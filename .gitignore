@@ -1,0 +1,21 @@
+# VIM
+*.swp
+*~
+
+# Autotools
+aclocal.m4
+config/
+config.h
+configure
+libtool
+Makefile
+stamp-h1
+*.in
+*.log
+*.cache
+*.status
+
+# Results
+*.[oa]
+*.l[oa]
+*.so
