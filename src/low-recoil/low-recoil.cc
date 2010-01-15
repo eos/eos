@@ -93,9 +93,10 @@ namespace wf
         Complex<double> a_long(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
+            double m_Kstar_hat = m_Kstar / m_B;
             Complex<double> wilson = c9eff + h * c10 + kappa_1() * c7eff * (2 * m_b_MSbar * m_b_MSbar / s);
             Complex<double> prefactor = Complex<double>::Cartesian(0.0, -0.5 * norm(s) * m_B * m_B / m_Kstar / std::sqrt(s));
-            double formfactor = lambda(1, 0, s_hat(s)) * FormFactors::a_1(s_hat(s)) - (1 - s_hat(s)) * FormFactors::a_2(s_hat(s));
+            double formfactor = lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s)) * FormFactors::a_1(s_hat(s)) - (1 - s_hat(s)) * FormFactors::a_2(s_hat(s));
 
             return prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
@@ -103,8 +104,9 @@ namespace wf
         Complex<double> a_perp(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
+            double m_Kstar_hat = m_Kstar / m_B;
             Complex<double> wilson = c9eff + h * c10 + kappa_1() * c7eff * c7eff * (2 * m_b_MSbar * m_b_MSbar / s);
-            Complex<double> prefactor = Complex<double>::Cartesian(0.0, std::sqrt(2 * lambda(1, 0, s_hat(s))) * norm(s) * m_B);
+            Complex<double> prefactor = Complex<double>::Cartesian(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * norm(s) * m_B);
 
             return prefactor * wilson * FormFactors::v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }
