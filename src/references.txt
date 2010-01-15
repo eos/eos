@@ -1,0 +1,35 @@
+References
+==========
+
+    ABHH : Ali, A. and Ball, P. and Handoko, L. T., and Hiller, G.
+
+        A Comparative Study of the Decays B -> (K,K^*) l^+ l^- in Standard
+        Model and Supersymmetric Theories
+
+        arxiv:hep-ph/9910221
+
+    BHP2008 : Bobeth, C. and Hiller, G. and Piranishvili, G.
+
+        CP Asymmetries in Bbar -> Kbar^* (-> Kbar Pi) lbar l and Untagged
+        Bbar_s, B_s -> phi(-> K^+ K^-) lbar l Decays at NLO
+
+        arxiv:0805.2525 [hep-ph]
+
+
+    BHvD2010 : Bobeth, C. and Hiller, G. and van Dyk, D.
+
+        Benefits at Low Recoil
+
+        arxiv:10XX.YYYY [hep-ph]
+
+
+    PDG2006 : Particle Data Group
+
+        Particle Physics Booklet (July 2006)
+
+
+    PS : Peskin, M. and Schroeder, D.
+
+        An Introduction to Quantum Field Theory
+
+
