@@ -137,12 +137,12 @@ namespace wf
     Complex<double>
     Decay<BToKstarDilepton>::a_perp(const Helicity & h, const double & s)
     {
-        return _imp->a_long(h, s);
+        return _imp->a_perp(h, s);
     }
 
     Complex<double>
     Decay<BToKstarDilepton>::a_par(const Helicity & h, const double & s)
     {
-        return _imp->a_long(h, s);
+        return _imp->a_par(h, s);
     }
 }
