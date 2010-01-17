@@ -17,10 +17,10 @@ main(int argc, char * argv[])
         std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
 
         const unsigned N = 100;
-        for (unsigned i = 0 ; i < N ; ++i)
+        for (unsigned i = 0 ; i <= N ; ++i)
         {
-            const double s_low = 17;
-            const double s_high = 19.25;
+            const double s_low = 13.932;
+            const double s_high = 19.211;
             double s = s_low + i * (s_high - s_low) / N;
 
             double dGamma = decay.a_long(left_handed, s).absolute_squared()
