@@ -14,7 +14,7 @@ main(int argc, char * argv[])
     {
         Decay<BToKstarDilepton> decay(4.0);
 
-        std::cout << "#s(GeV^2) dGamma" << std::endl;
+        std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
 
         const unsigned N = 100;
         for (unsigned i = 0 ; i < N ; ++i)
@@ -30,9 +30,18 @@ main(int argc, char * argv[])
                 + decay.a_par(left_handed, s).absolute_squared()
                 + decay.a_par(right_handed, s).absolute_squared();
 
+            double J_6 = 1.5 * (
+                    (decay.a_par(left_handed, s) * decay.a_perp(left_handed, s).conjugate()).real()
+                    -(decay.a_par(right_handed, s) * decay.a_perp(right_handed, s).conjugate()).real());
+
+            double num_F_L = decay.a_long(left_handed, s).absolute_squared()
+                + decay.a_long(right_handed, s).absolute_squared();
+
             std::cout
                 << s << "\t"
-                << dGamma
+                << dGamma << "\t"
+                << J_6 / dGamma << "\t"
+                << num_F_L / dGamma
                 << std::endl;
         }
     }
