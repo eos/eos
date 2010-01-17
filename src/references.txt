@@ -8,6 +8,14 @@ References
 
         arxiv:hep-ph/9910221
 
+
+    BFS2001 : Beneke, M. and Feldmann, Th. and Seidel, D.
+
+        Systematic Approach to Exclusive B -> V l^+ l^-, V gamma decays
+
+        arxiv:hep-ph/0106067
+
+
     BHP2008 : Bobeth, C. and Hiller, G. and Piranishvili, G.
 
         CP Asymmetries in Bbar -> Kbar^* (-> Kbar Pi) lbar l and Untagged
@@ -32,4 +40,4 @@ References
 
         An Introduction to Quantum Field Theory
 
-
+## vim: set ts=4 et :
