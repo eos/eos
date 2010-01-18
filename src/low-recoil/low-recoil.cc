@@ -34,13 +34,27 @@ namespace wf
     template <>
     struct Implementation<Decay<BToKstarDilepton>>
     {
-        Complex<double> c7eff;
+        double c1;
 
-        Complex<double> c9eff;
+        double c2;
 
-        Complex<double> c10;
+        double c3;
+
+        double c4;
+
+        double c5;
+
+        double c6;
+
+        double c7;
+
+        double c9;
+
+        double c10;
 
         double m_b_MSbar;
+
+        double m_c;
 
         double m_B;
 
@@ -50,10 +64,17 @@ namespace wf
         double mu;
 
         Implementation(double mu) :
-            c7eff(Complex<double>::Cartesian(-0.313, 0)), // TODO: Compute correct value from [GP]
-            c9eff(Complex<double>::Cartesian(+4.344, 0)), // TODO: Compute correct value from [GP]
-            c10(Complex<double>::Cartesian(-4.669, 0)), // TODO: Compute correct value from [GP]
+            c1(-0.248), // TODO
+            c2(+1.107), // TODO
+            c3(+0.011), // TODO
+            c4(-0.026), // TODO
+            c5(+0.007), // TODO
+            c6(-0.031), // TODO
+            c7(-0.313), // TODO: Compute correct value from [GP]
+            c9(+4.344), // TODO: Compute correct value from [GP]
+            c10(-4.669), // TODO: Compute correct value from [GP]
             m_b_MSbar(4.2), // (GeV), cf. [PDG2006], p. 24
+            m_c(1.27), // TODO
             m_B(5.279), // (GeV), cf. [PDG2006], p. 87
             m_Kstar(0.896), // (GeV), cf. [PDG2006], p. 51
             mu(mu)
@@ -61,6 +82,35 @@ namespace wf
         }
 
         // Helpers
+        Complex<double> c7eff(double s) const
+        {
+            // TODO: Neglecting contributions ~alpha_s / 4.0 / M_PI. These do involve spectator scattering,
+            // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
+            double c7eff0 = c7 - 4.0/9.0 * c3 - 4.0/3.0 * c4 + 1.0/9.0 * c5 + 1.0/3.0 * c6;
+            return Complex<double>::Cartesian(c7eff0, 0); // cf. [GP2004] Eq. (56), p. 10
+        }
+
+        Complex<double> c9eff(double s) const
+        {
+            // For r_i, g_i cf. [GP2004], Eqs. (27)-(29), p. 6
+            // TODO: I think all sqrt(r_c) needs to be replaced by r_c. Asked Christoph for checking it.
+            double r_b = std::sqrt(4.0 * m_b_MSbar * m_b_MSbar / s - 1.0);
+            double r_c = std::sqrt(1.0 - 4.0 * s / m_c / m_c);
+            Complex<double> g_0 = Complex<double>::Cartesian(std::log(s / mu / mu), -M_PI) * (1.0 / 6.0) - 5.0 / 18.0;
+            double g_m_b = std::log(m_b_MSbar * m_b_MSbar / mu / mu) / 6.0 - 5.0 / 18.0 - 2.0 * m_b_MSbar * m_b_MSbar / 3.0 / s
+                + r_b / 3.0 * (1.0 + 2.0 * m_b_MSbar * m_b_MSbar / s) * std::atan(1.0 / r_b);
+            Complex<double> g_m_c = std::log(m_c * m_c / mu / mu) / 6.0 - 5.0 / 18.0 - 2.0 * m_c * m_c / 3.0 / s
+                + std::sqrt(r_c) / 6.0 * (1.0 + 2.0 * m_c * m_c / s) * Complex<double>::Cartesian(std::log((1.0 + std::sqrt(r_c)) / (1.0 - std::sqrt(r_c))), -M_PI);
+
+            Complex<double> c9eff0 = c9 - (c1 + c2 / 3.0) * (8.0 * g_0 - 4.0 / 3.0) - c3 * (20.0 / 3.0 * g_0 - 16.0 / 3.0 * g_m_b + 2.0 / 27.0)
+                + c4 * (4.0 / 3.0 * g_0 + 16.0 / 3.0 * g_m_b + 14.0 / 9.0) - c5 * (8.0 * g_0 - 4.0 * g_m_b - 14.0 / 27.0)
+                - c6 * (8.0 / 3.0 * g_0 - 4.0 / 3.0 * g_m_b + 2.0 / 9.0);
+
+            // TODO: Neglecting contributions ~alpha_s / 4.0 / M_PI. These do involve spectator scattering,
+            // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
+            return c9eff0; // cf. [GP2004] Eq. (55), p. 10
+        }
+
         double kappa_1() const
         {
             static const double c0v // cf. [GP] Eq. (48)
@@ -94,7 +144,7 @@ namespace wf
         {
             double h = helicity;
             double m_Kstar_hat = m_Kstar / m_B;
-            Complex<double> wilson = c9eff + h * c10 + kappa_1() * c7eff * (2 * m_b_MSbar * m_b_MSbar / s);
+            Complex<double> wilson = c9eff(s) + h * c10 + kappa_1() * c7eff(s) * (2 * m_b_MSbar * m_b_MSbar / s);
             Complex<double> prefactor = Complex<double>::Cartesian(0.0, -0.5 * norm(s) * m_B * m_B / m_Kstar / std::sqrt(s));
             double formfactor = lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s)) * FormFactors::a_1(s_hat(s)) - (1 - s_hat(s)) * FormFactors::a_2(s_hat(s));
 
@@ -105,7 +155,7 @@ namespace wf
         {
             double h = helicity;
             double m_Kstar_hat = m_Kstar / m_B;
-            Complex<double> wilson = c9eff + h * c10 + kappa_1() * c7eff * c7eff * (2 * m_b_MSbar * m_b_MSbar / s);
+            Complex<double> wilson = c9eff(s) + h * c10 + kappa_1() * c7eff(s) * (2 * m_b_MSbar * m_b_MSbar / s);
             Complex<double> prefactor = Complex<double>::Cartesian(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * norm(s) * m_B);
 
             return prefactor * wilson * FormFactors::v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
@@ -114,7 +164,7 @@ namespace wf
         Complex<double> a_par(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
-            Complex<double> wilson = c9eff + h * c10 + kappa_1() * c7eff * c7eff * (2 * m_b_MSbar * m_b_MSbar / s);
+            Complex<double> wilson = c9eff(s) + h * c10 + kappa_1() * c7eff(s) * (2 * m_b_MSbar * m_b_MSbar / s);
             Complex<double> prefactor = Complex<double>::Cartesian(0.0, -std::sqrt(2) * norm(s) * m_B);
 
             return prefactor * wilson * FormFactors::a_1(s_hat(s)); // cf. [BHvD2010], Eq. (??)
