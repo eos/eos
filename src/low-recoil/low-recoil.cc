@@ -131,7 +131,7 @@ namespace wf
 
             return std::sqrt(g_fermi * g_fermi * alpha_e * alpha_e / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
                     * lambda_t * lambda_t * s_hat(s)
-                    * lambda(m_B * m_B, m_Kstar * m_Kstar, s)); // cf. [BHP2008], Eq. (C.6), p. 21
+                    * std::sqrt(lambda(m_B * m_B, m_Kstar * m_Kstar, s))); // cf. [BHP2008], Eq. (C.6), p. 21
         }
 
         inline double s_hat(const double & s) const
