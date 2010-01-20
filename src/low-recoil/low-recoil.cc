@@ -93,14 +93,15 @@ namespace wf
         Complex<double> c9eff(double s) const
         {
             // For r_i, g_i cf. [GP2004], Eqs. (27)-(29), p. 6
-            // TODO: I think all sqrt(r_c) needs to be replaced by r_c. Asked Christoph for checking it.
+            // All occurences of sqrt(r_c) in Eq. need to be replaced by r_c. Cf. also the footnote
+            // on p. 6.
             double r_b = std::sqrt(4.0 * m_b_MSbar * m_b_MSbar / s - 1.0);
             double r_c = std::sqrt(1.0 - 4.0 * s / m_c / m_c);
             Complex<double> g_0 = Complex<double>::Cartesian(std::log(s / mu / mu), -M_PI) * (1.0 / 6.0) - 5.0 / 18.0;
             double g_m_b = std::log(m_b_MSbar * m_b_MSbar / mu / mu) / 6.0 - 5.0 / 18.0 - 2.0 * m_b_MSbar * m_b_MSbar / 3.0 / s
                 + r_b / 3.0 * (1.0 + 2.0 * m_b_MSbar * m_b_MSbar / s) * std::atan(1.0 / r_b);
             Complex<double> g_m_c = std::log(m_c * m_c / mu / mu) / 6.0 - 5.0 / 18.0 - 2.0 * m_c * m_c / 3.0 / s
-                + std::sqrt(r_c) / 6.0 * (1.0 + 2.0 * m_c * m_c / s) * Complex<double>::Cartesian(std::log((1.0 + std::sqrt(r_c)) / (1.0 - std::sqrt(r_c))), -M_PI);
+                + r_c / 6.0 * (1.0 + 2.0 * m_c * m_c / s) * Complex<double>::Cartesian(std::log((1.0 + r_c) / (1.0 - r_c)), -M_PI);
 
             Complex<double> c9eff0 = c9 - (c1 + c2 / 3.0) * (8.0 * g_0 - 4.0 / 3.0) - c3 * (20.0 / 3.0 * g_0 - 16.0 / 3.0 * g_m_b + 2.0 / 27.0)
                 + c4 * (4.0 / 3.0 * g_0 + 16.0 / 3.0 * g_m_b + 14.0 / 9.0) - c5 * (8.0 * g_0 - 4.0 * g_m_b - 14.0 / 27.0)
