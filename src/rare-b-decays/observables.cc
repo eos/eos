@@ -12,7 +12,7 @@ main(int argc, char * argv[])
 {
     try
     {
-        Decay<BToKstarDilepton> decay(4.0);
+        BToKstarDilepton<LowRecoil> decay(4.0);
 
         std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
 

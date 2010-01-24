@@ -3,30 +3,30 @@
 #ifndef WFITTER_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_HH
 #define WFITTER_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_HH 1
 
-#include <src/utils/decay.hh>
+#include <src/rare-b-decays/decays.hh>
 #include <src/utils/complex.hh>
 #include <src/utils/private_implementation_pattern.hh>
 
 namespace wf
 {
     /*
-     * Reference: arxiv:10XX.YYYY
+     * Decay: B -> K l lbar
      */
 
-    struct BToKstarDilepton
+    /*
+     * Reference: [BHvD2010]
+     */
+    struct LowRecoil
     {
     };
 
-    /*
-     * @Decay: B -> K l lbar
-     */
     template <>
-    class Decay<BToKstarDilepton> :
-        public PrivateImplementationPattern<Decay<BToKstarDilepton>>
+    class BToKstarDilepton<LowRecoil> :
+        public PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>
     {
         public:
-            Decay(const double & mu);
-            ~Decay();
+            BToKstarDilepton(const double & mu);
+            ~BToKstarDilepton();
 
             // [BHvD2010] Eqs. (??-??)
             Complex<double> a_long(const Helicity & h, const double & s);

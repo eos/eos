@@ -32,7 +32,7 @@ namespace wf
     };
 
     template <>
-    struct Implementation<Decay<BToKstarDilepton>>
+    struct Implementation<BToKstarDilepton<LowRecoil>>
     {
         double c1;
 
@@ -172,29 +172,29 @@ namespace wf
         }
     };
 
-    Decay<BToKstarDilepton>::Decay(const double & mu) :
-        PrivateImplementationPattern<Decay<BToKstarDilepton>>(new Implementation<Decay<BToKstarDilepton>>(mu))
+    BToKstarDilepton<LowRecoil>::BToKstarDilepton(const double & mu) :
+        PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>(new Implementation<BToKstarDilepton<LowRecoil>>(mu))
     {
     }
 
-    Decay<BToKstarDilepton>::~Decay()
+    BToKstarDilepton<LowRecoil>::~BToKstarDilepton()
     {
     }
 
     Complex<double>
-    Decay<BToKstarDilepton>::a_long(const Helicity & h, const double & s)
+    BToKstarDilepton<LowRecoil>::a_long(const Helicity & h, const double & s)
     {
         return _imp->a_long(h, s);
     }
 
     Complex<double>
-    Decay<BToKstarDilepton>::a_perp(const Helicity & h, const double & s)
+    BToKstarDilepton<LowRecoil>::a_perp(const Helicity & h, const double & s)
     {
         return _imp->a_perp(h, s);
     }
 
     Complex<double>
-    Decay<BToKstarDilepton>::a_par(const Helicity & h, const double & s)
+    BToKstarDilepton<LowRecoil>::a_par(const Helicity & h, const double & s)
     {
         return _imp->a_par(h, s);
     }
