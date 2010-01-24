@@ -1,4 +1,4 @@
 CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = utils low-recoil
+SUBDIRS = utils rare-b-decays

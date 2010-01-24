@@ -1,6 +1,6 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#include <src/low-recoil/low-recoil.hh>
+#include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>

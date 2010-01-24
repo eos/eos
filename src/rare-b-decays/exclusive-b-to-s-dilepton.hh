@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef WFITTER_GUARD_SRC_LOW_RECOIL_LOW_RECOIL_HH
-#define WFITTER_GUARD_SRC_LOW_RECOIL_LOW_RECOIL_HH 1
+#ifndef WFITTER_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_HH
+#define WFITTER_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_HH 1
 
 #include <src/utils/decay.hh>
 #include <src/utils/complex.hh>
