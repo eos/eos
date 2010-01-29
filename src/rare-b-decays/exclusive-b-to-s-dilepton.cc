@@ -17,7 +17,7 @@ namespace wf
     {
         static double v(const double & s_hat)
         {
-            return 0.457 * std::exp(1.482 * s_hat + 1.014 * s_hat * s_hat);
+            return 0.457 * std::exp(1.482 * s_hat + 1.015 * s_hat * s_hat);
         }
 
         static double a_1(const double & s_hat)
