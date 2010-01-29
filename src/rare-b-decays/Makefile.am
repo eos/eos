@@ -7,7 +7,10 @@ noinst_LTLIBRARIES = libwfrarebdecays.la
 libwfrarebdecays_la_SOURCES = \
 	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh
 
-noinst_PROGRAMS = observables
+noinst_PROGRAMS = amplitudes observables
+amplitudes_SOURCES = \
+	amplitudes.cc
+amplitudes_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
 observables_SOURCES = \
 	observables.cc
 observables_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
