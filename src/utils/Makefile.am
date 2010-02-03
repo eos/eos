@@ -7,7 +7,7 @@ lib_LTLIBRARIES = libwfutils.la
 libwfutils_la_SOURCES = \
 	complex.cc complex.hh complex-impl.hh \
 	exception.cc exception.hh \
-	kinematics.hh \
+	kinematic.cc kinematic.hh \
 	parameters.cc parameters.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh
