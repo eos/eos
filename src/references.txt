@@ -1,6 +1,14 @@
 References
 ==========
 
+    ABBBSW2008 : Altmannshofer, W. and Ball, P. and Bharucha, A. and Buras,
+                 A. J. and Straub, D. and Wick, M.
+
+        Symmetries and Asymmetries of B -> K^* mu^+ mu^- Decays in the Standard
+        Model and Beyond
+
+        arxiv:0811.1214
+
     ABHH : Ali, A. and Ball, P. and Handoko, L. T., and Hiller, G.
 
         A Comparative Study of the Decays B -> (K,K^*) l^+ l^- in Standard
