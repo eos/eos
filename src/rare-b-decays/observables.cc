@@ -4,6 +4,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 using namespace wf;
 
@@ -12,41 +13,50 @@ main(int argc, char * argv[])
 {
     try
     {
-        BToKstarDilepton<LowRecoil> decay(4.0);
-
-        std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
-
-        const unsigned N = 100;
-        const static double Gamma = 6.58211899e-22 * 1e-3 / 1.52e-12; // cf. [PDG2006], hbar / tau_B
-        for (unsigned i = 0 ; i <= N ; ++i)
+        Parameters parameters(Parameters::StandardModell());
+        Kinematics kinematics;
+        kinematics.declare("s");
+        std::vector<ObservablePtr> observables
         {
-            const double s_low = 13.932;
-            const double s_high = 19.211;
-            double s = s_low + i * (s_high - s_low) / N;
+            BToKstarDileptonFactory::make("dBR/ds", parameters),
+            BToKstarDileptonFactory::make("dA_FB/ds", parameters),
+            BToKstarDileptonFactory::make("dF_L/ds", parameters)
+        };
 
-            double dGamma = decay.a_long(left_handed, s).absolute_squared()
-                + decay.a_long(right_handed, s).absolute_squared()
-                + decay.a_perp(left_handed, s).absolute_squared()
-                + decay.a_perp(right_handed, s).absolute_squared()
-                + decay.a_par(left_handed, s).absolute_squared()
-                + decay.a_par(right_handed, s).absolute_squared();
+        const unsigned points = 100;
+        std::vector<double> scales{ 2.0, 4.0, 8.0 };
 
-            double J_6 = 1.5 * (
-                    (decay.a_par(left_handed, s) * decay.a_perp(left_handed, s).conjugate()).real()
-                    -(decay.a_par(right_handed, s) * decay.a_perp(right_handed, s).conjugate()).real());
+        for (auto i = scales.begin() ; i != scales.end() ; ++i)
+        {
+            std::cout << "# mu = " << *i << std::endl;
+            parameters.set("mu", *i);
+            BToKstarDilepton<LowRecoil> decay(parameters);
 
-            double num_F_L = decay.a_long(left_handed, s).absolute_squared()
-                + decay.a_long(right_handed, s).absolute_squared();
+            std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
+            for (unsigned j = 0 ; j <= points ; ++j)
+            {
+                const double s_low = 13.932;
+                const double s_high = 19.211;
+                double s = s_low + j * (s_high - s_low) / points;
 
-            std::cout
-                << s << "\t"
-                << dGamma / Gamma << "\t"
-                << J_6 / dGamma << "\t"
-                << num_F_L / dGamma
-                << std::endl;
+                std::cout << s << std::flush;
+                kinematics.set("s", s);
+
+                for (auto k(observables.begin()), k_end(observables.end()) ; k != k_end ; ++k)
+                {
+                    if (*k)
+                        std::cout << '\t' << (*k)->evaluate(kinematics);
+                }
+                std::cout << std::endl;
+            }
+            std::cout << std::endl << std::endl;
         }
     }
-    catch(...)
+    catch (Exception & e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+    catch (...)
     {
         return EXIT_FAILURE;
     }

@@ -5,6 +5,8 @@
 
 #include <src/rare-b-decays/decays.hh>
 #include <src/utils/complex.hh>
+#include <src/utils/observable.hh>
+#include <src/utils/parameters.hh>
 #include <src/utils/private_implementation_pattern.hh>
 
 namespace wf
@@ -25,13 +27,29 @@ namespace wf
         public PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>
     {
         public:
-            BToKstarDilepton(const double & mu);
+            BToKstarDilepton(const Parameters & parameters);
             ~BToKstarDilepton();
 
             // [BHvD2010] Eqs. (??-??)
-            Complex<double> a_long(const Helicity & h, const double & s);
-            Complex<double> a_perp(const Helicity & h, const double & s);
-            Complex<double> a_par(const Helicity & h, const double & s);
+            Complex<double> a_long(const Helicity & h, const double & s) const;
+            Complex<double> a_perp(const Helicity & h, const double & s) const;
+            Complex<double> a_par(const Helicity & h, const double & s) const;
+
+            // Differential Observables
+            double differential_branching_ratio(const double & s) const;
+            double differential_decay_width(const double & s) const;
+            double differential_forward_backward_asymmetry(const double & s) const;
+            double differential_longitudinal_polarisation(const double & s) const;
+
+            // Integrated Observables
+            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
+    };
+
+    class BToKstarDileptonFactory
+    {
+        public:
+            static std::tr1::shared_ptr<Observable> make(const std::string & name, const Parameters & parameters);
     };
 }
 

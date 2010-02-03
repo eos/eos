@@ -1,11 +1,15 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
+#include <src/utils/concrete_observable.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 
 #include <cmath>
+#include <tr1/functional>
+#include <utility>
+#include <map>
 
 #include <iostream>
 
@@ -34,23 +38,23 @@ namespace wf
     template <>
     struct Implementation<BToKstarDilepton<LowRecoil>>
     {
-        double c1;
+        Parameter c1;
 
-        double c2;
+        Parameter c2;
 
-        double c3;
+        Parameter c3;
 
-        double c4;
+        Parameter c4;
 
-        double c5;
+        Parameter c5;
 
-        double c6;
+        Parameter c6;
 
-        double c7;
+        Parameter c7;
 
-        double c9;
+        Parameter c9;
 
-        double c10;
+        Parameter c10;
 
         double m_b_MSbar;
 
@@ -61,23 +65,23 @@ namespace wf
         double m_Kstar;
 
 
-        double mu;
+        Parameter mu;
 
-        Implementation(double mu) :
-            c1(-0.248), // TODO
-            c2(+1.107), // TODO
-            c3(+0.011), // TODO
-            c4(-0.026), // TODO
-            c5(+0.007), // TODO
-            c6(-0.031), // TODO
-            c7(-0.313), // TODO: Compute correct value from [GP]
-            c9(+4.344), // TODO: Compute correct value from [GP]
-            c10(-4.669), // TODO: Compute correct value from [GP]
+        Implementation(const Parameters & p) :
+            c1(p["c1"]),
+            c2(p["c2"]),
+            c3(p["c3"]),
+            c4(p["c4"]),
+            c5(p["c5"]),
+            c6(p["c6"]),
+            c7(p["c7"]),
+            c9(p["c9"]),
+            c10(p["c10"]),
             m_b_MSbar(4.2), // (GeV), cf. [PDG2006], p. 24
             m_c(1.27), // TODO
             m_B(5.279), // (GeV), cf. [PDG2006], p. 87
             m_Kstar(0.896), // (GeV), cf. [PDG2006], p. 51
-            mu(mu)
+            mu(p["mu"])
         {
         }
 
@@ -103,9 +107,9 @@ namespace wf
             Complex<double> g_m_c = std::log(m_c * m_c / mu / mu) / 6.0 - 5.0 / 18.0 - 2.0 * m_c * m_c / 3.0 / s
                 + r_c / 6.0 * (1.0 + 2.0 * m_c * m_c / s) * Complex<double>::Cartesian(std::log((1.0 + r_c) / (1.0 - r_c)), -M_PI);
 
-            Complex<double> c9eff0 = c9 - (c1 + c2 / 3.0) * (8.0 * g_0 - 4.0 / 3.0) - c3 * (20.0 / 3.0 * g_0 - 16.0 / 3.0 * g_m_b + 2.0 / 27.0)
-                + c4 * (4.0 / 3.0 * g_0 + 16.0 / 3.0 * g_m_b + 14.0 / 9.0) - c5 * (8.0 * g_0 - 4.0 * g_m_b - 14.0 / 27.0)
-                - c6 * (8.0 / 3.0 * g_0 - 4.0 / 3.0 * g_m_b + 2.0 / 9.0);
+            Complex<double> c9eff0 = c9() - (c1 + c2 / 3.0) * (8.0 * g_0 - 4.0 / 3.0) - c3() * (20.0 / 3.0 * g_0 - 16.0 / 3.0 * g_m_b + 2.0 / 27.0)
+                + c4() * (4.0 / 3.0 * g_0 + 16.0 / 3.0 * g_m_b + 14.0 / 9.0) - c5() * (8.0 * g_0 - 4.0 * g_m_b - 14.0 / 27.0)
+                - c6() * (8.0 / 3.0 * g_0 - 4.0 / 3.0 * g_m_b + 2.0 / 9.0);
 
             // TODO: Neglecting contributions ~alpha_s / 4.0 / M_PI. These do involve spectator scattering,
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
@@ -172,8 +176,8 @@ namespace wf
         }
     };
 
-    BToKstarDilepton<LowRecoil>::BToKstarDilepton(const double & mu) :
-        PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>(new Implementation<BToKstarDilepton<LowRecoil>>(mu))
+    BToKstarDilepton<LowRecoil>::BToKstarDilepton(const Parameters & parameters) :
+        PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>(new Implementation<BToKstarDilepton<LowRecoil>>(parameters))
     {
     }
 
@@ -182,20 +186,126 @@ namespace wf
     }
 
     Complex<double>
-    BToKstarDilepton<LowRecoil>::a_long(const Helicity & h, const double & s)
+    BToKstarDilepton<LowRecoil>::a_long(const Helicity & h, const double & s) const
     {
         return _imp->a_long(h, s);
     }
 
     Complex<double>
-    BToKstarDilepton<LowRecoil>::a_perp(const Helicity & h, const double & s)
+    BToKstarDilepton<LowRecoil>::a_perp(const Helicity & h, const double & s) const
     {
         return _imp->a_perp(h, s);
     }
 
     Complex<double>
-    BToKstarDilepton<LowRecoil>::a_par(const Helicity & h, const double & s)
+    BToKstarDilepton<LowRecoil>::a_par(const Helicity & h, const double & s) const
     {
         return _imp->a_par(h, s);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_branching_ratio(const double & s) const
+    {
+        static const double Gamma(6.58211899e-22 * 1e-3 / 1.52e-12); // cf. [PDG2006], hbar / tau_B
+
+        return differential_decay_width(s) / Gamma;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_decay_width(const double & s) const
+    {
+        return a_long(left_handed, s).absolute_squared()
+            + a_long(right_handed, s).absolute_squared()
+            + a_perp(left_handed, s).absolute_squared()
+            + a_perp(right_handed, s).absolute_squared()
+            + a_par(left_handed, s).absolute_squared()
+            + a_par(right_handed, s).absolute_squared();
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry(const double & s) const
+    {
+        return 1.5 / differential_decay_width(s) * (
+                (a_par(left_handed, s) * a_perp(left_handed, s).conjugate()).real()
+                -(a_par(right_handed, s) * a_perp(right_handed, s).conjugate()).real()
+            );
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation(const double & s) const
+    {
+        return (a_long(left_handed, s).absolute_squared() + a_long(right_handed, s).absolute_squared())
+            / differential_decay_width(s);
+    }
+
+    double integrate(const std::tr1::function<double (const double &)> & f, unsigned n, const double & a, const double & b)
+    {
+        if (n & 0x1)
+            n += 1;
+
+        double h = (b - a) / n;
+
+        double result = f(a) + f(b);
+        for (unsigned i = 1 ; i <= n / 2 - 1 ; ++i)
+        {
+            result += 2.0 * f(a + h * (2 * i));
+        }
+        for (unsigned i = 1 ; i <= n / 2 ; ++i)
+        {
+            result += 4.0 * f(a + h * (2 * i - 1));
+        }
+
+        result *= h / 3;
+
+        return result;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    {
+        return integrate(std::tr1::bind(std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_branching_ratio),
+                    this, std::tr1::placeholders::_1), 100, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    {
+        return integrate(std::tr1::bind(std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry),
+                    this, std::tr1::placeholders::_1), 100, s_min, s_max);
+    }
+
+    std::tr1::shared_ptr<Observable>
+    BToKstarDileptonFactory::make(const std::string & name, const Parameters & parameters)
+    {
+        static const std::map<std::string, ObservableFactory *> simple_observables
+        {
+            std::make_pair("dBR/ds", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
+                        ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dBR/ds",
+                            std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_branching_ratio),
+                            "s"))),
+            std::make_pair("dA_FB/ds", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
+                        ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dA_FB/ds",
+                            std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry),
+                            "s"))),
+            std::make_pair("dF_L/ds", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
+                        ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dF_L/ds",
+                            std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation),
+                            "s"))),
+            std::make_pair("A_FB", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 2>(
+                        ConcreteObservableData<BToKstarDilepton<LowRecoil>, 2>("A_FB",
+                            std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry),
+                            "s_min", "s_max"))),
+            std::make_pair("BR", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 2>(
+                        ConcreteObservableData<BToKstarDilepton<LowRecoil>, 2>("BR",
+                            std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::integrated_branching_ratio),
+                            "s_min", "s_max")))
+        };
+
+        auto i(simple_observables.find(name));
+
+        if (simple_observables.end() == i)
+            return std::tr1::shared_ptr<Observable>();
+
+        return i->second->make(parameters);
     }
 }
