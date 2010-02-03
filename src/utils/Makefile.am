@@ -6,6 +6,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x
 lib_LTLIBRARIES = libwfutils.la
 libwfutils_la_SOURCES = \
 	complex.cc complex.hh complex-impl.hh \
+	exception.cc exception.hh \
 	kinematics.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh
