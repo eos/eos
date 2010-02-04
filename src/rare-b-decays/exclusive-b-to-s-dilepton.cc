@@ -77,10 +77,10 @@ namespace wf
             c7(p["c7"]),
             c9(p["c9"]),
             c10(p["c10"]),
-            m_b_MSbar(4.2), // (GeV), cf. [PDG2006], p. 24
-            m_c(1.27), // TODO
-            m_B(5.279), // (GeV), cf. [PDG2006], p. 87
-            m_Kstar(0.896), // (GeV), cf. [PDG2006], p. 51
+            m_b_MSbar(4.2), // (GeV), cf. [PDG2008], p. 21
+            m_c(1.27), // (GeV), cf. [PDG2008], p. 21
+            m_B(5.279), // (GeV), cf. [PDG2008], p. 81
+            m_Kstar(0.896), // (GeV), cf. [PDG2008], p. 44
             mu(p["mu"])
         {
         }
@@ -131,8 +131,8 @@ namespace wf
         double norm(const double & s) const
         {
             static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
-            static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2006], p.5
-            static const double lambda_t = 0.2272 * 0.2272 * 0.818; // cf. [PDG2006], Eqs. (11.2, 11.25), pp. 183,189
+            static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
+            static const double lambda_t = -0.2257 * 0.2257 * 0.814; // cf. [PDG2008], Eqs. (11.5, 11.26), pp. 169,174
 
             return std::sqrt(g_fermi * g_fermi * alpha_e * alpha_e / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
                     * lambda_t * lambda_t * s_hat(s)
@@ -206,7 +206,8 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::differential_branching_ratio(const double & s) const
     {
-        static const double Gamma(6.58211899e-22 * 1e-3 / 1.52e-12); // cf. [PDG2006], hbar / tau_B
+        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
+        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
 
         return differential_decay_width(s) / Gamma;
     }

@@ -17,7 +17,7 @@ main(int argc, char * argv[])
         std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
 
         const unsigned N = 100;
-        const static double Gamma = 6.58211899e-22 * 1e-3 / 1.52e-12; // cf. [PDG2006], hbar / tau_B
+        const static double Gamma = 6.58211899e-22 * 1e-3 / 1.53e-12; // cf. [PDG2008], hbar / tau_B
         for (unsigned i = 0 ; i <= N ; ++i)
         {
             const double s_low = 13.932;

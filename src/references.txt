@@ -47,9 +47,16 @@ References
         arxiv:hep-ph/0404250
 
 
-    PDG2006 : Particle Data Group
+    PDG2008 : Particle Data Group
 
-        Particle Physics Booklet (July 2006)
+        Particle Physics Booklet (July 2008)
+
+        Extracted from the
+
+          Review of Particle Physics : Amsler, C. and others
+          Physics Letters B 667, 1 (2008)
+
+        http:/pdg.lbl.gob
 
 
     PS : Peskin, M. and Schroeder, D.
