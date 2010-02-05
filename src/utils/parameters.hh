@@ -29,6 +29,8 @@ namespace wf
 
             Parameter operator[] (const std::string & name) const;
 
+            Parameter declare(const std::string & name, const double & value = 0.0);
+
             void set(const std::string & name, const double & value);
 
             static Parameters FromList(const std::initializer_list<NameValuePair> &);

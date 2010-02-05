@@ -50,6 +50,25 @@ namespace wf
         return Parameter(_imp, i->second);
     }
 
+    Parameter
+    Parameters::declare(const std::string & name, const double & value)
+    {
+        auto i(_imp->parameter_map.find(name));
+
+        if (_imp->parameter_map.end() != i) // TODO: Should this throw an exception instead?
+        {
+            _imp->parameters[i->second] = value;
+            return Parameter(_imp, i->second);
+        }
+        else
+        {
+            _imp->parameter_map[name] = _imp->parameters.size();
+            Parameter result(_imp, _imp->parameters.size());
+            _imp->parameters.push_back(value);
+            return result;
+        }
+    }
+
     void
     Parameters::set(const std::string & name, const double & value)
     {
