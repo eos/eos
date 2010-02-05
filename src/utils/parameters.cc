@@ -102,6 +102,10 @@ namespace wf
             Parameters::NameValuePair{"c8", -0.164},
             Parameters::NameValuePair{"c9", +4.211},
             Parameters::NameValuePair{"c10", -4.103},
+            // Primed Wilson coefficients are 0 in the SM
+            Parameters::NameValuePair{"c7prime", 0.0},
+            Parameters::NameValuePair{"c9prime", 0.0},
+            Parameters::NameValuePair{"c10prime", 0.0},
             Parameters::NameValuePair{"mu", 4.8}
         });
     }
