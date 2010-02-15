@@ -85,7 +85,7 @@ main(int argc, char * argv[])
             {
                 c10 = 1 * j / 3.0;
 
-                double likelihood(0.0);
+                double chi_squared(0.0);
 
                 for (auto bin = bins.begin() ; bin != bins.end() ; ++bin)
                 {
@@ -94,9 +94,9 @@ main(int argc, char * argv[])
 
                     double value = bin->second->evaluate(kinematics) / (bin->first.max - bin->first.min);
                     double chi = (value - bin->first.o) / (bin->first.o_max - bin->first.o_min);
-                    likelihood += -2.0 * std::log(std::abs(chi));
+                    chi_squared += chi * chi;
                 }
-
+                double likelihood = -1.0 * std::log(chi_squared);
                 max_likelihood = std::max(max_likelihood, likelihood);
                 results.push_back(Result{c9(), c10(), likelihood, false});
             }
@@ -105,10 +105,10 @@ main(int argc, char * argv[])
         }
 
         std::cout << "# max_likelihood = " << max_likelihood << std::endl;
-        std::map<signed, unsigned> distribution;
+        std::map<double, unsigned> distribution;
         for (auto r(results.begin()), r_end(results.end()) ; r != r_end ; ++r)
         {
-            double likelihood = std::ceil((r->likelihood - max_likelihood) / bins.size());
+            double likelihood = 0.5 * std::round(2.0 * (r->likelihood - max_likelihood));
             std::cout << r->c9 << '\t' << r->c10 << '\t' << likelihood << std::endl;
             distribution[likelihood] += 1;
 
