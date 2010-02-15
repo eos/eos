@@ -44,8 +44,9 @@ main(int argc, char * argv[])
     {
         // max(s) = (m_B - m_Kstar)^2 = 19.211
         std::list<Bin> data = {
-            // [BaBar2008] data
-            Bin{10.24, 19.21, -0.44, -0.76, -1.28, "A_FB"},
+            // [BaBar2006] data
+            Bin{10.24, 19.21, -0.38, -0.72, -1.08, "A_FB"},
+            Bin{10.24, 19.21, 0.21e-7, 0.37e-6, 0.55e-6, "BR"},
 
             // [Belle2009] data
             Bin{14.18, 16.00, -0.96, -0.70, -0.38, "A_FB"},
