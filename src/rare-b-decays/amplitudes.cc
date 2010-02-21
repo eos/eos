@@ -12,7 +12,7 @@ main(int argc, char * argv[])
 {
     try
     {
-        BToKstarDilepton<LowRecoil> decay(Parameters::StandardModell());
+        BToKstarDilepton<LowRecoil> decay(Parameters::Defaults());
 
         std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
 

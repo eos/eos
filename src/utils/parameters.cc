@@ -87,7 +87,7 @@ namespace wf
     }
 
     Parameters
-    Parameters::StandardModell()
+    Parameters::Defaults()
     {
         return Parameters::FromList({
             // Wilson coefficients at mu = 4.8 GeV to NNLL accuary, cf. ABBBSW2008, p. 6, Table 2.
@@ -102,10 +102,11 @@ namespace wf
             Parameters::NameValuePair{"c8", -0.164},
             Parameters::NameValuePair{"c9", +4.211},
             Parameters::NameValuePair{"c10", -4.103},
-            // Primed Wilson coefficients are 0 in the SM
+            // Primed Wilson coefficients are negligible in the SM
             Parameters::NameValuePair{"c7prime", 0.0},
             Parameters::NameValuePair{"c9prime", 0.0},
             Parameters::NameValuePair{"c10prime", 0.0},
+            // Factorization scale
             Parameters::NameValuePair{"mu", 4.8}
         });
     }

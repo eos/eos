@@ -13,7 +13,7 @@ main(int argc, char * argv[])
 {
     try
     {
-        Parameters parameters(Parameters::StandardModell());
+        Parameters parameters(Parameters::Defaults());
         Kinematics kinematics;
         kinematics.declare("s");
         std::vector<ObservablePtr> observables

@@ -35,7 +35,7 @@ namespace wf
 
             static Parameters FromList(const std::initializer_list<NameValuePair> &);
 
-            static Parameters StandardModell();
+            static Parameters Defaults();
     };
 
     class Parameter

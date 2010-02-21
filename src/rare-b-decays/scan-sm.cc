@@ -61,7 +61,7 @@ main(int argc, char * argv[])
             Bin{16.00, 19.21, 0.86e-7, 1.35e-7, 1.84e-7, "BR"},
         };
 
-        Parameters parameters(Parameters::StandardModell());
+        Parameters parameters(Parameters::Defaults());
         Parameter c9 = parameters["c9"];
         Parameter c10 = parameters["c10"];
 

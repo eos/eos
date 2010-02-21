@@ -60,7 +60,7 @@ main(int argc, char * argv[])
             Bin{16.00, 19.21, 0.86e-7, 1.35e-7, 1.84e-7, "BR"},
         };
 
-        Parameters parameters(Parameters::StandardModell());
+        Parameters parameters(Parameters::Defaults());
         Parameter c7prime = parameters.declare("c7prime");
         Parameter c9prime = parameters.declare("c9prime");
         Parameter c10prime = parameters.declare("c10prime");
