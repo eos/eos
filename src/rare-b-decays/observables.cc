@@ -19,8 +19,8 @@ main(int argc, char * argv[])
         std::vector<ObservablePtr> observables
         {
             BToKstarDileptonFactory::make("dBR/ds", parameters),
-            BToKstarDileptonFactory::make("dA_FB/ds", parameters),
-            BToKstarDileptonFactory::make("dF_L/ds", parameters)
+            BToKstarDileptonFactory::make("A_FB(s)", parameters),
+            BToKstarDileptonFactory::make("F_L(s)", parameters)
         };
 
         const unsigned points = 100;

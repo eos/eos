@@ -293,11 +293,11 @@ namespace wf
                         ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dBR/ds",
                             std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_branching_ratio),
                             "s"))),
-            std::make_pair("dA_FB/ds", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
+            std::make_pair("A_FB(s)", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
                         ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dA_FB/ds",
                             std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry),
                             "s"))),
-            std::make_pair("dF_L/ds", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
+            std::make_pair("F_L(s)", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
                         ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dF_L/ds",
                             std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation),
                             "s"))),
