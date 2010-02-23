@@ -54,7 +54,7 @@ namespace wf
 
             virtual ~ObservableFactory();
 
-            virtual ObservablePtr make(const Parameters &) const = 0;
+            virtual ObservablePtr make(const Parameters &, const ObservableOptions &) const = 0;
     };
 }
 

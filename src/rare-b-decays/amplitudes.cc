@@ -12,7 +12,9 @@ main(int argc, char * argv[])
 {
     try
     {
-        BToKstarDilepton<LowRecoil> decay(Parameters::Defaults());
+        ObservableOptions options;
+        options.set("form-factors", "ABHH1999::2");
+        BToKstarDilepton<LowRecoil> decay(Parameters::Defaults(), options);
 
         std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
 

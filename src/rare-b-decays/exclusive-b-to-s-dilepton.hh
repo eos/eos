@@ -27,7 +27,7 @@ namespace wf
         public PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>
     {
         public:
-            BToKstarDilepton(const Parameters & parameters);
+            BToKstarDilepton(const Parameters & parameters, const ObservableOptions & options);
             ~BToKstarDilepton();
 
             // [BHvD2010] Eqs. (??-??)
@@ -49,7 +49,7 @@ namespace wf
     class BToKstarDileptonFactory
     {
         public:
-            static std::tr1::shared_ptr<Observable> make(const std::string & name, const Parameters & parameters);
+            static std::tr1::shared_ptr<Observable> make(const std::string & name, const Parameters & parameters, const ObservableOptions & options);
     };
 }
 

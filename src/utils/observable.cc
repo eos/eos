@@ -33,7 +33,6 @@ namespace wf
     const std::string &
     ObservableOptions::operator[] (const std::string & key) const
     {
-        std::cout << "OO::operator[]" << std::endl;
         auto i(_imp->options.find(key));
         if (_imp->options.end() == i)
             throw UnknownOptionError(key);

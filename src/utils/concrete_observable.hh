@@ -75,8 +75,8 @@ namespace wf
             ConcreteObservableData<Decay_, n_> _data;
 
         public:
-            ConcreteObservable(const Parameters & parameters, const ConcreteObservableData<Decay_, n_> & data) :
-                _decay(parameters),
+            ConcreteObservable(const Parameters & parameters, const ObservableOptions & options, const ConcreteObservableData<Decay_, n_> & data) :
+                _decay(parameters, options),
                 _data(data)
             {
             }
@@ -109,9 +109,9 @@ namespace wf
             {
             }
 
-            virtual std::tr1::shared_ptr<Observable> make(const Parameters & parameters) const
+            virtual std::tr1::shared_ptr<Observable> make(const Parameters & parameters, const ObservableOptions & options) const
             {
-                return std::tr1::shared_ptr<Observable>(new ConcreteObservable<Decay_, n_>(parameters, _data));
+                return std::tr1::shared_ptr<Observable>(new ConcreteObservable<Decay_, n_>(parameters, options, _data));
             }
     };
 }

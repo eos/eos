@@ -24,6 +24,8 @@ class Bin
         const double o_max;
 
         const std::string o_name;
+
+        const std::string o_options;
 };
 
 struct Result
@@ -45,20 +47,20 @@ main(int argc, char * argv[])
         // max(s) = (m_B - m_Kstar)^2 = 19.211
         std::list<Bin> data = {
             // [BaBar2006] data
-            Bin{10.24, 19.21, -0.38, -0.72, -1.08, "A_FB"},
-            Bin{10.24, 19.21, 0.21e-7, 0.37e-6, 0.55e-6, "BR"},
+            Bin{10.24, 19.21, -0.38, -0.72, -1.08, "A_FB", ""},
+            Bin{10.24, 19.21, 0.21e-7, 0.37e-6, 0.55e-6, "BR", ""},
 
             // [Belle2009] data
-            Bin{14.18, 16.00, -0.96, -0.70, -0.38, "A_FB"},
-            Bin{16.00, 19.21, -0.81, -0.66, -0.46, "A_FB"},
-            Bin{14.18, 16.00, 0.71e-7, 1.05e-7, 1.42e-7, "BR"},
-            Bin{16.00, 19.21, 1.64e-7, 2.04e-7, 2.47e-7, "BR"},
+            Bin{14.18, 16.00, -0.96, -0.70, -0.38, "A_FB", ""},
+            Bin{16.00, 19.21, -0.81, -0.66, -0.46, "A_FB", ""},
+            Bin{14.18, 16.00, 0.71e-7, 1.05e-7, 1.42e-7, "BR", ""},
+            Bin{16.00, 19.21, 1.64e-7, 2.04e-7, 2.47e-7, "BR", ""},
 
             // [CDF2010] data
-            Bin{14.18, 16.00, -0.67, -0.42, -0.17, "A_FB"},
-            Bin{16.00, 19.21, -0.96, -0.70, -0.35, "A_FB"},
-            Bin{14.18, 16.00, 1.02e-7, 1.51e-7, 2.00e-7, "BR"},
-            Bin{16.00, 19.21, 0.86e-7, 1.35e-7, 1.84e-7, "BR"},
+            Bin{14.18, 16.00, -0.67, -0.42, -0.17, "A_FB", ""},
+            Bin{16.00, 19.21, -0.96, -0.70, -0.35, "A_FB", ""},
+            Bin{14.18, 16.00, 1.02e-7, 1.51e-7, 2.00e-7, "BR", ""},
+            Bin{16.00, 19.21, 0.86e-7, 1.35e-7, 1.84e-7, "BR", ""},
         };
 
         Parameters parameters(Parameters::Defaults());
@@ -72,7 +74,9 @@ main(int argc, char * argv[])
         std::list<std::pair<Bin, ObservablePtr>> bins;
         for (auto d(data.begin()) ; d != data.end() ; ++d)
         {
-            bins.push_back(std::make_pair(*d, BToKstarDileptonFactory::make(d->o_name, parameters)));
+            // TODO: Read options from o_options
+            ObservableOptions options;
+            bins.push_back(std::make_pair(*d, BToKstarDileptonFactory::make(d->o_name, parameters, options)));
         }
 
         double max_likelihood(-1e7);
@@ -96,7 +100,7 @@ main(int argc, char * argv[])
                     double chi = (value - bin->first.o) / (bin->first.o_max - bin->first.o_min);
                     chi_squared += chi * chi;
                 }
-                double likelihood = -1.0 * std::log(chi_squared);
+                double likelihood = std::exp(-0.5 * chi_squared);
                 max_likelihood = std::max(max_likelihood, likelihood);
                 results.push_back(Result{c9(), c10(), likelihood, false});
             }
@@ -108,7 +112,7 @@ main(int argc, char * argv[])
         std::map<double, unsigned> distribution;
         for (auto r(results.begin()), r_end(results.end()) ; r != r_end ; ++r)
         {
-            double likelihood = 0.5 * std::round(2.0 * (r->likelihood - max_likelihood));
+            double likelihood = 0.1 * std::floor(10 * r->likelihood / max_likelihood);
             std::cout << r->c9 << '\t' << r->c10 << '\t' << likelihood << std::endl;
             distribution[likelihood] += 1;
 
@@ -123,8 +127,14 @@ main(int argc, char * argv[])
             std::cout << "# " << d->first << " : " << d->second << std::endl;
         }
     }
+    catch(std::string & e)
+    {
+        std::cout << "Caught exception: '" << e << "'" << std::endl;
+        return EXIT_FAILURE;
+    }
     catch(...)
     {
+        std::cerr << "Aborting after unknown exception" << std::endl;
         return EXIT_FAILURE;
     }
 

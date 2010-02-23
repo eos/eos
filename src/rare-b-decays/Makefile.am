@@ -5,7 +5,8 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x
 
 noinst_LTLIBRARIES = libwfrarebdecays.la
 libwfrarebdecays_la_SOURCES = \
-	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh
+	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh \
+	form_factors.cc form_factors.hh
 libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la
 
 noinst_PROGRAMS = amplitudes scan-sm scan-rh observables

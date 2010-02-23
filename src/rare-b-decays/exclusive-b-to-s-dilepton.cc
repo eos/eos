@@ -1,6 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
+#include <src/rare-b-decays/form_factors.hh>
 #include <src/utils/concrete_observable.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
@@ -11,30 +12,8 @@
 #include <utility>
 #include <map>
 
-#include <iostream>
-
 namespace wf
 {
-    // TODO: Move to low_recoil/form_factors ?
-    // cf. [ABHH1999], p. 8, Table 3
-    struct FormFactors
-    {
-        static double v(const double & s_hat)
-        {
-            return 0.457 * std::exp(1.482 * s_hat + 1.015 * s_hat * s_hat);
-        }
-
-        static double a_1(const double & s_hat)
-        {
-            return 0.337 * std::exp(0.602 * s_hat + 0.258 * s_hat * s_hat);
-        }
-
-        static double a_2(const double & s_hat)
-        {
-            return 0.282 * std::exp(1.172 * s_hat + 0.567 * s_hat * s_hat);
-        }
-    };
-
     template <>
     struct Implementation<BToKstarDilepton<LowRecoil>>
     {
@@ -73,7 +52,9 @@ namespace wf
 
         Parameter mu;
 
-        Implementation(const Parameters & p) :
+        std::tr1::shared_ptr<FormFactors<BToKstar>> form_factors;
+
+        Implementation(const Parameters & p, const ObservableOptions & o) :
             c1(p["c1"]),
             c2(p["c2"]),
             c3(p["c3"]),
@@ -92,6 +73,9 @@ namespace wf
             m_Kstar(0.896), // (GeV), cf. [PDG2008], p. 44
             mu(p["mu"])
         {
+            form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"]);
+            if (! form_factors.get())
+                throw std::string("InternalError");
         }
 
         // Helpers
@@ -160,7 +144,7 @@ namespace wf
             double m_Kstar_hat = m_Kstar / m_B;
             Complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
             Complex<double> prefactor = Complex<double>::Cartesian(0.0, -0.5 * norm(s) * m_B * m_B * m_B / m_Kstar / std::sqrt(s));
-            double formfactor = lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s)) * FormFactors::a_1(s_hat(s)) - (1 - s_hat(s)) * FormFactors::a_2(s_hat(s));
+            double formfactor = lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s)) * form_factors->a_1(s_hat(s)) - (1 - s_hat(s)) * form_factors->a_2(s_hat(s));
 
             return prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
@@ -172,7 +156,7 @@ namespace wf
             Complex<double> wilson = (c9eff(s) + c9prime()) + h * (c10() + c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
             Complex<double> prefactor = Complex<double>::Cartesian(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * norm(s) * m_B);
 
-            return prefactor * wilson * FormFactors::v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
+            return prefactor * wilson * form_factors->v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }
 
         Complex<double> a_par(const Helicity & helicity, const double & s) const
@@ -181,12 +165,12 @@ namespace wf
             Complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
             Complex<double> prefactor = Complex<double>::Cartesian(0.0, -std::sqrt(2) * norm(s) * m_B);
 
-            return prefactor * wilson * FormFactors::a_1(s_hat(s)); // cf. [BHvD2010], Eq. (??)
+            return prefactor * wilson * form_factors->a_1(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }
     };
 
-    BToKstarDilepton<LowRecoil>::BToKstarDilepton(const Parameters & parameters) :
-        PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>(new Implementation<BToKstarDilepton<LowRecoil>>(parameters))
+    BToKstarDilepton<LowRecoil>::BToKstarDilepton(const Parameters & parameters, const ObservableOptions & options) :
+        PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>(new Implementation<BToKstarDilepton<LowRecoil>>(parameters, options))
     {
     }
 
@@ -285,7 +269,7 @@ namespace wf
     }
 
     std::tr1::shared_ptr<Observable>
-    BToKstarDileptonFactory::make(const std::string & name, const Parameters & parameters)
+    BToKstarDileptonFactory::make(const std::string & name, const Parameters & parameters, const ObservableOptions & options)
     {
         static const std::map<std::string, ObservableFactory *> simple_observables
         {
@@ -311,11 +295,14 @@ namespace wf
                             "s_min", "s_max")))
         };
 
-        auto i(simple_observables.find(name));
+        ObservableOptions myoptions(options);
+        if (! myoptions.has("form-factors"))
+            myoptions.set("form-factors", "ABHH1999::2");
 
+        auto i(simple_observables.find(name));
         if (simple_observables.end() == i)
             return std::tr1::shared_ptr<Observable>();
 
-        return i->second->make(parameters);
+        return i->second->make(parameters, myoptions);
     }
 }

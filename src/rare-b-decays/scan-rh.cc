@@ -24,6 +24,8 @@ class Bin
         const double o_max;
 
         const std::string o_name;
+
+        const std::string o_options;
 };
 
 struct Result
@@ -45,19 +47,19 @@ main(int argc, char * argv[])
         // max(s) = (m_B - m_Kstar)^2 = 19.211
         std::list<Bin> data = {
             // [BaBar2008] data
-            Bin{10.24, 19.21, -0.44, -0.76, -1.28, "A_FB"},
+            Bin{10.24, 19.21, -0.44, -0.76, -1.28, "A_FB", ""},
 
             // [Belle2009] data
-            Bin{14.18, 16.00, -0.96, -0.70, -0.38, "A_FB"},
-            Bin{16.00, 19.21, -0.81, -0.66, -0.46, "A_FB"},
-            Bin{14.18, 16.00, 0.71e-7, 1.05e-7, 1.42e-7, "BR"},
-            Bin{16.00, 19.21, 1.64e-7, 2.04e-7, 2.47e-7, "BR"},
+            Bin{14.18, 16.00, -0.96, -0.70, -0.38, "A_FB", ""},
+            Bin{16.00, 19.21, -0.81, -0.66, -0.46, "A_FB", ""},
+            Bin{14.18, 16.00, 0.71e-7, 1.05e-7, 1.42e-7, "BR", ""},
+            Bin{16.00, 19.21, 1.64e-7, 2.04e-7, 2.47e-7, "BR", ""},
 
             // [CDF2010] data
-            Bin{14.18, 16.00, -0.67, -0.42, -0.17, "A_FB"},
-            Bin{16.00, 19.21, -0.96, -0.70, -0.35, "A_FB"},
-            Bin{14.18, 16.00, 1.02e-7, 1.51e-7, 2.00e-7, "BR"},
-            Bin{16.00, 19.21, 0.86e-7, 1.35e-7, 1.84e-7, "BR"},
+            Bin{14.18, 16.00, -0.67, -0.42, -0.17, "A_FB", ""},
+            Bin{16.00, 19.21, -0.96, -0.70, -0.35, "A_FB", ""},
+            Bin{14.18, 16.00, 1.02e-7, 1.51e-7, 2.00e-7, "BR", ""},
+            Bin{16.00, 19.21, 0.86e-7, 1.35e-7, 1.84e-7, "BR", ""},
         };
 
         Parameters parameters(Parameters::Defaults());
@@ -72,7 +74,9 @@ main(int argc, char * argv[])
         std::list<std::pair<Bin, ObservablePtr>> bins;
         for (auto d(data.begin()) ; d != data.end() ; ++d)
         {
-            bins.push_back(std::make_pair(*d, BToKstarDileptonFactory::make(d->o_name, parameters)));
+            // TODO: Read options from o_options
+            ObservableOptions options;
+            bins.push_back(std::make_pair(*d, BToKstarDileptonFactory::make(d->o_name, parameters, options)));
         }
 
         double max_likelihood(-1e7);
