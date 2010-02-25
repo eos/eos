@@ -4,29 +4,69 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <vector>
+#include <list>
 
 using namespace wf;
+
+struct DoUsage
+{
+    std::string what;
+
+    DoUsage(const std::string & what) :
+        what(what)
+    {
+    }
+};
 
 int
 main(int argc, char * argv[])
 {
     try
     {
+        if (2 > argc)
+            throw DoUsage("Need at least one observable");
+
         Parameters parameters(Parameters::Defaults());
         Kinematics kinematics;
         kinematics.declare("s");
-        ObservableOptions options;
-        std::vector<ObservablePtr> observables
+
+        std::list<ObservablePtr> observables;
+
+        for (char ** o(argv + 1), ** o_end(argv + argc) ; o != o_end ; ++o)
         {
-            BToKstarDileptonFactory::make("dBR/ds@LowRecoil", parameters, options),
-            BToKstarDileptonFactory::make("A_FB(s)@LowRecoil", parameters, options),
-            BToKstarDileptonFactory::make("F_L(s)@LowRecoil", parameters, options)
-        };
+            ObservableOptions options;
+            std::string observable(*o);
+
+            std::string::size_type pos;
+            while (std::string::npos != (pos = observable.rfind(',')))
+            {
+                std::string::size_type sep(observable.find('=', pos + 1));
+                if (std::string::npos == sep)
+                    throw DoUsage("Invalid option: '" + observable.substr(pos + 1) + "'");
+
+                std::string key(observable.substr(pos + 1, sep - pos - 1));
+                std::string value(observable.substr(sep + 1));
+
+                options.set(key, value);
+                observable.erase(pos);
+            }
+
+            ObservablePtr ptr(BToKstarDileptonFactory::make(observable, parameters, options));
+            if (! ptr)
+                throw DoUsage("Unknown observable: '" + observable + "'");
+
+            observables.push_back(ptr);
+        }
 
         const unsigned points = 100;
 
-        std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
+        std::cout << "#\ts";
+        for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
+        {
+            std::cout << '\t' << (*o)->name();
+        }
+        std::cout << std::endl;
+
         for (unsigned j = 0 ; j <= points ; ++j)
         {
             const double s_low = 13.932;
@@ -36,17 +76,29 @@ main(int argc, char * argv[])
             std::cout << s << std::flush;
             kinematics.set("s", s);
 
-            for (auto k(observables.begin()), k_end(observables.end()) ; k != k_end ; ++k)
+            for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
             {
-                if (*k)
-                    std::cout << '\t' << (*k)->evaluate(kinematics);
+                std::cout << '\t' << (*o)->evaluate(kinematics);
             }
+
             std::cout << std::endl;
         }
+    }
+    catch (DoUsage & e)
+    {
+        std::cout << e.what << std::endl;
+        std::cout << "Usage: observables OBSERVABLE [OBSERVABLE [...]]" << std::endl;
+        return EXIT_FAILURE;
     }
     catch (Exception & e)
     {
         std::cerr << "Error: " << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+    catch (std::exception & e)
+    {
+        std::cerr << "STL Exception; " << e.what() << std::endl;
+        return EXIT_FAILURE;
     }
     catch (...)
     {
