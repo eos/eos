@@ -89,18 +89,20 @@ namespace wf
     {
         private:
             // cf. [BZ2004], Eqs. (59)-(61)
-            // Here ratio{r,fit} is m_B^2 / m_{R,fit}^2. For Eq. (61), we use Eq. (59) with r1 = 0.
+            // Here ratio_{r,fit} is m_B^2 / m_{R,fit}^2. For Eq. (61), we use Eq. (59) with r1 = 0.
             double _calc_eq59(const double & r1, const double & r2, const double & ratio_r, const double & ratio_fit, const double & s_hat)
             {
                 double x_r = s_hat * ratio_r;
                 double x_fit = s_hat * ratio_fit;
-                return r1 / (1.0 - x_r * x_r) + r2 / (1.0 - x_fit * x_fit);
+
+                return r1 / (1.0 - x_r) + r2 / (1.0 - x_fit);
             }
 
             double _calc_eq60(const double & r1, const double & r2, const double & ratio_fit, const double & s_hat)
             {
                 double x_fit = s_hat * ratio_fit;
-                double denom = 1.0 - x_fit * x_fit;
+                double denom = 1.0 - x_fit;
+
                 return r1 / denom + r2 / denom / denom;
             }
 
@@ -113,6 +115,7 @@ namespace wf
             {
             }
 
+            // cf. [BZ2004], Table 8, p. 28
             virtual double v(const double & s_hat)
             {
                 return _calc_eq59(0.923, -0.511, 0.99248, 0.56434, s_hat);
@@ -134,6 +137,45 @@ namespace wf
             }
     };
 
+    /* Form Factors according to [IKKR2007] */
+    class IKKR2007FormFactors :
+        public FormFactors<BToKstar>
+    {
+        private:
+            // cf. [IKKR2007], Eq. (48)
+            // Here s_hat = q^2 / m_B^2
+            double _calc(const double & f0, const double & a, const double & b, const double & s_hat)
+            {
+                return f0 / (1.0 - s_hat * a + s_hat * s_hat * b);
+            }
+
+            // cf. [IKKR2007], Table III, p. 9
+            // For rewriting the form factor to the [BZ2004] Basis, cf. [IKKR2007], Eq. (6), p. 2
+            // The ^c basis corresponds to the [BZ2004] Basis.
+            virtual double v(const double & s_hat)
+            {
+                return _calc(0.37, 2.05, 1.13, s_hat);
+            }
+
+            virtual double a_0(const double & s_hat)
+            {
+                static const double alpha = 2.4596;
+                static const double beta = 2.5139;
+
+                // A_0 <- alpha (A_0 - A_+) - s_hat beta A_-
+                return alpha * (_calc(0.40, 0.98, 0.034, s_hat) - _calc(0.30, 1.92, 0.97, s_hat)) - s_hat * beta * _calc(-0.38, 2.10, 1.19, s_hat);
+            }
+
+            virtual double a_1(const double & s_hat)
+            {
+                return _calc(0.28438, 0.97, 0.034, s_hat);
+            }
+
+            virtual double a_2(const double & s_hat)
+            {
+                return _calc(0.30, 1.92, 0.97, s_hat);
+            }
+    };
 
     FormFactors<BToKstar>::~FormFactors()
     {
@@ -169,6 +211,10 @@ namespace wf
         else if ("BZ2004" == name)
         {
             result = std::tr1::shared_ptr<FormFactors<BToKstar>>(new BZ2004FormFactors);
+        }
+        else if ("IKKR2007" == name)
+        {
+            result = std::tr1::shared_ptr<FormFactors<BToKstar>>(new IKKR2007FormFactors);
         }
 
         return result;
