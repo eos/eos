@@ -273,23 +273,24 @@ namespace wf
     {
         static const std::map<std::string, ObservableFactory *> simple_observables
         {
-            std::make_pair("dBR/ds", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
+            // Low Recoil
+            std::make_pair("dBR/ds@LowRecoil", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
                         ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dBR/ds",
                             std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_branching_ratio),
                             "s"))),
-            std::make_pair("A_FB(s)", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
+            std::make_pair("A_FB(s)@LowRecoil", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
                         ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dA_FB/ds",
                             std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry),
                             "s"))),
-            std::make_pair("F_L(s)", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
+            std::make_pair("F_L(s)@LowRecoil", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
                         ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dF_L/ds",
                             std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation),
                             "s"))),
-            std::make_pair("A_FB", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 2>(
+            std::make_pair("A_FB@LowRecoil", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 2>(
                         ConcreteObservableData<BToKstarDilepton<LowRecoil>, 2>("A_FB",
                             std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry),
                             "s_min", "s_max"))),
-            std::make_pair("BR", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 2>(
+            std::make_pair("BR@LowRecoil", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 2>(
                         ConcreteObservableData<BToKstarDilepton<LowRecoil>, 2>("BR",
                             std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::integrated_branching_ratio),
                             "s_min", "s_max")))

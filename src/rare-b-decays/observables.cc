@@ -19,9 +19,9 @@ main(int argc, char * argv[])
         ObservableOptions options;
         std::vector<ObservablePtr> observables
         {
-            BToKstarDileptonFactory::make("dBR/ds", parameters, options),
-            BToKstarDileptonFactory::make("A_FB(s)", parameters, options),
-            BToKstarDileptonFactory::make("F_L(s)", parameters, options)
+            BToKstarDileptonFactory::make("dBR/ds@LowRecoil", parameters, options),
+            BToKstarDileptonFactory::make("A_FB(s)@LowRecoil", parameters, options),
+            BToKstarDileptonFactory::make("F_L(s)@LowRecoil", parameters, options)
         };
 
         const unsigned points = 100;
