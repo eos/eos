@@ -39,6 +39,14 @@ References
         arxiv:10XX.YYYY [hep-ph]
 
 
+    BZ2004 : Ball, P. and Zwicky, R.
+
+        B_{d,s} -> rho,omega,K^*,phi Decay Form Factors from Light-Cone
+        Sum Rules Revisited
+
+        arxiv:hep-ph/0412079
+
+
     GP2004 : Grinstein, B. and Pirjol, D.
 
         Exclusive rare B -> K^* l^+ l^- Decays at Low Recoil:
