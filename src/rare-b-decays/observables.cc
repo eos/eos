@@ -58,7 +58,7 @@ main(int argc, char * argv[])
             observables.push_back(ptr);
         }
 
-        const unsigned points = 100;
+        const unsigned points = 300;
 
         std::cout << "#\ts";
         for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
@@ -69,7 +69,7 @@ main(int argc, char * argv[])
 
         for (unsigned j = 0 ; j <= points ; ++j)
         {
-            const double s_low = 13.932;
+            const double s_low = 0.0;
             const double s_high = 19.211;
             double s = s_low + j * (s_high - s_low) / points;
 
