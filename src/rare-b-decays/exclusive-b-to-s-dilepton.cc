@@ -43,7 +43,7 @@ namespace wf
 
         Parameter c10prime;
 
-        double m_b_PS;
+        double m_b_pole;
 
         double m_c;
 
@@ -74,9 +74,8 @@ namespace wf
             c7prime(p["c7prime"]),
             c9prime(p["c9prime"]),
             c10prime(p["c10prime"]),
-            m_b_PS(4.6), // (GeV), cf. [BHP2008], Table 1, p. 8
-            m_c(1.4), // (GeV), cf. [BHP2008], Table 1, p. 8
-            //m_c(1.27), // (GeV), cf. [PDG2008], p. 21
+            m_b_pole(4.8), // (GeV)
+            m_c(1.27), // (GeV), cf. [PDG2008], p. 21
             m_B(5.279), // (GeV), cf. [PDG2008], p. 81
             m_Kstar(0.896), // (GeV), cf. [PDG2008], p. 44
             mu(p["mu"])
@@ -166,7 +165,8 @@ namespace wf
             double Y_0 = -0.5 * (c3() + 4.0 / 3.0 * c4() + 16.0 * c5() - 64 / 3.0 * c6());
             double Y = 2.0 / 9.0 * (6.0 * c3() + 32.0 * c5() + 32.0 / 3.0 * c6());
 
-            return Y_c * h(s, m_c) + Y_b * h(s, m_b_PS) + Y_0 * h0(s) + Y;
+            // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
+            return Y_c * h(s, m_c) + Y_b * h(s, m_b_pole) + Y_0 * h0(s) + Y;
         }
 
         Complex<double> Y0u(const double & s) const
@@ -194,12 +194,12 @@ namespace wf
 
         Complex<double> tensor_perp(const double & h, const double & s) const
         {
-            return c7eff() + h * c7prime() + s / (2.0 * m_b_PS * m_B) * (Y0(s) + lambda_u_hat * Y0u(s));
+            return c7eff() + h * c7prime() + s / (2.0 * QCD::mb_PS(m_b_pole, mu()) * m_B) * (Y0(s) + lambda_u_hat * Y0u(s));
         }
 
         Complex<double> tensor_par(const double & s) const
         {
-            return -1.0 * (c7eff() - c7prime() + m_B / (2.0 * m_b_PS) * (Y0(s) + lambda_u_hat * Y0u(s)));
+            return -1.0 * (c7eff() - c7prime() + m_B / (2.0 * QCD::mb_PS(m_b_pole, mu())) * (Y0(s) + lambda_u_hat * Y0u(s)));
         }
 
         // Amplitudes
@@ -207,7 +207,7 @@ namespace wf
         {
             double h = helicity;
             double shat = s_hat(s);
-            double mbhat = m_b_PS / m_B;
+            double mbhat = QCD::mb_PS(m_b_pole, mu()) / m_B;
 
             double prefactor = -1.0 * norm(s) * m_B * m_B * (1.0 - shat) * (1.0 - shat) / (2.0 * m_Kstar * std::sqrt(shat));
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
@@ -219,7 +219,7 @@ namespace wf
         {
             double h = helicity;
             double shat = s_hat(s);
-            double mbhat = m_b_PS / m_B;
+            double mbhat = QCD::mb_PS(m_b_pole, mu()) / m_B;
 
             double prefactor = +std::sqrt(2.0) * norm(s) * m_B * (1.0 - shat);
             double wilson = (c9() + c9prime()) + h * (c10() + c10prime());
@@ -231,7 +231,7 @@ namespace wf
         {
             double h = helicity;
             double shat = s_hat(s);
-            double mbhat = m_b_PS / m_B;
+            double mbhat = QCD::mb_PS(m_b_pole, mu()) / m_B;
 
             double prefactor = -std::sqrt(2.0) * norm(s) * m_B * (1.0 - shat);
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());

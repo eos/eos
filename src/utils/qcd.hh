@@ -13,6 +13,9 @@ namespace wf
 
             // TODO: This is the quadratic casimir operator, correct?
             static const double casimir_f = 4.0 / 3.0;
+
+            // Potential-subtracted b mass m_b^PS
+            static double mb_PS(const double & mb_pole, const double & mu);
     };
 }
 

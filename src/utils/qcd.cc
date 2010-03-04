@@ -15,4 +15,12 @@ namespace wf
 
         return alpha_s_MZ / (1 + b_0 * alpha_s_MZ / (2.0 * M_PI) * std::log(mu / MZ)); // cf. [PS] Eq. (17.14)
     }
+
+    double
+    QCD::mb_PS(const double & mb_pole, const double & mu)
+    {
+        double alpha = alpha_s(mu);
+
+        return mb_pole - alpha * mu * 4.0 / 3.0 / M_PI;
+    }
 }
