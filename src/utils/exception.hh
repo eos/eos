@@ -22,6 +22,12 @@ namespace wf
 
             virtual const char * what() const throw ();
     };
+
+    struct InternalError :
+        public Exception
+    {
+        InternalError(const std::string & message) throw ();
+    };
 }
 
 #endif

@@ -18,4 +18,9 @@ namespace wf
     {
         return _message.c_str();
     }
+
+    InternalError::InternalError(const std::string & message) throw () :
+        Exception("Internal Error: " + message)
+    {
+    }
 }
