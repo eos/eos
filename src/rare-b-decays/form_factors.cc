@@ -168,7 +168,7 @@ namespace wf
 
             virtual double a_1(const double & s_hat)
             {
-                return _calc(0.28438, 0.97, 0.034, s_hat);
+                return _calc(0.28438, 0.98, 0.034, s_hat);
             }
 
             virtual double a_2(const double & s_hat)
