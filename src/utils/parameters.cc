@@ -8,11 +8,6 @@
 
 namespace wf
 {
-    namespace impl
-    {
-
-    }
-
     template <>
     struct Implementation<Parameters>
     {
