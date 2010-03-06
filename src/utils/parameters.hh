@@ -27,6 +27,8 @@ namespace wf
 
             ~Parameters();
 
+            Parameters clone() const;
+
             Parameter operator[] (const std::string & name) const;
 
             Parameter declare(const std::string & name, const double & value = 0.0);

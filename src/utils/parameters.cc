@@ -34,6 +34,12 @@ namespace wf
     {
     }
 
+    Parameters
+    Parameters::clone() const
+    {
+        return Parameters(new Implementation<Parameters>(*_imp));
+    }
+
     Parameter
     Parameters::operator[] (const std::string & name) const
     {

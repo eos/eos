@@ -12,6 +12,10 @@
 
 namespace wf
 {
+    class Observable;
+
+    typedef std::tr1::shared_ptr<Observable> ObservablePtr;
+
     class Observable
     {
         public:
@@ -22,6 +26,10 @@ namespace wf
             virtual const std::string & name() const = 0;
 
             virtual double evaluate(const Kinematics &) const = 0;
+
+            virtual Parameters parameters() = 0;
+
+            virtual ObservablePtr clone() const = 0;
     };
 
     typedef std::tr1::shared_ptr<Observable> ObservablePtr;

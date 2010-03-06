@@ -70,12 +70,18 @@ namespace wf
         public Observable
     {
         private:
+            Parameters _parameters;
+
+            ObservableOptions _options;
+
             Decay_ _decay;
 
             ConcreteObservableData<Decay_, n_> _data;
 
         public:
             ConcreteObservable(const Parameters & parameters, const ObservableOptions & options, const ConcreteObservableData<Decay_, n_> & data) :
+                _parameters(parameters),
+                _options(options),
                 _decay(parameters, options),
                 _data(data)
             {
@@ -90,6 +96,16 @@ namespace wf
             {
                 return _data.evaluate(_decay, k);
             };
+
+            virtual Parameters parameters()
+            {
+                return _parameters;
+            };
+
+            virtual ObservablePtr clone() const
+            {
+                return ObservablePtr(new ConcreteObservable(_parameters.clone(), _options, _data));
+            }
     };
 
     template <typename Decay_, unsigned n_>
