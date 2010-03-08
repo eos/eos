@@ -14,6 +14,30 @@
 
 namespace wf
 {
+    // Move to src/utils/...
+    double integrate(const std::tr1::function<double (const double &)> & f, unsigned n, const double & a, const double & b)
+    {
+        if (n & 0x1)
+            n += 1;
+
+        double h = (b - a) / n;
+
+        double result = f(a) + f(b);
+        for (unsigned i = 1 ; i <= n / 2 - 1 ; ++i)
+        {
+            result += 2.0 * f(a + h * (2 * i));
+        }
+        for (unsigned i = 1 ; i <= n / 2 ; ++i)
+        {
+            result += 4.0 * f(a + h * (2 * i - 1));
+        }
+
+        result *= h / 3;
+
+        return result;
+    }
+
+
     // Large Recoil
 
     template <>
@@ -303,6 +327,21 @@ namespace wf
             / differential_decay_width(s);
     }
 
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    {
+        return integrate(std::tr1::bind(std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_branching_ratio),
+                    this, std::tr1::placeholders::_1), 100, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    {
+        return integrate(std::tr1::bind(std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry),
+                    this, std::tr1::placeholders::_1), 100, s_min, s_max);
+    }
+
+
     // Low Recoil
 
     template <>
@@ -523,28 +562,6 @@ namespace wf
             / differential_decay_width(s);
     }
 
-    double integrate(const std::tr1::function<double (const double &)> & f, unsigned n, const double & a, const double & b)
-    {
-        if (n & 0x1)
-            n += 1;
-
-        double h = (b - a) / n;
-
-        double result = f(a) + f(b);
-        for (unsigned i = 1 ; i <= n / 2 - 1 ; ++i)
-        {
-            result += 2.0 * f(a + h * (2 * i));
-        }
-        for (unsigned i = 1 ; i <= n / 2 ; ++i)
-        {
-            result += 4.0 * f(a + h * (2 * i - 1));
-        }
-
-        result *= h / 3;
-
-        return result;
-    }
-
     double
     BToKstarDilepton<LowRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
@@ -577,6 +594,15 @@ namespace wf
                         ConcreteObservableData<BToKstarDilepton<LargeRecoil>, 1>("dF_L/ds",
                             std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation),
                             "s"))),
+            std::make_pair("A_FB@LargeRecoil", new ConcreteObservableFactory<BToKstarDilepton<LargeRecoil>, 2>(
+                        ConcreteObservableData<BToKstarDilepton<LargeRecoil>, 2>("A_FB",
+                            std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry),
+                            "s_min", "s_max"))),
+            std::make_pair("BR@LargeRecoil", new ConcreteObservableFactory<BToKstarDilepton<LargeRecoil>, 2>(
+                        ConcreteObservableData<BToKstarDilepton<LargeRecoil>, 2>("BR",
+                            std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::integrated_branching_ratio),
+                            "s_min", "s_max"))),
+
             // Low Recoil
             std::make_pair("dBR/ds@LowRecoil", new ConcreteObservableFactory<BToKstarDilepton<LowRecoil>, 1>(
                         ConcreteObservableData<BToKstarDilepton<LowRecoil>, 1>("dBR/ds",
