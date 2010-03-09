@@ -1,6 +1,6 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
+#include <src/rare-b-decays/factory.hh>
 #include <src/utils/lock.hh>
 #include <src/utils/mutex.hh>
 #include <src/utils/thread_pool.hh>
@@ -60,7 +60,7 @@ class Scan3
             {
                 //TODO: Create options from i->o_opions!
                 ObservableOptions options;
-                bins.push_back(std::make_pair(*i, BToKstarDileptonFactory::make(i->o_name, Parameters::Defaults(), options)));
+                bins.push_back(std::make_pair(*i, RareBFactory::make(i->o_name, Parameters::Defaults(), options)));
             }
         }
 
@@ -203,36 +203,36 @@ main(int argc, char * argv[])
         // max(s) = (m_B - m_Kstar)^2 = 19.211
         std::initializer_list<Input> input = {
             // [BaBar2006] data
-            //Input{00.10, 08.41,  0.12e-6,  0.27e-6,  0.44e-6, "BR@LargeRecoil", ""},
-            //Input{10.24, 19.21,  0.21e-6,  0.37e-6,  0.55e-6, "BR@LowRecoil", ""},
+            //Input{00.10, 08.41,  0.12e-6,  0.27e-6,  0.44e-6, "B->K^*ll::BR@LargeRecoil", ""},
+            //Input{10.24, 19.21,  0.21e-6,  0.37e-6,  0.55e-6, "B->K^*ll::BR@LowRecoil", ""},
 
             // [BaBar2008] data
-            //Input{00.10, 06.25, +0.01,    -0.24,    -0.42,    "A_FB@LargeRecoil", ""},
-            //Input{10.24, 19.21, -0.44,    -0.76,    -1.28,    "A_FB@LowRecoil", ""},
+            //Input{00.10, 06.25, +0.01,    -0.24,    -0.42,    "B->K^*ll::A_FB@LargeRecoil", ""},
+            //Input{10.24, 19.21, -0.44,    -0.76,    -1.28,    "B->K^*ll::A_FB@LowRecoil", ""},
 
             // [Belle2009] data
-            Input{00.10, 02.00, -0.12,    -0.47,    -0.76,    "A_FB@LargeRecoil", ""},
-            Input{02.00, 04.30, +0.30,    -0.11,    -0.47,    "A_FB@LargeRecoil", ""},
-            Input{04.30, 08.68, -0.11,    -0.45,    -0.73,    "A_FB@LargeRecoil", ""},
-            Input{14.18, 16.00, -0.96,    -0.70,    -0.38,    "A_FB@LowRecoil", ""},
-            Input{16.00, 19.21, -0.81,    -0.66,    -0.46,    "A_FB@LowRecoil", ""},
-            Input{00.10, 02.00,  0.99e-7,  1.46e-7,  1.98e-7, "BR@LargeRecoil", ""},
-            Input{02.00, 04.30,  0.52e-7,  0.86e-7,  1.24e-7, "BR@LargeRecoil", ""},
-            Input{04.30, 08.68,  0.83e-7,  1.37e-7,  1.96e-7, "BR@LargeRecoil", ""},
-            Input{14.18, 16.00,  0.71e-7,  1.05e-7,  1.42e-7, "BR@LowRecoil", ""},
-            Input{16.00, 19.21,  1.64e-7,  2.04e-7,  2.47e-7, "BR@LowRecoil", ""},
+            Input{00.10, 02.00, -0.12,    -0.47,    -0.76,    "B->K^*ll::A_FB@LargeRecoil", ""},
+            Input{02.00, 04.30, +0.30,    -0.11,    -0.47,    "B->K^*ll::A_FB@LargeRecoil", ""},
+            Input{04.30, 08.68, -0.11,    -0.45,    -0.73,    "B->K^*ll::A_FB@LargeRecoil", ""},
+            Input{14.18, 16.00, -0.96,    -0.70,    -0.38,    "B->K^*ll::A_FB@LowRecoil", ""},
+            Input{16.00, 19.21, -0.81,    -0.66,    -0.46,    "B->K^*ll::A_FB@LowRecoil", ""},
+            Input{00.10, 02.00,  0.99e-7,  1.46e-7,  1.98e-7, "B->K^*ll::BR@LargeRecoil", ""},
+            Input{02.00, 04.30,  0.52e-7,  0.86e-7,  1.24e-7, "B->K^*ll::BR@LargeRecoil", ""},
+            Input{04.30, 08.68,  0.83e-7,  1.37e-7,  1.96e-7, "B->K^*ll::BR@LargeRecoil", ""},
+            Input{14.18, 16.00,  0.71e-7,  1.05e-7,  1.42e-7, "B->K^*ll::BR@LowRecoil", ""},
+            Input{16.00, 19.21,  1.64e-7,  2.04e-7,  2.47e-7, "B->K^*ll::BR@LowRecoil", ""},
 
             // [CDF2010] data
-            //Input{00.10, 02.00, +0.87,    -0.13,    -2.03,    "A_FB@LargeRecoil", ""},
-            //Input{02.00, 04.30, +0.36,    -0.19,    -0.73,    "A_FB@LargeRecoil", ""},
-            //Input{04.30, 08.68, +0.39,    +0.06,    -0.29,    "A_FB@LargeRecoil", ""},
-            //Input{14.18, 16.00, -0.67,    -0.42,    -0.17,    "A_FB@LowRecoil", ""},
-            //Input{16.00, 19.21, -0.96,    -0.70,    -0.35,    "A_FB@LowRecoil", ""},
-            //Input{00.10, 02.00,  0.49e-7,  0.98e-7,  1.47e-7, "BR@LargeRecoil", ""},
-            //Input{02.00, 04.30,  0.53e-7,  1.00e-7,  1.47e-7, "BR@LargeRecoil", ""},
-            //Input{04.30, 08.68,  0.97e-7,  1.69e-7,  1.41e-7, "BR@LargeRecoil", ""},
-            //Input{14.18, 16.00,  1.02e-7,  1.51e-7,  2.00e-7, "BR@LowRecoil", ""},
-            //Input{16.00, 19.21,  0.86e-7,  1.35e-7,  1.84e-7, "BR@LowRecoil", ""},
+            //Input{00.10, 02.00, +0.87,    -0.13,    -2.03,    "B->K^*ll::A_FB@LargeRecoil", ""},
+            //Input{02.00, 04.30, +0.36,    -0.19,    -0.73,    "B->K^*ll::A_FB@LargeRecoil", ""},
+            //Input{04.30, 08.68, +0.39,    +0.06,    -0.29,    "B->K^*ll::A_FB@LargeRecoil", ""},
+            //Input{14.18, 16.00, -0.67,    -0.42,    -0.17,    "B->K^*ll::A_FB@LowRecoil", ""},
+            //Input{16.00, 19.21, -0.96,    -0.70,    -0.35,    "B->K^*ll::A_FB@LowRecoil", ""},
+            //Input{00.10, 02.00,  0.49e-7,  0.98e-7,  1.47e-7, "B->K^*ll::BR@LargeRecoil", ""},
+            //Input{02.00, 04.30,  0.53e-7,  1.00e-7,  1.47e-7, "B->K^*ll::BR@LargeRecoil", ""},
+            //Input{04.30, 08.68,  0.97e-7,  1.69e-7,  1.41e-7, "B->K^*ll::BR@LargeRecoil", ""},
+            //Input{14.18, 16.00,  1.02e-7,  1.51e-7,  2.00e-7, "B->K^*ll::BR@LowRecoil", ""},
+            //Input{16.00, 19.21,  0.86e-7,  1.35e-7,  1.84e-7, "B->K^*ll::BR@LowRecoil", ""},
         };
 
         Scan3 scanner(x, y, z, input);

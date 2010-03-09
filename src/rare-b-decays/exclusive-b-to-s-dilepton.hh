@@ -73,12 +73,6 @@ namespace wf
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
     };
-
-    class BToKstarDileptonFactory
-    {
-        public:
-            static std::tr1::shared_ptr<Observable> make(const std::string & name, const Parameters & parameters, const ObservableOptions & options);
-    };
 }
 
 #endif

@@ -1,6 +1,6 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
+#include <src/rare-b-decays/factory.hh>
 
 #include <cstdlib>
 #include <iostream>
@@ -51,7 +51,7 @@ main(int argc, char * argv[])
                 observable.erase(pos);
             }
 
-            ObservablePtr ptr(BToKstarDileptonFactory::make(observable, parameters, options));
+            ObservablePtr ptr(RareBFactory::make(observable, parameters, options));
             if (! ptr)
                 throw DoUsage("Unknown observable: '" + observable + "'");
 
