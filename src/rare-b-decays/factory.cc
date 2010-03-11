@@ -2,7 +2,7 @@
 
 #include <src/rare-b-decays/factory.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.cc>
-//#include <src/rare-b-decays/inclusive-b-to-s-dilepton.cc>
+#include <src/rare-b-decays/inclusive-b-to-s-dilepton.cc>
 
 namespace wf
 {
@@ -22,19 +22,31 @@ namespace wf
                         ConcreteObservableData<decay_, 2>(name_, std::tr1::mem_fn(&decay_::function_), var1_, var2_)))
 #endif
 
+            /* Exclusive Decays */
+
             // B -> K^* ll, Large Recoil
-            OBSERVABLE1("B->K^*ll::dBR/ds@LargeRecoil",  BToKstarDilepton<LargeRecoil>, differential_branching_ratio,            "s"),
-            OBSERVABLE1("B->K^*ll::A_FB(s)@LargeRecoil", BToKstarDilepton<LargeRecoil>, differential_forward_backward_asymmetry, "s"),
-            OBSERVABLE1("B->K^*ll::F_L(s)@LargeRecoil",  BToKstarDilepton<LargeRecoil>, differential_longitudinal_polarisation,  "s"),
-            OBSERVABLE2("B->K^*ll::A_FB@LargeRecoil",    BToKstarDilepton<LargeRecoil>, integrated_forward_backward_asymmetry,   "s_min", "s_max"),
-            OBSERVABLE2("B->K^*ll::BR@LargeRecoil",      BToKstarDilepton<LargeRecoil>, integrated_branching_ratio,              "s_min", "s_max"),
+            OBSERVABLE1("B->K^*ll::dBR/ds@LargeRecoil",   BToKstarDilepton<LargeRecoil>, differential_branching_ratio,            "s"),
+            OBSERVABLE1("B->K^*ll::A_FB(s)@LargeRecoil",  BToKstarDilepton<LargeRecoil>, differential_forward_backward_asymmetry, "s"),
+            OBSERVABLE1("B->K^*ll::A_T^2(s)@LargeRecoil", BToKstarDilepton<LargeRecoil>, differential_transverse_asymmetry_2,     "s"),
+            OBSERVABLE1("B->K^*ll::A_T^3(s)@LargeRecoil", BToKstarDilepton<LargeRecoil>, differential_transverse_asymmetry_3,     "s"),
+            OBSERVABLE1("B->K^*ll::A_T^4(s)@LargeRecoil", BToKstarDilepton<LargeRecoil>, differential_transverse_asymmetry_4,     "s"),
+            OBSERVABLE1("B->K^*ll::F_L(s)@LargeRecoil",   BToKstarDilepton<LargeRecoil>, differential_longitudinal_polarisation,  "s"),
+            OBSERVABLE2("B->K^*ll::A_FB@LargeRecoil",     BToKstarDilepton<LargeRecoil>, integrated_forward_backward_asymmetry,   "s_min", "s_max"),
+            OBSERVABLE2("B->K^*ll::BR@LargeRecoil",       BToKstarDilepton<LargeRecoil>, integrated_branching_ratio,              "s_min", "s_max"),
 
             // B -> K^* ll, Low Recoil
-            OBSERVABLE1("B->K^*ll::dBR/ds@LowRecoil",  BToKstarDilepton<LowRecoil>, differential_branching_ratio,            "s"),
-            OBSERVABLE1("B->K^*ll::A_FB(s)@LowRecoil", BToKstarDilepton<LowRecoil>, differential_forward_backward_asymmetry, "s"),
-            OBSERVABLE1("B->K^*ll::F_L(s)@LowRecoil",  BToKstarDilepton<LowRecoil>, differential_longitudinal_polarisation,  "s"),
-            OBSERVABLE2("B->K^*ll::A_FB@LowRecoil",    BToKstarDilepton<LowRecoil>, integrated_forward_backward_asymmetry,   "s_min", "s_max"),
-            OBSERVABLE2("B->K^*ll::BR@LowRecoil",      BToKstarDilepton<LowRecoil>, integrated_branching_ratio,              "s_min", "s_max"),
+            OBSERVABLE1("B->K^*ll::dBR/ds@LowRecoil",     BToKstarDilepton<LowRecoil>, differential_branching_ratio,            "s"),
+            OBSERVABLE1("B->K^*ll::A_FB(s)@LowRecoil",    BToKstarDilepton<LowRecoil>, differential_forward_backward_asymmetry, "s"),
+            OBSERVABLE1("B->K^*ll::A_T^2(s)@LowRecoil",   BToKstarDilepton<LowRecoil>, differential_transverse_asymmetry_2,     "s"),
+            OBSERVABLE1("B->K^*ll::A_T^3(s)@LowRecoil",   BToKstarDilepton<LowRecoil>, differential_transverse_asymmetry_3,     "s"),
+            OBSERVABLE1("B->K^*ll::A_T^4(s)@LowRecoil",   BToKstarDilepton<LowRecoil>, differential_transverse_asymmetry_4,     "s"),
+            OBSERVABLE1("B->K^*ll::F_L(s)@LowRecoil",     BToKstarDilepton<LowRecoil>, differential_longitudinal_polarisation,  "s"),
+            OBSERVABLE2("B->K^*ll::A_FB@LowRecoil",       BToKstarDilepton<LowRecoil>, integrated_forward_backward_asymmetry,   "s_min", "s_max"),
+            OBSERVABLE2("B->K^*ll::BR@LowRecoil",         BToKstarDilepton<LowRecoil>, integrated_branching_ratio,              "s_min", "s_max"),
+
+            /* Inclusive Decays */
+            OBSERVABLE1("B->X_sll::dBR/ds@GN1997", BToXsDilepton<GN1997>, differential_branching_ratio, "s"),
+            OBSERVABLE2("B->X_sll::BR@GN1997",     BToXsDilepton<GN1997>, integrated_branching_ratio,   "s_min", "s_max"),
         };
 
         ObservableOptions myoptions(options);

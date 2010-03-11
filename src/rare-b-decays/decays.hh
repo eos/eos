@@ -7,6 +7,8 @@ namespace wf
 {
     template <typename T_> class BToKstarDilepton;
 
+    template <typename T_> class BToXsDilepton;
+
     enum Helicity
     {
         left_handed = -1,
