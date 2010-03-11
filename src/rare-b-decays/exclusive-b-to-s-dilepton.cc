@@ -3,6 +3,7 @@
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <src/rare-b-decays/form_factors.hh>
 #include <src/utils/concrete_observable.hh>
+#include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
@@ -14,30 +15,6 @@
 
 namespace wf
 {
-    // Move to src/utils/...
-    double integrate(const std::tr1::function<double (const double &)> & f, unsigned n, const double & a, const double & b)
-    {
-        if (n & 0x1)
-            n += 1;
-
-        double h = (b - a) / n;
-
-        double result = f(a) + f(b);
-        for (unsigned i = 1 ; i <= n / 2 - 1 ; ++i)
-        {
-            result += 2.0 * f(a + h * (2 * i));
-        }
-        for (unsigned i = 1 ; i <= n / 2 ; ++i)
-        {
-            result += 4.0 * f(a + h * (2 * i - 1));
-        }
-
-        result *= h / 3;
-
-        return result;
-    }
-
-
     // Large Recoil
 
     template <>

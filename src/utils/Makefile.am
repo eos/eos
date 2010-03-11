@@ -10,6 +10,7 @@ libwfutils_la_SOURCES = \
 	concrete_observable.hh \
 	condition_variable.cc condition_variable.hh \
 	exception.cc exception.hh \
+	integrate.cc integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.cc kinematic.hh \
 	lock.cc lock.hh \
