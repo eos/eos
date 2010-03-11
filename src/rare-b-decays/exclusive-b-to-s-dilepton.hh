@@ -38,6 +38,9 @@ namespace wf
             double differential_branching_ratio(const double & s) const;
             double differential_decay_width(const double & s) const;
             double differential_forward_backward_asymmetry(const double & s) const;
+            double differential_transverse_asymmetry_2(const double & s) const;
+            double differential_transverse_asymmetry_3(const double & s) const;
+            double differential_transverse_asymmetry_4(const double & s) const;
             double differential_longitudinal_polarisation(const double & s) const;
 
             // Integrated Observables
@@ -67,6 +70,9 @@ namespace wf
             double differential_branching_ratio(const double & s) const;
             double differential_decay_width(const double & s) const;
             double differential_forward_backward_asymmetry(const double & s) const;
+            double differential_transverse_asymmetry_2(const double & s) const;
+            double differential_transverse_asymmetry_3(const double & s) const;
+            double differential_transverse_asymmetry_4(const double & s) const;
             double differential_longitudinal_polarisation(const double & s) const;
 
             // Integrated Observables

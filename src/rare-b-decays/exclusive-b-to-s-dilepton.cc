@@ -298,6 +298,34 @@ namespace wf
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_2(const double & s) const
+    {
+        double a = a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared();
+        double b = a_par(left_handed, s).absolute_squared() + a_par(right_handed, s).absolute_squared();
+
+        return (a - b) / (a + b);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_3(const double & s) const
+    {
+        double a = (a_long(left_handed, s) * a_par(left_handed, s).conjugate() + a_long(right_handed, s).conjugate() * a_par(right_handed, s)).absolute();
+        double b = std::sqrt(a_long(left_handed, s).absolute_squared() + a_long(right_handed, s).absolute_squared())
+                * std::sqrt(a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared());
+
+        return a / b;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_4(const double & s) const
+    {
+        double a = (a_long(left_handed, s) * a_perp(left_handed, s).conjugate() - a_long(right_handed, s).conjugate() * a_perp(right_handed, s)).absolute();
+        double b = (a_long(left_handed, s).conjugate() * a_par(left_handed, s) + a_long(right_handed, s) * a_par(right_handed, s).conjugate()).absolute();
+
+        return a / b;
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
         return (a_long(left_handed, s).absolute_squared() + a_long(right_handed, s).absolute_squared())
@@ -530,6 +558,34 @@ namespace wf
                 (a_par(left_handed, s) * a_perp(left_handed, s).conjugate()).real()
                 -(a_par(right_handed, s) * a_perp(right_handed, s).conjugate()).real()
             );
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2(const double & s) const
+    {
+        double a = a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared();
+        double b = a_par(left_handed, s).absolute_squared() + a_par(right_handed, s).absolute_squared();
+
+        return (a - b) / (a + b);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3(const double & s) const
+    {
+        double a = (a_long(left_handed, s) * a_par(left_handed, s).conjugate() + a_long(right_handed, s).conjugate() * a_par(right_handed, s)).absolute();
+        double b = std::sqrt((a_long(left_handed, s).absolute_squared() + a_long(right_handed, s).absolute_squared())
+                * (a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared()));
+
+        return a / b;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4(const double & s) const
+    {
+        double a = (a_long(left_handed, s) * a_perp(left_handed, s).conjugate() - a_long(right_handed, s).conjugate() * a_perp(right_handed, s)).absolute();
+        double b = (a_long(left_handed, s).conjugate() * a_par(left_handed, s) + a_long(right_handed, s) * a_par(right_handed, s).conjugate()).absolute();
+
+        return a / b;
     }
 
     double
