@@ -210,7 +210,7 @@ namespace wf
             double shat = s_hat(s);
             double mbhat = QCD::mb_PS(m_b_pole, mu()) / m_B;
 
-            double prefactor = -1.0 * norm(s) * m_B * m_B * (1.0 - shat) * (1.0 - shat) / (2.0 * m_Kstar * std::sqrt(shat));
+            double prefactor = -1.0 * m_B * m_B * (1.0 - shat) * (1.0 - shat) / (2.0 * m_Kstar * std::sqrt(shat));
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
 
             return prefactor * (wilson - 2.0 * mbhat * tensor_par(s)) * xi_par(s);
@@ -222,7 +222,7 @@ namespace wf
             double shat = s_hat(s);
             double mbhat = QCD::mb_PS(m_b_pole, mu()) / m_B;
 
-            double prefactor = +std::sqrt(2.0) * norm(s) * m_B * (1.0 - shat);
+            double prefactor = +std::sqrt(2.0) * m_B * (1.0 - shat);
             double wilson = (c9() + c9prime()) + h * (c10() + c10prime());
 
             return prefactor * (wilson + 2.0 * mbhat / shat * tensor_perp(+1.0, s)) * xi_perp(s);
@@ -234,7 +234,7 @@ namespace wf
             double shat = s_hat(s);
             double mbhat = QCD::mb_PS(m_b_pole, mu()) / m_B;
 
-            double prefactor = -std::sqrt(2.0) * norm(s) * m_B * (1.0 - shat);
+            double prefactor = -std::sqrt(2.0) * m_B * (1.0 - shat);
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
 
             return prefactor * (wilson + 2.0 * mbhat / shat * tensor_perp(-1.0, s)) * xi_perp(s);
@@ -280,18 +280,18 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::differential_decay_width(const double & s) const
     {
-        return a_long(left_handed, s).absolute_squared()
+        return _imp->norm(s) * _imp->norm(s) * (a_long(left_handed, s).absolute_squared()
             + a_long(right_handed, s).absolute_squared()
             + a_perp(left_handed, s).absolute_squared()
             + a_perp(right_handed, s).absolute_squared()
             + a_par(left_handed, s).absolute_squared()
-            + a_par(right_handed, s).absolute_squared();
+            + a_par(right_handed, s).absolute_squared());
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
-        return 1.5 / differential_decay_width(s) * (
+        return 1.5 * _imp->norm(s) * _imp->norm(s) / differential_decay_width(s) * (
                 (a_par(left_handed, s) * a_perp(left_handed, s).conjugate()).real()
                 -(a_par(right_handed, s) * a_perp(right_handed, s).conjugate()).real()
             );
@@ -301,7 +301,7 @@ namespace wf
     BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
         return (a_long(left_handed, s).absolute_squared() + a_long(right_handed, s).absolute_squared())
-            / differential_decay_width(s);
+            * _imp->norm(s) * _imp->norm(s) / differential_decay_width(s);
     }
 
     double
@@ -450,7 +450,7 @@ namespace wf
             double h = helicity;
             double m_Kstar_hat = m_Kstar / m_B;
             Complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
-            Complex<double> prefactor = Complex<double>::Cartesian(0.0, -0.5 * norm(s) * m_B * m_B * m_B / m_Kstar / std::sqrt(s));
+            Complex<double> prefactor = Complex<double>::Cartesian(0.0, -0.5 * m_B * m_B * m_B / m_Kstar / std::sqrt(s));
             double formfactor = lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s)) * form_factors->a_1(s_hat(s)) - (1 - s_hat(s)) * form_factors->a_2(s_hat(s));
 
             return prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
@@ -461,7 +461,7 @@ namespace wf
             double h = helicity;
             double m_Kstar_hat = m_Kstar / m_B;
             Complex<double> wilson = (c9eff(s) + c9prime()) + h * (c10() + c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
-            Complex<double> prefactor = Complex<double>::Cartesian(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * norm(s) * m_B);
+            Complex<double> prefactor = Complex<double>::Cartesian(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * m_B);
 
             return prefactor * wilson * form_factors->v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }
@@ -470,7 +470,7 @@ namespace wf
         {
             double h = helicity;
             Complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
-            Complex<double> prefactor = Complex<double>::Cartesian(0.0, -std::sqrt(2) * norm(s) * m_B);
+            Complex<double> prefactor = Complex<double>::Cartesian(0.0, -std::sqrt(2) * m_B);
 
             return prefactor * wilson * form_factors->a_1(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }
@@ -509,18 +509,18 @@ namespace wf
         // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
         static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
 
-        return differential_decay_width(s) / Gamma;
+        return differential_decay_width(s) * (_imp->norm(s) * _imp->norm(s) / Gamma);
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_decay_width(const double & s) const
     {
-        return a_long(left_handed, s).absolute_squared()
+        return (a_long(left_handed, s).absolute_squared()
             + a_long(right_handed, s).absolute_squared()
             + a_perp(left_handed, s).absolute_squared()
             + a_perp(right_handed, s).absolute_squared()
             + a_par(left_handed, s).absolute_squared()
-            + a_par(right_handed, s).absolute_squared();
+            + a_par(right_handed, s).absolute_squared());
     }
 
     double
