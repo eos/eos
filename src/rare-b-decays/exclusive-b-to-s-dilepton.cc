@@ -60,6 +60,12 @@ namespace wf
 
         Complex<double> lambda_u_hat;
 
+        double f_B;
+
+        double f_Kstar_par;
+
+        double lambda_B_plus;
+
         std::tr1::shared_ptr<FormFactors<BToKstar>> form_factors;
 
         Implementation(const Parameters & p, const ObservableOptions & o) :
@@ -79,7 +85,10 @@ namespace wf
             m_c(1.27), // (GeV), cf. [PDG2008], p. 21
             m_B(5.279), // (GeV), cf. [PDG2008], p. 81
             m_Kstar(0.896), // (GeV), cf. [PDG2008], p. 44
-            mu(p["mu"])
+            mu(p["mu"]),
+            f_B(0.200), // +/- 0.03 GeV, cf. [BHP2008], Table 1, p. 8
+            f_Kstar_par(0.217), // +/- 0.005 GeV, cf. [BHP2008], Table 1, p. 8
+            lambda_B_plus(0.458) // +/- 0.115 GeV, cf. [BHP2008], Table 1, p. 8
         {
             form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
             if (! form_factors.get())
@@ -193,14 +202,36 @@ namespace wf
             return factor1 * form_factors->a_1(s_hat(s)) - factor2 * form_factors->a_2(s_hat(s));
         }
 
+        // cf. [BFS2001], Eq. (36), p. 9
+        double bfs_L(const double & s) const
+        {
+            double m_b_pole2 = m_b_pole * m_b_pole;
+
+            return -1.0 * (m_b_pole2 - s) / s * std::log(1.0 - s / m_b_pole2);
+        }
+
+        Complex<double> lambda_B_minus_inv(const double & s) const
+        {
+            double x = s / m_B / 0.33;
+            double ei = 0.57721566490 + std::log(x) + x + x * x / 4.0 + x * x * x / 18.0;
+
+            return Complex<double>::Cartesian(-ei, M_PI) * (std::exp(-x) / 0.33);
+        }
+
         Complex<double> tensor_perp(const double & h, const double & s) const
         {
-            return c7eff() + h * c7prime() + s / (2.0 * QCD::mb_PS(m_b_pole, mu()) * m_B) * (Y0(s) + lambda_u_hat * Y0u(s));
+            Complex<double> factorizable = (c7eff() + h * c7prime()) + s / (2.0 * QCD::mb_PS(m_b_pole, mu()) * m_B) * (Y0(s) + lambda_u_hat * Y0u(s));
+
+            return xi_perp(s) * factorizable;
         }
 
         Complex<double> tensor_par(const double & s) const
         {
-            return -1.0 * (c7eff() - c7prime() + m_B / (2.0 * QCD::mb_PS(m_b_pole, mu())) * (Y0(s) + lambda_u_hat * Y0u(s)));
+            Complex<double> factorizable = -1.0 * (c7eff() - c7prime() + m_B / (2.0 * QCD::mb_PS(m_b_pole, mu())) * (Y0(s) + lambda_u_hat * Y0u(s)));
+            Complex<double> non_factorizable = M_PI * M_PI / 3.0 * f_B * f_Kstar_par * 2.0 / (m_B * m_B - s) * m_Kstar * lambda_B_minus_inv(s)
+                * (4.0 / 3.0) * (m_B / QCD::mb_PS(m_b_pole, mu())) * (c3() + 4.0/3.0 * c4() + 16.0 * c5() + 64.0/3.0 * c6());
+
+            return xi_par(s) * factorizable + non_factorizable;
         }
 
         // Amplitudes
@@ -213,7 +244,7 @@ namespace wf
             double prefactor = -1.0 * m_B * m_B * (1.0 - shat) * (1.0 - shat) / (2.0 * m_Kstar * std::sqrt(shat));
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
 
-            return prefactor * (wilson - 2.0 * mbhat * tensor_par(s)) * xi_par(s);
+            return prefactor * (wilson * xi_par(s) - 2.0 * mbhat * tensor_par(s));
         }
 
         Complex<double> a_perp(const Helicity & helicity, const double & s) const
@@ -225,7 +256,7 @@ namespace wf
             double prefactor = +std::sqrt(2.0) * m_B * (1.0 - shat);
             double wilson = (c9() + c9prime()) + h * (c10() + c10prime());
 
-            return prefactor * (wilson + 2.0 * mbhat / shat * tensor_perp(+1.0, s)) * xi_perp(s);
+            return prefactor * (wilson * xi_perp(s) + 2.0 * mbhat / shat * tensor_perp(+1.0, s));
         }
 
         Complex<double> a_par(const Helicity & helicity, const double & s) const
