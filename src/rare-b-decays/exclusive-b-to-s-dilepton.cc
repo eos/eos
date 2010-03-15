@@ -386,6 +386,10 @@ namespace wf
 
         Parameter mu;
 
+        Parameter ckm_A;
+
+        Parameter ckm_lambda;
+
         std::tr1::shared_ptr<FormFactors<BToKstar>> form_factors;
 
         Implementation(const Parameters & p, const ObservableOptions & o) :
@@ -405,7 +409,9 @@ namespace wf
             m_c(p["mass::c"]),
             m_B(p["mass::B0"]),
             m_Kstar(p["mass::K^*0"]),
-            mu(p["mu"])
+            mu(p["mu"]),
+            ckm_A(p["CKM::A"]),
+            ckm_lambda(p["CKM::lambda"])
         {
             form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
             if (! form_factors.get())
@@ -459,7 +465,7 @@ namespace wf
         {
             static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
             static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
-            static const double lambda_t = -0.2257 * 0.2257 * 0.814; // cf. [PDG2008], Eqs. (11.5, 11.26), pp. 169,174
+            double lambda_t = ckm_A * ckm_lambda * ckm_lambda;
 
             return std::sqrt(g_fermi * g_fermi * alpha_e * alpha_e / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
                     * lambda_t * lambda_t * s_hat(s)
