@@ -23,7 +23,30 @@ namespace wf
             Parameters(Implementation<Parameters> *);
 
         public:
-            typedef std::pair<std::string, double> NameValuePair;
+            struct NameValuePair
+            {
+                const std::string name;
+
+                const double min, max;
+
+                double value;
+
+                NameValuePair(const std::string & name, const double & central) :
+                    name(name),
+                    min(central),
+                    max(central),
+                    value(central)
+                {
+                }
+
+                NameValuePair(const std::string & name, const double & min, const double & central, const double & max) :
+                    name(name),
+                    min(min),
+                    max(max),
+                    value(central)
+                {
+                }
+            };
 
             ~Parameters();
 
@@ -59,6 +82,10 @@ namespace wf
             double operator() () const;
 
             const Parameter & operator= (const double &);
+
+            const double & max() const;
+
+            const double & min() const;
     };
 }
 

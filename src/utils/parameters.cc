@@ -11,16 +11,17 @@ namespace wf
     template <>
     struct Implementation<Parameters>
     {
-        std::vector<double> parameters;
+        std::vector<Parameters::NameValuePair> parameters;
 
         std::map<std::string, unsigned> parameter_map;
 
-        Implementation(const std::initializer_list<Parameters::NameValuePair> & list)
+        Implementation(const std::initializer_list<Parameters::NameValuePair> & list) :
+            parameters(list)
         {
-            for (auto i(list.begin()), i_end(list.end()) ; i != i_end ; ++i)
+            unsigned idx(0);
+            for (auto i(list.begin()), i_end(list.end()) ; i != i_end ; ++i, ++idx)
             {
-                parameter_map[i->first] = parameters.size();
-                parameters.push_back(i->second);
+                parameter_map[i->name] = idx;
             }
         }
     };
@@ -51,25 +52,6 @@ namespace wf
         return Parameter(_imp, i->second);
     }
 
-    Parameter
-    Parameters::declare(const std::string & name, const double & value)
-    {
-        auto i(_imp->parameter_map.find(name));
-
-        if (_imp->parameter_map.end() != i) // TODO: Should this throw an exception instead?
-        {
-            _imp->parameters[i->second] = value;
-            return Parameter(_imp, i->second);
-        }
-        else
-        {
-            _imp->parameter_map[name] = _imp->parameters.size();
-            Parameter result(_imp, _imp->parameters.size());
-            _imp->parameters.push_back(value);
-            return result;
-        }
-    }
-
     void
     Parameters::set(const std::string & name, const double & value)
     {
@@ -78,7 +60,7 @@ namespace wf
         if (_imp->parameter_map.end() == i)
             throw UnknownParameterError(name);
 
-        _imp->parameters[i->second] = value;
+        _imp->parameters[i->second].value = value;
     }
 
     Parameters
@@ -110,10 +92,20 @@ namespace wf
             // Factorization scale
             Parameters::NameValuePair{"mu", 4.8},
             // CKM matrix elements, cf. [PDG2008], Eqs. (11.4), (11.5), p. 169 and Eq. (11.26), p. 174
-            Parameters::NameValuePair{"CKM::A", 0.814},
-            Parameters::NameValuePair{"CKM::lambda", 0.2257},
-            Parameters::NameValuePair{"CKM::rhobar", 0.135},
-            Parameters::NameValuePair{"CKM::etabar", 0.349},
+            Parameters::NameValuePair{"CKM::A", 0.793, 0.814, 0.835},
+            Parameters::NameValuePair{"CKM::lambda", 0.2247, 0.2257, 0.2266},
+            Parameters::NameValuePair{"CKM::rhobar", 0.119, 0.135, 0.166},
+            Parameters::NameValuePair{"CKM::etabar", 0.332, 0.349, 0.364},
+            // Masses in GeV
+            Parameters::NameValuePair{"mass::b(MSbar)", 4.13, 4.20, 4.37}, // cf. [PDG2008], p. 21
+            Parameters::NameValuePair{"mass::c", 1.16, 1.27, 1.34}, // cf. [PDG2008], p. 21
+            Parameters::NameValuePair{"mass::B0", 5.27920, 5.27953, 5.27986}, // cf. [PDG2008], p. 79
+            Parameters::NameValuePair{"mass::K^*0", 0.896}, // cf. [PDG2008], p. 44
+            // Form factor uncertainties
+            Parameters::NameValuePair{"formfactors::a0_uncertainty", 0.85, 1.0, 1.15},
+            Parameters::NameValuePair{"formfactors::a1_uncertainty", 0.85, 1.0, 1.15},
+            Parameters::NameValuePair{"formfactors::a2_uncertainty", 0.85, 1.0, 1.15},
+            Parameters::NameValuePair{"formfactors::v_uncertainty", 0.85, 1.0, 1.15},
         });
     }
 
@@ -129,19 +121,31 @@ namespace wf
 
     Parameter::operator double () const
     {
-        return _imp->parameters[_index];
+        return _imp->parameters[_index].value;
     }
 
     double
     Parameter::operator() () const
     {
-        return _imp->parameters[_index];
+        return _imp->parameters[_index].value;
     }
 
     const Parameter &
     Parameter::operator= (const double & value)
     {
-        _imp->parameters[_index] = value;
+        _imp->parameters[_index].value = value;
+    }
+
+    const double &
+    Parameter::max() const
+    {
+        return _imp->parameters[_index].max;
+    }
+
+    const double &
+    Parameter::min() const
+    {
+        return _imp->parameters[_index].min;
     }
 
     UnknownParameterError::UnknownParameterError(const std::string & name) throw () :
