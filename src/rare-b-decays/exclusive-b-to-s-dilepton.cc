@@ -376,14 +376,13 @@ namespace wf
 
         Parameter c10prime;
 
-        double m_b_MSbar;
+        Parameter m_b_MSbar;
 
-        double m_c;
+        Parameter m_c;
 
-        double m_B;
+        Parameter m_B;
 
-        double m_Kstar;
-
+        Parameter m_Kstar;
 
         Parameter mu;
 
@@ -402,10 +401,10 @@ namespace wf
             c7prime(p["c7prime"]),
             c9prime(p["c9prime"]),
             c10prime(p["c10prime"]),
-            m_b_MSbar(4.2), // (GeV), cf. [PDG2008], p. 21
-            m_c(1.27), // (GeV), cf. [PDG2008], p. 21
-            m_B(5.279), // (GeV), cf. [PDG2008], p. 81
-            m_Kstar(0.896), // (GeV), cf. [PDG2008], p. 44
+            m_b_MSbar(p["mass::b(MSbar)"]),
+            m_c(p["mass::c"]),
+            m_B(p["mass::B0"]),
+            m_Kstar(p["mass::K^*0"]),
             mu(p["mu"])
         {
             form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"]);
