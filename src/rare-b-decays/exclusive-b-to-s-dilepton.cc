@@ -171,8 +171,8 @@ namespace wf
         Complex<double> Y0(const double & s) const
         {
             double Y_c = 4.0 / 3.0 * c1() + c2() + 6.0 * c3() + 60.0 * c5();
-            double Y_b = -0.5 * (7.0 * c3() + 4.0 / 3.0 * (c4() + 76.0 * c5()) + 64.0 / 3.0 * c6());
-            double Y_0 = -0.5 * (c3() + 4.0 / 3.0 * c4() + 16.0 * c5() - 64 / 3.0 * c6());
+            double Y_b = -0.5 * (7.0 * c3() + 4.0 / 3.0 * c4() + 76.0 * c5() + 64.0 / 3.0 * c6());
+            double Y_0 = -0.5 * (c3() + 4.0 / 3.0 * c4() + 16.0 * c5() + 64 / 3.0 * c6());
             double Y = 2.0 / 9.0 * (6.0 * c3() + 32.0 * c5() + 32.0 / 3.0 * c6());
 
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
