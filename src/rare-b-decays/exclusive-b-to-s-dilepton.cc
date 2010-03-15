@@ -81,7 +81,7 @@ namespace wf
             m_Kstar(0.896), // (GeV), cf. [PDG2008], p. 44
             mu(p["mu"])
         {
-            form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"]);
+            form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
             if (! form_factors.get())
                 throw std::string("InternalError");
 
@@ -407,7 +407,7 @@ namespace wf
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"])
         {
-            form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"]);
+            form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
             if (! form_factors.get())
                 throw std::string("InternalError");
         }

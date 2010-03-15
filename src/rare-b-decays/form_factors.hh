@@ -3,6 +3,8 @@
 #ifndef WFITTER_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_HH
 #define WFITTER_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_HH 1
 
+#include <src/utils/parameters.hh>
+
 #include <string>
 #include <tr1/memory>
 
@@ -34,7 +36,7 @@ namespace wf
     {
         public:
             static std::tr1::shared_ptr<FormFactors<BToKstar>>
-                create(const std::string & label);
+                create(const std::string & label, const Parameters & parameters);
     };
 }
 

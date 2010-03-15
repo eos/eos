@@ -74,6 +74,10 @@ main(int argc, char * argv[])
             parameters["CKM::lambda"],
             parameters["CKM::etabar"],
             parameters["CKM::rhobar"],
+            parameters["formfactors::a0_uncertainty"],
+            parameters["formfactors::a1_uncertainty"],
+            parameters["formfactors::a2_uncertainty"],
+            parameters["formfactors::v_uncertainty"],
             parameters["mass::B0"],
         };
 

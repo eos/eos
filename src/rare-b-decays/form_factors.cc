@@ -88,6 +88,8 @@ namespace wf
         public FormFactors<BToKstar>
     {
         private:
+            Parameter _a0_factor, _a1_factor, _a2_factor, _v_factor;
+
             // cf. [BZ2004], Eqs. (59)-(61)
             // Here ratio_{r,fit} is m_B^2 / m_{R,fit}^2. For Eq. (61), we use Eq. (59) with r1 = 0.
             double _calc_eq59(const double & r1, const double & r2, const double & ratio_r, const double & ratio_fit, const double & s_hat)
@@ -107,7 +109,11 @@ namespace wf
             }
 
         public:
-            BZ2004FormFactors()
+            BZ2004FormFactors(const Parameters & p) :
+                _a0_factor(p["formfactors::a0_uncertainty"]),
+                _a1_factor(p["formfactors::a1_uncertainty"]),
+                _a2_factor(p["formfactors::a2_uncertainty"]),
+                _v_factor(p["formfactors::v_uncertainty"])
             {
             }
 
@@ -118,22 +124,22 @@ namespace wf
             // cf. [BZ2004], Table 8, p. 28
             virtual double v(const double & s_hat)
             {
-                return _calc_eq59(0.923, -0.511, 0.99248, 0.56434, s_hat);
+                return _v_factor * _calc_eq59(0.923, -0.511, 0.99248, 0.56434, s_hat);
             }
 
             virtual double a_0(const double & s_hat)
             {
-                return _calc_eq59(1.364, -0.990, 1.0, 0.75798, s_hat);
+                return _a0_factor * _calc_eq59(1.364, -0.990, 1.0, 0.75798, s_hat);
             }
 
             virtual double a_1(const double & s_hat)
             {
-                return _calc_eq59(0.0, 0.290, 1.0, 0.69040, s_hat);
+                return _a1_factor * _calc_eq59(0.0, 0.290, 1.0, 0.69040, s_hat);
             }
 
             virtual double a_2(const double & s_hat)
             {
-                return _calc_eq60(-0.084, 0.342, 0.53612, s_hat);
+                return _a2_factor * _calc_eq60(-0.084, 0.342, 0.53612, s_hat);
             }
     };
 
@@ -182,7 +188,7 @@ namespace wf
     }
 
     std::tr1::shared_ptr<FormFactors<BToKstar>>
-    FormFactorFactory<BToKstar>::create(const std::string & label)
+    FormFactorFactory<BToKstar>::create(const std::string & label, const Parameters & parameters)
     {
         std::tr1::shared_ptr<FormFactors<BToKstar>> result;
         std::string name, set;
@@ -210,7 +216,7 @@ namespace wf
         }
         else if ("BZ2004" == name)
         {
-            result = std::tr1::shared_ptr<FormFactors<BToKstar>>(new BZ2004FormFactors);
+            result = std::tr1::shared_ptr<FormFactors<BToKstar>>(new BZ2004FormFactors(parameters));
         }
         else if ("IKKR2007" == name)
         {
