@@ -2,6 +2,7 @@
 
 #include <src/rare-b-decays/factory.hh>
 
+#include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <list>
@@ -67,6 +68,15 @@ main(int argc, char * argv[])
         }
         std::cout << std::endl;
 
+        std::list<Parameter> variations =
+        {
+            parameters["CKM::A"],
+            parameters["CKM::lambda"],
+            parameters["CKM::etabar"],
+            parameters["CKM::rhobar"],
+            parameters["mass::B0"],
+        };
+
         for (unsigned j = 0 ; j <= points ; ++j)
         {
             const double s_low = 0.0;
@@ -78,7 +88,40 @@ main(int argc, char * argv[])
 
             for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
             {
-                std::cout << '\t' << (*o)->evaluate(kinematics);
+                double central = (*o)->evaluate(kinematics), sign = central / std::abs(central);
+                double delta_min = 0.0, delta_max = 0.0;
+
+                for (auto p(variations.begin()), p_end(variations.end()) ; p != p_end ; ++p)
+                {
+                    double old_p = *p;
+                    double max = 0.0, min = 0.0, value;
+
+                    *p = p->min();
+                    value = (*o)->evaluate(kinematics);
+                    if (value > central)
+                        max = value - central;
+
+                    if (value < central)
+                        min = central - value;
+
+                    *p = p->max();
+                    value = (*o)->evaluate(kinematics);
+                    if (value > central)
+                        max = std::max(max, value - central);
+
+                    if (value < central)
+                        min = std::max(min, central - value);
+
+                    *p = old_p;
+
+                    delta_min += min * min;
+                    delta_max += max * max;
+                }
+
+                delta_max = std::sqrt(delta_max);
+                delta_min = std::sqrt(delta_min);
+
+                std::cout << '\t' << central - delta_min << '\t' << central << '\t' << central + delta_max;
             }
 
             std::cout << std::endl;
