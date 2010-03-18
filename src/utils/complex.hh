@@ -54,6 +54,8 @@ namespace wf
             T_ & real();
 
             T_ & imaginary();
+
+            T_ phase();
     };
 
     template <typename T_>

@@ -4,6 +4,7 @@
 #define WILSON_FITTER_GUARD_SRC_UTILS_COMPLEX_IMPL_HH 1
 
 #include <src/utils/complex.hh>
+#include <src/utils/exception.hh>
 
 #include <cmath>
 
@@ -94,6 +95,18 @@ namespace wf
     }
 
     template <typename T_>
+    T_
+    Complex<T_>::phase()
+    {
+        T_ r(this->_real_part), i(this->_imaginary_part);
+
+        if ((0 == r) && (0 == i))
+            throw InternalError("Calculating phase of 0 + 0i");
+
+        return std::atan2(r, i);
+    }
+
+    template <typename T_>
     Complex<T_>
     operator* (const Complex<T_> & lhs, const Complex<T_> & rhs)
     {
@@ -128,7 +141,6 @@ namespace wf
 
         return result;
     }
-
 }
 
 #endif
