@@ -46,11 +46,11 @@ namespace wf
 
         double m_b_pole;
 
-        double m_c;
+        Parameter m_c;
 
-        double m_B;
+        Parameter m_B;
 
-        double m_Kstar;
+        Parameter m_Kstar;
 
         double m_l;
 
@@ -82,9 +82,9 @@ namespace wf
             c9prime(p["c9prime"]),
             c10prime(p["c10prime"]),
             m_b_pole(4.8), // (GeV)
-            m_c(1.27), // (GeV), cf. [PDG2008], p. 21
-            m_B(5.279), // (GeV), cf. [PDG2008], p. 81
-            m_Kstar(0.896), // (GeV), cf. [PDG2008], p. 44
+            m_c(p["mass::c"]),
+            m_B(p["mass::B0"]),
+            m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
             f_B(0.200), // +/- 0.03 GeV, cf. [BHP2008], Table 1, p. 8
             f_Kstar_par(0.217), // +/- 0.005 GeV, cf. [BHP2008], Table 1, p. 8
