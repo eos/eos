@@ -15,7 +15,10 @@ namespace wf
             static const double casimir_f = 4.0 / 3.0;
 
             // Potential-subtracted b mass m_b^PS
-            static double mb_PS(const double & mb_pole, const double & mu);
+            static double mb_PS(const double & mb_MSbar, const double & mu);
+
+            // Pole mass of the b
+            static double mb_pole(const double & mb_MSbar, const double & mu);
     };
 }
 

@@ -1,6 +1,14 @@
 References
 ==========
 
+    AAGW2001 : Asatryan, H.H. and Asatrian, H.M. and Greub, C. and Walker, M.
+
+        Calculation of two-loop virtual corrections to b -> s l^+ l^- in
+        the standard model
+
+        arxiv:hep-ph/0109140
+
+
     ABBBSW2008 : Altmannshofer, W. and Ball, P. and Bharucha, A. and Buras,
                  A. J. and Straub, D. and Wick, M.
 
@@ -8,6 +16,7 @@ References
         Model and Beyond
 
         arxiv:0811.1214
+
 
     ABHH : Ali, A. and Ball, P. and Handoko, L. T., and Hiller, G.
 

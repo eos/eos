@@ -59,7 +59,7 @@ main(int argc, char * argv[])
             observables.push_back(ptr);
         }
 
-        const unsigned points = 1921;
+        const unsigned points = 192;
 
         std::cout << "#\ts";
         for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
@@ -72,18 +72,20 @@ main(int argc, char * argv[])
         {
             parameters["CKM::A"],
             parameters["CKM::lambda"],
-            parameters["CKM::etabar"],
-            parameters["CKM::rhobar"],
             parameters["formfactors::a0_uncertainty"],
             parameters["formfactors::a1_uncertainty"],
             parameters["formfactors::a2_uncertainty"],
             parameters["formfactors::v_uncertainty"],
-            parameters["mass::B0"],
+            parameters["mass::b(MSbar)"],
+            parameters["B->K^*::a_1_par"],
+            parameters["B->K^*::a_2_par"],
+            parameters["B->K^*::a_1_perp"],
+            parameters["B->K^*::a_2_perp"],
         };
 
         for (unsigned j = 0 ; j <= points ; ++j)
         {
-            const double s_low = 0.0;
+            const double s_low = 0.01;
             const double s_high = 19.21;
             double s = s_low + j * (s_high - s_low) / points;
 

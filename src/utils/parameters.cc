@@ -106,6 +106,11 @@ namespace wf
             Parameters::NameValuePair{"formfactors::a1_uncertainty", 0.85, 1.0, 1.15},
             Parameters::NameValuePair{"formfactors::a2_uncertainty", 0.85, 1.0, 1.15},
             Parameters::NameValuePair{"formfactors::v_uncertainty", 0.85, 1.0, 1.15},
+            // B->K^*, K^* LCDA parameters
+            Parameters::NameValuePair{"B->K^*::a_1_par", 0.03, 0.1, 0.17},
+            Parameters::NameValuePair{"B->K^*::a_2_par", 0.0, 0.1, 0.2},
+            Parameters::NameValuePair{"B->K^*::a_1_perp", 0.03, 0.1, 0.17},
+            Parameters::NameValuePair{"B->K^*::a_2_perp", 0.0, 0.1, 0.2},
         });
     }
 

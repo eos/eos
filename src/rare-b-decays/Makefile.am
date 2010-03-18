@@ -9,7 +9,7 @@ libwfrarebdecays_la_SOURCES = \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
 	factory.cc factory.hh \
 	form_factors.cc form_factors.hh
-libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la
+libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la -lgslcblas -lgsl
 
 noinst_PROGRAMS = amplitudes ff scan2 scan3 observables
 amplitudes_SOURCES = \
