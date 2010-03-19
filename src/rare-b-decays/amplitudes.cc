@@ -16,7 +16,7 @@ main(int argc, char * argv[])
         options.set("form-factors", "ABHH1999::2");
         BToKstarDilepton<LowRecoil> decay(Parameters::Defaults(), options);
 
-        std::cout << "#s(GeV^2) dGamma A_FB F_L" << std::endl;
+        std::cout << "#s(GeV^2) A_0^L A_0^R A_pp^L A_pp^R A_pa^L A_pa^R" << std::endl;
 
         const unsigned N = 100;
         const static double Gamma = 6.58211899e-22 * 1e-3 / 1.53e-12; // cf. [PDG2008], hbar / tau_B
