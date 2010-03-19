@@ -32,7 +32,7 @@ main(int argc, char * argv[])
 
         const unsigned points = 300;
 
-        std::cout << "#s\tV\tA0\tA1\tA2" << std::endl;
+        std::cout << "#s\tV\tA0\tA1\tA2\txi_perp\txi_par" << std::endl;
 
         for (unsigned j = 0 ; j <= points ; ++j)
         {
@@ -47,6 +47,8 @@ main(int argc, char * argv[])
                 << set->a_0(s_hat) << '\t'
                 << set->a_1(s_hat) << '\t'
                 << set->a_2(s_hat) << '\t'
+                << set->v(s_hat) * 5.28 / (5.28 + 0.896) << '\t'
+                << (5.28 + 0.896) * 5.28 / (5.28*5.28 + 0.896*0.896 - s) * set->a_1(s_hat) - (1.0 - 0.896/5.28) * set->a_2(s_hat) << '\t'
                 << std::endl;
         }
     }
