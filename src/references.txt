@@ -26,6 +26,15 @@ References
         arxiv:hep-ph/9910221
 
 
+    AEMSS2002 : Ahmady, M.R. and Elias, V. and McKeon, D.G.C. and Squires, A.
+                and Steele, T.G.
+
+        Renormalization-Group Improvement of effective Actions Beyond Summation
+        of Leading Logarithms
+
+        arxiv:hep-ph/0211227
+
+
     BFS2001 : Beneke, M. and Feldmann, Th. and Seidel, D.
 
         Systematic Approach to Exclusive B -> V l^+ l^-, V gamma decays
@@ -110,5 +119,13 @@ References
     PS : Peskin, M. and Schroeder, D.
 
         An Introduction to Quantum Field Theory
+
+
+    vRVL1997 : van Ritbergen, T. and Vermaseren, J.A.M. and Larin, S.A.
+
+        The four-loop beta-function in Quantum Chromodynamics
+
+        arxiv:hep-ph/9701390
+
 
 ## vim: set ts=4 et :
