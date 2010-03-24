@@ -19,15 +19,20 @@ libwfutils_la_SOURCES = \
 	observable.cc observable.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh \
+	random_number_engine.cc random_number_engine.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh
 libwfutils_la_LIBADD = -lpthread
 
 TESTS = \
-	complex_TEST
+	complex_TEST \
+	integrate_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
 
 check_PROGRAMS = $(TESTS)
 complex_TEST_SOURCES = complex_TEST.cc
 complex_TEST_LDADD = $(TESTS_LD_ADD)
+
+integrate_TEST_SOURCES = integrate_TEST.cc
+integrate_TEST_LDADD = $(TESTS_LD_ADD)

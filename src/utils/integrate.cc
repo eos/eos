@@ -2,11 +2,32 @@
 
 #include <src/utils/complex-impl.hh>
 #include <src/utils/integrate.hh>
+#include <src/utils/random_number_engine.hh>
+
+#include <limits>
 
 namespace wf
 {
     double integrate(const std::tr1::function<double (const double &)> & f, unsigned n, const double & a, const double & b)
     {
+        static RandomNumberEngine engine;
+
+        double f_mean;
+
+        for (unsigned i(0) ; i < n ; ++i)
+        {
+            double r = double(engine()) / double(std::numeric_limits<unsigned>::max());
+            double x = a + (b - a) * r;
+            double y = f(x);
+
+            f_mean += y;
+        }
+
+        f_mean /= double(n);
+
+        return f_mean * (b - a);
+    }
+#if 0
         if (n & 0x1)
             n += 1;
 
@@ -26,6 +47,7 @@ namespace wf
 
         return result;
     }
+#endif
 
     Complex<double> integrate(const std::tr1::function<Complex<double> (const double &)> & f, unsigned n, const double & a, const double & b)
     {
