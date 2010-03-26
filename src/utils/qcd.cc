@@ -32,18 +32,32 @@ namespace wf
     }
 
     double
-    QCD::mb_PS(const double & mb_MSbar, const double & mu)
+    QCD::mb_pole(const double & mb_MSbar)
     {
-        double alpha = alpha_s(mu);
+        double a_s = alpha_s(mb_MSbar) / M_PI;
 
-        return mb_pole(mb_MSbar, mu) - alpha * mu * 4.0 / 3.0 / M_PI;
+        // cf. [CERN2003-002], Eq. (16), p. 45
+        return mb_MSbar * (1.0 + a_s * (4.0/3.0 + a_s * (8.24 + a_s * (73.55))));
     }
 
     double
-    QCD::mb_pole(const double & mb_MSbar, const double & mu)
+    QCD::mb_PS(const double & mb_MSbar, const double & mu, const double & mu_PS)
     {
-        double alpha = alpha_s(mb_MSbar);
+        double a_s = alpha_s(mu) / M_PI;
 
-        return mb_MSbar * (1.0 + 4.0 / 3.0 * alpha);
+        // cf. [CERN2003-002], below Eq. (20), p. 46
+        static const double a_1 = 43.0/3.0;
+        static const double a_2 = 155.85;
+        static const double b_0 = 23.0/3.0;
+        static const double b_1 = 116.0/3.0;
+
+        double casimir_f = 4.0 / 3.0;
+        double L = std::log(mu_PS / mu);
+
+        // cf. [CERN2003-002], Eq. (20), p. 46
+        return mb_pole(mb_MSbar) -  casimir_f * a_s * mu_PS * (
+                1.0 + a_s / 4.0 * (a_1 - b_0 * 2.0 * (L - 1.0))
+                + 0.25 * a_s * a_s * (a_2 - (2.0 * a_1 * b_0 + b_1) * 2.0 * (L - 1.0)
+                    + b_0 * b_0 * (L * L - 4.0 * L + 8.0)));
     }
 }

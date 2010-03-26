@@ -11,14 +11,14 @@ namespace wf
             // \alpha_s for n_f = 5
             static double alpha_s(const double & mu);
 
-            // TODO: This is the quadratic casimir operator, correct?
+            // The quadratic casimir operator
             static const double casimir_f = 4.0 / 3.0;
 
             // Potential-subtracted b mass m_b^PS
-            static double mb_PS(const double & mb_MSbar, const double & mu);
+            static double mb_PS(const double & mb_MSbar, const double & mu, const double & mu_PS);
 
             // Pole mass of the b
-            static double mb_pole(const double & mb_MSbar, const double & mu);
+            static double mb_pole(const double & mb_MSbar);
     };
 }
 

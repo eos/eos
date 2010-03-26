@@ -81,6 +81,16 @@ References
         arxiv:hep-ph/0412079
 
 
+    CERN2003-002 : Battaglia, M. and Buras, A.J and Gambino, P. and Stocchi, A.
+                   (Editors)
+
+        The CKM Matrix and the Unitarity Triangle
+
+        Based on the workshop held at CERN, 13-16 February 2002
+
+        arxiv:hep-ph/0304132
+
+
     FM2002 : Feldmann, Th. and Matias, J.
 
         Forward-backward and isospin asymmetry for B -> K^* l^+ l^- decay
