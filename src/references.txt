@@ -91,6 +91,13 @@ References
         arxiv:hep-ph/0304132
 
 
+    CMM1997 : Chetyrkin, K. and Misiak, M. and Muenz, M.
+
+        |Delta F| = 1 Nonleptonic Effective Hamiltonian in a Simpler Scheme
+
+        arxiv:hep-ph/9711280
+
+
     FM2002 : Feldmann, Th. and Matias, J.
 
         Forward-backward and isospin asymmetry for B -> K^* l^+ l^- decay

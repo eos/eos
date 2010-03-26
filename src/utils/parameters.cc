@@ -73,18 +73,18 @@ namespace wf
     Parameters::Defaults()
     {
         return Parameters::FromList({
-            // Wilson coefficients at mu = 4.8 GeV to NNLL accuary, cf. ABBBSW2008, p. 6, Table 2.
-            // We use C_{7,8} = C_{7,8}^eff - C'_{7,8}^eff.
-            Parameters::NameValuePair{"c1", -0.257},
+            // Wilson coefficients C1 - C6 at mu = 4.8 GeV to NLL accuary, based on [CMM1997]
+            Parameters::NameValuePair{"c1", -0.275},
             Parameters::NameValuePair{"c2", +1.009},
-            Parameters::NameValuePair{"c3", +0.005},
+            Parameters::NameValuePair{"c3", -0.005},
             Parameters::NameValuePair{"c4", -0.078},
             Parameters::NameValuePair{"c5", +0.000},
             Parameters::NameValuePair{"c6", +0.001},
-            Parameters::NameValuePair{"c7", -0.298},
-            Parameters::NameValuePair{"c8", -0.164},
-            Parameters::NameValuePair{"c9", +4.211},
-            Parameters::NameValuePair{"c10", -4.103},
+            // Wilson coefficients C7 - c10 at mu = 4.8 GeV to NNLL, based on ?
+            Parameters::NameValuePair{"c7", -0.303},
+            Parameters::NameValuePair{"c8", -0.166},
+            Parameters::NameValuePair{"c9", +4.225},
+            Parameters::NameValuePair{"c10", -4.154},
             // Primed Wilson coefficients are negligible in the SM
             Parameters::NameValuePair{"c7prime", 0.0},
             Parameters::NameValuePair{"c9prime", 0.0},
@@ -99,8 +99,12 @@ namespace wf
             // Masses in GeV
             Parameters::NameValuePair{"mass::b(MSbar)", 4.13, 4.20, 4.37}, // cf. [PDG2008], p. 21
             Parameters::NameValuePair{"mass::c", 1.16, 1.27, 1.34}, // cf. [PDG2008], p. 21
+            Parameters::NameValuePair{"mass::s", 0.07, 0.104, 1.3}, // cf. [PDG2008], p. 21
+            Parameters::NameValuePair{"mass::t", 169.1, 171.2, 173.3}, // cf. [PDG2008], p. 21
             Parameters::NameValuePair{"mass::B0", 5.27920, 5.27953, 5.27986}, // cf. [PDG2008], p. 79
             Parameters::NameValuePair{"mass::K^*0", 0.896}, // cf. [PDG2008], p. 44
+            Parameters::NameValuePair{"mass::W", 80.373, 80.398, 80.423}, // cf. [PDG2008], p. 8
+            Parameters::NameValuePair{"mass::Z", 91.1855, 91.1876, 91.1897}, // cf. [PDG2008], p. 9
             // Form factor uncertainties
             Parameters::NameValuePair{"formfactors::a0_uncertainty", 0.85, 1.0, 1.15},
             Parameters::NameValuePair{"formfactors::a1_uncertainty", 0.85, 1.0, 1.15},
