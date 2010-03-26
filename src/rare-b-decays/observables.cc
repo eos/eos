@@ -59,7 +59,7 @@ main(int argc, char * argv[])
             observables.push_back(ptr);
         }
 
-        const unsigned points = 192;
+        const unsigned points = 200;
 
         std::cout << "#\ts";
         for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
@@ -70,23 +70,27 @@ main(int argc, char * argv[])
 
         std::list<Parameter> variations =
         {
+            /*
             parameters["CKM::A"],
-            parameters["CKM::lambda"],
-            parameters["formfactors::a0_uncertainty"],
+            parameters["CKM::lambda"],*/
+            /*parameters["formfactors::a0_uncertainty"],
             parameters["formfactors::a1_uncertainty"],
             parameters["formfactors::a2_uncertainty"],
-            parameters["formfactors::v_uncertainty"],
-            parameters["mass::b(MSbar)"],
+            parameters["formfactors::v_uncertainty"],*/
+            /*parameters["mass::b(MSbar)"],
             parameters["B->K^*::a_1_par"],
             parameters["B->K^*::a_2_par"],
             parameters["B->K^*::a_1_perp"],
-            parameters["B->K^*::a_2_perp"],
+            parameters["B->K^*::a_2_perp"],*/
+            /*parameters["mu"],
+            parameters["mass::c"],*/
+            parameters["c7prime"],
         };
 
         for (unsigned j = 0 ; j <= points ; ++j)
         {
-            const double s_low = 0.01;
-            const double s_high = 19.21;
+            const double s_low = 1.0;
+            const double s_high = 6.0;
             double s = s_low + j * (s_high - s_low) / points;
 
             std::cout << s << std::flush;
