@@ -33,6 +33,14 @@ References
         arxiv:hep-ph/0106067
 
 
+    BFS2004 : Beneke, M. and Feldmann, Th. and Seidel, D.
+
+        Exclusive radiative and electroweak b -> d and b -> s penguin decays
+        at NLO
+
+        arxiv:hep-ph/0412400
+
+
     BHP2008 : Bobeth, C. and Hiller, G. and Piranishvili, G.
 
         CP Asymmetries in Bbar -> Kbar^* (-> Kbar Pi) lbar l and Untagged
@@ -62,6 +70,14 @@ References
         Sum Rules Revisited
 
         arxiv:hep-ph/0412079
+
+
+    FM2002 : Feldmann, Th. and Matias, J.
+
+        Forward-backward and isospin asymmetry for B -> K^* l^+ l^- decay
+        in the standard model and in supersymmetry
+
+        arxiv:hep-ph/0212158
 
 
     GP2004 : Grinstein, B. and Pirjol, D.
