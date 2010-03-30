@@ -2,6 +2,7 @@
 
 #include <src/rare-b-decays/factory.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.cc>
+#include <src/rare-b-decays/exclusive-b-to-s-gamma.cc>
 #include <src/rare-b-decays/inclusive-b-to-s-dilepton.cc>
 
 namespace wf
@@ -32,6 +33,9 @@ namespace wf
                         ConcreteObservableData<decay_, 2>(name_, std::tr1::mem_fn(&decay_::function_), var1_, var2_)))
 
             /* Exclusive Decays */
+
+            // B -> K^* gamma
+            OBSERVABLE0("B->K^*gamma::S_K^*gamma", BToKstarGamma, s_kstar_gamma),
 
             // B -> K^* ll, Large Recoil
             OBSERVABLE1("B->K^*ll::dBR/ds@LargeRecoil",   BToKstarDilepton<LargeRecoil>, differential_branching_ratio,            "s"),

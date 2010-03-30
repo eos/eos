@@ -6,6 +6,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -ggdb
 noinst_LTLIBRARIES = libwfrarebdecays.la
 libwfrarebdecays_la_SOURCES = \
 	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh \
+	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
 	factory.cc factory.hh \
 	form_factors.cc form_factors.hh
