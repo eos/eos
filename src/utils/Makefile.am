@@ -9,6 +9,7 @@ libwfutils_la_SOURCES = \
 	complex.cc complex.hh complex-impl.hh \
 	concrete_observable.hh \
 	condition_variable.cc condition_variable.hh \
+	destringify.hh \
 	exception.cc exception.hh \
 	integrate.cc integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
