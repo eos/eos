@@ -74,17 +74,66 @@ class Scan3
             for (auto bin = bins.begin() ; bin != bins.end() ; ++bin)
             {
                 ObservablePtr o(bin->second->clone());
+                Parameters p = o->parameters();
 
                 k.set("s_min", bin->first.min);
                 k.set("s_max", bin->first.max);
-                o->parameters().set(x_label, x);
-                o->parameters().set(y_label, y);
-                o->parameters().set(z_label, z);
+                p.set(x_label, x);
+                p.set(y_label, y);
+                p.set(z_label, z);
 
-                double value = o->evaluate(k) / (bin->first.max - bin->first.min);
-                double chi = (value - bin->first.o) / (bin->first.o_max - bin->first.o_min);
+                std::vector<Parameter> variations =
+                {
+                    p["CKM::A"],
+                    p["CKM::lambda"],
+                    p["formfactors::a1_uncertainty"],
+                    p["formfactors::a2_uncertainty"],
+                    p["formfactors::v_uncertainty"],
+                };
+                double central = o->evaluate(k);
+                double delta_min = 0.0, delta_max = 0.0;
+
+                for (auto p(variations.begin()), p_end(variations.end()) ; p != p_end ; ++p)
+                {
+                    double old_p = *p;
+                    double max = 0.0, min = 0.0, value;
+
+                    *p = p->min();
+                    value = o->evaluate(k);
+                    if (value > central)
+                        max = value - central;
+
+                    if (value < central)
+                        min = central - value;
+
+                    *p = p->max();
+                    value = o->evaluate(k);
+                    if (value > central)
+                        max = std::max(max, value - central);
+
+                    if (value < central)
+                        min = std::max(min, central - value);
+
+                    *p = old_p;
+
+                    delta_min += min * min;
+                    delta_max += max * max;
+                }
+
+                delta_max = std::sqrt(delta_max);
+                delta_min = std::sqrt(delta_min);
+
+                double chi = 0.0;
+                if (central - bin->first.o > delta_max)
+                    chi = central - bin->first.o - delta_max;
+                else if (bin->first.o - central > delta_min)
+                    chi = bin->first.o - central - delta_min;
+
+                chi /= (bin->first.o_max - bin->first.o_min);
                 chi_squared += chi * chi;
             }
+
+            double likelihood = std::exp(-0.5 * chi_squared);
 
             {
                 Lock l(mutex);
@@ -94,7 +143,6 @@ class Scan3
                     e = results.insert(std::make_pair(std::make_pair(x, y), 0.0)).first;
                 }
 
-                double likelihood = std::exp(-0.5 * chi_squared);
                 e->second = std::max(e->second, likelihood);
                 max_likelihood = std::max(max_likelihood, likelihood);
             }
@@ -104,17 +152,17 @@ class Scan3
         {
             TicketList tickets;
 
-            for (int i(-50) ; i <= 50 ; ++i)
+            for (int i(-20) ; i <= 20 ; ++i)
             {
-                double x = 1.0 * i / 3.0;
+                double x = 1.0 * i / 2.0;
 
-                for (int j(-50) ; j <= 50 ; ++j)
+                for (int j(-20) ; j <= 20 ; ++j)
                 {
-                    double y = 1.0 * j / 3.0;
+                    double y = 1.0 * j / 2.0;
 
-                    for (int k(-50) ; k <= 50 ; ++k)
+                    for (int k(-20) ; k <= 20 ; ++k)
                     {
-                        double z = (1.0 * k) / 20.0;
+                        double z = 1.0 * k / 2.0;
 
                         tickets.push_back(ThreadPool::instance()->enqueue(std::tr1::bind(std::tr1::mem_fn(&Scan3::calc_likelihood), this, x, y, z)));
                     }
@@ -202,6 +250,9 @@ main(int argc, char * argv[])
 
         // max(s) = (m_B - m_Kstar)^2 = 19.211
         std::initializer_list<Input> input = {
+            // [Belle2005] data
+            Input{01.00, 06.00, 0.67e-6, 1.49e-6, 2.40e-6, "B->X_sll::BR@GN1997", ""},
+
             // [BaBar2006] data
             //Input{00.10, 08.41,  0.12e-6,  0.27e-6,  0.44e-6, "B->K^*ll::BR@LargeRecoil", ""},
             //Input{10.24, 19.21,  0.21e-6,  0.37e-6,  0.55e-6, "B->K^*ll::BR@LowRecoil", ""},
