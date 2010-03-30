@@ -1081,6 +1081,8 @@ namespace wf
 
         Parameter c7prime;
 
+        Parameter c8;
+
         Parameter c9;
 
         Parameter c9prime;
@@ -1113,6 +1115,7 @@ namespace wf
             c5(p["c5"]),
             c6(p["c6"]),
             c7(p["c7"]),
+            c8(p["c8"]),
             c9(p["c9"]),
             c10(p["c10"]),
             c7prime(p["c7prime"]),
@@ -1131,47 +1134,209 @@ namespace wf
                 throw std::string("InternalError");
         }
 
-        // Helpers
+        /* Charm loop parts */
+        // cf. [BFS2001], Eq. (11), p. 4
+        Complex<double> h(const double & s, const double & m_q) const
+        {
+            if (m_q < 1e-4)
+                return h0(s);
+
+            const double z = 4.0 * m_q * m_q / s;
+            if (z < 1e-10)
+                return Complex<double>::Cartesian(-4.0/9.0 * (2.0 * std::log(m_q / mu) + 1.0), 0.0);
+
+            const double sqrt1z = std::sqrt(std::abs(z - 1.0));
+
+            double a = 2.0 * std::log(m_q / mu()) - 2.0 / 3.0 - z;
+            double b = (2.0 + z) * sqrt1z;
+            double rc, ic;
+            if (z > 1.0)
+            {
+                ic = 0.0;
+                rc = std::atan(1.0 / sqrt1z);
+            }
+            else
+            {
+                ic = -M_PI / 2.0;
+                rc = std::log((1.0 + sqrt1z) / std::sqrt(z));
+            }
+
+            return -4.0 / 9.0 * (a + b * Complex<double>::Cartesian(rc, ic));
+        }
+
+        // cf. [BFS2001], Eq. (11), p. 4 in the limit m_q -> 0
+        Complex<double> h0(const double & s) const
+        {
+            return 4.0 / 9.0 * Complex<double>::Cartesian(2.0 / 3.0 + 2.0 * std::log(2.0 * mu()) - std::log(s), M_PI);
+        }
+
+        // cf. [BFS2001], Eq. (29), p. 8
+        Complex<double> B0(const double & s, const double & m_q) const
+        {
+            double z = 4.0 * m_q * m_q / s;
+            double rp, ip;
+
+            if (m_q < 0.0)
+            {
+                throw InternalError("Implementation<BToKstarDilepton<LargeRecoil>>::B0: m_q < 0!");
+            };
+
+            if ((0.0 == m_q) && (0.0 == s))
+            {
+                throw InternalError("Implementation<BToKstarDilepton<LargeRecoil>>::B0: m_q == 0 & s == 0");
+            }
+
+            if (0 == s)
+                return Complex<double>::Cartesian(-2.0, 0.0);
+
+            if (z > 1.0)
+            {
+                rp = -2.0 * std::sqrt(z - 1.0) * std::atan(1.0 / std::sqrt(z - 1.0));
+                ip = 0.0;
+            }
+            else
+            {
+                rp = std::sqrt(1.0 - z) * std::log((1.0 - std::sqrt(1 - z)) / (1.0 + std::sqrt(1.0 - z)));
+                ip = std::sqrt(1.0 - z) * M_PI;
+            }
+
+            return Complex<double>::Cartesian(rp, ip);
+        }
+
+        // cf. [BFS2001], Eq. (84), p. 30
+        double C0(const double & s) const
+        {
+            static const int points = 40;
+            // Integration boundaries of u = (0, u_max]
+            static const double dx = (1.0 - 0.0) / points;
+            static const double g[2] =
+            {
+                (1.0 + std::sqrt(3.0 / 5.0)) / 2.0,
+                (1.0 - std::sqrt(3.0 / 5.0)) / 2.0
+            };
+
+            long double s_hat = s / m_B / m_B;
+            long double x1, x2, x;
+            long double y[3];
+            long double result = 0;
+
+            for (int i = 0; i < points; i++)
+            {
+                // 0 is lower integration boundary
+
+                x1 = 0.0 + i * dx;
+                x2 = 0.0 + (i + 1) * dx;
+                for (int j = 0; j < 3; j++)
+                {
+                    switch (j)
+                    {
+                        case 0: x = x1 * g[0] + x2 * g[1];
+                                break;
+
+                        case 1: x = (x1 + x2) / 2.0;
+                                break;
+
+                        case 2: x = x1 * g[1] + x2 * g[0];
+                                break;
+                    }
+
+                    y[j] = std::log(x * x / (1.0 - s_hat * x * (1.0 - x))) / (1.0 + x * (1.0 - s_hat));
+                }
+
+                result += (5.0 * y[0] + 8.0 * y[1] + 5.0 * y[2]) * dx / 18.0;
+            };
+
+            return result;
+        }
+
+        // cf. [GP2004], between Eqs. (41) and (42), p. 8
+        Complex<double> A(const double & s) const
+        {
+            return -104.0/243.0 * 2.0 * std::log(m_b_MSbar / mu) + Complex<double>::Cartesian(0.736, 0.836);
+        }
+
+        // cf. [GP2004], between Eqs. (41) and (42), p. 8
+        Complex<double> B(const double & s) const
+        {
+            const double l = std::log(std::pow(m_b_MSbar / mu, 2.0));
+            const double z = 4 * std::pow(m_b_MSbar, 2.0) / s;
+
+            Complex<double> result = Complex<double>::Cartesian(z - 34.0, -17 * M_PI) * l + 8.0 * l * l - 17.0 * std::log(z / 4.0) * l
+                - (2.0 + z) * std::sqrt(z - 1.0) * std::atan(1.0 / (std::sqrt(z - 1.0))) * l;
+            result = 8.0 / 243.0 * result;
+            result = result + Complex<double>::Cartesian(-1.332, 3.058);
+
+            return result;
+        }
+
+        // cf. [GP2004], between Eqs. (41) and (42), p. 8
+        Complex<double> C(const double & s) const
+        {
+            const double zeta3 = 1.20206;
+
+            return Complex<double>::Cartesian(-16.0/81.0 * std::log(s / std::pow(mu, 2.0)) + 428.0/243.0 - 64.0/27.0 * zeta3, 16.0 / 81.0 * M_PI);
+        }
+
+        // cf. [BFS2001], Eq. (82), p. 30
+        Complex<double> F87(const double & s) const
+        {
+            double s_hat = s / m_B / m_B;
+            double s_hat2 = s_hat * s_hat;
+            double denom = (1.0 - s_hat);
+            double denom2 = denom * denom;
+
+            Complex<double> a = Complex<double>::Cartesian(-32.0 * std::log(mu / m_b_MSbar) - 8.0 * s_hat / denom * std::log(s_hat)
+                    - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2,
+                    -8.0 * M_PI);
+            Complex<double> b = (4.0 / denom / denom2)
+                * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_b_MSbar) - (4.0 + 2.0 * s_hat) * C0(s));
+
+            return (1.0 / 9.0) * (a + b);
+        }
+
+        // cf. [BFS2001], Eq. (83), p. 30
+        Complex<double> F89(const double & s) const
+        {
+            double s_hat = s / m_B / m_B;
+            double denom = (1.0 - s_hat);
+            double denom2 = denom * denom;
+
+            double a = 16.0 * std::log(s_hat) / denom + 8.0 * (5.0 - 2.0 * s_hat) / denom2;
+            Complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b_MSbar) - 2.0 * C0(s));
+
+            return (1.0 / 9.0) * (a + b);
+        }
+
+        // cf. [GP2004], Eq. (56)
         Complex<double> c7eff(double s) const
         {
             // TODO: Neglecting contributions ~alpha_s / 4.0 / M_PI. These do involve spectator scattering,
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
-            double c7eff0 = c7 - 4.0/9.0 * c3 - 4.0/3.0 * c4 + 1.0/9.0 * c5 + 1.0/3.0 * c6;
-            return Complex<double>::Cartesian(c7eff0, 0); // cf. [GP2004] Eq. (56), p. 10
+            double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 + 20.0/3.0 * c5 + 80.0/9.0 * c6;
+            Complex<double> nlo = (c1() - 6.0 * c2()) * A(s) - c8() * F87(s);
+
+            return c7() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
 
-        Complex<double> c9eff(double s) const
+
+        // cf. [GP2004], Eq. (55), p. 10
+        Complex<double> c9eff(const double & s) const
         {
-            // For r_i, g_i cf. [GP2004], Eqs. (27)-(29), p. 6
-            // All occurences of sqrt(r_c) in Eq. need to be replaced by r_c. Cf. also the footnote
-            // on p. 6.
-            double r_b = std::sqrt(4.0 * m_b_MSbar * m_b_MSbar / s - 1.0);
-            double r_c = std::sqrt(1.0 - 4.0 * s / m_c / m_c);
-            Complex<double> g_0 = Complex<double>::Cartesian(std::log(s / mu / mu), -M_PI) * (1.0 / 6.0) - 5.0 / 18.0;
-            double g_m_b = std::log(m_b_MSbar * m_b_MSbar / mu / mu) / 6.0 - 5.0 / 18.0 - 2.0 * m_b_MSbar * m_b_MSbar / 3.0 / s
-                + r_b / 3.0 * (1.0 + 2.0 * m_b_MSbar * m_b_MSbar / s) * std::atan(1.0 / r_b);
-            Complex<double> g_m_c = std::log(m_c * m_c / mu / mu) / 6.0 - 5.0 / 18.0 - 2.0 * m_c * m_c / 3.0 / s
-                + r_c / 6.0 * (1.0 + 2.0 * m_c * m_c / s) * Complex<double>::Cartesian(std::log((1.0 + r_c) / (1.0 - r_c)), -M_PI);
+            double c_0 = 4.0 / 3.0 * c1() + c2() + 5.5 * c3() - 2.0 / 3.0 * c4() + 52.0 * c5() + 32.0 / 3.0 * c6();
+            double c_b = -0.5 * (7.0 * c3() + 4.0 / 3.0 * c4() + 76.0 * c5() + 64.0 / 3.0 * c6());
+            double c = 2.0 / 9.0 * (6.0 * c3() + 32.0 * c5() + 32.0 / 3.0 * c6());
 
-            Complex<double> c9eff0 = c9() - (c1 + c2 / 3.0) * (8.0 * g_0 - 4.0 / 3.0) - c3() * (20.0 / 3.0 * g_0 - 16.0 / 3.0 * g_m_b + 2.0 / 27.0)
-                + c4() * (4.0 / 3.0 * g_0 + 16.0 / 3.0 * g_m_b + 14.0 / 9.0) - c5() * (8.0 * g_0 - 4.0 * g_m_b - 14.0 / 27.0)
-                - c6() * (8.0 / 3.0 * g_0 - 4.0 / 3.0 * g_m_b + 2.0 / 9.0);
+            // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
+            Complex<double> lo = c_b * h(s, m_b_MSbar) + c_0 * h0(s) + c;
+            Complex<double> nlo = c1() * (B(s) + 4.0 * C(s)) - 3.0 * c2() * (2.0 * B(s) - C(s)) - c8() * F89(s);
 
-            // TODO: Neglecting contributions ~alpha_s / 4.0 / M_PI. These do involve spectator scattering,
-            // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
-            return c9eff0; // cf. [GP2004] Eq. (55), p. 10
+            return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
 
         double kappa_1() const
         {
-            static const double c0v // cf. [GP] Eq. (48)
-                = 1.0 - QCD::alpha_s(mu) * QCD::casimir_f / (4.0 * M_PI) * (3.0 * std::log(mu / m_b_MSbar) + 4.0);
-            static const double d0v // cf. [GP] Eq. (A30)
-                = QCD::alpha_s(mu) * QCD::casimir_f / (2.0 * M_PI) * (std::log(mu / m_b_MSbar) + 1.0);
-
-            // TODO: [GP] uses m_b(\mu). Which m_b? Using m_b_MSbar for the time
-            // being.
-            return (1.0 + 2.0 * d0v / c0v) * m_b_MSbar / m_B; // cf. [GP] Eq. (A24)
+            // cf. [BHvD2010], Eq. (?), p. ?
+            return (1.0 - 2.0 * QCD::alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
         }
 
         double norm(const double & s) const
