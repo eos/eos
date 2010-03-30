@@ -14,6 +14,27 @@ namespace wf
     struct ConcreteObservableData;
 
     template <typename Decay_>
+    struct ConcreteObservableData<Decay_, 0>
+    {
+        typedef std::tr1::function<double (const Decay_ &)> Type;
+
+        Type function;
+
+        std::string name;
+
+        ConcreteObservableData(const std::string & name, const Type & function) :
+            function(function),
+            name(name)
+        {
+        }
+
+        double evaluate(const Decay_ & decay, const Kinematics &) const
+        {
+            return function(decay);
+        }
+    };
+
+    template <typename Decay_>
     struct ConcreteObservableData<Decay_, 1>
     {
         typedef std::tr1::function<double (const Decay_ &, const double &)> Type;

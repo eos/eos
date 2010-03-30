@@ -11,16 +11,25 @@ namespace wf
     {
         static const std::map<std::string, ObservableFactory *> simple_observables
         {
+#ifdef OBSERVABLE0
+# undef OBSERVABLE0
+#endif
 #ifdef OBSERVABLE1
 # undef OBSERVABLE1
-#else
-# define OBSERVABLE1(name_, decay_, function_, var1_) \
+#endif
+#ifdef OBSERVABLE2
+# undef OBSERVABLE2
+#endif
+
+#define OBSERVABLE0(name_, decay_, function_) \
+            std::make_pair(name_, new ConcreteObservableFactory<decay_, 0>( \
+                        ConcreteObservableData<decay_, 0>(name_, std::tr1::mem_fn(&decay_::function_))))
+#define OBSERVABLE1(name_, decay_, function_, var1_) \
             std::make_pair(name_, new ConcreteObservableFactory<decay_, 1>( \
                         ConcreteObservableData<decay_, 1>(name_, std::tr1::mem_fn(&decay_::function_), var1_)))
-# define OBSERVABLE2(name_, decay_, function_, var1_, var2_) \
+#define OBSERVABLE2(name_, decay_, function_, var1_, var2_) \
             std::make_pair(name_, new ConcreteObservableFactory<decay_, 2>( \
                         ConcreteObservableData<decay_, 2>(name_, std::tr1::mem_fn(&decay_::function_), var1_, var2_)))
-#endif
 
             /* Exclusive Decays */
 
