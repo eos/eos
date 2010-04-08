@@ -1007,6 +1007,15 @@ namespace wf
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::differential_unnormalized_forward_backward_asymmetry(const double & s) const
+    {
+        return 1.5 * _imp->norm(s) * _imp->norm(s) * (
+                (a_par(left_handed, s) * a_perp(left_handed, s).conjugate()).real()
+                -(a_par(right_handed, s) * a_perp(right_handed, s).conjugate()).real()
+            );
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_2(const double & s) const
     {
         double a = a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared();
@@ -1053,10 +1062,13 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> f = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry), this, std::tr1::placeholders::_1);
+        std::tr1::function<double (const double &)> num = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_unnormalized_forward_backward_asymmetry), this, std::tr1::placeholders::_1);
 
-        return integrate(f, 100, s_min, s_max);
+        std::tr1::function<double (const double &)> denom = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_decay_width), this, std::tr1::placeholders::_1);
+
+        return integrate(num, 100, s_min, s_max) / integrate(denom, 100, s_min, s_max);
     }
 
 
@@ -1444,6 +1456,15 @@ namespace wf
     }
 
     double
+    BToKstarDilepton<LowRecoil>::differential_unnormalized_forward_backward_asymmetry(const double & s) const
+    {
+        return 1.5 * (
+                (a_par(left_handed, s) * a_perp(left_handed, s).conjugate()).real()
+                -(a_par(right_handed, s) * a_perp(right_handed, s).conjugate()).real()
+            );
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2(const double & s) const
     {
         double a = a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared();
@@ -1490,9 +1511,12 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> f = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry), this, std::tr1::placeholders::_1);
+        std::tr1::function<double (const double &)> num = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_unnormalized_forward_backward_asymmetry), this, std::tr1::placeholders::_1);
 
-        return integrate(f, 100, s_min, s_max);
+        std::tr1::function<double (const double &)> denom = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_decay_width), this, std::tr1::placeholders::_1);
+
+        return integrate(num, 1000, s_min, s_max) / integrate(denom, 1000, s_min, s_max);
     }
 }
