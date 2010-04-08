@@ -52,6 +52,8 @@ namespace wf
 
         Parameter m_s;
 
+        Parameter br_bcsl;
+
         double m_l;
 
         Implementation(const Parameters & p) :
@@ -69,7 +71,8 @@ namespace wf
             c10prime(p["c10prime"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c(p["mass::c"]),
-            m_s(p["mass::s"])
+            m_s(p["mass::s"]),
+            br_bcsl(p["exp::BR(B->X_clnu)"])
         {
             // TODO: Lepton masses, m_l = m_mu
             m_l = 0.0;//0.10565836; // (GeV), cf. [PDG2008], p. 13
@@ -210,7 +213,6 @@ namespace wf
         double norm2() const
         {
             static const double alpha_e = 1.0/133.0;
-            static const double br_bcsl = 0.104; // +- 0.004, [PDG2008], p. 82
             static const double ckm = 1.0; // |V_tb V_ts^*|/|V_cb| = 1.0 + O(lambda^4) according to Wolfenstein
 
             double m_b_pole = QCD::mb_pole(m_b_MSbar);

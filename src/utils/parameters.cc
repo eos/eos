@@ -115,6 +115,8 @@ namespace wf
             Parameters::NameValuePair{"B->K^*::a_2_par", 0.0, 0.1, 0.2},
             Parameters::NameValuePair{"B->K^*::a_1_perp", 0.03, 0.1, 0.17},
             Parameters::NameValuePair{"B->K^*::a_2_perp", 0.0, 0.1, 0.2},
+            // Experimental Input
+            Parameters::NameValuePair{"exp::BR(B->X_clnu)", 0.099, 0.101, 0.105}, // cf. [PDG2008], p. 82
         });
     }
 
