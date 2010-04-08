@@ -12,13 +12,16 @@ libwfrarebdecays_la_SOURCES = \
 	form_factors.cc form_factors.hh
 libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la -lgslcblas -lgsl
 
-noinst_PROGRAMS = amplitudes ff scan2 scan3 observables
+noinst_PROGRAMS = amplitudes ff scan2 scan3 integrated observables
 amplitudes_SOURCES = \
 	amplitudes.cc
 amplitudes_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
 ff_SOURCES = \
 	ff.cc
 ff_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
+integrated_SOURCES = \
+	integrated.cc
+integrated_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
 observables_SOURCES = \
 	observables.cc
 observables_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
