@@ -12,7 +12,7 @@ namespace wf
     // TODO: Do a proper MonteCarlo integration
     double integrate(const std::tr1::function<double (const double &)> & f, unsigned n, const double & a, const double & b);
 
-    Complex<double> integrate(const std::tr1::function<Complex<double> (const double &)> & f, unsigned n, const double & a, const double & b);
+    complex<double> integrate(const std::tr1::function<complex<double> (const double &)> & f, unsigned n, const double & a, const double & b);
 }
 
 #endif

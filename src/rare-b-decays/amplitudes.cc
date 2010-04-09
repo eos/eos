@@ -28,18 +28,18 @@ main(int argc, char * argv[])
 
             std::cout
                 << s << "\t"
-                << decay.a_long(left_handed, s).real() << "\t"
-                << decay.a_long(left_handed, s).imaginary() << "\t"
-                << decay.a_long(right_handed,s).real() << "\t"
-                << decay.a_long(right_handed,s).imaginary() << "\t"
-                << decay.a_perp(left_handed, s).real() << "\t"
-                << decay.a_perp(left_handed, s).imaginary() << "\t"
-                << decay.a_perp(right_handed,s).real() << "\t"
-                << decay.a_perp(right_handed,s).imaginary() << "\t"
-                << decay.a_par(left_handed,  s).real() << "\t"
-                << decay.a_par(left_handed,  s).imaginary() << "\t"
-                << decay.a_par(right_handed, s).real() << "\t"
-                << decay.a_par(right_handed, s).imaginary() << "\t"
+                << real(decay.a_long(left_handed, s)) << "\t"
+                << imag(decay.a_long(left_handed, s)) << "\t"
+                << real(decay.a_long(right_handed,s)) << "\t"
+                << imag(decay.a_long(right_handed,s)) << "\t"
+                << real(decay.a_perp(left_handed, s)) << "\t"
+                << imag(decay.a_perp(left_handed, s)) << "\t"
+                << real(decay.a_perp(right_handed,s)) << "\t"
+                << imag(decay.a_perp(right_handed,s)) << "\t"
+                << real(decay.a_par(left_handed,  s)) << "\t"
+                << imag(decay.a_par(left_handed,  s)) << "\t"
+                << real(decay.a_par(right_handed, s)) << "\t"
+                << imag(decay.a_par(right_handed, s)) << "\t"
                 << std::endl;
         }
     }

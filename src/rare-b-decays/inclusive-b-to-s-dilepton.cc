@@ -87,29 +87,29 @@ namespace wf
 
         /* Effective wilson coefficients */
         // cf. [GN19997], Eq. (3.7), p. 8
-        Complex<double> c9eff(const double & s_hat) const
+        complex<double> c9eff(const double & s_hat) const
         {
             return c9() + (3.0 * c1() + c2()) * g(s_hat);
         }
 
-        Complex<double> c9primeeff(const double & s_hat) const
+        complex<double> c9primeeff(const double & s_hat) const
         {
-            return Complex<double>::Cartesian(c9prime(), 0.0);
+            return complex<double>(c9prime(), 0.0);
         }
 
         // cf. [BM1995], Eqs. (3.9), (2.29)
-        Complex<double> g(const double & s_hat) const
+        complex<double> g(const double & s_hat) const
         {
             const double m_b_pole = QCD::mb_pole(m_b_MSbar);
             const double m_c_hat = m_c / m_b_pole;
             const double x = 4.0 * m_c_hat * m_c_hat / s_hat;
             double y = std::sqrt(std::abs(1.0 - x));
-            Complex<double> z;
+            complex<double> z;
 
             if (x <= 1.0)
-                z = Complex<double>::Cartesian(std::log(std::abs((y + 1.0) / (y - 1.0))), -M_PI);
+                z = complex<double>(std::log(std::abs((y + 1.0) / (y - 1.0))), -M_PI);
             else
-                z = Complex<double>::Cartesian(2.0 * std::atan(1.0 / y), 0.0);
+                z = complex<double>(2.0 * std::atan(1.0 / y), 0.0);
 
             static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
 
@@ -126,7 +126,7 @@ namespace wf
                 std::make_tuple(1.0, 4.040, 0.86e-6, 80e-6),
             };
 
-            Complex<double> resonance_parts = Complex<double>::Cartesian(0.0, 0.0);
+            complex<double> resonance_parts = complex<double>(0.0, 0.0);
             for (auto r(resonances.begin()) ; r != resonances.end() ; ++r)
             {
                 double k = std::get<0>(*r);
@@ -137,7 +137,7 @@ namespace wf
                 double denom = (s_hat - m_hat2) * (s_hat - m_hat2) + m_hat2 * gamma_hat * gamma_hat;
 
                 resonance_parts = resonance_parts
-                    + (k / denom) * Complex<double>::Cartesian((s_hat - m_hat2) * m_hat * gamma_ee_hat, -m_hat * m_hat * gamma_ee_hat * gamma_hat);
+                    + (k / denom) * complex<double>((s_hat - m_hat2) * m_hat * gamma_ee_hat, -m_hat * m_hat * gamma_ee_hat * gamma_hat);
             }
 
             return -1.0 / 3.0 * (4.0 * std::log(m_c_hat) - 16.0 / 3.0 - 2.0 * x
@@ -183,8 +183,8 @@ namespace wf
          */
         double sigma(const double & s_hat) const
         {
-            Complex<double> c9_eff(c9eff(s_hat));
-            Complex<double> c9prime_eff(c9primeeff(s_hat));
+            complex<double> c9_eff(c9eff(s_hat));
+            complex<double> c9prime_eff(c9primeeff(s_hat));
             double m_b_pole = QCD::mb_pole(m_b_MSbar);
             double m_l_hat = m_l / m_b_pole, m_l_hat2 = std::pow(m_l_hat, 2.0);
             double m_s_hat = m_s / m_b_pole, m_s_hat2 = std::pow(m_s_hat, 2.0);
@@ -195,9 +195,9 @@ namespace wf
             // m_s * s.
             double w1 = std::pow(c7, 2.0) + std::pow(c7prime, 2.0);
             double w2 = c7 * c7prime;
-            double w3 = (c7() * c9_eff + c7prime() * c9prime_eff).real();
-            double w4 = c9_eff.absolute_squared() + c9prime_eff.absolute_squared() + std::pow(c10, 2.0) + std::pow(c10prime, 2.0);
-            double w5 = (2.0 * c7() * c9prime_eff + 2.0 * c9_eff.conjugate() * c7prime() + c9_eff.conjugate() * c9prime_eff).real();
+            double w3 = real(c7() * c9_eff + c7prime() * c9prime_eff);
+            double w4 = norm(c9_eff) + norm(c9prime_eff) + std::pow(c10, 2.0) + std::pow(c10prime, 2.0);
+            double w5 = real(2.0 * c7() * c9prime_eff + 2.0 * conj(c9_eff) * c7prime() + conj(c9_eff) * c9prime_eff);
 
             // At the time being we do not consider scalar or pseudo-scalar wilson coefficients, so no additional term ~f5.
             double result = w1 * m1(u_hat, s_hat, m_s_hat2, m_l_hat2)

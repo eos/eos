@@ -30,9 +30,9 @@ namespace wf
             ~BToKstarDilepton();
 
             // [BHP2008], Appendix C
-            Complex<double> a_long(const Helicity & h, const double & s) const;
-            Complex<double> a_perp(const Helicity & h, const double & s) const;
-            Complex<double> a_par(const Helicity & h, const double & s) const;
+            complex<double> a_long(const Helicity & h, const double & s) const;
+            complex<double> a_perp(const Helicity & h, const double & s) const;
+            complex<double> a_par(const Helicity & h, const double & s) const;
 
             // Differential Observables
             double differential_branching_ratio(const double & s) const;
@@ -63,9 +63,9 @@ namespace wf
             ~BToKstarDilepton();
 
             // [BHvD2010] Eqs. (??-??)
-            Complex<double> a_long(const Helicity & h, const double & s) const;
-            Complex<double> a_perp(const Helicity & h, const double & s) const;
-            Complex<double> a_par(const Helicity & h, const double & s) const;
+            complex<double> a_long(const Helicity & h, const double & s) const;
+            complex<double> a_perp(const Helicity & h, const double & s) const;
+            complex<double> a_par(const Helicity & h, const double & s) const;
 
             // Differential Observables
             double differential_branching_ratio(const double & s) const;

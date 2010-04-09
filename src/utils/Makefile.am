@@ -6,7 +6,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x
 lib_LTLIBRARIES = libwfutils.la
 libwfutils_la_SOURCES = \
 	accumulator.cc accumulator.hh \
-	complex.cc complex.hh complex-impl.hh \
+	complex.hh \
 	concrete_observable.hh \
 	condition_variable.cc condition_variable.hh \
 	destringify.hh \
@@ -27,13 +27,9 @@ libwfutils_la_SOURCES = \
 libwfutils_la_LIBADD = -lpthread
 
 TESTS = \
-	complex_TEST \
 	integrate_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
 
 check_PROGRAMS = $(TESTS)
-complex_TEST_SOURCES = complex_TEST.cc
-complex_TEST_LDADD = $(TESTS_LD_ADD)
-
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_LDADD = $(TESTS_LD_ADD)

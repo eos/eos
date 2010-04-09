@@ -37,12 +37,12 @@ namespace wf
             double A = ckm_A(), lambda = ckm_lambda(), etabar = ckm_etabar(), rhobar = ckm_rhobar();
             double A2 = A * A, lambda2 = lambda * lambda, lambda4 = lambda2 * lambda2;
 
-            Complex<double> a = Complex<double>::Cartesian(rhobar, etabar);
-            Complex<double> b = 1.0 - A2 * lambda4 * a.conjugate();
+            complex<double> a = complex<double>(rhobar, etabar);
+            complex<double> b = 1.0 - A2 * lambda4 * conj(a);
             double c = std::sqrt((1.0 - A2 * lambda4) / (1.0 - lambda2));
             double d = std::pow(1.0 - A2 * lambda4 * rhobar, 2.0) + std::pow(A2 * lambda4 * etabar, 2.0);
 
-            return -1.0 * (1.0 - a * b * (c / d)).phase();
+            return -1.0 * arg(1.0 - a * b * (c / d));
         }
 
         double s_kstar_gamma() const

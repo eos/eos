@@ -18,6 +18,8 @@
 
 namespace wf
 {
+    using std::norm;
+
     // Large Recoil
 
     template <>
@@ -63,7 +65,7 @@ namespace wf
 
         double lambda_t2;
 
-        Complex<double> lambda_u_hat;
+        complex<double> lambda_u_hat;
 
         double f_B;
 
@@ -182,14 +184,14 @@ namespace wf
 
         /* Charm loop parts */
         // cf. [BFS2001], Eq. (11), p. 4
-        Complex<double> h(const double & s, const double & m_q) const
+        complex<double> h(const double & s, const double & m_q) const
         {
             if (m_q < 1e-4)
                 return h0(s);
 
             const double z = 4.0 * m_q * m_q / s;
             if (z < 1e-10)
-                return Complex<double>::Cartesian(-4.0/9.0 * (2.0 * std::log(m_q / mu) + 1.0), 0.0);
+                return complex<double>(-4.0/9.0 * (2.0 * std::log(m_q / mu) + 1.0), 0.0);
 
             const double sqrt1z = std::sqrt(std::abs(z - 1.0));
 
@@ -207,17 +209,17 @@ namespace wf
                 rc = std::log((1.0 + sqrt1z) / std::sqrt(z));
             }
 
-            return -4.0 / 9.0 * (a + b * Complex<double>::Cartesian(rc, ic));
+            return -4.0 / 9.0 * (a + b * complex<double>(rc, ic));
         }
 
         // cf. [BFS2001], Eq. (11), p. 4 in the limit m_q -> 0
-        Complex<double> h0(const double & s) const
+        complex<double> h0(const double & s) const
         {
-            return 4.0 / 9.0 * Complex<double>::Cartesian(2.0 / 3.0 + 2.0 * std::log(2.0 * mu()) - std::log(s), M_PI);
+            return 4.0 / 9.0 * complex<double>(2.0 / 3.0 + 2.0 * std::log(2.0 * mu()) - std::log(s), M_PI);
         }
 
         // cf. [BFS2001], Eq. (10), p. 4
-        Complex<double> Y0(const double & s) const
+        complex<double> Y0(const double & s) const
         {
             double Y_c = 4.0 / 3.0 * c1() + c2() + 6.0 * c3() + 60.0 * c5();
             double Y_b = -0.5 * (7.0 * c3() + 4.0 / 3.0 * c4() + 76.0 * c5() + 64.0 / 3.0 * c6());
@@ -229,7 +231,7 @@ namespace wf
         }
 
         // cf. [BFS2004], ?
-        Complex<double> Y0u(const double & s) const
+        complex<double> Y0u(const double & s) const
         {
             double a = 4.0 / 3.0 * c1() + c2();
 
@@ -257,7 +259,7 @@ namespace wf
 
         /* NLO functions */
         // cf. [BFS2001], Eq. (29), p. 8
-        Complex<double> B0(const double & s, const double & m_q) const
+        complex<double> B0(const double & s, const double & m_q) const
         {
             double z = 4.0 * m_q * m_q / s;
             double rp, ip;
@@ -273,7 +275,7 @@ namespace wf
             }
 
             if (0 == s)
-                return Complex<double>::Cartesian(-2.0, 0.0);
+                return complex<double>(-2.0, 0.0);
 
             if (z > 1.0)
             {
@@ -286,7 +288,7 @@ namespace wf
                 ip = std::sqrt(1.0 - z) * M_PI;
             }
 
-            return Complex<double>::Cartesian(rp, ip);
+            return complex<double>(rp, ip);
         }
 
         // cf. [BFS2001], Eq. (84), p. 30
@@ -336,10 +338,10 @@ namespace wf
         }
 
         // cf. [BFS2001], Eqs. (30)-(32), p. 8
-        Complex<double> I1(const double & s, const double & u, const double & m_q) const
+        complex<double> I1(const double & s, const double & u, const double & m_q) const
         {
             if (m_q == 0.0)
-                return Complex<double>::Cartesian(1.0, 0.0);
+                return complex<double>(1.0, 0.0);
 
             int status;
             gsl_sf_result res_re, res_im;
@@ -349,15 +351,15 @@ namespace wf
             double m_B2 = m_B * m_B;
 
             double a, a2, sign;
-            Complex<double> dilogArg, dilog1, dilog2;
-            Complex<double> LxpLxm, LypLym;
+            complex<double> dilogArg, dilog1, dilog2;
+            complex<double> LxpLxm, LypLym;
 
             if (1.0 - 4.0 * m_q2 / (m_B2 - u * (m_B2 - s)) > 0)
             {
                 a = (1 - std::sqrt(1.0 - 4.0 * m_q2 / (m_B2 - u * (m_B2 - s))))
                   / (1 + std::sqrt(1.0 - 4.0 * m_q2 / (m_B2 - u * (m_B2 - s))));
                 LxpLxm = -M_PI* M_PI / 3.0
-                    + std::log(a) * (std::log(a) + Complex<double>::Cartesian(0.0, M_PI))
+                    + std::log(a) * (std::log(a) + complex<double>(0.0, M_PI))
                     + gsl_sf_dilog(-a) + gsl_sf_dilog(-1.0/a);
             }
             else
@@ -370,13 +372,13 @@ namespace wf
                 else
                     sign = -1.0;
 
-                dilogArg = Complex<double>::Cartesian((a2 - 1.0)/(a2 + 1.0), -2.0 * a / (a2 + 1.0));
-                status = gsl_sf_complex_dilog_e(dilogArg.absolute(), dilogArg.phase(), &res_re, &res_im);
-                dilog1 = Complex<double>::Cartesian( res_re.val, res_im.val);
+                dilogArg = complex<double>((a2 - 1.0)/(a2 + 1.0), -2.0 * a / (a2 + 1.0));
+                status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
+                dilog1 = complex<double>( res_re.val, res_im.val);
 
-                dilogArg = Complex<double>::Cartesian((a2 - 1.0)/(a2 + 1.0), +2.0 * a / (a2 + 1.0));
-                status = gsl_sf_complex_dilog_e(dilogArg.absolute(), dilogArg.phase(), &res_re, &res_im);
-                dilog2 = Complex<double>::Cartesian(res_re.val, res_im.val);
+                dilogArg = complex<double>((a2 - 1.0)/(a2 + 1.0), +2.0 * a / (a2 + 1.0));
+                status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
+                dilog2 = complex<double>(res_re.val, res_im.val);
 
                 LxpLxm = -1.0 / 3.0 * M_PI * M_PI - std::atan(2.0 * a / (a2 - 1.0)) * (std::atan(2.0 * a / (a2 - 1.0)) - M_PI * sign)
                     + dilog1 + dilog2;
@@ -386,7 +388,7 @@ namespace wf
             {
                 a = (1.0 - std::sqrt(1.0 - 4.0 * m_q2 / s))
                   / (1.0 + std::sqrt(1.0 - 4.0 * m_q2 / s));
-                LypLym = -1.0 / 3.0 * M_PI * M_PI + std::log(a) * (std::log(a) + Complex<double>::Cartesian(0.0, M_PI))
+                LypLym = -1.0 / 3.0 * M_PI * M_PI + std::log(a) * (std::log(a) + complex<double>(0.0, M_PI))
                     + gsl_sf_dilog(-a) + gsl_sf_dilog(-1./a);
             }
             else
@@ -398,13 +400,13 @@ namespace wf
                 else
                     sign = -1.0;
 
-                dilogArg = Complex<double>::Cartesian((a2 - 1.0) / (a2 + 1.0), -2.0 * a / (a2 + 1.0));
-                status = gsl_sf_complex_dilog_e(dilogArg.absolute(), dilogArg.phase(), &res_re, &res_im);
-                dilog1 = Complex<double>::Cartesian(res_re.val, res_im.val);
+                dilogArg = complex<double>((a2 - 1.0) / (a2 + 1.0), -2.0 * a / (a2 + 1.0));
+                status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
+                dilog1 = complex<double>(res_re.val, res_im.val);
 
-                dilogArg = Complex<double>::Cartesian((a2 - 1.0) / (a2 + 1.0), +2.0 * a / (a2 + 1.0));
-                status = gsl_sf_complex_dilog_e(dilogArg.absolute(), dilogArg.phase(), &res_re, &res_im);
-                dilog2 = Complex<double>::Cartesian(res_re.val, res_im.val);
+                dilogArg = complex<double>((a2 - 1.0) / (a2 + 1.0), +2.0 * a / (a2 + 1.0));
+                status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
+                dilog2 = complex<double>(res_re.val, res_im.val);
 
                 LypLym = -1.0 / 3.0 * M_PI * M_PI - std::atan(2.0 * a / (a2 - 1.0)) * (std::atan(2.0 * a / (a2 - 1.0)) - M_PI * sign)
                     + dilog1 + dilog2;
@@ -435,7 +437,7 @@ namespace wf
         }
 
         // cf. [BFS2001], Eq. (21), p. 6
-        Complex<double> Tf_par_p(const double & s, const double & u) const
+        complex<double> Tf_par_p(const double & s, const double & u) const
         {
             double E = energy(s);
 
@@ -443,7 +445,7 @@ namespace wf
         }
 
         // cf. [BFS2001], Eq. (27), p. 8
-        Complex<double> t_perp(const double & s, const double & u, const double & m_q) const
+        complex<double> t_perp(const double & s, const double & u, const double & m_q) const
         {
             if (0.0 == s)
                 return t_perp_0(u, m_q);
@@ -452,20 +454,20 @@ namespace wf
             double E = energy(s);
             double x = ubar * m_B * m_B + u * s;
 
-            Complex<double> result = (2.0 * m_B / ubar / E) * I1(s, u, m_q);
+            complex<double> result = (2.0 * m_B / ubar / E) * I1(s, u, m_q);
             if (m_q > 0.0)
                 result = result + (s / ubar / ubar / E / E) * (B0(x, m_q) - B0(s, m_q));
 
             return result;
         }
 
-        Complex<double> t_perp_0(const double & u, const double & m_q) const
+        complex<double> t_perp_0(const double & u, const double & m_q) const
         {
             double ubar = 1.0 - u;
             double m_q2 = m_q * m_q, m_B2 = m_B * m_B;
             double a, a2, sign;
-            Complex<double> dilogArg, dilog1, dilog2;
-            Complex<double> LxpLxm;
+            complex<double> dilogArg, dilog1, dilog2;
+            complex<double> LxpLxm;
             int status;
             gsl_sf_result res_re, res_im;
 
@@ -475,7 +477,7 @@ namespace wf
                 {
                     a = (1.0 - std::sqrt(1.0 - 4.0 * m_q2 / (m_B2 - u * m_B2)))
                         / (1.0 + std::sqrt(1.0 - 4.0 * m_q2 / (m_B2 - u * m_B2)));
-                    LxpLxm = -M_PI * M_PI / 3.0 + std::log(a) * (std::log(a) + Complex<double>::Cartesian(0.0, M_PI))
+                    LxpLxm = -M_PI * M_PI / 3.0 + std::log(a) * (std::log(a) + complex<double>(0.0, M_PI))
                         + gsl_sf_dilog(-a) + gsl_sf_dilog(-1.0/a);
                 }
                 else
@@ -488,12 +490,12 @@ namespace wf
                     else
                         sign = -1.0;
 
-                    dilogArg = Complex<double>::Cartesian((a2 - 1.0) / (a2 + 1.0), -2.0 * a / (a2 + 1.0));
-                    status = gsl_sf_complex_dilog_e(dilogArg.absolute(), dilogArg.phase(), &res_re, &res_im);
-                    dilog1 = Complex<double>::Cartesian(res_re.val, res_im.val);
-                    dilogArg = Complex<double>::Cartesian((a2 - 1.0) / (a2 + 1.0), +2.0 * a / (a2 + 1.0));
-                    status = gsl_sf_complex_dilog_e(dilogArg.absolute(), dilogArg.phase(), &res_re, &res_im);
-                    dilog2 = Complex<double>::Cartesian(res_re.val, res_im.val);
+                    dilogArg = complex<double>((a2 - 1.0) / (a2 + 1.0), -2.0 * a / (a2 + 1.0));
+                    status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
+                    dilog1 = complex<double>(res_re.val, res_im.val);
+                    dilogArg = complex<double>((a2 - 1.0) / (a2 + 1.0), +2.0 * a / (a2 + 1.0));
+                    status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
+                    dilog2 = complex<double>(res_re.val, res_im.val);
 
                     LxpLxm = -M_PI * M_PI / 3.0 - std::atan(2.0 * a / (a2 - 1.0)) * (std::atan(2.0 * a / (a2 - 1.0)) - M_PI * sign)
                         + dilog1 + dilog2;
@@ -503,18 +505,18 @@ namespace wf
             }
             else
             {
-                return Complex<double>::Cartesian(4.0 / ubar, 0.0);
+                return complex<double>(4.0 / ubar, 0.0);
             }
         }
 
         // cf. [BFS2001], Eq. (28), p. 8
-        Complex<double> t_par(const double & s, const double & u, const double & m_q) const
+        complex<double> t_par(const double & s, const double & u, const double & m_q) const
         {
             double ubar = 1.0 - u;
             double E = energy(s);
             double x = ubar * m_B * m_B + u * s;
 
-            Complex<double> result = (2.0 * m_B / ubar / E) * I1(s, u, m_q);
+            complex<double> result = (2.0 * m_B / ubar / E) * I1(s, u, m_q);
             if (m_q > 0.0)
                 result = result + (x / ubar / ubar / E / E) * (B0(x, m_q) - B0(s, m_q));
 
@@ -522,42 +524,42 @@ namespace wf
         }
 
         // cf. [BFS2001], Eq. (23), p. 7, multiplied by phi_K^*,perp
-        Complex<double> Tnf_perp_p(const double & s, const double & u) const
+        complex<double> Tnf_perp_p(const double & s, const double & u) const
         {
             double s_hat = s / m_B / m_B;
             double ubar = 1.0 - u;
 
             double a = (4.0 / 3.0 / (u + ubar * s_hat)) * c8eff();
-            Complex<double> ba = (+2.0 / 3.0) * (-c1 / 6.0 + c2 + 6.0 * c6) * t_perp(s, u, m_c);
-            Complex<double> bb = (-1.0 / 3.0)
+            complex<double> ba = (+2.0 / 3.0) * (-c1 / 6.0 + c2 + 6.0 * c6) * t_perp(s, u, m_c);
+            complex<double> bb = (-1.0 / 3.0)
                 * (c3 - c4 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6 - (4.0 * m_b_pole() / m_B) * (c3 - c4/6.0 + 4.0 * c5 - 2.0/3.0 * c6))
                 * t_perp(s, u, m_b_pole());
-            Complex<double> bc = (-1.0 / 3.0) * (c3 - c4 / 6.0 + 16.0 * c5 - 8.0/3.0 * c6) * t_perp(s, u, 0.0);
+            complex<double> bc = (-1.0 / 3.0) * (c3 - c4 / 6.0 + 16.0 * c5 - 8.0/3.0 * c6) * t_perp(s, u, 0.0);
 
             return (a + (m_B / 2.0 / m_b_pole()) * (ba + bb + bc)) * phi_K(u, a_1_perp, a_2_perp);
         }
 
         // cf. [BFS2001, Eq. (25), p. 7, multiplied by phi_K^*,par
-        Complex<double> Tnf_par_p(const double & s, const double & u) const
+        complex<double> Tnf_par_p(const double & s, const double & u) const
         {
-            Complex<double> a = (+2.0 / 3.0) * (-c1 / 6.0 + c2 + 6.0 * c6) * t_par(s, u, m_c);
-            Complex<double> b = (-1.0 / 3.0) * (c3 - c1 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6) * t_par(s, u, m_b_pole());
-            Complex<double> c = (-1.0 / 3.0) * (c3 - c4 / 6.0 + 16.0 * c5 - 8.0/3.0 * c6) * t_par(s, u, 0.0);
+            complex<double> a = (+2.0 / 3.0) * (-c1 / 6.0 + c2 + 6.0 * c6) * t_par(s, u, m_c);
+            complex<double> b = (-1.0 / 3.0) * (c3 - c1 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6) * t_par(s, u, m_b_pole());
+            complex<double> c = (-1.0 / 3.0) * (c3 - c4 / 6.0 + 16.0 * c5 - 8.0/3.0 * c6) * t_par(s, u, 0.0);
 
             return (m_B / m_b_pole()) * (a + b + c) * phi_K(u, a_1_par, a_2_par);
         }
 
         // cf. [BFS2001], Eq. (26), pp. 7-8, multiplied by phi_K^*,par
-        Complex<double> Tnf_par_m(const double & s, const double & u) const
+        complex<double> Tnf_par_m(const double & s, const double & u) const
         {
             double s_hat = s / m_B / m_B;
             double ubar = 1.0 - u;
             double x = ubar * m_B * m_B + u * s;
 
             double a = (e_q * 8.0 / (ubar + u * s_hat)) * c8eff();
-            Complex<double> ba = (-c1 / 6.0 + c2 + c4 + 10 * c6) * h(x, m_c);
-            Complex<double> bb = (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * h(x, m_b_pole());
-            Complex<double> bc = (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * h0(x);
+            complex<double> ba = (-c1 / 6.0 + c2 + c4 + 10 * c6) * h(x, m_c);
+            complex<double> bb = (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * h(x, m_b_pole());
+            complex<double> bc = (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * h0(x);
             double bd = -8.0 / 27.0 * (-7.5 * c4 + 12.0 * c5 - 32.0 * c6);
 
             return (6.0 * m_B / m_b_pole()) * (ba + bb + bc + bd) * phi_K(u, a_1_par, a_2_par);
@@ -572,22 +574,22 @@ namespace wf
         }
 
         // cf. [BFS2001], Eq. (54), p. 15
-        Complex<double> lambda_B_m_inv(const double & s) const
+        complex<double> lambda_B_m_inv(const double & s) const
         {
             if (0.0 == s)
-                return Complex<double>::Cartesian(0.0, 0.0);
+                return complex<double>(0.0, 0.0);
 
             double omega_0 = lambda_B_p;
             double x = s / m_B / omega_0;
             double ei = gsl_sf_expint_Ei(x);
 
-            Complex<double> result = Complex<double>::Cartesian(-ei, M_PI) * (std::exp(-x) / omega_0);
+            complex<double> result = complex<double>(-ei, M_PI) * (std::exp(-x) / omega_0);
 
             return result;
         }
 
         // cf. [AAGW2001], Eq. (56), p. 20
-        Complex<double> F17(const double & s) const
+        complex<double> F17(const double & s) const
         {
             // Deviating definition of s_hat == s / m_b_pole^2 !
             double s_hat = s / m_b_pole() / m_b_pole();
@@ -595,15 +597,15 @@ namespace wf
             double Ls = std::log(s_hat);
 
             // cf. [AAGW2001], Table I, p. 20
-            std::vector<std::pair<Complex<double>, Complex<double>>> f17_coefficients =
+            std::vector<std::pair<complex<double>, complex<double>>> f17_coefficients =
             {
-                std::make_pair(Complex<double>::Cartesian(-0.76730, -0.11418), Complex<double>::Cartesian(-0.00000, -0.00000)),
-                std::make_pair(Complex<double>::Cartesian(-0.28480, -0.18278), Complex<double>::Cartesian(-0.00328, +0.02083)),
-                std::make_pair(Complex<double>::Cartesian(+0.05611, -0.23357), Complex<double>::Cartesian(+0.01637, +0.02091)),
-                std::make_pair(Complex<double>::Cartesian(+0.62438, -0.02744), Complex<double>::Cartesian(+0.07673, +0.00914))
+                std::make_pair(complex<double>(-0.76730, -0.11418), complex<double>(-0.00000, -0.00000)),
+                std::make_pair(complex<double>(-0.28480, -0.18278), complex<double>(-0.00328, +0.02083)),
+                std::make_pair(complex<double>(+0.05611, -0.23357), complex<double>(+0.01637, +0.02091)),
+                std::make_pair(complex<double>(+0.62438, -0.02744), complex<double>(+0.07673, +0.00914))
             };
 
-            Complex<double> f17 = Complex<double>::Cartesian(0.0, 0.0);
+            complex<double> f17 = complex<double>(0.0, 0.0);
             double i(0);
             for (auto k = f17_coefficients.begin() ; k != f17_coefficients.end() ; ++k, ++i)
             {
@@ -614,7 +616,7 @@ namespace wf
         }
 
         // cf. [AAGW2001], Eq. (54), p. 19
-        Complex<double> F19(const double & s) const
+        complex<double> F19(const double & s) const
         {
             // Deviating definition of s_hat == s / m_b_pole^2 !
             double s_hat = s / m_b_pole() / m_b_pole();
@@ -624,23 +626,23 @@ namespace wf
             double z = (m_c / m_b_pole()) * (m_c / m_b_pole());
 
             // cf. [AAGW2001], Table I, p. 20
-            std::vector<std::pair<Complex<double>, Complex<double>>> f19_coefficients =
+            std::vector<std::pair<complex<double>, complex<double>>> f19_coefficients =
             {
-                std::make_pair(Complex<double>::Cartesian(-12.7150, +0.09470), Complex<double>::Cartesian(-0.07883, -0.07414)),
-                std::make_pair(Complex<double>::Cartesian(-38.7420, -0.67862), Complex<double>::Cartesian(-0.03930, -0.00017)),
-                std::make_pair(Complex<double>::Cartesian(-103.830, -2.53880), Complex<double>::Cartesian(-0.04470, +0.00263)),
-                std::make_pair(Complex<double>::Cartesian(-313.750, -8.45540), Complex<double>::Cartesian(-0.05113, +0.02275))
+                std::make_pair(complex<double>(-12.7150, +0.09470), complex<double>(-0.07883, -0.07414)),
+                std::make_pair(complex<double>(-38.7420, -0.67862), complex<double>(-0.03930, -0.00017)),
+                std::make_pair(complex<double>(-103.830, -2.53880), complex<double>(-0.04470, +0.00263)),
+                std::make_pair(complex<double>(-313.750, -8.45540), complex<double>(-0.05113, +0.02275))
             };
 
-            Complex<double> f19 = Complex<double>::Cartesian(0.0, 0.0);
+            complex<double> f19 = complex<double>(0.0, 0.0);
             double i(0);
             for (auto k = f19_coefficients.begin() ; k != f19_coefficients.end() ; ++k, ++i)
             {
                 f19 = f19 + std::pow(s_hat, i) * (k->first + k->second * Ls);
             }
 
-            Complex<double> result =
-                        Lmu * Complex<double>::Cartesian(-1424.0/729.0 + 64.0/27.0 * Lc - 16.0/243.0 * Ls + (16.0/1215.0 - 32.0/(z * 135.0)) * s_hat
+            complex<double> result =
+                        Lmu * complex<double>(-1424.0/729.0 + 64.0/27.0 * Lc - 16.0/243.0 * Ls + (16.0/1215.0 - 32.0/(z * 135.0)) * s_hat
                         + (4.0/2835.0 - 8.0/(315.0 * z * z)) * s_hat * s_hat + (16.0/76545.0 - 32.0/(8505.0 * z * z * z)) * s_hat * s_hat * s_hat
                         - 256.0/243.0 * Lmu,
                         16.0/243.0 * M_PI)
@@ -650,7 +652,7 @@ namespace wf
         }
 
         // cf. [AAGW2001], Eq. (56), p. 20
-        Complex<double> F27(const double & s) const
+        complex<double> F27(const double & s) const
         {
             // Deviating definition of s_hat == s / m_b_pole^2 !
             double s_hat = s / m_b_pole() / m_b_pole();
@@ -658,28 +660,28 @@ namespace wf
             double Ls = std::log(s_hat);
 
             // cf. [AAGW2001], Table II, p. 21
-            std::vector<std::pair<Complex<double>, Complex<double>>> f27_coefficients =
+            std::vector<std::pair<complex<double>, complex<double>>> f27_coefficients =
             {
-                std::make_pair(Complex<double>::Cartesian(+4.60380, +0.68510), Complex<double>::Cartesian(-0.00000, -0.00000)),
-                std::make_pair(Complex<double>::Cartesian(+1.70880, +1.09670), Complex<double>::Cartesian(+0.01959, -0.12496)),
-                std::make_pair(Complex<double>::Cartesian(-0.33665, +1.40140), Complex<double>::Cartesian(-0.09822, -0.12548)),
-                std::make_pair(Complex<double>::Cartesian(-3.74630, +0.16463), Complex<double>::Cartesian(-0.18321, -0.05485))
+                std::make_pair(complex<double>(+4.60380, +0.68510), complex<double>(-0.00000, -0.00000)),
+                std::make_pair(complex<double>(+1.70880, +1.09670), complex<double>(+0.01959, -0.12496)),
+                std::make_pair(complex<double>(-0.33665, +1.40140), complex<double>(-0.09822, -0.12548)),
+                std::make_pair(complex<double>(-3.74630, +0.16463), complex<double>(-0.18321, -0.05485))
             };
 
-            Complex<double> f27 = Complex<double>::Cartesian(0.0, 0.0);
+            complex<double> f27 = complex<double>(0.0, 0.0);
             double i(0);
             for (auto k = f27_coefficients.begin() ; k != f27_coefficients.end() ; ++k, ++i)
             {
                 f27 = f27 + std::pow(s_hat, i) * (k->first + k->second * Ls);
             }
 
-            Complex<double> result = 416.0/81.0 * Lmu + f27;
+            complex<double> result = 416.0/81.0 * Lmu + f27;
 
             return result;
         }
 
         // cf. [AAGW2001], Eq. (55), p. 19
-        Complex<double> F29(const double & s) const
+        complex<double> F29(const double & s) const
         {
             // Deviating definition of s_hat == s / m_b_pole^2 !
             double s_hat = s / m_b_pole() / m_b_pole();
@@ -689,23 +691,23 @@ namespace wf
             double z = (m_c / m_b_pole()) * (m_c / m_b_pole());
 
             // cf. [AAGW2001], Table II, p. 21
-            std::vector<std::pair<Complex<double>, Complex<double>>> f29_coefficients =
+            std::vector<std::pair<complex<double>, complex<double>>> f29_coefficients =
             {
-                std::make_pair(Complex<double>::Cartesian(+9.50420, -0.56819), Complex<double>::Cartesian(+0.47298, +0.44483)),
-                std::make_pair(Complex<double>::Cartesian(+7.42380, +4.07170), Complex<double>::Cartesian(+0.23581, +0.00104)),
-                std::make_pair(Complex<double>::Cartesian(+0.33806, +15.2330), Complex<double>::Cartesian(+0.26821, -0.01577)),
-                std::make_pair(Complex<double>::Cartesian(-42.0850, +50.7320), Complex<double>::Cartesian(+0.30680, -0.13652))
+                std::make_pair(complex<double>(+9.50420, -0.56819), complex<double>(+0.47298, +0.44483)),
+                std::make_pair(complex<double>(+7.42380, +4.07170), complex<double>(+0.23581, +0.00104)),
+                std::make_pair(complex<double>(+0.33806, +15.2330), complex<double>(+0.26821, -0.01577)),
+                std::make_pair(complex<double>(-42.0850, +50.7320), complex<double>(+0.30680, -0.13652))
             };
 
-            Complex<double> f29 = Complex<double>::Cartesian(0.0, 0.0);
+            complex<double> f29 = complex<double>(0.0, 0.0);
             double i(0);
             for (auto k = f29_coefficients.begin() ; k != f29_coefficients.end() ; ++k, ++i)
             {
                 f29 = f29 + std::pow(s_hat, i) * (k->first + k->second * Ls);
             }
 
-            Complex<double> result =
-                Lmu * Complex<double>::Cartesian(256.0/243.0 - 128.0/9.0 * Lc + 32.0/81.0 * Ls - (32.0/405.0 - 64.0/(z * 45.0)) * s_hat
+            complex<double> result =
+                Lmu * complex<double>(256.0/243.0 - 128.0/9.0 * Lc + 32.0/81.0 * Ls - (32.0/405.0 - 64.0/(z * 45.0)) * s_hat
                         - (8.0/945.0 - 16.0/(105.0 * z * z)) * s_hat * s_hat - (32.0/25515.0 - 64.0/(2835.0 * z * z * z)) * s_hat * s_hat * s_hat
                         + 512.0/81.0 * Lmu,
                         -32.0/81.0 * M_PI)
@@ -715,31 +717,31 @@ namespace wf
         }
 
         // cf. [BFS2001], Eq. (82), p. 30
-        Complex<double> F87(const double & s) const
+        complex<double> F87(const double & s) const
         {
             double s_hat = s / m_B / m_B;
             double s_hat2 = s_hat * s_hat;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
 
-            Complex<double> a = Complex<double>::Cartesian(-32.0 * std::log(mu / m_b_pole()) - 8.0 * s_hat / denom * std::log(s_hat)
+            complex<double> a = complex<double>(-32.0 * std::log(mu / m_b_pole()) - 8.0 * s_hat / denom * std::log(s_hat)
                     - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2,
                     -8.0 * M_PI);
-            Complex<double> b = (4.0 / denom / denom2)
+            complex<double> b = (4.0 / denom / denom2)
                 * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_b_pole()) - (4.0 + 2.0 * s_hat) * C0(s));
 
             return (1.0 / 9.0) * (a + b);
         }
 
         // cf. [BFS2001], Eq. (83), p. 30
-        Complex<double> F89(const double & s) const
+        complex<double> F89(const double & s) const
         {
             double s_hat = s / m_B / m_B;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
 
             double a = 16.0 * std::log(s_hat) / denom + 8.0 * (5.0 - 2.0 * s_hat) / denom2;
-            Complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b_pole()) - 2.0 * C0(s));
+            complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b_pole()) - 2.0 * C0(s));
 
             return (1.0 / 9.0) * (a + b);
         }
@@ -763,7 +765,7 @@ namespace wf
         }
 
         // cf. [FM2002], Eq. (22), p. 9
-        Complex<double> FV(const double & s) const
+        complex<double> FV(const double & s) const
         {
             return 3.0 / 4.0 * (
                     (-c1 / 6.0 + c2 + c4 + 10.0 * c6) * h(s, m_c)
@@ -773,7 +775,7 @@ namespace wf
         }
 
         // cf. [BFS2004], Eq. (52), the integrand of the second term only
-        Complex<double> Thsa_1_perp(const double & s_hat, const double & u) const
+        complex<double> Thsa_1_perp(const double & s_hat, const double & u) const
         {
             double ubar = 1.0 - u;
             double x = (ubar + u * s_hat) * m_B * m_B;
@@ -783,7 +785,7 @@ namespace wf
 
         // cf. [BFS2004], Eq. (52), the integrand of the third term only.
         // the v integration has been executed analytically
-        Complex<double> Thsa_2_perp(const double & s_hat, const double & u) const
+        complex<double> Thsa_2_perp(const double & s_hat, const double & u) const
         {
             double ubar = 1.0 - u;
             double x = (ubar + u * s_hat) * m_B * m_B;
@@ -793,7 +795,7 @@ namespace wf
         }
 
         // cf. [BFS2001], Eq. (15) with a = perp, and [BHP2008], Eq. (C.4)
-        Complex<double> tensor_perp(const double & h, const double & s) const
+        complex<double> tensor_perp(const double & h, const double & s) const
         {
             // cf. [BFS2004], paragraph below Eq. (42)
             double ff_nlo_factor = QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI;
@@ -805,24 +807,24 @@ namespace wf
             // Here m_b_pole is used, cf. [BFS2001], comment below Eq. (36), p. 9
 
             /* Form factor corrections */
-            Complex<double> ff_0 = (c7eff() + h * c7prime()) + s / (2.0 * m_b_pole() * m_B) * Y0(s);
+            complex<double> ff_0 = (c7eff() + h * c7prime()) + s / (2.0 * m_b_pole() * m_B) * Y0(s);
             // cf. [BFS2001], Eq. (34), p. 9
             double ff_f = (c7eff() + h * c7prime()) * (8.0 * std::log(m_b_pole() / mu) - 4.0 * (1.0 - mu_f() / m_b_pole()) - L(s));
             // cf. [BFS2001], Eq. (37), p. 9
-            Complex<double> ff_nf = (-1.0 / QCD::casimir_f) * (
+            complex<double> ff_nf = (-1.0 / QCD::casimir_f) * (
                     (c2 - c1 / 6.0) * F27(s) + c8eff() * F87(s)
                     + (s / (2.0 * m_b_pole() * m_B)) * (c2() * F29(s) + c1() * F19(s) + c8eff() * F89(s)));
-            Complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
+            complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
 
             /* Specator scattering, folded with phi_K^*,perp */
             // cf. [BFS2001], Eq. (20), p. 6
             double scatt_f_p = (c7eff() + h * c7prime) * 2.0 * m_B / energy(s) * 3.0 * (1.0 + a_1_perp + a_2_perp);
             // cf. [BFS2001], Eq. (23), p. 7
-            Complex<double> scatt_nf_p = integrate(
-                    std::tr1::function<Complex<double> (const double &)>(
+            complex<double> scatt_nf_p = integrate(
+                    std::tr1::function<complex<double> (const double &)>(
                         std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_perp_p, this, s, std::tr1::placeholders::_1)),
                     40, 0.001, 0.999);
-            Complex<double> scatt_p = (1.0 / lambda_B_p) * scatt_nlo_factor * (scatt_f_p + scatt_nf_p);
+            complex<double> scatt_p = (1.0 / lambda_B_p) * scatt_nlo_factor * (scatt_f_p + scatt_nf_p);
 
             /* Weak annihilation */
             // cf. [BFS2004], Eq. (51), p. 26
@@ -833,27 +835,27 @@ namespace wf
                         40, 0.0, 1.0)
                     + f_Kstar_par * m_Kstar / ((1 - shat) * lambda_B_p));
             /* Hard spectator scattering */
-            Complex<double> hsa = e_q * scatt_nlo_factor * M_PI * M_PI * f_B / (3.0 * m_b_pole() * m_B) * (
+            complex<double> hsa = e_q * scatt_nlo_factor * M_PI * M_PI * f_B / (3.0 * m_b_pole() * m_B) * (
                     12.0 * c8eff() * m_b_pole() / m_B * f_Kstar_perp * integrate(
                         std::tr1::function<double (const double &)>(
                             std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Xperp, this, shat, std::tr1::placeholders::_1)),
                         40, 0.0, 1.0)
                     + 8.0 * f_Kstar_perp * integrate(
-                        std::tr1::function<Complex<double> (const double &)>(
+                        std::tr1::function<complex<double> (const double &)>(
                             std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Thsa_1_perp, this, shat, std::tr1::placeholders::_1)),
                         40, 0.0, 1.0)
                     - 4.0 * m_Kstar * f_Kstar_par / ((1.0 - shat) * lambda_B_p) * integrate(
-                        std::tr1::function<Complex<double> (const double &)>(
+                        std::tr1::function<complex<double> (const double &)>(
                             std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Thsa_2_perp, this, shat, std::tr1::placeholders::_1)),
                         40, 0.0, 1.0));
 
-            Complex<double> result = xi_perp(s) * ff + scatt_factor * scatt_p + wa + hsa;
+            complex<double> result = xi_perp(s) * ff + scatt_factor * scatt_p + wa + hsa;
 
             return result;
         }
 
         // cf. [BFS2001], Eq. (15) with a = par, and [BHP2008], Eq. (C.4)
-        Complex<double> tensor_par(const double & s) const
+        complex<double> tensor_par(const double & s) const
         {
             // cf. [BFS2004], paragraph below Eq. (42)
             double ff_nlo_factor = QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI;
@@ -864,44 +866,44 @@ namespace wf
             // Here m_b_pole is used, cf. [BFS2001], comment below Eq. (36), p. 9
 
             /* Form factor corrections */
-            Complex<double> ff_0 = -1.0 * (c7eff() - c7prime() + m_B / (2.0 * m_b_pole()) * (Y0(s)));
+            complex<double> ff_0 = -1.0 * (c7eff() - c7prime() + m_B / (2.0 * m_b_pole()) * (Y0(s)));
             // cf. [BFS2004], Eq. (44), p. 24
-            Complex<double> ff_f = -1.0 * (c7eff() - c7prime()) * (8.0 * std::log(m_b_pole() / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b_pole()))
+            complex<double> ff_f = -1.0 * (c7eff() - c7prime()) * (8.0 * std::log(m_b_pole() / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b_pole()))
                     + (m_B / (2.0 * m_b_pole())) * Y0(s) * (2.0 - 2.0 * L(s));
             // cf. [BFS2001], Eq. (38), p. 9
-            Complex<double> ff_nf = (+1.0 / QCD::casimir_f) * (
+            complex<double> ff_nf = (+1.0 / QCD::casimir_f) * (
                     (c2 - c1 / 6.0) * F27(s) + c8eff() * F87(s)
                     + (m_B / (2.0 * m_b_pole())) * (c2() * F29(s) + c1() * F19(s) + c8eff() * F89(s)));
-            Complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
+            complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
 
             /* Spectator scattering */
             // cf. [BFS2001], Eq. (18), p. 6
             double scatt_0_m = -e_q * 4.0 * m_B / m_b_pole() * (c3 + 4.0/3.0 * c4 + 16.0 * c5 + 64.0/3.0 * c6);
             // cf. [BFS2001], Eq. (21), p. 6
-            Complex<double> scatt_f_p = (c7eff() - c7prime + (s / (2.0 * m_b_pole() * m_B)) * Y0(s)) * (2.0 * m_B * m_B / energy(s) / energy(s))
+            complex<double> scatt_f_p = (c7eff() - c7prime + (s / (2.0 * m_b_pole() * m_B)) * Y0(s)) * (2.0 * m_B * m_B / energy(s) / energy(s))
                     * 3.0 * (1.0 + a_1_par + a_2_par);
-            scatt_f_p = Complex<double>::Cartesian(((c7eff() - c7prime) * 4.0 * m_B / energy(s)) * 3.0 * (1.0 + a_1_par + a_2_par), 0.0);
+            scatt_f_p = complex<double>(((c7eff() - c7prime) * 4.0 * m_B / energy(s)) * 3.0 * (1.0 + a_1_par + a_2_par), 0.0);
             // cf. [BFS2001], Eq. (25), p. 7
-            Complex<double> scatt_nf_p = integrate(
-                    std::tr1::function<Complex<double> (const double &)>(std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_par_p,
+            complex<double> scatt_nf_p = integrate(
+                    std::tr1::function<complex<double> (const double &)>(std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_par_p,
                             this, s, std::tr1::placeholders::_1)),
                     40, 0.001, 0.999);
             // cf. [BFS2001], Eq. (26), pp. 7-8
-            Complex<double> scatt_nf_m = integrate(
-                    std::tr1::function<Complex<double> (const double &)>(std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_par_m,
+            complex<double> scatt_nf_m = integrate(
+                    std::tr1::function<complex<double> (const double &)>(std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_par_m,
                             this, s, std::tr1::placeholders::_1)),
                     40, 0.001, 0.999);
-            Complex<double> scatt_p = (1.0 / lambda_B_p) * scatt_nlo_factor * (scatt_f_p + scatt_nf_p);
-            Complex<double> scatt_m = lambda_B_m_inv(s)  * (scatt_0_m + scatt_nlo_factor * scatt_nf_m);
+            complex<double> scatt_p = (1.0 / lambda_B_p) * scatt_nlo_factor * (scatt_f_p + scatt_nf_p);
+            complex<double> scatt_m = lambda_B_m_inv(s)  * (scatt_0_m + scatt_nlo_factor * scatt_nf_m);
 
-            Complex<double> result = xi_par(s) * ff + scatt_factor * (scatt_p + scatt_m);
+            complex<double> result = xi_par(s) * ff + scatt_factor * (scatt_p + scatt_m);
 
             return result;
         }
 
         /* Amplitudes */
         // cf. [BHP2008], p. 20
-        Complex<double> a_long(const Helicity & helicity, const double & s) const
+        complex<double> a_long(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
             double shat = s_hat(s);
@@ -915,14 +917,14 @@ namespace wf
 
             double a = wilson * ((m_B * m_B - m_Kstar * m_Kstar - s) * 2.0 * energy(s) * xi_perp(s)
                 -lambda(m_B * m_B, m_Kstar * m_Kstar, s) * m_B / (m_B * m_B - m_Kstar * m_Kstar) * (xi_perp(s) - xi_par(s)));
-            Complex<double> b = 2 * m_b_pole() * (((m_B * m_B + 3 * m_Kstar * m_Kstar - s) * 2.0 * energy(s) / m_B
+            complex<double> b = 2 * m_b_pole() * (((m_B * m_B + 3 * m_Kstar * m_Kstar - s) * 2.0 * energy(s) / m_B
                         - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar)) * tensor_perp(-1.0, s)
                     - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar) * tensor_par(s));
             return prefactor * (a + b);
         }
 
         // cf. [BHP2008], p. 20
-        Complex<double> a_perp(const Helicity & helicity, const double & s) const
+        complex<double> a_perp(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
             double shat = s_hat(s);
@@ -936,7 +938,7 @@ namespace wf
         }
 
         // cf. [BHP2008], p. 20
-        Complex<double> a_par(const Helicity & helicity, const double & s) const
+        complex<double> a_par(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
             double shat = s_hat(s);
@@ -959,19 +961,19 @@ namespace wf
     {
     }
 
-    Complex<double>
+    complex<double>
     BToKstarDilepton<LargeRecoil>::a_long(const Helicity & h, const double & s) const
     {
         return _imp->a_long(h, s);
     }
 
-    Complex<double>
+    complex<double>
     BToKstarDilepton<LargeRecoil>::a_perp(const Helicity & h, const double & s) const
     {
         return _imp->a_perp(h, s);
     }
 
-    Complex<double>
+    complex<double>
     BToKstarDilepton<LargeRecoil>::a_par(const Helicity & h, const double & s) const
     {
         return _imp->a_par(h, s);
@@ -989,37 +991,33 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::differential_decay_width(const double & s) const
     {
-        return _imp->norm(s) * _imp->norm(s) * (a_long(left_handed, s).absolute_squared()
-            + a_long(right_handed, s).absolute_squared()
-            + a_perp(left_handed, s).absolute_squared()
-            + a_perp(right_handed, s).absolute_squared()
-            + a_par(left_handed, s).absolute_squared()
-            + a_par(right_handed, s).absolute_squared());
+        return _imp->norm(s) * _imp->norm(s) * (norm(a_long(left_handed, s))
+            + norm(a_long(right_handed, s))
+            + norm(a_perp(left_handed, s))
+            + norm(a_perp(right_handed, s))
+            + norm(a_par(left_handed, s))
+            + norm(a_par(right_handed, s)));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
-        return 1.5 * _imp->norm(s) * _imp->norm(s) / differential_decay_width(s) * (
-                (a_par(left_handed, s) * a_perp(left_handed, s).conjugate()).real()
-                -(a_par(right_handed, s) * a_perp(right_handed, s).conjugate()).real()
-            );
+        return 1.5 * _imp->norm(s) * _imp->norm(s) / differential_decay_width(s)
+            * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_unnormalized_forward_backward_asymmetry(const double & s) const
     {
-        return 1.5 * _imp->norm(s) * _imp->norm(s) * (
-                (a_par(left_handed, s) * a_perp(left_handed, s).conjugate()).real()
-                -(a_par(right_handed, s) * a_perp(right_handed, s).conjugate()).real()
-            );
+        return 1.5 * _imp->norm(s) * _imp->norm(s)
+            * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_2(const double & s) const
     {
-        double a = a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared();
-        double b = a_par(left_handed, s).absolute_squared() + a_par(right_handed, s).absolute_squared();
+        double a = norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s));
+        double b = norm(a_par(left_handed, s)) + norm(a_par(right_handed, s));
 
         return (a - b) / (a + b);
     }
@@ -1027,9 +1025,9 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_3(const double & s) const
     {
-        double a = (a_long(left_handed, s) * a_par(left_handed, s).conjugate() + a_long(right_handed, s).conjugate() * a_par(right_handed, s)).absolute();
-        double b = std::sqrt(a_long(left_handed, s).absolute_squared() + a_long(right_handed, s).absolute_squared())
-                * std::sqrt(a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared());
+        double a = abs(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
+        double b = std::sqrt(norm(a_long(left_handed, s)) + norm(a_long(right_handed, s)))
+                * std::sqrt(norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s)));
 
         return a / b;
     }
@@ -1037,8 +1035,8 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_4(const double & s) const
     {
-        double a = (a_long(left_handed, s) * a_perp(left_handed, s).conjugate() - a_long(right_handed, s).conjugate() * a_perp(right_handed, s)).absolute();
-        double b = (a_long(left_handed, s).conjugate() * a_par(left_handed, s) + a_long(right_handed, s) * a_par(right_handed, s).conjugate()).absolute();
+        double a = abs(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+        double b = abs(conj(a_long(left_handed, s)) * a_par(left_handed, s) + a_long(right_handed, s) * conj(a_par(right_handed, s)));
 
         return a / b;
     }
@@ -1046,8 +1044,7 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
-        return (a_long(left_handed, s).absolute_squared() + a_long(right_handed, s).absolute_squared())
-            * _imp->norm(s) * _imp->norm(s) / differential_decay_width(s);
+        return (norm(a_long(left_handed, s)) + norm(a_long(right_handed, s))) * _imp->norm(s) * _imp->norm(s) / differential_decay_width(s);
     }
 
     double
@@ -1148,14 +1145,14 @@ namespace wf
 
         /* Charm loop parts */
         // cf. [BFS2001], Eq. (11), p. 4
-        Complex<double> h(const double & s, const double & m_q) const
+        complex<double> h(const double & s, const double & m_q) const
         {
             if (m_q < 1e-4)
                 return h0(s);
 
             const double z = 4.0 * m_q * m_q / s;
             if (z < 1e-10)
-                return Complex<double>::Cartesian(-4.0/9.0 * (2.0 * std::log(m_q / mu) + 1.0), 0.0);
+                return complex<double>(-4.0/9.0 * (2.0 * std::log(m_q / mu) + 1.0), 0.0);
 
             const double sqrt1z = std::sqrt(std::abs(z - 1.0));
 
@@ -1173,17 +1170,17 @@ namespace wf
                 rc = std::log((1.0 + sqrt1z) / std::sqrt(z));
             }
 
-            return -4.0 / 9.0 * (a + b * Complex<double>::Cartesian(rc, ic));
+            return -4.0 / 9.0 * (a + b * complex<double>(rc, ic));
         }
 
         // cf. [BFS2001], Eq. (11), p. 4 in the limit m_q -> 0
-        Complex<double> h0(const double & s) const
+        complex<double> h0(const double & s) const
         {
-            return 4.0 / 9.0 * Complex<double>::Cartesian(2.0 / 3.0 + 2.0 * std::log(2.0 * mu()) - std::log(s), M_PI);
+            return 4.0 / 9.0 * complex<double>(2.0 / 3.0 + 2.0 * std::log(2.0 * mu()) - std::log(s), M_PI);
         }
 
         // cf. [BFS2001], Eq. (29), p. 8
-        Complex<double> B0(const double & s, const double & m_q) const
+        complex<double> B0(const double & s, const double & m_q) const
         {
             double z = 4.0 * m_q * m_q / s;
             double rp, ip;
@@ -1199,7 +1196,7 @@ namespace wf
             }
 
             if (0 == s)
-                return Complex<double>::Cartesian(-2.0, 0.0);
+                return complex<double>(-2.0, 0.0);
 
             if (z > 1.0)
             {
@@ -1212,7 +1209,7 @@ namespace wf
                 ip = std::sqrt(1.0 - z) * M_PI;
             }
 
-            return Complex<double>::Cartesian(rp, ip);
+            return complex<double>(rp, ip);
         }
 
         // cf. [BFS2001], Eq. (84), p. 30
@@ -1262,85 +1259,85 @@ namespace wf
         }
 
         // cf. [GP2004], between Eqs. (41) and (42), p. 8
-        Complex<double> A(const double & s) const
+        complex<double> A(const double & s) const
         {
-            return -104.0/243.0 * 2.0 * std::log(m_b_MSbar / mu) + Complex<double>::Cartesian(0.736, 0.836);
+            return -104.0/243.0 * 2.0 * std::log(m_b_MSbar / mu) + complex<double>(0.736, 0.836);
         }
 
         // cf. [GP2004], between Eqs. (41) and (42), p. 8
-        Complex<double> B(const double & s) const
+        complex<double> B(const double & s) const
         {
             const double l = std::log(std::pow(m_b_MSbar / mu, 2.0));
             const double z = 4 * std::pow(m_b_MSbar, 2.0) / s;
 
-            Complex<double> result = Complex<double>::Cartesian(z - 34.0, -17 * M_PI) * l + 8.0 * l * l - 17.0 * std::log(z / 4.0) * l
+            complex<double> result = complex<double>(z - 34.0, -17 * M_PI) * l + 8.0 * l * l - 17.0 * std::log(z / 4.0) * l
                 - (2.0 + z) * std::sqrt(z - 1.0) * std::atan(1.0 / (std::sqrt(z - 1.0))) * l;
             result = 8.0 / 243.0 * result;
-            result = result + Complex<double>::Cartesian(-1.332, 3.058);
+            result = result + complex<double>(-1.332, 3.058);
 
             return result;
         }
 
         // cf. [GP2004], between Eqs. (41) and (42), p. 8
-        Complex<double> C(const double & s) const
+        complex<double> C(const double & s) const
         {
             const double zeta3 = 1.20206;
 
-            return Complex<double>::Cartesian(-16.0/81.0 * std::log(s / std::pow(mu, 2.0)) + 428.0/243.0 - 64.0/27.0 * zeta3, 16.0 / 81.0 * M_PI);
+            return complex<double>(-16.0/81.0 * std::log(s / std::pow(mu, 2.0)) + 428.0/243.0 - 64.0/27.0 * zeta3, 16.0 / 81.0 * M_PI);
         }
 
         // cf. [BFS2001], Eq. (82), p. 30
-        Complex<double> F87(const double & s) const
+        complex<double> F87(const double & s) const
         {
             double s_hat = s / m_B / m_B;
             double s_hat2 = s_hat * s_hat;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
 
-            Complex<double> a = Complex<double>::Cartesian(-32.0 * std::log(mu / m_b_MSbar) - 8.0 * s_hat / denom * std::log(s_hat)
+            complex<double> a = complex<double>(-32.0 * std::log(mu / m_b_MSbar) - 8.0 * s_hat / denom * std::log(s_hat)
                     - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2,
                     -8.0 * M_PI);
-            Complex<double> b = (4.0 / denom / denom2)
+            complex<double> b = (4.0 / denom / denom2)
                 * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_b_MSbar) - (4.0 + 2.0 * s_hat) * C0(s));
 
             return (1.0 / 9.0) * (a + b);
         }
 
         // cf. [BFS2001], Eq. (83), p. 30
-        Complex<double> F89(const double & s) const
+        complex<double> F89(const double & s) const
         {
             double s_hat = s / m_B / m_B;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
 
             double a = 16.0 * std::log(s_hat) / denom + 8.0 * (5.0 - 2.0 * s_hat) / denom2;
-            Complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b_MSbar) - 2.0 * C0(s));
+            complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b_MSbar) - 2.0 * C0(s));
 
             return (1.0 / 9.0) * (a + b);
         }
 
         // cf. [GP2004], Eq. (56)
-        Complex<double> c7eff(double s) const
+        complex<double> c7eff(double s) const
         {
             // TODO: Neglecting contributions ~alpha_s / 4.0 / M_PI. These do involve spectator scattering,
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 + 20.0/3.0 * c5 + 80.0/9.0 * c6;
-            Complex<double> nlo = (c1() - 6.0 * c2()) * A(s) - c8() * F87(s);
+            complex<double> nlo = (c1() - 6.0 * c2()) * A(s) - c8() * F87(s);
 
             return c7() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
 
 
         // cf. [GP2004], Eq. (55), p. 10
-        Complex<double> c9eff(const double & s) const
+        complex<double> c9eff(const double & s) const
         {
             double c_0 = 4.0 / 3.0 * c1() + c2() + 5.5 * c3() - 2.0 / 3.0 * c4() + 52.0 * c5() + 32.0 / 3.0 * c6();
             double c_b = -0.5 * (7.0 * c3() + 4.0 / 3.0 * c4() + 76.0 * c5() + 64.0 / 3.0 * c6());
             double c = 2.0 / 9.0 * (6.0 * c3() + 32.0 * c5() + 32.0 / 3.0 * c6());
 
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
-            Complex<double> lo = c_b * h(s, m_b_MSbar) + c_0 * h0(s) + c;
-            Complex<double> nlo = c1() * (B(s) + 4.0 * C(s)) - 3.0 * c2() * (2.0 * B(s) - C(s)) - c8() * F89(s);
+            complex<double> lo = c_b * h(s, m_b_MSbar) + c_0 * h0(s) + c;
+            complex<double> nlo = c1() * (B(s) + 4.0 * C(s)) - 3.0 * c2() * (2.0 * B(s) - C(s)) - c8() * F89(s);
 
             return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
@@ -1368,32 +1365,32 @@ namespace wf
         }
 
         // Amplitudes
-        Complex<double> a_long(const Helicity & helicity, const double & s) const
+        complex<double> a_long(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
             double m_Kstar_hat = m_Kstar / m_B;
-            Complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
-            Complex<double> prefactor = Complex<double>::Cartesian(0.0, -0.5 * m_B * m_B * m_B / m_Kstar / std::sqrt(s));
+            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
+            complex<double> prefactor = complex<double>(0.0, -0.5 * m_B * m_B * m_B / m_Kstar / std::sqrt(s));
             double formfactor = lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s)) * form_factors->a_1(s_hat(s)) - (1 - s_hat(s)) * form_factors->a_2(s_hat(s));
 
             return prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
 
-        Complex<double> a_perp(const Helicity & helicity, const double & s) const
+        complex<double> a_perp(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
             double m_Kstar_hat = m_Kstar / m_B;
-            Complex<double> wilson = (c9eff(s) + c9prime()) + h * (c10() + c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
-            Complex<double> prefactor = Complex<double>::Cartesian(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * m_B);
+            complex<double> wilson = (c9eff(s) + c9prime()) + h * (c10() + c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
+            complex<double> prefactor = complex<double>(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * m_B);
 
             return prefactor * wilson * form_factors->v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }
 
-        Complex<double> a_par(const Helicity & helicity, const double & s) const
+        complex<double> a_par(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
-            Complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
-            Complex<double> prefactor = Complex<double>::Cartesian(0.0, -std::sqrt(2) * m_B);
+            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
+            complex<double> prefactor = complex<double>(0.0, -std::sqrt(2) * m_B);
 
             return prefactor * wilson * form_factors->a_1(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }
@@ -1408,19 +1405,19 @@ namespace wf
     {
     }
 
-    Complex<double>
+    complex<double>
     BToKstarDilepton<LowRecoil>::a_long(const Helicity & h, const double & s) const
     {
         return _imp->a_long(h, s);
     }
 
-    Complex<double>
+    complex<double>
     BToKstarDilepton<LowRecoil>::a_perp(const Helicity & h, const double & s) const
     {
         return _imp->a_perp(h, s);
     }
 
-    Complex<double>
+    complex<double>
     BToKstarDilepton<LowRecoil>::a_par(const Helicity & h, const double & s) const
     {
         return _imp->a_par(h, s);
@@ -1438,37 +1435,31 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::differential_decay_width(const double & s) const
     {
-        return (a_long(left_handed, s).absolute_squared()
-            + a_long(right_handed, s).absolute_squared()
-            + a_perp(left_handed, s).absolute_squared()
-            + a_perp(right_handed, s).absolute_squared()
-            + a_par(left_handed, s).absolute_squared()
-            + a_par(right_handed, s).absolute_squared());
+        return (norm(a_long(left_handed, s))
+            + norm(a_long(right_handed, s))
+            + norm(a_perp(left_handed, s))
+            + norm(a_perp(right_handed, s))
+            + norm(a_par(left_handed, s))
+            + norm(a_par(right_handed, s)));
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
-        return 1.5 / differential_decay_width(s) * (
-                (a_par(left_handed, s) * a_perp(left_handed, s).conjugate()).real()
-                -(a_par(right_handed, s) * a_perp(right_handed, s).conjugate()).real()
-            );
+        return 1.5 / differential_decay_width(s) * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_unnormalized_forward_backward_asymmetry(const double & s) const
     {
-        return 1.5 * (
-                (a_par(left_handed, s) * a_perp(left_handed, s).conjugate()).real()
-                -(a_par(right_handed, s) * a_perp(right_handed, s).conjugate()).real()
-            );
+        return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2(const double & s) const
     {
-        double a = a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared();
-        double b = a_par(left_handed, s).absolute_squared() + a_par(right_handed, s).absolute_squared();
+        double a = norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s));
+        double b = norm(a_par(left_handed, s)) + norm(a_par(right_handed, s));
 
         return (a - b) / (a + b);
     }
@@ -1476,9 +1467,9 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3(const double & s) const
     {
-        double a = (a_long(left_handed, s) * a_par(left_handed, s).conjugate() + a_long(right_handed, s).conjugate() * a_par(right_handed, s)).absolute();
-        double b = std::sqrt((a_long(left_handed, s).absolute_squared() + a_long(right_handed, s).absolute_squared())
-                * (a_perp(left_handed, s).absolute_squared() + a_perp(right_handed, s).absolute_squared()));
+        double a = abs(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
+        double b = std::sqrt((norm(a_long(left_handed, s)) + norm(a_long(right_handed, s))))
+                * std::sqrt((norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s))));
 
         return a / b;
     }
@@ -1486,8 +1477,8 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4(const double & s) const
     {
-        double a = (a_long(left_handed, s) * a_perp(left_handed, s).conjugate() - a_long(right_handed, s).conjugate() * a_perp(right_handed, s)).absolute();
-        double b = (a_long(left_handed, s).conjugate() * a_par(left_handed, s) + a_long(right_handed, s) * a_par(right_handed, s).conjugate()).absolute();
+        double a = abs(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+        double b = abs(conj(a_long(left_handed, s)) * a_par(left_handed, s) + a_long(right_handed, s) * conj(a_par(right_handed, s)));
 
         return a / b;
     }
@@ -1495,7 +1486,7 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
-        return (a_long(left_handed, s).absolute_squared() + a_long(right_handed, s).absolute_squared())
+        return (norm(a_long(left_handed, s)) + norm(a_long(right_handed, s)))
             / differential_decay_width(s);
     }
 
