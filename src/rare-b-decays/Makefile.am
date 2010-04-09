@@ -5,6 +5,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -ggdb
 
 noinst_LTLIBRARIES = libwfrarebdecays.la
 libwfrarebdecays_la_SOURCES = \
+	charm-loops.cc charm-loops.hh \
 	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
@@ -31,3 +32,11 @@ scan2_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
 scan3_SOURCES = \
 	scan3.cc
 scan3_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
+
+TESTS = \
+	charm-loops_TEST
+TESTS_LD_ADD = $(top_builddir)/test/libwftest.a $(top_builddir)/src/utils/libwfutils.la libwfrarebdecays.la
+
+check_PROGRAMS = $(TESTS)
+charm_loops_TEST_SOURCES = charm-loops_TEST.cc
+charm_loops_TEST_LDADD = $(TESTS_LD_ADD)

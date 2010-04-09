@@ -9,6 +9,14 @@ References
         arxiv:hep-ph/0109140
 
 
+    ABGW2003 : Asatrian, H.M. and Bieri, K. and Greub, C. and Walker, M.
+
+        Virtual- and bremsstrahlung corrections to b -> d l^+ l^- in the
+        standard model
+
+        arxiv:hep-ph/0312063
+
+
     ABBBSW2008 : Altmannshofer, W. and Ball, P. and Bharucha, A. and Buras,
                  A. J. and Straub, D. and Wick, M.
 
@@ -136,6 +144,13 @@ References
     PS : Peskin, M. and Schroeder, D.
 
         An Introduction to Quantum Field Theory
+
+
+    S2004 : Seidel, D.
+
+        Analytic two-loop virtual corrections to b -> d l^+ l^-
+
+        arxiv:hep-ph/0403185
 
 
     vRVL1997 : van Ritbergen, T. and Vermaseren, J.A.M. and Larin, S.A.

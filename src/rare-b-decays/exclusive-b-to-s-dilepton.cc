@@ -1,5 +1,6 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
+#include <src/rare-b-decays/charm-loops.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <src/rare-b-decays/form_factors.hh>
 #include <src/utils/concrete_observable.hh>
@@ -182,42 +183,6 @@ namespace wf
             return c8() + c3() - 1.0/6.0 * c4() + 20.0 * c5() - 10.0/3.0 * c6();
         }
 
-        /* Charm loop parts */
-        // cf. [BFS2001], Eq. (11), p. 4
-        complex<double> h(const double & s, const double & m_q) const
-        {
-            if (m_q < 1e-4)
-                return h0(s);
-
-            const double z = 4.0 * m_q * m_q / s;
-            if (z < 1e-10)
-                return complex<double>(-4.0/9.0 * (2.0 * std::log(m_q / mu) + 1.0), 0.0);
-
-            const double sqrt1z = std::sqrt(std::abs(z - 1.0));
-
-            double a = 2.0 * std::log(m_q / mu()) - 2.0 / 3.0 - z;
-            double b = (2.0 + z) * sqrt1z;
-            double rc, ic;
-            if (z > 1.0)
-            {
-                ic = 0.0;
-                rc = std::atan(1.0 / sqrt1z);
-            }
-            else
-            {
-                ic = -M_PI / 2.0;
-                rc = std::log((1.0 + sqrt1z) / std::sqrt(z));
-            }
-
-            return -4.0 / 9.0 * (a + b * complex<double>(rc, ic));
-        }
-
-        // cf. [BFS2001], Eq. (11), p. 4 in the limit m_q -> 0
-        complex<double> h0(const double & s) const
-        {
-            return 4.0 / 9.0 * complex<double>(2.0 / 3.0 + 2.0 * std::log(2.0 * mu()) - std::log(s), M_PI);
-        }
-
         // cf. [BFS2001], Eq. (10), p. 4
         complex<double> Y0(const double & s) const
         {
@@ -227,7 +192,10 @@ namespace wf
             double Y = 2.0 / 9.0 * (6.0 * c3() + 32.0 * c5() + 32.0 / 3.0 * c6());
 
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
-            return Y_c * h(s, m_c) + Y_b * h(s, m_b_pole()) + Y_0 * h0(s) + Y;
+            return Y_c * CharmLoops::h(mu, s, m_c)
+                + Y_b * CharmLoops::h(mu, s, m_b_pole())
+                + Y_0 * CharmLoops::h(mu, s)
+                + Y;
         }
 
         // cf. [BFS2004], ?
@@ -235,7 +203,7 @@ namespace wf
         {
             double a = 4.0 / 3.0 * c1() + c2();
 
-            return a * (h(s, m_c) - h0(s));
+            return a * (CharmLoops::h(mu, s, m_c) - CharmLoops::h(mu, s));
         }
 
         /* Form factors */
@@ -557,9 +525,9 @@ namespace wf
             double x = ubar * m_B * m_B + u * s;
 
             double a = (e_q * 8.0 / (ubar + u * s_hat)) * c8eff();
-            complex<double> ba = (-c1 / 6.0 + c2 + c4 + 10 * c6) * h(x, m_c);
-            complex<double> bb = (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * h(x, m_b_pole());
-            complex<double> bc = (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * h0(x);
+            complex<double> ba = (-c1 / 6.0 + c2 + c4 + 10 * c6) * CharmLoops::h(mu, x, m_c);
+            complex<double> bb = (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * CharmLoops::h(mu, x, m_b_pole());
+            complex<double> bc = (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * CharmLoops::h(mu, x);
             double bd = -8.0 / 27.0 * (-7.5 * c4 + 12.0 * c5 - 32.0 * c6);
 
             return (6.0 * m_B / m_b_pole()) * (ba + bb + bc + bd) * phi_K(u, a_1_par, a_2_par);
@@ -584,134 +552,6 @@ namespace wf
             double ei = gsl_sf_expint_Ei(x);
 
             complex<double> result = complex<double>(-ei, M_PI) * (std::exp(-x) / omega_0);
-
-            return result;
-        }
-
-        // cf. [AAGW2001], Eq. (56), p. 20
-        complex<double> F17(const double & s) const
-        {
-            // Deviating definition of s_hat == s / m_b_pole^2 !
-            double s_hat = s / m_b_pole() / m_b_pole();
-            double Lmu = std::log(mu / m_b_pole());
-            double Ls = std::log(s_hat);
-
-            // cf. [AAGW2001], Table I, p. 20
-            std::vector<std::pair<complex<double>, complex<double>>> f17_coefficients =
-            {
-                std::make_pair(complex<double>(-0.76730, -0.11418), complex<double>(-0.00000, -0.00000)),
-                std::make_pair(complex<double>(-0.28480, -0.18278), complex<double>(-0.00328, +0.02083)),
-                std::make_pair(complex<double>(+0.05611, -0.23357), complex<double>(+0.01637, +0.02091)),
-                std::make_pair(complex<double>(+0.62438, -0.02744), complex<double>(+0.07673, +0.00914))
-            };
-
-            complex<double> f17 = complex<double>(0.0, 0.0);
-            double i(0);
-            for (auto k = f17_coefficients.begin() ; k != f17_coefficients.end() ; ++k, ++i)
-            {
-                f17 = f17 + std::pow(s_hat, i) * (k->first + k->second * Ls);
-            }
-
-            return -208.0/243.0 * Lmu + f17;
-        }
-
-        // cf. [AAGW2001], Eq. (54), p. 19
-        complex<double> F19(const double & s) const
-        {
-            // Deviating definition of s_hat == s / m_b_pole^2 !
-            double s_hat = s / m_b_pole() / m_b_pole();
-            double Lmu = std::log(mu / m_b_pole());
-            double Ls = std::log(s_hat);
-            double Lc = std::log(m_c / m_b_pole());
-            double z = (m_c / m_b_pole()) * (m_c / m_b_pole());
-
-            // cf. [AAGW2001], Table I, p. 20
-            std::vector<std::pair<complex<double>, complex<double>>> f19_coefficients =
-            {
-                std::make_pair(complex<double>(-12.7150, +0.09470), complex<double>(-0.07883, -0.07414)),
-                std::make_pair(complex<double>(-38.7420, -0.67862), complex<double>(-0.03930, -0.00017)),
-                std::make_pair(complex<double>(-103.830, -2.53880), complex<double>(-0.04470, +0.00263)),
-                std::make_pair(complex<double>(-313.750, -8.45540), complex<double>(-0.05113, +0.02275))
-            };
-
-            complex<double> f19 = complex<double>(0.0, 0.0);
-            double i(0);
-            for (auto k = f19_coefficients.begin() ; k != f19_coefficients.end() ; ++k, ++i)
-            {
-                f19 = f19 + std::pow(s_hat, i) * (k->first + k->second * Ls);
-            }
-
-            complex<double> result =
-                        Lmu * complex<double>(-1424.0/729.0 + 64.0/27.0 * Lc - 16.0/243.0 * Ls + (16.0/1215.0 - 32.0/(z * 135.0)) * s_hat
-                        + (4.0/2835.0 - 8.0/(315.0 * z * z)) * s_hat * s_hat + (16.0/76545.0 - 32.0/(8505.0 * z * z * z)) * s_hat * s_hat * s_hat
-                        - 256.0/243.0 * Lmu,
-                        16.0/243.0 * M_PI)
-                + f19;
-
-            return result;
-        }
-
-        // cf. [AAGW2001], Eq. (56), p. 20
-        complex<double> F27(const double & s) const
-        {
-            // Deviating definition of s_hat == s / m_b_pole^2 !
-            double s_hat = s / m_b_pole() / m_b_pole();
-            double Lmu = std::log(mu / m_b_pole());
-            double Ls = std::log(s_hat);
-
-            // cf. [AAGW2001], Table II, p. 21
-            std::vector<std::pair<complex<double>, complex<double>>> f27_coefficients =
-            {
-                std::make_pair(complex<double>(+4.60380, +0.68510), complex<double>(-0.00000, -0.00000)),
-                std::make_pair(complex<double>(+1.70880, +1.09670), complex<double>(+0.01959, -0.12496)),
-                std::make_pair(complex<double>(-0.33665, +1.40140), complex<double>(-0.09822, -0.12548)),
-                std::make_pair(complex<double>(-3.74630, +0.16463), complex<double>(-0.18321, -0.05485))
-            };
-
-            complex<double> f27 = complex<double>(0.0, 0.0);
-            double i(0);
-            for (auto k = f27_coefficients.begin() ; k != f27_coefficients.end() ; ++k, ++i)
-            {
-                f27 = f27 + std::pow(s_hat, i) * (k->first + k->second * Ls);
-            }
-
-            complex<double> result = 416.0/81.0 * Lmu + f27;
-
-            return result;
-        }
-
-        // cf. [AAGW2001], Eq. (55), p. 19
-        complex<double> F29(const double & s) const
-        {
-            // Deviating definition of s_hat == s / m_b_pole^2 !
-            double s_hat = s / m_b_pole() / m_b_pole();
-            double Lmu = std::log(mu / m_b_pole());
-            double Ls = std::log(s_hat);
-            double Lc = std::log(m_c / m_b_pole());
-            double z = (m_c / m_b_pole()) * (m_c / m_b_pole());
-
-            // cf. [AAGW2001], Table II, p. 21
-            std::vector<std::pair<complex<double>, complex<double>>> f29_coefficients =
-            {
-                std::make_pair(complex<double>(+9.50420, -0.56819), complex<double>(+0.47298, +0.44483)),
-                std::make_pair(complex<double>(+7.42380, +4.07170), complex<double>(+0.23581, +0.00104)),
-                std::make_pair(complex<double>(+0.33806, +15.2330), complex<double>(+0.26821, -0.01577)),
-                std::make_pair(complex<double>(-42.0850, +50.7320), complex<double>(+0.30680, -0.13652))
-            };
-
-            complex<double> f29 = complex<double>(0.0, 0.0);
-            double i(0);
-            for (auto k = f29_coefficients.begin() ; k != f29_coefficients.end() ; ++k, ++i)
-            {
-                f29 = f29 + std::pow(s_hat, i) * (k->first + k->second * Ls);
-            }
-
-            complex<double> result =
-                Lmu * complex<double>(256.0/243.0 - 128.0/9.0 * Lc + 32.0/81.0 * Ls - (32.0/405.0 - 64.0/(z * 45.0)) * s_hat
-                        - (8.0/945.0 - 16.0/(105.0 * z * z)) * s_hat * s_hat - (32.0/25515.0 - 64.0/(2835.0 * z * z * z)) * s_hat * s_hat * s_hat
-                        + 512.0/81.0 * Lmu,
-                        -32.0/81.0 * M_PI)
-                + f29;
 
             return result;
         }
@@ -768,9 +608,9 @@ namespace wf
         complex<double> FV(const double & s) const
         {
             return 3.0 / 4.0 * (
-                    (-c1 / 6.0 + c2 + c4 + 10.0 * c6) * h(s, m_c)
-                    + (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * h(s, m_b_pole())
-                    + (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * h0(s)
+                    (-c1 / 6.0 + c2 + c4 + 10.0 * c6) * CharmLoops::h(mu, s, m_c)
+                    + (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * CharmLoops::h(mu, s, m_b_pole())
+                    + (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * CharmLoops::h(mu, s)
                     - 8.0/27.0 * (-7.5 * c4 + 12 * c5 - 32 * c6));
         }
 
@@ -812,8 +652,8 @@ namespace wf
             double ff_f = (c7eff() + h * c7prime()) * (8.0 * std::log(m_b_pole() / mu) - 4.0 * (1.0 - mu_f() / m_b_pole()) - L(s));
             // cf. [BFS2001], Eq. (37), p. 9
             complex<double> ff_nf = (-1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * F27(s) + c8eff() * F87(s)
-                    + (s / (2.0 * m_b_pole() * m_B)) * (c2() * F29(s) + c1() * F19(s) + c8eff() * F89(s)));
+                    (c2 - c1 / 6.0) * CharmLoops::F27(mu, s, m_b_pole()) + c8eff() * F87(s)
+                    + (s / (2.0 * m_b_pole() * m_B)) * (c2() * CharmLoops::F29(mu, s, m_b_pole()) + c1() * CharmLoops::F19(mu, s, m_b_pole()) + c8eff() * F89(s)));
             complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
 
             /* Specator scattering, folded with phi_K^*,perp */
@@ -872,8 +712,8 @@ namespace wf
                     + (m_B / (2.0 * m_b_pole())) * Y0(s) * (2.0 - 2.0 * L(s));
             // cf. [BFS2001], Eq. (38), p. 9
             complex<double> ff_nf = (+1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * F27(s) + c8eff() * F87(s)
-                    + (m_B / (2.0 * m_b_pole())) * (c2() * F29(s) + c1() * F19(s) + c8eff() * F89(s)));
+                    (c2 - c1 / 6.0) * CharmLoops::F27(mu, s, m_b_pole()) + c8eff() * F87(s)
+                    + (m_B / (2.0 * m_b_pole())) * (c2() * CharmLoops::F29(mu, s, m_b_pole()) + c1() * CharmLoops::F19(mu, s, m_b_pole()) + c8eff() * F89(s)));
             complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
 
             /* Spectator scattering */
@@ -1143,42 +983,6 @@ namespace wf
                 throw std::string("InternalError");
         }
 
-        /* Charm loop parts */
-        // cf. [BFS2001], Eq. (11), p. 4
-        complex<double> h(const double & s, const double & m_q) const
-        {
-            if (m_q < 1e-4)
-                return h0(s);
-
-            const double z = 4.0 * m_q * m_q / s;
-            if (z < 1e-10)
-                return complex<double>(-4.0/9.0 * (2.0 * std::log(m_q / mu) + 1.0), 0.0);
-
-            const double sqrt1z = std::sqrt(std::abs(z - 1.0));
-
-            double a = 2.0 * std::log(m_q / mu()) - 2.0 / 3.0 - z;
-            double b = (2.0 + z) * sqrt1z;
-            double rc, ic;
-            if (z > 1.0)
-            {
-                ic = 0.0;
-                rc = std::atan(1.0 / sqrt1z);
-            }
-            else
-            {
-                ic = -M_PI / 2.0;
-                rc = std::log((1.0 + sqrt1z) / std::sqrt(z));
-            }
-
-            return -4.0 / 9.0 * (a + b * complex<double>(rc, ic));
-        }
-
-        // cf. [BFS2001], Eq. (11), p. 4 in the limit m_q -> 0
-        complex<double> h0(const double & s) const
-        {
-            return 4.0 / 9.0 * complex<double>(2.0 / 3.0 + 2.0 * std::log(2.0 * mu()) - std::log(s), M_PI);
-        }
-
         // cf. [BFS2001], Eq. (29), p. 8
         complex<double> B0(const double & s, const double & m_q) const
         {
@@ -1258,34 +1062,6 @@ namespace wf
             return result;
         }
 
-        // cf. [GP2004], between Eqs. (41) and (42), p. 8
-        complex<double> A(const double & s) const
-        {
-            return -104.0/243.0 * 2.0 * std::log(m_b_MSbar / mu) + complex<double>(0.736, 0.836);
-        }
-
-        // cf. [GP2004], between Eqs. (41) and (42), p. 8
-        complex<double> B(const double & s) const
-        {
-            const double l = std::log(std::pow(m_b_MSbar / mu, 2.0));
-            const double z = 4 * std::pow(m_b_MSbar, 2.0) / s;
-
-            complex<double> result = complex<double>(z - 34.0, -17 * M_PI) * l + 8.0 * l * l - 17.0 * std::log(z / 4.0) * l
-                - (2.0 + z) * std::sqrt(z - 1.0) * std::atan(1.0 / (std::sqrt(z - 1.0))) * l;
-            result = 8.0 / 243.0 * result;
-            result = result + complex<double>(-1.332, 3.058);
-
-            return result;
-        }
-
-        // cf. [GP2004], between Eqs. (41) and (42), p. 8
-        complex<double> C(const double & s) const
-        {
-            const double zeta3 = 1.20206;
-
-            return complex<double>(-16.0/81.0 * std::log(s / std::pow(mu, 2.0)) + 428.0/243.0 - 64.0/27.0 * zeta3, 16.0 / 81.0 * M_PI);
-        }
-
         // cf. [BFS2001], Eq. (82), p. 30
         complex<double> F87(const double & s) const
         {
@@ -1322,11 +1098,10 @@ namespace wf
             // TODO: Neglecting contributions ~alpha_s / 4.0 / M_PI. These do involve spectator scattering,
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 + 20.0/3.0 * c5 + 80.0/9.0 * c6;
-            complex<double> nlo = (c1() - 6.0 * c2()) * A(s) - c8() * F87(s);
+            complex<double> nlo = -1.0 * (c1() * CharmLoops::F17(mu, s, m_b_MSbar) + c2() * CharmLoops::F27(mu, s, m_b_MSbar) + c8() * F87(s));
 
             return c7() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
-
 
         // cf. [GP2004], Eq. (55), p. 10
         complex<double> c9eff(const double & s) const
@@ -1336,8 +1111,8 @@ namespace wf
             double c = 2.0 / 9.0 * (6.0 * c3() + 32.0 * c5() + 32.0 / 3.0 * c6());
 
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
-            complex<double> lo = c_b * h(s, m_b_MSbar) + c_0 * h0(s) + c;
-            complex<double> nlo = c1() * (B(s) + 4.0 * C(s)) - 3.0 * c2() * (2.0 * B(s) - C(s)) - c8() * F89(s);
+            complex<double> lo = c_b * CharmLoops::h(mu, s, m_b_MSbar) + c_0 * CharmLoops::h(mu, s) + c;
+            complex<double> nlo = -1.0 * (c1() * CharmLoops::F19(mu, s, m_b_MSbar) + c2() * CharmLoops::F29(mu, s, m_b_MSbar) + c8() * F89(s));
 
             return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
