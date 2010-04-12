@@ -88,6 +88,18 @@ namespace wf
 
         Parameter ckm_lambda;
 
+        Parameter uncertainty_par_left;
+
+        Parameter uncertainty_par_right;
+
+        Parameter uncertainty_perp_left;
+
+        Parameter uncertainty_perp_right;
+
+        Parameter uncertainty_long_left;
+
+        Parameter uncertainty_long_right;
+
         double e_q;
 
         std::tr1::shared_ptr<FormFactors<BToKstar>> form_factors;
@@ -121,6 +133,12 @@ namespace wf
             a_2_perp(p["B->K^*::a_2_perp"]),
             ckm_A(p["CKM::A"]),
             ckm_lambda(p["CKM::lambda"]),
+            uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty"]),
+            uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty"]),
+            uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty"]),
+            uncertainty_perp_right(p["B->K^*ll::A_perp^R_uncertainty"]),
+            uncertainty_long_left(p["B->K^*ll::A_0^L_uncertainty"]),
+            uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty"]),
             e_q(-1.0/3.0)
         {
             form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
@@ -750,6 +768,7 @@ namespace wf
             double mKhat = m_Kstar / m_B;
             double lambdahat = lambda(1.0, mKhat * mKhat, s);
 
+            double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
             double prefactor = -1.0 / (2.0 * m_Kstar * std::sqrt(s));
 
@@ -758,7 +777,8 @@ namespace wf
             complex<double> b = 2 * m_b_pole() * (((m_B * m_B + 3 * m_Kstar * m_Kstar - s) * 2.0 * energy(s) / m_B
                         - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar)) * tensor_perp(-1.0, s)
                     - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar) * tensor_par(s));
-            return prefactor * (a + b);
+
+            return uncertainty * prefactor * (a + b);
         }
 
         // cf. [BHP2008], p. 20
@@ -769,10 +789,11 @@ namespace wf
             double mbhat = m_b_pole() / m_B;
             double mKhat = m_Kstar / m_B;
 
+            double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
             double prefactor = +std::sqrt(2.0) * m_B * std::sqrt(lambda(1.0, mKhat * mKhat, shat));
             double wilson = (c9() + c9prime()) + h * (c10() + c10prime());
 
-            return prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * tensor_perp(+1.0, s));
+            return uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * tensor_perp(+1.0, s));
         }
 
         // cf. [BHP2008], p. 20
@@ -783,10 +804,11 @@ namespace wf
             double mbhat = m_b_pole() / m_B;
             double mKhat = m_Kstar / m_B;
 
+            double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
             double prefactor = -std::sqrt(2.0) * m_B * (1.0 - shat);
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
 
-            return prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * tensor_perp(-1.0, s));
+            return uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * tensor_perp(-1.0, s));
         }
     };
 
@@ -952,6 +974,18 @@ namespace wf
 
         Parameter ckm_lambda;
 
+        Parameter uncertainty_par_left;
+
+        Parameter uncertainty_par_right;
+
+        Parameter uncertainty_perp_left;
+
+        Parameter uncertainty_perp_right;
+
+        Parameter uncertainty_long_left;
+
+        Parameter uncertainty_long_right;
+
         std::tr1::shared_ptr<FormFactors<BToKstar>> form_factors;
 
         Implementation(const Parameters & p, const ObservableOptions & o) :
@@ -974,7 +1008,13 @@ namespace wf
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
             ckm_A(p["CKM::A"]),
-            ckm_lambda(p["CKM::lambda"])
+            ckm_lambda(p["CKM::lambda"]),
+            uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty"]),
+            uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty"]),
+            uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty"]),
+            uncertainty_perp_right(p["B->K^*ll::A_perp^R_uncertainty"]),
+            uncertainty_long_left(p["B->K^*ll::A_0^L_uncertainty"]),
+            uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty"])
         {
             form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
             if (! form_factors.get())
@@ -1144,9 +1184,10 @@ namespace wf
             double m_Kstar_hat = m_Kstar / m_B;
             complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
             complex<double> prefactor = complex<double>(0.0, -0.5 * m_B * m_B * m_B / m_Kstar / std::sqrt(s));
+            double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
             double formfactor = lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s)) * form_factors->a_1(s_hat(s)) - (1 - s_hat(s)) * form_factors->a_2(s_hat(s));
 
-            return prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
+            return uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
 
         complex<double> a_perp(const Helicity & helicity, const double & s) const
@@ -1155,8 +1196,9 @@ namespace wf
             double m_Kstar_hat = m_Kstar / m_B;
             complex<double> wilson = (c9eff(s) + c9prime()) + h * (c10() + c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
             complex<double> prefactor = complex<double>(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * m_B);
+            double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
 
-            return prefactor * wilson * form_factors->v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
+            return uncertainty * prefactor * wilson * form_factors->v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }
 
         complex<double> a_par(const Helicity & helicity, const double & s) const
@@ -1164,6 +1206,7 @@ namespace wf
             double h = helicity;
             complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
             complex<double> prefactor = complex<double>(0.0, -std::sqrt(2) * m_B);
+            double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
 
             return prefactor * wilson * form_factors->a_1(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }

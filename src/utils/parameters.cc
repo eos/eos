@@ -115,6 +115,13 @@ namespace wf
             Parameters::NameValuePair{"B->K^*::a_2_par", 0.0, 0.1, 0.2},
             Parameters::NameValuePair{"B->K^*::a_1_perp", 0.03, 0.1, 0.17},
             Parameters::NameValuePair{"B->K^*::a_2_perp", 0.0, 0.1, 0.2},
+            // B->K^*ll uncertainties from subleading terms
+            Parameters::NameValuePair{"B->K^*ll::A_0^L_uncertainty", 0.9, 1.0, 1.1},
+            Parameters::NameValuePair{"B->K^*ll::A_0^R_uncertainty", 0.9, 1.0, 1.1},
+            Parameters::NameValuePair{"B->K^*ll::A_par^L_uncertainty", 0.9, 1.0, 1.1},
+            Parameters::NameValuePair{"B->K^*ll::A_par^R_uncertainty", 0.9, 1.0, 1.1},
+            Parameters::NameValuePair{"B->K^*ll::A_perp^L_uncertainty", 0.9, 1.0, 1.1},
+            Parameters::NameValuePair{"B->K^*ll::A_perp^R_uncertainty", 0.9, 1.0, 1.1},
             // Experimental Input
             Parameters::NameValuePair{"exp::BR(B->X_clnu)", 0.099, 0.101, 0.105}, // cf. [PDG2008], p. 82
         });
