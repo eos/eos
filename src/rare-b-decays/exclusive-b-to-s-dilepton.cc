@@ -634,6 +634,13 @@ namespace wf
                 * FV(x);
         }
 
+        complex<double> tensor_perp_hsa(const double & shat, const double & u) const
+        {
+            return 12.0 * c8eff() * m_b_pole() / m_B * f_Kstar_perp * Xperp(shat, u)
+                    + 8.0 * f_Kstar_perp * Thsa_1_perp(shat, u)
+                    - 4.0 * m_Kstar * f_Kstar_par / ((1.0 - shat) * lambda_B_p) * Thsa_2_perp(shat, u);
+        }
+
         // cf. [BFS2001], Eq. (15) with a = perp, and [BHP2008], Eq. (C.4)
         complex<double> tensor_perp(const double & h, const double & s) const
         {
@@ -675,19 +682,10 @@ namespace wf
                         32, 0.0, 1.0)
                     + f_Kstar_par * m_Kstar / ((1 - shat) * lambda_B_p));
             /* Hard spectator scattering */
-            complex<double> hsa = e_q * scatt_nlo_factor * M_PI * M_PI * f_B / (3.0 * m_b_pole() * m_B) * (
-                    12.0 * c8eff() * m_b_pole() / m_B * f_Kstar_perp * integrate(
-                        std::tr1::function<double (const double &)>(
-                            std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Xperp, this, shat, std::tr1::placeholders::_1)),
-                        32, 0.0, 1.0)
-                    + 8.0 * f_Kstar_perp * integrate(
-                        std::tr1::function<complex<double> (const double &)>(
-                            std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Thsa_1_perp, this, shat, std::tr1::placeholders::_1)),
-                        32, 0.0, 1.0)
-                    - 4.0 * m_Kstar * f_Kstar_par / ((1.0 - shat) * lambda_B_p) * integrate(
-                        std::tr1::function<complex<double> (const double &)>(
-                            std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Thsa_2_perp, this, shat, std::tr1::placeholders::_1)),
-                        32, 0.0, 1.0));
+            complex<double> hsa = e_q * scatt_nlo_factor * M_PI * M_PI * f_B / (3.0 * m_b_pole() * m_B) * integrate(
+                    std::tr1::function<complex<double> (const double &)>(
+                        std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::tensor_perp_hsa, this, shat, std::tr1::placeholders::_1)),
+                    32, 0.0, 1.0);
 
             complex<double> result = xi_perp(s) * ff + scatt_factor * scatt_p + wa + hsa;
 
