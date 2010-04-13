@@ -43,6 +43,7 @@ namespace wf
             OBSERVABLE1("B->K^*ll::A_T^2(s)@LargeRecoil", BToKstarDilepton<LargeRecoil>, differential_transverse_asymmetry_2,     "s"),
             OBSERVABLE1("B->K^*ll::A_T^3(s)@LargeRecoil", BToKstarDilepton<LargeRecoil>, differential_transverse_asymmetry_3,     "s"),
             OBSERVABLE1("B->K^*ll::A_T^4(s)@LargeRecoil", BToKstarDilepton<LargeRecoil>, differential_transverse_asymmetry_4,     "s"),
+            OBSERVABLE1("B->K^*ll::A_T^5(s)@LargeRecoil", BToKstarDilepton<LargeRecoil>, differential_transverse_asymmetry_5,     "s"),
             OBSERVABLE1("B->K^*ll::F_L(s)@LargeRecoil",   BToKstarDilepton<LargeRecoil>, differential_longitudinal_polarisation,  "s"),
             OBSERVABLE2("B->K^*ll::A_FB@LargeRecoil",     BToKstarDilepton<LargeRecoil>, integrated_forward_backward_asymmetry,   "s_min", "s_max"),
             OBSERVABLE2("B->K^*ll::BR@LargeRecoil",       BToKstarDilepton<LargeRecoil>, integrated_branching_ratio,              "s_min", "s_max"),

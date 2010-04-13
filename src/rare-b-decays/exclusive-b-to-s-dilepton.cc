@@ -902,6 +902,16 @@ namespace wf
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_5(const double & s) const
+    {
+        double a = abs(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+        double b = std::sqrt(norm(a_long(left_handed, s)) + norm(a_long(right_handed, s)))
+                * std::sqrt(norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s)));
+
+        return a / b;
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
         return (norm(a_long(left_handed, s)) + norm(a_long(right_handed, s))) * _imp->norm(s) * _imp->norm(s) / differential_decay_width(s);
@@ -1295,6 +1305,16 @@ namespace wf
     {
         double a = abs(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
         double b = abs(conj(a_long(left_handed, s)) * a_par(left_handed, s) + a_long(right_handed, s) * conj(a_par(right_handed, s)));
+
+        return a / b;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_5(const double & s) const
+    {
+        double a = abs(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+        double b = std::sqrt((norm(a_long(left_handed, s)) + norm(a_long(right_handed, s))))
+                * std::sqrt((norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s))));
 
         return a / b;
     }

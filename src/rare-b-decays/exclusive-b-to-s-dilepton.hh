@@ -42,6 +42,7 @@ namespace wf
             double differential_transverse_asymmetry_2(const double & s) const;
             double differential_transverse_asymmetry_3(const double & s) const;
             double differential_transverse_asymmetry_4(const double & s) const;
+            double differential_transverse_asymmetry_5(const double & s) const;
             double differential_longitudinal_polarisation(const double & s) const;
 
             // Integrated Observables
@@ -75,6 +76,7 @@ namespace wf
             double differential_transverse_asymmetry_2(const double & s) const;
             double differential_transverse_asymmetry_3(const double & s) const;
             double differential_transverse_asymmetry_4(const double & s) const;
+            double differential_transverse_asymmetry_5(const double & s) const;
             double differential_longitudinal_polarisation(const double & s) const;
 
             // Integrated Observables
