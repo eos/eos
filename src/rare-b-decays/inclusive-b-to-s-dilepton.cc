@@ -246,6 +246,6 @@ namespace wf
     {
         return integrate(std::tr1::function<double (const double &)>(
                     std::tr1::bind(&BToXsDilepton<GN1997>::differential_branching_ratio, this, std::tr1::placeholders::_1)),
-                400, s_min, s_max);
+                128, s_min, s_max);
     }
 }

@@ -663,7 +663,7 @@ namespace wf
             complex<double> scatt_nf_p = integrate(
                     std::tr1::function<complex<double> (const double &)>(
                         std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_perp_p, this, s, std::tr1::placeholders::_1)),
-                    40, 0.001, 0.999);
+                    32, 0.001, 0.999);
             complex<double> scatt_p = (1.0 / lambda_B_p) * scatt_nlo_factor * (scatt_f_p + scatt_nf_p);
 
             /* Weak annihilation */
@@ -672,22 +672,22 @@ namespace wf
                     - f_Kstar_perp * (c3 + 4.0/3.0 * c4 + 4.0 * c5 + 16.0/3.0 * c6) * integrate(
                         std::tr1::function<double (const double &)>(
                             std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Twa_perp, this, shat, std::tr1::placeholders::_1)),
-                        40, 0.0, 1.0)
+                        32, 0.0, 1.0)
                     + f_Kstar_par * m_Kstar / ((1 - shat) * lambda_B_p));
             /* Hard spectator scattering */
             complex<double> hsa = e_q * scatt_nlo_factor * M_PI * M_PI * f_B / (3.0 * m_b_pole() * m_B) * (
                     12.0 * c8eff() * m_b_pole() / m_B * f_Kstar_perp * integrate(
                         std::tr1::function<double (const double &)>(
                             std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Xperp, this, shat, std::tr1::placeholders::_1)),
-                        40, 0.0, 1.0)
+                        32, 0.0, 1.0)
                     + 8.0 * f_Kstar_perp * integrate(
                         std::tr1::function<complex<double> (const double &)>(
                             std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Thsa_1_perp, this, shat, std::tr1::placeholders::_1)),
-                        40, 0.0, 1.0)
+                        32, 0.0, 1.0)
                     - 4.0 * m_Kstar * f_Kstar_par / ((1.0 - shat) * lambda_B_p) * integrate(
                         std::tr1::function<complex<double> (const double &)>(
                             std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Thsa_2_perp, this, shat, std::tr1::placeholders::_1)),
-                        40, 0.0, 1.0));
+                        32, 0.0, 1.0));
 
             complex<double> result = xi_perp(s) * ff + scatt_factor * scatt_p + wa + hsa;
 
@@ -727,12 +727,12 @@ namespace wf
             complex<double> scatt_nf_p = integrate(
                     std::tr1::function<complex<double> (const double &)>(std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_par_p,
                             this, s, std::tr1::placeholders::_1)),
-                    40, 0.001, 0.999);
+                    32, 0.001, 0.999);
             // cf. [BFS2001], Eq. (26), pp. 7-8
             complex<double> scatt_nf_m = integrate(
                     std::tr1::function<complex<double> (const double &)>(std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_par_m,
                             this, s, std::tr1::placeholders::_1)),
-                    40, 0.001, 0.999);
+                    32, 0.001, 0.999);
             complex<double> scatt_p = (1.0 / lambda_B_p) * scatt_nlo_factor * (scatt_f_p + scatt_nf_p);
             complex<double> scatt_m = lambda_B_m_inv(s)  * (scatt_0_m + scatt_nlo_factor * scatt_nf_m);
 
@@ -893,7 +893,7 @@ namespace wf
         std::tr1::function<double (const double &)> f = std::tr1::bind(std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_branching_ratio),
                 this, std::tr1::placeholders::_1);
 
-        return integrate(f, 100, s_min, s_max);
+        return integrate(f, 128, s_min, s_max);
     }
 
     double
@@ -905,7 +905,7 @@ namespace wf
         std::tr1::function<double (const double &)> denom = std::tr1::bind(
                 std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_decay_width), this, std::tr1::placeholders::_1);
 
-        return integrate(num, 100, s_min, s_max) / integrate(denom, 100, s_min, s_max);
+        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
 
 
