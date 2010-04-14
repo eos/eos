@@ -182,10 +182,10 @@ namespace wf
             return std::sqrt(mu * Lambda_QCD);
         }
 
-        inline double m_b_pole() const
+        inline double m_b_PS() const
         {
             // Actually use the PS mass at mu_f = 2 GeV
-            return 4.6;
+            return QCD::mb_PS(m_b_MSbar, mu, 2.0);
         }
 
         /* Effective wilson coefficients */
@@ -211,7 +211,7 @@ namespace wf
 
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
             return Y_c * CharmLoops::h(mu, s, m_c)
-                + Y_b * CharmLoops::h(mu, s, m_b_pole())
+                + Y_b * CharmLoops::h(mu, s, m_b_PS())
                 + Y_0 * CharmLoops::h(mu, s)
                 + Y;
         }
@@ -413,7 +413,7 @@ namespace wf
         double T0_perp_m(const double & s, const double & u) const
         {
             double wilson = c3 + 4.0/3.0 * c4 + 16.0 * c5 + 64.0/3.0 * c6;
-            return -1.0 * e_q * (4.0 * m_B / m_b_pole()) * wilson;
+            return -1.0 * e_q * (4.0 * m_B / m_b_PS()) * wilson;
         }
 
         // cf. [BFS2001], Eq. (20), p. 6, module the inverse of lambda_B,+
@@ -427,7 +427,7 @@ namespace wf
         {
             double E = energy(s);
 
-            return ((c7eff() - c7prime) + (s / (2.0 * m_B * m_b_pole())) * Y0(s)) * (2.0 * m_B * m_B / (1 - u) / E / E);
+            return ((c7eff() - c7prime) + (s / (2.0 * m_B * m_b_PS())) * Y0(s)) * (2.0 * m_B * m_B / (1 - u) / E / E);
         }
 
         // cf. [BFS2001], Eq. (27), p. 8
@@ -512,51 +512,57 @@ namespace wf
         // cf. [BFS2001], Eq. (23), p. 7, multiplied by phi_K^*,perp
         complex<double> Tnf_perp_p(const double & s, const double & u) const
         {
+            double m_b = m_b_PS();
             double s_hat = s / m_B / m_B;
             double ubar = 1.0 - u;
 
             double a = (4.0 / 3.0 / (u + ubar * s_hat)) * c8eff();
             complex<double> ba = (+2.0 / 3.0) * (-c1 / 6.0 + c2 + 6.0 * c6) * t_perp(s, u, m_c);
             complex<double> bb = (-1.0 / 3.0)
-                * (c3 - c4 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6 - (4.0 * m_b_pole() / m_B) * (c3 - c4/6.0 + 4.0 * c5 - 2.0/3.0 * c6))
-                * t_perp(s, u, m_b_pole());
+                * (c3 - c4 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6 - (4.0 * m_b / m_B) * (c3 - c4/6.0 + 4.0 * c5 - 2.0/3.0 * c6))
+                * t_perp(s, u, m_b);
             complex<double> bc = (-1.0 / 3.0) * (c3 - c4 / 6.0 + 16.0 * c5 - 8.0/3.0 * c6) * t_perp(s, u, 0.0);
 
-            return (a + (m_B / 2.0 / m_b_pole()) * (ba + bb + bc)) * phi_K(u, a_1_perp, a_2_perp);
+            return (a + (m_B / 2.0 / m_b) * (ba + bb + bc)) * phi_K(u, a_1_perp, a_2_perp);
         }
 
         // cf. [BFS2001, Eq. (25), p. 7, multiplied by phi_K^*,par
         complex<double> Tnf_par_p(const double & s, const double & u) const
         {
+            double m_b = m_b_PS();
+
             complex<double> a = (+2.0 / 3.0) * (-c1 / 6.0 + c2 + 6.0 * c6) * t_par(s, u, m_c);
-            complex<double> b = (-1.0 / 3.0) * (c3 - c1 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6) * t_par(s, u, m_b_pole());
+            complex<double> b = (-1.0 / 3.0) * (c3 - c1 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6) * t_par(s, u, m_b);
             complex<double> c = (-1.0 / 3.0) * (c3 - c4 / 6.0 + 16.0 * c5 - 8.0/3.0 * c6) * t_par(s, u, 0.0);
 
-            return (m_B / m_b_pole()) * (a + b + c) * phi_K(u, a_1_par, a_2_par);
+            return (m_B / m_b) * (a + b + c) * phi_K(u, a_1_par, a_2_par);
         }
 
         // cf. [BFS2001], Eq. (26), pp. 7-8, multiplied by phi_K^*,par
         complex<double> Tnf_par_m(const double & s, const double & u) const
         {
+            double m_b = m_b_PS();
+
             double s_hat = s / m_B / m_B;
             double ubar = 1.0 - u;
             double x = ubar * m_B * m_B + u * s;
 
             double a = (e_q * 8.0 / (ubar + u * s_hat)) * c8eff();
             complex<double> ba = (-c1 / 6.0 + c2 + c4 + 10 * c6) * CharmLoops::h(mu, x, m_c);
-            complex<double> bb = (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * CharmLoops::h(mu, x, m_b_pole());
+            complex<double> bb = (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * CharmLoops::h(mu, x, m_b);
             complex<double> bc = (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * CharmLoops::h(mu, x);
             double bd = -8.0 / 27.0 * (-7.5 * c4 + 12.0 * c5 - 32.0 * c6);
 
-            return (6.0 * m_B / m_b_pole()) * (ba + bb + bc + bd) * phi_K(u, a_1_par, a_2_par);
+            return (6.0 * m_B / m_b) * (ba + bb + bc + bd) * phi_K(u, a_1_par, a_2_par);
         }
 
         // cf. [BFS2001], Eq. (36), p. 9
         double L(const double & s) const
         {
-            double m_b_pole2 = m_b_pole() * m_b_pole();
+            double m_b = m_b_PS();
+            double m_b2 = m_b * m_b;
 
-            return -1.0 * (m_b_pole2 - s) / s * std::log(1.0 - s / m_b_pole2);
+            return -1.0 * (m_b2 - s) / s * std::log(1.0 - s / m_b2);
         }
 
         // cf. [BFS2001], Eq. (54), p. 15
@@ -577,16 +583,17 @@ namespace wf
         // cf. [BFS2001], Eq. (82), p. 30
         complex<double> F87(const double & s) const
         {
-            double s_hat = s / m_B / m_B;
+            double m_b = m_b_PS();
+            double s_hat = s / m_b / m_b;
             double s_hat2 = s_hat * s_hat;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
 
-            complex<double> a = complex<double>(-32.0 * std::log(mu / m_b_pole()) - 8.0 * s_hat / denom * std::log(s_hat)
+            complex<double> a = complex<double>(-32.0 * std::log(mu / m_b) - 8.0 * s_hat / denom * std::log(s_hat)
                     - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2,
                     -8.0 * M_PI);
             complex<double> b = (4.0 / denom / denom2)
-                * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_b_pole()) - (4.0 + 2.0 * s_hat) * C0(s));
+                * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_b) - (4.0 + 2.0 * s_hat) * C0(s));
 
             return (1.0 / 9.0) * (a + b);
         }
@@ -594,12 +601,13 @@ namespace wf
         // cf. [BFS2001], Eq. (83), p. 30
         complex<double> F89(const double & s) const
         {
-            double s_hat = s / m_B / m_B;
+            double m_b = m_b_PS();
+            double s_hat = s / m_b / m_b;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
 
             double a = 16.0 * std::log(s_hat) / denom + 8.0 * (5.0 - 2.0 * s_hat) / denom2;
-            complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b_pole()) - 2.0 * C0(s));
+            complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b) - 2.0 * C0(s));
 
             return (1.0 / 9.0) * (a + b);
         }
@@ -627,7 +635,7 @@ namespace wf
         {
             return 3.0 / 4.0 * (
                     (-c1 / 6.0 + c2 + c4 + 10.0 * c6) * CharmLoops::h(mu, s, m_c)
-                    + (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * CharmLoops::h(mu, s, m_b_pole())
+                    + (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * CharmLoops::h(mu, s, m_b_PS())
                     + (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * CharmLoops::h(mu, s)
                     - 8.0/27.0 * (-7.5 * c4 + 12 * c5 - 32 * c6));
         }
@@ -654,7 +662,7 @@ namespace wf
 
         complex<double> tensor_perp_hsa(const double & shat, const double & u) const
         {
-            return 12.0 * c8eff() * m_b_pole() / m_B * f_Kstar_perp * Xperp(shat, u)
+            return 12.0 * c8eff() * m_b_PS() / m_B * f_Kstar_perp * Xperp(shat, u)
                     + 8.0 * f_Kstar_perp * Thsa_1_perp(shat, u)
                     - 4.0 * m_Kstar * f_Kstar_par / ((1.0 - shat) * lambda_B_p) * Thsa_2_perp(shat, u);
         }
@@ -669,16 +677,17 @@ namespace wf
             double scatt_factor = M_PI * M_PI / 3.0 * f_B * f_Kstar_perp / m_B;
             double shat = s_hat(s);
 
-            // Here m_b_pole is used, cf. [BFS2001], comment below Eq. (36), p. 9
+            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
+            double m_b = m_b_PS();
 
             /* Form factor corrections */
-            complex<double> ff_0 = (c7eff() + h * c7prime()) + s / (2.0 * m_b_pole() * m_B) * Y0(s);
+            complex<double> ff_0 = (c7eff() + h * c7prime()) + s / (2.0 * m_b * m_B) * Y0(s);
             // cf. [BFS2001], Eq. (34), p. 9
-            double ff_f = (c7eff() + h * c7prime()) * (8.0 * std::log(m_b_pole() / mu) - 4.0 * (1.0 - mu_f() / m_b_pole()) - L(s));
+            double ff_f = (c7eff() + h * c7prime()) * (8.0 * std::log(m_b / mu) - 4.0 * (1.0 - mu_f() / m_b) - L(s));
             // cf. [BFS2001], Eq. (37), p. 9
             complex<double> ff_nf = (-1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * CharmLoops::F27(mu, s, m_b_pole()) + c8eff() * F87(s)
-                    + (s / (2.0 * m_b_pole() * m_B)) * (c2() * CharmLoops::F29(mu, s, m_b_pole()) + c1() * CharmLoops::F19(mu, s, m_b_pole()) + c8eff() * F89(s)));
+                    (c2 - c1 / 6.0) * CharmLoops::F27(mu, s, m_b) + c8eff() * F87(s)
+                    + (s / (2.0 * m_b * m_B)) * (c2() * CharmLoops::F29(mu, s, m_b) + c1() * CharmLoops::F19(mu, s, m_b) + c8eff() * F89(s)));
             complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
 
             /* Specator scattering, folded with phi_K^*,perp */
@@ -693,14 +702,14 @@ namespace wf
 
             /* Weak annihilation */
             // cf. [BFS2004], Eq. (51), p. 26
-            double wa = (e_q * 2.0 * M_PI * M_PI * f_B / (3.0 * m_b_pole() * m_B)) * (
+            double wa = (e_q * 2.0 * M_PI * M_PI * f_B / (3.0 * m_b * m_B)) * (
                     - f_Kstar_perp * (c3 + 4.0/3.0 * c4 + 4.0 * c5 + 16.0/3.0 * c6) * integrate(
                         std::tr1::function<double (const double &)>(
                             std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Twa_perp, this, shat, std::tr1::placeholders::_1)),
                         32, 0.0, 1.0)
                     + f_Kstar_par * m_Kstar / ((1 - shat) * lambda_B_p));
             /* Hard spectator scattering */
-            complex<double> hsa = e_q * scatt_nlo_factor * M_PI * M_PI * f_B / (3.0 * m_b_pole() * m_B) * integrate(
+            complex<double> hsa = e_q * scatt_nlo_factor * M_PI * M_PI * f_B / (3.0 * m_b * m_B) * integrate(
                     std::tr1::function<complex<double> (const double &)>(
                         std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::tensor_perp_hsa, this, shat, std::tr1::placeholders::_1)),
                     32, 0.0, 1.0);
@@ -719,24 +728,25 @@ namespace wf
 
             double scatt_factor = M_PI * M_PI / 3.0 * f_B * f_Kstar_perp / m_B * m_Kstar / energy(s);
 
-            // Here m_b_pole is used, cf. [BFS2001], comment below Eq. (36), p. 9
+            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
+            double m_b = m_b_PS();
 
             /* Form factor corrections */
-            complex<double> ff_0 = -1.0 * (c7eff() - c7prime() + m_B / (2.0 * m_b_pole()) * (Y0(s)));
+            complex<double> ff_0 = -1.0 * (c7eff() - c7prime() + m_B / (2.0 * m_b) * (Y0(s)));
             // cf. [BFS2004], Eq. (44), p. 24
-            complex<double> ff_f = -1.0 * (c7eff() - c7prime()) * (8.0 * std::log(m_b_pole() / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b_pole()))
-                    + (m_B / (2.0 * m_b_pole())) * Y0(s) * (2.0 - 2.0 * L(s));
+            complex<double> ff_f = -1.0 * (c7eff() - c7prime()) * (8.0 * std::log(m_b / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b))
+                    + (m_B / (2.0 * m_b)) * Y0(s) * (2.0 - 2.0 * L(s));
             // cf. [BFS2001], Eq. (38), p. 9
             complex<double> ff_nf = (+1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * CharmLoops::F27(mu, s, m_b_pole()) + c8eff() * F87(s)
-                    + (m_B / (2.0 * m_b_pole())) * (c2() * CharmLoops::F29(mu, s, m_b_pole()) + c1() * CharmLoops::F19(mu, s, m_b_pole()) + c8eff() * F89(s)));
+                    (c2 - c1 / 6.0) * CharmLoops::F27(mu, s, m_b) + c8eff() * F87(s)
+                    + (m_B / (2.0 * m_b)) * (c2() * CharmLoops::F29(mu, s, m_b) + c1() * CharmLoops::F19(mu, s, m_b) + c8eff() * F89(s)));
             complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
 
             /* Spectator scattering */
             // cf. [BFS2001], Eq. (18), p. 6
-            double scatt_0_m = -e_q * 4.0 * m_B / m_b_pole() * (c3 + 4.0/3.0 * c4 + 16.0 * c5 + 64.0/3.0 * c6);
+            double scatt_0_m = -e_q * 4.0 * m_B / m_b * (c3 + 4.0/3.0 * c4 + 16.0 * c5 + 64.0/3.0 * c6);
             // cf. [BFS2001], Eq. (21), p. 6
-            complex<double> scatt_f_p = (c7eff() - c7prime + (s / (2.0 * m_b_pole() * m_B)) * Y0(s)) * (2.0 * m_B * m_B / energy(s) / energy(s))
+            complex<double> scatt_f_p = (c7eff() - c7prime + (s / (2.0 * m_b * m_B)) * Y0(s)) * (2.0 * m_B * m_B / energy(s) / energy(s))
                     * 3.0 * (1.0 + a_1_par + a_2_par);
             scatt_f_p = complex<double>(((c7eff() - c7prime) * 4.0 * m_B / energy(s)) * 3.0 * (1.0 + a_1_par + a_2_par), 0.0);
             // cf. [BFS2001], Eq. (25), p. 7
@@ -763,7 +773,7 @@ namespace wf
         {
             double h = helicity;
             double shat = s_hat(s);
-            double mbhat = m_b_pole() / m_B;
+            double mbhat = m_b_PS() / m_B;
             double E = 0.5 * (m_B - s / m_B);
             double mKhat = m_Kstar / m_B;
             double lambdahat = lambda(1.0, mKhat * mKhat, s);
@@ -774,7 +784,7 @@ namespace wf
 
             double a = wilson * ((m_B * m_B - m_Kstar * m_Kstar - s) * 2.0 * energy(s) * xi_perp(s)
                 -lambda(m_B * m_B, m_Kstar * m_Kstar, s) * m_B / (m_B * m_B - m_Kstar * m_Kstar) * (xi_perp(s) - xi_par(s)));
-            complex<double> b = 2 * m_b_pole() * (((m_B * m_B + 3 * m_Kstar * m_Kstar - s) * 2.0 * energy(s) / m_B
+            complex<double> b = 2 * m_b_PS() * (((m_B * m_B + 3 * m_Kstar * m_Kstar - s) * 2.0 * energy(s) / m_B
                         - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar)) * tensor_perp(-1.0, s)
                     - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar) * tensor_par(s));
 
@@ -786,7 +796,7 @@ namespace wf
         {
             double h = helicity;
             double shat = s_hat(s);
-            double mbhat = m_b_pole() / m_B;
+            double mbhat = m_b_PS() / m_B;
             double mKhat = m_Kstar / m_B;
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
@@ -801,7 +811,7 @@ namespace wf
         {
             double h = helicity;
             double shat = s_hat(s);
-            double mbhat = m_b_pole() / m_B;
+            double mbhat = m_b_PS() / m_B;
             double mKhat = m_Kstar / m_B;
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
@@ -1031,6 +1041,12 @@ namespace wf
                 throw std::string("InternalError");
         }
 
+        // We use the PS mass except for kappa_1
+        double m_b_PS() const
+        {
+            return QCD::mb_PS(m_b_MSbar, mu, 2.0);
+        }
+
         // cf. [BFS2001], Eq. (29), p. 8
         complex<double> B0(const double & s, const double & m_q) const
         {
@@ -1113,16 +1129,17 @@ namespace wf
         // cf. [BFS2001], Eq. (82), p. 30
         complex<double> F87(const double & s) const
         {
-            double s_hat = s / m_B / m_B;
+            double m_b = m_b_PS();
+            double s_hat = s / m_b / m_b;
             double s_hat2 = s_hat * s_hat;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
 
-            complex<double> a = complex<double>(-32.0 * std::log(mu / m_b_MSbar) - 8.0 * s_hat / denom * std::log(s_hat)
+            complex<double> a = complex<double>(-32.0 * std::log(mu / m_b) - 8.0 * s_hat / denom * std::log(s_hat)
                     - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2,
                     -8.0 * M_PI);
             complex<double> b = (4.0 / denom / denom2)
-                * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_b_MSbar) - (4.0 + 2.0 * s_hat) * C0(s));
+                * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_b) - (4.0 + 2.0 * s_hat) * C0(s));
 
             return (1.0 / 9.0) * (a + b);
         }
@@ -1130,12 +1147,13 @@ namespace wf
         // cf. [BFS2001], Eq. (83), p. 30
         complex<double> F89(const double & s) const
         {
-            double s_hat = s / m_B / m_B;
+            double m_b = m_b_PS();
+            double s_hat = s / m_b / m_b;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
 
             double a = 16.0 * std::log(s_hat) / denom + 8.0 * (5.0 - 2.0 * s_hat) / denom2;
-            complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b_MSbar) - 2.0 * C0(s));
+            complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b) - 2.0 * C0(s));
 
             return (1.0 / 9.0) * (a + b);
         }
@@ -1143,10 +1161,11 @@ namespace wf
         // cf. [GP2004], Eq. (56)
         complex<double> c7eff(double s) const
         {
-            // TODO: Neglecting contributions ~alpha_s / 4.0 / M_PI. These do involve spectator scattering,
+            double m_b = m_b_PS();
+
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 + 20.0/3.0 * c5 + 80.0/9.0 * c6;
-            complex<double> nlo = -1.0 * (c1() * CharmLoops::F17(mu, s, m_b_MSbar) + c2() * CharmLoops::F27(mu, s, m_b_MSbar) + c8() * F87(s));
+            complex<double> nlo = -1.0 * (c1() * CharmLoops::F17(mu, s, m_b) + c2() * CharmLoops::F27(mu, s, m_b) + c8() * F87(s));
 
             return c7() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
@@ -1154,13 +1173,15 @@ namespace wf
         // cf. [GP2004], Eq. (55), p. 10
         complex<double> c9eff(const double & s) const
         {
+            double m_b = m_b_PS();
+
             double c_0 = 4.0 / 3.0 * c1() + c2() + 5.5 * c3() - 2.0 / 3.0 * c4() + 52.0 * c5() + 32.0 / 3.0 * c6();
             double c_b = -0.5 * (7.0 * c3() + 4.0 / 3.0 * c4() + 76.0 * c5() + 64.0 / 3.0 * c6());
             double c = 2.0 / 9.0 * (6.0 * c3() + 32.0 * c5() + 32.0 / 3.0 * c6());
 
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
-            complex<double> lo = c_b * CharmLoops::h(mu, s, m_b_MSbar) + c_0 * CharmLoops::h(mu, s) + c;
-            complex<double> nlo = -1.0 * (c1() * CharmLoops::F19(mu, s, m_b_MSbar) + c2() * CharmLoops::F29(mu, s, m_b_MSbar) + c8() * F89(s));
+            complex<double> lo = c_b * CharmLoops::h(mu, s, m_b) + c_0 * CharmLoops::h(mu, s) + c;
+            complex<double> nlo = -1.0 * (c1() * CharmLoops::F19(mu, s, m_b) + c2() * CharmLoops::F29(mu, s, m_b) + c8() * F89(s));
 
             return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
@@ -1190,9 +1211,10 @@ namespace wf
         // Amplitudes
         complex<double> a_long(const Helicity & helicity, const double & s) const
         {
+            double m_b = m_b_PS();
             double h = helicity;
             double m_Kstar_hat = m_Kstar / m_B;
-            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
+            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b * m_B / s);
             complex<double> prefactor = complex<double>(0.0, -0.5 * m_B * m_B * m_B / m_Kstar / std::sqrt(s));
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
             double formfactor = lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s)) * form_factors->a_1(s_hat(s)) - (1 - s_hat(s)) * form_factors->a_2(s_hat(s));
@@ -1202,9 +1224,10 @@ namespace wf
 
         complex<double> a_perp(const Helicity & helicity, const double & s) const
         {
+            double m_b = m_b_PS();
             double h = helicity;
             double m_Kstar_hat = m_Kstar / m_B;
-            complex<double> wilson = (c9eff(s) + c9prime()) + h * (c10() + c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
+            complex<double> wilson = (c9eff(s) + c9prime()) + h * (c10() + c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b * m_B / s);
             complex<double> prefactor = complex<double>(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * m_B);
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
 
@@ -1213,8 +1236,9 @@ namespace wf
 
         complex<double> a_par(const Helicity & helicity, const double & s) const
         {
+            double m_b = m_b_PS();
             double h = helicity;
-            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
+            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b * m_B / s);
             complex<double> prefactor = complex<double>(0.0, -std::sqrt(2) * m_B);
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
 
