@@ -27,9 +27,13 @@ libwfutils_la_SOURCES = \
 libwfutils_la_LIBADD = -lpthread
 
 TESTS = \
-	integrate_TEST
+	integrate_TEST \
+	qcd_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
 
 check_PROGRAMS = $(TESTS)
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_LDADD = $(TESTS_LD_ADD)
+
+qcd_TEST_SOURCES = qcd_TEST.cc
+qcd_TEST_LDADD = $(TESTS_LD_ADD)

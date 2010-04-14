@@ -43,6 +43,13 @@ References
         arxiv:hep-ph/0211227
 
 
+    BBL1995 : Buchalla, G. and Buras, J.B. and Lautenbacher, M.E.
+
+        Weak Decays Beyond Leading Logarithms
+
+        arxiv:hep-ph/9512380
+
+
     BFS2001 : Beneke, M. and Feldmann, Th. and Seidel, D.
 
         Systematic Approach to Exclusive B -> V l^+ l^-, V gamma decays

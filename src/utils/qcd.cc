@@ -60,4 +60,20 @@ namespace wf
                 + 0.25 * a_s * a_s * (a_2 - (2.0 * a_1 * b_0 + b_1) * 2.0 * (L - 1.0)
                     + b_0 * b_0 * (L * L - 4.0 * L + 8.0)));
     }
+
+    double
+    QCD::mb_MSbar(const double & mb_MSbar0, const double & mu)
+    {
+        static const double b_0 = 23.0/3.0;
+        static const double b_1 = 116.0/3.0;
+        static const double g_0 = 8.0;
+        static const double g_1 = 1012/9.0;
+        static const double rho = g_0 / (2.0 * b_0);
+
+        double alpha_m = alpha_s(mb_MSbar0), alpha_mu = alpha_s(mu);
+        double eta = alpha_mu / alpha_m;
+
+        // cf. [BBL1995], Eq. (III.20), p. 17
+        return mb_MSbar0 * pow(eta, rho) * (1.0 + alpha_m / (4.0 * M_PI) * rho * (g_1 / g_0 - b_1 / b_0) * (eta - 1));
+    }
 }

@@ -19,6 +19,9 @@ namespace wf
 
             // Pole mass of the b
             static double mb_pole(const double & mb_MSbar);
+
+            // Running MSbar mass of the b
+            static double mb_MSbar(const double & mb_MSbar0, const double & mu);
     };
 }
 
