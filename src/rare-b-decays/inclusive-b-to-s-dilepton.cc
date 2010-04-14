@@ -146,7 +146,7 @@ namespace wf
 
         double m1(const double & u_hat, const double & s_hat, const double & m_s_hat2, const double & m_l_hat2) const
         {
-            return 32.0/3.0 * u_hat / s_hat * (2.0 * (1.0 + m_s_hat2) * std::pow(1.0 - - m_s_hat2, 2.0)
+            return 32.0/3.0 * u_hat / s_hat * (2.0 * (1.0 + m_s_hat2) * std::pow(1.0 - m_s_hat2, 2.0)
                     - s_hat * (1.0 + 14.0 * m_s_hat2 + std::pow(m_s_hat2, 2.0))
                     - std::pow(s_hat, 2.0) * (1.0 + m_s_hat2));
         }
