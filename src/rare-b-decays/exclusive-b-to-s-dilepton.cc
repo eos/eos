@@ -1168,7 +1168,7 @@ namespace wf
         double kappa_1() const
         {
             // cf. [BHvD2010], Eq. (?), p. ?
-            return (1.0 - 2.0 * QCD::alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
+            return (1.0 - 2.0 * QCD::alpha_s(mu) / (3.0 * M_PI) * std::log(mu / QCD::mb_MSbar(m_b_MSbar, mu)));
         }
 
         double norm(const double & s) const
