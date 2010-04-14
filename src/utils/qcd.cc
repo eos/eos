@@ -57,7 +57,7 @@ namespace wf
         // cf. [CERN2003-002], Eq. (20), p. 46
         return mb_pole(mb_MSbar) -  casimir_f * a_s * mu_PS * (
                 1.0 + a_s / 4.0 * (a_1 - b_0 * 2.0 * (L - 1.0))
-                + 0.25 * a_s * a_s * (a_2 - (2.0 * a_1 * b_0 + b_1) * 2.0 * (L - 1.0)
+                + 1.0 / 4.0 / 4.0 * a_s * a_s * (a_2 - (2.0 * a_1 * b_0 + b_1) * 2.0 * (L - 1.0)
                     + b_0 * b_0 * (L * L - 4.0 * L + 8.0)));
     }
 
