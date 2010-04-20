@@ -64,6 +64,8 @@ namespace wf
     double
     QCD::mb_MSbar(const double & mb_MSbar0, const double & mu)
     {
+        // 5 active flavors!
+
         static const double b_0 = 23.0/3.0;
         static const double b_1 = 116.0/3.0;
         static const double g_0 = 8.0;
@@ -75,5 +77,23 @@ namespace wf
 
         // cf. [BBL1995], Eq. (III.20), p. 17
         return mb_MSbar0 * pow(eta, rho) * (1.0 + alpha_m / (4.0 * M_PI) * rho * (g_1 / g_0 - b_1 / b_0) * (eta - 1));
+    }
+
+    double
+    QCD::mc_MSbar(const double & mc_MSbar0, const double & mu)
+    {
+        // 4 active flavors!
+
+        static const double b_0 = 25.0/3.0;
+        static const double b_1 = 154.0/3.0;
+        static const double g_0 = 8.0;
+        static const double g_1 = 1052.0/9.0;
+        static const double rho = g_0 / (2.0 * b_0);
+
+        double alpha_m = alpha_s(mc_MSbar0), alpha_mu = alpha_s(mu);
+        double eta = alpha_mu / alpha_m;
+
+        // cf. [BBL1995], Eq. (III.20), p. 17
+        return mc_MSbar0 * pow(eta, rho) * (1.0 + alpha_m / (4.0 * M_PI) * rho * (g_1 / g_0 - b_1 / b_0) * (eta - 1));
     }
 }

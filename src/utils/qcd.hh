@@ -22,6 +22,9 @@ namespace wf
 
             // Running MSbar mass of the b
             static double mb_MSbar(const double & mb_MSbar0, const double & mu);
+
+            // Running MSbar mass of the c
+            static double mc_MSbar(const double & mb_MSbar0, const double & mu);
     };
 }
 
