@@ -1225,22 +1225,31 @@ namespace wf
         {
             double m_b = m_b_PS();
             double h = helicity;
-            double m_Kstar_hat = m_Kstar / m_B;
-            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b * m_B / s);
+            double m_Kstarhat = m_Kstar / m_B;
+            double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
+            double s_hat = s / m_B / m_B;
+            complex<double> wilson1 = (c9eff(s) - c9prime()) + h * (c10() - c10prime());
+            complex<double> wilson2 = kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b / m_B);
             complex<double> prefactor = complex<double>(0.0, -0.5 * m_B * m_B * m_B / m_Kstar / std::sqrt(s));
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
-            double formfactor = lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s)) * form_factors->a_1(s_hat(s)) - (1 - s_hat(s)) * form_factors->a_2(s_hat(s));
+            double a_1 = form_factors->a_1(s_hat), a_2 = form_factors->a_2(s_hat);
+            double formfactor1 = (1.0 - m_Kstarhat2 - s_hat) * (1.0 + m_Kstarhat) * a_1
+                - lambda(1.0, m_Kstarhat2, s_hat) / (1.0 + m_Kstarhat) * a_2;
+            double formfactor2 = (1.0 + 3.0 * m_Kstarhat2 - s_hat) * a_1
+                - lambda(1.0, m_Kstarhat2, s_hat) / (1.0 - m_Kstarhat2) * (a_2 - a_1) / s_hat;
 
-            return uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
+            return uncertainty * prefactor * (wilson1 * formfactor1 + wilson2 * formfactor2); // cf. [BHvD2010], Eq. (??)
         }
 
         complex<double> a_perp(const Helicity & helicity, const double & s) const
         {
             double m_b = m_b_PS();
             double h = helicity;
-            double m_Kstar_hat = m_Kstar / m_B;
-            complex<double> wilson = (c9eff(s) + c9prime()) + h * (c10() + c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b * m_B / s);
-            complex<double> prefactor = complex<double>(0.0, std::sqrt(2 * lambda(1.0, m_Kstar_hat * m_Kstar_hat, s_hat(s))) * m_B);
+            double m_Kstarhat = m_Kstar / m_B;
+            double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
+            complex<double> wilson = ((c9eff(s) + c9prime()) + h * (c10() + c10prime())) / (1.0 + m_Kstarhat)
+                + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b * m_B / s);
+            complex<double> prefactor = complex<double>(0.0, std::sqrt(2 * lambda(1.0, m_Kstarhat2, s_hat(s))) * m_B);
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
 
             return uncertainty * prefactor * wilson * form_factors->v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
@@ -1249,12 +1258,15 @@ namespace wf
         complex<double> a_par(const Helicity & helicity, const double & s) const
         {
             double m_b = m_b_PS();
+            double m_Kstarhat = m_Kstar / m_B;
+            double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
             double h = helicity;
-            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime()) + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b * m_B / s);
-            complex<double> prefactor = complex<double>(0.0, -std::sqrt(2) * m_B);
+            complex<double> wilson = ((c9eff(s) - c9prime()) + h * (c10() - c10prime())) / (1.0 - m_Kstarhat)
+                + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b * m_B / s);
+            complex<double> prefactor = complex<double>(0.0, -std::sqrt(2) * m_B) * (1.0 - m_Kstarhat2);
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
 
-            return prefactor * wilson * form_factors->a_1(s_hat(s)); // cf. [BHvD2010], Eq. (??)
+            return uncertainty * prefactor * wilson * form_factors->a_1(s_hat(s)); // cf. [BHvD2010], Eq. (??)
         }
     };
 
