@@ -86,6 +86,8 @@ namespace wf
             const double & max() const;
 
             const double & min() const;
+
+            const std::string & name() const;
     };
 }
 

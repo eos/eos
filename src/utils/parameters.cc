@@ -166,6 +166,12 @@ namespace wf
         return _imp->parameters[_index].min;
     }
 
+    const std::string &
+    Parameter::name() const
+    {
+        return _imp->parameters[_index].name;
+    }
+
     UnknownParameterError::UnknownParameterError(const std::string & name) throw () :
         Exception("Unknown parameter: '" + name + "'")
     {
