@@ -23,12 +23,14 @@ libwfutils_la_SOURCES = \
 	random_number_engine.cc random_number_engine.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
-	ticket.cc ticket.hh
+	ticket.cc ticket.hh \
+	wilson_coefficients.cc wilson_coefficients.hh
 libwfutils_la_LIBADD = -lpthread
 
 TESTS = \
 	integrate_TEST \
-	qcd_TEST
+	qcd_TEST \
+	wilson_coefficients_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
 
 check_PROGRAMS = $(TESTS)
@@ -37,3 +39,6 @@ integrate_TEST_LDADD = $(TESTS_LD_ADD)
 
 qcd_TEST_SOURCES = qcd_TEST.cc
 qcd_TEST_LDADD = $(TESTS_LD_ADD)
+
+wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
+wilson_coefficients_TEST_LDADD = $(TESTS_LD_ADD)
