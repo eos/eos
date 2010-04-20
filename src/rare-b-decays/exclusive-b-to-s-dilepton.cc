@@ -1200,7 +1200,8 @@ namespace wf
         double kappa_1() const
         {
             // cf. [BHvD2010], Eq. (?), p. ?
-            return (1.0 - 2.0 * QCD::alpha_s(mu) / (3.0 * M_PI) * std::log(mu / QCD::mb_MSbar(m_b_MSbar, mu)));
+            // Use m_b_MSbar(m_b_MSbar) instead m_b_MSbar(mu), as we want kappa_1 up to NLO only.
+            return (1.0 - 2.0 * QCD::alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
         }
 
         double norm(const double & s) const
