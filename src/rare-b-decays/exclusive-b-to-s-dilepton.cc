@@ -948,6 +948,17 @@ namespace wf
         return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
 
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation), this, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_decay_width), this, std::tr1::placeholders::_1);
+
+        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+    }
 
     // Low Recoil
 
