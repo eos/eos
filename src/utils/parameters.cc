@@ -90,7 +90,7 @@ namespace wf
             Parameters::NameValuePair{"c9prime", 0.0},
             Parameters::NameValuePair{"c10prime", 0.0},
             // Factorization scale
-            Parameters::NameValuePair{"mu", 4.8},
+            Parameters::NameValuePair{"mu", 2.4, 4.2, 9.6},
             // CKM matrix elements, cf. [PDG2008], Eqs. (11.4), (11.5), p. 169 and Eq. (11.26), p. 174
             Parameters::NameValuePair{"CKM::A", 0.793, 0.814, 0.835},
             Parameters::NameValuePair{"CKM::lambda", 0.2247, 0.2257, 0.2266},
