@@ -73,18 +73,18 @@ namespace wf
     Parameters::Defaults()
     {
         return Parameters::FromList({
-            // Wilson coefficients C1 - C6 at mu = 4.8 GeV to NLL accuary, based on [CMM1997]
-            Parameters::NameValuePair{"c1", -0.275},
-            Parameters::NameValuePair{"c2", +1.009},
-            Parameters::NameValuePair{"c3", -0.005},
-            Parameters::NameValuePair{"c4", -0.078},
-            Parameters::NameValuePair{"c5", +0.000},
-            Parameters::NameValuePair{"c6", +0.001},
-            // Wilson coefficients C7 - c10 at mu = 4.8 GeV to NNLL, based on ?
-            Parameters::NameValuePair{"c7", -0.303},
+            // Wilson coefficients C1 - C6 at mu = 4.2 GeV to NLL accuary, based on [CMM1997]
+            Parameters::NameValuePair{"c1", -0.323},
+            Parameters::NameValuePair{"c2", +1.00931},
+            Parameters::NameValuePair{"c3", -0.00522869},
+            Parameters::NameValuePair{"c4", -0.0879473},
+            Parameters::NameValuePair{"c5", +0.000374755},
+            Parameters::NameValuePair{"c6", +0.00105859},
+            // Wilson coefficients C7 - c10 at mu = 4.2 GeV to NNLL, based on ?
+            Parameters::NameValuePair{"c7", -0.33},
             Parameters::NameValuePair{"c8", -0.166},
-            Parameters::NameValuePair{"c9", +4.225},
-            Parameters::NameValuePair{"c10", -4.154},
+            Parameters::NameValuePair{"c9", +4.23},
+            Parameters::NameValuePair{"c10", -4.17},
             // Primed Wilson coefficients are negligible in the SM
             Parameters::NameValuePair{"c7prime", 0.0},
             Parameters::NameValuePair{"c9prime", 0.0},
