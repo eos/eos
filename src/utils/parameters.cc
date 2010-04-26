@@ -99,7 +99,7 @@ namespace wf
             // Masses in GeV
             Parameters::NameValuePair{"mass::b(MSbar)", 4.13, 4.20, 4.37}, // cf. [PDG2008], p. 21
             Parameters::NameValuePair{"mass::c", 1.16, 1.27, 1.34}, // cf. [PDG2008], p. 21
-            Parameters::NameValuePair{"mass::s", 0.07, 0.104, 0.13}, // cf. [PDG2008], p. 21
+            Parameters::NameValuePair{"mass::s", 0.00}, // we neglect m_s, cf. [BHvD2010], Eq. (??)
             Parameters::NameValuePair{"mass::t", 169.1, 171.2, 173.3}, // cf. [PDG2008], p. 21
             Parameters::NameValuePair{"mass::B0", 5.27920, 5.27953, 5.27986}, // cf. [PDG2008], p. 79
             Parameters::NameValuePair{"mass::K^*0", 0.896}, // cf. [PDG2008], p. 44
