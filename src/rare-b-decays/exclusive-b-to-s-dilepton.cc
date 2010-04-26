@@ -1175,7 +1175,7 @@ namespace wf
             double m_b = m_b_PS();
 
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
-            double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 + 20.0/3.0 * c5 + 80.0/9.0 * c6;
+            double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
             complex<double> nlo = -1.0 * (c1() * CharmLoops::F17(mu, s, m_b) + c2() * CharmLoops::F27(mu, s, m_b) + c8() * F87(s));
 
             return c7() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
