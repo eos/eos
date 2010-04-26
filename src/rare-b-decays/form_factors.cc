@@ -124,7 +124,7 @@ namespace wf
             // cf. [BZ2004], Table 8, p. 28
             virtual double v(const double & s_hat)
             {
-                return _v_factor * _calc_eq59(0.923, -0.511, 0.99248, 0.56434, s_hat);
+                return _v_factor * _calc_eq59(0.923, -0.511, 0.984646, 0.56434, s_hat);
             }
 
             virtual double a_0(const double & s_hat)
