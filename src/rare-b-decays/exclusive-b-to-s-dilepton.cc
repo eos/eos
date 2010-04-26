@@ -993,7 +993,7 @@ namespace wf
 
         Parameter m_b_MSbar;
 
-        Parameter m_c;
+        Parameter m_c_MSbar;
 
         Parameter m_B;
 
@@ -1034,7 +1034,7 @@ namespace wf
             c9prime(p["c9prime"]),
             c10prime(p["c10prime"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
-            m_c(p["mass::c"]),
+            m_c_MSbar(p["mass::c"]),
             m_B(p["mass::B0"]),
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
@@ -1184,17 +1184,21 @@ namespace wf
         // cf. [GP2004], Eq. (55), p. 10
         complex<double> c9eff(const double & s) const
         {
-            double m_b = m_b_PS();
-
-            double c_0 = 4.0 / 3.0 * c1() + c2() + 5.5 * c3() - 2.0 / 3.0 * c4() + 52.0 * c5() + 32.0 / 3.0 * c6();
-            double c_b = -0.5 * (7.0 * c3() + 4.0 / 3.0 * c4() + 76.0 * c5() + 64.0 / 3.0 * c6());
-            double c = 2.0 / 9.0 * (6.0 * c3() + 32.0 * c5() + 32.0 / 3.0 * c6());
-
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
-            complex<double> lo = c_b * CharmLoops::h(mu, s, m_b) + c_0 * CharmLoops::h(mu, s) + c;
-            complex<double> nlo = -1.0 * (c1() * CharmLoops::F19(mu, s, m_b) + c2() * CharmLoops::F29(mu, s, m_b) + c8() * F89(s));
+            // Substitute pole mass by PS mass
+            double m_b = m_b_PS();
+            double m_c = QCD::mc_MSbar(m_c_MSbar, mu);
+            double c = -2.0 / 27.0 * (8.0 * c1() + 6.0 * c2() - 6.0 * c3() - 8.0 * c4() - 12.0 * c5() - 160.0 * c6());
+            double c_0 = -2.0 / 27.0 * (48.0 * c1() + 36.0 * c2() + 198.0 * c3() - 24.0 * c4() + 1872.0 * c5() - 384.0 * c6());
+            double c_b = +2.0 / 27.0 * (126.0 * c3() + 24.0 * c4 + 1368.0 * c5() + 384.0 * c6());
+            complex<double> G0 = -3.0 / 8.0 * (CharmLoops::h(mu, s) + 4.0 / 9.0);
+            complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b) + 4.0 / 9.0);
 
-            return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
+            complex<double> lo = c_b * Gb + c_0 * G0 + c;
+            complex<double> nlo_alpha_s = -1.0 * (c1() * CharmLoops::F19(mu, s, m_b) + c2() * CharmLoops::F29(mu, s, m_b) + c8() * F89(s));
+            complex<double> nlo_mc = m_c * m_c / s * 8 * (4.0/9.0 * c1() + 1.0/3.0 * c2() + 2.0/3.0 * c3() + 20.0 * c5());
+
+            return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
         }
 
         double kappa_1() const
