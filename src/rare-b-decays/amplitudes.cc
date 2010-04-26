@@ -4,6 +4,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 
 using namespace wf;
 
@@ -13,20 +14,21 @@ main(int argc, char * argv[])
     try
     {
         ObservableOptions options;
-        options.set("form-factors", "ABHH1999::2");
-        BToKstarDilepton<LargeRecoil> decay(Parameters::Defaults(), options);
+        options.set("form-factors", "BZ2004");
+        BToKstarDilepton<LowRecoil> decay(Parameters::Defaults(), options);
 
         std::cout << "#s(GeV^2) A_0^L A_0^R A_pp^L A_pp^R A_pa^L A_pa^R" << std::endl;
 
-        const unsigned N = 100;
-        const static double Gamma = 6.58211899e-22 * 1e-3 / 1.53e-12; // cf. [PDG2008], hbar / tau_B
+        const unsigned N = 20;
         for (unsigned i = 0 ; i <= N ; ++i)
         {
-            const double s_low = 1.0;
-            const double s_high = 6.0;
+            const double s_low = 14.0;
+            const double s_high = 19.21;
             double s = s_low + i * (s_high - s_low) / N;
 
             std::cout
+                << std::setprecision(5)
+                << std::scientific
                 << s << "\t"
                 << real(decay.a_long(left_handed, s)) << "\t"
                 << imag(decay.a_long(left_handed, s)) << "\t"
