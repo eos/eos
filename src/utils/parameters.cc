@@ -82,7 +82,7 @@ namespace wf
             Parameters::NameValuePair{"c6", +0.00105859},
             // Wilson coefficients C7 - c10 at mu = 4.2 GeV to NNLL, based on ?
             Parameters::NameValuePair{"c7", -0.33},
-            Parameters::NameValuePair{"c8", -0.166},
+            Parameters::NameValuePair{"c8", -0.169},
             Parameters::NameValuePair{"c9", +4.23},
             Parameters::NameValuePair{"c10", -4.17},
             // Primed Wilson coefficients are negligible in the SM
