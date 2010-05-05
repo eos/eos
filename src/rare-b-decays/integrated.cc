@@ -5,8 +5,10 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <iomanip>
 #include <iostream>
 #include <list>
+#include <tuple>
 
 using namespace wf;
 
@@ -32,7 +34,7 @@ main(int argc, char * argv[])
 
         double s_min(0.0), s_max(0.0);
         bool range(false);
-        std::list<Parameter> variations;
+        std::list<std::tuple<std::string, std::list<Parameter>>> budgets;
         std::list<ObservablePtr> observables;
 
         for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
@@ -55,10 +57,20 @@ main(int argc, char * argv[])
                 continue;
             }
 
-            if ("--vary" == argument)
+            if ("--budget" == argument)
             {
                 std::string name(*(++a));
-                variations.push_back(parameters[name]);
+                budgets.push_back(std::make_tuple(name, std::list<Parameter>()));
+                continue;
+            }
+
+            if ("--vary" == argument)
+            {
+                if (budgets.empty())
+                    throw DoUsage("Specify a budget before any variations");
+
+                std::string name(*(++a));
+                std::get<1>(budgets.back()).push_back(parameters[name]);
                 continue;
             }
 
@@ -102,37 +114,72 @@ main(int argc, char * argv[])
             double central = (*o)->evaluate(kinematics);
             double delta_min = 0.0, delta_max = 0.0;
 
-            for (auto p(variations.begin()), p_end(variations.end()) ; p != p_end ; ++p)
+            std::list<std::tuple<std::string, double, double>> uncertainties;
+
+            for (auto b(budgets.begin()), b_end(budgets.end()) ; b != b_end ; ++b)
             {
-                double old_p = *p;
-                double max = 0.0, min = 0.0, value;
+                std::string name = std::get<0>(*b);
+                std::list<Parameter> variations = std::get<1>(*b);
 
-                *p = p->min();
-                value = (*o)->evaluate(kinematics);
-                if (value > central)
-                    max = value - central;
+                double budget_max = 0.0, budget_min = 0.0;
 
-                if (value < central)
-                    min = central - value;
+                for (auto p(variations.begin()), p_end(variations.end()) ; p != p_end ; ++p)
+                {
+                    double old_p = *p;
+                    double max = 0.0, min = 0.0, value;
 
-                *p = p->max();
-                value = (*o)->evaluate(kinematics);
-                if (value > central)
-                    max = std::max(max, value - central);
+                    *p = p->min();
+                    value = (*o)->evaluate(kinematics);
+                    if (value > central)
+                        max = value - central;
 
-                if (value < central)
-                    min = std::max(min, central - value);
+                    if (value < central)
+                        min = central - value;
 
-                *p = old_p;
+                    *p = p->max();
+                    value = (*o)->evaluate(kinematics);
+                    if (value > central)
+                        max = std::max(max, value - central);
 
-                delta_min += min * min;
-                delta_max += max * max;
+                    if (value < central)
+                        min = std::max(min, central - value);
+
+                    *p = old_p;
+
+                    delta_min += min * min;
+                    delta_max += max * max;
+
+                    budget_min += min * min;
+                    budget_max += max * max;
+                }
+
+                uncertainties.push_back(std::make_tuple(name, std::sqrt(budget_min), std::sqrt(budget_max)));
             }
 
             delta_max = std::sqrt(delta_max);
             delta_min = std::sqrt(delta_min);
 
-            std::cout << (*o)->name() << " = " << central << " -" << delta_min << " +"  << delta_max << std::endl;
+            std::cout << std::setprecision(4) << std::scientific;
+            std::cout << (*o)->name() << ':' << std::endl;
+            std::cout << '\t'
+                << central << ' '
+                << '-' << delta_min << ' '
+                << '+' << delta_max << '\t'
+                << '-' << std::abs(delta_min / central) * 100 << " %  "
+                << '+' << std::abs(delta_max / central) * 100 << " %  "
+                << std::endl;
+
+            if (uncertainties.empty())
+                continue;
+
+            std::cout << "Budgets:" << std::endl;
+            for (auto b(uncertainties.begin()) ; b != uncertainties.end() ; ++b)
+            {
+                std::cout
+                    << '\t' << '-' << std::get<1>(*b) << " +" << std::get<2>(*b)
+                    << " [" << std::get<0>(*b) << "] " << std::endl;
+            }
+            std::cout << std::endl;
         }
     }
     catch (DoUsage & e)

@@ -29,7 +29,7 @@ main(int argc, char * argv[])
         Kinematics kinematics;
         kinematics.declare("s");
         double s_low(0.0), s_high(19.21);
-        std::list<Parameter> variations;
+        std::list<std::tuple<std::string, std::list<Parameter>>> budgets;
         std::list<ObservablePtr> observables;
 
         for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
@@ -52,10 +52,21 @@ main(int argc, char * argv[])
                 continue;
             }
 
-            if ("--vary" == argument)
+            if ("--budget" == argument)
             {
                 std::string name(*(++a));
-                variations.push_back(parameters[name]);
+                budgets.push_back(std::make_tuple(name, std::list<Parameter>()));
+                std::cerr << "Budget: " << name << std::endl;
+                continue;
+            }
+
+            if ("--vary" == argument)
+            {
+                if (budgets.empty())
+                    throw DoUsage("Specify a budget before any variations");
+
+                std::string name(*(++a));
+                std::get<1>(budgets.back()).push_back(parameters[name]);
                 std::cerr << "Vary: " << name << std::endl;
                 continue;
             }
@@ -92,60 +103,75 @@ main(int argc, char * argv[])
 
         const unsigned points = 50;
 
-        std::cout << "#\ts";
+        std::cout << "## Observables ##" << std::endl;
         for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
         {
-            std::cout << '\t' << (*o)->name();
+            std::cout << "# " << (*o)->name() << std::endl;
         }
-        std::cout << std::endl;
 
-
-        for (unsigned j = 0 ; j <= points ; ++j)
+        std::cout << "## Data ##" << std::endl;
+        for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
         {
-            double s = s_low + j * (s_high - s_low) / points;
-
-            std::cout << s << std::flush;
-            kinematics.set("s", s);
-
-            for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
+            std::cout << "# " << (*o)->name() << std::endl;
+            for (unsigned j = 0 ; j <= points ; ++j)
             {
+                double s = s_low + j * (s_high - s_low) / points;
+
+                std::cout << s << std::flush;
+                kinematics.set("s", s);
+
                 double central = (*o)->evaluate(kinematics);
                 double delta_min = 0.0, delta_max = 0.0;
 
-                for (auto p(variations.begin()), p_end(variations.end()) ; p != p_end ; ++p)
+                std::cout << '\t' << central << std::flush;
+
+                for (auto b(budgets.begin()), b_end(budgets.end()) ; b != b_end ; ++b)
                 {
-                    double old_p = *p;
-                    double max = 0.0, min = 0.0, value;
+                    std::string name = std::get<0>(*b);
+                    std::list<Parameter> variations = std::get<1>(*b);
 
-                    *p = p->min();
-                    value = (*o)->evaluate(kinematics);
-                    if (value > central)
-                        max = value - central;
+                    double budget_max = 0.0, budget_min = 0.0;
 
-                    if (value < central)
-                        min = central - value;
+                    for (auto p(variations.begin()), p_end(variations.end()) ; p != p_end ; ++p)
+                    {
+                        double old_p = *p;
+                        double max = 0.0, min = 0.0, value;
 
-                    *p = p->max();
-                    value = (*o)->evaluate(kinematics);
-                    if (value > central)
-                        max = std::max(max, value - central);
+                        *p = p->min();
+                        value = (*o)->evaluate(kinematics);
+                        if (value > central)
+                            max = value - central;
 
-                    if (value < central)
-                        min = std::max(min, central - value);
+                        if (value < central)
+                            min = central - value;
 
-                    *p = old_p;
+                        *p = p->max();
+                        value = (*o)->evaluate(kinematics);
+                        if (value > central)
+                            max = std::max(max, value - central);
 
-                    delta_min += min * min;
-                    delta_max += max * max;
+                        if (value < central)
+                            min = std::max(min, central - value);
+
+                        *p = old_p;
+
+                        delta_min += min * min;
+                        delta_max += max * max;
+
+                        budget_min += min * min;
+                        budget_max += max * max;
+                    }
+
+                    std::cout << '\t' << std::sqrt(budget_min) << '\t' << std::sqrt(budget_max) << std::flush;
                 }
 
                 delta_max = std::sqrt(delta_max);
                 delta_min = std::sqrt(delta_min);
 
-                std::cout << '\t' << delta_min << '\t' << central << '\t' << delta_max;
+                std::cout << '\t' << delta_min << '\t' << delta_max << std::endl;
             }
 
-            std::cout << std::endl;
+            std::cout << std::endl << std::endl;
         }
     }
     catch (DoUsage & e)
