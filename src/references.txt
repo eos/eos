@@ -43,6 +43,14 @@ References
         arxiv:hep-ph/0211227
 
 
+    ALGH2001 : Ali, A. and Lunghi, E. and Greub, C. and Hiller, G.
+
+        Improved Model-Independent Analysis of Semileptonic and Radiative Rare
+        B Decays
+
+        arxiv:hep-ph/0112300
+
+
     BBL1995 : Buchalla, G. and Buras, J.B. and Lautenbacher, M.E.
 
         Weak Decays Beyond Leading Logarithms

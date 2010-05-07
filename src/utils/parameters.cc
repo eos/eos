@@ -126,6 +126,9 @@ namespace wf
             Parameters::NameValuePair{"B->K^*ll::R_1_uncertainty", 0.8, 1.0, 1.0},
             Parameters::NameValuePair{"B->K^*ll::R_2_uncertainty", 1.0, 1.0, 1.15},
             Parameters::NameValuePair{"B->K^*ll::R_3_uncertainty", 1.0, 1.0, 2.1},
+            // B->X_s HQET parameters
+            Parameters::NameValuePair{"B->X_s::lambda_1", -0.20}, // cf. [ALGH2001], Table 2, p. 13
+            Parameters::NameValuePair{"B->X_s::lambda_2", +0.12}, // cf. [ALGH2001], Table 2, p. 13
             // Experimental Input
             Parameters::NameValuePair{"exp::BR(B->X_clnu)", 0.099, 0.101, 0.105}, // cf. [PDG2008], p. 82
         });

@@ -60,8 +60,8 @@ namespace wf
             OBSERVABLE2("B->K^*ll::BR@LowRecoil",         BToKstarDilepton<LowRecoil>, integrated_branching_ratio,              "s_min", "s_max"),
 
             /* Inclusive Decays */
-            OBSERVABLE1("B->X_sll::dBR/ds@GN1997", BToXsDilepton<GN1997>, differential_branching_ratio, "s"),
-            OBSERVABLE2("B->X_sll::BR@GN1997",     BToXsDilepton<GN1997>, integrated_branching_ratio,   "s_min", "s_max"),
+            OBSERVABLE1("B->X_sll::dBR/ds@ALGH2001",      BToXsDilepton<ALGH2001>, differential_branching_ratio, "s"),
+            OBSERVABLE2("B->X_sll::BR@ALGH2001",          BToXsDilepton<ALGH2001>, integrated_branching_ratio,   "s_min", "s_max"),
         };
 
         ObservableOptions myoptions(options);

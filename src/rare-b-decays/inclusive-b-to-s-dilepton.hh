@@ -12,18 +12,18 @@
 namespace wf
 {
     /*
-     * Decay: b -> X_s l lbar
+     * Decay: B -> X_s l lbar
      */
 
 
-    // As given in [GN1997]
-    struct GN1997
+    // As given in [ALGH2001]
+    struct ALGH2001
     {
     };
 
     template <>
-    class BToXsDilepton<GN1997> :
-        public PrivateImplementationPattern<BToXsDilepton<GN1997>>
+    class BToXsDilepton<ALGH2001> :
+        public PrivateImplementationPattern<BToXsDilepton<ALGH2001>>
     {
         public:
             BToXsDilepton(const Parameters & parameters, const ObservableOptions & options);
