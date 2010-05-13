@@ -109,23 +109,32 @@ namespace wf
             Parameters::NameValuePair{"formfactors::a0_uncertainty", 0.85, 1.0, 1.15},
             Parameters::NameValuePair{"formfactors::a1_uncertainty", 0.85, 1.0, 1.15},
             Parameters::NameValuePair{"formfactors::a2_uncertainty", 0.85, 1.0, 1.15},
-            Parameters::NameValuePair{"formfactors::v_uncertainty", 0.85, 1.0, 1.15},
+            Parameters::NameValuePair{"formfactors::v_uncertainty",  0.85, 1.0, 1.15},
+            Parameters::NameValuePair{"formfactors::xi_perp_uncertainty", 0.89, 1.0, 1.11},
+            Parameters::NameValuePair{"formfactors::xi_par_uncertainty",  0.86, 1.0, 1.14},
             // B->K^*, K^* LCDA parameters
             Parameters::NameValuePair{"B->K^*::a_1_par", 0.03, 0.1, 0.17},
             Parameters::NameValuePair{"B->K^*::a_2_par", 0.0, 0.1, 0.2},
             Parameters::NameValuePair{"B->K^*::a_1_perp", 0.03, 0.1, 0.17},
             Parameters::NameValuePair{"B->K^*::a_2_perp", 0.0, 0.1, 0.2},
             // B->K^*ll uncertainties from subleading terms for Large Recoil
-            Parameters::NameValuePair{"B->K^*ll::A_0^L_uncertainty", 0.9, 1.0, 1.1},
-            Parameters::NameValuePair{"B->K^*ll::A_0^R_uncertainty", 0.9, 1.0, 1.1},
-            Parameters::NameValuePair{"B->K^*ll::A_par^L_uncertainty", 0.9, 1.0, 1.1},
-            Parameters::NameValuePair{"B->K^*ll::A_par^R_uncertainty", 0.9, 1.0, 1.1},
-            Parameters::NameValuePair{"B->K^*ll::A_perp^L_uncertainty", 0.9, 1.0, 1.1},
-            Parameters::NameValuePair{"B->K^*ll::A_perp^R_uncertainty", 0.9, 1.0, 1.1},
+            Parameters::NameValuePair{"B->K^*ll::A_0^L_uncertainty@LargeRecoil",    0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_0^R_uncertainty@LargeRecoil",    0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_par^L_uncertainty@LargeRecoil",  0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_par^R_uncertainty@LargeRecoil",  0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_perp^L_uncertainty@LargeRecoil", 0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_perp^R_uncertainty@LargeRecoil", 0.95, 1.0, 1.05},
+             // B->K^*ll uncertainties from subleading terms for Low Recoil
+            Parameters::NameValuePair{"B->K^*ll::A_0^L_uncertainty@LowRecoil",    0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_0^R_uncertainty@LowRecoil",    0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_par^L_uncertainty@LowRecoil",  0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_par^R_uncertainty@LowRecoil",  0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_perp^L_uncertainty@LowRecoil", 0.95, 1.0, 1.05},
+            Parameters::NameValuePair{"B->K^*ll::A_perp^R_uncertainty@LowRecoil", 0.95, 1.0, 1.05},
             // B->K^*ll uncertainties from improved Isgur-Wise relations at Low Recoil
-            Parameters::NameValuePair{"B->K^*ll::R_1_uncertainty", 0.8, 1.0, 1.0},
-            Parameters::NameValuePair{"B->K^*ll::R_2_uncertainty", 1.0, 1.0, 1.15},
-            Parameters::NameValuePair{"B->K^*ll::R_3_uncertainty", 1.0, 1.0, 2.1},
+            Parameters::NameValuePair{"B->K^*ll::IW_long_uncertainty", 0.8, 1.0, 1.2},
+            Parameters::NameValuePair{"B->K^*ll::IW_par_uncertainty",  0.8, 1.0, 1.2},
+            Parameters::NameValuePair{"B->K^*ll::IW_perp_uncertainty", 0.8, 1.0, 1.2},
             // B->X_s HQET parameters
             Parameters::NameValuePair{"B->X_s::lambda_1", -0.20}, // cf. [ALGH2001], Table 2, p. 13
             Parameters::NameValuePair{"B->X_s::lambda_2", +0.12}, // cf. [ALGH2001], Table 2, p. 13

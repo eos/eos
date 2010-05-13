@@ -100,6 +100,10 @@ namespace wf
 
         Parameter uncertainty_long_right;
 
+        Parameter uncertainty_xi_perp;
+
+        Parameter uncertainty_xi_par;
+
         double e_q;
 
         std::tr1::shared_ptr<FormFactors<BToKstar>> form_factors;
@@ -133,12 +137,14 @@ namespace wf
             a_2_perp(p["B->K^*::a_2_perp"]),
             ckm_A(p["CKM::A"]),
             ckm_lambda(p["CKM::lambda"]),
-            uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty"]),
-            uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty"]),
-            uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty"]),
-            uncertainty_perp_right(p["B->K^*ll::A_perp^R_uncertainty"]),
-            uncertainty_long_left(p["B->K^*ll::A_0^L_uncertainty"]),
-            uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty"]),
+            uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty@LargeRecoil"]),
+            uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty@LargeRecoil"]),
+            uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty@LargeRecoil"]),
+            uncertainty_perp_right(p["B->K^*ll::A_perp^R_uncertainty@LargeRecoil"]),
+            uncertainty_long_left(p["B->K^*ll::A_0^L_uncertainty@LargeRecoil"]),
+            uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty@LargeRecoil"]),
+            uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"]),
+            uncertainty_xi_par(p["formfactors::xi_par_uncertainty"]),
             e_q(-1.0/3.0)
         {
             form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
@@ -146,7 +152,7 @@ namespace wf
                 throw std::string("InternalError");
 
             // TODO: Lepton masses, m_l = m_mu
-            m_l = 0.10565836; // (GeV), cf. [PDG2008], p. 13
+            m_l = 0.0;//m_l = 0.10565836; // (GeV), cf. [PDG2008], p. 13
         }
 
         double beta_l(const double & s) const
@@ -229,7 +235,7 @@ namespace wf
         double xi_perp(const double & s) const
         {
             const double factor = m_B / (m_B + m_Kstar);
-            double result = factor * form_factors->v(s_hat(s));
+            double result = uncertainty_xi_perp * factor * form_factors->v(s_hat(s));
 
             return result;
         }
@@ -238,7 +244,7 @@ namespace wf
         {
             const double factor1 = (m_B + m_Kstar) / (2.0 * energy(s));
             const double factor2 = (1.0 - m_Kstar / m_B);
-            double result = factor1 * form_factors->a_1(s_hat(s)) - factor2 * form_factors->a_2(s_hat(s));
+            double result = uncertainty_xi_par * (factor1 * form_factors->a_1(s_hat(s)) - factor2 * form_factors->a_2(s_hat(s)));
 
             return result;
         }
@@ -788,7 +794,7 @@ namespace wf
                         - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar)) * tensor_perp(-1.0, s)
                     - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar) * tensor_par(s));
 
-            return uncertainty * prefactor * (a + b);
+            return this->norm(s) * uncertainty * prefactor * (a + b);
         }
 
         // cf. [BHP2008], p. 20
@@ -803,7 +809,7 @@ namespace wf
             double prefactor = +std::sqrt(2.0) * m_B * std::sqrt(lambda(1.0, mKhat * mKhat, shat));
             double wilson = (c9() + c9prime()) + h * (c10() + c10prime());
 
-            return uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * tensor_perp(+1.0, s));
+            return this->norm(s) * uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * tensor_perp(+1.0, s));
         }
 
         // cf. [BHP2008], p. 20
@@ -818,7 +824,99 @@ namespace wf
             double prefactor = -std::sqrt(2.0) * m_B * (1.0 - shat);
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
 
-            return uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * tensor_perp(-1.0, s));
+            return this->norm(s) * uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * tensor_perp(-1.0, s));
+        }
+
+        // Unormalized combinations of transversity amplitudes
+        double u_1(const double & s) const
+        {
+            return std::norm(a_long(left_handed, s)) + std::norm(a_long(right_handed, s));
+        }
+
+        double u_2(const double & s) const
+        {
+            return std::norm(a_perp(left_handed, s)) + std::norm(a_perp(right_handed, s));
+        }
+
+        double u_3(const double & s) const
+        {
+            return std::norm(a_par(left_handed, s)) + std::norm(a_par(right_handed, s));
+        }
+
+        double u_4(const double & s) const
+        {
+            return real(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
+        }
+
+        double u_5(const double & s) const
+        {
+            return real(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+        }
+
+        double u_6(const double & s) const
+        {
+            return real(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s));
+        }
+
+        double u_7(const double & s) const
+        {
+            return imag(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
+        }
+
+        double u_8(const double & s) const
+        {
+            return imag(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+        }
+
+        double u_9(const double & s) const
+        {
+            return imag(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s));
+        }
+
+        // Components of observables
+        double unnormalized_decay_width(const double & s) const
+        {
+            return (u_1(s) + u_2(s) + u_3(s));
+        }
+
+        double a_fb_numerator(const double & s) const
+        {
+            return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
+        }
+
+        double f_l_numerator(const double & s) const
+        {
+            return u_1(s);
+        }
+
+        double a_t_2_numerator(const double & s) const
+        {
+            return u_2(s) - u_3(s);
+        }
+
+        double a_t_2_denominator(const double & s) const
+        {
+            return u_2(s) + u_3(s);
+        }
+
+        double a_t_3_numerator(const double & s) const
+        {
+            return sqrt(pow(u_4(s), 2) + pow(u_7(s), 2));
+        }
+
+        double a_t_3_denominator(const double & s) const
+        {
+            return sqrt(u_1(s) * u_2(s));
+        }
+
+        double a_t_4_numerator(const double & s) const
+        {
+            return sqrt(pow(u_5(s), 2) + pow(u_8(s), 2));
+        }
+
+        double a_t_4_denominator(const double & s) const
+        {
+            return sqrt(pow(u_4(s), 2) + pow(u_7(s), 2));
         }
     };
 
@@ -861,70 +959,43 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::differential_decay_width(const double & s) const
     {
-        return _imp->norm(s) * _imp->norm(s) * (norm(a_long(left_handed, s))
-            + norm(a_long(right_handed, s))
-            + norm(a_perp(left_handed, s))
-            + norm(a_perp(right_handed, s))
-            + norm(a_par(left_handed, s))
-            + norm(a_par(right_handed, s)));
+        return _imp->norm(s) * _imp->norm(s) * _imp->unnormalized_decay_width(s);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
-        return 1.5 * _imp->norm(s) * _imp->norm(s) / differential_decay_width(s)
-            * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
-    }
-
-    double
-    BToKstarDilepton<LargeRecoil>::differential_unnormalized_forward_backward_asymmetry(const double & s) const
-    {
-        return 1.5 * _imp->norm(s) * _imp->norm(s)
-            * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
+        return _imp->a_fb_numerator(s) / _imp->unnormalized_decay_width(s);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_2(const double & s) const
     {
-        double a = norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s));
-        double b = norm(a_par(left_handed, s)) + norm(a_par(right_handed, s));
-
-        return (a - b) / (a + b);
+        return _imp->a_t_2_numerator(s) / _imp->a_t_2_denominator(s);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_3(const double & s) const
     {
-        double a = abs(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
-        double b = std::sqrt(norm(a_long(left_handed, s)) + norm(a_long(right_handed, s)))
-                * std::sqrt(norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s)));
-
-        return a / b;
+        return _imp->a_t_3_numerator(s) / _imp->a_t_3_denominator(s);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_4(const double & s) const
     {
-        double a = abs(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
-        double b = abs(conj(a_long(left_handed, s)) * a_par(left_handed, s) + a_long(right_handed, s) * conj(a_par(right_handed, s)));
-
-        return a / b;
+        return _imp->a_t_4_numerator(s) / _imp->a_t_4_denominator(s);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_5(const double & s) const
     {
-        double a = abs(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
-        double b = std::sqrt(norm(a_long(left_handed, s)) + norm(a_long(right_handed, s)))
-                * std::sqrt(norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s)));
-
-        return a / b;
+        return _imp->a_t_4_numerator(s) / _imp->a_t_3_denominator(s);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
-        return (norm(a_long(left_handed, s)) + norm(a_long(right_handed, s))) * _imp->norm(s) * _imp->norm(s) / differential_decay_width(s);
+        return _imp->f_l_numerator(s) / _imp->unnormalized_decay_width(s);
     }
 
     double
@@ -940,10 +1011,10 @@ namespace wf
     BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
         std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_unnormalized_forward_backward_asymmetry), this, std::tr1::placeholders::_1);
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_fb_numerator), _imp, std::tr1::placeholders::_1);
 
         std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_decay_width), this, std::tr1::placeholders::_1);
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::tr1::placeholders::_1);
 
         return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
@@ -952,10 +1023,58 @@ namespace wf
     BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
     {
         std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation), this, std::tr1::placeholders::_1);
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::f_l_numerator), _imp, std::tr1::placeholders::_1);
 
         std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_decay_width), this, std::tr1::placeholders::_1);
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_numerator), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_denominator), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_numerator), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_numerator), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_denominator), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_numerator), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::tr1::placeholders::_1);
 
         return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
@@ -1017,6 +1136,12 @@ namespace wf
 
         Parameter uncertainty_long_right;
 
+        Parameter uncertainty_isgur_wise_long;
+
+        Parameter uncertainty_isgur_wise_par;
+
+        Parameter uncertainty_isgur_wise_perp;
+
         std::tr1::shared_ptr<FormFactors<BToKstar>> form_factors;
 
         Implementation(const Parameters & p, const ObservableOptions & o) :
@@ -1040,12 +1165,15 @@ namespace wf
             mu(p["mu"]),
             ckm_A(p["CKM::A"]),
             ckm_lambda(p["CKM::lambda"]),
-            uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty"]),
-            uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty"]),
-            uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty"]),
-            uncertainty_perp_right(p["B->K^*ll::A_perp^R_uncertainty"]),
-            uncertainty_long_left(p["B->K^*ll::A_0^L_uncertainty"]),
-            uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty"])
+            uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty@LowRecoil"]),
+            uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty@LowRecoil"]),
+            uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty@LowRecoil"]),
+            uncertainty_perp_right(p["B->K^*ll::A_perp^R_uncertainty@LowRecoil"]),
+            uncertainty_long_left(p["B->K^*ll::A_0^L_uncertainty@LowRecoil"]),
+            uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty@LowRecoil"]),
+            uncertainty_isgur_wise_long(p["B->K^*ll::IW_long_uncertainty"]),
+            uncertainty_isgur_wise_par(p["B->K^*ll::IW_par_uncertainty"]),
+            uncertainty_isgur_wise_perp(p["B->K^*ll::IW_perp_uncertainty"])
         {
             form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
             if (! form_factors.get())
@@ -1055,6 +1183,7 @@ namespace wf
         // We use the PS mass except for kappa_1
         double m_b_PS() const
         {
+            return 4.45;
             return QCD::mb_PS(m_b_MSbar, mu, 2.0);
         }
 
@@ -1140,7 +1269,7 @@ namespace wf
         // cf. [BFS2001], Eq. (82), p. 30
         complex<double> F87(const double & s) const
         {
-            double m_b = m_b_PS();
+            double m_b = QCD::mb_pole(m_b_MSbar);
             double s_hat = s / m_b / m_b;
             double s_hat2 = s_hat * s_hat;
             double denom = (1.0 - s_hat);
@@ -1158,7 +1287,7 @@ namespace wf
         // cf. [BFS2001], Eq. (83), p. 30
         complex<double> F89(const double & s) const
         {
-            double m_b = m_b_PS();
+            double m_b = QCD::mb_pole(m_b_MSbar);
             double s_hat = s / m_b / m_b;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
@@ -1201,7 +1330,7 @@ namespace wf
             return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
         }
 
-        double kappa_1() const
+        double kappa() const
         {
             // cf. [BHvD2010], Eq. (?), p. ?
             // Use m_b_MSbar(m_b_MSbar) instead m_b_MSbar(mu), as we want kappa_1 up to NLO only.
@@ -1232,17 +1361,16 @@ namespace wf
             double m_Kstarhat = m_Kstar / m_B;
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
             double s_hat = s / m_B / m_B;
-            complex<double> wilson1 = (c9eff(s) - c9prime()) + h * (c10() - c10prime());
-            complex<double> wilson2 = kappa_1() * (c7eff(s) + c7prime()) * (2 * m_b / m_B);
-            complex<double> prefactor = complex<double>(0.0, -0.5 * m_B * m_B * m_B / m_Kstar / std::sqrt(s));
-            double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
             double a_1 = form_factors->a_1(s_hat), a_2 = form_factors->a_2(s_hat);
-            double formfactor1 = (1.0 - m_Kstarhat2 - s_hat) * (1.0 + m_Kstarhat) * a_1
-                - lambda(1.0, m_Kstarhat2, s_hat) / (1.0 + m_Kstarhat) * a_2;
-            double formfactor2 = (1.0 + 3.0 * m_Kstarhat2 - s_hat) * a_1
-                - lambda(1.0, m_Kstarhat2, s_hat) / (1.0 - m_Kstarhat2) * (a_2 - a_1) / s_hat;
 
-            return uncertainty * prefactor * (wilson1 * formfactor1 + wilson2 * formfactor2); // cf. [BHvD2010], Eq. (??)
+            double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
+            complex<double> prefactor = complex<double>(0.0, -1.0) * m_B();
+            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime())
+                + uncertainty_isgur_wise_long * kappa() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
+            double formfactor = ((1.0 - m_Kstarhat2 - s_hat) * std::pow(1.0 + m_Kstarhat, 2) * a_1 - lambda(1.0, m_Kstarhat2, s_hat) * a_2)
+                / (2.0 * m_Kstarhat * (1.0 + m_Kstarhat) * std::sqrt(s_hat));
+
+            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
 
         complex<double> a_perp(const Helicity & helicity, const double & s) const
@@ -1251,26 +1379,153 @@ namespace wf
             double h = helicity;
             double m_Kstarhat = m_Kstar / m_B;
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
-            complex<double> wilson = ((c9eff(s) + c9prime()) + h * (c10() + c10prime())) / (1.0 + m_Kstarhat)
-                + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b * m_B / s);
-            complex<double> prefactor = complex<double>(0.0, std::sqrt(2 * lambda(1.0, m_Kstarhat2, s_hat(s))) * m_B);
-            double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
 
-            return uncertainty * prefactor * wilson * form_factors->v(s_hat(s)); // cf. [BHvD2010], Eq. (??)
+            double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
+            complex<double> prefactor = complex<double>(0.0, 1.0) * m_B();
+            complex<double> wilson = ((c9eff(s) + c9prime()) + h * (c10() + c10prime()))
+                + uncertainty_isgur_wise_perp * kappa() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
+            double formfactor = std::sqrt(2 * lambda(1.0, m_Kstarhat2, s_hat(s))) / (1.0 + m_Kstarhat)
+                * form_factors->v(s_hat(s));
+
+            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
 
         complex<double> a_par(const Helicity & helicity, const double & s) const
         {
             double m_b = m_b_PS();
+            double h = helicity;
             double m_Kstarhat = m_Kstar / m_B;
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
-            double h = helicity;
-            complex<double> wilson = ((c9eff(s) - c9prime()) + h * (c10() - c10prime())) / (1.0 - m_Kstarhat)
-                + kappa_1() * (c7eff(s) - c7prime()) * (2 * m_b * m_B / s);
-            complex<double> prefactor = complex<double>(0.0, -std::sqrt(2) * m_B) * (1.0 - m_Kstarhat2);
-            double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
 
-            return uncertainty * prefactor * wilson * form_factors->a_1(s_hat(s)); // cf. [BHvD2010], Eq. (??)
+            double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
+            complex<double> prefactor = complex<double>(0.0, -1.0) * m_B();
+            complex<double> wilson = ((c9eff(s) - c9prime()) + h * (c10() - c10prime()))
+                + uncertainty_isgur_wise_par * kappa() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
+            complex<double> formfactor = std::sqrt(2) * (1.0 + m_Kstarhat) * form_factors->a_1(s_hat(s));
+
+            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
+        }
+
+        // Unormalized combinations of transversity amplitudes
+        double u_1(const double & s) const
+        {
+            return std::norm(a_long(left_handed, s)) + std::norm(a_long(right_handed, s));
+        }
+
+        double u_2(const double & s) const
+        {
+            return std::norm(a_perp(left_handed, s)) + std::norm(a_perp(right_handed, s));
+        }
+
+        double u_3(const double & s) const
+        {
+            return std::norm(a_par(left_handed, s)) + std::norm(a_par(right_handed, s));
+        }
+
+        double u_4(const double & s) const
+        {
+            return real(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
+        }
+
+        double u_5(const double & s) const
+        {
+            return real(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+        }
+
+        double u_6(const double & s) const
+        {
+            return real(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s));
+        }
+
+        double u_7(const double & s) const
+        {
+            return imag(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
+        }
+
+        double u_8(const double & s) const
+        {
+            return imag(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+        }
+
+        double u_9(const double & s) const
+        {
+            return imag(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s));
+        }
+
+        // Components of observables
+        double decay_width(const double & s) const
+        {
+            return (u_1(s) + u_2(s) + u_3(s));
+        }
+
+        double a_fb_numerator(const double & s) const
+        {
+            return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
+        }
+
+        double f_l_numerator(const double & s) const
+        {
+            return u_1(s);
+        }
+
+        double a_t_2_numerator(const double & s) const
+        {
+            return (u_2(s) - u_3(s));
+        }
+
+        double a_t_2_denominator(const double & s) const
+        {
+            return (u_2(s) + u_3(s));
+        }
+
+        double a_t_3_numerator(const double & s) const
+        {
+            return sqrt(pow(u_4(s), 2) + pow(u_7(s), 2));
+        }
+
+        double a_t_3_denominator(const double & s) const
+        {
+            return sqrt(u_1(s) * u_2(s));
+        }
+
+        double a_t_4_numerator(const double & s) const
+        {
+            return sqrt(pow(u_5(s), 2) + pow(u_8(s), 2));
+        }
+
+        double a_t_4_denominator(const double & s) const
+        {
+            return u_4(s);
+        }
+
+        double h_1_numerator(const double & s) const
+        {
+            return u_4(s);
+        }
+
+        double h_1_denominator(const double & s) const
+        {
+            return sqrt(u_1(s) * u_3(s));
+        }
+
+        double h_2_numerator(const double & s) const
+        {
+            return u_5(s);
+        }
+
+        double h_2_denominator(const double & s) const
+        {
+            return sqrt(u_1(s) * u_2(s));
+        }
+
+        double h_3_numerator(const double & s) const
+        {
+            return u_6(s);
+        }
+
+        double h_3_denominator(const double & s) const
+        {
+            return sqrt(u_2(s) * u_3(s));
         }
     };
 
@@ -1286,19 +1541,31 @@ namespace wf
     complex<double>
     BToKstarDilepton<LowRecoil>::a_long(const Helicity & h, const double & s) const
     {
-        return _imp->a_long(h, s);
+        return _imp->norm(s) * _imp->a_long(h, s);
     }
 
     complex<double>
     BToKstarDilepton<LowRecoil>::a_perp(const Helicity & h, const double & s) const
     {
-        return _imp->a_perp(h, s);
+        return _imp->norm(s) * _imp->a_perp(h, s);
     }
 
     complex<double>
     BToKstarDilepton<LowRecoil>::a_par(const Helicity & h, const double & s) const
     {
-        return _imp->a_par(h, s);
+        return _imp->norm(s) * _imp->a_par(h, s);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::rho_1(const double & s) const
+    {
+        return norm(_imp->c9eff(s) + _imp->kappa() * 2.0 * _imp->m_b_PS() * _imp->m_B / s * _imp->c7eff(s)) + pow(_imp->c10(), 2);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::rho_2(const double & s) const
+    {
+        return real(_imp->c10() * (_imp->c9eff(s) + _imp->kappa() * 2.0 * _imp->m_b_PS() * _imp->m_B / s * _imp->c7eff(s)));
     }
 
     double
@@ -1307,75 +1574,61 @@ namespace wf
         // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
         static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
 
-        return differential_decay_width(s) * (_imp->norm(s) * _imp->norm(s) / Gamma);
+        return differential_decay_width(s) / Gamma;
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_decay_width(const double & s) const
     {
-        return (norm(a_long(left_handed, s))
-            + norm(a_long(right_handed, s))
-            + norm(a_perp(left_handed, s))
-            + norm(a_perp(right_handed, s))
-            + norm(a_par(left_handed, s))
-            + norm(a_par(right_handed, s)));
+        return _imp->decay_width(s);
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
-        return 1.5 / differential_decay_width(s) * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
-    }
-
-    double
-    BToKstarDilepton<LowRecoil>::differential_unnormalized_forward_backward_asymmetry(const double & s) const
-    {
-        return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
+        return _imp->a_fb_numerator(s) / _imp->decay_width(s);
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2(const double & s) const
     {
-        double a = norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s));
-        double b = norm(a_par(left_handed, s)) + norm(a_par(right_handed, s));
-
-        return (a - b) / (a + b);
+        return _imp->a_t_2_numerator(s) / _imp->a_t_2_denominator(s);
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3(const double & s) const
     {
-        double a = abs(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
-        double b = std::sqrt((norm(a_long(left_handed, s)) + norm(a_long(right_handed, s))))
-                * std::sqrt((norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s))));
-
-        return a / b;
+        return _imp->a_t_3_numerator(s) / _imp->a_t_3_denominator(s);
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4(const double & s) const
     {
-        double a = abs(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
-        double b = abs(conj(a_long(left_handed, s)) * a_par(left_handed, s) + a_long(right_handed, s) * conj(a_par(right_handed, s)));
-
-        return a / b;
+        return _imp->a_t_4_numerator(s) / _imp->a_t_4_denominator(s);
     }
 
     double
-    BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_5(const double & s) const
+    BToKstarDilepton<LowRecoil>::differential_h_1(const double & s) const
     {
-        double a = abs(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
-        double b = std::sqrt((norm(a_long(left_handed, s)) + norm(a_long(right_handed, s))))
-                * std::sqrt((norm(a_perp(left_handed, s)) + norm(a_perp(right_handed, s))));
+        return _imp->h_1_numerator(s) / _imp->h_1_denominator(s);
+    }
 
-        return a / b;
+    double
+    BToKstarDilepton<LowRecoil>::differential_h_2(const double & s) const
+    {
+        return _imp->h_2_numerator(s) / _imp->h_2_denominator(s);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_h_3(const double & s) const
+    {
+        return _imp->h_3_numerator(s) / _imp->h_3_denominator(s);
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
-        return (norm(a_long(left_handed, s)) + norm(a_long(right_handed, s)))
-            / differential_decay_width(s);
+        return _imp->f_l_numerator(s) / _imp->decay_width(s);
     }
 
     double
@@ -1384,18 +1637,194 @@ namespace wf
         std::tr1::function<double (const double &)> f = std::tr1::bind(std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_branching_ratio),
                 this, std::tr1::placeholders::_1);
 
-        return integrate(f, 100, s_min, s_max);
+        return integrate(f, 256, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry_naive(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry), this, std::tr1::placeholders::_1);
+
+        return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }
 
     double
     BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
         std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_unnormalized_forward_backward_asymmetry), this, std::tr1::placeholders::_1);
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::a_fb_numerator), _imp, std::tr1::placeholders::_1);
 
         std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_decay_width), this, std::tr1::placeholders::_1);
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width), _imp, std::tr1::placeholders::_1);
 
-        return integrate(num, 1000, s_min, s_max) / integrate(denom, 1000, s_min, s_max);
+        return integrate(num, 256, s_min, s_max) / integrate(denom, 256, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::f_l_numerator), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num, 256, s_min, s_max) / integrate(denom, 256, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation_naive(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation), this, std::tr1::placeholders::_1);
+
+        return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_numerator), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_denominator), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num, 256, s_min, s_max) / integrate(denom, 256, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2_naive(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2), this, std::tr1::placeholders::_1);
+
+        return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_4), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_1), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_2), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num1, 256, s_min, s_max)
+            / sqrt(integrate(denom1, 256, s_min, s_max) * integrate(denom2, 256, s_min, s_max));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_3_naive(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3), this, std::tr1::placeholders::_1);
+
+        return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_5), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_4), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_7), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num1, 256, s_min, s_max)
+            / sqrt(pow(integrate(denom1, 256, s_min, s_max), 2) + pow(integrate(denom2, 256, s_min, s_max), 2));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_4_naive(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4), this, std::tr1::placeholders::_1);
+
+        return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_h_1(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_4), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_1), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_3), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num1, 256, s_min, s_max)
+            / sqrt(integrate(denom1, 256, s_min, s_max) * integrate(denom2, 256, s_min, s_max));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_h_1_naive(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_h_1), this, std::tr1::placeholders::_1);
+
+        return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_h_2(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_5), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_1), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_2), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num1, 256, s_min, s_max)
+            / sqrt(integrate(denom1, 256, s_min, s_max) * integrate(denom2, 256, s_min, s_max));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_h_2_naive(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_h_2), this, std::tr1::placeholders::_1);
+
+        return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_h_3(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_6), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_2), _imp, std::tr1::placeholders::_1);
+
+        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
+                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_3), _imp, std::tr1::placeholders::_1);
+
+        return integrate(num1, 256, s_min, s_max)
+            / sqrt(integrate(denom1, 256, s_min, s_max) * integrate(denom2, 256, s_min, s_max));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_h_3_naive(const double & s_min, const double & s_max) const
+    {
+        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
+                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_h_3), this, std::tr1::placeholders::_1);
+
+        return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }
 }

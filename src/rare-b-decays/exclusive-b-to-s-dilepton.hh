@@ -38,17 +38,20 @@ namespace wf
             double differential_branching_ratio(const double & s) const;
             double differential_decay_width(const double & s) const;
             double differential_forward_backward_asymmetry(const double & s) const;
-            double differential_unnormalized_forward_backward_asymmetry(const double & s) const;
+            double differential_longitudinal_polarisation(const double & s) const;
             double differential_transverse_asymmetry_2(const double & s) const;
             double differential_transverse_asymmetry_3(const double & s) const;
             double differential_transverse_asymmetry_4(const double & s) const;
             double differential_transverse_asymmetry_5(const double & s) const;
-            double differential_longitudinal_polarisation(const double & s) const;
 
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const;
     };
 
     // Low Recoil, cf. [BHvD2010]
@@ -69,20 +72,40 @@ namespace wf
             complex<double> a_perp(const Helicity & h, const double & s) const;
             complex<double> a_par(const Helicity & h, const double & s) const;
 
+            // [BHvD2010] Eqs. (??-??)
+            double rho_1(const double & s) const;
+            double rho_2(const double & s) const;
+
             // Differential Observables
             double differential_branching_ratio(const double & s) const;
             double differential_decay_width(const double & s) const;
             double differential_forward_backward_asymmetry(const double & s) const;
-            double differential_unnormalized_forward_backward_asymmetry(const double & s) const;
+            double differential_longitudinal_polarisation(const double & s) const;
             double differential_transverse_asymmetry_2(const double & s) const;
             double differential_transverse_asymmetry_3(const double & s) const;
             double differential_transverse_asymmetry_4(const double & s) const;
-            double differential_transverse_asymmetry_5(const double & s) const;
-            double differential_longitudinal_polarisation(const double & s) const;
+            double differential_h_1(const double & s) const;
+            double differential_h_2(const double & s) const;
+            double differential_h_3(const double & s) const;
 
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double integrated_forward_backward_asymmetry_naive(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
+            double integrated_longitudinal_polarisation_naive(const double & s_min, const double & s_max) const;
+            double integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_2_naive(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_3_naive(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_4_naive(const double & s_min, const double & s_max) const;
+            double integrated_h_1(const double & s_min, const double & s_max) const;
+            double integrated_h_1_naive(const double & s_min, const double & s_max) const;
+            double integrated_h_2(const double & s_min, const double & s_max) const;
+            double integrated_h_2_naive(const double & s_min, const double & s_max) const;
+            double integrated_h_3(const double & s_min, const double & s_max) const;
+            double integrated_h_3_naive(const double & s_min, const double & s_max) const;
     };
 }
 
