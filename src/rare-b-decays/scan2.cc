@@ -1,6 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 #include <src/rare-b-decays/factory.hh>
+#include <src/utils/destringify.hh>
 #include <src/utils/lock.hh>
 #include <src/utils/mutex.hh>
 #include <src/utils/thread_pool.hh>
@@ -50,7 +51,7 @@ class Scan2
 
         std::vector<std::string> variations;
 
-        Scan2(const std::string & x_name, const std::string & y_name, const std::initializer_list<Input> & inputs) :
+        Scan2(const std::string & x_name, const std::string & y_name, const std::list<Input> & inputs) :
             max_likelihood(0.0),
             x_name(x_name),
             y_name(y_name)
@@ -87,6 +88,8 @@ class Scan2
                     p["formfactors::a1_uncertainty"],
                     p["formfactors::a2_uncertainty"],
                     p["formfactors::v_uncertainty"],
+                    p["mass::s"],
+                    p["mass::c"],
                 };
 
                 double central = o->evaluate(k);
@@ -123,10 +126,10 @@ class Scan2
                 delta_min = std::sqrt(delta_min);
 
                 double chi = 0.0;
-                if (central - bin->first.o > delta_max)
-                    chi = central - bin->first.o - delta_max;
-                else if (bin->first.o - central > delta_min)
-                    chi = bin->first.o - central - delta_min;
+                if (bin->first.o - central > delta_max)
+                    chi = bin->first.o - central - delta_max;
+                else if (central - bin->first.o > delta_min)
+                    chi = central - bin->first.o - delta_min;
 
                 chi /= (bin->first.o_max - bin->first.o_min);
 
@@ -142,17 +145,17 @@ class Scan2
             }
         }
 
-        void scan()
+        void scan(const double & x_min,const double & x_max, const double & y_min, const double & y_max)
         {
             TicketList tickets;
 
-            for (int i(-20) ; i <= 20 ; ++i)
+            for (int i(0) ; i <= 40 ; ++i)
             {
-                double x = 1.0 * i / 2.0;
+                double x = x_min + (x_max - x_min) / 40 * i;
 
-                for (int j(-20) ; j <= 20 ; ++j)
+                for (int j(0) ; j <= 40 ; ++j)
                 {
-                    double y = 1.0 * j / 2.0;
+                    double y = y_min + (y_max - y_min) / 40 * j;
 
                     tickets.push_back(ThreadPool::instance()->enqueue(std::tr1::bind(std::tr1::mem_fn(&Scan2::calc_likelihood), this, x, y)));
                 }
@@ -232,35 +235,79 @@ main(int argc, char * argv[])
 {
     try
     {
-        if (argc < 3)
-            throw DoUsage("Need two parameter names");
+        std::string x, y;
+        double x_min = -10.0, x_max = +10.0;
+        double y_min = -10.0, y_max = +10.0;
+        std::list<Input> input;
 
-        std::string x(argv[1]), y(argv[2]);
+        for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
+        {
+            std::string argument(*a);
+            if ("--x" == argument)
+            {
+                x = std::string(*(++a));
+                x_min = destringify<double>(*(++a));
+                x_max = destringify<double>(*(++a));
+                continue;
+            }
 
+            if ("--y" == argument)
+            {
+                y = std::string(*(++a));
+                y_min = destringify<double>(*(++a));
+                y_max = destringify<double>(*(++a));
+                continue;
+            }
+
+            if ("--input" == argument)
+            {
+                std::string observable(*(++a));
+                double k1 = destringify<double>(*(++a));
+                double k2 = destringify<double>(*(++a));
+                double min = destringify<double>(*(++a));
+                double central = destringify<double>(*(++a));
+                double max = destringify<double>(*(++a));
+
+                input.push_back(Input{k1, k2, min, central, max, observable});
+
+                continue;
+            }
+        }
+
+        if (x.empty())
+            throw DoUsage("Need a name for the 'x' parameter");
+
+        if (y.empty())
+            throw DoUsage("Need a name for the 'y' parameter");
+
+        if (input.empty())
+            throw DoUsage("Need at least one input");
+#if 0
         // max(s) = (m_B - m_Kstar)^2 = 19.211
         std::initializer_list<Input> input = {
             // Data used
-            Input{01.00, 06.00, 0.668e-6, 1.493e-6, 2.408e-6, "B->X_sll::BR@GN1997", ""},
+            Input{01.00, 06.00, 0.668e-6, 1.493e-6, 2.408e-6, "B->X_sll::BR@ALGH2001", ""},
 
-            Input{02.00, 04.30, +0.30,    -0.11,    -0.47,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            Input{14.18, 16.00, -0.96,    -0.70,    -0.38,    "B->K^*ll::A_FB@LowRecoil", ""},
-            Input{16.00, 19.21, -0.81,    -0.66,    -0.46,    "B->K^*ll::A_FB@LowRecoil", ""},
+            //Input{02.00, 04.30, +0.30,    -0.11,    -0.47,    "B->K^*ll::A_FB@LargeRecoil", ""},
+            //Input{14.18, 16.00, -0.96,    -0.70,    -0.38,    "B->K^*ll::A_FB@LowRecoil", ""},
+            //Input{16.00, 19.21, -0.81,    -0.66,    -0.46,    "B->K^*ll::A_FB@LowRecoil", ""},
 
-            Input{02.00, 04.30, +0.36,    -0.19,    -0.73,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            Input{14.18, 16.00, -0.67,    -0.42,    -0.17,    "B->K^*ll::A_FB@LowRecoil", ""},
-            Input{16.00, 19.21, -0.96,    -0.70,    -0.35,    "B->K^*ll::A_FB@LowRecoil", ""},
+            //Input{02.00, 04.30, +0.36,    -0.19,    -0.73,    "B->K^*ll::A_FB@LargeRecoil", ""},
+            //Input{14.18, 16.00, -0.67,    -0.42,    -0.17,    "B->K^*ll::A_FB@LowRecoil", ""},
+            //Input{16.00, 19.21, -0.96,    -0.70,    -0.35,    "B->K^*ll::A_FB@LowRecoil", ""},
         };
+#endif
 
         Scan2 scanner(x, y, input);
-        scanner.scan();
+        scanner.scan(x_min, x_max, y_min, y_max);
     }
     catch(DoUsage & e)
     {
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
     }
     catch(Exception & e)
     {
-        std::cout << "Caught exception: '" << e.what() << "'" << std::endl;
+        std::cerr << "Caught exception: '" << e.what() << "'" << std::endl;
         return EXIT_FAILURE;
     }
     catch(...)
