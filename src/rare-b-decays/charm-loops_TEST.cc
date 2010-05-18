@@ -9,6 +9,32 @@
 using namespace test;
 using namespace wf;
 
+class OneLoopTest :
+    public TestCase
+{
+    public:
+        OneLoopTest() :
+            TestCase("one_loop_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Comparison with Christoph Bobeth's result from May 2010 */
+
+            /* One-Loop */
+            {
+                static const double mu = 4.2, s = 1.0, m_c = 1.4, m_b = 4.8, eps = 0.00001;
+                TEST_CHECK_NEARLY_EQUAL(+1.57192, real(CharmLoops::h(mu, 1.0)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.39626, imag(CharmLoops::h(mu, 1.0)), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(+0.58013, CharmLoops::h(mu, 1.0, m_c), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(-0.55926, CharmLoops::h(mu, 1.0, m_b), eps);
+            }
+        }
+} one_loop_test;
+
 class TwoLoopTest :
     public TestCase
 {
@@ -20,27 +46,42 @@ class TwoLoopTest :
 
         virtual void run() const
         {
-            std::cout << "# Compare to Figures in [S2004], consider a global sign!" << std::endl;
-            std::cout << "# s F_1^7(R,I) F_2^7(R,I) F_1^9(R,I) F_2^9(R,I)" << std::endl;
-            for (auto i(0) ; i < 40 ; ++i)
+            /* Comparison with Christoph Bobeth's result from May 2010 */
+
+            /* Two-Loop, massless */
             {
-                double s = 0.0 + i * (19.21) / 40.0;
-                double mu = 4.6, m_b = 4.6;
+                static const double mu = 4.2, s = 6.0, m_b = 4.6, eps = 0.0000001;
+                TEST_CHECK_NEARLY_EQUAL(- 0.8832611, real(CharmLoops::F17(mu, s, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(- 0.6937322, imag(CharmLoops::F17(mu, s, m_b)), eps);
 
-                complex<double> f17 = CharmLoops::F17(mu, s, m_b), f27 = CharmLoops::F27(mu, s, m_b),
-                    f19 = CharmLoops::F19(mu, s, m_b), f29 = CharmLoops::F29(mu, s, m_b);
+                TEST_CHECK_NEARLY_EQUAL(+ 5.2995666, real(CharmLoops::F27(mu, s, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+ 4.1623936, imag(CharmLoops::F27(mu, s, m_b)), eps);
 
-                std::cout
-                    << s << '\t'
-                    << real(f17) << ' ' << imag(f17) << '\t'
-                    << real(f19) << ' ' << imag(f19) << '\t'
-                    << real(f27) << ' ' << imag(f27) << '\t'
-                    << real(f29) << ' ' << imag(f29) << '\t'
-                    << std::endl;
+                TEST_CHECK_NEARLY_EQUAL(+ 3.3632062, real(CharmLoops::F19(mu, s, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(- 6.9078480, imag(CharmLoops::F19(mu, s, m_b)), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(+ 3.4455298, real(CharmLoops::F29(mu, s, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+24.6919276, imag(CharmLoops::F29(mu, s, m_b)), eps);
+
+                // F87, F89?
             }
 
-            std::cout << std::endl;
-            std::cout << "# Comparison with Christoph Bobeth at q^2 =14 GeV^2, mu = mb = 4.45 GeV" << std::endl;
-            std::cout << "A = " << CharmLoops::A(4.45, 14.0, 4.45) << std::endl;
+            /* Two-Loop, massive */
+            {
+                static const double mu = 4.2, s = 6.0, m_b = 4.6, m_c = 1.2, eps = 0.0000001;
+                TEST_CHECK_NEARLY_EQUAL(- 0.73093991, real(CharmLoops::F17(mu, s, m_b, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(- 0.17771334, imag(CharmLoops::F17(mu, s, m_b, m_c)), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(+ 4.38563254, real(CharmLoops::F27(mu, s, m_b, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+ 1.06627403, imag(CharmLoops::F27(mu, s, m_b, m_c)), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(-34.40870331, real(CharmLoops::F19(mu, s, m_b, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(- 0.25864665, imag(CharmLoops::F19(mu, s, m_b, m_c)), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(+ 6.27364439, real(CharmLoops::F29(mu, s, m_b, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+ 1.55195807, imag(CharmLoops::F29(mu, s, m_b, m_c)), eps);
+
+                // F87, F89?
+            }
         }
 } two_loop_test;
