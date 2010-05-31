@@ -160,7 +160,7 @@ main(int argc, char * argv[])
             delta_min = std::sqrt(delta_min);
 
             std::cout << std::setprecision(4) << std::scientific;
-            std::cout << (*o)->name() << ':' << std::endl;
+            std::cout << (*o)->name() << '[' << s_min << ".." << s_max << "]:" << std::endl;
             std::cout << '\t'
                 << central << ' '
                 << '-' << delta_min << ' '
