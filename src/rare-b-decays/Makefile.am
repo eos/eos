@@ -5,6 +5,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -ggdb
 
 noinst_LTLIBRARIES = libwfrarebdecays.la
 libwfrarebdecays_la_SOURCES = \
+	bremsstrahlung.cc bremsstrahlung.hh \
 	charm-loops.cc charm-loops.hh \
 	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
@@ -34,11 +35,15 @@ scan3_SOURCES = \
 scan3_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
 
 TESTS = \
+	bremsstrahlung_TEST \
 	charm-loops_TEST \
 	exclusive-b-to-s-dilepton_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a $(top_builddir)/src/utils/libwfutils.la libwfrarebdecays.la
 
 check_PROGRAMS = $(TESTS)
+bremsstrahlung_TEST_SOURCES = bremsstrahlung_TEST.cc
+bremsstrahlung_TEST_LDADD = $(TESTS_LD_ADD)
+
 charm_loops_TEST_SOURCES = charm-loops_TEST.cc
 charm_loops_TEST_LDADD = $(TESTS_LD_ADD)
 
