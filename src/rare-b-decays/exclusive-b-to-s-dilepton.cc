@@ -68,13 +68,13 @@ namespace wf
 
         complex<double> lambda_u_hat;
 
-        double f_B;
+        Parameter f_B;
 
-        double f_Kstar_par;
+        Parameter f_Kstar_par;
 
-        double f_Kstar_perp;
+        Parameter f_Kstar_perp;
 
-        double lambda_B_p;
+        Parameter lambda_B_p;
 
         Parameter a_1_par;
 
@@ -127,14 +127,14 @@ namespace wf
             m_B(p["mass::B0"]),
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
-            f_B(0.180), // +/- 0.03 GeV, cf. [BHP2008], Table 1, p. 8
-            f_Kstar_par(0.225), // +/- 0.005 GeV, cf. [BHP2008], Table 1, p. 8
-            f_Kstar_perp(0.185), // +/-0.005 GeV, cf. [BHP2008], Table 1, p. 8
-            lambda_B_p(0.458),// +/- 0.115 GeV, cf. [BHP2008], Table 1, p. 8
+            f_B(p["f_B"]),
+            lambda_B_p(p["lambda_B_p"]),
             a_1_par(p["B->K^*::a_1_par"]),
             a_2_par(p["B->K^*::a_1_par"]),
             a_1_perp(p["B->K^*::a_1_perp"]),
             a_2_perp(p["B->K^*::a_2_perp"]),
+            f_Kstar_par(p["B->K^*::f_Kstar_par"]),
+            f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"]),
             ckm_A(p["CKM::A"]),
             ckm_lambda(p["CKM::lambda"]),
             uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty@LargeRecoil"]),
@@ -184,14 +184,13 @@ namespace wf
 
         inline double mu_f() const
         {
-            static const double Lambda_QCD = 0.5; // (GeV)
-            return std::sqrt(mu * Lambda_QCD);
+            return 1.5;
         }
 
         inline double m_b_PS() const
         {
-            // Actually use the PS mass at mu_f = 2 GeV
-            return QCD::mb_PS(m_b_MSbar, mu, 2.0);
+            // Actually use the PS mass at mu_f = 1.5 GeV
+            return QCD::mb_PS(m_b_MSbar, mu, 1.5);
         }
 
         /* Effective wilson coefficients */
@@ -295,7 +294,7 @@ namespace wf
                 (1.0 - std::sqrt(3.0 / 5.0)) / 2.0
             };
 
-            long double s_hat = s / m_B / m_B;
+            long double s_hat = s / pow(m_b_PS(), 2);
             long double x1, x2, x;
             long double y[3];
             long double result = 0;
@@ -559,7 +558,7 @@ namespace wf
             complex<double> bc = (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * CharmLoops::h(mu, x);
             double bd = -8.0 / 27.0 * (-7.5 * c4 + 12.0 * c5 - 32.0 * c6);
 
-            return (6.0 * m_B / m_b) * (ba + bb + bc + bd) * phi_K(u, a_1_par, a_2_par);
+            return (a + (6.0 * m_B / m_b) * (ba + bb + bc + bd)) * phi_K(u, a_1_par, a_2_par);
         }
 
         // cf. [BFS2001], Eq. (36), p. 9
@@ -590,12 +589,14 @@ namespace wf
         complex<double> F87(const double & s) const
         {
             double m_b = m_b_PS();
+            // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
+            double mu_pole = mu * QCD::mb_pole(m_b_MSbar) / m_b;
             double s_hat = s / m_b / m_b;
             double s_hat2 = s_hat * s_hat;
             double denom = (1.0 - s_hat);
             double denom2 = denom * denom;
 
-            complex<double> a = complex<double>(-32.0 * std::log(mu / m_b) - 8.0 * s_hat / denom * std::log(s_hat)
+            complex<double> a = complex<double>(-32.0 * std::log(mu_pole / m_b) - 8.0 * s_hat / denom * std::log(s_hat)
                     - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2,
                     -8.0 * M_PI);
             complex<double> b = (4.0 / denom / denom2)
@@ -673,104 +674,182 @@ namespace wf
                     - 4.0 * m_Kstar * f_Kstar_par / ((1.0 - shat) * lambda_B_p) * Thsa_2_perp(shat, u);
         }
 
-        // cf. [BFS2001], Eq. (15) with a = perp, and [BHP2008], Eq. (C.4)
-        complex<double> tensor_perp(const double & h, const double & s) const
+        // cf. [BFS2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1
+        complex<double> C0_perp(const double & h, const double & s) const
         {
-            // cf. [BFS2004], paragraph below Eq. (42)
-            double ff_nlo_factor = QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI;
-            double scatt_nlo_factor = QCD::alpha_s(mu_f()) * QCD::casimir_f / 4.0 / M_PI;
+            return c7eff() + s / (2.0 * m_b_PS() * m_B) * Y0(s);
+        }
 
-            double scatt_factor = M_PI * M_PI / 3.0 * f_B * f_Kstar_perp / m_B;
-            double shat = s_hat(s);
+        // cf. [BFS2001], Eqs. (34), (37), p. 9
+        complex<double> C1_perp(const double & h, const double & s) const
+        {
+            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
+            double m_b = m_b_PS();
+            // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
+            double mu_pole = mu * QCD::mb_pole(m_b_MSbar) / m_b;
+
+            // cf. [BFS2004], Eq. (44), p. 24
+            // [Christoph] Use c7 instead of c7eff
+            complex<double> C_perp_f = (c7() - c7prime()) * (8.0 * std::log(m_b / mu) - L(s) - 4.0 * (1.0 - mu_f() / m_b));
+
+            // cf. [BFS2001], Eq. (37), p. 9
+            // [Christoph] Use c8 instead of c8eff
+            complex<double> C_perp_nf = (-1.0 / QCD::casimir_f) * (
+                    (c2 - c1 / 6.0) * CharmLoops::F27(mu_pole, s, m_b, m_c) + c8() * F87(s)
+                    + (s / (2.0 * m_b * m_B)) * (
+                        c1() * CharmLoops::F19(mu_pole, s, m_b, m_c)
+                        + c2() * CharmLoops::F29(mu_pole, s, m_b, m_c)
+                        + c8() * F89(s)));
+
+            return C_perp_f + C_perp_nf;
+        }
+
+        // cf. [BFS2001], Eqs. (16), (21), (25), pp. 5-7
+        complex<double> T1_perp_p(const double & s, const double & u) const
+        {
+            static const double e_d = (-1.0/3.0);
+            static const double e_u = (+2.0/3.0);
+
+            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
+            double m_b = m_b_PS();
+            double s_hat = s / m_B / m_B;
+            double ubar = 1.0 - u;
+
+            // cf. [BFS2001], Eq. (20)
+            // [Christoph] Use c7 instead of c7eff
+            complex<double> Tf_perp_p = c7() * 2.0 * m_B / (1.0 - u) / energy(s);
+
+            // cf. [BFS2001], Eq. (23)
+            // [Christoph] Use c8 instead of c8eff
+            complex<double> Tnf_perp_p = -4.0 * e_d * c8 / (u + (1.0 - u) * s_hat)
+                + m_B / (2.0 * m_b) * (
+                        e_u * (-c1 / 6.0 + c2 + 6.0 * c6) * t_perp(s, u, m_c)
+                        + e_d * (c3 - c4 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6 - (4.0 * m_b / m_B) * (c3 - c4/6.0 + 4.0 * c5 - 2.0/3.0 * c6))
+                        + e_d * (c3 - c4 / 6.0 + 16.0 * c5 - 8.0/3.0 * c6) * t_perp(s, u, 0.0));
+
+            return (Tf_perp_p + Tnf_perp_p) / lambda_B_p();
+        }
+
+        // cf. [BFS2001], Eq. (16) times phi_K^*_perp
+        complex<double> T_perp(const double & s, const double & u) const
+        {
+            double a = QCD::alpha_s(sqrt(mu * 0.5)) * QCD::casimir_f / 4.0 / M_PI;
+
+            return phi_K(u, a_1_perp, a_2_perp) * a * T1_perp_p(s, u);
+
+            // TODO: Hard scattering + Weak annihilation from [BFS2004], Eqs. (51), (52)
+        }
+
+        // cf. [BFS2001], Eq. (15) with a = perp
+        complex<double> calT_perp(const double & h, const double & s) const
+        {
+            return xi_perp(s) * (C0_perp(h, s) + QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * C1_perp(h, s))
+                + (pow(M_PI, 2) / 3.0) * (f_B * f_Kstar_perp / m_B)
+                * integrate(std::tr1::function<complex<double> (const double &)>(
+                                std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::T_perp, this, s, std::placeholders::_1)),
+                        64, 0.001, 0.999);
+        }
+
+        // cf. [BFS2001], Eqs. (14), (15), p. 5, in comparison with \delta_{2,3} = 1
+        complex<double> C0_par(const double & s) const
+        {
+            return -1.0 * (c7eff() - c7prime() + m_B / (2.0 * m_b_PS()) * (Y0(s)));
+        }
+
+        // cf. [BFS2001], Eqs. (35), (38), p. 9
+        complex<double> C1_par(const double & s) const
+        {
+            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
+            double m_b = m_b_PS();
+            // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
+            double mu_pole = mu * QCD::mb_pole(m_b_MSbar) / m_b;
+
+            // cf. [BFS2004], Eq. (45), p. 24
+            // [Christoph] Use c7 instead of c7eff.
+            complex<double> C_par_f = -1.0 * (c7() - c7prime()) * (8.0 * std::log(m_b / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b));
+            /* for [BFS2001] version of xi_par we also needed: */
+            // C_par_f += (m_B / (2.0 * m_b)) * Y0(s) * (2.0 - 2.0 * L(s));
+
+            // cf. [BFS2001], Eq. (38), p. 9
+            // [Christoph] Use c8 instead of c8eff.
+            complex<double> C_par_nf = (+1.0 / QCD::casimir_f) * (
+                    (c2 - c1 / 6.0) * CharmLoops::F27(mu_pole, s, m_b, m_c) + c8eff() * F87(s)
+                    + (m_B / (2.0 * m_b)) * (
+                        c1() * CharmLoops::F19(mu_pole, s, m_b, m_c)
+                        + c2() * CharmLoops::F29(mu_pole, s, m_b, m_c)
+                        + c8eff() * F89(s)));
+
+            return C_par_f + C_par_nf;
+        }
+
+        // cf. [BFS2001], Eq. (18), p. 6 with \omega integrated out.
+        complex<double> T0_par_m(const double & s) const
+        {
+            return -e_q * 4.0 * m_B / m_b_PS() * (c3 + 4.0/3.0 * c4 + 16.0 * c5 + 64.0/3.0 * c6) * lambda_B_m_inv(s);
+        }
+
+        // cf. [BFS2001], Eqs. (16), (21), (25), pp. 5-7
+        complex<double> T1_par_p(const double & s, const double & u) const
+        {
+            static const double e_d = (-1.0/3.0);
+            static const double e_u = (+2.0/3.0);
 
             // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
             double m_b = m_b_PS();
 
-            /* Form factor corrections */
-            complex<double> ff_0 = (c7eff() + h * c7prime()) + s / (2.0 * m_b * m_B) * Y0(s);
-            // cf. [BFS2001], Eq. (34), p. 9
-            double ff_f = (c7eff() + h * c7prime()) * (8.0 * std::log(m_b / mu) - 4.0 * (1.0 - mu_f() / m_b) - L(s));
-            // cf. [BFS2001], Eq. (37), p. 9
-            complex<double> ff_nf = (-1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * CharmLoops::F27(mu, s, m_b) + c8eff() * F87(s)
-                    + (s / (2.0 * m_b * m_B)) * (c2() * CharmLoops::F29(mu, s, m_b) + c1() * CharmLoops::F19(mu, s, m_b) + c8eff() * F89(s)));
-            complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
+            // cf. [BFS2001], Eq. (21)
+            //complex<double> Tf_par_p = (c7() - c7prime + (s / (2.0 * m_b * m_B)) * Y0(s)) * (2.0 * pow(m_B / energy(s), 2));
+            // cf. [BFS2004], Eq. (49)
+            // [Christoph] Use c7 instead of c7eff.
+            complex<double> Tf_par_p = c7() * 4.0 * m_B / (1.0 - u) / energy(s);
 
-            /* Specator scattering, folded with phi_K^*,perp */
-            // cf. [BFS2001], Eq. (20), p. 6
-            double scatt_f_p = (c7eff() + h * c7prime) * 2.0 * m_B / energy(s) * 3.0 * (1.0 + a_1_perp + a_2_perp);
-            // cf. [BFS2001], Eq. (23), p. 7
-            complex<double> scatt_nf_p = integrate(
-                    std::tr1::function<complex<double> (const double &)>(
-                        std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_perp_p, this, s, std::tr1::placeholders::_1)),
-                    32, 0.001, 0.999);
-            complex<double> scatt_p = (1.0 / lambda_B_p) * scatt_nlo_factor * (scatt_f_p + scatt_nf_p);
+            // cf. [BFS2001], Eq. (25)
+            complex<double> Tnf_par_p = m_B / m_b * (
+                    e_u * (-c1 / 6.0 + c2 + 6.0 * c6) * t_par(s, u, m_c)
+                    + e_d * (c3 - c1 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6) * t_par(s, u, m_b)
+                    + e_d * (c3 - c4 / 6.0 + 16.0 * c5 - 8.0/3.0 * c6) * t_par(s, u, 0.0));
 
-            /* Weak annihilation */
-            // cf. [BFS2004], Eq. (51), p. 26
-            double wa = (e_q * 2.0 * M_PI * M_PI * f_B / (3.0 * m_b * m_B)) * (
-                    - f_Kstar_perp * (c3 + 4.0/3.0 * c4 + 4.0 * c5 + 16.0/3.0 * c6) * integrate(
-                        std::tr1::function<double (const double &)>(
-                            std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Twa_perp, this, shat, std::tr1::placeholders::_1)),
-                        32, 0.0, 1.0)
-                    + f_Kstar_par * m_Kstar / ((1 - shat) * lambda_B_p));
-            /* Hard spectator scattering */
-            complex<double> hsa = e_q * scatt_nlo_factor * M_PI * M_PI * f_B / (3.0 * m_b * m_B) * integrate(
-                    std::tr1::function<complex<double> (const double &)>(
-                        std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::tensor_perp_hsa, this, shat, std::tr1::placeholders::_1)),
-                    32, 0.0, 1.0);
+            return (Tf_par_p + Tnf_par_p) / lambda_B_p();
+        }
 
-            complex<double> result = xi_perp(s) * ff + scatt_factor * scatt_p + wa + hsa;
+        // cf. [BFS2001], Eq. (16), (22), (26), pp. 5-8
+        complex<double> T1_par_m(const double & s, const double & u) const
+        {
+            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
+            double m_b = m_b_PS();
+            // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
+            double mu_pole = mu * QCD::mb_pole(m_b_MSbar) / m_b;
 
-            return result;
+            double s_hat = s / m_B / m_B;
+            double ubar = 1.0 - u;
+            double x = ubar * m_B * m_B + u * s;
+
+            // [Christoph] Use c8 instead of c8eff.
+            return e_q * lambda_B_m_inv(s) * (
+                    8.0 / (ubar + u * s_hat) * c8()
+                    + 6.0 * m_B / m_b * (
+                        (-c1 / 6.0 + c2 + c4 + 10 * c6) * CharmLoops::h(mu_pole, x, m_c)
+                        + (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * CharmLoops::h(mu_pole, x, m_b)
+                        + (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * CharmLoops::h(mu_pole, x)
+                        -8.0 / 27.0 * (-7.5 * c4 + 12.0 * c5 - 32.0 * c6)));
+        }
+
+        // cf. [BFS2001], Eq. (16) times phi_K^*_par
+        complex<double> T_par(const double & s, const double & u) const
+        {
+            double a = QCD::alpha_s(sqrt(mu * 0.5)) * QCD::casimir_f / 4.0 / M_PI;
+
+            return phi_K(u, a_1_par, a_2_par) * (T0_par_m(s) + a * (T1_par_m(s, u) + T1_par_p(s, u)));
         }
 
         // cf. [BFS2001], Eq. (15) with a = par, and [BHP2008], Eq. (C.4)
-        complex<double> tensor_par(const double & s) const
+        complex<double> calT_par(const double & s) const
         {
-            // cf. [BFS2004], paragraph below Eq. (42)
-            double ff_nlo_factor = QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI;
-            double scatt_nlo_factor = QCD::alpha_s(mu_f()) * QCD::casimir_f / 4.0 / M_PI;
-
-            double scatt_factor = M_PI * M_PI / 3.0 * f_B * f_Kstar_perp / m_B * m_Kstar / energy(s);
-
-            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
-            double m_b = m_b_PS();
-
-            /* Form factor corrections */
-            complex<double> ff_0 = -1.0 * (c7eff() - c7prime() + m_B / (2.0 * m_b) * (Y0(s)));
-            // cf. [BFS2004], Eq. (44), p. 24
-            complex<double> ff_f = -1.0 * (c7eff() - c7prime()) * (8.0 * std::log(m_b / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b))
-                    + (m_B / (2.0 * m_b)) * Y0(s) * (2.0 - 2.0 * L(s));
-            // cf. [BFS2001], Eq. (38), p. 9
-            complex<double> ff_nf = (+1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * CharmLoops::F27(mu, s, m_b) + c8eff() * F87(s)
-                    + (m_B / (2.0 * m_b)) * (c2() * CharmLoops::F29(mu, s, m_b) + c1() * CharmLoops::F19(mu, s, m_b) + c8eff() * F89(s)));
-            complex<double> ff = ff_0 + ff_nlo_factor * (ff_f + ff_nf);
-
-            /* Spectator scattering */
-            // cf. [BFS2001], Eq. (18), p. 6
-            double scatt_0_m = -e_q * 4.0 * m_B / m_b * (c3 + 4.0/3.0 * c4 + 16.0 * c5 + 64.0/3.0 * c6);
-            // cf. [BFS2001], Eq. (21), p. 6
-            complex<double> scatt_f_p = (c7eff() - c7prime + (s / (2.0 * m_b * m_B)) * Y0(s)) * (2.0 * m_B * m_B / energy(s) / energy(s))
-                    * 3.0 * (1.0 + a_1_par + a_2_par);
-            scatt_f_p = complex<double>(((c7eff() - c7prime) * 4.0 * m_B / energy(s)) * 3.0 * (1.0 + a_1_par + a_2_par), 0.0);
-            // cf. [BFS2001], Eq. (25), p. 7
-            complex<double> scatt_nf_p = integrate(
-                    std::tr1::function<complex<double> (const double &)>(std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_par_p,
-                            this, s, std::tr1::placeholders::_1)),
-                    32, 0.001, 0.999);
-            // cf. [BFS2001], Eq. (26), pp. 7-8
-            complex<double> scatt_nf_m = integrate(
-                    std::tr1::function<complex<double> (const double &)>(std::tr1::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::Tnf_par_m,
-                            this, s, std::tr1::placeholders::_1)),
-                    32, 0.001, 0.999);
-            complex<double> scatt_p = (1.0 / lambda_B_p) * scatt_nlo_factor * (scatt_f_p + scatt_nf_p);
-            complex<double> scatt_m = lambda_B_m_inv(s)  * (scatt_0_m + scatt_nlo_factor * scatt_nf_m);
-
-            complex<double> result = xi_par(s) * ff + scatt_factor * (scatt_p + scatt_m);
-
-            return result;
+            return xi_par(s) * (C0_par(s) + QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * C1_par(s))
+                + (pow(M_PI, 2) / 3.0) * (f_B * f_Kstar_par / m_B) * (m_Kstar / energy(s))
+                * integrate(std::tr1::function<complex<double> (const double &)>(
+                                std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::T_par, this, s, std::placeholders::_1)),
+                        32, 0.001, 0.999);
         }
 
         /* Amplitudes */
@@ -791,8 +870,8 @@ namespace wf
             double a = wilson * ((m_B * m_B - m_Kstar * m_Kstar - s) * 2.0 * energy(s) * xi_perp(s)
                 -lambda(m_B * m_B, m_Kstar * m_Kstar, s) * m_B / (m_B * m_B - m_Kstar * m_Kstar) * (xi_perp(s) - xi_par(s)));
             complex<double> b = 2 * m_b_PS() * (((m_B * m_B + 3 * m_Kstar * m_Kstar - s) * 2.0 * energy(s) / m_B
-                        - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar)) * tensor_perp(-1.0, s)
-                    - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar) * tensor_par(s));
+                        - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar)) * calT_perp(-1.0, s)
+                    - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar) * calT_par(s));
 
             return this->norm(s) * uncertainty * prefactor * (a + b);
         }
@@ -809,7 +888,7 @@ namespace wf
             double prefactor = +std::sqrt(2.0) * m_B * std::sqrt(lambda(1.0, mKhat * mKhat, shat));
             double wilson = (c9() + c9prime()) + h * (c10() + c10prime());
 
-            return this->norm(s) * uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * tensor_perp(+1.0, s));
+            return this->norm(s) * uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * calT_perp(+1.0, s));
         }
 
         // cf. [BHP2008], p. 20
@@ -824,7 +903,7 @@ namespace wf
             double prefactor = -std::sqrt(2.0) * m_B * (1.0 - shat);
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
 
-            return this->norm(s) * uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * tensor_perp(-1.0, s));
+            return this->norm(s) * uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * calT_perp(-1.0, s));
         }
 
         // Unormalized combinations of transversity amplitudes
@@ -959,7 +1038,7 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::differential_decay_width(const double & s) const
     {
-        return _imp->norm(s) * _imp->norm(s) * _imp->unnormalized_decay_width(s);
+        return _imp->unnormalized_decay_width(s);
     }
 
     double
@@ -1183,7 +1262,6 @@ namespace wf
         // We use the PS mass except for kappa_1
         double m_b_PS() const
         {
-            return 4.45;
             return QCD::mb_PS(m_b_MSbar, mu, 2.0);
         }
 

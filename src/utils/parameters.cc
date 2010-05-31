@@ -81,9 +81,9 @@ namespace wf
             Parameters::NameValuePair{"c5", +0.000374755},
             Parameters::NameValuePair{"c6", +0.00105859},
             // Wilson coefficients C7 - c10 at mu = 4.2 GeV to NNLL, based on ?
-            Parameters::NameValuePair{"c7", -0.33},
-            Parameters::NameValuePair{"c8", -0.169},
-            Parameters::NameValuePair{"c9", +4.23},
+            Parameters::NameValuePair{"c7", -0.331}, // c7eff = -0.306
+            Parameters::NameValuePair{"c8", -0.181}, // c8eff = -0.168
+            Parameters::NameValuePair{"c9", +4.27},
             Parameters::NameValuePair{"c10", -4.17},
             // Primed Wilson coefficients are negligible in the SM
             Parameters::NameValuePair{"c7prime", 0.0},
@@ -112,11 +112,16 @@ namespace wf
             Parameters::NameValuePair{"formfactors::v_uncertainty",  0.85, 1.0, 1.15},
             Parameters::NameValuePair{"formfactors::xi_perp_uncertainty", 0.89, 1.0, 1.11},
             Parameters::NameValuePair{"formfactors::xi_par_uncertainty",  0.86, 1.0, 1.14},
+            // B LCDA parameters
+            Parameters::NameValuePair{"f_B",        0.17,  0.20,  0.23}, // GeV, cf. [BHvD2010], Table I
+            Parameters::NameValuePair{"lambda_B_p", 0.370, 0.485, 0.600}, // GeV, cf. [BHvD2010], Table I
             // B->K^*, K^* LCDA parameters
-            Parameters::NameValuePair{"B->K^*::a_1_par", 0.03, 0.1, 0.17},
-            Parameters::NameValuePair{"B->K^*::a_2_par", 0.0, 0.1, 0.2},
-            Parameters::NameValuePair{"B->K^*::a_1_perp", 0.03, 0.1, 0.17},
-            Parameters::NameValuePair{"B->K^*::a_2_perp", 0.0, 0.1, 0.2},
+            Parameters::NameValuePair{"B->K^*::a_1_par",   0.03,  0.1,   0.17},
+            Parameters::NameValuePair{"B->K^*::a_2_par",   0.0,   0.1,   0.2},
+            Parameters::NameValuePair{"B->K^*::a_1_perp",  0.03,  0.1,   0.17},
+            Parameters::NameValuePair{"B->K^*::a_2_perp",  0.0,   0.1,   0.2},
+            Parameters::NameValuePair{"B->K^*::f_Kstar_par",       0.212, 0.217, 0.222}, // GeV, cf. [BHvD2010], Table I
+            Parameters::NameValuePair{"B->K^*::f_Kstar_perp@2GeV", 0.168, 0.173, 0.178}, // GeV @2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD2010], Table I
             // B->K^*ll uncertainties from subleading terms for Large Recoil
             Parameters::NameValuePair{"B->K^*ll::A_0^L_uncertainty@LargeRecoil",    0.95, 1.0, 1.05},
             Parameters::NameValuePair{"B->K^*ll::A_0^R_uncertainty@LargeRecoil",    0.95, 1.0, 1.05},
