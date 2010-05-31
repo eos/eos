@@ -77,8 +77,8 @@ namespace wf
             OBSERVABLE2("B->K^*ll::nH_T^3@LowRecoil",     BToKstarDilepton<LowRecoil>, integrated_h_3_naive,                        "s_min", "s_max"),
 
             /* Inclusive Decays */
-            OBSERVABLE1("B->X_sll::dBR/ds@ALGH2001",      BToXsDilepton<ALGH2001>, differential_branching_ratio, "s"),
-            OBSERVABLE2("B->X_sll::BR@ALGH2001",          BToXsDilepton<ALGH2001>, integrated_branching_ratio,   "s_min", "s_max"),
+            OBSERVABLE1("B->X_sll::dBR/ds@HLMW2005",      BToXsDilepton<HLMW2005>, differential_branching_ratio, "s"),
+            OBSERVABLE2("B->X_sll::BR@HLMW2005",          BToXsDilepton<HLMW2005>, integrated_branching_ratio,   "s_min", "s_max"),
         };
 
         ObservableOptions myoptions(options);

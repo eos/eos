@@ -101,6 +101,7 @@ namespace wf
             Parameters::NameValuePair{"mass::c", 1.16, 1.27, 1.34}, // cf. [PDG2008], p. 21
             Parameters::NameValuePair{"mass::s", 0.00}, // we neglect m_s, cf. [BHvD2010], Eq. (??)
             Parameters::NameValuePair{"mass::t", 169.1, 171.2, 173.3}, // cf. [PDG2008], p. 21
+            Parameters::NameValuePair{"mass::tau", 1.77684}, // cf. [PDG2008], p. 14
             Parameters::NameValuePair{"mass::B0", 5.27920, 5.27953, 5.27986}, // cf. [PDG2008], p. 79
             Parameters::NameValuePair{"mass::K^*0", 0.896}, // cf. [PDG2008], p. 44
             Parameters::NameValuePair{"mass::W", 80.373, 80.398, 80.423}, // cf. [PDG2008], p. 8
@@ -144,7 +145,9 @@ namespace wf
             Parameters::NameValuePair{"B->X_s::lambda_1", -0.20}, // cf. [ALGH2001], Table 2, p. 13
             Parameters::NameValuePair{"B->X_s::lambda_2", +0.12}, // cf. [ALGH2001], Table 2, p. 13
             // Experimental Input
-            Parameters::NameValuePair{"exp::BR(B->X_clnu)", 0.099, 0.101, 0.105}, // cf. [PDG2008], p. 82
+            Parameters::NameValuePair{"exp::BR(B->X_clnu)", 0.1042, 0.1057, 0.1072}, // cf. [PDG2008], p. 82
+            Parameters::NameValuePair{"exp::C(B->X_clnu, B->X_ulnu)", 0.57, 0.58, 0.59},
+            Parameters::NameValuePair{"exp::CKM(B->X_sll, B->X_clnu)", 0.975218, 0.98549, 0.995277},
         });
     }
 

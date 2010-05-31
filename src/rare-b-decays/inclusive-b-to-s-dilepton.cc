@@ -1,5 +1,6 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
+#include <src/rare-b-decays/bremsstrahlung.hh>
 #include <src/rare-b-decays/charm-loops.hh>
 #include <src/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <src/utils/concrete_observable.hh>
@@ -16,14 +17,12 @@
 
 #include <gsl/gsl_sf_dilog.h>
 
-#include <iostream>
-
 namespace wf
 {
-    /* ALGH2001 */
+    /* HLMW2005 */
 
     template <>
-    struct Implementation<BToXsDilepton<ALGH2001>>
+    struct Implementation<BToXsDilepton<HLMW2005>>
     {
         Parameter c1;
 
@@ -51,13 +50,19 @@ namespace wf
 
         Parameter m_s;
 
-        Parameter br_bcsl;
+        Parameter m_tau;
 
-        Parameter lambda_1;
+        Parameter m_Z;
+
+        Parameter br_clnu;
 
         Parameter lambda_2;
 
         Parameter mu;
+
+        Parameter ckm;
+
+        Parameter C;
 
         double m_l;
 
@@ -75,54 +80,26 @@ namespace wf
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c_MSbar(p["mass::c"]),
             m_s(p["mass::s"]),
-            br_bcsl(p["exp::BR(B->X_clnu)"]),
-            lambda_1(p["B->X_s::lambda_1"]),
+            m_tau(p["mass::tau"]),
+            m_Z(p["mass::Z"]),
+            br_clnu(p["exp::BR(B->X_clnu)"]),
             lambda_2(p["B->X_s::lambda_2"]),
-            mu(p["mu"])
+            mu(p["mu"]),
+            ckm(p["exp::CKM(B->X_sll, B->X_clnu)"]),
+            C(p["exp::C(B->X_clnu, B->X_ulnu)"])
         {
             // TODO: Lepton masses, m_l = m_mu
-            m_l = 0.0;//0.10565836; // (GeV), cf. [PDG2008], p. 13
-#if 0
-            double sh = 1.0 / pow(m_b_pole(), 2);
-            std::cout << "s_hat  = " << sh << std::endl;
-            std::cout << "c7eff  = " << c7eff(sh) << std::endl;
-            std::cout << "c9eff  = " << c9eff(sh) << std::endl;
-            std::cout << "c10eff = " << c10eff(sh) << std::endl;
-            std::cout << "dBR    = " << branching_ratio(sh) << std::endl;
-            std::cout << "omega_7= " << omega_7(sh) << std::endl;
-            std::cout << "omega_9= " << omega_9(sh) << std::endl;
-            std::cout << "gc     = " << gc(sh) << std::endl;
-            std::cout << "g1     = " << g1(sh) << std::endl;
-            std::cout << "g2     = " << g2(sh) << std::endl;
-            std::cout << "==================" << std::endl << std::endl;
-
-            sh = 6.0 / pow(m_b_pole(), 2);
-            std::cout << "s_hat  = " << sh << std::endl;
-            std::cout << "c7eff  = " << c7eff(sh) << std::endl;
-            std::cout << "c9eff  = " << c9eff(sh) << std::endl;
-            std::cout << "c10eff = " << c10eff(sh) << std::endl;
-            std::cout << "dBR    = " << branching_ratio(sh) << std::endl;
-            std::cout << "omega_7= " << omega_7(sh) << std::endl;
-            std::cout << "omega_9= " << omega_9(sh) << std::endl;
-            std::cout << "gc     = " << gc(sh) << std::endl;
-            std::cout << "g1     = " << g1(sh) << std::endl;
-            std::cout << "g2     = " << g2(sh) << std::endl;
-            std::cout << "==================" << std::endl << std::endl;
-#endif
+            m_l = 0.10565836; // (GeV), cf. [PDG2008], p. 13
         }
 
         double m_b_pole() const
         {
-            double result = QCD::mb_pole(m_b_MSbar);
-
-            return result;
+            return 4.8;
         }
 
         double m_c_pole() const
         {
-            double result = 1.4;
-
-            return result;
+            return 1.4;
         }
 
         double s_hat(const double & s) const
@@ -242,43 +219,13 @@ namespace wf
 
             return (1.0 / 9.0) * (a + b);
         }
-        // cf. [AAGW2002], Eq. (81), p. 26
-        double omega_7(const double & s_hat) const
+
+        // cf. [BMU1999], Eq. (34), p. 9 and [HLMW2005], Eq. (127), p. 29
+        double omega1_99(const double & s_hat) const
         {
             double li2 = gsl_sf_dilog(s_hat);
             double ln = log(s_hat), ln1 = log(1.0 - s_hat);
-            double s_hat2 = s_hat2;
-
-            return - 8.0/3.0 * log(mu / m_b_pole())
-                - 4.0/3.0 * li2 - 2.0/9.0 * M_PI * M_PI - 2.0/3.0 * ln * ln1
-                - (8.0 + s_hat) / (3.0 * (2.0 + s_hat)) * ln1
-                - (2.0 * s_hat * (2.0 - 2.0 * s_hat + s_hat2)) / (3.0 * pow(1.0 - s_hat, 2) * (2.0 + s_hat)) * ln
-                - (16.0 - 11.0 * s_hat - 17.0 * s_hat2) / (18.0 * (2.0 + s_hat) * (1.0 - s_hat));
-        }
-
-        /* Effective wilson coefficients */
-        // cf. [ALGH2001], Eq. (13), p. 6
-        complex<double> c7eff(const double & s_hat) const
-        {
-            double m_b = m_b_pole();
-            double s = s_hat * m_b;
-            double alpha_s = QCD::alpha_s(mu());
-
-            complex<double> a8 = c8() + c3() - 1.0/6.0 * c4() + 20.0 * c5() - 10.0/3.0 * c6();
-            complex<double> lo = c7() - 1.0/3.0 * c3() - 4.0/9.0 * c4() - 20.0/3.0 * c5() - 80.0/9.0 * c6();
-            complex<double> prefactor = 1.0 + alpha_s / M_PI * omega_7(s_hat);
-            complex<double> nlo = -1.0 * alpha_s / (4.0 * M_PI)
-                * (c1() * CharmLoops::F17(mu, s, m_b) + c2() * CharmLoops::F27(mu, s, m_b) + a8 * F87(s_hat));
-
-            return prefactor * lo + nlo;
-        }
-
-        // cf. [BMU1999], Eq. (34), p. 9
-        double omega_9(const double & s_hat) const
-        {
-            double li2 = gsl_sf_dilog(s_hat);
-            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
-            double s_hat2 = s_hat2;
+            double s_hat2 = s_hat * s_hat;
 
             return -4.0/3.0 * li2 - 2.0/3.0 * ln1 * ln - 2.0/9.0 * M_PI * M_PI
                 - (5.0 + 4.0 * s_hat) / (3.0 * (1.0 + 2.0 * s_hat)) * ln1
@@ -286,154 +233,406 @@ namespace wf
                 + (5.0 + 9.0 * s_hat - 6.0 * s_hat2) / (6.0 * (1.0 - s_hat) * (1.0 + 2.0 * s_hat));
         }
 
-        // cf. [ALGH2001], Eq. (14), p. 6
-        complex<double> c9eff(const double & s_hat) const
+        // cf. [HLMW2005], Eq. (128), p. 29
+        // only valid for 0 < s_hat < 0.4
+        double omega2_99(const double & s_hat) const
         {
-            double m_b = m_b_pole();
-            double s = s_hat * m_b;
-            double alpha_s = QCD::alpha_s(mu());
+            double ln = log(s_hat);;
+            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
 
-            complex<double> a8 = c8() + c3() - 1.0/6.0 * c4() + 20.0 * c5() - 10.0/3.0 * c6();
-            complex<double> lo = c9 + 4.0/3.0 * c3() + 64.0 / 9.0 * c5() + 64./27.0 * c6(); // + gamma^0_{i9} terms
-            complex<double> lo_loops = (4.0/3.0 * c1() + c2() + 6.0 * c3() + 60.0 * c5()) * CharmLoops::h(mu, s, m_c_pole())
-                - 0.5 * (7.0 * c3() + 4.0/3.0 * c4() + 76.0 * c5() + 64.0/3.0 * c6()) * CharmLoops::h(mu, s, m_b_pole())
-                - 0.5 * (c3() + 4.0/3.0 * c4() + 16.0 * c5() + 64.0/3.0 * c6()) * CharmLoops::h(mu, s);
-            complex<double> prefactor = 1.0 + alpha_s / M_PI * omega_9(s_hat);
-            complex<double> nlo = -1.0 * alpha_s / (4.0 * M_PI)
-                * (c1() + CharmLoops::F19(mu, s, m_b) + c2() * CharmLoops::F29(mu, s, m_b) + a8 * F89(s_hat));
-
-            return prefactor * (lo + lo_loops) + nlo;
+            return -19.2 + 6.1 * s_hat + (37.9 + 17.2 * ln) * s_hat2 - 18.7 * s_hat3;
         }
 
-        // cf. [ALGH2001], Eq. (15), p. 6
-        complex<double> c10eff(const double & s_hat) const
+        // cf. [HLMW2005], Eq. (130), p. 29
+        double omega1_77(const double & s_hat) const
         {
-            double alpha_s = QCD::alpha_s(mu());
+            double li2 = gsl_sf_dilog(s_hat);
+            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
+            double s_hat2 = s_hat * s_hat;
 
-            return (1.0 + alpha_s / M_PI * omega_9(s_hat)) * c10();
+            return -4.0/3.0 * li2 - 2.0/3.0 * ln1 * ln - 2.0/9.0 * M_PI * M_PI
+                - (8.0 + s_hat) / (3.0 * (2.0 + s_hat)) * ln1
+                - (2.0 * s_hat * (2.0 - 2.0 * s_hat - s_hat2)) / (3.0 * pow(1.0 - s_hat, 2) * (2.0 + s_hat)) * ln
+                - (16.0 - 11.0 * s_hat - 17.0 * s_hat2) / (8.0 * (1.0 - s_hat) * (2.0 + s_hat))
+                // We use mu_b in MSbar scheme globally, so use m_b_MSbar here instead of m_b_pole
+                - 8.0/3.0 * log(mu / m_b_MSbar());
         }
 
-        // cf. [ALGH2001], Eq. (29), p. 8
-        double g1(const double & s_hat) const
+        // cf.[HLMW2005], Eq. (131), p. 29
+        double omega1_79(const double & s_hat) const
         {
-            double m_b2 = pow(m_b_pole(), 2);
-            double s_hat2 = pow(s_hat, 2);
-            double s_hat3 = pow(s_hat, 3);
+            double li2 = gsl_sf_dilog(s_hat);
+            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
+            double s_hat2 = s_hat * s_hat;
 
-            return 1.0
-                + lambda_1 / (2.0 * m_b2)
-                + 3.0 * (1.0 - 15.0 * s_hat2 + 10.0 * s_hat3) / (pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * lambda_2 / (2.0 * m_b2);
+            return -4.0/3.0 * li2 - 2.0/3.0 * ln1 * ln - 2.0/9.0 * M_PI * M_PI
+                - (2.0 + 7.0 * s_hat) / (9.0 * s_hat) * ln1
+                - (2.0 * s_hat * (3.0 - 2.0 * s_hat)) / (9.0 * pow(1.0 - s_hat, 2)) * ln
+                + (5.0 - 9.0 * s_hat) / (18.0 * (1.0 - s_hat))
+                // We use mu_b in MSbar scheme globally, so use m_b_MSbar here instead of m_b_pole
+                - 4.0/3.0 * log(mu / m_b_MSbar());
         }
 
-        // cf. [ALGH2001], Eq. (30), p. 8
-        double g2(const double & s_hat) const
+        // cf. [HLMW2005], Eq. (94), p. 23
+        double omegaem_99(const double & s_hat) const
         {
-            double m_b2 = pow(m_b_pole(), 2);
-            double s_hat2 = pow(s_hat, 2);
-            double s_hat3 = pow(s_hat, 3);
+            double li2 = gsl_sf_dilog(s_hat);
+            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
+            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
 
-            return 1.0
-                + lambda_1 / (2.0 * m_b2)
-                - 3.0 * (6.0 + 3.0 * s_hat - 5.0 * s_hat3) / (pow(1.0 - s_hat, 2) * (2.0 + s_hat)) * lambda_2 / (2.0 * m_b2);
+            return 2.0 * log(m_b_pole() / m_l) * (
+                    - (1.0 + 4.0 * s_hat - 8.0 * s_hat2) / (6.0 * (1.0 - s_hat) + (1.0 + 2.0 * s_hat))
+                    + ln1
+                    - (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3) / (2.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln
+                    - 1.0 / 9.0 * li2
+                    + 4.0 * pow(M_PI, 2) / 27.0
+                    - (121.0 - 27.0 * s_hat - 30.0 * s_hat2) / (72.0 * (1.0 - s_hat) * (1.0 + 2.0 * s_hat))
+                    - (41.0 + 76.0 * s_hat) / (36.0 * (1.0 + 2.0 * s_hat)) * ln1
+                    + (14.0 * s_hat3 - 17.0 * s_hat2 - 10.0 * s_hat - 3.0) / (18.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln
+                    + 17.0 / 18.0 * ln1 * ln
+                    - (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3) / (2.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln * ln
+                    );
         }
 
-        // cf. [ALGH2001], Eq. (30), p. 8
-        double g3(const double & s_hat) const
+        // cf. [HLMW2005], Eq. (100), p. 24
+        double omegaem_1010(const double & s_hat) const
         {
-            double m_b2 = pow(m_b_pole(), 2);
-            double s_hat2 = pow(s_hat, 2);
-            double s_hat3 = pow(s_hat, 3);
+            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
+            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
 
-            return 1.0
-                + lambda_1 / (2.0 * m_b2)
-                - (5.0 + 6.0 * s_hat - 7.0 * s_hat2) / pow(1.0 - s_hat, 2) * lambda_2 / (2.0 * m_b2);
+            return 2.0 * log(m_b_pole() / m_l) * (
+                    - (1.0 + 4.0 * s_hat - 8.0 * s_hat2) / (6.0 * (1.0 - s_hat) + (1.0 + 2.0 * s_hat))
+                    + ln1
+                    - (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3) / (2.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln
+                    );
         }
 
-        // cf. [ALGH2001], Eq. (32), p. 8
-        double gc(const double & s_hat) const
+        // cf. [HLMW2005], Eq. (101), p. 25
+        double omegaem_77(const double & s_hat) const
         {
-            double m_c2 = pow(m_c_pole(), 2);
-            double r = s_hat / (4.0 * m_c2 / pow(m_b_pole(), 2));
+            return 0.0;
+        }
 
-            // cf. [ALGH2001], Eq. (33), p. 9
-            complex<double> f;
-            if (r > 1.0)
+        // cf. [HLMW2005], Eq. (102), p. 25
+        double omegaem_79(const double & s_hat) const
+        {
+            return 0.0;
+        }
+
+        // cf. [HLMW2005], Eq. (103), p. 25
+        double omegaem_29(const double & s_hat) const
+        {
+            return 0.0;
+        }
+
+        // cf. [HLMW2005], Eq. (104), p. 25
+        double omegaem_22(const double & s_hat) const
+        {
+            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat, s_hat4 = s_hat2 * s_hat2;
+            double sigma_1 = 23.787 - 120.948 * s_hat + 365.373 * s_hat2 - 584.206 * s_hat3;
+            double sigma_2 = 11.488 - 36.987 * s_hat + 255.330 * s_hat2 - 812.388 * s_hat3 + 1011.791 * s_hat4;
+
+            return 2.0 * log(m_b_pole() / m_l) * (
+                        sigma_2 / (8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat))
+                        + sigma_1 / (9.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * log(mu / 5.0)
+                        + 64.0 / 81.0 * omegaem_1010(s_hat) * pow(log(mu / 5.0), 2)
+                    );
+        }
+
+        // cf. [HLMW2005], Eq. (105), p. 25
+        double omegaem_27(const double & s_hat) const
+        {
+            return 0.0;
+        }
+
+        // cf. [HLMW2005], Eq. (126), p. 28
+        complex<double> g(const double & y) const
+        {
+            if (y < 1)
+                throw InternalError("[HLMW2005] g(y) only valid for y >= 1");
+
+            return 20.0 / 27.0 + 4.0 / 9.0 * y - 2.0 / 9.0 * (2.0 + y) * sqrt(y - 1) * 2.0 * std::atan(1.0 / sqrt(y - 1));
+        }
+
+        // cf. [HLMW2005], Eq. (72), p. 17
+        // i = { 1 .. 10, Q3 .. Q6, b }
+        complex<double> f(unsigned i, const double & s_hat) const
+        {
+            if ((7 == i) || (8 == i))
+                throw InternalError("[HLMW2005] f_i not defined for i = 7,8!");
+
+            static const std::vector<double> rho_b = {
+                /* 1 .. 6 */
+                0.0, 0.0, -7.0 / 2.0, -2.0 / 3.0, -38.0, -32.0 / 3.0,
+                /* 7 .. 10 */
+                0.0, 0.0, 0.0, 0.0,
+                /* Q3 .. Q6 */
+                7.0 / 6.0, 2.0 / 9.0, 38.0 / 3.0, 32.0 / 9.0, -2.0
+            };
+
+            static const std::vector<double> rho_c = {
+                /* 1 .. 6 */
+                4.0 / 3.0, 1.0, 6.0, 0.0, 60.0, 0.0,
+                /* 7 .. 10 */
+                0.0, 0.0, 0.0, 0.0,
+                /* Q3 .. Q6 */
+                4.0, 0.0, 40.0, 0.0, 0.0
+            };
+
+            static const std::vector<double> rho_0 = {
+                /* 1 .. 6 */
+                0.0, 0.0, 2.0/9.0, 8.0 / 27.0, 32.0 / 9.0, 128.0 / 27.0,
+                /* 7 .. 10 */
+                0.0, 0.0, 0.0, 0.0,
+                /* Q3 .. Q6 */
+                -74.0 / 27.0, -8.0 / 81.0, -752.0 / 27.0, -128.0 / 81.0, 0.0
+            };
+
+            static const std::vector<double> rho_sharp = {
+                /* 1 .. 6 */
+                -16.0 / 27.0, -4.0 / 9.0, 2.0 / 27.0, 8.0 / 81.0, -136.0 / 27.0, 320.0 / 81.0,
+                /* 7 .. 10 */
+                0.0, 0.0, 0.0, 0.0,
+                /* Q3 .. Q6 */
+                358.0 / 81.0, -8.0 / 243.0, 1144.0 / 81.0, -320.0 / 243.0, 26.0 / 27.0
+            };
+
+            static const std::vector<double> gamma9 = {
+                /* 1 .. 6 */
+                -32.0 / 27.0, -8.0 / 9.0, -16.0 / 9.0, 32.0 / 27.0, -112.0 / 9.0, 512.0 / 27.0,
+                /* 7 .. 10 */
+                0.0, 0.0, 8.0, -4.0,
+                /* Q3 .. Q6 */
+                -272.0 / 27.0, -32.0 / 81.0, 2768.0 / 27.0, -512.0 / 81.0, 16.0 / 9.0
+            };
+
+            double m_b = m_b_pole(), m_c = m_c_pole();
+            double s = s_hat * pow(m_b, 2);
+
+            complex<double> g_b = g(4.0 / s_hat);
+            complex<double> g_c = g(4.0 * pow(m_c, 2) / s);
+
+            /* mu == mu in MSbar scheme, so use m_b_MSbar here */
+            return gamma9[i-1] * log(m_b_MSbar / mu)
+                + rho_c[i-1] * (g_c + 8.0 / 9.0 * log(m_b / m_c))
+                + rho_b[i-1] * g_b
+                + rho_0[i-1] * complex<double>(log(s_hat), -M_PI)
+                + rho_sharp[i-1];
+        }
+
+        complex<double> f9pen(const double & s_hat) const
+        {
+            complex<double> g_tau = g(4.0 * pow(m_tau / m_b_pole(), 2) / s_hat);
+
+            return 8.0 * log(m_b_MSbar / mu)
+                - 3.0 * (g_tau + 8.0 / 9.0 * log(m_b_MSbar / m_tau))
+                + 8.0 / 3.0 * std::complex<double>(log(s_hat), -M_PI)
+                - 40.0 / 9.0;
+        }
+
+        // cf. [HLMW2005], Eq. (132), p. 29
+        complex<double> F(const double & s_hat) const
+        {
+            double r = s_hat * pow(m_b_pole() / m_c_pole(), 2) / 4.0;
+            complex<double> result;
+
+            if ((r < 0) || (r > 1))
+                throw InternalError("[HLMW] F only implemented for 0 < r < 1");
+
+            result = 3.0 / (2.0 * r) * (std::atan(std::sqrt(r / (1.0 - r))) / std::sqrt(r * (1.0 - r)) - 1.0);
+
+            return result;
+        }
+
+        // cf. [HLMW2005], Eq. (6), p. 4
+        double branching_ratio(const double & s) const
+        {
+            static const double alpha_e = 1.0/133.0;
+            double m_c = m_c_pole(), m_b = m_b_pole();
+            double s_hat = s / pow(m_b, 2), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
+            double lambda_2_hat = lambda_2 / pow(m_b, 2);
+            double alpha_s = QCD::alpha_s(mu);
+            double kappa = alpha_e / alpha_s, alpha_s_tilde = alpha_s / (4.0 * M_PI);
+
+            static const double u1 = (4.0 * M_PI * M_PI - 25.0) / 12.0;
+            double u2 = 27.1 + 23.0 / 3.0 * u1 * log(mu / m_b);
+            double uem = 12.0 / 23.0 * (QCD::alpha_s(m_Z) / alpha_s - 1.0);
+
+            // cf. [HLMW2005], Eq. (69), p. 16
+            double c7eff = c7() - c3() / 3.0 - 4.0 * c4() / 9.0 - 20.0 * c5() / 3.0 - 80.0 * c6() / 9.0;
+
+            // We use a different basis of operators: O_9 = alpha_e_tilde * P_9 */
+            double c9hlmw = alpha_s_tilde * kappa * c9();
+            double c10hlmw = alpha_s_tilde * kappa * c10();
+
+            /* S_{AB} */
+            // cf. [HLMW2005], Eqs. (112)-(115), p. 26
+            double s77 = pow(1.0 - s_hat, 2) * (4.0 + 8.0 / s_hat) * (
+                    1.0
+                    + 8.0 * alpha_s_tilde * (omega1_77(s_hat) + u1)
+                    + kappa * uem
+                    + 8.0 * alpha_s_tilde * kappa * omegaem_77(s_hat)
+                ) + 24.0 * lambda_2_hat * (2.0 * s_hat2 - 3.0);
+
+            double s79 = 12.0 * pow(1.0 - s_hat, 2) * (
+                    1.0
+                    + 8.0 * alpha_s_tilde * (omega1_79(s_hat) + u1)
+                    + kappa * uem
+                    + 8.0 * alpha_s_tilde * omegaem_79(s_hat)
+                ) + 24.0 * lambda_2_hat * (1.0 - 6.0 * s_hat + 4.0 * s_hat2);
+
+            double s99 = pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * (
+                    1.0
+                    + 8.0 * alpha_s_tilde * (omega1_99(s_hat) + u1)
+                    + kappa * uem
+                    + 8.0 * alpha_s_tilde * kappa * omegaem_99(s_hat)
+                    + 16.0 * pow(alpha_s_tilde, 2) * (omega2_99(s_hat) + u2 + 4.0 * u1 * omega1_99(s_hat))
+                ) + 6.0 * lambda_2_hat * (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3);
+
+            double s1010 = s99
+                + 8.0 * alpha_s_tilde * kappa * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * (omegaem_1010(s_hat) - omegaem_99(s_hat));
+
+            /* Wilson coefficients */
+            std::vector<double> wc = {
+                c1, c2, c3, c4, c5, c6, c7, c8,
+                alpha_s_tilde * kappa * c9,
+                alpha_s_tilde * kappa * c10,
+                // cf. [HLMW2005], Table 3, p. 17. Using values at mu = 5.0 GeV
+                alpha_s_tilde * kappa * -3.72e-2,
+                alpha_s_tilde * kappa * -1.04e-2,
+                alpha_s_tilde * kappa * -1.71e-6,
+                alpha_s_tilde * kappa * -1.03e-3,
+                0.0
+            };
+
+            /* Corrections, cf. [HLMW2005], Table 6, p. 18 */
+            std::vector<complex<double>> m7 = {
+                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F17(mu, s, m_b, m_c),
+                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F27(mu, s, m_b, m_c),
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                alpha_s_tilde * kappa,
+                -pow(alpha_s_tilde, 2) * kappa * F87(s_hat),
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+            };
+
+            std::vector<complex<double>> m9 = {
+                alpha_s_tilde * kappa * f(1, s_hat) - pow(alpha_s_tilde, 2) * kappa * CharmLoops::F19(mu, s, m_b, m_c),
+                alpha_s_tilde * kappa * f(2, s_hat) - pow(alpha_s_tilde, 2) * kappa * CharmLoops::F29(mu, s, m_b, m_c),
+                alpha_s_tilde * kappa * f(3, s_hat),
+                alpha_s_tilde * kappa * f(4, s_hat),
+                alpha_s_tilde * kappa * f(5, s_hat),
+                alpha_s_tilde * kappa * f(6, s_hat),
+                0.0,
+                -pow(alpha_s_tilde, 2) * kappa * F89(s_hat),
+                1.0 + alpha_s_tilde * kappa * f9pen(s_hat),
+                0.0,
+                alpha_s_tilde * kappa * f(3, s_hat),
+                alpha_s_tilde * kappa * f(4, s_hat),
+                alpha_s_tilde * kappa * f(5, s_hat),
+                alpha_s_tilde * kappa * f(6, s_hat),
+            };
+
+            std::vector<complex<double>> m10(14, 0.0);
+            m10[9] = 1.0; // M^10_i = delta_{10,i}
+
+            // cf. [HLMW2005], Eq. (111)
+            double ratio_phi = 0.0;
+            for (unsigned i(0) ; i < 14 ; ++i)
             {
-                double a = 1.0 / (2.0 * sqrt(r * (r - 1.0)));
-                double b = sqrt(1.0 - 1.0 / r);
-                f = a * std::complex<double>(log((1.0 - b) / (1.0 + b)), M_PI) - 1.0;
+                /* diagonal */
+                ratio_phi += pow(wc[i], 2) * real(
+                        s77 * norm(m7[i])
+                        + s99 * norm(m9[i])
+                        + s1010 * norm(m10[i])
+                        + s79 * m7[i] * conj(m9[i])
+                    );
+
+                /* upper */
+                for (unsigned j(i + 1) ; j < 14 ; ++j)
+                {
+                    ratio_phi += wc[i] * wc[j] * real(
+                            2.0 * s77 * m7[i] * conj(m7[j])
+                            + 2.0 * s99 * m9[i] * conj(m9[j])
+                            + 2.0 * s1010 * m10[i] * conj(m10[j])
+                            + s79 * (m7[i] * conj(m9[j]) + m9[i] * conj(m7[j]))
+                        );
+                }
             }
-            else
-            {
-                double a = sqrt(r / (1.0 - r));
-                f = a / r * atan(a) - 1.0;
-            }
-            f *= 1.5 / r;
 
-            return -8.0/9.0 * (c2() - c1() / 6.0) * lambda_2 / m_c2
-                * real(conj(f) * (c9eff(s_hat) * (2.0 + s_hat) + c7eff(s_hat) * (1.0 + 6.0 * s_hat - s_hat * s_hat) / s_hat));
-        }
+            /* bremsstrahlung */
+            static const double c_tau1 = 1.0 / 27.0;
+            static const double c_tau2 = - 2.0 / 9.0;
+            double z = pow(m_c / m_b, 2);
+            double itau_22 = real(Bremsstrahlung::itau_22(s_hat, z));
+            double itau_27 = real(Bremsstrahlung::itau_27(s_hat, z));
+            double itau_28 = real(Bremsstrahlung::itau_28(s_hat, z));
+            double itau_29 = real(Bremsstrahlung::itau_29(s_hat, z));
+            double b11 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_22 * c_tau1;
+            double b12 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_22 * c_tau2 * 2.0;
+            double b22 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_22 * QCD::casimir_f;
+            double b17 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_27 * c_tau2 * 2.0;
+            double b27 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_27 * QCD::casimir_f * 2.0;
+            double b18 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_28 * c_tau2 * 2.0;
+            double b28 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_28 * QCD::casimir_f * 2.0;
+            double b19 = pow(alpha_s_tilde, 2) * kappa * itau_29 * c_tau2 * 2.0;
+            double b29 = pow(alpha_s_tilde, 2) * kappa * itau_29 * QCD::casimir_f * 2.0;
+            double add = 0.0;
+            add += wc[0] * wc[0] * b11 + wc[0] * wc[1] * b12 + wc[1] * wc[1] * b22;
+            add += wc[6] * (wc[0] * b17 + wc[1] * b27);
+            add += wc[7] * (wc[0] * b18 + wc[1] * b28);
+            add += wc[8] * (wc[0] * b19 + wc[1] * b29);
+            ratio_phi += add;
 
-        /* We compute the branching ratio as given in [ALGH2001], Eqs. (28),(35) and
-         * [BMU1999], Eq. (45):
-         *
-         *  dBr(B->X_s l^+ l^-)/dsHat = Br(B->X_c l nu) / Gamma(b->X_c l nu) * dGamma(b->X_s l^+ l^-)/dsHat,
-         *  dBr/ds = mb^{-2} dBr/dsHat
-         *
-         */
-        double branching_ratio(const double & s_hat) const
-        {
-            static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
+            /* non-perturbative 1/m_c^2 */
+            complex<double> cF = F(s_hat);
+            double c27 = - pow(alpha_s_tilde * kappa, 2) * 8.0 * lambda_2 / (9.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2)
+                * (1.0 + 6.0 * s_hat - s_hat2) / s_hat * real(cF);
+            double c29 = - alpha_s_tilde * kappa * 8.0 * lambda_2 / (9.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF);
+            double c22 = - alpha_s_tilde * kappa * 8.0 * lambda_2 / (9.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF * conj(m9[1]));
+            ratio_phi += c22 * (-2.0 / 9.0 * wc[0] * wc[0] + 7.0 / 6.0 * wc[0] * wc[1] + wc[1] * wc[1]);
+            ratio_phi += c27 * (-1.0 / 6.0 * wc[0] + wc[1]) * wc[6];
+            ratio_phi += c29 * (-1.0 / 6.0 * wc[0] + wc[1]) * wc[8];
 
-            double z = pow(m_c_pole() / m_b_pole(), 2);
-            double z2 = z * z, z3 = z * z2, z4 = z2 * z2, lnz = log(z), ln2z = lnz * lnz;
-            double sqrtz = m_c_pole() / m_b_pole();
-            double li2z = gsl_sf_dilog(z), li2psqrtz = gsl_sf_dilog(sqrtz), li2msqrtz = gsl_sf_dilog(-sqrtz);
+            /* log enhanced em */
+            double e22 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 3) * omegaem_22(s_hat);
+            double e27 = 96.0 * pow(1.0 - s_hat, 2) * pow(alpha_s_tilde * kappa, 3) * omegaem_27(s_hat);
+            double e29 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 2) * omegaem_29(s_hat);
+            ratio_phi += e22 * (16.0 / 9.0 * wc[0] * wc[0] + 8.0 / 3.0 * wc[0] * wc[1] + wc[1] * wc[1]);
+            ratio_phi += e27 * (4.0 / 3.0 * wc[0] + wc[1]) * wc[6];
+            ratio_phi += e29 * (4.0 / 3.0 * wc[0] + wc[1]) * wc[8];
 
-            // cf. [BMU1999], Eq. (46), p. 16
-            double g = 1.0 - 8.0 * z + 8.0 * z3 - z4 - 12.0 * z2 * log(z);
-            // cf. [BMU1999], Eq. (48), p. 16
-            double h = -(1.0 - z2) * (25.0/4.0 - 239.0/3.0 * z + 25.0/4.0 * z2)
-                + z * lnz * (20.0 + 90.0 * z - 4.0/3.0 * z2 + 17.0/3.0 * z3)
-                + z2 * ln2z * (36.0 + z2)
-                + (1 - z2) * (17.0/3.0 - 64.0/3.0 * z + 17.0/3.0 * z2) * log(1 - z)
-                - 4.0 * (1.0 + 30.0 * z2 + z4) * lnz * log(1 - z)
-                - (1.0 + 16.0 * z2 + z4) * (6.0 * li2z - M_PI * M_PI)
-                - 32.0 * pow(z, 1.5) * (1.0 + z) * (M_PI * M_PI - 4.0 * (li2psqrtz - li2msqrtz) - 2.0 * lnz * log((1.0 - sqrtz) / (1.0 + sqrtz)));
-            // cf. [BMU1999], Eq. (47), pp. 16-17
-            double kappa = 1.0 - 2.0/3.0/M_PI * QCD::alpha_s(m_b_pole()) * h / g;
-
-            double ckm = 1.0; // lambda_t^2/V_cb^2 = 1.0 + O(lambda^4)
-            double a = br_bcsl * pow(alpha_e, 2) / (4.0 * M_PI * M_PI) / pow(m_b_pole(), 2) * ckm / g / kappa;
-            double b = pow(1.0 - s_hat, 2) * ((1.0 + 2.0 * s_hat) * (norm(c9eff(s_hat)) + norm(c10eff(s_hat))) * g1(s_hat)
-                    + 4.0 * (1.0 + 2.0 / s_hat) * norm(c7eff(s_hat)) * g2(s_hat)
-                    + 12.0 * real(c7eff(s_hat) * conj(c9eff(s_hat))) * g3(s_hat)
-                    + gc(s_hat));
-
-            return a * b;
+            return br_clnu * ckm * 4.0 / C * ratio_phi;
         }
     };
 
-    BToXsDilepton<ALGH2001>::BToXsDilepton(const Parameters & parameters, const ObservableOptions &) :
-        PrivateImplementationPattern<BToXsDilepton<ALGH2001>>(new Implementation<BToXsDilepton<ALGH2001>>(parameters))
+    BToXsDilepton<HLMW2005>::BToXsDilepton(const Parameters & parameters, const ObservableOptions &) :
+        PrivateImplementationPattern<BToXsDilepton<HLMW2005>>(new Implementation<BToXsDilepton<HLMW2005>>(parameters))
     {
     }
 
-    BToXsDilepton<ALGH2001>::~BToXsDilepton()
+    BToXsDilepton<HLMW2005>::~BToXsDilepton()
     {
     }
 
     double
-    BToXsDilepton<ALGH2001>::differential_branching_ratio(const double & s) const
+    BToXsDilepton<HLMW2005>::differential_branching_ratio(const double & s) const
     {
-        return _imp->branching_ratio(_imp->s_hat(s));
+        return _imp->branching_ratio(s) / pow(_imp->m_b_pole(), 2);
     }
 
     double
-    BToXsDilepton<ALGH2001>::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    BToXsDilepton<HLMW2005>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
         return integrate(std::tr1::function<double (const double &)>(
-                    std::tr1::bind(&BToXsDilepton<ALGH2001>::differential_branching_ratio, this, std::tr1::placeholders::_1)),
+                    std::tr1::bind(&BToXsDilepton<HLMW2005>::differential_branching_ratio, this, std::tr1::placeholders::_1)),
                 128, s_min, s_max);
     }
 }

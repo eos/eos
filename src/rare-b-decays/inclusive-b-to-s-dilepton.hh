@@ -16,14 +16,14 @@ namespace wf
      */
 
 
-    // As given in [ALGH2001]
-    struct ALGH2001
+    // As given in [HLMW2005]
+    struct HLMW2005
     {
     };
 
     template <>
-    class BToXsDilepton<ALGH2001> :
-        public PrivateImplementationPattern<BToXsDilepton<ALGH2001>>
+    class BToXsDilepton<HLMW2005> :
+        public PrivateImplementationPattern<BToXsDilepton<HLMW2005>>
     {
         public:
             BToXsDilepton(const Parameters & parameters, const ObservableOptions & options);
