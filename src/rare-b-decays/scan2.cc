@@ -43,18 +43,31 @@ class Scan2
 
         double max_likelihood;
 
-        std::map<std::pair<double, double>, double> results;
+        std::map<std::pair<int, int>, double> results;
 
         std::string x_name;
 
+        double x_min, x_max;
+
         std::string y_name;
+
+        double y_min, y_max;
+
+        unsigned points;
 
         std::vector<std::string> variations;
 
-        Scan2(const std::string & x_name, const std::string & y_name, const std::list<Input> & inputs) :
+        Scan2(const std::string & x_name, const double & x_min, const double & x_max,
+                const std::string & y_name, const double & y_min, const double & y_max,
+                const std::list<Input> & inputs) :
             max_likelihood(0.0),
             x_name(x_name),
-            y_name(y_name)
+            x_min(x_min),
+            x_max(x_max),
+            y_name(y_name),
+            y_min(y_min),
+            y_max(y_max),
+            points(60)
         {
             for (auto i(inputs.begin()), i_end(inputs.end()) ; i != i_end ; ++i)
             {
@@ -64,8 +77,11 @@ class Scan2
             }
         }
 
-        void calc_likelihood(const double & x, const double & y)
+        void calc_likelihood(const int & ix, const int & iy)
         {
+            double x = x_min + (x_max - x_min) / points * ix;
+            double y = y_min + (y_max - y_min) / points * iy;
+
             double chi_squared(0.0);
             Kinematics k;
             k.declare("s_min");
@@ -140,24 +156,20 @@ class Scan2
 
             {
                 Lock l(mutex);
-                results[std::make_pair(x, y)] = likelihood;
+                results[std::make_pair(ix, iy)] = likelihood;
                 max_likelihood = std::max(max_likelihood, likelihood);
             }
         }
 
-        void scan(const double & x_min,const double & x_max, const double & y_min, const double & y_max)
+        void scan()
         {
             TicketList tickets;
 
-            for (int i(0) ; i <= 40 ; ++i)
+            for (int i(0) ; i <= points ; ++i)
             {
-                double x = x_min + (x_max - x_min) / 40 * i;
-
-                for (int j(0) ; j <= 40 ; ++j)
+                for (int j(0) ; j <= points ; ++j)
                 {
-                    double y = y_min + (y_max - y_min) / 40 * j;
-
-                    tickets.push_back(ThreadPool::instance()->enqueue(std::tr1::bind(std::tr1::mem_fn(&Scan2::calc_likelihood), this, x, y)));
+                    tickets.push_back(ThreadPool::instance()->enqueue(std::tr1::bind(std::tr1::mem_fn(&Scan2::calc_likelihood), this, i, j)));
                 }
             }
 
@@ -174,7 +186,15 @@ class Scan2
                     std::cout << std::endl;
 
                 index = r->first.second;
-                std::cout << r->first.first << '\t' << r->first.second << '\t' << r->second / max_likelihood << std::endl;
+                double x = x_min + (x_max - x_min) / points * r->first.first;
+                double y = y_min + (y_max - y_min) / points * r->first.second;
+                std::cout
+                    << r->first.first << '\t'
+                    << r->first.second << '\t'
+                    << r->second / max_likelihood << '\t'
+                    << x << '\t'
+                    << y << '\t'
+                    << std::endl;
                 likelihoods.push_back(r->second / max_likelihood);
                 integral += r->second / max_likelihood;
             }
@@ -282,24 +302,9 @@ main(int argc, char * argv[])
 
         if (input.empty())
             throw DoUsage("Need at least one input");
-#if 0
-        // max(s) = (m_B - m_Kstar)^2 = 19.211
-        std::initializer_list<Input> input = {
-            // Data used
-            Input{01.00, 06.00, 0.668e-6, 1.493e-6, 2.408e-6, "B->X_sll::BR@ALGH2001", ""},
 
-            //Input{02.00, 04.30, +0.30,    -0.11,    -0.47,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            //Input{14.18, 16.00, -0.96,    -0.70,    -0.38,    "B->K^*ll::A_FB@LowRecoil", ""},
-            //Input{16.00, 19.21, -0.81,    -0.66,    -0.46,    "B->K^*ll::A_FB@LowRecoil", ""},
-
-            //Input{02.00, 04.30, +0.36,    -0.19,    -0.73,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            //Input{14.18, 16.00, -0.67,    -0.42,    -0.17,    "B->K^*ll::A_FB@LowRecoil", ""},
-            //Input{16.00, 19.21, -0.96,    -0.70,    -0.35,    "B->K^*ll::A_FB@LowRecoil", ""},
-        };
-#endif
-
-        Scan2 scanner(x, y, input);
-        scanner.scan(x_min, x_max, y_min, y_max);
+        Scan2 scanner(x, x_min, x_max, y, y_min, y_max, input);
+        scanner.scan();
     }
     catch(DoUsage & e)
     {
