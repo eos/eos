@@ -40,8 +40,6 @@ namespace wf
 
         void thread_function()
         {
-            bool done(false);
-
             std::tr1::function<void (void)> * job;
             Ticket ticket;
 
@@ -132,7 +130,6 @@ namespace wf
     Ticket
     ThreadPool::enqueue(const std::tr1::function<void (void)> & job)
     {
-        static unsigned jobs(0);
         std::pair<Ticket, std::tr1::function<void (void)> *> item(Ticket(), new std::tr1::function<void (void)>(job));
 
         {

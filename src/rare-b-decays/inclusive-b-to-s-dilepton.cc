@@ -263,7 +263,6 @@ namespace wf
         {
             double li2 = gsl_sf_dilog(s_hat);
             double ln = log(s_hat), ln1 = log(1.0 - s_hat);
-            double s_hat2 = s_hat * s_hat;
 
             return -4.0/3.0 * li2 - 2.0/3.0 * ln1 * ln - 2.0/9.0 * M_PI * M_PI
                 - (2.0 + 7.0 * s_hat) / (9.0 * s_hat) * ln1
@@ -461,10 +460,6 @@ namespace wf
             // cf. [HLMW2005], Eq. (69), p. 16
             double c7eff = c7() - c3() / 3.0 - 4.0 * c4() / 9.0 - 20.0 * c5() / 3.0 - 80.0 * c6() / 9.0;
 
-            // We use a different basis of operators: O_9 = alpha_e_tilde * P_9 */
-            double c9hlmw = alpha_s_tilde * kappa * c9();
-            double c10hlmw = alpha_s_tilde * kappa * c10();
-
             /* S_{AB} */
             // cf. [HLMW2005], Eqs. (112)-(115), p. 26
             double s77 = pow(1.0 - s_hat, 2) * (4.0 + 8.0 / s_hat) * (
@@ -494,7 +489,8 @@ namespace wf
 
             /* Wilson coefficients */
             std::vector<double> wc = {
-                c1, c2, c3, c4, c5, c6, c7, c8,
+                c1, c2, c3, c4, c5, c6, c7eff, c8,
+                // We use a different basis of operators: O_{9,10} = alpha_e_tilde * P_{9,10} */
                 alpha_s_tilde * kappa * c9,
                 alpha_s_tilde * kappa * c10,
                 // cf. [HLMW2005], Table 3, p. 17. Using values at mu = 5.0 GeV

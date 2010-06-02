@@ -99,7 +99,7 @@ namespace wf
     complex<double>
     Bremsstrahlung::tau_28(const double & s_hat, const double & w, const double & z)
     {
-        double s_hat2 = s_hat * s_hat, w2 = w * w;
+        double w2 = w * w;
         double x = s_hat / (1.0 + s_hat - w) / (w2 + s_hat * (1.0 - w));
 
         return 8.0 / 9.0 / (s_hat * w * (w - s_hat)) * (
@@ -113,8 +113,6 @@ namespace wf
     complex<double>
     Bremsstrahlung::tau_29(const double & s_hat, const double & w, const double & z)
     {
-        double s_hat2 = s_hat * s_hat, w2 = w * w;
-
         return 4.0 / 3.0 / w * (
                 (2.0 * s_hat * (1.0 - w) * (s_hat + w) + 4.0 * s_hat * w * log(w)) * Deltai_23(s_hat, w, z)
                 - (2.0 * s_hat * (1.0 - w) * (s_hat + w) + w * (3.0 * s_hat + w) * log(w)) * Deltai_27(s_hat, w, z));

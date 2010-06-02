@@ -713,7 +713,6 @@ namespace wf
             // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
             double m_b = m_b_PS();
             double s_hat = s / m_B / m_B;
-            double ubar = 1.0 - u;
 
             // cf. [BFS2001], Eq. (20)
             // [Christoph] Use c7 instead of c7eff
@@ -857,11 +856,6 @@ namespace wf
         complex<double> a_long(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
-            double shat = s_hat(s);
-            double mbhat = m_b_PS() / m_B;
-            double E = 0.5 * (m_B - s / m_B);
-            double mKhat = m_Kstar / m_B;
-            double lambdahat = lambda(1.0, mKhat * mKhat, s);
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
             double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
@@ -1434,7 +1428,6 @@ namespace wf
         // Amplitudes
         complex<double> a_long(const Helicity & helicity, const double & s) const
         {
-            double m_b = m_b_PS();
             double h = helicity;
             double m_Kstarhat = m_Kstar / m_B;
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
@@ -1453,7 +1446,6 @@ namespace wf
 
         complex<double> a_perp(const Helicity & helicity, const double & s) const
         {
-            double m_b = m_b_PS();
             double h = helicity;
             double m_Kstarhat = m_Kstar / m_B;
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
@@ -1470,10 +1462,8 @@ namespace wf
 
         complex<double> a_par(const Helicity & helicity, const double & s) const
         {
-            double m_b = m_b_PS();
             double h = helicity;
             double m_Kstarhat = m_Kstar / m_B;
-            double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
             complex<double> prefactor = complex<double>(0.0, -1.0) * m_B();

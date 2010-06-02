@@ -104,8 +104,6 @@ main(int argc, char * argv[])
         if (observables.empty())
             throw DoUsage("Need at least one observable");
 
-        const unsigned points = 50;
-
         kinematics.set("s_min", s_min);
         kinematics.set("s_max", s_max);
 

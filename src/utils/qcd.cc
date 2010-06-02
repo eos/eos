@@ -19,7 +19,6 @@ namespace wf
         static const double b_0 = 23.0/3.0;
         static const double b_1 = 116.0/3.0;
         static const double b_2 = 6519.0/54.0;
-        static const double b_3 = 4826.1;
 
         // cf. [AEMSS2002], Eq. (5.7)
         double a = alpha_s_MZ / (4.0 * M_PI);
