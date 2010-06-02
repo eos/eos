@@ -7,6 +7,7 @@ noinst_LTLIBRARIES = libwfrarebdecays.la
 libwfrarebdecays_la_SOURCES = \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	charm-loops.cc charm-loops.hh \
+	decays.hh \
 	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
