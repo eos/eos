@@ -1,7 +1,7 @@
 CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in
 
-AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -ggdb
+AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -pedantic
 
 noinst_LTLIBRARIES = libwfrarebdecays.la
 libwfrarebdecays_la_SOURCES = \
