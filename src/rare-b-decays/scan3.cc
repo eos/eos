@@ -1,6 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 #include <src/rare-b-decays/factory.hh>
+#include <src/utils/destringify.hh>
 #include <src/utils/lock.hh>
 #include <src/utils/mutex.hh>
 #include <src/utils/thread_pool.hh>
@@ -42,19 +43,41 @@ class Scan3
 
         double max_likelihood;
 
-        std::map<std::pair<double, double>, double> results;
+        std::map<std::pair<int, int>, double> results;
 
         std::string x_label;
 
+        double x_min, x_max, x_points;
+
         std::string y_label;
+
+        double y_min, y_max, y_points;
 
         std::string z_label;
 
-        Scan3(const std::string & x_label, const std::string & y_label, const std::string & z_label, const std::initializer_list<Input> & inputs) :
+        double z_min, z_max, z_points;
+
+        std::list<std::string> variation_names;
+
+        Scan3(const std::string & x_label, const double & x_min, const double & x_max,
+                const std::string & y_label, const double & y_min, const double & y_max,
+                const std::string & z_label, const double & z_min, const double & z_max,
+                const std::list<Input> & inputs,
+                const std::list<std::string> & variation_names) :
             max_likelihood(0.0),
             x_label(x_label),
+            x_min(x_min),
+            x_max(x_max),
+            x_points(60),
             y_label(y_label),
-            z_label(z_label)
+            y_min(y_min),
+            y_max(y_max),
+            y_points(60),
+            z_label(z_label),
+            z_min(z_min),
+            z_max(z_max),
+            z_points(10),
+            variation_names(variation_names)
         {
             for (auto i(inputs.begin()), i_end(inputs.end()) ; i != i_end ; ++i)
             {
@@ -64,8 +87,12 @@ class Scan3
             }
         }
 
-        void calc_likelihood(const double & x, const double & y, const double & z)
+        void calc_likelihood(const int & ix, const int & iy, const int & iz)
         {
+            double x = x_min + (x_max - x_min) / x_points * ix;
+            double y = y_min + (y_max - y_min) / y_points * iy;
+            double z = z_min + (z_max - z_min) / z_points * iz;
+
             double chi_squared(0.0);
             Kinematics k;
             k.declare("s_min");
@@ -82,14 +109,12 @@ class Scan3
                 p.set(y_label, y);
                 p.set(z_label, z);
 
-                std::vector<Parameter> variations =
+                std::vector<Parameter> variations;
+                for (auto v(variation_names.begin()) ; v != variation_names.end() ; ++v)
                 {
-                    p["CKM::A"],
-                    p["CKM::lambda"],
-                    p["formfactors::a1_uncertainty"],
-                    p["formfactors::a2_uncertainty"],
-                    p["formfactors::v_uncertainty"],
-                };
+                    variations.push_back(p[*v]);
+                }
+
                 double central = o->evaluate(k);
                 double delta_min = 0.0, delta_max = 0.0;
 
@@ -137,10 +162,10 @@ class Scan3
 
             {
                 Lock l(mutex);
-                auto e(results.find(std::pair<double, double>(x, y)));
+                auto e(results.find(std::pair<int, int>(ix, iy)));
                 if (e == results.end())
                 {
-                    e = results.insert(std::make_pair(std::make_pair(x, y), 0.0)).first;
+                    e = results.insert(std::make_pair(std::make_pair(ix, iy), 0.0)).first;
                 }
 
                 e->second = std::max(e->second, likelihood);
@@ -152,19 +177,13 @@ class Scan3
         {
             TicketList tickets;
 
-            for (int i(-20) ; i <= 20 ; ++i)
+            for (unsigned i(0) ; i <= x_points ; ++i)
             {
-                double x = 1.0 * i / 2.0;
-
-                for (int j(-20) ; j <= 20 ; ++j)
+                for (unsigned j(0) ; j <= y_points ; ++j)
                 {
-                    double y = 1.0 * j / 2.0;
-
-                    for (int k(-20) ; k <= 20 ; ++k)
+                    for (unsigned k(0) ; k <= z_points ; ++k)
                     {
-                        double z = 1.0 * k / 2.0;
-
-                        tickets.push_back(ThreadPool::instance()->enqueue(std::tr1::bind(std::tr1::mem_fn(&Scan3::calc_likelihood), this, x, y, z)));
+                        tickets.push_back(ThreadPool::instance()->enqueue(std::tr1::bind(std::tr1::mem_fn(&Scan3::calc_likelihood), this, i, j, k)));
                     }
                 }
             }
@@ -182,7 +201,15 @@ class Scan3
                     std::cout << std::endl;
 
                 index = r->first.second;
-                std::cout << r->first.first << '\t' << r->first.second << '\t' << r->second / max_likelihood << std::endl;
+                double x = x_min + (x_max - x_min) / x_points * r->first.first;
+                double y = y_min + (y_max - y_min) / y_points * r->first.second;
+                std::cout
+                    << r->first.first << '\t'
+                    << r->first.second << '\t'
+                    << r->second / max_likelihood << '\t'
+                    << x << '\t'
+                    << y << '\t'
+                    << std::endl;
                 likelihoods.push_back(r->second / max_likelihood);
                 integral += r->second / max_likelihood;
             }
@@ -243,50 +270,79 @@ main(int argc, char * argv[])
 {
     try
     {
-        if (argc < 4)
-            throw DoUsage("Need three parameter names");
+        std::string x, y, z;
+        double x_min = -10.0, x_max = +10.0;
+        double y_min = -10.0, y_max = +10.0;
+        double z_min = -10.0, z_max = +10.0;
+        std::list<Input> input;
+        std::list<std::string> variation_names;
 
-        std::string x(argv[1]), y(argv[2]), z(argv[3]);
+        for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
+        {
+            std::string argument(*a);
+            if ("--x" == argument)
+            {
+                x = std::string(*(++a));
+                x_min = destringify<double>(*(++a));
+                x_max = destringify<double>(*(++a));
+                continue;
+            }
 
-        // max(s) = (m_B - m_Kstar)^2 = 19.211
-        std::initializer_list<Input> input = {
-            // [Belle2005] data
-            Input{01.00, 06.00, 0.67e-6, 1.49e-6, 2.40e-6, "B->X_sll::BR@GN1997", ""},
+            if ("--y" == argument)
+            {
+                y = std::string(*(++a));
+                y_min = destringify<double>(*(++a));
+                y_max = destringify<double>(*(++a));
+                continue;
+            }
 
-            // [BaBar2006] data
-            //Input{00.10, 08.41,  0.12e-6,  0.27e-6,  0.44e-6, "B->K^*ll::BR@LargeRecoil", ""},
-            //Input{10.24, 19.21,  0.21e-6,  0.37e-6,  0.55e-6, "B->K^*ll::BR@LowRecoil", ""},
+            if ("--z" == argument)
+            {
+                z = std::string(*(++a));
+                z_min = destringify<double>(*(++a));
+                z_max = destringify<double>(*(++a));
+                continue;
+            }
 
-            // [BaBar2008] data
-            //Input{00.10, 06.25, +0.01,    -0.24,    -0.42,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            //Input{10.24, 19.21, -0.44,    -0.76,    -1.28,    "B->K^*ll::A_FB@LowRecoil", ""},
+            if ("--input" == argument)
+            {
+                std::string observable(*(++a));
+                double k1 = destringify<double>(*(++a));
+                double k2 = destringify<double>(*(++a));
+                double min = destringify<double>(*(++a));
+                double central = destringify<double>(*(++a));
+                double max = destringify<double>(*(++a));
 
-            // [Belle2009] data
-            Input{00.10, 02.00, -0.12,    -0.47,    -0.76,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            Input{02.00, 04.30, +0.30,    -0.11,    -0.47,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            Input{04.30, 08.68, -0.11,    -0.45,    -0.73,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            Input{14.18, 16.00, -0.96,    -0.70,    -0.38,    "B->K^*ll::A_FB@LowRecoil", ""},
-            Input{16.00, 19.21, -0.81,    -0.66,    -0.46,    "B->K^*ll::A_FB@LowRecoil", ""},
-            Input{00.10, 02.00,  0.99e-7,  1.46e-7,  1.98e-7, "B->K^*ll::BR@LargeRecoil", ""},
-            Input{02.00, 04.30,  0.52e-7,  0.86e-7,  1.24e-7, "B->K^*ll::BR@LargeRecoil", ""},
-            Input{04.30, 08.68,  0.83e-7,  1.37e-7,  1.96e-7, "B->K^*ll::BR@LargeRecoil", ""},
-            Input{14.18, 16.00,  0.71e-7,  1.05e-7,  1.42e-7, "B->K^*ll::BR@LowRecoil", ""},
-            Input{16.00, 19.21,  1.64e-7,  2.04e-7,  2.47e-7, "B->K^*ll::BR@LowRecoil", ""},
+                input.push_back(Input{k1, k2, min, central, max, observable});
 
-            // [CDF2010] data
-            //Input{00.10, 02.00, +0.87,    -0.13,    -2.03,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            //Input{02.00, 04.30, +0.36,    -0.19,    -0.73,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            //Input{04.30, 08.68, +0.39,    +0.06,    -0.29,    "B->K^*ll::A_FB@LargeRecoil", ""},
-            //Input{14.18, 16.00, -0.67,    -0.42,    -0.17,    "B->K^*ll::A_FB@LowRecoil", ""},
-            //Input{16.00, 19.21, -0.96,    -0.70,    -0.35,    "B->K^*ll::A_FB@LowRecoil", ""},
-            //Input{00.10, 02.00,  0.49e-7,  0.98e-7,  1.47e-7, "B->K^*ll::BR@LargeRecoil", ""},
-            //Input{02.00, 04.30,  0.53e-7,  1.00e-7,  1.47e-7, "B->K^*ll::BR@LargeRecoil", ""},
-            //Input{04.30, 08.68,  0.97e-7,  1.69e-7,  1.41e-7, "B->K^*ll::BR@LargeRecoil", ""},
-            //Input{14.18, 16.00,  1.02e-7,  1.51e-7,  2.00e-7, "B->K^*ll::BR@LowRecoil", ""},
-            //Input{16.00, 19.21,  0.86e-7,  1.35e-7,  1.84e-7, "B->K^*ll::BR@LowRecoil", ""},
-        };
+                continue;
+            }
 
-        Scan3 scanner(x, y, z, input);
+            if ("--vary" == argument)
+            {
+                std::string variation_name(*(++a));
+                variation_names.push_back(variation_name);
+
+                continue;
+            }
+        }
+
+        if (x.empty())
+            throw DoUsage("Need a name for the 'x' parameter");
+
+        if (y.empty())
+            throw DoUsage("Need a name for the 'y' parameter");
+
+        if (z.empty())
+            throw DoUsage("Need a name for the 'z' parameter");
+
+        if (input.empty())
+            throw DoUsage("Need at least one input");
+
+        Scan3 scanner(x, x_min, x_max,
+                y, y_min, y_max,
+                z, z_min, z_max,
+                input, variation_names);
         scanner.scan();
     }
     catch(DoUsage & e)
