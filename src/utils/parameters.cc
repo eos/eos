@@ -176,6 +176,8 @@ namespace wf
     Parameter::operator= (const double & value)
     {
         _imp->parameters[_index].value = value;
+
+        return *this;
     }
 
     const double &
