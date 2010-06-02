@@ -55,11 +55,12 @@ class Scan2
 
         unsigned points;
 
-        std::vector<std::string> variations;
+        std::list<std::string> variation_names;
 
         Scan2(const std::string & x_name, const double & x_min, const double & x_max,
                 const std::string & y_name, const double & y_min, const double & y_max,
-                const std::list<Input> & inputs) :
+                const std::list<Input> & inputs,
+                const std::list<std::string> & variation_names) :
             max_likelihood(0.0),
             x_name(x_name),
             x_min(x_min),
@@ -67,7 +68,8 @@ class Scan2
             y_name(y_name),
             y_min(y_min),
             y_max(y_max),
-            points(60)
+            points(60),
+            variation_names(variation_names)
         {
             for (auto i(inputs.begin()), i_end(inputs.end()) ; i != i_end ; ++i)
             {
@@ -97,16 +99,11 @@ class Scan2
                 p.set(x_name, x);
                 p.set(y_name, y);
 
-                std::vector<Parameter> variations =
+                std::vector<Parameter> variations;
+                for (auto v(variation_names.begin()) ; v != variation_names.end() ; ++v)
                 {
-                    p["CKM::A"],
-                    p["CKM::lambda"],
-                    p["formfactors::a1_uncertainty"],
-                    p["formfactors::a2_uncertainty"],
-                    p["formfactors::v_uncertainty"],
-                    p["mass::s"],
-                    p["mass::c"],
-                };
+                    variations.push_back(p[*v]);
+                }
 
                 double central = o->evaluate(k);
                 double delta_min = 0.0, delta_max = 0.0;
@@ -259,6 +256,7 @@ main(int argc, char * argv[])
         double x_min = -10.0, x_max = +10.0;
         double y_min = -10.0, y_max = +10.0;
         std::list<Input> input;
+        std::list<std::string> variation_names;
 
         for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
         {
@@ -292,6 +290,14 @@ main(int argc, char * argv[])
 
                 continue;
             }
+
+            if ("--vary" == argument)
+            {
+                std::string variation_name(*(++a));
+                variation_names.push_back(variation_name);
+
+                continue;
+            }
         }
 
         if (x.empty())
@@ -303,7 +309,7 @@ main(int argc, char * argv[])
         if (input.empty())
             throw DoUsage("Need at least one input");
 
-        Scan2 scanner(x, x_min, x_max, y, y_min, y_max, input);
+        Scan2 scanner(x, x_min, x_max, y, y_min, y_max, input, variation_names);
         scanner.scan();
     }
     catch(DoUsage & e)
