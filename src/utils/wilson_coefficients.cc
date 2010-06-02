@@ -67,7 +67,7 @@ namespace wf
         double nlo = alpha_s / (4.0 * M_PI);
 
         std::vector<double> result = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-        for (auto i(0) ; i < result.size() ; ++i)
+        for (unsigned i(0) ; i < result.size() ; ++i)
         {
             // cf. [CMM1997], Eq. (25), p. 10
             for (unsigned j(0) ; j < a.size() ; ++j)

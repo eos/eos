@@ -22,21 +22,21 @@ namespace wf
         double h = (b - a) / n;
         std::vector<double> y;
 
-        for (auto k(0) ; k < n + 1 ; ++k)
+        for (unsigned k(0) ; k < n + 1 ; ++k)
         {
             y.push_back(f(a + k * h));
         }
 
         double Q0 = 0.0, Q1 = 0.0, Q2 = 0.0;
-        for (auto k(0) ; k < n / 8 ; ++k)
+        for (unsigned k(0) ; k < n / 8 ; ++k)
         {
             Q0 += y[8 * k] + 4.0 * y[8 * k + 4] + y[8 * k + 4];
         }
-        for (auto k(0) ; k < n / 4 ; ++k)
+        for (unsigned k(0) ; k < n / 4 ; ++k)
         {
             Q1 += y[4 * k] + 4.0 * y[4 * k + 2] + y[4 * k + 4];
         }
-        for (auto k(0) ; k < n / 2 ; ++k)
+        for (unsigned k(0) ; k < n / 2 ; ++k)
         {
             Q2 += y[2 * k] + 4.0 * y[2 * k + 1] + y[2 * k + 2];
         }
@@ -83,21 +83,21 @@ namespace wf
         double h = (b - a) / n;
         std::vector<complex<double>> y;
 
-        for (auto k(0) ; k < n + 1 ; ++k)
+        for (unsigned k(0) ; k < n + 1 ; ++k)
         {
             y.push_back(f(a + k * h));
         }
 
         complex<double> Q0 = 0.0, Q1 = 0.0, Q2 = 0.0;
-        for (auto k(0) ; k < n / 8 ; ++k)
+        for (unsigned k(0) ; k < n / 8 ; ++k)
         {
             Q0 += y[8 * k] + 4.0 * y[8 * k + 4] + y[8 * k + 4];
         }
-        for (auto k(0) ; k < n / 4 ; ++k)
+        for (unsigned k(0) ; k < n / 4 ; ++k)
         {
             Q1 += y[4 * k] + 4.0 * y[4 * k + 2] + y[4 * k + 4];
         }
-        for (auto k(0) ; k < n / 2 ; ++k)
+        for (unsigned k(0) ; k < n / 2 ; ++k)
         {
             Q2 += y[2 * k] + 4.0 * y[2 * k + 1] + y[2 * k + 2];
         }

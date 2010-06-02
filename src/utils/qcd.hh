@@ -12,7 +12,7 @@ namespace wf
             static double alpha_s(const double & mu);
 
             // The quadratic casimir operator
-            static const double casimir_f = 4.0 / 3.0;
+            static const double casimir_f;
 
             // Potential-subtracted b mass m_b^PS
             static double mb_PS(const double & mb_MSbar, const double & mu, const double & mu_PS);

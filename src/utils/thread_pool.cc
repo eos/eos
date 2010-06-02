@@ -84,15 +84,15 @@ namespace wf
         }
 
         Implementation() :
+            number_of_threads(sysconf(_SC_NPROCESSORS_CONF)),
             terminate_mutex(new Mutex),
             terminate(false),
             job_mutex(new Mutex),
             job_arrival(new ConditionVariable),
             waiting_jobs(0),
-            done_jobs(0),
-            number_of_threads(sysconf(_SC_NPROCESSORS_CONF))
+            done_jobs(0)
         {
-            for (int i(0) ; i < number_of_threads ; ++i)
+            for (unsigned i(0) ; i < number_of_threads ; ++i)
             {
                 threads.push_back(new Thread(std::tr1::bind(&Implementation<ThreadPool>::thread_function, this)));
             }

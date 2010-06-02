@@ -165,9 +165,9 @@ class Scan2
         {
             TicketList tickets;
 
-            for (int i(0) ; i <= points ; ++i)
+            for (unsigned i(0) ; i <= points ; ++i)
             {
-                for (int j(0) ; j <= points ; ++j)
+                for (unsigned j(0) ; j <= points ; ++j)
                 {
                     tickets.push_back(ThreadPool::instance()->enqueue(std::tr1::bind(std::tr1::mem_fn(&Scan2::calc_likelihood), this, i, j)));
                 }

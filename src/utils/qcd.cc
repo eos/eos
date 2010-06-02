@@ -8,6 +8,8 @@
 
 namespace wf
 {
+    const double QCD::casimir_f = 4.0 / 3.0;
+
     double
     QCD::alpha_s(const double & mu)
     {
