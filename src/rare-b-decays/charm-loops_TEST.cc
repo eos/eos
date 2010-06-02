@@ -25,12 +25,12 @@ class OneLoopTest :
             /* One-Loop */
             {
                 static const double mu = 4.2, s = 1.0, m_c = 1.4, m_b = 4.8, eps = 0.00001;
-                TEST_CHECK_NEARLY_EQUAL(+1.57192, real(CharmLoops::h(mu, 1.0)), eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.39626, imag(CharmLoops::h(mu, 1.0)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.57192, real(CharmLoops::h(mu, s)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.39626, imag(CharmLoops::h(mu, s)), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.58013, CharmLoops::h(mu, 1.0, m_c), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.58013, CharmLoops::h(mu, s, m_c), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(-0.55926, CharmLoops::h(mu, 1.0, m_b), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.55926, CharmLoops::h(mu, s, m_b), eps);
             }
         }
 } one_loop_test;
