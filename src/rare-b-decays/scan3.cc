@@ -57,6 +57,8 @@ class Scan3
 
         double z_min, z_max, z_points;
 
+        std::list<Input> inputs;
+
         std::list<std::string> variation_names;
 
         Scan3(const std::string & x_label, const double & x_min, const double & x_max,
@@ -77,6 +79,7 @@ class Scan3
             z_min(z_min),
             z_max(z_max),
             z_points(10),
+            inputs(inputs),
             variation_names(variation_names)
         {
             for (auto i(inputs.begin()), i_end(inputs.end()) ; i != i_end ; ++i)
@@ -175,6 +178,12 @@ class Scan3
 
         void scan()
         {
+            std::cout << "# Scan for inputs" << std::endl;
+            for (auto i(inputs.begin()), i_end(inputs.end()) ; i != i_end ; ++i)
+            {
+                std::cout << "#   " << i->o_name << '[' << i->min << ".." << i->max << "] : " << i->o_min << " < " << i->o << " < " << i->o_max << std::endl;
+            }
+
             TicketList tickets;
 
             for (unsigned i(0) ; i <= x_points ; ++i)
