@@ -26,6 +26,8 @@ namespace wf
         template <typename T_> struct DoDestringify;
 
         template <> struct DoDestringify<double> : public SimpleDestringify<double> {};
+
+        template <> struct DoDestringify<unsigned> : public SimpleDestringify<double> {};
     }
 
     template <typename T_>
