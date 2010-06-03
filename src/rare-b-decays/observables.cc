@@ -29,6 +29,7 @@ main(int argc, char * argv[])
         Kinematics kinematics;
         kinematics.declare("s");
         double s_low(0.0), s_high(19.21);
+        unsigned points = 50;
         std::list<std::tuple<std::string, std::list<Parameter>>> budgets;
         std::list<ObservablePtr> observables;
 
@@ -49,6 +50,13 @@ main(int argc, char * argv[])
                 s_low = destringify<double>(*(++a));
                 s_high = destringify<double>(*(++a));
                 std::cerr << "Range: " << s_low << " .. " << s_high << std::endl;
+                continue;
+            }
+
+            if ("--points" == argument)
+            {
+                points = destringify<unsigned>(*(++a));
+                std::cerr << "Points: " << points << std::endl;
                 continue;
             }
 
@@ -100,8 +108,6 @@ main(int argc, char * argv[])
 
         if (observables.empty())
             throw DoUsage("Need at least one observable");
-
-        const unsigned points = 50;
 
         std::cout << "## Observables ##" << std::endl;
         for (auto o(observables.begin()), o_end(observables.end()) ; o != o_end ; ++o)
@@ -177,7 +183,7 @@ main(int argc, char * argv[])
     catch (DoUsage & e)
     {
         std::cerr << e.what << std::endl;
-        std::cerr << "Usage: observables --range SMIN SMAX [--parameter NAME VALUE]* [--vary NAME]* [--observable NAME]+" << std::endl;
+        std::cerr << "Usage: observables --range SMIN SMAX [--points N] [--parameter NAME VALUE]* [--vary NAME]* [--observable NAME]+" << std::endl;
         return EXIT_FAILURE;
     }
     catch (Exception & e)
