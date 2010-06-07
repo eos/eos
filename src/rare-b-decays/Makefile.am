@@ -15,7 +15,7 @@ libwfrarebdecays_la_SOURCES = \
 	form_factors.cc form_factors.hh
 libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la -lgslcblas -lgsl
 
-noinst_PROGRAMS = amplitudes ff scan2 scan3 integrated observables
+noinst_PROGRAMS = amplitudes ff scan2 scan2-raw scan3 integrated observables
 amplitudes_SOURCES = \
 	amplitudes.cc
 amplitudes_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
@@ -31,6 +31,9 @@ observables_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
 scan2_SOURCES = \
 	scan2.cc
 scan2_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
+scan2_raw_SOURCES = \
+	scan2-raw.cc
+scan2_raw_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
 scan3_SOURCES = \
 	scan3.cc
 scan3_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
