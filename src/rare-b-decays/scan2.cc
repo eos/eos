@@ -307,6 +307,8 @@ main(int argc, char * argv[])
 
                 continue;
             }
+
+            throw DoUsage("Unknown command line argument: " + argument);
         }
 
         if (x.empty())
