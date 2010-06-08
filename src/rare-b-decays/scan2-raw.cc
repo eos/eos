@@ -62,6 +62,7 @@ class Scan2
         Scan2(const std::string & x_name, const double & x_min, const double & x_max,
                 const std::string & y_name, const double & y_min, const double & y_max,
                 const std::list<Input> & inputs,
+                const std::list<std::pair<std::string, double>> & param_changes,
                 const std::list<std::string> & variation_names) :
             max_likelihood(0.0),
             x_name(x_name),
@@ -78,7 +79,12 @@ class Scan2
             {
                 //TODO: Create options from i->o_opions!
                 ObservableOptions options;
-                bins.push_back(std::make_pair(*i, RareBFactory::make(i->o_name, Parameters::Defaults(), options)));
+                Parameters parameters = Parameters::Defaults();
+                for (auto p(param_changes.begin()), p_end(param_changes.end()) ; p != p_end ; ++p)
+                {
+                    parameters[p->first] = p->second;
+                }
+                bins.push_back(std::make_pair(*i, RareBFactory::make(i->o_name, parameters, options)));
             }
         }
 
@@ -225,6 +231,7 @@ main(int argc, char * argv[])
         double y_min = -10.0, y_max = +10.0;
         std::list<Input> input;
         std::list<std::string> variation_names;
+        std::list<std::pair<std::string, double>> param_changes;
 
         for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
         {
@@ -242,6 +249,14 @@ main(int argc, char * argv[])
                 y = std::string(*(++a));
                 y_min = destringify<double>(*(++a));
                 y_max = destringify<double>(*(++a));
+                continue;
+            }
+
+            if ("--parameter" == argument)
+            {
+                std::string name = std::string(*(++a));
+                double value = destringify<double>(*(++a));
+                param_changes.push_back(std::make_pair(name, value));
                 continue;
             }
 
@@ -279,7 +294,7 @@ main(int argc, char * argv[])
         if (input.empty())
             throw DoUsage("Need at least one input");
 
-        Scan2 scanner(x, x_min, x_max, y, y_min, y_max, input, variation_names);
+        Scan2 scanner(x, x_min, x_max, y, y_min, y_max, input, param_changes, variation_names);
         scanner.scan();
     }
     catch(DoUsage & e)
