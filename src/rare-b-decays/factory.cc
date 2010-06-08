@@ -1,9 +1,14 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 #include <src/rare-b-decays/factory.hh>
-#include <src/rare-b-decays/exclusive-b-to-s-dilepton.cc>
-#include <src/rare-b-decays/exclusive-b-to-s-gamma.cc>
-#include <src/rare-b-decays/inclusive-b-to-s-dilepton.cc>
+#include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
+#include <src/rare-b-decays/exclusive-b-to-s-gamma.hh>
+#include <src/rare-b-decays/inclusive-b-to-s-dilepton.hh>
+#include <src/rare-b-decays/inclusive-b-to-s-gamma.hh>
+#include <src/utils/concrete_observable.hh>
+
+#include <map>
+#include <tr1/functional>
 
 namespace wf
 {
@@ -77,8 +82,13 @@ namespace wf
             OBSERVABLE2("B->K^*ll::nH_T^3@LowRecoil",     BToKstarDilepton<LowRecoil>, integrated_h_3_naive,                        "s_min", "s_max"),
 
             /* Inclusive Decays */
+
+            // B->X_s ll, HLMW2005
             OBSERVABLE1("B->X_sll::dBR/ds@HLMW2005",      BToXsDilepton<HLMW2005>, differential_branching_ratio, "s"),
             OBSERVABLE2("B->X_sll::BR@HLMW2005",          BToXsDilepton<HLMW2005>, integrated_branching_ratio,   "s_min", "s_max"),
+
+            // B->X_s gamma
+            OBSERVABLE0("B->X_sgamma::BR@Minimal",        BToXsGamma<Minimal>,     integrated_branching_ratio),
         };
 
         ObservableOptions myoptions(options);

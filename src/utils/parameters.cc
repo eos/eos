@@ -96,6 +96,7 @@ namespace wf
             Parameters::NameValuePair{"CKM::lambda", 0.2247, 0.2257, 0.2266},
             Parameters::NameValuePair{"CKM::rhobar", 0.119, 0.135, 0.166},
             Parameters::NameValuePair{"CKM::etabar", 0.332, 0.349, 0.364},
+            Parameters::NameValuePair{"CKM::|V_cb|", 0.0404, 0.0417, 0.0430},
             // Masses in GeV
             Parameters::NameValuePair{"mass::b(MSbar)", 4.13, 4.20, 4.37}, // cf. [PDG2008], p. 21
             Parameters::NameValuePair{"mass::c", 1.16, 1.27, 1.34}, // cf. [PDG2008], p. 21
@@ -144,6 +145,8 @@ namespace wf
             // B->X_s HQET parameters
             Parameters::NameValuePair{"B->X_s::lambda_1", -0.20}, // cf. [ALGH2001], Table 2, p. 13
             Parameters::NameValuePair{"B->X_s::lambda_2", +0.12}, // cf. [ALGH2001], Table 2, p. 13
+            // B->X_s gamma SM theory uncertainty
+            Parameters::NameValuePair{"B->X_sgamma::uncertainty", -1.0, 0.0, +1.0},
             // Experimental Input
             Parameters::NameValuePair{"exp::BR(B->X_clnu)", 0.1042, 0.1057, 0.1072}, // cf. [PDG2008], p. 82
             Parameters::NameValuePair{"exp::C(B->X_clnu, B->X_ulnu)", 0.57, 0.58, 0.59},

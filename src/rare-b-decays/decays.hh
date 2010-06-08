@@ -9,6 +9,8 @@ namespace wf
 
     template <typename T_> class BToXsDilepton;
 
+    template <typename T_> class BToXsGamma;
+
     enum Helicity
     {
         left_handed = -1,

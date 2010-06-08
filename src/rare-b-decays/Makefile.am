@@ -11,6 +11,7 @@ libwfrarebdecays_la_SOURCES = \
 	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
+	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
 	factory.cc factory.hh \
 	form_factors.cc form_factors.hh
 libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la -lgslcblas -lgsl

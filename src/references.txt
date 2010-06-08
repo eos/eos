@@ -1,6 +1,13 @@
 References
 ==========
 
+    2006zs : Misiak, M. et al
+
+        The first estimate of B(anti-B -> X/s gamma) at O(alpha(s)^2)
+
+        arxiv:hep-ph/0609232
+
+
     AAGW2001 : Asatryan, H.H. and Asatrian, H.M. and Greub, C. and Walker, M.
 
         Calculation of two-loop virtual corrections to b -> s l^+ l^- in
