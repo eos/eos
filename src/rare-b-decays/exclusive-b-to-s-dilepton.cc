@@ -1397,7 +1397,7 @@ namespace wf
 
             complex<double> lo = c_b * Gb + c_0 * G0 + c;
             complex<double> nlo_alpha_s = -1.0 * (c1() * CharmLoops::F19(mu, s, m_b) + c2() * CharmLoops::F29(mu, s, m_b) + c8() * F89(s));
-            complex<double> nlo_mc = m_c * m_c / s * 8 * (4.0/9.0 * c1() + 1.0/3.0 * c2() + 2.0/3.0 * c3() + 20.0 * c5());
+            complex<double> nlo_mc = m_c * m_c / s * 8 * (4.0/9.0 * c1() + 1.0/3.0 * c2() + 2.0 * c3() + 20.0 * c5());
 
             return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
         }
