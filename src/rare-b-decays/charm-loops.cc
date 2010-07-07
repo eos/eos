@@ -3,6 +3,7 @@
 /* Contains code written by Christoph Bobeth */
 
 #include <src/rare-b-decays/charm-loops.hh>
+#include <src/utils/exception.hh>
 
 #include <cmath>
 #include <complex>
@@ -848,5 +849,100 @@ namespace wf
                 i = i + kap2931[l][m][1] * pow(s_hat, 3) * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
 
         return complex<double>(r, i);
+    }
+
+    // cf. [BFS2001], Eq. (82), p. 30
+    complex<double>
+    CharmLoops::F87(const double & mu, const double & s, const double & m_q)
+    {
+        // Loop-Functions are calculated for the pole mass!
+        double s_hat = s / (m_q * m_q);
+        double s_hat2 = s_hat * s_hat;
+        double denom = (1.0 - s_hat);
+        double denom2 = denom * denom;
+
+        complex<double> a = complex<double>(-32.0 * std::log(mu / m_q) - 8.0 * s_hat / denom * std::log(s_hat)
+                - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2,
+                -8.0 * M_PI);
+        complex<double> b = (4.0 / denom / denom2)
+            * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_q) - (4.0 + 2.0 * s_hat) * C0(s, m_q));
+
+        return (1.0 / 9.0) * (a + b);
+    }
+
+    // cf. [BFS2001], Eq. (83), p. 30
+    complex<double>
+    CharmLoops::F89(const double & mu, const double & s, const double & m_q)
+    {
+        // Loop-Functions are calculated for the pole mass!
+        double s_hat = s / (m_q * m_q);
+        double denom = (1.0 - s_hat);
+        double denom2 = denom * denom;
+
+        double a = 16.0 * std::log(s_hat) / denom + 8.0 * (5.0 - 2.0 * s_hat) / denom2;
+        complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_q) - 2.0 * C0(s, m_q));
+
+        return (1.0 / 9.0) * (a + b);
+    }
+
+    complex<double>
+    CharmLoops::B0(const double & s, const double & m_q)
+    {
+        if ((0.0 == m_q) && (0.0 == s))
+        {
+            throw InternalError("Implementation<BToKstarDilepton<LargeRecoil>>::B0: m_q == 0 & s == 0");
+        }
+
+        if (0.0 == s)
+            return complex<double>(-2.0, 0.0);
+
+        double z = 4.0 * m_q * m_q / s;
+        complex<double> result;
+
+        if (z > 1.0)
+        {
+            result = complex<double>(-2.0 * std::sqrt(z - 1.0) * std::atan(1.0 / std::sqrt(z - 1.0)), 0.0);
+        }
+        else
+        {
+            result = complex<double>(std::sqrt(1.0 - z) * std::log((1.0 - std::sqrt(1 - z)) / (1.0 + std::sqrt(1.0 - z))),
+                    std::sqrt(1.0 - z) * M_PI);
+        }
+
+        return result;
+    }
+
+    complex<double>
+    CharmLoops::C0(const double & s, const double & m_q)
+    {
+        if (0.0 == s)
+            return complex<double>(-M_PI * M_PI / 6.0, 0.0);
+
+        double s_hat = s/(m_q * m_q);
+        double A = sqrt(s_hat * (4.0 - s_hat));
+        double at1 = atan(A / (2.0 - s_hat));
+        double at2 = atan(A / s_hat);
+        double log1 = log(2.0 - s_hat);
+
+        complex<double> arg;
+        gsl_sf_result res_re, res_im;
+
+        arg = 0.5 * complex<double>(2.0 - s_hat, -A);
+        int status = gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
+        complex<double> Li_1(res_re.val, res_im.val);
+
+        arg = 0.5 * complex<double>(2.0 - s_hat, +A);
+        status = gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
+        complex<double> Li_2(res_re.val, res_im.val);
+
+        arg = 0.5 * complex<double>(1.0, -A / (2.0 - s_hat));
+        status = gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
+        complex<double> Li_3(res_re.val, res_im.val);
+
+        arg = 0.5 * complex<double>(1.0, +A / (2.0 - s_hat));
+        status = gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
+        complex<double> Li_4(res_re.val, res_im.val);
+
+        return 1.0 / (1.0 - s_hat) * (2.0 * at1 * (at1 - at2) + log1 * log1 - Li_1 - Li_2 + Li_3 + Li_4);
     }
 }
