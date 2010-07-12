@@ -34,13 +34,13 @@ namespace wf
         unsigned waiting_jobs;
         unsigned done_jobs;
 
-        std::list<std::pair<Ticket, std::tr1::function<void (void)> *>> queue;
+        std::list<std::pair<Ticket, std::function<void (void)> *>> queue;
 
         std::list<Thread *> threads;
 
         void thread_function()
         {
-            std::tr1::function<void (void)> * job;
+            std::function<void (void)> * job;
             Ticket ticket;
 
             do
@@ -94,7 +94,7 @@ namespace wf
         {
             for (unsigned i(0) ; i < number_of_threads ; ++i)
             {
-                threads.push_back(new Thread(std::tr1::bind(&Implementation<ThreadPool>::thread_function, this)));
+                threads.push_back(new Thread(std::bind(&Implementation<ThreadPool>::thread_function, this)));
             }
         }
 
@@ -128,9 +128,9 @@ namespace wf
     }
 
     Ticket
-    ThreadPool::enqueue(const std::tr1::function<void (void)> & job)
+    ThreadPool::enqueue(const std::function<void (void)> & job)
     {
-        std::pair<Ticket, std::tr1::function<void (void)> *> item(Ticket(), new std::tr1::function<void (void)>(job));
+        std::pair<Ticket, std::function<void (void)> *> item(Ticket(), new std::function<void (void)>(job));
 
         {
             Lock l(*_imp->job_mutex);

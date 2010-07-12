@@ -192,7 +192,7 @@ class Scan3
                 {
                     for (unsigned k(0) ; k <= z_points ; ++k)
                     {
-                        tickets.push_back(ThreadPool::instance()->enqueue(std::tr1::bind(std::tr1::mem_fn(&Scan3::calc_likelihood), this, i, j, k)));
+                        tickets.push_back(ThreadPool::instance()->enqueue(std::bind(std::tr1::mem_fn(&Scan3::calc_likelihood), this, i, j, k)));
                     }
                 }
             }

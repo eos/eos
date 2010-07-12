@@ -11,7 +11,7 @@ namespace wf
     using std::real;
     using std::imag;
 
-    double integrate(const std::tr1::function<double (const double &)> & f, unsigned n, const double & a, const double & b)
+    double integrate(const std::function<double (const double &)> & f, unsigned n, const double & a, const double & b)
     {
         if (n & 0x1)
             n += 1;
@@ -72,7 +72,7 @@ namespace wf
         return result;
     }
 
-    complex<double> integrate(const std::tr1::function<complex<double> (const double &)> & f, unsigned n, const double & a, const double & b)
+    complex<double> integrate(const std::function<complex<double> (const double &)> & f, unsigned n, const double & a, const double & b)
     {
         if (n & 0x1)
             n += 1;

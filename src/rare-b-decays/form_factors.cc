@@ -187,10 +187,10 @@ namespace wf
     {
     }
 
-    std::tr1::shared_ptr<FormFactors<BToKstar>>
+    std::shared_ptr<FormFactors<BToKstar>>
     FormFactorFactory<BToKstar>::create(const std::string & label, const Parameters & parameters)
     {
-        std::tr1::shared_ptr<FormFactors<BToKstar>> result;
+        std::shared_ptr<FormFactors<BToKstar>> result;
         std::string name, set;
 
         std::string::size_type sep(label.find("::"));
@@ -212,15 +212,15 @@ namespace wf
             unsigned index(set[0] - '1');
 
             if (index < 3)
-                result = std::tr1::shared_ptr<FormFactors<BToKstar>>(new ABHH1999FormFactors(index));
+                result = std::shared_ptr<FormFactors<BToKstar>>(new ABHH1999FormFactors(index));
         }
         else if ("BZ2004" == name)
         {
-            result = std::tr1::shared_ptr<FormFactors<BToKstar>>(new BZ2004FormFactors(parameters));
+            result = std::shared_ptr<FormFactors<BToKstar>>(new BZ2004FormFactors(parameters));
         }
         else if ("IKKR2007" == name)
         {
-            result = std::tr1::shared_ptr<FormFactors<BToKstar>>(new IKKR2007FormFactors);
+            result = std::shared_ptr<FormFactors<BToKstar>>(new IKKR2007FormFactors);
         }
 
         return result;

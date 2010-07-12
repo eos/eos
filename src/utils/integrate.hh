@@ -5,14 +5,14 @@
 
 #include <src/utils/complex.hh>
 
-#include <tr1/functional>
+#include <functional>
 
 namespace wf
 {
     // TODO: Do a proper MonteCarlo integration
-    double integrate(const std::tr1::function<double (const double &)> & f, unsigned n, const double & a, const double & b);
+    double integrate(const std::function<double (const double &)> & f, unsigned n, const double & a, const double & b);
 
-    complex<double> integrate(const std::tr1::function<complex<double> (const double &)> & f, unsigned n, const double & a, const double & b);
+    complex<double> integrate(const std::function<complex<double> (const double &)> & f, unsigned n, const double & a, const double & b);
 }
 
 #endif

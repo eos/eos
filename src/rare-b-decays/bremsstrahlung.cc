@@ -127,8 +127,8 @@ namespace wf
         if (1.0 - s_hat < eps)
             return 0.0;
 
-        return integrate(std::tr1::function<complex<double> (const double &)>(
-                    std::tr1::bind(&Bremsstrahlung::tau_22, s_hat, std::tr1::placeholders::_1, z)),
+        return integrate(std::function<complex<double> (const double &)>(
+                    std::bind(&Bremsstrahlung::tau_22, s_hat, std::placeholders::_1, z)),
                 128, s_hat + eps, 1.0);
     }
 
@@ -140,8 +140,8 @@ namespace wf
         if (1.0 - s_hat < eps)
             return 0.0;
 
-        return integrate(std::tr1::function<complex<double> (const double &)>(
-                    std::tr1::bind(&Bremsstrahlung::tau_27, s_hat, std::tr1::placeholders::_1, z)),
+        return integrate(std::function<complex<double> (const double &)>(
+                    std::bind(&Bremsstrahlung::tau_27, s_hat, std::placeholders::_1, z)),
                 128, s_hat + eps, 1.0);
     }
 
@@ -153,8 +153,8 @@ namespace wf
         if (1.0 - s_hat < eps)
             return 0.0;
 
-        return integrate(std::tr1::function<complex<double> (const double &)>(
-                    std::tr1::bind(&Bremsstrahlung::tau_28, s_hat, std::tr1::placeholders::_1, z)),
+        return integrate(std::function<complex<double> (const double &)>(
+                    std::bind(&Bremsstrahlung::tau_28, s_hat, std::placeholders::_1, z)),
                 128, s_hat + eps, 1.0);
     }
 
@@ -166,8 +166,8 @@ namespace wf
         if (1.0 - s_hat < eps)
             return 0.0;
 
-        return integrate(std::tr1::function<complex<double> (const double &)>(
-                    std::tr1::bind(&Bremsstrahlung::tau_29, s_hat, std::tr1::placeholders::_1, z)),
+        return integrate(std::function<complex<double> (const double &)>(
+                    std::bind(&Bremsstrahlung::tau_29, s_hat, std::placeholders::_1, z)),
                 128, s_hat + eps, 1.0);
     }
 }

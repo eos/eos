@@ -26,7 +26,7 @@ main(int argc, char * argv[])
         if (2 != argc)
             throw DoUsage("Need at exactly one set of form factors");
 
-        std::tr1::shared_ptr<FormFactors<BToKstar>> set(FormFactorFactory<BToKstar>::create(argv[1], Parameters::Defaults()));
+        std::shared_ptr<FormFactors<BToKstar>> set(FormFactorFactory<BToKstar>::create(argv[1], Parameters::Defaults()));
         if (! set)
             throw DoUsage("Unknown set of form factors: '" + std::string(argv[1]) + "'");
 

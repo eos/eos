@@ -106,7 +106,7 @@ namespace wf
 
         double e_q;
 
-        std::tr1::shared_ptr<FormFactors<BToKstar>> form_factors;
+        std::shared_ptr<FormFactors<BToKstar>> form_factors;
 
         Implementation(const Parameters & p, const ObservableOptions & o) :
             c1(p["c1"]),
@@ -631,7 +631,7 @@ namespace wf
         {
             return xi_perp(s) * (C0_perp(h, s) + QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * C1_perp(h, s))
                 + (pow(M_PI, 2) / 3.0) * (f_B * f_Kstar_perp / m_B)
-                * integrate(std::tr1::function<complex<double> (const double &)>(
+                * integrate(std::function<complex<double> (const double &)>(
                                 std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::T_perp, this, s, std::placeholders::_1)),
                         64, 0.001, 0.999);
         }
@@ -733,7 +733,7 @@ namespace wf
         {
             return xi_par(s) * (C0_par(s) + QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * C1_par(s))
                 + (pow(M_PI, 2) / 3.0) * (f_B * f_Kstar_par / m_B) * (m_Kstar / energy(s))
-                * integrate(std::tr1::function<complex<double> (const double &)>(
+                * integrate(std::function<complex<double> (const double &)>(
                                 std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::T_par, this, s, std::placeholders::_1)),
                         32, 0.001, 0.999);
         }
@@ -961,8 +961,8 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> f = std::tr1::bind(std::tr1::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_branching_ratio),
-                this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> f = std::bind(std::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_branching_ratio),
+                this, std::placeholders::_1);
 
         return integrate(f, 128, s_min, s_max);
     }
@@ -970,11 +970,11 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_fb_numerator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_fb_numerator), _imp, std::placeholders::_1);
 
-        std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::placeholders::_1);
 
         return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
@@ -982,11 +982,11 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::f_l_numerator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::f_l_numerator), _imp, std::placeholders::_1);
 
-        std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::placeholders::_1);
 
         return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
@@ -994,11 +994,11 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_numerator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_numerator), _imp, std::placeholders::_1);
 
-        std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_denominator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_denominator), _imp, std::placeholders::_1);
 
         return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
@@ -1006,11 +1006,11 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_numerator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_numerator), _imp, std::placeholders::_1);
 
-        std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::placeholders::_1);
 
         return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
@@ -1018,11 +1018,11 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_numerator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_numerator), _imp, std::placeholders::_1);
 
-        std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_denominator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_denominator), _imp, std::placeholders::_1);
 
         return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
@@ -1030,11 +1030,11 @@ namespace wf
     double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_numerator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_numerator), _imp, std::placeholders::_1);
 
-        std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::placeholders::_1);
 
         return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
     }
@@ -1102,7 +1102,7 @@ namespace wf
 
         Parameter uncertainty_isgur_wise_perp;
 
-        std::tr1::shared_ptr<FormFactors<BToKstar>> form_factors;
+        std::shared_ptr<FormFactors<BToKstar>> form_factors;
 
         Implementation(const Parameters & p, const ObservableOptions & o) :
             c1(p["c1"]),
@@ -1478,8 +1478,8 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> f = std::tr1::bind(std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_branching_ratio),
-                this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> f = std::bind(&BToKstarDilepton<LowRecoil>::differential_branching_ratio,
+                this, std::placeholders::_1);
 
         return integrate(f, 256, s_min, s_max);
     }
@@ -1487,8 +1487,7 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry_naive(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry), this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry, this, std::placeholders::_1);
 
         return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }
@@ -1496,11 +1495,8 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::a_fb_numerator), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_fb_numerator, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
 
         return integrate(num, 256, s_min, s_max) / integrate(denom, 256, s_min, s_max);
     }
@@ -1508,11 +1504,8 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::f_l_numerator), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::f_l_numerator, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
 
         return integrate(num, 256, s_min, s_max) / integrate(denom, 256, s_min, s_max);
     }
@@ -1520,8 +1513,7 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation_naive(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation), this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation, this, std::placeholders::_1);
 
         return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }
@@ -1529,11 +1521,8 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_numerator), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_denominator), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_numerator, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_denominator, _imp, std::placeholders::_1);
 
         return integrate(num, 256, s_min, s_max) / integrate(denom, 256, s_min, s_max);
     }
@@ -1541,8 +1530,7 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2_naive(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2), this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2, this, std::placeholders::_1);
 
         return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }
@@ -1550,14 +1538,9 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_4), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_1), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_2), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_4, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_1, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_2, _imp, std::placeholders::_1);
 
         return integrate(num1, 256, s_min, s_max)
             / sqrt(integrate(denom1, 256, s_min, s_max) * integrate(denom2, 256, s_min, s_max));
@@ -1566,8 +1549,7 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_3_naive(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3), this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3, this, std::placeholders::_1);
 
         return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }
@@ -1575,14 +1557,14 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_5), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num1 = std::bind(
+                &Implementation<BToKstarDilepton<LowRecoil>>::u_5, _imp, std::placeholders::_1);
 
-        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_4), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> denom1 = std::bind(
+                &Implementation<BToKstarDilepton<LowRecoil>>::u_4, _imp, std::placeholders::_1);
 
-        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_7), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> denom2 = std::bind(
+                &Implementation<BToKstarDilepton<LowRecoil>>::u_7, _imp, std::placeholders::_1);
 
         return integrate(num1, 256, s_min, s_max)
             / sqrt(pow(integrate(denom1, 256, s_min, s_max), 2) + pow(integrate(denom2, 256, s_min, s_max), 2));
@@ -1591,8 +1573,7 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_4_naive(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4), this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4, this, std::placeholders::_1);
 
         return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }
@@ -1600,14 +1581,9 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_h_1(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_4), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_1), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_3), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_4, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_1, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_3, _imp, std::placeholders::_1);
 
         return integrate(num1, 256, s_min, s_max)
             / sqrt(integrate(denom1, 256, s_min, s_max) * integrate(denom2, 256, s_min, s_max));
@@ -1616,8 +1592,7 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_h_1_naive(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_h_1), this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_1, this, std::placeholders::_1);
 
         return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }
@@ -1625,14 +1600,9 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_h_2(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_5), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_1), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_2), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_5, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_1, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_2, _imp, std::placeholders::_1);
 
         return integrate(num1, 256, s_min, s_max)
             / sqrt(integrate(denom1, 256, s_min, s_max) * integrate(denom2, 256, s_min, s_max));
@@ -1641,8 +1611,7 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_h_2_naive(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_h_2), this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_2, this, std::placeholders::_1);
 
         return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }
@@ -1650,14 +1619,9 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_h_3(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> num1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_6), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom1 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_2), _imp, std::tr1::placeholders::_1);
-
-        std::tr1::function<double (const double &)> denom2 = std::tr1::bind(
-                std::tr1::mem_fn(&Implementation<BToKstarDilepton<LowRecoil>>::u_3), _imp, std::tr1::placeholders::_1);
+        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_6, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_2, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_3, _imp, std::placeholders::_1);
 
         return integrate(num1, 256, s_min, s_max)
             / sqrt(integrate(denom1, 256, s_min, s_max) * integrate(denom2, 256, s_min, s_max));
@@ -1666,8 +1630,7 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::integrated_h_3_naive(const double & s_min, const double & s_max) const
     {
-        std::tr1::function<double (const double &)> integrand = std::tr1::bind(
-                std::tr1::mem_fn(&BToKstarDilepton<LowRecoil>::differential_h_3), this, std::tr1::placeholders::_1);
+        std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_3, this, std::placeholders::_1);
 
         return integrate(integrand, 256, s_min, s_max) / (s_max - s_min);
     }

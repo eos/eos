@@ -20,7 +20,7 @@ namespace wf
 
             ~ThreadPool();
 
-            Ticket enqueue(const std::tr1::function<void (void)> & work);
+            Ticket enqueue(const std::function<void (void)> & work);
 
             static ThreadPool * instance();
     };

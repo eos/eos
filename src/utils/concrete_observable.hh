@@ -16,7 +16,7 @@ namespace wf
     template <typename Decay_>
     struct ConcreteObservableData<Decay_, 0>
     {
-        typedef std::tr1::function<double (const Decay_ &)> Type;
+        typedef std::function<double (const Decay_ &)> Type;
 
         Type function;
 
@@ -37,7 +37,7 @@ namespace wf
     template <typename Decay_>
     struct ConcreteObservableData<Decay_, 1>
     {
-        typedef std::tr1::function<double (const Decay_ &, const double &)> Type;
+        typedef std::function<double (const Decay_ &, const double &)> Type;
 
         Type function;
 
@@ -61,7 +61,7 @@ namespace wf
     template <typename Decay_>
     struct ConcreteObservableData<Decay_, 2>
     {
-        typedef std::tr1::function<double (const Decay_ &, const double &, const double &)> Type;
+        typedef std::function<double (const Decay_ &, const double &, const double &)> Type;
 
         Type function;
 

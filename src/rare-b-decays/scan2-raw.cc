@@ -178,7 +178,7 @@ class Scan2
             {
                 for (unsigned j(0) ; j <= points ; ++j)
                 {
-                    tickets.push_back(ThreadPool::instance()->enqueue(std::tr1::bind(std::tr1::mem_fn(&Scan2::calc_chi_squared), this, i, j)));
+                    tickets.push_back(ThreadPool::instance()->enqueue(std::bind(std::tr1::mem_fn(&Scan2::calc_chi_squared), this, i, j)));
                 }
             }
 

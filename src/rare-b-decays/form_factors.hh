@@ -5,8 +5,8 @@
 
 #include <src/utils/parameters.hh>
 
+#include <memory>
 #include <string>
-#include <tr1/memory>
 
 namespace wf
 {
@@ -35,7 +35,7 @@ namespace wf
     class FormFactorFactory<BToKstar>
     {
         public:
-            static std::tr1::shared_ptr<FormFactors<BToKstar>>
+            static std::shared_ptr<FormFactors<BToKstar>>
                 create(const std::string & label, const Parameters & parameters);
     };
 }
