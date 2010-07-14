@@ -28,6 +28,17 @@ namespace wf
         template <> struct DoDestringify<double> : public SimpleDestringify<double> {};
 
         template <> struct DoDestringify<unsigned> : public SimpleDestringify<double> {};
+
+        template <> struct DoDestringify<bool>
+        {
+            static bool destringify(const std::string & input)
+            {
+                if ("true" == input)
+                    return true;
+
+                return false;
+            }
+        };
     }
 
     template <typename T_>
