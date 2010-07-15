@@ -6,6 +6,7 @@
 #include <src/utils/concrete_observable.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
+#include <src/utils/model.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 
@@ -26,6 +27,8 @@ namespace wf
     template <>
     struct Implementation<BToKstarDilepton<LargeRecoil>>
     {
+        std::shared_ptr<Model> model;
+
         Parameter c1;
 
         Parameter c2;
@@ -64,10 +67,6 @@ namespace wf
 
         Parameter mu;
 
-        double lambda_t2;
-
-        complex<double> lambda_u_hat;
-
         Parameter f_B;
 
         Parameter f_Kstar_par;
@@ -83,10 +82,6 @@ namespace wf
         Parameter a_1_perp;
 
         Parameter a_2_perp;
-
-        Parameter ckm_A;
-
-        Parameter ckm_lambda;
 
         Parameter uncertainty_par_left;
 
@@ -109,6 +104,7 @@ namespace wf
         std::shared_ptr<FormFactors<BToKstar>> form_factors;
 
         Implementation(const Parameters & p, const ObservableOptions & o) :
+            model(new StandardModel(p)),
             c1(p["c1"]),
             c2(p["c2"]),
             c3(p["c3"]),
@@ -135,8 +131,6 @@ namespace wf
             a_2_par(p["B->K^*::a_1_par"]),
             a_1_perp(p["B->K^*::a_1_perp"]),
             a_2_perp(p["B->K^*::a_2_perp"]),
-            ckm_A(p["CKM::A"]),
-            ckm_lambda(p["CKM::lambda"]),
             uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty@LargeRecoil"]),
             uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty@LargeRecoil"]),
             uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty@LargeRecoil"]),
@@ -165,7 +159,7 @@ namespace wf
             static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
             static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
 
-            double lambda_t = ckm_A * ckm_lambda * ckm_lambda;
+            double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
             return std::sqrt(g_fermi * g_fermi * alpha_e * alpha_e / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
                     * lambda_t * lambda_t * s_hat(s)
@@ -1044,6 +1038,8 @@ namespace wf
     template <>
     struct Implementation<BToKstarDilepton<LowRecoil>>
     {
+        std::shared_ptr<Model> model;
+
         Parameter c1;
 
         Parameter c2;
@@ -1080,10 +1076,6 @@ namespace wf
 
         Parameter mu;
 
-        Parameter ckm_A;
-
-        Parameter ckm_lambda;
-
         Parameter uncertainty_par_left;
 
         Parameter uncertainty_par_right;
@@ -1104,7 +1096,10 @@ namespace wf
 
         std::shared_ptr<FormFactors<BToKstar>> form_factors;
 
+        bool cp_conjugate;
+
         Implementation(const Parameters & p, const ObservableOptions & o) :
+            model(new StandardModel(p)),
             c1(p["c1"]),
             c2(p["c2"]),
             c3(p["c3"]),
@@ -1123,8 +1118,6 @@ namespace wf
             m_B(p["mass::B0"]),
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
-            ckm_A(p["CKM::A"]),
-            ckm_lambda(p["CKM::lambda"]),
             uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty@LowRecoil"]),
             uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty@LowRecoil"]),
             uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty@LowRecoil"]),
@@ -1133,11 +1126,14 @@ namespace wf
             uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty@LowRecoil"]),
             uncertainty_isgur_wise_long(p["B->K^*ll::IW_long_uncertainty"]),
             uncertainty_isgur_wise_par(p["B->K^*ll::IW_par_uncertainty"]),
-            uncertainty_isgur_wise_perp(p["B->K^*ll::IW_perp_uncertainty"])
+            uncertainty_isgur_wise_perp(p["B->K^*ll::IW_perp_uncertainty"]),
+            cp_conjugate(false)
         {
             form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
             if (! form_factors.get())
                 throw std::string("InternalError");
+
+            cp_conjugate = o.has("cp-conjugate");
         }
 
         // We use the PS mass except for kappa_1
@@ -1171,9 +1167,13 @@ namespace wf
             complex<double> G0 = -3.0 / 8.0 * (CharmLoops::h(mu, s) + 4.0 / 9.0);
             complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b) + 4.0 / 9.0);
 
+            complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
+            if (cp_conjugate)
+                lambda_hat_u = conj(lambda_hat_u);
+
             complex<double> lo = c_b * Gb + c_0 * G0 + c;
             complex<double> nlo_alpha_s = -1.0 * (c1() * CharmLoops::F19(mu, s, m_b) + c2() * CharmLoops::F29(mu, s, m_b) + c8() * CharmLoops::F89(mu, s, m_b));
-            complex<double> nlo_mc = m_c * m_c / s * 8 * (4.0/9.0 * c1() + 1.0/3.0 * c2() + 2.0 * c3() + 20.0 * c5());
+            complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
 
             return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
         }
@@ -1189,7 +1189,7 @@ namespace wf
         {
             static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
             static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
-            double lambda_t = ckm_A * ckm_lambda * ckm_lambda;
+            double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
             return std::sqrt(g_fermi * g_fermi * alpha_e * alpha_e / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
                     * lambda_t * lambda_t * s_hat(s)

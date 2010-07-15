@@ -15,6 +15,7 @@ libwfutils_la_SOURCES = \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.cc kinematic.hh \
 	lock.cc lock.hh \
+	model.cc model.hh \
 	mutex.cc mutex.hh \
 	parameters.cc parameters.hh \
 	observable.cc observable.hh \
