@@ -22,6 +22,7 @@ libwfutils_la_SOURCES = \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh \
 	random_number_engine.cc random_number_engine.hh \
+	save.hh \
 	stringify.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
@@ -32,6 +33,7 @@ libwfutils_la_LIBADD = -lpthread
 TESTS = \
 	integrate_TEST \
 	qcd_TEST \
+	save_TEST \
 	stringify_TEST \
 	wilson_coefficients_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
@@ -42,6 +44,9 @@ integrate_TEST_LDADD = $(TESTS_LD_ADD)
 
 qcd_TEST_SOURCES = qcd_TEST.cc
 qcd_TEST_LDADD = $(TESTS_LD_ADD)
+
+save_TEST_SOURCES = save_TEST.cc
+save_TEST_LDADD = $(TESTS_LD_ADD)
 
 stringify_TEST_SOURCES = stringify_TEST.cc
 stringify_TEST_LDADD = $(TESTS_LD_ADD)
