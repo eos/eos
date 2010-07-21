@@ -1250,6 +1250,12 @@ namespace wf
             return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
 
+        // Quantity C, related to the strong phase of the amplitudes
+        complex<double> C(const double & s) const
+        {
+            return c9eff(s) + kappa() * c7eff(s) * (2.0 * m_b_MSbar * m_B / s);
+        }
+
         // Unormalized combinations of transversity amplitudes
         double u_1(const double & s) const
         {
@@ -1398,6 +1404,30 @@ namespace wf
     BToKstarDilepton<LowRecoil>::a_par(const Helicity & h, const double & s) const
     {
         return _imp->norm(s) * _imp->a_par(h, s);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::real_c(const double & s) const
+    {
+        return real(_imp->C(s));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::imag_c(const double & s) const
+    {
+        return imag(_imp->C(s));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::real_c9eff(const double & s) const
+    {
+        return real(_imp->c9eff(s));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::imag_c9eff(const double & s) const
+    {
+        return imag(_imp->c9eff(s));
     }
 
     double

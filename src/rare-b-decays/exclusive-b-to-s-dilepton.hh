@@ -72,6 +72,12 @@ namespace wf
             complex<double> a_perp(const Helicity & h, const double & s) const;
             complex<double> a_par(const Helicity & h, const double & s) const;
 
+            // [BHvD2010-2] Eqs. (??)
+            double real_c(const double & s) const;
+            double imag_c(const double & s) const;
+            double real_c9eff(const double & s) const;
+            double imag_c9eff(const double & s) const;
+
             // [BHvD2010] Eqs. (??-??)
             double rho_1(const double & s) const;
             double rho_2(const double & s) const;
