@@ -42,7 +42,8 @@ scan3_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
 TESTS = \
 	bremsstrahlung_TEST \
 	charm-loops_TEST \
-	exclusive-b-to-s-dilepton_TEST
+	exclusive-b-to-s-dilepton_TEST \
+	inclusive-b-to-s-dilepton_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a $(top_builddir)/src/utils/libwfutils.la libwfrarebdecays.la
 
 check_PROGRAMS = $(TESTS)
@@ -54,3 +55,6 @@ charm_loops_TEST_LDADD = $(TESTS_LD_ADD)
 
 exclusive_b_to_s_dilepton_TEST_SOURCES = exclusive-b-to-s-dilepton_TEST.cc
 exclusive_b_to_s_dilepton_TEST_LDADD = $(TESTS_LD_ADD)
+
+inclusive_b_to_s_dilepton_TEST_SOURCES = inclusive-b-to-s-dilepton_TEST.cc
+inclusive_b_to_s_dilepton_TEST_LDADD = $(TESTS_LD_ADD)
