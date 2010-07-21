@@ -9,6 +9,7 @@
 #include <src/utils/model.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
+#include <src/utils/save.hh>
 
 #include <cmath>
 #include <tr1/functional>
@@ -1503,6 +1504,18 @@ namespace wf
     BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
         return _imp->f_l_numerator(s) / _imp->decay_width(s);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_cp_asymmetry(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        double gamma = _imp->decay_width(s);
+        _imp->cp_conjugate = true;
+        double gamma_bar = _imp->decay_width(s);
+
+        return (gamma - gamma_bar) / (gamma + gamma_bar);
     }
 
     double
