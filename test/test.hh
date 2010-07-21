@@ -47,7 +47,14 @@ namespace test
             throw TestCaseFailedException(__LINE__, __FILE__, "'" #a "' is false"); \
     } \
     while (false)
-}
+
+#define TEST_CHECK_EQUAL(a, b) \
+    do \
+    { \
+        if (! ((a) == (b))) \
+            throw TestCaseFailedException(__LINE__, __FILE__, "'" #a "' is not equal to '" #b "'"); \
+    } \
+    while (false)
 
 #define TEST_CHECK_NEARLY_EQUAL(a, b, eps) \
     do \
@@ -60,5 +67,6 @@ namespace test
                     + ", difference is '" + stringify(a - b) + "'"); \
     } \
     while (false)
+}
 
 #endif
