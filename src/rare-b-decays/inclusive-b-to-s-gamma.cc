@@ -27,7 +27,7 @@ namespace wf
 
         Implementation(const Parameters & p) :
             model(new StandardModel(p)),
-            c7(p["c7"]),
+            c7(p["Re{c7}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             br_bcsl(p["exp::BR(B->X_clnu)"]),
             uncertainty(p["B->X_sgamma::uncertainty"])

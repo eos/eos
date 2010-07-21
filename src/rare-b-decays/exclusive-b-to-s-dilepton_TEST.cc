@@ -21,12 +21,14 @@ class BToKstarDileptonLargeRecoilTest :
         virtual void run() const
         {
             /* Large Recoil */
+
+            // Standard Model
             {
                 Parameters p = Parameters::Defaults();
-                p["c7"] = -0.331;
+                p["Re{c7}"] = -0.331;
                 p["c8"] = -0.181;
-                p["c9"] = +4.27;
-                p["c10"] = -4.173;
+                p["Re{c9}"] = +4.27;
+                p["Re{c10}"] = -4.173;
 
                 ObservableOptions oo;
                 oo.set("form-factors", "BZ2004");
@@ -56,9 +58,9 @@ class BToKstarDileptonLowRecoilTest :
             /* Low Recoil */
             {
                 Parameters p = Parameters::Defaults();
-                p["c7"] = -0.336;
-                p["c9"] = +4.27;
-                p["c10"] = -4.173;
+                p["Re{c7}"] = -0.336;
+                p["Re{c9}"] = +4.27;
+                p["Re{c10}"] = -4.173;
 
                 ObservableOptions oo;
                 oo.set("form-factors", "BZ2004");

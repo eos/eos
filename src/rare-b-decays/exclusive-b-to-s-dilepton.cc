@@ -4,6 +4,7 @@
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <src/rare-b-decays/form_factors.hh>
 #include <src/utils/concrete_observable.hh>
+#include <src/utils/destringify.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/model.hh>
@@ -112,12 +113,12 @@ namespace wf
             c4(p["c4"]),
             c5(p["c5"]),
             c6(p["c6"]),
-            c7(p["c7"]),
+            c7(p["Re{c7}"]),
             c7prime(p["c7prime"]),
             c8(p["c8"]),
-            c9(p["c9"]),
+            c9(p["Re{c9}"]),
             c9prime(p["c9prime"]),
-            c10(p["c10"]),
+            c10(p["Re{c10}"]),
             c10prime(p["c10prime"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c(p["mass::c"]),
@@ -1053,17 +1054,23 @@ namespace wf
 
         Parameter c6;
 
-        Parameter c7;
+        Parameter re_c7;
+
+        Parameter im_c7;
 
         Parameter c7prime;
 
         Parameter c8;
 
-        Parameter c9;
+        Parameter re_c9;
+
+        Parameter im_c9;
 
         Parameter c9prime;
 
-        Parameter c10;
+        Parameter re_c10;
+
+        Parameter im_c10;
 
         Parameter c10prime;
 
@@ -1107,12 +1114,15 @@ namespace wf
             c4(p["c4"]),
             c5(p["c5"]),
             c6(p["c6"]),
-            c7(p["c7"]),
+            re_c7(p["Re{c7}"]),
+            im_c7(p["Im{c7}"]),
             c7prime(p["c7prime"]),
             c8(p["c8"]),
-            c9(p["c9"]),
+            re_c9(p["Re{c9}"]),
+            im_c9(p["Im{c9}"]),
             c9prime(p["c9prime"]),
-            c10(p["c10"]),
+            re_c10(p["Re{c10}"]),
+            im_c10(p["Im{c10}"]),
             c10prime(p["c10prime"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c_MSbar(p["mass::c"]),
@@ -1134,7 +1144,8 @@ namespace wf
             if (! form_factors.get())
                 throw std::string("InternalError");
 
-            cp_conjugate = o.has("cp-conjugate");
+            if (o.has("cp-conjugate"))
+                cp_conjugate = destringify<bool>(o["cp-conjugate"]);
         }
 
         // We use the PS mass except for kappa_1
@@ -1152,7 +1163,7 @@ namespace wf
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
             complex<double> nlo = -1.0 * (c1() * CharmLoops::F17(mu, s, m_b) + c2() * CharmLoops::F27(mu, s, m_b) + c8() * CharmLoops::F87(mu, s, m_b));
 
-            return c7() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
+            return complex<double>(re_c7(), im_c7()) + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
 
         // cf. [GP2004], Eq. (55), p. 10
@@ -1176,7 +1187,12 @@ namespace wf
             complex<double> nlo_alpha_s = -1.0 * (c1() * CharmLoops::F19(mu, s, m_b) + c2() * CharmLoops::F29(mu, s, m_b) + c8() * CharmLoops::F89(mu, s, m_b));
             complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
 
-            return c9() + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
+            return complex<double>(re_c9(), im_c9()) + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
+        }
+
+        complex<double> c10() const
+        {
+            return complex<double>(re_c10(), im_c10());
         }
 
         double kappa() const
@@ -1434,13 +1450,13 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::rho_1(const double & s) const
     {
-        return norm(_imp->c9eff(s) + _imp->kappa() * 2.0 * _imp->m_b_PS() * _imp->m_B / s * _imp->c7eff(s)) + pow(_imp->c10(), 2);
+        return norm(_imp->c9eff(s) + _imp->kappa() * 2.0 * _imp->m_b_PS() * _imp->m_B / s * _imp->c7eff(s)) + norm(_imp->c10());
     }
 
     double
     BToKstarDilepton<LowRecoil>::rho_2(const double & s) const
     {
-        return real(_imp->c10() * (_imp->c9eff(s) + _imp->kappa() * 2.0 * _imp->m_b_PS() * _imp->m_B / s * _imp->c7eff(s)));
+        return real(conj(_imp->c10()) * (_imp->c9eff(s) + _imp->kappa() * 2.0 * _imp->m_b_PS() * _imp->m_B / s * _imp->c7eff(s)));
     }
 
     double
