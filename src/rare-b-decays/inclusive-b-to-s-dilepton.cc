@@ -503,8 +503,8 @@ namespace wf
 
             /* Corrections, cf. [HLMW2005], Table 6, p. 18 */
             std::vector<complex<double>> m7 = {
-                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F17(mu, s, m_b, m_c),
-                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F27(mu, s, m_b, m_c),
+                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F17_massive(mu, s, m_b, m_c),
+                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F27_massive(mu, s, m_b, m_c),
                 0.0,
                 0.0,
                 0.0,
@@ -520,8 +520,8 @@ namespace wf
             };
 
             std::vector<complex<double>> m9 = {
-                alpha_s_tilde * kappa * f(1, s_hat) - pow(alpha_s_tilde, 2) * kappa * CharmLoops::F19(mu, s, m_b, m_c),
-                alpha_s_tilde * kappa * f(2, s_hat) - pow(alpha_s_tilde, 2) * kappa * CharmLoops::F29(mu, s, m_b, m_c),
+                alpha_s_tilde * kappa * f(1, s_hat) - pow(alpha_s_tilde, 2) * kappa * CharmLoops::F19_massive(mu, s, m_b, m_c),
+                alpha_s_tilde * kappa * f(2, s_hat) - pow(alpha_s_tilde, 2) * kappa * CharmLoops::F29_massive(mu, s, m_b, m_c),
                 alpha_s_tilde * kappa * f(3, s_hat),
                 alpha_s_tilde * kappa * f(4, s_hat),
                 alpha_s_tilde * kappa * f(5, s_hat),

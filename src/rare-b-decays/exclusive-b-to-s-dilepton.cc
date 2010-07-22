@@ -578,11 +578,11 @@ namespace wf
             // cf. [BFS2001], Eq. (37), p. 9
             // [Christoph] Use c8 instead of c8eff
             complex<double> C_perp_nf = (-1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * CharmLoops::F27(mu_pole, s, m_b, m_c) + c8() * CharmLoops::F87(mu_pole, s, m_b)
+                    (c2 - c1 / 6.0) * CharmLoops::F27_massive(mu_pole, s, m_b, m_c()) + c8() * CharmLoops::F87_massless(mu_pole, s, m_b)
                     + (s / (2.0 * m_b * m_B)) * (
-                        c1() * CharmLoops::F19(mu_pole, s, m_b, m_c)
-                        + c2() * CharmLoops::F29(mu_pole, s, m_b, m_c)
-                        + c8() * CharmLoops::F89(mu_pole, s, m_b)));
+                        c1() * CharmLoops::F19_massive(mu_pole, s, m_b, m_c())
+                        + c2() * CharmLoops::F29_massive(mu_pole, s, m_b, m_c())
+                        + c8() * CharmLoops::F89_massless(mu_pole, s, m_b)));
 
             return C_perp_f + C_perp_nf;
         }
@@ -655,11 +655,11 @@ namespace wf
             // cf. [BFS2001], Eq. (38), p. 9
             // [Christoph] Use c8 instead of c8eff.
             complex<double> C_par_nf = (+1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * CharmLoops::F27(mu_pole, s, m_b, m_c) + c8eff() * CharmLoops::F87(mu_pole, s, m_b)
+                    (c2 - c1 / 6.0) * CharmLoops::F27_massive(mu_pole, s, m_b, m_c()) + c8eff() * CharmLoops::F87_massless(mu_pole, s, m_b)
                     + (m_B / (2.0 * m_b)) * (
-                        c1() * CharmLoops::F19(mu_pole, s, m_b, m_c)
-                        + c2() * CharmLoops::F29(mu_pole, s, m_b, m_c)
-                        + c8eff() * CharmLoops::F89(mu_pole, s, m_b)));
+                        c1() * CharmLoops::F19_massive(mu_pole, s, m_b, m_c())
+                        + c2() * CharmLoops::F29_massive(mu_pole, s, m_b, m_c())
+                        + c8eff() * CharmLoops::F89_massless(mu_pole, s, m_b)));
 
             return C_par_f + C_par_nf;
         }
@@ -1161,7 +1161,7 @@ namespace wf
 
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
-            complex<double> nlo = -1.0 * (c1() * CharmLoops::F17(mu, s, m_b) + c2() * CharmLoops::F27(mu, s, m_b) + c8() * CharmLoops::F87(mu, s, m_b));
+            complex<double> nlo = -1.0 * (c1() * CharmLoops::F17_massless(mu, s, m_b) + c2() * CharmLoops::F27_massless(mu, s, m_b) + c8() * CharmLoops::F87_massless(mu, s, m_b));
 
             return complex<double>(re_c7(), im_c7()) + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
@@ -1184,7 +1184,7 @@ namespace wf
                 lambda_hat_u = conj(lambda_hat_u);
 
             complex<double> lo = c_b * Gb + c_0 * G0 + c;
-            complex<double> nlo_alpha_s = -1.0 * (c1() * CharmLoops::F19(mu, s, m_b) + c2() * CharmLoops::F29(mu, s, m_b) + c8() * CharmLoops::F89(mu, s, m_b));
+            complex<double> nlo_alpha_s = -1.0 * (c1() * CharmLoops::F19_massless(mu, s, m_b) + c2() * CharmLoops::F29_massless(mu, s, m_b) + c8() * CharmLoops::F89_massless(mu, s, m_b));
             complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
 
             return complex<double>(re_c9(), im_c9()) + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;

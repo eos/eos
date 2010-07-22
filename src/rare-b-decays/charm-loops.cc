@@ -135,28 +135,28 @@ namespace wf
 
     /* Two-Loop functions for massless quarks from[S2004], suitable for up-quark loops */
     complex<double>
-    CharmLoops::F17(const double & mu, const double & s, const double & m_b)
+    CharmLoops::F17_massless(const double & mu, const double & s, const double & m_b)
     {
         // cf. [S2004], Eq. (22), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
         return -A(mu, s, m_b);
     }
 
     complex<double>
-    CharmLoops::F19(const double & mu, const double & s, const double & m_b)
+    CharmLoops::F19_massless(const double & mu, const double & s, const double & m_b)
     {
         // cf. [S2004], Eq. (24), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
         return -B(mu, s, m_b) - 4.0 * C(mu, s, m_b);
     }
 
     complex<double>
-    CharmLoops::F27(const double & mu, const double & s, const double & m_b)
+    CharmLoops::F27_massless(const double & mu, const double & s, const double & m_b)
     {
         // cf. [S2004], Eq. (23), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
         return 6.0 * A(mu, s, m_b);
     }
 
     complex<double>
-    CharmLoops::F29(const double & mu, const double & s, const double & m_b)
+    CharmLoops::F29_massless(const double & mu, const double & s, const double & m_b)
     {
         // cf. [S2004], Eq. (25), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
         return 6.0 * B(mu, s, m_b) - 3.0 * C(mu, s, m_b);
@@ -165,7 +165,7 @@ namespace wf
     /* Two-Loop functions for charm-quark loops */
     // cf. [AAGW2001], Eq. (56), p. 20
     complex<double>
-    CharmLoops::F17(const double & mu, const double & s, const double & m_b, const double & m_c)
+    CharmLoops::F17_massive(const double & mu, const double & s, const double & m_b, const double & m_c)
     {
         // cf. [ABGW2001], Appendix B, pp. 34-38
         static long double kap1700[7][5][2] = {
@@ -353,7 +353,7 @@ namespace wf
 
     // cf. [AAGW2001], Eq. (56), p. 20
     complex<double>
-    CharmLoops::F27(const double & mu, const double & s, const double & m_b, const double & m_q)
+    CharmLoops::F27_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
         // cf. [ABGW2001], Appendix B, pp. 34-38
         static long double kap2700[7][5][2] = {
@@ -508,7 +508,7 @@ namespace wf
 
     // cf. [AAGW2001], Eq. (54), p. 19
     complex<double>
-    CharmLoops::F19(const double & mu, const double & s, const double & m_b, const double & m_q)
+    CharmLoops::F19_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
         // cf. [ABGW2001], Appendix B, pp. 34-38
         static long double kap1900[7][5][2] = {
@@ -681,7 +681,7 @@ namespace wf
 
     // cf. [AAGW2001], Eq. (54), p. 19
     complex<double>
-    CharmLoops::F29(const double & mu, const double & s, const double & m_b, const double & m_q)
+    CharmLoops::F29_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
         // cf. [ABGW2001], Appendix B, pp. 34-38
         static long double kap2900[7][5][2] = {
@@ -853,7 +853,7 @@ namespace wf
 
     // cf. [BFS2001], Eq. (82), p. 30
     complex<double>
-    CharmLoops::F87(const double & mu, const double & s, const double & m_q)
+    CharmLoops::F87_massless(const double & mu, const double & s, const double & m_q)
     {
         // Loop-Functions are calculated for the pole mass!
         double s_hat = s / (m_q * m_q);
@@ -872,7 +872,7 @@ namespace wf
 
     // cf. [BFS2001], Eq. (83), p. 30
     complex<double>
-    CharmLoops::F89(const double & mu, const double & s, const double & m_q)
+    CharmLoops::F89_massless(const double & mu, const double & s, const double & m_q)
     {
         // Loop-Functions are calculated for the pole mass!
         double s_hat = s / (m_q * m_q);
