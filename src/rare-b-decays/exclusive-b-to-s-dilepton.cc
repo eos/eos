@@ -3,6 +3,7 @@
 #include <src/rare-b-decays/charm-loops.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <src/rare-b-decays/form_factors.hh>
+#include <src/rare-b-decays/hard-scattering.hh>
 #include <src/utils/concrete_observable.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/integrate.hh>
@@ -246,85 +247,6 @@ namespace wf
         }
 
         /* NLO functions */
-        // cf. [BFS2001], Eqs. (30)-(32), p. 8
-        // @mB : mass of the B meson
-        static complex<double> I1(const double & s, const double & u, const double & m_q, const double & mB)
-        {
-            if (m_q == 0.0)
-                return complex<double>(1.0, 0.0);
-
-            int status;
-            gsl_sf_result res_re, res_im;
-
-            double ubar = 1.0 - u;
-            double m_q2 = m_q * m_q;
-            double m_B2 = mB * mB;
-
-            double a, a2, sign;
-            complex<double> dilogArg, dilog1, dilog2;
-            complex<double> LxpLxm, LypLym;
-
-            if (1.0 - 4.0 * m_q2 / (m_B2 - u * (m_B2 - s)) > 0)
-            {
-                a = (1 - std::sqrt(1.0 - 4.0 * m_q2 / (m_B2 - u * (m_B2 - s))))
-                  / (1 + std::sqrt(1.0 - 4.0 * m_q2 / (m_B2 - u * (m_B2 - s))));
-                LxpLxm = -M_PI* M_PI / 3.0
-                    + std::log(a) * (std::log(a) + complex<double>(0.0, M_PI))
-                    + gsl_sf_dilog(-a) + gsl_sf_dilog(-1.0/a);
-            }
-            else
-            {
-                a  = sqrt(4.0 * m_q2 / (m_B2 - u * (m_B2 - s)) - 1);
-                a2 = a * a;
-
-                if (a2 - 1 > 0)
-                    sign = +1.0;
-                else
-                    sign = -1.0;
-
-                dilogArg = complex<double>((a2 - 1.0)/(a2 + 1.0), -2.0 * a / (a2 + 1.0));
-                status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
-                dilog1 = complex<double>( res_re.val, res_im.val);
-
-                dilogArg = complex<double>((a2 - 1.0)/(a2 + 1.0), +2.0 * a / (a2 + 1.0));
-                status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
-                dilog2 = complex<double>(res_re.val, res_im.val);
-
-                LxpLxm = -1.0 / 3.0 * M_PI * M_PI - std::atan(2.0 * a / (a2 - 1.0)) * (std::atan(2.0 * a / (a2 - 1.0)) - M_PI * sign)
-                    + dilog1 + dilog2;
-            }
-
-            if (1.0 - 4.0 * m_q2 / s > 0)
-            {
-                a = (1.0 - std::sqrt(1.0 - 4.0 * m_q2 / s))
-                  / (1.0 + std::sqrt(1.0 - 4.0 * m_q2 / s));
-                LypLym = -1.0 / 3.0 * M_PI * M_PI + std::log(a) * (std::log(a) + complex<double>(0.0, M_PI))
-                    + gsl_sf_dilog(-a) + gsl_sf_dilog(-1./a);
-            }
-            else
-            {
-                a  = std::sqrt(4.0 * m_q2 / s - 1.0);
-                a2 = a * a;
-                if (a2 - 1.0 > 0)
-                    sign = +1.0;
-                else
-                    sign = -1.0;
-
-                dilogArg = complex<double>((a2 - 1.0) / (a2 + 1.0), -2.0 * a / (a2 + 1.0));
-                status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
-                dilog1 = complex<double>(res_re.val, res_im.val);
-
-                dilogArg = complex<double>((a2 - 1.0) / (a2 + 1.0), +2.0 * a / (a2 + 1.0));
-                status = gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
-                dilog2 = complex<double>(res_re.val, res_im.val);
-
-                LypLym = -1.0 / 3.0 * M_PI * M_PI - std::atan(2.0 * a / (a2 - 1.0)) * (std::atan(2.0 * a / (a2 - 1.0)) - M_PI * sign)
-                    + dilog1 + dilog2;
-            }
-
-            return 1.0 + 2.0 * m_q2 / (ubar * (m_B2 - s)) * (LxpLxm - LypLym);
-        }
-
         // cf. [BFS2001], Eq. (48)
         double phi_K(const double & u, const double & a_1, const double & a_2) const
         {
@@ -364,7 +286,7 @@ namespace wf
             double E = energy(s);
             double x = ubar * m_B * m_B + u * s;
 
-            complex<double> result = (2.0 * m_B / ubar / E) * memoise(I1, s, u, m_q, m_B());
+            complex<double> result = (2.0 * m_B / ubar / E) * memoise(HardScattering::I1, s, u, m_q, m_B());
             if (m_q > 0.0)
                 result = result + (s / ubar / ubar / E / E) * (CharmLoops::B0(x, m_q) - CharmLoops::B0(s, m_q));
 
@@ -426,7 +348,7 @@ namespace wf
             double E = energy(s);
             double x = ubar * m_B * m_B + u * s;
 
-            complex<double> result = (2.0 * m_B / ubar / E) * memoise(I1, s, u, m_q, m_B());
+            complex<double> result = (2.0 * m_B / ubar / E) * memoise(HardScattering::I1, s, u, m_q, m_B());
             if (m_q > 0.0)
                 result = result + (x / ubar / ubar / E / E) * (CharmLoops::B0(x, m_q) - CharmLoops::B0(s, m_q));
 

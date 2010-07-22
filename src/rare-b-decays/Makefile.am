@@ -13,7 +13,8 @@ libwfrarebdecays_la_SOURCES = \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
 	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
 	factory.cc factory.hh \
-	form_factors.cc form_factors.hh
+	form_factors.cc form_factors.hh \
+	hard-scattering.cc hard-scattering.hh
 libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la -lgslcblas -lgsl
 
 noinst_PROGRAMS = amplitudes ff scan2 scan2-raw scan3 integrated observables
@@ -44,7 +45,8 @@ TESTS = \
 	charm-loops_TEST \
 	exclusive-b-to-s-dilepton_TEST \
 	inclusive-b-to-s-dilepton_TEST \
-	inclusive-b-to-s-gamma_TEST
+	inclusive-b-to-s-gamma_TEST \
+	hard-scattering_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a $(top_builddir)/src/utils/libwfutils.la libwfrarebdecays.la
 
 check_PROGRAMS = $(TESTS)
@@ -62,3 +64,6 @@ inclusive_b_to_s_dilepton_TEST_LDADD = $(TESTS_LD_ADD)
 
 inclusive_b_to_s_gamma_TEST_SOURCES = inclusive-b-to-s-gamma_TEST.cc
 inclusive_b_to_s_gamma_TEST_LDADD = $(TESTS_LD_ADD)
+
+hard_scattering_TEST_SOURCES = hard-scattering_TEST.cc
+hard_scattering_TEST_LDADD = $(TESTS_LD_ADD)
