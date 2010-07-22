@@ -7,6 +7,7 @@
 #include <src/utils/destringify.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
+#include <src/utils/memoise.hh>
 #include <src/utils/model.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
@@ -246,7 +247,8 @@ namespace wf
 
         /* NLO functions */
         // cf. [BFS2001], Eqs. (30)-(32), p. 8
-        complex<double> I1(const double & s, const double & u, const double & m_q) const
+        // @mB : mass of the B meson
+        static complex<double> I1(const double & s, const double & u, const double & m_q, const double & mB)
         {
             if (m_q == 0.0)
                 return complex<double>(1.0, 0.0);
@@ -256,7 +258,7 @@ namespace wf
 
             double ubar = 1.0 - u;
             double m_q2 = m_q * m_q;
-            double m_B2 = m_B * m_B;
+            double m_B2 = mB * mB;
 
             double a, a2, sign;
             complex<double> dilogArg, dilog1, dilog2;
@@ -362,7 +364,7 @@ namespace wf
             double E = energy(s);
             double x = ubar * m_B * m_B + u * s;
 
-            complex<double> result = (2.0 * m_B / ubar / E) * I1(s, u, m_q);
+            complex<double> result = (2.0 * m_B / ubar / E) * memoise(I1, s, u, m_q, m_B());
             if (m_q > 0.0)
                 result = result + (s / ubar / ubar / E / E) * (CharmLoops::B0(x, m_q) - CharmLoops::B0(s, m_q));
 
@@ -424,7 +426,7 @@ namespace wf
             double E = energy(s);
             double x = ubar * m_B * m_B + u * s;
 
-            complex<double> result = (2.0 * m_B / ubar / E) * I1(s, u, m_q);
+            complex<double> result = (2.0 * m_B / ubar / E) * memoise(I1, s, u, m_q, m_B());
             if (m_q > 0.0)
                 result = result + (x / ubar / ubar / E / E) * (CharmLoops::B0(x, m_q) - CharmLoops::B0(s, m_q));
 
@@ -578,10 +580,10 @@ namespace wf
             // cf. [BFS2001], Eq. (37), p. 9
             // [Christoph] Use c8 instead of c8eff
             complex<double> C_perp_nf = (-1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * CharmLoops::F27_massive(mu_pole, s, m_b, m_c()) + c8() * CharmLoops::F87_massless(mu_pole, s, m_b)
+                    (c2 - c1 / 6.0) * memoise(CharmLoops::F27_massive, mu_pole, s, m_b, m_c()) + c8() * CharmLoops::F87_massless(mu_pole, s, m_b)
                     + (s / (2.0 * m_b * m_B)) * (
-                        c1() * CharmLoops::F19_massive(mu_pole, s, m_b, m_c())
-                        + c2() * CharmLoops::F29_massive(mu_pole, s, m_b, m_c())
+                        c1() * memoise(CharmLoops::F19_massive, mu_pole, s, m_b, m_c())
+                        + c2() * memoise(CharmLoops::F29_massive, mu_pole, s, m_b, m_c())
                         + c8() * CharmLoops::F89_massless(mu_pole, s, m_b)));
 
             return C_perp_f + C_perp_nf;
@@ -655,10 +657,10 @@ namespace wf
             // cf. [BFS2001], Eq. (38), p. 9
             // [Christoph] Use c8 instead of c8eff.
             complex<double> C_par_nf = (+1.0 / QCD::casimir_f) * (
-                    (c2 - c1 / 6.0) * CharmLoops::F27_massive(mu_pole, s, m_b, m_c()) + c8eff() * CharmLoops::F87_massless(mu_pole, s, m_b)
+                    (c2 - c1 / 6.0) * memoise(CharmLoops::F27_massive, mu_pole, s, m_b, m_c()) + c8eff() * CharmLoops::F87_massless(mu_pole, s, m_b)
                     + (m_B / (2.0 * m_b)) * (
-                        c1() * CharmLoops::F19_massive(mu_pole, s, m_b, m_c())
-                        + c2() * CharmLoops::F29_massive(mu_pole, s, m_b, m_c())
+                        c1() * memoise(CharmLoops::F19_massive, mu_pole, s, m_b, m_c())
+                        + c2() * memoise(CharmLoops::F29_massive, mu_pole, s, m_b, m_c())
                         + c8eff() * CharmLoops::F89_massless(mu_pole, s, m_b)));
 
             return C_par_f + C_par_nf;

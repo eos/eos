@@ -15,6 +15,7 @@ libwfutils_la_SOURCES = \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.cc kinematic.hh \
 	lock.cc lock.hh \
+	memoise.hh \
 	model.cc model.hh \
 	mutex.cc mutex.hh \
 	parameters.cc parameters.hh \
@@ -32,6 +33,7 @@ libwfutils_la_LIBADD = -lpthread
 
 TESTS = \
 	integrate_TEST \
+	memoise_TEST \
 	qcd_TEST \
 	save_TEST \
 	stringify_TEST \
@@ -41,6 +43,9 @@ TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
 check_PROGRAMS = $(TESTS)
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_LDADD = $(TESTS_LD_ADD)
+
+memoise_TEST_SOURCES = memoise_TEST.cc
+memoise_TEST_LDADD = $(TESTS_LD_ADD)
 
 qcd_TEST_SOURCES = qcd_TEST.cc
 qcd_TEST_LDADD = $(TESTS_LD_ADD)
