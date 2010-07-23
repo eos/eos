@@ -45,17 +45,23 @@ namespace wf
 
         Parameter c6;
 
-        Parameter c7;
+        Parameter re_c7;
+
+        Parameter im_c7;
 
         Parameter c7prime;
 
         Parameter c8;
 
-        Parameter c9;
+        Parameter re_c9;
+
+        Parameter im_c9;
 
         Parameter c9prime;
 
-        Parameter c10;
+        Parameter re_c10;
+
+        Parameter im_c10;
 
         Parameter c10prime;
 
@@ -115,12 +121,15 @@ namespace wf
             c4(p["c4"]),
             c5(p["c5"]),
             c6(p["c6"]),
-            c7(p["Re{c7}"]),
+            re_c7(p["Re{c7}"]),
+            im_c7(p["Im{c7}"]),
             c7prime(p["c7prime"]),
             c8(p["c8"]),
-            c9(p["Re{c9}"]),
+            re_c9(p["Re{c9}"]),
+            im_c9(p["Im{c9}"]),
             c9prime(p["c9prime"]),
-            c10(p["Re{c10}"]),
+            re_c10(p["Re{c10}"]),
+            im_c10(p["Im{c10}"]),
             c10prime(p["c10prime"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c(p["mass::c"]),
@@ -193,15 +202,25 @@ namespace wf
 
         /* Effective wilson coefficients */
         // cf. [BFS2001], below Eq. (9), p. 4
-        double c7eff() const
+        complex<double> c7eff() const
         {
-            return c7() - 1.0/3.0 * c3() - 4.0/9.0 * c4() - 20.0/3.0 * c5() - 80.0/9.0 * c6();
+            return complex<double>(re_c7(), im_c7()) - 1.0/3.0 * c3() - 4.0/9.0 * c4() - 20.0/3.0 * c5() - 80.0/9.0 * c6();
         }
 
         // cf. [BFS2001], below Eq. (26), p. 8
         double c8eff() const
         {
             return c8() + c3() - 1.0/6.0 * c4() + 20.0 * c5() - 10.0/3.0 * c6();
+        }
+
+        complex<double> c9() const
+        {
+            return complex<double>(re_c9(), im_c9());
+        }
+
+        complex<double> c10() const
+        {
+            return complex<double>(re_c10(), im_c10());
         }
 
         // cf. [BFS2001], Eq. (10), p. 4
@@ -263,7 +282,7 @@ namespace wf
         }
 
         // cf. [BFS2001], Eq. (20), p. 6, module the inverse of lambda_B,+
-        double Tf_perp_p(const double & h, const double & s, const double & u) const
+        complex<double> Tf_perp_p(const double & h, const double & s, const double & u) const
         {
             return (c7eff() + h * c7prime()) * (2.0 * m_B / (1.0 - u) / energy(s));
         }
@@ -273,7 +292,7 @@ namespace wf
         {
             double E = energy(s);
 
-            return ((c7eff() - c7prime) + (s / (2.0 * m_B * m_b_PS())) * Y0(s)) * (2.0 * m_B * m_B / (1 - u) / E / E);
+            return ((c7eff() - c7prime()) + (s / (2.0 * m_B * m_b_PS())) * Y0(s)) * (2.0 * m_B * m_B / (1 - u) / E / E);
         }
 
         // cf. [BFS2001], Eq. (27), p. 8
@@ -497,7 +516,7 @@ namespace wf
 
             // cf. [BFS2004], Eq. (44), p. 24
             // [Christoph] Use c7 instead of c7eff
-            complex<double> C_perp_f = (c7() - c7prime()) * (8.0 * std::log(m_b / mu) - L(s) - 4.0 * (1.0 - mu_f() / m_b));
+            complex<double> C_perp_f = (complex<double>(re_c7(), im_c7()) - c7prime()) * (8.0 * std::log(m_b / mu) - L(s) - 4.0 * (1.0 - mu_f() / m_b));
 
             // cf. [BFS2001], Eq. (37), p. 9
             // [Christoph] Use c8 instead of c8eff
@@ -523,7 +542,7 @@ namespace wf
 
             // cf. [BFS2001], Eq. (20)
             // [Christoph] Use c7 instead of c7eff
-            complex<double> Tf_perp_p = c7() * 2.0 * m_B / (1.0 - u) / energy(s);
+            complex<double> Tf_perp_p = complex<double>(re_c7(), im_c7()) * (2.0 * m_B / (1.0 - u) / energy(s));
 
             // cf. [BFS2001], Eq. (23)
             // [Christoph] Use c8 instead of c8eff
@@ -572,7 +591,7 @@ namespace wf
 
             // cf. [BFS2004], Eq. (45), p. 24
             // [Christoph] Use c7 instead of c7eff.
-            complex<double> C_par_f = -1.0 * (c7() - c7prime()) * (8.0 * std::log(m_b / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b));
+            complex<double> C_par_f = -1.0 * (complex<double>(re_c7(), im_c7()) - c7prime()) * (8.0 * std::log(m_b / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b));
             /* for [BFS2001] version of xi_par we also needed: */
             // C_par_f += (m_B / (2.0 * m_b)) * Y0(s) * (2.0 - 2.0 * L(s));
 
@@ -607,7 +626,7 @@ namespace wf
             //complex<double> Tf_par_p = (c7() - c7prime + (s / (2.0 * m_b * m_B)) * Y0(s)) * (2.0 * pow(m_B / energy(s), 2));
             // cf. [BFS2004], Eq. (49)
             // [Christoph] Use c7 instead of c7eff.
-            complex<double> Tf_par_p = c7() * 4.0 * m_B / (1.0 - u) / energy(s);
+            complex<double> Tf_par_p = complex<double>(re_c7(), im_c7()) * (4.0 * m_B / (1.0 - u) / energy(s));
 
             // cf. [BFS2001], Eq. (25)
             complex<double> Tnf_par_p = m_B / m_b * (
@@ -665,10 +684,10 @@ namespace wf
             double h = helicity;
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
-            double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
+            complex<double> wilson = (c9() - c9prime()) + h * (c10() - c10prime());
             double prefactor = -1.0 / (2.0 * m_Kstar * std::sqrt(s));
 
-            double a = wilson * ((m_B * m_B - m_Kstar * m_Kstar - s) * 2.0 * energy(s) * xi_perp(s)
+            complex<double> a = wilson * ((m_B * m_B - m_Kstar * m_Kstar - s) * 2.0 * energy(s) * xi_perp(s)
                 -lambda(m_B * m_B, m_Kstar * m_Kstar, s) * m_B / (m_B * m_B - m_Kstar * m_Kstar) * (xi_perp(s) - xi_par(s)));
             complex<double> b = 2 * m_b_PS() * (((m_B * m_B + 3 * m_Kstar * m_Kstar - s) * 2.0 * energy(s) / m_B
                         - lambda(m_B * m_B, m_Kstar * m_Kstar, s) / (m_B * m_B - m_Kstar * m_Kstar)) * calT_perp(-1.0, s)
@@ -687,7 +706,7 @@ namespace wf
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
             double prefactor = +std::sqrt(2.0) * m_B * std::sqrt(lambda(1.0, mKhat * mKhat, shat));
-            double wilson = (c9() + c9prime()) + h * (c10() + c10prime());
+            complex<double> wilson = (c9() + c9prime()) + h * (c10() + c10prime());
 
             return this->norm(s) * uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * calT_perp(+1.0, s));
         }
@@ -702,7 +721,7 @@ namespace wf
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
             double prefactor = -std::sqrt(2.0) * m_B * (1.0 - shat);
-            double wilson = (c9() - c9prime()) + h * (c10() - c10prime());
+            complex<double> wilson = (c9() - c9prime()) + h * (c10() - c10prime());
 
             return this->norm(s) * uncertainty * prefactor * (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * calT_perp(-1.0, s));
         }
