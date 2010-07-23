@@ -36,7 +36,7 @@ class BToXsDileptonLargeRecoilTest :
 
                 const double eps = 1e-11;
 
-                TEST_CHECK_NEARLY_EQUAL(1.55711e-6, d.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.55709e-6, d.integrated_branching_ratio(1.00, 6.00), eps);
             }
         }
 } b_to_x_s_dilepton_large_recoil_test;

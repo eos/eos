@@ -110,116 +110,6 @@ namespace wf
         }
 
         /* NLO functions */
-        // cf. [BFS2001], Eq. (29), p. 8
-        complex<double> B0(const double & s, const double & m_q) const
-        {
-            double z = 4.0 * m_q * m_q / s;
-            double rp, ip;
-
-            if (m_q < 0.0)
-            {
-                throw InternalError("Implementation<BToKstarDilepton<LargeRecoil>>::B0: m_q < 0!");
-            };
-
-            if ((0.0 == m_q) && (0.0 == s))
-            {
-                throw InternalError("Implementation<BToKstarDilepton<LargeRecoil>>::B0: m_q == 0 & s == 0");
-            }
-
-            if (0 == s)
-                return complex<double>(-2.0, 0.0);
-
-            if (z > 1.0)
-            {
-                rp = -2.0 * std::sqrt(z - 1.0) * std::atan(1.0 / std::sqrt(z - 1.0));
-                ip = 0.0;
-            }
-            else
-            {
-                rp = std::sqrt(1.0 - z) * std::log((1.0 - std::sqrt(1 - z)) / (1.0 + std::sqrt(1.0 - z)));
-                ip = std::sqrt(1.0 - z) * M_PI;
-            }
-
-            return complex<double>(rp, ip);
-        }
-
-        // cf. [BFS2001], Eq. (84), p. 30
-        double C0(const double & s_hat) const
-        {
-            static const int points = 40;
-            // Integration boundaries of u = (0, u_max]
-            static const double dx = (1.0 - 0.0) / points;
-            static const double g[2] =
-            {
-                (1.0 + std::sqrt(3.0 / 5.0)) / 2.0,
-                (1.0 - std::sqrt(3.0 / 5.0)) / 2.0
-            };
-
-            long double x1, x2, x;
-            long double y[3];
-            long double result = 0;
-
-            for (int i = 0; i < points; i++)
-            {
-                // 0 is lower integration boundary
-
-                x1 = 0.0 + i * dx;
-                x2 = 0.0 + (i + 1) * dx;
-                for (int j = 0; j < 3; j++)
-                {
-                    switch (j)
-                    {
-                        case 0: x = x1 * g[0] + x2 * g[1];
-                                break;
-
-                        case 1: x = (x1 + x2) / 2.0;
-                                break;
-
-                        case 2: x = x1 * g[1] + x2 * g[0];
-                                break;
-                    }
-
-                    y[j] = std::log(x * x / (1.0 - s_hat * x * (1.0 - x))) / (1.0 + x * (1.0 - s_hat));
-                }
-
-                result += (5.0 * y[0] + 8.0 * y[1] + 5.0 * y[2]) * dx / 18.0;
-            };
-
-            return result;
-        }
-
-        // cf. [BFS2001], Eq. (82), p. 30
-        complex<double> F87(const double & s_hat) const
-        {
-            double m_b = m_b_pole();
-            double s_hat2 = s_hat * s_hat;
-            double s = s_hat * m_b * m_b;
-            double denom = (1.0 - s_hat);
-            double denom2 = denom * denom;
-
-            complex<double> a = complex<double>(-32.0 * std::log(mu / m_b) - 8.0 * s_hat / denom * std::log(s_hat)
-                    - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2,
-                    -8.0 * M_PI);
-            complex<double> b = (4.0 / denom / denom2)
-                * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_b) - (4.0 + 2.0 * s_hat) * C0(s_hat));
-
-            return (1.0 / 9.0) * (a + b);
-        }
-
-        // cf. [BFS2001], Eq. (83), p. 30
-        complex<double> F89(const double & s_hat) const
-        {
-            double m_b = m_b_pole();
-            double s = s_hat * m_b * m_b;
-            double denom = (1.0 - s_hat);
-            double denom2 = denom * denom;
-
-            double a = 16.0 * std::log(s_hat) / denom + 8.0 * (5.0 - 2.0 * s_hat) / denom2;
-            complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_b) - 2.0 * C0(s_hat));
-
-            return (1.0 / 9.0) * (a + b);
-        }
-
         // cf. [BMU1999], Eq. (34), p. 9 and [HLMW2005], Eq. (127), p. 29
         double omega1_99(const double & s_hat) const
         {
@@ -510,7 +400,7 @@ namespace wf
                 0.0,
                 0.0,
                 alpha_s_tilde * kappa,
-                -pow(alpha_s_tilde, 2) * kappa * F87(s_hat),
+                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F87_massless(mu, s, m_b),
                 0.0,
                 0.0,
                 0.0,
@@ -527,7 +417,7 @@ namespace wf
                 alpha_s_tilde * kappa * f(5, s_hat),
                 alpha_s_tilde * kappa * f(6, s_hat),
                 0.0,
-                -pow(alpha_s_tilde, 2) * kappa * F89(s_hat),
+                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F89_massless(mu, s, m_b),
                 1.0 + alpha_s_tilde * kappa * f9pen(s_hat),
                 0.0,
                 alpha_s_tilde * kappa * f(3, s_hat),
