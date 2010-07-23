@@ -61,6 +61,7 @@ class Scan2
 
         Scan2(const std::string & x_name, const double & x_min, const double & x_max,
                 const std::string & y_name, const double & y_min, const double & y_max,
+                unsigned points,
                 const std::list<Input> & inputs,
                 const std::list<std::pair<std::string, double>> & param_changes,
                 const std::list<std::string> & variation_names) :
@@ -71,7 +72,7 @@ class Scan2
             y_name(y_name),
             y_min(y_min),
             y_max(y_max),
-            points(60),
+            points(points),
             inputs(inputs),
             variation_names(variation_names)
         {
@@ -229,6 +230,7 @@ main(int argc, char * argv[])
         std::string x, y;
         double x_min = -10.0, x_max = +10.0;
         double y_min = -10.0, y_max = +10.0;
+        unsigned points = 60;
         std::list<Input> input;
         std::list<std::string> variation_names;
         std::list<std::pair<std::string, double>> param_changes;
@@ -249,6 +251,12 @@ main(int argc, char * argv[])
                 y = std::string(*(++a));
                 y_min = destringify<double>(*(++a));
                 y_max = destringify<double>(*(++a));
+                continue;
+            }
+
+            if ("--points" == argument)
+            {
+                points = destringify<unsigned>(*(++a));
                 continue;
             }
 
@@ -294,7 +302,7 @@ main(int argc, char * argv[])
         if (input.empty())
             throw DoUsage("Need at least one input");
 
-        Scan2 scanner(x, x_min, x_max, y, y_min, y_max, input, param_changes, variation_names);
+        Scan2 scanner(x, x_min, x_max, y, y_min, y_max, points, input, param_changes, variation_names);
         scanner.scan();
     }
     catch(DoUsage & e)
