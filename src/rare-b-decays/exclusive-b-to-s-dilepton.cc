@@ -1210,10 +1210,10 @@ namespace wf
             return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
 
-        // Quantity C, related to the strong phase of the amplitudes
-        complex<double> C(const double & s) const
+        // Quantity Y = Y_9 + lambda_u_hat Y_9^u + kappa_hat Y_7, the strong phase contributor of the amplitudes
+        complex<double> Y(const double & s) const
         {
-            return c9eff(s) + kappa() * c7eff(s) * (2.0 * m_b_MSbar * m_B / s);
+            return (c9eff(s) - complex<double>(re_c9, im_c9)) + kappa() * (c7eff(s) - complex<double>(re_c7, im_c7)) * (2.0 * m_b_MSbar * m_B / s);
         }
 
         // Unormalized combinations of transversity amplitudes
@@ -1367,15 +1367,15 @@ namespace wf
     }
 
     double
-    BToKstarDilepton<LowRecoil>::real_c(const double & s) const
+    BToKstarDilepton<LowRecoil>::real_y(const double & s) const
     {
-        return real(_imp->C(s));
+        return real(_imp->Y(s));
     }
 
     double
-    BToKstarDilepton<LowRecoil>::imag_c(const double & s) const
+    BToKstarDilepton<LowRecoil>::imag_y(const double & s) const
     {
-        return imag(_imp->C(s));
+        return imag(_imp->Y(s));
     }
 
     double
