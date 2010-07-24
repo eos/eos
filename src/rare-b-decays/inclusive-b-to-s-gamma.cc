@@ -17,7 +17,9 @@ namespace wf
     {
         std::shared_ptr<Model> model;
 
-        Parameter c7;
+        Parameter re_c7;
+
+        Parameter im_c7;
 
         Parameter m_b_MSbar;
 
@@ -27,7 +29,8 @@ namespace wf
 
         Implementation(const Parameters & p) :
             model(new StandardModel(p)),
-            c7(p["Re{c7}"]),
+            re_c7(p["Re{c7}"]),
+            im_c7(p["Im{c7}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             br_bcsl(p["exp::BR(B->X_clnu)"]),
             uncertainty(p["B->X_sgamma::uncertainty"])
@@ -61,10 +64,13 @@ namespace wf
             double kappa = 1.0 - 2.0/3.0 * QCD::alpha_s(m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * pow(1.0 - m_c_hat, 2));
 
             double ckm = norm(model->ckm_tb() * conj(model->ckm_ts()) / model->ckm_cb());
-            double c7np = c7 - c7sm;
+            complex<double> c7np = complex<double>(re_c7 - c7sm, im_c7);
 
-            return (sm + sm_delta * uncertainty)
-                + 6.0 * alpha_e / M_PI * br_bcsl * ckm / g / kappa * (pow(c7np, 2) + 2.0 * c7sm * c7np);
+            double result = (sm + sm_delta * uncertainty)
+                + 6.0 * alpha_e / M_PI * br_bcsl * ckm / g / kappa * (norm(c7np) + 2.0 * real(c7np * c7sm));
+
+            // Make sure the approximate BR is positive definite.
+            return std::max(result, 0.0);
         }
     };
 
