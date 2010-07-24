@@ -3,11 +3,13 @@
 #ifndef WFITTER_GUARD_SRC_UTILS_MEMOISE_HH
 #define WFITTER_GUARD_SRC_UTILS_MEMOISE_HH 1
 
-#include <tuple>
-#include <unordered_map>
-
 #include <src/utils/instantiation_policy.hh>
 #include <src/utils/instantiation_policy-impl.hh>
+#include <src/utils/lock.hh>
+#include <src/utils/mutex.hh>
+
+#include <tuple>
+#include <unordered_map>
 
 /* We are using a custom std::hash for tuple<FunctinPtr, double, ..., double> */
 namespace std
@@ -70,6 +72,7 @@ namespace wf
         public InstantiationPolicy<Memoiser<Result_, Params_ ...>, Singleton>
     {
         public:
+            Mutex * const mutex;
             typedef Result_ (*FunctionType)(const Params_ & ...);
             typedef std::tuple<FunctionType, Params_...> KeyType;
 
@@ -77,8 +80,20 @@ namespace wf
             std::unordered_map<KeyType, Result_> memoisations;
 
         public:
+            Memoiser() :
+                mutex(new Mutex)
+            {
+            }
+
+            ~Memoiser()
+            {
+                delete mutex;
+            }
+
             Result_ operator() (const FunctionType & f, const Params_ & ... p)
             {
+                Lock l(*mutex);
+
                 KeyType key(f, p ...);
                 auto i = memoisations.find(key);
 
