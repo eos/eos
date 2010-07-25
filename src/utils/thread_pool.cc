@@ -20,6 +20,8 @@ namespace wf
     struct Implementation<ThreadPool>
     {
         unsigned number_of_threads;
+        unsigned long nominal_capacity;
+        unsigned long stop_capacity;
 
         // Thread termination
         Mutex * const terminate_mutex;
@@ -30,9 +32,10 @@ namespace wf
         Mutex * const job_mutex;
 
         ConditionVariable * const job_arrival;
+        ConditionVariable * const job_capacity;
 
-        unsigned waiting_jobs;
-        unsigned done_jobs;
+        unsigned long waiting_for_jobs;
+        unsigned long pending_jobs;
 
         std::list<std::pair<Ticket, std::function<void (void)> *>> queue;
 
@@ -58,9 +61,9 @@ namespace wf
 
                     if (queue.empty())
                     {
-                        waiting_jobs += 1;
+                        waiting_for_jobs += 1;
                         job_arrival->wait(*job_mutex);
-                        waiting_jobs -= 1;
+                        waiting_for_jobs -= 1;
                     }
 
                     if (queue.empty())
@@ -78,6 +81,14 @@ namespace wf
                 }
 
                 (*job)();
+                {
+                    Lock l(*job_mutex);
+                    pending_jobs -= 1;
+
+                    if (pending_jobs == nominal_capacity)
+                        job_capacity->signal();
+
+                }
                 ticket.mark();
             }
             while (true);
@@ -85,12 +96,15 @@ namespace wf
 
         Implementation() :
             number_of_threads(sysconf(_SC_NPROCESSORS_CONF)),
+            nominal_capacity(number_of_threads * 10),
+            stop_capacity(nominal_capacity * 2),
             terminate_mutex(new Mutex),
             terminate(false),
             job_mutex(new Mutex),
             job_arrival(new ConditionVariable),
-            waiting_jobs(0),
-            done_jobs(0)
+            job_capacity(new ConditionVariable),
+            waiting_for_jobs(0),
+            pending_jobs(0)
         {
             for (unsigned i(0) ; i < number_of_threads ; ++i)
             {
@@ -135,8 +149,9 @@ namespace wf
         {
             Lock l(*_imp->job_mutex);
             _imp->queue.push_back(item);
+            _imp->pending_jobs += 1;
 
-            if (_imp->waiting_jobs > 0)
+            if (_imp->waiting_for_jobs > 0)
                 _imp->job_arrival->signal();
         }
 
@@ -147,6 +162,17 @@ namespace wf
     ThreadPool::instance()
     {
         return InstantiationPolicy<ThreadPool, Singleton>::instance();
+    }
+
+    void
+    ThreadPool::wait_for_free_capacity()
+    {
+        Lock l(*_imp->job_mutex);
+
+        if (_imp->pending_jobs < _imp->stop_capacity)
+            return;
+
+        _imp->job_capacity->wait(*_imp->job_mutex);
     }
 }
 

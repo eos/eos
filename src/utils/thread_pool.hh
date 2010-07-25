@@ -23,6 +23,8 @@ namespace wf
             Ticket enqueue(const std::function<void (void)> & work);
 
             static ThreadPool * instance();
+
+            void wait_for_free_capacity();
     };
 }
 
