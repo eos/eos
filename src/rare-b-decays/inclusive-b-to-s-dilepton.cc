@@ -36,13 +36,19 @@ namespace wf
 
         Parameter c6;
 
-        Parameter c7;
+        Parameter re_c7;
+
+        Parameter im_c7;
 
         Parameter c8;
 
-        Parameter c9;
+        Parameter re_c9;
 
-        Parameter c10;
+        Parameter im_c9;
+
+        Parameter re_c10;
+
+        Parameter im_c10;
 
         Parameter m_b_MSbar;
 
@@ -73,10 +79,13 @@ namespace wf
             c4(p["c4"]),
             c5(p["c5"]),
             c6(p["c6"]),
-            c7(p["Re{c7}"]),
+            re_c7(p["Re{c7}"]),
+            im_c7(p["Im{c7}"]),
             c8(p["c8"]),
-            c9(p["Re{c9}"]),
-            c10(p["Re{c10}"]),
+            re_c9(p["Re{c9}"]),
+            im_c9(p["Im{c9}"]),
+            re_c10(p["Re{c10}"]),
+            im_c10(p["Im{c10}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c_MSbar(p["mass::c"]),
             m_s(p["mass::s"]),
@@ -100,6 +109,21 @@ namespace wf
         double m_c_pole() const
         {
             return 1.4;
+        }
+
+        complex<double> c7() const
+        {
+            return complex<double>(re_c7, 0.0);
+        }
+
+        complex<double> c9() const
+        {
+            return complex<double>(re_c9, 0.0);
+        }
+
+        complex<double> c10() const
+        {
+            return complex<double>(re_c10, 0.0);
         }
 
         double s_hat(const double & s) const
@@ -348,7 +372,7 @@ namespace wf
             double uem = 12.0 / 23.0 * (QCD::alpha_s(m_Z) / alpha_s - 1.0);
 
             // cf. [HLMW2005], Eq. (69), p. 16
-            double c7eff = c7() - c3() / 3.0 - 4.0 * c4() / 9.0 - 20.0 * c5() / 3.0 - 80.0 * c6() / 9.0;
+            complex<double> c7eff = c7() - c3() / 3.0 - 4.0 * c4() / 9.0 - 20.0 * c5() / 3.0 - 80.0 * c6() / 9.0;
 
             /* S_{AB} */
             // cf. [HLMW2005], Eqs. (112)-(115), p. 26
@@ -378,11 +402,11 @@ namespace wf
                 + 8.0 * alpha_s_tilde * kappa * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * (omegaem_1010(s_hat) - omegaem_99(s_hat));
 
             /* Wilson coefficients */
-            std::vector<double> wc = {
-                c1, c2, c3, c4, c5, c6, c7eff, c8,
+            std::vector<complex<double>> wc = {
+                c1(), c2(), c3(), c4(), c5(), c6(), c7eff, c8(),
                 // We use a different basis of operators: O_{9,10} = alpha_e_tilde * P_{9,10} */
-                alpha_s_tilde * kappa * c9,
-                alpha_s_tilde * kappa * c10,
+                alpha_s_tilde * kappa * c9(),
+                alpha_s_tilde * kappa * c10(),
                 // cf. [HLMW2005], Table 3, p. 17. Using values at mu = 5.0 GeV
                 alpha_s_tilde * kappa * -3.72e-2,
                 alpha_s_tilde * kappa * -1.04e-2,
@@ -434,7 +458,7 @@ namespace wf
             for (unsigned i(0) ; i < 14 ; ++i)
             {
                 /* diagonal */
-                ratio_phi += pow(wc[i], 2) * real(
+                ratio_phi += norm(wc[i]) * real(
                         s77 * norm(m7[i])
                         + s99 * norm(m9[i])
                         + s1010 * norm(m10[i])
@@ -444,11 +468,11 @@ namespace wf
                 /* upper */
                 for (unsigned j(i + 1) ; j < 14 ; ++j)
                 {
-                    ratio_phi += wc[i] * wc[j] * real(
+                    ratio_phi += real(wc[i] * conj(wc[j]) * (
                             2.0 * s77 * m7[i] * conj(m7[j])
                             + 2.0 * s99 * m9[i] * conj(m9[j])
                             + 2.0 * s1010 * m10[i] * conj(m10[j])
-                            + s79 * (m7[i] * conj(m9[j]) + m9[i] * conj(m7[j]))
+                            + s79 * (m7[i] * conj(m9[j]) + m9[i] * conj(m7[j])))
                         );
                 }
             }
@@ -471,10 +495,10 @@ namespace wf
             double b19 = pow(alpha_s_tilde, 2) * kappa * itau_29 * c_tau2 * 2.0;
             double b29 = pow(alpha_s_tilde, 2) * kappa * itau_29 * QCD::casimir_f * 2.0;
             double add = 0.0;
-            add += wc[0] * wc[0] * b11 + wc[0] * wc[1] * b12 + wc[1] * wc[1] * b22;
-            add += wc[6] * (wc[0] * b17 + wc[1] * b27);
-            add += wc[7] * (wc[0] * b18 + wc[1] * b28);
-            add += wc[8] * (wc[0] * b19 + wc[1] * b29);
+            add += norm(wc[0]) * b11 + real(wc[0] * conj(wc[1])) * b12 + norm(wc[1]) * b22;
+            add += real(conj(wc[6]) * (wc[0] * b17 + wc[1] * b27));
+            add += real(conj(wc[7]) * (wc[0] * b18 + wc[1] * b28));
+            add += real(conj(wc[8]) * (wc[0] * b19 + wc[1] * b29));
             ratio_phi += add;
 
             /* non-perturbative 1/m_c^2 */
@@ -483,17 +507,17 @@ namespace wf
                 * (1.0 + 6.0 * s_hat - s_hat2) / s_hat * real(cF);
             double c29 = - alpha_s_tilde * kappa * 8.0 * lambda_2 / (9.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF);
             double c22 = - alpha_s_tilde * kappa * 8.0 * lambda_2 / (9.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF * conj(m9[1]));
-            ratio_phi += c22 * (-2.0 / 9.0 * wc[0] * wc[0] + 7.0 / 6.0 * wc[0] * wc[1] + wc[1] * wc[1]);
-            ratio_phi += c27 * (-1.0 / 6.0 * wc[0] + wc[1]) * wc[6];
-            ratio_phi += c29 * (-1.0 / 6.0 * wc[0] + wc[1]) * wc[8];
+            ratio_phi += c22 * (-2.0 / 9.0 * norm(wc[0]) + 7.0 / 6.0 * real(wc[0] * conj(wc[1])) + norm(wc[1]));
+            ratio_phi += c27 * real((-1.0 / 6.0 * wc[0] + wc[1]) * conj(wc[6]));
+            ratio_phi += c29 * real((-1.0 / 6.0 * wc[0] + wc[1]) * conj(wc[8]));
 
             /* log enhanced em */
             double e22 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 3) * omegaem_22(s_hat);
             double e27 = 96.0 * pow(1.0 - s_hat, 2) * pow(alpha_s_tilde * kappa, 3) * omegaem_27(s_hat);
             double e29 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 2) * omegaem_29(s_hat);
-            ratio_phi += e22 * (16.0 / 9.0 * wc[0] * wc[0] + 8.0 / 3.0 * wc[0] * wc[1] + wc[1] * wc[1]);
-            ratio_phi += e27 * (4.0 / 3.0 * wc[0] + wc[1]) * wc[6];
-            ratio_phi += e29 * (4.0 / 3.0 * wc[0] + wc[1]) * wc[8];
+            ratio_phi += e22 * (16.0 / 9.0 * norm(wc[0]) + 8.0 / 3.0 * real(wc[0] * conj(wc[1])) + norm(wc[1]));
+            ratio_phi += e27 * real((4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[6]));
+            ratio_phi += e29 * real((4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[8]));
 
             return br_clnu * ckm * 4.0 / C * ratio_phi;
         }
