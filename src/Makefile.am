@@ -1,4 +1,4 @@
 CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = utils rare-b-decays
+SUBDIRS = utils rare-b-decays clients

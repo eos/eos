@@ -18,6 +18,7 @@ AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(
 	Makefile
 	src/Makefile
+	src/clients/Makefile
 	src/rare-b-decays/Makefile
 	src/utils/Makefile
 	test/Makefile
