@@ -57,16 +57,20 @@ class WilsonScan
 
         std::list<std::string> variation_names;
 
+        double theory_uncertainty;
+
         std::list<std::pair<std::vector<double>, double>> results;
 
         WilsonScan(const std::list<ScanData> & scan_data,
                 const std::list<Input> & inputs,
                 const std::list<std::pair<std::string, double>> & param_changes,
-                const std::list<std::string> & variation_names) :
+                const std::list<std::string> & variation_names,
+                const double & theory_uncertainty) :
             mutex(new Mutex),
             scan_data(scan_data),
             inputs(inputs),
-            variation_names(variation_names)
+            variation_names(variation_names),
+            theory_uncertainty(theory_uncertainty)
         {
             Parameters parameters = Parameters::Defaults();
             for (auto p(param_changes.begin()), p_end(param_changes.end()) ; p != p_end ; ++p)
@@ -130,6 +134,9 @@ class WilsonScan
                 delta_min += min * min;
                 delta_max += max * max;
             }
+
+            delta_min += pow(central * theory_uncertainty, 2);
+            delta_max += pow(central * theory_uncertainty, 2);
 
             delta_max = std::sqrt(delta_max);
             delta_min = std::sqrt(delta_min);
@@ -234,6 +241,7 @@ main(int argc, char * argv[])
         std::list<Input> input;
         std::list<std::string> variation_names;
         std::list<std::pair<std::string, double>> param_changes;
+        double theory_uncertainty = 0.0;
 
         for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
         {
@@ -278,6 +286,13 @@ main(int argc, char * argv[])
                 continue;
             }
 
+            if ("--theory-uncertainty" == argument)
+            {
+                theory_uncertainty = destringify<double>(*(++a));
+
+                continue;
+            }
+
             throw DoUsage("Unknown command line argument: " + argument);
         }
 
@@ -287,7 +302,7 @@ main(int argc, char * argv[])
         if (input.empty())
             throw DoUsage("Need at least one input");
 
-        WilsonScan scanner(scan_data, input, param_changes, variation_names);
+        WilsonScan scanner(scan_data, input, param_changes, variation_names, theory_uncertainty);
         scanner.scan();
     }
     catch(DoUsage & e)
