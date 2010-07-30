@@ -1097,6 +1097,15 @@ namespace wf
             return QCD::mb_PS(m_b_MSbar, mu, 2.0);
         }
 
+        static complex<double> c7eff_nlo(const double & mu, const double & s, const double & m_b,
+                const double & c1, const double & c2, const double & c8)
+        {
+            return -1.0 * (
+                    c1 * CharmLoops::F17_massless(mu, s, m_b)
+                    + c2 * CharmLoops::F27_massless(mu, s, m_b)
+                    + c8 * CharmLoops::F87_massless(mu, s, m_b));
+        }
+
         // cf. [GP2004], Eq. (56)
         complex<double> c7eff(double s) const
         {
@@ -1104,9 +1113,18 @@ namespace wf
 
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
-            complex<double> nlo = -1.0 * (c1() * CharmLoops::F17_massless(mu, s, m_b) + c2() * CharmLoops::F27_massless(mu, s, m_b) + c8() * CharmLoops::F87_massless(mu, s, m_b));
+            complex<double> nlo = memoise(c7eff_nlo, mu(), s, m_b, c1(), c2(), c8());
 
             return complex<double>(re_c7(), im_c7()) + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
+        }
+
+        static complex<double> c9eff_nlo_alpha_s(const double & mu, const double & s, const double & m_b,
+                const double & c1, const double & c2, const double & c8)
+        {
+            return -1.0 * (
+                    c1 * CharmLoops::F19_massless(mu, s, m_b)
+                    + c2 * CharmLoops::F29_massless(mu, s, m_b)
+                    + c8 * CharmLoops::F89_massless(mu, s, m_b));
         }
 
         // cf. [GP2004], Eq. (55), p. 10
@@ -1127,7 +1145,7 @@ namespace wf
                 lambda_hat_u = conj(lambda_hat_u);
 
             complex<double> lo = c_b * Gb + c_0 * G0 + c;
-            complex<double> nlo_alpha_s = -1.0 * (c1() * CharmLoops::F19_massless(mu, s, m_b) + c2() * CharmLoops::F29_massless(mu, s, m_b) + c8() * CharmLoops::F89_massless(mu, s, m_b));
+            complex<double> nlo_alpha_s = memoise(c9eff_nlo_alpha_s, mu(), s, m_b, c1(), c2(), c8());
             complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
 
             return complex<double>(re_c9(), im_c9()) + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
