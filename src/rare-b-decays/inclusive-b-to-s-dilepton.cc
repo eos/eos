@@ -6,6 +6,7 @@
 #include <src/utils/concrete_observable.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
+#include <src/utils/memoise.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 
@@ -417,8 +418,8 @@ namespace wf
 
             /* Corrections, cf. [HLMW2005], Table 6, p. 18 */
             std::vector<complex<double>> m7 = {
-                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F17_massive(mu, s, m_b, m_c),
-                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F27_massive(mu, s, m_b, m_c),
+                -pow(alpha_s_tilde, 2) * kappa * memoise(CharmLoops::F17_massive, mu(), s, m_b, m_c),
+                -pow(alpha_s_tilde, 2) * kappa * memoise(CharmLoops::F27_massive, mu(), s, m_b, m_c),
                 0.0,
                 0.0,
                 0.0,
@@ -434,8 +435,8 @@ namespace wf
             };
 
             std::vector<complex<double>> m9 = {
-                alpha_s_tilde * kappa * f(1, s_hat) - pow(alpha_s_tilde, 2) * kappa * CharmLoops::F19_massive(mu, s, m_b, m_c),
-                alpha_s_tilde * kappa * f(2, s_hat) - pow(alpha_s_tilde, 2) * kappa * CharmLoops::F29_massive(mu, s, m_b, m_c),
+                alpha_s_tilde * kappa * f(1, s_hat) - pow(alpha_s_tilde, 2) * kappa * memoise(CharmLoops::F19_massive, mu(), s, m_b, m_c),
+                alpha_s_tilde * kappa * f(2, s_hat) - pow(alpha_s_tilde, 2) * kappa * memoise(CharmLoops::F29_massive, mu(), s, m_b, m_c),
                 alpha_s_tilde * kappa * f(3, s_hat),
                 alpha_s_tilde * kappa * f(4, s_hat),
                 alpha_s_tilde * kappa * f(5, s_hat),
@@ -481,10 +482,10 @@ namespace wf
             static const double c_tau1 = 1.0 / 27.0;
             static const double c_tau2 = - 2.0 / 9.0;
             double z = pow(m_c / m_b, 2);
-            double itau_22 = real(Bremsstrahlung::itau_22(s_hat, z));
-            double itau_27 = real(Bremsstrahlung::itau_27(s_hat, z));
-            double itau_28 = real(Bremsstrahlung::itau_28(s_hat, z));
-            double itau_29 = real(Bremsstrahlung::itau_29(s_hat, z));
+            double itau_22 = real(memoise(Bremsstrahlung::itau_22, s_hat, z));
+            double itau_27 = real(memoise(Bremsstrahlung::itau_27, s_hat, z));
+            double itau_28 = real(memoise(Bremsstrahlung::itau_28, s_hat, z));
+            double itau_29 = real(memoise(Bremsstrahlung::itau_29, s_hat, z));
             double b11 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_22 * c_tau1;
             double b12 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_22 * c_tau2 * 2.0;
             double b22 = pow(alpha_s_tilde, 3) * pow(kappa, 2) * itau_22 * QCD::casimir_f;
