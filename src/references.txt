@@ -144,6 +144,13 @@ References
         arxiv:hep-ph/0404250
 
 
+    HLMW2005 : Huber, T. and Lunghi, E. and Misiak, M. and Wyler, D.
+
+        Electromagnetic Logarithms in B -> X_s l+ l-
+
+        arxiv:hep-ph/0512066
+
+
     IKKR2007 : Ivanov, M.A. and Korner, J.G. and Kovalenko, S.G. and Roberts, C.D.
 
         B- to Light Meson Transition Form Factors
