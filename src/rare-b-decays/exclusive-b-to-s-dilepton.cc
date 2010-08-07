@@ -274,27 +274,6 @@ namespace wf
             return 6.0 * u * (1 - u) * (1.0 + a_1 * 3.0 * xi + a_2 * (7.5 * xi * xi - 1.5));
         }
 
-        // cf. [BFS2001], Eq. (18), p. 6, modulo the inverse of lambda_B,-
-        double T0_perp_m(const double & s, const double & u) const
-        {
-            double wilson = c3 + 4.0/3.0 * c4 + 16.0 * c5 + 64.0/3.0 * c6;
-            return -1.0 * e_q * (4.0 * m_B / m_b_PS()) * wilson;
-        }
-
-        // cf. [BFS2001], Eq. (20), p. 6, module the inverse of lambda_B,+
-        complex<double> Tf_perp_p(const double & h, const double & s, const double & u) const
-        {
-            return (c7eff() + h * c7prime()) * (2.0 * m_B / (1.0 - u) / energy(s));
-        }
-
-        // cf. [BFS2001], Eq. (21), p. 6
-        complex<double> Tf_par_p(const double & s, const double & u) const
-        {
-            double E = energy(s);
-
-            return ((c7eff() - c7prime()) + (s / (2.0 * m_B * m_b_PS())) * Y0(s)) * (2.0 * m_B * m_B / (1 - u) / E / E);
-        }
-
         // cf. [BFS2001], Eq. (27), p. 8
         complex<double> t_perp(const double & s, const double & u, const double & m_q) const
         {
