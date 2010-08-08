@@ -58,6 +58,13 @@ References
         arxiv:hep-ph/0112300
 
 
+    B1998 : Beneke, M.
+
+        A quark mass definition adequate for threshold problems
+
+        arxiv:hep-ph/9804241
+
+
     BBL1995 : Buchalla, G. and Buras, J.B. and Lautenbacher, M.E.
 
         Weak Decays Beyond Leading Logarithms
@@ -119,6 +126,14 @@ References
         Based on the workshop held at CERN, 13-16 February 2002
 
         arxiv:hep-ph/0304132
+
+
+    CKS2000 : Chetyrkin, K.G. and Kuehn, J.H. and Steinhauser, M.
+
+        RunDec: a Mathematica package for running and decoupling of the strong
+        coupling and quark masses
+
+        arXiv:hep-ph/0004189
 
 
     CMM1997 : Chetyrkin, K. and Misiak, M. and Muenz, M.

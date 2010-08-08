@@ -37,12 +37,6 @@ namespace wf
         {
         }
 
-        double m_b_pole() const
-        {
-            // Return the m_b pole mass
-            return QCD::mb_pole(m_b_MSbar);
-        }
-
         double m_c_pole() const
         {
             return 1.6;
@@ -55,13 +49,13 @@ namespace wf
             static const double c7sm = -0.3;
             static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
 
-            double m_c_hat = m_c_pole() / m_b_pole();
+            double m_c_hat = m_c_pole() / model->m_b_pole();
             double z = pow(m_c_hat, 2);
             double z2 = pow(z, 2), z3 = z * z2, z4 = z3 * z, lnz = log(z);
 
             // cf. [BMU1999], Eq. (46), p. 16
             double g = 1.0 - 8.0 * z + 8.0 * z3 - z4 - 12.0 * z2 * lnz;
-            double kappa = 1.0 - 2.0/3.0 * QCD::alpha_s(m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * pow(1.0 - m_c_hat, 2));
+            double kappa = 1.0 - 2.0/3.0 * model->alpha_s(model->m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * pow(1.0 - m_c_hat, 2));
 
             double ckm = norm(model->ckm_tb() * conj(model->ckm_ts()) / model->ckm_cb());
             complex<double> c7np = complex<double>(re_c7 - c7sm, im_c7);

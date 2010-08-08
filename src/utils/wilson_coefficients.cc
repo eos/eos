@@ -1,5 +1,6 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
+#include <src/utils/model.hh>
 #include <src/utils/wilson_coefficients.hh>
 #include <src/utils/qcd.hh>
 
@@ -62,8 +63,9 @@ namespace wf
             + x * x * (15.0 - 16.0 * x + 4.0 * x * x) / (6.0 * std::pow(1.0 - x, 4.0)) * std::log(x)
             - 2.0 / 3.0 * std::log(x);
 
-        double alpha_s = QCD::alpha_s(mu);
-        double eta = QCD::alpha_s(m_W) / alpha_s;
+        StandardModel model(parameters);
+        double alpha_s = model.alpha_s(mu);
+        double eta = model.alpha_s(m_W) / alpha_s;
         double nlo = alpha_s / (4.0 * M_PI);
 
         std::vector<double> result = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };

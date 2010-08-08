@@ -197,7 +197,7 @@ namespace wf
         inline double m_b_PS() const
         {
             // Actually use the PS mass at mu_f = 1.5 GeV
-            return QCD::mb_PS(m_b_MSbar, mu, 1.5);
+            return model->m_b_ps(1.5);
         }
 
         /* Effective wilson coefficients */
@@ -491,7 +491,7 @@ namespace wf
             // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
             double m_b = m_b_PS();
             // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
-            double mu_pole = mu * QCD::mb_pole(m_b_MSbar) / m_b;
+            double mu_pole = mu * model->m_b_pole() / m_b;
 
             // cf. [BFS2004], Eq. (44), p. 24
             // [Christoph] Use c7 instead of c7eff
@@ -537,7 +537,7 @@ namespace wf
         // cf. [BFS2001], Eq. (16) times phi_K^*_perp
         complex<double> T_perp(const double & s, const double & u) const
         {
-            double a = QCD::alpha_s(sqrt(mu * 0.5)) * QCD::casimir_f / 4.0 / M_PI;
+            double a = model->alpha_s(sqrt(mu * 0.5)) * QCD::casimir_f / 4.0 / M_PI;
 
             return phi_K(u, a_1_perp, a_2_perp) * a * T1_perp_p(s, u);
 
@@ -547,7 +547,7 @@ namespace wf
         // cf. [BFS2001], Eq. (15) with a = perp
         complex<double> calT_perp(const double & h, const double & s) const
         {
-            return xi_perp(s) * (C0_perp(h, s) + QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * C1_perp(h, s))
+            return xi_perp(s) * (C0_perp(h, s) + model->alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * C1_perp(h, s))
                 + (pow(M_PI, 2) / 3.0) * (f_B * f_Kstar_perp / m_B)
                 * integrate(std::function<complex<double> (const double &)>(
                                 std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::T_perp, this, s, std::placeholders::_1)),
@@ -566,7 +566,7 @@ namespace wf
             // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
             double m_b = m_b_PS();
             // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
-            double mu_pole = mu * QCD::mb_pole(m_b_MSbar) / m_b;
+            double mu_pole = mu * model->m_b_pole() / m_b;
 
             // cf. [BFS2004], Eq. (45), p. 24
             // [Christoph] Use c7 instead of c7eff.
@@ -622,7 +622,7 @@ namespace wf
             // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
             double m_b = m_b_PS();
             // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
-            double mu_pole = mu * QCD::mb_pole(m_b_MSbar) / m_b;
+            double mu_pole = mu * model->m_b_pole() / m_b;
 
             double s_hat = s / m_B / m_B;
             double ubar = 1.0 - u;
@@ -641,7 +641,7 @@ namespace wf
         // cf. [BFS2001], Eq. (16) times phi_K^*_par
         complex<double> T_par(const double & s, const double & u) const
         {
-            double a = QCD::alpha_s(sqrt(mu * 0.5)) * QCD::casimir_f / 4.0 / M_PI;
+            double a = model->alpha_s(sqrt(mu * 0.5)) * QCD::casimir_f / 4.0 / M_PI;
 
             return phi_K(u, a_1_par, a_2_par) * (T0_par_m(s) + a * (T1_par_m(s, u) + T1_par_p(s, u)));
         }
@@ -649,7 +649,7 @@ namespace wf
         // cf. [BFS2001], Eq. (15) with a = par, and [BHP2008], Eq. (C.4)
         complex<double> calT_par(const double & s) const
         {
-            return xi_par(s) * (C0_par(s) + QCD::alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * C1_par(s))
+            return xi_par(s) * (C0_par(s) + model->alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * C1_par(s))
                 + (pow(M_PI, 2) / 3.0) * (f_B * f_Kstar_par / m_B) * (m_Kstar / energy(s))
                 * integrate(std::function<complex<double> (const double &)>(
                                 std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::T_par, this, s, std::placeholders::_1)),
@@ -1073,7 +1073,8 @@ namespace wf
         // We use the PS mass except for kappa_1
         double m_b_PS() const
         {
-            return QCD::mb_PS(m_b_MSbar, mu, 2.0);
+            // Actually use m_b_PS at mu_PS = 2.0 GeV
+            return model->m_b_ps(2.0);
         }
 
         static complex<double> c7eff_nlo(const double & mu, const double & s, const double & m_b,
@@ -1098,7 +1099,7 @@ namespace wf
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
             complex<double> nlo = memoise(c7eff_nlo, mu(), s, m_b, c1(), c2(), c8());
 
-            return c7 + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
+            return c7 + lo + (model->alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
 
         static complex<double> c9eff_nlo_alpha_s(const double & mu, const double & s, const double & m_b,
@@ -1116,7 +1117,7 @@ namespace wf
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
             // Substitute pole mass by PS mass
             double m_b = m_b_PS();
-            double m_c = QCD::mc_MSbar(m_c_MSbar, mu);
+            double m_c = model->m_c_msbar(mu);
             double c = -2.0 / 27.0 * (8.0 * c1() + 6.0 * c2() - 6.0 * c3() - 8.0 * c4() - 12.0 * c5() - 160.0 * c6());
             double c_0 = -2.0 / 27.0 * (48.0 * c1() + 36.0 * c2() + 198.0 * c3() - 24.0 * c4() + 1872.0 * c5() - 384.0 * c6());
             double c_b = +2.0 / 27.0 * (126.0 * c3() + 24.0 * c4 + 1368.0 * c5() + 384.0 * c6());
@@ -1135,7 +1136,7 @@ namespace wf
             complex<double> nlo_alpha_s = memoise(c9eff_nlo_alpha_s, mu(), s, m_b, c1(), c2(), c8());
             complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
 
-            return c9 + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
+            return c9 + lo + (model->alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
         }
 
         complex<double> c10() const
@@ -1152,7 +1153,7 @@ namespace wf
         {
             // cf. [BHvD2010], Eq. (?), p. ?
             // Use m_b_MSbar(m_b_MSbar) instead m_b_MSbar(mu), as we want kappa_1 up to NLO only.
-            return (1.0 - 2.0 * QCD::alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
+            return (1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
         }
 
         double norm(const double & s) const

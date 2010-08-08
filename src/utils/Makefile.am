@@ -38,6 +38,7 @@ TESTS = \
 	memoise_TEST \
 	qcd_TEST \
 	save_TEST \
+	standard_model_TEST \
 	stringify_TEST \
 	wilson_coefficients_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
@@ -61,6 +62,9 @@ save_TEST_LDADD = $(TESTS_LD_ADD)
 
 stringify_TEST_SOURCES = stringify_TEST.cc
 stringify_TEST_LDADD = $(TESTS_LD_ADD)
+
+standard_model_TEST = standard_model_TEST.cc
+standard_model_TEST_LDADD = $(TESTS_LD_ADD)
 
 wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
 wilson_coefficients_TEST_LDADD = $(TESTS_LD_ADD)

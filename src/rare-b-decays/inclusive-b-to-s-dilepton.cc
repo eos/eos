@@ -7,6 +7,7 @@
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/memoise.hh>
+#include <src/utils/model.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 
@@ -25,6 +26,8 @@ namespace wf
     template <>
     struct Implementation<BToXsDilepton<HLMW2005>>
     {
+        std::shared_ptr<Model> model;
+
         Parameter c1;
 
         Parameter c2;
@@ -74,6 +77,7 @@ namespace wf
         double m_l;
 
         Implementation(const Parameters & p) :
+            model(new StandardModel(p)),
             c1(p["c1"]),
             c2(p["c2"]),
             c3(p["c3"]),
@@ -104,7 +108,7 @@ namespace wf
 
         double m_b_pole() const
         {
-            return 4.8;
+            return model->m_b_pole();
         }
 
         double m_c_pole() const
@@ -400,12 +404,12 @@ namespace wf
             double m_c = m_c_pole(), m_b = m_b_pole();
             double s_hat = s / pow(m_b, 2), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
             double lambda_2_hat = lambda_2 / pow(m_b, 2);
-            double alpha_s = QCD::alpha_s(mu);
+            double alpha_s = model->alpha_s(mu);
             double kappa = alpha_e / alpha_s, alpha_s_tilde = alpha_s / (4.0 * M_PI);
 
             static const double u1 = (4.0 * M_PI * M_PI - 25.0) / 12.0;
             double u2 = 27.1 + 23.0 / 3.0 * u1 * log(mu / m_b);
-            double uem = 12.0 / 23.0 * (QCD::alpha_s(m_Z) / alpha_s - 1.0);
+            double uem = 12.0 / 23.0 * (model->alpha_s(m_Z) / alpha_s - 1.0);
 
             // cf. [HLMW2005], Eq. (69), p. 16
             complex<double> c7eff = c7() - c3() / 3.0 - 4.0 * c4() / 9.0 - 20.0 * c5() / 3.0 - 80.0 * c6() / 9.0;

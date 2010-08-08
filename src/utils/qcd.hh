@@ -8,23 +8,164 @@ namespace wf
     class QCD
     {
         public:
-            // \alpha_s for n_f = 5
-            static double alpha_s(const double & mu);
+            struct Parameters;
 
-            // The quadratic casimir operator
+            /*
+             * Running coupling alpha_s down to mu from mu_0, based on QCD parameters in params.
+             *
+             * Calculation according to [CKS2000].
+             *
+             * @mu        : Scale at which alpha_s shall be evaluated
+             * @alpha_s_0 : alpha_s at the initial scale mu_0
+             * @mu_0      : Initial scale mu_0
+             * @params    : QCD parameters that control the running
+             */
+            static double alpha_s(const double & mu, const double & alpha_s_0, const double & mu_0, const Parameters & params);
+
+            /*
+             * Running quark mass in the MSbar scheme.
+             *
+             * Calculation according to [CKS2000].
+             *
+             * @m_q_0       : Quark mass in the MSbar scheme at the scale m_q
+             * @alpha_s_0   : alpha_s at the scale mu_0 = m_q
+             * @mu          : Scale at which m_q shall be evaluated
+             * @alpha_s_mu  : alpha_s at the scale mu
+             * @params      : QCD parameters that control the running
+             */
+            static double m_q_msbar(const double & m_q, const double & alpha_s_mu0, const double & mu, const double & alpha_s_mu, const Parameters & params);
+
+            /*
+             * Pole mass shift from the MSbar scheme
+             *
+             * Calculation according to [CERN2002-002].
+             *
+             * @m_q     : Quark mass in the MSbar scheme at the scale m_q
+             * @alpha_s : alpha_s at the scale m_q
+             * @params  : QCD parameters that control the calculation
+             */
+            static double m_q_pole(const double & m_q, const double & alpha_s, const Parameters & params);
+
+            /*
+             * Potential-Subtracted mass (PS mass) shift from the MSbar scheme
+             *
+             * Calculation according to [B1998].
+             *
+             * @m_q     : Quark mass in the MSbar scheme at the scale m_q
+             * @alpha_s : alpha_s at the scalem_q
+             * @mu_f    : Factorization scale
+             * @params  : QCD parameters that control the calculation
+             */
+            static double m_q_ps(const double & m_q, const double & alpha_s, const double & mu_f, const Parameters & params);
+
+            /*
+             * The quadratic casimir operator for the fundamental representation
+             */
             static const double casimir_f;
 
-            // Potential-subtracted b mass m_b^PS
-            static double mb_PS(const double & mb_MSbar, const double & mu, const double & mu_PS);
+            /*
+             * The quadratic casimir operator for the ajoint representation
+             */
+            static const double casimir_a;
+    };
 
-            // Pole mass of the b
-            static double mb_pole(const double & mb_MSbar);
+    struct QCD::Parameters
+    {
+        /* Number of active flavors */
+        double _nf;
 
-            // Running MSbar mass of the b
-            static double mb_MSbar(const double & mb_MSbar0, const double & mu);
+        QCD::Parameters &&
+        nf(const double & v)
+        {
+            _nf = v;
+            return *this;
+        }
 
-            // Running MSbar mass of the c
-            static double mc_MSbar(const double & mb_MSbar0, const double & mu);
+        /* Coefficients of the QCD potential */
+        double _a1;
+        double _a2;
+
+        QCD::Parameters &&
+        a1(const double & v)
+        {
+            _a1 = v;
+            return *this;
+        }
+
+        QCD::Parameters &&
+        a2(const double & v)
+        {
+            _a2 = v;
+            return *this;
+        }
+
+        /* Coefficients of the QCD beta function */
+        double _beta0;
+        double _beta1;
+        double _beta2;
+        double _beta3;
+
+        QCD::Parameters &&
+        beta0(const double & v)
+        {
+            _beta0 = v;
+            return *this;
+        }
+
+        QCD::Parameters &&
+        beta1(const double & v)
+        {
+            _beta1 = v;
+            return *this;
+        }
+
+        QCD::Parameters &&
+        beta2(const double & v)
+        {
+            _beta2 = v;
+            return *this;
+        }
+
+        QCD::Parameters &&
+        beta3(const double & v)
+        {
+            _beta3 = v;
+            return *this;
+        }
+
+        /* Coefficients of the anomalous dimension of quark masses (MSbar scheme) */
+        double _gamma0_m;
+        double _gamma1_m;
+        double _gamma2_m;
+        double _gamma3_m;
+
+        QCD::Parameters &&
+        gamma0_m(const double & v)
+        {
+            _gamma0_m = v;
+            return *this;
+        }
+
+        QCD::Parameters &&
+        gamma1_m(const double & v)
+        {
+            _gamma1_m = v;
+            return *this;
+        }
+
+        QCD::Parameters &&
+        gamma2_m(const double & v)
+        {
+            _gamma2_m = v;
+            return *this;
+        }
+
+        QCD::Parameters &&
+        gamma3_m(const double & v)
+        {
+            _gamma3_m = v;
+            return *this;
+        }
     };
 }
 

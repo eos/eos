@@ -100,6 +100,11 @@ namespace wf
             Parameters::NameValuePair{"CKM::rhobar", 0.119, 0.135, 0.166},
             Parameters::NameValuePair{"CKM::etabar", 0.332, 0.349, 0.364},
             Parameters::NameValuePair{"CKM::|V_cb|", 0.0404, 0.0417, 0.0430},
+            // QCD inputs
+            Parameters::NameValuePair{"QCD::alpha_s(MZ)", 0.117620},
+            Parameters::NameValuePair{"QCD::mu_t", 170.0},
+            Parameters::NameValuePair{"QCD::mu_b",   4.2},
+            Parameters::NameValuePair{"QCD::mu_c",   1.2},
             // Masses in GeV
             Parameters::NameValuePair{"mass::b(MSbar)", 4.13, 4.20, 4.37}, // cf. [PDG2008], p. 21
             Parameters::NameValuePair{"mass::c", 1.16, 1.27, 1.34}, // cf. [PDG2008], p. 21
