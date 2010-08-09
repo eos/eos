@@ -114,17 +114,17 @@ namespace wf
 
         complex<double> c7() const
         {
-            return complex<double>(re_c7, 0.0);
+            return complex<double>(re_c7, im_c7);
         }
 
         complex<double> c9() const
         {
-            return complex<double>(re_c9, 0.0);
+            return complex<double>(re_c9, im_c9);
         }
 
         complex<double> c10() const
         {
-            return complex<double>(re_c10, 0.0);
+            return complex<double>(re_c10, im_c10);
         }
 
         double s_hat(const double & s) const
