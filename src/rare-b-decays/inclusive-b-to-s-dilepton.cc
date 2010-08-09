@@ -554,7 +554,7 @@ namespace wf
             /* log enhanced em */
             double e22 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 3) * omegaem_22(s_hat);
             complex<double> e27 = 96.0 * pow(1.0 - s_hat, 2) * pow(alpha_s_tilde * kappa, 3) * omegaem_27(s_hat);
-            complex<double> e29 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 3) * omegaem_29(s_hat);
+            complex<double> e29 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 2) * omegaem_29(s_hat);
             ratio_phi += e22 * (16.0 / 9.0 * norm(wc[0]) + 8.0 / 3.0 * real(wc[0] * conj(wc[1])) + norm(wc[1]));
             ratio_phi += real(e27 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[6]));
             ratio_phi += real(e29 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[8]));
