@@ -1109,13 +1109,17 @@ namespace wf
         // cf. [GP2004], Eq. (56)
         complex<double> c7eff(double s) const
         {
+            complex<double> c7(re_c7(), im_c7());
+            if (cp_conjugate)
+                c7 = conj(c7);
+
             double m_b = m_b_PS();
 
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
             complex<double> nlo = memoise(c7eff_nlo, mu(), s, m_b, c1(), c2(), c8());
 
-            return complex<double>(re_c7(), im_c7()) + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
+            return c7 + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo;
         }
 
         static complex<double> c9eff_nlo_alpha_s(const double & mu, const double & s, const double & m_b,
@@ -1140,20 +1144,29 @@ namespace wf
             complex<double> G0 = -3.0 / 8.0 * (CharmLoops::h(mu, s) + 4.0 / 9.0);
             complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b) + 4.0 / 9.0);
 
+            complex<double> c9(re_c9(), im_c9());
             complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
             if (cp_conjugate)
+            {
                 lambda_hat_u = conj(lambda_hat_u);
+                c9 = conj(c9);
+            }
 
             complex<double> lo = c_b * Gb + c_0 * G0 + c;
             complex<double> nlo_alpha_s = memoise(c9eff_nlo_alpha_s, mu(), s, m_b, c1(), c2(), c8());
             complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
 
-            return complex<double>(re_c9(), im_c9()) + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
+            return c9 + lo + (QCD::alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
         }
 
         complex<double> c10() const
         {
-            return complex<double>(re_c10(), im_c10());
+            complex<double> result(re_c10(), im_c10());
+
+            if (cp_conjugate)
+                result = conj(result);
+
+            return result;
         }
 
         double kappa() const
