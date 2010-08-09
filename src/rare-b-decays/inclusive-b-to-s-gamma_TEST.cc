@@ -38,7 +38,7 @@ class BToXsGammaLargeRecoilTest :
 
                 const double eps = 1e-9;
 
-                TEST_CHECK_NEARLY_EQUAL(3.86813e-4, d.integrated_branching_ratio(), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.86877e-4, d.integrated_branching_ratio(), eps);
             }
 
             // Zero test
