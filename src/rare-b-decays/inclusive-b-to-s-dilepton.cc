@@ -224,19 +224,40 @@ namespace wf
         // cf. [HLMW2005], Eq. (101), p. 25
         double omegaem_77(const double & s_hat) const
         {
-            return 0.0;
+            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
+            double s_hat2 = s_hat * s_hat;
+
+            return 2.0 * log(m_b_pole() / m_l) * (
+                    s_hat / (2.0 * (1.0 - s_hat) * (2.0 + s_hat))
+                    + ln1
+                    - s_hat * (-3.0 + 2.0 * s_hat2) / (2.0 * pow(1.0 - s_hat, 2) * (2.0 + s_hat)) * ln
+                    );
         }
 
         // cf. [HLMW2005], Eq. (102), p. 25
         double omegaem_79(const double & s_hat) const
         {
-            return 0.0;
+            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
+            double s_hat2 = s_hat * s_hat;
+
+            return 2.0 * log(m_b_pole() / m_l) * (
+                    -1.0 / (2.0 * (1.0 - s_hat))
+                    + ln1
+                    + (-1.0 + 2.0 * s_hat - 2.0 * s_hat2) / (2.0 * pow(1.0 - s_hat, 2)) * ln
+                    );
         }
 
         // cf. [HLMW2005], Eq. (103), p. 25
-        double omegaem_29(const double & s_hat) const
+        complex<double> omegaem_29(const double & s_hat) const
         {
-            return 0.0;
+            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
+            double sigma_1 = 23.787 - 120.948 * s_hat + 365.373 * s_hat2 - 584.206 * s_hat3;
+            double sigma_1_I = 1.653 + 6.009 * s_hat - 17.080 * s_hat2 + 115.880 * s_hat3;
+
+            return 2.0 * log(m_b_pole() / m_l) * (
+                    complex<double>(sigma_1, sigma_1_I) / (8.0 * (1.0 - s_hat) * (1.0 - s_hat) * (1.0 + 2.0 * s_hat))
+                    + 16.0 / 9.0 * omegaem_1010(s_hat) * log(mu / 5.0)
+                    );
         }
 
         // cf. [HLMW2005], Eq. (104), p. 25
@@ -247,25 +268,36 @@ namespace wf
             double sigma_2 = 11.488 - 36.987 * s_hat + 255.330 * s_hat2 - 812.388 * s_hat3 + 1011.791 * s_hat4;
 
             return 2.0 * log(m_b_pole() / m_l) * (
-                        sigma_2 / (8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat))
-                        + sigma_1 / (9.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * log(mu / 5.0)
-                        + 64.0 / 81.0 * omegaem_1010(s_hat) * pow(log(mu / 5.0), 2)
+                    sigma_2 / (8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat))
+                    + sigma_1 / (9.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * log(mu / 5.0)
+                    + 64.0 / 81.0 * omegaem_1010(s_hat) * pow(log(mu / 5.0), 2)
                     );
         }
 
         // cf. [HLMW2005], Eq. (105), p. 25
-        double omegaem_27(const double & s_hat) const
+        complex<double> omegaem_27(const double & s_hat) const
         {
-            return 0.0;
+            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
+            double sigma_3 = 109.311 - 846.039 * s_hat + 2890.115 * s_hat2 - 4179.072 * s_hat3;
+            double sigma_3_I = 4.606 + 17.650 * s_hat - 53.244 * s_hat2 + 348.069 * s_hat3;
+
+            return 2.0 * log(m_b_pole() / m_l) * (
+                    complex<double>(sigma_3, sigma_3_I) / (96.0 * (1.0 - s_hat) * (1.0 - s_hat))
+                    + 8.0 / 9.0 * omegaem_79(s_hat) * log(mu / 5.0)
+                    );
         }
 
         // cf. [HLMW2005], Eq. (126), p. 28
         complex<double> g(const double & y) const
         {
-            if (y < 1)
-                throw InternalError("[HLMW2005] g(y) only valid for y >= 1");
+            complex<double> x;
 
-            return 20.0 / 27.0 + 4.0 / 9.0 * y - 2.0 / 9.0 * (2.0 + y) * sqrt(y - 1) * 2.0 * std::atan(1.0 / sqrt(y - 1));
+            if (y < 1)
+                x = complex<double>(log(abs(1.0 + sqrt(1.0 - y)) / (1.0 - sqrt(1.0 - y))), -M_PI);
+            else
+                x = 2.0 * atan(1.0 / sqrt(y - 1.0));
+
+            return 20.0 / 27.0 + 4.0 / 9.0 * y - 2.0 / 9.0 * (2.0 + y) * sqrt(abs(y - 1)) * x;
         }
 
         // cf. [HLMW2005], Eq. (72), p. 17
@@ -348,12 +380,15 @@ namespace wf
         complex<double> F(const double & s_hat) const
         {
             double r = s_hat * pow(m_b_pole() / m_c_pole(), 2) / 4.0;
+            double x = sqrt(1.0 - 1.0 / r);
             complex<double> result;
 
-            if ((r < 0) || (r > 1))
-                throw InternalError("[HLMW] F only implemented for 0 < r < 1");
-
-            result = 3.0 / (2.0 * r) * (std::atan(std::sqrt(r / (1.0 - r))) / std::sqrt(r * (1.0 - r)) - 1.0);
+            if ((0 < r) && (r < 1))
+                result = 3.0 / (2.0 * r) * (std::atan(std::sqrt(r / (1.0 - r))) / std::sqrt(r * (1.0 - r)) - 1.0);
+            else
+                result = 3.0 / (2.0 * r) * (
+                    complex<double>(log((1.0 - x) / (1.0 + x)), M_PI) / (2.0 * sqrt(r * (r - 1.0)))
+                    - 1.0);
 
             return result;
         }
@@ -514,11 +549,11 @@ namespace wf
 
             /* log enhanced em */
             double e22 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 3) * omegaem_22(s_hat);
-            double e27 = 96.0 * pow(1.0 - s_hat, 2) * pow(alpha_s_tilde * kappa, 3) * omegaem_27(s_hat);
-            double e29 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 2) * omegaem_29(s_hat);
+            complex<double> e27 = 96.0 * pow(1.0 - s_hat, 2) * pow(alpha_s_tilde * kappa, 3) * omegaem_27(s_hat);
+            complex<double> e29 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 3) * omegaem_29(s_hat);
             ratio_phi += e22 * (16.0 / 9.0 * norm(wc[0]) + 8.0 / 3.0 * real(wc[0] * conj(wc[1])) + norm(wc[1]));
-            ratio_phi += e27 * real((4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[6]));
-            ratio_phi += e29 * real((4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[8]));
+            ratio_phi += real(e27 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[6]));
+            ratio_phi += real(e29 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[8]));
 
             return br_clnu * ckm * 4.0 / C * ratio_phi;
         }
