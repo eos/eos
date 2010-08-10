@@ -74,7 +74,7 @@ namespace wf
         /* Number of active flavors */
         double _nf;
 
-        QCD::Parameters &&
+        QCD::Parameters
         nf(const double & v)
         {
             _nf = v;
@@ -85,14 +85,14 @@ namespace wf
         double _a1;
         double _a2;
 
-        QCD::Parameters &&
+        QCD::Parameters
         a1(const double & v)
         {
             _a1 = v;
             return *this;
         }
 
-        QCD::Parameters &&
+        QCD::Parameters
         a2(const double & v)
         {
             _a2 = v;
@@ -105,28 +105,28 @@ namespace wf
         double _beta2;
         double _beta3;
 
-        QCD::Parameters &&
+        QCD::Parameters
         beta0(const double & v)
         {
             _beta0 = v;
             return *this;
         }
 
-        QCD::Parameters &&
+        QCD::Parameters
         beta1(const double & v)
         {
             _beta1 = v;
             return *this;
         }
 
-        QCD::Parameters &&
+        QCD::Parameters
         beta2(const double & v)
         {
             _beta2 = v;
             return *this;
         }
 
-        QCD::Parameters &&
+        QCD::Parameters
         beta3(const double & v)
         {
             _beta3 = v;
@@ -139,28 +139,28 @@ namespace wf
         double _gamma2_m;
         double _gamma3_m;
 
-        QCD::Parameters &&
+        QCD::Parameters
         gamma0_m(const double & v)
         {
             _gamma0_m = v;
             return *this;
         }
 
-        QCD::Parameters &&
+        QCD::Parameters
         gamma1_m(const double & v)
         {
             _gamma1_m = v;
             return *this;
         }
 
-        QCD::Parameters &&
+        QCD::Parameters
         gamma2_m(const double & v)
         {
             _gamma2_m = v;
             return *this;
         }
 
-        QCD::Parameters &&
+        QCD::Parameters
         gamma3_m(const double & v)
         {
             _gamma3_m = v;
