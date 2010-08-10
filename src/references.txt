@@ -173,6 +173,13 @@ References
         arxiv:nucl-th/0703094
 
 
+    KS1996 : Krueger, F. and Sehgal, L.M.
+
+        Lepton Polarization in the Decays B -> X_s mu^+ mu^- and B -> X_s tau^+ tau^-
+
+        arxiv:hep-ph/9603237
+
+
     PDG2008 : Particle Data Group
 
         Particle Physics Booklet (July 2008)
