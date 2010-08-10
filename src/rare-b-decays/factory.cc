@@ -84,7 +84,8 @@ namespace wf
             OBSERVABLE1("B->K^*ll::Im{Y}(s)@LowRecoil",       BToKstarDilepton<LowRecoil>, imag_y,                                      "s"),
             OBSERVABLE1("B->K^*ll::Re{C_9^eff}(s)@LowRecoil", BToKstarDilepton<LowRecoil>, real_c9eff,                                  "s"),
             OBSERVABLE1("B->K^*ll::Im{C_9^eff}(s)@LowRecoil", BToKstarDilepton<LowRecoil>, imag_c9eff,                                  "s"),
-            OBSERVABLE1("B->K^*ll::A_CP(s)@LowRecoil",        BToKstarDilepton<LowRecoil>, differential_cp_asymmetry,                   "s"),
+            OBSERVABLE1("B->K^*ll::a_CP^1(s)@LowRecoil",      BToKstarDilepton<LowRecoil>, differential_cp_asymmetry_1,                 "s"),
+            OBSERVABLE1("B->K^*ll::a_CP^2(s)@LowRecoil",      BToKstarDilepton<LowRecoil>, differential_cp_asymmetry_2,                 "s"),
 
             /* Inclusive Decays */
 

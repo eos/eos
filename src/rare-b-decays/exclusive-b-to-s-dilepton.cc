@@ -1149,6 +1149,16 @@ namespace wf
             return result;
         }
 
+        double rho_1(const double & s) const
+        {
+            return std::norm(c9eff(s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s)) + std::norm(c10());
+        }
+
+        double rho_2(const double & s) const
+        {
+            return real((c9eff(s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s)) * conj(c10()));
+        }
+
         double kappa() const
         {
             // cf. [BHvD2010], Eq. (?), p. ?
@@ -1404,13 +1414,13 @@ namespace wf
     double
     BToKstarDilepton<LowRecoil>::rho_1(const double & s) const
     {
-        return norm(_imp->c9eff(s) + _imp->kappa() * 2.0 * _imp->m_b_PS() * _imp->m_B / s * _imp->c7eff(s)) + norm(_imp->c10());
+        return _imp->rho_1(s);
     }
 
     double
     BToKstarDilepton<LowRecoil>::rho_2(const double & s) const
     {
-        return real(conj(_imp->c10()) * (_imp->c9eff(s) + _imp->kappa() * 2.0 * _imp->m_b_PS() * _imp->m_B / s * _imp->c7eff(s)));
+        return _imp->rho_2(s);
     }
 
     double
@@ -1477,15 +1487,27 @@ namespace wf
     }
 
     double
-    BToKstarDilepton<LowRecoil>::differential_cp_asymmetry(const double & s) const
+    BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_1(const double & s) const
     {
         Save<bool> save(_imp->cp_conjugate, false);
 
-        double gamma = _imp->decay_width(s);
+        double rho_1 = _imp->rho_1(s);
         _imp->cp_conjugate = true;
-        double gamma_bar = _imp->decay_width(s);
+        double rho_1_bar = _imp->rho_1(s);
 
-        return (gamma - gamma_bar) / (gamma + gamma_bar);
+        return (rho_1 - rho_1_bar) / (rho_1 + rho_1_bar);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_2(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        double rho_1 = _imp->rho_1(s), rho_2 = _imp->rho_2(s);
+        _imp->cp_conjugate = true;
+        double rho_1_bar = _imp->rho_1(s), rho_2_bar = _imp->rho_2(s);
+
+        return (rho_2 / rho_1 - rho_2_bar / rho_1_bar) / (rho_2 / rho_1 + rho_2_bar / rho_2_bar);
     }
 
     double
