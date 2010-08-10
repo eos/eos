@@ -104,7 +104,7 @@ namespace wf
             Parameters::NameValuePair{"QCD::alpha_s(MZ)", 0.117620},
             Parameters::NameValuePair{"QCD::mu_t", 170.0},
             Parameters::NameValuePair{"QCD::mu_b",   4.2},
-            Parameters::NameValuePair{"QCD::mu_c",   1.2},
+            Parameters::NameValuePair{"QCD::mu_c",   1.0},
             // Masses in GeV
             Parameters::NameValuePair{"mass::b(MSbar)", 4.13, 4.20, 4.37}, // cf. [PDG2008], p. 21
             Parameters::NameValuePair{"mass::c", 1.16, 1.27, 1.34}, // cf. [PDG2008], p. 21
