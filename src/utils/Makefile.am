@@ -6,6 +6,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -pedantic
 lib_LTLIBRARIES = libwfutils.la
 libwfutils_la_SOURCES = \
 	accumulator.cc accumulator.hh \
+	apply.hh \
 	cartesian-product.hh \
 	complex.hh \
 	concrete_observable.hh \
@@ -33,6 +34,7 @@ libwfutils_la_SOURCES = \
 libwfutils_la_LIBADD = -lpthread
 
 TESTS = \
+	apply_TEST \
 	cartesian-product_TEST \
 	integrate_TEST \
 	memoise_TEST \
@@ -44,6 +46,9 @@ TESTS = \
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
 
 check_PROGRAMS = $(TESTS)
+
+apply_TEST_SOURCES = apply_TEST.cc
+apply_TEST_LDADD = $(TESTS_LD_ADD)
 
 cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 cartesian_product_TEST_LDADD = $(TESTS_LD_ADD)
