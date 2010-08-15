@@ -17,6 +17,7 @@ libwfutils_la_SOURCES = \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.cc kinematic.hh \
 	lock.cc lock.hh \
+	matrix.hh \
 	memoise.hh \
 	model.cc model.hh \
 	mutex.cc mutex.hh \
@@ -37,6 +38,7 @@ TESTS = \
 	apply_TEST \
 	cartesian-product_TEST \
 	integrate_TEST \
+	matrix_TEST \
 	memoise_TEST \
 	qcd_TEST \
 	save_TEST \
@@ -55,6 +57,9 @@ cartesian_product_TEST_LDADD = $(TESTS_LD_ADD)
 
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_LDADD = $(TESTS_LD_ADD)
+
+matrix_TEST_SOURCES = matrix_TEST.cc
+matrix_TEST_LDADD = $(TESTS_LD_ADD)
 
 memoise_TEST_SOURCES = memoise_TEST.cc
 memoise_TEST_LDADD = $(TESTS_LD_ADD)
