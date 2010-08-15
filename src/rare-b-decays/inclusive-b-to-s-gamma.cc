@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 #include <src/rare-b-decays/inclusive-b-to-s-gamma.hh>
-#include <src/utils/concrete_observable.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/model.hh>
+#include <src/utils/observable.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 

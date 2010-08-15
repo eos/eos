@@ -3,16 +3,16 @@
 #include <src/rare-b-decays/bremsstrahlung.hh>
 #include <src/rare-b-decays/charm-loops.hh>
 #include <src/rare-b-decays/inclusive-b-to-s-dilepton.hh>
-#include <src/utils/concrete_observable.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/memoise.hh>
 #include <src/utils/model.hh>
+#include <src/utils/observable.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 
 #include <cmath>
-#include <tr1/functional>
+#include <functional>
 #include <utility>
 #include <map>
 #include <vector>

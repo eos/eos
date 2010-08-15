@@ -4,10 +4,8 @@
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <src/rare-b-decays/form_factors.hh>
 #include <src/rare-b-decays/hard-scattering.hh>
-#include <src/utils/concrete_observable.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/integrate.hh>
-#include <src/utils/kinematic.hh>
 #include <src/utils/memoise.hh>
 #include <src/utils/model.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
@@ -15,7 +13,7 @@
 #include <src/utils/save.hh>
 
 #include <cmath>
-#include <tr1/functional>
+#include <functional>
 #include <utility>
 #include <map>
 #include <vector>
