@@ -4,6 +4,7 @@
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <src/rare-b-decays/form_factors.hh>
 #include <src/rare-b-decays/hard-scattering.hh>
+#include <src/rare-b-decays/long-distance.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/memoise.hh>
@@ -1026,6 +1027,8 @@ namespace wf
 
         bool cp_conjugate;
 
+        bool ccbar_resonance;
+
         Implementation(const Parameters & p, const ObservableOptions & o) :
             model(new StandardModel(p)),
             c1(p["c1"]),
@@ -1058,7 +1061,8 @@ namespace wf
             uncertainty_isgur_wise_long(p["B->K^*ll::IW_long_uncertainty"]),
             uncertainty_isgur_wise_par(p["B->K^*ll::IW_par_uncertainty"]),
             uncertainty_isgur_wise_perp(p["B->K^*ll::IW_perp_uncertainty"]),
-            cp_conjugate(false)
+            cp_conjugate(false),
+            ccbar_resonance(false)
         {
             form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
             if (! form_factors.get())
@@ -1066,6 +1070,9 @@ namespace wf
 
             if (o.has("cp-conjugate"))
                 cp_conjugate = destringify<bool>(o["cp-conjugate"]);
+
+            if (o.has("ccbar-resonance"))
+                ccbar_resonance = destringify<bool>(o["ccbar-resonance"]);
         }
 
         // We use the PS mass except for kappa_1
@@ -1119,7 +1126,7 @@ namespace wf
             double c = -2.0 / 27.0 * (8.0 * c1() + 6.0 * c2() - 6.0 * c3() - 8.0 * c4() - 12.0 * c5() - 160.0 * c6());
             double c_0 = -2.0 / 27.0 * (48.0 * c1() + 36.0 * c2() + 198.0 * c3() - 24.0 * c4() + 1872.0 * c5() - 384.0 * c6());
             double c_b = +2.0 / 27.0 * (126.0 * c3() + 24.0 * c4 + 1368.0 * c5() + 384.0 * c6());
-            complex<double> G0 = -3.0 / 8.0 * (CharmLoops::h(mu, s) + 4.0 / 9.0);
+            complex<double> G0 = -3.0 / 8.0 * ((ccbar_resonance ? LongDistance::g_had_ccbar(s, m_c) : CharmLoops::h(mu, s)) + 4.0 / 9.0);
             complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b) + 4.0 / 9.0);
 
             complex<double> c9(re_c9(), im_c9());
@@ -1134,7 +1141,11 @@ namespace wf
             complex<double> nlo_alpha_s = memoise(c9eff_nlo_alpha_s, mu(), s, m_b, c1(), c2(), c8());
             complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
 
-            return c9 + lo + (model->alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
+            complex<double> result = c9 + lo;
+            if (! ccbar_resonance)
+                result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
+
+            return result;
         }
 
         complex<double> c10() const
