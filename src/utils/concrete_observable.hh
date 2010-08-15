@@ -3,119 +3,93 @@
 #ifndef WFITTER_GUARD_SRC_UTILS_CONCRETE_OBSERVABLE_HH
 #define WFITTER_GUARD_SRC_UTILS_CONCRETE_OBSERVABLE_HH 1
 
+#include <src/utils/apply.hh>
 #include <src/utils/observable.hh>
 
+#include <functional>
 #include <string>
-#include <tr1/functional>
 
 namespace wf
 {
-    template <typename Decay_, unsigned n_>
-    struct ConcreteObservableData;
-
-    template <typename Decay_>
-    struct ConcreteObservableData<Decay_, 0>
+    namespace impl
     {
-        typedef std::function<double (const Decay_ &)> Type;
+        template <typename T_, typename U_> struct ConvertTo { typedef U_ Type; };
 
-        Type function;
-
-        std::string name;
-
-        ConcreteObservableData(const std::string & name, const Type & function) :
-            function(function),
-            name(name)
+        template <unsigned n_> struct TupleMaker
         {
-        }
+            template <typename Decay_, typename ... TupleElements_, typename ... ResultElements_>
+            static auto make(const Kinematics & k, const std::tuple<TupleElements_ ...> & t, const Decay_ * d, ResultElements_ ... r)
+                -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, double>::Type ...>
+            {
+                return TupleMaker<n_ - 1>::make(k, t, d, k[std::get<n_ - 1>(t)], r ...);
+            }
+        };
 
-        double evaluate(const Decay_ & decay, const Kinematics &) const
+        template <> struct TupleMaker<0>
         {
-            return function(decay);
-        }
-    };
+            template <typename Decay_, typename ... TupleElements_, typename ... ResultElements_>
+            static auto make(const Kinematics & k, const std::tuple<TupleElements_ ...> & t, const Decay_ * d, ResultElements_ ... r)
+                -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, double>::Type ...>
+            {
+                return std::make_tuple(d, r ...);
+            }
+        };
 
-    template <typename Decay_>
-    struct ConcreteObservableData<Decay_, 1>
-    {
-        typedef std::function<double (const Decay_ &, const double &)> Type;
+        template <typename T_> struct TupleSize;
 
-        Type function;
-
-        std::string name;
-
-        std::string variable1;
-
-        ConcreteObservableData(const std::string & name, const Type & function, const std::string & variable1) :
-            function(function),
-            name(name),
-            variable1(variable1)
+        template <typename ... TupleElements_> struct TupleSize<std::tuple<TupleElements_ ...>>
         {
-        }
+            static const unsigned long size = sizeof...(TupleElements_);
+        };
+    }
 
-        double evaluate(const Decay_ & decay, const Kinematics & k) const
-        {
-            return function(decay, k[variable1]);
-        }
-    };
-
-    template <typename Decay_>
-    struct ConcreteObservableData<Decay_, 2>
-    {
-        typedef std::function<double (const Decay_ &, const double &, const double &)> Type;
-
-        Type function;
-
-        std::string name;
-
-        std::string variable1;
-
-        std::string variable2;
-
-        ConcreteObservableData(const std::string & name, const Type & function, const std::string & variable1,
-                const std::string & variable2) :
-            function(function),
-            name(name),
-            variable1(variable1),
-            variable2(variable2)
-        {
-        }
-
-        double evaluate(const Decay_ & decay, const Kinematics & k) const
-        {
-            return function(decay, k[variable1], k[variable2]);
-        }
-    };
-
-    template <typename Decay_, unsigned n_>
+    template <typename Decay_, typename ... Args_>
     class ConcreteObservable :
         public Observable
     {
+        public:
+
         private:
+            std::string _name;
+
             Parameters _parameters;
 
             ObservableOptions _options;
 
             Decay_ _decay;
 
-            ConcreteObservableData<Decay_, n_> _data;
+            std::function<double (const Decay_ *, const Args_ & ...)> _function;
+
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
+
+            std::tuple<const Decay_ *, Args_ ...> _argument_tuple(const Kinematics & k) const
+            {
+                return impl::TupleMaker<sizeof...(Args_)>::make(k, _kinematics_names, &_decay);
+            }
 
         public:
-            ConcreteObservable(const Parameters & parameters, const ObservableOptions & options, const ConcreteObservableData<Decay_, n_> & data) :
+            ConcreteObservable(const std::string & name,
+                    const Parameters & parameters,
+                    const ObservableOptions & options,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & function,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+                _name(name),
                 _parameters(parameters),
                 _options(options),
                 _decay(parameters, options),
-                _data(data)
+                _function(function),
+                _kinematics_names(kinematics_names)
             {
             }
 
             virtual const std::string & name() const
             {
-                return _data.name;
+                return _name;
             }
 
             virtual double evaluate(const Kinematics & k) const
             {
-                return _data.evaluate(_decay, k);
+                return apply(_function, _argument_tuple(k));
             };
 
             virtual Parameters parameters()
@@ -125,20 +99,28 @@ namespace wf
 
             virtual ObservablePtr clone() const
             {
-                return ObservablePtr(new ConcreteObservable(_parameters.clone(), _options, _data));
+                return ObservablePtr(new ConcreteObservable(_name, _parameters.clone(), _options, _function, _kinematics_names));
             }
     };
 
-    template <typename Decay_, unsigned n_>
+    template <typename Decay_, typename ... Args_>
     class ConcreteObservableFactory :
         public ObservableFactory
     {
         private:
-            ConcreteObservableData<Decay_, n_> _data;
+            std::string _name;
+
+            std::function<double (const Decay_ *, const Args_ & ...)> _function;
+
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
 
         public:
-            ConcreteObservableFactory(const ConcreteObservableData<Decay_, n_> & data) :
-                _data(data)
+            ConcreteObservableFactory(const std::string & name,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & function,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+                _name(name),
+                _function(function),
+                _kinematics_names(kinematics_names)
             {
             }
 
@@ -148,9 +130,21 @@ namespace wf
 
             virtual std::tr1::shared_ptr<Observable> make(const Parameters & parameters, const ObservableOptions & options) const
             {
-                return std::tr1::shared_ptr<Observable>(new ConcreteObservable<Decay_, n_>(parameters, options, _data));
+                return std::tr1::shared_ptr<Observable>(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, options, _function,
+                            _kinematics_names));
             }
     };
+
+    template <typename Decay_, typename Tuple_, typename ... Args_>
+    ObservableFactory * make_concrete_observable_factory(const std::string & name, double (Decay_::* function)(const Args_ & ...) const,
+            const Tuple_ & kinematics_names = std::make_tuple())
+    {
+        static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
+
+        return new ConcreteObservableFactory<Decay_, Args_ ...>(name,
+                std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(function)),
+                kinematics_names);
+    }
 }
 
 #endif
