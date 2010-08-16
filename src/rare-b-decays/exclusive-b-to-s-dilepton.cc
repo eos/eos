@@ -1168,6 +1168,16 @@ namespace wf
             return real((c9eff(s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s)) * conj(c10()));
         }
 
+        complex<double> rho_L(const double & s) const
+        {
+            return c9eff(s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s) - c10();
+        }
+
+        complex<double> rho_R(const double & s) const
+        {
+            return c9eff(s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s) + c10();
+        }
+
         double kappa() const
         {
             // cf. [BHvD2010], Eq. (?), p. ?
@@ -1517,6 +1527,23 @@ namespace wf
         double rho_1_bar = _imp->rho_1(s), rho_2_bar = _imp->rho_2(s);
 
         return (rho_2 / rho_1 - rho_2_bar / rho_1_bar) / (rho_2 / rho_1 + rho_2_bar / rho_2_bar);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_3(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        double rho_1 = _imp->rho_1(s), rho_2 = _imp->rho_2(s);
+
+        complex<double> rho_L = _imp->rho_L(s), rho_R = _imp->rho_R(s);
+        _imp->cp_conjugate = true;
+        complex<double> rho_L_bar = _imp->rho_L(s), rho_R_bar = _imp->rho_R(s);
+
+        double abs2_xi_L = norm(rho_L / rho_L_bar), abs2_xi_R = norm(rho_R / rho_R_bar);
+
+        return (2 * rho_2 * (abs2_xi_L + abs2_xi_R - 2.0) + rho_1 * (abs2_xi_R - abs2_xi_L))
+            / (rho_1 * (abs2_xi_L + abs2_xi_R + 2.0) + 2 * rho_2 * (abs2_xi_R - abs2_xi_L));
     }
 
     double

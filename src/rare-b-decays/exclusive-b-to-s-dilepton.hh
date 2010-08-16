@@ -95,6 +95,7 @@ namespace wf
             double differential_h_3(const double & s) const;
             double differential_cp_asymmetry_1(const double & s) const;
             double differential_cp_asymmetry_2(const double & s) const;
+            double differential_cp_asymmetry_3(const double & s) const;
 
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
