@@ -25,10 +25,10 @@ class LongDistanceTest :
             static const double eps = 1e-6;
             static const std::vector<double> inputs{ 14.00, 15.00, 16.00, 19.21 };
             static const std::vector<complex<double>> results{
-                complex<double>(0.543474, 0.293208),
-                complex<double>(0.666160, 0.162673),
-                complex<double>(0.881766, 1.045673),
-                complex<double>(1.187389, 1.769690),
+                complex<double>(1.421627, 0.351849),
+                complex<double>(1.543080, 0.195207),
+                complex<double>(1.756748, 1.254808),
+                complex<double>(2.053897, 1.912082),
             };
 
             auto r = results.cbegin();
