@@ -18,8 +18,9 @@ namespace wf
         static const double s_1_hat = 0.60;
         static const double s_2_hat = 0.69;
 
-        // We us a universal fudge factor, kappa_V = kappa = fudge
-        static const double fudge = 2.0;
+        // We us a universal fudge factor, kappa_V = kappa, adjusted
+        // so that C_0({C_i}) * kappa ~= 0.72. Using C_0^NLL = 0.61.
+        static const double fudge = 1.2;
 
         static const std::vector<double> m_cc_hat
         {
