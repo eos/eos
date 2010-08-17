@@ -3,6 +3,7 @@
 #include <src/utils/parameters.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 
+#include <cmath>
 #include <map>
 #include <vector>
 
@@ -81,13 +82,13 @@ namespace wf
             Parameters::NameValuePair{"c5", +0.000374755},
             Parameters::NameValuePair{"c6", +0.00105859},
             // Wilson coefficients C7 - c10 at mu = 4.2 GeV to NNLL, based on ?
-            Parameters::NameValuePair{"Re{c7}", -0.331}, // c7eff = -0.306
-            Parameters::NameValuePair{"Im{c7}", 0.0},
+            Parameters::NameValuePair{"Abs{c7}",  0.331}, // c7eff = -0.306
+            Parameters::NameValuePair{"Arg{c7}",  M_PI},
             Parameters::NameValuePair{"c8", -0.181}, // c8eff = -0.168
-            Parameters::NameValuePair{"Re{c9}", +4.27},
-            Parameters::NameValuePair{"Im{c9}", 0.0},
-            Parameters::NameValuePair{"Re{c10}", -4.17},
-            Parameters::NameValuePair{"Im{c10}", 0.0},
+            Parameters::NameValuePair{"Abs{c9}",  4.27},
+            Parameters::NameValuePair{"Arg{c9}",  0.00},
+            Parameters::NameValuePair{"Abs{c10}", 4.17},
+            Parameters::NameValuePair{"Arg{c10}", M_PI},
             // Primed Wilson coefficients are negligible in the SM
             Parameters::NameValuePair{"c7prime", 0.0},
             Parameters::NameValuePair{"c9prime", 0.0},

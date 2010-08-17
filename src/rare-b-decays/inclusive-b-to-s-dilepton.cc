@@ -40,19 +40,19 @@ namespace wf
 
         Parameter c6;
 
-        Parameter re_c7;
+        Parameter abs_c7;
 
-        Parameter im_c7;
+        Parameter arg_c7;
 
         Parameter c8;
 
-        Parameter re_c9;
+        Parameter abs_c9;
 
-        Parameter im_c9;
+        Parameter arg_c9;
 
-        Parameter re_c10;
+        Parameter abs_c10;
 
-        Parameter im_c10;
+        Parameter arg_c10;
 
         Parameter m_b_MSbar;
 
@@ -84,13 +84,13 @@ namespace wf
             c4(p["c4"]),
             c5(p["c5"]),
             c6(p["c6"]),
-            re_c7(p["Re{c7}"]),
-            im_c7(p["Im{c7}"]),
+            abs_c7(p["Abs{c7}"]),
+            arg_c7(p["Arg{c7}"]),
             c8(p["c8"]),
-            re_c9(p["Re{c9}"]),
-            im_c9(p["Im{c9}"]),
-            re_c10(p["Re{c10}"]),
-            im_c10(p["Im{c10}"]),
+            abs_c9(p["Abs{c9}"]),
+            arg_c9(p["Arg{c9}"]),
+            abs_c10(p["Abs{c10}"]),
+            arg_c10(p["Arg{c10}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c_MSbar(p["mass::c"]),
             m_s(p["mass::s"]),
@@ -118,17 +118,17 @@ namespace wf
 
         complex<double> c7() const
         {
-            return complex<double>(re_c7, im_c7);
+            return abs_c7() * complex<double>(cos(arg_c7), sin(arg_c7));
         }
 
         complex<double> c9() const
         {
-            return complex<double>(re_c9, im_c9);
+            return abs_c9() * complex<double>(cos(arg_c9), sin(arg_c9));
         }
 
         complex<double> c10() const
         {
-            return complex<double>(re_c10, im_c10);
+            return abs_c10() * complex<double>(cos(arg_c10), sin(arg_c10));
         }
 
         double s_hat(const double & s) const

@@ -17,9 +17,9 @@ namespace wf
     {
         std::shared_ptr<Model> model;
 
-        Parameter re_c7;
+        Parameter abs_c7;
 
-        Parameter im_c7;
+        Parameter arg_c7;
 
         Parameter m_b_MSbar;
 
@@ -29,8 +29,8 @@ namespace wf
 
         Implementation(const Parameters & p) :
             model(new StandardModel(p)),
-            re_c7(p["Re{c7}"]),
-            im_c7(p["Im{c7}"]),
+            abs_c7(p["Abs{c7}"]),
+            arg_c7(p["Arg{c7}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             br_bcsl(p["exp::BR(B->X_clnu)"]),
             uncertainty(p["B->X_sgamma::uncertainty"])
@@ -58,7 +58,7 @@ namespace wf
             double kappa = 1.0 - 2.0/3.0 * model->alpha_s(model->m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * pow(1.0 - m_c_hat, 2));
 
             double ckm = norm(model->ckm_tb() * conj(model->ckm_ts()) / model->ckm_cb());
-            complex<double> c7np = complex<double>(re_c7 - c7sm, im_c7);
+            complex<double> c7np = abs_c7() * complex<double>(cos(arg_c7), sin(arg_c7)) - c7sm;
 
             double result = (sm + sm_delta * uncertainty)
                 + 6.0 * alpha_e / M_PI * br_bcsl * ckm / g / kappa * (norm(c7np) + 2.0 * real(c7np * c7sm));

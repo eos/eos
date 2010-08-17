@@ -44,23 +44,23 @@ namespace wf
 
         Parameter c6;
 
-        Parameter re_c7;
+        Parameter abs_c7;
 
-        Parameter im_c7;
+        Parameter arg_c7;
 
         Parameter c7prime;
 
         Parameter c8;
 
-        Parameter re_c9;
+        Parameter abs_c9;
 
-        Parameter im_c9;
+        Parameter arg_c9;
 
         Parameter c9prime;
 
-        Parameter re_c10;
+        Parameter abs_c10;
 
-        Parameter im_c10;
+        Parameter arg_c10;
 
         Parameter c10prime;
 
@@ -120,15 +120,15 @@ namespace wf
             c4(p["c4"]),
             c5(p["c5"]),
             c6(p["c6"]),
-            re_c7(p["Re{c7}"]),
-            im_c7(p["Im{c7}"]),
+            abs_c7(p["Abs{c7}"]),
+            arg_c7(p["Arg{c7}"]),
             c7prime(p["c7prime"]),
             c8(p["c8"]),
-            re_c9(p["Re{c9}"]),
-            im_c9(p["Im{c9}"]),
+            abs_c9(p["Abs{c9}"]),
+            arg_c9(p["Arg{c9}"]),
             c9prime(p["c9prime"]),
-            re_c10(p["Re{c10}"]),
-            im_c10(p["Im{c10}"]),
+            abs_c10(p["Abs{c10}"]),
+            arg_c10(p["Arg{c10}"]),
             c10prime(p["c10prime"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c(p["mass::c"]),
@@ -203,7 +203,7 @@ namespace wf
         // cf. [BFS2001], below Eq. (9), p. 4
         complex<double> c7eff() const
         {
-            return complex<double>(re_c7(), im_c7()) - 1.0/3.0 * c3() - 4.0/9.0 * c4() - 20.0/3.0 * c5() - 80.0/9.0 * c6();
+            return abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) - 1.0/3.0 * c3() - 4.0/9.0 * c4() - 20.0/3.0 * c5() - 80.0/9.0 * c6();
         }
 
         // cf. [BFS2001], below Eq. (26), p. 8
@@ -214,12 +214,12 @@ namespace wf
 
         complex<double> c9() const
         {
-            return complex<double>(re_c9(), im_c9());
+            return abs_c9() * complex<double>(cos(arg_c9()), sin(arg_c9()));
         }
 
         complex<double> c10() const
         {
-            return complex<double>(re_c10(), im_c10());
+            return abs_c10() * complex<double>(cos(arg_c10()), sin(arg_c10()));
         }
 
         // cf. [BFS2001], Eq. (10), p. 4
@@ -494,7 +494,7 @@ namespace wf
 
             // cf. [BFS2004], Eq. (44), p. 24
             // [Christoph] Use c7 instead of c7eff
-            complex<double> C_perp_f = (complex<double>(re_c7(), im_c7()) - c7prime()) * (8.0 * std::log(m_b / mu) - L(s) - 4.0 * (1.0 - mu_f() / m_b));
+            complex<double> C_perp_f = (abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) - c7prime()) * (8.0 * std::log(m_b / mu) - L(s) - 4.0 * (1.0 - mu_f() / m_b));
 
             // cf. [BFS2001], Eq. (37), p. 9
             // [Christoph] Use c8 instead of c8eff
@@ -520,7 +520,7 @@ namespace wf
 
             // cf. [BFS2001], Eq. (20)
             // [Christoph] Use c7 instead of c7eff
-            complex<double> Tf_perp_p = complex<double>(re_c7(), im_c7()) * (2.0 * m_B / (1.0 - u) / energy(s));
+            complex<double> Tf_perp_p = abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) * (2.0 * m_B / (1.0 - u) / energy(s));
 
             // cf. [BFS2001], Eq. (23)
             // [Christoph] Use c8 instead of c8eff
@@ -569,7 +569,7 @@ namespace wf
 
             // cf. [BFS2004], Eq. (45), p. 24
             // [Christoph] Use c7 instead of c7eff.
-            complex<double> C_par_f = -1.0 * (complex<double>(re_c7(), im_c7()) - c7prime()) * (8.0 * std::log(m_b / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b));
+            complex<double> C_par_f = -1.0 * (abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) - c7prime()) * (8.0 * std::log(m_b / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b));
             /* for [BFS2001] version of xi_par we also needed: */
             // C_par_f += (m_B / (2.0 * m_b)) * Y0(s) * (2.0 - 2.0 * L(s));
 
@@ -604,7 +604,7 @@ namespace wf
             //complex<double> Tf_par_p = (c7() - c7prime + (s / (2.0 * m_b * m_B)) * Y0(s)) * (2.0 * pow(m_B / energy(s), 2));
             // cf. [BFS2004], Eq. (49)
             // [Christoph] Use c7 instead of c7eff.
-            complex<double> Tf_par_p = complex<double>(re_c7(), im_c7()) * (4.0 * m_B / (1.0 - u) / energy(s));
+            complex<double> Tf_par_p = abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) * (4.0 * m_B / (1.0 - u) / energy(s));
 
             // cf. [BFS2001], Eq. (25)
             complex<double> Tnf_par_p = m_B / m_b * (
@@ -975,23 +975,23 @@ namespace wf
 
         Parameter c6;
 
-        Parameter re_c7;
+        Parameter abs_c7;
 
-        Parameter im_c7;
+        Parameter arg_c7;
 
         Parameter c7prime;
 
         Parameter c8;
 
-        Parameter re_c9;
+        Parameter abs_c9;
 
-        Parameter im_c9;
+        Parameter arg_c9;
 
         Parameter c9prime;
 
-        Parameter re_c10;
+        Parameter abs_c10;
 
-        Parameter im_c10;
+        Parameter arg_c10;
 
         Parameter c10prime;
 
@@ -1037,15 +1037,15 @@ namespace wf
             c4(p["c4"]),
             c5(p["c5"]),
             c6(p["c6"]),
-            re_c7(p["Re{c7}"]),
-            im_c7(p["Im{c7}"]),
+            abs_c7(p["Abs{c7}"]),
+            arg_c7(p["Arg{c7}"]),
             c7prime(p["c7prime"]),
             c8(p["c8"]),
-            re_c9(p["Re{c9}"]),
-            im_c9(p["Im{c9}"]),
+            abs_c9(p["Abs{c9}"]),
+            arg_c9(p["Arg{c9}"]),
             c9prime(p["c9prime"]),
-            re_c10(p["Re{c10}"]),
-            im_c10(p["Im{c10}"]),
+            abs_c10(p["Abs{c10}"]),
+            arg_c10(p["Arg{c10}"]),
             c10prime(p["c10prime"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c_MSbar(p["mass::c"]),
@@ -1082,6 +1082,13 @@ namespace wf
             return model->m_b_ps(2.0);
         }
 
+        inline complex<double> c7() const
+        {
+            double sign = (cp_conjugate ? -1.0 : +1.0);
+
+            return abs_c7() * complex<double>(cos(arg_c7()), sign * sin(arg_c7()));
+        }
+
         static complex<double> c7eff_nlo(const double & mu, const double & s, const double & m_b,
                 const double & c1, const double & c2, const double & c8)
         {
@@ -1094,17 +1101,20 @@ namespace wf
         // cf. [GP2004], Eq. (56)
         complex<double> c7eff(double s) const
         {
-            complex<double> c7(re_c7(), im_c7());
-            if (cp_conjugate)
-                c7 = conj(c7);
-
             double m_b = m_b_PS();
 
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
             complex<double> nlo = memoise(c7eff_nlo, mu(), s, m_b, c1(), c2(), c8());
 
-            return c7 + lo + (model->alpha_s(mu) / (4.0 * M_PI)) * nlo;
+            return c7() + lo + (model->alpha_s(mu) / (4.0 * M_PI)) * nlo;
+        }
+
+        inline complex<double> c9() const
+        {
+            double sign = (cp_conjugate ? -1.0 : +1.0);
+
+            return abs_c9() * complex<double>(cos(arg_c9()), sign * sin(arg_c9()));
         }
 
         static complex<double> c9eff_nlo_alpha_s(const double & mu, const double & s, const double & m_b,
@@ -1129,19 +1139,17 @@ namespace wf
             complex<double> G0 = -3.0 / 8.0 * ((ccbar_resonance ? LongDistance::g_had_ccbar(s, m_c) : CharmLoops::h(mu, s)) + 4.0 / 9.0);
             complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b) + 4.0 / 9.0);
 
-            complex<double> c9(re_c9(), im_c9());
             complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
             if (cp_conjugate)
             {
                 lambda_hat_u = conj(lambda_hat_u);
-                c9 = conj(c9);
             }
 
             complex<double> lo = c_b * Gb + c_0 * G0 + c;
             complex<double> nlo_alpha_s = memoise(c9eff_nlo_alpha_s, mu(), s, m_b, c1(), c2(), c8());
             complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
 
-            complex<double> result = c9 + lo;
+            complex<double> result = c9() + lo;
             if (! ccbar_resonance)
                 result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
 
@@ -1150,12 +1158,9 @@ namespace wf
 
         complex<double> c10() const
         {
-            complex<double> result(re_c10(), im_c10());
+            double sign = (cp_conjugate ? -1.0 : +1.0);
 
-            if (cp_conjugate)
-                result = conj(result);
-
-            return result;
+            return abs_c10() * complex<double>(cos(arg_c10()), sign * sin(arg_c10()));
         }
 
         double rho_1(const double & s) const
@@ -1253,7 +1258,7 @@ namespace wf
         // Quantity Y = Y_9 + lambda_u_hat Y_9^u + kappa_hat Y_7, the strong phase contributor of the amplitudes
         complex<double> Y(const double & s) const
         {
-            return (c9eff(s) - complex<double>(re_c9, im_c9)) + kappa() * (c7eff(s) - complex<double>(re_c7, im_c7)) * (2.0 * m_b_MSbar * m_B / s);
+            return (c9eff(s) - c9()) + kappa() * (c7eff(s) - c7()) * (2.0 * m_b_MSbar * m_B / s);
         }
 
         // Unormalized combinations of transversity amplitudes

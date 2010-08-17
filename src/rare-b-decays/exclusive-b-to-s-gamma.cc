@@ -10,7 +10,7 @@ namespace wf
     template <>
     struct Implementation<BToKstarGamma>
     {
-        Parameter c7;
+        Parameter abs_c7;
 
         Parameter c7prime;
 
@@ -23,7 +23,7 @@ namespace wf
         Parameter ckm_rhobar;
 
         Implementation(const Parameters & p) :
-            c7(p["c7"]),
+            abs_c7(p["Abs{c7}"]),
             c7prime(p["c7prime"]),
             ckm_A(p["CKM::A"]),
             ckm_lambda(p["CKM::lambda"]),
@@ -47,7 +47,7 @@ namespace wf
 
         double s_kstar_gamma() const
         {
-            double r = std::abs(c7prime / c7);
+            double r = std::abs(c7prime / abs_c7);
 
             return -2.0 * r / (1.0 + r * r) * std::sin(2.0 * beta());
         }

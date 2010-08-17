@@ -27,10 +27,13 @@ class BToXsGammaLargeRecoilTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
-                p["Re{c7}"] = -0.331;
+                p["Abs{c7}"] = +0.331;
+                p["Arg{c7}"] = M_PI;
                 p["c8"] = -0.181;
-                p["Re{c9}"] = +4.27;
-                p["Re{c10}"] = -4.173;
+                p["Abs{c9}"] = +4.27;
+                p["Arg{c9}"] = 0.0;
+                p["Abs{c10}"] = +4.173;
+                p["Arg{c10}"] = M_PI;
 
                 ObservableOptions oo;
 
@@ -44,10 +47,13 @@ class BToXsGammaLargeRecoilTest :
             // Zero test
             {
                 Parameters p = Parameters::Defaults();
-                p["Re{c7}"] = -0.3;
+                p["Abs{c7}"] = +0.3;
+                p["Arg{c7}"] = M_PI;
                 p["c8"] = -0.181;
-                p["Re{c9}"] = +4.27;
-                p["Re{c10}"] = -4.173;
+                p["Abs{c9}"] = +4.27;
+                p["Arg{c9}"] = 0.0;
+                p["Abs{c10}"] = +4.173;
+                p["Arg{c10}"] = M_PI;
 
                 ObservableOptions oo;
 
