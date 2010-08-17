@@ -199,7 +199,7 @@ namespace wf
             double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
 
             return 2.0 * log(m_b_pole() / m_l) * (
-                    - (1.0 + 4.0 * s_hat - 8.0 * s_hat2) / (6.0 * (1.0 - s_hat) + (1.0 + 2.0 * s_hat))
+                    - (1.0 + 4.0 * s_hat - 8.0 * s_hat2) / (6.0 * (1.0 - s_hat) * (1.0 + 2.0 * s_hat))
                     + ln1
                     - (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3) / (2.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln
                     - 1.0 / 9.0 * li2
@@ -427,7 +427,7 @@ namespace wf
                     1.0
                     + 8.0 * alpha_s_tilde * (omega1_79(s_hat) + u1)
                     + kappa * uem
-                    + 8.0 * alpha_s_tilde * omegaem_79(s_hat)
+                    + 8.0 * alpha_s_tilde * kappa * omegaem_79(s_hat)
                 ) + 24.0 * lambda_2_hat * (1.0 - 6.0 * s_hat + 4.0 * s_hat2);
 
             double s99 = pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * (
