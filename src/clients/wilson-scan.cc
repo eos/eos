@@ -86,7 +86,7 @@ class WilsonScan
             }
         }
 
-        void calc_chi_square(const Input & input, const ObservablePtr & o,
+        void calc_chi_square(const Input & input, const ObservablePtr & observable,
                 const CartesianProduct<std::vector<double>>::Iterator & wc_iterator)
         {
             Kinematics k;
@@ -95,6 +95,7 @@ class WilsonScan
             k.set("s_min", input.min);
             k.set("s_max", input.max);
 
+            ObservablePtr o = observable->clone();
             Parameters params = o->parameters();
 
             auto sd = scan_data.cbegin();
