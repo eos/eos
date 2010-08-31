@@ -1540,6 +1540,18 @@ namespace wf
         Save<bool> save(_imp->cp_conjugate, false);
 
         double rho_1 = _imp->rho_1(s), rho_2 = _imp->rho_2(s);
+        _imp->cp_conjugate = true;
+        double rho_1_bar = _imp->rho_1(s), rho_2_bar = _imp->rho_2(s);
+
+        return 2.0 * (rho_2 - rho_2_bar) / (rho_1 + rho_1_bar);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_mix(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        double rho_1 = _imp->rho_1(s), rho_2 = _imp->rho_2(s);
 
         complex<double> rho_L = _imp->rho_L(s), rho_R = _imp->rho_R(s);
         _imp->cp_conjugate = true;

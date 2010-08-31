@@ -213,6 +213,10 @@ namespace wf
                     &BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_3,
                     std::make_tuple("s")),
 
+            make_observable("B->K^*ll::a_CP^mix(s)@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_mix,
+                    std::make_tuple("s")),
+
             /* Inclusive Decays */
 
             // B->X_s ll, HLMW2005
