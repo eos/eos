@@ -124,14 +124,14 @@ namespace wf
         if (mu > _imp->m_b_MSbar)
         {
             if (mu < _imp->mu_t)
-                return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, mu, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf5);
+                return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf5);
 
             throw InternalError("StandardModel::m_b_msbar: Running of m_b_MSbar to mu > mu_t not yet implemented");
         }
         else
         {
             if (mu >= _imp->mu_c)
-                return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, mu, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf4);
+                return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf4);
 
             throw InternalError("StandardModel::m_b_msbar: Running of m_b_MSbar to mu < mu_c not yet implemented");
         }
@@ -163,14 +163,14 @@ namespace wf
         if (mu >= _imp->m_c_MSbar)
         {
             if (mu <= _imp->mu_b)
-                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, mu, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf4);
+                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf4);
 
             double alpha_s_b = alpha_s(_imp->mu_b);
-            m_c_0 = QCD::m_q_msbar(m_c_0, alpha_s_mu0, _imp->mu_b, alpha_s_b, Implementation<StandardModel>::qcd_params_nf4);
+            m_c_0 = QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s_b, Implementation<StandardModel>::qcd_params_nf4);
             alpha_s_mu0 = alpha_s_b;
 
             if (mu <= _imp->mu_t)
-                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, mu, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf5);
+                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf5);
 
             throw InternalError("StandardModel::m_c_msbar: Running of m_c_MSbar to mu > mu_t not yet implemented");
         }

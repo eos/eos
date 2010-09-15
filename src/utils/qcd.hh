@@ -29,11 +29,10 @@ namespace wf
              *
              * @m_q_0       : Quark mass in the MSbar scheme at the scale m_q
              * @alpha_s_0   : alpha_s at the scale mu_0 = m_q
-             * @mu          : Scale at which m_q shall be evaluated
              * @alpha_s_mu  : alpha_s at the scale mu
              * @params      : QCD parameters that control the running
              */
-            static double m_q_msbar(const double & m_q, const double & alpha_s_mu0, const double & mu, const double & alpha_s_mu, const Parameters & params);
+            static double m_q_msbar(const double & m_q, const double & alpha_s_mu0, const double & alpha_s_mu, const Parameters & params);
 
             /*
              * Pole mass shift from the MSbar scheme

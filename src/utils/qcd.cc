@@ -40,7 +40,7 @@ namespace wf
     }
 
     double
-    QCD::m_q_msbar(const double & m_q_0, const double & alpha_s_0, const double & mu, const double & alpha_s_mu, const QCD::Parameters & params)
+    QCD::m_q_msbar(const double & m_q_0, const double & alpha_s_0, const double & alpha_s_mu, const QCD::Parameters & params)
     {
         double a_mu0 = alpha_s_0 / M_PI;
         double a_mu = alpha_s_mu / M_PI;
