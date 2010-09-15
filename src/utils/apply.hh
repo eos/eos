@@ -22,7 +22,7 @@ namespace wf
         template <typename Result_> struct Applicator<Result_, 0>
         {
             template <typename Function_, typename Tuple_, typename ... CallArgs_>
-            static Result_ apply(const Function_ & f, const Tuple_ & t, CallArgs_ ... a)
+            static Result_ apply(const Function_ & f, const Tuple_ &, CallArgs_ ... a)
             {
                 return f(a ...);
             }
@@ -31,7 +31,7 @@ namespace wf
         template <> struct Applicator<void, 0>
         {
             template <typename Function_, typename Tuple_, typename ... CallArgs_>
-            static void apply(const Function_ & f, const Tuple_ & t, CallArgs_ ... a)
+            static void apply(const Function_ & f, const Tuple_ &, CallArgs_ ... a)
             {
                 f(a ...);
             }

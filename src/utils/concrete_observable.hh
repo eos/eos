@@ -28,7 +28,7 @@ namespace wf
         template <> struct TupleMaker<0>
         {
             template <typename Decay_, typename ... TupleElements_, typename ... ResultElements_>
-            static auto make(const Kinematics & k, const std::tuple<TupleElements_ ...> & t, const Decay_ * d, ResultElements_ ... r)
+            static auto make(const Kinematics &, const std::tuple<TupleElements_ ...> &, const Decay_ * d, ResultElements_ ... r)
                 -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, double>::Type ...>
             {
                 return std::make_tuple(d, r ...);
