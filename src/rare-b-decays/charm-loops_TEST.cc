@@ -116,8 +116,8 @@ class FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(- 1.2486221, real(CharmLoops::F87_massless(mu, s, m_b)), eps);
                 TEST_CHECK_NEARLY_EQUAL(- 2.7925269, imag(CharmLoops::F87_massless(mu, s, m_b)), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(- 3.2730189, real(CharmLoops::F89_massless(mu, s, m_b)), eps);
-                TEST_CHECK_NEARLY_EQUAL(  0.0000000, imag(CharmLoops::F89_massless(mu, s, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(- 3.2730189, real(CharmLoops::F89_massless(s, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(  0.0000000, imag(CharmLoops::F89_massless(s, m_b)), eps);
             }
 
             /* Formfactors for O_8 are problematic near the zero recoil point */
@@ -127,8 +127,8 @@ class FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(- 0.9708796,  real(CharmLoops::F87_massless(mu, s, m_b)), eps);
                 TEST_CHECK_NEARLY_EQUAL(- 2.7925268,  imag(CharmLoops::F87_massless(mu, s, m_b)), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(- 2.0208146,  real(CharmLoops::F89_massless(mu, s, m_b)), eps);
-                TEST_CHECK_NEARLY_EQUAL(  0.0000000,  imag(CharmLoops::F89_massless(mu, s, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(- 2.0208146,  real(CharmLoops::F89_massless(s, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(  0.0000000,  imag(CharmLoops::F89_massless(s, m_b)), eps);
             }
 
             /* Check imaginary parts of the form factors at the boundaries of the Low Recoil region */
@@ -143,8 +143,8 @@ class FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(-5.4492617, imag(CharmLoops::F19_massless(mu, s2, m_b)), eps);
                 TEST_CHECK_NEARLY_EQUAL(18.4542117, imag(CharmLoops::F29_massless(mu, s1, m_b)), eps);
                 TEST_CHECK_NEARLY_EQUAL(15.9404096, imag(CharmLoops::F29_massless(mu, s2, m_b)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0000000, imag(CharmLoops::F89_massless(mu, s1, m_b)), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0000000, imag(CharmLoops::F89_massless(mu, s2, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0000000, imag(CharmLoops::F89_massless(s1, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0000000, imag(CharmLoops::F89_massless(s2, m_b)), eps);
             }
 
             /* Formfactors, massive loops */

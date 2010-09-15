@@ -503,7 +503,7 @@ namespace wf
                     + (s / (2.0 * m_b * m_B)) * (
                         c1() * memoise(CharmLoops::F19_massive, mu_pole, s, m_b, m_c())
                         + c2() * memoise(CharmLoops::F29_massive, mu_pole, s, m_b, m_c())
-                        + c8() * CharmLoops::F89_massless(mu_pole, s, m_b)));
+                        + c8() * CharmLoops::F89_massless(s, m_b)));
 
             return C_perp_f + C_perp_nf;
         }
@@ -580,7 +580,7 @@ namespace wf
                     + (m_B / (2.0 * m_b)) * (
                         c1() * memoise(CharmLoops::F19_massive, mu_pole, s, m_b, m_c())
                         + c2() * memoise(CharmLoops::F29_massive, mu_pole, s, m_b, m_c())
-                        + c8eff() * CharmLoops::F89_massless(mu_pole, s, m_b)));
+                        + c8eff() * CharmLoops::F89_massless(s, m_b)));
 
             return C_par_f + C_par_nf;
         }
@@ -1123,7 +1123,7 @@ namespace wf
             return -1.0 * (
                     c1 * CharmLoops::F19_massless(mu, s, m_b)
                     + c2 * CharmLoops::F29_massless(mu, s, m_b)
-                    + c8 * CharmLoops::F89_massless(mu, s, m_b));
+                    + c8 * CharmLoops::F89_massless(s, m_b));
         }
 
         // cf. [GP2004], Eq. (55), p. 10

@@ -481,7 +481,7 @@ namespace wf
                 alpha_s_tilde * kappa * f(5, s_hat),
                 alpha_s_tilde * kappa * f(6, s_hat),
                 0.0,
-                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F89_massless(mu, s, m_b),
+                -pow(alpha_s_tilde, 2) * kappa * CharmLoops::F89_massless(s, m_b),
                 1.0 + alpha_s_tilde * kappa * f9pen(s_hat),
                 0.0,
                 alpha_s_tilde * kappa * f(3, s_hat),

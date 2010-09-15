@@ -120,15 +120,16 @@ namespace wf
                     * pow(M_PI / 2.0 - atan(sqrt1z), 2.0)
                     - M_PI * M_PI * (54.0 - 53.0 * s_hat - 286.0 * s_hat2 + 612.0 * s_hat * s_hat2 - 446 * s_hat2 * s_hat2 + 113.0 * s_hat2 * s_hat2 * s_hat));
 
-            // cf. [S2004], Eq. (29), p. 8
+            // cf. [S2004], Eq. (30), p. 8
             return a + b + c + d + e + f;
     }
 
     complex<double>
-    CharmLoops::C(const double & mu, const double & s, const double & m_b)
+    CharmLoops::C(const double & mu, const double & s)
     {
         static const double zeta3 = 1.20206;
 
+        // cf. [S2004], Eq. (31), p. 9
         return complex<double>(16.0 / 81.0 * log(mu * mu / s) + 428.0 / 243.0 - 64.0 / 27.0 * zeta3,
                 16.0 / 81.0 * M_PI);
     }
@@ -145,7 +146,7 @@ namespace wf
     CharmLoops::F19_massless(const double & mu, const double & s, const double & m_b)
     {
         // cf. [S2004], Eq. (24), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
-        return -B(mu, s, m_b) - 4.0 * C(mu, s, m_b);
+        return -B(mu, s, m_b) - 4.0 * C(mu, s);
     }
 
     complex<double>
@@ -159,7 +160,7 @@ namespace wf
     CharmLoops::F29_massless(const double & mu, const double & s, const double & m_b)
     {
         // cf. [S2004], Eq. (25), p. 7 and consider a global sign (compare [ABGW2003], Eq. (7), p. 8 with [S2004], Eq. (16), p. 6)
-        return 6.0 * B(mu, s, m_b) - 3.0 * C(mu, s, m_b);
+        return 6.0 * B(mu, s, m_b) - 3.0 * C(mu, s);
     }
 
     /* Two-Loop functions for charm-quark loops */
@@ -871,8 +872,9 @@ namespace wf
     }
 
     // cf. [BFS2001], Eq. (83), p. 30
+    // TODO: Check explicit mu dependence and remove it if possible
     complex<double>
-    CharmLoops::F89_massless(const double & mu, const double & s, const double & m_q)
+    CharmLoops::F89_massless(const double & s, const double & m_q)
     {
         // Loop-Functions are calculated for the pole mass!
         double s_hat = s / (m_q * m_q);

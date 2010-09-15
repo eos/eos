@@ -21,7 +21,7 @@ namespace wf
         // cf. [S2004], Eq. (30), pp. 8-9
         static complex<double> B(const double & mu, const double & s, const double & m_b);
         // cf. [S2004], Eq. (31), p. 9
-        static complex<double> C(const double & mu, const double & s, const double & m_b);
+        static complex<double> C(const double & mu, const double & s);
 
         /* Non-factorizing two loop contributions */
         // massless case, cf. [S2004], Eq. (16), p. 6
@@ -31,7 +31,7 @@ namespace wf
         static complex<double> F29_massless(const double & mu, const double & s, const double & m_b);
         // massless case, cf. [BFS2001], Eqs. (82)-(83), p. 30
         static complex<double> F87_massless(const double & mu, const double & s, const double & m_b);
-        static complex<double> F89_massless(const double & mu, const double & s, const double & m_b);
+        static complex<double> F89_massless(                   const double & s, const double & m_b);
 
         // massive case, cf. [ABGW2003], Eq. (7), p. 8
         static complex<double> F17_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
