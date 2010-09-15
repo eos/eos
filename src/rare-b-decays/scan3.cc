@@ -322,7 +322,7 @@ main(int argc, char * argv[])
                 double central = destringify<double>(*(++a));
                 double max = destringify<double>(*(++a));
 
-                input.push_back(Input{k1, k2, min, central, max, observable});
+                input.push_back(Input{k1, k2, min, central, max, observable, ""});
 
                 continue;
             }
