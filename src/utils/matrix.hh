@@ -114,6 +114,19 @@ namespace wf
 
         return result;
     }
+
+    /* scalar times vector */
+    template <unsigned long n_>
+    std::array<double, n_> operator* (const double & x, const std::array<double, n_> & y)
+    {
+        std::array<double, n_> result = y;
+        for (unsigned i(0) ; i < n_ ; ++i)
+        {
+            result[i] *= x;
+        }
+
+        return result;
+    }
 }
 
 #endif
