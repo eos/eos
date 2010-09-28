@@ -32,8 +32,9 @@ libwfutils_la_SOURCES = \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh \
+	top-loops.hh top-loops.cc \
 	wilson_coefficients.cc wilson_coefficients.hh
-libwfutils_la_LIBADD = -lpthread
+libwfutils_la_LIBADD = -lpthread -lgslcblas -lgsl
 
 TESTS = \
 	apply_TEST \
@@ -45,6 +46,7 @@ TESTS = \
 	qcd_TEST \
 	save_TEST \
 	standard_model_TEST \
+	top-loops_TEST \
 	stringify_TEST \
 	wilson_coefficients_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
@@ -80,6 +82,9 @@ stringify_TEST_LDADD = $(TESTS_LD_ADD)
 
 standard_model_TEST = standard_model_TEST.cc
 standard_model_TEST_LDADD = $(TESTS_LD_ADD)
+
+top_loops_TEST = top-loops_TEST.cc
+top_loops_TEST_LDADD = $(TESTS_LD_ADD)
 
 wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
 wilson_coefficients_TEST_LDADD = $(TESTS_LD_ADD)
