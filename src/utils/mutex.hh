@@ -47,7 +47,7 @@ namespace wf
             ~Mutex();
 
             /// Returns a pointer to our underlying posix mutex.
-            pthread_mutex_t * const mutex()
+            pthread_mutex_t * mutex()
             {
                 return _mutex;
             }
