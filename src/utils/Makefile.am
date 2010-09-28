@@ -21,8 +21,9 @@ libwfutils_la_SOURCES = \
 	memoise.hh \
 	model.cc model.hh \
 	mutex.cc mutex.hh \
-	parameters.cc parameters.hh \
 	observable.cc observable.hh \
+	parameters.cc parameters.hh \
+	power_of.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh \
 	random_number_engine.cc random_number_engine.hh \
@@ -40,6 +41,7 @@ TESTS = \
 	integrate_TEST \
 	matrix_TEST \
 	memoise_TEST \
+	power_of_TEST \
 	qcd_TEST \
 	save_TEST \
 	standard_model_TEST \
@@ -63,6 +65,9 @@ matrix_TEST_LDADD = $(TESTS_LD_ADD)
 
 memoise_TEST_SOURCES = memoise_TEST.cc
 memoise_TEST_LDADD = $(TESTS_LD_ADD)
+
+power_of_TEST_SOURCES = power_of_TEST.cc
+power_of_TEST_LDADD = $(TESTS_LD_ADD)
 
 qcd_TEST_SOURCES = qcd_TEST.cc
 qcd_TEST_LDADD = $(TESTS_LD_ADD)
