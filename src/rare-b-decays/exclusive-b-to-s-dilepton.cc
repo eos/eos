@@ -479,13 +479,13 @@ namespace wf
         }
 
         // cf. [BFS2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1
-        complex<double> C0_perp(const double & h, const double & s) const
+        complex<double> C0_perp(const double & /*h*/, const double & s) const
         {
             return c7eff() + s / (2.0 * m_b_PS() * m_B) * Y0(s);
         }
 
         // cf. [BFS2001], Eqs. (34), (37), p. 9
-        complex<double> C1_perp(const double & h, const double & s) const
+        complex<double> C1_perp(const double & /*h*/, const double & s) const
         {
             // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
             double m_b = m_b_PS();
