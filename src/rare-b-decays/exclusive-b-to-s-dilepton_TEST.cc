@@ -40,7 +40,7 @@ class BToKstarDileptonLargeRecoilTest :
 
                 const double eps = 1e-4;
 
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(2.00, 4.30) * 1e7,      +1.1121, eps); // 1.1125 for m_b_PS = 4.6
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(2.00, 4.30) * 1e7,      +1.1122, eps); // 1.1125 for m_b_PS = 4.6
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(2.00, 4.30), +0.0857, eps); // 0.0911 for m_b_PS = 4.6
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(2.00, 4.30),  +0.7827, eps); // 0.7800 for m_b_PS = 4.6
 

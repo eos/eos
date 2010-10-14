@@ -881,7 +881,7 @@ namespace wf
         std::function<double (const double &)> f = std::bind(std::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_branching_ratio),
                 this, std::placeholders::_1);
 
-        return integrate(f, 128, s_min, s_max);
+        return integrate(f, 64, s_min, s_max);
     }
 
     double
@@ -893,7 +893,7 @@ namespace wf
         std::function<double (const double &)> denom = std::bind(
                 std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::placeholders::_1);
 
-        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
     }
 
     double
@@ -905,7 +905,7 @@ namespace wf
         std::function<double (const double &)> denom = std::bind(
                 std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::placeholders::_1);
 
-        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
     }
 
     double
@@ -917,7 +917,7 @@ namespace wf
         std::function<double (const double &)> denom = std::bind(
                 std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_denominator), _imp, std::placeholders::_1);
 
-        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
     }
 
     double
@@ -929,7 +929,7 @@ namespace wf
         std::function<double (const double &)> denom = std::bind(
                 std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::placeholders::_1);
 
-        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
     }
 
     double
@@ -941,7 +941,7 @@ namespace wf
         std::function<double (const double &)> denom = std::bind(
                 std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_denominator), _imp, std::placeholders::_1);
 
-        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
     }
 
     double
@@ -953,7 +953,7 @@ namespace wf
         std::function<double (const double &)> denom = std::bind(
                 std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::placeholders::_1);
 
-        return integrate(num, 128, s_min, s_max) / integrate(denom, 128, s_min, s_max);
+        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
     }
 
     // Low Recoil
