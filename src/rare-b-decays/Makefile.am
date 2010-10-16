@@ -13,7 +13,7 @@ libwfrarebdecays_la_SOURCES = \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
 	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
 	factory.cc factory.hh \
-	form_factors.cc form_factors.hh \
+	form-factors.cc form-factors.hh \
 	hard-scattering.cc hard-scattering.hh \
 	long-distance.cc long-distance.hh
 libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la -lgslcblas -lgsl

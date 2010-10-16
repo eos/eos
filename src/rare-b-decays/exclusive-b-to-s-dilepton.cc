@@ -2,7 +2,7 @@
 
 #include <src/rare-b-decays/charm-loops.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
-#include <src/rare-b-decays/form_factors.hh>
+#include <src/rare-b-decays/form-factors.hh>
 #include <src/rare-b-decays/hard-scattering.hh>
 #include <src/rare-b-decays/long-distance.hh>
 #include <src/utils/destringify.hh>

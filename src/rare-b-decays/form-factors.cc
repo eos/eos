@@ -1,6 +1,6 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#include <src/rare-b-decays/form_factors.hh>
+#include <src/rare-b-decays/form-factors.hh>
 
 #include <cmath>
 
