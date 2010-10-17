@@ -42,6 +42,7 @@ TESTS = \
 	bremsstrahlung_TEST \
 	charm-loops_TEST \
 	exclusive-b-to-s-dilepton_TEST \
+	form-factors_TEST \
 	inclusive-b-to-s-dilepton_TEST \
 	inclusive-b-to-s-gamma_TEST \
 	hard-scattering_TEST \
@@ -57,6 +58,9 @@ charm_loops_TEST_LDADD = $(TESTS_LD_ADD)
 
 exclusive_b_to_s_dilepton_TEST_SOURCES = exclusive-b-to-s-dilepton_TEST.cc
 exclusive_b_to_s_dilepton_TEST_LDADD = $(TESTS_LD_ADD)
+
+form_factors_TEST_SOURCES = form-factors_TEST.cc
+form_factors_TEST_LDADD = $(TESTS_LD_ADD)
 
 inclusive_b_to_s_dilepton_TEST_SOURCES = inclusive-b-to-s-dilepton_TEST.cc
 inclusive_b_to_s_dilepton_TEST_LDADD = $(TESTS_LD_ADD)

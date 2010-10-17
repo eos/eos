@@ -1,227 +1,165 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 #include <src/rare-b-decays/form-factors.hh>
+#include <src/utils/destringify.hh>
 
-#include <cmath>
+#include <map>
 
 namespace wf
 {
-    /* Form Factors according to [ABHH1999] */
-    class ABHH1999FormFactors :
-        public FormFactors<BToKstar>
-    {
-        private:
-            // cf. [ABHH1999], p. 8, Table 3
-            static const double _v_f0[3];
-            static const double _v_c1[3];
-            static const double _v_c2[3];
+    /* P -> V Processes */
 
-            static const double _a_0_f0[3];
-            static const double _a_0_c1[3];
-            static const double _a_0_c2[3];
-
-            static const double _a_1_f0[3];
-            static const double _a_1_c1[3];
-            static const double _a_1_c2[3];
-
-            static const double _a_2_f0[3];
-            static const double _a_2_c1[3];
-            static const double _a_2_c2[3];
-
-            unsigned _set;
-
-            // cf. [ABHH1999], Eq. (3.7), p. 10 and following text
-            double _calc(const double & f0, const double & c1, const double & c2, const double & s_hat)
-            {
-                return f0 * std::exp(c1 * s_hat + c2 * s_hat * s_hat);
-            }
-
-        public:
-            ABHH1999FormFactors(unsigned set) :
-                _set(set)
-            {
-            }
-
-            ~ABHH1999FormFactors()
-            {
-            }
-
-            virtual double v(const double & s_hat)
-            {
-                return _calc(_v_f0[_set], _v_c1[_set], _v_c2[_set], s_hat);
-            }
-
-            virtual double a_0(const double & s_hat)
-            {
-                return _calc(_a_0_f0[_set], _a_0_c1[_set], _a_0_c2[_set], s_hat);
-            }
-
-            virtual double a_1(const double & s_hat)
-            {
-                return _calc(_a_1_f0[_set], _a_1_c1[_set], _a_1_c2[_set], s_hat);
-            }
-
-            virtual double a_2(const double & s_hat)
-            {
-                return _calc(_a_2_f0[_set], _a_2_c1[_set], _a_2_c2[_set], s_hat);
-            }
-    };
-
-    const double ABHH1999FormFactors::_v_f0[3] = { 0.399, 0.457, 0.548 };
-    const double ABHH1999FormFactors::_v_c1[3] = { 1.537, 1.482, 1.462 };
-    const double ABHH1999FormFactors::_v_c2[3] = { 1.123, 1.015, 0.953 };
-
-    const double ABHH1999FormFactors::_a_0_f0[3] = { 0.412, 0.471, 0.698 };
-    const double ABHH1999FormFactors::_a_0_c1[3] = { 1.543, 1.505, 1.945 };
-    const double ABHH1999FormFactors::_a_0_c2[3] = { 0.954, 0.710, 0.314 };
-
-    const double ABHH1999FormFactors::_a_1_f0[3] = { 0.294, 0.337, 0.385 };
-    const double ABHH1999FormFactors::_a_1_c1[3] = { 0.656, 0.602, 0.557 };
-    const double ABHH1999FormFactors::_a_1_c2[3] = { 0.456, 0.258, 0.068 };
-
-    const double ABHH1999FormFactors::_a_2_f0[3] = { 0.246, 0.282, 0.320 };
-    const double ABHH1999FormFactors::_a_2_c1[3] = { 1.237, 1.172, 1.083 };
-    const double ABHH1999FormFactors::_a_2_c2[3] = { 0.822, 0.567, 0.393 };
+    struct BToKstar { };
+    struct BsToPhi { };
 
     /* Form Factors according to [BZ2004] */
-    class BZ2004FormFactors :
-        public FormFactors<BToKstar>
+    template <typename Process_> class BZ2004FormFactors :
+        public FormFactors<PToV>
     {
         private:
-            Parameter _a0_factor, _a1_factor, _a2_factor, _v_factor;
+            Parameter _v_factor, _a0_factor, _a1_factor, _a2_factor;
 
-            // cf. [BZ2004], Eqs. (59)-(61)
-            // Here ratio_{r,fit} is m_B^2 / m_{R,fit}^2. For Eq. (61), we use Eq. (59) with r1 = 0.
-            double _calc_eq59(const double & r1, const double & r2, const double & ratio_r, const double & ratio_fit, const double & s_hat)
+            // fit parametrisation for P -> V according to [BZ2004]
+            static const double _v_r1, _v_r2, _v_m2r, _v_m2fit;
+            static const double _a0_r1, _a0_r2, _a0_m2r, _a0_m2fit;
+            static const double _a1_r2, _a1_m2fit;
+            static const double _a2_r1, _a2_r2, _a2_m2fit;
+
+            BZ2004FormFactors(const Parameters & p) :
+                _v_factor(p["formfactors::v_uncertainty"]),
+                _a0_factor(p["formfactors::a0_uncertainty"]),
+                _a1_factor(p["formfactors::a1_uncertainty"]),
+                _a2_factor(p["formfactors::a2_uncertainty"])
             {
-                double x_r = s_hat * ratio_r;
-                double x_fit = s_hat * ratio_fit;
-
-                return r1 / (1.0 - x_r) + r2 / (1.0 - x_fit);
             }
 
-            double _calc_eq60(const double & r1, const double & r2, const double & ratio_fit, const double & s_hat)
+            // cf. [BZ2004], Eq. 59, p. 27
+            static inline double _calc_eq59(const double & s, const double & r_1, const double & r_2, const double & m2r, const double & m2fit)
             {
-                double x_fit = s_hat * ratio_fit;
-                double denom = 1.0 - x_fit;
+                return r_1 / (1.0 - s / m2r) + r_2 / (1.0 - s / m2fit);
+            }
 
-                return r1 / denom + r2 / denom / denom;
+            // cf. [BZ2004], Eq. 60, p. 29
+            static inline double _calc_eq60(const double & s, const double & r_1, const double & r_2, const double & m2fit)
+            {
+                double denom = 1.0 - s / m2fit;
+
+                return r_1 / denom + r_2 / denom / denom;
+            }
+
+            // cf. [BZ2004], Eq. 61, p. 29
+            static inline double _calc_eq61(const double & s, const double & r_2, const double & m2fit)
+            {
+                return r_2 / (1.0 - s / m2fit);
             }
 
         public:
-            BZ2004FormFactors(const Parameters & p) :
-                _a0_factor(p["formfactors::a0_uncertainty"]),
-                _a1_factor(p["formfactors::a1_uncertainty"]),
-                _a2_factor(p["formfactors::a2_uncertainty"]),
-                _v_factor(p["formfactors::v_uncertainty"])
+            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
             {
+                return new BZ2004FormFactors(parameters);
             }
 
-            ~BZ2004FormFactors()
+            virtual double v(const double & s) const
             {
+                return _calc_eq59(s, _v_r1, _v_r2, _v_m2r, _v_m2fit);
             }
 
-            // cf. [BZ2004], Table 8, p. 28
-            virtual double v(const double & s_hat)
+            virtual double a_0(const double & s) const
             {
-                return _v_factor * _calc_eq59(0.923, -0.511, 0.984646, 0.56434, s_hat);
+                return _calc_eq59(s, _a0_r1, _a0_r2, _a0_m2r, _a0_m2fit);
             }
 
-            virtual double a_0(const double & s_hat)
+            virtual double a_1(const double & s) const
             {
-                return _a0_factor * _calc_eq59(1.364, -0.990, 1.0, 0.75798, s_hat);
+                return _calc_eq61(s, _a1_r2, _a1_m2fit);
             }
 
-            virtual double a_1(const double & s_hat)
+            virtual double a_2(const double & s) const
             {
-                return _a1_factor * _calc_eq59(0.0, 0.290, 1.0, 0.69040, s_hat);
-            }
-
-            virtual double a_2(const double & s_hat)
-            {
-                return _a2_factor * _calc_eq60(-0.084, 0.342, 0.53612, s_hat);
+                return _calc_eq60(s, _a2_r1, _a2_r2, _a2_m2fit);
             }
     };
 
-    /* Form Factors according to [IKKR2007] */
-    class IKKR2007FormFactors :
-        public FormFactors<BToKstar>
-    {
-        private:
-            // cf. [IKKR2007], Eq. (48)
-            // Here s_hat = q^2 / m_B^2
-            double _calc(const double & f0, const double & a, const double & b, const double & s_hat)
-            {
-                return f0 / (1.0 - s_hat * a + s_hat * s_hat * b);
-            }
+    /* For the values below, cf. [BZ2004], Table 8, p. 28 */
 
-            // cf. [IKKR2007], Table III, p. 9
-            // For rewriting the form factor to the [BZ2004] Basis, cf. [IKKR2007], Eq. (6), p. 2
-            // The ^c basis corresponds to the [BZ2004] Basis.
-            virtual double v(const double & s_hat)
-            {
-                return _calc(0.37, 2.05, 1.13, s_hat);
-            }
+    /* B_{u,d} -> K^* */
+    template class BZ2004FormFactors<BToKstar>;
+    template <> const double BZ2004FormFactors<BToKstar>::_v_r1 = +0.923;
+    template <> const double BZ2004FormFactors<BToKstar>::_v_r2 = -0.511;
+    template <> const double BZ2004FormFactors<BToKstar>::_v_m2r = 5.32 * 5.32;
+    template <> const double BZ2004FormFactors<BToKstar>::_v_m2fit = 49.40;
+    template <> const double BZ2004FormFactors<BToKstar>::_a0_r1 = +1.364;
+    template <> const double BZ2004FormFactors<BToKstar>::_a0_r2 = -0.990;
+    template <> const double BZ2004FormFactors<BToKstar>::_a0_m2r = 5.28 * 5.28;
+    template <> const double BZ2004FormFactors<BToKstar>::_a0_m2fit = 36.78;
+    template <> const double BZ2004FormFactors<BToKstar>::_a1_r2 = +0.290;
+    template <> const double BZ2004FormFactors<BToKstar>::_a1_m2fit = 40.38;
+    template <> const double BZ2004FormFactors<BToKstar>::_a2_r1 = -0.084;
+    template <> const double BZ2004FormFactors<BToKstar>::_a2_r2 = +0.342;
+    template <> const double BZ2004FormFactors<BToKstar>::_a2_m2fit = 52.00;
 
-            virtual double a_0(const double & s_hat)
-            {
-                static const double alpha = 2.4596;
-                static const double beta = 2.5139;
+    /* B_s -> phi */
+    template class BZ2004FormFactors<BsToPhi>;
+    template <> const double BZ2004FormFactors<BsToPhi>::_v_r1 = +1.484;
+    template <> const double BZ2004FormFactors<BsToPhi>::_v_r2 = -1.049;
+    template <> const double BZ2004FormFactors<BsToPhi>::_v_m2r = 5.42 * 5.42;
+    template <> const double BZ2004FormFactors<BsToPhi>::_v_m2fit = 39.52;
+    template <> const double BZ2004FormFactors<BsToPhi>::_a0_r1 = +3.310;
+    template <> const double BZ2004FormFactors<BsToPhi>::_a0_r2 = -2.835;
+    template <> const double BZ2004FormFactors<BsToPhi>::_a0_m2r = 5.37 * 5.37;
+    template <> const double BZ2004FormFactors<BsToPhi>::_a0_m2fit = 31.57;
+    template <> const double BZ2004FormFactors<BsToPhi>::_a1_r2 = +0.308;
+    template <> const double BZ2004FormFactors<BsToPhi>::_a1_m2fit = 36.54;
+    template <> const double BZ2004FormFactors<BsToPhi>::_a2_r1 = -0.054;
+    template <> const double BZ2004FormFactors<BsToPhi>::_a2_r2 = +0.288;
+    template <> const double BZ2004FormFactors<BsToPhi>::_a2_m2fit = 48.94;
 
-                // A_0 <- alpha (A_0 - A_+) - s_hat beta A_-
-                return alpha * (_calc(0.40, 0.98, 0.034, s_hat) - _calc(0.30, 1.92, 0.97, s_hat)) - s_hat * beta * _calc(-0.38, 2.10, 1.19, s_hat);
-            }
-
-            virtual double a_1(const double & s_hat)
-            {
-                return _calc(0.28438, 0.98, 0.034, s_hat);
-            }
-
-            virtual double a_2(const double & s_hat)
-            {
-                return _calc(0.30, 1.92, 0.97, s_hat);
-            }
-    };
-
-    FormFactors<BToKstar>::~FormFactors()
+    FormFactors<PToV>::~FormFactors()
     {
     }
 
-    std::shared_ptr<FormFactors<BToKstar>>
-    FormFactorFactory<BToKstar>::create(const std::string & label, const Parameters & parameters)
+    std::shared_ptr<FormFactors<PToV>>
+    FormFactorFactory<PToV>::create(const std::string & label, const Parameters & parameters)
     {
-        std::shared_ptr<FormFactors<BToKstar>> result;
-        std::string name, set;
+        std::shared_ptr<FormFactors<PToV>> result;
 
-        std::string::size_type sep(label.find("::"));
-        if (std::string::npos == sep)
+        typedef std::tuple<std::string, std::string> KeyType;
+        typedef std::function<FormFactors<PToV> * (const Parameters &, unsigned)> ValueType;
+        static const std::map<KeyType, ValueType> form_factors
         {
-            name = label;
-        }
-        else
+            { KeyType("B->K^*",     "BZ2004"), &BZ2004FormFactors<BToKstar>::make   },
+            { KeyType("Bs->phi",    "BZ2004"), &BZ2004FormFactors<BsToPhi>::make    },
+        };
+
+        /*
+         * Labels have the form
+         *
+         *   PROCESS@NAME[:SET]
+         *
+         * The brackets indicate the latter part to be optional.
+         */
+
+        std::string process, name, input(label);
+        unsigned set(0);
+
+        std::string::size_type sep_at(input.find('@')), sep_colon(input.find(':'));
+        if (std::string::npos == sep_at)
+            return result;
+
+        if (std::string::npos != sep_colon)
         {
-            name = label.substr(0, sep);
-            set = label.substr(sep + 2);
+            set = destringify<unsigned>(input.substr(sep_colon + 1));
+            input.erase(sep_colon + 1);
         }
 
-        if ("ABHH1999" == name)
-        {
-            if (set.empty())
-                set = "1";
+        name = input.substr(sep_at + 1);
+        process = input.substr(0, sep_at);
 
-            unsigned index(set[0] - '1');
+        auto i = form_factors.find(KeyType(process, name));
+        if (form_factors.cend() == i)
+            return result;
 
-            if (index < 3)
-                result = std::shared_ptr<FormFactors<BToKstar>>(new ABHH1999FormFactors(index));
-        }
-        else if ("BZ2004" == name)
-        {
-            result = std::shared_ptr<FormFactors<BToKstar>>(new BZ2004FormFactors(parameters));
-        }
-        else if ("IKKR2007" == name)
-        {
-            result = std::shared_ptr<FormFactors<BToKstar>>(new IKKR2007FormFactors);
-        }
+        result = std::shared_ptr<FormFactors<PToV>>(i->second(parameters, set));
 
         return result;
     }

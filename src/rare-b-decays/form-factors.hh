@@ -16,27 +16,36 @@ namespace wf
     template <typename Transition_>
     class FormFactorFactory;
 
-    struct BToKstar { };
+    /* Tags */
+
+    /*
+     * P -> V transitions
+     *
+     * P: (Heavy) pseudoscalar meson.
+     * V: Light vector meson.
+     */
+    struct PToV { };
 
     template <>
-    class FormFactors<BToKstar>
+    class FormFactors<PToV>
     {
         public:
             virtual ~FormFactors();
 
-            virtual double v(const double & s_hat) = 0;
+            virtual double v(const double & s_hat) const = 0;
 
-            virtual double a_0(const double & s_hat) = 0;
-            virtual double a_1(const double & s_hat) = 0;
-            virtual double a_2(const double & s_hat) = 0;
+            virtual double a_0(const double & s_hat) const = 0;
+            virtual double a_1(const double & s_hat) const = 0;
+            virtual double a_2(const double & s_hat) const = 0;
+
+            // TODO: dipole form factors
     };
 
     template <>
-    class FormFactorFactory<BToKstar>
+    class FormFactorFactory<PToV>
     {
         public:
-            static std::shared_ptr<FormFactors<BToKstar>>
-                create(const std::string & label, const Parameters & parameters);
+            static std::shared_ptr<FormFactors<PToV>> create(const std::string & label, const Parameters & parameters);
     };
 }
 

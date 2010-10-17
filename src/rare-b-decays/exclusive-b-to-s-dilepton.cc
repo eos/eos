@@ -110,7 +110,7 @@ namespace wf
 
         double e_q;
 
-        std::shared_ptr<FormFactors<BToKstar>> form_factors;
+        std::shared_ptr<FormFactors<PToV>> form_factors;
 
         Implementation(const Parameters & p, const ObservableOptions & o) :
             model(new StandardModel(p)),
@@ -153,7 +153,7 @@ namespace wf
             uncertainty_xi_par(p["formfactors::xi_par_uncertainty"]),
             e_q(-1.0/3.0)
         {
-            form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
+            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o["form-factors"], p);
             if (! form_factors.get())
                 throw std::string("InternalError");
 
@@ -250,7 +250,7 @@ namespace wf
         double xi_perp(const double & s) const
         {
             const double factor = m_B / (m_B + m_Kstar);
-            double result = uncertainty_xi_perp * factor * form_factors->v(s_hat(s));
+            double result = uncertainty_xi_perp * factor * form_factors->v(s);
 
             return result;
         }
@@ -259,7 +259,7 @@ namespace wf
         {
             const double factor1 = (m_B + m_Kstar) / (2.0 * energy(s));
             const double factor2 = (1.0 - m_Kstar / m_B);
-            double result = uncertainty_xi_par * (factor1 * form_factors->a_1(s_hat(s)) - factor2 * form_factors->a_2(s_hat(s)));
+            double result = uncertainty_xi_par * (factor1 * form_factors->a_1(s) - factor2 * form_factors->a_2(s));
 
             return result;
         }
@@ -1023,7 +1023,7 @@ namespace wf
 
         Parameter uncertainty_isgur_wise_perp;
 
-        std::shared_ptr<FormFactors<BToKstar>> form_factors;
+        std::shared_ptr<FormFactors<PToV>> form_factors;
 
         bool cp_conjugate;
 
@@ -1064,7 +1064,7 @@ namespace wf
             cp_conjugate(false),
             ccbar_resonance(false)
         {
-            form_factors = FormFactorFactory<BToKstar>::create(o["form-factors"], p);
+            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o["form-factors"], p);
             if (! form_factors.get())
                 throw std::string("InternalError");
 
@@ -1213,7 +1213,7 @@ namespace wf
             double m_Kstarhat = m_Kstar / m_B;
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
             double s_hat = s / m_B / m_B;
-            double a_1 = form_factors->a_1(s_hat), a_2 = form_factors->a_2(s_hat);
+            double a_1 = form_factors->a_1(s), a_2 = form_factors->a_2(s);
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
             complex<double> prefactor = complex<double>(0.0, -1.0) * m_B();
@@ -1236,7 +1236,7 @@ namespace wf
             complex<double> wilson = ((c9eff(s) + c9prime()) + h * (c10() + c10prime()))
                 + uncertainty_isgur_wise_perp * kappa() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
             double formfactor = std::sqrt(2 * lambda(1.0, m_Kstarhat2, s_hat(s))) / (1.0 + m_Kstarhat)
-                * form_factors->v(s_hat(s));
+                * form_factors->v(s);
 
             return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
@@ -1250,7 +1250,7 @@ namespace wf
             complex<double> prefactor = complex<double>(0.0, -1.0) * m_B();
             complex<double> wilson = ((c9eff(s) - c9prime()) + h * (c10() - c10prime()))
                 + uncertainty_isgur_wise_par * kappa() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
-            complex<double> formfactor = std::sqrt(2) * (1.0 + m_Kstarhat) * form_factors->a_1(s_hat(s));
+            complex<double> formfactor = std::sqrt(2) * (1.0 + m_Kstarhat) * form_factors->a_1(s);
 
             return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
         }
