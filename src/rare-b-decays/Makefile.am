@@ -18,13 +18,10 @@ libwfrarebdecays_la_SOURCES = \
 	long-distance.cc long-distance.hh
 libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la -lgslcblas -lgsl
 
-noinst_PROGRAMS = amplitudes ff scan2 scan2-raw scan3 integrated observables
+noinst_PROGRAMS = amplitudes scan2 scan2-raw scan3 integrated observables
 amplitudes_SOURCES = \
 	amplitudes.cc
 amplitudes_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
-ff_SOURCES = \
-	ff.cc
-ff_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
 integrated_SOURCES = \
 	integrated.cc
 integrated_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
