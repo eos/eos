@@ -15,6 +15,19 @@ AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
 dnl }}}
 
+dnl {{{ check for git HEAD
+if test -d "${GIT_DIR:-${ac_top_srcdir:-./}/.git}" ; then
+	GITHEAD=`git describe 2> /dev/null`
+	if test -z ${GITHEAD} ; then
+		GITHEAD=`git rev-parse --short=7 HEAD`
+	fi
+	if test -n "`git diff-index -m --name-only HEAD`" ; then
+		GITHEAD=${GITHEAD}-dirty
+	fi
+fi
+AC_SUBST([GITHEAD])
+dnl }}}
+
 dnl {{{ define CHECK_CXXFLAG
 AC_DEFUN([CHECK_CXXFLAG], [
 	save_CXXFLAGS=$CXXFLAGS
