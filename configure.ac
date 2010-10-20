@@ -72,6 +72,17 @@ AC_COMPILE_IFELSE([
 dnl }}}
 dnl }}}
 
+dnl {{{ check for libraries
+dnl {{{ check for -lgsl
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS -lgslcblas"
+AC_CHECK_LIB(gsl, gsl_sf_zeta,
+	[],
+	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library])])
+CXXFLAGS=$save_CXXFLAGS
+dnl }}}
+dnl }}}
+
 dnl {{{ output
 AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(
