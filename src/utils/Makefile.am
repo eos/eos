@@ -83,7 +83,7 @@ stringify_TEST_LDADD = $(TESTS_LD_ADD)
 standard_model_TEST_SOURCES = standard_model_TEST.cc
 standard_model_TEST_LDADD = $(TESTS_LD_ADD)
 
-top_loops_TEST = top-loops_TEST.cc
+top_loops_TEST_SOURCES = top-loops_TEST.cc
 top_loops_TEST_LDADD = $(TESTS_LD_ADD)
 
 wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
