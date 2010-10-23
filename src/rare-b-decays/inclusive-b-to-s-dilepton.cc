@@ -2,6 +2,7 @@
 
 #include <src/rare-b-decays/bremsstrahlung.hh>
 #include <src/rare-b-decays/charm-loops.hh>
+#include <src/rare-b-decays/em-contributions.hh>
 #include <src/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
@@ -191,106 +192,6 @@ namespace eos
                 - 4.0/3.0 * log(mu / m_b_MSbar());
         }
 
-        // cf. [HLMW2005], Eq. (94), p. 23
-        double omegaem_99(const double & s_hat) const
-        {
-            double li2 = gsl_sf_dilog(s_hat);
-            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
-            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
-
-            return 2.0 * log(m_b_pole() / m_l) * (
-                    - (1.0 + 4.0 * s_hat - 8.0 * s_hat2) / (6.0 * (1.0 - s_hat) * (1.0 + 2.0 * s_hat))
-                    + ln1
-                    - (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3) / (2.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln
-                    - 1.0 / 9.0 * li2
-                    + 4.0 * pow(M_PI, 2) / 27.0
-                    - (121.0 - 27.0 * s_hat - 30.0 * s_hat2) / (72.0 * (1.0 - s_hat) * (1.0 + 2.0 * s_hat))
-                    - (41.0 + 76.0 * s_hat) / (36.0 * (1.0 + 2.0 * s_hat)) * ln1
-                    + (14.0 * s_hat3 - 17.0 * s_hat2 - 10.0 * s_hat - 3.0) / (18.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln
-                    + 17.0 / 18.0 * ln1 * ln
-                    - (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3) / (2.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln * ln
-                    );
-        }
-
-        // cf. [HLMW2005], Eq. (100), p. 24
-        double omegaem_1010(const double & s_hat) const
-        {
-            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
-            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
-
-            return 2.0 * log(m_b_pole() / m_l) * (
-                    - (1.0 + 4.0 * s_hat - 8.0 * s_hat2) / (6.0 * (1.0 - s_hat) + (1.0 + 2.0 * s_hat))
-                    + ln1
-                    - (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3) / (2.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * ln
-                    );
-        }
-
-        // cf. [HLMW2005], Eq. (101), p. 25
-        double omegaem_77(const double & s_hat) const
-        {
-            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
-            double s_hat2 = s_hat * s_hat;
-
-            return 2.0 * log(m_b_pole() / m_l) * (
-                    s_hat / (2.0 * (1.0 - s_hat) * (2.0 + s_hat))
-                    + ln1
-                    - s_hat * (-3.0 + 2.0 * s_hat2) / (2.0 * pow(1.0 - s_hat, 2) * (2.0 + s_hat)) * ln
-                    );
-        }
-
-        // cf. [HLMW2005], Eq. (102), p. 25
-        double omegaem_79(const double & s_hat) const
-        {
-            double ln = log(s_hat), ln1 = log(1.0 - s_hat);
-            double s_hat2 = s_hat * s_hat;
-
-            return 2.0 * log(m_b_pole() / m_l) * (
-                    -1.0 / (2.0 * (1.0 - s_hat))
-                    + ln1
-                    + (-1.0 + 2.0 * s_hat - 2.0 * s_hat2) / (2.0 * pow(1.0 - s_hat, 2)) * ln
-                    );
-        }
-
-        // cf. [HLMW2005], Eq. (103), p. 25
-        complex<double> omegaem_29(const double & s_hat) const
-        {
-            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
-            double sigma_1 = 23.787 - 120.948 * s_hat + 365.373 * s_hat2 - 584.206 * s_hat3;
-            double sigma_1_I = 1.653 + 6.009 * s_hat - 17.080 * s_hat2 + 115.880 * s_hat3;
-
-            return 2.0 * log(m_b_pole() / m_l) * (
-                    complex<double>(sigma_1, sigma_1_I) / (8.0 * (1.0 - s_hat) * (1.0 - s_hat) * (1.0 + 2.0 * s_hat))
-                    + 16.0 / 9.0 * omegaem_1010(s_hat) * log(mu / 5.0)
-                    );
-        }
-
-        // cf. [HLMW2005], Eq. (104), p. 25
-        double omegaem_22(const double & s_hat) const
-        {
-            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat, s_hat4 = s_hat2 * s_hat2;
-            double sigma_1 = 23.787 - 120.948 * s_hat + 365.373 * s_hat2 - 584.206 * s_hat3;
-            double sigma_2 = 11.488 - 36.987 * s_hat + 255.330 * s_hat2 - 812.388 * s_hat3 + 1011.791 * s_hat4;
-
-            return 2.0 * log(m_b_pole() / m_l) * (
-                    sigma_2 / (8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat))
-                    + sigma_1 / (9.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat)) * log(mu / 5.0)
-                    + 64.0 / 81.0 * omegaem_1010(s_hat) * pow(log(mu / 5.0), 2)
-                    );
-        }
-
-        // cf. [HLMW2005], Eq. (105), p. 25
-        complex<double> omegaem_27(const double & s_hat) const
-        {
-            double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
-            double sigma_3 = 109.311 - 846.039 * s_hat + 2890.115 * s_hat2 - 4179.072 * s_hat3;
-            double sigma_3_I = 4.606 + 17.650 * s_hat - 53.244 * s_hat2 + 348.069 * s_hat3;
-
-            return 2.0 * log(m_b_pole() / m_l) * (
-                    complex<double>(sigma_3, sigma_3_I) / (96.0 * (1.0 - s_hat) * (1.0 - s_hat))
-                    + 8.0 / 9.0 * omegaem_79(s_hat) * log(mu / 5.0)
-                    );
-        }
-
         // cf. [HLMW2005], Eq. (126), p. 28
         complex<double> g(const double & y) const
         {
@@ -401,7 +302,7 @@ namespace eos
         double branching_ratio(const double & s) const
         {
             static const double alpha_e = 1.0/133.0;
-            double m_c = m_c_pole(), m_b = m_b_pole();
+            double m_c = m_c_pole(), m_b = m_b_pole(), log_m_l_hat = std::log(m_l / m_b);
             double s_hat = s / pow(m_b, 2), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
             double lambda_2_hat = lambda_2 / pow(m_b, 2);
             double alpha_s = model->alpha_s(mu);
@@ -420,26 +321,26 @@ namespace eos
                     1.0
                     + 8.0 * alpha_s_tilde * (omega1_77(s_hat) + u1)
                     + kappa * uem
-                    + 8.0 * alpha_s_tilde * kappa * omegaem_77(s_hat)
+                    + 8.0 * alpha_s_tilde * kappa * EMContributions::omegaem_77(s_hat, log_m_l_hat)
                 ) + 24.0 * lambda_2_hat * (2.0 * s_hat2 - 3.0);
 
             double s79 = 12.0 * pow(1.0 - s_hat, 2) * (
                     1.0
                     + 8.0 * alpha_s_tilde * (omega1_79(s_hat) + u1)
                     + kappa * uem
-                    + 8.0 * alpha_s_tilde * kappa * omegaem_79(s_hat)
+                    + 8.0 * alpha_s_tilde * kappa * EMContributions::omegaem_79(s_hat, log_m_l_hat)
                 ) + 24.0 * lambda_2_hat * (1.0 - 6.0 * s_hat + 4.0 * s_hat2);
 
             double s99 = pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * (
                     1.0
                     + 8.0 * alpha_s_tilde * (omega1_99(s_hat) + u1)
                     + kappa * uem
-                    + 8.0 * alpha_s_tilde * kappa * omegaem_99(s_hat)
+                    + 8.0 * alpha_s_tilde * kappa * EMContributions::omegaem_99(s_hat, log_m_l_hat)
                     + 16.0 * pow(alpha_s_tilde, 2) * (omega2_99(s_hat) + u2 + 4.0 * u1 * omega1_99(s_hat))
                 ) + 6.0 * lambda_2_hat * (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3);
 
             double s1010 = s99
-                + 8.0 * alpha_s_tilde * kappa * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * (omegaem_1010(s_hat) - omegaem_99(s_hat));
+                + 8.0 * alpha_s_tilde * kappa * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * (EMContributions::omegaem_1010(s_hat, log_m_l_hat) - EMContributions::omegaem_99(s_hat, log_m_l_hat));
 
             /* Wilson coefficients */
             std::vector<complex<double>> wc = {
@@ -552,9 +453,9 @@ namespace eos
             ratio_phi += c29 * real((-1.0 / 6.0 * wc[0] + wc[1]) * conj(wc[8]));
 
             /* log enhanced em */
-            double e22 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 3) * omegaem_22(s_hat);
-            complex<double> e27 = 96.0 * pow(1.0 - s_hat, 2) * pow(alpha_s_tilde * kappa, 3) * omegaem_27(s_hat);
-            complex<double> e29 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 2) * omegaem_29(s_hat);
+            double e22 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 3) * EMContributions::omegaem_22(s_hat, log_m_l_hat, mu);
+            complex<double> e27 = 96.0 * pow(1.0 - s_hat, 2) * pow(alpha_s_tilde * kappa, 3) * EMContributions::omegaem_27(s_hat, log_m_l_hat, mu);
+            complex<double> e29 = 8.0 * pow(1.0 - s_hat, 2) * (1.0 + 2.0 * s_hat) * pow(alpha_s_tilde * kappa, 2) * EMContributions::omegaem_29(s_hat, log_m_l_hat, mu);
             ratio_phi += e22 * (16.0 / 9.0 * norm(wc[0]) + 8.0 / 3.0 * real(wc[0] * conj(wc[1])) + norm(wc[1]));
             ratio_phi += real(e27 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[6]));
             ratio_phi += real(e29 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[8]));

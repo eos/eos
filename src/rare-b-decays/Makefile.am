@@ -8,6 +8,7 @@ libeosrarebdecays_la_SOURCES = \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	charm-loops.cc charm-loops.hh \
 	decays.hh \
+	em-contributions.hh em-contributions.cc \
 	exclusive-b-to-s-dilepton.cc exclusive-b-to-s-dilepton.hh \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
@@ -41,6 +42,7 @@ scan3_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
 TESTS = \
 	bremsstrahlung_TEST \
 	charm-loops_TEST \
+	em-contributions_TEST \
 	exclusive-b-to-s-dilepton_TEST \
 	form-factors_TEST \
 	inclusive-b-to-s-dilepton_TEST \
@@ -55,6 +57,9 @@ bremsstrahlung_TEST_LDADD = $(TESTS_LD_ADD)
 
 charm_loops_TEST_SOURCES = charm-loops_TEST.cc
 charm_loops_TEST_LDADD = $(TESTS_LD_ADD)
+
+em_contributions_TEST_SOURCES = em-contributions_TEST.cc
+em_contributions_TEST_LDADD = $(TESTS_LD_ADD)
 
 exclusive_b_to_s_dilepton_TEST_SOURCES = exclusive-b-to-s-dilepton_TEST.cc
 exclusive_b_to_s_dilepton_TEST_LDADD = $(TESTS_LD_ADD)
