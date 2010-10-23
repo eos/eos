@@ -114,7 +114,7 @@ namespace eos
 
         double m_c_pole() const
         {
-            return 1.4;
+            return model->m_c_pole();
         }
 
         complex<double> c7() const
