@@ -3,8 +3,8 @@ MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
-lib_LTLIBRARIES = libwfutils.la
-libwfutils_la_SOURCES = \
+lib_LTLIBRARIES = libeosutils.la
+libeosutils_la_SOURCES = \
 	accumulator.cc accumulator.hh \
 	apply.hh \
 	cartesian-product.hh \
@@ -34,7 +34,7 @@ libwfutils_la_SOURCES = \
 	ticket.cc ticket.hh \
 	top-loops.hh top-loops.cc \
 	wilson_coefficients.cc wilson_coefficients.hh
-libwfutils_la_LIBADD = -lpthread -lgslcblas -lgsl
+libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl
 
 TESTS = \
 	apply_TEST \
@@ -49,7 +49,7 @@ TESTS = \
 	top-loops_TEST \
 	stringify_TEST \
 	wilson_coefficients_TEST
-TESTS_LD_ADD = $(top_builddir)/test/libwftest.a libwfutils.la
+TESTS_LD_ADD = $(top_builddir)/test/libeostest.a libeosutils.la
 
 check_PROGRAMS = $(TESTS)
 

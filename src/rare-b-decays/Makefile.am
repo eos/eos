@@ -3,8 +3,8 @@ MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
-noinst_LTLIBRARIES = libwfrarebdecays.la
-libwfrarebdecays_la_SOURCES = \
+noinst_LTLIBRARIES = libeosrarebdecays.la
+libeosrarebdecays_la_SOURCES = \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	charm-loops.cc charm-loops.hh \
 	decays.hh \
@@ -16,27 +16,27 @@ libwfrarebdecays_la_SOURCES = \
 	form-factors.cc form-factors.hh \
 	hard-scattering.cc hard-scattering.hh \
 	long-distance.cc long-distance.hh
-libwfrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libwfutils.la -lgslcblas -lgsl
+libeosrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libeosutils.la -lgslcblas -lgsl
 
 noinst_PROGRAMS = amplitudes scan2 scan2-raw scan3 integrated observables
 amplitudes_SOURCES = \
 	amplitudes.cc
-amplitudes_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
+amplitudes_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
 integrated_SOURCES = \
 	integrated.cc
-integrated_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
+integrated_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
 observables_SOURCES = \
 	observables.cc
-observables_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
+observables_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
 scan2_SOURCES = \
 	scan2.cc
-scan2_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
+scan2_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
 scan2_raw_SOURCES = \
 	scan2-raw.cc
-scan2_raw_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
+scan2_raw_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
 scan3_SOURCES = \
 	scan3.cc
-scan3_LDADD = libwfrarebdecays.la $(top_builddir)/src/utils/libwfutils.la
+scan3_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
 
 TESTS = \
 	bremsstrahlung_TEST \
@@ -47,7 +47,7 @@ TESTS = \
 	inclusive-b-to-s-gamma_TEST \
 	hard-scattering_TEST \
 	long-distance_TEST
-TESTS_LD_ADD = $(top_builddir)/test/libwftest.a $(top_builddir)/src/utils/libwfutils.la libwfrarebdecays.la
+TESTS_LD_ADD = $(top_builddir)/test/libeostest.a $(top_builddir)/src/utils/libeosutils.la libeosrarebdecays.la
 
 check_PROGRAMS = $(TESTS)
 bremsstrahlung_TEST_SOURCES = bremsstrahlung_TEST.cc

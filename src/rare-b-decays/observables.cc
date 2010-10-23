@@ -8,7 +8,7 @@
 #include <iostream>
 #include <list>
 
-using namespace wf;
+using namespace eos;
 
 struct DoUsage
 {

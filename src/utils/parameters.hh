@@ -1,12 +1,12 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef WFITTER_GUARD_SRC_UTILS_PARAMETERS_HH
-#define WFITTER_GUARD_SRC_UTILS_PARAMETERS_HH 1
+#ifndef EOS_GUARD_SRC_UTILS_PARAMETERS_HH
+#define EOS_GUARD_SRC_UTILS_PARAMETERS_HH 1
 
 #include <src/utils/exception.hh>
 #include <src/utils/private_implementation_pattern.hh>
 
-namespace wf
+namespace eos
 {
     struct UnknownParameterError :
         public Exception

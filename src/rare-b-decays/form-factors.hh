@@ -1,14 +1,14 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef WFITTER_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_HH
-#define WFITTER_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_HH 1
+#ifndef EOS_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_HH
+#define EOS_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_HH 1
 
 #include <src/utils/parameters.hh>
 
 #include <memory>
 #include <string>
 
-namespace wf
+namespace eos
 {
     template <typename Transition_>
     class FormFactors;

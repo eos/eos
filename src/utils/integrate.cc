@@ -5,7 +5,7 @@
 #include <limits>
 #include <vector>
 
-namespace wf
+namespace eos
 {
     using std::abs;
     using std::real;

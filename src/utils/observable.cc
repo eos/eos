@@ -5,7 +5,7 @@
 
 #include <map>
 
-namespace wf
+namespace eos
 {
     Observable::Observable()
     {

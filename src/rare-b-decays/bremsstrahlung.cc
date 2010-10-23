@@ -7,7 +7,7 @@
 #include <limits>
 #include <tr1/functional>
 
-namespace wf
+namespace eos
 {
     // cf. [AAGW2002], Eq. (30), p. 12
     complex<double>

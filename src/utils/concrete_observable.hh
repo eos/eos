@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef WFITTER_GUARD_SRC_UTILS_CONCRETE_OBSERVABLE_HH
-#define WFITTER_GUARD_SRC_UTILS_CONCRETE_OBSERVABLE_HH 1
+#ifndef EOS_GUARD_SRC_UTILS_CONCRETE_OBSERVABLE_HH
+#define EOS_GUARD_SRC_UTILS_CONCRETE_OBSERVABLE_HH 1
 
 #include <src/utils/apply.hh>
 #include <src/utils/observable.hh>
@@ -9,7 +9,7 @@
 #include <functional>
 #include <string>
 
-namespace wf
+namespace eos
 {
     namespace impl
     {

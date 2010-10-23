@@ -6,7 +6,7 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace wf;
+using namespace eos;
 
 int
 main(int, char **)

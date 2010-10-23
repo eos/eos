@@ -7,7 +7,7 @@
 
 #include <gsl/gsl_sf_dilog.h>
 
-namespace wf
+namespace eos
 {
     double
     TopLoops::A0(const double & x_t)

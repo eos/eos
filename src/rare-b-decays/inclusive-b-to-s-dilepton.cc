@@ -19,7 +19,7 @@
 
 #include <gsl/gsl_sf_dilog.h>
 
-namespace wf
+namespace eos
 {
     /* HLMW2005 */
 

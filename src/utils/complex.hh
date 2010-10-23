@@ -5,7 +5,7 @@
 
 #include <complex>
 
-namespace wf
+namespace eos
 {
     using std::complex;
 }

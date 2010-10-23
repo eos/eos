@@ -10,7 +10,7 @@
 
 #include <gsl/gsl_sf_dilog.h>
 
-namespace wf
+namespace eos
 {
     using std::atan;
     using std::complex;

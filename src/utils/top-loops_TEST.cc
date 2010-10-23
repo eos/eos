@@ -6,7 +6,7 @@
 #include <cmath>
 
 using namespace test;
-using namespace wf;
+using namespace eos;
 
 class TopLoopsTest :
     public TestCase

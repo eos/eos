@@ -1,11 +1,11 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef WFITTER_GUARD_SRC_UTILS_MATRIX_HH
-#define WFITTER_GUARD_SRC_UTILS_MATRIX_HH 1
+#ifndef EOS_GUARD_SRC_UTILS_MATRIX_HH
+#define EOS_GUARD_SRC_UTILS_MATRIX_HH 1
 
 #include <array>
 
-namespace wf
+namespace eos
 {
     /* Addition */
 

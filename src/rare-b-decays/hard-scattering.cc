@@ -4,7 +4,7 @@
 
 #include <gsl/gsl_sf_dilog.h>
 
-namespace wf
+namespace eos
 {
     complex<double>
     HardScattering::I1(const double & s, const double & u, const double & m_q, const double & m_B)

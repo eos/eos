@@ -10,7 +10,7 @@
 #include <map>
 #include <tr1/functional>
 
-namespace wf
+namespace eos
 {
     template <typename Decay_, typename ... Args_>
     std::pair<std::string, ObservableFactory *> make_observable(const char * name,

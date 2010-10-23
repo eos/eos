@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-namespace wf
+namespace eos
 {
     template <>
     struct Implementation<ThreadPool>

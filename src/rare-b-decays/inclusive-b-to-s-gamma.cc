@@ -8,7 +8,7 @@
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 
-namespace wf
+namespace eos
 {
     /* Minimal */
 

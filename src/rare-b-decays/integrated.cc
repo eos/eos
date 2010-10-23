@@ -10,7 +10,7 @@
 #include <list>
 #include <tuple>
 
-using namespace wf;
+using namespace eos;
 
 struct DoUsage
 {

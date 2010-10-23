@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef WFITTER_GUARD_SRC_UTILS_MEMOISE_HH
-#define WFITTER_GUARD_SRC_UTILS_MEMOISE_HH 1
+#ifndef EOS_GUARD_SRC_UTILS_MEMOISE_HH
+#define EOS_GUARD_SRC_UTILS_MEMOISE_HH 1
 
 #include <src/utils/instantiation_policy.hh>
 #include <src/utils/instantiation_policy-impl.hh>
@@ -48,7 +48,7 @@ namespace std
     };
 }
 
-namespace wf
+namespace eos
 {
     namespace implementation
     {

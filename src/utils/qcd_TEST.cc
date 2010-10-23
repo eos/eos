@@ -7,7 +7,7 @@
 #include <iostream>
 
 using namespace test;
-using namespace wf;
+using namespace eos;
 
 class QCDTest :
     public TestCase

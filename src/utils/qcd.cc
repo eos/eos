@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-namespace wf
+namespace eos
 {
     const double QCD::casimir_f = 4.0 / 3.0;
 

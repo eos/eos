@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef WFITTER_GUARD_SRC_UTILS_TOP_LOOPS_HH
-#define WFITTER_GUARD_SRC_UTILS_TOP_LOOPS_HH 1
+#ifndef EOS_GUARD_SRC_UTILS_TOP_LOOPS_HH
+#define EOS_GUARD_SRC_UTILS_TOP_LOOPS_HH 1
 
-namespace wf
+namespace eos
 {
     struct TopLoops
     {

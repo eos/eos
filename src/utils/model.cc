@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-namespace wf
+namespace eos
 {
     using std::sqrt;
 

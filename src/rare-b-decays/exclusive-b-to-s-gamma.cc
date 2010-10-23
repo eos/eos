@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-namespace wf
+namespace eos
 {
     template <>
     struct Implementation<BToKstarGamma>

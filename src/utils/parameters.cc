@@ -7,7 +7,7 @@
 #include <map>
 #include <vector>
 
-namespace wf
+namespace eos
 {
     template <>
     struct Implementation<Parameters>

@@ -5,7 +5,7 @@
 
 #include <src/utils/private_implementation_pattern.hh>
 
-namespace wf
+namespace eos
 {
     class RandomNumberEngine :
         public PrivateImplementationPattern<RandomNumberEngine>

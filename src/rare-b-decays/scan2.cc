@@ -15,7 +15,7 @@
 #include <utility>
 #include <vector>
 
-using namespace wf;
+using namespace eos;
 
 struct Input
 {

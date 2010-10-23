@@ -5,7 +5,7 @@
 
 #include <tr1/random>
 
-namespace wf
+namespace eos
 {
     template <>
     struct Implementation<RandomNumberEngine>

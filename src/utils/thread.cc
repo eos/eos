@@ -32,7 +32,7 @@
 
 #include <pthread.h>
 
-namespace wf
+namespace eos
 {
     template <> struct Implementation<Thread>
     {

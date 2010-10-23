@@ -5,7 +5,7 @@
 
 #include <map>
 
-namespace wf
+namespace eos
 {
     /* P -> V Processes */
 

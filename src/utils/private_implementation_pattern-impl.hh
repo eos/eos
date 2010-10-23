@@ -5,7 +5,7 @@
 
 #include <src/utils/private_implementation_pattern.hh>
 
-namespace wf
+namespace eos
 {
     template <typename T_>
     PrivateImplementationPattern<T_>::PrivateImplementationPattern(Implementation<T_> * imp) :

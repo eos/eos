@@ -1,12 +1,12 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef WFITTER_GUARD_SRC_UTILS_STRINGIFY_HH
-#define WFITTER_GUARD_SRC_UTILS_STRINGIFY_HH 1
+#ifndef EOS_GUARD_SRC_UTILS_STRINGIFY_HH
+#define EOS_GUARD_SRC_UTILS_STRINGIFY_HH 1
 
 #include <string>
 #include <sstream>
 
-namespace wf
+namespace eos
 {
     namespace implementation
     {

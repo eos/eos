@@ -4,7 +4,7 @@
 #include <src/utils/save.hh>
 
 using namespace test;
-using namespace wf;
+using namespace eos;
 
 class SaveTest :
     public TestCase

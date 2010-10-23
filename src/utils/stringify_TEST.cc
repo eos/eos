@@ -4,7 +4,7 @@
 #include <src/utils/stringify.hh>
 
 using namespace test;
-using namespace wf;
+using namespace eos;
 
 class StringifyTest :
     public TestCase

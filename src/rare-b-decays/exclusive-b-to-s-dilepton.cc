@@ -21,7 +21,7 @@
 
 #include <gsl/gsl_sf.h>
 
-namespace wf
+namespace eos
 {
     using std::norm;
 

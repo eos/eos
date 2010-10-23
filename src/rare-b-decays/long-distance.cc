@@ -4,7 +4,7 @@
 
 #include <vector>
 
-namespace wf
+namespace eos
 {
     complex<double>
     LongDistance::g_had_ccbar(const double & s, const double & m_c)

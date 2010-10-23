@@ -2,7 +2,7 @@
 
 #include <src/utils/exception.hh>
 
-namespace wf
+namespace eos
 {
     Exception::Exception(const std::string & message) throw () :
         _message(message)

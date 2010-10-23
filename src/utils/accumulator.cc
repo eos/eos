@@ -5,7 +5,7 @@
 #include <src/utils/mutex.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 
-namespace wf
+namespace eos
 {
     template <>
     struct Implementation<Accumulator>

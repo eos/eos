@@ -12,7 +12,7 @@
 #include <gsl/gsl_sf_clausen.h>
 
 using namespace test;
-using namespace wf;
+using namespace eos;
 
 class WilsonCoefficientsTest :
     public TestCase

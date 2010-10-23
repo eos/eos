@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef WFITTER_GUARD_SRC_UTILS_THREAD_POOL_HH
-#define WFITTER_GUARD_SRC_UTILS_THREAD_POOL_HH 1
+#ifndef EOS_GUARD_SRC_UTILS_THREAD_POOL_HH
+#define EOS_GUARD_SRC_UTILS_THREAD_POOL_HH 1
 
 #include <src/utils/instantiation_policy.hh>
 #include <src/utils/private_implementation_pattern.hh>
@@ -9,7 +9,7 @@
 
 #include <tr1/functional>
 
-namespace wf
+namespace eos
 {
     class ThreadPool :
         public InstantiationPolicy<ThreadPool, Singleton>,

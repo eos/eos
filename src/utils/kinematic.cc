@@ -5,7 +5,7 @@
 
 #include <map>
 
-namespace wf
+namespace eos
 {
     template <>
     struct Implementation<Kinematics>

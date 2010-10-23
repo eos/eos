@@ -6,11 +6,11 @@
  * Based upon 'mutex.cc' from Paludis, which is:
  *     Copyright (c) 2007 Ciaran McCreesh
  *
- * * This file is part of the Wfitter program. Wfitter is free software;
+ * * This file is part of the EOS program. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
  * Public License version 2, as published by the Free Software Foundation.
  *
- * Wfitter is distributed in the hope that it will be useful, but WITHOUT ANY
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
@@ -23,7 +23,7 @@
 #include <src/utils/instantiation_policy-impl.hh>
 #include <src/utils/mutex.hh>
 
-using namespace wf;
+using namespace eos;
 
 Mutex::Mutex() :
     _attr(new pthread_mutexattr_t),

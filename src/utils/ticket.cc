@@ -3,11 +3,11 @@
 /*
  * Copyright (c) 2008 Danny van Dyk <danny.dyk@uni-dortmund.de>
  *
- * This file is part of the Wfitter program. Wfitter is free software;
+ * This file is part of the EOS program. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
  * Public License version 2, as published by the Free Software Foundation.
  *
- * Wfitter is distributed in the hope that it will be useful, but WITHOUT ANY
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
@@ -27,7 +27,7 @@
 #include <list>
 #include <tr1/memory>
 
-namespace wf
+namespace eos
 {
     template <> struct Implementation<Ticket>
     {

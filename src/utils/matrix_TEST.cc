@@ -7,7 +7,7 @@
 #include <array>
 
 using namespace test;
-using namespace wf;
+using namespace eos;
 
 class MatrixMultiplicationTest :
     public TestCase

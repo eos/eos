@@ -5,7 +5,7 @@
 
 #include <tr1/memory>
 
-namespace wf
+namespace eos
 {
     template <typename T_> struct Implementation;
 

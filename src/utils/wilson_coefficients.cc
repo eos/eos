@@ -10,7 +10,7 @@
 #include <cmath>
 #include <vector>
 
-namespace wf
+namespace eos
 {
     WilsonCoefficients<BToS> evolve(const std::array<double, 15> & wc_qcd_0,
             const std::array<double, 15> & wc_qcd_1,

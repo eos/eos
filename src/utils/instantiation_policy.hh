@@ -6,11 +6,11 @@
  * Base upon 'instantiation_policy.hh' from Paludis, which is:
  *     Copyright (c) 2005, 2006, 2007 Ciaran McCreesh
  *
- * This file is part of the Wfitter program. Wfitter is free software;
+ * This file is part of the EOS program. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
  * Public License version 2, as published by the Free Software Foundation.
  *
- * Wfitter is distributed in the hope that it will be useful, but WITHOUT ANY
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
@@ -20,10 +20,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WFITTER_GUARD_SRC_UTILS_INSTANTIATION_POLICY_HH
-#define WFITTER_GUARD_SRC_UTILS_INSTANTIATION_POLICY_HH 1
+#ifndef EOS_GUARD_SRC_UTILS_INSTANTIATION_POLICY_HH
+#define EOS_GUARD_SRC_UTILS_INSTANTIATION_POLICY_HH 1
 
-namespace wf
+namespace eos
 {
     /**
      * \{
