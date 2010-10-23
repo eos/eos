@@ -77,7 +77,7 @@ namespace eos
 
         double m_l;
 
-        Implementation(const Parameters & p) :
+        Implementation(const Parameters & p, const ObservableOptions & o) :
             model(new StandardModel(p)),
             c1(p["c1"]),
             c2(p["c2"]),
@@ -103,8 +103,13 @@ namespace eos
             ckm(p["exp::CKM(B->X_sll, B->X_clnu)"]),
             C(p["exp::C(B->X_clnu, B->X_ulnu)"])
         {
-            // TODO: Lepton masses, m_l = m_mu
-            m_l = 0.10565836; // (GeV), cf. [PDG2008], p. 13
+            static const double m_mu = 0.10565836; // (GeV), cf. [PDG2008], p. 13
+            static const double m_e = 0.00051099892; // (GeV), cf. [PDG2008], p. 13
+
+            m_l = m_mu;
+
+            if (o.has("l") && ("e" == o["l"]))
+                m_l = m_e;
         }
 
         double m_b_pole() const
@@ -464,8 +469,8 @@ namespace eos
         }
     };
 
-    BToXsDilepton<HLMW2005>::BToXsDilepton(const Parameters & parameters, const ObservableOptions &) :
-        PrivateImplementationPattern<BToXsDilepton<HLMW2005>>(new Implementation<BToXsDilepton<HLMW2005>>(parameters))
+    BToXsDilepton<HLMW2005>::BToXsDilepton(const Parameters & parameters, const ObservableOptions & options) :
+        PrivateImplementationPattern<BToXsDilepton<HLMW2005>>(new Implementation<BToXsDilepton<HLMW2005>>(parameters, options))
     {
     }
 

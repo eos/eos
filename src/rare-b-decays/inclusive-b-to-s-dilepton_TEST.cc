@@ -34,12 +34,17 @@ class BToXsDileptonLargeRecoilTest :
                 p["Arg{c10}"] = M_PI;
 
                 ObservableOptions oo;
+                oo.set("l", "mu");
 
-                BToXsDilepton<HLMW2005> d(p, oo);
+                BToXsDilepton<HLMW2005> d_mu(p, oo);
+
+                oo.set("l", "e");
+                BToXsDilepton<HLMW2005> d_e(p, oo);
 
                 const double eps = 1e-11;
 
-                TEST_CHECK_NEARLY_EQUAL(1.57375e-06, d.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.57375e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.62207e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
             }
         }
 } b_to_x_s_dilepton_large_recoil_test;
