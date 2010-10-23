@@ -80,7 +80,7 @@ save_TEST_LDADD = $(TESTS_LD_ADD)
 stringify_TEST_SOURCES = stringify_TEST.cc
 stringify_TEST_LDADD = $(TESTS_LD_ADD)
 
-standard_model_TEST = standard_model_TEST.cc
+standard_model_TEST_SOURCES = standard_model_TEST.cc
 standard_model_TEST_LDADD = $(TESTS_LD_ADD)
 
 top_loops_TEST = top-loops_TEST.cc
