@@ -24,13 +24,13 @@ class LongDistanceTest :
         virtual void run() const
         {
             static const double m_c = 1.2;
-            static const double eps = 1e-6;
+            static const double eps = 1e-5;
             static const std::vector<double> inputs{ 14.00, 15.00, 16.00, 19.21 };
             static const std::vector<complex<double>> results{
-                complex<double>(6.716354, 0.381747),
-                complex<double>(4.064683, 0.766175),
-                complex<double>(3.230018, 2.113815),
-                complex<double>(2.195244, 1.780107),
+                complex<double>(1.13014, 0.381747),
+                complex<double>(1.60574, 0.766175),
+                complex<double>(0.57689, 2.113815),
+                complex<double>(1.02058, 1.780107),
             };
             auto r = results.cbegin();
             for (auto i = inputs.cbegin() ; inputs.cend() != i ; ++i, ++r)

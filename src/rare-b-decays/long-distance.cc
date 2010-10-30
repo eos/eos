@@ -65,7 +65,7 @@ namespace eos
 
             imag_res += aa * s_hat / ((s_hat - bb) * (s_hat - bb) + cc * cc);
             real_res += aa / (2.0 * cc) * (
-                        (s_hat - bb) * (M_PI - 2.0 * std::atan((bb - s_0_hat) / cc))
+                        (s_hat - bb) * (M_PI + 2.0 * std::atan((bb - s_0_hat) / cc))
                         - cc * std::log((s_0_hat - s_hat) * (s_0_hat - s_hat) / ((bb - s_0_hat) * (bb - s_0_hat) + cc * cc))
                     ) / ((bb - s_hat) * (bb - s_hat) + cc * cc);
         }
