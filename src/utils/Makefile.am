@@ -22,6 +22,7 @@ libeosutils_la_SOURCES = \
 	model.cc model.hh \
 	mutex.cc mutex.hh \
 	observable.cc observable.hh \
+	one-of.hh \
 	parameters.cc parameters.hh \
 	power_of.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
@@ -43,6 +44,7 @@ TESTS = \
 	integrate_TEST \
 	matrix_TEST \
 	memoise_TEST \
+	one-of_TEST \
 	power_of_TEST \
 	qcd_TEST \
 	save_TEST \
@@ -68,6 +70,9 @@ matrix_TEST_LDADD = $(TESTS_LD_ADD)
 
 memoise_TEST_SOURCES = memoise_TEST.cc
 memoise_TEST_LDADD = $(TESTS_LD_ADD)
+
+one_of_TEST_SOURCES = one-of_TEST.cc
+one_of_TEST_LDADD = $(TESTS_LD_ADD)
 
 power_of_TEST_SOURCES = power_of_TEST.cc
 power_of_TEST_LDADD = $(TESTS_LD_ADD)
