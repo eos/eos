@@ -23,31 +23,6 @@ namespace eos
             Parameters(Implementation<Parameters> *);
 
         public:
-            struct NameValuePair
-            {
-                const std::string name;
-
-                const double min, max;
-
-                double value;
-
-                NameValuePair(const std::string & name, const double & central) :
-                    name(name),
-                    min(central),
-                    max(central),
-                    value(central)
-                {
-                }
-
-                NameValuePair(const std::string & name, const double & min, const double & central, const double & max) :
-                    name(name),
-                    min(min),
-                    max(max),
-                    value(central)
-                {
-                }
-            };
-
             ~Parameters();
 
             Parameters clone() const;
@@ -57,8 +32,6 @@ namespace eos
             Parameter declare(const std::string & name, const double & value = 0.0);
 
             void set(const std::string & name, const double & value);
-
-            static Parameters FromList(const std::initializer_list<NameValuePair> &);
 
             static Parameters Defaults();
     };
