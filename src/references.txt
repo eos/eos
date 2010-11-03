@@ -97,9 +97,9 @@ References
 
     BHvD2010 : Bobeth, C. and Hiller, G. and van Dyk, D.
 
-        Benefits at Low Recoil
+        The benefits of Bbar -> Kbar^* l^+ l^- at low recoil
 
-        arxiv:10XX.YYYY [hep-ph]
+        arxiv:1006.5013 [hep-ph]
 
 
     BM1995 : Buras, A. J. and Muenz, M.
