@@ -32,11 +32,11 @@ namespace eos
         public:
             virtual ~FormFactors();
 
-            virtual double v(const double & s_hat) const = 0;
+            virtual double v(const double & s) const = 0;
 
-            virtual double a_0(const double & s_hat) const = 0;
-            virtual double a_1(const double & s_hat) const = 0;
-            virtual double a_2(const double & s_hat) const = 0;
+            virtual double a_0(const double & s) const = 0;
+            virtual double a_1(const double & s) const = 0;
+            virtual double a_2(const double & s) const = 0;
 
             // TODO: dipole form factors
     };
