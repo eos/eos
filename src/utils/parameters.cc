@@ -209,6 +209,12 @@ namespace eos
     }
 
     const double &
+    Parameter::central() const
+    {
+        return _imp->parameters[_index].central;
+    }
+
+    const double &
     Parameter::max() const
     {
         return _imp->parameters[_index].max;

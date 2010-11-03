@@ -56,6 +56,8 @@ namespace eos
 
             const Parameter & operator= (const double &);
 
+            const double & central() const;
+
             const double & max() const;
 
             const double & min() const;
