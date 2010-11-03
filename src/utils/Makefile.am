@@ -35,7 +35,8 @@ libeosutils_la_SOURCES = \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh \
 	top-loops.hh top-loops.cc \
-	wilson_coefficients.cc wilson_coefficients.hh
+	wilson_coefficients.cc wilson_coefficients.hh \
+	wilson-polynomial.cc wilson-polynomial.hh
 libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl
 
 TESTS = \
@@ -51,7 +52,8 @@ TESTS = \
 	standard_model_TEST \
 	top-loops_TEST \
 	stringify_TEST \
-	wilson_coefficients_TEST
+	wilson_coefficients_TEST \
+	wilson-polynomial_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libeostest.a libeosutils.la
 
 check_PROGRAMS = $(TESTS)
@@ -94,3 +96,6 @@ top_loops_TEST_LDADD = $(TESTS_LD_ADD)
 
 wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
 wilson_coefficients_TEST_LDADD = $(TESTS_LD_ADD)
+
+wilson_polynomial_TEST_SOURCES = wilson-polynomial_TEST.cc
+wilson_polynomial_TEST_LDADD = $(TESTS_LD_ADD)
