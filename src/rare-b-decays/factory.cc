@@ -129,6 +129,10 @@ namespace eos
                     &BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::Abar_FB@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_unnormalized_forward_backward_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->K^*ll::nA_FB@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry_naive,
                     std::make_tuple("s_min", "s_max")),

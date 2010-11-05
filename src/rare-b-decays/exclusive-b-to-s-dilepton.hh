@@ -104,6 +104,7 @@ namespace eos
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry_naive(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
+            double integrated_unnormalized_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_longitudinal_polarisation_naive(const double & s_min, const double & s_max) const;
             double integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const;
