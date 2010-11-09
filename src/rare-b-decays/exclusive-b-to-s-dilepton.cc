@@ -1531,7 +1531,7 @@ namespace eos
         _imp->cp_conjugate = true;
         double rho_1_bar = _imp->rho_1(s), rho_2_bar = _imp->rho_2(s);
 
-        return (rho_2 / rho_1 - rho_2_bar / rho_1_bar) / (rho_2 / rho_1 + rho_2_bar / rho_2_bar);
+        return (rho_2 / rho_1 - rho_2_bar / rho_1_bar) / (rho_2 / rho_1 + rho_2_bar / rho_1_bar);
     }
 
     double
