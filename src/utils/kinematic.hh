@@ -24,6 +24,8 @@ namespace eos
 
             double operator[] (const std::string & variable) const;
 
+            std::string as_string() const;
+
             void declare(const std::string & variable);
 
             void set(const std::string & variable, const double & value);

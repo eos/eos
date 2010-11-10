@@ -2,6 +2,7 @@
 
 #include <src/utils/kinematic.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
+#include <src/utils/stringify.hh>
 
 #include <map>
 
@@ -31,6 +32,27 @@ namespace eos
             throw UnknownKinematicVariableError(variable);
 
         return i->second;
+    }
+
+    std::string
+    Kinematics::as_string () const
+    {
+        std::string result;
+
+        auto i(_imp->variables.cbegin()), i_end(_imp->variables.cend());
+        if (i != i_end)
+        {
+            result = i->first + '=' + stringify(i->second);
+            ++i;
+        }
+
+
+        for ( ; i != i_end ; ++i)
+        {
+            result += ", " + i->first + '=' + stringify(i->second);
+        }
+
+        return result;
     }
 
     void
