@@ -8,6 +8,7 @@ libeosutils_la_SOURCES = \
 	accumulator.cc accumulator.hh \
 	apply.hh \
 	cartesian-product.hh \
+	chi-squared.hh chi-squared.cc \
 	complex.hh \
 	concrete_observable.hh \
 	condition_variable.cc condition_variable.hh \
@@ -42,6 +43,7 @@ libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl
 TESTS = \
 	apply_TEST \
 	cartesian-product_TEST \
+	chi-squared_TEST \
 	integrate_TEST \
 	matrix_TEST \
 	memoise_TEST \
@@ -63,6 +65,9 @@ apply_TEST_LDADD = $(TESTS_LD_ADD)
 
 cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 cartesian_product_TEST_LDADD = $(TESTS_LD_ADD)
+
+chi_squared_TEST_SOURCES = chi-squared_TEST.cc
+chi_squared_TEST_LDADD = $(TESTS_LD_ADD)
 
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_LDADD = $(TESTS_LD_ADD)
