@@ -123,6 +123,9 @@ namespace eos
             Parameters::NameValuePair{"formfactors::v_uncertainty",  0.85, 1.0, 1.15},
             Parameters::NameValuePair{"formfactors::xi_perp_uncertainty", 0.89, 1.0, 1.11},
             Parameters::NameValuePair{"formfactors::xi_par_uncertainty",  0.86, 1.0, 1.14},
+            Parameters::NameValuePair{"formfactors::fp_uncertainty", 0.85, 1.0, 1.15},
+            Parameters::NameValuePair{"formfactors::f0_uncertainty", 0.85, 1.0, 1.15},
+            Parameters::NameValuePair{"formfactors::ft_uncertainty", 0.85, 1.0, 1.15},
             // B LCDA parameters
             Parameters::NameValuePair{"f_B",        0.17,  0.20,  0.23}, // GeV, cf. [BHvD2010], Table I
             Parameters::NameValuePair{"lambda_B_p", 0.370, 0.485, 0.600}, // GeV, cf. [BHvD2010], Table I

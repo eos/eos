@@ -26,6 +26,8 @@ namespace eos
      */
     struct PToV { };
 
+    struct PToP { };
+
     template <>
     class FormFactors<PToV>
     {
@@ -46,6 +48,24 @@ namespace eos
     {
         public:
             static std::shared_ptr<FormFactors<PToV>> create(const std::string & label, const Parameters & parameters);
+    };
+
+    template <>
+    class FormFactors<PToP>
+    {
+        public:
+            virtual ~FormFactors();
+
+            virtual double f_p(const double & s) const = 0;
+            virtual double f_0(const double & s) const = 0;
+            virtual double f_t(const double & s) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<PToP>
+    {
+        public:
+            static std::shared_ptr<FormFactors<PToP>> create(const std::string & label, const Parameters & parameters);
     };
 }
 

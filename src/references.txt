@@ -97,9 +97,9 @@ References
 
     BHvD2010 : Bobeth, C. and Hiller, G. and van Dyk, D.
 
-        The benefits of Bbar -> Kbar^* l^+ l^- at low recoil
+        Benefits at Low Recoil
 
-        arxiv:1006.5013 [hep-ph]
+        arxiv:10XX.YYYY [hep-ph]
 
 
     BM1995 : Buras, A. J. and Muenz, M.
@@ -116,6 +116,14 @@ References
         Sum Rules Revisited
 
         arxiv:hep-ph/0412079
+
+
+    BZ2004v2 : Ball, P. and Zwicky, R.
+
+        B -> pi, K, eta Decay Formfactors from Light-Cone Sum Rules
+        Sum Rules Revisited
+
+        arxiv:hep-ph/0406261v1
 
 
     CERN2003-002 : Battaglia, M. and Buras, A.J and Gambino, P. and Stocchi, A.
@@ -171,6 +179,13 @@ References
         B- to Light Meson Transition Form Factors
 
         arxiv:nucl-th/0703094
+
+
+    KMPW2010 : Khodjamirian, A. and Mannel, Th. and Pivovarov, A.A. and Wang, Y.-M.
+
+        Charm-loop effect in B to K^(*)l^+l^- and B to K^* gamma
+
+        arxiv:hep-ph/1006.4945v2
 
 
     KS1996 : Krueger, F. and Sehgal, L.M.
