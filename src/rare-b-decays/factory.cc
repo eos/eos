@@ -87,6 +87,10 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::Fbar_L@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_unnormalized_longitudinal_polarisation,
+                    std::make_tuple("s_min", "s_max")),
+
 
             // B -> K^* ll, Low Recoil
             make_observable("B->K^*ll::dBR/ds@LowRecoil",

@@ -922,6 +922,19 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::integrated_unnormalized_longitudinal_polarisation(const double & s_min, const double & s_max) const
+    {
+        // Convert from polarisation in the decay width to polarisation in the BR
+        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
+        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
+
+        std::function<double (const double &)> f = std::bind(
+                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::f_l_numerator), _imp, std::placeholders::_1);
+
+        return integrate(f, 64, s_min, s_max) / Gamma;
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
     {
         std::function<double (const double &)> num = std::bind(
