@@ -14,16 +14,24 @@
 /* We are using a custom std::hash for tuple<FunctinPtr, double, ..., double> */
 namespace std
 {
-    template <typename U_> static unsigned long __hash_one(const U_ & u)
+    template <typename U_> static uint64_t __hash_one(const U_ & u)
     {
-        static_assert(sizeof(U_) == sizeof(double), "Need to specialize __hash_one for sizeof(U_) != sizeof(double)");
-        return *reinterpret_cast<const unsigned long *>(&u);
+        static_assert(sizeof(U_) == sizeof(uint32_t) || sizeof(U_) == sizeof(uint64_t), "Need to specialize __hash_one for non 32- and 64-bit data types");
+
+        if (sizeof(U_) == sizeof(int64_t))
+        {
+            return *reinterpret_cast<const uint64_t *>(&u);
+        }
+        else if (sizeof(U_) == sizeof(uint32_t))
+        {
+            return static_cast<const uint64_t>(*reinterpret_cast<const uint32_t *>(&u));
+        }
     }
 
     template <unsigned n_, typename ... T_>
     struct __TupleHasher
     {
-        static unsigned long hash(const std::tuple<T_ ...> & t)
+        static uint64_t hash(const std::tuple<T_ ...> & t)
         {
             return __TupleHasher<n_ - 1, T_ ...>::hash(t) ^ __hash_one<decltype(std::get<n_>(t))>(std::get<n_>(t));
         }
@@ -32,7 +40,7 @@ namespace std
     template <typename ... T_>
     struct __TupleHasher<0, T_ ...>
     {
-        static unsigned long hash(const std::tuple<T_ ...> & t)
+        static uint64_t hash(const std::tuple<T_ ...> & t)
         {
             return __hash_one<decltype(std::get<0>(t))>(std::get<0>(t));
         }
