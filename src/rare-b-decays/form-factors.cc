@@ -65,22 +65,22 @@ namespace eos
 
             virtual double v(const double & s) const
             {
-                return _calc_eq59(s, _v_r1, _v_r2, _v_m2r, _v_m2fit);
+                return _v_factor * _calc_eq59(s, _v_r1, _v_r2, _v_m2r, _v_m2fit);
             }
 
             virtual double a_0(const double & s) const
             {
-                return _calc_eq59(s, _a0_r1, _a0_r2, _a0_m2r, _a0_m2fit);
+                return _a0_factor * _calc_eq59(s, _a0_r1, _a0_r2, _a0_m2r, _a0_m2fit);
             }
 
             virtual double a_1(const double & s) const
             {
-                return _calc_eq61(s, _a1_r2, _a1_m2fit);
+                return _a1_factor * _calc_eq61(s, _a1_r2, _a1_m2fit);
             }
 
             virtual double a_2(const double & s) const
             {
-                return _calc_eq60(s, _a2_r1, _a2_r2, _a2_m2fit);
+                return _a2_factor * _calc_eq60(s, _a2_r1, _a2_r2, _a2_m2fit);
             }
     };
 
