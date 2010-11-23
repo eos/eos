@@ -56,6 +56,13 @@ namespace test
     } \
     while (false)
 
+#define TEST_CHECK_FAILED(s) \
+    do \
+    { \
+        throw TestCaseFailedException(__LINE__, __FILE__, s); \
+    } \
+    while (false)
+
 #define TEST_CHECK_NEARLY_EQUAL(a, b, eps) \
     do \
     { \
