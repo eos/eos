@@ -78,7 +78,7 @@ namespace eos
         double m_l;
 
         Implementation(const Parameters & p, const ObservableOptions & o) :
-            model(new StandardModel(p)),
+            model(Model::make("SM", p)),
             c1(p["c1"]),
             c2(p["c2"]),
             c3(p["c3"]),

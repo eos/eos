@@ -28,7 +28,7 @@ namespace eos
         Parameter uncertainty;
 
         Implementation(const Parameters & p) :
-            model(new StandardModel(p)),
+            model(Model::make("SM", p)),
             abs_c7(p["Abs{c7}"]),
             arg_c7(p["Arg{c7}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),

@@ -2,6 +2,7 @@
 
 #include <test/test.hh>
 #include <src/utils/model.hh>
+#include <src/utils/standard_model.hh>
 
 #include <cmath>
 #include <iostream>
@@ -21,6 +22,32 @@ reference_parameters()
 
     return result;
 }
+
+class MakeTest :
+    public TestCase
+{
+    public:
+        MakeTest() :
+            TestCase("sm_make_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            try
+            {
+                std::shared_ptr<Model> m = Model::make("SM", reference_parameters());
+            }
+            catch (NoSuchModelError &)
+            {
+                TEST_CHECK_FAILED("Model::make does not know the model 'SM'");
+            }
+            catch (...)
+            {
+                TEST_CHECK_FAILED("Unknown Exception while making 'SM'");
+            }
+        }
+} sm_make_test;
 
 class AlphaSTest :
     public TestCase

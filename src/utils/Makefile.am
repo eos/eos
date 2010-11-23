@@ -28,6 +28,7 @@ libeosutils_la_SOURCES = \
 	qcd.cc qcd.hh \
 	random_number_engine.cc random_number_engine.hh \
 	save.hh \
+	standard-model.cc standard-model.hh \
 	stringify.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
