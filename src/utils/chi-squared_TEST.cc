@@ -73,5 +73,34 @@ class ChiSquaredTest :
                     TEST_CHECK_NEARLY_EQUAL(*r, ChiSquared::with_theory_offset(i->theory_min, i->theory_central, i->theory_max, i->experiment_min, i->experiment_central, i->experiment_max), eps);
                 }
             }
+
+            /* combined-ucnertainties */
+            {
+                static const std::vector<double> results
+                {
+                    0.153846,
+                    0.0615385,
+                    0.0327869,
+
+                    0.0384615,
+                    0.0153846,
+                    0.00819672,
+
+                    0.0,
+                    0.0,
+                    0.0,
+
+                    0.0384615,
+                    0.0153846,
+                    0.00819672,
+                };
+
+                auto r = results.cbegin();
+                for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i, ++r)
+                {
+                    static const double eps = 1e-5;
+                    TEST_CHECK_NEARLY_EQUAL(*r, ChiSquared::with_combined_uncertainties(i->theory_min, i->theory_central, i->theory_max, i->experiment_min, i->experiment_central, i->experiment_max), eps);
+                }
+            }
         }
 } chi_squared_test;
