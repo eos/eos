@@ -20,7 +20,7 @@ namespace eos
             static std::shared_ptr<Model> make(const std::string & name, const Parameters & parameters);
 
             /* QCD */
-            virtual double alpha_s(const double &) const = 0;
+            virtual double alpha_s(const double & mu) const = 0;
             virtual double m_b_msbar(const double & mu) const = 0;
             virtual double m_b_pole() const = 0;
             virtual double m_b_ps(const double & mu_f) const = 0;
