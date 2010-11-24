@@ -758,7 +758,7 @@ namespace eos
 
         double a_fb_numerator(const double & s) const
         {
-            return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
+            return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s)));
         }
 
         double f_l_numerator(const double & s) const
