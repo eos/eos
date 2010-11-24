@@ -2,7 +2,7 @@
 
 #include <test/test.hh>
 #include <src/utils/model.hh>
-#include <src/utils/standard_model.hh>
+#include <src/utils/standard-model.hh>
 
 #include <cmath>
 #include <iostream>
