@@ -3,10 +3,20 @@
 #ifndef EOS_GUARD_SRC_UTILS_CHI_SQUARED_HH
 #define EOS_GUARD_SRC_UTILS_CHI_SQUARED_HH 1
 
+#include <src/utils/exception.hh>
+
+#include <functional>
+
 namespace eos
 {
     struct ChiSquared
     {
+        /*
+         * Signature for Chi-Squared functions.
+         */
+
+        typedef std::function<double (double, double, double, double, double, double)> Function;
+
         /*
          * Chi-Squared function with theory offset.
          *
@@ -36,6 +46,17 @@ namespace eos
          */
         static double with_combined_uncertainties(const double & theory_min, const double & theory_central, const double & theory_max,
                 const double & experiment_min, const double & experiment_central, const double & experiment_max);
+
+        /*
+         * Factory method to create a ChiSquared::Function from a given name
+         */
+        static Function make(const std::string & name);
+    };
+
+    struct NoSuchChiSquaredError :
+        public Exception
+    {
+        NoSuchChiSquaredError(const std::string & name);
     };
 }
 

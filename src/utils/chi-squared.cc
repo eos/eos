@@ -4,6 +4,8 @@
 #include <src/utils/power_of.hh>
 
 #include <cmath>
+#include <map>
+#include <string>
 
 namespace eos
 {
@@ -44,5 +46,26 @@ namespace eos
         }
 
         return chi * chi;
+    }
+
+    ChiSquared::Function
+    ChiSquared::make(const std::string & name)
+    {
+        static const std::map<std::string, ChiSquared::Function> functions
+        {
+            std::make_pair("with-theory-offset",                &ChiSquared::with_theory_offset),
+            std::make_pair("with-combined-uncertainties",       &ChiSquared::with_combined_uncertainties),
+        };
+
+        auto i = functions.find(name);
+        if (functions.cend() == i)
+            throw NoSuchChiSquaredError(name);
+
+        return i->second;
+    }
+
+    NoSuchChiSquaredError::NoSuchChiSquaredError(const std::string & name) :
+        Exception("No such ChiSquared function: '" + name + "'")
+    {
     }
 }
