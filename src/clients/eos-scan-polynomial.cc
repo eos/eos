@@ -444,7 +444,11 @@ main(int argc, char * argv[])
     }
     catch(DoUsage & e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cout << e.what() << std::endl;
+        std::cout << "Usage: eos-scan-polynomial" << std::endl;
+        std::cout << "  [--vary PARAMETER]*" << std::endl;
+        std::cout << "  [[--kinematics NAME VALUE]* --observable NAME MIN CENTRAL MAX]+" << std::endl;
+        std::cout << "  [[--scan-abs COEFFICIENT POINTS MIN MAX] | [--scan-arg COEFFICIENT POINTS MIN MAX]]+" << std::endl;
     }
     catch(Exception & e)
     {

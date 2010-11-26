@@ -137,7 +137,10 @@ main(int argc, char * argv[])
     }
     catch(DoUsage & e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cout << e.what() << std::endl;
+        std::cout << "Usage: eos-print-polynomial" << std::endl;
+        std::cout << "  [--coefficient WILSONCOEFFICIENT]*" << std::endl;
+        std::cout << "  [[--kinematics NAME VALUE]* --observable NAME]+" << std::endl;
     }
     catch(Exception & e)
     {

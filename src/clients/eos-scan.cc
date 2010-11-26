@@ -308,7 +308,13 @@ main(int argc, char * argv[])
     }
     catch(DoUsage & e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cout << e.what() << std::endl;
+        std::cout << "Usage: eos-scan" << std::endl;
+        std::cout << "  [--vary PARAMETER]*" << std::endl;
+        std::cout << "  [--parameter NEWVALUE]*" << std::endl;
+        std::cout << "  [--input NAME SMIN SMAX MIN CENTRAL MAX]+" << std::endl;
+        std::cout << "  [--scan PARAMETER POINTS MIN MAX]+" << std::endl;
+        std::cout << "  [--theory-uncertainty PERCENT]" << std::endl;
     }
     catch(Exception & e)
     {
