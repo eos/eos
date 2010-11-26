@@ -113,7 +113,7 @@ main(int argc, char * argv[])
 
         WilsonPolynomialEvaluator evaluator;
         WilsonPolynomialPrinter printer;
-        for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.end() ; i != i_end ; ++i)
+        for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend() ; i != i_end ; ++i)
         {
             WilsonPolynomial polynomial = make_polynomial(i->observable, i->kinematics, CommandLine::instance()->coefficients);
 
