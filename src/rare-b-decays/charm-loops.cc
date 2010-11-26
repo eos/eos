@@ -930,19 +930,19 @@ namespace eos
         gsl_sf_result res_re, res_im;
 
         arg = 0.5 * complex<double>(2.0 - s_hat, -A);
-        int status = gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
+        gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
         complex<double> Li_1(res_re.val, res_im.val);
 
         arg = 0.5 * complex<double>(2.0 - s_hat, +A);
-        status = gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
+        gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
         complex<double> Li_2(res_re.val, res_im.val);
 
         arg = 0.5 * complex<double>(1.0, -A / (2.0 - s_hat));
-        status = gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
+        gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
         complex<double> Li_3(res_re.val, res_im.val);
 
         arg = 0.5 * complex<double>(1.0, +A / (2.0 - s_hat));
-        status = gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
+        gsl_sf_complex_dilog_e(abs(arg), atan2(imag(arg), real(arg)), &res_re, &res_im);
         complex<double> Li_4(res_re.val, res_im.val);
 
         return 1.0 / (1.0 - s_hat) * (2.0 * at1 * (at1 - at2) + log1 * log1 - Li_1 - Li_2 + Li_3 + Li_4);
