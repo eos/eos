@@ -86,7 +86,7 @@ namespace eos
     Parameters
     Parameters::Defaults()
     {
-        return Parameters::Parameters(new Implementation<Parameters>({
+        return Parameters(new Implementation<Parameters>({
             // Wilson coefficients C1 - C6 at mu = 4.2 GeV to NLL accuary, based on [CMM1997]
             ParameterTemplate{"c1",                                            -0.32300000, -0.32300000, -0.32300000},
             ParameterTemplate{"c2",                                            +1.00931000, +1.00931000, +1.00931000},
