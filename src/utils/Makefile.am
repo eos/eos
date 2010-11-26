@@ -14,6 +14,7 @@ libeosutils_la_SOURCES = \
 	condition_variable.cc condition_variable.hh \
 	destringify.hh \
 	exception.cc exception.hh \
+	histogram.cc histogram.hh \
 	integrate.cc integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.cc kinematic.hh \
@@ -45,6 +46,7 @@ TESTS = \
 	apply_TEST \
 	cartesian-product_TEST \
 	chi-squared_TEST \
+	histogram_TEST \
 	integrate_TEST \
 	matrix_TEST \
 	memoise_TEST \
@@ -69,6 +71,9 @@ cartesian_product_TEST_LDADD = $(TESTS_LD_ADD)
 
 chi_squared_TEST_SOURCES = chi-squared_TEST.cc
 chi_squared_TEST_LDADD = $(TESTS_LD_ADD)
+
+histogram_TEST_SOURCES = histogram_TEST.cc
+histogram_TEST_LDADD = $(TESTS_LD_ADD)
 
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_LDADD = $(TESTS_LD_ADD)
