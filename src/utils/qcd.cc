@@ -85,22 +85,21 @@ namespace eos
     }
 
     double
-    QCD::m_q_pole(const double & m_q_MSbar, const double & alpha_s_mb, const QCD::Parameters & params)
+    QCD::m_q_pole(const double & m_q_MSbar, const double & alpha_s_mb, const double & nf)
     {
         double a_s = alpha_s_mb / M_PI;
-        double nf = params._nf;
 
         // cf. [CERN2003-002], Eq. (16), p. 45
         return m_q_MSbar * (1.0 + a_s * (4.0/3.0 + a_s * (13.44 - 1.04 * nf + a_s * (190.8 - 26.7 * nf + 0.65 * nf * nf))));
     }
 
     double
-    QCD::m_q_ps(const double & m_q_MSbar, const double & alpha_s_mb, const double & mu_f, const QCD::Parameters & params)
+    QCD::m_q_ps(const double & m_q_MSbar, const double & alpha_s_mb, const double & mu_f, const double & nf, const QCD::BetaFunction & beta)
     {
         double a_s = alpha_s_mb / M_PI;
-        double K = 13.44 - 1.04 * params._nf;
-        double a_1 = 10.33 - 1.11 * params._nf;
-        double b_0 = params._beta0;
+        double K = 13.44 - 1.04 * nf;
+        double a_1 = 10.33 - 1.11 * nf;
+        double b_0 = beta[0];
         double L = log(mu_f / m_q_MSbar);
 
         // cf. [CERN2003-002], Eq. (16), p. 45

@@ -44,23 +44,24 @@ namespace eos
              *
              * Calculation according to [CERN2002-002].
              *
-             * @m_q     : Quark mass in the MSbar scheme at the scale m_q
+             * @m_q     : quark mass in the MSbar scheme at the scale m_q
              * @alpha_s : alpha_s at the scale m_q
-             * @params  : QCD parameters that control the calculation
+             * @nf      : number of active QCD flavors that control the calculation
              */
-            static double m_q_pole(const double & m_q, const double & alpha_s, const Parameters & params);
+            static double m_q_pole(const double & m_q, const double & alpha_s, const double & nf);
 
             /*
              * Potential-Subtracted mass (PS mass) shift from the MSbar scheme
              *
              * Calculation according to [B1998].
              *
-             * @m_q     : Quark mass in the MSbar scheme at the scale m_q
+             * @m_q     : quark mass in the MSbar scheme at the scale m_q
              * @alpha_s : alpha_s at the scalem_q
              * @mu_f    : Factorization scale
-             * @params  : QCD parameters that control the calculation
+             * @nf      : number of active QCD flavors that control the calculation
+             * @beta    : parameters of QCD beta function that control the calculation
              */
-            static double m_q_ps(const double & m_q, const double & alpha_s, const double & mu_f, const Parameters & params);
+            static double m_q_ps(const double & m_q, const double & alpha_s, const double & mu_f, const double & nf, const BetaFunction & beta);
 
             /*
              * The quadratic casimir operator for the fundamental representation

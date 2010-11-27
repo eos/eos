@@ -192,7 +192,7 @@ namespace eos
     {
         double m_b_MSbar = _imp->m_b_MSbar();
 
-        return QCD::m_q_pole(m_b_MSbar, alpha_s(m_b_MSbar), Implementation<StandardModel>::qcd_params_nf5);
+        return QCD::m_q_pole(m_b_MSbar, alpha_s(m_b_MSbar), 5.0);
     }
 
     double
@@ -200,7 +200,7 @@ namespace eos
     {
         double m_b_MSbar = _imp->m_b_MSbar();
 
-        return QCD::m_q_ps(m_b_MSbar, alpha_s(m_b_MSbar), mu_f, Implementation<StandardModel>::qcd_params_nf5);
+        return QCD::m_q_ps(m_b_MSbar, alpha_s(m_b_MSbar), mu_f, 5.0, Implementation<StandardModel>::qcd_nf5_beta_function);
     }
 
     /* Charm */
@@ -235,7 +235,7 @@ namespace eos
     {
         double m_c_MSbar = _imp->m_c_MSbar();
 
-        return QCD::m_q_pole(m_c_MSbar, alpha_s(m_c_MSbar), Implementation<StandardModel>::qcd_params_nf4);
+        return QCD::m_q_pole(m_c_MSbar, alpha_s(m_c_MSbar), 4.0);
     }
 
     complex<double>
