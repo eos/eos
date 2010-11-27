@@ -12,7 +12,6 @@ namespace eos
         public:
             typedef std::array<double, 4> AnomalousMassDimension;
             typedef std::array<double, 4> BetaFunction;
-            struct Parameters;
 
             /*
              * Running coupling alpha_s down to mu from mu_0, based on QCD parameters in params.
@@ -72,105 +71,6 @@ namespace eos
              * The quadratic casimir operator for the ajoint representation
              */
             static const double casimir_a;
-    };
-
-    struct QCD::Parameters
-    {
-        /* Number of active flavors */
-        double _nf;
-
-        QCD::Parameters
-        nf(const double & v)
-        {
-            _nf = v;
-            return *this;
-        }
-
-        /* Coefficients of the QCD potential */
-        double _a1;
-        double _a2;
-
-        QCD::Parameters
-        a1(const double & v)
-        {
-            _a1 = v;
-            return *this;
-        }
-
-        QCD::Parameters
-        a2(const double & v)
-        {
-            _a2 = v;
-            return *this;
-        }
-
-        /* Coefficients of the QCD beta function */
-        double _beta0;
-        double _beta1;
-        double _beta2;
-        double _beta3;
-
-        QCD::Parameters
-        beta0(const double & v)
-        {
-            _beta0 = v;
-            return *this;
-        }
-
-        QCD::Parameters
-        beta1(const double & v)
-        {
-            _beta1 = v;
-            return *this;
-        }
-
-        QCD::Parameters
-        beta2(const double & v)
-        {
-            _beta2 = v;
-            return *this;
-        }
-
-        QCD::Parameters
-        beta3(const double & v)
-        {
-            _beta3 = v;
-            return *this;
-        }
-
-        /* Coefficients of the anomalous dimension of quark masses (MSbar scheme) */
-        double _gamma0_m;
-        double _gamma1_m;
-        double _gamma2_m;
-        double _gamma3_m;
-
-        QCD::Parameters
-        gamma0_m(const double & v)
-        {
-            _gamma0_m = v;
-            return *this;
-        }
-
-        QCD::Parameters
-        gamma1_m(const double & v)
-        {
-            _gamma1_m = v;
-            return *this;
-        }
-
-        QCD::Parameters
-        gamma2_m(const double & v)
-        {
-            _gamma2_m = v;
-            return *this;
-        }
-
-        QCD::Parameters
-        gamma3_m(const double & v)
-        {
-            _gamma3_m = v;
-            return *this;
-        }
     };
 }
 

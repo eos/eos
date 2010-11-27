@@ -51,10 +51,6 @@ namespace eos
         {
         }
 
-        static QCD::Parameters qcd_params_nf5;
-
-        static QCD::Parameters qcd_params_nf4;
-
         // 5 flavor QCD
         static const QCD::BetaFunction qcd_nf5_beta_function;
         static const QCD::AnomalousMassDimension qcd_nf5_gamma_m;
@@ -63,32 +59,6 @@ namespace eos
         static const QCD::BetaFunction qcd_nf4_beta_function;
         static const QCD::AnomalousMassDimension qcd_nf4_gamma_m;
     };
-
-    QCD::Parameters Implementation<StandardModel>::qcd_params_nf5 = QCD::Parameters()
-                .nf(5.0)
-                .a1(43.0 / 9.0)
-                .a2(155.829)
-                .beta0(23.0 / 3.0)
-                .beta1(116.0 / 3.0)
-                .beta2(9769.0 / 54.0)
-                .beta3(4826.1563287908967)
-                .gamma0_m(1.0)
-                .gamma1_m(506.0 / 9.0)
-                .gamma2_m(474.87124557719461)
-                .gamma3_m(2824.7862379694232);
-
-    QCD::Parameters Implementation<StandardModel>::qcd_params_nf4 = QCD::Parameters()
-                .nf(4.0)
-                .a1(53.0 / 9.0)
-                .a2(211.077)
-                .beta0(25.0 / 3.0)
-                .beta1(154.0 / 3.0)
-                .beta2(21943.0 / 54.0)
-                .beta3(8035.1864197901160)
-                .gamma0_m(1.0)
-                .gamma1_m(526.0 / 9.0)
-                .gamma2_m(636.61057670866927)
-                .gamma3_m(6989.5510103599477);
 
     /* 5 flavor QCD constants */
 
