@@ -104,6 +104,10 @@ class BMassesTest :
             TEST_CHECK_NEARLY_EQUAL(4.75221, model.m_b_msbar(2.4), eps);
 
             TEST_CHECK_NEARLY_EQUAL(4.88402, model.m_b_pole(), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(4.60728, model.m_b_ps(1.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(4.54012, model.m_b_ps(1.5), eps);
+            TEST_CHECK_NEARLY_EQUAL(4.47735, model.m_b_ps(2.0), eps);
         }
 } sm_b_masses_test;
 
@@ -118,12 +122,14 @@ class CMassesTest :
 
         virtual void run() const
         {
-            static const double eps = 1e-5;
+            static const double eps = 1e-6;
 
             StandardModel model(reference_parameters());
 
             TEST_CHECK_NEARLY_EQUAL(0.891000, model.m_c_msbar(4.8),  eps);
             TEST_CHECK_NEARLY_EQUAL(0.912618, model.m_c_msbar(4.2),  eps);
             TEST_CHECK_NEARLY_EQUAL(1.270000, model.m_c_msbar(1.27), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(1.891359, model.m_c_pole(), eps);
         }
 } sm_c_masses_test;
