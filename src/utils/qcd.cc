@@ -40,25 +40,25 @@ namespace eos
     }
 
     double
-    QCD::m_q_msbar(const double & m_q_0, const double & alpha_s_0, const double & alpha_s_mu, const QCD::Parameters & params)
+    QCD::m_q_msbar(const double & m_q_0, const double & alpha_s_0, const double & alpha_s_mu, const BetaFunction & beta, const AnomalousMassDimension & gamma_m)
     {
         double a_mu0 = alpha_s_0 / M_PI;
         double a_mu = alpha_s_mu / M_PI;
 
         // Adjust for a different convention on beta function coefficients
-        double beta0 = params._beta0 / 4.0;
-        double beta1 = params._beta1 / 16.0;
-        double beta2 = params._beta2 / 64.0;
-        double beta3 = params._beta3 / 256.0;
+        double beta0 = beta[0] / 4.0;
+        double beta1 = beta[1] / 16.0;
+        double beta2 = beta[2] / 64.0;
+        double beta3 = beta[3] / 256.0;
         double b1 = beta1 / beta0;
         double b2 = beta2 / beta0;
         double b3 = beta3 / beta0;
 
-        double gamma0_m = params._gamma0_m;
         // Adjust for a different convention on gamma function coefficients
-        double gamma1_m = params._gamma1_m / 16.0;
-        double gamma2_m = params._gamma2_m / 64.0;
-        double gamma3_m = params._gamma3_m / 256.0;
+        double gamma0_m = gamma_m[0];
+        double gamma1_m = gamma_m[1] / 16.0;
+        double gamma2_m = gamma_m[2] / 64.0;
+        double gamma3_m = gamma_m[3] / 256.0;
         double c0 = gamma0_m / beta0;
         double c1 = gamma1_m / beta0;
         double c2 = gamma2_m / beta0;

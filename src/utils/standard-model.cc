@@ -57,9 +57,11 @@ namespace eos
 
         // 5 flavor QCD
         static const QCD::BetaFunction qcd_nf5_beta_function;
+        static const QCD::AnomalousMassDimension qcd_nf5_gamma_m;
 
         // 4 flavor QCD
         static const QCD::BetaFunction qcd_nf4_beta_function;
+        static const QCD::AnomalousMassDimension qcd_nf4_gamma_m;
     };
 
     QCD::Parameters Implementation<StandardModel>::qcd_params_nf5 = QCD::Parameters()
@@ -99,6 +101,15 @@ namespace eos
         4826.1563287908967,
     }};
 
+    // cf. [CKS2000], Eq. (7), p. 5 with n_f = 5
+    const QCD::AnomalousMassDimension Implementation<StandardModel>::qcd_nf5_gamma_m
+    {{
+        1.0,
+        506.0 / 9.0,
+        474.87124557719461,
+        2824.7862379694232,
+    }};
+
     /* 4 flavor QCD constants */
 
     // cf. [CKS2000], Eq. (2), p. 2 with n_f = 4
@@ -108,6 +119,15 @@ namespace eos
         154.0 / 3.0,
         21943.0 / 54.0,
         8035.1864197901160,
+    }};
+
+    // cf. [CKS2000], Eq. (7), p. 5 with n_f = 4
+    const QCD::AnomalousMassDimension Implementation<StandardModel>::qcd_nf4_gamma_m
+    {{
+        1.0,
+        526.0 / 9.0,
+        636.61057670866927,
+        6989.5510103599477,
     }};
 
     StandardModel::StandardModel(const Parameters & p) :
@@ -154,14 +174,14 @@ namespace eos
         if (mu > _imp->m_b_MSbar)
         {
             if (mu < _imp->mu_t)
-                return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf5);
+                return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, alpha_s(mu), Implementation<StandardModel>::qcd_nf5_beta_function, Implementation<StandardModel>::qcd_nf5_gamma_m);
 
             throw InternalError("StandardModel::m_b_msbar: Running of m_b_MSbar to mu > mu_t not yet implemented");
         }
         else
         {
             if (mu >= _imp->mu_c)
-                return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf4);
+                return QCD::m_q_msbar(m_b_MSbar, alpha_mu_0, alpha_s(mu), Implementation<StandardModel>::qcd_nf4_beta_function, Implementation<StandardModel>::qcd_nf4_gamma_m);
 
             throw InternalError("StandardModel::m_b_msbar: Running of m_b_MSbar to mu < mu_c not yet implemented");
         }
@@ -193,14 +213,14 @@ namespace eos
         if (mu >= _imp->m_c_MSbar)
         {
             if (mu <= _imp->mu_b)
-                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf4);
+                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), Implementation<StandardModel>::qcd_nf4_beta_function, Implementation<StandardModel>::qcd_nf4_gamma_m);
 
             double alpha_s_b = alpha_s(_imp->mu_b);
-            m_c_0 = QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s_b, Implementation<StandardModel>::qcd_params_nf4);
+            m_c_0 = QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s_b, Implementation<StandardModel>::qcd_nf4_beta_function, Implementation<StandardModel>::qcd_nf4_gamma_m);
             alpha_s_mu0 = alpha_s_b;
 
             if (mu <= _imp->mu_t)
-                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), Implementation<StandardModel>::qcd_params_nf5);
+                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), Implementation<StandardModel>::qcd_nf5_beta_function, Implementation<StandardModel>::qcd_nf5_gamma_m);
 
             throw InternalError("StandardModel::m_c_msbar: Running of m_c_MSbar to mu > mu_t not yet implemented");
         }

@@ -10,6 +10,7 @@ namespace eos
     class QCD
     {
         public:
+            typedef std::array<double, 4> AnomalousMassDimension;
             typedef std::array<double, 4> BetaFunction;
             struct Parameters;
 
@@ -30,12 +31,13 @@ namespace eos
              *
              * Calculation according to [CKS2000].
              *
-             * @m_q_0       : Quark mass in the MSbar scheme at the scale m_q
+             * @m_q_0       : quark mass in the MSbar scheme at the scale m_q
              * @alpha_s_0   : alpha_s at the scale mu_0 = m_q
              * @alpha_s_mu  : alpha_s at the scale mu
-             * @params      : QCD parameters that control the running
+             * @beta        : parameters of QCD beta function that control the running
+             * @gamma_m     : parameters of QCD anomalous mass dimension that control the running
              */
-            static double m_q_msbar(const double & m_q, const double & alpha_s_mu0, const double & alpha_s_mu, const Parameters & params);
+            static double m_q_msbar(const double & m_q, const double & alpha_s_mu0, const double & alpha_s_mu, const BetaFunction & beta, const AnomalousMassDimension & gamma_m);
 
             /*
              * Pole mass shift from the MSbar scheme
