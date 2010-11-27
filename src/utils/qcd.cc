@@ -9,14 +9,14 @@ namespace eos
     const double QCD::casimir_f = 4.0 / 3.0;
 
     double
-    QCD::alpha_s(const double & mu, const double & alpha_s_0, const double & mu_0, const Parameters & params)
+    QCD::alpha_s(const double & mu, const double & alpha_s_0, const double & mu_0, const BetaFunction & beta)
     {
         double a = alpha_s_0 / M_PI;
         // Adjust for a different convention on beta function coefficients
-        double beta0 = params._beta0 / 4.0;
-        double beta1 = params._beta1 / 16.0;
-        double beta2 = params._beta2 / 64.0;
-        double beta3 = params._beta3 / 256.0;
+        double beta0 = beta[0] / 4.0;
+        double beta1 = beta[1] / 16.0;
+        double beta2 = beta[2] / 64.0;
+        double beta3 = beta[3] / 256.0;
         double b1 = beta1 / beta0;
         double b2 = beta2 / beta0;
         double b3 = beta3 / beta0;

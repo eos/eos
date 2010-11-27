@@ -54,6 +54,12 @@ namespace eos
         static QCD::Parameters qcd_params_nf5;
 
         static QCD::Parameters qcd_params_nf4;
+
+        // 5 flavor QCD
+        static const QCD::BetaFunction qcd_nf5_beta_function;
+
+        // 4 flavor QCD
+        static const QCD::BetaFunction qcd_nf4_beta_function;
     };
 
     QCD::Parameters Implementation<StandardModel>::qcd_params_nf5 = QCD::Parameters()
@@ -82,6 +88,28 @@ namespace eos
                 .gamma2_m(636.61057670866927)
                 .gamma3_m(6989.5510103599477);
 
+    /* 5 flavor QCD constants */
+
+    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 5
+    const QCD::BetaFunction Implementation<StandardModel>::qcd_nf5_beta_function
+    {{
+        23.0 / 3.0,
+        116.0 / 3.0,
+        9769.0 / 54.0,
+        4826.1563287908967,
+    }};
+
+    /* 4 flavor QCD constants */
+
+    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 4
+    const QCD::BetaFunction Implementation<StandardModel>::qcd_nf4_beta_function
+    {{
+        25.0 / 3.0,
+        154.0 / 3.0,
+        21943.0 / 54.0,
+        8035.1864197901160,
+    }};
+
     StandardModel::StandardModel(const Parameters & p) :
         PrivateImplementationPattern<StandardModel>(new Implementation<StandardModel>(p))
     {
@@ -106,13 +134,13 @@ namespace eos
         double alpha_s_0 = _imp->alpha_s_Z, mu_0 = _imp->m_Z;
 
         if (mu >= _imp->mu_b)
-            return QCD::alpha_s(mu, alpha_s_0, mu_0, Implementation<StandardModel>::qcd_params_nf5);
+            return QCD::alpha_s(mu, alpha_s_0, mu_0, Implementation<StandardModel>::qcd_nf5_beta_function);
 
-        alpha_s_0 = QCD::alpha_s(_imp->mu_b, alpha_s_0, mu_0, Implementation<StandardModel>::qcd_params_nf5);
+        alpha_s_0 = QCD::alpha_s(_imp->mu_b, alpha_s_0, mu_0, Implementation<StandardModel>::qcd_nf5_beta_function);
         mu_0 = _imp->mu_b;
 
         if (mu >= _imp->mu_c)
-            return QCD::alpha_s(mu, alpha_s_0, mu_0, Implementation<StandardModel>::qcd_params_nf4);
+            return QCD::alpha_s(mu, alpha_s_0, mu_0, Implementation<StandardModel>::qcd_nf4_beta_function);
 
         throw InternalError("StandardModel::alpha_s: Running of alpha_s to mu < mu_c not yet implemented");
     }

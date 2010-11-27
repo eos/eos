@@ -3,11 +3,14 @@
 #ifndef EOS_GUARD_SRC_UTILS_QCD_HH
 #define EOS_GUARD_SRC_UTILS_QCD_HH 1
 
+#include <array>
+
 namespace eos
 {
     class QCD
     {
         public:
+            typedef std::array<double, 4> BetaFunction;
             struct Parameters;
 
             /*
@@ -15,12 +18,12 @@ namespace eos
              *
              * Calculation according to [CKS2000].
              *
-             * @mu        : Scale at which alpha_s shall be evaluated
+             * @mu        : scale at which alpha_s shall be evaluated
              * @alpha_s_0 : alpha_s at the initial scale mu_0
-             * @mu_0      : Initial scale mu_0
-             * @params    : QCD parameters that control the running
+             * @mu_0      : initial scale mu_0
+             * @beta      : parameters of QCD beta function that control the running
              */
-            static double alpha_s(const double & mu, const double & alpha_s_0, const double & mu_0, const Parameters & params);
+            static double alpha_s(const double & mu, const double & alpha_s_0, const double & mu_0, const BetaFunction & beta);
 
             /*
              * Running quark mass in the MSbar scheme.
