@@ -47,7 +47,7 @@ namespace eos
             const std::array<double, 15> & wc_qcd_1,
             const std::array<double, 15> & wc_qcd_2,
             const double & alpha_s_0, const double & alpha_s,
-            const QCD::Parameters & params);
+            const double & nf, const QCD::BetaFunction & beta);
 
     void calculate_wilson_coefficients(const double & mu, Parameters & parameters);
 }

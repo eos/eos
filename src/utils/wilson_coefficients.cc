@@ -15,7 +15,7 @@ namespace eos
     WilsonCoefficients<BToS> evolve(const std::array<double, 15> & wc_qcd_0,
             const std::array<double, 15> & wc_qcd_1,
             const std::array<double, 15> & wc_qcd_2,
-            const double & alpha_s_0, const double & alpha_s, const QCD::Parameters & params)
+            const double & alpha_s_0, const double & alpha_s, const double & nf, const QCD::BetaFunction & beta)
     {
         using std::array;
         typedef array<array<double, 15>, 15> Matrix;
@@ -83,47 +83,47 @@ namespace eos
         }};
 
         static const double zeta_3 = 1.2020569031595943;
-        double u11 = -1927.0 / 2 + 257.0 / 9 * params._nf + 40.0 / 9 * params._nf * params._nf + (224 + 160.0 / 3 * params._nf) * zeta_3;
-        double u12 = 475.0 / 9 + 362.0 / 27 * params._nf - 40.0 / 27 * params._nf * params._nf - (896.0 / 3 + 320.0 / 9 * params._nf) * zeta_3;
-        double u21 = 307.0 / 2 + 361.0 / 3 * params._nf - 20.0 / 3 * params._nf * params._nf - (1344 + 160* params._nf) * zeta_3;
-        double u22 = 1298.0 / 3 - 76.0 / 3 * params._nf - 224* zeta_3;
-        double u13 = 269107.0 / 13122 - 2288.0 / 729 * params._nf - 1360.0 / 81* zeta_3;
-        double u14 = -2425817.0 / 13122 + 30815.0 / 4374 * params._nf - 776.0 / 81* zeta_3;
-        double u23 = 69797.0 / 2187 + 904.0 / 243 * params._nf + 2720.0 / 27* zeta_3;
-        double u24 = 1457549.0 / 8748 - 22067.0 / 729 * params._nf - 2768.0 / 27* zeta_3;
-        double u33 = -4203068.0 / 2187 + 14012.0 / 243 * params._nf - 608.0 / 27* zeta_3;
-        double u34 = -18422762.0 / 2187 + 888605.0 / 2916 * params._nf + 272.0 / 27 * params._nf * params._nf
-                    + (39824.0 / 27 + 160. * params._nf) * zeta_3;
-        double u43 = -5875184.0 / 6561 + 217892.0 / 2187 * params._nf + 472.0 / 81 * params._nf * params._nf
-                    + (27520.0 / 81 + 1360.0 / 9 * params._nf) * zeta_3;
-        double u44 = -70274587.0 / 13122 + 8860733.0 / 17496 * params._nf - 4010.0 / 729 * params._nf * params._nf
-                    + (16592.0 / 81 + 2512.0 / 27 * params._nf) * zeta_3;
-        double u53 = -194951552.0 / 2187 + 358672.0 / 81 * params._nf - 2144.0 / 81 * params._nf * params._nf + 87040.0 / 27* zeta_3;
-        double u54 = -130500332.0 / 2187 - 2949616.0 / 729 * params._nf + 3088.0 / 27 * params._nf * params._nf
-                    + (238016.0 / 27 + 640. * params._nf) * zeta_3;
-        double u63 = 162733912.0 / 6561 - 2535466.0 / 2187 * params._nf + 17920.0 / 243 * params._nf * params._nf
-                    + (174208.0 / 81 + 12160.0 / 9 * params._nf) * zeta_3;
-        double u64 = 13286236.0 / 6561 - 1826023.0 / 4374 * params._nf - 159548.0 / 729 * params._nf * params._nf
-                    - (24832.0 / 81 + 9440.0 / 27 * params._nf) * zeta_3;
-        double u15 = -343783.0 / 52488 + 392.0 / 729 * params._nf + 124.0 / 81* zeta_3;
-        double u16 = -37573.0 / 69984 + 35.0 / 972 * params._nf + 100.0 / 27* zeta_3;
-        double u25 = -37889.0 / 8748 - 28.0 / 243 * params._nf - 248.0 / 27* zeta_3;
-        double u26 = 366919.0 / 11664 - 35.0 / 162 * params._nf - 110.0 / 9* zeta_3;
-        double u35 = 674281.0 / 4374 - 1352.0 / 243 * params._nf - 496.0 / 27* zeta_3;
-        double u36 = 9284531.0 / 11664 - 2798.0 / 81 * params._nf - 26.0 / 27* params._nf * params._nf
-                    - (1921.0 / 9 + 20* params._nf) * zeta_3;
-        double u45 = 2951809.0 / 52488 - 31175.0 / 8748 * params._nf - 52.0 / 81* params._nf * params._nf
-                    - (3154.0 / 81 + 136.0 / 9* params._nf) * zeta_3;
-        double u46 = 3227801.0 / 8748 - 105293.0 / 11664 * params._nf - 65.0 / 54* params._nf * params._nf
-                    + (200.0 / 27 - 220.0 / 9* params._nf) * zeta_3;
-        double u55 = 14732222.0 / 2187 - 27428.0 / 81 * params._nf + 272.0 / 81* params._nf * params._nf
+        double u11 = -1927.0 / 2 + 257.0 / 9 * nf + 40.0 / 9 * nf * nf + (224 + 160.0 / 3 * nf) * zeta_3;
+        double u12 = 475.0 / 9 + 362.0 / 27 * nf - 40.0 / 27 * nf * nf - (896.0 / 3 + 320.0 / 9 * nf) * zeta_3;
+        double u21 = 307.0 / 2 + 361.0 / 3 * nf - 20.0 / 3 * nf * nf - (1344 + 160* nf) * zeta_3;
+        double u22 = 1298.0 / 3 - 76.0 / 3 * nf - 224* zeta_3;
+        double u13 = 269107.0 / 13122 - 2288.0 / 729 * nf - 1360.0 / 81* zeta_3;
+        double u14 = -2425817.0 / 13122 + 30815.0 / 4374 * nf - 776.0 / 81* zeta_3;
+        double u23 = 69797.0 / 2187 + 904.0 / 243 * nf + 2720.0 / 27* zeta_3;
+        double u24 = 1457549.0 / 8748 - 22067.0 / 729 * nf - 2768.0 / 27* zeta_3;
+        double u33 = -4203068.0 / 2187 + 14012.0 / 243 * nf - 608.0 / 27* zeta_3;
+        double u34 = -18422762.0 / 2187 + 888605.0 / 2916 * nf + 272.0 / 27 * nf * nf
+                    + (39824.0 / 27 + 160. * nf) * zeta_3;
+        double u43 = -5875184.0 / 6561 + 217892.0 / 2187 * nf + 472.0 / 81 * nf * nf
+                    + (27520.0 / 81 + 1360.0 / 9 * nf) * zeta_3;
+        double u44 = -70274587.0 / 13122 + 8860733.0 / 17496 * nf - 4010.0 / 729 * nf * nf
+                    + (16592.0 / 81 + 2512.0 / 27 * nf) * zeta_3;
+        double u53 = -194951552.0 / 2187 + 358672.0 / 81 * nf - 2144.0 / 81 * nf * nf + 87040.0 / 27* zeta_3;
+        double u54 = -130500332.0 / 2187 - 2949616.0 / 729 * nf + 3088.0 / 27 * nf * nf
+                    + (238016.0 / 27 + 640. * nf) * zeta_3;
+        double u63 = 162733912.0 / 6561 - 2535466.0 / 2187 * nf + 17920.0 / 243 * nf * nf
+                    + (174208.0 / 81 + 12160.0 / 9 * nf) * zeta_3;
+        double u64 = 13286236.0 / 6561 - 1826023.0 / 4374 * nf - 159548.0 / 729 * nf * nf
+                    - (24832.0 / 81 + 9440.0 / 27 * nf) * zeta_3;
+        double u15 = -343783.0 / 52488 + 392.0 / 729 * nf + 124.0 / 81* zeta_3;
+        double u16 = -37573.0 / 69984 + 35.0 / 972 * nf + 100.0 / 27* zeta_3;
+        double u25 = -37889.0 / 8748 - 28.0 / 243 * nf - 248.0 / 27* zeta_3;
+        double u26 = 366919.0 / 11664 - 35.0 / 162 * nf - 110.0 / 9* zeta_3;
+        double u35 = 674281.0 / 4374 - 1352.0 / 243 * nf - 496.0 / 27* zeta_3;
+        double u36 = 9284531.0 / 11664 - 2798.0 / 81 * nf - 26.0 / 27* nf * nf
+                    - (1921.0 / 9 + 20* nf) * zeta_3;
+        double u45 = 2951809.0 / 52488 - 31175.0 / 8748 * nf - 52.0 / 81* nf * nf
+                    - (3154.0 / 81 + 136.0 / 9* nf) * zeta_3;
+        double u46 = 3227801.0 / 8748 - 105293.0 / 11664 * nf - 65.0 / 54* nf * nf
+                    + (200.0 / 27 - 220.0 / 9* nf) * zeta_3;
+        double u55 = 14732222.0 / 2187 - 27428.0 / 81 * nf + 272.0 / 81* nf * nf
                     - 13984.0 / 27* zeta_3;
-        double u56 = 16521659.0 / 2916 + 8081.0 / 54 * params._nf - 316.0 / 27* params._nf * params._nf
-                    - (22420.0 / 9 + 200* params._nf) * zeta_3;
-        double u65 = -22191107.0 / 13122 + 395783.0 / 4374 * params._nf - 1720.0 / 243* params._nf * params._nf
-                    - (33832.0 / 81 + 1360.0 / 9 * params._nf) * zeta_3;
-        double u66 = -32043361.0 / 8748 + 3353393.0 / 5832 * params._nf - 533.0 / 81* params._nf * params._nf
-                    + (9248.0 / 27 - 1120.0 / 9* params._nf) * zeta_3;
+        double u56 = 16521659.0 / 2916 + 8081.0 / 54 * nf - 316.0 / 27* nf * nf
+                    - (22420.0 / 9 + 200* nf) * zeta_3;
+        double u65 = -22191107.0 / 13122 + 395783.0 / 4374 * nf - 1720.0 / 243* nf * nf
+                    - (33832.0 / 81 + 1360.0 / 9 * nf) * zeta_3;
+        double u66 = -32043361.0 / 8748 + 3353393.0 / 5832 * nf - 533.0 / 81* nf * nf
+                    + (9248.0 / 27 - 1120.0 / 9* nf) * zeta_3;
         static const double u17 = -13234.0 / 2187;
         static const double u18 = 13957.0 / 2916;
         static const double u19 = -1359190.0 / 19683 + 6976.0 / 243 * zeta_3;
@@ -178,7 +178,7 @@ namespace eos
         Matrix H_qcd_0, H_qcd_1, H_qcd_2;
         for (unsigned i(0) ; i < a.size() ; ++i)
         {
-            a[i] = gamma_qcd_0_eigenvalues[i] / 2.0 / params._beta0;
+            a[i] = gamma_qcd_0_eigenvalues[i] / 2.0 / beta[0];
         }
 
         for (unsigned i(0) ; i < a.size() ; ++i)
@@ -186,10 +186,10 @@ namespace eos
             for (unsigned j(0) ; j < a.size() ; ++j)
             {
                 H_qcd_0[i][j] = 0.0;
-                H_qcd_1[i][j] = -G_qcd_1[i][j] / (2.0 * params._beta0) / (1.0 + a[i] - a[j]);
+                H_qcd_1[i][j] = -G_qcd_1[i][j] / (2.0 * beta[0]) / (1.0 + a[i] - a[j]);
             }
             H_qcd_0[i][i] = std::pow(eta, a[i]);
-            H_qcd_1[i][i] += params._beta1 / params._beta0 * a[i];
+            H_qcd_1[i][i] += beta[1] / beta[0] * a[i];
         }
 
         // Need complete H_qcd_1 to compute H_qcd_2!
@@ -197,8 +197,8 @@ namespace eos
         {
             for (unsigned j(0) ; j < a.size() ; ++j)
             {
-                H_qcd_2[i][j] = -G_qcd_2[i][j] / (2.0 * params._beta0) / (2.0 + a[i] - a[j]);
-                H_qcd_2[i][j] += -params._beta1 / params._beta0 * (1.0 + a[i] - a[j]) / (2.0 + a[i] - a[j]) * H_qcd_1[i][j];
+                H_qcd_2[i][j] = -G_qcd_2[i][j] / (2.0 * beta[0]) / (2.0 + a[i] - a[j]);
+                H_qcd_2[i][j] += -beta[1] / beta[0] * (1.0 + a[i] - a[j]) / (2.0 + a[i] - a[j]) * H_qcd_1[i][j];
 
                 for (unsigned k(0) ; k < a.size() ; ++k)
                 {
@@ -206,7 +206,7 @@ namespace eos
                 }
             }
 
-            H_qcd_2[i][i] += params._beta2 / 2.0 / params._beta0 * a[i];
+            H_qcd_2[i][i] += beta[2] / 2.0 / beta[0] * a[i];
         }
 
         Matrix U_qcd_0 = V * H_qcd_0 * V_inverse;

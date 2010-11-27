@@ -33,18 +33,14 @@ class WilsonCoefficientsTest :
                 static const double log_charm = 2.0 * std::log(mu_0c / m_W), log_top = std::log(mu_0t / m_t_mu_0t);
                 static const double x_c = power_of<2>(m_t_mu_0c / m_W), x_t = power_of<2>(m_t_mu_0t / m_W);
                 static const double sw2 = 0.23122;
-                static const QCD::Parameters params = QCD::Parameters()
-                    .nf(5.0)
-                    .a1(43.0 / 9.0)
-                    .a2(155.829)
-                    .beta0(23.0 / 3.0)
-                    .beta1(116.0 / 3.0)
-                    .beta2(9769.0 / 54.0)
-                    .beta3(4826.1563287908967)
-                    .gamma0_m(1.0)
-                    .gamma1_m(506.0 / 9.0)
-                    .gamma2_m(474.87124557719461)
-                    .gamma3_m(2824.7862379694232);
+                static const double nf = 5.0;
+                static const QCD::BetaFunction beta
+                {{
+                    23.0 / 3.0,
+                    116.0 / 3.0,
+                    9769.0 / 54.0,
+                    4826.1563287908967,
+                }};
 
                 /* Charm Sector */
                 std::array<double, 15> initial_charm_qcd_0
@@ -115,11 +111,11 @@ class WilsonCoefficientsTest :
                 WilsonCoefficients<BToS> downscaled_charm = evolve(initial_charm_qcd_0,
                         initial_charm_qcd_1,
                         initial_charm_qcd_2,
-                        alpha_s_0, alpha_s, params);
+                        alpha_s_0, alpha_s, nf, beta);
                 WilsonCoefficients<BToS> downscaled_top = evolve(initial_top_qcd_0,
                         initial_top_qcd_1,
                         initial_top_qcd_2,
-                        alpha_s_0, alpha_s, params);
+                        alpha_s_0, alpha_s, nf, beta);
 
                 WilsonCoefficients<BToS> wc = downscaled_top;
                 wc._coefficients = wc._coefficients + (-1.0) * downscaled_charm._coefficients;
