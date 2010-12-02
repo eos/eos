@@ -3,7 +3,7 @@ MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
-noinst_LTLIBRARIES = libeosrarebdecays.la
+lib_LTLIBRARIES = libeosrarebdecays.la
 libeosrarebdecays_la_SOURCES = \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	charm-loops.cc charm-loops.hh \
