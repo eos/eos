@@ -87,6 +87,7 @@ dnl {{{ output
 AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(
 	Makefile
+	doc/Makefile
 	src/Makefile
 	src/clients/Makefile
 	src/rare-b-decays/Makefile
