@@ -5,13 +5,16 @@
 
 namespace eos
 {
+    /*!
+     * Helper class to bundle top-loop functions in the SM which are relevant to @f$b\to s@f$ transitions.
+     */
     struct TopLoops
     {
-        /* One-Loop Functions
+        ///@{
+        /*!
+         * One-loop functions in the MSbar scheme at the renormalization scale @f$\mu_t@f$.
          *
-         * MSbar scheme
-         *
-         * x_t: m_t(mu_t)^2 / m_W^2
+         * @param x_t        @f$= m_t(\mu_t)^2 / m_W^2@f$
          */
         static double A0(const double & x_t);
 
@@ -24,14 +27,14 @@ namespace eos
         static double E0(const double & x_t);
 
         static double F0(const double & x_t);
+        ///@}
 
-        /*
-         * Two-Loop Functions
+        ///@{
+        /*!
+         * Two-loop functions in the MSbar scheme at the renormalization scale @f$\mu_t@f$.
          *
-         * MSbar scheme
-         *
-         * x_t:   m_t(mu_t)^2 / m_W^2
-         * log_t: ln(mu_t / m_t(mu_t))
+         * @param x_t        @f$= m_t(\mu_t)^2 / m_W^2@f$
+         * @param log_t      @f$= \ln(\mu_t / m_t(\mu_t))@f$
          */
         static double A1(const double & x_t, const double & log_t);
 
@@ -46,6 +49,7 @@ namespace eos
         static double F1(const double & x_t, const double & log_t);
 
         static double G1(const double & x_t, const double & log_t);
+        ///@}
     };
 }
 
