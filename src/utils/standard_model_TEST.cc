@@ -64,7 +64,7 @@ class AlphaSTest :
 
             StandardModel model(reference_parameters());
 
-            // Calculation of alpha_s is not self-confistent:
+            // Calculation of alpha_s is not self-consistent:
             //   alpha_s(mu) != alpha_s_0
             // So check for relative error
             TEST_CHECK_NEARLY_EQUAL(0.117620, model.alpha_s(91.1876), 5e-5);
@@ -80,6 +80,11 @@ class AlphaSTest :
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s( 4.45), 0.219518, eps);
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s( 4.2 ), 0.223342, eps);
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s( 2.4 ), 0.277227, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.alpha_s( 1.2 ), 0.405724, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.alpha_s( 1.0 ), 0.490620, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.alpha_s( 0.7 ), 0.883896, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.alpha_s( 0.6 ), 1.524938, eps);
+            TEST_CHECK_NEARLY_EQUAL(model.alpha_s( 0.5 ), 5.709652, eps);
         }
 } sm_alpha_s_test;
 

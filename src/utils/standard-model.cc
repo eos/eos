@@ -25,6 +25,7 @@ namespace eos
         Parameter mu_t;
         Parameter mu_b;
         Parameter mu_c;
+        Parameter lambda_qcd;
 
         /* Masses */
         Parameter m_b_MSbar;
@@ -44,6 +45,7 @@ namespace eos
             mu_t(p["QCD::mu_t"]),
             mu_b(p["QCD::mu_b"]),
             mu_c(p["QCD::mu_c"]),
+            lambda_qcd(p["QCD::Lambda"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c_MSbar(p["mass::c"]),
             m_Z(p["mass::Z"]),
@@ -58,6 +60,9 @@ namespace eos
         // 4 flavor QCD
         static const QCD::BetaFunction qcd_nf4_beta_function;
         static const QCD::AnomalousMassDimension qcd_nf4_gamma_m;
+
+        // 3 flavor QCD
+        static const QCD::BetaFunction qcd_nf3_beta_function;
     };
 
     /* 5 flavor QCD constants */
@@ -100,6 +105,17 @@ namespace eos
         6989.5510103599477,
     }};
 
+    /* 3 flavor QCD constants */
+
+    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 3
+    const QCD::BetaFunction Implementation<StandardModel>::qcd_nf3_beta_function
+    {{
+        9.0,
+        64.0,
+        3863.0 / 6.0,
+        12090.378130803711,
+    }};
+
     StandardModel::StandardModel(const Parameters & p) :
         PrivateImplementationPattern<StandardModel>(new Implementation<StandardModel>(p))
     {
@@ -132,7 +148,13 @@ namespace eos
         if (mu >= _imp->mu_c)
             return QCD::alpha_s(mu, alpha_s_0, mu_0, Implementation<StandardModel>::qcd_nf4_beta_function);
 
-        throw InternalError("StandardModel::alpha_s: Running of alpha_s to mu < mu_c not yet implemented");
+        alpha_s_0 = QCD::alpha_s(_imp->mu_c, alpha_s_0, mu_0, Implementation<StandardModel>::qcd_nf4_beta_function);
+        mu_0 = _imp->mu_c;
+
+        if (mu >= _imp->lambda_qcd)
+            return QCD::alpha_s(mu, alpha_s_0, mu_0, Implementation<StandardModel>::qcd_nf3_beta_function);
+
+        throw InternalError("StandardModel::alpha_s: Cannot run alpha_s to mu < lambda_qcd");
     }
 
     double

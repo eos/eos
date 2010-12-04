@@ -119,6 +119,7 @@ namespace eos
             ParameterTemplate{"QCD::mu_t",                                     +170.0,      +170.0,      +170.0     },
             ParameterTemplate{"QCD::mu_b",                                     +4.2,        +4.2,        +4.2       },
             ParameterTemplate{"QCD::mu_c",                                     +1.0,        +1.0,        +1.0       },
+            ParameterTemplate{"QCD::Lambda",                                   +0.5,        +0.5,        +0.5       },
             // Masses in GeV
             ParameterTemplate{"mass::b(MSbar)",                                +4.13,       +4.20,       +4.37      }, // cf. [PDG2008], p. 21
             ParameterTemplate{"mass::c",                                       +1.16,       +1.27,       +1.34      }, // cf. [PDG2008], p. 21
