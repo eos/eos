@@ -77,6 +77,17 @@ namespace eos
         }
     }
 
+    std::string
+    ObservableOptions::get(const std::string & key, const std::string & default_value) const
+    {
+        auto i(_imp->options.find(key));
+
+        if (_imp->options.end() == i)
+            return default_value;
+
+        return i->second;
+    }
+
     ObservableFactory::ObservableFactory()
     {
     }
