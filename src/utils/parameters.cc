@@ -125,8 +125,11 @@ namespace eos
             ParameterTemplate{"mass::c",                                       +1.16,       +1.27,       +1.34      }, // cf. [PDG2008], p. 21
             ParameterTemplate{"mass::s",                                       +0.00,       +0.00,       +0.00      }, // we neglect m_s throughout, cf. [BHvD2010], Table 1
             ParameterTemplate{"mass::t",                                       +169.1,      +171.2,      +173.3     }, // cf. [PDG2008], p. 21
+            ParameterTemplate{"mass::e",                                       +5.10999e-4, +5.10999e-4, +5.10999e-4}, // cf. [PDG2008], p. 13
+            ParameterTemplate{"mass::mu",                                      +1.05658e-1, +1.05658e-1, +1.05658e-1}, // cf. [PDG2008], p. 13
             ParameterTemplate{"mass::tau",                                     +1.77667,    +1.77684,    +1.77701   }, // cf. [PDG2008], p. 14
             ParameterTemplate{"mass::B0",                                      +5.27920,    +5.27953,    +5.27986   }, // cf. [PDG2008], p. 79
+            ParameterTemplate{"mass::K0",                                      +0.49759,    +0.49761,    +0.49764   }, // cf. [PDG2008], p. 41
             ParameterTemplate{"mass::K^*0",                                    +0.89575,    +0.896,      +0.89625   }, // cf. [PDG2008], p. 44
             ParameterTemplate{"mass::W",                                       +80.373,     +80.398,     +80.423    }, // cf. [PDG2008], p. 8
             ParameterTemplate{"mass::Z",                                       +91.1855,    +91.1876,    +91.1897   }, // cf. [PDG2008], p. 9
