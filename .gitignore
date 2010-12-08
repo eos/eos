@@ -19,3 +19,6 @@ stamp-h1
 *.[oa]
 *.l[oa]
 *.so
+
+# Tests
+*_TEST
