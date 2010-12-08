@@ -4,7 +4,6 @@
 #include <src/rare-b-decays/charm-loops.hh>
 
 #include <cmath>
-#include <iostream>
 
 using namespace test;
 using namespace eos;
@@ -84,6 +83,99 @@ class HelperTest :
             }
         }
 } helper_test;
+
+class SeidelFunctionTest :
+    public TestCase
+{
+    public:
+        SeidelFunctionTest() :
+            TestCase("seidel_function_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Comparison with Mathematica results */
+            {
+                static const double eps = 1e-7;
+                static const double mu = 4.2;
+                static const double m_b = 4.6;
+
+                // CharmLoops::A
+                TEST_CHECK_NEARLY_EQUAL(0.9773295847097823, real(CharmLoops::A(mu, 0.1 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.9214363985136449, real(CharmLoops::A(mu, 0.2 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8763703269301939, real(CharmLoops::A(mu, 0.3 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8378238727298053, real(CharmLoops::A(mu, 0.4 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8038113953761623, real(CharmLoops::A(mu, 0.5 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.7731991760882022, real(CharmLoops::A(mu, 0.6 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.7452609937428958, real(CharmLoops::A(mu, 0.7 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.7194961842495493, real(CharmLoops::A(mu, 0.8 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.6955413360449034, real(CharmLoops::A(mu, 0.9 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.6731223501151583, real(CharmLoops::A(mu, 1.0 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.6520262388101052, real(CharmLoops::A(mu, 1.1 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.6320834983833805, real(CharmLoops::A(mu, 1.2 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.6131565526952305, real(CharmLoops::A(mu, 1.3 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.595131879233407,  real(CharmLoops::A(mu, 1.4 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.5779144700352841, real(CharmLoops::A(mu, 1.5 * m_b * m_b, m_b)), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(0.6146283866916408, imag(CharmLoops::A(mu, 0.1 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.6636082140569280, imag(CharmLoops::A(mu, 0.2 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.6989293588461240, imag(CharmLoops::A(mu, 0.3 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.7267965974570413, imag(CharmLoops::A(mu, 0.4 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.7498451601160822, imag(CharmLoops::A(mu, 0.5 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.7694868420677202, imag(CharmLoops::A(mu, 0.6 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.7865792246366115, imag(CharmLoops::A(mu, 0.7 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8016869872542616, imag(CharmLoops::A(mu, 0.8 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8152036571681478, imag(CharmLoops::A(mu, 0.9 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8274153490936081, imag(CharmLoops::A(mu, 1.0 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8385370486103412, imag(CharmLoops::A(mu, 1.1 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8487346187930029, imag(CharmLoops::A(mu, 1.2 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8581388308167810, imag(CharmLoops::A(mu, 1.3 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8668546781765816, imag(CharmLoops::A(mu, 1.4 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.8749677701646030, imag(CharmLoops::A(mu, 1.5 * m_b * m_b, m_b)), eps);
+            }
+
+            {
+                static const double eps = 1e-7;
+                static const double mu = 4.2;
+                static const double m_b = 4.6;
+
+                // CharmLoops::B
+                TEST_CHECK_NEARLY_EQUAL( 1.7748361098250610, real(CharmLoops::B(mu, 0.1 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.6608414616625271, real(CharmLoops::B(mu, 0.2 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0549070842163954, real(CharmLoops::B(mu, 0.3 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.3492674916475516, real(CharmLoops::B(mu, 0.4 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.6458935344204433, real(CharmLoops::B(mu, 0.5 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.8762212415129942, real(CharmLoops::B(mu, 0.6 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.0618989188198120, real(CharmLoops::B(mu, 0.7 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.2156477427678207, real(CharmLoops::B(mu, 0.8 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.3455497477643420, real(CharmLoops::B(mu, 0.9 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.4570427884607030, real(CharmLoops::B(mu, 1.0 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.5539504651990608, real(CharmLoops::B(mu, 1.1 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.6390570203043875, real(CharmLoops::B(mu, 1.2 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.7144484220915650, real(CharmLoops::B(mu, 1.3 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.7817249058911009, real(CharmLoops::B(mu, 1.4 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.8421388765446847, real(CharmLoops::B(mu, 1.5 * m_b * m_b, m_b)), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(5.553840794326391, imag(CharmLoops::B(mu, 0.1 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(4.820249145955325, imag(CharmLoops::B(mu, 0.2 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(4.360108135584585, imag(CharmLoops::B(mu, 0.3 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(4.017944023522331, imag(CharmLoops::B(mu, 0.4 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.743067928416354, imag(CharmLoops::B(mu, 0.5 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.512167767255114, imag(CharmLoops::B(mu, 0.6 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.312463519105912, imag(CharmLoops::B(mu, 0.7 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.136141749913582, imag(CharmLoops::B(mu, 0.8 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.978054117771269, imag(CharmLoops::B(mu, 0.9 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.834617374526911, imag(CharmLoops::B(mu, 1.0 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.703230935969235, imag(CharmLoops::B(mu, 1.1 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.581943911053763, imag(CharmLoops::B(mu, 1.2 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.469253015913550, imag(CharmLoops::B(mu, 1.3 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.363973892039418, imag(CharmLoops::B(mu, 1.4 * m_b * m_b, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.265155869018138, imag(CharmLoops::B(mu, 1.5 * m_b * m_b, m_b)), eps);
+            }
+        }
+} seidel_function_test;
+
 
 class FormFactorsTest :
     public TestCase

@@ -4,6 +4,7 @@
 
 #include <src/rare-b-decays/charm-loops.hh>
 #include <src/utils/exception.hh>
+#include <src/utils/power_of.hh>
 
 #include <cmath>
 #include <complex>
@@ -58,70 +59,121 @@ namespace eos
     complex<double>
     CharmLoops::A(const double & mu, const double & s, const double & m_b)
     {
-            double s_hat = s / m_b / m_b, s_hat2 = s_hat * s_hat, denom = 1 - s_hat;
-            double ln = log(s_hat), ln2 = ln * ln, li_2 = gsl_sf_dilog(s_hat);
-            double z = 4.0 / s_hat, sqrt1z = sqrt(z - 1.0);
+        /* cf. [S2004], Eq. (29), p. 8
+         * We have three different cases for the evaluation of the formula depending on s_hat.
+         * 1. s_hat < 1: We can use the formula without modification
+         * 2. s_hat > 1: 1 - s_hat is negative. We have to take care, because in this regime
+         *    the logarithm and the dilogarithm have a branch cut. The real part ist continuous.
+         *    And for small epsilon > 0 is Im(dilog(s +- i*epsilon)) = +-pi*ln(s) and
+         *    Im(log(1 - s -+ i*epsilon)) = -+pi. So regardless of the epsilon chosen the final result
+         *    does not change. If we use compatible definitions for the branch cuts (as in clib and gsl),
+         *    we don't need to specify epsilon.
+         * 3. s_hat = 1: The fomula cannot be used since denom = 0, but the limit exists.
+         */
 
-            double a = -104.0 / 243.0 * 2.0 * log(m_b / mu);
-            double b = +4.0 * s_hat / 27.0 / denom * (li_2 + ln * log(1.0 - s_hat));
-            complex<double> c = +1.0 / 729.0 / pow(denom, 2) * complex<double>(
-                    6.0 * s_hat * (29.0 - 47.0 * s_hat) * ln + 785.0 - 1600.0 * s_hat + 833.0 * s_hat2,
-                    6.0 * M_PI * (20.0 - 49.0 * s_hat + 47.0 * s_hat2));
-            complex<double> d = -2.0 / 243.0 / pow(denom, 3) * complex<double>(
-                    2.0 * sqrt1z * (-4.0 + 9.0 * s_hat - 15.0 * s_hat2 + 4.0 * s_hat * s_hat2) * (M_PI / 2.0 - atan(sqrt1z))
-                    + 9.0 * s_hat * s_hat2 * ln2,
-                    18.0 * M_PI * s_hat * (1.0 - 2.0 * s_hat) * ln);
-            double e = +2.0 * s_hat / 243.0 / pow(denom, 4) * (36.0 * pow(M_PI / 2.0 - atan(sqrt1z), 2) +
-                    M_PI * M_PI * (-4.0 + 9.0 * s_hat - 9.0 * s_hat2 + 3.0 * s_hat * s_hat2));
+        double s_hat = s / m_b / m_b, s_hat2 = s_hat * s_hat, denom = 1 - s_hat;
+        double ln = log(s_hat), ln2 = ln * ln;
 
-            // cf. [S2004], Eq. (29), p. 8
-            complex<double> result = a + b + c + d + e;
+        double z = 4.0 / s_hat, sqrt1z = sqrt(z - 1.0);
 
-            return result;
+        if (std::abs(s - m_b * m_b) < 1e-5)
+        {
+            return -104.0 / 243.0 * 2.0 * log(m_b / mu) + (997.0 + 6.0 * M_PI * complex<double>(3.0 * std::sqrt(3.0), 64.0)) / 1458.0;
+        }
+
+        double a = -104.0 / 243.0 * 2.0 * log(m_b / mu);
+
+        complex<double> ln1s = std::log(std::complex<double> (1.0 - s_hat, 0.0));
+
+        // the dilogarithm function expects the radius and angle of z, but returns the real and imaginary part
+        gsl_sf_result li_2s_real, li_2s_imag;
+        gsl_sf_complex_dilog_e(s_hat, 0, &li_2s_real, &li_2s_imag);
+        complex<double> li_2s(li_2s_real.val, li_2s_imag.val);
+
+        complex<double> b = +4.0 * s_hat / 27.0 / denom * (li_2s + ln * ln1s);
+
+        complex<double> c = +1.0 / 729.0 / power_of<2>(denom) * complex<double>(
+                6.0 * s_hat * (29.0 - 47.0 * s_hat) * ln + 785.0 - 1600.0 * s_hat + 833.0 * s_hat2,
+                6.0 * M_PI * (20.0 - 49.0 * s_hat + 47.0 * s_hat2));
+
+        // identity: arccot(x) = pi / 2 - arctan(x)
+        complex<double> d = -2.0 / 243.0 / power_of<3>(denom) * complex<double>(
+                2.0 * sqrt1z * (-4.0 + 9.0 * s_hat - 15.0 * s_hat2 + 4.0 * s_hat * s_hat2) * (M_PI / 2.0 - atan(sqrt1z))
+                + 9.0 * s_hat * s_hat2 * ln2,
+                18.0 * M_PI * s_hat * (1.0 - 2.0 * s_hat) * ln);
+
+        double e = +2.0 * s_hat / 243.0 / power_of<4>(denom) * (36.0 * power_of<2>(M_PI / 2.0 - atan(sqrt1z)) +
+                M_PI * M_PI * (-4.0 + 9.0 * s_hat - 9.0 * s_hat2 + 3.0 * s_hat * s_hat2));
+
+        return a + b + c + d + e;
     }
 
     complex<double>
     CharmLoops::B(const double & mu, const double & s, const double & m_b)
     {
-            double s_hat = s / m_b / m_b, s_hat2 = s_hat * s_hat, denom = 1 - s_hat;
-            double ln = log(s_hat), ln2 = ln * ln, li_2 = gsl_sf_dilog(s_hat);
-            double z = 4.0 / s_hat, sqrt1z = sqrt(z - 1.0);
-            double lnmu = 2.0 * log(m_b / mu);
+        // cf. [S2004], Eq. (30), p. 8
+        // See remarks in CharmLoops::A
+        double s_hat = s / m_b / m_b, s_hat2 = s_hat * s_hat, denom = 1 - s_hat;
+        double ln = log(s_hat), ln2 = ln * ln;
+        double z = 4.0 / s_hat, sqrt1z = sqrt(z - 1.0);
+        double lnmu = 2.0 * log(m_b / mu);
 
-            complex<double> x1(0.5, 0.5 * sqrt1z), x2(0.5, -0.5 * sqrt1z), x3(0.5, 0.5 / sqrt1z), x4(0.5, -0.5 / sqrt1z);
-            gsl_sf_result rp, ip;
-            gsl_sf_complex_dilog_e(1.0, arg(-x2 / x1), &rp, &ip);
-            complex<double> dilog(rp.val, ip.val);
-            complex<double> lx1 = log(x1), lx2 = log(x2), lx3 = log(x3), lx4 = log(x4);
+        complex<double> x1(0.5, 0.5 * sqrt1z), x2(0.5, -0.5 * sqrt1z), x3(0.5, 0.5 / sqrt1z), x4(0.5, -0.5 / sqrt1z);
+        complex<double> lx1 = log(x1), lx2 = log(x2), lx3 = log(x3), lx4 = log(x4);
 
+        complex<double> a = 8.0 / 243.0 / s_hat * (complex<double>(4.0 - 34.0 * s_hat, -17.0 * M_PI * s_hat) * lnmu
+                + 8.0 * s_hat * lnmu * lnmu + 17.0 * s_hat * ln * lnmu);
 
-            complex<double> a = 8.0 / 243.0 / s_hat * (complex<double>(4.0 - 34.0 * s_hat, -17.0 * M_PI * s_hat) * lnmu
-                    + 8.0 * s_hat * lnmu * lnmu + 17.0 * s_hat * ln * lnmu);
-            complex<double> b = (2.0 + s_hat) * sqrt1z / 729.0 / s_hat * (
-                        -48.0 * lnmu * (M_PI / 2.0 - atan(sqrt1z)) - 18.0 * M_PI * 2.0 * log(sqrt1z) -12.0 * M_PI * (2.0 * lx1 + lx3 + lx4)
-                        + complex<double>(0.0, 1.0) * (
-                            3.0 * 4.0 * pow(log(sqrt1z), 2.0) - 5.0 * M_PI * M_PI - 24.0 * dilog
-                            +6.0 * (-9.0 * pow(lx1, 2.0) + pow(lx2, 2.0) - 2.0 * pow(lx4, 2.0) + 6.0 * lx1 * lx2
-                            -4.0 * lx1 * lx3 + 8.0 * lx1 * lx4))
-                        );
-            complex<double> c = -2.0 / 243.0 / s_hat / denom * (
-                    4.0 * s_hat * (-8.0 + 17.0 * s_hat) * (li_2 + ln * log(1.0 - s_hat))
-                    + 3.0 * (2.0 + s_hat) * (3.0 - s_hat) * pow(lx2 - lx1, 2.0)
-                    + 12.0 * M_PI * (-6.0 - s_hat + s_hat2) * (M_PI / 2.0 - atan(sqrt1z)));
-            complex<double> d = 2.0 / (2187.0 * s_hat * pow(denom, 2.0)) * complex<double>(
-                    -18.0 * s_hat * (120.0 - 211.0 * s_hat + 73.0 * s_hat2) * ln
-                    -288.0 - 8.0 * s_hat + 934.0 * s_hat2 - 692.0 * s_hat * s_hat2,
-                    18.0 * M_PI * s_hat * (82.0 - 173.0 * s_hat + 73.0 * s_hat2));
-            complex<double> e = -4.0 / (243.0 * s_hat * pow(denom, 3.0)) * std::complex<double>(
-                    -2.0 * sqrt1z * (4.0 - 3.0 * s_hat - 18.0 * s_hat2 + 16.0 * s_hat * s_hat2 - 5.0 * s_hat2 * s_hat2) * (M_PI / 2 - atan(sqrt1z))
-                    -9.0 * s_hat * s_hat2 * ln2,
-                    2.0 * M_PI * s_hat * (8.0 - 33.0 * s_hat + 51.0 * s_hat2 - 17.0 * s_hat * s_hat2) * ln);
-            complex<double> f = 2.0 / (729.0 * s_hat * pow(denom, 4.0)) * (72.0 * (3.0 - 8.0 * s_hat + 2.0 * s_hat2)
-                    * pow(M_PI / 2.0 - atan(sqrt1z), 2.0)
-                    - M_PI * M_PI * (54.0 - 53.0 * s_hat - 286.0 * s_hat2 + 612.0 * s_hat * s_hat2 - 446 * s_hat2 * s_hat2 + 113.0 * s_hat2 * s_hat2 * s_hat));
+        if (std::abs(s - m_b * m_b) < 1e-5)
+        {
+            /* exact expression for limit s -> 1
+             * 1 / 2187 * (287 - 6 * (-366 * i + sqrt(3)) * pi + (-342 + 8 * i * sqrt(3)) * pi^2 +
+             * + (9 - 3 * i * sqrt(3)) * Digamma(1/6) + (9 + 3 * i * sqrt(3)) * Digamma(1/3) +
+             * + 3 * i * (3 * i + sqrt(3)) * PolyGamma(2/3) + (-9 - 3 * i * sqrt(3)) * Digamma(5/6))
+             * + O(lmmu)
+             * but we use the numerical value
+             */
+            return std::complex<double>(-1.253470563, 3.154521018) + a - 16.0 / 243.0 * (2.0 + s_hat) * sqrt1z * lnmu * (M_PI / 2.0 - atan(sqrt1z));
+        }
 
-            // cf. [S2004], Eq. (30), p. 8
-            return a + b + c + d + e + f;
+        // calculate Li_2(-x_2 / x_1)
+        gsl_sf_result li_2x2x1_real, li_2x2x1_imag;
+        gsl_sf_complex_dilog_e(1.0, arg(-x2 / x1), &li_2x2x1_real, &li_2x2x1_imag);
+        complex<double> li_2x2x1(li_2x2x1_real.val, li_2x2x1_imag.val);
+
+        complex<double> ln1s = std::log(std::complex<double> (1.0 - s_hat, 0.0));
+
+        gsl_sf_result li_2s_real, li_2s_imag;
+        gsl_sf_complex_dilog_e(s_hat, 0, &li_2s_real, &li_2s_imag);
+        complex<double> li_2s(li_2s_real.val, li_2s_imag.val);
+
+        complex<double> b = (2.0 + s_hat) * sqrt1z / 729.0 / s_hat * (
+                    -48.0 * lnmu * (M_PI / 2.0 - atan(sqrt1z)) - 18.0 * M_PI * 2.0 * log(sqrt1z) - 12.0 * M_PI * (2.0 * lx1 + lx3 + lx4)
+                    + complex<double>(0.0, 1.0) * (
+                        3.0 * power_of<2>(log(z - 1.0)) - 24.0 * li_2x2x1 - 5.0 * M_PI * M_PI
+                        + 6.0 * (-9.0 * power_of<2>(lx1) + power_of<2>(lx2) - 2.0 * power_of<2>(lx4) + 6.0 * lx1 * lx2
+                        - 4.0 * lx1 * lx3 + 8.0 * lx1 * lx4)));
+
+        complex<double> c = -2.0 / 243.0 / s_hat / denom * (
+                4.0 * s_hat * (-8.0 + 17.0 * s_hat) * (li_2s + ln * ln1s)
+                + 3.0 * (2.0 + s_hat) * (3.0 - s_hat) * power_of<2>(lx2 - lx1)
+                + 12.0 * M_PI * (-6.0 - s_hat + s_hat2) * (M_PI / 2.0 - atan(sqrt1z)));
+
+        complex<double> d = 2.0 / (2187.0 * s_hat * power_of<2>(denom)) * complex<double>(
+                -18.0 * s_hat * (120.0 - 211.0 * s_hat + 73.0 * s_hat2) * ln
+                -288.0 - 8.0 * s_hat + 934.0 * s_hat2 - 692.0 * s_hat * s_hat2,
+                18.0 * M_PI * s_hat * (82.0 - 173.0 * s_hat + 73.0 * s_hat2));
+
+        complex<double> e = -4.0 / (243.0 * s_hat * power_of<3>(denom)) * std::complex<double>(
+                -2.0 * sqrt1z * (4.0 - 3.0 * s_hat - 18.0 * s_hat2 + 16.0 * s_hat * s_hat2 - 5.0 * s_hat2 * s_hat2) * (M_PI / 2 - atan(sqrt1z))
+                -9.0 * s_hat * s_hat2 * ln2,
+                2.0 * M_PI * s_hat * (8.0 - 33.0 * s_hat + 51.0 * s_hat2 - 17.0 * s_hat * s_hat2) * ln);
+
+        complex<double> f = 2.0 / (729.0 * s_hat * power_of<4>(denom)) * (72.0 * (3.0 - 8.0 * s_hat + 2.0 * s_hat2)
+                * power_of<2>(M_PI / 2.0 - atan(sqrt1z))
+                - M_PI * M_PI * (54.0 - 53.0 * s_hat - 286.0 * s_hat2 + 612.0 * s_hat * s_hat2 - 446 * s_hat2 * s_hat2 + 113.0 * s_hat2 * s_hat2 * s_hat));
+
+        return a + b + c + d + e + f;
     }
 
     complex<double>
