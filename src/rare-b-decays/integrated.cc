@@ -196,6 +196,11 @@ main(int argc, char * argv[])
         std::cerr << "STL Exception; " << e.what() << std::endl;
         return EXIT_FAILURE;
     }
+    catch (std::string & e)
+    {
+        std::cerr << "String Exception: " << e << std::endl;
+        return EXIT_FAILURE;
+    }
     catch (...)
     {
         return EXIT_FAILURE;
