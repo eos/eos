@@ -114,6 +114,11 @@ namespace eos
                 return _parameters;
             };
 
+            virtual ObservableOptions options()
+            {
+                return _options;
+            }
+
             virtual ObservablePtr clone() const
             {
                 return ObservablePtr(new ConcreteObservable(_name, _parameters.clone(), _options, _function, _kinematics_names));

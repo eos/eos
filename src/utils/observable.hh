@@ -31,6 +31,8 @@ namespace eos
 {
     class Observable;
 
+    class ObservableOptions;
+
     typedef std::tr1::shared_ptr<Observable> ObservablePtr;
 
     class Observable
@@ -45,6 +47,8 @@ namespace eos
             virtual double evaluate(const Kinematics &) const = 0;
 
             virtual Parameters parameters() = 0;
+
+            virtual ObservableOptions options() = 0;
 
             virtual ObservablePtr clone() const = 0;
     };

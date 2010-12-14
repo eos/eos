@@ -60,6 +60,7 @@ struct WilsonPolynomialTestObservable :
 
     virtual const std::string & name() const { return n; }
     virtual Parameters parameters() { return p; }
+    virtual ObservableOptions options() { return ObservableOptions(); }
     virtual ObservablePtr clone() const { return ObservablePtr(new WilsonPolynomialTestObservable(p.clone(), ObservableOptions())); }
 
     virtual double evaluate(const Kinematics &) const
