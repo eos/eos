@@ -206,7 +206,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
 {
     public:
         BToKstarDileptonLowRecoilPolynomialTest() :
-            TestCase("b_to_kstar_dilepton_large_recoil_polynomial_test")
+            TestCase("b_to_kstar_dilepton_low_recoil_polynomial_test")
         {
         }
 
