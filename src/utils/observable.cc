@@ -88,6 +88,27 @@ namespace eos
         return i->second;
     }
 
+    std::string
+    ObservableOptions::as_string() const
+    {
+        std::string result;
+
+        auto i(_imp->options.cbegin()), i_end(_imp->options.cend());
+
+        if (i != i_end)
+        {
+            result += i->first + '=' + i->second;
+            ++i;
+        }
+
+        for ( ; i != i_end ; ++i)
+        {
+            result += ',' + i->first + '=' + i->second;
+        }
+
+        return result;
+    }
+
     ObservableFactory::ObservableFactory()
     {
     }

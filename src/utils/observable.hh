@@ -72,6 +72,8 @@ namespace eos
             void set(const std::string & key, const std::string & value = "");
 
             std::string get(const std::string & key, const std::string & default_value = "") const;
+
+            std::string as_string() const;
     };
 
     class ObservableFactory
