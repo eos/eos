@@ -290,6 +290,18 @@ namespace eos
                     &BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_mix,
                     std::make_tuple("s")),
 
+            make_observable("B->K^*ll::a_CP^1@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_1,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::a_CP^2@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_2,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::a_CP^3@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_3,
+                    std::make_tuple("s_min", "s_max")),
+
             /* Inclusive Decays */
 
             // B->X_s ll, HLMW2005

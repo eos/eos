@@ -119,6 +119,9 @@ namespace eos
             double integrated_h_2_naive(const double & s_min, const double & s_max) const;
             double integrated_h_3(const double & s_min, const double & s_max) const;
             double integrated_h_3_naive(const double & s_min, const double & s_max) const;
+            double integrated_cp_asymmetry_1(const double & s_min, const double & s_max) const;
+            double integrated_cp_asymmetry_2(const double & s_min, const double & s_max) const;
+            double integrated_cp_asymmetry_3(const double & s_min, const double & s_max) const;
     };
 }
 

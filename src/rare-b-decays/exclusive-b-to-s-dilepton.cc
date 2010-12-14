@@ -1309,12 +1309,12 @@ namespace eos
 
         double u_5(const double & s) const
         {
-            return real(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+            return (real(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s)));
         }
 
         double u_6(const double & s) const
         {
-            return real(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s));
+            return (real(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s)));
         }
 
         double u_7(const double & s) const
@@ -1324,12 +1324,12 @@ namespace eos
 
         double u_8(const double & s) const
         {
-            return imag(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
+            return (imag(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s)));
         }
 
         double u_9(const double & s) const
         {
-            return imag(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s));
+            return (imag(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s)));
         }
 
         // Components of observables
@@ -1757,5 +1757,52 @@ namespace eos
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_3, this, std::placeholders::_1);
 
         return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_1(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        std::function<double (const double &)> integrand = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
+
+        double gamma = integrate(integrand, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double gamma_bar = integrate(integrand, 64, s_min, s_max);
+
+        return (gamma - gamma_bar) / (gamma + gamma_bar);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_2(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_fb_numerator, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
+
+        double a_fb = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double a_fb_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+
+        // Note that in the code A_FB does not flip its sign under CP. Therefore a_fb_bar -> -a_fb_bar here.
+        return (a_fb - a_fb_bar) / (a_fb + a_fb_bar);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_3(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        std::function<double (const double &)> u_1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_1, _imp, std::placeholders::_1);
+        std::function<double (const double &)> u_2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_2, _imp, std::placeholders::_1);
+        std::function<double (const double &)> u_5 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_5, _imp, std::placeholders::_1);
+
+        double iu_1 = integrate(u_1, 16, s_min, s_max), iu_2 = integrate(u_2, 16, s_min, s_max), iu_5 = integrate(u_5, 16, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double iu_1_bar = integrate(u_1, 16, s_min, s_max), iu_2_bar = integrate(u_2, 16, s_min, s_max), iu_5_bar = integrate(u_5, 16, s_min, s_max);
+
+        // Note that in the code U_5 does not flip its sign under CP. Therefore iu_5_bar -> -iu_5_bar here.
+        return (iu_5 - iu_5_bar) / std::sqrt((iu_1 + iu_1_bar) * (iu_2 + iu_2_bar));
     }
 }
