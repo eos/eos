@@ -3,6 +3,7 @@
 #include <src/rare-b-decays/factory.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-gamma.hh>
+#include <src/rare-b-decays/form-factors-impl.hh>
 #include <src/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <src/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <src/utils/concrete_observable.hh>
@@ -37,6 +38,66 @@ namespace eos
         static const std::map<std::string, ObservableFactory *> simple_observables
         {
             /* Exclusive Decays */
+
+            // B -> K, cf. [BZ2004v2]
+            make_observable("B->K::f_+(s)@BZ2004v2",
+                    &BZ2004FormFactors<BToK, PToP>::f_p,
+                    std::make_tuple("s")),
+
+            make_observable("B->K::f_T(s)@BZ2004v2",
+                    &BZ2004FormFactors<BToK, PToP>::f_t,
+                    std::make_tuple("s")),
+
+            make_observable("B->K::f_0(s)@BZ2004v2",
+                    &BZ2004FormFactors<BToK, PToP>::f_0,
+                    std::make_tuple("s")),
+
+            // B -> K, cf. [KMPW2010]
+            make_observable("B->K::f_+(s)@KMPW2010",
+                    &KMPW2010FormFactors<BToK>::f_p,
+                    std::make_tuple("s")),
+
+            make_observable("B->K::f_T(s)@KMPW2010",
+                    &KMPW2010FormFactors<BToK>::f_t,
+                    std::make_tuple("s")),
+
+            make_observable("B->K::f_0(s)@KMPW2010",
+                    &KMPW2010FormFactors<BToK>::f_0,
+                    std::make_tuple("s")),
+
+            // B -> K^*, cf. [BZ2004]
+            make_observable("B->K^*::V(s)@BZ2004",
+                    &BZ2004FormFactors<BToKstar, PToV>::v,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*::A_0(s)@BZ2004",
+                    &BZ2004FormFactors<BToKstar, PToV>::a_0,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*::A_1(s)@BZ2004",
+                    &BZ2004FormFactors<BToKstar, PToV>::a_1,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*::A_2(s)@BZ2004",
+                    &BZ2004FormFactors<BToKstar, PToV>::a_2,
+                    std::make_tuple("s")),
+
+            // B_s -> phi, cf. [BZ2004]
+            make_observable("B_s->phi::V(s)@BZ2004",
+                    &BZ2004FormFactors<BToKstar, PToV>::v,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->phi::A_0(s)@BZ2004",
+                    &BZ2004FormFactors<BToKstar, PToV>::a_0,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->phi::A_1(s)@BZ2004",
+                    &BZ2004FormFactors<BToKstar, PToV>::a_1,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->phi::A_2(s)@BZ2004",
+                    &BZ2004FormFactors<BToKstar, PToV>::a_2,
+                    std::make_tuple("s")),
 
             // B -> K^* gamma
             make_observable("B->K^*gamma::S_K^*gamma",
