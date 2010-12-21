@@ -1421,19 +1421,19 @@ namespace eos
     complex<double>
     BToKstarDilepton<LowRecoil>::a_long(const Helicity & h, const double & s) const
     {
-        return _imp->norm(s) * _imp->a_long(h, s);
+        return _imp->a_long(h, s);
     }
 
     complex<double>
     BToKstarDilepton<LowRecoil>::a_perp(const Helicity & h, const double & s) const
     {
-        return _imp->norm(s) * _imp->a_perp(h, s);
+        return _imp->a_perp(h, s);
     }
 
     complex<double>
     BToKstarDilepton<LowRecoil>::a_par(const Helicity & h, const double & s) const
     {
-        return _imp->norm(s) * _imp->a_par(h, s);
+        return _imp->a_par(h, s);
     }
 
     double
