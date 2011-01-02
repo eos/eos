@@ -120,6 +120,13 @@ namespace eos
             return this->lower < other.lower;
         }
     };
+
+    /*!
+     * Compute the estimated cummultative distribution function for a given 1D distribution.
+     *
+     * @param distribution   The histogram of a distribution function.
+     */
+    Histogram<1> estimate_cummultative_distribution(const Histogram<1> & distribution);
 }
 
 #endif
