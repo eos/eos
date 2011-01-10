@@ -66,5 +66,9 @@ class Histogram1Test :
                 TEST_CHECK_EQUAL(_stringify(histogram), "[0,1,0][1,2,0][2,3,0][3,4,2][4,5,0][5,6,1][6,7,0]");
                 TEST_CHECK_EQUAL(histogram.entries(), 3);
             }
+
+            // ToDo: Test ECDF
+            {
+            }
         }
 } histogram_1_test;

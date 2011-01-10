@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -37,8 +38,12 @@ namespace eos
 
         unsigned entries;
 
+        unsigned underflow, overflow;
+
         Implementation() :
-            entries(0)
+            entries(0),
+            underflow(0),
+            overflow(0)
         {
         }
 
@@ -52,7 +57,15 @@ namespace eos
             auto b = std::find_if(bins.begin(), bins.end(), std::bind(&Implementation<Histogram<1>>::falls_into, value, std::placeholders::_1));
 
             if (bins.end() == b)
-                throw InternalError("Histrogram<1>::insert(): No bin found to cover value '" + stringify(value) + "'");
+            {
+                if (value < bins.begin()->lower)
+                    ++underflow;
+
+                if (value >= bins.end()->upper)
+                    ++overflow;
+
+                throw InternalError("Histogram<1>::insert(): No bin found to cover value '" + stringify(value) + "'");
+            }
 
             b->value += 1.0;
             ++entries;
