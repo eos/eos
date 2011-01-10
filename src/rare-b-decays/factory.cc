@@ -336,8 +336,6 @@ namespace eos
         };
 
         ObservableOptions myoptions(options);
-        if (! myoptions.has("form-factors"))
-            myoptions.set("form-factors", "BZ2004");
 
         auto i(simple_observables.find(name));
         if (simple_observables.end() == i)

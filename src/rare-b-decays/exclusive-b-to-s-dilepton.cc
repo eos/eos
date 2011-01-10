@@ -170,9 +170,10 @@ namespace eos
             uncertainty_xi_par(p["formfactors::xi_par_uncertainty"]),
             e_q(-1.0/3.0)
         {
-            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o["form-factors"], p);
+            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
+
             if (! form_factors.get())
-                throw std::string("InternalError");
+                throw InternalError("Form factors not found!");
 
             // TODO: Lepton masses, m_l = m_mu
             m_l = 0.0;//m_l = 0.10565836; // (GeV), cf. [PDG2008], p. 13
@@ -1103,18 +1104,13 @@ namespace eos
             uncertainty_isgur_wise_long(p["B->K^*ll::IW_long_uncertainty"]),
             uncertainty_isgur_wise_par(p["B->K^*ll::IW_par_uncertainty"]),
             uncertainty_isgur_wise_perp(p["B->K^*ll::IW_perp_uncertainty"]),
-            cp_conjugate(false),
-            ccbar_resonance(false)
+            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+            ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
-            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o["form-factors"], p);
+            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
+
             if (! form_factors.get())
-                throw std::string("InternalError");
-
-            if (o.has("cp-conjugate"))
-                cp_conjugate = destringify<bool>(o["cp-conjugate"]);
-
-            if (o.has("ccbar-resonance"))
-                ccbar_resonance = destringify<bool>(o["ccbar-resonance"]);
+                throw InternalError("Form factors not found!");
         }
 
         // We use the PS mass except for kappa_1
