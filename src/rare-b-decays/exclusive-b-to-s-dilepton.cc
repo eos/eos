@@ -26,6 +26,7 @@
 #include <src/utils/integrate.hh>
 #include <src/utils/memoise.hh>
 #include <src/utils/model.hh>
+#include <src/utils/power_of.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 #include <src/utils/save.hh>
@@ -1817,5 +1818,279 @@ namespace eos
 
         // Note that in the code U_5 does not flip its sign under CP. Therefore iu_5_bar -> -iu_5_bar here.
         return (iu_5 - iu_5_bar) / std::sqrt((iu_1 + iu_1_bar) * (iu_2 + iu_2_bar));
+    }
+
+    /* BToKDilepton */
+    template <>
+    struct Implementation<BToKDilepton<LowRecoil>>
+    {
+        std::shared_ptr<Model> model;
+
+        Parameter c1;
+
+        Parameter c2;
+
+        Parameter c3;
+
+        Parameter c4;
+
+        Parameter c5;
+
+        Parameter c6;
+
+        Parameter abs_c7;
+
+        Parameter arg_c7;
+
+        Parameter c8;
+
+        Parameter abs_c9;
+
+        Parameter arg_c9;
+
+        Parameter abs_c10;
+
+        Parameter arg_c10;
+
+        Parameter m_b_MSbar;
+
+        Parameter m_B;
+
+        Parameter m_K;
+
+        Parameter m_e;
+
+        Parameter m_mu;
+
+        Parameter m_tau;
+
+        Parameter mu;
+
+        double m_l;
+
+        bool ccbar_resonance;
+
+        std::shared_ptr<FormFactors<PToP>> form_factors;
+
+        Implementation(const Parameters & p, const ObservableOptions & o) :
+            model(Model::make("SM", p)),
+            c1(p["c1"]),
+            c2(p["c2"]),
+            c3(p["c3"]),
+            c4(p["c4"]),
+            c5(p["c5"]),
+            c6(p["c6"]),
+            abs_c7(p["Abs{c7}"]),
+            arg_c7(p["Arg{c7}"]),
+            c8(p["c8"]),
+            abs_c9(p["Abs{c9}"]),
+            arg_c9(p["Arg{c9}"]),
+            abs_c10(p["Abs{c10}"]),
+            arg_c10(p["Arg{c10}"]),
+            m_b_MSbar(p["mass::b(MSbar)"]),
+            m_B(p["mass::B0"]),
+            m_K(p["mass::K0"]),
+            m_e(p["mass::e"]),
+            m_mu(p["mass::mu"]),
+            m_tau(p["mass::tau"]),
+            mu(p["mu"]),
+            ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
+        {
+            form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "BZ2004v2"), p);
+
+            if (! form_factors.get())
+                 throw InternalError("Form factors not found!");
+
+            std::string lepton = o.get("l", "mu");
+            if ("e" == lepton)
+            {
+                m_l = m_e;
+            }
+            else if ("mu" == lepton)
+            {
+                m_l = m_mu;
+            }
+            else if ("tau" == lepton)
+            {
+                m_l = m_tau;
+            }
+            else
+                throw InternalError("Unknown fourth lepton generation: " + lepton);
+        }
+
+        inline complex<double> c7() const
+        {
+            return abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7()));
+        }
+
+        inline complex<double> c9() const
+        {
+            return abs_c9() * complex<double>(cos(arg_c9()), sin(arg_c9()));
+        }
+
+        // We use the PS mass except for kappa
+        double m_b_PS() const
+        {
+            // Actually use m_b_PS at mu_PS = 2.0 GeV
+            return model->m_b_ps(2.0);
+        }
+
+        static complex<double> c7eff_nlo(const double & mu, const double & s, const double & m_b,
+                const double & c1, const double & c2, const double & c8)
+        {
+            return -1.0 * (
+                    c1 * CharmLoops::F17_massless(mu, s, m_b)
+                    + c2 * CharmLoops::F27_massless(mu, s, m_b)
+                    + c8 * CharmLoops::F87_massless(mu, s, m_b));
+        }
+
+        // cf. [GP2004], Eq. (56)
+        complex<double> c7eff(double s) const
+        {
+            // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
+            double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
+            complex<double> nlo = memoise(c7eff_nlo, mu(), s, m_b_MSbar(), c1(), c2(), c8());
+
+            return c7() + lo + (model->alpha_s(mu) / (4.0 * M_PI)) * nlo;
+        }
+
+        static complex<double> c9eff_nlo_alpha_s(const double & mu, const double & s, const double & m_b,
+                const double & c1, const double & c2, const double & c8)
+        {
+            return -1.0 * (
+                    c1 * CharmLoops::F19_massless(mu, s, m_b)
+                    + c2 * CharmLoops::F29_massless(mu, s, m_b)
+                    + c8 * CharmLoops::F89_massless(s, m_b));
+        }
+
+        // cf. [GP2004], Eq. (55), p. 10
+        complex<double> c9eff(const double & s) const
+        {
+            // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
+            // Substitute pole mass by PS mass
+            double m_b = m_b_PS();
+            double m_c = model->m_c_msbar(mu);
+            double c = -2.0 / 27.0 * (8.0 * c1() + 6.0 * c2() - 6.0 * c3() - 8.0 * c4() - 12.0 * c5() - 160.0 * c6());
+            double c_0 = -2.0 / 27.0 * (48.0 * c1() + 36.0 * c2() + 198.0 * c3() - 24.0 * c4() + 1872.0 * c5() - 384.0 * c6());
+            double c_b = +2.0 / 27.0 * (126.0 * c3() + 24.0 * c4 + 1368.0 * c5() + 384.0 * c6());
+            complex<double> G0 = -3.0 / 8.0 * ((ccbar_resonance ? LongDistance::g_had_ccbar(s, m_c) : CharmLoops::h(mu, s)) + 4.0 / 9.0);
+            complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b) + 4.0 / 9.0);
+
+            complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
+
+            complex<double> lo = c_b * Gb + c_0 * G0 + c;
+            complex<double> nlo_alpha_s = memoise(c9eff_nlo_alpha_s, mu(), s, m_b_MSbar(), c1(), c2(), c8());
+            complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
+
+            complex<double> result = c9() + lo;
+            if (! ccbar_resonance)
+                result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
+
+            return result;
+        }
+
+        complex<double> c10() const
+        {
+            return abs_c10() * complex<double>(cos(arg_c10()), sin(arg_c10()));
+        }
+
+        double kappa() const
+        {
+            // cf. [BHvD2010], Eq. (3.8), p. 8
+            // Use m_b_MSbar(m_b_MSbar) instead m_b_MSbar(mu), as we want kappa up to NLO only.
+            return (1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
+        }
+
+        double rho_1(const double & s) const
+        {
+            return std::norm(kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s) + c9eff(s)) + std::norm(c10());
+        }
+
+        double rho_2(const double & s) const
+        {
+            return std::real((c9eff(s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s)) * std::conj(c10()));
+        }
+
+        // speed of the lepton
+        double beta(const double & s) const
+        {
+            return std::sqrt(1.0 - 4.0 * power_of<2>(m_l) / s);
+        }
+
+        double xi_b(const double & s) const
+        {
+            return 1.0 - (power_of<2>(m_B()) - power_of<2>(m_K())) / s * (1.0 - form_factors->f_0(s) / form_factors->f_p(s));
+        }
+
+        double N2(const double & s) const
+        {
+            static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
+            static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
+            const double lambda_t_abs = abs(model->ckm_tb() * conj(model->ckm_ts()));
+
+            return power_of<2>(g_fermi * lambda_t_abs * alpha_e) * std::sqrt(lambda(power_of<2>(m_B()), power_of<2>(m_K()), s)) /
+                    (1024.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
+        }
+
+        double unnormalized_decay_width(const double & s) const
+        {
+            double prefactor = N2(s) * beta(s) * power_of<2>(form_factors->f_p(s));
+            return prefactor * (rho_1(s) * lambda(power_of<2>(m_B()), power_of<2>(m_K()), s) * (1.0 - power_of<2>(beta(s)) / 3.0)
+                    + 16.0 * power_of<2>(m_l) * std::norm(c10()) * (power_of<2>(m_K()) + s * power_of<2>(xi_b(s) * beta(s)) / 4.0));
+        }
+
+        double a_fb_numerator(const double & s) const
+        {
+            return -4.0 * N2(s) * xi_b(s) * rho_2(s) * power_of<2> (form_factors->f_p(s) * m_l * beta(s)) *
+                    sqrt(lambda(power_of<2>(m_B()), power_of<2>(m_K()), s));
+        }
+    };
+
+    BToKDilepton<LowRecoil>::BToKDilepton(const Parameters & parameters, const ObservableOptions & options) :
+        PrivateImplementationPattern<BToKDilepton<LowRecoil>>(new Implementation<BToKDilepton<LowRecoil>>(parameters, options))
+    {
+    }
+
+    BToKDilepton<LowRecoil>::~BToKDilepton()
+    {
+    }
+
+    // Differential Observables
+    double
+    BToKDilepton<LowRecoil>::differential_branching_ratio(const double & s) const
+    {
+        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
+        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
+
+        return _imp->unnormalized_decay_width(s) / Gamma;
+    }
+
+    double
+    BToKDilepton<LowRecoil>::differential_forward_backward_asymmetry(const double & s) const
+    {
+        return _imp->a_fb_numerator(s) / _imp->unnormalized_decay_width(s);
+    }
+
+
+    // Integrated Observables
+    double
+    BToKDilepton<LowRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKDilepton<LowRecoil>::differential_branching_ratio),
+                this, std::placeholders::_1);
+
+        return integrate(integrand, 64, s_min, s_max);
+    }
+
+    double
+    BToKDilepton<LowRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> num = std::bind(
+                std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::a_fb_numerator), _imp, std::placeholders::_1);
+
+        std::function<double (const double &)> denom = std::bind(
+                std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width), _imp, std::placeholders::_1);
+
+        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
     }
 }

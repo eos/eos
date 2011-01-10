@@ -140,6 +140,24 @@ namespace eos
             double integrated_cp_asymmetry_2(const double & s_min, const double & s_max) const;
             double integrated_cp_asymmetry_3(const double & s_min, const double & s_max) const;
     };
+
+
+    template <>
+    class BToKDilepton<LowRecoil> :
+        public PrivateImplementationPattern<BToKDilepton<LowRecoil>>
+    {
+        public:
+            BToKDilepton(const Parameters & parameters, const ObservableOptions & options);
+            ~BToKDilepton();
+
+            // Differential Observables
+            double differential_branching_ratio(const double & s) const;
+            double differential_forward_backward_asymmetry(const double & s) const;
+
+            // Integrated Observables
+            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
+    };
 }
 
 #endif

@@ -24,6 +24,8 @@ namespace eos
 {
     template <typename T_> class BToKstarDilepton;
 
+    template <typename T_> class BToKDilepton;
+
     template <typename T_> class BToXsDilepton;
 
     template <typename T_> class BToXsGamma;

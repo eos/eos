@@ -120,6 +120,15 @@ namespace eos
             make_observable("B->K^*gamma::S_K^*gamma",
                     &BToKstarGamma::s_kstar_gamma),
 
+            // B -> K ll, Low Recoil
+            make_observable("B->Kll::dBR/ds@LowRecoil",
+                    &BToKDilepton<LowRecoil>::differential_branching_ratio,
+                    std::make_tuple("s")),
+
+            make_observable("B->Kll::BR@LowRecoil",
+                    &BToKDilepton<LowRecoil>::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
             // B -> K^* ll, Large Recoil
             make_observable("B->K^*ll::dBR/ds@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::differential_branching_ratio,
