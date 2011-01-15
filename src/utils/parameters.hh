@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,61 +25,139 @@
 
 namespace eos
 {
+    /*!
+     * UnknownParameterError is thrown when no parameter of a given
+     * name could be found.
+     */
     struct UnknownParameterError :
         public Exception
     {
         UnknownParameterError(const std::string & variable) throw ();
     };
 
+    // Forward declaration.
     class Parameter;
 
+    /*!
+     * Parameters keeps the set of all numeric parameters for any Observable.
+     *
+     * Access to any Parameter or their values is coherent, i.e., changes to
+     * a Parameter object will propagate to every other object with the same
+     * parent Parameters and which handle the same parameter by name.
+     */
     class Parameters :
         public PrivateImplementationPattern<Parameters>
     {
         private:
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor (private).
+             *
+             * Creates an instance of Parameters from a given implementation.
+             * To create an instance of Parameters, see one of the named constructors.
+             *
+             * @param impl Implementation from which the Parameters object shall be constructed from.
+             */
             Parameters(Implementation<Parameters> *);
+            ///@}
 
         public:
-            ~Parameters();
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Named constructor.
+             *
+             * Creates an instance of Parameters with default values filled in.
+             */
+            static Parameters Defaults();
 
             Parameters clone() const;
+            /*!
+             * Destructor.
+             */
+            ~Parameters();
+            ///@}
 
-            Parameter operator[] (const std::string & name) const;
-
+            ///@name Parameter access
+            ///@{
+            /*!
+             * Declare a new parameter.
+             *
+             * @param name  Name of the new parameter to be declared.
+             * @param value (Optional) value for the new parameter.
+             */
             Parameter declare(const std::string & name, const double & value = 0.0);
 
+            /*!
+             * Set a parameter's numeric value.
+             *
+             * @param name  The name of the parameter whose numeric value shall be changed.
+             * @param value The parameter's new numeric value.
+             */
             void set(const std::string & name, const double & value);
 
-            static Parameters Defaults();
+            /*!
+             * Retrieve a parameter's Parameter object by name.
+             *
+             * @param name  The name of the Parameter that shall be retrieved.
+             */
+            Parameter operator[] (const std::string & name) const;
+            ///@}
     };
 
+    /*!
+     * Parameter is the class that holds all information of one of Parameters' parameters.
+     */
     class Parameter
     {
         private:
+            ///@name Internal Data
+            ///@{
             std::tr1::shared_ptr<Implementation<Parameters>> _imp;
 
             unsigned _index;
+            ///@}
 
+            ///@name Basic Functions
+            ///@{
             Parameter(const std::tr1::shared_ptr<Implementation<Parameters>> & imp, unsigned index);
+            ///@}
 
         public:
             friend class Parameters;
 
+            ///@name Basic Functions
+            ///@{
             ~Parameter();
+            ///@}
 
+            ///@name Access & Modification of the Numeric Value
+            ///@{
+            /// Cast a Parameter's numeric value to a double.
             operator double () const;
 
+            /// Retrieve a Parameter's numeric value.
             double operator() () const;
 
+            /// Set a Parameter's numeric value.
             const Parameter & operator= (const double &);
+            ///@}
 
+            ///@name Access to Meta Data
+            ///@{
+            /// Retrieve the Parameter's name.
+            const std::string & name() const;
+
+            /// Retrieve the Parameter's (default) central value.
             const double & central() const;
 
+            /// Retrieve the Parameter's (default) maximal value.
             const double & max() const;
 
+            /// Retrieve the Parameter's (default) minimal value.
             const double & min() const;
-
-            const std::string & name() const;
+            ///@}
     };
 }
 
