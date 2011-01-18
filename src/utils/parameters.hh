@@ -22,6 +22,7 @@
 
 #include <src/utils/exception.hh>
 #include <src/utils/private_implementation_pattern.hh>
+#include <src/utils/wrapped_forward_iterator.hh>
 
 namespace eos
 {
@@ -49,6 +50,11 @@ namespace eos
         public PrivateImplementationPattern<Parameters>
     {
         private:
+            ///@name Internal Data
+            ///@{
+            struct Data;
+            ///@}
+
             ///@name Basic Functions
             ///@{
             /*!
@@ -63,6 +69,10 @@ namespace eos
             ///@}
 
         public:
+            friend class Parameter;
+            friend class Implementation<Parameter>;
+            friend class Implementation<Parameters>;
+
             ///@name Basic Functions
             ///@{
             /*!
@@ -77,6 +87,15 @@ namespace eos
              * Destructor.
              */
             ~Parameters();
+            ///@}
+
+            ///@name Iteration
+            ///@{
+            struct IteratorTag;
+            typedef WrappedForwardIterator<IteratorTag, Parameter> Iterator;
+
+            Iterator begin() const;
+            Iterator end() const;
             ///@}
 
             ///@name Parameter access
@@ -112,20 +131,24 @@ namespace eos
     class Parameter
     {
         private:
+            struct Data;
+            struct Template;
+
             ///@name Internal Data
             ///@{
-            std::tr1::shared_ptr<Implementation<Parameters>> _imp;
+            std::shared_ptr<Parameters::Data> _parameters_data;
 
             unsigned _index;
             ///@}
 
             ///@name Basic Functions
             ///@{
-            Parameter(const std::tr1::shared_ptr<Implementation<Parameters>> & imp, unsigned index);
+            Parameter(const std::shared_ptr<Parameters::Data> & imp, unsigned index);
             ///@}
 
         public:
             friend class Parameters;
+            friend class Implementation<Parameters>;
 
             ///@name Basic Functions
             ///@{
