@@ -1255,7 +1255,7 @@ namespace eos
             double a_1 = form_factors->a_1(s), a_2 = form_factors->a_2(s);
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
-            complex<double> prefactor = complex<double>(0.0, -1.0) * m_B();
+            complex<double> prefactor = complex<double>(-1.0, 0.0) * m_B();
             complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime())
                 + uncertainty_isgur_wise_long * kappa() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
             double formfactor = ((1.0 - m_Kstarhat2 - s_hat) * std::pow(1.0 + m_Kstarhat, 2) * a_1 - lambda(1.0, m_Kstarhat2, s_hat) * a_2)
@@ -1271,7 +1271,7 @@ namespace eos
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
-            complex<double> prefactor = complex<double>(0.0, 1.0) * m_B();
+            complex<double> prefactor = complex<double>(1.0, 0.0) * m_B();
             complex<double> wilson = ((c9eff(s) + c9prime()) + h * (c10() + c10prime()))
                 + uncertainty_isgur_wise_perp * kappa() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
             double formfactor = std::sqrt(2 * lambda(1.0, m_Kstarhat2, s_hat(s))) / (1.0 + m_Kstarhat)
@@ -1286,7 +1286,7 @@ namespace eos
             double m_Kstarhat = m_Kstar / m_B;
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
-            complex<double> prefactor = complex<double>(0.0, -1.0) * m_B();
+            complex<double> prefactor = complex<double>(-1.0, 0.0) * m_B();
             complex<double> wilson = ((c9eff(s) - c9prime()) + h * (c10() - c10prime()))
                 + uncertainty_isgur_wise_par * kappa() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
             complex<double> formfactor = std::sqrt(2) * (1.0 + m_Kstarhat) * form_factors->a_1(s);
