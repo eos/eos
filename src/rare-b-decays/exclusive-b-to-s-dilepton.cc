@@ -2018,11 +2018,6 @@ namespace eos
             return std::norm(kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s) + c9eff(s)) + std::norm(c10());
         }
 
-        double rho_2(const double & s) const
-        {
-            return std::real((c9eff(s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s)) * std::conj(c10()));
-        }
-
         // speed of the lepton
         double beta(const double & s) const
         {
@@ -2041,20 +2036,15 @@ namespace eos
             const double lambda_t_abs = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
             return power_of<2>(g_fermi * lambda_t_abs * alpha_e) * std::sqrt(lambda(power_of<2>(m_B()), power_of<2>(m_K()), s)) /
-                    (1024.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
+                    (2048.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
         }
 
         double unnormalized_decay_width(const double & s) const
         {
-            double prefactor = N2(s) * beta(s) * power_of<2>(form_factors->f_p(s));
+            double prefactor = 2.0 * N2(s) * power_of<2>(form_factors->f_p(s)) * beta(s);
             return prefactor * (rho_1(s) * lambda(power_of<2>(m_B()), power_of<2>(m_K()), s) * (1.0 - power_of<2>(beta(s)) / 3.0)
-                    + 16.0 * power_of<2>(m_l) * std::norm(c10()) * (power_of<2>(m_K()) + s * power_of<2>(xi_b(s) * beta(s)) / 4.0));
-        }
-
-        double a_fb_numerator(const double & s) const
-        {
-            return -4.0 * N2(s) * xi_b(s) * rho_2(s) * power_of<2> (form_factors->f_p(s) * m_l * beta(s)) *
-                    sqrt(lambda(power_of<2>(m_B()), power_of<2>(m_K()), s));
+                    + 8.0 * power_of<2>(m_l) * std::norm(c10()) * (2.0 * (power_of<2>(m_K()) + s * power_of<2>(xi_b(s)) / 4.0) +
+                      (power_of<2>(m_B()) - power_of<2>(m_K()) - s) * xi_b(s)));
         }
     };
 
@@ -2077,13 +2067,6 @@ namespace eos
         return _imp->unnormalized_decay_width(s) / Gamma;
     }
 
-    double
-    BToKDilepton<LowRecoil>::differential_forward_backward_asymmetry(const double & s) const
-    {
-        return _imp->a_fb_numerator(s) / _imp->unnormalized_decay_width(s);
-    }
-
-
     // Integrated Observables
     double
     BToKDilepton<LowRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
@@ -2092,17 +2075,5 @@ namespace eos
                 this, std::placeholders::_1);
 
         return integrate(integrand, 64, s_min, s_max);
-    }
-
-    double
-    BToKDilepton<LowRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
-    {
-        std::function<double (const double &)> num = std::bind(
-                std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::a_fb_numerator), _imp, std::placeholders::_1);
-
-        std::function<double (const double &)> denom = std::bind(
-                std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width), _imp, std::placeholders::_1);
-
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
     }
 }
