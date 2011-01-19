@@ -1475,6 +1475,18 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::real_c7eff(const double & s) const
+    {
+        return real(_imp->c7eff(s));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::imag_c7eff(const double & s) const
+    {
+        return imag(_imp->c7eff(s));
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::rho_1(const double & s) const
     {
         return _imp->rho_1(s);

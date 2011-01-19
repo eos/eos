@@ -96,6 +96,8 @@ namespace eos
             double imag_y(const double & s) const;
             double real_c9eff(const double & s) const;
             double imag_c9eff(const double & s) const;
+            double real_c7eff(const double & s) const;
+            double imag_c7eff(const double & s) const;
 
             // [BHvD2010] Eqs. (??-??)
             double rho_1(const double & s) const;
