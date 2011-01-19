@@ -269,6 +269,37 @@ class BToKstarDileptonLowRecoilTest :
                     TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), +8.938923592e-12, eps);
                 }
             }
+
+            /* Low Recoil (Zero Point for C_7 = C_9 = C_10 = 0) */
+            {
+                Parameters p = Parameters::Defaults();
+                p["Abs{c7}"] = 0.0;
+                p["c8"] = -0.181;
+                p["Abs{c9}"] = 0.0;
+                p["Abs{c10}"] = 0.0;
+
+                ObservableOptions oo;
+                oo.set("form-factors", "BZ2004");
+
+                BToKstarDilepton<LowRecoil> d(p, oo);
+
+                /* transversity amplitudes at q^2 = 16.00 GeV^2 */
+                {
+                    static const double eps = 1e-19; // 1e-7 smaller than results
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  16.00)), -2.4968177e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  16.00)), -3.1062246e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 16.00)), -2.4968177e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 16.00)), -3.1062246e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  16.00)), +1.8179888e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  16.00)), +2.2617115e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 16.00)), +1.8179888e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 16.00)), +2.2617115e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   16.00)), -2.8862159e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   16.00)), -3.5906645e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  16.00)), -2.8862159e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), -3.5906645e-12, eps);
+                }
+            }
         }
 } b_to_kstar_dilepton_low_recoil_test;
 
