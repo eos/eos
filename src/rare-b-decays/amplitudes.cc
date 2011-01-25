@@ -17,7 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
+#include <src/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
+#include <src/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 
 #include <cstdlib>
 #include <iostream>

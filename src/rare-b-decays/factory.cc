@@ -18,7 +18,8 @@
  */
 
 #include <src/rare-b-decays/factory.hh>
-#include <src/rare-b-decays/exclusive-b-to-s-dilepton.hh>
+#include <src/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
+#include <src/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-gamma.hh>
 #include <src/rare-b-decays/form-factors-impl.hh>
 #include <src/rare-b-decays/inclusive-b-to-s-dilepton.hh>

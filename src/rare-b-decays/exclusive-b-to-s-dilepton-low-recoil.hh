@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_HH
-#define EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_HH 1
+#ifndef EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_LOW_RECOIL_HH
+#define EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_LOW_RECOIL_HH 1
 
 #include <src/rare-b-decays/decays.hh>
 #include <src/utils/complex.hh>
@@ -28,56 +29,13 @@
 
 namespace eos
 {
-    /*
-     * Decay: B -> K l lbar
-     */
-
-
-    // Large Recoil, cf. [BHP2008]
-    struct LargeRecoil
-    {
-    };
-
-    template <>
-    class BToKstarDilepton<LargeRecoil> :
-        public PrivateImplementationPattern<BToKstarDilepton<LargeRecoil>>
-    {
-        public:
-            BToKstarDilepton(const Parameters & parameters, const ObservableOptions & options);
-            ~BToKstarDilepton();
-
-            // [BHP2008], Appendix C
-            complex<double> a_long(const Helicity & h, const double & s) const;
-            complex<double> a_perp(const Helicity & h, const double & s) const;
-            complex<double> a_par(const Helicity & h, const double & s) const;
-
-            // Differential Observables
-            double differential_branching_ratio(const double & s) const;
-            double differential_decay_width(const double & s) const;
-            double differential_forward_backward_asymmetry(const double & s) const;
-            double differential_longitudinal_polarisation(const double & s) const;
-            double differential_transverse_asymmetry_2(const double & s) const;
-            double differential_transverse_asymmetry_3(const double & s) const;
-            double differential_transverse_asymmetry_4(const double & s) const;
-            double differential_transverse_asymmetry_5(const double & s) const;
-
-            // Integrated Observables
-            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
-            double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
-            double integrated_unnormalized_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
-            double integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const;
-            double integrated_unnormalized_longitudinal_polarisation(const double & s_min, const double & s_max) const;
-            double integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const;
-            double integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const;
-            double integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const;
-            double integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const;
-    };
-
-    // Low Recoil, cf. [BHvD2010]
     struct LowRecoil
     {
     };
 
+    /*
+     * Decay: B -> K^* l lbar at Low Recoil, cf. [BHvD2010]
+     */
     template <>
     class BToKstarDilepton<LowRecoil> :
         public PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>
@@ -143,7 +101,9 @@ namespace eos
             double integrated_cp_asymmetry_3(const double & s_min, const double & s_max) const;
     };
 
-
+    /*
+     * Decay: B -> K l l at Low Recoil
+     */
     template <>
     class BToKDilepton<LowRecoil> :
         public PrivateImplementationPattern<BToKDilepton<LowRecoil>>
