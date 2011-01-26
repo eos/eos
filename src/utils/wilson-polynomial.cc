@@ -94,7 +94,7 @@ namespace eos
     };
 
     /* Build a WilsonPolynomial from an observable */
-    WilsonPolynomial make_polynomial(const ObservablePtr & o, const Kinematics & k, const std::list<std::string> & _coefficients)
+    WilsonPolynomial make_polynomial(const ObservablePtr & o, const std::list<std::string> & _coefficients)
     {
         Sum result;
 
@@ -122,7 +122,7 @@ namespace eos
         }
 
         // Determine the constant part 'n'
-        double n = o->evaluate(k);
+        double n = o->evaluate();
         result.add(Constant(n));
 
         // Determine the true quadratic terms 'q_i' and linear terms 'l_i'
@@ -133,13 +133,13 @@ namespace eos
             r_i = r_i.central();
             // calculate observables
             phi_i = 0.0;
-            double pzero = o->evaluate(k);
+            double pzero = o->evaluate();
             phi_i = M_PI;
-            double ppluspi = o->evaluate(k);
+            double ppluspi = o->evaluate();
             phi_i = +M_PI / 2.0;
-            double ppluspihalf = o->evaluate(k);
+            double ppluspihalf = o->evaluate();
             phi_i = -M_PI / 2.0;
-            double pminuspihalf = o->evaluate(k);
+            double pminuspihalf = o->evaluate();
 
             double q_i = 0.5 * ((ppluspi + pzero) - 2.0 * n) / r_i() / r_i();
             result.add(Product(Constant(q_i), Product(r_i, r_i)));
@@ -176,13 +176,13 @@ namespace eos
 
                 // calculate observables
                 phi_j = +M_PI;
-                double ppluspi = o->evaluate(k);
+                double ppluspi = o->evaluate();
                 phi_j = 0.0;
-                double pzero = o->evaluate(k);
+                double pzero = o->evaluate();
                 phi_j = +M_PI / 2.0;
-                double ppluspihalf = o->evaluate(k);
+                double ppluspihalf = o->evaluate();
                 phi_j = -M_PI / 2.0;
-                double pminuspihalf = o->evaluate(k);
+                double pminuspihalf = o->evaluate();
 
                 // extract bilinear terms
                 double c_ij = 0.5 * ((pzero - ppluspi) - 2.0 * r_j() * c_j) / r_i() / r_j();

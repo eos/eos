@@ -91,7 +91,7 @@ class BToKstarDileptonLargeRecoilPolynomialTest :
         {
         }
 
-        void run_one(const ObservablePtr & o, const Kinematics & k, const WilsonPolynomial & p, const std::array<double, 6> & values) const
+        void run_one(const ObservablePtr & o, const WilsonPolynomial & p, const std::array<double, 6> & values) const
         {
             Parameters parameters = o->parameters();
             Parameter abs_c7(parameters["Abs{c7}"]);
@@ -110,7 +110,7 @@ class BToKstarDileptonLargeRecoilPolynomialTest :
 
             static const double eps = 2e-10;
             WilsonPolynomialEvaluator evaluator;
-            TEST_CHECK_NEARLY_EQUAL(o->evaluate(k), p.accept_returning<double>(evaluator), eps);
+            TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
         }
 
         virtual void run() const
@@ -144,14 +144,14 @@ class BToKstarDileptonLargeRecoilPolynomialTest :
 
             for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
             {
-                ObservablePtr observable = RareBFactory::make(*n, parameters, options);
+                ObservablePtr observable = RareBFactory::make(*n, parameters, kinematics, options);
                 TEST_CHECK(0 != observable);
 
-                WilsonPolynomial polynomial = make_polynomial(observable, kinematics, std::list<std::string>{ "c7", "c9", "c10" });
+                WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "c7", "c9", "c10" });
 
                 for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
                 {
-                    run_one(observable, kinematics, polynomial, *i);
+                    run_one(observable, polynomial, *i);
                 }
             }
         }

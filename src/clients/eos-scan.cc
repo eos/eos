@@ -90,6 +90,10 @@ class WilsonScan
             theory_uncertainty(theory_uncertainty)
         {
             Parameters parameters = Parameters::Defaults();
+            Kinematics kinematics;
+            kinematics.declare("s_min");
+            kinematics.declare("s_max");
+
             for (auto p(param_changes.begin()), p_end(param_changes.end()) ; p != p_end ; ++p)
             {
                 parameters[p->first] = p->second;
@@ -99,16 +103,14 @@ class WilsonScan
             {
                 //TODO: Create options from i->o_options!
                 ObservableOptions options;
-                bins.push_back(std::make_pair(*i, RareBFactory::make(i->o_name, parameters.clone(), options)));
+                bins.push_back(std::make_pair(*i, RareBFactory::make(i->o_name, parameters.clone(), kinematics.clone(), options)));
             }
         }
 
         void calc_chi_square(const Input & input, const ObservablePtr & observable,
                 const CartesianProduct<std::vector<double>>::Iterator & wc_iterator)
         {
-            Kinematics k;
-            k.declare("s_min");
-            k.declare("s_max");
+            Kinematics k = observable->kinematics();
             k.set("s_min", input.min);
             k.set("s_max", input.max);
 
@@ -123,7 +125,7 @@ class WilsonScan
             }
 
             // Calculate chi^2
-            double central = o->evaluate(k);
+            double central = o->evaluate();
             double delta_min = 0.0, delta_max = 0.0;
             for (auto v = variation_names.begin(), v_end = variation_names.end() ; v != v_end ; ++v)
             {
@@ -132,7 +134,7 @@ class WilsonScan
                 double max = 0.0, min = 0.0, value;
 
                 p = p.min();
-                value = o->evaluate(k);
+                value = o->evaluate();
                 if (value > central)
                     max = value - central;
 
@@ -140,7 +142,7 @@ class WilsonScan
                     min = central - value;
 
                 p = p.max();
-                value = o->evaluate(k);
+                value = o->evaluate();
                 if (value > central)
                     max = std::max(max, value - central);
 

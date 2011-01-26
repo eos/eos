@@ -116,7 +116,7 @@ main(int argc, char * argv[])
                 argument.erase(pos);
             }
 
-            ObservablePtr ptr(RareBFactory::make(argument, parameters, options));
+            ObservablePtr ptr(RareBFactory::make(argument, parameters, kinematics, options));
             if (! ptr)
                 throw DoUsage("Unknown observable: '" + argument + "'");
 
@@ -143,7 +143,7 @@ main(int argc, char * argv[])
                 std::cout << s << std::flush;
                 kinematics.set("s", s);
 
-                double central = (*o)->evaluate(kinematics);
+                double central = (*o)->evaluate();
                 double delta_min = 0.0, delta_max = 0.0;
 
                 std::cout << '\t' << central << std::flush;
@@ -161,7 +161,7 @@ main(int argc, char * argv[])
                         double max = 0.0, min = 0.0, value;
 
                         *p = p->min();
-                        value = (*o)->evaluate(kinematics);
+                        value = (*o)->evaluate();
                         if (value > central)
                             max = value - central;
 
@@ -169,7 +169,7 @@ main(int argc, char * argv[])
                             min = central - value;
 
                         *p = p->max();
-                        value = (*o)->evaluate(kinematics);
+                        value = (*o)->evaluate();
                         if (value > central)
                             max = std::max(max, value - central);
 

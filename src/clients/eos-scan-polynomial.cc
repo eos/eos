@@ -56,16 +56,12 @@ struct ObservableInput
 {
     ObservablePtr observable;
 
-    Kinematics kinematics;
-
     double min, central, max;
 };
 
 struct ObservableRatioInput
 {
     ObservablePtr numerator, denominator;
-
-    Kinematics kinematics;
 
     double min, central, max;
 };
@@ -251,9 +247,7 @@ class CommandLine :
                     std::string observable_name(*(++a));
 
                     ObservableInput input;
-                    input.kinematics = *kinematics;
-                    kinematics.reset(new Kinematics);
-                    input.observable = RareBFactory::make(observable_name, parameters, ObservableOptions());
+                    input.observable = RareBFactory::make(observable_name, parameters, *kinematics, ObservableOptions());
                     if (! input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 
@@ -262,6 +256,7 @@ class CommandLine :
                     input.max = destringify<double>(*(++a));
 
                     inputs.push_back(input);
+                    kinematics.reset(new Kinematics);
 
                     continue;
                 }
@@ -271,13 +266,11 @@ class CommandLine :
                     std::string numerator_name(*(++a)), denominator_name(*(++a));
 
                     ObservableRatioInput input;
-                    input.kinematics = *kinematics;
-                    kinematics.reset(new Kinematics);
-                    input.numerator = RareBFactory::make(numerator_name, parameters, ObservableOptions());
+                    input.numerator = RareBFactory::make(numerator_name, parameters, *kinematics, ObservableOptions());
                     if (! input.numerator)
                         throw DoUsage("Unknown observable '" + numerator_name + "'");
 
-                    input.denominator = RareBFactory::make(denominator_name, parameters, ObservableOptions());
+                    input.denominator = RareBFactory::make(denominator_name, parameters, *kinematics, ObservableOptions());
                     if (! input.numerator)
                         throw DoUsage("Unknown observable '" + denominator_name + "'");
 
@@ -286,6 +279,7 @@ class CommandLine :
                     input.max = destringify<double>(*(++a));
 
                     inputs.push_back(input);
+                    kinematics.reset(new Kinematics);
 
                     continue;
                 }
@@ -354,20 +348,20 @@ class WilsonScannerPolynomial
         {
             Parameters parameters = CommandLine::instance()->parameters;
 
-            std::cout << "#   " << i.observable->name() << '[' << i.kinematics.as_string() << "] = (" << i.min << ", " << i.central << ", " << i.max << ")" << std::endl;
+            std::cout << "#   " << i.observable->name() << '[' << i.observable->kinematics().as_string() << "] = (" << i.min << ", " << i.central << ", " << i.max << ")" << std::endl;
 
             ObservableChiSquared chi_squared;
-            chi_squared.observable_central = make_polynomial(i.observable, i.kinematics, CommandLine::instance()->coefficients);
+            chi_squared.observable_central = make_polynomial(i.observable, CommandLine::instance()->coefficients);
             for (auto v = CommandLine::instance()->variations.cbegin(), v_end = CommandLine::instance()->variations.cend() ; v != v_end ; ++v)
             {
                 Parameter p = parameters[*v];
                 double old_p = p();
 
                 p = p.min();
-                chi_squared.observable_min.push_back(make_polynomial(i.observable, i.kinematics, CommandLine::instance()->coefficients));
+                chi_squared.observable_min.push_back(make_polynomial(i.observable, CommandLine::instance()->coefficients));
 
                 p = p.max();
-                chi_squared.observable_max.push_back(make_polynomial(i.observable, i.kinematics, CommandLine::instance()->coefficients));
+                chi_squared.observable_max.push_back(make_polynomial(i.observable, CommandLine::instance()->coefficients));
 
                 p = old_p;
             }
@@ -385,20 +379,20 @@ class WilsonScannerPolynomial
             std::cout << "#   " << i.numerator->name() << "[Kinematics]" << " / " << i.denominator->name() << "[Kinematics]" << " = (" << i.min << ", " << i.central << ", " << i.max << ")" << std::endl;
 
             ObservableRatioChiSquared chi_squared;
-            chi_squared.numerator_central = make_polynomial(i.numerator, i.kinematics, CommandLine::instance()->coefficients);
-            chi_squared.denominator_central = make_polynomial(i.denominator, i.kinematics, CommandLine::instance()->coefficients);
+            chi_squared.numerator_central = make_polynomial(i.numerator, CommandLine::instance()->coefficients);
+            chi_squared.denominator_central = make_polynomial(i.denominator, CommandLine::instance()->coefficients);
             for (auto v = CommandLine::instance()->variations.cbegin(), v_end = CommandLine::instance()->variations.cend() ; v != v_end ; ++v)
             {
                 Parameter p = parameters[*v];
                 double old_p = p();
 
                 p = p.min();
-                chi_squared.numerator_min.push_back(make_polynomial(i.numerator, i.kinematics, CommandLine::instance()->coefficients));
-                chi_squared.denominator_min.push_back(make_polynomial(i.denominator, i.kinematics, CommandLine::instance()->coefficients));
+                chi_squared.numerator_min.push_back(make_polynomial(i.numerator, CommandLine::instance()->coefficients));
+                chi_squared.denominator_min.push_back(make_polynomial(i.denominator, CommandLine::instance()->coefficients));
 
                 p = p.max();
-                chi_squared.numerator_max.push_back(make_polynomial(i.numerator, i.kinematics, CommandLine::instance()->coefficients));
-                chi_squared.denominator_max.push_back(make_polynomial(i.denominator, i.kinematics, CommandLine::instance()->coefficients));
+                chi_squared.numerator_max.push_back(make_polynomial(i.numerator, CommandLine::instance()->coefficients));
+                chi_squared.denominator_max.push_back(make_polynomial(i.denominator, CommandLine::instance()->coefficients));
 
                 p = old_p;
             }

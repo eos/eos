@@ -52,8 +52,6 @@ class DoUsage
 struct ObservableInput
 {
     ObservablePtr observable;
-
-    Kinematics kinematics;
 };
 
 class CommandLine :
@@ -102,13 +100,12 @@ class CommandLine :
                     std::string observable_name(*(++a));
 
                     ObservableInput input;
-                    input.kinematics = *kinematics;
-                    kinematics.reset(new Kinematics);
-                    input.observable = RareBFactory::make(observable_name, parameters, ObservableOptions());
+                    input.observable = RareBFactory::make(observable_name, parameters, *kinematics, ObservableOptions());
                     if (! input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 
                     inputs.push_back(input);
+                    kinematics.reset(new Kinematics);
 
                     continue;
                 }
@@ -132,7 +129,7 @@ main(int argc, char * argv[])
         WilsonPolynomialPrinter printer;
         for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend() ; i != i_end ; ++i)
         {
-            WilsonPolynomial polynomial = make_polynomial(i->observable, i->kinematics, CommandLine::instance()->coefficients);
+            WilsonPolynomial polynomial = make_polynomial(i->observable, CommandLine::instance()->coefficients);
 
             std::cout << i->observable->name() + "[";
 
@@ -149,7 +146,7 @@ main(int argc, char * argv[])
             }
             std::cout << "] = " << polynomial.accept_returning<std::string>(printer) << std::endl;
             std::cout << "polynomial = " << polynomial.accept_returning<double>(evaluator) << std::endl;
-            std::cout << "direct     = " << i->observable->evaluate(i->kinematics) << std::endl;
+            std::cout << "direct     = " << i->observable->evaluate() << std::endl;
         }
     }
     catch(DoUsage & e)

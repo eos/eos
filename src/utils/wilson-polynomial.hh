@@ -40,7 +40,7 @@ namespace eos
 
     typedef OneOf<Constant, Sum, Product, Sine, Cosine, Parameter> WilsonPolynomial;
 
-    WilsonPolynomial make_polynomial(const ObservablePtr &, const Kinematics &, const std::list<std::string> &);
+    WilsonPolynomial make_polynomial(const ObservablePtr &, const std::list<std::string> &);
 
     class WilsonPolynomialPrinter
     {

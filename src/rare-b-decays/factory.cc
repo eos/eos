@@ -51,7 +51,7 @@ namespace eos
     }
 
     ObservablePtr
-    RareBFactory::make(const std::string & name, const Parameters & parameters, const ObservableOptions & options)
+    RareBFactory::make(const std::string & name, const Parameters & parameters, const Kinematics & kinematics, const ObservableOptions & options)
     {
         static const std::map<std::string, ObservableFactory *> simple_observables
         {
@@ -351,6 +351,6 @@ namespace eos
         if (simple_observables.end() == i)
             return ObservablePtr();
 
-        return i->second->make(parameters, myoptions);
+        return i->second->make(parameters, kinematics, myoptions);
     }
 }

@@ -25,27 +25,131 @@
 
 namespace eos
 {
+    /*!
+     * UnknownKinematicVariableError is thrown when no parameter of a given
+     * name could be found.
+     */
     struct UnknownKinematicVariableError :
         public Exception
     {
         UnknownKinematicVariableError(const std::string & variable) throw ();
     };
 
+    // Forward declaration.
+    class KinematicVariable;
+
+    /*!
+     * Kinematics keeps the set of all kinematic variables for any Observable.
+     *
+     * Access to any KinematicVariable or their values is coherent, i.e., changes to
+     * a KinematicVariable object will propagate to every other object with the same
+     * parent Kinematics and which handle the same variable by name.
+     */
     class Kinematics :
         public PrivateImplementationPattern<Kinematics>
     {
+        private:
+            ///@name Internal Data
+            ///@{
+            struct Data;
+            ///@}
+
         public:
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * Creates an instance of Parameters from a given implementation.
+             * To create an instance of Parameters, see one of the named constructors.
+             *
+             * @param impl Implementation from which the Parameters object shall be constructed from.
+             */
             Kinematics();
 
+            /*!
+             * Destructor
+             */
             ~Kinematics();
 
-            double operator[] (const std::string & variable) const;
+            Kinematics clone() const;
+            ///@}
 
-            std::string as_string() const;
+            ///@name Variable access
+            ///@{
+            /*!
+             * Declare a new kinematic variable.
+             *
+             * @param name  Name of the new variable to be declared.
+             * @param value (Optional) value for the new variable.
+             */
+            KinematicVariable declare(const std::string & name, const double & value = 0.0);
 
-            void declare(const std::string & variable);
-
+            /*!
+             * Set a kinematic variable's numeric value.
+             *
+             * @param name  The name of the variable whose numeric value shall be changed.
+             * @param value The variable's new numeric value.
+             */
             void set(const std::string & variable, const double & value);
+
+            /*!
+             * Retrieve a variable's KinematicVariable object by name.
+             *
+             * @param name  The name of the KinematicVariable that shall be retrieved.
+             */
+            KinematicVariable operator[] (const std::string & variable) const;
+            ///@}
+
+            ///@name Output
+            ///@{
+            /*!
+             * Retrieve a string representation of the set of kinematic
+             * variables.
+             */
+            std::string as_string() const;
+            ///@}
+    };
+
+
+    /*!
+     * KinematicVariable is the class that holds all information of one of KinematicVariables' parameters.
+     */
+    class KinematicVariable
+    {
+        private:
+            ///@name Internal Data
+            ///@{
+            std::shared_ptr<Implementation<Kinematics>> _imp;
+
+            unsigned _index;
+            ///@}
+
+            ///@name Basic Functions
+            ///@{
+            KinematicVariable(const std::shared_ptr<Implementation<Kinematics>> & imp, unsigned index);
+            ///@}
+
+        public:
+            friend class Kinematics;
+            friend class Implementation<Kinematics>;
+
+            ///@name Basic Functions
+            ///@{
+            ~KinematicVariable();
+            ///@}
+
+            ///@name Access & Modification of the Numeric Value
+            ///@{
+            /// Cast a KinematicVariable's numeric value to a double.
+            operator double () const;
+
+            /// Retrieve a KinematicVariable's numeric value.
+            double operator() () const;
+
+            /// Set a KinematicVariable's numeric value.
+            const KinematicVariable & operator= (const double &);
+            ///@}
     };
 
     inline double lambda(const double & a, const double & b, const double & c)

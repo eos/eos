@@ -35,6 +35,7 @@ struct WilsonPolynomialTestObservable :
 {
     std::string n;
     Parameters p;
+    Kinematics k;
     Parameter c1;
     Parameter c2;
     Parameter abs_c7;
@@ -44,9 +45,10 @@ struct WilsonPolynomialTestObservable :
     Parameter abs_c10;
     Parameter arg_c10;
 
-    WilsonPolynomialTestObservable(const Parameters & p, const ObservableOptions &) :
+    WilsonPolynomialTestObservable(const Parameters & p, const Kinematics & k, const ObservableOptions &) :
         n("WilsonPolynomialTestObservable"),
         p(p),
+        k(k),
         c1(p["c1"]),
         c2(p["c2"]),
         abs_c7(p["Abs{c7}"]),
@@ -60,10 +62,11 @@ struct WilsonPolynomialTestObservable :
 
     virtual const std::string & name() const { return n; }
     virtual Parameters parameters() { return p; }
+    virtual Kinematics kinematics() { return k; }
     virtual ObservableOptions options() { return ObservableOptions(); }
-    virtual ObservablePtr clone() const { return ObservablePtr(new WilsonPolynomialTestObservable(p.clone(), ObservableOptions())); }
+    virtual ObservablePtr clone() const { return ObservablePtr(new WilsonPolynomialTestObservable(p.clone(), k.clone(), ObservableOptions())); }
 
-    virtual double evaluate(const Kinematics &) const
+    virtual double evaluate() const
     {
         complex<double> c7 = abs_c7() * complex<double>(std::cos(arg_c7()), std::sin(arg_c7));
         complex<double> c9 = abs_c9() * complex<double>(std::cos(arg_c9()), std::sin(arg_c9));
@@ -109,7 +112,7 @@ class WilsonPolynomialTest :
 
             static const double eps = 1e-10;
             WilsonPolynomialEvaluator evaluator;
-            TEST_CHECK_NEARLY_EQUAL(o->evaluate(Kinematics()), p.accept_returning<double>(evaluator), eps);
+            TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
         }
 
         virtual void run() const
@@ -117,8 +120,8 @@ class WilsonPolynomialTest :
             Parameters parameters = Parameters::Defaults();
             Kinematics kinematics;
 
-            ObservablePtr o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, ObservableOptions()));
-            WilsonPolynomial p = make_polynomial(o, kinematics, std::list<std::string>{ "c7", "c9", "c10" });
+            ObservablePtr o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, ObservableOptions()));
+            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "c7", "c9", "c10" });
 
             WilsonPolynomialPrinter printer;
             std::cout << p.accept_returning<std::string>(printer) << std::endl;

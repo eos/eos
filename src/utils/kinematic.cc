@@ -22,13 +22,16 @@
 #include <src/utils/stringify.hh>
 
 #include <map>
+#include <vector>
 
 namespace eos
 {
     template <>
     struct Implementation<Kinematics>
     {
-        std::map<std::string, double> variables;
+        std::vector<double> variables_data;
+
+        std::map<std::string, unsigned> variables_map;
     };
 
     Kinematics::Kinematics() :
@@ -40,15 +43,25 @@ namespace eos
     {
     }
 
-    double
-    Kinematics::operator[] (const std::string & variable) const
+    Kinematics
+    Kinematics::clone() const
     {
-        auto i(_imp->variables.find(variable));
+        Kinematics result;
 
-        if (_imp->variables.end() == i)
-            throw UnknownKinematicVariableError(variable);
+        result._imp.reset(new Implementation<Kinematics>(*_imp));
 
-        return i->second;
+        return result;
+    }
+
+    KinematicVariable
+    Kinematics::operator[] (const std::string & name) const
+    {
+        auto i(_imp->variables_map.find(name));
+
+        if (_imp->variables_map.end() == i)
+            throw UnknownKinematicVariableError(name);
+
+        return KinematicVariable(_imp, i->second);
     }
 
     std::string
@@ -56,40 +69,78 @@ namespace eos
     {
         std::string result;
 
-        auto i(_imp->variables.cbegin()), i_end(_imp->variables.cend());
+        auto i(_imp->variables_map.cbegin()), i_end(_imp->variables_map.cend());
         if (i != i_end)
         {
-            result = i->first + '=' + stringify(i->second);
+            result = i->first + '=' + stringify(_imp->variables_data[i->second]);
             ++i;
         }
 
-
         for ( ; i != i_end ; ++i)
         {
-            result += ", " + i->first + '=' + stringify(i->second);
+            result += ", " + i->first + '=' + stringify(_imp->variables_data[i->second]);
         }
 
         return result;
     }
 
-    void
-    Kinematics::declare(const std::string & variable)
+    KinematicVariable
+    Kinematics::declare(const std::string & name, const double & value)
     {
-        auto i(_imp->variables.find(variable));
+        auto i(_imp->variables_map.find(name));
 
-        if (_imp->variables.end() == i)
-            _imp->variables[variable] = 0.0;
+        if (_imp->variables_map.end() == i)
+        {
+            int index = _imp->variables_data.size();
+            _imp->variables_map[name] = index;
+            _imp->variables_data.push_back(value);
+
+            return KinematicVariable(_imp, index);
+        }
+
+        _imp->variables_data[i->second] = value;
+
+        return KinematicVariable(_imp, i->second);
     }
 
     void
-    Kinematics::set(const std::string & variable, const double & value)
+    Kinematics::set(const std::string & name, const double & value)
     {
-        auto i(_imp->variables.find(variable));
+        auto i(_imp->variables_map.find(name));
 
-        if (_imp->variables.end() == i)
-            throw UnknownKinematicVariableError(variable);
+        if (_imp->variables_map.end() == i)
+            throw UnknownKinematicVariableError(name);
 
-        i->second = value;
+        _imp->variables_data[i->second] = value;
+    }
+
+    KinematicVariable::KinematicVariable(const std::shared_ptr<Implementation<Kinematics>> & imp, unsigned index) :
+        _imp(imp),
+        _index(index)
+    {
+    }
+
+    KinematicVariable::~KinematicVariable()
+    {
+    }
+
+    KinematicVariable::operator double () const
+    {
+        return _imp->variables_data[_index];
+    }
+
+    double
+    KinematicVariable::operator() () const
+    {
+        return _imp->variables_data[_index];
+    }
+
+    const KinematicVariable &
+    KinematicVariable::operator= (const double & value)
+    {
+        _imp->variables_data[_index] = value;
+
+        return *this;
     }
 
     UnknownKinematicVariableError::UnknownKinematicVariableError(const std::string & variable) throw () :

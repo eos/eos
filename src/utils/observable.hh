@@ -44,7 +44,9 @@ namespace eos
 
             virtual const std::string & name() const = 0;
 
-            virtual double evaluate(const Kinematics &) const = 0;
+            virtual double evaluate() const = 0;
+
+            virtual Kinematics kinematics() = 0;
 
             virtual Parameters parameters() = 0;
 
@@ -87,7 +89,7 @@ namespace eos
 
             virtual ~ObservableFactory();
 
-            virtual ObservablePtr make(const Parameters &, const ObservableOptions &) const = 0;
+            virtual ObservablePtr make(const Parameters &, const Kinematics &, const ObservableOptions &) const = 0;
     };
 }
 

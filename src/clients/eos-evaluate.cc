@@ -128,7 +128,7 @@ class CommandLine :
                         observable_name.erase(pos);
                     }
 
-                    input.observable = RareBFactory::make(observable_name, parameters, options);
+                    input.observable = RareBFactory::make(observable_name, parameters, *kinematics, options);
                     if (! input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 
@@ -199,7 +199,7 @@ main(int argc, char * argv[])
 
         for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend() ; i != i_end ; ++i)
         {
-            double central = i->observable->evaluate(i->kinematics);
+            double central = i->observable->evaluate();
 
             std::cout << "# " << i->observable->name() << '[' << i->kinematics.as_string() << "]: " << i->observable->options().as_string() << std::endl;
             std::cout << "#   central = " << central << std::endl;
@@ -220,7 +220,7 @@ main(int argc, char * argv[])
                     *v = distribution(engine);
                 }
 
-                double value = i->observable->evaluate(i->kinematics);
+                double value = i->observable->evaluate();
                 if (isnan(value))
                     continue;
 

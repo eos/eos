@@ -36,7 +36,7 @@ namespace eos
         {
             template <typename Decay_, typename ... TupleElements_, typename ... ResultElements_>
             static auto make(const Kinematics & k, const std::tuple<TupleElements_ ...> & t, const Decay_ * d, ResultElements_ ... r)
-                -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, double>::Type ...>
+                -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, KinematicVariable>::Type ...>
             {
                 return TupleMaker<n_ - 1>::make(k, t, d, k[std::get<n_ - 1>(t)], r ...);
             }
@@ -46,7 +46,7 @@ namespace eos
         {
             template <typename Decay_, typename ... TupleElements_, typename ... ResultElements_>
             static auto make(const Kinematics &, const std::tuple<TupleElements_ ...> &, const Decay_ * d, ResultElements_ ... r)
-                -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, double>::Type ...>
+                -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, KinematicVariable>::Type ...>
             {
                 return std::make_tuple(d, r ...);
             }
@@ -71,6 +71,8 @@ namespace eos
 
             Parameters _parameters;
 
+            Kinematics _kinematics;
+
             ObservableOptions _options;
 
             Decay_ _decay;
@@ -79,23 +81,23 @@ namespace eos
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
 
-            std::tuple<const Decay_ *, Args_ ...> _argument_tuple(const Kinematics & k) const
-            {
-                return impl::TupleMaker<sizeof...(Args_)>::make(k, _kinematics_names, &_decay);
-            }
+            std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple;
 
         public:
             ConcreteObservable(const std::string & name,
                     const Parameters & parameters,
+                    const Kinematics & kinematics,
                     const ObservableOptions & options,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & function,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
                 _name(name),
                 _parameters(parameters),
+                _kinematics(kinematics),
                 _options(options),
                 _decay(parameters, options),
                 _function(function),
-                _kinematics_names(kinematics_names)
+                _kinematics_names(kinematics_names),
+                _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, &_decay))
             {
             }
 
@@ -104,14 +106,21 @@ namespace eos
                 return _name;
             }
 
-            virtual double evaluate(const Kinematics & k) const
+            virtual double evaluate() const
             {
-                return apply(_function, _argument_tuple(k));
+                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
+
+                return apply(_function, values);
             };
 
             virtual Parameters parameters()
             {
                 return _parameters;
+            };
+
+            virtual Kinematics kinematics()
+            {
+                return _kinematics;
             };
 
             virtual ObservableOptions options()
@@ -121,7 +130,7 @@ namespace eos
 
             virtual ObservablePtr clone() const
             {
-                return ObservablePtr(new ConcreteObservable(_name, _parameters.clone(), _options, _function, _kinematics_names));
+                return ObservablePtr(new ConcreteObservable(_name, _parameters.clone(), _kinematics.clone(), _options, _function, _kinematics_names));
             }
     };
 
@@ -150,10 +159,9 @@ namespace eos
             {
             }
 
-            virtual ObservablePtr make(const Parameters & parameters, const ObservableOptions & options) const
+            virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const ObservableOptions & options) const
             {
-                return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, options, _function,
-                            _kinematics_names));
+                return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, kinematics, options, _function, _kinematics_names));
             }
     };
 

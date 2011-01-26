@@ -27,7 +27,7 @@ namespace eos
     class RareBFactory
     {
         public:
-            static ObservablePtr make(const std::string & name, const Parameters & parameters, const ObservableOptions & options);
+            static ObservablePtr make(const std::string & name, const Parameters & parameters, const Kinematics & kinematics, const ObservableOptions & options);
     };
 }
 
