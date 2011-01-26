@@ -150,9 +150,9 @@ namespace eos
             {
             }
 
-            virtual std::tr1::shared_ptr<Observable> make(const Parameters & parameters, const ObservableOptions & options) const
+            virtual ObservablePtr make(const Parameters & parameters, const ObservableOptions & options) const
             {
-                return std::tr1::shared_ptr<Observable>(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, options, _function,
+                return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, options, _function,
                             _kinematics_names));
             }
     };

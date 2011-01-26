@@ -74,7 +74,7 @@ namespace eos
 
     template <> struct Implementation<TicketList>
     {
-        std::list<std::tr1::shared_ptr<Implementation<Ticket> > > tickets;
+        std::list<std::shared_ptr<Implementation<Ticket> > > tickets;
     };
 
     TicketList::TicketList() :
@@ -97,7 +97,7 @@ namespace eos
     {
         while (! _imp->tickets.empty())
         {
-            std::tr1::shared_ptr<Implementation<Ticket> > ticket(_imp->tickets.front());
+            std::shared_ptr<Implementation<Ticket> > ticket(_imp->tickets.front());
 
             {
                 Lock l(ticket->mutex);

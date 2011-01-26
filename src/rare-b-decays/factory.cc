@@ -349,7 +349,7 @@ namespace eos
 
         auto i(simple_observables.find(name));
         if (simple_observables.end() == i)
-            return std::tr1::shared_ptr<Observable>();
+            return ObservablePtr();
 
         return i->second->make(parameters, myoptions);
     }

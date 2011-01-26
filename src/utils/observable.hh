@@ -33,7 +33,7 @@ namespace eos
 
     class ObservableOptions;
 
-    typedef std::tr1::shared_ptr<Observable> ObservablePtr;
+    typedef std::shared_ptr<Observable> ObservablePtr;
 
     class Observable
     {
@@ -53,7 +53,7 @@ namespace eos
             virtual ObservablePtr clone() const = 0;
     };
 
-    typedef std::tr1::shared_ptr<Observable> ObservablePtr;
+    typedef std::shared_ptr<Observable> ObservablePtr;
 
     struct UnknownOptionError :
         public Exception

@@ -20,7 +20,7 @@
 #ifndef WILSON_FITTER_GUARD_UTILS_PRIVATE_IMPLEMENTATION_PATTERN_HH
 #define WILSON_FITTER_GUARD_UTILS_PRIVATE_IMPLEMENTATION_PATTERN_HH 1
 
-#include <tr1/memory>
+#include <memory>
 
 namespace eos
 {
@@ -29,7 +29,7 @@ namespace eos
     template <typename T_> class PrivateImplementationPattern
     {
         protected:
-            std::tr1::shared_ptr<Implementation<T_> > _imp;
+            std::shared_ptr<Implementation<T_> > _imp;
 
         public:
             explicit PrivateImplementationPattern(Implementation<T_> * imp);
