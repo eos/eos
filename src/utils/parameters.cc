@@ -125,6 +125,12 @@ namespace eos
         return Parameters::Iterator(_imp->parameters.end());
     }
 
+    bool
+    Parameters::operator!= (const Parameters & rhs) const
+    {
+        return rhs._imp.get() != this->_imp.get();
+    }
+
     Parameters
     Parameters::Defaults()
     {

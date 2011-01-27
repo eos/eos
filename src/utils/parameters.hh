@@ -123,6 +123,14 @@ namespace eos
              */
             Parameter operator[] (const std::string & name) const;
             ///@}
+
+            /*!
+             * Compare two instances of Parameters on inequality of their
+             * underlying implementations.
+             *
+             * @param rhs   The right hand side of the binary != operator.
+             */
+            bool operator!= (const Parameters & rhs) const;
     };
 
     /*!
