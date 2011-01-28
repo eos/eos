@@ -20,6 +20,7 @@
 #ifndef WILSON_FITTER_GUARD_TEST_TEST_HH
 #define WILSON_FITTER_GUARD_TEST_TEST_HH 1
 
+#include <limits>
 #include <string>
 #include <src/utils/stringify.hh>
 
@@ -89,6 +90,26 @@ namespace test
             throw TestCaseFailedException(__LINE__, __FILE__, \
                     "'" #a "' = " + stringify(a) + " is not nearly-equal to '" #b "' = " + stringify(b) + " within '" + stringify(eps) + "'" \
                     + ", difference is '" + stringify(a - b) + "'"); \
+    } \
+    while (false)
+
+#define TEST_CHECK_RELATIVE_ERROR(a, b, eps) \
+    do \
+    { \
+        if (std::sqrt(std::abs(a)) < std::numeric_limits<decltype(a)>::epsilon()) \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "'" #a "' has been evaluated to the zero within computational accuracy, result = " + stringify(a)); \
+         \
+        if (std::sqrt(std::abs(b)) < std::numeric_limits<decltype(b)>::epsilon()) \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "'" #b "' has been evaluated to the zero within computational accuracy, result = " + stringify(b)); \
+         \
+        if (((std::abs(a - b) / a) <= eps) && ((std::abs(a - b) / b) <= eps)) \
+            break; \
+        else \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "One relative error of '" #a "' and '" #b "' is greater than " + stringify(eps) + ". The results are " + \
+                    stringify(std::abs(a - b) / a) + " and " + stringify(std::abs(a - b) / b)); \
     } \
     while (false)
 }
