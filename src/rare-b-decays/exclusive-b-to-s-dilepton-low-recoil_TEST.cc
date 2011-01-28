@@ -253,3 +253,44 @@ class BToKstarDileptonLowRecoilPolynomialTest :
             }
         }
 } b_to_kstar_dilepton_low_recoil_polynomial_test;
+
+
+class BToKDileptonLowRecoilTest :
+    public TestCase
+{
+    public:
+        BToKDileptonLowRecoilTest() :
+            TestCase("b_to_k_dilepton_low_recoil_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Low Recoil (SM) */
+            {
+                Parameters p = Parameters::Defaults();
+
+                ObservableOptions oo;
+                oo.set("form-factors", "BZ2004v2");
+
+                BToKDilepton<LowRecoil> d(p, oo);
+
+                /* q^2 = [14.18, 22.8] */
+                {
+                    const double eps = 1e-5;
+
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(14.18  ), 2.59251e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(15.2575), 2.54735e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.335 ), 2.46414e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(17.4125), 2.32995e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(18.49  ), 2.12452e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(19.5675), 1.81688e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(20.645 ), 1.36303e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(21.7225), 7.19611e-09, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(22.8   ), 1.64107e-10, eps);
+
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.58485e-7, eps);
+                }
+            }
+        }
+} b_to_k_dilepton_low_recoil_test;
