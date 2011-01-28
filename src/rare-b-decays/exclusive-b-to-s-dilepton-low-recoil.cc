@@ -159,7 +159,7 @@ namespace eos
                 throw InternalError("Form factors not found!");
         }
 
-        // We use the PS mass except for kappa_1
+        // We use the PS mass except for kappa
         double m_b_PS() const
         {
             // Actually use m_b_PS at mu_PS = 2.0 GeV
@@ -269,8 +269,8 @@ namespace eos
 
         double kappa() const
         {
-            // cf. [BHvD2010], Eq. (?), p. ?
-            // Use m_b_MSbar(m_b_MSbar) instead m_b_MSbar(mu), as we want kappa_1 up to NLO only.
+            // cf. [BHvD2010], Eq. (3.8), p. 8
+            // Use m_b_MSbar(m_b_MSbar) instead m_b_MSbar(mu), as we want kappa up to NLO only.
             return (1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
         }
 
@@ -306,7 +306,7 @@ namespace eos
             double formfactor = ((1.0 - m_Kstarhat2 - s_hat) * std::pow(1.0 + m_Kstarhat, 2) * a_1 - lambda(1.0, m_Kstarhat2, s_hat) * a_2)
                 / (2.0 * m_Kstarhat * (1.0 + m_Kstarhat) * std::sqrt(s_hat));
 
-            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
+            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.15), p. 10
         }
 
         complex<double> a_perp(const Helicity & helicity, const double & s) const
@@ -322,7 +322,7 @@ namespace eos
             double formfactor = std::sqrt(2 * lambda(1.0, m_Kstarhat2, s_hat(s))) / (1.0 + m_Kstarhat)
                 * form_factors->v(s);
 
-            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
+            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.13), p. 10
         }
 
         complex<double> a_par(const Helicity & helicity, const double & s) const
@@ -336,7 +336,7 @@ namespace eos
                 + uncertainty_isgur_wise_par * kappa() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
             complex<double> formfactor = std::sqrt(2) * (1.0 + m_Kstarhat) * form_factors->a_1(s);
 
-            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (??)
+            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.14), p. 10
         }
 
         // Quantity Y = Y_9 + lambda_u_hat Y_9^u + kappa_hat Y_7, the strong phase contributor of the amplitudes
