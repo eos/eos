@@ -36,6 +36,14 @@
 
 using namespace eos;
 
+double sign(const double & x)
+{
+    if (x < 0.0)
+        return -1.0;
+
+    return +1.0;
+}
+
 class DoUsage
 {
     private:
@@ -222,19 +230,20 @@ main(int argc, char * argv[])
             std::cout << "# " << i->observable->name() << '[' << i->kinematics.as_string() << "]: " << i->observable->options().as_string() << std::endl;
             std::cout << "#   central = " << central << std::endl;
 
+            double delta = CommandLine::instance()->resolution * std::abs(central);
             Histogram<1> histogram = Histogram<1>::WithEqualBinning(
-                    (1.0 - CommandLine::instance()->resolution) * central,
-                    (1.0 + CommandLine::instance()->resolution) * central,
+                    central - delta,
+                    central + delta,
                     CommandLine::instance()->bins);
-            histogram.insert(Histogram<1>::Bin(0.0, (1.0 - CommandLine::instance()->resolution) * central));
-            histogram.insert(Histogram<1>::Bin((1.0 + CommandLine::instance()->resolution) * central, std::numeric_limits<double>::max()));
+            histogram.insert(Histogram<1>::Bin(-std::numeric_limits<double>::max(), central - delta));
+            histogram.insert(Histogram<1>::Bin(central + delta, std::numeric_limits<double>::max()));
 
             RandomNumberEngine engine;
             for (unsigned s = 0 ; s != CommandLine::instance()->samples ; ++s)
             {
                 for (auto v = CommandLine::instance()->variations.begin(), v_end = CommandLine::instance()->variations.end() ; v != v_end ; ++v)
                 {
-                    std::normal_distribution<double> distribution(v->central(), v->max() - v->min());
+                    std::normal_distribution<double> distribution(v->central(), 0.5 * (v->max() - v->min()));
                     *v = distribution(engine);
                 }
 
@@ -269,7 +278,7 @@ main(int argc, char * argv[])
             std::vector<double> confidence_levels{ 0.683, 0.954, 0.997 };
             for (auto c = confidence_levels.cbegin(), c_end = confidence_levels.cend() ; c != c_end ; ++c)
             {
-                double lower, upper;
+                double lower = -std::numeric_limits<double>::max(), upper = -std::numeric_limits<double>::max();
                 for (auto b = ecdf.begin(), b_end = ecdf.end() ; b != b_end ; ++b)
                 {
                     if (b->value <= (1.0 - *c) / 2.0)
@@ -279,7 +288,7 @@ main(int argc, char * argv[])
                         upper = b->upper;
                 }
 
-                std::cout << "#   " << *c << "% CL: " << lower << " .. " << upper << std::endl;
+                std::cout << "#   " << *c << "% CL: " << lower << " .. " << upper << "    (-" << std::abs((central - lower) / central) * 100 << "% / +" << std::abs((upper - central) / central) * 100 << "%)" << std::endl;
             }
         }
     }
