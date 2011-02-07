@@ -98,7 +98,7 @@ namespace eos
     {
         Histogram<1> result;
 
-        double bin_width = (upper - lower) / count;
+        double bin_width = std::abs(upper - lower) / count;
         for (unsigned i = 0 ; i < count ; ++i)
         {
             result.insert(Bin(lower + bin_width * i, lower + bin_width * (i + 1), 0.0));
