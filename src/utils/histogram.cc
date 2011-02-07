@@ -58,10 +58,10 @@ namespace eos
 
             if (bins.end() == b)
             {
-                if (value < bins.begin()->lower)
+                if (value < bins.front().lower)
                     ++underflow;
 
-                if (value >= bins.end()->upper)
+                if (value >= bins.back().upper)
                     ++overflow;
 
                 throw InternalError("Histogram<1>::insert(): No bin found to cover value '" + stringify(value) + "'");
