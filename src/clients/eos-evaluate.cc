@@ -128,7 +128,7 @@ class CommandLine :
                         observable_name.erase(pos);
                     }
 
-                    input.observable = RareBFactory::make(observable_name, parameters, *kinematics, options);
+                    input.observable = RareBFactory::make(observable_name, parameters, input.kinematics, options);
                     if (! input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 
