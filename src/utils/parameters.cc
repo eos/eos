@@ -74,6 +74,17 @@ namespace eos
                 parameters.push_back(Parameter(parameters_data, idx));
             }
         }
+
+        Implementation(const Implementation & other) :
+            parameters_data(new Parameters::Data(*other.parameters_data)),
+            parameters_map(other.parameters_map)
+        {
+            parameters.reserve(other.parameters.size());
+            for (unsigned i = 0 ; i != parameters.size() ; ++i)
+            {
+                parameters.push_back(Parameter(parameters_data, i));
+            }
+        }
     };
 
     Parameters::Parameters(Implementation<Parameters> * imp) :

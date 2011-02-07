@@ -53,6 +53,7 @@ TESTS = \
 	matrix_TEST \
 	memoise_TEST \
 	one-of_TEST \
+	parameters_TEST \
 	power_of_TEST \
 	qcd_TEST \
 	save_TEST \
@@ -91,6 +92,9 @@ memoise_TEST_LDADD = $(TESTS_LD_ADD)
 
 one_of_TEST_SOURCES = one-of_TEST.cc
 one_of_TEST_LDADD = $(TESTS_LD_ADD)
+
+parameters_TEST_SOURCES = parameters_TEST.cc
+parameters_TEST_LDADD = $(TESTS_LD_ADD)
 
 power_of_TEST_SOURCES = power_of_TEST.cc
 power_of_TEST_LDADD = $(TESTS_LD_ADD)
