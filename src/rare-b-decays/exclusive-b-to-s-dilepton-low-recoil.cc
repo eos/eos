@@ -88,29 +88,25 @@ namespace eos
 
         Parameter m_c_MSbar;
 
+        Parameter m_s;
+
         Parameter m_B;
 
         Parameter m_Kstar;
 
         Parameter mu;
 
-        Parameter uncertainty_par_left;
+        Parameter lambda_long;
 
-        Parameter uncertainty_par_right;
+        Parameter lambda_par;
 
-        Parameter uncertainty_perp_left;
+        Parameter lambda_perp;
 
-        Parameter uncertainty_perp_right;
+        Parameter sl_phase_long;
 
-        Parameter uncertainty_long_left;
+        Parameter sl_phase_par;
 
-        Parameter uncertainty_long_right;
-
-        Parameter uncertainty_isgur_wise_long;
-
-        Parameter uncertainty_isgur_wise_par;
-
-        Parameter uncertainty_isgur_wise_perp;
+        Parameter sl_phase_perp;
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
@@ -138,18 +134,16 @@ namespace eos
             c10prime(p["c10prime"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c_MSbar(p["mass::c"]),
+            m_s(p["mass::s"]),
             m_B(p["mass::B0"]),
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
-            uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty@LowRecoil"]),
-            uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty@LowRecoil"]),
-            uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty@LowRecoil"]),
-            uncertainty_perp_right(p["B->K^*ll::A_perp^R_uncertainty@LowRecoil"]),
-            uncertainty_long_left(p["B->K^*ll::A_0^L_uncertainty@LowRecoil"]),
-            uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty@LowRecoil"]),
-            uncertainty_isgur_wise_long(p["B->K^*ll::IW_long_uncertainty"]),
-            uncertainty_isgur_wise_par(p["B->K^*ll::IW_par_uncertainty"]),
-            uncertainty_isgur_wise_perp(p["B->K^*ll::IW_perp_uncertainty"]),
+            lambda_long(p["B->Vll::Lambda_0@LowRecoil"]),
+            lambda_par(p["B->Vll::Lambda_pa@LowRecoil"]),
+            lambda_perp(p["B->Vll::Lambda_pp@LowRecoil"]),
+            sl_phase_long(p["B->Vll::sl_phase_0@LowRecoil"]),
+            sl_phase_par(p["B->Vll::sl_phase_pa@LowRecoil"]),
+            sl_phase_perp(p["B->Vll::sl_phase_pp@LowRecoil"]),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
@@ -298,15 +292,20 @@ namespace eos
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
             double s_hat = s / m_B / m_B;
             double a_1 = form_factors->a_1(s), a_2 = form_factors->a_2(s);
+            double alpha_s = model->alpha_s(mu());
 
-            double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
-            complex<double> prefactor = complex<double>(-1.0, 0.0) * m_B();
-            complex<double> wilson = (c9eff(s) - c9prime()) + h * (c10() - c10prime())
-                + uncertainty_isgur_wise_long * kappa() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
-            double formfactor = ((1.0 - m_Kstarhat2 - s_hat) * std::pow(1.0 + m_Kstarhat, 2) * a_1 - lambda(1.0, m_Kstarhat2, s_hat) * a_2)
+            complex<double> prefactor = complex<double>(-1.0, 0.0) * m_B()
                 / (2.0 * m_Kstarhat * (1.0 + m_Kstarhat) * std::sqrt(s_hat));
+            complex<double> wilson1 = (c9eff(s) - c9prime()) + h * (c10() - c10prime())
+                + kappa() * (c7eff(s) - c7prime()) * (2 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
+                + 0.5 * lambda_par() / m_B * alpha_s * complex<double>(std::cos(sl_phase_par()), std::sin(sl_phase_par()));
+            complex<double> wilson2 = (c9eff(s) - c9prime()) + h * (c10() - c10prime())
+                + kappa() * (c7eff(s) - c7prime()) * (2 * m_B / s) * (m_b_MSbar() - m_s() - lambda_long())
+                - 0.5 * lambda_long / m_B * alpha_s * complex<double>(std::cos(sl_phase_long()), std::sin(sl_phase_long()));
+            double formfactor1 = (1.0 - m_Kstarhat2 - s_hat) * std::pow(1.0 + m_Kstarhat, 2) * a_1,
+                   formfactor2 = -lambda(1.0, m_Kstarhat2, s_hat) * a_2;
 
-            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.15), p. 10
+            return this->norm(s) * prefactor * (wilson1 * formfactor1 + wilson2 * formfactor2); // cf. [BHvD2010], Eq. (3.15), p. 10
         }
 
         complex<double> a_perp(const Helicity & helicity, const double & s) const
@@ -314,29 +313,31 @@ namespace eos
             double h = helicity;
             double m_Kstarhat = m_Kstar / m_B;
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
+            double alpha_s = model->alpha_s(mu());
 
-            double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
             complex<double> prefactor = complex<double>(1.0, 0.0) * m_B();
             complex<double> wilson = ((c9eff(s) + c9prime()) + h * (c10() + c10prime()))
-                + uncertainty_isgur_wise_perp * kappa() * (c7eff(s) + c7prime()) * (2 * m_b_MSbar * m_B / s);
+                + kappa() * (c7eff(s) + c7prime()) * (2 * m_B / s) * (m_b_MSbar() + m_s() + lambda_perp())
+                - 0.5 * lambda_perp()/m_B * alpha_s * complex<double>(std::cos(sl_phase_perp()), std::sin(sl_phase_perp()));
             double formfactor = std::sqrt(2 * lambda(1.0, m_Kstarhat2, s_hat(s))) / (1.0 + m_Kstarhat)
                 * form_factors->v(s);
 
-            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.13), p. 10
+            return this->norm(s) * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.13), p. 10
         }
 
         complex<double> a_par(const Helicity & helicity, const double & s) const
         {
             double h = helicity;
             double m_Kstarhat = m_Kstar / m_B;
+            double alpha_s = model->alpha_s(mu());
 
-            double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
             complex<double> prefactor = complex<double>(-1.0, 0.0) * m_B();
             complex<double> wilson = ((c9eff(s) - c9prime()) + h * (c10() - c10prime()))
-                + uncertainty_isgur_wise_par * kappa() * (c7eff(s) - c7prime()) * (2 * m_b_MSbar * m_B / s);
+                + kappa() * (c7eff(s) - c7prime()) * (2 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
+                + 0.5 * lambda_par() * alpha_s * complex<double>(std::cos(sl_phase_par()), std::sin(sl_phase_par()));
             complex<double> formfactor = std::sqrt(2) * (1.0 + m_Kstarhat) * form_factors->a_1(s);
 
-            return this->norm(s) * uncertainty * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.14), p. 10
+            return this->norm(s) * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.14), p. 10
         }
 
         // Quantity Y = Y_9 + lambda_u_hat Y_9^u + kappa_hat Y_7, the strong phase contributor of the amplitudes

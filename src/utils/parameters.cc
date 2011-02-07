@@ -219,17 +219,13 @@ namespace eos
             Parameter::Template{"B->K^*ll::A_par^R_uncertainty@LargeRecoil",     +0.95,       +1.0,        +1.05      },
             Parameter::Template{"B->K^*ll::A_perp^L_uncertainty@LargeRecoil",    +0.95,       +1.0,        +1.05      },
             Parameter::Template{"B->K^*ll::A_perp^R_uncertainty@LargeRecoil",    +0.95,       +1.0,        +1.05      },
-             // B->K^*ll uncertainties from subleading terms for Low Recoil
-            Parameter::Template{"B->K^*ll::A_0^L_uncertainty@LowRecoil",         +0.95,       +1.0,        +1.05      },
-            Parameter::Template{"B->K^*ll::A_0^R_uncertainty@LowRecoil",         +0.95,       +1.0,        +1.05      },
-            Parameter::Template{"B->K^*ll::A_par^L_uncertainty@LowRecoil",       +0.95,       +1.0,        +1.05      },
-            Parameter::Template{"B->K^*ll::A_par^R_uncertainty@LowRecoil",       +0.95,       +1.0,        +1.05      },
-            Parameter::Template{"B->K^*ll::A_perp^L_uncertainty@LowRecoil",      +0.95,       +1.0,        +1.05      },
-            Parameter::Template{"B->K^*ll::A_perp^R_uncertainty@LowRecoil",      +0.95,       +1.0,        +1.05      },
-            // B->K^*ll uncertainties from improved Isgur-Wise relations at Low Recoil
-            Parameter::Template{"B->K^*ll::IW_long_uncertainty",                 +0.8,        +1.0,        +1.2       },
-            Parameter::Template{"B->K^*ll::IW_par_uncertainty",                  +0.8,        +1.0,        +1.2       },
-            Parameter::Template{"B->K^*ll::IW_perp_uncertainty",                 +0.8,        +1.0,        +1.2       },
+            // B->Vll uncertainties at subleading order at Low Recoil
+            Parameter::Template{"B->Vll::Lambda_0@LowRecoil",                    -0.5,        +0.0,        +0.5       },
+            Parameter::Template{"B->Vll::Lambda_pa@LowRecoil",                   -0.5,        +0.0,        +0.5       },
+            Parameter::Template{"B->Vll::Lambda_pp@LowRecoil",                   -0.5,        +0.0,        +0.5       },
+            Parameter::Template{"B->Vll::sl_phase_0@LowRecoil",                  -M_PI/2.0,   +0.0,        +M_PI/2.0  },
+            Parameter::Template{"B->Vll::sl_phase_pa@LowRecoil",                 -M_PI/2.0,   +0.0,        +M_PI/2.0  },
+            Parameter::Template{"B->Vll::sl_phase_pp@LowRecoil",                 -M_PI/2.0,   +0.0,        +M_PI/2.0  },
             // B->X_s HQET parameters
             Parameter::Template{"B->X_s::lambda_1",                              -0.20,       -0.20,       -0.20      }, // cf. [ALGH2001], Table 2, p. 13
             Parameter::Template{"B->X_s::lambda_2",                              +0.12,       +0.12,       +0.12      }, // cf. [ALGH2001], Table 2, p. 13
