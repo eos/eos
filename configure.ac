@@ -26,6 +26,7 @@ if test -d "${GIT_DIR:-${ac_top_srcdir:-./}/.git}" ; then
 	fi
 fi
 AC_SUBST([GITHEAD])
+AC_DEFINE_UNQUOTED([EOS_GITHEAD], "$GITHEAD", [GIT revision of the sources])
 dnl }}}
 
 dnl {{{ define CHECK_CXXFLAG
