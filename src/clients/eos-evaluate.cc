@@ -17,7 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/factory.hh>
+#include <src/observable.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/histogram.hh>
 #include <src/utils/instantiation_policy-impl.hh>
@@ -136,7 +136,7 @@ class CommandLine :
                         observable_name.erase(pos);
                     }
 
-                    input.observable = RareBFactory::make(observable_name, parameters, input.kinematics, options);
+                    input.observable = Observable::make(observable_name, parameters, input.kinematics, options);
                     if (! input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 

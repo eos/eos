@@ -17,7 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/factory.hh>
+#include <src/observable.hh>
 #include <src/utils/destringify.hh>
 
 #include <cmath>
@@ -116,7 +116,7 @@ main(int argc, char * argv[])
                 argument.erase(pos);
             }
 
-            ObservablePtr ptr(RareBFactory::make(argument, parameters, kinematics, options));
+            ObservablePtr ptr(Observable::make(argument, parameters, kinematics, options));
             if (! ptr)
                 throw DoUsage("Unknown observable: '" + argument + "'");
 

@@ -17,7 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/factory.hh>
+#include <src/observable.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/instantiation_policy-impl.hh>
 #include <src/utils/one-of.hh>
@@ -100,7 +100,7 @@ class CommandLine :
                     std::string observable_name(*(++a));
 
                     ObservableInput input;
-                    input.observable = RareBFactory::make(observable_name, parameters, *kinematics, Options());
+                    input.observable = Observable::make(observable_name, parameters, *kinematics, Options());
                     if (! input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 

@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <src/factory.hh>
+#include <src/observable.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 #include <src/utils/complex.hh>
 #include <src/utils/wilson-polynomial.hh>
@@ -243,7 +243,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
 
             for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
             {
-                ObservablePtr observable = RareBFactory::make(*n, parameters, kinematics, options);
+                ObservablePtr observable = Observable::make(*n, parameters, kinematics, options);
                 WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "c7", "c9", "c10" });
 
                 for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)

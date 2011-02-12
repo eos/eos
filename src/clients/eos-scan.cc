@@ -18,7 +18,7 @@
  */
 
 #include <config.h>
-#include <src/factory.hh>
+#include <src/observable.hh>
 #include <src/utils/cartesian-product.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/lock.hh>
@@ -104,7 +104,7 @@ class WilsonScan
             {
                 //TODO: Create options from i->o_options!
                 Options options;
-                bins.push_back(std::make_pair(*i, RareBFactory::make(i->o_name, parameters.clone(), kinematics.clone(), options)));
+                bins.push_back(std::make_pair(*i, Observable::make(i->o_name, parameters.clone(), kinematics.clone(), options)));
             }
         }
 

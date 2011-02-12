@@ -54,6 +54,8 @@ namespace eos
             virtual Options options() = 0;
 
             virtual ObservablePtr clone() const = 0;
+
+            static ObservablePtr make(const std::string & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
     };
 
     typedef std::shared_ptr<Observable> ObservablePtr;

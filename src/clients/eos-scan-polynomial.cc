@@ -18,7 +18,7 @@
  */
 
 #include <config.h>
-#include <src/factory.hh>
+#include <src/observable.hh>
 #include <src/utils/cartesian-product.hh>
 #include <src/utils/chi-squared.hh>
 #include <src/utils/destringify.hh>
@@ -248,7 +248,7 @@ class CommandLine :
                     std::string observable_name(*(++a));
 
                     ObservableInput input;
-                    input.observable = RareBFactory::make(observable_name, parameters, *kinematics, Options());
+                    input.observable = Observable::make(observable_name, parameters, *kinematics, Options());
                     if (! input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 
@@ -267,11 +267,11 @@ class CommandLine :
                     std::string numerator_name(*(++a)), denominator_name(*(++a));
 
                     ObservableRatioInput input;
-                    input.numerator = RareBFactory::make(numerator_name, parameters, *kinematics, Options());
+                    input.numerator = Observable::make(numerator_name, parameters, *kinematics, Options());
                     if (! input.numerator)
                         throw DoUsage("Unknown observable '" + numerator_name + "'");
 
-                    input.denominator = RareBFactory::make(denominator_name, parameters, *kinematics, Options());
+                    input.denominator = Observable::make(denominator_name, parameters, *kinematics, Options());
                     if (! input.numerator)
                         throw DoUsage("Unknown observable '" + denominator_name + "'");
 
