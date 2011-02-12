@@ -20,16 +20,10 @@ libeosrarebdecays_la_SOURCES = \
 	long-distance.cc long-distance.hh
 libeosrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libeosutils.la -lgslcblas -lgsl
 
-noinst_PROGRAMS = amplitudes integrated observables
+noinst_PROGRAMS = amplitudes
 amplitudes_SOURCES = \
 	amplitudes.cc
 amplitudes_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
-integrated_SOURCES = \
-	integrated.cc
-integrated_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
-observables_SOURCES = \
-	observables.cc
-observables_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
 
 TESTS = \
 	bremsstrahlung_TEST \

@@ -9,6 +9,9 @@ bin_PROGRAMS = \
 	eos-print-polynomial \
 	eos-scan-polynomial \
 	eos-scan
+noinst_PROGRAMS = \
+	integrated \
+	observables
 
 eos_evaluate_SOURCES = \
 	eos-evaluate.cc
@@ -36,5 +39,17 @@ eos_scan_polynomial_LDADD = \
 eos_scan_SOURCES = \
 	eos-scan.cc
 eos_scan_LDADD = \
+	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la \
+	$(top_builddir)/src/utils/libeosutils.la
+
+integrated_SOURCES = \
+	integrated.cc
+integrated_LDADD = \
+	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la \
+	$(top_builddir)/src/utils/libeosutils.la
+
+observables_SOURCES = \
+	observables.cc
+observables_LDADD = \
 	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la \
 	$(top_builddir)/src/utils/libeosutils.la
