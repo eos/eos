@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,8 +24,10 @@
 #include <src/rare-b-decays/long-distance.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/integrate.hh>
+#include <src/utils/kinematic.hh>
 #include <src/utils/memoise.hh>
 #include <src/utils/model.hh>
+#include <src/utils/options.hh>
 #include <src/utils/power_of.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
@@ -131,7 +133,7 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
-        Implementation(const Parameters & p, const ObservableOptions & o) :
+        Implementation(const Parameters & p, const Options & o) :
             model(Model::make("SM", p)),
             c1(p["c1"]),
             c2(p["c2"]),
@@ -816,7 +818,7 @@ namespace eos
         }
     };
 
-    BToKstarDilepton<LargeRecoil>::BToKstarDilepton(const Parameters & parameters, const ObservableOptions & options) :
+    BToKstarDilepton<LargeRecoil>::BToKstarDilepton(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToKstarDilepton<LargeRecoil>>(new Implementation<BToKstarDilepton<LargeRecoil>>(parameters, options))
     {
     }

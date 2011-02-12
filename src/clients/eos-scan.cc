@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -103,7 +103,7 @@ class WilsonScan
             for (auto i(inputs.begin()), i_end(inputs.end()) ; i != i_end ; ++i)
             {
                 //TODO: Create options from i->o_options!
-                ObservableOptions options;
+                Options options;
                 bins.push_back(std::make_pair(*i, RareBFactory::make(i->o_name, parameters.clone(), kinematics.clone(), options)));
             }
         }

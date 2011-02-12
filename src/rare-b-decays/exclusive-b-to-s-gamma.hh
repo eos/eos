@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,7 +22,7 @@
 
 #include <src/rare-b-decays/decays.hh>
 #include <src/utils/complex.hh>
-#include <src/utils/observable.hh>
+#include <src/utils/options.hh>
 #include <src/utils/parameters.hh>
 #include <src/utils/private_implementation_pattern.hh>
 
@@ -37,7 +37,7 @@ namespace eos
         public PrivateImplementationPattern<BToKstarGamma>
     {
         public:
-            BToKstarGamma(const Parameters & parameters, const ObservableOptions & options);
+            BToKstarGamma(const Parameters & parameters, const Options & options);
             ~BToKstarGamma();
 
             // Time dependent CP asymmetry S_K^*gamma

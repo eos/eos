@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -22,7 +22,7 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_IMPL_HH 1
 
 #include <src/rare-b-decays/form-factors.hh>
-#include <src/utils/observable.hh>
+#include <src/utils/options.hh>
 #include <src/utils/power_of.hh>
 
 namespace eos
@@ -68,7 +68,7 @@ namespace eos
             }
 
         public:
-            BZ2004FormFactors(const Parameters & p, const ObservableOptions &) :
+            BZ2004FormFactors(const Parameters & p, const Options &) :
                 _v_factor(p["formfactors::v_uncertainty"]),
                 _a0_factor(p["formfactors::a0_uncertainty"]),
                 _a1_factor(p["formfactors::a1_uncertainty"]),
@@ -78,7 +78,7 @@ namespace eos
 
             static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
             {
-                return new BZ2004FormFactors(parameters, ObservableOptions());
+                return new BZ2004FormFactors(parameters, Options());
             }
 
             virtual double v(const double & s) const
@@ -118,7 +118,7 @@ namespace eos
             static const double _mfit2, _m12;
 
         public:
-            BZ2004FormFactors(const Parameters & p, const ObservableOptions &) :
+            BZ2004FormFactors(const Parameters & p, const Options &) :
                 _f_p_factor(p["formfactors::fp_uncertainty"]),
                 _f_0_factor(p["formfactors::f0_uncertainty"]),
                 _f_t_factor(p["formfactors::ft_uncertainty"])
@@ -127,7 +127,7 @@ namespace eos
 
             static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
             {
-                return new BZ2004FormFactors(parameters, ObservableOptions());
+                return new BZ2004FormFactors(parameters, Options());
             }
 
             virtual double f_p(const double & s) const
@@ -168,7 +168,7 @@ namespace eos
             }
 
         public:
-            KMPW2010FormFactors(const Parameters & p, const ObservableOptions &) :
+            KMPW2010FormFactors(const Parameters & p, const Options &) :
                 _f_p_factor(p["formfactors::fp_uncertainty"]),
                 _f_0_factor(p["formfactors::f0_uncertainty"]),
                 _f_t_factor(p["formfactors::ft_uncertainty"])
@@ -177,7 +177,7 @@ namespace eos
 
             static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
             {
-                return new KMPW2010FormFactors(parameters, ObservableOptions());
+                return new KMPW2010FormFactors(parameters, Options());
             }
 
             virtual double f_p(const double & s) const

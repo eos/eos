@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -25,8 +25,10 @@
 #include <src/rare-b-decays/long-distance.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/integrate.hh>
+#include <src/utils/kinematic.hh>
 #include <src/utils/memoise.hh>
 #include <src/utils/model.hh>
+#include <src/utils/options.hh>
 #include <src/utils/power_of.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
@@ -114,7 +116,7 @@ namespace eos
 
         bool ccbar_resonance;
 
-        Implementation(const Parameters & p, const ObservableOptions & o) :
+        Implementation(const Parameters & p, const Options & o) :
             model(Model::make("SM", p)),
             c1(p["c1"]),
             c2(p["c2"]),
@@ -469,7 +471,7 @@ namespace eos
         }
     };
 
-    BToKstarDilepton<LowRecoil>::BToKstarDilepton(const Parameters & parameters, const ObservableOptions & options) :
+    BToKstarDilepton<LowRecoil>::BToKstarDilepton(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>(new Implementation<BToKstarDilepton<LowRecoil>>(parameters, options))
     {
     }
@@ -932,7 +934,7 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
-        Implementation(const Parameters & p, const ObservableOptions & o) :
+        Implementation(const Parameters & p, const Options & o) :
             model(Model::make("SM", p)),
             c1(p["c1"]),
             c2(p["c2"]),
@@ -1096,7 +1098,7 @@ namespace eos
         }
     };
 
-    BToKDilepton<LowRecoil>::BToKDilepton(const Parameters & parameters, const ObservableOptions & options) :
+    BToKDilepton<LowRecoil>::BToKDilepton(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToKDilepton<LowRecoil>>(new Implementation<BToKDilepton<LowRecoil>>(parameters, options))
     {
     }

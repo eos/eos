@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -45,7 +45,7 @@ struct WilsonPolynomialTestObservable :
     Parameter abs_c10;
     Parameter arg_c10;
 
-    WilsonPolynomialTestObservable(const Parameters & p, const Kinematics & k, const ObservableOptions &) :
+    WilsonPolynomialTestObservable(const Parameters & p, const Kinematics & k, const Options &) :
         n("WilsonPolynomialTestObservable"),
         p(p),
         k(k),
@@ -63,8 +63,8 @@ struct WilsonPolynomialTestObservable :
     virtual const std::string & name() const { return n; }
     virtual Parameters parameters() { return p; }
     virtual Kinematics kinematics() { return k; }
-    virtual ObservableOptions options() { return ObservableOptions(); }
-    virtual ObservablePtr clone() const { return ObservablePtr(new WilsonPolynomialTestObservable(p.clone(), k.clone(), ObservableOptions())); }
+    virtual Options options() { return Options(); }
+    virtual ObservablePtr clone() const { return ObservablePtr(new WilsonPolynomialTestObservable(p.clone(), k.clone(), Options())); }
 
     virtual double evaluate() const
     {
@@ -120,7 +120,7 @@ class WilsonPolynomialTest :
             Parameters parameters = Parameters::Defaults();
             Kinematics kinematics;
 
-            ObservablePtr o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, ObservableOptions()));
+            ObservablePtr o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
             WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "c7", "c9", "c10" });
 
             WilsonPolynomialPrinter printer;

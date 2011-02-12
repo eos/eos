@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +22,7 @@
 
 #include <src/utils/exception.hh>
 #include <src/utils/kinematic.hh>
+#include <src/utils/options.hh>
 #include <src/utils/parameters.hh>
 
 #include <string>
@@ -31,7 +32,7 @@ namespace eos
 {
     class Observable;
 
-    class ObservableOptions;
+    class Options;
 
     typedef std::shared_ptr<Observable> ObservablePtr;
 
@@ -50,37 +51,12 @@ namespace eos
 
             virtual Parameters parameters() = 0;
 
-            virtual ObservableOptions options() = 0;
+            virtual Options options() = 0;
 
             virtual ObservablePtr clone() const = 0;
     };
 
     typedef std::shared_ptr<Observable> ObservablePtr;
-
-    struct UnknownOptionError :
-        public Exception
-    {
-        UnknownOptionError(const std::string & key) throw ();
-    };
-
-    class ObservableOptions :
-        public PrivateImplementationPattern<ObservableOptions>
-    {
-        public:
-            ObservableOptions();
-
-            ~ObservableOptions();
-
-            const std::string & operator[] (const std::string & key) const;
-
-            bool has(const std::string & key) const;
-
-            void set(const std::string & key, const std::string & value = "");
-
-            std::string get(const std::string & key, const std::string & default_value = "") const;
-
-            std::string as_string() const;
-    };
 
     class ObservableFactory
     {
@@ -89,7 +65,7 @@ namespace eos
 
             virtual ~ObservableFactory();
 
-            virtual ObservablePtr make(const Parameters &, const Kinematics &, const ObservableOptions &) const = 0;
+            virtual ObservablePtr make(const Parameters &, const Kinematics &, const Options &) const = 0;
     };
 }
 

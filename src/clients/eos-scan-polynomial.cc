@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -248,7 +248,7 @@ class CommandLine :
                     std::string observable_name(*(++a));
 
                     ObservableInput input;
-                    input.observable = RareBFactory::make(observable_name, parameters, *kinematics, ObservableOptions());
+                    input.observable = RareBFactory::make(observable_name, parameters, *kinematics, Options());
                     if (! input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 
@@ -267,11 +267,11 @@ class CommandLine :
                     std::string numerator_name(*(++a)), denominator_name(*(++a));
 
                     ObservableRatioInput input;
-                    input.numerator = RareBFactory::make(numerator_name, parameters, *kinematics, ObservableOptions());
+                    input.numerator = RareBFactory::make(numerator_name, parameters, *kinematics, Options());
                     if (! input.numerator)
                         throw DoUsage("Unknown observable '" + numerator_name + "'");
 
-                    input.denominator = RareBFactory::make(denominator_name, parameters, *kinematics, ObservableOptions());
+                    input.denominator = RareBFactory::make(denominator_name, parameters, *kinematics, Options());
                     if (! input.numerator)
                         throw DoUsage("Unknown observable '" + denominator_name + "'");
 

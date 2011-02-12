@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -23,7 +23,7 @@
 
 #include <src/rare-b-decays/decays.hh>
 #include <src/utils/complex.hh>
-#include <src/utils/observable.hh>
+#include <src/utils/options.hh>
 #include <src/utils/parameters.hh>
 #include <src/utils/private_implementation_pattern.hh>
 
@@ -41,7 +41,7 @@ namespace eos
         public PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>
     {
         public:
-            BToKstarDilepton(const Parameters & parameters, const ObservableOptions & options);
+            BToKstarDilepton(const Parameters & parameters, const Options & options);
             ~BToKstarDilepton();
 
             // [BHvD2010] Eqs. (??-??)
@@ -109,7 +109,7 @@ namespace eos
         public PrivateImplementationPattern<BToKDilepton<LowRecoil>>
     {
         public:
-            BToKDilepton(const Parameters & parameters, const ObservableOptions & options);
+            BToKDilepton(const Parameters & parameters, const Options & options);
             ~BToKDilepton();
 
             // Differential Observables

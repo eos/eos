@@ -26,6 +26,7 @@ libeosutils_la_SOURCES = \
 	mutex.cc mutex.hh \
 	observable.cc observable.hh \
 	one-of.hh \
+	options.cc options.hh \
 	parameters.cc parameters.hh \
 	power_of.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \

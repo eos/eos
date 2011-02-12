@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,7 +25,7 @@
 #include <src/utils/kinematic.hh>
 #include <src/utils/memoise.hh>
 #include <src/utils/model.hh>
-#include <src/utils/observable.hh>
+#include <src/utils/options.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 
@@ -94,7 +94,7 @@ namespace eos
 
         double m_l;
 
-        Implementation(const Parameters & p, const ObservableOptions & o) :
+        Implementation(const Parameters & p, const Options & o) :
             model(Model::make("SM", p)),
             c1(p["c1"]),
             c2(p["c2"]),
@@ -486,7 +486,7 @@ namespace eos
         }
     };
 
-    BToXsDilepton<HLMW2005>::BToXsDilepton(const Parameters & parameters, const ObservableOptions & options) :
+    BToXsDilepton<HLMW2005>::BToXsDilepton(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToXsDilepton<HLMW2005>>(new Implementation<BToXsDilepton<HLMW2005>>(parameters, options))
     {
     }

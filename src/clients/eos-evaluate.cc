@@ -121,7 +121,7 @@ class CommandLine :
                     input.kinematics = *kinematics;
                     kinematics.reset(new Kinematics);
 
-                    ObservableOptions options;
+                    Options options;
                     std::string::size_type pos;
                     while (std::string::npos != (pos = observable_name.rfind(',')))
                     {

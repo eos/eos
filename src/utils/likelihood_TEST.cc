@@ -33,7 +33,7 @@ struct TestObservable :
 
     Kinematics k;
 
-    ObservableOptions o;
+    Options o;
 
     std::string n, mass_name;
 
@@ -61,7 +61,7 @@ struct TestObservable :
 
     Parameters parameters() { return p; }
     Kinematics kinematics() { return k; }
-    ObservableOptions options() { return o; }
+    Options options() { return o; }
     const std::string & name() const { return n; }
 };
 

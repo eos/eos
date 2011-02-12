@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@ class BToXsDileptonLargeRecoilTest :
                 p["Abs{c10}"] = +4.173;
                 p["Arg{c10}"] = M_PI;
 
-                ObservableOptions oo;
+                Options oo;
                 oo.set("l", "mu");
 
                 BToXsDilepton<HLMW2005> d_mu(p, oo);
@@ -128,7 +128,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
 
             for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
             {
-                ObservablePtr observable = RareBFactory::make(*n, parameters, kinematics, ObservableOptions());
+                ObservablePtr observable = RareBFactory::make(*n, parameters, kinematics, Options());
                 TEST_CHECK(0 != observable);
 
                 WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "c7", "c9", "c10" });

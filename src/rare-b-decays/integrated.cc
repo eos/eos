@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -95,7 +95,7 @@ main(int argc, char * argv[])
             if ("--observable" != argument)
                 throw DoUsage("Unknown option: '" + argument + "'");
 
-            ObservableOptions options;
+            Options options;
             argument = *(++a);
 
             std::string::size_type pos;

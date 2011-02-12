@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,14 +20,17 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_FACTORY_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_FACTORY_HH 1
 
+#include <src/utils/kinematic.hh>
 #include <src/utils/observable.hh>
+#include <src/utils/options.hh>
+#include <src/utils/parameters.hh>
 
 namespace eos
 {
     class RareBFactory
     {
         public:
-            static ObservablePtr make(const std::string & name, const Parameters & parameters, const Kinematics & kinematics, const ObservableOptions & options);
+            static ObservablePtr make(const std::string & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
     };
 }
 
