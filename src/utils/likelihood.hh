@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_SRC_UTILS_LIKELIHOOD_HH
 #define EOS_GUARD_SRC_UTILS_LIKELIHOOD_HH 1
 
-#include <src/utils/observable.hh>
+#include <src/observable.hh>
 #include <src/utils/parameters.hh>
 #include <src/utils/private_implementation_pattern.hh>
 

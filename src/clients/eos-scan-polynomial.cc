@@ -18,7 +18,7 @@
  */
 
 #include <config.h>
-#include <src/rare-b-decays/factory.hh>
+#include <src/factory.hh>
 #include <src/utils/cartesian-product.hh>
 #include <src/utils/chi-squared.hh>
 #include <src/utils/destringify.hh>

@@ -26,7 +26,7 @@
 #include <src/utils/parameters.hh>
 
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 namespace eos
 {

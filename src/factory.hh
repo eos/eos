@@ -21,7 +21,7 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_FACTORY_HH 1
 
 #include <src/utils/kinematic.hh>
-#include <src/utils/observable.hh>
+#include <src/observable.hh>
 #include <src/utils/options.hh>
 #include <src/utils/parameters.hh>
 

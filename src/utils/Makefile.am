@@ -24,7 +24,6 @@ libeosutils_la_SOURCES = \
 	memoise.hh \
 	model.cc model.hh \
 	mutex.cc mutex.hh \
-	observable.cc observable.hh \
 	one-of.hh \
 	options.cc options.hh \
 	parameters.cc parameters.hh \
@@ -83,7 +82,7 @@ integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_LDADD = $(TESTS_LD_ADD)
 
 likelihood_TEST_SOURCES = likelihood_TEST.cc
-likelihood_TEST_LDADD = $(TESTS_LD_ADD)
+likelihood_TEST_LDADD = $(TESTS_LD_ADD) $(top_builddir)/src/libeos.la
 
 matrix_TEST_SOURCES = matrix_TEST.cc
 matrix_TEST_LDADD = $(TESTS_LD_ADD)
@@ -119,4 +118,4 @@ wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
 wilson_coefficients_TEST_LDADD = $(TESTS_LD_ADD)
 
 wilson_polynomial_TEST_SOURCES = wilson-polynomial_TEST.cc
-wilson_polynomial_TEST_LDADD = $(TESTS_LD_ADD)
+wilson_polynomial_TEST_LDADD = $(TESTS_LD_ADD) $(top_builddir)/src/libeos.la

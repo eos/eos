@@ -21,7 +21,6 @@
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/model.hh>
-#include <src/utils/observable.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 

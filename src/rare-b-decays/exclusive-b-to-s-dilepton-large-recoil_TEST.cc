@@ -18,8 +18,8 @@
  */
 
 #include <test/test.hh>
+#include <src/factory.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
-#include <src/rare-b-decays/factory.hh>
 #include <src/utils/complex.hh>
 #include <src/utils/wilson-polynomial.hh>
 

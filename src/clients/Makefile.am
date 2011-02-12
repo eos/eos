@@ -13,43 +13,32 @@ noinst_PROGRAMS = \
 	integrated \
 	observables
 
+EOS_CLIENTS_LIBS = $(top_builddir)/src/libeos.la
+
 eos_evaluate_SOURCES = \
 	eos-evaluate.cc
-eos_evaluate_LDADD = \
-	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la \
-	$(top_builddir)/src/utils/libeosutils.la
+eos_evaluate_LDADD = $(EOS_CLIENTS_LIBS)
 
 eos_list_parameters_SOURCES = \
 	eos-list-parameters.cc
-eos_list_parameters_LDADD = \
-	$(top_builddir)/src/utils/libeosutils.la
+eos_list_parameters_LDADD = $(EOS_CLIENTS_LIBS)
 
 eos_print_polynomial_SOURCES = \
 	eos-print-polynomial.cc
-eos_print_polynomial_LDADD = \
-	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la \
-	$(top_builddir)/src/utils/libeosutils.la
+eos_print_polynomial_LDADD = $(EOS_CLIENTS_LIBS)
 
 eos_scan_polynomial_SOURCES = \
 	eos-scan-polynomial.cc
-eos_scan_polynomial_LDADD = \
-	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la \
-	$(top_builddir)/src/utils/libeosutils.la
+eos_scan_polynomial_LDADD = $(EOS_CLIENTS_LIBS)
 
 eos_scan_SOURCES = \
 	eos-scan.cc
-eos_scan_LDADD = \
-	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la \
-	$(top_builddir)/src/utils/libeosutils.la
+eos_scan_LDADD = $(EOS_CLIENTS_LIBS)
 
 integrated_SOURCES = \
 	integrated.cc
-integrated_LDADD = \
-	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la \
-	$(top_builddir)/src/utils/libeosutils.la
+integrated_LDADD = $(EOS_CLIENTS_LIBS)
 
 observables_SOURCES = \
 	observables.cc
-observables_LDADD = \
-	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la \
-	$(top_builddir)/src/utils/libeosutils.la
+observables_LDADD = $(EOS_CLIENTS_LIBS)

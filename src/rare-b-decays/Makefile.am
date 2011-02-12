@@ -14,7 +14,6 @@ libeosrarebdecays_la_SOURCES = \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
 	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
-	factory.cc factory.hh \
 	form-factors.cc form-factors.hh form-factors-impl.hh \
 	hard-scattering.cc hard-scattering.hh \
 	long-distance.cc long-distance.hh
@@ -36,7 +35,11 @@ TESTS = \
 	inclusive-b-to-s-gamma_TEST \
 	hard-scattering_TEST \
 	long-distance_TEST
-TESTS_LD_ADD = $(top_builddir)/test/libeostest.a $(top_builddir)/src/utils/libeosutils.la libeosrarebdecays.la
+TESTS_LD_ADD = \
+	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/src/libeos.la \
+	$(top_builddir)/src/utils/libeosutils.la \
+	libeosrarebdecays.la
 
 check_PROGRAMS = $(TESTS)
 bremsstrahlung_TEST_SOURCES = bremsstrahlung_TEST.cc

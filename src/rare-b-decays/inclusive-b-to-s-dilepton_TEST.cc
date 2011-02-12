@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <src/rare-b-decays/factory.hh>
+#include <src/factory.hh>
 #include <src/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <src/utils/wilson-polynomial.hh>
 

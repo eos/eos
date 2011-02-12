@@ -17,7 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/rare-b-decays/factory.hh>
+#include <src/factory.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-gamma.hh>
@@ -27,7 +27,7 @@
 #include <src/utils/concrete_observable.hh>
 
 #include <map>
-#include <tr1/functional>
+#include <functional>
 
 namespace eos
 {
