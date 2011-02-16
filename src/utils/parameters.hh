@@ -22,6 +22,7 @@
 
 #include <src/utils/exception.hh>
 #include <src/utils/private_implementation_pattern.hh>
+#include <src/utils/random_number_engine.hh>
 #include <src/utils/wrapped_forward_iterator.hh>
 
 namespace eos
@@ -173,6 +174,13 @@ namespace eos
 
             /// Set a Parameter's numeric value.
             const Parameter & operator= (const double &);
+
+            /*!
+             * Retrieve a sample of the Parameter's numeric value based on its intrinsic probability distribution.
+             *
+             * @param engine The random number engine that shall be used to obtain the sample
+             */
+            double sample(RandomNumberEngine & engine) const;
             ///@}
 
             ///@name Access to Meta Data

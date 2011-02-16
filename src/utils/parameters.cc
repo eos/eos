@@ -24,6 +24,7 @@
 
 #include <cmath>
 #include <map>
+#include <random>
 #include <vector>
 
 namespace eos
@@ -257,6 +258,14 @@ namespace eos
     Parameter::operator() () const
     {
         return _parameters_data->data[_index].value;
+    }
+
+    double
+    Parameter::sample(RandomNumberEngine & engine) const
+    {
+        std::uniform_real<double> distribution(_parameters_data->data[_index].min, _parameters_data->data[_index].max);
+
+        return distribution(engine);
     }
 
     const Parameter &
