@@ -243,8 +243,7 @@ main(int argc, char * argv[])
             {
                 for (auto v = CommandLine::instance()->variations.begin(), v_end = CommandLine::instance()->variations.end() ; v != v_end ; ++v)
                 {
-                    std::normal_distribution<double> distribution(v->central(), 0.5 * (v->max() - v->min()));
-                    *v = distribution(engine);
+                    *v = v->sample(engine);
                 }
 
                 double value = i->observable->evaluate();
