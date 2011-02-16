@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -26,9 +26,32 @@
 namespace eos
 {
     class StandardModel :
-        public Model,
-        public PrivateImplementationPattern<StandardModel>
+        public Model
     {
+        private:
+            /* CKM Wolfenstein parameters */
+            Parameter _A;
+            Parameter _lambda;
+            Parameter _rhobar;
+            Parameter _etabar;
+            // Measurement of V_cb is quite good, so use that directly
+            Parameter _ckm_cb;
+
+            /* QCD parameters */
+            Parameter _alpha_s_Z;
+            Parameter _mu_t;
+            Parameter _mu_b;
+            Parameter _mu_c;
+            Parameter _lambda_qcd;
+
+            /* Masses */
+            Parameter _m_b_MSbar;
+            Parameter _m_c_MSbar;
+            Parameter _m_Z;
+
+            /* Renormalization Scale */
+            Parameter _mu;
+
         public:
             StandardModel(const Parameters &);
             virtual ~StandardModel();
