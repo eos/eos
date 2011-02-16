@@ -116,6 +116,8 @@ namespace eos
 
         bool ccbar_resonance;
 
+        bool use_nlo;
+
         Implementation(const Parameters & p, const Options & o) :
             model(Model::make("SM", p)),
             c1(p["c1"]),
@@ -147,7 +149,8 @@ namespace eos
             sl_phase_par(p["B->Vll::sl_phase_pa@LowRecoil"]),
             sl_phase_perp(p["B->Vll::sl_phase_pp@LowRecoil"]),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
-            ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
+            ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
+            use_nlo(destringify<bool>(o.get("nlo", "true")))
         {
             form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
 
@@ -187,7 +190,11 @@ namespace eos
             double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
             complex<double> nlo = memoise(c7eff_nlo, mu(), s, m_b, c1(), c2(), c8());
 
-            return c7() + lo + (model->alpha_s(mu) / (4.0 * M_PI)) * nlo;
+            complex<double> result = c7() + lo;
+            if (use_nlo)
+                result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo;
+
+            return result;
         }
 
         inline complex<double> c9() const
@@ -230,7 +237,7 @@ namespace eos
             complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
 
             complex<double> result = c9() + lo;
-            if (! ccbar_resonance)
+            if ((! ccbar_resonance) && (use_nlo))
                 result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
 
             return result;
