@@ -74,14 +74,14 @@ dnl }}}
 dnl }}}
 
 dnl {{{ check for libraries
-dnl {{{ check for -lgsl
 save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS -lgslcblas"
+CXXFLAGS="$CXXFLAGS -lgslcblas" # work around Debian/Ubuntu oddities
+dnl {{{ check for -lgsl
 AC_CHECK_LIB(gsl, gsl_sf_zeta,
 	[],
-	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library])])
-CXXFLAGS=$save_CXXFLAGS
+	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library (http://www.gnu.org/software/gsl/).])])
 dnl }}}
+CXXFLAGS=$save_CXXFLAGS
 dnl }}}
 
 dnl {{{ output
