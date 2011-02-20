@@ -24,6 +24,8 @@ if test -d "${GIT_DIR:-${ac_top_srcdir:-./}/.git}" ; then
 	if test -n "`git diff-index -m --name-only HEAD`" ; then
 		GITHEAD=${GITHEAD}-dirty
 	fi
+else
+	GITHEAD=$PACKAGE_VERSION
 fi
 AC_SUBST([GITHEAD])
 AC_DEFINE_UNQUOTED([EOS_GITHEAD], "$GITHEAD", [GIT revision of the sources])
@@ -80,6 +82,11 @@ dnl {{{ check for -lgsl
 AC_CHECK_LIB(gsl, gsl_sf_zeta,
 	[],
 	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library (http://www.gnu.org/software/gsl/).])])
+dnl }}}
+dnl {{{ check for -lhdf5
+AC_CHECK_LIB(hdf5, H5open,
+	[],
+	[AC_MSG_ERROR([you do seem to be lacking libhdf5 (http://hdf.ncsa.uiuc.edu/HDF5/).])])
 dnl }}}
 CXXFLAGS=$save_CXXFLAGS
 dnl }}}

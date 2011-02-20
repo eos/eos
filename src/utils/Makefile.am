@@ -32,6 +32,7 @@ libeosutils_la_SOURCES = \
 	qcd.cc qcd.hh \
 	random_number_engine.cc random_number_engine.hh \
 	save.hh \
+	scan_file.cc scan_file.hh \
 	standard-model.cc standard-model.hh \
 	stringify.hh \
 	thread.cc thread.hh \
@@ -41,7 +42,7 @@ libeosutils_la_SOURCES = \
 	wilson_coefficients.cc wilson_coefficients.hh \
 	wilson-polynomial.cc wilson-polynomial.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
-libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl
+libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl -lhdf5
 
 TESTS = \
 	apply_TEST \
@@ -57,6 +58,7 @@ TESTS = \
 	power_of_TEST \
 	qcd_TEST \
 	save_TEST \
+	scan_file_TEST \
 	standard_model_TEST \
 	top-loops_TEST \
 	stringify_TEST \
@@ -104,6 +106,9 @@ qcd_TEST_LDADD = $(TESTS_LD_ADD)
 
 save_TEST_SOURCES = save_TEST.cc
 save_TEST_LDADD = $(TESTS_LD_ADD)
+
+scan_file_TEST_SOURCES = scan_file_TEST.cc
+scan_file_TEST_LDADD = $(TESTS_LD_ADD)
 
 stringify_TEST_SOURCES = stringify_TEST.cc
 stringify_TEST_LDADD = $(TESTS_LD_ADD)
