@@ -53,6 +53,12 @@ namespace eos
         return result;
     }
 
+    Parameters
+    Likelihood::parameters() const
+    {
+        return _imp->parameters;
+    }
+
     double
     Likelihood::operator() () const
     {
