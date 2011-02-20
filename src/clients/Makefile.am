@@ -5,6 +5,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
 bin_PROGRAMS = \
 	eos-evaluate \
+	eos-inspect \
 	eos-list-parameters \
 	eos-print-polynomial \
 	eos-scan-polynomial \
@@ -18,6 +19,10 @@ EOS_CLIENTS_LIBS = $(top_builddir)/src/libeos.la
 eos_evaluate_SOURCES = \
 	eos-evaluate.cc
 eos_evaluate_LDADD = $(EOS_CLIENTS_LIBS)
+
+eos_inspect_SOURCES = \
+	eos-inspect.cc
+eos_inspect_LDADD = $(EOS_CLIENTS_LIBS)
 
 eos_list_parameters_SOURCES = \
 	eos-list-parameters.cc
