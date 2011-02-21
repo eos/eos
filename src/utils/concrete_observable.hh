@@ -132,6 +132,11 @@ namespace eos
             {
                 return ObservablePtr(new ConcreteObservable(_name, _parameters.clone(), _kinematics.clone(), _options, _function, _kinematics_names));
             }
+
+            virtual ObservablePtr clone(const Parameters & parameters) const
+            {
+                return ObservablePtr(new ConcreteObservable(_name, parameters, _kinematics.clone(), _options, _function, _kinematics_names));
+            }
     };
 
     template <typename Decay_, typename ... Args_>

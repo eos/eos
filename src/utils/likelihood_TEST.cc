@@ -56,7 +56,13 @@ struct TestObservable :
 
     ObservablePtr clone() const
     {
-        return ObservablePtr(new TestObservable(p.clone(), k.clone(), mass_name));
+        static const bool should_never_be_used = true;
+        TEST_CHECK(should_never_be_used == false);
+    }
+
+    ObservablePtr clone(const Parameters & parameters) const
+    {
+        return ObservablePtr(new TestObservable(parameters, k.clone(), mass_name));
     }
 
     Parameters parameters() { return p; }
@@ -109,6 +115,26 @@ class LikelihoodTest :
                 llh.add(ObservablePtr(new TestObservable(p, k, "mass::tau")),      -1.85, -2.00, -2.18);
 
                 TEST_CHECK_NEARLY_EQUAL(llh(), 0.310470594301509861, eps);
+            }
+
+            // Clone test
+            {
+                Likelihood llh1(p);
+                llh1.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +0.15, +0.16, +0.17);
+
+                TEST_CHECK_NEARLY_EQUAL(llh1(), 0.994403813437738, eps);
+
+                Likelihood llh2 = llh1.clone();
+                TEST_CHECK_NEARLY_EQUAL(llh1(), 0.994403813437738, eps);
+                TEST_CHECK_NEARLY_EQUAL(llh2(), 0.994403813437738, eps);
+
+                p["mass::b(MSbar)"] = 4.30;
+                TEST_CHECK_NEARLY_EQUAL(llh1(), 0.048639401002063827, eps);
+                TEST_CHECK_NEARLY_EQUAL(llh2(), 0.994403813437738, eps);
+
+                llh2.parameters()["mass::b(MSbar)"] = 4.30;
+                TEST_CHECK_NEARLY_EQUAL(llh1(), 0.048639401002063827, eps);
+                TEST_CHECK_NEARLY_EQUAL(llh2(), 0.048639401002063827, eps);
             }
         }
 } likelihood_test;

@@ -44,10 +44,11 @@ namespace eos
     Likelihood
     Likelihood::clone() const
     {
-        Likelihood result(_imp->parameters.clone());
+        Parameters parameters(_imp->parameters.clone());
+        Likelihood result(parameters);
         for (auto i = _imp->observables.cbegin(), i_end = _imp->observables.cend() ; i != i_end ; ++i)
         {
-            result._imp->observables.push_back(std::make_tuple(std::get<0>(*i)->clone(), std::get<1>(*i), std::get<2>(*i), std::get<3>(*i)));
+            result._imp->observables.push_back(std::make_tuple(std::get<0>(*i)->clone(parameters), std::get<1>(*i), std::get<2>(*i), std::get<3>(*i)));
         }
 
         return result;

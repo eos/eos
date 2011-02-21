@@ -65,6 +65,7 @@ struct WilsonPolynomialTestObservable :
     virtual Kinematics kinematics() { return k; }
     virtual Options options() { return Options(); }
     virtual ObservablePtr clone() const { return ObservablePtr(new WilsonPolynomialTestObservable(p.clone(), k.clone(), Options())); }
+    virtual ObservablePtr clone(const Parameters & p) const { return ObservablePtr(new WilsonPolynomialTestObservable(p, k.clone(), Options())); }
 
     virtual double evaluate() const
     {
