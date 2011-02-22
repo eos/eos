@@ -14,7 +14,7 @@ noinst_PROGRAMS = \
 	integrated \
 	observables
 
-EOS_CLIENTS_LIBS = $(top_builddir)/src/libeos.la
+EOS_CLIENTS_LIBS = $(top_builddir)/src/libeos.la $(top_builddir)/src/utils/libeosutils.la
 
 eos_evaluate_SOURCES = \
 	eos-evaluate.cc
