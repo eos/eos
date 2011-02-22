@@ -22,119 +22,176 @@
 
 #include <vector>
 
-#include <iostream>
-
-template <typename T_> class CartesianProduct
+namespace eos
 {
-    private:
-        typedef std::vector<typename T_::const_iterator> IteratorState;
+    /*!
+     * @brief CartesianProduct is a template class to represent a Cartesian Product of an
+     * arbitrary number of T_. T_ should be a container providing a random access iterator.
+     */
+    template <typename T_> class CartesianProduct
+    {
+        private:
+            typedef std::vector<typename T_::const_iterator> IteratorState;
 
-        std::vector<T_> _data;
+            // All stored containers.
+            std::vector<T_> _data;
 
-        IteratorState _begin, _end;
+            // Iterators for the begin and end of each stored container.
+            IteratorState _begin, _end;
 
-        unsigned long _size;
+            // The overall number of elements stored in CartesianProduct.
+            size_t _size;
 
-        template <typename U_> class _Iterator
-        {
-            private:
-                typedef std::vector<typename U_::const_iterator> IteratorState;
+            typedef std::vector<size_t> Sizes;
+            Sizes _sizes;
 
-                IteratorState _state, _begin, _end;
+            template <typename U_> class _Iterator
+            {
+                private:
+                    typedef std::vector<typename U_::const_iterator> IteratorState;
 
-                _Iterator(const IteratorState & state, const IteratorState & begin, const IteratorState & end) :
-                    _state(state),
-                    _begin(begin),
-                    _end(end)
-                {
-                }
+                    IteratorState _state;
+                    Sizes _sizes;
+                    bool _atEnd;
+                    std::vector<long> _values;
 
-            public:
-                friend class CartesianProduct<U_>;
-
-                bool operator!= (const _Iterator & other)
-                {
-                    auto j = other._state.cbegin();
-
-                    for (auto i = _state.cbegin(), i_end = _state.cend() ; i != i_end ; ++i, ++j)
+                    _Iterator(const IteratorState & state,
+                              const Sizes& sizes,
+                              bool  atEnd) :
+                        _state(state),
+                        _sizes(sizes),
+                        _atEnd(atEnd),
+                        _values(state.size(), 0)
                     {
-                        if (*i != *j)
+                    }
+
+                public:
+                    friend class CartesianProduct<U_>;
+
+                    bool operator== (const _Iterator & other) const
+                    {
+                        if (_atEnd && other._atEnd)
                             return true;
+
+                        // compare each element
+                        auto i = _state.cbegin();
+                        auto j = other._state.cbegin();
+                        for ( ; i != _state.end(); ++i, ++j)
+                        {
+                            if (*i != *j)
+                                return false;
+                        }
+
+                        return true;
                     }
 
-                    return other._state.cend() != j;
-                }
-
-                _Iterator & operator++ ()
-                {
-                    auto ji = _state.rbegin(), jb = _begin.rbegin(), je = _end.rbegin();
-
-                    do
+                    bool operator!= (const _Iterator& other) const
                     {
-                        ++(*ji);
-
-                        if ((*je) != (*ji))
-                            break;
-
-                        (*ji) = (*jb);
-
-                        ++ji;
-                        ++jb;
-                        ++je;
-                    } while (_state.rend() != ji);
-
-                    if (_state.rend() == ji)
-                        _state = _end;
-
-                    return *this;
-                }
-
-                std::vector<double> operator* () const
-                {
-                    std::vector<double> result;
-                    for (auto i = _state.begin() ; _state.end() != i ; ++i)
-                    {
-                        result.push_back(*(*i));
+                        return !(*this == other);
                     }
 
-                    return result;
-                }
-        };
+                    _Iterator & operator+= (long increment)
+                    {
+                        // Already at the last element?
+                        if (_atEnd)
+                            return *this;
 
-    public:
-        typedef _Iterator<T_> Iterator;
+                        auto sizeIt = _sizes.rbegin();
+                        auto stateIt = _state.rbegin();
+                        auto valueIt = _values.rbegin();
+                        for ( ; sizeIt != _sizes.rend(); ++sizeIt, ++stateIt, ++valueIt)
+                        {
+                            long newValue = (*valueIt + increment) % *sizeIt;;
+                            long difference = newValue - *valueIt;
+                            *valueIt = newValue;
+                            increment -= difference;
+                            increment /= *sizeIt;
+                            *stateIt += difference;
+                        }
 
-        CartesianProduct() :
-            _size(0)
-        {
-        }
+                        if (increment != 0)
+                            _atEnd = true;
 
-        void over(const T_ & x)
-        {
-            _data.push_back(x);
-            _begin.push_back(_data.back().cbegin());
-            _end.push_back(_data.back().cend());
+                        return *this;
+                    }
 
-            if (0 == _size)
-                _size = x.size();
-            else
-                _size *= x.size();
-        }
+                    _Iterator & operator++ ()
+                    {
+                        return (*this += 1);
+                    }
 
-        Iterator begin() const
-        {
-            return Iterator(_begin, _begin, _end);
-        }
+                    std::vector<typename U_::value_type> operator* () const
+                    {
+                        std::vector<typename U_::value_type> result;
+                        for (auto i = _state.begin() ; _state.end() != i ; ++i)
+                        {
+                            result.push_back(*(*i));
+                        }
 
-        Iterator end() const
-        {
-            return Iterator(_end, _begin, _end);
-        }
+                        return result;
+                    }
+            };
 
-        unsigned long size() const
-        {
-            return _size;
-        }
-};
+        public:
+            /*!
+             * @brief This is a random access iterator for CartesianPoduct.
+             */
+            typedef _Iterator<T_> Iterator;
+
+            /*!
+             * Initializes an empty CartesianProduct.
+             */
+            CartesianProduct() :
+                _size(0)
+            {
+            }
+
+            /*!
+             * Adds another container of type T_ to the CartesianProduct. So in some sense a multiplication
+             * with newContainer.
+             * @param newContainer The new container to be added.
+             */
+            void over(const T_ & newContainer)
+            {
+                // Store the new container and its iterators
+                _data.push_back(newContainer);
+                _begin.push_back(_data.back().cbegin());
+                _end.push_back(_data.back().cend());
+
+                // Update the size of CartesianProduct
+                if (0 == _size)
+                    _size = newContainer.size();
+                else
+                    _size *= newContainer.size();
+
+                _sizes.push_back(newContainer.size());
+            }
+
+            /*!
+             * Returns an iterator for the first element.
+             */
+            Iterator begin() const
+            {
+                return Iterator(_begin, _sizes, false);
+            }
+
+            /*!
+             * Returns an iterator for the position after the last element.
+             */
+            Iterator end() const
+            {
+                return Iterator(_end, _sizes, true);
+            }
+
+            /*!
+             * Returns the number of elements stored in CartesianProduct. This is the product of the
+             * sizes of each stored container.
+             */
+            size_t size() const
+            {
+                return _size;
+            }
+    };
+}
 
 #endif
