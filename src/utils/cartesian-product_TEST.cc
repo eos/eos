@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -85,40 +86,40 @@ class CartesianProductTest :
                 cp.over(input3);
                 cp.over(input4);
 
-                auto cpIt = cp.begin();
+                auto cp_it = cp.begin();
 
-                TEST_CHECK_EQUAL(cpIt, cp.begin());
+                TEST_CHECK_EQUAL(cp_it, cp.begin());
 
                 static const std::vector<double> result1 = { 1.0, 10.0, 100.0, 1000.0 };
-                TEST_CHECK_EQUAL(*cpIt, result1);
+                TEST_CHECK_EQUAL(*cp_it, result1);
 
-                ++cpIt;
+                ++cp_it;
                 static const std::vector<double> result2 = { 1.0, 10.0, 100.0, 2000.0 };
-                TEST_CHECK_EQUAL(*cpIt, result2);
+                TEST_CHECK_EQUAL(*cp_it, result2);
 
-                cpIt += 10;
+                cp_it += 10;
                 static const std::vector<double> result3 = { 1.0, 20.0, 200.0, 2000.0 };
-                TEST_CHECK_EQUAL(*cpIt, result3);
+                TEST_CHECK_EQUAL(*cp_it, result3);
 
-                if (cpIt == cp.begin())
-                    TEST_CHECK_FAILED("cpIt should not be equal cp.begin()");
+                if (cp_it == cp.begin())
+                    TEST_CHECK_FAILED("cp_it should not be equal cp.begin()");
 
-                if (cpIt == cp.end())
-                    TEST_CHECK_FAILED("cpIt should not be equal cp.end()");
+                if (cp_it == cp.end())
+                    TEST_CHECK_FAILED("cp_it should not be equal cp.end()");
 
-                cpIt += 35;
+                cp_it += 35;
 
-                if (cpIt == cp.end())
-                    TEST_CHECK_FAILED("cpIt should not be equal cp.end()");
+                if (cp_it == cp.end())
+                    TEST_CHECK_FAILED("cp_it should not be equal cp.end()");
 
                 static const std::vector<double> result4 = { 2.0, 30.0, 400.0, 1000.0 };
-                TEST_CHECK_EQUAL(*cpIt, result4);
+                TEST_CHECK_EQUAL(*cp_it, result4);
 
-                cpIt += 2;
-                TEST_CHECK_EQUAL(cpIt, cp.end());
+                cp_it += 2;
+                TEST_CHECK_EQUAL(cp_it, cp.end());
 
-                ++cpIt;
-                TEST_CHECK_EQUAL(cpIt, cp.end());
+                ++cp_it;
+                TEST_CHECK_EQUAL(cp_it, cp.end());
             }
         }
 } cartesian_product_test;

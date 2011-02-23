@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -52,7 +53,7 @@ namespace eos
 
                     IteratorState _state;
                     Sizes _sizes;
-                    bool _atEnd;
+                    bool _at_end;
                     std::vector<long> _values;
 
                     _Iterator(const IteratorState & state,
@@ -60,7 +61,7 @@ namespace eos
                               bool  atEnd) :
                         _state(state),
                         _sizes(sizes),
-                        _atEnd(atEnd),
+                        _at_end(atEnd),
                         _values(state.size(), 0)
                     {
                     }
@@ -70,7 +71,7 @@ namespace eos
 
                     bool operator== (const _Iterator & other) const
                     {
-                        if (_atEnd && other._atEnd)
+                        if (_at_end && other._at_end)
                             return true;
 
                         // compare each element
@@ -93,24 +94,24 @@ namespace eos
                     _Iterator & operator+= (long increment)
                     {
                         // Already at the last element?
-                        if (_atEnd)
+                        if (_at_end)
                             return *this;
 
-                        auto sizeIt = _sizes.rbegin();
-                        auto stateIt = _state.rbegin();
-                        auto valueIt = _values.rbegin();
-                        for ( ; sizeIt != _sizes.rend(); ++sizeIt, ++stateIt, ++valueIt)
+                        auto size_it = _sizes.rbegin();
+                        auto state_it = _state.rbegin();
+                        auto value_it = _values.rbegin();
+                        for ( ; size_it != _sizes.rend(); ++size_it, ++state_it, ++value_it)
                         {
-                            long newValue = (*valueIt + increment) % *sizeIt;;
-                            long difference = newValue - *valueIt;
-                            *valueIt = newValue;
+                            long new_value = (*value_it + increment) % *size_it;;
+                            long difference = new_value - *value_it;
+                            *value_it = new_value;
                             increment -= difference;
-                            increment /= *sizeIt;
-                            *stateIt += difference;
+                            increment /= *size_it;
+                            *state_it += difference;
                         }
 
                         if (increment != 0)
-                            _atEnd = true;
+                            _at_end = true;
 
                         return *this;
                     }
@@ -148,23 +149,23 @@ namespace eos
 
             /*!
              * Adds another container of type T_ to the CartesianProduct. So in some sense a multiplication
-             * with newContainer.
-             * @param newContainer The new container to be added.
+             * with new_container.
+             * @param new_container The new container to be added.
              */
-            void over(const T_ & newContainer)
+            void over(const T_ & new_container)
             {
                 // Store the new container and its iterators
-                _data.push_back(newContainer);
+                _data.push_back(new_container);
                 _begin.push_back(_data.back().cbegin());
                 _end.push_back(_data.back().cend());
 
                 // Update the size of CartesianProduct
                 if (0 == _size)
-                    _size = newContainer.size();
+                    _size = new_container.size();
                 else
-                    _size *= newContainer.size();
+                    _size *= new_container.size();
 
-                _sizes.push_back(newContainer.size());
+                _sizes.push_back(new_container.size());
             }
 
             /*!
