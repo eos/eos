@@ -44,7 +44,7 @@ namespace eos
 
         template <> struct DoDestringify<double> : public SimpleDestringify<double> {};
 
-        template <> struct DoDestringify<unsigned> : public SimpleDestringify<double> {};
+        template <> struct DoDestringify<unsigned> : public SimpleDestringify<unsigned> {};
 
         template <> struct DoDestringify<bool>
         {
