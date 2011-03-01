@@ -112,6 +112,43 @@ namespace test
                     stringify(std::abs(a - b) / a) + " and " + stringify(std::abs(a - b) / b)); \
     } \
     while (false)
+
+#define TEST_CHECK_NO_THROW(expression) \
+    do \
+    { \
+        try \
+        { \
+            expression; \
+        } \
+        catch (...) \
+        { \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "Caught unexpected exception in '" #expression "'"); \
+        } \
+    } \
+    while (false)
+
+#define TEST_CHECK_THROWS(exception, expression) \
+    do \
+    { \
+        try \
+        { \
+            expression; \
+        } \
+        catch (exception & e) \
+        { \
+            break; \
+        } \
+        catch (...) \
+        { \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "Caught unexpected exception when expecting " #exception " in '" #expression "'"); \
+        } \
+        \
+        throw TestCaseFailedException(__LINE__, __FILE__, \
+                "Caught no exception in " #expression " when expecting '" #exception "'"); \
+    } \
+    while (false)
 }
 
 #endif
