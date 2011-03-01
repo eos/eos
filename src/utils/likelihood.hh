@@ -79,6 +79,8 @@ namespace eos
             double operator() () const;
             ///@}
     };
+
+    typedef std::shared_ptr<Likelihood> LikelihoodPtr;
 }
 
 #endif
