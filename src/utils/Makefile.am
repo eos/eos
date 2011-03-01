@@ -39,6 +39,7 @@ libeosutils_la_SOURCES = \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh \
 	top-loops.hh top-loops.cc \
+	verify.cc verify.hh \
 	wilson_coefficients.cc wilson_coefficients.hh \
 	wilson-polynomial.cc wilson-polynomial.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
@@ -62,6 +63,7 @@ TESTS = \
 	standard_model_TEST \
 	top-loops_TEST \
 	stringify_TEST \
+	verify_TEST \
 	wilson_coefficients_TEST \
 	wilson-polynomial_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libeostest.a libeosutils.la
@@ -118,6 +120,9 @@ standard_model_TEST_LDADD = $(TESTS_LD_ADD)
 
 top_loops_TEST_SOURCES = top-loops_TEST.cc
 top_loops_TEST_LDADD = $(TESTS_LD_ADD)
+
+verify_TEST_SOURCES = verify_TEST.cc
+verify_TEST_LDADD = $(TESTS_LD_ADD)
 
 wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
 wilson_coefficients_TEST_LDADD = $(TESTS_LD_ADD)
