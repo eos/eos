@@ -46,6 +46,10 @@ namespace eos
 
         template <> struct DoDestringify<unsigned> : public SimpleDestringify<unsigned> {};
 
+        template <> struct DoDestringify<long> : public SimpleDestringify<long> {};
+
+        template <> struct DoDestringify<unsigned long> : public SimpleDestringify<unsigned long> {};
+
         template <> struct DoDestringify<bool>
         {
             static bool destringify(const std::string & input)
