@@ -19,6 +19,11 @@ stamp-h1
 *.[oa]
 *.l[oa]
 *.so
+*.libs/
 
 # Tests
 *_TEST
+
+#eclipse
+*.*project
+.settings/org.eclipse*
