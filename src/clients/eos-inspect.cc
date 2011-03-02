@@ -22,6 +22,7 @@
 #include <src/utils/scan_file.hh>
 
 #include <list>
+#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -86,22 +87,23 @@ main(int argc, char * argv[])
             {
                 ScanFile file = ScanFile::Open(*f);
 
-                std::cout << "#   Creator:          " << file.creator() << std::endl;
-                std::cout << "#   EOS Version:      " << file.eos_version() << std::endl;
-                std::cout << "#   Number of tuples: " << file.scan_size() << std::endl;
-                std::cout << "#   Tuple size:       " << file.tuple_size() << std::endl;
+                std::cout << "#   Creator:     " << file.creator() << std::endl;
+                std::cout << "#   EOS Version: " << file.eos_version() << std::endl;
 
-                ScanFile::Tuple tuple = file[0];
-                for (auto i = 0 ; i < file.scan_size() ; ++i, ++tuple)
+                for (auto d = file.begin(), d_end = file.end() ; d != d_end ; ++d)
                 {
-                    tuple.read();
-
-                    for (auto j = 0 ; j < file.tuple_size() ; ++j)
+                    ScanFile::Tuple tuple = (*d)[0];
+                    std::cout << "#   Dataset 'results': (" << d->tuples() << ", " << d->tuple_size() << ')' << std::endl;
+                    std::cout << std::scientific << std::setprecision(9);
+                    for (unsigned i = 0 ; i < d->tuples() ; ++i, ++tuple)
                     {
-                        std::cout << tuple[j] << '\t';
-                    }
+                        for (unsigned j = 0 ; j < d->tuple_size() ; ++j)
+                        {
+                            std::cout << tuple[j] << '\t';
+                        }
 
-                    std::cout << std::endl;
+                        std::cout << std::endl;
+                    }
                 }
             }
             catch (ScanFileError & e)

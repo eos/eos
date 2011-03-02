@@ -21,10 +21,9 @@
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/scan_file.hh>
 #include <src/utils/stringify.hh>
+#include <src/utils/wrapped_forward_iterator-impl.hh>
 
 #include <hdf5.h>
-
-#include <iostream>
 
 namespace eos
 {
@@ -38,6 +37,8 @@ namespace eos
     {
     }
 
+    template class WrappedForwardIterator<ScanFile::IteratorTag, ScanFile::DataSet>;
+
     template <>
     struct Implementation<ScanFile>
     {
@@ -45,29 +46,21 @@ namespace eos
 
         hid_t group_id_metadata;
 
-        hid_t space_id_scan;
-
-        hid_t set_id_scan;
+        hid_t group_id_data;
 
         std::string creator;
 
         std::string eos_version;
 
-        hsize_t tuple_size;
-
-        hsize_t scan_size;
+        std::vector<ScanFile::DataSet> data_sets;
 
         // Create a new HDF5 file
-        Implementation(const std::string & filename, const std::string & creator,
-                const unsigned & tuple_size, const unsigned & scan_size) :
+        Implementation(const std::string & filename, const std::string & creator) :
             file_id(H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT)),
             group_id_metadata(H5I_INVALID_HID),
-            space_id_scan(H5I_INVALID_HID),
-            set_id_scan(H5I_INVALID_HID),
+            group_id_data(H5I_INVALID_HID),
             creator(creator),
-            eos_version(EOS_GITHEAD),
-            tuple_size(tuple_size),
-            scan_size(scan_size)
+            eos_version(EOS_GITHEAD)
         {
             if (H5I_INVALID_HID == file_id)
                 throw ScanFileHDF5Error("H5Fcreate", file_id);
@@ -79,19 +72,26 @@ namespace eos
             add_metadata_field("/metadata/creator", creator);
             add_metadata_field("/metadata/eos_version", EOS_GITHEAD);
 
-            hsize_t dimensions[2] = { scan_size, tuple_size };
-
-            space_id_scan = H5Screate_simple(2, dimensions, 0);
-            if (H5I_INVALID_HID == space_id_scan)
-                throw ScanFileHDF5Error("H5Screate_simple", space_id_scan);
-
-            set_id_scan = H5Dcreate2(file_id, "/scan", H5T_IEEE_F64LE, space_id_scan, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-            if (H5I_INVALID_HID == set_id_scan)
-                throw ScanFileHDF5Error("H5Dcreate2", set_id_scan);
+            group_id_data = H5Gcreate2(file_id, "/data", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+            if (H5I_INVALID_HID == group_id_data)
+                throw ScanFileHDF5Error("H5Gcreate2", group_id_data);
         }
 
+        // Callback function for iteration over data sets
+        static herr_t add_data_set(hid_t /* unused */, const char * name, const H5L_info_t * /* unused */, void * _imp)
+        {
+            Implementation * imp = static_cast<Implementation<ScanFile> *>(_imp);
+
+            imp->data_sets.push_back(ScanFile::DataSet(imp, std::string(name)));
+
+            return 0;
+        }
+
+        // Open an existing HDF5 file
         Implementation(const std::string & filename) :
-            file_id(H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT))
+            file_id(H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT)),
+            group_id_metadata(H5I_INVALID_HID),
+            group_id_data(H5I_INVALID_HID)
         {
             if (H5I_INVALID_HID == file_id)
                 throw ScanFileHDF5Error("H5Fopen", file_id);
@@ -103,39 +103,23 @@ namespace eos
             creator = read_metadata_field("/metadata/creator");
             eos_version = read_metadata_field("/metadata/eos_version");
 
-            set_id_scan = H5Dopen2(file_id, "/scan", H5P_DEFAULT);
-            if (H5I_INVALID_HID == set_id_scan)
-                throw ScanFileHDF5Error("H5Dopen2", set_id_scan);
+            group_id_data = H5Gopen2(file_id, "/data", H5P_DEFAULT);
+            if (H5I_INVALID_HID == group_id_data)
+                throw ScanFileHDF5Error("H5Gopen2", group_id_data);
 
-            space_id_scan = H5Dget_space(set_id_scan);
-            if (H5I_INVALID_HID == space_id_scan)
-                throw ScanFileHDF5Error("H5Dget_space", space_id_scan);
-
-            if (0 >= H5Sis_simple(space_id_scan))
-                throw ScanFileError("File at hand is not an EOS scan file: '/scan' is not associated to a simple data space: " + stringify(H5Sis_simple(space_id_scan)));
-
-            if (2 != H5Sget_simple_extent_ndims(space_id_scan))
-                throw ScanFileError("File at hand is not an EOS scan file: '/scan' is not of rank 2");
-
-            hsize_t dimensions[2] = { -1, -1 };
-            if (2 != H5Sget_simple_extent_dims(space_id_scan, dimensions, 0))
-                throw ScanFileError("File at hand is fishy");
-
-            scan_size = dimensions[0];
-            tuple_size = dimensions[1];
+            hsize_t idx = 0;
+            herr_t ret = H5Literate(group_id_data, H5_INDEX_NAME, H5_ITER_INC, &idx, &Implementation<ScanFile>::add_data_set, this);
+            if (0 > ret)
+                throw ScanFileHDF5Error("H5Literate", ret);
         }
 
         ~Implementation()
         {
             herr_t ret;
 
-            ret = H5Dclose(set_id_scan);
+            ret = H5Gclose(group_id_data);
             if (0 > ret)
-                throw ScanFileHDF5Error("H5Dclose", ret);
-
-            ret = H5Sclose(space_id_scan);
-            if (0 > ret)
-                throw ScanFileHDF5Error("H5Sclose", ret);
+                throw ScanFileHDF5Error("H5Gclose", ret);
 
             ret = H5Gclose(group_id_metadata);
             if (0 > ret)
@@ -160,9 +144,9 @@ namespace eos
             if (ret > 0)
                 throw ScanFileHDF5Error("H5Tset_size", ret);
 
-            hid_t set_id = H5Dcreate(group_id_metadata, field_name.c_str(), type_id, space_id, H5P_DEFAULT);
+            hid_t set_id = H5Dcreate2(group_id_metadata, field_name.c_str(), type_id, space_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
             if (H5I_INVALID_HID == set_id)
-                throw ScanFileHDF5Error("H5Dcreate", set_id);
+                throw ScanFileHDF5Error("H5Dcreate2", set_id);
 
             ret = H5Dwrite(set_id, type_id, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value[0]);
 
@@ -173,9 +157,9 @@ namespace eos
 
         std::string read_metadata_field(const std::string & field_name)
         {
-            hid_t set_id = H5Dopen(group_id_metadata, field_name.c_str());
+            hid_t set_id = H5Dopen2(group_id_metadata, field_name.c_str(), H5P_DEFAULT);
             if (H5I_INVALID_HID == set_id)
-                throw ScanFileHDF5Error("H5Dopen", set_id);
+                throw ScanFileHDF5Error("H5Dopen2", set_id);
 
             hsize_t set_size = H5Dget_storage_size(set_id);
             std::string result = std::string(set_size, '\0');
@@ -210,15 +194,16 @@ namespace eos
     }
 
     ScanFile
-    ScanFile::Create(const std::string & filename, const std::string & creator,
-            const unsigned & tuple_size, const unsigned & scan_size)
+    ScanFile::Create(const std::string & filename, const std::string & creator)
     {
-        return ScanFile(new Implementation<ScanFile>(filename, creator, tuple_size, scan_size));
+        H5dont_atexit();
+        return ScanFile(new Implementation<ScanFile>(filename, creator));
     }
 
     ScanFile
     ScanFile::Open(const std::string & filename)
     {
+        H5dont_atexit();
         return ScanFile(new Implementation<ScanFile>(filename));
     }
 
@@ -234,58 +219,319 @@ namespace eos
         return _imp->eos_version;
     }
 
-    int
-    ScanFile::tuple_size() const
+    ScanFile::DataSet
+    ScanFile::operator[] (const std::string & name)
     {
-        return _imp->tuple_size;
+        return ScanFile::DataSet(_imp.get(), name);
     }
 
-    int
-    ScanFile::scan_size() const
+    ScanFile::DataSet
+    ScanFile::add(const std::string & name, unsigned tuple_size)
     {
-        return _imp->scan_size;
+        return ScanFile::DataSet(_imp.get(), name, tuple_size);
     }
 
-    ScanFile::Tuple
-    ScanFile::operator[] (const unsigned & index)
+    ScanFile::Iterator
+    ScanFile::begin()
     {
-        return ScanFile::Tuple(_imp, index);
+        return ScanFile::Iterator(_imp->data_sets.begin());
+    }
+
+    ScanFile::Iterator
+    ScanFile::end()
+    {
+        return ScanFile::Iterator(_imp->data_sets.end());
     }
 
     template <>
-    struct Implementation<ScanFile::Tuple>
+    struct Implementation<ScanFile::DataSet>
     {
-        std::shared_ptr<Implementation<ScanFile>> file_imp;
+        Implementation<ScanFile> * file_imp;
 
-        const unsigned tuple_size;
+        std::string name;
 
-        unsigned index;
+        unsigned tuple_size;
 
-        double * buffer;
+        unsigned current_index;
 
-        hid_t set_id_scan;
+        unsigned tuples;
+
+        unsigned capacity;
+
+        hid_t group_id_data;
+
+        hid_t set_id;
+
+        hid_t dcpl_id;
 
         hid_t space_id_memory;
 
         hid_t space_id_file;
 
-        Implementation(const std::shared_ptr<Implementation<ScanFile>> & file_imp, const unsigned & index) :
+        hid_t space_id_file_writing;
+
+        bool truncate_on_destroy;
+
+        // Constructor to create a new data set
+        Implementation(Implementation<ScanFile> * file_imp, const std::string & name, unsigned tuple_size) :
             file_imp(file_imp),
-            tuple_size(file_imp->tuple_size),
-            index(index),
-            set_id_scan(file_imp->set_id_scan)
+            name(name),
+            tuple_size(tuple_size),
+            current_index(0),
+            tuples(0),
+            capacity(1000),
+            group_id_data(file_imp->group_id_data),
+            set_id(H5I_INVALID_HID),
+            space_id_memory(H5I_INVALID_HID),
+            space_id_file(H5I_INVALID_HID),
+            space_id_file_writing(H5I_INVALID_HID),
+            truncate_on_destroy(true)
         {
-            buffer = new double[tuple_size];
+            // create space id for in-memory representation
+            {
+                hsize_t dimensions[2] = { 1, tuple_size };
+                space_id_memory = H5Screate_simple(2, dimensions, 0);
+                if (H5I_INVALID_HID == space_id_memory)
+                    throw ScanFileHDF5Error("H5Screate_simple", space_id_memory);
+            }
+
+            // create space id for in-file representation
+            {
+                hsize_t dimensions[2] = { capacity, tuple_size };
+                hsize_t max_dimensions[2] = { H5S_UNLIMITED, tuple_size };
+                space_id_file = H5Screate_simple(2, dimensions, max_dimensions);
+                if (H5I_INVALID_HID == space_id_file)
+                    throw ScanFileHDF5Error("H5Screate_simple", space_id_file);
+
+                space_id_file_writing = H5Scopy(space_id_file);
+                if (H5I_INVALID_HID == space_id_file_writing)
+                    throw ScanFileHDF5Error("H5Scopy", space_id_file_writing);
+            }
+
+            // create a property list for in-file data
+            {
+                dcpl_id = H5Pcreate(H5P_DATASET_CREATE);
+                if (H5I_INVALID_HID == dcpl_id)
+                    throw ScanFileHDF5Error("H5Pcreate", dcpl_id);
+
+                hsize_t chunk_size[2] = { 1000, tuple_size };
+                herr_t ret = H5Pset_chunk(dcpl_id, 2, chunk_size);
+                if (0 > ret)
+                    throw ScanFileHDF5Error("H5Pset_chunk", ret);
+            }
+
+            // create set id for in-file data
+            {
+                set_id = H5Dcreate2(group_id_data, name.c_str(), H5T_IEEE_F64LE, space_id_file, H5P_DEFAULT, dcpl_id, H5P_DEFAULT);
+                if (H5I_INVALID_HID == set_id)
+                    throw ScanFileHDF5Error("H5Dcreate2", set_id);
+            }
+        }
+
+        // Constructor to open an existing data set in append mode
+        Implementation(Implementation<ScanFile> * file_imp, const std::string & name) :
+            file_imp(file_imp),
+            name(name),
+            tuple_size(0),
+            current_index(0),
+            group_id_data(file_imp->group_id_data),
+            set_id(H5I_INVALID_HID),
+            space_id_memory(H5I_INVALID_HID),
+            space_id_file(H5I_INVALID_HID),
+            truncate_on_destroy(false)
+        {
+            // open set by name and retrieve its space id
+            {
+                set_id = H5Dopen2(group_id_data, name.c_str(), H5P_DEFAULT);
+                if (H5I_INVALID_HID == set_id)
+                    throw ScanFileHDF5Error("H5Dopen2", set_id);
+
+                space_id_file = H5Dget_space(set_id);
+                if (H5I_INVALID_HID == space_id_file)
+                    throw ScanFileHDF5Error("H5Dget_space", space_id_file);
+
+                space_id_file_writing = H5Scopy(space_id_file);
+                if (H5I_INVALID_HID == space_id_file_writing)
+                    throw ScanFileHDF5Error("H5Scopy", space_id_file_writing);
+
+                if (0 >= H5Sis_simple(space_id_file))
+                    throw ScanFileError("File at hand is not an EOS scan file: '/data/" + name + "' is not associated to a simple data space: " + stringify(H5Sis_simple(space_id_file)));
+
+                if (2 != H5Sget_simple_extent_ndims(space_id_file))
+                    throw ScanFileError("File at hand is not an EOS scan file: '/data/" + name + "' is not a data space of rank 2");
+
+                hsize_t dimensions[2] = { -1, -1 };
+                if (2 != H5Sget_simple_extent_dims(space_id_file, dimensions, 0))
+                    throw ScanFileError("File at hand is fishy");
+
+                current_index = capacity = tuples = dimensions[0];
+                tuple_size = dimensions[1];
+            }
+
+            // create space id for in-memory representation
+            {
+                hsize_t dimensions[2] = { 1, tuple_size };
+                space_id_memory = H5Screate_simple(2, dimensions, 0);
+                if (H5I_INVALID_HID == space_id_memory)
+                    throw ScanFileHDF5Error("H5Screate_simple", space_id_memory);
+            }
+
+        }
+
+        ~Implementation()
+        {
+            if (truncate_on_destroy)
+            {
+                hsize_t dimensions[2] = { tuples, tuple_size };
+
+                herr_t ret = H5Dset_extent(set_id, dimensions);
+                if (0 > ret)
+                    throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
+            }
+
+            herr_t ret = H5Dclose(set_id);
+            if (0 > ret)
+                throw ScanFileHDF5Error("H5Dclose", ret);
+
+            ret = H5Sclose(space_id_memory);
+            if (ret < 0)
+                throw ScanFileHDF5Error("H5Sclose", ret);
+
+            ret = H5Sclose(space_id_file_writing);
+            if (ret < 0)
+                throw ScanFileHDF5Error("H5Sclose", ret);
+
+            ret = H5Sclose(space_id_file);
+            if (ret < 0)
+                throw ScanFileHDF5Error("H5Sclose", ret);
+        }
+
+        void append(const std::vector<double> & data)
+        {
+            if (data.size() != tuple_size)
+                throw InternalError("Trying to write a tuple of size '" + stringify(data.size()) + "' to a ScanFile::DataSet of width '" + stringify(tuple_size) + "'");
+
+            hsize_t offset[2] = { current_index, 0 };
+            hsize_t count[2] = { 1, tuple_size };
+
+            herr_t ret = H5Sselect_hyperslab(space_id_file_writing, H5S_SELECT_SET, offset, 0, count, 0);
+            if (ret < 0)
+                throw ScanFileHDF5Error("H5Sselect_hyperslab", ret);
+
+            ret = H5Dwrite(set_id, H5T_IEEE_F64LE, space_id_memory, space_id_file_writing, H5P_DEFAULT, &data[0]);
+            if (ret < 0)
+                throw ScanFileHDF5Error("H5Dwrite", ret);
+
+            ++current_index;
+            ++tuples;
+
+            if (capacity <= current_index)
+            {
+                capacity += 1000;
+
+                hsize_t dimensions[2] = { capacity, tuple_size };
+                hsize_t max_dimensions[2] = { H5S_UNLIMITED, tuple_size };
+
+                herr_t ret = H5Sset_extent_simple(space_id_file_writing, 2, dimensions, max_dimensions);
+                if (0 > ret)
+                    throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
+
+                ret = H5Sset_extent_simple(space_id_file, 2, dimensions, max_dimensions);
+                if (0 > ret)
+                    throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
+
+                ret = H5Dset_extent(set_id, dimensions);
+                if (0 > ret)
+                    throw ScanFileHDF5Error("H5Dset_extent", ret);
+            }
+        }
+    };
+
+    ScanFile::DataSet::DataSet(Implementation<ScanFile> * imp, const std::string & name) :
+        PrivateImplementationPattern<ScanFile::DataSet>(new Implementation<ScanFile::DataSet>(imp, name))
+    {
+    }
+
+    ScanFile::DataSet::DataSet(Implementation<ScanFile> * imp, const std::string & name, unsigned tuple_size) :
+        PrivateImplementationPattern<ScanFile::DataSet>(new Implementation<ScanFile::DataSet>(imp, name, tuple_size))
+    {
+    }
+
+    ScanFile::DataSet::~DataSet()
+    {
+    }
+
+    std::string
+    ScanFile::DataSet::name() const
+    {
+        return _imp->name;
+    }
+
+    unsigned
+    ScanFile::DataSet::tuple_size() const
+    {
+        return _imp->tuple_size;
+    }
+
+    unsigned
+    ScanFile::DataSet::tuples() const
+    {
+        return _imp->tuples;
+    }
+
+    ScanFile::Tuple
+    ScanFile::DataSet::operator[] (const unsigned & index)
+    {
+        return ScanFile::Tuple(_imp, index);
+    }
+
+    ScanFile::DataSet &
+    operator<< (ScanFile::DataSet & lhs, const std::vector<double> & rhs)
+    {
+        lhs._imp->append(rhs);
+
+        return lhs;
+    }
+
+    template <>
+    struct Implementation<ScanFile::Tuple>
+    {
+        std::shared_ptr<Implementation<ScanFile::DataSet>> data_set_imp;
+
+        const unsigned tuple_size;
+
+        unsigned tuples;
+
+        unsigned index;
+
+        double * buffer;
+
+        hid_t set_id;
+
+        hid_t space_id_memory;
+
+        hid_t space_id_file_reading;
+
+        Implementation(const std::shared_ptr<Implementation<ScanFile::DataSet>> & data_set_imp, const unsigned & index) :
+            data_set_imp(data_set_imp),
+            tuple_size(data_set_imp->tuple_size),
+            tuples(data_set_imp->tuples),
+            index(index),
+            set_id(data_set_imp->set_id),
+            space_id_memory(H5I_INVALID_HID),
+            space_id_file_reading(H5Scopy(data_set_imp->space_id_file))
+        {
+            if (H5I_INVALID_HID == space_id_file_reading)
+                throw ScanFileHDF5Error("H5Scopy", space_id_file_reading);
+
             hsize_t dimensions[2] = { 1, tuple_size };
             space_id_memory = H5Screate_simple(2, dimensions, 0);
             if (H5I_INVALID_HID == space_id_memory)
                 throw ScanFileHDF5Error("H5Screate_simple", space_id_memory);
 
-            space_id_file = H5Dget_space(set_id_scan);
-            if (H5I_INVALID_HID == space_id_file)
-                throw ScanFileHDF5Error("H5Dget_space", space_id_file);
+            buffer = new double[tuple_size];
 
-            select();
+            read();
         }
 
         ~Implementation()
@@ -296,40 +542,32 @@ namespace eos
             if (ret < 0)
                 throw ScanFileHDF5Error("H5Sclose", ret);
 
-            ret = H5Sclose(space_id_file);
+            ret = H5Sclose(space_id_file_reading);
             if (ret < 0)
                 throw ScanFileHDF5Error("H5Sclose", ret);
         }
 
-        void select()
+        void read()
         {
+            if (index >= tuples)
+                return;
+
             hsize_t offset[2] = { index, 0 };
             hsize_t count[2] = { 1, tuple_size };
 
-            herr_t ret = H5Sselect_hyperslab(space_id_file, H5S_SELECT_SET, offset, 0, count, 0);
+            herr_t ret = H5Sselect_hyperslab(space_id_file_reading, H5S_SELECT_SET, offset, 0, count, 0);
             if (ret < 0)
                 throw ScanFileHDF5Error("H5Sselect_hyperslab", ret);
-        }
 
-        void read()
-        {
-            herr_t ret = H5Dread(set_id_scan, H5T_IEEE_F64LE, space_id_memory, space_id_file, H5P_DEFAULT, buffer);
+            ret = H5Dread(set_id, H5T_IEEE_F64LE, space_id_memory, space_id_file_reading, H5P_DEFAULT, buffer);
             if (ret < 0)
                 throw ScanFileHDF5Error("H5Dread", ret);
         }
-
-        void write()
-        {
-            herr_t ret = H5Dwrite(set_id_scan, H5T_IEEE_F64LE, space_id_memory, space_id_file, H5P_DEFAULT, buffer);
-            if (ret < 0)
-                throw ScanFileHDF5Error("H5Dwrite", ret);
-        }
     };
 
-    ScanFile::Tuple::Tuple(const std::shared_ptr<Implementation<ScanFile>> & file_imp, const unsigned & index) :
-        PrivateImplementationPattern<ScanFile::Tuple>(new Implementation<ScanFile::Tuple>(file_imp, index))
+    ScanFile::Tuple::Tuple(const std::shared_ptr<Implementation<ScanFile::DataSet>> & data_set_imp, const unsigned & index) :
+        PrivateImplementationPattern<ScanFile::Tuple>(new Implementation<ScanFile::Tuple>(data_set_imp, index))
     {
-
     }
 
     ScanFile::Tuple::~Tuple()
@@ -340,26 +578,14 @@ namespace eos
     ScanFile::Tuple::operator++ ()
     {
         _imp->index += 1;
-        _imp->select();
+        _imp->read();
 
         return *this;
     }
 
-    double &
-    ScanFile::Tuple::operator[] (const unsigned & index)
+    double
+    ScanFile::Tuple::operator[] (const unsigned & index) const
     {
         return _imp->buffer[index];
-    }
-
-    void
-    ScanFile::Tuple::read()
-    {
-        _imp->read();
-    }
-
-    void
-    ScanFile::Tuple::write()
-    {
-        _imp->write();
     }
 }

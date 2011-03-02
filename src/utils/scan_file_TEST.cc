@@ -23,6 +23,8 @@
 
 #include <cmath>
 #include <cstdio>
+#include <string>
+#include <tuple>
 
 using namespace test;
 using namespace eos;
@@ -44,13 +46,20 @@ class ScanFileTest :
 
             // Create file
             {
-                ScanFile test_file = ScanFile::Create(filename, "scan_file_TEST", 3, 5);
+                ScanFile test_file = ScanFile::Create(filename, "scan_file_TEST");
+                ScanFile::DataSet test_set = test_file.add("result #1", 3);
 
-                ScanFile::Tuple tuple = test_file[0];
-                tuple[0] = 3.0;
-                tuple[1] = 2.0;
-                tuple[2] = 1.0;
-                tuple.write();
+                test_set << std::vector<double>{ 3.0, 2.0, 1.0 };
+
+                for (auto i = 0 ; i < 1002 ; ++i)
+                {
+                    test_set << std::vector<double>{ 4.0, 5.0, 6.0 };
+                }
+
+                test_set << std::vector<double>{ 7.0, 8.0, 9.0 };
+
+                test_set = test_file.add("result #2", 7);
+                test_set << std::vector<double>{ 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0 };
             }
 
             // Open file
@@ -58,8 +67,44 @@ class ScanFileTest :
                 ScanFile test_file = ScanFile::Open(filename);
                 TEST_CHECK_EQUAL(test_file.creator(),     "scan_file_TEST");
                 TEST_CHECK_EQUAL(test_file.eos_version(), EOS_GITHEAD);
-                TEST_CHECK_EQUAL(test_file.tuple_size(),  3);
-                TEST_CHECK_EQUAL(test_file.scan_size(),   5);
+
+                static const std::vector<std::tuple<std::string, unsigned, unsigned>> references
+                {
+                    std::tuple<std::string, unsigned, unsigned>(std::string("result #1"), 3, 1004),
+                    std::tuple<std::string, unsigned, unsigned>(std::string("result #2"), 7, 1),
+                };
+
+                auto r = references.cbegin();
+                for (ScanFile::Iterator d = test_file.begin(), d_end = test_file.end() ; d != d_end ; ++d, ++r)
+                {
+                    TEST_CHECK_EQUAL(std::get<0>(*r), d->name());
+                    TEST_CHECK_EQUAL(std::get<1>(*r), d->tuple_size());
+                    TEST_CHECK_EQUAL(std::get<2>(*r), d->tuples());
+                }
+
+                // "result #1"
+                {
+                    ScanFile::DataSet test_set = test_file["result #1"];
+                    ScanFile::Tuple test_tuple = test_set[0];
+
+                    TEST_CHECK_EQUAL(3.0, test_tuple[0]);
+                    TEST_CHECK_EQUAL(2.0, test_tuple[1]);
+                    TEST_CHECK_EQUAL(1.0, test_tuple[2]);
+                }
+
+                // "result #2"
+                {
+                    ScanFile::DataSet test_set = test_file["result #2"];
+                    ScanFile::Tuple test_tuple = test_set[0];
+
+                    TEST_CHECK_EQUAL(7.0, test_tuple[0]);
+                    TEST_CHECK_EQUAL(6.0, test_tuple[1]);
+                    TEST_CHECK_EQUAL(5.0, test_tuple[2]);
+                    TEST_CHECK_EQUAL(4.0, test_tuple[3]);
+                    TEST_CHECK_EQUAL(3.0, test_tuple[4]);
+                    TEST_CHECK_EQUAL(2.0, test_tuple[5]);
+                    TEST_CHECK_EQUAL(1.0, test_tuple[6]);
+                }
             }
         }
 } scan_file_test;

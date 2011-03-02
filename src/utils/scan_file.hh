@@ -22,6 +22,9 @@
 
 #include <src/utils/exception.hh>
 #include <src/utils/private_implementation_pattern.hh>
+#include <src/utils/wrapped_forward_iterator.hh>
+
+#include <vector>
 
 namespace eos
 {
@@ -62,7 +65,7 @@ namespace eos
      *
      * An HDF5 DDL representation of a scan file follows:
      *
-     * @verbatim
+     * @code
      *   HDF5 "<FILE>" {
      *   GROUP "/" {
      *     GROUP "metadata" {
@@ -91,16 +94,21 @@ namespace eos
      *         }
      *       }
      *     }
-     *     DATASET "scan" {
-     *       DATATYPE H5T_IEEE_F64LE
-     *       DATASPACE SIMPLE { ( <TUPLES>, <ELEMENTS> ) / ( <TUPLES>, <ELEMENTS> ) }
-     *       DATA {
+     *     GROUP "data" {
+     *       DATASET "<RESULT1>" {
+     *         DATATYPE H5T_IEEE_F64LE
+     *         DATASPACE SIMPLE { ( <TUPLES>, <ELEMENTS> ) / ( UNLIMITED, <ELEMENTS> ) }
+     *         DATA {
+     *           ...
+     *         }
+     *       }
+     *       DATASET "<RESULT2>" {
      *         ...
      *       }
      *     }
      *   }
      *   }
-     * @endverbatim
+     * @endcode
      *
      * Here, <FILE> is the filename, <TUPLES> is the number of scan tuples of <ELEMENTS> elements
      * each. <CREATOR> is an identifier of the creating program, and <EOSVERSION> is a string
@@ -114,6 +122,7 @@ namespace eos
             ScanFile(Implementation<ScanFile> * imp);
 
         public:
+            class DataSet;
             class Tuple;
 
             ///@name Basic Functions
@@ -129,8 +138,7 @@ namespace eos
              * @param tuple_size Number of elements of each scan tuple.
              * @param scan_size  Number of scan tuples in file.
              */
-            static ScanFile Create(const std::string & filename, const std::string & creator,
-                    const unsigned & tuple_size, const unsigned & scan_size);
+            static ScanFile Create(const std::string & filename, const std::string & creator);
 
             /*!
              * Named constructor to open an existing file.
@@ -147,24 +155,87 @@ namespace eos
 
             /// Retrieve the file creator's version information.
             const std::string & eos_version() const;
-
-            /// Retrieve the number of elements of a scan tuple.
-            int tuple_size() const;
-
-            /// Retrieve the number of scan tuples in the file.
-            int scan_size() const;
             ///@}
 
             ///@name Data Access
             ///@{
             /*!
-             * Retrieve a scan tuple by its index.
+             * Retrieve a data set by its name.
              *
              * @param index Index of the scan tuple that shall be retrieved.
+             */
+            DataSet operator[] (const std::string & name);
+
+            /*!
+             * Create a new data set by name.
+             *
+             * @param name       Name of the new data set.
+             * @param tuple_size Numer of elements in each tuple of the new data set.
+             */
+            DataSet add(const std::string & name, unsigned tuple_size);
+            ///@}
+
+            ///@name Iteration
+            ///@{
+            struct IteratorTag;
+            typedef WrappedForwardIterator<IteratorTag, DataSet> Iterator;
+
+            Iterator begin();
+            Iterator end();
+            ///@}
+    };
+
+    /*!
+     * ScanFile::DataSet represents one of the data sets in the group "/data" within a ScanFile.
+     */
+    class ScanFile::DataSet :
+        public PrivateImplementationPattern<ScanFile::DataSet>
+    {
+        private:
+            DataSet(Implementation<ScanFile> * imp, const std::string & name);
+            DataSet(Implementation<ScanFile> * imp, const std::string & name, unsigned tuple_size);
+
+        public:
+            friend class ScanFile;
+            friend class Implementation<ScanFile>;
+            friend ScanFile::DataSet & operator<< (ScanFile::DataSet &, const std::vector<double> &);
+
+            ///@name Basic Functions
+            ///@{
+            /// Destructor.
+            ~DataSet();
+            ///@}
+
+            ///@name Metadata Access
+            ///@{
+            /// Name of the data set
+            std::string name() const;
+
+            /// Number of columns in data set
+            unsigned tuple_size() const;
+
+            /// Number of rows in data set
+            unsigned tuples() const;
+            ///@}
+
+            ///@name Data Access
+            ///@{
+            /*!
+             * Retrieve a tuple element.
+             *
+             * @param index Index of the tuple element that shall be retrieved.
              */
             Tuple operator[] (const unsigned & index);
             ///@}
     };
+
+    /*!
+     * Append a tuple to a ScanFile::DataSet.
+     *
+     * @param lhs The ScanFile::DataSet which shall be written to.
+     * @param rhs The tuple which shall be appended.
+     */
+    ScanFile::DataSet & operator<< (ScanFile::DataSet & lhs, const std::vector<double> & rhs);
 
     /*!
      * ScanFile::Tuple represents one of the scan tuples within a ScanFile.
@@ -173,7 +244,7 @@ namespace eos
         public PrivateImplementationPattern<ScanFile::Tuple>
     {
         private:
-            Tuple(const std::shared_ptr<Implementation<ScanFile>> & imp, const unsigned & offset);
+            Tuple(const std::shared_ptr<Implementation<ScanFile::DataSet>> & imp, const unsigned & index);
 
         public:
             friend class ScanFile;
@@ -194,13 +265,7 @@ namespace eos
              *
              * @param index Index of the tuple element that shall be retrieved.
              */
-            double & operator[] (const unsigned & index);
-
-            /// Read the tuple data from the parent ScanFile
-            void read();
-
-            /// Write the tuple data to the parent ScanFile
-            void write();
+            double operator[] (const unsigned & index) const;
             ///@}
     };
 }
