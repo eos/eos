@@ -23,6 +23,8 @@
 #include <src/utils/private_implementation_pattern.hh>
 #include <src/utils/wrapped_forward_iterator.hh>
 
+#include <array>
+
 namespace eos
 {
     template <std::size_t dimensions_> class Histogram;
@@ -127,6 +129,118 @@ namespace eos
      * @param distribution   The histogram of a distribution function.
      */
     Histogram<1> estimate_cumulative_distribution(const Histogram<1> & distribution);
+
+    template <> class Histogram<2> :
+        public PrivateImplementationPattern<Histogram<2>>
+    {
+        public:
+            struct Bin;
+
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * Creates an empty Histogram, i.e. a Histogram without any bins.
+             */
+            Histogram();
+
+            /// Destructor.
+            ~Histogram();
+
+            /*!
+             * Named constructor.
+             *
+             * Creates a Histogram with pre-existing bins of identical width.
+             * @param start    Left-most value for each dimension that shall be covered by the Histogram.
+             * @param end      Right-most value for each dimension that shall be covered by the Histogram.
+             * @param count    Number of Bins for each dimension.
+             */
+            static Histogram WithEqualBinning(const std::array<double, 2> & start, const std::array<double, 2> & end, const std::array<unsigned, 2> & count);
+            ///@}
+
+            ///@name Insertion and Retrieval
+            ///@{
+            /// Inserts a bin into the histogram.
+            void insert(const Bin & bin);
+
+            /// Returns the number of entries in the histogram.
+            unsigned entries() const;
+            ///@}
+
+            ///@name Iteration
+            ///@{
+            struct IteratorTag;
+            typedef WrappedForwardIterator<IteratorTag, Bin> Iterator;
+
+            Iterator begin();
+            Iterator find(const std::array<double, 2> & coordinates);
+            Iterator end();
+            ///@}
+
+            ///@name Constant Iteration
+            ///@{
+            struct ConstIteratorTag;
+            typedef WrappedForwardIterator<ConstIteratorTag, const Bin> ConstIterator;
+
+            ConstIterator cbegin() const;
+            ConstIterator cend() const;
+            ///@}
+    };
+
+    /*!
+     * Holds information on any one of Histogram<2>'s bins.
+     */
+    struct Histogram<2>::Bin
+    {
+        /// Lower limit of the Bin's interval for each dimension.
+        std::array<double, 2> lower;
+
+        /// Upper limit of the Bin's interval for each dimension.
+        std::array<double, 2> upper;
+
+        /// Content of the Bin.
+        double value;
+
+        ///@name Basic Functions
+        ///@{
+        /*
+         * Constructor.
+         *
+         * @param lower    Left-most (inclusive) border of the Bin's interval.
+         * @param upper    Right-most (exclusive) border of the Bin's interval.
+         * @param value    Initial value of the Bin.
+         */
+        Bin(const std::array<double, 2> & lower, const std::array<double, 2> & upper, const double & value = 0.0) :
+            lower(lower),
+            upper(upper),
+            value(value)
+        {
+        }
+
+        /// Destructor.
+        ~Bin() { }
+        ///@}
+
+        /*!
+         * Compare if this bin is of lower order than another bin.
+         *
+         * @param other    The other Bin.
+         */
+        bool operator< (const Bin & other) const
+        {
+            if (this->lower[0] < other.lower[0])
+                return true;
+
+            if (this->lower[0] > other.lower[0])
+                return false;
+
+            if (this->lower[1] < other.lower[1])
+                return true;
+
+            return false;
+        }
+    };
 }
 
 #endif

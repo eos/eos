@@ -27,9 +27,12 @@
 #include <cmath>
 #include <algorithm>
 #include <list>
+#include <vector>
 
 namespace eos
 {
+    /* Histogram<1> */
+
     template class WrappedForwardIterator<Histogram<1>::ConstIteratorTag, const Histogram<1>::Bin>;
 
     template <> struct Implementation<Histogram<1>>
@@ -153,5 +156,148 @@ namespace eos
         }
 
         return result;
+    }
+
+    /* Histogram<2> */
+
+    template class WrappedForwardIterator<Histogram<2>::ConstIteratorTag, const Histogram<2>::Bin>;
+
+    template class WrappedForwardIterator<Histogram<2>::IteratorTag, Histogram<2>::Bin>;
+
+    template <> struct Implementation<Histogram<2>>
+    {
+        std::vector<Histogram<2>::Bin> bins;
+
+        Implementation()
+        {
+        }
+
+        static bool falls_into(const std::array<double, 2> & coordinates, const Histogram<2>::Bin & bin)
+        {
+            bool result = (((bin.lower[0] <= coordinates[0]) && (coordinates[0] < bin.upper[0]))
+                && (bin.lower[1] <= coordinates[1]) && (coordinates[1] < bin.upper[1]));
+
+            return result;
+        }
+
+        std::vector<Histogram<2>::Bin>::iterator find(const std::array<double, 2> & coordinates)
+        {
+            // perform a binary search for a matching bin
+            std::vector<Histogram<2>::Bin>::iterator l = bins.begin(), r = bins.end(), x;
+
+            while (r - l > 2)
+            {
+                x = l + (r - l) / 2;
+
+                if (coordinates[0] < x->lower[0])
+                {
+                    r = x;
+                    continue;
+                }
+
+                if (x->upper[0] < coordinates[0])
+                {
+                    l = x;
+                    continue;
+                }
+
+                if (coordinates[1] < x->lower[1])
+                {
+                    r = x;
+                    continue;
+                }
+
+                if (x->upper[1] < coordinates[1])
+                {
+                    l = x;
+                    continue;
+                }
+
+                break;
+            };
+
+            auto result = std::find_if(l, r, std::bind(&Implementation<Histogram<2>>::falls_into, coordinates, std::placeholders::_1));
+            if (result == r)
+                result = bins.end();
+
+            return result;
+        }
+
+        static bool is_next_of(const Histogram<2>::Bin & new_bin, const Histogram<2>::Bin & bin)
+        {
+            return ! (bin < new_bin);
+        }
+
+        void insert(const Histogram<2>::Bin & bin)
+        {
+            auto b = std::find_if(bins.begin(), bins.end(), std::bind(&Implementation<Histogram<2>>::is_next_of, bin, std::placeholders::_1));
+
+            bins.insert(b, bin);
+        }
+    };
+
+    Histogram<2>::Histogram() :
+        PrivateImplementationPattern<Histogram<2>>(new Implementation<Histogram<2>>)
+    {
+    }
+
+    Histogram<2>::~Histogram()
+    {
+    }
+
+    Histogram<2>
+    Histogram<2>::WithEqualBinning(const std::array<double, 2> & lower, const std::array<double, 2> & upper, const std::array<unsigned, 2> & count)
+    {
+        Histogram<2> result;
+
+        double x_bin_width = std::abs(upper[0] - lower[0]) / count[0];
+        double y_bin_width = std::abs(upper[1] - lower[1]) / count[1];
+        for (unsigned i = 0 ; i < count[0] ; ++i)
+        {
+            for (unsigned j = 0 ; j < count[1] ; ++j)
+            {
+                result.insert(Bin(std::array<double, 2>{{lower[0] + x_bin_width * i, lower[1] + y_bin_width * j}},
+                            std::array<double, 2>{{lower[0] + x_bin_width * (i + 1), lower[1] + y_bin_width * (j + 1)}},
+                            0.0));
+            }
+        }
+
+        return result;
+    }
+
+    void
+    Histogram<2>::insert(const Bin & bin)
+    {
+        _imp->insert(bin);
+    }
+
+    Histogram<2>::Iterator
+    Histogram<2>::begin()
+    {
+        return Iterator(_imp->bins.begin());
+    }
+
+    Histogram<2>::Iterator
+    Histogram<2>::end()
+    {
+        return Iterator(_imp->bins.end());
+    }
+
+    Histogram<2>::Iterator
+    Histogram<2>::find(const std::array<double, 2> & coordinates)
+    {
+        return Iterator(_imp->find(coordinates));
+    }
+
+    Histogram<2>::ConstIterator
+    Histogram<2>::cbegin() const
+    {
+        return ConstIterator(_imp->bins.cbegin());
+    }
+
+    Histogram<2>::ConstIterator
+    Histogram<2>::cend() const
+    {
+        return ConstIterator(_imp->bins.cend());
     }
 }
