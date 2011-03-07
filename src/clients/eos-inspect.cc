@@ -80,9 +80,12 @@ main(int argc, char * argv[])
     {
         CommandLine::instance()->parse(argc, argv);
 
+        if (CommandLine::instance()->filenames.empty())
+            throw DoUsage("Need to specify at least one filename to inspect!");
+
         for (auto f = CommandLine::instance()->filenames.cbegin(), f_end = CommandLine::instance()->filenames.cend() ; f != f_end ; ++f)
         {
-            std::cout << "# " << *f << std::endl;
+            std::cout << "# File: " << *f << std::endl;
             try
             {
                 ScanFile file = ScanFile::Open(*f);
@@ -115,7 +118,11 @@ main(int argc, char * argv[])
     catch(DoUsage & e)
     {
         std::cout << e.what() << std::endl;
-        std::cout << "Usage: eos-list-parameters" << std::endl;
+        std::cout << "Usage: eos-inspect" << std::endl;
+        std::cout << "  [--file NAME]+" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Example:" << std::endl;
+        std::cout << "  eos-inspect --file input1.hdf5 --file input2.hdf5" << std::endl;
     }
     catch(Exception & e)
     {
