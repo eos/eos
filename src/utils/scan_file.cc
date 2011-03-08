@@ -23,6 +23,8 @@
 #include <src/utils/stringify.hh>
 #include <src/utils/wrapped_forward_iterator-impl.hh>
 
+#include <algorithm>
+
 #include <hdf5.h>
 
 namespace eos
@@ -117,6 +119,13 @@ namespace eos
         {
             herr_t ret;
 
+            // Close all data sets
+            data_sets.clear();
+
+            ret = H5Fflush(file_id, H5F_SCOPE_GLOBAL);
+            if (0 > ret)
+                throw ScanFileHDF5Error("H5Fflush", ret);
+
             ret = H5Gclose(group_id_data);
             if (0 > ret)
                 throw ScanFileHDF5Error("H5Gclose", ret);
@@ -182,6 +191,16 @@ namespace eos
 
             return result;
         }
+
+        static bool same_name_as(const std::string & name, const ScanFile::DataSet & data_set)
+        {
+            return name == data_set.name();
+        }
+
+        std::vector<ScanFile::DataSet>::iterator find_data_set(const std::string & name)
+        {
+            return std::find_if(data_sets.begin(), data_sets.end(), std::bind(Implementation<ScanFile>::same_name_as, name, std::placeholders::_1));
+        }
     };
 
     ScanFile::ScanFile(Implementation<ScanFile> * imp) :
@@ -222,13 +241,21 @@ namespace eos
     ScanFile::DataSet
     ScanFile::operator[] (const std::string & name)
     {
-        return ScanFile::DataSet(_imp.get(), name);
+        auto d = _imp->find_data_set(name);
+
+        if (_imp->data_sets.end() == d)
+            throw ScanFileError("No such data set '" + name + "'");
+
+        return *d;
     }
 
     ScanFile::DataSet
     ScanFile::add(const std::string & name, unsigned tuple_size)
     {
-        return ScanFile::DataSet(_imp.get(), name, tuple_size);
+        ScanFile::DataSet result = ScanFile::DataSet(_imp.get(), name, tuple_size);
+        _imp->data_sets.push_back(result);
+
+        return result;
     }
 
     ScanFile::Iterator
@@ -389,7 +416,11 @@ namespace eos
                     throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
             }
 
-            herr_t ret = H5Dclose(set_id);
+            herr_t ret = H5Fflush(set_id, H5F_SCOPE_LOCAL);
+            if (0 > ret)
+                throw ScanFileHDF5Error("H5Fflush", ret);
+
+            ret = H5Dclose(set_id);
             if (0 > ret)
                 throw ScanFileHDF5Error("H5Dclose", ret);
 
