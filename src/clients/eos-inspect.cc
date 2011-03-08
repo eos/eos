@@ -96,7 +96,7 @@ main(int argc, char * argv[])
                 for (auto d = file.begin(), d_end = file.end() ; d != d_end ; ++d)
                 {
                     ScanFile::Tuple tuple = (*d)[0];
-                    std::cout << "#   Dataset 'results': (" << d->tuples() << ", " << d->tuple_size() << ')' << std::endl;
+                    std::cout << "#   Dataset '" + d->name() + "': (" << d->tuples() << ", " << d->tuple_size() << ')' << std::endl;
                     std::cout << std::scientific << std::setprecision(9);
                     for (unsigned i = 0 ; i < d->tuples() ; ++i, ++tuple)
                     {
