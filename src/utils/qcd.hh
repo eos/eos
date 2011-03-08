@@ -70,7 +70,7 @@ namespace eos
             static double m_q_pole(const double & m_q, const double & alpha_s, const double & nf);
 
             /*!
-             * Calculate the from from MSbar scheme to potential-Subtracted mass (PS mass).
+             * Calculate the shift from from MSbar scheme to potential-Subtracted mass (PS mass).
              *
              * Calculation according to [B1998].
              *

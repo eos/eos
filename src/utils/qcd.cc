@@ -119,7 +119,7 @@ namespace eos
         double b_0 = beta[0];
         double L = log(mu_f / m_q_MSbar);
 
-        // cf. [CERN2003-002], Eq. (16), p. 45
+        // cf. [B1998], Eq. (25), p. 12
         return m_q_MSbar * (1.0 + a_s * (4.0/3.0 * (1.0 - mu_f / m_q_MSbar) + a_s * (K - (mu_f / 3.0 / m_q_MSbar) * (a_1 - 2.0 * b_0 * (L - 1.0)))));
     }
 }
