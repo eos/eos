@@ -23,6 +23,7 @@
 #include <src/utils/scan_file.hh>
 #include <src/utils/stringify.hh>
 
+#include <cmath>
 #include <list>
 #include <iostream>
 #include <string>
@@ -46,6 +47,17 @@ class DoUsage
         }
 };
 
+/* Marginalisation Classes */
+double marginalise_by_sum(const double & previous, const double & next)
+{
+    return previous + next;
+}
+
+double marginalise_by_max_likelihood(const double & previous, const double & next)
+{
+    return std::max(previous, std::exp(-0.5 * next));
+}
+
 class CommandLine :
     public InstantiationPolicy<CommandLine, Singleton>
 {
@@ -60,12 +72,15 @@ class CommandLine :
 
         std::array<unsigned, 2> count;
 
+        std::function<double (const double &, const double &)> marginalise;
+
         CommandLine() :
             x_index(0),
             y_index(0),
             start(std::array<double, 2>{{ 0.0, 0.0 }}),
             end(std::array<double, 2>{{ 15.0, 15.0 }}),
-            count(std::array<unsigned, 2>{{ 60, 60 }})
+            count(std::array<unsigned, 2>{{ 60, 60 }}),
+            marginalise(marginalise_by_sum)
         {
         }
 
@@ -74,6 +89,13 @@ class CommandLine :
             for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
             {
                 std::string argument(*a);
+
+                if ("--max-exp" == argument)
+                {
+                    marginalise = &marginalise_by_max_likelihood;
+
+                    continue;
+                }
 
                 if ("--file" == argument)
                 {
@@ -148,33 +170,33 @@ main(int argc, char * argv[])
                     std::cout << "#   Data set '" << d->name() << "' with " << d->tuples() << " of " << d->tuple_size() << " elements each" << std::endl;
                     for (unsigned i = 0 ; i < d->tuples() ; ++i, ++tuple)
                     {
-                        for (unsigned j = 0 ; j < d->tuple_size() ; ++j)
+                        std::array<double, 2> coords{{ tuple[x_index], tuple[y_index] }};
+                        auto b = histogram.find(coords);
+                        if (histogram.end() == b)
                         {
-                            std::array<double, 2> coords{{ tuple[x_index], tuple[y_index] }};
-                            auto b = histogram.find(coords);
-                            if (histogram.end() == b)
-                                throw DoUsage("Did not find bin suitable for '(" + stringify(coords[0]) + ", " + stringify(coords[1]) + ")'. Please adjust histogram configuration!");
-
-                            b->value += tuple[posterior_index];
+                            std::cerr << "Did not find bin suitable for '(" << coords[0] << ", " << coords[1] << ")'. You might need to adjust the histogram configuration!" << std::endl;
+                            continue;
                         }
-                    }
 
-                    auto b = histogram.cbegin(), b_end = histogram.cend();
-                    double last_y = b->lower[1];
-                    for ( ; b != b_end ; ++b)
-                    {
-                        if (b->lower[1] < last_y)
-                            std::cout << std::endl;
-
-                        last_y = b->lower[1];
-
-                        std::cout << b->lower[0] << '\t' << b->lower[1] << '\t' << b->upper[0] << '\t' << b->upper[1] << '\t' << b->value << std::endl;
+                        b->value = CommandLine::instance()->marginalise(b->value, tuple[posterior_index]);
                     }
                 }
             }
             catch (ScanFileError & e)
             {
                 std::cout << "#   Error reading " << *f << std::endl;
+            }
+
+            auto b = histogram.cbegin(), b_end = histogram.cend();
+            double last_y = b->lower[1];
+            for ( ; b != b_end ; ++b)
+            {
+                if (b->lower[1] < last_y)
+                    std::cout << std::endl;
+
+                last_y = b->lower[1];
+
+                std::cout << b->lower[0] << '\t' << b->lower[1] << '\t' << b->upper[0] << '\t' << b->upper[1] << '\t' << b->value << std::endl;
             }
         }
     }
