@@ -42,6 +42,22 @@ namespace eos
 
     WilsonPolynomial make_polynomial(const ObservablePtr &, const std::list<std::string> &);
 
+    class WilsonPolynomialCloner
+    {
+        private:
+            Parameters _parameters;
+
+        public:
+            WilsonPolynomialCloner(const Parameters & parameters);
+
+            WilsonPolynomial visit(const Constant & c);
+            WilsonPolynomial visit(const Sum & s);
+            WilsonPolynomial visit(const Product & p);
+            WilsonPolynomial visit(const Sine & s);
+            WilsonPolynomial visit(const Cosine & s);
+            WilsonPolynomial visit(const Parameter & p);
+    };
+
     class WilsonPolynomialPrinter
     {
         private:

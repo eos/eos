@@ -212,6 +212,56 @@ namespace eos
         return result;
     }
 
+    /* WilsonPolynomialCloner */
+    WilsonPolynomialCloner::WilsonPolynomialCloner(const Parameters & parameters) :
+        _parameters(parameters)
+    {
+    }
+
+    WilsonPolynomial
+    WilsonPolynomialCloner::visit(const Constant & c)
+    {
+        return WilsonPolynomial(Constant(c));
+    }
+
+    WilsonPolynomial
+    WilsonPolynomialCloner::visit(const Sum & s)
+    {
+        Sum result;
+
+        for (auto i = s.summands.cbegin(), i_end = s.summands.cend() ; i != i_end ; ++i)
+        {
+            result.add(i->accept_returning<WilsonPolynomial>(*this));
+        }
+
+        return WilsonPolynomial(result);
+    }
+
+    WilsonPolynomial
+    WilsonPolynomialCloner::visit(const Product & p)
+    {
+        return WilsonPolynomial(Product(p.x.accept_returning<WilsonPolynomial>(*this),
+                    p.y.accept_returning<WilsonPolynomial>(*this)));
+    }
+
+    WilsonPolynomial
+    WilsonPolynomialCloner::visit(const Sine & s)
+    {
+        return WilsonPolynomial(Sine(s.phi.accept_returning<WilsonPolynomial>(*this)));
+    }
+
+    WilsonPolynomial
+    WilsonPolynomialCloner::visit(const Cosine & c)
+    {
+        return WilsonPolynomial(Cosine(c.phi.accept_returning<WilsonPolynomial>(*this)));
+    }
+
+    WilsonPolynomial
+    WilsonPolynomialCloner::visit(const Parameter & p)
+    {
+        return WilsonPolynomial(_parameters[p.name()]);
+    }
+
     /* WilsonPolynomialPrinter */
     WilsonPolynomialPrinter::WilsonPolynomialPrinter(const bool & pretty) :
         _pretty(pretty)

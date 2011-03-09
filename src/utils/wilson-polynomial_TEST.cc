@@ -145,3 +145,38 @@ class WilsonPolynomialTest :
             }
         }
 } wilson_polynomial_test;
+
+class WilsonPolynomialClonerTest :
+    public TestCase
+{
+    public:
+        WilsonPolynomialClonerTest() :
+            TestCase("wilson_polynomial_cloner_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            Parameters parameters = Parameters::Defaults();
+            Kinematics kinematics;
+
+            ObservablePtr o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
+            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "c7", "c9", "c10" });
+
+            Parameters clone_parameters = Parameters::Defaults();
+            WilsonPolynomialCloner cloner(clone_parameters);
+            WilsonPolynomial c = p.accept_returning<WilsonPolynomial>(cloner);
+
+            WilsonPolynomialPrinter printer;
+            TEST_CHECK_EQUAL(p.accept_returning<std::string>(printer), c.accept_returning<std::string>(printer));
+
+            WilsonPolynomialEvaluator evaluator;
+            TEST_CHECK_EQUAL(p.accept_returning<double>(evaluator), c.accept_returning<double>(evaluator));
+
+            parameters["Abs{c10}"] = 10;
+            TEST_CHECK(p.accept_returning<double>(evaluator) != c.accept_returning<double>(evaluator));
+
+            clone_parameters["Abs{c10}"] = 10;
+            TEST_CHECK_EQUAL(p.accept_returning<double>(evaluator), c.accept_returning<double>(evaluator));
+        }
+} wilson_polynomial_cloner_test;
