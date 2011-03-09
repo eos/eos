@@ -201,18 +201,6 @@ namespace eos
                     continue;
                 }
 
-                if (coordinates[1] < x->lower[1])
-                {
-                    r = x;
-                    continue;
-                }
-
-                if (x->upper[1] < coordinates[1])
-                {
-                    l = x;
-                    continue;
-                }
-
                 break;
             };
 

@@ -190,5 +190,21 @@ class Histogram2Test :
                 TEST_CHECK(histogram.end() == histogram.find(std::array<double, 2>{{5.9, 6.0}}));
                 TEST_CHECK(histogram.end() == histogram.find(std::array<double, 2>{{6.0, 6.0}}));
             }
+
+            // Test a common use case
+            {
+                static const std::array<double, 2> start{{0.0, 0.0}}, end{{15.25, 15.25}};
+                static const std::array<unsigned, 2> count{{61, 61}};
+                Histogram<2> histogram = Histogram<2>::WithEqualBinning(start, end, count);
+
+                // check lattice points
+                for (unsigned i = 0 ; i < 61 ; ++i)
+                {
+                    for (unsigned j = 0 ; j < 61 ; ++j)
+                    {
+                        TEST_CHECK(histogram.end() != histogram.find(std::array<double, 2>{{i * 0.25, j * 0.25}}));
+                    }
+                }
+            }
         }
 } histogram_2_test;
