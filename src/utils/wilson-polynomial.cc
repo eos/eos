@@ -212,6 +212,70 @@ namespace eos
         return result;
     }
 
+    class WilsonPolynomialRatio :
+        public Observable
+    {
+        private:
+            WilsonPolynomial _numerator, _denominator;
+
+            Parameters _parameters;
+
+            Kinematics _kinematics;
+
+            Options _options;
+
+            std::string _name;
+
+        public:
+            WilsonPolynomialRatio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator,
+                    const Parameters & parameters):
+                _numerator(numerator),
+                _denominator(denominator),
+                _parameters(parameters),
+                _name("WilsonPolynomialRatio")
+            {
+            }
+
+            ~WilsonPolynomialRatio()
+            {
+            }
+
+            virtual const std::string & name() const { return _name; }
+            virtual Kinematics kinematics() { return _kinematics; }
+            virtual Parameters parameters() { return _parameters; }
+            virtual Options options() { return _options; }
+            virtual ObservablePtr clone() const { throw InternalError("Cloning WilsonPolynomialRatio without external parameters"); }
+
+            virtual double evaluate() const
+            {
+                WilsonPolynomialEvaluator evaluator;
+
+                return _numerator.accept_returning<double>(evaluator)
+                    / _denominator.accept_returning<double>(evaluator);
+            }
+
+            virtual ObservablePtr clone(const Parameters & parameters) const
+            {
+                WilsonPolynomialCloner cloner(parameters);
+
+                return ObservablePtr(new WilsonPolynomialRatio(_numerator.accept_returning<WilsonPolynomial>(cloner),
+                            _denominator.accept_returning<WilsonPolynomial>(cloner),
+                            parameters));
+            }
+    };
+
+    ObservablePtr
+    make_polynomial_observable(const WilsonPolynomial & polynomial, const Parameters & parameters)
+    {
+        return ObservablePtr(new WilsonPolynomialRatio(polynomial, Constant(1.0), parameters));
+    }
+
+    ObservablePtr
+    make_polynomial_ratio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator, const Parameters & parameters)
+    {
+        return ObservablePtr(new WilsonPolynomialRatio(numerator, denominator, parameters));
+    }
+
     /* WilsonPolynomialCloner */
     WilsonPolynomialCloner::WilsonPolynomialCloner(const Parameters & parameters) :
         _parameters(parameters)

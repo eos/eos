@@ -42,6 +42,24 @@ namespace eos
 
     WilsonPolynomial make_polynomial(const ObservablePtr &, const std::list<std::string> &);
 
+    /*!
+     * Return an Observable that wraps a WilsonPolynomial object.
+     *
+     * @param polynomial  The polynomial that shall be wrapped.
+     * @param parameters  The Parameters object of the polynomial.
+     */
+    ObservablePtr make_polynomial_observable(const WilsonPolynomial & polynomial,
+            const Parameters & parameters);
+    /*!
+     * Return an Observable that is a ratio of two WilsonPolynomial objects.
+     *
+     * @param numerator   The numerator of the ratio.
+     * @param denominator The denominator of the ratio.
+     * @param parameters  The common Parameters object of both numerator and denominator.
+     */
+    ObservablePtr make_polynomial_ratio(const WilsonPolynomial & numerator, const WilsonPolynomial & denumerator,
+            const Parameters & parameters);
+
     class WilsonPolynomialCloner
     {
         private:
