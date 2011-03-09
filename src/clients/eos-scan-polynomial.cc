@@ -82,106 +82,6 @@ struct ScanData
     double max;
 };
 
-struct ObservableChiSquared
-{
-    WilsonPolynomial observable_central;
-    std::vector<WilsonPolynomial> observable_max, observable_min;
-
-    double experiment_min, experiment_central, experiment_max;
-
-    double operator() ()
-    {
-        static WilsonPolynomialEvaluator evaluator;
-
-        double theory_central = observable_central.accept_returning<double>(evaluator);
-        double delta_min = 0.0, delta_max = 0.0;
-
-        // Handle parameters with lowered values
-        for (auto i = observable_min.cbegin(), i_end = observable_min.cend() ; i != i_end ; ++i)
-        {
-            double value = i->accept_returning<double>(evaluator);
-
-            if (value < theory_central)
-            {
-                delta_min += power_of<2>(theory_central - value);
-            }
-            else if (value > theory_central)
-            {
-                delta_max += power_of<2>(theory_central - value);
-            }
-        }
-
-        // Handle parameters with raised values
-        for (auto i = observable_max.cbegin(), i_end = observable_max.cend() ; i != i_end ; ++i)
-        {
-            double value = i->accept_returning<double>(evaluator);
-
-            if (value < theory_central)
-            {
-                delta_min += power_of<2>(theory_central - value);
-            }
-            else if (value > theory_central)
-            {
-                delta_max += power_of<2>(theory_central - value);
-            }
-        }
-
-        return ChiSquared::with_theory_offset(theory_central - std::sqrt(delta_min), theory_central, theory_central + std::sqrt(delta_max), experiment_min, experiment_central, experiment_max);
-    }
-};
-
-struct ObservableRatioChiSquared
-{
-    WilsonPolynomial numerator_central;
-    std::vector<WilsonPolynomial> numerator_max, numerator_min;
-
-    WilsonPolynomial denominator_central;
-    std::vector<WilsonPolynomial> denominator_max, denominator_min;
-
-    double experiment_min, experiment_central, experiment_max;
-
-    double operator() ()
-    {
-        static WilsonPolynomialEvaluator evaluator;
-
-        double theory_central = numerator_central.accept_returning<double>(evaluator)
-            / denominator_central.accept_returning<double>(evaluator);
-        double delta_min = 0.0, delta_max = 0.0;
-
-        // Handle parameters with lowered values
-        for (auto n = numerator_min.cbegin(), d = denominator_min.cbegin(), n_end = numerator_min.cend() ; n != n_end ; ++n, ++d)
-        {
-            double value = n->accept_returning<double>(evaluator) / d->accept_returning<double>(evaluator);
-
-            if (value < theory_central)
-            {
-                delta_min += power_of<2>(theory_central - value);
-            }
-            else if (value > theory_central)
-            {
-                delta_max += power_of<2>(theory_central - value);
-            }
-        }
-
-        // Handle parameters with raised values
-        for (auto n = numerator_max.cbegin(), d = denominator_max.cbegin(), n_end = numerator_max.cend() ; n != n_end ; ++n, ++d)
-        {
-            double value = n->accept_returning<double>(evaluator) / d->accept_returning<double>(evaluator);
-
-            if (value < theory_central)
-            {
-                delta_min += power_of<2>(theory_central - value);
-            }
-            else if (value > theory_central)
-            {
-                delta_max += power_of<2>(theory_central - value);
-            }
-        }
-
-        return ChiSquared::with_theory_offset(theory_central - std::sqrt(delta_min), theory_central, theory_central + std::sqrt(delta_max), experiment_min, experiment_central, experiment_max);
-    }
-};
-
 class CommandLine :
     public InstantiationPolicy<CommandLine, Singleton>
 {
@@ -316,7 +216,9 @@ class WilsonScannerPolynomial
 
         std::vector<Parameter> _scan_parameters;
 
-        std::vector<std::function<double ()>> _chi_squared_functions;
+        std::vector<Parameter> _variations;
+
+        std::vector<std::tuple<ObservablePtr, double, double, double>> _observables;
 
         std::vector<Ticket> _tickets;
 
@@ -360,6 +262,13 @@ class WilsonScannerPolynomial
                 i->accept(*this);
             }
 
+            std::cout << "# Variations:" << std::endl;
+            for (auto v = CommandLine::instance()->variations.cbegin(), v_end = CommandLine::instance()->variations.cend() ; v != v_end ; ++v)
+            {
+                Parameter p = CommandLine::instance()->parameters[*v];
+                std::cout << "#   " << p.name() << ": " << p.min() << " < " << p << " < " << p.max() << std::endl;
+                _variations.push_back(p);
+            }
         }
 
         void visit(const ObservableInput & i)
@@ -368,79 +277,102 @@ class WilsonScannerPolynomial
 
             std::cout << "#   " << i.observable->name() << '[' << i.observable->kinematics().as_string() << "] = (" << i.min << ", " << i.central << ", " << i.max << ")" << std::endl;
 
-            ObservableChiSquared chi_squared;
-            chi_squared.observable_central = make_polynomial(i.observable, CommandLine::instance()->coefficients);
-            for (auto v = CommandLine::instance()->variations.cbegin(), v_end = CommandLine::instance()->variations.cend() ; v != v_end ; ++v)
-            {
-                Parameter p = parameters[*v];
-                double old_p = p();
-
-                p = p.min();
-                chi_squared.observable_min.push_back(make_polynomial(i.observable, CommandLine::instance()->coefficients));
-
-                p = p.max();
-                chi_squared.observable_max.push_back(make_polynomial(i.observable, CommandLine::instance()->coefficients));
-
-                p = old_p;
-            }
-            chi_squared.experiment_min = i.min;
-            chi_squared.experiment_central = i.central;
-            chi_squared.experiment_max = i.max;
-
-            _chi_squared_functions.push_back(std::function<double ()>(chi_squared));
+            ObservablePtr observable = make_polynomial_observable(make_polynomial(i.observable, CommandLine::instance()->coefficients), parameters);
+            _observables.push_back(std::make_tuple(observable, i.min, i.central, i.max));
         }
 
         void visit(const ObservableRatioInput & i)
         {
-            Parameters parameters = i.numerator->parameters();
+            Parameters parameters = CommandLine::instance()->parameters;
 
             std::cout << "#   " << i.numerator->name() << "[Kinematics]" << " / " << i.denominator->name() << "[Kinematics]" << " = (" << i.min << ", " << i.central << ", " << i.max << ")" << std::endl;
 
-            ObservableRatioChiSquared chi_squared;
-            chi_squared.numerator_central = make_polynomial(i.numerator, CommandLine::instance()->coefficients);
-            chi_squared.denominator_central = make_polynomial(i.denominator, CommandLine::instance()->coefficients);
-            for (auto v = CommandLine::instance()->variations.cbegin(), v_end = CommandLine::instance()->variations.cend() ; v != v_end ; ++v)
-            {
-                Parameter p = parameters[*v];
-                double old_p = p();
-
-                p = p.min();
-                chi_squared.numerator_min.push_back(make_polynomial(i.numerator, CommandLine::instance()->coefficients));
-                chi_squared.denominator_min.push_back(make_polynomial(i.denominator, CommandLine::instance()->coefficients));
-
-                p = p.max();
-                chi_squared.numerator_max.push_back(make_polynomial(i.numerator, CommandLine::instance()->coefficients));
-                chi_squared.denominator_max.push_back(make_polynomial(i.denominator, CommandLine::instance()->coefficients));
-
-                p = old_p;
-            }
-            chi_squared.experiment_min = i.min;
-            chi_squared.experiment_central = i.central;
-            chi_squared.experiment_max = i.max;
-
-            _chi_squared_functions.push_back(std::function<double ()>(chi_squared));
+            ObservablePtr observable = make_polynomial_ratio(make_polynomial(i.numerator, CommandLine::instance()->coefficients),
+                    make_polynomial(i.denominator, CommandLine::instance()->coefficients),
+                    parameters);
+            _observables.push_back(std::make_tuple(observable, i.min, i.central, i.max));
         }
 
         void scan_range(const CartesianProduct<std::vector<double>>::Iterator & begin, const CartesianProduct<std::vector<double>>::Iterator & end,
                 unsigned index)
         {
+            // Clone
+            Parameters parameters = CommandLine::instance()->parameters.clone();
+
+            std::vector<Parameter> scan_parameters;
+            for (auto p = _scan_parameters.cbegin(), p_end = _scan_parameters.cend() ; p != p_end ; ++p)
+            {
+                scan_parameters.push_back(parameters[p->name()]);
+            }
+
+            std::vector<std::tuple<ObservablePtr, double, double, double>> observables;
+            for (auto o = _observables.cbegin(), o_end = _observables.cend() ; o != o_end ; ++o)
+            {
+                observables.push_back(std::make_tuple(std::get<0>(*o)->clone(parameters), std::get<1>(*o), std::get<2>(*o), std::get<3>(*o)));
+            }
+
+            std::vector<Parameter> variations;
+            for (auto v = _variations.cbegin(), v_end = _variations.cend() ; v != v_end ; ++v)
+            {
+                variations.push_back(parameters[v->name()]);
+            }
+
+            // Scan our range
             for (auto i = begin, i_end = end ; i != i_end ; ++i)
             {
                 std::vector<double> v = *i;
                 std::vector<double> result;
 
-                auto p = _scan_parameters.begin();
+                auto p = scan_parameters.begin();
                 for (auto j = v.begin(), j_end = v.end() ; j != j_end ; ++j, ++p)
                 {
                     (*p) = *j;
                     result.push_back(*j);
                 }
 
+                // Calculate chi^2
                 double chi_squared = 0.0;
-                for (auto c = _chi_squared_functions.cbegin(), c_end = _chi_squared_functions.cend() ; c != c_end ; ++c)
+                for (auto o = observables.begin(), o_end = observables.end() ; o != o_end ; ++o)
                 {
-                    chi_squared += (*c)();
+                    ObservablePtr observable = std::get<0>(*o);
+                    double central = observable->evaluate();
+                    double delta_min = 0.0, delta_max = 0.0;
+
+                    for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
+                    {
+                        double old_v = *v;
+                        double max = 0.0, min = 0.0, value;
+
+                        // Handle parameters with lowered values
+                        *v = v->min();
+                        value = observable->evaluate();
+
+                        if (value > central)
+                            max = value - central;
+
+                        if (value < central)
+                            min = central - value;
+
+                        // Handle parameters with raised values
+                        *v = v->max();
+                        value = observable->evaluate();
+
+                        if (value > central)
+                            max = std::max(max, value - central);
+
+                        if (value < central)
+                            min = std::max(min, central -value);
+
+                        *v = old_v;
+
+                        delta_min += min * min;
+                        delta_max += max * max;
+                    }
+
+                    chi_squared += ChiSquared::with_theory_offset(central - std::sqrt(delta_min), central, central + std::sqrt(delta_max),
+                            std::get<1>(*o), std::get<2>(*o), std::get<3>(*o));
                 }
+
                 result.push_back(chi_squared);
 
                 _data_sets[index] << result;
@@ -449,7 +381,6 @@ class WilsonScannerPolynomial
 
         void scan()
         {
-
             // Find chunk size for N chunks
             unsigned chunk_size = _points.size() / ThreadPool::instance()->number_of_threads();
 
