@@ -31,14 +31,6 @@
 
 namespace eos
 {
-    Observable::Observable()
-    {
-    }
-
-    Observable::~Observable()
-    {
-    }
-
     ObservableFactory::ObservableFactory()
     {
     }

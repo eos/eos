@@ -39,10 +39,6 @@ namespace eos
     class Observable
     {
         public:
-            Observable();
-
-            virtual ~Observable();
-
             virtual const std::string & name() const = 0;
 
             virtual double evaluate() const = 0;
