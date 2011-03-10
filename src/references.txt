@@ -72,6 +72,20 @@ References
         arxiv:hep-ph/9512380
 
 
+    BBL2006 : Ball, P. and Braun, V.M. and Lenz, A.
+
+        Higher-Twist Distribution Amplitudes of the K Meson in QCD
+
+        arxiv:hep-ph/0603063
+
+
+    BF2001 : Beneke, M. and Feldmann, Th.
+
+        Symmetry-breaking corrections to heavy-to-light B meson form factors at large recoil
+
+        arxiv:hep-ph/0008255
+
+
     BFS2001 : Beneke, M. and Feldmann, Th. and Seidel, D.
 
         Systematic Approach to Exclusive B -> V l^+ l^-, V gamma decays
@@ -85,6 +99,13 @@ References
         at NLO
 
         arxiv:hep-ph/0412400
+
+
+    BHP2007 : Bobeth, C. and Hiller, G. and Piranishvilli, G.
+
+        Angular Distributions of B -> KLL
+
+        arxiv:0709.4174 [hep-ph]
 
 
     BHP2008 : Bobeth, C. and Hiller, G. and Piranishvili, G.
@@ -124,6 +145,13 @@ References
         Sum Rules Revisited
 
         arxiv:hep-ph/0406261v1
+
+
+    BZ2004v3 : Ball, P. and Zwicky, R.
+
+        B -> pi, K, eta Decay Formfactors from Light-Cone Sum Rules
+
+        arxiv:hep-ph/0406232v1
 
 
     CERN2003-002 : Battaglia, M. and Buras, A.J and Gambino, P. and Stocchi, A.
@@ -204,7 +232,16 @@ References
           Review of Particle Physics : Amsler, C. and others
           Physics Letters B 667, 1 (2008)
 
-        http:/pdg.lbl.gob
+        http:/pdg.lbl.gov
+
+
+    PDGBOOK2010 : K. Nakamura et al. (Particle Data Group)
+
+         Review of Particle Physics (2010)
+
+         J. Phys. G 37, 075021 (2010)
+
+         http:/pdg.lbl.gov
 
 
     PS : Peskin, M. and Schroeder, D.
