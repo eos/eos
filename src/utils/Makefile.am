@@ -19,6 +19,7 @@ libeosutils_la_SOURCES = \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.cc kinematic.hh \
 	likelihood.cc likelihood.hh \
+	lcda.cc lcda.hh \
 	lock.cc lock.hh \
 	matrix.hh \
 	memoise.hh \
@@ -51,6 +52,7 @@ TESTS = \
 	chi-squared_TEST \
 	histogram_TEST \
 	integrate_TEST \
+	lcda_TEST \
 	likelihood_TEST \
 	matrix_TEST \
 	memoise_TEST \
@@ -84,6 +86,9 @@ histogram_TEST_LDADD = $(TESTS_LD_ADD)
 
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_LDADD = $(TESTS_LD_ADD)
+
+lcda_TEST_SOURCES = lcda_TEST.cc
+lcda_TEST_LDADD = $(TESTS_LD_ADD)
 
 likelihood_TEST_SOURCES = likelihood_TEST.cc
 likelihood_TEST_LDADD = $(TESTS_LD_ADD) $(top_builddir)/src/libeos.la
