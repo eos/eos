@@ -20,7 +20,6 @@
 
 #include <src/rare-b-decays/form-factors-impl.hh>
 #include <src/utils/destringify.hh>
-#include <src/utils/power_of.hh>
 
 #include <map>
 #include <cmath>

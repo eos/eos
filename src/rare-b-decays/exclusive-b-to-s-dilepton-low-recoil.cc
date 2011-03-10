@@ -36,11 +36,6 @@
 
 #include <cmath>
 #include <functional>
-#include <utility>
-#include <map>
-#include <vector>
-
-#include <gsl/gsl_sf.h>
 
 namespace eos
 {

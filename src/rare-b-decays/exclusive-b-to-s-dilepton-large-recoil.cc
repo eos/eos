@@ -22,7 +22,6 @@
 #include <src/rare-b-decays/form-factors.hh>
 #include <src/rare-b-decays/hard-scattering.hh>
 #include <src/rare-b-decays/long-distance.hh>
-#include <src/utils/destringify.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/memoise.hh>
@@ -31,13 +30,9 @@
 #include <src/utils/power_of.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
-#include <src/utils/save.hh>
 
 #include <cmath>
 #include <functional>
-#include <utility>
-#include <map>
-#include <vector>
 
 #include <gsl/gsl_sf.h>
 
