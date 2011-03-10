@@ -161,7 +161,7 @@ namespace eos
             f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"]),
             lambda_B_p(p["lambda_B_p"]),
             a_1_par(p["B->K^*::a_1_par"]),
-            a_2_par(p["B->K^*::a_1_par"]),
+            a_2_par(p["B->K^*::a_2_par"]),
             a_1_perp(p["B->K^*::a_1_perp"]),
             a_2_perp(p["B->K^*::a_2_perp"]),
             uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty@LargeRecoil"]),
