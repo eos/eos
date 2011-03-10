@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,6 +24,57 @@
 namespace eos
 {
     const double QCD::casimir_f = 4.0 / 3.0;
+
+    /* 5 flavor QCD constants */
+
+    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 5
+    const QCD::BetaFunction QCD::beta_function_nf_5
+    {{
+        23.0 / 3.0,
+        116.0 / 3.0,
+        9769.0 / 54.0,
+        4826.1563287908967,
+    }};
+
+    // cf. [CKS2000], Eq. (7), p. 5 with n_f = 5
+    const QCD::AnomalousMassDimension QCD::gamma_m_nf_5
+    {{
+        1.0,
+        506.0 / 9.0,
+        474.87124557719461,
+        2824.7862379694232,
+    }};
+
+    /* 4 flavor QCD constants */
+
+    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 4
+    const QCD::BetaFunction QCD::beta_function_nf_4
+    {{
+        25.0 / 3.0,
+        154.0 / 3.0,
+        21943.0 / 54.0,
+        8035.1864197901160,
+    }};
+
+    // cf. [CKS2000], Eq. (7), p. 5 with n_f = 4
+    const QCD::AnomalousMassDimension QCD::gamma_m_nf_4
+    {{
+        1.0,
+        526.0 / 9.0,
+        636.61057670866927,
+        6989.5510103599477,
+    }};
+
+    /* 3 flavor QCD constants */
+
+    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 3
+    const QCD::BetaFunction QCD::beta_function_nf_3
+    {{
+        9.0,
+        64.0,
+        3863.0 / 6.0,
+        12090.378130803711,
+    }};
 
     double
     QCD::alpha_s(const double & mu, const double & alpha_s_0, const double & mu_0, const BetaFunction & beta)

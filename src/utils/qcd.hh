@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -91,6 +91,29 @@ namespace eos
              * The quadratic casimir operator for the adjoint representation SU(3).
              */
             static const double casimir_a;
+
+            /*!
+             * The 5-flavor-QCD constants.
+             */
+            ///@{
+            static const BetaFunction beta_function_nf_5;
+            static const AnomalousMassDimension gamma_m_nf_5;
+            ///@}
+
+            /*!
+             * The 4-flavor-QCD constants.
+             */
+            ///@{
+            static const BetaFunction beta_function_nf_4;
+            static const AnomalousMassDimension gamma_m_nf_4;
+            ///@}
+
+            /*!
+             * The 3-flavor QCD constants.
+             */
+            ///@{
+            static const BetaFunction beta_function_nf_3;
+            ///@}
     };
 }
 
