@@ -218,7 +218,7 @@ class WilsonScannerPolynomial
 
         std::vector<Parameter> _variations;
 
-        std::vector<std::tuple<ObservablePtr, double, double, double>> _observables;
+        std::vector<std::tuple<ObservablePtr, double, double, double, std::vector<std::tuple<ObservablePtr, ObservablePtr>>>> _observables;
 
         std::vector<Ticket> _tickets;
 
@@ -256,18 +256,18 @@ class WilsonScannerPolynomial
                 std::cout << "#   " << s->name << ": [" << s->min << ", " << s->max << "], increment = " << delta << std::endl;
             }
 
-            std::cout << "# Inputs:" << std::endl;
-            for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend() ; i != i_end ; ++i)
-            {
-                i->accept(*this);
-            }
-
             std::cout << "# Variations:" << std::endl;
             for (auto v = CommandLine::instance()->variations.cbegin(), v_end = CommandLine::instance()->variations.cend() ; v != v_end ; ++v)
             {
                 Parameter p = CommandLine::instance()->parameters[*v];
                 std::cout << "#   " << p.name() << ": " << p.min() << " < " << p << " < " << p.max() << std::endl;
                 _variations.push_back(p);
+            }
+
+            std::cout << "# Inputs:" << std::endl;
+            for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend() ; i != i_end ; ++i)
+            {
+                i->accept(*this);
             }
         }
 
@@ -278,7 +278,22 @@ class WilsonScannerPolynomial
             std::cout << "#   " << i.observable->name() << '[' << i.observable->kinematics().as_string() << "] = (" << i.min << ", " << i.central << ", " << i.max << ")" << std::endl;
 
             ObservablePtr observable = make_polynomial_observable(make_polynomial(i.observable, CommandLine::instance()->coefficients), parameters);
-            _observables.push_back(std::make_tuple(observable, i.min, i.central, i.max));
+            std::vector<std::tuple<ObservablePtr, ObservablePtr>> varied_observables;
+            for (auto v = _variations.begin(), v_end = _variations.end() ; v != v_end ; ++v)
+            {
+                double old_v = *v;
+
+                *v = v->max();
+                ObservablePtr raised = make_polynomial_observable(make_polynomial(i.observable, CommandLine::instance()->coefficients), parameters);
+
+                *v = v->min();
+                ObservablePtr lowered = make_polynomial_observable(make_polynomial(i.observable, CommandLine::instance()->coefficients), parameters);
+
+                *v = old_v;
+
+                varied_observables.push_back(std::make_tuple(raised, lowered));
+            }
+            _observables.push_back(std::make_tuple(observable, i.min, i.central, i.max, varied_observables));
         }
 
         void visit(const ObservableRatioInput & i)
@@ -290,7 +305,27 @@ class WilsonScannerPolynomial
             ObservablePtr observable = make_polynomial_ratio(make_polynomial(i.numerator, CommandLine::instance()->coefficients),
                     make_polynomial(i.denominator, CommandLine::instance()->coefficients),
                     parameters);
-            _observables.push_back(std::make_tuple(observable, i.min, i.central, i.max));
+
+            std::vector<std::tuple<ObservablePtr, ObservablePtr>> varied_observables;
+            for (auto v = _variations.begin(), v_end = _variations.end() ; v != v_end ; ++v)
+            {
+                double old_v = *v;
+
+                *v = v->max();
+                ObservablePtr raised = make_polynomial_ratio(make_polynomial(i.numerator, CommandLine::instance()->coefficients),
+                        make_polynomial(i.denominator, CommandLine::instance()->coefficients),
+                        parameters);
+
+                *v = v->min();
+                ObservablePtr lowered = make_polynomial_ratio(make_polynomial(i.numerator, CommandLine::instance()->coefficients),
+                        make_polynomial(i.denominator, CommandLine::instance()->coefficients),
+                        parameters);
+
+                *v = old_v;
+
+                varied_observables.push_back(std::make_tuple(raised, lowered));
+            }
+            _observables.push_back(std::make_tuple(observable, i.min, i.central, i.max, varied_observables));
         }
 
         void scan_range(const CartesianProduct<std::vector<double>>::Iterator & begin, const CartesianProduct<std::vector<double>>::Iterator & end,
@@ -305,16 +340,16 @@ class WilsonScannerPolynomial
                 scan_parameters.push_back(parameters[p->name()]);
             }
 
-            std::vector<std::tuple<ObservablePtr, double, double, double>> observables;
+            std::vector<std::tuple<ObservablePtr, double, double, double, std::vector<std::tuple<ObservablePtr, ObservablePtr>>>> observables;
             for (auto o = _observables.cbegin(), o_end = _observables.cend() ; o != o_end ; ++o)
             {
-                observables.push_back(std::make_tuple(std::get<0>(*o)->clone(parameters), std::get<1>(*o), std::get<2>(*o), std::get<3>(*o)));
-            }
+                std::vector<std::tuple<ObservablePtr, ObservablePtr>> varied_observables;
+                for (auto v = std::get<4>(*o).begin(), v_end = std::get<4>(*o).end() ; v != v_end ; ++v)
+                {
+                    varied_observables.push_back(std::make_tuple(std::get<0>(*v)->clone(parameters), std::get<1>(*v)->clone(parameters)));
+                }
 
-            std::vector<Parameter> variations;
-            for (auto v = _variations.cbegin(), v_end = _variations.cend() ; v != v_end ; ++v)
-            {
-                variations.push_back(parameters[v->name()]);
+                observables.push_back(std::make_tuple(std::get<0>(*o)->clone(parameters), std::get<1>(*o), std::get<2>(*o), std::get<3>(*o), varied_observables));
             }
 
             // Scan our range
@@ -337,15 +372,14 @@ class WilsonScannerPolynomial
                     ObservablePtr observable = std::get<0>(*o);
                     double central = observable->evaluate();
                     double delta_min = 0.0, delta_max = 0.0;
+                    std::vector<std::tuple<ObservablePtr, ObservablePtr>> varied_observables = std::get<4>(*o);
 
-                    for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
+                    for (auto v = varied_observables.begin(), v_end = varied_observables.end() ; v != v_end ; ++v)
                     {
-                        double old_v = *v;
-                        double max = 0.0, min = 0.0, value;
+                        double max, min, value;
 
                         // Handle parameters with lowered values
-                        *v = v->min();
-                        value = observable->evaluate();
+                        value = std::get<1>(*v)->evaluate();
 
                         if (value > central)
                             max = value - central;
@@ -354,16 +388,13 @@ class WilsonScannerPolynomial
                             min = central - value;
 
                         // Handle parameters with raised values
-                        *v = v->max();
-                        value = observable->evaluate();
+                        value = std::get<0>(*v)->evaluate();
 
                         if (value > central)
                             max = std::max(max, value - central);
 
                         if (value < central)
                             min = std::max(min, central -value);
-
-                        *v = old_v;
 
                         delta_min += min * min;
                         delta_max += max * max;
