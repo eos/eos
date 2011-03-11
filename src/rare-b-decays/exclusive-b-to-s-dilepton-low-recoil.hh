@@ -99,6 +99,8 @@ namespace eos
             double integrated_cp_asymmetry_1(const double & s_min, const double & s_max) const;
             double integrated_cp_asymmetry_2(const double & s_min, const double & s_max) const;
             double integrated_cp_asymmetry_3(const double & s_min, const double & s_max) const;
+            double integrated_cp_summed_decay_width(const double & s_min, const double & s_max) const;
+            double integrated_unnormalized_cp_asymmetry_1(const double & s_min, const double & s_max) const;
     };
 
     /*

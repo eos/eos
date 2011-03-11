@@ -337,6 +337,14 @@ namespace eos
                     &BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_3,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::Gamma+Gammabar@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_cp_summed_decay_width,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::Gamma-Gammabar@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_unnormalized_cp_asymmetry_1,
+                    std::make_tuple("s_min", "s_max")),
+
             /* Inclusive Decays */
 
             // B->X_s ll, HLMW2005

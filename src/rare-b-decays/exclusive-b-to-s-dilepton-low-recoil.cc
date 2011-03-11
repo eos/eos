@@ -882,6 +882,34 @@ namespace eos
         return (iu_5 - iu_5_bar) / std::sqrt((iu_1 + iu_1_bar) * (iu_2 + iu_2_bar));
     }
 
+    double
+    BToKstarDilepton<LowRecoil>::integrated_cp_summed_decay_width(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        std::function<double (const double &)> integrand = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
+
+        double gamma = integrate(integrand, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double gamma_bar = integrate(integrand, 64, s_min, s_max);
+
+        return (gamma + gamma_bar);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_unnormalized_cp_asymmetry_1(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        std::function<double (const double &)> integrand = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
+
+        double gamma = integrate(integrand, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double gamma_bar = integrate(integrand, 64, s_min, s_max);
+
+        return (gamma - gamma_bar);
+    }
+
     /*
      * Decay: B -> K l lbar at Low Recoil
      */
