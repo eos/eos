@@ -24,6 +24,7 @@
 #include <src/utils/stringify.hh>
 
 #include <cmath>
+#include <limits>
 #include <list>
 #include <iostream>
 #include <string>
@@ -189,6 +190,8 @@ main(int argc, char * argv[])
 
             auto b = histogram.cbegin(), b_end = histogram.cend();
             double last_y = b->lower[1];
+            double min_value = std::numeric_limits<double>::max(), max_value = -std::numeric_limits<double>::max();
+            double integral = 0.0;
             for ( ; b != b_end ; ++b)
             {
                 if (b->lower[1] < last_y)
@@ -197,6 +200,48 @@ main(int argc, char * argv[])
                 last_y = b->lower[1];
 
                 std::cout << b->lower[0] << '\t' << b->lower[1] << '\t' << b->upper[0] << '\t' << b->upper[1] << '\t' << b->value << std::endl;
+                min_value = std::min(min_value, b->value);
+                max_value = std::max(max_value, b->value);
+                integral += b->value;
+            }
+
+            std::array<double, 3> ratios{{ 0.683, 0.954, 0.997 }};
+            std::array<double, 3> partials;
+            std::array<double, 3> thresholds, upper_bounds, lower_bounds;
+            thresholds.fill((min_value + max_value) / 2.0);
+            upper_bounds.fill(max_value / 2.0);
+            lower_bounds.fill(min_value / 2.0);
+
+            for (auto i = 0 ; i < 10 ; ++i)
+            {
+                partials.fill(0.0);
+
+                for (auto b = histogram.cbegin(), b_end = histogram.cend() ; b != b_end ; ++b)
+                {
+                    for (unsigned j = 0 ; j < thresholds.size() ; ++j)
+                    {
+                        if (b->value >= thresholds[j])
+                            partials[j] += b->value;
+                    }
+                }
+
+                for (unsigned j = 0 ; j < thresholds.size() ; ++j)
+                {
+                    double ratio = partials[j] / integral;
+
+                    if (ratio > ratios[j])
+                        lower_bounds[j] = thresholds[j];
+
+                    if (ratio < ratios[j])
+                        upper_bounds[j] = thresholds[j];
+
+                    thresholds[j] = (upper_bounds[j] + lower_bounds[j]) / 2.0;
+                }
+            }
+
+            for (unsigned j = 0 ; j < thresholds.size() ; ++j)
+            {
+                std::cout << "# " << ratios[j] << " -> " << thresholds[j] << " @ " << partials[j] / integral << std::endl;
             }
         }
     }
