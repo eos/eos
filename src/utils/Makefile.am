@@ -18,9 +18,9 @@ libeosutils_la_SOURCES = \
 	integrate.cc integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.cc kinematic.hh \
-	likelihood.cc likelihood.hh \
 	lcda.cc lcda.hh \
 	lock.cc lock.hh \
+	log_likelihood.cc log_likelihood.hh \
 	log_prior.cc log_prior.hh log_prior-fwd.hh \
 	matrix.hh \
 	memoise.hh \
@@ -55,7 +55,7 @@ TESTS = \
 	integrate_TEST \
 	kinematic_TEST \
 	lcda_TEST \
-	likelihood_TEST \
+	log_likelihood_TEST \
 	log_prior_TEST \
 	matrix_TEST \
 	memoise_TEST \
@@ -97,8 +97,8 @@ kinematic_TEST_LDADD = $(TESTS_LD_ADD)
 lcda_TEST_SOURCES = lcda_TEST.cc
 lcda_TEST_LDADD = $(TESTS_LD_ADD)
 
-likelihood_TEST_SOURCES = likelihood_TEST.cc
-likelihood_TEST_LDADD = $(TESTS_LD_ADD)
+log_likelihood_TEST_SOURCES = log_likelihood_TEST.cc
+log_likelihood_TEST_LDADD = $(TESTS_LD_ADD)
 
 log_prior_TEST_SOURCES = log_prior_TEST.cc
 log_prior_TEST_LDADD = $(TESTS_LD_ADD)
