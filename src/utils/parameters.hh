@@ -198,6 +198,22 @@ namespace eos
             const double & min() const;
             ///@}
     };
+
+    struct ParameterDescription
+    {
+        Parameter parameter;
+
+        double min;
+
+        double max;
+
+        bool nuisance;
+    };
+
+    struct ParameterRange
+    {
+            double min, max;
+    };
 }
 
 #endif
