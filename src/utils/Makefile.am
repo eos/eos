@@ -6,6 +6,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 lib_LTLIBRARIES = libeosutils.la
 libeosutils_la_SOURCES = \
 	accumulator.cc accumulator.hh \
+	analysis.cc analysis.hh analysis-fwd.hh \
 	apply.hh \
 	cartesian-product.hh \
 	chi-squared.hh chi-squared.cc \
@@ -48,6 +49,7 @@ libeosutils_la_SOURCES = \
 libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl -lhdf5 -lhdf5_hl
 
 TESTS = \
+	analysis_TEST \
 	apply_TEST \
 	cartesian-product_TEST \
 	chi-squared_TEST \
@@ -75,6 +77,9 @@ TESTS = \
 TESTS_LD_ADD = $(top_builddir)/test/libeostest.a $(top_builddir)/src/libeos.la libeosutils.la
 
 check_PROGRAMS = $(TESTS)
+
+analysis_TEST_SOURCES = analysis_TEST.cc analysis_TEST.hh
+analysis_TEST_LDADD = $(TESTS_LD_ADD)
 
 apply_TEST_SOURCES = apply_TEST.cc
 apply_TEST_LDADD = $(TESTS_LD_ADD)
