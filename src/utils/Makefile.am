@@ -23,6 +23,7 @@ libeosutils_la_SOURCES = \
 	lock.cc lock.hh \
 	log_likelihood.cc log_likelihood.hh \
 	log_prior.cc log_prior.hh log_prior-fwd.hh \
+	markov_chain.cc markov_chain.hh \
 	matrix.hh \
 	memoise.hh \
 	model.cc model.hh \
@@ -60,6 +61,7 @@ TESTS = \
 	log_likelihood_TEST \
 	log_prior_TEST \
 	matrix_TEST \
+	markov_chain_TEST \
 	memoise_TEST \
 	options_TEST \
 	one-of_TEST \
@@ -110,6 +112,9 @@ log_prior_TEST_LDADD = $(TESTS_LD_ADD)
 
 matrix_TEST_SOURCES = matrix_TEST.cc
 matrix_TEST_LDADD = $(TESTS_LD_ADD)
+
+markov_chain_TEST_SOURCES = markov_chain_TEST.cc
+markov_chain_TEST_LDADD = $(TESTS_LD_ADD)
 
 memoise_TEST_SOURCES = memoise_TEST.cc
 memoise_TEST_LDADD = $(TESTS_LD_ADD)
