@@ -12,6 +12,7 @@ bin_PROGRAMS = \
 	eos-marginalise \
 	eos-print-polynomial \
 	eos-realify \
+	eos-scan-mc \
 	eos-scan-polynomial \
 	eos-scan
 noinst_PROGRAMS = \
@@ -54,6 +55,11 @@ eos_merge_LDADD = $(EOS_CLIENTS_LIBS)
 eos_print_polynomial_SOURCES = \
 	eos-print-polynomial.cc
 eos_print_polynomial_LDADD = $(EOS_CLIENTS_LIBS)
+
+eos_scan_mc_SOURCES = \
+	eos-scan-mc.cc
+eos_scan_mc_LDADD = \
+	$(EOS_CLIENTS_LIBS)
 
 eos_scan_polynomial_SOURCES = \
 	eos-scan-polynomial.cc
