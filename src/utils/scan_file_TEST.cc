@@ -47,19 +47,42 @@ class ScanFileTest :
             // Create file
             {
                 ScanFile test_file = ScanFile::Create(filename, "scan_file_TEST");
-                ScanFile::DataSet test_set = test_file.add("result #1", 3);
 
-                test_set << std::vector<double>{ 3.0, 2.0, 1.0 };
-
-                for (auto i = 0 ; i < 1002 ; ++i)
+                // Set 'result #1'
                 {
-                    test_set << std::vector<double>{ 4.0, 5.0, 6.0 };
+                    ScanFile::DataSet test_set = test_file.add("result #1", 3);
+
+                    test_set << std::vector<double>{ 3.0, 2.0, 1.0 };
+
+                    ScanFile::WriteBuffer test_buffer(3);
+                    for (auto i = 0 ; i < 1002 ; ++i)
+                    {
+                        test_buffer << std::vector<double>{ 4.0, 5.0, 6.0 };
+                    }
+                    test_set << test_buffer;
+
+                    test_set << std::vector<double>{ 7.0, 8.0, 9.0 };
                 }
 
-                test_set << std::vector<double>{ 7.0, 8.0, 9.0 };
+                // Set 'result #2'
+                {
+                    ScanFile::DataSet test_set = test_file.add("result #2", 7);
+                    test_set << std::vector<double>{ 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0 };
+                }
 
-                test_set = test_file.add("result #2", 7);
-                test_set << std::vector<double>{ 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0 };
+                // Set 'result #3'
+                {
+                    ScanFile::DataSet test_set = test_file.add("result #3", 5);
+                    ScanFile::WriteBuffer test_buffer(5);
+
+                    for (auto i = 0 ; i < 1023 ; ++i) // 1024 currently max capacity
+                    {
+                        test_buffer << std::vector<double>{ 4.0, 5.0, 6.0, 7.0, 8.0 };
+                    }
+                    test_buffer << std::vector<double>{ 5.0, 6.0, 7.0, 8.0, 9.0 };
+
+                    test_set << test_buffer;
+                }
             }
 
             // Open file
@@ -72,6 +95,7 @@ class ScanFileTest :
                 {
                     std::tuple<std::string, unsigned, unsigned>(std::string("result #1"), 3, 1004),
                     std::tuple<std::string, unsigned, unsigned>(std::string("result #2"), 7, 1),
+                    std::tuple<std::string, unsigned, unsigned>(std::string("result #3"), 5, 1024),
                 };
 
                 auto r = references.cbegin();
@@ -104,6 +128,34 @@ class ScanFileTest :
                     TEST_CHECK_EQUAL(3.0, test_tuple[4]);
                     TEST_CHECK_EQUAL(2.0, test_tuple[5]);
                     TEST_CHECK_EQUAL(1.0, test_tuple[6]);
+                }
+
+                // "result #3"
+                {
+                    ScanFile::DataSet test_set = test_file["result #3"];
+                    ScanFile::Tuple test_tuple = test_set[0];
+
+                    TEST_CHECK_EQUAL(4.0, test_tuple[0]);
+                    TEST_CHECK_EQUAL(5.0, test_tuple[1]);
+                    TEST_CHECK_EQUAL(6.0, test_tuple[2]);
+                    TEST_CHECK_EQUAL(7.0, test_tuple[3]);
+                    TEST_CHECK_EQUAL(8.0, test_tuple[4]);
+
+                    test_tuple = test_set[33];
+
+                    TEST_CHECK_EQUAL(4.0, test_tuple[0]);
+                    TEST_CHECK_EQUAL(5.0, test_tuple[1]);
+                    TEST_CHECK_EQUAL(6.0, test_tuple[2]);
+                    TEST_CHECK_EQUAL(7.0, test_tuple[3]);
+                    TEST_CHECK_EQUAL(8.0, test_tuple[4]);
+
+                    test_tuple = test_set[1023];
+
+                    TEST_CHECK_EQUAL(5.0, test_tuple[0]);
+                    TEST_CHECK_EQUAL(6.0, test_tuple[1]);
+                    TEST_CHECK_EQUAL(7.0, test_tuple[2]);
+                    TEST_CHECK_EQUAL(8.0, test_tuple[3]);
+                    TEST_CHECK_EQUAL(9.0, test_tuple[4]);
                 }
             }
         }

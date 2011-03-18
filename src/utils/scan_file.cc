@@ -271,6 +271,72 @@ namespace eos
     }
 
     template <>
+    struct Implementation<ScanFile::WriteBuffer>
+    {
+        static const unsigned chunk_size = 1024;
+
+        unsigned tuples;
+
+        unsigned tuple_size;
+
+        std::vector<double> buffer;
+
+        Implementation(const unsigned & tuple_size) :
+            tuples(0),
+            tuple_size(tuple_size)
+        {
+            buffer.reserve(tuple_size * chunk_size);
+        }
+
+        void clear()
+        {
+            tuples = 0;
+            buffer.clear(); // clear only affects size, not capacity
+        }
+    };
+
+    ScanFile::WriteBuffer::WriteBuffer(const unsigned & tuple_size) :
+        PrivateImplementationPattern<ScanFile::WriteBuffer>(new Implementation<ScanFile::WriteBuffer>(tuple_size))
+    {
+    }
+
+    ScanFile::WriteBuffer::~WriteBuffer()
+    {
+    }
+
+    void
+    ScanFile::WriteBuffer::clear()
+    {
+        _imp->clear();
+    }
+
+    unsigned
+    ScanFile::WriteBuffer::capacity() const
+    {
+        return Implementation<ScanFile::WriteBuffer>::chunk_size;
+    }
+
+    unsigned
+    ScanFile::WriteBuffer::size() const
+    {
+        return _imp->tuples;
+    }
+
+    ScanFile::WriteBuffer &
+    operator<< (ScanFile::WriteBuffer & lhs, const std::vector<double> & rhs)
+    {
+        if (Implementation<ScanFile::WriteBuffer>::chunk_size == lhs._imp->tuples)
+            throw InternalError("Extending WriteBuffer capacity is not yet implemented");
+
+        for (auto i = rhs.cbegin(), i_end = rhs.cend() ; i != i_end ; ++i)
+            lhs._imp->buffer.push_back(*i);
+
+        ++lhs._imp->tuples;
+
+        return lhs;
+    }
+
+    template <>
     struct Implementation<ScanFile::DataSet>
     {
         Implementation<ScanFile> * file_imp;
@@ -284,6 +350,8 @@ namespace eos
         unsigned tuples;
 
         unsigned capacity;
+
+        static const unsigned chunk_size = 1024;
 
         hid_t group_id_data;
 
@@ -306,7 +374,7 @@ namespace eos
             tuple_size(tuple_size),
             current_index(0),
             tuples(0),
-            capacity(1000),
+            capacity(chunk_size),
             group_id_data(file_imp->group_id_data),
             set_id(H5I_INVALID_HID),
             space_id_memory(H5I_INVALID_HID),
@@ -317,7 +385,8 @@ namespace eos
             // create space id for in-memory representation
             {
                 hsize_t dimensions[2] = { 1, tuple_size };
-                space_id_memory = H5Screate_simple(2, dimensions, 0);
+                hsize_t max_dimensions[2] = { capacity, tuple_size };
+                space_id_memory = H5Screate_simple(2, dimensions, max_dimensions);
                 if (H5I_INVALID_HID == space_id_memory)
                     throw ScanFileHDF5Error("H5Screate_simple", space_id_memory);
             }
@@ -341,7 +410,7 @@ namespace eos
                 if (H5I_INVALID_HID == dcpl_id)
                     throw ScanFileHDF5Error("H5Pcreate", dcpl_id);
 
-                hsize_t chunk_size[2] = { 1000, tuple_size };
+                hsize_t chunk_size[2] = { capacity, tuple_size };
                 herr_t ret = H5Pset_chunk(dcpl_id, 2, chunk_size);
                 if (0 > ret)
                     throw ScanFileHDF5Error("H5Pset_chunk", ret);
@@ -398,11 +467,11 @@ namespace eos
             // create space id for in-memory representation
             {
                 hsize_t dimensions[2] = { 1, tuple_size };
-                space_id_memory = H5Screate_simple(2, dimensions, 0);
+                hsize_t max_dimensions[2] = { chunk_size, tuple_size };
+                space_id_memory = H5Screate_simple(2, dimensions, max_dimensions);
                 if (H5I_INVALID_HID == space_id_memory)
                     throw ScanFileHDF5Error("H5Screate_simple", space_id_memory);
             }
-
         }
 
         ~Implementation()
@@ -439,26 +508,14 @@ namespace eos
 
         void append(const std::vector<double> & data)
         {
-            if (data.size() != tuple_size)
-                throw InternalError("Trying to write a tuple of size '" + stringify(data.size()) + "' to a ScanFile::DataSet of width '" + stringify(tuple_size) + "'");
+            unsigned buffer_length = data.size() / tuple_size;
+            if (buffer_length > chunk_size)
+                throw InternalError("Flushing a WriteBuffer with capacity > " + stringify(chunk_size) + " is not implemented yet");
 
-            hsize_t offset[2] = { current_index, 0 };
-            hsize_t count[2] = { 1, tuple_size };
-
-            herr_t ret = H5Sselect_hyperslab(space_id_file_writing, H5S_SELECT_SET, offset, 0, count, 0);
-            if (ret < 0)
-                throw ScanFileHDF5Error("H5Sselect_hyperslab", ret);
-
-            ret = H5Dwrite(set_id, H5T_IEEE_F64LE, space_id_memory, space_id_file_writing, H5P_DEFAULT, &data[0]);
-            if (ret < 0)
-                throw ScanFileHDF5Error("H5Dwrite", ret);
-
-            ++current_index;
-            ++tuples;
-
-            if (capacity <= current_index)
+            // can we store the data? if not, extend the data set
+            if (capacity <= current_index + buffer_length)
             {
-                capacity += 1000;
+                capacity += chunk_size;
 
                 hsize_t dimensions[2] = { capacity, tuple_size };
                 hsize_t max_dimensions[2] = { H5S_UNLIMITED, tuple_size };
@@ -475,6 +532,27 @@ namespace eos
                 if (0 > ret)
                     throw ScanFileHDF5Error("H5Dset_extent", ret);
             }
+
+            // actually store the data
+            hsize_t offset[2] = { current_index, 0 };
+            hsize_t count[2] = { buffer_length, tuple_size };
+
+            herr_t ret = H5Sselect_hyperslab(space_id_file_writing, H5S_SELECT_SET, offset, 0, count, 0);
+            if (ret < 0)
+                throw ScanFileHDF5Error("H5Sselect_hyperslab", ret);
+
+            hsize_t max_dimensions[2] = { chunk_size, tuple_size };
+            ret = H5Sset_extent_simple(space_id_memory, 2, count, max_dimensions);
+            if (ret < 0)
+                throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
+
+            ret = H5Dwrite(set_id, H5T_IEEE_F64LE, space_id_memory, space_id_file_writing, H5P_DEFAULT, &data[0]);
+            if (ret < 0)
+                throw ScanFileHDF5Error("H5Dwrite", ret);
+
+            current_index += buffer_length;
+            tuples += buffer_length;
+
         }
     };
 
@@ -519,7 +597,21 @@ namespace eos
     ScanFile::DataSet &
     operator<< (ScanFile::DataSet & lhs, const std::vector<double> & rhs)
     {
+        if (lhs._imp->tuple_size != rhs.size())
+            throw InternalError("Trying to write a tuple of size '" + stringify(rhs.size()) + "' to a ScanFile::DataSet of width '" + stringify(lhs._imp->tuple_size) + "'");
+
         lhs._imp->append(rhs);
+
+        return lhs;
+    }
+
+    ScanFile::DataSet &
+    operator<< (ScanFile::DataSet & lhs, const ScanFile::WriteBuffer & rhs)
+    {
+        if (lhs._imp->tuple_size != rhs._imp->tuple_size)
+            throw InternalError("Trying to write a buffer of size '" + stringify(rhs._imp->tuple_size) + "' to a ScanFile::DataSet of width '" + stringify(lhs._imp->tuple_size) + "'");
+
+        lhs._imp->append(rhs._imp->buffer);
 
         return lhs;
     }

@@ -124,6 +124,7 @@ namespace eos
         public:
             class DataSet;
             class Tuple;
+            class WriteBuffer;
 
             ///@name Basic Functions
             ///@{
@@ -199,6 +200,7 @@ namespace eos
             friend class ScanFile;
             friend class Implementation<ScanFile>;
             friend ScanFile::DataSet & operator<< (ScanFile::DataSet &, const std::vector<double> &);
+            friend ScanFile::DataSet & operator<< (ScanFile::DataSet &, const ScanFile::WriteBuffer &);
 
             ///@name Basic Functions
             ///@{
@@ -232,10 +234,18 @@ namespace eos
     /*!
      * Append a tuple to a ScanFile::DataSet.
      *
-     * @param lhs The ScanFile::DataSet which shall be written to.
+     * @param lhs The ScanFile::DataSet to which shall be written.
      * @param rhs The tuple which shall be appended.
      */
     ScanFile::DataSet & operator<< (ScanFile::DataSet & lhs, const std::vector<double> & rhs);
+
+    /*!
+     * Append an entire write buffer to a ScanFile::DataSet.
+     *
+     * @param lhs The ScanFile::DataSet to which shall be written.
+     * @param rhs The write buffer which shall be appended.
+     */
+    ScanFile::DataSet & operator<< (ScanFile::DataSet & lhs, const ScanFile::WriteBuffer & rhs);
 
     /*!
      * ScanFile::Tuple represents one of the scan tuples within a ScanFile.
@@ -268,6 +278,52 @@ namespace eos
             double operator[] (const unsigned & index) const;
             ///@}
     };
+
+    /*!
+     * ScanFile::WriteBuffer temporarily keeps data which shall be written to one of the data sets within a ScanFile.
+     */
+    class ScanFile::WriteBuffer :
+        public PrivateImplementationPattern<ScanFile::WriteBuffer>
+    {
+        public:
+            friend ScanFile::DataSet & operator<< (ScanFile::DataSet & lhs, const ScanFile::WriteBuffer & rhs);
+            friend ScanFile::WriteBuffer & operator<< (ScanFile::WriteBuffer &, const std::vector<double> &);
+
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * @param tuple_size Number of elements per recorded tuple.
+             */
+            WriteBuffer(const unsigned & tuple_size);
+
+            /// Destructor.
+            ~WriteBuffer();
+            ///@}
+
+            ///@name Access
+            ///@{
+            void clear();
+            ///@}
+
+            ///@name Metadata
+            ///@{
+            /// Retrieve the maximal number of tuples that can be stored in the buffer.
+            unsigned capacity() const;
+
+            /// Retrieve the number of tuples currently stored in the buffer.
+            unsigned size() const;
+            ///@}
+    };
+
+    /*!
+     * Append a tuple to a ScanFile::WriteBuffer.
+     *
+     * @param lhs The ScanFile::WriteBuffer to which shall be written.
+     * @param rhs The tuple which shall be appended.
+     */
+    ScanFile::WriteBuffer & operator<< (ScanFile::WriteBuffer & lhs, const std::vector<double> & rhs);
 }
 
 #endif
