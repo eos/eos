@@ -68,7 +68,7 @@ TESTS = \
 	verify_TEST \
 	wilson_coefficients_TEST \
 	wilson-polynomial_TEST
-TESTS_LD_ADD = $(top_builddir)/test/libeostest.a libeosutils.la
+TESTS_LD_ADD = $(top_builddir)/test/libeostest.a $(top_builddir)/src/libeos.la libeosutils.la
 
 check_PROGRAMS = $(TESTS)
 
@@ -91,7 +91,7 @@ lcda_TEST_SOURCES = lcda_TEST.cc
 lcda_TEST_LDADD = $(TESTS_LD_ADD)
 
 likelihood_TEST_SOURCES = likelihood_TEST.cc
-likelihood_TEST_LDADD = $(TESTS_LD_ADD) $(top_builddir)/src/libeos.la
+likelihood_TEST_LDADD = $(TESTS_LD_ADD)
 
 matrix_TEST_SOURCES = matrix_TEST.cc
 matrix_TEST_LDADD = $(TESTS_LD_ADD)
@@ -133,4 +133,4 @@ wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
 wilson_coefficients_TEST_LDADD = $(TESTS_LD_ADD)
 
 wilson_polynomial_TEST_SOURCES = wilson-polynomial_TEST.cc
-wilson_polynomial_TEST_LDADD = $(TESTS_LD_ADD) $(top_builddir)/src/libeos.la
+wilson_polynomial_TEST_LDADD = $(TESTS_LD_ADD)
