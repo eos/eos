@@ -379,7 +379,7 @@ class WilsonScannerPolynomial
 
                     for (auto v = varied_observables.begin(), v_end = varied_observables.end() ; v != v_end ; ++v)
                     {
-                        double max, min, value;
+                        double max = 0.0, min = 0.0, value;
 
                         // Handle parameters with lowered values
                         value = std::get<1>(*v)->evaluate();
