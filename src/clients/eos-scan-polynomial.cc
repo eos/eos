@@ -352,6 +352,9 @@ class WilsonScannerPolynomial
                 observables.push_back(std::make_tuple(std::get<0>(*o)->clone(parameters), std::get<1>(*o), std::get<2>(*o), std::get<3>(*o), varied_observables));
             }
 
+            // Allocate a write buffer
+            ScanFile::WriteBuffer buffer(_scan_parameters.size() + 1);
+
             // Scan our range
             for (auto i = begin, i_end = end ; i != i_end ; ++i)
             {
@@ -406,8 +409,17 @@ class WilsonScannerPolynomial
 
                 result.push_back(chi_squared);
 
-                _data_sets[index] << result;
+                buffer << result;
+
+                if (buffer.capacity() == buffer.size())
+                {
+                    _data_sets[index] << buffer;
+                    buffer.clear();
+                }
             }
+
+            _data_sets[index] << buffer;
+            buffer.clear();
         }
 
         void scan()
