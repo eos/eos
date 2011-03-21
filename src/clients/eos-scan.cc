@@ -50,8 +50,6 @@ struct Input
     const double o_max;
 
     const std::string o_name;
-
-    const std::string o_options;
 };
 
 struct ScanData
@@ -102,9 +100,7 @@ class WilsonScan
 
             for (auto i(inputs.begin()), i_end(inputs.end()) ; i != i_end ; ++i)
             {
-                //TODO: Create options from i->o_options!
-                Options options;
-                bins.push_back(std::make_pair(*i, Observable::make(i->o_name, parameters.clone(), kinematics.clone(), options)));
+                bins.push_back(std::make_pair(*i, Observable::make(i->o_name, parameters.clone(), kinematics.clone(), Options())));
             }
         }
 
@@ -294,7 +290,7 @@ main(int argc, char * argv[])
                 double central = destringify<double>(*(++a));
                 double max = destringify<double>(*(++a));
 
-                input.push_back(Input{k1, k2, min, central, max, observable, ""});
+                input.push_back(Input{k1, k2, min, central, max, observable});
 
                 continue;
             }

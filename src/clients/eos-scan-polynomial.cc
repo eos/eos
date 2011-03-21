@@ -149,16 +149,15 @@ class CommandLine :
 
                 if ("--observable" == argument)
                 {
-                    std::string observable_name(*(++a));
+                    std::string name(*(++a));
 
                     ObservableInput input;
-                    input.observable = Observable::make(observable_name, parameters, *kinematics, Options());
-                    if (! input.observable)
-                        throw DoUsage("Unknown observable '" + observable_name + "'");
-
                     input.min = destringify<double>(*(++a));
                     input.central = destringify<double>(*(++a));
                     input.max = destringify<double>(*(++a));
+                    input.observable = Observable::make(name, parameters, *kinematics, Options());
+                    if (! input.observable)
+                        throw DoUsage("Unknown observable '" + name + "'");
 
                     inputs.push_back(input);
                     kinematics.reset(new Kinematics);

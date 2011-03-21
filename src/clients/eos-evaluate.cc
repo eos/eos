@@ -115,32 +115,16 @@ class CommandLine :
 
                 if ("--observable" == argument)
                 {
-                    std::string observable_name(*(++a));
-
+                    std::string name(*(++a));
                     ObservableInput input;
                     input.kinematics = *kinematics;
-                    kinematics.reset(new Kinematics);
-
-                    Options options;
-                    std::string::size_type pos;
-                    while (std::string::npos != (pos = observable_name.rfind(',')))
-                    {
-                        std::string::size_type sep(observable_name.find('=', pos + 1));
-                        if (std::string::npos == sep)
-                            throw DoUsage("Invalid observable option: '" + observable_name.substr(pos + 1) + "'");
-
-                        std::string key(observable_name.substr(pos + 1, sep - pos - 1));
-                        std::string value(observable_name.substr(sep + 1));
-
-                        options.set(key, value);
-                        observable_name.erase(pos);
-                    }
-
-                    input.observable = Observable::make(observable_name, parameters, input.kinematics, options);
+                    input.observable = Observable::make(name, parameters, input.kinematics, Options());
                     if (! input.observable)
-                        throw DoUsage("Unknown observable '" + observable_name + "'");
+                        throw DoUsage("Unknown observable '" + name + "'");
 
                     inputs.push_back(input);
+                    kinematics.reset(new Kinematics);
+
 
                     continue;
                 }

@@ -99,26 +99,10 @@ main(int argc, char * argv[])
             if ("--observable" != argument)
                 throw DoUsage("Unknown option: '" + argument + "'");
 
-            Options options;
-            argument = *(++a);
-
-            std::string::size_type pos;
-            while (std::string::npos != (pos = argument.rfind(',')))
-            {
-                std::string::size_type sep(argument.find('=', pos + 1));
-                if (std::string::npos == sep)
-                    throw DoUsage("Invalid observable option: '" + argument.substr(pos + 1) + "'");
-
-                std::string key(argument.substr(pos + 1, sep - pos - 1));
-                std::string value(argument.substr(sep + 1));
-
-                options.set(key, value);
-                argument.erase(pos);
-            }
-
-            ObservablePtr ptr(Observable::make(argument, parameters, kinematics, options));
+            std::string name(*(++a));
+            ObservablePtr ptr(Observable::make(name, parameters, kinematics, Options()));
             if (! ptr)
-                throw DoUsage("Unknown observable: '" + argument + "'");
+                throw DoUsage("Unknown observable: '" + name + "'");
 
             observables.push_back(ptr);
         }
