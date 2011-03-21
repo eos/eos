@@ -168,7 +168,7 @@ main(int argc, char * argv[])
 
                     ScanFile::Tuple tuple = (*d)[0];
 
-                    std::cout << "#   Data set '" << d->name() << "' with " << d->tuples() << " of " << d->tuple_size() << " elements each" << std::endl;
+                    std::cout << "#   Data set '" << d->name() << "' with " << d->tuples() << " tuples of " << d->tuple_size() << " elements each" << std::endl;
                     for (unsigned i = 0 ; i < d->tuples() ; ++i, ++tuple)
                     {
                         std::array<double, 2> coords{{ tuple[x_index], tuple[y_index] }};
