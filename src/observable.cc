@@ -31,6 +31,11 @@
 
 namespace eos
 {
+    ObservableNameError::ObservableNameError(const std::string & name) :
+        Exception("Observable name '" + name + "' is malformed")
+    {
+    }
+
     ObservableFactory::ObservableFactory()
     {
     }
@@ -59,7 +64,7 @@ namespace eos
     }
 
     ObservablePtr
-    Observable::make(const std::string & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options)
+    Observable::make(const std::string & _name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
     {
         static const std::map<std::string, ObservableFactory *> simple_observables
         {
@@ -361,12 +366,27 @@ namespace eos
                     &BToXsGamma<Minimal>::integrated_branching_ratio),
         };
 
-        Options myoptions(options);
+        Options options(_options);
+        std::string name(_name);
+
+        std::string::size_type pos;
+        while (std::string::npos != (pos = name.rfind(',')))
+        {
+            std::string::size_type sep(name.find('=', pos + 1));
+            if (std::string::npos == sep)
+                throw ObservableNameError(_name);
+
+            std::string key(name.substr(pos + 1, sep - pos - 1));
+            std::string value(name.substr(sep + 1));
+
+            options.set(key, value);
+            name.erase(pos);
+        }
 
         auto i(simple_observables.find(name));
         if (simple_observables.end() == i)
             return ObservablePtr();
 
-        return i->second->make(parameters, kinematics, myoptions);
+        return i->second->make(parameters, kinematics, options);
     }
 }
