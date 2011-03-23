@@ -44,7 +44,7 @@ libeosutils_la_SOURCES = \
 	wilson_coefficients.cc wilson_coefficients.hh \
 	wilson-polynomial.cc wilson-polynomial.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
-libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl -lhdf5
+libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl -lhdf5 -lhdf5_hl
 
 TESTS = \
 	apply_TEST \

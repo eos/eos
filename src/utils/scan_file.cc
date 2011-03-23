@@ -26,6 +26,7 @@
 #include <algorithm>
 
 #include <hdf5.h>
+#include <hdf5_hl.h>
 
 namespace eos
 {
@@ -56,13 +57,16 @@ namespace eos
 
         std::vector<ScanFile::DataSet> data_sets;
 
+        bool read_only;
+
         // Create a new HDF5 file
         Implementation(const std::string & filename, const std::string & creator) :
             file_id(H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT)),
             group_id_metadata(H5I_INVALID_HID),
             group_id_data(H5I_INVALID_HID),
             creator(creator),
-            eos_version(EOS_GITHEAD)
+            eos_version(EOS_GITHEAD),
+            read_only(false)
         {
             if (H5I_INVALID_HID == file_id)
                 throw ScanFileHDF5Error("H5Fcreate", file_id);
@@ -93,7 +97,8 @@ namespace eos
         Implementation(const std::string & filename) :
             file_id(H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT)),
             group_id_metadata(H5I_INVALID_HID),
-            group_id_data(H5I_INVALID_HID)
+            group_id_data(H5I_INVALID_HID),
+            read_only(true)
         {
             if (H5I_INVALID_HID == file_id)
                 throw ScanFileHDF5Error("H5Fopen", file_id);
@@ -336,6 +341,8 @@ namespace eos
         return lhs;
     }
 
+    template class WrappedForwardIterator<ScanFile::DataSet::FieldIteratorTag, std::string>;
+
     template <>
     struct Implementation<ScanFile::DataSet>
     {
@@ -365,6 +372,8 @@ namespace eos
 
         hid_t space_id_file_writing;
 
+        std::vector<std::string> field_names;
+
         bool truncate_on_destroy;
 
         // Constructor to create a new data set
@@ -380,6 +389,7 @@ namespace eos
             space_id_memory(H5I_INVALID_HID),
             space_id_file(H5I_INVALID_HID),
             space_id_file_writing(H5I_INVALID_HID),
+            field_names(tuple_size, ""),
             truncate_on_destroy(true)
         {
             // create space id for in-memory representation
@@ -472,17 +482,56 @@ namespace eos
                 if (H5I_INVALID_HID == space_id_memory)
                     throw ScanFileHDF5Error("H5Screate_simple", space_id_memory);
             }
+
+            // read field names from attributes
+            for (unsigned i = 0 ; i < tuple_size ; ++i)
+            {
+                std::string attr_name = "FIELD_" + stringify(i) + "_NAME";
+                hsize_t attr_rank;
+                H5T_class_t attr_class;
+                size_t attr_size;
+
+                // how large is the attribute's value?
+                herr_t ret = H5LTget_attribute_info(group_id_data, name.c_str(), attr_name.c_str(), &attr_rank, &attr_class, &attr_size);
+                if (ret < 0)
+                    throw ScanFileHDF5Error("H5LTget_attribute_info", ret);
+
+                // allocate a suitable buffer
+                // fuck the HDF5 Lite API!
+                std::vector<char> attr_data(attr_size + 1, 0);
+
+                // get the attribute
+                ret = H5LTget_attribute_string(group_id_data, name.c_str(), attr_name.c_str(), &attr_data[0]);
+                if (ret < 0)
+                    field_names.push_back("(UNLABELED)");
+                else
+                    field_names.push_back(std::string(&attr_data[0]));
+            }
         }
 
         ~Implementation()
         {
-            if (truncate_on_destroy)
+            // truncate the data set to its actual size
+            if (truncate_on_destroy && (! file_imp->read_only))
             {
                 hsize_t dimensions[2] = { tuples, tuple_size };
 
                 herr_t ret = H5Dset_extent(set_id, dimensions);
                 if (0 > ret)
                     throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
+            }
+
+            // create attributes for field info
+            if (! file_imp->read_only)
+            {
+                unsigned i = 0;
+                for (auto f = field_names.cbegin(), f_end = field_names.cend() ; f != f_end ; ++f, ++i)
+                {
+                    std::string attr_name = "FIELD_" + stringify(i) + "_NAME";
+                    herr_t ret = H5LTset_attribute_string(group_id_data, name.c_str(), attr_name.c_str(), f->c_str());
+                    if (ret < 0)
+                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
+                }
             }
 
             herr_t ret = H5Fflush(set_id, H5F_SCOPE_LOCAL);
@@ -586,6 +635,29 @@ namespace eos
     ScanFile::DataSet::tuples() const
     {
         return _imp->tuples;
+    }
+
+    ScanFile::DataSet::FieldIterator
+    ScanFile::DataSet::begin_fields()
+    {
+        return FieldIterator(_imp->field_names.begin());
+    }
+
+    ScanFile::DataSet::FieldIterator
+    ScanFile::DataSet::end_fields()
+    {
+        return FieldIterator(_imp->field_names.end());
+    }
+
+    unsigned
+    ScanFile::DataSet::find_field_index(const std::string & name) const
+    {
+        auto f = std::find(_imp->field_names.cbegin(), _imp->field_names.cend(), name);
+
+        if (_imp->field_names.cend() == f)
+            throw ScanFileError("Dataset '" + _imp->name + "' does not have a field named '" + name + "'");
+
+        return std::distance(_imp->field_names.cbegin(), f);
     }
 
     ScanFile::Tuple

@@ -51,6 +51,11 @@ class ScanFileTest :
                 // Set 'result #1'
                 {
                     ScanFile::DataSet test_set = test_file.add("result #1", 3);
+                    unsigned idx = 1;
+                    for (auto f = test_set.begin_fields(), f_end = test_set.end_fields() ; f != f_end ; ++f, ++idx)
+                    {
+                        *f = "result #1, field #" + stringify(idx);
+                    }
 
                     test_set << std::vector<double>{ 3.0, 2.0, 1.0 };
 
@@ -114,6 +119,12 @@ class ScanFileTest :
                     TEST_CHECK_EQUAL(3.0, test_tuple[0]);
                     TEST_CHECK_EQUAL(2.0, test_tuple[1]);
                     TEST_CHECK_EQUAL(1.0, test_tuple[2]);
+
+                    unsigned idx = 1;
+                    for (auto f = test_set.begin_fields(), f_end = test_set.end_fields() ; f != f_end ; ++f, ++idx)
+                    {
+                        TEST_CHECK_EQUAL("result #1, field #" + stringify(idx), *f);
+                    }
                 }
 
                 // "result #2"

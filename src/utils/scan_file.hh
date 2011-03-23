@@ -218,6 +218,22 @@ namespace eos
 
             /// Number of rows in data set
             unsigned tuples() const;
+
+            /// Iterate over fields in data set.
+            ///@{
+            struct FieldIteratorTag;
+            typedef WrappedForwardIterator<FieldIteratorTag, std::string> FieldIterator;
+
+            FieldIterator begin_fields();
+            FieldIterator end_fields();
+            ///@}
+
+            /*!
+             * Retrieve a field index by name.
+             *
+             * @param name The name of the field whose index shall be retrieved.
+             */
+            unsigned find_field_index(const std::string & name) const;
             ///@}
 
             ///@name Data Access
