@@ -65,7 +65,7 @@ class CommandLine :
     public:
         std::list<std::string> files;
 
-        unsigned x_index, y_index;
+        std::string x_name, y_name;
 
         std::array<double, 2> start;
 
@@ -76,8 +76,6 @@ class CommandLine :
         std::function<double (const double &, const double &)> marginalise;
 
         CommandLine() :
-            x_index(0),
-            y_index(0),
             start(std::array<double, 2>{{ 0.0, 0.0 }}),
             end(std::array<double, 2>{{ 15.0, 15.0 }}),
             count(std::array<unsigned, 2>{{ 60, 60 }}),
@@ -107,7 +105,7 @@ class CommandLine :
 
                 if ("--x" == argument)
                 {
-                    x_index = destringify<unsigned>(*(++a));
+                    x_name = *(++a);
                     start[0] = destringify<double>(*(++a));
                     end[0] = destringify<double>(*(++a));
                     count[0] = destringify<unsigned>(*(++a));
@@ -117,7 +115,7 @@ class CommandLine :
 
                 if ("--y" == argument)
                 {
-                    y_index = destringify<unsigned>(*(++a));
+                    y_name = *(++a);
                     start[1] = destringify<double>(*(++a));
                     end[1] = destringify<double>(*(++a));
                     count[1] = destringify<unsigned>(*(++a));
@@ -137,11 +135,8 @@ main(int argc, char * argv[])
     {
         CommandLine::instance()->parse(argc, argv);
 
-        if ((0 == CommandLine::instance()->x_index) || (0 == CommandLine::instance()->y_index))
-            throw DoUsage("Need to specify --x-index and --y-index with non-zero values!");
-
-        unsigned x_index = CommandLine::instance()->x_index - 1;
-        unsigned y_index = CommandLine::instance()->y_index - 1;
+        if (CommandLine::instance()->x_name.empty() || CommandLine::instance()->y_name.empty())
+            throw DoUsage("Need to specify no-empty field names for --x and --y!");
 
         Histogram<2> histogram = Histogram<2>::WithEqualBinning(CommandLine::instance()->start,
                 CommandLine::instance()->end, CommandLine::instance()->count);
@@ -158,13 +153,9 @@ main(int argc, char * argv[])
 
                 for (auto d = file.begin(), d_end = file.end() ; d != d_end ; ++d)
                 {
-                    unsigned posterior_index = d->tuple_size() - 1;
-
-                    if (posterior_index <= x_index)
-                        throw DoUsage("X index '" + stringify(CommandLine::instance()->x_index) + "' exceeds number of parameters!");
-
-                    if (posterior_index <= y_index)
-                        throw DoUsage("Y index '" + stringify(CommandLine::instance()->y_index) + "' exceeds number of parameters!");
+                    unsigned x_index = d->find_field_index(CommandLine::instance()->x_name),
+                             y_index = d->find_field_index(CommandLine::instance()->y_name),
+                             posterior_index = d->find_field_index("posterior");
 
                     ScanFile::Tuple tuple = (*d)[0];
 

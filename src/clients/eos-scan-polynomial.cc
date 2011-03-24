@@ -435,11 +435,25 @@ class WilsonScannerPolynomial
                 end += chunk_size;
 
                 _data_sets.push_back(_output.add("chunk #" + stringify(i), _scan_parameters.size() + 1));
+
+                auto f = _data_sets.back().begin_fields();
+                for (auto p = _scan_parameters.cbegin(), p_end = _scan_parameters.cend() ; p != p_end ; ++p, ++f)
+                {
+                    *f = p->name();
+                }
+                *f = "posterior";
+
                 _tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&WilsonScannerPolynomial::scan_range, this, begin, end, i)));
             }
 
             // Enqueue an extra job for the remains
             _data_sets.push_back(_output.add("chunk #" + stringify(i), _scan_parameters.size() + 1));
+            auto f = _data_sets.back().begin_fields();
+            for (auto p = _scan_parameters.cbegin(), p_end = _scan_parameters.cend() ; p != p_end ; ++p, ++f)
+            {
+                *f = p->name();
+            }
+            *f = "posterior";
             _tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&WilsonScannerPolynomial::scan_range, this, c, _points.end(), i)));
 
             // Wait for job completion

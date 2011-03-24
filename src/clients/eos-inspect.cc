@@ -95,9 +95,14 @@ main(int argc, char * argv[])
 
                 for (auto d = file.begin(), d_end = file.end() ; d != d_end ; ++d)
                 {
-                    ScanFile::Tuple tuple = (*d)[0];
                     std::cout << "#   Dataset '" + d->name() + "': (" << d->tuples() << ", " << d->tuple_size() << ')' << std::endl;
+                    for (auto f = d->begin_fields(), f_end = d->end_fields() ; f != f_end ; ++f)
+                    {
+                        std::cout << "#     Field '" << *f << "'" << std::endl;
+                    }
+
                     std::cout << std::scientific << std::setprecision(9);
+                    ScanFile::Tuple tuple = (*d)[0];
                     for (unsigned i = 0 ; i < d->tuples() ; ++i, ++tuple)
                     {
                         for (unsigned j = 0 ; j < d->tuple_size() ; ++j)
