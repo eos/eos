@@ -107,18 +107,18 @@ class ScanFileTest :
                 for (ScanFile::Iterator d = test_file.begin(), d_end = test_file.end() ; d != d_end ; ++d, ++r)
                 {
                     TEST_CHECK_EQUAL(std::get<0>(*r), d->name());
-                    TEST_CHECK_EQUAL(std::get<1>(*r), d->tuple_size());
-                    TEST_CHECK_EQUAL(std::get<2>(*r), d->tuples());
+                    TEST_CHECK_EQUAL(std::get<1>(*r), d->fields());
+                    TEST_CHECK_EQUAL(std::get<2>(*r), d->records());
                 }
 
                 // "result #1"
                 {
                     ScanFile::DataSet test_set = test_file["result #1"];
-                    ScanFile::Tuple test_tuple = test_set[0];
+                    ScanFile::Record test_record = test_set[0];
 
-                    TEST_CHECK_EQUAL(3.0, test_tuple[0]);
-                    TEST_CHECK_EQUAL(2.0, test_tuple[1]);
-                    TEST_CHECK_EQUAL(1.0, test_tuple[2]);
+                    TEST_CHECK_EQUAL(3.0, test_record[0]);
+                    TEST_CHECK_EQUAL(2.0, test_record[1]);
+                    TEST_CHECK_EQUAL(1.0, test_record[2]);
 
                     unsigned idx = 1;
                     for (auto f = test_set.begin_fields(), f_end = test_set.end_fields() ; f != f_end ; ++f, ++idx)
@@ -130,43 +130,43 @@ class ScanFileTest :
                 // "result #2"
                 {
                     ScanFile::DataSet test_set = test_file["result #2"];
-                    ScanFile::Tuple test_tuple = test_set[0];
+                    ScanFile::Record test_record = test_set[0];
 
-                    TEST_CHECK_EQUAL(7.0, test_tuple[0]);
-                    TEST_CHECK_EQUAL(6.0, test_tuple[1]);
-                    TEST_CHECK_EQUAL(5.0, test_tuple[2]);
-                    TEST_CHECK_EQUAL(4.0, test_tuple[3]);
-                    TEST_CHECK_EQUAL(3.0, test_tuple[4]);
-                    TEST_CHECK_EQUAL(2.0, test_tuple[5]);
-                    TEST_CHECK_EQUAL(1.0, test_tuple[6]);
+                    TEST_CHECK_EQUAL(7.0, test_record[0]);
+                    TEST_CHECK_EQUAL(6.0, test_record[1]);
+                    TEST_CHECK_EQUAL(5.0, test_record[2]);
+                    TEST_CHECK_EQUAL(4.0, test_record[3]);
+                    TEST_CHECK_EQUAL(3.0, test_record[4]);
+                    TEST_CHECK_EQUAL(2.0, test_record[5]);
+                    TEST_CHECK_EQUAL(1.0, test_record[6]);
                 }
 
                 // "result #3"
                 {
                     ScanFile::DataSet test_set = test_file["result #3"];
-                    ScanFile::Tuple test_tuple = test_set[0];
+                    ScanFile::Record test_record = test_set[0];
 
-                    TEST_CHECK_EQUAL(4.0, test_tuple[0]);
-                    TEST_CHECK_EQUAL(5.0, test_tuple[1]);
-                    TEST_CHECK_EQUAL(6.0, test_tuple[2]);
-                    TEST_CHECK_EQUAL(7.0, test_tuple[3]);
-                    TEST_CHECK_EQUAL(8.0, test_tuple[4]);
+                    TEST_CHECK_EQUAL(4.0, test_record[0]);
+                    TEST_CHECK_EQUAL(5.0, test_record[1]);
+                    TEST_CHECK_EQUAL(6.0, test_record[2]);
+                    TEST_CHECK_EQUAL(7.0, test_record[3]);
+                    TEST_CHECK_EQUAL(8.0, test_record[4]);
 
-                    test_tuple = test_set[33];
+                    test_record = test_set[33];
 
-                    TEST_CHECK_EQUAL(4.0, test_tuple[0]);
-                    TEST_CHECK_EQUAL(5.0, test_tuple[1]);
-                    TEST_CHECK_EQUAL(6.0, test_tuple[2]);
-                    TEST_CHECK_EQUAL(7.0, test_tuple[3]);
-                    TEST_CHECK_EQUAL(8.0, test_tuple[4]);
+                    TEST_CHECK_EQUAL(4.0, test_record[0]);
+                    TEST_CHECK_EQUAL(5.0, test_record[1]);
+                    TEST_CHECK_EQUAL(6.0, test_record[2]);
+                    TEST_CHECK_EQUAL(7.0, test_record[3]);
+                    TEST_CHECK_EQUAL(8.0, test_record[4]);
 
-                    test_tuple = test_set[1023];
+                    test_record = test_set[1023];
 
-                    TEST_CHECK_EQUAL(5.0, test_tuple[0]);
-                    TEST_CHECK_EQUAL(6.0, test_tuple[1]);
-                    TEST_CHECK_EQUAL(7.0, test_tuple[2]);
-                    TEST_CHECK_EQUAL(8.0, test_tuple[3]);
-                    TEST_CHECK_EQUAL(9.0, test_tuple[4]);
+                    TEST_CHECK_EQUAL(5.0, test_record[0]);
+                    TEST_CHECK_EQUAL(6.0, test_record[1]);
+                    TEST_CHECK_EQUAL(7.0, test_record[2]);
+                    TEST_CHECK_EQUAL(8.0, test_record[3]);
+                    TEST_CHECK_EQUAL(9.0, test_record[4]);
                 }
             }
         }

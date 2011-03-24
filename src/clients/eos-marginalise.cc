@@ -157,12 +157,12 @@ main(int argc, char * argv[])
                              y_index = d->find_field_index(CommandLine::instance()->y_name),
                              posterior_index = d->find_field_index("posterior");
 
-                    ScanFile::Tuple tuple = (*d)[0];
+                    ScanFile::Record record = (*d)[0];
 
-                    std::cout << "#   Data set '" << d->name() << "' with " << d->tuples() << " tuples of " << d->tuple_size() << " elements each" << std::endl;
-                    for (unsigned i = 0 ; i < d->tuples() ; ++i, ++tuple)
+                    std::cout << "#   Data set '" << d->name() << "' with " << d->records() << " records of " << d->fields() << " elements each" << std::endl;
+                    for (unsigned i = 0 ; i < d->records() ; ++i, ++record)
                     {
-                        std::array<double, 2> coords{{ tuple[x_index], tuple[y_index] }};
+                        std::array<double, 2> coords{{ record[x_index], record[y_index] }};
                         auto b = histogram.find(coords);
                         if (histogram.end() == b)
                         {
@@ -170,7 +170,7 @@ main(int argc, char * argv[])
                             continue;
                         }
 
-                        b->value = CommandLine::instance()->marginalise(b->value, tuple[posterior_index]);
+                        b->value = CommandLine::instance()->marginalise(b->value, record[posterior_index]);
                     }
                 }
             }

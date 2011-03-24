@@ -97,7 +97,7 @@ namespace eos
      *     GROUP "data" {
      *       DATASET "<RESULT1>" {
      *         DATATYPE H5T_IEEE_F64LE
-     *         DATASPACE SIMPLE { ( <TUPLES>, <ELEMENTS> ) / ( UNLIMITED, <ELEMENTS> ) }
+     *         DATASPACE SIMPLE { ( <RECORDS>, <FIELDS> ) / ( UNLIMITED, <FIELDS> ) }
      *         DATA {
      *           ...
      *         }
@@ -110,7 +110,7 @@ namespace eos
      *   }
      * @endcode
      *
-     * Here, <FILE> is the filename, <TUPLES> is the number of scan tuples of <ELEMENTS> elements
+     * Here, <FILE> is the filename, <RECORDS> is the number of scan records of <FIELDS> record fields
      * each. <CREATOR> is an identifier of the creating program, and <EOSVERSION> is a string
      * representation of the EOS version/revision that was used to create the file.
      */
@@ -123,7 +123,7 @@ namespace eos
 
         public:
             class DataSet;
-            class Tuple;
+            class Record;
             class WriteBuffer;
 
             ///@name Basic Functions
@@ -136,8 +136,6 @@ namespace eos
              *
              * @param filename   File which shall be created.
              * @param creator    Name of the creating program.
-             * @param tuple_size Number of elements of each scan tuple.
-             * @param scan_size  Number of scan tuples in file.
              */
             static ScanFile Create(const std::string & filename, const std::string & creator);
 
@@ -163,17 +161,17 @@ namespace eos
             /*!
              * Retrieve a data set by its name.
              *
-             * @param index Index of the scan tuple that shall be retrieved.
+             * @param index Index of the data set that shall be retrieved.
              */
             DataSet operator[] (const std::string & name);
 
             /*!
              * Create a new data set by name.
              *
-             * @param name       Name of the new data set.
-             * @param tuple_size Numer of elements in each tuple of the new data set.
+             * @param name   Name of the new data set.
+             * @param fields Numer of fields in each record of the new data set.
              */
-            DataSet add(const std::string & name, unsigned tuple_size);
+            DataSet add(const std::string & name, unsigned fields);
             ///@}
 
             ///@name Iteration
@@ -194,7 +192,7 @@ namespace eos
     {
         private:
             DataSet(Implementation<ScanFile> * imp, const std::string & name);
-            DataSet(Implementation<ScanFile> * imp, const std::string & name, unsigned tuple_size);
+            DataSet(Implementation<ScanFile> * imp, const std::string & name, unsigned fields);
 
         public:
             friend class ScanFile;
@@ -214,10 +212,10 @@ namespace eos
             std::string name() const;
 
             /// Number of columns in data set
-            unsigned tuple_size() const;
+            unsigned fields() const;
 
             /// Number of rows in data set
-            unsigned tuples() const;
+            unsigned records() const;
 
             /// Iterate over fields in data set.
             ///@{
@@ -239,19 +237,19 @@ namespace eos
             ///@name Data Access
             ///@{
             /*!
-             * Retrieve a tuple element.
+             * Retrieve a records
              *
-             * @param index Index of the tuple element that shall be retrieved.
+             * @param index Index of the record that shall be retrieved.
              */
-            Tuple operator[] (const unsigned & index);
+            Record operator[] (const unsigned & index);
             ///@}
     };
 
     /*!
-     * Append a tuple to a ScanFile::DataSet.
+     * Append a record to a ScanFile::DataSet.
      *
      * @param lhs The ScanFile::DataSet to which shall be written.
-     * @param rhs The tuple which shall be appended.
+     * @param rhs The record which shall be appended.
      */
     ScanFile::DataSet & operator<< (ScanFile::DataSet & lhs, const std::vector<double> & rhs);
 
@@ -259,18 +257,18 @@ namespace eos
      * Append an entire write buffer to a ScanFile::DataSet.
      *
      * @param lhs The ScanFile::DataSet to which shall be written.
-     * @param rhs The write buffer which shall be appended.
+     * @param rhs The write buffer of records which shall be appended.
      */
     ScanFile::DataSet & operator<< (ScanFile::DataSet & lhs, const ScanFile::WriteBuffer & rhs);
 
     /*!
-     * ScanFile::Tuple represents one of the scan tuples within a ScanFile.
+     * ScanFile::Record represents one of the scan records within a ScanFile::DataSet.
      */
-    class ScanFile::Tuple :
-        public PrivateImplementationPattern<ScanFile::Tuple>
+    class ScanFile::Record :
+        public PrivateImplementationPattern<ScanFile::Record>
     {
         private:
-            Tuple(const std::shared_ptr<Implementation<ScanFile::DataSet>> & imp, const unsigned & index);
+            Record(const std::shared_ptr<Implementation<ScanFile::DataSet>> & imp, const unsigned & index);
 
         public:
             friend class ScanFile;
@@ -278,18 +276,18 @@ namespace eos
             ///@name Basic Functions
             ///@{
             /// Destructor.
-            ~Tuple();
+            ~Record();
             ///@}
 
             ///@name Data Access
             ///@{
-            /// Advance the scan tuple by one within the parent ScanFile.
-            Tuple & operator++ ();
+            /// Advance the scan record by one within the parent ScanFile::DataSet.
+            Record & operator++ ();
 
             /*!
-             * Retrieve a tuple element.
+             * Retrieve a field element.
              *
-             * @param index Index of the tuple element that shall be retrieved.
+             * @param index Index of the field element that shall be retrieved.
              */
             double operator[] (const unsigned & index) const;
             ///@}
@@ -310,9 +308,9 @@ namespace eos
             /*!
              * Constructor.
              *
-             * @param tuple_size Number of elements per recorded tuple.
+             * @param fields Number of fields per record.
              */
-            WriteBuffer(const unsigned & tuple_size);
+            WriteBuffer(const unsigned & fields);
 
             /// Destructor.
             ~WriteBuffer();
@@ -325,19 +323,19 @@ namespace eos
 
             ///@name Metadata
             ///@{
-            /// Retrieve the maximal number of tuples that can be stored in the buffer.
+            /// Retrieve the maximal number of records that can be stored in the buffer.
             unsigned capacity() const;
 
-            /// Retrieve the number of tuples currently stored in the buffer.
+            /// Retrieve the number of records currently stored in the buffer.
             unsigned size() const;
             ///@}
     };
 
     /*!
-     * Append a tuple to a ScanFile::WriteBuffer.
+     * Append a record to a ScanFile::WriteBuffer.
      *
      * @param lhs The ScanFile::WriteBuffer to which shall be written.
-     * @param rhs The tuple which shall be appended.
+     * @param rhs The record which shall be appended.
      */
     ScanFile::WriteBuffer & operator<< (ScanFile::WriteBuffer & lhs, const std::vector<double> & rhs);
 }
