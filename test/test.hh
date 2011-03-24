@@ -97,11 +97,11 @@ namespace test
 #define TEST_CHECK_RELATIVE_ERROR(a, b, eps) \
     do \
     { \
-        if (std::sqrt(std::abs(a)) < std::numeric_limits<decltype(a)>::epsilon()) \
+        if (std::sqrt(std::fabs(a)) < std::numeric_limits<double>::epsilon()) \
             throw TestCaseFailedException(__LINE__, __FILE__, \
                     "'" #a "' has been evaluated to the zero within computational accuracy, result = " + stringify(a)); \
          \
-        if (std::sqrt(std::abs(b)) < std::numeric_limits<decltype(b)>::epsilon()) \
+        if (std::sqrt(std::fabs(b)) < std::numeric_limits<double>::epsilon()) \
             throw TestCaseFailedException(__LINE__, __FILE__, \
                     "'" #b "' has been evaluated to the zero within computational accuracy, result = " + stringify(b)); \
          \
