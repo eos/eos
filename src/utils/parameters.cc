@@ -193,6 +193,9 @@ namespace eos
             Parameter::Template{"mass::K^*0",                                    +0.89575,    +0.896,      +0.89625   }, // cf. [PDG2008], p. 44
             Parameter::Template{"mass::W",                                       +80.373,     +80.398,     +80.423    }, // cf. [PDG2008], p. 8
             Parameter::Template{"mass::Z",                                       +91.1855,    +91.1876,    +91.1897   }, // cf. [PDG2008], p. 9
+            // Decay constants
+            Parameter::Template{"f_B",                                           +0.17,       +0.20,       +0.23      }, // GeV, cf. [BHvD2010], Table I
+            Parameter::Template{"f_K",                                           +0.1549,     +0.1561,     +0.1573    }, // GeV, cf. [PDGBOOK2010], p. 864, Eq. (7)
             // Form factor uncertainties
             Parameter::Template{"formfactors::a0_uncertainty",                   +0.85,       +1.0,        +1.15      },
             Parameter::Template{"formfactors::a1_uncertainty",                   +0.85,       +1.0,        +1.15      },
@@ -204,7 +207,6 @@ namespace eos
             Parameter::Template{"formfactors::f0_uncertainty",                   +0.85,       +1.0,        +1.15      },
             Parameter::Template{"formfactors::ft_uncertainty",                   +0.85,       +1.0,        +1.15      },
             // B LCDA parameters
-            Parameter::Template{"f_B",                                           +0.17,       +0.20,       +0.23      }, // GeV, cf. [BHvD2010], Table I
             Parameter::Template{"lambda_B_p",                                    +0.370,      +0.485,      +0.600     }, // GeV, cf. [BHvD2010], Table I
             // B->K^*, K^* LCDA parameters
             Parameter::Template{"B->K^*::a_1_par",                               +0.03,       +0.1,        +0.17      },
