@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -104,12 +104,12 @@ namespace test
             throw TestCaseFailedException(__LINE__, __FILE__, \
                     "'" #b "' has been evaluated to the zero within computational accuracy, result = " + stringify(b)); \
          \
-        if (((std::abs(a - b) / a) <= eps) && ((std::abs(a - b) / b) <= eps)) \
+        if (((std::abs((a - b) / a)) <= eps) && ((std::abs((a - b) / b)) <= eps)) \
             break; \
         else \
             throw TestCaseFailedException(__LINE__, __FILE__, \
                     "One relative error of '" #a "' and '" #b "' is greater than " + stringify(eps) + ". The results are " + \
-                    stringify(std::abs(a - b) / a) + " and " + stringify(std::abs(a - b) / b)); \
+                    stringify(std::abs((a - b) / a)) + " and " + stringify(std::abs((a - b) / b))); \
     } \
     while (false)
 
