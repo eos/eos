@@ -190,6 +190,60 @@ class BToKBZ2004FormFactorsTest :
         }
 } b_to_k_bz2004_form_factors_test;
 
+
+class BToKBZ2004SplitFormFactorsTest :
+    public TestCase
+{
+    public:
+        BToKBZ2004SplitFormFactorsTest() :
+            TestCase("b_to_k_bz2004_split_form_factors_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const double eps = 1e-5;
+
+            Parameters p = Parameters::Defaults();
+            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K@BZ2004v2Split", p);
+            TEST_CHECK(0 != ff.get());
+
+            TEST_CHECK_NEARLY_EQUAL(0.326792, ff->f_p( 0.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.368753, ff->f_p( 2.3), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.421625, ff->f_p( 4.6), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.488304, ff->f_p( 6.9), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.574754, ff->f_p( 9.2), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.692499, ff->f_p(11.5), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.863899, ff->f_p(13.8), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.13432,  ff->f_p(16.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.60395,  ff->f_p(18.4), eps);
+            TEST_CHECK_NEARLY_EQUAL(2.52611,  ff->f_p(20.7), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(0.349555, ff->f_t( 0.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.395537, ff->f_t( 2.3), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.453490, ff->f_t( 4.6), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.526911, ff->f_t( 6.9), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.622869, ff->f_t( 9.2), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.754937, ff->f_t(11.5), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.949382, ff->f_t(13.8), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.25949,  ff->f_t(16.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.80311,  ff->f_t(18.4), eps);
+            TEST_CHECK_NEARLY_EQUAL(2.87884,  ff->f_t(20.7), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(0.327521, ff->f_0( 0.0), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.345076, ff->f_0( 2.3), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.364630, ff->f_0( 4.6), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.387123, ff->f_0( 6.9), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.414010, ff->f_0( 9.2), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.447569, ff->f_0(11.5), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.491474, ff->f_0(13.8), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.551925, ff->f_0(16.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.640084, ff->f_0(18.4), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.777994, ff->f_0(20.7), eps);
+        }
+} b_to_k_bz2004_split_form_factors_test;
+
+
 class BToKKMPW2010FormFactorsTest :
     public TestCase
 {

@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2010 Danny van Dyk
- * Copyright (c) 2010 Christian Wacker
+ * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -129,6 +129,70 @@ namespace eos
     template <> const double BZ2004FormFactors<BToK, PToP>::_m12      = 5.41 * 5.41;
 
 
+    // [BZ2004v3]
+    template class BZ2004FormFactorsSplit<BToK>;
+
+    // [BZ2004v3], Table B, p. 26
+    template <> const double BZ2004FormFactorsSplit<BToK>::_r1_p_asymptotic    = 0.0541;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_r2_p_asymptotic    = 0.2166;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_r2_0_asymptotic    = 0.2719;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_r1_t_asymptotic    = 0.0244;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_r2_t_asymptotic    = 0.2590;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_mfit2_0_asymptotic = 30.33;
+
+    // [BZ2004v3], Table D, p. 28
+    template <> const double BZ2004FormFactorsSplit<BToK>::_m12_asymptotic     = 5.41 * 5.41;
+
+    // [BZ2004v3], Table C, set 2
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_a_1 =  0.310;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_b_1 =  0.930e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_c_1 =  0.139e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_d_1 = -0.083e-3;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_a_2 =  0.228;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_b_2 = -0.632e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_c_2 =  0.017e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_d_2 = -0.143e-3;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_a_4 = -0.173;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_b_4 = -0.947e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_c_4 =  0.005e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_p_d_4 =  0.196e-3;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_a_1 =  0.308;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_b_1 =  0.106e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_c_1 =  0.026e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_d_1 = -0.048e-3;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_a_2 =  0.226;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_b_2 = -1.031e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_c_2 = -0.092e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_d_2 = -0.005e-3;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_a_4 = -0.170;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_b_4 = -0.838e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_c_4 =  0.209e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_0_d_4 =  0.001e-3;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_a_1 =  0.381;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_b_1 =  1.056e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_c_1 =  0.167e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_d_1 = -0.108e-3;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_a_2 =  0.264;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_b_2 = -0.858e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_c_2 = -0.011e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_d_2 = -0.153e-3;
+
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_a_4 = -0.217;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_b_4 = -1.165e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_c_4 =  0.101e-2;
+    template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_d_4 =  0.187e-3;
+
+
     /* B_{u,d} -> K */
     template class KMPW2010FormFactors<BToK>;
 
@@ -163,6 +227,7 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             { KeyType("B->K",     "BZ2004v2"), &BZ2004FormFactors<BToK, PToP>::make   },
+            { KeyType("B->K",     "BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make },
             { KeyType("B->K",     "KMPW2010"), &KMPW2010FormFactors<BToK>::make   }
         };
 

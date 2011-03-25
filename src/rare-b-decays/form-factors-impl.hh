@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
- * Copyright (c) 2010 Christian Wacker
+ * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -146,6 +146,104 @@ namespace eos
             {
                 // [BZ2004v2] eq. (11)
                 return _f_t_factor * (_r1_t / (1 - s / _m12) + _r2_t / power_of<2>(1 - s / _m12));
+            }
+    };
+
+
+    // Form Factors according to [BZ2004v3]
+    template <typename Process_> class BZ2004FormFactorsSplit :
+        public FormFactors<PToP>
+    {
+        private:
+            Parameter _f_p_factor, _f_0_factor, _f_t_factor;
+
+            static const double _r1_p_asymptotic, _r2_p_asymptotic;
+            static const double _r2_0_asymptotic;
+            static const double _r1_t_asymptotic, _r2_t_asymptotic;
+            static const double _mfit2_0_asymptotic;
+
+            static const double _m12_asymptotic;
+
+            static const double _f_p_a_1, _f_p_b_1, _f_p_c_1, _f_p_d_1;
+            static const double _f_p_a_2, _f_p_b_2, _f_p_c_2, _f_p_d_2;
+            static const double _f_p_a_4, _f_p_b_4, _f_p_c_4, _f_p_d_4;
+
+            static const double _f_0_a_1, _f_0_b_1, _f_0_c_1, _f_0_d_1;
+            static const double _f_0_a_2, _f_0_b_2, _f_0_c_2, _f_0_d_2;
+            static const double _f_0_a_4, _f_0_b_4, _f_0_c_4, _f_0_d_4;
+
+            static const double _f_t_a_1, _f_t_b_1, _f_t_c_1, _f_t_d_1;
+            static const double _f_t_a_2, _f_t_b_2, _f_t_c_2, _f_t_d_2;
+            static const double _f_t_a_4, _f_t_b_4, _f_t_c_4, _f_t_d_4;
+
+            // Gegenbauer moments
+            double _a_1, _a_2, _a_4;
+
+            // Polynomial of degree 3, cf. [BZ2004v3], eq. (A.6), p. 28
+            double poly3(const double & s, const double & a, const double & b, const double & c, const double & d) const
+            {
+                return a + b * s + c * s * s + d * s * s * s;
+            }
+
+            double f_p_asymptotic(const double & s) const
+            {
+                // cf. [BZ2004v3], eq. (A.2), p. 26
+                return _r1_p_asymptotic / (1.0 - s / _m12_asymptotic) + _r2_p_asymptotic / power_of<2>(1.0 - s / _m12_asymptotic);
+            }
+
+            double f_0_asymptotic(const double & s) const
+            {
+                // cf. [BZ2004v3], eq. (A.3), p. 26
+                return _r2_0_asymptotic / (1.0 - s / _mfit2_0_asymptotic);
+            }
+
+            double f_t_asymptotic(const double & s) const
+            {
+                // cf. [BZ2004v3], eq. (A.2), p. 26
+                return _r1_t_asymptotic / (1.0 - s / _m12_asymptotic) + _r2_t_asymptotic / power_of<2>(1.0 - s / _m12_asymptotic);
+            }
+
+        public:
+            BZ2004FormFactorsSplit(const Parameters & p, const Options &) :
+                _f_p_factor(p["formfactors::fp_uncertainty"]),
+                _f_0_factor(p["formfactors::f0_uncertainty"]),
+                _f_t_factor(p["formfactors::ft_uncertainty"]),
+                _a_1(p["B->K::a_1@2.2GeV"]),
+                _a_2(p["B->K::a_2@2.2GeV"]),
+                _a_4(p["B->K::a_4@2.2GeV"])
+            {
+            }
+
+            static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
+            {
+                return new BZ2004FormFactorsSplit(parameters, Options());
+            }
+
+            virtual double f_p(const double & s) const
+            {
+                // cf. [BZ2004v3], eq. (A.5), p. 27
+                return _f_p_factor * (f_p_asymptotic(s) +
+                                      _a_1 * poly3(s, _f_p_a_1, _f_p_b_1, _f_p_c_1, _f_p_d_1) +
+                                      _a_2 * poly3(s, _f_p_a_2, _f_p_b_2, _f_p_c_2, _f_p_d_2) +
+                                      _a_4 * poly3(s, _f_p_a_4, _f_p_b_4, _f_p_c_4, _f_p_d_4));
+            }
+
+            virtual double f_0(const double & s) const
+            {
+                // cf. [BZ2004v3], eq. (A.5), p. 27
+                return _f_0_factor * (f_0_asymptotic(s) +
+                                      _a_1 * poly3(s, _f_0_a_1, _f_0_b_1, _f_0_c_1, _f_0_d_1) +
+                                      _a_2 * poly3(s, _f_0_a_2, _f_0_b_2, _f_0_c_2, _f_0_d_2) +
+                                      _a_4 * poly3(s, _f_0_a_4, _f_0_b_4, _f_0_c_4, _f_0_d_4));
+            }
+
+            virtual double f_t(const double & s) const
+            {
+                // cf. [BZ2004v3], eq. (A.5), p. 27
+                return _f_t_factor * (f_t_asymptotic(s) +
+                                      _a_1 * poly3(s, _f_t_a_1, _f_t_b_1, _f_t_c_1, _f_t_d_1) +
+                                      _a_2 * poly3(s, _f_t_a_2, _f_t_b_2, _f_t_c_2, _f_t_d_2) +
+                                      _a_4 * poly3(s, _f_t_a_4, _f_t_b_4, _f_t_c_4, _f_t_d_4));
             }
     };
 
