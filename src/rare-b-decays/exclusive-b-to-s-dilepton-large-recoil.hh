@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -68,6 +69,28 @@ namespace eos
             double integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const;
+    };
+
+    /*
+     * Decay: B -> K l lbar at Large Recoil, cf. [BFS2001], [BHP2007]
+     */
+    template <>
+    class BToKDilepton<LargeRecoil> :
+        public PrivateImplementationPattern<BToKDilepton<LargeRecoil>>
+    {
+        public:
+            BToKDilepton(const Parameters & parameters, const Options & options);
+            ~BToKDilepton();
+
+            // Differential Observables
+            double differential_branching_ratio(const double & s) const;
+
+            // Integrated Observables
+            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+
+            double a_l(const double & s) const;
+
+            double c_l(const double & s) const;
     };
 }
 

@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -996,5 +997,509 @@ namespace eos
                 std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::placeholders::_1);
 
         return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+    }
+
+    /*
+     * Decay: B -> K l lbar at Large Recoil
+     */
+    template <>
+    struct Implementation<BToKDilepton<LargeRecoil>>
+    {
+        std::shared_ptr<Model> model;
+
+        Parameter c1;
+
+        Parameter c2;
+
+        Parameter c3;
+
+        Parameter c4;
+
+        Parameter c5;
+
+        Parameter c6;
+
+        Parameter abs_c7;
+
+        Parameter arg_c7;
+
+        Parameter c7prime;
+
+        Parameter c8;
+
+        Parameter abs_c9;
+
+        Parameter arg_c9;
+
+        Parameter c9prime;
+
+        Parameter abs_c10;
+
+        Parameter arg_c10;
+
+        Parameter m_b_MSbar;
+
+        Parameter m_c;
+
+        Parameter m_B;
+
+        Parameter m_K;
+
+        Parameter m_e;
+
+        Parameter m_mu;
+
+        Parameter m_tau;
+
+        double m_l;
+
+        Parameter mu;
+
+        Parameter f_B;
+
+        Parameter f_K;
+
+        Parameter lambda_B_p;
+
+        Parameter a_1;
+
+        Parameter a_2;
+
+        double e_q;
+
+        std::shared_ptr<FormFactors<PToP>> form_factors;
+
+        Implementation(const Parameters & p, const Options & o) :
+            model(Model::make("SM", p)),
+            c1(p["c1"]),
+            c2(p["c2"]),
+            c3(p["c3"]),
+            c4(p["c4"]),
+            c5(p["c5"]),
+            c6(p["c6"]),
+            abs_c7(p["Abs{c7}"]),
+            arg_c7(p["Arg{c7}"]),
+            c7prime(p["c7prime"]),
+            c8(p["c8"]),
+            abs_c9(p["Abs{c9}"]),
+            arg_c9(p["Arg{c9}"]),
+            c9prime(p["c9prime"]),
+            abs_c10(p["Abs{c10}"]),
+            arg_c10(p["Arg{c10}"]),
+            m_b_MSbar(p["mass::b(MSbar)"]),
+            m_c(p["mass::c"]),
+            m_B(p["mass::B0"]),
+            m_K(p["mass::K0"]),
+            m_e(p["mass::e"]),
+            m_mu(p["mass::mu"]),
+            m_tau(p["mass::tau"]),
+            mu(p["mu"]),
+            f_B(p["f_B"]),
+            f_K(p["f_K"]),
+            lambda_B_p(p["lambda_B_p"]),
+            a_1(p["B->K::a_1@1GeV"]),
+            a_2(p["B->K::a_2@1GeV"]),
+            e_q(-1.0/3.0)
+        {
+            form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "BZ2004v2"), p);
+
+            if (! form_factors.get())
+                throw InternalError("Form factors not found!");
+
+            std::string lepton = o.get("l", "mu");
+            if ("e" == lepton)
+            {
+                m_l = m_e;
+            }
+            else if ("mu" == lepton)
+            {
+                m_l = m_mu;
+            }
+            else if ("tau" == lepton)
+            {
+                m_l = m_tau;
+            }
+            else
+                throw InternalError("Unknown fourth lepton generation: " + lepton);
+        }
+
+        inline double s_hat(double s) const
+        {
+            return s / m_B / m_B;
+        }
+
+        inline double energy(const double & s) const
+        {
+            return (m_B * m_B + m_K * m_K - s) / (2.0 * m_B);
+        }
+
+        inline double mu_f() const
+        {
+            return 1.5;
+        }
+
+        inline double m_b_PS() const
+        {
+            // Actually use the PS mass at mu_f = 1.5 GeV
+            return model->m_b_ps(1.5);
+        }
+
+        complex<double> c7() const
+        {
+            return std::polar(abs_c7(), arg_c7());
+        }
+
+        /* Effective wilson coefficients */
+        // cf. [BFS2001], below Eq. (9), p. 4
+        complex<double> c7eff() const
+        {
+            return c7() - 1.0/3.0 * c3() - 4.0/9.0 * c4() - 20.0/3.0 * c5() - 80.0/9.0 * c6();
+        }
+
+        // cf. [BFS2001], below Eq. (26), p. 8
+        double c8eff() const
+        {
+             return c8() + c3() - 1.0/6.0 * c4() + 20.0 * c5() - 10.0/3.0 * c6();
+        }
+
+        complex<double> c9() const
+        {
+            return std::polar(abs_c9(), arg_c9());
+        }
+
+        complex<double> c10() const
+        {
+            return std::polar(abs_c10(), arg_c10());
+        }
+
+        // cf. [BFS2001], Eq. (10), p. 4
+        complex<double> Y0(const double & s) const
+        {
+            double Y_c = 4.0 / 3.0 * c1() + c2() + 6.0 * c3() + 60.0 * c5();
+            double Y_b = -0.5 * (7.0 * c3() + 4.0 / 3.0 * c4() + 76.0 * c5() + 64.0 / 3.0 * c6());
+            double Y_0 = -0.5 * (c3() + 4.0 / 3.0 * c4() + 16.0 * c5() + 64 / 3.0 * c6());
+            double Y = 2.0 / 9.0 * (6.0 * c3() + 32.0 * c5() + 32.0 / 3.0 * c6());
+
+            // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
+            return Y_c * CharmLoops::h(mu, s, m_c)
+                + Y_b * CharmLoops::h(mu, s, m_b_PS())
+                + Y_0 * CharmLoops::h(mu, s)
+                + Y;
+        }
+
+        /* Form factors */
+        // cf. [BF2001], Eq. (22)
+        double xi_pseudo(const double & s) const
+        {
+            return form_factors->f_p(s);
+        }
+
+        // cf. [BFS2001], Eq. (48)
+        double phi_K(const double & u, const double & a_1, const double & a_2) const
+        {
+            double xi = 2.0 * u - 1.0;
+
+            return 6.0 * u * (1 - u) * (1.0 + a_1 * 3.0 * xi + a_2 * (7.5 * xi * xi - 1.5));
+        }
+
+        // cf. [BFS2001], Eq. (28), p. 8
+        complex<double> t_par(const double & s, const double & u, const double & m_q) const
+        {
+            double ubar = 1.0 - u;
+            double E = energy(s);
+            double x = ubar * m_B * m_B + u * s;
+
+            complex<double> result = (2.0 * m_B / ubar / E) * memoise(HardScattering::I1, s, u, m_q, m_B());
+            if (m_q > 0.0)
+                result = result + (x / ubar / ubar / E / E) * (CharmLoops::B0(x, m_q) - CharmLoops::B0(s, m_q));
+
+            return result;
+        }
+
+        // cf. [BFS2001], Eq. (36), p. 9
+        double L(const double & s) const
+        {
+            double m_b = m_b_PS();
+            double m_b2 = m_b * m_b;
+
+            return -1.0 * (m_b2 - s) / s * std::log(1.0 - s / m_b2);
+        }
+
+        // cf. [BFS2001], Eq. (54), p. 15
+        complex<double> lambda_B_m_inv(const double & s) const
+        {
+            if (0.0 == s)
+                return complex<double>(0.0, 0.0);
+
+            double omega_0 = lambda_B_p;
+            double x = s / m_B / omega_0;
+            double ei = gsl_sf_expint_Ei(x);
+
+            complex<double> result = complex<double>(-ei, M_PI) * (std::exp(-x) / omega_0);
+
+            return result;
+        }
+
+        // cf. [BFS2001], Eqs. (14), (15), p. 5, in comparison with \delta_{2,3} = 1
+        complex<double> C0_par(const double & s) const
+        {
+            return -1.0 * (c7eff() - c7prime() + m_B / (2.0 * m_b_PS()) * Y0(s));
+        }
+
+        // cf. [BFS2001], Eqs. (38), p. 9
+        complex<double> C1nf_par(const double & s) const
+        {
+            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
+            double m_b = m_b_PS();
+            // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
+            double mu_pole = mu * model->m_b_pole() / m_b;
+
+            // cf. [BFS2001], Eq. (38), p. 9
+            // [Christoph] Use c8 instead of c8eff.
+            complex<double> C_par_nf = (+1.0 / QCD::casimir_f) * (
+                    (c2 - c1 / 6.0) * memoise(CharmLoops::F27_massive, mu_pole, s, m_b, m_c()) + c8eff() * CharmLoops::F87_massless(mu_pole, s, m_b)
+                    + (m_B / (2.0 * m_b)) * (
+                        c1() * memoise(CharmLoops::F19_massive, mu_pole, s, m_b, m_c())
+                        + c2() * memoise(CharmLoops::F29_massive, mu_pole, s, m_b, m_c())
+                        + c8eff() * CharmLoops::F89_massless(s, m_b)));
+
+            return C_par_nf;
+        }
+
+        // cf. [BHP2007], Eq. (B.2)
+        complex<double> C0_pseudo(const double & s) const
+        {
+            return -C0_par(s);
+        }
+
+        // cf. [BHP2007], Eq. (B.2)
+        complex<double> C1nf_pseudo(const double & s) const
+        {
+            return -C1nf_par(s);
+        }
+
+        // cf. [BHP2007], Eq. (B.2)
+        complex<double> C1f_pseudo(const double & s) const
+        {
+            double m_b = m_b_PS();
+
+            // the correct sign in front of C_7^eff is plus, as one can see by
+            // comparison with [BF2001], Eq. (63)
+            return c7() * (8.0 * log(m_b / mu_f()) + 2.0 * L(s) - 4.0 + 4.0 * mu_f() / m_b);
+        }
+
+        // cf. [BFS2001], Eq. (17), p. 6
+        complex<double> T0_par_p(const double & ) const
+        {
+            return 0.0;
+        }
+
+        // cf. [BFS2001], Eq. (18), p. 6 with \omega integrated out.
+        complex<double> T0_par_m(const double & ) const
+        {
+            return -e_q * 4.0 * m_B / m_b_PS() * (c3 + 4.0/3.0 * c4 + 16.0 * c5 + 64.0/3.0 * c6);
+        }
+
+        // cf. [BFS2001], Eq. (25), p. 7
+        complex<double> T1nf_par_p(const double & s, const double & u) const
+        {
+            static const double e_d = (-1.0/3.0);
+            static const double e_u = (+2.0/3.0);
+
+            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
+            double m_b = m_b_PS();
+
+            // cf. [BFS2001], Eq. (25)
+            complex<double> Tnf_par_p = m_B / m_b * (
+                    e_u * (-c1 / 6.0 + c2 + 6.0 * c6) * t_par(s, u, m_c)
+                    + e_d * (c3 - c1 / 6.0 + 16.0 * c5 + 10.0/3.0 * c6) * t_par(s, u, m_b)
+                    + e_d * (c3 - c4 / 6.0 + 16.0 * c5 - 8.0/3.0 * c6) * t_par(s, u, 0.0));
+
+            return Tnf_par_p;
+        }
+
+        // cf. [BFS2001], Eq. (26), pp. 7-8 with \omega integrated out.
+        complex<double> T1nf_par_m(const double & s, const double & u) const
+        {
+            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
+            double m_b = m_b_PS();
+            // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
+            double mu_pole = mu * model->m_b_pole() / m_b;
+
+            double s_hat = s / m_B / m_B;
+            double ubar = 1.0 - u;
+            double x = ubar * m_B * m_B + u * s;
+
+            // [Christoph] Use c8 instead of c8eff.
+            return e_q * (8.0 / (ubar + u * s_hat) * c8()
+                    + 6.0 * m_B / m_b * (
+                        (-c1 / 6.0 + c2 + c4 + 10 * c6) * CharmLoops::h(mu_pole, x, m_c)
+                        + (c3 + 5.0/6.0 * c4 + 16.0 * c5 + 22.0/3.0 * c6) * CharmLoops::h(mu_pole, x, m_b)
+                        + (c3 + 17.0/6.0 * c4 + 16.0 * c5 + 82.0/3.0 * c6) * CharmLoops::h(mu_pole, x)
+                        -8.0 / 27.0 * (-7.5 * c4 + 12.0 * c5 - 32.0 * c6)));
+        }
+
+        // cf. [BHP2007], Eq. (B.2)
+        complex<double> T0_pseudo_p(const double & s) const
+        {
+            return -T0_par_p(s);
+        }
+
+        // cf. [BHP2007], Eq. (B.2)
+        complex<double> T0_pseudo_m(const double & s) const
+        {
+            return -T0_par_m(s);
+        }
+
+        // cf. [BHP2007], Eq. (B.2)
+        complex<double> T1f_pseudo_p(const double & s, const double & u) const
+        {
+            return -c7() * (4.0 * m_B / (energy(s) * (1 - u)));
+        }
+
+        // cf. [BHP2007], Eq. (B.2)
+        complex<double> T1f_pseudo_m(const double &, const double &) const
+        {
+            return 0.0;
+        }
+
+        // cf. [BHP2007], Eq. (B.2)
+        complex<double> T1nf_pseudo_p(const double & s, const double & u) const
+        {
+            return -T1nf_par_p(s, u);
+        }
+
+        // cf. [BHP2007], Eq. (B.2)
+        complex<double> T1nf_pseudo_m(const double & s, const double & u) const
+        {
+            return -T1nf_par_m(s, u);
+        }
+
+        // cf. [BHP2007], Eq. (B.1), p. 25
+        complex<double> T_pseudo_sum(const double & s, const double & u) const
+        {
+            double a = model->alpha_s(sqrt(mu * 0.5)) * QCD::casimir_f / 4.0 / M_PI;
+
+            complex<double> result = 1 / lambda_B_p()  * (T0_pseudo_p(s) + a * (T1f_pseudo_p(s, u) + T1nf_pseudo_p(s, u))) +
+                                     lambda_B_m_inv(s) * (T0_pseudo_m(s) + a * (T1f_pseudo_m(s, u) + T1nf_pseudo_m(s, u)));
+
+            return phi_K(u, a_1, a_2) * result;
+        }
+
+        // cf. [BHP2007], Eq. (B.1), p. 25
+        complex<double> calT_pseudo(const double & s) const
+        {
+            //std::complex<double> result = xi_pseudo(s) * (C0_pseudo(s));
+            std::complex<double> result = xi_pseudo(s) * (C0_pseudo(s) + model->alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * (C1f_pseudo(s) + C1nf_pseudo(s)));
+
+            // integration of omega is included in T_pseudo_sum as lambda_B_*_inv
+            result += power_of<2>(M_PI) / 3.0 * (f_B * f_K) / m_B *
+                integrate(std::function<complex<double> (const double &)>(
+                               std::bind(&Implementation<BToKDilepton<LargeRecoil>>::T_pseudo_sum, this, s, std::placeholders::_1)),
+                        32, 0.001, 0.999);
+
+            return result;
+        }
+
+        // cf. [BHP2007], Eq. (3.2), p. 3
+        std::complex<double> F_A(const double &) const
+        {
+            return c10();
+        }
+
+        // cf. [BHP2007], Eq. (3.2), p. 4
+        std::complex<double> F_P(const double & s) const
+        {
+            return m_l * c10() *
+                    ((m_B() * m_B() - m_K() * m_K()) / s * (form_factors->f_0(s) / form_factors->f_p(s) - 1.0) - 1.0);
+        }
+
+        // cf. [BHP2007], Eq. (3.2), p. 4
+        std::complex<double> F_V(const double & s) const
+        {
+            double m_b = m_b_PS();
+            return c9() + 2.0 * m_b / m_B() * calT_pseudo(s) / xi_pseudo(s);
+        }
+
+        double beta_l(const double & s) const
+        {
+            return std::sqrt(1.0 - 4.0 * m_l * m_l / s);
+        }
+
+        // cf. [BHP2007], Eqs. (4.2), (4.4), (4.5), p. 5
+        double N(const double & s) const
+        {
+            static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
+            static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
+
+            double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
+
+            return power_of<2>(g_fermi * alpha_e * lambda_t) * std::sqrt(lambda(m_B * m_B, m_K * m_K, s)) * beta_l(s) * xi_pseudo(s) * xi_pseudo(s) /
+                    (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
+        }
+
+        // cf. [BHP2007], Eq. (4.2)
+        double a_l(const double & s) const
+        {
+            double result = s * std::norm(F_P(s));
+            result += 0.25 * lambda(m_B * m_B, m_K * m_K, s) * (std::norm(F_A(s)) + std::norm(F_V(s)));
+            result += 2.0 * m_l * (m_B() * m_B() - m_K() * m_K() + s) * std::real(F_P(s) * std::conj(F_A(s)));
+            result += 4.0 * m_l * m_l * m_B() * m_B() * std::norm(F_A(s));
+
+            return N(s) * result;
+        }
+
+        // cf. [BHP2007], Eq. (4.4)
+        double c_l(const double & s) const
+        {
+            double result =  N(s) * -0.25 * lambda(m_B * m_B, m_K * m_K, s) * beta_l(s) * beta_l(s) * (std::norm(F_A(s)) + std::norm(F_V(s)));
+            return result;
+        }
+
+        // cf. [BHP2007], Eq. (4.1)
+        double unnormalized_decay_width(const double & s) const
+        {
+            return 2.0 * (a_l(s) + c_l(s) / 3.0);
+        }
+    };
+
+    BToKDilepton<LargeRecoil>::BToKDilepton(const Parameters & parameters, const Options & options) :
+        PrivateImplementationPattern<BToKDilepton<LargeRecoil>>(new Implementation<BToKDilepton<LargeRecoil>>(parameters, options))
+    {
+    }
+
+    BToKDilepton<LargeRecoil>::~BToKDilepton()
+    {
+    }
+
+
+    double
+    BToKDilepton<LargeRecoil>::differential_branching_ratio(const double & s) const
+    {
+        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
+        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
+
+        return _imp->unnormalized_decay_width(s) / Gamma;
+    }
+
+    double
+    BToKDilepton<LargeRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> f = std::bind(std::mem_fn(&BToKDilepton<LargeRecoil>::differential_branching_ratio),
+                this, std::placeholders::_1);
+
+        return integrate(f, 64, s_min, s_max);
+    }
+
+    double
+    BToKDilepton<LargeRecoil>::a_l(const double & s) const
+    {
+        return _imp->a_l(s);
+    }
+
+    double
+    BToKDilepton<LargeRecoil>::c_l(const double & s) const
+    {
+        return _imp->c_l(s);
     }
 }
