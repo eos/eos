@@ -208,6 +208,13 @@ namespace eos
             Parameter::Template{"formfactors::ft_uncertainty",                   +0.85,       +1.0,        +1.15      },
             // B LCDA parameters
             Parameter::Template{"lambda_B_p",                                    +0.370,      +0.485,      +0.600     }, // GeV, cf. [BHvD2010], Table I
+            // B->K LCDA Parameter
+            Parameter::Template{"B->K::a_1@1GeV",                                +0.03,       +0.06,       +0.09      }, // cf. [BBL2006], Table 3
+            Parameter::Template{"B->K::a_2@1GeV",                                +0.10,       +0.25,       +0.4       }, // cf. [BBL2006], Table 3
+            Parameter::Template{"B->K::a_4@1GeV",                                -0.115,      -0.015,      +0.085     }, // cf. [BZ2004v3], Eq. (24)
+            Parameter::Template{"B->K::a_1@2.2GeV",                              +0.024,      +0.048,      +0.071     }, // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25
+            Parameter::Template{"B->K::a_2@2.2GeV",                              +0.070,      +0.174,      +0.278     }, // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25
+            Parameter::Template{"B->K::a_4@2.2GeV",                              -0.0679,     -0.0089,     +0.0502    }, // cf. [BZ2004v3], Eq. (24) and cf. [BHP2007] App. A, pp. 24-25
             // B->K^*, K^* LCDA parameters
             Parameter::Template{"B->K^*::a_1_par",                               +0.03,       +0.1,        +0.17      },
             Parameter::Template{"B->K^*::a_2_par",                               +0.0,        +0.1,        +0.2       },
