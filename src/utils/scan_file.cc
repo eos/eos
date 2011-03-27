@@ -841,6 +841,12 @@ namespace
     {
     }
 
+    const std::vector<double> &
+    ScanFile::Record::data() const
+    {
+        return _imp->buffer;
+    }
+
     ScanFile::Record &
     ScanFile::Record::operator++ ()
     {

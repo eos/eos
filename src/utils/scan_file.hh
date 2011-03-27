@@ -309,6 +309,9 @@ namespace eos
 
             ///@name Data Access
             ///@{
+            /// Retrieve the underlying buffer.
+            const std::vector<double> & data() const;
+
             /// Advance the scan record by one within the parent ScanFile::DataSet.
             Record & operator++ ();
 
