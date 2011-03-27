@@ -774,7 +774,7 @@ namespace
 
         unsigned index;
 
-        double * buffer;
+        std::vector<double> buffer;
 
         hid_t set_id;
 
@@ -787,6 +787,7 @@ namespace
             fields(data_set_imp->fields),
             records(data_set_imp->records),
             index(index),
+            buffer(fields, 0.0),
             set_id(data_set_imp->set_id),
             space_id_memory(H5I_INVALID_HID),
             space_id_file_reading(H5Scopy(data_set_imp->space_id_file))
@@ -799,15 +800,11 @@ namespace
             if (H5I_INVALID_HID == space_id_memory)
                 throw ScanFileHDF5Error("H5Screate_simple", space_id_memory);
 
-            buffer = new double[fields];
-
             read();
         }
 
         ~Implementation()
         {
-            delete[] buffer;
-
             herr_t ret = H5Sclose(space_id_memory);
             if (ret < 0)
                 throw ScanFileHDF5Error("H5Sclose", ret);
@@ -829,7 +826,7 @@ namespace
             if (ret < 0)
                 throw ScanFileHDF5Error("H5Sselect_hyperslab", ret);
 
-            ret = H5Dread(set_id, H5T_IEEE_F64LE, space_id_memory, space_id_file_reading, H5P_DEFAULT, buffer);
+            ret = H5Dread(set_id, H5T_IEEE_F64LE, space_id_memory, space_id_file_reading, H5P_DEFAULT, &buffer[0]);
             if (ret < 0)
                 throw ScanFileHDF5Error("H5Dread", ret);
         }
