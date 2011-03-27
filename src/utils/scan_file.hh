@@ -299,6 +299,7 @@ namespace eos
 
         public:
             friend class ScanFile;
+            friend ScanFile::WriteBuffer & operator<< (ScanFile::WriteBuffer &, const ScanFile::Record &);
 
             ///@name Basic Functions
             ///@{
@@ -329,6 +330,7 @@ namespace eos
         public:
             friend ScanFile::DataSet & operator<< (ScanFile::DataSet & lhs, const ScanFile::WriteBuffer & rhs);
             friend ScanFile::WriteBuffer & operator<< (ScanFile::WriteBuffer &, const std::vector<double> &);
+            friend ScanFile::WriteBuffer & operator<< (ScanFile::WriteBuffer &, const ScanFile::Record &);
 
             ///@name Basic Functions
             ///@{
@@ -365,6 +367,14 @@ namespace eos
      * @param rhs The record which shall be appended.
      */
     ScanFile::WriteBuffer & operator<< (ScanFile::WriteBuffer & lhs, const std::vector<double> & rhs);
+
+    /*!
+     * Append a ScanFile::Record to a ScanFile::WriteBuffer.
+     *
+     * @param lhs The ScanFile::WriteBuffer to which shall be written.
+     * @param rhs The Record object which shall be appended.
+     */
+    ScanFile::WriteBuffer & operator<< (ScanFile::WriteBuffer & lhs, const ScanFile::Record & rhs);
 }
 
 #endif

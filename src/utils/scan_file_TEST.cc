@@ -90,6 +90,20 @@ class ScanFileTest :
 
                     test_set << test_buffer;
                 }
+
+                // Set 'result #4'
+                {
+                    ScanFile::DataSet test_set = test_file.add("result #4", 3);
+                    ScanFile::WriteBuffer test_buffer(3);
+
+                    ScanFile::Record r = test_file["result #1"][0];
+                    for (auto i = 0 ; i < 1004 ; ++i, ++r)
+                    {
+                        test_buffer << r;
+                    }
+
+                    test_set << test_buffer;
+                }
             }
 
             // Open file
@@ -103,6 +117,7 @@ class ScanFileTest :
                     std::tuple<std::string, unsigned, unsigned>(std::string("result #1"), 3, 1004),
                     std::tuple<std::string, unsigned, unsigned>(std::string("result #2"), 7, 1),
                     std::tuple<std::string, unsigned, unsigned>(std::string("result #3"), 5, 1024),
+                    std::tuple<std::string, unsigned, unsigned>(std::string("result #4"), 3, 1004),
                 };
 
                 auto r = references.cbegin();
@@ -173,6 +188,28 @@ class ScanFileTest :
                     TEST_CHECK_EQUAL(7.0, test_record[2]);
                     TEST_CHECK_EQUAL(8.0, test_record[3]);
                     TEST_CHECK_EQUAL(9.0, test_record[4]);
+                }
+
+                // "result #4"
+                {
+                    ScanFile::DataSet test_set = test_file["result #1"];
+
+                    ScanFile::Record r = test_set[0];
+                    TEST_CHECK_EQUAL(3.0, r[0]);
+                    TEST_CHECK_EQUAL(2.0, r[1]);
+                    TEST_CHECK_EQUAL(1.0, r[2]);
+                    ++r;
+
+                    for (auto i = 0 ; i < 1002 ; ++i, ++r)
+                    {
+                        TEST_CHECK_EQUAL(4.0, r[0]);
+                        TEST_CHECK_EQUAL(5.0, r[1]);
+                        TEST_CHECK_EQUAL(6.0, r[2]);
+                    }
+
+                    TEST_CHECK_EQUAL(7.0, r[0]);
+                    TEST_CHECK_EQUAL(8.0, r[1]);
+                    TEST_CHECK_EQUAL(9.0, r[2]);
                 }
             }
         }

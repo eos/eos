@@ -855,4 +855,19 @@ namespace
     {
         return _imp->buffer[index];
     }
+
+    ScanFile::WriteBuffer &
+    operator<< (ScanFile::WriteBuffer & lhs, const ScanFile::Record & rhs)
+    {
+        if (Implementation<ScanFile::WriteBuffer>::chunk_size == lhs._imp->records)
+            throw InternalError("Extending WriteBuffer capacity is not yet implemented");
+
+        if (rhs._imp->fields != lhs._imp->fields)
+            throw InternalError("Trying to write a ScanFile::Record of width '" + stringify(rhs._imp->fields) + "' to a ScanFile::WriteBuffer of width '" + stringify(lhs._imp->fields) + "'");
+
+        lhs._imp->buffer.insert(lhs._imp->buffer.end(), rhs._imp->buffer.cbegin(), rhs._imp->buffer.cend());
+        ++lhs._imp->records;
+
+        return lhs;
+    }
 }
