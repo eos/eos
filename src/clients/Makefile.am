@@ -7,6 +7,7 @@ bin_PROGRAMS = \
 	eos-evaluate \
 	eos-inspect \
 	eos-list-parameters \
+	eos-merge \
 	eos-marginalise \
 	eos-print-polynomial \
 	eos-scan-polynomial \
@@ -32,6 +33,10 @@ eos_list_parameters_LDADD = $(EOS_CLIENTS_LIBS)
 eos_marginalise_SOURCES = \
 	eos-marginalise.cc
 eos_marginalise_LDADD = $(EOS_CLIENTS_LIBS)
+
+eos_merge_SOURCES = \
+	eos-merge.cc
+eos_merge_LDADD = $(EOS_CLIENTS_LIBS)
 
 eos_print_polynomial_SOURCES = \
 	eos-print-polynomial.cc
