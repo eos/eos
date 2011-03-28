@@ -98,7 +98,7 @@ main(int argc, char * argv[])
                     std::cout << "#   Dataset '" + d->name() + "': (" << d->records() << ", " << d->fields() << ')' << std::endl;
                     for (auto f = d->begin_fields(), f_end = d->end_fields() ; f != f_end ; ++f)
                     {
-                        std::cout << "#     Field '" << *f << "'" << std::endl;
+                        std::cout << "#     Field '" << f->name << "'" << std::endl;
                     }
 
                     std::cout << std::scientific << std::setprecision(9);

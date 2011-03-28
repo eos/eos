@@ -123,6 +123,7 @@ namespace eos
 
         public:
             class DataSet;
+            class FieldInfo;
             class Record;
             class WriteBuffer;
 
@@ -217,10 +218,10 @@ namespace eos
             /// Number of rows in data set
             unsigned records() const;
 
-            /// Iterate over fields in data set.
+            /// Iterate over field info in data set.
             ///@{
             struct FieldIteratorTag;
-            typedef WrappedForwardIterator<FieldIteratorTag, std::string> FieldIterator;
+            typedef WrappedForwardIterator<FieldIteratorTag, ScanFile::FieldInfo> FieldIterator;
 
             FieldIterator begin_fields();
             FieldIterator end_fields();
@@ -243,6 +244,32 @@ namespace eos
              */
             Record operator[] (const unsigned & index);
             ///@}
+    };
+
+    /*!
+     * Holds information on one of the fields in a Scanfile::DataSet.
+     */
+    struct ScanFile::FieldInfo
+    {
+        ///@name Basic Functions
+        ///@{
+        FieldInfo(const std::string & name, const double & min, const double & max, bool nuisance = false);
+        ///@}
+
+        ///@name Data
+        ///@{
+        /// Name of the field.
+        std::string name;
+
+        /// Minimal value in this field.
+        double min;
+
+        /// Maximal value in this field.
+        double max;
+
+        /// Whether this field contains a nuisance parameter.
+        bool nuisance;
+        ///@}
     };
 
     /*!

@@ -24,6 +24,7 @@
 #include <src/utils/wrapped_forward_iterator-impl.hh>
 
 #include <algorithm>
+#include <limits>
 
 #include <hdf5.h>
 #include <hdf5_hl.h>
@@ -341,11 +342,24 @@ namespace eos
         return lhs;
     }
 
-    template class WrappedForwardIterator<ScanFile::DataSet::FieldIteratorTag, std::string>;
+    /* ScanFile::FieldInfo */
+    ScanFile::FieldInfo::FieldInfo(const std::string & name, const double & min, const double & max, bool nuisance) :
+        name(name),
+        min(min),
+        max(max),
+        nuisance(nuisance)
+    {
+    }
+
+    /* ScanFile::DataSet */
+
+    template class WrappedForwardIterator<ScanFile::DataSet::FieldIteratorTag, ScanFile::FieldInfo>;
 
     template <>
     struct Implementation<ScanFile::DataSet>
     {
+        static const unsigned chunk_size;
+
         Implementation<ScanFile> * file_imp;
 
         std::string name;
@@ -357,8 +371,6 @@ namespace eos
         unsigned records;
 
         unsigned capacity;
-
-        static const unsigned chunk_size = 1024;
 
         hid_t group_id_data;
 
@@ -372,7 +384,7 @@ namespace eos
 
         hid_t space_id_file_writing;
 
-        std::vector<std::string> field_names;
+        std::vector<ScanFile::FieldInfo> field_infos;
 
         bool truncate_on_destroy;
 
@@ -389,7 +401,7 @@ namespace eos
             space_id_memory(H5I_INVALID_HID),
             space_id_file(H5I_INVALID_HID),
             space_id_file_writing(H5I_INVALID_HID),
-            field_names(fields, ""),
+            field_infos(fields, ScanFile::FieldInfo("", 0.0, 0.0, false)),
             truncate_on_destroy(true)
         {
             // create space id for in-memory representation
@@ -483,29 +495,54 @@ namespace eos
                     throw ScanFileHDF5Error("H5Screate_simple", space_id_memory);
             }
 
-            // read field names from attributes
+            // read field infos from attributes
             for (unsigned i = 0 ; i < fields ; ++i)
             {
-                std::string attr_name = "FIELD_" + stringify(i) + "_NAME";
-                hsize_t attr_rank;
-                H5T_class_t attr_class;
-                size_t attr_size;
+                // name
+                std::string name_attr_name = "FIELD_" + stringify(i) + "_NAME";
+                hsize_t name_attr_rank;
+                H5T_class_t name_attr_class;
+                size_t name_attr_size;
 
                 // how large is the attribute's value?
-                herr_t ret = H5LTget_attribute_info(group_id_data, name.c_str(), attr_name.c_str(), &attr_rank, &attr_class, &attr_size);
+                herr_t ret = H5LTget_attribute_info(group_id_data, name.c_str(), name_attr_name.c_str(), &name_attr_rank, &name_attr_class, &name_attr_size);
                 if (ret < 0)
                     throw ScanFileHDF5Error("H5LTget_attribute_info", ret);
 
                 // allocate a suitable buffer
                 // fuck the HDF5 Lite API!
-                std::vector<char> attr_data(attr_size + 1, 0);
+                std::vector<char> name_attr_data(name_attr_size + 1, '\0');
+                std::string name_attr;
 
-                // get the attribute
-                ret = H5LTget_attribute_string(group_id_data, name.c_str(), attr_name.c_str(), &attr_data[0]);
+                // get the name
+                ret = H5LTget_attribute_string(group_id_data, name.c_str(), name_attr_name.c_str(), &name_attr_data[0]);
                 if (ret < 0)
-                    field_names.push_back("(UNLABELED)");
+                    name_attr = "(UNLABELED)";
                 else
-                    field_names.push_back(std::string(&attr_data[0]));
+                    name_attr = std::string(&name_attr_data[0]);
+
+                // min
+                std::string min_attr_name = "FIELD_" + stringify(i) + "_MIN";
+                double min_attr;
+                ret = H5LTget_attribute_double(group_id_data, name.c_str(), min_attr_name.c_str(), &min_attr);
+                if (ret < 0)
+                    min_attr = std::numeric_limits<double>::min();
+
+                // max
+                std::string max_attr_name = "FIELD_" + stringify(i) + "_MAX";
+                double max_attr;
+                ret = H5LTget_attribute_double(group_id_data, name.c_str(), max_attr_name.c_str(), &max_attr);
+                if (ret < 0)
+                    max_attr = std::numeric_limits<double>::max();
+
+                // nuisance
+                std::string nuisance_attr_name = "FIELD_" + stringify(i) + "_NUISANCE";
+                unsigned short nuisance_attr;
+                ret = H5LTget_attribute_ushort(group_id_data, name.c_str(), nuisance_attr_name.c_str(), &nuisance_attr);
+                if (ret < 0)
+                    nuisance_attr = false;
+
+                field_infos.push_back(ScanFile::FieldInfo(name_attr, min_attr, max_attr, nuisance_attr));
             }
         }
 
@@ -525,10 +562,27 @@ namespace eos
             if (! file_imp->read_only)
             {
                 unsigned i = 0;
-                for (auto f = field_names.cbegin(), f_end = field_names.cend() ; f != f_end ; ++f, ++i)
+                for (auto f = field_infos.cbegin(), f_end = field_infos.cend() ; f != f_end ; ++f, ++i)
                 {
-                    std::string attr_name = "FIELD_" + stringify(i) + "_NAME";
-                    herr_t ret = H5LTset_attribute_string(group_id_data, name.c_str(), attr_name.c_str(), f->c_str());
+                    std::string name_attr_name = "FIELD_" + stringify(i) + "_NAME",
+                        max_attr_name = "FIELD_" + stringify(i) + "_MAX",
+                        min_attr_name = "FIELD_" + stringify(i) + "_MIN",
+                        nuisance_attr_name = "FIELD_" + stringify(i) + "_NUISANCE";
+
+                    herr_t ret = H5LTset_attribute_string(group_id_data, name.c_str(), name_attr_name.c_str(), f->name.c_str());
+                    if (ret < 0)
+                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
+
+                    ret = H5LTset_attribute_double(group_id_data, name.c_str(), max_attr_name.c_str(), &f->max, 1);
+                    if (ret < 0)
+                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
+
+                    ret = H5LTset_attribute_double(group_id_data, name.c_str(), min_attr_name.c_str(), &f->min, 1);
+                    if (ret < 0)
+                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
+
+                    unsigned short nuisance = f->nuisance;
+                    ret = H5LTset_attribute_ushort(group_id_data, name.c_str(), nuisance_attr_name.c_str(), &nuisance, 1);
                     if (ret < 0)
                         throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
                 }
@@ -605,6 +659,8 @@ namespace eos
         }
     };
 
+    const unsigned Implementation<ScanFile::DataSet>::chunk_size = 1024;
+
     ScanFile::DataSet::DataSet(Implementation<ScanFile> * imp, const std::string & name) :
         PrivateImplementationPattern<ScanFile::DataSet>(new Implementation<ScanFile::DataSet>(imp, name))
     {
@@ -640,24 +696,43 @@ namespace eos
     ScanFile::DataSet::FieldIterator
     ScanFile::DataSet::begin_fields()
     {
-        return FieldIterator(_imp->field_names.begin());
+        return FieldIterator(_imp->field_infos.begin());
     }
 
     ScanFile::DataSet::FieldIterator
     ScanFile::DataSet::end_fields()
     {
-        return FieldIterator(_imp->field_names.end());
+        return FieldIterator(_imp->field_infos.end());
     }
+
+// TODO: Replace by lambda function!
+namespace
+{
+    struct CompareFieldInfoByName
+    {
+        std::string _name;
+
+        CompareFieldInfoByName(const std::string & name) :
+            _name(name)
+        {
+        }
+
+        bool operator() (const eos::ScanFile::FieldInfo & x)
+        {
+            return x.name == _name;
+        }
+    };
+}
 
     unsigned
     ScanFile::DataSet::find_field_index(const std::string & name) const
     {
-        auto f = std::find(_imp->field_names.cbegin(), _imp->field_names.cend(), name);
+        auto f = std::find_if(_imp->field_infos.cbegin(), _imp->field_infos.cend(), CompareFieldInfoByName(name));
 
-        if (_imp->field_names.cend() == f)
+        if (_imp->field_infos.cend() == f)
             throw ScanFileError("Dataset '" + _imp->name + "' does not have a field named '" + name + "'");
 
-        return std::distance(_imp->field_names.cbegin(), f);
+        return std::distance(_imp->field_infos.cbegin(), f);
     }
 
     ScanFile::Record

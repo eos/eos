@@ -26,6 +26,8 @@
 #include <string>
 #include <tuple>
 
+#include <iostream>
+
 using namespace test;
 using namespace eos;
 
@@ -54,7 +56,7 @@ class ScanFileTest :
                     unsigned idx = 1;
                     for (auto f = test_set.begin_fields(), f_end = test_set.end_fields() ; f != f_end ; ++f, ++idx)
                     {
-                        *f = "result #1, field #" + stringify(idx);
+                        *f = ScanFile::FieldInfo("result #1, field #" + stringify(idx), 0.0, idx * 1.0, false);
                     }
 
                     test_set << std::vector<double>{ 3.0, 2.0, 1.0 };
@@ -123,7 +125,11 @@ class ScanFileTest :
                     unsigned idx = 1;
                     for (auto f = test_set.begin_fields(), f_end = test_set.end_fields() ; f != f_end ; ++f, ++idx)
                     {
-                        TEST_CHECK_EQUAL("result #1, field #" + stringify(idx), *f);
+                        std::cout << "f->name = " << f->name << std::endl;
+                        TEST_CHECK_EQUAL("result #1, field #" + stringify(idx), f->name);
+                        TEST_CHECK_EQUAL(0.0, f->min);
+                        TEST_CHECK_EQUAL(1.0 * idx, f->max);
+                        TEST_CHECK_EQUAL(false, f->nuisance);
                     }
                 }
 
