@@ -28,6 +28,9 @@
 
 namespace eos
 {
+    // forward declaration
+    struct HDF5File;
+
     /*!
      * ScanFileError is parent to all exceptions thrown by ScanFile when creating, opening or accessing scan file data.
      */
@@ -192,8 +195,8 @@ namespace eos
         public PrivateImplementationPattern<ScanFile::DataSet>
     {
         private:
-            DataSet(Implementation<ScanFile> * imp, const std::string & name);
-            DataSet(Implementation<ScanFile> * imp, const std::string & name, unsigned fields);
+            DataSet(const std::shared_ptr<HDF5File> & imp, const std::string & name);
+            DataSet(const std::shared_ptr<HDF5File> & imp, const std::string & name, unsigned fields);
 
         public:
             friend class ScanFile;

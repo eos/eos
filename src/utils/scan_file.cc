@@ -41,11 +41,10 @@ namespace eos
     {
     }
 
-    template class WrappedForwardIterator<ScanFile::IteratorTag, ScanFile::DataSet>;
-
-    template <>
-    struct Implementation<ScanFile>
+    struct HDF5File
     {
+        std::string file_name;
+
         const hid_t file_id;
 
         hid_t group_id_metadata;
@@ -56,13 +55,12 @@ namespace eos
 
         std::string eos_version;
 
-        std::vector<ScanFile::DataSet> data_sets;
-
         bool read_only;
 
         // Create a new HDF5 file
-        Implementation(const std::string & filename, const std::string & creator) :
-            file_id(H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT)),
+        HDF5File(const std::string & file_name, const std::string & creator) :
+            file_name(file_name),
+            file_id(H5Fcreate(file_name.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT)),
             group_id_metadata(H5I_INVALID_HID),
             group_id_data(H5I_INVALID_HID),
             creator(creator),
@@ -84,19 +82,10 @@ namespace eos
                 throw ScanFileHDF5Error("H5Gcreate2", group_id_data);
         }
 
-        // Callback function for iteration over data sets
-        static herr_t add_data_set(hid_t /* unused */, const char * name, const H5L_info_t * /* unused */, void * _imp)
-        {
-            Implementation * imp = static_cast<Implementation<ScanFile> *>(_imp);
-
-            imp->data_sets.push_back(ScanFile::DataSet(imp, std::string(name)));
-
-            return 0;
-        }
-
         // Open an existing HDF5 file
-        Implementation(const std::string & filename) :
-            file_id(H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT)),
+        HDF5File(const std::string & file_name) :
+            file_name(file_name),
+            file_id(H5Fopen(file_name.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT)),
             group_id_metadata(H5I_INVALID_HID),
             group_id_data(H5I_INVALID_HID),
             read_only(true)
@@ -114,19 +103,11 @@ namespace eos
             group_id_data = H5Gopen2(file_id, "/data", H5P_DEFAULT);
             if (H5I_INVALID_HID == group_id_data)
                 throw ScanFileHDF5Error("H5Gopen2", group_id_data);
-
-            hsize_t idx = 0;
-            herr_t ret = H5Literate(group_id_data, H5_INDEX_NAME, H5_ITER_INC, &idx, &Implementation<ScanFile>::add_data_set, this);
-            if (0 > ret)
-                throw ScanFileHDF5Error("H5Literate", ret);
         }
 
-        ~Implementation()
+        ~HDF5File()
         {
             herr_t ret;
-
-            // Close all data sets
-            data_sets.clear();
 
             ret = H5Fflush(file_id, H5F_SCOPE_GLOBAL);
             if (0 > ret)
@@ -197,6 +178,51 @@ namespace eos
 
             return result;
         }
+    };
+
+    template class WrappedForwardIterator<ScanFile::IteratorTag, ScanFile::DataSet>;
+
+    template <>
+    struct Implementation<ScanFile>
+    {
+        std::shared_ptr<HDF5File> hdf5_file;
+
+        std::vector<ScanFile::DataSet> data_sets;
+
+        // Create a new HDF5 file
+        Implementation(const std::string & file_name, const std::string & creator) :
+            hdf5_file(new HDF5File(file_name, creator))
+        {
+        }
+
+        // Callback function for iteration over data sets
+        static herr_t add_data_set(hid_t /* unused */, const char * name, const H5L_info_t * /* unused */, void * _imp)
+        {
+            Implementation<ScanFile> * imp = static_cast<Implementation<ScanFile> *>(_imp);
+
+            imp->data_sets.push_back(ScanFile::DataSet(imp->hdf5_file, std::string(name)));
+
+            return 0;
+        }
+
+        // Open an existing HDF5 file
+        Implementation(const std::string & file_name) :
+            hdf5_file(new HDF5File(file_name))
+        {
+            hsize_t idx = 0;
+            herr_t ret = H5Literate(hdf5_file->group_id_data, H5_INDEX_NAME, H5_ITER_INC, &idx, &Implementation<ScanFile>::add_data_set, this);
+            if (0 > ret)
+                throw ScanFileHDF5Error("H5Literate", ret);
+        }
+
+        ~Implementation()
+        {
+            // first close our handles to the data_sets
+            data_sets.clear();
+
+            // then close our handle to the file
+            hdf5_file.reset();
+        }
 
         static bool same_name_as(const std::string & name, const ScanFile::DataSet & data_set)
         {
@@ -235,13 +261,13 @@ namespace eos
     const std::string &
     ScanFile::creator() const
     {
-        return _imp->creator;
+        return _imp->hdf5_file->creator;
     }
 
     const std::string &
     ScanFile::eos_version() const
     {
-        return _imp->eos_version;
+        return _imp->hdf5_file->eos_version;
     }
 
     ScanFile::DataSet
@@ -258,7 +284,7 @@ namespace eos
     ScanFile::DataSet
     ScanFile::add(const std::string & name, unsigned fields)
     {
-        ScanFile::DataSet result = ScanFile::DataSet(_imp.get(), name, fields);
+        ScanFile::DataSet result = ScanFile::DataSet(_imp->hdf5_file, name, fields);
         _imp->data_sets.push_back(result);
 
         return result;
@@ -360,7 +386,7 @@ namespace eos
     {
         static const unsigned chunk_size;
 
-        Implementation<ScanFile> * file_imp;
+        std::shared_ptr<HDF5File> file;
 
         std::string name;
 
@@ -389,14 +415,14 @@ namespace eos
         bool truncate_on_destroy;
 
         // Constructor to create a new data set
-        Implementation(Implementation<ScanFile> * file_imp, const std::string & name, unsigned fields) :
-            file_imp(file_imp),
+        Implementation(const std::shared_ptr<HDF5File> & file, const std::string & name, unsigned fields) :
+            file(file),
             name(name),
             fields(fields),
             current_index(0),
             records(0),
             capacity(chunk_size),
-            group_id_data(file_imp->group_id_data),
+            group_id_data(file->group_id_data),
             set_id(H5I_INVALID_HID),
             space_id_memory(H5I_INVALID_HID),
             space_id_file(H5I_INVALID_HID),
@@ -443,16 +469,17 @@ namespace eos
                 set_id = H5Dcreate2(group_id_data, name.c_str(), H5T_IEEE_F64LE, space_id_file, H5P_DEFAULT, dcpl_id, H5P_DEFAULT);
                 if (H5I_INVALID_HID == set_id)
                     throw ScanFileHDF5Error("H5Dcreate2", set_id);
+
             }
         }
 
         // Constructor to open an existing data set in append mode
-        Implementation(Implementation<ScanFile> * file_imp, const std::string & name) :
-            file_imp(file_imp),
+        Implementation(const std::shared_ptr<HDF5File> & file, const std::string & name) :
+            file(file),
             name(name),
             fields(0),
             current_index(0),
-            group_id_data(file_imp->group_id_data),
+            group_id_data(file->group_id_data),
             set_id(H5I_INVALID_HID),
             space_id_memory(H5I_INVALID_HID),
             space_id_file(H5I_INVALID_HID),
@@ -549,7 +576,7 @@ namespace eos
         ~Implementation()
         {
             // truncate the data set to its actual size
-            if (truncate_on_destroy && (! file_imp->read_only))
+            if (truncate_on_destroy && (! file->read_only))
             {
                 hsize_t dimensions[2] = { records, fields };
 
@@ -559,7 +586,7 @@ namespace eos
             }
 
             // create attributes for field info
-            if (! file_imp->read_only)
+            if (! file->read_only)
             {
                 unsigned i = 0;
                 for (auto f = field_infos.cbegin(), f_end = field_infos.cend() ; f != f_end ; ++f, ++i)
@@ -598,15 +625,15 @@ namespace eos
 
             ret = H5Sclose(space_id_memory);
             if (ret < 0)
-                throw ScanFileHDF5Error("H5Sclose", ret);
+                throw ScanFileHDF5Error("Implementation<ScanFile::DataSet>: H5Sclose(space_id_memory)", ret);
 
             ret = H5Sclose(space_id_file_writing);
             if (ret < 0)
-                throw ScanFileHDF5Error("H5Sclose", ret);
+                throw ScanFileHDF5Error("Implementation<ScanFile::DataSet>: H5Sclose(space_id_file_writing)", ret);
 
             ret = H5Sclose(space_id_file);
             if (ret < 0)
-                throw ScanFileHDF5Error("H5Sclose", ret);
+                throw ScanFileHDF5Error("Implementation<ScanFile::DataSet>: H5Sclose(space_id_file)", ret);
         }
 
         void append(const std::vector<double> & data)
@@ -661,13 +688,13 @@ namespace eos
 
     const unsigned Implementation<ScanFile::DataSet>::chunk_size = 1024;
 
-    ScanFile::DataSet::DataSet(Implementation<ScanFile> * imp, const std::string & name) :
-        PrivateImplementationPattern<ScanFile::DataSet>(new Implementation<ScanFile::DataSet>(imp, name))
+    ScanFile::DataSet::DataSet(const std::shared_ptr<HDF5File> & file, const std::string & name) :
+        PrivateImplementationPattern<ScanFile::DataSet>(new Implementation<ScanFile::DataSet>(file, name))
     {
     }
 
-    ScanFile::DataSet::DataSet(Implementation<ScanFile> * imp, const std::string & name, unsigned fields) :
-        PrivateImplementationPattern<ScanFile::DataSet>(new Implementation<ScanFile::DataSet>(imp, name, fields))
+    ScanFile::DataSet::DataSet(const std::shared_ptr<HDF5File> & file, const std::string & name, unsigned fields) :
+        PrivateImplementationPattern<ScanFile::DataSet>(new Implementation<ScanFile::DataSet>(file, name, fields))
     {
     }
 
