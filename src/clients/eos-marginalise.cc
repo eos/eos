@@ -200,8 +200,8 @@ main(int argc, char * argv[])
             std::array<double, 3> partials;
             std::array<double, 3> thresholds, upper_bounds, lower_bounds;
             thresholds.fill((min_value + max_value) / 2.0);
-            upper_bounds.fill(max_value / 2.0);
-            lower_bounds.fill(min_value / 2.0);
+            upper_bounds.fill(max_value);
+            lower_bounds.fill(min_value);
 
             for (auto i = 0 ; i < 10 ; ++i)
             {
