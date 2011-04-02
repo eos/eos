@@ -343,9 +343,10 @@ namespace eos
             /*!
              * Constructor.
              *
-             * @param fields Number of fields per record.
+             * @param fields   Number of fields per record.
+             * @param capacity Number of records that can be held before reallocation is needed.
              */
-            WriteBuffer(const unsigned & fields);
+            WriteBuffer(const unsigned & fields, const unsigned & capacity = 1024);
 
             /// Destructor.
             ~WriteBuffer();
@@ -353,16 +354,21 @@ namespace eos
 
             ///@name Access
             ///@{
-            void clear();
-            ///@}
-
-            ///@name Metadata
-            ///@{
             /// Retrieve the maximal number of records that can be stored in the buffer.
             unsigned capacity() const;
 
+            /// Remove all records from the buffer.
+            void clear();
+
             /// Retrieve the number of records currently stored in the buffer.
             unsigned size() const;
+
+            /*!
+             * Increase the buffer's capacity.
+             *
+             * @param capacity The number of records that shall be storable from now on.
+             */
+            void reserve(const unsigned & capacity);
             ///@}
     };
 

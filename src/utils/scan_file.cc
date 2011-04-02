@@ -305,7 +305,9 @@ namespace eos
     template <>
     struct Implementation<ScanFile::WriteBuffer>
     {
-        static const unsigned chunk_size = 1024;
+        static const unsigned chunk_size;
+
+        unsigned capacity;
 
         unsigned records;
 
@@ -313,11 +315,12 @@ namespace eos
 
         std::vector<double> buffer;
 
-        Implementation(const unsigned & fields) :
+        Implementation(const unsigned & fields, const unsigned & capacity) :
+            capacity(capacity),
             records(0),
             fields(fields)
         {
-            buffer.reserve(fields * chunk_size);
+            buffer.reserve(fields * capacity);
         }
 
         void clear()
@@ -325,10 +328,18 @@ namespace eos
             records = 0;
             buffer.clear(); // clear only affects size, not capacity
         }
+
+        void reserve(const unsigned & capacity)
+        {
+            buffer.reserve(fields * capacity);
+            this->capacity = capacity;
+        }
     };
 
-    ScanFile::WriteBuffer::WriteBuffer(const unsigned & fields) :
-        PrivateImplementationPattern<ScanFile::WriteBuffer>(new Implementation<ScanFile::WriteBuffer>(fields))
+    const unsigned Implementation<ScanFile::WriteBuffer>::chunk_size = 1024;
+
+    ScanFile::WriteBuffer::WriteBuffer(const unsigned & fields, const unsigned & capacity) :
+        PrivateImplementationPattern<ScanFile::WriteBuffer>(new Implementation<ScanFile::WriteBuffer>(fields, capacity))
     {
     }
 
@@ -345,7 +356,13 @@ namespace eos
     unsigned
     ScanFile::WriteBuffer::capacity() const
     {
-        return Implementation<ScanFile::WriteBuffer>::chunk_size;
+        return _imp->capacity;
+    }
+
+    void
+    ScanFile::WriteBuffer::reserve(const unsigned & capacity)
+    {
+        _imp->reserve(capacity);
     }
 
     unsigned
@@ -357,11 +374,13 @@ namespace eos
     ScanFile::WriteBuffer &
     operator<< (ScanFile::WriteBuffer & lhs, const std::vector<double> & rhs)
     {
-        if (Implementation<ScanFile::WriteBuffer>::chunk_size == lhs._imp->records)
-            throw InternalError("Extending WriteBuffer capacity is not yet implemented");
+        if (lhs._imp->records == lhs._imp->capacity)
+            lhs._imp->reserve(lhs._imp->capacity + Implementation<ScanFile::WriteBuffer>::chunk_size);
 
         for (auto i = rhs.cbegin(), i_end = rhs.cend() ; i != i_end ; ++i)
+        {
             lhs._imp->buffer.push_back(*i);
+        }
 
         ++lhs._imp->records;
 

@@ -214,3 +214,43 @@ class ScanFileTest :
             }
         }
 } scan_file_test;
+
+class ScanFileWriteBufferTest :
+    public TestCase
+{
+    public:
+        ScanFileWriteBufferTest() :
+            TestCase("scan_file_write_buffer_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // empty buffer
+            {
+                ScanFile::WriteBuffer buffer(4, 0);
+
+                TEST_CHECK_EQUAL(0, buffer.capacity());
+                TEST_CHECK_EQUAL(0, buffer.size());
+            }
+
+            // random capacity
+            {
+                ScanFile::WriteBuffer buffer(3, 478594);
+                TEST_CHECK_EQUAL(478594, buffer.capacity());
+                TEST_CHECK_EQUAL(0,      buffer.size());
+            }
+
+            // writing to empty buffer
+            {
+                ScanFile::WriteBuffer buffer(2, 0);
+                for (unsigned i = 0 ; i < 1300 ; ++i)
+                {
+                    buffer << std::vector<double>{ 9.9, 7.7 };
+                }
+
+                TEST_CHECK_EQUAL(2048, buffer.capacity());
+                TEST_CHECK_EQUAL(1300, buffer.size());
+            }
+        }
+} scan_file_write_buffer_test;
