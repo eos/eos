@@ -140,6 +140,7 @@ main(int argc, char * argv[])
 
         Histogram<2> histogram = Histogram<2>::WithEqualBinning(CommandLine::instance()->start,
                 CommandLine::instance()->end, CommandLine::instance()->count);
+        unsigned long unbinned_values = 0;
 
         for (auto f = CommandLine::instance()->files.cbegin(), f_end = CommandLine::instance()->files.cend() ; f != f_end ; ++f)
         {
@@ -166,7 +167,7 @@ main(int argc, char * argv[])
                         auto b = histogram.find(coords);
                         if (histogram.end() == b)
                         {
-                            std::cerr << "Did not find bin suitable for '(" << coords[0] << ", " << coords[1] << ")'. You might need to adjust the histogram configuration!" << std::endl;
+                            ++unbinned_values;
                             continue;
                         }
 
@@ -179,6 +180,7 @@ main(int argc, char * argv[])
                 std::cout << "#   Error reading " << *f << std::endl;
             }
 
+            std::cout << "# " << unbinned_values << " have been excluded from the histogram" << std::endl;
             auto b = histogram.cbegin(), b_end = histogram.cend();
             double last_y = b->lower[1];
             double min_value = std::numeric_limits<double>::max(), max_value = -std::numeric_limits<double>::max();
