@@ -230,41 +230,132 @@ class BToKstarDileptonLowRecoilPolynomialTest :
 
         virtual void run() const
         {
-            static const std::vector<std::string> names
+            // Test make_polynomial
             {
-                "B->K^*ll::BR@LowRecoil",
-                "B->K^*ll::Abar_FB@LowRecoil",
-            };
-            static const std::vector<std::array<double, 6>> inputs
-            {
-                std::array<double, 6>{{0.0,       0.0,       0.0,       0.0,       0.0,       0.0      }},
-                std::array<double, 6>{{1.0,       0.0,       1.0,       0.0,       1.0,       0.0      }},
-                std::array<double, 6>{{0.7808414, 0.8487257, 0.7735165, 0.5383695, 0.6649164, 0.7235497}},
-                std::array<double, 6>{{0.5860642, 0.9830907, 0.7644369, 0.8330194, 0.4935018, 0.4492084}},
-                std::array<double, 6>{{0.2177456, 0.5062894, 0.6463376, 0.3624364, 0.6770480, 0.0718421}},
-                std::array<double, 6>{{0.0088306, 0.9441413, 0.8721501, 0.2984633, 0.2961408, 0.9145809}},
-                std::array<double, 6>{{0.7967655, 0.2427081, 0.8403112, 0.3351082, 0.6477823, 0.5569495}},
-                std::array<double, 6>{{0.7607454, 0.5025871, 0.5877762, 0.5516025, 0.2930899, 0.4882813}},
-            };
-
-            Parameters parameters = Parameters::Defaults();
-            Kinematics kinematics;
-            kinematics.declare("s_min");
-            kinematics.set("s_min", 14.18);
-            kinematics.declare("s_max");
-            kinematics.set("s_max", 19.21);
-            Options options;
-            options.set("form-factors", "BZ2004");
-
-            for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
-            {
-                ObservablePtr observable = Observable::make(*n, parameters, kinematics, options);
-                WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "c7", "c9", "c10" });
-
-                for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
+                static const std::vector<std::string> names
                 {
-                    run_one(observable, polynomial, *i);
+                    "B->K^*ll::BR@LowRecoil",
+                    "B->K^*ll::Abar_FB@LowRecoil",
+                };
+                static const std::vector<std::array<double, 6>> inputs
+                {
+                    std::array<double, 6>{{0.0,       0.0,       0.0,       0.0,       0.0,       0.0      }},
+                    std::array<double, 6>{{1.0,       0.0,       1.0,       0.0,       1.0,       0.0      }},
+                    std::array<double, 6>{{0.7808414, 0.8487257, 0.7735165, 0.5383695, 0.6649164, 0.7235497}},
+                    std::array<double, 6>{{0.5860642, 0.9830907, 0.7644369, 0.8330194, 0.4935018, 0.4492084}},
+                    std::array<double, 6>{{0.2177456, 0.5062894, 0.6463376, 0.3624364, 0.6770480, 0.0718421}},
+                    std::array<double, 6>{{0.0088306, 0.9441413, 0.8721501, 0.2984633, 0.2961408, 0.9145809}},
+                    std::array<double, 6>{{0.7967655, 0.2427081, 0.8403112, 0.3351082, 0.6477823, 0.5569495}},
+                    std::array<double, 6>{{0.7607454, 0.5025871, 0.5877762, 0.5516025, 0.2930899, 0.4882813}},
+                };
+
+                Parameters parameters = Parameters::Defaults();
+                Kinematics kinematics;
+                kinematics.declare("s_min");
+                kinematics.set("s_min", 14.18);
+                kinematics.declare("s_max");
+                kinematics.set("s_max", 19.21);
+                Options options;
+                options.set("form-factors", "BZ2004");
+
+                for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
+                {
+                    ObservablePtr observable = Observable::make(*n, parameters, kinematics, options);
+                    WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "c7", "c9", "c10" });
+
+                    for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
+                    {
+                        run_one(observable, polynomial, *i);
+                    }
                 }
+            }
+
+            // Test ratios
+            {
+                static const double eps = 1e-8;
+                Kinematics kinematics;
+                kinematics.declare("s_min");
+                kinematics.set("s_min", 14.18);
+                kinematics.declare("s_max");
+                kinematics.set("s_max", 19.21);
+
+                Parameters parameters = Parameters::Defaults();
+                Parameter lambda = parameters["CKM::lambda"];
+                Parameter A = parameters["CKM::A"];
+
+                Options options;
+
+                ObservablePtr numerator = Observable::make("B->K^*ll::Abar_FB@LowRecoil", parameters, kinematics, options);
+                ObservablePtr denominator = Observable::make("B->K^*ll::BR@LowRecoil", parameters, kinematics, options);
+                ObservablePtr observable = Observable::make("B->K^*ll::A_FB@LowRecoil", parameters, kinematics, options);
+
+                TEST_CHECK_NEARLY_EQUAL(numerator->evaluate() / denominator->evaluate(), observable->evaluate(), eps);
+
+                // vary CKM::lambda
+                {
+                    lambda = lambda.max();
+                    TEST_CHECK_NEARLY_EQUAL(numerator->evaluate() / denominator->evaluate(), observable->evaluate(), eps);
+                    lambda = lambda.min();
+                    TEST_CHECK_NEARLY_EQUAL(numerator->evaluate() / denominator->evaluate(), observable->evaluate(), eps);
+                    lambda = lambda.central();
+                }
+
+                // vary CKM::A
+                {
+                    A = A.max();
+                    TEST_CHECK_NEARLY_EQUAL(numerator->evaluate() / denominator->evaluate(), observable->evaluate(), eps);
+                    A = A.min();
+                    TEST_CHECK_NEARLY_EQUAL(numerator->evaluate() / denominator->evaluate(), observable->evaluate(), eps);
+                    A = A.central();
+                }
+
+                std::list<std::string> coefficients{"c7", "c9", "c10"};
+
+                // central ratio
+                {
+                    ObservablePtr ratio = make_polynomial_ratio(
+                            make_polynomial(numerator, coefficients),
+                            make_polynomial(denominator, coefficients),
+                            parameters);
+                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                }
+
+                // lambda ratios
+                {
+                    lambda = lambda.max();
+                    ObservablePtr ratio = make_polynomial_ratio(
+                            make_polynomial(numerator, coefficients),
+                            make_polynomial(denominator, coefficients),
+                            parameters);
+                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                }
+                {
+                    lambda = lambda.min();
+                    ObservablePtr ratio = make_polynomial_ratio(
+                            make_polynomial(numerator, coefficients),
+                            make_polynomial(denominator, coefficients),
+                            parameters);
+                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                }
+
+                // A ratios
+                {
+                    A = A.max();
+                    ObservablePtr ratio = make_polynomial_ratio(
+                            make_polynomial(numerator, coefficients),
+                            make_polynomial(denominator, coefficients),
+                            parameters);
+                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                }
+                {
+                    A = A.min();
+                    ObservablePtr ratio = make_polynomial_ratio(
+                            make_polynomial(numerator, coefficients),
+                            make_polynomial(denominator, coefficients),
+                            parameters);
+                    TEST_CHECK_NEARLY_EQUAL(ratio->evaluate(), observable->evaluate(), eps);
+                }
+
             }
         }
 } b_to_kstar_dilepton_low_recoil_polynomial_test;
