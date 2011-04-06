@@ -108,7 +108,7 @@ namespace test
             break; \
         else \
             throw TestCaseFailedException(__LINE__, __FILE__, \
-                    "One relative error of '" #a "' and '" #b "' is greater than " + stringify(eps) + ". The results are " + \
+                    "One relative error of '" #a "' = '" + stringify(a) + "' and '" #b "' = '" + stringify(b) + "' is greater than " + stringify(eps) + ". The results are " + \
                     stringify(std::abs((a - b) / a)) + " and " + stringify(std::abs((a - b) / b))); \
     } \
     while (false)
