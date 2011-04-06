@@ -34,8 +34,6 @@ namespace eos
             Parameter _lambda;
             Parameter _rhobar;
             Parameter _etabar;
-            // Measurement of V_cb is quite good, so use that directly
-            Parameter _ckm_cb;
 
             /* QCD parameters */
             Parameter _alpha_s_Z;

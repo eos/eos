@@ -57,6 +57,11 @@ class BToKstarDileptonLowRecoilTest :
                 p["Arg{c9}"] = 0.0;
                 p["Abs{c10}"] = +4.173;
                 p["Arg{c10}"] = M_PI;
+                // PDG 2008 CKM parameters
+                p["CKM::A"] = 0.814;
+                p["CKM::lambda"] = 0.2257;
+                p["CKM::rhobar"] = 0.135;
+                p["CKM::etabar"] = 0.349;
 
                 Options oo;
                 oo.set("form-factors", "BZ2004");
@@ -74,7 +79,7 @@ class BToKstarDileptonLowRecoilTest :
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(14.00, 19.21),     -0.5758, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(14.00, 19.21),                        +0.9967, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(14.00, 19.21),                        -0.9727, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(14.00, 19.21),                        -0.9586, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(14.00, 19.21),                        -0.9587, eps);
 
                     double a_fb = d.integrated_unnormalized_forward_backward_asymmetry(14.00, 19.21) / d.integrated_branching_ratio(14.00, 19.21);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(14.00, 19.21), a_fb,    eps);
@@ -100,18 +105,18 @@ class BToKstarDileptonLowRecoilTest :
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
                 {
                     static const double eps = 1e-19; // 1e-7 smaller than results
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  16.00)), -1.005941560e-10, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  16.00)), -3.106224560e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 16.00)), +8.197948310e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 16.00)), -3.106224560e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  16.00)), +7.324485210e-11, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  16.00)), +2.261711490e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 16.00)), -5.969109290e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 16.00)), +2.261711490e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   16.00)), -1.162825983e-10, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   16.00)), -3.590664490e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  16.00)), +9.476482210e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), -3.590664490e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  16.00)), -9.8637482850933726e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  16.00)), -3.0081265468197216e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 16.00)), +8.0390127552012269e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 16.00)), -3.0081265468197358e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  16.00)), +7.1820154665259945e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  16.00)), +2.1902841354109192e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 16.00)), -5.8533847655773209e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 16.00)), +2.1902841354109297e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   16.00)), -1.1402076676275021e-10, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   16.00)), -3.4772673173960855e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  16.00)), +9.2927594244148555e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), -3.4772673173961021e-12, eps);
                 }
             }
 
@@ -125,6 +130,11 @@ class BToKstarDileptonLowRecoilTest :
                 p["Arg{c9}"] = +M_PI / 2.0;
                 p["Abs{c10}"] = 4.2;
                 p["Arg{c10}"] = -M_PI / 2.0;
+                // PDG 2008 CKM parameters
+                p["CKM::A"] = 0.814;
+                p["CKM::lambda"] = 0.2257;
+                p["CKM::rhobar"] = 0.135;
+                p["CKM::etabar"] = 0.349;
 
                 Options oo;
                 oo.set("form-factors", "BZ2004");
@@ -134,18 +144,18 @@ class BToKstarDileptonLowRecoilTest :
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
                 {
                     static const double eps = 1e-19; // 1e-7 smaller than results
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  16.00)), -2.496817743e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  16.00)), -1.017630920e-10, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 16.00)), -2.496817743e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 16.00)), +7.732915218e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  16.00)), +1.817988774e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  16.00)), +7.409598052e-11, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 16.00)), +1.817988774e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 16.00)), -5.630508311e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   16.00)), -2.886215922e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   16.00)), -1.176338390e-10, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  16.00)), -2.886215922e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), +8.938923592e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  16.00)), -2.4477791894335507e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  16.00)), -9.9746478580495644e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 16.00)), -2.4477791894335579e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 16.00)), +7.6202315910276881e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  16.00)), +1.7822827072462959e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  16.00)), +7.2627639229121119e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 16.00)), +1.7822827072463010e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 16.00)), -5.5484608450501202e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   16.00)), -2.8295294240923002e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   16.00)), -1.1530271901625976e-10, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  16.00)), -2.8295294240923083e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), +8.8086660750638169e-12, eps);
                 }
             }
 
@@ -156,6 +166,11 @@ class BToKstarDileptonLowRecoilTest :
                 p["c8"] = -0.181;
                 p["Abs{c9}"] = 0.0;
                 p["Abs{c10}"] = 0.0;
+                // PDG 2008 CKM parameters
+                p["CKM::A"] = 0.814;
+                p["CKM::lambda"] = 0.2257;
+                p["CKM::rhobar"] = 0.135;
+                p["CKM::etabar"] = 0.349;
 
                 Options oo;
                 oo.set("form-factors", "BZ2004");
@@ -165,18 +180,18 @@ class BToKstarDileptonLowRecoilTest :
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
                 {
                     static const double eps = 1e-19; // 1e-7 smaller than results
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  16.00)), -2.4968177e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  16.00)), -3.1062246e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 16.00)), -2.4968177e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 16.00)), -3.1062246e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  16.00)), +1.8179888e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  16.00)), +2.2617115e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 16.00)), +1.8179888e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 16.00)), +2.2617115e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   16.00)), -2.8862159e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   16.00)), -3.5906645e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  16.00)), -2.8862159e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), -3.5906645e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  16.00)), -2.4477791894335507e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  16.00)), -3.0081265468197277e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 16.00)), -2.4477791894335507e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 16.00)), -3.0081265468197277e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  16.00)), +1.7822827072462959e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  16.00)), +2.1902841354109233e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 16.00)), +1.7822827072462959e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 16.00)), +2.1902841354109233e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   16.00)), -2.8295294240923002e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   16.00)), -3.4772673173960920e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  16.00)), -2.8295294240923002e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), -3.4772673173960920e-12, eps);
                 }
             }
         }
@@ -269,6 +284,11 @@ class BToKDileptonLowRecoilTest :
             /* Low Recoil (SM) */
             {
                 Parameters p = Parameters::Defaults();
+                // PDG 2008 CKM parameters
+                p["CKM::A"] = 0.814;
+                p["CKM::lambda"] = 0.2257;
+                p["CKM::rhobar"] = 0.135;
+                p["CKM::etabar"] = 0.349;
 
                 Options oo;
                 oo.set("form-factors", "BZ2004v2");
@@ -279,17 +299,17 @@ class BToKDileptonLowRecoilTest :
                 {
                     const double eps = 1e-5;
 
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(14.18  ), 2.59251e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(15.2575), 2.54735e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.335 ), 2.46414e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(17.4125), 2.32995e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(18.49  ), 2.12452e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(19.5675), 1.81688e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(20.645 ), 1.36303e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(21.7225), 7.19611e-09, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(22.8   ), 1.64107e-10, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(14.18  ), +2.4925339161890739e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(15.2575), +2.4491151572916396e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.335 ), +2.3691072051913402e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(17.4125), +2.2400932056767815e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(18.49  ), +2.0425842060256388e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(19.5675), +1.7468086502992899e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(20.645 ), +1.3104677325342616e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(21.7225), +6.9185876410657743e-09, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(22.8   ), +1.5777840716233338e-10, eps);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.58485e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.52373e-7, eps);
                 }
             }
         }

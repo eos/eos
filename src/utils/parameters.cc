@@ -168,12 +168,11 @@ namespace eos
             Parameter::Template{"c10prime",                                      +0.0,        +0.0,        +0.0       },
             // Factorization scale
             Parameter::Template{"mu",                                            +2.4,        +4.2,        +9.6       },
-            // CKM matrix elements, cf. [PDG2008], Eqs. (11.4), (11.5), p. 169 and Eq. (11.26), p. 174
-            Parameter::Template{"CKM::A",                                        +0.793,      +0.814,      +0.835     },
-            Parameter::Template{"CKM::lambda",                                   +0.2247,     +0.2257,     +0.2266    },
-            Parameter::Template{"CKM::rhobar",                                   +0.119,      +0.135,      +0.166     },
-            Parameter::Template{"CKM::etabar",                                   +0.332,      +0.349,      +0.364     },
-            Parameter::Template{"CKM::|V_cb|",                                   +0.0404,     +0.0417,     +0.0430    },
+            // Wolfenstein parameters of CKM, cf. [CKMfitter04] Table 2, p. 48 and ICHEP10 results +/- 1 sigma
+            Parameter::Template{"CKM::A",                                        +0.785,      +0.812,      +0.825     },
+            Parameter::Template{"CKM::lambda",                                   +0.22466,    +0.22543,    +0.22620   },
+            Parameter::Template{"CKM::rhobar",                                   +0.119,      +0.144,      +0.169     },
+            Parameter::Template{"CKM::etabar",                                   +0.327,      +0.342,      +0.358     },
             // QCD inputs
             Parameter::Template{"QCD::alpha_s(MZ)",                              +0.117620,   +0.117620,   +0.117620  },
             Parameter::Template{"QCD::mu_t",                                     +170.0,      +170.0,      +170.0     },

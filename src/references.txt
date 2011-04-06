@@ -164,6 +164,15 @@ References
         arxiv:hep-ph/0304132
 
 
+    CKMfitter04 : Charles, J. and Hoecker, A. and Lacker, H. and Laplace, S.
+                   and Le Diberder, F.R. and Melcles, J. and Ocariz, J. and Pivk, M.
+                   and Roos, L.
+
+        CP Violation and the CKM Matrix: Assessing the Impact of the Asymmetric B Factories
+
+        arxiv:hep-ph/0406184
+
+
     CKS2000 : Chetyrkin, K.G. and Kuehn, J.H. and Steinhauser, M.
 
         RunDec: a Mathematica package for running and decoupling of the strong

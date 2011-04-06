@@ -18,6 +18,7 @@
  */
 
 #include <src/utils/standard-model.hh>
+#include <src/utils/power_of.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
 
@@ -32,7 +33,6 @@ namespace eos
         _lambda(p["CKM::lambda"]),
         _rhobar(p["CKM::rhobar"]),
         _etabar(p["CKM::etabar"]),
-        _ckm_cb(p["CKM::|V_cb|"]),
         _alpha_s_Z(p["QCD::alpha_s(MZ)"]),
         _mu_t(p["QCD::mu_t"]),
         _mu_b(p["QCD::mu_b"]),
@@ -154,39 +154,75 @@ namespace eos
         return QCD::m_q_pole(m_c_MSbar, alpha_s(m_c_MSbar), 4.0);
     }
 
+namespace implementation
+{
+    // return rho - i eta, cf. [CKMfitter04], Eq. (17), p. 12
+    complex<double> rho_eta(const double & A, const double & lambda, const double & rhobar, const double & etabar)
+    {
+        double A2 = power_of<2>(A), lambda2 = power_of<2>(lambda), lambda4 = power_of<2>(lambda2);
+
+        complex<double> result = complex<double>(rhobar, etabar) * std::sqrt(1.0 - A2 * lambda4)
+            / std::sqrt(1.0 - lambda2) / (1.0 - A2 * lambda4 * complex<double>(rhobar, etabar));
+
+        return result;
+    }
+}
+    /*
+     * For the parametrisation of all CKM matrix elements, cf. [CKMfitter04], Footnote 4, p. 10
+     */
     complex<double>
     StandardModel::ckm_cb() const
     {
-        return complex<double>(_ckm_cb, 0.0);
+        complex<double> rho_eta = implementation::rho_eta(_A, _lambda, _rhobar, _etabar);
+        double A2 = power_of<2>(_A()), lambda2 = power_of<2>(_lambda()), lambda6 = power_of<3>(lambda2);
+
+        double result = _A * lambda2 * (1.0 - 0.5 * A2 * lambda6 * std::norm(rho_eta));
+
+        return complex<double>(result, 0.0);
     }
 
     complex<double>
     StandardModel::ckm_us() const
     {
-        return complex<double>(_lambda, 0.0);
+        complex<double> rho_eta = implementation::rho_eta(_A, _lambda, _rhobar, _etabar);
+        double A2 = power_of<2>(_A()), lambda6 = power_of<6>(_lambda());
+
+        double result = _lambda * (1.0 - 0.5 * A2 * lambda6 * std::norm(rho_eta));
+
+        return complex<double>(result, 0.0);
     }
 
     complex<double>
     StandardModel::ckm_ub() const
     {
-        double lambda2 = _lambda * _lambda, lambda3 = _lambda * lambda2, lambda4 = lambda2 * lambda3;
-        double A2 = _A * _A;
-        complex<double> num = complex<double>(_rhobar, -1.0 * _etabar);
-        complex<double> denom = 1.0 - num * A2 * lambda4;
-        double rest =  _A * lambda3 * sqrt((1.0 - A2 * lambda4) / (1.0 - lambda2));
+        complex<double> rho_eta = implementation::rho_eta(_A, _lambda, _rhobar, _etabar);
 
-        return (num / denom) * rest;
+        complex<double> result = _A * power_of<3>(_lambda()) * rho_eta;
+
+        return result;
     }
 
     complex<double>
     StandardModel::ckm_ts() const
     {
-        return complex<double>(-1.0 * _A * _lambda * _lambda, 0.0);
+        complex<double> rho_eta_conj = std::conj(implementation::rho_eta(_A, _lambda, _rhobar, _etabar));
+        double A2 = power_of<2>(_A()), lambda2 = power_of<2>(_lambda()), lambda4 = lambda2 * lambda2, lambda6 = lambda2 * lambda4;
+
+        complex<double> result = -1.0 * _A * lambda2 *
+            (1.0 - lambda2 * (1.0 - 2.0 * rho_eta_conj) / 2.0 - lambda4 / 8.0 - lambda6 * (1.0 + 8.0 * A2 * rho_eta_conj) / 16.0);
+
+        return result;
     }
 
     complex<double>
     StandardModel::ckm_tb() const
     {
-        return complex<double>(1.0, 0.0);
+        complex<double> rho_eta = implementation::rho_eta(_A, _lambda, _rhobar, _etabar);
+        double A2 = power_of<2>(_A()), A4 = A2 * A2;
+        double lambda4 = power_of<4>(_lambda()), lambda6 = power_of<6>(_lambda()), lambda8 = lambda4 * lambda4;
+
+        double result = 1.0 - A2 * lambda4 / 2.0 - A2 * lambda6 * std::norm(rho_eta) / 2.0 - A4 * lambda8 / 8.0;
+
+        return complex<double>(result, 0.0);
     }
 }

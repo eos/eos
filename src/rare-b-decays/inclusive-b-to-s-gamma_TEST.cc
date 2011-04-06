@@ -51,6 +51,11 @@ class BToXsGammaLargeRecoilTest :
                 p["Arg{c9}"] = 0.0;
                 p["Abs{c10}"] = +4.173;
                 p["Arg{c10}"] = M_PI;
+                // PDG 2008 CKM parameters
+                p["CKM::A"] = 0.814;
+                p["CKM::lambda"] = 0.2257;
+                p["CKM::rhobar"] = 0.135;
+                p["CKM::etabar"] = 0.349;
 
                 Options oo;
 
@@ -58,7 +63,7 @@ class BToXsGammaLargeRecoilTest :
 
                 const double eps = 1e-9;
 
-                TEST_CHECK_NEARLY_EQUAL(3.86877e-4, d.integrated_branching_ratio(), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.84894e-4, d.integrated_branching_ratio(), eps);
             }
 
             // Zero test
@@ -71,6 +76,11 @@ class BToXsGammaLargeRecoilTest :
                 p["Arg{c9}"] = 0.0;
                 p["Abs{c10}"] = +4.173;
                 p["Arg{c10}"] = M_PI;
+                // PDG 2008 CKM parameters
+                p["CKM::A"] = 0.814;
+                p["CKM::lambda"] = 0.2257;
+                p["CKM::rhobar"] = 0.135;
+                p["CKM::etabar"] = 0.349;
 
                 Options oo;
 
