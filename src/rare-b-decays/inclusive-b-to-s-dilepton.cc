@@ -92,6 +92,8 @@ namespace eos
 
         Parameter C;
 
+        Parameter admixture;
+
         double m_l;
 
         Implementation(const Parameters & p, const Options & o) :
@@ -118,7 +120,8 @@ namespace eos
             lambda_2(p["B->X_s::lambda_2"]),
             mu(p["mu"]),
             ckm(p["exp::CKM(B->X_sll, B->X_clnu)"]),
-            C(p["exp::C(B->X_clnu, B->X_ulnu)"])
+            C(p["exp::C(B->X_clnu, B->X_ulnu)"]),
+            admixture(p["exp::Admixture-BR(B->X_sll)"])
         {
             static const double m_mu = 0.10565836; // (GeV), cf. [PDG2008], p. 13
             static const double m_e = 0.00051099892; // (GeV), cf. [PDG2008], p. 13
@@ -482,7 +485,7 @@ namespace eos
             ratio_phi += real(e27 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[6]));
             ratio_phi += real(e29 * (4.0 / 3.0 * wc[0] + wc[1]) * conj(wc[8]));
 
-            return br_clnu * ckm * 4.0 / C * ratio_phi;
+            return br_clnu * ckm * 4.0 / C * ratio_phi * admixture;
         }
     };
 

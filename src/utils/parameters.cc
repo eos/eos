@@ -244,6 +244,8 @@ namespace eos
             Parameter::Template{"exp::BR(B->X_clnu)",                            +0.1042,     +0.1057,     +0.1072    }, // cf. [PDG2008], p. 82
             Parameter::Template{"exp::C(B->X_clnu, B->X_ulnu)",                  +0.57,       +0.58,       +0.59      },
             Parameter::Template{"exp::CKM(B->X_sll, B->X_clnu)",                 +0.975218,   +0.98549,    +0.995277  },
+            // Parametrise unknown admixture of l=e, l=mu in B->X_sll
+            Parameter::Template{"exp::Admixture-BR(B->X_sll)",                   +0.95,       +1.0,        +1.05      }, // BR varies by up to +/-5% between l=mu and l=e
         }));
     }
 
