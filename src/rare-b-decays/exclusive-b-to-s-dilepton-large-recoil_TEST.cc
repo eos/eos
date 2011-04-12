@@ -161,3 +161,53 @@ class BToKstarDileptonLargeRecoilPolynomialTest :
             }
         }
 } b_to_kstar_dilepton_large_recoil_polynomial_test;
+
+class BToKDileptonLargeRecoilTest :
+    public TestCase
+{
+    public:
+        BToKDileptonLargeRecoilTest() :
+            TestCase("b_to_k_dilepton_large_recoil_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Large Recoil */
+
+            // Standard Model
+            {
+                Parameters p = Parameters::Defaults();
+                p["Abs{c7}"] = 0.331;
+                p["Arg{c7}"] = M_PI;
+                p["c8"] = -0.181;
+                p["Abs{c9}"] = +4.27;
+                p["Arg{c9}"] = 0.0;
+                p["Abs{c10}"] = +4.173;
+                p["Arg{c10}"] = M_PI;
+                // PDG 2008 CKM parameters
+                p["CKM::A"] = 0.814;
+                p["CKM::lambda"] = 0.2257;
+                p["CKM::rhobar"] = 0.135;
+                p["CKM::etabar"] = 0.349;
+
+                Options oo;
+                oo.set("form-factors", "BZ2004v2");
+                oo.set("l", "mu");
+
+                BToKDilepton<LargeRecoil> d(p, oo);
+
+                const double eps = 1e-7;
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(1.0625), 3.145791429e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(2.125 ), 3.124835257e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(3.1875), 3.119065711e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(4.25  ), 3.127702599e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(5.3125), 3.163614767e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(6.375 ), 3.345862737e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(7.4375), 3.297253470e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(8.5   ), 3.149745610e-08, eps);
+
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0.1, 8.68), 2.7329633e-7, eps);
+            }
+        }
+} b_to_k_dilepton_large_recoil_test;
