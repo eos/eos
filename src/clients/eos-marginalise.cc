@@ -242,12 +242,12 @@ main(int argc, char * argv[])
     {
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-marginalise" << std::endl;
-        std::cout << "  --x INDEX MIN MAX COUNT" << std::endl;
-        std::cout << "  --y INDEX MIN MAX COUNT" << std::endl;
+        std::cout << "  --x NAME MIN MAX COUNT" << std::endl;
+        std::cout << "  --y NAME MIN MAX COUNT" << std::endl;
         std::cout << "  [--file NAME]+" << std::endl;
         std::cout << std::endl;
         std::cout << "Example:" << std::endl;
-        std::cout << "  eos-marginalise --x 1 0.0 15.0 60 --y 2 0.0 6.28 32 --file input1.hdf5 --file input2.hdf5" << std::endl;
+        std::cout << "  eos-marginalise --x \"Abs{c9}\" 0.0 15.0 60 --y \"Arg{c9}\" 0.0 6.28 32 --file input1.hdf5 --file input2.hdf5" << std::endl;
     }
     catch(Exception & e)
     {
