@@ -102,9 +102,9 @@ main(int argc, char * argv[])
 
         try
         {
+            std::cout << "# Merging these files" << std::endl;
             for (auto f = CommandLine::instance()->files.cbegin(), f_end = CommandLine::instance()->files.cend() ; f != f_end ; ++f)
             {
-                std::cout << "# Merging these files" << std::endl;
                 std::cout << "# " << *f << std::endl;
                 ScanFile file = ScanFile::Open(*f);
 
@@ -153,6 +153,7 @@ main(int argc, char * argv[])
                 for (unsigned i = 0 ; i < records ; ++i)
                 {
                     values = all_records[0].data();
+                    values[fields - 1] = 0.0;
 
                     for (auto r = all_records.begin(), r_end = all_records.end() ; r != r_end ; ++r)
                     {
