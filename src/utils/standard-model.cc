@@ -156,7 +156,7 @@ namespace eos
 
 namespace implementation
 {
-    // return rho - i eta, cf. [CKMfitter04], Eq. (17), p. 12
+    // return rho + i eta, cf. [CKMfitter04], Eq. (17), p. 12
     complex<double> rho_eta(const double & A, const double & lambda, const double & rhobar, const double & etabar)
     {
         double A2 = power_of<2>(A), lambda2 = power_of<2>(lambda), lambda4 = power_of<2>(lambda2);
@@ -195,9 +195,9 @@ namespace implementation
     complex<double>
     StandardModel::ckm_ub() const
     {
-        complex<double> rho_eta = implementation::rho_eta(_A, _lambda, _rhobar, _etabar);
+        complex<double> rho_eta_conj = std::conj(implementation::rho_eta(_A, _lambda, _rhobar, _etabar));
 
-        complex<double> result = _A * power_of<3>(_lambda()) * rho_eta;
+        complex<double> result = _A * power_of<3>(_lambda()) * rho_eta_conj;
 
         return result;
     }
@@ -205,11 +205,11 @@ namespace implementation
     complex<double>
     StandardModel::ckm_ts() const
     {
-        complex<double> rho_eta_conj = std::conj(implementation::rho_eta(_A, _lambda, _rhobar, _etabar));
+        complex<double> rho_eta = implementation::rho_eta(_A, _lambda, _rhobar, _etabar);
         double A2 = power_of<2>(_A()), lambda2 = power_of<2>(_lambda()), lambda4 = lambda2 * lambda2, lambda6 = lambda2 * lambda4;
 
         complex<double> result = -1.0 * _A * lambda2 *
-            (1.0 - lambda2 * (1.0 - 2.0 * rho_eta_conj) / 2.0 - lambda4 / 8.0 - lambda6 * (1.0 + 8.0 * A2 * rho_eta_conj) / 16.0);
+            (1.0 - lambda2 * (1.0 - 2.0 * rho_eta) / 2.0 - lambda4 / 8.0 - lambda6 * (1.0 + 8.0 * A2 * rho_eta) / 16.0);
 
         return result;
     }

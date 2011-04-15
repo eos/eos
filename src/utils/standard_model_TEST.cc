@@ -169,26 +169,26 @@ class CKMElementsTest :
 
         virtual void run() const
         {
-            static const double eps = 1e-6;
+            static const double eps = 1e-8;
 
             // central values
             {
                 Parameters parameters = reference_parameters();
                 StandardModel model(parameters);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.225429000, real(model.ckm_us()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.225428590, real(model.ckm_us()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(-0.040511700, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000734841, imag(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.040511671, real(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.000735237, imag(model.ckm_ts()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.001371630, real(model.ckm_ub()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.003264270, imag(model.ckm_ub()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.001372189, real(model.ckm_ub()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.003264270, imag(model.ckm_ub()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.041264500, real(model.ckm_cb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.041264513, real(model.ckm_cb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.999142000, real(model.ckm_tb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.999141977, real(model.ckm_tb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
             }
 
@@ -199,19 +199,19 @@ class CKMElementsTest :
 
                 parameters["CKM::A"] = parameters["CKM::A"].max();
 
-                TEST_CHECK_NEARLY_EQUAL(+0.225429000, real(model.ckm_us()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.225428541, real(model.ckm_us()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(-0.041160200, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000746979, imag(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.041160228, real(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.000746979, imag(model.ckm_ts()), eps);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.001394070, real(model.ckm_ub()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.003316490, imag(model.ckm_ub()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.003316490, imag(model.ckm_ub()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.041925100, real(model.ckm_cb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.041925143, real(model.ckm_cb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.999114000, real(model.ckm_tb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.999114272, real(model.ckm_tb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
             }
 
@@ -222,19 +222,19 @@ class CKMElementsTest :
 
                 parameters["CKM::A"] = parameters["CKM::A"].min();
 
-                TEST_CHECK_NEARLY_EQUAL(+0.225429000, real(model.ckm_us()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.225428679, real(model.ckm_us()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(-0.039164700, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000710846, imag(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.039164663, real(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.000710846, imag(model.ckm_ts()), eps);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.001326740, real(model.ckm_ub()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.003155800, imag(model.ckm_ub()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.003155800, imag(model.ckm_ub()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.039892400, real(model.ckm_cb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.039892433, real(model.ckm_cb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.999198000, real(model.ckm_tb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.999198111, real(model.ckm_tb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
             }
 
@@ -245,19 +245,19 @@ class CKMElementsTest :
 
                 parameters["CKM::lambda"] = parameters["CKM::lambda"].max();
 
-                TEST_CHECK_NEARLY_EQUAL(+0.226199000, real(model.ckm_us()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.226198552, real(model.ckm_us()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(-0.040783700, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000745458, imag(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.040783654, real(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.000745458, imag(model.ckm_ts()), eps);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.001386510, real(model.ckm_ub()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.003298420, imag(model.ckm_ub()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.003298420, imag(model.ckm_ub()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.041546900, real(model.ckm_cb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.041546883, real(model.ckm_cb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.999130000, real(model.ckm_tb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.999130143, real(model.ckm_tb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
             }
 
@@ -268,19 +268,19 @@ class CKMElementsTest :
 
                 parameters["CKM::lambda"] = parameters["CKM::lambda"].min();
 
-                TEST_CHECK_NEARLY_EQUAL(+0.224659000, real(model.ckm_us()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.224658620, real(model.ckm_us()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(-0.040240500, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000725122, imag(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.040240544, real(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.000725122, imag(model.ckm_ts()), eps);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.001357970, real(model.ckm_ub()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.003230360, imag(model.ckm_ub()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.003230360, imag(model.ckm_ub()), eps);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.040983100, real(model.ckm_cb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(+0.999154000, real(model.ckm_tb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.999153689, real(model.ckm_tb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
             }
         }
