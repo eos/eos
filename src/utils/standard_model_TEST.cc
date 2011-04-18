@@ -176,20 +176,62 @@ class CKMElementsTest :
                 Parameters parameters = reference_parameters();
                 StandardModel model(parameters);
 
+                // values
+                TEST_CHECK_NEARLY_EQUAL(+0.974253267, real(model.ckm_ud()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_ud()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.97425,     abs(model.ckm_ud()), 1e-5);
+
                 TEST_CHECK_NEARLY_EQUAL(+0.225428590, real(model.ckm_us()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(-0.040511671, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.000735237, imag(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.22543,     abs(model.ckm_us()), 1e-5);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.001372189, real(model.ckm_ub()), eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.003264270, imag(model.ckm_ub()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00354,     abs(model.ckm_ub()), 1e-5);
+
+                TEST_CHECK_NEARLY_EQUAL(+0.225296132, real(model.ckm_cd()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.000138121, imag(model.ckm_cd()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.22529,     abs(model.ckm_cd()), 1e-5);
+
+                TEST_CHECK_NEARLY_EQUAL(+0.973416767, real(model.ckm_cs()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.000030365, imag(model.ckm_cs()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.97342,     abs(model.ckm_cs()), 1e-5);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.041264513, real(model.ckm_cb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.04126,     abs(model.ckm_cb()), 1e-5);
+
+                TEST_CHECK_NEARLY_EQUAL(+0.007966605, real(model.ckm_td()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.003177489, imag(model.ckm_td()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00858,     abs(model.ckm_td()), 1e-5);
+
+                TEST_CHECK_NEARLY_EQUAL(-0.040511671, real(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.000735237, imag(model.ckm_ts()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.04052,     abs(model.ckm_ts()), 1e-5);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.999141977, real(model.ckm_tb()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.999141,    abs(model.ckm_tb()), 1e-6);
+
+                // angles
+                double alpha = arg(-1.0 * model.ckm_td() * conj(model.ckm_tb()) / model.ckm_ud() / conj(model.ckm_ub()));
+                TEST_CHECK_NEARLY_EQUAL(+1.589220699,    alpha, eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.036840406,    std::sin(2.0 * alpha), eps);
+
+                double beta  = arg(-1.0 * model.ckm_cd() * conj(model.ckm_cb()) / model.ckm_td() / conj(model.ckm_tb()));
+                TEST_CHECK_NEARLY_EQUAL(-2.761464006,    beta, eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.689107918,    std::sin(2.0 * beta), eps);
+
+                double gamma = arg(-1.0 * model.ckm_ud() * conj(model.ckm_ub()) / model.ckm_cd() / conj(model.ckm_cb()));
+                TEST_CHECK_NEARLY_EQUAL(-1.969349346,    gamma, eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.935295092,    std::abs(std::sin(2.0 * beta + gamma)), eps);
+
+                // unitarity
+                complex<double> lambda_t = model.ckm_tb() * conj(model.ckm_ts());
+                complex<double> lambda_c = model.ckm_cb() * conj(model.ckm_cs());
+                complex<double> lambda_u = model.ckm_ub() * conj(model.ckm_us());
+                TEST_CHECK_NEARLY_EQUAL(-1.131956683e-8, real(lambda_t + lambda_c + lambda_u), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,            imag(lambda_t + lambda_c + lambda_u), eps);
             }
 
             // A raised

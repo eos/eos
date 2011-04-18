@@ -65,9 +65,13 @@ namespace eos
             virtual double m_c_pole() const;
 
             /* CKM matrix elements */
+            virtual complex<double> ckm_cd() const;
+            virtual complex<double> ckm_cs() const;
             virtual complex<double> ckm_cb() const;
+            virtual complex<double> ckm_ud() const;
             virtual complex<double> ckm_us() const;
             virtual complex<double> ckm_ub() const;
+            virtual complex<double> ckm_td() const;
             virtual complex<double> ckm_ts() const;
             virtual complex<double> ckm_tb() const;
     };
