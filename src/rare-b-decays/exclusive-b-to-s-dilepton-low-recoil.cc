@@ -1119,22 +1119,38 @@ namespace eos
             return 1.0 - (power_of<2>(m_B()) - power_of<2>(m_K())) / s * (1.0 - form_factors->f_0(s) / form_factors->f_p(s));
         }
 
-        double N2(const double & s) const
+        double gamma0() const
         {
             static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
             static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
             const double lambda_t_abs = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-            return power_of<2>(g_fermi * lambda_t_abs * alpha_e) * std::sqrt(lambda(power_of<2>(m_B()), power_of<2>(m_K()), s)) /
-                    (2048.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
+            return power_of<2>(g_fermi * lambda_t_abs * alpha_e) / (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
+        }
+
+        double a_l(const double & s) const
+        {
+            const double lam = lambda(power_of<2>(m_B()), power_of<2>(m_K()), s);
+
+            return gamma0() * std::sqrt(lam) * beta(s) * power_of<2>(form_factors->f_p(s)) *
+                    (0.25 * lam * rho_1(s) + power_of<2>(m_l) * std::norm(c10()) * (power_of<2>(xi_b(s)) * s +
+                    2.0 * (power_of<2>(m_B()) - power_of<2>(m_K()) - s) * xi_b(s) + 4.0 * power_of<2> (m_K())));
+        }
+
+        double c_l(const double & s) const
+        {
+            return -0.25 * gamma0() * power_of<2>(form_factors->f_p(s)) * pow(lambda(power_of<2>(m_B()), power_of<2>(m_K()), s), 1.5) *
+                    power_of<3>(beta(s)) * rho_1(s);
         }
 
         double unnormalized_decay_width(const double & s) const
         {
-            double prefactor = 2.0 * N2(s) * power_of<2>(form_factors->f_p(s)) * beta(s);
-            return prefactor * (rho_1(s) * lambda(power_of<2>(m_B()), power_of<2>(m_K()), s) * (1.0 - power_of<2>(beta(s)) / 3.0)
-                    + 8.0 * power_of<2>(m_l) * std::norm(c10()) * (2.0 * (power_of<2>(m_K()) + s * power_of<2>(xi_b(s)) / 4.0) +
-                      (power_of<2>(m_B()) - power_of<2>(m_K()) - s) * xi_b(s)));
+            return 2.0 * (a_l(s) + c_l(s) / 3.0);
+        }
+
+        double differential_flat_term_numerator(const double & s) const
+        {
+            return 2.0 * (a_l(s) + c_l(s));
         }
     };
 
@@ -1147,6 +1163,18 @@ namespace eos
     {
     }
 
+    double
+    BToKDilepton<LowRecoil>::a_l(const double & s) const
+    {
+        return _imp->a_l(s);
+    }
+
+    double
+    BToKDilepton<LowRecoil>::c_l(const double & s) const
+    {
+        return _imp->c_l(s);
+    }
+
     // Differential Observables
     double
     BToKDilepton<LowRecoil>::differential_branching_ratio(const double & s) const
@@ -1157,6 +1185,12 @@ namespace eos
         return _imp->unnormalized_decay_width(s) / Gamma;
     }
 
+    double
+    BToKDilepton<LowRecoil>::differential_flat_term(const double & s) const
+    {
+        return _imp->differential_flat_term_numerator(s) / _imp->unnormalized_decay_width(s);
+    }
+
     // Integrated Observables
     double
     BToKDilepton<LowRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
@@ -1165,5 +1199,19 @@ namespace eos
                 this, std::placeholders::_1);
 
         return integrate(integrand, 64, s_min, s_max);
+    }
+
+    double
+    BToKDilepton<LowRecoil>::integrated_flat_term(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> num = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::differential_flat_term_numerator),
+                _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
+                _imp, std::placeholders::_1);
+
+        double num_integrated = integrate(num, 64, s_min, s_max);
+        double denom_integrated = integrate(denom, 64, s_min, s_max);
+
+        return num_integrated / denom_integrated;
     }
 }

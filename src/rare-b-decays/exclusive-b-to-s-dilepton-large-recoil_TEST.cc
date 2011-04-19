@@ -207,7 +207,12 @@ class BToKDileptonLargeRecoilTest :
                 TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(7.4375), 3.297253470e-08, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(8.5   ), 3.149745610e-08, eps);
 
+                TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(1.0), 0.06529669784, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(8.0), 0.009094268877, eps);
+
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0.1, 8.68), 2.7329633e-7, eps);
+
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(0.1, 8.68), 3.325593091e-2, eps);
             }
         }
 } b_to_k_dilepton_large_recoil_test;

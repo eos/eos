@@ -152,8 +152,16 @@ namespace eos
                     &BToKDilepton<LargeRecoil>::differential_branching_ratio,
                     std::make_tuple("s")),
 
+            make_observable("B->Kll::F_H(s)@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::differential_flat_term,
+                    std::make_tuple("s")),
+
             make_observable("B->Kll::BR@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Kll::F_H@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::integrated_flat_term,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->Kll::a_l@LargeRecoil",
@@ -169,9 +177,25 @@ namespace eos
                     &BToKDilepton<LowRecoil>::differential_branching_ratio,
                     std::make_tuple("s")),
 
+            make_observable("B->Kll::F_H(s)@LowRecoil",
+                    &BToKDilepton<LowRecoil>::differential_flat_term,
+                    std::make_tuple("s")),
+
             make_observable("B->Kll::BR@LowRecoil",
                     &BToKDilepton<LowRecoil>::integrated_branching_ratio,
                     std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Kll::F_H@LowRecoil",
+                    &BToKDilepton<LowRecoil>::integrated_flat_term,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Kll::a_l@LowRecoil",
+                    &BToKDilepton<LargeRecoil>::a_l,
+                    std::make_tuple("s")),
+
+            make_observable("B->Kll::c_l@LowRecoil",
+                    &BToKDilepton<LargeRecoil>::c_l,
+                    std::make_tuple("s")),
 
             // B -> K^* ll, Large Recoil
             make_observable("B->K^*ll::dBR/ds@LargeRecoil",

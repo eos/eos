@@ -1480,6 +1480,11 @@ namespace eos
         {
             return 2.0 * (a_l(s) + c_l(s) / 3.0);
         }
+
+        double differential_flat_term_numerator(const double & s) const
+        {
+             return 2.0 * (a_l(s) + c_l(s));
+        }
     };
 
     BToKDilepton<LargeRecoil>::BToKDilepton(const Parameters & parameters, const Options & options) :
@@ -1493,6 +1498,18 @@ namespace eos
 
 
     double
+    BToKDilepton<LargeRecoil>::a_l(const double & s) const
+    {
+        return _imp->a_l(s);
+    }
+
+    double
+    BToKDilepton<LargeRecoil>::c_l(const double & s) const
+    {
+        return _imp->c_l(s);
+    }
+
+    double
     BToKDilepton<LargeRecoil>::differential_branching_ratio(const double & s) const
     {
         // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
@@ -1501,6 +1518,13 @@ namespace eos
         return _imp->unnormalized_decay_width(s) / Gamma;
     }
 
+    double
+    BToKDilepton<LargeRecoil>::differential_flat_term(const double & s) const
+    {
+        return _imp->differential_flat_term_numerator(s) / _imp->unnormalized_decay_width(s);
+    }
+
+    // Integrated Observables
     double
     BToKDilepton<LargeRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
@@ -1511,14 +1535,16 @@ namespace eos
     }
 
     double
-    BToKDilepton<LargeRecoil>::a_l(const double & s) const
+    BToKDilepton<LargeRecoil>::integrated_flat_term(const double & s_min, const double & s_max) const
     {
-        return _imp->a_l(s);
-    }
+        std::function<double (const double &)> num = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::differential_flat_term_numerator),
+                _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
+                _imp, std::placeholders::_1);
 
-    double
-    BToKDilepton<LargeRecoil>::c_l(const double & s) const
-    {
-        return _imp->c_l(s);
+        double num_integrated = integrate(num, 64, s_min, s_max);
+        double denom_integrated = integrate(denom, 64, s_min, s_max);
+
+        return num_integrated / denom_integrated;
     }
 }

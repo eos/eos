@@ -400,7 +400,12 @@ class BToKDileptonLowRecoilTest :
                     TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(21.7225), +6.918910e-09, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(22.8   ), +1.577852e-10, eps);
 
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(15.0), +0.00556484, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(22.0), +0.00822122, eps);
+
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.52380e-7, eps);
+
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8), 5.4265507e-3, eps);
                 }
             }
         }
