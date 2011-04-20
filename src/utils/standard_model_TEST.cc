@@ -226,10 +226,14 @@ class CKMElementsTest :
                 TEST_CHECK_NEARLY_EQUAL(-1.969349346,    gamma, eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.935295092,    std::abs(std::sin(2.0 * beta + gamma)), eps);
 
-                // unitarity
                 complex<double> lambda_t = model.ckm_tb() * conj(model.ckm_ts());
+                TEST_CHECK_NEARLY_EQUAL(+0.040483577,    std::abs(lambda_t), eps);
                 complex<double> lambda_c = model.ckm_cb() * conj(model.ckm_cs());
+                TEST_CHECK_NEARLY_EQUAL(+0.040167570,    std::abs(lambda_c), eps);
                 complex<double> lambda_u = model.ckm_ub() * conj(model.ckm_us());
+                TEST_CHECK_NEARLY_EQUAL(+0.000798232,    std::abs(lambda_u), eps);
+
+                // unitarity
                 TEST_CHECK_NEARLY_EQUAL(-1.131956683e-8, real(lambda_t + lambda_c + lambda_u), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,            imag(lambda_t + lambda_c + lambda_u), eps);
             }
