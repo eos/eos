@@ -50,6 +50,7 @@ namespace eos
      */
     ObservablePtr make_polynomial_observable(const WilsonPolynomial & polynomial,
             const Parameters & parameters);
+
     /*!
      * Return an Observable that is a ratio of two WilsonPolynomial objects.
      *
@@ -57,8 +58,20 @@ namespace eos
      * @param denominator The denominator of the ratio.
      * @param parameters  The common Parameters object of both numerator and denominator.
      */
-    ObservablePtr make_polynomial_ratio(const WilsonPolynomial & numerator, const WilsonPolynomial & denumerator,
+    ObservablePtr make_polynomial_ratio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator,
             const Parameters & parameters);
+
+    /*!
+     * Return an Observable that is a ratio similar to H_T^(i) of three WilsonPolynomial objects N,D1,D2:
+     * @f[N / \sqrt{D1 \cdot D2}@f]
+     *
+     * @param numerator    The numerator of the ratio.
+     * @param denominator1 The first denominator component of the ratio.
+     * @param denominator2 The first denominator component of the ratio.
+     * @param parameters   The common Parameters object of both numerator and denominator.
+     */
+    ObservablePtr make_polynomial_ht_like_ratio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator,
+            const WilsonPolynomial & denominator2, const Parameters & parameters);
 
     class WilsonPolynomialCloner
     {

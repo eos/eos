@@ -69,7 +69,14 @@ struct ObservableRatioInput
     double min, central, max;
 };
 
-typedef OneOf<ObservableInput, ObservableRatioInput> Input;
+struct ObservableHTLikeRatioInput
+{
+    ObservablePtr numerator, denominator1, denominator2;
+
+    double min, central, max;
+};
+
+typedef OneOf<ObservableInput, ObservableRatioInput, ObservableHTLikeRatioInput> Input;
 
 struct ScanData
 {
@@ -177,6 +184,33 @@ class CommandLine :
                     input.denominator = Observable::make(denominator_name, parameters, *kinematics, Options());
                     if (! input.numerator)
                         throw DoUsage("Unknown observable '" + denominator_name + "'");
+
+                    input.min = destringify<double>(*(++a));
+                    input.central = destringify<double>(*(++a));
+                    input.max = destringify<double>(*(++a));
+
+                    inputs.push_back(input);
+                    kinematics.reset(new Kinematics);
+
+                    continue;
+                }
+
+                if ("--ht-like-ratio" == argument)
+                {
+                    std::string numerator_name(*(++a)), denominator1_name(*(++a)), denominator2_name(*(++a));
+
+                    ObservableHTLikeRatioInput input;
+                    input.numerator = Observable::make(numerator_name, parameters, *kinematics, Options());
+                    if (! input.numerator)
+                        throw DoUsage("Unknown observable '" + numerator_name + "'");
+
+                    input.denominator1 = Observable::make(denominator1_name, parameters, *kinematics, Options());
+                    if (! input.numerator)
+                        throw DoUsage("Unknown observable '" + denominator1_name + "'");
+
+                    input.denominator2 = Observable::make(denominator2_name, parameters, *kinematics, Options());
+                    if (! input.numerator)
+                        throw DoUsage("Unknown observable '" + denominator2_name + "'");
 
                     input.min = destringify<double>(*(++a));
                     input.central = destringify<double>(*(++a));
@@ -328,6 +362,44 @@ class WilsonScannerPolynomial
                 *v = v->min();
                 ObservablePtr lowered = make_polynomial_ratio(make_polynomial(i.numerator, CommandLine::instance()->coefficients),
                         make_polynomial(i.denominator, CommandLine::instance()->coefficients),
+                        parameters);
+
+                *v = old_v;
+
+                varied_observables.push_back(std::make_tuple(raised, lowered));
+            }
+            _observables.push_back(std::make_tuple(observable, i.min, i.central, i.max, varied_observables));
+        }
+
+        void visit(const ObservableHTLikeRatioInput & i)
+        {
+            Parameters parameters = CommandLine::instance()->parameters;
+
+            std::cout << "#   " << i.numerator->name() << "[Kinematics]"
+                << " / Sqrt(" << i.denominator1->name() << " * " << i.denominator2->name() << ")"
+                << "[Kinematics]" << " = (" << i.min << ", " << i.central << ", " << i.max << ")"
+                << std::endl;
+
+            ObservablePtr observable = make_polynomial_ht_like_ratio(make_polynomial(i.numerator, CommandLine::instance()->coefficients),
+                    make_polynomial(i.denominator1, CommandLine::instance()->coefficients),
+                    make_polynomial(i.denominator2, CommandLine::instance()->coefficients),
+                    parameters);
+
+            std::vector<std::tuple<ObservablePtr, ObservablePtr>> varied_observables;
+            for (auto v = _variations.begin(), v_end = _variations.end() ; v != v_end ; ++v)
+            {
+                double old_v = *v;
+
+                *v = v->max();
+                ObservablePtr raised = make_polynomial_ht_like_ratio(make_polynomial(i.numerator, CommandLine::instance()->coefficients),
+                        make_polynomial(i.denominator1, CommandLine::instance()->coefficients),
+                        make_polynomial(i.denominator2, CommandLine::instance()->coefficients),
+                        parameters);
+
+                *v = v->min();
+                ObservablePtr lowered = make_polynomial_ht_like_ratio(make_polynomial(i.numerator, CommandLine::instance()->coefficients),
+                        make_polynomial(i.denominator1, CommandLine::instance()->coefficients),
+                        make_polynomial(i.denominator2, CommandLine::instance()->coefficients),
                         parameters);
 
                 *v = old_v;
