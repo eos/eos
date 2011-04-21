@@ -607,7 +607,7 @@ namespace eos
 
                 herr_t ret = H5Dset_extent(set_id, dimensions);
                 if (0 > ret)
-                    throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
+                    throw ScanFileHDF5Error("H5Dset_extent", ret);
             }
 
             // create attributes for field info
@@ -667,6 +667,9 @@ namespace eos
             if (buffer_length > chunk_size)
                 throw InternalError("Flushing a WriteBuffer with capacity > " + stringify(chunk_size) + " is not implemented yet");
 
+            if (0 == buffer_length)
+                return;
+
             // can we store the data? if not, extend the data set
             if (capacity <= current_index + buffer_length)
             {
@@ -677,11 +680,14 @@ namespace eos
 
                 herr_t ret = H5Sset_extent_simple(space_id_file_writing, 2, dimensions, max_dimensions);
                 if (0 > ret)
-                    throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
+                    throw ScanFileHDF5Error("H5Sset_extent_simple(space_id_file_writing, 2, ["
+                            + stringify(dimensions[0]) + "," + stringify(dimensions[1]) + "], ["
+                            + stringify(max_dimensions[0]) + "," + stringify(max_dimensions[1]) + "])",
+                            ret);
 
                 ret = H5Sset_extent_simple(space_id_file, 2, dimensions, max_dimensions);
                 if (0 > ret)
-                    throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
+                    throw ScanFileHDF5Error("H5Sset_extent_simple(space_id_file, ...)", ret);
 
                 ret = H5Dset_extent(set_id, dimensions);
                 if (0 > ret)
@@ -699,7 +705,8 @@ namespace eos
             hsize_t max_dimensions[2] = { chunk_size, fields };
             ret = H5Sset_extent_simple(space_id_memory, 2, count, max_dimensions);
             if (ret < 0)
-                throw ScanFileHDF5Error("H5Sset_extent_simple", ret);
+                throw ScanFileHDF5Error("H5Sset_extent_simple(space_id_memory, 2, [" + stringify(buffer_length) + "," + stringify(fields) + "], ["
+                        + stringify(chunk_size) + "," + stringify(fields) + ")", ret);
 
             ret = H5Dwrite(set_id, H5T_IEEE_F64LE, space_id_memory, space_id_file_writing, H5P_DEFAULT, &data[0]);
             if (ret < 0)
