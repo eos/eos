@@ -146,9 +146,9 @@ namespace eos
             /*!
              * Named constructor to open an existing file.
              *
-             * @param filename File which shall be opened.
+             * @param file_name File which shall be opened.
              */
-            static ScanFile Open(const std::string & filename);
+            static ScanFile Open(const std::string & file_name);
             ///@}
 
             ///@name Metadata Access
@@ -158,6 +158,9 @@ namespace eos
 
             /// Retrieve the file creator's version information.
             const std::string & eos_version() const;
+
+            /// Retrieve the file's name.
+            const std::string & file_name() const;
             ///@}
 
             ///@name Data Access

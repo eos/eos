@@ -245,17 +245,17 @@ namespace eos
     }
 
     ScanFile
-    ScanFile::Create(const std::string & filename, const std::string & creator)
+    ScanFile::Create(const std::string & file_name, const std::string & creator)
     {
         H5dont_atexit();
-        return ScanFile(new Implementation<ScanFile>(filename, creator));
+        return ScanFile(new Implementation<ScanFile>(file_name, creator));
     }
 
     ScanFile
-    ScanFile::Open(const std::string & filename)
+    ScanFile::Open(const std::string & file_name)
     {
         H5dont_atexit();
-        return ScanFile(new Implementation<ScanFile>(filename));
+        return ScanFile(new Implementation<ScanFile>(file_name));
     }
 
     const std::string &
@@ -268,6 +268,12 @@ namespace eos
     ScanFile::eos_version() const
     {
         return _imp->hdf5_file->eos_version;
+    }
+
+    const std::string &
+    ScanFile::file_name() const
+    {
+        return _imp->hdf5_file->file_name;
     }
 
     ScanFile::DataSet
