@@ -59,6 +59,16 @@ double marginalise_by_max_likelihood(const double & previous, const double & nex
     return std::max(previous, std::exp(-0.5 * next));
 }
 
+double marginalise_by_threshold(const double & previous, const double & chi_squared, const double & threshold)
+{
+    double result = previous;
+
+    if (threshold < std::exp(-1.0 * chi_squared))
+        result += 1.0;
+
+    return result;
+}
+
 class CommandLine :
     public InstantiationPolicy<CommandLine, Singleton>
 {
@@ -92,6 +102,14 @@ class CommandLine :
                 if ("--max-exp" == argument)
                 {
                     marginalise = &marginalise_by_max_likelihood;
+
+                    continue;
+                }
+
+                if ("--threshold" == argument)
+                {
+                    double threshold = destringify<double>(*(++a));
+                    marginalise = std::bind(&marginalise_by_threshold, std::placeholders::_1, std::placeholders::_2, threshold);
 
                     continue;
                 }
