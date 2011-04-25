@@ -171,6 +171,8 @@ namespace eos
             Parameter::Template{"Arg{c10'}",                                     +M_PI,       +M_PI,       +M_PI      },
             // Factorization scale
             Parameter::Template{"mu",                                            +2.4,        +4.2,        +9.6       },
+            // GSW Parameter
+            Parameter::Template{"GSW::sin^2(theta)",                             +0.23103,    +0.23116,    +0.23129   },
             // Wolfenstein parameters of CKM, cf. [CKMfitter04] Table 2, p. 48 and ICHEP10 results +/- 1 sigma
             Parameter::Template{"CKM::A",                                        +0.785,      +0.812,      +0.825     },
             Parameter::Template{"CKM::lambda",                                   +0.22466,    +0.22543,    +0.22620   },
