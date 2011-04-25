@@ -22,6 +22,7 @@
 
 #include <src/utils/private_implementation_pattern.hh>
 #include <src/utils/parameters.hh>
+#include <src/utils/wilson_coefficients.hh>
 
 #include <complex>
 
@@ -56,6 +57,9 @@ namespace eos
             virtual complex<double> ckm_td() const = 0;
             virtual complex<double> ckm_ts() const = 0;
             virtual complex<double> ckm_tb() const = 0;
+
+            /* b->s Wilson coefficients */
+            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s() const = 0;
     };
 
     struct NoSuchModelError :

@@ -17,12 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/utils/standard-model.hh>
+#include <src/utils/matrix.hh>
 #include <src/utils/power_of.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
+#include <src/utils/top-loops.hh>
+#include <src/utils/standard-model.hh>
 
 #include <cmath>
+
+#include <gsl/gsl_sf_clausen.h>
 
 namespace eos
 {
@@ -41,8 +45,12 @@ namespace eos
         _m_t_pole(p["mass::t(pole)"]),
         _m_b_MSbar(p["mass::b(MSbar)"]),
         _m_c_MSbar(p["mass::c"]),
+        _m_W(p["mass::W"]),
         _m_Z(p["mass::Z"]),
-        _mu(p["mu"])
+        _sw2(p["GSW::sin^2(theta)"]),
+        _mu(p["mu"]),
+        _mu_0c(p["b->s::mu_0c"]),
+        _mu_0t(p["b->s::mu_0t"])
     {
     }
 
@@ -300,5 +308,144 @@ namespace implementation
         double result = 1.0 - A2 * lambda4 / 2.0 - A2 * lambda6 * std::norm(rho_eta) / 2.0 - A4 * lambda8 / 8.0;
 
         return complex<double>(result, 0.0);
+    }
+
+    /* b->s Wilson coefficients */
+namespace implementation
+{
+    /*
+     * Initial scale Wilson coefficients from the charm sector, cf. [BMU1999], between Eqs. (4) and (5), pp. 4-5
+     *
+     * x_c = m_t(mu_0c)^2 / m_W^2
+     * log_c = ln(mu_0c^2 / m_W^2)
+     * sw2 = sin^2(theta_Weinberg)
+     */
+    std::array<double, 15>
+    initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0()
+    {
+        std::array<double, 15> result
+        {{
+            0.0, -1.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0
+        }};
+
+        return result;
+    }
+
+    std::array<double, 15>
+    initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(const double & log_c, const double & sw2)
+    {
+        std::array<double, 15> result
+        {{
+            -15.0 - 6.0 * log_c, 0.0, 0.0, 7.0/9.0 - 2.0 / 3.0 * log_c, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0,
+            23.0/36.0, 1.0/3.0, -0.25 / sw2 - 38.0/27.0, 0.25 / sw2
+        }};
+
+        return result;
+    }
+
+    std::array<double, 15>
+    initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(const double & x_c, const double & log_c, const double & sw2)
+    {
+        std::array<double, 15> result;
+        result.fill(0.0);
+        result[0] = -(16.0 * x_c + 8.0) * std::sqrt(4.0 * x_c - 1.0) * gsl_sf_clausen(2.0 * std::asin(1.0 / 2.0 / std::sqrt(x_c)))
+            + (16.0 * x_c + 20.0 / 3.0) * std::log(x_c) + 32.0 * x_c + 112.0 / 9.0
+            - 7987.0 / 72.0 - 17.0 / 3.0 * M_PI * M_PI - 475.0 / 6.0 * log_c - 17.0 * log_c * log_c;
+        result[1] = -127.0 / 18.0 - 4.0 / 3.0 * M_PI * M_PI - 46.0 / 3.0 * log_c - 4.0 * log_c * log_c;
+        result[2] = 680.0 / 243.0 + 20.0 / 81.0 * M_PI * M_PI + 68.0 / 81.0 * log_c + 20.0 / 27.0 * log_c * log_c;
+        result[3] = -950.0 / 243.0 - 10.0 / 81.0 * M_PI * M_PI - 124.0 / 27.0 * log_c - 10.0 / 27.0  * log_c * log_c;
+        result[4] = -68.0 / 243.0 - 2.0 / 81.0 * M_PI * M_PI - 14.0 / 81.0 * log_c - 2.0 / 27.0 * log_c * log_c;
+        result[5] = -85.0 / 162.0 - 5.0 / 108.0 * M_PI * M_PI - 35.0 / 108.0 * log_c - 5.0 / 36.0 * log_c * log_c;
+        result[11] = -713.0 / 243.0 - 4.0 / 81.0 * log_c;
+        result[12] = -91.0 / 324.0 + 4.0 / 27.0 * log_c;
+        result[13] = -1.0 / sw2 - 524.0 / 729.0 + 128.0 / 243.0 * M_PI * M_PI + 16.0 / 3.0 * log_c + 128.0 / 81.0 * log_c * log_c;
+        result[14] = 1.0 / sw2;
+
+        return result;
+    }
+
+    /*
+     * Initial scale Wilson coefficients from the top sector, cf. [BMU1999], between Eqs. (4) and (5), pp. 4-5
+     *
+     * x_t = m_t(mu_0t)^2 / m_W^2
+     * log_t = ln(mu_0t / m_t(mu_0t))
+     * sw2 = sin^2(theta_Weinberg)
+     */
+    std::array<double, 15>
+    initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0()
+    {
+        std::array<double, 15> result;
+        result.fill(0.0);
+
+        return result;
+    }
+
+    std::array<double, 15>
+    initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(const double & x_t, const double & sw2)
+    {
+        std::array<double, 15> result;
+        result.fill(0.0);
+        result[3] = TopLoops::E0(x_t);
+        result[11] = -0.5 * TopLoops::A0(x_t);
+        result[12] = -0.5 * TopLoops::F0(x_t);
+        result[13] = (1.0 - 4.0 * sw2) / sw2 * TopLoops::C0(x_t) - TopLoops::B0(x_t) / sw2 - TopLoops::D0(x_t);
+        result[14] = (TopLoops::B0(x_t) - TopLoops::C0(x_t)) / sw2;
+
+        return result;
+    }
+
+    std::array<double, 15>
+    initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(const double & x_t, const double & log_t, const double & sw2)
+    {
+        std::array<double, 15> result;
+        result.fill(0.0);
+        result[2] = TopLoops::G1(x_t, log_t);
+        result[3] = TopLoops::E1(x_t, log_t);
+        result[4] = -0.1 * TopLoops::G1(x_t, log_t) + 2.0 / 15.0 * TopLoops::E0(x_t);
+        result[5] = -3.0 / 16.0 * TopLoops::E1(x_t, log_t) + 0.25 * TopLoops::E0(x_t);
+        result[11] = -0.5 * TopLoops::A1(x_t, log_t);
+        result[12] = -0.5 * TopLoops::F1(x_t, log_t);
+        result[13] = (1.0 - 4.0 * sw2) / sw2 * TopLoops::C1(x_t, log_t) - TopLoops::B1(x_t, log_t) / sw2 - TopLoops::D1(x_t, log_t);
+        result[14] = (TopLoops::B1(x_t, log_t) - TopLoops::C1(x_t, log_t)) / sw2;
+
+        return result;
+    }
+}
+
+    WilsonCoefficients<BToS>
+    StandardModel::wilson_coefficients_b_to_s() const
+    {
+        // Calculation according to [BMU1999], Eq. (25), p. 7
+
+        if (_mu >= _mu_t)
+            throw InternalError("StandardModel::wilson_coefficients_b_to_s: Evolution to mu >= mu_t is not yet implemented!");
+
+        if (_mu <= _mu_c)
+            throw InternalError("StandardModel::wilson_coefficients_b_to_s: Evolution to mu <= mu_c is not yet implemented!");
+
+        static const double nf = 5.0;
+        const double m_t_mu_0c = this->m_t_msbar(_mu_0c), m_t_mu_0t = this->m_t_msbar(_mu_0t);
+        const double log_c = 2.0 * std::log(_mu_0c / _m_W), log_t = std::log(_mu_0t / m_t_mu_0t);
+        const double x_c = power_of<2>(m_t_mu_0c / _m_W), x_t = power_of<2>(m_t_mu_0t / _m_W);
+
+        double alpha_s_0 = this->alpha_s(_m_W);
+        double alpha_s = this->alpha_s(_mu);
+
+        WilsonCoefficients<BToS> downscaled_charm = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0(),
+                implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(log_c, _sw2),
+                implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(x_c, log_c, _sw2),
+                alpha_s_0, alpha_s, nf, QCD::beta_function_nf_5);
+        WilsonCoefficients<BToS> downscaled_top = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0(),
+                implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(x_t, _sw2),
+                implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(x_t, log_t, _sw2),
+                alpha_s_0, alpha_s, nf, QCD::beta_function_nf_5);
+
+        WilsonCoefficients<BToS> wc = downscaled_top;
+        wc._coefficients = wc._coefficients + (-1.0) * downscaled_charm._coefficients;
+
+        return wc;
     }
 }

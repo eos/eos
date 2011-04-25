@@ -46,10 +46,16 @@ namespace eos
             Parameter _m_t_pole;
             Parameter _m_b_MSbar;
             Parameter _m_c_MSbar;
+            Parameter _m_W;
             Parameter _m_Z;
 
-            /* Renormalization Scale */
+            /* GSW parameters */
+            Parameter _sw2;
+
+            /* Renormalization scales */
             Parameter _mu;
+            Parameter _mu_0c;
+            Parameter _mu_0t;
 
         public:
             StandardModel(const Parameters &);
@@ -77,6 +83,9 @@ namespace eos
             virtual complex<double> ckm_td() const;
             virtual complex<double> ckm_ts() const;
             virtual complex<double> ckm_tb() const;
+
+            /* b->s Wilson coefficients */
+            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s() const;
     };
 }
 

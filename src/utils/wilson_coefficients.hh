@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ namespace eos
 
         double _alpha_s;
 
-        // Unknown Basis
+        // Misiak basis, cf. [BMU1999], Eq. (2), p. 3
         inline double c1() const { return _coefficients[0]; }
         inline double c2() const { return _coefficients[1]; }
         inline double c3() const { return _coefficients[2]; }
@@ -60,13 +60,24 @@ namespace eos
         inline double c10() const { return 4.0 * M_PI / _alpha_s * _coefficients[14]; }
     };
 
+    /*!
+     * Evolution of b -> s Wilson coefficients
+     *
+     * Calculation according to [BMU1999], Eq. (25)
+     *
+     * @param wc_qcd_0  The initial scale Wilson coefficients at O(alpha_s^0)
+     * @param wc_qcd_1  The initial scale Wilson coefficients at O(alpha_s^1)
+     * @param wc_qcd_2  The initial scale Wilson coefficients at O(alpha_s^2)
+     * @param alpha_s_0 The strong coupling constant at the initial scale
+     * @param alpha_s   The strong coupling constant at the low scale
+     * @param nf        The number of active flavors
+     * @param beta      Coefficients of the beta function of QCD for nf active flavors.
+     */
     WilsonCoefficients<BToS> evolve(const std::array<double, 15> & wc_qcd_0,
             const std::array<double, 15> & wc_qcd_1,
             const std::array<double, 15> & wc_qcd_2,
             const double & alpha_s_0, const double & alpha_s,
             const double & nf, const QCD::BetaFunction & beta);
-
-    void calculate_wilson_coefficients(const double & mu, Parameters & parameters);
 }
 
 #endif

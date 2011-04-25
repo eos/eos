@@ -131,6 +131,13 @@ References
         arxiv:hep-ph/9501281
 
 
+    BMU1999 : Bobeth, C. and Misiak, M. and Urban, J.
+
+        Photonic penguins at two loops and m_t-dependence of BR[B -> X_s l^+ l^-]
+
+        arxiv:hep-ph/9910220
+
+
     BZ2004 : Ball, P. and Zwicky, R.
 
         B_{d,s} -> rho,omega,K^*,phi Decay Form Factors from Light-Cone
