@@ -59,9 +59,20 @@ namespace eos
             static double m_q_msbar(const double & m_q, const double & alpha_s_0, const double & alpha_s_mu, const BetaFunction & beta, const AnomalousMassDimension & gamma_m);
 
             /*!
-             * Calculate the shift from MSbar scheme to pole mass
+             * Calculate the shift from pole mass scheme to MSbar.
              *
-             * Calculation according to [CERN2002-002].
+             * Calculation according to [MvR1999].
+             *
+             * @param m_q_pole    quark mass in the pole mass scheme
+             * @param alpha_s     alpha_s at scale mu = m_q_pole
+             * @param nf          number of active QCD flavors that control the calculation
+             */
+            static double m_q_msbar(const double & m_q_pole, const double & alpha_s, const double & nf);
+
+            /*!
+             * Calculate the shift from MSbar scheme to pole mass.
+             *
+             * Calculation according to [CERN2003-002].
              *
              * @param m_q         quark mass in the MSbar scheme at the scale m_q
              * @param alpha_s     alpha_s at the scale m_q

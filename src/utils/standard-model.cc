@@ -38,6 +38,7 @@ namespace eos
         _mu_b(p["QCD::mu_b"]),
         _mu_c(p["QCD::mu_c"]),
         _lambda_qcd(p["QCD::Lambda"]),
+        _m_t_pole(p["mass::t(pole)"]),
         _m_b_MSbar(p["mass::b(MSbar)"]),
         _m_c_MSbar(p["mass::c"]),
         _m_Z(p["mass::Z"]),
@@ -87,6 +88,24 @@ namespace eos
             return QCD::alpha_s(mu, alpha_s_0, mu_0, QCD::beta_function_nf_3);
 
         throw InternalError("StandardModel::alpha_s: Cannot run alpha_s to mu < lambda_qcd");
+    }
+
+    double
+    StandardModel::m_t_msbar(const double & mu) const
+    {
+        double alpha_s_m_t_pole = this->alpha_s(_m_t_pole);
+        double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole, alpha_s_m_t_pole, 5.0);
+
+        if ((_mu_b <= mu) && (mu < _mu_t))
+            return QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, this->alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+
+        throw InternalError("StandardModel::m_t_msbar: Running of m_t_MSbar to mu >= mu_t or to mu < m_b not yet implemented");
+    }
+
+    double
+    StandardModel::m_t_pole() const
+    {
+        return _m_t_pole();
     }
 
     double

@@ -43,6 +43,7 @@ namespace eos
             Parameter _lambda_qcd;
 
             /* Masses */
+            Parameter _m_t_pole;
             Parameter _m_b_MSbar;
             Parameter _m_c_MSbar;
             Parameter _m_Z;
@@ -58,6 +59,8 @@ namespace eos
 
             /* QCD */
             virtual double alpha_s(const double &) const;
+            virtual double m_t_msbar(const double & mu) const;
+            virtual double m_t_pole() const;
             virtual double m_b_msbar(const double & mu) const;
             virtual double m_b_pole() const;
             virtual double m_b_ps(const double & mu_f) const;

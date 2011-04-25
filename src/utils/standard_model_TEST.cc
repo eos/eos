@@ -35,7 +35,9 @@ reference_parameters()
     result["QCD::mu_t"] = 170.0;
     result["QCD::mu_b"] = 4.2;
     result["QCD::mu_c"] = 1.2;
+    result["mass::W"] = 80.398;
     result["mass::Z"] = 91.1876;
+    result["mass::t(pole)"] = 173.3;
 
     return result;
 }
@@ -106,6 +108,26 @@ class AlphaSTest :
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s( 0.5 ), 5.709652, eps);
         }
 } sm_alpha_s_test;
+
+class TMassesTest :
+    public TestCase
+{
+    public:
+        TMassesTest() :
+            TestCase("sm_t_masses_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const double eps = 1e-5;
+
+            StandardModel model(reference_parameters());
+
+            TEST_CHECK_RELATIVE_ERROR(167.794, model.m_t_msbar(120.0), eps);
+            TEST_CHECK_RELATIVE_ERROR(173.647, model.m_t_msbar( 80.0), eps);
+        }
+} sm_t_masses_test;
 
 class BMassesTest :
     public TestCase

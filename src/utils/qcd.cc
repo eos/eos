@@ -164,6 +164,17 @@ namespace eos
     }
 
     double
+    QCD::m_q_msbar(const double & m_q_pole, const double & alpha_s, const double & nf)
+    {
+        double a_s = alpha_s / M_PI;
+
+        // cf. [MvR1999], Eq. (12), pp. 4-5 for alpha_s = alpha_s(m_q_pole)
+        // thus we return m_b(mu)
+        return m_q_pole * (1.0 + a_s * (-4.0 / 3.0 + a_s * (1.04 * nf - 14.3323 + a_s *
+                        (-0.65269 * nf * nf + 26.9239 * nf - 198.8068))));
+    }
+
+    double
     QCD::m_q_pole(const double & m_q_MSbar, const double & alpha_s_mb, const double & nf)
     {
         double a_s = alpha_s_mb / M_PI;

@@ -188,7 +188,7 @@ namespace eos
             Parameter::Template{"mass::b(MSbar)",                                +4.13,       +4.20,       +4.37      }, // cf. [PDG2008], p. 21
             Parameter::Template{"mass::c",                                       +1.16,       +1.27,       +1.34      }, // cf. [PDG2008], p. 21
             Parameter::Template{"mass::s",                                       +0.00,       +0.00,       +0.00      }, // we neglect m_s throughout, cf. [BHvD2010], Table 1
-            Parameter::Template{"mass::t",                                       +169.1,      +171.2,      +173.3     }, // cf. [PDG2008], p. 21
+            Parameter::Template{"mass::t(pole)",                                 +172.2,      +173.3,      +174.4     }, // cf. [PDG2008], p. 21
             Parameter::Template{"mass::e",                                       +5.10999e-4, +5.10999e-4, +5.10999e-4}, // cf. [PDG2008], p. 13
             Parameter::Template{"mass::mu",                                      +1.05658e-1, +1.05658e-1, +1.05658e-1}, // cf. [PDG2008], p. 13
             Parameter::Template{"mass::tau",                                     +1.77667,    +1.77684,    +1.77701   }, // cf. [PDG2008], p. 14

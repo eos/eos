@@ -272,6 +272,13 @@ References
         arxiv:hep-ph/0403185
 
 
+    TEWWG2010 : Tevatron Electroweak Working Group
+
+        Combination of CDF and D0 Results on the Mass of the Top Quark using up to 5.6fb^-1 of data
+
+        arxiv:1007.3178
+
+
     vRVL1997 : van Ritbergen, T. and Vermaseren, J.A.M. and Larin, S.A.
 
         The four-loop beta-function in Quantum Chromodynamics

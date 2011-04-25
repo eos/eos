@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,50 +21,41 @@
 #include <src/utils/qcd.hh>
 
 #include <cmath>
-#include <iostream>
+#include <array>
+#include <vector>
 
 using namespace test;
 using namespace eos;
 
-class QCDTest :
+class QCDMassesTest :
     public TestCase
 {
     public:
-        QCDTest() :
-            TestCase("qcd_test")
+        QCDMassesTest() :
+            TestCase("qcd_masses_test")
         {
         }
 
         virtual void run() const
         {
-#if 0
-            static const double eps = 1e-6;
-            TEST_CHECK(std::abs(0.224302 - QCD::alpha_s( 4.2)) <= eps);
-            TEST_CHECK(std::abs(0.215643 - QCD::alpha_s( 4.8)) <= eps);
-            TEST_CHECK(std::abs(0.213133 - QCD::alpha_s( 5.0)) <= eps);
-            TEST_CHECK(std::abs(0.120246 - QCD::alpha_s(80.0)) <= eps);
-#endif
-        }
-} qcd_test;
+            static const double eps = 1e-7;
+            static const std::vector<std::array<double, 5>> tests
+            {
+                                      // pole,  nf, alpha_s,   MSbar-ref
+                std::array<double, 5>{{ 172.0, 5.0,    0.10,  162.6620051 }},
+                std::array<double, 5>{{ 170.0, 5.0,    0.10,  160.7705865 }},
+                std::array<double, 5>{{ 168.0, 5.0,    0.10,  158.8791678 }},
+                std::array<double, 5>{{   4.9, 4.0,    0.22,    4.0271606 }},
+                std::array<double, 5>{{   4.8, 4.0,    0.22,    3.9449736 }},
+                std::array<double, 5>{{   4.7, 4.0,    0.22,    3.8627867 }},
+            };
 
-class QCDBMassesTest :
-    public TestCase
-{
-    public:
-        QCDBMassesTest() :
-            TestCase("qcd_b_masses_test")
-        {
-        }
+            for (auto t = tests.cbegin(), t_end = tests.cend() ; t != t_end ; ++t)
+            {
+                double m_q_pole_input = (*t)[0], nf = (*t)[1], alpha_s = (*t)[2], m_q_msbar_ref = (*t)[3];
+                double m_q_msbar = QCD::m_q_msbar(m_q_pole_input, alpha_s, nf);
 
-        virtual void run() const
-        {
-#if 0
-            static const double eps = 1e-6;
-
-            /* b quark pole mass */
-            TEST_CHECK(std::abs(4.780082 - QCD::mb_pole(4.1)) <= eps);
-            TEST_CHECK(std::abs(4.888672 - QCD::mb_pole(4.2)) <= eps);
-            TEST_CHECK(std::abs(4.997244 - QCD::mb_pole(4.3)) <= eps);
-#endif
+                TEST_CHECK_RELATIVE_ERROR(m_q_msbar, m_q_msbar_ref, eps);
+            }
         }
-} qcd_b_masses_test;
+} qcd_masses_test;
