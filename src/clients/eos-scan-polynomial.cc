@@ -203,6 +203,16 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--parameter" == argument)
+                {
+                    std::string name(*(++a));
+                    double value = destringify<double>(*(++a));
+
+                    parameters[name] = value;
+
+                    continue;
+                }
+
                 throw DoUsage("Unknown command line argument: " + argument);
             }
         }
