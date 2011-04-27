@@ -23,6 +23,7 @@
 #include <src/rare-b-decays/form-factors.hh>
 #include <src/rare-b-decays/hard-scattering.hh>
 #include <src/rare-b-decays/long-distance.hh>
+#include <src/utils/destringify.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
 #include <src/utils/memoise.hh>
@@ -65,7 +66,9 @@ namespace eos
 
         Parameter arg_c7;
 
-        Parameter c7prime;
+        Parameter abs_c7prime;
+
+        Parameter arg_c7prime;
 
         Parameter c8;
 
@@ -73,13 +76,17 @@ namespace eos
 
         Parameter arg_c9;
 
-        Parameter c9prime;
+        Parameter abs_c9prime;
+
+        Parameter arg_c9prime;
 
         Parameter abs_c10;
 
         Parameter arg_c10;
 
-        Parameter c10prime;
+        Parameter abs_c10prime;
+
+        Parameter arg_c10prime;
 
         Parameter m_b_MSbar;
 
@@ -127,6 +134,8 @@ namespace eos
 
         double e_q;
 
+        bool cp_conjugate;
+
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
         Implementation(const Parameters & p, const Options & o) :
@@ -139,14 +148,17 @@ namespace eos
             c6(p["c6"]),
             abs_c7(p["Abs{c7}"]),
             arg_c7(p["Arg{c7}"]),
-            c7prime(p["c7prime"]),
+            abs_c7prime(p["Abs{c7'}"]),
+            arg_c7prime(p["Arg{c7'}"]),
             c8(p["c8"]),
             abs_c9(p["Abs{c9}"]),
             arg_c9(p["Arg{c9}"]),
-            c9prime(p["c9prime"]),
+            abs_c9prime(p["Abs{c9'}"]),
+            arg_c9prime(p["Arg{c9'}"]),
             abs_c10(p["Abs{c10}"]),
             arg_c10(p["Arg{c10}"]),
-            c10prime(p["c10prime"]),
+            abs_c10prime(p["Abs{c10'}"]),
+            arg_c10prime(p["Arg{c10'}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c(p["mass::c"]),
             m_B(p["mass::B0"]),
@@ -168,7 +180,8 @@ namespace eos
             uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty@LargeRecoil"]),
             uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"]),
             uncertainty_xi_par(p["formfactors::xi_par_uncertainty"]),
-            e_q(-1.0/3.0)
+            e_q(-1.0/3.0),
+            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
 
@@ -217,27 +230,25 @@ namespace eos
             return model->m_b_ps(1.5);
         }
 
+        // alias c7('),c9(') and c10(')
+        inline complex<double> c7() const { return std::polar(abs_c7(), (cp_conjugate ? -1.0 : +1.0) * arg_c7()); }
+        inline complex<double> c7prime() const { return std::polar(abs_c7prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c7prime()); }
+        inline complex<double> c9() const { return std::polar(abs_c9(), (cp_conjugate ? -1.0 : +1.0) * arg_c9()); }
+        inline complex<double> c9prime() const { return std::polar(abs_c9prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c9prime()); }
+        inline complex<double> c10() const { return std::polar(abs_c10(), (cp_conjugate ? -1.0 : +1.0) * arg_c10()); }
+        inline complex<double> c10prime() const { return std::polar(abs_c10prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c10prime()); }
+
         /* Effective wilson coefficients */
         // cf. [BFS2001], below Eq. (9), p. 4
-        complex<double> c7eff() const
+        inline complex<double> c7eff() const
         {
-            return abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) - 1.0/3.0 * c3() - 4.0/9.0 * c4() - 20.0/3.0 * c5() - 80.0/9.0 * c6();
+            return c7() - 1.0/3.0 * c3() - 4.0/9.0 * c4() - 20.0/3.0 * c5() - 80.0/9.0 * c6();
         }
 
         // cf. [BFS2001], below Eq. (26), p. 8
         double c8eff() const
         {
             return c8() + c3() - 1.0/6.0 * c4() + 20.0 * c5() - 10.0/3.0 * c6();
-        }
-
-        complex<double> c9() const
-        {
-            return abs_c9() * complex<double>(cos(arg_c9()), sin(arg_c9()));
-        }
-
-        complex<double> c10() const
-        {
-            return abs_c10() * complex<double>(cos(arg_c10()), sin(arg_c10()));
         }
 
         // cf. [BFS2001], Eq. (10), p. 4
@@ -496,13 +507,13 @@ namespace eos
         }
 
         // cf. [BFS2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1
-        complex<double> C0_perp(const double & /*h*/, const double & s) const
+        complex<double> C0_perp(const double & h, const double & s) const
         {
-            return c7eff() + s / (2.0 * m_b_PS() * m_B) * Y0(s);
+            return (c7eff() + h * c7prime()) + s / (2.0 * m_b_PS() * m_B) * Y0(s);
         }
 
         // cf. [BFS2001], Eqs. (34), (37), p. 9
-        complex<double> C1_perp(const double & /*h*/, const double & s) const
+        complex<double> C1_perp(const double & h, const double & s) const
         {
             // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
             double m_b = m_b_PS();
@@ -511,7 +522,7 @@ namespace eos
 
             // cf. [BFS2004], Eq. (44), p. 24
             // [Christoph] Use c7 instead of c7eff
-            complex<double> C_perp_f = (abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) - c7prime()) * (8.0 * std::log(m_b / mu) - L(s) - 4.0 * (1.0 - mu_f() / m_b));
+            complex<double> C_perp_f = (c7() + h * c7prime()) * (8.0 * std::log(m_b / mu) - L(s) - 4.0 * (1.0 - mu_f() / m_b));
 
             // cf. [BFS2001], Eq. (37), p. 9
             // [Christoph] Use c8 instead of c8eff
@@ -526,7 +537,7 @@ namespace eos
         }
 
         // cf. [BFS2001], Eqs. (16), (21), (25), pp. 5-7
-        complex<double> T1_perp_p(const double & s, const double & u) const
+        complex<double> T1_perp_p(const double & h, const double & s, const double & u) const
         {
             static const double e_d = (-1.0/3.0);
             static const double e_u = (+2.0/3.0);
@@ -537,7 +548,7 @@ namespace eos
 
             // cf. [BFS2001], Eq. (20)
             // [Christoph] Use c7 instead of c7eff
-            complex<double> Tf_perp_p = abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) * (2.0 * m_B / (1.0 - u) / energy(s));
+            complex<double> Tf_perp_p = (c7() + h * c7prime()) * (2.0 * m_B / (1.0 - u) / energy(s));
 
             // cf. [BFS2001], Eq. (23)
             // [Christoph] Use c8 instead of c8eff
@@ -551,11 +562,11 @@ namespace eos
         }
 
         // cf. [BFS2001], Eq. (16) times phi_K^*_perp
-        complex<double> T_perp(const double & s, const double & u) const
+        complex<double> T_perp(const double & h, const double & s, const double & u) const
         {
             double a = model->alpha_s(sqrt(mu * 0.5)) * QCD::casimir_f / 4.0 / M_PI;
 
-            return phi_K(u, a_1_perp, a_2_perp) * a * T1_perp_p(s, u);
+            return phi_K(u, a_1_perp, a_2_perp) * a * T1_perp_p(h, s, u);
 
             // TODO: Hard scattering + Weak annihilation from [BFS2004], Eqs. (51), (52)
         }
@@ -566,7 +577,7 @@ namespace eos
             return xi_perp(s) * (C0_perp(h, s) + model->alpha_s(mu) * QCD::casimir_f / 4.0 / M_PI * C1_perp(h, s))
                 + (pow(M_PI, 2) / 3.0) * (f_B * f_Kstar_perp / m_B)
                 * integrate(std::function<complex<double> (const double &)>(
-                                std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::T_perp, this, s, std::placeholders::_1)),
+                                std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::T_perp, this, h, s, std::placeholders::_1)),
                         64, 0.001, 0.999);
         }
 
@@ -586,7 +597,7 @@ namespace eos
 
             // cf. [BFS2004], Eq. (45), p. 24
             // [Christoph] Use c7 instead of c7eff.
-            complex<double> C_par_f = -1.0 * (abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) - c7prime()) * (8.0 * std::log(m_b / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b));
+            complex<double> C_par_f = -1.0 * (c7() - c7prime()) * (8.0 * std::log(m_b / mu) + 2.0 * L(s) - 4.0 * (1.0 - mu_f() / m_b));
             /* for [BFS2001] version of xi_par we also needed: */
             // C_par_f += (m_B / (2.0 * m_b)) * Y0(s) * (2.0 - 2.0 * L(s));
 
@@ -621,7 +632,7 @@ namespace eos
             //complex<double> Tf_par_p = (c7() - c7prime + (s / (2.0 * m_b * m_B)) * Y0(s)) * (2.0 * pow(m_B / energy(s), 2));
             // cf. [BFS2004], Eq. (49)
             // [Christoph] Use c7 instead of c7eff.
-            complex<double> Tf_par_p = abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7())) * (4.0 * m_B / (1.0 - u) / energy(s));
+            complex<double> Tf_par_p = (c7() - c7prime()) * (4.0 * m_B / (1.0 - u) / energy(s));
 
             // cf. [BFS2001], Eq. (25)
             complex<double> Tnf_par_p = m_B / m_b * (
@@ -1023,7 +1034,9 @@ namespace eos
 
         Parameter arg_c7;
 
-        Parameter c7prime;
+        Parameter abs_c7prime;
+
+        Parameter arg_c7prime;
 
         Parameter c8;
 
@@ -1031,11 +1044,17 @@ namespace eos
 
         Parameter arg_c9;
 
-        Parameter c9prime;
+        Parameter abs_c9prime;
+
+        Parameter arg_c9prime;
 
         Parameter abs_c10;
 
         Parameter arg_c10;
+
+        Parameter abs_c10prime;
+
+        Parameter arg_c10prime;
 
         Parameter m_b_MSbar;
 
@@ -1067,6 +1086,8 @@ namespace eos
 
         double e_q;
 
+        bool cp_conjugate;
+
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
         Implementation(const Parameters & p, const Options & o) :
@@ -1079,13 +1100,17 @@ namespace eos
             c6(p["c6"]),
             abs_c7(p["Abs{c7}"]),
             arg_c7(p["Arg{c7}"]),
-            c7prime(p["c7prime"]),
+            abs_c7prime(p["Abs{c7'}"]),
+            arg_c7prime(p["Arg{c7'}"]),
             c8(p["c8"]),
             abs_c9(p["Abs{c9}"]),
             arg_c9(p["Arg{c9}"]),
-            c9prime(p["c9prime"]),
+            abs_c9prime(p["Abs{c9'}"]),
+            arg_c9prime(p["Arg{c9'}"]),
             abs_c10(p["Abs{c10}"]),
             arg_c10(p["Arg{c10}"]),
+            abs_c10prime(p["Abs{c10'}"]),
+            arg_c10prime(p["Arg{c10'}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c(p["mass::c"]),
             m_B(p["mass::B0"]),
@@ -1099,7 +1124,8 @@ namespace eos
             lambda_B_p(p["lambda_B_p"]),
             a_1(p["B->K::a_1@1GeV"]),
             a_2(p["B->K::a_2@1GeV"]),
-            e_q(-1.0/3.0)
+            e_q(-1.0/3.0),
+            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "BZ2004v2"), p);
 
@@ -1144,10 +1170,13 @@ namespace eos
             return model->m_b_ps(1.5);
         }
 
-        complex<double> c7() const
-        {
-            return std::polar(abs_c7(), arg_c7());
-        }
+        // alias c7('),c9(') and c10(')
+        inline complex<double> c7() const { return std::polar(abs_c7(), (cp_conjugate ? -1.0 : +1.0) * arg_c7()); }
+        inline complex<double> c7prime() const { return std::polar(abs_c7prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c7prime()); }
+        inline complex<double> c9() const { return std::polar(abs_c9(), (cp_conjugate ? -1.0 : +1.0) * arg_c9()); }
+        inline complex<double> c9prime() const { return std::polar(abs_c9prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c9prime()); }
+        inline complex<double> c10() const { return std::polar(abs_c10(), (cp_conjugate ? -1.0 : +1.0) * arg_c10()); }
+        inline complex<double> c10prime() const { return std::polar(abs_c10prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c10prime()); }
 
         /* Effective wilson coefficients */
         // cf. [BFS2001], below Eq. (9), p. 4
@@ -1160,16 +1189,6 @@ namespace eos
         double c8eff() const
         {
              return c8() + c3() - 1.0/6.0 * c4() + 20.0 * c5() - 10.0/3.0 * c6();
-        }
-
-        complex<double> c9() const
-        {
-            return std::polar(abs_c9(), arg_c9());
-        }
-
-        complex<double> c10() const
-        {
-            return std::polar(abs_c10(), arg_c10());
         }
 
         // cf. [BFS2001], Eq. (10), p. 4
@@ -1285,7 +1304,7 @@ namespace eos
 
             // the correct sign in front of C_7^eff is plus, as one can see by
             // comparison with [BF2001], Eq. (63)
-            return c7() * (8.0 * log(m_b / mu_f()) + 2.0 * L(s) - 4.0 + 4.0 * mu_f() / m_b);
+            return (c7() - c7prime()) * (8.0 * log(m_b / mu_f()) + 2.0 * L(s) - 4.0 + 4.0 * mu_f() / m_b);
         }
 
         // cf. [BFS2001], Eq. (17), p. 6
@@ -1354,7 +1373,7 @@ namespace eos
         // cf. [BHP2007], Eq. (B.2)
         complex<double> T1f_pseudo_p(const double & s, const double & u) const
         {
-            return -c7() * (4.0 * m_B / (energy(s) * (1 - u)));
+            return -(c7() - c7prime()) * (4.0 * m_B / (energy(s) * (1 - u)));
         }
 
         // cf. [BHP2007], Eq. (B.2)

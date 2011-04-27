@@ -30,7 +30,7 @@ namespace eos
     {
         Parameter abs_c7;
 
-        Parameter c7prime;
+        Parameter abs_c7prime;
 
         Parameter ckm_A;
 
@@ -42,7 +42,7 @@ namespace eos
 
         Implementation(const Parameters & p) :
             abs_c7(p["Abs{c7}"]),
-            c7prime(p["c7prime"]),
+            abs_c7prime(p["Abs{c7'}"]),
             ckm_A(p["CKM::A"]),
             ckm_lambda(p["CKM::lambda"]),
             ckm_etabar(p["CKM::etabar"]),
@@ -65,7 +65,7 @@ namespace eos
 
         double s_kstar_gamma() const
         {
-            double r = std::abs(c7prime / abs_c7);
+            double r = abs_c7prime() / abs_c7();
 
             return -2.0 * r / (1.0 + r * r) * std::sin(2.0 * beta());
         }

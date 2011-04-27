@@ -163,9 +163,12 @@ namespace eos
             Parameter::Template{"Abs{c10}",                                      +4.17,       +4.17,       +4.17      },
             Parameter::Template{"Arg{c10}",                                      +M_PI,       +M_PI,       +M_PI      },
             // Primed Wilson coefficients are negligible in the SM
-            Parameter::Template{"c7prime",                                       +0.0,        +0.0,        +0.0       },
-            Parameter::Template{"c9prime",                                       +0.0,        +0.0,        +0.0       },
-            Parameter::Template{"c10prime",                                      +0.0,        +0.0,        +0.0       },
+            Parameter::Template{"Abs{c7'}",                                      +0.0,        +0.0,        +0.0       },
+            Parameter::Template{"Arg{c7'}",                                      +M_PI,       +M_PI,       +M_PI      },
+            Parameter::Template{"Abs{c9'}",                                      +0.0,        +0.0,        +0.0       },
+            Parameter::Template{"Arg{c9'}",                                      +M_PI,       +M_PI,       +M_PI      },
+            Parameter::Template{"Abs{c10'}",                                     +0.0,        +0.0,        +0.0       },
+            Parameter::Template{"Arg{c10'}",                                     +M_PI,       +M_PI,       +M_PI      },
             // Factorization scale
             Parameter::Template{"mu",                                            +2.4,        +4.2,        +9.6       },
             // Wolfenstein parameters of CKM, cf. [CKMfitter04] Table 2, p. 48 and ICHEP10 results +/- 1 sigma

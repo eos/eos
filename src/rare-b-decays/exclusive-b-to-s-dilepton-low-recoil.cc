@@ -65,7 +65,9 @@ namespace eos
 
         Parameter arg_c7;
 
-        Parameter c7prime;
+        Parameter abs_c7prime;
+
+        Parameter arg_c7prime;
 
         Parameter c8;
 
@@ -73,13 +75,17 @@ namespace eos
 
         Parameter arg_c9;
 
-        Parameter c9prime;
+        Parameter abs_c9prime;
+
+        Parameter arg_c9prime;
 
         Parameter abs_c10;
 
         Parameter arg_c10;
 
-        Parameter c10prime;
+        Parameter abs_c10prime;
+
+        Parameter arg_c10prime;
 
         Parameter m_b_MSbar;
 
@@ -123,14 +129,17 @@ namespace eos
             c6(p["c6"]),
             abs_c7(p["Abs{c7}"]),
             arg_c7(p["Arg{c7}"]),
-            c7prime(p["c7prime"]),
+            abs_c7prime(p["Abs{c7'}"]),
+            arg_c7prime(p["Arg{c7'}"]),
             c8(p["c8"]),
             abs_c9(p["Abs{c9}"]),
             arg_c9(p["Arg{c9}"]),
-            c9prime(p["c9prime"]),
+            abs_c9prime(p["Abs{c9'}"]),
+            arg_c9prime(p["Arg{c9'}"]),
             abs_c10(p["Abs{c10}"]),
             arg_c10(p["Arg{c10}"]),
-            c10prime(p["c10prime"]),
+            abs_c10prime(p["Abs{c10'}"]),
+            arg_c10prime(p["Arg{c10'}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_c_MSbar(p["mass::c"]),
             m_s(p["mass::s"]),
@@ -160,12 +169,13 @@ namespace eos
             return model->m_b_ps(2.0);
         }
 
-        inline complex<double> c7() const
-        {
-            double sign = (cp_conjugate ? -1.0 : +1.0);
-
-            return abs_c7() * complex<double>(cos(arg_c7()), sign * sin(arg_c7()));
-        }
+        // alias c7('),c9(') and c10(')
+        inline complex<double> c7() const { return std::polar(abs_c7(), (cp_conjugate ? -1.0 : +1.0) * arg_c7()); }
+        inline complex<double> c7prime() const { return std::polar(abs_c7prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c7prime()); }
+        inline complex<double> c9() const { return std::polar(abs_c9(), (cp_conjugate ? -1.0 : +1.0) * arg_c9()); }
+        inline complex<double> c9prime() const { return std::polar(abs_c9prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c9prime()); }
+        inline complex<double> c10() const { return std::polar(abs_c10(), (cp_conjugate ? -1.0 : +1.0) * arg_c10()); }
+        inline complex<double> c10prime() const { return std::polar(abs_c10prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c10prime()); }
 
         static complex<double> c7eff_nlo(const double & mu, const double & s, const double & m_b,
                 const double & c1, const double & c2, const double & c8)
@@ -190,13 +200,6 @@ namespace eos
                 result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo;
 
             return result;
-        }
-
-        inline complex<double> c9() const
-        {
-            double sign = (cp_conjugate ? -1.0 : +1.0);
-
-            return abs_c9() * complex<double>(cos(arg_c9()), sign * sin(arg_c9()));
         }
 
         static complex<double> c9eff_nlo_alpha_s(const double & mu, const double & s, const double & m_b,
@@ -236,13 +239,6 @@ namespace eos
                 result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
 
             return result;
-        }
-
-        complex<double> c10() const
-        {
-            double sign = (cp_conjugate ? -1.0 : +1.0);
-
-            return abs_c10() * complex<double>(cos(arg_c10()), sign * sin(arg_c10()));
         }
 
         double rho_1(const double & s) const
@@ -934,15 +930,27 @@ namespace eos
 
         Parameter arg_c7;
 
+        Parameter abs_c7prime;
+
+        Parameter arg_c7prime;
+
         Parameter c8;
 
         Parameter abs_c9;
 
         Parameter arg_c9;
 
+        Parameter abs_c9prime;
+
+        Parameter arg_c9prime;
+
         Parameter abs_c10;
 
         Parameter arg_c10;
+
+        Parameter abs_c10prime;
+
+        Parameter arg_c10prime;
 
         Parameter m_b_MSbar;
 
@@ -960,6 +968,8 @@ namespace eos
 
         double m_l;
 
+        bool cp_conjugate;
+
         bool ccbar_resonance;
 
         std::shared_ptr<FormFactors<PToP>> form_factors;
@@ -974,11 +984,17 @@ namespace eos
             c6(p["c6"]),
             abs_c7(p["Abs{c7}"]),
             arg_c7(p["Arg{c7}"]),
+            abs_c7prime(p["Abs{c7'}"]),
+            arg_c7prime(p["Arg{c7'}"]),
             c8(p["c8"]),
             abs_c9(p["Abs{c9}"]),
             arg_c9(p["Arg{c9}"]),
+            abs_c9prime(p["Abs{c9'}"]),
+            arg_c9prime(p["Arg{c9'}"]),
             abs_c10(p["Abs{c10}"]),
             arg_c10(p["Arg{c10}"]),
+            abs_c10prime(p["Abs{c10'}"]),
+            arg_c10prime(p["Arg{c10'}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
             m_B(p["mass::B0"]),
             m_K(p["mass::K0"]),
@@ -986,6 +1002,7 @@ namespace eos
             m_mu(p["mass::mu"]),
             m_tau(p["mass::tau"]),
             mu(p["mu"]),
+            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
             form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "BZ2004v2"), p);
@@ -1010,15 +1027,13 @@ namespace eos
                 throw InternalError("Unknown fourth lepton generation: " + lepton);
         }
 
-        inline complex<double> c7() const
-        {
-            return abs_c7() * complex<double>(cos(arg_c7()), sin(arg_c7()));
-        }
-
-        inline complex<double> c9() const
-        {
-            return abs_c9() * complex<double>(cos(arg_c9()), sin(arg_c9()));
-        }
+        // alias c7('),c9(') and c10(')
+        inline complex<double> c7() const { return std::polar(abs_c7(), (cp_conjugate ? -1.0 : +1.0) * arg_c7()); }
+        inline complex<double> c7prime() const { return std::polar(abs_c7prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c7prime()); }
+        inline complex<double> c9() const { return std::polar(abs_c9(), (cp_conjugate ? -1.0 : +1.0) * arg_c9()); }
+        inline complex<double> c9prime() const { return std::polar(abs_c9prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c9prime()); }
+        inline complex<double> c10() const { return std::polar(abs_c10(), (cp_conjugate ? -1.0 : +1.0) * arg_c10()); }
+        inline complex<double> c10prime() const { return std::polar(abs_c10prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c10prime()); }
 
         // We use the PS mass except for kappa
         double m_b_PS() const
@@ -1081,11 +1096,6 @@ namespace eos
             return result;
         }
 
-        complex<double> c10() const
-        {
-            return abs_c10() * complex<double>(cos(arg_c10()), sin(arg_c10()));
-        }
-
         double kappa() const
         {
             // cf. [BHvD2010], Eq. (3.8), p. 8
@@ -1095,7 +1105,7 @@ namespace eos
 
         double rho_1(const double & s) const
         {
-            return std::norm(kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(s) + c9eff(s)) + std::norm(c10());
+            return std::norm(kappa() * (2.0 * m_b_MSbar * m_B / s) * (c7eff(s) - c7prime()) + (c9eff(s) - c9prime())) + std::norm(c10() - c10prime());
         }
 
         // speed of the lepton
