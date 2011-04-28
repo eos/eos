@@ -18,7 +18,10 @@ noinst_PROGRAMS = \
 	integrated \
 	observables
 
-EOS_CLIENTS_LIBS = $(top_builddir)/src/libeos.la $(top_builddir)/src/utils/libeosutils.la
+EOS_CLIENTS_LIBS = \
+	$(top_builddir)/src/libeos.la \
+	$(top_builddir)/src/utils/libeosutils.la \
+	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la
 
 eos_evaluate_SOURCES = \
 	eos-evaluate.cc
