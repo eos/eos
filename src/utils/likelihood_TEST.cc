@@ -23,8 +23,6 @@
 
 #include <cmath>
 
-#include <limits>
-
 using namespace test;
 using namespace eos;
 
@@ -92,7 +90,7 @@ class LikelihoodTest :
             Kinematics k;
             k.declare("s", 15.0);
 
-            static double eps = std::numeric_limits<double>::epsilon();
+            static double eps = 1e-15;
             // Zero test
             {
                 Likelihood llh(p);
