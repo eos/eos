@@ -25,6 +25,17 @@ namespace eos
 {
     const double QCD::casimir_f = 4.0 / 3.0;
 
+    /* 6 flavor QCD constants */
+
+    // cf. [CKS2000], Eq. (2), p. 2 with n_f = 6
+    const QCD::BetaFunction QCD::beta_function_nf_6
+    {{
+        21.0 / 3.0,
+        78.0 / 3.0,
+        -65.0 / 2.0,
+        2472.2837425797160,
+    }};
+
     /* 5 flavor QCD constants */
 
     // cf. [CKS2000], Eq. (2), p. 2 with n_f = 5

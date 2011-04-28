@@ -58,10 +58,18 @@ namespace eos
     double
     StandardModel::alpha_s(const double & mu) const
     {
-        if (mu > _m_Z)
-            throw InternalError("StandardModel::alpha_s: Running of alpha_s to mu > m_Z not yet implemented");
-
         double alpha_s_0 = _alpha_s_Z, mu_0 = _m_Z;
+
+        if (mu >= _m_Z)
+        {
+            if (mu < _mu_t)
+                return QCD::alpha_s(mu, alpha_s_0, mu_0, QCD::beta_function_nf_5);
+
+            alpha_s_0 = QCD::alpha_s(_mu_t, alpha_s_0, mu_0, QCD::beta_function_nf_5);
+            mu_0 = _mu_t;
+
+            return QCD::alpha_s(mu, alpha_s_0, mu_0, QCD::beta_function_nf_6);
+        }
 
         if (mu >= _mu_b)
             return QCD::alpha_s(mu, alpha_s_0, mu_0, QCD::beta_function_nf_5);

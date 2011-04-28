@@ -93,6 +93,13 @@ namespace eos
             static const double casimir_a;
 
             /*!
+             * The 6-flavor-QCD constants.
+             */
+            ///@{
+            static const BetaFunction beta_function_nf_6;
+            ///@}
+
+            /*!
              * The 5-flavor-QCD constants.
              */
             ///@{

@@ -232,6 +232,13 @@ References
         arxiv:hep-ph/9603237
 
 
+    MvR1999 : Melnikov, K. and van Ritbergen, T.
+
+        The three-loop relation between the MSbar and the pole quark masses
+
+        arxiv:hep-ph/9912391
+
+
     PDG2008 : Particle Data Group
 
         Particle Physics Booklet (July 2008)
