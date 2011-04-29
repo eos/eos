@@ -39,6 +39,27 @@ namespace eos
     {
     }
 
+    bool
+    Options::operator== (const Options & rhs) const
+    {
+        if (_imp->options.size() != rhs._imp->options.size())
+            return false;
+
+        for (auto l = _imp->options.cbegin(), l_end = _imp->options.cend(), r = rhs._imp->options.cbegin() ; l != l_end ; ++l, ++r)
+        {
+            if (*l != *r)
+                return false;
+        }
+
+        return true;
+    }
+
+    bool
+    Options::operator!= (const Options & rhs) const
+    {
+        return ! (*this == rhs);
+    }
+
     const std::string &
     Options::operator[] (const std::string & key) const
     {

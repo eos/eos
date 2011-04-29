@@ -56,11 +56,16 @@ namespace eos
              * Destructor.
              */
             ~Options();
+
+            /// Equality comparison operator.
+            bool operator== (const Options & rhs) const;
+
+            /// Inequality comparison operator.
+            bool operator!= (const Options & rhs) const;
             ///@}
 
             ///@name Access
             ///@{
-
             const std::string & operator[] (const std::string & key) const;
 
             bool has(const std::string & key) const;
