@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -52,6 +52,31 @@ namespace eos
 
         return result;
     }
+
+    bool
+    Kinematics::operator== (const Kinematics & rhs) const
+    {
+        if (_imp->variables_map.size() != rhs._imp->variables_map.size())
+            return false;
+
+        for (auto l = _imp->variables_map.cbegin(), l_end = _imp->variables_map.cend(), r = rhs._imp->variables_map.cbegin() ; l != l_end ; ++l, ++r)
+        {
+            if (l->first != r->first)
+                return false;
+
+            if (_imp->variables_data[l->second] != rhs._imp->variables_data[r->second])
+                return false;
+        }
+
+        return true;
+    }
+
+    bool
+    Kinematics::operator!= (const Kinematics & rhs) const
+    {
+        return ! (*this == rhs);
+    }
+
 
     KinematicVariable
     Kinematics::operator[] (const std::string & name) const

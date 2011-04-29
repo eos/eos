@@ -52,6 +52,7 @@ TESTS = \
 	chi-squared_TEST \
 	histogram_TEST \
 	integrate_TEST \
+	kinematic_TEST \
 	lcda_TEST \
 	likelihood_TEST \
 	matrix_TEST \
@@ -87,6 +88,9 @@ histogram_TEST_LDADD = $(TESTS_LD_ADD)
 
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_LDADD = $(TESTS_LD_ADD)
+
+kinematic_TEST_SOURCES = kinematic_TEST.cc
+kinematic_TEST_LDADD = $(TESTS_LD_ADD)
 
 lcda_TEST_SOURCES = lcda_TEST.cc
 lcda_TEST_LDADD = $(TESTS_LD_ADD)
