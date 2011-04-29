@@ -129,7 +129,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
             for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
             {
                 ObservablePtr observable = Observable::make(*n, parameters, kinematics, Options());
-                TEST_CHECK(0 != observable);
+                TEST_CHECK(ObservablePtr() != observable);
 
                 WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "c7", "c9", "c10" });
 
