@@ -14,6 +14,7 @@ stamp-h1
 *.log
 *.cache
 *.status
+.deps/
 
 # Results
 *.[oa]
