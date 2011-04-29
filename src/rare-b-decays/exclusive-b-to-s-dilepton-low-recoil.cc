@@ -41,6 +41,80 @@ namespace eos
 {
     using std::norm;
 
+    struct ShortDistanceLowRecoil
+    {
+        /*!
+         * Effective Wilson coefficient c7 in the region of low hadronic recoil.
+         *
+         * @param s             dilepton invariant mass
+         * @param mu            renormalization scale
+         * @param alpha_s       strong coupling evaluated at the scale mu
+         * @param m_b_PS        PS mass of the bottom quark
+         * @param use_nlo       true, if NLO contributions shall be used
+         * @param cX            the Wilson coefficients c1...c8
+         *
+         * For the calculation, cf. [GP2004], Eq. (56)
+         */
+        static complex<double> c7eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, bool use_nlo,
+                const double & c1, const double & c2, const double & c3, const double & c4, const double & c5, const double & c6,
+                const complex<double> & c7, const double & c8)
+        {
+            // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
+            double lo = -1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
+            complex<double> nlo = -1.0 * (
+                      c1 * CharmLoops::F17_massless(mu, s, m_b_PS)
+                    + c2 * CharmLoops::F27_massless(mu, s, m_b_PS)
+                    + c8 * CharmLoops::F87_massless(mu, s, m_b_PS));
+
+            complex<double> result = c7 + lo;
+            if (use_nlo)
+                result += (alpha_s / (4.0 * M_PI)) * nlo;
+
+            return result;
+        }
+
+        /*!
+         * Effective Wilson coefficient c9 in the region of low hadronic recoil.
+         *
+         * @param s                     dilepton invariant mass
+         * @param mu                    renormalization scale
+         * @param alpha_s               strong coupling evaluated at the scale mu
+         * @param m_b_PS                PS mass of the bottom quark
+         * @param m_c                   MSbar mass of the charm quark
+         * @param use_nlo               true, if NLO contributions shall be used
+         * @param ccbar_resonance       true, if phenomenological data from e^+e^- -> ccbar resonance -> hadrons shall be used
+         * @param lambda_hat_u          certain combination of CKM matrix elements: V_ub V_us^* / (V_tb V_ts^*)
+         * @param cX                    the Wilson coefficients c1...c8
+         *
+         * For the calculation, cf. [GP2004], Eq. (55), p. 10
+         */
+        static complex<double> c9eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, const double & m_c_MSbar,
+                bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,
+                const double & c1, const double & c2, const double & c3, const double & c4, const double & c5, const double & c6,
+                const double & c8, const complex<double> & c9)
+        {
+            // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
+            // Substitute pole mass by PS mass
+            double c = -2.0 / 27.0 * (8.0 * c1 + 6.0 * c2 - 6.0 * c3 - 8.0 * c4 - 12.0 * c5 - 160.0 * c6);
+            double c_0 = -2.0 / 27.0 * (48.0 * c1 + 36.0 * c2 + 198.0 * c3 - 24.0 * c4 + 1872.0 * c5 - 384.0 * c6);
+            double c_b = +2.0 / 27.0 * (126.0 * c3 + 24.0 * c4 + 1368.0 * c5 + 384.0 * c6);
+            complex<double> G0 = -3.0 / 8.0 * ((ccbar_resonance ? LongDistance::g_had_ccbar(s, m_c_MSbar) : CharmLoops::h(mu, s)) + 4.0 / 9.0);
+            complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b_PS) + 4.0 / 9.0);
+
+            complex<double> lo = c_b * Gb + c_0 * G0 + c;
+            complex<double> nlo_alpha_s = -1.0 * (c1 * CharmLoops::F19_massless(mu, s, m_b_PS)
+                                                + c2 * CharmLoops::F29_massless(mu, s, m_b_PS)
+                                                + c8 * CharmLoops::F89_massless(s, m_b_PS));
+            complex<double> nlo_mc = m_c_MSbar * m_c_MSbar / s * 8.0 * ((4.0/9.0 * c1 + 1.0/3.0 * c2) * (1.0 + lambda_hat_u) + 2.0 * c3 + 20.0 * c5);
+
+            complex<double> result = c9 + lo;
+            if ((! ccbar_resonance) && (use_nlo))
+                result += (alpha_s / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
+
+            return result;
+        }
+    };
+
     /*
      * Decay: B -> K^* l lbar at Low Recoil, cf. [BHvD2010]
      */
@@ -177,68 +251,24 @@ namespace eos
         inline complex<double> c10() const { return std::polar(abs_c10(), (cp_conjugate ? -1.0 : +1.0) * arg_c10()); }
         inline complex<double> c10prime() const { return std::polar(abs_c10prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c10prime()); }
 
-        static complex<double> c7eff_nlo(const double & mu, const double & s, const double & m_b,
-                const double & c1, const double & c2, const double & c8)
-        {
-            return -1.0 * (
-                    c1 * CharmLoops::F17_massless(mu, s, m_b)
-                    + c2 * CharmLoops::F27_massless(mu, s, m_b)
-                    + c8 * CharmLoops::F87_massless(mu, s, m_b));
-        }
-
         // cf. [GP2004], Eq. (56)
         complex<double> c7eff(double s) const
         {
-            double m_b = m_b_PS();
-
-            // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
-            double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
-            complex<double> nlo = memoise(c7eff_nlo, mu(), s, m_b, c1(), c2(), c8());
-
-            complex<double> result = c7() + lo;
-            if (use_nlo)
-                result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo;
-
-            return result;
-        }
-
-        static complex<double> c9eff_nlo_alpha_s(const double & mu, const double & s, const double & m_b,
-                const double & c1, const double & c2, const double & c8)
-        {
-            return -1.0 * (
-                    c1 * CharmLoops::F19_massless(mu, s, m_b)
-                    + c2 * CharmLoops::F29_massless(mu, s, m_b)
-                    + c8 * CharmLoops::F89_massless(s, m_b));
+            return ShortDistanceLowRecoil::c7eff(s, mu(), model->alpha_s(mu), m_b_PS(), use_nlo,
+                    c1(), c2(), c3(), c4(), c5(), c6(), c7(), c8());
         }
 
         // cf. [GP2004], Eq. (55), p. 10
         complex<double> c9eff(const double & s) const
         {
-            // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
-            // Substitute pole mass by PS mass
-            double m_b = m_b_PS();
-            double m_c = model->m_c_msbar(mu);
-            double c = -2.0 / 27.0 * (8.0 * c1() + 6.0 * c2() - 6.0 * c3() - 8.0 * c4() - 12.0 * c5() - 160.0 * c6());
-            double c_0 = -2.0 / 27.0 * (48.0 * c1() + 36.0 * c2() + 198.0 * c3() - 24.0 * c4() + 1872.0 * c5() - 384.0 * c6());
-            double c_b = +2.0 / 27.0 * (126.0 * c3() + 24.0 * c4 + 1368.0 * c5() + 384.0 * c6());
-            complex<double> G0 = -3.0 / 8.0 * ((ccbar_resonance ? LongDistance::g_had_ccbar(s, m_c) : CharmLoops::h(mu, s)) + 4.0 / 9.0);
-            complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b) + 4.0 / 9.0);
-
             complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
             if (cp_conjugate)
             {
                 lambda_hat_u = conj(lambda_hat_u);
             }
 
-            complex<double> lo = c_b * Gb + c_0 * G0 + c;
-            complex<double> nlo_alpha_s = memoise(c9eff_nlo_alpha_s, mu(), s, m_b, c1(), c2(), c8());
-            complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
-
-            complex<double> result = c9() + lo;
-            if ((! ccbar_resonance) && (use_nlo))
-                result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
-
-            return result;
+            return ShortDistanceLowRecoil::c9eff(s, mu(), model->alpha_s(mu), m_b_PS(), model->m_c_msbar(mu), use_nlo, ccbar_resonance, lambda_hat_u,
+                    c1(), c2(), c3(), c4(), c5(), c6(), c8(), c9());
         }
 
         double rho_1(const double & s) const
@@ -1042,58 +1072,25 @@ namespace eos
             return model->m_b_ps(2.0);
         }
 
-        static complex<double> c7eff_nlo(const double & mu, const double & s, const double & m_b,
-                const double & c1, const double & c2, const double & c8)
-        {
-            return -1.0 * (
-                    c1 * CharmLoops::F17_massless(mu, s, m_b)
-                    + c2 * CharmLoops::F27_massless(mu, s, m_b)
-                    + c8 * CharmLoops::F87_massless(mu, s, m_b));
-        }
-
         // cf. [GP2004], Eq. (56)
         complex<double> c7eff(double s) const
         {
-            // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
-            double lo = - 1.0/3.0 * c3 - 4.0/9.0 * c4 - 20.0/3.0 * c5 - 80.0/9.0 * c6;
-            complex<double> nlo = memoise(c7eff_nlo, mu(), s, m_b_MSbar(), c1(), c2(), c8());
-
-            return c7() + lo + (model->alpha_s(mu) / (4.0 * M_PI)) * nlo;
-        }
-
-        static complex<double> c9eff_nlo_alpha_s(const double & mu, const double & s, const double & m_b,
-                const double & c1, const double & c2, const double & c8)
-        {
-            return -1.0 * (
-                    c1 * CharmLoops::F19_massless(mu, s, m_b)
-                    + c2 * CharmLoops::F29_massless(mu, s, m_b)
-                    + c8 * CharmLoops::F89_massless(s, m_b));
+            return ShortDistanceLowRecoil::c7eff(s, mu(), model->alpha_s(mu), m_b_PS(), true,
+                                                 c1(), c2(), c3(), c4(), c5(), c6(), c7(), c8());
         }
 
         // cf. [GP2004], Eq. (55), p. 10
         complex<double> c9eff(const double & s) const
         {
-            // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
-            // Substitute pole mass by PS mass
-            double m_b = m_b_PS();
-            double m_c = model->m_c_msbar(mu);
-            double c = -2.0 / 27.0 * (8.0 * c1() + 6.0 * c2() - 6.0 * c3() - 8.0 * c4() - 12.0 * c5() - 160.0 * c6());
-            double c_0 = -2.0 / 27.0 * (48.0 * c1() + 36.0 * c2() + 198.0 * c3() - 24.0 * c4() + 1872.0 * c5() - 384.0 * c6());
-            double c_b = +2.0 / 27.0 * (126.0 * c3() + 24.0 * c4 + 1368.0 * c5() + 384.0 * c6());
-            complex<double> G0 = -3.0 / 8.0 * ((ccbar_resonance ? LongDistance::g_had_ccbar(s, m_c) : CharmLoops::h(mu, s)) + 4.0 / 9.0);
-            complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b) + 4.0 / 9.0);
-
             complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
 
-            complex<double> lo = c_b * Gb + c_0 * G0 + c;
-            complex<double> nlo_alpha_s = memoise(c9eff_nlo_alpha_s, mu(), s, m_b_MSbar(), c1(), c2(), c8());
-            complex<double> nlo_mc = m_c * m_c / s * 8 * ((4.0/9.0 * c1() + 1.0/3.0 * c2()) * (1.0 + lambda_hat_u) + 2.0 * c3() + 20.0 * c5());
+            if (cp_conjugate)
+            {
+                lambda_hat_u = conj(lambda_hat_u);
+            }
 
-            complex<double> result = c9() + lo;
-            if (! ccbar_resonance)
-                result += (model->alpha_s(mu) / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
-
-            return result;
+            return ShortDistanceLowRecoil::c9eff(s, mu(), model->alpha_s(mu), m_b_PS(), model->m_c_msbar(mu), true, ccbar_resonance, lambda_hat_u,
+                    c1(), c2(), c3(), c4(), c5(), c6(), c8(), c9());
         }
 
         double kappa() const

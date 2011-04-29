@@ -390,22 +390,22 @@ class BToKDileptonLowRecoilTest :
                 {
                     const double eps = 1e-5;
 
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(14.18  ), +2.492635e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(15.2575), +2.449221e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.335 ), +2.369214e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(17.4125), +2.240196e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(18.49  ), +2.042679e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(19.5675), +1.746908e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(20.645 ), +1.310529e-08, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(21.7225), +6.918910e-09, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(22.8   ), +1.577852e-10, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(14.18  ), 2.500807637e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(15.2575), 2.456545648e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.335 ), 2.375701349e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(17.4125), 2.245832997e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(18.49  ), 2.047417239e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(19.5675), 1.750636006e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(20.645 ), 1.313132758e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(21.7225), 6.931662286e-09, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(22.8   ), 1.580405107e-10, eps);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(15.0), +0.00556484, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(22.0), +0.00822122, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(15.0), 0.005561457853, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(22.0), 0.008211846582, eps);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.52380e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8), 1.5276699e-07, eps);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8), 5.4265507e-3, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8), 5.4227810e-03, eps);
                 }
             }
         }
