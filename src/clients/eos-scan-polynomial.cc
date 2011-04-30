@@ -105,8 +105,11 @@ class CommandLine :
 
         std::string output;
 
+        double theory_uncertainty;
+
         CommandLine() :
-            parameters(Parameters::Defaults())
+            parameters(Parameters::Defaults()),
+            theory_uncertainty(0.0)
         {
         }
 
@@ -243,6 +246,13 @@ class CommandLine :
                     double value = destringify<double>(*(++a));
 
                     parameters[name] = value;
+
+                    continue;
+                }
+
+                if ("--theory-uncertainty" == argument)
+                {
+                    theory_uncertainty = destringify<double>(*(++a));
 
                     continue;
                 }
@@ -483,6 +493,9 @@ class WilsonScannerPolynomial
                         delta_min += min * min;
                         delta_max += max * max;
                     }
+
+                    delta_min += power_of<2>(central * CommandLine::instance()->theory_uncertainty);
+                    delta_max += power_of<2>(central * CommandLine::instance()->theory_uncertainty);
 
                     chi_squared += ChiSquared::with_theory_offset(central - std::sqrt(delta_min), central, central + std::sqrt(delta_max),
                             std::get<1>(*o), std::get<2>(*o), std::get<3>(*o));
