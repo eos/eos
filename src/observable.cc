@@ -144,6 +144,9 @@ namespace eos
                     std::make_tuple("s")),
 
             // B -> K^* gamma
+            make_observable("B->K^*gamma::BR",
+                    &BToKstarGamma::branching_ratio),
+
             make_observable("B->K^*gamma::S_K^*gamma",
                     &BToKstarGamma::s_kstar_gamma),
 

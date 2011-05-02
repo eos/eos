@@ -30,6 +30,7 @@ TESTS = \
 	em-contributions_TEST \
 	exclusive-b-to-s-dilepton-low-recoil_TEST \
 	exclusive-b-to-s-dilepton-large-recoil_TEST \
+	exclusive-b-to-s-gamma_TEST \
 	form-factors_TEST \
 	inclusive-b-to-s-dilepton_TEST \
 	inclusive-b-to-s-gamma_TEST \
@@ -56,6 +57,9 @@ exclusive_b_to_s_dilepton_low_recoil_TEST_LDADD = $(TESTS_LD_ADD)
 
 exclusive_b_to_s_dilepton_large_recoil_TEST_SOURCES = exclusive-b-to-s-dilepton-large-recoil_TEST.cc
 exclusive_b_to_s_dilepton_large_recoil_TEST_LDADD = $(TESTS_LD_ADD)
+
+exclusive_b_to_s_gamma_TEST_SOURCES = exclusive-b-to-s-gamma_TEST.cc
+exclusive_b_to_s_gamma_TEST_LDADD = $(TESTS_LD_ADD)
 
 form_factors_TEST_SOURCES = form-factors_TEST.cc
 form_factors_TEST_LDADD = $(TESTS_LD_ADD)

@@ -28,11 +28,9 @@
 
 namespace eos
 {
-    /*
-     * Decay: B -> K^* gamma
+    /*!
+     * Calculates observables in B->K^*gamma decays
      */
-
-
     class BToKstarGamma :
         public PrivateImplementationPattern<BToKstarGamma>
     {
@@ -40,7 +38,10 @@ namespace eos
             BToKstarGamma(const Parameters & parameters, const Options & options);
             ~BToKstarGamma();
 
-            // Time dependent CP asymmetry S_K^*gamma
+            /// Branching Ratio
+            double branching_ratio() const;
+
+            /// Time dependent CP asymmetry S_K^*gamma
             double s_kstar_gamma() const;
     };
 }
