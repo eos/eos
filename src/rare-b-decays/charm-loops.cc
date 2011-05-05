@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christoph Bobeth
  * Copyright (c) 2010 Christian Wacker
  *
@@ -48,6 +48,9 @@ namespace eos
     {
         if (m_q < 1e-4)
             return h(mu, s);
+
+        if (s < 1e-4)
+            return complex<double>(-4.0 / 9.0 * (1.0 - 2.0 * std::log(mu / m_q)), 0.0);
 
         const double z = 4.0 * m_q * m_q / s;
         if (z < 1e-10)
@@ -580,6 +583,10 @@ namespace eos
     complex<double>
     CharmLoops::F19_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
+        // F19(s) diverges for s -> 0. However, s * F89(s) -> 0 for s -> 0.
+        if (s < 1e-4)
+            throw InternalError("CharmLoops::F19_massive: F19 diverges for s -> 0. Check that F19 enters via 's * F19(s)' and replace by zero.");
+
         // cf. [ABGW2001], Appendix B, pp. 34-38
         static long double kap1900[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -753,6 +760,10 @@ namespace eos
     complex<double>
     CharmLoops::F29_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
+        // F29(s) diverges for s -> 0. However, s * F89(s) -> 0 for s -> 0.
+        if (s < 1e-4)
+            throw InternalError("CharmLoops::F29_massive: F29 diverges for s -> 0. Check that F29 enters via 's * F29(s)' and replace by zero.");
+
         // cf. [ABGW2001], Appendix B, pp. 34-38
         static long double kap2900[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -925,6 +936,9 @@ namespace eos
     complex<double>
     CharmLoops::F87_massless(const double & mu, const double & s, const double & m_q)
     {
+        if (s < 1e-4)
+            return -4.0 / 9.0 * (complex<double>(8.0 * std::log(mu / m_q) + 11.0, 2.0 * M_PI) + 4.0 * C0(0.0, m_q));
+
         // Loop-Functions are calculated for the pole mass!
         double s_hat = s / (m_q * m_q);
         double s_hat2 = s_hat * s_hat;
@@ -945,6 +959,10 @@ namespace eos
     complex<double>
     CharmLoops::F89_massless(const double & s, const double & m_q)
     {
+        // F89(s) diverges for s -> 0. However, s * F89(s) -> 0 for s -> 0.
+        if (s < 1e-4)
+            throw InternalError("CharmLoops::F89_massless: F89 diverges for s -> 0. Check that F89 enters via 's * F89(s)' and replace by zero.");
+
         // Loop-Functions are calculated for the pole mass!
         double s_hat = s / (m_q * m_q);
         double denom = (1.0 - s_hat);
