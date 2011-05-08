@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_UTILS_WRAPPED_FORWARD_ITERATOR_HH
 #define EOS_GUARD_UTILS_WRAPPED_FORWARD_ITERATOR_HH 1
 
-#include <src/utils/wrapped_forward_iterator.hh>
+#include <src/utils/wrapped_forward_iterator-fwd.hh>
 
 #include <functional>
 #include <iterator>
