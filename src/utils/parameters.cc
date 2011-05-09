@@ -178,6 +178,8 @@ namespace eos
             Parameter::Template{"CKM::lambda",                                   +0.22466,    +0.22543,    +0.22620   },
             Parameter::Template{"CKM::rhobar",                                   +0.119,      +0.144,      +0.169     },
             Parameter::Template{"CKM::etabar",                                   +0.327,      +0.342,      +0.358     },
+            // QED inputs
+            Parameter::Template{"QED::alpha_e(m_b)",                             +1.0/133.0,  +1.0/133.0,  +1.0/128.0 }, // alpha_e(m_b) .. alpha_e(m_W)
             // QCD inputs
             Parameter::Template{"QCD::alpha_s(MZ)",                              +0.117620,   +0.117620,   +0.117620  },
             Parameter::Template{"QCD::mu_t",                                     +170.0,      +170.0,      +170.0     },

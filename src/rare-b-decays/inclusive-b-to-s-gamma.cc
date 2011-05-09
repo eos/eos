@@ -39,6 +39,8 @@ namespace eos
 
         Parameter m_b_MSbar;
 
+        Parameter alpha_e;
+
         Parameter br_bcsl;
 
         Parameter uncertainty;
@@ -48,6 +50,7 @@ namespace eos
             abs_c7(p["Abs{c7}"]),
             arg_c7(p["Arg{c7}"]),
             m_b_MSbar(p["mass::b(MSbar)"]),
+            alpha_e(p["QED::alpha_e(m_b)"]),
             br_bcsl(p["exp::BR(B->X_clnu)"]),
             uncertainty(p["B->X_sgamma::uncertainty"])
         {
@@ -63,7 +66,6 @@ namespace eos
             static const double sm = 3.15e-4;
             static const double sm_delta = 0.23e-4;
             static const double c7sm = -0.3;
-            static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
 
             double m_c_hat = m_c_pole() / model->m_b_pole();
             double z = pow(m_c_hat, 2);

@@ -100,6 +100,8 @@ namespace eos
 
         Parameter mu;
 
+        Parameter alpha_e;
+
         Parameter f_B;
 
         Parameter f_Kstar_par;
@@ -164,6 +166,7 @@ namespace eos
             m_B(p["mass::B0"]),
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
+            alpha_e(p["QED::alpha_e(m_b)"]),
             f_B(p["f_B"]),
             f_Kstar_par(p["B->K^*::f_Kstar_par"]),
             f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"]),
@@ -199,12 +202,11 @@ namespace eos
 
         double norm(const double & s) const
         {
-            static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
             static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
 
             double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-            return std::sqrt(g_fermi * g_fermi * alpha_e * alpha_e / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
+            return std::sqrt(power_of<2>(g_fermi * alpha_e()) / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
                     * lambda_t * lambda_t * s_hat(s)
                     * std::sqrt(lambda(m_B * m_B, m_Kstar * m_Kstar, s))); // cf. [BHP2008], Eq. (C.6), p. 21
         }
@@ -1074,6 +1076,8 @@ namespace eos
 
         Parameter mu;
 
+        Parameter alpha_e;
+
         Parameter f_B;
 
         Parameter f_K;
@@ -1119,6 +1123,7 @@ namespace eos
             m_mu(p["mass::mu"]),
             m_tau(p["mass::tau"]),
             mu(p["mu"]),
+            alpha_e(p["QED::alpha_e(m_b)"]),
             f_B(p["f_B"]),
             f_K(p["f_K"]),
             lambda_B_p(p["lambda_B_p"]),
@@ -1448,12 +1453,11 @@ namespace eos
         // cf. [BHP2007], Eqs. (4.2), (4.4), (4.5), p. 5
         double N(const double & s) const
         {
-            static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
             static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
 
             double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-            return power_of<2>(g_fermi * alpha_e * lambda_t) * std::sqrt(lambda(m_B * m_B, m_K * m_K, s)) * beta_l(s) * xi_pseudo(s) * xi_pseudo(s) /
+            return power_of<2>(g_fermi * alpha_e() * lambda_t) * std::sqrt(lambda(m_B * m_B, m_K * m_K, s)) * beta_l(s) * xi_pseudo(s) * xi_pseudo(s) /
                     (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
         }
 

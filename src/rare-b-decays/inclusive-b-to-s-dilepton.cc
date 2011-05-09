@@ -88,6 +88,8 @@ namespace eos
 
         Parameter mu;
 
+        Parameter alpha_e;
+
         Parameter ckm;
 
         Parameter C;
@@ -119,6 +121,7 @@ namespace eos
             br_clnu(p["exp::BR(B->X_clnu)"]),
             lambda_2(p["B->X_s::lambda_2"]),
             mu(p["mu"]),
+            alpha_e(p["QED::alpha_e(m_b)"]),
             ckm(p["exp::CKM(B->X_sll, B->X_clnu)"]),
             C(p["exp::C(B->X_clnu, B->X_ulnu)"]),
             admixture(p["exp::Admixture-BR(B->X_sll)"])
@@ -326,7 +329,6 @@ namespace eos
         // cf. [HLMW2005], Eq. (6), p. 4
         double branching_ratio(const double & s) const
         {
-            static const double alpha_e = 1.0/133.0;
             double m_c = m_c_pole(), m_b = m_b_pole(), log_m_l_hat = std::log(m_l / m_b);
             double s_hat = s / pow(m_b, 2), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
             double lambda_2_hat = lambda_2 / pow(m_b, 2);

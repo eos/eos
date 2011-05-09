@@ -173,6 +173,8 @@ namespace eos
 
         Parameter mu;
 
+        Parameter alpha_e;
+
         Parameter lambda_long;
 
         Parameter lambda_par;
@@ -220,6 +222,7 @@ namespace eos
             m_B(p["mass::B0"]),
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
+            alpha_e(p["QED::alpha_e(m_b)"]),
             lambda_long(p["B->Vll::Lambda_0@LowRecoil"]),
             lambda_par(p["B->Vll::Lambda_pa@LowRecoil"]),
             lambda_perp(p["B->Vll::Lambda_pp@LowRecoil"]),
@@ -300,7 +303,6 @@ namespace eos
 
         double norm(const double & s) const
         {
-            static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
             static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
             double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
@@ -996,6 +998,8 @@ namespace eos
 
         Parameter mu;
 
+        Parameter alpha_e;
+
         double m_l;
 
         bool cp_conjugate;
@@ -1032,6 +1036,7 @@ namespace eos
             m_mu(p["mass::mu"]),
             m_tau(p["mass::tau"]),
             mu(p["mu"]),
+            alpha_e(p["QED::alpha_e(m_b)"]),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
@@ -1118,11 +1123,10 @@ namespace eos
 
         double gamma0() const
         {
-            static const double alpha_e = 1.0 / 133.0; // cf. [BHP2008]
             static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
             const double lambda_t_abs = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-            return power_of<2>(g_fermi * lambda_t_abs * alpha_e) / (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
+            return power_of<2>(g_fermi * lambda_t_abs * alpha_e()) / (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
         }
 
         double a_l(const double & s) const
