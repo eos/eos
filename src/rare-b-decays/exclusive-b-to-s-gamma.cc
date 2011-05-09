@@ -84,6 +84,8 @@ namespace eos
 
         Parameter alpha_e;
 
+        Parameter g_fermi;
+
         bool cp_conjugate;
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
@@ -111,6 +113,7 @@ namespace eos
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
             alpha_e(p["QED::alpha_e(m_b)"]),
+            g_fermi(p["G_Fermi"]),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             form_factors(FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p))
         {
@@ -343,12 +346,11 @@ namespace eos
         {
             // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
             static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
-            static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
 
             double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
             Amplitudes a = amplitudes();
 
-            return alpha_e() * power_of<2>(g_fermi * model->m_b_msbar(mu())) * power_of<3>(m_B()) / (32.0 * power_of<4>(M_PI)) *
+            return alpha_e() * power_of<2>(g_fermi() * model->m_b_msbar(mu())) * power_of<3>(m_B()) / (32.0 * power_of<4>(M_PI)) *
                 power_of<3>(1.0 - power_of<2>(m_Kstar / m_B)) * lambda_t * lambda_t * (std::norm(a.left) + std::norm(a.right)) / Gamma;
         }
 

@@ -246,6 +246,18 @@ References
         arxiv:hep-ph/9912391
 
 
+    PDG2010 : Particle Data Group
+
+        Particle Physics Booklet (July 2010)
+
+        Extracted from the
+
+          Review of Particle Physics : Nakamura, K. and others
+          Journal of Physics G 37 075021 (2010)
+
+        http://pdg.lbl.gov
+
+
     PDG2008 : Particle Data Group
 
         Particle Physics Booklet (July 2008)

@@ -175,6 +175,8 @@ namespace eos
 
         Parameter alpha_e;
 
+        Parameter g_fermi;
+
         Parameter lambda_long;
 
         Parameter lambda_par;
@@ -223,6 +225,7 @@ namespace eos
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
             alpha_e(p["QED::alpha_e(m_b)"]),
+            g_fermi(p["G_Fermi"]),
             lambda_long(p["B->Vll::Lambda_0@LowRecoil"]),
             lambda_par(p["B->Vll::Lambda_pa@LowRecoil"]),
             lambda_perp(p["B->Vll::Lambda_pp@LowRecoil"]),
@@ -303,10 +306,9 @@ namespace eos
 
         double norm(const double & s) const
         {
-            static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
             double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-            return std::sqrt(g_fermi * g_fermi * alpha_e * alpha_e / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
+            return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
                     * lambda_t * lambda_t * s_hat(s)
                     * std::sqrt(lambda(m_B * m_B, m_Kstar * m_Kstar, s))); // cf. [BHP2008], Eq. (C.6), p. 21
         }
@@ -1000,6 +1002,8 @@ namespace eos
 
         Parameter alpha_e;
 
+        Parameter g_fermi;
+
         double m_l;
 
         bool cp_conjugate;
@@ -1037,6 +1041,7 @@ namespace eos
             m_tau(p["mass::tau"]),
             mu(p["mu"]),
             alpha_e(p["QED::alpha_e(m_b)"]),
+            g_fermi(p["G_Fermi"]),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
@@ -1123,10 +1128,9 @@ namespace eos
 
         double gamma0() const
         {
-            static const double g_fermi = 1.16637e-5; // (Gev^-2 (hbar c)^3), cf. [PDG2008], p.5
             const double lambda_t_abs = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-            return power_of<2>(g_fermi * lambda_t_abs * alpha_e()) / (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
+            return power_of<2>(g_fermi() * lambda_t_abs * alpha_e()) / (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
         }
 
         double a_l(const double & s) const
