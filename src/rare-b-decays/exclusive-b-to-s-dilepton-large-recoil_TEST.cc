@@ -190,6 +190,8 @@ class BToKDileptonLargeRecoilTest :
                 p["CKM::lambda"] = 0.2257;
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
+                // B mass
+                p["mass::B_d"] = 5.27953;
 
                 Options oo;
                 oo.set("form-factors", "BZ2004v2");

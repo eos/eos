@@ -188,17 +188,24 @@ namespace eos
             Parameter::Template{"QCD::Lambda",                                   +0.5,        +0.5,        +0.5       },
             // G_Fermi
             Parameter::Template{"G_Fermi",                                       +1.16636e-5, +1.16637e-5, +1.16638e-5}, // cf. [PDG2010], p. 5
-            // Masses in GeV
+            /* Masses in GeV */
+            // Quark masses
             Parameter::Template{"mass::b(MSbar)",                                +4.13,       +4.20,       +4.37      }, // cf. [PDG2008], p. 21
             Parameter::Template{"mass::c",                                       +1.16,       +1.27,       +1.34      }, // cf. [PDG2008], p. 21
             Parameter::Template{"mass::s",                                       +0.00,       +0.00,       +0.00      }, // we neglect m_s throughout, cf. [BHvD2010], Table 1
             Parameter::Template{"mass::t(pole)",                                 +172.2,      +173.3,      +174.4     }, // cf. [PDG2008], p. 21
             Parameter::Template{"mass::e",                                       +5.10999e-4, +5.10999e-4, +5.10999e-4}, // cf. [PDG2008], p. 13
+            // Lepton masses
             Parameter::Template{"mass::mu",                                      +1.05658e-1, +1.05658e-1, +1.05658e-1}, // cf. [PDG2008], p. 13
             Parameter::Template{"mass::tau",                                     +1.77667,    +1.77684,    +1.77701   }, // cf. [PDG2008], p. 14
-            Parameter::Template{"mass::B0",                                      +5.27920,    +5.27953,    +5.27986   }, // cf. [PDG2008], p. 79
+            // B meson masses
+            Parameter::Template{"mass::B_d",                                     +5.2792,     +5.2795,     +5.2798    }, // cf. [PDG2010], p. 82
+            Parameter::Template{"mass::B_u",                                     +5.27888,    +5.27917,    +5.27946   }, // cf. [PDG2010], p. 69
+            Parameter::Template{"mass::B_s",                                     +5.3657,     +5.3663,     +5.3669    }, // cf. [PDG2010], p. 103
+            // K meson masses
             Parameter::Template{"mass::K0",                                      +0.49759,    +0.49761,    +0.49764   }, // cf. [PDG2008], p. 41
             Parameter::Template{"mass::K^*0",                                    +0.89575,    +0.896,      +0.89625   }, // cf. [PDG2008], p. 44
+            // Gauge boson masses
             Parameter::Template{"mass::W",                                       +80.373,     +80.398,     +80.423    }, // cf. [PDG2008], p. 8
             Parameter::Template{"mass::Z",                                       +91.1855,    +91.1876,    +91.1897   }, // cf. [PDG2008], p. 9
             // b->s matching parameters

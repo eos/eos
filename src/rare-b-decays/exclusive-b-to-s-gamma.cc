@@ -109,7 +109,7 @@ namespace eos
             f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"]),
             lambda_B_p(p["lambda_B_p"]),
             uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"]),
-            m_B(p["mass::B0"]),
+            m_B(p["mass::B_" + o.get("q", "d")]),
             m_Kstar(p["mass::K^*0"]),
             mu(p["mu"]),
             alpha_e(p["QED::alpha_e(m_b)"]),
