@@ -291,6 +291,13 @@ References
         arxiv:hep-ph/0403185
 
 
+    S2010 : Simone, J. and others [Fermilab Lattice and MILC Collaborations]
+
+        The decay constants f_Ds, f_D+, f_Bs and f_B from lattice QCD
+
+        PoS LATTICE2010 (2010) 317.
+
+
     TEWWG2010 : Tevatron Electroweak Working Group
 
         Combination of CDF and D0 Results on the Mass of the Top Quark using up to 5.6fb^-1 of data

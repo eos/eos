@@ -57,6 +57,7 @@ class BToKstarGammaTest :
                 p["CKM::lambda"] = 0.22543;
                 p["CKM::rhobar"] = 0.144;
                 p["CKM::etabar"] = 0.342;
+                p["decay-constant::B_d"] = 0.200;
 
                 Options oo;
                 oo.set("form-factors", "BZ2004");

@@ -105,7 +105,7 @@ namespace eos
             arg_c7prime(p["Arg{c7'}"]),
             a_1_perp(p["B->K^*::a_1_perp"]),
             a_2_perp(p["B->K^*::a_2_perp"]),
-            f_B(p["f_B"]),
+            f_B(p["decay-constant::B_" + o.get("q", "d")]),
             f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"]),
             lambda_B_p(p["lambda_B_p"]),
             uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"]),

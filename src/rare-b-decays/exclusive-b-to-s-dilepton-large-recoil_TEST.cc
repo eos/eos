@@ -62,6 +62,8 @@ class BToKstarDileptonLargeRecoilTest :
                 p["CKM::lambda"] = 0.2257;
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
+                // BHvD2010 parameters
+                p["decay-constant::B_d"] = 0.200;
 
                 Options oo;
                 oo.set("form-factors", "BZ2004");
@@ -192,6 +194,8 @@ class BToKDileptonLargeRecoilTest :
                 p["CKM::etabar"] = 0.349;
                 // B mass
                 p["mass::B_d"] = 5.27953;
+                // B decay constant
+                p["decay-constant::B_d"] = 0.200;
 
                 Options oo;
                 oo.set("form-factors", "BZ2004v2");

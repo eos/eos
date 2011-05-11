@@ -188,6 +188,7 @@ namespace eos
             Parameter::Template{"QCD::Lambda",                                   +0.5,        +0.5,        +0.5       },
             // G_Fermi
             Parameter::Template{"G_Fermi",                                       +1.16636e-5, +1.16637e-5, +1.16638e-5}, // cf. [PDG2010], p. 5
+
             /* Masses in GeV */
             // Quark masses
             Parameter::Template{"mass::b(MSbar)",                                +4.13,       +4.20,       +4.37      }, // cf. [PDG2008], p. 21
@@ -208,12 +209,15 @@ namespace eos
             // Gauge boson masses
             Parameter::Template{"mass::W",                                       +80.373,     +80.398,     +80.423    }, // cf. [PDG2008], p. 8
             Parameter::Template{"mass::Z",                                       +91.1855,    +91.1876,    +91.1897   }, // cf. [PDG2008], p. 9
-            // b->s matching parameters
+
+            /* Decay constants */
+            Parameter::Template{"decay-constant::B_d",                           +0.200,      +0.212,      +0.224     }, // GeV, cf. [S2010], p. 3
+            Parameter::Template{"decay-constant::B_s",                           +0.244,      +0.256,      +0.268     }, // GeV, cf. [S2010], p. 3
+            Parameter::Template{"decay-constant::K_d",                           +0.1549,     +0.1561,     +0.1573    }, // GeV, cf. [PDGBOOK2010], p. 864, Eq. (7)
+            /* b->s matching parameters */
             Parameter::Template{"b->s::mu_0c",                                   +80.0,       +80.0,       +80.0      },
             Parameter::Template{"b->s::mu_0t",                                   +120.0,      +120.0,      +120.0     },
-            // Decay constants
-            Parameter::Template{"f_B",                                           +0.17,       +0.20,       +0.23      }, // GeV, cf. [BHvD2010], Table I
-            Parameter::Template{"f_K",                                           +0.1549,     +0.1561,     +0.1573    }, // GeV, cf. [PDGBOOK2010], p. 864, Eq. (7)
+
             // Form factor uncertainties
             Parameter::Template{"formfactors::a0_uncertainty",                   +0.85,       +1.0,        +1.15      },
             Parameter::Template{"formfactors::a1_uncertainty",                   +0.85,       +1.0,        +1.15      },
