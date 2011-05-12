@@ -214,8 +214,10 @@ namespace eos
 
             /* Decay constants */
             Parameter::Template{"decay-constant::B_d",                           +0.200,          +0.212,          +0.224         }, // GeV, cf. [S2010], p. 3
+            Parameter::Template{"decay-constant::B_u",                           +0.200,          +0.212,          +0.224         }, // GeV, cf. [S2010], p. 3
             Parameter::Template{"decay-constant::B_s",                           +0.244,          +0.256,          +0.268         }, // GeV, cf. [S2010], p. 3
             Parameter::Template{"decay-constant::K_d",                           +0.1549,         +0.1561,         +0.1573        }, // GeV, cf. [PDGBOOK2010], p. 864, Eq. (7)
+            Parameter::Template{"decay-constant::K_u",                           +0.1549,         +0.1561,         +0.1573        }, // GeV, cf. [PDGBOOK2010], p. 864, Eq. (7)
             /* b->s matching parameters */
             Parameter::Template{"b->s::mu_0c",                                   +80.0,           +80.0,           +80.0          },
             Parameter::Template{"b->s::mu_0t",                                   +120.0,          +120.0,          +120.0         },
