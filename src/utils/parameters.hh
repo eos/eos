@@ -159,6 +159,11 @@ namespace eos
             friend class Parameters;
             friend class Implementation<Parameters>;
 
+            /*!
+             * A unique number that identifies this parameter at run time.
+             */
+            typedef unsigned Id;
+
             ///@name Basic Functions
             ///@{
             ~Parameter();
@@ -196,6 +201,9 @@ namespace eos
 
             /// Retrieve the Parameter's (default) minimal value.
             const double & min() const;
+
+            /// Retrieve the Parameter's id.
+            Id id() const;
             ///@}
     };
 

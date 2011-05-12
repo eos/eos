@@ -41,9 +41,12 @@ namespace eos
     {
         double value;
 
-        Data(const Parameter::Template & t) :
+        Parameter::Id id;
+
+        Data(const Parameter::Template & t, const Parameter::Id & i) :
             Parameter::Template(t),
-            value(t.central)
+            value(t.central),
+            id(i)
         {
         }
     };
@@ -70,7 +73,7 @@ namespace eos
             unsigned idx(0);
             for (auto i(list.begin()), i_end(list.end()) ; i != i_end ; ++i, ++idx)
             {
-                parameters_data->data.push_back(Parameter::Data(*i));
+                parameters_data->data.push_back(Parameter::Data(*i, idx));
                 parameters_map[i->name] = idx;
                 parameters.push_back(Parameter(parameters_data, idx));
             }
@@ -344,6 +347,12 @@ namespace eos
     Parameter::name() const
     {
         return _parameters_data->data[_index].name;
+    }
+
+    Parameter::Id
+    Parameter::id() const
+    {
+        return _parameters_data->data[_index].id;
     }
 
     UnknownParameterError::UnknownParameterError(const std::string & name) throw () :
