@@ -123,6 +123,8 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
+        Parameter hbar;
+
         Parameter c1;
 
         Parameter c2;
@@ -189,6 +191,8 @@ namespace eos
 
         Parameter sl_phase_perp;
 
+        Parameter tau;
+
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
         bool cp_conjugate;
@@ -199,6 +203,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o) :
             model(Model::make("SM", p)),
+            hbar(p["hbar"]),
             c1(p["c1"]),
             c2(p["c2"]),
             c3(p["c3"]),
@@ -232,6 +237,7 @@ namespace eos
             sl_phase_long(p["B->Vll::sl_phase_0@LowRecoil"]),
             sl_phase_par(p["B->Vll::sl_phase_pa@LowRecoil"]),
             sl_phase_perp(p["B->Vll::sl_phase_pp@LowRecoil"]),
+            tau(p["life_time::B_" + o.get("q", "d")]),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
             use_nlo(destringify<bool>(o.get("nlo", "true")))
@@ -432,6 +438,11 @@ namespace eos
             return (u_1(s) + u_2(s) + u_3(s));
         }
 
+        double differential_branching_ratio(const double & s) const
+        {
+            return decay_width(s) * tau() / hbar();
+        }
+
         double a_fb_numerator(const double & s) const
         {
             return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
@@ -578,13 +589,11 @@ namespace eos
         return _imp->rho_2(s);
     }
 
+
     double
     BToKstarDilepton<LowRecoil>::differential_branching_ratio(const double & s) const
     {
-        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
-        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
-
-        return differential_decay_width(s) / Gamma;
+        return _imp->differential_branching_ratio(s);
     }
 
     double
@@ -948,6 +957,8 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
+        Parameter hbar;
+
         Parameter c1;
 
         Parameter c2;
@@ -1006,6 +1017,9 @@ namespace eos
 
         double m_l;
 
+        // Mean life time
+        Parameter tau;
+
         bool cp_conjugate;
 
         bool ccbar_resonance;
@@ -1014,6 +1028,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o) :
             model(Model::make("SM", p)),
+            hbar(p["hbar"]),
             c1(p["c1"]),
             c2(p["c2"]),
             c3(p["c3"]),
@@ -1042,13 +1057,14 @@ namespace eos
             mu(p["mu"]),
             alpha_e(p["QED::alpha_e(m_b)"]),
             g_fermi(p["G_Fermi"]),
+            tau(p["life_time::B_" + o.get("q", "d")]),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
             form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "BZ2004v2"), p);
 
             if (! form_factors.get())
-                 throw InternalError("Form factors not found!");
+                throw InternalError("Form factors not found!");
 
             std::string lepton = o.get("l", "mu");
             if ("e" == lepton)
@@ -1153,6 +1169,11 @@ namespace eos
             return 2.0 * (a_l(s) + c_l(s) / 3.0);
         }
 
+        double differential_branching_ratio(const double & s) const
+        {
+            return unnormalized_decay_width(s) * tau() / hbar();
+        }
+
         double differential_flat_term_numerator(const double & s) const
         {
             return 2.0 * (a_l(s) + c_l(s));
@@ -1184,10 +1205,7 @@ namespace eos
     double
     BToKDilepton<LowRecoil>::differential_branching_ratio(const double & s) const
     {
-        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
-        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
-
-        return _imp->unnormalized_decay_width(s) / Gamma;
+        return _imp->differential_branching_ratio(s);
     }
 
     double

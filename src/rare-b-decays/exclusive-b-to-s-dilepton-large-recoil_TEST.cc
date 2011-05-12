@@ -50,6 +50,7 @@ class BToKstarDileptonLargeRecoilTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
+                p["life_time::B_d"] = 1.530e-12;
                 p["Abs{c7}"] = 0.331;
                 p["Arg{c7}"] = M_PI;
                 p["c8"] = -0.181;
@@ -180,6 +181,7 @@ class BToKDileptonLargeRecoilTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
+                p["life_time::B_d"] = 1.530e-12;
                 p["Abs{c7}"] = 0.331;
                 p["Arg{c7}"] = M_PI;
                 p["c8"] = -0.181;

@@ -50,6 +50,7 @@ class BToKstarDileptonLowRecoilTest :
             /* Low Recoil (SM) */
             {
                 Parameters p = Parameters::Defaults();
+                p["life_time::B_d"] = 1.530e-12;
                 p["Abs{c7}"] = 0.331;
                 p["Arg{c7}"] = M_PI;
                 p["c8"] = -0.181;
@@ -286,6 +287,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 kinematics.set("s_max", 19.21);
 
                 Parameters parameters = Parameters::Defaults();
+                parameters["life_time::B_d"] = 1.530e-12;
                 Parameter lambda = parameters["CKM::lambda"];
                 Parameter A = parameters["CKM::A"];
 
@@ -381,6 +383,7 @@ class BToKDileptonLowRecoilTest :
             /* Low Recoil (SM) */
             {
                 Parameters p = Parameters::Defaults();
+                p["life_time::B_d"] = 1.530e-12;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;

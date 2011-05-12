@@ -50,6 +50,8 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
+        Parameter hbar;
+
         Parameter c1;
 
         Parameter c2;
@@ -136,6 +138,8 @@ namespace eos
 
         Parameter uncertainty_xi_par;
 
+        Parameter tau;
+
         double e_q;
 
         bool cp_conjugate;
@@ -144,6 +148,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o) :
             model(Model::make("SM", p)),
+            hbar(p["hbar"]),
             c1(p["c1"]),
             c2(p["c2"]),
             c3(p["c3"]),
@@ -186,13 +191,23 @@ namespace eos
             uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty@LargeRecoil"]),
             uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"]),
             uncertainty_xi_par(p["formfactors::xi_par_uncertainty"]),
-            e_q(-1.0/3.0),
+            tau(p["life_time::B_" + o.get("q", "d")]),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
+
+            std::string spectator_quark = o.get("q", "d");
+            if (spectator_quark == "d")
+            {
+                e_q = -1.0 / 3.0;
+            }
+            else if (spectator_quark == "u")
+            {
+                e_q = 2.0 / 3.0;
+            }
 
             // TODO: Lepton masses, m_l = m_mu
             m_l = 0.0;//m_l = 0.10565836; // (GeV), cf. [PDG2008], p. 13
@@ -787,6 +802,11 @@ namespace eos
             return (u_1(s) + u_2(s) + u_3(s));
         }
 
+        double differential_branching_ratio(const double & s)
+        {
+            return unnormalized_decay_width(s) * tau / hbar();
+        }
+
         double a_fb_numerator(const double & s) const
         {
             return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s)));
@@ -858,10 +878,7 @@ namespace eos
     double
     BToKstarDilepton<LargeRecoil>::differential_branching_ratio(const double & s) const
     {
-        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
-        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
-
-        return differential_decay_width(s) / Gamma;
+        return _imp->differential_branching_ratio(s);
     }
 
     double
@@ -1021,6 +1038,8 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
+        Parameter hbar;
+
         Parameter c1;
 
         Parameter c2;
@@ -1091,6 +1110,10 @@ namespace eos
 
         Parameter a_2;
 
+        // Mean life times
+        Parameter tau;
+
+        // spectator quark charge
         double e_q;
 
         bool cp_conjugate;
@@ -1099,6 +1122,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o) :
             model(Model::make("SM", p)),
+            hbar(p["hbar"]),
             c1(p["c1"]),
             c2(p["c2"]),
             c3(p["c3"]),
@@ -1133,13 +1157,23 @@ namespace eos
             lambda_B_p(p["lambda_B_p"]),
             a_1(p["B->K::a_1@1GeV"]),
             a_2(p["B->K::a_2@1GeV"]),
-            e_q(-1.0/3.0),
+            tau(p["life_time::B_" + o.get("q", "d")]),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "BZ2004v2"), p);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
+
+            std::string spectator_quark = o.get("q", "d");
+            if (spectator_quark == "d")
+            {
+                e_q = -1.0 / 3.0;
+            }
+            else if (spectator_quark == "u")
+            {
+                e_q = 2.0 / 3.0;
+            }
 
             std::string lepton = o.get("l", "mu");
             if ("e" == lepton)
@@ -1487,6 +1521,11 @@ namespace eos
             return 2.0 * (a_l(s) + c_l(s) / 3.0);
         }
 
+        double differential_branching_ratio(const double & s)
+        {
+            return unnormalized_decay_width(s) * tau() / hbar();
+        }
+
         double differential_flat_term_numerator(const double & s) const
         {
              return 2.0 * (a_l(s) + c_l(s));
@@ -1518,10 +1557,7 @@ namespace eos
     double
     BToKDilepton<LargeRecoil>::differential_branching_ratio(const double & s) const
     {
-        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
-        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
-
-        return _imp->unnormalized_decay_width(s) / Gamma;
+        return _imp->differential_branching_ratio(s);
     }
 
     double
