@@ -208,6 +208,8 @@ namespace eos
             {
                 e_q = 2.0 / 3.0;
             }
+            else
+                throw InternalError("Unsupported spectator quark");
 
             // TODO: Lepton masses, m_l = m_mu
             m_l = 0.0;//m_l = 0.10565836; // (GeV), cf. [PDG2008], p. 13
@@ -1174,6 +1176,8 @@ namespace eos
             {
                 e_q = 2.0 / 3.0;
             }
+            else
+                throw InternalError("Unsupported spectator quark");
 
             std::string lepton = o.get("l", "mu");
             if ("e" == lepton)

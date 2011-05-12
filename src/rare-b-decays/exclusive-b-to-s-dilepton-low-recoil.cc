@@ -244,6 +244,10 @@ namespace eos
         {
             form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
 
+            std::string spectator_quark = o.get("q", "d");
+            if ((spectator_quark != "d") && (spectator_quark != "u"))
+                throw InternalError("Unsupported spectator quark");
+
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
         }
@@ -1065,6 +1069,10 @@ namespace eos
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
+
+            std::string spectator_quark = o.get("q", "d");
+            if ((spectator_quark != "d") && (spectator_quark != "u"))
+                throw InternalError("Unsupported spectator quark");
 
             std::string lepton = o.get("l", "mu");
             if ("e" == lepton)
