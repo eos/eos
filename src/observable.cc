@@ -18,6 +18,7 @@
  */
 
 #include <src/observable.hh>
+#include <src/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 #include <src/rare-b-decays/exclusive-b-to-s-gamma.hh>
@@ -69,6 +70,10 @@ namespace eos
         static const std::map<std::string, ObservableFactory *> simple_observables
         {
             /* Exclusive Decays */
+
+            // B_q -> ll
+            make_observable("B_q->ll::BR",
+                    &BToDilepton::branching_ratio),
 
             // B -> K, cf. [BZ2004v2]
             make_observable("B->K::f_+(s)@BZ2004v2",

@@ -9,6 +9,7 @@ libeosrarebdecays_la_SOURCES = \
 	charm-loops.cc charm-loops.hh \
 	decays.hh \
 	em-contributions.hh em-contributions.cc \
+	exclusive-b-to-dilepton.cc exclusive-b-to-dilepton.hh \
 	exclusive-b-to-s-dilepton-low-recoil.cc exclusive-b-to-s-dilepton-large-recoil.cc \
 	exclusive-b-to-s-dilepton-low-recoil.hh exclusive-b-to-s-dilepton-large-recoil.hh \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
@@ -28,6 +29,7 @@ TESTS = \
 	bremsstrahlung_TEST \
 	charm-loops_TEST \
 	em-contributions_TEST \
+	exclusive-b-to-dilepton_TEST \
 	exclusive-b-to-s-dilepton-low-recoil_TEST \
 	exclusive-b-to-s-dilepton-large-recoil_TEST \
 	exclusive-b-to-s-gamma_TEST \
@@ -51,6 +53,9 @@ charm_loops_TEST_LDADD = $(TESTS_LD_ADD)
 
 em_contributions_TEST_SOURCES = em-contributions_TEST.cc
 em_contributions_TEST_LDADD = $(TESTS_LD_ADD)
+
+exclusive_b_to_dilepton_TEST_SOURCES = exclusive-b-to-dilepton_TEST.cc
+exclusive_b_to_dilepton_TEST_LDADD = $(TESTS_LD_ADD)
 
 exclusive_b_to_s_dilepton_low_recoil_TEST_SOURCES = exclusive-b-to-s-dilepton-low-recoil_TEST.cc
 exclusive_b_to_s_dilepton_low_recoil_TEST_LDADD = $(TESTS_LD_ADD)

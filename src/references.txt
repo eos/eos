@@ -65,6 +65,13 @@ References
         arxiv:hep-ph/9804241
 
 
+    BB1999: Buchalla, G. and Buras, A.J.
+
+        The Rare Decays K -> pi nu nu, B -> X nu nu and B -> l^+ l^-
+
+        arxiv:hep-ph/9901288
+
+
     BBL1995 : Buchalla, G. and Buras, J.B. and Lautenbacher, M.E.
 
         Weak Decays Beyond Leading Logarithms
@@ -77,6 +84,14 @@ References
         Higher-Twist Distribution Amplitudes of the K Meson in QCD
 
         arxiv:hep-ph/0603063
+
+
+    BEKU2002 : Bobeth, C. and Ewerth, T. and Krüger, F. and Urban, J.
+
+        Enhancement of BR[B_d -> mu^+ mu^-] / BR[B_s -> mu^+ mu^-] in the MSSM with
+        Modified Minimal Flavor Violation and Large tan(beta)
+
+        arxiv:hep-ph/0204225
 
 
     BF2001 : Beneke, M. and Feldmann, Th.
