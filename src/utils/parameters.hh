@@ -25,6 +25,8 @@
 #include <src/utils/random_number_engine.hh>
 #include <src/utils/wrapped_forward_iterator.hh>
 
+#include <set>
+
 namespace eos
 {
     /*!
@@ -123,6 +125,13 @@ namespace eos
              * @param name  The name of the Parameter that shall be retrieved.
              */
             Parameter operator[] (const std::string & name) const;
+
+            /*!
+             * Retrieve a parameter's Parameter object by id.
+             *
+             * @param id    The id of the Parameter that shall be retrived.
+             */
+            Parameter operator[] (const unsigned & id) const;
             ///@}
 
             /*!
@@ -166,6 +175,10 @@ namespace eos
 
             ///@name Basic Functions
             ///@{
+            /// Copy-constructor.
+            Parameter(const Parameter & other);
+
+            /// Destructor.
             ~Parameter();
             ///@}
 
@@ -205,6 +218,60 @@ namespace eos
             /// Retrieve the Parameter's id.
             Id id() const;
             ///@}
+    };
+
+    /*!
+     * Base class for all users of Parameter objects.
+     */
+    class ParameterUser
+    {
+        protected:
+            std::set<Parameter::Id> _ids;
+
+        public:
+            ///@name Iteration over ids
+            ///@{
+            struct ConstIteratorTag;
+            typedef WrappedForwardIterator<ConstIteratorTag, const Parameter::Id> ConstIterator;
+
+            ConstIterator begin() const;
+            ConstIterator end() const;
+            ///@}
+
+            ///@name Access
+            ///@{
+            /*!
+             * Add a given parameter id to our list of used ids.
+             *
+             * @param id   The parameter id that we use.
+             */
+            void uses(const Parameter::Id & id);
+
+            /*!
+             * Copy parameter ids of another ParameterUser to our list of used ids.
+             *
+             * @param user The other ParameterUser whose ids we are going to copy.
+             */
+            void uses(const ParameterUser & user);
+            ///@}
+    };
+
+    /*!
+     * Wrapper class to automate usage tracking of Parameter objects.
+     */
+    class UsedParameter :
+        public Parameter
+    {
+        public:
+            /*!
+             * Constructor.
+             *
+             * Constructs a Parameter object and registers its usage with a ParameterUser.
+             *
+             * @param parameter The parameter which is used.
+             * @param user      The user of above parameter.
+             */
+            UsedParameter(const Parameter & parameter, ParameterUser & user);
     };
 
     struct ParameterDescription

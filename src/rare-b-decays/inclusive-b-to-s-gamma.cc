@@ -33,27 +33,28 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        Parameter abs_c7;
+        UsedParameter abs_c7;
 
-        Parameter arg_c7;
+        UsedParameter arg_c7;
 
-        Parameter m_b_MSbar;
+        UsedParameter m_b_MSbar;
 
-        Parameter alpha_e;
+        UsedParameter alpha_e;
 
-        Parameter br_bcsl;
+        UsedParameter br_bcsl;
 
-        Parameter uncertainty;
+        UsedParameter uncertainty;
 
-        Implementation(const Parameters & p) :
+        Implementation(const Parameters & p, ParameterUser & u) :
             model(Model::make("SM", p)),
-            abs_c7(p["Abs{c7}"]),
-            arg_c7(p["Arg{c7}"]),
-            m_b_MSbar(p["mass::b(MSbar)"]),
-            alpha_e(p["QED::alpha_e(m_b)"]),
-            br_bcsl(p["exp::BR(B->X_clnu)"]),
-            uncertainty(p["B->X_sgamma::uncertainty"])
+            abs_c7(p["Abs{c7}"], u),
+            arg_c7(p["Arg{c7}"], u),
+            m_b_MSbar(p["mass::b(MSbar)"], u),
+            alpha_e(p["QED::alpha_e(m_b)"], u),
+            br_bcsl(p["exp::BR(B->X_clnu)"], u),
+            uncertainty(p["B->X_sgamma::uncertainty"], u)
         {
+            u.uses(*model);
         }
 
         double m_c_pole() const
@@ -87,7 +88,7 @@ namespace eos
     };
 
     BToXsGamma<Minimal>::BToXsGamma(const Parameters & parameters, const Options &) :
-        PrivateImplementationPattern<BToXsGamma<Minimal>>(new Implementation<BToXsGamma<Minimal>>(parameters))
+        PrivateImplementationPattern<BToXsGamma<Minimal>>(new Implementation<BToXsGamma<Minimal>>(parameters, *this))
     {
     }
 

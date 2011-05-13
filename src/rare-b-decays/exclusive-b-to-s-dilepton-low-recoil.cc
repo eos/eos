@@ -123,75 +123,75 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        Parameter hbar;
+        UsedParameter hbar;
 
-        Parameter c1;
+        UsedParameter c1;
 
-        Parameter c2;
+        UsedParameter c2;
 
-        Parameter c3;
+        UsedParameter c3;
 
-        Parameter c4;
+        UsedParameter c4;
 
-        Parameter c5;
+        UsedParameter c5;
 
-        Parameter c6;
+        UsedParameter c6;
 
-        Parameter abs_c7;
+        UsedParameter abs_c7;
 
-        Parameter arg_c7;
+        UsedParameter arg_c7;
 
-        Parameter abs_c7prime;
+        UsedParameter abs_c7prime;
 
-        Parameter arg_c7prime;
+        UsedParameter arg_c7prime;
 
-        Parameter c8;
+        UsedParameter c8;
 
-        Parameter abs_c9;
+        UsedParameter abs_c9;
 
-        Parameter arg_c9;
+        UsedParameter arg_c9;
 
-        Parameter abs_c9prime;
+        UsedParameter abs_c9prime;
 
-        Parameter arg_c9prime;
+        UsedParameter arg_c9prime;
 
-        Parameter abs_c10;
+        UsedParameter abs_c10;
 
-        Parameter arg_c10;
+        UsedParameter arg_c10;
 
-        Parameter abs_c10prime;
+        UsedParameter abs_c10prime;
 
-        Parameter arg_c10prime;
+        UsedParameter arg_c10prime;
 
-        Parameter m_b_MSbar;
+        UsedParameter m_b_MSbar;
 
-        Parameter m_c_MSbar;
+        UsedParameter m_c_MSbar;
 
-        Parameter m_s;
+        UsedParameter m_s;
 
-        Parameter m_B;
+        UsedParameter m_B;
 
-        Parameter m_Kstar;
+        UsedParameter m_Kstar;
 
-        Parameter mu;
+        UsedParameter mu;
 
-        Parameter alpha_e;
+        UsedParameter alpha_e;
 
-        Parameter g_fermi;
+        UsedParameter g_fermi;
 
-        Parameter lambda_long;
+        UsedParameter lambda_long;
 
-        Parameter lambda_par;
+        UsedParameter lambda_par;
 
-        Parameter lambda_perp;
+        UsedParameter lambda_perp;
 
-        Parameter sl_phase_long;
+        UsedParameter sl_phase_long;
 
-        Parameter sl_phase_par;
+        UsedParameter sl_phase_par;
 
-        Parameter sl_phase_perp;
+        UsedParameter sl_phase_perp;
 
-        Parameter tau;
+        UsedParameter tau;
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
@@ -201,43 +201,43 @@ namespace eos
 
         bool use_nlo;
 
-        Implementation(const Parameters & p, const Options & o) :
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p)),
-            hbar(p["hbar"]),
-            c1(p["c1"]),
-            c2(p["c2"]),
-            c3(p["c3"]),
-            c4(p["c4"]),
-            c5(p["c5"]),
-            c6(p["c6"]),
-            abs_c7(p["Abs{c7}"]),
-            arg_c7(p["Arg{c7}"]),
-            abs_c7prime(p["Abs{c7'}"]),
-            arg_c7prime(p["Arg{c7'}"]),
-            c8(p["c8"]),
-            abs_c9(p["Abs{c9}"]),
-            arg_c9(p["Arg{c9}"]),
-            abs_c9prime(p["Abs{c9'}"]),
-            arg_c9prime(p["Arg{c9'}"]),
-            abs_c10(p["Abs{c10}"]),
-            arg_c10(p["Arg{c10}"]),
-            abs_c10prime(p["Abs{c10'}"]),
-            arg_c10prime(p["Arg{c10'}"]),
-            m_b_MSbar(p["mass::b(MSbar)"]),
-            m_c_MSbar(p["mass::c"]),
-            m_s(p["mass::s"]),
-            m_B(p["mass::B_" + o.get("q", "d")]),
-            m_Kstar(p["mass::K^*0"]),
-            mu(p["mu"]),
-            alpha_e(p["QED::alpha_e(m_b)"]),
-            g_fermi(p["G_Fermi"]),
-            lambda_long(p["B->Vll::Lambda_0@LowRecoil"]),
-            lambda_par(p["B->Vll::Lambda_pa@LowRecoil"]),
-            lambda_perp(p["B->Vll::Lambda_pp@LowRecoil"]),
-            sl_phase_long(p["B->Vll::sl_phase_0@LowRecoil"]),
-            sl_phase_par(p["B->Vll::sl_phase_pa@LowRecoil"]),
-            sl_phase_perp(p["B->Vll::sl_phase_pp@LowRecoil"]),
-            tau(p["life_time::B_" + o.get("q", "d")]),
+            hbar(p["hbar"], u),
+            c1(p["c1"], u),
+            c2(p["c2"], u),
+            c3(p["c3"], u),
+            c4(p["c4"], u),
+            c5(p["c5"], u),
+            c6(p["c6"], u),
+            abs_c7(p["Abs{c7}"], u),
+            arg_c7(p["Arg{c7}"], u),
+            abs_c7prime(p["Abs{c7'}"], u),
+            arg_c7prime(p["Arg{c7'}"], u),
+            c8(p["c8"], u),
+            abs_c9(p["Abs{c9}"], u),
+            arg_c9(p["Arg{c9}"], u),
+            abs_c9prime(p["Abs{c9'}"], u),
+            arg_c9prime(p["Arg{c9'}"], u),
+            abs_c10(p["Abs{c10}"], u),
+            arg_c10(p["Arg{c10}"], u),
+            abs_c10prime(p["Abs{c10'}"], u),
+            arg_c10prime(p["Arg{c10'}"], u),
+            m_b_MSbar(p["mass::b(MSbar)"], u),
+            m_c_MSbar(p["mass::c"], u),
+            m_s(p["mass::s"], u),
+            m_B(p["mass::B_" + o.get("q", "d")], u),
+            m_Kstar(p["mass::K^*0"], u),
+            mu(p["mu"], u),
+            alpha_e(p["QED::alpha_e(m_b)"], u),
+            g_fermi(p["G_Fermi"], u),
+            lambda_long(p["B->Vll::Lambda_0@LowRecoil"], u),
+            lambda_par(p["B->Vll::Lambda_pa@LowRecoil"], u),
+            lambda_perp(p["B->Vll::Lambda_pp@LowRecoil"], u),
+            sl_phase_long(p["B->Vll::sl_phase_0@LowRecoil"], u),
+            sl_phase_par(p["B->Vll::sl_phase_pa@LowRecoil"], u),
+            sl_phase_perp(p["B->Vll::sl_phase_pp@LowRecoil"], u),
+            tau(p["life_time::B_" + o.get("q", "d")], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
             use_nlo(destringify<bool>(o.get("nlo", "true")))
@@ -250,6 +250,9 @@ namespace eos
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
+
+            u.uses(*form_factors);
+            u.uses(*model);
         }
 
         // We use the PS mass except for kappa
@@ -519,7 +522,7 @@ namespace eos
     };
 
     BToKstarDilepton<LowRecoil>::BToKstarDilepton(const Parameters & parameters, const Options & options) :
-        PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>(new Implementation<BToKstarDilepton<LowRecoil>>(parameters, options))
+        PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>(new Implementation<BToKstarDilepton<LowRecoil>>(parameters, options, *this))
     {
     }
 
@@ -961,68 +964,68 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        Parameter hbar;
+        UsedParameter hbar;
 
-        Parameter c1;
+        UsedParameter c1;
 
-        Parameter c2;
+        UsedParameter c2;
 
-        Parameter c3;
+        UsedParameter c3;
 
-        Parameter c4;
+        UsedParameter c4;
 
-        Parameter c5;
+        UsedParameter c5;
 
-        Parameter c6;
+        UsedParameter c6;
 
-        Parameter abs_c7;
+        UsedParameter abs_c7;
 
-        Parameter arg_c7;
+        UsedParameter arg_c7;
 
-        Parameter abs_c7prime;
+        UsedParameter abs_c7prime;
 
-        Parameter arg_c7prime;
+        UsedParameter arg_c7prime;
 
-        Parameter c8;
+        UsedParameter c8;
 
-        Parameter abs_c9;
+        UsedParameter abs_c9;
 
-        Parameter arg_c9;
+        UsedParameter arg_c9;
 
-        Parameter abs_c9prime;
+        UsedParameter abs_c9prime;
 
-        Parameter arg_c9prime;
+        UsedParameter arg_c9prime;
 
-        Parameter abs_c10;
+        UsedParameter abs_c10;
 
-        Parameter arg_c10;
+        UsedParameter arg_c10;
 
-        Parameter abs_c10prime;
+        UsedParameter abs_c10prime;
 
-        Parameter arg_c10prime;
+        UsedParameter arg_c10prime;
 
-        Parameter m_b_MSbar;
+        UsedParameter m_b_MSbar;
 
-        Parameter m_B;
+        UsedParameter m_B;
 
-        Parameter m_K;
+        UsedParameter m_K;
 
-        Parameter m_e;
+        UsedParameter m_e;
 
-        Parameter m_mu;
+        UsedParameter m_mu;
 
-        Parameter m_tau;
+        UsedParameter m_tau;
 
-        Parameter mu;
+        UsedParameter mu;
 
-        Parameter alpha_e;
+        UsedParameter alpha_e;
 
-        Parameter g_fermi;
+        UsedParameter g_fermi;
 
         double m_l;
 
         // Mean life time
-        Parameter tau;
+        UsedParameter tau;
 
         bool cp_conjugate;
 
@@ -1030,38 +1033,38 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
-        Implementation(const Parameters & p, const Options & o) :
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p)),
-            hbar(p["hbar"]),
-            c1(p["c1"]),
-            c2(p["c2"]),
-            c3(p["c3"]),
-            c4(p["c4"]),
-            c5(p["c5"]),
-            c6(p["c6"]),
-            abs_c7(p["Abs{c7}"]),
-            arg_c7(p["Arg{c7}"]),
-            abs_c7prime(p["Abs{c7'}"]),
-            arg_c7prime(p["Arg{c7'}"]),
-            c8(p["c8"]),
-            abs_c9(p["Abs{c9}"]),
-            arg_c9(p["Arg{c9}"]),
-            abs_c9prime(p["Abs{c9'}"]),
-            arg_c9prime(p["Arg{c9'}"]),
-            abs_c10(p["Abs{c10}"]),
-            arg_c10(p["Arg{c10}"]),
-            abs_c10prime(p["Abs{c10'}"]),
-            arg_c10prime(p["Arg{c10'}"]),
-            m_b_MSbar(p["mass::b(MSbar)"]),
-            m_B(p["mass::B_" + o.get("q", "d")]),
-            m_K(p["mass::K0"]),
-            m_e(p["mass::e"]),
-            m_mu(p["mass::mu"]),
-            m_tau(p["mass::tau"]),
-            mu(p["mu"]),
-            alpha_e(p["QED::alpha_e(m_b)"]),
-            g_fermi(p["G_Fermi"]),
-            tau(p["life_time::B_" + o.get("q", "d")]),
+            hbar(p["hbar"], u),
+            c1(p["c1"], u),
+            c2(p["c2"], u),
+            c3(p["c3"], u),
+            c4(p["c4"], u),
+            c5(p["c5"], u),
+            c6(p["c6"], u),
+            abs_c7(p["Abs{c7}"], u),
+            arg_c7(p["Arg{c7}"], u),
+            abs_c7prime(p["Abs{c7'}"], u),
+            arg_c7prime(p["Arg{c7'}"], u),
+            c8(p["c8"], u),
+            abs_c9(p["Abs{c9}"], u),
+            arg_c9(p["Arg{c9}"], u),
+            abs_c9prime(p["Abs{c9'}"], u),
+            arg_c9prime(p["Arg{c9'}"], u),
+            abs_c10(p["Abs{c10}"], u),
+            arg_c10(p["Arg{c10}"], u),
+            abs_c10prime(p["Abs{c10'}"], u),
+            arg_c10prime(p["Arg{c10'}"], u),
+            m_b_MSbar(p["mass::b(MSbar)"], u),
+            m_B(p["mass::B_" + o.get("q", "d")], u),
+            m_K(p["mass::K0"], u),
+            m_e(p["mass::e"], u),
+            m_mu(p["mass::mu"], u),
+            m_tau(p["mass::tau"], u),
+            mu(p["mu"], u),
+            alpha_e(p["QED::alpha_e(m_b)"], u),
+            g_fermi(p["G_Fermi"], u),
+            tau(p["life_time::B_" + o.get("q", "d")], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
@@ -1073,6 +1076,9 @@ namespace eos
             std::string spectator_quark = o.get("q", "d");
             if ((spectator_quark != "d") && (spectator_quark != "u"))
                 throw InternalError("Unsupported spectator quark");
+
+            u.uses(*form_factors);
+            u.uses(*model);
 
             std::string lepton = o.get("l", "mu");
             if ("e" == lepton)
@@ -1189,7 +1195,7 @@ namespace eos
     };
 
     BToKDilepton<LowRecoil>::BToKDilepton(const Parameters & parameters, const Options & options) :
-        PrivateImplementationPattern<BToKDilepton<LowRecoil>>(new Implementation<BToKDilepton<LowRecoil>>(parameters, options))
+        PrivateImplementationPattern<BToKDilepton<LowRecoil>>(new Implementation<BToKDilepton<LowRecoil>>(parameters, options, *this))
     {
     }
 

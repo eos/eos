@@ -40,6 +40,7 @@ namespace eos
 
     template <>
     class BToXsDilepton<HLMW2005> :
+        public ParameterUser,
         public PrivateImplementationPattern<BToXsDilepton<HLMW2005>>
     {
         public:

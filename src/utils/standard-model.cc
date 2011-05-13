@@ -33,24 +33,24 @@ namespace eos
     using std::sqrt;
 
     StandardModel::StandardModel(const Parameters & p) :
-        _A(p["CKM::A"]),
-        _lambda(p["CKM::lambda"]),
-        _rhobar(p["CKM::rhobar"]),
-        _etabar(p["CKM::etabar"]),
-        _alpha_s_Z(p["QCD::alpha_s(MZ)"]),
-        _mu_t(p["QCD::mu_t"]),
-        _mu_b(p["QCD::mu_b"]),
-        _mu_c(p["QCD::mu_c"]),
-        _lambda_qcd(p["QCD::Lambda"]),
-        _m_t_pole(p["mass::t(pole)"]),
-        _m_b_MSbar(p["mass::b(MSbar)"]),
-        _m_c_MSbar(p["mass::c"]),
-        _m_W(p["mass::W"]),
-        _m_Z(p["mass::Z"]),
-        _sw2(p["GSW::sin^2(theta)"]),
-        _mu(p["mu"]),
-        _mu_0c(p["b->s::mu_0c"]),
-        _mu_0t(p["b->s::mu_0t"])
+        _A(p["CKM::A"], *this),
+        _lambda(p["CKM::lambda"], *this),
+        _rhobar(p["CKM::rhobar"], *this),
+        _etabar(p["CKM::etabar"], *this),
+        _alpha_s_Z(p["QCD::alpha_s(MZ)"], *this),
+        _mu_t(p["QCD::mu_t"], *this),
+        _mu_b(p["QCD::mu_b"], *this),
+        _mu_c(p["QCD::mu_c"], *this),
+        _lambda_qcd(p["QCD::Lambda"], *this),
+        _m_t_pole(p["mass::t(pole)"], *this),
+        _m_b_MSbar(p["mass::b(MSbar)"], *this),
+        _m_c_MSbar(p["mass::c"], *this),
+        _m_W(p["mass::W"], *this),
+        _m_Z(p["mass::Z"], *this),
+        _sw2(p["GSW::sin^2(theta)"], *this),
+        _mu(p["mu"], *this),
+        _mu_0c(p["b->s::mu_0c"], *this),
+        _mu_0t(p["b->s::mu_0t"], *this)
     {
     }
 

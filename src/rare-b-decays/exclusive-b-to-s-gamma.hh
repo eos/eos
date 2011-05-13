@@ -32,6 +32,7 @@ namespace eos
      * Calculates observables in B->K^*gamma decays
      */
     class BToKstarGamma :
+        public ParameterUser,
         public PrivateImplementationPattern<BToKstarGamma>
     {
         public:

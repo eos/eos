@@ -46,85 +46,85 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        Parameter c1;
+        UsedParameter c1;
 
-        Parameter c2;
+        UsedParameter c2;
 
-        Parameter c3;
+        UsedParameter c3;
 
-        Parameter c4;
+        UsedParameter c4;
 
-        Parameter c5;
+        UsedParameter c5;
 
-        Parameter c6;
+        UsedParameter c6;
 
-        Parameter abs_c7;
+        UsedParameter abs_c7;
 
-        Parameter arg_c7;
+        UsedParameter arg_c7;
 
-        Parameter c8;
+        UsedParameter c8;
 
-        Parameter abs_c9;
+        UsedParameter abs_c9;
 
-        Parameter arg_c9;
+        UsedParameter arg_c9;
 
-        Parameter abs_c10;
+        UsedParameter abs_c10;
 
-        Parameter arg_c10;
+        UsedParameter arg_c10;
 
-        Parameter m_b_MSbar;
+        UsedParameter m_b_MSbar;
 
-        Parameter m_c_MSbar;
+        UsedParameter m_c_MSbar;
 
-        Parameter m_s;
+        UsedParameter m_s;
 
-        Parameter m_tau;
+        UsedParameter m_tau;
 
-        Parameter m_Z;
+        UsedParameter m_Z;
 
-        Parameter br_clnu;
+        UsedParameter br_clnu;
 
-        Parameter lambda_2;
+        UsedParameter lambda_2;
 
-        Parameter mu;
+        UsedParameter mu;
 
-        Parameter alpha_e;
+        UsedParameter alpha_e;
 
-        Parameter ckm;
+        UsedParameter ckm;
 
-        Parameter C;
+        UsedParameter C;
 
-        Parameter admixture;
+        UsedParameter admixture;
 
         double m_l;
 
-        Implementation(const Parameters & p, const Options & o) :
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p)),
-            c1(p["c1"]),
-            c2(p["c2"]),
-            c3(p["c3"]),
-            c4(p["c4"]),
-            c5(p["c5"]),
-            c6(p["c6"]),
-            abs_c7(p["Abs{c7}"]),
-            arg_c7(p["Arg{c7}"]),
-            c8(p["c8"]),
-            abs_c9(p["Abs{c9}"]),
-            arg_c9(p["Arg{c9}"]),
-            abs_c10(p["Abs{c10}"]),
-            arg_c10(p["Arg{c10}"]),
-            m_b_MSbar(p["mass::b(MSbar)"]),
-            m_c_MSbar(p["mass::c"]),
-            m_s(p["mass::s"]),
-            m_tau(p["mass::tau"]),
-            m_Z(p["mass::Z"]),
-            br_clnu(p["exp::BR(B->X_clnu)"]),
-            lambda_2(p["B->X_s::lambda_2"]),
-            mu(p["mu"]),
-            alpha_e(p["QED::alpha_e(m_b)"]),
-            ckm(p["exp::CKM(B->X_sll, B->X_clnu)"]),
-            C(p["exp::C(B->X_clnu, B->X_ulnu)"]),
-            admixture(p["exp::Admixture-BR(B->X_sll)"])
+            c1(p["c1"], u),
+            c2(p["c2"], u),
+            c3(p["c3"], u),
+            c4(p["c4"], u),
+            c5(p["c5"], u),
+            c6(p["c6"], u),
+            abs_c7(p["Abs{c7}"], u),
+            arg_c7(p["Arg{c7}"], u),
+            c8(p["c8"], u),
+            abs_c9(p["Abs{c9}"], u),
+            arg_c9(p["Arg{c9}"], u),
+            abs_c10(p["Abs{c10}"], u),
+            arg_c10(p["Arg{c10}"], u),
+            m_b_MSbar(p["mass::b(MSbar)"], u),
+            m_c_MSbar(p["mass::c"], u),
+            m_s(p["mass::s"], u),
+            m_tau(p["mass::tau"], u),
+            m_Z(p["mass::Z"], u),
+            br_clnu(p["exp::BR(B->X_clnu)"], u),
+            lambda_2(p["B->X_s::lambda_2"], u),
+            mu(p["mu"], u),
+            alpha_e(p["QED::alpha_e(m_b)"], u),
+            ckm(p["exp::CKM(B->X_sll, B->X_clnu)"], u),
+            C(p["exp::C(B->X_clnu, B->X_ulnu)"], u),
+            admixture(p["exp::Admixture-BR(B->X_sll)"], u)
         {
             static const double m_mu = 0.10565836; // (GeV), cf. [PDG2008], p. 13
             static const double m_e = 0.00051099892; // (GeV), cf. [PDG2008], p. 13
@@ -133,6 +133,8 @@ namespace eos
 
             if (o.has("l") && ("e" == o["l"]))
                 m_l = m_e;
+
+            u.uses(*model);
         }
 
         double m_b_pole() const
@@ -492,7 +494,7 @@ namespace eos
     };
 
     BToXsDilepton<HLMW2005>::BToXsDilepton(const Parameters & parameters, const Options & options) :
-        PrivateImplementationPattern<BToXsDilepton<HLMW2005>>(new Implementation<BToXsDilepton<HLMW2005>>(parameters, options))
+        PrivateImplementationPattern<BToXsDilepton<HLMW2005>>(new Implementation<BToXsDilepton<HLMW2005>>(parameters, options, *this))
     {
     }
 

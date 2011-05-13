@@ -30,32 +30,32 @@ namespace eos
     {
         private:
             /* CKM Wolfenstein parameters */
-            Parameter _A;
-            Parameter _lambda;
-            Parameter _rhobar;
-            Parameter _etabar;
+            UsedParameter _A;
+            UsedParameter _lambda;
+            UsedParameter _rhobar;
+            UsedParameter _etabar;
 
             /* QCD parameters */
-            Parameter _alpha_s_Z;
-            Parameter _mu_t;
-            Parameter _mu_b;
-            Parameter _mu_c;
-            Parameter _lambda_qcd;
+            UsedParameter _alpha_s_Z;
+            UsedParameter _mu_t;
+            UsedParameter _mu_b;
+            UsedParameter _mu_c;
+            UsedParameter _lambda_qcd;
 
             /* Masses */
-            Parameter _m_t_pole;
-            Parameter _m_b_MSbar;
-            Parameter _m_c_MSbar;
-            Parameter _m_W;
-            Parameter _m_Z;
+            UsedParameter _m_t_pole;
+            UsedParameter _m_b_MSbar;
+            UsedParameter _m_c_MSbar;
+            UsedParameter _m_W;
+            UsedParameter _m_Z;
 
             /* GSW parameters */
-            Parameter _sw2;
+            UsedParameter _sw2;
 
             /* Renormalization scales */
-            Parameter _mu;
-            Parameter _mu_0c;
-            Parameter _mu_0t;
+            UsedParameter _mu;
+            UsedParameter _mu_0c;
+            UsedParameter _mu_0t;
 
         public:
             StandardModel(const Parameters &);

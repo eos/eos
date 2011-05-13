@@ -39,7 +39,7 @@ namespace eos
         public FormFactors<PToV>
     {
         private:
-            Parameter _v_factor, _a0_factor, _a1_factor, _a2_factor;
+            UsedParameter _v_factor, _a0_factor, _a1_factor, _a2_factor;
 
             // fit parametrisation for P -> V according to [BZ2004]
             static const double _v_r1, _v_r2, _v_m2r, _v_m2fit;
@@ -69,10 +69,10 @@ namespace eos
 
         public:
             BZ2004FormFactors(const Parameters & p, const Options &) :
-                _v_factor(p["formfactors::v_uncertainty"]),
-                _a0_factor(p["formfactors::a0_uncertainty"]),
-                _a1_factor(p["formfactors::a1_uncertainty"]),
-                _a2_factor(p["formfactors::a2_uncertainty"])
+                _v_factor(p["formfactors::v_uncertainty"], *this),
+                _a0_factor(p["formfactors::a0_uncertainty"], *this),
+                _a1_factor(p["formfactors::a1_uncertainty"], *this),
+                _a2_factor(p["formfactors::a2_uncertainty"], *this)
             {
             }
 
@@ -111,7 +111,7 @@ namespace eos
         public FormFactors<PToP>
     {
         private:
-            Parameter _f_p_factor, _f_0_factor, _f_t_factor;
+            UsedParameter _f_p_factor, _f_0_factor, _f_t_factor;
 
             // fit parametrisation for P -> P according to [BZ2004v2]
             static const double _r1_p, _r2_p, _r1_t, _r2_t, _r2_0;
@@ -119,9 +119,9 @@ namespace eos
 
         public:
             BZ2004FormFactors(const Parameters & p, const Options &) :
-                _f_p_factor(p["formfactors::fp_uncertainty"]),
-                _f_0_factor(p["formfactors::f0_uncertainty"]),
-                _f_t_factor(p["formfactors::ft_uncertainty"])
+                _f_p_factor(p["formfactors::fp_uncertainty"], *this),
+                _f_0_factor(p["formfactors::f0_uncertainty"], *this),
+                _f_t_factor(p["formfactors::ft_uncertainty"], *this)
             {
             }
 
@@ -155,7 +155,7 @@ namespace eos
         public FormFactors<PToP>
     {
         private:
-            Parameter _f_p_factor, _f_0_factor, _f_t_factor;
+            UsedParameter _f_p_factor, _f_0_factor, _f_t_factor;
 
             static const double _r1_p_asymptotic, _r2_p_asymptotic;
             static const double _r2_0_asymptotic;
@@ -177,7 +177,7 @@ namespace eos
             static const double _f_t_a_4, _f_t_b_4, _f_t_c_4, _f_t_d_4;
 
             // Gegenbauer moments
-            double _a_1, _a_2, _a_4;
+            UsedParameter _a_1, _a_2, _a_4;
 
             // Polynomial of degree 3, cf. [BZ2004v3], eq. (A.6), p. 28
             double poly3(const double & s, const double & a, const double & b, const double & c, const double & d) const
@@ -205,12 +205,12 @@ namespace eos
 
         public:
             BZ2004FormFactorsSplit(const Parameters & p, const Options &) :
-                _f_p_factor(p["formfactors::fp_uncertainty"]),
-                _f_0_factor(p["formfactors::f0_uncertainty"]),
-                _f_t_factor(p["formfactors::ft_uncertainty"]),
-                _a_1(p["B->K::a_1@2.2GeV"]),
-                _a_2(p["B->K::a_2@2.2GeV"]),
-                _a_4(p["B->K::a_4@2.2GeV"])
+                _f_p_factor(p["formfactors::fp_uncertainty"], *this),
+                _f_0_factor(p["formfactors::f0_uncertainty"], *this),
+                _f_t_factor(p["formfactors::ft_uncertainty"], *this),
+                _a_1(p["B->K::a_1@2.2GeV"], *this),
+                _a_2(p["B->K::a_2@2.2GeV"], *this),
+                _a_4(p["B->K::a_4@2.2GeV"], *this)
             {
             }
 
@@ -252,7 +252,7 @@ namespace eos
         public FormFactors<PToP>
     {
         private:
-            Parameter _f_p_factor, _f_0_factor, _f_t_factor;
+            UsedParameter _f_p_factor, _f_0_factor, _f_t_factor;
 
             // fit parametrisation for P -> P according to [KMPW2010]
             static const double _b1_p, _b1_0, _b1_t;
@@ -267,9 +267,9 @@ namespace eos
 
         public:
             KMPW2010FormFactors(const Parameters & p, const Options &) :
-                _f_p_factor(p["formfactors::fp_uncertainty"]),
-                _f_0_factor(p["formfactors::f0_uncertainty"]),
-                _f_t_factor(p["formfactors::ft_uncertainty"])
+                _f_p_factor(p["formfactors::fp_uncertainty"], *this),
+                _f_0_factor(p["formfactors::f0_uncertainty"], *this),
+                _f_t_factor(p["formfactors::ft_uncertainty"], *this)
             {
             }
 

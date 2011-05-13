@@ -39,6 +39,7 @@ namespace eos
 
     template <>
     class BToXsGamma<Minimal> :
+        public ParameterUser,
         public PrivateImplementationPattern<BToXsGamma<Minimal>>
     {
         public:

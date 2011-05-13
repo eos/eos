@@ -99,6 +99,7 @@ namespace eos
                 _kinematics_names(kinematics_names),
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, &_decay))
             {
+                uses(_decay);
             }
 
             virtual const std::string & name() const

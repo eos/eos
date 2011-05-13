@@ -42,81 +42,82 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        Parameter c1;
+        UsedParameter c1;
 
-        Parameter c2;
+        UsedParameter c2;
 
-        Parameter c3;
+        UsedParameter c3;
 
-        Parameter c4;
+        UsedParameter c4;
 
-        Parameter c5;
+        UsedParameter c5;
 
-        Parameter c6;
+        UsedParameter c6;
 
-        Parameter c8;
+        UsedParameter c8;
 
-        Parameter abs_c7;
+        UsedParameter abs_c7;
 
-        Parameter arg_c7;
+        UsedParameter arg_c7;
 
-        Parameter abs_c7prime;
+        UsedParameter abs_c7prime;
 
-        Parameter arg_c7prime;
+        UsedParameter arg_c7prime;
 
-        Parameter a_1_perp;
+        UsedParameter a_1_perp;
 
-        Parameter a_2_perp;
+        UsedParameter a_2_perp;
 
-        Parameter f_B;
+        UsedParameter f_B;
 
-        Parameter f_Kstar_perp;
+        UsedParameter f_Kstar_perp;
 
-        Parameter lambda_B_p;
+        UsedParameter lambda_B_p;
 
-        Parameter uncertainty_xi_perp;
+        UsedParameter uncertainty_xi_perp;
 
-        Parameter m_B;
+        UsedParameter m_B;
 
-        Parameter m_Kstar;
+        UsedParameter m_Kstar;
 
-        Parameter mu;
+        UsedParameter mu;
 
-        Parameter alpha_e;
+        UsedParameter alpha_e;
 
-        Parameter g_fermi;
+        UsedParameter g_fermi;
 
         bool cp_conjugate;
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
-        Implementation(const Parameters & p, const Options & o) :
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p)),
-            c1(p["c1"]),
-            c2(p["c2"]),
-            c3(p["c3"]),
-            c4(p["c4"]),
-            c5(p["c5"]),
-            c6(p["c6"]),
-            c8(p["c8"]),
-            abs_c7(p["Abs{c7}"]),
-            arg_c7(p["Arg{c7}"]),
-            abs_c7prime(p["Abs{c7'}"]),
-            arg_c7prime(p["Arg{c7'}"]),
-            a_1_perp(p["B->K^*::a_1_perp"]),
-            a_2_perp(p["B->K^*::a_2_perp"]),
-            f_B(p["decay-constant::B_" + o.get("q", "d")]),
-            f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"]),
-            lambda_B_p(p["lambda_B_p"]),
-            uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"]),
-            m_B(p["mass::B_" + o.get("q", "d")]),
-            m_Kstar(p["mass::K^*0"]),
-            mu(p["mu"]),
-            alpha_e(p["QED::alpha_e(m_b)"]),
-            g_fermi(p["G_Fermi"]),
+            c1(p["c1"], u),
+            c2(p["c2"], u),
+            c3(p["c3"], u),
+            c4(p["c4"], u),
+            c5(p["c5"], u),
+            c6(p["c6"], u),
+            c8(p["c8"], u),
+            abs_c7(p["Abs{c7}"], u),
+            arg_c7(p["Arg{c7}"], u),
+            abs_c7prime(p["Abs{c7'}"], u),
+            arg_c7prime(p["Arg{c7'}"], u),
+            a_1_perp(p["B->K^*::a_1_perp"], u),
+            a_2_perp(p["B->K^*::a_2_perp"], u),
+            f_B(p["decay-constant::B_" + o.get("q", "d")], u),
+            f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], u),
+            lambda_B_p(p["lambda_B_p"], u),
+            uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"], u),
+            m_B(p["mass::B_" + o.get("q", "d")], u),
+            m_Kstar(p["mass::K^*0"], u),
+            mu(p["mu"], u),
+            alpha_e(p["QED::alpha_e(m_b)"], u),
+            g_fermi(p["G_Fermi"], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             form_factors(FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p))
         {
+            u.uses(*model);
         }
 
         inline double m_b_PS() const { return model->m_b_ps(std::sqrt(mu * 0.5)); }
@@ -373,7 +374,7 @@ namespace eos
     };
 
     BToKstarGamma::BToKstarGamma(const Parameters & parameters, const Options & options) :
-        PrivateImplementationPattern<BToKstarGamma>(new Implementation<BToKstarGamma>(parameters, options))
+        PrivateImplementationPattern<BToKstarGamma>(new Implementation<BToKstarGamma>(parameters, options, *this))
     {
     }
 

@@ -20,6 +20,7 @@
 
 #include <src/utils/parameters.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
+#include <src/utils/stringify.hh>
 #include <src/utils/wrapped_forward_iterator-impl.hh>
 
 #include <cmath>
@@ -115,6 +116,15 @@ namespace eos
             throw UnknownParameterError(name);
 
         return Parameter(_imp->parameters_data, i->second);
+    }
+
+    Parameter
+    Parameters::operator[] (const Parameter::Id & id) const
+    {
+        if (id >= _imp->parameters.size())
+            throw InternalError("Parameters::operator[] (Parameter::Id): invalid id '" + stringify(id) + "'");
+
+        return _imp->parameters[id];
     }
 
     void
@@ -290,6 +300,12 @@ namespace eos
     {
     }
 
+    Parameter::Parameter(const Parameter & other) :
+        _parameters_data(other._parameters_data),
+        _index(other._index)
+    {
+    }
+
     Parameter::~Parameter()
     {
     }
@@ -353,6 +369,38 @@ namespace eos
     Parameter::id() const
     {
         return _parameters_data->data[_index].id;
+    }
+
+    template class WrappedForwardIterator<ParameterUser::ConstIteratorTag, const Parameter::Id>;
+
+    ParameterUser::ConstIterator
+    ParameterUser::begin() const
+    {
+        return ConstIterator(_ids.cbegin());
+    }
+
+    ParameterUser::ConstIterator
+    ParameterUser::end() const
+    {
+        return ConstIterator(_ids.cend());
+    }
+
+    void
+    ParameterUser::uses(const Parameter::Id & id)
+    {
+        _ids.insert(id);
+    }
+
+    void
+    ParameterUser::uses(const ParameterUser & other)
+    {
+        _ids.insert(other._ids.cbegin(), other._ids.cend());
+    }
+
+    UsedParameter::UsedParameter(const Parameter & parameter, ParameterUser & user) :
+        Parameter(parameter)
+    {
+        user.uses(parameter.id());
     }
 
     UnknownParameterError::UnknownParameterError(const std::string & name) throw () :

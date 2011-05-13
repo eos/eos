@@ -36,7 +36,8 @@ namespace eos
 
     typedef std::shared_ptr<Observable> ObservablePtr;
 
-    class Observable
+    class Observable :
+        public ParameterUser
     {
         public:
             virtual const std::string & name() const = 0;

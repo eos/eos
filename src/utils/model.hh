@@ -30,7 +30,8 @@ namespace eos
 {
     using std::complex;
 
-    class Model
+    class Model :
+        public ParameterUser
     {
         public:
             virtual ~Model() = 0;

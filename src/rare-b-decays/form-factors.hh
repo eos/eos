@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -47,7 +47,8 @@ namespace eos
     struct PToP { };
 
     template <>
-    class FormFactors<PToV>
+    class FormFactors<PToV> :
+        public ParameterUser
     {
         public:
             virtual ~FormFactors();
@@ -69,7 +70,8 @@ namespace eos
     };
 
     template <>
-    class FormFactors<PToP>
+    class FormFactors<PToP> :
+        public ParameterUser
     {
         public:
             virtual ~FormFactors();

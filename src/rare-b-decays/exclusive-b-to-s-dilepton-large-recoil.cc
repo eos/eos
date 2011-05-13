@@ -521,95 +521,95 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        Parameter hbar;
+        UsedParameter hbar;
 
-        Parameter c1;
+        UsedParameter c1;
 
-        Parameter c2;
+        UsedParameter c2;
 
-        Parameter c3;
+        UsedParameter c3;
 
-        Parameter c4;
+        UsedParameter c4;
 
-        Parameter c5;
+        UsedParameter c5;
 
-        Parameter c6;
+        UsedParameter c6;
 
-        Parameter abs_c7;
+        UsedParameter abs_c7;
 
-        Parameter arg_c7;
+        UsedParameter arg_c7;
 
-        Parameter abs_c7prime;
+        UsedParameter abs_c7prime;
 
-        Parameter arg_c7prime;
+        UsedParameter arg_c7prime;
 
-        Parameter c8;
+        UsedParameter c8;
 
-        Parameter abs_c9;
+        UsedParameter abs_c9;
 
-        Parameter arg_c9;
+        UsedParameter arg_c9;
 
-        Parameter abs_c9prime;
+        UsedParameter abs_c9prime;
 
-        Parameter arg_c9prime;
+        UsedParameter arg_c9prime;
 
-        Parameter abs_c10;
+        UsedParameter abs_c10;
 
-        Parameter arg_c10;
+        UsedParameter arg_c10;
 
-        Parameter abs_c10prime;
+        UsedParameter abs_c10prime;
 
-        Parameter arg_c10prime;
+        UsedParameter arg_c10prime;
 
-        Parameter m_b_MSbar;
+        UsedParameter m_b_MSbar;
 
-        Parameter m_c;
+        UsedParameter m_c;
 
-        Parameter m_B;
+        UsedParameter m_B;
 
-        Parameter m_Kstar;
+        UsedParameter m_Kstar;
 
         double m_l;
 
-        Parameter mu;
+        UsedParameter mu;
 
-        Parameter alpha_e;
+        UsedParameter alpha_e;
 
-        Parameter g_fermi;
+        UsedParameter g_fermi;
 
-        Parameter f_B;
+        UsedParameter f_B;
 
-        Parameter f_Kstar_par;
+        UsedParameter f_Kstar_par;
 
-        Parameter f_Kstar_perp;
+        UsedParameter f_Kstar_perp;
 
-        Parameter lambda_B_p;
+        UsedParameter lambda_B_p;
 
-        Parameter a_1_par;
+        UsedParameter a_1_par;
 
-        Parameter a_2_par;
+        UsedParameter a_2_par;
 
-        Parameter a_1_perp;
+        UsedParameter a_1_perp;
 
-        Parameter a_2_perp;
+        UsedParameter a_2_perp;
 
-        Parameter uncertainty_par_left;
+        UsedParameter uncertainty_par_left;
 
-        Parameter uncertainty_par_right;
+        UsedParameter uncertainty_par_right;
 
-        Parameter uncertainty_perp_left;
+        UsedParameter uncertainty_perp_left;
 
-        Parameter uncertainty_perp_right;
+        UsedParameter uncertainty_perp_right;
 
-        Parameter uncertainty_long_left;
+        UsedParameter uncertainty_long_left;
 
-        Parameter uncertainty_long_right;
+        UsedParameter uncertainty_long_right;
 
-        Parameter uncertainty_xi_perp;
+        UsedParameter uncertainty_xi_perp;
 
-        Parameter uncertainty_xi_par;
+        UsedParameter uncertainty_xi_par;
 
-        Parameter tau;
+        UsedParameter tau;
 
         double e_q;
 
@@ -617,58 +617,62 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
-        Implementation(const Parameters & p, const Options & o) :
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p)),
-            hbar(p["hbar"]),
-            c1(p["c1"]),
-            c2(p["c2"]),
-            c3(p["c3"]),
-            c4(p["c4"]),
-            c5(p["c5"]),
-            c6(p["c6"]),
-            abs_c7(p["Abs{c7}"]),
-            arg_c7(p["Arg{c7}"]),
-            abs_c7prime(p["Abs{c7'}"]),
-            arg_c7prime(p["Arg{c7'}"]),
-            c8(p["c8"]),
-            abs_c9(p["Abs{c9}"]),
-            arg_c9(p["Arg{c9}"]),
-            abs_c9prime(p["Abs{c9'}"]),
-            arg_c9prime(p["Arg{c9'}"]),
-            abs_c10(p["Abs{c10}"]),
-            arg_c10(p["Arg{c10}"]),
-            abs_c10prime(p["Abs{c10'}"]),
-            arg_c10prime(p["Arg{c10'}"]),
-            m_b_MSbar(p["mass::b(MSbar)"]),
-            m_c(p["mass::c"]),
-            m_B(p["mass::B_" + o.get("q", "d")]),
-            m_Kstar(p["mass::K^*0"]),
-            mu(p["mu"]),
-            alpha_e(p["QED::alpha_e(m_b)"]),
-            g_fermi(p["G_Fermi"]),
-            f_B(p["decay-constant::B_" + o.get("q", "d")]),
-            f_Kstar_par(p["B->K^*::f_Kstar_par"]),
-            f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"]),
-            lambda_B_p(p["lambda_B_p"]),
-            a_1_par(p["B->K^*::a_1_par"]),
-            a_2_par(p["B->K^*::a_2_par"]),
-            a_1_perp(p["B->K^*::a_1_perp"]),
-            a_2_perp(p["B->K^*::a_2_perp"]),
-            uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty@LargeRecoil"]),
-            uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty@LargeRecoil"]),
-            uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty@LargeRecoil"]),
-            uncertainty_perp_right(p["B->K^*ll::A_perp^R_uncertainty@LargeRecoil"]),
-            uncertainty_long_left(p["B->K^*ll::A_0^L_uncertainty@LargeRecoil"]),
-            uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty@LargeRecoil"]),
-            uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"]),
-            uncertainty_xi_par(p["formfactors::xi_par_uncertainty"]),
-            tau(p["life_time::B_" + o.get("q", "d")]),
+            hbar(p["hbar"], u),
+            c1(p["c1"], u),
+            c2(p["c2"], u),
+            c3(p["c3"], u),
+            c4(p["c4"], u),
+            c5(p["c5"], u),
+            c6(p["c6"], u),
+            abs_c7(p["Abs{c7}"], u),
+            arg_c7(p["Arg{c7}"], u),
+            abs_c7prime(p["Abs{c7'}"], u),
+            arg_c7prime(p["Arg{c7'}"], u),
+            c8(p["c8"], u),
+            abs_c9(p["Abs{c9}"], u),
+            arg_c9(p["Arg{c9}"], u),
+            abs_c9prime(p["Abs{c9'}"], u),
+            arg_c9prime(p["Arg{c9'}"], u),
+            abs_c10(p["Abs{c10}"], u),
+            arg_c10(p["Arg{c10}"], u),
+            abs_c10prime(p["Abs{c10'}"], u),
+            arg_c10prime(p["Arg{c10'}"], u),
+            m_b_MSbar(p["mass::b(MSbar)"], u),
+            m_c(p["mass::c"], u),
+            m_B(p["mass::B_" + o.get("q", "d")], u),
+            m_Kstar(p["mass::K^*0"], u),
+            mu(p["mu"], u),
+            alpha_e(p["QED::alpha_e(m_b)"], u),
+            g_fermi(p["G_Fermi"], u),
+            f_B(p["decay-constant::B_" + o.get("q", "d")], u),
+            f_Kstar_par(p["B->K^*::f_Kstar_par"], u),
+            f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], u),
+            lambda_B_p(p["lambda_B_p"], u),
+            a_1_par(p["B->K^*::a_1_par"], u),
+            a_2_par(p["B->K^*::a_2_par"], u),
+            a_1_perp(p["B->K^*::a_1_perp"], u),
+            a_2_perp(p["B->K^*::a_2_perp"], u),
+            uncertainty_par_left(p["B->K^*ll::A_par^L_uncertainty@LargeRecoil"], u),
+            uncertainty_par_right(p["B->K^*ll::A_par^R_uncertainty@LargeRecoil"], u),
+            uncertainty_perp_left(p["B->K^*ll::A_perp^L_uncertainty@LargeRecoil"], u),
+            uncertainty_perp_right(p["B->K^*ll::A_perp^R_uncertainty@LargeRecoil"], u),
+            uncertainty_long_left(p["B->K^*ll::A_0^L_uncertainty@LargeRecoil"], u),
+            uncertainty_long_right(p["B->K^*ll::A_0^R_uncertainty@LargeRecoil"], u),
+            uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"], u),
+            uncertainty_xi_par(p["formfactors::xi_par_uncertainty"], u),
+            tau(p["life_time::B_" + o.get("q", "d")], u),
+            e_q(-1.0/3.0),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
+
+            u.uses(*form_factors);
+            u.uses(*model);
 
             std::string spectator_quark = o.get("q", "d");
             if (spectator_quark == "d")
@@ -949,7 +953,7 @@ namespace eos
     };
 
     BToKstarDilepton<LargeRecoil>::BToKstarDilepton(const Parameters & parameters, const Options & options) :
-        PrivateImplementationPattern<BToKstarDilepton<LargeRecoil>>(new Implementation<BToKstarDilepton<LargeRecoil>>(parameters, options))
+        PrivateImplementationPattern<BToKstarDilepton<LargeRecoil>>(new Implementation<BToKstarDilepton<LargeRecoil>>(parameters, options, *this))
     {
     }
 
@@ -1138,80 +1142,80 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        Parameter hbar;
+        UsedParameter hbar;
 
-        Parameter c1;
+        UsedParameter c1;
 
-        Parameter c2;
+        UsedParameter c2;
 
-        Parameter c3;
+        UsedParameter c3;
 
-        Parameter c4;
+        UsedParameter c4;
 
-        Parameter c5;
+        UsedParameter c5;
 
-        Parameter c6;
+        UsedParameter c6;
 
-        Parameter abs_c7;
+        UsedParameter abs_c7;
 
-        Parameter arg_c7;
+        UsedParameter arg_c7;
 
-        Parameter abs_c7prime;
+        UsedParameter abs_c7prime;
 
-        Parameter arg_c7prime;
+        UsedParameter arg_c7prime;
 
-        Parameter c8;
+        UsedParameter c8;
 
-        Parameter abs_c9;
+        UsedParameter abs_c9;
 
-        Parameter arg_c9;
+        UsedParameter arg_c9;
 
-        Parameter abs_c9prime;
+        UsedParameter abs_c9prime;
 
-        Parameter arg_c9prime;
+        UsedParameter arg_c9prime;
 
-        Parameter abs_c10;
+        UsedParameter abs_c10;
 
-        Parameter arg_c10;
+        UsedParameter arg_c10;
 
-        Parameter abs_c10prime;
+        UsedParameter abs_c10prime;
 
-        Parameter arg_c10prime;
+        UsedParameter arg_c10prime;
 
-        Parameter m_b_MSbar;
+        UsedParameter m_b_MSbar;
 
-        Parameter m_c;
+        UsedParameter m_c;
 
-        Parameter m_B;
+        UsedParameter m_B;
 
-        Parameter m_K;
+        UsedParameter m_K;
 
-        Parameter m_e;
+        UsedParameter m_e;
 
-        Parameter m_mu;
+        UsedParameter m_mu;
 
-        Parameter m_tau;
+        UsedParameter m_tau;
 
         double m_l;
 
-        Parameter mu;
+        UsedParameter mu;
 
-        Parameter alpha_e;
+        UsedParameter alpha_e;
 
-        Parameter g_fermi;
+        UsedParameter g_fermi;
 
-        Parameter f_B;
+        UsedParameter f_B;
 
-        Parameter f_K;
+        UsedParameter f_K;
 
-        Parameter lambda_B_p;
+        UsedParameter lambda_B_p;
 
-        Parameter a_1;
+        UsedParameter a_1;
 
-        Parameter a_2;
+        UsedParameter a_2;
 
         // Mean life times
-        Parameter tau;
+        UsedParameter tau;
 
         // spectator quark charge
         double e_q;
@@ -1220,50 +1224,54 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
-        Implementation(const Parameters & p, const Options & o) :
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p)),
-            hbar(p["hbar"]),
-            c1(p["c1"]),
-            c2(p["c2"]),
-            c3(p["c3"]),
-            c4(p["c4"]),
-            c5(p["c5"]),
-            c6(p["c6"]),
-            abs_c7(p["Abs{c7}"]),
-            arg_c7(p["Arg{c7}"]),
-            abs_c7prime(p["Abs{c7'}"]),
-            arg_c7prime(p["Arg{c7'}"]),
-            c8(p["c8"]),
-            abs_c9(p["Abs{c9}"]),
-            arg_c9(p["Arg{c9}"]),
-            abs_c9prime(p["Abs{c9'}"]),
-            arg_c9prime(p["Arg{c9'}"]),
-            abs_c10(p["Abs{c10}"]),
-            arg_c10(p["Arg{c10}"]),
-            abs_c10prime(p["Abs{c10'}"]),
-            arg_c10prime(p["Arg{c10'}"]),
-            m_b_MSbar(p["mass::b(MSbar)"]),
-            m_c(p["mass::c"]),
-            m_B(p["mass::B_" + o.get("q", "d")]),
-            m_K(p["mass::K0"]),
-            m_e(p["mass::e"]),
-            m_mu(p["mass::mu"]),
-            m_tau(p["mass::tau"]),
-            mu(p["mu"]),
-            alpha_e(p["QED::alpha_e(m_b)"]),
-            g_fermi(p["G_Fermi"]),
-            f_B(p["decay-constant::B_" + o.get("q", "d")]),
-            f_K(p["decay-constant::K_" + o.get("q", "d")]),
-            lambda_B_p(p["lambda_B_p"]),
-            a_1(p["B->K::a_1@1GeV"]),
-            a_2(p["B->K::a_2@1GeV"]),
-            tau(p["life_time::B_" + o.get("q", "d")]),
+            hbar(p["hbar"], u),
+            c1(p["c1"], u),
+            c2(p["c2"], u),
+            c3(p["c3"], u),
+            c4(p["c4"], u),
+            c5(p["c5"], u),
+            c6(p["c6"], u),
+            abs_c7(p["Abs{c7}"], u),
+            arg_c7(p["Arg{c7}"], u),
+            abs_c7prime(p["Abs{c7'}"], u),
+            arg_c7prime(p["Arg{c7'}"], u),
+            c8(p["c8"], u),
+            abs_c9(p["Abs{c9}"], u),
+            arg_c9(p["Arg{c9}"], u),
+            abs_c9prime(p["Abs{c9'}"], u),
+            arg_c9prime(p["Arg{c9'}"], u),
+            abs_c10(p["Abs{c10}"], u),
+            arg_c10(p["Arg{c10}"], u),
+            abs_c10prime(p["Abs{c10'}"], u),
+            arg_c10prime(p["Arg{c10'}"], u),
+            m_b_MSbar(p["mass::b(MSbar)"], u),
+            m_c(p["mass::c"], u),
+            m_B(p["mass::B_" + o.get("q", "d")], u),
+            m_K(p["mass::K0"], u),
+            m_e(p["mass::e"], u),
+            m_mu(p["mass::mu"], u),
+            m_tau(p["mass::tau"], u),
+            mu(p["mu"], u),
+            alpha_e(p["QED::alpha_e(m_b)"], u),
+            g_fermi(p["G_Fermi"], u),
+            f_B(p["decay-constant::B_" + o.get("q", "d")], u),
+            f_K(p["decay-constant::K_" + o.get("q", "d")], u),
+            lambda_B_p(p["lambda_B_p"], u),
+            a_1(p["B->K::a_1@1GeV"], u),
+            a_2(p["B->K::a_2@1GeV"], u),
+            tau(p["life_time::B_" + o.get("q", "d")], u),
+            e_q(-1.0/3.0),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "BZ2004v2"), p);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
+
+            u.uses(*form_factors);
+            u.uses(*model);
 
             std::string spectator_quark = o.get("q", "d");
             if (spectator_quark == "d")
@@ -1412,7 +1420,7 @@ namespace eos
     };
 
     BToKDilepton<LargeRecoil>::BToKDilepton(const Parameters & parameters, const Options & options) :
-        PrivateImplementationPattern<BToKDilepton<LargeRecoil>>(new Implementation<BToKDilepton<LargeRecoil>>(parameters, options))
+        PrivateImplementationPattern<BToKDilepton<LargeRecoil>>(new Implementation<BToKDilepton<LargeRecoil>>(parameters, options, *this))
     {
     }
 

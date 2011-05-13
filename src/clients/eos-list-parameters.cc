@@ -59,6 +59,8 @@ class CommandLine :
     public:
         Parameters parameters;
 
+        std::vector<ObservablePtr> observables;
+
         CommandLine() :
             parameters(Parameters::Defaults())
         {
@@ -71,6 +73,29 @@ class CommandLine :
             for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
             {
                 std::string argument(*a);
+
+                if ("--kinematics" == argument)
+                {
+                    std::string name = std::string(*(++a));
+                    double value = destringify<double>(*(++a));
+                    kinematics->declare(name);
+                    kinematics->set(name, value);
+
+                    continue;
+                }
+
+                if ("--observable" == argument)
+                {
+                    std::string name(*(++a));
+                    ObservablePtr observable = Observable::make(name, parameters, *kinematics, Options());
+                    if (! observable)
+                        throw DoUsage("Unknown observable '" + name + "'");
+
+                    observables.push_back(observable);
+                    kinematics.reset(new Kinematics);
+
+                    continue;
+                }
 
                 throw DoUsage("Unknown command line argument: " + argument);
             }
@@ -85,12 +110,33 @@ main(int argc, char * argv[])
         CommandLine::instance()->parse(argc, argv);
 
         std::string::size_type max_name_length = 20;
-        for (auto p = CommandLine::instance()->parameters.begin(), p_end = CommandLine::instance()->parameters.end() ; p != p_end ; ++p)
+        std::vector<Parameter> parameters;
+
+        if (CommandLine::instance()->observables.empty())
+        {
+            parameters.insert(parameters.begin(), CommandLine::instance()->parameters.begin(), CommandLine::instance()->parameters.end());
+        }
+        else
+        {
+            std::set<Parameter::Id> ids;
+
+            for (auto o = CommandLine::instance()->observables.begin(), o_end = CommandLine::instance()->observables.end() ; o != o_end ; ++o)
+            {
+                ids.insert((*o)->begin(), (*o)->end());
+            }
+
+            for (auto i = ids.cbegin(), i_end = ids.cend() ; i != i_end ; ++i)
+            {
+                parameters.push_back(CommandLine::instance()->parameters[*i]);
+            }
+        }
+
+        for (auto p = parameters.begin(), p_end = parameters.end() ; p != p_end ; ++p)
         {
             max_name_length = std::max(max_name_length, p->name().length());
         }
 
-        for (auto p = CommandLine::instance()->parameters.begin(), p_end = CommandLine::instance()->parameters.end() ; p != p_end ; ++p)
+        for (auto p = parameters.begin(), p_end = parameters.end() ; p != p_end ; ++p)
         {
             std::cout
                 << std::setw(max_name_length) << std::setiosflags(std::ios::right)
@@ -104,6 +150,7 @@ main(int argc, char * argv[])
     {
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-list-parameters" << std::endl;
+        std::cout << "  [[--kinematics NAME VALUE]* --observable NAME]*" << std::endl;
     }
     catch(Exception & e)
     {

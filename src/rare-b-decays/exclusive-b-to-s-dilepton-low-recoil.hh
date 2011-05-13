@@ -38,6 +38,7 @@ namespace eos
      */
     template <>
     class BToKstarDilepton<LowRecoil> :
+        public ParameterUser,
         public PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>
     {
         public:
@@ -108,6 +109,7 @@ namespace eos
      */
     template <>
     class BToKDilepton<LowRecoil> :
+        public ParameterUser,
         public PrivateImplementationPattern<BToKDilepton<LowRecoil>>
     {
         public:
