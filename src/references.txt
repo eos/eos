@@ -211,6 +211,13 @@ References
         arxiv:hep-ph/0404250
 
 
+    GR1992 : Gelman, A. and Rubin, D.B.
+
+        Inference from Iterative Simulation Using Multiple Sequences
+
+        Statistical Science, Vol. 7, No. 4 (Nov. 1992), pp. 457-472
+
+
     HLMW2005 : Huber, T. and Lunghi, E. and Misiak, M. and Wyler, D.
 
         Electromagnetic Logarithms in B -> X_s l+ l-
