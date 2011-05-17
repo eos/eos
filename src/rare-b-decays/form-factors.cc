@@ -208,10 +208,12 @@ namespace eos
     template <> const double KMPW2010FormFactors<BToK>::_tau_m    = (_m_B - _m_K) * (_m_B - _m_K);
     template <> const double KMPW2010FormFactors<BToK>::_tau_0    = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
 
-    // Masses, cf. PDG 2008
-    template <> const double KMPW2010FormFactors<BToK>::_m_B      = 5.280;
-    template <> const double KMPW2010FormFactors<BToK>::_m_K      = 0.498;
-    template <> const double KMPW2010FormFactors<BToK>::_m_Bs2    = 5.325 * 5.325;
+    // mass B_u, cf. [PDG 2010]
+    template <> const double KMPW2010FormFactors<BToK>::_m_B      = 5.27917;
+    // mass K^+, cf. [PDG 2010
+    template <> const double KMPW2010FormFactors<BToK>::_m_K      = 0.493677;
+    // mass B_s^* (1-), cf. [KMPW2010]
+    template <> const double KMPW2010FormFactors<BToK>::_m_Bs2    = 5.412 * 5.412;
 
     FormFactors<PToP>::~FormFactors()
     {
