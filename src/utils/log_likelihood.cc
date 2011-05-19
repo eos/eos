@@ -46,7 +46,7 @@ namespace eos
         // <observable name, index>
         std::map<std::string, unsigned> observable_names;
 
-        // store which observables(index list for observations) is needed for a parameter id
+        // store which observables(index list for observations) are needed for a parameter id
         std::map<unsigned, std::vector<unsigned>> index_lists;
 
         Parameters parameters;

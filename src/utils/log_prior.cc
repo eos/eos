@@ -51,7 +51,7 @@ namespace eos
                     _range(range),
                     _value(std::log(1.0 / (range.max - range.min)))
                 {
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false });
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false, false });
                 }
 
                 virtual double operator()() const
@@ -62,6 +62,11 @@ namespace eos
                 virtual LogPriorPtr clone(const Parameters & parameters) const
                 {
                     return LogPriorPtr(new priors::Flat(parameters, _name, _range));
+                }
+
+                virtual double sample(gsl_rng * rng) const
+                {
+                    return gsl_rng_uniform(rng) * (_range.max - _range.min) + _range.min;
                 }
         };
 
@@ -82,6 +87,14 @@ namespace eos
 
                 double _norm_lower, _norm_upper;
 
+                // the probability covered to the left of the central value
+                double _prob_lower;
+
+                // coefficients needed for sampling
+                //TODO explain system and solution Vol. II, p. 154
+                double _c_lower, _c_upper;
+                double _phi_min, _phi_max;
+
             public:
                 Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
                         const double & lower, const double & central, const double & upper) :
@@ -94,7 +107,7 @@ namespace eos
                     _sigma_lower(central - lower),
                     _sigma_upper(upper - central)
                 {
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false });
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false, false });
 
                     /*
                      * calculate anything that doesn't depend on parameter x only once.
@@ -104,13 +117,19 @@ namespace eos
                      * where f denotes the Normal distribution
                      * $f\left(x|\mu,\sigma\right)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^{2}}{2\sigma^{2}}}$
                      */
-                    double lower_integral = +0.5 - gsl_cdf_gaussian_P(range.min - _central, _sigma_lower);
-                    double upper_integral = -0.5 + gsl_cdf_gaussian_P(range.max - _central, _sigma_upper);
 
-                    double overall_normalization = 1 / (lower_integral + upper_integral);
+                    _phi_min = gsl_cdf_gaussian_P(range.min - _central, _sigma_lower);
+                    _phi_max = gsl_cdf_gaussian_P(range.max - _central, _sigma_upper);
+
+                    double overall_normalization = 1.0 / (_phi_max - _phi_min);
+
+                    _prob_lower = (0.5 - _phi_min) * overall_normalization;
 
                     _norm_lower = std::log(overall_normalization / (std::sqrt(2.0 * M_PI) * _sigma_lower));
                     _norm_upper = std::log(overall_normalization / (std::sqrt(2.0 * M_PI) * _sigma_upper));
+
+                    _c_lower = 2.0 * _prob_lower / (1.0 - _phi_min);
+                    _c_upper = (1.0 - _prob_lower) / (_phi_max - 0.5);
                 }
 
                 virtual double operator()() const
@@ -138,6 +157,54 @@ namespace eos
                 {
                     return LogPriorPtr(new priors::Gauss(parameters, _name, _range, _lower, _central, _upper));
                 }
+
+                virtual double sample(gsl_rng * rng) const
+                {
+                    // find out if sample in upper or lower part
+                    double u = gsl_rng_uniform(rng);
+
+                    // get a sample from lower or upper part using inverse transform method
+                    if (u < _prob_lower)
+                        return gsl_cdf_gaussian_Pinv(u / _c_lower + _phi_min, _sigma_lower) + _central;
+                    else
+                        return gsl_cdf_gaussian_Pinv((u - _prob_lower) / _c_upper + 0.5, _sigma_upper) + _central;
+                }
+        };
+
+        class Discrete :
+            public LogPrior
+        {
+            private:
+                std::string _name;
+
+                std::vector<double> _values;
+
+                double _prob;
+
+            public:
+                Discrete(const Parameters & parameters, const std::string & name, const std::set<double> & values) :
+                    LogPrior(parameters),
+                    _name(name),
+                    _values(values.begin(), values.end()),
+                    _prob(1.0 / _values.size())
+                {
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], _values.front(), _values.back(), false, true });
+                }
+
+                virtual LogPriorPtr clone(const Parameters & parameters) const
+                {
+                    return LogPriorPtr(new priors::Discrete(parameters, _name, std::set<double>(_values.begin(), _values.end())));
+                }
+
+                virtual double operator() () const
+                {
+                    return _prob;
+                }
+
+                virtual double sample(gsl_rng * rng) const
+                {
+                    return _values[gsl_rng_uniform_int(rng, _values.size())];
+                }
         };
     }
 
@@ -159,10 +226,9 @@ namespace eos
     }
 
     LogPriorPtr
-    LogPrior::Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
-            const double & lower, const double & central, const double & upper)
+    LogPrior::Discrete(const Parameters & parameters, const std::string & name, const std::set<double> & values)
     {
-        LogPriorPtr prior = std::make_shared<eos::priors::Gauss>(parameters, name, range, lower, central, upper );
+        LogPriorPtr prior = std::make_shared<eos::priors::Discrete>(parameters, name, values);
 
         return prior;
     }
@@ -171,6 +237,15 @@ namespace eos
     LogPrior::Flat(const Parameters & parameters, const std::string & name, const ParameterRange & range)
     {
         LogPriorPtr prior = std::make_shared<eos::priors::Flat>(parameters, name, range);
+
+        return prior;
+    }
+
+    LogPriorPtr
+    LogPrior::Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+            const double & lower, const double & central, const double & upper)
+    {
+        LogPriorPtr prior = std::make_shared<eos::priors::Gauss>(parameters, name, range, lower, central, upper);
 
         return prior;
     }

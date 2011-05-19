@@ -25,6 +25,7 @@
 #include <cmath>
 #include <limits>
 #include <numeric>
+#include <map>
 
 #include <gsl/gsl_rng.h>
 
@@ -41,6 +42,9 @@ namespace eos
 
         // all the info about parameters that is needed to setup sampling
         std::vector<ParameterDescription> parameter_descriptions;
+
+        // get sample values directly from the prior for discrete parameters
+        std::map<unsigned, LogPriorPtr> discrete_priors;
 
         // Random number generator, unique to this chain
         gsl_rng * rng;
@@ -168,18 +172,20 @@ namespace eos
             proposal.log_posterior = proposal.log_prior + proposal.log_likelihood;
         }
 
-        // copy the information about parameters, their ranges and
-        // whether they are nuisance parameters or not
-        void extract_parameters()
-        {
-            parameter_descriptions = analysis->parameter_descriptions();
-        }
-
         // called from ctor only at beginning
         void initialize()
         {
-            // extract parameters
-            extract_parameters();
+            // copy the information about parameters, their ranges and
+            // whether they are nuisance parameters or not
+            parameter_descriptions = analysis->parameter_descriptions();
+
+            //find discrete parameters
+            unsigned index = 0;
+            for (auto i = parameter_descriptions.begin(), i_end = parameter_descriptions.end(); i != i_end; ++i, ++index)
+            {
+                if (i->discrete)
+                    discrete_priors.insert(std::make_pair(index, analysis->log_prior(i->parameter.name())));
+            }
 
             // initialize statistics
             reset(true);
@@ -203,14 +209,17 @@ namespace eos
         {
             // random starting point, equal current and proposal.
             //   x_{init} = x_{min} + U * (x_{max}-x_{min})
-            for (unsigned i = 0; i < parameter_descriptions.size() ; ++i)
+            unsigned i = 0;
+            for (auto p = parameter_descriptions.begin(), p_end = parameter_descriptions.end(); p != p_end; ++p,++i)
             {
-                double range = parameter_descriptions[i].max - parameter_descriptions[i].min;
-                current.point[i] = parameter_descriptions[i].min + uniform_random_number() * range;
-                proposal.point[i] = current.point[i];
+                if(p->discrete)
+                    current.point[i] = discrete_priors[i]->sample(rng);
+                else
+                    current.point[i] = p->min + uniform_random_number() * ( p->max - p->min);
 
                 // update Parameters object
-                parameter_descriptions[i].parameter = current.point[i];
+                proposal.point[i] = current.point[i];
+                p->parameter = current.point[i];
             }
 
             // reuse code. Pretend we propose to change first param. to its initial value
@@ -240,30 +249,37 @@ namespace eos
          */
         bool new_proposal_point()
         {
+            ParameterDescription& descr = parameter_descriptions[current_parameter];
+
             // ensure that we start from current point
             // undo any changes for previous parameter.
             // to cover the case where parameter = 0, need modulus to wrap around
             unsigned previous_par_index = (current_parameter == 0) ? parameter_descriptions.size() - 1 : current_parameter - 1;
             proposal.point[previous_par_index] = current.point[previous_par_index];
 
-            double scale = scales[current_parameter];
+            if (descr.discrete)
+                prop = discrete_priors[current_parameter]->sample(rng);
+            else
+            {
+                double scale = scales[current_parameter];
 
-            // u in [0,1[
-            double u = uniform_random_number();
+                // u in [0,1[
+                double u = uniform_random_number();
 
-            // inverse transform method for Cauchy variable around zero
-            double x = scale * std::tan(M_PI * (u - 1 / 2.)) + 0;
+                // inverse transform method for Cauchy variable around zero
+                double x = scale * std::tan(M_PI * (u - 1 / 2.)) + 0;
 
-            // proposal = current point plus move
-            double par_range = parameter_descriptions[current_parameter].max - parameter_descriptions[current_parameter].min;
-            prop = current.point[current_parameter] + x * par_range;
+                // proposal = current point plus move
+                double par_range = descr.max - descr.min;
+                prop = current.point[current_parameter] + x * par_range;
+            }
 
             // save point and update parameters
             proposal.point[current_parameter] = prop;
 
             // check if point outside valid range. Then it is rejected and no likelihood
             // evaluation is needed
-            if ((prop < parameter_descriptions[current_parameter].min) || (prop > parameter_descriptions[current_parameter].max))
+            if ((prop < descr.min) || (prop > descr.max))
             {
                 return false;
             }

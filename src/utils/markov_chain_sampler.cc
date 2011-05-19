@@ -265,6 +265,7 @@ namespace eos
                         f->min = p->min;
                         f->max = p->max;
                         f->nuisance = p->nuisance;
+                        f->discrete = p->discrete;
                     }
 
                     if (data_set->end_fields() == f)

@@ -33,7 +33,7 @@ namespace eos
         // at most into N 1D priors
         std::vector<LogPriorPtr> priors;
 
-        // Parameter, minimum, maximum, nuisance
+        // Parameter, minimum, maximum, nuisance, discrete
         std::vector<ParameterDescription> parameter_descriptions;
 
         // names of all parameters. prevent using a parameter twice
@@ -131,6 +131,23 @@ namespace eos
 
             return result;
         }
+
+        LogPriorPtr log_prior(const std::string & name) const
+        {
+            LogPriorPtr prior;
+
+            // loop over all descriptions of the prior pointers
+            for (auto p = priors.begin(), p_end = priors.end() ; p != p_end ; ++p)
+            {
+                for (auto i = (*p)->begin(), i_end = (*p)->end() ; i != i_end ; ++i)
+                {
+                    if (i->parameter.name() == name)
+                        prior = *p;
+                }
+            }
+
+            return prior;
+        }
     };
 
     Analysis::Analysis(const LogLikelihoodPtr & log_likelihood) :
@@ -176,6 +193,12 @@ namespace eos
     Analysis::log_prior()
     {
         return _imp->log_prior();
+    }
+
+    LogPriorPtr
+    Analysis::log_prior(const std::string & name) const
+    {
+        return _imp->log_prior(name);
     }
 
     bool

@@ -394,11 +394,12 @@ namespace eos
     }
 
     /* ScanFile::FieldInfo */
-    ScanFile::FieldInfo::FieldInfo(const std::string & name, const double & min, const double & max, bool nuisance) :
+    ScanFile::FieldInfo::FieldInfo(const std::string & name, const double & min, const double & max, bool nuisance, bool discrete) :
         name(name),
         min(min),
         max(max),
-        nuisance(nuisance)
+        nuisance(nuisance),
+        discrete(discrete)
     {
     }
 
@@ -594,7 +595,14 @@ namespace eos
                 if (ret < 0)
                     nuisance_attr = false;
 
-                field_infos.push_back(ScanFile::FieldInfo(name_attr, min_attr, max_attr, nuisance_attr));
+                // discrete
+                std::string discrete_attr_name = "FIELD_" + stringify(i) + "_DISCRETE";
+                unsigned short discrete_attr;
+                ret = H5LTget_attribute_ushort(group_id_data, name.c_str(), discrete_attr_name.c_str(), &discrete_attr);
+                if (ret < 0)
+                    discrete_attr = false;
+
+                field_infos.push_back(ScanFile::FieldInfo(name_attr, min_attr, max_attr, nuisance_attr, discrete_attr));
             }
         }
 
@@ -619,7 +627,8 @@ namespace eos
                     std::string name_attr_name = "FIELD_" + stringify(i) + "_NAME",
                         max_attr_name = "FIELD_" + stringify(i) + "_MAX",
                         min_attr_name = "FIELD_" + stringify(i) + "_MIN",
-                        nuisance_attr_name = "FIELD_" + stringify(i) + "_NUISANCE";
+                        nuisance_attr_name = "FIELD_" + stringify(i) + "_NUISANCE",
+                        discrete_attr_name = "FIELD_" + stringify(i) + "_DISCRETE";
 
                     herr_t ret = H5LTset_attribute_string(group_id_data, name.c_str(), name_attr_name.c_str(), f->name.c_str());
                     if (ret < 0)
@@ -635,6 +644,11 @@ namespace eos
 
                     unsigned short nuisance = f->nuisance;
                     ret = H5LTset_attribute_ushort(group_id_data, name.c_str(), nuisance_attr_name.c_str(), &nuisance, 1);
+                    if (ret < 0)
+                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
+
+                    unsigned short discrete = f->discrete;
+                    ret = H5LTset_attribute_ushort(group_id_data, name.c_str(), discrete_attr_name.c_str(), &discrete, 1);
                     if (ret < 0)
                         throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
                 }

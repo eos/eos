@@ -259,7 +259,7 @@ namespace eos
     {
         ///@name Basic Functions
         ///@{
-        FieldInfo(const std::string & name, const double & min, const double & max, bool nuisance = false);
+        FieldInfo(const std::string & name, const double & min, const double & max, bool nuisance = false, bool discrete = false);
         ///@}
 
         ///@name Data
@@ -275,6 +275,9 @@ namespace eos
 
         /// Whether this field contains a nuisance parameter.
         bool nuisance;
+
+        /// Whether parameter is discrete or continuous
+        bool discrete;
         ///@}
     };
 

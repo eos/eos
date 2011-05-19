@@ -86,6 +86,11 @@ namespace eos
             /// Retrieve the overall Log(prior) for this analysis.
             double log_prior();
 
+            /*!
+             * Find the prior for a given parameter
+             */
+            LogPriorPtr log_prior(const std::string & name) const;
+
             /// Retrieve the overall Log(posterior) for this analysis.
             ///   incorporate normalization constant, the evidence here in getter if available
             double log_posterior();

@@ -54,6 +54,11 @@ class LogPriorTest :
                 // use factory
                 LogPriorPtr flat_prior = LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{ 4.2, 4.5 });
                 TEST_CHECK_NEARLY_EQUAL((*flat_prior)(), 1.2039728043259361, eps);
+
+                //a continuous parameter of interest
+                TEST_CHECK( ! flat_prior->begin()->nuisance);
+                TEST_CHECK( ! flat_prior->begin()->discrete);
+                TEST_CHECK_EQUAL(flat_prior->begin()->parameter.name(), "mass::b(MSbar)");
             }
 
 
@@ -107,6 +112,59 @@ class LogPriorTest :
 
                 parameters["mass::b(MSbar)"] = 4.3;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), +0.883646846442260436, eps);
+            }
+
+            //test sampling
+            {
+                LogPriorPtr gauss_prior = LogPrior::Gauss(parameters, "mass::b(MSbar)", ParameterRange{ 4.15, 4.57 },
+                                        4.2, 4.3, 4.5);
+
+                gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
+                gsl_rng_set(rng, 1243);
+
+                //calculate manually what will happen for the first three numbers.
+
+                TEST_CHECK_NEARLY_EQUAL(gauss_prior -> sample(rng), 4.559828404943599, eps );
+                TEST_CHECK_NEARLY_EQUAL(gauss_prior -> sample(rng), 4.390994101050554, eps );
+                TEST_CHECK_NEARLY_EQUAL(gauss_prior -> sample(rng), 4.286086713649191, eps );
+
+                gsl_rng_free(rng);
+            }
+
+            //test discrete prior
+            {
+                LogPriorPtr discrete = LogPrior::Discrete(Parameters::Defaults(), "Arg{c9}", std::set<double>{0, M_PI} );
+
+                // spits out 1 1 0 1 1 on range {0,1}
+                gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
+                gsl_rng_set(rng, 1243);
+
+                TEST_CHECK_EQUAL(M_PI, discrete->sample(rng));
+                TEST_CHECK_EQUAL(M_PI, discrete->sample(rng));
+                TEST_CHECK_EQUAL(0   , discrete->sample(rng));
+                TEST_CHECK_EQUAL(M_PI, discrete->sample(rng));
+                TEST_CHECK_EQUAL(M_PI, discrete->sample(rng));
+
+                TEST_CHECK_EQUAL(discrete->begin()->parameter.name(), "Arg{c9}");
+                TEST_CHECK(!discrete->begin()->nuisance);
+                TEST_CHECK(discrete->begin()->discrete);
+
+                LogPriorPtr discrete2 = LogPrior::Discrete(Parameters::Defaults(), "Arg{c10'}", std::set<double>{0, 0.75, 1, 0.25, 0.5} );
+
+                // spits out indices 4 0 1 4 1 on range {0...4}
+                gsl_rng* rng2 = gsl_rng_alloc(gsl_rng_mt19937);
+                gsl_rng_set(rng, 984);
+
+                // note that samples are ordered according to size
+                // so element[4] is the largest value
+                TEST_CHECK_EQUAL(1   , discrete2->sample(rng2));
+                TEST_CHECK_EQUAL(0   , discrete2->sample(rng2));
+                TEST_CHECK_EQUAL(0.25, discrete2->sample(rng2));
+                TEST_CHECK_EQUAL(1   , discrete2->sample(rng2));
+                TEST_CHECK_EQUAL(0.25, discrete2->sample(rng2));
+
+                gsl_rng_free(rng);
+                gsl_rng_free(rng2);
             }
         }
 } log_prior_test;

@@ -266,5 +266,52 @@ class MarkovChainTest :
                 // if this evaluates to NaN, initialization went wrong
                 TEST_CHECK_RELATIVE_ERROR( (*llh)(), -14.758100406210971, eps);
             }
+
+            // try sampling with discrete parameters only
+            {
+                Parameters parameters = Parameters::Defaults();
+                LogLikelihoodPtr llh(new LogLikelihood(parameters));
+                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(), "mass::b(MSbar)")), 4.1, 4.2, 4.3);
+
+                AnalysisPtr ana = std::make_shared<Analysis>(llh);
+                ana->add(LogPrior::Discrete(parameters, "mass::b(MSbar)", std::set<double>{ 4.15, 4.4 }));
+
+                MarkovChain chain(ana, 12346);
+
+                unsigned samples = 1000;
+                chain.run(samples);
+
+                static const std::string file_name = "/tmp/discrete.hdf5";
+                std::remove(file_name.c_str());
+                std::shared_ptr<ScanFile> file(new ScanFile(ScanFile::Create(file_name, "markov_chain_TEST")));
+                std::shared_ptr<ScanFile::DataSet> data_set(new ScanFile::DataSet(file->add("chain #0", 1 + 1)));
+
+                chain.dump_history(*data_set);
+
+                // make sure there are only two values
+                unsigned counter = 0;
+                for (unsigned i = 0 ; i < samples ; ++i)
+                {
+                    double param = (*data_set)[i][0];
+
+                    if (std::abs(param - 4.15) < eps)
+                    {
+                        ++counter;
+                        continue;
+                    }
+
+                    if (std::abs(param - 4.4) < eps)
+                        continue;
+
+                    TEST_CHECK_FAILED("Parameter in step "+ stringify(i)+" of value "+stringify(param)+", which is neither 4.15 nor 4.4!");
+                }
+
+                // pdf at 4.15 is about 6.5208 higher than at 4.4
+                // but accuracy is low for 1000 samples
+                TEST_CHECK_NEARLY_EQUAL(1.0 * counter / (samples - counter), 6.5208, 2e-1);
+
+                // remove the HDF5 file
+                std::remove(file_name.c_str());
+            }
         }
 } markov_chain_test;
