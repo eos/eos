@@ -20,6 +20,7 @@
 #include <src/observable.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/instantiation_policy-impl.hh>
+#include <src/utils/log.hh>
 #include <src/utils/one-of.hh>
 #include <src/utils/stringify.hh>
 #include <src/utils/wilson-polynomial.hh>
@@ -71,6 +72,8 @@ class CommandLine :
 
         void parse(int argc, char ** argv)
         {
+            Log::instance()->set_program_name("eos-print-polynomial");
+
             std::shared_ptr<Kinematics> kinematics(new Kinematics);
 
             for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)

@@ -22,6 +22,7 @@
 #include <src/utils/cartesian-product.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/lock.hh>
+#include <src/utils/log.hh>
 #include <src/utils/mutex.hh>
 #include <src/utils/thread_pool.hh>
 
@@ -259,6 +260,8 @@ main(int argc, char * argv[])
         std::list<std::string> variation_names;
         std::list<std::pair<std::string, double>> param_changes;
         double theory_uncertainty = 0.0;
+
+        Log::instance()->set_program_name("eos-scan");
 
         for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
         {
