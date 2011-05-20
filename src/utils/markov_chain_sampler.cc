@@ -216,7 +216,7 @@ namespace eos
             for (auto d = data_sets.begin(), d_end = data_sets.end(); d != d_end; ++c, ++d)
             {
                 if (! (*d))
-                    continue;
+                    throw InternalError("MarkovChainSampler::dump_hdf5: null pointer to ScanFile::DataSet");
 
                 (*c)->dump_history(**d);
                 (*c)->clear();
