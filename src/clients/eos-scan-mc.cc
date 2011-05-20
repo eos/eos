@@ -162,6 +162,35 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--discrete" == argument)
+                {
+                    std::string name = std::string(*(++a));
+
+                    std::string lbrace(*(++a));
+                    if ("{" != lbrace)
+                        throw DoUsage("Put set of discrete values in braces {}");
+
+                    std::set<double> values;
+                    do
+                    {
+                        std::string word(*(++a));
+                        if ("}" == word)
+                            break;
+
+                        double value = destringify<double> (word);
+                        values.insert(value);
+                    }
+                    while (true);
+
+                    LogPriorPtr prior = LogPrior::Discrete(parameters, name, values);
+
+                    // check for error in setting the prior and adding the parameter
+                    if (! analysis->add(prior, true))
+                        throw DoUsage("Unknown error in assigning discrete prior distribution to " + name);
+
+                    continue;
+                }
+
                 if ("--fix" == argument)
                 {
                     std::string par_name = std::string(*(++a));
@@ -223,7 +252,7 @@ class CommandLine :
                     }
                     else
                     {
-                        config.seed = destringify<unsigned long>(*(++a));
+                        config.seed = destringify<unsigned long>(value);
                     }
 
                     continue;
@@ -328,6 +357,7 @@ int main(int argc, char * argv[])
         std::cout << "Usage: eos-scan-mc" << std::endl;
         std::cout << "  [ [--kinematics NAME VALUE]* --observable NAME LOWER CENTRAL UPPER]+" << std::endl;
         std::cout << "  [ [ [--scan PARAMETER MIN MAX] | [--nuisance PARAMETER MIN MAX] ] --prior [flat | [gaussian LOWER CENTRAL UPPER] ] ]+" << std::endl;
+        std::cout << "  [--discrete PARAMETER { VALUE1 VALUE2 ...}]" << std::endl;
         std::cout << "  [--fix PARAMETER VALUE]" << std::endl;
         std::cout << "  [--chunksize VALUE]+" << std::endl;
         std::cout << "  [--chunks VALUE]+" << std::endl;
