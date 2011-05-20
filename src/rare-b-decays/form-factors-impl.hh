@@ -27,14 +27,18 @@
 
 namespace eos
 {
+    /* Form Factors according to [BZ2004] */
+    template <typename Process_, typename Transition_> class BZ2004FormFactors;
+
+    /* Form Factors according to [KMPW2010] */
+    template <typename Transition_> class KMPW2010FormFactors;
+
+
     /* P -> V Processes */
 
     struct BToKstar { };
     struct BsToPhi { };
 
-    template <typename Process_, typename Transition_> class BZ2004FormFactors;
-
-    /* Form Factors according to [BZ2004] */
     template <typename Process_> class BZ2004FormFactors<Process_, PToV> :
         public FormFactors<PToV>
     {
@@ -247,16 +251,13 @@ namespace eos
             }
     };
 
-    /* Form Factors according to [KMPW2010] */
-    template <typename Process_> class KMPW2010FormFactors :
+    template <> class KMPW2010FormFactors<PToP> :
         public FormFactors<PToP>
     {
         private:
-            UsedParameter _f_p_factor, _f_0_factor, _f_t_factor;
-
             // fit parametrisation for P -> P according to [KMPW2010]
-            static const double _b1_p, _b1_0, _b1_t;
-            static const double _f0_p, _f0_0, _f0_t;
+            UsedParameter _b1_p, _b1_0, _b1_t;
+            UsedParameter _f0_p, _f0_0, _f0_t;
             static const double _tau_p, _tau_m, _tau_0;
             static const double _m_B, _m_K, _m_Bs2;
 
@@ -267,9 +268,12 @@ namespace eos
 
         public:
             KMPW2010FormFactors(const Parameters & p, const Options &) :
-                _f_p_factor(p["formfactors::fp_uncertainty"], *this),
-                _f_0_factor(p["formfactors::f0_uncertainty"], *this),
-                _f_t_factor(p["formfactors::ft_uncertainty"], *this)
+                _b1_p(p["B->K::b^p_1@KMPW2010"], *this),
+                _b1_0(p["B->K::b^0_1@KMPW2010"], *this),
+                _b1_t(p["B->K::b^t_1@KMPW2010"], *this),
+                _f0_p(p["B->K::F^p(0)@KMPW2010"], *this),
+                _f0_0(p["B->K::F^0(0)@KMPW2010"], *this),
+                _f0_t(p["B->K::F^t(0)@KMPW2010"], *this)
             {
             }
 
@@ -280,20 +284,26 @@ namespace eos
 
             virtual double f_p(const double & s) const
             {
-                // [KMPW2010] eq. (8.8)
-                return _f_p_factor * _f0_p / (1 - s / _m_Bs2) * (1 + _b1_p * (_calc_z(s) - _calc_z(0) + 0.5 * (power_of<2>(_calc_z(s)) - power_of<2>(_calc_z(0)))));
+                // cf. [KMPW2010], Eq. (8.8), p. 30
+                const double zs = _calc_z(s), z0 = _calc_z(0.0);
+
+                return _f0_p() / (1 - s / _m_Bs2) * (1 + _b1_p() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
             }
 
             virtual double f_0(const double & s) const
             {
-                // [KMPW2010] eq. (8.8)
-                return _f_0_factor * _f0_0 * (1 + _b1_0 * (_calc_z(s) - _calc_z(0) + 0.5 * (power_of<2>(_calc_z(s)) - power_of<2>(_calc_z(0)))));
+                // cf. [KMPW2010], Eq. (8.8), p. 30
+                const double zs = _calc_z(s), z0 = _calc_z(0.0);
+
+                return _f0_0() * (1 + _b1_0() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
             }
 
             virtual double f_t(const double & s) const
             {
-                // [KMPW2010] eq. (8.8)
-                return _f_t_factor * _f0_t / (1 - s / _m_Bs2) * (1 + _b1_t * (_calc_z(s) - _calc_z(0) + 0.5 * (power_of<2>(_calc_z(s)) - power_of<2>(_calc_z(0)))));
+                // cf. [KMPW2010], Eq. (8.8), p. 30
+                const double zs = _calc_z(s), z0 = _calc_z(0.0);
+
+                return _f0_t() / (1 - s / _m_Bs2) * (1 + _b1_t() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
             }
     };
 }

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -194,26 +194,18 @@ namespace eos
 
 
     /* B_{u,d} -> K */
-    template class KMPW2010FormFactors<BToK>;
-
-    /* For the values below, cf. [KMPW2010], Table 4, p. 31 */
-    template <> const double KMPW2010FormFactors<BToK>::_f0_p     =  0.34;
-    template <> const double KMPW2010FormFactors<BToK>::_f0_0     =  0.34;
-    template <> const double KMPW2010FormFactors<BToK>::_f0_t     =  0.39;
-    template <> const double KMPW2010FormFactors<BToK>::_b1_p     = -2.1;
-    template <> const double KMPW2010FormFactors<BToK>::_b1_0     = -4.3;
-    template <> const double KMPW2010FormFactors<BToK>::_b1_t     = -2.2;
-
-    template <> const double KMPW2010FormFactors<BToK>::_tau_p    = (_m_B + _m_K) * (_m_B + _m_K);
-    template <> const double KMPW2010FormFactors<BToK>::_tau_m    = (_m_B - _m_K) * (_m_B - _m_K);
-    template <> const double KMPW2010FormFactors<BToK>::_tau_0    = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
+    template class KMPW2010FormFactors<PToP>;
 
     // mass B_u, cf. [PDG 2010]
-    template <> const double KMPW2010FormFactors<BToK>::_m_B      = 5.27917;
+    const double KMPW2010FormFactors<PToP>::_m_B      = 5.27917;
     // mass K^+, cf. [PDG 2010
-    template <> const double KMPW2010FormFactors<BToK>::_m_K      = 0.493677;
+    const double KMPW2010FormFactors<PToP>::_m_K      = 0.493677;
     // mass B_s^* (1-), cf. [KMPW2010]
-    template <> const double KMPW2010FormFactors<BToK>::_m_Bs2    = 5.412 * 5.412;
+    const double KMPW2010FormFactors<PToP>::_m_Bs2    = 5.412 * 5.412;
+    const double KMPW2010FormFactors<PToP>::_tau_p    = (_m_B + _m_K) * (_m_B + _m_K);
+    const double KMPW2010FormFactors<PToP>::_tau_m    = (_m_B - _m_K) * (_m_B - _m_K);
+    const double KMPW2010FormFactors<PToP>::_tau_0    = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
+
 
     FormFactors<PToP>::~FormFactors()
     {
@@ -230,7 +222,7 @@ namespace eos
         {
             { KeyType("B->K",     "BZ2004v2"), &BZ2004FormFactors<BToK, PToP>::make   },
             { KeyType("B->K",     "BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make },
-            { KeyType("B->K",     "KMPW2010"), &KMPW2010FormFactors<BToK>::make   }
+            { KeyType("B->K",     "KMPW2010"), &KMPW2010FormFactors<PToP>::make   }
         };
 
         /*

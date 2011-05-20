@@ -261,36 +261,35 @@ class BToKKMPW2010FormFactorsTest :
             std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K@KMPW2010", p);
             TEST_CHECK(0 != ff.get());
 
-            // compare with results from mathematica
-            TEST_CHECK_NEARLY_EQUAL(0.3854600528094132, ff->f_p( 2.3), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4408162526083970, ff->f_p( 4.6), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5094116577791380, ff->f_p( 6.9), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5962340777899116, ff->f_p( 9.2), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.7090525859202947, ff->f_p(11.5), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.8606390605425334, ff->f_p(13.8), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.0735056199519840, ff->f_p(16.1), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.3912388887015092, ff->f_p(18.4), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.9103355325441675, ff->f_p(20.7), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.3844144474375, ff->f_p( 2.3), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.4381960494587, ff->f_p( 4.6), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.5043916755865, ff->f_p( 6.9), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.5874824689246, ff->f_p( 9.2), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.6943252577904, ff->f_p(11.5), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.8359400978914, ff->f_p(13.8), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.0311821367700, ff->f_p(16.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.3150955485260, ff->f_p(18.4), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.7607545970800, ff->f_p(20.7), eps);
 
-            TEST_CHECK_NEARLY_EQUAL(0.4429891169415026, ff->f_t( 2.3), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5075528014464368, ff->f_t( 4.6), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5876062550406836, ff->f_t( 6.9), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.6889921147786275, ff->f_t( 9.2), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.8208127271320460, ff->f_t(11.5), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.9980345648013700, ff->f_t(13.8), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.2470425659175960, ff->f_t(16.1), eps);
-            TEST_CHECK_NEARLY_EQUAL(1.6189297143216232, ff->f_t(18.4), eps);
-            TEST_CHECK_NEARLY_EQUAL(2.2268266805200300, ff->f_t(20.7), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.4417893713152, ff->f_t( 2.3), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.5045402114062, ff->f_t( 4.6), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.5818230155226, ff->f_t( 6.9), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.6788902047561, ff->f_t( 9.2), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.8037805019019, ff->f_t(11.5), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.9694161202369, ff->f_t(13.8), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.1979110863960, ff->f_t(16.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.5303740143290, ff->f_t(18.4), eps);
+            TEST_CHECK_NEARLY_EQUAL(2.0525389704830, ff->f_t(20.7), eps);
 
-            TEST_CHECK_NEARLY_EQUAL(0.3690646519572099, ff->f_0( 2.3), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4000048624053975, ff->f_0( 4.6), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4330693292731886, ff->f_0( 6.9), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.4685609166295309, ff->f_0( 9.2), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5068541296358544, ff->f_0(11.5), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5484204890080470, ff->f_0(13.8), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.5938666565595490, ff->f_0(16.1), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.6439941507148608, ff->f_0(18.4), eps);
-            TEST_CHECK_NEARLY_EQUAL(0.6998978506823319, ff->f_0(20.7), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.3691335300041, ff->f_0( 2.3), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.4001522415666, ff->f_0( 4.6), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.4333067770539, ff->f_0( 6.9), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.4689025169045, ff->f_0( 9.2), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.5073172894003, ff->f_0(11.5), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.5490271105427, ff->f_0(13.8), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.5946449022903, ff->f_0(16.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.6449812193912, ff->f_0(18.4), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.7011445924499, ff->f_0(20.7), eps);
         }
 } b_to_k_kmpw2010_form_factors_test;
 
