@@ -541,7 +541,7 @@ namespace eos
             // create space id for in-memory representation
             {
                 hsize_t dimensions[2] = { 1, fields };
-                hsize_t max_dimensions[2] = { chunk_size, fields };
+                hsize_t max_dimensions[2] = { H5S_UNLIMITED, fields };
                 space_id_memory = H5Screate_simple(2, dimensions, max_dimensions);
                 if (H5I_INVALID_HID == space_id_memory)
                     throw ScanFileHDF5Error("H5Screate_simple", space_id_memory);
@@ -664,16 +664,16 @@ namespace eos
         void append(const std::vector<double> & data)
         {
             unsigned buffer_length = data.size() / fields;
-            if (buffer_length > chunk_size)
-                throw InternalError("Flushing a WriteBuffer with capacity > " + stringify(chunk_size) + " is not implemented yet");
-
             if (0 == buffer_length)
                 return;
 
             // can we store the data? if not, extend the data set
             if (capacity <= current_index + buffer_length)
             {
-                capacity += chunk_size;
+                unsigned need = buffer_length + current_index - capacity;
+                unsigned chunks = need / chunk_size + 1;
+
+                capacity += chunks * chunk_size;
 
                 hsize_t dimensions[2] = { capacity, fields };
                 hsize_t max_dimensions[2] = { H5S_UNLIMITED, fields };
@@ -702,11 +702,11 @@ namespace eos
             if (ret < 0)
                 throw ScanFileHDF5Error("H5Sselect_hyperslab", ret);
 
-            hsize_t max_dimensions[2] = { chunk_size, fields };
+            hsize_t max_dimensions[2] = { H5S_UNLIMITED, fields };
             ret = H5Sset_extent_simple(space_id_memory, 2, count, max_dimensions);
             if (ret < 0)
                 throw ScanFileHDF5Error("H5Sset_extent_simple(space_id_memory, 2, [" + stringify(buffer_length) + "," + stringify(fields) + "], ["
-                        + stringify(chunk_size) + "," + stringify(fields) + ")", ret);
+                        + "UNLIMITED" + "," + stringify(fields) + ")", ret);
 
             ret = H5Dwrite(set_id, H5T_IEEE_F64LE, space_id_memory, space_id_file_writing, H5P_DEFAULT, &data[0]);
             if (ret < 0)
