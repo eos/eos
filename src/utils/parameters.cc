@@ -251,6 +251,16 @@ namespace eos
             Parameter::Template{"formfactors::f0_uncertainty",                   +0.85,           +1.0,            +1.15          },
             Parameter::Template{"formfactors::ft_uncertainty",                   +0.85,           +1.0,            +1.15          },
 
+            // form factor parameters for B->K^* according to [KMPW2010], Table 4, p. 31
+            Parameter::Template{"B->K^*::F^V(0)@KMPW2010",                       +0.24,           +0.36,           +0.59          },
+            Parameter::Template{"B->K^*::F^A0(0)@KMPW2010",                      +0.22,           +0.29,           +0.39          },
+            Parameter::Template{"B->K^*::F^A1(0)@KMPW2010",                      +0.15,           +0.25,           +0.41          },
+            Parameter::Template{"B->K^*::F^A2(0)@KMPW2010",                      +0.13,           +0.23,           +0.42          },
+            Parameter::Template{"B->K^*::b^V_1@KMPW2010",                        -5.2,            -4.8,            -4.0           },
+            Parameter::Template{"B->K^*::b^A0_1@KMPW2010",                      -21.2,            -18.2,          -16.9           },
+            Parameter::Template{"B->K^*::b^A1_1@KMPW2010",                       -0.46,           +0.34,           +1.2           },
+            Parameter::Template{"B->K^*::b^A2_1@KMPW2010",                       -2.2,            -0.85,           +2.03          },
+
             // form factor parameters for B->K according to [KMPW2010], Table 4, p. 31
             Parameter::Template{"B->K::F^p(0)@KMPW2010",                         +0.32,           +0.34,           +0.39          },
             Parameter::Template{"B->K::F^0(0)@KMPW2010",                         +0.32,           +0.34,           +0.39          },

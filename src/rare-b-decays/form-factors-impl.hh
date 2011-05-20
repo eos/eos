@@ -106,6 +106,74 @@ namespace eos
             }
     };
 
+    template <> class KMPW2010FormFactors<PToV> :
+        public FormFactors<PToV>
+    {
+        private:
+            // fit parametrisation for P -> V according to [KMPW2010]
+            UsedParameter _f0_V, _b1_V;
+            UsedParameter _f0_A0, _b1_A0;
+            UsedParameter _f0_A1, _b1_A1;
+            UsedParameter _f0_A2, _b1_A2;
+            static const double _tau_p, _tau_m, _tau_0;
+            static const double _m_B, _m_Kstar, _m_Bs2_0m, _m_Bs2_1m, _m_Bs2_1p;
+
+            static double _calc_z(const double & s)
+            {
+                return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
+            }
+
+        public:
+            KMPW2010FormFactors(const Parameters & p, const Options &) :
+                _f0_V(p["B->K^*::F^V(0)@KMPW2010"],   *this),
+                _b1_V(p["B->K^*::b^V_1@KMPW2010"],    *this),
+                _f0_A0(p["B->K^*::F^A0(0)@KMPW2010"], *this),
+                _b1_A0(p["B->K^*::b^A0_1@KMPW2010"],  *this),
+                _f0_A1(p["B->K^*::F^A1(0)@KMPW2010"], *this),
+                _b1_A1(p["B->K^*::b^A1_1@KMPW2010"],  *this),
+                _f0_A2(p["B->K^*::F^A2(0)@KMPW2010"], *this),
+                _b1_A2(p["B->K^*::b^A2_1@KMPW2010"],  *this)
+            {
+            }
+
+            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
+            {
+                return new KMPW2010FormFactors(parameters, Options());
+            }
+
+            virtual double v(const double & s) const
+            {
+                const double zs = _calc_z(s), z0 = _calc_z(0.0);
+
+                // cf. [KMPW2010], Eq. (8.8), p. 30
+                return _f0_V() / (1.0 - s / _m_Bs2_1m) * (1.0 + _b1_V() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+            }
+
+            virtual double a_0(const double & s) const
+            {
+                const double zs = _calc_z(s), z0 = _calc_z(0.0);
+
+                // cf. [KMPW2010], Eq. (8.8), p. 30
+                return _f0_A0() / (1.0 - s / _m_Bs2_0m) * (1.0 + _b1_A0() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+            }
+
+            virtual double a_1(const double & s) const
+            {
+                const double zs = _calc_z(s), z0 = _calc_z(0.0);
+
+                // cf. [KMPW2010], Eq. (8.8), p. 30
+                return _f0_A1() / (1.0 - s / _m_Bs2_1p) * (1.0 + _b1_A1() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+            }
+
+            virtual double a_2(const double & s) const
+            {
+                const double zs = _calc_z(s), z0 = _calc_z(0.0);
+
+                // cf. [KMPW2010], Eq. (8.8), p. 30
+                return _f0_A2() / (1.0 - s / _m_Bs2_1p) * (1.0 + _b1_A2() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+            }
+    };
+
     /* P -> P Processes */
 
     struct BToK { };

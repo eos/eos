@@ -77,8 +77,9 @@ namespace eos
         typedef std::function<FormFactors<PToV> * (const Parameters &, unsigned)> ValueType;
         static const std::map<KeyType, ValueType> form_factors
         {
-            { KeyType("B->K^*",     "BZ2004"), &BZ2004FormFactors<BToKstar, PToV>::make   },
-            { KeyType("Bs->phi",    "BZ2004"), &BZ2004FormFactors<BsToPhi, PToV>::make    },
+            { KeyType("B->K^*",     "BZ2004"),   &BZ2004FormFactors<BToKstar, PToV>::make   },
+            { KeyType("B->K^*",     "KMPW2010"), &KMPW2010FormFactors<PToV>::make           },
+            { KeyType("Bs->phi",    "BZ2004"),   &BZ2004FormFactors<BsToPhi, PToV>::make    },
         };
 
         /*
@@ -191,6 +192,24 @@ namespace eos
     template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_b_4 = -1.165e-2;
     template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_c_4 =  0.101e-2;
     template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_d_4 =  0.187e-3;
+
+
+    /* B_{u,d} -> K^* */
+    template class KMPW2010FormFactors<PToV>;
+
+    // mass B_d, cf. [PDG 2010]
+    const double KMPW2010FormFactors<PToV>::_m_B       = 5.2795;
+    // mass K^*0, cf. [PDG 2010]
+    const double KMPW2010FormFactors<PToV>::_m_Kstar   = 0.89594;
+    // mass B_s (0-), cf. [KMPW2010]
+    const double KMPW2010FormFactors<PToV>::_m_Bs2_0m  = 5.366 * 5.366;
+    // mass B_s (1-), cf. [KMPW2010]
+    const double KMPW2010FormFactors<PToV>::_m_Bs2_1m  = 5.412 * 5.412;
+    // mass B_s (1+), cf. [KMPW2010]
+    const double KMPW2010FormFactors<PToV>::_m_Bs2_1p  = 5.829 * 5.829;
+    const double KMPW2010FormFactors<PToV>::_tau_p     = (_m_B + _m_Kstar) * (_m_B + _m_Kstar);
+    const double KMPW2010FormFactors<PToV>::_tau_m     = (_m_B - _m_Kstar) * (_m_B - _m_Kstar);
+    const double KMPW2010FormFactors<PToV>::_tau_0     = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
 
 
     /* B_{u,d} -> K */
