@@ -293,7 +293,7 @@ namespace eos
             for (auto chain = chains.begin(), last_chain = chains.end();chain != last_chain; ++chain)
             {
                 // save history?
-                (**chain).keep_history(config.store);
+                (**chain).keep_history(true);
             }
 
             // keep going till maxIter or  break when convergence estimated
@@ -349,6 +349,12 @@ namespace eos
             {
                 Log::instance()->message("markov_chain_sampler.no_convergence", ll_error)
                     << "Pre-run did NOT converge!";
+            }
+
+            // clear the history after the prerun
+            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
+            {
+                (*c)->clear();
             }
         }
 
