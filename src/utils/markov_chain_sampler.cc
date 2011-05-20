@@ -212,6 +212,9 @@ namespace eos
 
         void dump_hdf5()
         {
+            Log::instance()->message("markov_chain_sampler.dump_hdf5", ll_debug)
+                << "Dumping all chains to HDF5";
+
             auto c = chains.begin();
             for (auto d = data_sets.begin(), d_end = data_sets.end(); d != d_end; ++c, ++d)
             {

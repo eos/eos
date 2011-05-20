@@ -18,6 +18,7 @@
  */
 
 #include <src/utils/analysis.hh>
+#include <src/utils/log.hh>
 #include <src/utils/markov_chain.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/stringify.hh>
@@ -106,6 +107,9 @@ namespace eos
         // dump history of this chain into a ScanFile's DataSet
         void dump_history(ScanFile::DataSet & data_set)
         {
+            Log::instance()->message("markov_chain.dump_history", ll_debug)
+                << "Dumping " << history.points.size() << " records";
+
             ScanFile::WriteBuffer buffer(data_set.fields(), history.points.size());
 
             std::vector<double> tuple;
@@ -388,6 +392,9 @@ namespace eos
         // set the number of iterations for next run and go
         void run(unsigned iterations)
         {
+            Log::instance()->message("markov_chain.run", ll_debug)
+                << "Running " << iterations << " iterations";
+
             reset();
 
             // make sure everything is fine __before__ we start
