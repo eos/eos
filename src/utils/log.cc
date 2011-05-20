@@ -53,7 +53,7 @@ namespace eos
 
         void message(const std::string & id, const LogLevel & l, const std::string & m)
         {
-            if (l < log_level)
+            if (l > log_level)
                 return;
 
             *stream << program_name << '@' << ::time(0) << ": ";
