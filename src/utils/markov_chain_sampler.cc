@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,6 +18,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <src/utils/log.hh>
 #include <src/utils/markov_chain_sampler.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/power_of.hh>
@@ -105,17 +107,20 @@ namespace eos
                     // spit out warning if scale exceed allowed ranges
                     if ((new_scale < config.scale_min) || (new_scale > config.scale_max))
                     {
-                        // LOG("Attempt to update scale factor of parameter '" + chain.parameter_descriptions()[p].parameter.name()
-                        //         + "' in chain " + stringify(std::distance(chains.begin(), c)) + " beyond its limits (" + stringify(config.scale_min) + ","
-                        //         + stringify(config.scale_max) + ". Scale kept at current value. May be the chosen parameter range is wrong?");
+                        Log::instance()->message("markov_chain_sampler.rescale_beyond_limits", ll_warning)
+                            << "Attempting to update scale factor of parameter '" << (*c)->parameter_descriptions()[p].parameter.name()
+                            << "' in chain " << std::distance(chains.begin(), c) << " beyond its limits (" << config.scale_min << ","
+                            << config.scale_max << ". Scale kept at current value. May be the chosen parameter range is wrong?";
+
                         new_scale = (*c)->get_scale(p);
                     }
 
                     // did value change?
                     if (new_scale != (*c)->get_scale(p))
                     {
-                        // LOG("Updating scale of parameter '" + chain.parameter_descriptions()[p].parameter.name()
-                        //         + "' in chain " + stringify(std::distance(chains.begin(), c) + " to " + stringify(new_scale));
+                        Log::instance()->message("markov_chain_sampler.update_scale", ll_informational)
+                            << "Updating scale of parameter '" << (*c)->parameter_descriptions()[p].parameter.name()
+                            << "' in chain " << std::distance(chains.begin(), c) << " to " << new_scale;
 
                         // update scale
                         (*c)->set_scale(p, new_scale);
@@ -167,8 +172,10 @@ namespace eos
                 if (pre_run_info.rvalue_parameters[i] > config.rvalue_criterion_param || isnan(pre_run_info.rvalue_parameters[i]))
                 {
                     all_rvalues_small = false;
-                    // LOG("R-value of parameter '" + chains.front()->parameter_descriptions()[i].parameter.name() + "' too large: "
-                    //         + stringify(pre_run_info.rvalue_parameters[i]) + " > " << stringify(config.rvalue_criterion_param));
+
+                    Log::instance()->message("markov_chain_sampler.parameter_rvalue_too_large", ll_informational)
+                        << "R-value of parameter '" << chains.front()->parameter_descriptions()[i].parameter.name() << "' is too large: "
+                        << pre_run_info.rvalue_parameters[i] << " > " << config.rvalue_criterion_param;
                 }
             }
 
@@ -187,13 +194,17 @@ namespace eos
                 if ((pre_run_info.rvalue_posterior > config.rvalue_criterion_posterior) || isnan(pre_run_info.rvalue_posterior))
                 {
                     all_rvalues_small = false;
-                    // LOG("R-value of posterior too large: " + stringify(pre_run_info.rvalue_parameters[i]) + " > " << stringify(config.rvalue_criterion_param));
+
+                    Log::instance()->message("markov_chain_sampler.posterior_rvalue_too_large", ll_informational)
+                        << "R-value of posterior is too large: "
+                        << pre_run_info.rvalue_posterior << " > " << config.rvalue_criterion_posterior;
                 }
             }
 
             if (all_rvalues_small)
             {
-                // LOG("Convergence achieved");
+                Log::instance()->message("markov_chain_sampler.convergence", ll_informational)
+                    << "Convergence achieved";
             }
 
             return all_rvalues_small;
@@ -271,7 +282,8 @@ namespace eos
          */
         void pre_run()
         {
-            // LOG("Commencing the pre run");
+            Log::instance()->message("markov_chain_sampler.prerun_start", ll_informational)
+                << "Commencing the pre-run";
 
             // require:chains are initialized
             pre_run_info.converged = false;
@@ -314,25 +326,29 @@ namespace eos
                 tickets.clear();
 
                 pre_run_info.iterations += config.prerun_iterations_update;
-                // LOG("Pre run has completed " + stringify(pre_run_info.iterations) + " iterations");
+                Log::instance()->message("markov_chain_sampler.prerun_progress", ll_informational)
+                    << "Pre-run has completed " << pre_run_info.iterations << " iterations";
 
                 pre_run_info.converged = check_convergence();
             }
 
             if (pre_run_info.converged)
             {
-                // LOG("Pre run converged after " + stringify(pre_run_info.iterations) + " iterations");
+                Log::instance()->message("markov_chain_sampler.prerun_converged", ll_informational)
+                    << "Pre-run has converged after " << pre_run_info.iterations << " iterations";
 
                 if (config.number_of_chains < 2)
                 {
-                    // LOG("However, the R-values are undefined for a single chain, only efficiencies were adjusted");
+                    Log::instance()->message("markov_chain_sampler.single_chain", ll_warning)
+                        << "R-values are undefined for a single chain, so only efficiencies were adjusted";
                 }
 
                 pre_run_info.iterations_at_convergence = pre_run_info.iterations;
             }
             else
             {
-                // LOG("Pre run has NOT converged");
+                Log::instance()->message("markov_chain_sampler.no_convergence", ll_error)
+                    << "Pre-run did NOT converge!";
             }
         }
 
@@ -342,7 +358,8 @@ namespace eos
          */
         void main_run()
         {
-            // LOG("Commencing the main run");
+            Log::instance()->message("markov_chain_sampler.mainrun_start", ll_informational)
+                << "Commencing the main-run";
 
             // set up chains
             for (auto c = chains.begin(), c_end = chains.end() ; c != c_end; ++c)
@@ -380,7 +397,8 @@ namespace eos
                 // all tickets finished
                 tickets.clear();
 
-                // LOG("Completed " + stringify(chunk + 1) + " iterations");
+                Log::instance()->message("markov_chain_sampler.mainrun_progress", ll_informational)
+                    << "Main-run has completed " << (chunk + 1) * config.chunk_size << " iterations";
 
                 if (config.store)
                 {
