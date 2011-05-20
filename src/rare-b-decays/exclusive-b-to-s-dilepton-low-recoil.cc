@@ -1022,6 +1022,10 @@ namespace eos
 
         UsedParameter g_fermi;
 
+        UsedParameter lambda_pseudo;
+
+        UsedParameter sl_phase_pseudo;
+
         double m_l;
 
         // Mean life time
@@ -1064,6 +1068,8 @@ namespace eos
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
+            lambda_pseudo(p["B->Vll::Lambda_pseudo@LowRecoil"], u),
+            sl_phase_pseudo(p["B->Vll::sl_phase_pseudo@LowRecoil"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
@@ -1142,7 +1148,11 @@ namespace eos
 
         double rho_1(const double & s) const
         {
-            return std::norm(kappa() * (2.0 * m_b_MSbar * m_B / s) * (c7eff(s) - c7prime()) + (c9eff(s) - c9prime())) + std::norm(c10() - c10prime());
+            double alpha_s = model->alpha_s(mu());
+
+            return std::norm(kappa() * (2.0 * (m_b_MSbar + lambda_pseudo()) * m_B() / s) * (c7eff(s) - c7prime())
+                    + 0.5 * alpha_s * std::polar(lambda_pseudo(), sl_phase_pseudo()) + (c9eff(s) - c9prime()))
+                    + std::norm(c10() - c10prime());
         }
 
         // speed of the lepton
