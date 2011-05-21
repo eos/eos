@@ -283,8 +283,8 @@ namespace eos
             Parameter::Template{"B->K^*ll::A_perp^L_uncertainty@LargeRecoil",    +0.95,           +1.0,            +1.05          },
             Parameter::Template{"B->K^*ll::A_perp^R_uncertainty@LargeRecoil",    +0.95,           +1.0,            +1.05          },
             // B->Pll uncertainties at subleading order at Low Recoil
-            Parameter::Template{"B->Vll::Lambda_pseudo@LowRecoil",               -0.5,            +0.0,            +0.5           },
-            Parameter::Template{"B->Vll::sl_phase_pseudo@LowRecoil",             -M_PI/2.0,       +0.0,            +M_PI/2.0      },
+            Parameter::Template{"B->Pll::Lambda_pseudo@LowRecoil",               -0.5,            +0.0,            +0.5           },
+            Parameter::Template{"B->Pll::sl_phase_pseudo@LowRecoil",             -M_PI/2.0,       +0.0,            +M_PI/2.0      },
             // B->Vll uncertainties at subleading order at Low Recoil
             Parameter::Template{"B->Vll::Lambda_0@LowRecoil",                    -0.5,            +0.0,            +0.5           },
             Parameter::Template{"B->Vll::Lambda_pa@LowRecoil",                   -0.5,            +0.0,            +0.5           },

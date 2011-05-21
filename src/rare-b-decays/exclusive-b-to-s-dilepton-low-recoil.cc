@@ -1068,8 +1068,8 @@ namespace eos
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
-            lambda_pseudo(p["B->Vll::Lambda_pseudo@LowRecoil"], u),
-            sl_phase_pseudo(p["B->Vll::sl_phase_pseudo@LowRecoil"], u),
+            lambda_pseudo(p["B->Pll::Lambda_pseudo@LowRecoil"], u),
+            sl_phase_pseudo(p["B->Pll::sl_phase_pseudo@LowRecoil"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
