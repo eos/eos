@@ -51,8 +51,8 @@ namespace eos
         unsigned number_of_parameters;
 
         // independent chains
-        std::vector<std::shared_ptr<MarkovChain>> chains;
-        std::vector<std::shared_ptr<ScanFile::DataSet>> data_sets;
+        std::vector<MarkovChain> chains;
+        std::vector<ScanFile::DataSet> data_sets;
 
         // collected information regarding the prerun
         MarkovChainSampler::PreRunInfo pre_run_info;
@@ -85,11 +85,11 @@ namespace eos
                 for (unsigned p = 0; p < number_of_parameters; ++p)
                 {
                     // read out efficiencies
-                    double accepted((*c)->statistics().iterations_accepted[p]);
-                    double rejected((*c)->statistics().iterations_rejected[p]);
+                    double accepted(c->statistics().iterations_accepted[p]);
+                    double rejected(c->statistics().iterations_rejected[p]);
                     efficiencies[p] = accepted / (accepted + rejected);
 
-                    double new_scale = (*c)->get_scale(p);
+                    double new_scale = c->get_scale(p);
 
                     // up/down of scale
 
@@ -108,22 +108,22 @@ namespace eos
                     if ((new_scale < config.scale_min) || (new_scale > config.scale_max))
                     {
                         Log::instance()->message("markov_chain_sampler.rescale_beyond_limits", ll_warning)
-                            << "Attempting to update scale factor of parameter '" << (*c)->parameter_descriptions()[p].parameter.name()
+                            << "Attempting to update scale factor of parameter '" << c->parameter_descriptions()[p].parameter.name()
                             << "' in chain " << std::distance(chains.begin(), c) << " beyond its limits (" << config.scale_min << ","
                             << config.scale_max << ". Scale kept at current value. May be the chosen parameter range is wrong?";
 
-                        new_scale = (*c)->get_scale(p);
+                        new_scale = c->get_scale(p);
                     }
 
                     // did value change?
-                    if (new_scale != (*c)->get_scale(p))
+                    if (new_scale != c->get_scale(p))
                     {
                         Log::instance()->message("markov_chain_sampler.update_scale", ll_informational)
-                            << "Updating scale of parameter '" << (*c)->parameter_descriptions()[p].parameter.name()
+                            << "Updating scale of parameter '" << c->parameter_descriptions()[p].parameter.name()
                             << "' in chain " << std::distance(chains.begin(), c) << " to " << new_scale;
 
                         // update scale
-                        (*c)->set_scale(p, new_scale);
+                        c->set_scale(p, new_scale);
 
                         all_efficiencies_ok = false;
                     }
@@ -163,8 +163,8 @@ namespace eos
                 // read out statistics
                 for (auto c = chains.begin(), c_end = chains.end() ;  c != c_end ; ++c)
                 {
-                    chain_means.push_back((*c)->statistics().mean_of_parameters[i]);
-                    chain_variances.push_back((*c)->statistics().variance_of_parameters[i]);
+                    chain_means.push_back(c->statistics().mean_of_parameters[i]);
+                    chain_variances.push_back(c->statistics().variance_of_parameters[i]);
                 }
 
                 pre_run_info.rvalue_parameters[i] = compute_rvalue(chain_means, chain_variances, pre_run_info.iterations);
@@ -174,7 +174,7 @@ namespace eos
                     all_rvalues_small = false;
 
                     Log::instance()->message("markov_chain_sampler.parameter_rvalue_too_large", ll_informational)
-                        << "R-value of parameter '" << chains.front()->parameter_descriptions()[i].parameter.name() << "' is too large: "
+                        << "R-value of parameter '" << chains.front().parameter_descriptions()[i].parameter.name() << "' is too large: "
                         << pre_run_info.rvalue_parameters[i] << " > " << config.rvalue_criterion_param;
                 }
             }
@@ -186,8 +186,8 @@ namespace eos
                 std::vector<double> chain_means, chain_variances;
                 for (auto c = chains.begin(), c_end = chains.end() ; c != c_end; ++c)
                 {
-                    chain_means.push_back((*c)->statistics().mean_of_posterior);
-                    chain_variances.push_back((*c)->statistics().variance_of_posterior);
+                    chain_means.push_back(c->statistics().mean_of_posterior);
+                    chain_variances.push_back(c->statistics().variance_of_posterior);
                 }
 
                 pre_run_info.rvalue_posterior = compute_rvalue(chain_means, chain_variances, pre_run_info.iterations);
@@ -216,13 +216,10 @@ namespace eos
                 << "Dumping all chains to HDF5";
 
             auto c = chains.begin();
-            for (auto d = data_sets.begin(), d_end = data_sets.end(); d != d_end; ++c, ++d)
+            for (auto d = data_sets.begin(), d_end = data_sets.end() ; d != d_end ; ++c, ++d)
             {
-                if (! (*d))
-                    throw InternalError("MarkovChainSampler::dump_hdf5: null pointer to ScanFile::DataSet");
-
-                (*c)->dump_history(**d);
-                (*c)->clear();
+                c->dump_history(*d);
+                c->clear();
             }
         }
 
@@ -236,8 +233,8 @@ namespace eos
 
                 unsigned long seed = config.seed + i;
 
-                std::shared_ptr<MarkovChain> chain(new MarkovChain(analysis_clone, seed));
-                chain->set_scale(config.scale_initial);
+                MarkovChain chain(analysis_clone, seed);
+                chain.set_scale(config.scale_initial);
                 chains.push_back(chain);
             }
 
@@ -255,9 +252,9 @@ namespace eos
                 {
                     // TODO:
                     //  * more than posterior?
-                    std::shared_ptr<ScanFile::DataSet> data_set(new ScanFile::DataSet(config.output_file->add("chain #" + stringify(i), number_of_parameters + 1)));
+                    ScanFile::DataSet data_set = ScanFile::DataSet(config.output_file->add("chain #" + stringify(i), number_of_parameters + 1));
 
-                    auto f = data_set->begin_fields();
+                    auto f = data_set.begin_fields();
                     auto pp = analysis.parameter_descriptions();
                     for (auto p = pp.begin(), p_end = pp.end() ; p != p_end ; ++p, ++f)
                     {
@@ -268,10 +265,10 @@ namespace eos
                         f->discrete = p->discrete;
                     }
 
-                    if (data_set->end_fields() == f)
+                    if (data_set.end_fields() == f)
                     {
                         throw InternalError("MarkovChainSampler::initialize: insufficient number of fields "
-                                + stringify(std::distance(data_set->begin_fields(), data_set->end_fields())) + " in data set, for "
+                                + stringify(std::distance(data_set.begin_fields(), data_set.end_fields())) + " in data set, for "
                                 + stringify(number_of_parameters) + " parameters");
                     }
 
@@ -294,10 +291,10 @@ namespace eos
             pre_run_info.iterations = 0;
 
             // set up chains
-            for (auto chain = chains.begin(), last_chain = chains.end();chain != last_chain; ++chain)
+            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
             {
-                // save history?
-                (**chain).keep_history(true);
+                // save history
+                c->keep_history(true);
             }
 
             // keep going till maxIter or  break when convergence estimated
@@ -310,17 +307,19 @@ namespace eos
 
                 // loop over chains
                 // run each chain for N iterations
-                for (auto chain = chains.begin(), last_chain = chains.end();chain != last_chain; ++chain)
+                for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
                 {
-
-                    if( config.parallelize)
-                    tickets.push_back(ThreadPool::instance()->enqueue(
-                                    std::bind( &MarkovChain::run, (*chain).get(),config.prerun_iterations_update)));
+                    if (config.parallelize)
+                    {
+                        tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&MarkovChain::run, *c, config.prerun_iterations_update)));
+                    }
                     else
-                    (*chain)->run(config.prerun_iterations_update);
+                    {
+                        c->run(config.prerun_iterations_update);
+                    }
                 }
 
-                // Wait for job completion
+                // wait for job completion
                 for (auto t = tickets.begin(), t_end = tickets.end(); t != t_end; ++t)
                 {
                     t->wait();
@@ -358,7 +357,7 @@ namespace eos
             // clear the history after the prerun
             for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
             {
-                (*c)->clear();
+                c->clear();
             }
         }
 
@@ -375,7 +374,7 @@ namespace eos
             for (auto c = chains.begin(), c_end = chains.end() ; c != c_end; ++c)
             {
                 // save history?
-                (*c)->keep_history(config.store);
+                c->keep_history(config.store);
             }
 
             for (unsigned chunk = 0 ; chunk < config.chunks ; ++chunk)
@@ -390,11 +389,11 @@ namespace eos
                 {
                     if (config.parallelize)
                     {
-                        tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&MarkovChain::run, c->get(), config.chunk_size)));
+                        tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&MarkovChain::run, *c, config.chunk_size)));
                     }
                     else
                     {
-                        (*c)->run(config.chunk_size);
+                        c->run(config.chunk_size);
                     }
                 }
 
@@ -426,7 +425,7 @@ namespace eos
                 //  clear up
                 for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
                 {
-                    (*c)->clear();
+                    c->clear();
                 }
             }
 
