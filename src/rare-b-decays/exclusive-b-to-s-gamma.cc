@@ -74,8 +74,6 @@ namespace eos
 
         UsedParameter lambda_B_p;
 
-        UsedParameter uncertainty_xi_perp;
-
         UsedParameter m_B;
 
         UsedParameter m_Kstar;
@@ -108,14 +106,13 @@ namespace eos
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], u),
             lambda_B_p(p["lambda_B_p"], u),
-            uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_Kstar(p["mass::K^*0"], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
-            form_factors(FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p))
+            form_factors(FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p))
         {
             u.uses(*model);
         }
@@ -148,7 +145,7 @@ namespace eos
         double xi_perp(const double & s) const
         {
             const double factor = m_B / (m_B + m_Kstar);
-            double result = uncertainty_xi_perp * factor * form_factors->v(s);
+            double result = factor * form_factors->v(s);
 
             return result;
         }

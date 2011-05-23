@@ -60,14 +60,14 @@ class BToKstarGammaTest :
                 p["decay-constant::B_d"] = 0.200;
 
                 Options oo;
-                oo.set("form-factors", "BZ2004");
+                oo.set("form-factors", "KMPW2010");
 
                 BToKstarGamma d(p, oo);
 
                 const double eps = 1e-4;
 
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(), +5.37981e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),   -2.99851e-2, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(), +4.21541e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),   -2.98715e-2, eps);
             }
         }
 } b_to_kstar_gamma_test;
