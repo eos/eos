@@ -292,7 +292,7 @@ class CommandLine :
                     config.parallelize = false;
 
                     // report exact call
-                    for(int i = 0 ; i < argc ; i++)
+                    for (int i = 0 ; i < argc ; i++)
                     {
                         std::cout << '"' << argv[i] << '"' << " ";
                     }
@@ -361,7 +361,7 @@ int main(int argc, char * argv[])
         std::cout << "  [--fix PARAMETER VALUE]" << std::endl;
         std::cout << "  [--chunksize VALUE]+" << std::endl;
         std::cout << "  [--chunks VALUE]+" << std::endl;
-        std::cout << "  [--n_chains VALUE]+" << std::endl;
+        std::cout << "  [--chains VALUE]+" << std::endl;
         std::cout << "  [--seed LONG_VALUE]+" << std::endl;
         std::cout << "  [--scale VALUE]+" << std::endl;
         std::cout << "  [--output FILENAME]+" << std::endl;
