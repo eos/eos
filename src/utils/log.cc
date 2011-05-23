@@ -33,6 +33,87 @@
 
 namespace eos
 {
+    /* LogLevel */
+
+    std::ostream &
+    operator<< (std::ostream & lhs, const LogLevel & rhs)
+    {
+        do
+        {
+            switch (rhs)
+            {
+                case ll_debug:
+                    lhs << "debug";
+                    continue;
+
+                case ll_error:
+                    lhs << "error";
+                    continue;
+
+                case ll_warning:
+                    lhs << "warning";
+                    continue;
+
+                case ll_informational:
+                    lhs << "informational";
+                    continue;
+
+                case ll_silent:
+                    lhs << "silent";
+                    continue;
+
+                case ll_last:
+                    break;
+            }
+
+            throw InternalError("LogLevel::operator<<: Bad value for log_level");
+        }
+        while (false);
+
+        return lhs;
+    }
+
+    std::istream &
+    operator>> (std::istream & lhs, LogLevel & rhs)
+    {
+        std::string word;
+        lhs >> word;
+
+        do
+        {
+            if ("debug" == word)
+            {
+                rhs = ll_debug;
+                break;
+            }
+            else if ("error" == word)
+            {
+                rhs = ll_error;
+                break;
+            }
+            else if ("warning" == word)
+            {
+                rhs = ll_warning;
+                break;
+            }
+            else if ("informational" == word)
+            {
+                rhs = ll_informational;
+                break;
+            }
+            else if ("silent" == word)
+            {
+                rhs = ll_silent;
+                break;
+            }
+
+            throw InternalError("LogLevel::operator>>: Bad input in stream");
+        }
+        while (false);
+
+        return lhs;
+    }
+
     /* Log */
 
     template <> struct Implementation<Log>

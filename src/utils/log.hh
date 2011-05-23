@@ -43,6 +43,14 @@ namespace eos
         ll_last
     };
 
+    /*!
+     * (De)stringification of LogLevel
+     */
+    ///@{
+    std::ostream & operator<< (std::ostream & lhs, const LogLevel & rhs);
+    std::istream & operator>> (std::istream & lhs, LogLevel & rhs);
+    ///@}
+
     // forward declaration for use in Log
     class LogMessageHandler;
 

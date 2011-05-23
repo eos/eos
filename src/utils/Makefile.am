@@ -61,6 +61,7 @@ TESTS = \
 	integrate_TEST \
 	kinematic_TEST \
 	lcda_TEST \
+	log_TEST \
 	log_likelihood_TEST \
 	log_prior_TEST \
 	matrix_TEST \
@@ -108,6 +109,9 @@ kinematic_TEST_LDADD = $(TESTS_LD_ADD)
 
 lcda_TEST_SOURCES = lcda_TEST.cc
 lcda_TEST_LDADD = $(TESTS_LD_ADD)
+
+log_TEST_SOURCES = log_TEST.cc
+log_TEST_LDADD = $(TESTS_LD_ADD)
 
 log_likelihood_TEST_SOURCES = log_likelihood_TEST.cc
 log_likelihood_TEST_LDADD = $(TESTS_LD_ADD)
