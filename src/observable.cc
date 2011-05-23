@@ -131,6 +131,23 @@ namespace eos
                     &BZ2004FormFactors<BToKstar, PToV>::a_2,
                     std::make_tuple("s")),
 
+            // B -> K^*, cf. [KMPW2010]
+            make_observable("B->K^*::V(s)@KMPW2010",
+                    &KMPW2010FormFactors<PToV>::v,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*::A_0(s)@KMPW2010",
+                    &KMPW2010FormFactors<PToV>::a_0,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*::A_1(s)@KMPW2010",
+                    &KMPW2010FormFactors<PToV>::a_1,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*::A_2(s)@KMPW2010",
+                    &KMPW2010FormFactors<PToV>::a_2,
+                    std::make_tuple("s")),
+
             // B_s -> phi, cf. [BZ2004]
             make_observable("B_s->phi::V(s)@BZ2004",
                     &BZ2004FormFactors<BToKstar, PToV>::v,
