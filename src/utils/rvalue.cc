@@ -21,6 +21,7 @@
 #include <src/utils/power_of.hh>
 #include <src/utils/rvalue.hh>
 #include <src/utils/stringify.hh>
+#include <src/utils/log.hh>
 
 #include <cmath>
 #include <limits>
@@ -44,7 +45,7 @@ namespace eos
         double variance_of_means = 0.0;
         double mean_of_means = 0.0;
         double mean_of_variances = 0.0;
-        double variance_of_variances =0.0;
+        double variance_of_variances = 0.0;
 
         // use Welford's method here as well with temporary variables
         double previous_mean_of_means(0);
@@ -68,8 +69,8 @@ namespace eos
             // update step
             mean_of_means += (chain_means[i] - previous_mean_of_means) / (i + 1.0);
             variance_of_means += (chain_means[i] - previous_mean_of_means) * (chain_means[i] - mean_of_means);
-            mean_of_variances += (chain_variances.at(i) - previous_mean_of_variances) / double(i+1);
-            variance_of_variances += (chain_variances.at(i) - previous_mean_of_variances) * (chain_variances.at(i) - mean_of_variances);
+            mean_of_variances += (chain_variances[i] - previous_mean_of_variances) / (i + 1.0);
+            variance_of_variances += (chain_variances[i] - previous_mean_of_variances) * (chain_variances[i] - mean_of_variances);
         }
 
         variance_of_means /= m - 1.0;
@@ -83,6 +84,7 @@ namespace eos
         // avoid NaN due to divide by zero
         if (0.0 == W)
         {
+            Log::instance()->message("Rvalue.gelman_rubin", ll_debug) << "W = 0. Avoiding R = NaN.";
             return std::numeric_limits<double>::max();
         }
 
@@ -108,11 +110,18 @@ namespace eos
         // estimation of scale variance
         double a = (n - 1.0) * (n - 1.0) / (n * n * m) * variance_of_variances;
         double b = (m + 1) * (m + 1) / (m * n * m * n) * 2.0 / (m - 1) * B * B;
-        double c = 2.0 * (m + 1.0) * (n - 1.0) / (m  * n * n) * n / m * (covariance_22 - 2.0 * mean_of_means * covariance_21);
+        double c = 2.0 * (m + 1.0) * (n - 1.0) / (m * n * n) * n / m * (covariance_22 - 2.0 * mean_of_means * covariance_21);
         double variance_of_V = a + b + c;
 
         // degrees of freedom of t-distribution
         double df = 2.0 * V * V / variance_of_V;
+
+        if (df <= 2)
+        {
+            Log::instance()->message("Rvalue.gelman_rubin", ll_debug)
+                << "DoF (" << df << ") below 2. Avoiding R = NaN.";
+            return std::numeric_limits<double>::max();;
+        }
 
         // sqrt of estimated scale reduction if sampling were continued
         R = std::sqrt(V / W * df / (df - 2.0));
@@ -141,7 +150,7 @@ namespace eos
         double variance_of_means = 0.0;
         double mean_of_means = 0.0;
         double mean_of_variances = 0.0;
-        double variance_of_variances =0.0;
+        double variance_of_variances = 0.0;
 
         // use Welford's method here as well with temporary variables
         double previous_mean_of_means(0);
@@ -165,8 +174,8 @@ namespace eos
             // update step
             mean_of_means += (chain_means[i] - previous_mean_of_means) / (i + 1.0);
             variance_of_means += (chain_means[i] - previous_mean_of_means) * (chain_means[i] - mean_of_means);
-            mean_of_variances += (chain_variances.at(i) - previous_mean_of_variances) / double(i+1);
-            variance_of_variances += (chain_variances.at(i) - previous_mean_of_variances) * (chain_variances.at(i) - mean_of_variances);
+            mean_of_variances += (chain_variances[i] - previous_mean_of_variances) / (i + 1.0);
+            variance_of_variances += (chain_variances[i] - previous_mean_of_variances) * (chain_variances[i] - mean_of_variances);
         }
 
         variance_of_means /= m - 1.0;
