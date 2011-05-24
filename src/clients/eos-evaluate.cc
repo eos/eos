@@ -23,6 +23,7 @@
 #include <src/utils/instantiation_policy-impl.hh>
 #include <src/utils/log.hh>
 #include <src/utils/one-of.hh>
+#include <src/utils/power_of.hh>
 #include <src/utils/random_number_engine.hh>
 #include <src/utils/stringify.hh>
 #include <src/utils/wilson-polynomial.hh>
@@ -62,12 +63,9 @@ class DoUsage
         }
 };
 
-struct ObservableInput
-{
-    ObservablePtr observable;
+void evaluate_with_sum_of_squares(const ObservablePtr & observable);
 
-    Kinematics kinematics;
-};
+void evaluate_with_samples(const ObservablePtr & observable);
 
 class CommandLine :
     public InstantiationPolicy<CommandLine, Singleton>
@@ -75,7 +73,7 @@ class CommandLine :
     public:
         Parameters parameters;
 
-        std::list<ObservableInput> inputs;
+        std::list<ObservablePtr> observables;
 
         unsigned samples;
 
@@ -87,12 +85,15 @@ class CommandLine :
 
         std::list<Parameter> variations;
 
+        std::function<void (const ObservablePtr &)> evaluate;
+
         CommandLine() :
             parameters(Parameters::Defaults()),
             samples(0),
             resolution(0.2),
             bins(40),
-            show_histogram(false)
+            show_histogram(false),
+            evaluate(&evaluate_with_sum_of_squares)
         {
         }
 
@@ -119,15 +120,12 @@ class CommandLine :
                 if ("--observable" == argument)
                 {
                     std::string name(*(++a));
-                    ObservableInput input;
-                    input.kinematics = *kinematics;
-                    input.observable = Observable::make(name, parameters, input.kinematics, Options());
-                    if (! input.observable)
+                    ObservablePtr observable = Observable::make(name, parameters, *kinematics, Options());
+                    if (! observable)
                         throw DoUsage("Unknown observable '" + name + "'");
 
-                    inputs.push_back(input);
+                    observables.push_back(observable);
                     kinematics.reset(new Kinematics);
-
 
                     continue;
                 }
@@ -195,10 +193,151 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--mode" == argument)
+                {
+                    std::string mode(*(++a));
+
+                    if ("samples" == mode)
+                    {
+                        evaluate = &evaluate_with_samples;
+                        continue;
+                    }
+                    else if ("sum-of-squares" == mode)
+                    {
+                        evaluate = &evaluate_with_sum_of_squares;
+                        continue;
+                    }
+
+                    throw DoUsage("Unknown evaluation mode '" + mode + "'");
+                }
+
                 throw DoUsage("Unknown command line argument: " + argument);
             }
         }
 };
+
+void evaluate_with_sum_of_squares(const ObservablePtr & observable)
+{
+    double central = observable->evaluate();
+
+    std::cout << "# " << observable->name() << '[' << observable->kinematics().as_string() << "]: " << observable->options().as_string() << std::endl;
+
+    double delta_max = 0.0, delta_min = 0.0;
+    for (auto v = CommandLine::instance()->variations.begin(), v_end = CommandLine::instance()->variations.end() ; v != v_end ; ++v)
+    {
+        double old_v = *v;
+
+        // raise value
+        *v = v->max();
+
+        double value = observable->evaluate();
+
+        if (value > central)
+        {
+            delta_max += power_of<2>(value - central);
+        }
+        else if (value < central)
+        {
+            delta_min += power_of<2>(value - central);
+        }
+
+        // lower value
+        *v = v->min();
+
+        value = observable->evaluate();
+
+        if (value > central)
+        {
+            delta_max += power_of<2>(value - central);
+        }
+        else if (value < central)
+        {
+            delta_min += power_of<2>(value - central);
+        }
+
+        *v = old_v;
+    }
+
+    double lower = central - std::sqrt(delta_min), upper = central + std::sqrt(delta_max);
+
+    std::cout
+        << "#   " << central
+        << " -" << lower
+        << " +" << upper
+        << "    (-" << std::abs((central - lower) / central) * 100 << "% / +" << std::abs((upper - central) / central) * 100 << "%)"
+        << std::endl;
+}
+
+void evaluate_with_samples(const ObservablePtr & observable)
+{
+    double central = observable->evaluate();
+
+    std::cout << "# " << observable->name() << '[' << observable->kinematics().as_string() << "]: " << observable->options().as_string() << std::endl;
+    std::cout << "#   central = " << central << std::endl;
+
+    double delta = CommandLine::instance()->resolution * std::abs(central);
+    Histogram<1> histogram = Histogram<1>::WithEqualBinning(
+            central - delta,
+            central + delta,
+            CommandLine::instance()->bins);
+    histogram.insert(Histogram<1>::Bin(-std::numeric_limits<double>::max(), central - delta));
+    histogram.insert(Histogram<1>::Bin(central + delta, std::numeric_limits<double>::max()));
+
+    RandomNumberEngine engine;
+    for (unsigned s = 0 ; s != CommandLine::instance()->samples ; ++s)
+    {
+        for (auto v = CommandLine::instance()->variations.begin(), v_end = CommandLine::instance()->variations.end() ; v != v_end ; ++v)
+        {
+            *v = v->sample(engine);
+        }
+
+        double value = observable->evaluate();
+        if (isnan(value))
+            continue;
+
+        histogram.insert(value);
+    }
+
+    if (CommandLine::instance()->show_histogram)
+    {
+        std::cout << "lower\tupper\tentries" << std::endl;
+        for (auto b = histogram.begin(), b_end = histogram.end() ; b != b_end ; ++b)
+        {
+            std::cout << b->lower << '\t' << b->upper << '\t' << b->value << std::endl;
+        }
+    }
+
+    Histogram<1> ecdf = estimate_cumulative_distribution(histogram);
+
+    if (CommandLine::instance()->show_histogram)
+    {
+        std::cout << std::endl << "ECDF" << std::endl;
+        std::cout << "lower\tupper\tentries" << std::endl;
+        for (auto b = ecdf.begin(), b_end = ecdf.end() ; b != b_end ; ++b)
+        {
+            std::cout << b->lower << '\t' << b->upper << '\t' << b->value << std::endl;
+        }
+    }
+
+    std::vector<double> confidence_levels{ 0.683, 0.954, 0.997 };
+    for (auto c = confidence_levels.cbegin(), c_end = confidence_levels.cend() ; c != c_end ; ++c)
+    {
+        double lower = -std::numeric_limits<double>::max(), upper = -std::numeric_limits<double>::max();
+        for (auto b = ecdf.begin(), b_end = ecdf.end() ; b != b_end ; ++b)
+        {
+            if (b->value <= (1.0 - *c) / 2.0)
+                lower = b->upper;
+
+            if (b->value <= 1.0 - (1.0 - *c) / 2.0)
+                upper = b->upper;
+        }
+
+        std::cout
+            << "#   " << *c << "% CL: " << lower << " .. " << upper
+            << "    (-" << std::abs((central - lower) / central) * 100 << "% / +" << std::abs((upper - central) / central) * 100 << "%)"
+            << std::endl;
+    }
+}
 
 int
 main(int argc, char * argv[])
@@ -207,75 +346,14 @@ main(int argc, char * argv[])
     {
         CommandLine::instance()->parse(argc, argv);
 
-        if (CommandLine::instance()->inputs.empty())
+        if (CommandLine::instance()->observables.empty())
             throw DoUsage("No input specified");
 
-        for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend() ; i != i_end ; ++i)
+        std::function<void (const ObservablePtr &)> evaluate = CommandLine::instance()->evaluate;
+
+        for (auto o = CommandLine::instance()->observables.cbegin(), o_end = CommandLine::instance()->observables.cend() ; o != o_end ; ++o)
         {
-            double central = i->observable->evaluate();
-
-            std::cout << "# " << i->observable->name() << '[' << i->kinematics.as_string() << "]: " << i->observable->options().as_string() << std::endl;
-            std::cout << "#   central = " << central << std::endl;
-
-            double delta = CommandLine::instance()->resolution * std::abs(central);
-            Histogram<1> histogram = Histogram<1>::WithEqualBinning(
-                    central - delta,
-                    central + delta,
-                    CommandLine::instance()->bins);
-            histogram.insert(Histogram<1>::Bin(-std::numeric_limits<double>::max(), central - delta));
-            histogram.insert(Histogram<1>::Bin(central + delta, std::numeric_limits<double>::max()));
-
-            RandomNumberEngine engine;
-            for (unsigned s = 0 ; s != CommandLine::instance()->samples ; ++s)
-            {
-                for (auto v = CommandLine::instance()->variations.begin(), v_end = CommandLine::instance()->variations.end() ; v != v_end ; ++v)
-                {
-                    *v = v->sample(engine);
-                }
-
-                double value = i->observable->evaluate();
-                if (isnan(value))
-                    continue;
-
-                histogram.insert(value);
-            }
-
-            if (CommandLine::instance()->show_histogram)
-            {
-                std::cout << "lower\tupper\tentries" << std::endl;
-                for (auto b = histogram.begin(), b_end = histogram.end() ; b != b_end ; ++b)
-                {
-                    std::cout << b->lower << '\t' << b->upper << '\t' << b->value << std::endl;
-                }
-            }
-
-            Histogram<1> ecdf = estimate_cumulative_distribution(histogram);
-
-            if (CommandLine::instance()->show_histogram)
-            {
-                std::cout << std::endl << "ECDF" << std::endl;
-                std::cout << "lower\tupper\tentries" << std::endl;
-                for (auto b = ecdf.begin(), b_end = ecdf.end() ; b != b_end ; ++b)
-                {
-                    std::cout << b->lower << '\t' << b->upper << '\t' << b->value << std::endl;
-                }
-            }
-
-            std::vector<double> confidence_levels{ 0.683, 0.954, 0.997 };
-            for (auto c = confidence_levels.cbegin(), c_end = confidence_levels.cend() ; c != c_end ; ++c)
-            {
-                double lower = -std::numeric_limits<double>::max(), upper = -std::numeric_limits<double>::max();
-                for (auto b = ecdf.begin(), b_end = ecdf.end() ; b != b_end ; ++b)
-                {
-                    if (b->value <= (1.0 - *c) / 2.0)
-                        lower = b->upper;
-
-                    if (b->value <= 1.0 - (1.0 - *c) / 2.0)
-                        upper = b->upper;
-                }
-
-                std::cout << "#   " << *c << "% CL: " << lower << " .. " << upper << "    (-" << std::abs((central - lower) / central) * 100 << "% / +" << std::abs((upper - central) / central) * 100 << "%)" << std::endl;
-            }
+            evaluate(*o);
         }
     }
     catch(DoUsage & e)
