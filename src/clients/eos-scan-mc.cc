@@ -104,6 +104,7 @@ class CommandLine :
 
         void parse(int argc, char ** argv)
         {
+            Log::instance()->set_log_level(ll_informational);
             Log::instance()->set_program_name("eos-scan-mc");
 
             std::shared_ptr<Kinematics> kinematics(new Kinematics);
@@ -288,8 +289,7 @@ class CommandLine :
 
                 if ("--debug" == argument)
                 {
-                    // only sequential execution
-                    config.parallelize = false;
+                    Log::instance()->set_log_level(ll_debug);
 
                     // report exact call
                     for (int i = 0 ; i < argc ; i++)
@@ -357,15 +357,15 @@ int main(int argc, char * argv[])
         std::cout << "Usage: eos-scan-mc" << std::endl;
         std::cout << "  [ [--kinematics NAME VALUE]* --observable NAME LOWER CENTRAL UPPER]+" << std::endl;
         std::cout << "  [ [ [--scan PARAMETER MIN MAX] | [--nuisance PARAMETER MIN MAX] ] --prior [flat | [gaussian LOWER CENTRAL UPPER] ] ]+" << std::endl;
-        std::cout << "  [--discrete PARAMETER { VALUE1 VALUE2 ...}]" << std::endl;
-        std::cout << "  [--fix PARAMETER VALUE]" << std::endl;
+        std::cout << "  [--discrete PARAMETER { VALUE1 VALUE2 ...}]+" << std::endl;
+        std::cout << "  [--fix PARAMETER VALUE]+" << std::endl;
         std::cout << "  [--chunksize VALUE]+" << std::endl;
         std::cout << "  [--chunks VALUE]+" << std::endl;
         std::cout << "  [--chains VALUE]+" << std::endl;
         std::cout << "  [--seed LONG_VALUE]+" << std::endl;
         std::cout << "  [--scale VALUE]+" << std::endl;
         std::cout << "  [--output FILENAME]+" << std::endl;
-        std::cout << "  [--debug]" << std::endl;
+        std::cout << "  [--debug]+" << std::endl;
 
         std::cout << std::endl;
         std::cout << "Example:" << std::endl;
