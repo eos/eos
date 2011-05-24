@@ -15,6 +15,23 @@ AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
 dnl }}}
 
+dnl {{{ use HDF5 path if supplied via --with-hdf5=
+AC_ARG_WITH([hdf5],
+	[AS_HELP_STRING([--with-hdf5], [used for I/O to scan data])]
+	[],
+	[])
+if test "x$with_hdf5" == xno ; then
+	AC_MSG_FAILURE(["Cannot build EOS without HDF5"])
+fi
+if test "x$with_hdf5" != x ; then
+	if ! test -d "$with_hdf5" ; then
+		AC_MSG_FAILURE(["$with_hdf5 is not a directory"])
+	fi
+	CXXFLAGS="-I$with_hdf5/include $CXXFLAGS"
+	LDFLAGS="-L$with_hdf5/lib $LDFLAGS"
+fi
+dnl }}}
+
 dnl {{{ check for git HEAD
 if test -d "${GIT_DIR:-${ac_top_srcdir:-./}/.git}" ; then
 	GITHEAD=`git describe 2> /dev/null`
