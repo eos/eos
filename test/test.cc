@@ -18,6 +18,7 @@
  */
 
 #include <test/test.hh>
+#include <src/utils/log.hh>
 
 #include <cstdlib>
 #include <iostream>
@@ -70,6 +71,8 @@ namespace test
 int main(int, char **)
 {
     int result(EXIT_SUCCESS);
+
+    eos::Log::instance()->set_log_level(eos::ll_debug);
 
     for (std::list<const test::TestCase *>::const_iterator i(test::test_cases.begin()),
             i_end(test::test_cases.end()) ; i != i_end ; ++i)
