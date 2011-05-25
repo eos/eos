@@ -21,6 +21,7 @@
 #define EOS_GUARD_SRC_UTILS_MODEL_HH 1
 
 #include <src/utils/private_implementation_pattern.hh>
+#include <src/utils/options.hh>
 #include <src/utils/parameters.hh>
 #include <src/utils/wilson_coefficients.hh>
 
@@ -36,7 +37,7 @@ namespace eos
         public:
             virtual ~Model() = 0;
 
-            static std::shared_ptr<Model> make(const std::string & name, const Parameters & parameters);
+            static std::shared_ptr<Model> make(const std::string & name, const Parameters & parameters, const Options & options);
 
             /* QCD */
             virtual double alpha_s(const double & mu) const = 0;

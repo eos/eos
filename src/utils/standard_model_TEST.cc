@@ -55,7 +55,7 @@ class MakeTest :
         {
             try
             {
-                std::shared_ptr<Model> m = Model::make("SM", reference_parameters());
+                std::shared_ptr<Model> m = Model::make("SM", reference_parameters(), Options());
             }
             catch (NoSuchModelError &)
             {

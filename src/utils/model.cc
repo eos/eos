@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -29,9 +29,9 @@ namespace eos
     }
 
     std::shared_ptr<Model>
-    Model::make(const std::string & name, const Parameters & parameters)
+    Model::make(const std::string & name, const Parameters & parameters, const Options & options)
     {
-        typedef std::function<std::shared_ptr<Model> (const Parameters &)> ModelMaker;
+        typedef std::function<std::shared_ptr<Model> (const Parameters &, const Options &)> ModelMaker;
         static const std::map<std::string, ModelMaker> model_makers
         {
             std::make_pair("SM", &StandardModel::make)
@@ -42,7 +42,7 @@ namespace eos
         if (model_makers.cend() == i)
             throw NoSuchModelError(name);
 
-        return i->second(parameters);
+        return i->second(parameters, options);
     }
 
     NoSuchModelError::NoSuchModelError(const std::string & name) :

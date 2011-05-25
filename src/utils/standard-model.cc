@@ -59,7 +59,7 @@ namespace eos
     }
 
     std::shared_ptr<Model>
-    StandardModel::make(const Parameters & parameters)
+    StandardModel::make(const Parameters & parameters, const Options &)
     {
         return std::shared_ptr<Model>(new StandardModel(parameters));
     }

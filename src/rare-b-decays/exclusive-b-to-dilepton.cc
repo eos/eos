@@ -59,7 +59,7 @@ namespace eos
         std::function<complex<double> (const Model *)> lambda;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p)),
+            model(Model::make("SM", p, o)),
             abs_c10(p["Abs{c10}"], u),
             arg_c10(p["Arg{c10}"], u),
             abs_c10prime(p["Abs{c10'}"], u),

@@ -45,8 +45,8 @@ namespace eos
 
         UsedParameter uncertainty;
 
-        Implementation(const Parameters & p, ParameterUser & u) :
-            model(Model::make("SM", p)),
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            model(Model::make("SM", p, o)),
             abs_c7(p["Abs{c7}"], u),
             arg_c7(p["Arg{c7}"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
@@ -87,8 +87,8 @@ namespace eos
         }
     };
 
-    BToXsGamma<Minimal>::BToXsGamma(const Parameters & parameters, const Options &) :
-        PrivateImplementationPattern<BToXsGamma<Minimal>>(new Implementation<BToXsGamma<Minimal>>(parameters, *this))
+    BToXsGamma<Minimal>::BToXsGamma(const Parameters & parameters, const Options & options) :
+        PrivateImplementationPattern<BToXsGamma<Minimal>>(new Implementation<BToXsGamma<Minimal>>(parameters, options, *this))
     {
     }
 

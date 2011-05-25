@@ -618,7 +618,7 @@ namespace eos
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p)),
+            model(Model::make("SM", p, o)),
             hbar(p["hbar"], u),
             c1(p["c1"], u),
             c2(p["c2"], u),
@@ -1225,7 +1225,7 @@ namespace eos
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p)),
+            model(Model::make("SM", p, o)),
             hbar(p["hbar"], u),
             c1(p["c1"], u),
             c2(p["c2"], u),

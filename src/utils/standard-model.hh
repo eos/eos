@@ -61,7 +61,7 @@ namespace eos
             StandardModel(const Parameters &);
             virtual ~StandardModel();
 
-            static std::shared_ptr<Model> make(const Parameters &);
+            static std::shared_ptr<Model> make(const Parameters &, const Options &);
 
             /* QCD */
             virtual double alpha_s(const double &) const;
