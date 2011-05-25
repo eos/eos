@@ -330,15 +330,65 @@ namespace eos
             }
         }
 
-        // return random number in [0,1[
-        inline double uniform_random_number() { return gsl_rng_uniform(rng); }
-
         // undo changes to Parameter object
         inline void revert()
         {
             parameter_descriptions[current_parameter].parameter = current.point[current_parameter];
             // reload old observable values
             analysis->log_likelihood()->reset();
+        }
+
+        // set the number of iterations for next run and go
+        void run(unsigned iterations)
+        {
+            Log::instance()->message("markov_chain.run", ll_debug)
+                << "Running " << iterations << " iterations";
+
+            reset();
+
+            // make sure everything is fine __before__ we start
+            self_check();
+
+            // loop over iterations
+            for (current_iteration = 0 ; current_iteration < iterations ; ++current_iteration)
+            {
+                // loop over parameters, one at a time
+                for (current_parameter = 0 ; current_parameter < parameter_descriptions.size() ; ++current_parameter)
+                {
+                    accept_proposal = false;
+
+                    // proposal point updated!
+                    bool in_range = new_proposal_point();
+
+                    if (in_range)
+                    {
+                        // calc. likelihood, log_prior. Parameter object updated!
+                        evaluate_point();
+
+                        // compare, throw dice
+                        double r = std::log(uniform_random_number());
+
+                        if (r < proposal.log_posterior - current.log_posterior)
+                        {
+                            accept_proposal = true;
+                            move();
+                        }
+                        else
+                        {
+                            // restore previous state of Parameters
+                            revert();
+                        }
+                    }
+
+                    // save points, update statistics etc
+                    update();
+                }
+
+            }
+
+            // we are done. store how many iterations we had in total
+            stats.iterations_total += iterations;
+            run_iterations = iterations;
         }
 
         // check consistency of configuration, throw exception
@@ -405,58 +455,8 @@ namespace eos
             }
         }
 
-        // set the number of iterations for next run and go
-        void run(unsigned iterations)
-        {
-            Log::instance()->message("markov_chain.run", ll_debug)
-                << "Running " << iterations << " iterations";
-
-            reset();
-
-            // make sure everything is fine __before__ we start
-            self_check();
-
-            // loop over iterations
-            for (current_iteration = 0 ; current_iteration < iterations ; ++current_iteration)
-            {
-                // loop over parameters, one at a time
-                for (current_parameter = 0 ; current_parameter < parameter_descriptions.size() ; ++current_parameter)
-                {
-                    accept_proposal = false;
-
-                    // proposal point updated!
-                    bool in_range = new_proposal_point();
-
-                    if (in_range)
-                    {
-                        // calc. likelihood, log_prior. Parameter object updated!
-                        evaluate_point();
-
-                        // compare, throw dice
-                        double r = std::log(uniform_random_number());
-
-                        if (r < proposal.log_posterior - current.log_posterior)
-                        {
-                            accept_proposal = true;
-                            move();
-                        }
-                        else
-                        {
-                            // restore previous state of Parameters
-                            revert();
-                        }
-                    }
-
-                    // save points, update statistics etc
-                    update();
-                }
-
-            }
-
-            // we are done. store how many iterations we had in total
-            stats.iterations_total += iterations;
-            run_iterations = iterations;
-        }
+        // return random number in [0,1[
+        inline double uniform_random_number() { return gsl_rng_uniform(rng); }
     };
 
     MarkovChain::MarkovChain(const std::shared_ptr<Analysis> & analysis, unsigned long seed) :
