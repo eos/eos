@@ -89,6 +89,14 @@ namespace eos
                     double rejected(c->statistics().iterations_rejected[p]);
                     efficiencies[p] = accepted / (accepted + rejected);
 
+                    Log::instance()->message("markov_chain_sampler.efficiencies", ll_debug)
+                        << "Current efficiency for \"" << c->parameter_descriptions()[p].parameter.name()
+                        << "\" in chain " << std::distance(chains.begin(), c) << ": " << efficiencies[p];
+
+                    //do not adjust scales if it has no effect on proposal function
+                    if (c->parameter_descriptions()[p].discrete)
+                        continue;
+
                     double new_scale = c->get_scale(p);
 
                     // up/down of scale
@@ -109,8 +117,8 @@ namespace eos
                     {
                         Log::instance()->message("markov_chain_sampler.rescale_beyond_limits", ll_warning)
                             << "Attempting to update scale factor of parameter '" << c->parameter_descriptions()[p].parameter.name()
-                            << "' in chain " << std::distance(chains.begin(), c) << " beyond its limits (" << config.scale_min << ","
-                            << config.scale_max << ". Scale kept at current value. May be the chosen parameter range is wrong?";
+                            << "' in chain " << std::distance(chains.begin(), c) << " beyond its limits [" << config.scale_min << ","
+                            << config.scale_max << "]. Scale kept at current value. May be the chosen parameter range is wrong?";
 
                         new_scale = c->get_scale(p);
                     }
@@ -414,6 +422,8 @@ namespace eos
                     dump_hdf5();
                 }
             }
+            Log::instance()->message("markov_chain_sampler.mainrun_end", ll_informational)
+                << "Finished the main-run";
         }
 
         void run()
