@@ -31,24 +31,29 @@ namespace eos
 {
     using std::complex;
 
-    class Model :
-        public ParameterUser
+    namespace components
+    {
+        /*!
+         * Tags for model components.
+         */
+        ///@{
+        struct CKM;
+        struct QCD;
+        struct DeltaB1;
+        ///@}
+    }
+
+    /*!
+     * Base classes for individual model components.
+     */
+    template <typename Tag_> class ModelComponent;
+
+    /*!
+     * Base class for the CKM component of models.
+     */
+    template <> class ModelComponent<components::CKM>
     {
         public:
-            virtual ~Model() = 0;
-
-            static std::shared_ptr<Model> make(const std::string & name, const Parameters & parameters, const Options & options);
-
-            /* QCD */
-            virtual double alpha_s(const double & mu) const = 0;
-            virtual double m_t_msbar(const double & mu) const = 0;
-            virtual double m_t_pole() const = 0;
-            virtual double m_b_msbar(const double & mu) const = 0;
-            virtual double m_b_pole() const = 0;
-            virtual double m_b_ps(const double & mu_f) const = 0;
-            virtual double m_c_msbar(const double & mu) const = 0;
-            virtual double m_c_pole() const = 0;
-
             /* CKM matrix elements */
             virtual complex<double> ckm_cd() const = 0;
             virtual complex<double> ckm_cs() const = 0;
@@ -59,9 +64,48 @@ namespace eos
             virtual complex<double> ckm_td() const = 0;
             virtual complex<double> ckm_ts() const = 0;
             virtual complex<double> ckm_tb() const = 0;
+    };
 
+    /*!
+     * Base class for the QCD component of models.
+     */
+    template <> class ModelComponent<components::QCD>
+    {
+        public:
+            /* QCD */
+            virtual double alpha_s(const double & mu) const = 0;
+            virtual double m_t_msbar(const double & mu) const = 0;
+            virtual double m_t_pole() const = 0;
+            virtual double m_b_msbar(const double & mu) const = 0;
+            virtual double m_b_pole() const = 0;
+            virtual double m_b_ps(const double & mu_f) const = 0;
+            virtual double m_c_msbar(const double & mu) const = 0;
+            virtual double m_c_pole() const = 0;
+    };
+
+    /*!
+     * Base class for the Delta B = 1 FCNC component of models.
+     */
+    template <> class ModelComponent<components::DeltaB1>
+    {
+        public:
             /* b->s Wilson coefficients */
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s() const = 0;
+    };
+
+    /*!
+     * Base class for all models.
+     */
+    class Model :
+        public ParameterUser,
+        public virtual ModelComponent<components::CKM>,
+        public virtual ModelComponent<components::QCD>,
+        public virtual ModelComponent<components::DeltaB1>
+    {
+        public:
+            virtual ~Model() = 0;
+
+            static std::shared_ptr<Model> make(const std::string & name, const Parameters & parameters, const Options & options);
     };
 
     struct NoSuchModelError :

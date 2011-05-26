@@ -25,53 +25,20 @@
 
 namespace eos
 {
-    class StandardModel :
-        public Model
+    template <typename Tag> class SMComponent;
+
+    template <> class SMComponent<components::CKM> :
+        public virtual ModelComponent<components::CKM>
     {
         private:
             /* CKM Wolfenstein parameters */
-            UsedParameter _A;
-            UsedParameter _lambda;
-            UsedParameter _rhobar;
-            UsedParameter _etabar;
-
-            /* QCD parameters */
-            UsedParameter _alpha_s_Z;
-            UsedParameter _mu_t;
-            UsedParameter _mu_b;
-            UsedParameter _mu_c;
-            UsedParameter _lambda_qcd;
-
-            /* Masses */
-            UsedParameter _m_t_pole;
-            UsedParameter _m_b_MSbar;
-            UsedParameter _m_c_MSbar;
-            UsedParameter _m_W;
-            UsedParameter _m_Z;
-
-            /* GSW parameters */
-            UsedParameter _sw2;
-
-            /* Renormalization scales */
-            UsedParameter _mu;
-            UsedParameter _mu_0c;
-            UsedParameter _mu_0t;
+            UsedParameter _A__ckm;
+            UsedParameter _lambda__ckm;
+            UsedParameter _rhobar__ckm;
+            UsedParameter _etabar__ckm;
 
         public:
-            StandardModel(const Parameters &);
-            virtual ~StandardModel();
-
-            static std::shared_ptr<Model> make(const Parameters &, const Options &);
-
-            /* QCD */
-            virtual double alpha_s(const double &) const;
-            virtual double m_t_msbar(const double & mu) const;
-            virtual double m_t_pole() const;
-            virtual double m_b_msbar(const double & mu) const;
-            virtual double m_b_pole() const;
-            virtual double m_b_ps(const double & mu_f) const;
-            virtual double m_c_msbar(const double & mu) const;
-            virtual double m_c_pole() const;
+            SMComponent(const Parameters &, ParameterUser &);
 
             /* CKM matrix elements */
             virtual complex<double> ckm_cd() const;
@@ -83,9 +50,82 @@ namespace eos
             virtual complex<double> ckm_td() const;
             virtual complex<double> ckm_ts() const;
             virtual complex<double> ckm_tb() const;
+    };
+
+    template <> class SMComponent<components::QCD> :
+        public virtual ModelComponent<components::QCD>
+    {
+        private:
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__qcd;
+            UsedParameter _mu_t__qcd;
+            UsedParameter _mu_b__qcd;
+            UsedParameter _mu_c__qcd;
+            UsedParameter _lambda_qcd__qcd;
+
+            /* Masses */
+            UsedParameter _m_t_pole__qcd;
+            UsedParameter _m_b_MSbar__qcd;
+            UsedParameter _m_c_MSbar__qcd;
+            UsedParameter _m_Z__qcd;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            /* QCD */
+            virtual double alpha_s(const double &) const;
+            virtual double m_t_msbar(const double & mu) const;
+            virtual double m_t_pole() const;
+            virtual double m_b_msbar(const double & mu) const;
+            virtual double m_b_pole() const;
+            virtual double m_b_ps(const double & mu_f) const;
+            virtual double m_c_msbar(const double & mu) const;
+            virtual double m_c_pole() const;
+    };
+
+    template <> class SMComponent<components::DeltaB1> :
+        public virtual ModelComponent<components::DeltaB1>
+    {
+        private:
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__deltab1;
+            UsedParameter _mu_t__deltab1;
+            UsedParameter _mu_b__deltab1;
+            UsedParameter _mu_c__deltab1;
+
+            /* GSW parameters */
+            UsedParameter _sw2__deltab1;
+
+            /* Masses */
+            UsedParameter _m_t_pole__deltab1;
+            UsedParameter _m_W__deltab1;
+            UsedParameter _m_Z__deltab1;
+
+            /* Matching scales */
+            UsedParameter _mu_0c__deltab1;
+            UsedParameter _mu_0t__deltab1;
+
+            /* Renormalization scale */
+            UsedParameter _mu__deltab1;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
 
             /* b->s Wilson coefficients */
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s() const;
+    };
+
+    class StandardModel :
+        public Model,
+        public SMComponent<components::CKM>,
+        public SMComponent<components::QCD>,
+        public SMComponent<components::DeltaB1>
+    {
+        public:
+            StandardModel(const Parameters &);
+            virtual ~StandardModel();
+
+            static std::shared_ptr<Model> make(const Parameters &, const Options &);
     };
 }
 
