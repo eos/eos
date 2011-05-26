@@ -258,13 +258,14 @@ void evaluate_with_sum_of_squares(const ObservablePtr & observable)
         *v = old_v;
     }
 
-    double lower = central - std::sqrt(delta_min), upper = central + std::sqrt(delta_max);
+    delta_min = std::sqrt(delta_min);
+    delta_max = std::sqrt(delta_max);
 
     std::cout
         << "#   " << central
-        << " -" << lower
-        << " +" << upper
-        << "    (-" << std::abs((central - lower) / central) * 100 << "% / +" << std::abs((upper - central) / central) * 100 << "%)"
+        << " -" << delta_min
+        << " +" << delta_max
+        << "    (-" << std::abs(delta_min / central) * 100 << "% / +" << std::abs(delta_max / central) * 100 << "%)"
         << std::endl;
 }
 
