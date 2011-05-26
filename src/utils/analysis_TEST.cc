@@ -143,5 +143,59 @@ class AnalysisTest :
 
                 TEST_CHECK_THROWS(InternalError, analysis.log_prior());
             }
+
+            // 1D optimization
+            {
+                Analysis analysis = make_analysis(false);
+
+                std::vector<double> initial_guess(1, 4.161345);
+                Analysis::OptimizationOptions options;
+                options.maximum_simplex_size = 1e-5;
+                options.initial_step_size = 0.1;
+                auto pair = analysis.optimize(initial_guess, options);
+
+                auto best_fit_parameter = pair.first;
+
+                TEST_CHECK_NEARLY_EQUAL(best_fit_parameter.front(), 4.3, 1e-5);
+                TEST_CHECK_NEARLY_EQUAL(pair.second, 1.7672934062316281 , 1e-8);
+            }
+
+            // 5D optimization
+            {
+                Parameters parameters = Parameters::Defaults();
+
+                LogLikelihoodPtr llh(new LogLikelihood(parameters));
+                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                        "mass::b(MSbar)")), 4.1, 4.2, 4.3);
+                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                        "mass::c")), 1.16, 1.2, 1.25);
+                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                        "mass::s")), 5e-3, 10e-3, 15e-3);
+                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                        "mass::t(pole)")), 171, 172, 173);
+                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                        "mass::e")), 510.5e-6, 511e-6, 511.5e-6);
+
+                Analysis analysis(llh);
+
+                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::b(MSbar)", ParameterRange{ 4     , 4.5   }));
+                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::c",        ParameterRange{ 1     , 2     }));
+                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::s",        ParameterRange{ 1e-3  , 25e-3 }));
+                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::t(pole)",  ParameterRange{ 168   , 177   }));
+                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::e",        ParameterRange{ 500e-6, 520e-6}));
+
+                std::vector<double> initial_guess{ 4.10013, 1.90014, 3.00045e-3, 174.6345, 515.51e-6};
+
+                Analysis::OptimizationOptions options;
+                options.maximum_simplex_size = 1e-5;
+                options.initial_step_size = 0.1;
+                std::vector<double> optimum = analysis.optimize(initial_guess, options).first;
+
+                TEST_CHECK_NEARLY_EQUAL(optimum[0], 4.2   , 1e-5);
+                TEST_CHECK_NEARLY_EQUAL(optimum[1], 1.2   , 1e-5);
+                TEST_CHECK_NEARLY_EQUAL(optimum[2], 1e-2  , 1e-5);
+                TEST_CHECK_NEARLY_EQUAL(optimum[3], 172   , 1e-5);
+                TEST_CHECK_NEARLY_EQUAL(optimum[4], 511e-6, 1e-5);
+            }
         }
 } analysis_test;

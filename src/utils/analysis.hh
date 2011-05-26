@@ -24,9 +24,12 @@
 #include <src/utils/log_likelihood.hh>
 #include <src/utils/log_prior.hh>
 #include <src/utils/private_implementation_pattern.hh>
+#include <src/utils/verify.hh>
 
 #include <vector>
 #include <set>
+
+#include <gsl/gsl_multimin.h>
 
 namespace eos
 {
@@ -34,7 +37,7 @@ namespace eos
         public PrivateImplementationPattern<Analysis>
     {
         public:
-            friend class Implementation<Analysis>;
+            struct OptimizationOptions;
 
             ///@name Basic Functions
             ///@{
@@ -102,7 +105,34 @@ namespace eos
              */
             bool nuisance(const std::string & name) const;
             ///@}
+
+            /*!
+             * Optimize the posterior using the Nelder-Mead simplex algorithm.
+             * @param initial_guess Starting point for simplex construction
+             * @param options If no tuning desired, use Analysis::OptimizationOptions::Defaults()
+             * @return <parameter values at mode, posterior value at mode>
+             */
+            std::pair<std::vector<double>, double>
+            optimize(const std::vector<double> & initial_guess, const OptimizationOptions & options);
     };
+
+        struct Analysis::OptimizationOptions
+        {
+                /// Fraction of parameter range, in [0,1].
+                VerifiedRange<double> initial_step_size;
+
+                /// If algorithm doesn't converge before, quit
+                /// after maximum_iterations.
+                unsigned maximum_iterations;
+
+                /// Once the algorithm has shrunk the probe
+                /// simplex below this size, convergence is declared.
+                VerifiedRange<double> maximum_simplex_size;
+
+                OptimizationOptions();
+
+                static OptimizationOptions Defaults();
+        };
 }
 
 #endif

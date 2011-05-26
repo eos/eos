@@ -19,6 +19,7 @@
 
 #include <src/utils/analysis.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
+#include <src/utils/log.hh>
 
 namespace eos
 {
@@ -77,7 +78,7 @@ namespace eos
             // add parameters via prior clones
             for (auto i = priors.cbegin(), i_end = priors.cend(); i != i_end; ++i)
             {
-                result->add((*i)->clone(result->_imp->parameters));
+                result->add((*i)->clone(result->parameters()));
             }
 
             return result;
@@ -99,6 +100,27 @@ namespace eos
             }
 
             throw InternalError("Implementation<Analysis>::definition: no such parameter '" + name + "'");
+        }
+
+        /*
+         * routine needed for optimization. It returns the negative
+         * log(posterior) at parameters
+         * @param parameters the values of the parameters
+         * @param data pointer to an Analysis object
+         * @return
+         */
+        static double
+        negative_log_posterior(const gsl_vector * pars, void * data)
+        {
+            // set all components of parameters
+            Implementation<Analysis>* analysis = (Implementation<Analysis>*) data;
+            for (unsigned i = 0 ; i < analysis->parameter_descriptions.size() ; ++i)
+            {
+                analysis->parameter_descriptions[i].parameter = gsl_vector_get(pars, i);
+            }
+
+            // calculate negative posterior
+            return - ( analysis->log_prior() + (*(analysis->log_likelihood))() );
         }
 
         bool nuisance(const std::string & name) const
@@ -147,6 +169,95 @@ namespace eos
             }
 
             return prior;
+        }
+
+        std::pair<std::vector<double>, double>
+        optimize(const std::vector<double> & initial_guess, const Analysis::OptimizationOptions & options)
+        {
+            // input validation
+            if (parameter_descriptions.size() != initial_guess.size())
+               throw InternalError("Analysis::optimize: starting point doesn't have the correct dimension "
+                   + stringify(parameter_descriptions.size()) );
+
+            // setup the function object as in GSL manual 36.4
+            gsl_multimin_function posterior;
+            posterior.n = parameter_descriptions.size();
+            posterior.f = &Implementation<Analysis>::negative_log_posterior;
+            posterior.params = (void *) this;
+
+            // set starting guess
+            gsl_vector *x = gsl_vector_alloc(posterior.n);
+            for (unsigned i = 0 ; i < posterior.n ; ++i)
+               gsl_vector_set(x, i, initial_guess[i]);
+
+            // save minimum for later comparison
+            double initial_minimum = posterior.f(x, (void *) this);
+
+            // set initial step sizes relative to allowed parameter range
+            gsl_vector *ss = gsl_vector_alloc(posterior.n);
+            for (unsigned i = 0 ; i < posterior.n ; ++i)
+               gsl_vector_set(ss, i, (parameter_descriptions[i].max - parameter_descriptions[i].min) * options.initial_step_size);
+
+            // setup the minimizer
+            const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex2rand;
+            gsl_multimin_fminimizer *minim = gsl_multimin_fminimizer_alloc(T, posterior.n);
+            gsl_multimin_fminimizer_set(minim, &posterior, x, ss);
+
+            unsigned iter = 0;
+            int status = 0;
+            double simplex_size = 0;
+
+            // run the minimizer
+            do
+            {
+               iter++;
+               status = gsl_multimin_fminimizer_iterate(minim);
+
+               if (status)
+                   break;
+
+               simplex_size = gsl_multimin_fminimizer_size(minim);
+               status = gsl_multimin_test_size(simplex_size, options.maximum_simplex_size);
+
+               Log::instance()->message("analysis.optimize", ll_debug)
+                               << "f() = " << minim->fval << "\tsize = " << simplex_size;
+
+               if (status == GSL_SUCCESS)
+               {
+                   Log::instance()->message("analysis.optimize", ll_informational)
+                       << "Simplex algorithm converged after " << stringify(iter) << " iterations";
+               }
+            } while (status == GSL_CONTINUE && iter < options.maximum_iterations);
+
+            // build output vector
+            std::vector<double> parameters_at_mode(initial_guess);
+            double mode = minim->fval;
+            for (unsigned i = 0 ; i < posterior.n ; ++i)
+               parameters_at_mode[i] = gsl_vector_get(minim->x, i);
+
+            // free resources
+            gsl_vector_free(x);
+            gsl_vector_free(ss);
+            gsl_multimin_fminimizer_free(minim);
+
+            //check if algorithm actually found a better minimum
+            if (mode >= initial_minimum)
+            {
+               Log::instance()->message("analysis.optimize", ll_warning)
+                  << "Simplex algorithm did not improve on initial guess";
+               return std::make_pair(initial_guess, -initial_minimum) ;
+            }
+
+            std::string results("Results: maximum of posterior = ");
+            results += stringify(-mode) + " at ( ";
+            for (unsigned i = 0 ; i < posterior.n ; ++i)
+               results += stringify(parameters_at_mode[i]) + " ";
+            results += ")";
+            Log::instance()->message("analysis.optimize", ll_informational)
+               << results;
+
+            //minus sign to convert to posterior
+            return std::make_pair(parameters_at_mode, -mode) ;
         }
     };
 
@@ -213,9 +324,27 @@ namespace eos
         return _imp->parameter_descriptions[index].parameter;
     }
 
+    std::pair<std::vector<double>, double>
+    Analysis::optimize(const std::vector<double> & initial_guess, const Analysis::OptimizationOptions & options)
+    {
+        return _imp->optimize(initial_guess, options);
+    }
+
     const std::vector<ParameterDescription> &
     Analysis::parameter_descriptions() const
     {
         return _imp->parameter_descriptions;
+    }
+
+    Analysis::OptimizationOptions::OptimizationOptions():
+        initial_step_size(0, 1, 0.1),
+        maximum_iterations(1000),
+        maximum_simplex_size(0, 1, 1e-5)
+    {
+    }
+
+    Analysis::OptimizationOptions Analysis::OptimizationOptions::Defaults()
+    {
+        return OptimizationOptions();
     }
 }
