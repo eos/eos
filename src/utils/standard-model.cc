@@ -17,6 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <src/utils/log.hh>
 #include <src/utils/matrix.hh>
 #include <src/utils/power_of.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
@@ -27,8 +28,6 @@
 #include <cmath>
 
 #include <gsl/gsl_sf_clausen.h>
-
-#include <src/utils/log.hh>
 
 namespace eos
 {
@@ -327,10 +326,10 @@ namespace implementation
      * log_c = ln(mu_0c^2 / m_W^2)
      * sw2 = sin^2(theta_Weinberg)
      */
-    std::array<double, 15>
+    std::array<complex<double>, 15>
     initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0()
     {
-        std::array<double, 15> result
+        std::array<complex<double>, 15> result
         {{
             0.0, -1.0, 0.0, 0.0, 0.0, 0.0,
             0.0, 0.0, 0.0, 0.0, 0.0,
@@ -340,10 +339,10 @@ namespace implementation
         return result;
     }
 
-    std::array<double, 15>
+    std::array<complex<double>, 15>
     initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(const double & log_c, const double & sw2)
     {
-        std::array<double, 15> result
+        std::array<complex<double>, 15> result
         {{
             -15.0 - 6.0 * log_c, 0.0, 0.0, 7.0/9.0 - 2.0 / 3.0 * log_c, 0.0, 0.0,
             0.0, 0.0, 0.0, 0.0, 0.0,
@@ -353,10 +352,10 @@ namespace implementation
         return result;
     }
 
-    std::array<double, 15>
+    std::array<complex<double>, 15>
     initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(const double & x_c, const double & log_c, const double & sw2)
     {
-        std::array<double, 15> result;
+        std::array<complex<double>, 15> result;
         result.fill(0.0);
         result[0] = -(16.0 * x_c + 8.0) * std::sqrt(4.0 * x_c - 1.0) * gsl_sf_clausen(2.0 * std::asin(1.0 / 2.0 / std::sqrt(x_c)))
             + (16.0 * x_c + 20.0 / 3.0) * std::log(x_c) + 32.0 * x_c + 112.0 / 9.0
@@ -381,19 +380,19 @@ namespace implementation
      * log_t = ln(mu_0t / m_t(mu_0t))
      * sw2 = sin^2(theta_Weinberg)
      */
-    std::array<double, 15>
+    std::array<complex<double>, 15>
     initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0()
     {
-        std::array<double, 15> result;
+        std::array<complex<double>, 15> result;
         result.fill(0.0);
 
         return result;
     }
 
-    std::array<double, 15>
+    std::array<complex<double>, 15>
     initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(const double & x_t, const double & sw2)
     {
-        std::array<double, 15> result;
+        std::array<complex<double>, 15> result;
         result.fill(0.0);
         result[3] = TopLoops::E0(x_t);
         result[11] = -0.5 * TopLoops::A0(x_t);
@@ -404,10 +403,10 @@ namespace implementation
         return result;
     }
 
-    std::array<double, 15>
+    std::array<complex<double>, 15>
     initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(const double & x_t, const double & log_t, const double & sw2)
     {
-        std::array<double, 15> result;
+        std::array<complex<double>, 15> result;
         result.fill(0.0);
         result[2] = TopLoops::G1(x_t, log_t);
         result[3] = TopLoops::E1(x_t, log_t);
@@ -485,7 +484,7 @@ namespace implementation
                 alpha_s_m_W, alpha_s, nf, QCD::beta_function_nf_5);
 
         WilsonCoefficients<BToS> wc = downscaled_top;
-        wc._coefficients = wc._coefficients + (-1.0) * downscaled_charm._coefficients;
+        wc._coefficients = wc._coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._coefficients;
 
         return wc;
     }

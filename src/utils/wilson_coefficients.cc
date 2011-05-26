@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
@@ -30,13 +30,13 @@
 
 namespace eos
 {
-    WilsonCoefficients<BToS> evolve(const std::array<double, 15> & wc_qcd_0,
-            const std::array<double, 15> & wc_qcd_1,
-            const std::array<double, 15> & wc_qcd_2,
+    WilsonCoefficients<BToS> evolve(const std::array<complex<double>, 15> & wc_qcd_0,
+            const std::array<complex<double>, 15> & wc_qcd_1,
+            const std::array<complex<double>, 15> & wc_qcd_2,
             const double & alpha_s_0, const double & alpha_s, const double & nf, const QCD::BetaFunction & beta)
     {
         using std::array;
-        typedef array<array<double, 15>, 15> Matrix;
+        typedef array<array<complex<double>, 15>, 15> Matrix;
 
         // diagonalisation matrix of gamma_qcd_0
         static const Matrix V
@@ -181,7 +181,7 @@ namespace eos
         }};
         Matrix G_qcd_2 = V_inverse * gamma_qcd_2_transposed * V;
 
-        static const array<double, 15> gamma_qcd_0_eigenvalues
+        static const array<complex<double>, 15> gamma_qcd_0_eigenvalues
         {{
             -16.000000000000000, -15.3333333333333334, -15.333333333333334, -13.790720905057988, -8.000000000000005,
             - 7.999999999999997, - 6.4858257980688645, + 6.265491004149404, - 6.000000000000000, -4.666666666666667,
@@ -190,9 +190,9 @@ namespace eos
 
         WilsonCoefficients<BToS> result;
         result._alpha_s = alpha_s;
-        double eta = alpha_s_0 / alpha_s;
+        complex<double> eta = alpha_s_0 / alpha_s;
 
-        array<double, 15> a;
+        array<complex<double>, 15> a;
         Matrix H_qcd_0, H_qcd_1, H_qcd_2;
         for (unsigned i(0) ; i < a.size() ; ++i)
         {
@@ -230,10 +230,10 @@ namespace eos
         Matrix U_qcd_0 = V * H_qcd_0 * V_inverse;
         Matrix U_qcd_1 = V * ((H_qcd_1 * H_qcd_0) + (-eta) * (H_qcd_0 * H_qcd_1)) * V_inverse;
         Matrix U_qcd_2 = V * (H_qcd_2 * H_qcd_0 + (-eta) * H_qcd_1 * H_qcd_0 * H_qcd_1 + (-eta*eta) * H_qcd_0 * (H_qcd_2 - H_qcd_1 * H_qcd_1)) * V_inverse;
-        double a_s = alpha_s / (4 * M_PI);
-        array<double, 15> result_qcd_0 = U_qcd_0 * wc_qcd_0;
-        array<double, 15> result_qcd_1 = U_qcd_1 * wc_qcd_0 + eta * (U_qcd_0 * wc_qcd_1);
-        array<double, 15> result_qcd_2 = U_qcd_2 * wc_qcd_0 + eta * (U_qcd_1 * wc_qcd_1) + power_of<2>(eta) * (U_qcd_0 * wc_qcd_2);
+        complex<double> a_s = alpha_s / (4 * M_PI);
+        array<complex<double>, 15> result_qcd_0 = U_qcd_0 * wc_qcd_0;
+        array<complex<double>, 15> result_qcd_1 = U_qcd_1 * wc_qcd_0 + eta * (U_qcd_0 * wc_qcd_1);
+        array<complex<double>, 15> result_qcd_2 = U_qcd_2 * wc_qcd_0 + eta * (U_qcd_1 * wc_qcd_1) + power_of<2>(eta) * (U_qcd_0 * wc_qcd_2);
 
         result._coefficients = result_qcd_0 + a_s * result_qcd_1 + power_of<2>(a_s) * result_qcd_2;
 
