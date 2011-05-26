@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -28,11 +28,11 @@ namespace eos
     /* Addition */
 
     /* matrix plus matrix */
-    template <std::size_t m_, std::size_t n_>
-    std::array<std::array<double, n_>, m_> operator+ (const std::array<std::array<double, n_>, m_> & x,
-            const std::array<std::array<double, n_>, m_> & y)
+    template <typename T_, std::size_t m_, std::size_t n_>
+    std::array<std::array<T_, n_>, m_> operator+ (const std::array<std::array<T_, n_>, m_> & x,
+            const std::array<std::array<T_, n_>, m_> & y)
     {
-        std::array<std::array<double, n_>, m_> result;
+        std::array<std::array<T_, n_>, m_> result;
         for (std::size_t i(0) ; i < m_ ; ++i)
         {
             for (std::size_t j(0) ; j < n_ ; ++j)
@@ -45,11 +45,11 @@ namespace eos
     }
 
     /* matrix minus matrix */
-    template <std::size_t m_, std::size_t n_>
-    std::array<std::array<double, n_>, m_> operator- (const std::array<std::array<double, n_>, m_> & x,
-            const std::array<std::array<double, n_>, m_> & y)
+    template <typename T_, std::size_t m_, std::size_t n_>
+    std::array<std::array<T_, n_>, m_> operator- (const std::array<std::array<T_, n_>, m_> & x,
+            const std::array<std::array<T_, n_>, m_> & y)
     {
-        std::array<std::array<double, n_>, m_> result;
+        std::array<std::array<T_, n_>, m_> result;
         for (std::size_t i(0) ; i < m_ ; ++i)
         {
             for (std::size_t j(0) ; j < n_ ; ++j)
@@ -62,11 +62,11 @@ namespace eos
     }
 
     /* vector plus vector */
-    template <std::size_t m_>
-    std::array<double, m_> operator+ (const std::array<double, m_> & x,
-            const std::array<double, m_> & y)
+    template <typename T_, std::size_t m_>
+    std::array<T_, m_> operator+ (const std::array<T_, m_> & x,
+            const std::array<T_, m_> & y)
     {
-        std::array<double, m_> result;
+        std::array<T_, m_> result;
         for (std::size_t i(0) ; i < m_ ; ++i)
         {
             result[i] = x[i] + y[i];
@@ -78,11 +78,11 @@ namespace eos
     /* Multiplication */
 
     /* matrix times matrix */
-    template <std::size_t m_, std::size_t n_, std::size_t o_>
-    std::array<std::array<double, n_>, m_> operator* (const std::array<std::array<double, o_>, m_> & x,
-            const std::array<std::array<double, n_>, o_> & y)
+    template <typename T_, std::size_t m_, std::size_t n_, std::size_t o_>
+    std::array<std::array<T_, n_>, m_> operator* (const std::array<std::array<T_, o_>, m_> & x,
+            const std::array<std::array<T_, n_>, o_> & y)
     {
-        std::array<std::array<double, n_>, m_> result;
+        std::array<std::array<T_, n_>, m_> result;
         for (std::size_t i(0) ; i < m_ ; ++i)
         {
             for (std::size_t j(0) ; j < n_ ; ++j)
@@ -100,10 +100,10 @@ namespace eos
     }
 
     /* matrix times vector */
-    template <std::size_t m_, std::size_t n_>
-    std::array<double, m_> operator* (const std::array<std::array<double, n_>, m_> & x, const std::array<double, n_> & y)
+    template <typename T_, std::size_t m_, std::size_t n_>
+    std::array<T_, m_> operator* (const std::array<std::array<T_, n_>, m_> & x, const std::array<T_, n_> & y)
     {
-        std::array<double, m_> result;
+        std::array<T_, m_> result;
         for (std::size_t i(0) ; i < m_ ; ++i)
         {
             result[i] = 0.0;
@@ -118,10 +118,10 @@ namespace eos
     }
 
     /* scalar times matrix */
-    template <std::size_t m_, std::size_t n_>
-    std::array<std::array<double, n_>, m_> operator* (const double & x, const std::array<std::array<double, n_>, m_> & y)
+    template <typename T_, std::size_t m_, std::size_t n_>
+    std::array<std::array<T_, n_>, m_> operator* (const T_ & x, const std::array<std::array<T_, n_>, m_> & y)
     {
-        std::array<std::array<double, n_>, m_> result = y;
+        std::array<std::array<T_, n_>, m_> result = y;
         for (std::size_t i(0) ; i < m_ ; ++i)
         {
             for (std::size_t j(0) ; j < n_ ; ++j)
@@ -134,10 +134,10 @@ namespace eos
     }
 
     /* scalar times vector */
-    template <std::size_t n_>
-    std::array<double, n_> operator* (const double & x, const std::array<double, n_> & y)
+    template <typename T_, std::size_t n_>
+    std::array<T_, n_> operator* (const T_ & x, const std::array<T_, n_> & y)
     {
-        std::array<double, n_> result = y;
+        std::array<T_, n_> result = y;
         for (std::size_t i(0) ; i < n_ ; ++i)
         {
             result[i] *= x;
