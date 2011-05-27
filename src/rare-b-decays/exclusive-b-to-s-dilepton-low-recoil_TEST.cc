@@ -67,6 +67,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::B_d"] = 5.27953;
 
                 Options oo;
+                oo.set("model", "WilsonScan");
                 oo.set("form-factors", "BZ2004");
 
                 BToKstarDilepton<LowRecoil> d(p, oo);
@@ -142,6 +143,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::B_d"] = 5.27953;
 
                 Options oo;
+                oo.set("model", "WilsonScan");
                 oo.set("form-factors", "BZ2004");
 
                 BToKstarDilepton<LowRecoil> d(p, oo);
@@ -180,6 +182,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::B_d"] = 5.27953;
 
                 Options oo;
+                oo.set("model", "WilsonScan");
                 oo.set("form-factors", "BZ2004");
 
                 BToKstarDilepton<LowRecoil> d(p, oo);
@@ -241,8 +244,8 @@ class BToKstarDileptonLowRecoilPolynomialTest :
             {
                 static const std::vector<std::string> names
                 {
-                    "B->K^*ll::BR@LowRecoil",
-                    "B->K^*ll::Abar_FB@LowRecoil",
+                    "B->K^*ll::BR@LowRecoil,model=WilsonScan",
+                    "B->K^*ll::Abar_FB@LowRecoil,model=WilsonScan",
                 };
                 static const std::vector<std::array<double, 6>> inputs
                 {
@@ -263,6 +266,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 kinematics.declare("s_max");
                 kinematics.set("s_max", 19.21);
                 Options options;
+                options.set("model", "WilsonScan");
                 options.set("form-factors", "BZ2004");
 
                 for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
@@ -292,6 +296,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 Parameter A = parameters["CKM::A"];
 
                 Options options;
+                options.set("model", "WilsonScan");
 
                 ObservablePtr numerator = Observable::make("B->K^*ll::Abar_FB@LowRecoil", parameters, kinematics, options);
                 ObservablePtr denominator = Observable::make("B->K^*ll::BR@LowRecoil", parameters, kinematics, options);
@@ -393,6 +398,7 @@ class BToKDileptonLowRecoilTest :
                 p["mass::B_d"] = 5.27953;
 
                 Options oo;
+                oo.set("model", "WilsonScan");
                 oo.set("form-factors", "BZ2004v2");
 
                 BToKDilepton<LowRecoil> d(p, oo);
