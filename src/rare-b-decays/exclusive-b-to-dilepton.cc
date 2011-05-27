@@ -32,14 +32,6 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        UsedParameter abs_c10;
-
-        UsedParameter arg_c10;
-
-        UsedParameter abs_c10prime;
-
-        UsedParameter arg_c10prime;
-
         UsedParameter f_B;
 
         UsedParameter m_B;
@@ -59,11 +51,7 @@ namespace eos
         std::function<complex<double> (const Model *)> lambda;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
-            abs_c10(p["Abs{c10}"], u),
-            arg_c10(p["Arg{c10}"], u),
-            abs_c10prime(p["Abs{c10'}"], u),
-            arg_c10prime(p["Arg{c10'}"], u),
+            model(Model::make(o.get("model", "SM"), p, o)),
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
@@ -103,17 +91,16 @@ namespace eos
         static complex<double> lambda_t_d(const Model * model) { return model->ckm_tb() * conj(model->ckm_td()); }
         static complex<double> lambda_t_s(const Model * model) { return model->ckm_tb() * conj(model->ckm_ts()); }
 
-        inline complex<double> c10() const { return std::polar(abs_c10(), arg_c10()); }
-        inline complex<double> c10prime() const { return std::polar(abs_c10prime(), arg_c10prime()); }
-
         double branching_ratio() const
         {
             double lambda_t = abs(lambda(model.get()));
             double beta_l = std::sqrt(1.0 - 4.0 * power_of<2>(m_l / m_B()));
 
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+
             // cf. [BEKU2002], Eq. (3.6) with c_S,P(') = 0
             return power_of<2>(g_fermi() * alpha_e() * lambda_t) / 64.0 / power_of<3>(M_PI)
-                * beta_l * m_B() * power_of<2>(f_B() * 2.0 * m_l) * std::norm(c10() - c10prime()) * tau_B / hbar;
+                * beta_l * m_B() * power_of<2>(f_B() * 2.0 * m_l) * std::norm(wc.c10() - wc.c10prime()) * tau_B / hbar;
         }
     };
 

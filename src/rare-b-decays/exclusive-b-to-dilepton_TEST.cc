@@ -68,6 +68,7 @@ class BToKstarGammaTest :
                 // B_d -> mu^+ mu^-
                 {
                     Options oo;
+                    oo.set("model", "WilsonScan");
                     oo.set("q", "d");
                     oo.set("l", "mu");
 
@@ -79,6 +80,7 @@ class BToKstarGammaTest :
                 // B_d -> e^+ e^-
                 {
                     Options oo;
+                    oo.set("model", "WilsonScan");
                     oo.set("q", "d");
                     oo.set("l", "e");
 
@@ -90,6 +92,7 @@ class BToKstarGammaTest :
                 // B_s -> mu^+ mu^-
                 {
                     Options oo;
+                    oo.set("model", "WilsonScan");
                     oo.set("q", "s");
                     oo.set("l", "mu");
 
@@ -101,6 +104,7 @@ class BToKstarGammaTest :
                 // B_s -> e^+ e^-
                 {
                     Options oo;
+                    oo.set("model", "WilsonScan");
                     oo.set("q", "s");
                     oo.set("l", "e");
 
