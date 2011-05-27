@@ -54,8 +54,7 @@ namespace eos
 
             double                    f_B, f_K;
 
-            double                    c1, c2, c3, c4, c5, c6, c8;
-            std::complex<double>      c7, c7prime;
+            WilsonCoefficients<BToS>  wc;
 
             double                    e_q;
 
@@ -68,8 +67,7 @@ namespace eos
                     const double & mu_, const double & mu_f_,
                     const double & alpha_s_mu_, const double & alpha_s_sqrt05mu_,
                     const double & f_B_, const double & f_K_,
-                    const double & c1_, const double & c2_, const double & c3_, const double & c4_, const double & c5_, const double & c6_, const double & c8_,
-                    const std::complex<double> & c7_, const std::complex<double> & c7prime_,
+                    const WilsonCoefficients<BToS> & wc_,
                     const double & e_q_,
                     const double & a_1_, const double & a_2_,
                     const double & lambda_B_p_) :
@@ -78,8 +76,7 @@ namespace eos
                  mu(mu_), mu_f(mu_f_),
                  alpha_s_mu(alpha_s_mu_), alpha_s_sqrt05mu(alpha_s_sqrt05mu_),
                  f_B(f_B_), f_K(f_K_),
-                 c1(c1_), c2(c2_), c3(c3_), c4(c4_), c5(c5_), c6(c6_), c8(c8_),
-                 c7(c7_), c7prime(c7prime_),
+                 wc(wc_),
                  e_q(e_q_),
                  a_1(a_1_), a_2(a_2_),
                  lambda_B_p(lambda_B_p_)
@@ -95,22 +92,22 @@ namespace eos
         // cf. [BFS2001], below Eq. (9), p. 4
         static complex<double> c7eff(const ParameterSet & p)
         {
-            return p.c7 - 1.0/3.0 * p.c3 - 4.0/9.0 * p.c4 - 20.0/3.0 * p.c5 - 80.0/9.0 * p.c6;
+            return p.wc.c7() - 1.0/3.0 * p.wc.c3() - 4.0/9.0 * p.wc.c4() - 20.0/3.0 * p.wc.c5() - 80.0/9.0 * p.wc.c6();
         }
 
         // cf. [BFS2001], below Eq. (26), p. 8
-        static double c8eff(const ParameterSet & p)
+        static complex<double> c8eff(const ParameterSet & p)
         {
-             return p.c8 + p.c3 - 1.0/6.0 * p.c4 + 20.0 * p.c5 - 10.0/3.0 * p.c6;
+             return p.wc.c8() + p.wc.c3() - 1.0/6.0 * p.wc.c4() + 20.0 * p.wc.c5() - 10.0/3.0 * p.wc.c6();
         }
 
         // cf. [BFS2001], Eq. (10), p. 4
         static complex<double> Y0(const double & s, const ParameterSet & p)
         {
-            double Y_c = 4.0 / 3.0 * p.c1 + p.c2 + 6.0 * p.c3 + 60.0 * p.c5;
-            double Y_b = -0.5 * (7.0 * p.c3 + 4.0 / 3.0 * p.c4 + 76.0 * p.c5 + 64.0 / 3.0 * p.c6);
-            double Y_0 = -0.5 * (p.c3 + 4.0 / 3.0 * p.c4 + 16.0 * p.c5 + 64 / 3.0 * p.c6);
-            double Y = 2.0 / 9.0 * (6.0 * p.c3 + 32.0 * p.c5 + 32.0 / 3.0 * p.c6);
+            complex<double> Y_c = 4.0 / 3.0 * p.wc.c1() + p.wc.c2() + 6.0 * p.wc.c3() + 60.0 * p.wc.c5();
+            complex<double> Y_b = -0.5 * (7.0 * p.wc.c3() + 4.0 / 3.0 * p.wc.c4() + 76.0 * p.wc.c5() + 64.0 / 3.0 * p.wc.c6());
+            complex<double> Y_0 = -0.5 * (p.wc.c3() + 4.0 / 3.0 * p.wc.c4() + 16.0 * p.wc.c5() + 64 / 3.0 * p.wc.c6());
+            complex<double> Y = 2.0 / 9.0 * (6.0 * p.wc.c3() + 32.0 * p.wc.c5() + 32.0 / 3.0 * p.wc.c6());
 
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
             return Y_c * CharmLoops::h(p.mu, s, p.m_c)
@@ -232,7 +229,7 @@ namespace eos
         // cf. [BFS2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1
         static complex<double> C0_perp(const double & h, const double & s, const ParameterSet & p)
         {
-            return (c7eff(p) + h * p.c7prime) + s / (2.0 * p.m_b_PS * p.m_B) * Y0(s, p);
+            return (c7eff(p) + h * p.wc.c7prime()) + s / (2.0 * p.m_b_PS * p.m_B) * Y0(s, p);
         }
 
         // cf. [BFS2001], Eqs. (34), (37), p. 9
@@ -240,7 +237,7 @@ namespace eos
         {
             // cf. [BFS2004], Eq. (44), p. 24
             // [Christoph] Use c7 instead of c7eff
-            return (p.c7 + h * p.c7prime) * (8.0 * std::log(p.m_b_PS / p.mu) - L(s, p) - 4.0 * (1.0 - p.mu_f / p.m_b_PS));
+            return (p.wc.c7() + h * p.wc.c7prime()) * (8.0 * std::log(p.m_b_PS / p.mu) - L(s, p) - 4.0 * (1.0 - p.mu_f / p.m_b_PS));
         }
 
         // cf. [BFS2001], Eqs. (34), (37), p. 9
@@ -253,17 +250,17 @@ namespace eos
             // cf. [BFS2001], Eq. (37), p. 9
             // [Christoph] Use c8 instead of c8eff
             return (-1.0 / QCD::casimir_f) * (
-                    (p.c2 - p.c1 / 6.0) * memoise(CharmLoops::F27_massive, mu_pole, s, p.m_b_PS, p.m_c) + p.c8 * CharmLoops::F87_massless(mu_pole, s, p.m_b_PS)
+                    (p.wc.c2() - p.wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu_pole, s, p.m_b_PS, p.m_c) + p.wc.c8() * CharmLoops::F87_massless(mu_pole, s, p.m_b_PS)
                     + (s / (2.0 * p.m_b_PS * p.m_B)) * (
-                        p.c1 * memoise(CharmLoops::F19_massive, mu_pole, s, p.m_b_PS, p.m_c)
-                        + p.c2 * memoise(CharmLoops::F29_massive, mu_pole, s, p.m_b_PS, p.m_c)
-                        + p.c8 * CharmLoops::F89_massless(s, p.m_b_PS)));
+                        p.wc.c1() * memoise(CharmLoops::F19_massive, mu_pole, s, p.m_b_PS, p.m_c)
+                        + p.wc.c2() * memoise(CharmLoops::F29_massive, mu_pole, s, p.m_b_PS, p.m_c)
+                        + p.wc.c8() * CharmLoops::F89_massless(s, p.m_b_PS)));
         }
 
         // cf. [BFS2001], Eqs. (14), (15), p. 5, in comparison with \delta_{2,3} = 1
         static complex<double> C0_par(const double & s, const ParameterSet & p)
         {
-            return -1.0 * (c7eff(p) - p.c7prime + p.m_B / (2.0 * p.m_b_PS) * Y0(s, p));
+            return -1.0 * (c7eff(p) - p.wc.c7prime() + p.m_B / (2.0 * p.m_b_PS) * Y0(s, p));
         }
 
         // cf. [BFS2001], Eqs. (38), p. 9
@@ -276,10 +273,10 @@ namespace eos
             // cf. [BFS2001], Eq. (38), p. 9
             // [Christoph] Use c8 instead of c8eff.
             return (+1.0 / QCD::casimir_f) * (
-                    (p.c2 - p.c1 / 6.0) * memoise(CharmLoops::F27_massive, mu_pole, s, p.m_b_PS, p.m_c) + c8eff(p) * CharmLoops::F87_massless(mu_pole, s, p.m_b_PS)
+                    (p.wc.c2() - p.wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu_pole, s, p.m_b_PS, p.m_c) + c8eff(p) * CharmLoops::F87_massless(mu_pole, s, p.m_b_PS)
                     + (p.m_B / (2.0 * p.m_b_PS)) * (
-                        p.c1 * memoise(CharmLoops::F19_massive, mu_pole, s, p.m_b_PS, p.m_c)
-                        + p.c2 * memoise(CharmLoops::F29_massive, mu_pole, s, p.m_b_PS, p.m_c)
+                        p.wc.c1() * memoise(CharmLoops::F19_massive, mu_pole, s, p.m_b_PS, p.m_c)
+                        + p.wc.c2() * memoise(CharmLoops::F29_massive, mu_pole, s, p.m_b_PS, p.m_c)
                         + c8eff(p) * CharmLoops::F89_massless(s, p.m_b_PS)));
         }
 
@@ -288,7 +285,7 @@ namespace eos
         {
             // cf. [BFS2004], Eq. (45), p. 24
             // [Christoph] Use c7 instead of c7eff.
-            return -1.0 * (p.c7 - p.c7prime) * (8.0 * std::log(p.m_b_PS / p.mu) + 2.0 * L(s, p) - 4.0 * (1.0 - p.mu_f / p.m_b_PS));
+            return -1.0 * (p.wc.c7() - p.wc.c7prime()) * (8.0 * std::log(p.m_b_PS / p.mu) + 2.0 * L(s, p) - 4.0 * (1.0 - p.mu_f / p.m_b_PS));
             /* for [BFS2001] version of xi_par we also needed: */
             // C_par_f += (m_B / (2.0 * m_b)) * Y0(s) * (2.0 - 2.0 * L(s));
         }
@@ -310,7 +307,7 @@ namespace eos
         {
             // the correct sign in front of C_7^eff is plus, as one can see by
             // comparison with [BF2001], Eq. (63)
-            return (p.c7 - p.c7prime) * (8.0 * log(p.m_b_PS / p.mu_f) + 2.0 * L(s, p) - 4.0 + 4.0 * p.mu_f / p.m_b_PS);
+            return (p.wc.c7() - p.wc.c7prime()) * (8.0 * log(p.m_b_PS / p.mu_f) + 2.0 * L(s, p) - 4.0 + 4.0 * p.mu_f / p.m_b_PS);
         }
 
         // cf. [BFS2001], Eq. (17), p. 6
@@ -322,7 +319,7 @@ namespace eos
         // cf. [BFS2001], Eq. (18), p. 6 with \omega integrated out.
         static complex<double> T0_par_m(const double &, const ParameterSet & p)
         {
-            return -p.e_q * 4.0 * p.m_B / p.m_b_PS * (p.c3 + 4.0/3.0 * p.c4 + 16.0 * p.c5 + 64.0/3.0 * p.c6);
+            return -p.e_q * 4.0 * p.m_B / p.m_b_PS * (p.wc.c3() + 4.0/3.0 * p.wc.c4() + 16.0 * p.wc.c5() + 64.0/3.0 * p.wc.c6());
         }
 
         // cf. [BHP2007], Eq. (B.2)
@@ -342,7 +339,7 @@ namespace eos
         {
             // cf. [BFS2001], Eq. (20)
             // [Christoph] Use c7 instead of c7eff
-            return (p.c7 + h * p.c7prime) * (2.0 * p.m_B / (1.0 - u) / energy(s, p));
+            return (p.wc.c7() + h * p.wc.c7prime()) * (2.0 * p.m_B / (1.0 - u) / energy(s, p));
         }
 
         static complex<double> T1nf_perp_p(const double &, const double & s, const double & u, const ParameterSet & p)
@@ -355,11 +352,11 @@ namespace eos
 
             // cf. [BFS2001], Eq. (23)
             // [Christoph] Use c8 instead of c8eff
-            return -4.0 * e_d * p.c8 / (u + (1.0 - u) * s_hat)
+            return -4.0 * e_d * p.wc.c8() / (u + (1.0 - u) * s_hat)
                 + p.m_B / (2.0 * p.m_b_PS) * (
-                        e_u * (-p.c1 / 6.0 + p.c2 + 6.0 * p.c6) * t_perp(s, u, p, p.m_c)
-                        + e_d * (p.c3 - p.c4 / 6.0 + 16.0 * p.c5 + 10.0/3.0 * p.c6 - (4.0 * p.m_b_PS / p.m_B) * (p.c3 - p.c4/6.0 + 4.0 * p.c5 - 2.0/3.0 * p.c6))
-                        + e_d * (p.c3 - p.c4 / 6.0 + 16.0 * p.c5 - 8.0/3.0 * p.c6) * t_perp(s, u, p, 0.0));
+                        e_u * (-p.wc.c1() / 6.0 + p.wc.c2() + 6.0 * p.wc.c6()) * t_perp(s, u, p, p.m_c)
+                        + e_d * (p.wc.c3() - p.wc.c4() / 6.0 + 16.0 * p.wc.c5() + 10.0/3.0 * p.wc.c6() - (4.0 * p.m_b_PS / p.m_B) * (p.wc.c3() - p.wc.c4()/6.0 + 4.0 * p.wc.c5() - 2.0/3.0 * p.wc.c6()))
+                        + e_d * (p.wc.c3() - p.wc.c4() / 6.0 + 16.0 * p.wc.c5() - 8.0/3.0 * p.wc.c6()) * t_perp(s, u, p, 0.0));
         }
 
         // cf. [BFS2001], Eqs. (16), (21), (25), pp. 5-7
@@ -369,7 +366,7 @@ namespace eos
             //complex<double> Tf_par_p = (c7() - c7prime + (s / (2.0 * m_b * m_B)) * Y0(s)) * (2.0 * pow(m_B / energy(s), 2));
             // cf. [BFS2004], Eq. (49)
             // [Christoph] Use c7 instead of c7eff.
-            return (p.c7 - p.c7prime) * (4.0 * p.m_B / (1.0 - u) / energy(s, p));
+            return (p.wc.c7() - p.wc.c7prime()) * (4.0 * p.m_B / (1.0 - u) / energy(s, p));
         }
 
         // cf. [BFS2001], Eq. (16), (22), (26), pp. 5-8
@@ -386,9 +383,9 @@ namespace eos
 
             // cf. [BFS2001], Eq. (25)
             return p.m_B / p.m_b_PS * (
-                    e_u * (-p.c1 / 6.0 + p.c2 + 6.0 * p.c6) * t_par(s, u, p, p.m_c)
-                    + e_d * (p.c3 - p.c1 / 6.0 + 16.0 * p.c5 + 10.0/3.0 * p.c6) * t_par(s, u, p, p.m_b_PS)
-                    + e_d * (p.c3 - p.c4 / 6.0 + 16.0 * p.c5 -  8.0/3.0 * p.c6) * t_par(s, u, p, 0.0));
+                    e_u * (-p.wc.c1() / 6.0 + p.wc.c2() + 6.0 * p.wc.c6()) * t_par(s, u, p, p.m_c)
+                    + e_d * (p.wc.c3() - p.wc.c1() / 6.0 + 16.0 * p.wc.c5() + 10.0/3.0 * p.wc.c6()) * t_par(s, u, p, p.m_b_PS)
+                    + e_d * (p.wc.c3() - p.wc.c4() / 6.0 + 16.0 * p.wc.c5() -  8.0/3.0 * p.wc.c6()) * t_par(s, u, p, 0.0));
         }
 
         // cf. [BFS2001], Eq. (26), pp. 7-8 with \omega integrated out.
@@ -403,12 +400,12 @@ namespace eos
             double x = ubar * p.m_B * p.m_B + u * s;
 
             // [Christoph] Use c8 instead of c8eff.
-            return p.e_q * (8.0 / (ubar + u * s_hat) * p.c8
+            return p.e_q * (8.0 / (ubar + u * s_hat) * p.wc.c8()
                     + 6.0 * p.m_B / p.m_b_PS * (
-                        (-p.c1 / 6.0 + p.c2 + p.c4 + 10 * p.c6) * CharmLoops::h(mu_pole, x, p.m_c)
-                        + (p.c3 + 5.0/6.0 * p.c4 + 16.0 * p.c5 + 22.0/3.0 * p.c6) * CharmLoops::h(mu_pole, x, p.m_b_PS)
-                        + (p.c3 + 17.0/6.0 * p.c4 + 16.0 * p.c5 + 82.0/3.0 * p.c6) * CharmLoops::h(mu_pole, x)
-                        -8.0 / 27.0 * (-7.5 * p.c4 + 12.0 * p.c5 - 32.0 * p.c6)));
+                        (-p.wc.c1() / 6.0 + p.wc.c2() + p.wc.c4() + 10.0 * p.wc.c6()) * CharmLoops::h(mu_pole, x, p.m_c)
+                        + (p.wc.c3() + 5.0/6.0 * p.wc.c4() + 16.0 * p.wc.c5() + 22.0/3.0 * p.wc.c6()) * CharmLoops::h(mu_pole, x, p.m_b_PS)
+                        + (p.wc.c3() + 17.0/6.0 * p.wc.c4() + 16.0 * p.wc.c5() + 82.0/3.0 * p.wc.c6()) * CharmLoops::h(mu_pole, x)
+                        -8.0 / 27.0 * (-7.5 * p.wc.c4() + 12.0 * p.wc.c5() - 32.0 * p.wc.c6())));
         }
 
         // cf. [BHP2007], Eq. (B.2)
@@ -523,44 +520,6 @@ namespace eos
 
         UsedParameter hbar;
 
-        UsedParameter c1;
-
-        UsedParameter c2;
-
-        UsedParameter c3;
-
-        UsedParameter c4;
-
-        UsedParameter c5;
-
-        UsedParameter c6;
-
-        UsedParameter abs_c7;
-
-        UsedParameter arg_c7;
-
-        UsedParameter abs_c7prime;
-
-        UsedParameter arg_c7prime;
-
-        UsedParameter c8;
-
-        UsedParameter abs_c9;
-
-        UsedParameter arg_c9;
-
-        UsedParameter abs_c9prime;
-
-        UsedParameter arg_c9prime;
-
-        UsedParameter abs_c10;
-
-        UsedParameter arg_c10;
-
-        UsedParameter abs_c10prime;
-
-        UsedParameter arg_c10prime;
-
         UsedParameter m_b_MSbar;
 
         UsedParameter m_c;
@@ -618,27 +577,8 @@ namespace eos
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
+            model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["hbar"], u),
-            c1(p["c1"], u),
-            c2(p["c2"], u),
-            c3(p["c3"], u),
-            c4(p["c4"], u),
-            c5(p["c5"], u),
-            c6(p["c6"], u),
-            abs_c7(p["Abs{c7}"], u),
-            arg_c7(p["Arg{c7}"], u),
-            abs_c7prime(p["Abs{c7'}"], u),
-            arg_c7prime(p["Arg{c7'}"], u),
-            c8(p["c8"], u),
-            abs_c9(p["Abs{c9}"], u),
-            arg_c9(p["Arg{c9}"], u),
-            abs_c9prime(p["Abs{c9'}"], u),
-            arg_c9prime(p["Arg{c9'}"], u),
-            abs_c10(p["Abs{c10}"], u),
-            arg_c10(p["Arg{c10}"], u),
-            abs_c10prime(p["Abs{c10'}"], u),
-            arg_c10prime(p["Arg{c10'}"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
@@ -749,36 +689,28 @@ namespace eos
             return (m_B() * m_B() + m_Kstar() * m_Kstar() - s) / (2.0 * m_B());
         }
 
-        // alias c7('),c9(') and c10(')
-        inline complex<double> c7() const { return std::polar(abs_c7(), (cp_conjugate ? -1.0 : +1.0) * arg_c7()); }
-        inline complex<double> c7prime() const { return std::polar(abs_c7prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c7prime()); }
-        inline complex<double> c9() const { return std::polar(abs_c9(), (cp_conjugate ? -1.0 : +1.0) * arg_c9()); }
-        inline complex<double> c9prime() const { return std::polar(abs_c9prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c9prime()); }
-        inline complex<double> c10() const { return std::polar(abs_c10(), (cp_conjugate ? -1.0 : +1.0) * arg_c10()); }
-        inline complex<double> c10prime() const { return std::polar(abs_c10prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c10prime()); }
-
         /* Amplitudes */
         // cf. [BHP2008], p. 20
         complex<double> a_long(const Helicity & helicity, const double & s) const
         {
             double m_b = m_b_PS();
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
             double h = helicity;
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
-            complex<double> wilson = (c9() - c9prime()) + h * (c10() - c10prime());
+            complex<double> wilson = (wc.c9() - wc.c9prime()) + h * (wc.c10() - wc.c10prime());
             double prefactor = -1.0 / (2.0 * m_Kstar() * std::sqrt(s));
 
             ShortDistanceLargeRecoil::ParameterSet p(m_b, model->m_b_pole(), m_c(),
-                                                     m_B(), m_Kstar(),
-                                                     mu(), mu_f(),
-                                                     model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
-                                                     f_B(), f_Kstar_perp(),
-                                                     c1(), c2(), c3(), c4(), c5(), c6(), c8(),
-                                                     c7(), c7prime(),
-                                                     e_q,
-                                                     a_1_perp(), a_2_perp(),
-                                                     lambda_B_p());
+                    m_B(), m_Kstar(),
+                    mu(), mu_f(),
+                    model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
+                    f_B(), f_Kstar_perp(),
+                    wc,
+                    e_q,
+                    a_1_perp(), a_2_perp(),
+                    lambda_B_p());
 
             std::complex<double> calTperp = ShortDistanceLargeRecoil::calT_perp(-1.0, s, p, xi_perp(s));
 
@@ -800,6 +732,7 @@ namespace eos
         complex<double> a_perp(const Helicity & helicity, const double & s) const
         {
             double m_b = m_b_PS();
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
             double h = helicity;
             double shat = s_hat(s);
@@ -808,18 +741,17 @@ namespace eos
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
             double prefactor = +std::sqrt(2.0) * m_B() * std::sqrt(lambda(1.0, mKhat * mKhat, shat));
-            complex<double> wilson = (c9() + c9prime()) + h * (c10() + c10prime());
+            complex<double> wilson = (wc.c9() + wc.c9prime()) + h * (wc.c10() + wc.c10prime());
 
             ShortDistanceLargeRecoil::ParameterSet p(m_b, model->m_b_pole(), m_c(),
-                                                     m_B(), m_Kstar(),
-                                                     mu(), mu_f(),
-                                                     model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
-                                                     f_B(), f_Kstar_perp(),
-                                                     c1(), c2(), c3(), c4(), c5(), c6(), c8(),
-                                                     c7(), c7prime(),
-                                                     e_q,
-                                                     a_1_perp(), a_2_perp(),
-                                                     lambda_B_p());
+                    m_B(), m_Kstar(),
+                    mu(), mu_f(),
+                    model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
+                    f_B(), f_Kstar_perp(),
+                    wc,
+                    e_q,
+                    a_1_perp(), a_2_perp(),
+                    lambda_B_p());
 
             return this->norm(s) * uncertainty * prefactor *
                     (wilson * xi_perp(s) + (2.0 * mbhat / shat) * ShortDistanceLargeRecoil::calT_perp(+1.0, s, p, xi_perp(s)));
@@ -829,6 +761,7 @@ namespace eos
         complex<double> a_par(const Helicity & helicity, const double & s) const
         {
             double m_b = m_b_PS();
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
             double h = helicity;
             double shat = s_hat(s);
@@ -837,18 +770,17 @@ namespace eos
 
             double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
             double prefactor = -std::sqrt(2.0) * m_B() * (1.0 - shat);
-            complex<double> wilson = (c9() - c9prime()) + h * (c10() - c10prime());
+            complex<double> wilson = (wc.c9() - wc.c9prime()) + h * (wc.c10() - wc.c10prime());
 
             ShortDistanceLargeRecoil::ParameterSet p(m_b, model->m_b_pole(), m_c(),
-                                                     m_B(), m_Kstar(),
-                                                     mu(), mu_f(),
-                                                     model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
-                                                     f_B(), f_Kstar_perp(),
-                                                     c1(), c2(), c3(), c4(), c5(), c6(), c8(),
-                                                     c7(), c7prime(),
-                                                     e_q,
-                                                     a_1_perp(), a_2_perp(),
-                                                     lambda_B_p());
+                    m_B(), m_Kstar(),
+                    mu(), mu_f(),
+                    model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
+                    f_B(), f_Kstar_perp(),
+                    wc,
+                    e_q,
+                    a_1_perp(), a_2_perp(),
+                    lambda_B_p());
 
             return this->norm(s) * uncertainty * prefactor *
                     (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * ShortDistanceLargeRecoil::calT_perp(-1.0, s, p, xi_perp(s)));
@@ -954,7 +886,8 @@ namespace eos
         double a_fb_zero_crossing() const
         {
             // use calT_perp / xi_perp = C_7 as start point
-            const double start = -2.0 * model->m_b_msbar(mu()) * m_B() * real(c7() / c9());
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            const double start = -2.0 * model->m_b_msbar(mu()) * m_B() * real(wc.c7() / wc.c9());
             double result = start;
 
             // perform a couple of Newton-Raphson steps
@@ -1171,44 +1104,6 @@ namespace eos
 
         UsedParameter hbar;
 
-        UsedParameter c1;
-
-        UsedParameter c2;
-
-        UsedParameter c3;
-
-        UsedParameter c4;
-
-        UsedParameter c5;
-
-        UsedParameter c6;
-
-        UsedParameter abs_c7;
-
-        UsedParameter arg_c7;
-
-        UsedParameter abs_c7prime;
-
-        UsedParameter arg_c7prime;
-
-        UsedParameter c8;
-
-        UsedParameter abs_c9;
-
-        UsedParameter arg_c9;
-
-        UsedParameter abs_c9prime;
-
-        UsedParameter arg_c9prime;
-
-        UsedParameter abs_c10;
-
-        UsedParameter arg_c10;
-
-        UsedParameter abs_c10prime;
-
-        UsedParameter arg_c10prime;
-
         UsedParameter m_b_MSbar;
 
         UsedParameter m_c;
@@ -1252,27 +1147,8 @@ namespace eos
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
+            model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["hbar"], u),
-            c1(p["c1"], u),
-            c2(p["c2"], u),
-            c3(p["c3"], u),
-            c4(p["c4"], u),
-            c5(p["c5"], u),
-            c6(p["c6"], u),
-            abs_c7(p["Abs{c7}"], u),
-            arg_c7(p["Arg{c7}"], u),
-            abs_c7prime(p["Abs{c7'}"], u),
-            arg_c7prime(p["Arg{c7'}"], u),
-            c8(p["c8"], u),
-            abs_c9(p["Abs{c9}"], u),
-            arg_c9(p["Arg{c9}"], u),
-            abs_c9prime(p["Abs{c9'}"], u),
-            arg_c9prime(p["Arg{c9'}"], u),
-            abs_c10(p["Abs{c10}"], u),
-            arg_c10(p["Arg{c10}"], u),
-            abs_c10prime(p["Abs{c10'}"], u),
-            arg_c10prime(p["Arg{c10'}"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
@@ -1362,44 +1238,35 @@ namespace eos
             return (m_B() * m_B() + m_K() * m_K() - s) / (2.0 * m_B());
         }
 
-        // alias c7('), c9(') and c10(')
-        inline complex<double> c7() const { return std::polar(abs_c7(), (cp_conjugate ? -1.0 : +1.0) * arg_c7()); }
-        inline complex<double> c7prime() const { return std::polar(abs_c7prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c7prime()); }
-        inline complex<double> c9() const { return std::polar(abs_c9(), (cp_conjugate ? -1.0 : +1.0) * arg_c9()); }
-        inline complex<double> c9prime() const { return std::polar(abs_c9prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c9prime()); }
-        inline complex<double> c10() const { return std::polar(abs_c10(), (cp_conjugate ? -1.0 : +1.0) * arg_c10()); }
-        inline complex<double> c10prime() const { return std::polar(abs_c10prime(), (cp_conjugate ? -1.0 : +1.0) * arg_c10prime()); }
-
         // cf. [BHP2007], Eq. (3.2), p. 3
-        std::complex<double> F_A(const double &) const
+        std::complex<double> F_A(const WilsonCoefficients<BToS> & wc, const double &) const
         {
-            return c10();
+            return wc.c10();
         }
 
         // cf. [BHP2007], Eq. (3.2), p. 4
-        std::complex<double> F_P(const double & s) const
+        std::complex<double> F_P(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
-            return m_l * c10() *
+            return m_l * wc.c10() *
                     ((m_B() * m_B() - m_K() * m_K()) / s * (form_factors->f_0(s) / form_factors->f_p(s) - 1.0) - 1.0);
         }
 
         // cf. [BHP2007], Eq. (3.2), p. 4
-        std::complex<double> F_V(const double & s) const
+        std::complex<double> F_V(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
             double m_b = m_b_PS();
 
             ShortDistanceLargeRecoil::ParameterSet p(m_b, model->m_b_pole(), m_c(),
-                                                     m_B(), m_K(),
-                                                     mu(), mu_f(),
-                                                     model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
-                                                     f_B(), f_K(),
-                                                     c1(), c2(), c3(), c4(), c5(), c6(), c8(),
-                                                     c7(), c7prime(),
-                                                     e_q,
-                                                     a_1(), a_2(),
-                                                     lambda_B_p());
+                    m_B(), m_K(),
+                    mu(), mu_f(),
+                    model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
+                    f_B(), f_K(),
+                    wc,
+                    e_q,
+                    a_1(), a_2(),
+                    lambda_B_p());
 
-            return c9() + 2.0 * m_b / m_B() * ShortDistanceLargeRecoil::calT_pseudo(s, p, xi_pseudo(s)) / xi_pseudo(s);
+            return wc.c9() + 2.0 * m_b / m_B() * ShortDistanceLargeRecoil::calT_pseudo(s, p, xi_pseudo(s)) / xi_pseudo(s);
         }
 
         // cf. [BHP2007], Eqs. (4.2), (4.4), (4.5), p. 5
@@ -1412,27 +1279,29 @@ namespace eos
         }
 
         // cf. [BHP2007], Eq. (4.2)
-        double a_l(const double & s) const
+        double a_l(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
-            double result = s * std::norm(F_P(s));
-            result += 0.25 * lam(s) * (std::norm(F_A(s)) + std::norm(F_V(s)));
-            result += 2.0 * m_l * (m_B() * m_B() - m_K() * m_K() + s) * std::real(F_P(s) * std::conj(F_A(s)));
-            result += 4.0 * m_l * m_l * m_B() * m_B() * std::norm(F_A(s));
+            double result = s * std::norm(F_P(wc, s));
+            result += 0.25 * lam(s) * (std::norm(F_A(wc, s)) + std::norm(F_V(wc, s)));
+            result += 2.0 * m_l * (m_B() * m_B() - m_K() * m_K() + s) * std::real(F_P(wc, s) * std::conj(F_A(wc, s)));
+            result += 4.0 * m_l * m_l * m_B() * m_B() * std::norm(F_A(wc, s));
 
             return N(s) * result;
         }
 
         // cf. [BHP2007], Eq. (4.4)
-        double c_l(const double & s) const
+        double c_l(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
-            double result = N(s) * -0.25 * lam(s) * beta_l(s) * beta_l(s) * (std::norm(F_A(s)) + std::norm(F_V(s)));
+            double result = N(s) * -0.25 * lam(s) * beta_l(s) * beta_l(s) * (std::norm(F_A(wc, s)) + std::norm(F_V(wc, s)));
             return result;
         }
 
         // cf. [BHP2007], Eq. (4.1)
         double unnormalized_decay_width(const double & s) const
         {
-            return 2.0 * (a_l(s) + c_l(s) / 3.0);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+
+            return 2.0 * (a_l(wc, s) + c_l(wc, s) / 3.0);
         }
 
         double differential_branching_ratio(const double & s) const
@@ -1442,7 +1311,9 @@ namespace eos
 
         double differential_flat_term_numerator(const double & s) const
         {
-             return 2.0 * (a_l(s) + c_l(s));
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+
+            return 2.0 * (a_l(wc, s) + c_l(wc, s));
         }
     };
 
@@ -1459,13 +1330,13 @@ namespace eos
     double
     BToKDilepton<LargeRecoil>::a_l(const double & s) const
     {
-        return _imp->a_l(s);
+        return _imp->a_l(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
     }
 
     double
     BToKDilepton<LargeRecoil>::c_l(const double & s) const
     {
-        return _imp->c_l(s);
+        return _imp->c_l(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
     }
 
     double
