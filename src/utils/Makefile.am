@@ -49,6 +49,7 @@ libeosutils_la_SOURCES = \
 	verify.cc verify.hh \
 	wilson_coefficients.cc wilson_coefficients.hh \
 	wilson-polynomial.cc wilson-polynomial.hh \
+	wilson_scan_model.cc wilson_scan_model.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl -lhdf5 -lhdf5_hl
 
@@ -81,7 +82,8 @@ TESTS = \
 	stringify_TEST \
 	verify_TEST \
 	wilson_coefficients_TEST \
-	wilson-polynomial_TEST
+	wilson-polynomial_TEST \
+	wilson_scan_model_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libeostest.a $(top_builddir)/src/libeos.la libeosutils.la
 
 check_PROGRAMS = $(TESTS)
@@ -172,3 +174,6 @@ wilson_coefficients_TEST_LDADD = $(TESTS_LD_ADD)
 
 wilson_polynomial_TEST_SOURCES = wilson-polynomial_TEST.cc
 wilson_polynomial_TEST_LDADD = $(TESTS_LD_ADD)
+
+wilson_scan_model_TEST_SOURCES = wilson_scan_model_TEST.cc
+wilson_scan_model_TEST_LDADD = $(TESTS_LD_ADD)

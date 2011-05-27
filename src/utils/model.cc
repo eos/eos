@@ -19,6 +19,7 @@
 
 #include <src/utils/model.hh>
 #include <src/utils/standard-model.hh>
+#include <src/utils/wilson_scan_model.hh>
 
 #include <map>
 
@@ -34,7 +35,8 @@ namespace eos
         typedef std::function<std::shared_ptr<Model> (const Parameters &, const Options &)> ModelMaker;
         static const std::map<std::string, ModelMaker> model_makers
         {
-            std::make_pair("SM", &StandardModel::make)
+            std::make_pair("SM", &StandardModel::make),
+            std::make_pair("WilsonScan", &WilsonScanModel::make),
         };
 
         auto i = model_makers.find(name);
