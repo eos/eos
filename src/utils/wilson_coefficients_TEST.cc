@@ -135,7 +135,7 @@ class WilsonCoefficientsTest :
                         alpha_s_0, alpha_s, nf, beta);
 
                 WilsonCoefficients<BToS> wc = downscaled_top;
-                wc._coefficients = wc._coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._coefficients;
+                wc._sm_like_coefficients = wc._sm_like_coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._sm_like_coefficients;
 
                 static const double eps = 1e-10;
                 TEST_CHECK_NEARLY_EQUAL(-0.280597305725000, real(wc.c1()),  eps);

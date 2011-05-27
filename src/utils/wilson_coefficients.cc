@@ -235,7 +235,8 @@ namespace eos
         array<complex<double>, 15> result_qcd_1 = U_qcd_1 * wc_qcd_0 + eta * (U_qcd_0 * wc_qcd_1);
         array<complex<double>, 15> result_qcd_2 = U_qcd_2 * wc_qcd_0 + eta * (U_qcd_1 * wc_qcd_1) + power_of<2>(eta) * (U_qcd_0 * wc_qcd_2);
 
-        result._coefficients = result_qcd_0 + a_s * result_qcd_1 + power_of<2>(a_s) * result_qcd_2;
+        result._sm_like_coefficients = result_qcd_0 + a_s * result_qcd_1 + power_of<2>(a_s) * result_qcd_2;
+        result._primed_coefficients.fill(0.0);
 
         return result;
     }

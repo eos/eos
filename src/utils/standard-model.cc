@@ -484,7 +484,7 @@ namespace implementation
                 alpha_s_m_W, alpha_s, nf, QCD::beta_function_nf_5);
 
         WilsonCoefficients<BToS> wc = downscaled_top;
-        wc._coefficients = wc._coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._coefficients;
+        wc._sm_like_coefficients = wc._sm_like_coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._sm_like_coefficients;
 
         return wc;
     }

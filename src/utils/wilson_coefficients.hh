@@ -36,35 +36,42 @@ namespace eos
     template <> struct WilsonCoefficients<BToS>
     {
         /* Order: c1..c6, cq3..cq6, c2b, c7..c10 */
-        std::array<complex<double>, 15> _coefficients;
+        std::array<complex<double>, 15> _sm_like_coefficients;
+        /* Same order as above, with helicity flip */
+        std::array<complex<double>, 15> _primed_coefficients;
 
         double _alpha_s;
 
         // Misiak basis, cf. [BMU1999], Eq. (2), p. 3
-        inline complex<double> c1() const { return _coefficients[0]; }
-        inline complex<double> c2() const { return _coefficients[1]; }
-        inline complex<double> c3() const { return _coefficients[2]; }
-        inline complex<double> c4() const { return _coefficients[3]; }
-        inline complex<double> c5() const { return _coefficients[4]; }
-        inline complex<double> c6() const { return _coefficients[5]; }
+        inline complex<double> c1() const { return _sm_like_coefficients[0]; }
+        inline complex<double> c2() const { return _sm_like_coefficients[1]; }
+        inline complex<double> c3() const { return _sm_like_coefficients[2]; }
+        inline complex<double> c4() const { return _sm_like_coefficients[3]; }
+        inline complex<double> c5() const { return _sm_like_coefficients[4]; }
+        inline complex<double> c6() const { return _sm_like_coefficients[5]; }
 
-        inline complex<double> cq3() const { return _coefficients[6]; }
-        inline complex<double> cq4() const { return _coefficients[7]; }
-        inline complex<double> cq5() const { return _coefficients[8]; }
-        inline complex<double> cq6() const { return _coefficients[9]; }
+        inline complex<double> cq3() const { return _sm_like_coefficients[6]; }
+        inline complex<double> cq4() const { return _sm_like_coefficients[7]; }
+        inline complex<double> cq5() const { return _sm_like_coefficients[8]; }
+        inline complex<double> cq6() const { return _sm_like_coefficients[9]; }
 
-        inline complex<double> c2b() const { return _coefficients[10]; }
+        inline complex<double> c2b() const { return _sm_like_coefficients[10]; }
 
-        inline complex<double> c7() const { return 4.0 * M_PI / _alpha_s * _coefficients[11]; }
-        inline complex<double> c8() const { return 4.0 * M_PI / _alpha_s * _coefficients[12]; }
-        inline complex<double> c9() const { return 4.0 * M_PI / _alpha_s * _coefficients[13]; }
-        inline complex<double> c10() const { return 4.0 * M_PI / _alpha_s * _coefficients[14]; }
+        inline complex<double> c7() const { return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[11]; }
+        inline complex<double> c8() const { return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[12]; }
+        inline complex<double> c9() const { return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[13]; }
+        inline complex<double> c10() const { return 4.0 * M_PI / _alpha_s * _sm_like_coefficients[14]; }
+
+        inline complex<double> c7prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[11]; }
+        inline complex<double> c9prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[13]; }
+        inline complex<double> c10prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[14]; }
     };
 
     /*!
      * Evolution of b -> s Wilson coefficients
      *
-     * Calculation according to [BMU1999], Eq. (25)
+     * Calculation according to [BMU1999], Eq. (25). The helicity flipped components
+     * are implicitly kept at zero.
      *
      * @param wc_qcd_0  The initial scale Wilson coefficients at O(alpha_s^0)
      * @param wc_qcd_1  The initial scale Wilson coefficients at O(alpha_s^1)
