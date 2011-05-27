@@ -172,18 +172,30 @@ namespace eos
             // Wilson coefficients C7 - c10 at mu = 4.2 GeV to NNLL, based on ?
             Parameter::Template{"Abs{c7}",                                       +0.331,          +0.331,          +0.331         }, // c7eff = -0.306
             Parameter::Template{"Arg{c7}",                                       +M_PI,           +M_PI,           +M_PI          },
+            Parameter::Template{"Re{c7}",                                        -0.331,          -0.331,          -0.331         },
+            Parameter::Template{"Im{c7}",                                        +0.0,            +0.0,            +0.0           },
             Parameter::Template{"c8",                                            -0.181,          -0.181,          -0.181         }, // c8eff = -0.168
             Parameter::Template{"Abs{c9}",                                       +4.27,           +4.27,           +4.27          },
             Parameter::Template{"Arg{c9}",                                       +0.00,           +0.00,           +0.00          },
+            Parameter::Template{"Re{c9}",                                        +4.27,           +4.27,           +4.27          },
+            Parameter::Template{"Im{c9}",                                        +0.0,            +0.0,            +0.0           },
             Parameter::Template{"Abs{c10}",                                      +4.17,           +4.17,           +4.17          },
             Parameter::Template{"Arg{c10}",                                      +M_PI,           +M_PI,           +M_PI          },
+            Parameter::Template{"Re{c10}",                                       -4.17,           -4.17,           -4.17          },
+            Parameter::Template{"Im{c10}",                                       +0.0,            +0.0,            +0.0           },
             // Primed Wilson coefficients are negligible in the SM
             Parameter::Template{"Abs{c7'}",                                      +0.0,            +0.0,            +0.0           },
             Parameter::Template{"Arg{c7'}",                                      +M_PI,           +M_PI,           +M_PI          },
+            Parameter::Template{"Re{c7'}",                                       +0.0,            +0.0,            +0.0           },
+            Parameter::Template{"Im{c7'}",                                       +0.0,            +0.0,            +0.0           },
             Parameter::Template{"Abs{c9'}",                                      +0.0,            +0.0,            +0.0           },
             Parameter::Template{"Arg{c9'}",                                      +M_PI,           +M_PI,           +M_PI          },
+            Parameter::Template{"Re{c9'}",                                       +0.0,            +0.0,            +0.0           },
+            Parameter::Template{"Im{c9'}",                                       +0.0,            +0.0,            +0.0           },
             Parameter::Template{"Abs{c10'}",                                     +0.0,            +0.0,            +0.0           },
             Parameter::Template{"Arg{c10'}",                                     +M_PI,           +M_PI,           +M_PI          },
+            Parameter::Template{"Re{c10'}",                                      +0.0,            +0.0,            +0.0           },
+            Parameter::Template{"Im{c10'}",                                      +0.0,            +0.0,            +0.0           },
             // Factorization scale
             Parameter::Template{"mu",                                            +2.4,            +4.2,            +9.6           },
             // GSW Parameter
