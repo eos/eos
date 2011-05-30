@@ -99,7 +99,7 @@ namespace eos
 
     /* b->s Wilson coefficients */
     WilsonCoefficients<BToS>
-    WilsonScanComponent::wilson_coefficients_b_to_s() const
+    WilsonScanComponent::wilson_coefficients_b_to_s(const bool & cp_conjugate) const
     {
         double alpha_s = 0.0;
         if (_mu__deltab1 < _mu_b__deltab1)
@@ -128,6 +128,19 @@ namespace eos
             }},
             alpha_s
         };
+
+        if (cp_conjugate)
+        {
+            for (auto c = result._sm_like_coefficients.begin(), c_end = result._sm_like_coefficients.end() ; c != c_end ; ++c)
+            {
+                *c = conj(*c);
+            }
+
+            for (auto c = result._primed_coefficients.begin(), c_end = result._primed_coefficients.end() ; c != c_end ; ++c)
+            {
+                *c = conj(*c);
+            }
+        }
 
         return result;
     }

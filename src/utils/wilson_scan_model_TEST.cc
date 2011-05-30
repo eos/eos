@@ -101,7 +101,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s();
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.32300000, real(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+1.00931000, real(wc.c2()),  eps);
@@ -147,7 +147,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s();
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.32300000, real(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+1.00931000, real(wc.c2()),  eps);

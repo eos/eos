@@ -422,8 +422,13 @@ namespace implementation
 }
 
     WilsonCoefficients<BToS>
-    SMComponent<components::DeltaB1>::wilson_coefficients_b_to_s() const
+    SMComponent<components::DeltaB1>::wilson_coefficients_b_to_s(const bool & /*cp_conjugate*/) const
     {
+        /*
+         * In the SM all Wilson coefficients are real-valued -> all weak phases are zero.
+         * Therefore, CP conjugation leaves the Wilson coefficients invariant.
+         */
+
         // Calculation according to [BMU1999], Eq. (25), p. 7
 
         if (_mu__deltab1 >= _mu_t__deltab1)
