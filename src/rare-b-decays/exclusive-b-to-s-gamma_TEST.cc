@@ -60,6 +60,7 @@ class BToKstarGammaTest :
                 p["decay-constant::B_d"] = 0.200;
 
                 Options oo;
+                oo.set("model", "WilsonScan");
                 oo.set("form-factors", "KMPW2010");
 
                 BToKstarGamma d(p, oo);
