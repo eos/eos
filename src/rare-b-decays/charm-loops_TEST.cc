@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
- * Copyright (c) 2010 Christian Wacker
+ * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -78,7 +78,7 @@ class HelperTest :
 
             /* C0 */
             {
-                static const double m_b = 4.45, eps = 0.000001;
+                static const double m_b = 4.45, s_one = m_b * m_b, eps = 0.000001;
                 // real parts
                 TEST_CHECK_NEARLY_EQUAL(-1.64493406685, real(CharmLoops::C0( 0.0,  m_b)), eps);
                 TEST_CHECK_NEARLY_EQUAL(-1.648607,      real(CharmLoops::C0( 0.5,  m_b)), eps);
@@ -91,6 +91,12 @@ class HelperTest :
                 TEST_CHECK_NEARLY_EQUAL(-1.767803,      real(CharmLoops::C0(15.0,  m_b)), eps);
                 TEST_CHECK_NEARLY_EQUAL(-1.796088,      real(CharmLoops::C0(18.0,  m_b)), eps);
                 TEST_CHECK_NEARLY_EQUAL(-1.807916,      real(CharmLoops::C0(19.21, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.813774,      real(CharmLoops::C0(19.80, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.813799364,   real(CharmLoops::C0(s_one, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.813874,      real(CharmLoops::C0(19.81, m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.815774,      real(CharmLoops::C0(20.0,  m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.825884,      real(CharmLoops::C0(21.0,  m_b)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.836178,      real(CharmLoops::C0(22.0,  m_b)), eps);
 
                 // imag parts
                 TEST_CHECK_NEARLY_EQUAL(+0.000000000,  imag(CharmLoops::C0( 1.0, m_b)), eps);

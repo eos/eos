@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christoph Bobeth
- * Copyright (c) 2010 Christian Wacker
+ * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1004,10 +1004,34 @@ namespace eos
     complex<double>
     CharmLoops::C0(const double & s, const double & m_q)
     {
-        if (0.0 == s)
-            return complex<double>(-M_PI * M_PI / 6.0, 0.0);
 
-        double s_hat = s/(m_q * m_q);
+        double s_hat = s / (m_q * m_q);
+
+        if (s_hat < 0.0)
+            throw InternalError("CharmLoops::C0: s < 0 is unphysical");
+
+        if (s_hat > 2.0)
+            throw InternalError("CharmLoops::C0: support for s > 2.0 * m_q^2 is not implemented"); 
+
+        if (s_hat < 0.01)
+        {
+            // the following approximation via linear interpolation yields a difference < 5e-7
+            static const double a = -M_PI * M_PI / 6.0;
+            static const double b = -0.145134;
+
+            return complex<double>(a + s_hat * b, 0.0);
+        }
+
+        if ((0.99 <= s_hat) && (s_hat <= 1.01))
+        {
+            // the following approximation via quadratic approximation yields a difference < 1e-8
+            static const double a = -M_PI / std::sqrt(3.0);
+            static const double b = (-9.0 + std::sqrt(3.0) * M_PI) / 18.0;
+            static const double c = (9.0 - 2.0 * std::sqrt(3.0) * M_PI) / 54.0;
+
+            return complex<double>(a + (s_hat - 1.0) * b + power_of<2>(s_hat - 1.0) * c, 0.0); 
+        }
+
         double A = sqrt(s_hat * (4.0 - s_hat));
         double at1 = atan(A / (2.0 - s_hat));
         double at2 = atan(A / s_hat);
