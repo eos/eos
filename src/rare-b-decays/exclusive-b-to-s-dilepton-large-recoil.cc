@@ -950,6 +950,27 @@ namespace eos
         {
             return sqrt(pow(u_4(s), 2) + pow(u_7(s), 2));
         }
+
+        double a_fb_zero_crossing() const
+        {
+            // use calT_perp / xi_perp = C_7 as start point
+            const double start = -2.0 * model->m_b_msbar(mu()) * m_B() * real(c7() / c9());
+            double result = start;
+
+            // perform a couple of Newton-Raphson steps
+            for (unsigned i = 0 ; i < 10 ; ++i)
+            {
+                double xplus = result * 1.05;
+                double xminus = result * 0.95;
+
+                double f = a_fb_numerator(result);
+                double fprime = (a_fb_numerator(xplus) - a_fb_numerator(xminus)) / (xplus - xminus);
+
+                result = result - f / fprime;
+            }
+
+            return result;
+        }
     };
 
     BToKstarDilepton<LargeRecoil>::BToKstarDilepton(const Parameters & parameters, const Options & options) :
@@ -1132,6 +1153,12 @@ namespace eos
                 std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::placeholders::_1);
 
         return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::a_fb_zero_crossing() const
+    {
+        return _imp->a_fb_zero_crossing();
     }
 
     /*

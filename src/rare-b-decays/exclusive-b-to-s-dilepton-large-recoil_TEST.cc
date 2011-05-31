@@ -86,6 +86,8 @@ class BToKstarDileptonLargeRecoilTest :
 
                 a_fb = d.integrated_unnormalized_forward_backward_asymmetry(1.00, 6.00) / d.integrated_branching_ratio(1.00, 6.00);
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(1.00, 6.00), a_fb,    eps);
+
+                TEST_CHECK_NEARLY_EQUAL(d.a_fb_zero_crossing(), +4.03824, eps);
             }
         }
 } b_to_kstar_dilepton_large_recoil_test;

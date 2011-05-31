@@ -50,6 +50,9 @@ namespace eos
             complex<double> a_perp(const Helicity & h, const double & s) const;
             complex<double> a_par(const Helicity & h, const double & s) const;
 
+            // Inverse Observables
+            double a_fb_zero_crossing() const;
+
             // Differential Observables
             double differential_branching_ratio(const double & s) const;
             double differential_decay_width(const double & s) const;

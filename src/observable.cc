@@ -271,6 +271,9 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::integrated_unnormalized_longitudinal_polarisation,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::s_0^A_FB@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::a_fb_zero_crossing),
+
 
             // B -> K^* ll, Low Recoil
             make_observable("B->K^*ll::dBR/ds@LowRecoil",
