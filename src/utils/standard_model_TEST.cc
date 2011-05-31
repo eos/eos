@@ -88,7 +88,8 @@ class AlphaSTest :
             // So check for relative error
             TEST_CHECK_NEARLY_EQUAL(0.117620, model.alpha_s(91.1876), 5e-5);
 
-            // Data in agreement with RanDec, cf. [CKS2000]
+            // Data in agreement with RunDec, cf. [CKS2000]
+            TEST_CHECK_NEARLY_EQUAL(model.alpha_s(120.0), 0.112968, eps);
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s(80.403),0.119918, eps);
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s(80.0 ), 0.120011, eps);
             TEST_CHECK_NEARLY_EQUAL(model.alpha_s(40.0 ), 0.134400, eps);
