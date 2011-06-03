@@ -88,7 +88,7 @@ namespace eos
          *    Im(log(1 - s -+ i*epsilon)) = -+pi. So regardless of the epsilon chosen the final result
          *    does not change. If we use compatible definitions for the branch cuts (as in clib and gsl),
          *    we don't need to specify epsilon.
-         * 3. s_hat = 1: The fomula cannot be used since denom = 0, but the limit exists.
+         * 3. s_hat = 1: The fomula cannot be used since denom = 0, instead we use a taylor approximation.
          */
 
         double s_hat = s / m_b / m_b, s_hat2 = s_hat * s_hat, denom = 1 - s_hat;
@@ -96,12 +96,17 @@ namespace eos
 
         double z = 4.0 / s_hat, sqrt1z = sqrt(z - 1.0);
 
-        if (std::abs(s - m_b * m_b) < 1e-5)
-        {
-            return -104.0 / 243.0 * 2.0 * log(m_b / mu) + (997.0 + 6.0 * M_PI * complex<double>(3.0 * std::sqrt(3.0), 64.0)) / 1458.0;
-        }
-
         double a = -104.0 / 243.0 * 2.0 * log(m_b / mu);
+
+        if (std::abs(s_hat - 1.0) < 1e-2)
+        {
+            // We use taylor approximation with a maximum error of 4*10^-8, as the exact expression is numerical instable.
+            static const std::complex<double> c0((997.0 + 18.0 * std::sqrt(3.0) * M_PI) / 1458.0, 64.0 / 243.0 * M_PI);
+            static const std::complex<double> c1((215.0 +  9.0 * std::sqrt(3.0) * M_PI) / 1215.0, -1.0 / 27.0 * M_PI);
+            static const std::complex<double> c2(( 95.0 + 12.0 * std::sqrt(3.0) * M_PI) / 2430.0, -7.0 / 405.0 * M_PI);
+
+            return a + c0 + c1 * denom + c2 * power_of<2>(denom);
+        }
 
         complex<double> ln1s = std::log(std::complex<double> (1.0 - s_hat, 0.0));
 
@@ -144,16 +149,26 @@ namespace eos
         complex<double> a = 8.0 / 243.0 / s_hat * (complex<double>(4.0 - 34.0 * s_hat, -17.0 * M_PI * s_hat) * lnmu
                 + 8.0 * s_hat * lnmu * lnmu + 17.0 * s_hat * ln * lnmu);
 
-        if (std::abs(s - m_b * m_b) < 1e-5)
+        if (std::abs(s_hat - 1.0) < 1e-2)
         {
-            /* exact expression for limit s -> 1
-             * 1 / 2187 * (287 - 6 * (-366 * i + sqrt(3)) * pi + (-342 + 8 * i * sqrt(3)) * pi^2 +
-             * + (9 - 3 * i * sqrt(3)) * Digamma(1/6) + (9 + 3 * i * sqrt(3)) * Digamma(1/3) +
-             * + 3 * i * (3 * i + sqrt(3)) * PolyGamma(2/3) + (-9 - 3 * i * sqrt(3)) * Digamma(5/6))
-             * + O(lmmu)
-             * but we use the numerical value
+            /* We use a taylor approximation around s_hat = 1 with a maximum error of 5e-7, as the exact expression is
+             * numerical instable. The terms containing masses are implemented exactly.
+             * The taylor polynomial reads
+             *                1 / 2187 * (287 - 6 * (-366 * i + sqrt(3)) * pi + (-342 + 8 * i * sqrt(3)) * pi^2 +
+             *                + (9 - 3 * i * sqrt(3)) * Polygamma(1, 1/6) + (9 + 3 * i * sqrt(3)) * Polygamma(1, 1/3) +
+             *                + 3 * i * (3 * i + sqrt(3)) * Polygamma(1, 2/3) + (-9 - 3 * i * sqrt(3)) * Polygamma(1, 5/6))
+             * + (s - 1)   * (1 / 32805 * (2 * pi (-7155 * i + 573 * sqrt(3) + (-540 - 80 * i * sqrt(3)) * pi) +
+             *                60 * (-423 + i (3 * i + sqrt(3)) * Polygamma(1, 1/6) + (-3 - I sqrt(3)) * Polygamma(1, 1/3) +
+             *                (3 - i sqrt(3)) Polygamma(1, 2/3) + (3 + i * sqrt(3)) * Polygamma(1, 5/6)))
+             * + (s - 1)^2 * (-1 / 196830 * (-1)^(5/6) (2 * pi * (-16587 + 6999 * i * sqrt(3) + 20 * (123 * i + 67 * sqrt(3)) * pi) +
+             *                15 * (2925 * (i + sqrt(3)) + 56 * sqrt(3) * Polygamma(1, 1/6) + 28 * (3 * i + sqrt(3)) * Polygamma(1, 1/3) -
+             *                56 * sqrt(3) * Polygamma(1, 2/3) - 28 * (3 * i + sqrt(3)) * Polygamma(1, 5/6)))
+             * But we use the numerical values.
              */
-            return std::complex<double>(-1.253470563, 3.154521018) + a - 16.0 / 243.0 * (2.0 + s_hat) * sqrt1z * lnmu * (M_PI / 2.0 - atan(sqrt1z));
+            return std::complex<double>(-1.2534705628994441, 3.1545210184193809)
+                    + std::complex<double>(-1.1399966466176837, -1.3704066719362884) * (s_hat - 1.0)
+                    + std::complex<double>(0.77575942579740349, 0.59987612809286587) * power_of<2>(s_hat - 1.0)
+                    + a - 16.0 / 243.0 * (2.0 + s_hat) / s_hat * sqrt1z * lnmu * (M_PI / 2.0 - atan(sqrt1z));
         }
 
         // calculate Li_2(-x_2 / x_1)
@@ -945,17 +960,26 @@ namespace eos
         double denom = (1.0 - s_hat);
         double denom2 = denom * denom;
 
-        complex<double> a = complex<double>(-32.0 * std::log(mu / m_q) - 8.0 * s_hat / denom * std::log(s_hat)
-                - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2,
-                -8.0 * M_PI);
-        complex<double> b = (4.0 / denom / denom2)
-            * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_q) - (4.0 + 2.0 * s_hat) * C0(s, m_q));
+        complex<double> a = complex<double>(-32.0 * std::log(mu / m_q), -8.0 * M_PI);
 
-        return (1.0 / 9.0) * (a + b);
+        if (std::abs(s_hat - 1.0) < 1e-2)
+        {
+            // We use a taylor approximation with a maximum error of 1e-9, as the exact expression ist numerical instable.
+            static const double c0 = (-67.0 + 6.0 * std::sqrt(3.0) * M_PI) / 27.0;
+            static const double c1 = -1.0 + 58.0 * M_PI / (135.0 * std::sqrt(3.0));
+            static const double c2 = 4.0 * (-180.0 + 23.0 * std::sqrt(3.0) * M_PI) / 1215.0;
+            static const double c3 = -74.0 / 45.0 + 4436.0 * M_PI / (5103.0 * std::sqrt(3.0));
+
+            return a / 9.0 + c0 + c1 * denom + c2 * power_of<2>(denom) + c3 * power_of<3>(denom);
+        }
+
+        complex<double> b(-8.0 * s_hat / denom * std::log(s_hat) - 4.0 * (11.0 - 16.0 * s_hat + 8.0 * s_hat2) / denom2);
+        complex<double> c((4.0 / power_of<3>(denom)) * ((9.0 * s_hat - 5.0 * s_hat2 + 2.0 * s_hat * s_hat2) * B0(s, m_q) - (4.0 + 2.0 * s_hat) * C0(s, m_q)));
+
+        return (1.0 / 9.0) * (a + b + c);
     }
 
     // cf. [BFS2001], Eq. (83), p. 30
-    // TODO: Check explicit mu dependence and remove it if possible
     complex<double>
     CharmLoops::F89_massless(const double & s, const double & m_q)
     {
@@ -968,12 +992,24 @@ namespace eos
         double denom = (1.0 - s_hat);
         double denom2 = denom * denom;
 
+        if (std::abs(s_hat - 1.0) < 1e-2)
+        {
+            // We use a taylor approximation with a maximum error of 1e-9, as the exact expression ist numerical instable
+            static const double c0 = 2.0 * (2.0 * sqrt(3.0) * M_PI - 37.0) / 27.0;
+            static const double c1 = 28.0 * M_PI / (45.0 * sqrt(3.0)) - 2.0;
+            static const double c2 = 8.0 * (11.0 * sqrt(3.0) * M_PI - 90.0) / 405.0;
+            static const double c3 = 4.0 * (17577.0 - 4790.0 * sqrt(3.0) * M_PI) / 76545.0;
+
+            return c0 + c1 * denom + c2 * power_of<2>(denom) + c3 * power_of<3>(denom);;
+        }
+
         double a = 16.0 * std::log(s_hat) / denom + 8.0 * (5.0 - 2.0 * s_hat) / denom2;
-        complex<double> b = (-8.0 * (4.0 - s_hat) / denom / denom2) * ((1.0 + s_hat) * B0(s, m_q) - 2.0 * C0(s, m_q));
+        complex<double> b = (-8.0 * (4.0 - s_hat) / power_of<3>(denom)) * ((1.0 + s_hat) * B0(s, m_q) - 2.0 * C0(s, m_q));
 
         return (1.0 / 9.0) * (a + b);
     }
 
+    // cf. [BFS2001], Eq. (29), p. 8
     complex<double>
     CharmLoops::B0(const double & s, const double & m_q)
     {
@@ -1001,17 +1037,17 @@ namespace eos
         return result;
     }
 
+    // cf. [BFS2001], Eq. (84), p. 30
     complex<double>
     CharmLoops::C0(const double & s, const double & m_q)
     {
-
         double s_hat = s / (m_q * m_q);
 
         if (s_hat < 0.0)
             throw InternalError("CharmLoops::C0: s < 0 is unphysical");
 
         if (s_hat > 2.0)
-            throw InternalError("CharmLoops::C0: support for s > 2.0 * m_q^2 is not implemented"); 
+            throw InternalError("CharmLoops::C0: support for s > 2.0 * m_q^2 is not implemented");
 
         if (s_hat < 0.01)
         {
@@ -1024,12 +1060,12 @@ namespace eos
 
         if ((0.99 <= s_hat) && (s_hat <= 1.01))
         {
-            // the following approximation via quadratic approximation yields a difference < 1e-8
+            // the following quadratic approximation yields a difference < 1e-8
             static const double a = -M_PI / std::sqrt(3.0);
             static const double b = (-9.0 + std::sqrt(3.0) * M_PI) / 18.0;
             static const double c = (9.0 - 2.0 * std::sqrt(3.0) * M_PI) / 54.0;
 
-            return complex<double>(a + (s_hat - 1.0) * b + power_of<2>(s_hat - 1.0) * c, 0.0); 
+            return complex<double>(a + (s_hat - 1.0) * b + power_of<2>(s_hat - 1.0) * c, 0.0);
         }
 
         double A = sqrt(s_hat * (4.0 - s_hat));
