@@ -219,11 +219,11 @@ namespace eos
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->Kll::a_l@LowRecoil",
-                    &BToKDilepton<LargeRecoil>::a_l,
+                    &BToKDilepton<LowRecoil>::a_l,
                     std::make_tuple("s")),
 
             make_observable("B->Kll::c_l@LowRecoil",
-                    &BToKDilepton<LargeRecoil>::c_l,
+                    &BToKDilepton<LowRecoil>::c_l,
                     std::make_tuple("s")),
 
             // B -> K^* ll, Large Recoil
