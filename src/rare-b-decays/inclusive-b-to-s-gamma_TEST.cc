@@ -58,6 +58,7 @@ class BToXsGammaLargeRecoilTest :
                 p["CKM::etabar"] = 0.349;
 
                 Options oo;
+                oo.set("model", "WilsonScan");
 
                 BToXsGamma<Minimal> d(p, oo);
 
@@ -83,6 +84,7 @@ class BToXsGammaLargeRecoilTest :
                 p["CKM::etabar"] = 0.349;
 
                 Options oo;
+                oo.set("model", "WilsonScan");
 
                 BToXsGamma<Minimal> d(p, oo);
 

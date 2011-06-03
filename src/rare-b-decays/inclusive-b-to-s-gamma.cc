@@ -20,6 +20,7 @@
 #include <src/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
+#include <src/utils/log.hh>
 #include <src/utils/model.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
@@ -33,10 +34,6 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        UsedParameter abs_c7;
-
-        UsedParameter arg_c7;
-
         UsedParameter m_b_MSbar;
 
         UsedParameter alpha_e;
@@ -46,14 +43,18 @@ namespace eos
         UsedParameter uncertainty;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
-            abs_c7(p["Abs{c7}"], u),
-            arg_c7(p["Arg{c7}"], u),
+            model(Model::make(o.get("model", "SM"), p, o)),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             br_bcsl(p["exp::BR(B->X_clnu)"], u),
             uncertainty(p["B->X_sgamma::uncertainty"], u)
         {
+            if ("SM" != o.get("model", "SM"))
+            {
+                Log::instance()->message("B->X_sgamma.model", ll_error)
+                    << "B->X_sgamma is not yet capable to handle models beyond SM, e.g. for helicity flipped operators; use it carefully";
+            }
+
             u.uses(*model);
         }
 
@@ -77,7 +78,8 @@ namespace eos
             double kappa = 1.0 - 2.0/3.0 * model->alpha_s(model->m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * pow(1.0 - m_c_hat, 2));
 
             double ckm = norm(model->ckm_tb() * conj(model->ckm_ts()) / model->ckm_cb());
-            complex<double> c7np = abs_c7() * complex<double>(cos(arg_c7), sin(arg_c7)) - c7sm;
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+            complex<double> c7np = wc.c7() - c7sm;
 
             double result = (sm + sm_delta * uncertainty)
                 + 6.0 * alpha_e / M_PI * br_bcsl * ckm / g / kappa * (norm(c7np) + 2.0 * real(c7np * c7sm));
