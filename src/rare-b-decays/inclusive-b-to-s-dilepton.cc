@@ -23,6 +23,7 @@
 #include <src/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <src/utils/integrate.hh>
 #include <src/utils/kinematic.hh>
+#include <src/utils/log.hh>
 #include <src/utils/memoise.hh>
 #include <src/utils/model.hh>
 #include <src/utils/options.hh>
@@ -45,32 +46,6 @@ namespace eos
     struct Implementation<BToXsDilepton<HLMW2005>>
     {
         std::shared_ptr<Model> model;
-
-        UsedParameter c1;
-
-        UsedParameter c2;
-
-        UsedParameter c3;
-
-        UsedParameter c4;
-
-        UsedParameter c5;
-
-        UsedParameter c6;
-
-        UsedParameter abs_c7;
-
-        UsedParameter arg_c7;
-
-        UsedParameter c8;
-
-        UsedParameter abs_c9;
-
-        UsedParameter arg_c9;
-
-        UsedParameter abs_c10;
-
-        UsedParameter arg_c10;
 
         UsedParameter m_b_MSbar;
 
@@ -99,20 +74,7 @@ namespace eos
         double m_l;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM", p, o)),
-            c1(p["c1"], u),
-            c2(p["c2"], u),
-            c3(p["c3"], u),
-            c4(p["c4"], u),
-            c5(p["c5"], u),
-            c6(p["c6"], u),
-            abs_c7(p["Abs{c7}"], u),
-            arg_c7(p["Arg{c7}"], u),
-            c8(p["c8"], u),
-            abs_c9(p["Abs{c9}"], u),
-            arg_c9(p["Arg{c9}"], u),
-            abs_c10(p["Abs{c10}"], u),
-            arg_c10(p["Arg{c10}"], u),
+            model(Model::make(o.get("model", "SM"), p, o)),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
             m_s(p["mass::s"], u),
@@ -128,6 +90,12 @@ namespace eos
         {
             static const double m_mu = 0.10565836; // (GeV), cf. [PDG2008], p. 13
             static const double m_e = 0.00051099892; // (GeV), cf. [PDG2008], p. 13
+
+            if ("SM" != o.get("model", "SM"))
+            {
+                Log::instance()->message("B->X_sll.model", ll_error)
+                    << "B->X_sll is not yet capable to handle models beyond SM, e.g. for helicity flipped operators; use it carefully";
+            }
 
             m_l = m_mu;
 
@@ -145,21 +113,6 @@ namespace eos
         double m_c_pole() const
         {
             return model->m_c_pole();
-        }
-
-        complex<double> c7() const
-        {
-            return abs_c7() * complex<double>(cos(arg_c7), sin(arg_c7));
-        }
-
-        complex<double> c9() const
-        {
-            return abs_c9() * complex<double>(cos(arg_c9), sin(arg_c9));
-        }
-
-        complex<double> c10() const
-        {
-            return abs_c10() * complex<double>(cos(arg_c10), sin(arg_c10));
         }
 
         double s_hat(const double & s) const
@@ -341,8 +294,10 @@ namespace eos
             double u2 = 27.1 + 23.0 / 3.0 * u1 * log(mu / m_b);
             double uem = 12.0 / 23.0 * (model->alpha_s(m_Z) / alpha_s - 1.0);
 
+            WilsonCoefficients<BToS> w = model->wilson_coefficients_b_to_s();
+
             // cf. [HLMW2005], Eq. (69), p. 16
-            complex<double> c7eff = c7() - c3() / 3.0 - 4.0 * c4() / 9.0 - 20.0 * c5() / 3.0 - 80.0 * c6() / 9.0;
+            complex<double> c7eff = w.c7() - w.c3() / 3.0 - 4.0 * w.c4() / 9.0 - 20.0 * w.c5() / 3.0 - 80.0 * w.c6() / 9.0;
 
             /* S_{AB} */
             // cf. [HLMW2005], Eqs. (112)-(115), p. 26
@@ -373,10 +328,10 @@ namespace eos
 
             /* Wilson coefficients */
             std::vector<complex<double>> wc = {
-                c1(), c2(), c3(), c4(), c5(), c6(), c7eff, c8(),
+                w.c1(), w.c2(), w.c3(), w.c4(), w.c5(), w.c6(), c7eff, w.c8(),
                 // We use a different basis of operators: O_{9,10} = alpha_e_tilde * P_{9,10} */
-                alpha_s_tilde * kappa * c9(),
-                alpha_s_tilde * kappa * c10(),
+                alpha_s_tilde * kappa * w.c9(),
+                alpha_s_tilde * kappa * w.c10(),
                 // cf. [HLMW2005], Table 3, p. 17. Using values at mu = 5.0 GeV
                 alpha_s_tilde * kappa * -3.72e-2,
                 alpha_s_tilde * kappa * -1.04e-2,

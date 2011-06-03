@@ -55,6 +55,7 @@ class BToXsDileptonLargeRecoilTest :
                 p["Arg{c10}"] = M_PI;
 
                 Options oo;
+                oo.set("model", "WilsonScan");
                 oo.set("l", "mu");
 
                 BToXsDilepton<HLMW2005> d_mu(p, oo);
@@ -105,7 +106,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
         {
             static const std::vector<std::string> names
             {
-                "B->X_sll::BR@HLMW2005",
+                "B->X_sll::BR@HLMW2005,model=WilsonScan",
             };
             static const std::vector<std::array<double, 6>> inputs
             {
