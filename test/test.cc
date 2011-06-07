@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -68,10 +68,17 @@ namespace test
     }
 }
 
-int main(int, char **)
+int main(int, char ** argv)
 {
     int result(EXIT_SUCCESS);
 
+    // Extract the program name from argv[0]
+    std::string program_name(argv[0]);
+    std::string::size_type pos = program_name.rfind('/');
+    if (std::string::npos != pos)
+        program_name.erase(0, pos + 1);
+
+    eos::Log::instance()->set_program_name(program_name);
     eos::Log::instance()->set_log_level(eos::ll_debug);
 
     for (std::list<const test::TestCase *>::const_iterator i(test::test_cases.begin()),
