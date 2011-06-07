@@ -1155,4 +1155,19 @@ namespace eos
 
         return num_integrated / denom_integrated;
     }
+
+    double
+    BToKDilepton<LowRecoil>::integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const
+    {
+        Save<double> m_l(_imp->m_l, _imp->m_e());
+
+        std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKDilepton<LowRecoil>::differential_branching_ratio),
+                this, std::placeholders::_1);
+
+        double br_electrons = integrate(integrand, 64, s_min, s_max);
+        _imp->m_l = _imp->m_mu();
+        double br_muons = integrate(integrand, 64, s_min, s_max);
+
+        return br_muons / br_electrons;
+    }
 }
