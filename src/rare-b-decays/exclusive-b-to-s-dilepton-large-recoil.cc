@@ -606,7 +606,7 @@ namespace eos
             e_q(-1.0/3.0),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
-            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
+            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
@@ -1168,7 +1168,7 @@ namespace eos
             e_q(-1.0/3.0),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
-            form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "BZ2004v2"), p);
+            form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "KMPW2010"), p);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");

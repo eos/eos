@@ -184,7 +184,7 @@ namespace eos
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
             use_nlo(destringify<bool>(o.get("nlo", "true")))
         {
-            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
+            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p);
 
             std::string spectator_quark = o.get("q", "d");
             if ((spectator_quark != "d") && (spectator_quark != "u"))
@@ -970,7 +970,7 @@ namespace eos
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
-            form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "BZ2004v2"), p);
+            form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "KMPW2010"), p);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
