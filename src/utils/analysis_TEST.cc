@@ -197,5 +197,34 @@ class AnalysisTest :
                 TEST_CHECK_NEARLY_EQUAL(optimum[3], 172   , 1e-5);
                 TEST_CHECK_NEARLY_EQUAL(optimum[4], 511e-6, 1e-5);
             }
+
+            // goodness_of_fit
+            {
+                Parameters parameters = Parameters::Defaults();
+
+                LogLikelihoodPtr llh(new LogLikelihood(parameters));
+                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                    "mass::c")), 1.182, 1.192, 1.202);
+                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                    "mass::c")), 1.19, 1.2, 1.21);
+
+                Analysis analysis(llh);
+
+                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::c", ParameterRange{ 1 , 2 }));
+
+                // in middle of both observations
+                std::vector<double> best_fit_parameter(1, 1.196);
+
+                // each observation 0.4 sigma away from mode
+                auto ret = analysis.goodness_of_fit(best_fit_parameter);
+                TEST_CHECK_NEARLY_EQUAL(ret.first, 0.32, eps);
+                TEST_CHECK_NEARLY_EQUAL(ret.second, 0.57160764495333116, eps);
+
+                // now use simulation.
+                // p-value _not_ corrected for DoF, thus biased towards p=1
+                ret = analysis.goodness_of_fit(best_fit_parameter, 1e4);
+                TEST_CHECK_NEARLY_EQUAL(ret.first, 0.32, eps);
+                TEST_CHECK_NEARLY_EQUAL(ret.second, 0.852143788, 5e-3);
+            }
         }
 } analysis_test;

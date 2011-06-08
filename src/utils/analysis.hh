@@ -83,6 +83,18 @@ namespace eos
              */
             bool add(const LogPriorPtr & prior, bool nuisance = false);
 
+            /*!
+             * Calculate the p-value based on the @f$\chi^2 @f$
+             * test statistic for fixed parameter_values
+             * @param parameter_values
+             * @param simulate if true, simulate data sets to estimate distribution of test statistic,
+             * else use the cumulative of the @f$\chi^2 @f$-distribution with (N-k) degrees-of-freedom,
+             * where N is the number of observations and k is the number of fitted parameters
+             * @return < @f$\chi^2 @f$, p>
+             */
+            std::pair<double, double>
+            goodness_of_fit(const std::vector<double> & parameter_values, const unsigned & simulated_datasets = 0);
+
             /// Retrieve the overall Log(likelihood) for this analysis.
             LogLikelihoodPtr & log_likelihood();
 

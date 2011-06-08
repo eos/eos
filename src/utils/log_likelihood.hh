@@ -82,9 +82,34 @@ namespace eos
                     const double & central, const double & max);
 
             /*!
+             * Calculate a p-value based on the \chi^2
+             * test statistic for the current setting of the parameters.
+             * @note   The p-value is _not_ corrected for degrees of freedom.
+             * @param  datasets The number of simulated data sets
+             * @return <p-value, uncertainty>, where the uncertainty is
+             * estimated from the standard posterior for a Bernoulli experiment.
+             */
+            std::pair<double, double>
+            bootstrap_p_value(const unsigned & datasets);
+
+
+            /*!
+             * Getter for the @f$\chi^2@f$, set in the last evaluation
+             * of the likelihood using operator(...).
+             */
+            double chi_squared() const;
+
+            /*!
              * Create an independent instance of this LogLikelihood that uses the same set of observables and measurements.
              */
             LogLikelihood clone() const;
+
+            /*!
+             * The number of independent observations used in the likelihood.
+             * @note This may differ from the number of observables in case
+             * two experiments reported their results on the same observable.
+             */
+            unsigned number_of_observations() const;
 
             /*!
              * Retrieve the underlying Parameters object.
@@ -92,14 +117,14 @@ namespace eos
             Parameters parameters() const;
 
             /*!
-             * Evaluate the log likelihood, i.e., return @f[2 \log \mathcal{L} = -\sum_i \chi^2_i + C\right]@f].
+             * Evaluate the log likelihood, i.e., return @f[ \log \mathcal{L} = \log P(D | \vec{\theta}, M)=  - \frac{\chi^2}{2} + C@f].
              * @note: all observables are recalculated
              */
             double operator()();
 
             /*!
-             * Evaluate the likelihood, but recalculate only those observables which depend on par
-             * with given id
+             * Evaluate the likelihood, but recalculate only those observables which depend on
+             * the parameter  with the given id
              *
              * @warning Do not use this call before __all__ observables have been added to the likelihood!
              * Since the dependence is checked only the first time a parameter id is encountered, adding

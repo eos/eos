@@ -21,6 +21,8 @@
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/log.hh>
 
+#include <gsl/gsl_cdf.h>
+
 namespace eos
 {
    template<>
@@ -82,6 +84,40 @@ namespace eos
             }
 
             return result;
+        }
+
+        std::pair<double, double>
+        goodness_of_fit(const std::vector<double> & parameter_values, unsigned simulated_datasets)
+        {
+            if (parameter_descriptions.size() != parameter_values.size())
+                           throw InternalError("Analysis::goodness_of_fit: starting point doesn't have the correct dimension "
+                               + stringify(parameter_descriptions.size()) );
+
+            // set the parameter values
+            for (unsigned i=0; i< parameter_values.size(); ++i)
+                parameter_descriptions[i].parameter = parameter_values[i];
+
+            // calculate \chi^2
+            (*log_likelihood)();
+            double chi_squared = log_likelihood->chi_squared();
+
+            // p-value from the analytical, yet approximate \chi^2-distribution
+            // with (n_obs - n_par) degrees-of-freedom
+            unsigned dof = log_likelihood->number_of_observations() - parameter_descriptions.size();
+            double p_analytical = gsl_cdf_chisq_Q(chi_squared, dof );
+
+            if (simulated_datasets == 0)
+                return std::make_pair(chi_squared, p_analytical);
+
+            // simulate data sets
+            auto sim_result = log_likelihood->bootstrap_p_value(simulated_datasets);
+
+            Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+               << "p-value from generating " << simulated_datasets << " data sets"
+               << " has a value of " << sim_result.first << " with uncertainty "
+               << sim_result.second;
+
+            return std::make_pair(chi_squared, sim_result.first);
         }
 
         /*
@@ -286,6 +322,12 @@ namespace eos
     Analysis::parameters() const
     {
         return _imp->parameters;
+    }
+
+    std::pair<double, double>
+    Analysis::goodness_of_fit(const std::vector<double> & parameter_values, const unsigned & simulated_datasets)
+    {
+        return _imp->goodness_of_fit(parameter_values, simulated_datasets);
     }
 
     LogLikelihoodPtr &
