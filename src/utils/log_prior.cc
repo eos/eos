@@ -90,8 +90,16 @@ namespace eos
                 // the probability covered to the left of the central value
                 double _prob_lower;
 
-                // coefficients needed for sampling
-                //TODO explain system and solution Vol. II, p. 154
+                // coefficients needed for sampling from asymmetric Gaussian on finite support
+                // the cumulative is a piecewise function
+                // CDF(x) = CDF_lower(x, sigma_lower) if x < central, else CDF_upper(x, sigma_upper)
+                // To ensure that cumulative is
+                // a) continuous at the central value
+                // b) zero when x < x_min
+                // c) one when  x > x_max
+                // need to fix the coefficients in
+                // @f$CDF_{lower}(x) = c_{lower} * \right( \Phi(x, \sigma_{lower}) - \Phi(x_{min},\sigma_{lower}) \left)$@f
+                // @f$CDF_{upper}(x) = c_{upper} * \right( \Phi(x, \sigma_{upper}) + P_{lower}/c_{upper} - 1/2\left)$@f.
                 double _c_lower, _c_upper;
                 double _phi_min, _phi_max;
 
