@@ -47,49 +47,61 @@ namespace eos
         _c4(p["c4"], u),
         _c5(p["c5"], u),
         _c6(p["c6"], u),
-        _abs_c7(p["Abs{c7}"], u),
-        _arg_c7(p["Arg{c7}"], u),
-        _re_c7(p["Re{c7}"], u),
-        _im_c7(p["Im{c7}"], u),
+        _abs_c7(p["Abs{c7}"]),
+        _arg_c7(p["Arg{c7}"]),
+        _re_c7(p["Re{c7}"]),
+        _im_c7(p["Im{c7}"]),
         _c8(p["c8"], u),
-        _abs_c9(p["Abs{c9}"], u),
-        _arg_c9(p["Arg{c9}"], u),
-        _re_c9(p["Re{c9}"], u),
-        _im_c9(p["Im{c9}"], u),
-        _abs_c10(p["Abs{c10}"], u),
-        _arg_c10(p["Arg{c10}"], u),
-        _re_c10(p["Re{c10}"], u),
-        _im_c10(p["Im{c10}"], u),
-        _abs_c7prime(p["Abs{c7'}"], u),
-        _arg_c7prime(p["Arg{c7'}"], u),
-        _re_c7prime(p["Re{c7'}"], u),
-        _im_c7prime(p["Im{c7'}"], u),
-        _abs_c9prime(p["Abs{c9'}"], u),
-        _arg_c9prime(p["Arg{c9'}"], u),
-        _re_c9prime(p["Re{c9'}"], u),
-        _im_c9prime(p["Im{c9'}"], u),
-        _abs_c10prime(p["Abs{c10'}"], u),
-        _arg_c10prime(p["Arg{c10'}"], u),
-        _re_c10prime(p["Re{c10'}"], u),
-        _im_c10prime(p["Im{c10'}"], u)
+        _abs_c9(p["Abs{c9}"]),
+        _arg_c9(p["Arg{c9}"]),
+        _re_c9(p["Re{c9}"]),
+        _im_c9(p["Im{c9}"]),
+        _abs_c10(p["Abs{c10}"]),
+        _arg_c10(p["Arg{c10}"]),
+        _re_c10(p["Re{c10}"]),
+        _im_c10(p["Im{c10}"]),
+        _abs_c7prime(p["Abs{c7'}"]),
+        _arg_c7prime(p["Arg{c7'}"]),
+        _re_c7prime(p["Re{c7'}"]),
+        _im_c7prime(p["Im{c7'}"]),
+        _abs_c9prime(p["Abs{c9'}"]),
+        _arg_c9prime(p["Arg{c9'}"]),
+        _re_c9prime(p["Re{c9'}"]),
+        _im_c9prime(p["Im{c9'}"]),
+        _abs_c10prime(p["Abs{c10'}"]),
+        _arg_c10prime(p["Arg{c10'}"]),
+        _re_c10prime(p["Re{c10'}"]),
+        _im_c10prime(p["Im{c10'}"])
     {
         if ("polar" == o.get("scan-mode", "polar"))
         {
             _c7 = std::bind(&wcimplementation::polar, _abs_c7, _arg_c7);
+            u.uses(_abs_c7.id()); u.uses(_arg_c7.id());
             _c9 = std::bind(&wcimplementation::polar, _abs_c9, _arg_c9);
+            u.uses(_abs_c9.id()); u.uses(_arg_c9.id());
             _c10 = std::bind(&wcimplementation::polar, _abs_c10, _arg_c10);
+            u.uses(_abs_c10.id()); u.uses(_arg_c10.id());
             _c7prime = std::bind(&wcimplementation::polar, _abs_c7prime, _arg_c7prime);
+            u.uses(_abs_c7prime.id()); u.uses(_arg_c7prime.id());
             _c9prime = std::bind(&wcimplementation::polar, _abs_c9prime, _arg_c9prime);
+            u.uses(_abs_c9prime.id()); u.uses(_arg_c9prime.id());
             _c10prime = std::bind(&wcimplementation::polar, _abs_c10prime, _arg_c10prime);
+            u.uses(_abs_c10prime.id()); u.uses(_arg_c10prime.id());
         }
         else if ("cartesian" == o.get("scan-mode", "polar"))
         {
             _c7 = std::bind(&wcimplementation::cartesian, _re_c7, _im_c7);
+            u.uses(_re_c7.id()); u.uses(_im_c7.id());
             _c9 = std::bind(&wcimplementation::cartesian, _re_c9, _im_c9);
+            u.uses(_re_c9.id()); u.uses(_im_c9.id());
             _c10 = std::bind(&wcimplementation::cartesian, _re_c10, _im_c10);
+            u.uses(_re_c10.id()); u.uses(_im_c10.id());
             _c7prime = std::bind(&wcimplementation::cartesian, _re_c7prime, _im_c7prime);
+            u.uses(_re_c7prime.id()); u.uses(_im_c7prime.id());
             _c9prime = std::bind(&wcimplementation::cartesian, _re_c9prime, _im_c9prime);
+            u.uses(_re_c9prime.id()); u.uses(_im_c9prime.id());
             _c10prime = std::bind(&wcimplementation::cartesian, _re_c10prime, _im_c10prime);
+            u.uses(_re_c10prime.id()); u.uses(_im_c10prime.id());
         }
         else
         {

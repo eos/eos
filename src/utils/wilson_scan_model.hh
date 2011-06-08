@@ -46,24 +46,24 @@ namespace eos
             UsedParameter _c4;
             UsedParameter _c5;
             UsedParameter _c6;
-            UsedParameter _abs_c7, _arg_c7;
-            UsedParameter _re_c7, _im_c7;
+            Parameter _abs_c7, _arg_c7;
+            Parameter _re_c7, _im_c7;
             std::function<complex<double> ()> _c7;
             UsedParameter _c8;
-            UsedParameter _abs_c9, _arg_c9;
-            UsedParameter _re_c9, _im_c9;
+            Parameter _abs_c9, _arg_c9;
+            Parameter _re_c9, _im_c9;
             std::function<complex<double> ()> _c9;
-            UsedParameter _abs_c10, _arg_c10;
-            UsedParameter _re_c10, _im_c10;
+            Parameter _abs_c10, _arg_c10;
+            Parameter _re_c10, _im_c10;
             std::function<complex<double> ()> _c10;
-            UsedParameter _abs_c7prime, _arg_c7prime;
-            UsedParameter _re_c7prime, _im_c7prime;
+            Parameter _abs_c7prime, _arg_c7prime;
+            Parameter _re_c7prime, _im_c7prime;
             std::function<complex<double> ()> _c7prime;
-            UsedParameter _abs_c9prime, _arg_c9prime;
-            UsedParameter _re_c9prime, _im_c9prime;
+            Parameter _abs_c9prime, _arg_c9prime;
+            Parameter _re_c9prime, _im_c9prime;
             std::function<complex<double> ()> _c9prime;
-            UsedParameter _abs_c10prime, _arg_c10prime;
-            UsedParameter _re_c10prime, _im_c10prime;
+            Parameter _abs_c10prime, _arg_c10prime;
+            Parameter _re_c10prime, _im_c10prime;
             std::function<complex<double> ()> _c10prime;
 
         public:
