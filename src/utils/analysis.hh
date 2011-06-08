@@ -62,6 +62,7 @@ namespace eos
 
             ///@name Accessors
             ///@{
+
             /// Retrieve a set of all parameters, including ranges
             const std::vector<ParameterDescription> & parameter_descriptions() const;
 
@@ -107,7 +108,7 @@ namespace eos
             LogPriorPtr log_prior(const std::string & name) const;
 
             /// Retrieve the overall Log(posterior) for this analysis.
-            ///   incorporate normalization constant, the evidence here in getter if available
+            /// Incorporate normalization constant, the evidence here in getter if available.
             double log_posterior();
 
             /*!

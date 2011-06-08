@@ -45,7 +45,6 @@ namespace eos
         private:
             /*!
              * Retrieve the observables and their values at last evaluation
-             * @return
              */
             const std::vector<std::tuple<ObservablePtr, double>>&
             predictions() const;
