@@ -44,10 +44,9 @@ namespace eos
     {
         private:
             /*!
-             * Retrieve the observables and their values at last evaluation
+             * Retrieve the values of observables at last evaluation
              */
-            const std::vector<std::tuple<ObservablePtr, double>>&
-            predictions() const;
+            const std::vector<double> & predictions() const;
 
         public:
             friend class LogLikelihoodTest;

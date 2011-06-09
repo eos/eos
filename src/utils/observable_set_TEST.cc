@@ -19,17 +19,17 @@
 
 #include <test/test.hh>
 #include <src/utils/analysis_TEST.hh>
-#include <src/utils/unique_observable_vector.hh>
+#include <src/utils/observable_set.hh>
 
 using namespace test;
 using namespace eos;
 
-class UniqueObservableVectorTest :
+class ObservableSetTest :
     public TestCase
 {
     public:
-        UniqueObservableVectorTest() :
-            TestCase("unique_observable_vector_test")
+        ObservableSetTest() :
+            TestCase("observable_set_test")
         {
         }
 
@@ -37,7 +37,7 @@ class UniqueObservableVectorTest :
         {
             // create simple observables vector
             {
-                UniqueObservableVector o;
+                ObservableSet o;
                 Parameters p = Parameters::Defaults();
                 o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::b(MSbar)")));
                 o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::c")));
@@ -70,7 +70,7 @@ class UniqueObservableVectorTest :
 
             // name, options and kinematics need to differ
             {
-                UniqueObservableVector o;
+                ObservableSet o;
                 Parameters p = Parameters::Defaults();
 
                 // adding to empty container should always work
@@ -95,4 +95,4 @@ class UniqueObservableVectorTest :
                 TEST_CHECK( ! o.add(ObservablePtr(new TestObservable(p, kin, "mass::b(MSbar)"))).second);
             }
         }
-} unique_observable_vector_test;
+} observable_set_test;

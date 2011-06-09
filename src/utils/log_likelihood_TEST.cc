@@ -124,7 +124,6 @@ namespace eos
 
                     // only one prediction
                     TEST_CHECK_EQUAL(llh.predictions().size(), 1);
-                    TEST_CHECK_EQUAL("test-observable[mass::b(MSbar)]", std::get<0>(llh.predictions()[0])->name());
                 }
 
                 // observables vary only by kinematic, but identical in name => they should be different _predictions
@@ -210,18 +209,18 @@ namespace eos
                     //evaluate
                     llh();
 
-                    TEST_CHECK_EQUAL(std::get<1>(llh.predictions().at(1)), 5.3);
+                    TEST_CHECK_EQUAL(llh.predictions()[1], 5.3);
 
                     //change value through the backdoor
                     p["Abs{c10'}"] = 6;
 
                     //same as before
                     llh(p["mass::b(MSbar)"].id());
-                    TEST_CHECK_EQUAL(std::get<1>(llh.predictions().at(1)), 5.3);
+                    TEST_CHECK_EQUAL(llh.predictions()[1], 5.3);
 
                     //now observable should be reevaluated
                     llh(p["Abs{c10'}"].id());
-                    TEST_CHECK_EQUAL(std::get<1>(llh.predictions().at(1)), 6);
+                    TEST_CHECK_EQUAL(llh.predictions()[1], 6);
                 }
 
                 //prevent user from using stale cache

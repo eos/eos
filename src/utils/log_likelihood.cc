@@ -21,6 +21,7 @@
 #include <src/utils/log_likelihood.hh>
 #include <src/utils/log_prior.hh>
 #include <src/utils/log.hh>
+#include <src/utils/observable_set.hh>
 #include <src/utils/power_of.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 
@@ -38,8 +39,11 @@ namespace eos
     template <>
     struct Implementation<LogLikelihood>
     {
-        // <ObservablePtr, current result of evaluation>
-        std::vector<std::tuple<ObservablePtr, double>> predictions;
+        // Store each observable that needs to be calculated exactly once
+        ObservableSet observables;
+
+        // Store values of observables
+        std::vector<double> predictions;
 
         // Same order as in predictions
         // <last result of evaluation>
@@ -48,10 +52,7 @@ namespace eos
         // <index to predictions, min, central, max>
         std::vector<std::tuple<unsigned, double, double, double>> observations;
 
-        // <observable name, index>
-        std::map<std::string, unsigned> observable_names;
-
-        // store which observables(index list for observations) are needed for a parameter id
+        // Store which observables(index list for observations) are needed for a parameter id
         std::map<unsigned, std::vector<unsigned>> index_lists;
 
         Parameters parameters;
@@ -65,48 +66,21 @@ namespace eos
         {
         }
 
-        static bool identical_observables(const ObservablePtr & lhs, const ObservablePtr & rhs)
-        {
-            // compare name
-            if( lhs->name() != rhs->name())
-                return false;
-
-            // compare kinematics
-            if( lhs->kinematics() != rhs->kinematics())
-                return false;
-
-            // compare options
-            if (lhs->options() != rhs->options())
-                return false;
-
-            return true;
-        }
-
         void add(const ObservablePtr & observable, const double & min, const double & central, const double & max)
         {
-            if (observable->parameters() != parameters)
-                throw InternalError("Likelihood::add(): Encountered observable whose parameters doesn't fit ours!");
-
             if ( ! index_lists.empty() )
                 throw InternalError("Likelihood::add(): Add all observables before evaluating the likelihood for the first time!");
 
-            // check if observable of that name exists already
-            auto result = observable_names.insert(std::make_pair(observable->name(), predictions.size()));
+            auto result = observables.add(observable);
 
-            // existing observable
-            if ((result.second == false) && identical_observables(observable, std::get<0>(predictions[result.first->second])))
+            // new observable
+            if (result.second)
             {
-                unsigned index = result.first->second;
-                observations.push_back(std::make_tuple(index, min, central, max) );
-            }
-            else //new observable
-            {
-                unsigned index = predictions.size();
-
-                predictions.push_back(std::make_tuple(observable, std::numeric_limits<double>::quiet_NaN()));
+                predictions.push_back(std::numeric_limits<double>::quiet_NaN());
                 predictions_dirty.push_back(std::numeric_limits<double>::quiet_NaN());
-                observations.push_back(std::make_tuple(index, min, central, max) );
             }
+
+            observations.push_back(std::make_tuple(result.first, min, central, max) );
         }
 
         std::pair<double, double>
@@ -127,13 +101,13 @@ namespace eos
             std::vector<double> preds;
             for (auto i = observations.cbegin(), i_end = observations.cend() ; i != i_end ; ++i)
             {
-                double central     = std::get<1>(predictions[std::get<0>(*i)]); //fixed parameters => fixed predictions
+                double central     = predictions[std::get<0>(*i)]; //fixed parameters => fixed predictions
                 double sigma_lower = std::get<2>(*i) - std::get<1>(*i);
                 double sigma_upper = std::get<3>(*i) - std::get<2>(*i);
                 generators.push_back( LogPrior::Gauss(pars, "mass::b(MSbar)",
                                 ParameterRange{ central - 3 * sigma_lower, central + 3 * sigma_upper },
                                 central - sigma_lower, central, central + sigma_upper));
-                preds.push_back(std::get<1>(predictions[std::get<0>(*i)]));
+                preds.push_back(predictions[std::get<0>(*i)]);
             }
 
             // save the current chi^2 for the observed data points
@@ -185,9 +159,10 @@ namespace eos
         // calculate predictions for all observables anew
         void evaluate_observables()
         {
-            for (auto i = predictions.begin(), i_end = predictions.end() ; i != i_end ; ++i)
+            auto p = predictions.begin();
+            for (auto i = observables.begin(), i_end = observables.end() ; i != i_end ; ++i, ++p)
             {
-                std::get<1>(*i) = std::get<0>(*i)->evaluate();
+                *p = (*i)->evaluate();
             }
         }
 
@@ -203,13 +178,13 @@ namespace eos
 
                 //loop over all observables
                 unsigned index = 0;
-                for (auto i = predictions.begin(),  i_end = predictions.end() ; i != i_end ; ++i, ++index)
+                for (auto i = observables.begin(), i_end = observables.end() ; i != i_end ; ++i, ++index)
                 {
                     // search through all parameters that this observable uses
-                    auto result = std::find(std::get<0>(*i)->begin(), std::get<0>(*i)->end(), id);
+                    auto result = std::find((*i)->begin(), (*i)->end(), id);
 
                     // no dependence on parameter
-                    if (result == std::get<0>(*i)->end())
+                    if (result == (*i)->end())
                        continue;
 
                     indices.push_back(index);
@@ -223,10 +198,10 @@ namespace eos
             for (auto i = index_list->second.begin(), i_end = index_list->second.end(); i != i_end; ++i)
             {
                 // store last value of observable
-                predictions_dirty.at(*i) = std::get<1>(predictions.at(*i));
+                predictions_dirty[*i] = predictions[*i];
 
                 // the new value
-                std::get<1>(predictions.at(*i)) = std::get<0>(predictions.at(*i))->evaluate();
+                predictions[*i] = observables[*i]->evaluate();
             }
         }
 
@@ -246,7 +221,7 @@ namespace eos
            for (auto i = observations.cbegin(), i_end = observations.cend() ; i != i_end ; ++i)
            {
                // get prediction
-               double value = std::get<1>(predictions[std::get<0>(*i)]);
+               double value = predictions[std::get<0>(*i)];
 
                // get most likely observed value
                double central = std::get<2>(*i);
@@ -305,7 +280,7 @@ namespace eos
         for (auto o = _imp->observations.cbegin(), o_end = _imp->observations.cend() ; o != o_end ; ++o)
         {
             // create clone with independent parameters object
-            ObservablePtr ptr = std::get<0>(_imp->predictions.at(std::get<0>(*o)))->clone(parameters);
+            ObservablePtr ptr = _imp->observables[std::get<0>(*o)]->clone(parameters);
             result.add(ptr, std::get<1>(*o), std::get<2>(*o), std::get<3>(*o));
         }
 
@@ -324,7 +299,7 @@ namespace eos
         return _imp->parameters;
     }
 
-    const std::vector<std::tuple<ObservablePtr, double>> &
+    const std::vector<double> &
     LogLikelihood::predictions() const
     {
         return _imp->predictions;
@@ -349,7 +324,7 @@ namespace eos
     {
         for (unsigned i = 0 ; i < _imp->predictions.size() ; ++i)
         {
-            std::get<1>(_imp->predictions[i]) = _imp->predictions_dirty[i];
+            _imp->predictions[i] = _imp->predictions_dirty[i];
         }
     }
 }

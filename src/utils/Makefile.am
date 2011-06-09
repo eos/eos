@@ -30,7 +30,7 @@ libeosutils_la_SOURCES = \
 	memoise.hh \
 	model.cc model.hh \
 	mutex.cc mutex.hh \
-	unique_observable_vector.cc unique_observable_vector.hh \
+	observable_set.cc observable_set.hh \
 	one-of.hh \
 	options.cc options.hh \
 	parameters.cc parameters.hh \
@@ -70,7 +70,7 @@ TESTS = \
 	markov_chain_TEST \
 	markov_chain_sampler_TEST \
 	memoise_TEST \
-	unique_observable_vector_TEST \
+	observable_set_TEST \
 	options_TEST \
 	one-of_TEST \
 	parameters_TEST \
@@ -135,8 +135,8 @@ markov_chain_sampler_TEST_LDADD = $(TESTS_LD_ADD) $(top_builddir)/src/libeos.la
 memoise_TEST_SOURCES = memoise_TEST.cc
 memoise_TEST_LDADD = $(TESTS_LD_ADD)
 
-unique_observable_vector_TEST_SOURCES = unique_observable_vector_TEST.cc
-unique_observable_vector_TEST_LDADD = $(TESTS_LD_ADD) 
+observable_set_TEST_SOURCES = observable_set_TEST.cc
+observable_set_TEST_LDADD = $(TESTS_LD_ADD) 
 
 one_of_TEST_SOURCES = one-of_TEST.cc
 one_of_TEST_LDADD = $(TESTS_LD_ADD)

@@ -17,7 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/utils/unique_observable_vector.hh>
+#include <src/utils/observable_set.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/wrapped_forward_iterator-impl.hh>
 
@@ -27,7 +27,7 @@
 namespace eos
 {
     template <>
-    struct Implementation<UniqueObservableVector>
+    struct Implementation<ObservableSet>
     {
         // The list of observables
         std::vector<ObservablePtr> observables;
@@ -42,7 +42,7 @@ namespace eos
         std::pair<unsigned, bool> add(const ObservablePtr & observable)
         {
             if (! observables.empty() && (observable->parameters() != observables.front()->parameters()))
-                throw InternalError("ObservableEvaluator::add(): Mismatch of Parameters between different observables detected.");
+                throw InternalError("ObservableSet::add(): Mismatch of Parameters between different observables detected.");
 
             // compare each observable for options, kinematics and name
             unsigned index = 0;
@@ -76,49 +76,49 @@ namespace eos
         }
     };
 
-    UniqueObservableVector::UniqueObservableVector() :
-    PrivateImplementationPattern<UniqueObservableVector>(new Implementation<UniqueObservableVector>())
+    ObservableSet::ObservableSet() :
+    PrivateImplementationPattern<ObservableSet>(new Implementation<ObservableSet>())
     {
     }
 
-    UniqueObservableVector::~UniqueObservableVector()
+    ObservableSet::~ObservableSet()
     {
     }
 
     std::pair<unsigned, bool>
-    UniqueObservableVector::add(const ObservablePtr & observable)
+    ObservableSet::add(const ObservablePtr & observable)
     {
         return _imp->add(observable);
     }
 
-    template class WrappedForwardIterator<UniqueObservableVector::IteratorTag, ObservablePtr>;
+    template class WrappedForwardIterator<ObservableSet::IteratorTag, ObservablePtr>;
 
-    UniqueObservableVector::Iterator
-    UniqueObservableVector::begin() const
+    ObservableSet::Iterator
+    ObservableSet::begin() const
     {
         return Iterator(_imp->observables.begin());
     }
 
-    UniqueObservableVector::Iterator
-    UniqueObservableVector::end() const
+    ObservableSet::Iterator
+    ObservableSet::end() const
     {
         return Iterator(_imp->observables.end());
     }
 
     ObservablePtr &
-    UniqueObservableVector::operator[] (const unsigned & index) const
+    ObservableSet::operator[] (const unsigned & index) const
     {
         return _imp->observables[index];
     }
 
     Parameters
-    UniqueObservableVector::parameters()
+    ObservableSet::parameters()
     {
         return _imp->observables.front()->parameters();
     }
 
     unsigned
-    UniqueObservableVector::size() const
+    ObservableSet::size() const
     {
         return _imp->observables.size();
     }
