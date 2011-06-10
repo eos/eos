@@ -62,8 +62,11 @@ class CommandLine :
 
         std::vector<ObservablePtr> observables;
 
+        bool scan_format;
+
         CommandLine() :
-            parameters(Parameters::Defaults())
+            parameters(Parameters::Defaults()),
+            scan_format(false)
         {
         }
 
@@ -96,6 +99,13 @@ class CommandLine :
 
                     observables.push_back(observable);
                     kinematics.reset(new Kinematics);
+
+                    continue;
+                }
+
+                if ("--scan-format" == argument)
+                {
+                    scan_format = true;
 
                     continue;
                 }
@@ -139,14 +149,65 @@ main(int argc, char * argv[])
             max_name_length = std::max(max_name_length, p->name().length());
         }
 
-        for (auto p = parameters.begin(), p_end = parameters.end() ; p != p_end ; ++p)
+        if (CommandLine::instance()->scan_format)
         {
-            std::cout
+            std::string::size_type max_prior_length = std::string("gaussian").length();
+
+            for (auto p = parameters.begin(), p_end = parameters.end() ; p != p_end ; ++p)
+            {
+                std::string prior;
+                std::string min, max;
+                if ( p->min() == (*p)() && p->max() == (*p)())
+                {
+                    prior = "flat";
+                    min = "MIN\t";
+                    max = "MAX\t";
+                }
+                else
+                {
+                    prior = "gaussian";
+                    std::stringstream ss;
+                    ss
+                    << std::scientific << std::setprecision(4)
+                    << double(*p) - 3.0 * ( double(*p) - p->min());
+                    min = ss.str();
+                    ss.str("");
+                    ss
+                    << std::scientific << std::setprecision(4)
+                    << double(*p) + 3.0 * (-double(*p) + p->max());
+                    max = ss.str();
+                }
+
+                std::cout
+                << "    --scan" << '\t'
+                << std::setw(max_name_length) << std::setiosflags(std::ios::left)
+                << "\"" + p->name() + "\"" << '\t'
+                << min << '\t' << max << '\t'
+                << "--prior" << '\t'
+                << std::setw(max_prior_length) << std::setiosflags(std::ios::left)
+                << prior;
+
+                if (prior != "flat")
+                {
+                    std::cout
+                    << std::setw(7) << std::scientific << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos)
+                    << '\t' << p->min() << '\t' << (*p)() << '\t' << p->max();
+                }
+
+                std::cout << " \\" << std::endl;
+            }
+        }
+        else
+        {
+            for (auto p = parameters.begin(), p_end = parameters.end() ; p != p_end ; ++p)
+            {
+                std::cout
                 << std::setw(max_name_length) << std::setiosflags(std::ios::right)
                 << p->name() << '\t'
                 << std::setw(7) << std::scientific << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos)
                 << p->min() << '\t' << (*p)() << '\t' << p->max()
                 << std::endl;
+            }
         }
     }
     catch(DoUsage & e)
@@ -154,6 +215,13 @@ main(int argc, char * argv[])
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-list-parameters" << std::endl;
         std::cout << "  [[--kinematics NAME VALUE]* --observable NAME]*" << std::endl;
+        std::cout << "  [--scan-format]" << std::endl;
+
+        std::cout << "Print the parameter dependencies of a given observable (inclusive" << std::endl;
+        std::cout << "its mandatory kinematics). If the scan-format option is given," << std::endl;
+        std::cout << "the output is formatted in such a way that it can be used" << std::endl;
+        std::cout << "as input to a call to eos-scan-mc." << std::endl;
+        std::cout << "If no observable is specified, all parameters are listed." << std::endl;
     }
     catch(Exception & e)
     {
