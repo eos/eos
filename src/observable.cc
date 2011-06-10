@@ -189,6 +189,10 @@ namespace eos
                     &BToKDilepton<LargeRecoil>::integrated_flat_term,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->Kll::R_K@LargeRecoil",
+                    &BToKDilepton<LowRecoil>::integrated_ratio_muons_electrons,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->Kll::a_l@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::a_l,
                     std::make_tuple("s")),

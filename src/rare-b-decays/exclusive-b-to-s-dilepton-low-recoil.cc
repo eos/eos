@@ -1168,6 +1168,7 @@ namespace eos
         _imp->m_l = _imp->m_mu();
         double br_muons = integrate(integrand, 64, s_min, s_max);
 
+        // cf. [BHP2007], Eq. (4.10), p. 6
         return br_muons / br_electrons;
     }
 }

@@ -32,6 +32,7 @@
 #include <src/utils/power_of.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/qcd.hh>
+#include <src/utils/save.hh>
 
 #include <cmath>
 #include <functional>
@@ -1373,5 +1374,21 @@ namespace eos
         double denom_integrated = integrate(denom, 64, s_min, s_max);
 
         return num_integrated / denom_integrated;
+    }
+
+    double
+    BToKDilepton<LargeRecoil>::integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const
+    {
+        Save<double> m_l(_imp->m_l, _imp->m_e());
+
+        std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKDilepton<LargeRecoil>::differential_branching_ratio),
+                this, std::placeholders::_1);
+
+        double br_electrons = integrate(integrand, 64, s_min, s_max);
+        _imp->m_l = _imp->m_mu();
+        double br_muons = integrate(integrand, 64, s_min, s_max);
+
+        // cf. [BHP2007], Eq. (4.10), p. 6
+        return br_muons / br_electrons;
     }
 }

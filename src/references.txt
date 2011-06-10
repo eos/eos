@@ -118,7 +118,7 @@ References
 
     BHP2007 : Bobeth, C. and Hiller, G. and Piranishvilli, G.
 
-        Angular Distributions of B -> KLL
+        Angular Distributions of B -> K lbar l
 
         arxiv:0709.4174 [hep-ph]
 
