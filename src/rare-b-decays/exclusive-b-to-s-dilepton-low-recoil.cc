@@ -1171,4 +1171,19 @@ namespace eos
         // cf. [BHP2007], Eq. (4.10), p. 6
         return br_muons / br_electrons;
     }
+
+    double
+    BToKDilepton<LowRecoil>::integrated_cp_asymmetry_1(const double & s_min, const double & s_max) const
+    {
+        Save<bool> cp_conjugate(_imp->cp_conjugate, false);
+
+        std::function<double (const double &)> integrand = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
+                _imp, std::placeholders::_1);
+
+        double gamma = integrate(integrand, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double gamma_bar = integrate(integrand, 64, s_min, s_max);
+
+        return (gamma - gamma_bar) / (gamma + gamma_bar);
+    }
 }

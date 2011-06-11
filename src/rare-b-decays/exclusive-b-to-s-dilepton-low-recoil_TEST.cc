@@ -423,6 +423,39 @@ class BToKDileptonLowRecoilTest :
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8),       1.5276699e-07, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),             5.4227810e-03, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(14.18, 22.8), 1.0015589,     eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry_1(14.18, 22.8),        2.3584979e-05, eps);
+                }
+            }
+
+            /* Benchmark Point */
+            {
+                Parameters p = Parameters::Defaults();
+                p["life_time::B_d"] = 1.530e-12;
+                // PDG 2008 CKM parameters
+                p["CKM::A"] = 0.814;
+                p["CKM::lambda"] = 0.2257;
+                p["CKM::rhobar"] = 0.135;
+                p["CKM::etabar"] = 0.349;
+                // B mass
+                p["mass::B_d"] = 5.27953;
+                p["Arg{c7}"] = -M_PI / 2.0;
+                p["Arg{c9}"] = +M_PI / 2.0;
+                p["Arg{c10}"] = -M_PI / 2.0;
+
+                Options oo;
+                oo.set("model", "WilsonScan");
+                oo.set("form-factors", "BZ2004v2");
+
+                BToKDilepton<LowRecoil> d(p, oo);
+
+                /* q^2 = [14.18, 22.8] */
+                {
+                    const double eps = 1e-5;
+
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8),       1.5549713e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),             5.3907650e-03, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(14.18, 22.8), 1.0015315,     eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry_1(14.18, 22.8),        0.0627285,     eps);
                 }
             }
         }
