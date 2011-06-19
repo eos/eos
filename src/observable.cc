@@ -283,6 +283,30 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::integrated_unnormalized_longitudinal_polarisation,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::H_T^1(s)@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::differential_h_1,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*ll::H_T^2(s)@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::differential_h_2,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*ll::H_T^3(s)@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::differential_h_3,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*ll::H_T^1@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_h_1,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::H_T^2@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_h_2,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::H_T^3@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_h_3,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->K^*ll::s_0^A_FB@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::a_fb_zero_crossing),
 
@@ -310,6 +334,18 @@ namespace eos
 
             make_observable("B->K^*ll::F_L(s)@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*ll::H_T^1(s)@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::differential_h_1,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*ll::H_T^2(s)@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::differential_h_2,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*ll::H_T^3(s)@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::differential_h_3,
                     std::make_tuple("s")),
 
             make_observable("B->K^*ll::rho_1(s)@LowRecoil",

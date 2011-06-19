@@ -983,6 +983,24 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::differential_h_1(const double & s) const
+    {
+        return _imp->u_4(s) / std::sqrt(_imp->u_1(s) * _imp->u_3(s));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_h_2(const double & s) const
+    {
+        return _imp->u_5(s) / std::sqrt(_imp->u_1(s) * _imp->u_2(s));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_h_3(const double & s) const
+    {
+        return _imp->u_6(s) / std::sqrt(_imp->u_2(s) * _imp->u_3(s));
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
         std::function<double (const double &)> f = std::bind(std::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_branching_ratio),
@@ -1087,6 +1105,39 @@ namespace eos
                 std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::placeholders::_1);
 
         return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_h_1(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_4, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_1, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_3, _imp, std::placeholders::_1);
+
+        return integrate(num1, 64, s_min, s_max)
+            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_h_2(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_5, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_1, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_2, _imp, std::placeholders::_1);
+
+        return integrate(num1, 64, s_min, s_max)
+            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_h_3(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_6, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_2, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_3, _imp, std::placeholders::_1);
+
+        return integrate(num1, 64, s_min, s_max)
+            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
     }
 
     double
