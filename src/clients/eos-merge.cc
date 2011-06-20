@@ -59,6 +59,8 @@ class CommandLine :
 
         std::string output;
 
+        std::string creator;
+
         CommandLine()
         {
         }
@@ -66,6 +68,12 @@ class CommandLine :
         void parse(int argc, char ** argv)
         {
             Log::instance()->set_program_name("eos-merge");
+
+            creator = std::string(argv[0]);
+            for (int i = 1 ; i < argc ; ++i)
+            {
+                creator += ' ' + std::string(argv[i]);
+            }
 
             for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
             {
@@ -131,7 +139,7 @@ main(int argc, char * argv[])
                 }
             }
 
-            ScanFile output = ScanFile::Create(CommandLine::instance()->output, "eos-merge");
+            ScanFile output = ScanFile::Create(CommandLine::instance()->output, CommandLine::instance()->creator);
 
             for (auto a = all_data_sets.begin(), a_end = all_data_sets.end() ; a != a_end ; ++a)
             {

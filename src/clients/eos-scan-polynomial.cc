@@ -106,6 +106,8 @@ class CommandLine :
 
         std::string output;
 
+        std::string creator;
+
         double theory_uncertainty;
 
         CommandLine() :
@@ -120,9 +122,16 @@ class CommandLine :
 
             std::shared_ptr<Kinematics> kinematics(new Kinematics);
 
+            creator = std::string(argv[0]);
+            for (int i = 1 ; i < argc ; ++i)
+            {
+                creator += ' ' + std::string(argv[i]);
+            }
+
             for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
             {
                 std::string argument(*a);
+
                 if ("--scan-abs" == argument)
                 {
                     std::string coefficient = std::string(*(++a));

@@ -89,6 +89,8 @@ class CommandLine :
 
         std::vector<ObservableInput> inputs;
 
+        std::string creator;
+
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(new LogLikelihood(parameters)),
@@ -108,6 +110,12 @@ class CommandLine :
             Log::instance()->set_program_name("eos-scan-mc");
 
             std::shared_ptr<Kinematics> kinematics(new Kinematics);
+
+            creator = std::string(argv[0]);
+            for (int i = 1 ; i < argc ; ++i)
+            {
+                creator += ' ' + std::string(argv[i]);
+            }
 
             for (char ** a(argv + 1), **a_end(argv + argc); a != a_end; ++a)
             {
@@ -237,8 +245,7 @@ class CommandLine :
                 if ("--output" == argument)
                 {
                     std::string filename(*(++a));
-
-                    config.output_file.reset(new ScanFile(ScanFile::Create(filename, "eos-scan-mc")));
+                    config.output_file.reset(new ScanFile(ScanFile::Create(filename, creator)));
 
                     continue;
                 }
