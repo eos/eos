@@ -134,6 +134,8 @@ namespace eos
 
         UsedParameter m_Kstar;
 
+        UsedParameter m_l;
+
         UsedParameter mu;
 
         UsedParameter alpha_e;
@@ -170,6 +172,7 @@ namespace eos
             m_s(p["mass::s"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_Kstar(p["mass::K^*0"], u),
+            m_l(p["mass::" + o.get("l", "mu")], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
@@ -915,6 +918,8 @@ namespace eos
     template <>
     struct Implementation<BToKDilepton<LowRecoil>>
     {
+        Parameters parameters;
+
         std::shared_ptr<Model> model;
 
         UsedParameter hbar;
@@ -925,11 +930,7 @@ namespace eos
 
         UsedParameter m_K;
 
-        UsedParameter m_e;
-
-        UsedParameter m_mu;
-
-        UsedParameter m_tau;
+        UsedParameter m_l;
 
         UsedParameter mu;
 
@@ -941,8 +942,6 @@ namespace eos
 
         UsedParameter sl_phase_pseudo;
 
-        double m_l;
-
         // Mean life time
         UsedParameter tau;
 
@@ -953,14 +952,13 @@ namespace eos
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            parameters(p),
             model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["hbar"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_K(p["mass::K0"], u),
-            m_e(p["mass::e"], u),
-            m_mu(p["mass::mu"], u),
-            m_tau(p["mass::tau"], u),
+            m_l(p["mass::" + o.get("l", "mu")], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
@@ -981,22 +979,6 @@ namespace eos
 
             u.uses(*form_factors);
             u.uses(*model);
-
-            std::string lepton = o.get("l", "mu");
-            if ("e" == lepton)
-            {
-                m_l = m_e;
-            }
-            else if ("mu" == lepton)
-            {
-                m_l = m_mu;
-            }
-            else if ("tau" == lepton)
-            {
-                m_l = m_tau;
-            }
-            else
-                throw InternalError("Unknown fourth lepton generation: " + lepton);
         }
 
         // We use the PS mass except for kappa
@@ -1044,7 +1026,7 @@ namespace eos
         // speed of the lepton
         double beta(const double & s) const
         {
-            return std::sqrt(1.0 - 4.0 * power_of<2>(m_l) / s);
+            return std::sqrt(1.0 - 4.0 * power_of<2>(m_l()) / s);
         }
 
         double xi_b(const double & s) const
@@ -1064,7 +1046,7 @@ namespace eos
             const double lam = lambda(power_of<2>(m_B()), power_of<2>(m_K()), s);
 
             return gamma0() * std::sqrt(lam) * beta(s) * power_of<2>(form_factors->f_p(s)) *
-                    (0.25 * lam * rho_1(wc, s) + power_of<2>(m_l) * std::norm(wc.c10()) * (power_of<2>(xi_b(s)) * s +
+                    (0.25 * lam * rho_1(wc, s) + power_of<2>(m_l()) * std::norm(wc.c10()) * (power_of<2>(xi_b(s)) * s +
                     2.0 * (power_of<2>(m_B()) - power_of<2>(m_K()) - s) * xi_b(s) + 4.0 * power_of<2> (m_K())));
         }
 
@@ -1159,14 +1141,20 @@ namespace eos
     double
     BToKDilepton<LowRecoil>::integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const
     {
-        Save<double> m_l(_imp->m_l, _imp->m_e());
-
         std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKDilepton<LowRecoil>::differential_branching_ratio),
                 this, std::placeholders::_1);
 
-        double br_electrons = integrate(integrand, 64, s_min, s_max);
-        _imp->m_l = _imp->m_mu();
-        double br_muons = integrate(integrand, 64, s_min, s_max);
+        double br_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            br_electrons = integrate(integrand, 64, s_min, s_max);
+        }
+
+        double br_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            br_muons = integrate(integrand, 64, s_min, s_max);
+        }
 
         // cf. [BHP2007], Eq. (4.10), p. 6
         return br_muons / br_electrons;

@@ -55,6 +55,8 @@ namespace eos
 
         UsedParameter m_tau;
 
+        UsedParameter m_l;
+
         UsedParameter m_Z;
 
         UsedParameter br_clnu;
@@ -71,14 +73,13 @@ namespace eos
 
         UsedParameter admixture;
 
-        double m_l;
-
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
             m_s(p["mass::s"], u),
             m_tau(p["mass::tau"], u),
+            m_l(p["mass::" + o.get("l", "mu")], u),
             m_Z(p["mass::Z"], u),
             br_clnu(p["exp::BR(B->X_clnu)"], u),
             lambda_2(p["B->X_s::lambda_2"], u),
@@ -88,19 +89,11 @@ namespace eos
             C(p["exp::C(B->X_clnu, B->X_ulnu)"], u),
             admixture(p["exp::Admixture-BR(B->X_sll)"], u)
         {
-            static const double m_mu = 0.10565836; // (GeV), cf. [PDG2008], p. 13
-            static const double m_e = 0.00051099892; // (GeV), cf. [PDG2008], p. 13
-
             if ("SM" != o.get("model", "SM"))
             {
                 Log::instance()->message("B->X_sll.model", ll_error)
                     << "B->X_sll is not yet capable to handle models beyond SM, e.g. for helicity flipped operators; use it carefully";
             }
-
-            m_l = m_mu;
-
-            if (o.has("l") && ("e" == o["l"]))
-                m_l = m_e;
 
             u.uses(*model);
         }

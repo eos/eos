@@ -529,7 +529,7 @@ namespace eos
 
         UsedParameter m_Kstar;
 
-        double m_l;
+        UsedParameter m_l;
 
         UsedParameter mu;
 
@@ -584,6 +584,7 @@ namespace eos
             m_c(p["mass::c"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_Kstar(p["mass::K^*0"], u),
+            m_l(p["mass::" + o.get("l", "mu")], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
@@ -626,9 +627,6 @@ namespace eos
             }
             else
                 throw InternalError("Unsupported spectator quark");
-
-            // TODO: Lepton masses, m_l = m_mu
-            m_l = 0.0;//m_l = 0.10565836; // (GeV), cf. [PDG2008], p. 13
         }
 
         /* Form factors */
@@ -1152,6 +1150,8 @@ namespace eos
     template <>
     struct Implementation<BToKDilepton<LargeRecoil>>
     {
+        Parameters parameters;
+
         std::shared_ptr<Model> model;
 
         UsedParameter hbar;
@@ -1164,13 +1164,7 @@ namespace eos
 
         UsedParameter m_K;
 
-        UsedParameter m_e;
-
-        UsedParameter m_mu;
-
-        UsedParameter m_tau;
-
-        double m_l;
+        UsedParameter m_l;
 
         UsedParameter mu;
 
@@ -1199,15 +1193,14 @@ namespace eos
         std::shared_ptr<FormFactors<PToP>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            parameters(p),
             model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["hbar"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_K(p["mass::K0"], u),
-            m_e(p["mass::e"], u),
-            m_mu(p["mass::mu"], u),
-            m_tau(p["mass::tau"], u),
+            m_l(p["mass::" + o.get("l", "mu")], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
@@ -1239,22 +1232,6 @@ namespace eos
             }
             else
                 throw InternalError("Unsupported spectator quark");
-
-            std::string lepton = o.get("l", "mu");
-            if ("e" == lepton)
-            {
-                m_l = m_e;
-            }
-            else if ("mu" == lepton)
-            {
-                m_l = m_mu;
-            }
-            else if ("tau" == lepton)
-            {
-                m_l = m_tau;
-            }
-            else
-                throw InternalError("Unknown fourth lepton generation: " + lepton);
         }
 
         /* Form factors */
@@ -1299,7 +1276,7 @@ namespace eos
         // cf. [BHP2007], Eq. (3.2), p. 4
         std::complex<double> F_P(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
-            return m_l * wc.c10() *
+            return m_l() * wc.c10() *
                     ((m_B() * m_B() - m_K() * m_K()) / s * (form_factors->f_0(s) / form_factors->f_p(s) - 1.0) - 1.0);
         }
 
@@ -1430,14 +1407,20 @@ namespace eos
     double
     BToKDilepton<LargeRecoil>::integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const
     {
-        Save<double> m_l(_imp->m_l, _imp->m_e());
-
         std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKDilepton<LargeRecoil>::differential_branching_ratio),
                 this, std::placeholders::_1);
 
-        double br_electrons = integrate(integrand, 64, s_min, s_max);
-        _imp->m_l = _imp->m_mu();
-        double br_muons = integrate(integrand, 64, s_min, s_max);
+        double br_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            br_electrons = integrate(integrand, 64, s_min, s_max);
+        }
+
+        double br_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            br_muons = integrate(integrand, 64, s_min, s_max);
+        }
 
         // cf. [BHP2007], Eq. (4.10), p. 6
         return br_muons / br_electrons;
