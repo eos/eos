@@ -1154,6 +1154,80 @@ namespace eos
         return _imp->a_fb_zero_crossing();
     }
 
+    double
+    BToKstarDilepton<LargeRecoil>::four_differential_decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const
+    {
+        // compute J (and d^4 Gamma) for m_l = 0, cf. [BHvD2010], p. 5, Eq. (2.6)
+        // and p. 26, Eqs. (A1)-(A11)
+        complex<double> a_long_left = _imp->a_long(left_handed, s),
+            a_long_right = _imp->a_long(right_handed, s);
+        complex<double> a_perp_left = _imp->a_perp(left_handed, s),
+            a_perp_right = _imp->a_perp(right_handed, s);
+        complex<double> a_par_left = _imp->a_par(left_handed, s),
+            a_par_right = _imp->a_par(right_handed, s);
+        complex<double> a_timelike = _imp->a_timelike(s);
+
+        double z = 4.0 * power_of<2>(_imp->m_l()) / s, beta2 = 1.0 - z, beta = sqrt(beta2);
+
+        // Cosine squared of the angles
+        double c_theta_k_2 = c_theta_k * c_theta_k;
+        double c_theta_l_2 = c_theta_l * c_theta_l;
+        double c_phi = cos(phi);
+        // Sine squared of the angles
+        double s_theta_k_2 = 1.0 - c_theta_k_2;
+        double s_theta_l_2 = 1.0 - c_theta_l_2;
+        // Sine of the angles
+        double s_theta_k = sqrt(s_theta_k_2);
+        double s_theta_l = sqrt(s_theta_l_2);
+        double s_phi = sin(phi);
+        // Cosine of twice the angle
+        //double c_2_theta_k = 2.0 * c_theta_k - 1.0;
+        double c_2_theta_l = 2.0 * c_theta_l - 1.0;
+        double c_2_phi = cos(2.0 * phi);
+        // Sine of twice the angle
+        double s_2_theta_k = 2.0 * s_theta_k * c_theta_k;
+        double s_2_theta_l = 2.0 * s_theta_l * c_theta_l;
+        double s_2_phi = sin(2.0 * phi);
+
+        double j1s = 3.0 / 4.0 * (
+                (2.0 + beta2) / 4.0 * (norm(a_perp_left) + norm(a_perp_right) + norm(a_par_left) * norm(a_par_right))
+                + z * real(a_perp_left * conj(a_perp_right) + a_par_left * conj(a_par_right)));
+        double j1c = 3.0 / 4.0 * (
+                norm(a_long_left) + norm(a_long_right)
+                + z * (norm(a_timelike) + 2.0 * real(a_long_left * conj(a_long_right))));
+        double j2s = 3 * beta2 / 16.0 * (
+                norm(a_perp_left) + norm(a_perp_right) + norm(a_par_left) + norm(a_par_right));
+        double j2c = -3.0 * beta2 / 4.0 * (
+                norm(a_long_left) + norm(a_long_right));
+        double j3 = 3.0 / 8.0 * beta2 * (
+                norm(a_perp_left) + norm(a_perp_right) - norm(a_par_left) - norm(a_par_right));
+        double j4 = 3.0 / (4.0 * sqrt(2.0)) * beta2 * real(
+                a_long_left * conj(a_par_left) + a_long_right * conj(a_par_right));
+        double j5 = 3.0 * sqrt(2.0) / 4.0 * beta * real(
+                a_long_left * conj(a_perp_left) - a_long_right * conj(a_perp_right));
+        double j6s = 3.0 / 2.0 * beta * real(
+                a_par_left * conj(a_perp_left) - a_par_right * conj(a_perp_right));
+        double j6c = 0.0;
+        double j7 = 3.0 * sqrt(2.0) / 4.0 * beta * imag(
+                a_long_left * conj(a_par_left) - a_long_right * conj(a_par_right));
+        double j8 = 3.0 / 4.0 / sqrt(2.0) * beta2 * imag(
+                a_long_left * conj(a_perp_left) + a_long_right * conj(a_perp_right));
+        double j9 = 3.0 / 4.0 * beta2 * imag(
+                conj(a_par_left) * a_perp_left + conj(a_par_right) * a_perp_right);
+
+        return 3.0 / 8.0 / M_PI * (
+                    j1s + (j1c - j1s) * c_theta_k_2
+                +  (j2s + (j2c - j2s) * c_theta_k_2) * c_2_theta_l
+                +  j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
+                +  j4 * s_2_theta_k * s_2_theta_l * c_phi
+                +  j5 * s_2_theta_k * s_theta_l * c_phi
+                +  (j6s * s_theta_k_2 + j6c * c_theta_k_2) * c_theta_l
+                +  j7 * s_2_theta_k * s_theta_l * s_phi
+                +  j8 * s_2_theta_k * s_2_theta_l * s_phi
+                +  j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi
+                );
+    }
+
     /*
      * Decay: B -> K l lbar at Large Recoil
      */

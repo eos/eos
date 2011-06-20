@@ -53,7 +53,10 @@ namespace eos
             // Inverse Observables
             double a_fb_zero_crossing() const;
 
-            // Differential Observables
+            // Four Differential Observables
+            double four_differential_decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const;
+
+            // Single Differential Observables
             double differential_branching_ratio(const double & s) const;
             double differential_decay_width(const double & s) const;
             double differential_forward_backward_asymmetry(const double & s) const;
