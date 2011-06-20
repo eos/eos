@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,15 +22,15 @@
 
 namespace eos
 {
-    template <typename T_> class Save
+    template <typename V_, typename R_ = V_> class Save
     {
         private:
-            T_ & _variable;
+            V_ & _variable;
 
-            T_ _original;
+            R_ _original;
 
         public:
-            Save(T_ & variable, const T_ & replacement) :
+            Save(V_ & variable, const R_ & replacement) :
                 _variable(variable),
                 _original(variable)
             {
