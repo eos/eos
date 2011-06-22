@@ -69,8 +69,14 @@ class BToKstarDileptonLowRecoilTest :
                 p["CKM::lambda"] = 0.2257;
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
+                // Kaon mass
+                p["mass::K^*0"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
+                // s quark mass
+                p["mass::s"] = 0.0;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -151,8 +157,14 @@ class BToKstarDileptonLowRecoilTest :
                 p["CKM::lambda"] = 0.2257;
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
+                // Kaon mass
+                p["mass::K^*0"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
+                // s quark mass
+                p["mass::s"] = 0.0;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -196,8 +208,14 @@ class BToKstarDileptonLowRecoilTest :
                 p["CKM::lambda"] = 0.2257;
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
+                // Kaon mass
+                p["mass::K^*0"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
+                // s quark mass
+                p["mass::s"] = 0.0;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -422,8 +440,11 @@ class BToKDileptonLowRecoilTest :
                 p["CKM::lambda"] = 0.2257;
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
+                // Kaon mass
+                p["mass::K0"] = 0.49761;
                 // B mass
                 p["mass::B_d"] = 5.27953;
+                p["mass::b(MSbar)"] = 4.2;
 
                 Options oo;
                 oo.set("model", "WilsonScan");

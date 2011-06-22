@@ -35,6 +35,7 @@ reference_parameters()
     result["QCD::mu_t"] = 170.0;
     result["QCD::mu_b"] = 4.2;
     result["QCD::mu_c"] = 1.2;
+    result["mass::b(MSbar)"] = 4.2;
     result["mass::W"] = 80.398;
     result["mass::Z"] = 91.1876;
     result["mass::t(pole)"] = 173.3;

@@ -60,6 +60,9 @@ class BToXsDileptonLargeRecoilTest :
                 p["Abs{c10}"] = +4.173;
                 p["Arg{c10}"] = M_PI;
 
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
+
                 Options oo;
                 oo.set("model", "WilsonScan");
                 oo.set("l", "mu");

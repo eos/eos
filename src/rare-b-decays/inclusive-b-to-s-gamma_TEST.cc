@@ -56,6 +56,8 @@ class BToXsGammaLargeRecoilTest :
                 p["CKM::lambda"] = 0.2257;
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
 
                 Options oo;
                 oo.set("model", "WilsonScan");

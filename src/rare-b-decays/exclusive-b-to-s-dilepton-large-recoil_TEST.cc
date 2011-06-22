@@ -71,6 +71,14 @@ class BToKstarDileptonLargeRecoilTest :
                 p["CKM::etabar"] = 0.349;
                 // BHvD2010 parameters
                 p["decay-constant::B_d"] = 0.200;
+                // Kaon mass
+                p["mass::K^*0"] = 0.896;
+                // B mass
+                p["mass::B_d"] = 5.2795;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
+                p["mass::W"] = 80.398;
+                p["mass::tau"] = 1.77684;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -141,8 +149,13 @@ class BToKstarDileptonLargeRecoilTest :
                 p["CKM::lambda"] = 0.2257;
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
+                // Kaon mass
+                p["mass::K^*0"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.20;
+                p["mass::W"] = 80.398;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -280,10 +293,15 @@ class BToKDileptonLargeRecoilTest :
                 p["CKM::lambda"] = 0.2257;
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
-                // B mass
-                p["mass::B_d"] = 5.27953;
                 // B decay constant
                 p["decay-constant::B_d"] = 0.200;
+                // Kaon mass
+                p["mass::K0"] = 0.49761;
+                // B mass
+                p["mass::B_d"] = 5.27953;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.20;
+                p["mass::W"] = 80.398;
 
                 Options oo;
                 oo.set("model", "WilsonScan");

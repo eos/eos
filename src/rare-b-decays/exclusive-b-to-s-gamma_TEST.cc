@@ -64,6 +64,7 @@ class BToKstarGammaTest :
                 p["CKM::rhobar"] = 0.144;
                 p["CKM::etabar"] = 0.342;
                 p["decay-constant::B_d"] = 0.200;
+                p["mass::b(MSbar)"] = 4.2;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
