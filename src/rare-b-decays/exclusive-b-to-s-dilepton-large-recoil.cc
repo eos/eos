@@ -785,6 +785,16 @@ namespace eos
                     (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * ShortDistanceLargeRecoil::calT_perp(-1.0, s, p, xi_perp(s)));
         }
 
+        complex<double> a_timelike(const double & s) const
+        {
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            double m_Kstarhat = m_Kstar / m_B;
+            double shat = s_hat(s);
+
+            return this->norm(s) * m_B * sqrt(lambda(1.0, power_of<2>(m_Kstarhat), shat) / shat) *
+                complex<double>(0.0, 2.0) * (wc.c10() - wc.c10prime()) * form_factors->a_0(s);
+        }
+
         // Unormalized combinations of transversity amplitudes
         double u_1(const double & s) const
         {

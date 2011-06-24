@@ -333,6 +333,16 @@ namespace eos
             return this->norm(s) * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.14), p. 10
         }
 
+        complex<double> a_timelike(const double & s) const
+        {
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            double m_Kstarhat = m_Kstar / m_B;
+            double shat = s_hat(s);
+
+            return this->norm(s) * m_B * sqrt(lambda(1.0, power_of<2>(m_Kstarhat), shat) / shat) *
+                complex<double>(0.0, 2.0) * (wc.c10() - wc.c10prime()) * form_factors->a_0(s);
+        }
+
         // Quantity Y = Y_9 + lambda_u_hat Y_9^u + kappa_hat Y_7, the strong phase contributor of the amplitudes
         complex<double> Y(const double & s) const
         {
