@@ -30,6 +30,7 @@ namespace eos
 {
     // forward declaration
     struct HDF5File;
+    typedef int hid_t;
 
     /*!
      * ScanFileError is parent to all exceptions thrown by ScanFile when creating, opening or accessing scan file data.
@@ -255,30 +256,80 @@ namespace eos
     /*!
      * Holds information on one of the fields in a Scanfile::DataSet.
      */
-    struct ScanFile::FieldInfo
+    class ScanFile::FieldInfo :
+        public PrivateImplementationPattern<ScanFile::FieldInfo>
     {
-        ///@name Basic Functions
-        ///@{
-        FieldInfo(const std::string & name, const double & min, const double & max, bool nuisance = false, bool discrete = false);
-        ///@}
+        private:
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Constructor.
+             *
+             * @param file   The HDF5 file that we work on.
+             * @param set_id The HDF5 data set id whose field we describe.
+             * @param index  The index of the field we describe.
+             */
+            FieldInfo(const std::shared_ptr<HDF5File> & file, hid_t set_id, unsigned index);
+            ///@}
 
-        ///@name Data
-        ///@{
-        /// Name of the field.
-        std::string name;
+        public:
+            ///@name Basic Functions
+            ///@{
+            /*!
+             * Named constructor to create a new FieldInfo.
+             *
+             * @param file   The HDF5 file that we work on.
+             * @param set_id The HDF5 data set id whose field we describe.
+             * @param index  The index of the field we describe.
+             */
+            static FieldInfo Create(const std::shared_ptr<HDF5File> & file, hid_t set_id, unsigned index);
 
-        /// Minimal value in this field.
-        double min;
+            /*!
+             * Named constructor to open an existing FieldInfo from disk.
+             *
+             * @param file   The HDF5 file that we work on.
+             * @param set_id The HDF5 data set id whose field we describe.
+             * @param index  The index of the field we describe.
+             */
+            static FieldInfo Open(const std::shared_ptr<HDF5File> & file, hid_t set_id, unsigned index);
 
-        /// Maximal value in this field.
-        double max;
+            /// Destructor.
+            ~FieldInfo();
+            ///@}
 
-        /// Whether this field contains a nuisance parameter.
-        bool nuisance;
+            ///@name Metadata
+            ///@{
+            /// Obtain the name of the field.
+            std::string name() const;
 
-        /// Whether parameter is discrete or continuous
-        bool discrete;
-        ///@}
+            /// Set the name of the field.
+            void name(const std::string & name);
+            ///@}
+
+            ///@name Numeric Data
+            ///@{
+            /*!
+             * Obtain the contents of a named numeric attribute.
+             *
+             * Known attribute names are:
+             *
+             *   min, max, nuisance, discrete
+             *
+             * @param attribute_name The name of the attribute.
+             * @param default_value  The value that shall be returned in case the attribute does not exist.
+             */
+            double get(const std::string & attribute_name, const double & default_value = 0);
+
+            /*!
+             * Write the contents of a named attribute.
+             *
+             * See 'get' for a list of known attribute names.
+             *
+             * @param attribute_name The name of the attribute.
+             * @param value          The new value for the attribute.
+             */
+            void set(const std::string & attribute_name, const double & value);
+            ///@}
     };
 
     /*!

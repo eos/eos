@@ -18,6 +18,7 @@
  */
 
 #include <config.h>
+#include <src/utils/log.hh>
 #include <src/utils/private_implementation_pattern-impl.hh>
 #include <src/utils/scan_file.hh>
 #include <src/utils/stringify.hh>
@@ -25,6 +26,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <map>
 
 #include <hdf5.h>
 #include <hdf5_hl.h>
@@ -394,13 +396,191 @@ namespace eos
     }
 
     /* ScanFile::FieldInfo */
-    ScanFile::FieldInfo::FieldInfo(const std::string & name, const double & min, const double & max, bool nuisance, bool discrete) :
-        name(name),
-        min(min),
-        max(max),
-        nuisance(nuisance),
-        discrete(discrete)
+    template <>
+    struct Implementation<ScanFile::FieldInfo>
     {
+        std::shared_ptr<HDF5File> file;
+
+        hid_t set_id;
+
+        unsigned index;
+
+        std::string field_prefix;
+
+        std::string field_name;
+
+        std::map<std::string, double> attributes;
+
+        Implementation(const std::shared_ptr<HDF5File> & file, hid_t set_id, unsigned index) :
+            file(file),
+            set_id(set_id),
+            index(index),
+            field_prefix("FIELD_" + stringify(index) + "_ATTR_")
+        {
+        }
+
+        ~Implementation()
+        {
+            if (file->read_only)
+                return;
+
+            // write the field name
+            {
+                std::string attr_name = "FIELD_" + stringify(index) + "_NAME";
+                H5LTset_attribute_string(set_id, ".", attr_name.c_str(), field_name.c_str());
+            }
+
+            // write the attributes
+            for (auto i = attributes.cbegin(), i_end = attributes.cend() ; i != i_end ; ++i)
+            {
+                std::string attr_name = field_prefix + i->first;
+                H5LTset_attribute_double(set_id, ".", attr_name.c_str(), &i->second, 1);
+            }
+        }
+
+        void read()
+        {
+            // read the field name
+            {
+                std::string attr_name = "FIELD_" + stringify(index) + "_NAME";
+                hsize_t attr_rank;
+                H5T_class_t attr_class;
+                size_t attr_size;
+
+                // how large is the attribute's value?
+                herr_t ret = H5LTget_attribute_info(set_id, ".", attr_name.c_str(), &attr_rank, &attr_class, &attr_size);
+                if (ret < 0)
+                    throw ScanFileHDF5Error("H5LTget_attribute_info", ret);
+
+                // allocate a suitable buffer
+                // fuck the HDF5 Lite API!
+                std::vector<char> attr_data(attr_size + 1, '\0');
+
+                // get the name
+                ret = H5LTget_attribute_string(set_id, ".", attr_name.c_str(), &attr_data[0]);
+                if (ret < 0)
+                    field_name = "(UNLABELED)";
+                else
+                    field_name = std::string(&attr_data[0]);
+            }
+
+            // read the remaining attributes
+            {
+                hsize_t n = 0;
+                herr_t result = H5Aiterate2(set_id, H5_INDEX_NAME, H5_ITER_NATIVE, &n, &Implementation<ScanFile::FieldInfo>::read_attributes, this);
+
+                if (0 != result)
+                    throw InternalError("ScanFile::FieldInfo::FieldInfo(): H5Aiterate2 returned non-zero result");
+            }
+        }
+
+        static herr_t read_attributes(hid_t /*id*/, const char * _name, const H5A_info_t * info, void * _imp)
+        {
+            Implementation * imp = reinterpret_cast<Implementation<ScanFile::FieldInfo> *>(_imp);
+            std::string attr_name(_name);
+
+            // only read attributes with the right prefix
+            if (attr_name.substr(0, imp->field_prefix.size()) != imp->field_prefix)
+                return 0;
+
+            // remove the prefix from the attribute's name
+            attr_name.erase(0, imp->field_prefix.size());
+
+            // discard empty attributes
+            if (0 == info->data_size)
+            {
+                Log::instance()->message("scan_file.field_info.read_attributes", ll_warning)
+                    << "Attribute '" << attr_name << "' of size zero discarded";
+
+                return 0;
+            }
+
+            // how large is the attribute's value?
+            hsize_t attr_rank;
+            H5T_class_t attr_class;
+            size_t attr_size;
+            herr_t ret = H5LTget_attribute_info(imp->set_id, ".", _name, &attr_rank, &attr_class, &attr_size);
+            if (ret < 0)
+                throw ScanFileHDF5Error("H5LTget_attribute_info", ret);
+
+            // discard non-scalar attributes
+            if (sizeof(double) != attr_size)
+            {
+                Log::instance()->message("scan_file.field_info.read_attributes", ll_warning)
+                    << "Attribute '" << attr_name << "' of size " << attr_size << " discarded";
+
+                return 0;
+            }
+
+            // read the attribute
+            double attr_data;
+            H5LTget_attribute_double(imp->set_id, ".", _name, &attr_data);
+            imp->attributes[attr_name] = attr_data;
+
+            return 0;
+        }
+
+        double get(const std::string & attribute, const double & default_value)
+        {
+            auto i = attributes.find(attribute), i_end = attributes.cend();
+            if (i_end == i)
+                return default_value;
+
+            return i->second;
+        }
+
+        void set(const std::string & attribute, const double & value)
+        {
+            attributes[attribute] = value;
+        }
+    };
+
+    ScanFile::FieldInfo::FieldInfo(const std::shared_ptr<HDF5File> & file, hid_t set_id, unsigned index) :
+        PrivateImplementationPattern<ScanFile::FieldInfo>(new Implementation<ScanFile::FieldInfo>(file, set_id, index))
+    {
+    }
+
+    ScanFile::FieldInfo::~FieldInfo()
+    {
+    }
+
+    ScanFile::FieldInfo
+    ScanFile::FieldInfo::Create(const std::shared_ptr<HDF5File> & file, hid_t set_id, unsigned index)
+    {
+        return FieldInfo(file, set_id, index);
+    }
+
+    ScanFile::FieldInfo
+    ScanFile::FieldInfo::Open(const std::shared_ptr<HDF5File> & file, hid_t set_id, unsigned index)
+    {
+        FieldInfo result(file, set_id, index);
+        result._imp->read();
+
+        return result;
+    }
+
+    std::string
+    ScanFile::FieldInfo::name() const
+    {
+        return _imp->field_name;
+    }
+
+    void
+    ScanFile::FieldInfo::name(const std::string & name)
+    {
+        _imp->field_name = name;
+    }
+
+    double
+    ScanFile::FieldInfo::get(const std::string & attribute_name, const double & default_value)
+    {
+        return _imp->get(attribute_name, default_value);
+    }
+
+    void
+    ScanFile::FieldInfo::set(const std::string & attribute_name, const double & value)
+    {
+        _imp->set(attribute_name, value);
     }
 
     /* ScanFile::DataSet */
@@ -453,7 +633,6 @@ namespace eos
             space_id_memory(H5I_INVALID_HID),
             space_id_file(H5I_INVALID_HID),
             space_id_file_writing(H5I_INVALID_HID),
-            field_infos(fields, ScanFile::FieldInfo("", 0.0, 0.0, false)),
             truncate_on_destroy(true)
         {
             // create space id for in-memory representation
@@ -495,7 +674,12 @@ namespace eos
                 set_id = H5Dcreate2(group_id_data, name.c_str(), H5T_IEEE_F64LE, space_id_file, H5P_DEFAULT, dcpl_id, H5P_DEFAULT);
                 if (H5I_INVALID_HID == set_id)
                     throw ScanFileHDF5Error("H5Dcreate2", set_id);
+            }
 
+            // create one FieldInfo per field
+            for (unsigned i = 0 ; i < fields ; ++i)
+            {
+                field_infos.push_back(ScanFile::FieldInfo::Create(file, set_id, i));
             }
         }
 
@@ -551,58 +735,7 @@ namespace eos
             // read field infos from attributes
             for (unsigned i = 0 ; i < fields ; ++i)
             {
-                // name
-                std::string name_attr_name = "FIELD_" + stringify(i) + "_NAME";
-                hsize_t name_attr_rank;
-                H5T_class_t name_attr_class;
-                size_t name_attr_size;
-
-                // how large is the attribute's value?
-                herr_t ret = H5LTget_attribute_info(group_id_data, name.c_str(), name_attr_name.c_str(), &name_attr_rank, &name_attr_class, &name_attr_size);
-                if (ret < 0)
-                    throw ScanFileHDF5Error("H5LTget_attribute_info", ret);
-
-                // allocate a suitable buffer
-                // fuck the HDF5 Lite API!
-                std::vector<char> name_attr_data(name_attr_size + 1, '\0');
-                std::string name_attr;
-
-                // get the name
-                ret = H5LTget_attribute_string(group_id_data, name.c_str(), name_attr_name.c_str(), &name_attr_data[0]);
-                if (ret < 0)
-                    name_attr = "(UNLABELED)";
-                else
-                    name_attr = std::string(&name_attr_data[0]);
-
-                // min
-                std::string min_attr_name = "FIELD_" + stringify(i) + "_MIN";
-                double min_attr;
-                ret = H5LTget_attribute_double(group_id_data, name.c_str(), min_attr_name.c_str(), &min_attr);
-                if (ret < 0)
-                    min_attr = std::numeric_limits<double>::min();
-
-                // max
-                std::string max_attr_name = "FIELD_" + stringify(i) + "_MAX";
-                double max_attr;
-                ret = H5LTget_attribute_double(group_id_data, name.c_str(), max_attr_name.c_str(), &max_attr);
-                if (ret < 0)
-                    max_attr = std::numeric_limits<double>::max();
-
-                // nuisance
-                std::string nuisance_attr_name = "FIELD_" + stringify(i) + "_NUISANCE";
-                unsigned short nuisance_attr;
-                ret = H5LTget_attribute_ushort(group_id_data, name.c_str(), nuisance_attr_name.c_str(), &nuisance_attr);
-                if (ret < 0)
-                    nuisance_attr = false;
-
-                // discrete
-                std::string discrete_attr_name = "FIELD_" + stringify(i) + "_DISCRETE";
-                unsigned short discrete_attr;
-                ret = H5LTget_attribute_ushort(group_id_data, name.c_str(), discrete_attr_name.c_str(), &discrete_attr);
-                if (ret < 0)
-                    discrete_attr = false;
-
-                field_infos.push_back(ScanFile::FieldInfo(name_attr, min_attr, max_attr, nuisance_attr, discrete_attr));
+                field_infos.push_back(ScanFile::FieldInfo::Open(file, set_id, i));
             }
         }
 
@@ -618,41 +751,8 @@ namespace eos
                     throw ScanFileHDF5Error("H5Dset_extent", ret);
             }
 
-            // create attributes for field info
-            if (! file->read_only)
-            {
-                unsigned i = 0;
-                for (auto f = field_infos.cbegin(), f_end = field_infos.cend() ; f != f_end ; ++f, ++i)
-                {
-                    std::string name_attr_name = "FIELD_" + stringify(i) + "_NAME",
-                        max_attr_name = "FIELD_" + stringify(i) + "_MAX",
-                        min_attr_name = "FIELD_" + stringify(i) + "_MIN",
-                        nuisance_attr_name = "FIELD_" + stringify(i) + "_NUISANCE",
-                        discrete_attr_name = "FIELD_" + stringify(i) + "_DISCRETE";
-
-                    herr_t ret = H5LTset_attribute_string(group_id_data, name.c_str(), name_attr_name.c_str(), f->name.c_str());
-                    if (ret < 0)
-                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
-
-                    ret = H5LTset_attribute_double(group_id_data, name.c_str(), max_attr_name.c_str(), &f->max, 1);
-                    if (ret < 0)
-                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
-
-                    ret = H5LTset_attribute_double(group_id_data, name.c_str(), min_attr_name.c_str(), &f->min, 1);
-                    if (ret < 0)
-                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
-
-                    unsigned short nuisance = f->nuisance;
-                    ret = H5LTset_attribute_ushort(group_id_data, name.c_str(), nuisance_attr_name.c_str(), &nuisance, 1);
-                    if (ret < 0)
-                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
-
-                    unsigned short discrete = f->discrete;
-                    ret = H5LTset_attribute_ushort(group_id_data, name.c_str(), discrete_attr_name.c_str(), &discrete, 1);
-                    if (ret < 0)
-                        throw ScanFileHDF5Error("H5LTset_attribute_string", ret);
-                }
-            }
+            // write out field infos if not read-only
+            field_infos.clear();
 
             herr_t ret = H5Fflush(set_id, H5F_SCOPE_LOCAL);
             if (0 > ret)
@@ -792,7 +892,7 @@ namespace
 
         bool operator() (const eos::ScanFile::FieldInfo & x)
         {
-            return x.name == _name;
+            return x.name() == _name;
         }
     };
 }

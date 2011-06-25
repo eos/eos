@@ -266,11 +266,11 @@ namespace eos
                     auto pp = analysis.parameter_descriptions();
                     for (auto p = pp.begin(), p_end = pp.end() ; p != p_end ; ++p, ++f)
                     {
-                        f->name = p->parameter.name();
-                        f->min = p->min;
-                        f->max = p->max;
-                        f->nuisance = p->nuisance;
-                        f->discrete = p->discrete;
+                        f->name(p->parameter.name());
+                        f->set("min", p->min);
+                        f->set("max", p->max);
+                        f->set("nuisance", p->nuisance);
+                        f->set("discrete", p->discrete);
                     }
 
                     if (data_set.end_fields() == f)
@@ -280,7 +280,7 @@ namespace eos
                                 + stringify(number_of_parameters) + " parameters");
                     }
 
-                    f->name = std::string("posterior");
+                    f->name("posterior");
                     data_sets.push_back(data_set);
                 }
             }

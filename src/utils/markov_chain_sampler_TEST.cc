@@ -110,18 +110,16 @@ class MarkovChainSamplerTest :
                     auto f = data_set.begin_fields();
 
                     // proper parameter?
-                    TEST_CHECK_EQUAL(f->name, "mass::b(MSbar)");
-                    TEST_CHECK_EQUAL(f->min, 3.7);
-                    TEST_CHECK_EQUAL(f->max, 4.9);
-                    TEST_CHECK_EQUAL(f->nuisance, false);
+                    TEST_CHECK_EQUAL(f->name(), "mass::b(MSbar)");
+                    TEST_CHECK_EQUAL(f->get("min", 0.0), 3.7);
+                    TEST_CHECK_EQUAL(f->get("max", 0.0), 4.9);
+                    TEST_CHECK_EQUAL(f->get("nuisance", 17.0), false);
 
                     ++f;
 
                     // only log(posterior)?
-                    TEST_CHECK_EQUAL(f->name, "posterior");
-                    TEST_CHECK_EQUAL(f->min, 0);
-                    TEST_CHECK_EQUAL(f->max, 0);
-                    TEST_CHECK_EQUAL(f->nuisance, false);
+                    TEST_CHECK_EQUAL(f->name(), "posterior");
+                    // posterior has currently no further attributes
                 }
             }
         }

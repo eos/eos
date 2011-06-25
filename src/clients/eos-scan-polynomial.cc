@@ -546,9 +546,9 @@ class WilsonScannerPolynomial
                 auto f = _data_sets.back().begin_fields();
                 for (auto p = _scan_parameters.cbegin(), p_end = _scan_parameters.cend() ; p != p_end ; ++p, ++f)
                 {
-                    f->name = p->name();
+                    f->name(p->name());
                 }
-                f->name = "posterior";
+                f->name("posterior");
 
                 _tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&WilsonScannerPolynomial::scan_range, this, begin, end, i)));
             }
@@ -558,9 +558,9 @@ class WilsonScannerPolynomial
             auto f = _data_sets.back().begin_fields();
             for (auto p = _scan_parameters.cbegin(), p_end = _scan_parameters.cend() ; p != p_end ; ++p, ++f)
             {
-                f->name = p->name();
+                f->name(p->name());
             }
-            f->name = "posterior";
+            f->name("posterior");
             _tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&WilsonScannerPolynomial::scan_range, this, c, _points.end(), i)));
 
             // Wait for job completion

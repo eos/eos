@@ -56,7 +56,10 @@ class ScanFileTest :
                     unsigned idx = 1;
                     for (auto f = test_set.begin_fields(), f_end = test_set.end_fields() ; f != f_end ; ++f, ++idx)
                     {
-                        *f = ScanFile::FieldInfo("result #1, field #" + stringify(idx), 0.0, idx * 1.0, false);
+                        f->name("result #1, field #" + stringify(idx));
+                        f->set("min", 0.0);
+                        f->set("max", idx * 1.0);
+                        f->set("nuisance", false);
                     }
 
                     test_set << std::vector<double>{ 3.0, 2.0, 1.0 };
@@ -140,11 +143,11 @@ class ScanFileTest :
                     unsigned idx = 1;
                     for (auto f = test_set.begin_fields(), f_end = test_set.end_fields() ; f != f_end ; ++f, ++idx)
                     {
-                        std::cout << "f->name = " << f->name << std::endl;
-                        TEST_CHECK_EQUAL("result #1, field #" + stringify(idx), f->name);
-                        TEST_CHECK_EQUAL(0.0, f->min);
-                        TEST_CHECK_EQUAL(1.0 * idx, f->max);
-                        TEST_CHECK_EQUAL(false, f->nuisance);
+                        std::cout << "f->name = " << f->name() << std::endl;
+                        TEST_CHECK_EQUAL("result #1, field #" + stringify(idx), f->name());
+                        TEST_CHECK_EQUAL(0.0,                                   f->get("min", 1.0));
+                        TEST_CHECK_EQUAL(1.0 * idx,                             f->get("max", 0.5));
+                        TEST_CHECK_EQUAL(false,                                 f->get("nuisance", 17.0));
                     }
                 }
 
