@@ -46,6 +46,12 @@ class BToXsDileptonLargeRecoilTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
+                p["c1"] = -0.32300000;
+                p["c2"] = +1.00931000;
+                p["c3"] = -0.00522869;
+                p["c4"] = -0.08794730;
+                p["c5"] = +0.00037476;
+                p["c6"] = +0.00105859;
                 p["Abs{c7}"] = 0.331;
                 p["Arg{c7}"] = M_PI;
                 p["c8"] = -0.181;

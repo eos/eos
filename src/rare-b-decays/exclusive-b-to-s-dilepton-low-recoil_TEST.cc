@@ -51,9 +51,15 @@ class BToKstarDileptonLowRecoilTest :
             {
                 Parameters p = Parameters::Defaults();
                 p["life_time::B_d"] = 1.530e-12;
+                p["c1"] = -0.32300000;
+                p["c2"] = +1.00931000;
+                p["c3"] = -0.00522869;
+                p["c4"] = -0.08794730;
+                p["c5"] = +0.00037476;
+                p["c6"] = +0.00105859;
                 p["Abs{c7}"] = 0.331;
                 p["Arg{c7}"] = M_PI;
-                p["c8"] = -0.181;
+                p["c8"] = -0.18100000;
                 p["Abs{c9}"] = +4.27;
                 p["Arg{c9}"] = 0.0;
                 p["Abs{c10}"] = +4.173;
@@ -127,6 +133,12 @@ class BToKstarDileptonLowRecoilTest :
             /* Low Recoil (Benchmark Point) */
             {
                 Parameters p = Parameters::Defaults();
+                p["c1"] = -0.32300000;
+                p["c2"] = +1.00931000;
+                p["c3"] = -0.00522869;
+                p["c4"] = -0.08794730;
+                p["c5"] = +0.00037476;
+                p["c6"] = +0.00105859;
                 p["Abs{c7}"] = 0.3;
                 p["Arg{c7}"] = -M_PI / 2.0;
                 p["c8"] = -0.181;
@@ -169,6 +181,12 @@ class BToKstarDileptonLowRecoilTest :
             /* Low Recoil (Zero Point for C_7 = C_9 = C_10 = 0) */
             {
                 Parameters p = Parameters::Defaults();
+                p["c1"] = -0.32300000;
+                p["c2"] = +1.00931000;
+                p["c3"] = -0.00522869;
+                p["c4"] = -0.08794730;
+                p["c5"] = +0.00037476;
+                p["c6"] = +0.00105859;
                 p["Abs{c7}"] = 0.0;
                 p["c8"] = -0.181;
                 p["Abs{c9}"] = 0.0;
@@ -389,6 +407,16 @@ class BToKDileptonLowRecoilTest :
             {
                 Parameters p = Parameters::Defaults();
                 p["life_time::B_d"] = 1.530e-12;
+                p["c1"] = -0.32300000;
+                p["c2"] = +1.00931000;
+                p["c3"] = -0.00522869;
+                p["c4"] = -0.08794730;
+                p["c5"] = +0.00037476;
+                p["c6"] = +0.00105859;
+                p["Abs{c7}"] = 0.331;
+                p["c8"] = -0.181;
+                p["Abs{c9}"] = 4.27;
+                p["Abs{c10}"] = 4.17;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;
@@ -438,6 +466,16 @@ class BToKDileptonLowRecoilTest :
                 p["CKM::etabar"] = 0.349;
                 // B mass
                 p["mass::B_d"] = 5.27953;
+                p["c1"] = -0.32300000;
+                p["c2"] = +1.00931000;
+                p["c3"] = -0.00522869;
+                p["c4"] = -0.08794730;
+                p["c5"] = +0.00037476;
+                p["c6"] = +0.00105859;
+                p["Abs{c7}"] = 0.331;
+                p["c8"] = -0.181;
+                p["Abs{c9}"] = 4.27;
+                p["Abs{c10}"] = 4.17;
                 p["Arg{c7}"] = -M_PI / 2.0;
                 p["Arg{c9}"] = +M_PI / 2.0;
                 p["Arg{c10}"] = -M_PI / 2.0;

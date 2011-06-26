@@ -433,5 +433,39 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c9()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c10()),  eps);
             }
+
+            /* Test for equality between SM Wilson coefficients and default parameter values */
+            {
+                // Do NOT use the reference parameters here!
+                static const double eps = 1e-8;
+                static const double mu = 4.2; // approximate m_b(m_b) MSbar mass
+
+                Parameters parameters = Parameters::Defaults();
+                StandardModel model(parameters);
+
+                parameters["mu"] = mu;
+                TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
+
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
+                TEST_CHECK_NEARLY_EQUAL(parameters["c1"],       real(wc.c1()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["c2"],       real(wc.c2()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["c3"],       real(wc.c3()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["c4"],       real(wc.c4()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["c5"],       real(wc.c5()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["c6"],       real(wc.c6()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Abs{c7}"],  abs(wc.c7()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Arg{c7}"],  arg(wc.c7()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Re{c7}"],   real(wc.c7()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Im{c7}"],   imag(wc.c7()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["c8"],       real(wc.c8()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Abs{c9}"],  abs(wc.c9()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Arg{c9}"],  arg(wc.c9()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Re{c9}"],   real(wc.c9()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Im{c9}"],   imag(wc.c9()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Abs{c10}"], abs(wc.c10()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Arg{c10}"], arg(wc.c10()),   eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Re{c10}"],  real(wc.c10()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["Im{c10}"],  imag(wc.c10()),  eps);
+            }
         }
 } wilson_coefficients_b_to_s_test;

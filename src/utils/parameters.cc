@@ -162,26 +162,26 @@ namespace eos
         return Parameters(new Implementation<Parameters>({
             Parameter::Template{"hbar",                                          +6.58211883e-25, +6.58211899e-25, +6.58211915e-25}, // GeV s, cf. [PDG2010]:  p. 4
 
-            // Wilson coefficients C1 - C6 at mu = 4.2 GeV to NLL accuary, based on [CMM1997]
-            Parameter::Template{"c1",                                            -0.32300000,     -0.32300000,     -0.32300000    },
-            Parameter::Template{"c2",                                            +1.00931000,     +1.00931000,     +1.00931000    },
-            Parameter::Template{"c3",                                            -0.00522869,     -0.00522869,     -0.00522869    },
-            Parameter::Template{"c4",                                            -0.08794730,     -0.08794730,     -0.08794730    },
-            Parameter::Template{"c5",                                            +0.00037476,     +0.00037476,     +0.00037476    },
-            Parameter::Template{"c6",                                            +0.00105859,     +0.00105859,     +0.00105859    },
-            // Wilson coefficients C7 - c10 at mu = 4.2 GeV to NNLL, based on ?
-            Parameter::Template{"Abs{c7}",                                       +0.331,          +0.331,          +0.331         }, // c7eff = -0.306
+            // Wilson coefficients C1 - C6 at mu = 4.2 GeV to NNLL accuary as calculated in the SM by EOS's StandardModel class.
+            // For the calculations, cf. [BMU1999].
+            Parameter::Template{"c1",                                            -0.28846676,     -0.28846676,     -0.28846676    },
+            Parameter::Template{"c2",                                            +1.01017822,     +1.01017822,     +1.01017822    },
+            Parameter::Template{"c3",                                            -0.00604629,     -0.00604629,     -0.00604629    },
+            Parameter::Template{"c4",                                            -0.08607506,     -0.08607506,     -0.08607506    },
+            Parameter::Template{"c5",                                            +0.00042146,     +0.00042146,     +0.00042146    },
+            Parameter::Template{"c6",                                            +0.00114089,     +0.00114089,     +0.00114089    },
+            Parameter::Template{"Abs{c7}",                                       +0.32741917,     +0.32741917,     +0.32741917    },
             Parameter::Template{"Arg{c7}",                                       +M_PI,           +M_PI,           +M_PI          },
-            Parameter::Template{"Re{c7}",                                        -0.331,          -0.331,          -0.331         },
+            Parameter::Template{"Re{c7}",                                        -0.32741917,     -0.32741917,     -0.32741917    },
             Parameter::Template{"Im{c7}",                                        +0.0,            +0.0,            +0.0           },
-            Parameter::Template{"c8",                                            -0.181,          -0.181,          -0.181         }, // c8eff = -0.168
-            Parameter::Template{"Abs{c9}",                                       +4.27,           +4.27,           +4.27          },
+            Parameter::Template{"c8",                                            -0.17707354,     -0.17707354,     -0.17707354    },
+            Parameter::Template{"Abs{c9}",                                       +4.27584794,     +4.27584794,     +4.27584794    },
             Parameter::Template{"Arg{c9}",                                       +0.00,           +0.00,           +0.00          },
-            Parameter::Template{"Re{c9}",                                        +4.27,           +4.27,           +4.27          },
+            Parameter::Template{"Re{c9}",                                        +4.27584794,     +4.27584794,     +4.27584794    },
             Parameter::Template{"Im{c9}",                                        +0.0,            +0.0,            +0.0           },
-            Parameter::Template{"Abs{c10}",                                      +4.17,           +4.17,           +4.17          },
+            Parameter::Template{"Abs{c10}",                                      +4.15077942,     +4.15077942,     +4.15077942    },
             Parameter::Template{"Arg{c10}",                                      +M_PI,           +M_PI,           +M_PI          },
-            Parameter::Template{"Re{c10}",                                       -4.17,           -4.17,           -4.17          },
+            Parameter::Template{"Re{c10}",                                       -4.15077942,     -4.15077942,     -4.15077942    },
             Parameter::Template{"Im{c10}",                                       +0.0,            +0.0,            +0.0           },
             // Primed Wilson coefficients are negligible in the SM
             Parameter::Template{"Abs{c7'}",                                      +0.0,            +0.0,            +0.0           },
