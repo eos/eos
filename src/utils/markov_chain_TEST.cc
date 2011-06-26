@@ -259,7 +259,7 @@ class MarkovChainTest :
                 // an interesting parameter that affects the observable
                 ana->add(LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{ 3.7, 4.9 }));
                 // another irrelevant parameters
-                ana->add(LogPrior::Flat(parameters, "formfactors::a1_uncertainty", ParameterRange{ 3.7, 4.9 }));
+                ana->add(LogPrior::Flat(parameters, "B->K^*::a1_uncertainty@BZ2004", ParameterRange{ 3.7, 4.9 }));
 
                 MarkovChain chain(ana, 12345);
 

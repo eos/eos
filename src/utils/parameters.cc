@@ -253,15 +253,14 @@ namespace eos
             Parameter::Template{"life_time::B_s",                                +1.446e-12,      +1.472e-12,      +1.496e-12     },
 
             // Form factor uncertainties
-            Parameter::Template{"formfactors::a0_uncertainty",                   +0.85,           +1.0,            +1.15          },
-            Parameter::Template{"formfactors::a1_uncertainty",                   +0.85,           +1.0,            +1.15          },
-            Parameter::Template{"formfactors::a2_uncertainty",                   +0.85,           +1.0,            +1.15          },
-            Parameter::Template{"formfactors::v_uncertainty",                    +0.85,           +1.0,            +1.15          },
             Parameter::Template{"formfactors::xi_perp_uncertainty",              +0.89,           +1.0,            +1.11          },
             Parameter::Template{"formfactors::xi_par_uncertainty",               +0.86,           +1.0,            +1.14          },
-            Parameter::Template{"formfactors::fp_uncertainty",                   +0.85,           +1.0,            +1.15          },
-            Parameter::Template{"formfactors::f0_uncertainty",                   +0.85,           +1.0,            +1.15          },
-            Parameter::Template{"formfactors::ft_uncertainty",                   +0.85,           +1.0,            +1.15          },
+
+            // form factor parameters for B->K^* according to [BZ2004] (approximate)
+            Parameter::Template{"B->K^*::a0_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },
+            Parameter::Template{"B->K^*::a1_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },
+            Parameter::Template{"B->K^*::a2_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },
+            Parameter::Template{"B->K^*::v_uncertainty@BZ2004",                  +0.85,           +1.0,            +1.15          },
 
             // form factor parameters for B->K^* according to [KMPW2010], Table 4, p. 31
             Parameter::Template{"B->K^*::F^V(0)@KMPW2010",                       +0.24,           +0.36,           +0.59          },
@@ -272,6 +271,11 @@ namespace eos
             Parameter::Template{"B->K^*::b^A0_1@KMPW2010",                      -21.2,            -18.2,          -16.9           },
             Parameter::Template{"B->K^*::b^A1_1@KMPW2010",                       -0.46,           +0.34,           +1.2           },
             Parameter::Template{"B->K^*::b^A2_1@KMPW2010",                       -2.2,            -0.85,           +2.03          },
+
+            // form factor parameters for B->K according to [BZ2004v2] (approximate)
+            Parameter::Template{"B->K::fp_uncertainty@BZ2004v2",                 +0.85,           +1.0,            +1.15          },
+            Parameter::Template{"B->K::f0_uncertainty@BZ2004v2",                 +0.85,           +1.0,            +1.15          },
+            Parameter::Template{"B->K::ft_uncertainty@BZ2004v2",                 +0.85,           +1.0,            +1.15          },
 
             // form factor parameters for B->K according to [KMPW2010], Table 4, p. 31
             Parameter::Template{"B->K::F^p(0)@KMPW2010",                         +0.32,           +0.34,           +0.39          },

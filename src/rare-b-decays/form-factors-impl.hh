@@ -73,10 +73,10 @@ namespace eos
 
         public:
             BZ2004FormFactors(const Parameters & p, const Options &) :
-                _v_factor(p["formfactors::v_uncertainty"], *this),
-                _a0_factor(p["formfactors::a0_uncertainty"], *this),
-                _a1_factor(p["formfactors::a1_uncertainty"], *this),
-                _a2_factor(p["formfactors::a2_uncertainty"], *this)
+                _v_factor(p["B->K^*::v_uncertainty@BZ2004"], *this),
+                _a0_factor(p["B->K^*::a0_uncertainty@BZ2004"], *this),
+                _a1_factor(p["B->K^*::a1_uncertainty@BZ2004"], *this),
+                _a2_factor(p["B->K^*::a2_uncertainty@BZ2004"], *this)
             {
             }
 
@@ -191,9 +191,9 @@ namespace eos
 
         public:
             BZ2004FormFactors(const Parameters & p, const Options &) :
-                _f_p_factor(p["formfactors::fp_uncertainty"], *this),
-                _f_0_factor(p["formfactors::f0_uncertainty"], *this),
-                _f_t_factor(p["formfactors::ft_uncertainty"], *this)
+                _f_p_factor(p["B->K::fp_uncertainty@BZ2004v2"], *this),
+                _f_0_factor(p["B->K::f0_uncertainty@BZ2004v2"], *this),
+                _f_t_factor(p["B->K::ft_uncertainty@BZ2004v2"], *this)
             {
             }
 
@@ -277,9 +277,9 @@ namespace eos
 
         public:
             BZ2004FormFactorsSplit(const Parameters & p, const Options &) :
-                _f_p_factor(p["formfactors::fp_uncertainty"], *this),
-                _f_0_factor(p["formfactors::f0_uncertainty"], *this),
-                _f_t_factor(p["formfactors::ft_uncertainty"], *this),
+                _f_p_factor(p["B->K::fp_uncertainty@BZ2004v2"], *this),
+                _f_0_factor(p["B->K::f0_uncertainty@BZ2004v2"], *this),
+                _f_t_factor(p["B->K::ft_uncertainty@BZ2004v2"], *this),
                 _a_1(p["B->K::a_1@2.2GeV"], *this),
                 _a_2(p["B->K::a_2@2.2GeV"], *this),
                 _a_4(p["B->K::a_4@2.2GeV"], *this)
