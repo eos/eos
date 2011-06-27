@@ -18,22 +18,15 @@
  */
 
 #include <src/observable.hh>
+#include <src/utils/cartesian-product.hh>
 #include <src/utils/destringify.hh>
-#include <src/utils/histogram.hh>
 #include <src/utils/instantiation_policy-impl.hh>
 #include <src/utils/log.hh>
-#include <src/utils/one-of.hh>
 #include <src/utils/power_of.hh>
-#include <src/utils/random_number_engine.hh>
-#include <src/utils/stringify.hh>
-#include <src/utils/wilson-polynomial.hh>
 
-#include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
-#include <list>
-#include <random>
 #include <vector>
 
 using namespace eos;
@@ -63,9 +56,21 @@ class DoUsage
         }
 };
 
-void evaluate_with_sum_of_squares(const ObservablePtr & observable);
+struct EvaluationInput
+{
+    ObservablePtr observable;
 
-void evaluate_with_samples(const ObservablePtr & observable);
+    CartesianProduct<std::vector<double>> ranges;
+
+    std::shared_ptr<Kinematics> kinematics;
+
+    std::vector<std::string> kinematic_names;
+
+    EvaluationInput() :
+        kinematics(new Kinematics)
+    {
+    }
+};
 
 class CommandLine :
     public InstantiationPolicy<CommandLine, Singleton>
@@ -73,27 +78,17 @@ class CommandLine :
     public:
         Parameters parameters;
 
-        std::list<ObservablePtr> observables;
+        std::vector<std::shared_ptr<EvaluationInput>> evaluation_inputs;
 
-        unsigned samples;
+        std::vector<std::tuple<std::string, std::vector<Parameter>>> budgets;
 
-        double resolution;
-
-        unsigned bins;
-
-        bool show_histogram;
-
-        std::list<Parameter> variations;
-
-        std::function<void (const ObservablePtr &)> evaluate;
+        bool use_budget;
 
         CommandLine() :
             parameters(Parameters::Defaults()),
-            samples(0),
-            resolution(0.2),
-            bins(40),
-            show_histogram(false),
-            evaluate(&evaluate_with_sum_of_squares)
+            budgets{std::make_tuple(std::string("delta"), std::vector<Parameter>())},
+            use_budget(false)
+
         {
         }
 
@@ -101,7 +96,7 @@ class CommandLine :
         {
             Log::instance()->set_program_name("eos-evaluate");
 
-            std::shared_ptr<Kinematics> kinematics(new Kinematics);
+            std::shared_ptr<EvaluationInput> evaluation_input(new EvaluationInput);
 
             for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
             {
@@ -111,8 +106,32 @@ class CommandLine :
                 {
                     std::string name = std::string(*(++a));
                     double value = destringify<double>(*(++a));
-                    kinematics->declare(name);
-                    kinematics->set(name, value);
+                    evaluation_input->kinematics->declare(name);
+                    evaluation_input->kinematic_names.push_back(name);
+
+                    // create a vector with a single entry
+                    std::vector<double> range(1, value);
+                    evaluation_input->ranges.over(range);
+
+                    continue;
+                }
+
+                if ("--range" == argument)
+                {
+                    std::string name = std::string(*(++a));
+                    double min_value = destringify<double>(*(++a));
+                    double max_value = destringify<double>(*(++a));
+                    unsigned points  = destringify<unsigned>(*(++a));
+                    evaluation_input->kinematics->declare(name);
+                    evaluation_input->kinematic_names.push_back(name);
+
+                    std::vector<double> range;
+                    double increment = (max_value - min_value) / points;
+                    for (std::size_t i = 0; i <= points; ++i)
+                    {
+                        range.push_back(min_value + i * increment);
+                    }
+                    evaluation_input->ranges.over(range);
 
                     continue;
                 }
@@ -120,40 +139,30 @@ class CommandLine :
                 if ("--observable" == argument)
                 {
                     std::string name(*(++a));
-                    ObservablePtr observable = Observable::make(name, parameters, *kinematics, Options());
-                    if (! observable)
+                    evaluation_input->observable = Observable::make(name, parameters, *evaluation_input->kinematics, Options());
+                    if (! evaluation_input->observable )
                         throw DoUsage("Unknown observable '" + name + "'");
 
-                    observables.push_back(observable);
-                    kinematics.reset(new Kinematics);
+                    evaluation_inputs.push_back(evaluation_input);
+
+                    evaluation_input.reset(new EvaluationInput());
 
                     continue;
                 }
 
-                if ("--samples" == argument)
+                if ("--budget" == argument)
                 {
-                    samples = destringify<unsigned>(*(++a));
+                    std::string name(*(++a));
 
-                    continue;
-                }
-
-                if ("--resolution" == argument)
-                {
-                    resolution = destringify<double>(*(++a));
-
-                    continue;
-                }
-
-                if ("--bins" == argument)
-                {
-                    bins = destringify<unsigned>(*(++a));
-
-                    continue;
-                }
-
-                if ("--show-histogram" == argument)
-                {
-                    show_histogram = true;
+                    if (! use_budget)
+                    {
+                        use_budget = true;
+                        std::get<0>(budgets.back()) = name;
+                    }
+                    else
+                    {
+                        budgets.push_back(std::make_tuple(name, std::vector<Parameter>()));
+                    }
 
                     continue;
                 }
@@ -165,7 +174,7 @@ class CommandLine :
                     try
                     {
                         Parameter variation = parameters[variation_name];
-                        variations.push_back(variation);
+                        std::get<1>(budgets.back()).push_back(variation);
                     }
                     catch (UnknownParameterError & e)
                     {
@@ -193,152 +202,101 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--mode" == argument)
-                {
-                    std::string mode(*(++a));
-
-                    if ("samples" == mode)
-                    {
-                        evaluate = &evaluate_with_samples;
-                        continue;
-                    }
-                    else if ("sum-of-squares" == mode)
-                    {
-                        evaluate = &evaluate_with_sum_of_squares;
-                        continue;
-                    }
-
-                    throw DoUsage("Unknown evaluation mode '" + mode + "'");
-                }
-
                 throw DoUsage("Unknown command line argument: " + argument);
             }
         }
 };
 
-void evaluate_with_sum_of_squares(const ObservablePtr & observable)
+void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluation_input)
 {
-    double central = observable->evaluate();
+    // print headlines
+    std::cout << "# " << evaluation_input->observable->name()
+              << ": " << evaluation_input->observable->options().as_string() << std::endl;
 
-    std::cout << "# " << observable->name() << '[' << observable->kinematics().as_string() << "]: " << observable->options().as_string() << std::endl;
-
-    double delta_max = 0.0, delta_min = 0.0;
-    for (auto v = CommandLine::instance()->variations.begin(), v_end = CommandLine::instance()->variations.end() ; v != v_end ; ++v)
+    std::cout << "# ";
+    for (std::size_t i = 0 ; i < evaluation_input->kinematic_names.size() ; ++i)
     {
-        double old_v = *v;
-
-        // raise value
-        *v = v->max();
-
-        double value = observable->evaluate();
-
-        if (value > central)
-        {
-            delta_max += power_of<2>(value - central);
-        }
-        else if (value < central)
-        {
-            delta_min += power_of<2>(value - central);
-        }
-
-        // lower value
-        *v = v->min();
-
-        value = observable->evaluate();
-
-        if (value > central)
-        {
-            delta_max += power_of<2>(value - central);
-        }
-        else if (value < central)
-        {
-            delta_min += power_of<2>(value - central);
-        }
-
-        *v = old_v;
+        std::cout << evaluation_input->kinematic_names[i] << '\t';
     }
-
-    delta_min = std::sqrt(delta_min);
-    delta_max = std::sqrt(delta_max);
-
-    std::cout
-        << "#   " << central
-        << " -" << delta_min
-        << " +" << delta_max
-        << "    (-" << std::abs(delta_min / central) * 100 << "% / +" << std::abs(delta_max / central) * 100 << "%)"
-        << std::endl;
-}
-
-void evaluate_with_samples(const ObservablePtr & observable)
-{
-    double central = observable->evaluate();
-
-    std::cout << "# " << observable->name() << '[' << observable->kinematics().as_string() << "]: " << observable->options().as_string() << std::endl;
-    std::cout << "#   central = " << central << std::endl;
-
-    double delta = CommandLine::instance()->resolution * std::abs(central);
-    Histogram<1> histogram = Histogram<1>::WithEqualBinning(
-            central - delta,
-            central + delta,
-            CommandLine::instance()->bins);
-    histogram.insert(Histogram<1>::Bin(-std::numeric_limits<double>::max(), central - delta));
-    histogram.insert(Histogram<1>::Bin(central + delta, std::numeric_limits<double>::max()));
-
-    RandomNumberEngine engine;
-    for (unsigned s = 0 ; s != CommandLine::instance()->samples ; ++s)
+    std::cout << "central";
+    for (auto b = CommandLine::instance()->budgets.begin() ; b != CommandLine::instance()->budgets.end(); ++b)
     {
-        for (auto v = CommandLine::instance()->variations.begin(), v_end = CommandLine::instance()->variations.end() ; v != v_end ; ++v)
+        std::cout << '\t' << std::get<0>(*b) << "_min\t" << std::get<0>(*b) << "_max";
+    }
+    std::cout << "\tdelta_min\tdelta_max" << std::endl;
+
+    // iterate over all kinematical ranges
+    for (auto r = evaluation_input->ranges.begin() ; r != evaluation_input->ranges.end() ; ++r)
+    {
+        // set the kinematics
+        // for every dimension
+        for (std::size_t i = 0 ; i < (*r).size() ; ++i)
         {
-            *v = v->sample(engine);
+            evaluation_input->kinematics->set(evaluation_input->kinematic_names[i], (*r)[i]);
+            std::cout << (*r)[i] << '\t';
         }
 
-        double value = observable->evaluate();
-        if (isnan(value))
-            continue;
+        double central = evaluation_input->observable->evaluate();
 
-        histogram.insert(value);
-    }
+        std::cout << central;
 
-    if (CommandLine::instance()->show_histogram)
-    {
-        std::cout << "lower\tupper\tentries" << std::endl;
-        for (auto b = histogram.begin(), b_end = histogram.end() ; b != b_end ; ++b)
+        // do the variations
+        double delta_max = 0.0, delta_min = 0.0;
+        for (auto b = CommandLine::instance()->budgets.begin() ; b != CommandLine::instance()->budgets.end() ; ++b)
         {
-            std::cout << b->lower << '\t' << b->upper << '\t' << b->value << std::endl;
-        }
-    }
+            double budget_min = 0.0;
+            double budget_max = 0.0;
 
-    Histogram<1> ecdf = estimate_cumulative_distribution(histogram);
+            std::vector<Parameter> variations = std::get<1>(*b);
 
-    if (CommandLine::instance()->show_histogram)
-    {
-        std::cout << std::endl << "ECDF" << std::endl;
-        std::cout << "lower\tupper\tentries" << std::endl;
-        for (auto b = ecdf.begin(), b_end = ecdf.end() ; b != b_end ; ++b)
-        {
-            std::cout << b->lower << '\t' << b->upper << '\t' << b->value << std::endl;
-        }
-    }
+            for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
+            {
+                double old_v = *v;
 
-    std::vector<double> confidence_levels{ 0.683, 0.954, 0.997 };
-    for (auto c = confidence_levels.cbegin(), c_end = confidence_levels.cend() ; c != c_end ; ++c)
-    {
-        double lower = -std::numeric_limits<double>::max(), upper = -std::numeric_limits<double>::max();
-        for (auto b = ecdf.begin(), b_end = ecdf.end() ; b != b_end ; ++b)
-        {
-            if (b->value <= (1.0 - *c) / 2.0)
-                lower = b->upper;
+                // raise value
+                *v = v->max();
 
-            if (b->value <= 1.0 - (1.0 - *c) / 2.0)
-                upper = b->upper;
+                double value = evaluation_input->observable->evaluate();
+
+                if (value > central)
+                {
+                    budget_max += power_of<2>(value - central);
+                }
+                else if (value < central)
+                {
+                    budget_min += power_of<2>(value - central);
+                }
+
+                // lower value
+                *v = v->min();
+
+                value = evaluation_input->observable->evaluate();
+
+                if (value > central)
+                {
+                    budget_max += power_of<2>(value - central);
+                }
+                else if (value < central)
+                {
+                    budget_min += power_of<2>(value - central);
+                }
+
+                *v = old_v;
+            }
+
+            delta_min += budget_min;
+            delta_max += budget_max;
+
+            std::cout << '\t' << std::sqrt(budget_min) << '\t' << std::sqrt(budget_max);
         }
 
         std::cout
-            << "#   " << *c << "% CL: " << lower << " .. " << upper
-            << "    (-" << std::abs((central - lower) / central) * 100 << "% / +" << std::abs((upper - central) / central) * 100 << "%)"
+            << '\t' << std::sqrt(delta_min) << '\t' << std::sqrt(delta_max)
+            << "   (-" << std::abs(std::sqrt(delta_min) / central) * 100 << "% / +" << std::abs(std::sqrt(delta_max) / central) * 100 << "%)"
             << std::endl;
     }
 }
+
 
 int
 main(int argc, char * argv[])
@@ -347,14 +305,12 @@ main(int argc, char * argv[])
     {
         CommandLine::instance()->parse(argc, argv);
 
-        if (CommandLine::instance()->observables.empty())
+        if (CommandLine::instance()->evaluation_inputs.empty())
             throw DoUsage("No input specified");
 
-        std::function<void (const ObservablePtr &)> evaluate = CommandLine::instance()->evaluate;
-
-        for (auto o = CommandLine::instance()->observables.cbegin(), o_end = CommandLine::instance()->observables.cend() ; o != o_end ; ++o)
+        for (auto i = CommandLine::instance()->evaluation_inputs.cbegin(), i_end = CommandLine::instance()->evaluation_inputs.cend() ; i != i_end ; ++i)
         {
-            evaluate(*o);
+            evaluate_with_sum_of_squares(*i);
         }
     }
     catch(DoUsage & e)
