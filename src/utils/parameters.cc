@@ -360,7 +360,7 @@ namespace eos
     }
 
     double
-    Parameter::sample(RandomNumberEngine & engine) const
+    Parameter::sample(RandomNumberGenerator & rng) const
     {
         #if __GNUC__ >= 4 && __GNUC_MINOR__ < 5
         std::uniform_real<double> distribution(_parameters_data->data[_index].min, _parameters_data->data[_index].max);
@@ -368,7 +368,7 @@ namespace eos
         std::uniform_real_distribution<double> distribution(_parameters_data->data[_index].min, _parameters_data->data[_index].max);
         #endif
 
-        return distribution(engine);
+        return distribution(rng);
     }
 
     const Parameter &

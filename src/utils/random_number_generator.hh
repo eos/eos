@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WILSON_FITTER_GUARD_SRC_UTILS_RANDOM_NUMBER_ENGINE_HH
-#define WILSON_FITTER_GUARD_SRC_UTILS_RANDOM_NUMBER_ENGINE_HH 1
+#ifndef EOS_GUARD_SRC_UTILS_RANDOM_NUMBER_GENERATOR_HH
+#define EOS_GUARD_SRC_UTILS_RANDOM_NUMBER_GENERATOR_HH 1
 
 #include <src/utils/private_implementation_pattern.hh>
 
@@ -30,19 +30,26 @@ namespace eos
      * Generate pseudo-random floating point numbers
      * in the range 0 ... 1.
      *
-     * RandomNumberEngine keeps its state/seed on copying.
+     * RandomNumberGenerator keeps its state/seed on copying.
      */
-    class RandomNumberEngine :
-        public PrivateImplementationPattern<RandomNumberEngine>
+    class RandomNumberGenerator :
+        public PrivateImplementationPattern<RandomNumberGenerator>
     {
         public:
+            ///@name Basic functions.
             ///@{
-            /// Basic functions.
-            RandomNumberEngine();
-            ~RandomNumberEngine();
+            /*!
+             * Constructor.
+             *
+             * @param seed The numerical value used to seed the RNG.
+             */
+            RandomNumberGenerator(const unsigned long & seed = 0ul);
+
+            /// Destructor.
+            ~RandomNumberGenerator();
             ///@}
 
-            /// Obtain a pseudo-random number in the range 0.0 .. 1.0.
+            /// Obtain a pseudo-random number in the range [0.0, 1.0)
             double operator() ();
 
             /// Return the maximal value that can be drawn.

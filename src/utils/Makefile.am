@@ -38,7 +38,7 @@ libeosutils_la_SOURCES = \
 	prior_sampler.cc prior_sampler.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh \
-	random_number_engine.cc random_number_engine.hh \
+	random_number_generator.cc random_number_generator.hh \
 	rvalue.cc rvalue.hh \
 	save.hh \
 	scan_file.cc scan_file.hh \
@@ -78,6 +78,7 @@ TESTS = \
 	power_of_TEST \
 	prior_sampler_TEST \
 	qcd_TEST \
+	random_number_generator_TEST \
 	rvalue_TEST \
 	save_TEST \
 	scan_file_TEST \
@@ -157,6 +158,9 @@ prior_sampler_TEST_LDADD = $(TESTS_LD_ADD)
 
 qcd_TEST_SOURCES = qcd_TEST.cc
 qcd_TEST_LDADD = $(TESTS_LD_ADD)
+
+random_number_generator_TEST_SOURCES = random_number_generator_TEST.cc
+random_number_generator_TEST_LDADD = $(TESTS_LD_ADD)
 
 rvalue_TEST_SOURCES = rvalue_TEST.cc
 rvalue_TEST_LDADD = $(TESTS_LD_ADD)
