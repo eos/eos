@@ -17,22 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <src/observable.hh>
 #include <src/utils/destringify.hh>
-#include <src/utils/histogram.hh>
 #include <src/utils/instantiation_policy-impl.hh>
 #include <src/utils/log.hh>
-#include <src/utils/one-of.hh>
-#include <src/utils/random_number_engine.hh>
+#include <src/utils/parameters.hh>
 #include <src/utils/stringify.hh>
-#include <src/utils/wilson-polynomial.hh>
 
-#include <algorithm>
 #include <cmath>
-#include <cstdlib>
 #include <iomanip>
 #include <iostream>
-#include <list>
-#include <random>
 #include <vector>
 
 using namespace eos;
