@@ -56,7 +56,7 @@ class MarkovChainSamplerTest :
 
             // check pre run, main run and HDF5 storage
             {
-                static const std::string file_name("/tmp/markov_chain_sampler_TEST.hdf5");
+                static const std::string file_name(EOS_BUILDDIR "/src/utils/markov_chain_sampler_TEST.hdf5");
                 std::remove(file_name.c_str());
 
                 // store to HDF5

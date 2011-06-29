@@ -108,6 +108,10 @@ dnl }}}
 CXXFLAGS=$save_CXXFLAGS
 dnl }}}
 
+dnl {{{ define EOS_BUILDDIR
+AC_DEFINE_UNQUOTED([EOS_BUILDDIR], "$ac_pwd", [Absolute path to the build directory])
+dnl }}}
+
 dnl {{{ output
 AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(

@@ -43,7 +43,7 @@ class ScanFileTest :
 
         virtual void run() const
         {
-            static const std::string filename("/tmp/scan_file_TEST.scan");
+            static const std::string filename(EOS_BUILDDIR "/src/utils/scan_file_TEST.hdf5");
 
             std::remove(filename.c_str());
 

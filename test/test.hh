@@ -20,6 +20,8 @@
 #ifndef WILSON_FITTER_GUARD_TEST_TEST_HH
 #define WILSON_FITTER_GUARD_TEST_TEST_HH 1
 
+#include <config.h>
+
 #include <limits>
 #include <string>
 #include <cmath>

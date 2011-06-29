@@ -17,6 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <config.h>
 #include <src/utils/markov_chain.hh>
 #include <src/utils/analysis_TEST.hh>
 #include <test/test.hh>
@@ -281,7 +282,7 @@ class MarkovChainTest :
                 unsigned samples = 1000;
                 chain.run(samples);
 
-                static const std::string file_name = "/tmp/discrete.hdf5";
+                static const std::string file_name(EOS_BUILDDIR "/src/utils/markov_chain_TEST_discrete.hdf5");
                 std::remove(file_name.c_str());
                 std::shared_ptr<ScanFile> file(new ScanFile(ScanFile::Create(file_name, "markov_chain_TEST")));
                 std::shared_ptr<ScanFile::DataSet> data_set(new ScanFile::DataSet(file->add("chain #0", 1 + 1)));
