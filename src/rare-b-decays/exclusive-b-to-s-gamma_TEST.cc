@@ -57,6 +57,7 @@ class BToKstarGammaTest :
                 p["Abs{c7}"] = 0.331;
                 p["Arg{c7}"] = M_PI;
                 p["Abs{c7'}"] = 0.008; // m_s(m_b) / m_b(m_b) * Abs{c7} = 105 / 4200 * Abs{c7}
+                p["Arg{c7'}"] = M_PI;
                 p["c8"] = -0.181;
                 // PDG 2010 CKM parameters
                 p["CKM::A"] = 0.812;
