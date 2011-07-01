@@ -86,7 +86,7 @@ References
         arxiv:hep-ph/0603063
 
 
-    BEKU2002 : Bobeth, C. and Ewerth, T. and Krüger, F. and Urban, J.
+    BEKU2002 : Bobeth, C. and Ewerth, T. and Krueger, F. and Urban, J.
 
         Enhancement of BR[B_d -> mu^+ mu^-] / BR[B_s -> mu^+ mu^-] in the MSSM with
         Modified Minimal Flavor Violation and Large tan(beta)
