@@ -119,6 +119,13 @@ namespace eos
             BToKDilepton(const Parameters & parameters, const Options & options);
             ~BToKDilepton();
 
+            // Effective Short-Distance Couplings
+            double real_c9eff(const double & s) const;
+            double imag_c9eff(const double & s) const;
+            double real_c7eff(const double & s) const;
+            double imag_c7eff(const double & s) const;
+
+            // Angular Distributions
             double a_l(const double & s) const;
             double c_l(const double & s) const;
 

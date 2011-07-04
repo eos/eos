@@ -1169,6 +1169,38 @@ namespace eos
     }
 
     double
+    BToKDilepton<LowRecoil>::real_c9eff(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+
+        return real(_imp->c9eff(wc, s));
+    }
+
+    double
+    BToKDilepton<LowRecoil>::imag_c9eff(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+
+        return imag(_imp->c9eff(wc, s));
+    }
+
+    double
+    BToKDilepton<LowRecoil>::real_c7eff(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+
+        return real(_imp->c7eff(wc, s));
+    }
+
+    double
+    BToKDilepton<LowRecoil>::imag_c7eff(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+
+        return imag(_imp->c7eff(wc, s));
+    }
+
+    double
     BToKDilepton<LowRecoil>::a_l(const double & s) const
     {
         WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);

@@ -234,6 +234,22 @@ namespace eos
                     &BToKDilepton<LowRecoil>::c_l,
                     std::make_tuple("s")),
 
+            make_observable("B->Kll::Re{c9eff}@LowRecoil",
+                    &BToKDilepton<LowRecoil>::real_c9eff,
+                    std::make_tuple("s")),
+
+            make_observable("B->Kll::Im{c9eff}@LowRecoil",
+                    &BToKDilepton<LowRecoil>::imag_c9eff,
+                    std::make_tuple("s")),
+
+            make_observable("B->Kll::Re{c7eff}@LowRecoil",
+                    &BToKDilepton<LowRecoil>::real_c7eff,
+                    std::make_tuple("s")),
+
+            make_observable("B->Kll::Im{c7eff}@LowRecoil",
+                    &BToKDilepton<LowRecoil>::imag_c7eff,
+                    std::make_tuple("s")),
+
             // B -> K^* ll, Large Recoil
             make_observable("B->K^*ll::dBR/ds@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::differential_branching_ratio,
