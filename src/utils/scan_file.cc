@@ -522,7 +522,7 @@ namespace eos
 
         double get(const std::string & attribute, const double & default_value)
         {
-            auto i = attributes.find(attribute), i_end = attributes.cend();
+            auto i = attributes.find(attribute), i_end = attributes.end();
             if (i_end == i)
                 return default_value;
 
