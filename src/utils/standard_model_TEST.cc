@@ -369,7 +369,7 @@ class WilsonCoefficientsBToSTest :
         {
             /* Test for 5 active flavors, evolving from mu_0c = 80, mu_0t = 120 to mu = 4.350516515 */
             {
-                static const double eps = 1e-8;
+                static const double eps = 1e-4;
                 static const double mu = 4.350516515; // Stems from older, lower-order calculations of alpha_s
 
                 Parameters parameters = reference_parameters();
@@ -379,16 +379,16 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.2209967815, model.alpha_s(mu), eps);
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
-                TEST_CHECK_NEARLY_EQUAL(-0.28058190, real(wc.c1()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.00972828, real(wc.c2()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.00581526, real(wc.c3()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.08408026, real(wc.c4()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00040465, real(wc.c5()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00108870, real(wc.c6()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.32561211, real(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.17593283, real(wc.c8()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+4.25821127, real(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-4.15077942, real(wc.c10()), eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.28058190, real(wc.c1()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(+1.00972828, real(wc.c2()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.00581526, real(wc.c3()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.08408026, real(wc.c4()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(+0.00040465, real(wc.c5()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(+0.00108870, real(wc.c6()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.32561211, real(wc.c7()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.17593283, real(wc.c8()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(+4.25821127, real(wc.c9()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-4.15077942, real(wc.c10()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c2()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c3()),  eps);
@@ -403,7 +403,7 @@ class WilsonCoefficientsBToSTest :
 
             /* Test for 5 active flavors, evolving from mu_0c = 80, mu_0t = 120 to mu = 4.2 */
             {
-                static const double eps = 1e-8;
+                static const double eps = 1e-4;
                 static const double mu = 4.2; // approximate m_b(m_b) MSbar mass
 
                 Parameters parameters = reference_parameters();
@@ -413,16 +413,16 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
-                TEST_CHECK_NEARLY_EQUAL(-0.28846675, real(wc.c1()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.01017822, real(wc.c2()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.00604628, real(wc.c3()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.08607506, real(wc.c4()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00042146, real(wc.c5()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00114089, real(wc.c6()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.32741917, real(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.17707354, real(wc.c8()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+4.27584793, real(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-4.15077943, real(wc.c10()), eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.28846675, real(wc.c1()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(+1.01017822, real(wc.c2()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.00604628, real(wc.c3()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.08607506, real(wc.c4()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(+0.00042146, real(wc.c5()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(+0.00114089, real(wc.c6()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.32741917, real(wc.c7()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.17707354, real(wc.c8()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(+4.27584793, real(wc.c9()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(-4.15077943, real(wc.c10()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c2()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c3()),  eps);
@@ -438,7 +438,7 @@ class WilsonCoefficientsBToSTest :
             /* Test for equality between SM Wilson coefficients and default parameter values */
             {
                 // Do NOT use the reference parameters here!
-                static const double eps = 1e-8;
+                static const double eps = 1e-4;
                 static const double mu = 4.2; // approximate m_b(m_b) MSbar mass
 
                 Parameters parameters = Parameters::Defaults();
@@ -448,24 +448,25 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
-                TEST_CHECK_NEARLY_EQUAL(parameters["c1"],       real(wc.c1()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["c2"],       real(wc.c2()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["c3"],       real(wc.c3()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["c4"],       real(wc.c4()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["c5"],       real(wc.c5()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["c6"],       real(wc.c6()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Abs{c7}"],  abs(wc.c7()),   eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Arg{c7}"],  arg(wc.c7()),   eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Re{c7}"],   real(wc.c7()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["c1"],       real(wc.c1()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["c2"],       real(wc.c2()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["c3"],       real(wc.c3()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["c4"],       real(wc.c4()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["c5"],       real(wc.c5()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["c6"],       real(wc.c6()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["Abs{c7}"],  abs(wc.c7()),   eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["Arg{c7}"],  arg(wc.c7()),   eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["Re{c7}"],   real(wc.c7()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["c8"],       real(wc.c8()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["Abs{c9}"],  abs(wc.c9()),   eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["Re{c9}"],   real(wc.c9()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["Abs{c10}"], abs(wc.c10()),   eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["Arg{c10}"], arg(wc.c10()),   eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["Re{c10}"],  real(wc.c10()),  eps);
+
                 TEST_CHECK_NEARLY_EQUAL(parameters["Im{c7}"],   imag(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["c8"],       real(wc.c8()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Abs{c9}"],  abs(wc.c9()),   eps);
                 TEST_CHECK_NEARLY_EQUAL(parameters["Arg{c9}"],  arg(wc.c9()),   eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Re{c9}"],   real(wc.c9()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(parameters["Im{c9}"],   imag(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Abs{c10}"], abs(wc.c10()),   eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Arg{c10}"], arg(wc.c10()),   eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Re{c10}"],  real(wc.c10()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(parameters["Im{c10}"],  imag(wc.c10()),  eps);
             }
         }

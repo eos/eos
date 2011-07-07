@@ -235,6 +235,10 @@ class BToKstarDileptonLargeRecoilPolynomialTest :
             };
 
             Parameters parameters = Parameters::Defaults();
+            // Kaon mass
+            parameters["mass::K0"] = 0.49761;
+            // b quark mass
+            parameters["mass::b(MSbar)"] = 4.2;
             Kinematics kinematics;
             kinematics.declare("s_min");
             kinematics.set("s_min", 1.0);

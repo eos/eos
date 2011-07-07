@@ -487,6 +487,10 @@ class BToKDileptonLowRecoilTest :
                 p["CKM::etabar"] = 0.349;
                 // B mass
                 p["mass::B_d"] = 5.27953;
+                // Kaon mass
+                p["mass::K0"] = 0.49761;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
                 p["c1"] = -0.32300000;
                 p["c2"] = +1.00931000;
                 p["c3"] = -0.00522869;
