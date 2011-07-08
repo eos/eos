@@ -46,7 +46,7 @@ namespace eos
 
         UsedParameter hbar;
 
-        double m_l;
+        UsedParameter m_l;
 
         std::function<complex<double> (const Model *)> lambda;
 
@@ -58,18 +58,9 @@ namespace eos
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
-            hbar(p["hbar"], u)
+            hbar(p["hbar"], u),
+            m_l(p["mass::" + o.get("l", "mu")], u)
         {
-            static const double m_mu = 0.10565836; // (GeV), cf. [PDG2008], p. 13
-            static const double m_e = 0.00051099892; // (GeV), cf. [PDG2008], p. 13
-
-            m_l = m_mu;
-
-            if (o.has("l") && ("e" == o["l"]))
-            {
-                m_l = m_e;
-            }
-
             if (o.get("q", "d") == "d")
             {
                 lambda = &lambda_t_d;
