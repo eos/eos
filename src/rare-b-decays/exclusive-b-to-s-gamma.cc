@@ -289,6 +289,7 @@ namespace eos
             form_factors(FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p))
         {
             u.uses(*model);
+            u.uses(*form_factors);
         }
 
         inline double m_b_PS() const { return model->m_b_ps(std::sqrt(mu * 0.5)); }
