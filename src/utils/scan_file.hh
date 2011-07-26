@@ -330,6 +330,15 @@ namespace eos
              */
             void set(const std::string & attribute_name, const double & value);
             ///@}
+
+            ///@name Iteration
+            ///@{
+            struct AttributeIteratorTag;
+            typedef WrappedForwardIterator<AttributeIteratorTag, std::pair<const std::string, double>> AttributeIterator;
+
+            AttributeIterator begin_attributes();
+            AttributeIterator end_attributes();
+            ///@}
     };
 
     /*!

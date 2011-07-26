@@ -24,6 +24,7 @@
 #include <cmath>
 #include <cstdio>
 #include <string>
+#include <set>
 #include <tuple>
 
 #include <iostream>
@@ -144,10 +145,28 @@ class ScanFileTest :
                     for (auto f = test_set.begin_fields(), f_end = test_set.end_fields() ; f != f_end ; ++f, ++idx)
                     {
                         std::cout << "f->name = " << f->name() << std::endl;
+
+                        // test the name
                         TEST_CHECK_EQUAL("result #1, field #" + stringify(idx), f->name());
+
+                        // test direct attribute access
                         TEST_CHECK_EQUAL(0.0,                                   f->get("min", 1.0));
                         TEST_CHECK_EQUAL(1.0 * idx,                             f->get("max", 0.5));
                         TEST_CHECK_EQUAL(false,                                 f->get("nuisance", 17.0));
+
+                        // test iteration over attributes
+                        const std::set<std::pair<const std::string, double>> references
+                        {
+                            std::make_pair(std::string("min"),       0.0),
+                            std::make_pair(std::string("max"),       1.0 * idx),
+                            std::make_pair(std::string("nuisance"),  false),
+                        };
+
+                        for (auto i = f->begin_attributes(), i_end = f->end_attributes() ; i != i_end ; ++i)
+                        {
+                            TEST_CHECK(references.end() != references.find(*i));
+                        }
+                        TEST_CHECK_EQUAL(std::distance(f->begin_attributes(), f->end_attributes()), references.size());
                     }
                 }
 

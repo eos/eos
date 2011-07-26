@@ -396,6 +396,9 @@ namespace eos
     }
 
     /* ScanFile::FieldInfo */
+
+    template class WrappedForwardIterator<ScanFile::FieldInfo::AttributeIteratorTag, std::pair<const std::string, double>>;
+
     template <>
     struct Implementation<ScanFile::FieldInfo>
     {
@@ -581,6 +584,18 @@ namespace eos
     ScanFile::FieldInfo::set(const std::string & attribute_name, const double & value)
     {
         _imp->set(attribute_name, value);
+    }
+
+    ScanFile::FieldInfo::AttributeIterator
+    ScanFile::FieldInfo::begin_attributes()
+    {
+        return ScanFile::FieldInfo::AttributeIterator(_imp->attributes.begin());
+    }
+
+    ScanFile::FieldInfo::AttributeIterator
+    ScanFile::FieldInfo::end_attributes()
+    {
+        return ScanFile::FieldInfo::AttributeIterator(_imp->attributes.end());
     }
 
     /* ScanFile::DataSet */
