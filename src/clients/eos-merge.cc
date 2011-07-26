@@ -151,6 +151,15 @@ main(int argc, char * argv[])
                 std::vector<ScanFile::FieldInfo> field_infos(data_sets[0].begin_fields(), data_sets[0].end_fields());
 
                 ScanFile::DataSet output_set = output.add(name, fields);
+                for (auto i = data_sets[0].begin_fields(), i_end = data_sets[0].end_fields(), j = output_set.begin_fields() ;
+                        i != i_end ; ++i, ++j)
+                {
+                    j->name(i->name());
+                    for (auto a = i->begin_attributes(), a_end = i->end_attributes() ; a != a_end ; ++a)
+                    {
+                        j->set(a->first, a->second);
+                    }
+                }
                 std::copy(data_sets[0].begin_fields(), data_sets[0].end_fields(), output_set.begin_fields());
                 ScanFile::WriteBuffer output_buffer(fields);
 
