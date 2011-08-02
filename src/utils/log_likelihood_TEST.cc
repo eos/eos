@@ -123,7 +123,7 @@ namespace eos
                     TEST_CHECK_NEARLY_EQUAL(llh(), 2 * 0.88364655978937656, eps);
 
                     // only one prediction
-                    TEST_CHECK_EQUAL(llh.predictions().size(), 1);
+                    TEST_CHECK_EQUAL(llh.observable_cache().size(), 1);
                 }
 
                 // observables vary only by kinematic, but identical in name => they should be different _predictions
@@ -139,7 +139,7 @@ namespace eos
                     TEST_CHECK_NEARLY_EQUAL(llh(), 2 * 0.88364655978937656, eps);
 
                     // two different _predictions
-                    TEST_CHECK_EQUAL(llh.predictions().size(), 2);
+                    TEST_CHECK_EQUAL(llh.observable_cache().size(), 2);
                 }
 
                 // observables vary only by option, but identical in name => they should be different predicitions
@@ -155,7 +155,7 @@ namespace eos
                     TEST_CHECK_NEARLY_EQUAL(llh(), 2 * 0.88364655978937656, eps);
 
                     // two different _predictions
-                    TEST_CHECK_EQUAL(llh.predictions().size(), 2);
+                    TEST_CHECK_EQUAL(llh.observable_cache().size(), 2);
                 }
 
                 //verify that evaluation of observables only when needed works
@@ -209,18 +209,18 @@ namespace eos
                     //evaluate
                     llh();
 
-                    TEST_CHECK_EQUAL(llh.predictions()[1], 5.3);
+                    TEST_CHECK_EQUAL(llh.observable_cache()[1], 5.3);
 
                     //change value through the backdoor
                     p["Abs{c10'}"] = 6;
 
                     //same as before
                     llh(p["mass::b(MSbar)"].id());
-                    TEST_CHECK_EQUAL(llh.predictions()[1], 5.3);
+                    TEST_CHECK_EQUAL(llh.observable_cache()[1], 5.3);
 
                     //now observable should be reevaluated
                     llh(p["Abs{c10'}"].id());
-                    TEST_CHECK_EQUAL(llh.predictions()[1], 6);
+                    TEST_CHECK_EQUAL(llh.observable_cache()[1], 6);
                 }
 
                 //prevent user from using stale cache

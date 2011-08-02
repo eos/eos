@@ -22,10 +22,11 @@
 #define EOS_GUARD_SRC_UTILS_LIKELIHOOD_HH 1
 
 #include <src/observable.hh>
+#include <src/utils/observable_cache.hh>
 #include <src/utils/parameters.hh>
 #include <src/utils/private_implementation_pattern.hh>
 
-#include <vector>
+#include <gsl/gsl_rng.h>
 
 namespace eos
 {
@@ -42,14 +43,7 @@ namespace eos
     class LogLikelihood :
         public PrivateImplementationPattern<LogLikelihood>
     {
-        private:
-            /*!
-             * Retrieve the values of observables at last evaluation
-             */
-            const std::vector<double> & predictions() const;
-
         public:
-            friend class LogLikelihoodTest;
 
             ///@name Basic Functions
             ///@{
@@ -112,6 +106,11 @@ namespace eos
              * Retrieve the underlying Parameters object.
              */
             Parameters parameters() const;
+
+            /*!
+             * Retrieve the cache of observables associated with this LogLikelihood.
+             */
+            ObservableCache observable_cache() const;
 
             /*!
              * Evaluate the log likelihood, i.e., return @f[ \log \mathcal{L} = \log P(D | \vec{\theta}, M)=  - \frac{\chi^2}{2} + C@f].
