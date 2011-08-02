@@ -51,13 +51,13 @@ class AnalysisTest :
 
                 // for comparison used ipython's log(scipy.stats.norm.pdf(4.3, loc=4.4, scale=0.1))
                 // value at center of both Gaussian distributions. so pdf the same
-                TEST_CHECK_RELATIVE_ERROR((*clone1->log_likelihood())(), +0.88364655978936768, eps);
+                TEST_CHECK_RELATIVE_ERROR(clone1->log_likelihood()(), +0.88364655978936768, eps);
                 TEST_CHECK_RELATIVE_ERROR(clone1->log_prior(), 0.883646846442260436, eps);
 
                 // almost, but not quite identical
-                TEST_CHECK_RELATIVE_ERROR((*clone1->log_likelihood())(), clone1->log_prior(), 1e-6);
+                TEST_CHECK_RELATIVE_ERROR(clone1->log_likelihood()(), clone1->log_prior(), 1e-6);
 
-                TEST_CHECK_RELATIVE_ERROR((*clone2->log_likelihood())(), -0.61635344021063077, eps);
+                TEST_CHECK_RELATIVE_ERROR(clone2->log_likelihood()(), -0.61635344021063077, eps);
 
                 TEST_CHECK_RELATIVE_ERROR(clone2->log_prior(), 1.38364684644226932, eps);
 
@@ -76,8 +76,8 @@ class AnalysisTest :
             {
                 Parameters parameters = Parameters::Defaults();
 
-                LogLikelihoodPtr llh(new LogLikelihood(parameters));
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                LogLikelihood llh(parameters);
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::b(MSbar)")), 4.1, 4.2, 4.3);
                 Analysis analysis(llh);
 
@@ -96,10 +96,10 @@ class AnalysisTest :
                 p = 4.3; //posterior mode
 
 
-                TEST_CHECK_NEARLY_EQUAL((*analysis.log_likelihood())(), +0.88364655978936768, eps);
+                TEST_CHECK_NEARLY_EQUAL(analysis.log_likelihood()(), +0.88364655978936768, eps);
                 TEST_CHECK_NEARLY_EQUAL(analysis.log_prior(), 0.883646846442260436, eps);
                 // slightly different due to normalization of prior
-                TEST_CHECK((*analysis.log_likelihood())() != analysis.log_prior());
+                TEST_CHECK(analysis.log_likelihood()() != analysis.log_prior());
 
                 // now check cloning
 
@@ -111,13 +111,13 @@ class AnalysisTest :
 
                 // change clone only
                 p2 = 4.112;
-                TEST_CHECK((*analysis.log_likelihood())() != (*clone->log_likelihood())());
+                TEST_CHECK(analysis.log_likelihood()() != clone->log_likelihood()());
                 TEST_CHECK(analysis.log_prior() != clone->log_prior());
 
                 // same value for clone and original
                 p2 = 4.3;
 
-                TEST_CHECK_EQUAL((*analysis.log_likelihood())(), (*clone->log_likelihood())());
+                TEST_CHECK_EQUAL(analysis.log_likelihood()(), clone->log_likelihood()());
                 TEST_CHECK_EQUAL(analysis.log_prior(), clone->log_prior());
             }
 
@@ -136,8 +136,8 @@ class AnalysisTest :
             {
                 Parameters parameters = Parameters::Defaults();
 
-                LogLikelihoodPtr llh(new LogLikelihood(parameters));
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                LogLikelihood llh(parameters);
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::b(MSbar)")), 4.1, 4.2, 4.3);
                 Analysis analysis(llh);
 
@@ -164,16 +164,16 @@ class AnalysisTest :
             {
                 Parameters parameters = Parameters::Defaults();
 
-                LogLikelihoodPtr llh(new LogLikelihood(parameters));
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                LogLikelihood llh(parameters);
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::b(MSbar)")), 4.1, 4.2, 4.3);
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::c")), 1.16, 1.2, 1.25);
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::s")), 5e-3, 10e-3, 15e-3);
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::t(pole)")), 171, 172, 173);
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::e")), 510.5e-6, 511e-6, 511.5e-6);
 
                 Analysis analysis(llh);
@@ -202,10 +202,10 @@ class AnalysisTest :
             {
                 Parameters parameters = Parameters::Defaults();
 
-                LogLikelihoodPtr llh(new LogLikelihood(parameters));
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                LogLikelihood llh(parameters);
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                     "mass::c")), 1.182, 1.192, 1.202);
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                     "mass::c")), 1.19, 1.2, 1.21);
 
                 Analysis analysis(llh);

@@ -48,7 +48,7 @@ class MarkovChainSamplerTest :
 
             // empty Analysis
             {
-                AnalysisPtr analysis = std::make_shared<Analysis>(std::make_shared<LogLikelihood>(Parameters::Defaults()));
+                AnalysisPtr analysis = std::make_shared<Analysis>(LogLikelihood(Parameters::Defaults()));
                 MarkovChain chain(analysis, 13);
 
                 TEST_CHECK_THROWS(InternalError, chain.run(2));

@@ -90,7 +90,6 @@ namespace eos
             std::pair<double, double>
             bootstrap_p_value(const unsigned & datasets);
 
-
             /*!
              * Getter for the @f$\chi^2@f$, set in the last evaluation
              * of the likelihood using operator(...).
@@ -140,8 +139,6 @@ namespace eos
             void reset();
             ///@}
     };
-
-    typedef std::shared_ptr<LogLikelihood> LogLikelihoodPtr;
 }
 
 #endif

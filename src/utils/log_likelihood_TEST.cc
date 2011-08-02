@@ -239,16 +239,16 @@ namespace eos
                 // bootstrap p-value calculation
                 {
                     Parameters parameters  = Parameters::Defaults();
-                    LogLikelihoodPtr llh(new LogLikelihood(parameters));
-                    llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                    LogLikelihood llh(parameters);
+                    llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::c")), 1.182, 1.192, 1.202);
-                    llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                    llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::c")), 1.19, 1.2, 1.21);
 
                     parameters["mass::c"] = 1.196;
-                    (*llh)();
+                    llh();
 
-                    double p_value = llh->bootstrap_p_value(5e4).first;
+                    double p_value = llh.bootstrap_p_value(5e4).first;
                     //p-value from chi^2=0.32 and two degrees-of-freedom
                     TEST_CHECK_NEARLY_EQUAL(p_value, 0.852143788, 1e-2);
                 }

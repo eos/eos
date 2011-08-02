@@ -167,7 +167,7 @@ namespace eos
             parameter_descriptions[current_parameter].parameter = prop;
 
             // let likelihood only evaluate observables that use the parameter we just changed
-            proposal.log_likelihood = (*analysis->log_likelihood())(parameter_descriptions[current_parameter].parameter.id());
+            proposal.log_likelihood = analysis->log_likelihood()(parameter_descriptions[current_parameter].parameter.id());
             proposal.log_prior = analysis->log_prior();
             proposal.log_posterior = proposal.log_prior + proposal.log_likelihood;
         }
@@ -229,7 +229,7 @@ namespace eos
                 prop = current.point[current_parameter];
 
                 // evaluate likelihood without argument, so all observables are calculated once
-                proposal.log_likelihood = (*analysis->log_likelihood())();
+                proposal.log_likelihood = analysis->log_likelihood()();
                 proposal.log_prior = analysis->log_prior();
                 proposal.log_posterior = proposal.log_prior + proposal.log_likelihood;
                 move();
@@ -335,7 +335,7 @@ namespace eos
         {
             parameter_descriptions[current_parameter].parameter = current.point[current_parameter];
             // reload old observable values
-            analysis->log_likelihood()->reset();
+            analysis->log_likelihood().reset();
         }
 
         // set the number of iterations for next run and go

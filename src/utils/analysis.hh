@@ -51,7 +51,7 @@ namespace eos
              *
              * @note Analysis assumes ownership of log_likelihood
              */
-            Analysis(const LogLikelihoodPtr & log_likelihood);
+            Analysis(const LogLikelihood & log_likelihood);
 
             /// Destructor.
             ~Analysis();
@@ -97,7 +97,7 @@ namespace eos
             goodness_of_fit(const std::vector<double> & parameter_values, const unsigned & simulated_datasets = 0);
 
             /// Retrieve the overall Log(likelihood) for this analysis.
-            LogLikelihoodPtr & log_likelihood();
+            LogLikelihood log_likelihood();
 
             /// Retrieve the overall Log(prior) for this analysis.
             double log_prior();

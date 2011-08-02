@@ -77,7 +77,7 @@ class CommandLine :
     public:
         Parameters parameters;
 
-        LogLikelihoodPtr likelihood;
+        LogLikelihood likelihood;
 
         AnalysisPtr analysis;
 
@@ -93,7 +93,7 @@ class CommandLine :
 
         CommandLine() :
             parameters(Parameters::Defaults()),
-            likelihood(new LogLikelihood(parameters)),
+            likelihood(parameters),
             analysis(new Analysis(likelihood)),
             config(MarkovChainSampler::Config::Quick())
         {
@@ -234,7 +234,7 @@ class CommandLine :
                     input.central = destringify<double> (*(++a));
                     input.max = destringify<double> (*(++a));
 
-                    likelihood->add(input.observable, input.min, input.central, input.max);
+                    likelihood.add(input.observable, input.min, input.central, input.max);
 
                     inputs.push_back(input);
                     kinematics.reset(new Kinematics);

@@ -250,8 +250,8 @@ class MarkovChainTest :
             {
                 Parameters parameters = Parameters::Defaults();
 
-                LogLikelihoodPtr llh(new LogLikelihood(parameters));
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                LogLikelihood llh(parameters);
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                             "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
                 AnalysisPtr ana = std::make_shared<Analysis>(llh);
@@ -265,14 +265,14 @@ class MarkovChainTest :
                 MarkovChain chain(ana, 12345);
 
                 // if this evaluates to NaN, initialization went wrong
-                TEST_CHECK_RELATIVE_ERROR( (*llh)(), -14.758100406210971, eps);
+                TEST_CHECK_RELATIVE_ERROR(llh(), -14.758100406210971, eps);
             }
 
             // try sampling with discrete parameters only
             {
                 Parameters parameters = Parameters::Defaults();
-                LogLikelihoodPtr llh(new LogLikelihood(parameters));
-                llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(), "mass::b(MSbar)")), 4.1, 4.2, 4.3);
+                LogLikelihood llh(parameters);
+                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(), "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
                 AnalysisPtr ana = std::make_shared<Analysis>(llh);
                 ana->add(LogPrior::Discrete(parameters, "mass::b(MSbar)", std::set<double>{ 4.15, 4.4 }));

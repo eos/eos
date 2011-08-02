@@ -28,7 +28,7 @@ namespace eos
    template<>
    struct Implementation<Analysis>
    {
-        LogLikelihoodPtr log_likelihood;
+        LogLikelihood log_likelihood;
 
         Parameters parameters;
 
@@ -42,9 +42,9 @@ namespace eos
         // names of all parameters. prevent using a parameter twice
         std::set<std::string> parameter_names;
 
-        Implementation(const LogLikelihoodPtr & log_likelihood) :
+        Implementation(const LogLikelihood & log_likelihood) :
             log_likelihood(log_likelihood),
-            parameters(log_likelihood->parameters())
+            parameters(log_likelihood.parameters())
         {
         }
 
@@ -74,7 +74,7 @@ namespace eos
         AnalysisPtr clone() const
         {
             // clone log_likelihood
-            LogLikelihoodPtr llh = LogLikelihoodPtr(new LogLikelihood(log_likelihood->clone()));
+            LogLikelihood llh = log_likelihood.clone();
             AnalysisPtr result = std::make_shared<Analysis>(llh);
 
             // add parameters via prior clones
@@ -98,19 +98,19 @@ namespace eos
                 parameter_descriptions[i].parameter = parameter_values[i];
 
             // calculate \chi^2
-            (*log_likelihood)();
-            double chi_squared = log_likelihood->chi_squared();
+            log_likelihood();
+            double chi_squared = log_likelihood.chi_squared();
 
             // p-value from the analytical, yet approximate \chi^2-distribution
             // with (n_obs - n_par) degrees-of-freedom
-            unsigned dof = log_likelihood->number_of_observations() - parameter_descriptions.size();
+            unsigned dof = log_likelihood.number_of_observations() - parameter_descriptions.size();
             double p_analytical = gsl_cdf_chisq_Q(chi_squared, dof );
 
             if (simulated_datasets == 0)
                 return std::make_pair(chi_squared, p_analytical);
 
             // simulate data sets
-            auto sim_result = log_likelihood->bootstrap_p_value(simulated_datasets);
+            auto sim_result = log_likelihood.bootstrap_p_value(simulated_datasets);
 
             Log::instance()->message("analysis.goodness_of_fit", ll_informational)
                << "p-value from generating " << simulated_datasets << " data sets"
@@ -156,7 +156,7 @@ namespace eos
             }
 
             // calculate negative posterior
-            return - ( analysis->log_prior() + (*(analysis->log_likelihood))() );
+            return -(analysis->log_prior() + analysis->log_likelihood());
         }
 
         bool nuisance(const std::string & name) const
@@ -297,7 +297,7 @@ namespace eos
         }
     };
 
-    Analysis::Analysis(const LogLikelihoodPtr & log_likelihood) :
+    Analysis::Analysis(const LogLikelihood & log_likelihood) :
         PrivateImplementationPattern<Analysis>(new Implementation<Analysis>(log_likelihood))
     {
     }
@@ -330,7 +330,7 @@ namespace eos
         return _imp->goodness_of_fit(parameter_values, simulated_datasets);
     }
 
-    LogLikelihoodPtr &
+    LogLikelihood
     Analysis::log_likelihood()
     {
         return _imp->log_likelihood;
@@ -339,7 +339,7 @@ namespace eos
     double
     Analysis::log_posterior()
     {
-        return _imp->log_prior() + (*_imp->log_likelihood)();
+        return _imp->log_prior() + _imp->log_likelihood();
     }
 
     double

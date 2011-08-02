@@ -102,8 +102,8 @@ namespace eos
     {
         Parameters parameters = Parameters::Defaults();
 
-        LogLikelihoodPtr llh(new LogLikelihood(parameters));
-        llh->add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+        LogLikelihood llh(parameters);
+        llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
         LogPriorPtr prior = flat ?
