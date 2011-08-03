@@ -33,6 +33,7 @@ libeosutils_la_SOURCES = \
 	memoise.hh \
 	model.cc model.hh \
 	mutex.cc mutex.hh \
+	observable_cache.cc observable_cache.hh \
 	observable_set.cc observable_set.hh \
 	one-of.hh \
 	options.cc options.hh \
