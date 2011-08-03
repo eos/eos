@@ -236,6 +236,71 @@ namespace eos
                     TEST_CHECK_THROWS(InternalError, llh.add(obs2, 5, +5.3, +5.4) );
                 }
 
+                // check single Gaussian block likelihood
+                {
+                    ObservablePtr obs(new TestObservable(p, k, "mass::b(MSbar)"));
+                    ObservableCache cache(p);
+
+                    auto block = LogLikelihoodBlock::Gaussian(cache, obs, +4.2, +4.3, +4.4);
+
+                    // the model prediction
+                    p["mass::b(MSbar)"] = 4.35;
+                    cache.update();
+                    block->prepare_sampling();
+
+                    gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
+                    gsl_rng_set(rng, 1243);
+
+                    double sample = block -> sample(rng);
+                    // likelihood from chi2 = (4.3 - 4.52)^2 / 0.1^2
+                    TEST_CHECK_NEARLY_EQUAL(sample, -1.214746202801726, eps );
+
+                    // now generate multiple samples for perfect fit
+                    // thus a chi^2 distribution with 1 DoF
+                    p["mass::b(MSbar)"] = 4.3;
+                    cache.update();
+                    block->prepare_sampling();
+
+                    sample = block->sample(rng);
+
+                    // likelihood from chi2 = (4.3 - 4.358)^2 / 0.1^2
+                    TEST_CHECK_NEARLY_EQUAL(sample, 1.213893687750542, eps );
+
+                    gsl_rng_set(rng, 15458);
+
+                    unsigned n = 1e5;
+
+                    double mean = 0;
+                    unsigned n_in = 0;
+
+                    for (unsigned i = 0; i < n; ++i)
+                    {
+                        sample = block->sample(rng);
+
+                        // transform from llh to chi^2
+                        sample = (sample - 1.383646559789373) * (-2);
+
+                        mean += (sample - mean) / double(i + 1);
+
+                        // check how many within one sigma
+                        if (sample <= 1)
+                            ++n_in;
+                    }
+
+                    // slight excess of samples: 68.4 % > 68.27
+                    // where does it come from?
+                    // checked different RNG algorithms, didn't make a difference
+                    // We only allowed variations of the data within 3 sigma,
+                    // in order to avoid possible unphysical values. This
+                    // slightly pushed the bulk up towards the central value.
+                    TEST_CHECK_NEARLY_EQUAL(n_in / double(n), 0.684 , 3e-3);
+
+                    // as a consequence, mean always too low (<1), seems to converge around 0.972
+                    TEST_CHECK_NEARLY_EQUAL(mean, 0.97, 1e-2);
+
+                    gsl_rng_free(rng);
+                }
+
                 // bootstrap p-value calculation
                 {
                     Parameters parameters  = Parameters::Defaults();
@@ -249,10 +314,11 @@ namespace eos
                     llh();
 
                     double p_value = llh.bootstrap_p_value(5e4).first;
-                    //p-value from chi^2=0.32 and two degrees-of-freedom
-                    TEST_CHECK_NEARLY_EQUAL(p_value, 0.852143788, 1e-2);
+                    // p-value from chi^2=0.32 and two degrees-of-freedom
+                    // since data restricted to three sigma around central value,
+                    // p-value should be slightly biased upwards
+                    TEST_CHECK_NEARLY_EQUAL(p_value, 0.852143788, 5e-3);
                 }
-
             }
     } log_likelihood_test;
 }

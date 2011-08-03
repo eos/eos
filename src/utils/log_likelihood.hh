@@ -30,9 +30,59 @@
 
 namespace eos
 {
-    // Forward declaration.
-    class LogLikelihoodTest;
+    // Forward declarations.
+    class LogLikelihoodBlock;
 
+    typedef std::shared_ptr<LogLikelihoodBlock> LogLikelihoodBlockPtr;
+
+    /*!
+     * LogLikelihoodBlock models the logarithm of the likelihood for a given
+     * number of correlated observables which are independent of all other
+     * observables such that total likelihood is just the product of
+     * the independent blocks.
+     *
+     * Access to any LogLikelihoodBlock is coherent, i.e., changes to one object will propagate
+     * to every other object copy. To create an independent instance, use clone().
+     */
+    class LogLikelihoodBlock
+    {
+        public:
+            /// Destructor.
+            virtual ~LogLikelihoodBlock() = 0;
+
+            /*!
+             * Fix the predictions for fixed parameters within given model.
+             * Calculate any normalization constants to fix the sampling distribution
+             * in order to speed up repeated calls of sample().
+             */
+            virtual void prepare_sampling();
+
+            /// Compute the logarithm of the likelihood for this block.
+            virtual double evaluate() const = 0;
+
+            /*!
+             * Sample from the logarithm of the likelihood for this block.
+             * @warning Call prepare_sampling() before a call to sample() to
+             * ensure that one really gets a log likelihood value from the correct distribution,
+             * i.e.  llh ~ llh(model, fixed parameters)
+             */
+            virtual double sample(gsl_rng * rng) const = 0;
+
+            /// Clone this block.
+            virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const = 0;
+
+            /*!
+             * Create a new LogLikelihoodBlock for one normally distributed observable.
+             *
+             * @param cache      The Observable cache from which we draw the predictions.
+             * @param observable The Observable whose distribution we model.
+             * @param min        The value one sigma below the mean of the experimental distribution.
+             * @param central    The mean value of the experimental distribution.
+             * @param max        The value one sigma above the mean of the experimental distribution.
+             */
+            static LogLikelihoodBlockPtr Gaussian(ObservableCache cache, const ObservablePtr & observable,
+                    const double & min, const double & central, const double & max);
+    };
 
     /*!
      * LogLikelihood handles a set of ObservablePtr with associated measurement data.
@@ -83,12 +133,6 @@ namespace eos
              */
             std::pair<double, double>
             bootstrap_p_value(const unsigned & datasets);
-
-            /*!
-             * Getter for the @f$\chi^2@f$, set in the last evaluation
-             * of the likelihood using operator(...).
-             */
-            double chi_squared() const;
 
             /*!
              * Create an independent instance of this LogLikelihood that uses the same set of observables and measurements.

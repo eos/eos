@@ -31,8 +31,141 @@
 #include <map>
 #include <vector>
 
+#include <gsl/gsl_cdf.h>
+
 namespace eos
 {
+    namespace implementation
+    {
+        struct GaussianBlock :
+            public LogLikelihoodBlock
+        {
+            ObservableCache cache;
+
+            ObservableCache::Id id;
+
+            double central, sigma_lower, sigma_upper;
+
+            // the probability covered to the left of the central value
+            double prob_lower;
+
+            // coefficients needed for sampling from asymmetric Gaussian on finite support
+            // the cumulative is a piecewise function
+            // CDF(x) = CDF_lower(x, sigma_lower) if x < central, else CDF_upper(x, sigma_upper)
+            // To ensure that cumulative is
+            // a) continuous at the central value
+            // b) zero when x < x_min
+            // c) one when  x > x_max
+            // need to fix the coefficients in
+            // @f$CDF_{lower}(x) = c_{lower} * \right( \Phi(x, \sigma_{lower}) - \Phi(x_{min},\sigma_{lower}) \left)$@f
+            // @f$CDF_{upper}(x) = c_{upper} * \right( \Phi(x, \sigma_{upper}) + P_{lower}/c_{upper} - 1/2\left)$@f.
+            double c_lower, c_upper;
+            double phi_min, phi_max;
+
+            GaussianBlock(const ObservableCache & cache, ObservableCache::Id id, const double & min, const double & central, const double & max) :
+                cache(cache),
+                id(id),
+                central(central),
+                sigma_lower(central - min),
+                sigma_upper(max - central)
+            {
+            }
+
+            ~GaussianBlock()
+            {
+            }
+
+            virtual double evaluate() const
+            {
+                double value = cache[id];
+                double sigma = 0.0;
+
+                // allow for asymmetric Gaussian uncertainty
+                if (value > central)
+                    sigma = sigma_upper;
+                else
+                    sigma = sigma_lower;
+
+                double chi = (value - central) / sigma;
+                double norm = 1.0 / std::sqrt(2.0 * M_PI) / sigma;
+
+                return std::log(norm) - chi * chi / 2.0;
+            }
+
+            virtual void prepare_sampling()
+            {
+                // fix the model, thus prediction of central value
+                // since we can't explicitly change the data, we make the bootstrap
+                // assumption: the measured is the true distribution. This creates
+                // a bias towards higher p-values which cannot be easily estimated.
+                // Would rather use cache[id], but we don't know what the experimental distribution
+                // would look like, so use central. In this case, no difference.
+                double mu = central;
+
+                // allow a range of observables of three sigmas around model prediction
+                // in order to avoid possible unphysical values
+                double range_min = mu - 3.0 * sigma_lower;
+                double range_max = mu + 3.0 * sigma_upper;
+
+                // following constants needed for proper sampling
+                phi_min = gsl_cdf_gaussian_P(range_min - mu, sigma_lower);
+                phi_max = gsl_cdf_gaussian_P(range_max - mu, sigma_upper);
+                prob_lower = (0.5 - phi_min) / (phi_max - phi_min);
+                c_lower = 2.0 * prob_lower / (1.0 - phi_min);
+                c_upper = (1.0 - prob_lower) / (phi_max - 0.5);
+            }
+
+            virtual double sample(gsl_rng * rng) const
+            {
+                // find out if sample in upper or lower part
+                double u = gsl_rng_uniform(rng);
+
+                // get a sample  observable using inverse transform method
+                double obs, sigma;
+                if (u < prob_lower)
+                {
+                    obs = gsl_cdf_gaussian_Pinv(u / c_lower + phi_min, sigma_lower) + central;
+                    sigma = sigma_lower;
+                }
+                else
+                {
+                    obs = gsl_cdf_gaussian_Pinv((u - prob_lower) / c_upper + 0.5, sigma_upper) + central;
+                    sigma = sigma_upper;
+                }
+
+                // calculate the properly normalized log likelihood
+                // note that we generate from gaussian around cache[id],
+                // but compare with central
+                return -std::log(std::sqrt(2.0 * M_PI) * sigma) - power_of<2>((central - obs) / sigma) / 2.0;
+            }
+
+            virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
+            {
+                ObservablePtr observable = this->cache.observable(id)->clone(cache.parameters());
+
+                return LogLikelihoodBlockPtr(new GaussianBlock(cache, cache.add(observable), central - sigma_lower, central, central + sigma_upper));
+            }
+        };
+    }
+
+    LogLikelihoodBlock::~LogLikelihoodBlock()
+    {
+    }
+
+    void
+    LogLikelihoodBlock::prepare_sampling()
+    {
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Gaussian(ObservableCache cache, const ObservablePtr & observable,
+            const double & min, const double & central, const double & max)
+    {
+        unsigned index = cache.add(observable);
+
+        return LogLikelihoodBlockPtr(new implementation::GaussianBlock(cache, index, min, central, max));
+    }
+
     template <>
     struct Implementation<LogLikelihood>
     {
@@ -41,132 +174,92 @@ namespace eos
         // Cache observable predictions
         ObservableCache cache;
 
-        // <index into cache, min, central, max>
-        std::vector<std::tuple<ObservableCache::Id, double, double, double>> observations;
-
-        double chi_squared;
+        // Container for all existing independent (i.e. uncorrelated) block
+        std::vector<LogLikelihoodBlockPtr> blocks;
 
         Implementation(const Parameters & parameters) :
             parameters(parameters),
-            cache(parameters),
-            chi_squared(0)
+            cache(parameters)
         {
-        }
-
-        void add(const ObservablePtr & observable, const double & min, const double & central, const double & max)
-        {
-            auto result = cache.add(observable);
-            observations.push_back(std::make_tuple(result, min, central, max));
         }
 
         std::pair<double, double>
         bootstrap_p_value(const unsigned & datasets)
         {
-            // create a Gaussian prior for each observation
-            // in order to sample possible observations
-            // take exp. uncertainty fixed, but sample around predictions
-            // for the (best fit) parameters
-            // TODO can we make sure that no unphysical observations are generated. Is three sigma safe?
-            // TODO asymmetry not correctly captured, as the discontinuity in the pdf shouldn't be at central,
-            // but rather at x_obs
-            Parameters pars = parameters.clone();
-            std::vector<LogPriorPtr> generators;
+            // Algorithm:
+            // 1. For fixed parameters, create data sets under the model.
+            // 2. Use the likelihood as test statistic, T=L, calculate it for each data set.
+            // 3. Compare with likelihood of "observed" data set to define p-value
+            //      p = #llh < llh(obs) / #trials
 
-            // store predictions to compare with, duplicate if necessary to avoid index lookup
-            // in data generation loop
-            std::vector<double> preds;
-            for (auto i = observations.cbegin(), i_end = observations.cend() ; i != i_end ; ++i)
+            // set up for sampling
+            for (auto b = blocks.cbegin(), b_end = blocks.cend() ; b != b_end ; ++b)
             {
-                double central     = cache[std::get<0>(*i)]; //fixed parameters => fixed predictions
-                double sigma_lower = std::get<2>(*i) - std::get<1>(*i);
-                double sigma_upper = std::get<3>(*i) - std::get<2>(*i);
-                generators.push_back( LogPrior::Gauss(pars, "mass::b(MSbar)",
-                                ParameterRange{ central - 3 * sigma_lower, central + 3 * sigma_upper },
-                                central - sigma_lower, central, central + sigma_upper));
-                preds.push_back(cache[std::get<0>(*i)]);
+                (*b)->prepare_sampling();
             }
 
-            // save the current chi^2 for the observed data points
-            double chi_squared_obs = chi_squared;
+            // observed value
+            double t_obs = this->log_likelihood();
 
             Log::instance()->message("log_likelihood.bootstrap_pvalue", ll_informational)
-                                                 << "chi^2_obs = " << chi_squared_obs;
+                                     << "The value of the test statistic (total likelihood) "
+                                     << "for the current parameters is = " << t_obs;
+
+            // count data sets with smaller likelihood
+            unsigned n_low = 0;
+
+            // test value
+            double t;
 
             gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
-            gsl_rng_set(rng, 1536);
+            gsl_rng_set(rng, datasets);
 
-            // keep track how often chi2 is bigger in pseudo data
-            unsigned counter = 0;
+            Log::instance()->message("log_likelihood.bootstrap_pvalue", ll_informational)
+                                     << "Begin sampling " << datasets << " simulated "
+                                     << "values of the likelihood";
 
-            for (unsigned i=0; i < datasets; ++i)
+            // collect samples
+            for (unsigned i = 0 ; i < datasets ; ++i)
             {
-                double pseudo_chi2 = 0;
-                double pseudo_obs = 0;
-                double sigma = 0;
-
-                // generate one pseudo data set
-                unsigned i = 0;
-                for (auto g = generators.begin(), g_end = generators.end() ; g != g_end ; ++g, ++i)
+                t = 0.0;
+                for (auto b = blocks.cbegin(), b_end = blocks.cend() ; b != b_end ; ++b)
                 {
-                    pseudo_obs = (**g).sample(rng);
-                    if (pseudo_obs > std::get<2>(observations[i]) )
-                        sigma = std::get<3>(observations[i]) - std::get<2>(observations[i]);
-                    else
-                        sigma = std::get<2>(observations[i]) - std::get<1>(observations[i]);
-                    pseudo_chi2 += power_of<2>( (pseudo_obs - preds[i]) / sigma);
+                    t += (*b)->sample(rng);
                 }
 
-                // compare with predictions
-                if (pseudo_chi2 > chi_squared_obs)
-                    counter++;
+                if (t < t_obs)
+                {
+                    ++n_low;
+                }
             }
 
+            // mode of binomial posterior
+            double p = n_low / double(datasets);
+
+            // determine uncertainty of p-value
+            // Just the variance of a binomial posterior
+            double p_expected = double(n_low + 1) / double(datasets + 2);
+            double uncertainty = std::sqrt(p_expected * (1 - p_expected) / double(datasets + 3));
+
+            Log::instance()->message("log_likelihood.bootstrap_pvalue", ll_informational)
+                                     << "The simulated p-value is " << p
+                                     << " with uncertainty " << uncertainty;
+
             gsl_rng_free(rng);
-
-            // naive estimate: mode of binomial posterior
-            double p = double(counter)/double(datasets);
-
-            double p_expected = double(counter+1)/double(datasets+2);
-            double uncertainty = sqrt(p_expected * ( 1 - p_expected) / double(datasets + 3));
 
             return std::make_pair(p, uncertainty);
         }
 
-        double operator() ()
+        double log_likelihood()
         {
-           /*
-            * proper normalization
-            * Could calculate only once upon initialization, but if
-            * uncertainty is parameter dependent, that's ruled out.
-            */
-           double norm = 1.0;
+            double result = 0.0;
 
-           chi_squared = 0.0;
-           double sigma = 1.0;
+            for (auto b = blocks.cbegin(), b_end = blocks.cend() ; b != b_end ; ++b)
+            {
+                result += (*b)->evaluate();
+            }
 
-           // compare predictions with observations
-           for (auto i = observations.cbegin(), i_end = observations.cend() ; i != i_end ; ++i)
-           {
-               // get prediction
-               double value = cache[std::get<0>(*i)];
-
-               // get most likely observed value
-               double central = std::get<2>(*i);
-
-               // allow for asymmetric Gaussian uncertainty
-               if (value > central)
-                   sigma = std::get<3>(*i) - central;
-               else
-                   sigma = central - std::get<1>(*i);
-
-               double chi = (value - central) / sigma;
-
-               chi_squared += chi * chi;
-
-               norm /= std::sqrt(2.0 * M_PI) * sigma;
-           }
-
-           return std::log(norm) - chi_squared / 2.0;
+            return result;
         }
     };
 
@@ -182,7 +275,7 @@ namespace eos
     void
     LogLikelihood::add(const ObservablePtr & observable, const double & min, const double & central, const double & max)
     {
-        _imp->add(observable, min, central, max);
+        _imp->blocks.push_back(LogLikelihoodBlock::Gaussian(_imp->cache, observable, min, central, max));
     }
 
     std::pair<double, double>
@@ -191,23 +284,15 @@ namespace eos
         return _imp->bootstrap_p_value(datasets);
     }
 
-    double
-    LogLikelihood::chi_squared() const
-    {
-        return _imp->chi_squared;
-    }
-
     LogLikelihood
     LogLikelihood::clone() const
     {
-        Parameters parameters(_imp->parameters.clone());
-        LogLikelihood result(parameters);
+        LogLikelihood result(_imp->parameters.clone());
+        result._imp->cache = _imp->cache.clone(result._imp->parameters);
 
-        for (auto o = _imp->observations.cbegin(), o_end = _imp->observations.cend() ; o != o_end ; ++o)
+        for (auto b = _imp->blocks.cbegin(), b_end = _imp->blocks.cend() ; b != b_end ; ++b)
         {
-            // create clone with independent parameters object
-            ObservablePtr ptr = _imp->cache.observable(std::get<0>(*o))->clone(parameters);
-            result.add(ptr, std::get<1>(*o), std::get<2>(*o), std::get<3>(*o));
+            result._imp->blocks.push_back((*b)->clone(result._imp->cache));
         }
 
         return result;
@@ -216,7 +301,7 @@ namespace eos
     unsigned
     LogLikelihood::number_of_observations() const
     {
-        return _imp->observations.size();
+        return _imp->blocks.size();
     }
 
     Parameters
@@ -236,7 +321,7 @@ namespace eos
     {
         _imp->cache.update();
 
-        return (*_imp)();
+        return _imp->log_likelihood();
     }
 
     double
@@ -244,7 +329,7 @@ namespace eos
     {
         _imp->cache.update(id);
 
-        return (*_imp)();
+        return _imp->log_likelihood();
     }
 
     void

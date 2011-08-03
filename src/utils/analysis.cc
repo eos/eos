@@ -98,26 +98,23 @@ namespace eos
                 parameter_descriptions[i].parameter = parameter_values[i];
 
             // calculate \chi^2
+            // update observables for new parameter values
             log_likelihood();
-            double chi_squared = log_likelihood.chi_squared();
-
-            // p-value from the analytical, yet approximate \chi^2-distribution
-            // with (n_obs - n_par) degrees-of-freedom
-            unsigned dof = log_likelihood.number_of_observations() - parameter_descriptions.size();
-            double p_analytical = gsl_cdf_chisq_Q(chi_squared, dof );
-
-            if (simulated_datasets == 0)
-                return std::make_pair(chi_squared, p_analytical);
 
             // simulate data sets
             auto sim_result = log_likelihood.bootstrap_p_value(simulated_datasets);
 
-            Log::instance()->message("analysis.goodness_of_fit", ll_informational)
-               << "p-value from generating " << simulated_datasets << " data sets"
-               << " has a value of " << sim_result.first << " with uncertainty "
-               << sim_result.second;
+            // p-value from the analytical, yet approximate \chi^2-distribution
+            // with (n_obs - n_par) degrees-of-freedom
+            unsigned dof = log_likelihood.number_of_observations() - parameter_descriptions.size();
+            double chi_squared = gsl_cdf_chisq_Qinv(sim_result.first, log_likelihood.number_of_observations());
+            double p_analytical = gsl_cdf_chisq_Q(chi_squared, dof);
 
-            return std::make_pair(chi_squared, sim_result.first);
+            Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+               << "p-value after applying DoF correction and using the \\chi^2-distribution"
+               << " (valid assumption?) has a value of " << p_analytical;
+
+            return std::make_pair(sim_result.first, p_analytical);
         }
 
         /*
