@@ -39,6 +39,27 @@ namespace eos
     {
     }
 
+    Kinematics::Kinematics(const std::initializer_list<std::pair<std::string, double>> & variables) :
+        PrivateImplementationPattern<Kinematics>(new Implementation<Kinematics>)
+    {
+        for (auto v = variables.begin(), v_end = variables.end() ; v != v_end ; ++v)
+        {
+            auto i(_imp->variables_map.find(v->first));
+
+            if (_imp->variables_map.end() == i)
+            {
+                int index = _imp->variables_data.size();
+                _imp->variables_map[v->first] = index;
+                _imp->variables_data.push_back(v->second);
+
+            }
+            else
+            {
+                _imp->variables_data[i->second] = v->second;
+            }
+        }
+    }
+
     Kinematics::~Kinematics()
     {
     }

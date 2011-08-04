@@ -36,6 +36,18 @@ class KinematicsTest :
 
         virtual void run() const
         {
+            // Creation from initializer list
+            {
+                Kinematics kinematics
+                {
+                    { "s_min", 1.0 },
+                    { "s_max", 6.0 },
+                };
+
+                TEST_CHECK_EQUAL(1.0, kinematics["s_min"]);
+                TEST_CHECK_EQUAL(6.0, kinematics["s_max"]);
+            }
+
             // Access
             {
                 Kinematics kinematics;

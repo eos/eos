@@ -60,6 +60,16 @@ namespace eos
             /// Constructor.
             Kinematics();
 
+            /*!
+             * Constructor.
+             *
+             * Create an instance of Kinematics with a given set of initial kinematic
+             * variables.
+             *
+             * @param variables The set of initial kinematics variables from which this object shall be constructed.
+             */
+            Kinematics(const std::initializer_list<std::pair<std::string, double>> & variables);
+
             /// Destructor.
             ~Kinematics();
 
