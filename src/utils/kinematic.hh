@@ -57,21 +57,15 @@ namespace eos
         public:
             ///@name Basic Functions
             ///@{
-            /*!
-             * Constructor.
-             *
-             * Creates an instance of Parameters from a given implementation.
-             * To create an instance of Parameters, see one of the named constructors.
-             *
-             * @param impl Implementation from which the Parameters object shall be constructed from.
-             */
+            /// Constructor.
             Kinematics();
 
-            /*!
-             * Destructor
-             */
+            /// Destructor.
             ~Kinematics();
 
+            /*!
+             * Create an independent copy of this Kinematics object.
+             */
             Kinematics clone() const;
 
             /// Equality comparison operator.
