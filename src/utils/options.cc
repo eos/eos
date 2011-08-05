@@ -143,4 +143,15 @@ namespace eos
         Exception("Unknown option: '" + key + "'")
     {
     }
+
+    Options
+    operator+ (const Options & lhs, const Options & rhs)
+    {
+        Options result;
+
+        result._imp->options.insert(lhs._imp->options.cbegin(), lhs._imp->options.cend());
+        result._imp->options.insert(rhs._imp->options.cbegin(), rhs._imp->options.cend());
+
+        return result;
+    }
 }

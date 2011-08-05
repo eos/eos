@@ -44,6 +44,8 @@ namespace eos
         public PrivateImplementationPattern<Options>
     {
         public:
+            friend Options operator+ (const Options &, const Options &);
+
             ///@name Basic Functions
             ///@{
 
@@ -83,6 +85,9 @@ namespace eos
             std::string as_string() const;
             ///@}
     };
+
+    /// Merge operator.
+    Options operator+ (const Options & lhs, const Options & rhs);
 }
 
 #endif

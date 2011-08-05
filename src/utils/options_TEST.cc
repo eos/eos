@@ -36,6 +36,18 @@ class OptionsTest :
 
         virtual void run() const
         {
+            // Creation from initializer list
+            {
+                Options options
+                {
+                    { "q", "d"  },
+                    { "l", "mu" },
+                };
+
+                TEST_CHECK_EQUAL("d",  options.get("q", "s"));
+                TEST_CHECK_EQUAL("mu", options.get("l", "tau"));
+            }
+
             // Access
             {
                 Options options;
@@ -44,6 +56,24 @@ class OptionsTest :
                 TEST_CHECK(options.has("foo"));
                 TEST_CHECK(! options.has("baz"));
                 TEST_CHECK_EQUAL("bar", options.get("foo", ""));
+            }
+
+            // Merging
+            {
+                Options o1
+                {
+                    { "q", "d" }
+                };
+
+                Options o2
+                {
+                    { "l", "mu" }
+                };
+
+                Options o3 = o1 + o2;
+
+                TEST_CHECK_EQUAL("d",  o3.get("q", "s"));
+                TEST_CHECK_EQUAL("mu", o3.get("l", "tau"));
             }
 
             // Equality/Inequality
