@@ -25,7 +25,7 @@ libeosutils_la_SOURCES = \
 	lcda.cc lcda.hh \
 	lock.cc lock.hh \
 	log.cc log.hh \
-	log_likelihood.cc log_likelihood.hh \
+	log_likelihood.cc log_likelihood.hh log_likelihood-fwd.hh \
 	log_prior.cc log_prior.hh log_prior-fwd.hh \
 	markov_chain.cc markov_chain.hh \
 	markov_chain_sampler.cc markov_chain_sampler.hh \

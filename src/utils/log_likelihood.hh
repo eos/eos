@@ -22,6 +22,7 @@
 #define EOS_GUARD_SRC_UTILS_LIKELIHOOD_HH 1
 
 #include <src/observable.hh>
+#include <src/utils/log_likelihood-fwd.hh>
 #include <src/utils/observable_cache.hh>
 #include <src/utils/parameters.hh>
 #include <src/utils/private_implementation_pattern.hh>
@@ -30,11 +31,6 @@
 
 namespace eos
 {
-    // Forward declarations.
-    class LogLikelihoodBlock;
-
-    typedef std::shared_ptr<LogLikelihoodBlock> LogLikelihoodBlockPtr;
-
     /*!
      * LogLikelihoodBlock models the logarithm of the likelihood for a given
      * number of correlated observables which are independent of all other
