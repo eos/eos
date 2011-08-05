@@ -47,14 +47,20 @@ namespace eos
             ///@name Basic Functions
             ///@{
 
-            /*!
-             * Constructor.
-             */
+            /// Constructor.
             Options();
 
             /*!
-             * Destructor.
+             * Constructor.
+             *
+             * Create an instance of Kinematics with a given set of initial
+             * options.
+             *
+             * @param options The set of initial options from which this object shall be constructed.
              */
+            Options(const std::initializer_list<std::pair<std::string, std::string>> & options);
+
+            /// Destructor.
             ~Options();
 
             /// Equality comparison operator.

@@ -28,10 +28,27 @@ namespace eos
     struct Implementation<Options>
     {
         std::map<std::string, std::string> options;
+
+        Implementation()
+        {
+        }
+
+        Implementation(const std::initializer_list<std::pair<std::string, std::string>> & _options)
+        {
+            for (auto o = _options.begin(), o_end = _options.end() ; o != o_end ; ++o)
+            {
+                options.insert(*o);
+            }
+        }
     };
 
     Options::Options() :
         PrivateImplementationPattern<Options>(new Implementation<Options>)
+    {
+    }
+
+    Options::Options(const std::initializer_list<std::pair<std::string, std::string>> & options) :
+        PrivateImplementationPattern<Options>(new Implementation<Options>(options))
     {
     }
 
