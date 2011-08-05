@@ -21,6 +21,7 @@
 #ifndef EOS_GUARD_SRC_UTILS_LIKELIHOOD_HH
 #define EOS_GUARD_SRC_UTILS_LIKELIHOOD_HH 1
 
+#include <src/constraint.hh>
 #include <src/observable.hh>
 #include <src/utils/log_likelihood-fwd.hh>
 #include <src/utils/observable_cache.hh>
@@ -118,6 +119,13 @@ namespace eos
              */
             void add(const ObservablePtr & observable, const double & min,
                     const double & central, const double & max);
+
+            /*!
+             * Add one of the libraries experimental constraints.
+             *
+             * @param constraint The experimental constraint, cf. Constraint::make
+             */
+            void add(const Constraint & constraint);
 
             /*!
              * Calculate a p-value based on the \chi^2

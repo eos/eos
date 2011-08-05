@@ -278,6 +278,16 @@ namespace eos
         _imp->blocks.push_back(LogLikelihoodBlock::Gaussian(_imp->cache, observable, min, central, max));
     }
 
+    void
+    LogLikelihood::add(const Constraint & constraint)
+    {
+        for (auto b = constraint.begin_blocks(), b_end = constraint.end_blocks() ; b != b_end ; ++b)
+        {
+            // Clone each LogLikelihoodBlock onto our ObservableCache
+            _imp->blocks.push_back((*b)->clone(_imp->cache));
+        }
+    }
+
     std::pair<double, double>
     LogLikelihood::bootstrap_p_value(const unsigned & datasets)
     {
