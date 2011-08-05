@@ -20,11 +20,6 @@ libeosrarebdecays_la_SOURCES = \
 	long-distance.cc long-distance.hh
 libeosrarebdecays_la_LIBADD = $(top_builddir)/src/utils/libeosutils.la -lgslcblas -lgsl
 
-noinst_PROGRAMS = amplitudes
-amplitudes_SOURCES = \
-	amplitudes.cc
-amplitudes_LDADD = libeosrarebdecays.la $(top_builddir)/src/utils/libeosutils.la
-
 TESTS = \
 	bremsstrahlung_TEST \
 	charm-loops_TEST \
