@@ -566,7 +566,7 @@ namespace eos
                     &BToXsGamma<Minimal>::integrated_branching_ratio),
         };
 
-        Options options(_options);
+        Options options;
         std::string name(_name);
 
         std::string::size_type pos;
@@ -587,6 +587,6 @@ namespace eos
         if (simple_observables.end() == i)
             return ObservablePtr();
 
-        return i->second->make(parameters, kinematics, options);
+        return i->second->make(parameters, kinematics, options + _options);
     }
 }
