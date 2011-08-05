@@ -18,6 +18,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <src/constraint.hh>
 #include <src/observable.hh>
 #include <src/utils/destringify.hh>
 #include <src/utils/instantiation_policy-impl.hh>
@@ -77,6 +78,8 @@ class CommandLine :
     public:
         Parameters parameters;
 
+        Options global_options;
+
         LogLikelihood likelihood;
 
         AnalysisPtr analysis;
@@ -90,6 +93,8 @@ class CommandLine :
         std::vector<ObservableInput> inputs;
 
         std::string creator;
+
+        bool has_constraints;
 
         CommandLine() :
             parameters(Parameters::Defaults()),
@@ -219,6 +224,19 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--global-option" == argument)
+                {
+                    if (has_constraints)
+                        throw DoUsage("All global options must be specified before the first --observable/--constraint");
+
+                    std::string name(*(++a));
+                    std::string value(*(++a));
+
+                    global_options.set(name, value);
+
+                    continue;
+                }
+
                 if ("--observable" == argument)
                 {
                     std::string observable_name(*(++a));
@@ -226,7 +244,7 @@ class CommandLine :
                     ObservableInput input;
                     input.kinematics = *kinematics;
                     input.observable = Observable::make(observable_name, parameters,
-                            *kinematics, Options());
+                            *kinematics, global_options);
                     if (!input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 
@@ -238,6 +256,18 @@ class CommandLine :
 
                     inputs.push_back(input);
                     kinematics.reset(new Kinematics);
+
+                    continue;
+                }
+
+                if ("--constraint" == argument)
+                {
+                    std::string constraint_name(*(++a));
+
+                    std::cout << "Making constraint '" << constraint_name << "'" << std::endl;
+                    likelihood.add(Constraint::make(constraint_name, global_options));
+                    std::cout << "LLH.add(C) done" << std::endl;
+                    has_constraints = true;
 
                     continue;
                 }
@@ -326,7 +356,7 @@ int main(int argc, char * argv[])
     {
         CommandLine::instance()->parse(argc, argv);
 
-        if (CommandLine::instance()->inputs.empty())
+        if (CommandLine::instance()->inputs.empty() && (! CommandLine::instance()->has_constraints))
             throw DoUsage("No inputs specified");
 
         std::cout << std::scientific;
