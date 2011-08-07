@@ -29,8 +29,6 @@
 
 #include <unistd.h>
 
-#include <iostream>
-
 namespace eos
 {
     template <>
