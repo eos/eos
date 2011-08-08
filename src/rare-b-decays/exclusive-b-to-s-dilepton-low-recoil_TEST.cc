@@ -172,6 +172,19 @@ class BToKstarDileptonLowRecoilTest :
 
                 BToKstarDilepton<LowRecoil> d(p, oo);
 
+                /* observables */
+                {
+                    static const double eps = 1e-4;
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 19.21),                         2.79400e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(14.18, 19.21),             2.64584e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(14.18, 19.21),             -4.08700e-1, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry_cp_averaged(14.18, 19.21), -4.02815e-1, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(14.18, 19.21),              +0.34841,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation_cp_averaged(14.18, 19.21),  +0.34851,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(14.18, 19.21),                 -4.92697e-1, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2_cp_averaged(14.18, 19.21),     -4.91581e-1, eps);
+                }
+
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
                 {
                     static const double eps = 1e-19; // 1e-7 smaller than results
@@ -515,10 +528,11 @@ class BToKDileptonLowRecoilTest :
                 {
                     const double eps = 1e-5;
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8),       1.5549713e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),             5.3907650e-03, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(14.18, 22.8), 1.0015315,     eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry_1(14.18, 22.8),        0.0627285,     eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8),              1.5549713e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(14.18, 22.8),  1.4631874e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),                    5.3907650e-03, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(14.18, 22.8),        1.0015315,     eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry_1(14.18, 22.8),               0.0627285,     eps);
                 }
             }
         }

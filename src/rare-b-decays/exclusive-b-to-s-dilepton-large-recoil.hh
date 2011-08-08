@@ -71,11 +71,15 @@ namespace eos
 
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
+            double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_unnormalized_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const;
+            double integrated_longitudinal_polarisation_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_unnormalized_longitudinal_polarisation(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const;
+            double integrated_transverse_asymmetry_2_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const;
@@ -105,6 +109,7 @@ namespace eos
 
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_flat_term(const double & s_min, const double & s_max) const;
             double integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const;
     };

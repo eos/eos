@@ -163,6 +163,19 @@ class BToKstarDileptonLargeRecoilTest :
 
                 BToKstarDilepton<LargeRecoil> d(p, oo);
 
+                /* observables */
+                {
+                    static const double eps = 1e-4;
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1.0, 6.0),                         2.41382e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1.0, 6.0),             2.40579e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(1.0, 6.0),             +2.39239e-2, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry_cp_averaged(1.0, 6.0), -9.16268e-3, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(1.0, 6.0),              +0.74575,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation_cp_averaged(1.0, 6.0),  +0.75409,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(1.0, 6.0),                 -3.57972e-2, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2_cp_averaged(1.0, 6.0),     -4.01245e-2, eps);
+                }
+
                 /* transversity amplitudes at q^2 = 6.00 GeV^2 */
                 {
                     static const double eps = 1e-19; // 1e-7 smaller than results
@@ -332,6 +345,54 @@ class BToKDileptonLargeRecoilTest :
 
                 // Standard bin 1.0 <= s <= 6.0 GeV^2
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(1.0, 6.0), 1.0003573, eps);
+            }
+
+            /* Benchmark Point */
+            {
+                Parameters p = Parameters::Defaults();
+                p["life_time::B_d"] = 1.530e-12;
+                p["c1"] = -0.32300000;
+                p["c2"] = +1.00931000;
+                p["c3"] = -0.00522869;
+                p["c4"] = -0.08794730;
+                p["c5"] = +0.00037476;
+                p["c6"] = +0.00105859;
+                p["Abs{c7}"] = 0.331;
+                p["c8"] = -0.181;
+                // PDG 2008 CKM parameters
+                p["CKM::A"] = 0.814;
+                p["CKM::lambda"] = 0.2257;
+                p["CKM::rhobar"] = 0.135;
+                p["CKM::etabar"] = 0.349;
+                // B decay constant
+                p["decay-constant::B_d"] = 0.200;
+                // B mass
+                p["mass::B_d"] = 5.27953;
+                // Kaon mass
+                p["mass::K0"] = 0.49761;
+                // b quark mass
+                p["mass::b(MSbar)"] = 4.2;
+                p["Abs{c9}"] = 4.27;
+                p["Abs{c10}"] = 4.17;
+                p["Arg{c7}"] = -M_PI / 2.0;
+                p["Arg{c9}"] = +M_PI / 2.0;
+                p["Arg{c10}"] = -M_PI / 2.0;
+
+                Options oo;
+                oo.set("model", "WilsonScan");
+                oo.set("form-factors", "BZ2004v2");
+
+                BToKDilepton<LargeRecoil> d(p, oo);
+
+                /* q^2 = [14.18, 22.8] */
+                {
+                    const double eps = 1e-5;
+
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1.0, 6.0),              1.5242329e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1.0, 6.0),  1.5217576e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(1.0, 6.0),                    2.4491886e-02, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(1.0, 6.0),        1.0003682,     eps);
+                }
             }
         }
 } b_to_k_dilepton_large_recoil_test;

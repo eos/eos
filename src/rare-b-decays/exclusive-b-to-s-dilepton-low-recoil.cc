@@ -685,6 +685,20 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+        std::function<double (const double &)> f = std::bind(&BToKstarDilepton<LowRecoil>::differential_branching_ratio,
+                this, std::placeholders::_1);
+
+        double br = integrate(f, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double br_bar = integrate(f, 64, s_min, s_max);
+
+        return (br + br_bar) / 2.0;
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry_naive(const double & s_min, const double & s_max) const
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry, this, std::placeholders::_1);
@@ -699,6 +713,20 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
 
         return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_fb_numerator, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
+
+        double a_fb = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double a_fb_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+
+        return (a_fb + a_fb_bar) / 2.0;
     }
 
     double
@@ -722,6 +750,20 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::f_l_numerator, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
+
+        double f_l = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double f_l_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+
+        return (f_l + f_l_bar) / 2.0;
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation_naive(const double & s_min, const double & s_max) const
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation, this, std::placeholders::_1);
@@ -736,6 +778,20 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_denominator, _imp, std::placeholders::_1);
 
         return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_numerator, _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_denominator, _imp, std::placeholders::_1);
+
+        double a_t_2 = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double a_t_2_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+
+        return (a_t_2 + a_t_2_bar) / 2.0;
     }
 
     double
@@ -1237,6 +1293,20 @@ namespace eos
                 this, std::placeholders::_1);
 
         return integrate(integrand, 64, s_min, s_max);
+    }
+
+    double
+    BToKDilepton<LowRecoil>::integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+        std::function<double (const double &)> integrand = std::bind(&BToKDilepton<LowRecoil>::differential_branching_ratio,
+                this, std::placeholders::_1);
+
+        double br = integrate(integrand, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double br_bar = integrate(integrand, 64, s_min, s_max);
+
+        return (br + br_bar) / 2.0;
     }
 
     double

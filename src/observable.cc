@@ -188,6 +188,10 @@ namespace eos
                     &BToKDilepton<LargeRecoil>::integrated_branching_ratio,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->Kll::BRavg@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::integrated_branching_ratio_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->Kll::F_H@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::integrated_flat_term,
                     std::make_tuple("s_min", "s_max")),
@@ -215,6 +219,10 @@ namespace eos
 
             make_observable("B->Kll::BR@LowRecoil",
                     &BToKDilepton<LowRecoil>::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Kll::BRavg@LowRecoil",
+                    &BToKDilepton<LowRecoil>::integrated_branching_ratio_cp_averaged,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->Kll::F_H@LowRecoil",
@@ -286,6 +294,10 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::A_FBavg@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->K^*ll::Abar_FB@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_unnormalized_forward_backward_asymmetry,
                     std::make_tuple("s_min", "s_max")),
@@ -294,12 +306,28 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::integrated_branching_ratio,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::BRavg@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_branching_ratio_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->K^*ll::F_L@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::F_Lavg@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->K^*ll::Fbar_L@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_unnormalized_longitudinal_polarisation,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::A_T^2@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_2,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::A_T^2avg@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_2_cp_averaged,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->K^*ll::H_T^1(s)@LargeRecoil",
@@ -383,6 +411,10 @@ namespace eos
                     &BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::A_FBavg@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->K^*ll::Abar_FB@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::integrated_unnormalized_forward_backward_asymmetry,
                     std::make_tuple("s_min", "s_max")),
@@ -395,8 +427,16 @@ namespace eos
                     &BToKstarDilepton<LowRecoil>::integrated_branching_ratio,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::BRavg@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_branching_ratio_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->K^*ll::F_L@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::F_Lavg@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation_cp_averaged,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->K^*ll::nF_L@LowRecoil",
@@ -405,6 +445,10 @@ namespace eos
 
             make_observable("B->K^*ll::A_T^2@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::A_T^2avg@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2_cp_averaged,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->K^*ll::nA_T^2@LowRecoil",
