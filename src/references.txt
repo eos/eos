@@ -1,6 +1,58 @@
 References
 ==========
 
+Experimental Results
+--------------------
+
+    CLEO:2000 : Coan, T.E. et al. [CLEO Collaboration]
+
+        Study of exclusive radiative B meson decays
+
+        Phys. Rev. Lett. 84, 5283-5284 (2000)
+
+        arxiv:hep-ex/9912047
+
+
+    Belle:2004 : Nakao, M. et al. [Belle Collaboration]
+
+        Measurement of the B ---> K* gamma branching fractions and asymmetries
+
+        Phys. Rev. D69, 112001 (2004)
+
+        arXiv:hep-ex/0402042
+
+
+    Belle:2006 : Ushiroda, Y. et al. [Belle Collaboration]
+
+        Time-Dependent CP Asymmetries in B0 ---> K0(s) pi0 gamma transitions
+
+        Phys. Rev. D74, 111104 (2006)
+
+        arxiv:hep-ex/0608017
+
+
+    BaBar:2008 : Aubert, B. et al. [BABAR Collaboration]
+
+        Measurement of Time-Dependent CP Asymmetry in B^0 ---> K^0_S pi^0 gamma Decays
+
+        Phys. Rev. D78, 071102 (2008)
+
+        arxiv:0807.3103 [hep-ex]
+
+
+    BaBar:2009 : Aubert, B. et al. [BABAR Collaboration]
+
+        Measurement of Branching Fractions and CP and Isospin Asymmetries in B --->
+        K*(892)gamma Decays
+
+        Phys. Rev. Lett. 103, 211802 (2009)
+
+        arxiv:0906.2177 [hep-ex]
+
+
+Theoretical Inputs
+------------------
+
     2006zs : Misiak, M. et al
 
         The first estimate of B(anti-B -> X/s gamma) at O(alpha(s)^2)

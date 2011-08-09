@@ -49,6 +49,123 @@ namespace eos
 
     namespace templates
     {
+        ///@name 2000 Data
+        ///@{
+        /*
+         * CLEO Collaboration
+         *
+         * Data taken from [CLEO:2000]
+         */
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_gamma_BR_CLEO_2000
+        {
+            "B->K^*gamma::BRavg",
+            Kinematics{ },
+            Options{ { "q", "d" } },
+            4.55e-5, 0.72e-5, 0.68e-5, 0.34e-5, 0.34e-5
+        };
+        static const GaussianConstraintTemplate Bplus_to_Kstarplus_gamma_BR_CLEO_2000
+        {
+            "B->K^*gamma::BRavg",
+            Kinematics{ },
+            Options{ { "q", "u" } },
+            3.76e-5, 0.89e-5, 0.83e-5, 0.28e-5, 0.28e-5
+        };
+        ///@}
+
+        ///@name 2004 Data
+        ///@{
+        /*
+         * Belle Collaboration
+         *
+         * Data taken from [Belle:2004]
+         */
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_gamma_BR_Belle_2004
+        {
+            "B->K^*gamma::BRavg",
+            Kinematics{ },
+            Options{ { "q", "d" } },
+            4.01e-5, 0.21e-5, 0.21e-5, 0.17e-5, 0.17e-5
+        };
+        static const GaussianConstraintTemplate Bplus_to_Kstarplus_gamma_BR_Belle_2004
+        {
+            "B->K^*gamma::BRavg",
+            Kinematics{ },
+            Options{ { "q", "u" } },
+            4.25e-5, 0.31e-5, 0.31e-5, 0.24e-5, 0.24e-5
+        };
+        ///@}
+
+        ///@name 2006 Data
+        ///@{
+        /*
+         * Belle Collaboration
+         *
+         * Data taken from [Belle:2006]
+         */
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_gamma_SKstargamma_Belle_2006
+        {
+            "B->K^*gamma::S_K^*gamma",
+            Kinematics{ },
+            Options{ { "q", "d" } },
+            -0.32, +0.36, -0.33, +0.05, -0.05
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_gamma_CKstargamma_Belle_2006
+        {
+            "B->K^*gamma::C_K^*gamma",
+            Kinematics{ },
+            Options{ { "q", "d" } },
+            +0.20, +0.24, -0.24, +0.05, -0.05
+        };
+        ///@}
+
+        ///@name 2008 Data
+        ///@{
+        /*
+         * BaBar Collaboration
+         *
+         * Data taken from [BaBar:2008]
+         */
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_gamma_SKstargamma_BaBar_2008
+        {
+            "B->K^*gamma::S_K^*gamma",
+            Kinematics{ },
+            Options{ { "q", "d" } },
+            -0.03, +0.29, -0.29, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_gamma_CKstargamma_BaBar_2008
+        {
+            "B->K^*gamma::C_K^*gamma",
+            Kinematics{ },
+            Options{ { "q", "d" } },
+            -0.14, +0.16, -0.16, +0.03, -0.03
+        };
+        ///@}
+
+        ///@name 2009 Data
+        ///@{
+        /*
+         * BaBar Collaboration
+         *
+         * Data taken from [BaBar:2009]
+         */
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_gamma_BR_BaBar_2009
+        {
+            "B->K^*gamma::BRavg",
+            Kinematics{ },
+            Options{ { "q", "d" } },
+            4.47e-5, +0.10e-5, -0.10e-5, +0.16e-5, -0.16e-5
+        };
+        static const GaussianConstraintTemplate Bplus_to_Kstarplus_gamma_BR_BaBar_2009
+        {
+            "B->K^*gamma::BRavg",
+            Kinematics{ },
+            Options{ { "q", "u" } },
+            4.22e-5, +0.14e-5, -0.14e-5, +0.16e-5, -0.16e-5
+        };
+        ///@}
+
+        ///@name 2011 Data
+        ///@{
         /*
          * LHCb Collaboration
          *
@@ -126,6 +243,7 @@ namespace eos
             Options{ { "q", "d"  }, { "l", "mu" } },
             +0.28, +0.10, -0.09, +0.04, -0.04
         };
+        ///@}
     }
 
     Constraint
@@ -231,7 +349,27 @@ namespace eos
                 n, \
                 std::bind(&make_gaussian_constraint, std::placeholders::_1, std::placeholders::_2, t) \
             }
-            /* LHCb 2011 */
+            /* 2000 */
+            // CLEO
+            MAKEGAUSS("B^0->K^*0gamma::BR@CLEO-2000",                          templates::Bzero_to_Kstarzero_gamma_BR_CLEO_2000),
+            MAKEGAUSS("B^+->K^*+gamma::BR@CLEO-2000",                          templates::Bplus_to_Kstarplus_gamma_BR_CLEO_2000),
+            /* 2004 */
+            // Belle
+            MAKEGAUSS("B^0->K^*0gamma::BR@Belle-2004",                         templates::Bzero_to_Kstarzero_gamma_BR_Belle_2004),
+            MAKEGAUSS("B^+->K^*+gamma::BR@Belle-2004",                         templates::Bplus_to_Kstarplus_gamma_BR_Belle_2004),
+            /* 2006 */
+            // Belle
+            MAKEGAUSS("B^0->K^*0gamma::S_K@Belle-2006",                        templates::Bzero_to_Kstarzero_gamma_SKstargamma_Belle_2006),
+            MAKEGAUSS("B^0->K^*0gamma::C_K@Belle-2006",                        templates::Bzero_to_Kstarzero_gamma_CKstargamma_Belle_2006),
+            /* 2008 */
+            // BaBar
+            MAKEGAUSS("B^0->K^*0gamma::S_K@BaBar-2008",                        templates::Bzero_to_Kstarzero_gamma_SKstargamma_BaBar_2008),
+            MAKEGAUSS("B^0->K^*0gamma::C_K@BaBar-2008",                        templates::Bzero_to_Kstarzero_gamma_CKstargamma_BaBar_2008),
+            /* 2009 */
+            MAKEGAUSS("B^0->K^*0gamma::BR@BaBar-2009",                         templates::Bzero_to_Kstarzero_gamma_BR_BaBar_2009),
+            MAKEGAUSS("B^+->K^*+gamma::BR@BaBar-2009",                         templates::Bplus_to_Kstarplus_gamma_BR_BaBar_2009),
+
+            /* 2011 */
             MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011",            templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2011),
             MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011",          templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2011),
             MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb-2011",          templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_LHCb_2011),
