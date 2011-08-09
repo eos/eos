@@ -356,6 +356,20 @@ namespace eos
 
             return numerator / denominator;
         }
+
+        double c_kstar_gamma()
+        {
+            Save<bool> save(this->cp_conjugate, false);
+
+            Amplitudes abar = amplitudes();
+            cp_conjugate = true;
+            Amplitudes a = amplitudes();
+
+            double numerator = std::norm(a.left) + std::norm(a.right) - std::norm(abar.left) - std::norm(abar.right);
+            double denominator = std::norm(a.left) + std::norm(a.right) + std::norm(abar.left) + std::norm(abar.right);
+
+            return numerator / denominator;
+        }
     };
 
     BToKstarGamma::BToKstarGamma(const Parameters & parameters, const Options & options) :
@@ -377,5 +391,11 @@ namespace eos
     BToKstarGamma::s_kstar_gamma() const
     {
         return _imp->s_kstar_gamma();
+    }
+
+    double
+    BToKstarGamma::c_kstar_gamma() const
+    {
+        return _imp->c_kstar_gamma();
     }
 }

@@ -76,6 +76,7 @@ class BToKstarGammaTest :
 
                 TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(), +4.21541e-5, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),   -2.98715e-2, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),      0.0,        eps);
             }
         }
 } b_to_kstar_gamma_test;

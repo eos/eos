@@ -44,6 +44,9 @@ namespace eos
 
             /// Time dependent CP asymmetry S_K^*gamma
             double s_kstar_gamma() const;
+
+            /// Time dependent CP asymmetry C_K^*gamma
+            double c_kstar_gamma() const;
     };
 }
 

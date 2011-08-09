@@ -172,6 +172,9 @@ namespace eos
             make_observable("B->K^*gamma::S_K^*gamma",
                     &BToKstarGamma::s_kstar_gamma),
 
+            make_observable("B->K^*gamma::C_K^*gamma",
+                    &BToKstarGamma::c_kstar_gamma),
+
             // B -> K ll, Large Recoil
             make_observable("B->Kll::dBR/ds@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::differential_branching_ratio,
