@@ -50,6 +50,36 @@ Experimental Results
         arxiv:0906.2177 [hep-ex]
 
 
+    Belle:2009 : Wei, J.T. et al. [BELLE Collaboration]
+
+        Measurement of the Differential Branching Fraction and Forward-Backward
+        Asymmetry for B ---> K(*)l+l-
+
+        Phys. Rev. Lett. 103, 171801 (2009)
+
+        arxiv:0904.0770 [hep-ex]
+
+
+    CDF:2011A : Aaltonen, T. et al. [CDF Collaboration]
+
+        Observation of the Baryonic Flavor-Changing Neutral Current Decay
+        Lambda_b^0 ---> Lambda mu^+ mu^-
+
+        Submitted to Phys. Rev. Lett.
+
+        arXiv:1107.3753 [hep-ex]
+
+
+    CDF:2011B : Aaltonen, T. et al. [CDF Collaboration]
+
+        Measurements of the Angular Distributions in the Decays B -> K(*) mu+ mu-
+        at CDF
+
+        Submitted to Phys. Rev. Lett.
+
+        arxiv:1108.0695 [hep-ex]
+
+
 Theoretical Inputs
 ------------------
 

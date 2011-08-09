@@ -38,7 +38,7 @@ class ConstraintTest :
         {
             /* Test making constraints */
             {
-                Constraint c = Constraint::make("B_u->K^+mu^+mu^-::BR[1.0,6.0]@CDF-2011", Options());
+                Constraint c = Constraint::make("B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011", Options());
             }
         }
 } constraint_test;

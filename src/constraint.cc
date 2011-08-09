@@ -162,10 +162,327 @@ namespace eos
             Options{ { "q", "u" } },
             4.22e-5, +0.14e-5, -0.14e-5, +0.16e-5, -0.16e-5
         };
+
+        /*
+         * Belle Collaboration
+         *
+         * Data taken from [Belle:2009], Table I, p.5
+         */
+        // B^+ -> K^+ mu^+ mu^-
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_1_to_6_Belle_2009
+        {
+            "B->Kll::BRavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            1.36e-7, +0.23e-7, -0.21e-7, +0.08e-7, -0.08e-7
+        };
+        // BR in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_14dot18_to_16_Belle_2009
+        {
+            "B->Kll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.38e-7, +0.19e-7, -0.12e-7, +0.02e-7, -0.02e-7
+        };
+        // BR in [16.00, 22.86]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_16_to_22dot86_Belle_2009
+        {
+            "B->Kll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 22.86 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.98e-7, +0.20e-7, -0.19e-7, +0.06e-7, -0.06e-7
+        };
+        // A_FB in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_1_to_6_Belle_2009
+        {
+            "B->Kll::A_FBavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            +0.04, +0.16, -0.13, +0.05, -0.05
+        };
+        // A_FB in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_Belle_2009
+        {
+            "B->Kll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            -0.04, +0.26, -0.32, +0.05, -0.05
+        };
+        // A_FB in [16.00, 22.86]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_Belle_2009
+        {
+            "B->Kll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 22.86 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            -0.02, +0.08, -0.11, +0.02, -0.02
+        };
+
+        // B^0 -> K^*0 mu^+ mu^-
+        // BR in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_Belle_2009
+        {
+            "B->K^*ll::BRavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            1.49e-7, +0.45e-7, -0.40e-7, +0.12e-7, -0.12e-7
+        };
+        // BR in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_Belle_2009
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            1.05e-7, +0.29e-7, -0.26e-7, +0.08e-7, -0.08e-7
+        };
+        // BR in [16.00, 19.21]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_Belle_2009
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            2.04e-7, +0.27e-7, -0.24e-7, +0.16e-7, -0.16e-7
+        };
+        // A_FB in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_Belle_2009
+        {
+            "B->K^*ll::A_FBavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            -0.26, +0.30, -0.27, +0.07, -0.07
+        };
+        // A_FB in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_Belle_2009
+        {
+            "B->K^*ll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            -0.70, +0.22, -0.16, +0.10, -0.10
+        };
+        // A_FB in [16.00, 19.21]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_Belle_2009
+        {
+            "B->K^*ll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            -0.66, +0.16, -0.11, +0.04, -0.04
+        };
+        // F_L in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_Belle_2009
+        {
+            "B->K^*ll::F_Lavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            +0.67, +0.23, -0.23, +0.05, -0.05
+        };
+        // F_L in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_Belle_2009
+        {
+            "B->K^*ll::F_Lavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            -0.15, +0.27, -0.23, +0.07, -0.07
+        };
+        // F_L in [16.00, 19.21]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_Belle_2009
+        {
+            "B->K^*ll::F_Lavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            +0.12, +0.15, -0.13, +0.02, -0.02
+        };
         ///@}
 
         ///@name 2011 Data
         ///@{
+        /*
+         * CDF Collaboration
+         *
+         * Data taken from [CDF:2011A]
+         */
+        // B^0 -> K^0 mu^+ mu^-
+        // BR in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bzero_to_Kzero_dimuon_BR_1_to_6_CDF_2011
+        {
+            "B->Kll::BRavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            0.98e-7, +0.614e-7, -0.614e-7, +0.074e-7, -0.074e-7
+        };
+        // BR in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bzero_to_Kzero_dimuon_BR_14dot18_to_16_CDF_2011
+        {
+            "B->Kll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            0.726e-7, +0.257e-7, -0.257e-7, +0.054e-7, -0.054e-7
+        };
+        // BR in [16.00, 23.00]
+        static const GaussianConstraintTemplate Bzero_to_Kzero_dimuon_BR_16_to_22dot86_CDF_2011
+        {
+            "B->Kll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 22.86 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            0.214e-7, +0.182e-7, -0.182e-7, +0.016e-7, -0.016e-7
+        };
+
+        // B^+ -> K^+ mu^+ mu^-
+        // BR in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_1_to_6_CDF_2011
+        {
+            "B->Kll::BRavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            1.41e-7, +0.20e-7, -0.20e-7, +0.09e-7, -0.09e-7
+        };
+        // BR in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_14dot18_to_16_CDF_2011
+        {
+            "B->Kll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.53e-7, +0.10e-7, -0.19e-7, +0.03e-7, -0.03e-7
+        };
+        // BR in [16.00, 23.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_16_to_22dot86_CDF_2011
+        {
+            "B->Kll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 22.86 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.48e-7, +0.11e-7, -0.11e-7, +0.03e-7, -0.03e-7
+        };
+
+        // B^0 -> K^*0 mu^+ mu^-
+        // BR in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_CDF_2011
+        {
+            "B->K^*ll::BRavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            1.42e-7, +0.41e-7, -0.4100e-7, +0.08e-7, -0.08-7
+        };
+        // BR in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CDF_2011
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            1.34e-7, +0.26e-7, -0.26e-7, +0.08e-7, -0.08e-7
+        };
+        // BR in [16.00, 19.21]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_CDF_2011
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            0.97e-7, +0.26e-7, -0.26e-7, +0.06e-7, -0.06e-7
+        };
+
+        // B^+ -> K^*+ mu^+ mu^-
+        // BR in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_1_to_6_CDF_2011
+        {
+            "B->K^*ll::BRavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            2.57e-7, +1.61e-7, -1.61e-7, +0.22e-7, -0.22-7
+        };
+        // BR in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_14dot18_to_16_CDF_2011
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.52e-7, +0.61e-7, -0.61e-7, +0.04e-7, -0.04e-7
+        };
+        // BR in [16.00, 19.21]
+        static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_16_to_19dot21_CDF_2011
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            1.57e-7, +0.96e-7, -0.96e-7, +0.13e-7, -0.13e-7
+        };
+
+        /*
+         * CDF Collaboration
+         *
+         * Data taken from [CDF:2011B]
+         */
+        // B^0 -> K^*0 mu^+ mu^-
+        // A_FB in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CDF_2011
+        {
+            "B->K^*ll::A_FBavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            -0.36, +0.28, -0.46, +0.11, -0.11
+        };
+        // A_FB in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CDF_2011
+        {
+            "B->K^*ll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            -0.40, +0.21, -0.18, +0.07, -0.07
+        };
+        // A_FB in [16.00, 19.21]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_CDF_2011
+        {
+            "B->K^*ll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            -0.66, +0.26, -0.18, +0.19, -0.19
+        };
+        // F_L in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CDF_2011
+        {
+            "B->K^*ll::F_Lavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            +0.60, +0.21, -0.23, +0.09, -0.09
+        };
+        // F_L in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CDF_2011
+        {
+            "B->K^*ll::F_Lavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            +0.32, +0.14, -0.14, +0.03, -0.03
+        };
+        // F_L in [16.00, 19.21]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_CDF_2011
+        {
+            "B->K^*ll::F_Lavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            +0.16, +0.22, -0.18, +0.06, -0.06
+        };
+        // B^+ -> K^+ mu^+ mu^-
+        // A_FB in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_1_to_6_CDF_2011
+        {
+            "B->Kll::A_FBavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            -0.13, +0.09, -0.09, +0.02, -0.02
+        };
+        // A_FB in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_CDF_2011
+        {
+            "B->Kll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            +0.05, +0.11, -0.09, +0.03, -0.03
+        };
+        // A_FB in [16.00, 23]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_CDF_2011
+        {
+            "B->Kll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 22.86 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            -0.09, +0.13, -0.17, +0.03, -0.03
+        };
+
         /*
          * LHCb Collaboration
          *
@@ -366,10 +683,57 @@ namespace eos
             MAKEGAUSS("B^0->K^*0gamma::S_K@BaBar-2008",                        templates::Bzero_to_Kstarzero_gamma_SKstargamma_BaBar_2008),
             MAKEGAUSS("B^0->K^*0gamma::C_K@BaBar-2008",                        templates::Bzero_to_Kstarzero_gamma_CKstargamma_BaBar_2008),
             /* 2009 */
+            // BaBar
             MAKEGAUSS("B^0->K^*0gamma::BR@BaBar-2009",                         templates::Bzero_to_Kstarzero_gamma_BR_BaBar_2009),
             MAKEGAUSS("B^+->K^*+gamma::BR@BaBar-2009",                         templates::Bplus_to_Kstarplus_gamma_BR_BaBar_2009),
-
+            // Belle
+            // B^+ -> K^+ mu^+ mu^-
+            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle-2009",            templates::Bplus_to_Kplus_dimuon_BR_1_to_6_Belle_2009),
+            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[14.18,16.00]@Belle-2009",          templates::Bplus_to_Kplus_dimuon_BR_14dot18_to_16_Belle_2009),
+            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[16.00,22.86]@Belle-2009",          templates::Bplus_to_Kplus_dimuon_BR_16_to_22dot86_Belle_2009),
+            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@Belle-2009",          templates::Bplus_to_Kplus_dimuon_A_FB_1_to_6_Belle_2009),
+            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@Belle-2009",        templates::Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_Belle_2009),
+            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@Belle-2009",        templates::Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_Belle_2009),
+            // B^0 -> K^*0 mu^+ mu^-
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[1.00,6.00]@Belle-2009",           templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_Belle_2009),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[14.18,16.00]@Belle-2009",         templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_Belle_2009),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[16.00,19.21]@Belle-2009",         templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_Belle_2009),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@Belle-2009",         templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_Belle_2009),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@Belle-2009",       templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_Belle_2009),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@Belle-2009",       templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_Belle_2009),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle-2009",          templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_Belle_2009),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009",        templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_Belle_2009),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009",        templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_Belle_2009),
             /* 2011 */
+            // CDF
+            // B^0 -> K^*0 mu^+ mu^-
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2011",             templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_CDF_2011),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2011",           templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CDF_2011),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2011",           templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_CDF_2011),
+            // B^+ -> K^*+ mu^+ mu^-
+            MAKEGAUSS("B^+->K^{*+}mu^+mu^-::BR[1.00,6.00]@CDF-2011",           templates::Bplus_to_Kstarplus_dimuon_BR_1_to_6_CDF_2011),
+            MAKEGAUSS("B^+->K^{*+}mu^+mu^-::BR[14.18,16.00]@CDF-2011",         templates::Bplus_to_Kstarplus_dimuon_BR_14dot18_to_16_CDF_2011),
+            MAKEGAUSS("B^+->K^{*+}mu^+mu^-::BR[16.00,19.21]@CDF-2011",         templates::Bplus_to_Kstarplus_dimuon_BR_16_to_19dot21_CDF_2011),
+            // B^0 -> K^*0 mu^+ mu^-
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",           templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CDF_2011),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",         templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CDF_2011),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2011",         templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_CDF_2011),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2011",            templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CDF_2011),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2011",          templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CDF_2011),
+            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2011",          templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_CDF_2011),
+            // B^0 -> K^0 mu^+ mu^-
+            MAKEGAUSS("B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011",              templates::Bzero_to_Kzero_dimuon_BR_1_to_6_CDF_2011),
+            MAKEGAUSS("B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011",            templates::Bzero_to_Kzero_dimuon_BR_14dot18_to_16_CDF_2011),
+            MAKEGAUSS("B^0->K^0mu^+mu^-::BR[16.00,23.00]@CDF-2011",            templates::Bzero_to_Kzero_dimuon_BR_16_to_22dot86_CDF_2011),
+            // B^+ -> K^+ mu^+ mu^-
+            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011",              templates::Bplus_to_Kplus_dimuon_BR_1_to_6_CDF_2011),
+            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2011",            templates::Bplus_to_Kplus_dimuon_BR_14dot18_to_16_CDF_2011),
+            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[16.00,23.00]@CDF-2011",            templates::Bplus_to_Kplus_dimuon_BR_16_to_22dot86_CDF_2011),
+            // Observable no yet implemented!
+            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",            templates::Bplus_to_Kplus_dimuon_A_FB_1_to_6_CDF_2011),
+            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",          templates::Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_CDF_2011),
+            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[16.00,23.00]@CDF-2011",          templates::Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_CDF_2011),
+            // LHCb
             MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011",            templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2011),
             MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011",          templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2011),
             MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb-2011",          templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_LHCb_2011),
