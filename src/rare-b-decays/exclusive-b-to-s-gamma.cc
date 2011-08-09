@@ -340,6 +340,21 @@ namespace eos
                 power_of<3>(1.0 - power_of<2>(m_Kstar / m_B)) * lambda_t * lambda_t * (std::norm(a.left) + std::norm(a.right)) / Gamma;
         }
 
+        double branching_ratio_cp_averaged()
+        {
+            // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
+            static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
+
+            Save<bool> save(this->cp_conjugate, false);
+            Amplitudes a = amplitudes();
+            cp_conjugate = true;
+            Amplitudes abar = amplitudes();
+
+            double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
+            return alpha_e() * power_of<2>(g_fermi() * model->m_b_msbar(mu())) * power_of<3>(m_B()) / (32.0 * power_of<4>(M_PI)) *
+                power_of<3>(1.0 - power_of<2>(m_Kstar / m_B)) * lambda_t * lambda_t * (std::norm(a.left) + std::norm(a.right) + std::norm(abar.left) + std::norm(abar.right)) / 2.0 / Gamma;
+        }
+
         double s_kstar_gamma()
         {
             Save<bool> save(this->cp_conjugate, false);
@@ -385,6 +400,12 @@ namespace eos
     BToKstarGamma::branching_ratio() const
     {
         return _imp->branching_ratio();
+    }
+
+    double
+    BToKstarGamma::branching_ratio_cp_averaged() const
+    {
+        return _imp->branching_ratio_cp_averaged();
     }
 
     double

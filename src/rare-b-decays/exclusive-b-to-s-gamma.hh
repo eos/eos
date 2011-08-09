@@ -42,6 +42,9 @@ namespace eos
             /// Branching Ratio
             double branching_ratio() const;
 
+            /// Branching Ratio (CP averaged)
+            double branching_ratio_cp_averaged() const;
+
             /// Time dependent CP asymmetry S_K^*gamma
             double s_kstar_gamma() const;
 

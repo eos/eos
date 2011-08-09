@@ -169,6 +169,9 @@ namespace eos
             make_observable("B->K^*gamma::BR",
                     &BToKstarGamma::branching_ratio),
 
+            make_observable("B->K^*gamma::BRavg",
+                    &BToKstarGamma::branching_ratio_cp_averaged),
+
             make_observable("B->K^*gamma::S_K^*gamma",
                     &BToKstarGamma::s_kstar_gamma),
 
