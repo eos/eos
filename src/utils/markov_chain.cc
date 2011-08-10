@@ -181,10 +181,10 @@ namespace eos
 
             //find discrete parameters
             unsigned index = 0;
-            for (auto i = parameter_descriptions.begin(), i_end = parameter_descriptions.end(); i != i_end; ++i, ++index)
+            for (auto p = parameter_descriptions.begin(), i_end = parameter_descriptions.end(); p != i_end; ++p, ++index)
             {
-                if (i->discrete)
-                    discrete_priors.insert(std::make_pair(index, analysis->log_prior(i->parameter.name())));
+                if (p->discrete)
+                    discrete_priors.insert(std::make_pair(index, analysis->log_prior(p->parameter.name())));
             }
 
             // initialize statistics
@@ -199,31 +199,13 @@ namespace eos
             history.keep = true;
 
             // set initial points
-            initial_points();
-        }
-
-        /*
-         * Choose random starting positions for each chain
-         */
-        void initial_points()
-        {
-            // random starting point, equal current and proposal.
+            // uniformly distributed random starting point
             //   x_{init} = x_{min} + U * (x_{max}-x_{min})
-            unsigned i = 0;
-            for (auto p = parameter_descriptions.begin(), p_end = parameter_descriptions.end(); p != p_end; ++p,++i)
-            {
-                if(p->discrete)
-                    current.point[i] = discrete_priors[i]->sample(rng);
-                else
-                    current.point[i] = p->min + uniform_random_number() * ( p->max - p->min);
+            std::vector<double> point(parameter_descriptions.size(), 0.0);
 
-                // update Parameters object
-                proposal.point[i] = current.point[i];
-                p->parameter = current.point[i];
-            }
-
-            // reuse code. Pretend we propose to change first param. to its initial value
-            if (parameter_descriptions.size() > 0)
+            unsigned n = 0;
+            auto i = point.begin();
+            for (auto p = parameter_descriptions.begin(), p_end = parameter_descriptions.end(); p != p_end; ++p, ++i, ++n)
             {
                 current_parameter = 0;
                 prop = current.point[current_parameter];
@@ -235,11 +217,12 @@ namespace eos
                 move();
 
                 // don't update!
+                if (p->discrete)
+                    *i = discrete_priors[n]->sample(rng);
+                else
+                    *i = p->min + uniform_random_number() * (p->max - p->min);
             }
-
-            // setup statistics
-            stats.mode_of_posterior = current.log_posterior;
-            stats.parameters_at_mode = current.point;
+            set_point(point);
         }
 
         /*
@@ -400,6 +383,55 @@ namespace eos
             }
         }
 
+        void set_point(const std::vector<double> & point)
+        {
+            // input validation
+            if (parameter_descriptions.size() != point.size())
+                throw InternalError("markov_chain::set_point: Dimension of the parameter space of the analysis doesn't match the dimension of the point given.");
+
+            if (parameter_descriptions.empty() || point.empty())
+                throw InternalError("markov_chain::set_point: Cannot operate on zero dimensional parameter space");
+
+            {
+                auto i = point.cbegin();
+                for (auto p = parameter_descriptions.begin(), p_end = parameter_descriptions.end(); p != p_end; ++p, ++i)
+                {
+                    if (*i < p->min || *i > p->max)
+                        throw InternalError("markov_chain::set_point: Parameter '" + p->parameter.name() + "' = " + stringify(*i) + "out of range");
+                }
+            }
+
+            // assign the values
+            {
+                unsigned n = 0;
+                auto i = point.cbegin();
+                for (auto p = parameter_descriptions.begin(), p_end = parameter_descriptions.end(); p != p_end; ++p, ++i, ++n)
+                {
+                    current.point[n] = *i;
+                    proposal.point[n] = *i;
+                    p->parameter = *i;
+                }
+            }
+
+            // reuse code. Pretend we propose to change first param. to its initial value
+            {
+                current_parameter = 0;
+                prop = current.point[current_parameter];
+
+                // evaluate likelihood without argument, so all observables are calculated once
+                proposal.log_likelihood = analysis->log_likelihood()();
+                proposal.log_prior = analysis->log_prior();
+                proposal.log_posterior = proposal.log_prior + proposal.log_likelihood;
+                move();
+
+                // don't update!
+            }
+
+            // setup statistics
+            stats.mode_of_posterior = current.log_posterior;
+            stats.parameters_at_mode = current.point;
+        }
+
         // save points, update statistics
         void update()
         {
@@ -478,6 +510,12 @@ namespace eos
     MarkovChain::dump_history(ScanFile::DataSet & data_set)
     {
         _imp->dump_history(data_set);
+    }
+
+    void
+    MarkovChain::set_point(const std::vector<double> & point)
+    {
+        _imp->set_point(point);
     }
 
     double

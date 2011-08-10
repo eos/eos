@@ -314,5 +314,13 @@ class MarkovChainTest :
                 // remove the HDF5 file
                 std::remove(file_name.c_str());
             }
+
+            // changing the point of a chain by hand
+            {
+                auto analysis = std::make_shared<Analysis>(make_analysis(true));
+                MarkovChain chain(analysis, 13);
+                chain.set_point(std::vector<double>{4.56});
+                TEST_CHECK_EQUAL(chain.info_at_current().point.front(), 4.56);
+            }
         }
 } markov_chain_test;

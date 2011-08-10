@@ -67,6 +67,13 @@ namespace eos
             const unsigned & iterations_last_run() const;
 
             /*!
+             * Set the chain to continue its walk from the given point.
+             *
+             * @param point The point in parameter space.
+             */
+            void set_point(const std::vector<double> & point);
+
+            /*!
              * Retrieve the scale used for proposals of a given parameter.
              *
              * @param index The index of the parameter.
