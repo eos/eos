@@ -96,11 +96,17 @@ class CommandLine :
 
         std::string creator;
 
+        std::string resume_file;
+
+        bool optimize;
+        std::vector<double> starting_point;
+
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
             analysis(new Analysis(likelihood)),
-            config(MarkovChainSampler::Config::Quick())
+            config(MarkovChainSampler::Config::Quick()),
+            optimize(false)
         {
             config.number_of_chains = 4;
             config.need_prerun = true;
@@ -271,10 +277,45 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--optimize" == argument)
+                {
+                    optimize = true;
+
+                    // starting point is optional
+                    std::string lbrace(*(++a));
+                    if ("{" != lbrace)
+                    {
+                        --a;
+                        continue;
+                    }
+
+                    // parse starting point
+                    do
+                    {
+                        std::string word(*(++a));
+                        if ("}" == word)
+                            break;
+
+                        double value = destringify<double>(word);
+                        starting_point.push_back(value);
+                    }
+                    while (true);
+
+                    continue;
+                }
+
                 if ("--output" == argument)
                 {
                     std::string filename(*(++a));
                     config.output_file.reset(new ScanFile(ScanFile::Create(filename, creator)));
+
+                    continue;
+                }
+
+                if ("--resume" == argument)
+                {
+                    resume_file = std::string(*(++a));
+                    config.need_prerun = false;
 
                     continue;
                 }
@@ -390,7 +431,25 @@ int main(int argc, char * argv[])
             std::cout << "#  " << c->name() << std::endl;
         }
 
+        if (CommandLine::instance()->optimize)
+        {
+            std::cout << "# Starting optimization: ";
+            auto options = Analysis::OptimizationOptions::Defaults();
+
+            CommandLine::instance()->analysis->optimize(CommandLine::instance()->starting_point, options);
+
+            return EXIT_SUCCESS;
+        }
+
         MarkovChainSampler sampler(*CommandLine::instance()->analysis, CommandLine::instance()->config);
+
+        // extract scales and starting points from completed prerun
+        if (CommandLine::instance()->resume_file != "")
+        {
+            std::shared_ptr<ScanFile> f(new ScanFile(ScanFile::Open(CommandLine::instance()->resume_file)));
+            sampler.resume(f);
+        }
+
         sampler.run();
     }
     catch (DoUsage & e)
@@ -401,13 +460,16 @@ int main(int argc, char * argv[])
         std::cout << "  [ [ [--scan PARAMETER MIN MAX] | [--nuisance PARAMETER MIN MAX] ] --prior [flat | [gaussian LOWER CENTRAL UPPER] ] ]+" << std::endl;
         std::cout << "  [--discrete PARAMETER { VALUE1 VALUE2 ...}]+" << std::endl;
         std::cout << "  [--fix PARAMETER VALUE]+" << std::endl;
-        std::cout << "  [--chunksize VALUE]+" << std::endl;
-        std::cout << "  [--chunks VALUE]+" << std::endl;
-        std::cout << "  [--chains VALUE]+" << std::endl;
-        std::cout << "  [--seed LONG_VALUE]+" << std::endl;
-        std::cout << "  [--scale VALUE]+" << std::endl;
-        std::cout << "  [--output FILENAME]+" << std::endl;
-        std::cout << "  [--debug]+" << std::endl;
+        std::cout << "  [--chunksize VALUE]" << std::endl;
+        std::cout << "  [--chunks VALUE]" << std::endl;
+        std::cout << "  [--chains VALUE]" << std::endl;
+        std::cout << "  [--resume FILENAME]" << std::endl;
+        std::cout << "  [--seed LONG_VALUE]" << std::endl;
+        std::cout << "  [--scale VALUE]" << std::endl;
+        std::cout << "  [--store-prerun]" << std::endl;
+        std::cout << "  [--optimize { VALUE1 VALUE2 ... VALUEN }]" << std::endl;
+        std::cout << "  [--output FILENAME]" << std::endl;
+        std::cout << "  [--debug]" << std::endl;
 
         std::cout << std::endl;
         std::cout << "Example:" << std::endl;
