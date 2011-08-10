@@ -21,6 +21,7 @@
 #include <src/constraint.hh>
 
 #include <iostream>
+#include <vector>
 
 using namespace test;
 using namespace eos;
@@ -38,7 +39,95 @@ class ConstraintTest :
         {
             /* Test making constraints */
             {
-                Constraint c = Constraint::make("B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011", Options());
+                std::vector<std::string> constraint_names
+                {
+                    /* 2000 */
+                    // CLEO
+                    "B^0->K^*0gamma::BR@CLEO-2000",
+                    "B^+->K^*+gamma::BR@CLEO-2000",
+                    /* 2004 */
+                    // Belle
+                    "B^0->K^*0gamma::BR@Belle-2004",
+                    "B^+->K^*+gamma::BR@Belle-2004",
+                    /* 2006 */
+                    // Belle
+                    "B^0->K^*0gamma::S_K@Belle-2006",
+                    "B^0->K^*0gamma::C_K@Belle-2006",
+                    /* 2008 */
+                    // BaBar
+                    "B^0->K^*0gamma::S_K@BaBar-2008",
+                    "B^0->K^*0gamma::C_K@BaBar-2008",
+                    /* 2009 */
+                    // BaBar
+                    "B^0->K^*0gamma::BR@BaBar-2009",
+                    "B^+->K^*+gamma::BR@BaBar-2009",
+                    // Belle
+                    // B^+ -> K^+ mu^+ mu^-
+                    "B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle-2009",
+                    "B^+->K^+mu^+mu^-::BR[14.18,16.00]@Belle-2009",
+                    "B^+->K^+mu^+mu^-::BR[16.00,22.86]@Belle-2009",
+                    /* The following commented observables have not yet been implemented! */
+                    //"B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@Belle-2009",
+                    //"B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@Belle-2009",
+                    //"B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@Belle-2009",
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@Belle-2009",
+                    "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@Belle-2009",
+                    "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@Belle-2009",
+                    "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@Belle-2009",
+                    "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@Belle-2009",
+                    "B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@Belle-2009",
+                    "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle-2009",
+                    "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009",
+                    "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009",
+                    /* 2011 */
+                    // CDF
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2011",
+                    // B^+ -> K^*+ mu^+ mu^-
+                    "B^+->K^{*+}mu^+mu^-::BR[1.00,6.00]@CDF-2011",
+                    "B^+->K^{*+}mu^+mu^-::BR[14.18,16.00]@CDF-2011",
+                    "B^+->K^{*+}mu^+mu^-::BR[16.00,19.21]@CDF-2011",
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2011",
+                    // B^0 -> K^0 mu^+ mu^-
+                    "B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011",
+                    "B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011",
+                    "B^0->K^0mu^+mu^-::BR[16.00,23.00]@CDF-2011",
+                    // B^+ -> K^+ mu^+ mu^-
+                    "B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011",
+                    "B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2011",
+                    "B^+->K^+mu^+mu^-::BR[16.00,23.00]@CDF-2011",
+                    /* The following commented observables have not yet been implemented! */
+                    //"B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",
+                    //"B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",
+                    //"B^+->K^+mu^+mu^-::A_FB[16.00,23.00]@CDF-2011",
+                    // LHCb
+                    "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011",
+                    "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011",
+                    "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb-2011",
+                    "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2011",
+                    "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2011",
+                    "B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@LHCb-2011",
+                    "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011",
+                    "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011",
+                    "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011",
+                };
+
+                for (auto n = constraint_names.cbegin(), n_end = constraint_names.cend() ; n != n_end ; ++n)
+                {
+                    Constraint c = Constraint::make(*n, Options());
+                    TEST_CHECK_EQUAL(c.name(), *n);
+                    TEST_CHECK(std::distance(c.begin_observables(), c.end_observables()) > 0);
+                    TEST_CHECK(std::distance(c.begin_blocks(), c.end_blocks()) > 0);
+                }
             }
         }
 } constraint_test;
