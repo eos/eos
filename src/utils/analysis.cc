@@ -378,7 +378,7 @@ namespace eos
     Analysis::OptimizationOptions::OptimizationOptions():
         initial_step_size(0, 1, 0.1),
         maximum_iterations(1000),
-        maximum_simplex_size(0, 1, 1e-5)
+        maximum_simplex_size(0, 1, 1e-3)
     {
     }
 
