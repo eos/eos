@@ -577,7 +577,7 @@ namespace eos
         if ("asymmetric+quadratic" == options.get("uncertainty", "asymmetric+quadratic"))
         {
             min = t.central - std::sqrt(power_of<2>(t.sigma_lo_stat) + power_of<2>(t.sigma_lo_sys));
-            max = t.central - std::sqrt(power_of<2>(t.sigma_hi_stat) + power_of<2>(t.sigma_hi_sys));
+            max = t.central + std::sqrt(power_of<2>(t.sigma_hi_stat) + power_of<2>(t.sigma_hi_sys));
         }
 
         LogLikelihoodBlockPtr block = LogLikelihoodBlock::Gaussian(cache, observable, min, t.central, max);
