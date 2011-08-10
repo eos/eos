@@ -166,7 +166,7 @@ class ScanFileTest :
                         {
                             TEST_CHECK(references.end() != references.find(*i));
                         }
-                        TEST_CHECK_EQUAL(std::distance(f->begin_attributes(), f->end_attributes()), references.size());
+                        TEST_CHECK_EQUAL(std::distance(f->begin_attributes(), f->end_attributes()), std::distance(references.cbegin(), references.cend()));
                     }
                 }
 
