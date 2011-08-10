@@ -1,4 +1,7 @@
-CLEANFILES = *~
+CLEANFILES = \
+	*~ \
+	markov_chain_sampler_TEST.hdf5 \
+	scan_file_TEST.hdf5
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
