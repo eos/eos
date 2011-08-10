@@ -49,9 +49,7 @@ class MarkovChainSamplerTest :
             // empty Analysis
             {
                 AnalysisPtr analysis = std::make_shared<Analysis>(LogLikelihood(Parameters::Defaults()));
-                MarkovChain chain(analysis, 13);
-
-                TEST_CHECK_THROWS(InternalError, chain.run(2));
+                TEST_CHECK_THROWS(InternalError, MarkovChain chain(analysis, 13));
             }
 
             // check pre run, main run and HDF5 storage

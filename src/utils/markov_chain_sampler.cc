@@ -302,7 +302,7 @@ namespace eos
             for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
             {
                 // save history
-                c->keep_history(true);
+                c->keep_history(config.store_prerun);
             }
 
             // keep going till maxIter or  break when convergence estimated
@@ -362,11 +362,12 @@ namespace eos
                     << "Pre-run did NOT converge!";
             }
 
+            // Save settings and, optionally, the history
+            store_pre_run();
+
             // clear the history after the prerun
             for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
-            {
                 c->clear();
-            }
         }
 
         /*
@@ -426,6 +427,72 @@ namespace eos
                 << "Finished the main-run";
         }
 
+        void resume(const std::shared_ptr<ScanFile> & scan_file)
+        {
+            Log::instance()->message("markov_chain_sampler.resume", ll_informational)
+                << "Copying settings from " << scan_file->file_name();
+
+            // find the prerun data sets
+            Log::instance()->message("markov_chain_sampler.resume", ll_debug)
+                << "Using these data sets:";
+
+            std::vector<ScanFile::DataSet> prerun_data;
+            for (auto d = scan_file->begin(), d_end = scan_file->end(); d != d_end; ++d)
+            {
+                // use only the prerun data sets
+                std::string::size_type loc = d->name().find("prerun chain #");
+                if (loc != std::string::npos)
+                {
+                    Log::instance()->message("markov_chain_sampler.resume", ll_debug)
+                                        << d->name();
+                    prerun_data.push_back(*d);
+                }
+            }
+
+            // extract scales for each parameter and chain
+            unsigned i = 0;
+            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
+            {
+                Log::instance()->message("markov_chain_sampler.resume", ll_debug)
+                               << "Extracting info for chain #" << i;
+
+                // use modulo to allow for more chains in main run than in prerun
+                ScanFile::DataSet & d = prerun_data[i % prerun_data.size()];
+
+                // loop over parameters. Skip last to avoid posterior entry
+                Log::instance()->message("markov_chain_sampler.resume", ll_debug)
+                    << "Scales:";
+
+                auto f = d.begin_fields();
+                for (unsigned j = 0; j < d.fields() - 1; ++j, ++f)
+                {
+                    Log::instance()->message("markov_chain_sampler.resume", ll_debug)
+                       << analysis.parameter_descriptions().at(j).parameter.name()
+                       << ": " << f->get("scale", 1);
+
+                    c->set_scale(j, f->get("scale", 1));
+                }
+
+                // extract starting positions from last point of prerun.
+                ScanFile::Record record = d[d.records() - 1];
+
+                // Skip posterior value
+                std::vector<double> point(record.data().begin(), record.data().begin() + record.data().size() - 1);
+                c->set_point(point);
+
+                // convert point into a string suitable for output
+                std::string point_str = "(";
+                for (auto i = point.cbegin(), i_end = point.cend(); i != i_end; ++i)
+                    point_str += stringify(*i) + " ";
+                point_str += ")";
+
+                Log::instance()->message("markov_chain_sampler.resume", ll_debug)
+                    << "Starting point:" << point_str;
+            }
+            // TODO check for number of parameters, ranges, names, priors, observables
+
+        }
+
         void run()
         {
             if (config.need_prerun)
@@ -440,6 +507,62 @@ namespace eos
             }
 
             main_run();
+        }
+
+        /*
+         * store all necessary information in output so chains can resume
+         * in the main run. This is useful to create many independent chains
+         * to collect a large number of samples in the main run, but only a few
+         * in the pre run until convergence is  declared.
+         */
+        void store_pre_run()
+        {
+            // loop over chains to store scales in main run data sets
+            auto c = chains.begin();
+            for (auto d = data_sets.begin(), d_end = data_sets.end() ; d != d_end ; ++c, ++d)
+            {
+                // store scale for each parameter of index j
+                // no scale for last column where posterior is stored
+                auto f = d->begin_fields();
+                for (unsigned j = 0; j < number_of_parameters; ++j, ++f)
+                    f->set("scale", c->get_scale(j));
+            }
+
+            if ( ! config.store_prerun)
+                return;
+
+            // loop over chains and save samples
+            unsigned i = 0;
+            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
+            {
+                // setup data sets for prerun
+                ScanFile::DataSet data_set = ScanFile::DataSet(config.output_file->add("prerun chain #" + stringify(i), number_of_parameters + 1));
+
+                auto f = data_set.begin_fields();
+                auto pp = analysis.parameter_descriptions();
+                unsigned j = 0;
+                for (auto p = pp.begin(), p_end = pp.end() ; p != p_end ; ++p, ++f, ++j)
+                {
+                    f->name(p->parameter.name());
+                    f->set("min", p->min);
+                    f->set("max", p->max);
+                    f->set("nuisance", p->nuisance);
+                    f->set("discrete", p->discrete);
+                    f->set("scale", c->get_scale(j));
+                }
+
+                if (data_set.end_fields() == f)
+                {
+                    throw InternalError("MarkovChainSampler::prerun: insufficient number of fields "
+                        + stringify(std::distance(data_set.begin_fields(), data_set.end_fields())) + " in data set, for "
+                        + stringify(number_of_parameters) + " parameters");
+                }
+
+                f->name("posterior");
+
+                // save to disk
+                c->dump_history(data_set);
+            }
         }
     };
 
@@ -456,6 +579,12 @@ namespace eos
     MarkovChainSampler::pre_run_info()
     {
         return _imp->pre_run_info;
+    }
+
+    void
+    MarkovChainSampler::resume(const std::shared_ptr<ScanFile> & scan_file)
+    {
+        _imp->resume(scan_file);
     }
 
     void
@@ -489,6 +618,7 @@ namespace eos
         prerun_iterations_update(1000),
         prerun_iterations_min(prerun_iterations_update),
         prerun_iterations_max(1e6),
+        store_prerun(false),
         chunks(100),
         chunk_size(1000),
         store(true)
@@ -511,7 +641,7 @@ namespace eos
         config.use_posterior_rvalue = false;
         config.scale_initial = 0.4;
         config.need_prerun = true;
-        config.prerun_iterations_max = 5e4;
+        config.prerun_iterations_max = 1e5;
         config.prerun_iterations_update = 400;
         config.prerun_iterations_min = config.prerun_iterations_update;
         config.chunks = 10;

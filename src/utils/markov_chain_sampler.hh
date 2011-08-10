@@ -48,6 +48,14 @@ namespace eos
 
             /// Destructor.
             ~MarkovChainSampler();
+
+            /*!
+             * Copy the settings such as proposal density scale and current points
+             * from the output of a (successful) prerun
+             * @param scan_file the HDF5 output of the prerun
+             */
+            void resume(const std::shared_ptr<ScanFile> & scan_file);
+
             ///@}
 
             ///@name Sampling
@@ -152,6 +160,9 @@ namespace eos
             unsigned prerun_iterations_update;
             unsigned prerun_iterations_min;
             unsigned prerun_iterations_max;
+
+            /// Whether to store prerun samples.
+            bool store_prerun;
             ///@}
 
             ///@name Main run options
