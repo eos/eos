@@ -298,6 +298,10 @@ namespace eos
                     // as a consequence, mean always too low (<1), seems to converge around 0.972
                     TEST_CHECK_NEARLY_EQUAL(mean, 0.97, 1e-2);
 
+                    // do not allow wrong input
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Gaussian(cache, obs, +4.2, +4.3, +1.2));
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Gaussian(cache, obs, +10., +4.3, +4.4));
+
                     gsl_rng_free(rng);
                 }
 

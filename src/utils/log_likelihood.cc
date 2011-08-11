@@ -161,6 +161,13 @@ namespace eos
     LogLikelihoodBlock::Gaussian(ObservableCache cache, const ObservablePtr & observable,
             const double & min, const double & central, const double & max)
     {
+        // check input
+        if (min >= central)
+            throw InternalError("LogLikelihoodBlock::Gaussian: min value >= central value");
+
+        if (max <= central)
+            throw InternalError("LogLikelihoodBlock::Gaussian: max value <= central value");
+
         unsigned index = cache.add(observable);
 
         return LogLikelihoodBlockPtr(new implementation::GaussianBlock(cache, index, min, central, max));
