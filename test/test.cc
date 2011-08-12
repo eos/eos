@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <src/utils/log.hh>
+#include <eos/utils/log.hh>
 
 #include <cstdlib>
 #include <iostream>

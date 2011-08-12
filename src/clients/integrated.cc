@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/observable.hh>
-#include <src/utils/destringify.hh>
+#include <eos/observable.hh>
+#include <eos/utils/destringify.hh>
 
 #include <cmath>
 #include <cstdlib>

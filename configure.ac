@@ -117,10 +117,11 @@ AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(
 	Makefile
 	doc/Makefile
+	eos/Makefile
+	eos/rare-b-decays/Makefile
+	eos/utils/Makefile
 	src/Makefile
 	src/clients/Makefile
-	src/rare-b-decays/Makefile
-	src/utils/Makefile
 	test/Makefile
 	)
 dnl }}}

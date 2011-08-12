@@ -18,13 +18,13 @@
  */
 
 #include <config.h>
-#include <src/observable.hh>
-#include <src/utils/cartesian-product.hh>
-#include <src/utils/destringify.hh>
-#include <src/utils/lock.hh>
-#include <src/utils/log.hh>
-#include <src/utils/mutex.hh>
-#include <src/utils/thread_pool.hh>
+#include <eos/observable.hh>
+#include <eos/utils/cartesian-product.hh>
+#include <eos/utils/destringify.hh>
+#include <eos/utils/lock.hh>
+#include <eos/utils/log.hh>
+#include <eos/utils/mutex.hh>
+#include <eos/utils/thread_pool.hh>
 
 #include <cmath>
 #include <cstdlib>

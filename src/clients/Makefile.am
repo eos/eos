@@ -21,9 +21,9 @@ noinst_PROGRAMS = \
 	observables
 
 EOS_CLIENTS_LIBS = \
-	$(top_builddir)/src/libeos.la \
-	$(top_builddir)/src/utils/libeosutils.la \
-	$(top_builddir)/src/rare-b-decays/libeosrarebdecays.la
+	$(top_builddir)/eos/libeos.la \
+	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la
 
 eos_evaluate_SOURCES = \
 	eos-evaluate.cc

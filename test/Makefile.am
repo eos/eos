@@ -10,7 +10,7 @@ libeostest_a_SOURCES = \
 
 TESTS = \
 	test_TEST
-TESTS_LD_ADD = libeostest.a -lgslcblas $(top_builddir)/src/libeos.la $(top_builddir)/src/utils/libeosutils.la
+TESTS_LD_ADD = libeostest.a -lgslcblas $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosutils.la
 
 check_PROGRAMS = $(TESTS)
 

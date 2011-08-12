@@ -18,13 +18,13 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/constraint.hh>
-#include <src/observable.hh>
-#include <src/utils/destringify.hh>
-#include <src/utils/instantiation_policy-impl.hh>
-#include <src/utils/log.hh>
-#include <src/utils/stringify.hh>
-#include <src/utils/markov_chain_sampler.hh>
+#include <eos/constraint.hh>
+#include <eos/observable.hh>
+#include <eos/utils/destringify.hh>
+#include <eos/utils/instantiation_policy-impl.hh>
+#include <eos/utils/log.hh>
+#include <eos/utils/stringify.hh>
+#include <eos/utils/markov_chain_sampler.hh>
 
 #include <cmath>
 #include <cstdlib>

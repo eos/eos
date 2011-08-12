@@ -17,13 +17,13 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/observable.hh>
-#include <src/utils/destringify.hh>
-#include <src/utils/instantiation_policy-impl.hh>
-#include <src/utils/log.hh>
-#include <src/utils/one-of.hh>
-#include <src/utils/stringify.hh>
-#include <src/utils/wilson-polynomial.hh>
+#include <eos/observable.hh>
+#include <eos/utils/destringify.hh>
+#include <eos/utils/instantiation_policy-impl.hh>
+#include <eos/utils/log.hh>
+#include <eos/utils/one-of.hh>
+#include <eos/utils/stringify.hh>
+#include <eos/utils/wilson-polynomial.hh>
 
 #include <algorithm>
 #include <cmath>

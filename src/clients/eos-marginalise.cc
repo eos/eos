@@ -17,12 +17,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <src/utils/destringify.hh>
-#include <src/utils/instantiation_policy-impl.hh>
-#include <src/utils/histogram.hh>
-#include <src/utils/log.hh>
-#include <src/utils/scan_file.hh>
-#include <src/utils/stringify.hh>
+#include <eos/utils/destringify.hh>
+#include <eos/utils/instantiation_policy-impl.hh>
+#include <eos/utils/histogram.hh>
+#include <eos/utils/log.hh>
+#include <eos/utils/scan_file.hh>
+#include <eos/utils/stringify.hh>
 
 #include <cmath>
 #include <limits>

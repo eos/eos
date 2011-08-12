@@ -25,7 +25,7 @@
 #include <limits>
 #include <string>
 #include <cmath>
-#include <src/utils/stringify.hh>
+#include <eos/utils/stringify.hh>
 
 namespace test
 {
