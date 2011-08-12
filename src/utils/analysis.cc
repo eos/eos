@@ -94,8 +94,16 @@ namespace eos
                                + stringify(parameter_descriptions.size()) );
 
             // set the parameter values
+            std::string par_string("( ");
             for (unsigned i=0; i< parameter_values.size(); ++i)
+            {
                 parameter_descriptions[i].parameter = parameter_values[i];
+                par_string += stringify(parameter_values[i]) + " ";
+            }
+            par_string += ")";
+
+            Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+               << "Calculating p-value at parameters " << par_string;
 
             // calculate \chi^2
             // update observables for new parameter values
