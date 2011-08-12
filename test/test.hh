@@ -87,32 +87,36 @@ namespace test
 #define TEST_CHECK_NEARLY_EQUAL(a, b, eps) \
     do \
     { \
-        if (std::abs((a - b)) <= eps) \
+        auto a_val = (a); \
+        auto b_val = (b); \
+        if (std::abs((a_val - b_val)) <= eps) \
             break; \
         else \
             throw TestCaseFailedException(__LINE__, __FILE__, \
-                    "'" #a "' = " + stringify(a) + " is not nearly-equal to '" #b "' = " + stringify(b) + " within '" + stringify(eps) + "'" \
-                    + ", difference is '" + stringify(a - b) + "'"); \
+                    "'" #a "' = " + stringify(a_val) + " is not nearly-equal to '" #b "' = " + stringify(b_val) + " within '" + stringify(eps) + "'" \
+                    + ", difference is '" + stringify(a_val - b_val) + "'"); \
     } \
     while (false)
 
 #define TEST_CHECK_RELATIVE_ERROR(a, b, eps) \
     do \
     { \
-        if (std::sqrt(std::fabs(a)) < std::numeric_limits<double>::epsilon()) \
+        auto a_val = (a); \
+        auto b_val = (b); \
+        if (std::sqrt(std::fabs(a_val)) < std::numeric_limits<double>::epsilon()) \
             throw TestCaseFailedException(__LINE__, __FILE__, \
-                    "'" #a "' has been evaluated to the zero within computational accuracy, result = " + stringify(a)); \
+                    "'" #a "' has been evaluated to the zero within computational accuracy, result = " + stringify(a_val)); \
          \
-        if (std::sqrt(std::fabs(b)) < std::numeric_limits<double>::epsilon()) \
+        if (std::sqrt(std::fabs(b_val)) < std::numeric_limits<double>::epsilon()) \
             throw TestCaseFailedException(__LINE__, __FILE__, \
-                    "'" #b "' has been evaluated to the zero within computational accuracy, result = " + stringify(b)); \
+                    "'" #b "' has been evaluated to the zero within computational accuracy, result = " + stringify(b_val)); \
          \
-        if (((std::abs((a - b) / a)) <= eps) && ((std::abs((a - b) / b)) <= eps)) \
+        if (((std::abs((a_val - b_val) / a_val)) <= eps) && ((std::abs((a_val - b_val) / b_val)) <= eps)) \
             break; \
         else \
             throw TestCaseFailedException(__LINE__, __FILE__, \
-                    "One relative error of '" #a "' = '" + stringify(a) + "' and '" #b "' = '" + stringify(b) + "' is greater than " + stringify(eps) + ". The results are " + \
-                    stringify(std::abs((a - b) / a)) + " and " + stringify(std::abs((a - b) / b))); \
+                    "One relative error of '" #a "' = '" + stringify(a_val) + "' and '" #b "' = '" + stringify(b_val) + "' is greater than " + stringify(eps) + ". The results are " + \
+                    stringify(std::abs((a_val - b_val) / a_val)) + " and " + stringify(std::abs((a_val - b_val) / b_val))); \
     } \
     while (false)
 
