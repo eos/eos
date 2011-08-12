@@ -101,6 +101,9 @@ class CommandLine :
         bool optimize;
         std::vector<double> starting_point;
 
+        bool goodness_of_fit;
+        std::vector<double> best_fit_point;
+
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
@@ -277,6 +280,40 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--goodness-of-fit" == argument)
+                {
+                    // best-fit point is optional
+                    goodness_of_fit = true;
+
+                    std::string lbrace(*(++a));
+                    if ("{" != lbrace)
+                    {
+                        --a;
+                        continue;
+                    }
+
+                    // parse starting point
+                    do
+                    {
+                        std::string word(*(++a));
+                        if ("}" == word)
+                            break;
+
+                        double value = destringify<double>(word);
+                        best_fit_point.push_back(value);
+                    }
+                    while (true);
+
+                    continue;
+                }
+
+                if ("--no-prerun" == argument)
+                {
+                    config.need_prerun = false;
+
+                    continue;
+                }
+
                 if ("--optimize" == argument)
                 {
                     optimize = true;
@@ -431,12 +468,33 @@ int main(int argc, char * argv[])
             std::cout << "#  " << c->name() << std::endl;
         }
 
+        // run optimization. Use starting point if given, else sample a point from the prior.
+        // Optionally calculate a p-value at the mode.
         if (CommandLine::instance()->optimize)
         {
-            std::cout << "# Starting optimization: ";
+            AnalysisPtr ana = CommandLine::instance()->analysis;
+            if (CommandLine::instance()->starting_point.empty())
+            {
+                gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
+                gsl_rng_set(rng, ::time(0));
+                for (auto i = ana->parameter_descriptions().begin(), i_end = ana->parameter_descriptions().end() ; i != i_end ; ++i)
+                {
+                    LogPriorPtr prior = ana->log_prior(i->parameter.name());
+                    CommandLine::instance()->starting_point.push_back(prior->sample(rng));
+                }
+            }
             auto options = Analysis::OptimizationOptions::Defaults();
+            auto ret = ana->optimize(CommandLine::instance()->starting_point, options);
+            if (CommandLine::instance()->goodness_of_fit && CommandLine::instance()->best_fit_point.empty())
+                ana->goodness_of_fit(ret.first, 1e5);
 
-            CommandLine::instance()->analysis->optimize(CommandLine::instance()->starting_point, options);
+	        return EXIT_SUCCESS;
+        }
+
+        // goodness-of-fit for user specified parameter point
+        if (CommandLine::instance()->goodness_of_fit)
+        {
+            CommandLine::instance()->analysis->goodness_of_fit(CommandLine::instance()->best_fit_point, 1e5);
 
             return EXIT_SUCCESS;
         }
@@ -457,24 +515,29 @@ int main(int argc, char * argv[])
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-scan-mc" << std::endl;
         std::cout << "  [ [--kinematics NAME VALUE]* --observable NAME LOWER CENTRAL UPPER]+" << std::endl;
+        std::cout << "  [--constraint NAME]+" << std::endl;
         std::cout << "  [ [ [--scan PARAMETER MIN MAX] | [--nuisance PARAMETER MIN MAX] ] --prior [flat | [gaussian LOWER CENTRAL UPPER] ] ]+" << std::endl;
+        std::cout << "  [--chains VALUE]" << std::endl;
+        std::cout << "  [--chunks VALUE]" << std::endl;
+        std::cout << "  [--chunksize VALUE]" << std::endl;
+        std::cout << "  [--debug]" << std::endl;
         std::cout << "  [--discrete PARAMETER { VALUE1 VALUE2 ...}]+" << std::endl;
         std::cout << "  [--fix PARAMETER VALUE]+" << std::endl;
-        std::cout << "  [--chunksize VALUE]" << std::endl;
-        std::cout << "  [--chunks VALUE]" << std::endl;
-        std::cout << "  [--chains VALUE]" << std::endl;
-        std::cout << "  [--resume FILENAME]" << std::endl;
-        std::cout << "  [--seed LONG_VALUE]" << std::endl;
-        std::cout << "  [--scale VALUE]" << std::endl;
-        std::cout << "  [--store-prerun]" << std::endl;
-        std::cout << "  [--optimize { VALUE1 VALUE2 ... VALUEN }]" << std::endl;
+        std::cout << "  [--goodness_of_fit [{ PAR_VALUE1 PAR_VALUE2 ... PAR_VALUEN }]]" << std::endl;
+        std::cout << "  [--no-prerun]" << std::endl;
+        std::cout << "  [--optimize [{ PAR_VALUE1 PAR_VALUE2 ... PAR_VALUEN }]]" << std::endl;
         std::cout << "  [--output FILENAME]" << std::endl;
-        std::cout << "  [--debug]" << std::endl;
+        std::cout << "  [--resume FILENAME]" << std::endl;
+        std::cout << "  [--scale VALUE]" << std::endl;
+        std::cout << "  [--seed LONG_VALUE]" << std::endl;
+        std::cout << "  [--store-prerun]" << std::endl;
+
 
         std::cout << std::endl;
         std::cout << "Example:" << std::endl;
         std::cout << "  eos-scan-mc --kinematics s_min 14.18 --kinematics s_max 16.00 \\" << std::endl;
         std::cout << "      --observable \"B->K^*ll::BR@LowRecoil\" 0.5e-7 1.25e-7 2.0e-7 \\" << std::endl;
+        std::cout << "      --constraint \"B^0->K^*0gamma::BR@BaBar-2009\" \\" << std::endl;
         std::cout << "      --scan     \"Abs{c9}\"        0.0 15.0     --prior flat\\" << std::endl;
         std::cout << "      --scan     \"Arg{c9}\"        0.0  6.28319 --prior flat\\" << std::endl;
         std::cout << "      --nuisance \"mass::b(MSbar)\" 3.8  5.0     --prior gaussian 4.14 4.27 4.37" << std::endl;
