@@ -20,6 +20,22 @@ libeosrarebdecays_la_SOURCES = \
 	long-distance.cc long-distance.hh
 libeosrarebdecays_la_LIBADD = $(top_builddir)/eos/utils/libeosutils.la -lgslcblas -lgsl
 
+include_eos_rarebdecaysdir = $(includedir)/eos/rare-b-decays
+include_eos_rarebdecays_HEADERS = \
+	bremsstrahlung.hh \
+	charm-loops.hh \
+	decays.hh \
+	em-contributions.hh \
+	exclusive-b-to-dilepton.hh \
+	exclusive-b-to-s-dilepton-large-recoil.hh \
+	exclusive-b-to-s-dilepton-low-recoil.hh \
+	exclusive-b-to-s-gamma.hh \
+	inclusive-b-to-s-dilepton.hh \
+	inclusive-b-to-s-gamma.hh \
+	form-factors.hh \
+	hard-scattering.hh \
+	long-distance.hh
+
 TESTS = \
 	bremsstrahlung_TEST \
 	charm-loops_TEST \

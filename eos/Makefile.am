@@ -14,6 +14,11 @@ libeos_la_LIBADD = \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
 	-lpthread -lgslcblas -lgsl
 
+include_eosdir = $(includedir)/eos
+include_eos_HEADERS = \
+	constraint.hh \
+	observable.hh
+
 TESTS = \
 	constraint_TEST
 TESTS_LD_ADD = $(top_builddir)/test/libeostest.a $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosutils.la

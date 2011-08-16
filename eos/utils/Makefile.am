@@ -59,6 +59,58 @@ libeosutils_la_SOURCES = \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 libeosutils_la_LIBADD = -lpthread -lgslcblas -lgsl -lhdf5 -lhdf5_hl
 
+include_eos_utilsdir = $(includedir)/eos/utils
+include_eos_utils_HEADERS = \
+	accumulator.hh \
+	analysis.hh analysis-fwd.hh \
+	apply.hh \
+	cartesian-product.hh \
+	chi-squared.hh \
+	complex.hh \
+	concrete_observable.hh \
+	condition_variable.hh \
+	destringify.hh \
+	exception.hh \
+	histogram.hh \
+	integrate.hh \
+	instantiation_policy.hh instantiation_policy-impl.hh \
+	kinematic.hh \
+	lcda.hh \
+	lock.hh \
+	log.hh \
+	log_likelihood.hh log_likelihood-fwd.hh \
+	log_prior.hh log_prior-fwd.hh \
+	markov_chain.hh \
+	markov_chain_sampler.hh \
+	matrix.hh \
+	memoise.hh \
+	model.hh \
+	mutex.hh \
+	observable_cache.hh \
+	observable_set.hh \
+	one-of.hh \
+	options.hh \
+	parameters.hh \
+	power_of.hh \
+	prior_sampler.hh \
+	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
+	qcd.hh \
+	random_number_generator.cc random_number_generator.hh \
+	rvalue.hh \
+	save.hh \
+	scan_file.hh \
+	standard-model.hh \
+	stringify.hh \
+	thread.hh \
+	thread_pool.hh \
+	ticket.hh \
+	top-loops.hh \
+	verify.hh \
+	wilson_coefficients.hh \
+	wilson-polynomial.hh \
+	wilson_scan_model.hh \
+	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
+
 TESTS = \
 	analysis_TEST \
 	apply_TEST \
