@@ -358,7 +358,7 @@ namespace eos
             "B->K^*ll::BRavg@LargeRecoil",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
             Options{ { "q", "d"  }, { "l", "mu" } },
-            1.42e-7, +0.41e-7, -0.4100e-7, +0.08e-7, -0.08-7
+            1.42e-7, +0.41e-7, -0.4100e-7, +0.08e-7, -0.08e-7
         };
         // BR in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CDF_2011
@@ -384,7 +384,7 @@ namespace eos
             "B->K^*ll::BRavg@LargeRecoil",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
             Options{ { "q", "u"  }, { "l", "mu" } },
-            2.57e-7, +1.61e-7, -1.61e-7, +0.22e-7, -0.22-7
+            2.57e-7, +1.61e-7, -1.61e-7, +0.22e-7, -0.22e-7
         };
         // BR in [14.18, 16.00]
         static const GaussianConstraintTemplate Bplus_to_Kstarplus_dimuon_BR_14dot18_to_16_CDF_2011
