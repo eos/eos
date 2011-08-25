@@ -175,5 +175,37 @@ class MatrixMultiplicationTest :
                     }
                 }
             }
+
+            // vector * matrix
+            {
+                typedef array<array<double, 3>, 3> Matrix;
+                typedef array<double, 3> Vector;
+
+                const Matrix A
+                {{
+                    {{1, 2, 3}},
+                    {{4, 5, 6}},
+                    {{7, 8, 9}}
+                }};
+
+                const Vector x {{1/2., 1/3., 1/4.}};
+
+                // result
+                const Vector true_result {{43/12., 14/3., 23/4.}};
+                Vector y = x ^ A;
+
+                for (unsigned i = 0 ; i < 3 ; ++i)
+                    TEST_CHECK_RELATIVE_ERROR(y[i], true_result[i], 1e-15);
+            }
+
+            // scalar product
+            {
+                typedef array<double, 3> Vector;
+
+                const Vector x {{1/2., 1/3., 1/4.}};
+                const Vector y {{43/12., 14/3., 23/4.}};
+
+                TEST_CHECK_RELATIVE_ERROR(dot(x,y), 4.7847222222222222, 1e-15);
+            }
         }
 } matrix_multiplication_test;
