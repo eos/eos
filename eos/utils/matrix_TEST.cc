@@ -207,5 +207,21 @@ class MatrixMultiplicationTest :
 
                 TEST_CHECK_RELATIVE_ERROR(dot(x,y), 4.7847222222222222, 1e-15);
             }
+
+            // vector - vector
+            {
+                typedef array<double, 3> Vector;
+
+                const Vector x {{1 / 2., 1 / 3., 1 / 4.}};
+                const Vector y {{43 / 12., 14 / 3., 23 / 4.}};
+
+                Vector true_result {{-37 / 12., -52 / 12., -66 / 12.}};
+                Vector result = x - y;
+
+                for (unsigned i = 0 ; i < 3 ; ++i)
+                {
+                    TEST_CHECK_RELATIVE_ERROR(result[i], true_result[i], 1e-15);
+                }
+            }
         }
 } matrix_multiplication_test;

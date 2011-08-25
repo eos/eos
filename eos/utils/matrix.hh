@@ -75,6 +75,20 @@ namespace eos
         return result;
     }
 
+    /* vector minus vector */
+    template <typename T_, std::size_t m_>
+    std::array<T_, m_> operator- (const std::array<T_, m_> & x,
+            const std::array<T_, m_> & y)
+    {
+        std::array<T_, m_> result;
+        for (std::size_t i(0) ; i < m_ ; ++i)
+        {
+            result[i] = x[i] - y[i];
+        }
+
+        return result;
+    }
+
     /* Multiplication */
 
     /* matrix times matrix */
