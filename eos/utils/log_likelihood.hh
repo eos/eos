@@ -99,7 +99,7 @@ namespace eos
              * @param covariance    The covariance matrix
              */
             template <std::size_t n_>
-            static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::vector<ObservablePtr> & observables,
+            static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
                                                               const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance);
     };
 

@@ -155,7 +155,7 @@ namespace eos
         {
             ObservableCache cache;
 
-            std::vector<ObservableCache::Id> ids;
+            std::array<ObservableCache::Id, n_> ids;
 
             std::array<double, n_> mean;
             std::array<std::array<double, n_>, n_> covariance;
@@ -167,7 +167,7 @@ namespace eos
             // cholesky matrix of covariance
             std::array<std::array<double, n_>, n_> chol;
 
-            MultivariateGaussianBlock(const ObservableCache & cache, const std::vector<ObservableCache::Id> & ids,
+            MultivariateGaussianBlock(const ObservableCache & cache, const std::array<ObservableCache::Id, n_> & ids,
                                      const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance) :
                 cache(cache),
                 ids(ids),
@@ -203,12 +203,12 @@ namespace eos
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
             {
-                std::vector<ObservableCache::Id> indices;
+                std::array<ObservableCache::Id, n_> indices;
 
                 // add observables to cache
-                for (auto i = ids.begin(), i_end = ids.end() ; i != i_end ; ++i)
+                for (auto i = 0u ; i < n_ ; ++i)
                 {
-                    indices.push_back(cache.add(this->cache.observable(*i)->clone(cache.parameters())));
+                    indices[i] = cache.add(this->cache.observable(this->ids[i])->clone(cache.parameters()));
                 }
 
                 return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock<n_>(cache, indices, mean, covariance));
@@ -350,21 +350,21 @@ namespace eos
 
     template <std::size_t n_>
     LogLikelihoodBlockPtr
-    LogLikelihoodBlock::MultivariateGaussian(ObservableCache cache, const std::vector<ObservablePtr> & observables,
+    LogLikelihoodBlock::MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
                                              const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance)
     {
-        std::vector<ObservableCache::Id> indices;
+        std::array<ObservableCache::Id, n_> indices;
 
         // add observables to cache
-        for (auto o = observables.begin(), o_end = observables.end() ; o != o_end ; ++o)
+        for (auto i = 0u ; i < n_ ; ++i)
         {
-            indices.push_back(cache.add(*o));
+            indices[i] = cache.add(observables[i]);
         }
 
         return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock<n_>(cache, indices, mean, covariance));
     }
 
-    template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<2>(ObservableCache cache, const std::vector<ObservablePtr> & observables,
+    template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<2>(ObservableCache cache, const std::array<ObservablePtr, 2> & observables,
                                              const std::array<double, 2> & mean, const std::array<std::array<double, 2>, 2> & covariance);
 
     template <>

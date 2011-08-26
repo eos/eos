@@ -307,14 +307,16 @@ namespace eos
 
                 // multivariate gaussian
                 {
-                    std::vector<ObservablePtr> obs;
-                    obs.push_back(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")));
-                    obs.push_back(ObservablePtr(new TestObservable(p, k, "mass::c")));
+                    std::array<ObservablePtr, 2> obs
+                    {{
+                        ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")),
+                        ObservablePtr(new TestObservable(p, k, "mass::c"))
+                    }};
 
                     ObservableCache cache(p);
 
                     // start with two uncorrelated Gaussians
-                    std::array<double, 2> mean {{4.3, 1.1}};
+                    std::array<double, 2> mean{{ 4.3, 1.1 }};
                     std::array<std::array<double, 2>, 2> covariance;
                     covariance[0][0] = 0.1 * 0.1;
                     covariance[1][1] = 0.05 * 0.05;
