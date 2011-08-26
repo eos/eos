@@ -172,6 +172,20 @@ namespace eos
             Options{ { "q", "d" } },
             +0.20, +0.24, -0.24, +0.05, -0.05
         };
+        static const MultivariateGaussianConstraintTemplate<2> Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_Belle_2006
+        {
+            {{ "B->K^*gamma::S_K^*gamma", "B->K^*gamma::C_K^*gamma" }},
+            {{ Kinematics{ }, Kinematics{ } }},
+            {{ Options{ { "q", "d" } }, Options{ { "q", "d" } } }},
+            {{ -0.32, +0.20 }},
+            {{
+                {{ 0.1321,  0.0071 }},  /* Use correlation of the two results from */
+                {{ 0.0071,  0.0601 }},  /* http://www.slac.stanford.edu/xorg/hfag/triangle/moriond2011/index.shtml#bsgamma
+                                         * to calculate covariance matrix. Use the larger of the two statistical
+                                         * uncertainties of S_K to form a combined, 2D block.
+                                         */
+            }}
+        };
         ///@}
 
         ///@name 2008 Data
@@ -194,6 +208,17 @@ namespace eos
             Kinematics{ },
             Options{ { "q", "d" } },
             -0.14, +0.16, -0.16, +0.03, -0.03
+        };
+        static const MultivariateGaussianConstraintTemplate<2> Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_BaBar_2008
+        {
+            {{ "B->K^*gamma::S_K^*gamma", "B->K^*gamma::C_K^*gamma" }},
+            {{ Kinematics{ }, Kinematics{ } }},
+            {{ Options{ { "q", "d" } }, Options{ { "q", "d" } } }},
+            {{ -0.03, -0.14 }},
+            {{
+                {{ 0.0850,  0.0024 }},  // Use correlation of the two results from
+                {{ 0.0024,  0.0265 }},  // http://www.slac.stanford.edu/xorg/hfag/triangle/moriond2011/index.shtml#bsgamma to calculate covariance matrix.
+            }}
         };
         ///@}
 
@@ -711,10 +736,12 @@ namespace eos
             // Belle
             { "B^0->K^*0gamma::S_K@Belle-2006", make_factory(templates::Bzero_to_Kstarzero_gamma_SKstargamma_Belle_2006) },
             { "B^0->K^*0gamma::C_K@Belle-2006", make_factory(templates::Bzero_to_Kstarzero_gamma_CKstargamma_Belle_2006) },
+            { "B^0->K^*0gamma::S_K+C_K@Belle-2006", make_factory(templates::Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_Belle_2006) },
             /* 2008 */
             // BaBar
             { "B^0->K^*0gamma::S_K@BaBar-2008", make_factory(templates::Bzero_to_Kstarzero_gamma_SKstargamma_BaBar_2008) },
             { "B^0->K^*0gamma::C_K@BaBar-2008", make_factory(templates::Bzero_to_Kstarzero_gamma_CKstargamma_BaBar_2008) },
+            { "B^0->K^*0gamma::S_K+C_K@BaBar-2008", make_factory(templates::Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_BaBar_2008) },
             /* 2009 */
             // BaBar
             { "B^0->K^*0gamma::BR@BaBar-2009", make_factory(templates::Bzero_to_Kstarzero_gamma_BR_BaBar_2009) },
