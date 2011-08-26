@@ -23,6 +23,7 @@
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <cmath>
@@ -45,6 +46,61 @@ namespace eos
         Options options;
 
         double central, sigma_hi_stat, sigma_lo_stat, sigma_hi_sys, sigma_lo_sys;
+
+        Constraint
+        make(const std::string & name, const Options & options) const
+        {
+            Parameters parameters(Parameters::Defaults());
+            ObservableCache cache(parameters);
+
+            ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
+            if (! observable.get())
+                throw InternalError("make_gaussian_constraint: " + name + ": '" + this->observable + "' is not a valid observable name");
+
+            double min = 0.0, max = 0.0;
+            if ("asymmetric+quadratic" == options.get("uncertainty", "asymmetric+quadratic"))
+            {
+                min = this->central - std::sqrt(power_of<2>(this->sigma_lo_stat) + power_of<2>(this->sigma_lo_sys));
+                max = this->central + std::sqrt(power_of<2>(this->sigma_hi_stat) + power_of<2>(this->sigma_hi_sys));
+            }
+
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::Gaussian(cache, observable, min, this->central, max);
+
+            return Constraint(name, { observable }, { block });
+        }
+    };
+
+    template <size_t dim_>
+    struct MultivariateGaussianConstraintTemplate
+    {
+        std::array<std::string, dim_> observables;
+
+        std::array<Kinematics, dim_> kinematics;
+
+        std::array<Options, dim_> options;
+
+        std::array<double, dim_> means;
+
+        std::array<std::array<double, dim_>, dim_> covariance;
+
+        Constraint
+        make(const std::string & name, const Options & options) const
+        {
+            Parameters parameters(Parameters::Defaults());
+            ObservableCache cache(parameters);
+
+            std::array<ObservablePtr, dim_> observables;
+            for (auto i = 0u ; i < dim_ ; ++i)
+            {
+                observables[i] = Observable::make(this->observables[i], parameters, this->kinematics[i], this->options[i] + options);
+                if (! observables[i].get())
+                    throw InternalError("make_multivariate_gaussian_constraint<" + stringify(dim_) + ">: " + name + ": '" + this->observables[i] + "' is not a valid observable name");
+            }
+
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, this->means, this->covariance);
+
+            return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
+        }
     };
 
     namespace templates
@@ -563,28 +619,6 @@ namespace eos
         ///@}
     }
 
-    Constraint
-    make_gaussian_constraint(const std::string & name, const Options & options, const GaussianConstraintTemplate & t)
-    {
-        Parameters parameters(Parameters::Defaults());
-        ObservableCache cache(parameters);
-
-        ObservablePtr observable = Observable::make(t.observable, parameters, t.kinematics, t.options + options);
-        if (! observable.get())
-            throw InternalError("make_gaussian_constraint: " + name + ": '" + t.observable + "' is not a valid observable name");
-
-        double min = 0.0, max = 0.0;
-        if ("asymmetric+quadratic" == options.get("uncertainty", "asymmetric+quadratic"))
-        {
-            min = t.central - std::sqrt(power_of<2>(t.sigma_lo_stat) + power_of<2>(t.sigma_lo_sys));
-            max = t.central + std::sqrt(power_of<2>(t.sigma_hi_stat) + power_of<2>(t.sigma_hi_sys));
-        }
-
-        LogLikelihoodBlockPtr block = LogLikelihoodBlock::Gaussian(cache, observable, min, t.central, max);
-
-        return Constraint(name, { observable }, { block });
-    }
-
     /* Constraint */
     template class WrappedForwardIterator<Constraint::BlockIteratorTag, LogLikelihoodBlockPtr>;
     template class WrappedForwardIterator<Constraint::ObservableIteratorTag, ObservablePtr>;
@@ -599,8 +633,8 @@ namespace eos
         std::vector<LogLikelihoodBlockPtr> blocks;
 
         Implementation(const std::string & name,
-                const std::initializer_list<ObservablePtr> & observables,
-                const std::initializer_list<LogLikelihoodBlockPtr> & blocks) :
+                const std::vector<ObservablePtr> & observables,
+                const std::vector<LogLikelihoodBlockPtr> & blocks) :
             name(name),
             blocks(blocks)
         {
@@ -612,8 +646,8 @@ namespace eos
     };
 
     Constraint::Constraint(const std::string & name,
-                const std::initializer_list<ObservablePtr> & observables,
-                const std::initializer_list<LogLikelihoodBlockPtr> & blocks) :
+                const std::vector<ObservablePtr> & observables,
+                const std::vector<LogLikelihoodBlockPtr> & blocks) :
         PrivateImplementationPattern<Constraint>(new Implementation<Constraint>(name, observables, blocks))
     {
     }
@@ -652,98 +686,96 @@ namespace eos
         return ObservableIterator(_imp->observables.end());
     }
 
+    typedef std::function<Constraint (const std::string &, const Options & options)> ConstraintFactory;
+
+    template <typename Factory_>
+    ConstraintFactory make_factory(const Factory_ & f)
+    {
+        return std::bind(&Factory_::make, f, std::placeholders::_1, std::placeholders::_2);
+    }
+
     Constraint
     Constraint::make(const std::string & name, const Options & options)
     {
-        typedef std::function<Constraint (const std::string &, const Options & options)> ConstraintFactory;
         static const std::map<std::string, ConstraintFactory> factories
         {
-#ifdef MAKEGAUSS
-#  undef MAKEGAUSS
-#endif
-#define MAKEGAUSS(n, t) \
-            { \
-                n, \
-                std::bind(&make_gaussian_constraint, std::placeholders::_1, std::placeholders::_2, t) \
-            }
             /* 2000 */
             // CLEO
-            MAKEGAUSS("B^0->K^*0gamma::BR@CLEO-2000",                          templates::Bzero_to_Kstarzero_gamma_BR_CLEO_2000),
-            MAKEGAUSS("B^+->K^*+gamma::BR@CLEO-2000",                          templates::Bplus_to_Kstarplus_gamma_BR_CLEO_2000),
+            { "B^0->K^*0gamma::BR@CLEO-2000", make_factory(templates::Bzero_to_Kstarzero_gamma_BR_CLEO_2000) },
+            { "B^+->K^*+gamma::BR@CLEO-2000", make_factory(templates::Bplus_to_Kstarplus_gamma_BR_CLEO_2000) },
             /* 2004 */
             // Belle
-            MAKEGAUSS("B^0->K^*0gamma::BR@Belle-2004",                         templates::Bzero_to_Kstarzero_gamma_BR_Belle_2004),
-            MAKEGAUSS("B^+->K^*+gamma::BR@Belle-2004",                         templates::Bplus_to_Kstarplus_gamma_BR_Belle_2004),
+            { "B^0->K^*0gamma::BR@Belle-2004", make_factory(templates::Bzero_to_Kstarzero_gamma_BR_Belle_2004) },
+            { "B^+->K^*+gamma::BR@Belle-2004", make_factory(templates::Bplus_to_Kstarplus_gamma_BR_Belle_2004) },
             /* 2006 */
             // Belle
-            MAKEGAUSS("B^0->K^*0gamma::S_K@Belle-2006",                        templates::Bzero_to_Kstarzero_gamma_SKstargamma_Belle_2006),
-            MAKEGAUSS("B^0->K^*0gamma::C_K@Belle-2006",                        templates::Bzero_to_Kstarzero_gamma_CKstargamma_Belle_2006),
+            { "B^0->K^*0gamma::S_K@Belle-2006", make_factory(templates::Bzero_to_Kstarzero_gamma_SKstargamma_Belle_2006) },
+            { "B^0->K^*0gamma::C_K@Belle-2006", make_factory(templates::Bzero_to_Kstarzero_gamma_CKstargamma_Belle_2006) },
             /* 2008 */
             // BaBar
-            MAKEGAUSS("B^0->K^*0gamma::S_K@BaBar-2008",                        templates::Bzero_to_Kstarzero_gamma_SKstargamma_BaBar_2008),
-            MAKEGAUSS("B^0->K^*0gamma::C_K@BaBar-2008",                        templates::Bzero_to_Kstarzero_gamma_CKstargamma_BaBar_2008),
+            { "B^0->K^*0gamma::S_K@BaBar-2008", make_factory(templates::Bzero_to_Kstarzero_gamma_SKstargamma_BaBar_2008) },
+            { "B^0->K^*0gamma::C_K@BaBar-2008", make_factory(templates::Bzero_to_Kstarzero_gamma_CKstargamma_BaBar_2008) },
             /* 2009 */
             // BaBar
-            MAKEGAUSS("B^0->K^*0gamma::BR@BaBar-2009",                         templates::Bzero_to_Kstarzero_gamma_BR_BaBar_2009),
-            MAKEGAUSS("B^+->K^*+gamma::BR@BaBar-2009",                         templates::Bplus_to_Kstarplus_gamma_BR_BaBar_2009),
+            { "B^0->K^*0gamma::BR@BaBar-2009", make_factory(templates::Bzero_to_Kstarzero_gamma_BR_BaBar_2009) },
+            { "B^+->K^*+gamma::BR@BaBar-2009", make_factory(templates::Bplus_to_Kstarplus_gamma_BR_BaBar_2009) },
             // Belle
             // B^+ -> K^+ mu^+ mu^-
-            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle-2009",            templates::Bplus_to_Kplus_dimuon_BR_1_to_6_Belle_2009),
-            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[14.18,16.00]@Belle-2009",          templates::Bplus_to_Kplus_dimuon_BR_14dot18_to_16_Belle_2009),
-            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[16.00,22.86]@Belle-2009",          templates::Bplus_to_Kplus_dimuon_BR_16_to_22dot86_Belle_2009),
-            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@Belle-2009",          templates::Bplus_to_Kplus_dimuon_A_FB_1_to_6_Belle_2009),
-            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@Belle-2009",        templates::Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_Belle_2009),
-            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@Belle-2009",        templates::Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_Belle_2009),
+            { "B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle-2009", make_factory(templates::Bplus_to_Kplus_dimuon_BR_1_to_6_Belle_2009) },
+            { "B^+->K^+mu^+mu^-::BR[14.18,16.00]@Belle-2009", make_factory(templates::Bplus_to_Kplus_dimuon_BR_14dot18_to_16_Belle_2009) },
+            { "B^+->K^+mu^+mu^-::BR[16.00,22.86]@Belle-2009", make_factory(templates::Bplus_to_Kplus_dimuon_BR_16_to_22dot86_Belle_2009) },
+            { "B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@Belle-2009", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_1_to_6_Belle_2009) },
+            { "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@Belle-2009", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_Belle_2009) },
+            { "B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@Belle-2009", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_Belle_2009) },
             // B^0 -> K^*0 mu^+ mu^-
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[1.00,6.00]@Belle-2009",           templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_Belle_2009),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[14.18,16.00]@Belle-2009",         templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_Belle_2009),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[16.00,19.21]@Belle-2009",         templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_Belle_2009),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@Belle-2009",         templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_Belle_2009),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@Belle-2009",       templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_Belle_2009),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@Belle-2009",       templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_Belle_2009),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle-2009",          templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_Belle_2009),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009",        templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_Belle_2009),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009",        templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_Belle_2009),
+            { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_Belle_2009) },
+            { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_Belle_2009) },
+            { "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_Belle_2009) },
+            { "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_Belle_2009) },
+            { "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_Belle_2009) },
+            { "B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_Belle_2009) },
+            { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_Belle_2009) },
+            { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_Belle_2009) },
+            { "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_Belle_2009) },
             /* 2011 */
             // CDF
             // B^0 -> K^*0 mu^+ mu^-
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2011",             templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_CDF_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2011",           templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CDF_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2011",           templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_CDF_2011),
+            { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_CDF_2011) },
             // B^+ -> K^*+ mu^+ mu^-
-            MAKEGAUSS("B^+->K^{*+}mu^+mu^-::BR[1.00,6.00]@CDF-2011",           templates::Bplus_to_Kstarplus_dimuon_BR_1_to_6_CDF_2011),
-            MAKEGAUSS("B^+->K^{*+}mu^+mu^-::BR[14.18,16.00]@CDF-2011",         templates::Bplus_to_Kstarplus_dimuon_BR_14dot18_to_16_CDF_2011),
-            MAKEGAUSS("B^+->K^{*+}mu^+mu^-::BR[16.00,19.21]@CDF-2011",         templates::Bplus_to_Kstarplus_dimuon_BR_16_to_19dot21_CDF_2011),
+            { "B^+->K^{*+}mu^+mu^-::BR[1.00,6.00]@CDF-2011", make_factory(templates::Bplus_to_Kstarplus_dimuon_BR_1_to_6_CDF_2011) },
+            { "B^+->K^{*+}mu^+mu^-::BR[14.18,16.00]@CDF-2011", make_factory(templates::Bplus_to_Kstarplus_dimuon_BR_14dot18_to_16_CDF_2011) },
+            { "B^+->K^{*+}mu^+mu^-::BR[16.00,19.21]@CDF-2011", make_factory(templates::Bplus_to_Kstarplus_dimuon_BR_16_to_19dot21_CDF_2011) },
             // B^0 -> K^*0 mu^+ mu^-
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",           templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CDF_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",         templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CDF_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2011",         templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_CDF_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2011",            templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CDF_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2011",          templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CDF_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2011",          templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_CDF_2011),
+            { "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_CDF_2011) },
             // B^0 -> K^0 mu^+ mu^-
-            MAKEGAUSS("B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011",              templates::Bzero_to_Kzero_dimuon_BR_1_to_6_CDF_2011),
-            MAKEGAUSS("B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011",            templates::Bzero_to_Kzero_dimuon_BR_14dot18_to_16_CDF_2011),
-            MAKEGAUSS("B^0->K^0mu^+mu^-::BR[16.00,23.00]@CDF-2011",            templates::Bzero_to_Kzero_dimuon_BR_16_to_22dot86_CDF_2011),
+            { "B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011", make_factory(templates::Bzero_to_Kzero_dimuon_BR_1_to_6_CDF_2011) },
+            { "B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011", make_factory(templates::Bzero_to_Kzero_dimuon_BR_14dot18_to_16_CDF_2011) },
+            { "B^0->K^0mu^+mu^-::BR[16.00,23.00]@CDF-2011", make_factory(templates::Bzero_to_Kzero_dimuon_BR_16_to_22dot86_CDF_2011) },
             // B^+ -> K^+ mu^+ mu^-
-            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011",              templates::Bplus_to_Kplus_dimuon_BR_1_to_6_CDF_2011),
-            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2011",            templates::Bplus_to_Kplus_dimuon_BR_14dot18_to_16_CDF_2011),
-            MAKEGAUSS("B^+->K^+mu^+mu^-::BR[16.00,23.00]@CDF-2011",            templates::Bplus_to_Kplus_dimuon_BR_16_to_22dot86_CDF_2011),
+            { "B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011", make_factory(templates::Bplus_to_Kplus_dimuon_BR_1_to_6_CDF_2011) },
+            { "B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2011", make_factory(templates::Bplus_to_Kplus_dimuon_BR_14dot18_to_16_CDF_2011) },
+            { "B^+->K^+mu^+mu^-::BR[16.00,23.00]@CDF-2011", make_factory(templates::Bplus_to_Kplus_dimuon_BR_16_to_22dot86_CDF_2011) },
             // Observable no yet implemented!
-            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",            templates::Bplus_to_Kplus_dimuon_A_FB_1_to_6_CDF_2011),
-            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",          templates::Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_CDF_2011),
-            MAKEGAUSS("B^+->K^+mu^+mu^-::A_FB[16.00,23.00]@CDF-2011",          templates::Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_CDF_2011),
+            { "B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2011", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_1_to_6_CDF_2011) },
+            { "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_CDF_2011) },
+            { "B^+->K^+mu^+mu^-::A_FB[16.00,23.00]@CDF-2011", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_CDF_2011) },
             // LHCb
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011",            templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011",          templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb-2011",          templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_LHCb_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2011",          templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_LHCb_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2011",        templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_LHCb_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@LHCb-2011",        templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_LHCb_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011",           templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_LHCb_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011",         templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_LHCb_2011),
-            MAKEGAUSS("B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011",         templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_LHCb_2011),
-#undef MAKEGAUSS
+            { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2011) },
+            { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2011) },
+            { "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_LHCb_2011) },
+            { "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_LHCb_2011) },
+            { "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_LHCb_2011) },
+            { "B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_LHCb_2011) },
+            { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_LHCb_2011) },
+            { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_LHCb_2011) },
+            { "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_LHCb_2011) },
         };
 
         auto f = factories.find(name);

@@ -27,6 +27,7 @@
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
+#include <vector>
 
 namespace eos
 {
@@ -42,8 +43,8 @@ namespace eos
     {
         public:
             /// Constructor.
-            Constraint(const std::string & name, const std::initializer_list<ObservablePtr> & observable,
-                    const std::initializer_list<LogLikelihoodBlockPtr> & blocks);
+            Constraint(const std::string & name, const std::vector<ObservablePtr> & observable,
+                    const std::vector<LogLikelihoodBlockPtr> & blocks);
 
             /// Destructor.
             ~Constraint();
