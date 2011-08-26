@@ -305,6 +305,89 @@ namespace eos
                     gsl_rng_free(rng);
                 }
 
+                // multivariate gaussian
+                {
+                    std::vector<ObservablePtr> obs;
+                    obs.push_back(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")));
+                    obs.push_back(ObservablePtr(new TestObservable(p, k, "mass::c")));
+
+                    ObservableCache cache(p);
+
+                    // start with two uncorrelated Gaussians
+                    std::array<double, 2> mean {{4.3, 1.1}};
+                    std::array<std::array<double, 2>, 2> covariance;
+                    covariance[0][0] = 0.1 * 0.1;
+                    covariance[1][1] = 0.05 * 0.05;
+                    covariance[0][1] = covariance[1][0] = 0;
+
+                    auto block = LogLikelihoodBlock::MultivariateGaussian<2>(cache, obs, mean, covariance);
+
+                    // create two one dim. gaussians to compare with
+                    auto block1 = LogLikelihoodBlock::Gaussian(cache, obs[0], +4.20, +4.30, +4.40);
+                    auto block2 = LogLikelihoodBlock::Gaussian(cache, obs[1], +1.05, +1.10, +1.15);
+
+                    // update the common cache so observable now have values different from nan
+                    p["mass::b(MSbar)"] = 4.35;
+                    p["mass::c"] = 1.2;
+                    cache.update();
+
+                    // log of product of single pdfs is just the combined log
+                    TEST_CHECK_NEARLY_EQUAL(block1->evaluate() + block2->evaluate(), block->evaluate(), 1e-13);
+
+                    // with correlation, results are slightly inaccurate due to matrix inversion and determinant
+                    covariance[0][1] = covariance[1][0] = 0.003;
+                    block = LogLikelihoodBlock::MultivariateGaussian<2>(cache, obs, mean, covariance);
+
+                    TEST_CHECK_NEARLY_EQUAL(block->evaluate(), 1.30077135, 1e-8);
+
+                    /* test sampling */
+                    gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
+                    gsl_rng_set(rng, 1243);
+
+                    block->prepare_sampling();
+                    double sample = block -> sample(rng);
+
+                    unsigned n2_in = 0;
+                    unsigned n3_in = 0;
+                    unsigned n = 1e5;
+
+                    // prefactor of multivariate pdf
+                    double normalization = -log(2 * M_PI) - 0.5 * log(1.6e-5);
+
+                    for (unsigned i = 0; i < n; ++i)
+                    {
+                        sample = block->sample(rng);
+
+                        // transform from llh to chi^2
+                        sample = (sample - normalization) * (-2);
+
+                        // check how many within a given quantile
+                        if (sample <= 2)
+                            ++n2_in;
+                        // check how many within a given quantile
+                        if (sample <= 3)
+                            ++n3_in;
+                    }
+
+                    // compare with \chi^2 distribution with 2 DoF
+                    TEST_CHECK_NEARLY_EQUAL(n2_in / double(n), 0.63212055882855767, 3e-3);
+                    TEST_CHECK_NEARLY_EQUAL(n3_in / double(n), 0.77686983985157021, 3e-3);
+
+                    /* cloning */
+                    Parameters new_pars = p.clone();
+                    ObservableCache new_cache(new_pars);
+                    auto block_clone = block->clone(new_cache);
+                    new_cache.update();
+
+                    double old_value = block->evaluate();
+                    TEST_CHECK_EQUAL(old_value, block_clone->evaluate());
+
+                    // with updated parameters, results should differ
+                    new_pars["mass::c"] = 1.232;
+                    new_cache.update();
+                    TEST_CHECK(block_clone->evaluate() != block->evaluate());
+                }
+
                 // bootstrap p-value calculation
                 {
                     Parameters parameters  = Parameters::Defaults();

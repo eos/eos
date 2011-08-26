@@ -24,9 +24,13 @@
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
 #include <eos/utils/log_likelihood-fwd.hh>
+#include <eos/utils/matrix.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+
+//TODO can we get around inclusion in this header and move it to source?
+#include <vector>
 
 #include <gsl/gsl_rng.h>
 
@@ -62,6 +66,8 @@ namespace eos
              * @warning Call prepare_sampling() before a call to sample() to
              * ensure that one really gets a log likelihood value from the correct distribution,
              * i.e.  llh ~ llh(model, fixed parameters)
+             *
+             * @param rng The random number generator.
              */
             virtual double sample(gsl_rng * rng) const = 0;
 
@@ -71,6 +77,9 @@ namespace eos
             /*!
              * Create a new LogLikelihoodBlock for one normally distributed observable.
              *
+             * @note For every dimension, this template and the corresponding implementation
+             *       have to be instantiated explicitly.
+             *
              * @param cache      The Observable cache from which we draw the predictions.
              * @param observable The Observable whose distribution we model.
              * @param min        The value one sigma below the mean of the experimental distribution.
@@ -79,6 +88,19 @@ namespace eos
              */
             static LogLikelihoodBlockPtr Gaussian(ObservableCache cache, const ObservablePtr & observable,
                     const double & min, const double & central, const double & max);
+
+            /*!
+             * Create a new LogLikelihoodBlock for n observables distributed
+             * according to a multivariate normal distribution.
+             *
+             * @param cache         The Observable cache from which we draw the predictions.
+             * @param observables   The Observables whose distribution we model.
+             * @param mean          The vector of means.
+             * @param covariance    The covariance matrix
+             */
+            template <std::size_t n_>
+            static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::vector<ObservablePtr> & observables,
+                                                              const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance);
     };
 
     /*!
