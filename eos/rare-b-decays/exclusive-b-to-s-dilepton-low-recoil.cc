@@ -1159,7 +1159,7 @@ namespace eos
             double alpha_s = model->alpha_s(mu());
 
             return std::norm(kappa() * (2.0 * (m_b_MSbar + lambda_pseudo()) * m_B() / s) * (c7eff(wc, s) + wc.c7prime())
-                    + 0.5 * alpha_s * std::polar(lambda_pseudo(), sl_phase_pseudo()) + (c9eff(wc, s) + wc.c9prime()))
+                    + 0.5 * alpha_s / m_B * std::polar(lambda_pseudo(), sl_phase_pseudo()) + (c9eff(wc, s) + wc.c9prime()))
                     + std::norm(wc.c10() + wc.c10prime());
         }
 
