@@ -1286,6 +1286,24 @@ namespace eos
         return _imp->differential_flat_term_numerator(s) / _imp->unnormalized_decay_width(s);
     }
 
+    double
+    BToKDilepton<LowRecoil>::differential_ratio_muons_electrons(const double & s) const
+    {
+        double br_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            br_electrons = BToKDilepton<LowRecoil>::differential_branching_ratio(s);
+        }
+
+        double br_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            br_muons = BToKDilepton<LowRecoil>::differential_branching_ratio(s);
+        }
+
+        return br_muons / br_electrons;
+    }
+
     // Integrated Observables
     double
     BToKDilepton<LowRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const

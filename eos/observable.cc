@@ -187,6 +187,10 @@ namespace eos
                     &BToKDilepton<LargeRecoil>::differential_flat_term,
                     std::make_tuple("s")),
 
+            make_observable("B->Kll::R_K(s)@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::differential_ratio_muons_electrons,
+                    std::make_tuple("s")),
+
             make_observable("B->Kll::BR@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::integrated_branching_ratio,
                     std::make_tuple("s_min", "s_max")),
@@ -218,6 +222,10 @@ namespace eos
 
             make_observable("B->Kll::F_H(s)@LowRecoil",
                     &BToKDilepton<LowRecoil>::differential_flat_term,
+                    std::make_tuple("s")),
+
+            make_observable("B->Kll::R_K(s)@LowRecoil",
+                    &BToKDilepton<LowRecoil>::differential_ratio_muons_electrons,
                     std::make_tuple("s")),
 
             make_observable("B->Kll::BR@LowRecoil",
