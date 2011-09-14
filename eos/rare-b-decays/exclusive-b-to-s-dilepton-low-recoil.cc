@@ -1153,13 +1153,14 @@ namespace eos
             return (1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
         }
 
+        // this is rho_1^+
         double rho_1(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
             double alpha_s = model->alpha_s(mu());
 
-            return std::norm(kappa() * (2.0 * (m_b_MSbar + lambda_pseudo()) * m_B() / s) * (c7eff(wc, s) - wc.c7prime())
-                    + 0.5 * alpha_s * std::polar(lambda_pseudo(), sl_phase_pseudo()) + (c9eff(wc, s) - wc.c9prime()))
-                    + std::norm(wc.c10() - wc.c10prime());
+            return std::norm(kappa() * (2.0 * (m_b_MSbar + lambda_pseudo()) * m_B() / s) * (c7eff(wc, s) + wc.c7prime())
+                    + 0.5 * alpha_s * std::polar(lambda_pseudo(), sl_phase_pseudo()) + (c9eff(wc, s) + wc.c9prime()))
+                    + std::norm(wc.c10() + wc.c10prime());
         }
 
         // speed of the lepton
@@ -1185,7 +1186,7 @@ namespace eos
             const double lam = lambda(power_of<2>(m_B()), power_of<2>(m_K()), s);
 
             return gamma0() * std::sqrt(lam) * beta(s) * power_of<2>(form_factors->f_p(s)) *
-                    (0.25 * lam * rho_1(wc, s) + power_of<2>(m_l()) * std::norm(wc.c10()) * (power_of<2>(xi_b(s)) * s +
+                    (0.25 * lam * rho_1(wc, s) + power_of<2>(m_l()) * std::norm(wc.c10() + wc.c10prime()) * (power_of<2>(xi_b(s)) * s +
                     2.0 * (power_of<2>(m_B()) - power_of<2>(m_K()) - s) * xi_b(s) + 4.0 * power_of<2> (m_K())));
         }
 
