@@ -25,11 +25,15 @@
 
 #include <array>
 #include <cmath>
+#include <fstream>
 #include <limits>
 #include <string>
 #include <vector>
 
 #include <iostream>
+
+// Uncomment the following #define to generate new test data for the Bobeth compatibility tests
+#define EOS_GENERATE_TEST_DATA
 
 using namespace test;
 using namespace eos;
@@ -396,3 +400,99 @@ class BToKDileptonLargeRecoilTest :
             }
         }
 } b_to_k_dilepton_large_recoil_test;
+
+class BToKDileptonLargeRecoilBobethCompatibilityTest :
+    public TestCase
+{
+    public:
+        BToKDileptonLargeRecoilBobethCompatibilityTest() :
+            TestCase("b_to_k_dilepton_large_recoil_bobeth_compatibility_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const std::vector<std::string> variation_names
+            {
+                "Abs{c7}",  "Arg{c7}",  "Abs{c7'}",  "Arg{c7'}",
+                "Abs{c9}",  "Arg{c9}",  "Abs{c9'}",  "Arg{c9'}",
+                "Abs{c10}", "Arg{c10}", "Abs{c10'}", "Arg{c10'}",
+            };
+
+            Parameters p = Parameters::Defaults();
+            Options o;
+            o.set("model", "WilsonScan");
+            o.set("form-factors", "KMPW2010");
+
+            std::vector<Parameter> variations;
+
+            for (auto n = variation_names.cbegin(), n_end = variation_names.cend() ; n != n_end ; ++n)
+            {
+                variations.push_back(p[*n]);
+            }
+
+            Kinematics k;
+            k.declare("s_min"); k.set("s_min", 14.18);
+            k.declare("s_max"); k.set("s_max", 22.86);
+
+            std::vector<ObservablePtr> observables;
+            observables.push_back(Observable::make("B->Kll::BR@LowRecoil,q=u,l=mu",  p, k, o));
+            observables.push_back(Observable::make("B->Kll::F_H@LowRecoil,q=u,l=mu", p, k, o));
+
+            std::string filename(EOS_BUILDDIR "/eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil_TEST-btokll.data");
+#ifdef EOS_GENERATE_TEST_DATA
+            {
+                std::cout << "-- GENERATING test case data for B->Kll@LargeRecoil --" << std::endl;
+                RandomNumberGenerator rng;
+                std::fstream file(filename.c_str(), std::fstream::out);
+                file.precision(17);
+
+                for (int i = 0 ; i < 1000 ; ++i)
+                {
+                    for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
+                    {
+                        *v = v->sample(rng);
+                        file << *v << '\t';
+                    }
+
+                    for (auto o = observables.cbegin(), o_end = observables.cend() ; o != o_end ; ++o)
+                    {
+                        file << (*o)->evaluate() << '\t';
+                    }
+                    file << std::endl;
+                }
+            }
+#else
+            // Verify the test case data
+            {
+                std::cout << "-- Verifying test case data for B->Kll@LargeRecoil --" << std::endl;
+                std::fstream file(filename.c_str(), std::fstream::in);
+
+                std::string line;
+                while (file)
+                {
+                    std::getline(file, line);
+                    if (line.empty())
+                        break;
+
+                    std::stringstream ss(line);
+
+                    for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
+                    {
+                        double value;
+                        ss >> value;
+                        *v = value;
+                    }
+
+                    for (auto o = observables.cbegin(), o_end = observables.cend() ; o != o_end ; ++o)
+                    {
+                        double reference;
+                        ss >> reference;
+
+                        TEST_CHECK_RELATIVE_ERROR(reference, (*o)->evaluate(), 1e-3);
+                    }
+                }
+            }
+#endif
+        }
+} b_to_k_dilepton_large_recoil_bobeth_compatibility_test;
