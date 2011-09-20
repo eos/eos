@@ -33,7 +33,7 @@
 #include <iostream>
 
 // Uncomment the following #define to generate new test data for the Bobeth compatibility tests
-#define EOS_GENERATE_TEST_DATA
+//#define EOS_GENERATE_TEST_DATA
 
 using namespace test;
 using namespace eos;
