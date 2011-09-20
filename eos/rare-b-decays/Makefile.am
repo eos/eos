@@ -36,6 +36,12 @@ include_eos_rarebdecays_HEADERS = \
 	hard-scattering.hh \
 	long-distance.hh
 
+EXTRA_DIST = \
+	exclusive-b-to-s-dilepton-large-recoil_TEST-btokll.data \
+	exclusive-b-to-s-dilepton-low-recoil_TEST-btokll.data \
+	exclusive-b-to-s-dilepton-low-recoil_TEST-btokstarll.data \
+	exclusive-b-to-s-gamma_TEST-btokstargamma.data
+
 TESTS = \
 	bremsstrahlung_TEST \
 	charm-loops_TEST \
