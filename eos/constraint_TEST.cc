@@ -103,15 +103,15 @@ class ConstraintTest :
                     // B^0 -> K^0 mu^+ mu^-
                     "B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011",
                     "B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011",
-                    "B^0->K^0mu^+mu^-::BR[16.00,23.00]@CDF-2011",
+                    "B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF-2011",
                     // B^+ -> K^+ mu^+ mu^-
                     "B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011",
                     "B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2011",
-                    "B^+->K^+mu^+mu^-::BR[16.00,23.00]@CDF-2011",
+                    "B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF-2011",
                     /* The following commented observables have not yet been implemented! */
                     //"B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",
                     //"B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",
-                    //"B^+->K^+mu^+mu^-::A_FB[16.00,23.00]@CDF-2011",
+                    //"B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2011",
                     // LHCb
                     "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011",
                     "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011",
