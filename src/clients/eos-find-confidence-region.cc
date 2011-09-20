@@ -126,7 +126,7 @@ main(int argc, char * argv[])
 
                     for (unsigned i = 0 ; i < d->records() ; ++i, ++record)
                     {
-                        double value = std::exp(-1.0 * record[posterior_index]);
+                        double value = std::exp(-0.5 * record[posterior_index]);
                         max_value = std::max(max_value, value);
                         min_value = std::min(min_value, value);
                         integral += value;
@@ -168,7 +168,7 @@ main(int argc, char * argv[])
 
                         for (unsigned j = 0 ; j < d->records() ; ++j, ++record)
                         {
-                            double value = std::exp(-1.0 * record[posterior_index]);
+                            double value = std::exp(-0.5 * record[posterior_index]);
 
                             for (unsigned k = 0 ; k < ratios.size() ; ++k)
                             {

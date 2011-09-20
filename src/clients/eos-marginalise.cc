@@ -64,7 +64,7 @@ double marginalise_by_threshold(const double & previous, const double & chi_squa
 {
     double result = previous;
 
-    if (threshold < std::exp(-1.0 * chi_squared))
+    if (threshold < std::exp(-0.5 * chi_squared))
         result += 1.0;
 
     return result;
