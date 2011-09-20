@@ -894,21 +894,35 @@ namespace eos
 
         double a_fb_zero_crossing() const
         {
+            // We trust QCDF results in a validity range from 0.5 GeV^2 < s < 6.0 GeV^2
+            static const double min_result = 0.5;
+            static const double max_result = 7.0;
+
             // use calT_perp / xi_perp = C_7 as start point
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
             const double start = -2.0 * model->m_b_msbar(mu()) * m_B() * real(wc.c7() / wc.c9());
+
             double result = start;
+            // clamp result to QCDF validity region
+            result = std::max(min_result, result);
+            result = std::min(max_result, result);
 
             // perform a couple of Newton-Raphson steps
-            for (unsigned i = 0 ; i < 10 ; ++i)
+            for (unsigned i = 0 ; i < 100 ; ++i)
             {
-                double xplus = result * 1.05;
-                double xminus = result * 0.95;
+                double xplus = result * 1.03;
+                double xminus = result * 0.97;
 
                 double f = a_fb_numerator(result);
                 double fprime = (a_fb_numerator(xplus) - a_fb_numerator(xminus)) / (xplus - xminus);
 
+                if (std::abs(f / fprime) < 1e-8)
+                    break;
+
                 result = result - f / fprime;
+                // clamp result to QCDF validity region
+                result = std::max(min_result, result);
+                result = std::min(max_result, result);
             }
 
             return result;
