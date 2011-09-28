@@ -538,6 +538,30 @@ namespace eos
             Options{ { "q", "d"  }, { "l", "mu" } },
             +0.16, +0.22, -0.18, +0.06, -0.06
         };
+        // A_T^{2} in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T_2_1_to_6_CDF_2011
+        {
+            "B->K^*ll::A_T^2avg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            +1.6, +1.8, -1.9, +2.2, -2.2
+        };
+        // A_T_2 in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T_2_14dot18_to_16_CDF_2011
+        {
+            "B->K^*ll::A_T^2avg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            +0.4, +0.8, -0.8, +0.2, -0.2
+        };
+        // A_T_2 in [16.00, 19.21]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T_2_16_to_19dot21_CDF_2011
+        {
+            "B->K^*ll::A_T^2avg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            -0.9, +0.8, -0.8, +0.4, -0.4
+        };
         // B^+ -> K^+ mu^+ mu^-
         // A_FB in [1.0, 6.0]
         static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_1_to_6_CDF_2011
@@ -771,9 +795,9 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CDF_2011) },
             { "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19dot21_CDF_2011) },
             // B^+ -> K^*+ mu^+ mu^-
-            { "B^+->K^{*+}mu^+mu^-::BR[1.00,6.00]@CDF-2011", make_factory(templates::Bplus_to_Kstarplus_dimuon_BR_1_to_6_CDF_2011) },
-            { "B^+->K^{*+}mu^+mu^-::BR[14.18,16.00]@CDF-2011", make_factory(templates::Bplus_to_Kstarplus_dimuon_BR_14dot18_to_16_CDF_2011) },
-            { "B^+->K^{*+}mu^+mu^-::BR[16.00,19.21]@CDF-2011", make_factory(templates::Bplus_to_Kstarplus_dimuon_BR_16_to_19dot21_CDF_2011) },
+            { "B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF-2011", make_factory(templates::Bplus_to_Kstarplus_dimuon_BR_1_to_6_CDF_2011) },
+            { "B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF-2011", make_factory(templates::Bplus_to_Kstarplus_dimuon_BR_14dot18_to_16_CDF_2011) },
+            { "B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF-2011", make_factory(templates::Bplus_to_Kstarplus_dimuon_BR_16_to_19dot21_CDF_2011) },
             // B^0 -> K^*0 mu^+ mu^-
             { "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CDF_2011) },
             { "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CDF_2011) },
@@ -781,6 +805,9 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CDF_2011) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CDF_2011) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::A_T_2[1.00,6.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T_2_1_to_6_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::A_T_2[14.18,16.00]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T_2_14dot18_to_16_CDF_2011) },
+            { "B^0->K^*0mu^+mu^-::A_T_2[16.00,19.21]@CDF-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T_2_16_to_19dot21_CDF_2011) },
             // B^0 -> K^0 mu^+ mu^-
             { "B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011", make_factory(templates::Bzero_to_Kzero_dimuon_BR_1_to_6_CDF_2011) },
             { "B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011", make_factory(templates::Bzero_to_Kzero_dimuon_BR_14dot18_to_16_CDF_2011) },
