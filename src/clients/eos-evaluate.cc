@@ -31,14 +31,6 @@
 
 using namespace eos;
 
-double sign(const double & x)
-{
-    if (x < 0.0)
-        return -1.0;
-
-    return +1.0;
-}
-
 class DoUsage
 {
     private:
@@ -84,11 +76,13 @@ class CommandLine :
 
         bool use_budget;
 
+        int precision;
+
         CommandLine() :
             parameters(Parameters::Defaults()),
             budgets{std::make_tuple(std::string("delta"), std::vector<Parameter>())},
-            use_budget(false)
-
+            use_budget(false),
+            precision(-1)
         {
         }
 
@@ -101,6 +95,13 @@ class CommandLine :
             for (char ** a(argv + 1), ** a_end(argv + argc) ; a != a_end ; ++a)
             {
                 std::string argument(*a);
+
+                if ("--precision" == argument)
+                {
+                	precision = destringify<unsigned>(*(++a));
+
+                	continue;
+                }
 
                 if ("--kinematics" == argument)
                 {
@@ -225,15 +226,35 @@ void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluat
     }
     std::cout << "\tdelta_min\tdelta_max" << std::endl;
 
+    int precision = CommandLine::instance()->precision;
+    // set requested precision
+    if (precision != -1)
+        std::cout.precision(precision);
+
+    bool ranges_empty = false;
+    // check if the kinematical ranges are empty
+    if (evaluation_input->ranges.size() == 0)
+    {
+        ranges_empty = true;
+
+        // create a vector with a single entry
+        std::vector<double> range(1, 1.0);
+        // insert a dummy value for the for-loop
+        evaluation_input->ranges.over(range);
+    }
+
     // iterate over all kinematical ranges
     for (auto r = evaluation_input->ranges.begin() ; r != evaluation_input->ranges.end() ; ++r)
     {
-        // set the kinematics
-        // for every dimension
-        for (std::size_t i = 0 ; i < (*r).size() ; ++i)
+        if (!ranges_empty)
         {
-            evaluation_input->kinematics->set(evaluation_input->kinematic_names[i], (*r)[i]);
-            std::cout << (*r)[i] << '\t';
+            // set the kinematics
+            // for every dimension
+            for (std::size_t i = 0 ; i < (*r).size() ; ++i)
+            {
+                evaluation_input->kinematics->set(evaluation_input->kinematic_names[i], (*r)[i]);
+                std::cout << (*r)[i] << '\t';
+            }
         }
 
         double central = evaluation_input->observable->evaluate();
@@ -317,9 +338,15 @@ main(int argc, char * argv[])
     {
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-evaluate" << std::endl;
-        std::cout << "  --samples NUMBER" << std::endl;
+        std::cout << "  [--precision PRECISION]" << std::endl;
         std::cout << "  [--vary PARAMETER]*" << std::endl;
-        std::cout << "  [[--kinematics NAME VALUE]* --observable NAME MIN CENTRAL MAX]+" << std::endl;
+        std::cout << "  [{--budget BUDGET[--parameter PARAMETER]*}*|{--parameter PARAMETER}*]" << std::endl;
+        std::cout << "  [[--kinematics NAME VALUE|--range NAME MIN MAX POINTS]* --observable OBSERVABLE]*" << std::endl;
+        std::cout << std::endl;
+        std::cout << "Example:" << std::endl;
+        std::cout << "  eos-evaluate --budget \"SD\" --vary \"mu\" --vary \"mass::W\" \\" << std::endl;
+        std::cout << "               --budget \"CKM\" --vary \"CKM::A\" --vary \"CKM::lambda\" \\" << std::endl;
+        std::cout << "               --range s 14.18 22.86 12 --observable \"B->Kll::dBR/ds@LowRecoil,l=tau\"" << std::endl;
     }
     catch(Exception & e)
     {
