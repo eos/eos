@@ -285,6 +285,15 @@ namespace eos
             Parameter::Template{"B->K::b^0_1@KMPW2010",                          -5.2,            -4.3,            -3.5           },
             Parameter::Template{"B->K::b^t_1@KMPW2010",                          -4.2,            -2.2,            -1.2           },
 
+            // form factor parameters for B->K simple series expansion (SSE) based on
+            // LCSR according to [BFW2010], table 6, p. 22, corrected values from Aoife Bharucha
+            Parameter::Template{"B->K::alpha^V0_0@BFW2010",                      +0.48,           +0.48,           +0.48,          },
+            Parameter::Template{"B->K::alpha^V0_1@BFW2010",                      -1.05,           -1.05,           -1.05,          },
+            Parameter::Template{"B->K::alpha^Vt_0np@BFW2010",                    +0.52,           +0.52,           +0.52,          },
+            Parameter::Template{"B->K::alpha^Vt_1np@BFW2010",                    -1.4,            -1.4,            -1.4,           },
+            Parameter::Template{"B->K::alpha^T0_0@BFW2010",                      +0.48,           +0.48,           +0.48,          },
+            Parameter::Template{"B->K::alpha^T0_1@BFW2010",                      -1.09,           -1.09,           -1.09,          },
+
             // B LCDA parameters
             Parameter::Template{"lambda_B_p",                                    +0.370,          +0.485,          +0.600         }, // GeV, cf. [BHvD2010], Table I
             // B->K LCDA Parameter

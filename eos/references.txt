@@ -198,6 +198,14 @@ Theoretical Inputs
         arxiv:hep-ph/0412400
 
 
+    BFW2010 : Bharucha, A. and Feldmann, Th. and Wick, M.
+
+        Theoretical and Phenomenological Constraints on Form Factors and 
+        Semi-Leptonic B-Meson Decays
+
+        arxiv:1004.3249
+
+
     BHP2007 : Bobeth, C. and Hiller, G. and Piranishvilli, G.
 
         Angular Distributions of B -> K lbar l

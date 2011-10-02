@@ -33,6 +33,8 @@ namespace eos
     /* Form Factors according to [KMPW2010] */
     template <typename Transition_> class KMPW2010FormFactors;
 
+    /* Form Factors according to [BFW2010] */
+    template <typename Transition_> class BFW2010FormFactors;
 
     /* P -> V Processes */
 
@@ -374,6 +376,61 @@ namespace eos
                 return _f0_t() / (1 - s / _m_Bs2) * (1 + _b1_t() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
             }
     };
+
+
+    template <> class BFW2010FormFactors<PToP> :
+          public FormFactors<PToP>
+   {
+          private:
+              // fit parametrisation for P -> P according to [BFW2011]. We use the simple series expansion and
+              // the results form LCSR only.
+              UsedParameter _alpha_V0_0, _alpha_V0_1;
+              UsedParameter _alpha_Vt_0np,_alpha_Vt_1np;
+              UsedParameter _alpha_T0_0, _alpha_T0_1;
+              static const double _tau_p, _tau_m, _tau_0;
+              static const double _m_B, _m_K, _m_Bs2;
+
+              static double _calc_z(const double & s)
+              {
+                  return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
+              }
+
+          public:
+              BFW2010FormFactors(const Parameters & p, const Options &) :
+                  _alpha_V0_0(p["B->K::alpha^V0_0@BFW2010"], *this),
+                  _alpha_V0_1(p["B->K::alpha^V0_1@BFW2010"], *this),
+                  _alpha_Vt_0np(p["B->K::alpha^Vt_0np@BFW2010"], *this),
+                  _alpha_Vt_1np(p["B->K::alpha^Vt_1np@BFW2010"], *this),
+                  _alpha_T0_0(p["B->K::alpha^T0_0@BFW2010"], *this),
+                  _alpha_T0_1(p["B->K::alpha^T0_1@BFW2010"], *this)
+              {
+              }
+
+              static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
+              {
+                  return new BFW2010FormFactors(parameters, Options());
+              }
+
+              virtual double f_p(const double & s) const
+              {
+                  // cf. [BFW2010], Eq. (43), p. 13, replacements Eq. (45), p. 16 and Eq. (7), p. 4
+                  return 1.0 / (1.0 - s / _m_Bs2) * (_alpha_V0_0 + _alpha_V0_1 * _calc_z(s));
+              }
+
+              virtual double f_0(const double & s) const
+              {
+                  // cf. [BFW2010], Eq. (43), p. 13, replacements Eq. (45), p. 16 and Eq. (7), p. 4
+                  static const double prefactor = _m_B * _m_B / (_m_B * _m_B -_m_K * _m_K);
+                  return prefactor * (_alpha_Vt_0np + _alpha_Vt_1np * _calc_z(s));
+              }
+
+              virtual double f_t(const double & s) const
+              {
+                  // cf. [BFW2010], Eq. (43), p. 13, replacements Eq. (45), p. 16 and Eq. (9), p. 4
+                  static const double prefactor = (_m_B + _m_K) / _m_B;
+                  return prefactor / (1.0 - s / _m_Bs2) * (_alpha_T0_0 + _alpha_T0_1 * _calc_z(s));
+              }
+      };
 }
 
 #endif
