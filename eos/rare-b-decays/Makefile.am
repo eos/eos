@@ -18,7 +18,8 @@ libeosrarebdecays_la_SOURCES = \
 	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
 	form-factors.cc form-factors.hh form-factors-impl.hh \
 	hard-scattering.cc hard-scattering.hh \
-	long-distance.cc long-distance.hh
+	long-distance.cc long-distance.hh \
+	qcdf_integrals.cc qcdf_integrals.hh
 libeosrarebdecays_la_LIBADD = $(top_builddir)/eos/utils/libeosutils.la -lgslcblas -lgsl
 
 include_eos_rarebdecaysdir = $(includedir)/eos/rare-b-decays
@@ -35,7 +36,8 @@ include_eos_rarebdecays_HEADERS = \
 	inclusive-b-to-s-gamma.hh \
 	form-factors.hh \
 	hard-scattering.hh \
-	long-distance.hh
+	long-distance.hh \
+	qcdf_integrals.hh
 
 EXTRA_DIST = \
 	exclusive-b-to-s-dilepton-low-recoil_TEST-btokll.data \
@@ -54,7 +56,8 @@ TESTS = \
 	inclusive-b-to-s-dilepton_TEST \
 	inclusive-b-to-s-gamma_TEST \
 	hard-scattering_TEST \
-	long-distance_TEST
+	long-distance_TEST \
+	qcdf_integrals_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	libeosrarebdecays.la \
@@ -85,3 +88,5 @@ inclusive_b_to_s_gamma_TEST_SOURCES = inclusive-b-to-s-gamma_TEST.cc
 hard_scattering_TEST_SOURCES = hard-scattering_TEST.cc
 
 long_distance_TEST_SOURCES = long-distance_TEST.cc
+
+qcdf_integrals_TEST_SOURCES = qcdf_integrals_TEST.cc
