@@ -38,6 +38,7 @@ libeosutils_la_SOURCES = \
 	one-of.hh \
 	options.cc options.hh \
 	parameters.cc parameters.hh \
+	polylog.cc polylog.hh \
 	power_of.hh \
 	prior_sampler.cc prior_sampler.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
@@ -131,6 +132,7 @@ TESTS = \
 	options_TEST \
 	one-of_TEST \
 	parameters_TEST \
+	polylog_TEST \
 	power_of_TEST \
 	prior_sampler_TEST \
 	qcd_TEST \
@@ -190,6 +192,8 @@ one_of_TEST_SOURCES = one-of_TEST.cc
 options_TEST_SOURCES = options_TEST.cc
 
 parameters_TEST_SOURCES = parameters_TEST.cc
+
+polylog_TEST_SOURCES = polylog_TEST.cc
 
 power_of_TEST_SOURCES = power_of_TEST.cc
 
