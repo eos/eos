@@ -226,12 +226,12 @@ main(int argc, char * argv[])
     catch(DoUsage & e)
     {
         std::cout << e.what() << std::endl;
-        std::cout << "Usage: eos-marginalise" << std::endl;
+        std::cout << "Usage: eos-find-confidence-region" << std::endl;
         std::cout << "  --max-iterations NUMBER" << std::endl;
         std::cout << "  [--file NAME]+" << std::endl;
         std::cout << std::endl;
         std::cout << "Example:" << std::endl;
-        std::cout << "  eos-marginalise --max-iterations 10 --file input1.hdf5 --file input2.hdf5" << std::endl;
+        std::cout << "  eos-find-confidence-region --max-iterations 10 --file input1.hdf5 --file input2.hdf5" << std::endl;
     }
     catch(Exception & e)
     {
