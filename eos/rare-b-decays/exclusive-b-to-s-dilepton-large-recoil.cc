@@ -1328,6 +1328,11 @@ namespace eos
         // Mean life times
         UsedParameter tau;
 
+        // Estimation of subleading contributions
+        UsedParameter lambda_psd;
+
+        UsedParameter sl_phase_psd;
+
         // spectator quark charge
         double e_q;
 
@@ -1353,6 +1358,8 @@ namespace eos
             a_1(p["B->K::a_1@1GeV"], u),
             a_2(p["B->K::a_2@1GeV"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
+            lambda_psd(p["B->Pll::Lambda_pseudo@LargeRecoil"], u),
+            sl_phase_psd(p["B->Pll::sl_phase_pseudo@LargeRecoil"], u),
             e_q(-1.0/3.0),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
@@ -1438,7 +1445,8 @@ namespace eos
                     a_1(), a_2(),
                     lambda_B_p());
 
-            return wc.c9() + 2.0 * m_b / m_B() * ShortDistanceLargeRecoil::calT_pseudo(s, p, xi_pseudo(s)) / xi_pseudo(s);
+            return wc.c9() + 2.0 * m_b / m_B() / xi_pseudo(s) * (ShortDistanceLargeRecoil::calT_pseudo(s, p, xi_pseudo(s))
+                    + lambda_psd / m_B * std::polar(1.0, sl_phase_psd()));
         }
 
         // cf. [BHP2007], Eqs. (4.2), (4.4), (4.5), p. 5
