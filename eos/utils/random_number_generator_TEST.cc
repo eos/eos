@@ -39,7 +39,7 @@ class RandomNumberGeneratorTest :
 
         virtual void run() const
         {
-            static const double eps = 1e-15;
+            static const double eps = 3e-15;
 
             // Uniform [0, 1)
             {
