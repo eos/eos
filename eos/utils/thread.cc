@@ -61,9 +61,13 @@ namespace eos
             {
                 throw InternalError("Exception in Thread: " + std::string(e.what()));
             }
+            catch (std::exception & e)
+            {
+                throw InternalError("Caught std::exception: " + std::string(e.what()));
+            }
             catch (...)
             {
-                throw InternalError("Unexpected std::exception or similar in Thread!");
+                throw InternalError("Unexpected exception or similar in Thread!");
             }
 
             Lock l(*imp->mutex);
