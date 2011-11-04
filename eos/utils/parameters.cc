@@ -225,7 +225,7 @@ namespace eos
             Parameter::Template{"mass::s",                                       +0.080,          +0.101,          +0.130         }, // cf. [PDG2010], p. 21
             Parameter::Template{"mass::c",                                       +1.18,           +1.27,           +1.34          }, // cf. [PDG2010], p. 21
             Parameter::Template{"mass::b(MSbar)",                                +4.13,           +4.19,           +4.37          }, // cf. [PDG2010], p. 21
-            Parameter::Template{"mass::t(pole)",                                 +172.2,          +173.3,          +174.4         }, // cf. [TEWWG2010], p. 21
+            Parameter::Template{"mass::t(pole)",                                 +172.0,          +173.3,          +174.6         }, // cf. [TEWWG2010], p. 21
             // K meson masses
             Parameter::Template{"mass::K0",                                      +0.497590,       +0.497614,       +0.497638      }, // cf. [PDG2010], p. 41
             Parameter::Template{"mass::K^*0",                                    +0.89572,        +0.89594,        +0.89616       }, // cf. [PDG2010], p. 45
