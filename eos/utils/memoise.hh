@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -26,10 +26,13 @@
 #include <eos/utils/lock.hh>
 #include <eos/utils/mutex.hh>
 
+#include <cstdint>
+#include <functional>
 #include <tuple>
 #include <unordered_map>
+#include <vector>
 
-/* We are using a custom std::hash for tuple<FunctinPtr, double, ..., double> */
+/* We are using a custom std::hash for tuple<FunctionPtr, double, ..., double> */
 namespace std
 {
     template <typename U_> static uint64_t __hash_one(const U_ & u)
@@ -93,43 +96,77 @@ namespace eos
         };
     }
 
+    class MemoisationControl :
+        public InstantiationPolicy<MemoisationControl, Singleton>
+    {
+        private:
+            Mutex * const _mutex;
+
+            std::vector<std::function<void ()>> _clear_functions;
+
+        public:
+            MemoisationControl();
+
+            ~MemoisationControl();
+
+            void register_clear_function(const std::function<void ()> & clear_function);
+
+            void clear();
+    };
+
     template <typename Result_, typename ... Params_>
     class Memoiser :
         public InstantiationPolicy<Memoiser<Result_, Params_ ...>, Singleton>
     {
         public:
-            Mutex * const mutex;
             typedef Result_ (*FunctionType)(const Params_ & ...);
             typedef std::tuple<FunctionType, Params_...> KeyType;
 
         private:
-            std::unordered_map<KeyType, Result_> memoisations;
+            Mutex * const _mutex;
+
+            std::unordered_map<KeyType, Result_> _memoisations;
 
         public:
             Memoiser() :
-                mutex(new Mutex)
+                _mutex(new Mutex)
             {
+                MemoisationControl::instance()->register_clear_function(std::bind(&Memoiser<Result_, Params_ ...>::clear, this));
             }
 
             ~Memoiser()
             {
-                delete mutex;
+                delete _mutex;
             }
 
             Result_ operator() (const FunctionType & f, const Params_ & ... p)
             {
-                Lock l(*mutex);
+                Lock l(*_mutex);
 
                 KeyType key(f, p ...);
-                auto i = memoisations.find(key);
+                auto i = _memoisations.find(key);
 
-                if (memoisations.end() != i)
+                if (_memoisations.end() != i)
                     return i->second;
 
                 Result_ result = f(p ...);
-                memoisations.insert(std::pair<KeyType, Result_>(key, result));
+                _memoisations.insert(std::pair<KeyType, Result_>(key, result));
 
                 return result;
+            }
+
+            void clear()
+            {
+                Lock l(*_mutex);
+
+                _memoisations.clear();
+            }
+
+            unsigned number_of_memoisations() const
+            {
+                Lock l(*_mutex);
+
+                return _memoisations.size();
             }
     };
 
@@ -137,6 +174,12 @@ namespace eos
     typename implementation::ResultOf<FunctionType_>::Type memoise(FunctionType_ f, const Params & ... p)
     {
         return (*Memoiser<typename implementation::ResultOf<FunctionType_>::Type, Params ...>::instance())(f, p ...);
+    }
+
+    template <typename FunctionType_, typename ... Params>
+    unsigned number_of_memoisations(FunctionType_, const Params & ...)
+    {
+        return Memoiser<typename implementation::ResultOf<FunctionType_>::Type, Params ...>::instance()->number_of_memoisations();
     }
 }
 

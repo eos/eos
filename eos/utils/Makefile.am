@@ -30,7 +30,7 @@ libeosutils_la_SOURCES = \
 	markov_chain.cc markov_chain.hh \
 	markov_chain_sampler.cc markov_chain_sampler.hh \
 	matrix.hh \
-	memoise.hh \
+	memoise.cc memoise.hh \
 	model.cc model.hh \
 	mutex.cc mutex.hh \
 	observable_cache.cc observable_cache.hh \
