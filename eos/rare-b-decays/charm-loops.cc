@@ -79,6 +79,12 @@ namespace eos
     complex<double>
     CharmLoops::A(const double & mu, const double & s, const double & m_b)
     {
+        /* in the limit s -> 0 all terms vanish, except for the mu-dependent log term. */
+        if (0 == s)
+        {
+            return -104.0 / 243.0 * 2.0 * log(m_b / mu);
+        }
+
         /* cf. [S2004], Eq. (29), p. 8
          * We have three different cases for the evaluation of the formula depending on s_hat.
          * 1. s_hat < 1: We can use the formula without modification
