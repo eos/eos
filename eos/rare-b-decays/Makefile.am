@@ -10,6 +10,7 @@ libeosrarebdecays_la_SOURCES = \
 	decays.hh \
 	em-contributions.hh em-contributions.cc \
 	exclusive-b-to-dilepton.cc exclusive-b-to-dilepton.hh \
+	exclusive-b-to-s-dilepton.hh \
 	exclusive-b-to-s-dilepton-low-recoil.cc exclusive-b-to-s-dilepton-large-recoil.cc \
 	exclusive-b-to-s-dilepton-low-recoil.hh exclusive-b-to-s-dilepton-large-recoil.hh \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \

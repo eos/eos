@@ -20,11 +20,12 @@
 
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
+#include <eos/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/form-factors.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/destringify.hh>
-#include <eos/utils/integrate.hh>
+#include <eos/utils/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/memoise.hh>
 #include <eos/utils/model.hh>
@@ -41,6 +42,9 @@
 
 namespace eos
 {
+    using namespace eos::btovll;
+    using std::norm;
+
     struct ShortDistanceLargeRecoil
     {
         struct ParameterSet
@@ -476,7 +480,7 @@ namespace eos
             result += power_of<2>(M_PI) / 3.0 * (p.f_B * p.f_K) / p.m_B *
                     integrate(std::function<complex<double> (const double &)>(
                                 std::bind(&ShortDistanceLargeRecoil::T_perp_sum, h, s, std::placeholders::_1, p)),
-                        64, 0.001, 0.999);
+                        64, 0.001, 0.999); //TODO why is this number bigger than below (calT_perp) ? should be both 32 or both 64
 
             return result;
         }
@@ -489,7 +493,7 @@ namespace eos
             result += power_of<2>(M_PI) / 3.0 * (p.f_B * p.f_K) / p.m_B * (p.m_K / energy(s, p)) *
                     integrate(std::function<complex<double> (const double &)>(
                                 std::bind(&ShortDistanceLargeRecoil::T_par_sum, s, std::placeholders::_1, p)),
-                        32, 0.001, 0.999);
+                        32, 0.001, 0.999); 
 
             return result;
         }
@@ -690,206 +694,93 @@ namespace eos
 
         /* Amplitudes */
         // cf. [BHP2008], p. 20
-        complex<double> a_long(const Helicity & helicity, const double & s) const
+        Amplitudes amplitudes(const double & s) const
         {
+            Amplitudes result;
+
             double m_b = m_b_PS();
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
-            double h = helicity;
-
-            double uncertainty = (1.0 - h) / 2.0 * uncertainty_long_left + (1.0 + h) / 2.0 * uncertainty_long_right;
-            complex<double> wilson = (wc.c9() - wc.c9prime()) + h * (wc.c10() - wc.c10prime());
-            double prefactor = -1.0 / (2.0 * m_Kstar() * std::sqrt(s));
+            double shat = s_hat(s);
+            double mbhat = m_b_PS() / m_B;
+            double mKhat = m_Kstar / m_B;
+            double norm_s = norm(s);
 
             ShortDistanceLargeRecoil::ParameterSet p(m_b, model->m_b_pole(), m_c(),
-                    m_B(), m_Kstar(),
-                    mu(), mu_f(),
-                    model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
-                    f_B(), f_Kstar_perp(),
-                    wc,
-                    e_q,
-                    a_1_perp(), a_2_perp(),
-                    lambda_B_p());
-
-            std::complex<double> calTperp = ShortDistanceLargeRecoil::calT_perp(-1.0, s, p, xi_perp(s));
+                                                     m_B(), m_Kstar(),
+                                                     mu(), mu_f(),
+                                                     model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
+                                                     f_B(), f_Kstar_perp(),
+                                                     wc,
+                                                     e_q,
+                                                     a_1_perp(), a_2_perp(),
+                                                     lambda_B_p());
+            std::complex<double> calTperp_right = ShortDistanceLargeRecoil::calT_perp( 1.0, s, p, xi_perp(s));
+            std::complex<double> calTperp_left  = ShortDistanceLargeRecoil::calT_perp(-1.0, s, p, xi_perp(s));
 
             p.f_K        = f_Kstar_par;
             p.a_1        = a_1_par();
             p.a_2        = a_2_par();
             std::complex<double> calTpar = ShortDistanceLargeRecoil::calT_par(s, p, xi_par(s));
 
-            complex<double> a = wilson * ((m_B() * m_B() - m_Kstar() * m_Kstar() - s) * 2.0 * energy(s) * xi_perp(s)
-                                - lam(s) * m_B() / (m_B() * m_B() - m_Kstar() * m_Kstar()) * (xi_perp(s) - xi_par(s)));
-            complex<double> b = 2.0 * m_b_PS() * (((m_B() * m_B() + 3 * m_Kstar() * m_Kstar() - s) * 2.0 * energy(s) / m_B()
-                                - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar())) * calTperp
-                                - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar()) * calTpar);
+            // longitudinal amplitude
+            complex<double> wilson_long_right = (wc.c9() - wc.c9prime()) + (wc.c10() - wc.c10prime());
+            complex<double> wilson_long_left  = (wc.c9() - wc.c9prime()) - (wc.c10() - wc.c10prime());
+            double prefactor_long = -1.0 / (2.0 * m_Kstar() * std::sqrt(s));
 
-            return this->norm(s) * uncertainty * prefactor * (a + b);
-        }
+            complex<double> a = ((m_B() * m_B() - m_Kstar() * m_Kstar() - s) * 2.0 * energy(s) * xi_perp(s)
+                               - lam(s) * m_B() / (m_B() * m_B() - m_Kstar() * m_Kstar()) * (xi_perp(s) - xi_par(s)));
+            complex<double> b = 2.0 * m_b_PS() * (((m_B() * m_B() + 3.0 * m_Kstar() * m_Kstar() - s) * 2.0 * energy(s) / m_B()
+                               - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar())) * calTperp_left
+                               - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar()) * calTpar);
 
-        // cf. [BHP2008], p. 20
-        complex<double> a_perp(const Helicity & helicity, const double & s) const
-        {
-            double m_b = m_b_PS();
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            result.a_long_right = norm_s * uncertainty_long_right * prefactor_long * (wilson_long_right * a + b);
+            result.a_long_left  = norm_s * uncertainty_long_left  * prefactor_long * (wilson_long_left  * a + b);
 
-            double h = helicity;
-            double shat = s_hat(s);
-            double mbhat = m_b_PS() / m_B;
-            double mKhat = m_Kstar / m_B;
+            // perpendicular amplitude
+            double prefactor_perp = +std::sqrt(2.0) * m_B() * std::sqrt(lambda(1.0, mKhat * mKhat, shat));
+            complex<double> wilson_perp_right = (wc.c9() + wc.c9prime()) + (wc.c10() + wc.c10prime());
+            complex<double> wilson_perp_left  = (wc.c9() + wc.c9prime()) - (wc.c10() + wc.c10prime());
 
-            double uncertainty = (1.0 - h) / 2.0 * uncertainty_perp_left + (1.0 + h) / 2.0 * uncertainty_perp_right;
-            double prefactor = +std::sqrt(2.0) * m_B() * std::sqrt(lambda(1.0, mKhat * mKhat, shat));
-            complex<double> wilson = (wc.c9() + wc.c9prime()) + h * (wc.c10() + wc.c10prime());
+            result.a_perp_right = norm_s * uncertainty_perp_right * prefactor_perp * (wilson_perp_right * xi_perp(s) + (2.0 * mbhat / shat) * calTperp_right);
+            result.a_perp_left  = norm_s * uncertainty_perp_left  * prefactor_perp * (wilson_perp_left  * xi_perp(s) + (2.0 * mbhat / shat) * calTperp_right);
 
-            ShortDistanceLargeRecoil::ParameterSet p(m_b, model->m_b_pole(), m_c(),
-                    m_B(), m_Kstar(),
-                    mu(), mu_f(),
-                    model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
-                    f_B(), f_Kstar_perp(),
-                    wc,
-                    e_q,
-                    a_1_perp(), a_2_perp(),
-                    lambda_B_p());
+            // parallel amplitude
+            double prefactor_par = -std::sqrt(2.0) * m_B() * (1.0 - shat);
+            complex<double> wilson_par_right = (wc.c9() - wc.c9prime()) + (wc.c10() - wc.c10prime());
+            complex<double> wilson_par_left  = (wc.c9() - wc.c9prime()) - (wc.c10() - wc.c10prime());
 
-            return this->norm(s) * uncertainty * prefactor *
-                    (wilson * xi_perp(s) + (2.0 * mbhat / shat) * ShortDistanceLargeRecoil::calT_perp(+1.0, s, p, xi_perp(s)));
-        }
+            result.a_par_right = norm_s * uncertainty_par_right * prefactor_par * (wilson_par_right * xi_perp(s) +
+                                    (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * calTperp_left);
+            result.a_par_left  = norm_s * uncertainty_par_left  * prefactor_par * (wilson_par_left  * xi_perp(s) +
+                                    (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * calTperp_left);
 
-        // cf. [BHP2008], p. 20
-        complex<double> a_par(const Helicity & helicity, const double & s) const
-        {
-            double m_b = m_b_PS();
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
-
-            double h = helicity;
-            double shat = s_hat(s);
-            double mbhat = m_b_PS() / m_B();
-            double mKhat = m_Kstar() / m_B();
-
-            double uncertainty = (1.0 - h) / 2.0 * uncertainty_par_left + (1.0 + h) / 2.0 * uncertainty_par_right;
-            double prefactor = -std::sqrt(2.0) * m_B() * (1.0 - shat);
-            complex<double> wilson = (wc.c9() - wc.c9prime()) + h * (wc.c10() - wc.c10prime());
-
-            ShortDistanceLargeRecoil::ParameterSet p(m_b, model->m_b_pole(), m_c(),
-                    m_B(), m_Kstar(),
-                    mu(), mu_f(),
-                    model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
-                    f_B(), f_Kstar_perp(),
-                    wc,
-                    e_q,
-                    a_1_perp(), a_2_perp(),
-                    lambda_B_p());
-
-            return this->norm(s) * uncertainty * prefactor *
-                    (wilson * xi_perp(s) + (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * ShortDistanceLargeRecoil::calT_perp(-1.0, s, p, xi_perp(s)));
-        }
-
-        complex<double> a_timelike(const double & s) const
-        {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            // timelike amplitude
             double m_Kstarhat = m_Kstar / m_B;
-            double shat = s_hat(s);
 
-            return this->norm(s) * m_B * sqrt(lambda(1.0, power_of<2>(m_Kstarhat), shat) / shat) *
+            result.a_timelike = norm_s * m_B * sqrt(lambda(1.0, power_of<2>(m_Kstarhat), shat) / shat) *
                 complex<double>(0.0, 2.0) * (wc.c10() - wc.c10prime()) * form_factors->a_0(s);
+
+            return result;
         }
 
-        // Unormalized combinations of transversity amplitudes
-        double u_1(const double & s) const
+        std::array<double, 12> differential_angular_coefficients_array(const double & s) const
         {
-            return std::norm(a_long(left_handed, s)) + std::norm(a_long(right_handed, s));
+            return angular_coefficients_array(amplitudes(s), s, m_l());
         }
 
-        double u_2(const double & s) const
+        AngularCoefficients differential_angular_coefficients(const double & s) const
         {
-            return std::norm(a_perp(left_handed, s)) + std::norm(a_perp(right_handed, s));
+            return array_to_angular_coefficients(angular_coefficients_array(amplitudes(s), s, m_l()));
         }
 
-        double u_3(const double & s) const
+        AngularCoefficients integrated_angular_coefficients(const double & s_min, const double & s_max) const
         {
-            return std::norm(a_par(left_handed, s)) + std::norm(a_par(right_handed, s));
-        }
+            std::function<std::array<double, 12> (const double &)> integrand =
+                    std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::differential_angular_coefficients_array, this, std::placeholders::_1);
+            std::array<double, 12> integrated_angular_coefficients_array = integrate(integrand, 64, s_min, s_max);
 
-        double u_4(const double & s) const
-        {
-            return real(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
-        }
-
-        double u_5(const double & s) const
-        {
-            return real(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
-        }
-
-        double u_6(const double & s) const
-        {
-            return real(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s));
-        }
-
-        double u_7(const double & s) const
-        {
-            return imag(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
-        }
-
-        double u_8(const double & s) const
-        {
-            return imag(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s));
-        }
-
-        double u_9(const double & s) const
-        {
-            return imag(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s));
-        }
-
-        // Components of observables
-        double unnormalized_decay_width(const double & s) const
-        {
-            return (u_1(s) + u_2(s) + u_3(s));
-        }
-
-        double differential_branching_ratio(const double & s) const
-        {
-            return unnormalized_decay_width(s) * tau / hbar();
-        }
-
-        double a_fb_numerator(const double & s) const
-        {
-            return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s)));
-        }
-
-        double f_l_numerator(const double & s) const
-        {
-            return u_1(s);
-        }
-
-        double a_t_2_numerator(const double & s) const
-        {
-            return u_2(s) - u_3(s);
-        }
-
-        double a_t_2_denominator(const double & s) const
-        {
-            return u_2(s) + u_3(s);
-        }
-
-        double a_t_3_numerator(const double & s) const
-        {
-            return sqrt(pow(u_4(s), 2) + pow(u_7(s), 2));
-        }
-
-        double a_t_3_denominator(const double & s) const
-        {
-            return sqrt(u_1(s) * u_2(s));
-        }
-
-        double a_t_4_numerator(const double & s) const
-        {
-            return sqrt(pow(u_5(s), 2) + pow(u_8(s), 2));
-        }
-
-        double a_t_4_denominator(const double & s) const
-        {
-            return sqrt(pow(u_4(s), 2) + pow(u_7(s), 2));
+            return array_to_angular_coefficients(integrated_angular_coefficients_array);
         }
 
         double a_fb_zero_crossing() const
@@ -913,8 +804,14 @@ namespace eos
                 double xplus = result * 1.03;
                 double xminus = result * 0.97;
 
-                double f = a_fb_numerator(result);
-                double fprime = (a_fb_numerator(xplus) - a_fb_numerator(xminus)) / (xplus - xminus);
+                AngularCoefficients a_c_central = differential_angular_coefficients(result);
+                double f = a_c_central.j6s;
+                AngularCoefficients a_c_minus   = differential_angular_coefficients(xminus);
+                double f_xminus = a_c_minus.j6s;
+                AngularCoefficients a_c_plus    = differential_angular_coefficients(xplus);
+                double f_xplus = a_c_plus.j6s;
+
+                double fprime = (f_xplus - f_xminus) / (xplus - xminus);
 
                 if (std::abs(f / fprime) < 1e-8)
                     break;
@@ -941,284 +838,401 @@ namespace eos
     complex<double>
     BToKstarDilepton<LargeRecoil>::a_long(const Helicity & h, const double & s) const
     {
-        return _imp->a_long(h, s);
+        Amplitudes amp = _imp->amplitudes(s);
+        if (h == -1)
+            return amp.a_long_left;
+        else
+            return amp.a_long_right;
     }
 
     complex<double>
     BToKstarDilepton<LargeRecoil>::a_perp(const Helicity & h, const double & s) const
     {
-        return _imp->a_perp(h, s);
+        Amplitudes amp = _imp->amplitudes(s);
+        if (h == -1)
+            return amp.a_perp_left;
+        else
+            return amp.a_perp_right;
     }
 
     complex<double>
     BToKstarDilepton<LargeRecoil>::a_par(const Helicity & h, const double & s) const
     {
-        return _imp->a_par(h, s);
+        Amplitudes amp = _imp->amplitudes(s);
+        if (h == -1)
+            return amp.a_par_left;
+        else
+            return amp.a_par_right;
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_branching_ratio(const double & s) const
     {
-        return _imp->differential_branching_ratio(s);
+        return differential_decay_width(s) * _imp->tau() / _imp->hbar();
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_decay_width(const double & s) const
     {
-        return _imp->unnormalized_decay_width(s);
+        return decay_width(_imp->differential_angular_coefficients(s));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
-        return _imp->a_fb_numerator(s) / _imp->unnormalized_decay_width(s);
+        // cf. [BHvD2010], p. 6, eq. (2.8)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j6s / decay_width(a_c);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_2(const double & s) const
     {
-        return _imp->a_t_2_numerator(s) / _imp->a_t_2_denominator(s);
+        // cf. [BHvD2010], p. 6, eq. (2.10)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return 0.5 * a_c.j3 / a_c.j2s;
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_3(const double & s) const
     {
-        return _imp->a_t_3_numerator(s) / _imp->a_t_3_denominator(s);
+        // cf. [BHvD2010], p. 6, eq. (2.11)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return std::sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_4(const double & s) const
     {
-        return _imp->a_t_4_numerator(s) / _imp->a_t_4_denominator(s);
+        // cf. [BHvD2010], p. 6, eq. (2.12)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return std::sqrt((power_of<2>(_imp->beta_l(s) * a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_5(const double & s) const
     {
-        return _imp->a_t_4_numerator(s) / _imp->a_t_3_denominator(s);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+
+        // cf. [EHMRR2010], eq. (3.23), p. 14 for the massless case
+        return std::sqrt(16.0 * power_of<2>(a_c.j1s) - 9.0 * power_of<2>(a_c.j6s) - 36.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
+            / 8.0 / a_c.j1s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_re(const double & s) const
+    {
+        // cf. [BS2011], eq. (38), p. 10
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return 0.25 * _imp->beta_l(s) * a_c.j6s / a_c.j2s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_transverse_asymmetry_im(const double & s) const
+    {
+        // cf. [BS2011], eq. (30), p. 8
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return 0.5 * a_c.j9 / a_c.j2s;
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
-        return _imp->f_l_numerator(s) / _imp->unnormalized_decay_width(s);
+        // cf. [BHvD2010], p. 6, eq. (2.9)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return (-a_c.j2c) / (4.0 * a_c.j2s - a_c.j2c);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_h_1(const double & s) const
     {
-        return _imp->u_4(s) / std::sqrt(_imp->u_1(s) * _imp->u_3(s));
+        // cf. [BHvD2010], p. 7, eq. (2.13)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_h_2(const double & s) const
     {
-        return _imp->u_5(s) / std::sqrt(_imp->u_1(s) * _imp->u_2(s));
+        // cf. [BHvD2010], p. 7, eq. (2.14)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return _imp->beta_l(s) * a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::differential_h_3(const double & s) const
     {
-        return _imp->u_6(s) / std::sqrt(_imp->u_2(s) * _imp->u_3(s));
+        // cf. [BHvD2010], p. 7, eq. (2.15)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return _imp->beta_l(s) * a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_h_4(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return sqrt(2.0) * a_c.j8 / sqrt(-a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_h_5(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return -a_c.j9 / sqrt(power_of<2>(2.0 * a_c.j2s) + power_of<2>(a_c.j3));
+    }
+
+    // differential angular coefficients
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_1c(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j1c;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_1s(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j1s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_2c(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j2c;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_2s(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j2s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_3(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j3;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_4(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j4;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_5(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j5;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_6c(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j6c;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_6s(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j6s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_7(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j7;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_8(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j8;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_j_9(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j9;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_decay_width(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return decay_width(a_c);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> f = std::bind(std::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_branching_ratio),
-                this, std::placeholders::_1);
-
-        return integrate(f, 64, s_min, s_max);
+        return integrated_decay_width(s_min, s_max) * _imp->tau() / _imp->hbar();
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const
     {
         Save<bool> save(_imp->cp_conjugate, false);
-        std::function<double (const double &)> f = std::bind(&BToKstarDilepton<LargeRecoil>::differential_branching_ratio,
-                this, std::placeholders::_1);
 
-        double br = integrate(f, 64, s_min, s_max);
+        double br = integrated_branching_ratio(s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate(f, 64, s_min, s_max);
+        double br_bar = integrated_branching_ratio(s_min, s_max);
 
-        return (br + br_bar) / 2.0;
+        return 0.5 * (br + br_bar);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_fb_numerator), _imp, std::placeholders::_1);
-
-        std::function<double (const double &)> denom = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::placeholders::_1);
-
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        // cf. [BHvD2010], eq. (2.8), p. 6
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j6s / decay_width(a_c);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const
     {
         Save<bool> save(_imp->cp_conjugate, false);
-        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::a_fb_numerator, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width, _imp, std::placeholders::_1);
 
-        double a_fb = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_fb = integrated_forward_backward_asymmetry(s_min, s_max);
         _imp->cp_conjugate = true;
-        double a_fb_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_fb_bar = integrated_forward_backward_asymmetry(s_min, s_max);
 
-        return (a_fb + a_fb_bar) / 2.0;
-    }
-
-    double
-    BToKstarDilepton<LargeRecoil>::integrated_unnormalized_forward_backward_asymmetry(const double & s_min, const double & s_max) const
-    {
-        // Convert from asymmetry in the decay width to asymmetry in the BR
-        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
-        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
-
-        std::function<double (const double &)> f = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_fb_numerator), _imp, std::placeholders::_1);
-
-        return integrate(f, 64, s_min, s_max) / Gamma;
+        return 0.5 * (a_fb + a_fb_bar);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::f_l_numerator), _imp, std::placeholders::_1);
-
-        std::function<double (const double &)> denom = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width), _imp, std::placeholders::_1);
-
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        // cf. [BHvD2010], p. 6, eq. (2.9)
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return (-a_c.j2c) / (4.0 * a_c.j2s - a_c.j2c);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation_cp_averaged(const double & s_min, const double & s_max) const
     {
         Save<bool> save(_imp->cp_conjugate, false);
-        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::f_l_numerator, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::unnormalized_decay_width, _imp, std::placeholders::_1);
 
-        double f_l = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double f_l = integrated_longitudinal_polarisation(s_min, s_max);
         _imp->cp_conjugate = true;
-        double f_l_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double f_l_bar = integrated_longitudinal_polarisation(s_min, s_max);
 
-        return (f_l + f_l_bar) / 2.0;
-    }
-
-    double
-    BToKstarDilepton<LargeRecoil>::integrated_unnormalized_longitudinal_polarisation(const double & s_min, const double & s_max) const
-    {
-        // Convert from polarisation in the decay width to polarisation in the BR
-        // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
-        static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
-
-        std::function<double (const double &)> f = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::f_l_numerator), _imp, std::placeholders::_1);
-
-        return integrate(f, 64, s_min, s_max) / Gamma;
+        return 0.5 * (f_l + f_l_bar);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_numerator), _imp, std::placeholders::_1);
-
-        std::function<double (const double &)> denom = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_denominator), _imp, std::placeholders::_1);
-
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        // cf. [BHvD2010], eq. (2.10), p. 6
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return 0.5 * a_c.j3 / a_c.j2s;
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_2_cp_averaged(const double & s_min, const double & s_max) const
     {
+        // cf. [BHvD2010], eq. (2.10), p. 6
         Save<bool> save(_imp->cp_conjugate, false);
-        std::function<double (const double &)> num = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_numerator), _imp, std::placeholders::_1);
 
-        std::function<double (const double &)> denom = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_2_denominator), _imp, std::placeholders::_1);
-
-        double a_t_2 = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_t_2 = integrated_transverse_asymmetry_2(s_min, s_max);
         _imp->cp_conjugate = true;
-        double a_t_2_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_t_2_bar = integrated_transverse_asymmetry_2(s_min, s_max);
 
-        return (a_t_2 + a_t_2_bar) / 2.0;
+        return 0.5 * (a_t_2 + a_t_2_bar);
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_numerator), _imp, std::placeholders::_1);
+        // cf. [BHvD2010], eq. (2.11), p. 6
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
 
-        std::function<double (const double &)> denom = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::placeholders::_1);
-
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        return sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_numerator), _imp, std::placeholders::_1);
+        // cf. [BHvD2010], eq. (2.12), p. 6
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
 
-        std::function<double (const double &)> denom = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_denominator), _imp, std::placeholders::_1);
-
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        return sqrt((power_of<2>(a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_4_numerator), _imp, std::placeholders::_1);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
 
-        std::function<double (const double &)> denom = std::bind(
-                std::mem_fn(&Implementation<BToKstarDilepton<LargeRecoil>>::a_t_3_denominator), _imp, std::placeholders::_1);
+        // cf. [EHMRR2010], eq. (3.23), p. 14 for the massless case
+        // TODO: check against [BS2011], which have different numerical factors multiplying the I_i
+        return std::sqrt(16.0 * power_of<2>(a_c.j1s) - 9.0 * power_of<2>(a_c.j6s) - 36.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
+            / 8.0 / a_c.j1s;
+    }
 
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_re(const double & s_min, const double & s_max) const
+    {
+        // cf. [BS2011], eq. (38), p. 10
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return 0.25 * a_c.j6s / a_c.j2s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_transverse_asymmetry_im(const double & s_min, const double & s_max) const
+    {
+        // cf. [BS2011], eq. (30), p. 8
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return 0.5 * a_c.j9 / a_c.j2s;
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_h_1(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_4, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_1, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_3, _imp, std::placeholders::_1);
-
-        return integrate(num1, 64, s_min, s_max)
-            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
+        // cf. [BHvD2010], p. 7, eq. (2.13)
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_h_2(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_5, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_1, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_2, _imp, std::placeholders::_1);
-
-        return integrate(num1, 64, s_min, s_max)
-            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
+        // cf. [BHvD2010], p. 7, eq. (2.14)
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return  a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
     BToKstarDilepton<LargeRecoil>::integrated_h_3(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_6, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_2, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::u_3, _imp, std::placeholders::_1);
+        // cf. [BHvD2010], p. 7, eq. (2.15)
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
+    }
 
-        return integrate(num1, 64, s_min, s_max)
-            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_h_4(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return sqrt(2.0) * a_c.j8 / sqrt(-a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_h_5(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return -a_c.j9 / sqrt(power_of<2>(2.0 * a_c.j2s) + power_of<2>(a_c.j3));
     }
 
     double
@@ -1227,21 +1241,95 @@ namespace eos
         return _imp->a_fb_zero_crossing();
     }
 
+    // integrated angular coefficients
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_1c(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j1c;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_1s(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j1s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_2c(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j2c;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_2s(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j2s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_3(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j3;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_4(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j4;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_5(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j5;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_6c(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j6c;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_6s(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j6s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_7(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j7;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_8(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j8;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_j_9(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j9;
+    }
+
     double
     BToKstarDilepton<LargeRecoil>::four_differential_decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const
     {
-        // compute J (and d^4 Gamma) for m_l = 0, cf. [BHvD2010], p. 5, Eq. (2.6)
-        // and p. 26, Eqs. (A1)-(A11)
-        complex<double> a_long_left = _imp->a_long(left_handed, s),
-            a_long_right = _imp->a_long(right_handed, s);
-        complex<double> a_perp_left = _imp->a_perp(left_handed, s),
-            a_perp_right = _imp->a_perp(right_handed, s);
-        complex<double> a_par_left = _imp->a_par(left_handed, s),
-            a_par_right = _imp->a_par(right_handed, s);
-        complex<double> a_timelike = _imp->a_timelike(s);
-
-        double z = 4.0 * power_of<2>(_imp->m_l()) / s, beta2 = 1.0 - z, beta = sqrt(beta2);
-
+        // compute d^4 Gamma, cf. [BHvD2010], p. 5, Eq. (2.6)
         // Cosine squared of the angles
         double c_theta_k_2 = c_theta_k * c_theta_k;
         double c_theta_l_2 = c_theta_l * c_theta_l;
@@ -1262,42 +1350,18 @@ namespace eos
         double s_2_theta_l = 2.0 * s_theta_l * c_theta_l;
         double s_2_phi = sin(2.0 * phi);
 
-        double j1s = 3.0 / 4.0 * (
-                (2.0 + beta2) / 4.0 * (norm(a_perp_left) + norm(a_perp_right) + norm(a_par_left) * norm(a_par_right))
-                + z * real(a_perp_left * conj(a_perp_right) + a_par_left * conj(a_par_right)));
-        double j1c = 3.0 / 4.0 * (
-                norm(a_long_left) + norm(a_long_right)
-                + z * (norm(a_timelike) + 2.0 * real(a_long_left * conj(a_long_right))));
-        double j2s = 3 * beta2 / 16.0 * (
-                norm(a_perp_left) + norm(a_perp_right) + norm(a_par_left) + norm(a_par_right));
-        double j2c = -3.0 * beta2 / 4.0 * (
-                norm(a_long_left) + norm(a_long_right));
-        double j3 = 3.0 / 8.0 * beta2 * (
-                norm(a_perp_left) + norm(a_perp_right) - norm(a_par_left) - norm(a_par_right));
-        double j4 = 3.0 / (4.0 * sqrt(2.0)) * beta2 * real(
-                a_long_left * conj(a_par_left) + a_long_right * conj(a_par_right));
-        double j5 = 3.0 * sqrt(2.0) / 4.0 * beta * real(
-                a_long_left * conj(a_perp_left) - a_long_right * conj(a_perp_right));
-        double j6s = 3.0 / 2.0 * beta * real(
-                a_par_left * conj(a_perp_left) - a_par_right * conj(a_perp_right));
-        double j6c = 0.0;
-        double j7 = 3.0 * sqrt(2.0) / 4.0 * beta * imag(
-                a_long_left * conj(a_par_left) - a_long_right * conj(a_par_right));
-        double j8 = 3.0 / 4.0 / sqrt(2.0) * beta2 * imag(
-                a_long_left * conj(a_perp_left) + a_long_right * conj(a_perp_right));
-        double j9 = 3.0 / 4.0 * beta2 * imag(
-                conj(a_par_left) * a_perp_left + conj(a_par_right) * a_perp_right);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
 
         return 3.0 / 8.0 / M_PI * (
-                    j1s + (j1c - j1s) * c_theta_k_2
-                +  (j2s + (j2c - j2s) * c_theta_k_2) * c_2_theta_l
-                +  j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
-                +  j4 * s_2_theta_k * s_2_theta_l * c_phi
-                +  j5 * s_2_theta_k * s_theta_l * c_phi
-                +  (j6s * s_theta_k_2 + j6c * c_theta_k_2) * c_theta_l
-                +  j7 * s_2_theta_k * s_theta_l * s_phi
-                +  j8 * s_2_theta_k * s_2_theta_l * s_phi
-                +  j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi
+                 a_c.j1s + (a_c.j1c - a_c.j1s) * c_theta_k_2
+                +  (a_c.j2s + (a_c.j2c - a_c.j2s) * c_theta_k_2) * c_2_theta_l
+                +  a_c.j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
+                +  a_c.j4 * s_2_theta_k * s_2_theta_l * c_phi
+                +  a_c.j5 * s_2_theta_k * s_theta_l * c_phi
+                +  (a_c.j6s * s_theta_k_2 + a_c.j6c * c_theta_k_2) * c_theta_l
+                +  a_c.j7 * s_2_theta_k * s_theta_l * s_phi
+                +  a_c.j8 * s_2_theta_k * s_2_theta_l * s_phi
+                +  a_c.j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi
                 );
     }
 
@@ -1486,8 +1550,7 @@ namespace eos
         // cf. [BHP2007], Eq. (4.4)
         double c_l(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
-            double result = N(s) * -0.25 * lam(s) * beta_l(s) * beta_l(s) * (std::norm(F_A(wc, s)) + std::norm(F_V(wc, s)));
-            return result;
+            return N(s) * -0.25 * lam(s) * beta_l(s) * beta_l(s) * (std::norm(F_A(wc, s)) + std::norm(F_V(wc, s)));
         }
 
         // cf. [BHP2007], Eq. (4.1)
@@ -1519,7 +1582,6 @@ namespace eos
     BToKDilepton<LargeRecoil>::~BToKDilepton()
     {
     }
-
 
     double
     BToKDilepton<LargeRecoil>::a_l(const double & s) const

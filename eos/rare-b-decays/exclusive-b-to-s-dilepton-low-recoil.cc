@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
- * Copyright (c) 2010 Christian Wacker
+ * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,6 +20,7 @@
 
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
+#include <eos/rare-b-decays/exclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/form-factors.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/long-distance.hh>
@@ -39,6 +40,7 @@
 
 namespace eos
 {
+    using namespace eos::btovll;
     using std::norm;
 
     struct ShortDistanceLowRecoil
@@ -128,13 +130,13 @@ namespace eos
 
         UsedParameter m_c_MSbar;
 
-        UsedParameter m_s;
-
         UsedParameter m_B;
 
         UsedParameter m_Kstar;
 
         UsedParameter m_l;
+
+        UsedParameter m_s;
 
         UsedParameter mu;
 
@@ -169,10 +171,10 @@ namespace eos
             hbar(p["hbar"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
-            m_s(p["mass::s"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_Kstar(p["mass::K^*0"], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
+            m_s(p["mass::s"], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
@@ -188,6 +190,20 @@ namespace eos
             use_nlo(destringify<bool>(o.get("nlo", "true")))
         {
             form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p);
+
+
+      /*
+       *    form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
+       *
+       *    Amplitudes amp = amplitudes(16.0);
+
+            std::cout << "a_perp_left = " << amp.a_perp_left << "\n";
+            std::cout << "a_perp_right = " << amp.a_perp_right << "\n";
+            std::cout << "a_par_left = " << amp.a_par_left << "\n";
+            std::cout << "a_par_right = " << amp.a_par_right << "\n";
+            std::cout << "a_long_left = " << amp.a_long_left << "\n";
+            std::cout << "a_long_right = " << amp.a_long_right << "\n";
+           */
 
             std::string spectator_quark = o.get("q", "d");
             if ((spectator_quark != "d") && (spectator_quark != "u"))
@@ -253,6 +269,11 @@ namespace eos
             return c9eff(wc, s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(wc, s) + wc.c10();
         }
 
+        double beta_l(const double & s) const
+        {
+            return std::sqrt(1.0 - 4.0 * m_l * m_l / s);
+        }
+
         double kappa() const
         {
             // cf. [BHvD2010], Eq. (3.8), p. 8
@@ -274,73 +295,96 @@ namespace eos
             return s / m_B / m_B;
         }
 
-        // Amplitudes
-        complex<double> a_long(const Helicity & helicity, const double & s) const
+        Amplitudes amplitudes(const double & s) const
         {
+            // compute J_i, [BHvD2010], p. 26, Eqs. (A1)-(A11)
+            // TODO: possibly optimize the calculation
+            Amplitudes result;
+
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
-            double h = helicity;
+
             double m_Kstarhat = m_Kstar / m_B;
             double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
             double s_hat = s / m_B / m_B;
             double a_1 = form_factors->a_1(s), a_2 = form_factors->a_2(s);
             double alpha_s = model->alpha_s(mu());
+            double norm_s = this->norm(s);
 
-            complex<double> prefactor = complex<double>(-1.0, 0.0) * m_B()
+            complex<double> subleading_perp = 0.5 / m_B * alpha_s * std::polar(lambda_perp(), sl_phase_perp());
+            complex<double> subleading_par  = 0.5 / m_B * alpha_s * std::polar(lambda_par(), sl_phase_par());
+            complex<double> subleading_long = 0.5 / m_B * alpha_s * std::polar(lambda_long(), sl_phase_long());
+
+            // longitudinal
+            complex<double> prefactor_long = complex<double>(-1.0, 0.0) * m_B()
                 / (2.0 * m_Kstarhat * (1.0 + m_Kstarhat) * std::sqrt(s_hat));
-            complex<double> wilson1 = (c9eff(wc, s) - wc.c9prime()) + h * (wc.c10() - wc.c10prime())
-                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
-                + 0.5 * lambda_par() / m_B * alpha_s * complex<double>(std::cos(sl_phase_par()), std::sin(sl_phase_par()));
-            complex<double> wilson2 = (c9eff(wc, s) - wc.c9prime()) + h * (wc.c10() - wc.c10prime())
-                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2 * m_B / s) * (m_b_MSbar() - m_s() - lambda_long())
-                - 0.5 * lambda_long / m_B * alpha_s * complex<double>(std::cos(sl_phase_long()), std::sin(sl_phase_long()));
-            double formfactor1 = (1.0 - m_Kstarhat2 - s_hat) * std::pow(1.0 + m_Kstarhat, 2) * a_1,
-                   formfactor2 = -lambda(1.0, m_Kstarhat2, s_hat) * a_2;
+            complex<double> wilson_long1_right = (c9eff(wc, s) - wc.c9prime()) + (wc.c10() - wc.c10prime())
+                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
+                + subleading_par;
+            complex<double> wilson_long1_left = (c9eff(wc, s) - wc.c9prime()) - (wc.c10() - wc.c10prime())
+                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
+                + subleading_par;
+            complex<double> wilson_long2_right = (c9eff(wc, s) - wc.c9prime()) + (wc.c10() - wc.c10prime())
+                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_long())
+                - subleading_long;
+            complex<double> wilson_long2_left = (c9eff(wc, s) - wc.c9prime()) - (wc.c10() - wc.c10prime())
+                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_long())
+                - subleading_long;
+            double formfactor_long1 = (1.0 - m_Kstarhat2 - s_hat) * std::pow(1.0 + m_Kstarhat, 2) * a_1;
+            double formfactor_long2 = -lambda(1.0, m_Kstarhat2, s_hat) * a_2;
+            // cf. [BHvD2010], Eq. (3.15), p. 10
+            result.a_long_right = norm_s * prefactor_long * (wilson_long1_right * formfactor_long1 + wilson_long2_right * formfactor_long2);
+            result.a_long_left  = norm_s * prefactor_long * (wilson_long1_left  * formfactor_long1 + wilson_long2_left  * formfactor_long2);
 
-            return this->norm(s) * prefactor * (wilson1 * formfactor1 + wilson2 * formfactor2); // cf. [BHvD2010], Eq. (3.15), p. 10
+            // perpendicular
+            complex<double> prefactor_perp = complex<double>(1.0, 0.0) * m_B();
+            complex<double> wilson_perp_right = ((c9eff(wc, s) + wc.c9prime()) + (wc.c10() + wc.c10prime()))
+                   + kappa() * (c7eff(wc, s) + wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() + m_s() + lambda_perp())
+                   - subleading_perp;
+            complex<double> wilson_perp_left = ((c9eff(wc, s) + wc.c9prime()) - (wc.c10() + wc.c10prime()))
+                   + kappa() * (c7eff(wc, s) + wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() + m_s() + lambda_perp())
+                   - subleading_perp;
+            double formfactor_perp = std::sqrt(2.0 * lambda(1.0, m_Kstarhat2, s_hat)) / (1.0 + m_Kstarhat) * form_factors->v(s);
+            // cf. [BHvD2010], Eq. (3.13), p. 10
+            result.a_perp_right = norm_s * prefactor_perp * wilson_perp_right * formfactor_perp;
+            result.a_perp_left  = norm_s * prefactor_perp * wilson_perp_left  * formfactor_perp;
+
+            // parallel
+            complex<double> prefactor_par = complex<double>(-1.0, 0.0) * m_B();
+            complex<double> wilson_par_right = ((c9eff(wc, s) - wc.c9prime()) + (wc.c10() - wc.c10prime()))
+                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
+                + subleading_par;
+            complex<double> wilson_par_left = ((c9eff(wc, s) - wc.c9prime()) - (wc.c10() - wc.c10prime()))
+                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
+                + subleading_par;
+            complex<double> formfactor_par = std::sqrt(2) * (1.0 + m_Kstarhat) * form_factors->a_1(s);
+            // cf. [BHvD2010], Eq. (3.14), p. 10
+            result.a_par_right = norm_s * prefactor_par * wilson_par_right * formfactor_par;
+            result.a_par_left  = norm_s * prefactor_par * wilson_par_left  * formfactor_par;
+
+            // timelike
+            result.a_timelike = this->norm(s) * m_B * sqrt(lambda(1.0, power_of<2>(m_Kstarhat), s_hat) / s_hat) *
+               complex<double>(0.0, 2.0) * (wc.c10() - wc.c10prime()) * form_factors->a_0(s);
+
+            return result;
         }
 
-        complex<double> a_perp(const Helicity & helicity, const double & s) const
+        std::array<double, 12> differential_angular_coefficients_array(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
-            double h = helicity;
-            double m_Kstarhat = m_Kstar / m_B;
-            double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
-            double alpha_s = model->alpha_s(mu());
-
-            complex<double> prefactor = complex<double>(1.0, 0.0) * m_B();
-            complex<double> wilson = ((c9eff(wc, s) + wc.c9prime()) + h * (wc.c10() + wc.c10prime()))
-                + kappa() * (c7eff(wc, s) + wc.c7prime()) * (2 * m_B / s) * (m_b_MSbar() + m_s() + lambda_perp())
-                - 0.5 * lambda_perp()/m_B * alpha_s * complex<double>(std::cos(sl_phase_perp()), std::sin(sl_phase_perp()));
-            double formfactor = std::sqrt(2 * lambda(1.0, m_Kstarhat2, s_hat(s))) / (1.0 + m_Kstarhat)
-                * form_factors->v(s);
-
-            return this->norm(s) * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.13), p. 10
+            return angular_coefficients_array(amplitudes(s), s, m_l());
         }
 
-        complex<double> a_par(const Helicity & helicity, const double & s) const
+        AngularCoefficients differential_angular_coefficients(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
-            double h = helicity;
-            double m_Kstarhat = m_Kstar / m_B;
-            double alpha_s = model->alpha_s(mu());
-
-            complex<double> prefactor = complex<double>(-1.0, 0.0) * m_B();
-            complex<double> wilson = ((c9eff(wc, s) - wc.c9prime()) + h * (wc.c10() - wc.c10prime()))
-                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
-                + 0.5 * lambda_par() * alpha_s * complex<double>(std::cos(sl_phase_par()), std::sin(sl_phase_par()));
-            complex<double> formfactor = std::sqrt(2) * (1.0 + m_Kstarhat) * form_factors->a_1(s);
-
-            return this->norm(s) * prefactor * wilson * formfactor; // cf. [BHvD2010], Eq. (3.14), p. 10
+            return array_to_angular_coefficients(angular_coefficients_array(amplitudes(s), s, m_l()));
         }
 
-        complex<double> a_timelike(const double & s) const
+        AngularCoefficients integrated_angular_coefficients(const double & s_min, const double & s_max) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
-            double m_Kstarhat = m_Kstar / m_B;
-            double shat = s_hat(s);
+            std::function<std::array<double, 12> (const double &)> integrand =
+                    std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::differential_angular_coefficients_array, this, std::placeholders::_1);
+            std::array<double, 12> integrated_angular_coefficients_array = integrate(integrand, 64, s_min, s_max);
 
-            return this->norm(s) * m_B * sqrt(lambda(1.0, power_of<2>(m_Kstarhat), shat) / shat) *
-                complex<double>(0.0, 2.0) * (wc.c10() - wc.c10prime()) * form_factors->a_0(s);
+            return array_to_angular_coefficients(integrated_angular_coefficients_array);
         }
 
         // Quantity Y = Y_9 + lambda_u_hat Y_9^u + kappa_hat Y_7, the strong phase contributor of the amplitudes
@@ -350,160 +394,47 @@ namespace eos
 
             return (c9eff(wc, s) - wc.c9()) + kappa() * (c7eff(wc, s) - wc.c7()) * (2.0 * m_b_MSbar * m_B / s);
         }
-
-        // Unormalized combinations of transversity amplitudes
-        double u_1(const double & s) const
-        {
-            return std::norm(a_long(left_handed, s)) + std::norm(a_long(right_handed, s));
-        }
-
-        double u_2(const double & s) const
-        {
-            return std::norm(a_perp(left_handed, s)) + std::norm(a_perp(right_handed, s));
-        }
-
-        double u_3(const double & s) const
-        {
-            return std::norm(a_par(left_handed, s)) + std::norm(a_par(right_handed, s));
-        }
-
-        double u_4(const double & s) const
-        {
-            return real(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
-        }
-
-        double u_5(const double & s) const
-        {
-            return (real(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s)));
-        }
-
-        double u_6(const double & s) const
-        {
-            return (real(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s)));
-        }
-
-        double u_7(const double & s) const
-        {
-            return imag(a_long(left_handed, s) * conj(a_par(left_handed, s)) + conj(a_long(right_handed, s)) * a_par(right_handed, s));
-        }
-
-        double u_8(const double & s) const
-        {
-            return (imag(a_long(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_long(right_handed, s)) * a_perp(right_handed, s)));
-        }
-
-        double u_9(const double & s) const
-        {
-            return (imag(a_par(left_handed, s) * conj(a_perp(left_handed, s)) - conj(a_par(right_handed, s)) * a_perp(right_handed, s)));
-        }
-
-        // Components of observables
-        double decay_width(const double & s) const
-        {
-            return (u_1(s) + u_2(s) + u_3(s));
-        }
-
-        double differential_branching_ratio(const double & s) const
-        {
-            return decay_width(s) * tau() / hbar();
-        }
-
-        double a_fb_numerator(const double & s) const
-        {
-            return 1.5 * (real(a_par(left_handed, s) * conj(a_perp(left_handed, s))) - real(a_par(right_handed, s) * conj(a_perp(right_handed, s))));
-        }
-
-        double f_l_numerator(const double & s) const
-        {
-            return u_1(s);
-        }
-
-        double a_t_2_numerator(const double & s) const
-        {
-            return (u_2(s) - u_3(s));
-        }
-
-        double a_t_2_denominator(const double & s) const
-        {
-            return (u_2(s) + u_3(s));
-        }
-
-        double a_t_3_numerator(const double & s) const
-        {
-            return sqrt(pow(u_4(s), 2) + pow(u_7(s), 2));
-        }
-
-        double a_t_3_denominator(const double & s) const
-        {
-            return sqrt(u_1(s) * u_2(s));
-        }
-
-        double a_t_4_numerator(const double & s) const
-        {
-            return sqrt(pow(u_5(s), 2) + pow(u_8(s), 2));
-        }
-
-        double a_t_4_denominator(const double & s) const
-        {
-            return u_4(s);
-        }
-
-        double h_1_numerator(const double & s) const
-        {
-            return u_4(s);
-        }
-
-        double h_1_denominator(const double & s) const
-        {
-            return sqrt(u_1(s) * u_3(s));
-        }
-
-        double h_2_numerator(const double & s) const
-        {
-            return u_5(s);
-        }
-
-        double h_2_denominator(const double & s) const
-        {
-            return sqrt(u_1(s) * u_2(s));
-        }
-
-        double h_3_numerator(const double & s) const
-        {
-            return u_6(s);
-        }
-
-        double h_3_denominator(const double & s) const
-        {
-            return sqrt(u_2(s) * u_3(s));
-        }
     };
 
     BToKstarDilepton<LowRecoil>::BToKstarDilepton(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToKstarDilepton<LowRecoil>>(new Implementation<BToKstarDilepton<LowRecoil>>(parameters, options, *this))
     {
+
     }
 
     BToKstarDilepton<LowRecoil>::~BToKstarDilepton()
     {
+
     }
 
     complex<double>
     BToKstarDilepton<LowRecoil>::a_long(const Helicity & h, const double & s) const
     {
-        return _imp->a_long(h, s);
+        Amplitudes amp = _imp->amplitudes(s);
+        if (h == -1)
+            return amp.a_long_left;
+        else
+            return amp.a_long_right;
     }
 
     complex<double>
     BToKstarDilepton<LowRecoil>::a_perp(const Helicity & h, const double & s) const
     {
-        return _imp->a_perp(h, s);
+        Amplitudes amp = _imp->amplitudes(s);
+        if (h == -1)
+            return amp.a_perp_left;
+        else
+            return amp.a_perp_right;
     }
 
     complex<double>
     BToKstarDilepton<LowRecoil>::a_par(const Helicity & h, const double & s) const
     {
-        return _imp->a_par(h, s);
+        Amplitudes amp = _imp->amplitudes(s);
+        if (h == -1)
+            return amp.a_par_left;
+        else
+            return amp.a_par_right;
     }
 
     double
@@ -565,66 +496,113 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::differential_branching_ratio(const double & s) const
     {
-        return _imp->differential_branching_ratio(s);
+        return differential_decay_width(s) * _imp->tau() / _imp->hbar();
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_decay_width(const double & s) const
     {
-        return _imp->decay_width(s);
+        return decay_width(_imp->differential_angular_coefficients(s));
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
-        return _imp->a_fb_numerator(s) / _imp->decay_width(s);
+        // cf. [BHvD2010], p. 6, eq. (2.8)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j6s / decay_width(a_c);
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2(const double & s) const
     {
-        return _imp->a_t_2_numerator(s) / _imp->a_t_2_denominator(s);
+        // cf. [BHvD2010], p. 6, eq. (2.10)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return 0.5 * a_c.j3 / a_c.j2s;
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3(const double & s) const
     {
-        return _imp->a_t_3_numerator(s) / _imp->a_t_3_denominator(s);
+        // cf. [BHvD2010], p. 6, eq. (2.11)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4(const double & s) const
     {
-        return _imp->a_t_4_numerator(s) / _imp->a_t_4_denominator(s);
+        // cf. [BHvD2010], p. 6, eq. (2.12)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return sqrt((power_of<2>(_imp->beta_l(s) * a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(_imp->beta_l(s) * a_c.j7)));
     }
 
     double
-    BToKstarDilepton<LowRecoil>::differential_h_1(const double & s) const
+    BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_re(const double & s) const
     {
-        return _imp->h_1_numerator(s) / _imp->h_1_denominator(s);
+        // cf. [BS2011], eq. (38), p. 10
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return 0.25 * _imp->beta_l(s) * a_c.j6s / a_c.j2s;
     }
 
     double
-    BToKstarDilepton<LowRecoil>::differential_h_2(const double & s) const
+    BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_im(const double & s) const
     {
-        return _imp->h_2_numerator(s) / _imp->h_2_denominator(s);
-    }
-
-    double
-    BToKstarDilepton<LowRecoil>::differential_h_3(const double & s) const
-    {
-        return _imp->h_3_numerator(s) / _imp->h_3_denominator(s);
+        // cf. [BS2011], eq. (30), p. 8
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return 0.5 * a_c.j9 / a_c.j2s;
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
-        return _imp->f_l_numerator(s) / _imp->decay_width(s);
+        // cf. [BHvD2010], p. 6, eq. (2.9)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return (-a_c.j2c) / (4.0 * a_c.j2s - a_c.j2c);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_h_1(const double & s) const
+    {
+        // cf. [BHvD2010], p. 7, eq. (2.13)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_h_2(const double & s) const
+    {
+        // cf. [BHvD2010], p. 7, eq. (2.14)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return _imp->beta_l(s) * a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_h_3(const double & s) const
+    {
+        // cf. [BHvD2010], p. 7, eq. (2.15)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return _imp->beta_l(s) * a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_h_4(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return sqrt(2.0) * a_c.j8 / sqrt(-a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_h_5(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return -a_c.j9 / sqrt(power_of<2>(2.0 * a_c.j2s) + power_of<2>(a_c.j3));
     }
 
     double
     BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_1(const double & s) const
     {
+        // cf. [BHvD2011], p. 6, eq. (2.14)
         Save<bool> save(_imp->cp_conjugate, false);
 
         double rho_1 = _imp->rho_1(s);
@@ -637,6 +615,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_2(const double & s) const
     {
+        // cf. [BHvD2011], p. 6, eq. (2.14)
         Save<bool> save(_imp->cp_conjugate, false);
 
         double rho_1 = _imp->rho_1(s), rho_2 = _imp->rho_2(s);
@@ -649,6 +628,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_3(const double & s) const
     {
+        // cf. [BHvD2011], p. 6, eq. (2.15)
         Save<bool> save(_imp->cp_conjugate, false);
 
         double rho_1 = _imp->rho_1(s), rho_2 = _imp->rho_2(s);
@@ -661,6 +641,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::differential_cp_asymmetry_mix(const double & s) const
     {
+        // cf. [BHvD2011], p. 10, eq. (2.34)
         Save<bool> save(_imp->cp_conjugate, false);
 
         double rho_1 = _imp->rho_1(s), rho_2 = _imp->rho_2(s);
@@ -675,27 +656,114 @@ namespace eos
             / (rho_1 * (abs2_xi_L + abs2_xi_R + 2.0) + 2 * rho_2 * (abs2_xi_R - abs2_xi_L));
     }
 
+    // differential angular coefficients
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_1c(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j1c;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_1s(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j1s;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_2c(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j2c;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_2s(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j2s;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_3(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j3;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_4(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j4;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_5(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j5;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_6c(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j6c;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_6s(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j6s;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_7(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j7;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_8(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j8;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_9(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j9;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_decay_width(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return decay_width(a_c);
+    }
+
     double
     BToKstarDilepton<LowRecoil>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> f = std::bind(&BToKstarDilepton<LowRecoil>::differential_branching_ratio,
-                this, std::placeholders::_1);
-
-        return integrate(f, 64, s_min, s_max);
+        return integrated_decay_width(s_min, s_max) * _imp->tau() / _imp->hbar();
     }
 
     double
     BToKstarDilepton<LowRecoil>::integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const
     {
         Save<bool> save(_imp->cp_conjugate, false);
-        std::function<double (const double &)> f = std::bind(&BToKstarDilepton<LowRecoil>::differential_branching_ratio,
-                this, std::placeholders::_1);
 
-        double br = integrate(f, 64, s_min, s_max);
+        double br = integrated_branching_ratio(s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate(f, 64, s_min, s_max);
+        double br_bar = integrated_branching_ratio(s_min, s_max);
 
-        return (br + br_bar) / 2.0;
+        return 0.5 * (br + br_bar);
     }
 
     double
@@ -709,24 +777,21 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_fb_numerator, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
-
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        // cf. [BHvD2010], eq. (2.8), p. 6
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j6s / decay_width(a_c);
     }
 
     double
     BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const
     {
         Save<bool> save(_imp->cp_conjugate, false);
-        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_fb_numerator, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
 
-        double a_fb = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_fb = integrated_forward_backward_asymmetry(s_min, s_max);
         _imp->cp_conjugate = true;
-        double a_fb_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_fb_bar = integrated_forward_backward_asymmetry(s_min, s_max);
 
-        return (a_fb + a_fb_bar) / 2.0;
+        return 0.5 * (a_fb + a_fb_bar);
     }
 
     double
@@ -735,32 +800,31 @@ namespace eos
         // Convert from asymmetry in the decay width to asymmetry in the BR
         // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
         static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
-        std::function<double (const double &)> integrand = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_fb_numerator, _imp, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / Gamma;
-    }
+        // cf. [BHvD2010], eq. (2.8), p. 6
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        return a_c.j6s / Gamma;
+     }
 
     double
     BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::f_l_numerator, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
-
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        // cf. [BHvD2010], p. 6, eq. (2.9)
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return (-a_c.j2c) / (4.0 * a_c.j2s - a_c.j2c);
     }
 
     double
     BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation_cp_averaged(const double & s_min, const double & s_max) const
     {
         Save<bool> save(_imp->cp_conjugate, false);
-        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::f_l_numerator, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
 
-        double f_l = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double f_l = integrated_longitudinal_polarisation(s_min, s_max);
         _imp->cp_conjugate = true;
-        double f_l_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double f_l_bar = integrated_longitudinal_polarisation(s_min, s_max);
 
-        return (f_l + f_l_bar) / 2.0;
+        return 0.5 * (f_l + f_l_bar);
     }
 
     double
@@ -774,24 +838,22 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_numerator, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_denominator, _imp, std::placeholders::_1);
-
-        return integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        // cf. [BHvD2010], eq. (2.10), p. 6
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return 0.5 * a_c.j3 / a_c.j2s;
     }
 
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_2_cp_averaged(const double & s_min, const double & s_max) const
     {
+        // cf. [BHvD2010], eq. (2.10), p. 6
         Save<bool> save(_imp->cp_conjugate, false);
-        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_numerator, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_t_2_denominator, _imp, std::placeholders::_1);
 
-        double a_t_2 = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_t_2 = integrated_transverse_asymmetry_2(s_min, s_max);
         _imp->cp_conjugate = true;
-        double a_t_2_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_t_2_bar = integrated_transverse_asymmetry_2(s_min, s_max);
 
-        return (a_t_2 + a_t_2_bar) / 2.0;
+        return 0.5 * (a_t_2 + a_t_2_bar);
     }
 
     double
@@ -805,12 +867,10 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_3(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_4, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_1, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_2, _imp, std::placeholders::_1);
+        // cf. [BHvD2010], eq. (2.11), p. 6
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
 
-        return integrate(num1, 64, s_min, s_max)
-            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
+        return sqrt((4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)) / (-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3)));
     }
 
     double
@@ -824,17 +884,10 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_4(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num1 = std::bind(
-                &Implementation<BToKstarDilepton<LowRecoil>>::u_5, _imp, std::placeholders::_1);
+        // cf. [BHvD2010], eq. (2.12), p. 6
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
 
-        std::function<double (const double &)> denom1 = std::bind(
-                &Implementation<BToKstarDilepton<LowRecoil>>::u_4, _imp, std::placeholders::_1);
-
-        std::function<double (const double &)> denom2 = std::bind(
-                &Implementation<BToKstarDilepton<LowRecoil>>::u_7, _imp, std::placeholders::_1);
-
-        return integrate(num1, 64, s_min, s_max)
-            / sqrt(pow(integrate(denom1, 64, s_min, s_max), 2) + pow(integrate(denom2, 64, s_min, s_max), 2));
+        return sqrt((power_of<2>(a_c.j5) + 4.0 * power_of<2>(a_c.j8)) / (4.0 * power_of<2>(a_c.j4) + power_of<2>(a_c.j7)));
     }
 
     double
@@ -846,14 +899,27 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_re(const double & s_min, const double & s_max) const
+    {
+        // cf. [BS2011], eq. (38), p. 10
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return 0.25 * a_c.j6s / a_c.j2s;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_im(const double & s_min, const double & s_max) const
+    {
+        // cf. [BS2011], eq. (30), p. 8
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return 0.5 * a_c.j9 / a_c.j2s;
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::integrated_h_1(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_4, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_1, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_3, _imp, std::placeholders::_1);
-
-        return integrate(num1, 64, s_min, s_max)
-            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
+        // cf. [BHvD2010], p. 7, eq. (2.13)
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return sqrt(2.0) * a_c.j4 / sqrt(-a_c.j2c * (2.0 * a_c.j2s - a_c.j3));
     }
 
     double
@@ -867,12 +933,9 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::integrated_h_2(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_5, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_1, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_2, _imp, std::placeholders::_1);
-
-        return integrate(num1, 64, s_min, s_max)
-            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
+        // cf. [BHvD2010], p. 7, eq. (2.14)
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return  a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
@@ -886,12 +949,9 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::integrated_h_3(const double & s_min, const double & s_max) const
     {
-        std::function<double (const double &)> num1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_6, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_2, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_3, _imp, std::placeholders::_1);
-
-        return integrate(num1, 64, s_min, s_max)
-            / sqrt(integrate(denom1, 64, s_min, s_max) * integrate(denom2, 64, s_min, s_max));
+        // cf. [BHvD2010], p. 7, eq. (2.15)
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j6s / (2.0 * sqrt(power_of<2>(2.0 * a_c.j2s) - power_of<2>(a_c.j3)));
     }
 
     double
@@ -903,16 +963,29 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::integrated_h_4(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return sqrt(2.0) * a_c.j8 / sqrt(-a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_h_5(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return -a_c.j9 / sqrt(power_of<2>(2.0 * a_c.j2s) + power_of<2>(a_c.j3));
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_1(const double & s_min, const double & s_max) const
     {
         Save<bool> save(_imp->cp_conjugate, false);
 
-        std::function<double (const double &)> integrand = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
-
-        double gamma = integrate(integrand, 64, s_min, s_max);
+        double gamma = integrated_decay_width(s_min, s_max);
         _imp->cp_conjugate = true;
-        double gamma_bar = integrate(integrand, 64, s_min, s_max);
+        double gamma_bar = integrated_decay_width(s_min, s_max);
 
+        // cf. [BHvD2011], p. 6/7, remarks below eq. (2.15), and eq. (2.36), p.11
         return (gamma - gamma_bar) / (gamma + gamma_bar);
     }
 
@@ -921,13 +994,11 @@ namespace eos
     {
         Save<bool> save(_imp->cp_conjugate, false);
 
-        std::function<double (const double &)> num = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::a_fb_numerator, _imp, std::placeholders::_1);
-        std::function<double (const double &)> denom = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
-
-        double a_fb = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_fb = integrated_forward_backward_asymmetry(s_min, s_max);
         _imp->cp_conjugate = true;
-        double a_fb_bar = integrate(num, 64, s_min, s_max) / integrate(denom, 64, s_min, s_max);
+        double a_fb_bar = integrated_forward_backward_asymmetry(s_min, s_max);
 
+        // cf. [BHvD2011], p. 6/7, remarks below eq. (2.15), and eq. (2.38), p. 11
         // Note that in the code A_FB does not flip its sign under CP. Therefore a_fb_bar -> -a_fb_bar here.
         return (a_fb - a_fb_bar) / (a_fb + a_fb_bar);
     }
@@ -937,16 +1008,14 @@ namespace eos
     {
         Save<bool> save(_imp->cp_conjugate, false);
 
-        std::function<double (const double &)> u_1 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_1, _imp, std::placeholders::_1);
-        std::function<double (const double &)> u_2 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_2, _imp, std::placeholders::_1);
-        std::function<double (const double &)> u_5 = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::u_5, _imp, std::placeholders::_1);
-
-        double iu_1 = integrate(u_1, 16, s_min, s_max), iu_2 = integrate(u_2, 16, s_min, s_max), iu_5 = integrate(u_5, 16, s_min, s_max);
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         _imp->cp_conjugate = true;
-        double iu_1_bar = integrate(u_1, 16, s_min, s_max), iu_2_bar = integrate(u_2, 16, s_min, s_max), iu_5_bar = integrate(u_5, 16, s_min, s_max);
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
 
-        // Note that in the code U_5 does not flip its sign under CP. Therefore iu_5_bar -> -iu_5_bar here.
-        return (iu_5 - iu_5_bar) / std::sqrt((iu_1 + iu_1_bar) * (iu_2 + iu_2_bar));
+        // cf. [BHvD2011], eq. (2.40, p. 12
+        return (a_c.j6s - a_c_bar.j6s)
+            / 2.0
+            / std::sqrt(4.0 * power_of<2>(a_c.j2s + a_c_bar.j2s) - power_of<2>(a_c.j3 + a_c_bar.j3));
     }
 
     double
@@ -954,11 +1023,9 @@ namespace eos
     {
         Save<bool> save(_imp->cp_conjugate, false);
 
-        std::function<double (const double &)> integrand = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
-
-        double gamma = integrate(integrand, 64, s_min, s_max);
+        double gamma = integrated_decay_width(s_min, s_max);
         _imp->cp_conjugate = true;
-        double gamma_bar = integrate(integrand, 64, s_min, s_max);
+        double gamma_bar = integrated_decay_width(s_min, s_max);
 
         return (gamma + gamma_bar);
     }
@@ -968,30 +1035,102 @@ namespace eos
     {
         Save<bool> save(_imp->cp_conjugate, false);
 
-        std::function<double (const double &)> integrand = std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::decay_width, _imp, std::placeholders::_1);
-
-        double gamma = integrate(integrand, 64, s_min, s_max);
+        double gamma = integrated_decay_width(s_min, s_max);
         _imp->cp_conjugate = true;
-        double gamma_bar = integrate(integrand, 64, s_min, s_max);
+        double gamma_bar = integrated_decay_width(s_min, s_max);
 
         return (gamma - gamma_bar);
+    }
+
+    // integrated angular coefficients
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_1c(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j1c;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_1s(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j1s;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_2c(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j2c;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_2s(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j2s;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_3(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j3;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_4(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j4;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_5(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j5;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_6c(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j6c;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_6s(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j6s;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_7(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j7;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_8(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j8;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_9(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j9;
     }
 
     double
     BToKstarDilepton<LowRecoil>::four_differential_decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const
     {
-        // compute J (and d^4 Gamma) for m_l = 0, cf. [BHvD2010], p. 5, Eq. (2.6)
-        // and p. 26, Eqs. (A1)-(A11)
-        complex<double> a_long_left = _imp->a_long(left_handed, s),
-            a_long_right = _imp->a_long(right_handed, s);
-        complex<double> a_perp_left = _imp->a_perp(left_handed, s),
-            a_perp_right = _imp->a_perp(right_handed, s);
-        complex<double> a_par_left = _imp->a_par(left_handed, s),
-            a_par_right = _imp->a_par(right_handed, s);
-        complex<double> a_timelike = _imp->a_timelike(s);
-
-        double z = 4.0 * power_of<2>(_imp->m_l()) / s, beta2 = 1.0 - z, beta = sqrt(beta2);
-
+        // compute d^4 Gamma, cf. [BHvD2010], p. 5, Eq. (2.6)
         // Cosine squared of the angles
         double c_theta_k_2 = c_theta_k * c_theta_k;
         double c_theta_l_2 = c_theta_l * c_theta_l;
@@ -1012,42 +1151,18 @@ namespace eos
         double s_2_theta_l = 2.0 * s_theta_l * c_theta_l;
         double s_2_phi = sin(2.0 * phi);
 
-        double j1s = 3.0 / 4.0 * (
-                (2.0 + beta2) / 4.0 * (norm(a_perp_left) + norm(a_perp_right) + norm(a_par_left) * norm(a_par_right))
-                + z * real(a_perp_left * conj(a_perp_right) + a_par_left * conj(a_par_right)));
-        double j1c = 3.0 / 4.0 * (
-                norm(a_long_left) + norm(a_long_right)
-                + z * (norm(a_timelike) + 2.0 * real(a_long_left * conj(a_long_right))));
-        double j2s = 3 * beta2 / 16.0 * (
-                norm(a_perp_left) + norm(a_perp_right) + norm(a_par_left) + norm(a_par_right));
-        double j2c = -3.0 * beta2 / 4.0 * (
-                norm(a_long_left) + norm(a_long_right));
-        double j3 = 3.0 / 8.0 * beta2 * (
-                norm(a_perp_left) + norm(a_perp_right) - norm(a_par_left) - norm(a_par_right));
-        double j4 = 3.0 / (4.0 * sqrt(2.0)) * beta2 * real(
-                a_long_left * conj(a_par_left) + a_long_right * conj(a_par_right));
-        double j5 = 3.0 * sqrt(2.0) / 4.0 * beta * real(
-                a_long_left * conj(a_perp_left) - a_long_right * conj(a_perp_right));
-        double j6s = 3.0 / 2.0 * beta * real(
-                a_par_left * conj(a_perp_left) - a_par_right * conj(a_perp_right));
-        double j6c = 0.0;
-        double j7 = 3.0 * sqrt(2.0) / 4.0 * beta * imag(
-                a_long_left * conj(a_par_left) - a_long_right * conj(a_par_right));
-        double j8 = 3.0 / 4.0 / sqrt(2.0) * beta2 * imag(
-                a_long_left * conj(a_perp_left) + a_long_right * conj(a_perp_right));
-        double j9 = 3.0 / 4.0 * beta2 * imag(
-                conj(a_par_left) * a_perp_left + conj(a_par_right) * a_perp_right);
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
 
         return 3.0 / 8.0 / M_PI * (
-                    j1s + (j1c - j1s) * c_theta_k_2
-                +  (j2s + (j2c - j2s) * c_theta_k_2) * c_2_theta_l
-                +  j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
-                +  j4 * s_2_theta_k * s_2_theta_l * c_phi
-                +  j5 * s_2_theta_k * s_theta_l * c_phi
-                +  (j6s * s_theta_k_2 + j6c * c_theta_k_2) * c_theta_l
-                +  j7 * s_2_theta_k * s_theta_l * s_phi
-                +  j8 * s_2_theta_k * s_2_theta_l * s_phi
-                +  j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi
+                 a_c.j1s + (a_c.j1c - a_c.j1s) * c_theta_k_2
+                +  (a_c.j2s + (a_c.j2c - a_c.j2s) * c_theta_k_2) * c_2_theta_l
+                +  a_c.j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
+                +  a_c.j4 * s_2_theta_k * s_2_theta_l * c_phi
+                +  a_c.j5 * s_2_theta_k * s_theta_l * c_phi
+                +  (a_c.j6s * s_theta_k_2 + a_c.j6c * c_theta_k_2) * c_theta_l
+                +  a_c.j7 * s_2_theta_k * s_theta_l * s_phi
+                +  a_c.j8 * s_2_theta_k * s_2_theta_l * s_phi
+                +  a_c.j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi
                 );
     }
 

@@ -79,6 +79,9 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::s"] = 0.0;
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.2;
+                // s quark mass
+                p["mass::mu"] = 0.0;
+
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -94,7 +97,7 @@ class BToKstarDileptonLowRecoilTest :
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(14.00, 19.21),  +0.3497, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(14.00, 19.21),     -0.4835, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(14.00, 19.21),     +1.6892, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(14.00, 19.21),     -0.5758, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(14.00, 19.21),     +0.5758, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(14.00, 19.21),                        +0.9967, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(14.00, 19.21),                        -0.9727, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(14.00, 19.21),                        -0.9587, eps);
@@ -111,7 +114,7 @@ class BToKstarDileptonLowRecoilTest :
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(16.00, 19.21),  +0.337697, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(16.00, 19.21),     -0.599389, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(16.00, 19.21),     +1.99535,  eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(16.00, 19.21),     -0.486256, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(16.00, 19.21),     +0.486256, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(16.00, 19.21),                        +0.998622, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(16.00, 19.21),                        -0.970214, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(16.00, 19.21),                        -0.959887, eps);
@@ -167,6 +170,8 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::s"] = 0.0;
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.2;
+                // mu mass
+                p["mass::mu"] = 0.0;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -443,6 +448,7 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             };
 
             Parameters p = Parameters::Defaults();
+            p["mass::mu"] = 0.0;
             Options o;
             o.set("model", "WilsonScan");
             o.set("form-factors", "BZ2004");
