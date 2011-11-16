@@ -132,7 +132,7 @@ namespace eos
         {
             result = Q2;
         }
-        else if ((abs(correction_r / real(Q2)) < 1.0) && (abs(correction_i / imag(Q2) < 1.0)))
+        else if ((abs(correction_r / real(Q2)) < 1.0) && (abs(correction_i / imag(Q2)) < 1.0))
         {
             result = Q2 - complex<double>(correction_r, correction_i);
         }
