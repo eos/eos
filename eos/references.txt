@@ -243,6 +243,13 @@ Theoretical Inputs
         arxiv:hep-ph/9910220
 
 
+    BS2011 : Becirevic, D. and Schneider, E.
+
+        On transverse asymmetries in B -> K^* l^+ l^-
+
+        arxiv:1106.3283
+
+
     BZ2004 : Ball, P. and Zwicky, R.
 
         B_{d,s} -> rho,omega,K^*,phi Decay Form Factors from Light-Cone
@@ -298,6 +305,13 @@ Theoretical Inputs
         |Delta F| = 1 Nonleptonic Effective Hamiltonian in a Simpler Scheme
 
         arxiv:hep-ph/9711280
+
+
+    EHMRR2010 : Egede, U. and Hurth, T. and Matias, J. and Ramon, M. and Reece, W.
+
+        On the new physics reach of the decay mode Bbar_d -> Kbar^*0 l^+ l^-
+
+        arxiv:1005.0571
 
 
     FM2002 : Feldmann, Th. and Matias, J.
