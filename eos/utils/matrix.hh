@@ -189,6 +189,32 @@ namespace eos
 
         return result;
     }
+
+    /* component-wise multiplication of two vectors */
+    template <typename T_, std::size_t n_>
+    std::array<T_, n_> mult(const std::array<T_, n_> & x, const std::array<T_, n_> & y)
+    {
+        std::array<T_, n_> result;
+        for (std::size_t i(0) ; i < n_ ; ++i)
+        {
+            result[i] = x[i] * y[i];
+        }
+
+        return result;
+    }
+
+    /* component-wise division of two vectors */
+    template <typename T_, std::size_t n_>
+    std::array<T_, n_> divide(const std::array<T_, n_> & x, const std::array<T_, n_> & y)
+    {
+        std::array<T_, n_> result;
+        for (std::size_t i(0) ; i < n_ ; ++i)
+        {
+            result[i] = x[i] / y[i];
+        }
+
+        return result;
+    }
 }
 
 #endif
