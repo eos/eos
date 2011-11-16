@@ -19,7 +19,7 @@ libeosutils_la_SOURCES = \
 	destringify.hh \
 	exception.cc exception.hh \
 	histogram.cc histogram.hh \
-	integrate.cc integrate.hh \
+	integrate.cc integrate.hh integrate-impl.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.cc kinematic.hh \
 	lcda.cc lcda.hh \

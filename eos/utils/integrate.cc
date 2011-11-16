@@ -18,6 +18,7 @@
  */
 
 #include <eos/utils/integrate.hh>
+#include <eos/utils/matrix.hh>
 
 #include <limits>
 #include <vector>
