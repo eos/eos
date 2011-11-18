@@ -71,6 +71,7 @@ class BToKstarGammaTest :
                 p["CKM::etabar"] = 0.342;
                 p["decay-constant::B_d"] = 0.200;
                 p["mass::b(MSbar)"] = 4.2;
+                p["mass::c"] = 1.27;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -80,9 +81,15 @@ class BToKstarGammaTest :
 
                 const double eps = 1e-4;
 
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +4.21541e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +4.21541e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               -2.98715e-2, eps);
+                // Using old charm pole mass
+                //TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +4.21541e-5, eps);
+                //TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +4.21541e-5, eps);
+                //TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               -2.98715e-2, eps);
+                //TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),                  0.0,        eps);
+
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +4.53979e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +4.53979e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               -2.87582e-2, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),                  0.0,        eps);
             }
 
@@ -116,10 +123,16 @@ class BToKstarGammaTest :
 
                 const double eps = 1e-4;
 
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +3.77936e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +3.45819e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               +3.66040e-2, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),                 -9.28720e-2, eps);
+                // Using old charm pole mass
+                //TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +3.77936e-5, eps);
+                //TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +3.45819e-5, eps);
+                //TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               +3.66040e-2, eps);
+                //TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),                 -9.28720e-2, eps);
+
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +3.98628e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +3.50455e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               +3.75213e-2, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),                 -1.37460e-1, eps);
             }
         }
 } b_to_kstar_gamma_test;

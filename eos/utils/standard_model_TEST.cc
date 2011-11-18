@@ -22,7 +22,6 @@
 #include <eos/utils/standard-model.hh>
 
 #include <cmath>
-#include <iostream>
 
 using namespace test;
 using namespace eos;
@@ -172,13 +171,14 @@ class CMassesTest :
         {
             static const double eps = 1e-6;
 
-            StandardModel model(reference_parameters());
+            Parameters p = reference_parameters();
+            StandardModel model(p);
 
             TEST_CHECK_NEARLY_EQUAL(0.891000, model.m_c_msbar(4.8),  eps);
             TEST_CHECK_NEARLY_EQUAL(0.912618, model.m_c_msbar(4.2),  eps);
             TEST_CHECK_NEARLY_EQUAL(1.270000, model.m_c_msbar(1.27), eps);
 
-            TEST_CHECK_NEARLY_EQUAL(1.891359, model.m_c_pole(), eps);
+            TEST_CHECK_NEARLY_EQUAL(1.595301, model.m_c_pole(), eps);
         }
 } sm_c_masses_test;
 

@@ -296,9 +296,27 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_c_pole() const
     {
-        double m_c_MSbar = _m_c_MSbar__qcd();
+        // The true (central) pole mass of the charm is very close to the values
+        // that can be calculated by the following quadratic polynomial.
+        // This holds vor 1.16 <= m_c_MSbar <= 1.34, which corresponds to the values from [PDG2010].
+        static const double m0 = 1.27, a = 1.59564, b = 1.13191, c = -0.737165;
 
-        return QCD::m_q_pole(m_c_MSbar, alpha_s(m_c_MSbar), 4.0);
+        double m_c_MSbar = _m_c_MSbar__qcd();
+        double m_c_pole = a + (m_c_MSbar - m0) * b + power_of<2>(m_c_MSbar - m0) * c;
+
+        for (int i = 0 ; i < 10 ; ++i)
+        {
+            m_c_MSbar = m_c_msbar(m_c_pole);
+            double next = QCD::m_q_pole(m_c_MSbar, alpha_s(m_c_pole), 4.0);
+
+            double delta = (m_c_pole - next) / m_c_pole;
+            m_c_pole = next;
+
+            if (std::abs(delta) < 1e-3)
+                break;
+        }
+
+        return m_c_pole;
     }
 
     SMComponent<components::DeltaB1>::SMComponent(const Parameters & p, ParameterUser & u) :

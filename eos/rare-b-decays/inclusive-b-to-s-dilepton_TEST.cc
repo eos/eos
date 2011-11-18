@@ -60,8 +60,9 @@ class BToXsDileptonLargeRecoilTest :
                 p["Abs{c10}"] = +4.173;
                 p["Arg{c10}"] = M_PI;
 
-                // b quark mass
+                // quark masses
                 p["mass::b(MSbar)"] = 4.2;
+                p["mass::c"] = 1.27;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -74,8 +75,8 @@ class BToXsDileptonLargeRecoilTest :
 
                 const double eps = 1e-11;
 
-                TEST_CHECK_NEARLY_EQUAL(1.57375e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.62207e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.61981e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.66825e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
             }
         }
 } b_to_x_s_dilepton_large_recoil_test;
@@ -106,7 +107,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
             abs_c10 = values[4];
             arg_c10 = values[5];
 
-            static const double eps = 8e-11;
+            static const double eps = 5e-10;
             WilsonPolynomialEvaluator evaluator;
             TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
         }
