@@ -174,12 +174,17 @@ class BToKstarDileptonLargeRecoilTest :
                     static const double eps = 1e-4;
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1.0, 6.0),                         2.41382e-7, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1.0, 6.0),             2.40579e-7, eps);
-          //          TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(1.0, 6.0),             +2.39239e-2, eps);
-          //          TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry_cp_averaged(1.0, 6.0), -9.16268e-3, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(1.0, 6.0),             +2.39364e-2, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry_cp_averaged(1.0, 6.0), -9.15637e-3, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(1.0, 6.0),              +0.74575,    eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation_cp_averaged(1.0, 6.0),  +0.75409,    eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(1.0, 6.0),                 -3.57972e-2, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2_cp_averaged(1.0, 6.0),     -4.01245e-2, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_3(1.0, 6.0),                 +0.577172,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_4(1.0, 6.0),                 +0.713499,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_5(1.0, 6.0),                 +0.49572,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_re(1.0, 6.0),                +0.125529,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_im(1.0, 6.0),                -0.00274647, eps);
                 }
 
                 /* transversity amplitudes at q^2 = 6.00 GeV^2 */

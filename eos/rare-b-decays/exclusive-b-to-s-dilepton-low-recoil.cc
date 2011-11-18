@@ -538,6 +538,15 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_5(const double & s) const
+    {
+        // cf. [BS2011], eq. (34), p. 9 for the massless case
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
+            / 8.0 / a_c.j2s;
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_re(const double & s) const
     {
         // cf. [BS2011], eq. (38), p. 10
@@ -896,6 +905,15 @@ namespace eos
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4, this, std::placeholders::_1);
 
         return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const
+    {
+        // cf. [BS2011], eq. (34), p. 9 for the massless case
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
+            / 8.0 / a_c.j2s;
     }
 
     double

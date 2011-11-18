@@ -914,9 +914,9 @@ namespace eos
     {
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
 
-        // cf. [EHMRR2010], eq. (3.23), p. 14 for the massless case
-        return std::sqrt(16.0 * power_of<2>(a_c.j1s) - 9.0 * power_of<2>(a_c.j6s) - 36.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
-            / 8.0 / a_c.j1s;
+        // cf. [BS2011], eq. (34), p. 9 for the massless case
+        return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
+            / 8.0 / a_c.j2s;
     }
 
     double
@@ -1175,10 +1175,9 @@ namespace eos
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
 
-        // cf. [EHMRR2010], eq. (3.23), p. 14 for the massless case
-        // TODO: check against [BS2011], which have different numerical factors multiplying the I_i
-        return std::sqrt(16.0 * power_of<2>(a_c.j1s) - 9.0 * power_of<2>(a_c.j6s) - 36.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
-            / 8.0 / a_c.j1s;
+        // cf. [BS2011], eq. (34), p. 9 for the massless case
+        return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
+            / 8.0 / a_c.j2s;
     }
 
     double
