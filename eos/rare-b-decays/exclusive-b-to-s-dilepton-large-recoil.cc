@@ -24,6 +24,7 @@
 #include <eos/rare-b-decays/form-factors.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/long-distance.hh>
+#include <eos/rare-b-decays/qcdf_integrals.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
@@ -39,6 +40,8 @@
 #include <functional>
 
 #include <gsl/gsl_sf.h>
+
+#include <iostream>
 
 namespace eos
 {
@@ -577,12 +580,14 @@ namespace eos
 
         double e_q;
 
+        char q;
+
         bool cp_conjugate;
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o)),
+            model(Model::make(o.get("model", "WilsonScan"), p, o)),
             hbar(p["hbar"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
@@ -621,16 +626,294 @@ namespace eos
             u.uses(*model);
 
             std::string spectator_quark = o.get("q", "d");
-            if (spectator_quark == "d")
+            if (spectator_quark.size() != 1)
+                throw InternalError("Option q should only be one character!");
+
+            q = spectator_quark[0];
+            if (q == 'd')
             {
                 e_q = -1.0 / 3.0;
             }
-            else if (spectator_quark == "u")
+            else if (q == 'u')
             {
                 e_q = 2.0 / 3.0;
             }
             else
                 throw InternalError("Unsupported spectator quark");
+#if 0
+            p["Abs{c7}"]  =  0.33670; // c7eff = 0.30726
+            p["Abs{c9}"]  =  4.27305;
+            p["Abs{c10}"] =  4.17166;
+            p["c1"]       = -0.32196;
+            p["c2"]       =  1.00925;
+            p["c3"]       = -0.00519;
+            p["c4"]       = -0.08787;
+            p["c5"]       =  0.00036;
+            p["c6"]       =  0.00101;
+            p["c8"]       = -0.18262; // c8eff = -0.16925
+            p["decay-constant::B_d"] = 0.200;
+            p["decay-constant::B_u"] = 0.200;
+            p["B->K^*::f_Kstar_perp@2GeV"] = 0.165138862;
+
+            Amplitudes a = amplitudes(3.0);
+            std::cout << "A_pp^L(q^2 = 3) = " << a.a_perp_left << std::endl;
+            std::cout << "A_pp^R(q^2 = 3) = " << a.a_perp_right << std::endl;
+            std::cout << "A_pa^L(q^2 = 3) = " << a.a_par_left << std::endl;
+            std::cout << "A_pa^R(q^2 = 3) = " << a.a_par_right << std::endl;
+            std::cout << "A_00^L(q^2 = 3) = " << a.a_long_left << std::endl;
+            std::cout << "A_00^R(q^2 = 3) = " << a.a_long_right << std::endl;
+
+            std::cout << "lam_up    = " << (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts())) << std::endl;
+            std::cout << "xi_par(3) = " << xi_par(3.0) << std::endl;
+            std::cout << "xi_perp(3)= " << xi_perp(3.0) << std::endl;
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+            std::cout << "C9       = " << wc.c9() << std::endl;
+            std::cout << "C10      = " << wc.c10() << std::endl;
+            std::cout << "C9 - C10 = " << wc.c9() - wc.c10() << std::endl;
+            std::cout << "C9 + c10 = " << wc.c9() + wc.c10() << std::endl;
+            DipoleFormFactors dff = calT(3.0);
+            std::cout << "s = 3" << std::endl;
+            std::cout << "calT_perp_left  = " << dff.calT_perp_left << std::endl;
+            std::cout << "calT_perp_right = " << dff.calT_perp_right << std::endl;
+            std::cout << "calT_parallel   = " << dff.calT_parallel << std::endl;
+            dff = calT(0.0);
+            std::cout << "s = 0" << std::endl;
+            std::cout << "calT_perp_left  = " << dff.calT_perp_left << std::endl;
+            std::cout << "calT_perp_right = " << dff.calT_perp_right << std::endl;
+            std::cout << "calT_parallel   = " << dff.calT_parallel << std::endl;
+            throw std::string("foo");
+#endif
+        }
+
+        struct DipoleFormFactors
+        {
+            complex<double> calT_perp_left;
+            complex<double> calT_perp_right;
+            complex<double> calT_parallel;
+        };
+
+        DipoleFormFactors calT(const double & s) const
+        {
+            // charges of down- and up-type quarks
+            static const double e_d = -1.0/3.0;
+            static const double e_u = +2.0/3.0;
+
+            // spectator contributions
+            double delta_qu = (q == 'u' ? 1.0 : 0.0);
+
+            // kinematics
+            double m_c_pole = model->m_c_pole();
+            double m_b_PS = this->m_b_PS(), m_b_PS2 = m_b_PS * m_b_PS;
+            double energy = this->energy(s);
+            double L = -1.0 * (m_b_PS2 - s) / s * std::log(1.0 - s / m_b_PS2);
+
+            // couplings
+            double alpha_s_mu = model->alpha_s(mu()); // alpha_s at the hard scale
+            double a_mu = alpha_s_mu * QCD::casimir_f / 4.0 / M_PI;
+            double alpha_s_mu_f = model->alpha_s(std::sqrt(mu() * 0.5)); // alpha_s at the factorization scale
+            double a_mu_f = alpha_s_mu_f * QCD::casimir_f / 4.0 / M_PI;
+            complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
+            if (cp_conjugate)
+                lambda_hat_u = std::conj(lambda_hat_u);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+
+            // Compute the QCDF Integrals
+            double invm1_par = 3.0 * (1.0 + a_1_par + a_2_par); // <ubar^-1>_par
+            double invm1_perp = 3.0 * (1.0 + a_1_perp + a_2_perp); // <ubar^-1>_perp
+            QCDFIntegrals::Results qcdf_0 = QCDFIntegrals::dilepton_massless_case(s, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals::Results qcdf_c = QCDFIntegrals::dilepton_charm_case(s, m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals::Results qcdf_b = QCDFIntegrals::dilepton_bottom_case(s, m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+
+            // inverse of the "negative" moment of the B meson LCDA
+            // cf. [BFS2001], Eq. (54), p. 15
+            double omega_0 = lambda_B_p, lambda_B_p_inv = 1.0 / lambda_B_p;
+            complex<double> lambda_B_m_inv = complex<double>(-gsl_sf_expint_Ei(s / m_B / omega_0), M_PI) * (std::exp(-s / m_B / omega_0) / omega_0);
+
+            /* Y(s) for the up and the top sector */
+            // cf. [BFS2001], Eq. (10), p. 4
+            complex<double> Y_top_c = 4.0 / 3.0 * wc.c1() + wc.c2() + 6.0 * wc.c3() + 60.0 * wc.c5();
+            complex<double> Y_top_b = -0.5 * (7.0 * wc.c3() + 4.0 / 3.0 * wc.c4() + 76.0 * wc.c5() + 64.0 / 3.0 * wc.c6());
+            complex<double> Y_top_0 = -0.5 * (wc.c3() + 4.0 / 3.0 * wc.c4() + 16.0 * wc.c5() + 64 / 3.0 * wc.c6());
+            complex<double> Y_top_ = 2.0 / 9.0 * (6.0 * wc.c3() + 32.0 * wc.c5() + 32.0 / 3.0 * wc.c6());
+
+            // Use b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses,
+            // then replace b pole mass by the PS mass.
+            complex<double> Y_top = Y_top_c * CharmLoops::h(mu, s, m_c_pole)
+                 + Y_top_b * CharmLoops::h(mu, s, m_b_PS)
+                 + Y_top_0 * CharmLoops::h(mu, s)
+                 + Y_top_;
+            // cf. [BFS2004], Eq. (43), p. 24
+            complex<double> Y_up = (4.0 / 3.0 * wc.c1() + wc.c2()) * (CharmLoops::h(mu, s, m_c_pole) - CharmLoops::h(mu, s));
+
+            /* Effective wilson coefficients */
+            // cf. [BFS2001], below Eq. (9), p. 4
+            complex<double> c7eff = wc.c7() - 1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
+            // cf. [BFS2001], below Eq. (26), p. 8
+            complex<double> c8eff = wc.c8() + wc.c3() - 1.0/6.0 * wc.c4() + 20.0 * wc.c5() - 10.0/3.0 * wc.c6();
+
+            /* perpendicular, top sector */
+            // cf. [BFS2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1
+            complex<double> C0_top_perp_left  = (c7eff - wc.c7prime()) + s / (2.0 * m_b_PS * m_B) * Y_top;
+            complex<double> C0_top_perp_right = (c7eff + wc.c7prime()) + s / (2.0 * m_b_PS * m_B) * Y_top;
+            // cf. [BFS2004], Eq. (44), p. 24
+            complex<double> C1f_top_perp_left  = (c7eff - wc.c7prime()) * (8.0 * std::log(m_b_PS / mu()) - L - 4.0 * (1.0 - mu_f() / m_b_PS));
+            complex<double> C1f_top_perp_right = (c7eff + wc.c7prime()) * (8.0 * std::log(m_b_PS / mu()) - L - 4.0 * (1.0 - mu_f() / m_b_PS));
+            // cf. [BFS2001], Eqs. (34), (37), p. 9
+            complex<double> C1nf_top_perp = (-1.0 / QCD::casimir_f) * (
+                    (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole) + c8eff * CharmLoops::F87_massless(mu, s, m_b_PS)
+                    + (s / (2.0 * m_b_PS * m_B)) * (
+                        wc.c1() * memoise(CharmLoops::F19_massive, mu(), s, m_b_PS, m_c_pole)
+                        + wc.c2() * memoise(CharmLoops::F29_massive, mu(), s, m_b_PS, m_c_pole)
+                        + c8eff * CharmLoops::F89_massless(s, m_b_PS)));
+
+            /* perpendicular, up sector */
+            // cf. [BFS2004], comment before Eq. (43), p. 24
+            complex<double> C0_up_perp = s / (2.0 * m_b_PS * m_B) * Y_up;
+            // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
+            // cf. [BFS2001], Eqs. (34), (37), p. 9
+            // [BFS2004], [S2004] have a different sign convention for F{12}{79}_massless than we!
+            complex<double> C1nf_up_perp = (-1.0 / QCD::casimir_f) * (
+                    (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, s, m_b_PS))
+                    + (s / (2.0 * m_b_PS * m_B)) * (
+                        wc.c1() * (memoise(CharmLoops::F19_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F19_massless(mu, s, m_b_PS))
+                        + wc.c2() * (memoise(CharmLoops::F29_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F29_massless(mu, s, m_b_PS))));
+
+            /* parallel, top sector */
+            // cf. [BFS2001], Eqs. (14), (15), p. 5, in comparison with \delta_{2,3} = 1
+            complex<double> C0_top_par = -1.0 * (c7eff - wc.c7prime() + m_B / (2.0 * m_b_PS) * Y_top);
+            // cf. [BFS2004], Eq. (45), p. 24
+            complex<double> C1f_top_par = -1.0 * (c7eff - wc.c7prime()) * (8.0 * std::log(m_b_PS / mu) + 2.0 * L - 4.0 * (1.0 - mu_f() / m_b_PS));
+            // cf. [BFS2001], Eqs. (38), p. 9
+            complex<double> C1nf_top_par = (+1.0 / QCD::casimir_f) * (
+                    (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole)
+                    + c8eff * CharmLoops::F87_massless(mu, s, m_b_PS)
+                    + (m_B / (2.0 * m_b_PS)) * (
+                        wc.c1() * memoise(CharmLoops::F19_massive, mu(), s, m_b_PS, m_c_pole)
+                        + wc.c2() * memoise(CharmLoops::F29_massive, mu(), s, m_b_PS, m_c_pole)
+                        + c8eff * CharmLoops::F89_massless(s, m_b_PS)));
+
+            /* parallel, up sector */
+            // cf. [BFS2004], comment before Eq. (43), p. 24
+            complex<double> C0_up_par = -1.0 * m_B / (2.0 * m_b_PS) * Y_up;
+            // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
+            // cf. [BFS2004], last paragraph in Sec A.1, p. 24
+            // [BFS2004], [S2004] have a different sign convention for F{12}{79}_massless than we!
+            complex<double> C1nf_up_par = (+1.0 / QCD::casimir_f) * (
+                    (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, s, m_b_PS))
+                    + (m_B / (2.0 * m_b_PS)) * (
+                        wc.c1() * (memoise(CharmLoops::F19_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F19_massless(mu, s, m_b_PS))
+                        + wc.c2() * (memoise(CharmLoops::F29_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F29_massless(mu, s, m_b_PS))));
+
+            // compute the factorizing contributions
+            complex<double> C_perp_left  = C0_top_perp_left  + lambda_hat_u * C0_up_perp
+                + a_mu * (C1f_top_perp_left  + C1nf_top_perp + lambda_hat_u * C1nf_up_perp);
+            complex<double> C_perp_right = C0_top_perp_right + lambda_hat_u * C0_up_perp
+                + a_mu * (C1f_top_perp_right + C1nf_top_perp + lambda_hat_u * C1nf_up_perp);
+            complex<double> C_par = C0_top_par + lambda_hat_u * C0_up_par
+                + a_mu * (C1f_top_par + C1nf_top_par + lambda_hat_u * C1nf_up_par);
+
+
+            /* perpendicular, top sector */
+            // T0_top_perp_{p,m} = 0, cf. [BFS2001], Eq. (17), p. 6
+            // cf. [BFS2004], Eq. (49)
+            complex<double> T1f_top_perp_p_left  = (c7eff - wc.c7prime()) * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
+            complex<double> T1f_top_perp_p_right = (c7eff + wc.c7prime()) * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
+            // T1f_top_perp_m = 0, cf. [BFS2001], Eq. (22), p. 7
+            // cf. [BFS2001], Eq. (23), p. 7
+            // [Christoph] Use c8 instead of c8eff
+            complex<double> T1nf_top_perp_p = (-4.0 * e_d * c8eff * qcdf_0.j0bar_perp
+                + m_B / (2.0 * m_b_PS) * (
+                        e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde1_perp
+                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6() - (4.0 * m_b_PS / m_B) * (wc.c3() - wc.c4()/6.0 + 4.0 * wc.c5() - 2.0/3.0 * wc.c6())) * qcdf_b.jtilde1_perp
+                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv;
+            // T1nf_top_perp_m = 0, cf. [BFS2001], Eq. (17), p. 6
+
+            /* perpendicular, up sector */
+            // all T1f_up vanish, cf. [BFS2004], sentence below Eq. (49), p. 25
+            // cf. [BFS2004], Eq. (50), p. 25
+            complex<double> T1nf_up_perp_p = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv;
+
+            /* parallel, top sector */
+            // T0_top_par_p = 0, cf. [BFS2001], Eq. (17), p. 6
+            // cf. [BFS2004], Eqs. (46)-(47), p. 25 without the \omega term.
+            complex<double> T0_top_par_m = -e_q * 4.0 * m_B / m_b_PS * (wc.c3() + 4.0/3.0 * wc.c4() + 16.0 * wc.c5() + 64.0/3.0 * wc.c6()) * lambda_B_m_inv;
+            // cf. [BFS2001], Eq. (21), p. 6
+            complex<double> T1f_top_par_p  = (c7eff - wc.c7prime() + s / (2.0 * m_b_PS * m_B) * Y_top) * (2.0 * power_of<2>(m_B / energy)) * invm1_par * lambda_B_p_inv;
+            // T1f_top_par_m = 0, cf. [BFS2001], Eq. (22), p. 7
+            // cf. [BFS2001], Eq. (25), p. 7
+            complex<double> T1nf_top_par_p = m_B / m_b_PS * (
+                    e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde2_parallel
+                    + e_d * (wc.c3() - wc.c1() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
+                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0/3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
+            // cf. [BFS2001], Eq. (26), pp. 7-8
+            complex<double> T1nf_top_par_m = e_q * (8.0 * c8eff * qcdf_0.j0_parallel
+                    + 6.0 * m_B / m_b_PS * (
+                        (-wc.c1() / 6.0 + wc.c2() + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j4_parallel
+                        + (wc.c3() + 5.0/6.0 * wc.c4() + 16.0 * wc.c5() + 22.0/3.0 * wc.c6()) * qcdf_b.j4_parallel
+                        + (wc.c3() + 17.0/6.0 * wc.c4() + 16.0 * wc.c5() + 82.0/3.0 * wc.c6()) * qcdf_0.j4_parallel
+                        -8.0 / 27.0 * (-7.5 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()))) * lambda_B_m_inv;
+
+            /* parallel, up sector */
+            // all T1f_up vanish, cf. [BFS2004], sentence below Eq. (49), p. 25
+            // cf. [BFS2004], Eqs. (46),(48), p. 25 without the \omega term
+            complex<double> T0_up_par_m = +e_q * 4.0 * m_B / m_b_PS * (3.0 * delta_qu * wc.c2()) * lambda_B_m_inv;
+            // cf. [BFS2004], Eq. (50), p. 25
+            complex<double> T1nf_up_par_p = +e_u * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde2_parallel - qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
+            // cf. [BFS2004], Eq. (50), p. 25 without the \omega term
+            complex<double> T1nf_up_par_m = +e_q * 6.0 * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.j4_parallel - qcdf_0.j4_parallel) * lambda_B_m_inv;
+
+
+            // Compute the nonfactorizing contributions
+            complex<double> T_perp_left  = a_mu_f * (T1f_top_perp_p_left + T1nf_top_perp_p + lambda_hat_u * T1nf_up_perp_p);
+            complex<double> T_perp_right = a_mu_f * (T1f_top_perp_p_right + T1nf_top_perp_p + lambda_hat_u * T1nf_up_perp_p);
+            complex<double> T_par = a_mu_f * (T1f_top_par_p + T1nf_top_par_p + lambda_hat_u * T1nf_up_par_p)
+                + (T0_top_par_m + lambda_hat_u * T0_up_par_m + a_mu_f * (T1nf_top_par_m + lambda_hat_u * T1nf_up_par_m));
+
+            // Compute the numerically leading power-suppressed weak annihilation contributions to order alpha_s^0
+            // cf. [BFS2004], Eq. (51)
+            complex<double> Delta_T_ann_top_perp = e_q * M_PI * M_PI * f_B / 3.0 / m_b_PS / m_B * (
+                    -4.0 * f_Kstar_perp * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 3.0 * wc.c5() + 4.0 * wc.c6())) * qcdf_0.j0_perp
+                    + 2.0 * f_Kstar_par * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 12.0 * wc.c5() + 16.0 * wc.c6())) *
+                        (m_Kstar / (1.0 - s / (m_B * m_B)) / lambda_B_p));
+            complex<double> Delta_T_ann_up_perp = -e_q * 2.0 * M_PI * M_PI * f_B * f_Kstar_par / 3.0 / m_b_PS / m_B *
+                (m_Kstar / (1.0 - s / (m_B * m_B)) / lambda_B_p) * 3.0 * delta_qu * wc.c2();
+            // Compute the numerically leading power-suppressed hard spectator interaction contributions to order alpha_s^1
+            // cf. [BFS2004], Eqs. (52), (53)
+            complex<double> Delta_T_hsa_top_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
+                    12.0 * c8eff * (m_b_PS / m_B) * f_Kstar_perp() * 1.0 / 3.0 * (qcdf_0.j0_perp + qcdf_0.j7_perp)
+                    + 8.0 * f_Kstar_perp * (3.0 / 4.0) * (
+                        (wc.c2() - wc.c1() / 6.0 + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j5_perp
+                        + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j5_perp
+                        + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j5_perp
+                        - (8.0 / 27.0) * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()) * qcdf_0.j0_perp)
+                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) / lambda_B_p) * (3.0 / 4.0) * (
+                        (wc.c2() - wc.c1() / 6.0 + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j6_perp
+                        + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j6_perp
+                        + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j6_perp
+                        - 8.0 / 27.0 * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6())));
+            complex<double> Delta_T_hsa_up_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
+                    + 8.0 * f_Kstar_perp * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0) * (qcdf_c.j5_perp - qcdf_0.j5_perp)
+                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) / lambda_B_p) * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0)
+                        * (qcdf_c.j6_perp - qcdf_0.j6_perp));
+
+            // Compute the sum of the numerically leading power-suppressed contributions
+            complex<double> Delta_T_top_perp = Delta_T_ann_top_perp + Delta_T_hsa_top_perp;
+            complex<double> Delta_T_up_perp = Delta_T_ann_up_perp + Delta_T_hsa_up_perp;
+            complex<double> Delta_T_perp = Delta_T_top_perp + lambda_hat_u * Delta_T_up_perp;
+
+
+            // cf. [BFS2001], Eq. (15), and [BHP2008], Eq. (C.4)
+            DipoleFormFactors result;
+            result.calT_perp_left  = xi_perp(s) * C_perp_left
+                + power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_left
+                + Delta_T_perp;
+            result.calT_perp_right = xi_perp(s) * C_perp_right
+                + power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_right
+                + Delta_T_perp;
+            result.calT_parallel = xi_par(s) * C_par
+                + power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_par * m_Kstar) / (m_B * energy) * T_par;
+
+            return result;
         }
 
         /* Form factors */
@@ -687,7 +970,7 @@ namespace eos
             return model->m_b_ps(mu_f());
         }
 
-        double energy(const double & s) const
+        inline double energy(const double & s) const
         {
             return (m_B() * m_B() + m_Kstar() * m_Kstar() - s) / (2.0 * m_B());
         }
@@ -698,7 +981,6 @@ namespace eos
         {
             Amplitudes result;
 
-            double m_b = m_b_PS();
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
             double shat = s_hat(s);
@@ -706,22 +988,7 @@ namespace eos
             double mKhat = m_Kstar / m_B;
             double norm_s = norm(s);
 
-            ShortDistanceLargeRecoil::ParameterSet p(m_b, model->m_b_pole(), m_c(),
-                                                     m_B(), m_Kstar(),
-                                                     mu(), mu_f(),
-                                                     model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
-                                                     f_B(), f_Kstar_perp(),
-                                                     wc,
-                                                     e_q,
-                                                     a_1_perp(), a_2_perp(),
-                                                     lambda_B_p());
-            std::complex<double> calTperp_right = ShortDistanceLargeRecoil::calT_perp( 1.0, s, p, xi_perp(s));
-            std::complex<double> calTperp_left  = ShortDistanceLargeRecoil::calT_perp(-1.0, s, p, xi_perp(s));
-
-            p.f_K        = f_Kstar_par;
-            p.a_1        = a_1_par();
-            p.a_2        = a_2_par();
-            std::complex<double> calTpar = ShortDistanceLargeRecoil::calT_par(s, p, xi_par(s));
+            DipoleFormFactors dff = calT(s);
 
             // longitudinal amplitude
             complex<double> wilson_long_right = (wc.c9() - wc.c9prime()) + (wc.c10() - wc.c10prime());
@@ -731,8 +998,8 @@ namespace eos
             complex<double> a = ((m_B() * m_B() - m_Kstar() * m_Kstar() - s) * 2.0 * energy(s) * xi_perp(s)
                                - lam(s) * m_B() / (m_B() * m_B() - m_Kstar() * m_Kstar()) * (xi_perp(s) - xi_par(s)));
             complex<double> b = 2.0 * m_b_PS() * (((m_B() * m_B() + 3.0 * m_Kstar() * m_Kstar() - s) * 2.0 * energy(s) / m_B()
-                               - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar())) * calTperp_left
-                               - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar()) * calTpar);
+                               - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar())) * dff.calT_perp_left
+                               - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar()) * dff.calT_parallel);
 
             result.a_long_right = norm_s * uncertainty_long_right * prefactor_long * (wilson_long_right * a + b);
             result.a_long_left  = norm_s * uncertainty_long_left  * prefactor_long * (wilson_long_left  * a + b);
@@ -742,8 +1009,8 @@ namespace eos
             complex<double> wilson_perp_right = (wc.c9() + wc.c9prime()) + (wc.c10() + wc.c10prime());
             complex<double> wilson_perp_left  = (wc.c9() + wc.c9prime()) - (wc.c10() + wc.c10prime());
 
-            result.a_perp_right = norm_s * uncertainty_perp_right * prefactor_perp * (wilson_perp_right * xi_perp(s) + (2.0 * mbhat / shat) * calTperp_right);
-            result.a_perp_left  = norm_s * uncertainty_perp_left  * prefactor_perp * (wilson_perp_left  * xi_perp(s) + (2.0 * mbhat / shat) * calTperp_right);
+            result.a_perp_right = norm_s * uncertainty_perp_right * prefactor_perp * (wilson_perp_right * xi_perp(s) + (2.0 * mbhat / shat) * dff.calT_perp_right);
+            result.a_perp_left  = norm_s * uncertainty_perp_left  * prefactor_perp * (wilson_perp_left  * xi_perp(s) + (2.0 * mbhat / shat) * dff.calT_perp_right);
 
             // parallel amplitude
             double prefactor_par = -std::sqrt(2.0) * m_B() * (1.0 - shat);
@@ -751,9 +1018,9 @@ namespace eos
             complex<double> wilson_par_left  = (wc.c9() - wc.c9prime()) - (wc.c10() - wc.c10prime());
 
             result.a_par_right = norm_s * uncertainty_par_right * prefactor_par * (wilson_par_right * xi_perp(s) +
-                                    (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * calTperp_left);
+                                    (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * dff.calT_perp_left);
             result.a_par_left  = norm_s * uncertainty_par_left  * prefactor_par * (wilson_par_left  * xi_perp(s) +
-                                    (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * calTperp_left);
+                                    (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * dff.calT_perp_left);
 
             // timelike amplitude
             double m_Kstarhat = m_Kstar / m_B;
