@@ -139,6 +139,7 @@ AC_OUTPUT(
 	Makefile
 	doc/Makefile
 	eos/Makefile
+	eos/form-factors/Makefile
 	eos/rare-b-decays/Makefile
 	eos/utils/Makefile
 	src/Makefile

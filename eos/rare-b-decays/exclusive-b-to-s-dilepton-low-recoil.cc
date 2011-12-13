@@ -18,10 +18,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/form-factors/form-factors.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton.hh>
-#include <eos/rare-b-decays/form-factors.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/destringify.hh>

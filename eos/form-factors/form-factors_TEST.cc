@@ -19,7 +19,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/rare-b-decays/form-factors.hh>
+#include <eos/form-factors/form-factors.hh>
 
 #include <cmath>
 #include <limits>

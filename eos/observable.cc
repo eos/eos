@@ -19,11 +19,11 @@
  */
 
 #include <eos/observable.hh>
+#include <eos/form-factors/form-factors-impl.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-gamma.hh>
-#include <eos/rare-b-decays/form-factors-impl.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <eos/utils/concrete_observable.hh>

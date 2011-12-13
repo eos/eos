@@ -18,7 +18,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/rare-b-decays/form-factors-impl.hh>
+#include <eos/form-factors/form-factors-impl.hh>
 #include <eos/utils/destringify.hh>
 
 #include <map>

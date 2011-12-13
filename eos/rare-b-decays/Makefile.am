@@ -16,11 +16,14 @@ libeosrarebdecays_la_SOURCES = \
 	exclusive-b-to-s-gamma.cc exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
 	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
-	form-factors.cc form-factors.hh form-factors-impl.hh \
 	hard-scattering.cc hard-scattering.hh \
 	long-distance.cc long-distance.hh \
 	qcdf_integrals.cc qcdf_integrals.hh
-libeosrarebdecays_la_LIBADD = $(top_builddir)/eos/utils/libeosutils.la -lgslcblas -lgsl
+libeosrarebdecays_la_LIBADD = \
+	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/form-factors/libeosformfactors.la \
+	-lgslcblas \
+	-lgsl
 
 include_eos_rarebdecaysdir = $(includedir)/eos/rare-b-decays
 include_eos_rarebdecays_HEADERS = \
@@ -34,7 +37,6 @@ include_eos_rarebdecays_HEADERS = \
 	exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.hh \
 	inclusive-b-to-s-gamma.hh \
-	form-factors.hh \
 	hard-scattering.hh \
 	long-distance.hh \
 	qcdf_integrals.hh
@@ -52,7 +54,6 @@ TESTS = \
 	exclusive-b-to-s-dilepton-low-recoil_TEST \
 	exclusive-b-to-s-dilepton-large-recoil_TEST \
 	exclusive-b-to-s-gamma_TEST \
-	form-factors_TEST \
 	inclusive-b-to-s-dilepton_TEST \
 	inclusive-b-to-s-gamma_TEST \
 	hard-scattering_TEST \
@@ -78,8 +79,6 @@ exclusive_b_to_s_dilepton_low_recoil_TEST_SOURCES = exclusive-b-to-s-dilepton-lo
 exclusive_b_to_s_dilepton_large_recoil_TEST_SOURCES = exclusive-b-to-s-dilepton-large-recoil_TEST.cc
 
 exclusive_b_to_s_gamma_TEST_SOURCES = exclusive-b-to-s-gamma_TEST.cc
-
-form_factors_TEST_SOURCES = form-factors_TEST.cc
 
 inclusive_b_to_s_dilepton_TEST_SOURCES = inclusive-b-to-s-dilepton_TEST.cc
 
