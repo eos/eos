@@ -311,6 +311,7 @@ namespace eos
             Parameter::Template{"B->K^*::f_Kstar_par",                           +0.212,          +0.217,          +0.222         }, // GeV, cf. [BHvD2010], Table I
             Parameter::Template{"B->K^*::f_Kstar_perp@2GeV",                     +0.168,          +0.173,          +0.178         }, // GeV @2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD2010], Table I
             // B->K^*ll uncertainties from subleading terms for Large Recoil
+            Parameter::Template{"B->K^*ll::sl_uncertainty@LargeRecoil",          +0.95,           +1.0,            +1.05          },
             Parameter::Template{"B->K^*ll::A_0^L_uncertainty@LargeRecoil",       +0.95,           +1.0,            +1.05          },
             Parameter::Template{"B->K^*ll::A_0^R_uncertainty@LargeRecoil",       +0.95,           +1.0,            +1.05          },
             Parameter::Template{"B->K^*ll::A_par^L_uncertainty@LargeRecoil",     +0.95,           +1.0,            +1.05          },
@@ -324,9 +325,11 @@ namespace eos
             Parameter::Template{"B->Pll::Lambda_pseudo@LowRecoil",               -0.5,            +0.0,            +0.5           },
             Parameter::Template{"B->Pll::sl_phase_pseudo@LowRecoil",             -M_PI/2.0,       +0.0,            +M_PI/2.0      },
             // B->Vll uncertainties at subleading order at Low Recoil
+            Parameter::Template{"B->Vll::Lambda@LowRecoil",                      -0.5,            +0.0,            +0.5           },
             Parameter::Template{"B->Vll::Lambda_0@LowRecoil",                    -0.5,            +0.0,            +0.5           },
             Parameter::Template{"B->Vll::Lambda_pa@LowRecoil",                   -0.5,            +0.0,            +0.5           },
             Parameter::Template{"B->Vll::Lambda_pp@LowRecoil",                   -0.5,            +0.0,            +0.5           },
+            Parameter::Template{"B->Vll::sl_phase@LowRecoil",                    -M_PI/2.0,       +0.0,            +M_PI/2.0      },
             Parameter::Template{"B->Vll::sl_phase_0@LowRecoil",                  -M_PI/2.0,       +0.0,            +M_PI/2.0      },
             Parameter::Template{"B->Vll::sl_phase_pa@LowRecoil",                 -M_PI/2.0,       +0.0,            +M_PI/2.0      },
             Parameter::Template{"B->Vll::sl_phase_pp@LowRecoil",                 -M_PI/2.0,       +0.0,            +M_PI/2.0      },
