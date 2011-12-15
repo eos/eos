@@ -20,6 +20,7 @@ libeosutils_la_SOURCES = \
 	concrete_observable.hh \
 	condition_variable.cc condition_variable.hh \
 	destringify.hh \
+	equation_solver.cc equation_solver.hh \
 	exception.cc exception.hh \
 	hdf5.cc hdf5.hh hdf5-fwd.hh \
 	hierarchical-clustering.cc hierarchical-clustering.hh \
@@ -64,7 +65,7 @@ libeosutils_la_SOURCES = \
 	wilson-polynomial.cc wilson-polynomial.hh \
 	wilson_scan_model.cc wilson_scan_model.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
-libeosutils_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lhdf5 -lhdf5_hl
+libeosutils_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lhdf5 -lhdf5_hl -lMinuit2
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
@@ -82,6 +83,7 @@ include_eos_utils_HEADERS = \
 	concrete_observable.hh \
 	condition_variable.hh \
 	destringify.hh \
+	equation_solver.hh \
 	exception.hh \
 	hdf5.hh \
 	hierarchical-clustering.hh \
@@ -131,6 +133,7 @@ TESTS = \
 	apply_TEST \
 	cartesian-product_TEST \
 	chi-squared_TEST \
+	equation_solver_TEST \
 	hdf5_TEST \
 	hierarchical-clustering_TEST \
 	histogram_TEST \
@@ -167,6 +170,7 @@ TESTS = \
 LDADD = \
 	-lgsl \
 	-lhdf5 \
+	-lMinuit2 \
 	$(top_builddir)/test/libeostest.a \
 	libeosutils.la \
 	$(top_builddir)/eos/libeos.la
@@ -184,6 +188,8 @@ chi_squared_TEST_SOURCES = chi-squared_TEST.cc
 hdf5_TEST_SOURCES = hdf5_TEST.cc
 
 hierarchical_clustering_TEST_SOURCES = hierarchical-clustering_TEST.cc
+
+equation_solver_TEST_SOURCES = equation_solver_TEST.cc
 
 histogram_TEST_SOURCES = histogram_TEST.cc
 
