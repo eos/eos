@@ -51,7 +51,6 @@ main(int argc, char * argv[])
         kinematics.declare("s_max");
 
         double s_min(0.0), s_max(0.0);
-        bool range(false);
         std::list<std::tuple<std::string, std::list<Parameter>>> budgets;
         std::list<ObservablePtr> observables;
 
@@ -70,7 +69,6 @@ main(int argc, char * argv[])
             {
                 s_min = destringify<double>(*(++a));
                 s_max = destringify<double>(*(++a));
-                range = true;
                 std::cerr << "Range: " << s_min << " .. " << s_max << std::endl;
                 continue;
             }
