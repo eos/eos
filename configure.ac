@@ -52,7 +52,7 @@ dnl {{{ define CHECK_CXXFLAG
 AC_DEFUN([CHECK_CXXFLAG], [
 	save_CXXFLAGS=$CXXFLAGS
 	CXXFLAGS="$CXXFLAGS $1 -Werror"
-	AC_COMPILE_IFELSE([
+	AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 #include <string>
 #include <iostream>
 template <typename T_> struct S { };
@@ -67,7 +67,7 @@ int main(int, char **)
 		 AC_MSG_ERROR([your compiler does not support CXXFLAGS=]$1)
 		])
 	CXXFLAGS=$save_CXXFLAGS
-])
+])])
 dnl }}}
 
 dnl {{{ check for compiler requirements
@@ -77,7 +77,7 @@ CHECK_CXXFLAG([-std=c++0x])
 dnl }}}
 dnl {{{ check for braced initializers
 AC_MSG_CHECKING([for braced initializers])
-AC_COMPILE_IFELSE([
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 	struct Foo { double x, y; };
 	int main(int, char **)
 	{
@@ -88,13 +88,13 @@ AC_COMPILE_IFELSE([
 	[AC_MSG_RESULT([no])
 	 AC_MSG_ERROR([your compiler does not support braced initializers])
 	]
-)
+)])
 dnl }}}
 dnl }}}
 
 dnl {{{ check for libraries
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS -lgslcblas" # work around Debian/Ubuntu oddities
+save_LIBS=$LIBS
+LIBS="$LIBS -lgslcblas" # work around Debian/Ubuntu oddities
 dnl {{{ check for -lgsl
 AC_CHECK_LIB(gsl, gsl_sf_zeta,
 	[],
@@ -105,7 +105,7 @@ AC_CHECK_LIB(hdf5, H5open,
 	[],
 	[AC_MSG_ERROR([you do seem to be lacking libhdf5 (http://hdf.ncsa.uiuc.edu/HDF5/).])])
 dnl }}}
-CXXFLAGS=$save_CXXFLAGS
+LIBS=$save_LIBS
 dnl }}}
 
 dnl {{{ define EOS_BUILDDIR
