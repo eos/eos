@@ -61,13 +61,14 @@ int main(int, char **)
 	std::string s("test");
 	std::cout << s << std::endl;
 }
-	],
+	])],
 		[AC_MSG_RESULT([yes])],
 		[AC_MSG_RESULT([no])
 		 AC_MSG_ERROR([your compiler does not support CXXFLAGS=]$1)
-		])
+		]
+	)
 	CXXFLAGS=$save_CXXFLAGS
-])])
+])
 dnl }}}
 
 dnl {{{ check for compiler requirements
@@ -83,12 +84,12 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 	{
 		Foo foo{ 17.24, 23.08 };
 	}
-],
+])],
 	[AC_MSG_RESULT([yes])],
 	[AC_MSG_RESULT([no])
 	 AC_MSG_ERROR([your compiler does not support braced initializers])
 	]
-)])
+)
 dnl }}}
 dnl }}}
 
