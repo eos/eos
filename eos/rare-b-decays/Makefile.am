@@ -54,45 +54,33 @@ TESTS = \
 	inclusive-b-to-s-gamma_TEST \
 	hard-scattering_TEST \
 	long-distance_TEST
-TESTS_LD_ADD = \
+LDADD = \
 	$(top_builddir)/test/libeostest.a \
-	$(top_builddir)/eos/libeos.la \
+	libeosrarebdecays.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
-	libeosrarebdecays.la
+	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
 bremsstrahlung_TEST_SOURCES = bremsstrahlung_TEST.cc
-bremsstrahlung_TEST_LDADD = $(TESTS_LD_ADD)
 
 charm_loops_TEST_SOURCES = charm-loops_TEST.cc
-charm_loops_TEST_LDADD = $(TESTS_LD_ADD)
 
 em_contributions_TEST_SOURCES = em-contributions_TEST.cc
-em_contributions_TEST_LDADD = $(TESTS_LD_ADD)
 
 exclusive_b_to_dilepton_TEST_SOURCES = exclusive-b-to-dilepton_TEST.cc
-exclusive_b_to_dilepton_TEST_LDADD = $(TESTS_LD_ADD)
 
 exclusive_b_to_s_dilepton_low_recoil_TEST_SOURCES = exclusive-b-to-s-dilepton-low-recoil_TEST.cc
-exclusive_b_to_s_dilepton_low_recoil_TEST_LDADD = $(TESTS_LD_ADD)
 
 exclusive_b_to_s_dilepton_large_recoil_TEST_SOURCES = exclusive-b-to-s-dilepton-large-recoil_TEST.cc
-exclusive_b_to_s_dilepton_large_recoil_TEST_LDADD = $(TESTS_LD_ADD)
 
 exclusive_b_to_s_gamma_TEST_SOURCES = exclusive-b-to-s-gamma_TEST.cc
-exclusive_b_to_s_gamma_TEST_LDADD = $(TESTS_LD_ADD)
 
 form_factors_TEST_SOURCES = form-factors_TEST.cc
-form_factors_TEST_LDADD = $(TESTS_LD_ADD)
 
 inclusive_b_to_s_dilepton_TEST_SOURCES = inclusive-b-to-s-dilepton_TEST.cc
-inclusive_b_to_s_dilepton_TEST_LDADD = $(TESTS_LD_ADD)
 
 inclusive_b_to_s_gamma_TEST_SOURCES = inclusive-b-to-s-gamma_TEST.cc
-inclusive_b_to_s_gamma_TEST_LDADD = $(TESTS_LD_ADD)
 
 hard_scattering_TEST_SOURCES = hard-scattering_TEST.cc
-hard_scattering_TEST_LDADD = $(TESTS_LD_ADD)
 
 long_distance_TEST_SOURCES = long-distance_TEST.cc
-long_distance_TEST_LDADD = $(TESTS_LD_ADD)

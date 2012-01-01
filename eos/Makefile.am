@@ -11,8 +11,7 @@ libeos_la_SOURCES = \
 	observable.cc observable.hh
 libeos_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
-	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
-	-lpthread -lgslcblas -lgsl
+	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la
 
 include_eosdir = $(includedir)/eos
 include_eos_HEADERS = \
@@ -21,9 +20,11 @@ include_eos_HEADERS = \
 
 TESTS = \
 	constraint_TEST
-TESTS_LD_ADD = $(top_builddir)/test/libeostest.a $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosutils.la
+LDADD = \
+	$(top_builddir)/test/libeostest.a \
+	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
 
 constraint_TEST_SOURCES = constraint_TEST.cc
-constraint_TEST_LDADD = $(TESTS_LD_ADD)

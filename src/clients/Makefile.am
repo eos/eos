@@ -20,64 +20,36 @@ noinst_PROGRAMS = \
 	integrated \
 	observables
 
-EOS_CLIENTS_LIBS = \
-	$(top_builddir)/eos/libeos.la \
+LDADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/libeos.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la
 
-eos_evaluate_SOURCES = \
-	eos-evaluate.cc
-eos_evaluate_LDADD = $(EOS_CLIENTS_LIBS)
+eos_evaluate_SOURCES = eos-evaluate.cc
 
-eos_find_confidence_region_SOURCES = \
-	eos-find-confidence-region.cc
-eos_find_confidence_region_LDADD = $(EOS_CLIENTS_LIBS)
+eos_find_confidence_region_SOURCES = eos-find-confidence-region.cc
 
-eos_inspect_SOURCES = \
-	eos-inspect.cc
-eos_inspect_LDADD = $(EOS_CLIENTS_LIBS)
+eos_inspect_SOURCES = eos-inspect.cc
 
-eos_list_parameters_SOURCES = \
-	eos-list-parameters.cc
-eos_list_parameters_LDADD = $(EOS_CLIENTS_LIBS)
+eos_list_parameters_SOURCES = eos-list-parameters.cc
 
-eos_marginalise_SOURCES = \
-	eos-marginalise.cc
-eos_marginalise_LDADD = $(EOS_CLIENTS_LIBS)
+eos_marginalise_SOURCES = eos-marginalise.cc
 
-eos_realify_SOURCES = \
-	eos-realify.cc
-eos_realify_LDADD = $(EOS_CLIENTS_LIBS)
+eos_realify_SOURCES = eos-realify.cc
 
-eos_merge_SOURCES = \
-	eos-merge.cc
-eos_merge_LDADD = $(EOS_CLIENTS_LIBS)
+eos_merge_SOURCES = eos-merge.cc
 
-eos_print_polynomial_SOURCES = \
-	eos-print-polynomial.cc
-eos_print_polynomial_LDADD = $(EOS_CLIENTS_LIBS)
+eos_print_polynomial_SOURCES = eos-print-polynomial.cc
 
-eos_propagate_uncertainty_SOURCES = \
-	eos-propagate-uncertainty.cc
-eos_propagate_uncertainty_LDADD = $(EOS_CLIENTS_LIBS)
+eos_propagate_uncertainty_SOURCES = eos-propagate-uncertainty.cc
 
-eos_scan_mc_SOURCES = \
-	eos-scan-mc.cc
-eos_scan_mc_LDADD = \
-	$(EOS_CLIENTS_LIBS)
+eos_scan_mc_SOURCES = eos-scan-mc.cc
+eos_scan_mc_LDADD = $(LDADD) -lgsl
 
-eos_scan_polynomial_SOURCES = \
-	eos-scan-polynomial.cc
-eos_scan_polynomial_LDADD = $(EOS_CLIENTS_LIBS)
+eos_scan_polynomial_SOURCES = eos-scan-polynomial.cc
 
-eos_scan_SOURCES = \
-	eos-scan.cc
-eos_scan_LDADD = $(EOS_CLIENTS_LIBS)
+eos_scan_SOURCES = eos-scan.cc
 
-integrated_SOURCES = \
-	integrated.cc
-integrated_LDADD = $(EOS_CLIENTS_LIBS)
+integrated_SOURCES = integrated.cc
 
-observables_SOURCES = \
-	observables.cc
-observables_LDADD = $(EOS_CLIENTS_LIBS)
+observables_SOURCES = observables.cc
