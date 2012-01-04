@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2012 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -75,47 +75,6 @@ class RandomNumberGeneratorTest :
                 TEST_CHECK_RELATIVE_ERROR(0.589485029224306340, rng(), eps);
                 TEST_CHECK_RELATIVE_ERROR(0.351696515223011370, rng(), eps);
                 TEST_CHECK_RELATIVE_ERROR(0.993107097456231710, rng(), eps);
-            }
-
-            // Uniform [-0.321, 1.234)
-            {
-                static const double min = -0.321, max = 1.234;
-                RandomNumberGenerator rng(1723);
-                #if __GNUC__ >= 4 && __GNUC_MINOR__ < 5
-                std::uniform_real<double> dist(min, max);
-                #elif __GNUC__ >= 4 && __GNUC_MINOR__ >= 5
-                std::uniform_real_distribution<double> dist(min, max);
-                #endif
-                TEST_CHECK_RELATIVE_ERROR(+0.8538440124338957400, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.6747135842274874000, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.0090613223970867351, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+1.1664731358129066000, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.4756600525064859600, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(-0.1065741378711536600, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.8197129757222718600, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.6871696041557007200, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.4759647606066427800, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.7838578204470687500, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(-0.1643361797546968000, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(-0.2647362860643770500, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.9124971716837027000, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.1705212575159966700, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+1.0947384447043296000, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(-0.1066510948459618000, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+1.0216026459294372000, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.6752741053523494400, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.3232106043524108400, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.5210343700749799900, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.2307199352500028400, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(-0.1899367926120758300, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(-0.1672542262719944300, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.7821766886380501200, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.1039372315837535600, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.3965604962161742300, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.8467661792666185700, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.5956492204437964200, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+0.2258880811717826600, dist(rng), eps);
-                TEST_CHECK_RELATIVE_ERROR(+1.2232815365444403000, dist(rng), eps);
             }
         }
 } rng_test;
