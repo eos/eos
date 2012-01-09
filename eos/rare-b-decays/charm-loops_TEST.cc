@@ -290,7 +290,7 @@ class FormFactorsTest :
 
             /* Check F87_massless and F89_massless near s_hat = 1 */
             {
-                static const double mu = 4.2, m_b = 4.6, eps = 5e-7;
+                static const double mu = 4.2, m_b = 4.6, eps = 6e-7;
 
                 TEST_CHECK_NEARLY_EQUAL(-0.951276751910152, real(CharmLoops::F87_massless(mu, 0.989 * m_b * m_b, m_b)), eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.950828012015162, real(CharmLoops::F87_massless(mu, 0.991 * m_b * m_b, m_b)), eps);
