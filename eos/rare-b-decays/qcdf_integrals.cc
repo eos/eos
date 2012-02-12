@@ -21,6 +21,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/polylog.hh>
+#include <eos/utils/stringify.hh>
 
 #include <cmath>
 #include <limits>
@@ -2056,7 +2057,7 @@ namespace eos
         double eh = (1.0 + power_of<2>(m_V / m_B) - sh) / 2.0;
 
         if (rho < 1.0)
-            throw InternalError("QCDFIntegrals::dilepton_charm_case: charm mass too small");
+            throw InternalError("QCDFIntegrals::dilepton_charm_case: charm mass too small, rho = " + stringify(rho) + ", m_c = " + stringify(m_c) + ", s = " + stringify(s));
 
         impl::DileptonIntegralsCharm integrals(sh, mh, m_B, mu);
 
