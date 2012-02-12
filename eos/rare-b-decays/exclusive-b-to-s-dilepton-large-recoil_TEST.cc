@@ -332,23 +332,23 @@ class BToKDileptonLargeRecoilTest :
                 BToKDilepton<LargeRecoil> d(p, oo);
 
                 const double eps = 1e-7;
-                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(1.0625), 3.145791429e-08, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(2.125 ), 3.124835257e-08, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(3.1875), 3.119065711e-08, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(4.25  ), 3.127702599e-08, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(5.3125), 3.163614767e-08, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(6.375 ), 3.345862737e-08, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(7.4375), 3.297253470e-08, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(8.5   ), 3.149745610e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(1.0625), 3.241462155e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(2.125 ), 3.220720447e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(3.1875), 3.205179559e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(4.25  ), 3.193072377e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(5.3125), 3.183965199e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(6.375 ), 3.178432796e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(7.4375), 3.178441635e-08, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(8.5   ), 3.189506045e-08, eps);
 
-                TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(1.0), 0.06529669784, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(8.0), 0.009094268877, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(1.0), 0.0653032126, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(8.0), 0.0091023877, eps);
 
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0.1, 8.68), 2.7329633e-7, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(0.1, 8.68), 3.325593091e-2, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0.1, 8.68), 2.746259782e-7, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(0.1, 8.68), 3.373366332e-2, eps);
 
                 // Standard bin 1.0 <= s <= 6.0 GeV^2
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(1.0, 6.0), 1.0003573, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(1.0, 6.0), 1.000346472, eps);
             }
 
             /* Benchmark Point */
@@ -392,10 +392,10 @@ class BToKDileptonLargeRecoilTest :
                 {
                     const double eps = 1e-5;
 
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1.0, 6.0),              1.5242329e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1.0, 6.0),  1.5217576e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(1.0, 6.0),                    2.4491886e-02, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(1.0, 6.0),        1.0003682,     eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1.0, 6.0),              1.567919245e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1.0, 6.0),  1.540852076e-07, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(1.0, 6.0),                    2.435608806e-02, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(1.0, 6.0),        1.00035584,      eps);
                 }
             }
         }
