@@ -223,9 +223,16 @@ Theoretical Inputs
 
     BHvD2010 : Bobeth, C. and Hiller, G. and van Dyk, D.
 
-        Benefits at Low Recoil
+        The Benefits of B -> K^* l^+ l^- Decays at Low Recoil
 
-        arxiv:10XX.YYYY [hep-ph]
+        arxiv:1006.5013 [hep-ph]
+
+
+    BHvD2011 : Bobeth, C. and Hiller, G. and van Dyk, D.
+
+        More Benefits of Semileptonic Rare B Decays at Low Recoil: CP Violation
+
+        arxiv:1105.0376 [hep-ph]
 
 
     BHvD2012 : Bobeth, C. and Hiller, G. and van Dyk, D.
