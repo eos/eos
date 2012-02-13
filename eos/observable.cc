@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -323,6 +323,10 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation,
                     std::make_tuple("s")),
 
+            make_observable("B->K^*ll::F_T(s)@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::differential_transversal_polarisation,
+                    std::make_tuple("s")),
+
             make_observable("B->K^*ll::J_1s(s)@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::differential_j_1s,
                     std::make_tuple("s")),
@@ -393,6 +397,14 @@ namespace eos
 
             make_observable("B->K^*ll::F_Lavg@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::F_T@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_transversal_polarisation,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::F_Tavg@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_transversal_polarisation_cp_averaged,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->K^*ll::A_T^2@LargeRecoil",
@@ -555,6 +567,10 @@ namespace eos
                     &BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation,
                     std::make_tuple("s")),
 
+            make_observable("B->K^*ll::F_T(s)@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::differential_transversal_polarisation,
+                    std::make_tuple("s")),
+
             make_observable("B->K^*ll::H_T^1(s)@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::differential_h_1,
                     std::make_tuple("s")),
@@ -661,6 +677,14 @@ namespace eos
 
             make_observable("B->K^*ll::F_Lavg@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::F_T@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_transversal_polarisation,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::F_Tavg@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_transversal_polarisation_cp_averaged,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->K^*ll::nF_L@LowRecoil",

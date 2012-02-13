@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -565,9 +565,17 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
-        // cf. [BHvD2010], p. 6, eq. (2.9)
+        // cf. [BHvD2012], p. 5, eq. (3.15)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return (-a_c.j2c) / (4.0 * a_c.j2s - a_c.j2c);
+        return (a_c.j1c - a_c.j2c / 3.0) / decay_width(a_c);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_transversal_polarisation(const double & s) const
+    {
+        // cf. [BHvD2012], p. 5, eq. (3.14)
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / decay_width(a_c);
     }
 
     double
@@ -819,9 +827,9 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
     {
-        // cf. [BHvD2010], p. 6, eq. (2.9)
+        // cf. [BHvD2012], p. 5, eq. (3.15)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return (-a_c.j2c) / (4.0 * a_c.j2s - a_c.j2c);
+        return (a_c.j1c - a_c.j2c / 3.0) / decay_width(a_c);
     }
 
     double
@@ -842,6 +850,26 @@ namespace eos
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation, this, std::placeholders::_1);
 
         return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transversal_polarisation(const double & s_min, const double & s_max) const
+    {
+        // cf. [BHvD2012], p. 5, eq. (3.14)
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / decay_width(a_c);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_transversal_polarisation_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        double f_t = integrated_transversal_polarisation(s_min, s_max);
+        _imp->cp_conjugate = true;
+        double f_t_bar = integrated_transversal_polarisation(s_min, s_max);
+
+        return 0.5 * (f_t + f_t_bar);
     }
 
     double

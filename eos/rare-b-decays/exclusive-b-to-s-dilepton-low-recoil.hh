@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -70,6 +70,7 @@ namespace eos
             double differential_decay_width(const double & s) const;
             double differential_forward_backward_asymmetry(const double & s) const;
             double differential_longitudinal_polarisation(const double & s) const;
+            double differential_transversal_polarisation(const double & s) const;
             double differential_transverse_asymmetry_2(const double & s) const;
             double differential_transverse_asymmetry_3(const double & s) const;
             double differential_transverse_asymmetry_4(const double & s) const;
@@ -109,6 +110,8 @@ namespace eos
             double integrated_longitudinal_polarisation_naive(const double & s_min, const double & s_max) const;
             double integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const;
             double integrated_longitudinal_polarisation_cp_averaged(const double & s_min, const double & s_max) const;
+            double integrated_transversal_polarisation(const double & s_min, const double & s_max) const;
+            double integrated_transversal_polarisation_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_2(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_2_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_2_naive(const double & s_min, const double & s_max) const;

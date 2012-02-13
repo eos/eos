@@ -228,6 +228,12 @@ Theoretical Inputs
         arxiv:10XX.YYYY [hep-ph]
 
 
+    BHvD2012 : Bobeth, C. and Hiller, G. and van Dyk, D.
+
+        General Analysis and Optimal Observables in B -> K^* (-> K pi) l^+ l^-
+        at Low Recoil
+
+
     BM1995 : Buras, A. J. and Muenz, M.
 
         Effective Hamiltonian for B -> X_s e^+ e^- Beyond Leading Logarithms
