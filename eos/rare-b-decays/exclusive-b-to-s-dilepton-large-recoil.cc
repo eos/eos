@@ -951,7 +951,7 @@ namespace eos
 
             return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / power_of<5>(M_PI) / m_B()
                     * lambda_t * lambda_t * s_hat(s)
-                    * std::sqrt(lam(s))); // cf. [BHP2008], Eq. (C.6), p. 21
+                    * std::sqrt(lam(s)) * beta_l(s)); // cf. [BHP2008], Eq. (C.6), p. 21
         }
 
         inline double s_hat(double s) const

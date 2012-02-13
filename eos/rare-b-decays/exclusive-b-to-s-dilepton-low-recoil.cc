@@ -286,7 +286,7 @@ namespace eos
             double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
             return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / std::pow(M_PI, 5.0) / m_B
-                    * lambda_t * lambda_t * s_hat(s)
+                    * lambda_t * lambda_t * s_hat(s) * beta_l(s)
                     * std::sqrt(lambda(m_B * m_B, m_Kstar * m_Kstar, s))); // cf. [BHP2008], Eq. (C.6), p. 21
         }
 
