@@ -710,6 +710,13 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::differential_j_3_normalized(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j3 / decay_width(a_c);
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::differential_j_4(const double & s) const
     {
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
@@ -1122,6 +1129,13 @@ namespace eos
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return a_c.j3;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_3_normalized(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j3 / decay_width(a_c);
     }
 
     double

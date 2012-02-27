@@ -78,6 +78,7 @@ namespace eos
             double differential_j_2s(const double & s) const;
             double differential_j_2c(const double & s) const;
             double differential_j_3(const double & s) const;
+            double differential_j_3_normalized(const double & s) const;
             double differential_j_4(const double & s) const;
             double differential_j_5(const double & s) const;
             double differential_j_6s(const double & s) const;
@@ -113,6 +114,7 @@ namespace eos
             double integrated_j_2s(const double & s_min, const double & s_max) const;
             double integrated_j_2c(const double & s_min, const double & s_max) const;
             double integrated_j_3(const double & s_min, const double & s_max) const;
+            double integrated_j_3_normalized(const double & s_min, const double & s_max) const;
             double integrated_j_4(const double & s_min, const double & s_max) const;
             double integrated_j_5(const double & s_min, const double & s_max) const;
             double integrated_j_6s(const double & s_min, const double & s_max) const;
