@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2012 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -61,7 +61,7 @@ class BToKstarGammaTest :
                 p["c6"] = +0.00105859;
                 p["Abs{c7}"] = 0.331;
                 p["Arg{c7}"] = M_PI;
-                p["Abs{c7'}"] = 0.008; // m_s(m_b) / m_b(m_b) * Abs{c7} = 105 / 4200 * Abs{c7}
+                p["Abs{c7'}"] = 0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
                 p["Arg{c7'}"] = M_PI;
                 p["c8"] = -0.181;
                 // PDG 2010 CKM parameters
@@ -81,16 +81,10 @@ class BToKstarGammaTest :
 
                 const double eps = 1e-4;
 
-                // Using old charm pole mass
-                //TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +4.21541e-5, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +4.21541e-5, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               -2.98715e-2, eps);
-                //TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),                  0.0,        eps);
-
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +4.53979e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +4.53979e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               -2.87582e-2, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),                  0.0,        eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +5.41479e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +5.43477e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               -3.97510e-2, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.c_kstar_gamma(),               +3.67502e-3, eps);
             }
 
             // Benchmark Point (CPV)
@@ -104,7 +98,7 @@ class BToKstarGammaTest :
                 p["c6"] = +0.00105859;
                 p["Abs{c7}"] = 0.331;
                 p["Arg{c7}"] = -M_PI / 2.0;
-                p["Abs{c7'}"] = 0.008; // m_s(m_b) / m_b(m_b) * Abs{c7} = 105 / 4200 * Abs{c7}
+                p["Abs{c7'}"] = 0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
                 p["Arg{c7'}"] = -M_PI / 2.0;
                 p["c8"] = -0.181;
                 // PDG 2010 CKM parameters
@@ -123,16 +117,10 @@ class BToKstarGammaTest :
 
                 const double eps = 1e-4;
 
-                // Using old charm pole mass
-                //TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +3.77936e-5, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +3.45819e-5, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               +3.66040e-2, eps);
-                //TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),                 -9.28720e-2, eps);
-
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +3.98628e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +3.50455e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               +3.75213e-2, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.c_kstar_gamma(),                 -1.37460e-1, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +5.64172e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +3.98902e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               +4.74441e-2, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.c_kstar_gamma(),               -4.14314e-1, eps);
             }
         }
 } b_to_kstar_gamma_test;
@@ -171,6 +159,7 @@ class BToKstarGammaBobethCompatibilityTest :
             observables.push_back(Observable::make("B->K^*gamma::BR,q=d",  p, k, o));
             observables.push_back(Observable::make("B->K^*gamma::S_K^*gamma,q=d", p, k, o));
             observables.push_back(Observable::make("B->K^*gamma::C_K^*gamma,q=d", p, k, o));
+            observables.push_back(Observable::make("B->K^*gamma::A_I", p, k, o));
 
             std::string filename(EOS_BUILDDIR "/eos/rare-b-decays/exclusive-b-to-s-gamma_TEST-btokstargamma.data");
 #ifdef EOS_GENERATE_TEST_DATA
@@ -184,7 +173,7 @@ class BToKstarGammaBobethCompatibilityTest :
                 {
                     for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
                     {
-                        *v = v->sample(rng);
+                        *v = v->min() + (v->max() - v->min()) * rng();
                         file << *v << '\t';
                     }
 

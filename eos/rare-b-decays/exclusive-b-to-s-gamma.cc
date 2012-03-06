@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,7 @@
 #include <eos/rare-b-decays/exclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/form-factors.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
+#include <eos/rare-b-decays/qcdf_integrals.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/memoise.hh>
@@ -37,225 +38,26 @@
 
 namespace eos
 {
-    struct ShortDistanceQCDF
-    {
-        struct ParameterSet
-        {
-            double                    m_b_PS, m_b_pole, m_c;
-            double                    m_B, m_K;
-
-            double                    mu;
-            double                    mu_f;
-
-            double                    alpha_s_mu, alpha_s_sqrt05mu;
-
-            double                    f_B, f_K;
-
-            WilsonCoefficients<BToS>  wc;
-
-            double                    e_q;
-
-            double                    a_1, a_2;
-
-            double                    lambda_B_p;
-
-            ParameterSet(const double & m_b_PS_, const double & m_b_pole_, const double & m_c_,
-                    const double & m_B_, const double & m_K_,
-                    const double & mu_, const double & mu_f_,
-                    const double & alpha_s_mu_, const double & alpha_s_sqrt05mu_,
-                    const double & f_B_, const double & f_K_,
-                    const WilsonCoefficients<BToS> & wc_,
-                    const double & e_q_,
-                    const double & a_1_, const double & a_2_,
-                    const double & lambda_B_p_) :
-                 m_b_PS(m_b_PS_), m_b_pole(m_b_pole_), m_c(m_c_),
-                 m_B(m_B_), m_K(m_K_),
-                 mu(mu_), mu_f(mu_f_),
-                 alpha_s_mu(alpha_s_mu_), alpha_s_sqrt05mu(alpha_s_sqrt05mu_),
-                 f_B(f_B_), f_K(f_K_),
-                 wc(wc_),
-                 e_q(e_q_),
-                 a_1(a_1_), a_2(a_2_),
-                 lambda_B_p(lambda_B_p_)
-            { }
-        };
-
-        // for s = 0
-        static double energy(const ParameterSet & p)
-        {
-            return (p.m_B * p.m_B + p.m_K * p.m_K) / (2.0 * p.m_B);
-        }
-
-        /* Effective wilson coefficients */
-        // cf. [BFS2001], below Eq. (9), p. 4
-        static complex<double> c7eff(const ParameterSet & p)
-        {
-            return p.wc.c7() - 1.0/3.0 * p.wc.c3() - 4.0/9.0 * p.wc.c4() - 20.0/3.0 * p.wc.c5() - 80.0/9.0 * p.wc.c6();
-        }
-
-        // cf. [BFS2001], below Eq. (26), p. 8
-        static complex<double> c8eff(const ParameterSet & p)
-        {
-             return p.wc.c8() + p.wc.c3() - 1.0/6.0 * p.wc.c4() + 20.0 * p.wc.c5() - 10.0/3.0 * p.wc.c6();
-        }
-
-        /* NLO functions */
-        // cf. [BFS2001], Eq. (48)
-        static double phi_K(const double & u, const ParameterSet & p)
-        {
-            double xi = 2.0 * u - 1.0;
-
-            return 6.0 * u * (1 - u) * (1.0 + p.a_1 * 3.0 * xi + p.a_2 * (7.5 * xi * xi - 1.5));
-        }
-
-        static complex<double> t_perp_0(const double & u, const ParameterSet & p, const double & m_q)
-        {
-            double ubar = 1.0 - u;
-            double m_q2 = m_q * m_q, m_B2 = p.m_B * p.m_B;
-            double a, a2, sign;
-            complex<double> dilogArg, dilog1, dilog2;
-            complex<double> LxpLxm;
-            gsl_sf_result res_re, res_im;
-
-            if (m_q > 0)
-            { // m != 0
-                if (1.0 - 4.0 * m_q2 / (m_B2 - u * m_B2) > 0)
-                {
-                    a = (1.0 - std::sqrt(1.0 - 4.0 * m_q2 / (m_B2 - u * m_B2)))
-                        / (1.0 + std::sqrt(1.0 - 4.0 * m_q2 / (m_B2 - u * m_B2)));
-                    LxpLxm = -M_PI * M_PI / 3.0 + std::log(a) * (std::log(a) + complex<double>(0.0, M_PI))
-                        + gsl_sf_dilog(-a) + gsl_sf_dilog(-1.0/a);
-                }
-                else
-                {
-                    a = std::sqrt(4.0 * m_q2 / (m_B2 - u * m_B2) - 1.0);
-                    a2 = a * a;
-
-                    if (a2 - 1 > 0)
-                        sign = +1.0;
-                    else
-                        sign = -1.0;
-
-                    dilogArg = complex<double>((a2 - 1.0) / (a2 + 1.0), -2.0 * a / (a2 + 1.0));
-                    gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
-                    dilog1 = complex<double>(res_re.val, res_im.val);
-                    dilogArg = complex<double>((a2 - 1.0) / (a2 + 1.0), +2.0 * a / (a2 + 1.0));
-                    gsl_sf_complex_dilog_e(abs(dilogArg), arg(dilogArg), &res_re, &res_im);
-                    dilog2 = complex<double>(res_re.val, res_im.val);
-
-                    LxpLxm = -M_PI * M_PI / 3.0 - std::atan(2.0 * a / (a2 - 1.0)) * (std::atan(2.0 * a / (a2 - 1.0)) - M_PI * sign)
-                        + dilog1 + dilog2;
-                }
-
-                return 4.0 / ubar * (1.0 + 2.0 * m_q2 / ubar / m_B2 * LxpLxm);
-            }
-            else
-            {
-                return complex<double>(4.0 / ubar, 0.0);
-            }
-        }
-
-        // cf. [BFS2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1
-        static complex<double> C0_perp(const double & h, const ParameterSet & p)
-        {
-            const double p_l = (1.0 + h) / 2.0, p_r = (1.0 - h) / 2.0;
-
-            return (p_l * c7eff(p) + p_r * p.wc.c7prime());
-        }
-
-        // cf. [BFS2001], Eqs. (34), (37), p. 9
-        static complex<double> C1f_perp(const double & h, const ParameterSet & p)
-        {
-            const double p_l = (1.0 + h) / 2.0, p_r = (1.0 - h) / 2.0;
-
-            // TODO
-            static const double L = -1.0;
-
-            // cf. [BFS2004], Eq. (44), p. 24
-            // [Christoph] Use c7 instead of c7eff
-            return (p_l * p.wc.c7() + p_r * p.wc.c7prime()) * (8.0 * std::log(p.m_b_PS / p.mu) - L - 4.0 * (1.0 - p.mu_f / p.m_b_PS));
-        }
-
-        // cf. [BFS2001], Eqs. (34), (37), p. 9
-        static complex<double> C1nf_perp(const double & h, const ParameterSet & p)
-        {
-            // Here m_b_PS is used instead of m_b_pole, cf. [BFS2001], comment below Eq. (36), p. 9
-            // Two-Loop Function are calculated for the pole mass! Use mu_pole instead
-            double mu_pole = p.mu * p.m_b_pole / p.m_b_PS;
-
-            const double p_l = (1.0 + h) / 2.0;
-
-            // cf. [BFS2001], Eq. (37), p. 9
-            // [Christoph] Use c8 instead of c8eff
-            return p_l * (-1.0 / QCD::casimir_f) * (
-                    (p.wc.c2() - p.wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu_pole, 0.0, p.m_b_PS, p.m_c)
-                    + p.wc.c8() * CharmLoops::F87_massless(mu_pole, 0.0, p.m_b_PS));
-        }
-
-        // cf. [BFS2001], Eqs. (16), (21), (25), pp. 5-7
-        static complex<double> T1f_perp_p(const double & h, const double & u, const ParameterSet & p)
-        {
-            const double p_l = (1.0 + h) / 2.0, p_r = (1.0 - h) / 2.0;
-
-            // cf. [BFS2001], Eq. (20)
-            // [Christoph] Use c7 instead of c7eff
-            return (p_l * p.wc.c7() + p_r * p.wc.c7prime()) * (2.0 * p.m_B / (1.0 - u) / energy(p));
-        }
-
-        static complex<double> T1nf_perp_p(const double & h, const double & u, const ParameterSet & p)
-        {
-            static const double e_d = -1.0/3.0;
-            static const double e_u = +2.0/3.0;
-
-            const double p_l = (1.0 + h) / 2.0;
-
-            // cf. [BFS2001], Eq. (23)
-            // [Christoph] Use c8 instead of c8eff
-            return p_l * (-4.0 * e_d * p.wc.c8() / u
-                + p.m_B / (2.0 * p.m_b_PS) * (
-                        e_u * (-p.wc.c1() / 6.0 + p.wc.c2() + 6.0 * p.wc.c6()) * t_perp_0(u, p, p.m_c)
-                        + e_d * (p.wc.c3() - p.wc.c4() / 6.0 + 16.0 * p.wc.c5() + 10.0/3.0 * p.wc.c6() - (4.0 * p.m_b_PS / p.m_B) * (p.wc.c3() - p.wc.c4()/6.0 + 4.0 * p.wc.c5() - 2.0/3.0 * p.wc.c6()))
-                        + e_d * (p.wc.c3() - p.wc.c4() / 6.0 + 16.0 * p.wc.c5() - 8.0/3.0 * p.wc.c6()) * t_perp_0(u, p, 0.0)));
-        }
-
-        // cf. [BFS2001], Eq. (16) times phi_K^*_perp
-        static complex<double> T_perp_sum(const double & h, const double & u, const ParameterSet & p)
-        {
-             double a = p.alpha_s_sqrt05mu * QCD::casimir_f / 4.0 / M_PI;
-
-             complex<double> result = 1.0 / p.lambda_B_p * a * (T1f_perp_p(h, u, p) + T1nf_perp_p(h, u, p));
-
-             return phi_K(u, p) * result;
-
-             // TODO: Hard scattering + Weak annihilation from [BFS2004], Eqs. (51), (52)
-        }
-
-        // cf. [BFS2001], Eq. (15) with a = perp
-        static complex<double> calT_perp(const double & h, const ParameterSet & p, const double & xi_perp)
-        {
-            std::complex<double> result = xi_perp * (C0_perp(h, p) + p.alpha_s_mu * QCD::casimir_f / 4.0 / M_PI * (C1f_perp(h, p) + C1nf_perp(h, p)));
-
-            result += power_of<2>(M_PI) / 3.0 * (p.f_B * p.f_K) / p.m_B *
-                    integrate(std::function<complex<double> (const double &)>(
-                                std::bind(&ShortDistanceQCDF::T_perp_sum, h, std::placeholders::_1, p)),
-                        64, 0.001, 0.999);
-
-            return result;
-        }
-    };
-
     template <>
     struct Implementation<BToKstarGamma>
     {
         std::shared_ptr<Model> model;
 
+        UsedParameter hbar;
+
         UsedParameter a_1_perp;
 
         UsedParameter a_2_perp;
 
+        UsedParameter a_1_par;
+
+        UsedParameter a_2_par;
+
         UsedParameter f_B;
 
         UsedParameter f_Kstar_perp;
+
+        UsedParameter f_Kstar_par;
 
         UsedParameter lambda_B_p;
 
@@ -269,30 +71,55 @@ namespace eos
 
         UsedParameter g_fermi;
 
+        UsedParameter tau;
+
         bool cp_conjugate;
+
+        char q;
+
+        double e_q;
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
+            hbar(p["hbar"], u),
             a_1_perp(p["B->K^*::a_1_perp"], u),
             a_2_perp(p["B->K^*::a_2_perp"], u),
+            a_1_par(p["B->K^*::a_1_par"], u),
+            a_2_par(p["B->K^*::a_2_par"], u),
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], u),
+            f_Kstar_par(p["B->K^*::f_Kstar_par"], u),
             lambda_B_p(p["lambda_B_p"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_Kstar(p["mass::K^*0"], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
+            tau(p["life_time::B_" + o.get("q", "d")], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             form_factors(FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p))
         {
             u.uses(*model);
             u.uses(*form_factors);
-        }
 
-        inline double m_b_PS() const { return model->m_b_ps(std::sqrt(mu * 0.5)); }
+            std::string spectator_quark = o.get("q", "d");
+            if (spectator_quark.size() != 1)
+                throw InternalError("Option q should only be one character!");
+
+            q = spectator_quark[0];
+            if (q == 'd')
+            {
+                e_q = -1.0 / 3.0;
+            }
+            else if (q == 'u')
+            {
+                e_q = 2.0 / 3.0;
+            }
+            else
+                throw InternalError("Unsupported spectator quark");
+        }
 
         /* Form factors */
         //  cf. [BHP2008], Eq. (E.4), p. 23
@@ -304,6 +131,17 @@ namespace eos
             return result;
         }
 
+        inline double mu_f() const
+        {
+            return 1.5;
+        }
+
+        inline double m_b_PS() const
+        {
+            // Actually use the PS mass at mu_f = 1.5 GeV
+            return model->m_b_ps(mu_f());
+        }
+
         struct Amplitudes
         {
             complex<double> left;
@@ -312,38 +150,170 @@ namespace eos
 
         Amplitudes amplitudes() const
         {
-            ShortDistanceQCDF::ParameterSet p(m_b_PS(), model->m_b_pole(), model->m_c_pole(),
-                    m_B(), m_Kstar(),
-                    mu(), std::sqrt(0.5 * mu()),
-                    model->alpha_s(mu()), model->alpha_s(sqrt(mu() * 0.5)),
-                    f_B(), f_Kstar_perp(),
-                    model->wilson_coefficients_b_to_s(cp_conjugate),
-                    -1.0 / 3.0,
-                    a_1_perp(), a_2_perp(),
-                    lambda_B_p());
+            // charges of down- and up-type quarks
+            static const double e_d = -1.0/3.0;
+            static const double e_u = +2.0/3.0;
 
-            complex<double> a_left = complex<double>(0.0, +1.0) * ShortDistanceQCDF::calT_perp(+1.0, p, xi_perp(0.0));
-            complex<double> a_right = complex<double>(0.0, -1.0) * ShortDistanceQCDF::calT_perp(-1.0, p, xi_perp(0.0));
+            // spectator contributions
+            double delta_qu = (q == 'u' ? 1.0 : 0.0);
 
-            return Amplitudes{ a_left, a_right };
+            // kinematics
+            double m_c_pole = /*1.4;//*/model->m_c_pole();
+            double m_b_PS = /*4.6*/this->m_b_PS();
+            double energy = (m_B * m_B + m_Kstar * m_Kstar) / 2.0 / m_B;
+            // L from B->K^*ll for s -> 0
+            double L = +1.0;
+
+            // couplings
+            double alpha_s_mu = /*0.2253389254;//*/model->alpha_s(mu()); // alpha_s at the hard scale
+            double a_mu = alpha_s_mu * QCD::casimir_f / 4.0 / M_PI;
+            double alpha_s_mu_f = model->alpha_s(std::sqrt(mu() * 0.5)); // alpha_s at the factorization scale
+            double a_mu_f = alpha_s_mu_f * QCD::casimir_f / 4.0 / M_PI;
+            complex<double> lambda_hat_u = /*0.0;//*/(model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
+            if (cp_conjugate)
+                lambda_hat_u = std::conj(lambda_hat_u);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+
+            // Compute the QCDF Integrals
+            double invm1_perp = 3.0 * (1.0 + a_1_perp + a_2_perp); // <ubar^-1>_perp
+            QCDFIntegrals::Results qcdf_0 = QCDFIntegrals::photon_massless_case(m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals::Results qcdf_c = QCDFIntegrals::photon_charm_case(m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+            QCDFIntegrals::Results qcdf_b = QCDFIntegrals::photon_bottom_case(m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+
+            // inverse of the "negative" moment of the B meson LCDA
+            // cf. [BFS2001], Eq. (54), p. 15
+            double lambda_B_p_inv = 1.0 / lambda_B_p;
+
+            /* Effective wilson coefficients */
+            // cf. [BFS2001], below Eq. (9), p. 4
+            complex<double> c7eff = wc.c7() - 1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
+            // cf. [BFS2001], below Eq. (26), p. 8
+            complex<double> c8eff = wc.c8() + wc.c3() - 1.0/6.0 * wc.c4() + 20.0 * wc.c5() - 10.0/3.0 * wc.c6();
+
+            /* perpendicular, top sector */
+            // cf. [BFS2001], Eqs. (12), (15), p. 5, in comparison with \delta_1 = 1, s -> 0, +/- -> left/right handed
+            complex<double> C0_top_perp_left  = c7eff;
+            complex<double> C0_top_perp_right = wc.c7prime();
+            // cf. [BFS2004], Eq. (44), p. 24, s -> 0
+            complex<double> C1f_top_perp_left  = c7eff * (8.0 * std::log(m_b_PS / mu()) - L - 4.0 * (1.0 - mu_f() / m_b_PS));
+            complex<double> C1f_top_perp_right = wc.c7prime() * (8.0 * std::log(m_b_PS / mu()) - L - 4.0 * (1.0 - mu_f() / m_b_PS));
+            // cf. [BFS2001], Eqs. (34), (37), p. 9, s -> 0
+            complex<double> C1nf_top_perp_left = (-1.0 / QCD::casimir_f) * (
+                    (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu(), 0.0, m_b_PS, m_c_pole) + c8eff * CharmLoops::F87_massless(mu, 0.0, m_b_PS));
+            const complex<double> C1nf_top_perp_right = 0.0;
+
+            /* perpendicular, up sector */
+            // cf. [BFS2004], comment before Eq. (43), p. 24, s -> 0
+            const complex<double> C0_up_perp_left = 0.0;
+            const complex<double> C0_up_perp_right = 0.0;
+            // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
+            // cf. [BFS2001], Eqs. (34), (37), p. 9
+            // [BFS2004], [S2004] have a different sign convention for F{12}{79}_massless than we!
+            complex<double> C1nf_up_perp_left = (-1.0 / QCD::casimir_f) * (
+                    (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), 0.0, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, 0.0, m_b_PS)));
+            const complex<double> C1nf_up_perp_right = 0.0;
+
+            // compute the factorizing contributions
+            complex<double> C_perp_left  = C0_top_perp_left  + lambda_hat_u * C0_up_perp_left
+                + a_mu * (C1f_top_perp_left  + C1nf_top_perp_left + lambda_hat_u * C1nf_up_perp_left);
+            complex<double> C_perp_right = C0_top_perp_right + lambda_hat_u * C0_up_perp_right
+                + a_mu * (C1f_top_perp_right + C1nf_top_perp_right + lambda_hat_u * C1nf_up_perp_right);
+
+            /* perpendicular, top sector */
+            // T0_top_perp_{p,m} = 0, cf. [BFS2001], Eq. (17), p. 6
+            // cf. [BFS2004], Eq. (49)
+            complex<double> T1f_top_perp_p_left  = c7eff * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
+            complex<double> T1f_top_perp_p_right = wc.c7prime() * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
+            // T1f_top_perp_m = 0, cf. [BFS2001], Eq. (22), p. 7
+            // cf. [BFS2001], Eq. (23), p. 7
+            // [Christoph] Use c8 instead of c8eff
+            complex<double> T1nf_top_perp_p_left = (-4.0 * e_d * c8eff * qcdf_0.j0bar_perp
+                + m_B / (2.0 * m_b_PS) * (
+                        e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde1_perp
+                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6() - (4.0 * m_b_PS / m_B) * (wc.c3() - wc.c4()/6.0 + 4.0 * wc.c5() - 2.0/3.0 * wc.c6())) * qcdf_b.jtilde1_perp
+                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv;
+            const complex<double> T1nf_top_perp_p_right = 0.0;
+            // T1nf_top_perp_m = 0, cf. [BFS2001], Eq. (17), p. 6
+
+            /* perpendicular, up sector */
+            // all T1f_up vanish, cf. [BFS2004], sentence below Eq. (49), p. 25
+            // cf. [BFS2004], Eq. (50), p. 25
+            complex<double> T1nf_up_perp_p_left = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv;
+            const complex<double> T1nf_up_perp_p_right = 0.0;
+
+
+            // Compute the nonfactorizing contributions
+            complex<double> T_perp_left  = a_mu_f * (T1f_top_perp_p_left + T1nf_top_perp_p_left + lambda_hat_u * T1nf_up_perp_p_left);
+            complex<double> T_perp_right = a_mu_f * (T1f_top_perp_p_right + T1nf_top_perp_p_right + lambda_hat_u * T1nf_up_perp_p_right);
+
+            // Compute the numerically leading power-suppressed weak annihilation contributions to order alpha_s^0
+            // cf. [BFS2004], Eq. (51)
+            complex<double> Delta_T_ann_top_perp = e_q * M_PI * M_PI * f_B / 3.0 / m_b_PS / m_B * (
+                    -4.0 * f_Kstar_perp * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 3.0 * wc.c5() + 4.0 * wc.c6())) * qcdf_0.j0_perp
+                    + 2.0 * f_Kstar_par * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 12.0 * wc.c5() + 16.0 * wc.c6())) *
+                        (m_Kstar / lambda_B_p));
+            complex<double> Delta_T_ann_up_perp = -e_q * 2.0 * M_PI * M_PI * f_B * f_Kstar_par / 3.0 / m_b_PS / m_B *
+                (m_Kstar / lambda_B_p) * 3.0 * delta_qu * wc.c2();
+            // Compute the numerically leading power-suppressed hard spectator interaction contributions to order alpha_s^1
+            // cf. [BFS2004], Eqs. (52), (53)
+            complex<double> Delta_T_hsa_top_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
+                    12.0 * c8eff * (m_b_PS / m_B) * f_Kstar_perp() * 1.0 / 3.0 * (qcdf_0.j0_perp + qcdf_0.j7_perp)
+                    + 8.0 * f_Kstar_perp * (3.0 / 4.0) * (
+                        (wc.c2() - wc.c1() / 6.0 + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j5_perp
+                        + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j5_perp
+                        + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j5_perp
+                        - (8.0 / 27.0) * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()) * qcdf_0.j0_perp)
+                    - (4.0 * m_Kstar * f_Kstar_par / lambda_B_p) * (3.0 / 4.0) * (
+                        (wc.c2() - wc.c1() / 6.0 + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j6_perp
+                        + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j6_perp
+                        + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j6_perp
+                        - 8.0 / 27.0 * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6())));
+            complex<double> Delta_T_hsa_up_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
+                    + 8.0 * f_Kstar_perp * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0) * (qcdf_c.j5_perp - qcdf_0.j5_perp)
+                    - (4.0 * m_Kstar * f_Kstar_par / lambda_B_p) * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0)
+                        * (qcdf_c.j6_perp - qcdf_0.j6_perp));
+
+            // Compute the sum of the numerically leading power-suppressed contributions
+            complex<double> Delta_T_top_perp = Delta_T_ann_top_perp + Delta_T_hsa_top_perp;
+            complex<double> Delta_T_up_perp = Delta_T_ann_up_perp + Delta_T_hsa_up_perp;
+            complex<double> Delta_T_perp = Delta_T_top_perp + lambda_hat_u * Delta_T_up_perp;
+
+            // Form factor
+            double xi_perp_zero = xi_perp(0.0);
+
+            // cf. [BFS2001], Eq. (15), and [BHP2008], Eq. (C.4)
+            Amplitudes result;
+            result.left  = complex<double>(0.0, +1.0) * (xi_perp_zero * C_perp_left
+                + power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_left
+                + Delta_T_perp);
+            result.right = complex<double>(0.0, -1.0) * (xi_perp_zero * C_perp_right
+                + power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_right
+                + Delta_T_perp);
+
+            return result;
+        }
+
+        double decay_rate()
+        {
+            double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
+            Amplitudes a = amplitudes();
+
+            return alpha_e() * power_of<2>(g_fermi() * model->m_b_msbar(mu())) * power_of<3>(m_B()) / (32.0 * power_of<4>(M_PI)) *
+                power_of<3>(1.0 - power_of<2>(m_Kstar / m_B)) * lambda_t * lambda_t * (std::norm(a.left) + std::norm(a.right));
         }
 
         double branching_ratio()
         {
             // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
-            static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
+            double Gamma = hbar() / tau();
 
-            double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
-            Amplitudes a = amplitudes();
-
-            return alpha_e() * power_of<2>(g_fermi() * model->m_b_msbar(mu())) * power_of<3>(m_B()) / (32.0 * power_of<4>(M_PI)) *
-                power_of<3>(1.0 - power_of<2>(m_Kstar / m_B)) * lambda_t * lambda_t * (std::norm(a.left) + std::norm(a.right)) / Gamma;
+            return decay_rate() / Gamma;
         }
 
         double branching_ratio_cp_averaged()
         {
             // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
-            static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
+            double Gamma = hbar() / tau;
 
             Save<bool> save(this->cp_conjugate, false);
             Amplitudes a = amplitudes();
@@ -353,6 +323,17 @@ namespace eos
             double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
             return alpha_e() * power_of<2>(g_fermi() * model->m_b_msbar(mu())) * power_of<3>(m_B()) / (32.0 * power_of<4>(M_PI)) *
                 power_of<3>(1.0 - power_of<2>(m_Kstar / m_B)) * lambda_t * lambda_t * (std::norm(a.left) + std::norm(a.right) + std::norm(abar.left) + std::norm(abar.right)) / 2.0 / Gamma;
+        }
+
+        double cp_asymmetry()
+        {
+            Save<bool> save(this->cp_conjugate, false);
+
+            double br = branching_ratio();
+            cp_conjugate = true;
+            double brbar = branching_ratio();
+
+            return (br - brbar) / (br + brbar);
         }
 
         double s_kstar_gamma()
@@ -385,6 +366,19 @@ namespace eos
 
             return numerator / denominator;
         }
+
+        double isospin_asymmetry()
+        {
+            Save<char> save_q(this->q, 'd');
+            Save<double> save_eq(this->e_q, -1.0/3.0);
+
+            double gamma_neutral = decay_rate();
+            q = 'u';
+            e_q = +2.0/3.0;
+            double gamma_charged = decay_rate();
+
+            return (gamma_neutral - gamma_charged) / (gamma_neutral + gamma_charged);
+        }
     };
 
     BToKstarGamma::BToKstarGamma(const Parameters & parameters, const Options & options) :
@@ -409,6 +403,12 @@ namespace eos
     }
 
     double
+    BToKstarGamma::cp_asymmetry() const
+    {
+        return _imp->cp_asymmetry();
+    }
+
+    double
     BToKstarGamma::s_kstar_gamma() const
     {
         return _imp->s_kstar_gamma();
@@ -418,5 +418,11 @@ namespace eos
     BToKstarGamma::c_kstar_gamma() const
     {
         return _imp->c_kstar_gamma();
+    }
+
+    double
+    BToKstarGamma::isospin_asymmetry() const
+    {
+        return _imp->isospin_asymmetry();
     }
 }

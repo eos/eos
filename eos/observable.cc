@@ -186,11 +186,17 @@ namespace eos
             make_observable("B->K^*gamma::BRavg",
                     &BToKstarGamma::branching_ratio_cp_averaged),
 
+            make_observable("B->K^*gamma::A_CP",
+                    &BToKstarGamma::cp_asymmetry),
+
             make_observable("B->K^*gamma::S_K^*gamma",
                     &BToKstarGamma::s_kstar_gamma),
 
             make_observable("B->K^*gamma::C_K^*gamma",
                     &BToKstarGamma::c_kstar_gamma),
+
+            make_observable("B->K^*gamma::A_I",
+                    &BToKstarGamma::isospin_asymmetry),
 
             // B -> K ll, Large Recoil
             make_observable("B->Kll::dBR/ds@LargeRecoil",

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -45,11 +45,17 @@ namespace eos
             /// Branching Ratio (CP averaged)
             double branching_ratio_cp_averaged() const;
 
+            /// Direct CP asymmetry A_CP
+            double cp_asymmetry() const;
+
             /// Time dependent CP asymmetry S_K^*gamma
             double s_kstar_gamma() const;
 
             /// Time dependent CP asymmetry C_K^*gamma
             double c_kstar_gamma() const;
+
+            /// Isospin asymmetry
+            double isospin_asymmetry() const;
     };
 }
 
