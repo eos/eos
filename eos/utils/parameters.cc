@@ -222,7 +222,7 @@ namespace eos
             Parameter::Template{"mass::mu",                                      +1.05658e-1,     +1.05658e-1,     +1.05658e-1    }, // cf. [PDG2010], p. 13
             Parameter::Template{"mass::tau",                                     +1.77666,        +1.77682,        +1.77698       }, // cf. [PDG2010], p. 14
             // Quark masses
-            Parameter::Template{"mass::s",                                       +0.080,          +0.101,          +0.130         }, // cf. [PDG2010], p. 21
+            Parameter::Template{"mass::s(2GeV)",                                 +0.080,          +0.101,          +0.130         }, // cf. [PDG2010], p. 21
             Parameter::Template{"mass::c",                                       +1.18,           +1.27,           +1.34          }, // cf. [PDG2010], p. 21
             Parameter::Template{"mass::b(MSbar)",                                +4.13,           +4.19,           +4.37          }, // cf. [PDG2010], p. 21
             Parameter::Template{"mass::t(pole)",                                 +172.0,          +173.3,          +174.6         }, // cf. [TEWWG2010], p. 21

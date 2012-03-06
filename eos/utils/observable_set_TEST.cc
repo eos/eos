@@ -41,11 +41,11 @@ class ObservableSetTest :
                 Parameters p = Parameters::Defaults();
                 o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::b(MSbar)")));
                 o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::c")));
-                o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::s")));
+                o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::s(2GeV)")));
 
                 p["mass::b(MSbar)"] = 4.5;
                 p["mass::c"] = 1.5;
-                p["mass::s"] = 0.1;
+                p["mass::s(2GeV)"] = 0.1;
 
                 // evaluate the observables
                 std::vector<double> results;

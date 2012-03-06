@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Frederik Beaujean
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2012 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -170,7 +170,7 @@ class AnalysisTest :
                 llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::c")), 1.16, 1.2, 1.25);
                 llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::s")), 5e-3, 10e-3, 15e-3);
+                        "mass::s(2GeV)")), 5e-3, 10e-3, 15e-3);
                 llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::t(pole)")), 171, 172, 173);
                 llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
@@ -180,7 +180,7 @@ class AnalysisTest :
 
                 analysis.add(LogPrior::Flat(analysis.parameters(), "mass::b(MSbar)", ParameterRange{ 4     , 4.5   }));
                 analysis.add(LogPrior::Flat(analysis.parameters(), "mass::c",        ParameterRange{ 1     , 2     }));
-                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::s",        ParameterRange{ 1e-3  , 25e-3 }));
+                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::s(2GeV)",  ParameterRange{ 1e-3  , 25e-3 }));
                 analysis.add(LogPrior::Flat(analysis.parameters(), "mass::t(pole)",  ParameterRange{ 168   , 177   }));
                 analysis.add(LogPrior::Flat(analysis.parameters(), "mass::e",        ParameterRange{ 500e-6, 520e-6}));
 

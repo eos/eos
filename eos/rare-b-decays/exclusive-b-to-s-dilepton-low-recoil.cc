@@ -174,7 +174,7 @@ namespace eos
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_Kstar(p["mass::K^*0"], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
-            m_s(p["mass::s"], u),
+            m_s(p["mass::s(2GeV)"], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),

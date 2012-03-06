@@ -46,7 +46,7 @@ class PriorSamplerTest :
                 ObservableSet o;
                 o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::b(MSbar)")));
                 o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::c")));
-                o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::s")));
+                o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::s(2GeV)")));
 
                 PriorSampler::Config config = PriorSampler::Config::Default();
                 config.chunks = 2;
@@ -60,7 +60,7 @@ class PriorSamplerTest :
 
                 sampler.add(LogPrior::Gauss(p, "mass::b(MSbar)", ParameterRange{3.5, 4.5}, 4.1, 4.2, 4.3));
                 sampler.add(LogPrior::Gauss(p, "mass::c", ParameterRange{1, 2}, 1.1, 1.2, 1.3));
-                sampler.add(LogPrior::Flat(p, "mass::s", ParameterRange{0, 0.1}));
+                sampler.add(LogPrior::Flat(p, "mass::s(2GeV)", ParameterRange{0, 0.1}));
 
                 sampler.run();
             }

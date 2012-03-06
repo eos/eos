@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -51,8 +51,6 @@ namespace eos
 
         UsedParameter m_c_MSbar;
 
-        UsedParameter m_s;
-
         UsedParameter m_tau;
 
         UsedParameter m_l;
@@ -77,7 +75,6 @@ namespace eos
             model(Model::make(o.get("model", "SM"), p, o)),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
-            m_s(p["mass::s"], u),
             m_tau(p["mass::tau"], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
             m_Z(p["mass::Z"], u),
