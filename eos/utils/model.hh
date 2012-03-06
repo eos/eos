@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -81,6 +81,7 @@ namespace eos
             virtual double m_b_ps(const double & mu_f) const = 0;
             virtual double m_c_msbar(const double & mu) const = 0;
             virtual double m_c_pole() const = 0;
+            virtual double m_s_msbar(const double & mu) const = 0;
     };
 
     /*!

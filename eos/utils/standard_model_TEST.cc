@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -181,6 +181,28 @@ class CMassesTest :
             TEST_CHECK_NEARLY_EQUAL(1.595301, model.m_c_pole(), eps);
         }
 } sm_c_masses_test;
+
+class SMassesTest :
+    public TestCase
+{
+    public:
+        SMassesTest() :
+            TestCase("sm_s_masses_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const double eps = 1e-6;
+
+            Parameters p = reference_parameters();
+            StandardModel model(p);
+
+            TEST_CHECK_NEARLY_EQUAL(0.101000, model.m_s_msbar(2.0),  eps);
+            TEST_CHECK_NEARLY_EQUAL(0.084980, model.m_s_msbar(4.2),  eps);
+            TEST_CHECK_NEARLY_EQUAL(0.082967, model.m_s_msbar(4.8),  eps);
+        }
+} sm_s_masses_test;
 
 class CKMElementsTest :
     public TestCase
