@@ -279,6 +279,13 @@ Theoretical Inputs
         arxiv:hep-ph/0603063
 
 
+    BCMU2002 : Buras, A. and Czarnecki, A. and Misiak, M. and Urban, J.
+
+        Completing the NLO QCD calculation of B -> X_s gamma
+
+        arxiv:hep-ph/0203135
+
+
     BEKU2002 : Bobeth, C. and Ewerth, T. and Krueger, F. and Urban, J.
 
         Enhancement of BR[B_d -> mu^+ mu^-] / BR[B_s -> mu^+ mu^-] in the MSSM with
@@ -424,6 +431,13 @@ Theoretical Inputs
         arXiv:hep-ph/0004189
 
 
+    CMM1996 : Chetyrkin, K. and Misiak, M. and Muenz, M.
+
+        Weak Radiative B-Meson Decays Beyond Leading Logarithms
+
+        arxiv:hep-ph/9612313
+
+
     CMM1997 : Chetyrkin, K. and Misiak, M. and Muenz, M.
 
         |Delta F| = 1 Nonleptonic Effective Hamiltonian in a Simpler Scheme
@@ -444,6 +458,13 @@ Theoretical Inputs
         in the standard model and in supersymmetry
 
         arxiv:hep-ph/0212158
+
+
+    GM2001 : Gambino, P. and Misiak, M.
+
+        Quark mass effects in B -> X_s gamma
+
+        arxiv:hep-ph/0104034
 
 
     GN1997 : Guetta, D. and Nardi, E.
