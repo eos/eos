@@ -143,14 +143,15 @@ class BMassesTest :
         {
             static const double eps = 1e-5;
 
-            StandardModel model(reference_parameters());
+            Parameters p = reference_parameters();
+            StandardModel model(p);
 
             TEST_CHECK_NEARLY_EQUAL(3.67956, model.m_b_msbar(9.6), eps);
             TEST_CHECK_NEARLY_EQUAL(4.10051, model.m_b_msbar(4.8), eps);
             TEST_CHECK_NEARLY_EQUAL(4.20000, model.m_b_msbar(4.2), eps);
             TEST_CHECK_NEARLY_EQUAL(4.75221, model.m_b_msbar(2.4), eps);
 
-            TEST_CHECK_NEARLY_EQUAL(4.88402, model.m_b_pole(), eps);
+            TEST_CHECK_NEARLY_EQUAL(4.74167, model.m_b_pole(), eps);
 
             TEST_CHECK_NEARLY_EQUAL(4.60728, model.m_b_ps(1.0), eps);
             TEST_CHECK_NEARLY_EQUAL(4.54012, model.m_b_ps(1.5), eps);

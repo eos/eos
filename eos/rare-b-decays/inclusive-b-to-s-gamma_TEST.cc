@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -66,7 +66,7 @@ class BToXsGammaLargeRecoilTest :
 
                 const double eps = 1e-9;
 
-                TEST_CHECK_NEARLY_EQUAL(3.84894e-4, d.integrated_branching_ratio(), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.88196e-4, d.integrated_branching_ratio(), eps);
             }
 
             // Zero test

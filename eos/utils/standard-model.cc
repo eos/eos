@@ -254,9 +254,26 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_b_pole() const
     {
+        // The true (central) pole mass of the bottom is very close to the values
+        // that can be calculated by the following quadratic polynomial.
+        // This holds vor 4.13 <= m_b_MSbar <= 4.37, which corresponds to the values from [PDG2010].
+        static const double m0 = 4.19, a = 4.7266, b = 1.14485, c = -0.168099;
         double m_b_MSbar = _m_b_MSbar__qcd();
+        double m_b_pole = a + (m_b_MSbar - m0) * b + power_of<2>(m_b_MSbar - m0) * c;
 
-        return QCD::m_q_pole(m_b_MSbar, alpha_s(m_b_MSbar), 5.0);
+        for (int i = 0 ; i < 10 ; ++i)
+        {
+            m_b_MSbar = m_b_msbar(m_b_pole);
+            double next = QCD::m_q_pole(m_b_MSbar, alpha_s(m_b_pole), 5.0);
+
+            double delta = (m_b_pole - next) / m_b_pole;
+            m_b_pole = next;
+
+            if (std::abs(delta) < 1e-3)
+                break;
+        }
+
+        return m_b_pole;
     }
 
     double
