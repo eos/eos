@@ -59,7 +59,7 @@ namespace eos
 
         UsedParameter br_clnu;
 
-        UsedParameter lambda_2;
+        UsedParameter mu2_g;
 
         UsedParameter mu;
 
@@ -79,7 +79,7 @@ namespace eos
             m_l(p["mass::" + o.get("l", "mu")], u),
             m_Z(p["mass::Z"], u),
             br_clnu(p["exp::BR(B->X_clnu)"], u),
-            lambda_2(p["B->X_s::lambda_2"], u),
+            mu2_g(p["B->B::mu_G^2@1GeV"], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             ckm(p["exp::CKM(B->X_sll, B->X_clnu)"], u),
@@ -276,7 +276,9 @@ namespace eos
         {
             double m_c = m_c_pole(), m_b = m_b_pole(), log_m_l_hat = std::log(m_l / m_b);
             double s_hat = s / pow(m_b, 2), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
-            double lambda_2_hat = lambda_2 / pow(m_b, 2);
+            // We express lambda_2 as mu^2_G / 3.0 and neglect terms of
+            // higher order in 1/m_b for that relation.
+            double lambda_2_hat = mu2_g / (3.0 * pow(m_b, 2));
             double alpha_s = model->alpha_s(mu);
             double kappa = alpha_e / alpha_s, alpha_s_tilde = alpha_s / (4.0 * M_PI);
 
@@ -418,10 +420,12 @@ namespace eos
 
             /* non-perturbative 1/m_c^2 */
             complex<double> cF = F(s_hat);
-            double c27 = - pow(alpha_s_tilde * kappa, 2) * 8.0 * lambda_2 / (9.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2)
+            // We use lambda_2 = mu2_g / 3.0 and neglect higher orders in 1/m_b in that
+            // relation.
+            double c27 = - pow(alpha_s_tilde * kappa, 2) * 8.0 * mu2_g / (27.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2)
                 * (1.0 + 6.0 * s_hat - s_hat2) / s_hat * real(cF);
-            double c29 = - alpha_s_tilde * kappa * 8.0 * lambda_2 / (9.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF);
-            double c22 = - alpha_s_tilde * kappa * 8.0 * lambda_2 / (9.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF * conj(m9[1]));
+            double c29 = - alpha_s_tilde * kappa * 8.0 * mu2_g / (27.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF);
+            double c22 = - alpha_s_tilde * kappa * 8.0 * mu2_g / (27.0 * pow(m_c, 2)) * pow(1.0 - s_hat, 2) * (2.0 + s_hat) * real(cF * conj(m9[1]));
             ratio_phi += c22 * (-2.0 / 9.0 * norm(wc[0]) + 7.0 / 6.0 * real(wc[0] * conj(wc[1])) + norm(wc[1]));
             ratio_phi += c27 * real((-1.0 / 6.0 * wc[0] + wc[1]) * conj(wc[6]));
             ratio_phi += c29 * real((-1.0 / 6.0 * wc[0] + wc[1]) * conj(wc[8]));

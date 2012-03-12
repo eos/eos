@@ -337,9 +337,9 @@ namespace eos
             Parameter::Template{"B->Vll::sl_phase_0@LowRecoil",                  -M_PI/2.0,       +0.0,            +M_PI/2.0      },
             Parameter::Template{"B->Vll::sl_phase_pa@LowRecoil",                 -M_PI/2.0,       +0.0,            +M_PI/2.0      },
             Parameter::Template{"B->Vll::sl_phase_pp@LowRecoil",                 -M_PI/2.0,       +0.0,            +M_PI/2.0      },
-            // B->X_s HQET parameters
-            Parameter::Template{"B->X_s::lambda_1",                              -0.20,           -0.20,           -0.20          }, // cf. [ALGH2001], Table 2, p. 13
-            Parameter::Template{"B->X_s::lambda_2",                              +0.12,           +0.12,           +0.12          }, // cf. [ALGH2001], Table 2, p. 13
+            // HQET parameters
+            Parameter::Template{"HQET::lambda_1",                                -0.20,           -0.20,           -0.20          }, // cf. [ALGH2001], Table 2, p. 13
+            Parameter::Template{"HQET::lambda_2",                                +0.12,           +0.12,           +0.12          }, // cf. [ALGH2001], Table 2, p. 13
             // Heavy Quark Expansion parameters for hadronic matrix elements ~ <B|O|B>
             Parameter::Template{"B->B::mu_pi^2@1GeV",                            +0.35,           +0.45,           +0.55          }, // cf. [BBMU2003], Eq. (19), p. 9
             Parameter::Template{"B->B::mu_G^2@1GeV",                             +0.33,           +0.35,           +0.38          }, // cf. [BBMU2003], Eq. (17), p. 9
