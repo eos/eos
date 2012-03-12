@@ -297,6 +297,10 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::differential_branching_ratio,
                     std::make_tuple("s")),
 
+            make_observable("B->K^*ll::A_I(s)@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::differential_isospin_asymmetry,
+                    std::make_tuple("s")),
+
             make_observable("B->K^*ll::A_FB(s)@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry,
                     std::make_tuple("s")),

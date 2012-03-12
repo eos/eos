@@ -675,6 +675,20 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::differential_isospin_asymmetry(const double & s) const
+    {
+        Save<char> save_q(_imp->q, 'd');
+        Save<double> save_e_q(_imp->e_q, -1.0/3.0);
+
+        double gamma_zero = differential_decay_width(s);
+        _imp->q = 'u';
+        _imp->e_q = +2.0/3.0;
+        double gamma_minus = differential_decay_width(s);
+
+        return (gamma_zero - gamma_minus) / (gamma_zero + gamma_minus);
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
         // cf. [BHvD2010], p. 6, eq. (2.8)
@@ -901,6 +915,20 @@ namespace eos
         double br_bar = integrated_branching_ratio(s_min, s_max);
 
         return 0.5 * (br + br_bar);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_isospin_asymmetry(const double & s_min, const double & s_max) const
+    {
+        Save<char> save_q(_imp->q, 'd');
+        Save<double> save_e_q(_imp->e_q, -1.0/3.0);
+
+        double gamma_zero = integrated_decay_width(s_min, s_max);
+        _imp->q = 'u';
+        _imp->e_q = +2.0/3.0;
+        double gamma_minus = integrated_decay_width(s_min, s_max);
+
+        return (gamma_zero - gamma_minus) / (gamma_zero + gamma_minus);
     }
 
     double

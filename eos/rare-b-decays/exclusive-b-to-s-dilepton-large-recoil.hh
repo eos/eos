@@ -59,6 +59,7 @@ namespace eos
             // Single Differential Observables
             double differential_branching_ratio(const double & s) const;
             double differential_decay_width(const double & s) const;
+            double differential_isospin_asymmetry(const double & s) const;
             double differential_forward_backward_asymmetry(const double & s) const;
             double differential_longitudinal_polarisation(const double & s) const;
             double differential_transversal_polarisation(const double & s) const;
@@ -91,6 +92,7 @@ namespace eos
             double integrated_decay_width(const double & s_min, const double & s_max) const;
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
             double integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const;
+            double integrated_isospin_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const;
