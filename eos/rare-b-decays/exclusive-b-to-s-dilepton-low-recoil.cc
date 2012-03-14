@@ -717,6 +717,18 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::differential_j_3_normalized_cp_averaged(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
+
+        return (a_c.j3 + a_c_bar.j3) / (decay_width(a_c) + decay_width(a_c_bar));
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::differential_j_4(const double & s) const
     {
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
@@ -764,6 +776,26 @@ namespace eos
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return a_c.j9;
     }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_9_normalized(const double & s) const
+    {
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        return a_c.j9 / decay_width(a_c);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_9_normalized_cp_averaged(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
+
+        return (a_c.j9 + a_c_bar.j9) / (decay_width(a_c) + decay_width(a_c_bar));
+    }
+
 
     double
     BToKstarDilepton<LowRecoil>::integrated_decay_width(const double & s_min, const double & s_max) const
@@ -1139,6 +1171,18 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::integrated_j_3_normalized_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        return (a_c.j3 + a_c_bar.j3) / (decay_width(a_c) + decay_width(a_c_bar));
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::integrated_j_4(const double & s_min, const double & s_max) const
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
@@ -1185,6 +1229,25 @@ namespace eos
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return a_c.j9;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_9_normalized(const double & s_min, const double & s_max) const
+    {
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        return a_c.j9 / decay_width(a_c);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_9_normalized_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        return (a_c.j9 + a_c_bar.j9) / (decay_width(a_c) + decay_width(a_c_bar));
     }
 
     double
