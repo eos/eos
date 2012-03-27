@@ -8,9 +8,9 @@ Experimental Results
 
         Study of exclusive radiative B meson decays
 
-        Phys. Rev. Lett. 84, 5283-5284 (2000)
+        Phys. Rev. Lett. 84, 5283-5287 (2000)
 
-        arxiv:hep-ex/9912047
+        arxiv:hep-ex/9912057
 
 
     Belle:2004 : Nakao, M. et al. [Belle Collaboration]
