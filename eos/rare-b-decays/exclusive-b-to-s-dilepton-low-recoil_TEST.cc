@@ -256,18 +256,18 @@ class BToKstarDileptonLowRecoilTest :
                 /* transversity amplitudes at q^2 = 16.00 GeV^2 */
                 {
                     static const double eps = 1e-19; // 1e-7 smaller than results
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  16.00)), -2.447779189433e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  16.00)), -3.046045136235e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 16.00)), -2.447779189433e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 16.00)), -3.046045136235e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  16.00)), +1.782282707246e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  16.00)), +2.217893507410e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 16.00)), +1.782282707246e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 16.00)), +2.217893507410e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   16.00)), -2.829529424092e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   16.00)), -3.521099606260e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  16.00)), -2.829529424092e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), -3.521099606260e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  16.00)), -2.44606952035309e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  16.00)), -3.04391760398848e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 16.00)), -2.44606952035309e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 16.00)), -3.04391760398848e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  16.00)), +1.78103785899758e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  16.00)), +2.21634440364970e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 16.00)), +1.78103785899758e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 16.00)), +2.21634440364970e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   16.00)), -2.82755311879911e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   16.00)), -3.51864026876994e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  16.00)), -2.82755311879911e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  16.00)), -3.51864026876994e-12, eps);
                 }
             }
         }
