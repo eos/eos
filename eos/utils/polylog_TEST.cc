@@ -45,9 +45,9 @@ class PolylogarithmTest :
 
         virtual void run() const
         {
-            std::ifstream z_file(EOS_BUILDDIR "/eos/utils/polylog_TEST_z.bin");
-            std::ifstream dilog_file(EOS_BUILDDIR "/eos/utils/polylog_TEST_dilog.bin");
-            std::ifstream trilog_file(EOS_BUILDDIR "/eos/utils/polylog_TEST_trilog.bin");
+            std::ifstream z_file(EOS_SRCDIR "/eos/utils/polylog_TEST_z.bin");
+            std::ifstream dilog_file(EOS_SRCDIR "/eos/utils/polylog_TEST_dilog.bin");
+            std::ifstream trilog_file(EOS_SRCDIR "/eos/utils/polylog_TEST_trilog.bin");
 
             static const double eps = 1e-12;
 

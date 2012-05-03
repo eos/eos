@@ -161,7 +161,7 @@ class BToKstarGammaBobethCompatibilityTest :
             observables.push_back(Observable::make("B->K^*gamma::C_K^*gamma,q=d", p, k, o));
             observables.push_back(Observable::make("B->K^*gamma::A_I", p, k, o));
 
-            std::string filename(EOS_BUILDDIR "/eos/rare-b-decays/exclusive-b-to-s-gamma_TEST-btokstargamma.data");
+            std::string filename(EOS_SRCDIR "/eos/rare-b-decays/exclusive-b-to-s-gamma_TEST-btokstargamma.data");
 #ifdef EOS_GENERATE_TEST_DATA
             {
                 std::cout << "-- GENERATING test case data for B->K^*gamma --" << std::endl;

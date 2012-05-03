@@ -60,6 +60,11 @@ libeosutils_la_SOURCES = \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 libeosutils_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lhdf5 -lhdf5_hl
 
+EXTRA_DIST = \
+	polylog_TEST_dilog.bin \
+	polylog_TEST_trilog.bin \
+	polylog_TEST_z.bin
+
 include_eos_utilsdir = $(includedir)/eos/utils
 include_eos_utils_HEADERS = \
 	accumulator.hh \

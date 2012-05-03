@@ -479,7 +479,7 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             observables.push_back(Observable::make("B->K^*ll::A_FB@LowRecoil,q=d,l=mu", p, k, o));
             observables.push_back(Observable::make("B->K^*ll::F_L@LowRecoil,q=d,l=mu",  p, k, o));
 
-            std::string filename(EOS_BUILDDIR "/eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil_TEST-btokstarll.data");
+            std::string filename(EOS_SRCDIR "/eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil_TEST-btokstarll.data");
 #ifdef EOS_GENERATE_TEST_DATA
             {
                 std::cout << "-- GENERATING test case data for B->K^*ll@LowRecoil --" << std::endl;
@@ -690,7 +690,7 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
             observables.push_back(Observable::make("B->Kll::BR@LowRecoil,q=u,l=mu",  p, k, o));
             observables.push_back(Observable::make("B->Kll::F_H@LowRecoil,q=u,l=mu", p, k, o));
 
-            std::string filename(EOS_BUILDDIR "/eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil_TEST-btokll.data");
+            std::string filename(EOS_SRCDIR "/eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil_TEST-btokll.data");
 #ifdef EOS_GENERATE_TEST_DATA
             {
                 std::cout << "-- GENERATING test case data for B->Kll@LowRecoil --" << std::endl;
