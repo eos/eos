@@ -523,7 +523,6 @@ namespace implementation
         // calculate all alpha_s values
         const double alpha_s_mu_0c = QCD::alpha_s(_mu_0c__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
         const double alpha_s_mu_0t = QCD::alpha_s(_mu_0t__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
-        const double alpha_s_m_W = QCD::alpha_s(_m_W__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
 
         double alpha_s = 0.0;
         if (_mu__deltab1 < _mu_b__deltab1)
@@ -562,11 +561,11 @@ namespace implementation
         WilsonCoefficients<BToS> downscaled_charm = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0(),
                 implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(log_c, _sw2__deltab1),
                 implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(x_c, log_c, _sw2__deltab1),
-                alpha_s_m_W, alpha_s, nf, QCD::beta_function_nf_5);
+                alpha_s_mu_0c, alpha_s, nf, QCD::beta_function_nf_5);
         WilsonCoefficients<BToS> downscaled_top = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0(),
                 implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(x_t, _sw2__deltab1),
                 implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(x_t, log_t, _sw2__deltab1),
-                alpha_s_m_W, alpha_s, nf, QCD::beta_function_nf_5);
+                alpha_s_mu_0t, alpha_s, nf, QCD::beta_function_nf_5);
 
         WilsonCoefficients<BToS> wc = downscaled_top;
         wc._sm_like_coefficients = wc._sm_like_coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._sm_like_coefficients;

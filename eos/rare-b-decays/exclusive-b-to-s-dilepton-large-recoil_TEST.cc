@@ -451,7 +451,8 @@ class BToKDileptonLargeRecoilBobethCompatibilityTest :
                 {
                     for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
                     {
-                        *v = v->sample(rng);
+                        *v = v->min() + (v->max() - v->min()) * rng();
+
                         file << *v << '\t';
                     }
 
