@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,6 +18,7 @@
  */
 
 #include <eos/utils/qcd.hh>
+#include <eos/utils/power_of.hh>
 
 #include <cmath>
 
@@ -194,5 +195,27 @@ namespace eos
 
         // cf. [B1998], Eq. (25), p. 12
         return m_q_MSbar * (1.0 + a_s * (4.0/3.0 * (1.0 - mu_f / m_q_MSbar) + a_s * (K - (mu_f / 3.0 / m_q_MSbar) * (a_1 - 2.0 * b_0 * (L - 1.0)))));
+    }
+
+    double
+    QCD::m_q_kin(const double & m_q_MSbar, const double & alpha_s_mq, const double & mu, const BetaFunction & beta)
+    {
+        static const double zeta3 = 1.20206;
+        static const double ln2 = log(2.0);
+        static const double pi = M_PI, pi2 = pi * pi;
+
+        double a_s = alpha_s_mq / M_PI, r = mu / m_q_MSbar;
+        double b_0 = beta[0]; // We do not need to adjust for a factor of 4 when using [BBMU2003], Eq. (A.8).
+        double L = log(m_q_MSbar / (2.0 * mu));
+
+        // cf. [BBMU2003], Eq. (A.8) and the underlying work [MvR2000]. Note that
+        // the latter does use 4 beta_0 = beta_0|here.
+        return m_q_MSbar * (1.0 + a_s * (4.0 / 3.0 * (1.0 - 4.0 / 3.0 * r - r * r / 2.0)
+                    + a_s * (b_0 / 2.0 * (pi2 / 6.0 + 71.0 / 48.0) + 665.0 / 144.0 + pi2 / 18.0 * (2.0 * ln2 - 19.0 / 2.0)
+                        - zeta3 / 6.0 - 8.0 / 3.0 - r * (8.0 * b_0 / 9.0 * (L + 8.0 / 3.0) - 8.0 * pi2 / 9.0 + 52.0 / 9.0)
+                        - r * r * (b_0 / 3.0 * (L + 13.0 / 6.0) - pi2 / 3.0 + 23.0 / 18.0)
+                        + a_s * b_0 * b_0 / 4.0 * (2353.0 / 2592.0 + 13.0 / 36.0 * pi2 + 7.0 / 6.0 * zeta3
+                            - r * 16.0 / 9.0 * (power_of<2>(L + 8.0 / 3.0) + 67.0 / 36.0 - pi2 / 6.0)
+                            - r * r * 2.0 / 3.0 * (power_of<2>(L + 13.0 / 6.0) + 10.0 / 9.0 - pi2 / 6.0)))));
     }
 }

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -81,17 +81,29 @@ namespace eos
             static double m_q_pole(const double & m_q, const double & alpha_s, const double & nf);
 
             /*!
-             * Calculate the shift from from MSbar scheme to potential-Subtracted mass (PS mass).
+             * Calculate the shift from MSbar scheme to potential-Subtracted mass (PS mass).
              *
              * Calculation according to [B1998].
              *
              * @param m_q         quark mass in the MSbar scheme at the scale m_q
-             * @param alpha_s     alpha_s at the scalem_q
+             * @param alpha_s     alpha_s at the scale m_q
              * @param mu_f        Factorization scale
              * @param nf          number of active QCD flavors that control the calculation
              * @param beta        parameters of QCD beta function that control the calculation
              */
             static double m_q_ps(const double & m_q, const double & alpha_s, const double & mu_f, const double & nf, const BetaFunction & beta);
+
+            /*!
+             * Calculate the shift from MSbar scheme to kinetic scheme (kin mass)
+             *
+             * Calculation according to [BBMU2003].
+             *
+             * @param m_q         quark mass in the MSbar scheme at the scale m_q
+             * @param alpha_s     alpha_s at the scale m_q
+             * @param mu          scale at which the mass shall be evaluated
+             * @param beta        parameters of QCD beta function that control the calculation
+             */
+            static double m_q_kin(const double & m_q, const double & alpha_s, const double & mu, const BetaFunction & beta);
 
             /*!
              * The quadratic casimir operator for the fundamental representation of SU(3).
