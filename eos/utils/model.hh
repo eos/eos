@@ -76,9 +76,11 @@ namespace eos
             virtual double alpha_s(const double & mu) const = 0;
             virtual double m_t_msbar(const double & mu) const = 0;
             virtual double m_t_pole() const = 0;
+            virtual double m_b_kin(const double & mu_kin) const = 0;
             virtual double m_b_msbar(const double & mu) const = 0;
             virtual double m_b_pole() const = 0;
             virtual double m_b_ps(const double & mu_f) const = 0;
+            virtual double m_c_kin(const double & mu_kin) const = 0;
             virtual double m_c_msbar(const double & mu) const = 0;
             virtual double m_c_pole() const = 0;
             virtual double m_s_msbar(const double & mu) const = 0;

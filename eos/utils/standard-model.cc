@@ -230,6 +230,15 @@ namespace implementation
     }
 
     double
+    SMComponent<components::QCD>::m_b_kin(const double & mu_kin) const
+    {
+        double m_b_MSbar = _m_b_MSbar__qcd();
+        double alpha_mu_0 = alpha_s(m_b_MSbar);
+
+        return QCD::m_q_kin(m_b_MSbar, alpha_mu_0, mu_kin, QCD::beta_function_nf_5);
+    }
+
+    double
     SMComponent<components::QCD>::m_b_msbar(const double & mu) const
     {
         double m_b_MSbar = _m_b_MSbar__qcd();
@@ -285,6 +294,15 @@ namespace implementation
     }
 
     /* Charm */
+    double
+    SMComponent<components::QCD>::m_c_kin(const double & mu_kin) const
+    {
+        double m_c_MSbar = _m_c_MSbar__qcd();
+        double alpha_mu_0 = alpha_s(m_c_MSbar);
+
+        return QCD::m_q_kin(m_c_MSbar, alpha_mu_0, mu_kin, QCD::beta_function_nf_4);
+    }
+
     double
     SMComponent<components::QCD>::m_c_msbar(const double & mu) const
     {

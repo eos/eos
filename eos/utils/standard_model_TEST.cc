@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +22,8 @@
 #include <eos/utils/standard-model.hh>
 
 #include <cmath>
+
+#include <iostream> // <-- Remove!
 
 using namespace test;
 using namespace eos;
@@ -156,6 +158,10 @@ class BMassesTest :
             TEST_CHECK_NEARLY_EQUAL(4.60728, model.m_b_ps(1.0), eps);
             TEST_CHECK_NEARLY_EQUAL(4.54012, model.m_b_ps(1.5), eps);
             TEST_CHECK_NEARLY_EQUAL(4.47735, model.m_b_ps(2.0), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(4.56114, model.m_b_kin(1.00), eps);
+            TEST_CHECK_NEARLY_EQUAL(4.49203, model.m_b_kin(1.25), eps);
+            TEST_CHECK_NEARLY_EQUAL(4.42520, model.m_b_kin(1.50), eps);
         }
 } sm_b_masses_test;
 
@@ -180,6 +186,10 @@ class CMassesTest :
             TEST_CHECK_NEARLY_EQUAL(1.270000, model.m_c_msbar(1.27), eps);
 
             TEST_CHECK_NEARLY_EQUAL(1.595301, model.m_c_pole(), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(1.060682, model.m_c_kin(1.00), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.931772, model.m_c_kin(1.25), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.813366, model.m_c_kin(1.50), eps);
         }
 } sm_c_masses_test;
 
