@@ -22,6 +22,7 @@ libeosutils_la_SOURCES = \
 	destringify.hh \
 	exception.cc exception.hh \
 	hdf5.cc hdf5.hh hdf5-fwd.hh \
+	hierarchical-clustering.cc hierarchical-clustering.hh \
 	histogram.cc histogram.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
@@ -82,6 +83,7 @@ include_eos_utils_HEADERS = \
 	destringify.hh \
 	exception.hh \
 	hdf5.hh \
+	hierarchical-clustering.hh \
 	histogram.hh \
 	integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
@@ -128,6 +130,7 @@ TESTS = \
 	cartesian-product_TEST \
 	chi-squared_TEST \
 	hdf5_TEST \
+	hierarchical-clustering_TEST \
 	histogram_TEST \
 	integrate_TEST \
 	kinematic_TEST \
@@ -176,6 +179,8 @@ cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 chi_squared_TEST_SOURCES = chi-squared_TEST.cc
 
 hdf5_TEST_SOURCES = hdf5_TEST.cc
+
+hierarchical_clustering_TEST_SOURCES = hierarchical-clustering_TEST.cc
 
 histogram_TEST_SOURCES = histogram_TEST.cc
 
