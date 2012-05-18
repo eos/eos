@@ -1,5 +1,8 @@
 CLEANFILES = \
 	*~ \
+	hdf5_TEST-attribute.hdf5 \
+	hdf5_TEST-file.hdf5 \
+	hdf5_TEST-copy.hdf5 \
 	markov_chain_sampler_TEST.hdf5 \
 	scan_file_TEST.hdf5
 MAINTAINERCLEANFILES = Makefile.in
@@ -18,6 +21,7 @@ libeosutils_la_SOURCES = \
 	condition_variable.cc condition_variable.hh \
 	destringify.hh \
 	exception.cc exception.hh \
+	hdf5.cc hdf5.hh hdf5-fwd.hh \
 	histogram.cc histogram.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
@@ -77,6 +81,7 @@ include_eos_utils_HEADERS = \
 	condition_variable.hh \
 	destringify.hh \
 	exception.hh \
+	hdf5.hh \
 	histogram.hh \
 	integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
@@ -122,6 +127,7 @@ TESTS = \
 	apply_TEST \
 	cartesian-product_TEST \
 	chi-squared_TEST \
+	hdf5_TEST \
 	histogram_TEST \
 	integrate_TEST \
 	kinematic_TEST \
@@ -154,6 +160,7 @@ TESTS = \
 	wilson_scan_model_TEST
 LDADD = \
 	-lgsl \
+	-lhdf5 \
 	$(top_builddir)/test/libeostest.a \
 	libeosutils.la \
 	$(top_builddir)/eos/libeos.la
@@ -167,6 +174,8 @@ apply_TEST_SOURCES = apply_TEST.cc
 cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 
 chi_squared_TEST_SOURCES = chi-squared_TEST.cc
+
+hdf5_TEST_SOURCES = hdf5_TEST.cc
 
 histogram_TEST_SOURCES = histogram_TEST.cc
 
