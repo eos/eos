@@ -30,10 +30,10 @@ namespace eos
         template <typename T_>
         struct DoStringify
         {
-            static std::string stringify(const T_ & x)
+            static std::string stringify(const T_ & x, unsigned precision)
             {
                 std::stringstream ss;
-                ss.precision(10);
+                ss.precision(precision);
                 ss << x;
 
                 return ss.str();
@@ -43,7 +43,7 @@ namespace eos
         template <>
         struct DoStringify<std::string>
         {
-            static std::string stringify(const std::string & x)
+            static std::string stringify(const std::string & x, unsigned)
             {
                 return x;
             }
@@ -51,9 +51,9 @@ namespace eos
     }
 
     template <typename T_>
-    std::string stringify(const T_ & x)
+    std::string stringify(const T_ & x, const unsigned & precision = 10)
     {
-        return implementation::DoStringify<T_>::stringify(x);
+        return implementation::DoStringify<T_>::stringify(x, precision);
     }
 }
 
