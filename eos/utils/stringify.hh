@@ -50,10 +50,76 @@ namespace eos
         };
     }
 
+    /*!
+     * Stringify an arbritrary (scalar) data type.
+     *
+     * @param x         Object that shall be stringified.
+     * @param precision (Optional) floating point precision for the stringification.
+     */
     template <typename T_>
     std::string stringify(const T_ & x, const unsigned & precision = 10)
     {
         return implementation::DoStringify<T_>::stringify(x, precision);
+    }
+
+    /*!
+     * Stringify a range of iterators.
+     *
+     * @param begin     Iterator pointing to the first element of the range.
+     * @param end       Iterator pointing beyond the last element of the range.
+     * @param precision (Optional) floating point precision for the stringification.
+     */
+    template <typename Iterator_>
+    std::string stringify(const Iterator_ & begin, const Iterator_ & end, const unsigned & precision  = 10)
+    {
+        std::stringstream ss;
+        ss.precision(precision);
+        ss << '(';
+
+        for (Iterator_ i = begin ; i != end ; ++i)
+        {
+            ss << ' ' << *i;
+        }
+
+        ss << " )";
+
+        return ss.str();
+    }
+
+    /*!
+     * Stringify a C-style square matrix
+     *
+     * @param m         Pointer to the first matrix element.
+     * @param dim       Dimension of the matrix.
+     * @param precision (Optional) floating point precision for the stringification.
+     */
+    template <typename T_>
+    std::string stringify(const T_ * m, const unsigned & dim, const unsigned & precision = 10)
+    {
+        std::stringstream ss;
+        ss.precision(precision);
+        ss << "\n(";
+
+        for (unsigned i = 0 ; i < dim ; ++i)
+        {
+            ss << '(';
+
+            for (unsigned j = 0 ; j < dim ; ++j)
+            {
+                ss << m[i * dim + j];
+
+                if (j != dim - 1)
+                {
+                    ss << ", ";
+                }
+            }
+
+            ss << ")\n";
+        }
+
+        ss << " )";
+
+        return ss.str();
     }
 }
 
