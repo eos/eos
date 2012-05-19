@@ -127,8 +127,8 @@ namespace eos
         R = std::sqrt(V / W * df / (df - 2.0));
 
         // R smaller, but close to 1 is OK.
-        if (R < 0.99)
-            throw InternalError("MarkovChainSampler::compute_rvalue: R-value " + stringify(R) + " < 0.99. Check for a bug in the implementation!");
+        if ((R < 0.99) && (n > 100))
+            throw InternalError("MarkovChainSampler::compute_rvalue: R-value " + stringify(R, 4) + " < 0.99. Check for a bug in the implementation!");
 
         return R;
     }
