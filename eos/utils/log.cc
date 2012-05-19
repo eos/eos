@@ -185,6 +185,14 @@ namespace eos
     {
     }
 
+    const LogLevel &
+    Log::get_log_level() const
+    {
+        Lock l(_imp->mutex);
+
+        return _imp->log_level;
+    }
+
     void
     Log::set_log_level(const LogLevel & log_level)
     {

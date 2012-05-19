@@ -83,6 +83,10 @@ namespace eos
 
             ///@name Access
             ///@{
+
+            /// Get the current log level
+            const LogLevel & get_log_level() const;
+
             /*!
              * Set the log level.
              */
