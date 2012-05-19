@@ -59,6 +59,7 @@ libeosutils_la_SOURCES = \
 	ticket.cc ticket.hh \
 	top-loops.hh top-loops.cc \
 	verify.cc verify.hh \
+	welford.cc welford.hh \
 	wilson_coefficients.cc wilson_coefficients.hh \
 	wilson-polynomial.cc wilson-polynomial.hh \
 	wilson_scan_model.cc wilson_scan_model.hh \
@@ -119,6 +120,7 @@ include_eos_utils_HEADERS = \
 	ticket.hh \
 	top-loops.hh \
 	verify.hh \
+	welford.hh \
 	wilson_coefficients.hh \
 	wilson-polynomial.hh \
 	wilson_scan_model.hh \
@@ -158,6 +160,7 @@ TESTS = \
 	top-loops_TEST \
 	stringify_TEST \
 	verify_TEST \
+	welford_TEST \
 	wilson_coefficients_TEST \
 	wilson-polynomial_TEST \
 	wilson_scan_model_TEST
@@ -235,6 +238,8 @@ standard_model_TEST_SOURCES = standard_model_TEST.cc
 top_loops_TEST_SOURCES = top-loops_TEST.cc
 
 verify_TEST_SOURCES = verify_TEST.cc
+
+welford_TEST_SOURCES = welford_TEST.cc
 
 wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
 
