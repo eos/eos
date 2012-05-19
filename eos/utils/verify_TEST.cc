@@ -21,9 +21,6 @@
 #include <test/test.hh>
 #include <eos/utils/verify.hh>
 
-#include <cmath>
-#include <iostream>
-
 using namespace test;
 using namespace eos;
 
