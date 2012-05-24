@@ -57,6 +57,12 @@ namespace eos
              */
             LogPrior(const Parameters & parameters);
 
+            virtual ~LogPrior()
+            {
+            }
+
+            virtual std::string as_string() const = 0;
+
             /*!
              * Create a clone (independent object) of this LogPrior object,
              *
@@ -78,6 +84,7 @@ namespace eos
 
             ///@name Accessors
             ///@{
+
             /*!
              * Evaluate the natural logarithm of the prior.
              */
@@ -88,6 +95,16 @@ namespace eos
              * @return a sample according to this prior distribution
              */
             virtual double sample(gsl_rng * rng) const = 0;
+
+            /*!
+             * Return the mean of the distribution.
+             */
+            virtual double mean() const = 0;
+
+            /*!
+             * Return the variance of this distribution.
+             */
+            virtual double variance() const = 0;
             ///@}
 
             ///@name Named constructors for 1D prior distributions
@@ -97,6 +114,36 @@ namespace eos
             static LogPriorPtr Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
                     const double & lower, const double & central, const double & upper);
 
+            /*!
+             * The LogGamma distribution is useful to model continuous, unimodal, asymmetric priors in one dimension.
+             *
+             * @note The construction will typically fail if the asymmetry is less than ca. 5 %. Use a Gaussian instead.
+             *
+             * By construction, it is constructed to behave similarly to a Gaussian:
+             * - the mode is at the central value
+             * - the interval [lower, upper] contains 68% probability
+             * - the density at lower is the same as at upper
+             *
+             * @param parameters The object from which the value of the parameter is retrieved.
+             * @param name The parameter name.
+             * @param range Total allowed range. The value of the pdf is rescaled such that the prior integrates to one over the range.
+             *              For efficiency reasons, no checking if input parameter is in range. But conceptually, the prior is zero outside.
+             * @param lower (central - lower) roughly corresponds to a Gaussian standard deviation for values left of the mode.
+             * @param central The mode of the prior.
+             * @param upper (upper - central) roughly corresponds to a Gaussian standard deviation for values right of the mode.
+             * @return
+             */
+            static LogPriorPtr LogGamma(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+                    const double & lower, const double & central, const double & upper);
+
+            /*!
+             * Construct a prior from its string representation.
+             *
+             * @param parameters The object from which the value of the parameter is retrieved.
+             * @param serialization The prior in string form.
+             * @return Pointer to the ready made prior.
+             */
+            static LogPriorPtr Make(const Parameters & parameters, const std::string & serialization);
             ///@}
     };
 }

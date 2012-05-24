@@ -36,8 +36,6 @@ class PriorSamplerTest :
 
         virtual void run() const
         {
-            static const double eps = 1e-15;
-
             // create simple PriorSampler
             {
                 Parameters p = Parameters::Defaults();
@@ -67,6 +65,8 @@ class PriorSamplerTest :
 
             // open HDF5 file and run checks on data
             {
+                static const double eps = 1e-12;
+
                 // read file from disk
                 ScanFile file = ScanFile::Open("/tmp/prior_sampler_test.hdf5");
 
@@ -89,12 +89,12 @@ class PriorSamplerTest :
                 auto record = data_set[0];
 
                 // parameters = observables
-                TEST_CHECK_NEARLY_EQUAL(record[0], 4.178903953642595  , eps);
-                TEST_CHECK_NEARLY_EQUAL(record[1], 1.477605489382485  , eps);
-                TEST_CHECK_NEARLY_EQUAL(record[2], 0.07203244892880321, eps);
-                TEST_CHECK_NEARLY_EQUAL(record[3], 4.178903953642595  , eps);
-                TEST_CHECK_NEARLY_EQUAL(record[4], 1.477605489382485  , eps);
-                TEST_CHECK_NEARLY_EQUAL(record[5], 0.07203244892880321, eps);
+                TEST_CHECK_RELATIVE_ERROR(record[0], 4.178903953642595  , eps);
+                TEST_CHECK_RELATIVE_ERROR(record[1], 1.477605489382485  , eps);
+                TEST_CHECK_RELATIVE_ERROR(record[2], 0.07203244892880321, eps);
+                TEST_CHECK_RELATIVE_ERROR(record[3], 4.178903953642595  , eps);
+                TEST_CHECK_RELATIVE_ERROR(record[4], 1.477605489382485  , eps);
+                TEST_CHECK_RELATIVE_ERROR(record[5], 0.07203244892880321, eps);
             }
         }
 } prior_sampler_test;
