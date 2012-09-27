@@ -103,7 +103,7 @@ namespace eos
     /*!
      * Stores all configuration options for a HierarchicalClustering.
      */
-    struct HierarchicalClustering::Config
+    class HierarchicalClustering::Config
     {
         private:
             /// Constructor.

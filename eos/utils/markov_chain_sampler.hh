@@ -34,7 +34,7 @@ namespace eos
     {
         public:
             class Config;
-            class PreRunInfo;
+            struct PreRunInfo;
 
             ///@name Basic Functions
             ///@{
@@ -74,7 +74,7 @@ namespace eos
     /*!
      * Stores all configuration options for a MarkovChainSampler.
      */
-    struct MarkovChainSampler::Config
+    class MarkovChainSampler::Config
     {
         private:
             /// Constructor.

@@ -204,7 +204,7 @@ namespace eos
 
         public:
             friend class ScanFile;
-            friend class Implementation<ScanFile>;
+            friend struct Implementation<ScanFile>;
             friend ScanFile::DataSet & operator<< (ScanFile::DataSet &, const std::vector<double> &);
             friend ScanFile::DataSet & operator<< (ScanFile::DataSet &, const ScanFile::WriteBuffer &);
 

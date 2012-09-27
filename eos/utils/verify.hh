@@ -22,6 +22,7 @@
 #define EOS_GUARD_SRC_UTILS_VERIFY_HH 1
 
 #include <eos/utils/exception.hh>
+#include <eos/utils/stringify.hh>
 
 namespace eos
 {

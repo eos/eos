@@ -33,9 +33,9 @@ namespace eos
         public PrivateImplementationPattern<MarkovChain>
     {
         public:
-            class History;
-            class InfoAtPoint;
-            class Stats;
+            struct History;
+            struct InfoAtPoint;
+            struct Stats;
 
             ///@name Basic Functions
             ///@{

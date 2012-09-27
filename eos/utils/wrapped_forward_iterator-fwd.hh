@@ -23,7 +23,7 @@
 namespace eos
 {
     template <typename Tag_, typename Value_>
-    struct WrappedForwardIterator;
+    class WrappedForwardIterator;
 }
 
 #endif

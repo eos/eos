@@ -73,8 +73,8 @@ namespace eos
 
         public:
             friend class Parameter;
-            friend class Implementation<Parameter>;
-            friend class Implementation<Parameters>;
+            friend struct Implementation<Parameter>;
+            friend struct Implementation<Parameters>;
 
             ///@name Basic Functions
             ///@{
@@ -166,7 +166,7 @@ namespace eos
 
         public:
             friend class Parameters;
-            friend class Implementation<Parameters>;
+            friend struct Implementation<Parameters>;
 
             /*!
              * A unique number that identifies this parameter at run time.

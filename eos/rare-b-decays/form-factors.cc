@@ -29,7 +29,6 @@ namespace eos
     /* P -> V Processes */
 
     /* B_{u,d} -> K^* */
-    template class BZ2004FormFactors<BToKstar, PToV>;
 
     /* For the values below, cf. [BZ2004], Table 8, p. 28 */
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_v_r1 = +0.923;
@@ -45,9 +44,8 @@ namespace eos
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_a2_r1 = -0.084;
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_a2_r2 = +0.342;
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_a2_m2fit = 52.00;
+    template class BZ2004FormFactors<BToKstar, PToV>;
 
-
-    template class KMPW2010FormFactors<PToV>;
 
     // mass B_d, cf. [PDG 2010]
     const double KMPW2010FormFactors<PToV>::_m_B       = 5.2795;
@@ -62,11 +60,10 @@ namespace eos
     const double KMPW2010FormFactors<PToV>::_tau_p     = (_m_B + _m_Kstar) * (_m_B + _m_Kstar);
     const double KMPW2010FormFactors<PToV>::_tau_m     = (_m_B - _m_Kstar) * (_m_B - _m_Kstar);
     const double KMPW2010FormFactors<PToV>::_tau_0     = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
+    template class KMPW2010FormFactors<PToV>;
 
 
     /* B_s -> phi */
-    template class BZ2004FormFactors<BsToPhi, PToV>;
-
     /* For the values below, cf. [BZ2004], Table 8, p. 28 */
     template <> const double BZ2004FormFactors<BsToPhi, PToV>::_v_r1 = +1.484;
     template <> const double BZ2004FormFactors<BsToPhi, PToV>::_v_r2 = -1.049;
@@ -81,6 +78,7 @@ namespace eos
     template <> const double BZ2004FormFactors<BsToPhi, PToV>::_a2_r1 = -0.054;
     template <> const double BZ2004FormFactors<BsToPhi, PToV>::_a2_r2 = +0.288;
     template <> const double BZ2004FormFactors<BsToPhi, PToV>::_a2_m2fit = 48.94;
+    template class BZ2004FormFactors<BsToPhi, PToV>;
 
 
     FormFactors<PToV>::~FormFactors()
@@ -137,7 +135,6 @@ namespace eos
     /* P -> P Processes */
 
     /* B_{u,d} -> K */
-    template class BZ2004FormFactors<BToK, PToP>;
 
     /* For the values below, cf. [BZ2004v2], Table 1, p. 8 */
     template <> const double BZ2004FormFactors<BToK, PToP>::_r1_p     = 0.162;
@@ -147,20 +144,15 @@ namespace eos
     template <> const double BZ2004FormFactors<BToK, PToP>::_r2_0     = 0.330;
     template <> const double BZ2004FormFactors<BToK, PToP>::_mfit2    = 37.46;
     template <> const double BZ2004FormFactors<BToK, PToP>::_m12      = 5.41 * 5.41;
+    template class BZ2004FormFactors<BToK, PToP>;
 
-
-    // [BZ2004v3]
-    template class BZ2004FormFactorsSplit<BToK>;
 
     // [BZ2004v3], Table B, p. 26
     template <> const double BZ2004FormFactorsSplit<BToK>::_r1_p_asymptotic    = 0.0541;
     template <> const double BZ2004FormFactorsSplit<BToK>::_r2_p_asymptotic    = 0.2166;
-
     template <> const double BZ2004FormFactorsSplit<BToK>::_r2_0_asymptotic    = 0.2719;
-
     template <> const double BZ2004FormFactorsSplit<BToK>::_r1_t_asymptotic    = 0.0244;
     template <> const double BZ2004FormFactorsSplit<BToK>::_r2_t_asymptotic    = 0.2590;
-
     template <> const double BZ2004FormFactorsSplit<BToK>::_mfit2_0_asymptotic = 30.33;
 
     // [BZ2004v3], Table D, p. 28
@@ -212,8 +204,8 @@ namespace eos
     template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_c_4 =  0.101e-2;
     template <> const double BZ2004FormFactorsSplit<BToK>::_f_t_d_4 =  0.187e-3;
 
+    template class BZ2004FormFactorsSplit<BToK>;
 
-    template class KMPW2010FormFactors<PToP>;
 
     // mass B_u, cf. [PDG 2010]
     const double KMPW2010FormFactors<PToP>::_m_B      = 5.27917;
@@ -224,9 +216,8 @@ namespace eos
     const double KMPW2010FormFactors<PToP>::_tau_p    = (_m_B + _m_K) * (_m_B + _m_K);
     const double KMPW2010FormFactors<PToP>::_tau_m    = (_m_B - _m_K) * (_m_B - _m_K);
     const double KMPW2010FormFactors<PToP>::_tau_0    = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
+    template class KMPW2010FormFactors<PToP>;
 
-
-    template class BFW2010FormFactors<PToP>;
 
     // mass B_u, cf. [PDG 2010]
     const double BFW2010FormFactors<PToP>::_m_B       = 5.27917;
@@ -237,6 +228,7 @@ namespace eos
     const double BFW2010FormFactors<PToP>::_tau_p     = (_m_B + _m_K) * (_m_B + _m_K);
     const double BFW2010FormFactors<PToP>::_tau_m     = (_m_B - _m_K) * (_m_B - _m_K);
     const double BFW2010FormFactors<PToP>::_tau_0     = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
+    template class BFW2010FormFactors<PToP>;
 
 
     FormFactors<PToP>::~FormFactors()

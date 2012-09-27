@@ -78,6 +78,8 @@ CHECK_CXXFLAG([-std=c++0x])
 dnl }}}
 dnl {{{ check for braced initializers
 AC_MSG_CHECKING([for braced initializers])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS -std=c++0x"
 AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 	struct Foo { double x, y; };
 	int main(int, char **)
@@ -90,6 +92,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 	 AC_MSG_ERROR([your compiler does not support braced initializers])
 	]
 )
+CXXFLAGS=$save_CXXFLAGS
 dnl }}}
 dnl }}}
 

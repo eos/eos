@@ -142,7 +142,7 @@ namespace eos
 
         public:
             friend class Kinematics;
-            friend class Implementation<Kinematics>;
+            friend struct Implementation<Kinematics>;
 
             ///@name Basic Functions
             ///@{
