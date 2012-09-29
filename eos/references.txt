@@ -452,6 +452,13 @@ Theoretical Inputs
         arxiv:1005.0571
 
 
+    EGN2010 : Ewerth, T. and Gambino, P. and Nandi, S.
+
+        Power suppressed effects in Bbar -> X_s gamma at O(alpha_s)
+
+        arxiv:0911.2175
+
+
     FM2002 : Feldmann, Th. and Matias, J.
 
         Forward-backward and isospin asymmetry for B -> K^* l^+ l^- decay

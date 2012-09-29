@@ -67,6 +67,10 @@ namespace eos
             // Branching ratio
             double integrated_branching_ratio(const double & emin) const;
 
+            // Photon energy moments
+            double photon_energy_moment_1(const double & emin) const;
+            double photon_energy_moment_2(const double & emin) const;
+
             // Diagnostics
             Diagnostics diagnostics() const;
     };

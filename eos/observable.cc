@@ -976,6 +976,14 @@ namespace eos
             make_observable("B->X_sgamma::BR(E_min)@NLO",
                     &BToXsGamma<NLO>::integrated_branching_ratio,
                     std::make_tuple("E_min")),
+
+            make_observable("B->X_sgamma::E_1(E_min)@NLO",
+                    &BToXsGamma<NLO>::photon_energy_moment_1,
+                    std::make_tuple("E_min")),
+
+            make_observable("B->X_sgamma::E_2(E_min)@NLO",
+                    &BToXsGamma<NLO>::photon_energy_moment_2,
+                    std::make_tuple("E_min")),
         };
 
         Options options;

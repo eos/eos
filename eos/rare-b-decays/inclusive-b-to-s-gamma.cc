@@ -520,6 +520,46 @@ namespace eos
             return decay_rate(emin) * tau() / hbar();
         }
 
+        double photon_energy_moment_1(const double & emin) const
+        {
+            // Calculation is based on results by [EGN2010].
+
+            const double a = model->alpha_s(mu()) / (4.0 * M_PI);
+            const double m_b = model->m_b_kin(1.0), m_b2 = m_b * m_b;
+            const double z = 2.0 * emin / m_b, z2 = z * z, z3 = z2 * z, z4 = z2 * z2;
+            const double ln1mz = std::log(1.0 - z), lnmu = std::log(mu() / m_b);
+
+            double c_0  = 1.0 + a * (-46.0 / 27.0 + 8.0 / 9.0 * (8.0 - 9.0 * z + z3) * ln1mz
+                    + 2.0 / 27.0 * z * (96.0 - 60.0 * z - 22.0 * z2 + 9.0 * z3));
+            double c_pi = 0.5
+                + a * (z * (96.0 - 120.0 * z - 52.0 * z2 + 25.0 * z3 - 9.0 * z4) / (27.0 * (1.0 - z))
+                        - 23.0 / 27.0 + 8.0 * (4.0 - 7.0 * z + z3) / (9.0 * (1.0 - z)) * ln1mz);
+            double c_g  = -0.5 + a * (-565.0 / 81.0 - 3.0 * lnmu
+                    + 2.0 * (80.0 - 33.0 * z - 81.0 * z2 + 25.0 * z3) / 27.0 * ln1mz
+                    + z * (480.0 + 42.0 * z - 425.0 * z2 + 81.0 * z3) / 81.0);
+
+            return m_b / 2.0 * (c_0 + c_pi * mu2_pi / m_b2 + c_g * mu2_g / m_b2);
+        }
+
+        double photon_energy_moment_2(const double & emin) const
+        {
+            // Calculation is based on results by [EGN2010].
+
+            const double a = model->alpha_s(mu()) / (4.0 * M_PI);
+            const double m_b = model->m_b_kin(1.0), m_b2 = m_b * m_b;
+            const double z = 2.0 * emin / m_b, z2 = z * z, z3 = z2 * z, z4 = z2 * z2, z5 = z4 * z;
+            const double ln1mz = std::log(1.0 - z);
+
+            double c_0  = a * (-2.0 / 9.0 * (1.0 - 2.0 * z + z2) * (17.0 - 2.0 * z - 3.0 * z2) * ln1mz
+                        + 1.0 / 270.0 * (1.0 - 2.0 * z + z2) * (61.0 - 898.0 * z - 207.0 * z2 + 144.0 * z3));
+            double c_pi = 1.0 / 3.0 + a * (-4.0 / 27.0 * (2.0 - 27.0 * z + 7.0 * z3) * ln1mz
+                        - 2.0 / 405.0 * (169.0 + 60.0 * z - 780.0 * z2 - 385.0 * z3 + 225.0 * z4 - 54.0 * z5));
+            double c_g  = a * ((43.0 - 84.0 * z + 258.0 * z2 - 292.0 * z3 + 75.0 * z4) * ln1mz / 54.0
+                        - (707.0 - 2580.0 * z + 3750.0 * z2 - 13820.0 * z3 + 14535.0 * z4 - 2592.0 * z5) / 3240.0);
+
+            return m_b2 / 4.0 * (c_0 + c_pi * mu2_pi / m_b2 + c_g * mu2_g / m_b2);
+        }
+
         Diagnostics diagnostics() const
         {
             Diagnostics results;
@@ -635,6 +675,18 @@ namespace eos
     BToXsGamma<NLO>::integrated_branching_ratio(const double & emin) const
     {
         return _imp->branching_ratio(emin);
+    }
+
+    double
+    BToXsGamma<NLO>::photon_energy_moment_1(const double & emin) const
+    {
+        return _imp->photon_energy_moment_1(emin);
+    }
+
+    double
+    BToXsGamma<NLO>::photon_energy_moment_2(const double & emin) const
+    {
+        return _imp->photon_energy_moment_2(emin);
     }
 
     Diagnostics
