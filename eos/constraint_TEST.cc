@@ -173,6 +173,10 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@BaBar-2012",
                     "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@BaBar-2012",
                     "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@BaBar-2012",
+                    // B -> X_s gamma
+                    "B->X_sgamma::BR[1.8]@BaBar-2012",
+                    "B->X_sgamma::E_1[1.8]@BaBar-2012",
+                    "B->X_sgamma::E_2[1.8]@BaBar-2012",
 
                     // CDF
                     // B^0 -> K^*0 mu^+ mu^-

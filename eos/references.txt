@@ -68,6 +68,14 @@ Experimental Results
         http://indico.in2p3.fr/getFile.py/access?contribId=10&sessionId=12&resId=0&materialId=slides&confId=6001
 
 
+    BaBar:2012C : [BaBar Collaboration]
+
+        Measurement of B(B -> X_s gamma), the B -> X_s gamma photon energy spectrum,
+        and the direct CP asymmetry in B -> X_s+d gamma decays
+
+        arxiv:1207.5772
+
+
     Belle:2009 : Wei, J.T. et al. [BELLE Collaboration]
 
         Measurement of the Differential Branching Fraction and Forward-Backward

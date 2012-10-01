@@ -986,6 +986,47 @@ namespace eos
         };
 
         /*
+         * BaBar
+         *
+         * Data taken from [BaBar:2012C]
+         */
+        static const GaussianConstraintTemplate B_to_Xs_gamma_BR_1dot8_BaBar_2012C
+        {
+            "B->X_sgamma::BR(E_min)@NLO",
+            Kinematics{ { "E_min", 1.8 } },
+            Options{ { "q", "d" } },
+            +3.21e-4, +0.15e-4, -0.15e-4, +0.29e-4, -0.29e-4
+        };
+        static const GaussianConstraintTemplate B_to_Xs_gamma_E_1_1dot8_BaBar_2012C
+        {
+            "B->X_sgamma::E_1(E_min)@NLO",
+            Kinematics{ { "E_min", 1.8 } },
+            Options{ { "q", "d" } },
+            +2.267, +0.019, -0.019, +0.032, -0.032
+        };
+        static const GaussianConstraintTemplate B_to_Xs_gamma_E_2_1dot8_BaBar_2012C
+        {
+            "B->X_sgamma::E_2(E_min)@NLO",
+            Kinematics{ { "E_min", 1.8 } },
+            Options{ { "q", "d"  } },
+            +4.84e-2, +5.3e-3, -5.3e-3, +7.7e-3, -7.7e-3
+        };
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Xs_gamma_E_1_and_E_2_1dot8_BaBar_2012C
+        {
+            {{ "B->X_sgamma::E_1(E_min)@NLO", "B->X_sgamma::E_2(E_min)@NLO" }},
+            {{ Kinematics{ { "E_min", 1.8 } }, Kinematics{ { "E_min", 1.8 } } }},
+            {{ Options{ { "q", "d"  } }, Options{ { "q", "d"  } } }},
+            {{ 2.267, 0.0484 }},
+            {{ 0.019, 0.0053 }},
+            {{ 0.019, 0.0053 }},
+            {{ 0.032, 0.0077 }},
+            {{
+                 {{ +1.00, -0.88 }},
+                 {{ -0.88, +1.00 }}
+            }}
+        };
+
+        /*
          * CDF Collaboration
          *
          * Data taken from [CDF:2012A]
@@ -1886,6 +1927,11 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@BaBar-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_BaBar_2012) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@BaBar-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_BaBar_2012) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@BaBar-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_BaBar_2012) },
+            // B -> X_s gamma
+            { "B->X_sgamma::BR[1.8]@BaBar-2012", make_factory(templates::B_to_Xs_gamma_BR_1dot8_BaBar_2012C) },
+            { "B->X_sgamma::E_1[1.8]@BaBar-2012", make_factory(templates::B_to_Xs_gamma_E_1_1dot8_BaBar_2012C) },
+            { "B->X_sgamma::E_2[1.8]@BaBar-2012", make_factory(templates::B_to_Xs_gamma_E_2_1dot8_BaBar_2012C) },
+            { "B->X_sgamma::E_1[1.8]+E_2[1.8]@BaBar-2012", make_factory(templates::B_to_Xs_gamma_E_1_and_E_2_1dot8_BaBar_2012C) },
             // CDF
             // B^0 -> K^*0 mu^+ mu^-
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_CDF_2012) },
