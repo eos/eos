@@ -1068,6 +1068,19 @@ namespace eos
             Options{ { "q", "d"  }, { "l", "mu" } },
             -0.47 / 2, +0.21 / 2, -0.10 / 2, +0.03 / 2, -0.05 / 2
         };
+
+        /*
+         * PDG
+         *
+         * Data taken from [PDG2012]
+         */
+        static const GaussianConstraintTemplate B_Bstar_mass_splitting_PDG_2012
+        {
+            "B::M_B^*-M_B",
+            Kinematics{ },
+            Options{ { "q", "d" } },
+            0.04578, +0.00035, -0.00035, 0.0, 0.0
+        };
         ///@}
     }
 
@@ -1250,6 +1263,7 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_LHCb_2011) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_LHCb_2011) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_LHCb_2011) },
+
             /* 2012 */
             // BaBar
             // B^+ -> K^+ mu^+ mu^-
@@ -1283,6 +1297,9 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_1_to_6_LHCb_2012) },
             { "B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_14dot18_to_16_LHCb_2012) },
             { "B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_16_to_19_LHCb_2012) },
+            // PDG2012
+            // B^0(*) Mass splitting
+            { "B^0::M_B^*-M_B@PDG-2012", make_factory(templates::B_Bstar_mass_splitting_PDG_2012) },
         };
 
         auto f = factories.find(name);
