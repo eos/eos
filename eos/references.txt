@@ -462,6 +462,14 @@ Theoretical Inputs
         arxiv:1007.3178
 
 
+    U2001 : Uraltsev, N.
+
+        On the chromomagnetic expectation value mu^2_G and higher power
+        corrections in heavy flavor mesons
+
+        arxiv:hep-ph/0111166
+
+
     vRVL1997 : van Ritbergen, T. and Vermaseren, J.A.M. and Larin, S.A.
 
         The four-loop beta-function in Quantum Chromodynamics

@@ -20,6 +20,7 @@
 
 #include <eos/observable.hh>
 #include <eos/form-factors/form-factors-impl.hh>
+#include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
@@ -70,6 +71,10 @@ namespace eos
     {
         static const std::map<std::string, ObservableFactory *> simple_observables
         {
+            /* B Meson Properties */
+            make_observable("B::M_B^*-M_B",
+                    &BMesonProperties::mass_splitting_j1_j0),
+
             /* Exclusive Decays */
 
             // B_q -> ll

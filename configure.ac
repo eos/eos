@@ -141,6 +141,7 @@ AC_OUTPUT(
 	eos/Makefile
 	eos/form-factors/Makefile
 	eos/rare-b-decays/Makefile
+        eos/b-decays/Makefile
 	eos/utils/Makefile
 	src/Makefile
 	src/clients/Makefile
