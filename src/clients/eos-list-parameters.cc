@@ -145,13 +145,20 @@ main(int argc, char * argv[])
 
         if (CommandLine::instance()->scan_format)
         {
-            std::string::size_type max_prior_length = std::string("gaussian").length();
+            // how big to choose the range around mode
+            double number_of_sigmas = 2.0;
+            std::string::size_type max_prior_length = std::string("log-gamma").length();
 
             for (auto p = parameters.begin(), p_end = parameters.end() ; p != p_end ; ++p)
             {
                 std::string prior;
                 std::string min, max;
-                if ( p->min() == (*p)() && p->max() == (*p)())
+
+                // upper and lower ranges
+                double delta_down = (*p)() - p->min();
+                double delta_up = p->max() - (*p)();
+
+                if ((delta_down == 0) && (delta_up == 0))
                 {
                     prior = "flat";
                     min = "MIN\t";
@@ -159,16 +166,17 @@ main(int argc, char * argv[])
                 }
                 else
                 {
-                    prior = "gaussian";
+                    // for asymmetries larger than 5%, use log-gamma
+                    prior =  std::fabs(delta_up / delta_down - 1.0) < 0.05 ? "gaussian" : "log-gamma";
                     std::stringstream ss;
                     ss
-                    << std::scientific << std::setprecision(4)
-                    << double(*p) - 3.0 * ( double(*p) - p->min());
+                    << std::setprecision(4)
+                    << double(*p) - number_of_sigmas * delta_down;
                     min = ss.str();
                     ss.str("");
                     ss
-                    << std::scientific << std::setprecision(4)
-                    << double(*p) + 3.0 * (-double(*p) + p->max());
+                    << std::setprecision(4)
+                    << double(*p) + number_of_sigmas * delta_up;
                     max = ss.str();
                 }
 
@@ -184,7 +192,7 @@ main(int argc, char * argv[])
                 if (prior != "flat")
                 {
                     std::cout
-                    << std::setw(7) << std::scientific << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos)
+                    << std::setw(7) << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos)
                     << '\t' << p->min() << '\t' << (*p)() << '\t' << p->max();
                 }
 
