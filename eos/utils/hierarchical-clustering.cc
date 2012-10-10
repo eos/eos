@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/utils/exception.hh>
 #include <eos/utils/hierarchical-clustering.hh>
+#include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -274,7 +274,7 @@ namespace eos
             bool converged = false;
             unsigned step = 0;
 
-            while (! converged)
+            while ((! converged) && (step < config.maximum_steps))
             {
                 cleanup();
 
@@ -535,6 +535,7 @@ namespace eos
     HierarchicalClustering::Config::Config() :
         equal_weights(true),
         kill_clusters(true),
+        maximum_steps(std::numeric_limits<unsigned>::max()),
         precision(1e-4)
     {
     }

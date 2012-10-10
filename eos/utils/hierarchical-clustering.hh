@@ -138,6 +138,9 @@ namespace eos
             /// If a cluster has zero weight, it is removed;
             bool kill_clusters;
 
+            /// Perform a maximum number of update steps.
+            unsigned maximum_steps;
+
             /// If relative change of distance between current and last step falls below precision,
             /// declare convergence.
             double precision;
