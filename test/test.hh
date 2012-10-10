@@ -21,11 +21,12 @@
 #define WILSON_FITTER_GUARD_TEST_TEST_HH 1
 
 #include <config.h>
+#include <eos/utils/stringify.hh>
 
+#include <cmath>
+#include <iostream>
 #include <limits>
 #include <string>
-#include <cmath>
-#include <eos/utils/stringify.hh>
 
 namespace test
 {
@@ -60,6 +61,15 @@ namespace test
 
             std::string where() const;
     };
+
+#define TEST_SECTION(name, body) \
+    do \
+    { \
+        std::cout << name << "> begins" << std::endl; \
+        body \
+        std::cout << name << "> ends" << std::endl; \
+    } \
+    while (false)
 
 #define TEST_CHECK(a) \
     do \
