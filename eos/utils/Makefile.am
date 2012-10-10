@@ -4,6 +4,7 @@ CLEANFILES = \
 	hdf5_TEST-file.hdf5 \
 	hdf5_TEST-copy.hdf5 \
 	markov_chain_sampler_TEST.hdf5 \
+	prior_sampler_TEST.hdf5 \
 	scan_file_TEST.hdf5
 MAINTAINERCLEANFILES = Makefile.in
 

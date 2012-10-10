@@ -23,7 +23,9 @@
 #include <eos/utils/log_prior-fwd.hh>
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/private_implementation_pattern.hh>
-#include <eos/utils/scan_file.hh>
+#include <eos/utils/hdf5-fwd.hh>
+
+#include <vector>
 
 namespace eos
 {
@@ -38,6 +40,8 @@ namespace eos
     {
         public:
             class Config;
+            typedef hdf5::Array<1, double> ObservablesType;
+            static ObservablesType observables_type(const unsigned & dimension);
 
             /*!
              * Constructor.
@@ -68,6 +72,14 @@ namespace eos
              * observable values to disk.
              */
             void run();
+
+            /*!
+             * Calculate observables at the given parameter samples.
+             * The order and meaning of parameters in a sample are
+             * specified by the parameter descriptions.
+             * @note No new samples are drawn from the priors.
+             */
+            void run(const std::vector<std::vector<double>> & samples, const std::vector<ParameterDescription> & );
     };
 
     /*!
@@ -91,7 +103,7 @@ namespace eos
             unsigned chunk_size;
 
             /// The file where the observables are stored.
-            std::shared_ptr<ScanFile> output_file;
+            std::shared_ptr<hdf5::File> output_file;
 
             /*!
              * If true, use as many threads as there are cores available.

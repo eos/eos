@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011, 2012 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,6 +18,7 @@
  */
 
 #include <eos/utils/destringify.hh>
+#include <eos/utils/hdf5.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/log_prior.hh>
@@ -25,9 +26,11 @@
 #include <eos/utils/prior_sampler.hh>
 #include <eos/utils/scan_file.hh>
 #include <eos/utils/stringify.hh>
+#include <eos/utils/verify.hh>
 
 #include <iomanip>
 #include <iostream>
+#include <limits>
 
 using namespace eos;
 
@@ -67,6 +70,8 @@ class CommandLine :
 
         Parameters parameters;
 
+        Options global_options;
+
         std::vector<LogPriorPtr> priors;
 
         CommandLine() :
@@ -100,11 +105,28 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--debug" == argument)
+                {
+                    Log::instance()->set_log_level(ll_debug);
+
+                    continue;
+                }
+
                 if ("--fix" == argument)
                 {
                     std::string par_name = std::string(*(++a));
                     double value = destringify<double> (*(++a));
                     parameters[par_name] = value;
+
+                    continue;
+                }
+
+                if ("--global-option" == argument)
+                {
+                    std::string name(*(++a));
+                    std::string value(*(++a));
+
+                    global_options.set(name, value);
 
                     continue;
                 }
@@ -126,7 +148,7 @@ class CommandLine :
                     ObservableInput input;
                     input.kinematics = *kinematics;
                     input.observable = Observable::make(observable_name, parameters,
-                            *kinematics, Options());
+                            *kinematics, global_options);
                     if (!input.observable)
                         throw DoUsage("Unknown observable '" + observable_name + "'");
 
@@ -141,7 +163,14 @@ class CommandLine :
                 {
                     std::string filename(*(++a));
 
-                    config.output_file.reset(new ScanFile(ScanFile::Create(filename, "eos-propagate-uncertainty")));
+                    config.output_file.reset(new hdf5::File(hdf5::File::Create(filename)));
+
+                    continue;
+                }
+
+                if ("--parallel" == argument)
+                {
+                    config.parallelize = destringify<unsigned>(*(++a));
 
                     continue;
                 }
@@ -169,12 +198,50 @@ class CommandLine :
                     continue;
                 }
 
+                /*
+                 * format: N_SIGMAS in [0, 10]
+                 * a) --scan PAR N_SIGMAS --prior ...
+                 * b) --scan PAR MIN MAX  --prior ...
+                 * c) --scan PAR HARD_MIN HARD_MAX N_SIGMAS --prior ...
+                 */
                 if ("--vary" == argument )
                 {
                     std::string name = std::string(*(++a));
-                    double min = destringify<double> (*(++a));
-                    double max = destringify<double> (*(++a));
+
+                    double min = -std::numeric_limits<double>::max();
+                    double max =  std::numeric_limits<double>::max();
+
+                    // first word has to be a number
+                    double number = destringify<double>(*(++a));
+
                     std::string keyword = std::string(*(++a));
+
+                    VerifiedRange<double> n_sigmas(0, 10, 0);
+
+                    // case a)
+                    if ("--prior" == keyword)
+                    {
+                        n_sigmas = VerifiedRange<double>(0, 10, number);
+                        if (n_sigmas == 0)
+                            throw DoUsage("number of sigmas: number expected");
+                    }
+                    else
+                    {
+                        // case b), c)
+                        min = number;
+                        max = destringify<double>(keyword);
+
+                        keyword = std::string(*(++a));
+
+                        // watch for case c)
+                        if ("--prior" != keyword)
+                        {
+                            n_sigmas = VerifiedRange<double>(0, 10,  destringify<double>(keyword));
+                            if (n_sigmas == 0)
+                                throw DoUsage("number of sigmas: number expected");
+                            keyword = std::string(*(++a));
+                        }
+                    }
 
                     if ("--prior" != keyword)
                         throw DoUsage("Missing correct prior specification for '" + name + "'!");
@@ -185,15 +252,31 @@ class CommandLine :
 
                     ParameterRange range{ min, max };
 
-                    if (prior_type == "gaussian")
+                    if (prior_type == "gaussian" || prior_type == "log-gamma")
                     {
                         double lower = destringify<double> (*(++a));
                         double central = destringify<double> (*(++a));
                         double upper = destringify<double> (*(++a));
-                        prior = LogPrior::Gauss(parameters, name, range, lower, central, upper);
+
+                        // adjust range, but always stay within hard bound supplied by the user
+                        if (n_sigmas > 0)
+                        {
+                            range.min = std::max(range.min, central - n_sigmas * (central - lower));
+                            range.max = std::min(range.max, central + n_sigmas * (upper - central));
+                        }
+                        if (prior_type == "gaussian")
+                        {
+                            prior = LogPrior::Gauss(parameters, name, range, lower, central, upper);
+                        }
+                        else
+                        {
+                            prior = LogPrior::LogGamma(parameters, name, range, lower, central, upper);
+                        }
                     }
                     else if (prior_type == "flat")
                     {
+                        if (n_sigmas > 0)
+                            throw DoUsage("Can't specify number of sigmas for flat prior");
                         prior = LogPrior::Flat(parameters, name, range);
                     }
                     else
@@ -211,23 +294,44 @@ class CommandLine :
         }
 };
 
-
 int main(int argc, char * argv[])
 {
     try
     {
-        CommandLine::instance()->parse(argc, argv);
+        auto inst = CommandLine::instance();
 
-        if (CommandLine::instance()->inputs.empty())
+        inst->parse(argc, argv);
+
+        if (inst->inputs.empty())
             throw DoUsage("No inputs specified");
 
-        PriorSampler sampler(CommandLine::instance()->unique_observables, CommandLine::instance()->config);
-        for (auto i = CommandLine::instance()->priors.begin(), i_end = CommandLine::instance()->priors.end() ; i != i_end ; ++i)
+        if (inst->priors.empty())
+            throw DoUsage("You must specify parameters to vary");
+
+        std::cout << "Determining the uncertainty on the following observables:" << std::endl;
+        for (auto o = inst->inputs.begin(), o_end = inst->inputs.end() ; o != o_end ; ++o)
         {
-            sampler.add(*i);
+            std::cout << o->observable->name() << "[" << o->kinematics.as_string() << "]"
+                      << " with options: " << o->observable->options().as_string() << std::endl;
         }
 
-        sampler.run();
+        std::cout << std::endl;
+
+        PriorSampler sampler(inst->unique_observables, inst->config);
+
+        // default: draw from priors
+        {
+            std::cout << "Varying the following parameters:" << std::endl;
+
+            for (auto i = inst->priors.begin(), i_end = inst->priors.end() ; i != i_end ; ++i)
+            {
+                sampler.add(*i);
+
+                std::cout << (**i).as_string() << std::endl;
+            }
+
+            sampler.run();
+        }
     }
     catch (DoUsage & e)
     {
@@ -239,6 +343,7 @@ int main(int argc, char * argv[])
         std::cout << "  [--chunk-size VALUE]" << std::endl;
         std::cout << "  [--fix PARAMETER VALUE]" << std::endl;
         std::cout << "  [--output FILENAME]" << std::endl;
+        std::cout << "  [--parallel [0|1]]" << std::endl;
         std::cout << "  [--seed LONG_VALUE]" << std::endl;
         std::cout << "  [--store-parameters]" << std::endl;
         std::cout << std::endl;
