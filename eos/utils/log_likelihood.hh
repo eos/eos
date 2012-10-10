@@ -29,9 +29,6 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 
-//TODO can we get around inclusion in this header and move it to source?
-#include <vector>
-
 #include <gsl/gsl_rng.h>
 
 namespace eos
@@ -51,15 +48,23 @@ namespace eos
             /// Destructor.
             virtual ~LogLikelihoodBlock() = 0;
 
+            virtual std::string as_string() const = 0;
+
+            /// Clone this block.
+            virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const = 0;
+
+            /// Compute the logarithm of the likelihood for this block.
+            virtual double evaluate() const = 0;
+
+            /// The number of experimental observations (not observables!) used in this block.
+            virtual unsigned number_of_observations() const = 0;
+
             /*!
              * Fix the predictions for fixed parameters within given model.
              * Calculate any normalization constants to fix the sampling distribution
              * in order to speed up repeated calls of sample().
              */
             virtual void prepare_sampling();
-
-            /// Compute the logarithm of the likelihood for this block.
-            virtual double evaluate() const = 0;
 
             /*!
              * Sample from the logarithm of the likelihood for this block.
@@ -71,8 +76,17 @@ namespace eos
              */
             virtual double sample(gsl_rng * rng) const = 0;
 
-            /// Clone this block.
-            virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const = 0;
+            /*!
+             * Calculate the significance of the deviation between
+             * the observables' current value and the mode in
+             * units of the standard Gaussian distribution.
+             *
+             * @example For a Gaussian around x=1 with sigma = 0.5,
+             * a current value of x=2 will yield a significance of 2.
+             *
+             * @note The significance is >= 0.
+             */
+            virtual double significance() const  = 0;
 
             /*!
              * Create a new LogLikelihoodBlock for one normally distributed observable.
@@ -90,8 +104,133 @@ namespace eos
                     const double & min, const double & central, const double & max);
 
             /*!
+             * Create a new LogLikelihoodBlock for one a single observable with asymmetric uncertainties.
+             *
+             * By construction, it is constructed to behave similarly to a Gaussian:
+             * - the mode is at the central value
+             * - the interval [min, max] contains 68% probability
+             * - the density at min is the same as at max
+             * For details see [C2004].
+             *
+             * @note Finding the correct parameter values is accomplished by solving a set of two equations numerically.
+             * This is unstable if max and min uncertainty differ by less than 5%.
+             * In that case, just a Gaussian instead.
+             *
+             * @param cache      The Observable cache from which we draw the predictions.
+             * @param observable The Observable whose distribution we model.
+             * @param min        The value one sigma below the mean of the experimental distribution.
+             * @param central    The mean value of the experimental distribution.
+             * @param max        The value one sigma above the mean of the experimental distribution.
+             */
+            static LogLikelihoodBlockPtr LogGamma(ObservableCache cache, const ObservablePtr & observable,
+                    const double & min, const double & central, const double & max);
+
+            /*!
+             * Create a new LogLikelihoodBlock for one a single observable with asymmetric uncertainties.
+             *
+             * @note The only difference to the constructor without the \lambda and \alpha arguments
+             * is that now the LogGamma distribution is defined explicitly, and no numerical
+             * equation solving is needed. However, consistency is checked.
+             *
+             * @param lambda The scale parameter of a LogGamma distribution.
+             * @param alpha The shape parameter of a LogGamma distribution.
+             * @return
+             */
+            static LogLikelihoodBlockPtr LogGamma(ObservableCache cache, const ObservablePtr & observable,
+                                const double & min, const double & central, const double & max,
+                                const double & lambda, const double & alpha);
+
+            /*!
+             * A likelihood contribution representing an upper limit on a quantity x.
+             *
+             * Internally, it is represented by an Amoroso distribution [C2004] with
+             * location parameter a set to the physical limit, scale parameter \theta and
+             * first shape parameter \alpha supplied by the user, and 2nd shape parameter \beta
+             * set to the inverse of \alpha, in order to ensure that the maximum of the density
+             * is at the physical limit.
+             *
+             * The limit values are required in order to check consistency with the parameter values.
+             *
+             * For example, consider a yet unobserved branching ratio, which has to be non-negative, x>= 0.
+             *
+             * @param cache The Observable cache from which we draw the predictions.
+             * @param observable The Observable whose distribution we model.
+             * @param mode The lower, physical limit. A branching ratio has to be >= 0. It is the maximum of the pdf.
+             * @param upper_limit_90 With 90% probability, x < upper_limit_90.
+             * @param upper_limit_95 With 95% probability, x < upper_limit_95.
+             * @param theta scale parameter
+             * @param alpha shape parameter
+             * @return
+             */
+            static LogLikelihoodBlockPtr AmorosoLimit(ObservableCache cache, const ObservablePtr & observable,
+                    const double & physical_limit, const double & upper_limit_90, const double & upper_limit_95,
+                    const double & theta, const double & alpha);
+
+            /*!
+             * A likelihood contribution representing an upper limit on a quantity x.
+             *
+             * Internally, it is represented by an Amoroso distribution [C2004] with
+             * location parameter a set to the physical limit, scale parameter \theta and
+             * shape parameters \alpha, \beta supplied by the user.
+             *
+             * The limit values / mode are required in order to check consistency with the parameter values.
+             *
+             * For example, consider a yet unobserved branching ratio, which has to be non-negative, x>= 0.
+             *
+             * @param cache The Observable cache from which we draw the predictions.
+             * @param observable The Observable whose distribution we model.
+             * @param physical_limit The lower, physical limit. A branching ratio has to be >= 0.
+             * @param mode The maximum of the distribution.
+             * @param upper_limit_90 With 90% probability, x < upper_limit_90.
+             * @param upper_limit_95 With 95% probability, x < upper_limit_95.
+             * @param theta scale parameter
+             * @param alpha 1st shape parameter
+             * @param beta  2nd shape parameter
+             * @return
+             */
+            static LogLikelihoodBlockPtr AmorosoMode(ObservableCache cache, const ObservablePtr & observable,
+                    const double & physical_limit, const double & mode,
+                    const double & upper_limit_90, const double & upper_limit_95,
+                    const double & theta, const double & alpha, const double & beta);
+
+            /*!
+             * A likelihood contribution representing an upper limit on a quantity x.
+             *
+             * Internally, it is represented by an Amoroso distribution [C2004] with
+             * location parameter a set to the physical limit, scale parameter \theta and
+             * shape parameters \alpha, \beta supplied by the user.
+             *
+             * @note The mode of the distribution is typically not at the physical limit.
+             *
+             * The limit values are required in order to check consistency with the parameter values.
+             *
+             * For example, consider a yet unobserved branching ratio, which has to be non-negative, x>= 0.
+             *
+             * @param cache The Observable cache from which we draw the predictions.
+             * @param observable The Observable whose distribution we model.
+             * @param mode The lower, physical limit. A branching ratio has to be >= 0.
+             * @param upper_limit_10  With  10% probability, x < upper_limit_10.
+             * @param upper_limit_50 With 50% probability, x < upper_limit_50.
+             * @param upper_limit_90 With 90% probability, x < upper_limit_90.
+             * @param theta scale parameter
+             * @param alpha 1st shape parameter
+             * @param beta  2nd shape parameter
+             * @return
+             */
+            static LogLikelihoodBlockPtr Amoroso(ObservableCache cache, const ObservablePtr & observable,
+                    const double & physical_limit, const double & upper_limit_10,
+                    const double & upper_limit_50, const double & upper_limit_90,
+                    const double & theta, const double & alpha, const double & beta);
+
+            // todo document
+            static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components, 
+                                                 const std::vector<double> & weights);
+            /*!
              * Create a new LogLikelihoodBlock for n observables distributed
              * according to a multivariate normal distribution.
+             *
+             * @note For every dimension, this template and the corresponding implementation
+             *       have to be instantiated explicitly.
              *
              * @param cache         The Observable cache from which we draw the predictions.
              * @param observables   The Observables whose distribution we model.
@@ -101,6 +240,25 @@ namespace eos
             template <std::size_t n_>
             static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
                                                               const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance);
+
+            /*!
+             * Create a new LogLikelihoodBlock for n observables distributed
+             * according to a multivariate normal distribution.
+             *
+             * @note For every dimension, this template and the corresponding implementation
+             *       have to be instantiated explicitly.
+             *
+             * @param cache         The Observable cache from which we draw the predictions.
+             * @param observables   The Observables whose distribution we model.
+             * @param mean          The vector of means.
+             * @param variances     The vector of variances.
+             * @param correlation   The correlation matrix. Diagonal is assumed to be one.
+             */
+            template <std::size_t n_>
+            static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
+                                                              const std::array<double, n_> & mean, const std::array<double, n_> & variances,
+                                                              const std::array<std::array<double, n_>, n_> & correlation);
+
     };
 
     /*!
@@ -148,6 +306,18 @@ namespace eos
              * @param constraint The experimental constraint, cf. Constraint::make
              */
             void add(const Constraint & constraint);
+
+            ///@name Iteration and Access
+            ///@{
+            struct ConstraintIteratorTag;
+            typedef WrappedForwardIterator<ConstraintIteratorTag, Constraint> ConstraintIterator;
+
+            /// Iterator to the first constraint.
+            ConstraintIterator begin() const;
+
+            /// Iterator pointing past the last constraint.
+            ConstraintIterator end() const;
+            ///@}
 
             /*!
              * Calculate a p-value based on the \chi^2
