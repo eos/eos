@@ -19,6 +19,7 @@
 
 #include <test/test.hh>
 #include <eos/constraint.hh>
+#include <eos/utils/log_likelihood.hh>
 
 #include <iostream>
 #include <vector>
@@ -81,6 +82,8 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009",
                     "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009",
                     /* 2011 */
+                    // HFAG
+                    "B^0->K^*0gamma::S_K+C_K@HFAG-2011",
                     // CDF
                     // B^0 -> K^*0 mu^+ mu^-
                     "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2011",
@@ -100,6 +103,9 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::A_T_2[1.00,6.00]@CDF-2011",
                     "B^0->K^*0mu^+mu^-::A_T_2[14.18,16.00]@CDF-2011",
                     "B^0->K^*0mu^+mu^-::A_T_2[16.00,19.21]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF-2011",
+                    "B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF-2011",
                     // B^0 -> K^0 mu^+ mu^-
                     "B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011",
                     "B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011",
@@ -108,10 +114,12 @@ class ConstraintTest :
                     "B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011",
                     "B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2011",
                     "B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF-2011",
-                    /* The following commented observables have not yet been implemented! */
-                    //"B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",
-                    //"B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",
-                    //"B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2011",
+                    // The following commented observables have not yet been implemented!
+#if 0
+                    "B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",
+                    "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",
+                    "B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2011",
+#endif
                     // LHCb
                     "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011",
                     "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011",
@@ -122,7 +130,42 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011",
                     "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011",
                     "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011",
+                    // BaBar
+                    // B^+ -> K^+ mu^+ mu^-
+                    "B^+->K^+mu^+mu^-::BR[1.00,6.00]@BaBar-2012",
+                    "B^+->K^+mu^+mu^-::BR[14.21,16.00]@BaBar-2012",
+                    "B^+->K^+mu^+mu^-::BR[16.00,22.86]@BaBar-2012",
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@BaBar-2012",
+                    "B^0->K^*0mu^+mu^-::BR[14.21,16.00]@BaBar-2012",
+                    "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@BaBar-2012",
+                    "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@BaBar-2012",
+                    "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@BaBar-2012",
+                    "B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@BaBar-2012",
+                    "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@BaBar-2012",
+                    "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@BaBar-2012",
+                    "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@BaBar-2012",
+                    // LHCb
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2012",
+                    // Observables not yet implemented!
+                    "B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::A_im[16.00,19.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2012",
+                    "B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2012",
                 };
+
+                std::cout << "# Constraints :" << std::endl;
 
                 for (auto n = constraint_names.cbegin(), n_end = constraint_names.cend() ; n != n_end ; ++n)
                 {
@@ -130,6 +173,19 @@ class ConstraintTest :
                     TEST_CHECK_EQUAL(c.name(), *n);
                     TEST_CHECK(std::distance(c.begin_observables(), c.end_observables()) > 0);
                     TEST_CHECK(std::distance(c.begin_blocks(), c.end_blocks()) > 0);
+
+                    std::cout << "#  " << c.name() << ": ";
+                    for (auto o = c.begin_observables(), o_end = c.end_observables(); o != o_end ; ++o)
+                    {
+                        std::cout << (**o).name() << '['
+                                << (**o).kinematics().as_string() << ']'
+                                << " with options: " << (**o).options().as_string();
+                    }
+                    for (auto b = c.begin_blocks(), b_end = c.end_blocks(); b != b_end ; ++b)
+                    {
+                        std::cout << ", " << (**b).as_string();
+                    }
+                    std::cout << std::endl;
                 }
             }
         }
