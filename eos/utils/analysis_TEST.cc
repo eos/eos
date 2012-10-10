@@ -20,6 +20,9 @@
 
 #include <eos/utils/analysis_TEST.hh>
 
+#include <Minuit2/FunctionMinimum.h>
+#include <Minuit2/MnUserParameterState.h>
+
 using namespace test;
 using namespace eos;
 
@@ -149,8 +152,8 @@ class AnalysisTest :
                 Analysis analysis = make_analysis(false);
 
                 std::vector<double> initial_guess(1, 4.161345);
-                Analysis::OptimizationOptions options;
-                options.maximum_simplex_size = 1e-5;
+                Analysis::OptimizationOptions options = Analysis::OptimizationOptions::Defaults();
+                options.tolerance = 1e-5;
                 options.initial_step_size = 0.1;
                 auto pair = analysis.optimize(initial_guess, options);
 
@@ -168,7 +171,7 @@ class AnalysisTest :
                 llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::b(MSbar)")), 4.1, 4.2, 4.3);
                 llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::c")), 1.16, 1.2, 1.25);
+                        "mass::c")), 1.15, 1.2, 1.25);
                 llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
                         "mass::s(2GeV)")), 5e-3, 10e-3, 15e-3);
                 llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
@@ -184,18 +187,48 @@ class AnalysisTest :
                 analysis.add(LogPrior::Flat(analysis.parameters(), "mass::t(pole)",  ParameterRange{ 168   , 177   }));
                 analysis.add(LogPrior::Flat(analysis.parameters(), "mass::e",        ParameterRange{ 500e-6, 520e-6}));
 
-                std::vector<double> initial_guess{ 4.10013, 1.90014, 3.00045e-3, 174.6345, 515.51e-6};
+                std::vector<double> initial_guess{ 4.1001, 1.90014, 3.00045e-3, 174.6345, 515.51e-6 };
 
-                Analysis::OptimizationOptions options;
-                options.maximum_simplex_size = 1e-5;
+                Analysis::OptimizationOptions options = Analysis::OptimizationOptions::Defaults();
+                options.tolerance = 1e-5;
                 options.initial_step_size = 0.1;
                 std::vector<double> optimum = analysis.optimize(initial_guess, options).first;
 
                 TEST_CHECK_NEARLY_EQUAL(optimum[0], 4.2   , 1e-5);
                 TEST_CHECK_NEARLY_EQUAL(optimum[1], 1.2   , 1e-5);
                 TEST_CHECK_NEARLY_EQUAL(optimum[2], 1e-2  , 1e-5);
-                TEST_CHECK_NEARLY_EQUAL(optimum[3], 172   , 1e-5);
+                TEST_CHECK_NEARLY_EQUAL(optimum[3], 172   , 2e-5);
                 TEST_CHECK_NEARLY_EQUAL(optimum[4], 511e-6, 1e-5);
+
+                /* try again with Minuit */
+
+                //somehow minuit doesn't coverge with 4.1001
+                initial_guess[0] = 3.2;
+
+                // use lowest accuracy
+                auto config = Analysis::OptimizationOptions::Defaults();
+                config.strategy_level = 0;
+                const ROOT::Minuit2::FunctionMinimum & data_at_min = analysis.optimize_minuit(initial_guess, config);
+
+                // check parameters at mode
+                auto u_par = data_at_min.UserParameters();
+                TEST_CHECK_NEARLY_EQUAL(u_par.Value(0), 4.2   , 1e-4);
+                TEST_CHECK_NEARLY_EQUAL(u_par.Value(1), 1.2   , 1e-4);
+                TEST_CHECK_NEARLY_EQUAL(u_par.Value(2), 1e-2  , 1e-4);
+                TEST_CHECK_NEARLY_EQUAL(u_par.Value(3), 172   , 1e-4);
+                TEST_CHECK_NEARLY_EQUAL(u_par.Value(4), 511e-6, 1e-4);
+
+                // should find input uncertainties
+                auto u_cov = data_at_min.UserCovariance();
+                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(0,0)) , 0.10   , 5e-3);
+                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(1,1)) , 0.05   , 5e-3);
+                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(2,2)) , 5e-3   , 5e-5);
+                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(3,3)) , 1      , 5e-2);
+                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(4,4)) , 5e-7   , 5e-9);
+
+                // no correlation present
+                TEST_CHECK_NEARLY_EQUAL(u_cov(0,1) / sqrt(fabs(u_cov(0,0) * u_cov(1,1))), 0   , 5e-3);
+                TEST_CHECK_NEARLY_EQUAL(u_cov(1,3) / sqrt(fabs(u_cov(1,1) * u_cov(3,3))), 0   , 2e-2);
             }
 
             // goodness_of_fit

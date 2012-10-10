@@ -50,32 +50,36 @@ namespace eos
             {
             }
 
-            double evaluate() const
+            virtual ~TestObservable()
+            {
+            }
+
+            virtual double evaluate() const
             {
                 return mass();
             }
 
-            ObservablePtr clone() const
+            virtual ObservablePtr clone() const
             {
                 return ObservablePtr(new TestObservable(p.clone(), k.clone(), mass_name));
             }
 
-            ObservablePtr clone(const Parameters & parameters) const
+            virtual ObservablePtr clone(const Parameters & parameters) const
             {
                 return ObservablePtr(new TestObservable(parameters, k.clone(), mass_name));
             }
 
-            Parameters parameters()
+            virtual Parameters parameters()
             {
                 return p;
             }
 
-            Kinematics kinematics()
+            virtual Kinematics kinematics()
             {
                 return k;
             }
 
-            Options options()
+            virtual Options options()
             {
                 return o;
             }
@@ -88,6 +92,34 @@ namespace eos
             void set_option(const std::string & key, const std::string & value = "")
             {
                 o.set(key, value);
+            }
+    };
+
+    struct AbsoluteTestObservable :
+        public TestObservable
+    {
+            AbsoluteTestObservable(const Parameters & p, const Kinematics & k, const std::string & mass_name) :
+                TestObservable(p, k, mass_name)
+            {
+            }
+
+            virtual ~AbsoluteTestObservable()
+            {
+            }
+
+            virtual double evaluate() const
+            {
+                return std::fabs(mass());
+            }
+
+            virtual ObservablePtr clone() const
+            {
+                return ObservablePtr(new AbsoluteTestObservable(p.clone(), k.clone(), mass_name));
+            }
+
+            virtual ObservablePtr clone(const Parameters & parameters) const
+            {
+                return ObservablePtr(new AbsoluteTestObservable(parameters, k.clone(), mass_name));
             }
     };
 
