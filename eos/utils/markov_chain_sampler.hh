@@ -25,6 +25,7 @@
 #include <eos/utils/markov_chain.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/proposal_functions.hh>
 #include <eos/utils/verify.hh>
 
 namespace eos
@@ -48,18 +49,20 @@ namespace eos
 
             /// Destructor.
             ~MarkovChainSampler();
-
-            /*!
-             * Copy the settings such as proposal density scale and current points
-             * from the output of a (successful) prerun
-             * @param scan_file the HDF5 output of the prerun
-             */
-            void resume(const std::shared_ptr<ScanFile> & scan_file);
-
             ///@}
 
             ///@name Sampling
             ///@{
+
+            /*!
+             * Use minuit to find local minima.
+             *
+             * Take as many starting points as there are chains
+             *
+             * @param options Pass options on to Minuit.
+             */
+            void massive_mode_finding(const Analysis::OptimizationOptions & options);
+
             /// Retrieve information about the prerun performance
             PreRunInfo pre_run_info();
 
@@ -139,39 +142,81 @@ namespace eos
 
             /*!
              * often the chains have mixed in parameter space,
-             *  but not in posterior space. Thus, this R-value
-             *  impedes convergence declaration.
+             * but not in posterior space. Thus, this R-value
+             * impedes convergence declaration.
              */
             bool use_posterior_rvalue;
 
-            /// Initial scale of the Cauchy variable used for proposal point generation.
-            double scale_initial;
+            /// Rescale multivariate proposal functions' covariance depending
+            /// on the dimensionality of the parameter space.
+            bool scale_automatic;
 
-            /// Minimal scale of the Cauchy variable used for proposal point generation
-            double scale_min;
+            /*!
+             * Decide whether only scan parameters or all parameters' initial
+             * variance should be rescaled in order to increase the efficiency.
+             */
+            bool scale_nuisance;
 
-            /// Maximal scale of the Cauchy variable used for proposal point generation
-            double scale_max;
+            /// Value by which sqrt(covariance) of scan parameters is reduced for initial guesses of the proposal functions.
+            double scale_reduction;
             ///@}
 
             ///@name Prerun options
             ///@{
+
+            /// Find the local maxima after the prerun, using the point
+            /// with the highest posterior in each chain as a starting point
+            bool find_modes;
+
             bool need_prerun;
             unsigned prerun_iterations_update;
             unsigned prerun_iterations_min;
             unsigned prerun_iterations_max;
 
+            /// Which local proposal function is chosen
+            std::string proposal;
+
+            /// One proposal for the whole space or a decomposition into multivariate part
+            /// and 1D, uncorrelated part.
+            /// Map a fixed proposal in 1D to a parameter
+            std::vector<std::string> block_proposal_parameters;
+
+            /*!
+             *  The number of degrees of freedom for a local proposal function
+             *  of type MultivariateStudentT
+             *  @note a value of one corresponds to a (multivariate) Cauchy function
+             */
+            VerifiedRange<double> student_t_degrees_of_freedom;
+
             /// Whether to store prerun samples.
             bool store_prerun;
+
+            /// In case there is only one partition, this is ignored and number_of_chains is used.
+            /// Else, this many chains are used per partition.
+            unsigned prerun_chains_per_partition;
+            std::vector<std::vector<std::tuple<std::string, double, double>>> partitions;
             ///@}
 
             ///@name Main run options
             ///@{
+
+            /// Proposal function is adapted during the first iterations.
+            /// Default: 0, i.e. don't adapt
+            unsigned adapt_iterations;
+
             /// Number of chunks of sampling.
             unsigned chunks;
 
             /// Number of iterations per chunk.
             unsigned chunk_size;
+
+            /// Turn off main run, so only prerun is performed
+            bool need_main_run;
+
+            /// When computing R-values, one can skip the first (skip_initial)% of the iterations.
+            /// This provides more robust results, as it discards an initial burn in where the chain
+            /// may be very far off from likely regions
+            VerifiedRange<double> skip_initial;
 
             /// Whether to store collected samples.
             bool store;
@@ -182,7 +227,9 @@ namespace eos
             /*!
              * The HDF5 output file to store the markov chains.
              */
-            std::shared_ptr<ScanFile> output_file;
+            std::string output_file;
+
+            bool store_observables_and_proposals;
             ///@}
     };
 

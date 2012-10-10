@@ -19,10 +19,32 @@
 
 #include <test/test.hh>
 #include <eos/utils/analysis_TEST.hh>
+#include <eos/utils/hdf5.hh>
+#include <eos/utils/histogram.hh>
 #include <eos/utils/markov_chain_sampler.hh>
+#include <eos/utils/power_of.hh>
+#include <eos/utils/proposal_functions.hh>
 
 using namespace test;
 using namespace eos;
+
+template <typename T_>
+void bin_data_set(hdf5::DataSet<T_ > & data_set, Histogram<1> & hist, const unsigned & dimension,
+                  const double & mu, const double & sigma, double & chi_squared)
+{
+    chi_squared = 0;
+
+    // reset pointer to start reading from beginning again
+    data_set.set_index(0);
+
+    std::vector<double> record;
+    for (unsigned i = 0 ; i < data_set.records() ; ++i)
+    {
+        data_set >> record;
+        hist.insert(record[dimension]);
+        chi_squared += power_of<2>((record[dimension] - mu) / sigma);
+    }
+}
 
 class MarkovChainSamplerTest :
     public TestCase
@@ -35,22 +57,16 @@ class MarkovChainSamplerTest :
 
         virtual void run() const
         {
-            static const double eps = 1e-14;
-
             // check MarkovChainSampler::Config
+            TEST_SECTION("config",
             {
                 MarkovChainSampler::Config conf = MarkovChainSampler::Config::Default();
                 TEST_CHECK_THROWS(VerifiedRangeUnderflow, conf.min_efficiency = -0.1);
 
                 MarkovChainSampler::Config conf_quick = MarkovChainSampler::Config::Quick();
                 TEST_CHECK_THROWS(VerifiedRangeOverflow, conf.max_efficiency = 23.1);
-            }
+            });
 
-            // empty Analysis
-            {
-                AnalysisPtr analysis = std::make_shared<Analysis>(LogLikelihood(Parameters::Defaults()));
-                TEST_CHECK_THROWS(InternalError, MarkovChain chain(analysis, 13));
-            }
 
             // check pre run, main run and HDF5 storage
             {
@@ -58,22 +74,30 @@ class MarkovChainSamplerTest :
                 std::remove(file_name.c_str());
 
                 // store to HDF5
+                TEST_SECTION("run-and-store",
                 {
                     Analysis analysis(make_analysis(true));
 
                     MarkovChainSampler::Config config = MarkovChainSampler::Config::Quick();
+                    config.chunk_size = 100;
+                    config.chunks = 6;
+                    config.max_efficiency = 0.75;
+                    config.min_efficiency = 0.20;
                     config.need_prerun = true;
                     config.number_of_chains = 3;
-                    config.min_efficiency = 0.20;
-                    config.rvalue_criterion_param = 1.1;
-                    config.use_strict_rvalue_definition = true;
-                    config.use_posterior_rvalue = true;
+                    config.output_file = file_name;
                     config.parallelize = true;
+                    config.find_modes = true;
                     config.prerun_iterations_update = 500;
-                    config.chunk_size = 100;
-                    config.chunks = 5;
+                    config.prerun_iterations_min = 1000;
+                    config.rvalue_criterion_param = 1.1;
+                    config.scale_automatic = true;
+                    config.scale_reduction = 2.0;
                     config.seed = 1346;
-                    config.output_file.reset(new ScanFile(ScanFile::Create(file_name, "markov_chain_sampler_TEST")));
+                    config.store = true;
+                    config.store_prerun = true;
+                    config.use_posterior_rvalue = true;
+                    config.use_strict_rvalue_definition = true;
 
                     MarkovChainSampler sampler(analysis, config);
                     sampler.run();
@@ -82,42 +106,133 @@ class MarkovChainSamplerTest :
 
                     TEST_CHECK(pre_info.converged);
                     TEST_CHECK_EQUAL(pre_info.iterations_at_convergence, pre_info.iterations);
-                    TEST_CHECK_EQUAL(pre_info.iterations_at_convergence, 1500);
-                    TEST_CHECK_NEARLY_EQUAL(pre_info.rvalue_parameters.front(), 1.007285609117614777, eps);
-                    TEST_CHECK_RELATIVE_ERROR(pre_info.rvalue_posterior, 1.042859920455756262, eps);
-                }
+                    TEST_CHECK_EQUAL(pre_info.iterations_at_convergence, 1000);
+                    TEST_CHECK_NEARLY_EQUAL(pre_info.rvalue_parameters[0], 1.0, 5e-3);
+                });
 
-                // open HDF5 file and run checks on data
+                // check sizes of data sets
                 {
-                    // read file from disk
-                    ScanFile file = ScanFile::Open(file_name);
+                    auto f = hdf5::File::Open(file_name);
+                    hdf5::Array<1, double> sample_type
+                    {
+                        "samples",
+                        { 1 + 1 },
+                    };
 
-                    // main run of third chain
-                    ScanFile::DataSet data_set = file["chain #2"];
+                    {
+                        auto data_set = f.open_data_set("/prerun/chain #0/proposal/meta", proposal_functions::meta_type());
+                        TEST_CHECK_EQUAL(data_set.records(), 1);
 
-                    /*
-                     * check in ipython using
-                     *   import h5py
-                     *   f = h5py.File("test.hdf5"); f["data"]['chain #2'].shape
-                     */
-                    TEST_CHECK_EQUAL(data_set.records(), 500);
+                        auto meta_record = proposal_functions::meta_record();
+                        data_set >> meta_record;
 
-                    // did we store one param + log(posterior)?
-                    TEST_CHECK_EQUAL(data_set.fields(), 2);
+                        TEST_CHECK_EQUAL(std::get<0>(meta_record), std::string("MultivariateGaussian"));
+                        TEST_CHECK_EQUAL(std::get<1>(meta_record), 1u);
+                    }
+                    {
+                        auto data_set_pre = f.open_data_set("/prerun/chain #1/samples", sample_type);
+                        TEST_CHECK_EQUAL(data_set_pre.records(), 1000);
 
-                    auto f = data_set.begin_fields();
+                        auto data_set_main = f.open_data_set("/main run/chain #1/samples", sample_type);
+                        TEST_CHECK_EQUAL(data_set_main.records(), 600);
+                    }
+                    {
+                        auto data_set = f.open_data_set("/prerun/chain #0/stats/mode", sample_type);
+                        // mode found during 2x500 iterations + the one from minuit
+                        TEST_CHECK_EQUAL(data_set.records(), 3);
 
-                    // proper parameter?
-                    TEST_CHECK_EQUAL(f->name(), "mass::b(MSbar)");
-                    TEST_CHECK_EQUAL(f->get("min", 0.0), 3.7);
-                    TEST_CHECK_EQUAL(f->get("max", 0.0), 4.9);
-                    TEST_CHECK_EQUAL(f->get("nuisance", 17.0), false);
+                        std::vector<double> record(2);
+                        data_set.end();
+                        data_set >> record;
+                        TEST_CHECK_RELATIVE_ERROR(record[0], 4.2, 1e-7);
+                        TEST_CHECK_RELATIVE_ERROR(record[1], 1.201325, 1e-5);
+                    }
+                    {
+                        hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>,
+                        hdf5::Scalar<double>, hdf5::Scalar<int>, hdf5::Scalar<const char *>> parameter_descriptions_type
+                        {
+                            "parameter description",
+                            hdf5::Scalar<const char *>("name"),
+                            hdf5::Scalar<double>("min"),
+                            hdf5::Scalar<double>("max"),
+                            hdf5::Scalar<int>("nuisance"),
+                            hdf5::Scalar<const char *>("prior"),
+                        };
+                        auto data_set_pre = f.open_data_set("/descriptions/prerun/chain #2/parameters", parameter_descriptions_type);
+                        TEST_CHECK_EQUAL(data_set_pre.records(), 1);
 
-                    ++f;
+                        auto record_pre = std::make_tuple("parameter_name", 1.0, 2.0, 3, "prior");
+                        data_set_pre >> record_pre;
+                        TEST_CHECK_EQUAL(std::get<0>(record_pre), std::string("mass::b(MSbar)"));
+                        TEST_CHECK_EQUAL(std::get<1>(record_pre), 3.7);
+                        TEST_CHECK_EQUAL(std::get<2>(record_pre), 4.9);
+                        TEST_CHECK_EQUAL(std::get<3>(record_pre), false);
+                        TEST_CHECK_EQUAL(std::get<4>(record_pre), std::string("Parameter: mass::b(MSbar), prior type: flat, range: [3.7,4.9]"));
 
-                    // only log(posterior)?
-                    TEST_CHECK_EQUAL(f->name(), "posterior");
-                    // posterior has currently no further attributes
+                        auto data_set_main = f.open_data_set("/descriptions/main run/chain #2/parameters", parameter_descriptions_type);
+                        TEST_CHECK_EQUAL(data_set_main.records(), 1);
+
+                        auto record_main = std::make_tuple("parameter_name", 1.0, 2.0, 3, "prior");
+                        data_set_main >> record_main;
+
+                        TEST_CHECK_EQUAL(std::string(std::get<0>(record_pre)), std::string(std::get<0>(record_main)));
+                        TEST_CHECK_EQUAL(std::get<1>(record_pre), std::get<1>(record_main));
+                        TEST_CHECK_EQUAL(std::get<2>(record_pre), std::get<2>(record_main));
+                        TEST_CHECK_EQUAL(std::get<3>(record_pre), std::get<3>(record_main));
+                        TEST_CHECK_EQUAL(std::string(std::get<4>(record_pre)), std::string(std::get<4>(record_main)));
+                    }
+                    {
+                        hdf5::Composite<hdf5::Scalar<const char *>> constraint_type
+                        {
+                            "constraints",
+                            hdf5::Scalar<const char *>("name"),
+                        };
+                        auto data_set_pre = f.open_data_set("/descriptions/prerun/chain #1/constraints", constraint_type);
+                        auto record_pre = std::make_tuple("parameter_name");
+                        data_set_pre >> record_pre;
+                        TEST_CHECK_EQUAL(std::get<0>(record_pre), std::string("test-observable[mass::b(MSbar)]"));
+
+                        auto data_set_main = f.open_data_set("/descriptions/main run/chain #1/constraints", constraint_type);
+                        auto record_main = std::make_tuple("parameter_name");
+                        data_set_main >> record_main;
+                        TEST_CHECK_EQUAL(std::string(std::get<0>(record_pre)), std::string(std::get<0>(record_main)));
+                    }
+                    {
+                        hdf5::Array<1, double> covariance_type
+                        {
+                            "samples",
+                            { 1 * 1 },
+                        };
+                        auto data_set_pre_0 = f.open_data_set("/prerun/chain #0/proposal/covariance", covariance_type);
+                        std::vector<double> record_0(1);
+                        data_set_pre_0 >> record_0;
+
+                        auto data_set_pre_1 = f.open_data_set("/prerun/chain #1/proposal/covariance", covariance_type);
+                        std::vector<double> record_1(1);
+                        data_set_pre_1 >> record_1;
+
+                        auto data_set_pre_2 = f.open_data_set("/prerun/chain #2/proposal/covariance", covariance_type);
+                        std::vector<double> record_2(1);
+                        data_set_pre_2 >> record_2;
+
+                        /* covariances identical in first round.
+                         * values from variance of uniform prior 1.2**2 / 12.0 = 0.12 and scale reduction 2**2
+                         * and the scaling inside the proposal, if it is taken into account, 2.38**2.
+                         */
+                        TEST_CHECK_RELATIVE_ERROR(record_0[0], 0.03 * 2.38 * 2.38, 1e-15);
+                        TEST_CHECK_EQUAL(record_0[0], record_1[0]);
+                        TEST_CHECK_EQUAL(record_0[0], record_2[0]);
+                        TEST_CHECK_EQUAL(record_1[0], record_2[0]);
+
+                        data_set_pre_0 >> record_0;
+                        data_set_pre_1 >> record_1;
+                        data_set_pre_2 >> record_2;
+
+                        // but different after first adapt
+                        TEST_CHECK(record_0[0] != record_1[0]);
+                        TEST_CHECK(record_0[0] != record_2[0]);
+                        TEST_CHECK(record_1[0] != record_2[0]);
+                    }
                 }
             }
         }

@@ -5,6 +5,8 @@ CLEANFILES = \
 	hdf5_TEST-copy.hdf5 \
 	markov_chain_sampler_TEST.hdf5 \
 	prior_sampler_TEST.hdf5 \
+	proposal_functions_TEST-rdwr.hdf5 \
+	proposal_functions_TEST-block-decomposition.hdf5 \
 	scan_file_TEST.hdf5
 MAINTAINERCLEANFILES = Makefile.in
 
@@ -49,6 +51,7 @@ libeosutils_la_SOURCES = \
 	power_of.hh \
 	prior_sampler.cc prior_sampler.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
+	proposal_functions.cc proposal_functions.hh \
 	qcd.cc qcd.hh \
 	random_number_generator.cc random_number_generator.hh \
 	rvalue.cc rvalue.hh \
@@ -111,6 +114,7 @@ include_eos_utils_HEADERS = \
 	power_of.hh \
 	prior_sampler.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
+	proposal_functions.hh \
 	qcd.hh \
 	random_number_generator.cc random_number_generator.hh \
 	rvalue.hh \
@@ -155,6 +159,7 @@ TESTS = \
 	polylog_TEST \
 	power_of_TEST \
 	prior_sampler_TEST \
+	proposal_functions_TEST \
 	qcd_TEST \
 	random_number_generator_TEST \
 	rvalue_TEST \
@@ -227,6 +232,8 @@ polylog_TEST_SOURCES = polylog_TEST.cc
 power_of_TEST_SOURCES = power_of_TEST.cc
 
 prior_sampler_TEST_SOURCES = prior_sampler_TEST.cc
+
+proposal_functions_TEST_SOURCES = proposal_functions_TEST.cc
 
 qcd_TEST_SOURCES = qcd_TEST.cc
 

@@ -22,6 +22,7 @@
 #include <eos/observable.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
+#include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/markov_chain_sampler.hh>
@@ -29,7 +30,11 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
+#include <limits>
 #include <vector>
+
+#include <Minuit2/FunctionMinimum.h>
+#include <Minuit2/MnPrint.h>
 
 #include <time.h>
 
@@ -82,9 +87,11 @@ class CommandLine :
 
         LogLikelihood likelihood;
 
-        AnalysisPtr analysis;
+        Analysis analysis;
 
         MarkovChainSampler::Config config;
+
+        std::vector<std::shared_ptr<hdf5::File>> prerun_inputs;
 
         std::vector<ParameterData> scan_parameters;
 
@@ -96,7 +103,13 @@ class CommandLine :
 
         std::string creator;
 
+        std::shared_ptr<unsigned> partition_index;
+
         std::string resume_file;
+
+        // use MINUIT
+        bool massive_mode_finding;
+        unsigned massive_maximum_iterations;
 
         bool optimize;
         std::vector<double> starting_point;
@@ -107,8 +120,10 @@ class CommandLine :
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
-            analysis(new Analysis(likelihood)),
+            analysis(likelihood),
             config(MarkovChainSampler::Config::Quick()),
+            massive_mode_finding(false),
+            massive_maximum_iterations(2000),
             optimize(false)
         {
             config.number_of_chains = 4;
@@ -135,12 +150,50 @@ class CommandLine :
             {
                 std::string argument(*a);
 
+                /*
+                 * format: N_SIGMAS in [0, 10]
+                 * a) --scan PAR N_SIGMAS --prior ...
+                 * b) --scan PAR MIN MAX  --prior ...
+                 * c) --scan PAR HARD_MIN HARD_MAX N_SIGMAS --prior ...
+                 */
                 if (("--scan" == argument) || ("--nuisance" == argument))
                 {
                     std::string name = std::string(*(++a));
-                    double min = destringify<double> (*(++a));
-                    double max = destringify<double> (*(++a));
+
+                    double min = -std::numeric_limits<double>::max();
+                    double max =  std::numeric_limits<double>::max();
+
+                    // first word has to be a number
+                    double number = destringify<double>(*(++a));
+
                     std::string keyword = std::string(*(++a));
+
+                    VerifiedRange<double> n_sigmas(0, 10, 0);
+
+                    // case a)
+                    if ("--prior" == keyword)
+                    {
+                        n_sigmas = VerifiedRange<double>(0, 10, number);
+                        if (n_sigmas == 0)
+                            throw DoUsage("number of sigmas: number expected");
+                    }
+                    else
+                    {
+                        // case b), c)
+                        min = number;
+                        max = destringify<double>(keyword);
+
+                        keyword = std::string(*(++a));
+
+                        // watch for case c)
+                        if ("--prior" != keyword)
+                        {
+                            n_sigmas = VerifiedRange<double>(0, 10,  destringify<double>(keyword));
+                            if (n_sigmas == 0)
+                                throw DoUsage("number of sigmas: number expected");
+                            keyword = std::string(*(++a));
+                        }
+                    }
 
                     if ("--prior" != keyword)
                         throw DoUsage("Missing correct prior specification for '" + name + "'!");
@@ -151,15 +204,31 @@ class CommandLine :
 
                     ParameterRange range{ min, max };
 
-                    if (prior_type == "gaussian")
+                    if (prior_type == "gaussian" || prior_type == "log-gamma")
                     {
                         double lower = destringify<double> (*(++a));
                         double central = destringify<double> (*(++a));
                         double upper = destringify<double> (*(++a));
-                        prior = LogPrior::Gauss(parameters, name, range, lower, central, upper);
+
+                        // adjust range, but always stay within hard bound supplied by the user
+                        if (n_sigmas > 0)
+                        {
+                            range.min = std::max(range.min, central - n_sigmas * (central - lower));
+                            range.max = std::min(range.max, central + n_sigmas * (upper - central));
+                        }
+                        if (prior_type == "gaussian")
+                        {
+                            prior = LogPrior::Gauss(parameters, name, range, lower, central, upper);
+                        }
+                        else
+                        {
+                            prior = LogPrior::LogGamma(parameters, name, range, lower, central, upper);
+                        }
                     }
                     else if (prior_type == "flat")
                     {
+                        if (n_sigmas > 0)
+                            throw DoUsage("Can't specify number of sigmas for flat prior");
                         prior = LogPrior::Flat(parameters, name, range);
                     }
                     else
@@ -171,16 +240,55 @@ class CommandLine :
 
                     if (nuisance)
                     {
-                        nuisance_parameters.push_back(ParameterData{ parameters[name], min, max, prior_type });
+                        nuisance_parameters.push_back(ParameterData{ parameters[name], range.min, range.max, prior_type });
                     }
                     else
                     {
-                        scan_parameters.push_back(ParameterData{ parameters[name], min, max, prior_type });
+                        scan_parameters.push_back(ParameterData{ parameters[name], range.min, range.max, prior_type });
                     }
 
                     // check for error in setting the prior and adding the parameter
-                    if (! analysis->add(prior, nuisance))
-                        throw DoUsage("Unknown error in assigning " + prior_type + " prior distribution to " + name);
+                    if (! analysis.add(prior, nuisance))
+                        throw DoUsage("Error in assigning " + prior_type + " prior distribution to '" + name +
+                                      "'. Perhaps '" + name + "' appears twice in the list of parameters?");
+
+                    continue;
+                }
+
+                if ("--chains" == argument)
+                {
+                    config.number_of_chains = destringify<unsigned>(*(++a));
+                    continue;
+                }
+
+                if ("--chunk-size" == argument)
+                {
+                    config.chunk_size = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--chunks" == argument)
+                {
+                    config.chunks = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--constraint" == argument)
+                {
+                    std::string constraint_name(*(++a));
+
+                    Constraint c(Constraint::make(constraint_name, global_options));
+                    likelihood.add(c);
+                    constraints.push_back(c);
+
+                    continue;
+                }
+
+                if ("--debug" == argument)
+                {
+                    Log::instance()->set_log_level(ll_debug);
 
                     continue;
                 }
@@ -208,7 +316,7 @@ class CommandLine :
                     LogPriorPtr prior = LogPrior::Discrete(parameters, name, values);
 
                     // check for error in setting the prior and adding the parameter
-                    if (! analysis->add(prior, true))
+                    if (! analysis.add(prior, true))
                         throw DoUsage("Unknown error in assigning discrete prior distribution to " + name);
 
                     continue;
@@ -218,7 +326,7 @@ class CommandLine :
                 {
                     std::string par_name = std::string(*(++a));
                     double value = destringify<double> (*(++a));
-                    analysis->parameters()[par_name]=value;
+                    analysis.parameters()[par_name]=value;
 
                     continue;
                 }
@@ -235,47 +343,17 @@ class CommandLine :
 
                 if ("--global-option" == argument)
                 {
-                    if (! constraints.empty())
-                        throw DoUsage("All global options must be specified before the first --observable/--constraint");
-
                     std::string name(*(++a));
                     std::string value(*(++a));
 
+                    if (! constraints.empty())
+                    {
+                        Log::instance()->message("eos-scan-mc", ll_warning)
+                            << "Global option (" << name << " = " << value <<") only applies to observables/constraints defined from now on, "
+                            << "but doesn't affect the " << constraints.size() << " previously defined constraints.";
+                    }
+
                     global_options.set(name, value);
-
-                    continue;
-                }
-
-                if ("--observable" == argument)
-                {
-                    std::string observable_name(*(++a));
-
-                    ObservableInput input;
-                    input.kinematics = *kinematics;
-                    input.observable = Observable::make(observable_name, parameters,
-                            *kinematics, global_options);
-                    if (!input.observable)
-                        throw DoUsage("Unknown observable '" + observable_name + "'");
-
-                    input.min = destringify<double> (*(++a));
-                    input.central = destringify<double> (*(++a));
-                    input.max = destringify<double> (*(++a));
-
-                    likelihood.add(input.observable, input.min, input.central, input.max);
-
-                    inputs.push_back(input);
-                    kinematics.reset(new Kinematics);
-
-                    continue;
-                }
-
-                if ("--constraint" == argument)
-                {
-                    std::string constraint_name(*(++a));
-
-                    Constraint c(Constraint::make(constraint_name, global_options));
-                    likelihood.add(c);
-                    constraints.push_back(c);
 
                     continue;
                 }
@@ -307,9 +385,44 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--massive-mode-finding" == argument)
+                {
+                    massive_mode_finding = true;
+                    massive_maximum_iterations = destringify<unsigned> (*(++a));
+                    if (massive_maximum_iterations == 0)
+                    {
+                        throw DoUsage("Need to specify maximum number of Minuit iterations for massive mode finding");
+                    }
+
+                    continue;
+                }
+
                 if ("--no-prerun" == argument)
                 {
                     config.need_prerun = false;
+
+                    continue;
+                }
+
+                if ("--observable" == argument)
+                {
+                    std::string observable_name(*(++a));
+
+                    ObservableInput input;
+                    input.kinematics = *kinematics;
+                    input.observable = Observable::make(observable_name, parameters,
+                            *kinematics, global_options);
+                    if (!input.observable)
+                        throw DoUsage("Unknown observable '" + observable_name + "'");
+
+                    input.min = destringify<double> (*(++a));
+                    input.central = destringify<double> (*(++a));
+                    input.max = destringify<double> (*(++a));
+
+                    likelihood.add(input.observable, input.min, input.central, input.max);
+
+                    inputs.push_back(input);
+                    kinematics.reset(new Kinematics);
 
                     continue;
                 }
@@ -344,7 +457,131 @@ class CommandLine :
                 if ("--output" == argument)
                 {
                     std::string filename(*(++a));
-                    config.output_file.reset(new ScanFile(ScanFile::Create(filename, creator)));
+                    config.output_file = filename;
+
+                    continue;
+                }
+
+                if ("--parallel" == argument)
+                {
+                    config.parallelize = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--partition" == argument)
+                {
+                    std::string key(*(++a));
+                    std::vector<std::tuple<std::string, double, double>> partition;
+                    while (key.substr(0, 2) != "--")
+                    {
+                        std::string name = key;
+                        double min = destringify<double>(*(++a));
+                        double max = destringify<double>(*(++a));
+                        partition.push_back(std::make_tuple(name, min, max));
+
+                        key = std::string(*(++a));
+                    }
+                    config.partitions.push_back(partition);
+                    --a;
+
+                    continue;
+                }
+
+                if ("--partition-index" == argument)
+                {
+                    partition_index.reset(new unsigned);
+                    *partition_index = destringify<unsigned> (*(++a));
+
+                    config.need_main_run = false;
+                    config.store_prerun = true;
+
+                    continue;
+                }
+
+                if ("--prerun-chains-per-partition" == argument)
+                {
+                    config.prerun_chains_per_partition = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--prerun-find-modes" == argument)
+                {
+                    config.find_modes = true;
+
+                    continue;
+                }
+
+                if ("--prerun-max" == argument)
+                {
+                    config.prerun_iterations_max = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--prerun-min" == argument)
+                {
+                    config.prerun_iterations_min = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--prerun-only" == argument)
+                {
+                    config.need_prerun = true;
+                    config.store_prerun = true;
+                    config.need_main_run = false;
+
+                    continue;
+                }
+
+                if ("--prerun-update" == argument)
+                {
+                    config.prerun_iterations_update = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--print-args" == argument)
+                {
+                    // print arguments and quit
+                   for (int i = 1 ; i < argc ; i++)
+                    {
+                       std::cout << "'" << argv[i] << "' ";
+                    }
+
+                    std::cout << std::endl;
+                    abort();
+
+                    continue;
+                }
+
+                if ("--prior-as-proposal" == argument)
+                {
+                    // [parameter_name]
+                    std::string name = *(++a);
+                    LogPriorPtr proposal = analysis.log_prior(name);
+                    if (! proposal)
+                        throw DoUsage("Define parameter " + name + " and its prior before --prior-as-proposal");
+                    config.block_proposal_parameters.push_back(name);
+
+                    continue;
+                }
+
+                if ("--proposal" == argument)
+                {
+                    config.proposal = *(++a);
+
+                    if (config.proposal == "MultivariateStudentT")
+                    {
+                        double dof = destringify<double>(*(++a));
+                        if (dof <= 0)
+                        {
+                            throw DoUsage("No (or non-positive) degree of freedom for MultivariateStudentT specified");
+                        }
+                        config.student_t_degrees_of_freedom = dof;
+                    }
 
                     continue;
                 }
@@ -373,52 +610,24 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--chunk-size" == argument)
+                if ("--scale-reduction" == argument)
                 {
-                    config.chunk_size = destringify<unsigned>(*(++a));
+                    config.scale_reduction = destringify<double>(*(++a));
 
                     continue;
                 }
 
-                if ("--chunks" == argument)
+                if ("--store-prerun" == argument)
                 {
-                    config.chunks = destringify<unsigned>(*(++a));
+                    config.store_prerun = true;
 
                     continue;
                 }
 
-                if ("--scale" == argument)
+                if ("--store-observables-and-proposals" == argument)
                 {
-                    config.scale_initial = destringify<double>(*(++a));
+                    config.store_observables_and_proposals = true;
 
-                    continue;
-                }
-
-                if ("--update" == argument)
-                {
-                    config.prerun_iterations_update = destringify<unsigned>(*(++a));
-
-                    continue;
-                }
-
-                if ("--debug" == argument)
-                {
-                    Log::instance()->set_log_level(ll_debug);
-
-                    // report exact call
-                    for (int i = 0 ; i < argc ; i++)
-                    {
-                        std::cout << '"' << argv[i] << '"' << " ";
-                    }
-
-                    std::cout << std::endl;
-
-                    continue;
-                }
-
-                if ("--chains" == argument)
-                {
-                    config.number_of_chains = destringify<unsigned>(*(++a));
                     continue;
                 }
 
@@ -431,81 +640,144 @@ int main(int argc, char * argv[])
 {
     try
     {
-        CommandLine::instance()->parse(argc, argv);
+        auto inst = CommandLine::instance();
+        inst->parse(argc, argv);
 
-        if (CommandLine::instance()->inputs.empty() && (CommandLine::instance()->constraints.empty()))
-            throw DoUsage("No inputs or constraints specified");
+        if (inst->inputs.empty() &&
+            inst->constraints.empty())
+            throw DoUsage("No inputs, constraints nor build output specified");
 
         std::cout << std::scientific;
         std::cout << "# Scan generated by eos-scan-mc" << std::endl;
-        std::cout << "# Scan parameters:" << std::endl;
-        for (auto p = CommandLine::instance()->scan_parameters.cbegin(), p_end = CommandLine::instance()->scan_parameters.cend() ;
-                p != p_end ; ++p)
+        if ( ! inst->scan_parameters.empty())
         {
-            std::cout << "#   " << p->parameter.name() << " with " << p->prior << " prior "
-                         " on range [" << p->min << "," << p->max << "]" << std::endl;
+            std::cout << "# Scan parameters (" << inst->scan_parameters.size() << "):" << std::endl;
+            for (auto d = inst->analysis.parameter_descriptions().cbegin(), d_end = inst->analysis.parameter_descriptions().cend() ;
+                 d != d_end ; ++d)
+            {
+                if (d->nuisance)
+                    continue;
+                std::cout << "#   " << inst->analysis.log_prior(d->parameter.name())->as_string() << std::endl;
+            }
         }
 
-        std::cout << "# Nuisance parameters:" << std::endl;
-        for (auto p = CommandLine::instance()->nuisance_parameters.cbegin(), p_end = CommandLine::instance()->nuisance_parameters.cend() ;
-                p != p_end ; ++p)
+        if ( ! inst->nuisance_parameters.empty())
         {
-            std::cout << "#   " << p->parameter.name() << " with " << p->prior << " prior "
-                         " on range [" << p->min << "," << p->max << "]" << std::endl;
+            std::cout << "# Nuisance parameters (" << inst->nuisance_parameters.size() << "):" << std::endl;
+            for (auto d = inst->analysis.parameter_descriptions().cbegin(), d_end = inst->analysis.parameter_descriptions().cend() ;
+                 d != d_end ; ++d)
+            {
+                if ( ! d->nuisance)
+                    continue;
+                std::cout << "#   " << inst->analysis.log_prior(d->parameter.name())->as_string() << std::endl;
+            }
         }
 
-        std::cout << "# Manual inputs:" << std::endl;
-        for (auto i = CommandLine::instance()->inputs.cbegin(), i_end = CommandLine::instance()->inputs.cend() ; i != i_end ; ++i)
+        if ( ! inst->inputs.empty())
         {
-            std::cout << "#   " << i->observable->name() << '['
+            std::cout << "# Manual inputs (" << inst->inputs.size() << "):" << std::endl;
+            for (auto i = inst->inputs.cbegin(), i_end = inst->inputs.cend() ; i != i_end ; ++i)
+            {
+                std::cout << "#   " << i->observable->name() << '['
                     << i->kinematics.as_string() << "] = (" << i->min << ", "
                     << i->central << ", " << i->max << ')' << std::endl;
+            }
         }
 
-        std::cout << "# Constraints:" << std::endl;
-        for (auto c = CommandLine::instance()->constraints.cbegin(), c_end = CommandLine::instance()->constraints.cend() ; c != c_end ; ++c)
+        if ( ! inst->constraints.empty())
         {
-            std::cout << "#  " << c->name() << std::endl;
+            std::cout << "# Constraints (" << inst->constraints.size() << "):" << std::endl;
+            for (auto c = inst->constraints.cbegin(), c_end = inst->constraints.cend() ; c != c_end ; ++c)
+            {
+                std::cout << "#  " << c->name() << ": ";
+                for (auto o = c->begin_observables(), o_end = c->end_observables(); o != o_end ; ++o)
+                {
+                    std::cout << (**o).name() << '['
+                        << (**o).kinematics().as_string() << ']'
+                        << " with options: " << (**o).options().as_string();
+                }
+                for (auto b = c->begin_blocks(), b_end = c->end_blocks(); b != b_end ; ++b)
+                {
+                    std::cout << ", " << (**b).as_string();
+                }
+                std::cout << std::endl;
+            }
         }
 
         // run optimization. Use starting point if given, else sample a point from the prior.
         // Optionally calculate a p-value at the mode.
-        if (CommandLine::instance()->optimize)
+        if (inst->optimize)
         {
-            AnalysisPtr ana = CommandLine::instance()->analysis;
-            if (CommandLine::instance()->starting_point.empty())
+            Analysis & ana(inst->analysis);
+            if (inst->starting_point.empty())
             {
                 gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
                 gsl_rng_set(rng, ::time(0));
-                for (auto i = ana->parameter_descriptions().begin(), i_end = ana->parameter_descriptions().end() ; i != i_end ; ++i)
+                for (auto i = ana.parameter_descriptions().begin(), i_end = ana.parameter_descriptions().end() ; i != i_end ; ++i)
                 {
-                    LogPriorPtr prior = ana->log_prior(i->parameter.name());
-                    CommandLine::instance()->starting_point.push_back(prior->sample(rng));
+                    LogPriorPtr prior = ana.log_prior(i->parameter.name());
+                    inst->starting_point.push_back(prior->sample(rng));
                 }
             }
+
+            if (inst->starting_point.size() != ana.parameter_descriptions().size())
+            {
+                throw DoUsage("Starting point size of" + stringify(inst->starting_point.size())
+                              + " doesn't match with analysis size of " + stringify(ana.parameter_descriptions().size()));
+            }
+
+            std::cout << std::endl;
+            std::cout << "# Starting optimization at " << stringify_container(inst->starting_point, 4) << std::endl;
+            std::cout << std::endl;
+
             auto options = Analysis::OptimizationOptions::Defaults();
-            auto ret = ana->optimize(CommandLine::instance()->starting_point, options);
-            if (CommandLine::instance()->goodness_of_fit && CommandLine::instance()->best_fit_point.empty())
-                ana->goodness_of_fit(ret.first, 1e5);
+            auto ret = ana.optimize_minuit(inst->starting_point, options);
 
-	        return EXIT_SUCCESS;
-        }
+            Log::instance()->message("eos-scan-mc", ll_informational)
+                << "Result from minuit:" << ret << ret.UserCovariance();
+            Log::instance()->message("eos-scan-mc", ll_informational)
+                << "Best result: log(posterior) at "
+                << stringify_container(ret.UserParameters().Params(), 6)
+                << " = " << -1.0 * ret.Fval();
 
-        // goodness-of-fit for user specified parameter point
-        if (CommandLine::instance()->goodness_of_fit)
-        {
-            CommandLine::instance()->analysis->goodness_of_fit(CommandLine::instance()->best_fit_point, 1e5);
+            if (inst->goodness_of_fit && inst->best_fit_point.empty())
+                ana.goodness_of_fit(ret.UserParameters().Params(), 1e5);
 
             return EXIT_SUCCESS;
         }
 
-        MarkovChainSampler sampler(*CommandLine::instance()->analysis, CommandLine::instance()->config);
-
-        // extract scales and starting points from completed prerun
-        if (CommandLine::instance()->resume_file != "")
+        // goodness-of-fit for user specified parameter point
+        if (inst->goodness_of_fit)
         {
-            std::shared_ptr<ScanFile> f(new ScanFile(ScanFile::Open(CommandLine::instance()->resume_file)));
-            sampler.resume(f);
+            inst->analysis.goodness_of_fit(inst->best_fit_point, 1e5, inst->config.output_file);
+
+            return EXIT_SUCCESS;
+        }
+
+        // remove unwanted partitions and select only one
+        if (unsigned * i = inst->partition_index.get())
+        {
+            MarkovChainSampler::Config & c = inst->config;
+            if (c.partitions.empty())
+                throw DoUsage("Can't select partition " + stringify(*i) + " from no partitions!");
+
+            auto temp = c.partitions;
+            c.partitions.clear();
+            c.partitions.push_back(temp.at(*i));
+        }
+
+        MarkovChainSampler sampler(inst->analysis, inst->config);
+
+        if (inst->massive_mode_finding)
+        {
+            // try to find just anything
+            Analysis::OptimizationOptions options = Analysis::OptimizationOptions::Defaults();
+            options.algorithm = "minimize";
+            options.maximum_iterations = inst->massive_maximum_iterations;
+            options.mcmc_pre_run = inst->config.need_prerun;
+            options.strategy_level = 0;
+            sampler.massive_mode_finding(options);
+            return EXIT_SUCCESS;
         }
 
         sampler.run();
@@ -541,6 +813,8 @@ int main(int argc, char * argv[])
         std::cout << "      --scan     \"Abs{c9}\"        0.0 15.0     --prior flat\\" << std::endl;
         std::cout << "      --scan     \"Arg{c9}\"        0.0  6.28319 --prior flat\\" << std::endl;
         std::cout << "      --nuisance \"mass::b(MSbar)\" 3.8  5.0     --prior gaussian 4.14 4.27 4.37" << std::endl;
+
+        return EXIT_FAILURE;
     }
     catch (Exception & e)
     {

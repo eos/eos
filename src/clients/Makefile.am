@@ -44,7 +44,7 @@ eos_print_polynomial_SOURCES = eos-print-polynomial.cc
 eos_propagate_uncertainty_SOURCES = eos-propagate-uncertainty.cc
 
 eos_scan_mc_SOURCES = eos-scan-mc.cc
-eos_scan_mc_LDADD = $(LDADD) -lgsl
+eos_scan_mc_LDADD = $(LDADD) -lgsl -lMinuit2
 
 eos_scan_polynomial_SOURCES = eos-scan-polynomial.cc
 
