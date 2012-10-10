@@ -121,6 +121,12 @@ namespace eos
 
         return ss.str();
     }
+
+    template <typename Container_>
+    std::string stringify_container(const Container_ & container, unsigned precision = 10)
+    {
+        return stringify(container.begin(), container.end(), precision);
+    }
 }
 
 #endif
