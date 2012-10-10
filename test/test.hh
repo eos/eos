@@ -103,8 +103,8 @@ namespace test
             break; \
         else \
             throw TestCaseFailedException(__LINE__, __FILE__, \
-                    "'" #a "' = " + stringify(a_val) + " is not nearly-equal to '" #b "' = " + stringify(b_val) + " within '" + stringify(eps) + "'" \
-                    + ", difference is '" + stringify(a_val - b_val) + "'"); \
+                    "'" #a "' = " + stringify(a_val, 16u) + " is not nearly-equal to '" #b "' = " + stringify(b_val, 16u) + " within '" + stringify(eps, 16u) + "'" \
+                    + ", difference is '" + stringify(a_val - b_val, 16u) + "'"); \
     } \
     while (false)
 
@@ -125,8 +125,8 @@ namespace test
             break; \
         else \
             throw TestCaseFailedException(__LINE__, __FILE__, \
-                    "One relative error of '" #a "' = '" + stringify(a_val) + "' and '" #b "' = '" + stringify(b_val) + "' is greater than " + stringify(eps) + ". The results are " + \
-                    stringify(std::abs((a_val - b_val) / a_val)) + " and " + stringify(std::abs((a_val - b_val) / b_val))); \
+                    "One relative error of '" #a "' = '" + stringify(a_val, 16u) + "' and '" #b "' = '" + stringify(b_val, 16u) + "' is greater than " + stringify(eps, 16u) + ". The results are " + \
+                    stringify(std::abs((a_val - b_val) / a_val)) + " and " + stringify(std::abs((a_val - b_val) / b_val), 16u)); \
     } \
     while (false)
 
