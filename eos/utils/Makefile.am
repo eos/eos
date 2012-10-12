@@ -19,6 +19,7 @@ libeosutils_la_SOURCES = \
 	apply.hh \
 	cartesian-product.hh \
 	chi-squared.hh chi-squared.cc \
+	cluster.cc cluster.hh \
 	complex.hh \
 	concrete_observable.hh \
 	condition_variable.cc condition_variable.hh \
