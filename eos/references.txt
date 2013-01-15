@@ -446,6 +446,13 @@ Theoretical Inputs
         arxiv:hep-ph/0212158
 
 
+    GN1997 : Guetta, D. and Nardi, E.
+
+        Searching for new physics in rare B -> tau decays.
+
+        arxiv:hep-ph/9707371
+
+
     GP2004 : Grinstein, B. and Pirjol, D.
 
         Exclusive rare B -> K^* l^+ l^- Decays at Low Recoil:

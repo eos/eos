@@ -86,12 +86,6 @@ namespace eos
             C(p["exp::C(B->X_clnu, B->X_ulnu)"], u),
             admixture(p["exp::Admixture-BR(B->X_sll)"], u)
         {
-            if ("SM" != o.get("model", "SM"))
-            {
-                Log::instance()->message("B->X_sll.model", ll_error)
-                    << "B->X_sll is not yet capable to handle models beyond SM, e.g. for helicity flipped operators; use it carefully";
-            }
-
             u.uses(*model);
         }
 
@@ -275,6 +269,7 @@ namespace eos
         double branching_ratio(const double & s) const
         {
             double m_c = m_c_pole(), m_b = m_b_pole(), log_m_l_hat = std::log(m_l / m_b);
+            double m_s_hat = model->m_s_msbar(mu()) / m_b;
             double s_hat = s / pow(m_b, 2), s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
             // We express lambda_2 as mu^2_G / 3.0 and neglect terms of
             // higher order in 1/m_b for that relation.
@@ -392,6 +387,34 @@ namespace eos
                             + s79 * (m7[i] * conj(m9[j]) + m9[i] * conj(m7[j])))
                         );
                 }
+            }
+
+            /*
+             * We consider also contributions from chirality-flipped operators.
+             * For m_s != 0, EOS provides c7',c8' != 0 in the "SM" model.
+             */
+            {
+                /*
+                 * diagonal (i = j) and interference terms are read off the
+                 * matching between Eq. (111) from [HLWM2005] and Eq. (3.9)
+                 * from [GN1997].
+                 */
+
+                /* only chirality-flipped */
+                ratio_phi += norm(w.c7prime()) * s77 * norm(m7[7 - 1])
+                    + real(w.c7prime() * m7[7 - 1] * conj(w.c9prime() * m9[9 - 1]) * s79)
+                    + norm(w.c9prime()) * s99 * norm(m9[9 - 1])
+                    + norm(w.c10prime()) * s1010 * norm(m10[10 - 1]);
+
+                double s77p = 16.0 * m_s_hat * (4.0 * s_hat2 - 12.0 + 8.0 / s_hat);
+                double s79p = -24.0 * m_s_hat * (s_hat - s_hat2), s97p = s79p;
+                double s99p = 0.5 * s79p, s1010p = s99p * (1.0 - 6.0 * m_l * m_l / s);
+                /* interference between chirality-flipped and SM-like*/
+                ratio_phi += real(w.c7() * m7[7 - 1] * conj(w.c7prime()) * s77p
+                    + w.c7() * m7[7 - 1] * conj(w.c9prime()) * s79p
+                    + w.c9() * m9[9 - 1] * conj(w.c7prime()) * s97p
+                    + w.c9() * m9[9 - 1] * conj(w.c9prime()) * s99p
+                    + w.c10() * m10[10 - 1] * conj(w.c10prime()) * s1010p);
             }
 
             /* bremsstrahlung */
