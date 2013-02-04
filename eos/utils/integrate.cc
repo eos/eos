@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -68,7 +68,7 @@ namespace eos
         double correction = num * num / denom;
         double result;
 
-        if (isnan(correction))
+        if (std::isnan(correction))
         {
             result = Q2;
         }
@@ -129,7 +129,7 @@ namespace eos
         double correction_r = num_r * num_r / denom_r, correction_i = num_i * num_i / denom_i;
         complex<double> result;
 
-        if (isnan(correction_r) || isnan(correction_i))
+        if (std::isnan(correction_r) || std::isnan(correction_i))
         {
             result = Q2;
         }

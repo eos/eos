@@ -74,7 +74,7 @@ namespace eos
         bool correction_valid = true;
         for (unsigned i = 0 ; i < k ; ++i)
         {
-            if (isnan(correction[i]))
+            if (std::isnan(correction[i]))
             {
                 correction_valid = false;
                 break;

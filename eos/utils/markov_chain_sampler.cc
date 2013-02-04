@@ -338,7 +338,7 @@ namespace eos
                 }
 
                 pre_run_info.rvalue_posterior = compute_rvalue(chain_means, chain_variances, pre_run_info.iterations);
-                if ((pre_run_info.rvalue_posterior > config.rvalue_criterion_posterior) || isnan(pre_run_info.rvalue_posterior))
+                if ((pre_run_info.rvalue_posterior > config.rvalue_criterion_posterior) || std::isnan(pre_run_info.rvalue_posterior))
                 {
                     all_rvalues_small = false;
 
