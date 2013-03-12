@@ -293,6 +293,10 @@ namespace eos
                     std::make_tuple("s")),
 
             // B -> K^* ll, Large Recoil
+            make_observable("B->K^*ll::d^4Gamma@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::four_differential_decay_width,
+                    std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
+
             make_observable("B->K^*ll::dBR/ds@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::differential_branching_ratio,
                     std::make_tuple("s")),
