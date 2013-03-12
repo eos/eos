@@ -571,7 +571,7 @@ namespace eos
             // B -> K^* ll, Low Recoil
             make_observable("B->K^*ll::d^4Gamma@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::four_differential_decay_width,
-                    std::make_tuple("s", "cos(theta_k)", "cos(theta_l)", "phi")),
+                    std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
 
             make_observable("B->K^*ll::dBR/ds@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::differential_branching_ratio,
