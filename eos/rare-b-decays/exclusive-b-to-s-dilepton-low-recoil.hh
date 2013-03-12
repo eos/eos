@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -175,9 +175,12 @@ namespace eos
             double real_c7eff(const double & s) const;
             double imag_c7eff(const double & s) const;
 
-            // Angular Distributions
+            // Angular Observables
             double a_l(const double & s) const;
             double c_l(const double & s) const;
+
+            // Two Differential Observables
+            double two_differential_decay_width(const double & s, const double & c_theta_l) const;
 
             // Differential Observables
             double differential_branching_ratio(const double & s) const;

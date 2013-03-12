@@ -199,6 +199,10 @@ namespace eos
                     &BToKstarGamma::isospin_asymmetry),
 
             // B -> K ll, Large Recoil
+            make_observable("B->Kll::d^2Gamma@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::two_differential_decay_width,
+                    std::make_tuple("s", "cos(theta_l)")),
+
             make_observable("B->Kll::dBR/ds@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::differential_branching_ratio,
                     std::make_tuple("s")),
@@ -236,6 +240,10 @@ namespace eos
                     std::make_tuple("s")),
 
             // B -> K ll, Low Recoil
+            make_observable("B->Kll::d^2Gamma@LowRecoil",
+                    &BToKDilepton<LowRecoil>::two_differential_decay_width,
+                    std::make_tuple("s", "cos(theta_l)")),
+
             make_observable("B->Kll::dBR/ds@LowRecoil",
                     &BToKDilepton<LowRecoil>::differential_branching_ratio,
                     std::make_tuple("s")),

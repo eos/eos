@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -1509,6 +1509,16 @@ namespace eos
         WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
 
         return _imp->c_l(wc, s);
+    }
+
+    // Two Differential Observables
+    double
+    BToKDilepton<LowRecoil>::two_differential_decay_width(const double & s, const double & c_theta_l) const
+    {
+        auto wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+
+        // For the basis of operators used, b_l always evaluates to 0.
+        return _imp->a_l(wc, s) + _imp->c_l(wc, s) * c_theta_l * c_theta_l;
     }
 
     // Differential Observables
