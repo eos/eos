@@ -222,7 +222,7 @@ namespace eos
             complex<double> calT_parallel;
         };
 
-        DipoleFormFactors calT(const double & s) const
+        DipoleFormFactors calT(const double & s, const WilsonCoefficients<BToS> & wc) const
         {
             // charges of down- and up-type quarks
             static const double e_d = -1.0/3.0;
@@ -245,7 +245,6 @@ namespace eos
             complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
             if (cp_conjugate)
                 lambda_hat_u = std::conj(lambda_hat_u);
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
             // Compute the QCDF Integrals
             double invm1_par = 3.0 * (1.0 + a_1_par + a_2_par); // <ubar^-1>_par
@@ -518,7 +517,7 @@ namespace eos
             double mKhat = m_Kstar / m_B;
             double norm_s = norm(s);
 
-            DipoleFormFactors dff = calT(s);
+            DipoleFormFactors dff = calT(s, wc);
 
             // longitudinal amplitude
             complex<double> wilson_long_right = (wc.c9() - wc.c9prime()) + (wc.c10() - wc.c10prime());
