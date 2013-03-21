@@ -1266,8 +1266,8 @@ namespace eos
         double s_theta_l = sqrt(s_theta_l_2);
         double s_phi = sin(phi);
         // Cosine of twice the angle
-        //double c_2_theta_k = 2.0 * c_theta_k - 1.0;
-        double c_2_theta_l = 2.0 * c_theta_l - 1.0;
+        //double c_2_theta_k = 2.0 * c_theta_k_2 - 1.0;
+        double c_2_theta_l = 2.0 * c_theta_l_2 - 1.0;
         double c_2_phi = cos(2.0 * phi);
         // Sine of twice the angle
         double s_2_theta_k = 2.0 * s_theta_k * c_theta_k;
