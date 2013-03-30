@@ -21,6 +21,7 @@
 #define EOS_GUARD_SRC_UTILS_PARAMETERS_HH 1
 
 #include <eos/utils/exception.hh>
+#include <eos/utils/parameter-fwd.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/random_number_generator.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
@@ -38,9 +39,6 @@ namespace eos
     {
         UnknownParameterError(const std::string & variable) throw ();
     };
-
-    // Forward declaration.
-    class Parameter;
 
     /*!
      * Parameters keeps the set of all numeric parameters for any Observable.

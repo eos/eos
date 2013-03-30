@@ -47,7 +47,7 @@ libeosutils_la_SOURCES = \
 	observable_set.cc observable_set.hh \
 	one-of.hh \
 	options.cc options.hh \
-	parameters.cc parameters.hh \
+	parameters.cc parameters.hh parameters-fwd.hh \
 	polylog.cc polylog.hh \
 	power_of.hh \
 	prior_sampler.cc prior_sampler.hh \
