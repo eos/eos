@@ -21,7 +21,8 @@
 #define EOS_GUARD_SRC_UTILS_PARAMETERS_HH 1
 
 #include <eos/utils/exception.hh>
-#include <eos/utils/parameter-fwd.hh>
+#include <eos/utils/mutable.hh>
+#include <eos/utils/parameters-fwd.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/random_number_generator.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
@@ -144,7 +145,8 @@ namespace eos
     /*!
      * Parameter is the class that holds all information of one of Parameters' parameters.
      */
-    class Parameter
+    class Parameter :
+        public Mutable
     {
         private:
             struct Data;
@@ -178,24 +180,27 @@ namespace eos
 
             /// Destructor.
             ~Parameter();
+
+            /// Make a copy of this Parameter as a MutablePtr.
+            MutablePtr clone() const;
             ///@}
 
             ///@name Access & Modification of the Numeric Value
             ///@{
             /// Cast a Parameter's numeric value to a double.
-            operator double () const;
+            virtual operator double () const;
 
             /// Retrieve a Parameter's numeric value.
-            double operator() () const;
+            virtual double operator() () const;
 
             /// Set a Parameter's numeric value.
-            const Parameter & operator= (const double &);
+            virtual const Parameter & operator= (const double &);
             ///@}
 
             ///@name Access to Meta Data
             ///@{
             /// Retrieve the Parameter's name.
-            const std::string & name() const;
+            virtual const std::string & name() const;
 
             /// Retrieve the Parameter's (default) central value.
             const double & central() const;

@@ -363,6 +363,12 @@ namespace eos
     {
     }
 
+    MutablePtr
+    Parameter::clone() const
+    {
+        return MutablePtr(new Parameter(_parameters_data, _index));
+    }
+
     Parameter::operator double () const
     {
         return _parameters_data->data[_index].value;

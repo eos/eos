@@ -42,6 +42,7 @@ libeosutils_la_SOURCES = \
 	matrix.hh \
 	memoise.cc memoise.hh \
 	model.cc model.hh \
+	mutable.cc mutable.hh mutable-fwd.hh \
 	mutex.cc mutex.hh \
 	observable_cache.cc observable_cache.hh \
 	observable_set.cc observable_set.hh \
@@ -153,6 +154,7 @@ TESTS = \
 	markov_chain_TEST \
 	markov_chain_sampler_TEST \
 	memoise_TEST \
+	mutable_TEST \
 	observable_set_TEST \
 	options_TEST \
 	one-of_TEST \
@@ -219,6 +221,8 @@ markov_chain_TEST_SOURCES = markov_chain_TEST.cc
 markov_chain_sampler_TEST_SOURCES = markov_chain_sampler_TEST.cc
 
 memoise_TEST_SOURCES = memoise_TEST.cc
+
+mutable_TEST_SOURCES = mutable_TEST.cc
 
 observable_set_TEST_SOURCES = observable_set_TEST.cc
 
