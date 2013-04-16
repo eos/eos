@@ -98,6 +98,35 @@ Experimental Results
         arxiv:1108.0695 [hep-ex]
 
 
+    CDF:2011C : Aaltonen, T. et al. [CDF Collaboration]
+
+        Measurement of the CP-Violating Phase beta^J/psiphi_s in B0s -> J/psi phi
+        Decays with the CDF II Detector
+
+        Phys.Rev. D85 (2012) 072002
+
+        arXiv:1112.1726
+
+
+    D0:2011A : Abazov, V.M. et al. [D0 Collaboration]
+
+        Measurement of the CP-violating phase phi^J/psiphi_s using the flavor-tagged
+        decay B0s -> J/psi phi in 8 fb−1 of p pbar collisions
+
+        Phys.Rev. D85 (2012) 032006
+
+        arXiv:1109.3166
+
+
+    LHCb:2013A : Aaij, R. et al. [LHCb Collaboration]
+
+        Measurement of CP violation and the B_s^0 meson decay width difference with
+        B_s^0\to J/psi K^+ K^- and B_s^0\to J/psi pi^+ pi^- decays
+
+        Submitted to Phys. Rev. D
+
+        arxiv:1304.2600 [hep-ex]
+
 Theoretical Inputs
 ------------------
 

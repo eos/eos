@@ -252,6 +252,10 @@ namespace eos
             Parameter::Template{"life_time::B_u",                                +1.627e-12,      +1.638e-12,      +1.649e-12     }, // cf. [PDG2010], p. 69
             Parameter::Template{"life_time::B_s",                                +1.446e-12,      +1.472e-12,      +1.496e-12     }, // cf. [PDG2010], p. 103
 
+            /* Decay width differences in neutral meson systems */
+            Parameter::Template{"life_time::Delta_B_d",                          +0.0,            +0.0,            +0.0           }, // smaller than 1eV, i.e. zero for all intents and purposes, cf. [PDG2012]
+            Parameter::Template{"life_time::Delta_B_s",                          +0.092,          +0.104,          +0.116         }, // weighted avg (PDG method) using [LHCb:2013A], [CDF:2011C] and [D0:2011A]
+
             // Form factor uncertainties
             Parameter::Template{"formfactors::xi_perp_uncertainty",              +0.89,           +1.0,            +1.11          },
             Parameter::Template{"formfactors::xi_par_uncertainty",               +0.86,           +1.0,            +1.14          },
