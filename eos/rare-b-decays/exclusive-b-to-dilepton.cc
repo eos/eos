@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -38,6 +38,8 @@ namespace eos
 
         UsedParameter tau_B;
 
+        UsedParameter delta_gamma_B;
+
         UsedParameter mu;
 
         UsedParameter alpha_e;
@@ -55,6 +57,7 @@ namespace eos
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
+            delta_gamma_B(p["life_time::Delta_B_" + o.get("q", "d")], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
@@ -82,7 +85,7 @@ namespace eos
         static complex<double> lambda_t_d(const Model * model) { return model->ckm_tb() * conj(model->ckm_td()); }
         static complex<double> lambda_t_s(const Model * model) { return model->ckm_tb() * conj(model->ckm_ts()); }
 
-        double branching_ratio() const
+        double branching_ratio_time_zero() const
         {
             double lambda_t = abs(lambda(model.get()));
             double beta_l = std::sqrt(1.0 - 4.0 * power_of<2>(m_l / m_B()));
@@ -92,6 +95,14 @@ namespace eos
             // cf. [BEKU2002], Eq. (3.6) with c_S,P(') = 0
             return power_of<2>(g_fermi() * alpha_e() * lambda_t) / 64.0 / power_of<3>(M_PI)
                 * beta_l * m_B() * power_of<2>(f_B() * 2.0 * m_l) * std::norm(wc.c10() - wc.c10prime()) * tau_B / hbar;
+        }
+
+        double branching_ratio_untagged_integrated() const
+        {
+            double y_s = tau_B() * delta_gamma_B / 2.0;
+
+            // In the case of vanishing C_S(') and C_P(') we find simply
+            return branching_ratio_time_zero() / (1.0 - y_s);
         }
     };
 
@@ -105,8 +116,14 @@ namespace eos
     }
 
     double
-    BToDilepton::branching_ratio() const
+    BToDilepton::branching_ratio_time_zero() const
     {
-        return _imp->branching_ratio();
+        return _imp->branching_ratio_time_zero();
+    }
+
+    double
+    BToDilepton::branching_ratio_untagged_integrated() const
+    {
+        return _imp->branching_ratio_untagged_integrated();
     }
 }

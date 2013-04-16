@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -62,6 +62,8 @@ class BToKstarGammaTest :
                 p["mass::B_s"] = 5.3663;
                 p["life_time::B_d"] = 1.525e-12;
                 p["life_time::B_s"] = 1.472e-12;
+                p["life_time::Delta_B_d"] = 0.0;
+                p["life_time::Delta_B_s"] = 0.104e12;
 
                 const double eps = 1e-4;
 
@@ -74,7 +76,8 @@ class BToKstarGammaTest :
 
                     BToDilepton d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(), +1.75327e-10, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +1.75327e-10, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +1.75327e-10, eps);
                 }
 
                 // B_d -> e^+ e^-
@@ -86,7 +89,8 @@ class BToKstarGammaTest :
 
                     BToDilepton d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(), +4.10420e-15, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +4.10420e-15, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +4.10420e-15, eps);
                 }
 
                 // B_s -> mu^+ mu^-
@@ -98,7 +102,8 @@ class BToKstarGammaTest :
 
                     BToDilepton d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(), +3.83903e-09, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +3.83903e-09, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +4.15721e-09, eps);
                 }
 
                 // B_s -> e^+ e^-
@@ -110,7 +115,8 @@ class BToKstarGammaTest :
 
                     BToDilepton d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(), +8.98650e-14, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +8.98650e-14, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +9.73138e-14, eps);
                 }
             }
         }

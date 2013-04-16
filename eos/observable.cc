@@ -79,7 +79,10 @@ namespace eos
 
             // B_q -> ll
             make_observable("B_q->ll::BR",
-                    &BToDilepton::branching_ratio),
+                    &BToDilepton::branching_ratio_time_zero),
+
+            make_observable("B_q->ll::BR@Untagged",
+                    &BToDilepton::branching_ratio_untagged_integrated),
 
             // B -> K, cf. [BZ2004v2]
             make_observable("B->K::f_+(s)@BZ2004v2",

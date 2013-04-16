@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -46,8 +46,11 @@ namespace eos
 
             ///@name Observables
             ///@{
-            // Branching ratio
-            double branching_ratio() const;
+            // Branching ratio at time t = 0, considering B-Bbar mixing effects.
+            double branching_ratio_time_zero() const;
+
+            // Time-integrated untagged branching ratio, considering B-Bbar mixing effects.
+            double branching_ratio_untagged_integrated() const;
             ///@}
     };
 }
