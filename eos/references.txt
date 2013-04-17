@@ -125,6 +125,13 @@ Experimental Results
         LHCb-CONF-047
 
 
+    LHCb:2011B : [LHCb Collaboration]
+
+        Differential branching fraction and angular analysis of the decay B 0 ---> K^{∗0} mu^+ mu^-
+
+        arxiv:1112.3515v1 [hep-ex]
+
+
     LHCb:2013A : Aaij, R. et al. [LHCb Collaboration]
 
         Measurement of CP violation and the B_s^0 meson decay width difference with
