@@ -132,6 +132,15 @@ Experimental Results
         arxiv:1112.3515v1 [hep-ex]
 
 
+    LHCb:2012A : [LHCb Collaboration]
+
+        Rare Beauty and Charm Decays at LHCb
+
+        Conference presentation at Moriond 2012
+
+        http://moriond.in2p3.fr/QCD/2012/TuesdayMorning/Parkinson.pdf
+
+
     LHCb:2013A : Aaij, R. et al. [LHCb Collaboration]
 
         Measurement of CP violation and the B_s^0 meson decay width difference with
