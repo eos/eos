@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -43,25 +43,39 @@ class ConstraintTest :
                 std::vector<std::string> constraint_names
                 {
                     /* 2000 */
+
                     // CLEO
                     "B^0->K^*0gamma::BR@CLEO-2000",
                     "B^+->K^*+gamma::BR@CLEO-2000",
+
+
                     /* 2004 */
+
                     // Belle
                     "B^0->K^*0gamma::BR@Belle-2004",
                     "B^+->K^*+gamma::BR@Belle-2004",
+
+
                     /* 2006 */
+
                     // Belle
                     "B^0->K^*0gamma::S_K@Belle-2006",
                     "B^0->K^*0gamma::C_K@Belle-2006",
+
+
                     /* 2008 */
+
                     // BaBar
                     "B^0->K^*0gamma::S_K@BaBar-2008",
                     "B^0->K^*0gamma::C_K@BaBar-2008",
+
+
                     /* 2009 */
+
                     // BaBar
                     "B^0->K^*0gamma::BR@BaBar-2009",
                     "B^+->K^*+gamma::BR@BaBar-2009",
+
                     // Belle
                     // B^+ -> K^+ mu^+ mu^-
                     "B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle-2009",
@@ -81,9 +95,13 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle-2009",
                     "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009",
                     "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009",
+
+
                     /* 2011 */
+
                     // HFAG
                     "B^0->K^*0gamma::S_K+C_K@HFAG-2011",
+
                     // CDF
                     // B^0 -> K^*0 mu^+ mu^-
                     "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2011",
@@ -120,7 +138,10 @@ class ConstraintTest :
                     "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",
                     "B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2011",
 #endif
+                    "B^0_s->mu^+mu^-::BR_limit@CDF-2011",
+
                     // LHCb
+                    // B^0 -> K^*0 mu^+ mu^-
                     "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011",
                     "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011",
                     "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb-2011",
@@ -130,6 +151,13 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011",
                     "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011",
                     "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011",
+                    // B^0_s -> mu^+ mu^-
+                    "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011",
+                    "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011-Bayes",
+
+
+                    /* 2012 */
+
                     // BaBar
                     // B^+ -> K^+ mu^+ mu^-
                     "B^+->K^+mu^+mu^-::BR[1.00,6.00]@BaBar-2012",
@@ -145,6 +173,44 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@BaBar-2012",
                     "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@BaBar-2012",
                     "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@BaBar-2012",
+
+                    // CDF
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2012",
+                    // B^+ -> K^*+ mu^+ mu^-
+                    "B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF-2012",
+                    "B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF-2012",
+                    "B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF-2012",
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::A_T_2[1.00,6.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::A_T_2[14.18,16.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::A_T_2[16.00,19.21]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF-2012",
+                    "B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF-2012",
+                    // B^0 -> K^0 mu^+ mu^-
+                    "B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2012",
+                    "B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2012",
+                    "B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF-2012",
+                    // B^+ -> K^+ mu^+ mu^-
+                    "B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2012",
+                    "B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2012",
+                    "B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF-2012",
+                    // The following commented observables have not yet been implemented!
+#if 0
+                    "B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2012",
+                    "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2012",
+                    "B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2012",
+#endif
+
                     // LHCb
                     // B^0 -> K^*0 mu^+ mu^-
                     "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2012",
@@ -156,13 +222,32 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2012",
                     "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2012",
                     "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2012",
-                    // Observables not yet implemented!
                     "B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@LHCb-2012",
                     "B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@LHCb-2012",
                     "B^0->K^*0mu^+mu^-::A_im[16.00,19.00]@LHCb-2012",
                     "B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2012",
                     "B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2012",
                     "B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2012",
+
+                    // B^0_s -> mu^+ mu^-
+                    "B^0_s->mu^+mu^-::BR_limit@LHCb-2012",
+                    "B^0_s->mu^+mu^-::BR_limit@LHCb-Nov-2012",
+
+                    // B^+ -> K^+ mu^+ mu^-
+                    "B^+->K^+mu^+mu^-::BR[1.00,6.00]@LHCb-2012",
+                    "B^+->K^+mu^+mu^-::BR[14.18,16.00]@LHCb-2012",
+                    "B^+->K^+mu^+mu^-::BR[16.00,18.00]@LHCb-2012",
+                    "B^+->K^+mu^+mu^-::BR[18.00,22.00]@LHCb-2012",
+#if 0
+                    "B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@LHCb-2012",
+                    "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@LHCb-2012",
+                    "B^+->K^+mu^+mu^-::A_FB[16.00,18.00]@LHCb-2012",
+                    "B^+->K^+mu^+mu^-::A_FB[18.00,22.00]@LHCb-2012",
+#endif
+                    "B^+->K^+mu^+mu^-::F_H[1.00,6.00]@LHCb-2012",
+                    "B^+->K^+mu^+mu^-::F_H[14.18,16.00]@LHCb-2012",
+                    "B^+->K^+mu^+mu^-::F_H[16.00,18.00]@LHCb-2012",
+                    "B^+->K^+mu^+mu^-::F_H[18.00,22.00]@LHCb-2012",
                 };
 
                 std::cout << "# Constraints :" << std::endl;
