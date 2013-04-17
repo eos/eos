@@ -745,6 +745,22 @@ namespace eos
             -0.09, +0.13, -0.17, +0.03, -0.03
         };
 #endif
+
+        /*
+         * CDF Collaboration
+         *
+         * Data taken from [CDF:2011C]
+         */
+        // limit on BR B^0_s -> mu^+ mu^-
+        static const AmorosoLimitConstraintTemplate Bzero_to_dimuon_CDF_2011
+        {
+            "B_q->ll::BR",
+            Kinematics{ }, // kinematics are ignored
+            Options{ { "q", "s"  }, { "l", "mu" } },
+            0.0, 3.5e-8, 4.0e-8,
+            3.60911035e-8, 0.30785263
+        };
+
         /*
          * LHCb Collaboration
          *
@@ -1253,6 +1269,8 @@ namespace eos
             { "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_CDF_2011) },
             { "B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2011", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_CDF_2011) },
 #endif
+            // limit on B^0_s -> mu^+ mu^-
+            { "B^0_s->mu^+mu^-::BR_limit@CDF-2011", make_factory(templates::Bzero_to_dimuon_CDF_2011) },
             // LHCb
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2011) },
             { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2011) },
