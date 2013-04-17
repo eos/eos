@@ -838,6 +838,32 @@ namespace eos
             Options{ { "q", "d"  }, { "l", "mu" } },
             +0.26, +0.10, -0.08, +0.03, -0.03
         };
+
+
+        /*
+         * LHCb and CMS Collaboration
+         *
+         * Data taken from [LHCb:2011A]
+         */
+        // limit on BR B^0_s -> mu^+ mu^-
+        static const AmorosoLimitConstraintTemplate Bzero_to_dimuon_LHCb_CMS_2011
+        {
+            "B_q->ll::BR@Untagged",
+            Kinematics{ },
+            Options{ { "q", "s"  }, { "l", "mu" } },
+            0.0, 0.9e-8, 1.08e-8,
+            0.74377978e-8, 0.53538044
+        };
+        // use the data from the Bayes-Heinrich method
+        // the mode is not at zero, but around 3.1e-9
+        static const AmorosoConstraintTemplate Bzero_to_dimuon_LHCb_CMS_2011_Bayes
+        {
+            "B_q->ll::BR@Untagged",
+            Kinematics{ },
+            Options{ { "q", "s"  }, { "l", "mu" } },
+            0.0, 0.132749474699e-8, 0.446663009589e-8, 0.932149816388e-8,
+            6.4184393253e-09, 8.1583565997e-01, 1.8230347158
+        };
         ///@}
 
         ///@name 2012 Data
@@ -1281,6 +1307,11 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_LHCb_2011) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_LHCb_2011) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_LHCb_2011) },
+
+            // limit on B^0_s -> mu^+ mu^-
+            // LHCb + CMS
+            { "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011", make_factory(templates::Bzero_to_dimuon_LHCb_CMS_2011) },
+            { "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011-Bayes", make_factory(templates::Bzero_to_dimuon_LHCb_CMS_2011_Bayes) },
 
             /* 2012 */
             // BaBar

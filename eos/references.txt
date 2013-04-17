@@ -118,6 +118,13 @@ Experimental Results
         arXiv:1109.3166
 
 
+    LHCb:2011A : [CMS and LHCb Collaboration]
+
+        Search for the rare decay B^0_s ---> mu^+ mu^- with the CMS and LHCb experiments
+
+        LHCb-CONF-047
+
+
     LHCb:2013A : Aaij, R. et al. [LHCb Collaboration]
 
         Measurement of CP violation and the B_s^0 meson decay width difference with
