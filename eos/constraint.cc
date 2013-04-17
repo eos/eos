@@ -1112,6 +1112,143 @@ namespace eos
         };
 
         /*
+         * LHCb Collaboration
+         *
+         * Data taken from LHCb:2012C
+         */
+        // BR in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_1_to_6_LHCb_2012
+        {
+            "B->Kll::BRavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            2.41e-8 * 5, +0.17e-8 * 5, -0.17e-8 * 5, +0.14e-8 * 5, -0.14e-8 * 5
+        };
+        // BR in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_14dot18_to_16_LHCb_2012
+        {
+            "B->Kll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            2.07e-8 * 1.82, +0.20e-8 * 1.82, -0.20e-8 * 1.82, +0.08e-8 * 1.82, -0.08e-8 * 1.82
+        };
+        // BR in [16.00, 18.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_16_to_18_LHCb_2012
+        {
+            "B->Kll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 18.00} },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            1.77e-8 * 2, +0.18e-8 * 2, -0.18e-8 * 2, +0.09e-8 * 2, -0.09e-8 * 2
+        };
+        // BR in [18.00, 22.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_BR_18_to_22_LHCb_2012
+        {
+            "B->Kll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 18.00 }, { "s_max", 22.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.78e-8 * 4, +0.10e-8 * 4, -0.10e-8 * 4, +0.04e-8 * 4, -0.04e-8 * 4
+        };
+        // sign flipped wrt to table 1 in LHCb:2012C!
+#if 0
+        // A_FB in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_1_to_6_LHCb_2012
+        {
+            "B->Kll::A_FBavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            -0.02, +0.03, -0.05, +0.01, -0.02
+        };
+        // A_FB in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_LHCb_2012
+        {
+            "B->Kll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            +0.01, +0.06, -0.12, +0.01, -0.01
+        };
+        // A_FB in [16.00, 18.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_16_to_18_LHCb_2012
+        {
+            "B->Kll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 18.00} },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            +0.09, +0.09, -0.07, +0.01, -0.02
+        };
+        // A_FB in [18.00, 22.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_A_FB_18_to_22_LHCb_2012
+        {
+            "B->Kll::A_FBavg@LowRecoil",
+            Kinematics{ { "s_min", 18.00 }, { "s_max", 22.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            -0.02, +0.11, -0.11, +0.01, -0.01
+        };
+#endif
+        // F_H in [1.0, 6.0]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_F_H_1_to_6_LHCb_2012
+        {
+            "B->Kll::F_H@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.05, +0.08, -0.05, +0.04, -0.02
+        };
+        // F_H in [14.18, 16.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_F_H_14dot18_to_16_LHCb_2012
+        {
+            "B->Kll::F_H@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.08, +0.28, -0.08, +0.02, -0.01
+        };
+        // F_H in [16.00, 18.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_F_H_16_to_18_LHCb_2012
+        {
+            "B->Kll::F_H@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 18.00} },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.18, +0.22, -0.14, +0.01, -0.04
+        };
+        // F_H in [18.00, 22.00]
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dimuon_F_H_18_to_22_LHCb_2012
+        {
+            "B->Kll::F_H@LowRecoil",
+            Kinematics{ { "s_min", 18.00 }, { "s_max", 22.00 } },
+            Options{ { "q", "u"  }, { "l", "mu" } },
+            0.14, +0.31, -0.14, +0.01, -0.02
+        };
+
+        // Data taken from LHCb:2012B
+        /* fit Amoroso to posterior supplied by Diego Martinez by fixing
+         * a) cdf(0) = 0
+         * b) cdf(x_10) = 0.1
+         * c) cdf(x_50) = 0.5
+         * d) cdf(x_90) = 0.9
+         */
+        static const AmorosoConstraintTemplate Bzero_to_dimuon_LHCb_2012
+        {
+            "B_q->ll::BRuntagged",
+            Kinematics(),
+            Options{ { "q", "s"  }, { "l", "mu" } },
+            0.0, 0.558367940293e-9, 2.03115589965e-9, 4.4528950788e-9,
+            2.9708273062e-09, 8.2392613044e-01, 1.6993290032
+        };
+
+        // Data taken from LHCb:2012D
+        /* fit Amoroso to result assuming
+         * a) cdf(0) = 0
+         * b) mode = 3.2
+         * c) 90% in (1.3, 5.8)
+         * d) pdf(1.3) = pdf(5.8) (smallest interval)
+         */
+        static const AmorosoModeConstraintTemplate Bzero_to_dimuon_LHCb_Nov_2012
+        {
+            "B_q->ll::BRuntagged",
+            Kinematics(),
+            Options{ { "q", "s"  }, { "l", "mu" } },
+            0.0, 3.2e-9, 5.479025195034372e-9, 6.110034104385014e-9,
+            2.3625776605e-09, 2.2682156277, 1.7296007586
+        };
+
+        /*
          * PDG
          *
          * Data taken from [PDG2012]
@@ -1346,6 +1483,26 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_1_to_6_LHCb_2012) },
             { "B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_14dot18_to_16_LHCb_2012) },
             { "B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_16_to_19_LHCb_2012) },
+            // limit on B^0_s -> mu^+ mu^-
+            { "B^0_s->mu^+mu^-::BR_limit@LHCb-2012", make_factory(templates::Bzero_to_dimuon_LHCb_2012) },
+            // limit on B^0_s -> mu^+ mu^- of Nov 2012
+            { "B^0_s->mu^+mu^-::BR_limit@LHCb-Nov-2012", make_factory(templates::Bzero_to_dimuon_LHCb_Nov_2012) },
+            // B^+ -> K^+ mu^+ mu^-
+            { "B^+->K^+mu^+mu^-::BR[1.00,6.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_BR_1_to_6_LHCb_2012) },
+            { "B^+->K^+mu^+mu^-::BR[14.18,16.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_BR_14dot18_to_16_LHCb_2012) },
+            { "B^+->K^+mu^+mu^-::BR[16.00,18.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_BR_16_to_18_LHCb_2012) },
+            { "B^+->K^+mu^+mu^-::BR[18.00,22.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_BR_18_to_22_LHCb_2012) },
+            // Observables not yet implemented!
+#if 0
+            { "B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_1_to_6_LHCb_2012) },
+            { "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_14dot18_to_16_LHCb_2012) },
+            { "B^+->K^+mu^+mu^-::A_FB[16.00,18.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_16_to_18_LHCb_2012) },
+            { "B^+->K^+mu^+mu^-::A_FB[18.00,22.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_18_to_22_LHCb_2012) },
+#endif
+            { "B^+->K^+mu^+mu^-::F_H[1.00,6.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_1_to_6_LHCb_2012) },
+            { "B^+->K^+mu^+mu^-::F_H[14.18,16.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_14dot18_to_16_LHCb_2012) },
+            { "B^+->K^+mu^+mu^-::F_H[16.00,18.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_16_to_18_LHCb_2012) },
+            { "B^+->K^+mu^+mu^-::F_H[18.00,22.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_18_to_22_LHCb_2012) },
             // PDG2012
             // B^0(*) Mass splitting
             { "B^0::M_B^*-M_B@PDG-2012", make_factory(templates::B_Bstar_mass_splitting_PDG_2012) },
