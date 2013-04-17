@@ -754,7 +754,7 @@ namespace eos
         // limit on BR B^0_s -> mu^+ mu^-
         static const AmorosoLimitConstraintTemplate Bzero_to_dimuon_CDF_2011
         {
-            "B_q->ll::BR",
+            "B_q->ll::BR@Untagged",
             Kinematics{ }, // kinematics are ignored
             Options{ { "q", "s"  }, { "l", "mu" } },
             0.0, 3.5e-8, 4.0e-8,
@@ -1460,7 +1460,7 @@ namespace eos
          */
         static const AmorosoConstraintTemplate Bzero_to_dimuon_LHCb_2012
         {
-            "B_q->ll::BRuntagged",
+            "B_q->ll::BR@Untagged",
             Kinematics(),
             Options{ { "q", "s"  }, { "l", "mu" } },
             0.0, 0.558367940293e-9, 2.03115589965e-9, 4.4528950788e-9,
@@ -1476,7 +1476,7 @@ namespace eos
          */
         static const AmorosoModeConstraintTemplate Bzero_to_dimuon_LHCb_Nov_2012
         {
-            "B_q->ll::BRuntagged",
+            "B_q->ll::BR@Untagged",
             Kinematics(),
             Options{ { "q", "s"  }, { "l", "mu" } },
             0.0, 3.2e-9, 5.479025195034372e-9, 6.110034104385014e-9,
