@@ -31,8 +31,9 @@
 namespace eos
 {
     /*!
-     * Implement the clustering explained in
-     * Goldberger, J. & Roweis, S. Hierarchical clustering of a mixture model. (2004).at <http://eprints.pascal-network.org/archive/00001565/>
+     * Implement the hierarchical clustering explained in [GR2004].
+     *
+     * A mixture density is determined as a reduced representation of input components.
      */
     class HierarchicalClustering :
         public PrivateImplementationPattern<HierarchicalClustering>
@@ -55,20 +56,29 @@ namespace eos
             ~HierarchicalClustering();
             ///@}
 
-            // todo document
+            /*!
+             * Add an input component
+             */
             void add(const Component & component);
 
+            /*!
+             * Add an initial guess for the clusters to be determined
+             * @param density
+             */
             void initial_guess(const MixtureDensity & density);
 
+            /*!
+             * Perform the clustering.
+             */
             void run();
 
             struct IteratorTag;
-            /// Loop over initial components
+            /// Loop over input components
             typedef WrappedForwardIterator<IteratorTag, Component> ComponentIterator;
             ComponentIterator begin_components() const;
             ComponentIterator end_components() const;
 
-            /// Loop over final clusters.
+            /// Loop over final clusters (determined during clustering).
             typedef WrappedForwardIterator<IteratorTag, Component> ClusterIterator;
             ClusterIterator begin_clusters() const;
             ClusterIterator end_clusters() const;

@@ -570,14 +570,21 @@ Theoretical Inputs
         arxiv:hep-ph/9701390
 
 
-Numerical Methods
------------------
+Numerical and Statistical  Methods
+----------------------------------
 
     C2006 : Crandall, R.E.
 
         Note on fast polylogarithm computation
 
         http://people.reed.edu/~crandall/papers/Polylog.pdf
+
+
+    GR2004 : Goldberger, J. and Roweis, S.
+
+        Hierarchical clustering of a mixture model
+
+        http://eprints.pascal-network.org/archive/00001565/
 
 
 ## vim: set ts=4 et :
