@@ -108,6 +108,14 @@ Experimental Results
         arXiv:1112.1726
 
 
+    CDF:2012A : Aaltonen, T. et al. [CDF Collaboration]
+
+        Precise measurements of exclusive b ---> s mu^+ mu^- decay amplitudes using the full CDF data set
+
+        http://www-cdf.fnal.gov/physics/new/bottom/120628.blessed-b2smumu_96/public_b2smumu.pdf
+        Preliminary results for summer 2012 conferences
+
+
     D0:2011A : Abazov, V.M. et al. [D0 Collaboration]
 
         Measurement of the CP-violating phase phi^J/psiphi_s using the flavor-tagged
