@@ -6,8 +6,7 @@ CLEANFILES = \
 	markov_chain_sampler_TEST.hdf5 \
 	prior_sampler_TEST.hdf5 \
 	proposal_functions_TEST-rdwr.hdf5 \
-	proposal_functions_TEST-block-decomposition.hdf5 \
-	scan_file_TEST.hdf5
+	proposal_functions_TEST-block-decomposition.hdf5
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
@@ -59,7 +58,6 @@ libeosutils_la_SOURCES = \
 	random_number_generator.cc random_number_generator.hh \
 	rvalue.cc rvalue.hh \
 	save.hh \
-	scan_file.cc scan_file.hh \
 	standard-model.cc standard-model.hh \
 	stringify.hh \
 	thread.cc thread.hh \
@@ -122,7 +120,6 @@ include_eos_utils_HEADERS = \
 	random_number_generator.cc random_number_generator.hh \
 	rvalue.hh \
 	save.hh \
-	scan_file.hh \
 	standard-model.hh \
 	stringify.hh \
 	thread.hh \
@@ -168,7 +165,6 @@ TESTS = \
 	random_number_generator_TEST \
 	rvalue_TEST \
 	save_TEST \
-	scan_file_TEST \
 	standard_model_TEST \
 	top-loops_TEST \
 	stringify_TEST \
@@ -248,8 +244,6 @@ random_number_generator_TEST_SOURCES = random_number_generator_TEST.cc
 rvalue_TEST_SOURCES = rvalue_TEST.cc
 
 save_TEST_SOURCES = save_TEST.cc
-
-scan_file_TEST_SOURCES = scan_file_TEST.cc
 
 stringify_TEST_SOURCES = stringify_TEST.cc
 

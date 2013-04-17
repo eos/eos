@@ -24,7 +24,6 @@
 #include <eos/utils/log_prior.hh>
 #include <eos/observable.hh>
 #include <eos/utils/prior_sampler.hh>
-#include <eos/utils/scan_file.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/verify.hh>
 
