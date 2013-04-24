@@ -46,7 +46,7 @@ namespace eos
         public PrivateImplementationPattern<Analysis>
     {
         public:
-            friend class Implementation<Analysis>;
+            friend struct Implementation<Analysis>;
 
             struct OptimizationOptions;
             struct Output;
