@@ -248,6 +248,41 @@ class ConstraintTest :
                     "B^+->K^+mu^+mu^-::F_H[14.18,16.00]@LHCb-2012",
                     "B^+->K^+mu^+mu^-::F_H[16.00,18.00]@LHCb-2012",
                     "B^+->K^+mu^+mu^-::F_H[18.00,22.00]@LHCb-2012",
+
+                    /* 2013 */
+
+                    // LHCb
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::S_9[1.00,6.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::S_9[14.18,16.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::S_9[16.00,19.00]@LHCb-2013",
+                    // The following commented observables have not yet been implemented!
+#if 0
+                    "B^0->K^*0mu^+mu^-::A_9[1.00,6.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::A_9[14.18,16.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::A_9[16.00,19.00]@LHCb-2013",
+#endif
+                    "B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb-2013",
+                    "B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb-2013",
+                    // The following constraint does not conform to a gaussian likelihood.
+#if 0
+                    "B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013",
+#endif
+                    "B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013",
                 };
 
                 std::cout << "# Constraints :" << std::endl;

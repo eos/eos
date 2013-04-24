@@ -181,6 +181,16 @@ Experimental Results
 
         arxiv:1304.2600 [hep-ex]
 
+
+    LHCb:2013B : Aaij, R. et al. [LHCb Collaboration]
+
+        Differential branching fraction and angular analysis of the decay B^0 -> K^*0 mu^+ mu^-
+
+        Submitted to JHEP
+
+        arxiv:1304.6325 [hep-ex]
+
+
 Theoretical Inputs
 ------------------
 

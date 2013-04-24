@@ -1496,6 +1496,191 @@ namespace eos
             0.04578, +0.00035, -0.00035, 0.0, 0.0
         };
         ///@}
+
+        ///@name 2013 Data
+        ///@{
+        /*
+         * LHCb Collaboration
+         *
+         * Data taken from [LHCb:2013B]
+         */
+        // BR
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2013B
+        {
+            "B->K^*ll::BRavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            1.70e-7, +0.18e-7, -0.23e-7, +0.20e-7, -0.20e-7
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2013B
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            1.02e-7, +0.13e-7, -0.16e-7, +0.07e-7, -0.07e-7
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19_LHCb_2013B
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            1.23e-7, +0.15e-7, -0.17e-7, +0.12e-7, -0.12e-7
+        };
+        // F_L
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_LHCb_2013B
+        {
+            "B->K^*ll::F_L@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.65, +0.08, -0.07, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_LHCb_2013B
+        {
+            "B->K^*ll::F_L@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.33, +0.08, -0.07, +0.02, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19_LHCb_2013B
+        {
+            "B->K^*ll::F_L@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.38, +0.09, -0.07, +0.03, -0.03
+        };
+        // A_FB
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_LHCb_2013B
+        {
+            "B->K^*ll::A_FB@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.17, +0.06, -0.06, +0.01, -0.01
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_LHCb_2013B
+        {
+            "B->K^*ll::A_FB@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.51, +0.05, -0.07, +0.02, -0.02
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_LHCb_2013B
+        {
+            "B->K^*ll::A_FB@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.30, +0.08, -0.08, +0.02, -0.01
+        };
+        // S_3
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_3_1_to_6_LHCb_2013B
+        {
+            "B->K^*ll::J_3normavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.03, +0.07, -0.07, +0.01, -0.01
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_3_14dot18_to_16_LHCb_2013B
+        {
+            "B->K^*ll::J_3normavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.03, +0.09, -0.10, +0.01, -0.01
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_3_16_to_19_LHCb_2013B
+        {
+            "B->K^*ll::J_3normavg@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.22, +0.10, -0.09, +0.02, -0.01
+        };
+        // S_9
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_9_1_to_6_LHCb_2013B
+        {
+            "B->K^*ll::J_9normavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.07, +0.09, -0.08, +0.01, -0.01
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_9_14dot18_to_16_LHCb_2013B
+        {
+            "B->K^*ll::J_9normavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.00, +0.09, -0.08, +0.01, -0.01
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_S_9_16_to_19_LHCb_2013B
+        {
+            "B->K^*ll::J_9normavg@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.06, +0.11, -0.10, +0.01, -0.01
+        };
+        // A_9
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_9_1_to_6_LHCb_2013B
+        {
+            "B->K^*ll::A_9@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.03, +0.08, -0.08, +0.01, -0.01
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_9_14dot18_to_16_LHCb_2013B
+        {
+            "B->K^*ll::A_9@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.06, +0.11, -0.08, +0.01, -0.01
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_9_16_to_19_LHCb_2013B
+        {
+            "B->K^*ll::A_9@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.00, +0.11, -0.10, +0.01, -0.01
+        };
+        // A_T^2
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T2_1_to_6_LHCb_2013B
+        {
+            "B->K^*ll::A_T^2@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.15, +0.39, -0.41, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T2_14dot18_to_16_LHCb_2013B
+        {
+            "B->K^*ll::A_T^2@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.07, +0.26, -0.28, +0.02, -0.02
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_T2_16_to_19_LHCb_2013B
+        {
+            "B->K^*ll::A_T^2@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.71, +0.35, -0.26, +0.06, -0.04
+        };
+        // A_T^re
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_Tre_1_to_6_LHCb_2013B
+        {
+            "B->K^*ll::A_T^re@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.66, +0.22, -0.24, +0.01, -0.04
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_Tre_14dot18_to_16_LHCb_2013B
+        {
+            "B->K^*ll::A_T^re@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -1.00, +0.05, -0.00, +0.02, -0.00
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_Tre_16_to_19_LHCb_2013B
+        {
+            "B->K^*ll::A_T^re@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.64, +0.15, -0.15, +0.02, -0.01
+        };
+        ///@}
     }
 
     /* Constraint */
@@ -1777,6 +1962,36 @@ namespace eos
             // PDG2012
             // B^0(*) Mass splitting
             { "B^0::M_B^*-M_B@PDG-2012", make_factory(templates::B_Bstar_mass_splitting_PDG_2012) },
+
+            /* 2013 */
+            // LHCb
+            { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_1_to_6_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_14dot18_to_16_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_16_to_19_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::S_9[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_9_1_to_6_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::S_9[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_9_14dot18_to_16_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::S_9[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_9_16_to_19_LHCb_2013B) },
+            // The following observables have not yet been implemented.
+#if 0
+            { "B^0->K^*0mu^+mu^-::A_9[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_9_1_to_6_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_9[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_9_14dot18_to_16_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_9[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_9_16_to_19_LHCb_2013B) },
+#endif
+            { "B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_1_to_6_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_14dot18_to_16_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_16_to_19_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_1_to_6_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_14dot18_to_16_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_16_to_19_LHCb_2013B) },
         };
 
         auto f = factories.find(name);
