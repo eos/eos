@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Frederik Beaujean
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2012, 2013 Frederik Beaujean
+ * Copyright (c) 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -49,6 +49,34 @@ namespace eos
 
             /// Destructor.
             ~MarkovChainSampler();
+
+            /*!
+             * Take the output from several independent preruns as input and store a
+             * global local proposal function to the output file in directory '/global local'
+             * In addition, the meta information about constraints, parameters and their priors
+             * is stored in '/descriptions'.
+             *
+             * @param output_file_name The name of the HDF5 file containing the global local proposal function.
+             *                         if empty, do not create the proposal nor any output.
+             * @param input_files HDF5 files containing the history, descriptions, stats, and local propopal densities
+             *                    as created by EOS.
+             * @param config The configuration options influencing how GlobalLocal is created.
+             * @param analysis Compare the order of parameters in files vs the one given in analysis.
+             * @return The full histories of all chains found in the input files
+             */
+            static std::vector<HistoryPtr> build_global_local(const std::string & output_file_name,
+                                    const std::vector<std::shared_ptr<hdf5::File>> input_files,
+                                    const proposal_functions::GlobalLocal::Config & config,
+                                    AnalysisPtr analysis = AnalysisPtr());
+
+            /*!
+             * Copy the settings such as proposal density
+             * from the output of a (successful) prerun to prepare
+             * for calling run(), where the main run is started
+             * immediately.
+             */
+            void resume(const hdf5::File &);
+
             ///@}
 
             ///@name Sampling
@@ -210,6 +238,9 @@ namespace eos
             /// Number of iterations per chunk.
             unsigned chunk_size;
 
+            /// Summarize all options pertaining to the GlobalLocal proposal function.
+            std::shared_ptr<proposal_functions::GlobalLocal::Config> global_local_config;
+
             /// Turn off main run, so only prerun is performed
             bool need_main_run;
 
@@ -232,6 +263,8 @@ namespace eos
             bool store_observables_and_proposals;
             ///@}
     };
+
+    std::ostream & operator<<(std::ostream&, const MarkovChainSampler::Config & config);
 
     /*!
      * Holds convergence information of the prerun.

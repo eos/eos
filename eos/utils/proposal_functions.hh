@@ -2,7 +2,6 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
- * Copyright (c) 2011 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,12 +20,12 @@
 #ifndef EOS_GUARD_EOS_UTILS_PROPROSAL_FUNCTIONS_HH
 #define EOS_GUARD_EOS_UTILS_PROPROSAL_FUNCTIONS_HH 1
 
+#include <eos/utils/cluster.hh>
 #include <eos/utils/hdf5-fwd.hh>
 #include <eos/utils/log_prior-fwd.hh>
 #include <eos/utils/markov_chain.hh>
 #include <eos/utils/verify.hh>
 
-#include <gsl/gsl_rng.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 
@@ -146,6 +145,251 @@ namespace eos
                  * Retrieve the fixed state used for cluster i.
                  */
                 const MarkovChain::State & state(const unsigned & i) const;
+        };
+
+        /*!
+         * After a suitable amount of prerun iterations, combine the information of all
+         * chains into one, common proposal function.
+         */
+        class GlobalLocal :
+            public MarkovChain::ProposalFunction
+        {
+            public:
+                /// Types of data sets for reading/writing the state of the proposal density from/to disk
+                typedef hdf5::Composite<hdf5::Scalar<unsigned>, hdf5::Array<1, double>> ComponentType;
+                typedef hdf5::Composite<hdf5::Array<1, double>, hdf5::Scalar<double>, hdf5::Scalar<double>, hdf5::Scalar<double>> HistoryType;
+                typedef hdf5::Composite<hdf5::Array<1, double>, hdf5::Scalar<double>> JumpType;
+                typedef hdf5::Composite<hdf5::Array<1, double>, hdf5::Array<1, double>> LocalCovarianceType;
+
+                static ComponentType component_type(const unsigned & dimension);
+                static HistoryType history_type(const unsigned & dimension);
+                static JumpType jump_type(const unsigned & dimension);
+                static LocalCovarianceType local_covariance_type(const unsigned & dimension);
+
+                struct Config
+                {
+                    private:
+                        Config();
+
+                    public:
+
+                        /*!
+                         * Choices on how to choose relative weight of
+                         * a history point
+                         */
+                        enum HistoryPointWeighting
+                        {
+                            posterior,             /// use posterior as weight
+                            log_posterior,         /// use log(posterior) as weight
+                            equal                  /// all points have same probability
+                        };
+
+                        /// Named constructor
+                        static Config Default();
+
+                        ///@name Construction options
+                        ///@{
+
+                        /// When chains have a common R-value less than this,
+                        /// they are considered to overlap sufficiently.
+                        VerifiedRange<double> clustering_maximum_r_value;
+
+                        /// Use strict definition of R or relaxed version.
+                        bool clustering_strict_r_value;
+
+                        /// Use same probability to draw from each cluster, at least initially.
+                        bool equal_weight_components;
+
+                        /*!
+                         * Join chains symmetrically such that each chain's history
+                         * (excluding the part from skip_initial) has equal contribution
+                         * to the covariance matrix
+                         */
+                        bool join_chains_symmetrically;
+
+                        /// The number of points selected from a single chain's history,
+                        /// useful for initializing population Monte Carlo
+                        unsigned history_points;
+
+                        /*!
+                         * If non-zero, compute covariance around each
+                         * history point locally, with the number of samples given.
+                         */
+                        unsigned history_points_local_covariance_size;
+
+                        /// Choose the points from the ones with highest posterior
+                        /// or on a fixed grid (e.g. every 500th point)
+                        bool history_points_ordered;
+
+                        /*!
+                         * Use log(posterior) to assign relative weight to history points
+                         * within each cluster. Else use posterior.
+                         */
+                        HistoryPointWeighting history_point_weighting;
+
+                        /// If a cluster's weight relative to the "heaviest" cluster
+                        /// falls below this threshold, the cluster is discarded.
+                        VerifiedRange<double> minimum_relative_cluster_weight;
+
+                        /// Compare chains by their R-values and merge them together.
+                        /// Else just put all chains from one partition together.
+                        bool perform_clustering;
+
+                        /*!
+                         *  In order to increase efficiency, the local proposal
+                         *  covariance scale can be divided.
+                         *  Default value: 1.0, i.e. don't rescale.
+                         *  @note Only meaningful if join_chains_symmetrically is true
+                         */
+                        VerifiedRange<double> rescale_local_covariance;
+
+                        /// Skip this percentage from beginning of a chain's history.
+                        VerifiedRange<double> skip_initial;
+
+                        ///@}
+
+                        ///@name Runtime behavior options
+                        ///@{
+
+                        /*!
+                         *  Combinining the component probabilities of this and the previous step,
+                         *  limit the effect of samples in the distant past by forming a
+                         *  weighted average of last component probability, \p_n and the frequency
+                         *  encountered in the last chunk, \f_n. In the (n+1)-th step,
+                         *
+                         *  \p_{n+1} = (1 - 1/n^{cooling_power}) \p_n +  1/n^{cooling_power} * f_n
+                         *
+                         *  cf. arxiv:0903.0837, Eq. (23)
+                         */
+                        double cooling_power;
+
+                        /// How often is a local jump proposed instead of a global one.
+                        VerifiedRange<double> local_jump_probability;
+
+                        /// If non-empty, all dimensions are masked and changes occur
+                        /// only in the dimensions specified by the indices.
+                        std::vector<unsigned> long_jump_indices;
+                        ///@}
+                };
+
+            private:
+                unsigned _adaptations;
+                Config _config;
+
+                /// Cumulative
+                std::vector<double> _component_cumulative;
+                std::vector<double> _component_probabilities;
+
+                /// History points selected from the prerun of a chain
+                std::vector<std::vector<double>> _history_points_cumulatives;
+                std::vector<std::vector<std::vector<double>>> _history_points_local_covariance;
+                std::vector<std::vector<double>> _history_points_probabilities;
+                std::vector<std::vector<MarkovChain::State>> _history_states;
+
+                /// Stores the jump vectors.
+                AdjacencyMatrix _jump_vectors;
+
+                /// the modes of each cluster found during the prerun.
+                std::vector<MarkovChain::State> _modes;
+
+                std::vector<std::shared_ptr<MarkovChain::ProposalFunction>> _prop;
+
+                void _sanity_check() const;
+
+                /*!
+                 * Choose a number of points from the history of the chains in each
+                 * cluster. The points are unique with probability 1 and represent
+                 * the points with highest posterior probability.
+                 *
+                 */
+                void _select_history_points(const std::vector<Cluster> & clusters);
+
+                /*!
+                 * Find the modes from the points and determine jumps as
+                 * the vector differences between the modes.
+                 */
+                void _select_jump_vectors(const std::vector<Cluster> & clusters);
+
+                typedef std::pair<unsigned, double> index_pair;
+
+                //todo replace by lambda
+                bool
+                static _cmp(const index_pair & a, const index_pair & b )
+                {
+                    return a.second > b.second;
+                }
+
+                /*!
+                 * Copy constructor for cloning only.
+                 */
+                GlobalLocal(const GlobalLocal &);
+
+            public:
+
+                /*!
+                 * Take the important parts of MarkovChains, and combine them into
+                 * a global local proposal density. It is assumed that in each vector,
+                 * the parts at a given index belong to the same chain.
+                 * If their histories only contain the last chunk, variability
+                 * of the algorithm is limited.
+                 *
+                 * @par chains Use pointers to the histories, such that unnecessary copying is avoided.
+                 * @par proposal The proposal density of each chain.
+                 * @par stats The statistics of each chain.
+                 * @par local_jump_probability In order to allow chains to explore more distant regions,
+                 *                             a value close to one is advised.
+                 * @par history_points the number of points selected from a single chain's history
+                 *
+                 */
+                // todo change to use shared_ptr
+                GlobalLocal(const std::vector<HistoryPtr> & chains,
+                            const std::vector<ProposalFunctionPtr> & proposals,
+                            const std::vector<MarkovChain::Stats> & stats,
+                            const Config & config, const unsigned & prerun_chains_per_cluster);
+
+                GlobalLocal(const std::vector<double> & component_probabilities, const unsigned & adaptations,
+                            const std::vector<MarkovChain::State> & jump_states, const std::vector<MarkovChain::State> & modes,
+                            const std::vector<std::vector<MarkovChain::State>> & history_states,
+                            const std::vector<std::vector<double>> & history_point_probabilities,
+                            const std::vector<std::vector<std::vector<double>>> & history_local_covariances,
+                            const std::vector<ProposalFunctionPtr> & proposals);
+
+                virtual ~GlobalLocal();
+
+                /// No adaptation currently foreseen.
+                virtual void adapt(const MarkovChain::State::Iterator & begin, const MarkovChain::State::Iterator & end, const double & efficiency, const double & efficiency_min, const double & efficiency_max);
+
+                /*!
+                 * The state with the highest posterior of all components
+                 * with parameter values and correct log posterior.
+                 */
+                virtual MarkovChain::State mode() const;
+
+                const std::vector<double> & component_probabilities() const
+                {
+                    return _component_probabilities;
+                }
+
+                const std::vector<std::vector<MarkovChain::State>> & history_states() const
+                {
+                    return _history_states;
+                }
+
+                const std::vector<std::vector<std::vector<double>>> & local_covariances() const
+                {
+                    return _history_points_local_covariance;
+                }
+
+                /// Reset config options
+                virtual void config(const Config & config);
+
+                virtual ProposalFunctionPtr clone() const;
+
+                virtual void dump_state(hdf5::File & file, const std::string & data_set_base_name) const;
+
+                virtual double evaluate(const MarkovChain::State & x, const MarkovChain::State & y) const;
+
+                virtual void propose(MarkovChain::State & x, const MarkovChain::State & y, gsl_rng * rng) const;
         };
 
         class Multivariate :

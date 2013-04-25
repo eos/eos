@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -879,7 +879,7 @@ namespace eos
                 Log::instance()->message("markov_chain_sampler.prerun_converged", ll_informational)
                     << "Pre-run has converged after " << pre_run_info.iterations << " iterations";
 
-                if (config.number_of_chains < 2)
+                if (config.number_of_chains < 2 || (config.global_local_config && config.prerun_chains_per_partition < 2))
                 {
                     Log::instance()->message("markov_chain_sampler.single_chain", ll_warning)
                         << "R-values are undefined for a single chain, so only efficiencies were adjusted";
@@ -954,7 +954,7 @@ namespace eos
                     Log::instance()->message("markov_chain_sampler.mainrun_invalid", ll_debug)
                             << "invalid/rejected proposals = " << 1.0 * c->statistics().iterations_invalid / c->statistics().iterations_rejected;
 
-                    if ((chunk + 1) * config.chunk_size < config.adapt_iterations)
+                    if (config.global_local_config && (chunk + 1) * config.chunk_size < config.adapt_iterations)
                     {
                         c->proposal_function()->adapt(c->history().states.end() - config.chunk_size, c->history().states.end(),
                                                       efficiency, config.min_efficiency, config.max_efficiency);
@@ -974,6 +974,133 @@ namespace eos
             }
             Log::instance()->message("markov_chain_sampler.mainrun_end", ll_informational)
                 << "Finished the main-run";
+        }
+
+        void resume(const hdf5::File & file)
+        {
+            Log::instance()->message("markov_chain_sampler.resume", ll_informational)
+                << "Copying settings from " << file.name();
+
+            // the goal is to start the main run immediately when run() is invoked
+            config.need_prerun = false;
+
+            // read in proposal
+            ProposalFunctionPtr prop;
+            try
+            {
+                prop = proposal_functions::Factory::make(const_cast<hdf5::File &>(file), "/global local",
+                                                             "GlobalLocal", analysis.parameter_descriptions().size());
+            }
+            catch (HDF5Error & e)
+            {
+                Log::instance()->message("markov_chain_sampler.setup_global_local", ll_error)
+                    << "Errors in reading from the HDF5 file can be due to a mismatch in the "
+                    << "analysis definition. Check that the same number of parameters is defined now "
+                    << "and when building the GlobalLocal proposal function";
+                throw e;
+            }
+            auto gl = dynamic_cast<proposal_functions::GlobalLocal *>(prop.get());
+            if ( ! gl)
+                throw InternalError("MarkovChainSampler::resume: couldn't read GlobalLocal from disk");
+
+            // reset options affecting the runtime behavior
+            // all the options affecting construction have no impact
+            gl->config(*config.global_local_config);
+
+            /* seed chains */
+
+            MarkovChain::State best_state = gl->mode();
+
+            Log::instance()->message("markov_chain_sampler.setup_global_local", ll_debug)
+                << "Found global mode at "  << best_state << " in component "
+                << best_state.hyper_parameter.component;
+
+            std::vector<MarkovChain> new_chains;
+            for (unsigned c = 0 ; c < config.number_of_chains ; ++c)
+            {
+                MarkovChain chain(analysis, config.seed + c, prop);
+                chain.set_point(best_state.point, best_state.hyper_parameter);
+                new_chains.push_back(chain);
+            }
+
+            chains = new_chains;
+
+            Log::instance()->message("markov_chain_sampler.resume", ll_debug)
+                << "chains: " << chains.size();
+
+            /* write parameter descriptions and create output file */
+
+            //todo Fix: don't just try once, keep increasing index until file not found
+            if (hdf5::File::Exists(config.output_file))
+            {
+                std::string old_file_name = config.output_file;
+                auto dot_pos = old_file_name.find_last_of('.');
+                config.output_file.insert(dot_pos, "_1");
+                Log::instance()->message("markov_chain_sampler.resume", ll_warning)
+                    << "File " << old_file_name << " already exists. Store data in new file "
+                    << config.output_file;
+            }
+
+            auto file_out = hdf5::File::Create(config.output_file);
+            unsigned i = 0;
+            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
+            {
+                c->dump_description(file_out, "/descriptions/main run/chain #" + stringify(i));
+            }
+
+            Log::instance()->message("markov_chain_sampler.resume", ll_informational)
+                << "Checking parameters, priors and constraints from input file vs the current analysis";
+
+            std::vector<std::string> constraints;
+            std::vector<ParameterDescription> descriptions;
+            std::string hash;
+            std::vector<std::string> priors;
+
+            MarkovChain::read_descriptions(const_cast<hdf5::File &>(file), "/descriptions", descriptions, priors, constraints, hash);
+
+            // compare all priors (includes name checking)
+            {
+                auto j = priors.cbegin();
+                std::string prior;
+                for (auto d = descriptions.cbegin(), d_end = descriptions.cend() ; d != d_end ; ++d, ++j)
+                {
+                    prior = analysis.log_prior(d->parameter.name())->as_string().c_str();
+                    if (*j != prior)
+                        throw InternalError("MarkovChainSampler::resume: mismatch of priors between " + *j + " and " + prior);
+                }
+            }
+            // compare all constraints
+            {
+                auto j = constraints.cbegin();
+                std::string constraint;
+                auto l = const_cast<Analysis &>(analysis).log_likelihood();
+                for (auto c = l.begin(), c_end = l.end() ; c != c_end ; ++c, ++j)
+                {
+                    constraint = c->name();
+                    if ( *j != constraint)
+                    {
+                        throw InternalError("MarkovChainSampler::resume: constraint mismatch:"
+                                            + *j + " vs " + constraint);
+                    }
+                    Log::instance()->message("MarkovChainSampler::resume", ll_debug)
+                        << "Comparing constraint " << constraint;
+                }
+            }
+            // compare hash
+            {
+                if (hash != EOS_GITHEAD)
+                    Log::instance()->message("MarkovChainSampler::resume", ll_warning)
+                        << "EOS version mismatch detected: " << hash << " vs " << EOS_GITHEAD;
+            }
+
+            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
+            {
+                // save history?
+                c->keep_history(true, config.store_observables_and_proposals);
+            }
+
+            // we are ready to go
+            main_run();
         }
 
         void run()
@@ -1009,6 +1136,65 @@ namespace eos
          */
         void setup_main_run()
         {
+            if (config.global_local_config)
+            {
+                // one common proposal function for all chains
+                std::vector<HistoryPtr> histories;
+                std::vector<ProposalFunctionPtr> proposals;
+                std::vector<MarkovChain::Stats> stats;
+
+                // read data from file, so resume will produce the same results
+                auto file = hdf5::File::Open(config.output_file);
+                unsigned i = 0;
+                for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
+                {
+                    std::string group_name = "/prerun/chain #" + stringify(i);
+                    HistoryPtr history(new MarkovChain::History());
+                    ProposalFunctionPtr prop;
+                    MarkovChain::Stats stat;
+                    std::string proposal_type;
+                    MarkovChain::read_data(file, group_name, *history, prop, proposal_type, stat);
+                    histories.push_back(history);
+                    proposals.push_back(prop);
+                    stats.push_back(stat);
+                }
+                Log::instance()->message("MCsampler::setup_global_local", ll_debug)
+                    << "Using skip_initial = " << config.global_local_config->skip_initial;
+
+                std::shared_ptr<proposal_functions::GlobalLocal> gl(
+                    new proposal_functions::GlobalLocal(histories, proposals, stats, *config.global_local_config, config.prerun_chains_per_partition));
+
+                Log::instance()->message("MCsampler::setup_global_local", ll_debug)
+                    << "first chain has " << histories.front()->states.size() << " elements"
+                    << ", and its first element is " <<
+                    stringify(histories.front()->states.front().point.begin(), histories.front()->states.front().point.end())
+                    << ", the max posterior is " << stats.front().mode_of_posterior << " at parameters "
+                    << stringify(stats.front().parameters_at_mode.begin(), stats.front().parameters_at_mode.end());
+
+                /*
+                 * Seed new chains with the global mode
+                 * of all chains found in the prerun
+                 */
+
+                MarkovChain::State state_at_mode = gl->mode();
+                Log::instance()->message("markov_chain_sampler.setup_global_local", ll_debug)
+                    << "Found global mode at "  << state_at_mode << " in component "
+                    << state_at_mode.hyper_parameter.component;
+
+                std::vector<MarkovChain> new_chains;
+
+                for (unsigned c = 0 ; c < config.number_of_chains ; ++c)
+                {
+                    MarkovChain chain(analysis, config.seed + c, gl);
+
+                     chain.set_point(state_at_mode.point, state_at_mode.hyper_parameter);
+
+                     new_chains.push_back(chain);
+                }
+
+                chains = new_chains;
+            }
+
             //  clear up
             for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
             {
@@ -1051,6 +1237,240 @@ namespace eos
     {
     }
 
+    std::vector<HistoryPtr>
+    MarkovChainSampler::build_global_local(const std::string & output_file_name,
+                                                const std::vector<std::shared_ptr<hdf5::File>> input_files,
+                                                const proposal_functions::GlobalLocal::Config & config,
+                                                AnalysisPtr analysis)
+    {
+        Log::instance()->message("MarkovChainSampler::build_global_local", ll_informational)
+            << "Building the global local proposal function from " << input_files.size()
+            << " input files, storing the result in " << output_file_name;
+
+        /* read in chains */
+
+        std::vector<HistoryPtr> histories_shared;
+        std::vector<ProposalFunctionPtr> proposals;
+        std::vector<std::string> proposal_types;
+        std::vector<MarkovChain::Stats> stats;
+        std::vector<std::vector<ParameterDescription>> descriptions;
+        std::vector<std::vector<std::string>> priors;
+        std::vector<std::vector<std::string>> constraints;
+        std::vector<std::string> hashes;
+
+        // loop over files
+        bool found_chain = false;
+        for (auto f = input_files.begin(), f_end = input_files.end() ; f != f_end ; ++f)
+        {
+            std::string group_name;
+            // loop over chains
+            unsigned c = 0;
+            while (true)
+            {
+                group_name = "/prerun/chain #" + stringify(c);
+                if ( ! (**f).group_exists(group_name))
+                    break;
+
+                found_chain = true;
+
+                HistoryPtr history(new MarkovChain::History());
+                ProposalFunctionPtr prop;
+                std::string proposal_type;
+                MarkovChain::Stats stat;
+                std::vector<ParameterDescription> descr;
+                std::vector<std::string> prior;
+                std::vector<std::string> constraint;
+                std::string hash;
+
+                // fill the objects
+                MarkovChain::read_data(**f, group_name, *history, prop, proposal_type, stat);
+                MarkovChain::read_descriptions(**f, "/descriptions/" + group_name, descr, prior, constraint, hash);
+
+                // store them
+                histories_shared.push_back(history);
+                proposals.push_back(prop);
+                proposal_types.push_back(proposal_type);
+                stats.push_back(stat);
+                descriptions.push_back(descr);
+                priors.push_back(prior);
+                constraints.push_back(constraint);
+                hashes.push_back(hash);
+
+                ++c;
+            }
+        }
+        if ( ! found_chain)
+        {
+            throw InternalError("build_global_local: Did not find any usable data in the files given");
+        }
+
+        /* find partitions: look for consecutive descriptions which match in all parameters */
+        std::vector<unsigned> partition_lengths;
+        {
+            // first chain is first partition. Index marks beginning of chains in same partition
+            std::vector<unsigned> partition_indices(1, 0);
+
+            // start to compare first with second
+            auto p = priors.cbegin() + 1;
+            auto c = constraints.cbegin() + 1;
+            for (auto d = descriptions.cbegin() + 1, d_end = descriptions.cend() ; d != d_end ; ++d, ++p, ++c)
+            {
+                bool found_new_partition = false;
+
+                // compare parameter descriptions
+                {
+                    // always compare with last partition found
+                    auto j = descriptions[partition_indices.back()].cbegin();
+                    for (auto i = d->cbegin(), i_end = d->cend() ; i != i_end ; ++i, ++j)
+                    {
+                        if (i->min != j->min || i->max != j->max)// ! (*i == *j))
+                        {
+                            Log::instance()->message("MarkovChainSampler::build_global_local", ll_debug)
+                                << "Partitions differ in " << i->parameter.name() << ", " << j->parameter.name()
+                                << "min = (" << i->min << ", " << j->min << ") "
+                                << "max = (" << i->max << ", " << j->max << ") "
+                                << "nus = (" << i->nuisance << ", " << j->nuisance << ") "
+                                << "dis  = (" << i->discrete << ", " << j->discrete << ")";
+                            found_new_partition = true;
+                            break;
+                        }
+                        if (i->parameter.name() != j->parameter.name() || i->nuisance != j->nuisance)
+                            throw InternalError("MarkovChainSampler::build_global_local: parameter mismatch:"
+                                                + i->parameter.name() + " vs " + j->parameter.name());
+                    }
+                }
+                // compare all priors
+                {
+                    auto j = priors[partition_indices.back()].cbegin();
+                    for (auto i = p->cbegin(), i_end = p->cend() ; i != i_end ; ++i, ++j)
+                    {
+                        if ( *i != *j)
+                        {
+                            throw InternalError("MarkovChainSampler::build_global_local: prior mismatch:"
+                                                + *i + " vs " + *j);
+                        }
+                    }
+                }
+                // compare all constraints
+                {
+                    auto j = constraints[partition_indices.back()].cbegin();
+                    for (auto i = c->cbegin(), i_end = c->cend() ; i != i_end ; ++i, ++j)
+                    {
+                        if ( *i != *j)
+                        {
+                            throw InternalError("MarkovChainSampler::build_global_local: constraint mismatch:"
+                                                + *i + " vs " + *j);
+                        }
+                    }
+                }
+                if (found_new_partition)
+                {
+                    unsigned index = std::distance(descriptions.cbegin(), d);
+                    partition_lengths.push_back(index - partition_indices.back());
+                    partition_indices.push_back(index);
+                }
+            }
+            Log::instance()->message("MarkovChainSampler::build_global_local", ll_informational)
+                << "The parameter descriptions, priors and constraints of the chains seem to match";
+
+            // now compare first partition against analysis
+            if (analysis)
+            {
+                if (descriptions.front().size() > analysis->parameter_descriptions().size())
+                    throw InternalError("MarkovChainSampler::build_global_local: More parameters in file ("
+                                        + stringify(descriptions.front().size())
+                                        + ") than in analysis (" + stringify(analysis->parameter_descriptions().size())
+                                        + ")");
+
+                unsigned i = 0;
+                auto d_part = descriptions.front().cbegin();
+                for (auto d = analysis->parameter_descriptions().cbegin() ; d != analysis->parameter_descriptions().cend() ; ++d, ++d_part, ++i)
+                {
+                    if (d_part == descriptions.front().cend())
+                        throw InternalError("MarkovChainSampler::build_global_local: parameter mismatch"
+                                            + std::string(" at position " + stringify(i))
+                                            + ": in analysis: " + d->parameter.name()
+                                            + " but no more parameters in file");
+
+                    if (d->parameter.name() != d_part->parameter.name())
+                    {
+                        throw InternalError("MarkovChainSampler::build_global_local: parameter mismatch"
+                                            + std::string(" at position " + stringify(i))
+                                            + ": in analysis: " + d->parameter.name()
+                                            + " vs in file: " + d_part->parameter.name());
+                    }
+
+                    if (d->min != d_part->min)
+                    {
+                        Log::instance()->message("MarkovChainSampler::build_global_local", ll_warning)
+                            << "Mismatch of minimum of '" << d->parameter.name() << "': "
+                            << d->min << " vs " << d_part->min;
+                    }
+                    if (d->max != d_part->max)
+                    {
+                        Log::instance()->message("MarkovChainSampler::build_global_local", ll_warning)
+                            << "Mismatch of maximum of '" << d->parameter.name() << "': "
+                            << d->max << " vs " << d_part->max;
+                    }
+                }
+            }
+
+            // add length of last partition
+            partition_lengths.push_back(descriptions.size() - partition_indices.back());
+
+            Log::instance()->message("MarkovChainSampler::build_global_local", ll_debug)
+                << "Found " << partition_indices.size() << " partitions: "
+                << stringify(partition_indices.cbegin(), partition_indices.cend())
+                << " with sizes: " << stringify(partition_lengths.cbegin(), partition_lengths.cend());
+
+            // check that all partitions had same number of chains
+            // in that case, unique will reduce the vector to effective length one
+            auto last = std::unique(partition_lengths.begin(), partition_lengths.end());
+            if (last != partition_lengths.begin() + 1)
+                Log::instance()->message("MarkovChainSampler::build_global_local", ll_warning)
+                << "Numbers of partitions in each file didn't match: "
+                << stringify(partition_indices.cbegin(), partition_indices.cend());
+        }
+
+        // check proposal types
+        {
+            auto last = std::unique(proposal_types.begin(), proposal_types.end());
+            if (last != proposal_types.begin() + 1)
+            {
+                Log::instance()->message("MarkovChainSampler::build_global_local", ll_warning)
+                    << "Local proposal do not match" << stringify_container(proposal_types);
+            }
+        }
+
+        /* check EOS versions */
+        {
+            auto last = std::unique(hashes.begin(), hashes.end());
+            if (last != hashes.begin() + 1)
+                Log::instance()->message("MarkovChainSampler::build_global_local", ll_warning)
+                    << "Hashes to not match: " << stringify(hashes.begin(), last);
+        }
+
+        Log::instance()->message("MCsampler::build_global_local", ll_debug)
+            << "Using skip_initial = " << config.skip_initial;
+
+        if (! output_file_name.empty())
+        {
+            // create output file
+            hdf5::File file = hdf5::File::Create(output_file_name);
+
+            // create global local proposal
+            proposal_functions::GlobalLocal gl(histories_shared, proposals, stats, config, partition_lengths.front());
+
+            // store proposal to disk
+            gl.dump_state(file, "/global local");
+
+            // assuming that all descriptions are equivalent, copy the one from the first chain in the first file
+            // to the output, so when resuming, the analysis can be checked again
+            input_files.front()->copy("/descriptions/prerun/chain #0", file, "/descriptions");
+        }
+        return histories_shared;
+    }
+
     void
     MarkovChainSampler::massive_mode_finding(const Analysis::OptimizationOptions & options)
     {
@@ -1061,6 +1481,12 @@ namespace eos
     MarkovChainSampler::pre_run_info()
     {
         return _imp->pre_run_info;
+    }
+
+    void
+    MarkovChainSampler::resume(const hdf5::File & file)
+    {
+        _imp->resume(file);
     }
 
     void
@@ -1131,5 +1557,19 @@ namespace eos
         config.chunk_size = 100;
 
         return config;
+    }
+
+    std::ostream & operator<<(std::ostream & stream, const MarkovChainSampler::Config & c)
+    {
+        stream << std::boolalpha
+               << "Prerun settings:" << std::endl
+               << "nchains = " << c.prerun_chains_per_partition
+               << ", seed = " << c.seed
+               << ", parallelize = " << c.parallelize
+               << ", prerun min iterations = " << c.prerun_iterations_min << std::endl
+               << ", prerun max iterations = " << c.prerun_iterations_max
+               << ", prerun update iterations = " << c.prerun_iterations_update
+               << ", skip initial = " << c.skip_initial;
+        return stream;
     }
 }

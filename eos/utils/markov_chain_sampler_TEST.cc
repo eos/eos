@@ -235,5 +235,250 @@ class MarkovChainSamplerTest :
                     }
                 }
             }
+
+            // check local/global proposal function
+            {
+                /* setup bimodal distribution */
+
+                Parameters p = Parameters::Defaults();
+                Kinematics k;
+                std::array<ObservablePtr, 2> obs;
+                obs[0] = ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)"));
+                obs[1] = ObservablePtr(new AbsoluteTestObservable(p, k, "mass::c"));
+
+                ObservableCache cache(p);
+
+                // multivariate gaussian with no correlation
+                std::array<double, 2> mean{{ +5, +5 }};
+                std::array<std::array<double, 2>, 2> covariance;
+                covariance[0][0] = 0.1 * 0.1;
+                covariance[1][1] = 0.05 * 0.05;
+                covariance[0][1] = covariance[1][0] = 0.0;
+
+                auto block = LogLikelihoodBlock::MultivariateGaussian<2>(cache, obs, mean, covariance);
+
+                LogLikelihood llh(p);
+                llh.add(Constraint("Correlated Gaussian for m_b and m_c", std::vector<ObservablePtr>(obs.begin(), obs.end()), { block }));
+
+                Analysis analysis(llh);
+
+                // an interesting parameter that affects the observable
+                analysis.add(LogPrior::Flat(p, "mass::b(MSbar)", ParameterRange{ -10, 10 }));
+
+                // the 2nd parameter
+                // NOTE: it is crucial for the accuracy of the covariance estimate that the range be large enough
+                //       to cover the gaussian peak out to many sigmas
+                analysis.add(LogPrior::Flat(p, "mass::c", ParameterRange{ -10, 10 }));
+
+
+                /* setup the sampler */
+                static const std::string file_name = EOS_BUILDDIR "/eos/utils/markov_chain_sampler_TEST-global-local.hdf5";
+                static const std::string file_name_resume = EOS_BUILDDIR "/eos/utils/markov_chain_sampler_TEST-global-local-resume.hdf5";
+                std::remove(file_name.c_str());
+
+                MarkovChainSampler::Config config = MarkovChainSampler::Config::Default();
+                config.number_of_chains = 2;
+                config.chunk_size = 10000;
+                config.chunks = 3;
+                config.seed = 784213135;
+                config.output_file = file_name;
+                config.scale_reduction = 10;
+                config.parallelize = true;
+                config.find_modes = true;
+                config.prerun_iterations_update = 650;
+                config.prerun_iterations_max = 2000;
+                config.prerun_iterations_min = 5000;
+                config.scale_reduction = 10;
+                config.skip_initial = 0.2;
+                config.store_prerun = true;
+
+                // more history points slow down the program significantly when likelihood is fast
+                auto gl_config = proposal_functions::GlobalLocal::Config::Default();
+                gl_config.join_chains_symmetrically = true;
+                gl_config.local_jump_probability = 0.95;
+                gl_config.perform_clustering = true;
+                gl_config.skip_initial = config.skip_initial;
+                config.global_local_config.reset(new proposal_functions::GlobalLocal::Config(gl_config));
+                {
+                    std::vector<std::tuple<std::string, double, double> > part;
+
+                    part.push_back(std::make_tuple(std::string("mass::c"), -5.5, -4.5));
+                    config.partitions.push_back(part);
+
+                    part.clear();
+                    part.push_back(std::make_tuple(std::string("mass::c"), +4.5, +5.5));
+                    config.partitions.push_back(part);
+
+                    MarkovChainSampler sampler(analysis, config);
+                    sampler.run();
+                }
+                /* open HDF5 file and run checks on data */
+                {
+                    // read file back in
+                    hdf5::File file = hdf5::File::Open(file_name, H5F_ACC_RDONLY);
+                    hdf5::Array<1, double> sample_type
+                    {
+                        "samples",
+                        { 2 + 1 },
+                    };
+                    auto data_set = file.open_data_set("/main run/chain #0/samples", sample_type);
+
+                    unsigned n = data_set.records();
+                    TEST_CHECK_EQUAL(n, config.chunks * config.chunk_size);
+
+                    /* analyze histogram for mass::b, should be that of a Gaussian */
+
+                    unsigned n_bins = 60;
+                    Histogram<1> hist_b = Histogram<1>::WithEqualBinning(4, 6, n_bins);
+
+                    double chi_squared = 0.0;
+
+                    bin_data_set(data_set, hist_b, 0, mean[0], std::sqrt(covariance[0][0]), chi_squared);
+
+                    // use sqrt(var) from Chi2 distribution as uncertainty
+                    TEST_CHECK_RELATIVE_ERROR((double)n, (double)chi_squared, std::sqrt(2.0 * n));
+
+                    std::vector<double> pdf_vec;
+
+                    for (auto b = hist_b.begin(), b_end = hist_b.end() ; b != b_end ; ++b)
+                    {
+                        pdf_vec.push_back(b->value);
+                    }
+
+                    auto cumulative_hist = estimate_cumulative_distribution(hist_b);
+
+                    std::vector<double> cumulative_vec;
+                    for (auto b = cumulative_hist.begin(), b_end = cumulative_hist.end() ; b != b_end ; ++b)
+                    {
+                        cumulative_vec.push_back(b->value);
+                    }
+
+                    TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.5 * n_bins) - 1], 0.5,  2.5e-2);
+
+                    // one sigma interval should be [4.9, 5.1], whole range covers n_sigmas
+                    double n_sigmas = (6.0 - 4.0) / 0.1;
+                    TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(11.0 / n_sigmas * n_bins) - 1] - cumulative_vec[unsigned(9.0 / n_sigmas * n_bins) - 1], 0.68,  2e-2);
+
+                    // two sigma interval should be [4.8, 5.2], less precise
+                    TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(12.0 / n_sigmas * n_bins) - 1] - cumulative_vec[unsigned(8.0 / n_sigmas * n_bins) - 1], 0.95,  3e-2);
+
+                    /* check mass::c, should be two Gaussian of same height */
+
+                    unsigned n_bins_c = 700;
+                    Histogram<1> hist_c = Histogram<1>::WithEqualBinning(-6, +6, n_bins_c);
+
+                    bin_data_set(data_set, hist_c, 1, mean[1], std::sqrt(covariance[1][1]), chi_squared);
+
+                    pdf_vec.clear();
+
+                    for (auto b = hist_c.begin(), b_end = hist_c.end() ; b != b_end ; ++b)
+                    {
+                        pdf_vec.push_back(b->value);
+                    }
+
+                    auto cumulative_hist_c = estimate_cumulative_distribution(hist_c);
+
+                    cumulative_vec.clear();
+
+                    for (auto b = cumulative_hist_c.begin(), b_end = cumulative_hist_c.end() ; b != b_end ; ++b)
+                    {
+                        cumulative_vec.push_back(b->value);
+                    }
+
+                    // same probability on either side of 0, both peaks equally strong
+                    TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.5 * n_bins_c) - 1], 0.5,  3e-2);
+
+                    // one sigma interval should be [4.95, 5.05] and [-5.05, -4.95], whole range covers 20 sigmas
+                    n_sigmas = (6.0 - (-6.0)) / 0.05;
+                    TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(21.0 / n_sigmas * n_bins_c) - 1] - cumulative_vec[unsigned(19.0 / n_sigmas * n_bins_c) - 1], 0.68 / 2.0,  5e-2);
+                    TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned((1 - (19.0 / n_sigmas)) * n_bins_c) - 1] - cumulative_vec[unsigned((1 - (21.0 / n_sigmas)) * n_bins_c) - 1], 0.68 / 2.0,  5e-2);
+
+                    /*  check pre run */
+
+                    data_set = file.open_data_set("/prerun/chain #0/samples", sample_type);
+                    TEST_CHECK(data_set.records() <=
+                               std::max(config.prerun_iterations_min, config.prerun_iterations_max) + config.prerun_iterations_update);
+                    TEST_CHECK(data_set.records() >= config.prerun_iterations_min);
+                }
+
+                // check proposal I/O in HDF5
+                {
+                    static const std::string file_name_build = EOS_BUILDDIR "/eos/utils/markov_chain_sampler_TEST-build-global-local.hdf5";
+
+                    // read preruns, and store global local to disk
+                    TEST_SECTION("build global local from disk",
+                    {
+                        proposal_functions::GlobalLocal::Config & gl_config = *config.global_local_config;
+                        gl_config.join_chains_symmetrically = true;
+
+                        std::vector<std::shared_ptr<hdf5::File>> input_files;
+                        auto input_file = std::make_shared<hdf5::File>(hdf5::File::Open(file_name, H5F_ACC_RDONLY));
+                        input_files.push_back(input_file);
+                        TEST_CHECK(input_files.front()->group_exists("/prerun/chain #0"));
+                        MarkovChainSampler::build_global_local(file_name_build, input_files, gl_config);
+                    });
+
+                    TEST_SECTION("read global local from disk and repeat main run",
+                    {
+                        hdf5::File file_build = hdf5::File::Open(file_name_build);
+
+                        // check that it compiles and runs
+                        proposal_functions::Factory::make(file_build, "/global local", "GlobalLocal", 2);
+
+                        config.output_file = file_name_resume;
+                        // avoid extending file name with every check just to avoid overwriting
+                        std::remove(file_name_resume.c_str());
+                        MarkovChainSampler sampler(analysis, config);
+                        sampler.resume(file_build);
+                    });
+                }
+
+                // do results agree, whether I resume or not?
+                {
+                    hdf5::File f = hdf5::File::Open(file_name);
+                    hdf5::File g = hdf5::File::Open(file_name_resume);
+
+                    //todo create factories with dimension argument to create all HDF5 output type => one definition!
+                    hdf5::Array<1, double> sample_type
+                    {
+                        "samples",
+                        { 2 + 1 },
+                    };
+                    auto data_set_f = f.open_data_set("/main run/chain #0/samples", sample_type);
+                    auto data_set_g = g.open_data_set("/main run/chain #0/samples", sample_type);
+
+                    std::vector<double> record_f(3);
+                    std::vector<double> record_g(3);
+
+                    data_set_f >> record_f;
+                    data_set_g >> record_g;
+
+                    TEST_CHECK_EQUAL(record_f, record_g);
+
+                    data_set_f.end();
+                    data_set_g.end();
+
+                    data_set_f >> record_f;
+                    data_set_g >> record_g;
+
+                    TEST_CHECK_EQUAL(record_f, record_g);
+
+                    data_set_f = f.open_data_set("/main run/chain #1/samples", sample_type);
+                    data_set_g = g.open_data_set("/main run/chain #1/samples", sample_type);
+
+                    data_set_f >> record_f;
+                    data_set_g >> record_g;
+
+                    TEST_CHECK_EQUAL(record_f, record_g);
+
+                    data_set_f.end();
+                    data_set_g.end();
+
+                    data_set_f >> record_f;
+                    data_set_g >> record_g;
+
+                    TEST_CHECK_EQUAL(record_f, record_g);
+                }
+            }
         }
 } markov_chain_sampler_test;
