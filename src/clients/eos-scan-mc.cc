@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2013 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -26,6 +26,7 @@
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/markov_chain_sampler.hh>
+#include <eos/utils/population_monte_carlo_sampler.hh>
 
 #include <cmath>
 #include <cstdlib>
@@ -90,7 +91,13 @@ class CommandLine :
         Analysis analysis;
 
         MarkovChainSampler::Config config;
+#if EOS_ENABLE_PMC
+        PopulationMonteCarloSampler::Config config_pmc;
+#endif
 
+        std::string global_local_output;
+        proposal_functions::GlobalLocal::Config config_gl;
+        bool use_global_local;
         std::vector<std::shared_ptr<hdf5::File>> prerun_inputs;
 
         std::vector<ParameterData> scan_parameters;
@@ -106,6 +113,13 @@ class CommandLine :
         std::shared_ptr<unsigned> partition_index;
 
         std::string resume_file;
+        std::string pmc_initialization_file;
+        std::string pmc_sample_file;
+        bool pmc_calculate_posterior;
+        unsigned pmc_calculate_posterior_min, pmc_calculate_posterior_max;
+        bool pmc_draw_samples;
+        bool pmc_final;
+        bool pmc_update;
 
         // use MINUIT
         bool massive_mode_finding;
@@ -117,14 +131,27 @@ class CommandLine :
         bool goodness_of_fit;
         std::vector<double> best_fit_point;
 
+        bool use_pmc;
+
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
             analysis(likelihood),
             config(MarkovChainSampler::Config::Quick()),
+#if EOS_ENABLE_PMC
+            config_pmc(PopulationMonteCarloSampler::Config::Default()),
+#endif
+            config_gl(proposal_functions::GlobalLocal::Config::Default()),
+            use_global_local(false),
+            pmc_calculate_posterior(false),
+            pmc_calculate_posterior_min(0),
+            pmc_calculate_posterior_max(0),
+            pmc_draw_samples(false),
+            pmc_final(false),
             massive_mode_finding(false),
             massive_maximum_iterations(2000),
-            optimize(false)
+            optimize(false),
+            use_pmc(false)
         {
             config.number_of_chains = 4;
             config.need_prerun = true;
@@ -255,6 +282,15 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--build-global-local" == argument)
+                {
+                    global_local_output = (*(++a));
+                    config.global_local_config.reset(new proposal_functions::GlobalLocal::Config(
+                                                         proposal_functions::GlobalLocal::Config::Default()));
+
+                    continue;
+                }
+
                 if ("--chains" == argument)
                 {
                     config.number_of_chains = destringify<unsigned>(*(++a));
@@ -264,6 +300,9 @@ class CommandLine :
                 if ("--chunk-size" == argument)
                 {
                     config.chunk_size = destringify<unsigned>(*(++a));
+#if EOS_ENABLE_PMC
+                    config_pmc.chunk_size = config.chunk_size;
+#endif
 
                     continue;
                 }
@@ -271,6 +310,9 @@ class CommandLine :
                 if ("--chunks" == argument)
                 {
                     config.chunks = destringify<unsigned>(*(++a));
+#if EOS_ENABLE_PMC
+                    config_pmc.chunks = config.chunks;
+#endif
 
                     continue;
                 }
@@ -354,6 +396,180 @@ class CommandLine :
                     }
 
                     global_options.set(name, value);
+
+                    continue;
+                }
+
+                if ("--global-local" == argument)
+                {
+                    use_global_local = destringify<unsigned>(*(++a));
+                    if (use_global_local)
+                        config.store_prerun = true;
+
+                    continue;
+                }
+
+                if ("--global-local-adapt-iterations" == argument)
+                {
+                    config.adapt_iterations = destringify<unsigned> (*(++a));
+
+                    continue;
+                }
+
+                if ("--global-local-covariance-window" == argument)
+                {
+                    config_gl.history_points_local_covariance_size = destringify<unsigned> (*(++a));
+#if EOS_ENABLE_PMC
+                    config_pmc.sliding_window = config_gl.history_points_local_covariance_size;
+#endif
+
+                    continue;
+                }
+
+                if ("--global-local-equal-weights" == argument)
+                {
+                    config_gl.equal_weight_components = destringify<unsigned> (*(++a));
+
+                    continue;
+                }
+
+                if ("--global-local-history-points" == argument)
+                {
+                    config_gl.history_points = destringify<unsigned> (*(++a));
+
+                    continue;
+                }
+
+                if ("--global-local-history-points-ordered" == argument)
+                {
+                    config_gl.history_points_ordered = destringify<unsigned> (*(++a));
+
+                    continue;
+                }
+
+                if ("--global-local-input" == argument)
+                {
+                    // parse all filename between { and }, separated by whitespace
+                    std::string lbrace(*(++a));
+                    if ("{" != lbrace)
+                    {
+                        --a;
+                        throw DoUsage("Need to specify prerun inputs like --global-local-input { file1 file2 } ");
+                        continue;
+                    }
+
+                    do
+                    {
+                        std::string word(*(++a));
+                        if ("}" == word)
+                            break;
+
+                        prerun_inputs.push_back(std::make_shared<hdf5::File>(hdf5::File::Open(word, H5F_ACC_RDONLY)));
+                    }
+                    while (true);
+
+                    continue;
+                }
+
+                if ("--global-local-jump-indices" == argument)
+                {
+                    // parse all filename between { and }, separated by whitespace
+                    std::string lbrace(*(++a));
+                    if ("{" != lbrace)
+                    {
+                        --a;
+                        throw DoUsage("Need to specify indices like --global-local-jump-indices { index0 index1 } ");
+                        continue;
+                    }
+
+                    do
+                    {
+                        std::string word(*(++a));
+                        if ("}" == word)
+                            break;
+
+                        config_gl.long_jump_indices.push_back(destringify<unsigned>(word));
+                    }
+                    while (true);
+
+                    continue;
+                }
+
+                if ("--global-local-jump-probability" == argument)
+                {
+                    config_gl.local_jump_probability = destringify<double> (*(++a));
+
+                    continue;
+                }
+
+                if ("--global-local-minimum-weight" == argument)
+                {
+                    config_gl.minimum_relative_cluster_weight = destringify<double> (*(++a));
+
+                    continue;
+                }
+
+                if ("--global-local-perform-clustering" == argument)
+                {
+                    config_gl.perform_clustering = true;
+
+                    config_gl.clustering_maximum_r_value = destringify<double> (*(++a));
+
+                    continue;
+                }
+
+                if ("--global-local-points" == argument)
+                {
+                    config_gl.history_points = destringify<unsigned> (*(++a));
+
+                    continue;
+                }
+
+                if ("--global-local-point-weighting" == argument)
+                {
+                    typedef proposal_functions::GlobalLocal::Config::HistoryPointWeighting hpw;
+
+                    std::string type(*(++a));
+                    if ("log" == type)
+                    {
+                        config_gl.history_point_weighting = hpw::log_posterior;
+                    }
+                    else if ("linear" == type)
+                    {
+                        config_gl.history_point_weighting = hpw::posterior;
+                    }
+                    else if("flat" == type)
+                    {
+                        config_gl.history_point_weighting = hpw::equal;
+                    }
+                    else
+                    {
+                        throw DoUsage("global-local-point-weighting: invalid type " + type);
+                    }
+
+                    continue;
+                }
+
+                if ("--global-local-rescale-local-covariance" == argument)
+                {
+                    config_gl.rescale_local_covariance = destringify<double> (*(++a));
+
+                    continue;
+                }
+
+                if ("--global-local-skip-initial" == argument)
+                {
+                    config_gl.skip_initial = destringify<double> (*(++a));
+#if EOS_ENABLE_PMC
+                    config_pmc.skip_initial = config_gl.skip_initial;
+#endif
+
+                    continue;
+                }
+
+                if ("--global-local-strict-clustering" == argument)
+                {
+                    config_gl.clustering_strict_r_value = destringify<unsigned> (*(++a));
 
                     continue;
                 }
@@ -458,6 +674,9 @@ class CommandLine :
                 {
                     std::string filename(*(++a));
                     config.output_file = filename;
+#if EOS_ENABLE_PMC
+                    config_pmc.output_file = filename;
+#endif
 
                     continue;
                 }
@@ -465,6 +684,9 @@ class CommandLine :
                 if ("--parallel" == argument)
                 {
                     config.parallelize = destringify<unsigned>(*(++a));
+#if EOS_ENABLE_PMC
+                    config_pmc.parallelize = config.parallelize;
+#endif
 
                     continue;
                 }
@@ -498,6 +720,184 @@ class CommandLine :
 
                     continue;
                 }
+
+                if ("--use-pmc" == argument)
+                {
+                    use_pmc = true;
+
+                    continue;
+                }
+
+#if EOS_ENABLE_PMC
+                if ("--pmc-adjust-sample-size" == argument)
+                {
+                    config_pmc.adjust_sample_size = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-block-decomposition" == argument)
+                {
+                    config_pmc.block_decomposition = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-crop-highest-weights" == argument)
+                {
+                    config_pmc.crop_highest_weights = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-dof" == argument)
+                {
+                    config_pmc.degrees_of_freedom = destringify<long>(*(++a));
+                    config_pmc.override_global_local_proposal = true;
+
+                    continue;
+                }
+
+                if ("--pmc-calculate-posterior" == argument)
+                {
+                    pmc_calculate_posterior = true;
+
+                    // read samples from this file
+                    pmc_sample_file = std::string(*(++a));
+                    pmc_calculate_posterior_min = destringify<unsigned>(*(++a));
+                    pmc_calculate_posterior_max = destringify<unsigned>(*(++a));
+
+                    // read components from this file
+                    pmc_initialization_file = pmc_sample_file;
+
+                    continue;
+                }
+
+                if ("--pmc-components-per-cluster" == argument)
+                {
+                    unsigned n_comp = destringify<unsigned>(*(++a));
+
+                    // with minuit initialization, total number of components depends on local modes found
+                    config_pmc.components_per_cluster = n_comp;
+
+                    continue;
+                }
+
+                if ("--pmc-draw-samples" == argument)
+                {
+                    // samples are to be stored in ordinary output file via config
+                    pmc_draw_samples = true;
+
+                    continue;
+                }
+
+                if ("--pmc-final" == argument)
+                {
+                    pmc_final = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-ignore-group" == argument)
+                {
+                    config_pmc.ignore_groups.push_back(destringify<unsigned>(*(++a)));
+
+                    continue;
+                }
+
+                if ("--pmc-initialize-from-file" == argument)
+                {
+                    pmc_initialization_file = std::string(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-hierarchical-clusters" == argument)
+                {
+                    config_pmc.super_clusters = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-minimum-overlap" == argument)
+                {
+                    config_pmc.minimum_overlap = destringify<double>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-patch-around-local-mode" == argument)
+                {
+                    config_pmc.patch_around_local_mode = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-group-by-r-value" == argument)
+                {
+                    config_pmc.group_by_r_value = destringify<double>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-r-value-no-nuisance" == argument)
+                {
+                    config_pmc.r_value_no_nuisance = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-single-cluster" == argument)
+                {
+                    config_pmc.single_cluster = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-starting-points" == argument)
+                {
+                    config_pmc.starting_points = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-final-chunksize" == argument)
+                {
+                    config_pmc.final_chunk_size = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-ignore-ess" == argument)
+                {
+                    config_pmc.ignore_eff_sample_size = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-relative-std-deviation-over-last-steps" == argument)
+                {
+                    config_pmc.maximum_relative_std_deviation = destringify<double>(*(++a));
+                    config_pmc.minimum_steps = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-std-dev-reduction" == argument)
+                {
+                    config_pmc.std_dev_reduction = destringify<double>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-update" == argument)
+                {
+                    pmc_update = true;
+                    pmc_initialization_file = std::string(*(++a));
+
+                    continue;
+                }
+#endif
 
                 if ("--prerun-chains-per-partition" == argument)
                 {
@@ -601,10 +1001,16 @@ class CommandLine :
                     if ("time" == value)
                     {
                         config.seed = ::time(0);
+#if EOS_ENABLE_PMC
+                        config_pmc.seed = ::time(0);
+#endif
                     }
                     else
                     {
                         config.seed = destringify<unsigned long>(value);
+#if EOS_ENABLE_PMC
+                        config_pmc.seed = destringify<unsigned long>(value);
+#endif
                     }
 
                     continue;
@@ -644,7 +1050,8 @@ int main(int argc, char * argv[])
         inst->parse(argc, argv);
 
         if (inst->inputs.empty() &&
-            inst->constraints.empty())
+            inst->constraints.empty() &&
+            inst->global_local_output.empty())
             throw DoUsage("No inputs, constraints nor build output specified");
 
         std::cout << std::scientific;
@@ -754,6 +1161,41 @@ int main(int argc, char * argv[])
             return EXIT_SUCCESS;
         }
 
+#if EOS_ENABLE_PMC
+        if (CommandLine::instance()->use_pmc)
+        {
+            std::shared_ptr<PopulationMonteCarloSampler> pop_sampler;
+            if (inst->pmc_initialization_file != "")
+                pop_sampler.reset(
+                    new PopulationMonteCarloSampler(inst->analysis, hdf5::File::Open(inst->pmc_initialization_file),
+                                                    inst->config_pmc, inst->pmc_update));
+            else
+                pop_sampler.reset(new PopulationMonteCarloSampler(inst->analysis, inst->config_pmc));
+
+            if (inst->pmc_final)
+            {
+                PopulationMonteCarloSampler::Status status =  pop_sampler->status();
+                status.converged = true;
+                pop_sampler->status(status);
+            }
+            if (inst->pmc_draw_samples)
+            {
+                pop_sampler->draw_samples();
+            }
+            else if (inst->pmc_calculate_posterior)
+            {
+                pop_sampler->calculate_weights(inst->pmc_sample_file,
+                    inst->pmc_calculate_posterior_min, inst->pmc_calculate_posterior_max);
+            }
+            else if (inst->pmc_update)
+                return EXIT_SUCCESS;
+            else
+                pop_sampler->run();
+
+            return EXIT_SUCCESS;
+        }
+#endif
+
         // remove unwanted partitions and select only one
         if (unsigned * i = inst->partition_index.get())
         {
@@ -766,6 +1208,17 @@ int main(int argc, char * argv[])
             c.partitions.push_back(temp.at(*i));
         }
 
+        if (! inst->global_local_output.empty())
+        {
+            MarkovChainSampler::build_global_local(inst->global_local_output, inst->prerun_inputs, inst->config_gl);
+            return EXIT_SUCCESS;
+        }
+
+        // create the sampler with correct options
+        if (inst->use_global_local)
+        {
+            inst->config.global_local_config.reset(new proposal_functions::GlobalLocal::Config(inst->config_gl));
+        }
         MarkovChainSampler sampler(inst->analysis, inst->config);
 
         if (inst->massive_mode_finding)
@@ -777,6 +1230,13 @@ int main(int argc, char * argv[])
             options.mcmc_pre_run = inst->config.need_prerun;
             options.strategy_level = 0;
             sampler.massive_mode_finding(options);
+            return EXIT_SUCCESS;
+        }
+
+        // extract scales and starting points from completed prerun
+        if (inst->resume_file != "")
+        {
+            sampler.resume(hdf5::File::Open(inst->resume_file));
             return EXIT_SUCCESS;
         }
 

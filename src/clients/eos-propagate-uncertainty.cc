@@ -27,6 +27,10 @@
 #include <eos/utils/stringify.hh>
 #include <eos/utils/verify.hh>
 
+#ifdef EOS_ENABLE_PMC
+#  include <eos/utils/population_monte_carlo_sampler.hh>
+#endif
+
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -71,11 +75,16 @@ class CommandLine :
 
         Options global_options;
 
+        std::string pmc_sample_file;
+        unsigned pmc_sample_min, pmc_sample_max;
+
         std::vector<LogPriorPtr> priors;
 
         CommandLine() :
             config(PriorSampler::Config::Default()),
-            parameters(Parameters::Defaults())
+            parameters(Parameters::Defaults()),
+            pmc_sample_min(0),
+            pmc_sample_max(0)
         {
         }
 
@@ -173,6 +182,18 @@ class CommandLine :
 
                     continue;
                 }
+
+#if EOS_ENABLE_PMC
+                if ("--pmc-input" == argument)
+                {
+                    // read samples from this file
+                    pmc_sample_file = std::string(*(++a));
+                    pmc_sample_min = destringify<unsigned>(*(++a));
+                    pmc_sample_max = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+#endif
 
                 if ("--seed" == argument)
                 {
@@ -304,8 +325,8 @@ int main(int argc, char * argv[])
         if (inst->inputs.empty())
             throw DoUsage("No inputs specified");
 
-        if (inst->priors.empty())
-            throw DoUsage("You must specify parameters to vary");
+        if (inst->priors.empty() and inst->pmc_sample_file.empty())
+            throw DoUsage("Either specify \n a) parameters to vary\n b) a PMC input file");
 
         std::cout << "Determining the uncertainty on the following observables:" << std::endl;
         for (auto o = inst->inputs.begin(), o_end = inst->inputs.end() ; o != o_end ; ++o)
@@ -318,6 +339,25 @@ int main(int argc, char * argv[])
 
         PriorSampler sampler(inst->unique_observables, inst->config);
 
+#if EOS_ENABLE_PMC
+        // read in parameter samples from the file and calculate observables for them
+        if ( ! inst->pmc_sample_file.empty() && inst->pmc_sample_min < inst->pmc_sample_max)
+        {
+            if ( ! inst->priors.empty())
+            {
+                Log::instance()->message("eos-propagate-uncertainty", ll_warning)
+                    << "Ignoring all " + inst->priors.size() << " priors. Using PMC samples instead";
+            }
+            auto f = hdf5::File::Open(inst->pmc_sample_file);
+            auto descriptions = Analysis::read_descriptions(f);
+            std::vector<std::vector<double>> samples;
+            samples.push_back(std::vector<double>(descriptions.size()));
+            PopulationMonteCarloSampler::read_samples(inst->pmc_sample_file, "/data", inst->pmc_sample_min, inst->pmc_sample_max, samples);
+            sampler.run(samples, descriptions);
+
+            return EXIT_SUCCESS;
+        }
+#endif
         // default: draw from priors
         {
             std::cout << "Varying the following parameters:" << std::endl;
@@ -343,6 +383,7 @@ int main(int argc, char * argv[])
         std::cout << "  [--fix PARAMETER VALUE]" << std::endl;
         std::cout << "  [--output FILENAME]" << std::endl;
         std::cout << "  [--parallel [0|1]]" << std::endl;
+        std::cout << "  [--pmc-input FILENAME MIN_INDEX MAX_INDEX]" << std::endl;
         std::cout << "  [--seed LONG_VALUE]" << std::endl;
         std::cout << "  [--store-parameters]" << std::endl;
         std::cout << std::endl;
@@ -351,6 +392,7 @@ int main(int argc, char * argv[])
         std::cout << "prior distributions and the observables are calculated and stored to disk." << std::endl;
         std::cout << "One thread is created for each chunk." << std::endl;
         std::cout << "Optionally, the drawn parameters are stored as well." << std::endl;
+        std::cout << "If an input file is specified, a slice of the samples is taken from there, and no new samples are drawn." << std::endl;
 
     }
     catch (Exception & e)

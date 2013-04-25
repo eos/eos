@@ -47,6 +47,24 @@ if test "x$with_minuit2" != x ; then
 	LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
 fi
 dnl }}}
+dnl {{{ enable PMC path if supplied via --with-pmc=
+AC_ARG_WITH([pmc],
+	[AS_HELP_STRING([--with-pmc], [used to find perform population montecarlo sampling])]
+	[],
+	[])
+if test "x$with_pmc" == xno ; then
+	AC_MSG_NOTICE(["Building EOS without PMC support"])
+fi
+if test "x$with_pmc" != xno && test "x$with_pmc" != x ; then
+	if ! test -d "$with_pmc" ; then
+		AC_MSG_FAILURE(["$with_pmc is not a directory"])
+	fi
+	CXXFLAGS="-I$with_pmc/include $CXXFLAGS"
+	LDFLAGS="-L$with_pmc/lib $LDFLAGS"
+	AC_DEFINE([EOS_ENABLE_PMC], 1, [Whether we use PMC])
+fi
+AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$with_pmc" != "xno"])
+dnl }}}
 
 dnl {{{ check for git HEAD
 if test -d "${GIT_DIR:-${ac_top_srcdir:-./}/.git}" ; then

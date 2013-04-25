@@ -75,6 +75,13 @@ libeosutils_la_SOURCES = \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 libeosutils_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lhdf5 -lhdf5_hl -lMinuit2
 
+if EOS_ENABLE_PMC
+libeosutils_la_SOURCES += \
+	population_monte_carlo_sampler.cc population_monte_carlo_sampler.hh
+libeosutils_la_LIBADD += -lpmc -ldl
+endif
+
+
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
 	polylog_TEST_trilog.bin \
@@ -183,6 +190,10 @@ LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	libeosutils.la \
 	$(top_builddir)/eos/libeos.la
+
+if EOS_ENABLE_PMC
+LDADD += -lpmc -ldl
+endif
 
 check_PROGRAMS = $(TESTS)
 
