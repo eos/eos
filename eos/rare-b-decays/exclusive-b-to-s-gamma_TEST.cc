@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2012 Danny van Dyk
+ * Copyright (c) 2011, 2012, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -81,10 +81,10 @@ class BToKstarGammaTest :
 
                 const double eps = 1e-4;
 
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +5.41479e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +5.43477e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               -3.97510e-2, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.c_kstar_gamma(),               +3.67502e-3, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +5.45306e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +5.47311e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               -3.94778e-2, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.c_kstar_gamma(),               +3.66320e-3, eps);
             }
 
             // Benchmark Point (CPV)
@@ -117,10 +117,10 @@ class BToKstarGammaTest :
 
                 const double eps = 1e-4;
 
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +5.64172e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +3.98902e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               +4.74441e-2, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.c_kstar_gamma(),               -4.14314e-1, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),             +5.65584e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_cp_averaged(), +4.00005e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.s_kstar_gamma(),               +4.72504e-2, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.c_kstar_gamma(),               -4.13944e-1, eps);
             }
         }
 } b_to_kstar_gamma_test;

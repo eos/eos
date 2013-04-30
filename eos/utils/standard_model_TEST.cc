@@ -23,8 +23,6 @@
 
 #include <cmath>
 
-#include <iostream> // <-- Remove!
-
 using namespace test;
 using namespace eos;
 
@@ -36,10 +34,17 @@ reference_parameters()
     result["QCD::mu_t"] = 170.0;
     result["QCD::mu_b"] = 4.2;
     result["QCD::mu_c"] = 1.2;
+    result["mass::t(pole)"] = 173.3;
     result["mass::b(MSbar)"] = 4.2;
+    result["mass::c"] = 1.27;
+    result["mass::s(2GeV)"] = 0.101;
     result["mass::W"] = 80.398;
     result["mass::Z"] = 91.1876;
-    result["mass::t(pole)"] = 173.3;
+    result["GSW::sin^2(theta)"] = 0.23116;
+    result["CKM::A"] = 0.812;
+    result["CKM::lambda"] = 0.22543;
+    result["CKM::rhobar"] = 0.144;
+    result["CKM::etabar"] = 0.342;
 
     return result;
 }
@@ -294,98 +299,6 @@ class CKMElementsTest :
                 TEST_CHECK_NEARLY_EQUAL(-1.131956683e-8, real(lambda_t + lambda_c + lambda_u), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,            imag(lambda_t + lambda_c + lambda_u), eps);
             }
-
-            // A raised
-            {
-                Parameters parameters = reference_parameters();
-                StandardModel model(parameters);
-
-                parameters["CKM::A"] = parameters["CKM::A"].max();
-
-                TEST_CHECK_NEARLY_EQUAL(+0.225428541, real(model.ckm_us()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(-0.041160228, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.000746979, imag(model.ckm_ts()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.001394070, real(model.ckm_ub()), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.003316490, imag(model.ckm_ub()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.041925143, real(model.ckm_cb()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.999114272, real(model.ckm_tb()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
-            }
-
-            // A lowered
-            {
-                Parameters parameters = reference_parameters();
-                StandardModel model(parameters);
-
-                parameters["CKM::A"] = parameters["CKM::A"].min();
-
-                TEST_CHECK_NEARLY_EQUAL(+0.225428679, real(model.ckm_us()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(-0.039164663, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.000710846, imag(model.ckm_ts()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.001326740, real(model.ckm_ub()), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.003155800, imag(model.ckm_ub()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.039892433, real(model.ckm_cb()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.999198111, real(model.ckm_tb()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
-            }
-
-            // lambda raised
-            {
-                Parameters parameters = reference_parameters();
-                StandardModel model(parameters);
-
-                parameters["CKM::lambda"] = parameters["CKM::lambda"].max();
-
-                TEST_CHECK_NEARLY_EQUAL(+0.226198552, real(model.ckm_us()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(-0.040783654, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.000745458, imag(model.ckm_ts()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.001386510, real(model.ckm_ub()), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.003298420, imag(model.ckm_ub()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.041546883, real(model.ckm_cb()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.999130143, real(model.ckm_tb()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
-            }
-
-            // lambda lowered
-            {
-                Parameters parameters = reference_parameters();
-                StandardModel model(parameters);
-
-                parameters["CKM::lambda"] = parameters["CKM::lambda"].min();
-
-                TEST_CHECK_NEARLY_EQUAL(+0.224658620, real(model.ckm_us()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_us()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(-0.040240544, real(model.ckm_ts()), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.000725122, imag(model.ckm_ts()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.001357970, real(model.ckm_ub()), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.003230360, imag(model.ckm_ub()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.040983100, real(model.ckm_cb()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_cb()), eps);
-
-                TEST_CHECK_NEARLY_EQUAL(+0.999153689, real(model.ckm_tb()), eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.000000000, imag(model.ckm_tb()), eps);
-            }
         }
 } ckm_elements_test;
 
@@ -478,7 +391,7 @@ class WilsonCoefficientsBToSTest :
                 StandardModel model(parameters);
 
                 parameters["mu"] = mu;
-                TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.2263282172, model.alpha_s(mu), eps);
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
                 TEST_CHECK_RELATIVE_ERROR(parameters["c1"],       real(wc.c1()),  eps);

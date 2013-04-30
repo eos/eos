@@ -217,6 +217,73 @@ Experimental Results
         arxiv:1304.6325 [hep-ex]
 
 
+Averages and Numerical Inputs
+-----------------------------
+
+    PDG2008 : Particle Data Group
+
+        Particle Physics Booklet (July 2008)
+
+        Extracted from the
+
+          Review of Particle Physics : Amsler, C. and others
+          Physics Letters B 667, 1 (2008)
+
+        http:/pdg.lbl.gov
+
+
+    PDG2010 : Particle Data Group
+
+        Particle Physics Booklet (July 2010)
+
+        Extracted from the
+
+          Review of Particle Physics : Nakamura, K. and others
+          Journal of Physics G 37 075021 (2010)
+
+        http://pdg.lbl.gov
+
+
+    PDGBOOK2010 : K. Nakamura et al. (Particle Data Group)
+
+         Review of Particle Physics (2010)
+
+         J. Phys. G 37, 075021 (2010)
+
+         http:/pdg.lbl.gov
+
+
+    PDG2012 : Particle Data Group
+
+        Particle Physics Booklet (July 2012)
+
+        Extracted from the
+
+          Review of Particle Physics : Beringer, J. and others
+          Phys. Rev. D 86 010001 (2012)
+
+        http://pdg.lbl.gov
+
+
+    LATAVG2011 : Lattice Averages Group - Laiho, J. and Lunhi, E. and Van de Water, R.S.
+
+        Lattice QCD inputs to the CKM unitarity triangle analysis
+
+        End of 2011 results taken from
+
+            http://www.latticeaverages.org/
+
+        Phys.Rev.D81:034503,2010
+
+
+    UTFIT2013 : UTfit collaboration
+
+        Standard model fit, pre-Moriond results 2013
+
+        http://www.utfit.org/UTfit/ResultsWinter2013PreMoriond
+
+
+
 Theoretical Inputs
 ------------------
 
@@ -344,7 +411,7 @@ Theoretical Inputs
 
     BFW2010 : Bharucha, A. and Feldmann, Th. and Wick, M.
 
-        Theoretical and Phenomenological Constraints on Form Factors and 
+        Theoretical and Phenomenological Constraints on Form Factors and
         Semi-Leptonic B-Meson Decays
 
         arxiv:1004.3249
@@ -555,39 +622,6 @@ Theoretical Inputs
         The three-loop relation between the MSbar and the pole quark masses
 
         arxiv:hep-ph/9912391
-
-
-    PDG2010 : Particle Data Group
-
-        Particle Physics Booklet (July 2010)
-
-        Extracted from the
-
-          Review of Particle Physics : Nakamura, K. and others
-          Journal of Physics G 37 075021 (2010)
-
-        http://pdg.lbl.gov
-
-
-    PDG2008 : Particle Data Group
-
-        Particle Physics Booklet (July 2008)
-
-        Extracted from the
-
-          Review of Particle Physics : Amsler, C. and others
-          Physics Letters B 667, 1 (2008)
-
-        http:/pdg.lbl.gov
-
-
-    PDGBOOK2010 : K. Nakamura et al. (Particle Data Group)
-
-         Review of Particle Physics (2010)
-
-         J. Phys. G 37, 075021 (2010)
-
-         http:/pdg.lbl.gov
 
 
     PS : Peskin, M. and Schroeder, D.

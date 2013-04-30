@@ -160,28 +160,28 @@ namespace eos
     Parameters::Defaults()
     {
         return Parameters(new Implementation<Parameters>({
-            Parameter::Template{"hbar",                                          +6.58211883e-25, +6.58211899e-25, +6.58211915e-25}, // GeV s, cf. [PDG2010]:  p. 4
+            Parameter::Template{"hbar",                                          +6.58211913e-25, +6.58211928e-25, +6.58211943e-25}, // GeV s, cf. [PDG2012]:  p. 4
 
             // Wilson coefficients C1 - C6 at mu = 4.2 GeV to NNLL accuary as calculated in the SM by EOS's StandardModel class.
             // For the calculations, cf. [BMU1999].
-            Parameter::Template{"c1",                                            -0.28768333,     -0.28768333,     -0.28768333    },
-            Parameter::Template{"c2",                                            +1.01013250,     +1.01013250,     +1.01013250    },
-            Parameter::Template{"c3",                                            -0.00600697,     -0.00600697,     -0.00600697    },
-            Parameter::Template{"c4",                                            -0.08597076,     -0.08597076,     -0.08597076    },
-            Parameter::Template{"c5",                                            +0.00041824,     +0.00041824,     +0.00041824    },
-            Parameter::Template{"c6",                                            +0.00112410,     +0.00112410,     +0.00112410    },
-            Parameter::Template{"Abs{c7}",                                       +0.0,            +0.33613067,     +1.0           },
+            Parameter::Template{"c1",                                            -0.29063621,     -0.29063621,     -0.29063621    },
+            Parameter::Template{"c2",                                            +1.01029623,     +1.01029623,     +1.01029623    },
+            Parameter::Template{"c3",                                            -0.00616220,     -0.00616220,     -0.00616220    },
+            Parameter::Template{"c4",                                            -0.08730376,     -0.08730376,     -0.08730376    },
+            Parameter::Template{"c5",                                            +0.00042854,     +0.00042854,     +0.00042854    },
+            Parameter::Template{"c6",                                            +0.00115807,     +0.00115807,     +0.00115807    },
+            Parameter::Template{"Abs{c7}",                                       +0.0,            +0.33726473,     +1.0           },
             Parameter::Template{"Arg{c7}",                                       +0.0,            +M_PI,           +2.0 * M_PI    },
-            Parameter::Template{"Re{c7}",                                        -1.0,            -0.33613067,     +1.0           },
+            Parameter::Template{"Re{c7}",                                        -1.0,            -0.33726473,     +1.0           },
             Parameter::Template{"Im{c7}",                                        -1.0,            +0.0,            +1.0           },
-            Parameter::Template{"c8",                                            -0.18205267,     -0.18205267,     -0.18205267    },
-            Parameter::Template{"Abs{c9}",                                       +0.0,            +4.27450580,    +15.0           },
+            Parameter::Template{"c8",                                            -0.18288898,     -0.18288898,     -0.18288898    },
+            Parameter::Template{"Abs{c9}",                                       +0.0,            +4.27342842,    +15.0           },
             Parameter::Template{"Arg{c9}",                                       +0.0,            +0.0,            +2.0 * M_PI    },
-            Parameter::Template{"Re{c9}",                                       -15.0,            +4.27450580,    +15.0           },
+            Parameter::Template{"Re{c9}",                                       -15.0,            +4.27342842,    +15.0           },
             Parameter::Template{"Im{c9}",                                       -15.0,            +0.0,           +15.0           },
-            Parameter::Template{"Abs{c10}",                                      +0.0,            +4.16020202,    +15.0           },
+            Parameter::Template{"Abs{c10}",                                      +0.0,            +4.16611761,    +15.0           },
             Parameter::Template{"Arg{c10}",                                      +0.0,            +M_PI,           +2.0 * M_PI    },
-            Parameter::Template{"Re{c10}",                                      -15.0,            -4.16020202,    +15.0           },
+            Parameter::Template{"Re{c10}",                                      -15.0,            -4.16611761,    +15.0           },
             Parameter::Template{"Im{c10}",                                      -15.0,            +0.0,           +15.0           },
             // Primed Wilson coefficients are negligible in the SM
             Parameter::Template{"Abs{c7'}",                                      +0.0,            +0.0,            +1.0           },
@@ -199,58 +199,59 @@ namespace eos
             // Factorization scale
             Parameter::Template{"mu",                                            +2.4,            +4.2,            +9.6           },
             // GSW Parameter
-            Parameter::Template{"GSW::sin^2(theta)",                             +0.23103,        +0.23116,        +0.23129       },
-            // Wolfenstein parameters of CKM, cf. [CKMfitter04] Table 2, p. 48 and ICHEP10 result s +/- 1 sigma
-            Parameter::Template{"CKM::A",                                        +0.785,          +0.812,          +0.825         },
-            Parameter::Template{"CKM::lambda",                                   +0.22466,        +0.22543,        +0.22620       },
-            Parameter::Template{"CKM::rhobar",                                   +0.119,          +0.144,          +0.169         },
-            Parameter::Template{"CKM::etabar",                                   +0.327,          +0.342,          +0.358         },
+            Parameter::Template{"GSW::sin^2(theta)",                             +0.23104,        +0.23116,        +0.23128       }, // cf. [PDG2012]:  p. 4
+            // Wolfenstein parameters of CKM, cf. [UTFIT2013]
+            Parameter::Template{"CKM::A",                                        +0.814,          +0.827,          +0.840         },
+            Parameter::Template{"CKM::lambda",                                   +0.22470,        +0.22535,        +0.22600       },
+            Parameter::Template{"CKM::rhobar",                                   +0.111,          +0.132,          +0.153         },
+            Parameter::Template{"CKM::etabar",                                   +0.336,          +0.350,          +0.364         },
             // QED inputs
             Parameter::Template{"QED::alpha_e(m_b)",                             +1.0/133.0,      +1.0/133.0,      +1.0/128.0     }, // alpha_e(m_b) .. alpha_e(m_W)
             // QCD inputs
-            Parameter::Template{"QCD::alpha_s(MZ)",                              +0.117620,       +0.117620,       +0.117620      },
+            Parameter::Template{"QCD::alpha_s(MZ)",                              +0.1191,         +0.1184,         +0.1177        }, // cf. [PDG2012], p. 1
             Parameter::Template{"QCD::mu_t",                                     +170.0,          +170.0,          +170.0         },
             Parameter::Template{"QCD::mu_b",                                     +4.2,            +4.2,            +4.2           },
             Parameter::Template{"QCD::mu_c",                                     +1.0,            +1.0,            +1.0           },
             Parameter::Template{"QCD::Lambda",                                   +0.5,            +0.5,            +0.5           },
             // G_Fermi
-            Parameter::Template{"G_Fermi",                                       +1.16636e-5,     +1.16637e-5,     +1.16638e-5    }, // cf. [PDG2010], p. 5
+            Parameter::Template{"G_Fermi",                                       +1.1663781e-5,   +1.1663787e-5,   +1.1663793e-5  }, // cf. [PDG2012], p. 5
 
             /* Masses in GeV */
             // Lepton masses
-            Parameter::Template{"mass::e",                                       +5.10999e-4,     +5.10999e-4,     +5.10999e-4    }, // cf. [PDG2010], p. 13
-            Parameter::Template{"mass::mu",                                      +1.05658e-1,     +1.05658e-1,     +1.05658e-1    }, // cf. [PDG2010], p. 13
-            Parameter::Template{"mass::tau",                                     +1.77666,        +1.77682,        +1.77698       }, // cf. [PDG2010], p. 14
+            Parameter::Template{"mass::e",                                       +5.10999e-4,     +5.10999e-4,     +5.10999e-4    }, // cf. [PDG2012], p. 13
+            Parameter::Template{"mass::mu",                                      +1.05658e-1,     +1.05658e-1,     +1.05658e-1    }, // cf. [PDG2012], p. 13
+            Parameter::Template{"mass::tau",                                     +1.77666,        +1.77682,        +1.77698       }, // cf. [PDG2012], p. 14
             // Quark masses
-            Parameter::Template{"mass::s(2GeV)",                                 +0.080,          +0.101,          +0.130         }, // cf. [PDG2010], p. 21
-            Parameter::Template{"mass::c",                                       +1.18,           +1.27,           +1.34          }, // cf. [PDG2010], p. 21
-            Parameter::Template{"mass::b(MSbar)",                                +4.13,           +4.19,           +4.37          }, // cf. [PDG2010], p. 21
-            Parameter::Template{"mass::t(pole)",                                 +172.0,          +173.3,          +174.6         }, // cf. [TEWWG2010], p. 21
+            Parameter::Template{"mass::s(2GeV)",                                 +0.090,          +0.095,          +0.010         }, // cf. [PDG2012], p. 21
+            Parameter::Template{"mass::c",                                       +1.250,          +1.275,          +1.300         }, // cf. [PDG2012], p. 21
+            Parameter::Template{"mass::b(MSbar)",                                +4.15,           +4.18,           +4.21          }, // cf. [PDG2012], p. 21
+            Parameter::Template{"mass::t(pole)",                                 +172.5,          +173.5,          +174.5         }, // cf. [PDG2012], p. 22
             // K meson masses
-            Parameter::Template{"mass::K0",                                      +0.497590,       +0.497614,       +0.497638      }, // cf. [PDG2010], p. 41
-            Parameter::Template{"mass::K^*0",                                    +0.89572,        +0.89594,        +0.89616       }, // cf. [PDG2010], p. 45
+            Parameter::Template{"mass::K0",                                      +0.497590,       +0.497614,       +0.497638      }, // cf. [PDG2012], p. 41
+            Parameter::Template{"mass::K^*0",                                    +0.89572,        +0.89594,        +0.89616       }, // cf. [PDG2012], p. 45
             // B meson masses
-            Parameter::Template{"mass::B_d",                                     +5.2792,         +5.2795,         +5.2798        }, // cf. [PDG2010], p. 82
-            Parameter::Template{"mass::B_u",                                     +5.27888,        +5.27917,        +5.27946       }, // cf. [PDG2010], p. 69
-            Parameter::Template{"mass::B_s",                                     +5.3657,         +5.3663,         +5.3669        }, // cf. [PDG2010], p. 103
+            Parameter::Template{"mass::B_d",                                     +5.27941,        +5.27958,        +5.27975       }, // cf. [PDG2012], p. 84
+            Parameter::Template{"mass::B_u",                                     +5.27908,        +5.27925,        +5.27942       }, // cf. [PDG2012], p. 70
+            Parameter::Template{"mass::B_s",                                     +5.36653,        +5.36677,        +5.36701       }, // cf. [PDG2012], p. 105
             // Gauge boson masses
-            Parameter::Template{"mass::W",                                       +80.376,         +80.399,         +80.422        }, // cf. [PDG2010], p. 8
-            Parameter::Template{"mass::Z",                                       +91.1855,        +91.1876,        +91.1897       }, // cf. [PDG2010], p. 9
+            Parameter::Template{"mass::W",                                       +80.370,         +80.385,         +80.400        }, // cf. [PDG2012], p. 8
+            Parameter::Template{"mass::Z",                                       +91.1855,        +91.1876,        +91.1897       }, // cf. [PDG2012], p. 9
 
             /* Decay constants */
-            Parameter::Template{"decay-constant::B_d",                           +0.200,          +0.212,          +0.224         }, // GeV, cf. [S2010], p. 3
-            Parameter::Template{"decay-constant::B_u",                           +0.200,          +0.212,          +0.224         }, // GeV, cf. [S2010], p. 3
-            Parameter::Template{"decay-constant::B_s",                           +0.244,          +0.256,          +0.268         }, // GeV, cf. [S2010], p. 3
-            Parameter::Template{"decay-constant::K_d",                           +0.1549,         +0.1561,         +0.1573        }, // GeV, cf. [PDGBOOK2010], p. 864, Eq. (7)
-            Parameter::Template{"decay-constant::K_u",                           +0.1549,         +0.1561,         +0.1573        }, // GeV, cf. [PDGBOOK2010], p. 864, Eq. (7)
+            Parameter::Template{"decay-constant::B_d",                           +0.1859,         +0.1906,         +0.1953        }, // GeV, cf. [LATAVG2011]
+            Parameter::Template{"decay-constant::B_u",                           +0.1859,         +0.1906,         +0.1953        }, // GeV, cf. [LATAVG2011]
+            Parameter::Template{"decay-constant::B_s",                           +0.2226,         +0.2276,         +0.2326        }, // GeV, cf. [LATAVG2011]
+            Parameter::Template{"decay-constant::K_d",                           +0.155,          +0.1561,         +0.1572        }, // GeV, cf. [LATAVG2011]
+            Parameter::Template{"decay-constant::K_u",                           +0.155,          +0.1561,         +0.1572        }, // GeV, cf. [LATAVG2011]
+
             /* b->s matching parameters */
             Parameter::Template{"b->s::mu_0c",                                   +80.0,           +80.0,           +80.0          },
             Parameter::Template{"b->s::mu_0t",                                   +120.0,          +120.0,          +120.0         },
 
             /* Mean life times */
-            Parameter::Template{"life_time::B_d",                                +1.516e-12,      +1.525e-12,      +1.534e-12     }, // cf. [PDG2010], p. 82
-            Parameter::Template{"life_time::B_u",                                +1.627e-12,      +1.638e-12,      +1.649e-12     }, // cf. [PDG2010], p. 69
-            Parameter::Template{"life_time::B_s",                                +1.446e-12,      +1.472e-12,      +1.496e-12     }, // cf. [PDG2010], p. 103
+            Parameter::Template{"life_time::B_d",                                +1.512e-12,      +1.519e-12,      +1.526e-12     }, // cf. [PDG2012], p. 84
+            Parameter::Template{"life_time::B_u",                                +1.633e-12,      +1.641e-12,      +1.649e-12     }, // cf. [PDG2012], p. 70
+            Parameter::Template{"life_time::B_s",                                +1.482e-12,      +1.497e-12,      +1.512e-12     }, // cf. [PDG2012], p. 105
 
             /* Decay width differences in neutral meson systems */
             Parameter::Template{"life_time::Delta_B_d",                          +0.0,            +0.0,            +0.0           }, // smaller than 1eV, i.e. zero for all intents and purposes, cf. [PDG2012]
@@ -322,7 +323,7 @@ namespace eos
             Parameter::Template{"B->K^*ll::A_par^R_uncertainty@LargeRecoil",     +0.95,           +1.0,            +1.05          },
             Parameter::Template{"B->K^*ll::A_perp^L_uncertainty@LargeRecoil",    +0.95,           +1.0,            +1.05          },
             Parameter::Template{"B->K^*ll::A_perp^R_uncertainty@LargeRecoil",    +0.95,           +1.0,            +1.05          },
-            // B->Pll uncertainties at subleasing order at Large Recoil
+            // B->Pll uncertainties at subleading order at Large Recoil
             Parameter::Template{"B->Pll::Lambda_pseudo@LargeRecoil",             -0.5,            +0.0,            +0.5           },
             Parameter::Template{"B->Pll::sl_phase_pseudo@LargeRecoil",           -M_PI/2.0,       +0.0,            +M_PI/2.0      },
             // B->Pll uncertainties at subleading order at Low Recoil
@@ -347,11 +348,14 @@ namespace eos
             Parameter::Template{"B->B::rho_LS^3@1GeV",                           -0.30,           -0.15,           -0.00          }, // cf. [BBMU2003], Eq. (20), p. 9
             // B->X_s gamma SM theory uncertainty
             Parameter::Template{"B->X_sgamma::uncertainty",                      -1.0,            +0.0,            +1.0           },
+
+            // todo all exp::* could be in constraint.cc as well
             // Experimental Input
-            Parameter::Template{"exp::BR(B->X_clnu)",                            +0.1042,         +0.1057,         +0.1072        }, // cf. [PDG2008], p. 82
+            Parameter::Template{"exp::BR(B->X_clnu)",                            +0.1005,         +0.1033,         +0.1061        }, // cf. [PDG2012], p. 88
+            // todo which numbers to take?
             Parameter::Template{"exp::C(B->X_clnu, B->X_ulnu)",                  +0.57,           +0.58,           +0.59          },
             Parameter::Template{"exp::CKM(B->X_sll, B->X_clnu)",                 +0.975218,       +0.98549,        +0.995277      },
-            // Parametrise unknown admixture of l=e, l=mu in B->X_sll
+            // Parameterize unknown admixture of l=e, l=mu in B->X_sll
             Parameter::Template{"exp::Admixture-BR(B->X_sll)",                   +0.95,            +1.0,            +1.05         }, // BR varies by up to +/-5% between l=mu and l=e
         }));
     }

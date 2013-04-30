@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -75,8 +75,8 @@ class BToXsDileptonLargeRecoilTest :
 
                 const double eps = 1e-11;
 
-                TEST_CHECK_NEARLY_EQUAL(1.69370e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.74138e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.64435e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.69086e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
             }
         }
 } b_to_x_s_dilepton_large_recoil_test;
@@ -107,7 +107,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
             abs_c10 = values[4];
             arg_c10 = values[5];
 
-            static const double eps = 5e-10;
+            static const double eps = 1e-9;
             WilsonPolynomialEvaluator evaluator;
             TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
         }

@@ -102,8 +102,8 @@ class BToKstarGammaTest :
 
                     BToDilepton d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +3.83903e-09, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +4.15721e-09, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +3.03452e-09, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +3.28604e-09, eps);
                 }
 
                 // B_s -> e^+ e^-
@@ -115,8 +115,8 @@ class BToKstarGammaTest :
 
                     BToDilepton d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +8.98650e-14, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +9.73138e-14, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +7.10333e-14, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +7.69211e-14, eps);
                 }
             }
         }

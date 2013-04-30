@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -103,16 +103,16 @@ class WilsonCoefficientsBToSTest :
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.28768333, real(wc.c1()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.01013250, real(wc.c2()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.00600697, real(wc.c3()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.08597076, real(wc.c4()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00041824, real(wc.c5()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00112410, real(wc.c6()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.33613067, real(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.18205267, real(wc.c8()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+4.27450580, real(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-4.16020202, real(wc.c10()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.29063621, real(wc.c1()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.01029623, real(wc.c2()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.00616220, real(wc.c3()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.08730376, real(wc.c4()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00042854, real(wc.c5()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00115807, real(wc.c6()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.33726473, real(wc.c7()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.18288898, real(wc.c8()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+4.27342842, real(wc.c9()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-4.16611761, real(wc.c10()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c2()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c3()),  eps);
@@ -149,16 +149,16 @@ class WilsonCoefficientsBToSTest :
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.28768333, real(wc.c1()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.01013250, real(wc.c2()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.00600697, real(wc.c3()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.08597076, real(wc.c4()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00041824, real(wc.c5()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00112410, real(wc.c6()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.33613067, real(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.18205267, real(wc.c8()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+4.27450580, real(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-4.16020202, real(wc.c10()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.29063621, real(wc.c1()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.01029623, real(wc.c2()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.00616220, real(wc.c3()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.08730376, real(wc.c4()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00042854, real(wc.c5()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00115807, real(wc.c6()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.33726473, real(wc.c7()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.18288898, real(wc.c8()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+4.27342842, real(wc.c9()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-4.16611761, real(wc.c10()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c2()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c3()),  eps);
@@ -201,16 +201,16 @@ class WilsonCoefficientsBToSTest :
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.28768333, real(wc.c1()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.01013250, real(wc.c2()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.00600697, real(wc.c3()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.08597076, real(wc.c4()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00041824, real(wc.c5()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00112410, real(wc.c6()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.33613067, real(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.18205267, real(wc.c8()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+4.27450580, real(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-4.16020202, real(wc.c10()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.29063621, real(wc.c1()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.01029623, real(wc.c2()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.00616220, real(wc.c3()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.08730376, real(wc.c4()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00042854, real(wc.c5()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00115807, real(wc.c6()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.33726473, real(wc.c7()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.18288898, real(wc.c8()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+4.27342842, real(wc.c9()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-4.16611761, real(wc.c10()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c2()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c3()),  eps);
@@ -260,16 +260,16 @@ class WilsonCoefficientsBToSTest :
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.28768333, real(wc.c1()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+1.01013250, real(wc.c2()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.00600697, real(wc.c3()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.08597076, real(wc.c4()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00041824, real(wc.c5()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+0.00112410, real(wc.c6()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.33613067, real(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.18205267, real(wc.c8()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(+4.27450580, real(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-4.16020202, real(wc.c10()), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.29063621, real(wc.c1()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.01029623, real(wc.c2()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.00616220, real(wc.c3()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.08730376, real(wc.c4()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00042854, real(wc.c5()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.00115807, real(wc.c6()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.33726473, real(wc.c7()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.18288898, real(wc.c8()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+4.27342842, real(wc.c9()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-4.16611761, real(wc.c10()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c2()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c3()),  eps);
