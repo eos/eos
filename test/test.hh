@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -166,6 +166,21 @@ namespace test
                 "Caught no exception in " #expression " when expecting '" #exception "'"); \
     } \
     while (false)
-}
 
+#define TEST_CHECK_DIAGNOSTICS(diagnostics, reference) \
+    do \
+    { \
+        if (diagnostics.size() != reference.size()) \
+            throw TestCaseFailedException(__LINE__, __FILE__, "Number of diagnostics and reference entries differ!"); \
+        auto i = diagnostics.begin(), i_end = diagnostics.end(); \
+        auto j = reference.begin(); \
+        for ( ; i != i_end ; ++i, ++j) \
+        { \
+            if (std::abs(j->first - i->value) > j->second) \
+                throw TestCaseFailedException(__LINE__, __FILE__, "Diagnostic error: " + i->description + "\n\tevaluates to " + stringify(i->value, 7u) + "\n\tdelta to reference value " + stringify(j->first, 7u) + " is " + stringify(j->first - i->value, 7u)); \
+        } \
+    } \
+    while (false)
+
+}
 #endif

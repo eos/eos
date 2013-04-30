@@ -24,6 +24,7 @@ libeosutils_la_SOURCES = \
 	concrete_observable.hh \
 	condition_variable.cc condition_variable.hh \
 	destringify.hh \
+	diagnostics.cc diagnostics.hh \
 	equation_solver.cc equation_solver.hh \
 	exception.cc exception.hh \
 	hdf5.cc hdf5.hh hdf5-fwd.hh \
