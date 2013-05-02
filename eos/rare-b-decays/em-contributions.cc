@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -41,9 +41,9 @@ namespace eos
                 )
             - 1.0 / 9.0 * li2
             + 4.0 * power_of<2>(M_PI) / 27.0
-            - (121.0 - 27.0 * s_hat - 30.0 * s_hat2) / (72.0 * (1.0 - s_hat) * (1.0 + 2.0 * s_hat))
+            - (37.0 - 3.0 * s_hat - 6.0 * s_hat2) / (72.0 * (1.0 - s_hat) * (1.0 + 2.0 * s_hat))
             - (41.0 + 76.0 * s_hat) / (36.0 * (1.0 + 2.0 * s_hat)) * ln1
-            + (14.0 * s_hat3 - 17.0 * s_hat2 - 10.0 * s_hat - 3.0) / (18.0 * power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat)) * ln
+            + (14.0 * s_hat3 - 17.0 * s_hat2 - 10.0 * s_hat + 6.0) / (18.0 * power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat)) * ln
             + 17.0 / 18.0 * ln1 * ln
             - (1.0 - 6.0 * s_hat2 + 4.0 * s_hat3) / (2.0 * power_of<2>(1.0 - s_hat) * (1.0 + 2.0 * s_hat)) * ln * ln;
     }

@@ -75,8 +75,20 @@ class BToXsDileptonLargeRecoilTest :
 
                 const double eps = 1e-11;
 
-                TEST_CHECK_NEARLY_EQUAL(1.64435e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.69086e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
+                {
+                    Diagnostics diagnostics = d_mu.diagnostics();
+                    static const std::vector<std::pair<double, double>> reference
+                    {
+                        /* phi_ll */
+                        std::make_pair(+1.01995e-05, 1e-9), // phi_ll(s = 1.0GeV^2)
+                        std::make_pair(+6.91719e-06, 1e-9), // phi_ll(s = 6.0GeV^2)
+                    };
+
+                    TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
+                }
+
+                TEST_CHECK_NEARLY_EQUAL(1.41769e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.47460e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
             }
         }
 } b_to_x_s_dilepton_large_recoil_test;
@@ -107,7 +119,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
             abs_c10 = values[4];
             arg_c10 = values[5];
 
-            static const double eps = 1e-9;
+            static const double eps = 5e-8;
             WilsonPolynomialEvaluator evaluator;
             TEST_CHECK_NEARLY_EQUAL(o->evaluate(), p.accept_returning<double>(evaluator), eps);
         }

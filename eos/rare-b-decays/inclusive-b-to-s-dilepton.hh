@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,7 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_INCLUSIVE_B_TO_S_DILEPTON_HH 1
 
 #include <eos/rare-b-decays/decays.hh>
+#include <eos/utils/diagnostics.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
@@ -52,6 +53,9 @@ namespace eos
 
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+
+            // Diagnostic Values
+            Diagnostics diagnostics() const;
     };
 }
 

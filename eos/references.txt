@@ -618,6 +618,15 @@ Theoretical Inputs
         arxiv:hep-ph/9603237
 
 
+    LT2007 : Ligeti, Z. and Tackmann, F.J.
+
+        Precise predictions for B -> X_s l^+ l^- in the large q^2 region.
+
+        Phys. Lett. B653 (2007) 404-410
+
+        arxiv:0707.1694 [hep-ph]
+
+
     MvR1999 : Melnikov, K. and van Ritbergen, T.
 
         The three-loop relation between the MSbar and the pole quark masses

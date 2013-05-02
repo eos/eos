@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -50,7 +50,7 @@ class EMContributionsTest :
             TEST_CHECK_NEARLY_EQUAL(+3.26257,   imag(EMContributions::omegaem_29(s_hat, log_m_l_hat, mu)), eps);
             TEST_CHECK_NEARLY_EQUAL(-3.77437,   EMContributions::omegaem_77(s_hat, log_m_l_hat), eps);
             TEST_CHECK_NEARLY_EQUAL(+0.0518519, EMContributions::omegaem_79(s_hat, log_m_l_hat), eps);
-            TEST_CHECK_NEARLY_EQUAL(+2.04104,   EMContributions::omegaem_99(s_hat, log_m_l_hat), eps);
+            TEST_CHECK_NEARLY_EQUAL(+2.11315,   EMContributions::omegaem_99(s_hat, log_m_l_hat), eps);
             TEST_CHECK_NEARLY_EQUAL(+2.02214,   EMContributions::omegaem_1010(s_hat, log_m_l_hat), eps);
         }
 } em_contributions_test;
