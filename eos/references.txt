@@ -13,24 +13,6 @@ Experimental Results
         arxiv:hep-ex/9912057
 
 
-    Belle:2004 : Nakao, M. et al. [Belle Collaboration]
-
-        Measurement of the B ---> K* gamma branching fractions and asymmetries
-
-        Phys. Rev. D69, 112001 (2004)
-
-        arXiv:hep-ex/0402042
-
-
-    Belle:2006 : Ushiroda, Y. et al. [Belle Collaboration]
-
-        Time-Dependent CP Asymmetries in B0 ---> K0(s) pi0 gamma transitions
-
-        Phys. Rev. D74, 111104 (2006)
-
-        arxiv:hep-ex/0608017
-
-
     BaBar:2008 : Aubert, B. et al. [BABAR Collaboration]
 
         Measurement of Time-Dependent CP Asymmetry in B^0 ---> K^0_S pi^0 gamma Decays
@@ -74,6 +56,32 @@ Experimental Results
         and the direct CP asymmetry in B -> X_s+d gamma decays
 
         arxiv:1207.5772
+
+
+    Belle:2004 : Nakao, M. et al. [Belle Collaboration]
+
+        Measurement of the B ---> K* gamma branching fractions and asymmetries
+
+        Phys. Rev. D69, 112001 (2004)
+
+        arXiv:hep-ex/0402042
+
+
+    Belle:2006 : Ushiroda, Y. et al. [Belle Collaboration]
+
+        Time-Dependent CP Asymmetries in B0 ---> K0(s) pi0 gamma transitions
+
+        Phys. Rev. D74, 111104 (2006)
+
+        arxiv:hep-ex/0608017
+
+
+    Belle:2008A : Schwanda, C. et al. [Belle Collaboration]
+
+        Measurement of the Moments of the Photon Energy Spectrum in B ---> X_s gamma
+        Decays and Determination of |V_cb| and m_b at Belle
+
+        Phys. Rev. D78, 032016 (2008)
 
 
     Belle:2009 : Wei, J.T. et al. [BELLE Collaboration]

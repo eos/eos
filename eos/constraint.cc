@@ -333,6 +333,40 @@ namespace eos
                 {{ 0.05,  1 }},  // http://www.slac.stanford.edu/xorg/hfag/triangle/moriond2011/index.shtml#bsgamma to calculate covariance matrix.
             }}
         };
+
+        /*
+         * Belle
+         *
+         * Data taken from [Belle:2008A]
+         */
+        static const GaussianConstraintTemplate B_to_Xs_gamma_E_1_1dot8_Belle_2008A
+        {
+            "B->X_sgamma::E_1(E_min)@NLO",
+            Kinematics{ { "E_min", 1.8 } },
+            Options{ },
+            2.292, 0.027, 0.027, 0.033, 0.033
+        };
+        static const GaussianConstraintTemplate B_to_Xs_gamma_E_2_1dot8_Belle_2008A
+        {
+            "B->X_sgamma::E_2(E_min)@NLO",
+            Kinematics{ { "E_min", 1.8 } },
+            Options{ },
+            0.0305, 0.079, 0.079, 0.099, 0.099
+        };
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Xs_gamma_E_1_and_E_2_1dot8_Belle_2008A
+        {
+            {{ "B->X_sgamma::E_1(E_min)@NLO", "B->X_sgamma::E_2(E_min)@NLO" }},
+            {{ Kinematics{ { "E_min", 1.8 } }, Kinematics{ { "E_min", 1.8 } } }},
+            {{ Options{ }, Options{ } }},
+            {{  2.292,  0.0305 }},
+            {{  0.027,  0.0079 }},
+            {{  0.027,  0.0079 }},
+            {{  0.033,  0.0099 }},
+            {{
+                {{ +1.00,  -0.46 }},  // Use correlation of the two results from
+                {{ -0.46,  +1.00 }},  // as given in Table VII in [Belle:2008]
+            }}
+        };
         ///@}
 
         ///@name 2009 Data
@@ -1850,6 +1884,10 @@ namespace eos
             { "B^0->K^*0gamma::S_K@BaBar-2008", make_factory(templates::Bzero_to_Kstarzero_gamma_SKstargamma_BaBar_2008) },
             { "B^0->K^*0gamma::C_K@BaBar-2008", make_factory(templates::Bzero_to_Kstarzero_gamma_CKstargamma_BaBar_2008) },
             { "B^0->K^*0gamma::S_K+C_K@BaBar-2008", make_factory(templates::Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_BaBar_2008) },
+            // Belle
+            { "B->X_sgamma::E_1[1.8]@Belle-2008", make_factory(templates::B_to_Xs_gamma_E_1_1dot8_Belle_2008A) },
+            { "B->X_sgamma::E_2[1.8]@Belle-2008", make_factory(templates::B_to_Xs_gamma_E_2_1dot8_Belle_2008A) },
+            { "B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle-2008", make_factory(templates::B_to_Xs_gamma_E_1_and_E_2_1dot8_Belle_2008A) },
             /* 2009 */
             // BaBar
             { "B^0->K^*0gamma::BR@BaBar-2009", make_factory(templates::Bzero_to_Kstarzero_gamma_BR_BaBar_2009) },

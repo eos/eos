@@ -69,6 +69,11 @@ class ConstraintTest :
                     "B^0->K^*0gamma::S_K@BaBar-2008",
                     "B^0->K^*0gamma::C_K@BaBar-2008",
 
+                    // Belle
+                    "B->X_sgamma::E_1[1.8]@Belle-2008",
+                    "B->X_sgamma::E_2[1.8]@Belle-2008",
+                    "B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle-2008",
+
 
                     /* 2009 */
 
