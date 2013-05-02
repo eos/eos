@@ -1610,6 +1610,31 @@ namespace eos
             2.3625776605e-09, 2.2682156277, 1.7296007586
         };
 
+        // Data taken from [LHCb:2012E]
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_CP_1_to_6_LHCb_2012E
+        {
+            "B->K^*ll::A_CP@LargeRecoil",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.058, +0.064, -0.064, +0.009, -0.009
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_CP_14dot18_to_16_LHCb_2012E
+        {
+            "B->K^*ll::A_CP@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.201, +0.104, -0.104, +0.009, -0.009
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_CP_16_to_20_LHCb_2012E
+        {
+            "B->K^*ll::A_CP@LowRecoil",
+            // [LHCb:2012E] gives unphysical upper kinematic range of 20.00GeV^2.
+            // Reducing this to 19.81GeV^2.
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.81 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.089, +0.100, -0.100, +0.012, -0.012
+        };
+
         /*
          * PDG
          *
@@ -2200,6 +2225,9 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_1_to_6_LHCb_2012) },
             { "B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_14dot18_to_16_LHCb_2012) },
             { "B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_S_3_16_to_19_LHCb_2012) },
+            { "B^0->K^*0mu^+mu^-::A_CP[1.00,6.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_CP_1_to_6_LHCb_2012E) },
+            { "B^0->K^*0mu^+mu^-::A_CP[14.18,16.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_CP_14dot18_to_16_LHCb_2012E) },
+            { "B^0->K^*0mu^+mu^-::A_CP[16.00,20.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_CP_16_to_20_LHCb_2012E) },
             // limit on B^0_s -> mu^+ mu^-
             { "B^0_s->mu^+mu^-::BR_limit@LHCb-2012", make_factory(templates::Bzero_to_dimuon_LHCb_2012) },
             // limit on B^0_s -> mu^+ mu^- of Nov 2012

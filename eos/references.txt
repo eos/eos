@@ -232,6 +232,13 @@ Experimental Results
         arxiv:1211.2674 [hep-ex]
 
 
+    LHCb:2012E : [LHCb Collaboration]
+
+        Measurement of the CP asymmetry in B^0 ---> K^*0 mu^+ mu^- decays
+
+        arxiv:1210.4492 [hep-ex]
+
+
     LHCb:2013A : Aaij, R. et al. [LHCb Collaboration]
 
         Measurement of CP violation and the B_s^0 meson decay width difference with
