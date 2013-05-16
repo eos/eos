@@ -187,6 +187,7 @@ class WilsonCoefficientsBToSTest :
                 p["mu"] = mu;
                 p["Abs{c7'}"] = 0.008;
                 p["Arg{c7'}"] = M_PI;
+                p["c8'"] = 0.012;
                 p["Abs{c9'}"] = 0.006;
                 p["Arg{c9'}"] = 0.0;
                 p["Abs{c10'}"] = 0.005;
@@ -223,6 +224,7 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_NEARLY_EQUAL(-0.0,        imag(wc.c10()), eps);
 
                 TEST_CHECK_NEARLY_EQUAL(-0.008,      real(wc.c7prime()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.012,      real(wc.c8prime()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.006,      real(wc.c9prime()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.005,      real(wc.c10prime()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c7prime()),  eps);
@@ -246,6 +248,7 @@ class WilsonCoefficientsBToSTest :
                 p["mu"] = mu;
                 p["Re{c7'}"] = 0.008;
                 p["Im{c7'}"] = M_PI;
+                p["c8'"] = 0.012;
                 p["Re{c9'}"] = 0.006;
                 p["Im{c9'}"] = 0.0;
                 p["Re{c10'}"] = 0.005;
@@ -282,6 +285,7 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c10()),  eps);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.008,      real(wc.c7prime()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.012,      real(wc.c8prime()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.006,      real(wc.c9prime()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.005,      real(wc.c10prime()), eps);
                 TEST_CHECK_NEARLY_EQUAL(+M_PI,       imag(wc.c7prime()),  eps);

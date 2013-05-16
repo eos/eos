@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -64,6 +64,7 @@ namespace eos
         _arg_c7prime(p["Arg{c7'}"]),
         _re_c7prime(p["Re{c7'}"]),
         _im_c7prime(p["Im{c7'}"]),
+        _c8prime(p["c8'"], u),
         _abs_c9prime(p["Abs{c9'}"]),
         _arg_c9prime(p["Arg{c9'}"]),
         _re_c9prime(p["Re{c9'}"]),
@@ -133,10 +134,10 @@ namespace eos
                 a_s * _c7(), a_s * _c8(), a_s * _c9(), a_s * _c10()
             }},
             {{
-                /* we only consider c7', c9' and c10' */
+                /* we only consider c7', c8', c9' and c10' */
                 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                 0.0, 0.0, 0.0, 0.0, 0.0,
-                a_s * _c7prime(), 0.0, a_s * _c9prime(), a_s * _c10prime()
+                a_s * _c7prime(), a_s * _c8prime(), a_s * _c9prime(), a_s * _c10prime()
             }},
             alpha_s
         };

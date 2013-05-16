@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -59,6 +59,7 @@ namespace eos
             Parameter _abs_c7prime, _arg_c7prime;
             Parameter _re_c7prime, _im_c7prime;
             std::function<complex<double> ()> _c7prime;
+            UsedParameter _c8prime;
             Parameter _abs_c9prime, _arg_c9prime;
             Parameter _re_c9prime, _im_c9prime;
             std::function<complex<double> ()> _c9prime;

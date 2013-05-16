@@ -188,6 +188,7 @@ namespace eos
             Parameter::Template{"Arg{c7'}",                                      +0.0,            +0.0,            +2.0 * M_PI    },
             Parameter::Template{"Re{c7'}",                                       -1.0,            +0.0,            +1.0           },
             Parameter::Template{"Im{c7'}",                                       -1.0,            +0.0,            +1.0           },
+            Parameter::Template{"c8'",                                           +0.0,            +0.0,            +0.0           },
             Parameter::Template{"Abs{c9'}",                                      +0.0,            +0.0,           +15.0           },
             Parameter::Template{"Arg{c9'}",                                      +0.0,            +0.0,            +2.0 * M_PI    },
             Parameter::Template{"Re{c9'}",                                      -15.0,            +0.0,           +15.0           },
