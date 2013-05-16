@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -180,3 +180,25 @@ class IntegrationTest :
 
         }
 } integration_test;
+
+class TypeATest :
+    public TestCase
+{
+    public:
+        TypeATest() :
+            TestCase("type_A_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const double eps = 1.0e-4;
+
+            TEST_CHECK_NEARLY_EQUAL( 79.656100,      Bremsstrahlung::tau_78(0.04), eps);
+            TEST_CHECK_NEARLY_EQUAL(  5.311830,      Bremsstrahlung::tau_78(0.20), eps);
+            TEST_CHECK_NEARLY_EQUAL( 46.770500,      Bremsstrahlung::tau_88(0.04), eps);
+            TEST_CHECK_NEARLY_EQUAL(  0.622935,      Bremsstrahlung::tau_88(0.20), eps);
+            TEST_CHECK_NEARLY_EQUAL(  3.517410,      Bremsstrahlung::tau_89(0.04), eps);
+            TEST_CHECK_NEARLY_EQUAL(  0.762566,      Bremsstrahlung::tau_89(0.20), eps);
+        }
+} type_a_test;

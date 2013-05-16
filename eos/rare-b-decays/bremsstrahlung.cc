@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,6 +19,7 @@
 
 #include <eos/rare-b-decays/bremsstrahlung.hh>
 #include <eos/utils/integrate.hh>
+#include <eos/utils/polylog.hh>
 
 #include <cmath>
 #include <limits>
@@ -133,6 +134,60 @@ namespace eos
         return 4.0 / 3.0 / w * (
                 (2.0 * s_hat * (1.0 - w) * (s_hat + w) + 4.0 * s_hat * w * log(w)) * Deltai_23(s_hat, w, z)
                 - (2.0 * s_hat * (1.0 - w) * (s_hat + w) + w * (3.0 * s_hat + w) * log(w)) * Deltai_27(s_hat, w, z));
+    }
+
+    // cf. [AAGW2002], Eq. (15), p. 8
+    double
+    Bremsstrahlung::tau_78(const double & s_hat)
+    {
+        static const double pi = M_PI, pi2 = pi * pi;
+        double ln_s_hat = std::log(s_hat), sqrt_s_hat = std::sqrt(s_hat), sqrt_4_m_s_hat = std::sqrt(4.0 - s_hat);
+        double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
+        double atan1 = std::atan((2.0 - 4.0 * s_hat + s_hat2) / ((2.0 - s_hat) * sqrt_s_hat * sqrt_4_m_s_hat));
+        double atan2 = std::atan(sqrt_s_hat * sqrt_4_m_s_hat / (2.0 - s_hat));
+        double atan3 = std::atan(sqrt_4_m_s_hat / sqrt_s_hat);
+        double reli2 = real(dilog(complex<double>(s_hat / 2.0, -0.5 * sqrt_s_hat * sqrt_4_m_s_hat)));
+
+        return 8.0 / (9.0 * s_hat) * (
+                25.0 - 2.0 * pi2 - 27.0 * s_hat + 3.0 * s_hat2 - s_hat3 + 12.0 * (s_hat + s_hat2) * ln_s_hat
+                + 6.0 * pow(pi / 2.0 - atan1, 2) - 24.0 * reli2
+                - 12.0 * ((1.0 - s_hat) * sqrt_s_hat * sqrt_4_m_s_hat - 2.0 * atan2) * (atan3 - atan2));
+    }
+
+    // cf. [AAGW2002], Eq. (16), p. 8
+    double
+    Bremsstrahlung::tau_88(const double & s_hat)
+    {
+        static const double pi = M_PI, pi2 = pi * pi;
+        double ln_s_hat = std::log(s_hat), sqrt_s_hat = std::sqrt(s_hat), sqrt_4_m_s_hat = std::sqrt(4.0 - s_hat);
+        double s_hat2 = s_hat * s_hat, s_hat3 = s_hat2 * s_hat;
+        double atan1 = std::atan(sqrt_4_m_s_hat / sqrt_s_hat);
+        double atan2 = std::atan(sqrt_s_hat * sqrt_4_m_s_hat / (2.0 - s_hat));
+        double reli1 = real(dilog(1.0 - s_hat));
+        double reli2 = real(dilog(complex<double>((3.0 - s_hat) / 2.0, (1.0 - s_hat) * sqrt_4_m_s_hat / (2.0 * sqrt_s_hat))));
+
+        return 4.0 / (27.0 * s_hat) * (
+                -8.0 * pi2 + (1.0 - s_hat) * (77.0 - s_hat - 4.0 * s_hat2) - 24.0 * reli1
+                + 3.0 * (10.0 - 4.0 * s_hat - 9.0 * s_hat2 + 8.0 * std::log(sqrt_s_hat / (1.0 - s_hat))) * ln_s_hat
+                + 48.00 * reli2
+                - 6.0 * ((20.0 * s_hat + 10.0 * s_hat2 - 3.0 * s_hat3) / (sqrt_s_hat * sqrt_4_m_s_hat) - 8.0 * pi + 8.0 * atan1)
+                    * (atan1 - atan2));
+    }
+
+    // cf. [AAGW2002], Eq. (17), p. 8
+    double
+    Bremsstrahlung::tau_89(const double & s_hat)
+    {
+        double ln_s_hat = std::log(s_hat), sqrt_s_hat = std::sqrt(s_hat), sqrt_4_m_s_hat = std::sqrt(4.0 - s_hat);
+        double s_hat2 = s_hat * s_hat;
+        double arctan1 = std::atan(sqrt_s_hat * sqrt_4_m_s_hat / (2.0 - s_hat));
+        double arctan2 = std::atan(sqrt_4_m_s_hat / sqrt_s_hat);
+        double reli1 = real(dilog(complex<double>(s_hat / 2.0, sqrt_s_hat * sqrt_4_m_s_hat / 2.0)));
+        double reli2 = real(dilog(complex<double>((-2.0 + s_hat * (4.0 - s_hat)) / 2.0, (2.0 - s_hat) * sqrt_s_hat * sqrt_4_m_s_hat / 2.0)));
+
+        return 2.0 / 3.0 * (
+                s_hat * (4.0 - s_hat) - 3.0 - 4.0 * ln_s_hat * (1.0 - s_hat - s_hat2)
+                - 8.0 * (reli1 - reli2) + 4.0 * (s_hat2 * sqrt_4_m_s_hat / sqrt_s_hat + 2.0 * arctan1) * (arctan2 - arctan1));
     }
 
     // Integrals of tau_2x from w = s_hat to w = 1

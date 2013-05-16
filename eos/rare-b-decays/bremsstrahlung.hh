@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -39,6 +39,10 @@ namespace eos
         static complex<double> tau_27(const double & s_hat, const double & w, const double & z);
         static complex<double> tau_28(const double & s_hat, const double & w, const double & z);
         static complex<double> tau_29(const double & s_hat, const double & w, const double & z);
+        // cf. [AAGW2002], Eqs. (15)-(17), p. 8
+        static double tau_78(const double & s_hat);
+        static double tau_88(const double & s_hat);
+        static double tau_89(const double & s_hat);
 
         // Integrals of tau_2x from w = s_hat to w = 1, cf [AAGW2002], Eq. (22)
         static complex<double> itau_22(const double & s_hat, const double & z);
