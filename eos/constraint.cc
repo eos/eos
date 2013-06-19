@@ -241,6 +241,19 @@ namespace eos
         ///@name 2004 Data
         ///@{
         /*
+         * BaBar Collaboration
+         *
+         * Data taken from [BaBar:2004A]
+         */
+        static const GaussianConstraintTemplate Bmix_to_Xs_dilepton_BR_BaBar_2004A
+        {
+            "B->X_sll::BR@HLMW2005",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ },
+            1.8e-6, 0.7e-6, 0.7e-6, 0.5e-6, 0.5e-6
+        };
+
+        /*
          * Belle Collaboration
          *
          * Data taken from [Belle:2004]
@@ -1878,6 +1891,8 @@ namespace eos
             { "B^0->K^*0gamma::BR@CLEO-2000", make_factory(templates::Bzero_to_Kstarzero_gamma_BR_CLEO_2000) },
             { "B^+->K^*+gamma::BR@CLEO-2000", make_factory(templates::Bplus_to_Kstarplus_gamma_BR_CLEO_2000) },
             /* 2004 */
+            // BaBar
+            { "B->X_sll::BR[1.0,6.0]@BaBar-2004A", make_factory(templates::Bmix_to_Xs_dilepton_BR_BaBar_2004A) },
             // Belle
             { "B^0->K^*0gamma::BR@Belle-2004", make_factory(templates::Bzero_to_Kstarzero_gamma_BR_Belle_2004) },
             { "B^+->K^*+gamma::BR@Belle-2004", make_factory(templates::Bplus_to_Kstarplus_gamma_BR_Belle_2004) },

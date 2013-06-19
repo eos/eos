@@ -51,6 +51,9 @@ class ConstraintTest :
 
                     /* 2004 */
 
+                    // BaBar
+                    "B->X_sll::BR[1.0,6.0]@BaBar-2004A",
+
                     // Belle
                     "B^0->K^*0gamma::BR@Belle-2004",
                     "B^+->K^*+gamma::BR@Belle-2004",

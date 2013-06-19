@@ -13,6 +13,16 @@ Experimental Results
         arxiv:hep-ex/9912057
 
 
+    BaBar:2004A : Aubert, B. et al. [BABAR Collaboration]
+
+        Measurement of the B ---> X_s l^+ l^- branching fraction with a sum
+        over exclusive modes
+
+        Phys. Rev. Lett. 93, 081802 (2004)
+
+        arxiv:hep-ex/0404006
+
+
     BaBar:2008 : Aubert, B. et al. [BABAR Collaboration]
 
         Measurement of Time-Dependent CP Asymmetry in B^0 ---> K^0_S pi^0 gamma Decays
