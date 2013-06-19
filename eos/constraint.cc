@@ -274,6 +274,17 @@ namespace eos
         };
         ///@}
 
+        ///@name 2005 Data
+        ///@{
+        static const GaussianConstraintTemplate Bmix_to_Xs_dilepton_BR_Belle_2005A
+        {
+            "B->X_sll::BR@HLMW2005",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ },
+            1.493e-6, 0.504e-6, 0.504e-6, 0.411e-6, 0.321e-6
+        };
+        ///@}
+
         ///@name 2006 Data
         ///@{
         /*
@@ -1896,6 +1907,9 @@ namespace eos
             // Belle
             { "B^0->K^*0gamma::BR@Belle-2004", make_factory(templates::Bzero_to_Kstarzero_gamma_BR_Belle_2004) },
             { "B^+->K^*+gamma::BR@Belle-2004", make_factory(templates::Bplus_to_Kstarplus_gamma_BR_Belle_2004) },
+            /* 2005 */
+            // Belle
+            { "B->X_sll::BR[1.0,6.0]@Belle-2005A", make_factory(templates::Bmix_to_Xs_dilepton_BR_Belle_2005A) },
             /* 2006 */
             // Belle
             { "B^0->K^*0gamma::S_K@Belle-2006", make_factory(templates::Bzero_to_Kstarzero_gamma_SKstargamma_Belle_2006) },

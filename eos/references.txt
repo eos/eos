@@ -78,6 +78,15 @@ Experimental Results
         arXiv:hep-ex/0402042
 
 
+    Belle:2005A : Iwasaki, M. et al. [Belle Collaboration]
+
+        Improved Measurement of the electroweak penguin process B ---> X_s l^+ l^-
+
+        Phys.Rev. D72 (2005) 092005
+
+        arXiv:hep-ex/0503044
+
+
     Belle:2006 : Ushiroda, Y. et al. [Belle Collaboration]
 
         Time-Dependent CP Asymmetries in B0 ---> K0(s) pi0 gamma transitions
