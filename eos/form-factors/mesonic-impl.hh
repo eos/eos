@@ -21,7 +21,7 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_IMPL_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_IMPL_HH 1
 
-#include <eos/form-factors/form-factors.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/power_of.hh>

@@ -17,14 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_FORM_FACTORS_FORM_FACTORS_HH
-#define EOS_GUARD_SRC_FORM_FACTORS_FORM_FACTORS_HH 1
+#ifndef EOS_GUARD_EOS_FORM_FACTORS_FORM_FACTORS_FWD_HH
+#define EOS_GUARD_EOS_FORM_FACTORS_FORM_FACTORS_FWD_HH 1
 
-/*
- * This file intentionally kept blank, only includes
- * specific form factor headers.
- */
+namespace eos
+{
+    template <typename Transition_>
+    class FormFactors;
 
-#include <eos/form-factors/mesonic.hh>
+    template <typename Transition_>
+    class FormFactorFactory;
+}
 
 #endif

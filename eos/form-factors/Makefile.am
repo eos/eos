@@ -6,7 +6,8 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 lib_LTLIBRARIES = libeosformfactors.la
 libeosformfactors_la_SOURCES = \
 	form-factor-adapter.hh \
-	form-factors.cc form-factors.hh form-factors-impl.hh
+	form-factors.hh form-factors-fwd.hh \
+	mesonic.cc mesonic.hh mesonic-impl.hh
 libeosformfactors_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	-lgslcblas \
@@ -18,7 +19,7 @@ include_eos_rarebdecays_HEADERS = \
 	form-factors.hh
 
 TESTS = \
-	form-factors_TEST
+	mesonic_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	libeosformfactors.la \
@@ -26,4 +27,4 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
-form_factors_TEST_SOURCES = form-factors_TEST.cc
+mesonic_TEST_SOURCES = mesonic_TEST.cc

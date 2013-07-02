@@ -20,8 +20,7 @@
 
 #include <eos/observable.hh>
 #include <eos/form-factors/form-factor-adapter.hh>
-#include <eos/form-factors/form-factors.hh>
-#include <eos/form-factors/form-factors-impl.hh>
+#include <eos/form-factors/mesonic-impl.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
