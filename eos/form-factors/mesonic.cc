@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -224,15 +224,15 @@ namespace eos
 
 
     // mass B_u, cf. [PDG 2010]
-    const double BFW2010FormFactors<PToP>::_m_B       = 5.27917;
+    const double BFW2010FormFactors<BToK, PToP>::_m_B       = 5.27917;
     // mass K^+, cf. [PDG 2010]
-    const double BFW2010FormFactors<PToP>::_m_K       = 0.493677;
+    const double BFW2010FormFactors<BToK, PToP>::_m_K       = 0.493677;
     // mass B_s^* (1-)
-    const double BFW2010FormFactors<PToP>::_m_Bs2     = 5.412 * 5.412;
-    const double BFW2010FormFactors<PToP>::_tau_p     = (_m_B + _m_K) * (_m_B + _m_K);
-    const double BFW2010FormFactors<PToP>::_tau_m     = (_m_B - _m_K) * (_m_B - _m_K);
-    const double BFW2010FormFactors<PToP>::_tau_0     = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
-    template class BFW2010FormFactors<PToP>;
+    const double BFW2010FormFactors<BToK, PToP>::_m_Bs2     = 5.412 * 5.412;
+    const double BFW2010FormFactors<BToK, PToP>::_tau_p     = (_m_B + _m_K) * (_m_B + _m_K);
+    const double BFW2010FormFactors<BToK, PToP>::_tau_m     = (_m_B - _m_K) * (_m_B - _m_K);
+    const double BFW2010FormFactors<BToK, PToP>::_tau_0     = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
+    template class BFW2010FormFactors<BToK, PToP>;
 
     /* B_{u,d} -> pi */
 
@@ -257,7 +257,7 @@ namespace eos
             { KeyType("B->K",     "BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make     },
             { KeyType("B->K",     "BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make      },
             { KeyType("B->K",     "KMPW2010"),      &KMPW2010FormFactors<PToP>::make         },
-            { KeyType("B->K",     "BFW2010"),       &BFW2010FormFactors<PToP>::make          },
+            { KeyType("B->K",     "BFW2010"),       &BFW2010FormFactors<BToK, PToP>::make    }
             { KeyType("B->pi",    "BCL2008"),       &BCL2008FormFactors<BToPi>::make         },
             // analytic computations
             { KeyType("B->pi",    "DKMMO2008"), &AnalyticFormFactorBToPiDKMMO2008::make      },

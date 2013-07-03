@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -37,7 +37,7 @@ namespace eos
     template <typename Transition_> class KMPW2010FormFactors;
 
     /* Form Factors according to [BFW2010] */
-    template <typename Transition_> class BFW2010FormFactors;
+    template <typename Process_, typename Transition_> class BFW2010FormFactors;
 
     /* Form Factors according to [BCL2008] */
     template <typename Process_> class BCL2008FormFactors;
@@ -52,6 +52,11 @@ namespace eos
     struct BsToPhi {
         static constexpr double mB = 5.366;
         static constexpr double mV = 1.020;
+    };
+
+    struct BsToKstar {
+        static constexpr double mB = 5.336;
+        static constexpr double mV = 0.896;
     };
 
     template <typename Process_> class BZ2004FormFactors<Process_, PToV> :
@@ -523,7 +528,7 @@ namespace eos
             }
     };
 
-    template <> class BFW2010FormFactors<PToP> :
+    template <> class BFW2010FormFactors<BToK, PToP> :
           public FormFactors<PToP>
     {
           private:
