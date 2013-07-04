@@ -25,6 +25,7 @@
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
+#include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
@@ -198,6 +199,187 @@ namespace eos
 
             make_observable("B->pilnu::zeta",
                     &BToPiLeptonNeutrino::integrated_zeta,
+                    std::make_tuple("s_min", "s_max")),
+
+            // B_s -> K^* l nubar
+            make_observable("B_s->K^*lnu::F_perp(s)",
+                    &BsToKstarLeptonNeutrino::Fperp,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::F_para(s)",
+                    &BsToKstarLeptonNeutrino::Fpara,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::F_long(s)",
+                    &BsToKstarLeptonNeutrino::Flong,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::d^4Gamma",
+                    &BsToKstarLeptonNeutrino::four_differential_decay_width,
+                    std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
+
+            make_observable("B_s->K^*lnu::dBR/ds",
+                    &BsToKstarLeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::A_FB(s)",
+                    &BsToKstarLeptonNeutrino::differential_forward_backward_asymmetry,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::BR",
+                    &BsToKstarLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::A_FB",
+                    &BsToKstarLeptonNeutrino::integrated_forward_backward_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::Shat_1s",
+                    &BsToKstarLeptonNeutrino::integrated_s_1s,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::Shat_1c",
+                    &BsToKstarLeptonNeutrino::integrated_s_1c,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::Shat_2s",
+                    &BsToKstarLeptonNeutrino::integrated_s_2s,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::Shat_2c",
+                    &BsToKstarLeptonNeutrino::integrated_s_2c,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::Shat_3",
+                    &BsToKstarLeptonNeutrino::integrated_s_3,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::Shat_4",
+                    &BsToKstarLeptonNeutrino::integrated_s_4,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::Shat_5",
+                    &BsToKstarLeptonNeutrino::integrated_s_5,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::Shat_6s",
+                    &BsToKstarLeptonNeutrino::integrated_s_6s,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::A_FB(s)",
+                    &BsToKstarLeptonNeutrino::differential_forward_backward_asymmetry,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::A_T^2(s)",
+                    &BsToKstarLeptonNeutrino::differential_transverse_asymmetry_2,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::A_T^3(s)",
+                    &BsToKstarLeptonNeutrino::differential_transverse_asymmetry_3,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::A_T^4(s)",
+                    &BsToKstarLeptonNeutrino::differential_transverse_asymmetry_4,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::A_T^5(s)",
+                    &BsToKstarLeptonNeutrino::differential_transverse_asymmetry_5,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::A_T^re(s)",
+                    &BsToKstarLeptonNeutrino::differential_transverse_asymmetry_re,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::A_T^im(s)",
+                    &BsToKstarLeptonNeutrino::differential_transverse_asymmetry_im,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::F_L(s)",
+                    &BsToKstarLeptonNeutrino::differential_longitudinal_polarisation,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::F_T(s)",
+                    &BsToKstarLeptonNeutrino::differential_transversal_polarisation,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::H_T^1(s)",
+                    &BsToKstarLeptonNeutrino::differential_h_1,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::H_T^2(s)",
+                    &BsToKstarLeptonNeutrino::differential_h_2,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::H_T^3(s)",
+                    &BsToKstarLeptonNeutrino::differential_h_3,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::H_T^4(s)",
+                    &BsToKstarLeptonNeutrino::differential_h_4,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::H_T^5(s)",
+                    &BsToKstarLeptonNeutrino::differential_h_5,
+                    std::make_tuple("s")),
+
+            make_observable("B_s->K^*lnu::A_FB",
+                    &BsToKstarLeptonNeutrino::integrated_forward_backward_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::BR",
+                    &BsToKstarLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::F_L",
+                    &BsToKstarLeptonNeutrino::integrated_longitudinal_polarisation,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::F_T",
+                    &BsToKstarLeptonNeutrino::integrated_transversal_polarisation,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::A_T^2",
+                    &BsToKstarLeptonNeutrino::integrated_transverse_asymmetry_2,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::A_T^3",
+                    &BsToKstarLeptonNeutrino::integrated_transverse_asymmetry_3,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::A_T^4",
+                    &BsToKstarLeptonNeutrino::integrated_transverse_asymmetry_4,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::A_T^5",
+                    &BsToKstarLeptonNeutrino::integrated_transverse_asymmetry_5,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::A_T^re",
+                    &BsToKstarLeptonNeutrino::integrated_transverse_asymmetry_re,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::A_T^im",
+                    &BsToKstarLeptonNeutrino::integrated_transverse_asymmetry_im,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::H_T^1",
+                    &BsToKstarLeptonNeutrino::integrated_h_1,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::H_T^2",
+                    &BsToKstarLeptonNeutrino::integrated_h_2,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::H_T^3",
+                    &BsToKstarLeptonNeutrino::integrated_h_3,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::H_T^4",
+                    &BsToKstarLeptonNeutrino::integrated_h_4,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B_s->K^*lnu::H_T^5",
+                    &BsToKstarLeptonNeutrino::integrated_h_5,
                     std::make_tuple("s_min", "s_max")),
 
             /* Exclusive Rare B Decays */
