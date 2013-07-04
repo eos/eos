@@ -7,7 +7,6 @@ lib_LTLIBRARIES = libeosrarebdecays.la
 libeosrarebdecays_la_SOURCES = \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	charm-loops.cc charm-loops.hh \
-	decays.hh \
 	em-contributions.hh em-contributions.cc \
 	exclusive-b-to-dilepton.cc exclusive-b-to-dilepton.hh \
 	exclusive-b-to-s-dilepton.hh \
@@ -30,7 +29,6 @@ include_eos_rarebdecaysdir = $(includedir)/eos/rare-b-decays
 include_eos_rarebdecays_HEADERS = \
 	bremsstrahlung.hh \
 	charm-loops.hh \
-	decays.hh \
 	em-contributions.hh \
 	exclusive-b-to-dilepton.hh \
 	exclusive-b-to-s-dilepton-large-recoil.hh \
