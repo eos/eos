@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2015 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
  *
@@ -27,19 +27,22 @@
 
 namespace eos
 {
-    class WilsonScanComponent :
-        public virtual ModelComponent<components::DeltaB1>
+    template <typename Tag_> class WilsonScanComponent;
+
+    template <>
+    class WilsonScanComponent<components::DeltaBS1> :
+        public virtual ModelComponent<components::DeltaBS1>
     {
         private:
             /* QCD parameters */
-            UsedParameter _alpha_s_Z__deltab1;
-            UsedParameter _mu_b__deltab1;
+            UsedParameter _alpha_s_Z__deltabs1;
+            UsedParameter _mu_b__deltabs1;
 
             /* Masses */
-            UsedParameter _m_Z__deltab1;
+            UsedParameter _m_Z__deltabs1;
 
             /* Renormalization scale */
-            UsedParameter _mu__deltab1;
+            UsedParameter _mu__deltabs1;
 
             /* b->s Wilson coefficients */
             UsedParameter _c1;
@@ -94,11 +97,41 @@ namespace eos
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const bool & cp_conjugate) const;
     };
 
+    template <>
+    class WilsonScanComponent<components::DeltaBU1> :
+        public virtual ModelComponent<components::DeltaBU1>
+    {
+        private:
+            /* b->u Wilson coefficients */
+            UsedParameter _re_csl;
+            UsedParameter _im_csl;
+            UsedParameter _re_csr;
+            UsedParameter _im_csr;
+            UsedParameter _re_cvl;
+            UsedParameter _im_cvl;
+            UsedParameter _re_cvr;
+            UsedParameter _im_cvr;
+            UsedParameter _re_ct;
+            UsedParameter _im_ct;
+            std::function<complex<double> ()> _csl;
+            std::function<complex<double> ()> _csr;
+            std::function<complex<double> ()> _cvl;
+            std::function<complex<double> ()> _cvr;
+            std::function<complex<double> ()> _ct;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /* b->u Wilson coefficients */
+            virtual WilsonCoefficients<BToU> wilson_coefficients_b_to_u(const bool & cp_conjugate) const;
+    };
+
     class WilsonScanModel :
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
-        public WilsonScanComponent
+        public WilsonScanComponent<components::DeltaBS1>,
+        public WilsonScanComponent<components::DeltaBU1>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2015 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
  *
@@ -32,6 +32,25 @@
 namespace eos
 {
     template <typename Tag_> struct WilsonCoefficients;
+
+    struct BToU {};
+
+    template <> struct WilsonCoefficients<BToU>
+    {
+        /*
+         * For the definition, cf. [FMvD2013].
+         */
+
+        /* Order: C_V,L, C_V,R, C_S,L, C_S,R, C_T */
+        std::array<complex<double>, 5> _coefficients;
+
+        // cf. [FMvD2015], Eqs. (1) and (2)
+        inline complex<double> cvl() const { return _coefficients[0]; }
+        inline complex<double> cvr() const { return _coefficients[1]; }
+        inline complex<double> csl() const { return _coefficients[2]; }
+        inline complex<double> csr() const { return _coefficients[3]; }
+        inline complex<double> ct()  const { return _coefficients[4]; }
+    };
 
     struct BToS {};
 

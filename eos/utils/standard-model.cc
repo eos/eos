@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -418,18 +418,18 @@ namespace implementation
         }
     }
 
-    SMComponent<components::DeltaB1>::SMComponent(const Parameters & p, ParameterUser & u) :
-        _alpha_s_Z__deltab1(p["QCD::alpha_s(MZ)"], u),
-        _mu_t__deltab1(p["QCD::mu_t"], u),
-        _mu_b__deltab1(p["QCD::mu_b"], u),
-        _mu_c__deltab1(p["QCD::mu_c"], u),
-        _sw2__deltab1(p["GSW::sin^2(theta)"], u),
-        _m_t_pole__deltab1(p["mass::t(pole)"], u),
-        _m_W__deltab1(p["mass::W"], u),
-        _m_Z__deltab1(p["mass::Z"], u),
-        _mu_0c__deltab1(p["b->s::mu_0c"], u),
-        _mu_0t__deltab1(p["b->s::mu_0t"], u),
-        _mu__deltab1(p["mu"], u)
+    SMComponent<components::DeltaBS1>::SMComponent(const Parameters & p, ParameterUser & u) :
+        _alpha_s_Z__deltabs1(p["QCD::alpha_s(MZ)"], u),
+        _mu_t__deltabs1(p["QCD::mu_t"], u),
+        _mu_b__deltabs1(p["QCD::mu_b"], u),
+        _mu_c__deltabs1(p["QCD::mu_c"], u),
+        _sw2__deltabs1(p["GSW::sin^2(theta)"], u),
+        _m_t_pole__deltabs1(p["mass::t(pole)"], u),
+        _m_W__deltabs1(p["mass::W"], u),
+        _m_Z__deltabs1(p["mass::Z"], u),
+        _mu_0c__deltabs1(p["b->s::mu_0c"], u),
+        _mu_0t__deltabs1(p["b->s::mu_0t"], u),
+        _mu__deltabs1(p["mu"], u)
     {
     }
 
@@ -539,7 +539,7 @@ namespace implementation
 }
 
     WilsonCoefficients<BToS>
-    SMComponent<components::DeltaB1>::wilson_coefficients_b_to_s(const bool & /*cp_conjugate*/) const
+    SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const bool & /*cp_conjugate*/) const
     {
         /*
          * In the SM all Wilson coefficients are real-valued -> all weak phases are zero.
@@ -548,60 +548,60 @@ namespace implementation
 
         // Calculation according to [BMU1999], Eq. (25), p. 7
 
-        if (_mu__deltab1 >= _mu_t__deltab1)
+        if (_mu__deltabs1 >= _mu_t__deltabs1)
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_b_to_s: Evolution to mu >= mu_t is not yet implemented!");
 
-        if (_mu__deltab1 <= _mu_c__deltab1)
+        if (_mu__deltabs1 <= _mu_c__deltabs1)
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_b_to_s: Evolution to mu <= mu_c is not yet implemented!");
 
         // only evolve the wilson coefficients for 5 active flavors
         static const double nf = 5.0;
 
         // calculate all alpha_s values
-        const double alpha_s_mu_0c = QCD::alpha_s(_mu_0c__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
-        const double alpha_s_mu_0t = QCD::alpha_s(_mu_0t__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
+        const double alpha_s_mu_0c = QCD::alpha_s(_mu_0c__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
+        const double alpha_s_mu_0t = QCD::alpha_s(_mu_0t__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
 
         double alpha_s = 0.0;
-        if (_mu__deltab1 < _mu_b__deltab1)
+        if (_mu__deltabs1 < _mu_b__deltabs1)
         {
-            alpha_s = QCD::alpha_s(_mu_b__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
-            alpha_s = QCD::alpha_s(_mu__deltab1, alpha_s, _mu_b__deltab1, QCD::beta_function_nf_4);
+            alpha_s = QCD::alpha_s(_mu_b__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
+            alpha_s = QCD::alpha_s(_mu__deltabs1, alpha_s, _mu_b__deltabs1, QCD::beta_function_nf_4);
         }
         else
         {
-            alpha_s = QCD::alpha_s(_mu__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
+            alpha_s = QCD::alpha_s(_mu__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
         }
 
         double alpha_s_m_t_pole = 0.0;
-        if (_mu_t__deltab1 <= _m_t_pole__deltab1)
+        if (_mu_t__deltabs1 <= _m_t_pole__deltabs1)
         {
-            alpha_s_m_t_pole = QCD::alpha_s(_mu_t__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
-            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__deltab1, alpha_s_m_t_pole, _mu_t__deltab1, QCD::beta_function_nf_6);
+            alpha_s_m_t_pole = QCD::alpha_s(_mu_t__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
+            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__deltabs1, alpha_s_m_t_pole, _mu_t__deltabs1, QCD::beta_function_nf_6);
         }
         else
         {
             Log::instance()->message("sm_component<deltab1>.wc", ll_error)
                 << "mu_t > m_t_pole!";
 
-            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
+            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
         }
 
         // calculate m_t at the matching scales in the MSbar scheme
-        const double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__deltab1, alpha_s_m_t_pole, 5.0);
+        const double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__deltabs1, alpha_s_m_t_pole, 5.0);
         const double m_t_mu_0c = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0c, QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
         const double m_t_mu_0t = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0t, QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
 
         // calculate dependent inputs
-        const double log_c = 2.0 * std::log(_mu_0c__deltab1 / _m_W__deltab1), log_t = std::log(_mu_0t__deltab1 / m_t_mu_0t);
-        const double x_c = power_of<2>(m_t_mu_0c / _m_W__deltab1), x_t = power_of<2>(m_t_mu_0t / _m_W__deltab1);
+        const double log_c = 2.0 * std::log(_mu_0c__deltabs1 / _m_W__deltabs1), log_t = std::log(_mu_0t__deltabs1 / m_t_mu_0t);
+        const double x_c = power_of<2>(m_t_mu_0c / _m_W__deltabs1), x_t = power_of<2>(m_t_mu_0t / _m_W__deltabs1);
 
         WilsonCoefficients<BToS> downscaled_charm = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd0(),
-                implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(log_c, _sw2__deltab1),
-                implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(x_c, log_c, _sw2__deltab1),
+                implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd1(log_c, _sw2__deltabs1),
+                implementation::initial_scale_wilson_coefficients_b_to_s_charm_sector_qcd2(x_c, log_c, _sw2__deltabs1),
                 alpha_s_mu_0c, alpha_s, nf, QCD::beta_function_nf_5);
         WilsonCoefficients<BToS> downscaled_top = evolve(implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd0(),
-                implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(x_t, _sw2__deltab1),
-                implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(x_t, log_t, _sw2__deltab1),
+                implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd1(x_t, _sw2__deltabs1),
+                implementation::initial_scale_wilson_coefficients_b_to_s_top_sector_qcd2(x_t, log_t, _sw2__deltabs1),
                 alpha_s_mu_0t, alpha_s, nf, QCD::beta_function_nf_5);
 
         WilsonCoefficients<BToS> wc = downscaled_top;
@@ -610,10 +610,25 @@ namespace implementation
         return wc;
     }
 
+    SMComponent<components::DeltaBU1>::SMComponent(const Parameters & /* p */, ParameterUser & /* u */)
+    {
+    }
+
+    WilsonCoefficients<BToU>
+    SMComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const bool & /* cp_conjugate */) const
+    {
+        WilsonCoefficients<BToU> wc;
+        wc._coefficients.fill(complex<double>(0.0));
+        wc._coefficients[0] = complex<double>(1.0);
+
+        return wc;
+    }
+
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
-        SMComponent<components::DeltaB1>(p, *this)
+        SMComponent<components::DeltaBS1>(p, *this),
+        SMComponent<components::DeltaBU1>(p, *this)
     {
     }
 

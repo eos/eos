@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -222,7 +222,17 @@ namespace eos
             Parameter::Template{"Arg{cT5}",                                      +0.0,            +0.0,            +2.0 * M_PI    },
             Parameter::Template{"Re{cT5}",                                       -1.0,            +0.0,            +1.0           },
             Parameter::Template{"Im{cT5}",                                       -1.0,            +0.0,            +1.0           },
-
+            // b->u Wilson coefficients
+            Parameter::Template{"Re{cVL}",                                        1.0,             1.0,             1.0           },
+            Parameter::Template{"Im{cVL}",                                        0.0,             0.0,             0.0           },
+            Parameter::Template{"Re{cVR}",                                        0.0,             0.0,             0.0           },
+            Parameter::Template{"Im{cVR}",                                        0.0,             0.0,             0.0           },
+            Parameter::Template{"Re{cSL}",                                        0.0,             0.0,             0.0           },
+            Parameter::Template{"Im{cSL}",                                        0.0,             0.0,             0.0           },
+            Parameter::Template{"Re{cSR}",                                        0.0,             0.0,             0.0           },
+            Parameter::Template{"Im{cSR}",                                        0.0,             0.0,             0.0           },
+            Parameter::Template{"Re{cT}",                                         0.0,             0.0,             0.0           },
+            Parameter::Template{"Im{cT}",                                         0.0,             0.0,             0.0           },
             // Factorization scale
             Parameter::Template{"mu",                                            +2.4,            +4.2,            +9.6           },
             // GSW Parameter

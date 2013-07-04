@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -89,30 +89,30 @@ namespace eos
             virtual double m_ud_msbar(const double & mu) const;
     };
 
-    template <> class SMComponent<components::DeltaB1> :
-        public virtual ModelComponent<components::DeltaB1>
+    template <> class SMComponent<components::DeltaBS1> :
+        public virtual ModelComponent<components::DeltaBS1>
     {
         private:
             /* QCD parameters */
-            UsedParameter _alpha_s_Z__deltab1;
-            UsedParameter _mu_t__deltab1;
-            UsedParameter _mu_b__deltab1;
-            UsedParameter _mu_c__deltab1;
+            UsedParameter _alpha_s_Z__deltabs1;
+            UsedParameter _mu_t__deltabs1;
+            UsedParameter _mu_b__deltabs1;
+            UsedParameter _mu_c__deltabs1;
 
             /* GSW parameters */
-            UsedParameter _sw2__deltab1;
+            UsedParameter _sw2__deltabs1;
 
             /* Masses */
-            UsedParameter _m_t_pole__deltab1;
-            UsedParameter _m_W__deltab1;
-            UsedParameter _m_Z__deltab1;
+            UsedParameter _m_t_pole__deltabs1;
+            UsedParameter _m_W__deltabs1;
+            UsedParameter _m_Z__deltabs1;
 
             /* Matching scales */
-            UsedParameter _mu_0c__deltab1;
-            UsedParameter _mu_0t__deltab1;
+            UsedParameter _mu_0c__deltabs1;
+            UsedParameter _mu_0t__deltabs1;
 
             /* Renormalization scale */
-            UsedParameter _mu__deltab1;
+            UsedParameter _mu__deltabs1;
 
         public:
             SMComponent(const Parameters &, ParameterUser &);
@@ -121,11 +121,22 @@ namespace eos
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const bool & cp_conjugate) const;
     };
 
+    template <> class SMComponent<components::DeltaBU1> :
+        public virtual ModelComponent<components::DeltaBU1>
+    {
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            /* b->u Wilson coefficients */
+            virtual WilsonCoefficients<BToU> wilson_coefficients_b_to_u(const bool & cp_conjugate) const;
+    };
+
     class StandardModel :
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
-        public SMComponent<components::DeltaB1>
+        public SMComponent<components::DeltaBS1>,
+        public SMComponent<components::DeltaBU1>
     {
         public:
             StandardModel(const Parameters &);
