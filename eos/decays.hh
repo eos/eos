@@ -31,7 +31,7 @@ namespace eos
     /*
      * B_s Decays
      */
-    template <typename T_> class BsToKstarLeptonNeutrino;
+    class BsToKstarLeptonNeutrino;
 
     /*
      * Rare B Decays
