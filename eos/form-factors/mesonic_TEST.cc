@@ -147,7 +147,7 @@ class BsToPhiBZ2004FormFactorsTest :
             static const double eps = 1e-10;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("Bs->phi@BZ2004", p);
+            std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->phi@BZ2004", p);
             TEST_CHECK(0 != ff.get());
 
             TEST_CHECK_NEARLY_EQUAL(0.460064372742, ff->v( 1.0),   eps);

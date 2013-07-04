@@ -402,6 +402,17 @@ namespace eos
             Parameter::Template{"B->K^*::b^A1_1@KMPW2010",                       -0.46,           +0.34,           +1.2           },
             Parameter::Template{"B->K^*::b^A2_1@KMPW2010",                       -2.2,            -0.85,           +2.03          },
 
+            // form factor parameters for B->K^* simple series expansion (SSE) based on
+            // LCSR according to [BFW2010], table 10, p. 33, corrected values from Aoife Bharucha
+            Parameter::Template{"B->K^*::beta^V0_0@BFW2010",                     +0.31,           +0.31,           +0.31,         },
+            Parameter::Template{"B->K^*::beta^V0_1@BFW2010",                     +0.74,           +0.74,           +0.74,         },
+            Parameter::Template{"B->K^*::beta^V1_0@BFW2010",                     +0.62,           +0.62,           +0.62,         },
+            Parameter::Template{"B->K^*::beta^V1_1@BFW2010",                     -1.4,            -1.4,            -1.4,          },
+            Parameter::Template{"B->K^*::beta^V2_0@BFW2010",                     +0.45,           +0.45,           +0.45,         },
+            Parameter::Template{"B->K^*::beta^V2_1@BFW2010",                     +0.35,           +0.35,           +0.35,         },
+            Parameter::Template{"B->K^*::beta^Vt_0@BFW2010",                     +0.49,           +0.49,           +0.49,         },
+            Parameter::Template{"B->K^*::beta^Vt_1@BFW2010",                     -1.4,            -1.4,            -1.4,          },
+
             // form factor parameters for B->K according to [BZ2004v2] (approximate)
             Parameter::Template{"B->K::fp_uncertainty@BZ2004v2",                 +0.85,           +1.0,            +1.15          },
             Parameter::Template{"B->K::f0_uncertainty@BZ2004v2",                 +0.85,           +1.0,            +1.15          },

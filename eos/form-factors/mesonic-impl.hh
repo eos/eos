@@ -45,18 +45,30 @@ namespace eos
     /* P -> V Processes */
 
     struct BToKstar {
+        static constexpr const char * label = "B->K^*";
         static constexpr double mB = 5.279;
         static constexpr double mV = 0.896;
+        static constexpr double mR2_0m = 5.336 * 5.336;
+        static constexpr double mR2_1m = 5.412 * 5.412;
+        static constexpr double mR2_1p = 5.829 * 5.829;
     };
 
     struct BsToPhi {
-        static constexpr double mB = 5.366;
+        static constexpr const char * label = "B_s->phi";
+        static constexpr double mB = 5.336;
         static constexpr double mV = 1.020;
+        static constexpr double mR2_0m = 5.336 * 5.336;
+        static constexpr double mR2_1m = 5.412 * 5.412;
+        static constexpr double mR2_1p = 5.829 * 5.829;
     };
 
     struct BsToKstar {
+        static constexpr const char * label = "B_s->K^*";
         static constexpr double mB = 5.336;
         static constexpr double mV = 0.896;
+        static constexpr double mR2_0m = 5.279 * 5.279;
+        static constexpr double mR2_1m = 5.325 * 5.325;
+        static constexpr double mR2_1p = 5.723 * 5.723;
     };
 
     template <typename Process_> class BZ2004FormFactors<Process_, PToV> :
@@ -202,6 +214,86 @@ namespace eos
                 // cf. [KMPW2010], Eq. (8.8), p. 30
                 return _f0_A2() / (1.0 - s / _m_Bs2_1p) * (1.0 + _b1_A2() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
             }
+            virtual double a_12(const double & s) const
+            {
+                const double mB = BToKstar::mB, mB2 = mB * mB;
+                const double mV = BToKstar::mV, mV2 = mV * mV;
+                const double lambda = eos::lambda(mB2, mV2, s);
+
+                return ((mB + mV) * (mB + mV) * (mB2 - mV2 - s) * this->a_1(s)
+                    - lambda * this->a_2(s)) / (16.0 * mB * mV2 * (mB + mV));
+            }
+    };
+
+    template <typename Tag_> class BFW2010FormFactors<Tag_, PToV> :
+        public FormFactors<PToV>
+    {
+        private:
+            // fit parametrisation for B_q -> Kstar according to [BFW2011]. We use the simple series expansion and
+            // the results form LCSR only.
+            UsedParameter _beta_V0_0, _beta_V0_1;
+            UsedParameter _beta_V1_0, _beta_V1_1;
+            UsedParameter _beta_V2_0, _beta_V2_1;
+            UsedParameter _beta_Vt_0,_beta_Vt_1;
+            static constexpr const double _m_B = Tag_::mB, _m_V = Tag_::mV;
+            static constexpr const double _tau_p = (_m_B + _m_V) * (_m_B + _m_V);
+            static constexpr const double _tau_m = (_m_B - _m_V) * (_m_B - _m_V);
+            static constexpr const double _tau_0 = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
+            static constexpr const double _m_R2_0m = Tag_::mR2_0m;
+            static constexpr const double _m_R2_1m = Tag_::mR2_1m;
+            static constexpr const double _m_R2_1p = Tag_::mR2_1p;
+
+            static double _calc_z(const double & s)
+            {
+                return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
+            }
+
+        public:
+            BFW2010FormFactors(const Parameters & p, const Options &) :
+                _beta_V0_0(p[std::string(Tag_::label) + "::beta^V0_0@BFW2010"], *this),
+                _beta_V0_1(p[std::string(Tag_::label) + "::beta^V0_1@BFW2010"], *this),
+                _beta_V1_0(p[std::string(Tag_::label) + "::beta^V1_0@BFW2010"], *this),
+                _beta_V1_1(p[std::string(Tag_::label) + "::beta^V1_1@BFW2010"], *this),
+                _beta_V2_0(p[std::string(Tag_::label) + "::beta^V2_0@BFW2010"], *this),
+                _beta_V2_1(p[std::string(Tag_::label) + "::beta^V2_1@BFW2010"], *this),
+                _beta_Vt_0(p[std::string(Tag_::label) + "::beta^Vt_0@BFW2010"], *this),
+                _beta_Vt_1(p[std::string(Tag_::label) + "::beta^Vt_1@BFW2010"], *this)
+            {
+            }
+
+            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
+            {
+                return new BFW2010FormFactors(parameters, Options());
+            }
+
+            virtual double a_2(const double & s) const
+            {
+                // cf. [BFW2010], Eq. (44), p. 16, replacements Eq. (45), p. 16 and Eq. (11), p. 5 
+                return (_m_B * (_m_B + _m_V)) / ((_tau_m-s) * (_tau_p-s)) * 1.0 / (1.0 - s / _m_R2_1p) * ((_m_B * _m_B -_m_V * _m_V - s) / sqrt(2)
+                        * (_beta_V2_0 + _beta_V2_1 * _calc_z(s)) - (2 * _m_B * _m_V) 
+                        * (_beta_V0_0 + _beta_V0_1 * _calc_z(s)));
+            }
+
+            virtual double v(const double & s) const
+            {
+                // cf. [BFW2010], Eq. (44), p. 16, replacements Eq. (45), p. 16 and Eq. (11), p. 5
+                static const double prefactor = (_m_B + _m_V)/(_m_B * sqrt(2));
+                return prefactor * 1.0 / (1.0 - s / _m_R2_1m) * (_beta_V1_0 + _beta_V1_1 * _calc_z(s));
+            }
+
+            virtual double a_1(const double & s) const
+            {
+                // cf. [BFW2010], Eq. (44), p. 16, replacements Eq. (45), p. 16 and Eq. (11), p. 5
+                static const double prefactor = _m_B / (sqrt(2) * (_m_B + _m_V));
+                return prefactor * 1.0 / (1.0 - s / _m_R2_1p) * (_beta_V2_0 + _beta_V2_1 * _calc_z(s));
+            }
+
+            virtual double a_0(const double & s) const
+            {
+                // cf. [BFW2010], Eq. (44), p. 16, replacements Eq. (45), p. 16 and Eq. (11), p. 5
+                return 1.0 / (1.0 - s / _m_R2_0m) * (_beta_Vt_0 + _beta_Vt_1 * _calc_z(s));
+            }
+
             virtual double a_12(const double & s) const
             {
                 const double mB = BToKstar::mB, mB2 = mB * mB;
