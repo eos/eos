@@ -52,10 +52,9 @@ AC_ARG_WITH([pmc],
 	[AS_HELP_STRING([--with-pmc], [used to find perform population montecarlo sampling])]
 	[],
 	[])
-if test "x$with_pmc" == xno ; then
+if test "x$with_pmc" == xno -o "x$with_pmc" == x ; then
 	AC_MSG_NOTICE(["Building EOS without PMC support"])
-fi
-if test "x$with_pmc" != xno && test "x$with_pmc" != x ; then
+else 
 	if ! test -d "$with_pmc" ; then
 		AC_MSG_FAILURE(["$with_pmc is not a directory"])
 	fi
@@ -63,7 +62,7 @@ if test "x$with_pmc" != xno && test "x$with_pmc" != x ; then
 	LDFLAGS="-L$with_pmc/lib $LDFLAGS"
 	AC_DEFINE([EOS_ENABLE_PMC], 1, [Whether we use PMC])
 fi
-AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$with_pmc" != "xno"])
+AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$with_pmc" != "xno" -a "x$with_pmc" != x])
 dnl }}}
 
 dnl {{{ check for git HEAD
