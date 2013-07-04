@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2015 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
  *
@@ -39,11 +39,13 @@ namespace eos
         complex<double> cartesian(const Parameter & re, const Parameter & im) { return complex<double>(re(), im()); }
     }
 
-    WilsonScanComponent::WilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
-        _alpha_s_Z__deltab1(p["QCD::alpha_s(MZ)"], u),
-        _mu_b__deltab1(p["QCD::mu_b"], u),
-        _m_Z__deltab1(p["mass::Z"], u),
-        _mu__deltab1(p["mu"], u),
+    /* b->s Wilson coefficients */
+    WilsonScanComponent<components::DeltaBS1>::WilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
+        _alpha_s_Z__deltabs1(p["QCD::alpha_s(MZ)"], u),
+        _mu_b__deltabs1(p["QCD::mu_b"], u),
+        _m_Z__deltabs1(p["mass::Z"], u),
+        _mu__deltabs1(p["mu"], u),
+        /* b->s */
         _c1(p["c1"], u),
         _c2(p["c2"], u),
         _c3(p["c3"], u),
@@ -161,19 +163,18 @@ namespace eos
         }
     }
 
-    /* b->s Wilson coefficients */
     WilsonCoefficients<BToS>
-    WilsonScanComponent::wilson_coefficients_b_to_s(const bool & cp_conjugate) const
+    WilsonScanComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const bool & cp_conjugate) const
     {
         double alpha_s = 0.0;
-        if (_mu__deltab1 < _mu_b__deltab1)
+        if (_mu__deltabs1 < _mu_b__deltabs1)
         {
-            alpha_s = QCD::alpha_s(_mu_b__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
-            alpha_s = QCD::alpha_s(_mu__deltab1, alpha_s, _mu_b__deltab1, QCD::beta_function_nf_4);
+            alpha_s = QCD::alpha_s(_mu_b__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
+            alpha_s = QCD::alpha_s(_mu__deltabs1, alpha_s, _mu_b__deltabs1, QCD::beta_function_nf_4);
         }
         else
         {
-            alpha_s = QCD::alpha_s(_mu__deltab1, _alpha_s_Z__deltab1, _m_Z__deltab1, QCD::beta_function_nf_5);
+            alpha_s = QCD::alpha_s(_mu__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
         }
 
         complex<double> a_s = alpha_s / 4.0 / M_PI;
@@ -218,10 +219,52 @@ namespace eos
         return result;
     }
 
+    /* b->u Wilson coefficients */
+    WilsonScanComponent<components::DeltaBU1>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+        _re_csl(p["Re{cSL}"], u),
+        _im_csl(p["Im{cSL}"], u),
+        _re_csr(p["Re{cSR}"], u),
+        _im_csr(p["Im{cSR}"], u),
+        _re_cvl(p["Re{cVL}"], u),
+        _im_cvl(p["Im{cVL}"], u),
+        _re_cvr(p["Re{cVR}"], u),
+        _im_cvr(p["Im{cVR}"], u),
+        _re_ct(p["Re{cT}"], u),
+        _im_ct(p["Im{cT}"], u),
+        _csl(std::bind(&wcimplementation::cartesian, _re_csl, _im_csl)),
+        _csr(std::bind(&wcimplementation::cartesian, _re_csr, _im_csr)),
+        _cvl(std::bind(&wcimplementation::cartesian, _re_cvl, _im_cvl)),
+        _cvr(std::bind(&wcimplementation::cartesian, _re_cvr, _im_cvr)),
+        _ct(std::bind(&wcimplementation::cartesian, _re_ct, _im_ct))
+    {
+    }
+
+    WilsonCoefficients<BToU>
+    WilsonScanComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const bool & cp_conjugate) const
+    {
+        WilsonCoefficients<BToU> result
+        {
+            {{
+                _cvl(), _cvr(), _csl(), _csr(), _ct()
+            }},
+        };
+
+        if (cp_conjugate)
+        {
+            for (auto c = result._coefficients.begin(), c_end = result._coefficients.end() ; c != c_end ; ++c)
+            {
+                *c = conj(*c);
+            }
+        }
+
+        return result;
+    }
+
     WilsonScanModel::WilsonScanModel(const Parameters & parameters, const Options & options) :
         SMComponent<components::CKM>(parameters, *this),
         SMComponent<components::QCD>(parameters, *this),
-        WilsonScanComponent(parameters, options, *this)
+        WilsonScanComponent<components::DeltaBS1>(parameters, options, *this),
+        WilsonScanComponent<components::DeltaBU1>(parameters, options, *this)
     {
     }
 
