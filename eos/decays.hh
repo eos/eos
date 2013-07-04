@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2013, 2014, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_RARE_B_DECAYS_DECAYS_HH
-#define EOS_GUARD_SRC_RARE_B_DECAYS_DECAYS_HH 1
+#ifndef EOS_GUARD_EOS_DECAYS_HH
+#define EOS_GUARD_EOS_DECAYS_HH 1
 
 namespace eos
 {
@@ -28,6 +28,14 @@ namespace eos
     struct LargeRecoil { };
     struct LowRecoil { };
 
+    /*
+     * B_s Decays
+     */
+    template <typename T_> class BsToKstarLeptonNeutrino;
+
+    /*
+     * Rare B Decays
+     */
     template <typename T_> class BToKstarDilepton;
 
     template <typename T_> class BToKDilepton;

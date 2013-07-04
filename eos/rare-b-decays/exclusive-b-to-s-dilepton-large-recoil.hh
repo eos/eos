@@ -23,7 +23,7 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_LARGE_RECOIL_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_DILEPTON_LARGE_RECOIL_HH 1
 
-#include <eos/rare-b-decays/decays.hh>
+#include <eos/decays.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
