@@ -1950,6 +1950,32 @@ namespace eos
             -0.64, +0.15, -0.15, +0.02, -0.01
         };
         ///@}
+
+        /*
+         * Theoretical Constraints from e.g. Lattice QCD.
+         */
+
+        ///@name 2013
+        ///@{
+        /*
+         * Reproduced from [HPQCD:2013A].
+         */
+        static const MultivariateGaussianConstraintTemplate<3> B_to_K_fplus_17_to_23_HPQCD_2013A
+        {
+            {{ "B->K::f_+(s)@KMPW2010", "B->K::f_+(s)@KMPW2010", "B->K::f_+(s)@KMPW2010" }},
+            {{ Kinematics{ { "s", 17.0 } }, Kinematics{ { "s", 20.0 } }, Kinematics{ { "s", 23.0 } },}},
+            {{ Options{ }, Options{ }, Options{ } }},
+            {{ 1.07617,   1.50728,   2.34247   }},
+            {{ 0.0265336, 0.0299249, 0.0696341 }},
+            {{ 0.0265336, 0.0299249, 0.0696341 }},
+            {{ +0.00, +0.00, +0.00 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000000, 0.778675, 0.290551 }},
+                {{ 0.778675, 1.000000, 0.708433 }},
+                {{ 0.290551, 0.708433, 1.000000 }}
+            }}
+        };
+        ///@}
     }
 
     /* Constraint */
@@ -2298,6 +2324,9 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_1_to_6_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_14dot18_to_16_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_16_to_19_LHCb_2013B) },
+
+            /* Theory Constraints */
+            { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
         };
 
         auto f = factories.find(name);

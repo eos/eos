@@ -635,6 +635,13 @@ Theoretical Inputs
         arxiv:hep-ph/0512066
 
 
+    HPQCDD2013 : Bouchard, C. et al. [HPQCD]
+
+        The rare decay B ---> K ll form factors from lattice QCD
+
+        arxiv:1306.2384
+
+
     IKKR2007 : Ivanov, M.A. and Korner, J.G. and Kovalenko, S.G. and Roberts, C.D.
 
         B- to Light Meson Transition Form Factors

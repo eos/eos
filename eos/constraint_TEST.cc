@@ -330,6 +330,10 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013",
 #endif
                     "B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013",
+
+                    /* Theory Constraints */
+                    /* 2013 */
+                    "B->K::f_+@HPQCD-2013A",
                 };
 
                 std::cout << "# Constraints :" << std::endl;
