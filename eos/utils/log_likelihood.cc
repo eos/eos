@@ -883,7 +883,17 @@ namespace eos
                     }
                     result += ")";
                 }
-                result += ")";
+                result += "), inverse covariance matrix = (";
+                for (std::size_t i = 0 ; i < n_ ; ++i)
+                {
+                    result += "( ";
+                    for (std::size_t j = 0 ; j < n_ ; ++j)
+                    {
+                        result += stringify(covariance_inv[i][j]) + " ";
+                    }
+                    result += ")";
+                }
+                result += " )";
 
                 return result;
             }
