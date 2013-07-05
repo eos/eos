@@ -486,6 +486,27 @@ namespace eos
             Options{ { "q", "d"  }, { "l", "mu" } },
             +0.12, +0.15, -0.13, +0.02, -0.02
         };
+
+        /*
+         * Belle Collaboration
+         *
+         * Data taken from [Belle:2009B], Tables I and II, pp. 7 and 9, respectively.
+         */
+        static const MultivariateGaussianConstraintTemplate<3> B_to_Xs_gamma_1dot8_Belle_2009B
+        {
+            {{ "B->X_sgamma::BR(E_min)@NLO", "B->X_sgamma::E_1(E_min)@NLO", "B->X_sgamma::E_2(E_min)@NLO" }},
+            {{ Kinematics{ { "E_min", 1.8 } }, Kinematics{ { "E_min", 1.8 } }, Kinematics{ { "E_min", 1.8 } } }},
+            {{ Options{ }, Options{ }, Options{ } }},
+            {{ 3.36e-4, 2.294, 0.0370 }},
+            {{ 0.13e-4, 0.011, 0.0029 }},
+            {{ 0.13e-4, 0.011, 0.0029 }},
+            {{ 0.25e-4, 0.028, 0.0081 }},
+            {{
+                 {{ 1.000, 0.670, 0.800 }},
+                 {{ 0.670, 1.000, 0.780 }},
+                 {{ 0.800, 0.780, 1.000 }},
+            }}
+        };
         ///@}
 
         ///@name 2011 Data
@@ -1854,6 +1875,8 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_Belle_2009) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_Belle_2009) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_Belle_2009) },
+            // B->X_sgamma
+            { "B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle-2009B", make_factory(templates::B_to_Xs_gamma_1dot8_Belle_2009B) },
             /* 2011 */
             // HFAG
             { "B^0->K^*0gamma::S_K+C_K@HFAG-2011", make_factory(templates::Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_HFAG_2011) },

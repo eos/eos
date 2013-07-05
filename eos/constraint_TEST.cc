@@ -96,6 +96,10 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009",
                     "B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009",
 
+                    // Belle
+                    // B -> X_s gamma
+                    "B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle-2009B",
+
 
                     /* 2011 */
 

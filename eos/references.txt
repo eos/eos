@@ -86,6 +86,16 @@ Experimental Results
         arxiv:0904.0770 [hep-ex]
 
 
+    Belle:2009B : Limosani, A. et al. [BELLE Collaboration]
+
+        Measurement of Inclusive Radiative B-meson Decays with a Photon Energy
+        Threshold of 1.7 GeV
+
+        Phys. Rev. Lett. 103, 241801 (2009)
+
+        arxiv:0907.1384
+
+
     CDF:2011A : Aaltonen, T. et al. [CDF Collaboration]
 
         Observation of the Baryonic Flavor-Changing Neutral Current Decay
