@@ -39,6 +39,8 @@
 
 #include <time.h>
 
+#include <config.h>
+
 using namespace eos;
 
 class DoUsage
