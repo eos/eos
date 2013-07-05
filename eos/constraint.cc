@@ -1627,6 +1627,54 @@ namespace eos
         ///@name 2013 Data
         ///@{
         /*
+         * ATLAS Collaboration
+         *
+         * Data taken from [ATLAS:2013A]
+         */
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_ATLAS_2013A
+        {
+            "B->K^*ll::A_FB@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.07, +0.20, -0.20, +0.07, -0.07
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_ATLAS_2013A
+        {
+            "B->K^*ll::A_FB@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.48, +0.19, -0.19, +0.05, -0.05
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_ATLAS_2013A
+        {
+            "B->K^*ll::A_FB@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.16, +0.10, -0.10, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_ATLAS_2013A
+        {
+            "B->K^*ll::F_L@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.18, +0.15, -0.15, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_ATLAS_2013A
+        {
+            "B->K^*ll::F_L@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.28, +0.16, -0.16, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19_ATLAS_2013A
+        {
+            "B->K^*ll::F_L@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.35, +0.08, -0.08, +0.02, -0.02
+        };
+
+        /*
          * LHCb Collaboration
          *
          * Data taken from [LHCb:2013B]
@@ -2108,6 +2156,13 @@ namespace eos
             { "B^0::M_B^*-M_B@PDG-2012", make_factory(templates::B_Bstar_mass_splitting_PDG_2012) },
 
             /* 2013 */
+            // ATLAS
+            { "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_ATLAS_2013A) },
+            { "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_ATLAS_2013A) },
+            { "B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_ATLAS_2013A) },
+            { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_ATLAS_2013A) },
+            { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_ATLAS_2013A) },
+            { "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19_ATLAS_2013A) },
             // LHCb
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2013B) },

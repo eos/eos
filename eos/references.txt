@@ -4,6 +4,13 @@ References
 Experimental Results
 --------------------
 
+    ATLAS:2013A : [ATLAS Collaboration]
+
+        Angular Analysis of B_d ---> K^*0 mu^+ mu^- with the ATLAS Experiment
+
+        ATLAS-CONF-2013-038, ATLAS-COM-CONF-2013-043
+
+
     CLEO:2000 : Coan, T.E. et al. [CLEO Collaboration]
 
         Study of exclusive radiative B meson decays

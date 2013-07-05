@@ -274,6 +274,15 @@ class ConstraintTest :
 
                     /* 2013 */
 
+                    // ATLAS
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@ATLAS-2013A",
+                    "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@ATLAS-2013A",
+                    "B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@ATLAS-2013A",
+                    "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@ATLAS-2013A",
+                    "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@ATLAS-2013A",
+                    "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@ATLAS-2013A",
+
                     // LHCb
                     // B^0 -> K^*0 mu^+ mu^-
                     "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013",
