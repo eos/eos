@@ -1028,7 +1028,7 @@ namespace eos
             "B->K^*ll::A_FBavg@LargeRecoil",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
             Options{ { "q", "d"  }, { "l", "mu" } },
-            -0.02, +0.18, -0.16, +0.07, -0.07
+            -0.17, +0.14, -0.12, +0.07, -0.07
         };
         // A_FB in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_BaBar_2012
@@ -1036,7 +1036,7 @@ namespace eos
             "B->K^*ll::A_FBavg@LowRecoil",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
             Options{ { "q", "d"  }, { "l", "mu" } },
-            -0.31, +0.19, -0.11, +0.13, -0.13
+            -0.34, +0.15, -0.08, +0.07, -0.07
         };
         // A_FB in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19dot21_BaBar_2012
@@ -1044,7 +1044,7 @@ namespace eos
             "B->K^*ll::A_FBavg@LowRecoil",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
             Options{ { "q", "d"  }, { "l", "mu" } },
-            -0.34, +0.26, -0.17, +0.08, -0.08
+            -0.34, +0.21, -0.19, +0.07, -0.07
         };
         // F_L in [1.0, 6.0]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_BaBar_2012
@@ -1052,7 +1052,7 @@ namespace eos
             "B->K^*ll::F_Lavg@LargeRecoil",
             Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
             Options{ { "q", "d"  }, { "l", "mu" } },
-            +0.47, +0.13, -0.13, +0.04, -0.04
+            +0.25, +0.09, -0.08, +0.03, -0.03
         };
         // F_L in [14.18, 16.00]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_BaBar_2012
@@ -1060,7 +1060,7 @@ namespace eos
             "B->K^*ll::F_Lavg@LowRecoil",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
             Options{ { "q", "d"  }, { "l", "mu" } },
-            +0.42, +0.12, -0.16, +0.11, -0.11
+            +0.43, +0.10, -0.13, +0.09, -0.09
         };
         // F_L in [16.00, 19.21]
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19dot21_BaBar_2012
@@ -1068,7 +1068,7 @@ namespace eos
             "B->K^*ll::F_Lavg@LowRecoil",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.21 } },
             Options{ { "q", "d"  }, { "l", "mu" } },
-            +0.47, +0.18, -0.20, +0.13, -0.13
+            +0.55, +0.15, -0.17, +0.03, -0.03
         };
 
         /*

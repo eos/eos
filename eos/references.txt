@@ -59,13 +59,11 @@ Experimental Results
         arxiv:1204.3933 [hep-ex]
 
 
-    BaBar:2012B : Poireau, Vincent [BABAR Collaboration]
+    BaBar:2012B : Ritchie, Jack [BABAR Collaboration]
 
-        A selection of recent results from BaBar
+        Angular Analysis of B ---> K*l+l− in BABAR
 
-        Conference presentation at Moriond 2012
-
-        http://indico.in2p3.fr/getFile.py/access?contribId=10&sessionId=12&resId=0&materialId=slides&confId=6001
+        arXiv:1301.1700
 
 
     BaBar:2012C : [BaBar Collaboration]
