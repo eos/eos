@@ -34,11 +34,12 @@ Experimental Results
 
     BaBar:2012A : Poireau, Vincent [BABAR Collaboration]
 
-        BABAR Measurements on B->K(*)l+l- Rates and Rate Asymmetries
+        Measurement of Branching Fractions and Rate Asymmetries in the Rare Decays B ---> K(*) l^+ l^-
+        Rates and Rate Asymmetries
 
-        Conference presentation at Moriond 2012
+        Phys. Rev. D 86, 032012 (2012)
 
-        http://indico.in2p3.fr/getFile.py/access?contribId=11&sessionId=7&resId=0&materialId=slides&confId=6001
+        arxiv:1204.3933 [hep-ex]
 
 
     BaBar:2012B : Poireau, Vincent [BABAR Collaboration]
