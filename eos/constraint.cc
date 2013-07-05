@@ -1675,6 +1675,75 @@ namespace eos
         };
 
         /*
+         * CMS Collaboration
+         *
+         * Data taken from [CMS:2013A]
+         */
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_1_to_6_CMS_2013A
+        {
+            "B->K^*ll::BRavg@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            4.4e-8 * 5.0, +0.6e-8 * 5.0, -0.6e-8 * 5.0, +0.7e-8 * 5.0, -0.7e-8 * 5.0
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CMS_2013A
+        {
+            "B->K^*ll::A_FB@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.07, +0.12, -0.12, +0.01, -0.01
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CMS_2013A
+        {
+            "B->K^*ll::F_L@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.68, +0.10, -0.10, +0.02, -0.02
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CMS_2013A
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            4.6e-8 * 1.82, +0.8e-8 * 1.82, -0.9e-8 * 1.82, +0.8e-8 * 1.82, -0.8e-8 * 1.82
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CMS_2013A
+        {
+            "B->K^*ll::A_FB@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.29, +0.09, -0.09, +0.05, -0.05
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CMS_2013A
+        {
+            "B->K^*ll::F_L@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.53, +0.12, -0.12, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_BR_16_to_19_CMS_2013A
+        {
+            "B->K^*ll::BRavg@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            5.2e-8 * 3.0, +0.6e-8 * 3.0, -0.6e-8 * 3.0, +0.8e-8 * 3.0, -0.8e-8 * 3.0
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_CMS_2013A
+        {
+            "B->K^*ll::A_FB@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.41, +0.05, -0.05, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_F_L_16_to_19_CMS_2013A
+        {
+            "B->K^*ll::F_L@LowRecoil",
+            Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.44, +0.07, -0.07, +0.03, -0.03
+        };
+
+        /*
          * LHCb Collaboration
          *
          * Data taken from [LHCb:2013B]
@@ -2163,6 +2232,16 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_ATLAS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_ATLAS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19_ATLAS_2013A) },
+            // CMS
+            { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_CMS_2013A) },
+            { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CMS_2013A) },
+            { "B^0->K^*0mu^+mu^-::BR[16.00,19.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_16_to_19_CMS_2013A) },
+            { "B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_1_to_6_CMS_2013A) },
+            { "B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CMS_2013A) },
+            { "B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_CMS_2013A) },
+            { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CMS_2013A) },
+            { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CMS_2013A) },
+            { "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19_CMS_2013A) },
             // LHCb
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2013B) },

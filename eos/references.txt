@@ -169,6 +169,13 @@ Experimental Results
         Preliminary results for summer 2012 conferences
 
 
+    CMS:2013A : [CMS Collaboration]
+
+        Angular analysis and branching ratio measurement of the decay B0 to K^*0 mu^+ mu^-
+
+        CMS-PAS-BPH-11-009
+
+
     D0:2011A : Abazov, V.M. et al. [D0 Collaboration]
 
         Measurement of the CP-violating phase phi^J/psiphi_s using the flavor-tagged
