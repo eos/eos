@@ -1962,7 +1962,7 @@ namespace eos
          */
         static const MultivariateGaussianConstraintTemplate<3> B_to_K_fplus_17_to_23_HPQCD_2013A
         {
-            {{ "B->K::f_+(s)@KMPW2010", "B->K::f_+(s)@KMPW2010", "B->K::f_+(s)@KMPW2010" }},
+            {{ "B->K::f_+(s)", "B->K::f_+(s)", "B->K::f_+(s)" }},
             {{ Kinematics{ { "s", 17.0 } }, Kinematics{ { "s", 20.0 } }, Kinematics{ { "s", 23.0 } },}},
             {{ Options{ }, Options{ }, Options{ } }},
             {{ 1.07617,   1.50728,   2.34247   }},

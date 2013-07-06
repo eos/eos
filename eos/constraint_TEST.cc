@@ -333,7 +333,8 @@ class ConstraintTest :
 
                     /* Theory Constraints */
                     /* 2013 */
-                    "B->K::f_+@HPQCD-2013A",
+                    // disabled, since it needs the option "form-factors" specified.
+                    //"B->K::f_+@HPQCD-2013A",
                 };
 
                 std::cout << "# Constraints :" << std::endl;
