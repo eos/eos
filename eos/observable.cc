@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -19,6 +19,8 @@
  */
 
 #include <eos/observable.hh>
+#include <eos/form-factors/form-factor-adapter.hh>
+#include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/form-factors-impl.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
@@ -66,6 +68,16 @@ namespace eos
         return std::make_pair(sname, make_concrete_observable_factory(sname, function, kinematics_names));
     }
 
+    template <typename Transition_>
+    std::pair<std::string, ObservableFactory *> make_observable(const char * name,
+            const char * process,
+            double (FormFactors<Transition_>::* function)(const double &) const)
+    {
+        std::string sname(name), sprocess(process);
+
+        return std::make_pair(sname, new FormFactorAdapterFactory<Transition_>(sname, sprocess, function));
+    }
+
     ObservablePtr
     Observable::make(const std::string & _name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
     {
@@ -83,6 +95,10 @@ namespace eos
 
             make_observable("B_q->ll::BR@Untagged",
                     &BToDilepton::branching_ratio_untagged_integrated),
+
+            // B -> K Form Factors
+            make_observable("B->K::f_+(s)", "B->K",
+                    &FormFactors<PToP>::f_p),
 
             // B -> K, cf. [BZ2004v2]
             make_observable("B->K::f_+(s)@BZ2004v2",
