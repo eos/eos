@@ -78,6 +78,17 @@ namespace eos
         return std::make_pair(sname, new FormFactorAdapterFactory<Transition_>(sname, sprocess, function));
     }
 
+    template <typename Transition_>
+    std::pair<std::string, ObservableFactory *> make_observable(const char * name,
+            const char * process,
+            double (FormFactors<Transition_>::* numerator)(const double &) const,
+            double (FormFactors<Transition_>::* denominator)(const double &) const)
+    {
+        std::string sname(name), sprocess(process);
+
+        return std::make_pair(sname, new FormFactorRatioAdapterFactory<Transition_>(sname, sprocess, numerator, denominator));
+    }
+
     ObservablePtr
     Observable::make(const std::string & _name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
     {
@@ -111,6 +122,9 @@ namespace eos
 
             make_observable("B->K^*::A_2(s)", "B->K^*",
                     &FormFactors<PToV>::a_2),
+
+            make_observable("B->K^*::V(s)/A_1(s)", "B->K^*",
+                    &FormFactors<PToV>::v, &FormFactors<PToV>::a_1),
 
             /* Exclusive Decays */
 
