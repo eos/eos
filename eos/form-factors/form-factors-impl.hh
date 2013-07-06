@@ -380,7 +380,7 @@ namespace eos
 
     template <> class BFW2010FormFactors<PToP> :
           public FormFactors<PToP>
-   {
+    {
           private:
               // fit parametrisation for P -> P according to [BFW2011]. We use the simple series expansion and
               // the results form LCSR only.
@@ -430,7 +430,7 @@ namespace eos
                   static const double prefactor = (_m_B + _m_K) / _m_B;
                   return prefactor / (1.0 - s / _m_Bs2) * (_alpha_T0_0 + _alpha_T0_1 * _calc_z(s));
               }
-      };
+    };
 }
 
 #endif
