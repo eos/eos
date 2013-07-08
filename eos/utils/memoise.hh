@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -150,6 +150,12 @@ namespace eos
                     return i->second;
 
                 Result_ result = f(p ...);
+
+                if (_memoisations.size() > 100000u)
+                {
+                    _memoisations.clear();
+                }
+
                 _memoisations.insert(std::pair<KeyType, Result_>(key, result));
 
                 return result;
