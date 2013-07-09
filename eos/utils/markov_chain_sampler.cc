@@ -22,7 +22,6 @@
 #include <config.h>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
-#include <eos/utils/memoise.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/rvalue.hh>
@@ -868,10 +867,6 @@ namespace eos
 
                 Log::instance()->message("markov_chain_sampler.prerun_progress", ll_informational)
                     << "Pre-run has completed " << pre_run_info.iterations << " iterations";
-
-                Log::instance()->message("markov_chain_sampler.prerun_clean_up", ll_debug)
-                    << "Clearing the memoise cache.";
-                MemoisationControl::instance()->clear();
             }
 
             if (pre_run_info.converged)
@@ -961,11 +956,6 @@ namespace eos
                     }
                 }
 
-                // todo Clear history now? There should be no prop density updates
-                // in main run that require chunks from the past
-                Log::instance()->message("markov_chain_sampler.mainrun_clean_up", ll_debug)
-                    << "Clearing the memoise cache and chain history.";
-                MemoisationControl::instance()->clear();
                 for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
                 {
                     c->clear();
