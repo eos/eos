@@ -103,6 +103,7 @@ class ConstraintTest :
 
                     // Belle
                     // B -> X_s gamma
+                    "B->X_sgamma::BR[1.8]@Belle-2009B",
                     "B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle-2009B",
 
 
