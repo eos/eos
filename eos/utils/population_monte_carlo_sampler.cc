@@ -639,7 +639,7 @@ namespace eos
             // variance for at least two results
             if (past_status.size() < config.minimum_steps)
             {
-                Log::instance()->message("PMC_sampler.check_convergence", ll_debug)
+                Log::instance()->message("PMC_sampler.check_convergence", ll_informational)
                     << "Found " << past_status.size()
                     << " status, but need at least " << config.minimum_steps
                     << " to define convergence based on previous steps";
@@ -663,7 +663,7 @@ namespace eos
             // require a minimum value
             if (welford_perplexity.mean() < config.minimum_perplexity)
             {
-                Log::instance()->message("PMC_sampler.check_convergence", ll_debug)
+                Log::instance()->message("PMC_sampler.check_convergence", ll_informational)
                     << "perplexity mean too small: " << stringify(welford_perplexity.mean(), 4)
                     << " < " << config.minimum_perplexity;
                 return false;
@@ -671,32 +671,32 @@ namespace eos
             // require that std_deviation be small enough
             if (relative_std_deviation_perplexity > config.maximum_relative_std_deviation)
             {
-                Log::instance()->message("PMC_sampler.check_convergence", ll_debug)
+                Log::instance()->message("PMC_sampler.check_convergence", ll_informational)
                     << "perplexity relative std_deviation too large: " << stringify(relative_std_deviation_perplexity, 4)
                     << " > " << config.maximum_relative_std_deviation;
                 return false;
             }
 
-            // same for eff sample size
+            // same for eff. sample size
             if (not config.ignore_eff_sample_size)
             {
                 if (welford_eff_sample_size.mean() < config.minimum_eff_sample_size)
                 {
-                    Log::instance()->message("PMC_sampler.check_convergence", ll_debug)
+                    Log::instance()->message("PMC_sampler.check_convergence", ll_informational)
                         << "ESS mean too small: " << stringify(welford_eff_sample_size.mean(), 4)
                         << " < " << config.minimum_eff_sample_size;
                     return false;
                 }
                 if (relative_std_deviation_ess > config.maximum_relative_std_deviation)
                 {
-                    Log::instance()->message("PMC_sampler.check_convergence", ll_debug)
+                    Log::instance()->message("PMC_sampler.check_convergence", ll_informational)
                         << "ESS relative std_deviation too large: " << stringify(relative_std_deviation_ess, 4)
                         << " > " << config.maximum_relative_std_deviation;
                     return false;
                 }
             }
 
-            Log::instance()->message("PMC_sampler.check_convergence", ll_debug)
+            Log::instance()->message("PMC_sampler.check_convergence", ll_informational)
                 << "Mean and relative std. deviation of perplexity (" << stringify(welford_perplexity.mean(), 4)
                 << ", " << stringify(relative_std_deviation_perplexity, 4) << ")"
                 << (config.ignore_eff_sample_size ? "" :
@@ -756,9 +756,6 @@ namespace eos
             auto component_record = PopulationMonteCarloSampler::Output::component_record(dim);
             auto dof = components.create_attribute("dof", hdf5::Scalar<int>("dof"));
             dof = config.degrees_of_freedom;
-
-            Log::instance()->message("PMC_sampler.dump", ll_debug)
-                << "dof: " <<  prop->comp[0]->df << " (pmc) " << config.degrees_of_freedom << " (config)";
 
             // save whether std contains the actual covariance matrix or the GSL cholesky decomposition
             auto chol = components.create_attribute("chol", hdf5::Scalar<int>("chol"));
