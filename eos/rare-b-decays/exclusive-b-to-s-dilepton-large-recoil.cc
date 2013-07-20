@@ -746,6 +746,45 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::differential_p_prime_4(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
+
+        // cf. [DMRV2012], p. 9, eq. (15)
+        return (a_c.j4 + a_c_bar.j4) / std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_p_prime_5(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
+
+        // cf. [DMRV2012], p. 9, eq. (16)
+        return (a_c.j5 + a_c_bar.j5) / (2.0 * std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s)));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_p_prime_6(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
+
+        // cf. [DMRV2012], p. 9, eq. (17)
+        return -1.0 * (a_c.j7 + a_c_bar.j7) / (2.0 * std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s)));
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
         // cf. [BHvD2012], p. 5, eq. (3.15)
@@ -1096,6 +1135,45 @@ namespace eos
         // cf. [BS2011], eq. (30), p. 8
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return 0.5 * a_c.j9 / a_c.j2s;
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_p_prime_4(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        // cf. [DMRV2012], p. 9, eq. (15)
+        return (a_c.j4 + a_c_bar.j4) / std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_p_prime_5(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        // cf. [DMRV2012], p. 9, eq. (16)
+        return (a_c.j5 + a_c_bar.j5) / (2.0 * std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s)));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_p_prime_6(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        // cf. [DMRV2012], p. 9, eq. (17)
+        return -1.0 * (a_c.j7 + a_c_bar.j7) / (2.0 * std::sqrt(-1.0 * (a_c.j2c + a_c_bar.j2c) * (a_c.j2s + a_c_bar.j2s)));
     }
 
     double

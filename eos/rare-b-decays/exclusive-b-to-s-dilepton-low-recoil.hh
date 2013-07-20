@@ -77,6 +77,9 @@ namespace eos
             double differential_transverse_asymmetry_5(const double & s) const;
             double differential_transverse_asymmetry_re(const double & s) const;
             double differential_transverse_asymmetry_im(const double & s) const;
+            double differential_p_prime_4(const double & s) const;
+            double differential_p_prime_5(const double & s) const;
+            double differential_p_prime_6(const double & s) const;
             double differential_h_1(const double & s) const;
             double differential_h_2(const double & s) const;
             double differential_h_3(const double & s) const;
@@ -126,6 +129,9 @@ namespace eos
             double integrated_transverse_asymmetry_5(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_re(const double & s_min, const double & s_max) const;
             double integrated_transverse_asymmetry_im(const double & s_min, const double & s_max) const;
+            double integrated_p_prime_4(const double & s_min, const double & s_max) const;
+            double integrated_p_prime_5(const double & s_min, const double & s_max) const;
+            double integrated_p_prime_6(const double & s_min, const double & s_max) const;
             double integrated_h_1(const double & s_min, const double & s_max) const;
             double integrated_h_1_naive(const double & s_min, const double & s_max) const;
             double integrated_h_2(const double & s_min, const double & s_max) const;

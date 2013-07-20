@@ -577,6 +577,14 @@ Theoretical Inputs
         arxiv:hep-ph/9711280
 
 
+    DMRV2012 : Descotes-Genon, S. and Matias, J. and Ramon, M. and Virto, J.
+
+        Implications from clean observables for the binned analysis
+        of B -> K^* mu^+ mu^- at large recoil
+
+         arXiv:1207.2753
+
+
     EHMRR2010 : Egede, U. and Hurth, T. and Matias, J. and Ramon, M. and Reece, W.
 
         On the new physics reach of the decay mode Bbar_d -> Kbar^*0 l^+ l^-
