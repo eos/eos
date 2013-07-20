@@ -256,6 +256,13 @@ Experimental Results
         arxiv:1304.6325 [hep-ex]
 
 
+    LHCb:2013C : Nicola Serra for the [LHCb Collaboration]
+
+        Studies of Electroweak Penguin Transitions in b -> s mu mu
+
+        Talk given at EPS-HEP, Stockholm, July 19th 2013
+
+
 Averages and Numerical Inputs
 -----------------------------
 

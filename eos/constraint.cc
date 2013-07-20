@@ -1954,6 +1954,79 @@ namespace eos
         ///@}
 
         /*
+         * LHCb Collaboration
+         *
+         * Data taken from [LHCb:2013C]
+         */
+        // P'_4, LHCb uses a different sign and a factor 1/2 relative to the theory prediction.
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_4_1_to_6_LHCb_2013C
+        {
+            "B->K^*ll::P'_4@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.58, +0.32, -0.36, +0.06, -0.06
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_4_14dot18_to_16_LHCb_2013C
+        {
+            "B->K^*ll::P'_4@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.18, +0.54, -0.70, +0.08, -0.08
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_4_16_to_19_LHCb_2013C
+        {
+            "B->K^*ll::P'_4@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.70, +0.44, -0.52, +0.06, -0.06
+        };
+        // P'_5
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_5_1_to_6_LHCb_2013C
+        {
+            "B->K^*ll::P'_5@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.21, +0.20, -0.21, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_5_14dot18_to_16_LHCb_2013C
+        {
+            "B->K^*ll::P'_5@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.79, +0.20, -0.13, +0.18, -0.18
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_5_16_to_19_LHCb_2013C
+        {
+            "B->K^*ll::P'_5@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.60, +0.19, -0.16, +0.09, -0.09
+        };
+        // P'_6, LHCb uses a different sign
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_6_1_to_6_LHCb_2013C
+        {
+            "B->K^*ll::P'_6@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.18, +0.21, -0.21, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_6_14dot18_to_16_LHCb_2013C
+        {
+            "B->K^*ll::P'_6@LowRecoil",
+            Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            +0.18, +0.24, -0.25, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_Pprime_6_16_to_19_LHCb_2013C
+        {
+            "B->K^*ll::P'_6@LowRecoil",
+            Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
+            Options{ { "q", "d" }, { "l", "mu" } },
+            -0.31, +0.37, -0.38, +0.03, -0.03
+        };
+        ///@}
+
+        /*
          * Theoretical Constraints from e.g. Lattice QCD.
          */
 
@@ -2326,6 +2399,15 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_1_to_6_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_14dot18_to_16_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_16_to_19_LHCb_2013B) },
+            { "B^0->K^*0mu^+mu^-::P'_4[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_4_1_to_6_LHCb_2013C) },
+            { "B^0->K^*0mu^+mu^-::P'_4[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_4_14dot18_to_16_LHCb_2013C) },
+            { "B^0->K^*0mu^+mu^-::P'_4[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_4_16_to_19_LHCb_2013C) },
+            { "B^0->K^*0mu^+mu^-::P'_5[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_5_1_to_6_LHCb_2013C) },
+            { "B^0->K^*0mu^+mu^-::P'_5[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_5_14dot18_to_16_LHCb_2013C) },
+            { "B^0->K^*0mu^+mu^-::P'_5[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_5_16_to_19_LHCb_2013C) },
+            { "B^0->K^*0mu^+mu^-::P'_6[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_1_to_6_LHCb_2013C) },
+            { "B^0->K^*0mu^+mu^-::P'_6[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_14dot18_to_16_LHCb_2013C) },
+            { "B^0->K^*0mu^+mu^-::P'_6[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_16_to_19_LHCb_2013C) },
 
             /* Theory Constraints */
             { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
