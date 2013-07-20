@@ -1940,7 +1940,9 @@ namespace eos
             "B->K^*ll::A_T^re@LowRecoil",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
             Options{ { "q", "d" }, { "l", "mu" } },
-            -1.00, +0.05, -0.00, +0.02, -0.00
+            -1.00, +0.05, -0.01, +0.02, -0.01
+            // (unphysical) lower errors (both stat and syst) adjusted to -0.01 to work
+            // around limitations in the asymmetric gaussian likelihood block.
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_Tre_16_to_19_LHCb_2013B
         {
