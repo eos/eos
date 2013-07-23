@@ -305,6 +305,139 @@ namespace eos
             }
     };
 
+    template <typename Process_> class FMvD2015FormFactors :
+        public FormFactors<PToV>
+    {
+        private:
+            UsedParameter _Fpara_0, _Fpara_beta1;
+            UsedParameter _Fperp_0, _Fperp_beta1;
+            UsedParameter _Flong_0;
+            UsedParameter _Ftime_0, _Ftime_beta1;
+
+            double _lambda(const double & s) const
+            {
+                static const double mB2 = Process_::mB * Process_::mB, mB4 = mB2 * mB2;
+                static const double mV2 = Process_::mV * Process_::mV, mV4 = mV2 * mV2;
+
+                return s * s + mB4 + mV4 - 2.0 * (s * (mB2 + mV2) + mB2 * mV2);
+            }
+
+            double _t_plus() const
+            {
+                return power_of<2>(Process_::mB + Process_::mV);
+            }
+
+            double _t_minus() const
+            {
+                return power_of<2>(Process_::mB - Process_::mV);
+            }
+
+            double _t_zero() const
+            {
+                return _t_plus() - std::sqrt((_t_plus() - _t_minus()) * _t_plus());
+            }
+
+            double _z(const double & t) const
+            {
+                return (std::sqrt(_t_plus() - t) - std::sqrt(_t_plus() - _t_zero())) / (std::sqrt(_t_plus() - t) + std::sqrt(_t_plus() - _t_zero()));
+            }
+
+            double _Flong_beta1() const
+            {
+                return (1.0 - _Fpara_0 / _Flong_0 * std::sqrt(_t_minus() / (2.0 * Process_::mB * Process_::mB)) * (1.0 + _Fpara_beta1 * (_z(_t_minus()) - _z(0.0)))) / (_z(0) - _z(_t_minus()));
+            }
+
+        public:
+            FMvD2015FormFactors(const Parameters & p, const Options &) :
+                _Fpara_0(p[std::string(Process_::label) + "::F_para(0)@FMvD2015"], *this),
+                _Fpara_beta1(p[std::string(Process_::label) + "::beta_para^1@FMvD2015"], *this),
+                _Fperp_0(p[std::string(Process_::label) + "::F_perp(0)@FMvD2015"], *this),
+                _Fperp_beta1(p[std::string(Process_::label) + "::beta_perp^1@FMvD2015"], *this),
+                _Flong_0(p[std::string(Process_::label) + "::F_long(0)@FMvD2015"], *this),
+                _Ftime_0(p[std::string(Process_::label) + "::F_time(0)@FMvD2015"], *this),
+                _Ftime_beta1(p[std::string(Process_::label) + "::beta_time^1@FMvD2015"], *this)
+            {
+            }
+
+            ~FMvD2015FormFactors()
+            {
+            }
+
+            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
+            {
+                return new FMvD2015FormFactors(parameters, Options());
+            }
+
+            virtual double f_long(const double & s) const
+            {
+                double zs = _z(s), z0 = _z(0.0);
+
+                return _Flong_0 / (1.0 - s / Process_::mR2_1p) * (1.0 + _Flong_beta1() * (zs - z0));
+            }
+
+            virtual double f_perp(const double & s) const
+            {
+                static const double mB = Process_::mB, mB2 = mB * mB;
+                static const double mV = Process_::mV, mV2 = mV * mV;
+
+                double zs = _z(s), z0 = _z(0.0);
+                double kin = std::sqrt(_lambda(s)) / (mB2 - mV2);
+
+                return _Fperp_0 * kin / (1.0 - s / Process_::mR2_1m) * (1.0 + _Fperp_beta1 * (zs - z0));
+            }
+
+            virtual double f_para(const double & s) const
+            {
+                double zs = _z(s), z0 = _z(0.0);
+
+                return _Fpara_0 / (1.0 - s / Process_::mR2_1p) * (1.0 + _Fpara_beta1 * (zs - z0));
+            }
+
+            virtual double f_time(const double & s) const
+            {
+                static const double mB = Process_::mB, mB2 = mB * mB;
+                static const double mV = Process_::mV, mV2 = mV * mV;
+
+                double zs = _z(s), z0 = _z(0.0);
+                double kin = std::sqrt(_lambda(s)) / (mB2 - mV2);
+
+                return _Ftime_0 * kin / (1.0 - s / Process_::mR2_0m) * (1.0 + _Ftime_beta1 * (zs - z0));
+            }
+
+            virtual double v(const double & s) const
+            {
+                static const double mB = Process_::mB;
+                static const double mV = Process_::mV;
+
+                return this->f_perp(s) * mB * (mB + mV) / std::sqrt(2.0 * _lambda(s));
+            }
+
+            virtual double a_0(const double & s) const
+            {
+                static const double mB = Process_::mB, mB2 = mB * mB;
+
+                return mB2 / std::sqrt(_lambda(s)) * f_time(s);
+            }
+
+            virtual double a_1(const double & s) const
+            {
+                return this->f_para(s) * Process_::mB / std::sqrt(2.0) / (Process_::mB + Process_::mV);
+            }
+
+            virtual double a_2(const double & s) const
+            {
+                static const double mB = Process_::mB, mB2 = mB * mB;
+                static const double mV = Process_::mV, mV2 = mV * mV;
+
+                return ((mB + mV) * mB / std::sqrt(2.0) * (mB2 - mV2 - s) * this->f_para(s) - 2.0 * mV * mB2 * (mB + mV) * this->f_long(s)) / _lambda(s);
+            }
+
+            virtual double a_12(const double & s) const
+            {
+                return this->f_long(s) * Process_::mB / (8.0 * Process_::mV);
+            }
+    };
+
     /* P -> P Processes */
 
     double FormFactors<PToP>::f_p_d1(const double & s) const
