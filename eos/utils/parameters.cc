@@ -412,6 +412,15 @@ namespace eos
             Parameter::Template{"B->K^*::b^A1_1@KMPW2010",                       -0.46,           +0.34,           +1.2           },
             Parameter::Template{"B->K^*::b^A2_1@KMPW2010",                       -2.2,            -0.85,           +2.03          },
 
+            // form factor parameter for B_s->K^* according to [FMvD2015].
+            Parameter::Template{"B_s->K^*::F_perp(0)@FMvD2015",                   0.349,           0.349,           0.349         },
+            Parameter::Template{"B_s->K^*::F_para(0)@FMvD2015",                   0.379,           0.379,           0.379         },
+            Parameter::Template{"B_s->K^*::F_long(0)@FMvD2015",                   0.314,           0.314,           0.314         },
+            Parameter::Template{"B_s->K^*::F_time(0)@FMvD2015",                   0.314,           0.314,           0.314         },
+            Parameter::Template{"B_s->K^*::beta_perp^1@FMvD2015",                -4.980,          -4.980,          -4.980         },
+            Parameter::Template{"B_s->K^*::beta_para^1@FMvD2015",                +0.065,          +0.065,          +0.065         },
+            Parameter::Template{"B_s->K^*::beta_time^1@FMvD2015",                +0.065,          +0.065,          +0.065         },
+
             // form factor parameters for B->K^* simple series expansion (SSE) based on
             // LCSR according to [BFW2010], table 10, p. 33, corrected values from Aoife Bharucha
             Parameter::Template{"B->K^*::beta^V0_0@BFW2010",                     +0.31,           +0.31,           +0.31,         },
