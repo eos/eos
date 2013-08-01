@@ -131,7 +131,7 @@ namespace eos
         }
     };
 
-    struct AmorosoConstraintTemplate
+    struct AmorosoTripleLimitConstraintTemplate
     {
         std::string observable;
 
@@ -157,6 +157,32 @@ namespace eos
             LogLikelihoodBlockPtr block = LogLikelihoodBlock::Amoroso(cache, observable, physical_limit,
                                                                       upper_limit_10, upper_limit_50, upper_limit_90,
                                                                       theta, alpha, beta);
+
+            return Constraint(name, { observable }, { block });
+        }
+    };
+
+    struct AmorosoConstraintTemplate
+    {
+        std::string observable;
+
+        Kinematics kinematics;
+
+        Options options;
+
+        double physical_limit, theta, alpha, beta;
+
+        Constraint
+        make(const std::string & name, const Options & options) const
+        {
+            Parameters parameters(Parameters::Defaults());
+            ObservableCache cache(parameters);
+
+            ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
+            if (! observable.get())
+                throw InternalError("make_amoroso_constraint: " + name + ": '" + this->observable + "' is not a valid observable name");
+
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::Amoroso(cache, observable, physical_limit, theta, alpha, beta);
 
             return Constraint(name, { observable }, { block });
         }
@@ -942,7 +968,7 @@ namespace eos
         };
         // use the data from the Bayes-Heinrich method
         // the mode is not at zero, but around 3.1e-9
-        static const AmorosoConstraintTemplate Bzero_to_dimuon_LHCb_CMS_2011_Bayes
+        static const AmorosoTripleLimitConstraintTemplate Bzero_to_dimuon_LHCb_CMS_2011_Bayes
         {
             "B_q->ll::BR@Untagged",
             Kinematics{ },
@@ -1585,7 +1611,7 @@ namespace eos
          * c) cdf(x_50) = 0.5
          * d) cdf(x_90) = 0.9
          */
-        static const AmorosoConstraintTemplate Bzero_to_dimuon_LHCb_2012
+        static const AmorosoTripleLimitConstraintTemplate Bzero_to_dimuon_LHCb_2012
         {
             "B_q->ll::BR@Untagged",
             Kinematics(),
@@ -1767,6 +1793,29 @@ namespace eos
             Options{ { "q", "d" }, { "l", "mu" } },
             +0.44, +0.07, -0.07, +0.03, -0.03
         };
+
+        /*
+         * CMS Collaboration
+         *
+         * Data taken from [CMS:2013B]
+         */
+        ///@name 2013
+        ///@{
+
+        /* fit Amoroso to result assuming
+         * a) cdf(0) = 0
+         * b) mode = 3.0
+         * c) 68% in (2.1, 4.0)
+         * d) pdf(2.1) = pdf(4.0) (smallest interval)
+         */
+        static const AmorosoConstraintTemplate Bzero_to_dimuon_CMS_2013B
+        {
+            "B_q->ll::BR@Untagged",
+            Kinematics(),
+            Options{ { "q", "s"  }, { "l", "mu" } },
+            0.0, 1.9859633460e-9, 2.7971996021, 2.0218845762
+        };
+        ///@}
 
         /*
          * LHCb Collaboration
@@ -2023,6 +2072,29 @@ namespace eos
             Kinematics{ { "s_min", 16.0 }, { "s_max", 19.00 } },
             Options{ { "q", "d" }, { "l", "mu" } },
             -0.31, +0.37, -0.38, +0.03, -0.03
+        };
+        ///@}
+
+        /*
+         * LHCb Collaboration
+         *
+         * Data taken from [LHCb:2013D]
+         */
+        ///@name 2013
+        ///@{
+
+        /* fit Amoroso to result assuming
+         * a) cdf(0) = 0
+         * b) mode = 2.9
+         * c) 68% in (1.90, 4.04)
+         * d) pdf(1.90) = pdf(4.04) (smallest interval)
+         */
+        static const AmorosoConstraintTemplate Bzero_to_dimuon_LHCb_2013D
+        {
+            "B_q->ll::BR@Untagged",
+            Kinematics(),
+            Options{ { "q", "s"  }, { "l", "mu" } },
+            0.0, 2.23067e-9, 2.19078, 2.00322
         };
         ///@}
 
@@ -2371,6 +2443,7 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CMS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CMS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19_CMS_2013A) },
+            { "B^0_s->mu^+mu^-::BR@CMS-2013B", make_factory(templates::Bzero_to_dimuon_CMS_2013B) },
             // LHCb
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2013B) },
@@ -2408,6 +2481,7 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::P'_6[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_1_to_6_LHCb_2013C) },
             { "B^0->K^*0mu^+mu^-::P'_6[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_14dot18_to_16_LHCb_2013C) },
             { "B^0->K^*0mu^+mu^-::P'_6[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_16_to_19_LHCb_2013C) },
+            { "B^0_s->mu^+mu^-::BR@LHCb-2013D", make_factory(templates::Bzero_to_dimuon_LHCb_2013D) },
 
             /* Theory Constraints */
             { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
