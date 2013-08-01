@@ -559,6 +559,17 @@ namespace eos
                 alpha(alpha),
                 beta(beta)
             {
+
+                if (theta <= 0)
+                    throw InternalError("LogLikelihoodBlock::Amoroso: scale parameter theta (" + stringify(theta) +
+                            ") must be positive for an upper limit");
+                if (alpha <= 0)
+                    throw InternalError("LogLikelihoodBlock::Amoroso: shape parameter alpha (" + stringify(alpha) +
+                            ") must be positive");
+                if (beta <= 0)
+                    throw InternalError("LogLikelihoodBlock::Amoroso: shape parameter beta (" + stringify(beta) +
+                                ") must be positive");
+
                 // calculate normalization factors that are independent of x
                 norm = -1.0 * gsl_sf_lngamma(alpha) + std::log(std::fabs(beta / theta));
             }
@@ -1128,13 +1139,6 @@ namespace eos
         if (upper_limit_95 <= upper_limit_90)
             throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_95 <= upper_limit_90");
 
-        if (theta <= 0)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: scale parameter theta (" + stringify(theta) +
-                                ") must be positive for an upper limit");
-        if (alpha <= 0)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: shape parameter alpha (" + stringify(alpha) +
-                                ") must be positive");
-
         unsigned index = cache.add(observable);
 
         implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, 1 / alpha);
@@ -1170,16 +1174,6 @@ namespace eos
 
         if (upper_limit_95 <= upper_limit_90)
             throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_95 <= upper_limit_90");
-
-        if (theta <= 0)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: scale parameter theta (" + stringify(theta) +
-                                ") must be positive for an upper limit");
-        if (alpha <= 0)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: shape parameter alpha (" + stringify(alpha) +
-                                ") must be positive");
-        if (beta <= 0)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: shape parameter beta (" + stringify(beta) +
-                                ") must be positive");
 
         unsigned index = cache.add(observable);
 
@@ -1221,15 +1215,7 @@ namespace eos
         if (upper_limit_90 <= upper_limit_50)
             throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_90 <= upper_limit_50");
 
-        if (theta <= 0)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: scale parameter theta (" + stringify(theta) +
-                                ") must be positive for an upper limit");
-        if (alpha <= 0)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: shape parameter alpha (" + stringify(alpha) +
-                                ") must be positive");
-
         unsigned index = cache.add(observable);
-
         implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta);
 
         // check consistency
@@ -1250,6 +1236,15 @@ namespace eos
         }
 
         return LogLikelihoodBlockPtr(a);
+    }
+
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Amoroso(ObservableCache cache, const ObservablePtr & observable,
+    		const double & physical_limit, const double & theta, const double & alpha, const double & beta)
+    {
+        unsigned index = cache.add(observable);
+        return LogLikelihoodBlockPtr(new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta));
     }
 
     LogLikelihoodBlockPtr

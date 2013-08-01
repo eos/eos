@@ -222,6 +222,28 @@ namespace eos
                     const double & upper_limit_50, const double & upper_limit_90,
                     const double & theta, const double & alpha, const double & beta);
 
+            /*!
+             * A likelihood contribution representing an upper limit on a quantity x.
+             *
+             * Internally, it is represented by an Amoroso distribution [C2004] with
+             * location parameter a set to the physical limit, scale parameter \theta and
+             * shape parameters \alpha, \beta supplied by the user.
+             *
+             * @note The mode of the distribution is typically not at the physical limit.
+             *
+             * For example, consider a yet unobserved branching ratio, which has to be non-negative, x>= 0.
+             *
+             * @param cache The Observable cache from which we draw the predictions.
+             * @param observable The Observable whose distribution we model.
+             * @param mode The lower, physical limit. A branching ratio has to be >= 0.
+             * @param theta scale parameter
+             * @param alpha 1st shape parameter
+             * @param beta  2nd shape parameter
+             * @return
+             */
+            static LogLikelihoodBlockPtr Amoroso(ObservableCache cache, const ObservablePtr & observable,
+                    const double & physical_limit, const double & theta, const double & alpha, const double & beta);
+
             // todo document
             static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components, 
                                                  const std::vector<double> & weights);
