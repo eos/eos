@@ -879,7 +879,7 @@ namespace eos
             mix_mvdens * mmv_old = mmv;
             mmv = mix_mvdens_alloc(n_live_components, mmv_old->ndim, err);
 
-            unsigned i_new = -1;
+            unsigned i_new = 0;
             for (unsigned i_old = 0 ; i_old < mmv_old->ncomp ; ++i_old)
             {
                 if (mmv_old->wght[i_old] == 0.0)
@@ -890,11 +890,12 @@ namespace eos
                     mvdens_empty(mmv_old->comp[i_old]);
                     continue;
                 }
-                ++i_new;
 
                 // equal weight to every cluster
                 mmv->wght[i_new] = 1.0 / n_live_components;
                 mmv->comp[i_new] = mmv_old->comp[i_old];
+
+                ++i_new;
             }
 
             return n_live_components;
