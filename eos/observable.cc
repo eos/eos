@@ -23,6 +23,7 @@
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
+#include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
@@ -181,6 +182,10 @@ namespace eos
                     &ZeroRecoilSumRule<LambdaBToC>::axialvector_current),
 
             /* Exclusive B Decays */
+
+            // B_q -> l nubar
+            make_observable("B_u->lnu::BR",
+                    &BToLeptonNeutrino::branching_ratio),
 
             // B -> pi l nu
             make_observable("B->pilnu::dBR/ds",

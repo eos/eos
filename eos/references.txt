@@ -684,6 +684,13 @@ Theoretical Inputs
         arxiv:hep-ph/9711280
 
 
+    DBG2013 : Dutta, R. and Bhol, A. and Giri, A.K.
+
+        An effective theory approach to NP in b -> u and b -> c leptonic and semileptonic decays
+
+        arxiv:1307.6653
+
+
     DKMMO2008 : Duplancic, G. and Khodjamirian, A. and Mannel, Th. and Melic, B.
                 and Offen, N.
 
