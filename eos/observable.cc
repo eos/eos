@@ -21,6 +21,7 @@
 #include <eos/observable.hh>
 #include <eos/form-factors/form-factor-adapter.hh>
 #include <eos/form-factors/mesonic-impl.hh>
+#include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
@@ -156,7 +157,22 @@ namespace eos
             make_observable("B->K^*::A_2(s)/A_1(s)", "B->K^*",
                     &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1),
 
-            /* Exclusive Decays */
+            /* Exclusive B Decays */
+
+            // B -> pi l nu
+            make_observable("B->pilnu::dBR/ds",
+                    &BToPiLeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple("s")),
+
+            make_observable("B->pilnu::BR",
+                    &BToPiLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->pilnu::zeta",
+                    &BToPiLeptonNeutrino::integrated_zeta,
+                    std::make_tuple("s_min", "s_max")),
+
+            /* Exclusive Rare B Decays */
 
             // B_q -> ll
             make_observable("B_q->ll::BR",
