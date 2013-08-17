@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014 Danny van Dyk
+ * Copyright (c) 2014, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -57,7 +57,7 @@ namespace eos
                 throw InternalError("BToPiLeptonNeutrino: l == 'tau' is not a valid option for this decay channel");
             }
 
-            if ((o.get("q", "d") != "d") && (o.get("q", "u") != "u"))
+            if ((o.get("q", "d") != "d") && (o.get("q", "d") != "u")) // q = d is the default
             {
                 // only B_{d,u} mesons can decay in this channel
                 throw InternalError("BToPiLeptonNeutrino: q = '" + o["q"] + "' is not a valid option for this decay channel");
@@ -72,26 +72,24 @@ namespace eos
             u.uses(*model);
         }
 
-        double differential_branching_ratio(const double & s) const
-        {
-            // cf. e.g. [BCL2008], eq. (2), p. 1
-            double fp = form_factors->f_p(s);
-            double lam = lambda(m_B * m_B, m_pi * m_pi, s);
-            double norm = power_of<2>(g_fermi * std::abs(model->ckm_ub()))
-                / (192.0 * power_of<3>(M_PI * m_B));
-
-            return norm * lam * std::sqrt(lam) * fp * fp * tau_B / hbar;
-        }
-
         double differential_zeta(const double & s) const
         {
             // cf. e.g. [BCL2008], eq. (2), p. 1
             double fp = form_factors->f_p(s);
             double lam = lambda(m_B * m_B, m_pi * m_pi, s);
             double norm = power_of<2>(g_fermi())
-                / (192.0 * power_of<3>(M_PI * m_B()));
+                / (192.0 * power_of<3>(M_PI * m_B));
 
-            return norm * lam * std::sqrt(lam) * fp * fp / hbar;
+            // NP contributions in EFT, cf. e.g. [DBG2013]
+            const WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u();
+            double np = std::norm(wc.cvl() + wc.cvr());
+
+            return norm * np * lam * std::sqrt(lam) * fp * fp * tau_B / hbar;
+        }
+
+        double differential_branching_ratio(const double & s) const
+        {
+            return differential_zeta(s) * std::norm(model->ckm_ub());
         }
     };
 
