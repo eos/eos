@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -22,6 +22,7 @@
 #include <eos/form-factors/form-factor-adapter.hh>
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
+#include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
@@ -173,6 +174,10 @@ namespace eos
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_a),
 
             /* Exclusive B Decays */
+
+            // B_q -> l nubar
+            make_observable("B_u->lnu::BR",
+                    &BToLeptonNeutrino::branching_ratio),
 
             // B -> pi l nu
             make_observable("B->pilnu::dBR/ds",
