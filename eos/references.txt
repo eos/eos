@@ -169,9 +169,9 @@ Experimental Results
 
     CMS:2013A : [CMS Collaboration]
 
-        Angular analysis and branching ratio measurement of the decay B0 to K^*0 mu^+ mu^-
+        Angular analysis and branching fraction measurement of the decay B0 to K^*0 mu^+ mu^-
 
-        CMS-PAS-BPH-11-009
+        arXiv:1308.3409
 
 
     CMS:2013B : [CMS Collaboration]

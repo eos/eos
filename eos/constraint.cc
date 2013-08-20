@@ -1756,7 +1756,7 @@ namespace eos
             "B->K^*ll::BRavg@LowRecoil",
             Kinematics{ { "s_min", 14.18 }, { "s_max", 16.00 } },
             Options{ { "q", "d" }, { "l", "mu" } },
-            4.6e-8 * 1.82, +0.8e-8 * 1.82, -0.9e-8 * 1.82, +0.8e-8 * 1.82, -0.8e-8 * 1.82
+            4.6e-8 * 1.82, +0.9e-8 * 1.82, -0.8e-8 * 1.82, +0.8e-8 * 1.82, -0.8e-8 * 1.82
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_14dot18_to_16_CMS_2013A
         {
@@ -1777,7 +1777,7 @@ namespace eos
             "B->K^*ll::BRavg@LowRecoil",
             Kinematics{ { "s_min", 16.00 }, { "s_max", 19.00 } },
             Options{ { "q", "d" }, { "l", "mu" } },
-            5.2e-8 * 3.0, +0.6e-8 * 3.0, -0.6e-8 * 3.0, +0.8e-8 * 3.0, -0.8e-8 * 3.0
+            5.2e-8 * 3.0, +0.6e-8 * 3.0, -0.6e-8 * 3.0, +0.9e-8 * 3.0, -0.9e-8 * 3.0
         };
         static const GaussianConstraintTemplate Bzero_to_Kstarzero_dimuon_A_FB_16_to_19_CMS_2013A
         {
