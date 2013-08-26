@@ -283,26 +283,36 @@ namespace eos
             setup_output();
 
             Log::instance()->message("prior_sampler.run", ll_informational)
-                << "Starting to generate " << config.chunks * config.chunk_size << " samples.";
+                << "Starting to generate " << config.n_samples << " samples.";
 
             // start with empty ticket queue
             tickets.clear();
 
              // create one Worker per chunk
             std::vector<std::shared_ptr<Worker>> workers;
-            for (unsigned chunk = 0 ; chunk < config.chunks ; ++chunk)
+            const unsigned average_samples_per_worker = config.n_samples / config.n_workers;
+            const unsigned remainder = config.n_samples % config.n_workers;
+
+            for (unsigned chunk = 0 ; chunk < config.n_workers; ++chunk)
             {
                 workers.push_back(std::make_shared<Worker>(observables, priors, parameter_descriptions,
                                                            config.seed + chunk, config.store_parameters));
+
+                unsigned samples_per_worker = average_samples_per_worker;
+
+                // last worker gets the remainder
+                if (chunk == config.n_workers - 1)
+                    samples_per_worker += remainder;
+
                 if (config.parallelize)
                 {
                     // make sure to pass the pointer, instead of a reference from *w, to bind.
                     // Else copies are created, which lead to a double freeing upon calling the destructor the 2nd time.
-                    tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&Worker::run, workers.back().get(), config.chunk_size)));
+                    tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&Worker::run, workers.back().get(), samples_per_worker)));
                 }
                 else
                 {
-                    workers.back()->run(config.chunk_size);
+                    workers.back()->run(samples_per_worker);
                 }
             }
 
@@ -440,8 +450,8 @@ namespace eos
     }
 
     PriorSampler::Config::Config() :
-        chunks(4),
-        chunk_size(10000),
+        n_samples(100000),
+        n_workers(4),
         parallelize(true),
         seed(1234623),
         store_parameters(false)

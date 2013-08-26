@@ -96,11 +96,11 @@ namespace eos
             /// Constructor with the default settings.
             static Config Default();
 
-            /// Number of chunks of sampling.
-            unsigned chunks;
+            /// Total number of samples
+            unsigned n_samples;
 
-            /// Number of iterations per chunk.
-            unsigned chunk_size;
+            /// Number of worker threads
+            unsigned n_workers;
 
             /// The file where the observables are stored.
             std::shared_ptr<hdf5::File> output_file;

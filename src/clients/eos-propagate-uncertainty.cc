@@ -103,16 +103,16 @@ class CommandLine :
             {
                 std::string argument(*a);
 
-                if ("--chunk-size" == argument)
+                if ("--samples" == argument)
                 {
-                    config.chunk_size = destringify<unsigned>(*(++a));
+                    config.n_samples = destringify<unsigned>(*(++a));
 
                     continue;
                 }
 
-                if ("--chunks" == argument)
+                if ("--workers" == argument)
                 {
-                    config.chunks = destringify<unsigned>(*(++a));
+                    config.n_workers = destringify<unsigned>(*(++a));
 
                     continue;
                 }
@@ -224,7 +224,7 @@ class CommandLine :
 
                 if ("--store-parameters" == argument)
                 {
-                    config.store_parameters = true;
+                    config.store_parameters = destringify<unsigned>(*(++a));
 
                     continue;
                 }

@@ -42,14 +42,13 @@ class PriorSamplerTest :
             static const std::string file_name(EOS_BUILDDIR "/eos/utils/prior_sampler_TEST.hdf5");
 
             PriorSampler::Config config = PriorSampler::Config::Default();
-            config.chunks = 2;
-            config.chunk_size = 2;
+            config.n_samples = 4;
             config.seed = 1;
             config.parallelize = true;
             config.store_parameters = true;
             config.output_file.reset(new hdf5::File(hdf5::File::Create(file_name)));
 
-            const unsigned n_samples = config.chunk_size * config.chunks;// create simple PriorSampler
+            const unsigned n_samples = config.n_samples;// create simple PriorSampler
             {
                 Parameters p = Parameters::Defaults();
 
