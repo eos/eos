@@ -948,6 +948,18 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::integrated_cp_asymmetry(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        double gamma = integrated_decay_width(s_min, s_max);
+        _imp->cp_conjugate = true;
+        double gamma_bar = integrated_decay_width(s_min, s_max);
+
+        return (gamma - gamma_bar) / (gamma + gamma_bar);
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::integrated_isospin_asymmetry(const double & s_min, const double & s_max) const
     {
         Save<char> save_q(_imp->q, 'd');
@@ -1251,6 +1263,18 @@ namespace eos
         AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
 
         return (a_c.j9 + a_c_bar.j9) / (decay_width(a_c) + decay_width(a_c_bar));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_a_9(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        return (a_c.j9 - a_c_bar.j9) / (decay_width(a_c) + decay_width(a_c_bar));
     }
 
     double

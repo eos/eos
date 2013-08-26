@@ -437,6 +437,10 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::integrated_branching_ratio_cp_averaged,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->K^*ll::A_CP@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_cp_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->K^*ll::F_L@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation,
                     std::make_tuple("s_min", "s_max")),
@@ -586,6 +590,10 @@ namespace eos
 
             make_observable("B->K^*ll::J_9normavg@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_j_9_normalized_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::A_9@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_a_9,
                     std::make_tuple("s_min", "s_max")),
 
             // B -> K^* ll, Low Recoil
@@ -747,6 +755,10 @@ namespace eos
 
             make_observable("B->K^*ll::BRavg@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::integrated_branching_ratio_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::A_CP@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->K^*ll::F_L@LowRecoil",
@@ -955,6 +967,10 @@ namespace eos
 
             make_observable("B->K^*ll::J_9normavg@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::integrated_j_9_normalized_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::A_9@LowRecoil",
+                    &BToKstarDilepton<LowRecoil>::integrated_a_9,
                     std::make_tuple("s_min", "s_max")),
 
             /* Inclusive Decays */

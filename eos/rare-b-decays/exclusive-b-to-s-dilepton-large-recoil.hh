@@ -95,6 +95,7 @@ namespace eos
             double integrated_decay_width(const double & s_min, const double & s_max) const;
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
             double integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const;
+            double integrated_cp_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_isospin_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
@@ -130,6 +131,7 @@ namespace eos
             double integrated_j_9(const double & s_min, const double & s_max) const;
             double integrated_j_9_normalized(const double & s_min, const double & s_max) const;
             double integrated_j_9_normalized_cp_averaged(const double & s_min, const double & s_max) const;
+            double integrated_a_9(const double & s_min, const double & s_max) const;
     };
 
     /*

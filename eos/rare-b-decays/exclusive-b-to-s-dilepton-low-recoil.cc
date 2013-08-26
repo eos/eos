@@ -27,6 +27,7 @@
 #include <eos/utils/destringify.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/memoise.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
@@ -1062,8 +1063,24 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        double gamma = integrated_decay_width(s_min, s_max);
+        _imp->cp_conjugate = true;
+        double gamma_bar = integrated_decay_width(s_min, s_max);
+
+        // cf. [BHvD2011], p. 6/7, remarks below eq. (2.15), and eq. (2.36), p.11
+        return (gamma - gamma_bar) / (gamma + gamma_bar);
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_1(const double & s_min, const double & s_max) const
     {
+        Log::instance()->message("BToKstarDilepton<LowRecoil>::integrated_cp_asymmetry_1", ll_error)
+            << "This observable seems to be wrongly implemented. Please check before using it!";
+
         Save<bool> save(_imp->cp_conjugate, false);
 
         double gamma = integrated_decay_width(s_min, s_max);
@@ -1248,6 +1265,18 @@ namespace eos
         AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
 
         return (a_c.j9 + a_c_bar.j9) / (decay_width(a_c) + decay_width(a_c_bar));
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_a_9(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        return (a_c.j9 - a_c_bar.j9) / (decay_width(a_c) + decay_width(a_c_bar));
     }
 
     double
