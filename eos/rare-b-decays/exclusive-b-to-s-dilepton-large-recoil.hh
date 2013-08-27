@@ -45,6 +45,10 @@ namespace eos
             BToKstarDilepton(const Parameters & parameters, const Options & options);
             ~BToKstarDilepton();
 
+            // Soft form factors
+            double xi_perp(const double & s) const;
+            double xi_para(const double & s) const;
+
             // [BHP2008], Appendix C
             complex<double> a_long(const Helicity & h, const double & s) const;
             complex<double> a_perp(const Helicity & h, const double & s) const;

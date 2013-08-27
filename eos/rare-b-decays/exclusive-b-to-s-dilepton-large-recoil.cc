@@ -631,6 +631,18 @@ namespace eos
     {
     }
 
+    double
+    BToKstarDilepton<LargeRecoil>::xi_perp(const double & s) const
+    {
+        return _imp->xi_perp(s);
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::xi_para(const double & s) const
+    {
+        return _imp->xi_par(s);
+    }
+
     complex<double>
     BToKstarDilepton<LargeRecoil>::a_long(const Helicity & h, const double & s) const
     {
