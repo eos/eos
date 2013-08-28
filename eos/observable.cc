@@ -179,6 +179,10 @@ namespace eos
                     &BToKDilepton<LargeRecoil>::integrated_branching_ratio_cp_averaged,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->Kll::A_CP@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::integrated_cp_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->Kll::F_H@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::integrated_flat_term,
                     std::make_tuple("s_min", "s_max")),
@@ -220,16 +224,16 @@ namespace eos
                     &BToKDilepton<LowRecoil>::integrated_branching_ratio_cp_averaged,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->Kll::A_CP@LowRecoil",
+                    &BToKDilepton<LowRecoil>::integrated_cp_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->Kll::F_H@LowRecoil",
                     &BToKDilepton<LowRecoil>::integrated_flat_term,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->Kll::R_K@LowRecoil",
                     &BToKDilepton<LowRecoil>::integrated_ratio_muons_electrons,
-                    std::make_tuple("s_min", "s_max")),
-
-            make_observable("B->Kll::a_CP^1@LowRecoil",
-                    &BToKDilepton<LowRecoil>::integrated_cp_asymmetry_1,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->Kll::a_l@LowRecoil",

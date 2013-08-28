@@ -1831,6 +1831,20 @@ namespace eos
     }
 
     double
+    BToKDilepton<LargeRecoil>::integrated_cp_asymmetry(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+        std::function<double (const double &)> f = std::bind(&BToKDilepton<LargeRecoil>::differential_branching_ratio,
+                this, std::placeholders::_1);
+
+        double br = integrate(f, 64, s_min, s_max);
+        _imp->cp_conjugate = true;
+        double br_bar = integrate(f, 64, s_min, s_max);
+
+        return (br - br_bar) / (br + br_bar);
+    }
+
+    double
     BToKDilepton<LargeRecoil>::integrated_flat_term(const double & s_min, const double & s_max) const
     {
         std::function<double (const double &)> num = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::differential_flat_term_numerator),

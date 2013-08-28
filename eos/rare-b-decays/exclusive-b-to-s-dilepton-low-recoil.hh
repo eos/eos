@@ -198,9 +198,9 @@ namespace eos
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
             double integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const;
+            double integrated_cp_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_flat_term(const double & s_min, const double & s_max) const;
             double integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const;
-            double integrated_cp_asymmetry_1(const double & s_min, const double & s_max) const;
     };
 }
 

@@ -1720,7 +1720,7 @@ namespace eos
     }
 
     double
-    BToKDilepton<LowRecoil>::integrated_cp_asymmetry_1(const double & s_min, const double & s_max) const
+    BToKDilepton<LowRecoil>::integrated_cp_asymmetry(const double & s_min, const double & s_max) const
     {
         Save<bool> cp_conjugate(_imp->cp_conjugate, false);
 
