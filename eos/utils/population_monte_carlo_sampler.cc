@@ -634,7 +634,8 @@ namespace eos
             H5E_END_TRY;
 
             // add current results
-            past_status.push_back(status);
+            if (! data_set_name.empty())
+                past_status.push_back(status);
 
             // variance for at least two results
             if (past_status.size() < config.minimum_steps)
