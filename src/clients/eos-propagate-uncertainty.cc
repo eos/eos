@@ -16,6 +16,7 @@
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include <config.h>
 
 #include <eos/utils/destringify.hh>
 #include <eos/utils/hdf5.hh>
@@ -78,13 +79,16 @@ class CommandLine :
         std::string pmc_sample_file;
         unsigned pmc_sample_min, pmc_sample_max;
 
+        std::string pmc_sample_directory;
+
         std::vector<LogPriorPtr> priors;
 
         CommandLine() :
             config(PriorSampler::Config::Default()),
             parameters(Parameters::Defaults()),
             pmc_sample_min(0),
-            pmc_sample_max(0)
+            pmc_sample_max(0),
+            pmc_sample_directory("/data")
         {
         }
 
@@ -184,6 +188,13 @@ class CommandLine :
                 }
 
 #if EOS_ENABLE_PMC
+                if ("--pmc-sample-directory" == argument)
+                {
+                        pmc_sample_directory = std::string(*(++a));
+
+                        continue;
+                }
+
                 if ("--pmc-input" == argument)
                 {
                     // read samples from this file
@@ -352,7 +363,7 @@ int main(int argc, char * argv[])
             auto descriptions = Analysis::read_descriptions(f);
             std::vector<std::vector<double>> samples;
             samples.push_back(std::vector<double>(descriptions.size()));
-            PopulationMonteCarloSampler::read_samples(inst->pmc_sample_file, "/data", inst->pmc_sample_min, inst->pmc_sample_max, samples);
+            PopulationMonteCarloSampler::read_samples(inst->pmc_sample_file, inst->pmc_sample_directory, inst->pmc_sample_min, inst->pmc_sample_max, samples);
             sampler.run(samples, descriptions);
 
             return EXIT_SUCCESS;
@@ -383,7 +394,10 @@ int main(int argc, char * argv[])
         std::cout << "  [--fix PARAMETER VALUE]" << std::endl;
         std::cout << "  [--output FILENAME]" << std::endl;
         std::cout << "  [--parallel [0|1]]" << std::endl;
+#if EOS_ENABLE_PMC
+        std::cout << "  [--pmc-sample-directory DIRECTORY]" << std::endl;
         std::cout << "  [--pmc-input FILENAME MIN_INDEX MAX_INDEX]" << std::endl;
+#endif
         std::cout << "  [--seed LONG_VALUE]" << std::endl;
         std::cout << "  [--store-parameters]" << std::endl;
         std::cout << std::endl;
@@ -392,7 +406,12 @@ int main(int argc, char * argv[])
         std::cout << "prior distributions and the observables are calculated and stored to disk." << std::endl;
         std::cout << "One thread is created for each chunk." << std::endl;
         std::cout << "Optionally, the drawn parameters are stored as well." << std::endl;
+#if EOS_ENABLE_PMC
+        std::cout << std::endl;
+        std::cout << "PMC options:" << std::endl;
         std::cout << "If an input file is specified, a slice of the samples is taken from there, and no new samples are drawn." << std::endl;
+        std::cout << "Add a sample directory to extract samples from there within the hdf5 file. Else the default is to look for 'samples' in '/data'" << std::endl;
+#endif
 
     }
     catch (Exception & e)
