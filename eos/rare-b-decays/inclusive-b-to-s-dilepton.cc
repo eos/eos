@@ -437,13 +437,13 @@ namespace eos
                 phi_ll += norm(wc7prime) * s77   * norm(m7[7 - 1])
                     + norm(wc9prime)     * s99   * norm(m9[9 - 1])
                     + norm(wc10prime)    * s1010 * norm(m10[10 - 1])
-                    + real(wc7prime * m7[7 - 1] * conj(w.c9prime() * m9[9 - 1]) * s79);
+                    + real(wc7prime * m7[7 - 1] * conj(wc9prime * m9[9 - 1]) * s79);
 
                 double s77p =  16.0 * m_s_hat / s_hat * (1.0 - s_hat) * (2.0 - 4.0 * s_hat - s_hat2);
                 double s79p = -24.0 * m_s_hat * (s_hat - s_hat2), s97p = s79p;
                 double s99p =  0.5 * s79p, s1010p = s99p;
                 /* interference between chirality-flipped and SM-like*/
-                phi_ll += real(w.c7() * m7[7 - 1]   * conj(wc7prime  * m7[7 - 1])   * s77p)
+                phi_ll += real(wc[7 - 1] * m7[7 - 1]   * conj(wc7prime  * m7[7 - 1])   * s77p)
                     + real(wc[7 - 1]  * m7[7 - 1]   * conj(wc9prime  * m9[9 - 1])   * s79p)
                     + real(wc[9 - 1]  * m9[9 - 1]   * conj(wc7prime  * m7[7 - 1])   * s97p)
                     + real(wc[9 - 1]  * m9[9 - 1]   * conj(wc9prime  * m9[9 - 1])   * s99p)
