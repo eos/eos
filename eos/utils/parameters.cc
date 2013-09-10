@@ -252,12 +252,12 @@ namespace eos
             /* Mean life times */
             Parameter::Template{"life_time::B_d",                                +1.512e-12,      +1.519e-12,      +1.526e-12     }, // cf. [PDG2012], p. 84
             Parameter::Template{"life_time::B_u",                                +1.633e-12,      +1.641e-12,      +1.649e-12     }, // cf. [PDG2012], p. 70
-            Parameter::Template{"life_time::B_s",                                +1.482e-12,      +1.497e-12,      +1.512e-12     }, // cf. [PDG2012], p. 105
+            Parameter::Template{"life_time::B_s",                                +1.505e-12,      +1.516e-12,      +1.527e-12     }, // cf. [PDG-Live], September 2013
             Parameter::Template{"life_time::B@Y(4S)",                            +1.573e-12,      +1.580e-12,      +1.589e-12     }, // based on 50:50 admixture of B^+B^- and B^0Bbar^0 @ Y(4S)
 
             /* Decay width differences in neutral meson systems */
             Parameter::Template{"life_time::Delta_B_d",                          +0.0,            +0.0,            +0.0           }, // smaller than 1eV, i.e. zero for all intents and purposes, cf. [PDG2012]
-            Parameter::Template{"life_time::Delta_B_s",                          +0.092,          +0.104,          +0.116         }, // weighted avg (PDG method) using [LHCb:2013A], [CDF:2011C] and [D0:2011A]
+            Parameter::Template{"life_time::Delta_B_s",                          +0.070e+12,      +0.081e+12,      +0.092e+12     }, // cf. [PDG-Live], September 2013
 
             // Form factor uncertainties
             Parameter::Template{"formfactors::xi_perp_uncertainty",              +0.89,           +1.0,            +1.11          },
