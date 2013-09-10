@@ -87,8 +87,8 @@ class BToXsDileptonLargeRecoilTest :
                     TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
                 }
 
-                TEST_CHECK_NEARLY_EQUAL(1.41769e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
-                TEST_CHECK_NEARLY_EQUAL(1.47460e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.47462e-06, d_mu.integrated_branching_ratio(1.00, 6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.53382e-06, d_e.integrated_branching_ratio(1.00, 6.00), eps);
             }
         }
 } b_to_x_s_dilepton_large_recoil_test;

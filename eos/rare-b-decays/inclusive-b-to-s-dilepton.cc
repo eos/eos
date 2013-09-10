@@ -24,6 +24,7 @@
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/em-contributions.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
+#include <eos/utils/destringify.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/log.hh>
@@ -79,7 +80,7 @@ namespace eos
             model(Model::make(o.get("model", "SM"), p, o)),
             gfermi(p["G_Fermi"], u),
             hbar(p["hbar"], u),
-            tau_B(p["life_time::B_" + o.get("q", "d")], u),
+            tau_B(p["life_time::B" + (destringify<bool>(o.get("admixture", "true")) ? ("@Y(4S)") : ("_" + o.get("q", "d")))], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
             m_tau(p["mass::tau"], u),

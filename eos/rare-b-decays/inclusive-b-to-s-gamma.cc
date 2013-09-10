@@ -18,6 +18,7 @@
  */
 
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
+#include <eos/utils/destringify.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/log.hh>
@@ -147,7 +148,7 @@ namespace eos
             m_b_MSbar(p["mass::b(MSbar)"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             gfermi(p["G_Fermi"], u),
-            tau(p["life_time::B_d"], u)
+            tau(p["life_time::B" + (destringify<bool>(o.get("admixture", "true")) ? ("@Y(4S)") : ("_" + o.get("q", "d")))], u)
         {
             u.uses(*model);
         }
