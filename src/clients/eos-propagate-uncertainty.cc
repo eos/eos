@@ -18,18 +18,18 @@
  */
 #include <config.h>
 
+#include <eos/observable.hh>
+#include <eos/statistics/log_prior.hh>
+#include <eos/statistics/prior_sampler.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
-#include <eos/utils/log_prior.hh>
-#include <eos/observable.hh>
-#include <eos/utils/prior_sampler.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/verify.hh>
 
 #ifdef EOS_ENABLE_PMC
-#  include <eos/utils/population_monte_carlo_sampler.hh>
+#  include <eos/statistics/population_monte_carlo_sampler.hh>
 #endif
 
 #include <iomanip>

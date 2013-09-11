@@ -181,6 +181,7 @@ AC_OUTPUT(
 	eos/rare-b-decays/Makefile
         eos/b-decays/Makefile
 	eos/utils/Makefile
+	eos/statistics/Makefile
 	src/Makefile
 	src/clients/Makefile
 	test/Makefile

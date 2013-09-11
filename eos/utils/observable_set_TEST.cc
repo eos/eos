@@ -18,11 +18,83 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/analysis_TEST.hh>
 #include <eos/utils/observable_set.hh>
+
+#include <vector>
 
 using namespace test;
 using namespace eos;
+
+namespace eos
+{
+    struct TestObservable :
+        public Observable
+    {
+            Parameters p;
+
+            Kinematics k;
+
+            Options o;
+
+            std::string n, mass_name;
+
+            UsedParameter mass;
+
+            TestObservable(const Parameters & p, const Kinematics & k, const std::string & mass_name) :
+                p(p),
+                k(k),
+                o(),
+                n("test-observable[" + mass_name + "]"),
+                mass_name(mass_name),
+                mass(p[mass_name], *this)
+            {
+            }
+
+            virtual ~TestObservable()
+            {
+            }
+
+            virtual double evaluate() const
+            {
+                return mass();
+            }
+
+            virtual ObservablePtr clone() const
+            {
+                return ObservablePtr(new TestObservable(p.clone(), k.clone(), mass_name));
+            }
+
+            virtual ObservablePtr clone(const Parameters & parameters) const
+            {
+                return ObservablePtr(new TestObservable(parameters, k.clone(), mass_name));
+            }
+
+            virtual Parameters parameters()
+            {
+                return p;
+            }
+
+            virtual Kinematics kinematics()
+            {
+                return k;
+            }
+
+            virtual Options options()
+            {
+                return o;
+            }
+
+            const std::string & name() const
+            {
+                return n;
+            }
+
+            void set_option(const std::string & key, const std::string & value = "")
+            {
+                o.set(key, value);
+            }
+    };
+}
 
 class ObservableSetTest :
     public TestCase

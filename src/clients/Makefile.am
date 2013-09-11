@@ -16,6 +16,7 @@ noinst_PROGRAMS = \
 LDADD = \
 	-lhdf5 \
 	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/statistics/libeosstatistics.la \
 	$(top_builddir)/eos/libeos.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la

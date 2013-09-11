@@ -19,7 +19,7 @@
 
 #include <test/test.hh>
 #include <eos/constraint.hh>
-#include <eos/utils/log_likelihood.hh>
+#include <eos/statistics/log_likelihood.hh>
 
 #include <iostream>
 #include <vector>
