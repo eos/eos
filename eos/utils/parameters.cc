@@ -30,6 +30,21 @@
 
 namespace eos
 {
+    bool
+    operator== (const ParameterDescription & lhs, const ParameterDescription & rhs)
+    {
+    	if (lhs.min != rhs.min)
+    		return false;
+    	if (lhs.max != rhs.max)
+    		return false;
+    	if (lhs.nuisance!= rhs.nuisance)
+    		return false;
+    	if (lhs.parameter.name() != rhs.parameter.name())
+    		return false;
+
+    	return true;
+    }
+
     struct Parameter::Template
     {
         std::string name;

@@ -281,6 +281,7 @@ namespace eos
         bool nuisance;
     };
 
+    bool operator== (const ParameterDescription & lhs, const ParameterDescription & rhs);
 
     struct ParameterRange
     {
