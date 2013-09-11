@@ -69,14 +69,6 @@ namespace eos
                                     const proposal_functions::GlobalLocal::Config & config,
                                     AnalysisPtr analysis = AnalysisPtr());
 
-            /*!
-             * Copy the settings such as proposal density
-             * from the output of a (successful) prerun to prepare
-             * for calling run(), where the main run is started
-             * immediately.
-             */
-            void resume(const hdf5::File &);
-
             ///@}
 
             ///@name Sampling
@@ -140,7 +132,7 @@ namespace eos
 
             /*!
              * The seed that is used to initialize the random number generator.
-             * Independant runs with identical seeds will produce 
+             * Independant runs with identical seeds will produce
              */
             unsigned long seed;
 

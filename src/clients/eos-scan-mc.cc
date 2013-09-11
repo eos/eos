@@ -114,7 +114,6 @@ class CommandLine :
 
         std::shared_ptr<unsigned> partition_index;
 
-        std::string resume_file;
         std::string pmc_initialization_file;
         std::string pmc_sample_file;
         bool pmc_calculate_posterior;
@@ -984,14 +983,6 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--resume" == argument)
-                {
-                    resume_file = std::string(*(++a));
-                    config.need_prerun = false;
-
-                    continue;
-                }
-
                 if ("--seed" == argument)
                 {
                     std::string value(*(++a));
@@ -1235,13 +1226,6 @@ int main(int argc, char * argv[])
             return EXIT_SUCCESS;
         }
 
-        // extract scales and starting points from completed prerun
-        if (inst->resume_file != "")
-        {
-            sampler.resume(hdf5::File::Open(inst->resume_file));
-            return EXIT_SUCCESS;
-        }
-
         sampler.run();
     }
     catch (DoUsage & e)
@@ -1260,7 +1244,6 @@ int main(int argc, char * argv[])
         std::cout << "  [--no-prerun]" << std::endl;
         std::cout << "  [--optimize [{ PAR_VALUE1 PAR_VALUE2 ... PAR_VALUEN }]]" << std::endl;
         std::cout << "  [--output FILENAME]" << std::endl;
-        std::cout << "  [--resume FILENAME]" << std::endl;
         std::cout << "  [--scale VALUE]" << std::endl;
         std::cout << "  [--seed LONG_VALUE]" << std::endl;
         std::cout << "  [--store-prerun]" << std::endl;

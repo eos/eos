@@ -417,20 +417,6 @@ class MarkovChainSamplerTest :
                         TEST_CHECK(input_files.front()->group_exists("/prerun/chain #0"));
                         MarkovChainSampler::build_global_local(file_name_build, input_files, gl_config);
                     });
-
-                    TEST_SECTION("read global local from disk and repeat main run",
-                    {
-                        hdf5::File file_build = hdf5::File::Open(file_name_build);
-
-                        // check that it compiles and runs
-                        proposal_functions::Factory::make(file_build, "/global local", "GlobalLocal", 2);
-
-                        config.output_file = file_name_resume;
-                        // avoid extending file name with every check just to avoid overwriting
-                        std::remove(file_name_resume.c_str());
-                        MarkovChainSampler sampler(analysis, config);
-                        sampler.resume(file_build);
-                    });
                 }
 
                 // do results agree, whether I resume or not?
