@@ -58,19 +58,8 @@ namespace eos
             /// Update the predictions for all observables.
             void update();
 
-            /*!
-             * Update the predicition for all observables that depend on a given
-             * Parameter.
-             *
-             * @param id The Parameter::Id for which all depending observables shall be updated.
-             */
-            void update(const Parameter::Id & id);
-
             /// Retrieve the cache's common Parameters object.
             Parameters parameters() const;
-
-            /// Reset the cache to the previous predictions.
-            void reset();
 
             /*!
              * Retrieve a unique observable by its ObservableCache::Id.

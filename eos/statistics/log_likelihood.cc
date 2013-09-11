@@ -776,7 +776,7 @@ namespace eos
             std::vector<double> weights;
             mutable std::vector<double> temp;
 
-            MixtureBlock(const std::vector<LogLikelihoodBlockPtr> & components, 
+            MixtureBlock(const std::vector<LogLikelihoodBlockPtr> & components,
                          const std::vector<double> & weights) :
                 components(components),
                 weights(weights),
@@ -1287,7 +1287,7 @@ namespace eos
     }
 
     LogLikelihoodBlockPtr
-    LogLikelihoodBlock::Mixture(const std::vector<LogLikelihoodBlockPtr> & components, 
+    LogLikelihoodBlock::Mixture(const std::vector<LogLikelihoodBlockPtr> & components,
                                 const std::vector<double> & weights)
     {
         if (components.size() != weights.size())
@@ -1590,19 +1590,5 @@ namespace eos
         _imp->cache.update();
 
         return _imp->log_likelihood();
-    }
-
-    double
-    LogLikelihood::operator() (const Parameter::Id & id)
-    {
-        _imp->cache.update(id);
-
-        return _imp->log_likelihood();
-    }
-
-    void
-    LogLikelihood::reset()
-    {
-        _imp->cache.reset();
     }
 }

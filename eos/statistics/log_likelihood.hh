@@ -252,7 +252,7 @@ namespace eos
                     const unsigned & number_of_observations = 1u);
 
             // todo document
-            static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components, 
+            static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components,
                                                  const std::vector<double> & weights);
             /*!
              * Create a new LogLikelihoodBlock for n observables distributed
@@ -389,25 +389,6 @@ namespace eos
              * @note: all observables are recalculated
              */
             double operator()();
-
-            /*!
-             * Evaluate the likelihood, but recalculate only those observables which depend on
-             * the parameter  with the given id
-             *
-             * @warning Do not use this call before __all__ observables have been added to the likelihood!
-             * Since the dependence is checked only the first time a parameter id is encountered, adding
-             * an observable later will not establish the link between the id and the observable, leading
-             * to incorrect values of the likelihood
-             */
-            double operator()(const Parameter::Id& id);
-
-            /*!
-             * Reload previous observable values.
-             *
-             * @note this is only useful in conjunction with operator()(const Parameter& par)
-             * and the Markov Chain sampler
-             */
-            void reset();
             ///@}
     };
 }

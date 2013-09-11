@@ -666,9 +666,6 @@ namespace eos
             {
                 parameter_descriptions[i].parameter = current.point[i];
             }
-
-            // reload old observable values
-            //analysis.log_likelihood().reset();
         }
 
         // set the number of iterations for next run and go
