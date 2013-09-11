@@ -49,9 +49,6 @@ namespace eos
         // all the info about parameters that is needed to setup sampling
         std::vector<ParameterDescription> parameter_descriptions;
 
-        // get sample values directly from the prior for discrete parameters
-        std::map<unsigned, LogPriorPtr> discrete_priors;
-
         // Random number generator, unique to this chain
         gsl_rng * rng;
 
@@ -332,14 +329,6 @@ namespace eos
             // whether they are nuisance parameters or not
             parameter_descriptions = analysis.parameter_descriptions();
 
-            //find discrete parameters
-            unsigned index = 0;
-            for (auto p = parameter_descriptions.begin(), i_end = parameter_descriptions.end() ; p != i_end ; ++p, ++index)
-            {
-                if (p->discrete)
-                    discrete_priors.insert(std::make_pair(index, analysis.log_prior(p->parameter.name())));
-            }
-
             // initialize statistics
             reset(true);
 
@@ -360,7 +349,6 @@ namespace eos
                 *i = value;
                 p->parameter = value;
             }
-            // TODO: discrete parameters
 
             // evaluate likelihood without argument, so all observables are calculated once
             current.log_likelihood = analysis.log_likelihood()();
@@ -541,7 +529,7 @@ namespace eos
                 auto record = std::make_tuple("parameter_name", 1.0, 2.0, 3, "prior");
                 data_set >> record;
                 descr.push_back(ParameterDescription{ p[std::get<0>(record)], std::get<1>(record),
-                                                      std::get<2>(record), bool(std::get<3>(record)), false});
+                                                      std::get<2>(record), bool(std::get<3>(record)) });
                 priors.push_back(std::get<4>(record));
             }
 

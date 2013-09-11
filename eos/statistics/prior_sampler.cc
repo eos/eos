@@ -46,7 +46,7 @@ typedef PriorSampler::SamplesList SamplesList;
             // The priors for all parameters to be varied.
             std::vector<LogPriorPtr> priors;
 
-            // Parameter, minimum, maximum, nuisance, discrete
+            // Parameter, minimum, maximum, nuisance
             std::vector<ParameterDescription> parameter_descriptions;
 
             // Random number generator seed
@@ -88,7 +88,7 @@ typedef PriorSampler::SamplesList SamplesList;
                 for (auto i = parameter_descriptions.begin(), i_end = parameter_descriptions.end() ; i != i_end ; ++i)
                 {
                     this->parameter_descriptions.push_back(
-                        ParameterDescription{ p[i->parameter.name()], i->min, i->max, i->nuisance, i->discrete });
+                        ParameterDescription{ p[i->parameter.name()], i->min, i->max, i->nuisance });
                 }
             }
 
@@ -203,7 +203,7 @@ typedef PriorSampler::SamplesList SamplesList;
         // The priors for all parameters to be varied.
         std::vector<LogPriorPtr> priors;
 
-        // Parameter, minimum, maximum, nuisance, discrete
+        // Parameter, minimum, maximum, nuisance
         std::vector<ParameterDescription> parameter_descriptions;
 
         // min, max, nuisance

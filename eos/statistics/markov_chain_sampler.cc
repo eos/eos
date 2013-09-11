@@ -1320,8 +1320,7 @@ namespace eos
                                 << "Partitions differ in " << i->parameter.name() << ", " << j->parameter.name()
                                 << "min = (" << i->min << ", " << j->min << ") "
                                 << "max = (" << i->max << ", " << j->max << ") "
-                                << "nus = (" << i->nuisance << ", " << j->nuisance << ") "
-                                << "dis  = (" << i->discrete << ", " << j->discrete << ")";
+                                << "nus = (" << i->nuisance << ", " << j->nuisance << ")";
                             found_new_partition = true;
                             break;
                         }

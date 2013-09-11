@@ -279,8 +279,6 @@ namespace eos
         double max;
 
         bool nuisance;
-
-        bool discrete;
     };
 
 

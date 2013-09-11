@@ -109,7 +109,6 @@ namespace eos
 
             ///@name Named constructors for 1D prior distributions
             ///@{
-            static LogPriorPtr Discrete(const Parameters & parameters, const std::string & name, const std::set<double> & values);
             static LogPriorPtr Flat(const Parameters & parameters, const std::string & name, const ParameterRange & range);
             static LogPriorPtr Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
                     const double & lower, const double & central, const double & upper);

@@ -86,7 +86,7 @@ namespace eos
                         throw RangeError("LogPrior::Flat(" + _name +"): minimum (" + stringify(range.min)
                                           + ") must be smaller than maximum (" + stringify(range.max) + ")");
                     }
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false, false });
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false });
                 }
 
                 virtual ~Flat()
@@ -174,7 +174,7 @@ namespace eos
                         throw RangeError("LogPrior::Gauss(" + _name +"): minimum (" + stringify(range.min)
                                           + ") must be smaller than maximum (" + stringify(range.max) + ")");
                     }
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false, false });
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false });
 
                     // scale factor takes finite range into account. For large range, it is 1
                     _c_lower = 1.0 / (gsl_cdf_gaussian_P(_range.max - _central, _sigma_upper)
@@ -323,7 +323,7 @@ namespace eos
                         throw RangeError("LogPrior::LogGamma(" + _name +"): minimum (" + stringify(range.min)
                                           + ") must be smaller than maximum (" + stringify(range.max) + ")");
                     }
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false, false });
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false });
 
                     // avoid extrapolation from polynomial
                     if (_sigma_plus < 1.03)
@@ -476,7 +476,7 @@ namespace eos
                     log_gamma->_name = _name;
                     log_gamma->_norm = _norm;
                     log_gamma->_nu = _nu;
-                    log_gamma->_parameter_descriptions.push_back(ParameterDescription{ parameters[_name], _range.min, _range.max, false, false });
+                    log_gamma->_parameter_descriptions.push_back(ParameterDescription{ parameters[_name], _range.min, _range.max, false });
                     log_gamma->_range = _range;
                     log_gamma->_sigma_lower = _sigma_lower;
                     log_gamma->_sigma_minus = _sigma_minus;
@@ -527,66 +527,6 @@ namespace eos
                     return power_of<2>(_lambda) * result.val;
                 }
         };
-
-        class Discrete :
-            public LogPrior
-        {
-            private:
-                std::string _name;
-
-                std::vector<double> _values;
-
-                double _prob;
-
-            public:
-                Discrete(const Parameters & parameters, const std::string & name, const std::set<double> & values) :
-                    LogPrior(parameters),
-                    _name(name),
-                    _values(values.begin(), values.end()),
-                    _prob(1.0 / _values.size())
-                {
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], _values.front(), _values.back(), false, true });
-                }
-
-                virtual ~Discrete()
-                {
-                }
-
-                virtual std::string as_string() const
-                {
-                    std::string result = "Parameter: " + _name + ", prior type: discrete, values = ";
-                    result += stringify(_values.cbegin(), _values.cend());
-
-                    return result;
-                }
-
-                virtual LogPriorPtr clone(const Parameters & parameters) const
-                {
-                    return LogPriorPtr(new priors::Discrete(parameters, _name, std::set<double>(_values.begin(), _values.end())));
-                }
-
-                virtual double operator() () const
-                {
-                    return _prob;
-                }
-
-                virtual double sample(gsl_rng * rng) const
-                {
-                    return _values[gsl_rng_uniform_int(rng, _values.size())];
-                }
-
-                virtual double mean() const
-                {
-                    throw InternalError("Attempting to obtain mean of a discrete prior");
-                    return 0.0;
-                }
-
-                virtual double variance() const
-                {
-                    throw InternalError("Attempting to obtain variance of a discrete prior");
-                    return 0.0;
-                }
-        };
     }
 
     LogPrior::LogPrior(const Parameters & parameters) :
@@ -604,14 +544,6 @@ namespace eos
     LogPrior::end()
     {
         return LogPrior::Iterator(_parameter_descriptions.end());
-    }
-
-    LogPriorPtr
-    LogPrior::Discrete(const Parameters & parameters, const std::string & name, const std::set<double> & values)
-    {
-        LogPriorPtr prior = std::make_shared<eos::priors::Discrete>(parameters, name, values);
-
-        return prior;
     }
 
     LogPriorPtr

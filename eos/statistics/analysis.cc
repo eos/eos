@@ -101,7 +101,7 @@ namespace eos
         // at most into N 1D priors
         std::vector<LogPriorPtr> priors;
 
-        // Parameter, minimum, maximum, nuisance, discrete
+        // Parameter, minimum, maximum, nuisance
         std::vector<ParameterDescription> parameter_descriptions;
 
         // names of all parameters. prevent using a parameter twice
@@ -157,7 +157,6 @@ namespace eos
                 j->min = i->min;
                 j->max = i->max;
                 j->nuisance = i->nuisance;
-                j->discrete = i->discrete;
             }
 
             return result;
@@ -243,8 +242,7 @@ namespace eos
             {
                 data_set >> record;
 
-                // never discrete
-                descriptions.push_back(ParameterDescription { p[std::get<0>(record)], std::get<1>(record), std::get<2>(record), bool(std::get<3>(record)), false });
+                descriptions.push_back(ParameterDescription { p[std::get<0>(record)], std::get<1>(record), std::get<2>(record), bool(std::get<3>(record)) });
             }
             return descriptions;
         }
