@@ -1134,63 +1134,6 @@ namespace eos
             _select_jump_vectors(clusters);
 
             _sanity_check();
-
-#if 0
-            /* Find the weight of each cluster by integrating the posterior in the cluster volume */
-
-            std::vector<MarkovChain> new_chains;
-//            std::vector<std::tuple<double, double>> results;
-            // total chain index
-            unsigned i = 0;
-            //todo replace with config option/argument
-            static const unsigned number_of_iterations = 500;
-            // extract proposal functions from  chains
-            for (auto cl = clusters.cbegin(), cl_end = clusters.cend() ; cl != cl_end ; ++cl)
-            {
-                double numerator = 0.0;
-                double denominator = 0.0;
-
-                std::vector<double> theta_star = cl->begin()->statistics().parameters_at_mode;
-
-                double chains_in_cluster = std::distance(cl->begin(), cl->end());
-
-                for (auto ch = cl->begin(), ch_end = cl->end() ; ch != ch_end ; ++ch)
-                {
-                    new_chains.push_back(*ch);
-                    std::tuple<double, double> result;
-                    //todo parallelize
-                    ch->normalized_density(result, theta_star, number_of_iterations);
-                    numerator += std::get<0>(result);
-                    denominator += std::get<1>(result);
-                }
-
-                //todo remove?
-                // average over number of chains
-                numerator /= chains_in_cluster;
-                denominator /= chains_in_cluster;
-
-                // divide by number of summands
-                numerator /= double(cl->begin()->history().points.size());
-                denominator /= double(number_of_iterations);
-
-                double weight = std::exp(cl->begin()->statistics().mode_of_posterior) / numerator * denominator;
-
-                Log::instance()->message("global_local.ctor", ll_debug)
-                    << "Estimated weight of cluster " << std::distance(clusters.cbegin(), cl)
-                    << " (" << unsigned(chains_in_cluster) << " chains) = " weight;
-
-                // build cumulative with relative(!) weights.
-                // Each chain in a cluster is assigned the same weight, its share of the weight
-                for (auto ch = cl->begin(), ch_end = cl->end() ; ch != ch_end ; ++ch, ++i)
-                {
-                    _component_probabilities[i] = weight / chains_in_cluster;
-                    _component_cumulative[i] = weight / chains_in_cluster;
-                    if (i > 0)
-                        _component_cumulative[i] += _component_cumulative[i - 1];
-
-                }
-            }
-#endif
         }
 
         GlobalLocal::~GlobalLocal()

@@ -413,99 +413,6 @@ namespace eos
             current = proposal;
         }
 
-        /*
-         * Estimate the normalized posterior density at a point.
-         *
-         */
-        void normalized_density(std::tuple<double, double> & result, const std::vector<double> & point, const unsigned & posterior_evaluations)
-        {
-            if (point.size() != parameter_descriptions.size())
-                throw InternalError("MarkovChain.normalized_density: Dimension of argument point (" + stringify(point.size())
-                                    + ") doesn't match with analysis (" + stringify(parameter_descriptions.size()));
-
-            /* calculate the numerator of (9) */
-
-            double numerator = 0.0;
-
-            // save state to restore later
-            MarkovChain::State previous_state = current;
-            MarkovChain::State previous_proposal = proposal;
-
-            // where we want to estimate the normalized_density
-            MarkovChain::State theta_star;
-            theta_star.point = point;
-            for (unsigned i = 0 ; i < parameter_descriptions.size() ; ++i)
-            {
-                parameter_descriptions[i].parameter = point[i];
-            }
-            theta_star.log_likelihood = analysis.log_likelihood()();
-            theta_star.log_prior = analysis.log_prior();
-            theta_star.log_posterior = theta_star.log_likelihood + theta_star.log_prior;
-
-            for (auto s = history.states.cbegin(), s_end = history.states.cend() ; s != s_end ; ++s)
-            {
-                // prob to propose \theta^{\star}, given past_state
-                double log_q = proposal_function->evaluate(theta_star, *s);
-
-                // prob to accept move from past_state to theta_star
-                double log_alpha = std::min(0.0, (theta_star.log_posterior + proposal_function->evaluate(*s, theta_star))
-                - (s->log_posterior + proposal_function->evaluate(theta_star, *s)));
-
-                numerator += std::exp(log_q + log_alpha);
-            }
-
-            numerator /= double(history.states.size());
-
-
-            /* calculate the denominator of (9) */
-
-            double denominator = 0.0;
-
-            // draw further samples
-            // todo increase precision and sample until point in range?
-            for (unsigned j = 0 ; j < posterior_evaluations ; ++j)
-            {
-                proposal_function->propose(proposal, theta_star, rng);
-
-                // in range? If so, assign.
-                bool in_range = true;
-                for (unsigned i = 0 ; i < parameter_descriptions.size() ; ++i)
-                {
-                    if ((proposal.point[i] < parameter_descriptions[i].min)
-                            || (proposal.point[i] > parameter_descriptions[i].max))
-                    {
-                        in_range = false;
-                        break;
-                    }
-                    parameter_descriptions[i].parameter = proposal.point[i];
-                }
-                // skip point <=> zero contribution to denominator
-                if (! in_range)
-                {
-                    continue;
-                }
-                proposal.log_likelihood = analysis.log_likelihood()();
-                proposal.log_prior = analysis.log_prior();
-                proposal.log_posterior = proposal.log_prior + proposal.log_likelihood;
-
-                double log_alpha = std::min(0.0, (proposal.log_posterior + proposal_function->evaluate(theta_star, proposal))
-                                   - (theta_star.log_posterior + proposal_function->evaluate(proposal, theta_star)));
-                denominator += std::exp(log_alpha);
-            }
-
-            denominator /= double(posterior_evaluations);
-
-            // restore previous state
-            current = previous_state;
-            proposal = previous_proposal;
-            for (unsigned i = 0 ; i < parameter_descriptions.size() ; ++i)
-            {
-                parameter_descriptions[i].parameter = current.point[i];
-            }
-
-            result = std::make_tuple(numerator, denominator);
-        }
-
         static void read_description(hdf5::File & file, const std::string & data_set_base_name,
                                      std::vector<ParameterDescription> & descr, std::vector<std::string> & priors,
                                      std::vector<std::string> & constraints, std::string & hash)
@@ -904,12 +811,6 @@ namespace eos
     MarkovChain::current_state() const
     {
         return _imp->current;
-    }
-
-    void
-    MarkovChain::normalized_density(std::tuple<double, double> & result,const std::vector<double> & point, const unsigned & posterior_evaluations) const
-    {
-        _imp->normalized_density(result, point, posterior_evaluations);
     }
 
     const MarkovChain::State &

@@ -96,17 +96,6 @@ namespace eos
              */
             void keep_history(bool keep_samples, bool keep_observables_and_proposals = false);
 
-            /*!
-             * Compute estimate of normalized posterior density of this chain according to method
-             * described in Chib, Jeliazkov (2001), Eq. (9)
-             * @param <numerator, denominator> of [CJ2001], Eq. (9)
-             * @param point where density is sought
-             * @param posterior_evaluations the number of additional posterior evaluations
-             *                              needed to estimate the normalized posterior density,
-             *                              see denominator of [CJ2001], Eq. (9)
-             */
-            void normalized_density(std::tuple<double, double> & result, const std::vector<double> & point, const unsigned & posterior_evaluations) const;
-
             /// Retrieve the descriptions of all parameters that are explored by this chain.
             const std::vector<ParameterDescription> & parameter_descriptions() const;
 

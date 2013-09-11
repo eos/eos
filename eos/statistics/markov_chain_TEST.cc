@@ -502,43 +502,6 @@ class MarkovChainTest :
                                               mvg->evaluate(chain.current_state(), chain.proposed_state()), 2e-2);
                 });
 
-//                TEST_SECTION("integration",
-                {
-                    proposal_functions::MultivariateGaussian* mvg = new proposal_functions::MultivariateGaussian(2, cov_initial);
-                    mvg->covariance_scale = 2.38 * 2.38 / 2.0;
-                    std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvg);
-
-                    MarkovChain chain(analysis, 13, ppf);
-                    MarkovChain::HyperParameter h;
-                    h.component = 0;
-                    std::vector<double> point_initial { 4.3, 1.15 };
-                    chain.set_point(point_initial, h);
-
-                    unsigned iterations = 1e5;
-
-                    chain.run(iterations);
-
-                    auto stats  = chain.statistics();
-                    double efficiency = stats.iterations_accepted;
-                    efficiency /= double(stats.iterations_accepted + stats.iterations_rejected);
-//                    TEST_CHECK_NEARLY_EQUAL(0.25, efficiency, 1e-4);
-                    TEST_CHECK( 0.2 < efficiency && efficiency < 0.3);
-
-                    std::tuple<double, double> result;
-                    chain.normalized_density(result, point_initial, iterations);
-                    const double & enumerator = std::get<0>(result);
-                    const double & denominator = std::get<1>(result);
-
-                    // likelihood at the point
-                    p["mass::b(MSbar)"] = point_initial[0];
-                    p["mass::c"] = point_initial[1];
-//
-//                    // evidence = 1/range = prior
-//                    // normalized posterior = likelihood
-                    // accuracy is quite low, even though it it only a 2D problem
-                    TEST_CHECK_RELATIVE_ERROR(analysis.log_likelihood()(), std::log(enumerator / denominator), 5.5e-2);
-
-                } //);
 #if 0
                 //todo sample _covariance not positive definite. What to do? Tried initial_scale, but didn't help
                 // global-local
@@ -587,51 +550,6 @@ class MarkovChainTest :
                     gl.propose(proposal, chains[0].current_state(), rng);
                 }
 #endif
-            }
-
-        // Monte Carlo integration
-            {
-                // 1D Gaussian integration
-                Analysis analysis = make_analysis(true);
-
-                std::vector<double> cov_initial { 0.5 * 0.5 };
-                proposal_functions::MultivariateGaussian* mvg = new proposal_functions::MultivariateGaussian(1, cov_initial);
-                // automatic scaling is not perfect very low number of dimension, so revert its effect
-                mvg->rescale(1.0 / mvg->covariance_scale);
-                std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvg);
-
-                MarkovChain chain(analysis, 13, ppf);
-                MarkovChain::HyperParameter h { 0 };
-                std::vector<double> point_initial{ 4.2 };
-                chain.set_point(point_initial, h);
-
-                unsigned iterations = 1e5;
-
-                chain.run(iterations);
-
-                auto stats  = chain.statistics();
-                double efficiency = stats.iterations_accepted;
-                efficiency /= double(stats.iterations_accepted + stats.iterations_rejected);
-                TEST_CHECK( 0.2 < efficiency && efficiency < 0.3);
-
-                std::tuple<double, double> result;
-                chain.normalized_density(result, point_initial, iterations);
-                const double & enumerator = std::get<0>(result);
-                const double & denominator = std::get<1>(result);
-
-                // evidence = 1/range = prior
-                // normalized posterior = likelihood
-                // don't forget to exponentiate log likelihood output
-                analysis.parameters()["mass::b(MSbar)"] = 4.2;
-                TEST_CHECK_RELATIVE_ERROR(std::exp(analysis.log_likelihood()()), enumerator / denominator , 6e-3);
-
-                // At a point away from the maximum, the precision isn't necessarily lower!
-                point_initial[0] = 4.3;
-                chain.run(iterations);
-                chain.normalized_density(result, point_initial, iterations);
-
-                analysis.parameters()["mass::b(MSbar)"] = 4.3;
-                TEST_CHECK_RELATIVE_ERROR(std::exp(analysis.log_likelihood()()), enumerator / denominator , 2.5e-3);
             }
 
             // test History
