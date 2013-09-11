@@ -2102,16 +2102,19 @@ namespace eos
                 pmc_simu_realloc(pmc, config.final_chunk_size, err);
                 pmc::check_error(err);
             }
-            // or if sample size has been changed externally to differ from the samples before and update
-            else if (unsigned(pmc->nsamples) != prop->ncomp * config.chunk_size)
-            {
-                pmc_simu_realloc(pmc, prop->ncomp * config.chunk_size, err);
-                pmc::check_error(err);
-            }
             // reduce overall size if components died out
             else if (config.adjust_sample_size)
             {
                 pmc_simu_realloc(pmc, live_components * config.chunk_size, err);
+                pmc::check_error(err);
+            }
+            // todo is this ever called?
+            // or if sample size has been changed externally to differ from the samples before and update
+            else if (unsigned(pmc->nsamples) != prop->ncomp * config.chunk_size)
+            {
+            	Log::instance()->message("PMC_sampler.draw_samples", ll_debug)
+                    << "I'm in a surprising place";
+                pmc_simu_realloc(pmc, prop->ncomp * config.chunk_size, err);
                 pmc::check_error(err);
             }
 
