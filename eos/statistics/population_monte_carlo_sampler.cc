@@ -1663,9 +1663,7 @@ namespace eos
             {
                 std::vector<std::shared_ptr<hdf5::File>> input_files;
                 input_files.push_back(std::make_shared<hdf5::File>(hdf5::File::Open(file.name(), H5F_ACC_RDONLY)));
-                auto gl_config = proposal_functions::GlobalLocal::Config::Default();
-                gl_config.skip_initial = config.skip_initial;
-                chains = MarkovChainSampler::build_global_local("", input_files, gl_config, analysis.clone());
+                chains = MarkovChainSampler::read_chains(input_files, analysis);
             }
 
             if (chains.front()->states.front().point.size() != analysis.parameter_descriptions().size())

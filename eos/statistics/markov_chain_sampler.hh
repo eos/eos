@@ -69,6 +69,12 @@ namespace eos
                                     const proposal_functions::GlobalLocal::Config & config,
                                     AnalysisPtr analysis = AnalysisPtr());
 
+            /*!
+             * Read the history of Markov chains stored in the input files.
+             * For safety, compare with the given analysis to ensure parameters and constraints agree.
+             */
+            static std::vector<HistoryPtr> read_chains(const std::vector<std::shared_ptr<hdf5::File>> input_files,
+            		                                   const Analysis & analysis);
             ///@}
 
             ///@name Sampling

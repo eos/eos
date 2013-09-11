@@ -1102,6 +1102,98 @@ namespace eos
     }
 
     std::vector<HistoryPtr>
+    MarkovChainSampler::read_chains(const std::vector<std::shared_ptr<hdf5::File>> input_files,
+    		                        const Analysis & _analysis)
+    {
+    	AnalysisPtr analysis = _analysis.clone();
+        std::vector<HistoryPtr> result;
+
+        // loop over files
+        bool found_chain = false;
+        for (auto f = input_files.begin(), f_end = input_files.end() ; f != f_end ; ++f)
+        {
+            std::string group_name;
+            // loop over chains
+            unsigned c = 0;
+            while (true)
+            {
+                group_name = "/prerun/chain #" + stringify(c);
+                if (! (*f)->group_exists(group_name))
+                    break;
+
+                found_chain = true;
+
+                HistoryPtr history(new MarkovChain::History());
+                ProposalFunctionPtr prop;
+                std::string proposal_type;
+                MarkovChain::Stats stat;
+                std::vector<ParameterDescription> descr;
+                std::vector<std::string> priors;
+                std::vector<std::string> constraints;
+                std::string hash;
+
+                // fill the objects
+                MarkovChain::read_data(**f, group_name, *history, prop, proposal_type, stat);
+                MarkovChain::read_descriptions(**f, "/descriptions/" + group_name, descr, priors, constraints, hash);
+
+                // store them
+                result.push_back(history);
+
+                // compare parameter descriptions
+                {
+                    auto j = analysis->parameter_descriptions().cbegin();
+                    for (auto i = descr.cbegin(), i_end = descr.cend() ; i != i_end ; ++i, ++j)
+                    {
+                    	if (! (*i == *j))
+                        {
+                            Log::instance()->message("MarkovChainSampler::read_chains", ll_warning)
+                                << "Parameter description differs in " << i->parameter.name() << ", " << j->parameter.name()
+                                << "min = (" << i->min << ", " << j->min << ") "
+                                << "max = (" << i->max << ", " << j->max << ") "
+                                << "nus = (" << i->nuisance << ", " << j->nuisance << ")";
+                        }
+                    }
+                }
+                //todo reactivate
+#if 0
+                // compare all priors
+                {
+                    auto j = analysis.priors().cbegin();
+                    for (auto i = p->cbegin(), i_end = p->cend() ; i != i_end ; ++i, ++j)
+                    {
+                        if (*i != *j)
+                        {
+                            throw InternalError("MarkovChainSampler::read_chains: prior mismatch:"
+                                                + *i + " vs " + *j);
+                        }
+                    }
+                }
+#endif
+                // compare all constraints
+                {
+                    auto j = analysis->log_likelihood().begin();
+                    for (auto i = constraints.cbegin(), i_end = constraints.cend() ; i != i_end ; ++i, ++j)
+                    {
+                        if (*i != j->name())
+                        {
+                            Log::instance()->message("MarkovChainSampler::read_chains", ll_warning)
+								<< "MarkovChainSampler::read_chains: constraint mismatch:"
+                                << *i + " vs " + j->name();
+                        }
+                    }
+                }
+
+                ++c;
+            }
+        }
+        if (! found_chain)
+        {
+            throw InternalError("read_chains: Did not find any usable data in the files given");
+        }
+        return result;
+    }
+
+    std::vector<HistoryPtr>
     MarkovChainSampler::build_global_local(const std::string & output_file_name,
                                                 const std::vector<std::shared_ptr<hdf5::File>> input_files,
                                                 const proposal_functions::GlobalLocal::Config & config,
