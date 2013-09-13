@@ -401,24 +401,6 @@ class MarkovChainSamplerTest :
                     TEST_CHECK(data_set.records() >= config.prerun_iterations_min);
                 }
 
-                // check proposal I/O in HDF5
-                {
-                    static const std::string file_name_build = EOS_BUILDDIR "/eos/utils/markov_chain_sampler_TEST-build-global-local.hdf5";
-
-                    // read preruns, and store global local to disk
-                    TEST_SECTION("build global local from disk",
-                    {
-                        proposal_functions::GlobalLocal::Config & gl_config = *config.global_local_config;
-                        gl_config.join_chains_symmetrically = true;
-
-                        std::vector<std::shared_ptr<hdf5::File>> input_files;
-                        auto input_file = std::make_shared<hdf5::File>(hdf5::File::Open(file_name, H5F_ACC_RDONLY));
-                        input_files.push_back(input_file);
-                        TEST_CHECK(input_files.front()->group_exists("/prerun/chain #0"));
-                        MarkovChainSampler::build_global_local(file_name_build, input_files, gl_config);
-                    });
-                }
-
                 // do results agree, whether I resume or not?
                 {
                     hdf5::File f = hdf5::File::Open(file_name);

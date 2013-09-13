@@ -51,25 +51,6 @@ namespace eos
             ~MarkovChainSampler();
 
             /*!
-             * Take the output from several independent preruns as input and store a
-             * global local proposal function to the output file in directory '/global local'
-             * In addition, the meta information about constraints, parameters and their priors
-             * is stored in '/descriptions'.
-             *
-             * @param output_file_name The name of the HDF5 file containing the global local proposal function.
-             *                         if empty, do not create the proposal nor any output.
-             * @param input_files HDF5 files containing the history, descriptions, stats, and local propopal densities
-             *                    as created by EOS.
-             * @param config The configuration options influencing how GlobalLocal is created.
-             * @param analysis Compare the order of parameters in files vs the one given in analysis.
-             * @return The full histories of all chains found in the input files
-             */
-            static std::vector<HistoryPtr> build_global_local(const std::string & output_file_name,
-                                    const std::vector<std::shared_ptr<hdf5::File>> input_files,
-                                    const proposal_functions::GlobalLocal::Config & config,
-                                    AnalysisPtr analysis = AnalysisPtr());
-
-            /*!
              * Read the history of Markov chains stored in the input files.
              * For safety, compare with the given analysis to ensure parameters and constraints agree.
              */
