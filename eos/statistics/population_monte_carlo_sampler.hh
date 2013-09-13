@@ -226,10 +226,6 @@ namespace eos
              */
             VerifiedRange<double> mode_distance;
 
-            /// If true, use same local proposal as supplied by GlobalLocal input.
-            /// Else use degrees_of_freedom defined above.
-            bool override_global_local_proposal;
-
             /*!
              * Initialize the components randomly at the beginning.
              */

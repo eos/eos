@@ -875,7 +875,7 @@ namespace eos
                 Log::instance()->message("markov_chain_sampler.prerun_converged", ll_informational)
                     << "Pre-run has converged after " << pre_run_info.iterations << " iterations";
 
-                if (config.number_of_chains < 2 || (config.global_local_config && config.prerun_chains_per_partition < 2))
+                if (config.number_of_chains < 2)
                 {
                     Log::instance()->message("markov_chain_sampler.single_chain", ll_warning)
                         << "R-values are undefined for a single chain, so only efficiencies were adjusted";
@@ -949,12 +949,6 @@ namespace eos
 
                     Log::instance()->message("markov_chain_sampler.mainrun_invalid", ll_debug)
                             << "invalid/rejected proposals = " << 1.0 * c->statistics().iterations_invalid / c->statistics().iterations_rejected;
-
-                    if (config.global_local_config && (chunk + 1) * config.chunk_size < config.adapt_iterations)
-                    {
-                        c->proposal_function()->adapt(c->history().states.end() - config.chunk_size, c->history().states.end(),
-                                                      efficiency, config.min_efficiency, config.max_efficiency);
-                    }
                 }
 
                 for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
@@ -1000,65 +994,6 @@ namespace eos
          */
         void setup_main_run()
         {
-            if (config.global_local_config)
-            {
-                // one common proposal function for all chains
-                std::vector<HistoryPtr> histories;
-                std::vector<ProposalFunctionPtr> proposals;
-                std::vector<MarkovChain::Stats> stats;
-
-                // read data from file, so resume will produce the same results
-                auto file = hdf5::File::Open(config.output_file);
-                unsigned i = 0;
-                for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
-                {
-                    std::string group_name = "/prerun/chain #" + stringify(i);
-                    HistoryPtr history(new MarkovChain::History());
-                    ProposalFunctionPtr prop;
-                    MarkovChain::Stats stat;
-                    std::string proposal_type;
-                    MarkovChain::read_data(file, group_name, *history, prop, proposal_type, stat);
-                    histories.push_back(history);
-                    proposals.push_back(prop);
-                    stats.push_back(stat);
-                }
-                Log::instance()->message("MCsampler::setup_global_local", ll_debug)
-                    << "Using skip_initial = " << config.global_local_config->skip_initial;
-
-                std::shared_ptr<proposal_functions::GlobalLocal> gl(
-                    new proposal_functions::GlobalLocal(histories, proposals, stats, *config.global_local_config, config.prerun_chains_per_partition));
-
-                Log::instance()->message("MCsampler::setup_global_local", ll_debug)
-                    << "first chain has " << histories.front()->states.size() << " elements"
-                    << ", and its first element is " <<
-                    stringify(histories.front()->states.front().point.begin(), histories.front()->states.front().point.end())
-                    << ", the max posterior is " << stats.front().mode_of_posterior << " at parameters "
-                    << stringify(stats.front().parameters_at_mode.begin(), stats.front().parameters_at_mode.end());
-
-                /*
-                 * Seed new chains with the global mode
-                 * of all chains found in the prerun
-                 */
-
-                MarkovChain::State state_at_mode = gl->mode();
-                Log::instance()->message("markov_chain_sampler.setup_global_local", ll_debug)
-                    << "Found global mode at "  << state_at_mode << " in component "
-                    << state_at_mode.hyper_parameter.component;
-
-                std::vector<MarkovChain> new_chains;
-
-                for (unsigned c = 0 ; c < config.number_of_chains ; ++c)
-                {
-                    MarkovChain chain(analysis, config.seed + c, gl);
-
-                     chain.set_point(state_at_mode.point, state_at_mode.hyper_parameter);
-
-                     new_chains.push_back(chain);
-                }
-
-                chains = new_chains;
-            }
-
             //  clear up
             for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
             {

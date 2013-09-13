@@ -217,9 +217,6 @@ namespace eos
             /// Number of iterations per chunk.
             unsigned chunk_size;
 
-            /// Summarize all options pertaining to the GlobalLocal proposal function.
-            std::shared_ptr<proposal_functions::GlobalLocal::Config> global_local_config;
-
             /// Turn off main run, so only prerun is performed
             bool need_main_run;
 

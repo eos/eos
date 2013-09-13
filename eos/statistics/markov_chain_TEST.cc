@@ -501,55 +501,6 @@ class MarkovChainTest :
                     TEST_CHECK_RELATIVE_ERROR(mvt->evaluate(chain.current_state(), chain.proposed_state()),
                                               mvg->evaluate(chain.current_state(), chain.proposed_state()), 2e-2);
                 });
-
-#if 0
-                //todo sample _covariance not positive definite. What to do? Tried initial_scale, but didn't help
-                // global-local
-                {
-                    double initial_scale = 2.38 * 2.38 / 2.0;
-                    // run two chains
-                    proposal_functions::MultivariateGaussian* mvg1 = new proposal_functions::MultivariateGaussian(2, cov_initial);
-                    mvg1->covariance_scale = initial_scale;
-                    std::shared_ptr<MarkovChain::ProposalFunction> ppf1(mvg1);
-                    proposal_functions::MultivariateGaussian* mvg2 = new proposal_functions::MultivariateGaussian(2, cov_initial);
-                    mvg2->covariance_scale = initial_scale;
-                    std::shared_ptr<MarkovChain::ProposalFunction> ppf2(mvg2);
-
-                    std::vector<MarkovChain> chains;
-                    chains.push_back(MarkovChain(analysis, 1, ppf1));
-                    chains.push_back(MarkovChain(analysis, 2, ppf2));
-
-                    unsigned iterations = 5e3;
-                    for (auto c= chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
-                    {
-                        c->run(iterations);
-                    }
-
-                    proposal_functions::GlobalLocal gl(chains, 0.5, 2);
-
-                    gsl_rng * rng;
-                    rng = gsl_rng_alloc(gsl_rng_mt19937);
-                    gsl_rng_set(rng, 4);
-
-                    MarkovChain::State proposal(chains[0].proposed_state());
-
-                    // pick 2nd component
-                    gl.propose(proposal, chains[0].current_state(), rng);
-                    TEST_CHECK_NEARLY_EQUAL(gl.evaluate(proposal, chains[0].current_state()), 0.717062241009793, eps);
-
-                    // nonlocal, then pick 1st component
-                    gl.propose(proposal, chains[0].current_state(), rng);
-
-                    gl.propose(proposal, chains[0].current_state(), rng);
-
-                    // local jump
-                    gl.propose(proposal, chains[0].current_state(), rng);
-                    TEST_CHECK_NEARLY_EQUAL(gl.evaluate(proposal, chains[0].current_state()), 1.5584608222464997, eps);
-
-                    // local jump
-                    gl.propose(proposal, chains[0].current_state(), rng);
-                }
-#endif
             }
 
             // test History

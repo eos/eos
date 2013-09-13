@@ -1,9 +1,6 @@
 CLEANFILES = \
 	*~ \
 	markov_chain_sampler_TEST.hdf5 \
-	markov_chain_sampler_TEST-global-local.hdf5 \
-	markov_chain_sampler_TEST-build-global-local.hdf5 \
-	markov_chain_sampler_TEST-global-local-resume.hdf5 \
 	prior_sampler_TEST.hdf5 \
 	proposal_functions_TEST-rdwr.hdf5 \
 	proposal_functions_TEST-block-decomposition.hdf5

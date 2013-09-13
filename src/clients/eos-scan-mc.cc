@@ -97,8 +97,6 @@ class CommandLine :
         PopulationMonteCarloSampler::Config config_pmc;
 #endif
 
-        proposal_functions::GlobalLocal::Config config_gl;
-        bool use_global_local;
         std::vector<std::shared_ptr<hdf5::File>> prerun_inputs;
 
         std::vector<ParameterData> scan_parameters;
@@ -141,16 +139,16 @@ class CommandLine :
 #if EOS_ENABLE_PMC
             config_pmc(PopulationMonteCarloSampler::Config::Default()),
 #endif
-            config_gl(proposal_functions::GlobalLocal::Config::Default()),
-            use_global_local(false),
             pmc_calculate_posterior(false),
             pmc_calculate_posterior_min(0),
             pmc_calculate_posterior_max(0),
             pmc_draw_samples(false),
             pmc_final(false),
+            pmc_update(false),
             massive_mode_finding(false),
             massive_maximum_iterations(2000),
             optimize(false),
+            goodness_of_fit(false),
             use_pmc(false)
         {
             config.number_of_chains = 4;
@@ -362,180 +360,6 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--global-local" == argument)
-                {
-                    use_global_local = destringify<unsigned>(*(++a));
-                    if (use_global_local)
-                        config.store_prerun = true;
-
-                    continue;
-                }
-
-                if ("--global-local-adapt-iterations" == argument)
-                {
-                    config.adapt_iterations = destringify<unsigned> (*(++a));
-
-                    continue;
-                }
-
-                if ("--global-local-covariance-window" == argument)
-                {
-                    config_gl.history_points_local_covariance_size = destringify<unsigned> (*(++a));
-#if EOS_ENABLE_PMC
-                    config_pmc.sliding_window = config_gl.history_points_local_covariance_size;
-#endif
-
-                    continue;
-                }
-
-                if ("--global-local-equal-weights" == argument)
-                {
-                    config_gl.equal_weight_components = destringify<unsigned> (*(++a));
-
-                    continue;
-                }
-
-                if ("--global-local-history-points" == argument)
-                {
-                    config_gl.history_points = destringify<unsigned> (*(++a));
-
-                    continue;
-                }
-
-                if ("--global-local-history-points-ordered" == argument)
-                {
-                    config_gl.history_points_ordered = destringify<unsigned> (*(++a));
-
-                    continue;
-                }
-
-                if ("--global-local-input" == argument)
-                {
-                    // parse all filename between { and }, separated by whitespace
-                    std::string lbrace(*(++a));
-                    if ("{" != lbrace)
-                    {
-                        --a;
-                        throw DoUsage("Need to specify prerun inputs like --global-local-input { file1 file2 } ");
-                        continue;
-                    }
-
-                    do
-                    {
-                        std::string word(*(++a));
-                        if ("}" == word)
-                            break;
-
-                        prerun_inputs.push_back(std::make_shared<hdf5::File>(hdf5::File::Open(word, H5F_ACC_RDONLY)));
-                    }
-                    while (true);
-
-                    continue;
-                }
-
-                if ("--global-local-jump-indices" == argument)
-                {
-                    // parse all filename between { and }, separated by whitespace
-                    std::string lbrace(*(++a));
-                    if ("{" != lbrace)
-                    {
-                        --a;
-                        throw DoUsage("Need to specify indices like --global-local-jump-indices { index0 index1 } ");
-                        continue;
-                    }
-
-                    do
-                    {
-                        std::string word(*(++a));
-                        if ("}" == word)
-                            break;
-
-                        config_gl.long_jump_indices.push_back(destringify<unsigned>(word));
-                    }
-                    while (true);
-
-                    continue;
-                }
-
-                if ("--global-local-jump-probability" == argument)
-                {
-                    config_gl.local_jump_probability = destringify<double> (*(++a));
-
-                    continue;
-                }
-
-                if ("--global-local-minimum-weight" == argument)
-                {
-                    config_gl.minimum_relative_cluster_weight = destringify<double> (*(++a));
-
-                    continue;
-                }
-
-                if ("--global-local-perform-clustering" == argument)
-                {
-                    config_gl.perform_clustering = true;
-
-                    config_gl.clustering_maximum_r_value = destringify<double> (*(++a));
-
-                    continue;
-                }
-
-                if ("--global-local-points" == argument)
-                {
-                    config_gl.history_points = destringify<unsigned> (*(++a));
-
-                    continue;
-                }
-
-                if ("--global-local-point-weighting" == argument)
-                {
-                    typedef proposal_functions::GlobalLocal::Config::HistoryPointWeighting hpw;
-
-                    std::string type(*(++a));
-                    if ("log" == type)
-                    {
-                        config_gl.history_point_weighting = hpw::log_posterior;
-                    }
-                    else if ("linear" == type)
-                    {
-                        config_gl.history_point_weighting = hpw::posterior;
-                    }
-                    else if("flat" == type)
-                    {
-                        config_gl.history_point_weighting = hpw::equal;
-                    }
-                    else
-                    {
-                        throw DoUsage("global-local-point-weighting: invalid type " + type);
-                    }
-
-                    continue;
-                }
-
-                if ("--global-local-rescale-local-covariance" == argument)
-                {
-                    config_gl.rescale_local_covariance = destringify<double> (*(++a));
-
-                    continue;
-                }
-
-                if ("--global-local-skip-initial" == argument)
-                {
-                    config_gl.skip_initial = destringify<double> (*(++a));
-#if EOS_ENABLE_PMC
-                    config_pmc.skip_initial = config_gl.skip_initial;
-#endif
-
-                    continue;
-                }
-
-                if ("--global-local-strict-clustering" == argument)
-                {
-                    config_gl.clustering_strict_r_value = destringify<unsigned> (*(++a));
-
-                    continue;
-                }
-
                 if ("--goodness-of-fit" == argument)
                 {
                     // best-fit point is optional
@@ -740,7 +564,6 @@ class CommandLine :
                 if ("--pmc-dof" == argument)
                 {
                     config_pmc.degrees_of_freedom = destringify<long>(*(++a));
-                    config_pmc.override_global_local_proposal = true;
 
                     continue;
                 }
@@ -1189,11 +1012,6 @@ int main(int argc, char * argv[])
             c.partitions.push_back(temp.at(*i));
         }
 
-        // create the sampler with correct options
-        if (inst->use_global_local)
-        {
-            inst->config.global_local_config.reset(new proposal_functions::GlobalLocal::Config(inst->config_gl));
-        }
         MarkovChainSampler sampler(inst->analysis, inst->config);
 
         if (inst->massive_mode_finding)
