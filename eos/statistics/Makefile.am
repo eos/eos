@@ -72,6 +72,7 @@ LDADD = \
 	$(top_builddir)/eos/utils/libeosutils.la
 
 if EOS_ENABLE_PMC
+TESTS += population_monte_carlo_sampler_TEST
 LDADD += -lpmc -ldl
 endif
 
@@ -92,6 +93,10 @@ log_prior_TEST_SOURCES = log_prior_TEST.cc
 markov_chain_TEST_SOURCES = markov_chain_TEST.cc
 
 markov_chain_sampler_TEST_SOURCES = markov_chain_sampler_TEST.cc
+
+if EOS_ENABLE_PMC
+population_monte_carlo_sampler_TEST_SOURCES = population_monte_carlo_sampler_TEST.cc
+endif
 
 prior_sampler_TEST_SOURCES = prior_sampler_TEST.cc
 
