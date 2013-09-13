@@ -827,81 +827,6 @@ namespace eos
             }
         }
 
-        /*
-         * Filter out components which don't overlap with the integration domain.
-         *
-         * Draw samples from a single component. If too few inside the domain,
-         * set the component's weight to zero
-         * @return The number of live components.
-         * @note mind the flag mix_mvdens::init_cwght (cumulative weight?) when calling this method
-         */
-        unsigned filter_components(mix_mvdens * & mmv, const parabox * pb)
-        {
-            pmc::ErrorHandler err;
-
-            std::vector<double> point(mmv->ndim);
-
-            unsigned n_live_components = 0;
-            for (unsigned i = 0 ; i < mmv->ncomp ; ++i)
-            {
-                unsigned n_in = 0;
-                for (unsigned j = 0 ; j < config.chunk_size ; ++j)
-                {
-                    mvdens_ran(&point[0], mmv->comp[i], rng, err);
-                    if (isinBox(pb, &point[0], err))
-                        ++n_in;
-                }
-
-                // check if enough were in
-                const double ratio = 1.0 * n_in / config.chunk_size;
-                if (ratio < config.minimum_overlap)
-                {
-                    mmv->wght[i] = 0.0;
-                }
-                else
-                {
-                    ++n_live_components;
-                }
-            }
-
-            Log::instance()->message("PMC::filter_components", ll_informational)
-                << mmv->ncomp - n_live_components << " components were removed "
-                << "by minimum overlap of " << config.minimum_overlap;
-
-            if (n_live_components == mmv->ncomp)
-            {
-                return n_live_components;
-            }
-
-            if (n_live_components == 0)
-                throw InternalError("PMC::filter_components: removed all components. Check parameter ranges!");
-
-            // return new proposal with components removed
-            mix_mvdens * mmv_old = mmv;
-            mmv = mix_mvdens_alloc(n_live_components, mmv_old->ndim, err);
-
-            unsigned i_new = 0;
-            for (unsigned i_old = 0 ; i_old < mmv_old->ncomp ; ++i_old)
-            {
-                if (mmv_old->wght[i_old] == 0.0)
-                {
-                    // leads to  munmap_chunk(): invalid pointer
-                    //                    auto mv = &mmv_old->comp[i_old];
-                    //                    mvdens_free(mv);
-                    mvdens_empty(mmv_old->comp[i_old]);
-                    continue;
-                }
-
-                // equal weight to every cluster
-                mmv->wght[i_new] = 1.0 / n_live_components;
-                mmv->comp[i_new] = mmv_old->comp[i_old];
-
-                ++i_new;
-            }
-
-            return n_live_components;
-        }
-
         void initialize_pmc(const hdf5::File & file, const bool & update)
         {
             Log::instance()->message("PMC_sampler::initialize", ll_informational)
@@ -1098,7 +1023,7 @@ namespace eos
             else if (config.super_clusters > 0)
             {
                 // initialize mmv by clustering and filtering
-                number_of_live_components = hierarchical_clustering(f, mmv, par_box);
+                number_of_live_components = hierarchical_clustering(f, mmv);
             }
             // read in from previous PMC output
             else
@@ -1655,7 +1580,7 @@ namespace eos
          * 1. Respect chains: choose one cluster only from patches within a chain
          * 2. Fix desired #clusters and #samples for a patch
          */
-        unsigned hierarchical_clustering(const hdf5::File & file, mix_mvdens * & mmv, const parabox * pb)
+        unsigned hierarchical_clustering(const hdf5::File & file, mix_mvdens * & mmv)
         {
             /* parse chain histories */
 
@@ -1899,11 +1824,6 @@ namespace eos
                 mv->df = config.degrees_of_freedom;
                 mv->chol = 0;
             }
-
-            // check if components are in valid region
-            Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_debug)
-                << "Filtering components that don't match";
-            active_clusters = filter_components(mmv, pb);
 
             return active_clusters;
         }
