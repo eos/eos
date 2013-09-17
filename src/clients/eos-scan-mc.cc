@@ -92,7 +92,8 @@ class CommandLine :
 
         Analysis analysis;
 
-        MarkovChainSampler::Config config;
+        MarkovChainSampler::Config mcmc_config;
+
 #if EOS_ENABLE_PMC
         PopulationMonteCarloSampler::Config config_pmc;
 #endif
@@ -135,7 +136,7 @@ class CommandLine :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
             analysis(likelihood),
-            config(MarkovChainSampler::Config::Quick()),
+            mcmc_config(MarkovChainSampler::Config::Quick()),
 #if EOS_ENABLE_PMC
             config_pmc(PopulationMonteCarloSampler::Config::Default()),
 #endif
@@ -151,11 +152,11 @@ class CommandLine :
             goodness_of_fit(false),
             use_pmc(false)
         {
-            config.number_of_chains = 4;
-            config.need_prerun = true;
-            config.chunk_size = 1000;
-            config.parallelize = true;
-            config.use_strict_rvalue_definition = true;
+            mcmc_config.number_of_chains = 4;
+            mcmc_config.need_prerun = true;
+            mcmc_config.chunk_size = 1000;
+            mcmc_config.parallelize = true;
+            mcmc_config.use_strict_rvalue_definition = true;
         }
 
         void parse(int argc, char ** argv)
@@ -282,26 +283,20 @@ class CommandLine :
 
                 if ("--chains" == argument)
                 {
-                    config.number_of_chains = destringify<unsigned>(*(++a));
+                    mcmc_config.number_of_chains = destringify<unsigned>(*(++a));
                     continue;
                 }
 
                 if ("--chunk-size" == argument)
                 {
-                    config.chunk_size = destringify<unsigned>(*(++a));
-#if EOS_ENABLE_PMC
-                    config_pmc.chunk_size = config.chunk_size;
-#endif
+                    mcmc_config.chunk_size = destringify<unsigned>(*(++a));
 
                     continue;
                 }
 
                 if ("--chunks" == argument)
                 {
-                    config.chunks = destringify<unsigned>(*(++a));
-#if EOS_ENABLE_PMC
-                    config_pmc.chunks = config.chunks;
-#endif
+                    mcmc_config.chunks = destringify<unsigned>(*(++a));
 
                     continue;
                 }
@@ -387,23 +382,28 @@ class CommandLine :
                     continue;
                 }
 
+#if EOS_ENABLE_PMC
                 if ("--hc-patch-length" == argument)
                 {
-#if EOS_ENABLE_PMC
                 	config_pmc.patch_length = destringify<double> (*(++a));
-#endif
 
                 	continue;
                 }
 
                 if ("--hc-skip-initial" == argument)
                 {
-#if EOS_ENABLE_PMC
                 	config_pmc.skip_initial = destringify<double> (*(++a));
-#endif
 
                 	continue;
                 }
+
+                if ("--hc-target-ncomponents" == argument)
+                {
+                    config_pmc.target_ncomponents = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+#endif
 
                 if ("--massive-mode-finding" == argument)
                 {
@@ -419,7 +419,7 @@ class CommandLine :
 
                 if ("--no-prerun" == argument)
                 {
-                    config.need_prerun = false;
+                    mcmc_config.need_prerun = false;
 
                     continue;
                 }
@@ -502,7 +502,7 @@ class CommandLine :
                 if ("--output" == argument)
                 {
                     std::string filename(*(++a));
-                    config.output_file = filename;
+                    mcmc_config.output_file = filename;
 #if EOS_ENABLE_PMC
                     config_pmc.output_file = filename;
 #endif
@@ -512,9 +512,9 @@ class CommandLine :
 
                 if ("--parallel" == argument)
                 {
-                    config.parallelize = destringify<unsigned>(*(++a));
+                    mcmc_config.parallelize = destringify<unsigned>(*(++a));
 #if EOS_ENABLE_PMC
-                    config_pmc.parallelize = config.parallelize;
+                    config_pmc.parallelize = mcmc_config.parallelize;
 #endif
 
                     continue;
@@ -533,7 +533,7 @@ class CommandLine :
 
                         key = std::string(*(++a));
                     }
-                    config.partitions.push_back(partition);
+                    mcmc_config.partitions.push_back(partition);
                     --a;
 
                     continue;
@@ -544,8 +544,8 @@ class CommandLine :
                     partition_index.reset(new unsigned);
                     *partition_index = destringify<unsigned> (*(++a));
 
-                    config.need_main_run = false;
-                    config.store_prerun = true;
+                    mcmc_config.need_main_run = false;
+                    mcmc_config.store_prerun = true;
 
                     continue;
                 }
@@ -594,16 +594,6 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--pmc-components-per-cluster" == argument)
-                {
-                    unsigned n_comp = destringify<unsigned>(*(++a));
-
-                    // with minuit initialization, total number of components depends on local modes found
-                    config_pmc.components_per_cluster = n_comp;
-
-                    continue;
-                }
-
                 if ("--pmc-draw-samples" == argument)
                 {
                     // samples are to be stored in ordinary output file via config
@@ -633,12 +623,6 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--pmc-hierarchical-clusters" == argument)
-                {
-                    config_pmc.super_clusters = destringify<unsigned>(*(++a));
-
-                    continue;
-                }
                 if ("--pmc-group-by-r-value" == argument)
                 {
                     config_pmc.group_by_r_value = destringify<double>(*(++a));
@@ -653,21 +637,9 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--pmc-single-cluster" == argument)
+                if ("--pmc-final-samples" == argument)
                 {
-                    config_pmc.single_cluster = destringify<unsigned>(*(++a));
-
-                    continue;
-                }
-
-                {
-
-                    continue;
-                }
-
-                if ("--pmc-final-chunksize" == argument)
-                {
-                    config_pmc.final_chunk_size = destringify<unsigned>(*(++a));
+                    config_pmc.final_samples = destringify<unsigned>(*(++a));
 
                     continue;
                 }
@@ -679,10 +651,24 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--pmc-max-updates" == argument)
+                {
+                    config_pmc.max_updates = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
                 if ("--pmc-relative-std-deviation-over-last-steps" == argument)
                 {
                     config_pmc.maximum_relative_std_deviation = destringify<double>(*(++a));
                     config_pmc.minimum_steps = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--pmc-samples-per-component" == argument)
+                {
+                    config_pmc.samples_per_component = destringify<unsigned>(*(++a));
 
                     continue;
                 }
@@ -705,44 +691,44 @@ class CommandLine :
 
                 if ("--prerun-chains-per-partition" == argument)
                 {
-                    config.prerun_chains_per_partition = destringify<unsigned>(*(++a));
+                    mcmc_config.prerun_chains_per_partition = destringify<unsigned>(*(++a));
 
                     continue;
                 }
 
                 if ("--prerun-find-modes" == argument)
                 {
-                    config.find_modes = true;
+                    mcmc_config.find_modes = true;
 
                     continue;
                 }
 
                 if ("--prerun-max" == argument)
                 {
-                    config.prerun_iterations_max = destringify<unsigned>(*(++a));
+                    mcmc_config.prerun_iterations_max = destringify<unsigned>(*(++a));
 
                     continue;
                 }
 
                 if ("--prerun-min" == argument)
                 {
-                    config.prerun_iterations_min = destringify<unsigned>(*(++a));
+                    mcmc_config.prerun_iterations_min = destringify<unsigned>(*(++a));
 
                     continue;
                 }
 
                 if ("--prerun-only" == argument)
                 {
-                    config.need_prerun = true;
-                    config.store_prerun = true;
-                    config.need_main_run = false;
+                    mcmc_config.need_prerun = true;
+                    mcmc_config.store_prerun = true;
+                    mcmc_config.need_main_run = false;
 
                     continue;
                 }
 
                 if ("--prerun-update" == argument)
                 {
-                    config.prerun_iterations_update = destringify<unsigned>(*(++a));
+                    mcmc_config.prerun_iterations_update = destringify<unsigned>(*(++a));
 
                     continue;
                 }
@@ -768,23 +754,23 @@ class CommandLine :
                     LogPriorPtr proposal = analysis.log_prior(name);
                     if (! proposal)
                         throw DoUsage("Define parameter " + name + " and its prior before --prior-as-proposal");
-                    config.block_proposal_parameters.push_back(name);
+                    mcmc_config.block_proposal_parameters.push_back(name);
 
                     continue;
                 }
 
                 if ("--proposal" == argument)
                 {
-                    config.proposal = *(++a);
+                    mcmc_config.proposal = *(++a);
 
-                    if (config.proposal == "MultivariateStudentT")
+                    if (mcmc_config.proposal == "MultivariateStudentT")
                     {
                         double dof = destringify<double>(*(++a));
                         if (dof <= 0)
                         {
                             throw DoUsage("No (or non-positive) degree of freedom for MultivariateStudentT specified");
                         }
-                        config.student_t_degrees_of_freedom = dof;
+                        mcmc_config.student_t_degrees_of_freedom = dof;
                     }
 
                     continue;
@@ -796,14 +782,14 @@ class CommandLine :
 
                     if ("time" == value)
                     {
-                        config.seed = ::time(0);
+                        mcmc_config.seed = ::time(0);
 #if EOS_ENABLE_PMC
                         config_pmc.seed = ::time(0);
 #endif
                     }
                     else
                     {
-                        config.seed = destringify<unsigned long>(value);
+                        mcmc_config.seed = destringify<unsigned long>(value);
 #if EOS_ENABLE_PMC
                         config_pmc.seed = destringify<unsigned long>(value);
 #endif
@@ -814,21 +800,21 @@ class CommandLine :
 
                 if ("--scale-reduction" == argument)
                 {
-                    config.scale_reduction = destringify<double>(*(++a));
+                    mcmc_config.scale_reduction = destringify<double>(*(++a));
 
                     continue;
                 }
 
                 if ("--store-prerun" == argument)
                 {
-                    config.store_prerun = true;
+                    mcmc_config.store_prerun = true;
 
                     continue;
                 }
 
                 if ("--store-observables-and-proposals" == argument)
                 {
-                    config.store_observables_and_proposals = true;
+                    mcmc_config.store_observables_and_proposals = true;
 
                     continue;
                 }
@@ -954,7 +940,7 @@ int main(int argc, char * argv[])
         // goodness-of-fit for user specified parameter point
         if (inst->goodness_of_fit)
         {
-            inst->analysis.goodness_of_fit(inst->best_fit_point, 1e5, inst->config.output_file);
+            inst->analysis.goodness_of_fit(inst->best_fit_point, 1e5, inst->mcmc_config.output_file);
 
             return EXIT_SUCCESS;
         }
@@ -992,7 +978,7 @@ int main(int argc, char * argv[])
         // remove unwanted partitions and select only one
         if (unsigned * i = inst->partition_index.get())
         {
-            MarkovChainSampler::Config & c = inst->config;
+            MarkovChainSampler::Config & c = inst->mcmc_config;
             if (c.partitions.empty())
                 throw DoUsage("Can't select partition " + stringify(*i) + " from no partitions!");
 
@@ -1001,7 +987,7 @@ int main(int argc, char * argv[])
             c.partitions.push_back(temp.at(*i));
         }
 
-        MarkovChainSampler sampler(inst->analysis, inst->config);
+        MarkovChainSampler sampler(inst->analysis, inst->mcmc_config);
 
         if (inst->massive_mode_finding)
         {
@@ -1009,7 +995,7 @@ int main(int argc, char * argv[])
             Analysis::OptimizationOptions options = Analysis::OptimizationOptions::Defaults();
             options.algorithm = "minimize";
             options.maximum_iterations = inst->massive_maximum_iterations;
-            options.mcmc_pre_run = inst->config.need_prerun;
+            options.mcmc_pre_run = inst->mcmc_config.need_prerun;
             options.strategy_level = 0;
             sampler.massive_mode_finding(options);
             return EXIT_SUCCESS;

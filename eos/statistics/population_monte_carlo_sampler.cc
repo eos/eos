@@ -836,7 +836,7 @@ namespace eos
 
             unsigned number_of_live_components = 0;
 
-            if (config.super_clusters > 0)
+            if (config.target_ncomponents > 0)
             {
                 // initialize mmv by clustering and filtering
                 number_of_live_components = hierarchical_clustering(f, mmv);
@@ -884,7 +884,7 @@ namespace eos
             distribution * proposal = mix_mvdens_distribution(mmv->ndim, (void*) mmv, err);
 
             // number of samples per chunk. Fixed size for each live component.
-            unsigned n_samples = config.chunk_size * number_of_live_components;
+            unsigned n_samples = config.samples_per_component * number_of_live_components;
 
             if (update)
             {
@@ -1057,14 +1057,14 @@ namespace eos
             /* create initial guess for super clusters by drawing local patches uniformly w/o replacement or large windows */
 
             Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
-                << "Creating initial guess for the " << config.super_clusters
+                << "Creating initial guess for the " << config.target_ncomponents
                 << " clusters to be formed from large windows"
                 << (config.group_by_r_value > 1 ? " for each of the " + stringify(chain_groups.size()) + " chain groups found" : "");
 
             HierarchicalClustering::MixtureDensity initial_clusters;
 
             // weight of a single cluster (weights sum up to one)
-            const unsigned n_clusters_total = config.super_clusters * chain_groups.size();
+            const unsigned n_clusters_total = config.target_ncomponents * chain_groups.size();
             const double weight = 1.0 / n_clusters_total;
 
             {
@@ -1072,7 +1072,7 @@ namespace eos
                 {
                     // how many clusters should each each in group contribute
                     std::vector<unsigned> super_clusters_per_chain;
-                    pmc::minimal_partition(config.super_clusters, g->size(), super_clusters_per_chain);
+                    pmc::minimal_partition(config.target_ncomponents, g->size(), super_clusters_per_chain);
 
                     auto n_clusters = super_clusters_per_chain.cbegin();
                     for (auto c = g->cbegin() ; c != g->cend() ; ++c, ++n_clusters)
@@ -1268,7 +1268,7 @@ namespace eos
             pmc::ErrorHandler err;
 
             // prerun to adapt proposal densities
-            for (unsigned i = 0; i < config.chunks ; ++i)
+            for (unsigned i = 0; i < config.max_updates ; ++i)
             {
                 //                pmc_simu_pmc_step(pmc_simu *pmc, gsl_rng *r, error **err)
                 {
@@ -1302,7 +1302,7 @@ namespace eos
                 status.eff_sample_size /= pmc->nsamples;
                 status.evidence = evidence(pmc, NULL, err);
                 Log::instance()->message("PMC_sampler.status", ll_informational)
-                    << "Status after step " << i + 1 << " of " << config.chunks
+                    << "Status after step " << i + 1 << " of " << config.max_updates
                     << " with " << pmc->nsamples << " samples:";
                 Log::instance()->message("PMC_sampler.status", ll_informational)
                     << "perplexity: " << status.perplexity
@@ -1323,7 +1323,7 @@ namespace eos
 
                 if (config.adjust_sample_size)
                 {
-                    pmc_simu_realloc(pmc, config.chunk_size * live_components, err);
+                    pmc_simu_realloc(pmc, config.samples_per_component * live_components, err);
                     pmc::check_error(err);
                 }
 
@@ -1369,11 +1369,11 @@ namespace eos
             if (config.need_prerun)
                 pre_run();
 
-            if (config.final_chunk_size == 0)
+            if (config.final_samples == 0)
                 return;
 
             // reserve memory for final chunk
-            pmc_simu_realloc(pmc, config.final_chunk_size, err);
+            pmc_simu_realloc(pmc, config.final_samples, err);
 
             // sample from proposal density
             pmc->proposal->simulate(pmc, pmc->proposal->data, rng, pmc->pb, err);
@@ -1449,22 +1449,22 @@ namespace eos
             // need to draw a different number of samples for final run
             if (status.converged)
             {
-                pmc_simu_realloc(pmc, config.final_chunk_size, err);
+                pmc_simu_realloc(pmc, config.final_samples, err);
                 pmc::check_error(err);
             }
             // reduce overall size if components died out
             else if (config.adjust_sample_size)
             {
-                pmc_simu_realloc(pmc, live_components * config.chunk_size, err);
+                pmc_simu_realloc(pmc, live_components * config.samples_per_component, err);
                 pmc::check_error(err);
             }
             // todo is this ever called?
             // or if sample size has been changed externally to differ from the samples before and update
-            else if (unsigned(pmc->nsamples) != prop->ncomp * config.chunk_size)
+            else if (unsigned(pmc->nsamples) != prop->ncomp * config.samples_per_component)
             {
                 Log::instance()->message("PMC_sampler.draw_samples", ll_debug)
                     << "I'm in a surprising place";
-                pmc_simu_realloc(pmc, prop->ncomp * config.chunk_size, err);
+                pmc_simu_realloc(pmc, prop->ncomp * config.samples_per_component, err);
                 pmc::check_error(err);
             }
 
@@ -1696,10 +1696,10 @@ namespace eos
          patch_length(1000),
          store_input_components(false),
          store_hc_initial(false),
-         super_clusters(0),
+         target_ncomponents(0),
          adjust_sample_size(false),
-         chunks(10),
-         chunk_size(10000),
+         max_updates(10),
+         samples_per_component(10000),
          crop_highest_weights(0),
          need_prerun(true),
          store_prerun(true),
@@ -1710,7 +1710,7 @@ namespace eos
          minimum_perplexity(0, 1, 0.1),
          minimum_steps(2, std::numeric_limits<unsigned>::max(), 3),
          maximum_relative_std_deviation(0, 1, 0.01),
-         final_chunk_size(20000),
+         final_samples(20000),
          store(true),
          print_steps(0, 100, 5)
      {
@@ -1727,7 +1727,7 @@ namespace eos
      {
          PopulationMonteCarloSampler::Config config;
 
-         config.chunk_size = 3000;
+         config.samples_per_component = 3000;
 
          return config;
      }
@@ -1740,17 +1740,17 @@ namespace eos
                 << ", ignore groups = " << stringify_container(c.ignore_groups)
                 << ", R value no nuisance = " << c.r_value_no_nuisance << std::endl
                 << "sliding window = " << c.patch_length
-                << ", number of clusters = " << c.super_clusters << std::endl
+                << ", number of clusters = " << c.target_ncomponents << std::endl
                 << "Prerun options:" << std::endl
-                << "chunk size = " << c.chunk_size
-                << ", max #updates = " << c.chunks
+                << "chunk size = " << c.samples_per_component
+                << ", max #updates = " << c.max_updates
                 << ", adjust sample size = " << c.adjust_sample_size << std::endl
                 << "degrees of freedom = " << c.degrees_of_freedom << std::endl
                 << "Convergence options:" << std::endl
                 << "ignore ESS = " << c.ignore_eff_sample_size
                 << ", allowed std. dev = " << c.maximum_relative_std_deviation << std::endl
                 << "Main run options: " << std::endl
-                << "chunk size = " << c.final_chunk_size;
+                << "chunk size = " << c.final_samples;
          return stream;
      }
 

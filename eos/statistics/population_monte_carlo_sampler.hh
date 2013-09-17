@@ -226,10 +226,10 @@ namespace eos
              * prerun markov chains to form an initial proposal density.
              * Create this many components for PMC.
              *
-             * If group_by_r_value is active, choose this many components per
+             * If #group_by_r_value is active, choose this many components per
              * group of chains.
              */
-            unsigned super_clusters;
+            unsigned target_ncomponents;
 
             ///@}
 
@@ -239,11 +239,11 @@ namespace eos
             /// Change number of samples according to number of live components.
             bool adjust_sample_size;
 
-            /// The number of updates to proposal functions (mixture components).
-            unsigned chunks;
+            /// The maximum number of updates to the proposal function.
+            unsigned max_updates;
 
-            /// Number of iterations per chunk and component.
-            unsigned chunk_size;
+            /// Number of importance samples per component.
+            unsigned samples_per_component;
 
             /*!
              *  If > 0, find the samples with highest weight and ignore them during a PMC update.
@@ -287,8 +287,8 @@ namespace eos
             ///@name Main run options
             ///@{
 
-            /// Number of iterations used in final step after adaption is finished.
-            long final_chunk_size;
+            /// Number of samples used in final step after adaption is finished.
+            long final_samples;
 
             /// Whether to store collected samples.
             bool store;

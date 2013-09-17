@@ -118,10 +118,9 @@ class PopulationMonteCarloSamplerTest :
                 static const std::string pmc_output_split = EOS_BUILDDIR "/eos/statistics/pmc_sampler_TEST-output-split.hdf5";
 
                 PopulationMonteCarloSampler::Config pmc_config = PopulationMonteCarloSampler::Config::Default();
-                pmc_config.chunks = 5;
-                pmc_config.chunk_size = 2000;
-                pmc_config.components_per_cluster = 1;
-                pmc_config.final_chunk_size = 5000;
+                pmc_config.max_updates = 5;
+                pmc_config.samples_per_component = 2000;
+                pmc_config.final_samples = 5000;
                 pmc_config.output_file = pmc_output;
                 pmc_config.parallelize = true;
                 pmc_config.seed = 23;
@@ -132,9 +131,10 @@ class PopulationMonteCarloSamplerTest :
                 	PopulationMonteCarloSampler::Config temp_config(pmc_config);
                     temp_config.skip_initial = 0.2;
                     temp_config.patch_length = 400;
-                    temp_config.super_clusters = 2;
+                    temp_config.target_ncomponents = 2;
                     PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(mcmc_file_name), temp_config);
                     pmc_sampler.run();
+                    TEST_CHECK(pmc_sampler.status().converged);
                 }
 
                 // save initial status for later resumption
@@ -143,7 +143,7 @@ class PopulationMonteCarloSamplerTest :
                     temp_config.output_file = pmc_output_components;
                     temp_config.skip_initial = 0.2;
                     temp_config.patch_length = 400;
-                    temp_config.super_clusters = 2;
+                    temp_config.target_ncomponents = 2;
                     PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(mcmc_file_name), temp_config);
                     pmc_sampler.draw_samples();
                 }
@@ -151,27 +151,27 @@ class PopulationMonteCarloSamplerTest :
                 // resuming from previous step
                 {
                     pmc_config.output_file = pmc_output_resume;
-                    PopulationMonteCarloSampler pmc_sampler_resume(analysis, hdf5::File::Open(pmc_output_components), pmc_config);
-                    pmc_sampler_resume.run();
+                    PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(pmc_output_components), pmc_config);
+                    pmc_sampler.run();
+                    TEST_CHECK(pmc_sampler.status().converged);
                 }
 
                 // splitting up the calculation
                 {
-                    pmc_config.chunk_size = 3001;
+                    pmc_config.samples_per_component = 3001;
                     pmc_config.output_file = pmc_output_split;
                     PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(pmc_output_components), pmc_config);
-                    pmc_sampler.calculate_weights(pmc_output_components, 0, pmc_config.chunk_size - 1);
+                    pmc_sampler.calculate_weights(pmc_output_components, 0, pmc_config.samples_per_component - 1);
                 }
 
                 // hierarchical clustering: integrate over a subdomain only, eliminate one peak with half of probability
                 {
-                    pmc_config.chunk_size = 1000;
+                    pmc_config.samples_per_component = 1000;
                     pmc_config.group_by_r_value = 1.1;
-                    pmc_config.minimum_overlap = 0.02;
                     pmc_config.output_file = pmc_output_hc;
                     pmc_config.patch_length = 400;
                     pmc_config.skip_initial = 0.2;
-                    pmc_config.super_clusters = 2;
+                    pmc_config.target_ncomponents = 2;
 
                     Analysis ana(llh);
                     ana.add(LogPrior::Flat(p, "mass::b(MSbar)", ParameterRange{ -10, 10 }));
@@ -179,6 +179,7 @@ class PopulationMonteCarloSamplerTest :
                     ana.restrict("mass::c", -10, 0);
                     PopulationMonteCarloSampler pmc_sampler(ana, hdf5::File::Open(mcmc_file_name), pmc_config);
                     pmc_sampler.run();
+                    TEST_CHECK(pmc_sampler.status().converged);
                 }
 
                 // read in results and check
