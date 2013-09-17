@@ -131,22 +131,6 @@ namespace eos
                                   MarkovChain::Stats & stats);
 
             /*!
-             * Read the description part of chain's prerun from hdf5 file.
-             *
-             * @param file
-             * @param data_base_name The directory in the file under which the data is parsed.
-             * @param descriptions All parameter ranges etc. Beware, the association to the underlying Parameters object is independent.
-             * @param priors The string representation of a prior distribution.
-             * @param constraints The string representation of an individual constraint.
-             * @param hash The EOS version used to create the file.
-             */
-            static void read_descriptions(hdf5::File & file, const std::string & data_base_name,
-                                          std::vector<ParameterDescription>& descriptions,
-                                          std::vector<std::string> & priors,
-                                          std::vector<std::string> & constraints,
-                                          std::string & hash);
-
-            /*!
              * Perform a number of iterations.
              *
              * @param iterations The number of iterations that shall be performed.

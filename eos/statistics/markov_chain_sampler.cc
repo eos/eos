@@ -1069,7 +1069,7 @@ namespace eos
 
                 // fill the objects
                 MarkovChain::read_data(**f, group_name, *history, prop, proposal_type, stat);
-                MarkovChain::read_descriptions(**f, "/descriptions/" + group_name, descr, priors, constraints, hash);
+                Analysis::read_descriptions(**f, "/descriptions/" + group_name, descr, priors, constraints, hash);
 
                 // store them
                 result.push_back(history);

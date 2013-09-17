@@ -278,55 +278,6 @@ namespace eos
             current = proposal;
         }
 
-        static void read_description(hdf5::File & file, const std::string & data_set_base_name,
-                                     std::vector<ParameterDescription> & descr, std::vector<std::string> & priors,
-                                     std::vector<std::string> & constraints, std::string & hash)
-        {
-            hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>,
-                hdf5::Scalar<double>, hdf5::Scalar<int>, hdf5::Scalar<const char *>> parameter_descriptions_type
-                {
-                    "parameter description",
-                    hdf5::Scalar<const char *>("name"),
-                    hdf5::Scalar<double>("min"),
-                    hdf5::Scalar<double>("max"),
-                    hdf5::Scalar<int>("nuisance"),
-                    hdf5::Scalar<const char *>("prior"),
-                };
-            auto data_set = file.open_data_set(data_set_base_name + "/parameters", parameter_descriptions_type);
-
-            Parameters p = Parameters::Defaults();
-
-            for (unsigned i = 0 ; i < data_set.records() ; ++i)
-            {
-                auto record = std::make_tuple("parameter_name", 1.0, 2.0, 3, "prior");
-                data_set >> record;
-                descr.push_back(ParameterDescription{ p[std::get<0>(record)].clone(), std::get<1>(record),
-                                                      std::get<2>(record), bool(std::get<3>(record)) });
-                priors.push_back(std::get<4>(record));
-            }
-
-            // store the SHA hash of the current git version
-            auto attr = data_set.open_attribute("version", hdf5::Scalar<const char *>("version"));
-            hash = attr.value();
-
-            // store constraints
-            {
-                hdf5::Composite<hdf5::Scalar<const char *>> constraint_type
-                {
-                    "constraints",
-                    hdf5::Scalar<const char *>("name"),
-                };
-                auto constraint_data_set = file.open_data_set(data_set_base_name + "/constraints", constraint_type);
-                auto constraint_record = std::make_tuple("name");
-
-                for (unsigned i = 0 ; i < constraint_data_set.records() ; ++i)
-                {
-                    constraint_data_set >> constraint_record;
-                    constraints.push_back(std::get<0>(constraint_record));
-                }
-            }
-        }
-
         static void read_history(hdf5::File & file, const std::string & data_set_base_name,
                                  const unsigned & dimension, MarkovChain::History & history)
         {
@@ -717,16 +668,6 @@ namespace eos
         Implementation<MarkovChain>::read_history(file, data_base_name, dimension, history);
         Implementation<MarkovChain>::read_proposal(file, data_base_name + "/proposal", proposal_type, dimension, proposal);
         Implementation<MarkovChain>::read_stats(file, data_base_name, dimension, stats);
-    }
-
-    void
-    MarkovChain::read_descriptions(hdf5::File & file, const std::string & data_base_name,
-                                   std::vector<ParameterDescription>& descriptions,
-                                   std::vector<std::string> & priors,
-                                   std::vector<std::string> & constraints,
-                                   std::string & hash)
-    {
-        Implementation<MarkovChain>::read_description(file, data_base_name, descriptions, priors, constraints, hash);
     }
 
     void
