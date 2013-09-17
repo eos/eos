@@ -147,13 +147,13 @@ namespace eos
 
                 for (auto d = parameter_descriptions.cbegin(), d_end = parameter_descriptions.cend() ; d != d_end ; ++d)
                 {
-                    std::get<0>(record) = d->parameter.name().c_str();
+                    std::get<0>(record) = d->parameter->name().c_str();
                     std::get<1>(record) = d->min;
                     std::get<2>(record) = d->max;
                     std::get<3>(record) = int(d->nuisance);
 
                     // without local string variable, can get random data in char *
-                    prior = a.log_prior(d->parameter.name())->as_string();
+                    prior = a.log_prior(d->parameter->name())->as_string();
                     std::get<4>(record) = prior.c_str();
 
                     data_set << record;
@@ -295,7 +295,7 @@ namespace eos
                 if ((proposal.point[i] < parameter_descriptions[i].min)
                         || (proposal.point[i] > parameter_descriptions[i].max))
                 {
-                    throw InternalError("MarkovChain::evaluate_point: parameter '" + parameter_descriptions[i].parameter.name()
+                    throw InternalError("MarkovChain::evaluate_point: parameter '" + parameter_descriptions[i].parameter->name()
                             + "' = " + stringify(proposal.point[i]) + " not in valid range ["
                             + stringify(parameter_descriptions[i].min) + "," + stringify(parameter_descriptions[i].max) + "]"
                             + " in iteration " + stringify(current_iteration));
@@ -304,15 +304,15 @@ namespace eos
 
             for (unsigned i = 0 ; i < parameter_descriptions.size() ; ++i)
             {
-                if (parameter_descriptions[i].parameter != current.point[i] )
-                    throw InternalError("MarkovChain::evaluate_point: parameter '" + parameter_descriptions[i].parameter.name()
-                            + "' = " + stringify(parameter_descriptions[i].parameter()) + " doesn't match current point!");
+                if (parameter_descriptions[i].parameter->evaluate() != current.point[i] )
+                    throw InternalError("MarkovChain::evaluate_point: parameter '" + parameter_descriptions[i].parameter->name()
+                            + "' = " + stringify(parameter_descriptions[i].parameter->evaluate()) + " doesn't match current point!");
             }
 #endif
             // change Parameter object
             for (unsigned i = 0 ; i < parameter_descriptions.size() ; ++i)
             {
-                parameter_descriptions[i].parameter = proposal.point[i];
+                parameter_descriptions[i].parameter->set(proposal.point[i]);
             }
 
             // todo If we used on par at a time again, change call to likelihood to evaluate only observables that use the parameter we just changed
@@ -347,7 +347,7 @@ namespace eos
                 //  don't draw from priors: they don't know about restricted ranges
                 double value = p->min + uniform_random_number() * (p->max - p->min);
                 *i = value;
-                p->parameter = value;
+                p->parameter->set(value);
             }
 
             // evaluate likelihood without argument, so all observables are calculated once
@@ -435,7 +435,7 @@ namespace eos
             {
                 auto record = std::make_tuple("parameter_name", 1.0, 2.0, 3, "prior");
                 data_set >> record;
-                descr.push_back(ParameterDescription{ p[std::get<0>(record)], std::get<1>(record),
+                descr.push_back(ParameterDescription{ p[std::get<0>(record)].clone(), std::get<1>(record),
                                                       std::get<2>(record), bool(std::get<3>(record)) });
                 priors.push_back(std::get<4>(record));
             }
@@ -559,7 +559,7 @@ namespace eos
         {
             for (unsigned i = 0 ; i < parameter_descriptions.size() ; ++i)
             {
-                parameter_descriptions[i].parameter = current.point[i];
+                parameter_descriptions[i].parameter->set(current.point[i]);
             }
         }
 
@@ -642,7 +642,7 @@ namespace eos
                 for (auto p = parameter_descriptions.begin(), p_end = parameter_descriptions.end(); p != p_end; ++p, ++i)
                 {
                     if (*i < p->min || *i > p->max)
-                        throw InternalError("markov_chain::set_point: Parameter '" + p->parameter.name() + "' = " + stringify(*i) + "out of range");
+                        throw InternalError("markov_chain::set_point: Parameter '" + p->parameter->name() + "' = " + stringify(*i) + "out of range");
                 }
             }
 
@@ -652,7 +652,7 @@ namespace eos
                 {
                     current.point[i] = point[i];
                     proposal.point[i] = point[i];
-                    parameter_descriptions[i].parameter = point[i];
+                    parameter_descriptions[i].parameter->set(point[i]);
                 }
             }
 

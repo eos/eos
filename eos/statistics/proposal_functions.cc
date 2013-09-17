@@ -1190,7 +1190,7 @@ namespace eos
                 auto par = prior_values->cbegin();
                 for (auto d = (**prior).begin(), d_end = (**prior).end() ; d != d_end ; ++d, ++par)
                 {
-                    d->parameter = **par;
+                    d->parameter->set(**par);
                 }
 
                 result += (**prior)();

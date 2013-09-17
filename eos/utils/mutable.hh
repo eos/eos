@@ -49,8 +49,15 @@ namespace eos
             /// Retrieve a Mutable's numeric value.
             virtual double operator() () const = 0;
 
+            /// Retrieve a Mutable's numeric value.
+            //TODO: evaluate -> get
+            virtual double evaluate() const = 0;
+
             /// Set a Mutable's numeric value.
             virtual const Mutable & operator= (const double &) = 0;
+
+            /// Set a Mutable's numeric value.
+            virtual void set(const double &) = 0;
             ///@}
 
             ///@name Access to Meta Data

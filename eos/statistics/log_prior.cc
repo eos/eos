@@ -86,7 +86,7 @@ namespace eos
                         throw RangeError("LogPrior::Flat(" + _name +"): minimum (" + stringify(range.min)
                                           + ") must be smaller than maximum (" + stringify(range.max) + ")");
                     }
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false });
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name].clone(), range.min, range.max, false });
                 }
 
                 virtual ~Flat()
@@ -174,7 +174,7 @@ namespace eos
                         throw RangeError("LogPrior::Gauss(" + _name +"): minimum (" + stringify(range.min)
                                           + ") must be smaller than maximum (" + stringify(range.max) + ")");
                     }
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false });
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name].clone(), range.min, range.max, false });
 
                     // scale factor takes finite range into account. For large range, it is 1
                     _c_lower = 1.0 / (gsl_cdf_gaussian_P(_range.max - _central, _sigma_upper)
@@ -216,7 +216,7 @@ namespace eos
                     double sigma = 0.0, norm = 0.0;
 
                     // read parameter's current value
-                    double x = _parameter_descriptions.front().parameter;
+                    double x = _parameter_descriptions.front().parameter->evaluate();
 
                     if (x < _central)
                     {
@@ -323,7 +323,7 @@ namespace eos
                         throw RangeError("LogPrior::LogGamma(" + _name +"): minimum (" + stringify(range.min)
                                           + ") must be smaller than maximum (" + stringify(range.max) + ")");
                     }
-                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name], range.min, range.max, false });
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name].clone(), range.min, range.max, false });
 
                     // avoid extrapolation from polynomial
                     if (_sigma_plus < 1.03)
@@ -462,7 +462,7 @@ namespace eos
 
                 virtual double operator()() const
                 {
-                    const double z = (_parameter_descriptions.front().parameter - _nu) / _lambda;
+                    const double z = (_parameter_descriptions.front().parameter->evaluate() - _nu) / _lambda;
                     return _norm + _alpha * z - std::exp(z);
                 }
 
@@ -476,7 +476,7 @@ namespace eos
                     log_gamma->_name = _name;
                     log_gamma->_norm = _norm;
                     log_gamma->_nu = _nu;
-                    log_gamma->_parameter_descriptions.push_back(ParameterDescription{ parameters[_name], _range.min, _range.max, false });
+                    log_gamma->_parameter_descriptions.push_back(ParameterDescription{ parameters[_name].clone(), _range.min, _range.max, false });
                     log_gamma->_range = _range;
                     log_gamma->_sigma_lower = _sigma_lower;
                     log_gamma->_sigma_minus = _sigma_minus;

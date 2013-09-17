@@ -848,7 +848,7 @@ int main(int argc, char * argv[])
             {
                 if (d->nuisance)
                     continue;
-                std::cout << "#   " << inst->analysis.log_prior(d->parameter.name())->as_string() << std::endl;
+                std::cout << "#   " << inst->analysis.log_prior(d->parameter->name())->as_string() << std::endl;
             }
         }
 
@@ -860,7 +860,7 @@ int main(int argc, char * argv[])
             {
                 if ( ! d->nuisance)
                     continue;
-                std::cout << "#   " << inst->analysis.log_prior(d->parameter.name())->as_string() << std::endl;
+                std::cout << "#   " << inst->analysis.log_prior(d->parameter->name())->as_string() << std::endl;
             }
         }
 
@@ -906,7 +906,7 @@ int main(int argc, char * argv[])
                 gsl_rng_set(rng, ::time(0));
                 for (auto i = ana.parameter_descriptions().begin(), i_end = ana.parameter_descriptions().end() ; i != i_end ; ++i)
                 {
-                    LogPriorPtr prior = ana.log_prior(i->parameter.name());
+                    LogPriorPtr prior = ana.log_prior(i->parameter->name());
                     inst->starting_point.push_back(prior->sample(rng));
                 }
             }

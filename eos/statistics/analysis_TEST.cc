@@ -47,10 +47,10 @@ class AnalysisTest :
                 auto clone2 = analysis.clone();
 
                 // make sure observable's value is not equal to central value
-                Parameter p = (*clone1)[0];
-                p = 4.3; //posterior mode
+                MutablePtr p = (*clone1)[0];
+                p->set(4.3); //posterior mode
                 p = (*clone2)[0];
-                p = 4.4; //log_prior mode
+                p->set(4.4); //log_prior mode
 
                 // for comparison used ipython's log(scipy.stats.norm.pdf(4.3, loc=4.4, scale=0.1))
                 // value at center of both Gaussian distributions. so pdf the same
@@ -95,8 +95,8 @@ class AnalysisTest :
 
 
 
-                Parameter p = analysis[0];
-                p = 4.3; //posterior mode
+                MutablePtr p = analysis[0];
+                p->set(4.3); //posterior mode
 
 
                 TEST_CHECK_NEARLY_EQUAL(analysis.log_likelihood()(), +0.88364655978936768, eps);
@@ -107,18 +107,18 @@ class AnalysisTest :
                 // now check cloning
 
                 auto clone = analysis.clone();
-                Parameter p2 = (*clone)[0];
+                MutablePtr p2 = (*clone)[0];
 
-                TEST_CHECK_EQUAL(double(p), double(p2));
+                TEST_CHECK_EQUAL(p->evaluate(), p2->evaluate());
 
 
                 // change clone only
-                p2 = 4.112;
+                p2->set(4.112);
                 TEST_CHECK(analysis.log_likelihood()() != clone->log_likelihood()());
                 TEST_CHECK(analysis.log_prior() != clone->log_prior());
 
                 // same value for clone and original
-                p2 = 4.3;
+                p2->set(4.3);
 
                 TEST_CHECK_EQUAL(analysis.log_likelihood()(), clone->log_likelihood()());
                 TEST_CHECK_EQUAL(analysis.log_prior(), clone->log_prior());

@@ -29,10 +29,10 @@
 
 namespace eos
 {
-namespace
-{
-typedef PriorSampler::SamplesList SamplesList;
-}
+    namespace
+    {
+        typedef PriorSampler::SamplesList SamplesList;
+    }
 
     template<>
     struct Implementation<PriorSampler>
@@ -88,7 +88,7 @@ typedef PriorSampler::SamplesList SamplesList;
                 for (auto i = parameter_descriptions.begin(), i_end = parameter_descriptions.end() ; i != i_end ; ++i)
                 {
                     this->parameter_descriptions.push_back(
-                        ParameterDescription{ p[i->parameter.name()], i->min, i->max, i->nuisance });
+                        ParameterDescription{ p[i->parameter->name()].clone(), i->min, i->max, i->nuisance });
                 }
             }
 
@@ -133,14 +133,14 @@ typedef PriorSampler::SamplesList SamplesList;
                     auto def = parameter_descriptions.begin();
                     for (auto p = first->cbegin() ; p != first->cend() ; ++p, ++def)
                     {
-                        def->parameter = *p;
+                        def->parameter->set(*p);
                     }
 
                     auto p = priors.cbegin();
                     std::advance(p, std::distance(first->cbegin(), first->cend()));
                     for (auto p_end = priors.cend() ; p != p_end ; ++p, ++def)
                     {
-                        def->parameter = (*p)->sample(rng);
+                        def->parameter->set((*p)->sample(rng));
                     }
 
                     // calculate all observables
@@ -177,9 +177,12 @@ typedef PriorSampler::SamplesList SamplesList;
                     for (auto prior = priors.begin(), i_end = priors.end() ; prior != i_end ; ++prior, ++index)
                     {
                         double p = (**prior).sample(rng);
-                        parameter_descriptions[index].parameter = p;
+//TODO: Fred, please check rebase starting here
+                        parameter_descriptions[index].parameter->set(p);
                         parameter_sample.push_back(p);
                     }
+
+//TODO: Fred, to here
                     parameter_samples.push_back(parameter_sample);
                 }
 
@@ -244,7 +247,7 @@ typedef PriorSampler::SamplesList SamplesList;
             {
                 if (counter > 0)
                     throw InternalError("PriorSampler::add(): eos is not ready for multidimensional priors.");
-                auto result = parameter_names.insert(d->parameter.name());
+                auto result = parameter_names.insert(d->parameter->name());
                 if ( ! result.second)
                     return false;
 
@@ -270,7 +273,7 @@ typedef PriorSampler::SamplesList SamplesList;
                 std::vector<LogPriorPtr> priors;
                 for (auto d = defs.cbegin(), d_end = defs.cend() ; d != d_end ; ++d)
                 {
-                    priors.push_back(LogPrior::Flat(Parameters::Defaults(), d->parameter.name(), ParameterRange{ d->min, d->max }));
+                    priors.push_back(LogPrior::Flat(Parameters::Defaults(), d->parameter->name(), ParameterRange{ d->min, d->max }));
                 }
 
                 this->priors.insert(this->priors.begin(), priors.begin(), priors.end());
@@ -361,7 +364,7 @@ typedef PriorSampler::SamplesList SamplesList;
                 components << record;
 
                 auto attr_name = components.create_attribute("name", hdf5::Scalar<const char *>("name"));
-                attr_name = d->parameter.name().c_str();
+                attr_name = d->parameter->name().c_str();
 
                 auto attr_prior = components.create_attribute("prior", hdf5::Scalar<const char *>("prior"));
                 attr_prior = priors[std::distance(parameter_descriptions.cbegin(), d)]->as_string().c_str();

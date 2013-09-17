@@ -39,7 +39,7 @@ namespace eos
     		return false;
     	if (lhs.nuisance!= rhs.nuisance)
     		return false;
-    	if (lhs.parameter.name() != rhs.parameter.name())
+    	if (lhs.parameter->name() != rhs.parameter->name())
     		return false;
 
     	return true;
@@ -515,12 +515,24 @@ namespace eos
         return _parameters_data->data[_index].value;
     }
 
+    double
+    Parameter::evaluate() const
+    {
+        return _parameters_data->data[_index].value;
+    }
+
     const Parameter &
     Parameter::operator= (const double & value)
     {
         _parameters_data->data[_index].value = value;
 
         return *this;
+    }
+
+    void
+    Parameter::set(const double & value)
+    {
+        _parameters_data->data[_index].value = value;
     }
 
     const double &

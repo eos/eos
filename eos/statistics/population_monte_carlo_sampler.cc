@@ -135,11 +135,7 @@ namespace eos
             unsigned j = 0;
             for (auto i = ana->parameter_descriptions().begin(), i_end = ana->parameter_descriptions().end() ; i != i_end ; ++i, ++j)
             {
-                // direct assignment doesn't work. Why?
-                // population_monte_carlo_sampler.cc:40: error: no match for ‘operator=’ in ‘i.__gnu_cxx::__normal_iterator<_Iterator, _Container>::operator-> [with _Iterator = const eos::ParameterDescription*, _Container = std::vector<eos::ParameterDescription, std::allocator<eos::ParameterDescription> >]()->eos::ParameterDescription::parameter = 2.29999999999999982236431605997495353221893310547e+0’
-                //                    i->parameter = par_point[j];
-                Parameter p = i->parameter;
-                p = par_point[j];
+                i->parameter->set(par_point[j]);
             }
             const double post = ana->log_posterior();
             if ( ! std::isfinite(post))

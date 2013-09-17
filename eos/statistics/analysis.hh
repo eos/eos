@@ -83,7 +83,7 @@ namespace eos
              *
              * @param index The index of the parameter.
              */
-            Parameter operator[] (const unsigned & index);
+            MutablePtr operator[] (const unsigned & index);
 
             /// Retrieve our associates Parameters object
             Parameters parameters() const;

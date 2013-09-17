@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -193,8 +193,14 @@ namespace eos
             /// Retrieve a Parameter's numeric value.
             virtual double operator() () const;
 
+            /// Retrieve a Parameter's numeric value.
+            virtual double evaluate() const;
+
             /// Set a Parameter's numeric value.
             virtual const Parameter & operator= (const double &);
+
+            /// Set a Parameter's numeric value.
+            virtual void set(const double &);
             ///@}
 
             ///@name Access to Meta Data
@@ -272,7 +278,7 @@ namespace eos
 
     struct ParameterDescription
     {
-        Parameter parameter;
+        MutablePtr parameter;
 
         double min;
 

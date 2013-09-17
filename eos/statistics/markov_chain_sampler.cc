@@ -318,7 +318,7 @@ namespace eos
                         all_rvalues_small = false;
 
                         Log::instance()->message("markov_chain_sampler.parameter_rvalue_too_large", ll_informational)
-                            << "R-value of parameter '" << chains.front().parameter_descriptions()[pmtr].parameter.name()
+                            << "R-value of parameter '" << chains.front().parameter_descriptions()[pmtr].parameter->name()
                             << "' in partition " << part << " is too large: "
                             << rvalue << " > " << config.rvalue_criterion_param;
                     }
@@ -399,7 +399,7 @@ namespace eos
                      all_rvalues_small = false;
 
                      Log::instance()->message("markov_chain_sampler.main_run", ll_informational)
-                         << "R-value of parameter '" << chains.front().parameter_descriptions()[par].parameter.name() << "' is too large: "
+                         << "R-value of parameter '" << chains.front().parameter_descriptions()[par].parameter->name() << "' is too large: "
                          << rvalue << " > " << config.rvalue_criterion_param;
                  }
              }
@@ -452,7 +452,7 @@ namespace eos
                 std::vector<std::tuple<std::string, double, double>> partition;
 
                 partition.push_back(std::make_tuple(
-                    analysis.parameter_descriptions().begin()->parameter.name(),
+                    analysis.parameter_descriptions().begin()->parameter->name(),
                     analysis.parameter_descriptions().begin()->min,
                     analysis.parameter_descriptions().begin()->max));
 
@@ -479,7 +479,7 @@ namespace eos
                     // initialize MVG with means/variance from priors on the diagonal
                     for (unsigned par = 0 ; par < number_of_parameters ; ++par)
                     {
-                        std::string name = analysis.parameter_descriptions()[par].parameter.name();
+                        std::string name = analysis.parameter_descriptions()[par].parameter->name();
                         LogPriorPtr prior = analysis.log_prior(name);
                         covariance[par + number_of_parameters * par] = prior->variance();
 
@@ -543,7 +543,7 @@ namespace eos
                             // is it a special parameter?
                             auto res = std::find(config.block_proposal_parameters.begin(),
                                     config.block_proposal_parameters.end(),
-                                    ana->parameter_descriptions()[par].parameter.name());
+                                    ana->parameter_descriptions()[par].parameter->name());
                             if (res != config.block_proposal_parameters.end())
                             {
                                 parameter_proposal_list.push_back(true);
@@ -573,7 +573,7 @@ namespace eos
                             for (auto multi_par = index_list.cbegin(), scan_par_end = index_list.cend() ;
                                     multi_par != scan_par_end ; ++multi_par)
                             {
-                                std::string name = ana->parameter_descriptions()[*multi_par].parameter.name();
+                                std::string name = ana->parameter_descriptions()[*multi_par].parameter->name();
                                 LogPriorPtr prior = ana->log_prior(name);
                                 covariance[*multi_par + index_list.size() * (*multi_par)] = prior->variance();
 
@@ -613,7 +613,7 @@ namespace eos
                         {
                             if (parameter_proposal_list[par])
                             {
-                                std::string name = ana->parameter_descriptions()[par].parameter.name();
+                                std::string name = ana->parameter_descriptions()[par].parameter->name();
                                 LogPriorPtr prior = ana->log_prior(name);
                                 if (! prior)
                                     throw InternalError("MC_sampler.initialize_decomposition: Undefined prior for '" + name + "'");
@@ -1082,7 +1082,7 @@ namespace eos
                     	if (! (*i == *j))
                         {
                             Log::instance()->message("MarkovChainSampler::read_chains", ll_warning)
-                                << "Parameter description differs in " << i->parameter.name() << ", " << j->parameter.name()
+                                << "Parameter description differs in " << i->parameter->name() << ", " << j->parameter->name()
                                 << "min = (" << i->min << ", " << j->min << ") "
                                 << "max = (" << i->max << ", " << j->max << ") "
                                 << "nus = (" << i->nuisance << ", " << j->nuisance << ")";

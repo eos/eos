@@ -64,7 +64,7 @@ namespace eos
            for (auto i = analysis.parameter_descriptions().begin(), i_end = analysis.parameter_descriptions().end() ; i != i_end ; ++i)
            {
                // name, value, error(?), min, max
-               user_parameters.Add(i->parameter.name(), (i->min + i->max) / 2.0,  i->max - i->min, i->min, i->max);
+               user_parameters.Add(i->parameter->name(), (i->min + i->max) / 2.0,  i->max - i->min, i->min, i->max);
            }
        }
 
@@ -83,8 +83,7 @@ namespace eos
            auto p = parameter_values.begin();
            for (auto i = analysis.parameter_descriptions().begin(), i_end = analysis.parameter_descriptions().end() ; i != i_end ; ++i, ++p)
            {
-               Parameter par = i->parameter;
-               par = *p;
+               i->parameter->set(*p);
            }
            return -analysis.log_posterior();
        }
@@ -124,7 +123,7 @@ namespace eos
             // read out parameters from prior
             for (auto d = prior->begin(), d_end = prior->end() ; d != d_end ; ++d)
             {
-                auto result = parameter_names.insert(d->parameter.name());
+                auto result = parameter_names.insert(d->parameter->name());
                 if (! result.second)
                     return false;
 
@@ -173,13 +172,13 @@ namespace eos
 
                 for (auto d = parameter_descriptions.cbegin(), d_end = parameter_descriptions.cend() ; d != d_end ; ++d)
                 {
-                    std::get<0>(record) = d->parameter.name().c_str();
+                    std::get<0>(record) = d->parameter->name().c_str();
                     std::get<1>(record) = d->min;
                     std::get<2>(record) = d->max;
                     std::get<3>(record) = int(d->nuisance);
 
                     // without local string variable, can get random data in char *
-                    prior = log_prior(d->parameter.name())->as_string();
+                    prior = log_prior(d->parameter->name())->as_string();
                     std::get<4>(record) = prior.c_str();
 
                     data_set << record;
@@ -242,7 +241,7 @@ namespace eos
             {
                 data_set >> record;
 
-                descriptions.push_back(ParameterDescription { p[std::get<0>(record)], std::get<1>(record), std::get<2>(record), bool(std::get<3>(record)) });
+                descriptions.push_back(ParameterDescription { p[std::get<0>(record)].clone(), std::get<1>(record), std::get<2>(record), bool(std::get<3>(record)) });
             }
             return descriptions;
         }
@@ -281,10 +280,10 @@ namespace eos
                 ParameterDescription & desc = parameter_descriptions[i];
                 if (parameter_values[i] < desc.min || parameter_values[i] > desc.max)
                 {
-                    throw InternalError("Analysis::goodness_of_fit: parameter " + desc.parameter.name() +
+                    throw InternalError("Analysis::goodness_of_fit: parameter " + desc.parameter->name() +
                         " out of bounds [" + stringify(desc.min) + ", " + stringify(desc.max) + "]");
                 }
-                desc.parameter = parameter_values[i];
+                desc.parameter->set(parameter_values[i]);
             }
 
             // update observables for new parameter values
@@ -414,7 +413,7 @@ namespace eos
 
             for (auto d = parameter_descriptions.cbegin(), d_end = parameter_descriptions.cend() ; d != d_end ; ++d, ++result)
             {
-                if (name == d->parameter.name())
+                if (name == d->parameter->name())
                     return result;
             }
 
@@ -435,7 +434,7 @@ namespace eos
             Implementation<Analysis>* analysis = (Implementation<Analysis>*) data;
             for (unsigned i = 0 ; i < analysis->parameter_descriptions.size() ; ++i)
             {
-                analysis->parameter_descriptions[i].parameter = gsl_vector_get(pars, i);
+                analysis->parameter_descriptions[i].parameter->set(gsl_vector_get(pars, i));
             }
 
             // calculate negative posterior
@@ -482,7 +481,7 @@ namespace eos
             {
                 for (auto i = (*p)->begin(), i_end = (*p)->end() ; i != i_end ; ++i)
                 {
-                    if (i->parameter.name() == name)
+                    if (i->parameter->name() == name)
                         prior = *p;
                 }
             }
@@ -600,7 +599,7 @@ namespace eos
                     if ( ! d->nuisance)
                         continue;
 
-                    auto p = log_prior(d->parameter.name());
+                    auto p = log_prior(d->parameter->name());
 
                     // dirty hack: check for flat prior from the variance: works only if this dimension is not partitioned
                     if (std::fabs(p->variance() - power_of<2>(d->max - d->min) / 12.0) < 1e-15)
@@ -663,7 +662,7 @@ namespace eos
 
             for (auto d = parameter_descriptions.begin(), d_end = parameter_descriptions.end() ; d != d_end ; ++d)
             {
-                if (d->parameter.name() != name)
+                if (d->parameter->name() != name)
                 {
                     continue;
                 }
@@ -758,7 +757,7 @@ namespace eos
         return _imp->nuisance(par_name);
     }
 
-    Parameter
+    MutablePtr
     Analysis::operator[] (const unsigned & index)
     {
         return _imp->parameter_descriptions[index].parameter;

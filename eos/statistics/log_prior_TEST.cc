@@ -59,7 +59,7 @@ class LogPriorTest :
 
                 //a continuous parameter of interest
                 TEST_CHECK( ! flat_prior->begin()->nuisance);
-                TEST_CHECK_EQUAL(flat_prior->begin()->parameter.name(), "mass::b(MSbar)");
+                TEST_CHECK_EQUAL(flat_prior->begin()->parameter->name(), "mass::b(MSbar)");
             }
 
 

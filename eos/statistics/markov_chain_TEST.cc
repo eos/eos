@@ -68,17 +68,17 @@ class MarkovChainTest :
                 MarkovChain chain1(analysis, 13, ppf1);
                 MarkovChain chain2(analysis, 13134, ppf2);
 
-                double mB1_before(chain1.parameter_descriptions().front().parameter);
-                double mB2_before(chain2.parameter_descriptions().front().parameter);
+                double mB1_before(chain1.parameter_descriptions().front().parameter->evaluate());
+                double mB2_before(chain2.parameter_descriptions().front().parameter->evaluate());
 
                 // running chain 1 shouldn't affect chain 2
                 // chain1 should have some moves accepted
                 chain1.run(300);
-                if (chain1.parameter_descriptions().front().parameter() == mB1_before)
+                if (chain1.parameter_descriptions().front().parameter->evaluate() == mB1_before)
                     TEST_CHECK_FAILED("chain1 did not move");
 
                 // running chain1 shouldn't affect chain2
-                TEST_CHECK_EQUAL(mB2_before, chain2.parameter_descriptions().front().parameter());
+                TEST_CHECK_EQUAL(mB2_before, chain2.parameter_descriptions().front().parameter->evaluate());
             });
 #if 0
             // step by step analysis of proposed moves. Out of range, too improbable, accepted... all in here
