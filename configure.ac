@@ -11,7 +11,7 @@ dnl {{{ check for required programs
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LN_S
-AC_PROG_LIBTOOL
+LT_INIT([disable-static])
 AC_PROG_MAKE_SET
 dnl }}}
 
