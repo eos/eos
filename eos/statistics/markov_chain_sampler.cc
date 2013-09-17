@@ -135,8 +135,7 @@ namespace eos
             bool rvalues_ok = true;
 
             // no R-value for single chain
-            if ( (config.partitions.size() >= 2 && config.prerun_chains_per_partition > 1) ||
-                 (config.partitions.size() == 1 && chains.size() > 1) )
+            if ( chains.size() > 1 )
             {
                 rvalues_ok = check_rvalues();
             }
@@ -180,30 +179,24 @@ namespace eos
                 // keep subset of chain statistics in on partition in here
                 std::vector<double> chain_means, chain_variances;
 
-                for (unsigned part = 0 ; part < config.partitions.size() ; ++part)
+                // read out statistics
+                for (unsigned c = 0 ; c < config.prerun_chains_per_partition ;  ++c)
                 {
-                    chain_means.clear();
-                    chain_variances.clear();
+                    chain_means.push_back(all_chains_means[c][pmtr]);
+                    chain_variances.push_back(all_chains_variances[c][pmtr]);
+                }
 
-                    // read out statistics
-                    for (unsigned c = 0 ; c < config.prerun_chains_per_partition ;  ++c)
-                    {
-                        chain_means.push_back(all_chains_means[part * config.prerun_chains_per_partition + c][pmtr]);
-                        chain_variances.push_back(all_chains_variances[part * config.prerun_chains_per_partition + c][pmtr]);
-                    }
+                double rvalue = compute_rvalue(chain_means, chain_variances, pre_run_info.iterations);
+                pre_run_info.rvalue_parameters[pmtr] = rvalue;
 
-                    double rvalue = compute_rvalue(chain_means, chain_variances, pre_run_info.iterations);
-                    pre_run_info.rvalue_parameters[pmtr] = rvalue;
+                if (rvalue > config.rvalue_criterion_param || std::isnan(rvalue))
+                {
+                    all_rvalues_small = false;
 
-                    if (rvalue > config.rvalue_criterion_param || std::isnan(rvalue))
-                    {
-                        all_rvalues_small = false;
-
-                        Log::instance()->message("markov_chain_sampler.parameter_rvalue_too_large", ll_informational)
-                            << "R-value of parameter '" << chains.front().parameter_descriptions()[pmtr].parameter->name()
-                            << "' in partition " << part << " is too large: "
-                            << rvalue << " > " << config.rvalue_criterion_param;
-                    }
+                    Log::instance()->message("markov_chain_sampler.parameter_rvalue_too_large", ll_informational)
+                        << "R-value of parameter '" << chains.front().parameter_descriptions()[pmtr].parameter->name()
+                        << "' is too large: "
+                        << rvalue << " > " << config.rvalue_criterion_param;
                 }
             }
 
@@ -328,198 +321,63 @@ namespace eos
 
             /* setup chains */
 
-            // add one partition that contains the entire parameter cube
-            if (config.partitions.empty())
+            // need to ensure that we have the same number of chains in prerun and main run
+            if (config.need_main_run)
             {
-                std::vector<std::tuple<std::string, double, double>> partition;
-
-                partition.push_back(std::make_tuple(
-                    analysis.parameter_descriptions().begin()->parameter->name(),
-                    analysis.parameter_descriptions().begin()->min,
-                    analysis.parameter_descriptions().begin()->max));
-
-                config.partitions.push_back(partition);
-
-                // need to ensure that we have the same number of chains in prerun and main run
-                if (config.need_main_run)
-                {
-                    config.prerun_chains_per_partition = config.number_of_chains;
-                }
+                config.prerun_chains_per_partition = config.number_of_chains;
             }
 
-            // loop over partitions
-            for (auto p = config.partitions.cbegin(), p_end = config.partitions.cend() ; p != p_end ; ++p)
+            for (unsigned c = 0 ; c < config.prerun_chains_per_partition ; ++c)
             {
-                AnalysisPtr ana = analysis.clone();
-
-                for (auto r = p->cbegin(), r_end = p->cend() ; r != r_end ; ++r)
+                // initialize MVG with means/variance from priors on the diagonal
+                for (unsigned par = 0 ; par < number_of_parameters ; ++par)
                 {
-                    ana->restrict(std::get<0>(*r), std::get<1>(*r), std::get<2>(*r));
+                    std::string name = analysis.parameter_descriptions()[par].parameter->name();
+                    LogPriorPtr prior = analysis.log_prior(name);
+                    covariance[par + number_of_parameters * par] = prior->variance();
+
+                    // rescale variance of scan parameters with a configurable value, in order
+                    // to avoid drawing too many samples outside the allowed range.
+                    if (! analysis.parameter_descriptions()[par].nuisance || config.scale_nuisance)
+                    {
+                        covariance[par + number_of_parameters * par] /= power_of<2>(config.scale_reduction);
+                    }
                 }
-                for (unsigned c = 0 ; c < config.prerun_chains_per_partition ; ++c)
+                //todo use factory for proposal_function
+                std::shared_ptr<MarkovChain::ProposalFunction> prop;
+                if (config.proposal == "MultivariateGaussian")
                 {
-                    // initialize MVG with means/variance from priors on the diagonal
-                    for (unsigned par = 0 ; par < number_of_parameters ; ++par)
+                    if (c == 0)
                     {
-                        std::string name = analysis.parameter_descriptions()[par].parameter->name();
-                        LogPriorPtr prior = analysis.log_prior(name);
-                        covariance[par + number_of_parameters * par] = prior->variance();
-
-                        // rescale the variance of partitioned parameters by (new_range/old_range)^2.
-                        auto r = std::find_if(p->begin(), p->end(), SameName(name));
-                        if (p->end() != r)
-                        {
-                            double min = analysis.parameter_descriptions()[par].min;
-                            double max = analysis.parameter_descriptions()[par].max;
-                            covariance[par + number_of_parameters * par] *= power_of<2>((std::get<2>(*r) - std::get<1>(*r)) / (max - min));
-                        }
-
-                        // rescale variance of scan parameters with a configurable value, in order
-                        // to avoid drawing too many samples outside the allowed range.
-                        if (! ana->parameter_descriptions()[par].nuisance || config.scale_nuisance)
-                        {
-                            covariance[par + number_of_parameters * par] /= power_of<2>(config.scale_reduction);
-                        }
+                        Log::instance()->message("markov_chain_sampler.initialize", ll_informational)
+                            << "Using proposal_functions::MultivariateGaussian";
                     }
-                    //todo use factory for proposal_function
-                    std::shared_ptr<MarkovChain::ProposalFunction> prop;
-                    if (config.proposal == "MultivariateGaussian")
-                    {
-                        if (p == config.partitions.cbegin() && c == 0)
-                        {
-                            Log::instance()->message("markov_chain_sampler.initialize", ll_informational)
-                                << "Using proposal_functions::MultivariateGaussian";
-                        }
-                        prop.reset(new proposal_functions::MultivariateGaussian(number_of_parameters, covariance, config.scale_automatic));
-                    }
-                    if (config.proposal == "MultivariateStudentT")
-                    {
-                        if (p == config.partitions.cbegin() && c == 0)
-                        {
-                            Log::instance()->message("markov_chain_sampler.initialize", ll_informational)
-                                << "Using proposal_functions::MultivariateStudentT";
-                        }
-                        prop.reset(new proposal_functions::MultivariateStudentT(number_of_parameters, covariance,
-                                config.student_t_degrees_of_freedom, config.scale_automatic));
-                    }
-                    if (! config.block_proposal_parameters.empty())
-                    {
-                        if (p == config.partitions.cbegin() && c == 0)
-                        {
-                            Log::instance()->message("markov_chain_sampler.initialize", ll_informational)
-                                        << "Using proposal_functions::BlockDecomposition";
-                        }
-
-                        // empty initially
-                        proposal_functions::BlockDecomposition* bd = new proposal_functions::BlockDecomposition();
-
-                        // which parameters need special treatment
-                        std::vector<bool> parameter_proposal_list;
-
-                        // count pars for multivariate proposal
-                        std::vector<unsigned> index_list;
-
-                        // find runs of consecutive parameters
-                        for (unsigned par = 0 ; par < number_of_parameters ; ++par)
-                        {
-                            // is it a special parameter?
-                            auto res = std::find(config.block_proposal_parameters.begin(),
-                                    config.block_proposal_parameters.end(),
-                                    ana->parameter_descriptions()[par].parameter->name());
-                            if (res != config.block_proposal_parameters.end())
-                            {
-                                parameter_proposal_list.push_back(true);
-                            }
-                            else
-                            {
-                                parameter_proposal_list.push_back(false);
-                                index_list.push_back(par);
-                            }
-                        }
-                        // last points to the conceptual end of new range, but the actual size is untouched
-                        auto parameter_proposal_list_copy(parameter_proposal_list);
-                        auto last = std::unique(parameter_proposal_list_copy.begin(), parameter_proposal_list_copy.end());
-                        if (std::distance(parameter_proposal_list_copy.begin(), last) > 2 || (std::distance(parameter_proposal_list_copy.begin(), last) == 2 && parameter_proposal_list_copy.front()) )
-                        {
-                            Log::instance()->message("MC_sampler.initialize_decomposition", ll_debug)
-                                        << "parameter_proposal_list_copy: " << stringify_container(parameter_proposal_list_copy);
-                            throw InternalError("With block decomposition, all parameters with fixed 1D proposal should come after the parameters with a Multivariate proposal");
-                        }
-
-
-                        // flush the accumulated scan parameters
-                        if ( ! index_list.empty())
-                        {
-                            std::vector<double> covariance(power_of<2>(index_list.size()), 0.0);
-                            // initialize multivariate with means/variance from priors on the diagonal
-                            for (auto multi_par = index_list.cbegin(), scan_par_end = index_list.cend() ;
-                                    multi_par != scan_par_end ; ++multi_par)
-                            {
-                                std::string name = ana->parameter_descriptions()[*multi_par].parameter->name();
-                                LogPriorPtr prior = ana->log_prior(name);
-                                covariance[*multi_par + index_list.size() * (*multi_par)] = prior->variance();
-
-                                // rescale the variance of partitioned parameters by (new_range/old_range)^2.
-                                auto r = std::find_if(p->begin(), p->end(), SameName(name));
-                                if (p->end() != r)
-                                {
-                                    double min = ana->parameter_descriptions()[*multi_par].min;
-                                    double max = ana->parameter_descriptions()[*multi_par].max;
-                                    covariance[*multi_par + index_list.size() * *multi_par] *=
-                                            power_of<2>((std::get<2>(*r) - std::get<1>(*r)) / (max - min));
-                                }
-
-                                // rescale variance of scan parameters with a configurable value, in order
-                                // to avoid drawing too many samples outside the allowed range.
-                                covariance[*multi_par + index_list.size() * *multi_par] /=
-                                        power_of<2>(config.scale_reduction);
-                            }
-                            Log::instance()->message("MC_sampler.initialize_decomposition", ll_debug)
-                                                    << "Add scan block with " << index_list.size() << " dimensions";
-
-                            // we can construct the multivariate proposal and add it as one block
-                            proposal_functions::MultivariateProposalPtr mv;
-                            if (config.proposal == "MultivariateGaussian")
-                                mv.reset(new proposal_functions::MultivariateGaussian(index_list.size(), covariance, config.scale_automatic));
-                            if (config.proposal == "MultivariateStudentT")
-                                mv.reset(new proposal_functions::MultivariateStudentT(index_list.size(), covariance,
-                                        config.student_t_degrees_of_freedom, config.scale_automatic));
-                            if ( ! mv)
-                                throw InternalError("Invalid local proposal function: " + config.proposal);
-                            bd->add(mv);
-                            index_list.clear();
-                        }
-
-                        // add 1D proposals
-                        for (unsigned par = 0 ; par < number_of_parameters ; ++par)
-                        {
-                            if (parameter_proposal_list[par])
-                            {
-                                std::string name = ana->parameter_descriptions()[par].parameter->name();
-                                LogPriorPtr prior = ana->log_prior(name);
-                                if (! prior)
-                                    throw InternalError("MC_sampler.initialize_decomposition: Undefined prior for '" + name + "'");
-                                // is cloned internally, so no back propagation
-                                bd->add(prior);
-                            }
-                        }
-                        prop.reset(bd);
-                    }
-                    // default behavior
-                    if (! prop)
-                    {
-                        if (p == config.partitions.cbegin() && c == 0)
-                        {
-                            Log::instance()->message("markov_chain_sampler.initialize", ll_warning)
-                                            << "No proposal function of name '" << config.proposal << "' registered."
-                                            << "Falling back to MultivariateGaussian.";
-                        }
-                        prop.reset(new proposal_functions::MultivariateGaussian(number_of_parameters, covariance, config.scale_automatic));
-                    }
-
-                    MarkovChain chain(*ana, config.seed + config.prerun_chains_per_partition * std::distance(config.partitions.cbegin(), p) + c, prop);
-                    chains.push_back(chain);
+                    prop.reset(new proposal_functions::MultivariateGaussian(number_of_parameters, covariance, config.scale_automatic));
                 }
+                if (config.proposal == "MultivariateStudentT")
+                {
+                    if (c == 0)
+                    {
+                        Log::instance()->message("markov_chain_sampler.initialize", ll_informational)
+                            << "Using proposal_functions::MultivariateStudentT";
+                    }
+                    prop.reset(new proposal_functions::MultivariateStudentT(number_of_parameters, covariance,
+                            config.student_t_degrees_of_freedom, config.scale_automatic));
+                }
+                // default behavior
+                if (! prop)
+                {
+                    if (c == 0)
+                    {
+                        Log::instance()->message("markov_chain_sampler.initialize", ll_warning)
+                                        << "No proposal function of name '" << config.proposal << "' registered."
+                                        << "Falling back to MultivariateGaussian.";
+                    }
+                    prop.reset(new proposal_functions::MultivariateGaussian(number_of_parameters, covariance, config.scale_automatic));
+                }
+
+                MarkovChain chain(analysis, config.seed + c, prop);
+                chains.push_back(chain);
             }
             gsl_rng_free(rng);
 

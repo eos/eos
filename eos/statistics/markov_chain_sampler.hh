@@ -188,7 +188,6 @@ namespace eos
             /// In case there is only one partition, this is ignored and number_of_chains is used.
             /// Else, this many chains are used per partition.
             unsigned prerun_chains_per_partition;
-            std::vector<std::vector<std::tuple<std::string, double, double>>> partitions;
             ///@}
 
             ///@name Main run options

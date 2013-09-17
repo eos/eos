@@ -173,14 +173,6 @@ namespace eos
 
             const ROOT::Minuit2::FunctionMinimum &
             optimize_minuit(const std::vector<double> & initial_guess, const OptimizationOptions & options);
-
-            /*!
-             * Restrict to a subrange of a given parameter.
-             * @param name
-             * @param min
-             * @param max
-             */
-            void restrict(const std::string & name, const double & min, const double & max);
     };
 
         struct Analysis::OptimizationOptions

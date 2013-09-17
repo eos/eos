@@ -110,8 +110,6 @@ class CommandLine :
 
         std::string creator;
 
-        std::shared_ptr<unsigned> partition_index;
-
         std::string pmc_initialization_file;
         std::string pmc_sample_file;
         bool pmc_calculate_posterior;
@@ -498,36 +496,6 @@ class CommandLine :
 #if EOS_ENABLE_PMC
                     config_pmc.parallelize = mcmc_config.parallelize;
 #endif
-
-                    continue;
-                }
-
-                if ("--partition" == argument)
-                {
-                    std::string key(*(++a));
-                    std::vector<std::tuple<std::string, double, double>> partition;
-                    while (key.substr(0, 2) != "--")
-                    {
-                        std::string name = key;
-                        double min = destringify<double>(*(++a));
-                        double max = destringify<double>(*(++a));
-                        partition.push_back(std::make_tuple(name, min, max));
-
-                        key = std::string(*(++a));
-                    }
-                    mcmc_config.partitions.push_back(partition);
-                    --a;
-
-                    continue;
-                }
-
-                if ("--partition-index" == argument)
-                {
-                    partition_index.reset(new unsigned);
-                    *partition_index = destringify<unsigned> (*(++a));
-
-                    mcmc_config.need_main_run = false;
-                    mcmc_config.store_prerun = true;
 
                     continue;
                 }
@@ -942,18 +910,6 @@ int main(int argc, char * argv[])
             return EXIT_SUCCESS;
         }
 #endif
-
-        // remove unwanted partitions and select only one
-        if (unsigned * i = inst->partition_index.get())
-        {
-            MarkovChainSampler::Config & c = inst->mcmc_config;
-            if (c.partitions.empty())
-                throw DoUsage("Can't select partition " + stringify(*i) + " from no partitions!");
-
-            auto temp = c.partitions;
-            c.partitions.clear();
-            c.partitions.push_back(temp.at(*i));
-        }
 
         MarkovChainSampler sampler(inst->analysis, inst->mcmc_config);
 

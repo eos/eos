@@ -82,7 +82,7 @@ class PopulationMonteCarloSamplerTest :
                     MarkovChainSampler::Config config = MarkovChainSampler::Config::Default();
                     config.chunk_size = 1;
                     config.chunks = 1;
-                    config.number_of_chains = 2;
+                    config.number_of_chains = 10;
                     config.parallelize = true;
                     config.prerun_iterations_update = 650;
                     config.prerun_iterations_max = 2000;
@@ -96,12 +96,9 @@ class PopulationMonteCarloSamplerTest :
 
                     std::vector<std::tuple<std::string, double, double> > part;
 
-                    part.push_back(std::make_tuple(std::string("mass::c"), -5.5, -4.5));
-                    config.partitions.push_back(part);
-
-                    part.clear();
-                    part.push_back(std::make_tuple(std::string("mass::c"), +4.5, +5.5));
-                    config.partitions.push_back(part);
+                    //TODO set starting point
+                    //part.push_back(std::make_tuple(std::string("mass::c"), -5.5, -4.5));
+                    //part.push_back(std::make_tuple(std::string("mass::c"), +4.5, +5.5));
 
                     Log::instance()->set_log_level(ll_silent);
                     MarkovChainSampler sampler(analysis, config);
@@ -164,6 +161,7 @@ class PopulationMonteCarloSamplerTest :
                 }
 
                 // hierarchical clustering: integrate over a subdomain only, eliminate one peak with half of probability
+                // but limit prior ranges
                 {
                     pmc_config.samples_per_component = 1000;
                     pmc_config.group_by_r_value = 1.1;
@@ -174,8 +172,7 @@ class PopulationMonteCarloSamplerTest :
 
                     Analysis ana(llh);
                     ana.add(LogPrior::Flat(p, "mass::b(MSbar)", ParameterRange{ -10, 10 }));
-                    ana.add(LogPrior::Flat(p, "mass::c", ParameterRange{ -10, 10 }));
-                    ana.restrict("mass::c", -10, 0);
+                    ana.add(LogPrior::Flat(p, "mass::c", ParameterRange{ -10, 0 }));
                     PopulationMonteCarloSampler pmc_sampler(ana, hdf5::File::Open(mcmc_file_name), pmc_config);
                     pmc_sampler.run();
                     TEST_CHECK(pmc_sampler.status().converged);
@@ -207,7 +204,7 @@ class PopulationMonteCarloSamplerTest :
                     // evidence = 2 (from absolute value for par mass::c) times 1 / (prior ranges)
                     TEST_CHECK_RELATIVE_ERROR(2.0 / 20.0 / 20.0, std::get<2>(record), 5e-3);
                     TEST_CHECK_RELATIVE_ERROR(2.0 / 20.0 / 20.0, std::get<2>(record_resume), 5e-3);
-                    TEST_CHECK_RELATIVE_ERROR(1.0 / 20.0 / 20.0, std::get<2>(record_hc), 5e-3);
+                    TEST_CHECK_RELATIVE_ERROR(1.0 / 20.0 / 10.0, std::get<2>(record_hc), 5e-3);
 
                     // check that initial components are identical
                     auto data_set_comp = file.open_data_set("/data/initial/components", PopulationMonteCarloSampler::Output::component_type(2));

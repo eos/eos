@@ -650,36 +650,6 @@ namespace eos
 
             return *minuit->data_at_minimum;
         }
-
-        void restrict(const std::string & name, const double & min, const double & max)
-        {
-            // check if param exists already
-            if (parameter_names.end() == parameter_names.find(name))
-                throw InternalError("Analysis.restrict: Parameter " + name + " doesn't exist.");
-
-            if (min >= max)
-                throw RangeError("Analysis.restrict: " + name + ": max < min (" + stringify(max) + " < " + stringify(min) + ")");
-
-            for (auto d = parameter_descriptions.begin(), d_end = parameter_descriptions.end() ; d != d_end ; ++d)
-            {
-                if (d->parameter->name() != name)
-                {
-                    continue;
-                }
-
-                if (min < d->min)
-                    throw RangeError("Analysis.restrict: " + name + ": min < d->min (" +  stringify(min) + " < " + stringify(d->min) + ")" );
-                if (max > d->max)
-                    throw RangeError("Analysis.restrict: " + name + ": max > d->max (" +  stringify(max) + " > " + stringify(d->max) + ")");
-
-                d->min = min;
-                d->max = max;
-
-                Log::instance()->message("Analysis.restrict", ll_debug)
-                    << "range: [" << d->min << ", " << d->max << "]";
-                break;
-            }
-        }
     };
 
     Analysis::Analysis(const LogLikelihood & log_likelihood) :
@@ -834,12 +804,6 @@ namespace eos
     Analysis::parameter_descriptions() const
     {
         return _imp->parameter_descriptions;
-    }
-
-    void
-    Analysis::restrict(const std::string & name, const double & min, const double & max)
-    {
-        _imp->restrict(name, min, max);
     }
 
     Analysis::OptimizationOptions::OptimizationOptions():

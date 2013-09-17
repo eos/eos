@@ -212,6 +212,7 @@ namespace eos
             for (auto p = parameter_descriptions.begin(), p_end = parameter_descriptions.end() ; p != p_end ; ++p, ++i)
             {
                 //  don't draw from priors: they don't know about restricted ranges
+                //TODO: draw from prior
                 double value = p->min + uniform_random_number() * (p->max - p->min);
                 *i = value;
                 p->parameter->set(value);
