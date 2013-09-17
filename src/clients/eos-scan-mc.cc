@@ -387,6 +387,24 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--hc-patch-length" == argument)
+                {
+#if EOS_ENABLE_PMC
+                	config_pmc.patch_length = destringify<double> (*(++a));
+#endif
+
+                	continue;
+                }
+
+                if ("--hc-skip-initial" == argument)
+                {
+#if EOS_ENABLE_PMC
+                	config_pmc.skip_initial = destringify<double> (*(++a));
+#endif
+
+                	continue;
+                }
+
                 if ("--massive-mode-finding" == argument)
                 {
                     massive_mode_finding = true;

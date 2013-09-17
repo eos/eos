@@ -1529,7 +1529,7 @@ namespace eos
             /* create patches from each chain */
 
             Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
-                << "Creating patches of length " << config.sliding_window;
+                << "Creating patches of length " << config.patch_length;
 
             HierarchicalClustering::MixtureDensity local_patches;
 
@@ -1540,11 +1540,11 @@ namespace eos
                     //                local_patches_index_lists.push_back(IndexList());
 
                     auto first_state = (**c).states.cbegin() + config.skip_initial * (**c).states.size();
-                    auto last_state = first_state + config.sliding_window;
+                    auto last_state = first_state + config.patch_length;
 
                     if (std::distance(last_state, (**c).states.cend()) < 0)
                     {
-                        throw InternalError("PMC::hierarchical_clustering: sliding window too large for history size and skip initial: " + stringify(config.sliding_window)
+                        throw InternalError("PMC::hierarchical_clustering: sliding window too large for history size and skip initial: " + stringify(config.patch_length)
                                 + " vs " + stringify(std::distance(first_state, (**c).states.cend())) + " and " + stringify(config.skip_initial));
                     }
 
@@ -1552,7 +1552,7 @@ namespace eos
                     while (! done)
                     {
                         // add remainder to last patch
-                        if (unsigned(std::distance(last_state, (**c).states.cend())) < config.sliding_window)
+                        if (unsigned(std::distance(last_state, (**c).states.cend())) < config.patch_length)
                         {
                             last_state = (**c).states.cend();
                             done = true;
@@ -1581,8 +1581,8 @@ namespace eos
                         }
 
                         // update range for next iteration
-                        first_state += config.sliding_window;
-                        last_state += config.sliding_window;
+                        first_state += config.patch_length;
+                        last_state += config.patch_length;
                     }
                 }
             }
@@ -2114,7 +2114,6 @@ namespace eos
          degrees_of_freedom(-1, std::numeric_limits<int>::max(), -1),
          minimum_overlap(0, 1, 0.0),
          mode_distance(std::numeric_limits<double>::epsilon(), 1, 1e-2),
-         override_global_local_proposal(false),
          random_start(true),
          single_cluster(-1),
          skip_initial(0, 1, 0.1),
@@ -2123,7 +2122,7 @@ namespace eos
          group_by_r_value(1, std::numeric_limits<double>::max(), 1),
          patch_around_local_mode(false),
          r_value_no_nuisance(true),
-         sliding_window(1000),
+         patch_length(1000),
          store_input_components(false),
          store_hc_initial(false),
          super_clusters(0),
@@ -2169,7 +2168,7 @@ namespace eos
                 << "critical R value = " << c.group_by_r_value
                 << ", ignore groups = " << stringify_container(c.ignore_groups)
                 << ", R value no nuisance = " << c.r_value_no_nuisance << std::endl
-                << "sliding window = " << c.sliding_window
+                << "sliding window = " << c.patch_length
                 << ", number of clusters = " << c.super_clusters << std::endl
                 << "Prerun options:" << std::endl
                 << "chunk size = " << c.chunk_size

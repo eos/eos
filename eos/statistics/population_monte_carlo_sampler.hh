@@ -292,7 +292,7 @@ namespace eos
              * With hierarchical clustering, use this many
              * samples to form a patch from a single Markov chain.
              */
-            unsigned sliding_window;
+            unsigned patch_length;
 
             /// Store the components created from chain patches.
             bool store_input_components;

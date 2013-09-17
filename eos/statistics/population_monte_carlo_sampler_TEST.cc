@@ -229,7 +229,7 @@ class PopulationMonteCarloSamplerTest :
                 {
                 	PopulationMonteCarloSampler::Config temp_config(pmc_config);
                     temp_config.skip_initial = 0.2;
-                    temp_config.sliding_window = 400;
+                    temp_config.patch_length = 400;
                     temp_config.super_clusters = 2;
                     PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(mcmc_file_name), temp_config);
                     pmc_sampler.run();
@@ -240,7 +240,7 @@ class PopulationMonteCarloSamplerTest :
                 	PopulationMonteCarloSampler::Config temp_config(pmc_config);
                     temp_config.output_file = pmc_output_components;
                     temp_config.skip_initial = 0.2;
-                    temp_config.sliding_window = 400;
+                    temp_config.patch_length = 400;
                     temp_config.super_clusters = 2;
                     PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(mcmc_file_name), temp_config);
                     pmc_sampler.draw_samples();
@@ -267,7 +267,7 @@ class PopulationMonteCarloSamplerTest :
                     pmc_config.group_by_r_value = 1.1;
                     pmc_config.minimum_overlap = 0.02;
                     pmc_config.output_file = pmc_output_hc;
-                    pmc_config.sliding_window = 400;
+                    pmc_config.patch_length = 400;
                     pmc_config.skip_initial = 0.2;
                     pmc_config.super_clusters = 2;
 
