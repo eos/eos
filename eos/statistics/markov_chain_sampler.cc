@@ -56,124 +56,6 @@ namespace eos
     template<>
     struct Implementation<MarkovChainSampler>
     {
-        // Worker allows simple thread parallelization of massive mode finding
-        struct Worker
-        {
-            std::shared_ptr<Analysis> analysis;
-
-            std::shared_ptr<ROOT::Minuit2::FunctionMinimum> minimum;
-
-            Worker(const Analysis & analysis) :
-                analysis(analysis.clone())
-            {
-            }
-
-            /*
-             * Return empty vector if something went wrong
-             */
-            std::vector<double> mode() const
-            {
-                std::vector<double> result;
-
-                if (! minimum)
-                {
-                    Log::instance()->message("Worker.mode", ll_warning)
-                        << "No search conducted yet.";
-                    return result;
-                }
-
-                if (! minimum->IsValid())
-                {
-                    return result;
-                }
-
-                for (unsigned i = 0 ; i < analysis->parameter_descriptions().size() ; ++i)
-                {
-                    result.push_back(minimum->UserParameters().Value(i));
-                }
-
-                return result;
-            }
-
-            void optimize(std::vector<double> initial_point, const Analysis::OptimizationOptions & options)
-            {
-                Log::instance()->message("Worker.optimize", ll_informational)
-                    << "Starting minuit optimization at "
-                    << stringify(initial_point.cbegin(), initial_point.cend());
-
-                minimum.reset(new ROOT::Minuit2::FunctionMinimum(analysis->optimize_minuit(initial_point, options)));
-
-                Log::instance()->message("Worker.optimize", ll_informational)
-                    << "Finished minuit optimization";
-                Log::instance()->message("Worker.optimize", ll_debug)
-                    << print_status();
-            }
-
-            std::string print_status()
-            {
-                std::stringstream lhs;
-
-                if ( ! minimum)
-                {
-                    return lhs.str();
-                }
-
-                const ROOT::Minuit2::FunctionMinimum & m = *minimum;
-
-                std::vector<double> parameters(m.UserParameters().Params());
-                if (m.IsValid())
-                {
-                    lhs << "|Success|: found mode after " << m.NFcn() << " calls with log(post) at "
-                        << stringify(parameters.begin(), parameters.end())
-                        << " = " << -1.0 * m.Fval() << "; ";
-                    return lhs.str();
-                }
-
-                lhs << "|Failure|, stopped after " << m.NFcn() << " calls with log(post) at "
-                    << stringify(parameters.begin(), parameters.end())
-                    << " = " << -1.0 * m.Fval() <<", listing the symptoms: ";
-
-                // look for a reason of failure
-                if (! m.HasValidParameters())
-                {
-                    lhs << "invalid parameters; ";
-                }
-                if (! m.HasValidCovariance())
-                {
-                    lhs << "invalid covariance; ";
-                }
-                if (! m.HasAccurateCovar())
-                {
-                    lhs << "inaccurate covariance; ";
-                }
-                if (! m.HasPosDefCovar())
-                {
-                    lhs << "covariance not positive definite; ";
-                }
-                if (m.HasMadePosDefCovar())
-                {
-                    lhs << "covariance was made positive definite; ";
-                }
-                if (m.HesseFailed())
-                {
-                    lhs << "Hesse failed; ";
-                }
-                if (! m.HasCovariance())
-                {
-                    lhs << "has no covariance; ";
-                }
-                if (m.IsAboveMaxEdm())
-                {
-                    lhs << "estimated distance to minimum " << m.Edm() << " too large; ";
-                }
-                if (m.HasReachedCallLimit())
-                {
-                    lhs << "exceeded function call limit with " << m.NFcn() << " calls; ";
-                }
-                return lhs.str();
-            }
-        };
-
         // store reference, but don't own analysis
         const Analysis & analysis;
 
@@ -648,151 +530,6 @@ namespace eos
                     };
         }
 
-        void massive_mode_finding(const Analysis::OptimizationOptions & options, bool dump = false)
-        {
-            if (options.mcmc_pre_run)
-            {
-                setup_output();
-                pre_run();
-            }
-
-            // create workers
-            std::vector<std::shared_ptr<Worker>> workers;
-
-            // let them work
-            // tickets for parallel computations
-            std::vector<Ticket> tickets;
-
-            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
-            {
-                // parallelize computations
-                auto worker = std::make_shared<Worker>(analysis);
-                workers.push_back(worker);
-
-                // extract best point seen during prerun
-                const std::vector<double> & starting_point = c->statistics().parameters_at_mode;
-
-                if (config.parallelize)
-                {
-                    tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&Worker::optimize, worker.get(), starting_point, options)));
-                }
-                else
-                {
-                    worker->optimize(starting_point, options);
-                }
-            }
-
-            // wait for job completion
-            for (auto t = tickets.begin(), t_end = tickets.end() ; t != t_end ; ++t)
-            {
-                t->wait();
-            }
-            tickets.clear();
-
-            if (dump)
-            {
-                auto file = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
-
-                auto w = workers.cbegin();
-                unsigned i = 0;
-                for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++w, ++i)
-                {
-                    // Ignore validity, but use only if it is better than MCMC value
-                    if ( -1.0 * (**w).minimum->Fval() > c->statistics().mode_of_posterior)
-                    {
-                        // switch from minimum to maximum again
-                        c->set_mode(file, "/prerun/chain #" + stringify(i), (**w).minimum->UserParameters().Params(), -1.0 * (**w).minimum->Fval());
-                    }
-                }
-            }
-
-            /* find unique modes */
-            std::vector<std::vector<double>> unique_modes;
-            // sort by posterior value
-            std::multimap<double, unsigned> posterior_worker_index;
-            unsigned invalid = 0;
-
-            // add first mode
-            auto w = workers.begin();
-
-            for (auto w_end = workers.end() ; w != w_end ; ++w)
-            {
-                auto mode = (**w).mode();
-                if( mode.empty() )
-                {
-                    ++invalid;
-                    continue;
-                }
-
-                // first valid mode
-                if (unique_modes.empty())
-                {
-                    unique_modes.push_back(mode);
-                    posterior_worker_index.insert(std::pair<double, unsigned>(-1.0 * (**w).minimum->Fval(), 0));
-                    continue;
-                }
-
-                // compare with every predecessor
-                // by calculating the Euclidean norm between this mode and
-                // previously found unique modes, rescaled by allowed range
-                double difference, length1, length2;
-                difference = length1 = length2 = 0;
-                auto m = unique_modes.begin(), m_end = unique_modes.end();
-                for ( ; m != m_end ; ++m, difference = 0)
-                {
-                    auto j = mode.begin();
-                    auto d = analysis.parameter_descriptions().begin();
-                    for ( auto i = m->begin(), i_end = m->end() ; i != i_end ; ++i, ++j, ++d)
-                    {
-                        double range = d->max - d->min;
-                        difference += power_of<2>((*i - *j)  / range);
-                        length1 += power_of<2>((*j - d->min) / range);
-                        length2 += power_of<2>((*i - d->min) / range);
-                    }
-
-                    // rescale to account for dimensionality
-                    // maximum distance of two points in n-dim unit hypercube is sqrt(n)
-                    difference /= mode.size();
-                    length1 /= mode.size();
-                    length2 /= mode.size();
-
-                    if (std::sqrt(difference) < options.splitting_tolerance)
-                    {
-                        break;
-                    }
-                }
-                // made it to the end?
-                if ( m == m_end)
-                {
-                    // so we can use the posterior info there after the loop
-                    // for ranking the modes
-                    unique_modes.push_back(mode);
-                    posterior_worker_index.insert(std::pair<double, unsigned>(-1.0 * (**w).minimum->Fval(), unique_modes.size() - 1));
-                }
-            }
-
-            // print out covariances and modes
-            for (auto i = posterior_worker_index.cbegin(), i_end = posterior_worker_index.cend() ; i != i_end ;  ++i)
-            {
-                Log::instance()->message("MC_sampler.mode_finding", ll_debug)
-                             << "worker " << i->second << ", unique: "
-                             << std::distance(posterior_worker_index.cbegin(), i) << workers[i->second]->minimum->UserState();
-            }
-            for (auto i = posterior_worker_index.cbegin(), i_end = posterior_worker_index.cend() ; i != i_end ;  ++i)
-            {
-                const std::vector<double> & m = unique_modes[i->second];
-                Log::instance()->message("MC_sampler.mode_finding", ll_informational)
-                             << "log(post) at "
-                             << stringify(m.cbegin(), m.cend())
-                             << " = " << i->first;
-            }
-
-            Log::instance()->message("MC_sampler.mode_finding", ll_informational)
-                     << "Identified " << unique_modes.size() << " unique mode(s) of posterior,"
-                     << " minuit failed " << invalid << " times.";
-
-        }
-
         /*
          * Collect samples from posterior and check for convergence.
          */
@@ -965,19 +702,10 @@ namespace eos
         {
             // overwrite file only if sampling is requested
             setup_output();
+
             if (config.need_prerun)
             {
                 pre_run();
-                if (config.find_modes)
-                {
-                    bool dump = true;
-                    Analysis::OptimizationOptions options = Analysis::OptimizationOptions::Defaults();
-                    options.fix_flat_nuisance = true;
-                    // we have already done the prerun
-                    options.mcmc_pre_run = false;
-                    options.maximum_iterations = 4000;
-                    massive_mode_finding(options, dump);
-                }
             }
 
             if (config.need_main_run)
@@ -1128,12 +856,6 @@ namespace eos
         return result;
     }
 
-    void
-    MarkovChainSampler::massive_mode_finding(const Analysis::OptimizationOptions & options)
-    {
-        _imp->massive_mode_finding(options);
-    }
-
     MarkovChainSampler::PreRunInfo
     MarkovChainSampler::pre_run_info()
     {
@@ -1167,7 +889,6 @@ namespace eos
         scale_automatic(true),
         scale_nuisance(true),
         scale_reduction(1),
-        find_modes(false),
         need_prerun(true),
         prerun_iterations_update(1000),
         prerun_iterations_min(prerun_iterations_update),

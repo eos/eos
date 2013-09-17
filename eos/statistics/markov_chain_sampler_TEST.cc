@@ -87,7 +87,6 @@ class MarkovChainSamplerTest :
                     config.number_of_chains = 3;
                     config.output_file = file_name;
                     config.parallelize = true;
-                    config.find_modes = true;
                     config.prerun_iterations_update = 500;
                     config.prerun_iterations_min = 1000;
                     config.rvalue_criterion_param = 1.1;
@@ -138,14 +137,14 @@ class MarkovChainSamplerTest :
                     }
                     {
                         auto data_set = f.open_data_set("/prerun/chain #0/stats/mode", sample_type);
-                        // mode found during 2x500 iterations + the one from minuit
-                        TEST_CHECK_EQUAL(data_set.records(), 3);
+                        // mode found during 2x500 iterations
+                        TEST_CHECK_EQUAL(data_set.records(), 2);
 
                         std::vector<double> record(2);
                         data_set.end();
                         data_set >> record;
-                        TEST_CHECK_RELATIVE_ERROR(record[0], 4.2, 1e-7);
-                        TEST_CHECK_RELATIVE_ERROR(record[1], 1.201325, 1e-5);
+                        TEST_CHECK_RELATIVE_ERROR(record[0], 4.2, 1e-4);
+                        TEST_CHECK_RELATIVE_ERROR(record[1], 1.201325, 1e-4);
                     }
                     {
                         hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>,

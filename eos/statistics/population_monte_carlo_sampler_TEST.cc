@@ -82,7 +82,6 @@ class PopulationMonteCarloSamplerTest :
                     MarkovChainSampler::Config config = MarkovChainSampler::Config::Default();
                     config.chunk_size = 1;
                     config.chunks = 1;
-                    config.find_modes = true;
                     config.number_of_chains = 2;
                     config.parallelize = true;
                     config.prerun_iterations_update = 650;

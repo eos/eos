@@ -120,10 +120,6 @@ class CommandLine :
         bool pmc_final;
         bool pmc_update;
 
-        // use MINUIT
-        bool massive_mode_finding;
-        unsigned massive_maximum_iterations;
-
         bool optimize;
         std::vector<double> starting_point;
 
@@ -146,8 +142,6 @@ class CommandLine :
             pmc_draw_samples(false),
             pmc_final(false),
             pmc_update(false),
-            massive_mode_finding(false),
-            massive_maximum_iterations(2000),
             optimize(false),
             goodness_of_fit(false),
             use_pmc(false)
@@ -404,18 +398,6 @@ class CommandLine :
                     continue;
                 }
 #endif
-
-                if ("--massive-mode-finding" == argument)
-                {
-                    massive_mode_finding = true;
-                    massive_maximum_iterations = destringify<unsigned> (*(++a));
-                    if (massive_maximum_iterations == 0)
-                    {
-                        throw DoUsage("Need to specify maximum number of Minuit iterations for massive mode finding");
-                    }
-
-                    continue;
-                }
 
                 if ("--no-prerun" == argument)
                 {
@@ -692,13 +674,6 @@ class CommandLine :
                 if ("--prerun-chains-per-partition" == argument)
                 {
                     mcmc_config.prerun_chains_per_partition = destringify<unsigned>(*(++a));
-
-                    continue;
-                }
-
-                if ("--prerun-find-modes" == argument)
-                {
-                    mcmc_config.find_modes = true;
 
                     continue;
                 }
@@ -981,18 +956,6 @@ int main(int argc, char * argv[])
         }
 
         MarkovChainSampler sampler(inst->analysis, inst->mcmc_config);
-
-        if (inst->massive_mode_finding)
-        {
-            // try to find just anything
-            Analysis::OptimizationOptions options = Analysis::OptimizationOptions::Defaults();
-            options.algorithm = "minimize";
-            options.maximum_iterations = inst->massive_maximum_iterations;
-            options.mcmc_pre_run = inst->mcmc_config.need_prerun;
-            options.strategy_level = 0;
-            sampler.massive_mode_finding(options);
-            return EXIT_SUCCESS;
-        }
 
         sampler.run();
     }

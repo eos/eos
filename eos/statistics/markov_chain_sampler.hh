@@ -61,15 +61,6 @@ namespace eos
             ///@name Sampling
             ///@{
 
-            /*!
-             * Use minuit to find local minima.
-             *
-             * Take as many starting points as there are chains
-             *
-             * @param options Pass options on to Minuit.
-             */
-            void massive_mode_finding(const Analysis::OptimizationOptions & options);
-
             /// Retrieve information about the prerun performance
             PreRunInfo pre_run_info();
 
@@ -170,10 +161,6 @@ namespace eos
 
             ///@name Prerun options
             ///@{
-
-            /// Find the local maxima after the prerun, using the point
-            /// with the highest posterior in each chain as a starting point
-            bool find_modes;
 
             bool need_prerun;
             unsigned prerun_iterations_update;
