@@ -317,8 +317,6 @@ class MarkovChainTest :
                 chain.set_point(std::vector<double>{ 4.3}, h);
                 TEST_CHECK_EQUAL(chain.current_state().point.front(), 4.3);
 
-                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_likelihood, 0.88364655978937656, eps);
-                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_prior, 0.883646846442260436, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_posterior,  0.88364655978937656 + 0.883646846442260436, eps);
             });
             TEST_SECTION("Multivariate::adapt",

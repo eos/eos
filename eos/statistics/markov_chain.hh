@@ -61,9 +61,6 @@ namespace eos
             /// Retrieve information regarding the current state.
             const State & current_state() const;
 
-            // todo document
-            void dump_description(hdf5::File & file, const std::string & data_set) const;
-
             /*!
              * Dump a part of the most recent history in the HDF5 file
              * under the given group name.
@@ -91,10 +88,8 @@ namespace eos
              * Set whether the chain stores samples in runs to come.
              *
              * @param keep_samples If true, the history of the runs to come will be kept.
-             * @param keep_observables_and_proposals For debugging purposes, store the proposed points
-             *                                       and the observable values.
              */
-            void keep_history(bool keep_samples, bool keep_observables_and_proposals = false);
+            void keep_history(bool keep_samples);
 
             /// Retrieve the descriptions of all parameters that are explored by this chain.
             const std::vector<ParameterDescription> & parameter_descriptions() const;
@@ -195,12 +190,6 @@ namespace eos
         /// position in parameter space
         std::vector<double> point;
 
-        /// log likelihood at the point
-        double log_likelihood;
-
-        /// log prior at the point
-        double log_prior;
-
         /// log posterior at the points
         double log_posterior;
 
@@ -213,8 +202,6 @@ namespace eos
 
         State(const State & other)
         {
-            log_likelihood = other.log_likelihood;
-            log_prior = other.log_prior;
             log_posterior = other.log_posterior;
             point.resize(other.point.size());
             std::copy(other.point.cbegin(), other.point.cend(), point.begin());

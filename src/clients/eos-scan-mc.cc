@@ -812,13 +812,6 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--store-observables-and-proposals" == argument)
-                {
-                    mcmc_config.store_observables_and_proposals = true;
-
-                    continue;
-                }
-
                 throw DoUsage("Unknown command line argument: " + argument);
             }
         }

@@ -68,11 +68,6 @@ namespace eos
         // history of the random walk
         MarkovChain::History history;
 
-        // For debugging purposes store the values of observables and proposed (not necessarily accepted) states
-        bool keep_observables_and_proposals;
-        MarkovChain::History proposal_history;
-        MarkovChain::History observables_history;
-
         // total number of iterations in this/the last sampling run
         unsigned run_iterations;
 
@@ -91,7 +86,6 @@ namespace eos
 
         Implementation(const Analysis & analysis, unsigned long seed, const std::shared_ptr<MarkovChain::ProposalFunction> & proposal_function) :
             analysis(*analysis.clone()),
-            keep_observables_and_proposals(false),
             sample_type
             {
                 "samples",
@@ -120,87 +114,6 @@ namespace eos
         void clear()
         {
             history.states.clear();
-            proposal_history.states.clear();
-            observables_history.states.clear();
-        }
-
-        void dump_description(hdf5::File & file, const std::string & data_set_root) const
-        {
-            auto a = const_cast<Analysis &>(analysis);
-
-            // store parameter info, including the prior
-            {
-                hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>,
-                hdf5::Scalar<double>, hdf5::Scalar<int>, hdf5::Scalar<const char *>> parameter_descriptions_type
-                {
-                    "parameter description",
-                    hdf5::Scalar<const char *>("name"),
-                    hdf5::Scalar<double>("min"),
-                    hdf5::Scalar<double>("max"),
-                    hdf5::Scalar<int>("nuisance"),
-                    hdf5::Scalar<const char *>("prior"),
-                };
-                auto data_set = file.create_data_set(data_set_root + "/parameters", parameter_descriptions_type);
-
-                auto record = std::make_tuple("name", 1.0, 2.0, 3, "prior");
-                std::string prior;
-
-                for (auto d = parameter_descriptions.cbegin(), d_end = parameter_descriptions.cend() ; d != d_end ; ++d)
-                {
-                    std::get<0>(record) = d->parameter->name().c_str();
-                    std::get<1>(record) = d->min;
-                    std::get<2>(record) = d->max;
-                    std::get<3>(record) = int(d->nuisance);
-
-                    // without local string variable, can get random data in char *
-                    prior = a.log_prior(d->parameter->name())->as_string();
-                    std::get<4>(record) = prior.c_str();
-
-                    data_set << record;
-                }
-                // store the SHA hash of the current git version
-                auto attr = data_set.create_attribute("version", hdf5::Scalar<const char *>("version"));
-                attr = EOS_GITHEAD;
-            }
-
-            // store constraints
-            {
-                hdf5::Composite<hdf5::Scalar<const char *>> constraint_type
-                {
-                    "constraints",
-                    hdf5::Scalar<const char *>("name"),
-                };
-                auto constraint_data_set = file.create_data_set(data_set_root + "/constraints", constraint_type);
-                auto constraint_record = std::make_tuple("name");
-
-                // loop over constraints
-                for (auto c = a.log_likelihood().begin(), c_end = a.log_likelihood().end() ; c != c_end ; ++c)
-                {
-                    std::get<0>(constraint_record) = c->name().c_str();
-                    constraint_data_set << constraint_record;
-                }
-            }
-
-            // store observable names
-            if (keep_observables_and_proposals)
-            {
-                hdf5::Composite<hdf5::Scalar<const char *>> observables_type
-                {
-                    "observables",
-                    hdf5::Scalar<const char *>("name"),
-                };
-
-                auto observables_data_set = file.create_data_set(data_set_root + "/observables", observables_type);
-                auto observables_record = std::make_tuple("name");
-
-                const ObservableCache & cache = a.log_likelihood().observable_cache();
-                const unsigned & n_observables = cache.size();
-                for (unsigned i = 0 ; i < n_observables ; ++i)
-                {
-                    std::get<0>(observables_record) = cache.observable(i)->name().c_str();
-                    observables_data_set << observables_record;
-                }
-            }
         }
 
         void dump_history(hdf5::File & file, const std::string & data_set_base_name, const unsigned & last_iterations) const
@@ -232,50 +145,6 @@ namespace eos
             std::copy(stats.parameters_at_mode.cbegin(), stats.parameters_at_mode.cend(), record.begin());
             record.back() = stats.mode_of_posterior;
             data_set_mode << record;
-
-            if (keep_observables_and_proposals)
-            {
-                /* store proposed points */
-                hdf5::Composite<hdf5::Scalar<unsigned>, hdf5::Scalar<double>, hdf5::Array<1, double>> proposed_type
-                {
-                    "proposed type",
-                    hdf5::Scalar<unsigned>("accepted"),
-                    hdf5::Scalar<double>("log posterior"),
-                    hdf5::Array<1, double>("point", { parameter_descriptions.size() })
-                };
-
-                auto data_set_proposed = file.create_or_open_data_set(data_set_base_name + "/proposed points", proposed_type);
-                auto record_proposed = std::make_tuple(0u, 1.0, std::vector<double>(parameter_descriptions.size()));
-
-                for (auto s = proposal_history.states.cend() - last_iterations, s_end = proposal_history.states.cend() ; s != s_end ; ++s)
-                {
-                    std::copy(s->point.cbegin(), s->point.cend(), std::get<2>(record_proposed).begin());
-                    std::get<0>(record_proposed) = s->log_prior;
-                    std::get<1>(record_proposed) = s->log_posterior;
-                    data_set_proposed << record_proposed;
-                }
-
-                /* store observables of proposed points */
-                unsigned n_observables = observables_history.states.front().point.size();
-                hdf5::Composite<hdf5::Scalar<double>, hdf5::Array<1, double>> observable_sample_type
-                {
-                    "samples",
-                    hdf5::Scalar<double>("log likelihood"),
-                    hdf5::Array<1, double>("observables", { n_observables }),
-                };
-
-                auto data_set_observables = file.create_or_open_data_set(data_set_base_name + "/proposed observables", observable_sample_type);
-
-                // observable values + likelihood
-                auto record_observables = std::make_tuple(0.0, std::vector<double>(n_observables));
-
-                for (auto s = observables_history.states.cend() - last_iterations, s_end = observables_history.states.cend() ; s != s_end ; ++s)
-                {
-                    std::copy(s->point.cbegin(), s->point.cend(), std::get<1>(record_observables).begin());
-                    std::get<0>(record_observables) = s->log_likelihood;
-                    data_set_observables << record_observables;
-                }
-            }
         }
 
         // store proposal density state
@@ -317,9 +186,7 @@ namespace eos
 
             // todo If we used on par at a time again, change call to likelihood to evaluate only observables that use the parameter we just changed
             // let likelihood evaluate all observables
-            proposal.log_likelihood = analysis.log_likelihood()();
-            proposal.log_prior = analysis.log_prior();
-            proposal.log_posterior = proposal.log_prior + proposal.log_likelihood;
+            proposal.log_posterior = analysis.log_posterior();
         }
 
         // called from ctor only at beginning
@@ -351,9 +218,7 @@ namespace eos
             }
 
             // evaluate likelihood without argument, so all observables are calculated once
-            current.log_likelihood = analysis.log_likelihood()();
-            current.log_prior = analysis.log_prior();
-            current.log_posterior = current.log_prior + current.log_likelihood;
+            current.log_posterior = analysis.log_posterior();
 
             // set proposal to current
             proposal = current;
@@ -659,9 +524,7 @@ namespace eos
             // copy
             {
                 // evaluate likelihood without argument, so all observables are calculated once
-                current.log_likelihood = analysis.log_likelihood()();
-                current.log_prior = analysis.log_prior();
-                current.log_posterior = current.log_prior + current.log_likelihood;
+                current.log_posterior = analysis.log_posterior();
                 current.hyper_parameter = hyper_parameter;
                 proposal = current;
             }
@@ -684,25 +547,6 @@ namespace eos
             if (history.keep)
             {
                 history.states.push_back(current);
-            }
-            if (keep_observables_and_proposals)
-            {
-                // store bool in log_prior.
-                // todo Dirty hack!
-                proposal_history.states.push_back(proposal);
-                proposal_history.states.back().log_prior = double(accept_proposal &&
-                        (proposal.hyper_parameter.component != current.hyper_parameter.component));
-
-                // read out observables
-                MarkovChain::State observable_state;
-                const ObservableCache & cache = analysis.log_likelihood().observable_cache();
-                const unsigned & n_observables = cache.size();
-                for (unsigned i = 0 ; i < n_observables ; ++i)
-                {
-                    observable_state.point.push_back(cache[i]);
-                }
-                observable_state.log_likelihood = proposal.log_likelihood;
-                observables_history.states.push_back(observable_state);
             }
 
             if (accept_proposal)
@@ -784,12 +628,6 @@ namespace eos
     }
 
     void
-    MarkovChain::dump_description(hdf5::File & file, const std::string & data_set) const
-    {
-        _imp->dump_description(file, data_set);
-    }
-
-    void
     MarkovChain::dump_history(hdf5::File & file, const std::string & data_set_base_name, const unsigned & last_iterations) const
     {
         _imp->dump_history(file, data_set_base_name, last_iterations);
@@ -826,10 +664,9 @@ namespace eos
     }
 
     void
-    MarkovChain::keep_history(bool keep, bool keep_observables_and_proposals)
+    MarkovChain::keep_history(bool keep)
     {
         _imp->history.keep = keep;
-        _imp->keep_observables_and_proposals = keep_observables_and_proposals;
     }
 
     const std::vector<ParameterDescription> &
@@ -1036,7 +873,7 @@ namespace eos
             lhs << *p << " ";
         }
 
-        lhs << "), prior = " << rhs.log_prior << ", likelihood = " << rhs.log_likelihood << ", posterior = " << rhs.log_posterior;
+        lhs << "), posterior = " << rhs.log_posterior;
 
         return lhs;
     }

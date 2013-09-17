@@ -809,7 +809,7 @@ namespace eos
                 unsigned i = 0;
                 for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
                 {
-                    c->dump_description(file, "/descriptions/prerun/chain #" + stringify(i));
+                    analysis.dump_descriptions(file, "/descriptions/prerun/chain #" + stringify(i));
                 }
             }
 
@@ -821,7 +821,7 @@ namespace eos
             for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
             {
                 // save history
-                c->keep_history(true, config.store_observables_and_proposals);
+                c->keep_history(true);
             }
 
             // keep going till maxIter or  break when convergence estimated
@@ -1000,7 +1000,7 @@ namespace eos
                 c->clear();
 
                 // save history?
-                c->keep_history(config.store, config.store_observables_and_proposals);
+                c->keep_history(config.store);
             }
 
             // write parameter descriptions
@@ -1009,7 +1009,7 @@ namespace eos
                 unsigned i = 0;
                 for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
                 {
-                    c->dump_description(file, "/descriptions/main run/chain #" + stringify(i));
+                    analysis.dump_descriptions(file, "/descriptions/main run/chain #" + stringify(i));
                 }
             }
         }
@@ -1181,8 +1181,7 @@ namespace eos
         chunk_size(1000),
         need_main_run(true),
         skip_initial(0, 1, 0.1),
-        store(true),
-        store_observables_and_proposals(false)
+        store(true)
     {
     }
 

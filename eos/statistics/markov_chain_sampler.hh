@@ -235,8 +235,6 @@ namespace eos
              * The HDF5 output file to store the markov chains.
              */
             std::string output_file;
-
-            bool store_observables_and_proposals;
             ///@}
     };
 
