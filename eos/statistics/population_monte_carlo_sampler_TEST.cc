@@ -38,103 +38,6 @@ class PopulationMonteCarloSamplerTest :
 
         virtual void run() const
         {
-            // convergence checking
-            {
-                PopulationMonteCarloSampler::Config config = PopulationMonteCarloSampler::Config::Default();
-                config.output_file = EOS_BUILDDIR "/eos/statistics/pmc_sampler_TEST-convergence.hdf5";
-                config.convergence_eff_sample_size= 0.9;
-                config.convergence_perplexity = 0.9;
-                config.minimum_eff_sample_size = 0.5;
-                config.minimum_perplexity = 0.5;
-                config.minimum_steps = 3;
-                config.maximum_relative_std_deviation = 1e-2;
-
-                bool flat = true;
-                Analysis analysis(make_analysis(flat));
-                PopulationMonteCarloSampler pmc_sampler(analysis, config);
-
-                /* direct convergence based on current status only */
-
-                PopulationMonteCarloSampler::Status new_status;
-                new_status.eff_sample_size = 0.18;
-                new_status.perplexity = 0.98;
-
-                static const bool check_for_convergence = true;
-                bool converged = pmc_sampler.status(new_status, check_for_convergence);
-                TEST_CHECK(! converged);
-
-                new_status.eff_sample_size = 0.98;
-                converged = pmc_sampler.status(new_status);
-                TEST_CHECK(converged);
-
-                /* indirect convergence based on previous, mock-up values */
-
-                {
-                    auto file = hdf5::File::Create(config.output_file);
-
-                    std::vector<double> eff_sample_sizes { 0.5712, 0.5739, 0.5698 } ;
-                    std::vector<double> perplexities { 0.7942, 0.7876, 0.7956 };
-
-                    TEST_CHECK_EQUAL(eff_sample_sizes.size(), config.minimum_steps);
-                    TEST_CHECK_EQUAL(perplexities.size(), config.minimum_steps);
-
-                    for (unsigned i = 0 ; i < config.minimum_steps ; ++i)
-                    {
-                        auto statistics = file.create_data_set("/data/" + stringify(i) + "/statistics",
-                            PopulationMonteCarloSampler::Output::statistics_type());
-                        auto statistics_record = std::make_tuple(perplexities[i], eff_sample_sizes[i], 11.11);
-                        statistics << statistics_record;
-                    }
-                }
-
-                new_status.eff_sample_size = 0.1;
-                converged = pmc_sampler.status(new_status);
-                TEST_CHECK(converged);
-
-                {
-                    auto file = hdf5::File::Create(config.output_file);
-
-                    std::vector<double> eff_sample_sizes { 0.5712, 0.61, 0.68 } ;
-                    std::vector<double> perplexities { 0.7942, 0.82, 0.853 };
-
-                    TEST_CHECK_EQUAL(eff_sample_sizes.size(), config.minimum_steps);
-                    TEST_CHECK_EQUAL(perplexities.size(), config.minimum_steps);
-
-                    for (unsigned i = 0 ; i < config.minimum_steps ; ++i)
-                    {
-                        auto statistics = file.create_data_set("/data/" + stringify(i) + "/statistics",
-                            PopulationMonteCarloSampler::Output::statistics_type());
-                        auto statistics_record = std::make_tuple(perplexities[i], eff_sample_sizes[i], 11.11);
-                        statistics << statistics_record;
-                    }
-                }
-
-                new_status.eff_sample_size = 0.1;
-                converged = pmc_sampler.status(new_status, check_for_convergence);
-                TEST_CHECK(! converged);
-            }
-
-            // initialization with minuit
-            {
-                bool flat = true;
-                Analysis analysis(make_analysis(flat));
-
-                PopulationMonteCarloSampler::Config config = PopulationMonteCarloSampler::Config::Default();
-                config.chunks = 2;
-                config.chunk_size = 500;
-                config.component_weights = std::vector<double>(2, 1/2.0);
-                config.final_chunk_size = 500;
-                config.mode_distance = 1e-3;
-                config.output_file = "/tmp/pmc_parallel.hdf5";
-                config.parallelize = true;
-                config.random_start = false;
-                config.seed = 23;
-                config.starting_points = 15;
-                config.store = true;
-
-                PopulationMonteCarloSampler pop(analysis, config);
-                pop.run();
-            }
             // initialize from a MCMC prerun
             {
                 /* setup bimodal distribution */
@@ -221,7 +124,6 @@ class PopulationMonteCarloSamplerTest :
                 pmc_config.final_chunk_size = 5000;
                 pmc_config.output_file = pmc_output;
                 pmc_config.parallelize = true;
-                pmc_config.random_start = false;
                 pmc_config.seed = 23;
                 pmc_config.store = true;
 

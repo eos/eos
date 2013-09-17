@@ -337,36 +337,6 @@ namespace eos
         // Posterior of the last sample
         std::vector<double> posterior_values;
 
-        Implementation(const Analysis & analysis, const PopulationMonteCarloSampler::Config & config) :
-            analysis(analysis),
-            config(config),
-            status(),
-            pmc(NULL)
-        {
-            // setup Mersenne-Twister RN generator using custom seed
-            rng = gsl_rng_alloc(gsl_rng_mt19937);
-            gsl_rng_set(rng, config.seed);
-
-            if (config.component_weights.empty())
-                throw InternalError("PMC_sampler.ctor: No weights for components specified");
-
-            setup_output();
-
-            // setup PMC library
-            initialize_pmc();
-
-            // initialization of the workers
-            const unsigned number_of_workers = config.number_of_workers == 0 ?
-                                               ThreadPool::instance()->number_of_threads() :
-                                               config.number_of_workers;
-            for (unsigned i = 0; i < number_of_workers; ++i)
-                workers.push_back(std::make_shared<pmc::Worker>(analysis));
-
-            auto f = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
-            this->analysis.dump_descriptions(f, "descriptions");
-            dump("initial");
-        }
-
         Implementation(const Analysis & analysis, const hdf5::File & file,
                        const PopulationMonteCarloSampler::Config & config, const bool & update) :
             analysis(analysis),
@@ -910,36 +880,6 @@ namespace eos
                                     + stringify(analysis.parameter_descriptions().size())
                                     + " vs " + stringify(mmv->ndim) + ")");
 
-            if (config.block_decomposition)
-            {
-                unsigned par_i = 0;
-                for (auto par = analysis.parameter_descriptions().begin(), d_end = analysis.parameter_descriptions().end() ; par != d_end ; ++par, ++par_i)
-                {
-                    if (! par->nuisance)
-                        continue;
-
-                    auto prior = analysis.log_prior(par->parameter.name());
-
-                    // todo dirty hack
-                    std::string s = prior->as_string();
-                    if (s.find("flat") != std::string::npos)
-                        continue;
-
-                    // set row/column with this parameter to zero in all components
-                    // only set diagonal element of variance and change mean
-                    for (unsigned c = 0 ; c < mmv->ncomp ; ++c)
-                    {
-                        gsl_vector_set(mmv->comp[c]->mean_view, par_i, prior->mean());
-
-                        auto row = gsl_matrix_row(mmv->comp[c]->std_view, par_i);
-                        gsl_vector_set_all(&row.vector, 0.0);
-                        auto column = gsl_matrix_column(mmv->comp[c]->std_view, par_i);
-                        gsl_vector_set_all(&column.vector, 0.0);
-                        gsl_matrix_set(mmv->comp[c]->std_view, par_i, par_i, prior->variance());
-                    }
-                }
-            }
-
             // create proposal distribution object
             distribution * proposal = mix_mvdens_distribution(mmv->ndim, (void*) mmv, err);
 
@@ -965,349 +905,6 @@ namespace eos
                 this->update(f, n_samples);
             }
         }
-
-        // Following the lines of pmclib/pmc_rc.c
-        void initialize_pmc()
-        {
-            Log::instance()->message("PMC_sampler::initialize", ll_informational)
-                << " Using random points / Minuit for initialization";
-
-            // number of dimensions of parameter cube
-            int n_dim = int(analysis.parameter_descriptions().size());
-
-            // setup importance sampling
-            pmc::ErrorHandler err;
-
-            // create posterior distribution
-            distribution * target = init_simple_distribution(n_dim, (void *) &analysis, &pmc::logpdf, NULL, err);
-            pmc::check_error(err);
-
-            /*  create proposal density */
-
-            // use functions in pmc_rc.c:
-            // o rcinit_mix_mvdens(...)
-            // o init_importance_from_rc(...)
-            mix_mvdens * mmv = NULL;
-
-            // randomize under first component
-            if (config.random_start)
-            {
-                mmv = mix_mvdens_alloc(config.component_weights.size(), unsigned(n_dim), err);
-                mvdens* mv = mmv->comp[0];
-
-                // copy weights
-                std::copy(config.component_weights.cbegin(), config.component_weights.cend(), mmv->wght);
-
-                // is first mean and variance specified?
-                if ( ! (config.component_means.size() == 1 && config.component_variances.size() == 1) )
-                {
-                    // mean = center or parameter cube
-                    std::vector<double> mean(n_dim, 0.0);
-                    for (int i = 0; i < n_dim ; ++i)
-                    {
-                        mean[i] = (analysis.parameter_descriptions()[i].max + analysis.parameter_descriptions()[i].min) / 2.0;
-                    }
-                    config.component_means.clear();
-                    config.component_means.push_back(mean);
-
-                    // variance = (parameter range / 2)^2 (diagonal matrix)
-                    std::vector<double> var(n_dim, 0.0);
-                    for (int i = 0; i < n_dim ; ++i)
-                    {
-                        var[i] = (analysis.parameter_descriptions()[i].max - analysis.parameter_descriptions()[i].min) /
-                                  config.std_dev_reduction;
-                        var[i] *= var[i];
-                    }
-                    config.component_variances.clear();
-                    config.component_variances.push_back(var);
-                }
-
-                if ( ! (config.component_means.front().size() == unsigned(n_dim) &&
-                        config.component_variances.front().size() == unsigned(n_dim)) )
-                    throw InternalError("PMC_sampler.cc: Need to specify mean and variance for exactly one component in all " + stringify(n_dim) + " dimensions.");
-
-                // copy means if they are all specified
-                std::copy(config.component_means.front().cbegin(), config.component_means.front().cend(), mv->mean);
-
-                /* create covariance matrix */
-
-                // case 1: only diagonal specified. Set off-diagonal = zero
-                if (config.component_variances.front().size() == unsigned(n_dim) )
-                {
-                    for (int i = 0; i < n_dim ; ++i)
-                    {
-                        for (int j = i ; j < n_dim ; ++j)
-                        {
-                            if ( i == j)
-                                mv->std[i*n_dim + j] = config.component_variances.front()[i];
-                            else
-                                mv->std[i*n_dim + j] = 0.0;
-                        }
-                    }
-                }
-                // case 2: full matrix specified
-                else if (config.component_variances.front().size() == unsigned(n_dim * n_dim) )
-                {
-                    std::copy(config.component_variances.front().cbegin(), config.component_variances.front().cend(), mv->std);
-                }
-                // case 3: misspecified
-                else
-                {
-                    throw InternalError("PMC_sampler.cc: Covariance matrix doesn't have right dimensions.");
-                }
-
-                // chol. and determinant
-                /*
-                 *  If set to 0, PMC will use GSL to compute the cholesky decomposition
-                 *  as soon as samples are drawn.
-                 *  and the result is stored in the same memory block, thus the
-                 *  interpretation of mmv->comp[0]->std is changed
-                 */
-                mv->chol = 0;
-
-                mv->band_limit = n_dim;
-                mv->df = config.degrees_of_freedom;
-
-                // specify additional proposal density components
-                for (unsigned i = 1 ; i < config.component_weights.size() ; ++i)
-                {
-                    mvdens_ran(mmv->comp[i]->mean, mmv->comp[0], rng, err);
-                    mmv->comp[i]->chol = mmv->comp[0]->chol;
-                    mmv->comp[i]->band_limit = mmv->comp[0]->band_limit;
-                    mmv->comp[i]->df = mmv->comp[0]->df;
-                    mmv->comp[i]->detL = mmv->comp[0]->detL;
-                    std::copy(mmv->comp[0]->std, mmv->comp[0]->std + n_dim * n_dim, mmv->comp[i]->std);
-                }
-            }
-            else
-            {
-                /*
-                 * 1. User defines number of starting positions, either explicitly by giving the points.
-                 *    Number can be different from #components.
-                 * or implicitly by the number. Latter case: draw points from the priors.
-                 * 2. Use MINUIT to find local modes and covariance matrices.
-                 * 3. Estimate weight of one mode by max. posterior * sqrt(determinant of covariance)
-                 * 4. Find unique modes: |mode_i - mode_j| < eps => i and j are same modes
-                 * 5. Initialize components: at least two per mode,
-                 *    for nuisance parameters, leave position at mode.
-                 *    for pars. of interest, draw a sample from multivariate gaussian, and ignore the nuisance values.
-                 *    This way, components can distribute along a banana shaped posterior.
-                 * 6. Perhaps one could estimate the non-Gaussianity (DoF < inf) from comparing the
-                 *    Hessian with std errors. If coincide closely, DoF = inf is good, else chose value close to 0
-                 */
-
-                std::vector<double> starting_point(n_dim, 0.0);
-
-                std::vector<Ticket> tickets;
-                std::vector<std::shared_ptr<pmc::Worker>> optimizers;
-
-                // draw starting point from priors
-                for (unsigned i = 0 ; i < config.starting_points ; ++i)
-                {
-                    auto s = starting_point.begin();
-                    for (auto d = analysis.parameter_descriptions().begin(), d_end = analysis.parameter_descriptions().end() ; d != d_end ; ++d, ++s)
-                    {
-                        if (d->nuisance)
-                        {
-                            *s = d->parameter();
-                        }
-                        else
-                        {
-                            //todo not ready for multidimensional priors
-                            LogPriorPtr prior = analysis.log_prior(d->parameter.name());
-                            *s = prior->sample(rng);
-                        }
-                    }
-
-                    // parallelize computations
-                    auto worker = std::make_shared<pmc::Worker>(analysis);
-                    optimizers.push_back(worker);
-
-                    if (config.parallelize)
-                    {
-                        tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&pmc::Worker::optimize, worker.get(), starting_point)));
-                    }
-                    else
-                    {
-                        worker->optimize(starting_point);
-                    }
-                }
-
-                // wait for job completion
-                for (auto t = tickets.begin(), t_end = tickets.end() ; t != t_end ; ++t)
-                    t->wait();
-
-                /* find unique modes */
-                std::vector<std::vector<double>> unique_modes;
-                std::vector<unsigned> worker_indices;
-
-                // add first mode
-                auto o = optimizers.begin();
-
-                for (auto o_end = optimizers.end() ; o != o_end ; ++o)
-                {
-                    auto mode = (**o).mode();
-                    if( mode.empty() )
-                    {
-                        Log::instance()->message("PMC_sampler.initialize", ll_warning)
-                            << "worker couldn't find mode using minuit";
-                        continue;
-                    }
-
-                    // first valid mode
-                    if (unique_modes.empty())
-                    {
-                        unique_modes.push_back(mode);
-                        worker_indices.push_back(0);
-                        continue;
-                    }
-
-                    // compare with every predecessor
-                    // by calculating the Euclidean norm between this mode and
-                    // previously found unique modes, rescaled by allowed range
-                    double difference, length1, length2;
-                    difference = length1 = length2 = 0;
-                    auto m = unique_modes.begin(), m_end = unique_modes.end();
-                    for ( ; m != m_end ; ++m, difference = 0)
-                    {
-                        auto j = mode.begin();
-                        auto d = analysis.parameter_descriptions().begin();
-                        for ( auto i = m->begin(), i_end = m->end() ; i != i_end ; ++i, ++j, ++d)
-                        {
-                            double range = d->max - d->min;
-                            difference += power_of<2>((*i - *j)  / range);
-                            length1 += power_of<2>((*j - d->min) / range);
-                            length2 += power_of<2>((*i - d->min) / range);
-                        }
-
-                        // rescale to account for dimensionality
-                        // maximum distance of two points in n-dim unit hypercube is sqrt(n)
-                        difference /= mode.size();
-                        length1 /= mode.size();
-                        length2 /= mode.size();
-
-                        Log::instance()->message("PMC_sampler.initialize", ll_debug)
-                            << "Length1=" << length1 << ", length2=" << length2
-                            << ", diff=" << difference;
-                        // check that one vector is not of length zero
-                        if (std::sqrt(difference) < config.mode_distance)
-                        {
-                            break;
-                        }
-                    }
-                    // made it to the end?
-                    if ( m == m_end)
-                    {
-                        // so we can use the posterior info there after the loop
-                        // for ranking the modes
-                        unique_modes.push_back(mode);
-                        worker_indices.push_back(std::distance(optimizers.begin(), o));
-                    }
-
-//                    std::string output("(");
-//                    for (auto i = mode.begin(), i_end = mode.end() ; i != i_end ; ++i)
-//                        output += " " + stringify(*i);
-//                    output += " )";
-                    Log::instance()->message("PMC_sampler.initialize", ll_debug)
-                                << "Found mode: " << stringify(mode.begin(), mode.end(), 4);
-                }
-
-                // print out modes
-                Log::instance()->message("PMC_sampler.initialize", ll_informational)
-                    << "Identified " << unique_modes.size() << " unique mode(s) of posterior.";
-                for (auto m = unique_modes.begin(), m_end = unique_modes.end() ; m != m_end ; ++m)
-                {
-                    Log::instance()->message("PMC_sampler.initialize", ll_debug)
-                        << stringify(m->begin(), m->end());
-                }
-
-                // estimate weight of each mode by posterior
-//                std::vector<double> weight_estimates
-
-                // issue warning if there appear to be not enough components
-
-                    // free to change number of components
-                unsigned m = config.components_per_cluster;
-                mmv = mix_mvdens_alloc(config.components_per_cluster * unique_modes.size(), n_dim, err);
-//                }
-
-                // a temp density, needed to initialize the actual components
-                mvdens * guide = mvdens_alloc(n_dim, err);
-
-                // create component from minuit result
-                for (unsigned i = 0 ; i < mmv->ncomp ; ++i)
-                {
-                    // equal weight for each component
-                    mmv->wght[i] = 1.0 / double(mmv->ncomp);
-
-                    // set mean to the unique mode
-                    std::copy(unique_modes[i / m].begin(), unique_modes[i / m].end(), guide->mean);
-
-                    // rescale volume/determinant
-                    double scale = std::pow(config.std_dev_reduction, 1.0 / double(n_dim));
-
-                    ROOT::Minuit2::FunctionMinimum min = *optimizers[worker_indices[i / m]]->minimum;
-                    Log::instance()->message("pmc-sampler.minimum", ll_debug)
-                        << "comp #" << i << ": min = " << min.UserCovariance();
-
-                    // copy covariance matrix
-                    for (int j = 0 ; j < n_dim ; ++j)
-                    {
-                        for (int k = 0 ; k < n_dim ; ++k)
-                        {
-                            auto w = optimizers[worker_indices[i / m]];
-                            mmv->comp[i]->std[j * n_dim + k ] = w->minimum->UserCovariance()(j, k);
-                            guide->std[j * n_dim + k ] = scale * w->minimum->UserCovariance()(j, k);
-                        }
-                    }
-
-                    // sample a mean from the distribution
-                    /* but not from first comp. of this mode, since overwriting itself lead to problem:
-                     * 'Cholesky decomposition failed' when drawing samples
-                     */
-
-                    // sample mean of component around the mode
-                    // this way components have a better chance
-                    pmc::mvdens_ran_extreme(mmv->comp[i]->mean, guide, rng, err, config.component_offset);
-                    pmc::check_error(err);
-
-                    Log::instance()->message("PMC_sampler.initialize", ll_debug)
-                        << "comp initialized to " << stringify(mmv->comp[i]->mean, mmv->comp[i]->mean + n_dim);
-
-                    // copy remaining parameters
-                    mmv->comp[i]->chol = 0;
-                    mmv->comp[i]->band_limit = n_dim;
-                    mmv->comp[i]->df = config.degrees_of_freedom;
-                    mmv->comp[i]->detL = mmv->comp[0]->detL;
-                }
-
-                mvdens_free(&guide);
-            }
-
-            // create proposal distribution object
-            distribution * proposal = mix_mvdens_distribution(mmv->ndim, (void*) mmv,err);
-
-            // number of samples per chunk. Fixed size for each component.
-            long n_samples = config.chunk_size * mmv->ncomp;
-
-            // setup with 0 (?) deduced parameters for now
-            pmc = pmc_simu_init_plus_ded(n_samples, target->ndim, target->n_ded, err);
-
-            // parameter cube: copy from analysis
-            parabox * par_box = init_parabox(n_dim, err);
-            int i = 0;
-            for (auto d = analysis.parameter_descriptions().begin(), d_end = analysis.parameter_descriptions().end() ; d != d_end ; ++d, ++i)
-            {
-                add_slab(par_box, i, d->min, d->max, err);
-            }
-
-            // setter methods, include safety checks of variable
-            pmc_simu_init_target(pmc, target, par_box, err);
-            pmc_simu_init_proposal(pmc, proposal, config.print_steps, err);
-            pmc_simu_init_pmc(pmc, NULL, NULL, update_prop_rb_void, err);
-            pmc::check_error(err);
-        }
-
 
         void group_chains(std::vector<ChainGroup> & chain_groups)
         {
@@ -1507,11 +1104,6 @@ namespace eos
                             (**c).mean_and_covariance(first_state, last_state, mean, covariance);
                             std::vector<double> center = mean;
 
-                            if (config.patch_around_local_mode)
-                            {
-                                center = (**c).local_mode(first_state, last_state).point;
-                            }
-
                             HierarchicalClustering::Component super_cluster(center, covariance, weight);
 
                             initial_clusters.push_back(super_cluster);
@@ -1562,17 +1154,12 @@ namespace eos
                         (**c).mean_and_covariance(first_state, last_state, mean, covariance);
                         std::vector<double> center = mean;
 
-                        if (config.patch_around_local_mode)
-                        {
-                            center = (**c).local_mode(first_state, last_state).point;
-                        }
                         try
                         {
                             //later on during clustering use equal weights for each patch
                             HierarchicalClustering::Component patch(center, covariance, 1.0);
                             local_patches.push_back(patch);
                             hc.add(patch);
-                            //                        local_patches_index_lists.back().push_back(index);
                         }
                         catch (InternalError &)
                         {
@@ -1587,8 +1174,7 @@ namespace eos
                 }
             }
             Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
-                << "Formed " << local_patches.size() << " local patches centered around"
-                << (config.patch_around_local_mode ? " local modes" : " patch means");
+                << "Formed " << local_patches.size() << " local patches centered around patch means";
 
             // number of parameters
             const unsigned & ndim = chains.front()->states.front().point.size();
@@ -2035,11 +1621,6 @@ namespace eos
         }
     };
 
-    PopulationMonteCarloSampler::PopulationMonteCarloSampler(const Analysis & analysis, const PopulationMonteCarloSampler::Config & config) :
-        PrivateImplementationPattern<PopulationMonteCarloSampler>(new Implementation<PopulationMonteCarloSampler>(analysis, config))
-    {
-    }
-
     PopulationMonteCarloSampler::PopulationMonteCarloSampler(const Analysis & analysis, const hdf5::File & file,
                                                              const PopulationMonteCarloSampler::Config & config,
                                                              const bool & update) :
@@ -2107,20 +1688,10 @@ namespace eos
          seed(0),
          parallelize(true),
          number_of_workers(0),
-         block_decomposition(false),
-         component_weights(10, 1/10.0),
-         component_offset(3),
-         components_per_cluster(1, std::numeric_limits<unsigned>::max(), 4),
          degrees_of_freedom(-1, std::numeric_limits<int>::max(), -1),
-         minimum_overlap(0, 1, 0.0),
-         mode_distance(std::numeric_limits<double>::epsilon(), 1, 1e-2),
-         random_start(true),
-         single_cluster(-1),
          skip_initial(0, 1, 0.1),
-         starting_points(15),
          std_dev_reduction(std::numeric_limits<double>::epsilon(), std::numeric_limits<double>::max(), 1),
          group_by_r_value(1, std::numeric_limits<double>::max(), 1),
-         patch_around_local_mode(false),
          r_value_no_nuisance(true),
          patch_length(1000),
          store_input_components(false),

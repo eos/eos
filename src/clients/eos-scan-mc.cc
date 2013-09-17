@@ -565,13 +565,6 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--pmc-block-decomposition" == argument)
-                {
-                    config_pmc.block_decomposition = destringify<unsigned>(*(++a));
-
-                    continue;
-                }
-
                 if ("--pmc-crop-highest-weights" == argument)
                 {
                     config_pmc.crop_highest_weights = destringify<unsigned>(*(++a));
@@ -646,21 +639,6 @@ class CommandLine :
 
                     continue;
                 }
-
-                if ("--pmc-minimum-overlap" == argument)
-                {
-                    config_pmc.minimum_overlap = destringify<double>(*(++a));
-
-                    continue;
-                }
-
-                if ("--pmc-patch-around-local-mode" == argument)
-                {
-                    config_pmc.patch_around_local_mode = destringify<unsigned>(*(++a));
-
-                    continue;
-                }
-
                 if ("--pmc-group-by-r-value" == argument)
                 {
                     config_pmc.group_by_r_value = destringify<double>(*(++a));
@@ -682,9 +660,7 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--pmc-starting-points" == argument)
                 {
-                    config_pmc.starting_points = destringify<unsigned>(*(++a));
 
                     continue;
                 }
@@ -986,33 +962,28 @@ int main(int argc, char * argv[])
 #if EOS_ENABLE_PMC
         if (CommandLine::instance()->use_pmc)
         {
-            std::shared_ptr<PopulationMonteCarloSampler> pop_sampler;
-            if (inst->pmc_initialization_file != "")
-                pop_sampler.reset(
-                    new PopulationMonteCarloSampler(inst->analysis, hdf5::File::Open(inst->pmc_initialization_file),
-                                                    inst->config_pmc, inst->pmc_update));
-            else
-                pop_sampler.reset(new PopulationMonteCarloSampler(inst->analysis, inst->config_pmc));
+            PopulationMonteCarloSampler pop_sampler(inst->analysis, hdf5::File::Open(inst->pmc_initialization_file),
+            		inst->config_pmc, inst->pmc_update);
 
             if (inst->pmc_final)
             {
-                PopulationMonteCarloSampler::Status status =  pop_sampler->status();
+                PopulationMonteCarloSampler::Status status =  pop_sampler.status();
                 status.converged = true;
-                pop_sampler->status(status);
+                pop_sampler.status(status);
             }
             if (inst->pmc_draw_samples)
             {
-                pop_sampler->draw_samples();
+                pop_sampler.draw_samples();
             }
             else if (inst->pmc_calculate_posterior)
             {
-                pop_sampler->calculate_weights(inst->pmc_sample_file,
+                pop_sampler.calculate_weights(inst->pmc_sample_file,
                     inst->pmc_calculate_posterior_min, inst->pmc_calculate_posterior_max);
             }
             else if (inst->pmc_update)
                 return EXIT_SUCCESS;
             else
-                pop_sampler->run();
+                pop_sampler.run();
 
             return EXIT_SUCCESS;
         }
@@ -1048,6 +1019,7 @@ int main(int argc, char * argv[])
     }
     catch (DoUsage & e)
     {
+    	// todo update
         std::cout << e.what() << std::endl;
         std::cout << "Usage: eos-scan-mc" << std::endl;
         std::cout << "  [ [--kinematics NAME VALUE]* --observable NAME LOWER CENTRAL UPPER]+" << std::endl;

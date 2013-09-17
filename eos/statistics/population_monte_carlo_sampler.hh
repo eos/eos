@@ -36,13 +36,6 @@ namespace eos
 
             ///@name Basic Functions
             ///@{
-            /*!
-             * Constructor.
-             *
-             * @param analysis The analysis for which we draw samples.
-             * @param config   The configuration of the samples.
-             */
-            PopulationMonteCarloSampler(const Analysis & analysis, const PopulationMonteCarloSampler::Config & config);
 
             /*!
              * Initialize the PMC from a HDF5 file.
@@ -160,7 +153,6 @@ namespace eos
              */
             bool parallelize;
 
-
             /*!
              * How many workers to use. If parallelize is true,
              * this is the number of threads used.
@@ -175,76 +167,13 @@ namespace eos
             ///@{
 
             /*!
-             * Perform a decomposition into scan and nuisance parameters
-             * and use prior variance for initial proposal of nuisance.
-             * The (co)variance in scan direction is unaffected.
-             * In addition, set the component's mean to the prior's mean.
-             */
-            bool block_decomposition;
-
-            /*!
-             * Each component has an associated weight,
-             * which determines how many samples it may
-             * contribute in the next sampling phase.
-             */
-            std::vector<double> component_weights;
-
-            /// n entries.
-            std::vector<std::vector<double>> component_means;
-
-            //TODO better explanation
-            /// Shift component by this number of sigmas.
-            double component_offset;
-
-            /// n^2 entries.
-            std::vector<std::vector<double>> component_variances;
-
-            //todo can we remove this with super_clusters?
-            /*!
-             * When initializing from global local, draw this
-             * many components for each cluster.
-             */
-            VerifiedRange<unsigned> components_per_cluster;
-
-            /*!
              * Degrees of freedom of a multivariate t-distribution.
              * Special value of -1 corresponds to the Gaussian distribution.
              */
             VerifiedRange<int> degrees_of_freedom;
 
-            /// Used during filtering of components, if too many samples fall outside of box, remove components
-            VerifiedRange<double> minimum_overlap;
-
-            /*!
-             * Maximum relative distance between two local modes
-             * that allows them to be treated as one mode.
-             * A rescaling of coordinates to the unit hypercube is
-             * performed in order to avoid problems when parameter
-             * ranges differ by several orders of magnitude.
-             *
-             * @example if |x - y|/|y| < eps, they are just one mode
-             */
-            VerifiedRange<double> mode_distance;
-
-            /*!
-             * Initialize the components randomly at the beginning.
-             */
-            bool random_start;
-
-            /*!
-             * Use only history points from a particular cluster
-             * defined by its index. Default value -1: take from all clusters
-             */
-            int single_cluster;
-
             /// Skip this percentage from beginning of a chain's history.
             VerifiedRange<double> skip_initial;
-
-            /*!
-             * Number of starting positions. Start optimization from each
-             * one to identify local modes and covariances.
-             */
-            unsigned starting_points;
 
             /*!
              * For random start, take the std. deviation as parameter range divided
@@ -273,14 +202,6 @@ namespace eos
              * @note Use with great care. Important parts of the posterior may be ignored.
              */
             std::vector<unsigned> ignore_groups;
-
-            /*!
-             * When creating patch from a Markov chain history,
-             * place the patches around the point with highest posterior
-             * in the selected range of point.
-             * If false, center on the mean of all points in range.
-             */
-            bool patch_around_local_mode;
 
             /*!
              * When grouping with R-value, consider only
