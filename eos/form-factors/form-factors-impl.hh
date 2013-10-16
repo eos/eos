@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -22,6 +22,7 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_IMPL_HH 1
 
 #include <eos/form-factors/form-factors.hh>
+#include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/power_of.hh>
 
@@ -38,8 +39,15 @@ namespace eos
 
     /* P -> V Processes */
 
-    struct BToKstar { };
-    struct BsToPhi { };
+    struct BToKstar {
+        static constexpr double mB = 5.279;
+        static constexpr double mV = 0.896;
+    };
+
+    struct BsToPhi {
+        static constexpr double mB = 5.336;
+        static constexpr double mV = 1.020;
+    };
 
     template <typename Process_> class BZ2004FormFactors<Process_, PToV> :
         public FormFactors<PToV>
@@ -105,6 +113,16 @@ namespace eos
             virtual double a_2(const double & s) const
             {
                 return _a2_factor * _calc_eq60(s, _a2_r1, _a2_r2, _a2_m2fit);
+            }
+
+            virtual double a_12(const double & s) const
+            {
+                const double mB = Process_::mB, mB2 = mB * mB;
+                const double mV = Process_::mV, mV2 = mV * mV;
+                const double lambda = eos::lambda(mB2, mV2, s);
+
+                return ((mB + mV) * (mB + mV) * (mB2 - mV2 - s) * this->a_1(s)
+                    - lambda * this->a_2(s)) / (16.0 * mB * mV2 * (mB + mV));
             }
     };
 
@@ -173,6 +191,15 @@ namespace eos
 
                 // cf. [KMPW2010], Eq. (8.8), p. 30
                 return _f0_A2() / (1.0 - s / _m_Bs2_1p) * (1.0 + _b1_A2() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+            }
+            virtual double a_12(const double & s) const
+            {
+                const double mB = BToKstar::mB, mB2 = mB * mB;
+                const double mV = BToKstar::mV, mV2 = mV * mV;
+                const double lambda = eos::lambda(mB2, mV2, s);
+
+                return ((mB + mV) * (mB + mV) * (mB2 - mV2 - s) * this->a_1(s)
+                    - lambda * this->a_2(s)) / (16.0 * mB * mV2 * (mB + mV));
             }
     };
 
