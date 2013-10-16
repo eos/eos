@@ -2122,6 +2122,52 @@ namespace eos
                 {{ 0.290551, 0.708433, 1.000000 }}
             }}
         };
+
+        /*
+         * Reproduced from [HPQCD:2013B].
+         */
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_V_15_to_19dot21_HPQCD_2013B
+        {
+            {{ "B->K^*::V(s)", "B->K^*::V(s)" }},
+            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 1.19122,   1.97758  }},
+            {{ 0.0999166, 0.112599 }},
+            {{ 0.0999166, 0.112599 }},
+            {{ +0.00, +0.00 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000000, 0.461948 }},
+                {{ 0.461948, 1.000000 }},
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B
+        {
+            {{ "B->K^*::A_1(s)", "B->K^*::A_1(s)" }},
+            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.515837,  0.644548  }},
+            {{ 0.0293675, 0.0195013 }},
+            {{ 0.0293675, 0.0195013 }},
+            {{ +0.00, +0.00 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000000, 0.52072  }},
+                {{ 0.52072,  1.000000 }},
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B
+        {
+            {{ "B->K^*::A_12(s)", "B->K^*::A_12(s)" }},
+            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.36264,   0.430436  }},
+            {{ 0.0301949, 0.0310884 }},
+            {{ 0.0301949, 0.0310884 }},
+            {{ +0.00, +0.00 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000000, 0.251844 }},
+                {{ 0.251844, 1.000000 }},
+            }}
+        };
         ///@}
     }
 
@@ -2485,6 +2531,10 @@ namespace eos
 
             /* Theory Constraints */
             { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
+
+            { "B->K^*::V@HPQCD-2013B", make_factory(templates::B_to_Kstar_V_15_to_19dot21_HPQCD_2013B) },
+            { "B->K^*::A_1@HPQCD-2013B", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B) },
+            { "B->K^*::A_12@HPQCD-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B) },
         };
 
         auto f = factories.find(name);

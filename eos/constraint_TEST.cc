@@ -351,6 +351,10 @@ class ConstraintTest :
                     /* 2013 */
                     // disabled, since it needs the option "form-factors" specified.
                     //"B->K::f_+@HPQCD-2013A",
+
+                    //"B->K^*::V@HPQCD-2013B",
+                    //"B->K^*::A_1@HPQCD-2013B",
+                    //"B->K^*::A_12V@HPQCD-2013B",
                 };
 
                 std::cout << "# Constraints :" << std::endl;

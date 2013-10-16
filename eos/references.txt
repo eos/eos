@@ -664,11 +664,19 @@ Theoretical Inputs
         arxiv:hep-ph/0512066
 
 
-    HPQCDD2013 : Bouchard, C. et al. [HPQCD]
+    HPQCDD2013A : Bouchard, C. et al. [HPQCD]
 
         The rare decay B ---> K ll form factors from lattice QCD
 
         arxiv:1306.2384
+
+
+    HPQCDD2013B : Horgan, R.R. and Lio, Z. and Meinel, S. and Wingate, M. [HPQCD]
+
+        Lattice QCD calculation of form factor describing the rare decays B --> K^* ll
+        and B_s -> phi ll
+
+        arxiv:1310.3722
 
 
     IKKR2007 : Ivanov, M.A. and Korner, J.G. and Kovalenko, S.G. and Roberts, C.D.
