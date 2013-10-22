@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_MC_SAMPLER_HH
-#define EOS_GUARD_SRC_UTILS_MC_SAMPLER_HH 1
+#ifndef EOS_GUARD_SRC_STATISTICS_MC_SAMPLER_HH
+#define EOS_GUARD_SRC_STATISTICS_MC_SAMPLER_HH 1
 
 #include <eos/statistics/analysis.hh>
 #include <eos/statistics/markov_chain.hh>

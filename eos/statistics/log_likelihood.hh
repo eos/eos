@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_LIKELIHOOD_HH
-#define EOS_GUARD_SRC_UTILS_LIKELIHOOD_HH 1
+#ifndef EOS_GUARD_SRC_STATISTICS_LIKELIHOOD_HH
+#define EOS_GUARD_SRC_STATISTICS_LIKELIHOOD_HH 1
 
 #include <eos/constraint.hh>
 #include <eos/observable.hh>

@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_CHI_SQUARED_HH
-#define EOS_GUARD_SRC_UTILS_CHI_SQUARED_HH 1
+#ifndef EOS_GUARD_SRC_STATISTICS_CHI_SQUARED_HH
+#define EOS_GUARD_SRC_STATISTICS_CHI_SQUARED_HH 1
 
 #include <eos/utils/exception.hh>
 

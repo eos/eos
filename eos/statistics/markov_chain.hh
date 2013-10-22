@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_MARKOV_CHAIN_HH
-#define EOS_GUARD_SRC_UTILS_MARKOV_CHAIN_HH 1
+#ifndef EOS_GUARD_SRC_STATISTICS_MARKOV_CHAIN_HH
+#define EOS_GUARD_SRC_STATISTICS_MARKOV_CHAIN_HH 1
 
 #include <eos/statistics/analysis-fwd.hh>
 #include <eos/utils/hdf5-fwd.hh>
