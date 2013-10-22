@@ -444,7 +444,7 @@ namespace eos
             return;
         }
 
-        void set_point(const std::vector<double> & point, const MarkovChain::HyperParameter & hyper_parameter)
+        void set_point(const std::vector<double> & point)
         {
             // input validation
             if (parameter_descriptions.size() != point.size())
@@ -477,7 +477,6 @@ namespace eos
             {
                 // evaluate likelihood without argument, so all observables are calculated once
                 current.log_posterior = analysis.log_posterior();
-                current.hyper_parameter = hyper_parameter;
                 proposal = current;
             }
 
@@ -592,9 +591,9 @@ namespace eos
     }
 
     void
-    MarkovChain::set_point(const std::vector<double> & point, const MarkovChain::HyperParameter & hyper_parameter)
+    MarkovChain::set_point(const std::vector<double> & point)
     {
-        _imp->set_point(point, hyper_parameter);
+        _imp->set_point(point);
     }
 
     const MarkovChain::State &
@@ -643,15 +642,6 @@ namespace eos
     MarkovChain::proposal_function(const ProposalFunctionPtr & prop)
     {
         _imp->proposal_function = prop;
-    }
-
-    MarkovChain::HyperParameter &
-    MarkovChain::hyper_parameter(bool current) const
-    {
-        if (current)
-            return _imp->current.hyper_parameter;
-        else
-            return _imp->proposal.hyper_parameter;
     }
 
     void

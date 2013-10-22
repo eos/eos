@@ -313,8 +313,7 @@ class MarkovChainTest :
                 auto analysis = make_analysis(false);
                 MarkovChain chain(analysis, 13, ppf);
 
-                MarkovChain::HyperParameter h { 0 } ;
-                chain.set_point(std::vector<double>{ 4.3}, h);
+                chain.set_point(std::vector<double>{ 4.3});
                 TEST_CHECK_EQUAL(chain.current_state().point.front(), 4.3);
 
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_posterior,  0.88364655978937656 + 0.883646846442260436, eps);

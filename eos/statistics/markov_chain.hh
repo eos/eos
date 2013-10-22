@@ -38,7 +38,6 @@ namespace eos
             class History;
             class State;
             class ProposalFunction;
-            class HyperParameter;
             class Stats;
 
             ///@name Basic Functions
@@ -72,8 +71,6 @@ namespace eos
             void dump_history(hdf5::File & file, const std::string & data_set_name, const unsigned & last_iterations) const;
 
             void dump_proposal(hdf5::File & file, const std::string & data_set_name) const;
-
-            MarkovChain::HyperParameter & hyper_parameter(bool current = true) const;
 
             /// Retrieve the number of iterations used in the last run
             const unsigned & iterations_last_run() const;
@@ -151,16 +148,10 @@ namespace eos
              *
              * @param point The point in parameter space.
              */
-            void set_point(const std::vector<double> & point, const MarkovChain::HyperParameter & hyper_parameter);
+            void set_point(const std::vector<double> & point);
 
             /// Retrieve statistical data that summarizes the evolution of the chain up to the current point.
             const Stats & statistics() const;
-    };
-
-    struct MarkovChain::HyperParameter
-    {
-            /// Indicating the current component.
-            unsigned component;
     };
 
     /*!
@@ -177,10 +168,8 @@ namespace eos
         /// log posterior at the points
         double log_posterior;
 
-        /// Contains possibly multidimensional hyperparameter information.
-        MarkovChain::HyperParameter hyper_parameter;
-
-        State()
+        State() :
+        	log_posterior(0)
         {
         }
 
@@ -189,7 +178,6 @@ namespace eos
             log_posterior = other.log_posterior;
             point.resize(other.point.size());
             std::copy(other.point.cbegin(), other.point.cend(), point.begin());
-            hyper_parameter = other.hyper_parameter;
         }
     };
 
