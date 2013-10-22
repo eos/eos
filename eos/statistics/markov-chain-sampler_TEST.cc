@@ -20,8 +20,8 @@
 #include <test/test.hh>
 #include <eos/statistics/analysis_TEST.hh>
 #include <eos/statistics/histogram.hh>
-#include <eos/statistics/markov_chain_sampler.hh>
-#include <eos/statistics/proposal_functions.hh>
+#include <eos/statistics/markov-chain-sampler.hh>
+#include <eos/statistics/proposal-functions.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/power_of.hh>
 
@@ -70,7 +70,7 @@ class MarkovChainSamplerTest :
 
             // check pre run, main run and HDF5 storage
             {
-                static const std::string file_name(EOS_BUILDDIR "/eos/utils/markov_chain_sampler_TEST.hdf5");
+                static const std::string file_name(EOS_BUILDDIR "/eos/utils/markov-chain-sampler_TEST.hdf5");
                 std::remove(file_name.c_str());
 
                 // store to HDF5

@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_PRIOR_HH
 #define EOS_GUARD_SRC_STATISTICS_PRIOR_HH 1
 
-#include <eos/statistics/log_prior-fwd.hh>
+#include <eos/statistics/log-prior-fwd.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 

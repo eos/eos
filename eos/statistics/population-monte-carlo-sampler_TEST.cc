@@ -18,8 +18,8 @@
  */
 
 #include <eos/statistics/analysis_TEST.hh>
-#include <eos/statistics/population_monte_carlo_sampler.hh>
-#include <eos/statistics/markov_chain_sampler.hh>
+#include <eos/statistics/population-monte-carlo-sampler.hh>
+#include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
 #include <test/test.hh>

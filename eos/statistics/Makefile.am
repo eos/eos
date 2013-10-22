@@ -1,9 +1,9 @@
 CLEANFILES = \
 	*~ \
-	markov_chain_sampler_TEST.hdf5 \
-	prior_sampler_TEST.hdf5 \
-	proposal_functions_TEST-rdwr.hdf5 \
-	proposal_functions_TEST-block-decomposition.hdf5
+	markov-chain-sampler_TEST.hdf5 \
+	prior-sampler_TEST.hdf5 \
+	proposal-functions_TEST-rdwr.hdf5 \
+	proposal-functions_TEST-block-decomposition.hdf5
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
@@ -15,19 +15,19 @@ libeosstatistics_la_SOURCES = \
 	chain-group.cc chain-group.hh \
 	hierarchical-clustering.cc hierarchical-clustering.hh \
 	histogram.cc histogram.hh \
-	log_likelihood.cc log_likelihood.hh log_likelihood-fwd.hh \
-	log_prior.cc log_prior.hh log_prior-fwd.hh \
-	markov_chain.cc markov_chain.hh \
-	markov_chain_sampler.cc markov_chain_sampler.hh \
-	prior_sampler.cc prior_sampler.hh \
-	proposal_functions.cc proposal_functions.hh \
+	log-likelihood.cc log-likelihood.hh log-likelihood-fwd.hh \
+	log-prior.cc log-prior.hh log-prior-fwd.hh \
+	markov-chain.cc markov-chain.hh \
+	markov-chain-sampler.cc markov-chain-sampler.hh \
+	prior-sampler.cc prior-sampler.hh \
+	proposal-functions.cc proposal-functions.hh \
 	rvalue.cc rvalue.hh \
 	welford.cc welford.hh
 libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lMinuit2
 
 if EOS_ENABLE_PMC
 libeosstatistics_la_SOURCES += \
-	population_monte_carlo_sampler.cc population_monte_carlo_sampler.hh
+	population-monte-carlo-sampler.cc population-monte-carlo-sampler.hh
 libeosstatistics_la_LIBADD += -lpmc -ldl
 endif
 
@@ -37,12 +37,12 @@ include_eos_statistics_HEADERS = \
 	chi-squared.hh \
 	hierarchical-clustering.hh \
 	histogram.hh \
-	log_likelihood.hh log_likelihood-fwd.hh \
-	log_prior.hh log_prior-fwd.hh \
-	markov_chain.hh \
-	markov_chain_sampler.hh \
-	prior_sampler.hh \
-	proposal_functions.hh \
+	log-likelihood.hh log-likelihood-fwd.hh \
+	log-prior.hh log-prior-fwd.hh \
+	markov-chain.hh \
+	markov-chain-sampler.hh \
+	prior-sampler.hh \
+	proposal-functions.hh \
 	rvalue.hh \
 	welford.hh
 
@@ -51,12 +51,12 @@ TESTS = \
 	chi-squared_TEST \
 	hierarchical-clustering_TEST \
 	histogram_TEST \
-	log_likelihood_TEST \
-	log_prior_TEST \
-	markov_chain_TEST \
-	markov_chain_sampler_TEST \
-	prior_sampler_TEST \
-	proposal_functions_TEST \
+	log-likelihood_TEST \
+	log-prior_TEST \
+	markov-chain_TEST \
+	markov-chain-sampler_TEST \
+	prior-sampler_TEST \
+	proposal-functions_TEST \
 	rvalue_TEST \
 	welford_TEST
 LDADD = \
@@ -69,7 +69,7 @@ LDADD = \
 	$(top_builddir)/eos/utils/libeosutils.la
 
 if EOS_ENABLE_PMC
-TESTS += population_monte_carlo_sampler_TEST
+TESTS += population-monte-carlo-sampler_TEST
 LDADD += -lpmc -ldl
 endif
 
@@ -83,21 +83,21 @@ hierarchical_clustering_TEST_SOURCES = hierarchical-clustering_TEST.cc
 
 histogram_TEST_SOURCES = histogram_TEST.cc
 
-log_likelihood_TEST_SOURCES = log_likelihood_TEST.cc
+log_likelihood_TEST_SOURCES = log-likelihood_TEST.cc
 
-log_prior_TEST_SOURCES = log_prior_TEST.cc
+log_prior_TEST_SOURCES = log-prior_TEST.cc
 
-markov_chain_TEST_SOURCES = markov_chain_TEST.cc
+markov_chain_TEST_SOURCES = markov-chain_TEST.cc
 
-markov_chain_sampler_TEST_SOURCES = markov_chain_sampler_TEST.cc
+markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc
 
 if EOS_ENABLE_PMC
-population_monte_carlo_sampler_TEST_SOURCES = population_monte_carlo_sampler_TEST.cc
+population_monte_carlo_sampler_TEST_SOURCES = population-monte-carlo-sampler_TEST.cc
 endif
 
-prior_sampler_TEST_SOURCES = prior_sampler_TEST.cc
+prior_sampler_TEST_SOURCES = prior-sampler_TEST.cc
 
-proposal_functions_TEST_SOURCES = proposal_functions_TEST.cc
+proposal_functions_TEST_SOURCES = proposal-functions_TEST.cc
 
 rvalue_TEST_SOURCES = rvalue_TEST.cc
 

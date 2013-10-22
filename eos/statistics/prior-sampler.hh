@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_PRIOR_SAMPLER_HH
 #define EOS_GUARD_SRC_STATISTICS_PRIOR_SAMPLER_HH 1
 
-#include <eos/statistics/log_prior-fwd.hh>
+#include <eos/statistics/log-prior-fwd.hh>
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/hdf5-fwd.hh>

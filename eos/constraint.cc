@@ -18,7 +18,7 @@
  */
 
 #include <eos/constraint.hh>
-#include <eos/statistics/log_likelihood.hh>
+#include <eos/statistics/log-likelihood.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/power_of.hh>

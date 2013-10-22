@@ -18,8 +18,8 @@
  */
 
 #include <eos/statistics/analysis_TEST.hh>
-#include <eos/statistics/log_prior.hh>
-#include <eos/statistics/prior_sampler.hh>
+#include <eos/statistics/log-prior.hh>
+#include <eos/statistics/prior-sampler.hh>
 #include <eos/utils/hdf5.hh>
 #include <test/test.hh>
 
@@ -39,7 +39,7 @@ class PriorSamplerTest :
         {
             static const double eps = 1e-14;
 
-            static const std::string file_name(EOS_BUILDDIR "/eos/utils/prior_sampler_TEST.hdf5");
+            static const std::string file_name(EOS_BUILDDIR "/eos/utils/prior-sampler_TEST.hdf5");
 
             PriorSampler::Config config = PriorSampler::Config::Default();
             config.n_samples = 4;

@@ -20,8 +20,8 @@
 
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
-#include <eos/statistics/markov_chain_sampler.hh>
-#include <eos/statistics/population_monte_carlo_sampler.hh>
+#include <eos/statistics/markov-chain-sampler.hh>
+#include <eos/statistics/population-monte-carlo-sampler.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/hdf5.hh>

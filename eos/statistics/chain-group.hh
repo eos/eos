@@ -3,7 +3,7 @@
 #ifndef EOS_GUARD_EOS_UTILS_CHAIN_GROUP_HH
 #define EOS_GUARD_EOS_UTILS_CHAIN_GROUP_HH 1
 
-#include <eos/statistics/markov_chain.hh>
+#include <eos/statistics/markov-chain.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 

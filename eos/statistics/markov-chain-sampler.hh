@@ -22,8 +22,8 @@
 #define EOS_GUARD_SRC_STATISTICS_MC_SAMPLER_HH 1
 
 #include <eos/statistics/analysis.hh>
-#include <eos/statistics/markov_chain.hh>
-#include <eos/statistics/proposal_functions.hh>
+#include <eos/statistics/markov-chain.hh>
+#include <eos/statistics/proposal-functions.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/verify.hh>

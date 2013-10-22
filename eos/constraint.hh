@@ -22,7 +22,7 @@
 #define EOS_GUARD_SRC_CONSTRAINT_HH 1
 
 #include <eos/observable.hh>
-#include <eos/statistics/log_likelihood-fwd.hh>
+#include <eos/statistics/log-likelihood-fwd.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>

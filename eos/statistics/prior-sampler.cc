@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/statistics/log_prior.hh>
-#include <eos/statistics/prior_sampler.hh>
+#include <eos/statistics/log-prior.hh>
+#include <eos/statistics/prior-sampler.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/memoise.hh>

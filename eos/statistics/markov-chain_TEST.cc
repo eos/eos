@@ -20,8 +20,8 @@
 
 #include <config.h>
 #include <eos/statistics/analysis_TEST.hh>
-#include <eos/statistics/markov_chain.hh>
-#include <eos/statistics/proposal_functions.hh>
+#include <eos/statistics/markov-chain.hh>
+#include <eos/statistics/proposal-functions.hh>
 #include <test/test.hh>
 
 #include <algorithm>

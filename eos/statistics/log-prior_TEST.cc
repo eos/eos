@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/statistics/log_prior.hh>
+#include <eos/statistics/log-prior.hh>
 #include <eos/statistics/histogram.hh>
 #include <eos/utils/power_of.hh>
 

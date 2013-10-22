@@ -18,9 +18,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/statistics/proposal_functions.hh>
+#include <eos/statistics/proposal-functions.hh>
 #include <eos/statistics/histogram.hh>
-#include <eos/statistics/log_prior.hh>
+#include <eos/statistics/log-prior.hh>
 #include <eos/statistics/rvalue.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>

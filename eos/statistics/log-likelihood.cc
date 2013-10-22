@@ -18,7 +18,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/statistics/log_likelihood.hh>
+#include <eos/statistics/log-likelihood.hh>
 #include <eos/utils/equation_solver.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_cache.hh>

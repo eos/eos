@@ -23,7 +23,7 @@
 
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
-#include <eos/statistics/log_likelihood-fwd.hh>
+#include <eos/statistics/log-likelihood-fwd.hh>
 #include <eos/utils/matrix.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/parameters.hh>

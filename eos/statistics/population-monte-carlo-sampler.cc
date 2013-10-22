@@ -18,9 +18,9 @@
  */
 #include <eos/statistics/chain-group.hh>
 #include <eos/statistics/hierarchical-clustering.hh>
-#include <eos/statistics/markov_chain_sampler.hh>
-#include <eos/statistics/population_monte_carlo_sampler.hh>
-#include <eos/statistics/proposal_functions.hh>
+#include <eos/statistics/markov-chain-sampler.hh>
+#include <eos/statistics/population-monte-carlo-sampler.hh>
+#include <eos/statistics/proposal-functions.hh>
 #include <eos/statistics/rvalue.hh>
 #include <eos/statistics/welford.hh>
 #include <eos/utils/exception.hh>

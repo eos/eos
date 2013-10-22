@@ -22,8 +22,8 @@
 
 #include <eos/statistics/analysis-fwd.hh>
 #include <eos/utils/hdf5-fwd.hh>
-#include <eos/statistics/log_likelihood.hh>
-#include <eos/statistics/log_prior.hh>
+#include <eos/statistics/log-likelihood.hh>
+#include <eos/statistics/log-prior.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/verify.hh>
 
