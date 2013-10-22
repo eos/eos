@@ -57,12 +57,12 @@ namespace eos
             ///@}
 
             /*!
-             * Add an input component
+             * Add an input component of unit weight.
              */
             void add(const Component & component);
 
             /*!
-             * Add an initial guess for the clusters to be determined
+             * Add an initial guess for the clusters to be determined.
              * @param density
              */
             void initial_guess(const MixtureDensity & density);
@@ -74,16 +74,16 @@ namespace eos
 
             struct IteratorTag;
             /// Loop over input components
-            typedef WrappedForwardIterator<IteratorTag, Component> ComponentIterator;
-            ComponentIterator begin_components() const;
-            ComponentIterator end_components() const;
+            typedef WrappedForwardIterator<IteratorTag, Component> InputIterator;
+            InputIterator begin_input() const;
+            InputIterator end_input() const;
 
-            /// Loop over final clusters (determined during clustering).
-            typedef WrappedForwardIterator<IteratorTag, Component> ClusterIterator;
-            ClusterIterator begin_clusters() const;
-            ClusterIterator end_clusters() const;
+            /// Loop over output components (determined during clustering).
+            typedef WrappedForwardIterator<IteratorTag, Component> OutputIterator;
+            OutputIterator begin_output() const;
+            OutputIterator end_output() const;
 
-            /// To which cluster is a component mapped?
+            /// To which output is an input component mapped?
             typedef WrappedForwardIterator<IteratorTag, unsigned> MapIterator;
             MapIterator begin_map() const;
             MapIterator end_map() const;
@@ -145,8 +145,8 @@ namespace eos
             /// Set component weights equal before the start of the clustering.
             bool equal_weights;
 
-            /// If a cluster has zero weight, it is removed;
-            bool kill_clusters;
+            /// If a component has zero weight, it is removed;
+            bool kill_components;
 
             /// Perform a maximum number of update steps.
             unsigned maximum_steps;

@@ -82,7 +82,7 @@ class HierarchicalClusteringTest :
                 }
                 // initialize clustering
                 HierarchicalClustering::Config config = HierarchicalClustering::Config::Default();
-                config.kill_clusters = true;
+                config.kill_components = true;
                 HierarchicalClustering hc(config);
                 for (unsigned i = 0 ; i < n_components ; ++i)
                 {
@@ -103,7 +103,7 @@ class HierarchicalClusteringTest :
                 hc.run();
 
                 /* check the result */
-                for (auto cl = hc.begin_clusters(); cl != hc.end_clusters() ; ++cl)
+                for (auto cl = hc.begin_output(); cl != hc.end_output() ; ++cl)
                 {
                     TEST_CHECK_RELATIVE_ERROR(cl->weight(), 0.2, 1e-15);
                 }

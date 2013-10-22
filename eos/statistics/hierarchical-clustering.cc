@@ -44,16 +44,16 @@ namespace eos
     {
         HierarchicalClustering::Config config;
 
-        // The smallest components
-        HierarchicalClustering::MixtureDensity components;
+        // The input components
+        HierarchicalClustering::MixtureDensity input_components;
 
         // The clusters created from components
-        HierarchicalClustering::MixtureDensity clusters;
+        HierarchicalClustering::MixtureDensity output_components;
 
         // keep track of \pi(i), i=1..k
         std::vector<unsigned> mapping;
 
-        // which components map to a given cluster, \pi^{-1}(j)
+        // which input maps to a given output, \pi^{-1}(j)
         std::vector<std::vector<unsigned>> inverse_mapping;
 
         // matrix, the (i,j) element gives KL(f_i || g_j)
@@ -70,33 +70,33 @@ namespace eos
 
         void add(const HierarchicalClustering::Component & component)
         {
-            components.push_back(component);
+            input_components.push_back(component);
         }
 
         /*
-         * Look for dead clusters (weight=0) and remove them.
+         * Look for dead components (weight=0) and remove them.
          * Resize storage.
          */
         void cleanup()
         {
-            unsigned active_clusters = clusters.size();
-            if (config.kill_clusters)
+            unsigned active_components = output_components.size();
+            if (config.kill_components)
             {
-                auto new_end = std::remove_if(clusters.begin(), clusters.end(), &is_dead);
-                active_clusters = std::distance(clusters.begin(), new_end);
-                clusters.erase(new_end, clusters.end());
+                auto new_end = std::remove_if(output_components.begin(), output_components.end(), &is_dead);
+                active_components = std::distance(output_components.begin(), new_end);
+                output_components.erase(new_end, output_components.end());
             }
-            inverse_mapping.resize(active_clusters);
-            divergences.resize(active_clusters * components.size());
+            inverse_mapping.resize(active_components);
+            divergences.resize(active_components * input_components.size());
         }
 
         void compute_KL()
         {
-            for (unsigned i = 0 ; i < components.size() ; ++i)
+            for (unsigned i = 0 ; i < input_components.size() ; ++i)
             {
-                for (unsigned j = 0 ; j < clusters.size() ; ++j)
+                for (unsigned j = 0 ; j < output_components.size() ; ++j)
                 {
-                    divergences[i * clusters.size() + j] = kullback_leibler_divergence(components[i], clusters[j]);
+                    divergences[i * output_components.size() + j] = kullback_leibler_divergence(input_components[i], output_components[j]);
                 }
             }
         }
@@ -107,9 +107,9 @@ namespace eos
         double distance()
         {
             double result = 0.0;
-            for (unsigned i = 0 ; i < components.size() ; ++i)
+            for (unsigned i = 0 ; i < input_components.size() ; ++i)
             {
-                result += components[i].weight() * divergences[i * clusters.size() + mapping[i]];
+                result += input_components[i].weight() * divergences[i * output_components.size() + mapping[i]];
             }
 
             return result;
@@ -166,45 +166,45 @@ namespace eos
         void refit()
         {
             // need temporary vector/matrix for addition
-            gsl_vector * mu_diff = gsl_vector_alloc(components[0].mean()->size);
-            gsl_matrix * sigma = gsl_matrix_alloc(components[0].mean()->size, components[0].mean()->size);
+            gsl_vector * mu_diff = gsl_vector_alloc(input_components[0].mean()->size);
+            gsl_matrix * sigma = gsl_matrix_alloc(input_components[0].mean()->size, input_components[0].mean()->size);
 
-            for (unsigned j = 0 ; j < clusters.size() ; ++j)
+            for (unsigned j = 0 ; j < output_components.size() ; ++j)
             {
                 // initialize values
-                clusters[j].weight() = 0;
-                gsl_vector_set_all(clusters[j].mean(), 0);
-                gsl_matrix_set_all(clusters[j].covariance(), 0);
+                output_components[j].weight() = 0;
+                gsl_vector_set_all(output_components[j].mean(), 0);
+                gsl_matrix_set_all(output_components[j].covariance(), 0);
                 gsl_matrix_set_all(sigma, 0);
 
                 // compute total weight and mean
                 for (auto i = inverse_mapping[j].cbegin() ; i != inverse_mapping[j].cend() ; ++i)
                 {
                     // update weight
-                    clusters[j].weight() += components[*i].weight();
+                    output_components[j].weight() += input_components[*i].weight();
                     // update mean
-                    gsl_blas_daxpy(components[*i].weight(), components[*i].mean(), clusters[j].mean());
+                    gsl_blas_daxpy(input_components[*i].weight(), input_components[*i].mean(), output_components[j].mean());
                 }
                 // rescale by total weight
-                gsl_vector_scale(clusters[j].mean(), 1.0 / clusters[j].weight());
+                gsl_vector_scale(output_components[j].mean(), 1.0 / output_components[j].weight());
 
                 // update covariance
                 for (auto i = inverse_mapping[j].cbegin() ; i != inverse_mapping[j].cend() ; ++i)
                 {
                     // mu_diff = mu'_j - mu_i
-                    gsl_vector_memcpy(mu_diff, clusters[j].mean());
-                    gsl_vector_sub(mu_diff, components[*i].mean());
+                    gsl_vector_memcpy(mu_diff, output_components[j].mean());
+                    gsl_vector_sub(mu_diff, input_components[*i].mean());
                     // sigma = (mu'_j - mu_i) (mu'_j - mu_i)^T
                     gsl_blas_dsyr(CblasUpper, 1.0, mu_diff, sigma);
                     // sigma += sigma_i
-                    gsl_matrix_add(sigma, components[*i].covariance());
+                    gsl_matrix_add(sigma, input_components[*i].covariance());
                     // multiply with alpha_i
-                    gsl_matrix_scale(sigma, components[*i].weight());
+                    gsl_matrix_scale(sigma, input_components[*i].weight());
                     // sigma_j += alpha_i * (sigma_i + (mu'_j - mu_i) (mu'_j - mu_i)^T
-                    gsl_matrix_add(clusters[j].covariance(), sigma);
+                    gsl_matrix_add(output_components[j].covariance(), sigma);
                 }
                 // 1 / beta_j
-                gsl_matrix_scale(clusters[j].covariance(), 1.0 / clusters[j].weight());
+                gsl_matrix_scale(output_components[j].covariance(), 1.0 / output_components[j].weight());
             }
             gsl_matrix_free(sigma);
             gsl_vector_free(mu_diff);
@@ -216,55 +216,42 @@ namespace eos
         void regroup()
         {
             // clean up old maps
-            for (unsigned j = 0 ; j < clusters.size() ; ++j)
+            for (unsigned j = 0 ; j < output_components.size() ; ++j)
             {
                 inverse_mapping[j].clear();
             }
 
-            // find smallest divergence between component i and any cluster j of the cluster mixture density
-            for (unsigned i = 0 ; i < components.size() ; ++i)
+            // find smallest divergence between input component i and output component j of the cluster mixture density
+            for (unsigned i = 0 ; i < input_components.size() ; ++i)
             {
-                auto first = divergences.cbegin() + i * clusters.size();
-                auto last =  divergences.cbegin() + (i + 1) * clusters.size();
+                auto first = divergences.cbegin() + i * output_components.size();
+                auto last =  divergences.cbegin() + (i + 1) * output_components.size();
                 unsigned j = std::distance(first, std::min_element(first, last));
                 mapping[i] = j;
                 inverse_mapping[j].push_back(i);
             }
-#if 0
-            std::string output = "New mapping:\n";
-
-            unsigned j = 0;
-            for (auto i = inverse_mapping.cbegin() ; i != inverse_mapping.cend() ; ++i, ++j)
-            {
-                output += stringify(j) + ": ";
-                output += print_container(*i);
-                output += '\n';
-            }
-            Log::instance()->message("HierarchicalClustering::regroup", ll_debug)
-                << output;
-#endif
         }
 
         void run()
         {
             // sanity checks and setup
             {
-                if (this->clusters.empty())
+                if (this->output_components.empty())
                     throw InternalError("HierarchicalClustering::run: initial guess required");
 
-                if (components.empty())
+                if (input_components.empty())
                     throw InternalError("HierarchicalClustering::run: no components specified");
 
-                if (components.size() <= clusters.size())
+                if (input_components.size() <= output_components.size())
                     throw InternalError("HierarchicalClustering::run: cannot reduce #components");
 
-                mapping.resize(components.size());
+                mapping.resize(input_components.size());
 
                 if (config.equal_weights)
                 {
-                    for (unsigned i = 0 ; i < components.size() ; ++i)
+                    for (unsigned i = 0 ; i < input_components.size() ; ++i)
                     {
-                        components[i].weight() = 1.0 / components.size();
+                        input_components[i].weight() = 1.0 / input_components.size();
                     }
                 }
             }
@@ -337,7 +324,7 @@ namespace eos
     void
     HierarchicalClustering::initial_guess(const MixtureDensity & density)
     {
-        _imp->clusters = density;
+        _imp->output_components = density;
         _imp->inverse_mapping.resize(density.size());
 
         double total_weight = 0;
@@ -356,28 +343,28 @@ namespace eos
         _imp->run();
     }
 
-    HierarchicalClustering::ComponentIterator
-    HierarchicalClustering::begin_components() const
+    HierarchicalClustering::InputIterator
+    HierarchicalClustering::begin_input() const
     {
-        return ComponentIterator(_imp->components.begin());
+        return InputIterator(_imp->input_components.begin());
     }
 
-    HierarchicalClustering::ComponentIterator
-    HierarchicalClustering::end_components() const
+    HierarchicalClustering::InputIterator
+    HierarchicalClustering::end_input() const
     {
-        return ComponentIterator(_imp->components.end());
+        return InputIterator(_imp->input_components.end());
     }
 
-    HierarchicalClustering::ClusterIterator
-    HierarchicalClustering::begin_clusters() const
+    HierarchicalClustering::OutputIterator
+    HierarchicalClustering::begin_output() const
     {
-        return ClusterIterator(_imp->clusters.begin());
+        return OutputIterator(_imp->output_components.begin());
     }
 
-    HierarchicalClustering::ClusterIterator
-    HierarchicalClustering::end_clusters() const
+    HierarchicalClustering::OutputIterator
+    HierarchicalClustering::end_output() const
     {
-        return ClusterIterator(_imp->clusters.end());
+        return OutputIterator(_imp->output_components.end());
     }
 
     HierarchicalClustering::MapIterator
@@ -534,7 +521,7 @@ namespace eos
 
     HierarchicalClustering::Config::Config() :
         equal_weights(true),
-        kill_clusters(true),
+        kill_components(true),
         maximum_steps(std::numeric_limits<unsigned>::max()),
         precision(1e-4)
     {
