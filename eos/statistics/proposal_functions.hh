@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_EOS_UTILS_PROPROSAL_FUNCTIONS_HH
 #define EOS_GUARD_EOS_UTILS_PROPROSAL_FUNCTIONS_HH 1
 
-#include <eos/statistics/cluster.hh>
+#include <eos/statistics/chain-group.hh>
 #include <eos/statistics/log_prior-fwd.hh>
 #include <eos/statistics/markov_chain.hh>
 #include <eos/utils/hdf5-fwd.hh>

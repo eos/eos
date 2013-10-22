@@ -1,6 +1,6 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#include <eos/statistics/cluster.hh>
+#include <eos/statistics/chain-group.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/verify.hh>
@@ -13,11 +13,11 @@
 
 namespace eos
 {
-    template class WrappedForwardIterator<Cluster::IteratorTag, const MarkovChain>;
+    template class WrappedForwardIterator<ChainGroup::IteratorTag, const MarkovChain>;
 
-    template <> struct Implementation<Cluster>
+    template <> struct Implementation<ChainGroup>
     {
-        Cluster::RValueFunction rvalue_function;
+        ChainGroup::RValueFunction rvalue_function;
 
         double max_rvalue;
 
@@ -37,7 +37,7 @@ namespace eos
 
         VerifiedRange<double> skip_initial;
 
-        Implementation(const Cluster::RValueFunction & rvalue_function, const double & max_rvalue,
+        Implementation(const ChainGroup::RValueFunction & rvalue_function, const double & max_rvalue,
                        const HistoryPtr & initial_chain, const unsigned & index, const double & skip_initial) :
             rvalue_function(rvalue_function),
             max_rvalue(max_rvalue),
@@ -118,53 +118,53 @@ namespace eos
         }
     };
 
-    Cluster::Cluster(const RValueFunction & rvalue_function, const double & max_rvalue, const HistoryPtr & initial_chain, const unsigned & index, const double & skip_initial) :
-        PrivateImplementationPattern<Cluster>(new Implementation<Cluster>(rvalue_function, max_rvalue, initial_chain, index, skip_initial))
+    ChainGroup::ChainGroup(const RValueFunction & rvalue_function, const double & max_rvalue, const HistoryPtr & initial_chain, const unsigned & index, const double & skip_initial) :
+        PrivateImplementationPattern<ChainGroup>(new Implementation<ChainGroup>(rvalue_function, max_rvalue, initial_chain, index, skip_initial))
     {
     }
 
-    Cluster::~Cluster()
+    ChainGroup::~ChainGroup()
     {
     }
 
     void
-    Cluster::add(const HistoryPtr & chain, const unsigned & index)
+    ChainGroup::add(const HistoryPtr & chain, const unsigned & index)
     {
         _imp->add(chain, index);
     }
 
-    Cluster::Iterator
-    Cluster::begin() const
+    ChainGroup::Iterator
+    ChainGroup::begin() const
     {
-        return Cluster::Iterator(_imp->chains.begin());
+        return ChainGroup::Iterator(_imp->chains.begin());
     }
 
-    Cluster::Iterator
-    Cluster::end() const
+    ChainGroup::Iterator
+    ChainGroup::end() const
     {
-        return Cluster::Iterator(_imp->chains.end());
+        return ChainGroup::Iterator(_imp->chains.end());
     }
 
-    Cluster::IndexIterator
-    Cluster::begin_indices() const
+    ChainGroup::IndexIterator
+    ChainGroup::begin_indices() const
     {
-        return Cluster::IndexIterator(_imp->chain_indices.begin());
+        return ChainGroup::IndexIterator(_imp->chain_indices.begin());
     }
 
-    Cluster::IndexIterator
-    Cluster::end_indices() const
+    ChainGroup::IndexIterator
+    ChainGroup::end_indices() const
     {
-        return Cluster::IndexIterator(_imp->chain_indices.end());
+        return ChainGroup::IndexIterator(_imp->chain_indices.end());
     }
 
     bool
-    Cluster::overlaps(const HistoryPtr & chain) const
+    ChainGroup::overlaps(const HistoryPtr & chain) const
     {
         return _imp->overlaps(chain);
     }
 
     void
-    Cluster::parameter_indices(const std::vector<unsigned> & indices)
+    ChainGroup::parameter_indices(const std::vector<unsigned> & indices)
     {
         // remove old indices
         _imp->parameter_indices.clear();
@@ -183,7 +183,7 @@ namespace eos
     }
 
     std::vector<double>
-    Cluster::mean() const
+    ChainGroup::mean() const
     {
         std::vector<double> result(_imp->parameter_means.front());
 
@@ -200,13 +200,13 @@ namespace eos
     }
 
     const std::vector<std::vector<double>> &
-    Cluster::means() const
+    ChainGroup::means() const
     {
         return _imp->parameter_means;
     }
 
     const std::vector<std::vector<double>> &
-    Cluster::variances() const
+    ChainGroup::variances() const
     {
         return _imp->parameter_variances;
     }

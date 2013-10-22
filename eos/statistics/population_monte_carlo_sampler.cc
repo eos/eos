@@ -16,7 +16,7 @@
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#include <eos/statistics/cluster.hh>
+#include <eos/statistics/chain-group.hh>
 #include <eos/statistics/hierarchical-clustering.hh>
 #include <eos/statistics/markov_chain_sampler.hh>
 #include <eos/statistics/population_monte_carlo_sampler.hh>
@@ -309,7 +309,6 @@ namespace eos
     template<>
     struct Implementation<PopulationMonteCarloSampler>
     {
-        typedef std::vector<HistoryPtr> ChainGroup;
         typedef std::vector<unsigned> IndexList;
 
         // store reference, but don't own analysis
@@ -902,12 +901,11 @@ namespace eos
             }
         }
 
-        void group_chains(std::vector<ChainGroup> & chain_groups)
+        std::vector<ChainGroup> group_chains(const std::vector<HistoryPtr> & chains)
         {
-            std::list<HistoryPtr> available_chains(chain_groups.front().cbegin(), chain_groups.front().cend());
+            std::list<HistoryPtr> available_chains(chains.begin(), chains.end());
 
-            // for historical reasons, the R-value grouping was called 'clustering'
-            Cluster::RValueFunction r = &RValue::approximation;
+            ChainGroup::RValueFunction r = &RValue::approximation;
 
             // create indices of parameters whose R-value is checked
             std::vector<unsigned> parameter_indices;
@@ -923,7 +921,7 @@ namespace eos
             }
 
             // add first chain as first group
-            std::vector<Cluster> groups{ Cluster(r, config.group_by_r_value,
+            std::vector<ChainGroup> groups{ ChainGroup(r, config.group_by_r_value,
                     available_chains.front(), 0, config.skip_initial) };
             groups.back().parameter_indices(parameter_indices);
 
@@ -952,7 +950,7 @@ namespace eos
 
                 if (! added)
                 {
-                    groups.push_back(Cluster(r, config.group_by_r_value,
+                    groups.push_back(ChainGroup(r, config.group_by_r_value,
                             available_chains.front(), chain_index, config.skip_initial));
                     groups.back().parameter_indices(parameter_indices);
 
@@ -964,23 +962,15 @@ namespace eos
 
             /* copy the groups */
 
-            chain_groups.clear();
-
-            // store lengths of groups for output onlye
-            std::vector<unsigned> sizes_groups;
-            for (auto g = groups.begin() ; g != groups.end() ; ++g)
+            // store lengths of groups for output only
+            std::vector<unsigned> group_sizes;
+            for (auto g : groups)
             {
-                chain_groups.push_back(ChainGroup());
-                unsigned group_size = 0;
-                for (auto c = g->begin() ; c != g->end() ; ++c, ++group_size)
-                {
-                    chain_groups.back().push_back(*c);
-                }
-                sizes_groups.push_back(group_size);
+                group_sizes.push_back(std::distance(g.begin(), g.end()));
             }
 
             Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
-                            << "Found " << sizes_groups.size() << " groups of chains with " << stringify_container(sizes_groups)
+                            << "Found " << group_sizes.size() << " groups of chains with " << stringify_container(group_sizes)
                             << " members";
 
             if ( ! config.ignore_groups.empty())
@@ -995,35 +985,35 @@ namespace eos
                 // remove group
                 for (auto i = ignore_groups.crbegin() ; i != ignore_groups.crend() ; ++i)
                 {
-                    if (*i >= chain_groups.size())
+                    if (*i >= groups.size())
                     {
                         Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_error)
                             << "Skipping invalid ignore group: " << *i;
                         continue;
                     }
-                    chain_groups.erase(chain_groups.begin() + *i);
-                    sizes_groups.erase(sizes_groups.begin() + *i);
+                    group_sizes.erase(group_sizes.begin() + *i);
 
                     Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_warning)
                                     << "Removing group " << *i;
                 }
 
                 Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
-                                << "Using " << sizes_groups.size() << " groups of chains with " << stringify_container(sizes_groups)
+                                << "Using " << group_sizes.size() << " groups of chains with " << stringify_container(group_sizes)
                                 << " members";
             }
+            return groups;
         }
 
         /*
-         * Finding the initial cluster guess:
-         * 1. Respect chains: choose one cluster only from patches within a chain
-         * 2. Fix desired #clusters and #samples for a patch
+         * Finding the initial component guess:
+         * 1. Respect chains: choose one component only from patches within a chain
+         * 2. Fix desired #components and #samples for a patch
          */
         unsigned hierarchical_clustering(const hdf5::File & file, mix_mvdens * & mmv)
         {
             /* parse chain histories */
 
-            ChainGroup chains;
+            std::vector<HistoryPtr> chains;
             {
                 std::vector<std::shared_ptr<hdf5::File>> input_files;
                 input_files.push_back(std::make_shared<hdf5::File>(hdf5::File::Open(file.name(), H5F_ACC_RDONLY)));
@@ -1043,45 +1033,40 @@ namespace eos
 
             /* group chains according to R-value */
 
-            std::vector<ChainGroup> chain_groups{ chains };
+            std::vector<ChainGroup> chain_groups = group_chains(chains);
 
-            if (config.group_by_r_value > 1)
-            {
-                group_chains(chain_groups);
-            }
-
-            /* create initial guess for super clusters by drawing local patches uniformly w/o replacement or large windows */
+            /* create initial guess for components by drawing local patches uniformly w/o replacement or large windows */
 
             Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
                 << "Creating initial guess for the " << config.target_ncomponents
-                << " clusters to be formed from large windows"
+                << " components to be formed from large windows"
                 << (config.group_by_r_value > 1 ? " for each of the " + stringify(chain_groups.size()) + " chain groups found" : "");
 
-            HierarchicalClustering::MixtureDensity initial_clusters;
+            HierarchicalClustering::MixtureDensity initial_components;
 
-            // weight of a single cluster (weights sum up to one)
-            const unsigned n_clusters_total = config.target_ncomponents * chain_groups.size();
-            const double weight = 1.0 / n_clusters_total;
+            // weight of a single component (weights sum up to one)
+            const unsigned n_components_total = config.target_ncomponents * chain_groups.size();
+            const double weight = 1.0 / n_components_total;
 
             {
                 for (auto g = chain_groups.cbegin() ; g != chain_groups.cend() ; ++g)
                 {
-                    // how many clusters should each each in group contribute
-                    std::vector<unsigned> super_clusters_per_chain;
-                    pmc::minimal_partition(config.target_ncomponents, g->size(), super_clusters_per_chain);
+                    // how many components should each each in group contribute
+                    std::vector<unsigned> components_per_chain;
+                    pmc::minimal_partition(config.target_ncomponents, std::distance(g->begin(), g->end()), components_per_chain);
 
-                    auto n_clusters = super_clusters_per_chain.cbegin();
-                    for (auto c = g->cbegin() ; c != g->cend() ; ++c, ++n_clusters)
+                    auto n_components = components_per_chain.cbegin();
+                    for (auto c = g->begin(); c != g->end(); ++c, ++n_components)
                     {
-                        //todo don't throw away clusters. Think about it!
-                        if (! *n_clusters)
+                        // throw away component
+                        if (! *n_components)
                             continue;
 
                         auto first_state = (**c).states.cbegin() + config.skip_initial * (**c).states.size();
-                        const int window = std::distance(first_state, (**c).states.cend()) / (*n_clusters);
+                        const int window = std::distance(first_state, (**c).states.cend()) / (*n_components);
                         if (window < 0)
                         {
-                            throw InternalError("PMC::hierarchical_clustering: number of super clusters too large for history size and skip initial: " + stringify(window)
+                            throw InternalError("PMC::hierarchical_clustering: number of components too large for history size and skip initial: " + stringify(window)
                                     + " vs " + stringify(std::distance(first_state, (**c).states.cend())) + " and " + stringify(config.skip_initial));
                         }
                         auto last_state = first_state + window;
@@ -1089,7 +1074,7 @@ namespace eos
                         bool done = false;
                         while (! done)
                         {
-                            // add remainder to last super_cluster
+                            // add remainder to last component
                             if (std::distance(last_state, (**c).states.cend()) < window)
                             {
                                 last_state = (**c).states.cend();
@@ -1100,9 +1085,7 @@ namespace eos
                             (**c).mean_and_covariance(first_state, last_state, mean, covariance);
                             std::vector<double> center = mean;
 
-                            HierarchicalClustering::Component super_cluster(center, covariance, weight);
-
-                            initial_clusters.push_back(super_cluster);
+                            initial_components.push_back(HierarchicalClustering::Component(center, covariance, weight));
 
                             // update range for next iteration
                             first_state += window;
@@ -1112,7 +1095,7 @@ namespace eos
                 }
             }
 
-            hc.initial_guess(initial_clusters);
+            hc.initial_guess(initial_components);
 
             /* create patches from each chain */
 
@@ -1123,7 +1106,7 @@ namespace eos
 
             for (auto g = chain_groups.cbegin() ; g != chain_groups.cend() ; ++g)
             {
-                for (auto c = g->cbegin() ; c != g->cend() ; ++c)
+                for (auto c = g->begin() ; c != g->end() ; ++c)
                 {
                     //                local_patches_index_lists.push_back(IndexList());
 
@@ -1152,7 +1135,7 @@ namespace eos
 
                         try
                         {
-                            //later on during clustering use equal weights for each patch
+                            //later on during clustering use equal weights for each component
                             HierarchicalClustering::Component patch(center, covariance, 1.0);
                             local_patches.push_back(patch);
                             hc.add(patch);
@@ -1183,7 +1166,7 @@ namespace eos
                     PopulationMonteCarloSampler::Output::component_type(ndim));
                 auto component_record = PopulationMonteCarloSampler::Output::component_record(ndim);
 
-                for (auto comp = hc.begin_components() ; comp != hc.end_components() ; ++comp)
+                for (auto comp = hc.begin_input() ; comp != hc.end_input() ; ++comp)
                 {
                     std::get<0>(component_record) = comp->weight();
                     std::copy(comp->mean()->data, comp->mean()->data + ndim,
@@ -1203,7 +1186,7 @@ namespace eos
                     PopulationMonteCarloSampler::Output::component_type(ndim));
                 auto component_record = PopulationMonteCarloSampler::Output::component_record(ndim);
 
-                for (auto comp = hc.begin_clusters() ; comp != hc.end_clusters() ; ++comp)
+                for (auto comp = hc.begin_output() ; comp != hc.end_output() ; ++comp)
                 {
                     std::get<0>(component_record) = comp->weight();
                     std::copy(comp->mean()->data, comp->mean()->data + ndim,
@@ -1215,7 +1198,7 @@ namespace eos
                 }
             }
 
-            /* create clusters from patches  */
+            /* create components from patches  */
 
             Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
                 << "Start hierarchical clustering ";
@@ -1224,27 +1207,27 @@ namespace eos
 
             /* initialize pmc */
 
-            // count active clusters
-            unsigned active_clusters = 0;
-            for (auto cl = hc.begin_clusters() ; cl != hc.end_clusters() ; ++cl, ++active_clusters);
+            // count active components
+            unsigned active_components = 0;
+            for (auto cl = hc.begin_output() ; cl != hc.end_output() ; ++cl, ++active_components);
 
-            // did clusters die?
-            if (active_clusters != n_clusters_total)
+            // did components die?
+            if (active_components != n_components_total)
             {
                 Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_warning)
-                    << "Using only " << active_clusters << " components to start PMC. "
-                    << n_clusters_total - active_clusters << " died out during the hierarchical clustering.";
+                    << "Using only " << active_components << " components to start PMC. "
+                    << n_components_total - active_components << " died out during the hierarchical clustering.";
             }
 
             pmc::ErrorHandler err;
 
-            mmv = mix_mvdens_alloc(active_clusters, ndim, err);
+            mmv = mix_mvdens_alloc(active_components, ndim, err);
 
             unsigned i_cl = 0;
-            for (auto cl = hc.begin_clusters() ; cl != hc.end_clusters() ; ++cl, ++i_cl)
+            for (auto cl = hc.begin_output() ; cl != hc.end_output() ; ++cl, ++i_cl)
             {
-                // equal weight to every cluster
-                mmv->wght[i_cl] = 1.0 / active_clusters;
+                // equal weight to every component
+                mmv->wght[i_cl] = 1.0 / active_components;
                 mvdens * mv = mmv->comp[i_cl];
                 std::copy(cl->mean()->data, cl->mean()->data + ndim, mv->mean);
                 std::copy(cl->covariance()->data, cl->covariance()->data + ndim * ndim, mv->std);
@@ -1253,7 +1236,7 @@ namespace eos
                 mv->chol = 0;
             }
 
-            return active_clusters;
+            return active_components;
         }
 
         void pre_run()
@@ -1736,7 +1719,7 @@ namespace eos
                 << ", ignore groups = " << stringify_container(c.ignore_groups)
                 << ", R value no nuisance = " << c.r_value_no_nuisance << std::endl
                 << "sliding window = " << c.patch_length
-                << ", number of clusters = " << c.target_ncomponents << std::endl
+                << ", number of components = " << c.target_ncomponents << std::endl
                 << "Prerun options:" << std::endl
                 << "chunk size = " << c.samples_per_component
                 << ", max #updates = " << c.max_updates

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef EOS_GUARD_EOS_UTILS_CLUSTER_HH
-#define EOS_GUARD_EOS_UTILS_CLUSTER_HH 1
+#ifndef EOS_GUARD_EOS_UTILS_CHAIN_GROUP_HH
+#define EOS_GUARD_EOS_UTILS_CHAIN_GROUP_HH 1
 
 #include <eos/statistics/markov_chain.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -9,8 +9,8 @@
 
 namespace eos
 {
-    class Cluster :
-        public PrivateImplementationPattern<Cluster>
+    class ChainGroup :
+        public PrivateImplementationPattern<ChainGroup>
     {
         public:
             typedef std::function<double (const std::vector<double> &, const std::vector<double> &, const unsigned &)> RValueFunction;
@@ -26,10 +26,10 @@ namespace eos
              * @param index
              * @param skip_initial Should be in [0,1]. The first portion of the chain's history is ignored when computing the R-value.
              */
-            Cluster(const RValueFunction &, const double & max_rvalue, const HistoryPtr & initial_chain,
+            ChainGroup(const RValueFunction &, const double & max_rvalue, const HistoryPtr & initial_chain,
                     const unsigned & index, const double & skip_initial);
 
-            ~Cluster();
+            ~ChainGroup();
 
             /*!
              * Add a chain (its history) to a cluster. Record its index.
@@ -58,7 +58,7 @@ namespace eos
             bool overlaps(const HistoryPtr & chain) const;
 
             /*!
-             * Set indices of parameters whose R-value ought to be checked.
+             * Set indices of parameters whose R value ought to be checked.
              * By default, all dimensions are checked.
              */
             void parameter_indices(const std::vector<unsigned> & indices);

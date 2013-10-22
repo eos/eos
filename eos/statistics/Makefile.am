@@ -12,7 +12,7 @@ lib_LTLIBRARIES = libeosstatistics.la
 libeosstatistics_la_SOURCES = \
 	analysis.cc analysis.hh analysis-fwd.hh \
 	chi-squared.hh chi-squared.cc \
-	cluster.cc cluster.hh \
+	chain-group.cc chain-group.hh \
 	hierarchical-clustering.cc hierarchical-clustering.hh \
 	histogram.cc histogram.hh \
 	log_likelihood.cc log_likelihood.hh log_likelihood-fwd.hh \
