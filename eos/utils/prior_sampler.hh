@@ -40,7 +40,10 @@ namespace eos
     {
         public:
             class Config;
+
             typedef hdf5::Array<1, double> ObservablesType;
+            typedef std::vector<std::vector<double>> SamplesList;
+
             static ObservablesType observables_type(const unsigned & dimension);
 
             /*!
@@ -79,7 +82,7 @@ namespace eos
              * specified by the parameter descriptions.
              * @note No new samples are drawn from the priors.
              */
-            void run(const std::vector<std::vector<double>> & samples, const std::vector<ParameterDescription> & );
+            void run(const SamplesList & samples, const std::vector<ParameterDescription> & );
     };
 
     /*!

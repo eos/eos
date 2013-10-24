@@ -29,12 +29,18 @@
 
 namespace eos
 {
+namespace
+{
+typedef PriorSampler::SamplesList SamplesList;
+}
 
     template<>
     struct Implementation<PriorSampler>
     {
+        typedef std::function<void (void)> Function;
+
         struct Worker
-    {
+        {
             ObservableSet observables;
 
             // The priors for all parameters to be varied.
@@ -46,27 +52,20 @@ namespace eos
             // Random number generator seed
             unsigned seed;
 
-            // clear cache every N iterations
-            const unsigned clear_cache;
-
             // the sampling output, one vector for each iteration
-            std::vector<std::vector<double>> observable_values;
-            std::vector<std::vector<double>> parameter_values;
+            SamplesList observable_samples;
+            SamplesList parameter_samples;
 
             hdf5::Array<1, double> observable_type;
             hdf5::Array<1, double> parameter_type;
 
-            bool store_parameters;
-
             Worker(const ObservableSet & observables,
                    const std::vector<LogPriorPtr> & priors,
                    const std::vector<ParameterDescription> & parameter_descriptions,
-                   unsigned seed, bool store_parameters) :
+                   unsigned seed) :
                        seed(seed),
-                       clear_cache(500),
                        observable_type("observables", { observables.size() }),
-                       parameter_type("parameters", { parameter_descriptions.size() }),
-                       store_parameters(store_parameters)
+                       parameter_type("parameters", { parameter_descriptions.size() })
             {
                 // need to clone, so parameters that are fixed by hand have correct value
                 // cast away const-ness
@@ -93,11 +92,11 @@ namespace eos
                 }
             }
 
-            void dump_history(const std::shared_ptr<hdf5::File> & file)
+            void dump_history(const std::shared_ptr<hdf5::File> & file, const bool & store_parameters)
             {
                 // write observables
                 auto observable_data_set = file->create_or_open_data_set("/data/observables", observable_type);
-                for (auto o = observable_values.cbegin(), o_end = observable_values.cend() ; o != o_end ; ++o)
+                for (auto o = observable_samples.cbegin(), o_end = observable_samples.cend() ; o != o_end ; ++o)
                 {
                     observable_data_set << *o;
                 }
@@ -107,14 +106,50 @@ namespace eos
                     return;
 
                 auto parameter_data_set = file->create_or_open_data_set("/data/parameters", parameter_type);
-                for (auto p = parameter_values.cbegin(), p_end = parameter_values.cend() ; p != p_end ; ++p)
+                for (auto p = parameter_samples.cbegin(), p_end = parameter_samples.cend() ; p != p_end ; ++p)
                 {
                     parameter_data_set << *p;
                 }
             }
 
-            void run(unsigned iterations)
+            /*!
+             * Compute observables for every sample in range
+             */
+            void compute_observables(      SamplesList::const_iterator & first,
+                    const SamplesList::const_iterator & last)
             {
+                Log::instance()->message("prior_sampler.run", ll_informational)
+                            << "Computing " << observables.size() << " observables for "
+                            << std::distance(first, last) << " parameter samples";
+
+                // loop over samples
+                for (; first != last; ++first)
+                {
+                    // read and update parameter values, one at a time
+                    auto def = parameter_descriptions.begin();
+                    for (auto p = first->cbegin() ; p != first->cend() ; ++p, ++def)
+                    {
+                        def->parameter = *p;
+                    }
+
+                    // calculate all observables
+                    std::vector<double> observable_sample;
+                    for (auto & o : observables)
+                        observable_sample.push_back(o->evaluate());
+                    observable_samples.push_back(observable_sample);
+                }
+            }
+
+            /*!
+             * Draw random vector from the priors.
+             *
+             * @param iterations The number of samples.
+             */
+            void draw_samples(unsigned iterations)
+            {
+                Log::instance()->message("prior_sampler.run", ll_informational)
+                            << "Drawing " << iterations << " parameter samples";
+
                 // setup random number generator
                 gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
                 gsl_rng_set(rng, seed);
@@ -122,7 +157,6 @@ namespace eos
                 for (unsigned i = 0 ; i < iterations ; ++i)
                 {
                     std::vector<double> parameter_sample;
-                    std::vector<double> observable_sample;
 
                     // draw a sample
                     unsigned index = 0;
@@ -130,76 +164,13 @@ namespace eos
                     {
                         double p = (**prior).sample(rng);
                         parameter_descriptions[index].parameter = p;
-                        if (store_parameters)
-                        {
-                            parameter_sample.push_back(p);
-                        }
+                        parameter_sample.push_back(p);
                     }
-                    if (store_parameters)
-                    {
-                        parameter_values.push_back(parameter_sample);
-                    }
-
-                    // evaluate observables
-                    for (auto obs = observables.begin(), i_end = observables.end(); obs != i_end; ++obs)
-                    {
-                        observable_sample.push_back((**obs).evaluate());
-                    }
-                    observable_values.push_back(observable_sample);
-
-                    // clear cache, but never with less than a 100 iterations
-                    if (i > 0 && i % clear_cache == 0)
-                    {
-                        Log::instance()->message("prior_sampler.run_clean_up", ll_informational)
-                        << "Clearing the memoise cache.";
-                        MemoisationControl::instance()->clear();
-                    }
+                    parameter_samples.push_back(parameter_sample);
                 }
+
                 // free RN generator
                 gsl_rng_free(rng);
-            }
-
-            /*
-             * Calculate observables for the given parameter samples
-             */
-            void run_samples(const std::vector<std::vector<double>> & samples)
-            {
-                std::vector<double> observable_sample;
-
-                const unsigned & n_dim = samples.front().size();
-
-                // loop over samples
-                unsigned sample_index = 0;
-                for (auto s = samples.begin() ; s != samples.end() ; ++s, ++sample_index)
-                {
-#if 1
-                    if (s->size() != n_dim)
-                        throw InternalError("prior_sampler.run: Found mismatch between parameter dimensions for sample "
-                            + stringify(sample_index) + ": " + stringify(n_dim) + " vs " + stringify(s->size()));
-#endif
-                    // read and update parameter values
-                    unsigned par_index = 0;
-                    for (auto p = s->begin() ; p != s->end() ; ++p, ++par_index)
-                    {
-                        parameter_descriptions[par_index].parameter = *p;
-                    }
-
-                    // evaluate observables
-                    observable_sample.clear();
-                    for (auto obs = observables.begin(), i_end = observables.end(); obs != i_end; ++obs)
-                    {
-                        observable_sample.push_back((**obs).evaluate());
-                    }
-                    observable_values.push_back(observable_sample);
-
-                    // clear cache every fixed number of iterations, but not at beginning
-                    if (sample_index % std::max(1u, clear_cache) == 0)
-                    {
-                        Log::instance()->message("prior_sampler.run_clean_up", ll_informational)
-                                                << "Clearing the memoise cache.";
-                        MemoisationControl::instance()->clear();
-                    }
-                }
             }
         };
 
@@ -277,26 +248,31 @@ namespace eos
             return observables.add(observable).second;
         }
 
-        void run()
+        void run(const SamplesList & samples, const std::vector<ParameterDescription> & defs)
         {
             // setup the scan file
             setup_output();
 
-            Log::instance()->message("prior_sampler.run", ll_informational)
-                << "Starting to generate " << config.n_samples << " samples.";
-
             // start with empty ticket queue
             tickets.clear();
 
-             // create one Worker per chunk
+            const bool draw = samples.empty();
+
+            if (! draw)
+            {
+                config.n_samples = samples.size();
+                config.store_parameters = false;
+            }
+
+            // create one Worker per chunk
             std::vector<std::shared_ptr<Worker>> workers;
             const unsigned average_samples_per_worker = config.n_samples / config.n_workers;
             const unsigned remainder = config.n_samples % config.n_workers;
 
             for (unsigned chunk = 0 ; chunk < config.n_workers; ++chunk)
             {
-                workers.push_back(std::make_shared<Worker>(observables, priors, parameter_descriptions,
-                                                           config.seed + chunk, config.store_parameters));
+                workers.push_back(std::make_shared<Worker>(observables, priors, defs.empty() ? parameter_descriptions : defs,
+                        config.seed + chunk));
 
                 unsigned samples_per_worker = average_samples_per_worker;
 
@@ -304,15 +280,26 @@ namespace eos
                 if (chunk == config.n_workers - 1)
                     samples_per_worker += remainder;
 
+                auto first = samples.cbegin() + chunk * average_samples_per_worker;
+                auto last  = first + samples_per_worker;
+                if (draw)
+                {
+                    workers.back()->draw_samples(samples_per_worker);
+                    first = workers.back()->parameter_samples.cbegin();
+                    last  = workers.back()->parameter_samples.cend();
+                }
+
+                Function f = std::bind(&Worker::compute_observables, workers.back().get(), first, last);
+
                 if (config.parallelize)
                 {
                     // make sure to pass the pointer, instead of a reference from *w, to bind.
                     // Else copies are created, which lead to a double freeing upon calling the destructor the 2nd time.
-                    tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&Worker::run, workers.back().get(), samples_per_worker)));
+                    tickets.push_back(ThreadPool::instance()->enqueue(f));
                 }
                 else
                 {
-                    workers.back()->run(samples_per_worker);
+                    f();
                 }
             }
 
@@ -325,34 +312,14 @@ namespace eos
             // retrieve data and delete workers
             for (auto w = workers.begin(), w_end = workers.end() ; w != w_end ; ++w)
             {
-                (**w).dump_history(config.output_file);
+                (**w).dump_history(config.output_file, config.store_parameters);
             }
 
             // all tickets finished
             tickets.clear();
 
             Log::instance()->message("prior_sampler.run", ll_informational)
-                << "Sampling completed.";
-        }
-
-        void
-        run(const std::vector<std::vector<double>> & samples, const std::vector<ParameterDescription> & defs)
-        {
-            // no need to store parameters
-            config.store_parameters = false;
-
-            // setup the scan file
-            setup_output();
-
-            // start with empty ticket queue
-            tickets.clear();
-
-            Worker worker(observables, priors, defs, config.seed, config.store_parameters);
-            worker.run_samples(samples);
-            worker.dump_history(config.output_file);
-
-            Log::instance()->message("prior_sampler.run", ll_informational)
-                << "Calculations completed.";
+                        << "Observable computations completed.";
         }
 
         void
@@ -375,8 +342,7 @@ namespace eos
             }
 
             Log::instance()->message("prior_sampler.run", ll_informational)
-                << "Computing the SM prediction for each observable with fixed parameter values "
-                << "before drawing random parameter samples.";
+                << "Computing the SM prediction for each observable with fixed parameter values ";
 
             // write observable descriptions
             counter = 0;
@@ -440,11 +406,11 @@ namespace eos
     void
     PriorSampler::run()
     {
-        _imp->run();
+        _imp->run(SamplesList(), std::vector<ParameterDescription>());
     }
 
     void
-    PriorSampler::run(const std::vector<std::vector<double>> & samples, const std::vector<ParameterDescription> & defs)
+    PriorSampler::run(const SamplesList & samples, const std::vector<ParameterDescription> & defs)
     {
         _imp->run(samples, defs);
     }
