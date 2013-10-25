@@ -8,6 +8,7 @@ bin_PROGRAMS = \
 	eos-list-parameters \
 	eos-print-polynomial \
 	eos-propagate-uncertainty \
+	eos-sample-mcmc \
 	eos-scan-mc
 noinst_PROGRAMS = \
 	integrated \
@@ -32,6 +33,8 @@ eos_list_parameters_SOURCES = eos-list-parameters.cc
 eos_print_polynomial_SOURCES = eos-print-polynomial.cc
 
 eos_propagate_uncertainty_SOURCES = eos-propagate-uncertainty.cc
+
+eos_sample_mcmc_SOURCES = eos-sample-mcmc.cc
 
 eos_scan_mc_SOURCES = eos-scan-mc.cc
 eos_scan_mc_LDADD = $(LDADD) -lgsl -lMinuit2
