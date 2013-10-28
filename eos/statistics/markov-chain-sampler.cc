@@ -626,7 +626,7 @@ namespace eos
     MarkovChainSampler::read_chains(const std::vector<std::shared_ptr<hdf5::File>> input_files,
     		                        const Analysis & _analysis)
     {
-    	AnalysisPtr analysis = _analysis.clone();
+    	AnalysisPtr analysis = _analysis.old_clone();
         std::vector<HistoryPtr> result;
 
         // loop over files

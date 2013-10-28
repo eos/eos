@@ -43,8 +43,8 @@ class AnalysisTest :
             {
                 Analysis analysis = make_analysis(false);
 
-                auto clone1 = analysis.clone();
-                auto clone2 = analysis.clone();
+                auto clone1 = analysis.old_clone();
+                auto clone2 = analysis.old_clone();
 
                 // make sure observable's value is not equal to central value
                 MutablePtr p = (*clone1)[0];
@@ -68,7 +68,7 @@ class AnalysisTest :
                 // now change a parameter which is not scanned
                 TEST_CHECK(analysis.parameters()["Abs{c7}"] != 2.599);
                 analysis.parameters()["Abs{c7}"] = 2.599;
-                AnalysisPtr clone3 = analysis.clone();
+                AnalysisPtr clone3 = analysis.old_clone();
 
                 TEST_CHECK_EQUAL(double(analysis.parameters()["Abs{c7}"] ),
                                  double( clone3->parameters()["Abs{c7}"] ));
@@ -85,7 +85,7 @@ class AnalysisTest :
                 Analysis analysis(llh);
 
                 // store a clone with no parameters
-                auto clone_bare = analysis.clone();
+                auto clone_bare = analysis.old_clone();
 
 
                 // 4.4 +- 0.1
@@ -106,7 +106,7 @@ class AnalysisTest :
 
                 // now check cloning
 
-                auto clone = analysis.clone();
+                auto clone = analysis.old_clone();
                 MutablePtr p2 = (*clone)[0];
 
                 TEST_CHECK_EQUAL(p->evaluate(), p2->evaluate());

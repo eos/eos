@@ -246,7 +246,7 @@ namespace eos
            std::shared_ptr<ROOT::Minuit2::FunctionMinimum> minimum;
 
            Worker(const Analysis & analysis) :
-               analysis(analysis.clone())
+               analysis(analysis.old_clone())
            {
            }
 

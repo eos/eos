@@ -21,16 +21,18 @@
 #define EOS_GUARD_SRC_STATISTICS_ANALYSIS_HH 1
 
 #include <eos/statistics/analysis-fwd.hh>
+#include <eos/statistics/density.hh>
 #include <eos/utils/hdf5-fwd.hh>
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/verify.hh>
 
-#include <vector>
 #include <set>
+#include <vector>
 
 #include <gsl/gsl_multimin.h>
+#include <gsl/gsl_vector.h>
 
 namespace ROOT
 {
@@ -42,8 +44,10 @@ namespace ROOT
 
 namespace eos
 {
+    class MinuitAdapter;
+
     class Analysis :
-        public PrivateImplementationPattern<Analysis>
+        public Density
     {
         public:
             friend struct Implementation<Analysis>;
@@ -66,26 +70,36 @@ namespace eos
             Analysis(const LogLikelihood & log_likelihood);
 
             /// Destructor.
-            ~Analysis();
+            virtual ~Analysis();
 
             /// Clone this Analysis
-            AnalysisPtr clone() const;
+            // todo remove
+            AnalysisPtr old_clone() const;
+
+            virtual DensityPtr clone() const;
+
+            virtual double evaluate() const;
+
+            virtual Iterator begin() const;
+            virtual Iterator end() const;
             ///@}
 
             ///@name Accessors
             ///@{
-
+            // todo remove
             /// Retrieve a set of all parameters, including ranges
             const std::vector<ParameterDescription> & parameter_descriptions() const;
 
+            // todo remove as functionality available from begin(), end()
             /*!
              * Retrieve a parameter by index.
              *
              * @param index The index of the parameter.
              */
-            MutablePtr operator[] (const unsigned & index);
+            MutablePtr operator[] (const unsigned & index) const;
 
-            /// Retrieve our associates Parameters object
+            // todo remove
+            /// Retrieve our associated Parameters object
             Parameters parameters() const;
 
             /*!
@@ -140,10 +154,10 @@ namespace eos
             goodness_of_fit(const std::vector<double> & parameter_values, const unsigned & simulated_datasets, std::string output_file = "");
 
             /// Retrieve the overall Log(likelihood) for this analysis.
-            LogLikelihood log_likelihood();
+            LogLikelihood log_likelihood() const;
 
             /// Retrieve the overall Log(prior) for this analysis.
-            double log_prior();
+            double log_prior() const;
 
             /*!
              * Find the prior for a given parameter
@@ -152,7 +166,7 @@ namespace eos
 
             /// Retrieve the overall Log(posterior) for this analysis.
             /// Incorporate normalization constant, the evidence here in getter if available.
-            double log_posterior();
+            double log_posterior() const;
 
             /*!
              * Check if a given parameter is a nuisance parameter for this Analysis.
@@ -173,8 +187,47 @@ namespace eos
 
             const ROOT::Minuit2::FunctionMinimum &
             optimize_minuit(const std::vector<double> & initial_guess, const OptimizationOptions & options);
+
+        private:
+            /*!
+             * Find index of definition of parameter
+             * @param name
+             * @return index if found, _parameter_descriptions.size() if not found
+             */
+            unsigned index(const std::string & name) const;
+
+            /*!
+             * routine needed for optimization. It returns the negative
+             * log(posterior) at parameters
+             * @param parameters the values of the parameters
+             * @param data pointer to an Analysis object
+             * @return
+             */
+            static double
+            negative_log_posterior(const gsl_vector * pars, void * data);
+
+            Analysis *
+            private_clone() const;
+
+            LogLikelihood _log_likelihood;
+
+            Parameters _parameters;
+
+            /// prior in N dimensions can decouple
+            /// at most into N 1D priors
+            std::vector<LogPriorPtr> _priors;
+
+            /// Parameter, minimum, maximum, nuisance
+            std::vector<ParameterDescription> _parameter_descriptions;
+
+            /// names of all parameters. prevent using a parameter twice
+            std::set<std::string> _parameter_names;
+
+            /// Adapter to let minuit operate on posterior
+            MinuitAdapter * _minuit;
     };
 
+        // todo move optimization into separate class
         struct Analysis::OptimizationOptions
         {
                 /// Options are: "migrad", "minimize", "scan", "simplex" from minuit2
@@ -232,6 +285,21 @@ namespace eos
          static DescriptionType description_type();
          static std::tuple<const char *, double, double, int, const char *> description_record();
      };
+
+     /*!
+      * Compute an initial guess of the proposal covariance matrix.
+      *
+      * The variance of each parameter is taken from the prior distribution
+      * and scaled if desired for higher efficiency. Zero correlation is assumed a priori.
+      *
+      * @param analysis The analysis supplying the prior information.
+      * @param scale_reduction Value by which sqrt(variance) of parameters is divided.
+      * @param scale_nuisance Decide whether only scan parameters or all parameters are scaled.
+      * @return The covariance matrix in row major format.
+      */
+     std::vector<double> proposal_covariance(const Analysis & analysis,
+                                             double scale_reduction=1,
+                                             bool scale_nuisance=true);
 }
 
 #endif
