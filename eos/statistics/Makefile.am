@@ -13,6 +13,7 @@ libeosstatistics_la_SOURCES = \
 	analysis.cc analysis.hh analysis-fwd.hh \
 	chi-squared.hh chi-squared.cc \
 	chain-group.cc chain-group.hh \
+	density.cc density.hh \
 	hierarchical-clustering.cc hierarchical-clustering.hh \
 	histogram.cc histogram.hh \
 	log-likelihood.cc log-likelihood.hh log-likelihood-fwd.hh \
@@ -35,6 +36,7 @@ include_eos_statisticsdir = $(includedir)/eos/utils
 include_eos_statistics_HEADERS = \
 	analysis.hh analysis-fwd.hh \
 	chi-squared.hh \
+	density.hh \
 	hierarchical-clustering.hh \
 	histogram.hh \
 	log-likelihood.hh log-likelihood-fwd.hh \

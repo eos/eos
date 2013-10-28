@@ -28,12 +28,15 @@
 
 namespace eos
 {
+    /*!
+     * A multivariate scalar function
+     */
     class Density
     {
         public:
             virtual ~Density() = 0;
 
-            /// Evaluate the density function at the current parameter point.
+            /// Evaluate the density function at the current parameter point on the log scale.
             virtual double evaluate() const = 0;
 
             /// Create an independent copy of this density function.
@@ -42,7 +45,7 @@ namespace eos
             /// Iterate over the parameters relevant to this density function.
             ///@{
             struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, ParameterDescription> Iterator;
+            typedef WrappedForwardIterator<IteratorTag, const ParameterDescription> Iterator;
 
             virtual Iterator begin() const = 0;
             virtual Iterator end() const = 0;
