@@ -1470,7 +1470,7 @@ namespace eos
             return std::make_pair(p, uncertainty);
         }
 
-        double log_likelihood()
+        double log_likelihood() const
         {
             double result = 0.0;
 
@@ -1585,7 +1585,7 @@ namespace eos
     }
 
     double
-    LogLikelihood::operator() ()
+    LogLikelihood::operator() () const
     {
         _imp->cache.update();
 

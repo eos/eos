@@ -388,7 +388,7 @@ namespace eos
              * Evaluate the log likelihood, i.e., return @f[ \log \mathcal{L} = \log P(D | \vec{\theta}, M)=  - \frac{\chi^2}{2} + C@f].
              * @note: all observables are recalculated
              */
-            double operator()();
+            double operator()() const;
             ///@}
     };
 }
