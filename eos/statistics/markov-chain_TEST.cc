@@ -49,13 +49,13 @@ class MarkovChainTest :
             {
                 Analysis analysis(LogLikelihood(Parameters::Defaults()));
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
-                TEST_CHECK_THROWS(InternalError, MarkovChain chain(analysis, 13, ppf));
+                TEST_CHECK_THROWS(InternalError, MarkovChain chain(analysis.clone(), 13, ppf));
             });
 
             // check if empty proposal function throws InternalError
             TEST_SECTION("empty-proposal-function",
             {
-                TEST_CHECK_THROWS(InternalError, MarkovChain chain(analysis, 13, std::shared_ptr<MarkovChain::ProposalFunction>()));
+                TEST_CHECK_THROWS(InternalError, MarkovChain chain(analysis.clone(), 13, std::shared_ptr<MarkovChain::ProposalFunction>()));
             });
 
             // check that clones are independent
@@ -65,8 +65,8 @@ class MarkovChainTest :
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf2(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
 
                 // create two chains and compare results
-                MarkovChain chain1(analysis, 13, ppf1);
-                MarkovChain chain2(analysis, 13134, ppf2);
+                MarkovChain chain1(analysis.clone(), 13, ppf1);
+                MarkovChain chain2(analysis.clone(), 13134, ppf2);
 
                 double mB1_before(chain1.parameter_descriptions().front().parameter->evaluate());
                 double mB2_before(chain2.parameter_descriptions().front().parameter->evaluate());
@@ -85,38 +85,38 @@ class MarkovChainTest :
             TEST_SECTION("step-by-step",
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.03 }));
-                MarkovChain chain(analysis, 1313, ppf);
+                MarkovChain chain(analysis.clone(), 1313, ppf);
 
                 std::cout << "initial:" << std::endl;
                 std::cout << chain.current_state().point[0] << std::endl;
                 std::cout << chain.current_state().log_likelihood << std::endl;
                 std::cout << chain.current_state().log_prior << std::endl;
-                std::cout << chain.current_state().log_posterior << std::endl;
+                std::cout << chain.current_state().log_density << std::endl;
 
                 //initial points
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().point.front(),    4.8910029008984566, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_likelihood, -22.4906038927148940, eps);
 
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_prior,      -10.6705455880927786, eps);
-                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_posterior,  -33.1611494808076728, eps);
+                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_density,  -33.1611494808076728, eps);
 
                 // next point is not accepted, out-of-range
                 chain.run(1);
                 std::cout << chain.current_state().point[0] << std::endl;
                 std::cout << chain.current_state().log_likelihood << std::endl;
                 std::cout << chain.current_state().log_prior << std::endl;
-                std::cout << chain.current_state().log_posterior << std::endl;
+                std::cout << chain.current_state().log_density << std::endl;
                 TEST_CHECK_EQUAL(chain.iterations_last_run(), 1);
                 TEST_CHECK_EQUAL(chain.proposal_accepted(), false);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().point.front(),    4.8910029008984566, eps);
-                TEST_CHECK_RELATIVE_ERROR(chain.proposed_state().log_posterior, -33.1611494808076728, eps); //not evaluated if proposal out of range
+                TEST_CHECK_RELATIVE_ERROR(chain.proposed_state().log_density, -33.1611494808076728, eps); //not evaluated if proposal out of range
 
                 // again out of range
                 chain.run(1);
                 std::cout << chain.current_state().point[0] << std::endl;
                 std::cout << chain.current_state().log_likelihood << std::endl;
                 std::cout << chain.current_state().log_prior << std::endl;
-                std::cout << chain.current_state().log_posterior << std::endl;
+                std::cout << chain.current_state().log_density << std::endl;
                 TEST_CHECK_EQUAL(chain.proposal_accepted(), false);
                 TEST_CHECK_EQUAL(chain.iterations_last_run(), 1);
                 TEST_CHECK_EQUAL(chain.statistics().iterations_total,2);
@@ -127,12 +127,12 @@ class MarkovChainTest :
                 std::cout << chain.current_state().point[0] << std::endl;
                 std::cout << chain.current_state().log_likelihood << std::endl;
                 std::cout << chain.current_state().log_prior << std::endl;
-                std::cout << chain.current_state().log_posterior << std::endl;
+                std::cout << chain.current_state().log_density << std::endl;
                 TEST_CHECK(chain.proposal_accepted() ==true);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().point.front(),    4.872512050011867, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_likelihood, -21.229976310768970, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_prior,       -9.779735023878651, eps);
-                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_posterior,   -31.00971133464762, eps); // reevaluated
+                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_density,   -31.00971133464762, eps); // reevaluated
 
                 // in range, but not accepted
                 chain.run(1);
@@ -140,14 +140,14 @@ class MarkovChainTest :
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().point.front(),    4.872512050011867, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_likelihood, -21.229976310768970, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_prior,       -9.779735023878651, eps);
-                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_posterior,   -31.00971133464762, eps); // not reevaluated
+                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_density,   -31.00971133464762, eps); // not reevaluated
 
                 chain.run(1);
                 TEST_CHECK_EQUAL(chain.proposal_accepted(), true);
                 TEST_CHECK_RELATIVE_ERROR(chain.proposed_state().point.front(),    4.812810423973447, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.proposed_state().log_likelihood, -17.393184226736560, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.proposed_state().log_prior,       -7.136975460614643, eps);
-                TEST_CHECK_RELATIVE_ERROR(chain.proposed_state().log_posterior,  -24.530159687351200, eps);
+                TEST_CHECK_RELATIVE_ERROR(chain.proposed_state().log_density,  -24.530159687351200, eps);
 
                 chain.run(45);
                 TEST_CHECK_EQUAL(chain.statistics().iterations_total, 50); // 5x1 + 1x45
@@ -156,7 +156,7 @@ class MarkovChainTest :
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().point[0],         4.3920766161687550, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_likelihood,  -0.4610247641525864, eps);
                 TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_prior,        1.3805078458753980, eps);
-                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_posterior,    0.9194830817228119, eps);
+                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_density,    0.9194830817228119, eps);
             });
 
             // this verifies that chain.run(1) 50 times will end at same point as chain.run(50)
@@ -164,8 +164,8 @@ class MarkovChainTest :
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf1(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf2(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
-                MarkovChain chain1(analysis, 1313, ppf1);
-                MarkovChain chain2(analysis, 1313, ppf2);
+                MarkovChain chain1(analysis.clone(), 1313, ppf1);
+                MarkovChain chain2(analysis.clone(), 1313, ppf2);
 
                 static const unsigned N = 57;
                 for (unsigned i = 0 ; i < N; ++i)
@@ -186,18 +186,18 @@ class MarkovChainTest :
             TEST_SECTION("statistics",
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.05 }));
-                MarkovChain chain(analysis, 1313, ppf);
+                MarkovChain chain(analysis.clone(), 1313, ppf);
 
                 chain.run(1);
                 TEST_CHECK_EQUAL(chain.statistics().mean_of_parameters.front(), chain.current_state().point.front()); // mean of one iteration is just the current point
                 TEST_CHECK_EQUAL(chain.statistics().variance_of_parameters.front(),0);
-                TEST_CHECK_EQUAL(chain.statistics().mean_of_posterior, chain.current_state().log_posterior);
+                TEST_CHECK_EQUAL(chain.statistics().mean_of_posterior, chain.current_state().log_density);
                 TEST_CHECK_EQUAL(chain.statistics().variance_of_posterior, 0);
 
                 chain.run(1);
                 TEST_CHECK_EQUAL(chain.statistics().mean_of_parameters.front(), chain.current_state().point.front()); // 2nd iteration has no accepted points.
                 TEST_CHECK_EQUAL(chain.statistics().variance_of_parameters.front(),0);
-                TEST_CHECK_EQUAL(chain.statistics().mean_of_posterior, chain.current_state().log_posterior);
+                TEST_CHECK_EQUAL(chain.statistics().mean_of_posterior, chain.current_state().log_density);
                 TEST_CHECK_EQUAL(chain.statistics().variance_of_posterior, 0);
 
                 chain.run(1);
@@ -230,7 +230,7 @@ class MarkovChainTest :
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.03 }));
 
-                MarkovChain chain(analysis, 1313, ppf);
+                MarkovChain chain(analysis.clone(), 1313, ppf);
 
                 chain.run(50);
                 TEST_CHECK_EQUAL(chain.statistics().iterations_total,    50);
@@ -255,7 +255,7 @@ class MarkovChainTest :
 
                 // check initial
                 TEST_CHECK_EQUAL(chain.current_state().point, chain.proposed_state().point);
-                TEST_CHECK_EQUAL(chain.current_state().log_posterior, chain.proposed_state().log_posterior);
+                TEST_CHECK_EQUAL(chain.current_state().log_density, chain.proposed_state().log_density);
 
                 chain.run(81);
                 TEST_CHECK_EQUAL(chain.statistics().iterations_total, 45+36);
@@ -263,7 +263,7 @@ class MarkovChainTest :
                 // if last move is accepted, then current and proposal should agree
                 TEST_CHECK(chain.proposal_accepted());
                 TEST_CHECK_EQUAL(chain.current_state().point, chain.proposed_state().point);
-                TEST_CHECK_EQUAL(chain.current_state().log_posterior, chain.proposed_state().log_posterior);
+                TEST_CHECK_EQUAL(chain.current_state().log_density, chain.proposed_state().log_density);
                 TEST_CHECK_EQUAL(chain.statistics().iterations_accepted, 10);
 
                 // if last move is rejected, current and proposal should disagree
@@ -299,7 +299,7 @@ class MarkovChainTest :
                                 0.0,  0.09,  0.0,
                                 0.0,  0.0,   0.08
                             }));
-                MarkovChain chain(analysis, 12345, ppf);
+                MarkovChain chain(analysis.clone(), 12345, ppf);
 
                 // if this evaluates to NaN, initialization went wrong
                 TEST_CHECK_RELATIVE_ERROR(llh(), -14.758100406210971, eps);
@@ -311,12 +311,12 @@ class MarkovChainTest :
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
                 auto analysis = make_analysis(false);
-                MarkovChain chain(analysis, 13, ppf);
+                MarkovChain chain(analysis.clone(), 13, ppf);
 
                 chain.set_point(std::vector<double>{ 4.3});
                 TEST_CHECK_EQUAL(chain.current_state().point.front(), 4.3);
 
-                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_posterior,  0.88364655978937656 + 0.883646846442260436, eps);
+                TEST_CHECK_RELATIVE_ERROR(chain.current_state().log_density,  0.88364655978937656 + 0.883646846442260436, eps);
             });
             TEST_SECTION("Multivariate::adapt",
             {
@@ -341,7 +341,7 @@ class MarkovChainTest :
                 mvg->covariance_scale = 2.38 * 2.38 / 2.0;
 
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvg);
-                MarkovChain chain(analysis, 12345, ppf);
+                MarkovChain chain(analysis.clone(), 12345, ppf);
 
                 chain.run(5e4);
                 double efficiency = 0.24;
@@ -413,7 +413,7 @@ class MarkovChainTest :
                 {
                     proposal_functions::MultivariateGaussian* mvg = new proposal_functions::MultivariateGaussian(2, cov_initial, automatic_scaling);
                     std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvg);
-                    MarkovChain chain(analysis, 12345, ppf);
+                    MarkovChain chain(analysis.clone(), 12345, ppf);
 
                     chain.run(1e4);
 
@@ -439,7 +439,7 @@ class MarkovChainTest :
                     proposal_functions::MultivariateStudentT * mvt = new proposal_functions::MultivariateStudentT(2, cov_initial, dof);
 
                     std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvt);
-                    MarkovChain chain(analysis, 12345, ppf);
+                    MarkovChain chain(analysis.clone(), 12345, ppf);
 
                     chain.run(12e4);
 
@@ -476,7 +476,7 @@ class MarkovChainTest :
                     TEST_CHECK_RELATIVE_ERROR(mvt->evaluate(current, proposal), mvg->evaluate(current, proposal), 3e-2);
 
                     std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvt);
-                    MarkovChain chain(analysis, 12345, ppf);
+                    MarkovChain chain(analysis.clone(), 12345, ppf);
 
                     chain.run(3e4);
 

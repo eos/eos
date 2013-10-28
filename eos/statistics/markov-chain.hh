@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_MARKOV_CHAIN_HH
 #define EOS_GUARD_SRC_STATISTICS_MARKOV_CHAIN_HH 1
 
-#include <eos/statistics/analysis-fwd.hh>
+#include <eos/statistics/density-fwd.hh>
 #include <eos/utils/hdf5-fwd.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/stringify.hh>
@@ -31,6 +31,9 @@
 
 namespace eos
 {
+    /*!
+     * An implementation of a Markov chain using the Metropolis-Hasting algorithm
+     */
     class MarkovChain :
         public PrivateImplementationPattern<MarkovChain>
     {
@@ -45,10 +48,11 @@ namespace eos
             /*!
              * Constructor
              *
-             * @param analysis The analysis for which we run.
+             * @density The density to sample from
              * @param seed     The initial seed for the RNG.
              */
-            MarkovChain(const Analysis & analysis, unsigned long seed, const std::shared_ptr<MarkovChain::ProposalFunction> & proposal_function);
+            MarkovChain(const DensityPtr & density, unsigned long seed,
+                        const std::shared_ptr<MarkovChain::ProposalFunction> & proposal_function);
 
             /// Destructor.
             ~MarkovChain();
@@ -77,9 +81,6 @@ namespace eos
 
             /// Retrieve the chain's detailed history.
             const History & history() const;
-
-            /// Set analysis.
-            void set_analysis(const Analysis & analysis);
 
             /*!
              * Set whether the chain stores samples in runs to come.
@@ -137,11 +138,13 @@ namespace eos
             /*! Set the stats at mode to a point found outside of the chain.
              * Triggers writing to the HDF5 file as another row in the stats section.
              *
-             * @param point
-             * @param posterior
+             *@param file The HDF5 file.
+             *@param data_base_name Data set base name within @see file
+             *@param point Parameter vector.
+             *@param log_density The value of log(density) at @see point
              */
             void set_mode(hdf5::File & file, const std::string & data_base_name,
-                          const std::vector<double> & point, const double & posterior);
+                          const std::vector<double> & point, const double & log_density);
 
             /*!
              * Set the chain to continue its walk from the given point.
@@ -165,17 +168,18 @@ namespace eos
         /// position in parameter space
         std::vector<double> point;
 
-        /// log posterior at the points
-        double log_posterior;
+        /// log density at the point
+        double log_density;
 
         State() :
-        	log_posterior(0)
+        	log_density(0)
         {
         }
 
+        // todo is this still needed?
         State(const State & other)
         {
-            log_posterior = other.log_posterior;
+            log_density = other.log_density;
             point.resize(other.point.size());
             std::copy(other.point.cbegin(), other.point.cend(), point.begin());
         }
@@ -208,23 +212,23 @@ namespace eos
          */
         unsigned iterations_rejected;
 
-        /// Maximum value of the posterior
-        double mode_of_posterior;
+        /// Maximum value of the log(density)
+        double mode;
 
-        /// Parameter values at the maximum of the posterior
+        /// Parameter values at the maximum of the density
         std::vector<double> parameters_at_mode;
 
         /// Sample mean of parameter values
         std::vector<double> mean_of_parameters;
 
-        /// Sample mean of posterior
-        double mean_of_posterior;
+        /// Sample mean of log(density)
+        double mean_of_log_density;
 
         /// Sample variance of parameter values
         std::vector<double> variance_of_parameters;
 
-        /// Sample variance of [log] posterior values
-        double variance_of_posterior;
+        /// Sample variance of [log] density values
+        double variance_of_log_density;
     };
 
     typedef std::shared_ptr<MarkovChain::History> HistoryPtr;
@@ -234,9 +238,6 @@ namespace eos
      */
     struct MarkovChain::History
     {
-        private:
-            static bool cmp(const MarkovChain::State & a, const MarkovChain::State & b);
-
         public:
 
             /// flag: if false => don't store numbers
@@ -246,7 +247,7 @@ namespace eos
             std::vector<MarkovChain::State> states;
 
             /*!
-             * Return state with highest posterior probability in selected range
+             * Return state with highest density in selected range
              */
             const MarkovChain::State & local_mode(const MarkovChain::State::Iterator & begin, const MarkovChain::State::Iterator & end) const;
 

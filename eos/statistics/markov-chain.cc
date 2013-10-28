@@ -19,7 +19,7 @@
 
 #include <config.h>
 
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/density.hh>
 #include <eos/statistics/markov-chain.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/utils/hdf5.hh>
@@ -41,7 +41,7 @@ namespace eos
     struct Implementation<MarkovChain>
     {
         // The Analysis that we are conducting.
-        Analysis analysis;
+        DensityPtr density;
 
         // The proposal function
         std::shared_ptr<MarkovChain::ProposalFunction> proposal_function;
@@ -77,19 +77,19 @@ namespace eos
         // sample variance of param values (Welford's method)
         std::vector<double> welford_data_parameters;
 
-        // sample variance of log(posterior) (Welford's method)
-        double welford_data_posterior;
+        // sample variance of log(density) (Welford's method)
+        double welford_data_density;
 
         // Output data types
         typedef hdf5::Array<1, double> SampleType;
         const SampleType sample_type;
 
-        Implementation(const Analysis & analysis, unsigned long seed, const std::shared_ptr<MarkovChain::ProposalFunction> & proposal_function) :
-            analysis(*analysis.clone()),
+        Implementation(const DensityPtr & density, unsigned long seed, const std::shared_ptr<MarkovChain::ProposalFunction> & proposal_function) :
+            density(density->clone()),
             sample_type
             {
                 "samples",
-                { analysis.parameter_descriptions().size() + 1 },
+                { std::distance(density->begin(), density->end()) + 1ul },
             }
 
         {
@@ -130,20 +130,20 @@ namespace eos
             // we could get into trouble if we attempt to create a data set a 2nd time
             auto data_set = file.create_or_open_data_set(data_set_base_name + "/samples", sample_type);
 
-            // parameter values + posterior
+            // parameter values + density
             std::vector<double> record(sample_record_length);
             for (auto s = history.states.cend() - last_iterations, s_end = history.states.cend() ; s != s_end ; ++s)
             {
                 std::copy(s->point.cbegin(), s->point.cend(), record.begin());
-                record.back() = s->log_posterior;
+                record.back() = s->log_density;
                 data_set << record;
             }
 
-            /* store (mode, max log(posterior) */
+            /* store (mode, max log(density) */
 
             auto data_set_mode = file.create_or_open_data_set(data_set_base_name + "/stats/mode", sample_type);
             std::copy(stats.parameters_at_mode.cbegin(), stats.parameters_at_mode.cend(), record.begin());
-            record.back() = stats.mode_of_posterior;
+            record.back() = stats.mode;
             data_set_mode << record;
         }
 
@@ -153,7 +153,7 @@ namespace eos
             proposal_function->dump_state(file, data_set_base_name + "/proposal");
         }
 
-        // calculate posterior etc at the proposal point
+        // calculate density etc at the proposal point
         void evaluate_proposal()
         {
             //todo this is for debug purposes, and should never throw during production run
@@ -184,9 +184,8 @@ namespace eos
                 parameter_descriptions[i].parameter->set(proposal.point[i]);
             }
 
-            // todo If we used on par at a time again, change call to likelihood to evaluate only observables that use the parameter we just changed
             // let likelihood evaluate all observables
-            proposal.log_posterior = analysis.log_posterior();
+            proposal.log_density = density->evaluate();
         }
 
         // called from ctor only at beginning
@@ -194,7 +193,8 @@ namespace eos
         {
             // copy the information about parameters, their ranges and
             // whether they are nuisance parameters or not
-            parameter_descriptions = analysis.parameter_descriptions();
+            parameter_descriptions.clear();
+            std::copy(density->begin(), density->end(), std::back_inserter(parameter_descriptions));
 
             // initialize statistics
             reset(true);
@@ -203,7 +203,7 @@ namespace eos
             current.point.resize(parameter_descriptions.size(), 0);
             proposal.point.resize(parameter_descriptions.size(), 0);
 
-            // by default save points and posterior values
+            // by default save points and density values
             history.keep = true;
 
             // uniformly distributed random starting point
@@ -219,7 +219,7 @@ namespace eos
             }
 
             // evaluate likelihood without argument, so all observables are calculated once
-            current.log_posterior = analysis.log_posterior();
+            current.log_density = density->evaluate();
 
             // set proposal to current
             proposal = current;
@@ -228,7 +228,7 @@ namespace eos
                 << "Starting chain at: " << current;
 
             // setup mode
-            stats.mode_of_posterior = current.log_posterior;
+            stats.mode = current.log_density;
             stats.parameters_at_mode = current.point;
         }
 
@@ -251,17 +251,17 @@ namespace eos
                 }
             }
 
-            // evaluate posterior at proposal point
+            // evaluate density at proposal point
             evaluate_proposal();
 
             // compute the Metropolis-Hastings factor
             double log_u = std::log(uniform_random_number());
-            double log_r_post = proposal.log_posterior - current.log_posterior;
+            double log_r_post = proposal.log_density - current.log_density;
             double log_r_prop = proposal_function->evaluate(current, proposal) - proposal_function->evaluate(proposal, current);
             double log_r = log_r_post + log_r_prop;
 
             if ( ! std::isfinite(log_r))
-                throw InternalError("MarkovChain::run: isfinite failed, either from a bad posterior value ("
+                throw InternalError("MarkovChain::run: isfinite failed, either from a bad density value ("
                                     + stringify(log_r_post, 6) +
                                     ") or (more likely) from a bad value in the proposal evaluation ("
                                     + stringify(log_r_prop, 6) +
@@ -297,7 +297,7 @@ namespace eos
                 data_set >> record;
 
                 std::copy(record.begin(), record.end() - 1, state.point.begin());
-                state.log_posterior = record.back();
+                state.log_density = record.back();
                 history.states.push_back(state);
             }
         }
@@ -323,7 +323,7 @@ namespace eos
             data_set_mode.end();
             data_set_mode >> record;
 
-            stats.mode_of_posterior = record.back();
+            stats.mode = record.back();
             stats.parameters_at_mode.resize(dimension);
             std::copy(record.begin(), record.end() - 1, stats.parameters_at_mode.begin());
 
@@ -358,16 +358,16 @@ namespace eos
 
                 stats.mean_of_parameters.clear();
                 stats.mean_of_parameters.resize(parameter_descriptions.size(), 0.0);
-                stats.mean_of_posterior = 0.0;
+                stats.mean_of_log_density = 0.0;
 
                 stats.variance_of_parameters.clear();
                 stats.variance_of_parameters.resize(parameter_descriptions.size(), 0.0);
                 welford_data_parameters.clear();
                 welford_data_parameters.resize(parameter_descriptions.size(), 0.0);
-                stats.variance_of_posterior = 0.0;
-                welford_data_posterior = 0.0;
+                stats.variance_of_log_density = 0.0;
+                welford_data_density = 0.0;
 
-                stats.mode_of_posterior = -std::numeric_limits<double>::max();
+                stats.mode = -std::numeric_limits<double>::max();
             }
         }
 
@@ -428,17 +428,17 @@ namespace eos
         }
 
         void set_mode(hdf5::File & file, const std::string & data_base_name,
-                          const std::vector<double> & point, const double & posterior)
+                          const std::vector<double> & point, const double & density)
         {
             // set Stats object
             stats.parameters_at_mode = point;
-            stats.mode_of_posterior = posterior;
+            stats.mode = density;
 
             // dump to disk
             auto data_set_mode = file.create_or_open_data_set(data_base_name + "/stats/mode", sample_type);
             std::vector<double> record(parameter_descriptions.size() + 1);
             std::copy(stats.parameters_at_mode.cbegin(), stats.parameters_at_mode.cend(), record.begin());
-            record.back() = stats.mode_of_posterior;
+            record.back() = stats.mode;
             data_set_mode << record;
 
             return;
@@ -475,15 +475,14 @@ namespace eos
 
             // copy
             {
-                // evaluate likelihood without argument, so all observables are calculated once
-                current.log_posterior = analysis.log_posterior();
+                current.log_density = density->evaluate();
                 proposal = current;
             }
 
             // setup statistics
-            if (current.log_posterior > stats.mode_of_posterior)
+            if (current.log_density > stats.mode)
             {
-                stats.mode_of_posterior = current.log_posterior;
+                stats.mode = current.log_density;
                 stats.parameters_at_mode = current.point;
             }
 
@@ -512,9 +511,9 @@ namespace eos
             // count iterations for this parameter since (pre|main) run started. start index at 0, so need +1
             double total_iterations_since_reset = stats.iterations_total + (current_iteration + 1.0);
 
-            if (current.log_posterior > stats.mode_of_posterior)
+            if (current.log_density > stats.mode)
             {
-                stats.mode_of_posterior = current.log_posterior;
+                stats.mode = current.log_density;
                 stats.parameters_at_mode = current.point;
             }
 
@@ -542,20 +541,20 @@ namespace eos
                 }
             }
 
-            // update Posterior
-            double former_posterior = stats.mean_of_posterior;
-            stats.mean_of_posterior += (current.log_posterior - former_posterior) / total_iterations_since_reset;
+            // update density
+            double former_density = stats.mean_of_log_density;
+            stats.mean_of_log_density += (current.log_density - former_density) / total_iterations_since_reset;
             if (total_iterations_since_reset < 2)
             {
-                welford_data_posterior = 0;
+                welford_data_density = 0;
             }
             else
             {
                 // update variance using Welford's method
                 // see http://www.johndcook.com/standard_deviation.html,
                 // Donald Knuth's Art of Computer Programming, Vol 2, page 232, 3rd edition
-                welford_data_posterior += (current.log_posterior - former_posterior) * (current.log_posterior - stats.mean_of_posterior);
-                stats.variance_of_posterior = welford_data_posterior / (total_iterations_since_reset - 1);
+                welford_data_density += (current.log_density - former_density) * (current.log_density - stats.mean_of_log_density);
+                stats.variance_of_log_density = welford_data_density / (total_iterations_since_reset - 1);
             }
         }
 
@@ -563,8 +562,8 @@ namespace eos
         inline double uniform_random_number() { return gsl_rng_uniform(rng); }
     };
 
-    MarkovChain::MarkovChain(const Analysis & analysis, unsigned long seed, const std::shared_ptr<MarkovChain::ProposalFunction> & proposal_function) :
-        PrivateImplementationPattern<MarkovChain>(new Implementation<MarkovChain>(analysis, seed, proposal_function))
+    MarkovChain::MarkovChain(const DensityPtr & density, unsigned long seed, const std::shared_ptr<MarkovChain::ProposalFunction> & proposal_function) :
+        PrivateImplementationPattern<MarkovChain>(new Implementation<MarkovChain>(density, seed, proposal_function))
     {
     }
 
@@ -675,9 +674,9 @@ namespace eos
 
     void
     MarkovChain::set_mode(hdf5::File & file, const std::string & data_base_name,
-                          const std::vector<double> & point, const double & posterior)
+                          const std::vector<double> & point, const double & density)
     {
-        _imp->set_mode(file, data_base_name, point, posterior);
+        _imp->set_mode(file, data_base_name, point, density);
     }
 
     const MarkovChain::Stats &
@@ -696,18 +695,10 @@ namespace eos
     {
     }
 
-    bool
-    MarkovChain::History::cmp(const MarkovChain::State & a, const MarkovChain::State & b)
-    {
-        return a.log_posterior < b.log_posterior;
-    }
-
     const MarkovChain::State &
     MarkovChain::History::local_mode(const MarkovChain::State::Iterator & begin, const MarkovChain::State::Iterator & end) const
     {
-        // todo use this lambda function
-        //        return *std::max_element(begin, end, [](const MarkovChain::State & a, const MarkovChain::State & b) { return a.log_posterior < b.log_posterior; });
-        return *std::max_element(begin, end, cmp);
+        return *std::max_element(begin, end, [](const MarkovChain::State & a, const MarkovChain::State & b) { return a.log_density < b.log_density; });
     }
 
     void
@@ -805,7 +796,7 @@ namespace eos
             lhs << *p << " ";
         }
 
-        lhs << "), posterior = " << rhs.log_posterior;
+        lhs << "), log(density) = " << rhs.log_density;
 
         return lhs;
     }

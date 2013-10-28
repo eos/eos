@@ -87,10 +87,9 @@ class PopulationMonteCarloSamplerTest :
                     config.prerun_iterations_update = 650;
                     config.prerun_iterations_max = 2000;
                     config.prerun_iterations_min = 5000;
+                    config.proposal_initial_covariance = proposal_covariance(analysis, 10);
                     config.output_file = mcmc_file_name;
-                    config.scale_reduction = 10;
                     config.seed = 784213135;
-                    config.scale_reduction = 10;
                     config.skip_initial = 0.2;
                     config.store_prerun = true;
 
@@ -101,7 +100,7 @@ class PopulationMonteCarloSamplerTest :
                     //part.push_back(std::make_tuple(std::string("mass::c"), +4.5, +5.5));
 
                     Log::instance()->set_log_level(ll_silent);
-                    MarkovChainSampler sampler(analysis, config);
+                    MarkovChainSampler sampler(analysis.clone(), config);
                     sampler.run();
                     Log::instance()->set_log_level(ll_debug);
                 }

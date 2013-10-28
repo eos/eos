@@ -21,7 +21,8 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_MC_SAMPLER_HH
 #define EOS_GUARD_SRC_STATISTICS_MC_SAMPLER_HH 1
 
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/analysis-fwd.hh>
+#include <eos/statistics/density.hh>
 #include <eos/statistics/markov-chain.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/utils/parameters.hh>
@@ -42,10 +43,10 @@ namespace eos
             /*!
              * Constructor.
              *
-             * @param analysis The analysis for which we draw samples.
+             * @param analysis The density to sample from.
              * @param config   The configuration of the samples.
              */
-            MarkovChainSampler(const Analysis & analysis, const MarkovChainSampler::Config & config);
+            MarkovChainSampler(const DensityPtr & density, const MarkovChainSampler::Config & config);
 
             /// Destructor.
             ~MarkovChainSampler();
@@ -149,14 +150,6 @@ namespace eos
             /// on the dimensionality of the parameter space.
             bool scale_automatic;
 
-            /*!
-             * Decide whether only scan parameters or all parameters' initial
-             * variance should be rescaled in order to increase the efficiency.
-             */
-            bool scale_nuisance;
-
-            /// Value by which sqrt(covariance) of scan parameters is reduced for initial guesses of the proposal functions.
-            double scale_reduction;
             ///@}
 
             ///@name Prerun options
@@ -170,10 +163,8 @@ namespace eos
             /// Which local proposal function is chosen
             std::string proposal;
 
-            /// One proposal for the whole space or a decomposition into multivariate part
-            /// and 1D, uncorrelated part.
-            /// Map a fixed proposal in 1D to a parameter
-            std::vector<std::string> block_proposal_parameters;
+            /// Initial covariance matrix for multivariate proposal
+            std::vector<double> proposal_initial_covariance;
 
             /*!
              *  The number of degrees of freedom for a local proposal function
@@ -184,10 +175,6 @@ namespace eos
 
             /// Whether to store prerun samples.
             bool store_prerun;
-
-            /// In case there is only one partition, this is ignored and number_of_chains is used.
-            /// Else, this many chains are used per partition.
-            unsigned prerun_chains_per_partition;
             ///@}
 
             ///@name Main run options

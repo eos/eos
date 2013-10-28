@@ -110,6 +110,8 @@ class CommandLine :
 
         std::string creator;
 
+        double scale_reduction;
+
         std::string pmc_initialization_file;
         std::string pmc_sample_file;
         bool pmc_calculate_posterior;
@@ -134,6 +136,7 @@ class CommandLine :
 #if EOS_ENABLE_PMC
             config_pmc(PopulationMonteCarloSampler::Config::Default()),
 #endif
+            scale_reduction(1),
             pmc_calculate_posterior(false),
             pmc_calculate_posterior_min(0),
             pmc_calculate_posterior_max(0),
@@ -638,10 +641,10 @@ class CommandLine :
                     continue;
                 }
 #endif
-
+                // todo rename here and in scripts
                 if ("--prerun-chains-per-partition" == argument)
                 {
-                    mcmc_config.prerun_chains_per_partition = destringify<unsigned>(*(++a));
+                    mcmc_config.number_of_chains = destringify<unsigned>(*(++a));
 
                     continue;
                 }
@@ -690,18 +693,6 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--prior-as-proposal" == argument)
-                {
-                    // [parameter_name]
-                    std::string name = *(++a);
-                    LogPriorPtr proposal = analysis.log_prior(name);
-                    if (! proposal)
-                        throw DoUsage("Define parameter " + name + " and its prior before --prior-as-proposal");
-                    mcmc_config.block_proposal_parameters.push_back(name);
-
-                    continue;
-                }
-
                 if ("--proposal" == argument)
                 {
                     mcmc_config.proposal = *(++a);
@@ -743,7 +734,7 @@ class CommandLine :
 
                 if ("--scale-reduction" == argument)
                 {
-                    mcmc_config.scale_reduction = destringify<double>(*(++a));
+                    scale_reduction = destringify<double>(*(++a));
 
                     continue;
                 }
@@ -911,7 +902,7 @@ int main(int argc, char * argv[])
         }
 #endif
 
-        MarkovChainSampler sampler(inst->analysis, inst->mcmc_config);
+        MarkovChainSampler sampler(inst->analysis.clone(), inst->mcmc_config);
 
         sampler.run();
     }

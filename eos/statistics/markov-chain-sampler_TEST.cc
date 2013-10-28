@@ -89,16 +89,16 @@ class MarkovChainSamplerTest :
                     config.parallelize = true;
                     config.prerun_iterations_update = 500;
                     config.prerun_iterations_min = 1000;
+                    config.proposal_initial_covariance = proposal_covariance(analysis, 2);
                     config.rvalue_criterion_param = 1.1;
                     config.scale_automatic = true;
-                    config.scale_reduction = 2.0;
                     config.seed = 1346;
                     config.store = true;
                     config.store_prerun = true;
                     config.use_posterior_rvalue = true;
                     config.use_strict_rvalue_definition = true;
 
-                    MarkovChainSampler sampler(analysis, config);
+                    MarkovChainSampler sampler(analysis.clone(), config);
                     sampler.run();
 
                     MarkovChainSampler::PreRunInfo pre_info(sampler.pre_run_info());

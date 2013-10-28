@@ -21,11 +21,12 @@
 #include <config.h>
 
 #include <eos/statistics/markov-chain-sampler.hh>
-#include <eos/statistics/rvalue.hh>
+#include <eos/statistics/analysis.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/statistics/rvalue.hh>
 #include <eos/utils/thread_pool.hh>
 
 #include <Minuit2/FunctionMinimum.h>
@@ -57,7 +58,7 @@ namespace eos
     struct Implementation<MarkovChainSampler>
     {
         // store reference, but don't own analysis
-        const Analysis & analysis;
+        DensityPtr density;
 
         // our configuration options
         MarkovChainSampler::Config config;
@@ -77,8 +78,8 @@ namespace eos
 
         std::function<double (const std::vector<double> &, const std::vector<double> &, const unsigned &)> compute_rvalue;
 
-        Implementation(const Analysis & analysis, const MarkovChainSampler::Config & config) :
-            analysis(analysis),
+        Implementation(const DensityPtr & density, const MarkovChainSampler::Config & config) :
+            density(density),
             config(config),
             compute_rvalue(config.use_strict_rvalue_definition ? &RValue::gelman_rubin : &RValue::approximation)
         {
@@ -176,11 +177,11 @@ namespace eos
             // loop over all parameters to check and get R-values
             for (unsigned pmtr = 0 ; pmtr < number_of_parameters ; ++pmtr)
             {
-                // keep subset of chain statistics in on partition in here
+                // keep subset of chain statistics in here
                 std::vector<double> chain_means, chain_variances;
 
                 // read out statistics
-                for (unsigned c = 0 ; c < config.prerun_chains_per_partition ;  ++c)
+                for (unsigned c = 0 ; c < config.number_of_chains ;  ++c)
                 {
                     chain_means.push_back(all_chains_means[c][pmtr]);
                     chain_variances.push_back(all_chains_variances[c][pmtr]);
@@ -311,38 +312,24 @@ namespace eos
         void initialize()
         {
             // the number of scan and nuisance parameters
-            number_of_parameters = analysis.parameter_descriptions().size();
+            number_of_parameters = std::distance(density->begin(), density->end());
+
+            // todo implement default
+            // proposal covariance
+            if (config.proposal_initial_covariance.size() != power_of<2>(number_of_parameters))
+                throw InternalError("MarkovChainSampler::initialize: initial proposal covariance undefined."
+                                    "No default method implement yet.");
 
             // create independent chains -> different seeds
-            std::vector<double> covariance(number_of_parameters * number_of_parameters, 0.0);
-
             gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
             gsl_rng_set(rng, config.seed);
 
             /* setup chains */
 
-            // need to ensure that we have the same number of chains in prerun and main run
-            if (config.need_main_run)
+            for (unsigned c = 0 ; c < config.number_of_chains ; ++c)
             {
-                config.prerun_chains_per_partition = config.number_of_chains;
-            }
+                // todo draw initial point from prior
 
-            for (unsigned c = 0 ; c < config.prerun_chains_per_partition ; ++c)
-            {
-                // initialize MVG with means/variance from priors on the diagonal
-                for (unsigned par = 0 ; par < number_of_parameters ; ++par)
-                {
-                    std::string name = analysis.parameter_descriptions()[par].parameter->name();
-                    LogPriorPtr prior = analysis.log_prior(name);
-                    covariance[par + number_of_parameters * par] = prior->variance();
-
-                    // rescale variance of scan parameters with a configurable value, in order
-                    // to avoid drawing too many samples outside the allowed range.
-                    if (! analysis.parameter_descriptions()[par].nuisance || config.scale_nuisance)
-                    {
-                        covariance[par + number_of_parameters * par] /= power_of<2>(config.scale_reduction);
-                    }
-                }
                 //todo use factory for proposal_function
                 std::shared_ptr<MarkovChain::ProposalFunction> prop;
                 if (config.proposal == "MultivariateGaussian")
@@ -352,7 +339,8 @@ namespace eos
                         Log::instance()->message("markov_chain_sampler.initialize", ll_informational)
                             << "Using proposal_functions::MultivariateGaussian";
                     }
-                    prop.reset(new proposal_functions::MultivariateGaussian(number_of_parameters, covariance, config.scale_automatic));
+                    prop.reset(new proposal_functions::MultivariateGaussian(number_of_parameters, config.proposal_initial_covariance,
+                                                                            config.scale_automatic));
                 }
                 if (config.proposal == "MultivariateStudentT")
                 {
@@ -361,8 +349,8 @@ namespace eos
                         Log::instance()->message("markov_chain_sampler.initialize", ll_informational)
                             << "Using proposal_functions::MultivariateStudentT";
                     }
-                    prop.reset(new proposal_functions::MultivariateStudentT(number_of_parameters, covariance,
-                            config.student_t_degrees_of_freedom, config.scale_automatic));
+                    prop.reset(new proposal_functions::MultivariateStudentT(number_of_parameters, config.proposal_initial_covariance,
+                                                                            config.student_t_degrees_of_freedom, config.scale_automatic));
                 }
                 // default behavior
                 if (! prop)
@@ -373,19 +361,23 @@ namespace eos
                                         << "No proposal function of name '" << config.proposal << "' registered."
                                         << "Falling back to MultivariateGaussian.";
                     }
-                    prop.reset(new proposal_functions::MultivariateGaussian(number_of_parameters, covariance, config.scale_automatic));
+                    prop.reset(new proposal_functions::MultivariateGaussian(number_of_parameters, config.proposal_initial_covariance,
+                                                                            config.scale_automatic));
                 }
 
-                MarkovChain chain(analysis, config.seed + c, prop);
+                MarkovChain chain(density, config.seed + c, prop);
                 chains.push_back(chain);
             }
             gsl_rng_free(rng);
 
             // setup prerun info
-            pre_run_info = MarkovChainSampler::PreRunInfo
-                    {
-                false, 0,0, std::numeric_limits<double>::max(), std::vector<double>(analysis.parameter_descriptions().size(),std::numeric_limits<double>::max())
-                    };
+            pre_run_info =
+            MarkovChainSampler::PreRunInfo
+            {
+                false, 0,0, std::numeric_limits<double>::max(),
+                std::vector<double>(std::distance(density->begin(), density->end()),
+                std::numeric_limits<double>::max())
+            };
         }
 
         /*
@@ -402,9 +394,13 @@ namespace eos
             {
                 auto file = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
                 unsigned i = 0;
-                for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
+                // todo very nasty hack
+                if (Analysis * a = dynamic_cast<Analysis *>(density.get()))
                 {
-                    analysis.dump_descriptions(file, "/descriptions/prerun/chain #" + stringify(i));
+                    for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
+                    {
+                        a->dump_descriptions(file, "/descriptions/prerun/chain #" + stringify(i));
+                    }
                 }
             }
 
@@ -593,9 +589,13 @@ namespace eos
             {
                 auto file = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
                 unsigned i = 0;
-                for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
+                // todo very nasty hack
+                if (Analysis * a = dynamic_cast<Analysis *>(density.get()))
                 {
-                    analysis.dump_descriptions(file, "/descriptions/main run/chain #" + stringify(i));
+                    for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
+                    {
+                        a->dump_descriptions(file, "/descriptions/main run/chain #" + stringify(i));
+                    }
                 }
             }
         }
@@ -613,8 +613,8 @@ namespace eos
         }
     };
 
-    MarkovChainSampler::MarkovChainSampler(const Analysis & analysis, const MarkovChainSampler::Config & config) :
-        PrivateImplementationPattern<MarkovChainSampler>(new Implementation<MarkovChainSampler>(analysis, config))
+    MarkovChainSampler::MarkovChainSampler(const DensityPtr & density, const MarkovChainSampler::Config & config) :
+        PrivateImplementationPattern<MarkovChainSampler>(new Implementation<MarkovChainSampler>(density, config))
     {
     }
 
@@ -624,9 +624,9 @@ namespace eos
 
     std::vector<HistoryPtr>
     MarkovChainSampler::read_chains(const std::vector<std::shared_ptr<hdf5::File>> input_files,
-    		                        const Analysis & _analysis)
+                                    const Analysis & _analysis)
     {
-    	AnalysisPtr analysis = _analysis.old_clone();
+        AnalysisPtr analysis = _analysis.old_clone();
         std::vector<HistoryPtr> result;
 
         // loop over files
@@ -665,7 +665,7 @@ namespace eos
                     auto j = analysis->parameter_descriptions().cbegin();
                     for (auto i = descr.cbegin(), i_end = descr.cend() ; i != i_end ; ++i, ++j)
                     {
-                    	if (! (*i == *j))
+                        if (! (*i == *j))
                         {
                             Log::instance()->message("MarkovChainSampler::read_chains", ll_warning)
                                 << "Parameter description differs in " << i->parameter->name() << ", " << j->parameter->name()
@@ -679,7 +679,7 @@ namespace eos
 #if 0
                 // compare all priors
                 {
-                    auto j = analysis.priors().cbegin();
+                    auto j = density.priors().cbegin();
                     for (auto i = p->cbegin(), i_end = p->cend() ; i != i_end ; ++i, ++j)
                     {
                         if (*i != *j)
@@ -698,7 +698,7 @@ namespace eos
                         if (*i != j->name())
                         {
                             Log::instance()->message("MarkovChainSampler::read_chains", ll_warning)
-								<< "MarkovChainSampler::read_chains: constraint mismatch:"
+                                                                << "MarkovChainSampler::read_chains: constraint mismatch:"
                                 << *i + " vs " + j->name();
                         }
                     }
@@ -745,8 +745,6 @@ namespace eos
         use_strict_rvalue_definition(true),
         use_posterior_rvalue(false),
         scale_automatic(true),
-        scale_nuisance(true),
-        scale_reduction(1),
         need_prerun(true),
         prerun_iterations_update(1000),
         prerun_iterations_min(prerun_iterations_update),
@@ -754,7 +752,6 @@ namespace eos
         proposal("MultivariateGaussian"),
         student_t_degrees_of_freedom(std::numeric_limits<double>::epsilon(), std::numeric_limits<double>::max(), 1.0),
         store_prerun(false),
-        prerun_chains_per_partition(2),
         adapt_iterations(0),
         chunks(100),
         chunk_size(1000),
@@ -792,7 +789,7 @@ namespace eos
     {
         stream << std::boolalpha
                << "Prerun settings:" << std::endl
-               << "nchains = " << c.prerun_chains_per_partition
+               << "nchains = " << c.number_of_chains
                << ", seed = " << c.seed
                << ", parallelize = " << c.parallelize
                << ", prerun min iterations = " << c.prerun_iterations_min << std::endl

@@ -20,6 +20,7 @@
 
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
+#include <eos/statistics/analysis.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
@@ -93,12 +94,18 @@ class CommandLine :
 
         std::string creator;
 
+        bool scale_nuisance;
+        double scale_reduction;
+
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
             analysis(likelihood),
-            mcmc_config(MarkovChainSampler::Config::Quick())
+            mcmc_config(MarkovChainSampler::Config::Quick()),
+            scale_nuisance(true),
+            scale_reduction(1)
         {
+            // todo these number should be in Config constructor
             mcmc_config.number_of_chains = 4;
             mcmc_config.need_prerun = true;
             mcmc_config.chunk_size = 1000;
@@ -347,9 +354,10 @@ class CommandLine :
                     continue;
                 }
 
+                // todo rename here and in scripts
                 if ("--prerun-chains-per-partition" == argument)
                 {
-                    mcmc_config.prerun_chains_per_partition = destringify<unsigned>(*(++a));
+                    mcmc_config.number_of_chains = destringify<unsigned>(*(++a));
 
                     continue;
                 }
@@ -398,18 +406,6 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--prior-as-proposal" == argument)
-                {
-                    // [parameter_name]
-                    std::string name = *(++a);
-                    LogPriorPtr proposal = analysis.log_prior(name);
-                    if (! proposal)
-                        throw DoUsage("Define parameter " + name + " and its prior before --prior-as-proposal");
-                    mcmc_config.block_proposal_parameters.push_back(name);
-
-                    continue;
-                }
-
                 if ("--proposal" == argument)
                 {
                     mcmc_config.proposal = *(++a);
@@ -443,9 +439,16 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--scale-nuisance" == argument)
+                {
+                    scale_nuisance = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
                 if ("--scale-reduction" == argument)
                 {
-                    mcmc_config.scale_reduction = destringify<double>(*(++a));
+                    scale_reduction = destringify<double>(*(++a));
 
                     continue;
                 }
@@ -533,7 +536,10 @@ int main(int argc, char * argv[])
             }
         }
 
-        MarkovChainSampler sampler(inst->analysis, inst->mcmc_config);
+        /* create initial proposal covariance */
+        inst->mcmc_config.proposal_initial_covariance = proposal_covariance(inst->analysis, inst->scale_reduction, inst->scale_nuisance);
+
+        MarkovChainSampler sampler(inst->analysis.clone(), inst->mcmc_config);
 
         sampler.run();
     }
