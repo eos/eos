@@ -57,7 +57,7 @@ namespace eos
     template<>
     struct Implementation<MarkovChainSampler>
     {
-        // store reference, but don't own analysis
+        // the target density to sample from
         DensityPtr density;
 
         // our configuration options
@@ -76,7 +76,7 @@ namespace eos
         // collected information regarding the prerun
         MarkovChainSampler::PreRunInfo pre_run_info;
 
-        std::function<double (const std::vector<double> &, const std::vector<double> &, const unsigned &)> compute_rvalue;
+        ChainGroup::RValueFunction compute_rvalue;
 
         Implementation(const DensityPtr & density, const MarkovChainSampler::Config & config) :
             density(density),
@@ -314,11 +314,22 @@ namespace eos
             // the number of scan and nuisance parameters
             number_of_parameters = std::distance(density->begin(), density->end());
 
-            // todo implement default
             // proposal covariance
             if (config.proposal_initial_covariance.size() != power_of<2>(number_of_parameters))
-                throw InternalError("MarkovChainSampler::initialize: initial proposal covariance undefined."
-                                    "No default method implement yet.");
+            {
+                Log::instance()->message("markov_chain_sampler.initialize", ll_informational)
+                    << "Determining initial proposal covariance assuming flat priors";
+
+                config.proposal_initial_covariance.assign(power_of<2>(number_of_parameters), 0.0);
+
+                unsigned par = 0;
+                for (auto & def : *density)
+                {
+                    config.proposal_initial_covariance[par + number_of_parameters * par] =
+                            power_of<2>(def.max - def.min) / 12.0;
+                    ++par;
+                }
+            }
 
             // create independent chains -> different seeds
             gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
