@@ -108,7 +108,7 @@ namespace eos
              * @param name  Name of the new parameter to be declared.
              * @param value (Optional) value for the new parameter.
              */
-            Parameter declare(const std::string & name, const double & value = 0.0);
+            Parameter declare(const std::string & name, double value = 0.0);
 
             /*!
              * Set a parameter's numeric value.

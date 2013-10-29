@@ -142,6 +142,23 @@ namespace eos
         return _imp->parameters[id];
     }
 
+    Parameter
+    Parameters::declare(const std::string & name, double value)
+    {
+        // return existing parameter
+        auto i(_imp->parameters_map.find(name));
+        if (_imp->parameters_map.end() != i)
+            return Parameter(_imp->parameters_data, i->second);
+
+        // create new parameter
+        unsigned idx = _imp->parameters.size();
+        _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, value, value, value }, idx));
+        _imp->parameters_map[name] = idx;
+        _imp->parameters.push_back(Parameter(_imp->parameters_data, idx));
+
+        return _imp->parameters.back();
+    }
+
     void
     Parameters::set(const std::string & name, const double & value)
     {
