@@ -271,7 +271,7 @@ class ProposalFunctionsTest :
 
             // read and write to HDF5
             {
-                static const std::string file_name = EOS_BUILDDIR "/eos/utils/proposal-functions_TEST-rdwr.hdf5";
+                static const std::string file_name = EOS_BUILDDIR "/eos/statistics/proposal-functions_TEST-rdwr.hdf5";
                 {
                     hdf5::File file = hdf5::File::Create(file_name);
                 }
@@ -336,7 +336,7 @@ class ProposalFunctionsTest :
                 Parameters p = Parameters::Defaults();
                 LogPriorPtr flat = LogPrior::Flat(p, "mass::c", ParameterRange{ 1.0, 3.0 });
 
-                static const std::string file_name(EOS_BUILDDIR "/eos/utils/proposal-functions_TEST-block-decomposition.hdf5");
+                static const std::string file_name(EOS_BUILDDIR "/eos/statistics/proposal-functions_TEST-block-decomposition.hdf5");
 
                 // one Multivariate
                 {

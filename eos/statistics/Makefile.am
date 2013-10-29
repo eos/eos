@@ -1,6 +1,13 @@
 CLEANFILES = \
 	*~ \
 	markov-chain-sampler_TEST.hdf5 \
+	markov-chain-sampler_TEST_density.hdf5 \
+	pmc_sampler_TEST-mcmc-prerun.hdf5 \
+	pmc_sampler_TEST-output.hdf5 \
+	pmc_sampler_TEST-output-components.hdf5 \
+	pmc_sampler_TEST-output-hc.hdf5 \
+	pmc_sampler_TEST-output-resume.hdf5 \
+	pmc_sampler_TEST-output-split.hdf5 \
 	prior-sampler_TEST.hdf5 \
 	proposal-functions_TEST-rdwr.hdf5 \
 	proposal-functions_TEST-block-decomposition.hdf5

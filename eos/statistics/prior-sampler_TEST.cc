@@ -39,7 +39,7 @@ class PriorSamplerTest :
         {
             static const double eps = 1e-14;
 
-            static const std::string file_name(EOS_BUILDDIR "/eos/utils/prior-sampler_TEST.hdf5");
+            static const std::string file_name(EOS_BUILDDIR "/eos/statistics/prior-sampler_TEST.hdf5");
 
             PriorSampler::Config config = PriorSampler::Config::Default();
             config.n_samples = 4;
