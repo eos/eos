@@ -161,8 +161,8 @@ namespace eos
             // check proposal point
             for (unsigned i = 0 ; i < parameter_descriptions.size() ; ++i)
             {
-                if ((proposal.point[i] < parameter_descriptions[i].min)
-                        || (proposal.point[i] > parameter_descriptions[i].max))
+                if ((proposal.point[i] < parameter_descriptions[i].min) ||
+                    (proposal.point[i] > parameter_descriptions[i].max))
                 {
                     throw InternalError("MarkovChain::evaluate_point: parameter '" + parameter_descriptions[i].parameter->name()
                             + "' = " + stringify(proposal.point[i]) + " not in valid range ["
@@ -175,7 +175,10 @@ namespace eos
             {
                 if (parameter_descriptions[i].parameter->evaluate() != current.point[i] )
                     throw InternalError("MarkovChain::evaluate_point: parameter '" + parameter_descriptions[i].parameter->name()
-                            + "' = " + stringify(parameter_descriptions[i].parameter->evaluate()) + " doesn't match current point!");
+                            + "' = " + stringify(parameter_descriptions[i].parameter->evaluate())
+                            + " doesn't match current point " + stringify(current.point[i])
+                            + " in iteration " + stringify(current_iteration)
+                            + ". Check if thread safety is violated due to incorrect ParameterDescription cloning");
             }
 #endif
             // change Parameter object
@@ -184,7 +187,7 @@ namespace eos
                 parameter_descriptions[i].parameter->set(proposal.point[i]);
             }
 
-            // let likelihood evaluate all observables
+            // finally evaluate the target density
             proposal.log_density = density->evaluate();
         }
 
@@ -212,13 +215,13 @@ namespace eos
             for (auto p = parameter_descriptions.begin(), p_end = parameter_descriptions.end() ; p != p_end ; ++p, ++i)
             {
                 //  don't draw from priors: they don't know about restricted ranges
-                //TODO: draw from prior
-                double value = p->min + uniform_random_number() * (p->max - p->min);
+                //TODO: draw from prior for analysis? No, but support setting initial point
+                const double value = p->min + uniform_random_number() * (p->max - p->min);
                 *i = value;
                 p->parameter->set(value);
             }
 
-            // evaluate likelihood without argument, so all observables are calculated once
+            // need the density value at initial
             current.log_density = density->evaluate();
 
             // set proposal to current
