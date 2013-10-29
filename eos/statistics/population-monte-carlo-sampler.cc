@@ -284,30 +284,6 @@ namespace eos
                     *p = pmc::logpdf(density.get(), &parameter_samples[i * n_dim], err);
                }
            }
-
-           std::vector<double> mode() const
-           {
-               std::vector<double> result;
-
-               if (! (minimum && minimum->IsValid()) )
-               {
-                   return result;
-               }
-
-               for (unsigned i = 0 ; i < std::distance(density->begin(), density->end()) ; ++i)
-               {
-                   result.push_back(minimum->UserParameters().Value(i));
-               }
-
-               return result;
-           }
-
-#if 0
-           void optimize(std::vector<double> initial_point)
-           {
-               minimum.reset(new ROOT::Minuit2::FunctionMinimum(density->optimize_minuit(initial_point, Analysis::OptimizationOptions::Defaults())));
-           }
-#endif
        };
     }
 
