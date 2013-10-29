@@ -19,6 +19,7 @@
 #include <config.h>
 
 #include <eos/observable.hh>
+#include <eos/statistics/analysis.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/statistics/prior-sampler.hh>
 #include <eos/utils/destringify.hh>

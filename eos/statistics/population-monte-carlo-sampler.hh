@@ -20,9 +20,12 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_PMC_SAMPLER_HH
 #define EOS_GUARD_SRC_STATISTICS_PMC_SAMPLER_HH 1
 
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/density.hh>
 #include <eos/utils/hdf5-fwd.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/verify.hh>
+
+#include <vector>
 
 namespace eos
 {
@@ -48,7 +51,7 @@ namespace eos
              *
              * All options regarding construction of the PMC in config are ignored.
              */
-            PopulationMonteCarloSampler(const Analysis & analysis, const hdf5::File & file,
+            PopulationMonteCarloSampler(const DensityPtr & density, const hdf5::File & file,
                                         const PopulationMonteCarloSampler::Config & config, const bool & update = false);
 
             /// Destructor.

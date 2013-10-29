@@ -127,7 +127,7 @@ class PopulationMonteCarloSamplerTest :
                     temp_config.skip_initial = 0.2;
                     temp_config.patch_length = 400;
                     temp_config.target_ncomponents = 2;
-                    PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(mcmc_file_name), temp_config);
+                    PopulationMonteCarloSampler pmc_sampler(analysis.clone(), hdf5::File::Open(mcmc_file_name), temp_config);
                     pmc_sampler.run();
                     TEST_CHECK(pmc_sampler.status().converged);
                 }
@@ -139,14 +139,14 @@ class PopulationMonteCarloSamplerTest :
                     temp_config.skip_initial = 0.2;
                     temp_config.patch_length = 400;
                     temp_config.target_ncomponents = 2;
-                    PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(mcmc_file_name), temp_config);
+                    PopulationMonteCarloSampler pmc_sampler(analysis.clone(), hdf5::File::Open(mcmc_file_name), temp_config);
                     pmc_sampler.draw_samples();
                 }
 
                 // resuming from previous step
                 {
                     pmc_config.output_file = pmc_output_resume;
-                    PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(pmc_output_components), pmc_config);
+                    PopulationMonteCarloSampler pmc_sampler(analysis.clone(), hdf5::File::Open(pmc_output_components), pmc_config);
                     pmc_sampler.run();
                     TEST_CHECK(pmc_sampler.status().converged);
                 }
@@ -155,7 +155,7 @@ class PopulationMonteCarloSamplerTest :
                 {
                     pmc_config.samples_per_component = 3001;
                     pmc_config.output_file = pmc_output_split;
-                    PopulationMonteCarloSampler pmc_sampler(analysis, hdf5::File::Open(pmc_output_components), pmc_config);
+                    PopulationMonteCarloSampler pmc_sampler(analysis.clone(), hdf5::File::Open(pmc_output_components), pmc_config);
                     pmc_sampler.calculate_weights(pmc_output_components, 0, pmc_config.samples_per_component - 1);
                 }
 
@@ -172,7 +172,7 @@ class PopulationMonteCarloSamplerTest :
                     Analysis ana(llh);
                     ana.add(LogPrior::Flat(p, "mass::b(MSbar)", ParameterRange{ -10, 10 }));
                     ana.add(LogPrior::Flat(p, "mass::c", ParameterRange{ -10, 0 }));
-                    PopulationMonteCarloSampler pmc_sampler(ana, hdf5::File::Open(mcmc_file_name), pmc_config);
+                    PopulationMonteCarloSampler pmc_sampler(ana.clone(), hdf5::File::Open(mcmc_file_name), pmc_config);
                     pmc_sampler.run();
                     TEST_CHECK(pmc_sampler.status().converged);
                 }

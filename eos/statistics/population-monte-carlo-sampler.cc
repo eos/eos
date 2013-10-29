@@ -16,10 +16,13 @@
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include <eos/statistics/population-monte-carlo-sampler.hh>
+
+#include <eos/statistics/analysis.hh>
 #include <eos/statistics/chain-group.hh>
+#include <eos/statistics/density.hh>
 #include <eos/statistics/hierarchical-clustering.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
-#include <eos/statistics/population-monte-carlo-sampler.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/statistics/rvalue.hh>
 #include <eos/statistics/welford.hh>
@@ -129,19 +132,19 @@ namespace eos
         double logpdf(void * data, const double * par_point, error ** /*error_handler*/)
         {
             // retrieve data
-            Analysis * ana = (Analysis *) data;
+            Density * density = static_cast<Density *>(data);
 
             // set parameters
             unsigned j = 0;
-            for (auto i = ana->parameter_descriptions().begin(), i_end = ana->parameter_descriptions().end() ; i != i_end ; ++i, ++j)
+            for (auto i = density->begin() ; i != density->end() ; ++i, ++j)
             {
                 i->parameter->set(par_point[j]);
             }
-            const double post = ana->log_posterior();
-            if ( ! std::isfinite(post))
-                throw InternalError("PMC::posterior: not finite " + stringify(post)
-                                    + " at " + stringify(par_point, par_point + ana->parameter_descriptions().size()) );
-            return post;
+            const double value = density->evaluate();
+            if ( ! std::isfinite(value))
+                throw InternalError("PMC::posterior: not finite " + stringify(value)
+                                    + " at " + stringify(par_point, par_point + std::distance(density->begin(), density->end())));
+            return value;
         }
 
       // todo remove
@@ -235,25 +238,25 @@ namespace eos
         // Worker allows simple thread parallelization of massive posterior evaluation
        struct Worker
        {
-           std::shared_ptr<Analysis> analysis;
+           DensityPtr density;
 
            // store the posterior values
-           std::vector<double> posterior_values;
+           std::vector<double> density_values;
 
            // points at which posterior is evaluated
            std::vector<double> parameter_samples;
 
            std::shared_ptr<ROOT::Minuit2::FunctionMinimum> minimum;
 
-           Worker(const Analysis & analysis) :
-               analysis(analysis.old_clone())
+           Worker(const DensityPtr & density) :
+               density(density->clone())
            {
            }
 
            void clear()
            {
                parameter_samples.resize(0);
-               posterior_values.resize(0);
+               density_values.resize(0);
            }
 
            // call from main thread before actual work is done
@@ -263,7 +266,7 @@ namespace eos
                parameter_samples = std::vector<double>();
                std::copy(samples, samples + n_samples * n_dim, std::back_inserter(parameter_samples));
 
-               posterior_values.resize(n_samples);
+               density_values.resize(n_samples);
            }
 
            // compute log(posterior) at many sample points
@@ -271,14 +274,14 @@ namespace eos
            {
                pmc::ErrorHandler err;
 
-               if (parameter_samples.empty() || posterior_values.empty())
+               if (parameter_samples.empty() || density_values.empty())
                    return;
 
-               unsigned n_dim = parameter_samples.size() / posterior_values.size();
+               unsigned n_dim = parameter_samples.size() / density_values.size();
                unsigned i = 0;
-               for (auto p = posterior_values.begin(), p_end = posterior_values.end(); p != p_end ; ++i, ++p)
+               for (auto p = density_values.begin(), p_end = density_values.end(); p != p_end ; ++i, ++p)
                {
-                    *p = pmc::logpdf(analysis.get(), &parameter_samples[i * n_dim], err);
+                    *p = pmc::logpdf(density.get(), &parameter_samples[i * n_dim], err);
                }
            }
 
@@ -291,7 +294,7 @@ namespace eos
                    return result;
                }
 
-               for (unsigned i = 0 ; i < analysis->parameter_descriptions().size() ; ++i)
+               for (unsigned i = 0 ; i < std::distance(density->begin(), density->end()) ; ++i)
                {
                    result.push_back(minimum->UserParameters().Value(i));
                }
@@ -299,10 +302,12 @@ namespace eos
                return result;
            }
 
+#if 0
            void optimize(std::vector<double> initial_point)
            {
-               minimum.reset(new ROOT::Minuit2::FunctionMinimum(analysis->optimize_minuit(initial_point, Analysis::OptimizationOptions::Defaults())));
+               minimum.reset(new ROOT::Minuit2::FunctionMinimum(density->optimize_minuit(initial_point, Analysis::OptimizationOptions::Defaults())));
            }
+#endif
        };
     }
 
@@ -312,7 +317,7 @@ namespace eos
         typedef std::vector<unsigned> IndexList;
 
         // store reference, but don't own analysis
-        Analysis analysis;
+        DensityPtr density;
 
         // our configuration options
         PopulationMonteCarloSampler::Config config;
@@ -332,9 +337,9 @@ namespace eos
         // Posterior of the last sample
         std::vector<double> posterior_values;
 
-        Implementation(const Analysis & analysis, const hdf5::File & file,
+        Implementation(const DensityPtr & density, const hdf5::File & file,
                        const PopulationMonteCarloSampler::Config & config, const bool & update) :
-            analysis(analysis),
+            density(density),
             config(config),
             status(),
             pmc(NULL)
@@ -353,10 +358,14 @@ namespace eos
                                                ThreadPool::instance()->number_of_threads() :
                                                config.number_of_workers;
             for (unsigned i = 0; i < number_of_workers ; ++i)
-                workers.push_back(std::make_shared<pmc::Worker>(analysis));
+                workers.push_back(std::make_shared<pmc::Worker>(density));
 
             auto f = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
-            this->analysis.dump_descriptions(f, "descriptions");
+            // todo very nasty hack
+            if (Analysis * a = dynamic_cast<Analysis *>(density.get()))
+            {
+                a->dump_descriptions(f, "descriptions");
+            }
             dump("initial");
         }
 
@@ -444,7 +453,7 @@ namespace eos
             unsigned average_samples_per_worker = pmc->nsamples / ThreadPool::instance()->number_of_threads();
             unsigned remainder = pmc->nsamples % ThreadPool::instance()->number_of_threads();
 
-            unsigned n_dim = analysis.parameter_descriptions().size();
+            const unsigned n_dim = std::distance(density->begin(), density->end());
 
             // tickets for parallel computations
             std::vector<Ticket> tickets;
@@ -481,7 +490,7 @@ namespace eos
             // copy results and free memory
             for (auto w = workers.begin(), w_end = workers.end() ; w != w_end ; ++w)
             {
-                std::move((**w).posterior_values.begin(), (**w).posterior_values.end(), std::back_inserter(posterior_values));
+                std::move((**w).density_values.begin(), (**w).density_values.end(), std::back_inserter(posterior_values));
                 (**w).clear();
             }
 
@@ -707,7 +716,7 @@ namespace eos
          */
         void dump(const std::string & group, bool store_samples = true)
         {
-            const unsigned & dim = analysis.parameter_descriptions().size();
+            const unsigned dim = std::distance(density->begin(), density->end());
 
             // open the file whenever writing is desired, so it is in a readable state during lengthy posterior calculations
             auto file = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
@@ -801,7 +810,7 @@ namespace eos
             hdf5::File & f = const_cast<hdf5::File &>(file);
 
             // number of dimensions of parameter cube
-            int n_dim = int(analysis.parameter_descriptions().size());
+            const size_t n_dim = std::distance(density->begin(), density->end());
 
             // exception handler look-alike
             pmc::ErrorHandler err;
@@ -809,15 +818,16 @@ namespace eos
             // parameter cube: copy from analysis
             parabox * par_box = init_parabox(n_dim, err);
             int i = 0;
-            for (auto d = analysis.parameter_descriptions().begin(), d_end = analysis.parameter_descriptions().end() ; d != d_end ; ++d, ++i)
+            for (auto & d : *density)
             {
-                add_slab(par_box, i, d->min, d->max, err);
+                add_slab(par_box, i, d.min, d.max, err);
+                ++i;
             }
 
             /* setup importance sampling */
 
             // create posterior distribution
-            distribution * target = init_simple_distribution(n_dim, (void *) &analysis, &pmc::logpdf, NULL, err);
+            distribution * target = init_simple_distribution(n_dim, (void *) &density, &pmc::logpdf, NULL, err);
             pmc::check_error(err);
 
             /* create proposal density from file */
@@ -870,9 +880,9 @@ namespace eos
 
             /* final part */
 
-            if (mmv->ndim != analysis.parameter_descriptions().size())
+            if (mmv->ndim != n_dim)
                 throw InternalError("PMC::ctor: mismatch of parameter dimensions of analysis vs proposal ("\
-                                    + stringify(analysis.parameter_descriptions().size())
+                                    + stringify(n_dim)
                                     + " vs " + stringify(mmv->ndim) + ")");
 
             // create proposal distribution object
@@ -911,12 +921,13 @@ namespace eos
             std::vector<unsigned> parameter_indices;
             {
                 unsigned i = 0;
-                for (auto d = analysis.parameter_descriptions().cbegin() ; d != analysis.parameter_descriptions().cend() ; ++d, ++i)
+                for (auto & d : *density)
                 {
-                    if ( d->nuisance && config.r_value_no_nuisance)
+                    if ( d.nuisance && config.r_value_no_nuisance)
                         continue;
 
                     parameter_indices.push_back(i);
+                    ++i;
                 }
             }
 
@@ -1017,14 +1028,21 @@ namespace eos
             {
                 std::vector<std::shared_ptr<hdf5::File>> input_files;
                 input_files.push_back(std::make_shared<hdf5::File>(hdf5::File::Open(file.name(), H5F_ACC_RDONLY)));
-                chains = MarkovChainSampler::read_chains(input_files, analysis);
+                // todo very nasty hack
+                if (Analysis * a = dynamic_cast<Analysis *>(density.get()))
+                {
+                    chains = MarkovChainSampler::read_chains(input_files, *a);
+                }
             }
 
-            if (chains.front()->states.front().point.size() != analysis.parameter_descriptions().size())
+            // number of parameters
+            const unsigned & ndim = chains.front()->states.front().point.size();
+
+            if (ndim != std::distance(density->begin(), density->end()))
             {
                 Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_warning)
-                    << "The analysis in MCMC prerun had dim " << chains.front()->states.front().point.size()
-                    << ", but now the analysis has dim " << analysis.parameter_descriptions().size();
+                    << "The analysis in MCMC prerun had dim " << ndim
+                    << ", but now the analysis has dim " << std::distance(density->begin(), density->end());
             }
 
             HierarchicalClustering::Config conf = HierarchicalClustering::Config::Default();
@@ -1154,9 +1172,6 @@ namespace eos
             }
             Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
                 << "Formed " << local_patches.size() << " local patches centered around patch means";
-
-            // number of parameters
-            const unsigned & ndim = chains.front()->states.front().point.size();
 
             if (config.store_input_components)
             {
@@ -1600,10 +1615,10 @@ namespace eos
         }
     };
 
-    PopulationMonteCarloSampler::PopulationMonteCarloSampler(const Analysis & analysis, const hdf5::File & file,
+    PopulationMonteCarloSampler::PopulationMonteCarloSampler(const DensityPtr & density, const hdf5::File & file,
                                                              const PopulationMonteCarloSampler::Config & config,
                                                              const bool & update) :
-        PrivateImplementationPattern<PopulationMonteCarloSampler>(new Implementation<PopulationMonteCarloSampler>(analysis, file, config, update))
+        PrivateImplementationPattern<PopulationMonteCarloSampler>(new Implementation<PopulationMonteCarloSampler>(density, file, config, update))
     {
     }
 

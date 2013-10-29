@@ -18,10 +18,15 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <config.h>
+
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
+#include <eos/statistics/analysis.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
+#if EOS_ENABLE_PMC
 #include <eos/statistics/population-monte-carlo-sampler.hh>
+#endif
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/hdf5.hh>
@@ -38,8 +43,6 @@
 #include <Minuit2/MnPrint.h>
 
 #include <time.h>
-
-#include <config.h>
 
 using namespace eos;
 
@@ -875,7 +878,7 @@ int main(int argc, char * argv[])
 #if EOS_ENABLE_PMC
         if (CommandLine::instance()->use_pmc)
         {
-            PopulationMonteCarloSampler pop_sampler(inst->analysis, hdf5::File::Open(inst->pmc_initialization_file),
+            PopulationMonteCarloSampler pop_sampler(inst->analysis.clone(), hdf5::File::Open(inst->pmc_initialization_file),
             		inst->config_pmc, inst->pmc_update);
 
             if (inst->pmc_final)
