@@ -58,6 +58,7 @@ include_eos_statistics_HEADERS = \
 TESTS = \
 	analysis_TEST \
 	chi-squared_TEST \
+	density_TEST \
 	hierarchical-clustering_TEST \
 	histogram_TEST \
 	log-likelihood_TEST \
@@ -88,6 +89,8 @@ analysis_TEST_SOURCES = analysis_TEST.cc analysis_TEST.hh
 
 chi_squared_TEST_SOURCES = chi-squared_TEST.cc
 
+density_TEST_SOURCES = density_TEST.cc density_TEST.hh
+
 hierarchical_clustering_TEST_SOURCES = hierarchical-clustering_TEST.cc
 
 histogram_TEST_SOURCES = histogram_TEST.cc
@@ -98,7 +101,7 @@ log_prior_TEST_SOURCES = log-prior_TEST.cc
 
 markov_chain_TEST_SOURCES = markov-chain_TEST.cc
 
-markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc
+markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc density_TEST.cc
 
 if EOS_ENABLE_PMC
 population_monte_carlo_sampler_TEST_SOURCES = population-monte-carlo-sampler_TEST.cc

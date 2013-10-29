@@ -17,10 +17,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/statistics/markov-chain-sampler.hh>
+
 #include <test/test.hh>
 #include <eos/statistics/analysis_TEST.hh>
+#include <eos/statistics/density_TEST.hh>
 #include <eos/statistics/histogram.hh>
-#include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/power_of.hh>
@@ -67,6 +69,20 @@ class MarkovChainSamplerTest :
                 TEST_CHECK_THROWS(VerifiedRangeOverflow, conf.max_efficiency = 23.1);
             });
 
+
+            /* sample from a density */
+            {
+                TestDensity density = make_multivariate_unit_normal(2);
+                MarkovChainSampler::Config config = MarkovChainSampler::Config::Default();
+                config.chunk_size = 5000;
+                config.chunks = 10;
+                config.number_of_chains = 2;
+                config.output_file = EOS_BUILDDIR "/eos/statistics/markov-chain-sampler_TEST_density.hdf5";
+                config.parallelize = false;
+                config.seed = 1246122;
+                MarkovChainSampler sampler(density.clone(), config);
+                sampler.run();
+            }
 
             // check pre run, main run and HDF5 storage
             {
