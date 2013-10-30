@@ -291,7 +291,7 @@ namespace eos
 
     struct ParameterRange
     {
-            double min, max;
+        double min, max;
     };
 }
 

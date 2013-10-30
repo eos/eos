@@ -19,9 +19,12 @@
 
 #include <eos/statistics/density_TEST.hh>
 #include <eos/utils/power_of.hh>
+#include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/wrapped_forward_iterator-impl.hh>
 #include <test/test.hh>
 
 #include <cmath>
+#include <map>
 
 using namespace test;
 using namespace eos;
@@ -98,8 +101,177 @@ namespace eos
         return _name;
     }
 
+    template class WrappedForwardIterator<Parameters::IteratorTag, ParameterDescription>;
+
+    template <>
+    struct Implementation<SimpleParameters>
+    {
+        // forbid parameters with same name
+        std::map<std::string, SimpleParameter::Index> parameters_map;
+        std::shared_ptr<std::vector<double>> values;
+        std::vector<ParameterDescription> defs;
+
+        Implementation() :
+            values(new std::vector<double>)
+        {
+
+        }
+
+        SimpleParameter & declare(const std::string & name, const double & min,
+                                const double & max, bool nuisance=false)
+        {
+            auto i(parameters_map.find(name));
+
+            if (parameters_map.end() == i)
+            {
+                SimpleParameter::Index id = defs.size();
+                parameters_map[name] = id;
+                values->push_back(0);
+                SimpleParameter * p = new SimpleParameter(name, id, values);
+                defs.push_back(ParameterDescription{ MutablePtr(p), min, max, nuisance });
+                return *p;
+            }
+            else
+            {
+                return *(static_cast<SimpleParameter *>(defs[i->second].parameter.get()));
+            }
+        }
+    };
+
+    SimpleParameter::SimpleParameter(const std::string & name, const Index & index,
+                                     const std::shared_ptr<std::vector<double>> & parameters) :
+        _name(name),
+        _index(index),
+        _parameters(parameters)
+    {
+    }
+
+    SimpleParameter::~SimpleParameter()
+    {
+    }
+
+    MutablePtr
+    SimpleParameter::clone() const
+    {
+        return MutablePtr(new SimpleParameter(_name, _index, _parameters));
+    }
+
+    SimpleParameter::operator double () const
+    {
+        return (*_parameters)[_index];
+    }
+
+    double
+    SimpleParameter::operator() () const
+    {
+        return (*_parameters)[_index];
+    }
+
+    double
+    SimpleParameter::evaluate() const
+    {
+        return (*_parameters)[_index];
+    }
+
+    const Mutable &
+    SimpleParameter::operator= (const double & value)
+    {
+        (*_parameters)[_index] = value;
+
+        return *this;
+    }
+
+    void
+    SimpleParameter::set(const double & value)
+    {
+        (*_parameters)[_index] = value;
+    }
+
+    const std::string &
+    SimpleParameter::name() const
+    {
+        return _name;
+    }
+
+    SimpleParameters::SimpleParameters() :
+        PrivateImplementationPattern<SimpleParameters>(new Implementation<SimpleParameters>())
+    {
+    }
+
+    SimpleParameters::~SimpleParameters()
+    {
+    }
+
+    SimpleParameters
+    SimpleParameters::clone() const
+    {
+        SimpleParameters result;
+
+        // copy parameters
+        for (auto & d : _imp->defs)
+        {
+            result.declare(d.parameter->name(), d.min, d.max, d.nuisance);
+        }
+
+        // copy values
+        std::copy(_imp->values->begin(), _imp->values->end(), result._imp->values->begin());
+
+        return result;
+    }
+
+    SimpleParameters::Iterator
+    SimpleParameters::begin() const
+    {
+        return _imp->defs.begin();
+    }
+
+    SimpleParameters::Iterator
+    SimpleParameters::end() const
+    {
+        return _imp->defs.end();
+    }
+
+    SimpleParameter &
+    SimpleParameters::declare(const std::string & name, const double & min,
+                              const double & max, bool nuisance)
+    {
+        return _imp->declare(name, min, max, nuisance);
+    }
+
+    SimpleParameter &
+    SimpleParameters::operator[] (const std::string & name) const
+    {
+        auto i(_imp->parameters_map.find(name));
+
+        if (_imp->parameters_map.end() == i)
+            throw UnknownParameterError(name);
+
+        return *(static_cast<SimpleParameter *>(_imp->defs[i->second].parameter.get()));
+    }
+
+    SimpleParameter &
+    SimpleParameters::operator[] (const SimpleParameter::Index & id) const
+    {
+        if (id >= _imp->defs.size())
+            throw InternalError("Parameters::operator[] (Parameter::Id): invalid id '" + stringify(id) + "'");
+
+        return *(static_cast<SimpleParameter *>(_imp->defs[id].parameter.get()));
+    }
+
+    bool
+    SimpleParameters::operator!= (const SimpleParameters & rhs) const
+    {
+        return _imp->values.get() != rhs._imp->values.get();
+    }
+
+    const std::vector<double> &
+    SimpleParameters::values() const
+    {
+        return *_imp->values;
+    }
+
     TestDensity::TestDensity(const WrappedDensity & density) :
-                _density(density)
+        _density(density)
     {
     }
 
@@ -176,7 +348,57 @@ class DensityTest :
         {
         }
 
-        virtual void run() const
+        void simple() const
+        {
+            // create, access, and modify
+            {
+                SimpleParameters p;
+                auto mH = p.declare("mH", 120, 130);
+                TEST_CHECK_EQUAL(mH.name(), "mH");
+
+                mH.set(125);
+                TEST_CHECK_EQUAL(double(mH), 125);
+
+                p["mH"] = 129;
+                TEST_CHECK_EQUAL(mH, 129);
+
+                p[0] = 128;
+                TEST_CHECK_EQUAL(mH, 128);
+
+                TEST_CHECK_EQUAL(p.values().size(), 1);
+                TEST_CHECK_EQUAL(p.values().front(), 128);
+
+                TEST_CHECK( (p != p) == false);
+
+                TEST_CHECK_EQUAL(p.begin()->min, 120);
+                TEST_CHECK_EQUAL(p.begin()->max, 130);
+                TEST_CHECK_EQUAL(p.begin()->nuisance, false);
+            }
+
+            // cloning
+            {
+                SimpleParameters p1;
+                p1.declare("mH", 120, 130);
+                p1.declare("mt", 170, 180);
+
+                p1[0] = 125;
+                p1[1] = 174;
+
+                SimpleParameters p2 = p1.clone();
+
+                TEST_CHECK(p1 != p2);
+                TEST_CHECK_EQUAL(p1[0], p2[0]);
+
+                // now modify p1, does p2 change?
+                p1[0] = 126;
+                TEST_CHECK_EQUAL(p2[0], 125);
+
+                p2[1] = 173;
+                TEST_CHECK_EQUAL(p1[1], 174);
+            }
+        }
+
+        void test() const
         {
             static const double eps = 1e-13;
 
@@ -211,5 +433,11 @@ class DensityTest :
 
                 TEST_CHECK_RELATIVE_ERROR(density.evaluate(), -3.0078770664093453, eps);
             }
+        }
+
+        virtual void run() const
+        {
+            test();
+            simple();
         }
 } density_test;
