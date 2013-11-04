@@ -75,7 +75,7 @@ include_eos_utils_HEADERS = \
 	destringify.hh \
 	equation_solver.hh \
 	exception.hh \
-	hdf5.hh \
+	hdf5.hh hdf5-fwd.hh \
 	integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.hh \
@@ -86,11 +86,12 @@ include_eos_utils_HEADERS = \
 	memoise.hh \
 	model.hh \
 	mutex.hh \
+	mutable.hh mutable-fwd.hh \
 	observable_cache.hh \
 	observable_set.hh \
 	one-of.hh \
 	options.hh \
-	parameters.hh \
+	parameters.hh parameters-fwd.hh \
 	power_of.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.hh \
