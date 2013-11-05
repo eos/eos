@@ -21,6 +21,7 @@ libeosstatistics_la_SOURCES = \
 	chain-group.cc chain-group.hh \
 	chi-squared.hh chi-squared.cc \
 	density.cc density.hh density-fwd.hh \
+	density-wrapper.cc density-wrapper.hh \
 	hierarchical-clustering.cc hierarchical-clustering.hh \
 	histogram.cc histogram.hh \
 	log-likelihood.cc log-likelihood.hh log-likelihood-fwd.hh \
@@ -30,6 +31,7 @@ libeosstatistics_la_SOURCES = \
 	prior-sampler.cc prior-sampler.hh \
 	proposal-functions.cc proposal-functions.hh \
 	rvalue.cc rvalue.hh \
+	simple-parameters.cc simple-parameters.hh \
 	welford.cc welford.hh
 libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lMinuit2
 
@@ -45,6 +47,7 @@ include_eos_statistics_HEADERS = \
 	chain-group.hh \
 	chi-squared.hh \
 	density.hh density-fwd.hh \
+	density-wrapper.hh \
 	hierarchical-clustering.hh \
 	histogram.hh \
 	log-likelihood.hh log-likelihood-fwd.hh \
@@ -54,6 +57,7 @@ include_eos_statistics_HEADERS = \
 	prior-sampler.hh \
 	proposal-functions.hh \
 	rvalue.hh \
+	simple-parameters.hh \
 	welford.hh
 
 if EOS_ENABLE_PMC
@@ -63,7 +67,7 @@ endif
 TESTS = \
 	analysis_TEST \
 	chi-squared_TEST \
-	density_TEST \
+	density-wrapper_TEST \
 	hierarchical-clustering_TEST \
 	histogram_TEST \
 	log-likelihood_TEST \
@@ -73,6 +77,7 @@ TESTS = \
 	prior-sampler_TEST \
 	proposal-functions_TEST \
 	rvalue_TEST \
+	simple-parameters_TEST \
 	welford_TEST
 LDADD = \
 	-lgsl \
@@ -94,7 +99,7 @@ analysis_TEST_SOURCES = analysis_TEST.cc analysis_TEST.hh
 
 chi_squared_TEST_SOURCES = chi-squared_TEST.cc
 
-density_TEST_SOURCES = density_TEST.cc density_TEST.hh
+density_wrapper_TEST_SOURCES = density-wrapper_TEST.cc density-wrapper_TEST.hh
 
 hierarchical_clustering_TEST_SOURCES = hierarchical-clustering_TEST.cc
 
@@ -106,7 +111,7 @@ log_prior_TEST_SOURCES = log-prior_TEST.cc
 
 markov_chain_TEST_SOURCES = markov-chain_TEST.cc
 
-markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc density_TEST.cc
+markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc density-wrapper_TEST.cc
 
 if EOS_ENABLE_PMC
 population_monte_carlo_sampler_TEST_SOURCES = population-monte-carlo-sampler_TEST.cc
@@ -117,5 +122,7 @@ prior_sampler_TEST_SOURCES = prior-sampler_TEST.cc
 proposal_functions_TEST_SOURCES = proposal-functions_TEST.cc
 
 rvalue_TEST_SOURCES = rvalue_TEST.cc
+
+simple_parameters_TEST_SOURCES = simple-parameters_TEST.cc
 
 welford_TEST_SOURCES = welford_TEST.cc

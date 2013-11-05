@@ -21,7 +21,7 @@
 
 #include <test/test.hh>
 #include <eos/statistics/analysis_TEST.hh>
-#include <eos/statistics/density_TEST.hh>
+#include <eos/statistics/density-wrapper_TEST.hh>
 #include <eos/statistics/histogram.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/utils/hdf5.hh>
@@ -72,7 +72,7 @@ class MarkovChainSamplerTest :
 
             /* sample from a density */
             {
-                TestDensity density = make_multivariate_unit_normal(2);
+                DensityWrapper density = make_multivariate_unit_normal(2);
                 MarkovChainSampler::Config config = MarkovChainSampler::Config::Default();
                 config.chunk_size = 5000;
                 config.chunks = 10;
