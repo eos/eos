@@ -21,8 +21,6 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_MC_SAMPLER_HH
 #define EOS_GUARD_SRC_STATISTICS_MC_SAMPLER_HH 1
 
-#include <eos/statistics/analysis-fwd.hh>
-#include <eos/statistics/density.hh>
 #include <eos/statistics/markov-chain.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/utils/parameters.hh>
@@ -53,10 +51,8 @@ namespace eos
 
             /*!
              * Read the history of Markov chains stored in the input files.
-             * For safety, compare with the given analysis to ensure parameters and constraints agree.
              */
-            static std::vector<HistoryPtr> read_chains(const std::vector<std::shared_ptr<hdf5::File>> input_files,
-            		                                   const Analysis & analysis);
+            static std::vector<HistoryPtr> read_chains(const std::vector<std::shared_ptr<hdf5::File>> & input_files);
             ///@}
 
             ///@name Sampling

@@ -619,10 +619,8 @@ namespace eos
     }
 
     std::vector<HistoryPtr>
-    MarkovChainSampler::read_chains(const std::vector<std::shared_ptr<hdf5::File>> input_files,
-                                    const Analysis & _analysis)
+    MarkovChainSampler::read_chains(const std::vector<std::shared_ptr<hdf5::File>> & input_files)
     {
-        AnalysisPtr analysis = _analysis.old_clone();
         std::vector<HistoryPtr> result;
 
         // loop over files
@@ -644,62 +642,14 @@ namespace eos
                 ProposalFunctionPtr prop;
                 std::string proposal_type;
                 MarkovChain::Stats stat;
-                std::vector<ParameterDescription> descr;
-                std::vector<std::string> priors;
-                std::vector<std::string> constraints;
-                std::string hash;
 
                 // fill the objects
                 MarkovChain::read_data(**f, group_name, *history, prop, proposal_type, stat);
-                Analysis::read_descriptions(**f, "/descriptions/" + group_name, descr, priors, constraints, hash);
 
                 // store them
                 result.push_back(history);
 
-                // compare parameter descriptions
-                {
-                    auto j = analysis->parameter_descriptions().cbegin();
-                    for (auto i = descr.cbegin(), i_end = descr.cend() ; i != i_end ; ++i, ++j)
-                    {
-                        if (! (*i == *j))
-                        {
-                            Log::instance()->message("MarkovChainSampler::read_chains", ll_warning)
-                                << "Parameter description differs in " << i->parameter->name() << ", " << j->parameter->name()
-                                << "min = (" << i->min << ", " << j->min << ") "
-                                << "max = (" << i->max << ", " << j->max << ") "
-                                << "nus = (" << i->nuisance << ", " << j->nuisance << ")";
-                        }
-                    }
-                }
-                //todo reactivate
-#if 0
-                // compare all priors
-                {
-                    auto j = density.priors().cbegin();
-                    for (auto i = p->cbegin(), i_end = p->cend() ; i != i_end ; ++i, ++j)
-                    {
-                        if (*i != *j)
-                        {
-                            throw InternalError("MarkovChainSampler::read_chains: prior mismatch:"
-                                                + *i + " vs " + *j);
-                        }
-                    }
-                }
-#endif
-                // compare all constraints
-                {
-                    auto j = analysis->log_likelihood().begin();
-                    for (auto i = constraints.cbegin(), i_end = constraints.cend() ; i != i_end ; ++i, ++j)
-                    {
-                        if (*i != j->name())
-                        {
-                            Log::instance()->message("MarkovChainSampler::read_chains", ll_warning)
-                                                                << "MarkovChainSampler::read_chains: constraint mismatch:"
-                                << *i + " vs " + j->name();
-                        }
-                    }
-                }
-
+                // go to next chain
                 ++c;
             }
         }
