@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011 - 2013 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -147,54 +147,7 @@ namespace eos
             return value;
         }
 
-      // todo remove
-        double* mvdens_ran_extreme(double* dest, mvdens * g, gsl_rng * r, error** err, double offset) {
-            size_t i;
-            double *res;
-            gsl_vector * res_view;
-            gsl_vector_view res_view_container;
-            double val,corr,u;
-
-            mvdens_cholesky_decomp(g,err);
-            pmc::check_error(err);
-
-            MALLOC_IF_NEEDED(res,dest,sizeof(double)*g->ndim,err);
-            pmc::check_error(err);
-
-            gsl_set_error_handler_off();
-            /* Generate a N(O,I) distributed vector               */
-            for (i = 0; i < g->ndim; i++) {
-                val= -offset + 2.0 * offset * gsl_rng_uniform(r);
-                res[i]=val;
-            }
-
-            /* Make it N(O,Sigma)                         */
-            res_view_container=gsl_vector_view_array(res,g->ndim);
-            res_view=&(res_view_container.vector);
-            gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, g->std_view, res_view);
-
-            corr=1;
-            if(g->df!=-1) {
-                // make it student-t
-                u = gsl_ran_chisq(r, g->df);
-                corr=sqrt(g->df/u);
-            }
-
-            // add mean and correct if student-t
-            for(i=0;i<g->ndim;i++) {
-                res[i]*=corr;
-                res[i]+=g->mean[i];
-            }
-            return res;
-        }
-
         typedef std::pair<unsigned, double> index_pair;
-        //todo replace by lambda
-        bool
-        cmp(const index_pair & a, const index_pair & b )
-        {
-            return a.second > b.second;
-        }
 
         /*
          * Find the minimal partition of N into K parts, such that the smallest
@@ -675,7 +628,11 @@ namespace eos
             }
 
             // sort according to posterior in descending order
-            std::sort(weight_indices.begin(), weight_indices.end(), &pmc::cmp);
+            std::sort(weight_indices.begin(), weight_indices.end(),
+                      [] (const pmc::index_pair & a, const pmc::index_pair & b)
+            {
+                return a.second > b.second;
+            } );
 
             // set OK flag to false for highest weights
             for (unsigned j = 0 ; j < config.crop_highest_weights ; ++j)
