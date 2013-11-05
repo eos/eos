@@ -746,7 +746,7 @@ namespace eos
     /* MarkovChainSampler::Config */
 
     MarkovChainSampler::Config::Config() :
-        number_of_chains(1, std::numeric_limits<unsigned>::max(), 3),
+        number_of_chains(1, std::numeric_limits<unsigned>::max(), 4),
         seed(0),
         parallelize(true),
         min_efficiency(0, 1, 0.15), // incompatible with BAT defaults [0.15, 0.5]
@@ -762,7 +762,7 @@ namespace eos
         prerun_iterations_max(1e6),
         proposal("MultivariateGaussian"),
         student_t_degrees_of_freedom(std::numeric_limits<double>::epsilon(), std::numeric_limits<double>::max(), 1.0),
-        store_prerun(false),
+        store_prerun(true),
         adapt_iterations(0),
         chunks(100),
         chunk_size(1000),
