@@ -818,7 +818,7 @@ namespace eos
 
                 // computed weighted sum, renormalize exponents
                 v = temp.begin();
-                for (auto w = weights.cbegin(); w != weights.end() ; ++w, ++v)
+                for (auto w = weights.cbegin(); w != weights.cend() ; ++w, ++v)
                 {
                     ret_val += *w * std::exp(*v - *max_val);
                 }
