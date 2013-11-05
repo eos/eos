@@ -3,6 +3,8 @@ CLEANFILES = \
 	markov-chain-sampler_TEST.hdf5 \
 	markov-chain-sampler_TEST_density.hdf5 \
 	pmc_sampler_TEST-mcmc-prerun.hdf5 \
+	pmc_sampler_TEST-density.hdf5 \
+	pmc_sampler_TEST-density-prerun.hdf5 \
 	pmc_sampler_TEST-output.hdf5 \
 	pmc_sampler_TEST-output-components.hdf5 \
 	pmc_sampler_TEST-output-hc.hdf5 \
@@ -114,7 +116,7 @@ markov_chain_TEST_SOURCES = markov-chain_TEST.cc
 markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc density-wrapper_TEST.cc
 
 if EOS_ENABLE_PMC
-population_monte_carlo_sampler_TEST_SOURCES = population-monte-carlo-sampler_TEST.cc
+population_monte_carlo_sampler_TEST_SOURCES = population-monte-carlo-sampler_TEST.cc density-wrapper_TEST.cc
 endif
 
 prior_sampler_TEST_SOURCES = prior-sampler_TEST.cc

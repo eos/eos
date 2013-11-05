@@ -18,6 +18,7 @@
  */
 
 #include <eos/statistics/analysis_TEST.hh>
+#include <eos/statistics/density-wrapper_TEST.hh>
 #include <eos/statistics/population-monte-carlo-sampler.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/utils/hdf5.hh>
@@ -36,8 +37,43 @@ class PopulationMonteCarloSamplerTest :
         {
         }
 
+        void wrapped_density() const
+        {
+            /* create prerun output */
+            DensityWrapper density = make_multivariate_unit_normal(2);
+            MarkovChainSampler::Config mcmc_config = MarkovChainSampler::Config::Default();
+            mcmc_config.need_main_run = false;
+            mcmc_config.number_of_chains = 2;
+            mcmc_config.output_file = EOS_BUILDDIR "/eos/statistics/pmc_sampler_TEST-density-prerun.hdf5";
+            mcmc_config.parallelize = false;
+            mcmc_config.prerun_iterations_update = 300;
+            mcmc_config.prerun_iterations_max = 5000;
+            mcmc_config.prerun_iterations_min = 500;
+            mcmc_config.seed = 1246122;
+            MarkovChainSampler sampler(density.clone(), mcmc_config);
+            sampler.run();
+
+            /* run PMC */
+            PopulationMonteCarloSampler::Config pmc_config = PopulationMonteCarloSampler::Config::Default();
+            pmc_config.max_updates = 5;
+            pmc_config.samples_per_component = 400;
+            pmc_config.final_samples = 50000;
+            pmc_config.output_file = EOS_BUILDDIR "/eos/statistics/pmc_sampler_TEST-density.hdf5";;
+            pmc_config.parallelize = true;
+            pmc_config.seed = 23;
+            pmc_config.store = true;
+            pmc_config.skip_initial = 0.2;
+            pmc_config.patch_length = 100;
+            pmc_config.target_ncomponents = 2;
+            pmc_config.group_by_r_value = 1.2;
+            PopulationMonteCarloSampler pmc_sampler(density.clone(), hdf5::File::Open(mcmc_config.output_file), pmc_config);
+            pmc_sampler.run();
+            TEST_CHECK(pmc_sampler.status().converged);
+}
+
         virtual void run() const
         {
+            wrapped_density();
             // initialize from a MCMC prerun
             {
                 /* setup bimodal distribution */
@@ -91,7 +127,6 @@ class PopulationMonteCarloSamplerTest :
                     config.output_file = mcmc_file_name;
                     config.seed = 784213135;
                     config.skip_initial = 0.2;
-                    config.store_prerun = true;
 
                     std::vector<std::tuple<std::string, double, double> > part;
 

@@ -961,11 +961,7 @@ namespace eos
             {
                 std::vector<std::shared_ptr<hdf5::File>> input_files;
                 input_files.push_back(std::make_shared<hdf5::File>(hdf5::File::Open(file.name(), H5F_ACC_RDONLY)));
-                // todo very nasty hack
-                if (Analysis * a = dynamic_cast<Analysis *>(density.get()))
-                {
-                    chains = MarkovChainSampler::read_chains(input_files, *a);
-                }
+                chains = MarkovChainSampler::read_chains(input_files);
             }
 
             // number of parameters
@@ -990,7 +986,7 @@ namespace eos
 
             Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
                 << "Creating initial guess for the " << config.target_ncomponents
-                << " components to be formed from large windows"
+                << " target components to be formed from large windows"
                 << (config.group_by_r_value > 1 ? " for each of the " + stringify(chain_groups.size()) + " chain groups found" : "");
 
             HierarchicalClustering::MixtureDensity initial_components;
@@ -1104,7 +1100,7 @@ namespace eos
                 }
             }
             Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_informational)
-                << "Formed " << local_patches.size() << " local patches centered around patch means";
+                << "Formed " << local_patches.size() << " input components centered around patch means";
 
             if (config.store_input_components)
             {
