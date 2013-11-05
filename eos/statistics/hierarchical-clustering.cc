@@ -241,7 +241,9 @@ namespace eos
                     throw InternalError("HierarchicalClustering::run: no components specified");
 
                 if (input_components.size() <= output_components.size())
-                    throw InternalError("HierarchicalClustering::run: cannot reduce #components");
+                    throw InternalError("HierarchicalClustering::run: cannot reduce #components. "
+                            "Input: " + stringify(input_components.size()) +
+                            " , output: " + stringify(output_components.size()));
 
                 mapping.resize(input_components.size());
 
