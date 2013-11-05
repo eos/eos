@@ -34,12 +34,6 @@
 
 namespace eos
 {
-    // TODO: replace by lambda function
-    bool is_dead(const HierarchicalClustering::Component & c)
-    {
-        return c.weight() == 0.0;
-    }
-
     template <> struct Implementation<HierarchicalClustering>
     {
         HierarchicalClustering::Config config;
@@ -82,7 +76,11 @@ namespace eos
             unsigned active_components = output_components.size();
             if (config.kill_components)
             {
-                auto new_end = std::remove_if(output_components.begin(), output_components.end(), &is_dead);
+                auto new_end = std::remove_if(output_components.begin(), output_components.end(),
+                        [] (const HierarchicalClustering::Component & c)
+                {
+                    return c.weight() == 0.0;
+                } );
                 active_components = std::distance(output_components.begin(), new_end);
                 output_components.erase(new_end, output_components.end());
             }
