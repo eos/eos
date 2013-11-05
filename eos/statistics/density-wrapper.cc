@@ -1,3 +1,22 @@
+/* vim: set sw=4 sts=4 et foldmethod=syntax : */
+
+/*
+ * Copyright (c) 2013 Frederik Beaujean
+ *
+ * This file is part of the EOS project. EOS is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License version 2, as published by the Free Software Foundation.
+ *
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 #include <eos/statistics/density-wrapper.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
@@ -18,46 +37,41 @@ namespace eos
     }
 
     void
-    DensityWrapper::add(const ParameterDescription & def)
+    DensityWrapper::add_parameter(const std::string & name, const double & min,
+            const double & max, bool nuisance)
     {
-        _defs.push_back(def);
+        _parameters.declare(name, min, max, nuisance);
+    }
+
+    SimpleParameters &
+    DensityWrapper::parameters()
+    {
+        return _parameters;
     }
 
      double
      DensityWrapper::evaluate() const
      {
-         // copy values
-         _parameter_values.resize(_defs.size(), 0.0);
-         unsigned i = 0;
-         for (auto & d : _defs)
-         {
-             _parameter_values[i] = *(d.parameter);
-             ++i;
-         }
-
-         return _density(_parameter_values);
+         return _density(_parameters.values());
      }
 
      DensityPtr
      DensityWrapper::clone() const
      {
          DensityWrapper * density = new DensityWrapper(_density);
-         for (auto & d : _defs)
-         {
-             density->add(ParameterDescription{ d.parameter->clone(), d.min, d.max, d.nuisance });
-         }
+         density->_parameters = this->_parameters.clone();
          return DensityPtr(density);
      }
 
      Density::Iterator
      DensityWrapper::begin() const
      {
-         return _defs.begin();
+         return _parameters.begin();
      }
 
      Density::Iterator
      DensityWrapper::end() const
      {
-         return _defs.end();
+         return _parameters.end();
      }
 }

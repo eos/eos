@@ -49,59 +49,6 @@ namespace
 
 namespace eos
 {
-    TestParameter::TestParameter(const std::string & name, double value) :
-        _name(name),
-        _value(value)
-    {
-    }
-
-    TestParameter::~TestParameter()
-    {
-    }
-
-    MutablePtr
-    TestParameter::clone() const
-    {
-        return MutablePtr(new TestParameter(_name, _value));
-    }
-
-    TestParameter::operator double () const
-    {
-        return _value;
-    }
-
-    double
-    TestParameter::operator() () const
-    {
-        return _value;
-    }
-
-    double
-    TestParameter::evaluate() const
-    {
-        return _value;
-    }
-
-    const Mutable &
-    TestParameter::operator= (const double & value)
-    {
-        _value = value;
-
-        return *this;
-    }
-
-    void
-    TestParameter::set(const double & value)
-    {
-        _value = value;
-    }
-
-    const std::string &
-    TestParameter::name() const
-    {
-        return _name;
-    }
-
      DensityWrapper
      make_multivariate_unit_normal(const unsigned & ndim)
      {
@@ -110,8 +57,7 @@ namespace eos
 
          for (unsigned i = 0 ; i < ndim ; ++i)
          {
-             TestParameter p(std::string("par") + stringify(i));
-             density.add(ParameterDescription{ p.clone(), -5, 5, false });
+             density.add_parameter(std::string("par") + stringify(i), -5, 5);
          }
 
          return density;
@@ -135,12 +81,14 @@ class DensityTest :
             {
                 DensityWrapper::WrappedDensity wrapped_density(::multivariate_unit_normal_pdf);
                 DensityWrapper density(wrapped_density);
-                Parameters p = Parameters::Defaults();
 
-                Parameter p1 = p.declare("x", 1.5);
-                density.add(ParameterDescription{ p1.clone(), -5, 5, false });
-                Parameter p2 = p.declare("y", -0.3);
-                density.add(ParameterDescription{ p2.clone(), -5, 5, false });
+                // access via name
+                density.add_parameter("x", -5, 5);
+                density.parameters()["x"] = 1.5;
+
+                // access via iterator
+                density.add_parameter("y", -5, 5);
+                *(++density.begin())->parameter = -0.3;
 
                 static const double result = -3.0078770664093453;
                 TEST_CHECK_RELATIVE_ERROR(density.evaluate(), result, eps);
