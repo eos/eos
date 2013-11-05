@@ -39,21 +39,6 @@
 
 namespace eos
 {
-    // TODO replace by lambda function
-    struct SameName
-    {
-        const std::string name;
-        SameName(const std::string & name) :
-            name(name)
-        {
-        }
-
-        bool operator() (const std::tuple<std::string, double, double> & t)
-        {
-            return name == std::get<0>(t);
-        }
-    };
-
     template<>
     struct Implementation<MarkovChainSampler>
     {
