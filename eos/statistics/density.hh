@@ -22,8 +22,9 @@
 #define EOS_GUARD_EOS_STATISTICS_DENSITY_HH 1
 
 #include <eos/statistics/density-fwd.hh>
+#include <eos/utils/hdf5-fwd.hh>
 #include <eos/utils/mutable-fwd.hh>
-#include <eos/utils/parameters.hh>
+#include <eos/utils/parameters.hh> // todo move ParameterDescription elsewhere and remove include
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 namespace eos
@@ -50,6 +51,24 @@ namespace eos
             virtual Iterator begin() const = 0;
             virtual Iterator end() const = 0;
             ///@}
+
+            /*!
+             * Write parameter descriptions into the hdf5 file under the given data set name.
+             */
+            virtual void dump_descriptions(hdf5::File & file, const std::string & data_set_base) const;
+
+            class Output;
+    };
+
+    /*!
+     * Boilerplate code to handle I/O to HDF5 files
+     */
+    struct Density::Output
+    {
+        typedef hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>, hdf5::Scalar<double>,
+                                hdf5::Scalar<int>> DescriptionType;
+        static DescriptionType description_type();
+        static std::tuple<const char *, double, double, int> description_record();
     };
 }
 

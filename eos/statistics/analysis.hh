@@ -114,7 +114,7 @@ namespace eos
              * Write parameter descriptions, constraints, observables
              * into the hdf5 file under the given group name.
              */
-            void dump_descriptions(hdf5::File & file, std::string data_set_base = "/descriptions") const;
+            virtual void dump_descriptions(hdf5::File & file, const std::string & data_set_base) const;
 
             /*!
              * Read in parameter descriptions from a previous dump.

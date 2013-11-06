@@ -389,14 +389,9 @@ namespace eos
             // write parameter descriptions
             {
                 auto file = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
-                unsigned i = 0;
-                // todo very nasty hack
-                if (Analysis * a = dynamic_cast<Analysis *>(density.get()))
+                for (unsigned i = 0; i < chains.size(); ++i)
                 {
-                    for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
-                    {
-                        a->dump_descriptions(file, "/descriptions/prerun/chain #" + stringify(i));
-                    }
+                    density->dump_descriptions(file, "/descriptions/prerun/chain #" + stringify(i));
                 }
             }
 
@@ -584,14 +579,9 @@ namespace eos
             // write parameter descriptions
             {
                 auto file = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
-                unsigned i = 0;
-                // todo very nasty hack
-                if (Analysis * a = dynamic_cast<Analysis *>(density.get()))
+                for (unsigned i = 0; i < chains.size(); ++i)
                 {
-                    for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++i)
-                    {
-                        a->dump_descriptions(file, "/descriptions/main run/chain #" + stringify(i));
-                    }
+                    density->dump_descriptions(file, "/descriptions/main run/chain #" + stringify(i));
                 }
             }
         }

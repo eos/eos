@@ -181,7 +181,7 @@ namespace eos
    }
 
    void
-   Analysis::dump_descriptions(hdf5::File & file, std::string data_set_base) const
+   Analysis::dump_descriptions(hdf5::File & file, const std::string & data_set_base) const
    {
        // store parameter info, including the prior
        {

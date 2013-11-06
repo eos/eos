@@ -290,11 +290,7 @@ namespace eos
                 workers.push_back(std::make_shared<pmc::Worker>(density));
 
             auto f = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
-            // todo very nasty hack
-            if (Analysis * a = dynamic_cast<Analysis *>(density.get()))
-            {
-                a->dump_descriptions(f, "descriptions");
-            }
+            density->dump_descriptions(f, "/descriptions");
             dump("initial");
         }
 
