@@ -2201,7 +2201,7 @@ namespace eos
                 pmc->weights[i] = std::get<1>(weight_record);
 
                 // check if rloc matches the difference of posterior and weight
-#if 1
+#if 0
                 const double & posterior = std::get<0>(weight_record);
                 if (rloc != posterior - pmc->weights[i])
                 {
