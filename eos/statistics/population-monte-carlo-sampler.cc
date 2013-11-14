@@ -568,6 +568,7 @@ namespace eos
                     << " < " << config.minimum_perplexity;
                 return false;
             }
+
             // require that std_deviation be small enough
             if (relative_std_deviation_perplexity > config.maximum_relative_std_deviation)
             {
@@ -1608,12 +1609,12 @@ namespace eos
          parallelize(true),
          number_of_workers(0),
          degrees_of_freedom(-1, std::numeric_limits<int>::max(), -1),
-         skip_initial(0, 1, 0.1),
          group_by_r_value(1, std::numeric_limits<double>::max(), 1),
-         r_value_no_nuisance(true),
          patch_length(1000),
-         store_input_components(false),
+         r_value_no_nuisance(true),
+         skip_initial(0, 1, 0.2),
          store_hc_initial(false),
+         store_input_components(false),
          target_ncomponents(0),
          adjust_sample_size(false),
          max_updates(10),
@@ -1621,13 +1622,13 @@ namespace eos
          crop_highest_weights(0),
          need_prerun(true),
          store_prerun(true),
-         convergence_eff_sample_size(0, 1, 0.92),
-         convergence_perplexity(0, 1, 0.92),
-         ignore_eff_sample_size(false),
+         convergence_eff_sample_size(0, 1, 0.80),
+         convergence_perplexity(0, 1, 0.90),
+         ignore_eff_sample_size(true),
          minimum_eff_sample_size(0, 1, 0.1),
          minimum_perplexity(0, 1, 0.1),
-         minimum_steps(2, std::numeric_limits<unsigned>::max(), 3),
-         maximum_relative_std_deviation(0, 1, 0.01),
+         minimum_steps(2, std::numeric_limits<unsigned>::max(), 2),
+         maximum_relative_std_deviation(0, 1, 0.10),
          final_samples(20000),
          store(true),
          print_steps(0, 100, 5)

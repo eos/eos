@@ -175,16 +175,13 @@ namespace eos
              */
             VerifiedRange<int> degrees_of_freedom;
 
-            /// Skip this percentage from beginning of a chain's history.
-            VerifiedRange<double> skip_initial;
-
             ///@}
 
             ///@name Hierarchical clustering options
             ///@{
 
             /*!
-             * If true, use the Gelman-Rubin R-value to combine
+             * If > 1 use the Gelman-Rubin R-value to combine
              * chains into groups. N initial guess clusters
              * are drawn from each group, no matter how many chains
              * are in it.
@@ -201,22 +198,25 @@ namespace eos
             std::vector<unsigned> ignore_groups;
 
             /*!
-             * When grouping with R-value, consider only
-             * the scan parameters.
-             */
-            bool r_value_no_nuisance;
-
-            /*!
              * With hierarchical clustering, use this many
              * samples to form a patch from a single Markov chain.
              */
             unsigned patch_length;
 
-            /// Store the components created from chain patches.
-            bool store_input_components;
+            /*!
+             * When grouping with R-value, consider only
+             * the scan parameters.
+             */
+            bool r_value_no_nuisance;
+
+            /// Skip this percentage from beginning of a chain's history.
+            VerifiedRange<double> skip_initial;
 
             /// Store initial guess for clustering from long patches
             bool store_hc_initial;
+
+            /// Store the components created from chain patches.
+            bool store_input_components;
 
             /*!
              * Perform the hierarchical_clustering algorithm on a set of input
@@ -239,7 +239,11 @@ namespace eos
             /// The maximum number of updates to the proposal function.
             unsigned max_updates;
 
-            /// Number of importance samples per component.
+            /*!
+             *  Number of importance samples per component in the initial step.
+             *
+             *  @note: total number of samples varies if components die and ::adjust_sample_size is true.
+             */
             unsigned samples_per_component;
 
             /*!
@@ -276,6 +280,7 @@ namespace eos
             VerifiedRange<double> minimum_perplexity;
             /// Consider the last steps to decide if convergence statistics do not rise (significantly) anymore.
             VerifiedRange<unsigned> minimum_steps;
+
             /// Relative variance of last steps should be small to ascertain convergence.
             VerifiedRange<double> maximum_relative_std_deviation;
 
