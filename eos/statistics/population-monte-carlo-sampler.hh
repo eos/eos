@@ -178,12 +178,6 @@ namespace eos
             /// Skip this percentage from beginning of a chain's history.
             VerifiedRange<double> skip_initial;
 
-            /*!
-             * For random start, take the std. deviation as parameter range divided
-             * by std_dev_reduction.
-             */
-            VerifiedRange<double> std_dev_reduction;
-
             ///@}
 
             ///@name Hierarchical clustering options

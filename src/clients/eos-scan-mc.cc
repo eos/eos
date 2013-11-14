@@ -629,13 +629,6 @@ class CommandLine :
                     continue;
                 }
 
-                if ("--pmc-std-dev-reduction" == argument)
-                {
-                    config_pmc.std_dev_reduction = destringify<double>(*(++a));
-
-                    continue;
-                }
-
                 if ("--pmc-update" == argument)
                 {
                     pmc_update = true;

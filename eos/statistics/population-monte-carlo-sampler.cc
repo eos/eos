@@ -1609,7 +1609,6 @@ namespace eos
          number_of_workers(0),
          degrees_of_freedom(-1, std::numeric_limits<int>::max(), -1),
          skip_initial(0, 1, 0.1),
-         std_dev_reduction(std::numeric_limits<double>::epsilon(), std::numeric_limits<double>::max(), 1),
          group_by_r_value(1, std::numeric_limits<double>::max(), 1),
          r_value_no_nuisance(true),
          patch_length(1000),
