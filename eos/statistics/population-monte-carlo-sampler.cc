@@ -291,7 +291,7 @@ namespace eos
 
             auto f = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
             density->dump_descriptions(f, "/descriptions");
-            dump("initial");
+            dump_proposal("initial");
         }
 
         ~Implementation<PopulationMonteCarloSampler>()
@@ -638,27 +638,19 @@ namespace eos
             }
         }
 
-        /*!
-         * Dump status to HDF5.
-         *
-         * @param group
-         * @param samples If false, only summary statistics are stored
-         */
-        void dump(const std::string & group, bool store_samples = true)
+        void dump_proposal(const std::string & group)
         {
-            const unsigned dim = std::distance(density->begin(), density->end());
-
             // open the file whenever writing is desired, so it is in a readable state during lengthy posterior calculations
             auto file = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
 
             /* dump components */
 
             // proposal density
-            mix_mvdens* prop = static_cast<mix_mvdens *>(pmc->proposal->data);
+            mix_mvdens * prop = static_cast<mix_mvdens *>(pmc->proposal->data);
 
             auto components = file.create_data_set("/data/" + group + "/components",
-                PopulationMonteCarloSampler::Output::component_type(dim));
-            auto component_record = PopulationMonteCarloSampler::Output::component_record(dim);
+                PopulationMonteCarloSampler::Output::component_type(pmc->ndim));
+            auto component_record = PopulationMonteCarloSampler::Output::component_record(pmc->ndim);
             auto dof = components.create_attribute("dof", hdf5::Scalar<int>("dof"));
             dof = config.degrees_of_freedom;
 
@@ -688,6 +680,20 @@ namespace eos
 
             if (group == "initial")
                 return;
+        }
+
+        /*!
+         * Dump status to HDF5.
+         *
+         * @param group
+         * @param samples If false, only summary statistics are stored
+         */
+        void dump(const std::string & group, bool store_samples = true)
+        {
+            const unsigned dim = std::distance(density->begin(), density->end());
+
+            // open the file whenever writing is desired, so it is in a readable state during lengthy posterior calculations
+            auto file = hdf5::File::Open(config.output_file, H5F_ACC_RDWR);
 
             /* dump statistics information */
 
@@ -1190,6 +1196,7 @@ namespace eos
             // prerun to adapt proposal densities
             for (unsigned i = 0; i < config.max_updates ; ++i)
             {
+                dump_proposal(stringify(i));
                 //                pmc_simu_pmc_step(pmc_simu *pmc, gsl_rng *r, error **err)
                 {
                     // hack my own replacement for
@@ -1316,6 +1323,7 @@ namespace eos
                 << ", evidence: " << status.evidence;
 
             // store results
+            dump_proposal("final");
             if (config.store)
                 dump("final");
         }
