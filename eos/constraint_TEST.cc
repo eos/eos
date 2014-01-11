@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2014, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -360,15 +360,7 @@ class ConstraintTest :
                     // B^0_s -> mu^+ mu^-
                     "B^0_s->mu^+mu^-::BR@LHCb-2013D",
 
-                    /* Theory Constraints */
-                    /* 2013 */
-                    // disabled, since it needs the option "form-factors" specified.
-                    //"B->K::f_+@HPQCD-2013A",
-
-                    //"B->K^*::V@HPQCD-2013B",
-                    //"B->K^*::A_1@HPQCD-2013B",
-                    //"B->K^*::A_12V@HPQCD-2013B",
-
+                    /* 2014 */
 
                     // LHCb
                     // B^+ -> K^+ mu^+ mu^-
@@ -384,6 +376,21 @@ class ConstraintTest :
                     "B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb-2014",
                     "B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb-2014",
                     "B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb-2014",
+
+                    /* Theory Constraints */
+
+                    /* 2013 */
+
+                    // disabled, since it needs the option "form-factors" specified.
+                    //"B->K::f_+@HPQCD-2013A",
+
+                    //"B->K^*::V@MILC-2013A",
+                    //"B->K^*::A_1@MILC-2013A",
+                    //"B->K^*::A_12V@MILC-2013A",
+
+                    //"B->K^*::V@MILC-2013A",
+                    //"B->K^*::A_1@MILC-2013A",
+                    //"B->K^*::A_12V@MILC-2013A",
                 };
 
                 std::cout << "# Constraints :" << std::endl;

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2012, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2011, 2012, 2013, 2014, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -2451,9 +2451,9 @@ namespace eos
         };
 
         /*
-         * Reproduced from [HPQCD:2013B].
+         * Reproduced from [MILC:2013A].
          */
-        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_V_15_to_19dot21_HPQCD_2013B
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_V_15_to_19dot21_MILC_2013A
         {
             {{ "B->K^*::V(s)", "B->K^*::V(s)" }},
             {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
@@ -2468,7 +2468,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A1_15_to_19dot21_MILC_2013A
         {
             {{ "B->K^*::A_1(s)", "B->K^*::A_1(s)" }},
             {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
@@ -2483,7 +2483,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A12_15_to_19dot21_MILC_2013A
         {
             {{ "B->K^*::A_12(s)", "B->K^*::A_12(s)" }},
             {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
@@ -2992,9 +2992,13 @@ namespace eos
             /* Theory Constraints */
             { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
 
-            { "B->K^*::V@HPQCD-2013B", make_factory(templates::B_to_Kstar_V_15_to_19dot21_HPQCD_2013B) },
-            { "B->K^*::A_1@HPQCD-2013B", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B) },
-            { "B->K^*::A_12@HPQCD-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B) },
+            { "B->K^*::V@HPQCD-2013B", make_factory(templates::B_to_Kstar_V_15_to_19dot21_MILC_2013A) },
+            { "B->K^*::A_1@HPQCD-2013B", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_MILC_2013A) },
+            { "B->K^*::A_12@HPQCD-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_MILC_2013A) },
+
+            { "B->K^*::V@MILC-2013B", make_factory(templates::B_to_Kstar_V_15_to_19dot21_MILC_2013A) },
+            { "B->K^*::A_1@MILC-2013B", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_MILC_2013A) },
+            { "B->K^*::A_12@MILC-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_MILC_2013A) },
 
             { "B->pi::f_+@IKMvD-2014", make_factory(templates::B_to_pi_fp_IKMvD_2014) },
 
