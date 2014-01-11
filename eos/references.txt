@@ -786,14 +786,6 @@ Theoretical Inputs
         arxiv:1306.2384
 
 
-    HPQCDD2013B : Horgan, R.R. and Lio, Z. and Meinel, S. and Wingate, M. [HPQCD]
-
-        Lattice QCD calculation of form factor describing the rare decays B --> K^* ll
-        and B_s -> phi ll
-
-        arxiv:1310.3722v2
-
-
     IKKR2007 : Ivanov, M.A. and Korner, J.G. and Kovalenko, S.G. and Roberts, C.D.
 
         B- to Light Meson Transition Form Factors
@@ -829,6 +821,14 @@ Theoretical Inputs
         Phys. Lett. B653 (2007) 404-410
 
         arxiv:0707.1694 [hep-ph]
+
+
+    MILCD2013A : Horgan, R.R. and Lio, Z. and Meinel, S. and Wingate, M. [MILC]
+
+        Lattice QCD calculation of form factor describing the rare decays B --> K^* ll
+        and B_s -> phi ll
+
+        arxiv:1310.3722
 
 
     MvR1999 : Melnikov, K. and van Ritbergen, T.
