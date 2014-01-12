@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2014 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,21 +17,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_FORM_FACTORS_FORM_FACTORS_HH
-#define EOS_GUARD_SRC_FORM_FACTORS_FORM_FACTORS_HH 1
-
-#include <eos/form-factors/baryonic.hh>
-#include <eos/form-factors/mesonic.hh>
-#include <eos/utils/exception.hh>
+#include <eos/form-factors/form-factors.hh>
 
 namespace eos
 {
-    class NoSuchFormFactorError :
-        public Exception
+    NoSuchFormFactorError::NoSuchFormFactorError(const std::string & process, const std::string & tag) :
+        Exception("No form factor found for process '" + process + "' and tag '" + tag + "'!")
     {
-        public:
-            NoSuchFormFactorError(const std::string & process, const std::string & tag);
-    };
+    }
 }
-
-#endif
