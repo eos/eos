@@ -8,7 +8,7 @@ libeosformfactors_la_SOURCES = \
 	analytic-b-to-pi.hh analytic-b-to-pi.cc \
 	baryonic.cc baryonic.hh baryonic-impl.hh \
 	form-factor-adapter.hh \
-	form-factors.hh form-factors-fwd.hh \
+	form-factors.cc form-factors.hh form-factors-fwd.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
 	pi-lcdas.cc pi-lcdas.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
