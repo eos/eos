@@ -66,6 +66,8 @@ namespace eos
                     throw UnknownOptionError("form-factors");
 
                 _form_factors = FormFactorFactory<Transition_>::create(process + '@' + options["form-factors"], _parameters);
+                if (! _form_factors)
+                    throw NoSuchFormFactorError(process, options["form-factors"]);
             }
 
             virtual const std::string & name() const
