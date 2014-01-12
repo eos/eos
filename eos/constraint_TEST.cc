@@ -388,9 +388,9 @@ class ConstraintTest :
                     //"B->K^*::A_1@MILC-2013A",
                     //"B->K^*::A_12V@MILC-2013A",
 
-                    //"B->K^*::V@MILC-2013A",
-                    //"B->K^*::A_1@MILC-2013A",
-                    //"B->K^*::A_12V@MILC-2013A",
+                    //"B_s->K^*::V@MILC-2013A",
+                    //"B_s->K^*::A_1@MILC-2013A",
+                    //"B_s->K^*::A_12V@MILC-2013A",
                 };
 
                 std::cout << "# Constraints :" << std::endl;
