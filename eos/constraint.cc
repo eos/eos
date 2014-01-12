@@ -2453,6 +2453,7 @@ namespace eos
         /*
          * Reproduced from [MILC:2013A].
          */
+        // B -> K^*
         static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_V_15_to_19dot21_MILC_2013A
         {
             {{ "B->K^*::V(s)", "B->K^*::V(s)" }},
@@ -2495,6 +2496,52 @@ namespace eos
             {{
                 {{ 1.000000, 0.204495 }},
                 {{ 0.204495, 1.000000 }},
+            }},
+        0u
+        };
+        // B_s -> K^*
+        static const MultivariateGaussianConstraintTemplate<2> Bs_to_Kstar_V_15_to_19dot21_MILC_2013A
+        {
+            {{ "B_s->K^*::V(s)", "B_s->K^*::V(s)" }},
+            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.872, 1.722 }},
+            {{ 0.066, 0.066 }},
+            {{ 0.066, 0.066 }},
+            {{ 0.000, 0.000 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000, 0.271 }},
+                {{ 0.271, 1.000 }},
+            }},
+        0u
+        };
+        static const MultivariateGaussianConstraintTemplate<2> Bs_to_Kstar_A1_15_to_19dot21_MILC_2013A
+        {
+            {{ "B_s->K^*::A_1(s)", "B_s->K^*::A_1(s)" }},
+            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.427, 0.548 }},
+            {{ 0.015, 0.015 }},
+            {{ 0.015, 0.015 }},
+            {{ 0.000, 0.000 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000, 0.305 }},
+                {{ 0.305, 1.000 }},
+            }},
+        0u
+        };
+        static const MultivariateGaussianConstraintTemplate<2> Bs_to_Kstar_A12_15_to_19dot21_MILC_2013A
+        {
+            {{ "B_s->K^*::A_12(s)", "B_s->K^*::A_12(s)" }},
+            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.342, 0.408 }},
+            {{ 0.016, 0.016 }},
+            {{ 0.016, 0.016 }},
+            {{ 0.000, 0.000 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000, 0.334 }},
+                {{ 0.334, 1.000 }},
             }},
         0u
         };
@@ -2992,13 +3039,13 @@ namespace eos
             /* Theory Constraints */
             { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
 
-            { "B->K^*::V@HPQCD-2013B", make_factory(templates::B_to_Kstar_V_15_to_19dot21_MILC_2013A) },
-            { "B->K^*::A_1@HPQCD-2013B", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_MILC_2013A) },
-            { "B->K^*::A_12@HPQCD-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_MILC_2013A) },
+            { "B->K^*::V@MILC-2013A", make_factory(templates::B_to_Kstar_V_15_to_19dot21_MILC_2013A) },
+            { "B->K^*::A_1@MILC-2013A", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_MILC_2013A) },
+            { "B->K^*::A_12@MILC-2013A", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_MILC_2013A) },
 
-            { "B->K^*::V@MILC-2013B", make_factory(templates::B_to_Kstar_V_15_to_19dot21_MILC_2013A) },
-            { "B->K^*::A_1@MILC-2013B", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_MILC_2013A) },
-            { "B->K^*::A_12@MILC-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_MILC_2013A) },
+            { "B_s->K^*::V@MILC-2013A", make_factory(templates::Bs_to_Kstar_V_15_to_19dot21_MILC_2013A) },
+            { "B_s->K^*::A_1@MILC-2013A", make_factory(templates::Bs_to_Kstar_A1_15_to_19dot21_MILC_2013A) },
+            { "B_s->K^*::A_12@MILC-2013A", make_factory(templates::Bs_to_Kstar_A12_15_to_19dot21_MILC_2013A) },
 
             { "B->pi::f_+@IKMvD-2014", make_factory(templates::B_to_pi_fp_IKMvD_2014) },
 
