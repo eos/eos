@@ -676,7 +676,7 @@ Theoretical Inputs
         Lattice QCD calculation of form factor describing the rare decays B --> K^* ll
         and B_s -> phi ll
 
-        arxiv:1310.3722
+        arxiv:1310.3722v2
 
 
     IKKR2007 : Ivanov, M.A. and Korner, J.G. and Kovalenko, S.G. and Roberts, C.D.
