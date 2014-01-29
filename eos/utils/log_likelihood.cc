@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2014 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -69,12 +69,16 @@ namespace eos
             double c_lower, c_upper;
             double phi_min, phi_max;
 
-            GaussianBlock(const ObservableCache & cache, ObservableCache::Id id, const double & min, const double & central, const double & max) :
+            unsigned _number_of_observations;
+
+            GaussianBlock(const ObservableCache & cache, ObservableCache::Id id, const double & min, const double & central, const double & max,
+                    const unsigned & number_of_observations) :
                 cache(cache),
                 id(id),
                 central(central),
                 sigma_lower(central - min),
-                sigma_upper(max - central)
+                sigma_upper(max - central),
+                _number_of_observations(number_of_observations)
             {
             }
 
@@ -94,6 +98,9 @@ namespace eos
                 {
                     result += " + " + stringify(sigma_upper) + " - " + stringify(sigma_lower);
                 }
+
+                if (0 == _number_of_observations)
+                    result += "; no observation";
 
                 return result;
             }
@@ -117,7 +124,7 @@ namespace eos
 
             virtual unsigned number_of_observations() const
             {
-                return 1;
+                return _number_of_observations;
             }
 
             virtual void prepare_sampling()
@@ -186,7 +193,7 @@ namespace eos
             {
                 ObservablePtr observable = this->cache.observable(id)->clone(cache.parameters());
 
-                return LogLikelihoodBlockPtr(new GaussianBlock(cache, cache.add(observable), central - sigma_lower, central, central + sigma_upper));
+                return LogLikelihoodBlockPtr(new GaussianBlock(cache, cache.add(observable), central - sigma_lower, central, central + sigma_upper, _number_of_observations));
             }
         };
 
@@ -204,12 +211,16 @@ namespace eos
 
             double norm;
 
-            LogGammaBlock(const ObservableCache & cache, ObservableCache::Id id, const double & min, const double & central, const double & max) :
+            unsigned _number_of_observations;
+
+            LogGammaBlock(const ObservableCache & cache, ObservableCache::Id id, const double & min, const double & central, const double & max,
+                    const unsigned & number_of_observations) :
                 cache(cache),
                 id(id),
                 central(central),
                 sigma_lower(central - min),
-                sigma_upper(max - central)
+                sigma_upper(max - central),
+                _number_of_observations(number_of_observations)
             {
                 // standardize scales, such that lower is one, thus fixing the sign of lambda
                 const double sigma_plus( (sigma_upper > sigma_lower)? sigma_upper / sigma_lower : sigma_lower / sigma_upper);
@@ -272,7 +283,8 @@ namespace eos
 
             LogGammaBlock(const ObservableCache & cache, ObservableCache::Id id,
                           const double & min, const double & central, const double & max,
-                          const double & lambda, const double & alpha) :
+                          const double & lambda, const double & alpha,
+                          const unsigned & number_of_observations) :
                 cache(cache),
                 id(id),
                 central(central),
@@ -280,7 +292,8 @@ namespace eos
                 sigma_upper(max - central),
                 nu(central - lambda * std::log(alpha)),
                 lambda(lambda),
-                alpha(alpha)
+                alpha(alpha),
+                _number_of_observations(number_of_observations)
             {
                 const double sigma_plus( (sigma_upper > sigma_lower)? sigma_upper / sigma_lower : sigma_lower / sigma_upper);
 
@@ -321,6 +334,9 @@ namespace eos
                 std::string result = "LogGamma: ";
                 result += stringify(central) + " + " + stringify(sigma_upper) + " - " + stringify(sigma_lower);
                 result += " (nu = " + stringify(nu) + ", lambda = " + stringify(lambda) + ", alpha = " + stringify(alpha) + ")";
+
+                if (0 == _number_of_observations)
+                    result += "; no observation";
 
                 return result;
             }
@@ -390,7 +406,7 @@ namespace eos
 
             virtual unsigned number_of_observations() const
             {
-                return 1;
+                return _number_of_observations;
             }
 
             // draw from standard gamma, apply log, then shift and rescale
@@ -533,7 +549,7 @@ namespace eos
                 ObservablePtr observable = this->cache.observable(id)->clone(cache.parameters());
 
                 return LogLikelihoodBlockPtr(new LogGammaBlock(cache, cache.add(observable),
-                    central - sigma_lower, central, central + sigma_upper, lambda, alpha));
+                    central - sigma_lower, central, central + sigma_upper, lambda, alpha, _number_of_observations));
             }
         };
 
@@ -550,14 +566,18 @@ namespace eos
 
             double norm;
 
+            unsigned _number_of_observations;
+
             AmorosoBlock(const ObservableCache & cache, ObservableCache::Id id, const double & physical_limit,
-                         const double & theta, const double & alpha, const double & beta) :
+                         const double & theta, const double & alpha, const double & beta,
+                         const unsigned & number_of_observations) :
                 cache(cache),
                 id(id),
                 physical_limit(physical_limit),
                 theta(theta),
                 alpha(alpha),
-                beta(beta)
+                beta(beta),
+                _number_of_observations(number_of_observations)
             {
 
                 if (theta <= 0)
@@ -585,6 +605,9 @@ namespace eos
                 result += "mode at " + name + " = " + stringify(mode(), 5);
                 result += " (a = " + stringify(physical_limit, 5) + ", theta = " + stringify(theta, 5);
                 result += ", alpha = " + stringify(alpha, 5) + ", beta = " + stringify(beta, 5)+ ")";
+
+                if (0 == _number_of_observations)
+                    result += "; no observation";
 
                 return result;
             }
@@ -616,7 +639,7 @@ namespace eos
 
             virtual unsigned number_of_observations() const
             {
-                return 1;
+                return _number_of_observations;
             }
 
             /*
@@ -742,7 +765,7 @@ namespace eos
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
             {
                 ObservablePtr observable = this->cache.observable(id)->clone(cache.parameters());
-                return LogLikelihoodBlockPtr(new AmorosoBlock(cache, cache.add(observable), physical_limit, theta, alpha, beta));
+                return LogLikelihoodBlockPtr(new AmorosoBlock(cache, cache.add(observable), physical_limit, theta, alpha, beta, _number_of_observations));
             }
         };
 
@@ -842,13 +865,17 @@ namespace eos
             // cholesky matrix of covariance
             std::array<std::array<double, n_>, n_> chol;
 
+            unsigned _number_of_observations;
+
             MultivariateGaussianBlock(const ObservableCache & cache, const std::array<ObservableCache::Id, n_> & ids,
-                                     const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance) :
+                                     const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance,
+                                     const unsigned & number_of_observations) :
                 cache(cache),
                 ids(ids),
                 mean(mean),
                 covariance(covariance),
-                norm(compute_norm())
+                norm(compute_norm()),
+                _number_of_observations(number_of_observations)
             {
                 unsigned k = mean.size();
 
@@ -906,6 +933,9 @@ namespace eos
                 }
                 result += " )";
 
+                if (0 == _number_of_observations)
+                    result += "; no observation";
+
                 return result;
             }
 
@@ -938,7 +968,7 @@ namespace eos
                     indices[i] = cache.add(this->cache.observable(this->ids[i])->clone(cache.parameters()));
                 }
 
-                return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock<n_>(cache, indices, mean, covariance));
+                return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock<n_>(cache, indices, mean, covariance, _number_of_observations));
             }
 
             // compute the normalization constant on log scale
@@ -1073,7 +1103,8 @@ namespace eos
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::Gaussian(ObservableCache cache, const ObservablePtr & observable,
-            const double & min, const double & central, const double & max)
+            const double & min, const double & central, const double & max,
+            const unsigned & number_of_observations)
     {
         // check input
         if (min >= central)
@@ -1084,12 +1115,13 @@ namespace eos
 
         unsigned index = cache.add(observable);
 
-        return LogLikelihoodBlockPtr(new implementation::GaussianBlock(cache, index, min, central, max));
+        return LogLikelihoodBlockPtr(new implementation::GaussianBlock(cache, index, min, central, max, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::LogGamma(ObservableCache cache, const ObservablePtr & observable,
-            const double & min, const double & central, const double & max)
+            const double & min, const double & central, const double & max,
+            const unsigned & number_of_observations)
     {
         // check input
         if (min >= central)
@@ -1100,13 +1132,14 @@ namespace eos
 
         unsigned index = cache.add(observable);
 
-        return LogLikelihoodBlockPtr(new implementation::LogGammaBlock(cache, index, min, central, max));
+        return LogLikelihoodBlockPtr(new implementation::LogGammaBlock(cache, index, min, central, max, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::LogGamma(ObservableCache cache, const ObservablePtr & observable,
             const double & min, const double & central, const double & max,
-            const double & lambda, const double & alpha)
+            const double & lambda, const double & alpha,
+            const unsigned & number_of_observations)
     {
         // check input
         if (min >= central)
@@ -1121,13 +1154,14 @@ namespace eos
 
         unsigned index = cache.add(observable);
 
-        return LogLikelihoodBlockPtr(new implementation::LogGammaBlock(cache, index, min, central, max, lambda, alpha));
+        return LogLikelihoodBlockPtr(new implementation::LogGammaBlock(cache, index, min, central, max, lambda, alpha, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::AmorosoLimit(ObservableCache cache, const ObservablePtr & observable,
                     const double & physical_limit, const double & upper_limit_90, const double & upper_limit_95,
-                    const double & theta, const double & alpha)
+                    const double & theta, const double & alpha,
+                    const unsigned & number_of_observations)
     {
         // check input
         if (upper_limit_90 <= physical_limit)
@@ -1141,7 +1175,7 @@ namespace eos
 
         unsigned index = cache.add(observable);
 
-        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, 1 / alpha);
+        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, 1 / alpha, number_of_observations);
 
         // check consistency
         if (std::abs(a->cdf(upper_limit_90) - 0.90) > 1e-4)
@@ -1163,7 +1197,8 @@ namespace eos
     LogLikelihoodBlock::AmorosoMode(ObservableCache cache, const ObservablePtr & observable,
                                 const double & physical_limit, const double & mode,
                                 const double & upper_limit_90, const double & upper_limit_95,
-                                const double & theta, const double & alpha, const double & beta)
+                                const double & theta, const double & alpha, const double & beta,
+                                const unsigned & number_of_observations)
     {
         // check input
         if (mode <= physical_limit)
@@ -1177,7 +1212,7 @@ namespace eos
 
         unsigned index = cache.add(observable);
 
-        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta);
+        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta, number_of_observations);
 
         // check consistency
         if (std::abs(a->mode() - mode) > 1e-4)
@@ -1203,7 +1238,8 @@ namespace eos
     LogLikelihoodBlock::Amoroso(ObservableCache cache, const ObservablePtr & observable,
                                 const double & physical_limit, const double & upper_limit_10,
                                 const double & upper_limit_50, const double & upper_limit_90,
-                                const double & theta, const double & alpha, const double & beta)
+                                const double & theta, const double & alpha, const double & beta,
+                                const unsigned & number_of_observations)
     {
         // check input
         if (upper_limit_10 <= physical_limit)
@@ -1216,7 +1252,7 @@ namespace eos
             throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_90 <= upper_limit_50");
 
         unsigned index = cache.add(observable);
-        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta);
+        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta, number_of_observations);
 
         // check consistency
         if (std::abs(a->cdf(upper_limit_10) - 0.10) > 1e-4)
@@ -1241,10 +1277,11 @@ namespace eos
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::Amoroso(ObservableCache cache, const ObservablePtr & observable,
-    		const double & physical_limit, const double & theta, const double & alpha, const double & beta)
+        const double & physical_limit, const double & theta, const double & alpha, const double & beta,
+        const unsigned & number_of_observations)
     {
         unsigned index = cache.add(observable);
-        return LogLikelihoodBlockPtr(new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta));
+        return LogLikelihoodBlockPtr(new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
@@ -1272,7 +1309,8 @@ namespace eos
     template <std::size_t n_>
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
-                                             const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance)
+                                             const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance,
+                                             const unsigned & number_of_observations)
     {
         std::array<ObservableCache::Id, n_> indices;
 
@@ -1282,20 +1320,23 @@ namespace eos
             indices[i] = cache.add(observables[i]);
         }
 
-        return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock<n_>(cache, indices, mean, covariance));
+        return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock<n_>(cache, indices, mean, covariance, number_of_observations));
     }
 
     // explicit instantiation
     template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<2>(ObservableCache cache, const std::array<ObservablePtr, 2> & observables,
-                                             const std::array<double, 2> & mean, const std::array<std::array<double, 2>, 2> & covariance);
+                                             const std::array<double, 2> & mean, const std::array<std::array<double, 2>, 2> & covariance,
+                                             const unsigned & number_of_observations = 2u);
     template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<3>(ObservableCache cache, const std::array<ObservablePtr, 3> & observables,
-                                             const std::array<double, 3> & mean, const std::array<std::array<double, 3>, 3> & covariance);
+                                             const std::array<double, 3> & mean, const std::array<std::array<double, 3>, 3> & covariance,
+                                             const unsigned & number_of_observations = 3u);
 
     template <std::size_t n_>
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
                                                       const std::array<double, n_> & mean, const std::array<double, n_> & variances,
-                                                      const std::array<std::array<double, n_>, n_> & correlation)
+                                                      const std::array<std::array<double, n_>, n_> & correlation,
+                                                      const unsigned & number_of_observations)
     {
         // convert correlation matrix to covariance matrix
         std::array<std::array<double, n_>, n_> covariance(correlation);
@@ -1310,16 +1351,18 @@ namespace eos
             }
         }
 
-        return MultivariateGaussian(cache, observables, mean, covariance);
+        return MultivariateGaussian(cache, observables, mean, covariance, number_of_observations);
     }
 
     // explicit instantiation
     template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<2>(ObservableCache cache, const std::array<ObservablePtr, 2> & observables,
                                              const std::array<double, 2> & mean, const std::array<double, 2> & variances,
-                                             const std::array<std::array<double, 2>, 2> & correlation);
+                                             const std::array<std::array<double, 2>, 2> & correlation,
+                                             const unsigned & number_of_observations = 2u);
     template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<3>(ObservableCache cache, const std::array<ObservablePtr, 3> & observables,
                                              const std::array<double, 3> & mean, const std::array<double, 3> & variances,
-                                             const std::array<std::array<double, 3>, 3> & correlation);
+                                             const std::array<std::array<double, 3>, 3> & correlation,
+                                             const unsigned & number_of_observations = 3u);
 
     template <>
     struct Implementation<LogLikelihood>
@@ -1438,9 +1481,10 @@ namespace eos
     }
 
     void
-    LogLikelihood::add(const ObservablePtr & observable, const double & min, const double & central, const double & max)
+    LogLikelihood::add(const ObservablePtr & observable, const double & min, const double & central, const double & max,
+            const unsigned & number_of_observations)
     {
-        LogLikelihoodBlockPtr b = LogLikelihoodBlock::Gaussian(_imp->cache, observable, min, central, max);
+        LogLikelihoodBlockPtr b = LogLikelihoodBlock::Gaussian(_imp->cache, observable, min, central, max, number_of_observations);
         _imp->constraints.push_back(
             Constraint(observable->name(), std::vector<ObservablePtr>{ observable }, std::vector<LogLikelihoodBlockPtr>{ b }));
     }

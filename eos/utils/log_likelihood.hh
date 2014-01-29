@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2014 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -101,7 +101,8 @@ namespace eos
              * @param max        The value one sigma above the mean of the experimental distribution.
              */
             static LogLikelihoodBlockPtr Gaussian(ObservableCache cache, const ObservablePtr & observable,
-                    const double & min, const double & central, const double & max);
+                    const double & min, const double & central, const double & max,
+                    const unsigned & number_of_observations = 1u);
 
             /*!
              * Create a new LogLikelihoodBlock for one a single observable with asymmetric uncertainties.
@@ -123,7 +124,8 @@ namespace eos
              * @param max        The value one sigma above the mean of the experimental distribution.
              */
             static LogLikelihoodBlockPtr LogGamma(ObservableCache cache, const ObservablePtr & observable,
-                    const double & min, const double & central, const double & max);
+                    const double & min, const double & central, const double & max,
+                    const unsigned & number_of_observations = 1u);
 
             /*!
              * Create a new LogLikelihoodBlock for one a single observable with asymmetric uncertainties.
@@ -137,8 +139,9 @@ namespace eos
              * @return
              */
             static LogLikelihoodBlockPtr LogGamma(ObservableCache cache, const ObservablePtr & observable,
-                                const double & min, const double & central, const double & max,
-                                const double & lambda, const double & alpha);
+                    const double & min, const double & central, const double & max,
+                    const double & lambda, const double & alpha,
+                    const unsigned & number_of_observations = 1u);
 
             /*!
              * A likelihood contribution representing an upper limit on a quantity x.
@@ -164,7 +167,8 @@ namespace eos
              */
             static LogLikelihoodBlockPtr AmorosoLimit(ObservableCache cache, const ObservablePtr & observable,
                     const double & physical_limit, const double & upper_limit_90, const double & upper_limit_95,
-                    const double & theta, const double & alpha);
+                    const double & theta, const double & alpha,
+                    const unsigned & number_of_observations = 1u);
 
             /*!
              * A likelihood contribution representing an upper limit on a quantity x.
@@ -191,7 +195,8 @@ namespace eos
             static LogLikelihoodBlockPtr AmorosoMode(ObservableCache cache, const ObservablePtr & observable,
                     const double & physical_limit, const double & mode,
                     const double & upper_limit_90, const double & upper_limit_95,
-                    const double & theta, const double & alpha, const double & beta);
+                    const double & theta, const double & alpha, const double & beta,
+                    const unsigned & number_of_observations = 1u);
 
             /*!
              * A likelihood contribution representing an upper limit on a quantity x.
@@ -220,7 +225,8 @@ namespace eos
             static LogLikelihoodBlockPtr Amoroso(ObservableCache cache, const ObservablePtr & observable,
                     const double & physical_limit, const double & upper_limit_10,
                     const double & upper_limit_50, const double & upper_limit_90,
-                    const double & theta, const double & alpha, const double & beta);
+                    const double & theta, const double & alpha, const double & beta,
+                    const unsigned & number_of_observations = 1u);
 
             /*!
              * A likelihood contribution representing an upper limit on a quantity x.
@@ -242,7 +248,8 @@ namespace eos
              * @return
              */
             static LogLikelihoodBlockPtr Amoroso(ObservableCache cache, const ObservablePtr & observable,
-                    const double & physical_limit, const double & theta, const double & alpha, const double & beta);
+                    const double & physical_limit, const double & theta, const double & alpha, const double & beta,
+                    const unsigned & number_of_observations = 1u);
 
             // todo document
             static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components, 
@@ -261,7 +268,8 @@ namespace eos
              */
             template <std::size_t n_>
             static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
-                                                              const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance);
+                                                              const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance,
+                                                              const unsigned & number_of_observations = n_);
 
             /*!
              * Create a new LogLikelihoodBlock for n observables distributed
@@ -279,7 +287,8 @@ namespace eos
             template <std::size_t n_>
             static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
                                                               const std::array<double, n_> & mean, const std::array<double, n_> & variances,
-                                                              const std::array<std::array<double, n_>, n_> & correlation);
+                                                              const std::array<std::array<double, n_>, n_> & correlation,
+                                                              const unsigned & number_of_observations = n_);
 
     };
 
@@ -314,13 +323,14 @@ namespace eos
             /*!
              * Add an observable and its associated measurement.
              *
-             * @param observable  The Observable that shall be added to the calculation of the likelihood.
-             * @param min         The lower bound on the measurement.
-             * @param central     The central value of the measurement.
-             * @param max         The upper bound on the measurement.
+             * @param observable                The Observable that shall be added to the calculation of the likelihood.
+             * @param min                       The lower bound on the measurement.
+             * @param central                   The central value of the measurement.
+             * @param max                       The upper bound on the measurement.
+             * @param number_of_observations    The number of observations associated with the measurement. Defaults to 1.
              */
             void add(const ObservablePtr & observable, const double & min,
-                    const double & central, const double & max);
+                    const double & central, const double & max, const unsigned & number_of_observations = 1u);
 
             /*!
              * Add one of the libraries experimental constraints.
