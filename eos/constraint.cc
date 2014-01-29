@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2012, 2013, 2014 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -46,6 +46,26 @@ namespace eos
         Options options;
 
         double central, sigma_hi_stat, sigma_lo_stat, sigma_hi_sys, sigma_lo_sys;
+
+        unsigned number_of_observations;
+
+        GaussianConstraintTemplate(const std::string & observable,
+                const Kinematics & kinematics, const Options & options,
+                const double & central,
+                const double & sigma_hi_stat, const double & sigma_lo_stat,
+                const double & sigma_hi_sys, const double & sigma_lo_sys,
+                const unsigned & number_of_observations = 1u) :
+            observable(observable),
+            kinematics(kinematics),
+            options(options),
+            central(central),
+            sigma_hi_stat(sigma_hi_stat),
+            sigma_lo_stat(sigma_lo_stat),
+            sigma_hi_sys(sigma_hi_sys),
+            sigma_lo_sys(sigma_lo_sys),
+            number_of_observations(number_of_observations)
+        {
+        }
 
         Constraint
         make(const std::string & name, const Options & options) const
@@ -205,6 +225,29 @@ namespace eos
         std::array<double, dim_> sigma_sys;
 
         std::array<std::array<double, dim_>, dim_> correlation;
+
+        unsigned number_of_observations;
+
+        MultivariateGaussianConstraintTemplate(const std::array<std::string, dim_> & observables,
+            const std::array<Kinematics, dim_> & kinematics,
+            const std::array<Options, dim_> & options,
+            const std::array<double, dim_> & means,
+            const std::array<double, dim_> & sigma_stat_hi,
+            const std::array<double, dim_> & sigma_stat_lo,
+            const std::array<double, dim_> & sigma_sys,
+            const std::array<std::array<double, dim_>, dim_> & correlation,
+            const unsigned & number_of_observations = 1u) :
+            observables(observables),
+            kinematics(kinematics),
+            options(options),
+            means(means),
+            sigma_stat_hi(sigma_stat_hi),
+            sigma_stat_lo(sigma_stat_lo),
+            sigma_sys(sigma_sys),
+            correlation(correlation),
+            number_of_observations(number_of_observations)
+        {
+        }
 
         Constraint
         make(const std::string & name, const Options & options) const
@@ -2120,7 +2163,8 @@ namespace eos
                 {{ 1.000000, 0.778675, 0.290551 }},
                 {{ 0.778675, 1.000000, 0.708433 }},
                 {{ 0.290551, 0.708433, 1.000000 }}
-            }}
+            }},
+            0u
         };
 
         /*
@@ -2138,7 +2182,8 @@ namespace eos
             {{
                 {{ 1.000000, 0.461948 }},
                 {{ 0.461948, 1.000000 }},
-            }}
+            }},
+            0u
         };
         static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B
         {
@@ -2152,7 +2197,8 @@ namespace eos
             {{
                 {{ 1.000000, 0.52072  }},
                 {{ 0.52072,  1.000000 }},
-            }}
+            }},
+            0u
         };
         static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B
         {
@@ -2166,7 +2212,8 @@ namespace eos
             {{
                 {{ 1.000000, 0.204495 }},
                 {{ 0.204495, 1.000000 }},
-            }}
+            }},
+        0u
         };
         ///@}
     }
