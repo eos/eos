@@ -645,6 +645,31 @@ class CommandLine :
                     continue;
                 }
 
+                if ("--observable-prior" == argument)
+                {
+                    std::string observable_name(*(++a));
+
+                    ObservableInput input;
+                    input.kinematics = *kinematics;
+                    input.observable = Observable::make(observable_name, parameters,
+                            *kinematics, global_options);
+                    if (!input.observable)
+                        throw DoUsage("Unknown observable '" + observable_name + "'");
+
+                    input.min = destringify<double> (*(++a));
+                    input.central = destringify<double> (*(++a));
+                    input.max = destringify<double> (*(++a));
+
+                    // TODO: Hack! This is only used for putting parts of the
+                    // prior into the likelihood for correlated prior information.
+                    likelihood.add(input.observable, input.min, input.central, input.max, 0);
+
+                    inputs.push_back(input);
+                    kinematics.reset(new Kinematics);
+
+                    continue;
+                }
+
                 if ("--optimize" == argument)
                 {
                     optimize = true;
