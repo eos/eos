@@ -387,6 +387,22 @@ namespace eos
             Parameter::Template{"B->K::alpha^T0_0@BFW2010",                      +0.48,           +0.48,           +0.48,          },
             Parameter::Template{"B->K::alpha^T0_1@BFW2010",                      -1.09,           -1.09,           -1.09,          },
 
+            // form factor parameters for Lambda_b -> Lambda decays according to
+            // [BFvD2014], table ?, p. ??
+            Parameter::Template{"Lambda_b->Lambda::f_0^V(0)@BFvD2014",           +0.22,           +0.28,           +0.34,         },
+            Parameter::Template{"Lambda_b->Lambda::b_1_0^V@BFvD2014",           -19.00,          -11.00,           -6.00,         },
+            Parameter::Template{"Lambda_b->Lambda::f_0^A(0)@BFvD2014",           +0.21,           +0.27,           +0.33,         },
+            Parameter::Template{"Lambda_b->Lambda::b_1_0^A@BFvD2014",           -16.00,           -8.00,           -5.00,         },
+            Parameter::Template{"Lambda_b->Lambda::f_perp^V(0)@BFvD2014",        +0.22,           +0.28,           +0.34,         },
+            Parameter::Template{"Lambda_b->Lambda::b_1_perp^V@BFvD2014",        -19.00,          -11.00,           -6.00,         },
+            Parameter::Template{"Lambda_b->Lambda::f_perp^A(0)@BFvD2014",        +0.24,           +0.30,           +0.36,         },
+            Parameter::Template{"Lambda_b->Lambda::b_1_perp^A@BFvD2014",        -12.00,           -6.00,           -3.00,         },
+            // Ratio of tensor to vector form factors
+            Parameter::Template{"Lambda_b->Lambda::R_perp_V@BFvD2014",            0.75,            1.00,            1.25          },
+            Parameter::Template{"Lambda_b->Lambda::R_perp_A@BFvD2014",            0.62,            1.00,            1.38          },
+            Parameter::Template{"Lambda_b->Lambda::R_long_V@BFvD2014",            0.73,            1.00,            1.27          },
+            Parameter::Template{"Lambda_b->Lambda::R_long_A@BFvD2014",            0.61,            1.00,            1.39          },
+
             // B LCDA parameters
             Parameter::Template{"lambda_B_p",                                    +0.370,          +0.485,          +0.600         }, // GeV, cf. [BHvD2010], Table I
             // B->K LCDA Parameter

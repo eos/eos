@@ -20,6 +20,7 @@
 
 #include <eos/observable.hh>
 #include <eos/form-factors/form-factor-adapter.hh>
+#include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/properties.hh>
@@ -156,6 +157,19 @@ namespace eos
 
             make_observable("B->K^*::A_2(s)/A_1(s)", "B->K^*",
                     &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1),
+
+            // Lambda_b -> Lambda Form Factors
+            make_observable("Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_v),
+
+            make_observable("Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_a),
+
+            make_observable("Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_v),
+
+            make_observable("Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_a),
 
             /* Exclusive B Decays */
 
