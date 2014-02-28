@@ -290,6 +290,10 @@ namespace eos
             Parameter::Template{"mass::B_d",                                     +5.27941,        +5.27958,        +5.27975       }, // cf. [PDG2012], p. 84
             Parameter::Template{"mass::B_u",                                     +5.27908,        +5.27925,        +5.27942       }, // cf. [PDG2012], p. 70
             Parameter::Template{"mass::B_s",                                     +5.36653,        +5.36677,        +5.36701       }, // cf. [PDG2012], p. 105
+            // s baryon masses
+            Parameter::Template{"mass::Lambda",                                  +1.115677,       +1.115683,       +1.115689      }, // cf. [PDG2012], p. 149
+            // b baryon masses
+            Parameter::Template{"mass::Lambda_b",                                +5.6187,         +5.6194,         +5.6201        }, // cf. [PDG2012], p. 165
             // Gauge boson masses
             Parameter::Template{"mass::W",                                       +80.370,         +80.385,         +80.400        }, // cf. [PDG2012], p. 8
             Parameter::Template{"mass::Z",                                       +91.1855,        +91.1876,        +91.1897       }, // cf. [PDG2012], p. 9
