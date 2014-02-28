@@ -31,10 +31,6 @@
 
 namespace eos
 {
-    struct LowRecoil
-    {
-    };
-
     /*
      * Decay: B -> K^* l lbar at Low Recoil, cf. [BHvD2010]
      */

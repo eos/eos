@@ -31,10 +31,6 @@
 
 namespace eos
 {
-    struct LargeRecoil
-    {
-    };
-
     /*
      * Decay: B -> K^* l lbar at Large Recoil, cf. [BHP2008]
      */
