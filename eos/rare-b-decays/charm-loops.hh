@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010, 2014 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,7 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_CHARM_LOOPS_HH 1
 
 #include <eos/utils/complex.hh>
+#include <eos/utils/model.hh>
 
 namespace eos
 {
@@ -59,6 +60,43 @@ namespace eos
         // helper functions for F8j, cf. [BFS2001], Eqs. (29) and (84), pp. 8 and 30
         static complex<double> B0(const double & s, const double & m_q);
         static complex<double> C0(const double & s, const double & m_q);
+    };
+
+    struct ShortDistanceLowRecoil
+    {
+        /*!
+         * Effective Wilson coefficient c7 in the region of low hadronic recoil.
+         *
+         * @param s             dilepton invariant mass
+         * @param mu            renormalization scale
+         * @param alpha_s       strong coupling evaluated at the scale mu
+         * @param m_b_PS        PS mass of the bottom quark
+         * @param use_nlo       true, if NLO contributions shall be used
+         * @param wc            the Wilson coefficients
+         *
+         * For the calculation, cf. [GP2004], Eq. (56)
+         */
+        static complex<double> c7eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, bool use_nlo,
+                const WilsonCoefficients<BToS> & wc);
+
+        /*!
+         * Effective Wilson coefficient c9 in the region of low hadronic recoil.
+         *
+         * @param s                     dilepton invariant mass
+         * @param mu                    renormalization scale
+         * @param alpha_s               strong coupling evaluated at the scale mu
+         * @param m_b_PS                PS mass of the bottom quark
+         * @param m_c                   MSbar mass of the charm quark
+         * @param use_nlo               true, if NLO contributions shall be used
+         * @param ccbar_resonance       true, if phenomenological data from e^+e^- -> ccbar resonance -> hadrons shall be used
+         * @param lambda_hat_u          certain combination of CKM matrix elements: V_ub V_us^* / (V_tb V_ts^*)
+         * @param wc                    the Wilson coefficients
+         *
+         * For the calculation, cf. [GP2004], Eq. (55), p. 10
+         */
+        static complex<double> c9eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, const double & m_c_MSbar,
+                bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,
+                const WilsonCoefficients<BToS> & wc);
     };
 }
 

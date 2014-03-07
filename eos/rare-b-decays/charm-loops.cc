@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2014 Danny van Dyk
  * Copyright (c) 2010 Christoph Bobeth
  * Copyright (c) 2010, 2011 Christian Wacker
  *
@@ -20,6 +20,7 @@
  */
 
 #include <eos/rare-b-decays/charm-loops.hh>
+#include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/power_of.hh>
 
@@ -35,6 +36,51 @@ namespace eos
     using std::log;
     using std::pow;
     using std::sqrt;
+
+    complex<double>
+    ShortDistanceLowRecoil::c7eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, bool use_nlo,
+                const WilsonCoefficients<BToS> & wc)
+    {
+        // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
+        complex<double> lo = -1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
+        complex<double> nlo = -1.0 * (
+                  wc.c1() * CharmLoops::F17_massless(mu, s, m_b_PS)
+                + wc.c2() * CharmLoops::F27_massless(mu, s, m_b_PS)
+                + wc.c8() * CharmLoops::F87_massless(mu, s, m_b_PS));
+
+        complex<double> result = wc.c7() + lo;
+        if (use_nlo)
+            result += (alpha_s / (4.0 * M_PI)) * nlo;
+
+        return result;
+    }
+
+    complex<double>
+    ShortDistanceLowRecoil::c9eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, const double & m_c_MSbar,
+                bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,
+                const WilsonCoefficients<BToS> & wc)
+    {
+        // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
+        // Substitute pole mass by PS mass
+        complex<double> c = -2.0 / 27.0 * (8.0 * wc.c1() + 6.0 * wc.c2() - 6.0 * wc.c3() - 8.0 * wc.c4() - 12.0 * wc.c5() - 160.0 * wc.c6());
+        complex<double> c_0 = -2.0 / 27.0 * (48.0 * wc.c1() + 36.0 * wc.c2() + 198.0 * wc.c3() - 24.0 * wc.c4() + 1872.0 * wc.c5() - 384.0 * wc.c6());
+        complex<double> c_b = +2.0 / 27.0 * (126.0 * wc.c3() + 24.0 * wc.c4() + 1368.0 * wc.c5() + 384.0 * wc.c6());
+        complex<double> G0 = -3.0 / 8.0 * ((ccbar_resonance ? LongDistance::g_had_ccbar(s, m_c_MSbar) : CharmLoops::h(mu, s)) + 4.0 / 9.0);
+        complex<double> Gb = -3.0 / 8.0 * (CharmLoops::h(mu, s, m_b_PS) + 4.0 / 9.0);
+
+        complex<double> lo = c_b * Gb + c_0 * G0 + c;
+        complex<double> nlo_alpha_s = -1.0 * (wc.c1() * CharmLoops::F19_massless(mu, s, m_b_PS)
+                                            + wc.c2() * CharmLoops::F29_massless(mu, s, m_b_PS)
+                                            + wc.c8() * CharmLoops::F89_massless(s, m_b_PS));
+        complex<double> nlo_mc = m_c_MSbar * m_c_MSbar / s * 8.0 *
+            ((4.0/9.0 * wc.c1() + 1.0/3.0 * wc.c2()) * (1.0 + lambda_hat_u) + 2.0 * wc.c3() + 20.0 * wc.c5());
+
+        complex<double> result = wc.c9() + lo;
+        if ((! ccbar_resonance) && (use_nlo))
+            result += (alpha_s / (4.0 * M_PI)) * nlo_alpha_s + nlo_mc;
+
+        return result;
+    }
 
     complex<double>
     CharmLoops::h(const double & mu, const double & s)
