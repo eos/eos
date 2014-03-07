@@ -323,6 +323,7 @@ namespace eos
             Parameter::Template{"life_time::B_u",                                +1.633e-12,      +1.641e-12,      +1.649e-12     }, // cf. [PDG2012], p. 70
             Parameter::Template{"life_time::B_s",                                +1.505e-12,      +1.516e-12,      +1.527e-12     }, // cf. [PDG-Live], September 2013
             Parameter::Template{"life_time::B@Y(4S)",                            +1.573e-12,      +1.580e-12,      +1.589e-12     }, // based on 50:50 admixture of B^+B^- and B^0Bbar^0 @ Y(4S)
+            Parameter::Template{"life_time::Lambda_b",                           +1.438e-12,      +1.451e-12,      +1.464e-12     }, // cf. PDG2014 update by [HFAG]
 
             /* Decay width differences in neutral meson systems */
             Parameter::Template{"life_time::Delta_B_d",                          +0.0,            +0.0,            +0.0           }, // smaller than 1eV, i.e. zero for all intents and purposes, cf. [PDG2012]
