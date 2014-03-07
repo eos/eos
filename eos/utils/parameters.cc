@@ -327,7 +327,10 @@ namespace eos
 
             /* Decay width differences in neutral meson systems */
             Parameter::Template{"life_time::Delta_B_d",                          +0.0,            +0.0,            +0.0           }, // smaller than 1eV, i.e. zero for all intents and purposes, cf. [PDG2012]
-            Parameter::Template{"life_time::Delta_B_s",                          +0.070e+12,      +0.081e+12,      +0.092e+12     }, // cf. [PDG-Live], September 2013
+            Parameter::Template{"life_time::Delta_B_s",                          +0.070e+12,      +0.081e+12,      +0.092e+12     }, // cf. [PDG2012+]
+
+            /* Decay parameter of the Lambda hyperon */
+            Parameter::Template{"Lambda::alpha",                                 +0.629,          +0.642,          +0.655         }, // cf. [PDG2012+]
 
             // Form factor uncertainties
             Parameter::Template{"formfactors::xi_perp_uncertainty",              +0.89,           +1.0,            +1.11          },
