@@ -2525,6 +2525,86 @@ namespace eos
         0u
         };
         ///@}
+
+        ///@name 2014
+        ///@{
+        /*
+         * From [BFvD2014], based on reproduction of data points from [DLMW2012] and [FY2011], and subleading Isgur-Wise functions
+         * approximations.
+         */
+        static const MultivariateGaussianConstraintTemplate<4> LambdaB_to_Lambda_all_v_and_a_0_BFvD2014
+        {
+            {{ "Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda::f_long^A(s)" }},
+            {{ Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } } }},
+            {{ Options{ }, Options{ }, Options{ }, Options{ } }},
+            {{ 0.391, 0.389, 0.380, 0.380 }},
+            {{ 0.226, 0.224, 0.221, 0.221 }},
+            {{ 0.226, 0.224, 0.221, 0.221 }},
+            {{ 0.000, 0.000, 0.000, 0.000 }},
+            {{
+                 {{ 1.000, 0.556, 0.773, 0.771 }},
+                 {{ 0.556, 1.000, 0.773, 0.772 }},
+                 {{ 0.773, 0.773, 1.000, 0.534 }},
+                 {{ 0.771, 0.772, 0.534, 1.000 }}
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<2> LambdaB_to_Lambda_fperpV_13dot5_to_20dot3_BFvD2014
+        {
+            {{ "Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda::f_perp^V(s)" }},
+            {{ Kinematics{ { "s", 13.5 } }, Kinematics{ { "s", 20.5 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.73, 1.40 }},
+            {{ 0.20, 0.20 }},
+            {{ 0.20, 0.20 }},
+            {{ 0.00, 0.00 }},
+            {{
+                 {{ 1.000, 0.000 }},
+                 {{ 0.000, 1.000 }}
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<2> LambdaB_to_Lambda_fperpA_13dot5_to_20dot3_BFvD2014
+        {
+            {{ "Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda::f_perp^A(s)" }},
+            {{ Kinematics{ { "s", 13.5 } }, Kinematics{ { "s", 20.5 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.48, 0.84 }},
+            {{ 0.19, 0.19 }},
+            {{ 0.19, 0.19 }},
+            {{ 0.00, 0.00 }},
+            {{
+                 {{ 1.000, 0.000 }},
+                 {{ 0.000, 1.000 }}
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<2> LambdaB_to_Lambda_flongV_13dot5_to_20dot3_BFvD2014
+        {
+            {{ "Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda::f_long^V(s)" }},
+            {{ Kinematics{ { "s", 13.5 } }, Kinematics{ { "s", 20.5 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.72, 1.39 }},
+            {{ 0.21, 0.21 }},
+            {{ 0.21, 0.21 }},
+            {{ 0.00, 0.00 }},
+            {{
+                 {{ 1.000, 0.000 }},
+                 {{ 0.000, 1.000 }}
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<2> LambdaB_to_Lambda_flongA_13dot5_to_20dot3_BFvD2014
+        {
+            {{ "Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda::f_long^A(s)" }},
+            {{ Kinematics{ { "s", 13.5 } }, Kinematics{ { "s", 20.5 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.48, 0.85 }},
+            {{ 0.19, 0.18 }},
+            {{ 0.19, 0.18 }},
+            {{ 0.00, 0.00 }},
+            {{
+                 {{ 1.000, 0.000 }},
+                 {{ 0.000, 1.000 }}
+            }}
+        };
+        ///@}
     }
 
     /* Constraint */
@@ -2917,6 +2997,12 @@ namespace eos
             { "B->K^*::A_12@HPQCD-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B) },
 
             { "B->pi::f_+@IKMvD-2014", make_factory(templates::B_to_pi_fp_IKMvD_2014) },
+
+            { "Lambda_b->Lambda::f_perp+long^V+A@BFvD2014", make_factory(templates::LambdaB_to_Lambda_all_v_and_a_0_BFvD2014) },
+            { "Lambda_b->Lambda::f_perp^V@BFvD2014", make_factory(templates::LambdaB_to_Lambda_fperpV_13dot5_to_20dot3_BFvD2014) },
+            { "Lambda_b->Lambda::f_perp^A@BFvD2014", make_factory(templates::LambdaB_to_Lambda_fperpA_13dot5_to_20dot3_BFvD2014) },
+            { "Lambda_b->Lambda::f_long^V@BFvD2014", make_factory(templates::LambdaB_to_Lambda_flongV_13dot5_to_20dot3_BFvD2014) },
+            { "Lambda_b->Lambda::f_long^A@BFvD2014", make_factory(templates::LambdaB_to_Lambda_flongA_13dot5_to_20dot3_BFvD2014) },
         };
 
         auto f = factories.find(name);
