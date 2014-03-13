@@ -30,6 +30,7 @@
 #include <eos/rare-b-decays/exclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
+#include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
 #include <eos/utils/concrete_observable.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
@@ -1091,6 +1092,47 @@ namespace eos
 
             make_observable("B->K^*ll::A_9@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::integrated_a_9,
+                    std::make_tuple("s_min", "s_max")),
+
+            // Lambda_b -> Lambda l^+ l^-, Low Recoil
+            make_observable("Lambda_b->Lambdall::dBR/ds@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::differential_branching_ratio,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^l(s)@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_leptonic,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^h(s)@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_hadronic,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^c(s)@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_combined,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::F_0(s)@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::differential_fzero,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::BR@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^l@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_leptonic,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^h@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_hadronic,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^c@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_combined,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::F_0@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_fzero,
                     std::make_tuple("s_min", "s_max")),
 
             /* Inclusive Decays */

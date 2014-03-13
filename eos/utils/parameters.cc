@@ -401,11 +401,10 @@ namespace eos
             Parameter::Template{"Lambda_b->Lambda::b_1_perp^V@BFvD2014",        -19.00,          -11.00,           -6.00,         },
             Parameter::Template{"Lambda_b->Lambda::f_perp^A(0)@BFvD2014",        +0.24,           +0.30,           +0.36,         },
             Parameter::Template{"Lambda_b->Lambda::b_1_perp^A@BFvD2014",        -12.00,           -6.00,           -3.00,         },
-            // Ratio of tensor to vector form factors
-            Parameter::Template{"Lambda_b->Lambda::R_perp_V@BFvD2014",            0.75,            1.00,            1.25          },
-            Parameter::Template{"Lambda_b->Lambda::R_perp_A@BFvD2014",            0.62,            1.00,            1.38          },
-            Parameter::Template{"Lambda_b->Lambda::R_long_V@BFvD2014",            0.73,            1.00,            1.27          },
-            Parameter::Template{"Lambda_b->Lambda::R_long_A@BFvD2014",            0.61,            1.00,            1.39          },
+            Parameter::Template{"Lambda_b->Lambda::sigma_perp^V@BFvD2014",       -0.20,            0.00,           +0.20,         },
+            Parameter::Template{"Lambda_b->Lambda::sigma_perp^A@BFvD2014",       -0.30,            0.00,           +0.30,         },
+            Parameter::Template{"Lambda_b->Lambda::sigma_long^V@BFvD2014",       -0.21,            0.00,           +0.21,         },
+            Parameter::Template{"Lambda_b->Lambda::sigma_long^A@BFvD2014",       -0.30,            0.00,           +0.30,         },
 
             // B LCDA parameters
             Parameter::Template{"lambda_B_p",                                    +0.370,          +0.485,          +0.600         }, // GeV, cf. [BHvD2010], Table I

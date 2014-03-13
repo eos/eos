@@ -18,6 +18,7 @@ libeosrarebdecays_la_SOURCES = \
 	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
 	hard-scattering.cc hard-scattering.hh \
 	long-distance.cc long-distance.hh \
+	lambda-b-to-lambda-dilepton.cc lambda-b-to-lambda-dilepton.hh \
 	qcdf_integrals.cc qcdf_integrals.hh
 libeosrarebdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \

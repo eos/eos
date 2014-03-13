@@ -36,6 +36,8 @@ namespace eos
 
     template <typename T_> class BToXsGamma;
 
+    template <typename T_> class LambdaBToLambdaDilepton;
+
     enum Helicity
     {
         left_handed = -1,
