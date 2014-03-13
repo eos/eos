@@ -548,6 +548,13 @@ Theoretical Inputs
         arxiv:hep-ph/0412400
 
 
+    BFvD2014 : Boeer, P. and Feldmann, Th. and van Dyk, D.
+
+        ???
+
+        arxiv:14??.???? [hep-ph]
+
+
     BFW2010 : Bharucha, A. and Feldmann, Th. and Wick, M.
 
         Theoretical and Phenomenological Constraints on Form Factors and
@@ -685,6 +692,13 @@ Theoretical Inputs
         arXiv:0801.1796
 
 
+    DLMW2012 : Detmold, W. and Lin, CJ.D. and Meinel, S. and Wingate, M.
+
+        Lambda_b -> Lambda l^+ l^- form factors and differential branching fraction from lattice QCD
+
+        arxiv:1212.4827 [hep-lat]
+
+
     DMRV2012 : Descotes-Genon, S. and Matias, J. and Ramon, M. and Virto, J.
 
         Implications from clean observables for the binned analysis
@@ -713,6 +727,13 @@ Theoretical Inputs
         in the standard model and in supersymmetry
 
         arxiv:hep-ph/0212158
+
+
+    FY2011 : Feldmann, Th. and Yip, M.W.Y.
+
+        Form Factors for Lambda_b -> Lambda Transitions in SCET
+
+        arxiv:1111.1844 [hep-ph]
 
 
     GM2001 : Gambino, P. and Misiak, M.
