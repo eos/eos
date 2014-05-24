@@ -255,6 +255,8 @@ namespace eos
             Parameter::Template{"mass::c",                                       +1.250,          +1.275,          +1.300         }, // cf. [PDG2012], p. 21
             Parameter::Template{"mass::b(MSbar)",                                +4.15,           +4.18,           +4.21          }, // cf. [PDG2012], p. 21
             Parameter::Template{"mass::t(pole)",                                 +172.5,          +173.5,          +174.5         }, // cf. [PDG2012], p. 22
+            // Pi meson masses
+            Parameter::Template{"mass::pi^0",                                    +0.1349760,      +0.1349766,      +0.1349772     }, // cf. [PDG-Live], May 2014
             // K meson masses
             Parameter::Template{"mass::K_d",                                     +0.497590,       +0.497614,       +0.497638      }, // cf. [PDG2012], p. 41
             Parameter::Template{"mass::K_u",                                     +0.493661,       +0.493677,       +0.493693      }, // cf. [PDG2012], p. 39
@@ -274,6 +276,15 @@ namespace eos
             Parameter::Template{"decay-constant::B_s",                           +0.2226,         +0.2276,         +0.2326        }, // GeV, cf. [LATAVG2011]
             Parameter::Template{"decay-constant::K_d",                           +0.155,          +0.1561,         +0.1572        }, // GeV, cf. [LATAVG2011]
             Parameter::Template{"decay-constant::K_u",                           +0.155,          +0.1561,         +0.1572        }, // GeV, cf. [LATAVG2011]
+            Parameter::Template{"decay-constant::pi",                            +0.1288,         +0.1302,         +0.1326        }, // GeV, cf. [FLAG2013], eq. (43)
+
+            /* Pion LCDA parameters */
+            Parameter::Template{"pi::a2@1GeV",                                   +0.16,           +0.16,           +0.16          }, // cf. [DKMMO2008]
+            Parameter::Template{"pi::a4@1GeV",                                   +0.04,           +0.04,           +0.04          }, // cf. [DKMMO2008]
+            Parameter::Template{"pi::f3@1GeV",                                   +0.0030,         +0.0045,         +0.0060        }, // GeV^2, cf. [DKMMO2008]
+            Parameter::Template{"pi::omega3@1GeV",                               -2.2,            -1.5,            -0.8           }, // cf. [DKMMO2008]
+            Parameter::Template{"pi::omega4@1GeV",                               +0.2,            +0.2,            +0.2           }, // cf. [DKMMO2008]
+            Parameter::Template{"pi::delta^2@1GeV",                              +0.12,           +0.18,           +0.24          }, // GeV^2, cf. [DKMMO2008]
 
             /* b->s matching parameters */
             Parameter::Template{"b->s::mu_0c",                                   +80.0,           +80.0,           +80.0          },

@@ -297,6 +297,13 @@ Experimental Results
 Averages and Numerical Inputs
 -----------------------------
 
+    FLAG2013 : Flavor Lattice Averagin Group
+
+        Review of lattice results concerning low energy particle physics
+
+        arXiv:1310.8555v2 [hep-lat]
+
+
     PDG2008 : Particle Data Group
 
         Particle Physics Booklet (July 2008)
