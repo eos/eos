@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2014 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -173,6 +173,7 @@ namespace implementation
         _m_b_MSbar__qcd(p["mass::b(MSbar)"], u),
         _m_c_MSbar__qcd(p["mass::c"], u),
         _m_s_MSbar__qcd(p["mass::s(2GeV)"], u),
+        _m_ud_MSbar__qcd(p["mass::ud(2GeV)"], u),
         _m_Z__qcd(p["mass::Z"], u)
     {
     }
@@ -358,26 +359,62 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_s_msbar(const double & mu) const
     {
-        double m_c_0 = _m_s_MSbar__qcd();
+        double m_s_0 = _m_s_MSbar__qcd();
         double alpha_s_mu0 = alpha_s(2.0);
 
         if (mu >= 2.0)
         {
             if (mu <= _mu_b__qcd)
-                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+                return QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
 
             double alpha_s_b = alpha_s(_mu_b__qcd);
-            m_c_0 = QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            m_s_0 = QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
             alpha_s_mu0 = alpha_s_b;
 
             if (mu <= _mu_t__qcd)
-                return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+                return QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
 
             throw InternalError("SMComponent<components::QCD>::m_s_msbar: Running of m_s_MSbar to mu > mu_t not yet implemented");
         }
         else
         {
             throw InternalError("SMComponent<components::QCD>::m_s_msbar: Running of m_s_MSbar to mu < 2.0 GeV not yet implemented");
+        }
+    }
+
+    double
+    SMComponent<components::QCD>::m_ud_msbar(const double & mu) const
+    {
+        double m_ud_0 = _m_ud_MSbar__qcd();
+        double alpha_s_mu0 = alpha_s(2.0);
+
+        if (mu >= 2.0)
+        {
+            if (mu <= _mu_b__qcd)
+                return QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+
+            double alpha_s_b = alpha_s(_mu_b__qcd);
+            m_ud_0 = QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0 = alpha_s_b;
+
+            if (mu <= _mu_t__qcd)
+                return QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+
+            throw InternalError("SMComponent<components::QCD>::m_ud_msbar: Running of m_ud_MSbar to mu > mu_t not yet implemented");
+        }
+        else
+        {
+            if (mu >= _mu_c__qcd)
+                return QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+
+            double alpha_s_c = alpha_s(_mu_c__qcd);
+            m_ud_0 = QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0 = alpha_s_c;
+
+            if (mu >= 1.0)
+                return QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_3, QCD::gamma_m_nf_3);
+
+            throw InternalError("SMComponent<components::QCD>::m_ud_msbar: Running of m_ud_MSbar to mu < 1.0 GeV not yet implemented");
         }
     }
 

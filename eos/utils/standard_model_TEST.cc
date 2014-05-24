@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -38,6 +38,7 @@ reference_parameters()
     result["mass::b(MSbar)"] = 4.2;
     result["mass::c"] = 1.27;
     result["mass::s(2GeV)"] = 0.101;
+    result["mass::ud(2GeV)"] = 0.008;
     result["mass::W"] = 80.398;
     result["mass::Z"] = 91.1876;
     result["GSW::sin^2(theta)"] = 0.23116;
@@ -219,6 +220,30 @@ class SMassesTest :
             TEST_CHECK_NEARLY_EQUAL(0.082967, model.m_s_msbar(4.8),  eps);
         }
 } sm_s_masses_test;
+
+class UDMassesTest :
+    public TestCase
+{
+    public:
+        UDMassesTest() :
+            TestCase("sm_ud_masses_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const double eps = 1e-6;
+
+            Parameters p = reference_parameters();
+            StandardModel model(p);
+
+            TEST_CHECK_NEARLY_EQUAL(0.010826, model.m_ud_msbar(1.0),  eps);
+            TEST_CHECK_NEARLY_EQUAL(0.008000, model.m_ud_msbar(2.0),  eps);
+            TEST_CHECK_NEARLY_EQUAL(0.007223, model.m_ud_msbar(3.0),  eps);
+            TEST_CHECK_NEARLY_EQUAL(0.006803, model.m_ud_msbar(4.0),  eps);
+            TEST_CHECK_NEARLY_EQUAL(0.006525, model.m_ud_msbar(5.0),  eps);
+        }
+} sm_ud_masses_test;
 
 class CKMElementsTest :
     public TestCase

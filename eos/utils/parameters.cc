@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -250,6 +250,7 @@ namespace eos
             Parameter::Template{"mass::tau",                                     +1.77666,        +1.77682,        +1.77698       }, // cf. [PDG2012], p. 14
             // Quark masses
             Parameter::Template{"mass::d(2GeV)",                                 +0.0045,         +0.0048,         +0.0055        }, // cf. [PDG2012], p. 21
+            Parameter::Template{"mass::ud(2GeV)",                                +0.008,          +0.008,          +0.008         },
             Parameter::Template{"mass::s(2GeV)",                                 +0.090,          +0.095,          +0.010         }, // cf. [PDG2012], p. 21
             Parameter::Template{"mass::c",                                       +1.250,          +1.275,          +1.300         }, // cf. [PDG2012], p. 21
             Parameter::Template{"mass::b(MSbar)",                                +4.15,           +4.18,           +4.21          }, // cf. [PDG2012], p. 21
