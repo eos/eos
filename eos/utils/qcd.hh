@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2014 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -143,6 +143,7 @@ namespace eos
              */
             ///@{
             static const BetaFunction beta_function_nf_3;
+            static const AnomalousMassDimension gamma_m_nf_3;
             ///@}
     };
 }

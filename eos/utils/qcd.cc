@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -86,6 +86,15 @@ namespace eos
         64.0,
         3863.0 / 6.0,
         12090.378130803711,
+    }};
+
+    // cf. [CKS2000], Eq. (7), p. 5 with n_f = 3
+    const QCD::AnomalousMassDimension QCD::gamma_m_nf_3
+    {{
+        1.0,
+        182.0 / 3.0,
+        794.89311771668714,
+        11331.304567227756
     }};
 
     double
