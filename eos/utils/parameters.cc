@@ -240,6 +240,9 @@ namespace eos
             Parameter::Template{"QCD::mu_b",                                     +4.2,            +4.2,            +4.2           },
             Parameter::Template{"QCD::mu_c",                                     +1.0,            +1.0,            +1.0           },
             Parameter::Template{"QCD::Lambda",                                   +0.5,            +0.5,            +0.5           },
+            Parameter::Template{"QCD::cond_GG",                                  +0.000,          +0.012,          +0.018         },
+            Parameter::Template{"QCD::m_0",                                      +0.7746,         +0.89443,        +1.0           }, // GeV, cf. [DKMMO2008]
+            Parameter::Template{"QCD::r_vac",                                    +0.1,            +0.55,           +1.0           }, // cf. [DKMMO2008]
             // G_Fermi
             Parameter::Template{"G_Fermi",                                       +1.1663781e-5,   +1.1663787e-5,   +1.1663793e-5  }, // cf. [PDG2012], p. 5
 
@@ -303,6 +306,14 @@ namespace eos
             // Form factor uncertainties
             Parameter::Template{"formfactors::xi_perp_uncertainty",              +0.89,           +1.0,            +1.11          },
             Parameter::Template{"formfactors::xi_par_uncertainty",               +0.86,           +1.0,            +1.14          },
+
+            // form factor parameters for LCSR calculation according to [DKMMO2008]
+            Parameter::Template{"B->pi::zeta(NNLO)@DKMMO2008",                   -1.0,             0.0,            +1.0           },
+            Parameter::Template{"B->pi::M^2@DKMMO2008",                         +15.0,           +18.0,           +20.0           }, // GeV^2, cf. [DKMMO2008]
+            Parameter::Template{"B->pi::Mp^2@DKMMO2008",                         +5.0,            +5.0,            +5.0           }, // GeV^2, cf. [DKMMO2008]
+            Parameter::Template{"B->pi::mu@DKMMO2008",                           +3.0,            +3.0,            +3.0           }, // GeV, cf. [DKMMO2008]
+            Parameter::Template{"B->pi::s_0^B@DKMMO2008",                       +35.75,          +35.75,          +35.75          }, // GeV^2, cf. [DKMMO2008]
+            Parameter::Template{"B->pi::sp_0^B@DKMMO2008",                      +35.5,           +35.6,           +36.0           }, // GeV^2, cf. [DKMMO2008]
 
             // form factor parameters for B->K^* according to [BZ2004] (approximate)
             Parameter::Template{"B->K^*::a0_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },

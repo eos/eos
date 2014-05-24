@@ -18,6 +18,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/form-factors/analytic-b-to-pi.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/utils/destringify.hh>
 
@@ -244,10 +245,13 @@ namespace eos
         typedef std::function<FormFactors<PToP> * (const Parameters &, unsigned)> ValueType;
         static const std::map<KeyType, ValueType> form_factors
         {
-            { KeyType("B->K",     "BZ2004v2"), &BZ2004FormFactors<BToK, PToP>::make   },
+            // parametrizations
+            { KeyType("B->K",     "BZ2004v2"), &BZ2004FormFactors<BToK, PToP>::make     },
             { KeyType("B->K",     "BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make },
-            { KeyType("B->K",     "KMPW2010"), &KMPW2010FormFactors<PToP>::make   },
-            { KeyType("B->K",     "BFW2010"), &BFW2010FormFactors<PToP>::make   }
+            { KeyType("B->K",     "KMPW2010"), &KMPW2010FormFactors<PToP>::make         },
+            { KeyType("B->K",     "BFW2010"), &BFW2010FormFactors<PToP>::make           },
+            // analytic computations
+            { KeyType("B->pi",    "DKMMO2008"), &AnalyticFormFactorBToPiDKMMO2008::make },
         };
 
         /*

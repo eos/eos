@@ -115,6 +115,15 @@ namespace eos
             make_observable("B->pi::f_0(s)", "B->pi",
                     &FormFactors<PToP>::f_0),
 
+            // B -> pi Form Factors (auxillary variable for determining the
+            // LCSR/SVZ threshold parameters)
+            make_observable("B->pi::M_B(LCSR)@DKMMO2008",
+                    &AnalyticFormFactorBToPiDKMMO2008::MB_lcsr,
+                    std::make_tuple("s")),
+
+            make_observable("B->pi::M_B(SVZ)@DKMMO2008",
+                    &AnalyticFormFactorBToPiDKMMO2008::MB_svz),
+
             // B -> K Form Factors
             make_observable("B->K::f_+(s)", "B->K",
                     &FormFactors<PToP>::f_p),

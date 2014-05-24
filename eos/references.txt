@@ -622,6 +622,14 @@ Theoretical Inputs
         arxiv:hep-ph/9711280
 
 
+    DKMMO2008 : Duplancic, G. and Khodjamirian, A. and Mannel, Th. and Melic, B.
+                and Offen, N.
+
+        Light-cone sum rules for B -> pi form factors revisited
+
+        arXiv:0801.1796
+
+
     DMRV2012 : Descotes-Genon, S. and Matias, J. and Ramon, M. and Virto, J.
 
         Implications from clean observables for the binned analysis
