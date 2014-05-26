@@ -25,6 +25,7 @@ libeosutils_la_SOURCES = \
 	complex.hh \
 	concrete_observable.hh \
 	condition_variable.cc condition_variable.hh \
+	derivative.cc derivative.hh \
 	destringify.hh \
 	diagnostics.cc diagnostics.hh \
 	equation_solver.cc equation_solver.hh \
@@ -97,6 +98,7 @@ include_eos_utils_HEADERS = \
 	complex.hh \
 	concrete_observable.hh \
 	condition_variable.hh \
+	derivative.hh \
 	destringify.hh \
 	equation_solver.hh \
 	exception.hh \
@@ -148,6 +150,7 @@ TESTS = \
 	apply_TEST \
 	cartesian-product_TEST \
 	chi-squared_TEST \
+	derivative_TEST \
 	equation_solver_TEST \
 	hdf5_TEST \
 	hierarchical-clustering_TEST \
@@ -204,6 +207,8 @@ apply_TEST_SOURCES = apply_TEST.cc
 cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 
 chi_squared_TEST_SOURCES = chi-squared_TEST.cc
+
+derivative_TEST_SOURCES = derivative_TEST.cc
 
 hdf5_TEST_SOURCES = hdf5_TEST.cc
 
