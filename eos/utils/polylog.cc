@@ -7,6 +7,8 @@
 #include <cmath>
 #include <limits>
 
+#include <iostream>
+
 namespace eos
 {
     static const int max_iterations = 54;
@@ -120,10 +122,10 @@ namespace eos
         if (z == complex<double>(-1.0, 0.0))
             return -M_PI * M_PI / 12.0;
 
-        if (std::abs(z) <= 0.5)
+        if (std::abs(z) < 0.5)
             return dilog_impl::f0(z);
 
-        if (std::abs(z) >= 2.0)
+        if (std::abs(z) > 2.0)
             return dilog_impl::g(z) - dilog_impl::f0(1.0 / z);
 
         return dilog_impl::f1(z);
@@ -240,10 +242,10 @@ namespace eos
         if (z == complex<double>(-1.0, 0.0))
             return -3.0 / 4.0 * aperys_constant;
 
-        if (std::abs(z) <= 0.5)
+        if (std::abs(z) < 0.5)
             return trilog_impl::f0(z);
 
-        if (std::abs(z) >= 2.0)
+        if (std::abs(z) > 2.0)
             return trilog_impl::g(z) + trilog_impl::f0(1.0 / z);
 
         return trilog_impl::f1(z);

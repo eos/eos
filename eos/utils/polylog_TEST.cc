@@ -22,6 +22,8 @@
 
 #include <fstream>
 
+#include <iomanip>
+
 using namespace test;
 using namespace eos;
 
@@ -67,5 +69,15 @@ class PolylogarithmTest :
                 TEST_CHECK_NEARLY_EQUAL(real(trilog_reference), real(trilog_value), eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(trilog_reference), imag(trilog_value), eps);
             }
+
+            // check that the C implementation handles z = -2.0 - i 0.0
+            // correctly
+            static const complex<double> c1(1.0, 0.0), c05(0.5, 0.0), c2(2.0, 0.0);
+            static const complex<double> z    = (c2 - c1) / (c05 - c1); // which turns out to be (-2.0,-0.0)
+            static const complex<double> zbar = (c05 - c1) / (c2 - c1); // which turns out to be (-0.5,-0.0)
+            TEST_CHECK_RELATIVE_ERROR(real(dilog(-c2)),   +real(dilog(z)),     eps); // has no imaginary part
+            TEST_CHECK_RELATIVE_ERROR(real(trilog(-c2)),  +real(trilog(z)),    eps); // has no imaginary part
+            TEST_CHECK_RELATIVE_ERROR(real(dilog(-c05)),  +real(dilog(zbar)),  eps); // has no imaginary part
+            TEST_CHECK_RELATIVE_ERROR(real(trilog(-c05)), +real(trilog(zbar)), eps); // has no imaginary part
         }
 } polylogarithm_test;
