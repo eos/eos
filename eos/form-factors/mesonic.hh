@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -75,6 +75,9 @@ namespace eos
             virtual double f_p(const double & s) const = 0;
             virtual double f_0(const double & s) const = 0;
             virtual double f_t(const double & s) const = 0;
+
+            virtual double f_p_d1(const double & s) const;
+            virtual double f_p_d2(const double & s) const;
     };
 
     template <>

@@ -99,6 +99,22 @@ namespace eos
 
             /* Form Factor for the Exclusive Decays */
 
+            // B -> pi Form Factors
+            make_observable("B->pi::f_+(s)", "B->pi",
+                    &FormFactors<PToP>::f_p),
+
+            make_observable("B->pi::f_+'(s)", "B->pi",
+                    &FormFactors<PToP>::f_p_d1),
+
+            make_observable("B->pi::f_+''(s)", "B->pi",
+                    &FormFactors<PToP>::f_p_d2),
+
+            make_observable("B->pi::f_T(s)", "B->pi",
+                    &FormFactors<PToP>::f_t),
+
+            make_observable("B->pi::f_0(s)", "B->pi",
+                    &FormFactors<PToP>::f_0),
+
             // B -> K Form Factors
             make_observable("B->K::f_+(s)", "B->K",
                     &FormFactors<PToP>::f_p),

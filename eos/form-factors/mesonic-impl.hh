@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -22,6 +22,7 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_IMPL_HH 1
 
 #include <eos/form-factors/mesonic.hh>
+#include <eos/utils/derivative.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/power_of.hh>
@@ -206,6 +207,24 @@ namespace eos
     /* P -> P Processes */
 
     struct BToK { };
+
+    double FormFactors<PToP>::f_p_d1(const double & s) const
+    {
+        using namespace std::placeholders;
+
+        auto f = std::function<double (const double &)>(std::bind(&FormFactors<PToP>::f_p, this, _1));
+
+        return derivative<1u, deriv::TwoSided>(f, s);
+    }
+
+    double FormFactors<PToP>::f_p_d2(const double & s) const
+    {
+        using namespace std::placeholders;
+
+        auto f = std::function<double (const double &)>(std::bind(&FormFactors<PToP>::f_p, this, _1));
+
+        return derivative<2u, deriv::TwoSided>(f, s);
+    }
 
     /* Form Factors according to [BZ2004v2] */
     template <typename Process_> class BZ2004FormFactors<Process_, PToP> :
