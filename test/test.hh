@@ -79,6 +79,14 @@ namespace test
     } \
     while (false)
 
+#define TEST_CHECK_MSG(a, msg) \
+    do \
+    { \
+        if (! (a)) \
+            throw TestCaseFailedException(__LINE__, __FILE__, msg); \
+    } \
+    while (false)
+
 #define TEST_CHECK_EQUAL(a, b) \
     do \
     { \
