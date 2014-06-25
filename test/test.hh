@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2014 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -76,6 +77,14 @@ namespace test
     { \
         if (! (a)) \
             throw TestCaseFailedException(__LINE__, __FILE__, "'" #a "' is false"); \
+    } \
+    while (false)
+
+#define TEST_CHECK_MSG(a, msg) \
+    do \
+    { \
+        if (! (a)) \
+            throw TestCaseFailedException(__LINE__, __FILE__, msg); \
     } \
     while (false)
 
