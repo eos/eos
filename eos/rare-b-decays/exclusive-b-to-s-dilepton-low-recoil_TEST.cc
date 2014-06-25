@@ -685,8 +685,15 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
             k.declare("s_max"); k.set("s_max", 22.86);
 
             std::vector<ObservablePtr> observables;
-            observables.push_back(Observable::make("B->Kll::BR@LowRecoil,q=u,l=mu",  p, k, o));
-            observables.push_back(Observable::make("B->Kll::F_H@LowRecoil,q=u,l=mu", p, k, o));
+            std::vector<std::string> observable_names = {
+                    "B->Kll::BR@LowRecoil,q=u,l=mu",
+                    "B->Kll::F_H@LowRecoil,q=u,l=mu",
+            };
+            for (auto & s : observable_names)
+            {
+                observables.push_back(Observable::make(s, p, k, o));
+                TEST_CHECK_MSG(observables.back(), "Could not create '" + s + "'");
+            }
 
             std::string filename(EOS_SRCDIR "/eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil_TEST-btokll.data");
 #ifdef EOS_GENERATE_TEST_DATA
@@ -717,7 +724,7 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
             {
                 std::cout << "-- Verifying test case data for B->Kll@LowRecoil --" << std::endl;
                 std::fstream file(filename.c_str(), std::fstream::in);
-
+                TEST_CHECK_MSG(file, "'" + filename + "' does not exist");
                 std::string line;
                 while (file)
                 {
