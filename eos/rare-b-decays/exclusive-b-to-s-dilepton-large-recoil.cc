@@ -1570,11 +1570,11 @@ namespace eos
 
             /* top sector */
             // cf. [BHP2007], Eq. (B.2) and [BFS2001], Eqs. (14), (15), p. 5, in comparison with \delta_{2,3} = 1
-            complex<double> C0_top_psd = 1.0 * (c7eff - wc.c7prime() + m_B / (2.0 * m_b_PS) * Y_top);
+            complex<double> C0_top_psd = 1.0 * (c7eff + wc.c7prime() + m_B / (2.0 * m_b_PS) * Y_top);
             // cf. [BHP2007], Eq. (B.2) and [BFS2004], Eq. (45), p. 24
             // the correct sign in front of C_7^eff is plus, as one can see by
             // comparison with [BF2001], Eq. (63)
-            complex<double> C1f_top_psd = 1.0 * (c7eff - wc.c7prime()) * (8.0 * std::log(m_b_PS / mu) + 2.0 * L - 4.0 * (1.0 - mu_f() / m_b_PS));
+            complex<double> C1f_top_psd = 1.0 * (c7eff + wc.c7prime()) * (8.0 * std::log(m_b_PS / mu) + 2.0 * L - 4.0 * (1.0 - mu_f() / m_b_PS));
             // cf. [BHP2007], Eq. (B.2) and [BFS2001], Eqs. (38), p. 9
             complex<double> C1nf_top_psd = -(+1.0 / QCD::casimir_f) * (
                     (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole)
@@ -1605,7 +1605,7 @@ namespace eos
             // cf. [BFS2004], Eqs. (46)-(47), p. 25 without the \omega term.
             complex<double> T0_top_psd_m = +e_q * 4.0 * m_B / m_b_PS * (wc.c3() + 4.0/3.0 * wc.c4() + 16.0 * wc.c5() + 64.0/3.0 * wc.c6()) * lambda_B_m_inv;
             // cf. [BFS2001], Eq. (21), p. 6
-            complex<double> T1f_top_psd_p  = -(c7eff - wc.c7prime() + s / (2.0 * m_b_PS * m_B) * Y_top) * (2.0 * power_of<2>(m_B / energy)) * invm1_psd * lambda_B_p_inv;
+            complex<double> T1f_top_psd_p  = -(c7eff + wc.c7prime() + s / (2.0 * m_b_PS * m_B) * Y_top) * (2.0 * power_of<2>(m_B / energy)) * invm1_psd * lambda_B_p_inv;
             // T1f_top_par_m = 0, cf. [BFS2001], Eq. (22), p. 7
             // cf. [BFS2001], Eq. (25), p. 7
             complex<double> T1nf_top_psd_p = -m_B / m_b_PS * (
