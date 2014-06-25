@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2014 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -28,6 +28,55 @@
 
 using namespace test;
 using namespace eos;
+
+class BCL2008FormFactorsTest :
+    public TestCase
+{
+    public:
+        BCL2008FormFactorsTest() :
+            TestCase("bcl2008_form_factors_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* B -> pi */
+            {
+                static const double eps = 1e-5;
+
+                Parameters p = Parameters::Defaults();
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi@BCL2008", p);
+
+                p["B->pi::f_+(0)@BCL2008"] = 1.0;
+                p["B->pi::b_+^1@BCL2008"]  = 0.0;
+                p["B->pi::b_+^2@BCL2008"]  = 0.0;
+
+                TEST_CHECK_NEARLY_EQUAL(1.00000, ff->f_p( 0.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.21408, ff->f_p( 5.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.54479, ff->f_p(10.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.12312, ff->f_p(15.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.39360, ff->f_p(20.0), eps);
+
+                p["B->pi::b_+^1@BCL2008"]  = 1.0;
+                p["B->pi::b_+^2@BCL2008"]  = 0.0;
+
+                TEST_CHECK_NEARLY_EQUAL(1.00000, ff->f_p( 0.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.16483, ff->f_p( 5.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.40109, ff->f_p(10.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.77364, ff->f_p(15.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.47348, ff->f_p(20.0), eps);
+
+                p["B->pi::b_+^1@BCL2008"]  = 0.0;
+                p["B->pi::b_+^2@BCL2008"]  = 1.0;
+
+                TEST_CHECK_NEARLY_EQUAL(1.00000, ff->f_p( 0.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.17917, ff->f_p( 5.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.45663, ff->f_p(10.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.94890, ff->f_p(15.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.06978, ff->f_p(20.0), eps);
+            }
+        }
+} bcl2008_form_factors_test;
 
 class BToKstarBZ2004FormFactorsTest :
     public TestCase

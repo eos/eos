@@ -39,6 +39,9 @@ namespace eos
     /* Form Factors according to [BFW2010] */
     template <typename Transition_> class BFW2010FormFactors;
 
+    /* Form Factors according to [BCL2008] */
+    template <typename Process_> class BCL2008FormFactors;
+
     /* P -> V Processes */
 
     struct BToKstar {
@@ -207,8 +210,6 @@ namespace eos
 
     /* P -> P Processes */
 
-    struct BToK { };
-
     double FormFactors<PToP>::f_p_d1(const double & s) const
     {
         using namespace std::placeholders;
@@ -226,6 +227,105 @@ namespace eos
 
         return derivative<2u, deriv::TwoSided>(f, s);
     }
+
+    struct BToK {
+        typedef PToP Transition;
+        static constexpr const char * label = "B->K";
+        static constexpr const double m_B = 5.279;
+        static constexpr const double m_P = 0.492;
+        static constexpr const double m2_Br0m = 5.366 * 5.366; // B_s
+        static constexpr const double m2_Br1m = 5.415 * 5.415; // B_s^*
+        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
+        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
+    };
+
+    struct BToPi {
+        typedef PToP Transition;
+        static constexpr const char * label = "B->pi";
+        static constexpr const double m_B = 5.279;
+        static constexpr const double m_P = 0.135;
+        static constexpr const double m2_Br0m = 5.279 * 5.279; // B_{u,d}
+        static constexpr const double m2_Br1m = 5.325 * 5.325; // B_{u,d}^*
+        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
+        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
+    };
+
+
+    /*
+     * P -> P Form Factors in the simplified series expansion according to
+     * [BCL2008].
+     */
+    template <typename Process_> class BCL2008FormFactors :
+        public FormFactors<typename Process_::Transition>
+    {
+        private:
+            /*
+             * Fit parametrisation for P -> P according to [BCL2008], eq. (11)
+             * with K = 3. Note that we factor out the form factor at q^2 = 0
+             * by setting t_0 = 0.0, thus b_k -> b_k / b_0. Note that the last
+             * coefficient b_K is fixed by eq. (14).
+             */
+            UsedParameter _f_plus_0, _b_plus_1, _b_plus_2;
+            UsedParameter            _b_zero_1, _b_zero_2;
+            UsedParameter _f_t_0,    _b_t_1,    _b_t_2;
+
+            static double _z(const double & s)
+            {
+                static const double m_B = Process_::m_B;
+                static const double m_P = Process_::m_P;
+                static const double tau_p = Process_::tau_p;
+                static const double tau_0 = (m_B + m_P) * (std::sqrt(m_B) - std::sqrt(m_P)) * (std::sqrt(m_B) - std::sqrt(m_P));
+
+                return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0))
+                    / (std::sqrt(tau_p - s) + std::sqrt(tau_p - tau_0));
+            }
+
+        public:
+            BCL2008FormFactors(const Parameters & p, const Options &) :
+                _f_plus_0(p[std::string(Process_::label) + "::f_+(0)@BCL2008"], *this),
+                _b_plus_1(p[std::string(Process_::label) + "::b_+^1@BCL2008"],  *this),
+                _b_plus_2(p[std::string(Process_::label) + "::b_+^2@BCL2008"],  *this),
+                _b_zero_1(p[std::string(Process_::label) + "::b_0^1@BCL2008"],  *this),
+                _b_zero_2(p[std::string(Process_::label) + "::b_0^2@BCL2008"],  *this),
+                _f_t_0(p[std::string(Process_::label)    + "::f_T(0)@BCL2008"], *this),
+                _b_t_1(p[std::string(Process_::label)    + "::b_T^1@BCL2008"],  *this),
+                _b_t_2(p[std::string(Process_::label)    + "::b_T^2@BCL2008"],  *this)
+            {
+            }
+
+            static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
+            {
+                return new BCL2008FormFactors(parameters, Options());
+            }
+
+            virtual double f_p(const double & s) const
+            {
+                const double z = _z(s), z2 = z * z, z3 = z * z2;
+                const double z0 = _z(0), z02 = z0 * z0, z03 = z0 * z02;
+                const double zbar = z - z0, z2bar = z2 - z02, z3bar = z3 - z03;
+
+                return _f_plus_0 / (1.0 - s / Process_::m2_Br1m) * (1.0 + _b_plus_1 * (zbar - z3bar / 3.0) + _b_plus_2 * (z2bar + 2.0 * z3bar / 3.0));
+            }
+
+            virtual double f_0(const double & s) const
+            {
+                const double z = _z(s), z2 = z * z, z3 = z * z2;
+                const double z0 = _z(0), z02 = z0 * z0, z03 = z0 * z02;
+                const double zbar = z - z0, z2bar = z2 - z02, z3bar = z3 - z03;
+
+                // note that f_0(0) = f_+(0)!
+                return _f_plus_0 / (1.0 - s / Process_::m2_Br1m) * (1.0 + _b_zero_1 * (zbar - z3bar / 3.0) + _b_zero_2 * (z2bar + 2.0 * z3bar / 3.0));
+            }
+
+            virtual double f_t(const double & s) const
+            {
+                const double z = _z(s), z2 = z * z, z3 = z * z2;
+                const double z0 = _z(0), z02 = z0 * z0, z03 = z0 * z02;
+                const double zbar = z - z0, z2bar = z2 - z02, z3bar = z3 - z03;
+
+                return _f_t_0 / (1.0 - s / Process_::m2_Br1m) * (1.0 + _b_t_1 * (zbar - z3bar / 3.0) + _b_t_2 * (z2bar + 2.0 * z3bar / 3.0));
+            }
+    };
 
     /* Form Factors according to [BZ2004v2] */
     template <typename Process_> class BZ2004FormFactors<Process_, PToP> :
@@ -423,7 +523,6 @@ namespace eos
                 return _f0_t() / (1 - s / _m_Bs2) * (1 + _b1_t() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
             }
     };
-
 
     template <> class BFW2010FormFactors<PToP> :
           public FormFactors<PToP>

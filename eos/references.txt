@@ -456,6 +456,14 @@ Theoretical Inputs
         arxiv:hep-ph/0603063
 
 
+    BCL2008 : Bourrely, C and Caprini, I. and Lellouch, L.
+
+        Model-independent description of B -> pi l nu decays and a determination
+        of |V_ub|
+
+        arXiv:0807.2722
+
+
     BCMU2002 : Buras, A. and Czarnecki, A. and Misiak, M. and Urban, J.
 
         Completing the NLO QCD calculation of B -> X_s gamma

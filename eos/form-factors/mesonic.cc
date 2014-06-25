@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -137,6 +137,9 @@ namespace eos
 
     /* B_{u,d} -> K */
 
+    // [BCL2008]
+    template class BCL2008FormFactors<BToK>;
+
     /* For the values below, cf. [BZ2004v2], Table 1, p. 8 */
     template <> const double BZ2004FormFactors<BToK, PToP>::_r1_p     = 0.162;
     template <> const double BZ2004FormFactors<BToK, PToP>::_r2_p     = 0.173;
@@ -231,6 +234,11 @@ namespace eos
     const double BFW2010FormFactors<PToP>::_tau_0     = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
     template class BFW2010FormFactors<PToP>;
 
+    /* B_{u,d} -> pi */
+
+    // [BCL2008]
+    template class BCL2008FormFactors<BToPi>;
+
 
     FormFactors<PToP>::~FormFactors()
     {
@@ -246,12 +254,13 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
-            { KeyType("B->K",     "BZ2004v2"), &BZ2004FormFactors<BToK, PToP>::make     },
-            { KeyType("B->K",     "BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make },
-            { KeyType("B->K",     "KMPW2010"), &KMPW2010FormFactors<PToP>::make         },
-            { KeyType("B->K",     "BFW2010"), &BFW2010FormFactors<PToP>::make           },
+            { KeyType("B->K",     "BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make     },
+            { KeyType("B->K",     "BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make      },
+            { KeyType("B->K",     "KMPW2010"),      &KMPW2010FormFactors<PToP>::make         },
+            { KeyType("B->K",     "BFW2010"),       &BFW2010FormFactors<PToP>::make          },
+            { KeyType("B->pi",    "BCL2008"),       &BCL2008FormFactors<BToPi>::make         },
             // analytic computations
-            { KeyType("B->pi",    "DKMMO2008"), &AnalyticFormFactorBToPiDKMMO2008::make },
+            { KeyType("B->pi",    "DKMMO2008"), &AnalyticFormFactorBToPiDKMMO2008::make      },
         };
 
         /*
