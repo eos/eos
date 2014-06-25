@@ -45,7 +45,7 @@ namespace eos
     };
 
     struct BsToPhi {
-        static constexpr double mB = 5.336;
+        static constexpr double mB = 5.366;
         static constexpr double mV = 1.020;
     };
 
