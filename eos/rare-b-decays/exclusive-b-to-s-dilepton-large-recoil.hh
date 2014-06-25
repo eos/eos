@@ -158,6 +158,7 @@ namespace eos
 
             // Angular Observables
             double a_l(const double & s) const;
+            double b_l(const double & s) const;
             double c_l(const double & s) const;
 
             // Two Differential Observables
@@ -166,6 +167,7 @@ namespace eos
             // Differential Observables
             double differential_branching_ratio(const double & s) const;
             double differential_flat_term(const double & s) const;
+            double differential_forward_backward_asymmetry(const double & s) const;
             double differential_ratio_muons_electrons(const double & s) const;
 
             // Integrated Observables
@@ -173,6 +175,9 @@ namespace eos
             double integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_cp_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_flat_term(const double & s_min, const double & s_max) const;
+            double integrated_flat_term_cp_averaged(const double & s_min, const double & s_max) const;
+            double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
+            double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const;
     };
 }
