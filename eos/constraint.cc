@@ -2316,6 +2316,32 @@ namespace eos
         0u
         };
         ///@}
+
+        ///@name 2014
+        ///@{
+        /*
+         * From [IKMvD:2014].
+         */
+        static const MultivariateGaussianConstraintTemplate<6> B_to_pi_fp_IKMvD_2014
+        {
+            {{ "B->pi::f_+(s)", "B->pi::f_+'(s)", "B->pi::f_+''(s)", "B->pi::f_+(s)", "B->pi::f_+'(s)", "B->pi::f_+''(s)" }},
+            {{ Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 10.0 } },Kinematics{ { "s", 10.0 } }, Kinematics{ { "s", 10.0 } } }},
+            {{ Options{ }, Options{ }, Options{ }, Options{ }, Options{ }, Options{ } }},
+            {{ 3.095910e-1, 1.5545000e-2, 1.242580e-3, 5.619880e-1, 4.033900e-2, 4.708910e-3 }},
+            {{ 0.199207e-1, 0.0999788e-2, 0.108337e-3, 0.321127e-1, 0.237506e-2, 0.365924e-3 }},
+            {{ 0.199207e-1, 0.0999788e-2, 0.108337e-3, 0.321127e-1, 0.237506e-2, 0.365924e-3 }},
+            {{ 0.000000e-1, 0.0000000e-2, 0.000000e-3, 0.000000e-1, 0.000000e-2, 0.000000e-3 }},
+            {{
+                {{ 1.000, 0.735, 0.374, 0.925, 0.564, 0.313 }},
+                {{ 0.735, 1.000, 0.867, 0.927, 0.863, 0.246 }},
+                {{ 0.374, 0.867, 1.000, 0.682, 0.853, 0.221 }},
+                {{ 0.925, 0.927, 0.682, 1.000, 0.814, 0.389 }},
+                {{ 0.564, 0.863, 0.853, 0.814, 1.000, 0.647 }},
+                {{ 0.313, 0.246, 0.221, 0.389, 0.647, 1.000 }}
+            }},
+        0u
+        };
+        ///@}
     }
 
     /* Constraint */
@@ -2692,6 +2718,8 @@ namespace eos
             { "B->K^*::V@HPQCD-2013B", make_factory(templates::B_to_Kstar_V_15_to_19dot21_HPQCD_2013B) },
             { "B->K^*::A_1@HPQCD-2013B", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B) },
             { "B->K^*::A_12@HPQCD-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B) },
+
+            { "B->pi::f_+@IKMvD-2014", make_factory(templates::B_to_pi_fp_IKMvD_2014) },
         };
 
         auto f = factories.find(name);

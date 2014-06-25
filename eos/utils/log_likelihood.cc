@@ -1090,6 +1090,7 @@ namespace eos
         // explicit instantiation
         template struct MultivariateGaussianBlock<2>;
         template struct MultivariateGaussianBlock<3>;
+        template struct MultivariateGaussianBlock<6>;
     }
 
     LogLikelihoodBlock::~LogLikelihoodBlock()
@@ -1330,6 +1331,9 @@ namespace eos
     template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<3>(ObservableCache cache, const std::array<ObservablePtr, 3> & observables,
                                              const std::array<double, 3> & mean, const std::array<std::array<double, 3>, 3> & covariance,
                                              const unsigned & number_of_observations = 3u);
+    template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<6>(ObservableCache cache, const std::array<ObservablePtr, 6> & observables,
+                                             const std::array<double, 6> & mean, const std::array<std::array<double, 6>, 6> & covariance,
+                                             const unsigned & number_of_observations = 6u);
 
     template <std::size_t n_>
     LogLikelihoodBlockPtr
@@ -1363,6 +1367,11 @@ namespace eos
                                              const std::array<double, 3> & mean, const std::array<double, 3> & variances,
                                              const std::array<std::array<double, 3>, 3> & correlation,
                                              const unsigned & number_of_observations = 3u);
+
+    template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<6>(ObservableCache cache, const std::array<ObservablePtr, 6> & observables,
+                                             const std::array<double, 6> & mean, const std::array<double, 6> & variances,
+                                             const std::array<std::array<double, 6>, 6> & correlation,
+                                             const unsigned & number_of_observations = 6u);
 
     template <>
     struct Implementation<LogLikelihood>
