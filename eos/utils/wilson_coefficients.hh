@@ -37,8 +37,12 @@ namespace eos
     {
         /* Order: c1..c6, cq3..cq6, c2b, c7..c10 */
         std::array<complex<double>, 15> _sm_like_coefficients;
+
         /* Same order as above, with helicity flip */
         std::array<complex<double>, 15> _primed_coefficients;
+
+        /* Scalar, pseudoscalar, and tensor coefficients */
+        std::array<complex<double>, 6> _scalar_tensor_coefficients;
 
         double _alpha_s;
 
@@ -66,13 +70,20 @@ namespace eos
         inline complex<double> c8prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[12]; }
         inline complex<double> c9prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[13]; }
         inline complex<double> c10prime() const { return 4.0 * M_PI / _alpha_s * _primed_coefficients[14]; }
+
+        inline complex<double> cS() const { return  _scalar_tensor_coefficients[0]; }
+        inline complex<double> cSprime() const { return  _scalar_tensor_coefficients[1]; }
+        inline complex<double> cP() const { return  _scalar_tensor_coefficients[2]; }
+        inline complex<double> cPprime() const { return  _scalar_tensor_coefficients[3]; }
+        inline complex<double> cT() const { return  _scalar_tensor_coefficients[4]; }
+        inline complex<double> cT5() const { return  _scalar_tensor_coefficients[5]; }
     };
 
     /*!
      * Evolution of b -> s Wilson coefficients
      *
-     * Calculation according to [BMU1999], Eq. (25). The helicity flipped components
-     * are implicitly kept at zero.
+     * Calculation according to [BMU1999], Eq. (25). The helicity-flipped, scalar,
+     * pseudoscalar, and tensor components are implicitly kept at zero.
      *
      * @param wc_qcd_0  The initial scale Wilson coefficients at O(alpha_s^0)
      * @param wc_qcd_1  The initial scale Wilson coefficients at O(alpha_s^1)

@@ -66,6 +66,24 @@ namespace eos
             Parameter _abs_c10prime, _arg_c10prime;
             Parameter _re_c10prime, _im_c10prime;
             std::function<complex<double> ()> _c10prime;
+            Parameter _abs_cS, _arg_cS;
+            Parameter _re_cS, _im_cS;
+            std::function<complex<double> ()> _cS;
+            Parameter _abs_cSprime, _arg_cSprime;
+            Parameter _re_cSprime, _im_cSprime;
+            std::function<complex<double> ()> _cSprime;
+            Parameter _abs_cP, _arg_cP;
+            Parameter _re_cP, _im_cP;
+            std::function<complex<double> ()> _cP;
+            Parameter _abs_cPprime, _arg_cPprime;
+            Parameter _re_cPprime, _im_cPprime;
+            std::function<complex<double> ()> _cPprime;
+            Parameter _abs_cT, _arg_cT;
+            Parameter _re_cT, _im_cT;
+            std::function<complex<double> ()> _cT;
+            Parameter _abs_cT5, _arg_cT5;
+            Parameter _re_cT5, _im_cT5;
+            std::function<complex<double> ()> _cT5;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);

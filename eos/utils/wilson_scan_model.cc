@@ -72,7 +72,31 @@ namespace eos
         _abs_c10prime(p["Abs{c10'}"]),
         _arg_c10prime(p["Arg{c10'}"]),
         _re_c10prime(p["Re{c10'}"]),
-        _im_c10prime(p["Im{c10'}"])
+        _im_c10prime(p["Im{c10'}"]),
+        _abs_cS(p["Abs{cS}"]),
+        _arg_cS(p["Arg{cS}"]),
+        _re_cS(p["Re{cS}"]),
+        _im_cS(p["Im{cS}"]),
+        _abs_cSprime(p["Abs{cS'}"]),
+        _arg_cSprime(p["Arg{cS'}"]),
+        _re_cSprime(p["Re{cS'}"]),
+        _im_cSprime(p["Im{cS'}"]),
+        _abs_cP(p["Abs{cP}"]),
+        _arg_cP(p["Arg{cP}"]),
+        _re_cP(p["Re{cP}"]),
+        _im_cP(p["Im{cP}"]),
+        _abs_cPprime(p["Abs{cP'}"]),
+        _arg_cPprime(p["Arg{cP'}"]),
+        _re_cPprime(p["Re{cP'}"]),
+        _im_cPprime(p["Im{cP'}"]),
+        _abs_cT(p["Abs{cT}"]),
+        _arg_cT(p["Arg{cT}"]),
+        _re_cT(p["Re{cT}"]),
+        _im_cT(p["Im{cT}"]),
+        _abs_cT5(p["Abs{cT5}"]),
+        _arg_cT5(p["Arg{cT5}"]),
+        _re_cT5(p["Re{cT5}"]),
+        _im_cT5(p["Im{cT5}"])
     {
         if ("polar" == o.get("scan-mode", "polar"))
         {
@@ -88,6 +112,18 @@ namespace eos
             u.uses(_abs_c9prime.id()); u.uses(_arg_c9prime.id());
             _c10prime = std::bind(&wcimplementation::polar, _abs_c10prime, _arg_c10prime);
             u.uses(_abs_c10prime.id()); u.uses(_arg_c10prime.id());
+            _cS = std::bind(&wcimplementation::polar, _abs_cS, _arg_cS);
+            u.uses(_abs_cS.id()); u.uses(_arg_cS.id());
+            _cSprime = std::bind(&wcimplementation::polar, _abs_cSprime, _arg_cSprime);
+            u.uses(_abs_cSprime.id()); u.uses(_arg_cSprime.id());
+            _cP = std::bind(&wcimplementation::polar, _abs_cP, _arg_cP);
+            u.uses(_abs_cP.id()); u.uses(_arg_cP.id());
+            _cPprime = std::bind(&wcimplementation::polar, _abs_cPprime, _arg_cPprime);
+            u.uses(_abs_cPprime.id()); u.uses(_arg_cPprime.id());
+            _cT = std::bind(&wcimplementation::polar, _abs_cT, _arg_cT);
+            u.uses(_abs_cT.id()); u.uses(_arg_cT.id());
+            _cT5 = std::bind(&wcimplementation::polar, _abs_cT5, _arg_cT5);
+            u.uses(_abs_cT5.id()); u.uses(_arg_cT5.id());
         }
         else if ("cartesian" == o.get("scan-mode", "polar"))
         {
@@ -103,6 +139,18 @@ namespace eos
             u.uses(_re_c9prime.id()); u.uses(_im_c9prime.id());
             _c10prime = std::bind(&wcimplementation::cartesian, _re_c10prime, _im_c10prime);
             u.uses(_re_c10prime.id()); u.uses(_im_c10prime.id());
+            _cS = std::bind(&wcimplementation::cartesian, _re_cS, _im_cS);
+            u.uses(_re_cS.id()); u.uses(_im_cS.id());
+            _cSprime = std::bind(&wcimplementation::cartesian, _re_cSprime, _im_cSprime);
+            u.uses(_re_cSprime.id()); u.uses(_im_cSprime.id());
+            _cP = std::bind(&wcimplementation::cartesian, _re_cP, _im_cP);
+            u.uses(_re_cP.id()); u.uses(_im_cP.id());
+            _cPprime = std::bind(&wcimplementation::cartesian, _re_cPprime, _im_cPprime);
+            u.uses(_re_cPprime.id()); u.uses(_im_cPprime.id());
+            _cT = std::bind(&wcimplementation::cartesian, _re_cT, _im_cT);
+            u.uses(_re_cT.id()); u.uses(_im_cT.id());
+            _cT5 = std::bind(&wcimplementation::cartesian, _re_cT5, _im_cT5);
+            u.uses(_re_cT5.id()); u.uses(_im_cT5.id());
         }
         else
         {
@@ -139,20 +187,20 @@ namespace eos
                 0.0, 0.0, 0.0, 0.0, 0.0,
                 a_s * _c7prime(), a_s * _c8prime(), a_s * _c9prime(), a_s * _c10prime()
             }},
+            {{
+                _cS(), _cSprime(), _cP(), _cPprime(), _cT(), _cT5()
+            }},
             alpha_s
         };
 
         if (cp_conjugate)
         {
-            for (auto c = result._sm_like_coefficients.begin(), c_end = result._sm_like_coefficients.end() ; c != c_end ; ++c)
-            {
-                *c = conj(*c);
-            }
-
-            for (auto c = result._primed_coefficients.begin(), c_end = result._primed_coefficients.end() ; c != c_end ; ++c)
-            {
-                *c = conj(*c);
-            }
+            for (auto & c : result._sm_like_coefficients)
+                c = conj(c);
+            for (auto & c : result._primed_coefficients)
+                c = conj(c);
+            for (auto & c : result._scalar_tensor_coefficients)
+                c = conj(c);
         }
 
         return result;
