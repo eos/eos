@@ -48,6 +48,9 @@ namespace eos
 
         double _alpha_s;
 
+        /*! Default ctor */
+        WilsonCoefficients();
+
         // Misiak basis, cf. [BMU1999], Eq. (2), p. 3
         inline complex<double> c1() const { return _sm_like_coefficients[0]; }
         inline complex<double> c2() const { return _sm_like_coefficients[1]; }

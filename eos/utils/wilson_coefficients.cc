@@ -30,6 +30,14 @@
 
 namespace eos
 {
+    WilsonCoefficients<BToS>::WilsonCoefficients() :
+        _alpha_s(0.0)
+    {
+        _sm_like_coefficients.fill(0.0);
+        _primed_coefficients.fill(0.0);
+        _scalar_tensor_coefficients.fill(0.0);
+    }
+
     WilsonCoefficients<BToS> evolve(const std::array<complex<double>, 15> & wc_qcd_0,
             const std::array<complex<double>, 15> & wc_qcd_1,
             const std::array<complex<double>, 15> & wc_qcd_2,
@@ -236,7 +244,6 @@ namespace eos
         array<complex<double>, 15> result_qcd_2 = U_qcd_2 * wc_qcd_0 + eta * (U_qcd_1 * wc_qcd_1) + power_of<2>(eta) * (U_qcd_0 * wc_qcd_2);
 
         result._sm_like_coefficients = result_qcd_0 + a_s * result_qcd_1 + power_of<2>(a_s) * result_qcd_2;
-        result._primed_coefficients.fill(0.0);
 
         return result;
     }

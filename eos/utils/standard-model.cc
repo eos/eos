@@ -569,7 +569,7 @@ namespace implementation
 
         WilsonCoefficients<BToS> wc = downscaled_top;
         wc._sm_like_coefficients = wc._sm_like_coefficients + complex<double>(-1.0, 0.0) * downscaled_charm._sm_like_coefficients;
-        // todo what about wc._primed etc? Should be set to zero
+
         return wc;
     }
 
