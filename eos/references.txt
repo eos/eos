@@ -277,6 +277,23 @@ Experimental Results
        arXiv:1307.5024 [hep-ex]
 
 
+    LHCb:2014A : Aaij, R. et al. [LHCb Collaboration]
+
+       Differential branching fractions and isospin asymmetries of $B \to K^{(*)} \mu^+ \mu^−$ decays
+
+       JHEP 1406 (2014) 133
+
+       arXiv:1403.8044 [hep-ex]
+
+    LHCb:2014B : Aaij, R. et al. [LHCb Collaboration]
+
+       Angular analysis of charged and neutral $B \to K \mu^+ \mu^−$ decays
+
+       JHEP 1405 (2014) 082
+
+       arXiv:1403.8045 [hep-ex]
+
+
 Averages and Numerical Inputs
 -----------------------------
 
