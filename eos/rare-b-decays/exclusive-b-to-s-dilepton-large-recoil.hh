@@ -3,6 +3,8 @@
 /*
  * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
+ * Copyright (c) 2014 Frederik Beaujean
+ * Copyright (c) 2014 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -158,6 +160,7 @@ namespace eos
 
             // Angular Observables
             double a_l(const double & s) const;
+            double b_l(const double & s) const;
             double c_l(const double & s) const;
 
             // Two Differential Observables
@@ -166,6 +169,7 @@ namespace eos
             // Differential Observables
             double differential_branching_ratio(const double & s) const;
             double differential_flat_term(const double & s) const;
+            double differential_forward_backward_asymmetry(const double & s) const;
             double differential_ratio_muons_electrons(const double & s) const;
 
             // Integrated Observables
@@ -174,6 +178,9 @@ namespace eos
             double integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_cp_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_flat_term(const double & s_min, const double & s_max) const;
+            double integrated_flat_term_cp_averaged(const double & s_min, const double & s_max) const;
+            double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
+            double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const;
     };
 }

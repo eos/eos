@@ -3,6 +3,8 @@
 /*
  * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
+ * Copyright (c) 2014 Frederik Beaujean
+ * Copyright (c) 2014 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1422,6 +1424,8 @@ namespace eos
 
         UsedParameter m_c;
 
+        UsedParameter m_s_MSbar;
+
         UsedParameter m_B;
 
         UsedParameter m_K;
@@ -1468,6 +1472,7 @@ namespace eos
             hbar(p["hbar"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
+            m_s_MSbar(p["mass::s(2GeV)"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_K(p["mass::K0"], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
@@ -1644,6 +1649,7 @@ namespace eos
 
             return result;
         }
+
         /* Form factors */
         // cf. [BF2001], Eq. (22)
         double xi_pseudo(const double & s) const
@@ -1659,7 +1665,7 @@ namespace eos
         inline double m_b_PS() const
         {
             // Actually use the PS mass at mu_f = 1.5 GeV
-            return model->m_b_ps(1.5);
+            return model->m_b_ps(mu_f());
         }
 
         double beta_l(const double & s) const
@@ -1680,13 +1686,45 @@ namespace eos
         // cf. [BHP2007], Eq. (3.2), p. 3
         std::complex<double> F_A(const WilsonCoefficients<BToS> & wc, const double &) const
         {
-            return wc.c10();
+            return wc.c10() + wc.c10prime();
+        }
+
+        double F_Tkin(const double & s) const
+        {
+            double result = 2.0 * std::sqrt(lam(s)) * beta_l(s) / (m_B() + m_K());
+            result *= form_factors->f_t(s) / form_factors->f_p(s);
+            return result;
+        }
+
+        // cf. [BHP2007], Eq. (3.2), p. 3
+        std::complex<double> F_T(const WilsonCoefficients<BToS> & wc, const double & s) const
+        {
+            return F_Tkin(s) * wc.cT();
+        }
+
+        // cf. [BHP2007], Eq. (3.2), p. 3
+        std::complex<double> F_T5(const WilsonCoefficients<BToS> & wc, const double & s) const
+        {
+            return F_Tkin(s) * wc.cT5();
+        }
+
+        double F_Skin(const double & s) const
+        {
+            double result = 0.5 * (power_of<2>(m_B()) - power_of<2>(m_K())) / (m_b_MSbar - m_s_MSbar);
+            result *= form_factors->f_0(s) / form_factors->f_p(s);
+            return result;
+        }
+
+        // cf. [BHP2007], Eq. (3.2), p. 4
+        std::complex<double> F_S(const WilsonCoefficients<BToS> & wc, const double & s) const
+        {
+            return F_Skin(s) * (wc.cS() + wc.cSprime());
         }
 
         // cf. [BHP2007], Eq. (3.2), p. 4
         std::complex<double> F_P(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
-            return m_l() * wc.c10() *
+            return F_Skin(s) * (wc.cP() + wc.cPprime()) + m_l() * (wc.c10() + wc.c10prime()) *
                     ((m_B() * m_B() - m_K() * m_K()) / s * (form_factors->f_0(s) / form_factors->f_p(s) - 1.0) - 1.0);
         }
 
@@ -1695,8 +1733,11 @@ namespace eos
         {
             double m_b = m_b_PS();
 
-            return wc.c9() + 2.0 * m_b / m_B() / xi_pseudo(s) * (calT(s)
-                    + lambda_psd / m_B * std::polar(1.0, sl_phase_psd()));
+            std::complex<double> result = wc.c9() + wc.c9prime();
+            result += 2.0 * m_b / m_B() / xi_pseudo(s) *
+                      (calT(s) + lambda_psd / m_B * std::polar(1.0, sl_phase_psd()));
+            result += 8.0 * m_l / (m_B() + m_K()) * form_factors->f_t(s) / form_factors->f_p(s) * wc.cT();
+            return result;
         }
 
         // cf. [BHP2007], Eqs. (4.2), (4.4), (4.5), p. 5
@@ -1711,7 +1752,7 @@ namespace eos
         // cf. [BHP2007], Eq. (4.2)
         double a_l(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
-            double result = s * std::norm(F_P(wc, s));
+            double result = s * (power_of<2>(beta_l(s)) * std::norm(F_S(wc, s)) + std::norm(F_P(wc, s)));
             result += 0.25 * lam(s) * (std::norm(F_A(wc, s)) + std::norm(F_V(wc, s)));
             result += 2.0 * m_l * (m_B() * m_B() - m_K() * m_K() + s) * std::real(F_P(wc, s) * std::conj(F_A(wc, s)));
             result += 4.0 * m_l * m_l * m_B() * m_B() * std::norm(F_A(wc, s));
@@ -1719,13 +1760,27 @@ namespace eos
             return N(s) * result;
         }
 
+        // cf. [BHP2007], Eq. (4.3)
+        double b_l(const WilsonCoefficients<BToS> & wc, const double & s) const
+        {
+            double result = s * (power_of<2>(beta_l(s)) * std::real(F_S(wc, s) * std::conj(F_T(wc, s)))
+                                 + std::real(F_P(wc, s) * std::conj(F_T5(wc, s))));
+            result += m_l * (std::sqrt(lam(s)) * beta_l(s) * std::real(F_S(wc, s) * std::conj(F_V(wc, s)))
+                             + (m_B() * m_B() - m_K() * m_K() + s) * std::real(F_T5(wc, s) * std::conj(F_A(wc, s))));
+
+            return 2.0 * N(s) * result;
+        }
+
         // cf. [BHP2007], Eq. (4.4)
         double c_l(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
-            return N(s) * -0.25 * lam(s) * beta_l(s) * beta_l(s) * (std::norm(F_A(wc, s)) + std::norm(F_V(wc, s)));
+            double result = s * (power_of<2>(beta_l(s)) * std::norm(F_T(wc, s)) + std::norm(F_T5(wc, s)));
+            result -= 0.25 * lam(s) * power_of<2>(beta_l(s)) * (std::norm(F_A(wc, s)) + std::norm(F_V(wc, s)));
+            result += 2.0 * m_l * std::sqrt(lam(s)) * beta_l(s) * std::real(F_T(wc, s) * std::conj(F_V(wc, s)));
+            return N(s) * result;
         }
 
-        // cf. [BHP2007], Eq. (4.1)
+        // cf. [BHP2007], Eq. (4.8)
         double unnormalized_decay_width(const double & s) const
         {
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
@@ -1738,11 +1793,19 @@ namespace eos
             return unnormalized_decay_width(s) * tau() / hbar();
         }
 
+        // cf. [BHP2007], Eq. (4.9)
         double differential_flat_term_numerator(const double & s) const
         {
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
             return 2.0 * (a_l(wc, s) + c_l(wc, s));
+        }
+
+        double differential_forward_backward_asymmetry_numerator(const double & s) const
+        {
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+
+            return b_l(wc, s);
         }
     };
 
@@ -1762,6 +1825,12 @@ namespace eos
     }
 
     double
+    BToKDilepton<LargeRecoil>::b_l(const double & s) const
+    {
+        return _imp->b_l(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    double
     BToKDilepton<LargeRecoil>::c_l(const double & s) const
     {
         return _imp->c_l(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
@@ -1772,8 +1841,8 @@ namespace eos
     {
         auto wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
 
-        // For the basis of operators used, b_l always evaluates to 0.
-        return _imp->a_l(wc, s) + _imp->c_l(wc, s) * c_theta_l * c_theta_l;
+        // cf. [BHP2007], Eq. (4.1)
+        return _imp->a_l(wc, s) + _imp->b_l(wc, s) * c_theta_l + _imp->c_l(wc, s) * c_theta_l * c_theta_l;
     }
 
     double
@@ -1786,6 +1855,12 @@ namespace eos
     BToKDilepton<LargeRecoil>::differential_flat_term(const double & s) const
     {
         return _imp->differential_flat_term_numerator(s) / _imp->unnormalized_decay_width(s);
+    }
+
+    double
+    BToKDilepton<LargeRecoil>::differential_forward_backward_asymmetry(const double & s) const
+    {
+        return _imp->differential_forward_backward_asymmetry_numerator(s) / _imp->unnormalized_decay_width(s);
     }
 
     double
@@ -1863,6 +1938,61 @@ namespace eos
 
         double num_integrated = integrate(num, 64, s_min, s_max);
         double denom_integrated = integrate(denom, 64, s_min, s_max);
+
+        return num_integrated / denom_integrated;
+    }
+
+    double
+    BToKDilepton<LargeRecoil>::integrated_flat_term_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+        std::function<double (const double &)> num = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::differential_flat_term_numerator),
+                _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
+                _imp, std::placeholders::_1);
+
+        double num_integrated = integrate(num, 64, s_min, s_max);
+        double denom_integrated = integrate(denom, 64, s_min, s_max);
+
+        _imp->cp_conjugate = true;
+
+        num_integrated += integrate(num, 64, s_min, s_max);
+        denom_integrated += integrate(denom, 64, s_min, s_max);
+
+        return num_integrated / denom_integrated;
+    }
+
+    // todo caching of denominator?
+    double
+    BToKDilepton<LargeRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> num = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::differential_forward_backward_asymmetry_numerator),
+                _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
+                _imp, std::placeholders::_1);
+
+        double num_integrated = integrate(num, 64, s_min, s_max);
+        double denom_integrated = integrate(denom, 64, s_min, s_max);
+
+        return num_integrated / denom_integrated;
+    }
+
+    double
+    BToKDilepton<LargeRecoil>::integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+        std::function<double (const double &)> num = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::differential_forward_backward_asymmetry_numerator),
+                _imp, std::placeholders::_1);
+        std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
+                _imp, std::placeholders::_1);
+
+        double num_integrated = integrate(num, 64, s_min, s_max);
+        double denom_integrated = integrate(denom, 64, s_min, s_max);
+
+        _imp->cp_conjugate = true;
+
+        num_integrated += integrate(num, 64, s_min, s_max);
+        denom_integrated += integrate(denom, 64, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
