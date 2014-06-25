@@ -151,12 +151,11 @@ class ConstraintTest :
                     "B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011",
                     "B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2011",
                     "B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF-2011",
-                    // The following commented observables have not yet been implemented!
-#if 0
+
                     "B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2011",
                     "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011",
                     "B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2011",
-#endif
+
                     "B^0_s->mu^+mu^-::BR_limit@CDF-2011",
 
                     // LHCb
@@ -227,12 +226,10 @@ class ConstraintTest :
                     "B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2012",
                     "B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2012",
                     "B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF-2012",
-                    // The following commented observables have not yet been implemented!
-#if 0
+
                     "B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2012",
                     "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2012",
                     "B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2012",
-#endif
 
                     // LHCb
                     // B^0 -> K^*0 mu^+ mu^-
@@ -264,12 +261,12 @@ class ConstraintTest :
                     "B^+->K^+mu^+mu^-::BR[14.18,16.00]@LHCb-2012",
                     "B^+->K^+mu^+mu^-::BR[16.00,18.00]@LHCb-2012",
                     "B^+->K^+mu^+mu^-::BR[18.00,22.00]@LHCb-2012",
-#if 0
+
                     "B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@LHCb-2012",
                     "B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@LHCb-2012",
                     "B^+->K^+mu^+mu^-::A_FB[16.00,18.00]@LHCb-2012",
                     "B^+->K^+mu^+mu^-::A_FB[18.00,22.00]@LHCb-2012",
-#endif
+
                     "B^+->K^+mu^+mu^-::F_H[1.00,6.00]@LHCb-2012",
                     "B^+->K^+mu^+mu^-::F_H[14.18,16.00]@LHCb-2012",
                     "B^+->K^+mu^+mu^-::F_H[16.00,18.00]@LHCb-2012",
@@ -355,18 +352,35 @@ class ConstraintTest :
                     //"B->K^*::V@HPQCD-2013B",
                     //"B->K^*::A_1@HPQCD-2013B",
                     //"B->K^*::A_12V@HPQCD-2013B",
+
+
+                    // LHCb
+                    // B^+ -> K^+ mu^+ mu^-
+                    "B^+->K^+mu^+mu^-::BR[1.10,2.00]@LHCb-2014",
+                    "B^+->K^+mu^+mu^-::BR[2.00,3.00]@LHCb-2014",
+                    "B^+->K^+mu^+mu^-::BR[3.00,4.00]@LHCb-2014",
+                    "B^+->K^+mu^+mu^-::BR[4.00,5.00]@LHCb-2014",
+                    "B^+->K^+mu^+mu^-::BR[5.00,6.00]@LHCb-2014",
+                    "B^+->K^+mu^+mu^-::BR[1.10,6.00]@LHCb-2014",
+                    "B^+->K^+mu^+mu^-::BR[15.00,22.00]@LHCb-2014",
+
+                    "B^+->K^+mu^+mu^-::A_FB[1.10,6.00]@LHCb-2014",
+                    "B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb-2014",
+                    "B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb-2014",
+                    "B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb-2014",
                 };
 
                 std::cout << "# Constraints :" << std::endl;
 
                 for (auto n = constraint_names.cbegin(), n_end = constraint_names.cend() ; n != n_end ; ++n)
                 {
+                    std::cout << "#  " << *n << ": ";
+
                     Constraint c = Constraint::make(*n, Options());
                     TEST_CHECK_EQUAL(c.name(), *n);
                     TEST_CHECK(std::distance(c.begin_observables(), c.end_observables()) > 0);
                     TEST_CHECK(std::distance(c.begin_blocks(), c.end_blocks()) > 0);
 
-                    std::cout << "#  " << c.name() << ": ";
                     for (auto o = c.begin_observables(), o_end = c.end_observables(); o != o_end ; ++o)
                     {
                         std::cout << (**o).name() << '['
