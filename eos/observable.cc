@@ -173,6 +173,10 @@ namespace eos
                     &BToKDilepton<LargeRecoil>::differential_flat_term,
                     std::make_tuple("s")),
 
+            make_observable("B->Kll::A_FB(s)@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::differential_forward_backward_asymmetry,
+                    std::make_tuple("s")),
+
             make_observable("B->Kll::R_K(s)@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::differential_ratio_muons_electrons,
                     std::make_tuple("s")),
@@ -197,12 +201,28 @@ namespace eos
                     &BToKDilepton<LargeRecoil>::integrated_flat_term,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->Kll::F_Havg@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::integrated_flat_term_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Kll::A_FB@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::integrated_forward_backward_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Kll::A_FBavg@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::integrated_forward_backward_asymmetry_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->Kll::R_K@LargeRecoil",
                     &BToKDilepton<LowRecoil>::integrated_ratio_muons_electrons,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->Kll::a_l@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::a_l,
+                    std::make_tuple("s")),
+
+            make_observable("B->Kll::b_l@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::b_l,
                     std::make_tuple("s")),
 
             make_observable("B->Kll::c_l@LargeRecoil",
@@ -220,6 +240,10 @@ namespace eos
 
             make_observable("B->Kll::F_H(s)@LowRecoil",
                     &BToKDilepton<LowRecoil>::differential_flat_term,
+                    std::make_tuple("s")),
+
+            make_observable("B->Kll::A_FB(s)@LowRecoil",
+                    &BToKDilepton<LowRecoil>::differential_forward_backward_asymmetry,
                     std::make_tuple("s")),
 
             make_observable("B->Kll::R_K(s)@LowRecoil",
@@ -246,12 +270,28 @@ namespace eos
                     &BToKDilepton<LowRecoil>::integrated_flat_term,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->Kll::F_Havg@LowRecoil",
+                    &BToKDilepton<LowRecoil>::integrated_flat_term_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Kll::A_FB@LowRecoil",
+                    &BToKDilepton<LowRecoil>::integrated_forward_backward_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Kll::A_FBavg@LowRecoil",
+                    &BToKDilepton<LowRecoil>::integrated_forward_backward_asymmetry_cp_averaged,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->Kll::R_K@LowRecoil",
                     &BToKDilepton<LowRecoil>::integrated_ratio_muons_electrons,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->Kll::a_l@LowRecoil",
                     &BToKDilepton<LowRecoil>::a_l,
+                    std::make_tuple("s")),
+
+            make_observable("B->Kll::b_l@LowRecoil",
+                    &BToKDilepton<LowRecoil>::b_l,
                     std::make_tuple("s")),
 
             make_observable("B->Kll::c_l@LowRecoil",
