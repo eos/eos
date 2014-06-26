@@ -158,6 +158,14 @@ namespace eos
             BToKDilepton(const Parameters & parameters, const Options & options);
             ~BToKDilepton();
 
+            // Amplitudes
+            std::complex<double> F_A(const double & s) const;
+            std::complex<double> F_V(const double & s) const;
+            std::complex<double> F_S(const double & s) const;
+            std::complex<double> F_P(const double & s) const;
+            std::complex<double> F_T(const double & s) const;
+            std::complex<double> F_T5(const double & s) const;
+
             // Angular Observables
             double a_l(const double & s) const;
             double b_l(const double & s) const;

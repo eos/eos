@@ -1555,15 +1555,15 @@ namespace eos
             // cf. [BFS2001], Eq. (10), p. 4
             complex<double> Y_top_c = 4.0 / 3.0 * wc.c1() + wc.c2() + 6.0 * wc.c3() + 60.0 * wc.c5();
             complex<double> Y_top_b = -0.5 * (7.0 * wc.c3() + 4.0 / 3.0 * wc.c4() + 76.0 * wc.c5() + 64.0 / 3.0 * wc.c6());
-            complex<double> Y_top_0 = -0.5 * (wc.c3() + 4.0 / 3.0 * wc.c4() + 16.0 * wc.c5() + 64 / 3.0 * wc.c6());
+            complex<double> Y_top_0 = -0.5 * (wc.c3() + 4.0 / 3.0 * wc.c4() + 16.0 * wc.c5() + 64.0 / 3.0 * wc.c6());
             complex<double> Y_top_ = 2.0 / 9.0 * (6.0 * wc.c3() + 32.0 * wc.c5() + 32.0 / 3.0 * wc.c6());
 
             // Use b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses,
             // then replace b pole mass by the PS mass.
-            complex<double> Y_top = Y_top_c * CharmLoops::h(mu, s, m_c_pole)
-                 + Y_top_b * CharmLoops::h(mu, s, m_b_PS)
-                 + Y_top_0 * CharmLoops::h(mu, s)
-                 + Y_top_;
+            complex<double> Y_top = Y_top_c * CharmLoops::h(mu, s, m_c_pole);
+            Y_top += Y_top_b * CharmLoops::h(mu, s, m_b_PS);
+            Y_top += Y_top_0 * CharmLoops::h(mu, s);
+            Y_top += Y_top_;
             // cf. [BFS2004], Eq. (43), p. 24
             complex<double> Y_up = (4.0 / 3.0 * wc.c1() + wc.c2()) * (CharmLoops::h(mu, s, m_c_pole) - CharmLoops::h(mu, s));
 
@@ -1645,7 +1645,7 @@ namespace eos
             // cf. [BFS2001], Eq. (15), and [BHP2008], Eq. (C.4)
             complex<double> result;
             result = xi_pseudo(s) * C_psd
-                + power_of<2>(M_PI) / 3.0 * (f_B * f_K * m_K) / (m_B * energy) * T_psd;
+                + power_of<2>(M_PI) / 3.0 * (f_B * f_K) / m_B  * T_psd;
 
             return result;
         }
@@ -1816,6 +1816,42 @@ namespace eos
 
     BToKDilepton<LargeRecoil>::~BToKDilepton()
     {
+    }
+
+    std::complex<double>
+    BToKDilepton<LargeRecoil>::F_A(const double & s) const
+    {
+        return _imp->F_A(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LargeRecoil>::F_V(const double & s) const
+    {
+        return _imp->F_V(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LargeRecoil>::F_S(const double & s) const
+    {
+        return _imp->F_S(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LargeRecoil>::F_P(const double & s) const
+    {
+        return _imp->F_P(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LargeRecoil>::F_T(const double & s) const
+    {
+        return _imp->F_T(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LargeRecoil>::F_T5(const double & s) const
+    {
+        return _imp->F_T5(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
     }
 
     double
