@@ -1,7 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2014 Frederik Beaujean
+ * Copyright (c) 2014 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -93,34 +95,34 @@ class BToKstarDileptonLargeRecoilTest :
 
                 /* integrated observables */
                 {
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(2.00, 4.30) * 1e7,      +1.0719, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(2.00, 4.30), +0.0922, eps); // 0.0911 for m_b_PS = 4.6
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(2.00, 4.30),  +0.7810, eps); // 0.7800 for m_b_PS = 4.6
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(2.00, 4.30) * 1e7,      +1.0648, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(2.00, 4.30), +0.0740, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(2.00, 4.30),  +0.7892, eps);
 
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(1.00, 6.00) * 1e7,      +2.5025, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(1.00, 6.00), +0.0563, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(1.00, 6.00),  +0.7291, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(1.00, 6.00) * 1e7,      +2.4793, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(1.00, 6.00), +0.0394, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(1.00, 6.00),  +0.7387, eps);
                 }
 
                 /* inverse observables */
                 {
-                    TEST_CHECK_NEARLY_EQUAL(d.a_fb_zero_crossing(), +4.13361887, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.a_fb_zero_crossing(), +3.9370, eps);
                 }
 
                 /* transversity amplitudes at q^2 = 6.00 GeV^2 */
                 {
                     static const double eps = 1e-17; // 1e-7..1e-4 smaller than results
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  6.00)), -1.260994648e-10, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  6.00)), -1.263624134354398e-10, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  6.00)), -8.389483213e-13, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 6.00)), +7.897349908e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 6.00)), +7.634401257320374e-12, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 6.00)), -8.389483213e-13, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  6.00)), +5.245797675e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  6.00)), +5.383694676773861e-11, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  6.00)), -2.699482697e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 6.00)), -2.583658442e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 6.00)), -2.445761439446209e-11, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 6.00)), -2.699482697e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   6.00)), -5.649598872e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   6.00)), -5.791745651504549e-11, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   6.00)), +2.782676687e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  6.00)), +2.660501076e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  6.00)), +2.518354295925372e-11, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  6.00)), +2.782676687e-12, eps);
                 }
             }
@@ -164,37 +166,37 @@ class BToKstarDileptonLargeRecoilTest :
                 /* observables */
                 {
                     static const double eps = 1e-4;
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1.0, 6.0),                         2.44531e-7, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1.0, 6.0),             2.39185e-7, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(1.0, 6.0),             +3.26828e-2, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry_cp_averaged(1.0, 6.0), +5.61550e-3, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(1.0, 6.0),              +0.74909,    eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation_cp_averaged(1.0, 6.0),  +0.75261,    eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(1.0, 6.0),                 -3.48594e-2, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2_cp_averaged(1.0, 6.0),     -3.85200e-2, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_3(1.0, 6.0),                 +0.544137,   eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_4(1.0, 6.0),                 +0.723155,   eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_5(1.0, 6.0),                 +0.492092,   eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_re(1.0, 6.0),                +0.173673,   eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_im(1.0, 6.0),                -1.87452e-3, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1.0, 6.0),                         2.43172e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1.0, 6.0),             2.38449e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(1.0, 6.0),             +1.60818e-2, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry_cp_averaged(1.0, 6.0), -1.14212e-2, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation(1.0, 6.0),              +0.75593,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_longitudinal_polarisation_cp_averaged(1.0, 6.0),  +0.75754,    eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2(1.0, 6.0),                 -3.73159e-2, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_2_cp_averaged(1.0, 6.0),     -4.08299e-2, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_3(1.0, 6.0),                 +0.591089,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_4(1.0, 6.0),                 +0.754167,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_5(1.0, 6.0),                 +0.497716,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_re(1.0, 6.0),                +8.78531e-2, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_transverse_asymmetry_im(1.0, 6.0),                -2.06701e-3, eps);
                 }
 
                 /* transversity amplitudes at q^2 = 6.00 GeV^2 */
                 {
                     static const double eps = 1e-19; // 1e-7 smaller than results
 
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  6.00)),-1.550244236e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  6.00)),-1.257405948e-10, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 6.00)),-1.550244236e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 6.00)),+9.124870288e-12, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  6.00)),-5.958584341e-13, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  6.00)),+5.264792480e-11, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 6.00)),-5.958584341e-13, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 6.00)),-2.615401830e-11, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   6.00)),+6.142213426e-13, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   6.00)),-5.667940441e-11, eps);
-                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  6.00)),+6.142213426e-13, eps);
-                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  6.00)),+2.696002157e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(left_handed,  6.00)),-1.526251636e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(left_handed,  6.00)),-1.259894592e-10, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_long(right_handed, 6.00)),-1.526251636e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_long(right_handed, 6.00)),+8.876005879e-12, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(left_handed,  6.00)),-7.216837587e-13, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(left_handed,  6.00)),+5.395305408e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_perp(right_handed, 6.00)),-7.216837587e-13, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_perp(right_handed, 6.00)),-2.484888902e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(left_handed,   6.00)),+7.439242977e-13, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(left_handed,   6.00)),-5.802475460e-11, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(d.a_par(right_handed,  6.00)),+7.439242977e-13, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(d.a_par(right_handed,  6.00)),+2.561467137e-11, eps);
                 }
             }
         }

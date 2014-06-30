@@ -347,8 +347,8 @@ namespace eos
             /* perpendicular, top sector */
             // T0_top_perp_{p,m} = 0, cf. [BFS2001], Eq. (17), p. 6
             // cf. [BFS2004], Eq. (49)
-            complex<double> T1f_top_perp_p_left  = (c7eff - wc.c7prime()) * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
-            complex<double> T1f_top_perp_p_right = (c7eff + wc.c7prime()) * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
+            complex<double> T1f_top_perp_p_left  = (c7eff - wc.c7prime()) * (2.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
+            complex<double> T1f_top_perp_p_right = (c7eff + wc.c7prime()) * (2.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
             // T1f_top_perp_m = 0, cf. [BFS2001], Eq. (22), p. 7
             // cf. [BFS2001], Eq. (23), p. 7
             // [Christoph] Use c8 instead of c8eff
