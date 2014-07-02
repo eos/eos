@@ -291,22 +291,22 @@ class BToKDileptonLargeRecoilBobethCompatibilityTest :
         {
             // Christoph uses \Delta C instead of C for C9, C10
             Parameters p = Parameters::Defaults();
-            p["c1"] = -0.321961806;
-            p["c2"] = 1.009246233;
-            p["c3"] = -0.005191551838;
-            p["c4"] = -0.08787376815;
-            p["c5"] = 0.0003573490117;
-            p["c6"] = 0.001011323348;
-            p["Re{c7}"] = -0.3367243768 + 0.1;
+            p["c1"] = -0.3231323312;
+            p["c2"] = 1.009301831;
+            p["c3"] = -0.005233499106;
+            p["c4"] = -0.08829686414;
+            p["c5"] = 0.0003601965805;
+            p["c6"] = 0.001020749573;
+            p["Re{c7}"] = -0.3370422989 + 0.1;
             p["Im{c7}"] = 0.2;
             p["Re{c7'}"] = 0.3;
             p["Im{c7'}"] = 0.4;
-            p["c8"] = -0.1825051462;
-            p["Re{c9}"] = 4.295481065 + 1;
+            p["c8"] = -0.1827530948;
+            p["Re{c9}"] = 4.294489364 + 1;
             p["Im{c9}"] = 0.5;
             p["Re{c9'}"] = 2;
             p["Im{c9'}"] = 1.5;
-            p["Re{c10}"] = -4.196943811 + 3;
+            p["Re{c10}"] = -4.196294696 + 3;
             p["Im{c10}"] = 2.5;
             p["Re{c10'}"] = 4;
             p["Im{c10'}"] = 3.5;
@@ -331,10 +331,10 @@ class BToKDileptonLargeRecoilBobethCompatibilityTest :
             oo.set("q", "u");
 
             BToKDilepton<LargeRecoil> d(p, oo);
-            static const double eps = 1e-3;
+            double eps = 1e-3;
             static const double s = 6.0;
 
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_A(s)), 2.803056189, 1e-14);
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_A(s)), 2.803705304, 1e-14);
             TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_A(s)), 6, 1e-14);
             TEST_CHECK_RELATIVE_ERROR(std::real(d.F_S(s)), 3.277235546, eps);
             TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_S(s)), 6.256540588, eps);
@@ -342,26 +342,26 @@ class BToKDileptonLargeRecoilBobethCompatibilityTest :
             TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T(s)), 11.97049139, eps);
             TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T5(s)), 8.550350995, eps);
             TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T5(s)), 12.82552649, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_P(s)), 4.010598621, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_P(s)), 6.467135768 , eps);
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_P(s)), 4.010492477, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_P(s)), 6.467135768, eps);
 
             /* difference comes from cal_T, F_V affects everything below */
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_V(s)), 7.787757339, 7 * eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_V(s)), 3.190070491, 7 * eps);
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_V(s)), 7.756362368, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_V(s)), 3.191642172, 6 * eps);
 
-            TEST_CHECK_RELATIVE_ERROR(d.a_l(s),  3.935609789e-20, 8 * eps);
-            TEST_CHECK_RELATIVE_ERROR(d.b_l(s),  9.695777426e-21, 2 * eps);
-            TEST_CHECK_RELATIVE_ERROR(d.c_l(s), -2.771498043e-20, 10 * eps);
+            eps *= 2.5;
+            TEST_CHECK_RELATIVE_ERROR(d.a_l(s),  3.92053702e-20, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.b_l(s),  9.694697008e-21, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.c_l(s), -2.756810607e-20, eps);
 
             const double tau_over_hbar = p["life_time::B_u"] / p["hbar"];
             TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1, 6),
-                                      2.910731397e-19 * tau_over_hbar, 7 * eps);
+                                      2.898727023e-19 * tau_over_hbar, eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1, 6),
-                                      2.887189571e-19 * tau_over_hbar, 5 * eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(1, 6), 0.1093626586 , 6 * eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(1, 6),  0.2778727304, 5 * eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(1, 6), 1.07282598, eps);
-            // todo debug cal_T to find out why difference is 100% or more
-//            TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry(1, 6), -0.003672979605, eps);
+                                      2.8855929e-19 * tau_over_hbar, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(1, 6), 0.1097985735, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(1, 6), 0.2788261376, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(1, 6), 1.073039657, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry(1, 6), 0.00455162022, 5 * eps);
         }
 } b_to_k_dilepton_large_recoil_bobeth_compatibility_test;

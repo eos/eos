@@ -1539,11 +1539,39 @@ namespace eos
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
             // Compute the QCDF Integrals
+            // todo all integrals are calculated but only a few are needed. Speed up?
             double invm1_psd = 3.0 * (1.0 + a_1 + a_2); // <ubar^-1>
+#if 0
             QCDFIntegrals::Results qcdf_0 = QCDFIntegrals::dilepton_massless_case(s, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
             QCDFIntegrals::Results qcdf_c = QCDFIntegrals::dilepton_charm_case(s, m_c_pole, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
             QCDFIntegrals::Results qcdf_b = QCDFIntegrals::dilepton_bottom_case(s, m_b_PS, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
+#else
+            QCDFIntegrals::Results qcdf_0, qcdf_c, qcdf_b;
 
+            static const double u_min = 0.0;
+            static const double u_max = 1.0 - 1e-5;
+
+            std::function<complex<double> (const double &)> f = std::bind(&HardScattering::j0_par, s, std::placeholders::_1, m_B(), a_1, a_2);
+            qcdf_0.j0_parallel = integrate(f, 64, u_min, u_max);
+
+            f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, 0.0, m_B(), m_K(), a_1, a_2);
+            qcdf_0.jtilde2_parallel = integrate(f, 64, u_min, u_max);
+
+            f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, m_c_pole, m_B(), m_K(), a_1, a_2);
+            qcdf_c.jtilde2_parallel = integrate(f, 64, u_min, u_max);
+
+            f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, m_b_PS, m_B(), m_K(), a_1, a_2);
+            qcdf_b.jtilde2_parallel = integrate(f, 64, u_min, u_max);
+
+            f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, 0.0, m_B(), mu(), a_1, a_2);
+            qcdf_0.j4_parallel = integrate(f, 64, u_min, u_max);
+
+            f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, m_c_pole, m_B(), mu(), a_1, a_2);
+            qcdf_c.j4_parallel = integrate(f, 64, u_min, u_max);
+
+            f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, m_b_PS, m_B(), mu(), a_1, a_2);
+            qcdf_b.j4_parallel = integrate(f, 64, u_min, u_max);
+#endif
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15
             double omega_0 = lambda_B_p, lambda_B_p_inv = 1.0 / lambda_B_p;
@@ -1643,9 +1671,7 @@ namespace eos
             // computed for calT_perp, not for calT_par ~ calT_psd.
 
             // cf. [BFS2001], Eq. (15), and [BHP2008], Eq. (C.4)
-            complex<double> result;
-            result = xi_pseudo(s) * C_psd
-                + power_of<2>(M_PI) / 3.0 * (f_B * f_K) / m_B  * T_psd;
+            complex<double> result = xi_pseudo(s) * C_psd + power_of<2>(M_PI) / 3.0 * (f_B * f_K) / m_B  * T_psd;
 
             return result;
         }
