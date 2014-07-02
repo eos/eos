@@ -368,20 +368,20 @@ namespace eos
             // T0_top_par_p = 0, cf. [BFS2001], Eq. (17), p. 6
             // cf. [BFS2004], Eqs. (46)-(47), p. 25 without the \omega term.
             complex<double> T0_top_par_m = -e_q * 4.0 * m_B / m_b_PS * (wc.c3() + 4.0/3.0 * wc.c4() + 16.0 * wc.c5() + 64.0/3.0 * wc.c6()) * lambda_B_m_inv;
-            // cf. [BFS2001], Eq. (21), p. 6
-            complex<double> T1f_top_par_p  = (c7eff - wc.c7prime() + s / (2.0 * m_b_PS * m_B) * Y_top) * (2.0 * power_of<2>(m_B / energy)) * invm1_par * lambda_B_p_inv;
+            // cf. [BFS2004], Eq. (49), p. 25
+            complex<double> T1f_top_par_p  = (c7eff - wc.c7prime()) * (4.0 * m_B / energy) * invm1_par * lambda_B_p_inv;
             // T1f_top_par_m = 0, cf. [BFS2001], Eq. (22), p. 7
             // cf. [BFS2001], Eq. (25), p. 7
             complex<double> T1nf_top_par_p = m_B / m_b_PS * (
                     e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde2_parallel
-                    + e_d * (wc.c3() - wc.c1() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
-                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0/3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
+                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0 / 3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
+                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0 / 3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
             // cf. [BFS2001], Eq. (26), pp. 7-8
             complex<double> T1nf_top_par_m = e_q * (8.0 * c8eff * qcdf_0.j0_parallel
                     + 6.0 * m_B / m_b_PS * (
                         (-wc.c1() / 6.0 + wc.c2() + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j4_parallel
-                        + (wc.c3() + 5.0/6.0 * wc.c4() + 16.0 * wc.c5() + 22.0/3.0 * wc.c6()) * qcdf_b.j4_parallel
-                        + (wc.c3() + 17.0/6.0 * wc.c4() + 16.0 * wc.c5() + 82.0/3.0 * wc.c6()) * qcdf_0.j4_parallel
+                        + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j4_parallel
+                        + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j4_parallel
                         -8.0 / 27.0 * (-7.5 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()))) * lambda_B_m_inv;
 
             /* parallel, up sector */
@@ -1518,8 +1518,8 @@ namespace eos
         complex<double> calT(const double & s) const
         {
             // charges of down- and up-type quarks
-            static const double e_d = -1.0/3.0;
-            static const double e_u = +2.0/3.0;
+            static const double e_d = -1.0 / 3.0;
+            static const double e_u = +2.0 / 3.0;
 
             // spectator contributions
             double delta_qu = (q == 'u' ? 1.0 : 0.0);
@@ -1595,6 +1595,8 @@ namespace eos
             // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
             // cf. [BFS2004], last paragraph in Sec A.1, p. 24
             // [BFS2004], [S2004] have a different sign convention for F{12}{79}_massless than we!
+            // Use here FF_massive - FF_massless because FF_massless is defined with an extra '-'
+            // compared to [S2004]
             complex<double> C1nf_up_psd = -(+1.0 / QCD::casimir_f) * (
                     (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), s, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, s, m_b_PS))
                     + (m_B / (2.0 * m_b_PS)) * (
@@ -1609,20 +1611,20 @@ namespace eos
             // T0_top_par_p = 0, cf. [BFS2001], Eq. (17), p. 6
             // cf. [BFS2004], Eqs. (46)-(47), p. 25 without the \omega term.
             complex<double> T0_top_psd_m = +e_q * 4.0 * m_B / m_b_PS * (wc.c3() + 4.0/3.0 * wc.c4() + 16.0 * wc.c5() + 64.0/3.0 * wc.c6()) * lambda_B_m_inv;
-            // cf. [BFS2001], Eq. (21), p. 6
-            complex<double> T1f_top_psd_p  = -(c7eff + wc.c7prime() + s / (2.0 * m_b_PS * m_B) * Y_top) * (2.0 * power_of<2>(m_B / energy)) * invm1_psd * lambda_B_p_inv;
+            // cf. [BHP2007], Eq. (B.2)
+            complex<double> T1f_top_psd_p  = -(c7eff + wc.c7prime()) * (4.0 * m_B / energy) * invm1_psd * lambda_B_p_inv;
             // T1f_top_par_m = 0, cf. [BFS2001], Eq. (22), p. 7
             // cf. [BFS2001], Eq. (25), p. 7
             complex<double> T1nf_top_psd_p = -m_B / m_b_PS * (
                     e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde2_parallel
-                    + e_d * (wc.c3() - wc.c1() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
-                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0/3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
+                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0 / 3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
+                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0 / 3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
             // cf. [BFS2001], Eq. (26), pp. 7-8
             complex<double> T1nf_top_psd_m = -e_q * (8.0 * c8eff * qcdf_0.j0_parallel
                     + 6.0 * m_B / m_b_PS * (
                         (-wc.c1() / 6.0 + wc.c2() + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j4_parallel
-                        + (wc.c3() + 5.0/6.0 * wc.c4() + 16.0 * wc.c5() + 22.0/3.0 * wc.c6()) * qcdf_b.j4_parallel
-                        + (wc.c3() + 17.0/6.0 * wc.c4() + 16.0 * wc.c5() + 82.0/3.0 * wc.c6()) * qcdf_0.j4_parallel
+                        + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j4_parallel
+                        + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j4_parallel
                         -8.0 / 27.0 * (-7.5 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()))) * lambda_B_m_inv;
 
             /* parallel, up sector */
@@ -1731,10 +1733,8 @@ namespace eos
         // cf. [BHP2007], Eq. (3.2), p. 4
         std::complex<double> F_V(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
-            double m_b = m_b_PS();
-
             std::complex<double> result = wc.c9() + wc.c9prime();
-            result += 2.0 * m_b / m_B() / xi_pseudo(s) *
+            result += 2.0 * m_b_PS() / m_B() / xi_pseudo(s) *
                       (calT(s) + lambda_psd / m_B * std::polar(1.0, sl_phase_psd()));
             result += 8.0 * m_l / (m_B() + m_K()) * form_factors->f_t(s) / form_factors->f_p(s) * wc.cT();
             return result;
