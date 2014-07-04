@@ -249,10 +249,74 @@ namespace eos
             // Compute the QCDF Integrals
             double invm1_par = 3.0 * (1.0 + a_1_par + a_2_par); // <ubar^-1>_par
             double invm1_perp = 3.0 * (1.0 + a_1_perp + a_2_perp); // <ubar^-1>_perp
+#if 0
             QCDFIntegrals::Results qcdf_0 = QCDFIntegrals::dilepton_massless_case(s, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
             QCDFIntegrals::Results qcdf_c = QCDFIntegrals::dilepton_charm_case(s, m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
             QCDFIntegrals::Results qcdf_b = QCDFIntegrals::dilepton_bottom_case(s, m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
+#else
+            QCDFIntegrals::Results qcdf_0, qcdf_c, qcdf_b;
 
+            // avoid NaN at u=1
+            static const double u_min = 0.0;
+            static const double u_max = 1.0 - 1e-5;
+            static const unsigned integration_points = 64;
+
+            std::function<complex<double> (const double &)> f = std::bind(&HardScattering::j0_par, s, std::placeholders::_1, m_B(), a_1_par, a_2_par);
+            qcdf_0.j0_parallel = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, 0.0, m_B(), m_Kstar(), a_1_par, a_2_par);
+            qcdf_0.jtilde2_parallel = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, m_c_pole, m_B(), m_Kstar(), a_1_par, a_2_par);
+            qcdf_c.jtilde2_parallel = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, m_b_PS, m_B(), m_Kstar(), a_1_par, a_2_par);
+            qcdf_b.jtilde2_parallel = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, 0.0, m_B(), mu(), a_1_par, a_2_par);
+            qcdf_0.j4_parallel = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, m_c_pole, m_B(), mu(), a_1_par, a_2_par);
+            qcdf_c.j4_parallel = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, m_b_PS, m_B(), mu(), a_1_par, a_2_par);
+            qcdf_b.j4_parallel = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j0_perp, s, std::placeholders::_1, m_B(), a_1_perp, a_2_perp);
+            qcdf_0.j0bar_perp = integrate(f, integration_points, u_min, u_max);
+
+            qcdf_0.j0_perp = qcdf_0.j0_parallel;
+
+            f = std::bind(&HardScattering::j1_perp, s, std::placeholders::_1, 0.0, m_B(), m_Kstar(), a_1_perp, a_2_perp);
+            qcdf_0.jtilde1_perp = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j1_perp, s, std::placeholders::_1, m_c_pole, m_B(), m_Kstar(), a_1_perp, a_2_perp);
+            qcdf_c.jtilde1_perp = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j1_perp, s, std::placeholders::_1, m_b_PS, m_B(), m_Kstar(), a_1_perp, a_2_perp);
+            qcdf_b.jtilde1_perp = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j5_perp, s, std::placeholders::_1, 0.0, m_B(), mu(), a_1_perp, a_2_perp);
+            qcdf_0.j5_perp = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j5_perp, s, std::placeholders::_1, m_c_pole, m_B(), mu(), a_1_perp, a_2_perp);
+            qcdf_c.j5_perp = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j5_perp, s, std::placeholders::_1, m_b_PS, m_B(), mu(), a_1_perp, a_2_perp);
+            qcdf_b.j5_perp = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j6_perp, s, std::placeholders::_1, 0.0, m_B(), mu(), a_1_par, a_2_par);
+            qcdf_0.j6_perp = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j6_perp, s, std::placeholders::_1, m_c_pole, m_B(), mu(), a_1_par, a_2_par);
+            qcdf_c.j6_perp = integrate(f, integration_points, u_min, u_max);
+
+            f = std::bind(&HardScattering::j6_perp, s, std::placeholders::_1, m_b_PS, m_B(), mu(), a_1_par, a_2_par);
+            qcdf_b.j6_perp = integrate(f, integration_points, u_min, u_max);
+
+            std::function<double (const double &)> f_real = std::bind(&HardScattering::j7_perp, s, std::placeholders::_1, m_B(), a_1_perp, a_2_perp);
+            qcdf_0.j7_perp = integrate(f_real, integration_points, u_min, u_max);
+#endif
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15
             double omega_0 = lambda_B_p, lambda_B_p_inv = 1.0 / lambda_B_p;
@@ -393,7 +457,7 @@ namespace eos
 
 
             // Compute the nonfactorizing contributions
-            complex<double> T_perp_left  = a_mu_f * (T1f_top_perp_p_left + T1nf_top_perp_p + lambda_hat_u * T1nf_up_perp_p);
+            complex<double> T_perp_left  = a_mu_f * (T1f_top_perp_p_left  + T1nf_top_perp_p + lambda_hat_u * T1nf_up_perp_p);
             complex<double> T_perp_right = a_mu_f * (T1f_top_perp_p_right + T1nf_top_perp_p + lambda_hat_u * T1nf_up_perp_p);
             complex<double> T_par = a_mu_f * (T1f_top_par_p + T1nf_top_par_p + lambda_hat_u * T1nf_up_par_p)
                 + (T0_top_par_m + lambda_hat_u * T0_up_par_m + a_mu_f * (T1nf_top_par_m + lambda_hat_u * T1nf_up_par_m));
@@ -476,11 +540,10 @@ namespace eos
 
         double norm(const double & s) const
         {
-            double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
+            double lambda_t2 = std::norm(model->ckm_tb() * conj(model->ckm_ts()));
 
             return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / power_of<5>(M_PI) / m_B()
-                    * lambda_t * lambda_t * s_hat(s)
-                    * std::sqrt(lam(s)) * beta_l(s)); // cf. [BHP2008], Eq. (C.6), p. 21
+                    * lambda_t2 * s_hat(s) * std::sqrt(lam(s)) * beta_l(s)); // cf. [BHP2008], Eq. (C.6), p. 21
         }
 
         inline double s_hat(double s) const
@@ -512,10 +575,13 @@ namespace eos
 
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
-            double shat = s_hat(s);
-            double mbhat = m_b_PS() / m_B;
-            double mKhat = m_Kstar / m_B;
-            double norm_s = norm(s);
+            const double shat = s_hat(s);
+            const double mbhat = m_b_PS() / m_B;
+            const double mKhat2 = power_of<2>(m_Kstar() / m_B());
+            const double m_K2 = power_of<2>(m_Kstar());
+            const double m_B2 = power_of<2>(m_B());
+            const double m_diff2 = m_B2 - m_K2;
+            const double norm_s = norm(s);
 
             DipoleFormFactors dff = calT(s, wc);
 
@@ -524,17 +590,17 @@ namespace eos
             complex<double> wilson_long_left  = (wc.c9() - wc.c9prime()) - (wc.c10() - wc.c10prime());
             double prefactor_long = -1.0 / (2.0 * m_Kstar() * std::sqrt(s));
 
-            complex<double> a = ((m_B() * m_B() - m_Kstar() * m_Kstar() - s) * 2.0 * energy(s) * xi_perp(s)
-                               - lam(s) * m_B() / (m_B() * m_B() - m_Kstar() * m_Kstar()) * (xi_perp(s) - xi_par(s)));
-            complex<double> b = 2.0 * m_b_PS() * (((m_B() * m_B() + 3.0 * m_Kstar() * m_Kstar() - s) * 2.0 * energy(s) / m_B()
-                               - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar())) * dff.calT_perp_left
-                               - lam(s) / (m_B() * m_B() - m_Kstar() * m_Kstar()) * dff.calT_parallel);
+            complex<double> a = ((m_diff2 - s) * 2.0 * energy(s) * xi_perp(s)
+                               - lam(s) * m_B() / m_diff2 * (xi_perp(s) - xi_par(s)));
+            complex<double> b = 2.0 * m_b_PS() * (((m_B2 + 3.0 * m_K2 - s) * 2.0 * energy(s) / m_B()
+                               - lam(s) / m_diff2) * dff.calT_perp_left
+                               - lam(s) / m_diff2 * dff.calT_parallel);
 
             result.a_long_right = norm_s * uncertainty_long_right * prefactor_long * (wilson_long_right * a + b);
             result.a_long_left  = norm_s * uncertainty_long_left  * prefactor_long * (wilson_long_left  * a + b);
 
             // perpendicular amplitude
-            double prefactor_perp = +std::sqrt(2.0) * m_B() * std::sqrt(lambda(1.0, mKhat * mKhat, shat));
+            double prefactor_perp = +std::sqrt(2.0) * m_B() * std::sqrt(lambda(1.0, mKhat2, shat));
             complex<double> wilson_perp_right = (wc.c9() + wc.c9prime()) + (wc.c10() + wc.c10prime());
             complex<double> wilson_perp_left  = (wc.c9() + wc.c9prime()) - (wc.c10() + wc.c10prime());
 
@@ -542,19 +608,17 @@ namespace eos
             result.a_perp_left  = norm_s * uncertainty_perp_left  * prefactor_perp * (wilson_perp_left  * xi_perp(s) + (2.0 * mbhat / shat) * dff.calT_perp_right);
 
             // parallel amplitude
-            double prefactor_par = -std::sqrt(2.0) * m_B() * (1.0 - shat);
+            double prefactor_par = -std::sqrt(2.0) * m_diff2;
             complex<double> wilson_par_right = (wc.c9() - wc.c9prime()) + (wc.c10() - wc.c10prime());
             complex<double> wilson_par_left  = (wc.c9() - wc.c9prime()) - (wc.c10() - wc.c10prime());
 
-            result.a_par_right = norm_s * uncertainty_par_right * prefactor_par * (wilson_par_right * xi_perp(s) +
-                                    (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * dff.calT_perp_left);
-            result.a_par_left  = norm_s * uncertainty_par_left  * prefactor_par * (wilson_par_left  * xi_perp(s) +
-                                    (2.0 * mbhat / shat) * (1.0 - mKhat * mKhat) * dff.calT_perp_left);
+            result.a_par_right = norm_s * uncertainty_par_right * prefactor_par * (wilson_par_right * xi_perp(s) * 2.0 * energy(s) / m_diff2 +
+                                    (4.0 * m_b_PS() * energy(s) / s / m_B()) * dff.calT_perp_left);
+            result.a_par_left  = norm_s * uncertainty_par_left  * prefactor_par * (wilson_par_left  * xi_perp(s) * 2.0 * energy(s) / m_diff2 +
+                                    (4.0 * m_b_PS() * energy(s) / s / m_B()) * dff.calT_perp_left);
 
             // timelike amplitude
-            double m_Kstarhat = m_Kstar / m_B;
-
-            result.a_timelike = norm_s * m_B * sqrt(lambda(1.0, power_of<2>(m_Kstarhat), shat) / shat) *
+            result.a_timelike = norm_s * m_B * sqrt(lambda(1.0, mKhat2, shat) / shat) *
                 complex<double>(0.0, 2.0) * (wc.c10() - wc.c10prime()) * form_factors->a_0(s);
 
             return result;
