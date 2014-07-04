@@ -199,4 +199,40 @@ namespace eos
     {
         return LCDA_2pt(u, a_1, a_2) * CharmLoops::h(mu, (1.0 - u) * power_of<2>(m_B) + u * s, m_q);
     }
+
+    complex<double>
+    HardScattering::j0_perp(const double & s, const double & u, const double & m_B, const double & a_1, const double & a_2)
+    {
+        return LCDA_2pt(u, a_1, a_2) / (u + (1.0 - u) * s / power_of<2>(m_B));
+    }
+
+    complex<double>
+    HardScattering::j1_perp(const double & s, const double & u, const double & m_q, const double & m_B,
+                            const double & m_K, const double & a_1, const double & a_2)
+    {
+        return LCDA_2pt(u, a_1, a_2) * t_perp(s, u, m_q, m_B, m_K);
+    }
+
+    complex<double>
+    HardScattering::j5_perp(const double & s, const double & u, const double & m_q, const double & m_B,
+                            const double & mu, const double & a_1, const double & a_2)
+    {
+        return LCDA_2pt(u, a_1, a_2) / ((1.0 - u) + u * s / power_of<2>(m_B))
+               * CharmLoops::h(mu, (1.0 - u) * power_of<2>(m_B) + u * s, m_q);
+    }
+
+    complex<double>
+    HardScattering::j6_perp(const double & s, const double & u, const double & m_q, const double & m_B,
+                            const double & mu, const double & a_1, const double & a_2)
+    {
+        return power_of<2>(u) * (3.0 + a_1 * (-9.0 + 12.0 * u) +
+                a_2 * (18.0 - 60.0 * u + 45.0 * power_of<2>(u)))
+        * CharmLoops::h(mu, (1.0 - u) * power_of<2>(m_B) + u * s, m_q);
+    }
+
+    double
+    HardScattering::j7_perp(const double & s, const double & u, const double & m_B, const double & a_1, const double & a_2)
+    {
+        return LCDA_2pt(u, a_1, a_2) / power_of<2>((1.0 - u) + u * s / power_of<2>(m_B));
+    }
 }

@@ -86,6 +86,39 @@ namespace eos
          */
         static complex<double> j4_par(const double & s, const double & u, const double & m_q, const double & m_B,
                                       const double & mu, const double & a_1, const double & a_2);
+
+        /*!
+         * [BFS2001], Eq. (23), term \propto C_8_eff
+         * See @see I1 and @see LCDA_2pt for parameter descriptions
+         */
+        static complex<double> j0_perp(const double & s, const double & u, const double & m_B, const double & a_1, const double & a_2);
+
+        /*!
+         * [BFS2001], Eq. (23), term \propto C1 - C6
+         * See @see I1 and @see LCDA_2pt for parameter descriptions
+         */
+        static complex<double> j1_perp(const double & s, const double & u, const double & m_q, const double & m_B,
+                                       const double & m_K, const double & a_1, const double & a_2);
+
+        /*!
+         * [BFS2004], Eq. (52), term \propto f_{\perp}
+         * See @see I1 and @see LCDA_2pt for parameter descriptions
+         */
+        static complex<double> j5_perp(const double & s, const double & u, const double & m_q, const double & m_B,
+                                       const double & mu, const double & a_1, const double & a_2);
+
+        /*!
+         * [BFS2004], Eq. (52), term \propto f_{\par}
+         * See @see I1 and @see LCDA_2pt for parameter descriptions
+         */
+        static complex<double> j6_perp(const double & s, const double & u, const double & m_q, const double & m_B,
+                                       const double & mu, const double & a_1, const double & a_2);
+
+        /*!
+         * [BFS2004], Eq. (52), term \propto C_8_eff
+         * See @see I1 and @see LCDA_2pt for parameter descriptions
+         */
+        static double j7_perp(const double & s, const double & u, const double & m_B, const double & a_1, const double & a_2);
     };
 }
 
