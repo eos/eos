@@ -70,7 +70,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
                 // Kaon mass
-                p["mass::K^*0"] = 0.896;
+                p["mass::K^*_d"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
                 // s quark mass
@@ -171,7 +171,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
                 // Kaon mass
-                p["mass::K^*0"] = 0.896;
+                p["mass::K^*_d"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
                 // s quark mass
@@ -237,7 +237,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
                 // Kaon mass
-                p["mass::K^*0"] = 0.896;
+                p["mass::K^*_d"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
                 // s quark mass
@@ -567,7 +567,7 @@ class BToKDileptonLowRecoilTest :
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
                 // Kaon mass
-                p["mass::K0"] = 0.49761;
+                p["mass::K_d"] = 0.49761;
                 // B mass
                 p["mass::B_d"] = 5.27953;
                 p["mass::b(MSbar)"] = 4.2;
@@ -613,7 +613,7 @@ class BToKDileptonLowRecoilTest :
                 // B mass
                 p["mass::B_d"] = 5.27953;
                 // Kaon mass
-                p["mass::K0"] = 0.49761;
+                p["mass::K_d"] = 0.49761;
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.2;
                 p["c1"] = -0.32300000;
@@ -669,6 +669,8 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
             };
 
             Parameters p = Parameters::Defaults();
+            // old test data generated for K^+ mass set to K0 mass
+            p["mass::K_u"] = 0.497614;
             Options o;
             o.set("model", "WilsonScan");
             o.set("form-factors", "KMPW2010");

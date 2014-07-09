@@ -78,7 +78,7 @@ class BToKstarDileptonLargeRecoilTest :
                 // BHvD2010 parameters
                 p["decay-constant::B_d"] = 0.200;
                 // Kaon mass
-                p["mass::K^*0"] = 0.896;
+                p["mass::K^*_d"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.2795;
                 // b quark mass
@@ -151,7 +151,7 @@ class BToKstarDileptonLargeRecoilTest :
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
                 // Kaon mass
-                p["mass::K^*0"] = 0.896;
+                p["mass::K^*_d"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
                 // b quark mass
@@ -256,7 +256,7 @@ class BToKstarDileptonLargeRecoilPolynomialTest :
 
             Parameters parameters = Parameters::Defaults();
             // Kaon mass
-            parameters["mass::K0"] = 0.49761;
+            parameters["mass::K_d"] = 0.49761;
             // b quark mass
             parameters["mass::b(MSbar)"] = 4.2;
             Kinematics kinematics;
