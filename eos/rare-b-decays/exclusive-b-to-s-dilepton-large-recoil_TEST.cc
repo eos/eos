@@ -121,7 +121,7 @@ class BToKDileptonLargeRecoilBobethCompatibilityTest :
         virtual void run() const
         {
             // Christoph uses \Delta C instead of C for C9, C10
-            // important to agree to alpha_s, can change values by 1%
+            // important to agree on alpha_s, can change values by 1%
             Parameters p = Parameters::Defaults();
             p["c1"] = -0.3231323312;
             p["c2"] = 1.009301831;
