@@ -62,7 +62,7 @@ namespace eos
                 const WilsonCoefficients<BToS> & wc)
         {
             // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
-            complex<double> lo = -1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
+            complex<double> lo = -1.0 / 3.0 * wc.c3() - 4.0 / 9.0 * wc.c4() - 20.0 / 3.0 * wc.c5() - 80.0 / 9.0 * wc.c6();
             complex<double> nlo = -1.0 * (
                       wc.c1() * CharmLoops::F17_massless(mu, s, m_b_PS)
                     + wc.c2() * CharmLoops::F27_massless(mu, s, m_b_PS)
@@ -90,9 +90,11 @@ namespace eos
          *
          * For the calculation, cf. [GP2004], Eq. (55), p. 10
          */
-        static complex<double> c9eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, const double & m_c_MSbar,
-                bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,
-                const WilsonCoefficients<BToS> & wc)
+        static complex<double>
+        c9eff(const double & s, const double & mu, const double & alpha_s,
+              const double & m_b_PS, const double & m_c_MSbar,
+              bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,
+              const WilsonCoefficients<BToS> & wc)
         {
             // Uses b pole mass according to [BFS2001], Sec. 3.1, paragraph Quark Masses
             // Substitute pole mass by PS mass
@@ -1686,6 +1688,42 @@ namespace eos
         WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
 
         return imag(_imp->c7eff(wc, s));
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_A(const double & s) const
+    {
+        return _imp->F_A(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_V(const double & s) const
+    {
+        return _imp->F_V(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_S(const double & s) const
+    {
+        return _imp->F_S(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_P(const double & s) const
+    {
+        return _imp->F_P(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_T(const double & s) const
+    {
+        return _imp->F_T(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_T5(const double & s) const
+    {
+        return _imp->F_T5(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
     }
 
     double

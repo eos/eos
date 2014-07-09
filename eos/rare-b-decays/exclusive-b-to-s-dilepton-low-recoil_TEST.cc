@@ -650,12 +650,12 @@ class BToKDileptonLowRecoilTest :
         }
 } b_to_k_dilepton_low_recoil_test;
 
-class BToKDileptonLowRecoilBobethCompatibilityTest :
+class BToKDileptonLowRecoilBobethFileCompatibilityTest :
     public TestCase
 {
     public:
-        BToKDileptonLowRecoilBobethCompatibilityTest() :
-            TestCase("b_to_k_dilepton_low_recoil_bobeth_compatibility_test")
+        BToKDileptonLowRecoilBobethFileCompatibilityTest() :
+            TestCase("b_to_k_dilepton_low_recoil_bobeth_file_compatibility_test")
         {
         }
 
@@ -753,5 +753,121 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
                 }
             }
 #endif
+        }
+} b_to_k_dilepton_low_recoil_bobeth_file_compatibility_test;
+
+class BToKDileptonLowRecoilBobethCompatibilityTest :
+    public TestCase
+{
+    public:
+        BToKDileptonLowRecoilBobethCompatibilityTest() :
+            TestCase("b_to_k_dilepton_low_recoil_bobeth_compatibility_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // Christoph uses \Delta C instead of C for C9, C10
+            // important to agree to alpha_s, can change values by 1%
+            Parameters p = Parameters::Defaults();
+            p["c1"] = -0.3231323312;
+            p["c2"] = 1.009301831;
+            p["c3"] = -0.005233499106;
+            p["c4"] = -0.08829686414;
+            p["c5"] = 0.0003601965805;
+            p["c6"] = 0.001020749573;
+            p["Re{c7}"] = -0.3370422989 + 0.1;
+            p["Im{c7}"] = 0.2;
+            p["Re{c7'}"] = 0.3;
+            p["Im{c7'}"] = 0.4;
+            p["c8"] = -0.1827530948;
+            p["Re{c9}"] = 4.294489364 + 1;
+            p["Im{c9}"] = 0.5;
+            p["Re{c9'}"] = 2;
+            p["Im{c9'}"] = 1.5;
+            p["Re{c10}"] = -4.196294696 + 3;
+            p["Im{c10}"] = 2.5;
+            p["Re{c10'}"] = 4;
+            p["Im{c10'}"] = 3.5;
+            p["Re{cS}"] = 0.5;
+            p["Im{cS}"] = 1;
+            p["Re{cS'}"] = 0.6;
+            p["Im{cS'}"] = 1.1;
+            p["Re{cP}"] = 0.7;
+            p["Im{cP}"] = 1.2;
+            p["Re{cP'}"] = 0.8;
+            p["Im{cP'}"] = 1.3;
+            p["Re{cT}"] = 0.9;
+            p["Im{cT}"] = 1.4;
+            p["Re{cT5}"] = 1.0;
+            p["Im{cT5}"] = 1.5;
+
+            Options oo;
+            oo.set("model", "WilsonScan");
+            oo.set("scan-mode", "cartesian");
+            oo.set("form-factors", "KMPW2010");
+            oo.set("l", "mu");
+            oo.set("q", "u");
+            oo.set("cp-conjugate", "true");
+
+            BToKDilepton<LowRecoil> d(p, oo);
+            double eps = 1e-5;
+            static const double s = 15.0;
+
+            // just form factors, so agreement must be great
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_A(s)),  2.803705304, 1e-14);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_A(s)), -6, 1e-14);
+
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_S(s)),  2.290345545, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_S(s)), -4.372477858, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_P(s)),  2.6173133,   eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_P(s)), -4.12272377,  eps);
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T(s)),  4.348710794, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T(s)), -6.764661235, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T5(s)), 4.831900882, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T5(s)),-7.247851323, eps);
+
+            eps = 0.003;
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_V(s)),  7.842302994, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_V(s)), -3.810315056, eps);
+
+            oo.set("cp-conjugate", "false");
+            d = BToKDilepton<LowRecoil> (p, oo);
+
+            // just form factors, so agreement must be great
+            eps = 1e-5;
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_A(s)),  2.803705304, 1e-14);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_A(s)),  6, 1e-14);
+
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_S(s)),  2.290345545, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_S(s)),  4.372477858, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_P(s)),  2.6173133,   eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_P(s)),  4.12272377,  eps);
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T(s)),  4.348710794, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T(s)),  6.764661235, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T5(s)), 4.831900882, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T5(s)), 7.247851323, eps);
+
+            // difference seems to arise from Bobeth's computing of the Wilson coefficients
+            // they differ slightly at large and low recoil
+            eps = 0.003;
+            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_V(s)), 7.842302994, eps);
+            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_V(s)), 4.216344837, eps);
+
+            TEST_CHECK_RELATIVE_ERROR(d.a_l(s), 3.242926113e-20 , eps);
+            TEST_CHECK_RELATIVE_ERROR(d.b_l(s), 1.799235952e-20 , eps);
+            TEST_CHECK_RELATIVE_ERROR(d.c_l(s),-1.280104187e-20 , 2.5 * eps);
+
+            const double tau_over_hbar = p["life_time::B_u"] / p["hbar"];
+            const double s_min = 15;
+            const double s_max = 22;
+
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(s_min, s_max),
+                                      2.706126359e-19 * tau_over_hbar, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(s_min, s_max),
+                                      2.682095622e-19 * tau_over_hbar, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(s_min, s_max), 0.3766013794, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(s_min, s_max), 0.790763177, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry(s_min, s_max), 0.008959686823, eps);
         }
 } b_to_k_dilepton_low_recoil_bobeth_compatibility_test;

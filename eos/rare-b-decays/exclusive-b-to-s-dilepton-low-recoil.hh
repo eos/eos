@@ -183,6 +183,14 @@ namespace eos
             double real_c7eff(const double & s) const;
             double imag_c7eff(const double & s) const;
 
+            // Amplitudes
+            std::complex<double> F_A(const double & s) const;
+            std::complex<double> F_V(const double & s) const;
+            std::complex<double> F_S(const double & s) const;
+            std::complex<double> F_P(const double & s) const;
+            std::complex<double> F_T(const double & s) const;
+            std::complex<double> F_T5(const double & s) const;
+
             // Angular Observables
             double a_l(const double & s) const;
             double b_l(const double & s) const;
