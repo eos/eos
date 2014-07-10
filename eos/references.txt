@@ -645,6 +645,13 @@ Theoretical Inputs
         arxiv:hep-ph/0212158
 
 
+    F2012 : Fleischer, R.
+
+        On Branching Ratios of B_s Decays and the Search for New Physics in B0_s -> mu^+ mu^-
+
+        arxiv:1208.2843
+
+
     GM2001 : Gambino, P. and Misiak, M.
 
         Quark mass effects in B -> X_s gamma

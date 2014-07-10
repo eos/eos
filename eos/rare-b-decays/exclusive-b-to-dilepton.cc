@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013 Danny van Dyk. 2014 Frederik Beaujean and Christoph Bobeth.
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -50,7 +50,13 @@ namespace eos
 
         UsedParameter m_l;
 
+        UsedParameter m_b;
+
+        UsedParameter m_q;
+
         std::function<complex<double> (const Model *)> lambda;
+
+        typedef std::array<complex<double>, 4> xi_t;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
@@ -62,7 +68,9 @@ namespace eos
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
             hbar(p["hbar"], u),
-            m_l(p["mass::" + o.get("l", "mu")], u)
+            m_l(p["mass::" + o.get("l", "mu")], u),
+            m_b(p["mass::b(MSbar)"], u),
+            m_q(p["mass::" + o.get("q", "d") + "(2GeV)"], u)
         {
             if (o.get("q", "d") == "d")
             {
@@ -85,6 +93,29 @@ namespace eos
         static complex<double> lambda_t_d(const Model * model) { return model->ckm_tb() * conj(model->ckm_td()); }
         static complex<double> lambda_t_s(const Model * model) { return model->ckm_tb() * conj(model->ckm_ts()); }
 
+        xi_t calc_amplitudes() const
+        {
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+
+            double factor = power_of<2>(m_B()) / 2.0 / m_l / (m_b + m_q);
+            complex<double> S = std::sqrt(1.0 - 4.0 * power_of<2>(m_l / m_B)) * factor * (wc.cS() - wc.cSprime());
+            complex<double> P = (wc.c10() - wc.c10prime()) + factor * (wc.cP() - wc.cPprime());
+
+            xi_t xi;
+            xi[0] = -1.0 * (P + S) / std::conj(S - P);
+            xi[1] = -1.0 * (S - P) / std::conj(P + S);
+            xi[2] = std::norm(P) + std::norm(S);
+            xi[3] = P* P - S* S;
+
+            return xi;
+        }
+
+        double y_q() const
+        {
+            return tau_B() * delta_gamma_B / 2.0;
+        }
+
+        // cf. [BEKU2002], Eq. (3.6)
         double branching_ratio_time_zero() const
         {
             double lambda_t = abs(lambda(model.get()));
@@ -92,17 +123,42 @@ namespace eos
 
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
 
-            // cf. [BEKU2002], Eq. (3.6) with c_S,P(') = 0
-            return power_of<2>(g_fermi() * alpha_e() * lambda_t) / 64.0 / power_of<3>(M_PI)
-                * beta_l * m_B() * power_of<2>(f_B() * 2.0 * m_l) * std::norm(wc.c10() - wc.c10prime()) * tau_B / hbar;
+            return power_of<2>(g_fermi() * alpha_e() * lambda_t * f_B()) / 64.0 / power_of<3>(M_PI) * tau_B / hbar
+                * beta_l * power_of<3>(m_B()) * (
+                        power_of<2>(beta_l) * std::norm(m_B / (m_b + m_q) * (wc.cS() - wc.cSprime()))
+                        + std::norm(m_B / (m_b + m_q) * (wc.cP() - wc.cPprime()) + 2.0 * m_l / m_B * (wc.c10() - wc.c10prime())));
         }
 
+        // [F2012], Eq. (29), (30)
         double branching_ratio_untagged_integrated() const
         {
-            double y_s = tau_B() * delta_gamma_B / 2.0;
+            xi_t xi = calc_amplitudes();
+            double factor = power_of<2>(g_fermi() * alpha_e() * f_B * 2.0 * m_l) * tau_B / hbar * m_B * std::norm(lambda(model.get())) / (64.0 * power_of<3>(M_PI))
+                            * std::sqrt(1 - 4* power_of<2>(m_l/m_B));
+            return factor / (1.0 - power_of<2>(y_q())) * (std::real(xi[2]) + std::real(xi[3]) * y_q());
+        }
 
-            // In the case of vanishing C_S(') and C_P(') we find simply
-            return branching_ratio_time_zero() / (1.0 - y_s);
+        // [F2012], Eq. (25)
+        double cp_asymmetry_del_gamma() const
+        {
+            xi_t xi = calc_amplitudes();
+            return 2.0 * std::real(xi[0]) / (1.0 + std::norm(xi[0]));
+        }
+
+        // [F2012], Eq. (24)
+        double cp_asymmetry_mixing_S() const
+        {
+            xi_t xi = calc_amplitudes();
+            return 2.0 * std::imag(xi[0]) / (1.0 + std::norm(xi[0]));
+        }
+
+        // [F2012], Eq. (8)
+        double effective_lifetime() const
+        {
+            const double cp_asym = cp_asymmetry_del_gamma();
+            const double y = y_q();
+
+            return tau_B() / hbar / (1.0 - power_of<2>(y)) * (1.0 + 2.0 * cp_asym * y + power_of<2>(y)) / (1.0 + cp_asym * y);
         }
     };
 
@@ -125,5 +181,23 @@ namespace eos
     BToDilepton::branching_ratio_untagged_integrated() const
     {
         return _imp->branching_ratio_untagged_integrated();
+    }
+
+    double
+    BToDilepton::cp_asymmetry_del_gamma() const
+    {
+        return _imp->cp_asymmetry_del_gamma();
+    }
+
+    double
+    BToDilepton::cp_asymmetry_mixing_S() const
+    {
+        return _imp->cp_asymmetry_mixing_S();
+    }
+
+    double
+    BToDilepton::effective_lifetime() const
+    {
+        return _imp->effective_lifetime();
     }
 }
