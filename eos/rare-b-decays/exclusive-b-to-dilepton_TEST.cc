@@ -2,6 +2,8 @@
 
 /*
  * Copyright (c) 2011, 2013 Danny van Dyk
+ * Copyright (c) 2014 Frederik Beaujean
+ * Copyright (c) 2014 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,12 +35,12 @@
 using namespace test;
 using namespace eos;
 
-class BToKstarGammaTest :
+class BToDileptonTest :
     public TestCase
 {
     public:
-        BToKstarGammaTest() :
-            TestCase("b_to_kstar_gamma_test")
+        BToDileptonTest() :
+            TestCase("b_to_dilepton_test")
         {
         }
 
@@ -56,7 +58,7 @@ class BToKstarGammaTest :
                 p["CKM::lambda"] = 0.22543;
                 p["CKM::rhobar"] = 0.144;
                 p["CKM::etabar"] = 0.342;
-                p["decay-constant::B_d"] = 0.212;
+                p["decay-constant::B_s"] = 0.2276;
                 p["decay-constant::B_d"] = 0.256;
                 p["mass::B_d"] = 5.2795;
                 p["mass::B_s"] = 5.3663;
@@ -65,7 +67,7 @@ class BToKstarGammaTest :
                 p["life_time::Delta_B_d"] = 0.0;
                 p["life_time::Delta_B_s"] = 0.104e12;
 
-                const double eps = 1e-4;
+                static const double eps = 1e-4;
 
                 // B_d -> mu^+ mu^-
                 {
@@ -104,6 +106,8 @@ class BToKstarGammaTest :
 
                     TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           +3.03452e-09, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +3.28604e-09, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.cp_asymmetry_del_gamma(),              +1, eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.cp_asymmetry_mixing_S(),                  0, eps);
                 }
 
                 // B_s -> e^+ e^-
@@ -119,5 +123,57 @@ class BToKstarGammaTest :
                     TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), +7.69211e-14, eps);
                 }
             }
+
+            // new physics
+            {
+                Parameters p = Parameters::Defaults();
+
+                // test large NP contributions
+                p["Re{c10}"] = -4.196294696 + 3;
+                p["Im{c10}"] = 2.5;
+                p["Re{c10'}"] = 4;
+                p["Im{c10'}"] = 3.5;
+                p["Re{cS}"] = 0.5;
+                p["Im{cS}"] = 1;
+                p["Re{cS'}"] = 0.6;
+                p["Im{cS'}"] = 1.1;
+                p["Re{cP}"] = 0.7;
+                p["Im{cP}"] = 1.2;
+                p["Re{cP'}"] = 0.8;
+                p["Im{cP'}"] = 1.3;
+
+                // 2013 default values
+                p["CKM::A"] = +0.827;
+                p["CKM::lambda"] = 0.22535;
+                p["CKM::rhobar"] = 0.132;
+                p["CKM::etabar"] = 0.350;
+                p["mass::B_d"] = 5.27958;
+                p["mass::B_s"] = 5.36677;
+                p["life_time::B_d"] = 1.519e-12;
+                p["life_time::B_s"] = 1.516e-12;
+                p["life_time::Delta_B_d"] = 0.0;
+                p["life_time::Delta_B_s"] = 0.081e12;
+                p["decay-constant::B_d"] = 0.1906;
+                p["decay-constant::B_s"] = 0.2276;
+
+                static const double eps = 1e-4;
+
+                // B_s -> mu^+ mu^-
+                {
+                    Options oo;
+                    oo.set("model", "WilsonScan");
+                    oo.set("scan-mode", "cartesian");
+                    oo.set("q", "s");
+                    oo.set("l", "mu");
+
+                    BToDilepton d(p, oo);
+
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_time_zero(),           2.030257955e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.branching_ratio_untagged_integrated(), 2.098985874e-08, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.cp_asymmetry_del_gamma(),              0.4878740356, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.cp_asymmetry_mixing_S(),               0.4617576325, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.effective_lifetime(),                  2.387625253e+12, eps);
+                }
+            }
         }
-} b_to_kstar_gamma_test;
+} b_to_dilepton_test;

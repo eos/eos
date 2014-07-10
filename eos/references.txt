@@ -735,6 +735,13 @@ Theoretical Inputs
         arxiv:0911.2175
 
 
+    F2012 : Fleischer, R.
+
+        On Branching Ratios of B_s Decays and the Search for New Physics in B0_s -> mu^+ mu^-
+
+        arxiv:1208.2843
+
+
     FM2002 : Feldmann, Th. and Matias, J.
 
         Forward-backward and isospin asymmetry for B -> K^* l^+ l^- decay

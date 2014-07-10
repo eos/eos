@@ -2,6 +2,8 @@
 
 /*
  * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2014 Frederik Beaujean
+ * Copyright (c) 2014 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -28,7 +30,7 @@
 namespace eos
 {
     /*!
-     * Calculation according to [BEKU2002].
+     * Calculation according to [BEKU2002] and [F2012].
      */
     class BToDilepton :
         public ParameterUser,
@@ -46,11 +48,20 @@ namespace eos
 
             ///@name Observables
             ///@{
-            // Branching ratio at time t = 0, considering B-Bbar mixing effects.
+            /// Branching ratio at time t = 0, considering B-Bbar mixing effects.
             double branching_ratio_time_zero() const;
 
-            // Time-integrated untagged branching ratio, considering B-Bbar mixing effects.
+            /// Time-integrated untagged branching ratio, considering B-Bbar mixing effects.
             double branching_ratio_untagged_integrated() const;
+
+            /// CP asymmetry due to finite decay-width difference
+            double cp_asymmetry_del_gamma() const;
+
+            /// CP asymmetry due to mixing
+            double cp_asymmetry_mixing_S() const;
+
+            /// Effective lifetime
+            double effective_lifetime() const;
             ///@}
     };
 }

@@ -441,6 +441,15 @@ namespace eos
             make_observable("B_q->ll::BR@Untagged",
                     &BToDilepton::branching_ratio_untagged_integrated),
 
+            make_observable("B_q->ll::A_DeltaGamma",
+                    &BToDilepton::cp_asymmetry_del_gamma),
+
+            make_observable("B_q->ll::S",
+                    &BToDilepton::cp_asymmetry_mixing_S),
+
+            make_observable("B_q->ll::eff_lifetime",
+                    &BToDilepton::effective_lifetime),
+
             // B -> K^* gamma
             make_observable("B->K^*gamma::BR",
                     &BToKstarGamma::branching_ratio),
