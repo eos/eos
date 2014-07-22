@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -169,6 +169,7 @@ namespace eos
             double differential_ratio_muons_electrons(const double & s) const;
 
             // Integrated Observables
+            double integrated_decay_width(const double & s_min, const double & s_max) const;
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
             double integrated_branching_ratio_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_cp_asymmetry(const double & s_min, const double & s_max) const;

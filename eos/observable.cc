@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -189,6 +189,10 @@ namespace eos
                     &BToKDilepton<LargeRecoil>::integrated_cp_asymmetry,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->Kll::Gamma@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::integrated_decay_width,
+                    std::make_tuple("s_min", "s_max")),
+
             make_observable("B->Kll::F_H@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::integrated_flat_term,
                     std::make_tuple("s_min", "s_max")),
@@ -232,6 +236,10 @@ namespace eos
 
             make_observable("B->Kll::A_CP@LowRecoil",
                     &BToKDilepton<LowRecoil>::integrated_cp_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Kll::Gamma@LowRecoil",
+                    &BToKDilepton<LowRecoil>::integrated_decay_width,
                     std::make_tuple("s_min", "s_max")),
 
             make_observable("B->Kll::F_H@LowRecoil",
@@ -517,6 +525,10 @@ namespace eos
 
             make_observable("B->K^*ll::s_0^A_FB@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::a_fb_zero_crossing),
+
+            make_observable("B->K^*ll::Gamma@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_decay_width,
+                    std::make_tuple("s_min", "s_max")),
 
             make_observable("B->K^*ll::J_1s@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_j_1s,
