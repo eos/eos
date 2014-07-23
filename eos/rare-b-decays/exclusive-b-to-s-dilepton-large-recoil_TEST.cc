@@ -79,33 +79,32 @@ class BToKstarDileptonLargeRecoilBobethCompatibilityTest :
         double eps = 0.6e-2;
         static const double s = 6.0;
 
-        complex<double> x;
+        TEST_CHECK_RELATIVE_ERROR_C(d.a_long(Helicity::left_handed, s),
+                                    complex<double>(-1.120616135e-10, 6.005404351e-12),
+                                    eps);
 
-        x = d.a_long(Helicity::left_handed, s);
-        TEST_CHECK_RELATIVE_ERROR(std::real(x), -1.120616135e-10, eps);
-        TEST_CHECK_RELATIVE_ERROR(std::imag(x),  6.005404351e-12, eps);
+        TEST_CHECK_RELATIVE_ERROR_C(d.a_long(Helicity::right_handed, s),
+                                    complex<double>(4.337275083e-11, 3.591794269e-11),
+                                    eps);
 
-        x = d.a_long(Helicity::right_handed, s);
-        TEST_CHECK_RELATIVE_ERROR(std::real(x),  4.337275083e-11, eps);
-        TEST_CHECK_RELATIVE_ERROR(std::imag(x),  3.591794269e-11, eps);
+        TEST_CHECK_RELATIVE_ERROR_C(d.a_par(Helicity::left_handed, s),
+                                    complex<double>(-4.177379962e-11, 1.649925628e-11),
+                                    eps);
 
-        x = d.a_par(Helicity::left_handed, s);
-        TEST_CHECK_RELATIVE_ERROR(std::real(x), -4.177379962e-11, eps);
-        TEST_CHECK_RELATIVE_ERROR(std::imag(x),  1.649925628e-11, eps);
+        TEST_CHECK_RELATIVE_ERROR_C(d.a_par(Helicity::right_handed, s),
+                                    complex<double>(5.963768892e-11, 3.601537199e-11),
+                                    eps);
 
-        x = d.a_par(Helicity::right_handed, s);
-        TEST_CHECK_RELATIVE_ERROR(std::real(x),  5.963768892e-11, eps);
-        TEST_CHECK_RELATIVE_ERROR(std::imag(x),  3.601537199e-11, eps);
-
-        x = d.a_perp(Helicity::left_handed, s);
+        complex<double> x = d.a_perp(Helicity::left_handed, s);
         TEST_CHECK_RELATIVE_ERROR(std::real(x),  4.352686602e-11, eps);
+
         // Difference much smaller if Im{C7}=1.2.
-                // So think we agree on the implementation but difference depends on WC
+        // So think we agree on the implementation but difference depends on WC
         TEST_CHECK_RELATIVE_ERROR(std::imag(x),  5.276889886e-12, 2.2 * eps);
 
-        x = d.a_perp(Helicity::right_handed, s);
-        TEST_CHECK_RELATIVE_ERROR(std::real(x),  9.326590159e-11, eps);
-        TEST_CHECK_RELATIVE_ERROR(std::imag(x),  1.116294121e-10, eps);
+        TEST_CHECK_RELATIVE_ERROR_C(d.a_perp(Helicity::right_handed, s),
+                                    complex<double>(9.326590159e-11, 1.116294121e-10),
+                                    eps);
     }
 } b_to_kstar_dilepton_large_recoil_bobeth_compatibility_test;
 
@@ -166,16 +165,11 @@ class BToKDileptonLargeRecoilBobethCompatibilityTest :
             double eps = 1e-3;
             static const double s = 6.0;
 
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_A(s)), 2.803705304, 1e-14);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_A(s)), 6, 1e-14);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_S(s)), 3.277235546, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_S(s)), 6.256540588, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T(s)), 7.695315895, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T(s)), 11.97049139, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T5(s)), 8.550350995, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T5(s)), 12.82552649, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_P(s)), 4.010492477, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_P(s)), 6.467135768, eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_A(s), complex<double>(2.803705304, 6), 1e-14);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_S(s), complex<double>(3.277235546, 6.256540588), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_T(s), complex<double>(7.695315895, 11.97049139), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_T5(s), complex<double>(8.550350995, 12.82552649), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_P(s), complex<double>(4.010492477, 6.467135768), eps);
 
             /* difference comes from cal_T, F_V affects everything below */
             TEST_CHECK_RELATIVE_ERROR(std::real(d.F_V(s)), 7.756362368, eps);

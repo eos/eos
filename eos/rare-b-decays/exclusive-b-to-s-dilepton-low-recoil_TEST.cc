@@ -815,44 +815,31 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
             static const double s = 15.0;
 
             // just form factors, so agreement must be great
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_A(s)),  2.803705304, 1e-14);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_A(s)), -6, 1e-14);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_A(s), complex<double>(2.803705304, -6.0), 1e-14);
 
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_S(s)),  2.290345545, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_S(s)), -4.372477858, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_P(s)),  2.6173133,   eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_P(s)), -4.12272377,  eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T(s)),  4.348710794, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T(s)), -6.764661235, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T5(s)), 4.831900882, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T5(s)),-7.247851323, eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_S(s), complex<double>(2.290345545, -4.372477858), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_P(s),  complex<double>(2.6173133, -4.1227237), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_T(s),  complex<double>(4.348710794, -6.764661235), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_T5(s), complex<double>(4.831900882, -7.247851323), eps);
 
             eps = 0.003;
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_V(s)),  7.842302994, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_V(s)), -3.810315056, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.F_V(s), complex<double>( 7.842302994, -3.810315056), eps);
 
             oo.set("cp-conjugate", "false");
             d = BToKDilepton<LowRecoil> (p, oo);
 
             // just form factors, so agreement must be great
-            eps = 1e-5;
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_A(s)),  2.803705304, 1e-14);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_A(s)),  6, 1e-14);
+            TEST_CHECK_RELATIVE_ERROR(d.F_A(s), complex<double>( 2.803705304, 6), 1e-14);
 
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_S(s)),  2.290345545, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_S(s)),  4.372477858, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_P(s)),  2.6173133,   eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_P(s)),  4.12272377,  eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T(s)),  4.348710794, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T(s)),  6.764661235, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_T5(s)), 4.831900882, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_T5(s)), 7.247851323, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.F_S(s), complex<double>( 2.290345545, 4.372477858), eps);
+            TEST_CHECK_RELATIVE_ERROR(d.F_P(s), complex<double>( 2.6173133, 4.12272377), eps);
+            TEST_CHECK_RELATIVE_ERROR(d.F_T(s), complex<double>( 4.348710794, 6.764661235), eps);
+            TEST_CHECK_RELATIVE_ERROR(d.F_T5(s), complex<double>(4.831900882, 7.247851323), eps);
 
             // difference seems to arise from Bobeth's computing of the Wilson coefficients
             // they differ slightly at large and low recoil
             eps = 0.003;
-            TEST_CHECK_RELATIVE_ERROR(std::real(d.F_V(s)), 7.842302994, eps);
-            TEST_CHECK_RELATIVE_ERROR(std::imag(d.F_V(s)), 4.216344837, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.F_V(s), complex<double>(7.842302994, 4.216344837), eps);
 
             TEST_CHECK_RELATIVE_ERROR(d.a_l(s), 3.242926113e-20 , eps);
             TEST_CHECK_RELATIVE_ERROR(d.b_l(s), 1.799235952e-20 , eps);
