@@ -138,6 +138,50 @@ namespace test
     } \
     while (false)
 
+#define TEST_CHECK_RELATIVE_ERROR_C(a, b, eps) \
+    do \
+    { \
+        const std::complex<double> a_val = (a); \
+        const std::complex<double> b_val = (b); \
+        const double a_val_r = std::real(a_val); \
+        const double a_val_i = std::imag(a_val); \
+        const double b_val_r = std::real(b_val); \
+        const double b_val_i = std::imag(b_val); \
+         \
+        if (std::sqrt(std::fabs(a_val_r)) < std::numeric_limits<double>::epsilon()) \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "Re('" #a "') has been evaluated to the zero within computational accuracy, result = " + stringify(a_val)); \
+         \
+        if (std::sqrt(std::fabs(b_val_r)) < std::numeric_limits<double>::epsilon()) \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "Re('" #b "') has been evaluated to the zero within computational accuracy, result = " + stringify(a_val)); \
+         \
+        if (std::sqrt(std::fabs(std::imag(a_val))) < std::numeric_limits<double>::epsilon()) \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "Im('" #a "') has been evaluated to the zero within computational accuracy, result = " + stringify(a_val)); \
+         \
+        if (std::sqrt(std::fabs(std::imag(b_val))) < std::numeric_limits<double>::epsilon()) \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "Im('" #b "') has been evaluated to the zero within computational accuracy, result = " + stringify(a_val)); \
+         \
+        if (not (((std::abs((a_val_r - b_val_r) / a_val_r)) <= eps) && ((std::abs((a_val_r - b_val_r) / b_val_r)) <= eps))) \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                                          "One relative error of the real part of '" #a "' = '" + stringify(a_val_r, 16u) + \
+                                          "' and '" #b "' = '" + stringify(b_val_r, 16u) + \
+                                          "' is greater than " + stringify(eps, 16u) + ". The results are " + \
+                                          stringify(std::abs((a_val_r - b_val_r) / a_val_r)) + " and " + \
+                                          stringify(std::abs((a_val_r - b_val_r) / b_val_r), 16u)); \
+         \
+        if (not (((std::abs((a_val_i - b_val_i) / a_val_i)) <= eps) && ((std::abs((a_val_i - b_val_i) / b_val_i)) <= eps))) \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                                          "One relative error of the imaginary part of '" #a "' = '" + stringify(a_val_i, 16u) + \
+                                          "' and '" #b "' = '" + stringify(b_val_i, 16u) + \
+                                          "' is greater than " + stringify(eps, 16u) + ". The results are " + \
+                                          stringify(std::abs((a_val_i - b_val_i) / a_val_i)) + " and " + \
+                                          stringify(std::abs((a_val_i - b_val_i) / b_val_i), 16u)); \
+    } \
+    while (false)
+
 #define TEST_CHECK_NO_THROW(expression) \
     do \
     { \

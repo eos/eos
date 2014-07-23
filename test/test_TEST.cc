@@ -18,6 +18,7 @@
  */
 
 #include <test/test.hh>
+#include <eos/utils/complex.hh>
 
 #include <cmath>
 
@@ -91,3 +92,21 @@ class RelativeErrorTest :
             TEST_CHECK_THROWS(TestCaseFailedException, TEST_CHECK_RELATIVE_ERROR(-0.1, 0.0, 0.2));
         }
 } relative_error_test;
+
+class RelativeErrorComplexTest :
+    public TestCase
+{
+    public:
+        RelativeErrorComplexTest() :
+            TestCase("relative_error_complex_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            complex<double> x(1.0, 2.0);
+            TEST_CHECK_NO_THROW(TEST_CHECK_RELATIVE_ERROR_C(x, complex<double>(1.03, 2.1), 0.1));
+            TEST_CHECK_THROWS(TestCaseFailedException, TEST_CHECK_RELATIVE_ERROR_C(x, complex<double>(1.15, 2.1), 0.1));
+            TEST_CHECK_THROWS(TestCaseFailedException, TEST_CHECK_RELATIVE_ERROR_C(x, complex<double>(1.0, 2.5), 0.1));
+        }
+} relative_error_complex_test;
