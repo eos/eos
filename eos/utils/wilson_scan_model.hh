@@ -28,7 +28,7 @@ namespace eos
     class WilsonScanComponent :
         public virtual ModelComponent<components::DeltaB1>
     {
-        private:
+        protected:
             /* QCD parameters */
             UsedParameter _alpha_s_Z__deltab1;
             UsedParameter _mu_b__deltab1;
@@ -88,10 +88,20 @@ namespace eos
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
-            /* b->s Wilson coefficients */
+            /*! b->s Wilson coefficients */
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const bool & cp_conjugate) const;
     };
 
+    class ConstrainedWilsonScanComponent : public WilsonScanComponent
+    {
+    public:
+        ConstrainedWilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+    };
+
+    /*!
+     * A model with all possible operators; their Wilson coefficients
+     * are allowed to have arbitrary values.
+     */
     class WilsonScanModel :
         public Model,
         public SMComponent<components::CKM>,
@@ -101,6 +111,26 @@ namespace eos
         public:
             WilsonScanModel(const Parameters &, const Options &);
             virtual ~WilsonScanModel();
+
+            static std::shared_ptr<Model> make(const Parameters &, const Options &);
+    };
+
+    /*!
+     * Special case of @see WilsonScanModel with C_S = - C_P, C'_S = C'_P, and C_T = C_T5 = 0.
+     *
+     * As shown in arXiv:1407.7044 eq. (8), the Wilson coefficients are not
+     * independent if new physics is well above the electro-weak scale,
+     * respects the SM gauge symmetry, and only dim. 6 operators contribute.
+     */
+    class ConstrainedWilsonScanModel :
+        public Model,
+        public SMComponent<components::CKM>,
+        public SMComponent<components::QCD>,
+        public ConstrainedWilsonScanComponent
+    {
+        public:
+            ConstrainedWilsonScanModel(const Parameters &, const Options &);
+            virtual ~ConstrainedWilsonScanModel();
 
             static std::shared_ptr<Model> make(const Parameters &, const Options &);
     };
