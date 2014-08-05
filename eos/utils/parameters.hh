@@ -237,6 +237,11 @@ namespace eos
             ///@name Access
             ///@{
             /*!
+             * Remove a parameter from the set of used ids.
+             */
+            void drop(const Parameter::Id & id);
+
+            /*!
              * Add a given parameter id to our list of used ids.
              *
              * @param id   The parameter id that we use.

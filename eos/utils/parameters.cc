@@ -477,6 +477,12 @@ namespace eos
     }
 
     void
+    ParameterUser::drop(const Parameter::Id & id)
+    {
+        _ids.erase(id);
+    }
+
+    void
     ParameterUser::uses(const Parameter::Id & id)
     {
         _ids.insert(id);
