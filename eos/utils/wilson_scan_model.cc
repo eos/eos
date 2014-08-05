@@ -37,6 +37,9 @@ namespace eos
     {
         complex<double> polar(const Parameter & abs, const Parameter & arg) { return std::polar(abs(), arg()); }
         complex<double> cartesian(const Parameter & re, const Parameter & im) { return complex<double>(re(), im()); }
+        complex<double> polar_negative(const Parameter & abs, const Parameter & arg) { return std::polar(abs(), arg() + M_PI); }
+        complex<double> cartesian_negative(const Parameter & re, const Parameter & im) { return complex<double>(-re(), -im()); }
+        complex<double> zero() { return complex<double>(0.0, 0.0); }
     }
 
     /* b->s Wilson coefficients */
@@ -260,6 +263,36 @@ namespace eos
         return result;
     }
 
+    ConstrainedWilsonScanComponent::ConstrainedWilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
+        WilsonScanComponent<components::DeltaBS1>(p, o, u)
+    {
+        _cT = std::bind(&wcimplementation::zero);
+        _cT5 = std::bind(&wcimplementation::zero);
+
+        if ("polar" == o.get("scan-mode", "polar"))
+        {
+            _cP = std::bind(&wcimplementation::polar_negative, _abs_cS, _arg_cS);
+            _cPprime = std::bind(&wcimplementation::polar, _abs_cSprime, _arg_cSprime);
+            u.drop(_abs_cP.id()); u.drop(_arg_cP.id());
+            u.drop(_abs_cPprime.id()); u.drop(_arg_cPprime.id());
+            u.drop(_abs_cT.id()); u.drop(_arg_cT.id());
+            u.drop(_abs_cT5.id()); u.drop(_arg_cT5.id());
+        }
+        else if ("cartesian" == o.get("scan-mode", "polar"))
+        {
+            _cP = std::bind(&wcimplementation::cartesian_negative, _re_cS, _im_cS);
+            _cPprime = std::bind(&wcimplementation::cartesian, _re_cSprime, _im_cSprime);
+            u.drop(_re_cP.id()); u.drop(_im_cP.id());
+            u.drop(_re_cPprime.id()); u.drop(_im_cPprime.id());
+            u.drop(_re_cT.id()); u.drop(_im_cT.id());
+            u.drop(_re_cT5.id()); u.drop(_im_cT5.id());
+        }
+        else
+        {
+            throw InternalError("scan-mode = '" + stringify(o.get("scan-mode", "polar")) + "' is not a valid scan mode for ConstrainedWilsonScanModel");
+        }
+    }
+
     WilsonScanModel::WilsonScanModel(const Parameters & parameters, const Options & options) :
         SMComponent<components::CKM>(parameters, *this),
         SMComponent<components::QCD>(parameters, *this),
@@ -276,5 +309,23 @@ namespace eos
     WilsonScanModel::make(const Parameters & parameters, const Options & options)
     {
         return std::shared_ptr<Model>(new WilsonScanModel(parameters, options));
+    }
+
+    ConstrainedWilsonScanModel::ConstrainedWilsonScanModel(const Parameters & parameters, const Options & options) :
+        SMComponent<components::CKM>(parameters, *this),
+        SMComponent<components::QCD>(parameters, *this),
+        ConstrainedWilsonScanComponent(parameters, options, *this),
+        WilsonScanComponent<components::DeltaBU1>(parameters, options, *this)
+    {
+    }
+
+    ConstrainedWilsonScanModel::~ConstrainedWilsonScanModel()
+    {
+    }
+
+    std::shared_ptr<Model>
+    ConstrainedWilsonScanModel::make(const Parameters & parameters, const Options & options)
+    {
+        return std::shared_ptr<Model>(new ConstrainedWilsonScanModel(parameters, options));
     }
 }

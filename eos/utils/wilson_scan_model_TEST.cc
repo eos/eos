@@ -18,10 +18,13 @@
  */
 
 #include <test/test.hh>
+#include <eos/utils/complex.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/wilson_scan_model.hh>
 
+#include <algorithm>
 #include <cmath>
+#include <list>
 
 using namespace test;
 using namespace eos;
@@ -52,18 +55,22 @@ class MakeTest :
 
         virtual void run() const
         {
-            try
+            std::list<std::string> models = {"WilsonScan", "ConstrainedWilsonScan"};
+            for (const auto & name : models)
             {
-                std::shared_ptr<Model> m = Model::make("WilsonScan", reference_parameters(), Options());
-            }
-            catch (NoSuchModelError &)
-            {
-                TEST_CHECK_FAILED("Model::make does not know the model 'WilsonScan'");
-            }
-            catch (...)
-            {
-                throw;
-                TEST_CHECK_FAILED("Unknown Exception while making 'WilsonScan'");
+                try
+                {
+                    std::shared_ptr<Model> m = Model::make(name, reference_parameters(), Options());
+                }
+                catch (NoSuchModelError &)
+                {
+                    TEST_CHECK_FAILED("Model::make does not know the model '" + name + "'");
+                }
+                catch (...)
+                {
+                    throw;
+                    TEST_CHECK_FAILED("Unknown Exception while making '" + name + "'");
+                }
             }
         }
 } wsm_make_test;
@@ -294,3 +301,173 @@ class WilsonCoefficientsBToSTest :
             }
         }
 } wilson_coefficients_b_to_s_test;
+
+class ConstrainedWilsonScanModelTest:
+    public TestCase
+{
+    public:
+        ConstrainedWilsonScanModelTest() :
+            TestCase("constrained_wilson_scan_model_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const double eps = 1e-15;
+
+            /* Vary parameters that should be ignored */
+            {
+                Parameters p = Parameters::Defaults();
+                Options o;
+                o.set("scan-mode", "cartesian");
+                ConstrainedWilsonScanModel model(p, o);
+
+                p["Re{c7}"] = 1.008;
+                p["Re{cS}"] = 42;
+                p["Re{cP}"] = 100;
+                p["Im{cS'}"] = -12;
+                p["Im{cP'}"] = -135;
+                p["Re{cT}"] = 2.0;
+                p["Re{cT5}"] = -43.0;
+
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
+
+                TEST_CHECK_RELATIVE_ERROR(std::real(wc.c7()), 1.008, eps);
+
+                /* C_P should be ignored, and always equal -C_S */
+                TEST_CHECK_RELATIVE_ERROR(std::real(wc.cS()), 42, eps);
+                TEST_CHECK_RELATIVE_ERROR(std::real(wc.cP()), -42, eps);
+
+                TEST_CHECK_RELATIVE_ERROR(imag(wc.cSprime()), -12, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(wc.cPprime()), -12, eps);
+
+                /* C_T and C_T5 vanish */
+                TEST_CHECK_NEARLY_EQUAL(std::real(wc.cT()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT()), 0.0, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(std::real(wc.cT5()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT5()), 0.0, eps);
+
+                /* Used parameters registered */
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Re{cS}"].id()) != std::end(model));
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Im{cS}"].id()) != std::end(model));
+
+                std::list<Parameter::Id> unused_ids = {
+                        p["Re{cP}"].id(),
+                        p["Im{cP}"].id(),
+                        p["Re{cP'}"].id(),
+                        p["Im{cP'}"].id(),
+                        p["Re{cT}"].id(),
+                        p["Im{cT}"].id(),
+                        p["Re{cT5}"].id(),
+                        p["Im{cT5}"].id(),
+                };
+                for (auto & id : model)
+                {
+                    TEST_CHECK(std::find(unused_ids.begin(), unused_ids.end(), id) == unused_ids.end());
+                }
+            }
+
+            /* polar parametrisation */
+            {
+                Parameters p = Parameters::Defaults();
+                Options o;
+                o.set("scan-mode", "polar");
+                ConstrainedWilsonScanModel model(p, o);
+
+                p["Abs{c7}"] = 1.008;
+                p["Abs{cS}"] = 42;
+                p["Arg{cS}"] = 0.5;
+                p["Abs{cP}"] = 100;
+                p["Abs{cS'}"] = 3.2;
+                p["Arg{cS'}"] = 1.2;
+                p["Abs{cP'}"] = 35;
+                p["Arg{cP'}"] = -0.2;
+                p["Abs{cT}"] = 2.0;
+                p["Abs{cT5}"] = -43.0;
+
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
+
+                TEST_CHECK_RELATIVE_ERROR(abs(wc.c7()), 1.008, eps);
+
+                /* C_P should be ignored, and always equal -C_S */
+                TEST_CHECK_RELATIVE_ERROR(abs(wc.cS()), 42, eps);
+                TEST_CHECK_RELATIVE_ERROR(abs(wc.cP()), 42, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(wc.cP()), -real(wc.cS()), eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(wc.cP()), -imag(wc.cS()), eps);
+
+                TEST_CHECK_RELATIVE_ERROR(abs(wc.cSprime()), 3.2, eps);
+                TEST_CHECK_RELATIVE_ERROR(arg(wc.cSprime()), 1.2, eps);
+                TEST_CHECK_RELATIVE_ERROR(abs(wc.cPprime()), 3.2, eps);
+                TEST_CHECK_RELATIVE_ERROR(arg(wc.cPprime()), 1.2, eps);
+
+                /* C_T and C_T5 vanish */
+                TEST_CHECK_NEARLY_EQUAL(std::real(wc.cT()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT()), 0.0, eps);
+
+                TEST_CHECK_NEARLY_EQUAL(std::real(wc.cT5()), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT5()), 0.0, eps);
+
+                /* Used parameters registered */
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Abs{cS}"].id()) != std::end(model));
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Arg{cS}"].id()) != std::end(model));
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Re{cS}"].id())  == std::end(model));
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Im{cS}"].id())  == std::end(model));
+
+                std::list<Parameter::Id> unused_ids = {
+                    p["Abs{cP}"].id(),
+                    p["Arg{cP}"].id(),
+                    p["Abs{cP'}"].id(),
+                    p["Arg{cP'}"].id(),
+                    p["Abs{cT}"].id(),
+                    p["Arg{cT}"].id(),
+                    p["Abs{cT5}"].id(),
+                    p["Arg{cT5}"].id(),
+                };
+                for (auto & id : model)
+                {
+                    TEST_CHECK(std::find(unused_ids.begin(), unused_ids.end(), id) == unused_ids.end());
+                }
+            }
+
+            /* most parameters identical to the usual WilsonScanModel */
+            {
+                Parameters p = Parameters::Defaults();
+                Options o;
+                o.set("scan-mode", "cartesian");
+
+                p["Re{c7}"] = 1.008;
+                p["Re{cS}"] = 42;   p["Re{cP}"] = -1.0 * p["Re{cS}"]();
+                p["Im{cS'}"] = -12; p["Im{cP'}"] = p["Im{cS'}"]();
+                p["Re{cT}"] = 0.0;  p["Im{cT}"] = 0.0;
+                p["Re{cT5}"] = 0.0; p["Im{cT5}"] = 0.0;
+
+                ConstrainedWilsonScanModel constrained_model(p, o);
+                WilsonScanModel unconstrained_model(p, o);
+
+                WilsonCoefficients<BToS> constrained_wc = constrained_model.wilson_coefficients_b_to_s(false);
+                WilsonCoefficients<BToS> unconstrained_wc = constrained_model.wilson_coefficients_b_to_s(false);
+
+                auto ux = unconstrained_wc._sm_like_coefficients.begin();
+                for (auto & x : constrained_wc._sm_like_coefficients)
+                {
+                    TEST_CHECK_EQUAL(x, *ux);
+                    ++ux;
+                }
+
+                ux = unconstrained_wc._primed_coefficients.begin();
+                for (auto & x : constrained_wc._primed_coefficients)
+                {
+                    TEST_CHECK_EQUAL(x, *ux);
+                    ++ux;
+                }
+
+                ux = unconstrained_wc._scalar_tensor_coefficients.begin();
+                for (auto & x : constrained_wc._scalar_tensor_coefficients)
+                {
+                    TEST_CHECK_EQUAL(x, *ux);
+                    ++ux;
+                }
+            }
+        }
+} constrained_wilson_scan_model_test;

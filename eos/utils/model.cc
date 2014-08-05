@@ -39,6 +39,7 @@ namespace eos
             std::make_pair("CKMScan", &CKMScanModel::make),
             std::make_pair("SM", &StandardModel::make),
             std::make_pair("WilsonScan", &WilsonScanModel::make),
+            std::make_pair("ConstrainedWilsonScan", &ConstrainedWilsonScanModel::make),
         };
 
         auto i = model_makers.find(name);
