@@ -181,6 +181,13 @@ Experimental Results
         arXiv:1307.5025 [hep-ex]
 
 
+    CMS-LHCb:2013A
+
+        Combination of results on the rare decays $B^0_{(s)} \to \mu^+\mu^-$ from the CMS and LHCb experiments
+
+        CMS-PAS-BPH-13-007, LHCb-CONF-2013-012, CERN-LHCb-CONF-2013-012
+
+
     D0:2011A : Abazov, V.M. et al. [D0 Collaboration]
 
         Measurement of the CP-violating phase phi^J/psiphi_s using the flavor-tagged
@@ -284,6 +291,7 @@ Experimental Results
        JHEP 1406 (2014) 133
 
        arXiv:1403.8044 [hep-ex]
+
 
     LHCb:2014B : Aaij, R. et al. [LHCb Collaboration]
 

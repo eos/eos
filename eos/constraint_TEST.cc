@@ -344,6 +344,10 @@ class ConstraintTest :
                     // B^0_s -> mu^+ mu^-
                     "B^0_s->mu^+mu^-::BR@LHCb-2013D",
 
+                    // CMS + LHCb
+                    // B^0_s -> mu^+ mu^-
+                    "B^0_s->mu^+mu^-::BR@CMS-LHCb-2013",
+
                     /* Theory Constraints */
                     /* 2013 */
                     // disabled, since it needs the option "form-factors" specified.
@@ -353,6 +357,8 @@ class ConstraintTest :
                     //"B->K^*::A_1@HPQCD-2013B",
                     //"B->K^*::A_12V@HPQCD-2013B",
 
+
+                    /* 2014 */
 
                     // LHCb
                     // B^+ -> K^+ mu^+ mu^-
