@@ -2137,83 +2137,6 @@ namespace eos
         };
         ///@}
 
-        /*
-         * Theoretical Constraints from e.g. Lattice QCD.
-         */
-
-        ///@name 2013
-        ///@{
-        /*
-         * Reproduced from [HPQCD:2013A].
-         */
-        static const MultivariateGaussianConstraintTemplate<3> B_to_K_fplus_17_to_23_HPQCD_2013A
-        {
-            {{ "B->K::f_+(s)", "B->K::f_+(s)", "B->K::f_+(s)" }},
-            {{ Kinematics{ { "s", 17.0 } }, Kinematics{ { "s", 20.0 } }, Kinematics{ { "s", 23.0 } },}},
-            {{ Options{ }, Options{ }, Options{ } }},
-            {{ 1.07617,   1.50728,   2.34247   }},
-            {{ 0.0265336, 0.0299249, 0.0696341 }},
-            {{ 0.0265336, 0.0299249, 0.0696341 }},
-            {{ +0.00, +0.00, +0.00 }}, // we assign no systematic uncertainty
-            {{
-                {{ 1.000000, 0.778675, 0.290551 }},
-                {{ 0.778675, 1.000000, 0.708433 }},
-                {{ 0.290551, 0.708433, 1.000000 }}
-            }},
-            0u
-        };
-
-        /*
-         * Reproduced from [HPQCD:2013B].
-         */
-        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_V_15_to_19dot21_HPQCD_2013B
-        {
-            {{ "B->K^*::V(s)", "B->K^*::V(s)" }},
-            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
-            {{ Options{ }, Options{ } }},
-            {{ 1.19122,   1.97758  }},
-            {{ 0.0999166, 0.112599 }},
-            {{ 0.0999166, 0.112599 }},
-            {{ +0.00, +0.00 }}, // we assign no systematic uncertainty
-            {{
-                {{ 1.000000, 0.461948 }},
-                {{ 0.461948, 1.000000 }},
-            }},
-            0u
-        };
-        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B
-        {
-            {{ "B->K^*::A_1(s)", "B->K^*::A_1(s)" }},
-            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
-            {{ Options{ }, Options{ } }},
-            {{ 0.515837,  0.644548  }},
-            {{ 0.0293675, 0.0195013 }},
-            {{ 0.0293675, 0.0195013 }},
-            {{ +0.00, +0.00 }}, // we assign no systematic uncertainty
-            {{
-                {{ 1.000000, 0.52072  }},
-                {{ 0.52072,  1.000000 }},
-            }},
-            0u
-        };
-        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B
-        {
-            {{ "B->K^*::A_12(s)", "B->K^*::A_12(s)" }},
-            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
-            {{ Options{ }, Options{ } }},
-            {{ 0.371041,  0.440076  }},
-            {{ 0.0306946, 0.0273783 }},
-            {{ 0.0306946, 0.0273783 }},
-            {{ +0.00, +0.00 }}, // we assign no systematic uncertainty
-            {{
-                {{ 1.000000, 0.204495 }},
-                {{ 0.204495, 1.000000 }},
-            }},
-        0u
-        };
-        ///@}
-
-
         ///@name 2014
         ///@{
         /*
@@ -2316,7 +2239,82 @@ namespace eos
             Options{ { "q", "u"  }, { "l", "mu" } },
             0.035, +0.035, -0.035, +0.02, -0.02
         };
+        ///@}
 
+        /*
+         * Theoretical Constraints from e.g. Lattice QCD.
+         */
+
+        ///@name 2013
+        ///@{
+        /*
+         * Reproduced from [HPQCD:2013A].
+         */
+        static const MultivariateGaussianConstraintTemplate<3> B_to_K_fplus_17_to_23_HPQCD_2013A
+        {
+            {{ "B->K::f_+(s)", "B->K::f_+(s)", "B->K::f_+(s)" }},
+            {{ Kinematics{ { "s", 17.0 } }, Kinematics{ { "s", 20.0 } }, Kinematics{ { "s", 23.0 } },}},
+            {{ Options{ }, Options{ }, Options{ } }},
+            {{ 1.07617,   1.50728,   2.34247   }},
+            {{ 0.0265336, 0.0299249, 0.0696341 }},
+            {{ 0.0265336, 0.0299249, 0.0696341 }},
+            {{ +0.00, +0.00, +0.00 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000000, 0.778675, 0.290551 }},
+                {{ 0.778675, 1.000000, 0.708433 }},
+                {{ 0.290551, 0.708433, 1.000000 }}
+            }},
+            0u
+        };
+
+        /*
+         * Reproduced from [HPQCD:2013B].
+         */
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_V_15_to_19dot21_HPQCD_2013B
+        {
+            {{ "B->K^*::V(s)", "B->K^*::V(s)" }},
+            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 1.19122,   1.97758  }},
+            {{ 0.0999166, 0.112599 }},
+            {{ 0.0999166, 0.112599 }},
+            {{ +0.00, +0.00 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000000, 0.461948 }},
+                {{ 0.461948, 1.000000 }},
+            }},
+            0u
+        };
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B
+        {
+            {{ "B->K^*::A_1(s)", "B->K^*::A_1(s)" }},
+            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.515837,  0.644548  }},
+            {{ 0.0293675, 0.0195013 }},
+            {{ 0.0293675, 0.0195013 }},
+            {{ +0.00, +0.00 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000000, 0.52072  }},
+                {{ 0.52072,  1.000000 }},
+            }},
+            0u
+        };
+        static const MultivariateGaussianConstraintTemplate<2> B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B
+        {
+            {{ "B->K^*::A_12(s)", "B->K^*::A_12(s)" }},
+            {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
+            {{ Options{ }, Options{ } }},
+            {{ 0.371041,  0.440076  }},
+            {{ 0.0306946, 0.0273783 }},
+            {{ 0.0306946, 0.0273783 }},
+            {{ +0.00, +0.00 }}, // we assign no systematic uncertainty
+            {{
+                {{ 1.000000, 0.204495 }},
+                {{ 0.204495, 1.000000 }},
+            }},
+        0u
+        };
         ///@}
     }
 
@@ -2674,13 +2672,6 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::P'_6[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_16_to_19_LHCb_2013C) },
             { "B^0_s->mu^+mu^-::BR@LHCb-2013D", make_factory(templates::Bzero_to_dimuon_LHCb_2013D) },
 
-            /* Theory Constraints */
-            { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
-
-            { "B->K^*::V@HPQCD-2013B", make_factory(templates::B_to_Kstar_V_15_to_19dot21_HPQCD_2013B) },
-            { "B->K^*::A_1@HPQCD-2013B", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B) },
-            { "B->K^*::A_12@HPQCD-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B) },
-
             /* 2014 */
             // LHCb
             { "B^+->K^+mu^+mu^-::BR[1.10,2.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_BR_1dot1_to_2_LHCb_2014) },
@@ -2694,6 +2685,13 @@ namespace eos
             { "B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_15_to_22_LHCb_2014) },
             { "B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_1dot1_to_6_LHCb_2014) },
             { "B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_15_to_22_LHCb_2014) },
+
+            /* Theory Constraints */
+            { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
+
+            { "B->K^*::V@HPQCD-2013B", make_factory(templates::B_to_Kstar_V_15_to_19dot21_HPQCD_2013B) },
+            { "B->K^*::A_1@HPQCD-2013B", make_factory(templates::B_to_Kstar_A1_15_to_19dot21_HPQCD_2013B) },
+            { "B->K^*::A_12@HPQCD-2013B", make_factory(templates::B_to_Kstar_A12_15_to_19dot21_HPQCD_2013B) },
         };
 
         auto f = factories.find(name);
