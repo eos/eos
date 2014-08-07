@@ -1877,6 +1877,14 @@ namespace eos
             Options{ { "q", "s"  }, { "l", "mu" } },
             0.0, 2.39876e-9, 2.10578, 3.02417
         };
+
+        static const AmorosoConstraintTemplate Bzero_to_dimuon_CMS_LHCb_2013A
+        {
+            "B_q->ll::BR@Untagged",
+            Kinematics(),
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            0.0, 3.28249e-10, 1.69302, 2.07566
+        };
         ///@}
 
         /*
@@ -2661,6 +2669,7 @@ namespace eos
 
             // CMS + LHCb
             { "B^0_s->mu^+mu^-::BR@CMS-LHCb-2013", make_factory(templates::B_s_to_dimuon_CMS_LHCb_2013A) },
+            { "B^0_d->mu^+mu^-::BR@CMS-LHCb-2013", make_factory(templates::Bzero_to_dimuon_CMS_LHCb_2013A) },
 
             // LHCb
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2013B) },

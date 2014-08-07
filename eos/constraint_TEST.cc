@@ -347,6 +347,7 @@ class ConstraintTest :
                     // CMS + LHCb
                     // B^0_s -> mu^+ mu^-
                     "B^0_s->mu^+mu^-::BR@CMS-LHCb-2013",
+                    "B^0_d->mu^+mu^-::BR@CMS-LHCb-2013",
 
                     /* Theory Constraints */
                     /* 2013 */
