@@ -1094,6 +1094,47 @@ namespace eos
                     &BToKstarDilepton<LowRecoil>::integrated_a_9,
                     std::make_tuple("s_min", "s_max")),
 
+            // Lambda_b -> Lambda l^+ l^-, Large Recoil
+            make_observable("Lambda_b->Lambdall::dBR/ds@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::differential_branching_ratio,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^l(s)@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_leptonic,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^h(s)@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_hadronic,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^c(s)@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_combined,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::F_0(s)@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::differential_fzero,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambdall::BR@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^l@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_leptonic,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^h@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_hadronic,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::A_FB^c@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_combined,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::F_0@LargeRecoil",
+                    &LambdaBToLambdaDilepton<LargeRecoil>::integrated_fzero,
+                    std::make_tuple("s_min", "s_max")),
+
             // Lambda_b -> Lambda l^+ l^-, Low Recoil
             make_observable("Lambda_b->Lambdall::dBR/ds@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::differential_branching_ratio,

@@ -28,7 +28,31 @@
 namespace eos
 {
     /*
-     * Decay: Lambda_b -> Lambda l^+ l^-, cf. [BFvD2014]
+     * Decay: Lambda_b -> Lambda l^+ l^- at large recoil, cf. [BFvD2014]
+     */
+    template <> class LambdaBToLambdaDilepton<LargeRecoil> :
+        public ParameterUser,
+        public PrivateImplementationPattern<LambdaBToLambdaDilepton<LargeRecoil>>
+    {
+        public:
+            LambdaBToLambdaDilepton(const Parameters &, const Options &);
+            ~LambdaBToLambdaDilepton();
+
+            double differential_branching_ratio(const double & s) const;
+            double differential_a_fb_leptonic(const double & s) const;
+            double differential_a_fb_hadronic(const double & s) const;
+            double differential_a_fb_combined(const double & s) const;
+            double differential_fzero(const double & s) const;
+
+            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double integrated_a_fb_leptonic(const double & s_min, const double & s_max) const;
+            double integrated_a_fb_hadronic(const double & s_min, const double & s_max) const;
+            double integrated_a_fb_combined(const double & s_min, const double & s_max) const;
+            double integrated_fzero(const double & s_min, const double & s_max) const;
+    };
+
+    /*
+     * Decay: Lambda_b -> Lambda l^+ l^- at low recoil, cf. [BFvD2014]
      */
     template <> class LambdaBToLambdaDilepton<LowRecoil> :
         public ParameterUser,
