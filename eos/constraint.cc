@@ -904,7 +904,7 @@ namespace eos
          * Data taken from [CDF:2011C]
          */
         // limit on BR B^0_s -> mu^+ mu^-
-        static const AmorosoLimitConstraintTemplate Bzero_to_dimuon_CDF_2011
+        static const AmorosoLimitConstraintTemplate B_s_to_dimuon_CDF_2011
         {
             "B_q->ll::BR@Untagged",
             Kinematics{ }, // kinematics are ignored
@@ -998,7 +998,7 @@ namespace eos
          * Data taken from [LHCb:2011A]
          */
         // limit on BR B^0_s -> mu^+ mu^-
-        static const AmorosoLimitConstraintTemplate Bzero_to_dimuon_LHCb_CMS_2011
+        static const AmorosoLimitConstraintTemplate B_s_to_dimuon_LHCb_CMS_2011
         {
             "B_q->ll::BR@Untagged",
             Kinematics{ },
@@ -1008,7 +1008,7 @@ namespace eos
         };
         // use the data from the Bayes-Heinrich method
         // the mode is not at zero, but around 3.1e-9
-        static const AmorosoTripleLimitConstraintTemplate Bzero_to_dimuon_LHCb_CMS_2011_Bayes
+        static const AmorosoTripleLimitConstraintTemplate B_s_to_dimuon_LHCb_CMS_2011_Bayes
         {
             "B_q->ll::BR@Untagged",
             Kinematics{ },
@@ -1650,7 +1650,7 @@ namespace eos
          * c) cdf(x_50) = 0.5
          * d) cdf(x_90) = 0.9
          */
-        static const AmorosoTripleLimitConstraintTemplate Bzero_to_dimuon_LHCb_2012
+        static const AmorosoTripleLimitConstraintTemplate B_s_to_dimuon_LHCb_2012
         {
             "B_q->ll::BR@Untagged",
             Kinematics(),
@@ -1666,7 +1666,7 @@ namespace eos
          * c) 90% in (1.3, 5.8)
          * d) pdf(1.3) = pdf(5.8) (smallest interval)
          */
-        static const AmorosoModeConstraintTemplate Bzero_to_dimuon_LHCb_Nov_2012
+        static const AmorosoModeConstraintTemplate B_s_to_dimuon_LHCb_Nov_2012
         {
             "B_q->ll::BR@Untagged",
             Kinematics(),
@@ -1847,7 +1847,7 @@ namespace eos
          * c) 68% in (2.1, 4.0)
          * d) pdf(2.1) = pdf(4.0) (smallest interval)
          */
-        static const AmorosoConstraintTemplate Bzero_to_dimuon_CMS_2013B
+        static const AmorosoConstraintTemplate B_s_to_dimuon_CMS_2013B
         {
             "B_q->ll::BR@Untagged",
             Kinematics(),
@@ -1870,7 +1870,7 @@ namespace eos
          * c) 68% in (2.2, 3.6)
          * d) pdf(2.2) = pdf(3.6) (smallest interval)
          */
-        static const AmorosoConstraintTemplate Bzero_to_dimuon_CMS_LHCb_2013A
+        static const AmorosoConstraintTemplate B_s_to_dimuon_CMS_LHCb_2013A
         {
             "B_q->ll::BR@Untagged",
             Kinematics(),
@@ -2151,7 +2151,7 @@ namespace eos
          * c) 68% in (1.90, 4.04)
          * d) pdf(1.90) = pdf(4.04) (smallest interval)
          */
-        static const AmorosoConstraintTemplate Bzero_to_dimuon_LHCb_2013D
+        static const AmorosoConstraintTemplate B_s_to_dimuon_LHCb_2013D
         {
             "B_q->ll::BR@Untagged",
             Kinematics(),
@@ -2523,7 +2523,7 @@ namespace eos
             { "B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2011", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_16_to_22dot86_CDF_2011) },
 
             // limit on B^0_s -> mu^+ mu^-
-            { "B^0_s->mu^+mu^-::BR_limit@CDF-2011", make_factory(templates::Bzero_to_dimuon_CDF_2011) },
+            { "B^0_s->mu^+mu^-::BR_limit@CDF-2011", make_factory(templates::B_s_to_dimuon_CDF_2011) },
             // LHCb
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2011) },
             { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_LHCb_2011) },
@@ -2537,8 +2537,8 @@ namespace eos
 
             // limit on B^0_s -> mu^+ mu^-
             // LHCb + CMS
-            { "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011", make_factory(templates::Bzero_to_dimuon_LHCb_CMS_2011) },
-            { "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011-Bayes", make_factory(templates::Bzero_to_dimuon_LHCb_CMS_2011_Bayes) },
+            { "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011", make_factory(templates::B_s_to_dimuon_LHCb_CMS_2011) },
+            { "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011-Bayes", make_factory(templates::B_s_to_dimuon_LHCb_CMS_2011_Bayes) },
 
             /* 2012 */
             // BaBar
@@ -2617,9 +2617,9 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::A_CP[14.18,16.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_CP_14dot18_to_16_LHCb_2012E) },
             { "B^0->K^*0mu^+mu^-::A_CP[16.00,20.00]@LHCb-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_CP_16_to_20_LHCb_2012E) },
             // limit on B^0_s -> mu^+ mu^-
-            { "B^0_s->mu^+mu^-::BR_limit@LHCb-2012", make_factory(templates::Bzero_to_dimuon_LHCb_2012) },
+            { "B^0_s->mu^+mu^-::BR_limit@LHCb-2012", make_factory(templates::B_s_to_dimuon_LHCb_2012) },
             // limit on B^0_s -> mu^+ mu^- of Nov 2012
-            { "B^0_s->mu^+mu^-::BR_limit@LHCb-Nov-2012", make_factory(templates::Bzero_to_dimuon_LHCb_Nov_2012) },
+            { "B^0_s->mu^+mu^-::BR_limit@LHCb-Nov-2012", make_factory(templates::B_s_to_dimuon_LHCb_Nov_2012) },
             // B^+ -> K^+ mu^+ mu^-
             { "B^+->K^+mu^+mu^-::BR[1.00,6.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_BR_1_to_6_LHCb_2012) },
             { "B^+->K^+mu^+mu^-::BR[14.18,16.00]@LHCb-2012", make_factory(templates::Bplus_to_Kplus_dimuon_BR_14dot18_to_16_LHCb_2012) },
@@ -2657,10 +2657,10 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_CMS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_CMS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19_CMS_2013A) },
-            { "B^0_s->mu^+mu^-::BR@CMS-2013B", make_factory(templates::Bzero_to_dimuon_CMS_2013B) },
+            { "B^0_s->mu^+mu^-::BR@CMS-2013B", make_factory(templates::B_s_to_dimuon_CMS_2013B) },
 
             // CMS + LHCb
-            { "B^0_s->mu^+mu^-::BR@CMS-LHCb-2013", make_factory(templates::Bzero_to_dimuon_CMS_LHCb_2013A) },
+            { "B^0_s->mu^+mu^-::BR@CMS-LHCb-2013", make_factory(templates::B_s_to_dimuon_CMS_LHCb_2013A) },
 
             // LHCb
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_LHCb_2013B) },
@@ -2699,7 +2699,7 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::P'_6[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_1_to_6_LHCb_2013C) },
             { "B^0->K^*0mu^+mu^-::P'_6[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_14dot18_to_16_LHCb_2013C) },
             { "B^0->K^*0mu^+mu^-::P'_6[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_6_16_to_19_LHCb_2013C) },
-            { "B^0_s->mu^+mu^-::BR@LHCb-2013D", make_factory(templates::Bzero_to_dimuon_LHCb_2013D) },
+            { "B^0_s->mu^+mu^-::BR@LHCb-2013D", make_factory(templates::B_s_to_dimuon_LHCb_2013D) },
 
             /* Theory Constraints */
             { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
