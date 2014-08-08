@@ -49,6 +49,15 @@ Experimental Results
         arxiv:0906.2177 [hep-ex]
 
 
+    BaBar:2010A : del Amo Sanchez, P. et al. [BABAR Collaboration]
+
+        Study of B -> pi l nu and B -> rho l nu Decays and Determination of |V_ub|
+
+        Phys. Rev. D83, 032007 (2011)
+
+        arxiv:1005.3288 [hep-ex]
+
+
     BaBar:2012A : Poireau, Vincent [BABAR Collaboration]
 
         Measurement of Branching Fractions and Rate Asymmetries in the Rare Decays B ---> K(*) l^+ l^-

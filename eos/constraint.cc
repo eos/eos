@@ -642,6 +642,36 @@ namespace eos
         };
         ///@}
 
+        ///@name 2010 Data
+        ///@{
+        /*
+         * BaBar Collaboration
+         *
+         * Data taken from [BaBar:2010A], Table X, p. 33.
+         */
+        static const GaussianConstraintTemplate Bzero_to_pi_l_nu_BR_0_to_4_BaBar_2010A
+        {
+            "B->pilnu::BR",
+            Kinematics{ { "s_min", 0.0 }, { "s_max", 4.0 } },
+            Options{ { "q", "d" } },
+            0.313e-4, +0.030e-4, -0.030e-4, +0.025e-4, -0.025e-4
+        };
+        static const GaussianConstraintTemplate Bzero_to_pi_l_nu_BR_4_to_8_BaBar_2010A
+        {
+            "B->pilnu::BR",
+            Kinematics{ { "s_min", 4.0 }, { "s_max", 8.0 } },
+            Options{ { "q", "d" } },
+            0.329e-4, +0.018e-4, -0.018e-4, +0.016e-4, -0.016e-4
+        };
+        static const GaussianConstraintTemplate Bzero_to_pi_l_nu_BR_8_to_12_BaBar_2010A
+        {
+            "B->pilnu::BR",
+            Kinematics{ { "s_min", 8.0 }, { "s_max", 12.0 } },
+            Options{ { "q", "d" } },
+            0.241e-4, +0.018e-4, -0.018e-4, +0.015e-4, -0.015e-4
+        };
+        ///@}
+
         ///@name 2011 Data
         ///@{
         // Use correlation of the results from Belle and BaBar on S_K and C_K
@@ -2485,6 +2515,13 @@ namespace eos
             // B->X_sgamma
             { "B->X_sgamma::BR[1.8]@Belle-2009B", make_factory(templates::B_to_Xs_gamma_BR_1dot8_Belle_2009B) },
             { "B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle-2009B", make_factory(templates::B_to_Xs_gamma_1dot8_Belle_2009B) },
+
+            /* 2010 */
+            // BaBar
+            { "B^0->pi^+lnu::BR[0.0,4.0]@BaBar-2010A", make_factory(templates::Bzero_to_pi_l_nu_BR_0_to_4_BaBar_2010A) },
+            { "B^0->pi^+lnu::BR[4.0,8.0]@BaBar-2010A", make_factory(templates::Bzero_to_pi_l_nu_BR_4_to_8_BaBar_2010A) },
+            { "B^0->pi^+lnu::BR[8.0,12.0]@BaBar-2010A", make_factory(templates::Bzero_to_pi_l_nu_BR_8_to_12_BaBar_2010A) },
+
             /* 2011 */
             // HFAG
             { "B^0->K^*0gamma::S_K+C_K@HFAG-2011", make_factory(templates::Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_HFAG_2011) },

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2014 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -114,6 +114,13 @@ class ConstraintTest :
                     // B -> X_s gamma
                     "B->X_sgamma::BR[1.8]@Belle-2009B",
                     "B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle-2009B",
+
+
+                    /* 2010 */
+                    // BaBar
+                    "B^0->pi^+lnu::BR[0.0,4.0]@BaBar-2010A",
+                    "B^0->pi^+lnu::BR[4.0,8.0]@BaBar-2010A",
+                    "B^0->pi^+lnu::BR[8.0,12.0]@BaBar-2010A",
 
 
                     /* 2011 */
