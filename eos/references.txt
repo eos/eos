@@ -149,6 +149,15 @@ Experimental Results
         arxiv:0907.1384
 
 
+    Belle:2010A : Ha, H. et al. [BELLE Collaboration]
+
+        Measurement of the decay B^0 -> pi^- l^+ nu and determination of |V_ub|
+
+        Phys. Rev. D83 071101 (2011)
+
+        arxiv:1012.0090 [hep-ex]
+
+
     CDF:2011A : Aaltonen, T. et al. [CDF Collaboration]
 
         Observation of the Baryonic Flavor-Changing Neutral Current Decay

@@ -710,6 +710,45 @@ namespace eos
                 {{ +0.1839, -0.0227, +0.2382, +0.2808, +0.0202, +1.0000 }}
             }}
         };
+
+        /*
+         * Belle Collaboration
+         *
+         * Data taken from [Belle:2010A], Table V, p. 14.
+         * We combine correlations between the statistic uncertainties and systematic uncertainties.
+         */
+        static const MultivariateGaussianConstraintTemplate<6> Bzero_to_pi_l_nu_BR_Belle_2010A
+        {
+            {{ "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR" }},
+            {{
+                 Kinematics{ { "s_min",  0.0 }, { "s_max",  2.0 } },
+                 Kinematics{ { "s_min",  2.0 }, { "s_max",  4.0 } },
+                 Kinematics{ { "s_min",  4.0 }, { "s_max",  6.0 } },
+                 Kinematics{ { "s_min",  6.0 }, { "s_max",  8.0 } },
+                 Kinematics{ { "s_min",  8.0 }, { "s_max", 10.0 } },
+                 Kinematics{ { "s_min", 10.0 }, { "s_max", 12.0 } }
+            }},
+            {{
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } }
+            }},
+            {{ 0.1173e-4, 0.1526e-4, 0.1213e-4, 0.1465e-4, 0.1473e-4, 0.1404e-4 }},
+            {{ 0.0,       0.0,       0.0,       0.0,       0.0,       0.0       }},
+            {{ 0.0,       0.0,       0.0,       0.0,       0.0,       0.0       }},
+            {{ 0.0219e-4, 0.0103e-4, 0.0105e-4, 0.0102e-4, 0.0108e-4, 0.0124e-4 }},
+            {{
+                {{ +1.0000, -0.2638, +0.1400, -0.0635, +0.1670, +0.1084 }},
+                {{ -0.2638, +1.0000, -0.1390, +0.3369, +0.0292, +0.0888 }},
+                {{ +0.1400, -0.1390, +1.0000, -0.0484, +0.2842, +0.2288 }},
+                {{ -0.0635, +0.3369, -0.0484, +1.0000, -0.1302, +0.1859 }},
+                {{ +0.1670, +0.0292, +0.2842, -0.1302, +1.0000, +0.1476 }},
+                {{ +0.1084, +0.0888, +0.2288, +0.1859, +0.1476, +1.0000 }}
+            }}
+        };
         ///@}
 
         ///@name 2011 Data
@@ -2562,6 +2601,8 @@ namespace eos
             { "B^0->pi^+lnu::BR[4.0,8.0]@BaBar-2010A", make_factory(templates::Bzero_to_pi_l_nu_BR_4_to_8_BaBar_2010A) },
             { "B^0->pi^+lnu::BR[8.0,12.0]@BaBar-2010A", make_factory(templates::Bzero_to_pi_l_nu_BR_8_to_12_BaBar_2010A) },
             { "B^0->pi^+lnu::BR@BaBar-2010B", make_factory(templates::Bzero_to_pi_l_nu_BR_BaBar_2010B) },
+            //Belle
+            { "B^0->pi^+lnu::BR@Belle-2010A", make_factory(templates::Bzero_to_pi_l_nu_BR_Belle_2010A) },
 
             /* 2011 */
             // HFAG

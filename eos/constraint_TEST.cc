@@ -124,6 +124,8 @@ class ConstraintTest :
 
                     "B^0->pi^+lnu::BR@BaBar-2010B",
 
+                    // Belle
+                    "B^0->pi^+lnu::BR@Belle-2010A",
 
                     /* 2011 */
 
