@@ -555,7 +555,7 @@ namespace eos
     {
         return integrate(std::function<double (const double &)>(
                     std::bind(&BToXsDilepton<HLMW2005>::differential_branching_ratio, this, std::placeholders::_1)),
-                32, s_min, s_max);
+                    s_min, s_max, 32);
     }
 
     Diagnostics

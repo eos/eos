@@ -26,6 +26,7 @@
 #include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/integrate.hh>
+#include <eos/utils/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/memoise.hh>
@@ -385,7 +386,7 @@ namespace eos
         {
             std::function<std::array<double, 12> (const double &)> integrand =
                     std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate(integrand, 64, s_min, s_max);
+            std::array<double, 12> integrated_angular_coefficients_array = integrate(integrand, s_min, s_max);
 
             return array_to_angular_coefficients(integrated_angular_coefficients_array);
         }
@@ -869,7 +870,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate(integrand, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -930,7 +931,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate(integrand, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -979,7 +980,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate(integrand, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -996,7 +997,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate(integrand, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1013,7 +1014,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate(integrand, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1093,7 +1094,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_1, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate(integrand, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1109,7 +1110,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_2, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate(integrand, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1125,7 +1126,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_3, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate(integrand, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1803,7 +1804,7 @@ namespace eos
         std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKDilepton<LowRecoil>::differential_branching_ratio),
                 this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max);
+        return integrate(integrand, s_min, s_max);
     }
 
     double
@@ -1813,9 +1814,9 @@ namespace eos
         std::function<double (const double &)> integrand = std::bind(&BToKDilepton<LowRecoil>::differential_branching_ratio,
                 this, std::placeholders::_1);
 
-        double br = integrate(integrand, 64, s_min, s_max);
+        double br = integrate(integrand, s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate(integrand, 64, s_min, s_max);
+        double br_bar = integrate(integrand, s_min, s_max);
 
         return (br + br_bar) / 2.0;
     }
@@ -1828,8 +1829,8 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate(num, s_min, s_max);
+        double denom_integrated = integrate(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -1843,13 +1844,13 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate(num, s_min, s_max);
+        double denom_integrated = integrate(denom, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate(num, 64, s_min, s_max);
-        denom_integrated += integrate(denom, 64, s_min, s_max);
+        num_integrated += integrate(num, s_min, s_max);
+        denom_integrated += integrate(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -1862,8 +1863,8 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate(num, s_min, s_max);
+        double denom_integrated = integrate(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -1877,13 +1878,13 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate(num, s_min, s_max);
+        double denom_integrated = integrate(denom, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate(num, 64, s_min, s_max);
-        denom_integrated += integrate(denom, 64, s_min, s_max);
+        num_integrated += integrate(num, s_min, s_max);
+        denom_integrated += integrate(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -1897,13 +1898,13 @@ namespace eos
         double br_electrons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
-            br_electrons = integrate(integrand, 64, s_min, s_max);
+            br_electrons = integrate(integrand, s_min, s_max);
         }
 
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            br_muons = integrate(integrand, 64, s_min, s_max);
+            br_muons = integrate(integrand, s_min, s_max);
         }
 
         // cf. [BHP2007], Eq. (4.10), p. 6
@@ -1918,9 +1919,9 @@ namespace eos
         std::function<double (const double &)> integrand = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double gamma = integrate(integrand, 64, s_min, s_max);
+        double gamma = integrate(integrand, s_min, s_max);
         _imp->cp_conjugate = true;
-        double gamma_bar = integrate(integrand, 64, s_min, s_max);
+        double gamma_bar = integrate(integrand, s_min, s_max);
 
         return (gamma - gamma_bar) / (gamma + gamma_bar);
     }

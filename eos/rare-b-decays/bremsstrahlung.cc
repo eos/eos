@@ -201,7 +201,7 @@ namespace eos
 
         return integrate(std::function<complex<double> (const double &)>(
                     std::bind(&Bremsstrahlung::tau_22, s_hat, std::placeholders::_1, z)),
-                128, s_hat + eps, 1.0);
+                    s_hat + eps, 1.0, 128);
     }
 
     complex<double>
@@ -214,7 +214,7 @@ namespace eos
 
         return integrate(std::function<complex<double> (const double &)>(
                     std::bind(&Bremsstrahlung::tau_27, s_hat, std::placeholders::_1, z)),
-                128, s_hat + eps, 1.0);
+                    s_hat + eps, 1.0, 128);
     }
 
     complex<double>
@@ -227,7 +227,7 @@ namespace eos
 
         return integrate(std::function<complex<double> (const double &)>(
                     std::bind(&Bremsstrahlung::tau_28, s_hat, std::placeholders::_1, z)),
-                128, s_hat + eps, 1.0);
+                    s_hat + eps, 1.0, 128);
     }
 
     complex<double>
@@ -240,6 +240,6 @@ namespace eos
 
         return integrate(std::function<complex<double> (const double &)>(
                     std::bind(&Bremsstrahlung::tau_29, s_hat, std::placeholders::_1, z)),
-                128, s_hat + eps, 1.0);
+                    s_hat + eps, 1.0, 128);
     }
 }

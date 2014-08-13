@@ -28,13 +28,10 @@
 
 namespace eos
 {
-    template <std::size_t k> std::array<double, k> integrate(const std::function<std::array<double, k> (const double &)> & f, unsigned n, const double & a, const double & b)
+    template <std::size_t k> std::array<double, k>
+    integrate(const std::function<std::array<double, k> (const double &)> & f, const double & a, const double & b, unsigned n)
     {
-        if (n & 0x1)
-            n += 1;
-
-        if (n < 16)
-            n = 16;
+        integration::validate(n);
 
         // step width
         double h = (b - a) / n;
@@ -110,9 +107,16 @@ namespace eos
                 std::cerr << "Q2 = " << Q2 << std::endl;
                 std::cerr << "Reintegrating with twice the number of data points" << std::endl;
 #endif
-                return integrate(f, 2 * n, a, b);
+                return integrate(f, a, b, 2 * n);
             }
         }
+    }
+
+    template <std::size_t k> std::array<double, k>
+    integrate(const std::function<std::array<double, k> (const double &)> & f,
+              const double & a, const double & b)
+    {
+        return integrate(f, a, b, integration::get_n());
     }
 }
 

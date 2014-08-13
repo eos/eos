@@ -18,6 +18,7 @@
  */
 
 #include <eos/utils/integrate.hh>
+#include <eos/utils/stringify.hh>
 #include <eos/utils/matrix.hh>
 
 #include <limits>
@@ -25,17 +26,18 @@
 
 namespace eos
 {
+    static unsigned default_number_of_integration_points = 64;
+
     using std::abs;
     using std::real;
     using std::imag;
 
-    double integrate(const std::function<double (const double &)> & f, unsigned n, const double & a, const double & b)
-    {
-        if (n & 0x1)
-            n += 1;
+    using integration::validate;
 
-        if (n < 16)
-            n = 16;
+    double
+    integrate(const std::function<double (const double &)> & f, const double & a, const double & b, unsigned n)
+    {
+        validate(n);
 
         double h = (b - a) / n;
         std::vector<double> y;
@@ -84,19 +86,22 @@ namespace eos
             std::cerr << "Q2 = " << Q2 << std::endl;
             std::cerr << "Reintegrating with twice the number of data points" << std::endl;
 #endif
-            result = integrate(f, 2 * n, a, b);
+            result = integrate(f, a, b, 2 * n);
         }
 
         return result;
     }
 
-    complex<double> integrate(const std::function<complex<double> (const double &)> & f, unsigned n, const double & a, const double & b)
+    double
+    integrate(const std::function<double (const double &)> & f, const double & a, const double & b)
     {
-        if (n & 0x1)
-            n += 1;
+        return integrate(f, a, b, default_number_of_integration_points);
+    }
 
-        if (n < 16)
-            n = 16;
+    complex<double>
+    integrate(const std::function<complex<double> (const double &)> & f, const double & a, const double & b, unsigned n)
+    {
+        validate(n);
 
         double h = (b - a) / n;
         std::vector<complex<double>> y;
@@ -145,9 +150,42 @@ namespace eos
             std::cerr << "Q2 = " << Q2 << std::endl;
             std::cerr << "Reintegrating with twice the number of data points" << std::endl;
 #endif
-            result = integrate(f, 2 * n, a, b);
+            result = integrate(f, a, b, 2 * n);
         }
 
         return result;
+    }
+
+    complex<double>
+    integrate(const std::function<complex<double> (const double &)> & f, const double & a, const double & b)
+    {
+        return integrate(f, a, b, default_number_of_integration_points);
+    }
+
+    namespace integration
+    {
+        InvalidNumberOfEvaluations::InvalidNumberOfEvaluations(unsigned n) :
+            Exception("Parameter 'n' must be a power of two and at least 16 (got " + stringify(n) + ")")
+        {
+        }
+
+        void
+        set_n(unsigned n)
+        {
+            validate(n);
+            default_number_of_integration_points = n;
+        }
+
+        unsigned
+        get_n()
+        {
+            return default_number_of_integration_points;
+        }
+
+        void validate(unsigned n)
+        {
+            if ( n < 16 || (n & (n - 1)) ) // n & (n - 1) is 0 (false) only if n is a power of two.
+                throw InvalidNumberOfEvaluations(n);
+        }
     }
 }

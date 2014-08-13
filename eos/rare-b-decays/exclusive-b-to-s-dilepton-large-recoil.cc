@@ -259,63 +259,62 @@ namespace eos
             // avoid NaN at u=1
             static const double u_min = 0.0;
             static const double u_max = 1.0 - 1e-5;
-            static const unsigned integration_points = 64;
 
             std::function<complex<double> (const double &)> f = std::bind(&HardScattering::j0_par, s, std::placeholders::_1, m_B(), a_1_par, a_2_par);
-            qcdf_0.j0_parallel = integrate(f, integration_points, u_min, u_max);
+            qcdf_0.j0_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, 0.0, m_B(), m_Kstar(), a_1_par, a_2_par);
-            qcdf_0.jtilde2_parallel = integrate(f, integration_points, u_min, u_max);
+            qcdf_0.jtilde2_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, m_c_pole, m_B(), m_Kstar(), a_1_par, a_2_par);
-            qcdf_c.jtilde2_parallel = integrate(f, integration_points, u_min, u_max);
+            qcdf_c.jtilde2_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, m_b_PS, m_B(), m_Kstar(), a_1_par, a_2_par);
-            qcdf_b.jtilde2_parallel = integrate(f, integration_points, u_min, u_max);
+            qcdf_b.jtilde2_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, 0.0, m_B(), mu(), a_1_par, a_2_par);
-            qcdf_0.j4_parallel = integrate(f, integration_points, u_min, u_max);
+            qcdf_0.j4_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, m_c_pole, m_B(), mu(), a_1_par, a_2_par);
-            qcdf_c.j4_parallel = integrate(f, integration_points, u_min, u_max);
+            qcdf_c.j4_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, m_b_PS, m_B(), mu(), a_1_par, a_2_par);
-            qcdf_b.j4_parallel = integrate(f, integration_points, u_min, u_max);
+            qcdf_b.j4_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j0_perp, s, std::placeholders::_1, m_B(), a_1_perp, a_2_perp);
-            qcdf_0.j0bar_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_0.j0bar_perp = integrate(f, u_min, u_max);
 
             qcdf_0.j0_perp = qcdf_0.j0_parallel;
 
             f = std::bind(&HardScattering::j1_perp, s, std::placeholders::_1, 0.0, m_B(), m_Kstar(), a_1_perp, a_2_perp);
-            qcdf_0.jtilde1_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_0.jtilde1_perp = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j1_perp, s, std::placeholders::_1, m_c_pole, m_B(), m_Kstar(), a_1_perp, a_2_perp);
-            qcdf_c.jtilde1_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_c.jtilde1_perp = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j1_perp, s, std::placeholders::_1, m_b_PS, m_B(), m_Kstar(), a_1_perp, a_2_perp);
-            qcdf_b.jtilde1_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_b.jtilde1_perp = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j5_perp, s, std::placeholders::_1, 0.0, m_B(), mu(), a_1_perp, a_2_perp);
-            qcdf_0.j5_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_0.j5_perp = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j5_perp, s, std::placeholders::_1, m_c_pole, m_B(), mu(), a_1_perp, a_2_perp);
-            qcdf_c.j5_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_c.j5_perp = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j5_perp, s, std::placeholders::_1, m_b_PS, m_B(), mu(), a_1_perp, a_2_perp);
-            qcdf_b.j5_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_b.j5_perp = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j6_perp, s, std::placeholders::_1, 0.0, m_B(), mu(), a_1_par, a_2_par);
-            qcdf_0.j6_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_0.j6_perp = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j6_perp, s, std::placeholders::_1, m_c_pole, m_B(), mu(), a_1_par, a_2_par);
-            qcdf_c.j6_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_c.j6_perp = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j6_perp, s, std::placeholders::_1, m_b_PS, m_B(), mu(), a_1_par, a_2_par);
-            qcdf_b.j6_perp = integrate(f, integration_points, u_min, u_max);
+            qcdf_b.j6_perp = integrate(f, u_min, u_max);
 
             std::function<double (const double &)> f_real = std::bind(&HardScattering::j7_perp, s, std::placeholders::_1, m_B(), a_1_perp, a_2_perp);
-            qcdf_0.j7_perp = integrate(f_real, integration_points, u_min, u_max);
+            qcdf_0.j7_perp = integrate(f_real, u_min, u_max);
 #endif
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15
@@ -638,7 +637,7 @@ namespace eos
         {
             std::function<std::array<double, 12> (const double &)> integrand =
                     std::bind(&Implementation<BToKstarDilepton<LargeRecoil>>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate(integrand, 64, s_min, s_max);
+            std::array<double, 12> integrated_angular_coefficients_array = integrate(integrand, s_min, s_max);
 
             return array_to_angular_coefficients(integrated_angular_coefficients_array);
         }
@@ -1616,25 +1615,25 @@ namespace eos
             static const double u_max = 1.0 - 1e-5;
 
             std::function<complex<double> (const double &)> f = std::bind(&HardScattering::j0_par, s, std::placeholders::_1, m_B(), a_1, a_2);
-            qcdf_0.j0_parallel = integrate(f, 64, u_min, u_max);
+            qcdf_0.j0_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, 0.0, m_B(), m_K(), a_1, a_2);
-            qcdf_0.jtilde2_parallel = integrate(f, 64, u_min, u_max);
+            qcdf_0.jtilde2_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, m_c_pole, m_B(), m_K(), a_1, a_2);
-            qcdf_c.jtilde2_parallel = integrate(f, 64, u_min, u_max);
+            qcdf_c.jtilde2_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j2_par, s, std::placeholders::_1, m_b_PS, m_B(), m_K(), a_1, a_2);
-            qcdf_b.jtilde2_parallel = integrate(f, 64, u_min, u_max);
+            qcdf_b.jtilde2_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, 0.0, m_B(), mu(), a_1, a_2);
-            qcdf_0.j4_parallel = integrate(f, 64, u_min, u_max);
+            qcdf_0.j4_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, m_c_pole, m_B(), mu(), a_1, a_2);
-            qcdf_c.j4_parallel = integrate(f, 64, u_min, u_max);
+            qcdf_c.j4_parallel = integrate(f, u_min, u_max);
 
             f = std::bind(&HardScattering::j4_par, s, std::placeholders::_1, m_b_PS, m_B(), mu(), a_1, a_2);
-            qcdf_b.j4_parallel = integrate(f, 64, u_min, u_max);
+            qcdf_b.j4_parallel = integrate(f, u_min, u_max);
 #endif
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15
@@ -2012,7 +2011,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(std::mem_fn(&BToKDilepton<LargeRecoil>::differential_branching_ratio),
                 this, std::placeholders::_1);
 
-        return integrate(f, 64, s_min, s_max);
+        return integrate(f, s_min, s_max);
     }
 
     double
@@ -2022,9 +2021,9 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&BToKDilepton<LargeRecoil>::differential_branching_ratio,
                 this, std::placeholders::_1);
 
-        double br = integrate(f, 64, s_min, s_max);
+        double br = integrate(f, s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate(f, 64, s_min, s_max);
+        double br_bar = integrate(f, s_min, s_max);
 
         return (br + br_bar) / 2.0;
     }
@@ -2036,9 +2035,9 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&BToKDilepton<LargeRecoil>::differential_branching_ratio,
                 this, std::placeholders::_1);
 
-        double br = integrate(f, 64, s_min, s_max);
+        double br = integrate(f, s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate(f, 64, s_min, s_max);
+        double br_bar = integrate(f, s_min, s_max);
 
         return (br - br_bar) / (br + br_bar);
     }
@@ -2051,8 +2050,8 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate(num, s_min, s_max);
+        double denom_integrated = integrate(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2066,13 +2065,13 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate(num, s_min, s_max);
+        double denom_integrated = integrate(denom, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate(num, 64, s_min, s_max);
-        denom_integrated += integrate(denom, 64, s_min, s_max);
+        num_integrated += integrate(num, s_min, s_max);
+        denom_integrated += integrate(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2086,8 +2085,8 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate(num, s_min, s_max);
+        double denom_integrated = integrate(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2101,13 +2100,13 @@ namespace eos
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate(num, s_min, s_max);
+        double denom_integrated = integrate(denom, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate(num, 64, s_min, s_max);
-        denom_integrated += integrate(denom, 64, s_min, s_max);
+        num_integrated += integrate(num, s_min, s_max);
+        denom_integrated += integrate(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2121,13 +2120,13 @@ namespace eos
         double br_electrons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
-            br_electrons = integrate(integrand, 64, s_min, s_max);
+            br_electrons = integrate(integrand, s_min, s_max);
         }
 
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            br_muons = integrate(integrand, 64, s_min, s_max);
+            br_muons = integrate(integrand, s_min, s_max);
         }
 
         // cf. [BHP2007], Eq. (4.10), p. 6
