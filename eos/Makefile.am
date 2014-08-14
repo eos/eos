@@ -1,4 +1,4 @@
-CLEANFILES = *~
+CLEANFILES = *~ *.pyc *.pyo
 MAINTAINERCLEANFILES = Makefile.in
 
 SUBDIRS = utils form-factors rare-b-decays b-decays .
@@ -20,8 +20,12 @@ include_eos_HEADERS = \
 	constraint.hh \
 	observable.hh
 
-TESTS = \
+compiled_tests = \
 	constraint_TEST
+
+check_PROGRAMS = $(compiled_tests)
+TESTS = $(compiled_tests)
+
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	$(top_builddir)/eos/utils/libeosutils.la \
@@ -30,6 +34,11 @@ LDADD = \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
 	$(top_builddir)/eos/libeos.la
 
-check_PROGRAMS = $(TESTS)
-
 constraint_TEST_SOURCES = constraint_TEST.cc
+
+if EOS_ENABLE_PYTHON
+TESTS += eos_py_interface_TEST.py
+TESTS_ENVIRONMENT = LD_LIBRARY_PATH=./.libs:$(LD_LIBRARY_PATH); export LD_LIBRARY_PATH;
+python_PYTHON = eos.py
+check_SCRIPTS = eos_py_interface_TEST.py
+endif

@@ -6,21 +6,26 @@
 aclocal.m4
 config/
 config.h
+config.h.in
 configure
 libtool
 Makefile
+Makefile.in
 stamp-h1
-*.in
 *.log
 *.cache
 *.status
 .deps/
+
+# configure output
+eos/eos.py
 
 # Results
 *.[oa]
 *.l[oa]
 *.so
 *.libs/
+*.pyc
 
 # Tests
 *_TEST

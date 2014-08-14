@@ -31,6 +31,7 @@ if test "x$with_hdf5" != x ; then
 	LDFLAGS="-L$with_hdf5/lib $LDFLAGS"
 fi
 dnl }}}
+
 dnl {{{ use Minuit2 path if supplied via --with-minuit2=
 AC_ARG_WITH([minuit2],
 	[AS_HELP_STRING([--with-minuit2], [used to find starting points for population montecarlo sampling])]
@@ -54,7 +55,7 @@ AC_ARG_WITH([pmc],
 	[])
 if test "x$with_pmc" == xno -o "x$with_pmc" == x ; then
 	AC_MSG_NOTICE(["Building EOS without PMC support"])
-else 
+else
 	if ! test -d "$with_pmc" ; then
 		AC_MSG_FAILURE(["$with_pmc is not a directory"])
 	fi
@@ -63,6 +64,23 @@ else
 	AC_DEFINE([EOS_ENABLE_PMC], 1, [Whether we use PMC])
 fi
 AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$with_pmc" != "xno" -a "x$with_pmc" != x])
+dnl }}}
+
+dnl {{{ enable python enabled via --enable-python
+AC_ARG_ENABLE([python],
+	[AS_HELP_STRING([--enable-python], [build a python interface using ctypes])]
+	[],
+	[])
+if test "x$enable_python" == xno -o "x$enable_python" == x ; then
+	AC_MSG_NOTICE(["Building EOS without python support"])
+elif test "x$enable_python" == xyes ; then
+	AM_PATH_PYTHON()
+	AC_DEFINE([EOS_ENABLE_PYTHON], 1, [include a python interface])
+	AC_OUTPUT(eos/eos.py)
+else
+	AC_MSG_FAILURE(["enable_python" must be "yes" or "no", not "$enable_python"])
+fi
+AM_CONDITIONAL([EOS_ENABLE_PYTHON], [test "x$enable_python" == xyes])
 dnl }}}
 
 dnl {{{ check for git HEAD

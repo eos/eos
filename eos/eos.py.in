@@ -1,0 +1,421 @@
+'''Python wrapper for the EOS library'''
+
+## Copyright (c) 2014 Stephan Jahn
+##
+## This file is part of the EOS project. EOS is free software;
+## you can redistribute it and/or modify it under the terms of the GNU General
+## Public License version 2, as published by the Free Software Foundation.
+##
+## EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+## WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+## FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+## details.
+##
+## You should have received a copy of the GNU General Public License along with
+## this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+## Place, Suite 330, Boston, MA  02111-1307  USA
+
+import ctypes as _c
+from numpy import ascontiguousarray as _mk_c_array, double as _np_double
+from copy import deepcopy as _cp
+
+_clibeos = _c.CDLL('libeos.so')
+
+##########################################
+# prototype C functions from 'libeos.so' #
+##########################################
+
+# Note "const" variables do not exist in python
+
+# Options:
+# --------
+
+# Note: "Options *" does not exist in plain C because "Options"
+# is a C++ class --> make it "void *"
+
+# Options * EOS_Options_new();
+_clibeos.EOS_Options_new.restype = _c.c_void_p
+
+# void EOS_Options_set(Options * options, const char * key, const char * value);
+_clibeos.EOS_Options_set.argtypes = (_c.c_void_p, _c.c_char_p, _c.c_char_p)
+
+# void EOS_Options_delete(Options * options);
+_clibeos.EOS_Options_delete.argtypes = (_c.c_void_p,)
+
+
+# LogLikelihood:
+# --------------
+
+# Note: "LogLikelihood *" does not exist in plain C because "LogLikelihood"
+# is a C++ class --> make it "void *"
+
+# LogLikelihood * EOS_LogLikelihood_new();
+_clibeos.EOS_LogLikelihood_new.restype = _c.c_void_p
+
+# void EOS_LogLikelihood_delete(LogLikelihood * ll);
+_clibeos.EOS_LogLikelihood_delete.argtypes = (_c.c_void_p,)
+
+# char * EOS_LogLikelihood_add_constraint_by_name
+#       (LogLikelihood * ll, const char * constraint_name, const Options options);
+_clibeos.EOS_LogLikelihood_add_constraint_by_name.restype = _c.c_void_p
+_clibeos.EOS_LogLikelihood_add_constraint_by_name.argtypes = (_c.c_void_p, _c.c_char_p, _c.c_void_p)
+
+
+# Analysis:
+# ---------
+
+# Note: "Analysis *" does not exist in plain C because "Analysis"
+# is a C++ class --> make it "void *"
+
+# Note: python ctypes does not have "double *" --> make it "void *"
+
+# Analysis * EOS_Analysis_new(LogLikelihood * log_likelihood);
+_clibeos.EOS_Analysis_new.restype = _c.c_void_p
+_clibeos.EOS_Analysis_new.argtypes = (_c.c_void_p,)
+
+# void EOS_Analysis_delete(Analysis * ana);
+_clibeos.EOS_Analysis_delete.argtypes = (_c.c_void_p,)
+
+# double EOS_Analysis_log_posterior(Analysis * ana, const double * par_vals);
+_clibeos.EOS_Analysis_log_posterior.restype = _c.c_double
+_clibeos.EOS_Analysis_log_posterior.argtypes = (_c.c_void_p, _c.c_void_p)
+
+# char * EOS_Analysis_info(Analysis * ana);
+_clibeos.EOS_Analysis_info.restype = _c.c_void_p
+_clibeos.EOS_Analysis_info.argtypes = (_c.c_void_p,)
+
+# char * EOS_Analysis_add_Flat(Analysis * ana, const char * par_name,
+_clibeos.EOS_Analysis_add_Flat.restype = _c.c_void_p
+_clibeos.EOS_Analysis_add_Flat.argtypes = (_c.c_void_p, _c.c_char_p,
+#                                    const double range_min, const double range_max,
+                                      _c.c_double,            _c.c_double,
+#                                    bool nuisance);
+                                _c.c_bool)
+
+# char * EOS_Analysis_add_Gauss(Analysis * ana, const char * par_name,
+_clibeos.EOS_Analysis_add_Gauss.restype = _c.c_void_p
+_clibeos.EOS_Analysis_add_Gauss.argtypes = (_c.c_void_p, _c.c_char_p,
+#                                     const double range_min, const double range_max,
+                                       _c.c_double,            _c.c_double,
+#                                     const double lower, const double central, const double upper,
+                                       _c.c_double,        _c.c_double,          _c.c_double,
+#                                     bool nuisance);
+                                 _c.c_bool)
+
+
+# char * EOS_Analysis_add_LogGamma(Analysis * ana, const char * par_name,
+_clibeos.EOS_Analysis_add_LogGamma.restype = _c.c_void_p
+_clibeos.EOS_Analysis_add_LogGamma.argtypes = (_c.c_void_p, _c.c_char_p,
+#                                        const double range_min, const double range_max,
+                                          _c.c_double,            _c.c_double,
+#                                        const double lower, const double central, const double upper,
+                                          _c.c_double,        _c.c_double,          _c.c_double,
+#                                        bool nuisance);
+                                    _c.c_bool)
+
+
+# Integrate:
+# ----------
+
+# void EOS_integration_set_n(unsigned n);
+_clibeos.EOS_integration_set_n.argtypes = (_c.c_uint,)
+
+# unsigned EOS_integration_get_n(void);
+_clibeos.EOS_integration_get_n.restype = _c.c_uint
+
+
+__version__ = '@GITHEAD@'
+
+class LogPrior(object):
+    "Log Prior distributions"
+    class _Prior(object):
+        '''Base container class for Log Priors.'''
+        def __init__(self, name, range_min, range_max):
+            self.name        = str(name)
+            self.range_min   = float(range_min)
+            self.range_max   = float(range_max)
+
+        def __repr__(self):
+            return 'Prior "' + self.__class__.__name__ + '" for parameter "' + self.name + '"'
+
+        def __eq__(self, other):
+            if type(self) != type(other):
+                return False
+            if self.name != other.name:
+                return False
+            if self.range_min != other.range_min:
+                return False
+            if self.range_max != other.range_max:
+                return False
+            return True
+
+        def __ne__(self, other):
+            return not (self == other)
+
+    class Flat(_Prior):
+        """A flat prior container.
+
+        :param name:
+
+            string; the parameter name registered in eos.
+
+        :param range_min, range_max:
+
+            float; the interval where the prior is non zero.
+
+        """
+        def __init__(self, name, range_min, range_max):
+            super(LogPrior.Flat, self).__init__(name, range_min, range_max)
+
+    class Gauss(_Prior):
+        """A Gaussian prior container.
+
+        :param name:
+
+            string; the parameter name registered in eos.
+
+        :param range_min, range_max:
+
+            float; the interval where the prior is non zero.
+
+        :param central:
+
+            float; the mean value.
+
+        :param lower, upper:
+
+            float; the point at one sigma distance from the mean value.
+
+        """
+        def __init__(self, name, range_min, range_max, lower, central, upper):
+            super(LogPrior.Gauss, self).__init__(name, range_min, range_max)
+            self.lower   = float(lower)
+            self.central = float(central)
+            self.upper   = float(upper)
+
+        def __eq__(self, other):
+            if not super(LogPrior.Gauss, self).__eq__(other):
+                return False
+            if self.lower != other.lower:
+                return False
+            if self.central != other.central:
+                return False
+            if self.upper != other.upper:
+                return False
+            return True
+
+    class LogGamma(_Prior):
+        """A Log-Gamma prior container.
+
+        :param name:
+
+            string; the parameter name registered in eos.
+
+        :param range_min, range_max:
+
+            float; the interval where the prior is non zero.
+
+        :param central:
+
+            float; the mean value.
+
+        :param lower, upper:
+
+            float; the point at one sigma distance from the mean value.
+
+        """
+        def __init__(self, name, range_min, range_max, lower, central, upper):
+            super(LogPrior.LogGamma, self).__init__(name, range_min, range_max)
+            self.lower   = float(lower)
+            self.central = float(central)
+            self.upper   = float(upper)
+
+        def __eq__(self, other):
+            if not super(LogPrior.LogGamma, self).__eq__(other):
+                return False
+            if self.lower != other.lower:
+                return False
+            if self.central != other.central:
+                return False
+            if self.upper != other.upper:
+                return False
+            return True
+
+class EOSError(Exception):
+    "Class for EOS specific exceptions."
+    pass
+
+def _eos_errorhandler(message_pointer):
+    """Error handler for EOS. Detect from a string if and which error
+    occurred and raise a python exception if neccessary.
+
+    :param message:
+
+        string; the error message on error, else empty.
+
+    """
+
+    # copy char array into a new python string
+    message = _c.cast(message_pointer, _c.c_char_p).value
+
+    # now memory can be freed. It is essential that the free function
+    # from the library that allocated the memory is called.
+    _clibeos.free(message_pointer)
+    if message == "":
+        return
+    if message.startswith("EOS: "):
+        raise EOSError(message[5:])
+    raise RuntimeError(message)
+
+class Analysis(object):
+    """eos::Analysis wrapped object. Callable that evaluates to the
+    unnormalized log_posterior of the specified model. For details
+    refer to the doxygen comments in analysis.hh.
+
+    :param constraints:
+
+        Iterable of strings; the names of constraints to be
+        considered.
+
+        Example:
+        ["B^0_s->mu^+mu^-::BR@CMS-2013B"]
+
+    :param priors:
+
+        Iterable of LogPrior containers: the names and prior descriptions
+        of the priors to be passed when an instance of this class is
+        called.
+
+        Example:
+        [eos.LogPrior.Flat("QCD::alpha_s(MZ)", range_min=-15, range_max=15),
+         eos.LogPrior.Gauss("CKM::A", range_min=1.0, range_max=2.834,
+                             lower=1.04-0.01, central=1.04, upper=1.04+0.01 ),
+         eos.LogPrior.LogGamma("QCD::mu_b", range_min=1, range_max=2,
+                                lower=1.5-0.2, central=1.5, upper=1.5+0.1 )]
+
+        .. note::
+
+            A parameter without a prior is kept constant at its default value.
+
+    :param options:
+
+        Dictionary with strings; global options to be set.
+        For valid options refer to the documentation of eos observables.
+
+        Example:
+        options = {"scan-mode": "cartesian"}
+
+    Instances are callable and return the log posterior. Call signature:
+    self(par_vals)
+
+    :param par_vals:
+
+        array-like of doubles; the parameters to evaluate the log
+        posterior for. The order is the same as passed via ``priors``.
+
+    """
+    def __init__(self, constraints, priors, options={}):
+        self._options = 0
+        self._log_likelihood = 0
+        self._analysis = 0
+        self._howmany = 0
+
+        self.constraints = _cp(constraints)
+        self.priors      = _cp(priors)
+        self.options     = _cp(options)
+
+        try:
+            # set options
+            self._options = _clibeos.EOS_Options_new()
+            for option in options.items():
+                _clibeos.EOS_Options_set(self._options, option[0], option[1])
+
+            # set up likelihood
+            self._log_likelihood = _clibeos.EOS_LogLikelihood_new()
+            for constraint in constraints:
+                _eos_errorhandler(
+                    _clibeos.EOS_LogLikelihood_add_constraint_by_name(
+                                   self._log_likelihood, constraint, self._options)
+                 )
+
+            # add priors
+            self._analysis = _clibeos.EOS_Analysis_new(self._log_likelihood)
+            for prior in priors:
+                self._howmany += 1
+                self._add_prior(prior)
+
+        # make sure that all C++ object are destroyed
+        except BaseException as error:
+            self._destroy()
+            raise error
+
+    def _add_prior(self, prior):
+        if type(prior) == LogPrior.Flat:
+            _eos_errorhandler(
+                _clibeos.EOS_Analysis_add_Flat(self._analysis, prior.name,
+                                               prior.range_min, prior.range_max,
+                                               False)
+            )
+        elif type(prior) == LogPrior.Gauss:
+            _eos_errorhandler(
+                _clibeos.EOS_Analysis_add_Gauss(self._analysis, prior.name,
+                                                prior.range_min, prior.range_max,
+                                                prior.lower, prior.central, prior.upper,
+                                                False)
+            )
+        elif type(prior) == LogPrior.LogGamma:
+            _eos_errorhandler(
+                _clibeos.EOS_Analysis_add_LogGamma(self._analysis, prior.name,
+                                                   prior.range_min, prior.range_max,
+                                                   prior.lower, prior.central, prior.upper,
+                                                   False)
+            )
+        else:
+            raise EOSError("Unknown prior type: " + str(type(prior)))
+
+    def _destroy(self):
+        if self._options:
+            _clibeos.EOS_Options_delete(self._options)
+            self._options = 0
+        if self._log_likelihood:
+            _clibeos.EOS_LogLikelihood_delete(self._log_likelihood)
+            self._log_likelihood = 0
+        if self._analysis:
+            _clibeos.EOS_Analysis_delete(self._analysis)
+            self._analysis = 0
+
+    def __del__(self):
+        self._destroy()
+
+    def __call__(self, par_vals):
+        par_vals = _mk_c_array(par_vals, dtype=_np_double)
+        assert (self._howmany,) == par_vals.shape, "`par_vals` must have shape %s, got %s." %((self._howmany,), par_vals.shape)
+        return _clibeos.EOS_Analysis_log_posterior(self._analysis, par_vals.ctypes.data)
+
+    def __repr__(self):
+        'Return a string describing the constraints, observables, and parameters.'
+        info_pointer = _clibeos.EOS_Analysis_info(self._analysis)
+        info = _c.cast(info_pointer, _c.c_char_p).value
+        _clibeos.free(info_pointer)
+        return info
+
+def set_integrate_n(n=64):
+    """Set the default number of evaluations EOS uses internally for numerical
+    integrations.
+
+    :param n:
+
+        Unsigned integer; the default number of points EOS uses for numerical
+        integration. Must be at least 16 and a power of two.
+
+    """
+    if n < 16 or n & (n - 1):
+        raise EOSError("``n`` must be at least 16 and a power of two (got %s)" % n)
+    _clibeos.EOS_integration_set_n(n)
+
+def get_integrate_n():
+    """Get the default number of evaluations EOS uses internally for numerical
+    integrations.
+
+    """
+    return _clibeos.EOS_integration_get_n()

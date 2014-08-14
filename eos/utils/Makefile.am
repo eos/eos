@@ -81,6 +81,13 @@ libeosutils_la_SOURCES += \
 libeosutils_la_LIBADD += -lpmc -ldl
 endif
 
+if EOS_ENABLE_PYTHON
+libeosutils_la_SOURCES += \
+	analysis_C.cc analysis_C.hh \
+	log_likelihood_C.cc log_likelihood_C.hh \
+	options_C.cc options_C.hh \
+	integrate_C.cc integrate_C.hh
+endif
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
