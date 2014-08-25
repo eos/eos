@@ -42,6 +42,27 @@ class PosteriorTest(unittest.TestCase):
         # should be a valid call
         ana = eos.Analysis(constraints, priors, options)
 
+    def test_constraint_options(self):
+        # add some local option
+        constraints = ["B->X_sll::BR[1.0,6.0]@Belle-2005A",
+                       ("B^0->K^*0gamma::S_K@Belle-2006", {"form-factors": "KMPW2010"}),
+                       "B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle-2008",]
+
+        # Parametereters to be scanned
+        priors = []
+        priors.append(  eos.LogPrior.Flat("QCD::alpha_s(MZ)", range_min=-15, range_max=15)  )
+        priors.append(  eos.LogPrior.Gauss("CKM::A", range_min=1.0, range_max=2.834,
+                                                lower=1.04-0.1, central=1.04, upper=1.04+0.01 ) )
+
+        global_options = {"scan-mode": "cartesian", "model": "WilsonScan", "form-factors": "BZ2004"}
+
+        # should be a valid call
+        ana = eos.Analysis(constraints, priors, global_options)
+
+        self.assertEqual(ana.constraints[0].options["form-factors"], "BZ2004")
+        self.assertEqual(ana.constraints[1].options["form-factors"], "KMPW2010")
+        self.assertEqual(ana.constraints[2].options["form-factors"], "BZ2004")
+
     def test_error_messages(self):
         params_OK       = [eos.LogPrior.Flat("QCD::alpha_s(MZ)", range_min=-15, range_max=15),
                            eos.LogPrior.Gauss("CKM::A", range_min=1.0, range_max=2.834,
@@ -129,14 +150,15 @@ class PriorTest(unittest.TestCase):
         options = {"scan-mode": "cartesian"}
         ana = eos.Analysis(constraints, priors, options)
 
-        self.assertEqual(ana.constraints, constraints)
+        for x,y in zip(ana.constraints, constraints):
+            self.assertEqual(x.name, y)
         self.assertEqual(ana.priors, priors)
-        self.assertEqual(ana.options, options)
+        self.assertEqual(ana.global_options, options)
 
         # deep copy, not just reference?
         self.assertNotEqual(id(ana.priors), id(priors))
         self.assertNotEqual(id(ana.constraints), id(constraints))
-        self.assertNotEqual(id(ana.options), id(options))
+        self.assertNotEqual(id(ana.global_options), id(options))
 
 class SetNumberOfIntegrationPointsTest(unittest.TestCase):
     def test_set_and_get_n(self):

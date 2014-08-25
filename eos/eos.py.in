@@ -126,6 +126,14 @@ _clibeos.EOS_integration_get_n.restype = _c.c_uint
 
 __version__ = '@GITHEAD@'
 
+class Constraint(object):
+    """Wrap constraints and its options."""
+    def __init__(self, name, **kwargs):
+        if type(name) != str:
+            raise TypeError("Expected a string, got " + str(name))
+        self.name = name
+        self.options = dict(**kwargs)
+
 class LogPrior(object):
     "Log Prior distributions"
     class _Prior(object):
@@ -275,10 +283,16 @@ class Analysis(object):
     :param constraints:
 
         Iterable of strings; the names of constraints to be
-        considered.
+        considered. If options particular to the constraint are needed, pass
+        them in the form (name, dict()).
 
-        Example:
+        Examples:
+
         ["B^0_s->mu^+mu^-::BR@CMS-2013B"]
+
+        or
+
+        [("B^0_s->mu^+mu^-::BR@CMS-2013B", {"form-factors": "KMPW2010", "foo": "bar"})]
 
     :param priors:
 
@@ -297,13 +311,14 @@ class Analysis(object):
 
             A parameter without a prior is kept constant at its default value.
 
-    :param options:
+    :param global_options:
 
         Dictionary with strings; global options to be set.
         For valid options refer to the documentation of eos observables.
+        Global options *never* override individual options passed with a constraint.
 
         Example:
-        options = {"scan-mode": "cartesian"}
+        global_options = {"scan-mode": "cartesian"}
 
     Instances are callable and return the log posterior. Call signature:
     self(par_vals)
@@ -314,28 +329,40 @@ class Analysis(object):
         posterior for. The order is the same as passed via ``priors``.
 
     """
-    def __init__(self, constraints, priors, options={}):
-        self._options = 0
+    def __init__(self, constraints, priors, global_options={}):
         self._log_likelihood = 0
         self._analysis = 0
         self._howmany = 0
 
-        self.constraints = _cp(constraints)
-        self.priors      = _cp(priors)
-        self.options     = _cp(options)
+        self.priors = _cp(priors)
+        self.global_options = _cp(global_options)
 
+        self.constraints = []
+        for c in constraints:
+            try:
+                self.constraints.append(Constraint(c))
+            except TypeError:
+                self.constraints.append(Constraint(c[0], **c[1]))
+
+        self._options = []
         try:
-            # set options
-            self._options = _clibeos.EOS_Options_new()
-            for option in options.items():
-                _clibeos.EOS_Options_set(self._options, option[0], option[1])
-
             # set up likelihood
             self._log_likelihood = _clibeos.EOS_LogLikelihood_new()
-            for constraint in constraints:
+
+            for constraint in self.constraints:
+                # add global options to constraint options.
+                # local options take precedence.
+                for k, v in self.global_options.items():
+                    constraint.options.setdefault(k, v)
+
+                # copy over options from python to C
+                self._options.append(_clibeos.EOS_Options_new())
+                for option in constraint.options.items():
+                    _clibeos.EOS_Options_set(self._options[-1], option[0], option[1])
+
                 _eos_errorhandler(
                     _clibeos.EOS_LogLikelihood_add_constraint_by_name(
-                                   self._log_likelihood, constraint, self._options)
+                                   self._log_likelihood, constraint.name, self._options[-1])
                  )
 
             # add priors
@@ -374,9 +401,10 @@ class Analysis(object):
             raise EOSError("Unknown prior type: " + str(type(prior)))
 
     def _destroy(self):
-        if self._options:
-            _clibeos.EOS_Options_delete(self._options)
-            self._options = 0
+        for i, o in enumerate(self._options):
+            if o:
+                _clibeos.EOS_Options_delete(o)
+                self._options[i] = 0
         if self._log_likelihood:
             _clibeos.EOS_LogLikelihood_delete(self._log_likelihood)
             self._log_likelihood = 0
