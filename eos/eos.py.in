@@ -42,6 +42,20 @@ _clibeos.EOS_Options_set.argtypes = (_c.c_void_p, _c.c_char_p, _c.c_char_p)
 # void EOS_Options_delete(Options * options);
 _clibeos.EOS_Options_delete.argtypes = (_c.c_void_p,)
 
+# Kinematics:
+# -----------
+
+# Note: "Kinematics *" does not exist in plain C because "Kinematics"
+# is a C++ class --> make it "void *"
+
+# Kinematics * EOS_Kinematics_new();
+_clibeos.EOS_Kinematics_new.restype = _c.c_void_p
+
+# void EOS_Kinematics_set(Kinematics * options, const char * key, const double value);
+_clibeos.EOS_Kinematics_set.argtypes = (_c.c_void_p, _c.c_char_p, _c.c_double)
+
+# void EOS_Kinematics_delete(Kinematics * options);
+_clibeos.EOS_Kinematics_delete.argtypes = (_c.c_void_p,)
 
 # LogLikelihood:
 # --------------
@@ -60,6 +74,15 @@ _clibeos.EOS_LogLikelihood_delete.argtypes = (_c.c_void_p,)
 _clibeos.EOS_LogLikelihood_add_constraint_by_name.restype = _c.c_void_p
 _clibeos.EOS_LogLikelihood_add_constraint_by_name.argtypes = (_c.c_void_p, _c.c_char_p, _c.c_void_p)
 
+# char * EOS_LogLikelihood_add_gaussian_constraint(LogLikelihood * ll, const char * observable,
+#                                                  const double min, const double central,
+#                                                  const double max, const unsigned number_of_observations,
+#                                                  const Kinematics * kinematics, const Options * options);
+_clibeos.EOS_LogLikelihood_add_gaussian_constraint.restype = _c.c_void_p
+_clibeos.EOS_LogLikelihood_add_gaussian_constraint.argtypes = (_c.c_void_p, _c.c_void_p,
+                                                               _c.c_double, _c.c_double,
+                                                               _c.c_double, _c.c_uint,
+                                                               _c.c_void_p, _c.c_void_p)
 
 # Analysis:
 # ---------
@@ -133,6 +156,44 @@ class Constraint(object):
             raise TypeError("Expected a string, got " + str(name))
         self.name = name
         self.options = dict(**kwargs)
+
+    def add(self, log_likelihood, options):
+        _eos_errorhandler(
+            _clibeos.EOS_LogLikelihood_add_constraint_by_name(log_likelihood, self.name, options))
+
+    def __repr__(self):
+        return self.__class__.__name__ + ': "' + self.name + '" with options ' + str(self.options)
+
+class ManualConstraint(Constraint):
+    def __init__(self, observable, low, central, high, nobs, kinematics, **kwargs):
+        super(ManualConstraint, self).__init__(observable, **kwargs)
+        self.low = low
+        self.central = central
+        self.high = high
+        self.kinematics = kinematics
+        self.nobs = bool(nobs)
+
+        self._kinematics = _clibeos.EOS_Kinematics_new()
+        for k,v in self.kinematics.iteritems():
+            _clibeos.EOS_Kinematics_set(self._kinematics, k, v)
+
+    def add(self, log_likelihood, options):
+        _eos_errorhandler(
+            _clibeos.EOS_LogLikelihood_add_gaussian_constraint(
+                log_likelihood, self.name, self.low, self.central, self.high, self.nobs,
+                self._kinematics, options))
+
+    def _destroy(self):
+        if self._kinematics:
+            _clibeos.EOS_Kinematics_delete(self._kinematics)
+            self._kinematics = 0
+
+    def __del__(self):
+        self._destroy()
+
+    def __repr__(self):
+        return self.__class__.__name__ + ' "' + self.name + ('" = %g +%g -%g' % (self.low, self.central, self.high)) \
+               + ' with ' + str(self.kinematics) + ' and options ' + str(self.options)
 
 class LogPrior(object):
     "Log Prior distributions"
@@ -283,16 +344,18 @@ class Analysis(object):
     :param constraints:
 
         Iterable of strings; the names of constraints to be
-        considered. If options particular to the constraint are needed, pass
-        them in the form (name, dict()).
+        considered. If options particular to the constraint are
+        needed, pass them in the form (name, dict()). To create a
+        constraint manually, pass the (observable name, (min, central,
+        max), number_of_observations, {kinematics}, {options}), where
+        ``number_of_observations`` is simplified to 0 (theory
+        constraint) or 1 (experimental constraint).
 
-        Examples:
+        An example will all valid forms:
 
-        ["B^0_s->mu^+mu^-::BR@CMS-2013B"]
-
-        or
-
-        [("B^0_s->mu^+mu^-::BR@CMS-2013B", {"form-factors": "KMPW2010", "foo": "bar"})]
+        ["B^0_s->mu^+mu^-::BR@CMS-2013B",
+         ("B^0_s->mu^+mu^-::BR@CMS-2013B", {"form-factors": "KMPW2010", "foo": "bar"}),
+         ("B->Kll::BR@LowRecoil", (min, central, max), 1, {"s_min": 15, "s_max": 16}, {"form-factors": "KMPW2010"})]
 
     :param priors:
 
@@ -338,13 +401,21 @@ class Analysis(object):
         self.global_options = _cp(global_options)
 
         self.constraints = []
-        for c in constraints:
-            try:
-                self.constraints.append(Constraint(c))
-            except TypeError:
-                self.constraints.append(Constraint(c[0], **c[1]))
-
         self._options = []
+
+        for c in constraints:
+            if not hasattr(c, "__iter__"):
+                # single string
+                self.constraints.append(Constraint(c))
+            else:
+                if len(c) == 2:
+                    self.constraints.append(Constraint(c[0], **c[1]))
+                elif len(c) == 5:
+                    self.constraints.append(ManualConstraint(c[0], c[1][0], c[1][1], c[1][2], c[2], c[3], **c[-1]))
+                    xx = self.constraints[-1]
+                else:
+                    raise TypeError("Invalid constraint specification: " + str(c))
+
         try:
             # set up likelihood
             self._log_likelihood = _clibeos.EOS_LogLikelihood_new()
@@ -359,11 +430,7 @@ class Analysis(object):
                 self._options.append(_clibeos.EOS_Options_new())
                 for option in constraint.options.items():
                     _clibeos.EOS_Options_set(self._options[-1], option[0], option[1])
-
-                _eos_errorhandler(
-                    _clibeos.EOS_LogLikelihood_add_constraint_by_name(
-                                   self._log_likelihood, constraint.name, self._options[-1])
-                 )
+                constraint.add(self._log_likelihood, self._options[-1])
 
             # add priors
             self._analysis = _clibeos.EOS_Analysis_new(self._log_likelihood)
@@ -371,7 +438,7 @@ class Analysis(object):
                 self._howmany += 1
                 self._add_prior(prior)
 
-        # make sure that all C++ object are destroyed
+        # make sure that all C++ objects are destroyed
         except BaseException as error:
             self._destroy()
             raise error
@@ -401,6 +468,7 @@ class Analysis(object):
             raise EOSError("Unknown prior type: " + str(type(prior)))
 
     def _destroy(self):
+        # set to and check for zero to avoid double free if _destroy called twice
         for i, o in enumerate(self._options):
             if o:
                 _clibeos.EOS_Options_delete(o)

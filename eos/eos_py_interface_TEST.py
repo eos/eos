@@ -27,7 +27,7 @@ class PosteriorTest(unittest.TestCase):
                        "B^0->K^*0gamma::S_K@Belle-2006",
                        "B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle-2008"]
 
-        # Parametereters to be scanned
+        # Parameters to be scanned
         priors = []
         priors.append(  eos.LogPrior.Flat("QCD::alpha_s(MZ)", range_min=-15, range_max=15)  )
         priors.append(  eos.LogPrior.Gauss("CKM::A", range_min=1.0, range_max=2.834,
@@ -46,13 +46,14 @@ class PosteriorTest(unittest.TestCase):
         # add some local option
         constraints = ["B->X_sll::BR[1.0,6.0]@Belle-2005A",
                        ("B^0->K^*0gamma::S_K@Belle-2006", {"form-factors": "KMPW2010"}),
-                       "B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle-2008",]
+                       "B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle-2008",
+                       ("B->K^*ll::BRavg@LowRecoil", (2e-7, 3e-7, 4e-7), 1, {"s_min": 15., "s_max": 16.}, {"form-factors": "KMPW2010", "q": "d", "l": "mu"})]
 
-        # Parametereters to be scanned
+        # Parameters to be scanned
         priors = []
-        priors.append(  eos.LogPrior.Flat("QCD::alpha_s(MZ)", range_min=-15, range_max=15)  )
-        priors.append(  eos.LogPrior.Gauss("CKM::A", range_min=1.0, range_max=2.834,
-                                                lower=1.04-0.1, central=1.04, upper=1.04+0.01 ) )
+        priors.append(eos.LogPrior.Flat("QCD::alpha_s(MZ)", range_min=-15, range_max=15))
+        priors.append(eos.LogPrior.Gauss("CKM::A", range_min=1.0, range_max=2.834,
+                                         lower=1.04-0.1, central=1.04, upper=1.04+0.01))
 
         global_options = {"scan-mode": "cartesian", "model": "WilsonScan", "form-factors": "BZ2004"}
 
