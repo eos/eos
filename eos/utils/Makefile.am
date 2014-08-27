@@ -84,6 +84,7 @@ endif
 if EOS_ENABLE_PYTHON
 libeosutils_la_SOURCES += \
 	analysis_C.cc analysis_C.hh \
+	kinematics_C.cc kinematics_C.hh \
 	log_likelihood_C.cc log_likelihood_C.hh \
 	options_C.cc options_C.hh \
 	integrate_C.cc integrate_C.hh
