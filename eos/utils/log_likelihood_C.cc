@@ -21,6 +21,32 @@
 
 #include <cstring>
 
+#define errorhandler(add_constraint_call) \
+    do \
+    { \
+        std::string s(""); \
+        try \
+        { \
+            add_constraint_call; \
+        } \
+        catch (eos::Exception & e) \
+        { \
+            s = "EOS: "; \
+            s += e.what(); \
+        } \
+        catch (...) \
+        { \
+            s = "Unknown Error"; \
+        } \
+        /* add "sizeof(char)" to "s.size()" to make sure that there is memory for "NULL" at end of string \
+         * Note: A std::string is NOT neccessarily NULL-terminated \
+         */ \
+        char * c = static_cast<char *>(malloc(s.size() + sizeof(char))); \
+        strcpy(c, s.c_str()); \
+        return c; \
+    } \
+    while (false)
+
 extern "C" {
     using namespace eos;
 
@@ -42,25 +68,21 @@ extern "C" {
                                              const char * constraint_name,
                                              const Options * options)
     {
-        std::string s("");
-        try
-        {
-            ll->add(Constraint::make(constraint_name, *options));
-        }
-        catch (eos::Exception & e)
-        {
-            s  = "EOS: ";
-            s += e.what();
-        }
-        catch (...)
-        {
-            s = "Unknown error";
-        }
-        /* add "sizeof(char)" to "s.size()" to make sure that there is memory for "NULL" at end of string
-         * Note: A std::string is NOT neccessarily NULL-terminated
-         */
-        auto c = static_cast<char *>(malloc(s.size() + sizeof(char)));
-        strcpy(c, s.c_str());
-        return c;
+        errorhandler(ll->add(Constraint::make(constraint_name, *options)));
+    }
+
+    char *
+    EOS_LogLikelihood_add_gaussian_constraint(LogLikelihood * ll, const char * observable,
+                                              const double min, const double central,
+                                              const double max, const unsigned number_of_observations,
+                                              const Kinematics * kinematics, const Options * options)
+    {
+        errorhandler(
+                // create observable
+                auto o = Observable::make(observable, ll->parameters(), *kinematics, *options);
+                if (not o)
+                    throw ObservableNameError(std::string("Unknown observable: ") + observable);
+                ll->add(o, min, central, max, number_of_observations);
+                );
     }
 }
