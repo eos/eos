@@ -1044,7 +1044,7 @@ namespace eos
 
             virtual unsigned number_of_observations() const
             {
-                return n_;
+                return _number_of_observations;
             }
 
             virtual double sample(gsl_rng * rng) const
