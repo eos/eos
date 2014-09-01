@@ -776,7 +776,7 @@ namespace eos
             std::vector<double> weights;
             mutable std::vector<double> temp;
 
-            MixtureBlock(const std::vector<LogLikelihoodBlockPtr> & components, 
+            MixtureBlock(const std::vector<LogLikelihoodBlockPtr> & components,
                          const std::vector<double> & weights) :
                 components(components),
                 weights(weights),
@@ -1044,7 +1044,7 @@ namespace eos
 
             virtual unsigned number_of_observations() const
             {
-                return n_;
+                return _number_of_observations;
             }
 
             virtual double sample(gsl_rng * rng) const
@@ -1285,7 +1285,7 @@ namespace eos
     }
 
     LogLikelihoodBlockPtr
-    LogLikelihoodBlock::Mixture(const std::vector<LogLikelihoodBlockPtr> & components, 
+    LogLikelihoodBlock::Mixture(const std::vector<LogLikelihoodBlockPtr> & components,
                                 const std::vector<double> & weights)
     {
         if (components.size() != weights.size())

@@ -236,7 +236,7 @@ namespace eos
             const std::array<double, dim_> & sigma_stat_lo,
             const std::array<double, dim_> & sigma_sys,
             const std::array<std::array<double, dim_>, dim_> & correlation,
-            const unsigned & number_of_observations = 1u) :
+            const unsigned number_of_observations = dim_) :
             observables(observables),
             kinematics(kinematics),
             options(options),
@@ -276,7 +276,7 @@ namespace eos
                 }
             }
 
-            LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, this->means, variances, this->correlation);
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, this->means, variances, this->correlation, number_of_observations);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
@@ -2240,7 +2240,7 @@ namespace eos
                 {{ 1.000000, 0.204495 }},
                 {{ 0.204495, 1.000000 }},
             }},
-        0u
+            0u
         };
         ///@}
 

@@ -252,7 +252,7 @@ namespace eos
                     const unsigned & number_of_observations = 1u);
 
             // todo document
-            static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components, 
+            static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components,
                                                  const std::vector<double> & weights);
             /*!
              * Create a new LogLikelihoodBlock for n observables distributed
