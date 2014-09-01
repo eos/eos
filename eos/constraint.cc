@@ -1943,6 +1943,44 @@ namespace eos
         };
 
         /*
+         * Belle Collaboration
+         *
+         * Data taken from [Belle:2013A], Table XVI and XVII, pp. 37-38.
+         */
+        static const MultivariateGaussianConstraintTemplate<6> Bzero_to_pi_l_nu_BR_Belle_2013A
+        {
+            {{ "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR" }},
+            {{
+                 Kinematics{ { "s_min",  0.0 }, { "s_max",  2.0 } },
+                 Kinematics{ { "s_min",  2.0 }, { "s_max",  4.0 } },
+                 Kinematics{ { "s_min",  4.0 }, { "s_max",  6.0 } },
+                 Kinematics{ { "s_min",  6.0 }, { "s_max",  8.0 } },
+                 Kinematics{ { "s_min",  8.0 }, { "s_max", 10.0 } },
+                 Kinematics{ { "s_min", 10.0 }, { "s_max", 12.0 } }
+            }},
+            {{
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } }
+            }},
+            {{ 0.195e-4, 0.106e-4, 0.151e-4, 0.097e-4, 0.078e-4, 0.159e-4 }},
+            {{ 0.0,      0.0,      0.0,      0.0,      0.0,      0.0      }},
+            {{ 0.0,      0.0,      0.0,      0.0,      0.0,      0.0      }},
+            {{ 0.032e-4, 0.027e-4, 0.028e-4, 0.023e-4, 0.022e-4, 0.028e-4 }},
+            {{
+                {{ +1.000, -0.145, +0.010, -0.001, +0.000, +0.000 }},
+                {{ -0.145, +1.000, -0.100, +0.008, +0.000, +0.001 }},
+                {{ +0.010, -0.100, +1.000, -0.094, +0.003, -0.001 }},
+                {{ -0.001, +0.008, -0.094, +1.000, -0.078, +0.005 }},
+                {{ +0.000, +0.000, +0.003, -0.078, +1.000, -0.097 }},
+                {{ +0.000, +0.001, -0.001, +0.005, -0.097, +1.000 }}
+            }}
+        };
+
+        /*
          * CMS Collaboration
          *
          * Data taken from [CMS:2013B]
@@ -2767,6 +2805,8 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_ATLAS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_ATLAS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19_ATLAS_2013A) },
+            //Belle
+            { "B^0->pi^+lnu::BR@Belle-2013A", make_factory(templates::Bzero_to_pi_l_nu_BR_Belle_2013A) },
             // CMS
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_CMS_2013A) },
             { "B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CMS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_14dot18_to_16_CMS_2013A) },

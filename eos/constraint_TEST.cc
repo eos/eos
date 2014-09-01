@@ -294,6 +294,9 @@ class ConstraintTest :
                     "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@ATLAS-2013A",
                     "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@ATLAS-2013A",
 
+                    // Belle
+                    "B^0->pi^+lnu::BR@Belle-2013A",
+
                     // CMS
                     // B^0 -> K^*0 mu^+ mu^-
                     "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CMS-2013A",

@@ -158,6 +158,16 @@ Experimental Results
         arxiv:1012.0090 [hep-ex]
 
 
+    Belle:2013A : Sibidanov, A. et al. [BELLE Collaboration]
+
+        Study of Exclusive B -> X_u l nu Decays and Extraction of |V_ub| using
+        Full Reconstruction Tagging at the Belle Experiment
+
+        Phys.Rev. D88 (2013) 3, 032005
+
+        arXiv:1306.2781 [hep-ex]
+
+
     CDF:2011A : Aaltonen, T. et al. [CDF Collaboration]
 
         Observation of the Baryonic Flavor-Changing Neutral Current Decay
