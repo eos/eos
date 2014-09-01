@@ -199,10 +199,11 @@ class LogPrior(object):
     "Log Prior distributions"
     class _Prior(object):
         '''Base container class for Log Priors.'''
-        def __init__(self, name, range_min, range_max):
+        def __init__(self, name, range_min, range_max, nuisance=False):
             self.name        = str(name)
             self.range_min   = float(range_min)
             self.range_max   = float(range_max)
+            self.nuisance    = nuisance
 
         def __repr__(self):
             return 'Prior "' + self.__class__.__name__ + '" for parameter "' + self.name + '"'
@@ -215,6 +216,8 @@ class LogPrior(object):
             if self.range_min != other.range_min:
                 return False
             if self.range_max != other.range_max:
+                return False
+            if self.nuisance != other.nuisance:
                 return False
             return True
 
@@ -233,8 +236,8 @@ class LogPrior(object):
             float; the interval where the prior is non zero.
 
         """
-        def __init__(self, name, range_min, range_max):
-            super(LogPrior.Flat, self).__init__(name, range_min, range_max)
+        def __init__(self, name, range_min, range_max, **kwargs):
+            super(LogPrior.Flat, self).__init__(name, range_min, range_max, **kwargs)
 
     class Gauss(_Prior):
         """A Gaussian prior container.
@@ -256,8 +259,8 @@ class LogPrior(object):
             float; the point at one sigma distance from the mean value.
 
         """
-        def __init__(self, name, range_min, range_max, lower, central, upper):
-            super(LogPrior.Gauss, self).__init__(name, range_min, range_max)
+        def __init__(self, name, range_min, range_max, lower, central, upper, **kwargs):
+            super(LogPrior.Gauss, self).__init__(name, range_min, range_max, **kwargs)
             self.lower   = float(lower)
             self.central = float(central)
             self.upper   = float(upper)
@@ -293,8 +296,8 @@ class LogPrior(object):
             float; the point at one sigma distance from the mean value.
 
         """
-        def __init__(self, name, range_min, range_max, lower, central, upper):
-            super(LogPrior.LogGamma, self).__init__(name, range_min, range_max)
+        def __init__(self, name, range_min, range_max, lower, central, upper, **kwargs):
+            super(LogPrior.LogGamma, self).__init__(name, range_min, range_max, **kwargs)
             self.lower   = float(lower)
             self.central = float(central)
             self.upper   = float(upper)
@@ -343,19 +346,21 @@ class Analysis(object):
 
     :param constraints:
 
-        Iterable of strings; the names of constraints to be
+        Iterable; In the simplest case, the names of constraints to be
         considered. If options particular to the constraint are
         needed, pass them in the form (name, dict()). To create a
         constraint manually, pass the (observable name, (min, central,
         max), number_of_observations, {kinematics}, {options}), where
         ``number_of_observations`` is simplified to 0 (theory
-        constraint) or 1 (experimental constraint).
+        constraint) or 1 (experimental constraint). Alternatively, you
+        can pass an instance of Constraint directly.
 
         An example will all valid forms:
 
         ["B^0_s->mu^+mu^-::BR@CMS-2013B",
-         ("B^0_s->mu^+mu^-::BR@CMS-2013B", {"form-factors": "KMPW2010", "foo": "bar"}),
-         ("B->Kll::BR@LowRecoil", (min, central, max), 1, {"s_min": 15, "s_max": 16}, {"form-factors": "KMPW2010"})]
+         ("B^0->K^*0mu^+mu^-::P'_6[14.18,16.00]@LHCb-2013", {"form-factors": "KMPW2010", "foo": "bar"}),
+         ("B->Kll::BR@LowRecoil", (min, central, max), 1, {"s_min": 15, "s_max": 16}, {"form-factors": "KMPW2010"}),
+         Constraint("B->X_sll::BR[1.0,6.0]@BaBar-2004A")]
 
     :param priors:
 
@@ -404,7 +409,9 @@ class Analysis(object):
         self._options = []
 
         for c in constraints:
-            if not hasattr(c, "__iter__"):
+            if isinstance(c, Constraint):
+                self.constraints.append(c)
+            elif not hasattr(c, "__iter__"):
                 # single string
                 self.constraints.append(Constraint(c))
             else:
@@ -448,21 +455,21 @@ class Analysis(object):
             _eos_errorhandler(
                 _clibeos.EOS_Analysis_add_Flat(self._analysis, prior.name,
                                                prior.range_min, prior.range_max,
-                                               False)
+                                               prior.nuisance)
             )
         elif type(prior) == LogPrior.Gauss:
             _eos_errorhandler(
                 _clibeos.EOS_Analysis_add_Gauss(self._analysis, prior.name,
                                                 prior.range_min, prior.range_max,
                                                 prior.lower, prior.central, prior.upper,
-                                                False)
+                                                prior.nuisance)
             )
         elif type(prior) == LogPrior.LogGamma:
             _eos_errorhandler(
                 _clibeos.EOS_Analysis_add_LogGamma(self._analysis, prior.name,
                                                    prior.range_min, prior.range_max,
                                                    prior.lower, prior.central, prior.upper,
-                                                   False)
+                                                   prior.nuisance)
             )
         else:
             raise EOSError("Unknown prior type: " + str(type(prior)))

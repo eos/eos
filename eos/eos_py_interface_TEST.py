@@ -47,7 +47,8 @@ class PosteriorTest(unittest.TestCase):
         constraints = ["B->X_sll::BR[1.0,6.0]@Belle-2005A",
                        ("B^0->K^*0gamma::S_K@Belle-2006", {"form-factors": "KMPW2010"}),
                        "B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle-2008",
-                       ("B->K^*ll::BRavg@LowRecoil", (2e-7, 3e-7, 4e-7), 1, {"s_min": 15., "s_max": 16.}, {"form-factors": "KMPW2010", "q": "d", "l": "mu"})]
+                       ("B->K^*ll::BRavg@LowRecoil", (2e-7, 3e-7, 4e-7), 1, {"s_min": 15., "s_max": 16.}, {"form-factors": "KMPW2010", "q": "d", "l": "mu"}),
+                       eos.Constraint("B^0_s->mu^+mu^-::BR@CMS-2013B")]
 
         # Parameters to be scanned
         priors = []
@@ -160,6 +161,14 @@ class PriorTest(unittest.TestCase):
         self.assertNotEqual(id(ana.priors), id(priors))
         self.assertNotEqual(id(ana.constraints), id(constraints))
         self.assertNotEqual(id(ana.global_options), id(options))
+
+    def test_nuisance(self):
+        gauss_prior_description = eos.LogPrior.Gauss("QCD::mu_t", range_min=1.0, range_max=2.834,
+                                                           lower=1.04-0.01, central=1.04, upper=1.04+0.01,
+                                                           nuisance=True)
+        flat_prior_description = eos.LogPrior.Flat("Re{C9}", range_min=-15, range_max=15)
+        self.assert_(gauss_prior_description.nuisance)
+        self.assertFalse(flat_prior_description.nuisance)
 
 class SetNumberOfIntegrationPointsTest(unittest.TestCase):
     def test_set_and_get_n(self):
