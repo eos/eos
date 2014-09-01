@@ -2025,9 +2025,6 @@ namespace eos
          *
          * Data taken from [CMS:2013B]
          */
-        ///@name 2013
-        ///@{
-
         /* fit Amoroso to result assuming
          * a) cdf(0) = 0
          * b) mode = 3.0
@@ -2041,7 +2038,6 @@ namespace eos
             Options{ { "q", "s"  }, { "l", "mu" } },
             0.0, 1.9859633460e-9, 2.7971996021, 2.0218845762
         };
-        ///@}
 
         /*
          * LHCb Collaboration
