@@ -126,6 +126,7 @@ namespace eos
             static std::vector<ParameterDescription> read_descriptions(const hdf5::File & file, std::string data_set_base = "/descriptions");
 
             /*!
+<<<<<<< HEAD:eos/statistics/analysis.hh
              * Read the description part of chain's prerun from hdf5 file.
              *
              * @param file
@@ -144,11 +145,29 @@ namespace eos
             /*!
              * Calculate the p-value based on the @f$\chi^2 @f$
              * test statistic for fixed parameter_values
+=======
+             * Calculate two p values based on the @f$\chi^2 @f$
+             * test statistic for fixed parameter_values.
+             *
+             * The first is based on pulls, or significances,
+             * defined in units of Gaussian standard deviations. Their squared sum
+             * is a @f$\chi^2 @f$. The second uses the log-likelihood as a test statistic,
+             * and empirically generates data from the likelihood blocks to simulate the statistic's
+             * distribution and a p value. With N observations, this p value is transformed into a @f$\chi^2 @f$
+             * using the inverse cumulative of the @f$\chi^2 @f$ distribution with N degrees of freedom.
+             *
+             * Both @f$\chi^2 @f$ values are transformed into a p value through
+             * cumulative of the @f$\chi^2 @f$-distribution with (N-k) degrees-of-freedom,
+             * where N is the number of observations and k is the number of fitted parameters.
+             *
+>>>>>>> 40893a8... [utils] Improve Analysis.goodness_of_fit documentation and error messages:eos/utils/analysis.hh
              * @param parameter_values
-             * @param simulate if true, simulate data sets to estimate distribution of test statistic,
-             * else use the cumulative of the @f$\chi^2 @f$-distribution with (N-k) degrees-of-freedom,
-             * where N is the number of observations and k is the number of fitted parameters
+             * @param simulated_datasets The number of data sets used to estimate the distribution of log-likelihood test statistic.
+             * @param output_file If given, store pulls and @f$\chi^2 @f$ in an HDF5 file.
              * @return < @f$\chi^2 @f$, p>
+             *
+             * @note Nuisance parameters are assumed to have an informative prior counted as one @e observation.
+             *       They therefore cancel in computing the degrees of freedom.
              */
             std::pair<double, double>
             goodness_of_fit(const std::vector<double> & parameter_values, const unsigned & simulated_datasets, std::string output_file = "");
