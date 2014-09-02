@@ -284,7 +284,8 @@ namespace eos
                 if (parameter_values[i] < desc.min || parameter_values[i] > desc.max)
                 {
                     throw InternalError("Analysis::goodness_of_fit: parameter " + desc.parameter.name() +
-                        " out of bounds [" + stringify(desc.min) + ", " + stringify(desc.max) + "]");
+                        " out of bounds [" + stringify(desc.min) + ", " + stringify(desc.max) + "]: "
+                        + stringify(parameter_values[i]));
                 }
                 desc.parameter = parameter_values[i];
             }
@@ -320,7 +321,7 @@ namespace eos
             else
             {
                 Log::instance()->message("analysis.goodness_of_fit", ll_warning)
-                    << "Cannot compute p-value for negative dof. Need more constraints / less parameters";
+                    << "Cannot compute p-value for nonpositive dof (" << dof << "). Need more constraints / less parameters";
             }
 
             // p-value from the analytical, yet approximate \chi^2-distribution
@@ -338,7 +339,7 @@ namespace eos
             else
             {
                 Log::instance()->message("analysis.goodness_of_fit", ll_warning)
-                    << "Cannot compute p-value for negative dof_scan. Need more constraints / less parameters";
+                    << "Cannot compute p-value for nonpositive dof_scan (" << dof_scan << "). Need more constraints / less parameters";
 
             }
             /* calculate the significances */
