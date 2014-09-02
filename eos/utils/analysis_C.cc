@@ -18,8 +18,10 @@
  */
 
 #include <eos/utils/analysis_C.hh>
+#include <eos/utils/log.hh>
 
 #include <cstring>
+#include <iostream>
 #include <sstream>
 
 #define errorhandler(prior_constructor_call) \
@@ -69,18 +71,34 @@ extern "C" {
         ana = nullptr;
     }
 
-    double
-    EOS_Analysis_log_posterior(Analysis* ana, const double * par_vals)
+    char *
+    EOS_Analysis_add_Flat(Analysis * ana, const char * par_name,
+                          const double range_min, const double range_max,
+                          bool nuisance)
     {
-        unsigned j = 0;
-        for (auto & i : ana->parameter_descriptions())
-        {
-            Parameter p = i.parameter;
-            p = par_vals[j];
-            ++j;
-        }
-        // evaluate likelihood and prior; no NaN check --> to be done in python
-        return ana->log_posterior();
+        errorhandler(LogPriorPtr prior = LogPrior::Flat(ana->log_likelihood().parameters(), par_name,
+                                                        ParameterRange{range_min, range_max}));
+    }
+
+    char *
+    EOS_Analysis_add_Gauss(Analysis * ana, const char * par_name,
+                           const double range_min, const double range_max,
+                           const double lower, const double central, const double upper,
+                           bool nuisance)
+    {
+        errorhandler(LogPriorPtr prior = LogPrior::Gauss(ana->log_likelihood().parameters(), par_name,
+                                                         ParameterRange{range_min, range_max},
+                                                         lower, central, upper) );
+    }
+
+    char *
+    EOS_Analysis_add_LogGamma(Analysis * ana, const char * par_name,
+                              const double range_min, const double range_max,
+                              const double lower, const double central, const double upper,
+                              bool nuisance)
+    {
+        errorhandler(LogPriorPtr prior = LogPrior::LogGamma(ana->log_likelihood().parameters(), par_name,
+                                                            ParameterRange{range_min, range_max}, lower, central, upper) );
     }
 
     char *
@@ -131,32 +149,42 @@ extern "C" {
     }
 
     char *
-    EOS_Analysis_add_Flat(Analysis * ana, const char * par_name,
-                          const double range_min, const double range_max,
-                          bool nuisance)
+    EOS_Analysis_gof(Analysis * ana, const double * par_vals, const unsigned simulated_datasets)
     {
-        errorhandler(LogPriorPtr prior = LogPrior::Flat(ana->log_likelihood().parameters(), par_name,
-                                                        ParameterRange{range_min, range_max}));
+        Log::instance()->set_program_name("eos.py");
+        Log::instance()->set_log_level(ll_debug);
+
+        // catch the output
+        std::stringstream ostream;
+        Log::instance()->set_log_stream(&ostream);
+
+        // copy parameter values into vector
+        std::vector<double> par_vals_(par_vals, par_vals + ana->parameter_descriptions().size());
+
+        // ignore return value
+        ana->goodness_of_fit(par_vals_, simulated_datasets, "");
+
+        std::string s = ostream.str();
+
+        /* add "sizeof(char)" to "s.size()" to make sure that there is memory for "NULL" at end of string
+         * Note: A std::string is NOT neccessarily NULL-terminated
+         */
+        char * c = (char *) malloc(s.size() + sizeof(char));
+        strcpy(c, s.c_str());
+        return c;
     }
 
-    char *
-    EOS_Analysis_add_Gauss(Analysis * ana, const char * par_name,
-                           const double range_min, const double range_max,
-                           const double lower, const double central, const double upper,
-                           bool nuisance)
+    double
+    EOS_Analysis_log_posterior(Analysis* ana, const double * par_vals)
     {
-        errorhandler(LogPriorPtr prior = LogPrior::Gauss(ana->log_likelihood().parameters(), par_name,
-                                                         ParameterRange{range_min, range_max},
-                                                         lower, central, upper) );
-    }
-
-    char *
-    EOS_Analysis_add_LogGamma(Analysis * ana, const char * par_name,
-                              const double range_min, const double range_max,
-                              const double lower, const double central, const double upper,
-                              bool nuisance)
-    {
-        errorhandler(LogPriorPtr prior = LogPrior::LogGamma(ana->log_likelihood().parameters(), par_name,
-                                                            ParameterRange{range_min, range_max}, lower, central, upper) );
+        unsigned j = 0;
+        for (auto & i : ana->parameter_descriptions())
+        {
+            Parameter p = i.parameter;
+            p = par_vals[j];
+            ++j;
+        }
+        // evaluate likelihood and prior; no NaN check --> to be done in python
+        return ana->log_posterior();
     }
 }

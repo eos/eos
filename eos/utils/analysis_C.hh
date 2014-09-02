@@ -22,7 +22,7 @@
 
 #include <eos/utils/analysis.hh>
 
-/// C like interface to handle an Analysic object
+/// C like interface to handle an Analysis object
 extern "C" {
     using namespace eos;
 
@@ -31,19 +31,6 @@ extern "C" {
 
     /// destructor
     void EOS_Analysis_delete(Analysis * ana);
-
-    /*!
-     * Update parameter values in the underlying Parameters objects
-     * and evaluate the Analysis.log_posterior.
-     */
-    double EOS_Analysis_log_posterior(Analysis * ana, const double * par_vals);
-
-    /*!
-     * Get info about analysis object.
-     *
-     * @note The returned pointer must explicitly be deleted by using \c free.
-     */
-    char * EOS_Analysis_info(Analysis * ana);
 
     /*!
      * Analysis.add Flat Prior
@@ -72,6 +59,29 @@ extern "C" {
                                      const double range_min, const double range_max,
                                      const double lower, const double central, const double upper,
                                      bool nuisance);
+
+    /*!
+     * Analysis.goodness_of_fit
+     *
+     * @param par_vals Parameter values for gof is computed.
+     * @param simulated_datasets Number of simulated likelihoods.
+     * @return Log output that contains chi2, p values, significances, observable values etc.
+     * @note The returned pointer must explicitly be deleted by using \c free.
+     */
+    char * EOS_Analysis_gof(Analysis * ana, const double * par_vals, const unsigned simulated_datasets);
+
+    /*!
+     * Get info about analysis object.
+     *
+     * @note The returned pointer must explicitly be deleted by using \c free.
+     */
+    char * EOS_Analysis_info(Analysis * ana);
+
+    /*!
+     * Update parameter values in the underlying Parameters objects
+     * and evaluate the Analysis.log_posterior.
+     */
+    double EOS_Analysis_log_posterior(Analysis * ana, const double * par_vals);
 }
 
 #endif
