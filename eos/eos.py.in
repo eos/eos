@@ -99,14 +99,6 @@ _clibeos.EOS_Analysis_new.argtypes = (_c.c_void_p,)
 # void EOS_Analysis_delete(Analysis * ana);
 _clibeos.EOS_Analysis_delete.argtypes = (_c.c_void_p,)
 
-# double EOS_Analysis_log_posterior(Analysis * ana, const double * par_vals);
-_clibeos.EOS_Analysis_log_posterior.restype = _c.c_double
-_clibeos.EOS_Analysis_log_posterior.argtypes = (_c.c_void_p, _c.c_void_p)
-
-# char * EOS_Analysis_info(Analysis * ana);
-_clibeos.EOS_Analysis_info.restype = _c.c_void_p
-_clibeos.EOS_Analysis_info.argtypes = (_c.c_void_p,)
-
 # char * EOS_Analysis_add_Flat(Analysis * ana, const char * par_name,
 _clibeos.EOS_Analysis_add_Flat.restype = _c.c_void_p
 _clibeos.EOS_Analysis_add_Flat.argtypes = (_c.c_void_p, _c.c_char_p,
@@ -135,6 +127,18 @@ _clibeos.EOS_Analysis_add_LogGamma.argtypes = (_c.c_void_p, _c.c_char_p,
                                           _c.c_double,        _c.c_double,          _c.c_double,
 #                                        bool nuisance);
                                     _c.c_bool)
+
+# void EOS_Analysis_gof(Analysis * ana, const double * par_vals, const unsigned simulated_datasets)
+_clibeos.EOS_Analysis_gof.restype = _c.c_void_p
+_clibeos.EOS_Analysis_gof.argtypes = (_c.c_void_p, _c.c_void_p, _c.c_uint)
+
+# char * EOS_Analysis_info(Analysis * ana);
+_clibeos.EOS_Analysis_info.restype = _c.c_void_p
+_clibeos.EOS_Analysis_info.argtypes = (_c.c_void_p,)
+
+# double EOS_Analysis_log_posterior(Analysis * ana, const double * par_vals);
+_clibeos.EOS_Analysis_log_posterior.restype = _c.c_double
+_clibeos.EOS_Analysis_log_posterior.argtypes = (_c.c_void_p, _c.c_void_p)
 
 
 # Integrate:
@@ -331,7 +335,7 @@ def _eos_errorhandler(message_pointer):
     message = _c.cast(message_pointer, _c.c_char_p).value
 
     # now memory can be freed. It is essential that the free function
-    # from the library that allocated the memory is called.
+    # from the library that allocated the memory be called.
     _clibeos.free(message_pointer)
     if message == "":
         return
@@ -491,9 +495,8 @@ class Analysis(object):
         self._destroy()
 
     def __call__(self, par_vals):
-        par_vals = _mk_c_array(par_vals, dtype=_np_double)
-        assert (self._howmany,) == par_vals.shape, "`par_vals` must have shape %s, got %s." %((self._howmany,), par_vals.shape)
-        return _clibeos.EOS_Analysis_log_posterior(self._analysis, par_vals.ctypes.data)
+        buf = self._to_buffer(par_vals)
+        return _clibeos.EOS_Analysis_log_posterior(self._analysis, buf.ctypes.data)
 
     def __repr__(self):
         'Return a string describing the constraints, observables, and parameters.'
@@ -501,6 +504,26 @@ class Analysis(object):
         info = _c.cast(info_pointer, _c.c_char_p).value
         _clibeos.free(info_pointer)
         return info
+
+    def _to_buffer(self, par_vals):
+        """Convert iterable into a double C buffer."""
+        par_vals = _mk_c_array(par_vals, dtype=_np_double)
+        assert (self._howmany,) == par_vals.shape, "`par_vals` must have shape %s, got %s." %((self._howmany,), par_vals.shape)
+        return par_vals
+
+    def gof(self, par_vals, simulated_datasets=100000):
+        '''Compute goodness of fit at parameter point `par_vals`.
+
+        One p value based on the likelihood as test statistic needs to simulate data sets.'''
+        buf = self._to_buffer(par_vals)
+        message_pointer = _clibeos.EOS_Analysis_gof(self._analysis, buf.ctypes.data, simulated_datasets)
+        # copy char array into a new python string
+        message = _c.cast(message_pointer, _c.c_char_p).value
+
+        # now memory can be freed. It is essential that the free function
+        # from the library that allocated the memory be called.
+        _clibeos.free(message_pointer)
+        return message
 
 def set_integrate_n(n=64):
     """Set the default number of evaluations EOS uses internally for numerical

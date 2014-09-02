@@ -97,7 +97,7 @@ class PosteriorTest(unittest.TestCase):
     def test_call(self):
         constraints = ["B^0_s->mu^+mu^-::BR@CMS-2013B"]
         priors = [eos.LogPrior.Flat("Re{c10}", range_min=-15, range_max=15)]
-        options = {"scan-mode": "cartesian", "model": "WilsonScan", "form-factors": "BZ2004"}
+        options = {"scan-mode": "cartesian", "model": "WilsonScan"}
 
         ana = eos.Analysis(constraints, priors, options)
 
@@ -129,6 +129,33 @@ class PosteriorTest(unittest.TestCase):
         ana = eos.Analysis(constraints, priors, options)
 
         self.assertAlmostEqual(ana([2.3]), 15.210677762849, places=12)
+
+    def test_gof(self):
+        # add one theory constraint that should not enter degrees of freedom
+        constraints = ["B^0_s->mu^+mu^-::BR@CMS-2013B", "B^0_s->mu^+mu^-::BR@LHCb-2013D",
+                       ("B->K^*::V(s)/A_1(s)", (0.93, 1.33, 1.73), 0, {"s": 0.}, {}),]
+        priors = [eos.LogPrior.Flat("Re{c10}", range_min=-15, range_max=15),
+                  eos.LogPrior.Gauss("B->K::F^p(0)@KMPW2010", range_min=0.1, range_max=0.49,
+                                     lower=0.29, central=0.34, upper=0.39, nuisance=True)]
+        options = {"scan-mode": "cartesian", "model": "WilsonScan", "form-factors": "KMPW2010"}
+
+        ana = eos.Analysis(constraints, priors, options)
+
+        result = ana.gof([-4.3, 0.35])
+
+        # If nuisance not considered as such, there is zero dof
+        self.assert_('Cannot compute p-value for nonpositive' in result)
+
+        # But if it is treated right, we can extract dof from
+        #
+        # eos.py@1409652237: [INFO analysis.goodness_of_fit] p-value
+        # from calculating significances, treating them as coming from
+        # a Gaussian, is 0.3011898722. The pseudo chi_squared/dof (dof
+        # from scan parameters only) is 1.068918441/1 = 1.068918441
+        line = result.splitlines()[-1]
+        first = line.rfind('/')
+        last = line.rfind('=')
+        self.assertEqual(int(line[first + 1:last]), 1, "incorrect dof")
 
 class PriorTest(unittest.TestCase):
     def test_repr(self):
