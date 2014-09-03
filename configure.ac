@@ -169,7 +169,7 @@ AC_DEFINE_UNQUOTED([EOS_SRCDIR], "`readlink -f $ac_pwd/$srcdir`", [Absolute path
 dnl }}}
 
 dnl {{{ output
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADER(config.h)
 AC_OUTPUT(
 	Makefile
 	doc/Makefile
