@@ -77,9 +77,8 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::s(2GeV)"] = 0.0;
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.2;
-                // s quark mass
-                p["mass::mu"] = 0.0;
-
+                // muon mass near zero to avoid artificial divergence
+                p["mass::mu"] = 1e-5;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -179,7 +178,7 @@ class BToKstarDileptonLowRecoilTest :
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.2;
                 // mu mass
-                p["mass::mu"] = 0.0;
+                p["mass::mu"] = 1e-5;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -456,7 +455,10 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             };
 
             Parameters p = Parameters::Defaults();
-            p["mass::mu"] = 0.0;
+            // comparison done for zero lepton mass
+            // but this leads to a NaN in the timelike transversity amplitude
+            // so make the mass very small
+            p["mass::mu"] = 1e-5;
             Options o;
             o.set("model", "WilsonScan");
             o.set("form-factors", "BZ2004");

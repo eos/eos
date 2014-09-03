@@ -536,6 +536,8 @@ Theoretical Inputs
         General Analysis and Optimal Observables in B -> K^* (-> K pi) l^+ l^-
         at Low Recoil
 
+        arxiv:1212.2321 v3 [hep-ph]
+
 
     BM1995 : Buras, A. J. and Muenz, M.
 

@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
+ * Copyright (c) 2014 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -61,6 +62,8 @@ namespace eos
         UsedParameter m_b_MSbar;
 
         UsedParameter m_c;
+
+        UsedParameter m_s_MSbar;
 
         UsedParameter m_B;
 
@@ -121,6 +124,7 @@ namespace eos
             hbar(p["hbar"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
+            m_s_MSbar(p["mass::s(2GeV)"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_Kstar(p["mass::K^*_d"], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
@@ -147,6 +151,9 @@ namespace eos
             e_q(-1.0/3.0),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
+            if (m_l() == 0.0)
+                throw InternalError("Zero lepton mass leads to NaNs in timelike amplitudes. Use tiny lepton mass > 0!");
+
             form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p);
 
             if (! form_factors.get())
@@ -541,8 +548,10 @@ namespace eos
         {
             double lambda_t2 = std::norm(model->ckm_tb() * conj(model->ckm_ts()));
 
-            return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / power_of<5>(M_PI) / m_B()
-                    * lambda_t2 * s_hat(s) * std::sqrt(lam(s)) * beta_l(s)); // cf. [BHP2008], Eq. (C.6), p. 21
+            return g_fermi() * alpha_e() * std::sqrt(
+                      1.0 / 3.0 / 1024 / power_of<5>(M_PI) / m_B()
+                      * lambda_t2 * s_hat(s) * std::sqrt(lam(s)) * beta_l(s)
+                   ); // cf. [BHP2008], Eq. (C.6), p. 21
         }
 
         inline double s_hat(double s) const
@@ -568,25 +577,33 @@ namespace eos
 
         /* Amplitudes */
         // cf. [BHP2008], p. 20
+        // cf. [BHvD2012], app B, eqs. (B13 - B19)
         Amplitudes amplitudes(const double & s) const
         {
             Amplitudes result;
 
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
-            const double shat = s_hat(s);
-            const double mbhat = m_b_PS() / m_B;
-            const double mKhat2 = power_of<2>(m_Kstar() / m_B());
-            const double m_K2 = power_of<2>(m_Kstar());
-            const double m_B2 = power_of<2>(m_B());
-            const double m_diff2 = m_B2 - m_K2;
-            const double norm_s = norm(s);
+            const double
+               shat = s_hat(s),
+               mbhat = m_b_PS() / m_B,
+               mKhat2 = power_of<2>(m_Kstar() / m_B()),
+               m_K2 = power_of<2>(m_Kstar()),
+               m_B2 = power_of<2>(m_B()),
+               m_diff2 = m_B2 - m_K2,
+               norm_s = this->norm(s),
+               sqrt_lam = std::sqrt(lam(s)),
+               sqrt_s = std::sqrt(s);
 
             DipoleFormFactors dff = calT(s, wc);
 
+            const complex<double>
+               wilson_minus_right = (wc.c9() - wc.c9prime()) + (wc.c10() - wc.c10prime()),
+               wilson_minus_left  = (wc.c9() - wc.c9prime()) - (wc.c10() - wc.c10prime()),
+               wilson_plus_right  = (wc.c9() + wc.c9prime()) + (wc.c10() + wc.c10prime()),
+               wilson_plus_left   = (wc.c9() + wc.c9prime()) - (wc.c10() + wc.c10prime());
+
             // longitudinal amplitude
-            complex<double> wilson_long_right = (wc.c9() - wc.c9prime()) + (wc.c10() - wc.c10prime());
-            complex<double> wilson_long_left  = (wc.c9() - wc.c9prime()) - (wc.c10() - wc.c10prime());
             double prefactor_long = -1.0 / (2.0 * m_Kstar() * std::sqrt(s));
 
             complex<double> a = ((m_diff2 - s) * 2.0 * energy(s) * xi_perp(s)
@@ -595,30 +612,56 @@ namespace eos
                                - lam(s) / m_diff2) * dff.calT_perp_left
                                - lam(s) / m_diff2 * dff.calT_parallel);
 
-            result.a_long_right = norm_s * uncertainty_long_right * prefactor_long * (wilson_long_right * a + b);
-            result.a_long_left  = norm_s * uncertainty_long_left  * prefactor_long * (wilson_long_left  * a + b);
+            result.a_long_right = norm_s * uncertainty_long_right * prefactor_long * (wilson_minus_right * a + b);
+            result.a_long_left  = norm_s * uncertainty_long_left  * prefactor_long * (wilson_minus_left  * a + b);
 
             // perpendicular amplitude
             double prefactor_perp = +std::sqrt(2.0) * m_B() * std::sqrt(lambda(1.0, mKhat2, shat));
-            complex<double> wilson_perp_right = (wc.c9() + wc.c9prime()) + (wc.c10() + wc.c10prime());
-            complex<double> wilson_perp_left  = (wc.c9() + wc.c9prime()) - (wc.c10() + wc.c10prime());
 
-            result.a_perp_right = norm_s * uncertainty_perp_right * prefactor_perp * (wilson_perp_right * xi_perp(s) + (2.0 * mbhat / shat) * dff.calT_perp_right);
-            result.a_perp_left  = norm_s * uncertainty_perp_left  * prefactor_perp * (wilson_perp_left  * xi_perp(s) + (2.0 * mbhat / shat) * dff.calT_perp_right);
+            result.a_perp_right = norm_s * uncertainty_perp_right * prefactor_perp * (wilson_plus_right * xi_perp(s) + (2.0 * mbhat / shat) * dff.calT_perp_right);
+            result.a_perp_left  = norm_s * uncertainty_perp_left  * prefactor_perp * (wilson_plus_left  * xi_perp(s) + (2.0 * mbhat / shat) * dff.calT_perp_right);
 
             // parallel amplitude
             double prefactor_par = -std::sqrt(2.0) * m_diff2;
-            complex<double> wilson_par_right = (wc.c9() - wc.c9prime()) + (wc.c10() - wc.c10prime());
-            complex<double> wilson_par_left  = (wc.c9() - wc.c9prime()) - (wc.c10() - wc.c10prime());
 
-            result.a_par_right = norm_s * uncertainty_par_right * prefactor_par * (wilson_par_right * xi_perp(s) * 2.0 * energy(s) / m_diff2 +
-                                    (4.0 * m_b_PS() * energy(s) / s / m_B()) * dff.calT_perp_left);
-            result.a_par_left  = norm_s * uncertainty_par_left  * prefactor_par * (wilson_par_left  * xi_perp(s) * 2.0 * energy(s) / m_diff2 +
-                                    (4.0 * m_b_PS() * energy(s) / s / m_B()) * dff.calT_perp_left);
+            result.a_par_right = norm_s * uncertainty_par_right * prefactor_par * (
+                                    wilson_minus_right * xi_perp(s) * 2.0 * energy(s) / m_diff2
+                                    + (4.0 * m_b_PS() * energy(s) / s / m_B()) * dff.calT_perp_left
+                                 );
+            result.a_par_left  = norm_s * uncertainty_par_left  * prefactor_par * (
+                                    wilson_minus_left  * xi_perp(s) * 2.0 * energy(s) / m_diff2
+                                    + (4.0 * m_b_PS() * energy(s) / s / m_B()) * dff.calT_perp_left
+                                 );
 
             // timelike amplitude
-            result.a_timelike = norm_s * m_B * sqrt(lambda(1.0, mKhat2, shat) / shat) *
-                complex<double>(0.0, 2.0) * (wc.c10() - wc.c10prime()) * form_factors->a_0(s);
+            result.a_timelike = norm_s * sqrt_lam / sqrt_s
+                * (2.0 * (wc.c10() - wc.c10prime()) + s / m_l / (m_b_MSbar + m_s_MSbar) * (wc.cP() - wc.cPprime()))
+                * form_factors->a_0(s);
+
+            // scalar amplitude
+            result.a_scalar = -2.0 * norm_s * sqrt_lam * (wc.cS() - wc.cSprime()) / (m_b_MSbar + m_s_MSbar) * form_factors->a_0(s);
+
+            // tensor amplitudes
+            // TODO: 1) here only leading order form factor relations for tensor form factors T_1,2,3
+            //          are used, without alpha_s corrections from [BF2001]
+            //       2) no parametrization of uncertainty due to lacking sub-leading corrections
+            //          to form factor relations
+            const double
+               kin_tensor_1 = norm_s / m_Kstar() * (
+                                (m_B2 + 3.0 * m_K2 - s) * 2.0 * energy(s) / m_B * xi_perp(s)
+                                 - lam(s) / m_diff2 * (xi_perp(s) - xi_par(s))
+                              ),
+               kin_tensor_2 = 2.0 * norm_s * sqrt_lam / sqrt_s * xi_perp(s),
+               kin_tensor_3 = 2.0 * norm_s * m_diff2 / sqrt_s * 2.0 * energy(s) / m_B * xi_perp(s);
+
+            result.a_par_perp = kin_tensor_1 * wc.cT();
+            result.a_t_long   = kin_tensor_1 * wc.cT5();
+
+            result.a_t_perp    = kin_tensor_2 * wc.cT();
+            result.a_long_perp = kin_tensor_2 * wc.cT5();
+
+            result.a_t_par     = kin_tensor_3 * wc.cT5();
+            result.a_long_par  = kin_tensor_3 * wc.cT();
 
             return result;
         }

@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011 Christian Wacker
+ * Copyright (c) 2014 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -34,6 +35,10 @@ namespace eos
             complex<double> a_perp_right, a_perp_left;
             complex<double> a_par_right, a_par_left;
             complex<double> a_timelike;
+            complex<double> a_scalar;
+            complex<double> a_par_perp, a_t_long;
+            complex<double> a_t_perp, a_long_perp;
+            complex<double> a_t_par, a_long_par;
         };
 
         struct AngularCoefficients
@@ -63,52 +68,103 @@ namespace eos
             return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 3.0 * (2.0 * a_c.j2s + a_c.j2c);
         }
 
-        inline std::array<double, 12> angular_coefficients_array(const Amplitudes & amplitudes, const double & s, const double & m_l)
+        inline std::array<double, 12> angular_coefficients_array(const Amplitudes & A, const double & s, const double & m_l)
         {
             // cf. [BHvD2010], p. 26, eqs. (A1)-(A11)
+            // cf. [BHvD2012], app B, eqs. (B1)-(B12)
             std::array<double, 12> result;
 
             double z = 4.0 * power_of<2>(m_l) / s;
+            double y = m_l / std::sqrt(s);
             double beta2 = 1.0 - z;
-            double beta = sqrt(beta2);
+            double beta = std::sqrt(beta2);
 
             // j1s
             result[0] = 3.0 / 4.0 * (
-                  (2.0 + beta2) / 4.0 * (norm(amplitudes.a_perp_left) + norm(amplitudes.a_perp_right) + norm(amplitudes.a_par_left) + norm(amplitudes.a_par_right))
-                  + z * real(amplitudes.a_perp_left * conj(amplitudes.a_perp_right) + amplitudes.a_par_left * conj(amplitudes.a_par_right)));
+                  (2.0 + beta2) / 4.0 * (norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_par_left) + norm(A.a_par_right))
+                  + z * real(A.a_perp_left * conj(A.a_perp_right) + A.a_par_left * conj(A.a_par_right))
+                  + 4.0 * beta2 * (norm(A.a_long_perp) + norm(A.a_long_par))
+                  + 4.0 * (4.0 - 3.0 * beta2) * (norm(A.a_t_perp) + norm(A.a_t_par))
+                  + 8.0 * std::sqrt(2.0) * y * real(
+                       (A.a_par_left + A.a_par_right)   * conj(A.a_t_par)
+                     + (A.a_perp_left + A.a_perp_right) * conj(A.a_t_perp)
+                  )
+               );
             // j1c
             result[1] = 3.0 / 4.0 * (
-                  norm(amplitudes.a_long_left) + norm(amplitudes.a_long_right)
-                  + z * (norm(amplitudes.a_timelike) + 2.0 * real(amplitudes.a_long_left * conj(amplitudes.a_long_right))));
+                  norm(A.a_long_left) + norm(A.a_long_right)
+                  + z * (norm(A.a_timelike) + 2.0 * real(A.a_long_left * conj(A.a_long_right)))
+                  + beta2 * norm(A.a_scalar)
+                  + 8.0 * (2.0 - beta2) * norm(A.a_t_long)
+                  + 8.0 * beta2 * norm(A.a_par_perp)
+                  + 16.0 * y * real((A.a_long_left + A.a_long_right) * conj(A.a_t_long))
+               );
             // j2s
             result[2] = 3.0 * beta2 / 16.0 * (
-                  norm(amplitudes.a_perp_left) + norm(amplitudes.a_perp_right) + norm(amplitudes.a_par_left) + norm(amplitudes.a_par_right));
+                  norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_par_left) + norm(A.a_par_right)
+                  - 16.0 * (norm(A.a_t_perp) + norm(A.a_t_par) + norm(A.a_long_perp) + norm(A.a_long_par))
+               );
             // j2c
             result[3] = -3.0 * beta2 / 4.0 * (
-                  norm(amplitudes.a_long_left) + norm(amplitudes.a_long_right));
+                  norm(A.a_long_left) + norm(A.a_long_right)
+                  - 8.0 * (norm(A.a_t_long) + norm(A.a_par_perp))
+               );
             // j3
             result[4] = 3.0 / 8.0 * beta2 * (
-                  norm(amplitudes.a_perp_left) + norm(amplitudes.a_perp_right) - norm(amplitudes.a_par_left) - norm(amplitudes.a_par_right));
+                  norm(A.a_perp_left) + norm(A.a_perp_right) - norm(A.a_par_left) - norm(A.a_par_right)
+                  + 16.0 * (norm(A.a_t_par) - norm(A.a_t_perp) + norm(A.a_long_par) - norm(A.a_long_perp))
+               );
             // j4
-            result[5] = 3.0 / (4.0 * sqrt(2.0)) * beta2 * real(
-                  amplitudes.a_long_left * conj(amplitudes.a_par_left) + amplitudes.a_long_right * conj(amplitudes.a_par_right));
+            result[5] = 3.0 / (4.0 * std::sqrt(2.0)) * beta2 * real(
+                  A.a_long_left * conj(A.a_par_left) + A.a_long_right * conj(A.a_par_right)
+                  - 8.0 * std::sqrt(2.0) * (A.a_t_long * conj(A.a_t_par) + A.a_par_perp * conj(A.a_long_par))
+               );
             // j5
-            result[6] = 3.0 * sqrt(2.0) / 4.0 * beta * real(
-                  amplitudes.a_long_left * conj(amplitudes.a_perp_left) - amplitudes.a_long_right * conj(amplitudes.a_perp_right));
+            result[6] = 3.0 * std::sqrt(2.0) / 4.0 * beta * real(
+                  A.a_long_left * conj(A.a_perp_left) - A.a_long_right * conj(A.a_perp_right)
+                  - 2.0 * std::sqrt(2.0) * A.a_t_par * conj(A.a_scalar)
+                  - y * (
+                     (A.a_par_left + A.a_par_right) * conj(A.a_scalar)
+                     + 4.0 * std::sqrt(2.0) * A.a_long_par * conj(A.a_timelike)
+                     - 4.0 * std::sqrt(2.0) * (A.a_long_left - A.a_long_right) * conj(A.a_t_perp)
+                     - 4.0 * (A.a_perp_left - A.a_perp_right) * conj(A.a_t_long)
+                  )
+               );
             // j6s
             result[7] = 3.0 / 2.0 * beta * real(
-                  amplitudes.a_par_left * conj(amplitudes.a_perp_left) - amplitudes.a_par_right * conj(amplitudes.a_perp_right));
+                  A.a_par_left * conj(A.a_perp_left) - A.a_par_right * conj(A.a_perp_right)
+                  + 4.0 * std::sqrt(2.0) * y * (
+                     (A.a_perp_left - A.a_perp_right) * conj(A.a_t_par)
+                     + (A.a_par_left - A.a_par_right) * conj(A.a_t_perp)
+                  )
+               );
             // j6c
-            result[8] = 0.0;
+            result[8] = 3.0 * beta * real(
+                  2.0 * A.a_t_long * conj(A.a_scalar)
+                  + y * (
+                     (A.a_long_left + A.a_long_right) * conj(A.a_scalar)
+                     + 4.0 * A.a_par_perp * conj(A.a_timelike)
+                  )
+               );
             // j7
-            result[9] = 3.0 * sqrt(2.0) / 4.0 * beta * imag(
-                  amplitudes.a_long_left * conj(amplitudes.a_par_left) - amplitudes.a_long_right * conj(amplitudes.a_par_right));
+            result[9] = 3.0 * std::sqrt(2.0) / 4.0 * beta * imag(
+                  A.a_long_left * conj(A.a_par_left) - A.a_long_right * conj(A.a_par_right)
+                  + 2.0 * std::sqrt(2.0) * A.a_t_perp * conj(A.a_scalar)
+                  + y * (
+                     (A.a_perp_left + A.a_perp_right) * conj(A.a_scalar)
+                     + 4.0 * std::sqrt(2.0) * A.a_long_perp * conj(A.a_timelike)
+                     + 4.0 * std::sqrt(2.0) * (A.a_long_left - A.a_long_right) * conj(A.a_t_par)
+                     - 4.0 * (A.a_par_left - A.a_par_right) * conj(A.a_t_long)
+                  )
+               );
             // j8
-            result[10] = 3.0 / 4.0 / sqrt(2.0) * beta2 * (imag(
-                  amplitudes.a_long_left * conj(amplitudes.a_perp_left)) + imag(amplitudes.a_long_right * conj(amplitudes.a_perp_right)));
+            result[10] = 3.0 / 4.0 / std::sqrt(2.0) * beta2 * imag(
+                  A.a_long_left * conj(A.a_perp_left) + A.a_long_right * conj(A.a_perp_right)
+               );
             // j9
-            result[11] = 3.0 / 4.0 * beta2 * (imag(
-                  conj(amplitudes.a_par_left) * amplitudes.a_perp_left) + imag(conj(amplitudes.a_par_right) * amplitudes.a_perp_right));
+            result[11] = 3.0 / 4.0 * beta2 * imag(
+                  conj(A.a_par_left) * A.a_perp_left + conj(A.a_par_right) * A.a_perp_right
+               );
 
             return result;
         }
