@@ -707,11 +707,11 @@ namespace eos
                 double xminus = result * 0.97;
 
                 AngularCoefficients a_c_central = differential_angular_coefficients(result);
-                double f = a_c_central.j6s;
+                double f = a_c_central.j6s + 0.5 * a_c_central.j6c;
                 AngularCoefficients a_c_minus   = differential_angular_coefficients(xminus);
-                double f_xminus = a_c_minus.j6s;
+                double f_xminus = a_c_minus.j6s + 0.5 * a_c_minus.j6c;
                 AngularCoefficients a_c_plus    = differential_angular_coefficients(xplus);
-                double f_xplus = a_c_plus.j6s;
+                double f_xplus = a_c_plus.j6s + a_c_plus.j6c;
 
                 double fprime = (f_xplus - f_xminus) / (xplus - xminus);
 
@@ -809,8 +809,9 @@ namespace eos
     BToKstarDilepton<LargeRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
         // cf. [BHvD2010], p. 6, eq. (2.8)
+        // cf. [BHvD2012], eq. (A7)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return a_c.j6s / decay_width(a_c);
+        return (a_c.j6s + 0.5 * a_c.j6c) / decay_width(a_c);
     }
 
     double
@@ -905,7 +906,7 @@ namespace eos
     double
     BToKstarDilepton<LargeRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
-        // cf. [BHvD2012], p. 5, eq. (3.15)
+        // cf. [BHvD2012], eq. (A9)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return (a_c.j1c - a_c.j2c / 3.0) / decay_width(a_c);
     }
@@ -913,7 +914,7 @@ namespace eos
     double
     BToKstarDilepton<LargeRecoil>::differential_transversal_polarisation(const double & s) const
     {
-        // cf. [BHvD2012], p. 5, eq. (3.14)
+        // cf. [BHvD2012], eq. (A10)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / decay_width(a_c);
     }
@@ -1134,8 +1135,9 @@ namespace eos
     BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
         // cf. [BHvD2010], eq. (2.8), p. 6
+        // cf. [BHvD2012], eq. (A7)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j6s / decay_width(a_c);
+        return (a_c.j6s + 0.5 * a_c.j6c) / decay_width(a_c);
     }
 
     double
@@ -1153,7 +1155,7 @@ namespace eos
     double
     BToKstarDilepton<LargeRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
     {
-        // cf. [BHvD2012], p. 5, eq. (3.15)
+        // cf. [BHvD2012], eq. (A9)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return (a_c.j1c - a_c.j2c / 3.0) / decay_width(a_c);
     }
@@ -1173,7 +1175,7 @@ namespace eos
     double
     BToKstarDilepton<LargeRecoil>::integrated_transversal_polarisation(const double & s_min, const double & s_max) const
     {
-        // cf. [BHvD2012], p. 5, eq. (3.14)
+        // cf. [BHvD2012], eq. (A10)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / decay_width(a_c);
     }
