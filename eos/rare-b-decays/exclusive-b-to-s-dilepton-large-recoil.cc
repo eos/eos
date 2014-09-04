@@ -711,7 +711,7 @@ namespace eos
                 AngularCoefficients a_c_minus   = differential_angular_coefficients(xminus);
                 double f_xminus = a_c_minus.j6s + 0.5 * a_c_minus.j6c;
                 AngularCoefficients a_c_plus    = differential_angular_coefficients(xplus);
-                double f_xplus = a_c_plus.j6s + a_c_plus.j6c;
+                double f_xplus = a_c_plus.j6s + 0.5 * a_c_plus.j6c;
 
                 double fprime = (f_xplus - f_xminus) / (xplus - xminus);
 
