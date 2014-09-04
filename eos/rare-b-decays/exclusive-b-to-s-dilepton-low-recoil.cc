@@ -364,17 +364,6 @@ namespace eos
             result.a_timelike = norm_s * sqrt_lam / sqrt_s
                 * (2.0 * (wc.c10() - wc.c10prime()) + s / m_l / (m_b_MSbar + m_s()) * (wc.cP() - wc.cPprime()))
                 * form_factors->a_0(s);
-            complex<double> harr = wc.c10();
-//            std::cout << harr << std::endl;
-            harr = (wc.c10() - wc.c10prime());
-//            std::cout << harr << std::endl;
-            harr = + s / m_l() / (m_b_MSbar + m_s());
-//            std::cout << harr << std::endl;
-//            std::cout << m_l() << std::endl;
-            harr = (wc.cP() - wc.cPprime());
-//            std::cout << harr << std::endl;
-            harr = form_factors->a_0(s);
-//            std::cout << harr << std::endl;
 
             // scalar amplitude
             result.a_scalar = -2.0 * norm_s * sqrt_lam * (wc.cS() - wc.cSprime()) / (m_b_MSbar + m_s()) * form_factors->a_0(s);
