@@ -45,10 +45,18 @@ namespace eos
             BToKstarDilepton(const Parameters & parameters, const Options & options);
             ~BToKstarDilepton();
 
-            // [BHvD2010] Eqs. (??-??)
+            // [BHvD2012] Eqs. (B.13-B.20)
             complex<double> a_long(const Helicity & h, const double & s) const;
             complex<double> a_perp(const Helicity & h, const double & s) const;
             complex<double> a_par(const Helicity & h, const double & s) const;
+            complex<double> a_timelike(const double & s) const;
+            complex<double> a_scalar(const double & s) const;
+            complex<double> a_par_perp(const double & s) const;
+            complex<double> a_t_long(const double & s) const;
+            complex<double> a_t_perp(const double & s) const;
+            complex<double> a_t_par(const double & s) const;
+            complex<double> a_long_par(const double & s) const;
+            complex<double> a_long_perp(const double & s) const;
 
             // [BHvD2010-2] Eqs. (??)
             double real_y(const double & s) const;

@@ -42,7 +42,6 @@
 #include <cmath>
 #include <functional>
 
-#include <iostream>
 namespace eos
 {
     using namespace eos::btovll;
@@ -273,7 +272,7 @@ namespace eos
         {
             // cf. [BHvD2010], Eq. (3.8), p. 8
             // Use m_b_MSbar(m_b_MSbar) instead m_b_MSbar(mu), as we want kappa up to NLO only.
-            return (1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar));
+            return 1.0 - 2.0 * model->alpha_s(mu) / (3.0 * M_PI) * std::log(mu / m_b_MSbar);
         }
 
         double norm(const double & s) const
@@ -341,7 +340,7 @@ namespace eos
             result.a_long_left  = norm_s * prefactor_long * (wilson_long1_left  * formfactor_long1 + wilson_long2_left  * formfactor_long2);
 
             // perpendicular
-            complex<double> prefactor_perp = complex<double>(1.0, 0.0) * m_B();
+            complex<double> prefactor_perp(m_B(), 0.0);
             complex<double>
                 wilson_perp_right = c910_plus_right + c7_plus * (m_b_MSbar() + m_s() + lambda_perp()) - subleading_perp,
                 wilson_perp_left  = c910_plus_left  + c7_plus * (m_b_MSbar() + m_s() + lambda_perp()) - subleading_perp;
@@ -351,7 +350,7 @@ namespace eos
             result.a_perp_left  = norm_s * prefactor_perp * wilson_perp_left  * formfactor_perp;
 
             // parallel
-            complex<double> prefactor_par = complex<double>(-1.0, 0.0) * m_B();
+            complex<double> prefactor_par = complex<double>(-m_B(), 0.0);
             complex<double>
                 wilson_par_right = c910_minus_right + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par,
                 wilson_par_left  = c910_minus_left  + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
@@ -460,6 +459,62 @@ namespace eos
             return amp.a_par_left;
         else
             return amp.a_par_right;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_timelike(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_timelike;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_scalar(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_scalar;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_par_perp(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_par_perp;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_t_long(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_t_long;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_t_perp(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_t_perp;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_t_par(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_t_par;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_long_par(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_long_par;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_long_perp(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_long_perp;
     }
 
     double
@@ -860,7 +915,6 @@ namespace eos
 
         return (a_c.j9 + a_c_bar.j9) / (decay_width(a_c) + decay_width(a_c_bar));
     }
-
 
     double
     BToKstarDilepton<LowRecoil>::integrated_decay_width(const double & s_min, const double & s_max) const
