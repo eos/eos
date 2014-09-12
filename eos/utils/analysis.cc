@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2011-2014 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -347,19 +347,28 @@ namespace eos
             std::vector<double> significances;
 
             Log::instance()->message("analysis.goodness_of_fit", ll_informational)
-                << "Significances for each constraint:";
+                << "Significances for each constraint (n_observations):";
 
-            for (auto c = log_likelihood.begin(), c_end = log_likelihood.end() ; c != c_end ; ++c)
+            bool theory_constraint = false;
+            for (auto & c : log_likelihood)
             {
-                for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
+                for (auto b = c.begin_blocks(), b_end = c.end_blocks() ; b != b_end ; ++b)
                 {
                     double significance = (**b).significance();
-                    Log::instance()->message("analysis.goodness_of_fit", ll_informational)
-                        << c->name() << ": " << significance << " sigma";
-                    total_significance_squared += power_of<2>(significance);
                     significances.push_back(significance);
+                    Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+                        << c.name() << " (" << (**b).number_of_observations() << "): " << significance << " sigma";
+                    if (not (**b).number_of_observations())
+                    {
+                        theory_constraint = true;
+                        continue;
+                    }
+                    total_significance_squared += power_of<2>(significance);
                 }
             }
+            if (theory_constraint)
+                Log::instance()->message("analysis.goodness_of_fit", ll_warning)
+                << "Constraints with zero observations ('theory constraints') are not added to the total chi2";
 
             // store significances and chi^2
             if (f)
@@ -375,13 +384,13 @@ namespace eos
             }
 
             Log::instance()->message("analysis.goodness_of_fit", ll_informational)
-                << "Listing the individual observables' predicted values:";
+                << "Listing the individual observables' predicted values (kinematics):";
 
             const ObservableCache & cache = log_likelihood.observable_cache();
             for (unsigned i = 0 ; i < cache.size() ; ++i)
             {
                 Log::instance()->message("analysis.goodness_of_fit", ll_informational)
-                    << cache.observable(i)->name() << " = " << cache[i];
+                    << cache.observable(i)->name() << ", (" << cache.observable(i)->kinematics().as_string() << "): " << cache[i];
             }
 
             if (dof > 0)
@@ -389,7 +398,7 @@ namespace eos
                 const double p_significance =  gsl_cdf_chisq_Q(total_significance_squared, dof);
                 Log::instance()->message("analysis.goodness_of_fit", ll_informational)
                     << "p-value from calculating significances, treating them as coming from a Gaussian, is "
-                    << p_significance << ". The pseudo chi_squared/dof is " << total_significance_squared
+                    << p_significance << ". The pseudo chi^2/dof is " << total_significance_squared
                     << "/" << dof << " = " << total_significance_squared / dof;
             }
 
@@ -398,7 +407,7 @@ namespace eos
                 const double p_significance_scan =  gsl_cdf_chisq_Q(total_significance_squared, dof_scan);
                 Log::instance()->message("analysis.goodness_of_fit", ll_informational)
                         << "p-value from calculating significances, treating them as coming from a Gaussian, is "
-                        << p_significance_scan << ". The pseudo chi_squared/dof (dof from scan parameters only) is "
+                        << p_significance_scan << ". The pseudo chi^2/dof (dof from scan parameters only) is "
                         << total_significance_squared
                         << "/" << dof_scan << " = " << total_significance_squared / dof_scan;
             }

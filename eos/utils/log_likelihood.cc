@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2011, 2014 Danny van Dyk
- * Copyright (c) 2011 Frederik Beaujean
+ * Copyright (c) 2014 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1390,17 +1390,19 @@ namespace eos
             // 3. Compare with likelihood of "observed" data set to define p-value
             //      p = #llh < llh(obs) / #trials
 
-            // set up for sampling
-            for (auto c = constraints.cbegin(), c_end = constraints.cend() ; c != c_end ; ++c)
+            // observed value
+            double t_obs = 0;
+
+            for (auto & c : constraints)
             {
-                for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
+                for (auto b = c.begin_blocks(); b != c.end_blocks() ; ++b)
                 {
+                    if (not (*b)->number_of_observations())
+                        continue;
                     (*b)->prepare_sampling();
+                    t_obs += (*b)->evaluate();
                 }
             }
-
-            // observed value
-            double t_obs = this->log_likelihood();
 
             Log::instance()->message("log_likelihood.bootstrap_pvalue", ll_informational)
                                      << "The value of the test statistic (total likelihood) "
@@ -1423,10 +1425,12 @@ namespace eos
             for (unsigned i = 0 ; i < datasets ; ++i)
             {
                 t = 0.0;
-                for (auto c = constraints.cbegin(), c_end = constraints.cend() ; c != c_end ; ++c)
+                for (auto & c : constraints)
                 {
-                    for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
+                    for (auto b = c.begin_blocks(), b_end = c.end_blocks() ; b != b_end ; ++b)
                     {
+                        if (not (*b)->number_of_observations())
+                            continue;
                         t += (*b)->sample(rng);
                     }
                 }
