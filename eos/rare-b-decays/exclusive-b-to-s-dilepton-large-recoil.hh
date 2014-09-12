@@ -53,6 +53,14 @@ namespace eos
             complex<double> a_long(const Helicity & h, const double & s) const;
             complex<double> a_perp(const Helicity & h, const double & s) const;
             complex<double> a_par(const Helicity & h, const double & s) const;
+            complex<double> a_timelike(const double & s) const;
+            complex<double> a_scalar(const double & s) const;
+            complex<double> a_par_perp(const double & s) const;
+            complex<double> a_t_long(const double & s) const;
+            complex<double> a_t_perp(const double & s) const;
+            complex<double> a_t_par(const double & s) const;
+            complex<double> a_long_par(const double & s) const;
+            complex<double> a_long_perp(const double & s) const;
 
             // Inverse Observables
             double a_fb_zero_crossing() const;

@@ -29,7 +29,8 @@ eos/eos.py
 
 # Tests
 *_TEST
+*.trs
 
 #eclipse
 *.*project
-.settings/org.eclipse*
+.settings/*

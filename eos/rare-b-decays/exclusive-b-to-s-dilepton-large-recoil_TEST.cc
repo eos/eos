@@ -30,9 +30,6 @@
 #include <string>
 #include <vector>
 
-// Uncomment the following #define to generate new test data for the Bobeth compatibility tests
-//#define EOS_GENERATE_TEST_DATA
-
 using namespace test;
 using namespace eos;
 
@@ -47,64 +44,136 @@ class BToKstarDileptonLargeRecoilBobethCompatibilityTest :
 
     virtual void run() const
     {
-        Parameters p = Parameters::Defaults();
-        p["c1"] = -0.3231323312;
-        p["c2"] = 1.009301831;
-        p["c3"] = -0.005233499106;
-        p["c4"] = -0.08829686414;
-        p["c5"] = 0.0003601965805;
-        p["c6"] = 0.001020749573;
-        p["Re{c7}"] = -0.3370422989 + 0.1;
-        p["Im{c7}"] = 0.2;
-        p["Re{c7'}"] = 0.3;
-        p["Im{c7'}"] = 0.4;
-        p["c8"] = -0.1827530948;
-        p["Re{c9}"] = 4.294489364 + 1;
-        p["Im{c9}"] = 0.5;
-        p["Re{c9'}"] = 2;
-        p["Im{c9'}"] = 1.5;
-        p["Re{c10}"] = -4.196294696 + 3;
-        p["Im{c10}"] = 2.5;
-        p["Re{c10'}"] = 4;
-        p["Im{c10'}"] = 3.5;
+       {
+          Parameters p = Parameters::Defaults();
+          p["c1"] = -0.3231323312;
+          p["c2"] = 1.009301831;
+          p["c3"] = -0.005233499106;
+          p["c4"] = -0.08829686414;
+          p["c5"] = 0.0003601965805;
+          p["c6"] = 0.001020749573;
+          p["Re{c7}"] = -0.3370422989 + 0.1;
+          p["Im{c7}"] = 0.2;
+          p["Re{c7'}"] = 0.3;
+          p["Im{c7'}"] = 0.4;
+          p["c8"] = -0.1827530948;
+          p["Re{c9}"] = 4.294489364 + 1;
+          p["Im{c9}"] = 0.5;
+          p["Re{c9'}"] = 2;
+          p["Im{c9'}"] = 1.5;
+          p["Re{c10}"] = -4.196294696 + 3;
+          p["Im{c10}"] = 2.5;
+          p["Re{c10'}"] = 4;
+          p["Im{c10'}"] = 3.5;
 
-        Options oo;
-        oo.set("model", "WilsonScan");
-        oo.set("scan-mode", "cartesian");
-        oo.set("form-factors", "KMPW2010");
-        oo.set("l", "mu");
-        oo.set("q", "d");
+          Options oo;
+          oo.set("model", "WilsonScan");
+          oo.set("scan-mode", "cartesian");
+          oo.set("form-factors", "KMPW2010");
+          oo.set("l", "mu");
+          oo.set("q", "d");
 
-        BToKstarDilepton<LargeRecoil> d(p, oo);
-        double eps = 0.6e-2;
-        static const double s = 6.0;
+          BToKstarDilepton<LargeRecoil> d(p, oo);
+          double eps = 0.6e-2;
+          static const double s = 6.0;
 
-        TEST_CHECK_RELATIVE_ERROR_C(d.a_long(Helicity::left_handed, s),
-                                    complex<double>(-1.120616135e-10, 6.005404351e-12),
-                                    eps);
+          TEST_CHECK_RELATIVE_ERROR_C(d.a_long(Helicity::left_handed, s),
+                                      complex<double>(-1.120616135e-10, 6.005404351e-12),
+                                      eps);
 
-        TEST_CHECK_RELATIVE_ERROR_C(d.a_long(Helicity::right_handed, s),
-                                    complex<double>(4.337275083e-11, 3.591794269e-11),
-                                    eps);
+          TEST_CHECK_RELATIVE_ERROR_C(d.a_long(Helicity::right_handed, s),
+                                      complex<double>(4.337275083e-11, 3.591794269e-11),
+                                      eps);
 
-        TEST_CHECK_RELATIVE_ERROR_C(d.a_par(Helicity::left_handed, s),
-                                    complex<double>(-4.177379962e-11, 1.649925628e-11),
-                                    eps);
+          TEST_CHECK_RELATIVE_ERROR_C(d.a_par(Helicity::left_handed, s),
+                                      complex<double>(-4.177379962e-11, 1.649925628e-11),
+                                      eps);
 
-        TEST_CHECK_RELATIVE_ERROR_C(d.a_par(Helicity::right_handed, s),
-                                    complex<double>(5.963768892e-11, 3.601537199e-11),
-                                    eps);
+          TEST_CHECK_RELATIVE_ERROR_C(d.a_par(Helicity::right_handed, s),
+                                      complex<double>(5.963768892e-11, 3.601537199e-11),
+                                      eps);
 
-        complex<double> x = d.a_perp(Helicity::left_handed, s);
-        TEST_CHECK_RELATIVE_ERROR(std::real(x),  4.352686602e-11, eps);
+          complex<double> x = d.a_perp(Helicity::left_handed, s);
+          TEST_CHECK_RELATIVE_ERROR(std::real(x),  4.352686602e-11, eps);
 
-        // Difference much smaller if Im{C7}=1.2.
-        // So think we agree on the implementation but difference depends on WC
-        TEST_CHECK_RELATIVE_ERROR(std::imag(x),  5.276889886e-12, 2.2 * eps);
+          // Difference much smaller if Im{C7}=1.2.
+          // So think we agree on the implementation but difference depends on WC
+          TEST_CHECK_RELATIVE_ERROR(std::imag(x),  5.276889886e-12, 2.2 * eps);
 
-        TEST_CHECK_RELATIVE_ERROR_C(d.a_perp(Helicity::right_handed, s),
-                                    complex<double>(9.326590159e-11, 1.116294121e-10),
-                                    eps);
+          TEST_CHECK_RELATIVE_ERROR_C(d.a_perp(Helicity::right_handed, s),
+                                      complex<double>(9.326590159e-11, 1.116294121e-10),
+                                      eps);
+       }
+
+       // scalar and tensor
+       {
+            // important to agree on alpha_s, can change values by 1%
+            Parameters p = Parameters::Defaults();
+            p["c1"] = -0.3231323312;
+            p["c2"] = 1.009301831;
+            p["c3"] = -0.005233499106;
+            p["c4"] = -0.08829686414;
+            p["c5"] = 0.0003601965805;
+            p["c6"] = 0.001020749573;
+            p["Re{c7}"] = -0.3370422989 + 0.1;
+            p["Im{c7}"] = 0.2;
+            p["Re{c7'}"] = 0.3;
+            p["Im{c7'}"] = 0.4;
+            p["c8"] = -0.1827530948;
+            p["Re{c9}"] = 4.294489364 + 1;
+            p["Im{c9}"] = 0.5;
+            p["Re{c9'}"] = 2;
+            p["Im{c9'}"] = 1.5;
+            p["Re{c10}"] = -4.196294696 + 3;
+            p["Im{c10}"] = 2.5;
+            p["Re{c10'}"] = 4;
+            p["Im{c10'}"] = 3.5;
+            p["Re{cS}"] = 0.5;
+            p["Im{cS}"] = 1;
+            p["Re{cS'}"] = 0.6;
+            p["Im{cS'}"] = 1.1;
+            p["Re{cP}"] = 0.7;
+            p["Im{cP}"] = 1.2;
+            p["Re{cP'}"] = 0.8;
+            p["Im{cP'}"] = 1.3;
+            p["Re{cT}"] = 0.9;
+            p["Im{cT}"] = 1.4;
+            p["Re{cT5}"] = 1.0;
+            p["Im{cT5}"] = 1.5;
+
+            p["mass::s(2GeV)"] = 0.12;
+
+            Options oo;
+            oo.set("model", "WilsonScan");
+            oo.set("scan-mode", "cartesian");
+            oo.set("form-factors", "KMPW2010");
+            oo.set("l", "mu");
+            oo.set("q", "u");
+
+            BToKstarDilepton<LargeRecoil> d(p, oo);
+            static const double s = 6.0;
+
+            double eps = 3e-2;
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_long(left_handed, s),  complex<double>(-1.121022032e-10, 5.991646324e-12), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_long(right_handed, s), complex<double>( 4.333216107e-11, 3.590418466e-11), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_perp(left_handed, s),  complex<double>( 4.353425835e-11, 5.287884397e-12), eps);
+
+            eps = 1e-2;
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_perp(right_handed, s), complex<double>( 9.326263994e-11, 1.117078741e-10), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_par(left_handed, s),   complex<double>(-4.176304959e-11, 1.651237347e-11), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_par(right_handed, s),  complex<double>( 5.964843896e-11, 3.602848917e-11), eps);
+
+            // nearly identically implemented, only difference from alpha_s
+            eps = 2e-4;
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_timelike(s),  complex<double>(-2.247078271e-10, -6.370327589e-11), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_scalar(s),    complex<double>( 2.185643583e-12, 2.185643583e-12), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_par_perp(s),  complex<double>( 1.670559476e-11, 2.598648074e-11), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_t_long(s),    complex<double>( 1.856177196e-11, 2.784265793e-11), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_t_perp(s),    complex<double>( 2.432894203e-11, 3.784502093e-11), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_long_perp(s), complex<double>( 2.703215781e-11, 4.054823671e-11), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_t_par(s),     complex<double>( 2.888762249e-11, 4.333143373e-11), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.a_long_par(s),  complex<double>( 2.599886024e-11, 4.044267148e-11), eps);
+       }
     }
 } b_to_kstar_dilepton_large_recoil_bobeth_compatibility_test;
 

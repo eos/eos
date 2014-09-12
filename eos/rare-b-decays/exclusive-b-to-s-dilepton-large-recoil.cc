@@ -779,6 +779,62 @@ namespace eos
             return amp.a_par_right;
     }
 
+    complex<double>
+    BToKstarDilepton<LargeRecoil>::a_timelike(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_timelike;
+    }
+
+    complex<double>
+    BToKstarDilepton<LargeRecoil>::a_scalar(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_scalar;
+    }
+
+    complex<double>
+    BToKstarDilepton<LargeRecoil>::a_par_perp(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_par_perp;
+    }
+
+    complex<double>
+    BToKstarDilepton<LargeRecoil>::a_t_long(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_t_long;
+    }
+
+    complex<double>
+    BToKstarDilepton<LargeRecoil>::a_t_perp(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_t_perp;
+    }
+
+    complex<double>
+    BToKstarDilepton<LargeRecoil>::a_t_par(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_t_par;
+    }
+
+    complex<double>
+    BToKstarDilepton<LargeRecoil>::a_long_par(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_long_par;
+    }
+
+    complex<double>
+    BToKstarDilepton<LargeRecoil>::a_long_perp(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_long_perp;
+    }
+
     double
     BToKstarDilepton<LargeRecoil>::differential_branching_ratio(const double & s) const
     {
