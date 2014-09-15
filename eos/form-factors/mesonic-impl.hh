@@ -474,7 +474,7 @@ namespace eos
         private:
             // fit parametrisation for P -> P according to [KMPW2010]
             UsedParameter _b1_p, _b1_0, _b1_t;
-            UsedParameter _f0_p, _f0_0, _f0_t;
+            UsedParameter _f0_p, _f0_t;
             static const double _tau_p, _tau_m, _tau_0;
             static const double _m_B, _m_K, _m_Bs2;
 
@@ -489,7 +489,6 @@ namespace eos
                 _b1_0(p["B->K::b^0_1@KMPW2010"], *this),
                 _b1_t(p["B->K::b^t_1@KMPW2010"], *this),
                 _f0_p(p["B->K::F^p(0)@KMPW2010"], *this),
-                _f0_0(p["B->K::F^0(0)@KMPW2010"], *this),
                 _f0_t(p["B->K::F^t(0)@KMPW2010"], *this)
             {
             }
@@ -512,7 +511,7 @@ namespace eos
                 // cf. [KMPW2010], Eq. (8.8), p. 30
                 const double zs = _calc_z(s), z0 = _calc_z(0.0);
 
-                return _f0_0() * (1 + _b1_0() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+                return _f0_p() * (1 + _b1_0() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
             }
 
             virtual double f_t(const double & s) const
