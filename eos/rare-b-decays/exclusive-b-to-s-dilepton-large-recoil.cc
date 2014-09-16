@@ -1873,6 +1873,18 @@ namespace eos
             return (m_B() * m_B() + m_K() * m_K() - s) / (2.0 * m_B());
         }
 
+        // cf. [BF2001] Eq. (22 + TODO: 31)
+        double f_t_over_f_p(const double & s) const
+        {
+            return form_factors->f_t(s) / form_factors->f_p(s);
+        }
+
+        // cf. [BF2001] Eq. (22 + TODO: 30)
+        double f_0_over_f_p(const double & s) const
+        {
+            return form_factors->f_0(s) / form_factors->f_p(s);
+        }
+
         // cf. [BHP2007], Eq. (3.2), p. 3
         std::complex<double> F_A(const WilsonCoefficients<BToS> & wc, const double &) const
         {
@@ -1882,7 +1894,7 @@ namespace eos
         double F_Tkin(const double & s) const
         {
             double result = 2.0 * std::sqrt(lam(s)) * beta_l(s) / (m_B() + m_K());
-            result *= form_factors->f_t(s) / form_factors->f_p(s);
+            result *= f_t_over_f_p(s);
             return result;
         }
 
@@ -1901,7 +1913,7 @@ namespace eos
         double F_Skin(const double & s) const
         {
             double result = 0.5 * (power_of<2>(m_B()) - power_of<2>(m_K())) / (m_b_MSbar - m_s_MSbar);
-            result *= form_factors->f_0(s) / form_factors->f_p(s);
+            result *= f_0_over_f_p(s);
             return result;
         }
 
@@ -1915,7 +1927,7 @@ namespace eos
         std::complex<double> F_P(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
             return F_Skin(s) * (wc.cP() + wc.cPprime()) + m_l() * (wc.c10() + wc.c10prime()) *
-                    ((m_B() * m_B() - m_K() * m_K()) / s * (form_factors->f_0(s) / form_factors->f_p(s) - 1.0) - 1.0);
+                    ((m_B() * m_B() - m_K() * m_K()) / s * (f_0_over_f_p(s) - 1.0) - 1.0);
         }
 
         // cf. [BHP2007], Eq. (3.2), p. 4
@@ -1924,7 +1936,7 @@ namespace eos
             std::complex<double> result = wc.c9() + wc.c9prime();
             result += 2.0 * m_b_PS() / m_B() / xi_pseudo(s) *
                       (calT(s) + lambda_psd / m_B * std::polar(1.0, sl_phase_psd()));
-            result += 8.0 * m_l / (m_B() + m_K()) * form_factors->f_t(s) / form_factors->f_p(s) * wc.cT();
+            result += 8.0 * m_l / (m_B() + m_K()) * f_t_over_f_p(s) * wc.cT();
             return result;
         }
 

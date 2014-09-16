@@ -537,6 +537,12 @@ Theoretical Inputs
 
         arxiv:1105.0376 [hep-ph]
 
+    BHvDW2011 : Bobeth, C. and Hiller, G., van Dyk, D. and Wacker, C.
+
+        The decay B -> K l^+ l^− at low hadronic recoil and model-independent
+        Delta B = 1 constraints
+
+        arXiv:1111.2558
 
     BHvD2012 : Bobeth, C. and Hiller, G. and van Dyk, D.
 
