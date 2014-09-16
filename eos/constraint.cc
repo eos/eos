@@ -2515,7 +2515,7 @@ namespace eos
         {
             {{ "B->K::f_+(s)", "B->K::f_+(s)", "B->K::f_+(s)" }},
             {{ Kinematics{ { "s", 17.0 } }, Kinematics{ { "s", 20.0 } }, Kinematics{ { "s", 23.0 } },}},
-            {{ Options{ }, Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" }}, Options{ { "form-factors", "KMPW2010" } } }},
             {{ 1.07617,   1.50728,   2.34247   }},
             {{ 0.0265336, 0.0299249, 0.0696341 }},
             {{ 0.0265336, 0.0299249, 0.0696341 }},
@@ -2536,7 +2536,7 @@ namespace eos
         {
             {{ "B->K^*::V(s)", "B->K^*::V(s)" }},
             {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" } } }},
             {{ 1.19122,   1.97758  }},
             {{ 0.0999166, 0.112599 }},
             {{ 0.0999166, 0.112599 }},
@@ -2551,7 +2551,7 @@ namespace eos
         {
             {{ "B->K^*::A_1(s)", "B->K^*::A_1(s)" }},
             {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" } } }},
             {{ 0.515837,  0.644548  }},
             {{ 0.0293675, 0.0195013 }},
             {{ 0.0293675, 0.0195013 }},
@@ -2566,7 +2566,7 @@ namespace eos
         {
             {{ "B->K^*::A_12(s)", "B->K^*::A_12(s)" }},
             {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" } } }},
             {{ 0.371041,  0.440076  }},
             {{ 0.0306946, 0.0273783 }},
             {{ 0.0306946, 0.0273783 }},
@@ -2582,7 +2582,7 @@ namespace eos
         {
             {{ "B_s->K^*::V(s)", "B_s->K^*::V(s)" }},
             {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "FMvD2015" } }, Options{ { "form-factors", "FMvD2015" } } }},
             {{ 0.872, 1.722 }},
             {{ 0.066, 0.066 }},
             {{ 0.066, 0.066 }},
@@ -2597,7 +2597,7 @@ namespace eos
         {
             {{ "B_s->K^*::A_1(s)", "B_s->K^*::A_1(s)" }},
             {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "FMvD2015" } }, Options{ { "form-factors", "FMvD2015" } } }},
             {{ 0.427, 0.548 }},
             {{ 0.015, 0.015 }},
             {{ 0.015, 0.015 }},
@@ -2612,7 +2612,7 @@ namespace eos
         {
             {{ "B_s->K^*::A_12(s)", "B_s->K^*::A_12(s)" }},
             {{ Kinematics{ { "s", 15.0 } }, Kinematics{ { "s", 19.21 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "FMvD2015" } }, Options{ { "form-factors", "FMvD2015" } } }},
             {{ 0.342, 0.408 }},
             {{ 0.016, 0.016 }},
             {{ 0.016, 0.016 }},
@@ -2634,7 +2634,7 @@ namespace eos
         {
             {{ "B->pi::f_+(s)", "B->pi::f_+'(s)", "B->pi::f_+''(s)", "B->pi::f_+(s)", "B->pi::f_+'(s)", "B->pi::f_+''(s)" }},
             {{ Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 10.0 } },Kinematics{ { "s", 10.0 } }, Kinematics{ { "s", 10.0 } } }},
-            {{ Options{ }, Options{ }, Options{ }, Options{ }, Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "BCL2008" } }, Options{ { "form-factors", "BCL2008" } }, Options{ { "form-factors", "BCL2008" } }, Options{ { "form-factors", "BCL2008" } }, Options{ { "form-factors", "BCL2008" } }, Options{ { "form-factors", "BCL2008" } } }},
             {{ 3.095910e-1, 1.5545000e-2, 1.242580e-3, 5.619880e-1, 4.033900e-2, 4.708910e-3 }},
             {{ 0.199207e-1, 0.0999788e-2, 0.108337e-3, 0.321127e-1, 0.237506e-2, 0.365924e-3 }},
             {{ 0.199207e-1, 0.0999788e-2, 0.108337e-3, 0.321127e-1, 0.237506e-2, 0.365924e-3 }},
@@ -2658,7 +2658,7 @@ namespace eos
         {
             {{ "Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda::f_long^A(s)" }},
             {{ Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } }, Kinematics{ { "s", 0.0 } } }},
-            {{ Options{ }, Options{ }, Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "BFvD2014" } }, Options{ { "form-factors", "BFvD2014" } }, Options{ { "form-factors", "BFvD2014" } }, Options{ { "form-factors", "BFvD2014" } } }},
             {{ 0.391, 0.389, 0.380, 0.380 }},
             {{ 0.226, 0.224, 0.221, 0.221 }},
             {{ 0.226, 0.224, 0.221, 0.221 }},
@@ -2674,7 +2674,7 @@ namespace eos
         {
             {{ "Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda::f_perp^V(s)" }},
             {{ Kinematics{ { "s", 13.5 } }, Kinematics{ { "s", 20.5 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "BFvD2014" } }, Options{ { "form-factors", "BFvD2014" } } }},
             {{ 0.73, 1.40 }},
             {{ 0.20, 0.20 }},
             {{ 0.20, 0.20 }},
@@ -2688,7 +2688,7 @@ namespace eos
         {
             {{ "Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda::f_perp^A(s)" }},
             {{ Kinematics{ { "s", 13.5 } }, Kinematics{ { "s", 20.5 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "BFvD2014" } }, Options{ { "form-factors", "BFvD2014" } } }},
             {{ 0.48, 0.84 }},
             {{ 0.19, 0.19 }},
             {{ 0.19, 0.19 }},
@@ -2702,7 +2702,7 @@ namespace eos
         {
             {{ "Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda::f_long^V(s)" }},
             {{ Kinematics{ { "s", 13.5 } }, Kinematics{ { "s", 20.5 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "BFvD2014" } }, Options{ { "form-factors", "BFvD2014" } } }},
             {{ 0.72, 1.39 }},
             {{ 0.21, 0.21 }},
             {{ 0.21, 0.21 }},
@@ -2716,7 +2716,7 @@ namespace eos
         {
             {{ "Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda::f_long^A(s)" }},
             {{ Kinematics{ { "s", 13.5 } }, Kinematics{ { "s", 20.5 } } }},
-            {{ Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "BFvD2014" } }, Options{ { "form-factors", "BFvD2014" } } }},
             {{ 0.48, 0.85 }},
             {{ 0.19, 0.18 }},
             {{ 0.19, 0.18 }},
@@ -2747,10 +2747,10 @@ namespace eos
                Kinematics{{ "s", 0.1 }}, Kinematics{{ "s", 4.1 }}, Kinematics{{ "s", 8.1 }}, Kinematics{{ "s", 12.1 }},
                Kinematics{{ "s", 0.1 }}, Kinematics{{ "s", 4.1 }}, Kinematics{{ "s", 8.1 }}, Kinematics{{ "s", 12.1 }},
                Kinematics{{ "s", 0.1 }}, Kinematics{{ "s", 4.1 }}, Kinematics{{ "s", 8.1 }}, Kinematics{{ "s", 12.1 }} }},
-            {{ Options{ }, Options{ }, Options{ }, Options{ },
-               Options{ }, Options{ }, Options{ }, Options{ },
-               Options{ }, Options{ }, Options{ }, Options{ },
-               Options{ }, Options{ }, Options{ }, Options{ } }},
+            {{ Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+               Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+               Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+               Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } } }},
             {{ 0.3931360084310848,  0.4968783085219962, 0.6497703570194676,  0.8942469498594812,
                0.28960640973145696, 0.3198466660096681, 0.35855018651680937, 0.4122789380284461,
                0.24856939107445855, 0.3006774595083485, 0.37238048118927736, 0.4785236202254601,
@@ -2817,7 +2817,7 @@ namespace eos
                Kinematics{{ "s", 12.9663104802 }}, Kinematics{{ "s", 16.2551930084 }}, Kinematics{{ "s", 14.9875855712 }},
                Kinematics{{ "s", 13.9849812172 }}, Kinematics{{ "s", 12.8588109331 }}, Kinematics{{ "s", 15.6490320061 }},
                Kinematics{{ "s", 14.2961458423 }}, Kinematics{{ "s", 13.2122218257 }}, Kinematics{{ "s", 11.9180885363 }},
-               Kinematics{{ "s", 17.767122327 }},  Kinematics{{ "s", 16.5179098782 }}, Kinematics{{ "s", 14.9296311557 }},
+               Kinematics{{ "s", 17.7671223270 }},  Kinematics{{ "s", 16.5179098782 }}, Kinematics{{ "s", 14.9296311557 }},
                Kinematics{{ "s", 12.9663104802 }}, Kinematics{{ "s", 17.7899990577 }}, Kinematics{{ "s", 16.2551930084 }},
                Kinematics{{ "s", 14.9875855712 }}, Kinematics{{ "s", 12.8588109331 }}, Kinematics{{ "s", 17.0322061886 }},
                Kinematics{{ "s", 15.6490320061 }}, Kinematics{{ "s", 14.2961458423 }}, Kinematics{{ "s", 11.9180885363 }},
@@ -2830,13 +2830,31 @@ namespace eos
                Kinematics{{ "s", 13.9849812172 }}, Kinematics{{ "s", 12.8588109331 }}, Kinematics{{ "s", 15.6490320061 }},
                Kinematics{{ "s", 14.2961458423 }}, Kinematics{{ "s", 13.2122218257 }}, Kinematics{{ "s", 11.9180885363 }},  }},
          // no options; default ctor just fine
-         {{ Options{} }},
-               {{ 1.41654756,  1.19402316,  1.06139874,  0.98029398,  1.41456527,  1.38416036,  1.3568178 ,  1.0031494 ,
-                  1.30654947,  1.10920364,  1.03058181,  0.72171754,  0.56552245,  0.4972255 ,  0.46514096,  0.45514081,
-                  0.54684044,  0.52813813,  0.51173916,  0.40282807,  0.54058157,  0.51625489,  0.47855314,  0.41713015,
-                  0.37980242,  0.34367319,  0.34415972,  0.33971277,  0.34482022,  0.42729289,  0.28990601,  0.31845106,
-                  0.37294807,  0.33592982,  0.34252166,  0.34954018,  1.40033868,  1.22824918,  1.17492672,  0.95528844,
-                  1.21238441,  1.30580617,  0.98476889,  0.84125097,  1.35984599,  1.02937473,  1.0462483 ,  0.89997334 }},
+         {{
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } },
+              Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }, Options{ { "form-factors", "BSZ2015" } }
+         }},
+         {{
+              1.41654756,  1.19402316,  1.06139874,  0.98029398,  1.41456527,  1.38416036,  1.3568178 ,  1.0031494 ,
+              1.30654947,  1.10920364,  1.03058181,  0.72171754,  0.56552245,  0.4972255 ,  0.46514096,  0.45514081,
+              0.54684044,  0.52813813,  0.51173916,  0.40282807,  0.54058157,  0.51625489,  0.47855314,  0.41713015,
+              0.37980242,  0.34367319,  0.34415972,  0.33971277,  0.34482022,  0.42729289,  0.28990601,  0.31845106,
+              0.37294807,  0.33592982,  0.34252166,  0.34954018,  1.40033868,  1.22824918,  1.17492672,  0.95528844,
+              1.21238441,  1.30580617,  0.98476889,  0.84125097,  1.35984599,  1.02937473,  1.0462483 ,  0.89997334 }},
          {{
        {{ 1.16627106e-02,   7.49153547e-03,   6.45838440e-03,   8.15007038e-03,   6.55522244e-03,   5.21724930e-03,
           5.81927477e-03,   5.32914011e-03,   1.10130135e-02,   9.79601309e-03,   8.96424430e-03,   6.79804829e-03,
@@ -3302,17 +3320,10 @@ namespace eos
         return std::bind(&Factory_::make, f, std::placeholders::_1, std::placeholders::_2);
     }
 
-    /*
-     * Adding a new constraint:
-     * 1. Instantiate one of the existing ConstraintTemplate in namespace templates{...}
-     * 2. Add an entry to the map in Constraint::make
-     * 3. Add the constraint name to constraint_TEST.cc
-     * 4. Run constraint_TEST and check text output for new constraint
-     */
-    Constraint
-    Constraint::make(const std::string & name, const Options & options)
+    const std::map<std::string, ConstraintFactory> &
+    make_constraint_factories()
     {
-        static const std::map<std::string, ConstraintFactory> factories
+        static const std::map<std::string, ConstraintFactory> constraint_factories =
         {
             /* 2000 */
             // CLEO
@@ -3582,6 +3593,7 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_14dot18_to_16_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_16_to_19_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_1_to_6_LHCb_2013B) },
+            // The following constraint does not conform to a gaussian likelihood.
             { "B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_14dot18_to_16_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_16_to_19_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::P'_4[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_4_1_to_6_LHCb_2013C) },
@@ -3636,10 +3648,62 @@ namespace eos
             { "B->K^*::V+A_0+A_1+A_12@HLMW2015", make_factory(templates::B_to_Kstar_V_A0_A1_A12_11dot9_to_17dot8_HLMW_2015) },
         };
 
+        return constraint_factories;
+    }
+
+    /*
+     * Adding a new constraint:
+     * 1. Instantiate an existing ConstraintTemplate in namespace templates{...}
+     * 2. Add an entry to the map in make_constraint_factories
+     * 4. Run constraint_TEST and check text output for new constraint
+     */
+    Constraint
+    Constraint::make(const std::string & name, const Options & options)
+    {
+        const auto & factories = make_constraint_factories();
+
         auto f = factories.find(name);
         if (f == factories.end())
             throw UnknownConstraintError(name);
 
         return f->second(f->first, options);
+    }
+
+    template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::string &>;
+
+    template<>
+    struct Implementation<Constraints>
+    {
+        std::vector<std::string> constraints;
+
+        Implementation()
+        {
+            // read out constraint names only
+            for (auto & cf : make_constraint_factories())
+            {
+                constraints.push_back(cf.first);
+            }
+        }
+    };
+
+    Constraints::Constraints() :
+        PrivateImplementationPattern<Constraints>(new Implementation<Constraints>())
+    {
+    }
+
+    Constraints::~Constraints()
+    {
+    }
+
+    Constraints::ConstraintIterator
+    Constraints::begin() const
+    {
+        return ConstraintIterator(_imp->constraints.begin());
+    }
+
+    Constraints::ConstraintIterator
+    Constraints::end() const
+    {
+        return ConstraintIterator(_imp->constraints.end());
     }
 }

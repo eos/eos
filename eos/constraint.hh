@@ -83,6 +83,30 @@ namespace eos
             static Constraint make(const std::string & name, const Options & options);
     };
 
+
+    /*!
+     * Container around the known and implemented constraints
+     */
+    class Constraints :
+        public PrivateImplementationPattern<Constraints>
+    {
+    public:
+        /// Constructor.
+        Constraints();
+
+        /// Destructor.
+        ~Constraints();
+
+        ///@name Iteration over known constraints
+        ///@{
+        struct ConstraintIteratorTag;
+        typedef WrappedForwardIterator<ConstraintIteratorTag, const std::string &> ConstraintIterator;
+
+        ConstraintIterator begin() const;
+        ConstraintIterator end() const;
+        ///@}
+    };
+
     /*!
      * UnknownConstraintError is thrown when Constraint::make encounters an unknown constraint name.
      */
