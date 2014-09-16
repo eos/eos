@@ -188,6 +188,13 @@ Experimental Results
         CMS-PAS-BPH-13-007, LHCb-CONF-2013-012, CERN-LHCb-CONF-2013-012
 
 
+    CMS-LHCb:2014A
+
+        $B^0_{s} \to \mu^+\mu^-$ at the LHC
+
+        http://indico.cern.ch/event/253826/session/6/contribution/27
+
+
     D0:2011A : Abazov, V.M. et al. [D0 Collaboration]
 
         Measurement of the CP-violating phase phi^J/psiphi_s using the flavor-tagged

@@ -2348,6 +2348,33 @@ namespace eos
             0.035, +0.035, -0.035, +0.02, -0.02
         };
 
+        /*
+         * CMS +LHCb Collaborations
+         *
+         * Data taken from [CMS-LHCb:2014A]
+         */
+
+        /* fit Amoroso to result assuming
+         * a) cdf(0) = 0
+         * b) mode = 2.8
+         * c) 68% in (2.2, 3.5)
+         * d) pdf(2.2) = pdf(3.5) (smallest interval)
+         */
+        static const AmorosoConstraintTemplate B_s_to_dimuon_CMS_LHCb_2014A
+        {
+            "B_q->ll::BR@Untagged",
+            Kinematics(),
+            Options{ { "q", "s"  }, { "l", "mu" } },
+            0.0, 0.154243e-9, 19.4025, 1.0048
+        };
+
+        static const AmorosoConstraintTemplate Bzero_to_dimuon_CMS_LHCb_2014A
+        {
+            "B_q->ll::BR@Untagged",
+            Kinematics(),
+            Options{ { "q", "d"  }, { "l", "mu" } },
+            0.0, 3.09469e-10, 2.08667, 1.98708
+        };
         ///@}
     }
 
@@ -2730,6 +2757,10 @@ namespace eos
             { "B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_15_to_22_LHCb_2014) },
             { "B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_1dot1_to_6_LHCb_2014) },
             { "B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_15_to_22_LHCb_2014) },
+
+            // CMS + LHCb
+            { "B^0_s->mu^+mu^-::BR@CMS-LHCb-2014", make_factory(templates::B_s_to_dimuon_CMS_LHCb_2014A) },
+            { "B^0_d->mu^+mu^-::BR@CMS-LHCb-2014", make_factory(templates::Bzero_to_dimuon_CMS_LHCb_2014A) },
         };
 
         auto f = factories.find(name);
