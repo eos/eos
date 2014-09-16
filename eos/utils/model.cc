@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2014 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,6 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/ckm_scan_model.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/standard-model.hh>
 #include <eos/utils/wilson_scan_model.hh>
@@ -35,6 +36,7 @@ namespace eos
         typedef std::function<std::shared_ptr<Model> (const Parameters &, const Options &)> ModelMaker;
         static const std::map<std::string, ModelMaker> model_makers
         {
+            std::make_pair("CKMScan", &CKMScanModel::make),
             std::make_pair("SM", &StandardModel::make),
             std::make_pair("WilsonScan", &WilsonScanModel::make),
         };

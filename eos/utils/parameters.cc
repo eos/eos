@@ -232,6 +232,25 @@ namespace eos
             Parameter::Template{"CKM::lambda",                                   +0.22470,        +0.22535,        +0.22600       },
             Parameter::Template{"CKM::rhobar",                                   +0.111,          +0.132,          +0.153         },
             Parameter::Template{"CKM::etabar",                                   +0.336,          +0.350,          +0.364         },
+            // CKM matrix elements for use by CKMScanModel
+            Parameter::Template{"CKM::abs(V_ud)",                                +1.00,           +1.00,           +1.00          },
+            Parameter::Template{"CKM::arg(V_ud)",                                +1.00,           +1.00,           +1.00          },
+            Parameter::Template{"CKM::abs(V_us)",                                +0.22,           +0.22,           +0.22          },
+            Parameter::Template{"CKM::arg(V_us)",                                +0.22,           +0.22,           +0.22          },
+            Parameter::Template{"CKM::abs(V_ub)",                                +0.00,           +0.00,           +0.00          },
+            Parameter::Template{"CKM::arg(V_ub)",                                +0.00,           +0.00,           +0.00          },
+            Parameter::Template{"CKM::abs(V_cd)",                                +1.00,           +1.00,           +1.00          },
+            Parameter::Template{"CKM::arg(V_cd)",                                +1.00,           +1.00,           +1.00          },
+            Parameter::Template{"CKM::abs(V_cs)",                                +0.22,           +0.22,           +0.22          },
+            Parameter::Template{"CKM::arg(V_cs)",                                +0.22,           +0.22,           +0.22          },
+            Parameter::Template{"CKM::abs(V_cb)",                                +0.00,           +0.00,           +0.00          },
+            Parameter::Template{"CKM::arg(V_cb)",                                +0.00,           +0.00,           +0.00          },
+            Parameter::Template{"CKM::abs(V_td)",                                +0.00,           +0.00,           +0.00          },
+            Parameter::Template{"CKM::arg(V_td)",                                +0.00,           +0.00,           +0.00          },
+            Parameter::Template{"CKM::abs(V_ts)",                                +0.04,           +0.04,           +0.04          },
+            Parameter::Template{"CKM::arg(V_ts)",                                +0.04,           +0.04,           +0.04          },
+            Parameter::Template{"CKM::abs(V_tb)",                                +1.00,           +1.00,           +1.00          },
+            Parameter::Template{"CKM::arg(V_tb)",                                +1.00,           +1.00,           +1.00          },
             // QED inputs
             Parameter::Template{"QED::alpha_e(m_b)",                             +1.0/133.0,      +1.0/133.0,      +1.0/128.0     }, // alpha_e(m_b) .. alpha_e(m_W)
             // QCD inputs

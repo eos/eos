@@ -21,6 +21,7 @@ libeosutils_la_SOURCES = \
 	apply.hh \
 	cartesian-product.hh \
 	chi-squared.hh chi-squared.cc \
+	ckm_scan_model.cc ckm_scan_model.hh \
 	cluster.cc cluster.hh \
 	complex.hh \
 	concrete_observable.hh \
@@ -95,6 +96,7 @@ include_eos_utils_HEADERS = \
 	apply.hh \
 	cartesian-product.hh \
 	chi-squared.hh \
+	ckm_scan_model.hh \
 	complex.hh \
 	concrete_observable.hh \
 	condition_variable.hh \
@@ -150,6 +152,7 @@ TESTS = \
 	apply_TEST \
 	cartesian-product_TEST \
 	chi-squared_TEST \
+	ckm_scan_model_TEST \
 	derivative_TEST \
 	equation_solver_TEST \
 	hdf5_TEST \
@@ -207,6 +210,8 @@ apply_TEST_SOURCES = apply_TEST.cc
 cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 
 chi_squared_TEST_SOURCES = chi-squared_TEST.cc
+
+ckm_scan_model_TEST_SOURCES = ckm_scan_model_TEST.cc
 
 derivative_TEST_SOURCES = derivative_TEST.cc
 
