@@ -2453,17 +2453,10 @@ namespace eos
         return std::bind(&Factory_::make, f, std::placeholders::_1, std::placeholders::_2);
     }
 
-    /*
-     * Adding a new constraint:
-     * 1. Instantiate one of the existing ConstraintTemplate in namespace templates{...}
-     * 2. Add an entry to the map in Constraint::make
-     * 3. Add the constraint name to constraint_TEST.cc
-     * 4. Run constraint_TEST and check text output for new constraint
-     */
-    Constraint
-    Constraint::make(const std::string & name, const Options & options)
+    const std::map<std::string, ConstraintFactory> &
+    make_constraint_factories()
     {
-        static const std::map<std::string, ConstraintFactory> factories
+        static const std::map<std::string, ConstraintFactory> constraint_factories =
         {
             /* 2000 */
             // CLEO
@@ -2724,6 +2717,7 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_14dot18_to_16_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_T2_16_to_19_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_1_to_6_LHCb_2013B) },
+            // The following constraint does not conform to a gaussian likelihood.
             { "B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_14dot18_to_16_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_A_Tre_16_to_19_LHCb_2013B) },
             { "B^0->K^*0mu^+mu^-::P'_4[1.00,6.00]@LHCb-2013", make_factory(templates::Bzero_to_Kstarzero_dimuon_Pprime_4_1_to_6_LHCb_2013C) },
@@ -2763,10 +2757,62 @@ namespace eos
             { "B^0_d->mu^+mu^-::BR@CMS-LHCb-2014", make_factory(templates::Bzero_to_dimuon_CMS_LHCb_2014A) },
         };
 
+        return constraint_factories;
+    }
+
+    /*
+     * Adding a new constraint:
+     * 1. Instantiate an existing ConstraintTemplate in namespace templates{...}
+     * 2. Add an entry to the map in make_constraint_factories
+     * 4. Run constraint_TEST and check text output for new constraint
+     */
+    Constraint
+    Constraint::make(const std::string & name, const Options & options)
+    {
+        const auto & factories = make_constraint_factories();
+
         auto f = factories.find(name);
         if (f == factories.end())
             throw UnknownConstraintError(name);
 
         return f->second(f->first, options);
+    }
+
+    template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::string &>;
+
+    template<>
+    struct Implementation<Constraints>
+    {
+        std::vector<std::string> constraints;
+
+        Implementation()
+        {
+            // read out constraint names only
+            for (auto & cf : make_constraint_factories())
+            {
+                constraints.push_back(cf.first);
+            }
+        }
+    };
+
+    Constraints::Constraints() :
+        PrivateImplementationPattern<Constraints>(new Implementation<Constraints>())
+    {
+    }
+
+    Constraints::~Constraints()
+    {
+    }
+
+    Constraints::ConstraintIterator
+    Constraints::begin() const
+    {
+        return ConstraintIterator(_imp->constraints.begin());
+    }
+
+    Constraints::ConstraintIterator
+    Constraints::end() const
+    {
+        return ConstraintIterator(_imp->constraints.end());
     }
 }
