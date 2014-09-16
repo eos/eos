@@ -1288,6 +1288,46 @@ namespace eos
         };
 
         /*
+         * BaBar Collaboration
+         *
+         * Data taken from [BaBar:2012D], Table VIII, p. 14. We use the results
+         * 'without FSR' (final state radiation).
+         * We combine correlations between the statistic uncertainties and systematic uncertainties.
+         */
+        static const MultivariateGaussianConstraintTemplate<6> Bzero_to_pi_l_nu_BR_BaBar_2012D
+        {
+            {{ "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR" }},
+            {{
+                 Kinematics{ { "s_min",  0.0 }, { "s_max",  2.0 } },
+                 Kinematics{ { "s_min",  2.0 }, { "s_max",  4.0 } },
+                 Kinematics{ { "s_min",  4.0 }, { "s_max",  6.0 } },
+                 Kinematics{ { "s_min",  6.0 }, { "s_max",  8.0 } },
+                 Kinematics{ { "s_min",  8.0 }, { "s_max", 10.0 } },
+                 Kinematics{ { "s_min", 10.0 }, { "s_max", 12.0 } }
+            }},
+            {{
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } },
+                 Options{ { "q", "d" } }
+            }},
+            {{ 0.1225e-4, 0.1277e-4, 0.1274e-4, 0.1498e-4, 0.1405e-4, 0.1617e-4 }},
+            {{ 0.0,       0.0,       0.0,       0.0,       0.0,       0.0       }},
+            {{ 0.0,       0.0,       0.0,       0.0,       0.0,       0.0       }},
+            {{ 0.0182e-4, 0.0128e-4, 0.0109e-4, 0.0103e-4, 0.0115e-4, 0.0104e-4 }},
+            {{
+                {{ +1.0000, -0.0759, +0.1679, +0.1432, +0.1831, +0.1471 }},
+                {{ -0.0759, +1.0000, -0.1473, +0.2174, +0.0718, +0.0975 }},
+                {{ +0.1679, -0.1473, +1.0000, -0.0889, +0.2250, +0.1076 }},
+                {{ +0.1432, +0.2174, -0.0889, +1.0000, +0.0218, +0.2772 }},
+                {{ +0.1831, +0.0718, +0.2250, +0.0218, +1.0000, -0.0425 }},
+                {{ +0.1471, +0.0975, +0.1076, +0.2772, -0.0425, +1.0000 }},
+            }}
+        };
+
+        /*
          * CDF Collaboration
          *
          * Data taken from [CDF:2012A]
@@ -2719,6 +2759,8 @@ namespace eos
             { "B->X_sgamma::E_1[1.8]@BaBar-2012", make_factory(templates::B_to_Xs_gamma_E_1_1dot8_BaBar_2012C) },
             { "B->X_sgamma::E_2[1.8]@BaBar-2012", make_factory(templates::B_to_Xs_gamma_E_2_1dot8_BaBar_2012C) },
             { "B->X_sgamma::E_1[1.8]+E_2[1.8]@BaBar-2012", make_factory(templates::B_to_Xs_gamma_E_1_and_E_2_1dot8_BaBar_2012C) },
+            // B^0 -> pi^- l nu
+            { "B^0->pi^+lnu::BR@BaBar-2012D", make_factory(templates::Bzero_to_pi_l_nu_BR_BaBar_2012D) },
             // CDF
             // B^0 -> K^*0 mu^+ mu^-
             { "B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2012", make_factory(templates::Bzero_to_Kstarzero_dimuon_BR_1_to_6_CDF_2012) },

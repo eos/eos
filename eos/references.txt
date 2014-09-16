@@ -94,6 +94,14 @@ Experimental Results
         arxiv:1207.5772
 
 
+    BaBar:2012D : Lees, J.P. et al. [BaBar Collaboration]
+
+        Branching fraction and form-factor shape measurements of exclusive charmless semileptonic
+        B decays, and determination of |Vub|
+
+        arxiv:1208.1253 [hep-ex]
+
+
     Belle:2004 : Nakao, M. et al. [Belle Collaboration]
 
         Measurement of the B ---> K* gamma branching fractions and asymmetries

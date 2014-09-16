@@ -206,6 +206,8 @@ class ConstraintTest :
                     "B->X_sgamma::BR[1.8]@BaBar-2012",
                     "B->X_sgamma::E_1[1.8]@BaBar-2012",
                     "B->X_sgamma::E_2[1.8]@BaBar-2012",
+                    // B^0 -> pi l nu
+                    "B^0->pi^+lnu::BR@BaBar-2012D",
 
                     // CDF
                     // B^0 -> K^*0 mu^+ mu^-
