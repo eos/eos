@@ -972,8 +972,8 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
             // just form factors, so agreement must be great
             TEST_CHECK_RELATIVE_ERROR_C(d.F_A(s), complex<double>(2.803705304, -6.0), 1e-14);
 
-            TEST_CHECK_RELATIVE_ERROR_C(d.F_S(s), complex<double>(2.290345545, -4.372477858), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(d.F_P(s),  complex<double>(2.6173133, -4.1227237), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_S(s),  complex<double>(2.290345545, -4.372477858), eps);
+            TEST_CHECK_RELATIVE_ERROR_C(d.F_P(s),  complex<double>(2.6173133,   -4.1227237), eps);
             TEST_CHECK_RELATIVE_ERROR_C(d.F_T(s),  complex<double>(4.348710794, -6.764661235), eps);
             TEST_CHECK_RELATIVE_ERROR_C(d.F_T5(s), complex<double>(4.831900882, -7.247851323), eps);
 

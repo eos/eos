@@ -1655,7 +1655,7 @@ namespace eos
         std::complex<double> F_P(const WilsonCoefficients<BToS> & wc, const double & s) const
         {
             return F_Skin(s) * (wc.cP() + wc.cPprime()) + m_l() * (wc.c10() + wc.c10prime()) *
-                    ((m_B() * m_B() - m_K() * m_K()) / s * (f_t_over_f_p(s) - 1.0) - 1.0);
+                    ((m_B() * m_B() - m_K() * m_K()) / s * (form_factors->f_0(s) / form_factors->f_p(s) - 1.0) - 1.0);
         }
 
         // cf. [BHP2007], Eq. (3.2), p. 4
