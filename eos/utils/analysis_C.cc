@@ -106,16 +106,18 @@ extern "C" {
     {
         std::stringstream ostream;
 
-        ostream << "Constraints:" << std::endl;
-        ostream << "------------" << std::endl;
+        ostream << "Constraints ("
+                << std::distance(ana->log_likelihood().begin(), ana->log_likelihood().end())
+                << "):" << std::endl;
+        ostream << "-----------" << std::endl;
         auto likelih = ana->log_likelihood();
         for (auto & constr : likelih)
             ostream << constr.name() << std::endl;
         ostream << std::endl;
 
-        ostream << std::endl << "Observables:";
-        ostream << std::endl << "------------" << std::endl;
         const auto & cache = likelih.observable_cache();
+        ostream << std::endl << "Observables (" << cache.size() << "):";
+        ostream << std::endl << "-----------" << std::endl;
         for (ObservableCache::Id i = 0; i < cache.size(); ++i)
         {
             auto o = cache.observable(i);
@@ -128,8 +130,8 @@ extern "C" {
         }
         ostream << std::endl;
 
-        ostream << "Parameters:" << std::endl;
-        ostream << "-----------" << std::endl;
+        ostream << "Parameters (" << ana->parameter_descriptions().size() << "):" << std::endl;
+        ostream << "----------" << std::endl;
         for (auto & i : ana->parameter_descriptions())
         {
             Parameter p = i.parameter;
