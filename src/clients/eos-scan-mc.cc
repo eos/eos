@@ -396,6 +396,13 @@ class CommandLine :
                             << "Global option (" << name << " = " << value <<") only applies to observables/constraints defined from now on, "
                             << "but doesn't affect the " << constraints.size() << " previously defined constraints.";
                     }
+                    std::string old_value = global_options.get(name, value);
+                    if (old_value != value)
+                    {
+                        Log::instance()->message("eos-scan-mc", ll_warning)
+                            << "Updating global option " << name << " from " << old_value
+                            << " to " << value;
+                    }
 
                     global_options.set(name, value);
 
@@ -1118,7 +1125,8 @@ int main(int argc, char * argv[])
             {
                 std::cout << "#   " << i->observable->name() << '['
                     << i->kinematics.as_string() << "] = (" << i->min << ", "
-                    << i->central << ", " << i->max << ')' << std::endl;
+                    << i->central << ", " << i->max << ')'
+                    << " with options: " <<  i->observable->options().as_string() << std::endl;
             }
         }
 
