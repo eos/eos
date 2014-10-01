@@ -773,6 +773,13 @@ Theoretical Inputs
         arxiv:nucl-th/0703094
 
 
+    IKMvD2014 : Imsong, I.S. and Khodjamirian, A. and Mannel, Th. and van Dyk, D.
+
+        Extrapolation and unitarity bounds for the B -> pi form factor
+
+        arxiv:1409.XXXX [hep-ph]
+
+
     KMPW2010 : Khodjamirian, A. and Mannel, Th. and Pivovarov, A.A. and Wang, Y.-M.
 
         Charm-loop effect in B to K^(*)l^+l^- and B to K^* gamma
