@@ -509,8 +509,8 @@ namespace eos
                     gsl_sf_result result;
                     if ( ! GSL_SUCCESS == gsl_sf_psi_e(_alpha, &result))
                     {
-                        Log::instance()->message("LogPrior::LogGamma.variance", ll_error)
-                            << "Error in evaluating the trigamma function in GSL";
+                        Log::instance()->message("LogPrior::LogGamma.mean", ll_error)
+                            << "Error in evaluating the digamma function in GSL";
                     }
                     return _nu + _lambda * result.val;
                 }
