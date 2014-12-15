@@ -122,6 +122,10 @@ typedef PriorSampler::SamplesList SamplesList;
                             << "Computing " << observables.size() << " observables for "
                             << std::distance(first, last) << " parameter samples";
 
+                // setup random number generator
+                gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
+                gsl_rng_set(rng, seed);
+
                 // loop over samples
                 for (; first != last; ++first)
                 {
@@ -132,12 +136,22 @@ typedef PriorSampler::SamplesList SamplesList;
                         def->parameter = *p;
                     }
 
+                    auto p = priors.cbegin();
+                    std::advance(p, std::distance(first->cbegin(), first->cend()));
+                    for (auto p_end = priors.cend() ; p != p_end ; ++p, ++def)
+                    {
+                        def->parameter = (*p)->sample(rng);
+                    }
+
                     // calculate all observables
                     std::vector<double> observable_sample;
                     for (auto & o : observables)
                         observable_sample.push_back(o->evaluate());
                     observable_samples.push_back(observable_sample);
                 }
+
+                // free RN generator
+                gsl_rng_free(rng);
             }
 
             /*!
@@ -250,6 +264,18 @@ typedef PriorSampler::SamplesList SamplesList;
 
         void run(const SamplesList & samples, const std::vector<ParameterDescription> & defs)
         {
+            this->parameter_descriptions.insert(this->parameter_descriptions.begin(), defs.begin(), defs.end());
+
+            {
+                std::vector<LogPriorPtr> priors;
+                for (auto d = defs.cbegin(), d_end = defs.cend() ; d != d_end ; ++d)
+                {
+                    priors.push_back(LogPrior::Flat(Parameters::Defaults(), d->parameter.name(), ParameterRange{ d->min, d->max }));
+                }
+
+                this->priors.insert(this->priors.begin(), priors.begin(), priors.end());
+            }
+
             // setup the scan file
             setup_output();
 
@@ -271,7 +297,7 @@ typedef PriorSampler::SamplesList SamplesList;
 
             for (unsigned chunk = 0 ; chunk < config.n_workers; ++chunk)
             {
-                workers.push_back(std::make_shared<Worker>(observables, priors, defs.empty() ? parameter_descriptions : defs,
+                workers.push_back(std::make_shared<Worker>(observables, this->priors, this->parameter_descriptions,
                         config.seed + chunk));
 
                 unsigned samples_per_worker = average_samples_per_worker;
