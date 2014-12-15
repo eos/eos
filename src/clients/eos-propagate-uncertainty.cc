@@ -354,16 +354,24 @@ int main(int argc, char * argv[])
         // read in parameter samples from the file and calculate observables for them
         if ( ! inst->pmc_sample_file.empty() && inst->pmc_sample_min < inst->pmc_sample_max)
         {
-            if ( ! inst->priors.empty())
-            {
-                Log::instance()->message("eos-propagate-uncertainty", ll_warning)
-                    << "Ignoring all " + inst->priors.size() << " priors. Using PMC samples instead";
-            }
             auto f = hdf5::File::Open(inst->pmc_sample_file);
             auto descriptions = Analysis::read_descriptions(f);
             std::vector<std::vector<double>> samples;
             samples.push_back(std::vector<double>(descriptions.size()));
             PopulationMonteCarloSampler::read_samples(inst->pmc_sample_file, inst->pmc_sample_directory, inst->pmc_sample_min, inst->pmc_sample_max, samples);
+
+            if (! inst->priors.empty())
+            {
+                std::cout << "Varying the following parameters:" << std::endl;
+            }
+
+            for (auto i = inst->priors.begin(), i_end = inst->priors.end() ; i != i_end ; ++i)
+            {
+                sampler.add(*i);
+
+                std::cout << (**i).as_string() << std::endl;
+            }
+
             sampler.run(samples, descriptions);
 
             return EXIT_SUCCESS;
