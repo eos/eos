@@ -9,6 +9,7 @@ libeosbdecays_la_SOURCES = \
 	properties.cc properties.hh
 libeosbdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	-lgslcblas \
 	-lgsl
 
@@ -25,6 +26,7 @@ TESTS = \
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	libeosbdecays.la \
+	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/libeos.la
 
