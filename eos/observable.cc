@@ -162,6 +162,22 @@ namespace eos
             make_observable("B->K^*::A_2(s)/A_1(s)", "B->K^*",
                     &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1),
 
+            // B_s -> K^* Form Factors
+            make_observable("B_s->K^*::V(s)", "B_s->K^*",
+                    &FormFactors<PToV>::v),
+
+            make_observable("B_s->K^*::A_0(s)", "B_s->K^*",
+                    &FormFactors<PToV>::a_0),
+
+            make_observable("B_s->K^*::A_1(s)", "B_s->K^*",
+                    &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->K^*::A_2(s)", "B_s->K^*",
+                    &FormFactors<PToV>::a_2),
+
+            make_observable("B_s->K^*::A_12(s)", "B_s->K^*",
+                    &FormFactors<PToV>::a_12),
+
             // Lambda_b -> Lambda Form Factors
             make_observable("Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_v),
@@ -181,6 +197,8 @@ namespace eos
 
             make_observable("Lambda_b->Lambda_c::G(1)",
                     &ZeroRecoilSumRule<LambdaBToC>::axialvector_current),
+
+            /* Exclusive Decays */
 
             /* Exclusive B Decays */
 
