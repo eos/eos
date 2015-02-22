@@ -127,6 +127,27 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 )
 CXXFLAGS=$save_CXXFLAGS
 dnl }}}
+dnl {{{ check for constexpr const
+AC_MSG_CHECKING([for constexpr const])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS -std=c++0x"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+	struct X
+	{
+		static constexpr const int foo = 42;
+	};
+	int main(int, char **)
+	{
+		return 42 == X::foo;
+	}
+])],
+	[AC_MSG_RESULT([yes])],
+	[AC_MSG_RESULT([no])
+	 AC_MSG_ERROR([your compiler does not support constexpr const])
+	]
+)
+CXXFLAGS=$save_CXXFLAGS
+dnl }}}
 dnl }}}
 
 dnl {{{ check for libraries
