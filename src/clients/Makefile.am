@@ -25,8 +25,14 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 if EOS_ENABLE_PMC
+bin_PROGRAMS += \
+	eos-sample-pmc
+
 LDADD += \
 	-lpmc -ldl
+
+eos_sample_pmc_SOURCES = eos-sample-pmc.cc
+eos_sample_pmc_LDADD = $(LDADD) -lgsl -lMinuit2
 endif
 
 eos_evaluate_SOURCES = eos-evaluate.cc
