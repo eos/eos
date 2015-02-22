@@ -5,6 +5,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
 bin_PROGRAMS = \
 	eos-evaluate \
+	eos-find-mode \
 	eos-list-parameters \
 	eos-list-signal-pdfs \
 	eos-print-polynomial \
@@ -19,6 +20,7 @@ noinst_PROGRAMS = \
 LDADD = \
 	-lhdf5 \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
+	$(top_builddir)/eos/optimize/libeosoptimize.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
@@ -37,6 +39,9 @@ eos_sample_pmc_LDADD = $(LDADD) -lgsl -lMinuit2
 endif
 
 eos_evaluate_SOURCES = eos-evaluate.cc
+
+eos_find_mode_SOURCES = eos-find-mode.cc
+eos_find_mode_LDADD = $(LDADD) -lgsl
 
 eos_list_parameters_SOURCES = eos-list-parameters.cc
 
