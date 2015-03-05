@@ -60,13 +60,6 @@ namespace eos
             virtual unsigned number_of_observations() const = 0;
 
             /*!
-             * Fix the predictions for fixed parameters within given model.
-             * Calculate any normalization constants to fix the sampling distribution
-             * in order to speed up repeated calls of sample().
-             */
-            virtual void prepare_sampling();
-
-            /*!
              * Sample from the logarithm of the likelihood for this block.
              * @warning Call prepare_sampling() before a call to sample() to
              * ensure that one really gets a log likelihood value from the correct distribution,
@@ -104,6 +97,7 @@ namespace eos
                     const double & min, const double & central, const double & max,
                     const unsigned & number_of_observations = 1u);
 
+            // todo remove LogGamma block? It is not used anywhere
             /*!
              * Create a new LogLikelihoodBlock for one a single observable with asymmetric uncertainties.
              *

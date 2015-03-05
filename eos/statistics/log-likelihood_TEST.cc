@@ -66,13 +66,13 @@ namespace eos
                     llh.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +4.24, +4.25, +4.3);
 
                     p["mass::b(MSbar)"] = 4.2;
-                    TEST_CHECK_NEARLY_EQUAL(llh(), -8.813768347217003, eps);
+                    TEST_CHECK_NEARLY_EQUAL(llh(), -9.912380635885128, eps);
 
                     p["mass::b(MSbar)"] = 4.24;
-                    TEST_CHECK_NEARLY_EQUAL(llh(), +3.18623165278344, eps);
+                    TEST_CHECK_NEARLY_EQUAL(llh(), +2.087619364115315, eps);
 
                     p["mass::b(MSbar)"] = 4.3;
-                    TEST_CHECK_NEARLY_EQUAL(llh(), +1.5767937403493217, eps);
+                    TEST_CHECK_NEARLY_EQUAL(llh(), +2.0876193641153127, eps);
                 }
 
                 // Multiple test
@@ -87,7 +87,7 @@ namespace eos
                     p["mass::c"] = 1.5;
                     p["mass::tau"] = 2.28;
 
-                    TEST_CHECK_NEARLY_EQUAL(llh(), -9.646618122332889, eps);
+                    TEST_CHECK_NEARLY_EQUAL(llh(), -10.11630282317536, eps);
                 }
 
                 // clone test
@@ -217,25 +217,25 @@ namespace eos
                     // the model prediction
                     p["mass::b(MSbar)"] = 4.35;
                     cache.update();
-                    block->prepare_sampling();
 
                     gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
                     gsl_rng_set(rng, 1243);
 
                     double sample = block -> sample(rng);
-                    // likelihood from chi2 = (4.3 - 4.52)^2 / 0.1^2
-                    TEST_CHECK_NEARLY_EQUAL(sample, -1.214746202801726, eps );
+                    // likelihood from chi2 = (4.35 - 4.2975)^2 / 0.1^2
+                    double target = 1.383332873466108;
+                    TEST_CHECK_NEARLY_EQUAL(sample, target, eps );
 
-                    // now generate multiple samples for perfect fit
-                    // thus a chi^2 distribution with 1 DoF
-                    p["mass::b(MSbar)"] = 4.3;
+                    // theory is completely irrelevant, it is added and subtracted internally
+                    p["mass::b(MSbar)"] = 11234.35;
                     cache.update();
-                    block->prepare_sampling();
+                    gsl_rng_set(rng, 1243);
+                    TEST_CHECK_NEARLY_EQUAL(block->sample(rng), target, eps );
 
-                    sample = block->sample(rng);
-
-                    // likelihood from chi2 = (4.3 - 4.358)^2 / 0.1^2
-                    TEST_CHECK_NEARLY_EQUAL(sample, 1.213893687750542, eps );
+                    // likelihood from chi2 = (4.35 - 4.27296)^2 / 0.1^2
+                    p["mass::b(MSbar)"] = 4.35;
+                    cache.update();
+                    TEST_CHECK_NEARLY_EQUAL(block->sample(rng), 1.086906027470852, eps );
 
                     gsl_rng_set(rng, 15458);
 
@@ -257,16 +257,11 @@ namespace eos
                         if (sample <= 1)
                             ++n_in;
                     }
-                    // slight excess of samples: 68.4 % > 68.27
-                    // where does it come from?
-                    // checked different RNG algorithms, didn't make a difference
-                    // We only allowed variations of the data within 3 sigma,
-                    // in order to avoid possible unphysical values. This
-                    // slightly pushed the bulk up towards the central value.
-                    TEST_CHECK_NEARLY_EQUAL(n_in / double(n), 0.684 , 3e-3);
+                    // 1 sigma interval
+                    TEST_CHECK_NEARLY_EQUAL(n_in / double(n), 0.68268949213708585, 1.0 / std::sqrt(n));
 
-                    // as a consequence, mean always too low (<1), seems to converge around 0.972
-                    TEST_CHECK_NEARLY_EQUAL(mean, 0.97, 1e-2);
+                    // chi^2 distribution with 1 dof has mean 1
+                    TEST_CHECK_NEARLY_EQUAL(mean, 1, 1.0 / std::sqrt(n));
 
                     // do not allow wrong input
                     TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Gaussian(cache, obs, +4.2, +4.3, +1.2));
@@ -406,8 +401,6 @@ namespace eos
                     gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
                     gsl_rng_set(rng, 2022);
 
-                    log_gamma->prepare_sampling();
-
                     unsigned n = 1e4;
                     unsigned n_in = 0;
 
@@ -479,8 +472,6 @@ namespace eos
                     /* sampling */
                     gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
                     gsl_rng_set(rng, 1357);
-
-                    amoroso->prepare_sampling();
 
                     unsigned n = 1e4;
                     unsigned n_in_90 = 0;
@@ -640,7 +631,6 @@ namespace eos
                     gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
                     gsl_rng_set(rng, 1243);
 
-                    block->prepare_sampling();
                     double sample = block -> sample(rng);
 
                     unsigned n2_in = 0;
