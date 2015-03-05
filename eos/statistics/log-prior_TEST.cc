@@ -77,17 +77,21 @@ class LogPriorTest :
                 LogPriorPtr gauss_prior = LogPrior::Gauss(parameters, "mass::b(MSbar)", ParameterRange{ 4.15, 4.57 },
                         central - sig_lower, central, central+sig_upper);
 
-                // set m_b = 4.2
                 parameters["mass::b(MSbar)"] = 4.2;
-                TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 1.0524382901193807, eps);
+                TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 0.6555737246958322 /*1.0524382901193807*/, eps);
 
-                //set m_b = 4.25
                 parameters["mass::b(MSbar)"] = 4.25;
-                TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 1.4274382901193783, eps);
+                TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 1.0305737246958295, eps);
 
-                //set m_b = 4.389
                 parameters["mass::b(MSbar)"] = 4.389;
-                TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 0.76027860955943105, eps);
+                TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 1.0565612246958278, eps);
+
+                // continuity at zero
+                parameters["mass::b(MSbar)"] = 4.3 - 1e-7;
+                const double lower_limit = (*gauss_prior)();
+
+                parameters["mass::b(MSbar)"] = 4.3 + 1e-7;
+                TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), lower_limit, eps);
             }
 
             // cloning
@@ -99,8 +103,8 @@ class LogPriorTest :
 
                 parameters["mass::b(MSbar)"] = 4.389;
                 independent["mass::b(MSbar)"] = 4.25;
-                TEST_CHECK_NEARLY_EQUAL((*gauss_prior1)(), 0.76027860955943105, eps);
-                TEST_CHECK_NEARLY_EQUAL((*gauss_prior2)(), 1.42743829011937830, eps);
+                TEST_CHECK_NEARLY_EQUAL((*gauss_prior1)(), 1.0565612246958278, eps);
+                TEST_CHECK_NEARLY_EQUAL((*gauss_prior2)(), 1.0305737246958295, eps);
             }
 
             // vary one sigma interval
@@ -113,6 +117,18 @@ class LogPriorTest :
 
                 parameters["mass::b(MSbar)"] = 4.3;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 0.883646846442265719, eps);
+            }
+
+            // asymmetric
+            {
+                LogPriorPtr gauss_prior = LogPrior::Gauss(parameters, "mass::b(MSbar)", ParameterRange{ 0.2, 0.55 },
+                            0.319, 0.369, 0.485);
+
+                parameters["mass::b(MSbar)"] = 0.32;
+                TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 1.176587791815339, eps);
+
+                parameters["mass::b(MSbar)"] = 0.44;
+                TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 1.4694735825406655, eps);
             }
 
             //test sampling
@@ -164,10 +180,10 @@ class LogPriorTest :
                 TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.5 * n_bins) - 1], 0.5,  1e-2);
 
                 // one sigma interval should be [4.2, 4.4]
-                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.6 * n_bins) - 1] - cumulative_vec[unsigned(0.4 * n_bins) - 1], 0.68,  5e-2);
+                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.6 * n_bins) - 1] - cumulative_vec[unsigned(0.4 * n_bins) - 1], 0.68, 1e-2);
 
                 // two sigma interval should be [4.1, 4.5]
-                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.7 * n_bins) - 1] - cumulative_vec[unsigned(0.3 * n_bins) - 1], 0.95,  1.4e-2);
+                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.7 * n_bins) - 1] - cumulative_vec[unsigned(0.3 * n_bins) - 1], 0.95, 1e-2);
 
                 gsl_rng_free(rng);
             }
@@ -306,13 +322,11 @@ class LogPriorTest :
                 LogPriorPtr prior_gauss = LogPrior::Make(p, s_gauss);
                 TEST_CHECK_EQUAL(s_gauss, prior_gauss->as_string());
 
-                std::string s_gamma("Parameter: mass::c, prior type: LogGamma, range: [1,1.48], x = 1.27 + 0.07 - 0.09, nu: 1.201633227, lambda: 0.1046632085, alpha: 1.921694426");
-                LogPriorPtr prior_gamma1 = LogPrior::Make(p, s_gamma);
                 LogPriorPtr prior_gamma2 = LogPrior::LogGamma(p, "mass::c", ParameterRange{ 1.0, 1.48 }, 1.18, 1.27, 1.34);
+                LogPriorPtr prior_gamma1 = LogPrior::Make(p, prior_gamma2->as_string());
 
-                // string comparison should work
-                TEST_CHECK_EQUAL(s_gamma, prior_gamma1->as_string());
-                TEST_CHECK_EQUAL(s_gamma, prior_gamma2->as_string());
+                // creation from string should give same result
+                TEST_CHECK_EQUAL(prior_gamma1->as_string(), prior_gamma2->as_string());
             }
         }
 } log_prior_test;

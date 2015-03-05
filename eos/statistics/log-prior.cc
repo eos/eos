@@ -132,30 +132,29 @@ namespace eos
             public LogPrior
         {
             private:
-                std::string _name;
+                const std::string _name;
 
-                ParameterRange _range;
+                const ParameterRange _range;
 
-                double _lower, _central, _upper;
+                const double _lower, _central, _upper;
 
-                double _sigma_lower, _sigma_upper;
-
-                double _norm_lower, _norm_upper;
-
-                // the probability covered to the left of the central value
-                double _prob_lower;
+                const double _sigma_lower, _sigma_upper;
 
                 // coefficients needed for sampling from asymmetric Gaussian on finite support
-                // the cumulative is a piecewise function
-                // CDF(x) = CDF_lower(x, sigma_lower) if x < central, else CDF_upper(x, sigma_upper)
-                // To ensure that cumulative is
-                // a) continuous at the central value
-                // b) zero when x < x_min
-                // c) one when  x > x_max
-                // d) relative prob of upper vs. lower part is given by ratio of standard Gaussian cumulatives from [x_min, x_c] and [x_c, x_max]
-                // need to fix the coefficients in
-                // @f$CDF_{lower}(x) = c_{lower} * ( \Phi(x - x_c / \sigma_{lower}) + b_lower $@f
-                double _b_lower, _c_lower;
+                // the pdf is a piecewise function of y given x^{+a}_{-b}
+                // P(y|x,a,b) = \theta(y-x) c_a \mathcal{N}(y|x,a)  + \theta(x-y) c_b \mathcal{N}(y|x,b)
+                // Fix c_a, c_b by requiring that the PDF
+                // a) be continuous at x
+                // b) integrate to one over the range
+                const double _c_a, _c_b;
+
+                // The probability covered to the left of the central value. It is just
+                // c_b (1/2 - \Phi(y_-|x,b)
+                // but for the sampling it is faster to precompute the call to Gaussian cumulative.
+                const double _prob_lower;
+
+                // PDF normalization factor precomputed for operator()
+                const double _norm_lower, _norm_upper;
 
             public:
                 Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
@@ -167,7 +166,13 @@ namespace eos
                     _central(central),
                     _upper(upper),
                     _sigma_lower(central - lower),
-                    _sigma_upper(upper - central)
+                    _sigma_upper(upper - central),
+                    _c_a(1.0 / ((_sigma_lower / _sigma_upper) * (0.5 - gsl_cdf_gaussian_P(range.min - central, _sigma_lower))
+                                 + gsl_cdf_gaussian_P(range.max - central, _sigma_upper) - 0.5)),
+                    _c_b(_sigma_lower/ _sigma_upper * _c_a),
+                    _prob_lower(_c_b * (0.5 - gsl_cdf_gaussian_P(range.min - central, _sigma_lower))),
+                    _norm_lower(std::log(_c_b / std::sqrt(2 * M_PI) / _sigma_lower)),
+                    _norm_upper(std::log(_c_a / std::sqrt(2 * M_PI) / _sigma_upper))
                 {
                     if (range.min >= range.max)
                     {
@@ -175,20 +180,6 @@ namespace eos
                                           + ") must be smaller than maximum (" + stringify(range.max) + ")");
                     }
                     _parameter_descriptions.push_back(ParameterDescription{ _parameters[name].clone(), range.min, range.max, false });
-
-                    // scale factor takes finite range into account. For large range, it is 1
-                    _c_lower = 1.0 / (gsl_cdf_gaussian_P(_range.max - _central, _sigma_upper)
-                                    - gsl_cdf_gaussian_P(_range.min - _central, _sigma_lower));
-                    _b_lower = -1.0 * gsl_cdf_gaussian_P(_range.min - _central, _sigma_lower) * _c_lower;
-
-                    _norm_lower =  std::log(_c_lower / (std::sqrt(2.0 * M_PI) * _sigma_lower));
-                    _norm_upper =  std::log(_c_lower/ (std::sqrt(2.0 * M_PI) * _sigma_upper));
-
-                    _prob_lower = _c_lower / 2.0 + _b_lower;
-
-                    // sanity check: cdf must be continuous at the central point
-                    if (std::fabs((_c_lower / 2.0 + _b_lower) - (_c_lower / 2.0 + _b_lower)) > 1e-12)
-                        throw InternalError("LogPrior::Gauss: cdf not continuous");
                 }
 
                 virtual ~Gauss()
@@ -228,8 +219,7 @@ namespace eos
                         sigma = _sigma_upper;
                         norm = _norm_upper;
                     }
-
-                    return norm - power_of<2>((x - _central) / sigma) / 2.0;
+                    return norm - 0.5 * power_of<2>((x - _central) / sigma);
                 }
 
                 virtual LogPriorPtr clone(const Parameters & parameters) const
@@ -240,14 +230,14 @@ namespace eos
                 virtual double sample(gsl_rng * rng) const
                 {
                     // find out if sample in upper or lower part
-                    double u = gsl_rng_uniform(rng);
+                    const double u = gsl_rng_uniform(rng);
 
                     // get a sample from lower or upper part using inverse transform method
                     // CDF = c \Phi(x - x_{central} / \sigma) + b
                     if (u < _prob_lower)
-                        return gsl_cdf_ugaussian_Pinv((u - _b_lower) / _c_lower) * _sigma_lower + _central;
+                       return gsl_cdf_gaussian_Pinv((u - _prob_lower) / _c_b + 0.5, _sigma_lower) + _central;
                     else
-                        return gsl_cdf_ugaussian_Pinv((u - _b_lower) / _c_lower) * _sigma_upper + _central;
+                       return gsl_cdf_gaussian_Pinv((u - _prob_lower) / _c_a + 0.5,  _sigma_upper) + _central;
                 }
 
                 virtual double mean() const
