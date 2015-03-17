@@ -59,7 +59,7 @@ else
 		AC_MSG_FAILURE(["$with_pmc is not a directory"])
 	fi
 	CXXFLAGS="-I$with_pmc/include $CXXFLAGS"
-	LDFLAGS="-Wl,-rpath,$with_pm/lib -L$with_pmc/lib $LDFLAGS"
+	LDFLAGS="-Wl,-rpath,$with_pmc/lib -L$with_pmc/lib $LDFLAGS"
 	AC_DEFINE([EOS_ENABLE_PMC], 1, [Whether we use PMC])
 fi
 AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$with_pmc" != "xno" -a "x$with_pmc" != x])
