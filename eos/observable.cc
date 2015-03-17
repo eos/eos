@@ -26,6 +26,7 @@
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
+#include <eos/b-decays/inclusive-b-to-u.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
@@ -1390,6 +1391,10 @@ namespace eos
                     std::make_tuple("s_min", "s_max")),
 
             /* Inclusive Decays */
+
+            // B->X_u l nu (naive)
+            make_observable("B->X_ulnu::|V_ub|@Naive",
+                    &BToXuLeptonNeutrino<Naive>::v_ub),
 
             // B->X_s ll, HLMW2005
             make_observable("B->X_sll::dBR/ds@HLMW2005",
