@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014 Danny van Dyk
+ * Copyright (c) 2014, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -55,6 +55,9 @@ namespace eos
             /* B mass from the LCSR and the SVZ sum rule, respectively */
             double MB_lcsr(const double & q2) const;
             double MB_svz() const;
+
+            /* B meson decay constant at NLO */
+            double decay_constant() const;
 
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
