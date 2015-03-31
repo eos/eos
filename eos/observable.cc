@@ -396,6 +396,16 @@ namespace eos
                     &BsToKstarLeptonNeutrino::integrated_h_5,
                     std::make_tuple("s_min", "s_max")),
 
+            // B_s -> K^* l nubar Ratios
+            make_observable("B_s->K^*lnu::R_long",
+                    &BsToKstarLeptonNeutrinoRatios::ratio_long),
+
+            make_observable("B_s->K^*lnu::R_para",
+                    &BsToKstarLeptonNeutrinoRatios::ratio_para),
+
+            make_observable("B_s->K^*lnu::R_perp",
+                    &BsToKstarLeptonNeutrinoRatios::ratio_perp),
+
             /* Exclusive Rare B Decays */
 
             // B_q -> ll

@@ -28,6 +28,8 @@
 
 namespace eos
 {
+    class BsToKstarLeptonNeutrinoRatios;
+
     /*
      * Decay: B_s -> K^* l^- nubar, cf. [FMvD2014]
      */
@@ -36,6 +38,8 @@ namespace eos
         public PrivateImplementationPattern<BsToKstarLeptonNeutrino>
     {
         public:
+            friend BsToKstarLeptonNeutrinoRatios;
+
             BsToKstarLeptonNeutrino(const Parameters & parameters, const Options & options);
             ~BsToKstarLeptonNeutrino();
 
@@ -91,6 +95,19 @@ namespace eos
             double integrated_s_4(const double & s_min, const double & s_max) const;
             double integrated_s_5(const double & s_min, const double & s_max) const;
             double integrated_s_6s(const double & s_min, const double & s_max) const;
+    };
+
+    class BsToKstarLeptonNeutrinoRatios :
+        public ParameterUser,
+        public PrivateImplementationPattern<BsToKstarLeptonNeutrinoRatios>
+    {
+        public:
+            BsToKstarLeptonNeutrinoRatios(const Parameters & parameters, const Options & options);
+            ~BsToKstarLeptonNeutrinoRatios();
+
+            double ratio_long() const;
+            double ratio_para() const;
+            double ratio_perp() const;
     };
 }
 
