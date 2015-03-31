@@ -72,7 +72,8 @@ namespace eos
             u.uses(*model);
         }
 
-        double differential_zeta(const double & s) const
+        // normalized to V_ub = 1
+        double normalized_differential_decay_width(const double & s) const
         {
             // cf. e.g. [BCL2008], eq. (2), p. 1
             double fp = form_factors->f_p(s);
@@ -84,12 +85,22 @@ namespace eos
             const WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u();
             double np = std::norm(wc.cvl() + wc.cvr());
 
-            return norm * np * lam * std::sqrt(lam) * fp * fp * tau_B / hbar;
+            return norm * np * lam * std::sqrt(lam) * fp * fp;
         }
 
         double differential_branching_ratio(const double & s) const
         {
-            return differential_zeta(s) * std::norm(model->ckm_ub());
+            return differential_decay_width(s) * tau_B / hbar;
+        }
+
+        double differential_decay_width(const double & s) const
+        {
+            return normalized_differential_decay_width(s) * std::norm(model->ckm_ub());
+        }
+
+        double differential_zeta(const double & s) const
+        {
+            return normalized_differential_decay_width(s) * tau_B / hbar;
         }
     };
 
@@ -112,6 +123,15 @@ namespace eos
     BToPiLeptonNeutrino::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<BToPiLeptonNeutrino>::differential_branching_ratio,
+                _imp.get(), std::placeholders::_1);
+
+        return integrate(f, 64, s_min, s_max);
+    }
+
+    double
+    BToPiLeptonNeutrino::integrated_decay_width(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> f = std::bind(&Implementation<BToPiLeptonNeutrino>::differential_decay_width,
                 _imp.get(), std::placeholders::_1);
 
         return integrate(f, 64, s_min, s_max);

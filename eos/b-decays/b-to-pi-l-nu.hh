@@ -43,6 +43,7 @@ namespace eos
 
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double integrated_decay_width(const double & s_min, const double & s_max) const;
             double integrated_zeta(const double & s_min, const double & s_max) const;
     };
 }
