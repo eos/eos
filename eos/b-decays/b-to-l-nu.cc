@@ -64,7 +64,7 @@ namespace eos
             return (1.0 - power_of<2>(m_l() / m_B()));
         }
 
-        double branching_ratio() const
+        double decay_width() const
         {
             const WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u();
 
@@ -72,8 +72,13 @@ namespace eos
             const complex<double> ga = wc.cvl() - wc.cvr();
 
             return power_of<2>(g_fermi * std::abs(model->ckm_ub()) * f_B * m_l * beta_l())
-                * m_B * tau_B / (8.0 * M_PI * hbar)
+                * m_B / (8.0 * M_PI)
                 * norm(ga);
+        }
+
+        double branching_ratio() const
+        {
+            return decay_width() * tau_B / hbar;
         }
     };
 
@@ -90,5 +95,11 @@ namespace eos
     BToLeptonNeutrino::branching_ratio() const
     {
         return _imp->branching_ratio();
+    }
+
+    double
+    BToLeptonNeutrino::decay_width() const
+    {
+        return _imp->decay_width();
     }
 }
