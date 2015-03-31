@@ -18,6 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/b-decays/b-to-l-nu.hh>
+#include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/b-to-v-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/form-factors/form-factors.hh>
@@ -38,7 +40,7 @@ namespace eos
     using std::norm;
 
     /*
-     * Decay: B_s -> K^* l nubar, cf. [FMvD2013]
+     * Decay: B_s -> K^* l nubar, cf. [FMvD2015]
      */
     template <>
     struct Implementation<BsToKstarLeptonNeutrino>
@@ -542,5 +544,58 @@ namespace eos
                 +  a_c.j8 * s_2_theta_k * s_2_theta_l * s_phi
                 +  a_c.j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi
                 );
+    }
+
+    template <>
+    struct Implementation<BsToKstarLeptonNeutrinoRatios>
+    {
+        BsToKstarLeptonNeutrino bstokstarlnu;
+
+        BToLeptonNeutrino btolnu;
+
+        BToPiLeptonNeutrino btopilnu;
+
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            bstokstarlnu(p, o + Options{ std::make_pair("l", "mu")}),
+            btolnu(p, o + Options{ std::make_pair("l", "tau") }),
+            btopilnu(p, o + Options{ std::make_pair("l", "mu") })
+        {
+            u.uses(bstokstarlnu);
+            u.uses(btolnu);
+            u.uses(btopilnu);
+        }
+    };
+
+    BsToKstarLeptonNeutrinoRatios::BsToKstarLeptonNeutrinoRatios(const Parameters & parameters, const Options & options) :
+        PrivateImplementationPattern<BsToKstarLeptonNeutrinoRatios>(new Implementation<BsToKstarLeptonNeutrinoRatios>(parameters, options, *this))
+    {
+    }
+
+    BsToKstarLeptonNeutrinoRatios::~BsToKstarLeptonNeutrinoRatios()
+    {
+    }
+
+    double
+    BsToKstarLeptonNeutrinoRatios::ratio_long() const
+    {
+        AngularCoefficients a_c = _imp->bstokstarlnu._imp->integrated_angular_coefficients(0.02, 19.71);
+
+        return (a_c.j1c - a_c.j2c / 3.0) / _imp->btolnu.decay_width();
+    }
+
+    double
+    BsToKstarLeptonNeutrinoRatios::ratio_para() const
+    {
+        AngularCoefficients a_c = _imp->bstokstarlnu._imp->integrated_angular_coefficients(0.02, 19.71);
+
+        return 4.0 / 9.0 * (2.0 * a_c.j1s - 3.0 * a_c.j3) / _imp->btolnu.decay_width();
+    }
+
+    double
+    BsToKstarLeptonNeutrinoRatios::ratio_perp() const
+    {
+        AngularCoefficients a_c = _imp->bstokstarlnu._imp->integrated_angular_coefficients(0.02, 19.71);
+
+        return 4.0 / 9.0 * (2.0 * a_c.j1s + 3.0 * a_c.j3) / _imp->btopilnu.integrated_decay_width(0.02, 12.0);
     }
 }
