@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2015 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -368,7 +368,7 @@ namespace eos
 
                     p["mass::b(MSbar)"] = 0.34;
                     cache.update();
-                    TEST_CHECK_NEARLY_EQUAL(log_gamma->evaluate(), gauss->evaluate(), 0.13);
+                    TEST_CHECK_NEARLY_EQUAL(log_gamma->evaluate(), gauss->evaluate(), 0.132);
 
                     min = 0.425;
                     central = 0.53;
