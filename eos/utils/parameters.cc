@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -480,11 +480,17 @@ namespace eos
             // HQET parameters
             Parameter::Template{"HQET::lambda_1",                                -0.20,           -0.20,           -0.20          }, // cf. [ALGH2001], Table 2, p. 13
             Parameter::Template{"HQET::lambda_2",                                +0.12,           +0.12,           +0.12          }, // cf. [ALGH2001], Table 2, p. 13
+
             // Heavy Quark Expansion parameters for hadronic matrix elements ~ <B|O|B>
             Parameter::Template{"B->B::mu_pi^2@1GeV",                            +0.35,           +0.45,           +0.55          }, // cf. [BBMU2003], Eq. (19), p. 9
             Parameter::Template{"B->B::mu_G^2@1GeV",                             +0.33,           +0.35,           +0.38          }, // cf. [BBMU2003], Eq. (17), p. 9
             Parameter::Template{"B->B::rho_D^3@1GeV",                            +0.10,           +0.20,           +0.30          }, // cf. [BBMU2003], between Eqs. (19),(20), p. 9
             Parameter::Template{"B->B::rho_LS^3@1GeV",                           -0.30,           -0.15,           -0.00          }, // cf. [BBMU2003], Eq. (20), p. 9
+
+            // Heavy Quark Expansion parameters for hadronic matrix elements ~ <Lambda_b|O|Lambda_b>
+            Parameter::Template{"Lambda_b->Lambda_b::mu_pi^2@1GeV",              +0.40,           +0.50,           +0.60          }, // cf. [MvD2015]
+            Parameter::Template{"Lambda_b->Lambda_b::rho_D^3@1GeV",              +0.09,           +0.17,           +0.25          }, // cf. [MvD2015]
+
             // B->X_s gamma SM theory uncertainty
             Parameter::Template{"B->X_sgamma::uncertainty",                      -1.0,            +0.0,            +1.0           },
 
@@ -496,6 +502,10 @@ namespace eos
             Parameter::Template{"exp::CKM(B->X_sll, B->X_clnu)",                 +0.975218,       +0.98549,        +0.995277      },
             // Parameterize unknown admixture of l=e, l=mu in B->X_sll
             Parameter::Template{"exp::Admixture-BR(B->X_sll)",                   +0.95,            +1.0,            +1.05         }, // BR varies by up to +/-5% between l=mu and l=e
+
+            // Zero-Recoil Sum Rule for Lambda_b -> Lambca_c form factor
+            Parameter::Template{"Lambda_b->Lambda_c::mu@ZRSR",                   +0.75,           +0.75,           +0.75          },
+            Parameter::Template{"Lambda_b->Lambda_c::wM@ZRSR",                   +0.75,           +0.75,           +0.75          },
         }));
     }
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -22,6 +22,7 @@
 #include <eos/form-factors/form-factor-adapter.hh>
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
+#include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
@@ -171,6 +172,13 @@ namespace eos
 
             make_observable("Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_a),
+
+            // Zero-Recoil Sum Rule for the Lambda_b -> Lambda_c Form Factors
+            make_observable("Lambda_b->Lambda_c::F(1)",
+                    &ZeroRecoilSumRule<LambdaBToC>::vector_current),
+
+            make_observable("Lambda_b->Lambda_c::G(1)",
+                    &ZeroRecoilSumRule<LambdaBToC>::axialvector_current),
 
             /* Exclusive B Decays */
 

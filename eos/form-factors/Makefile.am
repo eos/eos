@@ -10,7 +10,8 @@ libeosformfactors_la_SOURCES = \
 	form-factor-adapter.hh \
 	form-factors.hh form-factors-fwd.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
-	pi-lcdas.cc pi-lcdas.hh
+	pi-lcdas.cc pi-lcdas.hh \
+	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
 libeosformfactors_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	-lgslcblas \
