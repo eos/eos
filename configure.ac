@@ -13,9 +13,10 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 LT_INIT([disable-static])
 AC_PROG_MAKE_SET
+PKG_PROG_PKG_CONFIG
 dnl }}}
 
-dnl {{{ use HDF5 path if supplied via --with-hdf5=
+dnl {{{ use HDF5 path if supplied via --with-hdf5=, otherwise use pkg-config; check for HDF5
 AC_ARG_WITH([hdf5],
 	[AS_HELP_STRING([--with-hdf5], [used for I/O to scan data])]
 	[],
@@ -23,14 +24,34 @@ AC_ARG_WITH([hdf5],
 if test "x$with_hdf5" == xno ; then
 	AC_MSG_FAILURE(["Cannot build EOS without HDF5"])
 fi
-if test "x$with_hdf5" != x ; then
+if test "x$with_hdf5" != x -a "x$with_hdf5" != xyes ; then
 	if ! test -d "$with_hdf5" ; then
 		AC_MSG_FAILURE(["$with_hdf5 is not a directory"])
 	fi
-	CXXFLAGS="-I$with_hdf5/include $CXXFLAGS"
-	LDFLAGS="-L$with_hdf5/lib $LDFLAGS"
+	HDF5_CXXFLAGS="-I$with_hdf5/include"
+	HDF5_LDFLAGS="-L$with_hdf5/lib"
+else # use pkg-config
+	PKG_CHECK_MODULES([HDF5],
+		[hdf5],
+		[
+			HDF5_CXXFLAGS="$HDF5_CFLAGS"
+			HDF5_LDFLAGS="$HDF5_LIBS"
+			AC_MSG_NOTICE([using pkg-config for HDF5 location])
+		],
+		[
+			HDF5_CXXFLAGS=""
+			HDF5_LDFLAGS="-lhdf5"
+			AC_MSG_NOTICE([falling back to default for HDF5 location])
+		])
 fi
+CXXFLAGS="$HDF5_CXXFLAGS $CXXFLAGS"
+LDFLAGS="$HDF5_LDFLAGS $LDFLAGS"
+
+AC_CHECK_LIB(hdf5, H5open,
+	[],
+	[AC_MSG_ERROR([you do seem to be lacking libhdf5 (http://hdf.ncsa.uiuc.edu/HDF5/).])])
 dnl }}}
+
 dnl {{{ use Minuit2 path if supplied via --with-minuit2=
 AC_ARG_WITH([minuit2],
 	[AS_HELP_STRING([--with-minuit2], [used to find starting points for population montecarlo sampling])]
@@ -157,11 +178,6 @@ dnl {{{ check for -lgsl
 AC_CHECK_LIB(gsl, gsl_sf_zeta,
 	[],
 	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library (http://www.gnu.org/software/gsl/).])])
-dnl }}}
-dnl {{{ check for -lhdf5
-AC_CHECK_LIB(hdf5, H5open,
-	[],
-	[AC_MSG_ERROR([you do seem to be lacking libhdf5 (http://hdf.ncsa.uiuc.edu/HDF5/).])])
 dnl }}}
 LIBS=$save_LIBS
 dnl }}}
