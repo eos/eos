@@ -144,6 +144,11 @@ namespace eos
     {
     }
 
+    InvalidOptionValueError::InvalidOptionValueError(const std::string & key, const std::string & value, const std::string & allowed) throw () :
+        Exception("Invalid value '" + value + "' for option: '" + key + "'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
+    {
+    }
+
     Options
     operator+ (const Options & lhs, const Options & rhs)
     {

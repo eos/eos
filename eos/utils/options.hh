@@ -38,6 +38,15 @@ namespace eos
     };
 
     /*!
+     * InvalidOptionValueError is thrown when the value passed to a known option is invalid.
+     */
+    struct InvalidOptionValueError :
+        public Exception
+    {
+        InvalidOptionValueError(const std::string & key, const std::string & value, const std::string & allowed = "") throw ();
+    };
+
+    /*!
      * Options keeps the set of all string options for any Observable.
      */
     class Options :
