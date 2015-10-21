@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
@@ -1214,10 +1214,34 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::integrated_j_4_normalized_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        return (a_c.j4 + a_c_bar.j4) / (decay_width(a_c) + decay_width(a_c_bar));
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::integrated_j_5(const double & s_min, const double & s_max) const
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return a_c.j5;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_5_normalized_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        return (a_c.j5 + a_c_bar.j5) / (decay_width(a_c) + decay_width(a_c_bar));
     }
 
     double
@@ -1242,10 +1266,34 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::integrated_j_7_normalized_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        return (a_c.j7 + a_c_bar.j7) / (decay_width(a_c) + decay_width(a_c_bar));
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::integrated_j_8(const double & s_min, const double & s_max) const
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return a_c.j8;
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::integrated_j_8_normalized_cp_averaged(const double & s_min, const double & s_max) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
+
+        return (a_c.j8 + a_c_bar.j8) / (decay_width(a_c) + decay_width(a_c_bar));
     }
 
     double

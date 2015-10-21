@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
@@ -131,11 +131,15 @@ namespace eos
             double integrated_j_3_normalized(const double & s_min, const double & s_max) const;
             double integrated_j_3_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_j_4(const double & s_min, const double & s_max) const;
+            double integrated_j_4_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_j_5(const double & s_min, const double & s_max) const;
+            double integrated_j_5_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_j_6s(const double & s_min, const double & s_max) const;
             double integrated_j_6c(const double & s_min, const double & s_max) const;
             double integrated_j_7(const double & s_min, const double & s_max) const;
+            double integrated_j_7_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_j_8(const double & s_min, const double & s_max) const;
+            double integrated_j_8_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_j_9(const double & s_min, const double & s_max) const;
             double integrated_j_9_normalized(const double & s_min, const double & s_max) const;
             double integrated_j_9_normalized_cp_averaged(const double & s_min, const double & s_max) const;
