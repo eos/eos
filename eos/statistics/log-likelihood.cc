@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -1092,6 +1092,7 @@ namespace eos
         template struct MultivariateGaussianBlock<3>;
         template struct MultivariateGaussianBlock<4>;
         template struct MultivariateGaussianBlock<6>;
+        template struct MultivariateGaussianBlock<8>;
     }
 
     LogLikelihoodBlock::~LogLikelihoodBlock()
@@ -1338,6 +1339,9 @@ namespace eos
     template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<6>(ObservableCache cache, const std::array<ObservablePtr, 6> & observables,
                                              const std::array<double, 6> & mean, const std::array<std::array<double, 6>, 6> & covariance,
                                              const unsigned & number_of_observations = 6u);
+    template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<8>(ObservableCache cache, const std::array<ObservablePtr, 8> & observables,
+                                             const std::array<double, 8> & mean, const std::array<std::array<double, 8>, 8> & covariance,
+                                             const unsigned & number_of_observations = 8u);
 
     template <std::size_t n_>
     LogLikelihoodBlockPtr
@@ -1379,6 +1383,10 @@ namespace eos
                                              const std::array<double, 6> & mean, const std::array<double, 6> & variances,
                                              const std::array<std::array<double, 6>, 6> & correlation,
                                              const unsigned & number_of_observations = 6u);
+    template LogLikelihoodBlockPtr LogLikelihoodBlock::MultivariateGaussian<8>(ObservableCache cache, const std::array<ObservablePtr, 8> & observables,
+                                             const std::array<double, 8> & mean, const std::array<double, 8> & variances,
+                                             const std::array<std::array<double, 8>, 8> & correlation,
+                                             const unsigned & number_of_observations = 8u);
 
     template <>
     struct Implementation<LogLikelihood>
