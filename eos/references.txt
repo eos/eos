@@ -341,6 +341,13 @@ Experimental Results
        arXiv:1403.8045 [hep-ex]
 
 
+    LHCb:2015A : Aaij, R. et al. [LHCb Collaboration]
+
+        Angular analysis of the decay Bbar^0 -> K^*0 mu^+ mu^-
+
+        ????
+
+
 Averages and Numerical Inputs
 -----------------------------
 

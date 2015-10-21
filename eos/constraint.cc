@@ -2502,6 +2502,162 @@ namespace eos
         };
         ///@}
 
+        ///@name 2015
+        ///@{
+        /*
+         * LHCb Collaboration
+         *
+         * Data taken from [LHCb:2015A], table 6, 50 and appendix F.
+         * We combine correlations between the statistic uncertainties and systematic uncertainties.
+         */
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_1dot1_to_2_LHCb_2015A
+        {
+            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{
+                 Kinematics{ { "s_min", 1.1 }, { "s_max", 2.0 } },
+                 Kinematics{ { "s_min", 1.1 }, { "s_max", 2.0 } },
+                 Kinematics{ { "s_min", 1.1 }, { "s_max", 2.0 } },
+                 Kinematics{ { "s_min", 1.1 }, { "s_max", 2.0 } },
+                 Kinematics{ { "s_min", 1.1 }, { "s_max", 2.0 } }
+            }},
+            {{
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } }
+            }},
+            {{  0.768,  0.065,  0.127,  0.286, -0.333 }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0,  }},
+            {{  0.138,  0.132,  0.187,  0.170,  0.123 }},
+            {{
+                {{ +1.00, +0.02, +0.05, +0.12, +0.01 }},
+                {{ +0.02, +1.00, +0.00, +0.05, +0.05 }},
+                {{ +0.05, +0.00, +1.00, -0.00, -0.03 }},
+                {{ +0.12, +0.05, -0.00, +1.00, -0.06 }},
+                {{ +0.01, +0.05, -0.03, -0.06, +1.00 }},
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_2_to_3_LHCb_2015A
+        {
+            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{
+                 Kinematics{ { "s_min", 2.0 }, { "s_max", 3.0 } },
+                 Kinematics{ { "s_min", 2.0 }, { "s_max", 3.0 } },
+                 Kinematics{ { "s_min", 2.0 }, { "s_max", 3.0 } },
+                 Kinematics{ { "s_min", 2.0 }, { "s_max", 3.0 } },
+                 Kinematics{ { "s_min", 2.0 }, { "s_max", 3.0 } }
+            }},
+            {{
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } }
+            }},
+            {{  0.690,  0.006, -0.339,  0.206, -0.158 }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0,  }},
+            {{  0.100,  0.100,  0.134,  0.123,  0.085 }},
+            {{
+                {{ +1.00, -0.11, -0.14, -0.05, +0.12 }},
+                {{ -0.11, +1.00, -0.10, +0.07, +0.03 }},
+                {{ -0.14, -0.10, +1.00, -0.08, -0.00 }},
+                {{ -0.05, +0.07, -0.08, +1.00, -0.10 }},
+                {{ +0.12, +0.03, -0.00, -0.10, +1.00 }},
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_3_to_4_LHCb_2015A
+        {
+            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{
+                 Kinematics{ { "s_min", 3.0 }, { "s_max", 4.0 } },
+                 Kinematics{ { "s_min", 3.0 }, { "s_max", 4.0 } },
+                 Kinematics{ { "s_min", 3.0 }, { "s_max", 4.0 } },
+                 Kinematics{ { "s_min", 3.0 }, { "s_max", 4.0 } },
+                 Kinematics{ { "s_min", 3.0 }, { "s_max", 4.0 } }
+            }},
+            {{
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } }
+            }},
+            {{  0.873,  0.078, -0.046, -0.110, -0.041 }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0,  }},
+            {{  0.132,  0.127,  0.200,  0.166,  0.091 }},
+            {{
+                {{ +1.00, +0.04, -0.00, -0.05, -0.02 }},
+                {{ +0.04, +1.00, +0.00, -0.05, +0.02 }},
+                {{ -0.00, +0.00, +1.00, +0.17, +0.05 }},
+                {{ -0.05, -0.05, +0.17, +1.00, +0.01 }},
+                {{ -0.02, +0.02, +0.05, +0.01, +1.00 }},
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_4_to_5_LHCb_2015A
+        {
+            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{
+                 Kinematics{ { "s_min", 4.0 }, { "s_max", 5.0 } },
+                 Kinematics{ { "s_min", 4.0 }, { "s_max", 5.0 } },
+                 Kinematics{ { "s_min", 4.0 }, { "s_max", 5.0 } },
+                 Kinematics{ { "s_min", 4.0 }, { "s_max", 5.0 } },
+                 Kinematics{ { "s_min", 4.0 }, { "s_max", 5.0 } }
+            }},
+            {{
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } }
+            }},
+            {{  0.899,  0.200, -0.148, -0.306, +0.052 }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0,  }},
+            {{  0.107,  0.099,  0.161,  0.140,  0.080 }},
+            {{
+                {{ +1.00, -0.02, +0.02, -0.10, -0.03 }},
+                {{ -0.02, +1.00, -0.10, -0.11, +0.03 }},
+                {{ +0.02, -0.10, +1.00, +0.15, -0.03 }},
+                {{ -0.10, -0.11, +0.15, +1.00, -0.03 }},
+                {{ -0.03, +0.03, -0.03, -0.03, +1.00 }},
+            }}
+        };
+        static const MultivariateGaussianConstraintTemplate<5> Bzero_to_Kstarzero_dimuon_aobs_moments_5_to_6_LHCb_2015A
+        {
+            {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
+            {{
+                 Kinematics{ { "s_min", 5.0 }, { "s_max", 6.0 } },
+                 Kinematics{ { "s_min", 5.0 }, { "s_max", 6.0 } },
+                 Kinematics{ { "s_min", 5.0 }, { "s_max", 6.0 } },
+                 Kinematics{ { "s_min", 5.0 }, { "s_max", 6.0 } },
+                 Kinematics{ { "s_min", 5.0 }, { "s_max", 6.0 } }
+            }},
+            {{
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } },
+                 Options{ { "q", "d" }, { "l", "mu" } }
+            }},
+            {{  0.644, -0.122, -0.273, -0.095, +0.057 }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0   }},
+            {{  0.0,    0.0,    0.0,    0.0,    0.0,  }},
+            {{  0.128,  0.123,  0.185,  0.140,  0.135 }},
+            {{
+                {{ +1.00, +0.01, -0.02, -0.02, -0.02 }},
+                {{ +0.01, +1.00, -0.03, -0.07, -0.10 }},
+                {{ -0.02, -0.03, +1.00, +0.09, +0.03 }},
+                {{ -0.02, -0.07, +0.09, +1.00, -0.07 }},
+                {{ -0.02, -0.10, +0.03, -0.07, +1.00 }},
+            }}
+        };
+        ///@}
+        ///@}
+
         /*
          * Theoretical Constraints from e.g. Lattice QCD.
          */
@@ -3694,6 +3850,14 @@ namespace eos
             // CMS + LHCb
             { "B^0_s->mu^+mu^-::BR@CMS-LHCb-2014", make_factory(templates::B_s_to_dimuon_CMS_LHCb_2014A) },
             { "B^0_d->mu^+mu^-::BR@CMS-LHCb-2014", make_factory(templates::Bzero_to_dimuon_CMS_LHCb_2014A) },
+
+            /* 2015 */
+            // LHCb
+            { "B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_1dot1_to_2_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_2_to_3_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_3_to_4_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_4_to_5_LHCb_2015A) },
+            { "B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_5_to_6_LHCb_2015A) },
 
             /* Theory Constraints */
             { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },
