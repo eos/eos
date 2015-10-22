@@ -377,20 +377,15 @@ class ConstraintTest :
                     "B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb-2014",
                     "B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb-2014",
 
-                    /* Theory Constraints */
+                    /* 2015 */
 
-                    /* 2013 */
-
-                    // disabled, since it needs the option "form-factors" specified.
-                    //"B->K::f_+@HPQCD-2013A",
-
-                    //"B->K^*::V@MILC-2013A",
-                    //"B->K^*::A_1@MILC-2013A",
-                    //"B->K^*::A_12V@MILC-2013A",
-
-                    //"B_s->K^*::V@MILC-2013A",
-                    //"B_s->K^*::A_1@MILC-2013A",
-                    //"B_s->K^*::A_12V@MILC-2013A",
+                    // LHCb
+                    // B^0 -> K^*0 mu^+ mu^-
+                    "B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb-2015A",
+                    "B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb-2015A",
+                    "B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb-2015A",
+                    "B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb-2015A",
+                    "B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A",
                 };
 
                 std::cout << "# Constraints :" << std::endl;
