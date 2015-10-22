@@ -469,10 +469,10 @@ namespace eos
             }
 
             template <typename Parameter_>
-            double _calc_ff(const double & s, const double & m_R, const std::array<Parameter_, 3> & a) const
+            double _calc_ff(const double & s, const double & m2_R, const std::array<Parameter_, 3> & a) const
             {
                 const double diff_z = _calc_z(s) - _z_0;
-                return 1.0 / (1.0 - s / power_of<2>(m_R)) *
+                return 1.0 / (1.0 - s / m2_R) *
                        (a[0] + a[1] * diff_z + a[2] * power_of<2>(diff_z));
             }
 
