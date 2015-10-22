@@ -282,6 +282,56 @@ namespace eos
         }
     };
 
+    template <size_t dim_>
+    struct MultivariateGaussianCovarianceConstraintTemplate
+    {
+        std::array<std::string, dim_> observables;
+
+        std::array<Kinematics, dim_> kinematics;
+
+        std::array<Options, dim_> options;
+
+        std::array<double, dim_> means;
+
+        std::array<std::array<double, dim_>, dim_> covariance;
+
+        unsigned number_of_observations;
+
+        MultivariateGaussianCovarianceConstraintTemplate(const std::array<std::string, dim_> & observables,
+            const std::array<Kinematics, dim_> & kinematics,
+            const std::array<Options, dim_> & options,
+            const std::array<double, dim_> & means,
+            const std::array<std::array<double, dim_>, dim_> & covariance,
+            const unsigned number_of_observations = dim_) :
+            observables(observables),
+            kinematics(kinematics),
+            options(options),
+            means(means),
+            covariance(covariance),
+            number_of_observations(number_of_observations)
+        {
+        }
+
+        Constraint
+        make(const std::string & name, const Options & options) const
+        {
+            Parameters parameters(Parameters::Defaults());
+            ObservableCache cache(parameters);
+
+            std::array<ObservablePtr, dim_> observables;
+            for (auto i = 0u ; i < dim_ ; ++i)
+            {
+                observables[i] = Observable::make(this->observables[i], parameters, this->kinematics[i], this->options[i] + options);
+                if (! observables[i].get())
+                    throw InternalError("make_multivariate_gaussian_covariance_constraint<" + stringify(dim_) + ">: " + name + ": '" + this->observables[i] + "' is not a valid observable name");
+            }
+
+            auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, number_of_observations);
+
+            return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
+        }
+    };
+
     namespace templates
     {
         ///@name 2000 Data
