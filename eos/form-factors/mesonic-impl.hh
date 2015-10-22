@@ -3,6 +3,8 @@
 /*
  * Copyright (c) 2010, 2011, 2013, 2014, 2015 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
+ * Copyright (c) 2015 Frederik Beaujean
+ * Copyright (c) 2015 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -41,6 +43,9 @@ namespace eos
 
     /* Form Factors according to [BCL2008] */
     template <typename Process_> class BCL2008FormFactors;
+
+    /* Form Factors according to [BSZ2015] */
+    template <typename Process_, typename Transition_> class BSZ2015FormFactors;
 
     /* P -> V Processes */
 
@@ -435,6 +440,152 @@ namespace eos
             virtual double a_12(const double & s) const
             {
                 return this->f_long(s) * Process_::mB / (8.0 * Process_::mV);
+            }
+    };
+
+    template <typename Process_> class BSZ2015FormFactors<Process_, PToV> :
+        public FormFactors<PToV>
+    {
+        private:
+            // fit parametrization for P -> V according to [BSZ2015]
+            std::array<UsedParameter, 3> _a_A0, _a_A1, _a_V, _a_T1, _a_T23;
+            // use constraint (B.6) in [BSZ2015] to remove A_12(0)
+            std::array<UsedParameter, 2> _a_A12, _a_T2;
+
+            const double _mB, _mB2, _mV, _mV2, _kin_factor;
+            const double _tau_p, _tau_0;
+            const double _z_0;
+
+            static double _calc_tau_0(const double & m_B, const double & m_V)
+            {
+                const double tau_p = power_of<2>(m_B + m_V);
+                const double tau_m = power_of<2>(m_B - m_V);
+                return tau_p * (1.0 - std::sqrt(1.0 - tau_m / tau_p));
+            }
+
+            double _calc_z(const double & s) const
+            {
+                return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
+            }
+
+            template <typename Parameter_>
+            double _calc_ff(const double & s, const double & m_R, const std::array<Parameter_, 3> & a) const
+            {
+                const double diff_z = _calc_z(s) - _z_0;
+                return 1.0 / (1.0 - s / power_of<2>(m_R)) *
+                       (a[0] + a[1] * diff_z + a[2] * power_of<2>(diff_z));
+            }
+
+            static std::string _par_name(const std::string & ff_name)
+            {
+                return std::string("B->K^*::alpha^") + ff_name + std::string("@BSZ2015");
+            }
+
+        public:
+            BSZ2015FormFactors(const Parameters & p, const Options &) :
+                _a_A0{{  UsedParameter(p[_par_name("A0_0")],  *this),
+                         UsedParameter(p[_par_name("A0_1")],  *this),
+                         UsedParameter(p[_par_name("A0_2")],  *this) }},
+                _a_A1{{  UsedParameter(p[_par_name("A1_0")],  *this),
+                         UsedParameter(p[_par_name("A1_1")],  *this),
+                         UsedParameter(p[_par_name("A1_2")],  *this) }},
+                _a_V{{   UsedParameter(p[_par_name("V_0")],   *this),
+                         UsedParameter(p[_par_name("V_1")],   *this),
+                         UsedParameter(p[_par_name("V_2")],   *this) }},
+                _a_T1{{  UsedParameter(p[_par_name("T1_0")],  *this),
+                         UsedParameter(p[_par_name("T1_1")],  *this),
+                         UsedParameter(p[_par_name("T1_2")],  *this) }},
+                _a_T23{{ UsedParameter(p[_par_name("T23_0")], *this),
+                         UsedParameter(p[_par_name("T23_1")], *this),
+                         UsedParameter(p[_par_name("T23_2")], *this) }},
+                _a_A12{{ UsedParameter(p[_par_name("A12_1")], *this),
+                         UsedParameter(p[_par_name("A12_2")], *this) }},
+                _a_T2{{  UsedParameter(p[_par_name("T2_1")],  *this),
+                         UsedParameter(p[_par_name("T2_2")],  *this) }},
+                _mB(Process_::mB),
+                _mB2(power_of<2>(_mB)),
+                _mV(Process_::mV),
+                _mV2(power_of<2>(_mV)),
+                _kin_factor((_mB2 - _mV2) / (8.0 * _mB * _mV)),
+                _tau_p(power_of<2>(_mB + _mV)),
+                _tau_0(_calc_tau_0(_mB, _mV)),
+                _z_0(_calc_z(0))
+            {
+            }
+
+            ~BSZ2015FormFactors()
+            {
+            }
+
+            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
+            {
+                return new BSZ2015FormFactors(parameters, Options());
+            }
+
+            virtual double v(const double & s) const
+            {
+                return _calc_ff(s, Process_::mR2_1m, _a_V);
+            }
+
+            virtual double a_0(const double & s) const
+            {
+                return _calc_ff(s, Process_::mR2_0m, _a_A0);
+            }
+
+            virtual double a_1(const double & s) const
+            {
+                return _calc_ff(s, Process_::mR2_1p, _a_A1);
+            }
+
+            virtual double a_2(const double & s) const
+            {
+                const double lambda = eos::lambda(_mB2, _mV2, s);
+
+                return (power_of<2>(_mB + _mV) * (_mB2 - _mV2 - s) * a_1(s)
+                        - 16.0 * _mB * _mV2 * (_mB + _mV) * a_12(s)) / lambda;
+            }
+
+            virtual double a_12(const double & s) const
+            {
+                // use constraint (B.6) in [BSZ2015] to remove A_12(0)
+                std::array<double, 3> values
+                {{
+                    _kin_factor * _a_A0[0],
+                    _a_A12[1 - 1],
+                    _a_A12[2 - 1],
+                }};
+
+                return _calc_ff(s, Process_::mR2_1p, values);
+            }
+
+            virtual double t_1(const double & s) const
+            {
+                return _calc_ff(s, Process_::mR2_1m, _a_T1);
+            }
+
+            virtual double t_2(const double & s) const
+            {
+                // use constraint T_1(0) = T_2(0) to replace T_2(0)
+                std::array<double, 3> values
+                {{
+                    _a_T1[0],
+                    _a_T2[1 - 1],
+                    _a_T2[2 - 1],
+                }};
+                return _calc_ff(s, Process_::mR2_1p, values);
+            }
+
+            virtual double t_3(const double & s) const
+            {
+                const double lambda = eos::lambda(_mB2, _mV2, s);
+
+                return ((_mB2 - _mV2) * (_mB2 + 3.0 * _mV2 - s) * t_2(s)
+                        - 8.0 * _mB * _mV2 * (_mB - _mV) * t_23(s)) / lambda;
+            }
+
+            virtual double t_23(const double & s) const
+            {
+                return _calc_ff(s, Process_::mR2_1p, _a_T23);
             }
     };
 

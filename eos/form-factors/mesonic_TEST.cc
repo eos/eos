@@ -1,8 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2014, 2015 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
+ * Copyright (c) 2015 Frederik Beaujean
+ * Copyright (c) 2015 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -562,3 +564,81 @@ class BToBFW2010FormFactorsTest :
         }
 } b_to_k_bfw2010_form_factors_test;
 
+class BToKstarBSZ2015FormFactorsTest :
+    public TestCase
+{
+    public:
+        BToKstarBSZ2015FormFactorsTest() :
+            TestCase("b_to_kstar_bsz2015_form_factors_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const double eps = 5.1e-3;
+
+            Parameters p = Parameters::Defaults();
+            std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*@BSZ2015", p);
+            TEST_CHECK(ff.get() != nullptr);
+
+            /* compare with values from David Straub,
+             * use his values of the parameters
+             */
+            p["B->K^*::alpha^A0_0@BSZ2015" ] = +0.39;
+            p["B->K^*::alpha^A0_1@BSZ2015" ] = -1.15;
+            p["B->K^*::alpha^A0_2@BSZ2015" ] = +2.08;
+            p["B->K^*::alpha^A1_0@BSZ2015" ] = +0.29;
+            p["B->K^*::alpha^A1_1@BSZ2015" ] = +0.31;
+            p["B->K^*::alpha^A1_2@BSZ2015" ] = +0.72;
+            p["B->K^*::alpha^A12_1@BSZ2015"] = +0.57;
+            p["B->K^*::alpha^A12_2@BSZ2015"] = +0.14;
+            p["B->K^*::alpha^V_0@BSZ2015"  ] = +0.37;
+            p["B->K^*::alpha^V_1@BSZ2015"  ] = -1.08;
+            p["B->K^*::alpha^V_2@BSZ2015"  ] = +2.47;
+            p["B->K^*::alpha^T1_0@BSZ2015" ] = +0.31;
+            p["B->K^*::alpha^T1_1@BSZ2015" ] = -0.96;
+            p["B->K^*::alpha^T1_2@BSZ2015" ] = +2.01;
+            p["B->K^*::alpha^T2_1@BSZ2015" ] = +0.42;
+            p["B->K^*::alpha^T2_2@BSZ2015" ] = +2.02;
+            p["B->K^*::alpha^T23_0@BSZ2015"] = +0.79;
+            p["B->K^*::alpha^T23_1@BSZ2015"] = +1.26;
+            p["B->K^*::alpha^T23_2@BSZ2015"] = +1.96;
+
+            TEST_CHECK_NEARLY_EQUAL(0.393136, ff->a_0(0.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.440394, ff->a_0(2.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.496878, ff->a_0(4.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.565342, ff->a_0(6.1), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(0.289606, ff->a_1(0.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.3039,   ff->a_1(2.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.319847, ff->a_1(4.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.337861, ff->a_1(6.1), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(0.248569, ff->a_2(0.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.272718, ff->a_2(2.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.300677, ff->a_2(4.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.333431, ff->a_2(6.1), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(0.367312, ff->v(0.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.411249, ff->v(2.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.463812, ff->v(4.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.527595, ff->v(6.1), eps);
+
+#if 0 // not using the tensor form factors yet
+            TEST_CHECK_NEARLY_EQUAL(0.3094,   ff->t_1(0.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.346962, ff->t_1(2.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.391946, ff->t_1(4.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.446575, ff->t_1(6.1), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(0.308387, ff->t_2(0.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.322844, ff->t_2(2.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.339239, ff->t_2(4.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.358183, ff->t_2(6.1), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(0.184952, ff->t_3(0.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.200925, ff->t_3(2.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.219004, ff->t_3(4.1), eps);
+            TEST_CHECK_NEARLY_EQUAL(0.239587, ff->t_3(6.1), eps);
+#endif
+        }
+} b_to_kstar_bsz2015_form_factors_test;

@@ -620,6 +620,13 @@ Theoretical Inputs
         arxiv:1106.3283
 
 
+    BSZ2015 : Bharucha, A. and Straub, D. and Zwicky, R.
+
+        B -> V l^+ l^- in the Standard Model from Light-Cone Sum Rules
+
+        arXiv:1503.05534
+
+
     BZ2004 : Ball, P. and Zwicky, R.
 
         B_{d,s} -> rho,omega,K^*,phi Decay Form Factors from Light-Cone

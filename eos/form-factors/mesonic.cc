@@ -104,6 +104,7 @@ namespace eos
             { KeyType("B->K^*",     "BZ2004"),   &BZ2004FormFactors<BToKstar, PToV>::make   },
             { KeyType("B->K^*",     "KMPW2010"), &KMPW2010FormFactors<PToV>::make           },
             { KeyType("B->K^*",     "BFW2010"),  &BFW2010FormFactors<BToKstar, PToV>::make  },
+            { KeyType("B->K^*",     "BSZ2015"),  &BSZ2015FormFactors<BToKstar, PToV>::make  },
             { KeyType("B_s->K^*",   "BFW2010"),  &BFW2010FormFactors<BsToKstar, PToV>::make },
             { KeyType("B_s->K^*",   "FMvD2015"), &FMvD2015FormFactors<BsToKstar>::make      },
             { KeyType("B_s->phi",   "BZ2004"),   &BZ2004FormFactors<BsToPhi, PToV>::make    },

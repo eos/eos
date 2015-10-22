@@ -468,6 +468,33 @@ namespace eos
             Parameter::Template{"Lambda_b->Lambda::sigma_long^V@BFvD2014",       -0.21,            0.00,           +0.21,         },
             Parameter::Template{"Lambda_b->Lambda::sigma_long^A@BFvD2014",       -0.30,            0.00,           +0.30,         },
 
+            // form-factor parameters for B->K* simple series
+            // expansion (SSE) based on LCSR according to
+            // [BSZ2015]. We don't use table 11, p. 40 but did our own
+            // fit to the combination of LCSR and lattice inputs
+            // [HLMW2015] with the info both groups provided to us.
+            // Use (B.6) to replace A_12(0), and T_1(0) = T_2(0) to
+            // replace T_2(0).
+            Parameter::Template{"B->K^*::alpha^A0_0@BSZ2015",                    +0.32,           +0.35,           +0.37,          },
+            Parameter::Template{"B->K^*::alpha^A0_1@BSZ2015",                    -1.29,           -1.21,           -1.13,          },
+            Parameter::Template{"B->K^*::alpha^A0_2@BSZ2015",                    +0.29,           +0.77,           +1.22,          },
+            Parameter::Template{"B->K^*::alpha^A1_0@BSZ2015",                    +0.2475,         +0.2625,         +0.2775,        },
+            Parameter::Template{"B->K^*::alpha^A1_1@BSZ2015",                    -0.01,           +0.07,           +0.13,          },
+            Parameter::Template{"B->K^*::alpha^A1_2@BSZ2015",                    -0.105,          +0.045,          +0.165,         },
+            Parameter::Template{"B->K^*::alpha^A12_1@BSZ2015",                   +0.39,           +0.53,           +0.63,          },
+            Parameter::Template{"B->K^*::alpha^A12_2@BSZ2015",                   -0.075,          +0.315,          +0.645,         },
+            Parameter::Template{"B->K^*::alpha^V_0@BSZ2015",                     +0.3225,         +0.3475,         +0.3625,        },
+            Parameter::Template{"B->K^*::alpha^V_1@BSZ2015",                     -1.27,           -1.19,           -1.11,          },
+            Parameter::Template{"B->K^*::alpha^V_2@BSZ2015",                     +1.215,          +1.545,          +1.875,         },
+            Parameter::Template{"B->K^*::alpha^T1_0@BSZ2015",                    +0.2925,         +0.3125,         +0.3275,        },
+            Parameter::Template{"B->K^*::alpha^T1_1@BSZ2015",                    -1.15,           -1.07,           -0.99,          },
+            Parameter::Template{"B->K^*::alpha^T1_2@BSZ2015",                    +1.095,          +1.395,          +1.695,         },
+            Parameter::Template{"B->K^*::alpha^T2_1@BSZ2015",                    +0.23,           +0.33,           +0.41,          },
+            Parameter::Template{"B->K^*::alpha^T2_2@BSZ2015",                    +0.015,          +0.255,          +0.465,         },
+            Parameter::Template{"B->K^*::alpha^T23_0@BSZ2015",                   +0.6225,         +0.6675,         +0.7025,        },
+            Parameter::Template{"B->K^*::alpha^T23_1@BSZ2015",                   +0.71,           +0.93,           +1.21,          },
+            Parameter::Template{"B->K^*::alpha^T23_2@BSZ2015",                   -0.855,          -0.15,           +0.705,         },
+
             // B LCDA parameters
             Parameter::Template{"lambda_B_p",                                    +0.370,          +0.485,          +0.600         }, // GeV, cf. [BHvD2010], Table I
             // B->K LCDA Parameter
