@@ -377,6 +377,10 @@ class ConstraintTest :
                     "B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb-2014",
                     "B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb-2014",
 
+                    // CMS + LHCb
+                    "B^0_s->mu^+mu^-::BR@CMS-LHCb-2014",
+                    "B^0_d->mu^+mu^-::BR@CMS-LHCb-2014",
+
                     /* 2015 */
 
                     // LHCb
