@@ -779,6 +779,13 @@ Theoretical Inputs
         arxiv:hep-ph/0512066
 
 
+    HLMW2015 : Horgan, R. R. and Liu, Z. and Meinel, S. and Wingate, M.
+
+        Rare B decays using lattice QCD form factors
+
+        arXiv:1501.00367v2
+
+
     HPQCDD2013A : Bouchard, C. et al. [HPQCD]
 
         The rare decay B ---> K ll form factors from lattice QCD
