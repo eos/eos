@@ -2655,6 +2655,41 @@ namespace eos
                 {{ -0.02, -0.10, +0.03, -0.07, +1.00 }},
             }}
         };
+
+        /*
+         * LHCb Collaboration
+         *
+         * Data taken from [LHCb:2015B], table 6, 50 and appendix F.
+         * We combine correlations between the statistic uncertainties and systematic uncertainties.
+         */
+        static const GaussianConstraintTemplate Lambdab_to_Lambda_dimuon_br_15_to_20_LHCb_2015B
+        {
+            "Lambda_b->Lambdall::BR@LowRecoil",
+            Kinematics{ { "s_min", 15.0 }, { "s_max", 20.00 } },
+            Options{ { "l", "mu" } },
+            1.20e-7 * 5.0, +0.09e-7 * 5.0, -0.09e-7 * 5.0, +0.25e-7 * 5.0, -0.25e-7 * 5.0
+        };
+        static const GaussianConstraintTemplate Lambdab_to_Lambda_dimuon_f_0_15_to_20_LHCb_2015B
+        {
+            "Lambda_b->Lambdall::F_0@LowRecoil",
+            Kinematics{ { "s_min", 15.0 }, { "s_max", 20.00 } },
+            Options{ { "l", "mu" } },
+            0.61, +0.11, -0.14, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Lambdab_to_Lambda_dimuon_a_fb_l_15_to_20_LHCb_2015B
+        {
+            "Lambda_b->Lambdall::A_FB^l@LowRecoil",
+            Kinematics{ { "s_min", 15.0 }, { "s_max", 20.00 } },
+            Options{ { "l", "mu" } },
+            -0.05, +0.09, -0.09, +0.03, -0.03
+        };
+        static const GaussianConstraintTemplate Lambdab_to_Lambda_dimuon_a_fb_h_15_to_20_LHCb_2015B
+        {
+            "Lambda_b->Lambdall::A_FB^h@LowRecoil",
+            Kinematics{ { "s_min", 15.0 }, { "s_max", 20.00 } },
+            Options{ { "l", "mu" } },
+            -0.29, +0.07, -0.07, +0.03, -0.03
+        };
         ///@}
         ///@}
 
@@ -3858,6 +3893,11 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_3_to_4_LHCb_2015A) },
             { "B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_4_to_5_LHCb_2015A) },
             { "B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A", make_factory(templates::Bzero_to_Kstarzero_dimuon_aobs_moments_5_to_6_LHCb_2015A) },
+            // LHCb
+            { "Lambda_b->Lambdamu^+mu^-::BR[15.0,20.0]@LHCb-2015B", make_factory(templates::Lambdab_to_Lambda_dimuon_br_15_to_20_LHCb_2015B) },
+            { "Lambda_b->Lambdamu^+mu^-::F_0[15.0,20.0]@LHCb-2015B", make_factory(templates::Lambdab_to_Lambda_dimuon_f_0_15_to_20_LHCb_2015B) },
+            { "Lambda_b->Lambdamu^+mu^-::A_FB^l[15.0,20.0]@LHCb-2015B", make_factory(templates::Lambdab_to_Lambda_dimuon_a_fb_l_15_to_20_LHCb_2015B) },
+            { "Lambda_b->Lambdamu^+mu^-::A_FB^h[15.0,20.0]@LHCb-2015B", make_factory(templates::Lambdab_to_Lambda_dimuon_a_fb_h_15_to_20_LHCb_2015B) },
 
             /* Theory Constraints */
             { "B->K::f_+@HPQCD-2013A", make_factory(templates::B_to_K_fplus_17_to_23_HPQCD_2013A) },

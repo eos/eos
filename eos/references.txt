@@ -348,6 +348,16 @@ Experimental Results
         ????
 
 
+    LHCb:2015B : Aaij, R. et al. [LHCb Collaboration]
+
+        Differential branching ratio and angular analysis of Lambda_b -> Lambda mu^+ mu^- decays
+
+        JHEP 1506 (2015) 115
+
+        arXiv:1503.07138 [hep-ex]
+
+
+
 Averages and Numerical Inputs
 -----------------------------
 
