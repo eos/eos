@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2016 Danny van Dyk
+ * Copyright (c) 2014-2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -100,6 +100,14 @@ namespace eos
 
                 return _f_perp_a() / (1.0 - s / ma2) * (1.0 + _b_1_perp_a() * (zt - z0));
             }
+
+            // Not yet implemented:
+            virtual double f_time_v(const double &) const { throw InternalError("BFvD2014FormFactors::f_time_v(): not implemented"); }
+            virtual double f_time_a(const double &) const { throw InternalError("BFvD2014FormFactors::f_time_a(): not implemented"); }
+            virtual double f_perp_t(const double &) const { throw InternalError("BFvD2014FormFactors::f_perp_t(): not implemented"); }
+            virtual double f_perp_t5(const double &) const { throw InternalError("BFvD2014FormFactors::f_perp_t5(): not implemented"); }
+            virtual double f_long_t(const double &) const { throw InternalError("BFvD2014FormFactors::f_long_t(): not implemented"); }
+            virtual double f_long_t5(const double &) const { throw InternalError("BFvD2014FormFactors::f_long_t5(): not implemented"); }
     };
 
     FormFactors<OneHalfPlusToOneHalfPlus>::~FormFactors()
@@ -115,7 +123,8 @@ namespace eos
         typedef std::function<FormFactors<OneHalfPlusToOneHalfPlus> * (const Parameters &, unsigned)> ValueType;
         static const std::map<KeyType, ValueType> form_factors
         {
-            { KeyType("Lambda_b->Lambda",     "BFvD2014"),   &BFvD2014FormFactors::make     },
+            { KeyType("Lambda_b->Lambda",     "BFvD2014"),   &BFvD2014FormFactors::make                      },
+            { KeyType("Lambda_b->Lambda",     "DM2016"),     &DM2016FormFactors<LambdaBToLambda>::make       },
         };
 
         /*

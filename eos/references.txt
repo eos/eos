@@ -738,6 +738,14 @@ Theoretical Inputs
         arxiv:1212.4827 [hep-lat]
 
 
+    DM2015 : Detmold, W. and Meinel, S.
+
+        Lambda_b -> Lambda form factors, differential branching fraction, and angular observables
+        from lattice QCD with relativistic b quarks
+
+        arXiv:1602.01399 [hep-lat]
+
+
     DMRV2012 : Descotes-Genon, S. and Matias, J. and Ramon, M. and Virto, J.
 
         Implications from clean observables for the binned analysis

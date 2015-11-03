@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014 Danny van Dyk
+ * Copyright (c) 2014, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -42,13 +42,19 @@ namespace eos
         public:
             virtual ~FormFactors();
 
-            //virtual double f_time_v(const double & s) const = 0;
+            virtual double f_time_v(const double & s) const = 0;
             virtual double f_long_v(const double & s) const = 0;
             virtual double f_perp_v(const double & s) const = 0;
 
-            //virtual double f_time_a(const double & s) const = 0;
+            virtual double f_time_a(const double & s) const = 0;
             virtual double f_long_a(const double & s) const = 0;
             virtual double f_perp_a(const double & s) const = 0;
+
+            virtual double f_long_t(const double & s) const = 0;
+            virtual double f_perp_t(const double & s) const = 0;
+
+            virtual double f_long_t5(const double & s) const = 0;
+            virtual double f_perp_t5(const double & s) const = 0;
     };
 
     template <>

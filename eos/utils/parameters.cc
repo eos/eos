@@ -487,6 +487,37 @@ namespace eos
             Parameter::Template{"Lambda_b->Lambda::sigma_long^V@BFvD2014",       -0.21,            0.00,           +0.21,         },
             Parameter::Template{"Lambda_b->Lambda::sigma_long^A@BFvD2014",       -0.30,            0.00,           +0.30,         },
 
+            // form factor parameters for Lambda_b -> Lambda decays according to
+            // [DM2016], table ?, p. ??
+            Parameter::Template{"Lambda_b->Lambda::a_0_time^V@DM2016",           +0.373,          +0.373,          +0.373,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_time^V@DM2016",           -0.939,          -0.939,          -0.939,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_time^V@DM2016",           +0.000,          +0.000,          +0.000,        },
+            Parameter::Template{"Lambda_b->Lambda::a_0_time^A@DM2016",           +0.403,          +0.403,          +0.403,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_time^A@DM2016",           -1.029,          -1.029,          -1.029,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_time^A@DM2016",           +0.000,          +0.000,          +0.000,        },
+            Parameter::Template{"Lambda_b->Lambda::a_0_long^V@DM2016",           +0.422,          +0.422,          +0.422,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_long^V@DM2016",           -1.139,          -1.139,          -1.139,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_long^V@DM2016",           +0.000,          +0.000,          +0.000,        },
+            Parameter::Template{"Lambda_b->Lambda::a_0_perp^V@DM2016",           +0.518,          +0.518,          +0.518,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_perp^V@DM2016",           -1.350,          -1.350,          -1.350,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_perp^V@DM2016",           +0.000,          +0.000,          +0.000,        },
+            Parameter::Template{"Lambda_b->Lambda::a_0_long^A@DM2016",           +0.356,          +0.356,          +0.356,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_long^A@DM2016",           -1.061,          -1.061,          -1.061,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_long^A@DM2016",           +0.000,          +0.000,          +0.000,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_perp^A@DM2016",           -1.136,          -1.136,          -1.136,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_perp^A@DM2016",           +0.000,          +0.000,          +0.000,        },
+            Parameter::Template{"Lambda_b->Lambda::a_0_long^T@DM2016",           +0.496,          +0.496,          +0.496,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_long^T@DM2016",           -1.128,          -1.128,          -1.128,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_long^T@DM2016",           +0.000,          +0.000,          +0.000,        },
+            Parameter::Template{"Lambda_b->Lambda::a_0_perp^T@DM2016",           +0.388,          +0.388,          +0.388,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_perp^T@DM2016",           -0.962,          -0.962,          -0.962,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_perp^T@DM2016",           +0.000,          +0.000,          +0.000,        },
+            Parameter::Template{"Lambda_b->Lambda::a_0_long^T5@DM2016",          +0.340,          +0.340,          +0.340,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_long^T5@DM2016",          -0.770,          -0.770,          -0.770,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_long^T5@DM2016",          +0.000,          +0.000,          +0.000,        },
+            Parameter::Template{"Lambda_b->Lambda::a_1_perp^T5@DM2016",          -0.801,          -0.801,          -0.801,        },
+            Parameter::Template{"Lambda_b->Lambda::a_2_perp^T5@DM2016",          +0.000,          +0.000,          +0.000,        },
+
             // form-factor parameters for B->K* simple series
             // expansion (SSE) based on LCSR according to
             // [BSZ2015]. We don't use table 11, p. 40 but did our own
