@@ -25,6 +25,7 @@
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
+#include <eos/b-decays/b-to-d-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/inclusive-b-to-u.hh>
 #include <eos/b-decays/properties.hh>
@@ -247,6 +248,18 @@ namespace eos
             make_observable("B->pilnu::zeta",
                     &BToPiLeptonNeutrino::integrated_zeta,
                     std::make_tuple("s_min", "s_max")),
+
+            // B -> D l nu
+            make_observable("B->Dlnu::dBR/ds",
+                            &BToDLeptonNeutrino::differential_branching_ratio,
+                            std::make_tuple("s")),
+
+            make_observable("B->Dlnu::BR",
+                            &BToDLeptonNeutrino::integrated_branching_ratio,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Dlnu::R_D",
+                            &BToDLeptonNeutrino::r_d),
 
             // B_s -> K^* l nubar
             make_observable("B_s->K^*lnu::F_perp(s)",
