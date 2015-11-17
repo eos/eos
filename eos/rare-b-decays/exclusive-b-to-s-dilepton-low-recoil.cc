@@ -121,19 +121,10 @@ namespace eos
         {
             form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p);
 
-
-      /*
-       *    form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "BZ2004"), p);
-       *
-       *    Amplitudes amp = amplitudes(16.0);
-
-            std::cout << "a_perp_left = " << amp.a_perp_left << "\n";
-            std::cout << "a_perp_right = " << amp.a_perp_right << "\n";
-            std::cout << "a_par_left = " << amp.a_par_left << "\n";
-            std::cout << "a_par_right = " << amp.a_par_right << "\n";
-            std::cout << "a_long_left = " << amp.a_long_left << "\n";
-            std::cout << "a_long_right = " << amp.a_long_right << "\n";
-           */
+            if (0.0 == m_l())
+            {
+                throw InternalError("Zero lepton mass leads to NaNs in timelike amplitudes. Use tiny lepton mass > 0!");
+            }
 
             std::string spectator_quark = o.get("q", "d");
             if ((spectator_quark != "d") && (spectator_quark != "u"))
@@ -233,32 +224,38 @@ namespace eos
 
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
 
-            double m_Kstarhat = m_Kstar / m_B;
-            double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
-            double s_hat = s / m_B / m_B;
-            double a_1 = form_factors->a_1(s), a_2 = form_factors->a_2(s);
-            double alpha_s = model->alpha_s(mu());
-            double norm_s = this->norm(s);
+            const double m_B2 = m_B * m_B, m_Kstar2 = m_Kstar * m_Kstar, m2_diff = m_B2 - m_Kstar2;
+            const double m_Kstarhat = m_Kstar / m_B;
+            const double m_Kstarhat2 = std::pow(m_Kstarhat, 2);
+            const double s_hat = s / m_B / m_B;
+            const double a_1 = form_factors->a_1(s), a_2 = form_factors->a_2(s);
+            const double alpha_s = model->alpha_s(mu());
+            const double norm_s = this->norm(s);
+            const double lam = lambda(m_B2, m_Kstar2, s);
+            const double sqrt_lam = std::sqrt(lam);
+            const double sqrt_s = std::sqrt(s);
 
-            complex<double> subleading_perp = 0.5 / m_B * alpha_s * std::polar(lambda_perp(), sl_phase_perp());
-            complex<double> subleading_par  = 0.5 / m_B * alpha_s * std::polar(lambda_par(), sl_phase_par());
-            complex<double> subleading_long = 0.5 / m_B * alpha_s * std::polar(lambda_long(), sl_phase_long());
+            const complex<double> subleading_perp = 0.5 / m_B * alpha_s * std::polar(lambda_perp(), sl_phase_perp());
+            const complex<double> subleading_par  = 0.5 / m_B * alpha_s * std::polar(lambda_par(), sl_phase_par());
+            const complex<double> subleading_long = 0.5 / m_B * alpha_s * std::polar(lambda_long(), sl_phase_long());
+
+            const complex<double> c_9eff = c9eff(wc, s);
+            const complex<double> c_7eff = c7eff(wc, s);
+            const complex<double> c910_plus_left   = (c_9eff + wc.c9prime()) - (wc.c10() + wc.c10prime());
+            const complex<double> c910_plus_right  = (c_9eff + wc.c9prime()) + (wc.c10() + wc.c10prime());
+            const complex<double> c910_minus_left  = (c_9eff - wc.c9prime()) - (wc.c10() - wc.c10prime());
+            const complex<double> c910_minus_right = (c_9eff - wc.c9prime()) + (wc.c10() - wc.c10prime());
+            const complex<double> c7_plus  = kappa() * (c_7eff + wc.c7prime()) * (2.0 * m_B / s);
+            const complex<double> c7_minus = kappa() * (c_7eff - wc.c7prime()) * (2.0 * m_B / s);
 
             // longitudinal
             complex<double> prefactor_long = complex<double>(-1.0, 0.0) * m_B()
                 / (2.0 * m_Kstarhat * (1.0 + m_Kstarhat) * std::sqrt(s_hat));
-            complex<double> wilson_long1_right = (c9eff(wc, s) - wc.c9prime()) + (wc.c10() - wc.c10prime())
-                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
-                + subleading_par;
-            complex<double> wilson_long1_left = (c9eff(wc, s) - wc.c9prime()) - (wc.c10() - wc.c10prime())
-                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
-                + subleading_par;
-            complex<double> wilson_long2_right = (c9eff(wc, s) - wc.c9prime()) + (wc.c10() - wc.c10prime())
-                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_long())
-                - subleading_long;
-            complex<double> wilson_long2_left = (c9eff(wc, s) - wc.c9prime()) - (wc.c10() - wc.c10prime())
-                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_long())
-                - subleading_long;
+            complex<double> wilson_long1_right = c910_minus_right + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
+            complex<double> wilson_long1_left  = c910_minus_left  + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
+            complex<double> wilson_long2_right = c910_minus_right + c7_minus * (m_b_MSbar() - m_s() - lambda_long()) - subleading_long;
+            complex<double> wilson_long2_left  = c910_minus_left  + c7_minus * (m_b_MSbar() - m_s() - lambda_long()) - subleading_long;
+
             double formfactor_long1 = (1.0 - m_Kstarhat2 - s_hat) * std::pow(1.0 + m_Kstarhat, 2) * a_1;
             double formfactor_long2 = -lambda(1.0, m_Kstarhat2, s_hat) * a_2;
             // cf. [BHvD2010], Eq. (3.15), p. 10
@@ -267,12 +264,9 @@ namespace eos
 
             // perpendicular
             complex<double> prefactor_perp = complex<double>(1.0, 0.0) * m_B();
-            complex<double> wilson_perp_right = ((c9eff(wc, s) + wc.c9prime()) + (wc.c10() + wc.c10prime()))
-                   + kappa() * (c7eff(wc, s) + wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() + m_s() + lambda_perp())
-                   - subleading_perp;
-            complex<double> wilson_perp_left = ((c9eff(wc, s) + wc.c9prime()) - (wc.c10() + wc.c10prime()))
-                   + kappa() * (c7eff(wc, s) + wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() + m_s() + lambda_perp())
-                   - subleading_perp;
+            complex<double> wilson_perp_right = c910_plus_right + c7_plus * (m_b_MSbar() + m_s() + lambda_perp()) - subleading_perp;
+            complex<double> wilson_perp_left  = c910_plus_left  + c7_plus * (m_b_MSbar() + m_s() + lambda_perp()) - subleading_perp;
+
             double formfactor_perp = std::sqrt(2.0 * lambda(1.0, m_Kstarhat2, s_hat)) / (1.0 + m_Kstarhat) * form_factors->v(s);
             // cf. [BHvD2010], Eq. (3.13), p. 10
             result.a_perp_right = norm_s * prefactor_perp * wilson_perp_right * formfactor_perp;
@@ -280,20 +274,43 @@ namespace eos
 
             // parallel
             complex<double> prefactor_par = complex<double>(-1.0, 0.0) * m_B();
-            complex<double> wilson_par_right = ((c9eff(wc, s) - wc.c9prime()) + (wc.c10() - wc.c10prime()))
-                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
-                + subleading_par;
-            complex<double> wilson_par_left = ((c9eff(wc, s) - wc.c9prime()) - (wc.c10() - wc.c10prime()))
-                + kappa() * (c7eff(wc, s) - wc.c7prime()) * (2.0 * m_B / s) * (m_b_MSbar() - m_s() - lambda_par())
-                + subleading_par;
-            complex<double> formfactor_par = std::sqrt(2) * (1.0 + m_Kstarhat) * form_factors->a_1(s);
+            complex<double> wilson_par_right = c910_minus_right + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
+            complex<double> wilson_par_left  = c910_minus_left  + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
+            double formfactor_par = std::sqrt(2) * (1.0 + m_Kstarhat) * a_1;
             // cf. [BHvD2010], Eq. (3.14), p. 10
             result.a_par_right = norm_s * prefactor_par * wilson_par_right * formfactor_par;
             result.a_par_left  = norm_s * prefactor_par * wilson_par_left  * formfactor_par;
 
             // timelike
-            result.a_timelike = this->norm(s) * m_B * sqrt(lambda(1.0, power_of<2>(m_Kstarhat), s_hat) / s_hat) *
-               complex<double>(0.0, 2.0) * (wc.c10() - wc.c10prime()) * form_factors->a_0(s);
+            result.a_timelike = norm_s * sqrt_lam / sqrt_s
+                * (2.0 * (wc.c10() - wc.c10prime()) + s / m_l / (m_b_MSbar + m_s()) * (wc.cP() - wc.cPprime()))
+                * form_factors->a_0(s);
+
+            // scalar amplitude
+            result.a_scalar = -2.0 * norm_s * sqrt_lam * (wc.cS() - wc.cSprime()) / (m_b_MSbar + m_s()) * form_factors->a_0(s);
+
+            // tensor amplitudes [BHvD2012]  eqs. (B18 - B20)
+            // no form factor relations used
+            const double ff_T1  = form_factors->t_1(s);
+            const double ff_T2  = form_factors->t_2(s);
+            const double ff_T3  = form_factors->t_3(s);
+
+            const double kin_tensor_1 = norm_s / m_Kstar * ((m_B2 + 3.0 * m_Kstar2 - s) * ff_T2 - lam / m2_diff * ff_T3);
+            const double kin_tensor_2 = 2.0 * norm_s * sqrt_lam / sqrt_s * ff_T1;
+            const double kin_tensor_3 = 2.0 * norm_s * m2_diff / sqrt_s * ff_T2;
+
+            // correct the sign of C_T5 from [BHvD2012] (arXiv v4) because of inconsistent use of
+            // gamma5 <-> Levi-Civita
+            static const double sign = -1;
+
+            result.a_par_perp = kin_tensor_1 * wc.cT();
+            result.a_t_long   = kin_tensor_1 * sign * wc.cT5();
+
+            result.a_t_perp    = kin_tensor_2 * wc.cT();
+            result.a_long_perp = kin_tensor_2 * sign * wc.cT5();
+
+            result.a_t_par     = kin_tensor_3 * sign * wc.cT5();
+            result.a_long_par  = kin_tensor_3 * wc.cT();
 
             return result;
         }
@@ -365,6 +382,62 @@ namespace eos
             return amp.a_par_left;
         else
             return amp.a_par_right;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_timelike(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_timelike;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_scalar(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_scalar;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_par_perp(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_par_perp;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_t_long(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_t_long;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_t_perp(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_t_perp;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_t_par(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_t_par;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_long_par(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_long_par;
+    }
+
+    complex<double>
+    BToKstarDilepton<LowRecoil>::a_long_perp(const double & s) const
+    {
+        Amplitudes amp = _imp->amplitudes(s);
+        return amp.a_long_perp;
     }
 
     double
@@ -439,8 +512,9 @@ namespace eos
     BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry(const double & s) const
     {
         // cf. [BHvD2010], p. 6, eq. (2.8)
+        // cf. [BHvD2012], eq. (A7)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        return a_c.j6s / decay_width(a_c);
+        return (a_c.j6s + 0.5 * a_c.j6c) / decay_width(a_c);
     }
 
     double
@@ -534,7 +608,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation(const double & s) const
     {
-        // cf. [BHvD2012], p. 5, eq. (3.15)
+        // cf. [BHvD2012], eq. (A9)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return (a_c.j1c - a_c.j2c / 3.0) / decay_width(a_c);
     }
@@ -542,7 +616,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::differential_transversal_polarisation(const double & s) const
     {
-        // cf. [BHvD2012], p. 5, eq. (3.14)
+        // cf. [BHvD2012], eq. (A10)
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / decay_width(a_c);
     }
@@ -726,6 +800,18 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LowRecoil>::differential_j_6c_cp_averaged(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
+
+        return 0.5 * (a_c.j6c + a_c_bar.j6c);
+    }
+
+    double
     BToKstarDilepton<LowRecoil>::differential_j_7(const double & s) const
     {
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
@@ -765,6 +851,29 @@ namespace eos
         return (a_c.j9 + a_c_bar.j9) / (decay_width(a_c) + decay_width(a_c_bar));
     }
 
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_1c_plus_j_2c_cp_averaged(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
+
+        return 0.5 * (a_c.j1c + a_c_bar.j1c + a_c.j2c + a_c_bar.j2c);
+    }
+
+    double
+    BToKstarDilepton<LowRecoil>::differential_j_1s_minus_3j_2s_cp_averaged(const double & s) const
+    {
+        Save<bool> save(_imp->cp_conjugate, false);
+
+        AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        _imp->cp_conjugate = true;
+        AngularCoefficients a_c_bar = _imp->differential_angular_coefficients(s);
+
+        return 0.5 * (a_c.j1s + a_c_bar.j1s - 3.0 * (a_c.j2s + a_c_bar.j2s));
+    }
 
     double
     BToKstarDilepton<LowRecoil>::integrated_decay_width(const double & s_min, const double & s_max) const
@@ -803,8 +912,9 @@ namespace eos
     BToKstarDilepton<LowRecoil>::integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
         // cf. [BHvD2010], eq. (2.8), p. 6
+        // cf. [BHvD2012], eq. (A7)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
-        return a_c.j6s / decay_width(a_c);
+        return (a_c.j6s + 0.5 * a_c.j6c) / decay_width(a_c);
     }
 
     double
@@ -824,18 +934,20 @@ namespace eos
     {
         // Convert from asymmetry in the decay width to asymmetry in the BR
         // cf. [PDG2008] : Gamma = hbar / tau_B, pp. 5, 79
+        // TODO: remove fixed value of tau_B and use the one from parameter.cc
         static const double Gamma(6.58211899e-22 * 1e-3 / 1.53e-12);
 
         // cf. [BHvD2010], eq. (2.8), p. 6
+        // cf. [BHvD2012], eq. (A7)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
 
-        return a_c.j6s / Gamma;
+        return (a_c.j6s + 0.5 * a_c.j6c) / Gamma;
      }
 
     double
     BToKstarDilepton<LowRecoil>::integrated_longitudinal_polarisation(const double & s_min, const double & s_max) const
     {
-        // cf. [BHvD2012], p. 5, eq. (3.15)
+        // cf. [BHvD2012], eq. (A9)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return (a_c.j1c - a_c.j2c / 3.0) / decay_width(a_c);
     }
@@ -864,6 +976,7 @@ namespace eos
     BToKstarDilepton<LowRecoil>::integrated_transversal_polarisation(const double & s_min, const double & s_max) const
     {
         // cf. [BHvD2012], p. 5, eq. (3.14)
+        // cf. [BHvD2012], eq. (A10)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
         return 2.0 * (a_c.j1s - a_c.j2s / 3.0) / decay_width(a_c);
     }
@@ -1500,6 +1613,12 @@ namespace eos
             return lambda(m_B() * m_B(), m_K() * m_K(), s);
         }
 
+        // cf. [BHvDW2011] Eq. (2.4)
+        double f_t_over_f_p(const double & s) const
+        {
+            return form_factors->f_t(s) / form_factors->f_p(s);
+        }
+
         // cf. [BHP2007], Eq. (3.2), p. 3
         std::complex<double> F_A(const WilsonCoefficients<BToS> & wc, const double &) const
         {
@@ -1510,7 +1629,7 @@ namespace eos
         double F_Tkin(const double & s) const
         {
             double result = 2.0 * std::sqrt(lam(s)) * beta_l(s) / (m_B() + m_K());
-            result *= form_factors->f_t(s) / form_factors->f_p(s);
+            result *= f_t_over_f_p(s);
             return result;
         }
 
@@ -1553,7 +1672,7 @@ namespace eos
             std::complex<double> result =  c9eff(wc, s) + wc.c9prime();
             result += kappa() * (2.0 * (m_b_MSbar + lambda_pseudo()) * m_B() / s) * (c7eff(wc, s) + wc.c7prime())
                       + 0.5 * model->alpha_s(mu) / m_B * std::polar(lambda_pseudo(), sl_phase_pseudo());
-            result += 8.0 * m_l / (m_B() + m_K()) * form_factors->f_t(s) / form_factors->f_p(s) * wc.cT();
+            result += 8.0 * m_l / (m_B() + m_K()) * f_t_over_f_p(s) * wc.cT();
             return result;
         }
 
@@ -1663,6 +1782,42 @@ namespace eos
         WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
 
         return imag(_imp->c7eff(wc, s));
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_A(const double & s) const
+    {
+        return _imp->F_A(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_V(const double & s) const
+    {
+        return _imp->F_V(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_S(const double & s) const
+    {
+        return _imp->F_S(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_P(const double & s) const
+    {
+        return _imp->F_P(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_T(const double & s) const
+    {
+        return _imp->F_T(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+    }
+
+    std::complex<double>
+    BToKDilepton<LowRecoil>::F_T5(const double & s) const
+    {
+        return _imp->F_T5(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
     }
 
     double

@@ -43,10 +43,18 @@ namespace eos
             BToKstarDilepton(const Parameters & parameters, const Options & options);
             ~BToKstarDilepton();
 
-            // [BHvD2010] Eqs. (??-??)
+            // [BHvD2012] Eqs. (B.13-B.20)
             complex<double> a_long(const Helicity & h, const double & s) const;
             complex<double> a_perp(const Helicity & h, const double & s) const;
             complex<double> a_par(const Helicity & h, const double & s) const;
+            complex<double> a_timelike(const double & s) const;
+            complex<double> a_scalar(const double & s) const;
+            complex<double> a_par_perp(const double & s) const;
+            complex<double> a_t_long(const double & s) const;
+            complex<double> a_t_perp(const double & s) const;
+            complex<double> a_t_par(const double & s) const;
+            complex<double> a_long_par(const double & s) const;
+            complex<double> a_long_perp(const double & s) const;
 
             // [BHvD2010-2] Eqs. (??)
             double real_y(const double & s) const;
@@ -98,11 +106,14 @@ namespace eos
             double differential_j_5(const double & s) const;
             double differential_j_6s(const double & s) const;
             double differential_j_6c(const double & s) const;
+            double differential_j_6c_cp_averaged(const double & s) const;
             double differential_j_7(const double & s) const;
             double differential_j_8(const double & s) const;
             double differential_j_9(const double & s) const;
             double differential_j_9_normalized(const double & s) const;
             double differential_j_9_normalized_cp_averaged(const double & s) const;
+            double differential_j_1c_plus_j_2c_cp_averaged(const double & s) const;
+            double differential_j_1s_minus_3j_2s_cp_averaged(const double & s) const;
 
             // Integrated Observables
             double integrated_decay_width(const double & s_min, const double & s_max) const;
@@ -157,6 +168,7 @@ namespace eos
             double integrated_j_5_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_j_6s(const double & s_min, const double & s_max) const;
             double integrated_j_6c(const double & s_min, const double & s_max) const;
+            double integrated_j_6c_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_j_7(const double & s_min, const double & s_max) const;
             double integrated_j_7_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_j_8(const double & s_min, const double & s_max) const;
@@ -165,6 +177,8 @@ namespace eos
             double integrated_j_9_normalized(const double & s_min, const double & s_max) const;
             double integrated_j_9_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_a_9(const double & s_min, const double & s_max) const;
+            double integrated_j_1c_plus_j_2c_cp_averaged(const double & s_min, const double & s_max) const;
+            double integrated_j_1s_minus_3j_2s_cp_averaged(const double & s_min, const double & s_max) const;
     };
 
     /*
@@ -184,6 +198,14 @@ namespace eos
             double imag_c9eff(const double & s) const;
             double real_c7eff(const double & s) const;
             double imag_c7eff(const double & s) const;
+
+            // Amplitudes
+            std::complex<double> F_A(const double & s) const;
+            std::complex<double> F_V(const double & s) const;
+            std::complex<double> F_S(const double & s) const;
+            std::complex<double> F_P(const double & s) const;
+            std::complex<double> F_T(const double & s) const;
+            std::complex<double> F_T5(const double & s) const;
 
             // Angular Observables
             double a_l(const double & s) const;

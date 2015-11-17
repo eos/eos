@@ -77,9 +77,8 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::s(2GeV)"] = 0.0;
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.2;
-                // s quark mass
-                p["mass::mu"] = 0.0;
-
+                // muon mass near zero to avoid artificial divergence
+                p["mass::mu"] = 1e-5;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -179,7 +178,7 @@ class BToKstarDileptonLowRecoilTest :
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.2;
                 // mu mass
-                p["mass::mu"] = 0.0;
+                p["mass::mu"] = 1e-5;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -456,7 +455,10 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             };
 
             Parameters p = Parameters::Defaults();
-            p["mass::mu"] = 0.0;
+            // comparison done for zero lepton mass
+            // but this leads to a NaN in the timelike transversity amplitude
+            // so make the mass very small
+            p["mass::mu"] = 1e-5;
             Options o;
             o.set("model", "WilsonScan");
             o.set("form-factors", "BZ2004");
@@ -535,6 +537,170 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
 #endif
         }
 } b_to_kstar_dilepton_low_recoil_bobeth_compatibility_test;
+
+class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
+    public TestCase
+{
+    public:
+        BToKstarDileptonTensorLowRecoilBobethCompatibilityTest() :
+            TestCase("b_to_kstar_tensor_dilepton_low_recoil_bobeth_compatibility_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // Christoph uses \Delta C instead of C for C9, C10
+            // important to agree to alpha_s, can change values by 1%
+            Parameters p = Parameters::Defaults();
+            p["c1"] = -0.3231323312;
+            p["c2"] = 1.009301831;
+            p["c3"] = -0.005233499106;
+            p["c4"] = -0.08829686414;
+            p["c5"] = 0.0003601965805;
+            p["c6"] = 0.001020749573;
+            p["Re{c7}"] = -0.3370422989 + 0.1;
+            p["Im{c7}"] = 0.2;
+            p["Re{c7'}"] = 0.3;
+            p["Im{c7'}"] = 0.4;
+            p["c8"] = -0.1827530948;
+            p["Re{c9}"] = 4.294489364 + 1;
+            p["Im{c9}"] = 0.5;
+            p["Re{c9'}"] = 2;
+            p["Im{c9'}"] = 1.5;
+            p["Re{c10}"] = -4.196294696 + 3;
+            p["Im{c10}"] = 2.5;
+            p["Re{c10'}"] = 4;
+            p["Im{c10'}"] = 3.5;
+            p["Re{cS}"] = 0.5;
+            p["Im{cS}"] = 1;
+            p["Re{cS'}"] = 0.6;
+            p["Im{cS'}"] = 1.1;
+            p["Re{cP}"] = 0.7;
+            p["Im{cP}"] = 1.2;
+            p["Re{cP'}"] = 0.8;
+            p["Im{cP'}"] = 1.3;
+            p["Re{cT}"] = 0.9;
+            p["Im{cT}"] = 1.4;
+            p["Re{cT5}"] = -1.0;
+            p["Im{cT5}"] = -1.5;
+
+            p["mass::s(2GeV)"] = 0.095;
+
+            // increase sensitivity to m_l^2/q^2 terms
+            p["mass::mu"] = 1.5;
+
+            Options oo;
+            oo.set("model", "WilsonScan");
+            oo.set("scan-mode", "cartesian");
+            oo.set("form-factors", "KMPW2010");
+            oo.set("l", "mu");
+            oo.set("q", "d");
+
+            static const double s = 14.0;
+            static const double s_max = 19.0;
+
+            {
+                BToKstarDilepton<LowRecoil> d(p, oo);
+
+                double eps = 7e-3;
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_perp(left_handed, s),  complex<double>( 4.021407965e-11,-1.564297789e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_perp(right_handed, s), complex<double>( 8.645626526e-11, 8.331646455e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_par(left_handed, s),   complex<double>(-7.455049449e-11, 4.565517978e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_par(right_handed, s),  complex<double>( 3.565928422e-11, 2.577481906e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_long(left_handed, s),  complex<double>(-7.541145186e-11, 4.618243535e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_long(right_handed, s), complex<double>( 3.607110071e-11, 2.607248335e-11), eps);
+
+                // nearly identically implemented, only difference from alpha_s
+                eps = 1e-4;
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_timelike(s),  complex<double>(-1.677697256e-10,-3.507403558e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_scalar(s),    complex<double>( 2.767698228e-12, 2.767698228e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_par_perp(s),  complex<double>( 2.38060e-11,  3.70316e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_t_long(s),    complex<double>( 2.64511e-11,  3.96767e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_t_perp(s),    complex<double>( 1.46932e-11,  2.28561e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_long_perp(s), complex<double>( 1.63258e-11,  2.44887e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_t_par(s),     complex<double>( 3.12340e-11,  4.6851e-11 ), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_long_par(s),  complex<double>( 2.81106e-11,  4.37276e-11), eps);
+
+                eps = 7e-4;
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1s(s),  6.080153751e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1c(s),  4.48478951e-20,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2s(s), -6.418495462e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2c(s),  6.966335387e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_3(s),   1.032048382e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_4(s),  -9.218261443e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_5(s),  -5.01299633e-21,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6s(s), -2.407918046e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6c(s), -1.457760738e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_7(s),  -2.413388446e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_8(s),  -3.305335877e-22, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_9(s),   4.621083562e-22, eps);
+
+                TEST_CHECK_RELATIVE_ERROR(d.differential_forward_backward_asymmetry(s),      -0.1862620012, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(s, s_max), -0.1855108351, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(s, s_max), -1.004538219,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(s, s_max), -0.6513218755, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(s, s_max), -1.553614345,  eps);
+            }
+
+            {
+                oo.set("cp-conjugate", "true");
+                BToKstarDilepton<LowRecoil> d(p, oo);
+
+                double eps = 7e-3;
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_perp(left_handed, s),  complex<double>( 4.021407965e-11,  1.843164004e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_perp(right_handed, s), complex<double>( 8.645626526e-11, -8.05278024e-11 ), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_par(left_handed, s),   complex<double>(-7.455049449e-11, -8.452349138e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_par(right_handed, s),  complex<double>( 3.565928422e-11, -2.966165022e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_long(left_handed, s),  complex<double>(-7.541145186e-11, -8.549962337e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_long(right_handed, s), complex<double>( 3.607110071e-11, -3.000420215e-11), eps);
+
+                // nearly identically implemented, only difference from alpha_s
+                eps = 1e-4;
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_timelike(s),  complex<double>(-1.677697256e-10,  3.507403558e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_scalar(s),    complex<double>( 2.767698228e-12, -2.767698228e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_par_perp(s),  complex<double>( 2.3806e-11,  -3.70316e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_t_long(s),    complex<double>( 2.64511e-11, -3.96767e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_t_perp(s),    complex<double>( 1.46932e-11, -2.28561e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_long_perp(s), complex<double>( 1.63258e-11, -2.44887e-11), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_t_par(s),     complex<double>( 3.1234e-11,  -4.6851e-11 ), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d.a_long_par(s),  complex<double>( 2.81106e-11, -4.37276e-11), eps);
+
+                eps = 7e-4;
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1s(s),  6.154137843e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1c(s),  4.668428684e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2s(s), -6.424911528e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_2c(s),  6.893410893e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_3(s),   1.023638282e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_4(s),  -9.167284751e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_5(s),  -5.227165173e-21, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6s(s), -2.437095943e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6c(s), -1.456196508e-20, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_7(s),   2.417311002e-21, eps);
+
+                eps = 3e-3;
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_8(s),   2.569833906e-22, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_9(s),  -3.592801961e-22, eps);
+
+                // j6c needed, nonzero only with tensor contributions
+                TEST_CHECK_RELATIVE_ERROR(d.differential_forward_backward_asymmetry(s),      -0.184288085,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(s, s_max), -0.1816297646, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_1(s, s_max), -1.004829116,  eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_2(s, s_max), -0.6687996564, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_h_3(s, s_max), -1.532088081,  eps);
+            }
+
+            {
+                BToKstarDilepton<LowRecoil> d(p, oo);
+
+                double eps = 7e-4;
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_6c_cp_averaged(s), 0.5 * (-1.457760738e-20 -1.456196508e-20), eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1c_plus_j_2c_cp_averaged(s),
+                        0.5 * (4.48478951e-20 + 4.668428684e-20 + 6.966335387e-21 + 6.893410893e-21), eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_j_1s_minus_3j_2s_cp_averaged(s),
+                        0.5 * (6.080153751e-20 + 6.154137843e-20 - 3.0 * (-6.418495462e-21 - 6.424911528e-21)), eps);
+            }
+        }
+} b_to_kstar_dilepton_tensor_low_recoil_bobeth_compatibility_test;
 
 class BToKDileptonLowRecoilTest :
     public TestCase
