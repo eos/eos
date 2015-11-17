@@ -401,16 +401,25 @@ namespace eos
             Parameter::Template{"B->K^*::a1_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },
             Parameter::Template{"B->K^*::a2_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },
             Parameter::Template{"B->K^*::v_uncertainty@BZ2004",                  +0.85,           +1.0,            +1.15          },
+            Parameter::Template{"B->K^*::t1_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },
+            Parameter::Template{"B->K^*::t2_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },
+            Parameter::Template{"B->K^*::t3_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },
 
             // form factor parameters for B->K^* according to [KMPW2010], Table 4, p. 31
             Parameter::Template{"B->K^*::F^V(0)@KMPW2010",                       +0.24,           +0.36,           +0.59          },
             Parameter::Template{"B->K^*::F^A0(0)@KMPW2010",                      +0.22,           +0.29,           +0.39          },
             Parameter::Template{"B->K^*::F^A1(0)@KMPW2010",                      +0.15,           +0.25,           +0.41          },
             Parameter::Template{"B->K^*::F^A2(0)@KMPW2010",                      +0.13,           +0.23,           +0.42          },
+            Parameter::Template{"B->K^*::F^T1(0)@KMPW2010",                      +0.21,           +0.31,           +0.49          },
+            Parameter::Template{"B->K^*::F^T2(0)@KMPW2010",                      +0.21,           +0.31,           +0.49          },
+            Parameter::Template{"B->K^*::F^T3(0)@KMPW2010",                      +0.12,           +0.22,           +0.39          },
             Parameter::Template{"B->K^*::b^V_1@KMPW2010",                        -5.2,            -4.8,            -4.0           },
-            Parameter::Template{"B->K^*::b^A0_1@KMPW2010",                      -21.2,            -18.2,          -16.9           },
+            Parameter::Template{"B->K^*::b^A0_1@KMPW2010",                      -21.2,           -18.2,           -16.9           },
             Parameter::Template{"B->K^*::b^A1_1@KMPW2010",                       -0.46,           +0.34,           +1.2           },
             Parameter::Template{"B->K^*::b^A2_1@KMPW2010",                       -2.2,            -0.85,           +2.03          },
+            Parameter::Template{"B->K^*::b^T1_1@KMPW2010",                       -5.01,           -4.6,            -3.79          },
+            Parameter::Template{"B->K^*::b^T2_1@KMPW2010",                       -5.4,            -3.2,            -1.1           },
+            Parameter::Template{"B->K^*::b^T3_1@KMPW2010",                      -13.4,           -10.3,            -7.8           },
 
             // form factor parameter for B_s->K^* according to [FMvD2015].
             Parameter::Template{"B_s->K^*::F_perp(0)@FMvD2015",                   0.349,           0.349,           0.349         },

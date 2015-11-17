@@ -32,6 +32,9 @@
 
 namespace eos
 {
+    // Process    = B -> K^*, B_s -> phi etc.
+    // Transition = B -> V or B -> P
+
     /* Form Factors according to [BZ2004] */
     template <typename Process_, typename Transition_> class BZ2004FormFactors;
 
@@ -80,13 +83,19 @@ namespace eos
         public FormFactors<PToV>
     {
         private:
-            UsedParameter _v_factor, _a0_factor, _a1_factor, _a2_factor;
+            UsedParameter _v_factor,
+                          _a0_factor, _a1_factor, _a2_factor,
+                          _t1_factor, _t2_factor, _t3_factor;
 
             // fit parametrisation for P -> V according to [BZ2004]
-            static const double _v_r1, _v_r2, _v_m2r, _v_m2fit;
-            static const double _a0_r1, _a0_r2, _a0_m2r, _a0_m2fit;
-            static const double _a1_r2, _a1_m2fit;
-            static const double _a2_r1, _a2_r2, _a2_m2fit;
+            static const double
+               _v_r1, _v_r2, _v_m2r, _v_m2fit,
+               _a0_r1, _a0_r2, _a0_m2r, _a0_m2fit,
+               _a1_r2, _a1_m2fit,
+               _a2_r1, _a2_r2, _a2_m2fit,
+               _t1_r1, _t1_r2, _t1_m2r, _t1_m2fit,
+               _t2_r2, _t2_m2fit,
+               _t3t_r1, _t3t_r2, _t3t_m2fit;
 
             // cf. [BZ2004], Eq. 59, p. 27
             static inline double _calc_eq59(const double & s, const double & r_1, const double & r_2, const double & m2r, const double & m2fit)
@@ -113,7 +122,10 @@ namespace eos
                 _v_factor(p["B->K^*::v_uncertainty@BZ2004"], *this),
                 _a0_factor(p["B->K^*::a0_uncertainty@BZ2004"], *this),
                 _a1_factor(p["B->K^*::a1_uncertainty@BZ2004"], *this),
-                _a2_factor(p["B->K^*::a2_uncertainty@BZ2004"], *this)
+                _a2_factor(p["B->K^*::a2_uncertainty@BZ2004"], *this),
+                _t1_factor(p["B->K^*::t1_uncertainty@BZ2004"], *this),
+                _t2_factor(p["B->K^*::t2_uncertainty@BZ2004"], *this),
+                _t3_factor(p["B->K^*::t3_uncertainty@BZ2004"], *this)
             {
             }
 
@@ -151,6 +163,36 @@ namespace eos
                 return ((mB + mV) * (mB + mV) * (mB2 - mV2 - s) * this->a_1(s)
                     - lambda * this->a_2(s)) / (16.0 * mB * mV2 * (mB + mV));
             }
+
+            virtual double t_1(const double & s) const
+            {
+                return _t1_factor * _calc_eq59(s, _t1_r1, _t1_r2, _t1_m2r, _t1_m2fit);
+            }
+
+            virtual double t_2(const double & s) const
+            {
+                return _t2_factor * _calc_eq61(s, _t2_r2, _t2_m2fit);
+            }
+
+            virtual double t_3(const double & s) const
+            {
+                const double mB = Process_::mB, mB2 = mB * mB;
+                const double mV = Process_::mV, mV2 = mV * mV;
+
+                // cf. [BZ2004], Eq. (8), p.4
+                return (mB2 - mV2) / s
+                   * (_t3_factor * _calc_eq60(s, _t3t_r1, _t3t_r2, _t3t_m2fit) - this->t_2(s));
+            }
+
+            virtual double t_23(const double & s) const
+            {
+                const double mB = Process_::mB, mB2 = mB * mB;
+                const double mV = Process_::mV, mV2 = mV * mV;
+                const double lambda = eos::lambda(mB2, mV2, s);
+
+                return ((mB2 - mV2) * (mB2 + 3.0 * mV2 - s) * this->t_2(s)
+                        - lambda * this->t_3(s)) / (8.0 * mB * mV2 * (mB - mV));
+            }
     };
 
     template <> class KMPW2010FormFactors<PToV> :
@@ -158,10 +200,11 @@ namespace eos
     {
         private:
             // fit parametrisation for P -> V according to [KMPW2010]
-            UsedParameter _f0_V, _b1_V;
-            UsedParameter _f0_A0, _b1_A0;
-            UsedParameter _f0_A1, _b1_A1;
-            UsedParameter _f0_A2, _b1_A2;
+            UsedParameter
+               _f0_V, _b1_V,
+               _f0_A0, _b1_A0, _f0_A1, _b1_A1, _f0_A2, _b1_A2,
+               _f0_T1, _b1_T1, _f0_T2, _b1_T2, _f0_T3, _b1_T3;
+
             static const double _tau_p, _tau_m, _tau_0;
             static const double _m_B, _m_Kstar, _m_Bs2_0m, _m_Bs2_1m, _m_Bs2_1p;
 
@@ -170,16 +213,24 @@ namespace eos
                 return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
             }
 
+            static double ff_KMPW(const double & s, const double & f0, const double & b1, const double & m2)
+            {
+                const double zs = _calc_z(s), z0 = _calc_z(0.0);
+
+                // cf. [KMPW2010], Eq. (8.8), p. 30
+                return f0 / (1.0 - s / m2) * (1.0 + b1 * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+            }
+
+        // Remark: this is hardcoded B->K* FF's nuisance parameters (OK, because in [KMPW2010] only B->K^* calculated)
         public:
             KMPW2010FormFactors(const Parameters & p, const Options &) :
-                _f0_V(p["B->K^*::F^V(0)@KMPW2010"],   *this),
-                _b1_V(p["B->K^*::b^V_1@KMPW2010"],    *this),
-                _f0_A0(p["B->K^*::F^A0(0)@KMPW2010"], *this),
-                _b1_A0(p["B->K^*::b^A0_1@KMPW2010"],  *this),
-                _f0_A1(p["B->K^*::F^A1(0)@KMPW2010"], *this),
-                _b1_A1(p["B->K^*::b^A1_1@KMPW2010"],  *this),
-                _f0_A2(p["B->K^*::F^A2(0)@KMPW2010"], *this),
-                _b1_A2(p["B->K^*::b^A2_1@KMPW2010"],  *this)
+                _f0_V(p["B->K^*::F^V(0)@KMPW2010"],   *this),   _b1_V(p["B->K^*::b^V_1@KMPW2010"],    *this),
+                _f0_A0(p["B->K^*::F^A0(0)@KMPW2010"], *this),   _b1_A0(p["B->K^*::b^A0_1@KMPW2010"],  *this),
+                _f0_A1(p["B->K^*::F^A1(0)@KMPW2010"], *this),   _b1_A1(p["B->K^*::b^A1_1@KMPW2010"],  *this),
+                _f0_A2(p["B->K^*::F^A2(0)@KMPW2010"], *this),   _b1_A2(p["B->K^*::b^A2_1@KMPW2010"],  *this),
+                _f0_T1(p["B->K^*::F^T1(0)@KMPW2010"], *this),   _b1_T1(p["B->K^*::b^T1_1@KMPW2010"],  *this),
+                _f0_T2(p["B->K^*::F^T2(0)@KMPW2010"], *this),   _b1_T2(p["B->K^*::b^T2_1@KMPW2010"],  *this),
+                _f0_T3(p["B->K^*::F^T3(0)@KMPW2010"], *this),   _b1_T3(p["B->K^*::b^T3_1@KMPW2010"],  *this)
             {
             }
 
@@ -190,35 +241,24 @@ namespace eos
 
             virtual double v(const double & s) const
             {
-                const double zs = _calc_z(s), z0 = _calc_z(0.0);
-
-                // cf. [KMPW2010], Eq. (8.8), p. 30
-                return _f0_V() / (1.0 - s / _m_Bs2_1m) * (1.0 + _b1_V() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+                return ff_KMPW(s, _f0_V(), _b1_V(), _m_Bs2_1m);
             }
 
             virtual double a_0(const double & s) const
             {
-                const double zs = _calc_z(s), z0 = _calc_z(0.0);
-
-                // cf. [KMPW2010], Eq. (8.8), p. 30
-                return _f0_A0() / (1.0 - s / _m_Bs2_0m) * (1.0 + _b1_A0() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+                return ff_KMPW(s, _f0_A0(), _b1_A0(), _m_Bs2_0m);
             }
 
             virtual double a_1(const double & s) const
             {
-                const double zs = _calc_z(s), z0 = _calc_z(0.0);
-
-                // cf. [KMPW2010], Eq. (8.8), p. 30
-                return _f0_A1() / (1.0 - s / _m_Bs2_1p) * (1.0 + _b1_A1() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+                return ff_KMPW(s, _f0_A1(), _b1_A1(), _m_Bs2_1p);
             }
 
             virtual double a_2(const double & s) const
             {
-                const double zs = _calc_z(s), z0 = _calc_z(0.0);
-
-                // cf. [KMPW2010], Eq. (8.8), p. 30
-                return _f0_A2() / (1.0 - s / _m_Bs2_1p) * (1.0 + _b1_A2() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
+                return ff_KMPW(s, _f0_A2(), _b1_A2(), _m_Bs2_1p);
             }
+
             virtual double a_12(const double & s) const
             {
                 const double mB = BToKstar::mB, mB2 = mB * mB;
@@ -227,6 +267,31 @@ namespace eos
 
                 return ((mB + mV) * (mB + mV) * (mB2 - mV2 - s) * this->a_1(s)
                     - lambda * this->a_2(s)) / (16.0 * mB * mV2 * (mB + mV));
+            }
+
+            virtual double t_1(const double & s) const
+            {
+                return ff_KMPW(s, _f0_T1(), _b1_T1(), _m_Bs2_1m);
+            }
+
+            virtual double t_2(const double & s) const
+            {
+                return ff_KMPW(s, _f0_T2(), _b1_T2(), _m_Bs2_1p);
+            }
+
+            virtual double t_3(const double & s) const
+            {
+                return ff_KMPW(s, _f0_T3(), _b1_T3(), _m_Bs2_1p);
+            }
+
+            virtual double t_23(const double & s) const
+            {
+                const double mB = BToKstar::mB, mB2 = mB * mB;
+                const double mV = BToKstar::mV, mV2 = mV * mV;
+                const double lambda = eos::lambda(mB2, mV2, s);
+
+                return ((mB2 - mV2) * (mB2 + 3.0 * mV2 - s) * this->t_2(s)
+                        - lambda * this->t_3(s)) / (8.0 * mB * mV2 * (mB - mV));
             }
     };
 
@@ -307,6 +372,26 @@ namespace eos
 
                 return ((mB + mV) * (mB + mV) * (mB2 - mV2 - s) * this->a_1(s)
                     - lambda * this->a_2(s)) / (16.0 * mB * mV2 * (mB + mV));
+            }
+
+            virtual double t_1(const double &) const
+            {
+                throw InternalError("BFW2010FormFactors<>::t_1: Tensor form factors not yet implemented");
+            }
+
+            virtual double t_2(const double &) const
+            {
+                throw InternalError("BFW2010FormFactors<>::t_2: Tensor form factors not yet implemented");
+            }
+
+            virtual double t_3(const double &) const
+            {
+                throw InternalError("BFW2010FormFactors<>::t_3: Tensor form factors not yet implemented");
+            }
+
+            virtual double t_23(const double &) const
+            {
+                throw InternalError("BFW2010FormFactors<>::t_23: Tensor form factors not yet implemented");
             }
     };
 
@@ -440,6 +525,26 @@ namespace eos
             virtual double a_12(const double & s) const
             {
                 return this->f_long(s) * Process_::mB / (8.0 * Process_::mV);
+            }
+
+            virtual double t_1(const double &) const
+            {
+                throw InternalError("FMvD2015FormFactors<>::t_1: Tensor form factors not yet implemented");
+            }
+
+            virtual double t_2(const double &) const
+            {
+                throw InternalError("FMvD2015FormFactors<>::t_2: Tensor form factors not yet implemented");
+            }
+
+            virtual double t_3(const double &) const
+            {
+                throw InternalError("FMvD2015FormFactors<>::t_3: Tensor form factors not yet implemented");
+            }
+
+            virtual double t_23(const double &) const
+            {
+                throw InternalError("FMvD2015FormFactors<>::t_23: Tensor form factors not yet implemented");
             }
     };
 

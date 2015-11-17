@@ -1,7 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -55,7 +56,10 @@ namespace eos
             virtual double a_2(const double & s) const = 0;
             virtual double a_12(const double & s) const = 0;
 
-            // TODO: dipole form factors
+            virtual double t_1(const double & s) const = 0;
+            virtual double t_2(const double & s) const = 0;
+            virtual double t_3(const double & s) const = 0;
+            virtual double t_23(const double & s) const = 0;
     };
 
     template <>

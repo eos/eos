@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -45,6 +46,15 @@ namespace eos
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_a2_r1 = -0.084;
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_a2_r2 = +0.342;
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_a2_m2fit = 52.00;
+    template <> const double BZ2004FormFactors<BToKstar, PToV>::_t1_r1 = +0.823;
+    template <> const double BZ2004FormFactors<BToKstar, PToV>::_t1_r2 = -0.491;
+    template <> const double BZ2004FormFactors<BToKstar, PToV>::_t1_m2r = 5.32 * 5.32;
+    template <> const double BZ2004FormFactors<BToKstar, PToV>::_t1_m2fit = 46.31;
+    template <> const double BZ2004FormFactors<BToKstar, PToV>::_t2_r2 = +0.333;
+    template <> const double BZ2004FormFactors<BToKstar, PToV>::_t2_m2fit = 41.41;
+    template <> const double BZ2004FormFactors<BToKstar, PToV>::_t3t_r1 = -0.036;
+    template <> const double BZ2004FormFactors<BToKstar, PToV>::_t3t_r2 = +0.368;
+    template <> const double BZ2004FormFactors<BToKstar, PToV>::_t3t_m2fit = 48.10;
     template class BZ2004FormFactors<BToKstar, PToV>;
 
 
@@ -85,6 +95,15 @@ namespace eos
     template <> const double BZ2004FormFactors<BsToPhi, PToV>::_a2_r1 = -0.054;
     template <> const double BZ2004FormFactors<BsToPhi, PToV>::_a2_r2 = +0.288;
     template <> const double BZ2004FormFactors<BsToPhi, PToV>::_a2_m2fit = 48.94;
+    template <> const double BZ2004FormFactors<BsToPhi, PToV>::_t1_r1 = +1.303;
+    template <> const double BZ2004FormFactors<BsToPhi, PToV>::_t1_r2 = -0.954;
+    template <> const double BZ2004FormFactors<BsToPhi, PToV>::_t1_m2r = 5.42 * 5.42;
+    template <> const double BZ2004FormFactors<BsToPhi, PToV>::_t1_m2fit = 38.28;
+    template <> const double BZ2004FormFactors<BsToPhi, PToV>::_t2_r2 = +0.349;
+    template <> const double BZ2004FormFactors<BsToPhi, PToV>::_t2_m2fit = 37.21;
+    template <> const double BZ2004FormFactors<BsToPhi, PToV>::_t3t_r1 = +0.027;
+    template <> const double BZ2004FormFactors<BsToPhi, PToV>::_t3t_r2 = +0.321;
+    template <> const double BZ2004FormFactors<BsToPhi, PToV>::_t3t_m2fit = 45.56;
     template class BZ2004FormFactors<BsToPhi, PToV>;
 
 
