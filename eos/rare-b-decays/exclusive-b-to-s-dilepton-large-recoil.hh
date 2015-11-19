@@ -51,6 +51,14 @@ namespace eos
             complex<double> a_long(const Helicity & h, const double & s) const;
             complex<double> a_perp(const Helicity & h, const double & s) const;
             complex<double> a_par(const Helicity & h, const double & s) const;
+            complex<double> a_timelike(const double & s) const;
+            complex<double> a_scalar(const double & s) const;
+            complex<double> a_par_perp(const double & s) const;
+            complex<double> a_t_long(const double & s) const;
+            complex<double> a_t_perp(const double & s) const;
+            complex<double> a_t_par(const double & s) const;
+            complex<double> a_long_par(const double & s) const;
+            complex<double> a_long_perp(const double & s) const;
 
             // Inverse Observables
             double a_fb_zero_crossing() const;
@@ -90,11 +98,14 @@ namespace eos
             double differential_j_5(const double & s) const;
             double differential_j_6s(const double & s) const;
             double differential_j_6c(const double & s) const;
+            double differential_j_6c_cp_averaged(const double & s) const;
             double differential_j_7(const double & s) const;
             double differential_j_8(const double & s) const;
             double differential_j_9(const double & s) const;
             double differential_j_9_normalized(const double & s) const;
             double differential_j_9_normalized_cp_averaged(const double & s) const;
+            double differential_j_1c_plus_j_2c_cp_averaged(const double & s) const;
+            double differential_j_1s_minus_3j_2s_cp_averaged(const double & s) const;
 
             // Integrated Observables
             double integrated_decay_width(const double & s_min, const double & s_max) const;

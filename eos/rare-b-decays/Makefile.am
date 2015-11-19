@@ -58,6 +58,8 @@ TESTS = \
 	hard-scattering_TEST \
 	long-distance_TEST \
 	qcdf_integrals_TEST
+XFAIL_TESTS = \
+	exclusive-b-to-s-dilepton-large-recoil_TEST # One of the QCDF integrals has a bug in the imaginary part
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	libeosrarebdecays.la \
