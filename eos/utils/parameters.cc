@@ -399,6 +399,13 @@ namespace eos
             Parameter::Template{"B->pi::b_T^1@BCL2008",                          +0.00,           +0.00,           +0.00          },
             Parameter::Template{"B->pi::b_T^2@BCL2008",                          +0.00,           +0.00,           +0.00          },
 
+            // form factor parameters for B->D from [BIvD2015] for [BCL2008] parametrization
+            Parameter::Template{"B->D::f_+(0)@BCL2008",                          +0.62,           +0.66,           +0.69          },
+            Parameter::Template{"B->D::b_+^1@BCL2008",                           -5.00,           -4.00,           -3.10          },
+            Parameter::Template{"B->D::b_+^2@BCL2008",                           -5.60,           -0.80,           +3.40          },
+            Parameter::Template{"B->D::b_0^1@BCL2008",                           -0.20,           +0.40,           +0.80          },
+            Parameter::Template{"B->D::b_0^2@BCL2008",                           -5.60,           -1.20,           +3.20          },
+
             // form factor parameters for B->K^* according to [BZ2004] (approximate)
             Parameter::Template{"B->K^*::a0_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },
             Parameter::Template{"B->K^*::a1_uncertainty@BZ2004",                 +0.85,           +1.0,            +1.15          },

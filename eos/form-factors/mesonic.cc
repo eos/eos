@@ -280,6 +280,11 @@ namespace eos
     // [BCL2008]
     template class BCL2008FormFactors<BToPi>;
 
+    /* B_{u,d -> D */
+
+    // [BCL2008]
+    template class BCL2008FormFactors<BToD>;
+
 
     FormFactors<PToP>::~FormFactors()
     {
@@ -295,11 +300,15 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
+            // b -> s
             { KeyType("B->K",     "BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make     },
             { KeyType("B->K",     "BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make      },
             { KeyType("B->K",     "KMPW2010"),      &KMPW2010FormFactors<PToP>::make         },
             { KeyType("B->K",     "BFW2010"),       &BFW2010FormFactors<BToK, PToP>::make    },
+            // b -> u
             { KeyType("B->pi",    "BCL2008"),       &BCL2008FormFactors<BToPi>::make         },
+            // b -> c
+            { KeyType("B->D",     "BCL2008"),       &BCL2008FormFactors<BToD>::make          },
             // analytic computations
             { KeyType("B->pi",    "DKMMO2008"), &AnalyticFormFactorBToPiDKMMO2008::make      },
         };

@@ -184,6 +184,13 @@ namespace eos
             make_observable("B->K^*::T_23(s)/T_2(s)", "B->K^*",
                     &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
 
+            // B -> D Form Factors
+            make_observable("B->D::f_+(s)", "B->D",
+                    &FormFactors<PToP>::f_p),
+
+            make_observable("B->D::f_0(s)", "B->D",
+                    &FormFactors<PToP>::f_0),
+
             // B_s -> K^* Form Factors
             make_observable("B_s->K^*::V(s)", "B_s->K^*",
                     &FormFactors<PToV>::v),

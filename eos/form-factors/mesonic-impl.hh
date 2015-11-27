@@ -723,6 +723,7 @@ namespace eos
         static constexpr const double m2_Br0p = 5.630 * 5.630; // B_s scalar
         static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
         static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
+        static constexpr const bool uses_tensor_form_factors = true;
     };
 
     struct BToPi {
@@ -734,14 +735,29 @@ namespace eos
         static constexpr const double m2_Br0p = 5.540 * 5.540; // B_{u,d} scalar: M(B_s scalar) - M(B_s^*) + M(B_{u,d}^*)
         static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
         static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
+        static constexpr const bool uses_tensor_form_factors = true;
     };
 
+    struct BToD {
+        typedef PToP Transition;
+        static constexpr const char * label = "B->D";
+        static constexpr const double m_B = 5.279;
+        static constexpr const double m_P = 1.870;
+        // resonance masses from [HPQCD2015A]
+        static constexpr const double m2_Br1m = 6.330 * 6.330; // B_c^*
+        static constexpr const double m2_Br0p = 6.420 * 6.420; // B_c scalar
+        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
+        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
+        static constexpr const bool uses_tensor_form_factors = false;
+    };
 
     /*
      * P -> P Form Factors in the simplified series expansion according to
      * [BCL2008].
      */
-    template <typename Process_> class BCL2008FormFactors :
+    template <typename Process_, bool with_tensor_> class BCL2008FormFactorBase;
+
+    template <typename Process_> class BCL2008FormFactorBase<Process_, false> :
         public FormFactors<typename Process_::Transition>
     {
         private:
@@ -753,9 +769,9 @@ namespace eos
              */
             UsedParameter _f_plus_0, _b_plus_1, _b_plus_2;
             UsedParameter            _b_zero_1, _b_zero_2;
-            UsedParameter _f_t_0,    _b_t_1,    _b_t_2;
 
-            static double _z(const double & s)
+        protected:
+            double _z(const double & s) const
             {
                 static const double m_B = Process_::m_B;
                 static const double m_P = Process_::m_P;
@@ -767,23 +783,14 @@ namespace eos
             }
 
         public:
-            BCL2008FormFactors(const Parameters & p, const Options &) :
+            BCL2008FormFactorBase(const Parameters & p, const Options &) :
                 _f_plus_0(p[std::string(Process_::label) + "::f_+(0)@BCL2008"], *this),
                 _b_plus_1(p[std::string(Process_::label) + "::b_+^1@BCL2008"],  *this),
                 _b_plus_2(p[std::string(Process_::label) + "::b_+^2@BCL2008"],  *this),
                 _b_zero_1(p[std::string(Process_::label) + "::b_0^1@BCL2008"],  *this),
-                _b_zero_2(p[std::string(Process_::label) + "::b_0^2@BCL2008"],  *this),
-                _f_t_0(p[std::string(Process_::label)    + "::f_T(0)@BCL2008"], *this),
-                _b_t_1(p[std::string(Process_::label)    + "::b_T^1@BCL2008"],  *this),
-                _b_t_2(p[std::string(Process_::label)    + "::b_T^2@BCL2008"],  *this)
+                _b_zero_2(p[std::string(Process_::label) + "::b_0^2@BCL2008"],  *this)
             {
             }
-
-            static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
-            {
-                return new BCL2008FormFactors(parameters, Options());
-            }
-
             virtual double f_p(const double & s) const
             {
                 const double z = _z(s), z2 = z * z, z3 = z * z2;
@@ -802,16 +809,62 @@ namespace eos
                 // note that f_0(0) = f_+(0)!
                 // for f_0(s) we do not have an equation of motion to express _b_zero_K in terms of the
                 // other coefficients!
-                return _f_plus_0 / (1.0 - s / Process_::m2_Br0m) * (1.0 + _b_zero_1 * zbar + _b_zero_2 * z2bar);
+                return _f_plus_0 / (1.0 - s / Process_::m2_Br0p) * (1.0 + _b_zero_1 * zbar + _b_zero_2 * z2bar);
+            }
+
+            virtual double f_t(const double &) const
+            {
+                throw InternalError("This form factor parametrization has no inputs for tensor form factors.");
+
+                return 0.0;
+            }
+    };
+
+    template <typename Process_> class BCL2008FormFactorBase<Process_, true> :
+        public BCL2008FormFactorBase<Process_, false>
+    {
+        private:
+            /*
+             * Fit parametrisation for P -> P according to [BCL2008], eq. (11)
+             * with K = 3. Note that we factor out the form factor at q^2 = 0
+             * by setting t_0 = 0.0, thus b_k -> b_k / b_0. Note that the last
+             * coefficient b_K is fixed by eq. (14).
+             *
+             * Tensor form factors only. Vector and scalar form factor in BCL2008FormFactorBase<>.
+             */
+            UsedParameter _f_t_0,    _b_t_1,    _b_t_2;
+
+        public:
+            BCL2008FormFactorBase(const Parameters & p, const Options & o) :
+                BCL2008FormFactorBase<Process_, false>(p, o),
+                _f_t_0(p[std::string(Process_::label)    + "::f_T(0)@BCL2008"], *this),
+                _b_t_1(p[std::string(Process_::label)    + "::b_T^1@BCL2008"],  *this),
+                _b_t_2(p[std::string(Process_::label)    + "::b_T^2@BCL2008"],  *this)
+            {
             }
 
             virtual double f_t(const double & s) const
             {
-                const double z = _z(s), z2 = z * z, z3 = z * z2;
-                const double z0 = _z(0), z02 = z0 * z0, z03 = z0 * z02;
+                const double z = this->_z(s), z2 = z * z, z3 = z * z2;
+                const double z0 = this->_z(0), z02 = z0 * z0, z03 = z0 * z02;
                 const double zbar = z - z0, z2bar = z2 - z02, z3bar = z3 - z03;
 
                 return _f_t_0 / (1.0 - s / Process_::m2_Br1m) * (1.0 + _b_t_1 * (zbar - z3bar / 3.0) + _b_t_2 * (z2bar + 2.0 * z3bar / 3.0));
+            }
+    };
+
+    template <typename Process_> class BCL2008FormFactors :
+        public BCL2008FormFactorBase<Process_, Process_::uses_tensor_form_factors>
+    {
+        public:
+            BCL2008FormFactors(const Parameters & p, const Options & o) :
+                BCL2008FormFactorBase<Process_, Process_::uses_tensor_form_factors>(p, o)
+            {
+            }
+
+            static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
+            {
+                return new BCL2008FormFactors(parameters, Options());
             }
     };
 
