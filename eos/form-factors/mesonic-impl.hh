@@ -719,8 +719,8 @@ namespace eos
         static constexpr const char * label = "B->K";
         static constexpr const double m_B = 5.279;
         static constexpr const double m_P = 0.492;
-        static constexpr const double m2_Br0m = 5.366 * 5.366; // B_s
         static constexpr const double m2_Br1m = 5.415 * 5.415; // B_s^*
+        static constexpr const double m2_Br0p = 5.630 * 5.630; // B_s scalar
         static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
         static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
     };
@@ -730,8 +730,8 @@ namespace eos
         static constexpr const char * label = "B->pi";
         static constexpr const double m_B = 5.279;
         static constexpr const double m_P = 0.135;
-        static constexpr const double m2_Br0m = 5.279 * 5.279; // B_{u,d}
         static constexpr const double m2_Br1m = 5.325 * 5.325; // B_{u,d}^*
+        static constexpr const double m2_Br0p = 5.540 * 5.540; // B_{u,d} scalar: M(B_s scalar) - M(B_s^*) + M(B_{u,d}^*)
         static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
         static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
     };
@@ -795,12 +795,14 @@ namespace eos
 
             virtual double f_0(const double & s) const
             {
-                const double z = _z(s), z2 = z * z, z3 = z * z2;
-                const double z0 = _z(0), z02 = z0 * z0, z03 = z0 * z02;
-                const double zbar = z - z0, z2bar = z2 - z02, z3bar = z3 - z03;
+                const double z = _z(s), z2 = z * z;
+                const double z0 = _z(0), z02 = z0 * z0;
+                const double zbar = z - z0, z2bar = z2 - z02;
 
                 // note that f_0(0) = f_+(0)!
-                return _f_plus_0 / (1.0 - s / Process_::m2_Br1m) * (1.0 + _b_zero_1 * (zbar - z3bar / 3.0) + _b_zero_2 * (z2bar + 2.0 * z3bar / 3.0));
+                // for f_0(s) we do not have an equation of motion to express _b_zero_K in terms of the
+                // other coefficients!
+                return _f_plus_0 / (1.0 - s / Process_::m2_Br0m) * (1.0 + _b_zero_1 * zbar + _b_zero_2 * z2bar);
             }
 
             virtual double f_t(const double & s) const
