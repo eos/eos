@@ -3242,6 +3242,43 @@ namespace eos
           7.84528369e-03,   3.22423463e-03,   9.57967990e-03,   8.49261230e-03,   8.92758070e-03,   2.18743795e-02}}}},
             0u
         };
+
+        /*
+         * B -> D lattice form factors from [HPQCD2015A]
+         */
+        static const MultivariateGaussianCovarianceConstraintTemplate<7> B_to_D_f_plus_f_zero_0_to_11dot62_HPQCD_2015A
+        {
+            {{ "B->D::f_+(s)", "B->D::f_+(s)", "B->D::f_+(s)", "B->D::f_+(s)", "B->D::f_0(s)", "B->D::f_0(s)", "B->D::f_0(s)" }},
+            {{
+                 Kinematics{ { "s",  0.00 } },
+                 Kinematics{ { "s",  4.00 } },
+                 Kinematics{ { "s",  8.00 } },
+                 Kinematics{ { "s", 11.62 } },
+                 Kinematics{ { "s",  4.00 } },
+                 Kinematics{ { "s",  8.00 } },
+                 Kinematics{ { "s", 11.62 } }
+            }},
+            {{
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } }
+            }},
+            {{ 0.665,          0.798,          0.972,         1.177,           0.729,          0.810,          0.901          }},
+            {{
+                 {{ 1.128e-3, 1.042e-3, 9.230e-4, 7.727e-4, 1.093e-3, 1.063e-3, 1.045e-3 }},
+                 {{ 1.042e-3, 1.079e-3, 1.108e-3, 1.123e-3, 1.026e-3, 1.017e-3, 1.021e-3 }},
+                 {{ 9.230e-4, 1.108e-3, 1.331e-3, 1.576e-3, 9.307e-4, 9.511e-4, 9.865e-4 }},
+                 {{ 7.727e-4, 1.123e-3, 1.576e-3, 2.112e-3, 8.108e-4, 8.681e-4, 9.425e-4 }},
+                 {{ 1.093e-3, 1.026e-3, 9.307e-4, 8.108e-4, 1.126e-3, 1.165e-3, 1.210e-3 }},
+                 {{ 1.063e-3, 1.017e-3, 9.511e-4, 8.681e-4, 1.165e-3, 1.283e-3, 1.410e-3 }},
+                 {{ 1.045e-3, 1.021e-3, 9.865e-4, 9.425e-4, 1.210e-3, 1.410e-3, 1.635e-3 }}
+            }},
+            0u
+        };
         ///@}
     }
 
@@ -3646,6 +3683,7 @@ namespace eos
             { "B->K^*::V+A_0+A_1+A_2@BSZ2015", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015) },
 
             { "B->K^*::V+A_0+A_1+A_12@HLMW2015", make_factory(templates::B_to_Kstar_V_A0_A1_A12_11dot9_to_17dot8_HLMW_2015) },
+            { "B->D::f_++f_0@HPQCD2015A", make_factory(templates::B_to_D_f_plus_f_zero_0_to_11dot62_HPQCD_2015A) }
         };
 
         return constraint_factories;

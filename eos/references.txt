@@ -807,6 +807,13 @@ Theoretical Inputs
         arxiv:1306.2384
 
 
+    HPQCD2015A : Na, H. et al. [HPQCD]
+
+        B ---> D l nu Form Factors at Non-Zero Recoil and Extraction of |V_cb|
+
+        arXiv:1505.03925
+
+
     IKKR2007 : Ivanov, M.A. and Korner, J.G. and Kovalenko, S.G. and Roberts, C.D.
 
         B- to Light Meson Transition Form Factors
