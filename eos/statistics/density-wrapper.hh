@@ -20,8 +20,8 @@
 #ifndef EOS_GUARD_EOS_STATISTICS_DENSITY_WRAPPER_HH
 #define EOS_GUARD_EOS_STATISTICS_DENSITY_WRAPPER_HH
 
-#include <eos/statistics/density.hh>
 #include <eos/statistics/simple-parameters.hh>
+#include <eos/utils/density.hh>
 
 #include <vector>
 

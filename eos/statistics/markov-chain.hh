@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_MARKOV_CHAIN_HH
 #define EOS_GUARD_SRC_STATISTICS_MARKOV_CHAIN_HH 1
 
-#include <eos/statistics/density-fwd.hh>
+#include <eos/utils/density-fwd.hh>
 #include <eos/utils/hdf5-fwd.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/stringify.hh>

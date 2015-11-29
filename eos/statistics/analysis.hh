@@ -21,10 +21,10 @@
 #define EOS_GUARD_SRC_STATISTICS_ANALYSIS_HH 1
 
 #include <eos/statistics/analysis-fwd.hh>
-#include <eos/statistics/density.hh>
-#include <eos/utils/hdf5-fwd.hh>
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/log-prior.hh>
+#include <eos/utils/density.hh>
+#include <eos/utils/hdf5-fwd.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/verify.hh>
 

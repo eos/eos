@@ -20,12 +20,12 @@
 
 #include <eos/statistics/analysis.hh>
 #include <eos/statistics/chain-group.hh>
-#include <eos/statistics/density.hh>
 #include <eos/statistics/hierarchical-clustering.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/statistics/rvalue.hh>
 #include <eos/statistics/welford.hh>
+#include <eos/utils/density.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>

@@ -16,6 +16,7 @@ libeosutils_la_SOURCES = \
 	complex.hh \
 	concrete_observable.hh \
 	condition_variable.cc condition_variable.hh \
+	density.cc density.hh density-fwd.hh \
 	derivative.cc derivative.hh \
 	destringify.hh \
 	diagnostics.cc diagnostics.hh \
@@ -71,6 +72,7 @@ include_eos_utils_HEADERS = \
 	complex.hh \
 	concrete_observable.hh \
 	condition_variable.hh \
+	density.hh density-fwd.hh \
 	derivative.hh \
 	destringify.hh \
 	equation_solver.hh \

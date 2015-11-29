@@ -22,7 +22,6 @@ libeosstatistics_la_SOURCES = \
 	analysis.cc analysis.hh analysis-fwd.hh \
 	chain-group.cc chain-group.hh \
 	chi-squared.hh chi-squared.cc \
-	density.cc density.hh density-fwd.hh \
 	density-wrapper.cc density-wrapper.hh \
 	hierarchical-clustering.cc hierarchical-clustering.hh \
 	histogram.cc histogram.hh \
@@ -48,7 +47,6 @@ include_eos_statistics_HEADERS = \
 	analysis.hh analysis-fwd.hh \
 	chain-group.hh \
 	chi-squared.hh \
-	density.hh density-fwd.hh \
 	density-wrapper.hh \
 	hierarchical-clustering.hh \
 	histogram.hh \

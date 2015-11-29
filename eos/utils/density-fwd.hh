@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013 Danny van Dyk
+ * Copyright (c) 2013, 2015 Danny van Dyk
  * Copyright (c) 2013 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_STATISTICS_DENSITY_FWD_HH
-#define EOS_GUARD_EOS_STATISTICS_DENSITY_FWD_HH 1
+#ifndef EOS_GUARD_EOS_UTILS_DENSITY_FWD_HH
+#define EOS_GUARD_EOS_UTILS_DENSITY_FWD_HH 1
 
 #include <memory>
 

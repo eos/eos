@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_PMC_SAMPLER_HH
 #define EOS_GUARD_SRC_STATISTICS_PMC_SAMPLER_HH 1
 
-#include <eos/statistics/density.hh>
+#include <eos/utils/density.hh>
 #include <eos/utils/hdf5-fwd.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/verify.hh>

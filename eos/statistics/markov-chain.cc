@@ -19,9 +19,9 @@
 
 #include <config.h>
 
-#include <eos/statistics/density.hh>
 #include <eos/statistics/markov-chain.hh>
 #include <eos/statistics/proposal-functions.hh>
+#include <eos/utils/density.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
