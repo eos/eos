@@ -9,6 +9,7 @@ bin_PROGRAMS = \
 	eos-print-polynomial \
 	eos-propagate-uncertainty \
 	eos-sample-mcmc \
+	eos-sample-events-mcmc \
 	eos-scan-mc
 noinst_PROGRAMS = \
 	integrated \
@@ -16,12 +17,12 @@ noinst_PROGRAMS = \
 
 LDADD = \
 	-lhdf5 \
-	$(top_builddir)/eos/libeos.la \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
-	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la
+	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
+	$(top_builddir)/eos/libeos.la
 
 if EOS_ENABLE_PMC
 LDADD += \
@@ -37,6 +38,8 @@ eos_print_polynomial_SOURCES = eos-print-polynomial.cc
 eos_propagate_uncertainty_SOURCES = eos-propagate-uncertainty.cc
 
 eos_sample_mcmc_SOURCES = eos-sample-mcmc.cc
+
+eos_sample_events_mcmc_SOURCES = eos-sample-events-mcmc.cc
 
 eos_scan_mc_SOURCES = eos-scan-mc.cc
 eos_scan_mc_LDADD = $(LDADD) -lgsl -lMinuit2
