@@ -532,8 +532,9 @@ namespace eos
         double s_2_phi = sin(2.0 * phi);
 
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
+        double Gamma = decay_width(_imp->integrated_angular_coefficients(0.02, 19.71));
 
-        return 3.0 / 8.0 / M_PI * (
+        double result = 3.0 / 8.0 / M_PI * (
                  a_c.j1s + (a_c.j1c - a_c.j1s) * c_theta_k_2
                 +  (a_c.j2s + (a_c.j2c - a_c.j2s) * c_theta_k_2) * c_2_theta_l
                 +  a_c.j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
@@ -543,7 +544,9 @@ namespace eos
                 +  a_c.j7 * s_2_theta_k * s_theta_l * s_phi
                 +  a_c.j8 * s_2_theta_k * s_2_theta_l * s_phi
                 +  a_c.j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi
-                );
+                ) / Gamma;
+
+        return result;
     }
 
     template <>
