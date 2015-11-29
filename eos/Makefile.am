@@ -9,7 +9,8 @@ lib_LTLIBRARIES = libeos.la
 libeos_la_SOURCES = \
 	constraint.cc constraint.hh \
 	decays.hh \
-	observable.cc observable.hh
+	observable.cc observable.hh \
+	signal-pdf.cc signal-pdf.hh
 libeos_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
@@ -21,7 +22,8 @@ include_eosdir = $(includedir)/eos
 include_eos_HEADERS = \
 	constraint.hh \
 	decays.hh \
-	observable.hh
+	observable.hh \
+	signal-pdf.hh
 
 TESTS = \
 	constraint_TEST
