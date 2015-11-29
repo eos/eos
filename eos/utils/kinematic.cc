@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -32,6 +32,8 @@ namespace eos
         std::vector<double> variables_data;
 
         std::map<std::string, unsigned> variables_map;
+
+        std::vector<std::string> variables_names;
     };
 
     Kinematics::Kinematics() :
@@ -51,11 +53,13 @@ namespace eos
                 int index = _imp->variables_data.size();
                 _imp->variables_map[v->first] = index;
                 _imp->variables_data.push_back(v->second);
+                _imp->variables_names.push_back(v->first);
 
             }
             else
             {
                 _imp->variables_data[i->second] = v->second;
+                _imp->variables_names[i->second] = v->first;
             }
         }
     }
@@ -140,6 +144,7 @@ namespace eos
             int index = _imp->variables_data.size();
             _imp->variables_map[name] = index;
             _imp->variables_data.push_back(value);
+            _imp->variables_names.push_back(name);
 
             return KinematicVariable(_imp, index);
         }
@@ -170,6 +175,12 @@ namespace eos
     {
     }
 
+    MutablePtr
+    KinematicVariable::clone() const
+    {
+        return MutablePtr(new KinematicVariable(_imp, _index));
+    }
+
     KinematicVariable::operator double () const
     {
         return _imp->variables_data[_index];
@@ -181,12 +192,30 @@ namespace eos
         return _imp->variables_data[_index];
     }
 
+    double
+    KinematicVariable::evaluate() const
+    {
+        return _imp->variables_data[_index];
+    }
+
     const KinematicVariable &
     KinematicVariable::operator= (const double & value)
     {
         _imp->variables_data[_index] = value;
 
         return *this;
+    }
+
+    void
+    KinematicVariable::set(const double & value)
+    {
+        _imp->variables_data[_index] = value;
+    }
+
+    const std::string &
+    KinematicVariable::name() const
+    {
+        return _imp->variables_names[_index];
     }
 
     UnknownKinematicVariableError::UnknownKinematicVariableError(const std::string & variable) throw () :

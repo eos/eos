@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,7 @@
 #define EOS_GUARD_SRC_UTILS_KINEMATIC_HH 1
 
 #include <eos/utils/exception.hh>
+#include <eos/utils/mutable.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 
 namespace eos
@@ -125,7 +126,8 @@ namespace eos
     /*!
      * KinematicVariable is the class that holds all information of one of KinematicVariables' parameters.
      */
-    class KinematicVariable
+    class KinematicVariable :
+        public Mutable
     {
         private:
             ///@name Internal Data
@@ -147,6 +149,9 @@ namespace eos
             ///@name Basic Functions
             ///@{
             ~KinematicVariable();
+
+            /// Make a copy of this KinematicVariable as a MutablePtr.
+            MutablePtr clone() const;
             ///@}
 
             ///@name Access & Modification of the Numeric Value
@@ -157,9 +162,22 @@ namespace eos
             /// Retrieve a KinematicVariable's numeric value.
             double operator() () const;
 
+            /// Retrieve a KinematicVariable's numeric value.
+            virtual double evaluate() const;
+
             /// Set a KinematicVariable's numeric value.
             const KinematicVariable & operator= (const double &);
+
+            /// Set a KinematicVariable's numeric value.
+            virtual void set(const double &);
             ///@}
+
+            ///@name Access to Meta Data
+            ///@{
+            /// Retrieve the Parameter's name.
+            virtual const std::string & name() const;
+            ///@}
+
     };
 
     inline double lambda(const double & a, const double & b, const double & c)
