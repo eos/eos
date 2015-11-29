@@ -51,6 +51,7 @@ libeosutils_la_SOURCES = \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh \
 	top-loops.hh top-loops.cc \
+	tuple-maker.hh \
 	verify.cc verify.hh \
 	wilson_coefficients.cc wilson_coefficients.hh \
 	wilson-polynomial.cc wilson-polynomial.hh \
@@ -105,6 +106,7 @@ include_eos_utils_HEADERS = \
 	thread_pool.hh \
 	ticket.hh \
 	top-loops.hh \
+	tuple-maker.hh \
 	verify.hh \
 	wilson_coefficients.hh \
 	wilson-polynomial.hh \

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,44 +22,13 @@
 
 #include <eos/observable.hh>
 #include <eos/utils/apply.hh>
+#include <eos/utils/tuple-maker.hh>
 
 #include <functional>
 #include <string>
 
 namespace eos
 {
-    namespace impl
-    {
-        template <typename T_, typename U_> struct ConvertTo { typedef U_ Type; };
-
-        template <unsigned n_> struct TupleMaker
-        {
-            template <typename Decay_, typename ... TupleElements_, typename ... ResultElements_>
-            static auto make(const Kinematics & k, const std::tuple<TupleElements_ ...> & t, const Decay_ * d, ResultElements_ ... r)
-                -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, KinematicVariable>::Type ...>
-            {
-                return TupleMaker<n_ - 1>::make(k, t, d, k[std::get<n_ - 1>(t)], r ...);
-            }
-        };
-
-        template <> struct TupleMaker<0>
-        {
-            template <typename Decay_, typename ... TupleElements_, typename ... ResultElements_>
-            static auto make(const Kinematics &, const std::tuple<TupleElements_ ...> &, const Decay_ * d, ResultElements_ ... r)
-                -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, KinematicVariable>::Type ...>
-            {
-                return std::make_tuple(d, r ...);
-            }
-        };
-
-        template <typename T_> struct TupleSize;
-
-        template <typename ... TupleElements_> struct TupleSize<std::tuple<TupleElements_ ...>>
-        {
-            static const unsigned long size = sizeof...(TupleElements_);
-        };
-    }
-
     template <typename Decay_, typename ... Args_>
     class ConcreteObservable :
         public Observable
