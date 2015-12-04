@@ -598,6 +598,14 @@ Theoretical Inputs
         at Low Recoil
 
 
+    BIvD2015 : Bordone, M. and Isidori, G. and van Dyk, D
+
+        Impact of leptonic tau decays on the angular distribution of Bbar -> D
+        mu nubar
+
+        arXiv:????
+
+
     BM1995 : Buras, A. J. and Muenz, M.
 
         Effective Hamiltonian for B -> X_s e^+ e^- Beyond Leading Logarithms
