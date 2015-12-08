@@ -32,6 +32,18 @@ namespace eos
 
     /* B_{u,d} -> K^* */
 
+    constexpr double BToKstar::mR2_0m;
+    constexpr double BToKstar::mR2_1m;
+    constexpr double BToKstar::mR2_1p;
+
+    constexpr double BsToPhi::mR2_0m;
+    constexpr double BsToPhi::mR2_1m;
+    constexpr double BsToPhi::mR2_1p;
+
+    constexpr double BsToKstar::mR2_0m;
+    constexpr double BsToKstar::mR2_1m;
+    constexpr double BsToKstar::mR2_1p;
+
     /* For the values below, cf. [BZ2004], Table 8, p. 28 */
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_v_r1 = +0.923;
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_v_r2 = -0.511;
