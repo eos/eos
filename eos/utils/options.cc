@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -137,6 +137,12 @@ namespace eos
         }
 
         return result;
+    }
+
+    bool
+    Options::empty() const
+    {
+        return _imp->options.empty();
     }
 
     UnknownOptionError::UnknownOptionError(const std::string & key) throw () :

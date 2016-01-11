@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -92,6 +92,8 @@ namespace eos
             std::string get(const std::string & key, const std::string & default_value = "") const;
 
             std::string as_string() const;
+
+            bool empty() const;
             ///@}
     };
 
