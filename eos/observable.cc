@@ -38,7 +38,9 @@
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
 #include <eos/utils/concrete_observable.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/observable_stub.hh>
 
+#include <algorithm>
 #include <map>
 
 namespace eos
@@ -1548,10 +1550,20 @@ namespace eos
             name.erase(pos);
         }
 
-        auto i(simple_observables.find(name));
-        if (simple_observables.end() == i)
-            return ObservablePtr();
+        // check if 'name' matches a simple observable
+        {
+            auto i = simple_observables.find(name);
+            if (simple_observables.end() != i)
+                return i->second->make(parameters, kinematics, options + _options);
+        }
 
-        return i->second->make(parameters, kinematics, options + _options);
+        // check if 'name' matches a parameter
+        {
+            auto i = std::find_if(parameters.begin(), parameters.end(), [&] (const Parameter & p) { return p.name() == name; });
+            if (options.empty() && (parameters.end() != i))
+                return ObservablePtr(new ObservableStub(parameters, name));
+        }
+
+        return ObservablePtr();
     }
 }
