@@ -37,6 +37,7 @@ libeosutils_la_SOURCES = \
 	mutex.cc mutex.hh \
 	observable_cache.cc observable_cache.hh \
 	observable_set.cc observable_set.hh \
+	observable_stub.cc observable_stub.hh \
 	one-of.hh \
 	options.cc options.hh \
 	parameters.cc parameters.hh parameters-fwd.hh \
@@ -130,6 +131,7 @@ TESTS = \
 	memoise_TEST \
 	mutable_TEST \
 	observable_set_TEST \
+	observable_stub_TEST \
 	options_TEST \
 	one-of_TEST \
 	parameters_TEST \
@@ -182,6 +184,8 @@ memoise_TEST_SOURCES = memoise_TEST.cc
 mutable_TEST_SOURCES = mutable_TEST.cc
 
 observable_set_TEST_SOURCES = observable_set_TEST.cc
+
+observable_stub_TEST_SOURCES = observable_stub_TEST.cc
 
 one_of_TEST_SOURCES = one-of_TEST.cc
 
