@@ -518,6 +518,13 @@ namespace eos
             Parameter::Template{"Lambda_b->Lambda::a_1_perp^T5@DM2016",          -0.801,          -0.801,          -0.801,        },
             Parameter::Template{"Lambda_b->Lambda::a_2_perp^T5@DM2016",          +0.000,          +0.000,          +0.000,        },
 
+            // subleading parameter for Lambda_b -> Lambda ll decays according to
+            // [MvD2016].
+            Parameter::Template{"Lambda_b->Lambdall::r_perp_0@MvD2016",          -0.03,            0.00,           +0.03,         },
+            Parameter::Template{"Lambda_b->Lambdall::r_perp_1@MvD2016",          -0.03,            0.00,           +0.03,         },
+            Parameter::Template{"Lambda_b->Lambdall::r_para_0@MvD2016",          -0.03,            0.00,           +0.03,         },
+            Parameter::Template{"Lambda_b->Lambdall::r_para_1@MvD2016",          -0.03,            0.00,           +0.03,         },
+
             // form-factor parameters for B->K* simple series
             // expansion (SSE) based on LCSR according to
             // [BSZ2015]. We don't use table 11, p. 40 but did our own

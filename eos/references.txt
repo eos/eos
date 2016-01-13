@@ -899,6 +899,14 @@ Theoretical Inputs
         arxiv:1310.3722
 
 
+    MvD2016 : Meinel, S. and van Dyk, D.
+
+        Using Lambda_b->Lambda mu^+ mu^- data within a Bayesian analysis of
+        |Delta B|=|Delta S|=1 decays
+
+        ZU-TH-7/16
+
+
     MvR1999 : Melnikov, K. and van Ritbergen, T.
 
         The three-loop relation between the MSbar and the pole quark masses

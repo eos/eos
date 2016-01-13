@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014 Danny van Dyk
+ * Copyright (c) 2014, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -500,6 +500,9 @@ namespace eos
         UsedParameter alpha_e;
         UsedParameter mu;
 
+        UsedParameter r_perp_0, r_perp_1;
+        UsedParameter r_para_0, r_para_1;
+
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
 
         std::shared_ptr<lambdab_to_lambda_dilepton::TensorToVectorRatios> ratios;
@@ -513,7 +516,11 @@ namespace eos
             m_Lambda(p["mass::Lambda"], u),
             alpha(p["Lambda::alpha"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            mu(p["mu"], u)
+            mu(p["mu"], u),
+            r_perp_0(p["Lambda_b->Lambdall::r_perp_0@MvD2016"], u),
+            r_perp_1(p["Lambda_b->Lambdall::r_perp_1@MvD2016"], u),
+            r_para_0(p["Lambda_b->Lambdall::r_para_0@MvD2016"], u),
+            r_para_1(p["Lambda_b->Lambdall::r_para_1@MvD2016"], u)
         {
             form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda@" + o.get("form-factors", "BFvD2014"), p);
 
@@ -560,21 +567,27 @@ namespace eos
             double zeta_long_V = s / ((m_Lambda_b + m_Lambda) * m_Lambda_b) * ratios->R_long_V(s) - 1.0;
             double zeta_long_A = s / ((m_Lambda_b - m_Lambda) * m_Lambda_b) * ratios->R_long_A(s) - 1.0;
 
+            // parametrize subleading power corrections, cf. [MvD2016], eq. (B1), p. ??
+            complex<double> x_perp_0 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_perp_0();
+            complex<double> x_perp_1 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_perp_1();
+            complex<double> x_para_0 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_para_0();
+            complex<double> x_para_1 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_para_1();
+
             // cf. [BFvD2014], eqs. (4.9)-(4.10), p. 11
-            result.a_perp_1_R = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_perp_V + (wc.c10() + wc.c10prime())) * form_factors->f_perp_v(s) * sqrtsminus;
-            result.a_perp_1_L = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_perp_V - (wc.c10() + wc.c10prime())) * form_factors->f_perp_v(s) * sqrtsminus;
+            result.a_perp_1_R = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_perp_V + (wc.c10() + wc.c10prime()) + x_perp_1) * form_factors->f_perp_v(s) * sqrtsminus;
+            result.a_perp_1_L = -2.0 *       N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_perp_V - (wc.c10() + wc.c10prime()) + x_perp_1) * form_factors->f_perp_v(s) * sqrtsminus;
 
-            result.a_para_1_R = +2.0 *       N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_perp_A + (wc.c10() - wc.c10prime())) * form_factors->f_perp_a(s) * sqrtsplus;
-            result.a_para_1_L = +2.0 *       N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_perp_A - (wc.c10() - wc.c10prime())) * form_factors->f_perp_a(s) * sqrtsplus;
+            result.a_para_1_R = +2.0 *       N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_perp_A + (wc.c10() - wc.c10prime()) + x_para_1) * form_factors->f_perp_a(s) * sqrtsplus;
+            result.a_para_1_L = +2.0 *       N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_perp_A - (wc.c10() - wc.c10prime()) + x_para_1) * form_factors->f_perp_a(s) * sqrtsplus;
 
-            result.a_perp_0_R = +sqrt(2.0) * N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_long_V + (wc.c10() + wc.c10prime())) * form_factors->f_long_v(s)
+            result.a_perp_0_R = +sqrt(2.0) * N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_long_V + (wc.c10() + wc.c10prime()) + x_perp_0) * form_factors->f_long_v(s)
                 * (m_Lambda_b + m_Lambda)  / sqrts * sqrtsminus;
-            result.a_perp_0_L = +sqrt(2.0) * N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_long_V - (wc.c10() + wc.c10prime())) * form_factors->f_long_v(s)
+            result.a_perp_0_L = +sqrt(2.0) * N * (c9eff + wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff + wc.c7prime()) * zeta_long_V - (wc.c10() + wc.c10prime()) + x_perp_0) * form_factors->f_long_v(s)
                 * (m_Lambda_b + m_Lambda)  / sqrts * sqrtsminus;
 
-            result.a_para_0_R = -sqrt(2.0) * N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_long_A + (wc.c10() - wc.c10prime())) * form_factors->f_long_a(s)
+            result.a_para_0_R = -sqrt(2.0) * N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_long_A + (wc.c10() - wc.c10prime()) + x_para_0) * form_factors->f_long_a(s)
                 * (m_Lambda_b - m_Lambda)  / sqrts * sqrtsplus;
-            result.a_para_0_L = -sqrt(2.0) * N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_long_A - (wc.c10() - wc.c10prime())) * form_factors->f_long_a(s)
+            result.a_para_0_L = -sqrt(2.0) * N * (c9eff - wc.c9prime() + (2.0 * kappa * m_b * m_Lambda_b / s) * (c7eff - wc.c7prime()) * zeta_long_A - (wc.c10() - wc.c10prime()) + x_para_0) * form_factors->f_long_a(s)
                 * (m_Lambda_b - m_Lambda)  / sqrts * sqrtsplus;
 
             result.alpha = this->alpha();
