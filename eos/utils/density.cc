@@ -20,6 +20,7 @@
 
 #include <eos/utils/density.hh>
 #include <eos/utils/hdf5.hh>
+#include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 namespace eos
@@ -67,5 +68,56 @@ namespace eos
     Density::Output::description_record()
     {
         return std::make_tuple("name", 1.0, 2.0, 3);
+    }
+
+    template <>
+    struct Implementation<ProductDensity>
+    {
+        DensityPtr x, y;
+
+        std::vector<ParameterDescription> descriptions;
+
+        Implementation(const DensityPtr & x, const DensityPtr & y) :
+            x(x),
+            y(y)
+        {
+            descriptions.insert(descriptions.end(), x->begin(), x->end());
+            descriptions.insert(descriptions.end(), y->begin(), y->end());
+        }
+    };
+
+    ProductDensity::ProductDensity(const DensityPtr & x, const DensityPtr & y) :
+        PrivateImplementationPattern<ProductDensity>(new Implementation<ProductDensity>(x, y))
+    {
+    }
+
+    ProductDensity::~ProductDensity()
+    {
+    }
+
+    DensityPtr
+    ProductDensity::clone() const
+    {
+        return DensityPtr(new ProductDensity(_imp->x->clone(), _imp->y->clone()));
+    }
+
+    double
+    ProductDensity::evaluate() const
+    {
+        // since densities are evaluates in the log scale, the product turns
+        // into a sum.
+        return _imp->x->evaluate() + _imp->y->evaluate();
+    }
+
+    Density::Iterator
+    ProductDensity::begin() const
+    {
+        return Density::Iterator(_imp->descriptions.begin());
+    }
+
+    Density::Iterator
+    ProductDensity::end() const
+    {
+        return Density::Iterator(_imp->descriptions.end());
     }
 }

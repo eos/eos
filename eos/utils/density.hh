@@ -37,7 +37,10 @@ namespace eos
         public:
             virtual ~Density() = 0;
 
-            /// Evaluate the density function at the current parameter point on the log scale.
+            /*!
+             * Evaluate the density function at the current parameter point
+             * on the _log_ scale.
+             */
             virtual double evaluate() const = 0;
 
             /// Create an independent copy of this density function.
@@ -70,6 +73,31 @@ namespace eos
         static DescriptionType description_type();
         static std::tuple<const char *, double, double, int> description_record();
     };
+
+    /*!
+     * A product of two multivariate scalar functions
+     */
+    class ProductDensity :
+        public Density,
+        public PrivateImplementationPattern<ProductDensity>
+    {
+        public:
+            ProductDensity(const DensityPtr & x, const DensityPtr & y);
+            virtual ~ProductDensity();
+
+            /// Evaluate the density function at the current parameter point on the log scale.
+            virtual double evaluate() const;
+
+            /// Create an independent copy of this density function.
+            virtual DensityPtr clone() const;
+
+            /// Iterate over the parameters relevant to this density function.
+            ///@{
+            virtual Density::Iterator begin() const;
+            virtual Density::Iterator end() const;
+            ///@}
+    };
+
 }
 
 #endif
