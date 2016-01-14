@@ -20,6 +20,8 @@
 #include <config.h>
 
 #include <eos/signal-pdf.hh>
+#include <eos/statistics/analysis.hh>
+#include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/destringify.hh>
@@ -29,6 +31,7 @@
 #include <eos/utils/stringify.hh>
 
 #include <iostream>
+#include <limits>
 
 using namespace eos;
 
@@ -62,15 +65,30 @@ class CommandLine :
     public InstantiationPolicy<CommandLine, Singleton>
 {
     public:
-        DensityPtr density;
-
+        /// @name Inputs common to signal PDF and posterior PDF
+        /// @{
         Parameters parameters;
 
         Options global_options;
+        /// @}
+
+        /// @name Inputs relevant to the signal PDF
+        /// @{
+        DensityPtr signal_pdf;
 
         Kinematics kinematics;
 
         std::vector<KinematicsData> kinematics_data;
+        /// @}
+
+        /// @name Inputs relevant to the posterior PDF
+        /// @{
+        LogLikelihood likelihood;
+
+        Analysis analysis;
+
+        std::vector<Constraint> constraints;
+        /// @}
 
         MarkovChainSampler::Config mcmc_config;
 
@@ -80,6 +98,8 @@ class CommandLine :
 
         CommandLine() :
             parameters(Parameters::Defaults()),
+            likelihood(parameters),
+            analysis(likelihood),
             mcmc_config(MarkovChainSampler::Config::Quick()),
             scale_reduction(1)
         {
@@ -121,6 +141,145 @@ class CommandLine :
                     kinematics_data.push_back(KinematicsData{ kinematics.declare(name, (max + min) / 2.0), min, max});
                 }
 
+                if ("--signal-pdf" == argument)
+                {
+                    std::string signal_pdf_name(*(++a));
+                    signal_pdf = SignalPDF::make(signal_pdf_name, parameters, kinematics, global_options);
+
+                    continue;
+                }
+
+                if ("--fix" == argument)
+                {
+                    std::string par_name = std::string(*(++a));
+                    double value = destringify<double> (*(++a));
+                    parameters.set(par_name, value);
+
+                    continue;
+                }
+
+                /*
+                 * format: N_SIGMAS in [0, 10]
+                 * a) --scan PAR N_SIGMAS --prior ...
+                 * b) --scan PAR MIN MAX  --prior ...
+                 * c) --scan PAR HARD_MIN HARD_MAX N_SIGMAS --prior ...
+                 */
+                if ("--nuisance" == argument)
+                {
+                    std::string name = std::string(*(++a));
+
+                    double min = -std::numeric_limits<double>::max();
+                    double max =  std::numeric_limits<double>::max();
+
+                    // first word has to be a number
+                    double number = destringify<double>(*(++a));
+
+                    std::string keyword = std::string(*(++a));
+
+                    VerifiedRange<double> n_sigmas(0, 10, 0);
+
+                    // case a)
+                    if ("--prior" == keyword)
+                    {
+                        n_sigmas = VerifiedRange<double>(0, 10, number);
+                        if (n_sigmas == 0)
+                            throw DoUsage("number of sigmas: number expected");
+                    }
+                    else
+                    {
+                        // case b), c)
+                        min = number;
+                        max = destringify<double>(keyword);
+
+                        keyword = std::string(*(++a));
+
+                        // watch for case c)
+                        if ("--prior" != keyword)
+                        {
+                            n_sigmas = VerifiedRange<double>(0, 10,  destringify<double>(keyword));
+                            if (n_sigmas == 0)
+                                throw DoUsage("number of sigmas: number expected");
+                            keyword = std::string(*(++a));
+                        }
+                    }
+
+                    if ("--prior" != keyword)
+                        throw DoUsage("Missing correct prior specification for '" + name + "'!");
+
+                    std::string prior_type = std::string(*(++a));
+
+                    LogPriorPtr prior;
+
+                    ParameterRange range{ min, max };
+
+                    if (prior_type == "gaussian" || prior_type == "log-gamma")
+                    {
+                        double lower = destringify<double> (*(++a));
+                        double central = destringify<double> (*(++a));
+                        double upper = destringify<double> (*(++a));
+
+                        // adjust range, but always stay within hard bound supplied by the user
+                        if (n_sigmas > 0)
+                        {
+                            range.min = std::max(range.min, central - n_sigmas * (central - lower));
+                            range.max = std::min(range.max, central + n_sigmas * (upper - central));
+                        }
+                        if (prior_type == "gaussian")
+                        {
+                            prior = LogPrior::Gauss(parameters, name, range, lower, central, upper);
+                        }
+                        else
+                        {
+                            prior = LogPrior::LogGamma(parameters, name, range, lower, central, upper);
+                        }
+                    }
+                    else if (prior_type == "flat")
+                    {
+                        if (n_sigmas > 0)
+                            throw DoUsage("Can't specify number of sigmas for flat prior");
+                        prior = LogPrior::Flat(parameters, name, range);
+                    }
+                    else
+                    {
+                        throw DoUsage("Unknown prior distribution: " + prior_type);
+                    }
+
+                    // check for error in setting the prior and adding the parameter
+                    if (! analysis.add(prior, true))
+                        throw DoUsage("Error in assigning " + prior_type + " prior distribution to '" + name +
+                                      "'. Perhaps '" + name + "' appears twice in the list of parameters?");
+
+                    continue;
+                }
+
+                if ("--global-option" == argument)
+                {
+                    std::string name(*(++a));
+                    std::string value(*(++a));
+
+                    if (! constraints.empty())
+                    {
+                        Log::instance()->message("eos-scan-mc", ll_warning)
+                            << "Global option (" << name << " = " << value <<") only applies to observables/constraints defined from now on, "
+                            << "but doesn't affect the " << constraints.size() << " previously defined constraints.";
+                    }
+
+                    global_options.set(name, value);
+
+                    continue;
+                }
+
+                if ("--constraint" == argument)
+                {
+                    std::string constraint_name(*(++a));
+
+                    Constraint c(Constraint::make(constraint_name, global_options));
+                    likelihood.add(c);
+                    constraints.push_back(c);
+
+                    continue;
+                }
+
                 if ("--chains" == argument)
                 {
                     mcmc_config.number_of_chains = destringify<unsigned>(*(++a));
@@ -144,23 +303,6 @@ class CommandLine :
                 if ("--debug" == argument)
                 {
                     Log::instance()->set_log_level(ll_debug);
-
-                    continue;
-                }
-
-                if ("--fix" == argument)
-                {
-                    std::string par_name = std::string(*(++a));
-                    double value = destringify<double> (*(++a));
-                    parameters.set(par_name, value);
-
-                    continue;
-                }
-
-                if ("--signal-pdf" == argument)
-                {
-                    std::string signal_pdf_name(*(++a));
-                    density = SignalPDF::make(signal_pdf_name, parameters, kinematics, global_options);
 
                     continue;
                 }
@@ -294,19 +436,29 @@ int main(int argc, char * argv[])
         std::cout << std::scientific;
         std::cout << "# Samples generated by eos-sample-events-mcmc" << std::endl;
 
-        if (! inst->density.get())
+        if (! inst->signal_pdf.get())
         {
             throw DoUsage("Need to specify a signal PDF to sample from");
         }
 
-        unsigned size = std::distance(inst->density->begin(), inst->density->end());
-        inst->mcmc_config.proposal_initial_covariance = std::vector<double>(size * size, 0.0);
-        for (unsigned i = 0 ; i < size ; ++i)
+        DensityPtr density;
+        if (inst->analysis.begin() != inst->analysis.end())
         {
-            inst->mcmc_config.proposal_initial_covariance[i + size * i] = 0.1;
+            density = DensityPtr(new ProductDensity(inst->signal_pdf, inst->analysis.clone()));
+        }
+        else
+        {
+            density = inst->signal_pdf;
         }
 
-        MarkovChainSampler sampler(inst->density, inst->mcmc_config);
+        unsigned i = 0, size = std::distance(density->begin(), density->end());
+        inst->mcmc_config.proposal_initial_covariance = std::vector<double>(size * size, 0.0);
+        for (auto d = density->begin(), d_end = density->end() ; d != d_end ; ++d, ++i)
+        {
+            inst->mcmc_config.proposal_initial_covariance[i + size * i] = 0.1 * pow(d->max - d->min, 2);
+        }
+
+        MarkovChainSampler sampler(density, inst->mcmc_config);
 
         sampler.run();
     }
