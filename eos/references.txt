@@ -102,6 +102,14 @@ Experimental Results
         arxiv:1208.1253 [hep-ex]
 
 
+    BaBar:2013A : Lees, J.P. et al. [BaBar Collaboration]
+
+        Measurement of the B -> X_s l^+ l^- branching fraction and search for direct CP
+        violation from a sum of exclusive final states
+
+        arXiv:1312.5364 [hep-ex]
+
+
     Belle:2004 : Nakao, M. et al. [Belle Collaboration]
 
         Measurement of the B ---> K* gamma branching fractions and asymmetries

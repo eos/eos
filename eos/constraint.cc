@@ -2033,6 +2033,19 @@ namespace eos
         };
 
         /*
+         * BaBar Collaboration
+         *
+         * Data taken from [BaBar:2013A], Table I, p. 6.
+         */
+        static const GaussianConstraintTemplate Bmix_to_Xs_dilepton_BR_BaBar_2013A
+        {
+            "B->X_sll::BR@HLMW2005",
+            Kinematics{ { "s_min", 1.0 }, { "s_max", 6.0 } },
+            Options{ },
+            1.60e-6, 0.41e-6, 0.39e-6, 0.25e-6, 0.22e-6
+        };
+
+        /*
          * Belle Collaboration
          *
          * Data taken from [Belle:2013A], Table XVI and XVII, pp. 37-38.
@@ -3898,6 +3911,8 @@ namespace eos
             { "B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_1_to_6_ATLAS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_14dot18_to_16_ATLAS_2013A) },
             { "B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@ATLAS-2013A", make_factory(templates::Bzero_to_Kstarzero_dimuon_F_L_16_to_19_ATLAS_2013A) },
+            // BaBar
+            { "B->X_sll::BR[1.0,6.0]@BaBar-2013A", make_factory(templates::Bmix_to_Xs_dilepton_BR_BaBar_2013A) },
             //Belle
             { "B^0->pi^+lnu::BR@Belle-2013A", make_factory(templates::Bzero_to_pi_l_nu_BR_Belle_2013A) },
             // CMS
