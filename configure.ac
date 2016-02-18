@@ -189,6 +189,7 @@ dnl }}}
 
 dnl {{{ output
 AM_CONFIG_HEADER(config.h)
+AM_EXTRA_RECURSIVE_TARGETS([manual])
 AC_OUTPUT(
 	Makefile
 	doc/Makefile
@@ -198,6 +199,8 @@ AC_OUTPUT(
         eos/b-decays/Makefile
 	eos/utils/Makefile
 	eos/statistics/Makefile
+	manual/Makefile
+	manual/figures/Makefile
 	src/Makefile
 	src/clients/Makefile
 	test/Makefile

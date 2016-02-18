@@ -1,0 +1,7 @@
+eos-propagate-uncertainty \
+    --kinematics s_min  0.0 \
+    --kinematics s_max 12.0 \
+    --observable "B->pilnu::BR,l=e,form-factors=BCL2008" \
+    --pmc-input /tmp/btopi-ckm+ff-parameters.hdf5 0 10000 \
+    --pmc-sample-directory "/data/final/" \
+    --output /tmp/btopilnu.hdf5

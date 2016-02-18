@@ -1,0 +1,22 @@
+digraph Parameters {
+
+    subgraph params {
+	data [shape=box, label="Parameter Data"];
+
+	param1 [label="paramA"];
+	param2 [label="paramB"];
+	param1 -> param2 [arrowhead=none, label="copy", style=dashed];
+
+	param1 -> data [label="depends"];
+	param2 -> data [label="depends"];
+
+	{ rank = same; param1 ; param2 };
+    }
+
+    obs1 [label="obsA"]
+    obs2 [label="obsB"]
+
+    obs1 -> param1 [label="depends"];
+    obs2 -> param2 [label="depends"];
+
+}

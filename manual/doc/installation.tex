@@ -1,0 +1,132 @@
+\chapter{Installation}
+
+\section{Installing the Dependencies}
+
+Installing EOS from source will require the following software:
+\begin{description}
+    \item[\package{g++}] the GNU C++ compiler, in version 4.8.1 or higher,
+    \item[\package{autoconf}] the GNU tool for creating configure scripts, in version 2.69 or higher,
+    \item[\package{automake}] the GNU tool for creating makefiles, in version 1.14.1 or higher,
+    \item[\package{libtool}] the GNU tool for generic library support, in version 2.4.2 or higher.
+\end{description}
+%
+Building and using the core libraries requires in addition the following software:
+\begin{description}
+    \item[\package{GSL}] the GNU Scientific Library \cite{GSL}, in version 1.16 or higher,
+    \item[\package{HDF5}] the Hierarchical Data Format v5 library \cite{HDF5}, in version 1.8.11 or higher,
+    \item[\package{Minuit2}] the physics analysis tool for function minimization, in version 5.28.00 or higher.
+\end{description}
+Except for \package{Minuit2}, we recommend the installation of the above packages using your system's
+software management system. For \package{Minuit2}, we recommend to install from source, and to disable
+the automatic support for OpenMP. The installation can be done using:
+\begin{commandline}
+mkdir /tmp/Minuit2
+pushd /tmp/Minuit2
+wget http://www.cern.ch/mathlibs/sw/5_28_00/Minuit2/Minuit2-5.28.00.tar.gz
+tar zxf Minuit2-5.28.00.tar.gz
+pushd Minuit2-5.28.00
+./configure --prefix=/opt/pkgs/Minuit2-5.28.00 --disable-openmp
+make all
+sudo make install
+popd
+popd
+rm -R /tmp/Minuit2
+\end{commandline}
+
+If you intend to use the \gls{PMC} sampling algorithm, you will need to install
+\begin{description}
+    \item[libpmc] a free implementation of said algorithm \cite{libpmc}, in version 1.01 or higher,
+\end{description}
+in addition to the core library dependencies. The \package{libpmc} package will -- in all likelihood -- not
+be installable via your system's software management system. In addition, EOS requires some
+modifications to libpmc's source code, in order to make it compatible with C++. We suggest
+the following commands to install it:
+\begin{commandline}
+mkdir /tmp/libpmc
+pushd /tmp/libpmc
+wget http://www2.iap.fr/users/kilbinge/CosmoPMC/pmclib_v1.01.tar.gz
+tar zxf pmclib_v1.01.tar.gz
+pushd pmclib_v1.01
+./waf configure --m64 --prefix=/opt/pkgs/pmclib-1.01
+./waf
+sudo ./waf install
+sudo find /opt/pkgs/pmclib-1.01/include -name "*.h" \
+    -exec sed -i \
+    -e 's/#include "errorlist\.h"/#include <pmctools\/errorlist.h>/' \
+    -e 's/#include "io\.h"/#include <pmctools\/io.h>/' \
+    -e 's/#include "mvdens\.h"/#include <pmctools\/mvdens.h>/' \
+    -e 's/#include "maths\.h"/#include <pmctools\/maths.h>/' \
+    -e 's/#include "maths_base\.h"/#include <pmctools\/maths_base.h>/' \
+    {} \;
+sudo sed -i \
+    -e 's/^double fmin(double/\/\/&/' \
+    -e 's/^double fmax(double/\/\/&/' \
+    /opt/pkgs/pmclib-1.01/include/pmctools/maths.h
+popd
+popd
+rm -R /tmp/pmclib
+\end{commandline}
+
+\section{Installing EOS}
+
+The most recent version of EOS is contained in the public GIT \cite{GIT} repository.
+In order to download it for the first time, create a new local clone of said
+repository via:
+%
+\begin{commandline}
+git clone \
+    -o eos \
+    -b master \
+    git://project.het.physik.tu-dortmund.de/eos.git \
+    eos
+\end{commandline}
+
+
+As a first step, you need to create all the necessary build scripts via:
+%
+\begin{commandline}
+cd eos
+./autogen.bash
+\end{commandline}
+%
+Next, you configure the build scripts using:
+%
+\begin{commandline}
+./configure \
+    --prefix=/opt/pkgs/eos \
+    --with-minuit2=/opt/pkgs/Minuit2-5.28.00 \
+    --with-pmc=no
+    # --with-pmc=/opt/pkgs/pmclib-1.01
+\end{commandline}
+%
+Note that the last line is optional, and should replace the second to last line only
+if you intend to use the \gls{PMC} sampling algorithm. If the \texttt{configure} script
+finds any problems with your system, it will complain loudly.\\
+
+After successful configuration, you can build and install EOS using:
+%
+\begin{commandline}
+make all
+sudo make install
+\end{commandline}
+%
+In order to be able to use the EOS clients from the command line, you will need to
+\begin{commandline}
+export PATH+=":/opt/pkgs/eos/bin"
+\end{commandline}
+to you \texttt{.bashrc} file. In order to build you own programs that use the EOS libraries,
+add
+\begin{commandline}
+CXXFLAGS+=" -I/opt/pkgs/eos/include"
+LDFLAGS+=" -L/opt/pkgs/eos/lib"
+\end{commandline}
+to your makefile.\\
+
+Moreover, we urgently recommend to also run the complete test suite upon installation,
+using:
+%
+\begin{commandline}
+make check
+\end{commandline}
+%
+within the source directory. Please contact the authors in the case that any test failures should occur.

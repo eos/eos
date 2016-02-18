@@ -1,0 +1,16 @@
+eos-sample-mcmc \
+    --scan "CKM::A"                  3     --prior gaussian 0.787   0.807   0.827 \
+    --scan "CKM::lambda"             3     --prior gaussian 0.22470 0.22535 0.22600 \
+    --scan "CKM::rhobar"             0   1 --prior gaussian 0.073   0.128   0.183 \
+    --scan "CKM::etabar"             3     --prior gaussian 0.315   0.375   0.435 \
+    --scan "B->pi::f_+(0)@BCL2008"   0   1 --prior flat \
+    --scan "B->pi::b_+^1@BCL2008"  -20 +20 --prior flat \
+    --scan "B->pi::b_+^2@BCL2008"  -20 +20 --prior flat \
+    --global-option form-factors BCL2008 \
+    --constraint "B->pi::f_+@IKMvD-2014" \
+    --prerun-min     500 \
+    --prerun-max    7500 \
+    --prerun-update  500 \
+    --chunks          10 \
+    --chunk-size    1000 \
+    --output /tmp/btopi-ckm+ff-parameters.hdf5

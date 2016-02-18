@@ -1,0 +1,154 @@
+%% vim: set sts=4 et :
+
+\chapter{Usage}
+\label{ch:usage}
+
+EOS has been authored with two use cases in mind.\\
+
+The first such use case is the evaluation of observables and further theoretical
+quantities in the field of flavor physics. EOS aspires to produce such evaluations
+in the course of theory estimates of publication quality.
+
+The second use case is the inference of parameters from experimental observations.
+For this task, EOS defaults to the Bayesian framework of parameter inference.\\
+
+In the remainder of this chapter, we document the usage of the existing
+EOS clients in order to carry out tasks corresponding to the above use cases.
+We assume further that only the built-in observables, physics models and experimental
+constraints are used.
+
+\section{Evaluating Observables using \client{eos-evaluate}}
+\label{sec:usage:eos-evaluate}
+
+
+Observables can be evaluated using the \client{eos-evaluate} client. It accepts
+the following command line arguments:
+\begin{itemize}
+    \item[] \texttt{--kinematics NAME VALUE}\\[\medskipamount]
+        Within the scope of the next observable, declare a new kinematic
+        variable with name \texttt{NAME} and numerical value \texttt{VALUE}.
+
+    \item[] \texttt{--range NAME MIN MAX POINTS}\\[\medskipamount]
+        Within the scope of the next observable, declare a new kinematic
+        variable with name \texttt{NAME}. Subdivide the interval [MIN, MAX]
+        in POINTS subintervals, and evaluate the observable at each subinterval
+        boundary.\\
+
+        \emph{Note}: More than one \texttt{--range} command can be issued per
+        observable, but only one \texttt{--range} command per kinematic variable.
+
+    \item[] \texttt{--observable NAME}\\[\medskipamount]
+        Add a new observable with name \texttt{NAME} to the list of observables
+        that shall be evaluated. All previously issued \texttt{--kinematics}
+        and \texttt{--range} arguments apply, and will be used by the new obervable.
+        The kinematics will be reset (i.e., all kinematic variables will be removed)
+        in anticipation of the next \texttt{--observable} argument.
+\end{itemize}
+The output of calls to \client{eos-evaluate} is structured as follows:
+\begin{itemize}
+    \item The first row names the observable at hand, as well as all active options.
+    \item The second row contains column headers in the order:
+        \begin{itemize}
+            \item kinematics variables,
+            \item the upper and lower uncertainty estimates for each individual uncertainty budget,
+            \item the total upper and lower uncertainty estimates.
+        \end{itemize}
+    \item The third row contains the result as described by the above columns. In addition, at
+        the end of the row the relative total uncertainties are given in parantheses.
+\end{itemize}
+The above structure repeats itself for every observable, as well as for each variation point
+of the kinematic variables as described by occuring \texttt{--range} arguments.\\
+
+As an example, we turn to the evaluation of the $q^2$-integrated branching ratio
+$\mathcal{B}(\bar{B}^0\to \pi^+\ell^-\bar\nu_\ell)$.
+For this example, let us use the integration range
+\begin{equation*}
+    0\,\GeV^2 \leq q^2 \leq 12\,\GeV^2\,.
+\end{equation*}
+Further, let us use the BCL2008 \cite{Bourrely:2008za} parametrization of the $\bar{B}\to \pi$ form factor,
+as well as the Wolfenstein parametrization of the CKM matrix. The latter is achieved
+by choosing the physics model 'SM'. By default, EOS uses the most recent results of
+the UTfit collaboration's fit of the CKM Wolfenstein parameter to data on tree-level decays.
+In this example, we will evaluate the observable, and estimate parametric uncertainties
+based on the naive expectation of Gaussian uncertainty propagation. We will classify two
+budgets of parametric uncertainties: one for uncertainties pertaining to the form factors
+(labelled 'FF'), and one for uncertainties pertaining to the CKM matrix elements (labelled 'CKM').
+
+Our intentations translate to the following call to \client{eos-evaluate}:
+\commandlineexample{examples/evaluate-btopilnu-integrated}
+
+\section{Producing Random Parameter Samples using \textbf{\texttt{eos-sample-mcmc}}}
+\label{sec:usage:eos-sample-mcmc}
+
+Both use cases, observable evaluation and Bayesian parameter inference, make use of
+random samples of some \gls{PDF} $P(\vec\theta)$. These random
+samples can be produced from Markov chains, using the Metropolis-Hastings algorithm,
+by calls to the \client{eos-sample-mcmc} client. It accepts the following command-line arguments:
+\begin{itemize}
+    \item[] \texttt{--scan NAME --prior flat MIN MAX}\\[\medskipamount]
+
+    \item[] \texttt{--scan NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[\medskipamount]
+
+    \item[] \texttt{--nuisance}\\[\medskipamount]
+        The \texttt{--nuisance} argument works identically as the \texttt{--scan} argument,
+        with one exception: It declare the associated parameter as a nuisance parameter, which
+        is flagged in the HDF5 output. The sampling algorithm \emph{does not} treat nuisance
+        parameters differently than scan parameter.
+
+    \item[] \texttt{--seed [time|VALUE]}\\[\medskipamount]
+        This argument sets the seed value for the \gls{RNG}. Setting the
+        seed to a fixed numerical \texttt{VALUE} ensures reproducibility of the results. This
+        is important for publication-quality usage of the client. If \texttt{time} is
+        specified, the \gls{RNG} is seeded with an interger value based on the current time.
+
+    \item[] \texttt{--prerun-min VALUE}\\[\medskipamount]
+        For the prerun phase of the sampling algorithm, set the minimum number of
+        steps to \texttt{VALUE}.
+
+    \item[] \texttt{--prerun-max}\\[\medskipamount]
+        For the prerun phase of the sampling algorithm, set the maximum number of
+        steps to \texttt{VALUE}.
+
+    \item[] \texttt{--prerun-update}\\[\medskipamount]
+        For the prerun phase of the sampling algorithm, force an adaptation of the
+        Markov chain's proposal function to its environment after every \texttt{VALUE}
+        steps.
+
+    \item[] \texttt{--store-prerun [0|1]}\\[\medskipamount]
+        Either disable or enable storing of the prerun samples to the output file.\\
+
+        \emph{Note}: Samples from the prerun should only be used for diagnostic purpose.
+
+    \item[] \texttt{--output FILENAME}\\[\medskipamount]
+        Use the file \texttt{FILENAME} to store the output, using the HDF5 file format.
+\end{itemize}
+
+As an example, we define the a-priori \gls{PDF} for a study of the decay $\bar{B}\to \pi^+\ell^-\bar\nu_\ell$.
+For the CKM Wolfenstein parameters, we use
+\begin{equation*}
+\begin{aligned}
+    \lambda    & = 0.22535 \pm 0.00065\,,  &
+    A          & = 0.807 \pm 0.020\,,      \\
+    \bar{\rho} & = 0.128 \pm 0.055\,,      &
+    \bar{\eta} & = 0.375 \pm 0.060\,.
+\end{aligned}
+\end{equation*}
+For the a-priori \gls{PDF}, we use uniform distributions for the BCL2008 \cite{Bourrely:2008za}
+parameters. However, we construct a likelihood from the results of a recent study of the form factor
+$f^{B\pi}_+(q^2)$ within \glspl{LCSR}. 
+We now intend to draw random numbers from the posterior PDF using EOS' adaptive Metropolis-Hasting algorithm.
+During its prerun phase, the algorithm adapts the chains' proposal
+functions. We should demand at least $500$, and -- for a problem of this complexity -- maximally
+$7500$ steps during the prerun phase; the adaption process should be executed
+after every $500$ steps. For the final samples, we wish for a total of $10^4$, which we artifically decompose
+into $10$ chunks with $1000$ samples each.\\
+
+Our intentions translate to the following call to \client{eos-sample-mcmc}:
+\commandlineexample{examples/sample-mcmc-btopi-ff}
+
+
+%\section{Bayesian Uncertainty Propagation using \textbf{\texttt{eos-propagate-uncertainty}}}
+%\label{sec:usage:eos-propagate-uncertainty}
+%
+%Our intentions translate to the following call to \client{eos-sample-mcmc}:\todo{Does not work yet!}
+%\commandlineexample{examples/propagate-uncertainty-b-to-pi-l-nu}

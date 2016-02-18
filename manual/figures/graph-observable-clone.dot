@@ -1,0 +1,16 @@
+digraph Observable {
+	obs1 [label="Observable A"];
+	obs2 [label="Observable B"];
+
+	{ rank = same; obs1; obs2 };
+
+	params1 [label="Parameters A\nmass::b(MSbar) = 4.20"];
+	params2 [label="Parameters B\nmass::b(MSbar) = 4.16"];
+
+	{ rank = same; params1; params2 };
+
+	obs1 -> params1;
+	obs2 -> params2;
+
+	obs1 -> obs2 [style=dashed, label="clone"]
+}
