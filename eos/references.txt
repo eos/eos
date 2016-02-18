@@ -758,6 +758,13 @@ Theoretical Inputs
         arxiv:hep-ph/0212158
 
 
+    FNALMILC2015A : Jon. A. Bailey, and others
+
+        |V_ub| from B → pi l nu decays and (2+1)-flavor lattice QCD
+
+        arxiv:1503.07893 [hep-ph]
+
+
     FY2011 : Feldmann, Th. and Yip, M.W.Y.
 
         Form Factors for Lambda_b -> Lambda Transitions in SCET

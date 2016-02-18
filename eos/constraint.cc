@@ -3279,6 +3279,40 @@ namespace eos
             }},
             0u
         };
+
+        /*
+         * B -> pi lattice form factors from [FNALMILC2015A]
+         */
+        static const MultivariateGaussianCovarianceConstraintTemplate<6> B_to_pi_f_plus_f_zero_18_to_26_FNALMILC_2015A
+        {
+            {{ "B->pi::f_+(s)", "B->pi::f_+(s)", "B->pi::f_+(s)", "B->pi::f_0(s)", "B->pi::f_0(s)", "B->pi::f_0(s)" }},
+            {{
+                 Kinematics{ { "s", 18.00 } },
+                 Kinematics{ { "s", 22.00 } },
+                 Kinematics{ { "s", 26.00 } },
+                 Kinematics{ { "s", 18.00 } },
+                 Kinematics{ { "s", 22.00 } },
+                 Kinematics{ { "s", 26.00 } }
+            }},
+            {{
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } },
+                 Options{ { "form-factors", "BCL2008" } }
+            }},
+            {{ 1.016,           1.971,           6.443,           0.417,           0.609,           0.961           }},
+            {{
+                 {{ 3.492e-3, 1.642e-3, 1.648e-3, 1.067e-3, 2.904e-4, 1.096e-4 }},
+                 {{ 1.997e-3, 3.371e-3, 6.193e-3, 2.123e-4, 2.167e-4, 1.294e-4 }},
+                 {{ 1.648e-3, 6.193e-3, 7.419e-2, 2.064e-3, 1.139e-3, 1.346e-3 }},
+                 {{ 1.067e-3, 2.123e-4, 2.064e-3, 8.478e-4, 4.266e-4, 3.150e-4 }},
+                 {{ 2.904e-4, 2.167e-4, 1.139e-3, 4.266e-4, 3.923e-4, 4.009e-4 }},
+                 {{ 1.096e-4, 1.294e-4, 1.346e-3, 3.150e-4, 4.009e-4, 6.467e-4 }},
+            }},
+            0u
+        };
         ///@}
     }
 
@@ -3683,7 +3717,8 @@ namespace eos
             { "B->K^*::V+A_0+A_1+A_2@BSZ2015", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015) },
 
             { "B->K^*::V+A_0+A_1+A_12@HLMW2015", make_factory(templates::B_to_Kstar_V_A0_A1_A12_11dot9_to_17dot8_HLMW_2015) },
-            { "B->D::f_++f_0@HPQCD2015A", make_factory(templates::B_to_D_f_plus_f_zero_0_to_11dot62_HPQCD_2015A) }
+            { "B->D::f_++f_0@HPQCD2015A", make_factory(templates::B_to_D_f_plus_f_zero_0_to_11dot62_HPQCD_2015A) },
+            { "B->pi::f_++f_0@FNALMILC2015A", make_factory(templates::B_to_pi_f_plus_f_zero_18_to_26_FNALMILC_2015A) }
         };
 
         return constraint_factories;
