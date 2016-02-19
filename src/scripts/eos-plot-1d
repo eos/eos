@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+
+# Copyright (c) 2016 Danny van Dyk
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+from eos import *
+
+def main():
+    parser = argparse.ArgumentParser(description='Plot 1D marginal distributions')
+    parser.add_argument('input', metavar='HDF5FILE', type=str, help='Name of the HDF5 input file')
+    parser.add_argument('index', metavar='IDX', type=int, help='Index of the n-tuple element to be plotted')
+    parser.add_argument('output', metavar='PDFFILE', type=str, help='Name of the PDF output file')
+    parser.add_argument('--xmin', type=float, help='Minimum value on the x axis')
+    parser.add_argument('--xmax', type=float, help='Maximum value on the x axis')
+
+    args = parser.parse_args()
+
+    # ensure that the input file exists
+    if not os.path.isfile(args.input):
+        error('\'%s\' is not a file' % args.input)
+
+    # open HDF5 data file
+    basename = os.path.basename(args.input)
+    if basename.startswith('mcmc_'):
+        datafile = MCMCDataFile(args.input)
+    elif basename.startswith('pmc_monolithic'):
+        datafile = PMCDataFile(args.input)
+
+    # forward options
+    argvars = vars(args)
+    options = { key: argvars[key] for key in ['xmin', 'xmax'] }
+
+    # plot data
+    plotter = Plotter1D(datafile, args.output)
+    plotter.histogram(args.index, **options)
+
+    exit(0);
+
+if __name__ == '__main__':
+    main()
