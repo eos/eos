@@ -21,10 +21,10 @@ import os
 import sys
 
 def error(message):
-    print >> sys.stderr, 'eos-plot-1d: error: %s' % message
+    print >> sys.stderr, '%s: error: %s' % (os.path.basename(sys.argv[0]), message)
 
 def warn(message):
-    print >> sys.stderr, 'eos-plot-1d: warning: %s' % message
+    print >> sys.stderr, '%s: warning: %s' % (os.path.basename(sys.argv[0]), message)
 
 class FileFormatError(Exception):
     def __init__(self, expected, found):
