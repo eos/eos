@@ -21,6 +21,8 @@ stamp-h1
 *.l[oa]
 *.so
 *.libs/
+*.pyc
+*.pyo
 
 # Tests
 *_TEST
