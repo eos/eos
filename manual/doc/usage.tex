@@ -13,7 +13,7 @@ The second use case is the inference of parameters from experimental observation
 For this task, EOS defaults to the Bayesian framework of parameter inference.\\
 
 In the remainder of this chapter, we document the usage of the existing
-EOS clients in order to carry out tasks corresponding to the above use cases.
+EOS clients and scripts, in order to carry out tasks corresponding to the above use cases.
 We assume further that only the built-in observables, physics models and experimental
 constraints are used.
 
@@ -146,6 +146,71 @@ into $10$ chunks with $1000$ samples each.\\
 Our intentions translate to the following call to \client{eos-sample-mcmc}:
 \commandlineexample{examples/sample-mcmc-btopi-ff}
 
+\section{Plotting Random Parameter Samples}
+\label{sec:usage:eos-plot}
+
+Once random samples from the posterior PDF have been obtained, e.g. as described in
+\refsec{usage:eos-sample-mcmc}, a visual inspection of the samples is the next step.
+EOS provides scripts for this purpose, which plot histograms of either
+a marginalized 1D (\texttt{eos-plot-1d}) or 2D (\texttt{eos-plot-2d}) probability density.
+Both scripts presently detect the output format by inspection of the resepective HDF5 file
+name. Files containing MCMC samples should be prefixed with \texttt{mcmc\_}, while
+PMC sample files should be prefixed with \texttt{pmc\_monolithic\_}.
+
+The \texttt{eos-plot-1d} produces a 1D histogram of the samples for one parameter.
+It accepts the following arguments:
+\begin{itemize}
+    \item[] \texttt{HDF5FILE}\\[\medskipamount]
+        The name of the HDF5 input file whose samples shall be plotted.
+
+    \item[] \texttt{IDX}\\[\medskipamount]
+        The numerical index for the parameter whose density function shall
+        be plotted. \texttt{IDX} starts with zero
+
+    \item[] \texttt{PDFFILE}\\[\medskipamount]
+        The name of the PDF output file, into which the plot shall be saved.
+
+    \item[] \texttt{--xmin XMIN}, \texttt{--xmax XMAX}\\[\medskipamount]
+        When specified, limit the plot range to the interval \texttt{XMIN} to \texttt{XMAX}.
+        The default values are taken from the description of the parameter within the
+        HDF5 input file.
+
+    \item[] \texttt{--kde [0|1]}\\[\medskipamount]
+        When enabled, plots a univariate Kernel Density Estimate of the probability
+        density based on the available samples.
+
+    \item[] \texttt{--kde-bandwidth KDEBANDWIDTH}\\[\medskipamount]
+        When specified, multiplies the automatically determined KDE bandwidth parameter
+        with \texttt{KDEBANDWIDTH}.
+\end{itemize}
+
+The \texttt{eos-plot-2d} produces a 2D heatmap of the samples for two parameters.
+It accepts the following arguments
+\begin{itemize}
+    \item[] \texttt{HDF5FILE}\\[\medskipamount]
+        The name of the HDF5 input file whose samples shall be plotted.
+
+    \item[] \texttt{XIDX}\\[\medskipamount]
+        The numerical index for the parameter that shall be plotted on the
+        $x$ acis. \texttt{XIDX} starts with zero
+
+    \item[] \texttt{YIDX}\\[\medskipamount]
+        The numerical index for the parameter that shall be plotted on the
+        $y$ acis. \texttt{YIDX} starts with zero
+
+    \item[] \texttt{PDFFILE}\\[\medskipamount]
+        The name of the PDF output file, into which the plot shall be saved.
+
+    \item[] \texttt{--xmin XMIN}, \texttt{--xmax XMAX}\\[\medskipamount]
+        When specified, limit the plot range on the $x$ axis to the interval
+        \texttt{XMIN} to \texttt{XMAX}. The default values are taken from the
+        description of the parameter within the HDF5 input file.
+
+    \item[] \texttt{--ymin YMIN}, \texttt{--ymax YMAX}\\[\medskipamount]
+        When specified, limit the plot range on the $y$ axis to the interval
+        \texttt{YMIN} to \texttt{YMAX}. The default values are taken from the
+        description of the parameter within the HDF5 input file.
+\end{itemize}
 
 %\section{Bayesian Uncertainty Propagation using \textbf{\texttt{eos-propagate-uncertainty}}}
 %\label{sec:usage:eos-propagate-uncertainty}
