@@ -15,13 +15,20 @@
 
 import argparse
 import h5py
+import matplotlib
+# use PDF renderer by default
+matplotlib.use('AGG')
 import matplotlib.pyplot as plot
 import numpy
 import os
 import sys
 
+from scipy.stats.kde import gaussian_kde
+
+
 def error(message):
     print >> sys.stderr, '%s: error: %s' % (os.path.basename(sys.argv[0]), message)
+    exit(1)
 
 def warn(message):
     print >> sys.stderr, '%s: warning: %s' % (os.path.basename(sys.argv[0]), message)
@@ -112,7 +119,7 @@ class MCMCDataFile:
             if data == None:
                 data = numpy.array(dset[:])
             else:
-                numpy.append(data, dset[:])
+                data = numpy.append(data, dset[:], axis=0)
 
         return data
 
@@ -127,11 +134,6 @@ class Plotter1D:
         # (name, min, max, nuisance, prior)
         parameter = self.datafile.parameters[index]
 
-        # compute histogram
-        entries, bins = numpy.histogram(data, 100)
-        width = (bins[1] - bins[0])
-        center = (bins[:-1] + bins[1:]) / 2
-
         plot.clf()
         plot.figure(figsize=(10, 10), dpi=80)
 
@@ -145,7 +147,13 @@ class Plotter1D:
         plot.ylabel('frequency')
 
         # plot
-        plot.bar(center, entries, align='center', width=width)
+        plot.hist(data, bins=100, normed=1, alpha=.3)
+        if 'kde' in options:
+            kde = gaussian_kde(data)
+            kde.set_bandwidth(bw_method='silverman')
+            kde.set_bandwidth(bw_method=kde.factor / 3)
+            x = numpy.linspace(xmin, xmax, 1000)
+            plot.plot(x, kde(x), 'r')
         plot.tight_layout()
 
         # save figure
@@ -186,3 +194,19 @@ class Plotter2D:
         plot.tight_layout()
 
         plot.savefig(self.pdffile)
+
+
+# set some default values for plotting
+matplotlib.rcParams['font.family'] = 'sans-serif'
+matplotlib.rcParams['font.serif'] = 'Computer Modern Sans serif'
+matplotlib.rcParams['font.size'] = 14
+matplotlib.rcParams['font.weight'] = 400
+
+matplotlib.rcParams['axes.labelsize'] = 16
+matplotlib.rcParams['axes.linewidth'] = 1
+
+matplotlib.rcParams['savefig.bbox'] = 'tight'
+matplotlib.rcParams['savefig.pad_inches'] = 0.1
+
+matplotlib.rcParams['xtick.direction'] = 'out'
+matplotlib.rcParams['ytick.direction'] = 'out'
