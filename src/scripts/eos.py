@@ -148,12 +148,13 @@ class Plotter1D:
 
         # plot
         plot.hist(data, bins=100, normed=1, alpha=.3)
-        if 'kde' in options:
+        if options['kde']:
             kde = gaussian_kde(data)
             kde.set_bandwidth(bw_method='silverman')
-            kde.set_bandwidth(bw_method=kde.factor / 3)
+            kde.set_bandwidth(bw_method=kde.factor * options['kde_bandwidth'])
             x = numpy.linspace(xmin, xmax, 1000)
             plot.plot(x, kde(x), 'r')
+
         plot.tight_layout()
 
         # save figure

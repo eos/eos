@@ -24,7 +24,8 @@ def main():
     parser.add_argument('output', metavar='PDFFILE', type=str, help='Name of the PDF output file')
     parser.add_argument('--xmin', type=float, help='Minimum value on the x axis')
     parser.add_argument('--xmax', type=float, help='Maximum value on the x axis')
-    parser.add_argument('--kde', type=bool, help='Whether to use Kerndel Density Estimation (KDE) in the plot')
+    parser.add_argument('--kde', type=bool, default=False, help='Whether to use Kerndel Density Estimation (KDE) in the plot')
+    parser.add_argument('--kde-bandwidth', type=float, default=1.0, help='Scaling factor for the automatically determined KDE bandwidth')
 
     args = parser.parse_args()
 
@@ -41,7 +42,7 @@ def main():
 
     # forward options
     argvars = vars(args)
-    options = { key: argvars[key] for key in ['xmin', 'xmax', 'kde'] }
+    options = { key: argvars[key] for key in ['xmin', 'xmax', 'kde', 'kde_bandwidth'] }
 
     # plot data
     plotter = Plotter1D(datafile, args.output)
