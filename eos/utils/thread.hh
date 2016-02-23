@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2007, 2008, 2010 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2007, 2008, 2010, 2015 Danny van Dyk <danny.dyk@uni-dortmund.de>
  *
  * Based upon 'thread.hh' from Paludis, which is:
  *     Copyright (c) 2007 Ciaran McCreesh
@@ -26,7 +26,7 @@
 #include <eos/utils/instantiation_policy.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 
-#include <tr1/functional>
+#include <functional>
 
 namespace eos
 {
