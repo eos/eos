@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015 Danny van Dyk
+ * Copyright (c) 2014, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -466,13 +466,61 @@ namespace eos
                 }
         };
 
+        // full ratios as obtained from LQCD calculation of tensor and vector
+        // form factors
+        class FormFactorTensorToVectorRatios :
+            public TensorToVectorRatios
+        {
+            private:
+                std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
+
+            public:
+                FormFactorTensorToVectorRatios(const Parameters & p, const Options & o)
+                {
+                    form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda@" + o.get("form-factors", "DM2016"), p);
+
+                    if (! form_factors.get())
+                        throw InternalError("Form factors not found!");
+                }
+
+                ~FormFactorTensorToVectorRatios()
+                {
+                }
+
+                virtual double R_perp_V(const double & s) const
+                {
+                    return form_factors->f_perp_t(s) / form_factors->f_perp_v(s);
+                }
+
+                virtual double R_perp_A(const double & s) const
+                {
+                    return form_factors->f_perp_t5(s) / form_factors->f_perp_a(s);
+                }
+
+                virtual double R_long_V(const double & s) const
+                {
+                    return form_factors->f_long_t(s) / form_factors->f_long_v(s);
+                }
+
+                virtual double R_long_A(const double & s) const
+                {
+                    return form_factors->f_long_t(s) / form_factors->f_long_v(s);
+                }
+
+                static FormFactorTensorToVectorRatios * make(const Parameters & p, const Options & o)
+                {
+                    return new FormFactorTensorToVectorRatios(p, o);
+                }
+        };
+
         TensorToVectorRatios *
         TensorToVectorRatios::make(const std::string & name, const Parameters & p, const Options & o)
         {
             typedef std::function<TensorToVectorRatios * (const Parameters &, const Options &)> RatiosMaker;
             static const std::map<std::string, RatiosMaker> ratios_makers
             {
-                std::make_pair("Estimate",   &EstimatedTensorToVectorRatios::make)
+                std::make_pair("estimate",     &EstimatedTensorToVectorRatios::make),
+                std::make_pair("form-factors", &FormFactorTensorToVectorRatios::make),
             };
 
             auto i = ratios_makers.find(name);
@@ -522,13 +570,13 @@ namespace eos
             r_para_0(p["Lambda_b->Lambdall::r_para_0@MvD2016"], u),
             r_para_1(p["Lambda_b->Lambdall::r_para_1@MvD2016"], u)
         {
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda@" + o.get("form-factors", "BFvD2014"), p);
+            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda@" + o.get("form-factors", "DM2016"), p);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
 
             using namespace lambdab_to_lambda_dilepton;
-            ratios = std::shared_ptr<TensorToVectorRatios>(TensorToVectorRatios::make(o.get("ratios", "Estimate"), p, o));
+            ratios = std::shared_ptr<TensorToVectorRatios>(TensorToVectorRatios::make(o.get("ratios", "form-factors"), p, o));
 
             u.uses(*ratios);
             u.uses(*form_factors);
