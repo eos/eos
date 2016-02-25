@@ -73,6 +73,17 @@ namespace eos
             double integrated_a_fb_hadronic(const double & s_min, const double & s_max) const;
             double integrated_a_fb_combined(const double & s_min, const double & s_max) const;
             double integrated_fzero(const double & s_min, const double & s_max) const;
+
+            double integrated_k1ss(const double & s_min, const double & s_max) const;
+            double integrated_k1cc(const double & s_min, const double & s_max) const;
+            double integrated_k1c(const double & s_min, const double & s_max) const;
+            double integrated_k2ss(const double & s_min, const double & s_max) const;
+            double integrated_k2cc(const double & s_min, const double & s_max) const;
+            double integrated_k2c(const double & s_min, const double & s_max) const;
+            double integrated_k3sc(const double & s_min, const double & s_max) const;
+            double integrated_k3s(const double & s_min, const double & s_max) const;
+            double integrated_k4sc(const double & s_min, const double & s_max) const;
+            double integrated_k4s(const double & s_min, const double & s_max) const;
     };
 }
 

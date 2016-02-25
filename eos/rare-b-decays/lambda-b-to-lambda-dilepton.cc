@@ -688,4 +688,74 @@ namespace eos
     {
         return _imp->integrated_angular_observables(s_min, s_max).f_zero();
     }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k1ss(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k1ss() / o.decay_width();
+    }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k1cc(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k1cc() / o.decay_width();
+    }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k1c(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k1c() / o.decay_width();
+    }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k2ss(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k2ss() / o.decay_width();
+    }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k2cc(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k2cc() / o.decay_width();
+    }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k2c(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k2c() / o.decay_width();
+    }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k3sc(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k3sc() / o.decay_width();
+    }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k3s(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k3s() / o.decay_width();
+    }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k4sc(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k4sc() / o.decay_width();
+    }
+
+    double
+    LambdaBToLambdaDilepton<LowRecoil>::integrated_k4s(const double & s_min, const double & s_max) const
+    {
+        auto o = _imp->integrated_angular_observables(s_min, s_max);
+        return o.k4s() / o.decay_width();
+    }
 }

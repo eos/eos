@@ -1518,6 +1518,46 @@ namespace eos
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_fzero,
                     std::make_tuple("s_min", "s_max")),
 
+            make_observable("Lambda_b->Lambdall::K_1ss@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k1ss,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::K_1cc@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k1cc,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::K_1c@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k1c,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::K_2ss@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k2ss,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::K_2cc@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k2cc,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::K_2c@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k2c,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::K_3sc@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k3sc,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::K_3s@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k3s,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::K_4sc@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k4sc,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambdall::K_4s@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_k4s,
+                    std::make_tuple("s_min", "s_max")),
+
             /* Inclusive Decays */
 
             // B->X_u l nu (naive)
