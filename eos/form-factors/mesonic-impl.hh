@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013-2016 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  * Copyright (c) 2015 Frederik Beaujean
  * Copyright (c) 2015 Christoph Bobeth
@@ -308,14 +308,20 @@ namespace eos
             static constexpr const double _m_B = Tag_::mB, _m_V = Tag_::mV;
             static constexpr const double _tau_p = (_m_B + _m_V) * (_m_B + _m_V);
             static constexpr const double _tau_m = (_m_B - _m_V) * (_m_B - _m_V);
-            static constexpr const double _tau_0 = _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
             static constexpr const double _m_R2_0m = Tag_::mR2_0m;
             static constexpr const double _m_R2_1m = Tag_::mR2_1m;
             static constexpr const double _m_R2_1p = Tag_::mR2_1p;
 
+            // std::sqrt is not declared as constexpr, which prohibits static
+            // initialization with more strict compiler than g++ (i.e., clang).
+            static double _tau_0()
+            {
+                return _tau_p - std::sqrt(_tau_p * _tau_p - _tau_m * _tau_p);
+            }
+
             static double _calc_z(const double & s)
             {
-                return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
+                return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0())) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0()));
             }
 
         public:

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014 Danny van Dyk
+ * Copyright (c) 2014, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -44,7 +44,7 @@ namespace eos
             static constexpr double mv2 = 5.415 * 5.415;
             static constexpr double ma2 = 5.829 * 5.829;
 
-            static constexpr double _z(const double & t, const double & tp, const double & t0)
+            static double _z(const double & t, const double & tp, const double & t0)
             {
                 return (std::sqrt(tp - t) - std::sqrt(tp - t0)) / (std::sqrt(tp - t) + std::sqrt(tp - t0));
             }
