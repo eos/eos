@@ -211,17 +211,35 @@ namespace eos
                     &FormFactors<PToV>::a_12),
 
             // Lambda_b -> Lambda Form Factors
-            make_observable("Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_v),
-
-            make_observable("Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_a),
+            make_observable("Lambda_b->Lambda::f_time^V(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_v),
 
             make_observable("Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_v),
 
+            make_observable("Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_v),
+
+            make_observable("Lambda_b->Lambda::f_time^A(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_a),
+
             make_observable("Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda",
                     &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_a),
+
+            make_observable("Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_a),
+
+            make_observable("Lambda_b->Lambda::f_long^T(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t),
+
+            make_observable("Lambda_b->Lambda::f_perp^T(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t),
+
+            make_observable("Lambda_b->Lambda::f_long^T5(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t5),
+
+            make_observable("Lambda_b->Lambda::f_perp^T5(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t5),
 
             // Zero-Recoil Sum Rule for the Lambda_b -> Lambda_c Form Factors
             make_observable("Lambda_b->Lambda_c::F(1)",
