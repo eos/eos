@@ -168,12 +168,13 @@ class Plotter2D:
 
     def histogram(self, index1, index2, **options):
         data = self.datafile.data()
-        parameter1 = self.datafile.parameters[index1]
-        parameter2 = self.datafile.parameters[index2]
 
-        # compute histogram
-        heatmap, xedges, yedges = numpy.histogram2d(data[:, index1], data[:, index2], bins=100)
-        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+        # param 1
+        parameter1 = self.datafile.parameters[index1]
+        data1 = data[:, index1]
+
+        parameter2 = self.datafile.parameters[index2]
+        data2 = data[:, index2]
 
         plot.clf()
         plot.figure(figsize=(10, 10), dpi=80)
@@ -191,7 +192,7 @@ class Plotter2D:
         plot.ylim(ymin, ymax)
 
         # plot
-        plot.imshow(heatmap, extent=extent, aspect='auto')
+        plot.hist2d(data1, data2, bins=100)
         plot.tight_layout()
 
         plot.savefig(self.pdffile)
