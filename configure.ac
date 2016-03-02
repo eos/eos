@@ -57,15 +57,22 @@ AC_ARG_WITH([minuit2],
 	[AS_HELP_STRING([--with-minuit2], [used to find starting points for population montecarlo sampling])]
 	[],
 	[])
-if test "x$with_minuit2" == xno ; then
-	AC_MSG_FAILURE(["Cannot build EOS without Minuit2"])
-fi
-if test "x$with_minuit2" != x ; then
+if test "x$with_minuit2" == xroot ; then
+	AC_CHECK_PROG(ROOTCONFIG, root-config, yes)
+	if test "x$ROOTCONFIG" == xyes ; then
+		CXXFLAGS="-I`root-config --incdir` $CXXFLAGS"
+		LDFLAGS="`root-config --libs` $LDFLAGS"
+	else
+		AC_MSG_FAILURE(["Cannot find root-config"])
+	fi
+elif test "x$with_minuit2" != xno -a "x$with_minuit2" != x ; then
 	if ! test -d "$with_minuit2" ; then
 		AC_MSG_FAILURE(["$with_minuit2 is not a directory"])
 	fi
 	CXXFLAGS="-I$with_minuit2/include $CXXFLAGS"
 	LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
+else
+	AC_MSG_FAILURE(["Cannot build EOS without Minuit2"])
 fi
 dnl }}}
 dnl {{{ enable PMC path if supplied via --with-pmc=
