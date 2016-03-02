@@ -77,23 +77,30 @@ budgets of parametric uncertainties: one for uncertainties pertaining to the for
 Our intentations translate to the following call to \client{eos-evaluate}:
 \commandlineexample{examples/evaluate-btopilnu-integrated}
 
-\section{Producing Random Parameter Samples using \textbf{\texttt{eos-sample-mcmc}}}
-\label{sec:usage:eos-sample-mcmc}
+\section{Producing Random Parameter Samples}
+\label{sec:usage:eos-sample-mcmc+pmc}
 
 Both use cases, observable evaluation and Bayesian parameter inference, make use of
 random samples of some \gls{PDF} $P(\vec\theta)$. These random
 samples can be produced from Markov chains, using the Metropolis-Hastings algorithm,
-by calls to the \client{eos-sample-mcmc} client. It accepts the following command-line arguments:
+by calls to the \client{eos-sample-mcmc} client. In second step, refined samples,
+or samples for a very complicated setup, are obtained from an algorithm described
+in Ref.~\cite{Beaujean:2013}. This algorithm uses an adaptive importance sampling
+called Population Monte Carlo (PMC), implemented within the client \client{eos-sample-pmc}.
+
+The \client{eos-sample-mcmc} clients accepts the following command-line arguments:
 \begin{itemize}
-    \item[] \texttt{--scan NAME --prior flat MIN MAX}\\[\medskipamount]
-
-    \item[] \texttt{--scan NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[\medskipamount]
-
-    \item[] \texttt{--nuisance}\\[\medskipamount]
-        The \texttt{--nuisance} argument works identically as the \texttt{--scan} argument,
-        with one exception: It declare the associated parameter as a nuisance parameter, which
-        is flagged in the HDF5 output. The sampling algorithm \emph{does not} treat nuisance
-        parameters differently than scan parameter.
+    \item[] \texttt{--scan NAME --prior flat MIN MAX}\\[-3\medskipamount]
+    \item[] \texttt{--scan NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[-3\medskipamount]
+    \item[] \texttt{--nuisance [...]}\\[\medskipamount]
+        These arguments add a parameter to the statistical analysis, with
+        either a flat or a gaussian prior. If \texttt{ABSMIN} and
+        \texttt{ABSMAX} are specified, the prior will be cropped to this
+        absolute interval.  The \texttt{--scan} and \texttt{--nuisance}
+        arguments work identically, with one exception: \texttt{--nuisance}
+        declares the associated parameter as a nuisance parameter, which is
+        flagged in the HDF5 output. The sampling algorithm \emph{does not}
+        treat nuisance parameters differently than scan parameter.
 
     \item[] \texttt{--seed [time|VALUE]}\\[\medskipamount]
         This argument sets the seed value for the \gls{RNG}. Setting the
@@ -123,6 +130,71 @@ by calls to the \client{eos-sample-mcmc} client. It accepts the following comman
         Use the file \texttt{FILENAME} to store the output, using the HDF5 file format.
 \end{itemize}
 
+The \client{eos-sample-pmc} clients accepts the following command-line arguments:
+\begin{itemize}
+    \item[] \texttt{--scan NAME --prior flat MIN MAX}\\[-3\medskipamount]
+    \item[] \texttt{--scan NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[-3\medskipamount]
+    \item[] \texttt{--nuisance [...]}\\[\medskipamount]
+        These arguments add a parameter to the statistical analysis, with
+        either a flat or a gaussian prior. If \texttt{ABSMIN} and
+        \texttt{ABSMAX} are specified, the prior will be cropped to this
+        absolute interval.  The \texttt{--scan} and \texttt{--nuisance}
+        arguments work identically, with one exception: \texttt{--nuisance}
+        declares the associated parameter as a nuisance parameter, which is
+        flagged in the HDF5 output. The sampling algorithm \emph{does not}
+        treat nuisance parameters differently than scan parameter.
+
+    \item[] \texttt{--seed [time|VALUE]}\\[\medskipamount]
+        This argument sets the seed value for the \gls{RNG}. Setting the
+        seed to a fixed numerical \texttt{VALUE} ensures reproducibility of the results. This
+        is important for publication-quality usage of the client. If \texttt{time} is
+        specified, the \gls{RNG} is seeded with an interger value based on the current time.
+
+    \item[] \texttt{--pmc-initialize-from-file HDF5FILE}\\[\medskipamount]
+        Use the samples from a MCMC HDF5 output file \texttt{HDF5FILE} as
+        generated with \client{eos-sample-mcmc}, in order to initialize the
+        mixture density of the initial PMC step.
+
+    \item[] \texttt{--pmc-group-by-r-value R}\\[\medskipamount]
+        When forming groups of MCs from the initialization file, only add
+        a chain to an existing group if the chain's $R$-value is less than \texttt{R};
+        create a new group otherwise.
+
+    \item[] \texttt{--hc-target-ncomponents N}\\[\medskipamount]
+        When creating mixture components, create \texttt{N} components per existing
+        MC group.
+
+    \item[] \texttt{--hc-patch-length LENGTH}\\[\medskipamount]
+        When clustering a group's MCs onto the mixture components, cut the
+        chains into patches of \texttt{LENGTH} samples each.
+
+    \item[] \texttt{--hc-skip-initial FRACTION}\\[\medskipamount]
+        Skip the first \texttt{FRACTION} of all MCMC samples in the clustering step.
+
+        \emph{Note}: \texttt{FRACTION} must be a floating point number between $0$ and $1$.
+
+    \item[] \texttt{--pmc-samples-per-component N}\\[\medskipamount]
+        Set the number \texttt{N} of samples that will be drawn per component and
+        update step of the PMC run.
+
+    \item[] \texttt{--pmc-final-samples N}\\[\medskipamount]
+        Set the number \texttt{N} of samples that will be drawn for the final step,
+        i.e.: after the PMC updates have converged.
+
+    \item[] \texttt{--pmc-ignore-ess [0|1]}\\[\medskipamount]
+        Set whether convergence of the PMC updates shall be determined from the
+        effective sample size (ESS) \emph{in addition} to the perplexity.
+
+        \emph{Default}: Use the ESS.
+
+    \item[] \texttt{--pmc-relative-std-deviation-over-last-step STD STEPS}\\[\medskipamount]
+        If both perplexity and ESS have a standard deviation less than \texttt{STD} over the
+        last \texttt{STEPS} updates, declare convergence.
+
+    \item[] \texttt{--output FILENAME}\\[\medskipamount]
+        Use the file \texttt{FILENAME} to store the output, using the HDF5 file format.
+\end{itemize}
+
 As an example, we define the a-priori \gls{PDF} for a study of the decay $\bar{B}\to \pi^+\ell^-\bar\nu_\ell$.
 For the CKM Wolfenstein parameters, we use
 \begin{equation*}
@@ -145,6 +217,14 @@ into $10$ chunks with $1000$ samples each.\\
 
 Our intentions translate to the following call to \client{eos-sample-mcmc}:
 \commandlineexample{examples/sample-mcmc-btopi-ff}
+
+We use the above call to \client{eos-sample-mcmc} in order to initialize a PMC run. We wish for
+$4$ components per MC group, and to skip $20\%$ of the MCMC samples as part of the burn in.
+Groups will be grouped based on an $R$-value threshold of $1.5$. For each update, $500$ samples
+per mixture component shall be drawn, in order to produce $10^6$ samples in the final step.
+Convergence shall be declared upon a standard deviation for the perplexity only, of $0.05$
+over the last $4$ update steps. The call then reads:
+\commandlineexample{examples/sample-pmc-btopi-ff}
 
 \section{Plotting Random Parameter Samples}
 \label{sec:usage:eos-plot}
