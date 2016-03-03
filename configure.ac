@@ -61,7 +61,7 @@ if test "x$with_minuit2" == xroot ; then
 	AC_CHECK_PROG(ROOTCONFIG, root-config, yes)
 	if test "x$ROOTCONFIG" == xyes ; then
 		CXXFLAGS="-I`root-config --incdir` $CXXFLAGS"
-		LDFLAGS="`root-config --libs` $LDFLAGS"
+		LDFLAGS="-L`root-config --libdir` $LDFLAGS"
 	else
 		AC_MSG_FAILURE(["Cannot find root-config"])
 	fi
