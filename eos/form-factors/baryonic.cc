@@ -28,6 +28,13 @@ namespace eos
 
     /* Lambda_b -> Lambda */
 
+    const constexpr double LambdaBToLambda::tm;
+    const constexpr double LambdaBToLambda::tp;
+    const constexpr double LambdaBToLambda::mR2_0m;
+    const constexpr double LambdaBToLambda::mR2_0p;
+    const constexpr double LambdaBToLambda::mR2_1m;
+    const constexpr double LambdaBToLambda::mR2_1p;
+
     /* Form Factors according to [BFvD2014] */
     class BFvD2014FormFactors :
         public FormFactors<OneHalfPlusToOneHalfPlus>
