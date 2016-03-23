@@ -29,6 +29,7 @@
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/power_of.hh>
+#include <array>
 
 namespace eos
 {
