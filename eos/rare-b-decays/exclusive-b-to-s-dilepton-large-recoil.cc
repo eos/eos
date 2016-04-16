@@ -58,6 +58,8 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
+        Parameters parameters;
+
         UsedParameter hbar;
 
         UsedParameter m_b_MSbar;
@@ -126,6 +128,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "WilsonScan"), p, o)),
+            parameters(p),
             hbar(p["hbar"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
@@ -1491,6 +1494,72 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::differential_d_4(const double & s) const
+    {
+        double J4_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
+
+            J4_electrons = differential_j_4(s);
+        }
+
+        double J4_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
+
+            J4_muons = differential_j_4(s);
+        }
+
+        return (J4_electrons - J4_muons) * _imp->tau() / _imp->hbar();
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_d_5(const double & s) const
+    {
+        double J5_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
+
+            J5_electrons = differential_j_5(s);
+        }
+
+        double J5_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
+
+            J5_muons = differential_j_5(s);
+        }
+
+        return (J5_electrons - J5_muons) * _imp->tau() / _imp->hbar();
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::differential_d_6s(const double & s) const
+    {
+        double J6s_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
+
+            J6s_electrons = differential_j_6s(s);
+        }
+
+        double J6s_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
+
+            J6s_muons = differential_j_6s(s);
+        }
+
+        return (J6s_electrons - J6s_muons) * _imp->tau() / _imp->hbar();
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::integrated_decay_width(const double & s_min, const double & s_max) const
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
@@ -1931,6 +2000,72 @@ namespace eos
         AngularCoefficients a_c_bar = _imp->integrated_angular_coefficients(s_min, s_max);
 
         return (a_c.j9 - a_c_bar.j9) / (decay_width(a_c) + decay_width(a_c_bar));
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_d_4(const double & s_min, const double & s_max) const
+    {
+        double J4_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
+
+            J4_electrons = integrated_j_4(s_min, s_max);
+        }
+
+        double J4_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
+
+            J4_muons = integrated_j_4(s_min, s_max);
+        }
+
+        return (J4_electrons - J4_muons) * _imp->tau() / _imp->hbar();
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_d_5(const double & s_min, const double & s_max) const
+    {
+        double J5_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
+
+            J5_electrons = integrated_j_5(s_min, s_max);
+        }
+
+        double J5_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
+
+            J5_muons = integrated_j_5(s_min, s_max);
+        }
+
+        return (J5_electrons - J5_muons) * _imp->tau() / _imp->hbar();
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_d_6s(const double & s_min, const double & s_max) const
+    {
+        double J6s_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
+
+            J6s_electrons = integrated_j_6s(s_min, s_max);
+        }
+
+        double J6s_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
+
+            J6s_muons = integrated_j_6s(s_min, s_max);
+        }
+
+        return (J6s_electrons - J6s_muons) * _imp->tau() / _imp->hbar();
     }
 
     double

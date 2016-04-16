@@ -106,6 +106,9 @@ namespace eos
             double differential_j_9_normalized_cp_averaged(const double & s) const;
             double differential_j_1c_plus_j_2c_cp_averaged(const double & s) const;
             double differential_j_1s_minus_3j_2s_cp_averaged(const double & s) const;
+            double differential_d_4(const double & s) const;
+            double differential_d_5(const double & s) const;
+            double differential_d_6s(const double & s) const;
 
             // Integrated Observables
             double integrated_decay_width(const double & s_min, const double & s_max) const;
@@ -155,6 +158,9 @@ namespace eos
             double integrated_j_9_normalized(const double & s_min, const double & s_max) const;
             double integrated_j_9_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_a_9(const double & s_min, const double & s_max) const;
+            double integrated_d_4(const double & s_min, const double & s_max) const;
+            double integrated_d_5(const double & s_min, const double & s_max) const;
+            double integrated_d_6s(const double & s_min, const double & s_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.

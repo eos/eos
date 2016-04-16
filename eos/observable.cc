@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -800,6 +800,18 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::differential_j_9_normalized_cp_averaged,
                     std::make_tuple("s")),
 
+            make_observable("B->K^*ll::D_4(s)@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::differential_d_4,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*ll::D_5(s)@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::differential_d_5,
+                    std::make_tuple("s")),
+
+            make_observable("B->K^*ll::D_6s(s)@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::differential_d_6s,
+                    std::make_tuple("s")),
+
             make_observable("B->K^*ll::A_FB@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry,
                     std::make_tuple("s_min", "s_max")),
@@ -1013,6 +1025,18 @@ namespace eos
 
             make_observable("B->K^*ll::A_9@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_a_9,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::D_4@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_d_4,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::D_5@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_d_5,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::D_6s@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_d_6s,
                     std::make_tuple("s_min", "s_max")),
 
             // B -> K^* ll, Low Recoil
