@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2015 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
  *
@@ -49,10 +49,8 @@ class BToDileptonTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
-                p["Abs{c10}"] = 4.150;
-                p["Arg{c10}"] = M_PI;
-                p["Abs{c10'}"] = 0.000;
-                p["Arg{c10'}"] = M_PI;
+                p["Re{c10}"] = -4.150;
+                p["Re{c10'}"] = 0.000;
                 // PDG 2010 CKM parameters
                 p["CKM::A"] = 0.812;
                 p["CKM::lambda"] = 0.22543;

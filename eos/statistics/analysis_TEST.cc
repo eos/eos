@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Frederik Beaujean
- * Copyright (c) 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2012, 2013, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -66,12 +66,12 @@ class AnalysisTest :
 
 
                 // now change a parameter which is not scanned
-                TEST_CHECK(analysis.parameters()["Abs{c7}"] != 2.599);
-                analysis.parameters()["Abs{c7}"] = 2.599;
+                TEST_CHECK(analysis.parameters()["Re{c7}"] != 2.599);
+                analysis.parameters()["Re{c7}"] = 2.599;
                 AnalysisPtr clone3 = analysis.old_clone();
 
-                TEST_CHECK_EQUAL(double(analysis.parameters()["Abs{c7}"] ),
-                                 double( clone3->parameters()["Abs{c7}"] ));
+                TEST_CHECK_EQUAL(double(analysis.parameters()["Re{c7}"] ),
+                                 double( clone3->parameters()["Re{c7}"] ));
 
             }
 

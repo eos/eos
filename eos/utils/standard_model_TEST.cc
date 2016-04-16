@@ -427,18 +427,12 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_RELATIVE_ERROR(parameters["c4"],       real(wc.c4()),  eps);
                 TEST_CHECK_RELATIVE_ERROR(parameters["c5"],       real(wc.c5()),  eps);
                 TEST_CHECK_RELATIVE_ERROR(parameters["c6"],       real(wc.c6()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["Abs{c7}"],  abs(wc.c7()),   eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["Arg{c7}"],  arg(wc.c7()),   eps);
                 TEST_CHECK_RELATIVE_ERROR(parameters["Re{c7}"],   real(wc.c7()),  eps);
                 TEST_CHECK_RELATIVE_ERROR(parameters["c8"],       real(wc.c8()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["Abs{c9}"],  abs(wc.c9()),   eps);
                 TEST_CHECK_RELATIVE_ERROR(parameters["Re{c9}"],   real(wc.c9()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["Abs{c10}"], abs(wc.c10()),   eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["Arg{c10}"], arg(wc.c10()),   eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["Re{c10}"],  real(wc.c10()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["Re{c10}"],  real(wc.c10()), eps);
 
                 TEST_CHECK_NEARLY_EQUAL(parameters["Im{c7}"],   imag(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Arg{c9}"],  arg(wc.c9()),   eps);
                 TEST_CHECK_NEARLY_EQUAL(parameters["Im{c9}"],   imag(wc.c9()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(parameters["Im{c10}"],  imag(wc.c10()),  eps);
             }

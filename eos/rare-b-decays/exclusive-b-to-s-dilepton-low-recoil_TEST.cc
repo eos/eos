@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -57,13 +57,10 @@ class BToKstarDileptonLowRecoilTest :
                 p["c4"] = -0.08794730;
                 p["c5"] = +0.00037476;
                 p["c6"] = +0.00105859;
-                p["Abs{c7}"] = 0.331;
-                p["Arg{c7}"] = M_PI;
+                p["Re{c7}"] = -0.331;
                 p["c8"] = -0.18100000;
-                p["Abs{c9}"] = +4.27;
-                p["Arg{c9}"] = 0.0;
-                p["Abs{c10}"] = +4.173;
-                p["Arg{c10}"] = M_PI;
+                p["Re{c9}"] = +4.27;
+                p["Re{c10}"] = -4.173;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;
@@ -157,13 +154,13 @@ class BToKstarDileptonLowRecoilTest :
                 p["c4"] = -0.08794730;
                 p["c5"] = +0.00037476;
                 p["c6"] = +0.00105859;
-                p["Abs{c7}"] = 0.3;
-                p["Arg{c7}"] = -M_PI / 2.0;
+                p["Re{c7}"] = 0.0;
+                p["Im{c7}"] = -0.3;
                 p["c8"] = -0.181;
-                p["Abs{c9}"] = 4.2;
-                p["Arg{c9}"] = +M_PI / 2.0;
-                p["Abs{c10}"] = 4.2;
-                p["Arg{c10}"] = -M_PI / 2.0;
+                p["Re{c9}"] = 0.0;
+                p["Im{c9}"] = 4.2;
+                p["Re{c10}"] = 0.0;
+                p["Im{c10}"] = -4.2;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;
@@ -226,10 +223,10 @@ class BToKstarDileptonLowRecoilTest :
                 p["c4"] = -0.08794730;
                 p["c5"] = +0.00037476;
                 p["c6"] = +0.00105859;
-                p["Abs{c7}"] = 0.0;
+                p["Re{c7}"] = 0.0;
                 p["c8"] = -0.181;
-                p["Abs{c9}"] = 0.0;
-                p["Abs{c10}"] = 0.0;
+                p["Re{c9}"] = 0.0;
+                p["Re{c10}"] = 0.0;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;
@@ -282,12 +279,12 @@ class BToKstarDileptonLowRecoilPolynomialTest :
         void run_one(const ObservablePtr & o, const WilsonPolynomial & p, const std::array<double, 6> & values) const
         {
             Parameters parameters = o->parameters();
-            Parameter abs_c7(parameters["Abs{c7}"]);
-            Parameter arg_c7(parameters["Arg{c7}"]);
-            Parameter abs_c9(parameters["Abs{c9}"]);
-            Parameter arg_c9(parameters["Arg{c9}"]);
-            Parameter abs_c10(parameters["Abs{c10}"]);
-            Parameter arg_c10(parameters["Arg{c10}"]);
+            Parameter abs_c7(parameters["Re{c7}"]);
+            Parameter arg_c7(parameters["Im{c7}"]);
+            Parameter abs_c9(parameters["Re{c9}"]);
+            Parameter arg_c9(parameters["Im{c9}"]);
+            Parameter abs_c10(parameters["Re{c10}"]);
+            Parameter arg_c10(parameters["Im{c10}"]);
 
             abs_c7 = values[0];
             arg_c7 = values[1];
@@ -335,7 +332,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
                 {
                     ObservablePtr observable = Observable::make(*n, parameters, kinematics, options);
-                    WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "c7", "c9", "c10" });
+                    WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "Re{c7}", "Im{c7}", "Re{c9}", "Im{c9}", "Re{c10}", "Im{c10}" });
 
                     for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
                     {
@@ -385,7 +382,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                     A = A.central();
                 }
 
-                std::list<std::string> coefficients{"c7", "c9", "c10"};
+                std::list<std::string> coefficients{"Re{c7}", "Im{c7}", "Re{c9}", "Im{c9}", "Re{c10}", "Im{c10}"};
 
                 // central ratio
                 {
@@ -449,9 +446,9 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
         {
             static const std::vector<std::string> variation_names
             {
-                "Abs{c7}",  "Arg{c7}",  "Abs{c7'}",  "Arg{c7'}",
-                "Abs{c9}",  "Arg{c9}",  "Abs{c9'}",  "Arg{c9'}",
-                "Abs{c10}", "Arg{c10}", "Abs{c10'}", "Arg{c10'}",
+                "Re{c7}",  "Im{c7}",  "Re{c7'}",  "Im{c7'}",
+                "Re{c9}",  "Im{c9}",  "Re{c9'}",  "Im{c9'}",
+                "Re{c10}", "Im{c10}", "Re{c10'}", "Im{c10'}",
             };
 
             Parameters p = Parameters::Defaults();
@@ -723,10 +720,10 @@ class BToKDileptonLowRecoilTest :
                 p["c4"] = -0.08794730;
                 p["c5"] = +0.00037476;
                 p["c6"] = +0.00105859;
-                p["Abs{c7}"] = 0.331;
+                p["Re{c7}"] = -0.331;
                 p["c8"] = -0.181;
-                p["Abs{c9}"] = 4.27;
-                p["Abs{c10}"] = 4.17;
+                p["Re{c9}"] = 4.27;
+                p["Re{c10}"] = -4.17;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;
@@ -788,13 +785,13 @@ class BToKDileptonLowRecoilTest :
                 p["c4"] = -0.08794730;
                 p["c5"] = +0.00037476;
                 p["c6"] = +0.00105859;
-                p["Abs{c7}"] = 0.331;
+                p["Re{c7}"] = 0.0;
+                p["Im{c7}"] = -0.331;
                 p["c8"] = -0.181;
-                p["Abs{c9}"] = 4.27;
-                p["Abs{c10}"] = 4.17;
-                p["Arg{c7}"] = -M_PI / 2.0;
-                p["Arg{c9}"] = +M_PI / 2.0;
-                p["Arg{c10}"] = -M_PI / 2.0;
+                p["Re{c9}"] = 0.0;
+                p["Im{c9}"] = +4.27;
+                p["Re{c10}"] = 0.0;
+                p["Im{c10}"] = -4.17;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -829,9 +826,9 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
         {
             static const std::vector<std::string> variation_names
             {
-                "Abs{c7}",  "Arg{c7}",  "Abs{c7'}",  "Arg{c7'}",
-                "Abs{c9}",  "Arg{c9}",  "Abs{c9'}",  "Arg{c9'}",
-                "Abs{c10}", "Arg{c10}", "Abs{c10'}", "Arg{c10'}",
+                "Re{c7}",  "Im{c7}",  "Re{c7'}",  "Im{c7'}",
+                "Re{c9}",  "Im{c9}",  "Re{c9'}",  "Im{c9'}",
+                "Re{c10}", "Im{c10}", "Re{c10'}", "Im{c10'}",
             };
 
             Parameters p = Parameters::Defaults();

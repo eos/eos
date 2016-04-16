@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2012, 2013, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -59,10 +59,8 @@ class BToKstarGammaTest :
                 p["c4"] = -0.08794730;
                 p["c5"] = +0.00037476;
                 p["c6"] = +0.00105859;
-                p["Abs{c7}"] = 0.331;
-                p["Arg{c7}"] = M_PI;
-                p["Abs{c7'}"] = 0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
-                p["Arg{c7'}"] = M_PI;
+                p["Re{c7}"] = -0.331;
+                p["Re{c7'}"] = -0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
                 p["c8"] = -0.181;
                 // PDG 2010 CKM parameters
                 p["CKM::A"] = 0.812;
@@ -96,10 +94,10 @@ class BToKstarGammaTest :
                 p["c4"] = -0.08794730;
                 p["c5"] = +0.00037476;
                 p["c6"] = +0.00105859;
-                p["Abs{c7}"] = 0.331;
-                p["Arg{c7}"] = -M_PI / 2.0;
-                p["Abs{c7'}"] = 0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
-                p["Arg{c7'}"] = -M_PI / 2.0;
+                p["Re{c7}"] = 0.0;
+                p["Im{c7}"] = -0.331;
+                p["Re{c7'}"] = 0.0;
+                p["Im{c7'}"] = -0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
                 p["c8"] = -0.181;
                 // PDG 2010 CKM parameters
                 p["CKM::A"] = 0.812;
@@ -138,7 +136,7 @@ class BToKstarGammaBobethCompatibilityTest :
         {
             static const std::vector<std::string> variation_names
             {
-                "Abs{c7}",  "Arg{c7}",  "Abs{c7'}",  "Arg{c7'}",
+                "Re{c7}",  "Im{c7}",  "Re{c7'}",  "Im{c7'}",
             };
 
             Parameters p = Parameters::Defaults();
