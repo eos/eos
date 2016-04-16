@@ -90,6 +90,8 @@ namespace eos
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
 
+        std::string lepton_flavour;
+
         bool cp_conjugate;
 
         bool ccbar_resonance;
@@ -115,6 +117,7 @@ namespace eos
             sl_phase_par(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_pa") + "@LowRecoil"], u),
             sl_phase_perp(p["B->Vll::sl_phase" + std::string(destringify<bool>(o.get("simple-sl")) ? "" : "_pp") + "@LowRecoil"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
+            lepton_flavour(o.get("l", "mu")),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
             use_nlo(destringify<bool>(o.get("nlo", "true")))
@@ -164,28 +167,28 @@ namespace eos
 
         double rho_1(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
 
             return std::norm(c9eff(wc, s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(wc, s)) + std::norm(wc.c10());
         }
 
         double rho_2(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
 
             return real((c9eff(wc, s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(wc, s)) * conj(wc.c10()));
         }
 
         complex<double> rho_L(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
 
             return c9eff(wc, s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(wc, s) - wc.c10();
         }
 
         complex<double> rho_R(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
 
             return c9eff(wc, s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(wc, s) + wc.c10();
         }
@@ -222,7 +225,7 @@ namespace eos
             // TODO: possibly optimize the calculation
             Amplitudes result;
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
 
             const double m_B2 = m_B * m_B, m_Kstar2 = m_Kstar * m_Kstar, m2_diff = m_B2 - m_Kstar2;
             const double m_Kstarhat = m_Kstar / m_B;
@@ -337,7 +340,7 @@ namespace eos
         // Quantity Y = Y_9 + lambda_u_hat Y_9^u + kappa_hat Y_7, the strong phase contributor of the amplitudes
         complex<double> Y(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
 
             return (c9eff(wc, s) - wc.c9()) + kappa() * (c7eff(wc, s) - wc.c7()) * (2.0 * m_b_MSbar * m_B / s);
         }
@@ -455,7 +458,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::real_c9eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->lepton_flavour, _imp->cp_conjugate);
 
         return real(_imp->c9eff(wc, s));
     }
@@ -463,7 +466,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::imag_c9eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->lepton_flavour, _imp->cp_conjugate);
 
         return imag(_imp->c9eff(wc, s));
     }
@@ -471,7 +474,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::real_c7eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->lepton_flavour, _imp->cp_conjugate);
 
         return real(_imp->c7eff(wc, s));
     }
@@ -479,7 +482,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::imag_c7eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->lepton_flavour, _imp->cp_conjugate);
 
         return imag(_imp->c7eff(wc, s));
     }
@@ -1542,6 +1545,8 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         // Mean life time
         UsedParameter tau;
 
+        std::string lepton_flavour;
+
         bool cp_conjugate;
 
         bool ccbar_resonance;
@@ -1563,6 +1568,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
             lambda_pseudo(p["B->Pll::Lambda_pseudo@LowRecoil"], u),
             sl_phase_pseudo(p["B->Pll::sl_phase_pseudo@LowRecoil"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
+            lepton_flavour(o.get("l", "mu")),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
@@ -1577,6 +1583,11 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
 
             u.uses(*form_factors);
             u.uses(*model);
+        }
+
+        WilsonCoefficients<BToS> wilson_coefficients() const
+        {
+            return model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
         }
 
         // We use the PS mass except for kappa
@@ -1739,7 +1750,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
 
         double unnormalized_decay_width(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
 
             return 2.0 * (a_l(wc, s) + c_l(wc, s) / 3.0);
         }
@@ -1751,14 +1762,14 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
 
         double differential_flat_term_numerator(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
 
             return 2.0 * (a_l(wc, s) + c_l(wc, s));
         }
 
         double differential_forward_backward_asymmetry_numerator(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
 
             return b_l(wc, s);
         }
@@ -1776,7 +1787,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     double
     BToKDilepton<LowRecoil>::real_c9eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->wilson_coefficients();
 
         return real(_imp->c9eff(wc, s));
     }
@@ -1784,7 +1795,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     double
     BToKDilepton<LowRecoil>::imag_c9eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->wilson_coefficients();
 
         return imag(_imp->c9eff(wc, s));
     }
@@ -1792,7 +1803,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     double
     BToKDilepton<LowRecoil>::real_c7eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->wilson_coefficients();
 
         return real(_imp->c7eff(wc, s));
     }
@@ -1800,7 +1811,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     double
     BToKDilepton<LowRecoil>::imag_c7eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->wilson_coefficients();
 
         return imag(_imp->c7eff(wc, s));
     }
@@ -1808,43 +1819,43 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     std::complex<double>
     BToKDilepton<LowRecoil>::F_A(const double & s) const
     {
-        return _imp->F_A(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_A(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LowRecoil>::F_V(const double & s) const
     {
-        return _imp->F_V(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_V(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LowRecoil>::F_S(const double & s) const
     {
-        return _imp->F_S(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_S(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LowRecoil>::F_P(const double & s) const
     {
-        return _imp->F_P(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_P(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LowRecoil>::F_T(const double & s) const
     {
-        return _imp->F_T(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_T(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LowRecoil>::F_T5(const double & s) const
     {
-        return _imp->F_T5(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_T5(_imp->wilson_coefficients(), s);
     }
 
     double
     BToKDilepton<LowRecoil>::a_l(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->wilson_coefficients();
 
         return _imp->a_l(wc, s);
     }
@@ -1852,7 +1863,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     double
     BToKDilepton<LowRecoil>::b_l(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->wilson_coefficients();
 
         return _imp->b_l(wc, s);
     }
@@ -1860,7 +1871,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     double
     BToKDilepton<LowRecoil>::c_l(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->wilson_coefficients();
 
         return _imp->c_l(wc, s);
     }
@@ -1869,7 +1880,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     double
     BToKDilepton<LowRecoil>::two_differential_decay_width(const double & s, const double & c_theta_l) const
     {
-        auto wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->wilson_coefficients();
 
         return _imp->a_l(wc, s) + _imp->b_l(wc, s) * c_theta_l + _imp->c_l(wc, s) * c_theta_l * c_theta_l;
     }

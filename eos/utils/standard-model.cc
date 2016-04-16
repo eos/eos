@@ -539,11 +539,13 @@ namespace implementation
 }
 
     WilsonCoefficients<BToS>
-    SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const bool & /*cp_conjugate*/) const
+    SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const std::string & /*lepton_flavour*/, const bool & /*cp_conjugate*/) const
     {
         /*
          * In the SM all Wilson coefficients are real-valued -> all weak phases are zero.
          * Therefore, CP conjugation leaves the Wilson coefficients invariant.
+         *
+         * In the SM there is lepton flavour universality.
          */
 
         // Calculation according to [BMU1999], Eq. (25), p. 7

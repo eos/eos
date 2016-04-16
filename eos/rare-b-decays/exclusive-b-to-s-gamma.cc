@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -178,7 +178,7 @@ namespace eos
             complex<double> lambda_hat_u = /*0.0;//*/(model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
             if (cp_conjugate)
                 lambda_hat_u = std::conj(lambda_hat_u);
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s("mu" /*fake lepton flavour*/, cp_conjugate);
 
             // Compute the QCDF Integrals
             double invm1_perp = 3.0 * (1.0 + a_1_perp + a_2_perp); // <ubar^-1>_perp

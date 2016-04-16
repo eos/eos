@@ -46,16 +46,16 @@ class BToXsDileptonLargeRecoilTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
-                p["c1"] = -0.32300000;
-                p["c2"] = +1.00931000;
-                p["c3"] = -0.00522869;
-                p["c4"] = -0.08794730;
-                p["c5"] = +0.00037476;
-                p["c6"] = +0.00105859;
-                p["Re{c7}"] = -0.331;
-                p["c8"] = -0.181;
-                p["Re{c9}"] = +4.27;
-                p["Re{c10}"] = -4.173;
+                p["b->s::c1"] = -0.32300000;
+                p["b->s::c2"] = +1.00931000;
+                p["b->s::c3"] = -0.00522869;
+                p["b->s::c4"] = -0.08794730;
+                p["b->s::c5"] = +0.00037476;
+                p["b->s::c6"] = +0.00105859;
+                p["b->s::Re{c7}"] = -0.331;
+                p["b->s::c8"] = -0.181;
+                p["b->smumu::Re{c9}"] = +4.27;
+                p["b->smumu::Re{c10}"] = -4.173;
 
                 // quark masses
                 p["mass::b(MSbar)"] = 4.2;
@@ -91,19 +91,19 @@ class BToXsDileptonLargeRecoilTest :
             // Benchmark Point (C_7,9,10 = 0, C_7',9',10' = C_7,9,10^SM)
             {
                 Parameters p = Parameters::Defaults();
-                p["c1"] = -0.32300000;
-                p["c2"] = +1.00931000;
-                p["c3"] = -0.00522869;
-                p["c4"] = -0.08794730;
-                p["c5"] = +0.00037476;
-                p["c6"] = +0.00105859;
-                p["Re{c7}"]  = 0.0;
-                p["Re{c7'}"] = -0.331;
-                p["c8"] = -0.181;
-                p["Re{c9}"]  = 0.0;
-                p["Re{c9'}"] = +4.27;
-                p["Re{c10}"]  = 0.0;
-                p["Re{c10'}"] = -4.173;
+                p["b->s::c1"] = -0.32300000;
+                p["b->s::c2"] = +1.00931000;
+                p["b->s::c3"] = -0.00522869;
+                p["b->s::c4"] = -0.08794730;
+                p["b->s::c5"] = +0.00037476;
+                p["b->s::c6"] = +0.00105859;
+                p["b->s::Re{c7}"]  = 0.0;
+                p["b->s::Re{c7'}"] = -0.331;
+                p["b->s::c8"] = -0.181;
+                p["b->smumu::Re{c9}"]  = 0.0;
+                p["b->smumu::Re{c9'}"] = +4.27;
+                p["b->smumu::Re{c10}"]  = 0.0;
+                p["b->smumu::Re{c10'}"] = -4.173;
 
                 // quark masses
                 p["mass::b(MSbar)"] = 4.2;
@@ -150,12 +150,12 @@ class BToXsDileptonLargeRecoilPolynomialTest :
         void run_one(const ObservablePtr & o, const WilsonPolynomial & p, const std::array<double, 6> & values) const
         {
             Parameters parameters = o->parameters();
-            Parameter re_c7(parameters["Re{c7}"]);
-            Parameter im_c7(parameters["Im{c7}"]);
-            Parameter re_c9(parameters["Re{c9}"]);
-            Parameter im_c9(parameters["Im{c9}"]);
-            Parameter re_c10(parameters["Re{c10}"]);
-            Parameter im_c10(parameters["Im{c10}"]);
+            Parameter re_c7(parameters["b->s::Re{c7}"]);
+            Parameter im_c7(parameters["b->s::Im{c7}"]);
+            Parameter re_c9(parameters["b->smumu::Re{c9}"]);
+            Parameter im_c9(parameters["b->smumu::Im{c9}"]);
+            Parameter re_c10(parameters["b->smumu::Re{c10}"]);
+            Parameter im_c10(parameters["b->smumu::Im{c10}"]);
 
             re_c7 = values[0];
             im_c7 = values[1];
@@ -199,7 +199,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
                 ObservablePtr observable = Observable::make(*n, parameters, kinematics, Options());
                 TEST_CHECK(ObservablePtr() != observable);
 
-                WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "Re{c7}", "Im{c7}", "Re{c9}", "Im{c9}", "Re{c10}", "Im{c10}" });
+                WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
 
                 for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
                 {

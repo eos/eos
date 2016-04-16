@@ -108,7 +108,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.29063621, real(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+1.01029623, real(wc.c2()),  eps);
@@ -146,13 +146,18 @@ class WilsonCoefficientsBToSTest :
                 p["mass::Z"] = 91.1876;
                 p["mass::t(pole)"] = 173.3;
                 p["mu"] = mu;
-                p["Re{c7'}"] = 0.008;
-                p["Im{c7'}"] = M_PI;
-                p["c8'"] = 0.012;
-                p["Re{c9'}"] = 0.006;
-                p["Im{c9'}"] = 0.0;
-                p["Re{c10'}"] = 0.005;
-                p["Im{c10'}"] = -M_PI;
+                p["b->s::Re{c7'}"] = 0.008;
+                p["b->s::Im{c7'}"] = M_PI;
+                p["b->s::c8'"] = 0.012;
+                p["b->see::Re{c9}"] = 3.27;
+                p["b->see::Re{c9'}"] = 0.007;
+                p["b->see::Im{c9'}"] = 0.01;
+                p["b->see::Re{c10'}"] = 0.006;
+                p["b->see::Im{c10'}"] = -M_PI+0.01;
+                p["b->smumu::Re{c9'}"] = 0.006;
+                p["b->smumu::Im{c9'}"] = 0.0;
+                p["b->smumu::Re{c10'}"] = 0.005;
+                p["b->smumu::Im{c10'}"] = -M_PI;
 
                 Options o;
                 o.set("scan-mode", "cartesian");
@@ -161,7 +166,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.29063621, real(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+1.01029623, real(wc.c2()),  eps);
@@ -191,6 +196,13 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_NEARLY_EQUAL(+M_PI,       imag(wc.c7prime()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c9prime()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-M_PI,       imag(wc.c10prime()), eps);
+
+                wc = model.wilson_coefficients_b_to_s("e", false);
+                TEST_CHECK_NEARLY_EQUAL(+3.27,       real(wc.c9()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.007,      real(wc.c9prime()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.006,      real(wc.c10prime()), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.01,       imag(wc.c9prime()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-M_PI+0.01,  imag(wc.c10prime()), eps);
             }
         }
 } wilson_coefficients_b_to_s_test;
@@ -214,15 +226,15 @@ class ConstrainedWilsonScanModelTest:
                 Options o;
                 ConstrainedWilsonScanModel model(p, o);
 
-                p["Re{c7}"] = 1.008;
-                p["Re{cS}"] = 42;
-                p["Re{cP}"] = 100;
-                p["Im{cS'}"] = -12;
-                p["Im{cP'}"] = -135;
-                p["Re{cT}"] = 2.0;
-                p["Re{cT5}"] = -43.0;
+                p["b->s::Re{c7}"] = 1.008;
+                p["b->smumu::Re{cS}"] = 42;
+                p["b->smumu::Re{cP}"] = 100;
+                p["b->smumu::Im{cS'}"] = -12;
+                p["b->smumu::Im{cP'}"] = -135;
+                p["b->smumu::Re{cT}"] = 2.0;
+                p["b->smumu::Re{cT5}"] = -43.0;
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
 
                 TEST_CHECK_RELATIVE_ERROR(std::real(wc.c7()),  1.008, eps);
 
@@ -241,18 +253,18 @@ class ConstrainedWilsonScanModelTest:
                 TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT5()),    0.0,  eps);
 
                 /* Used parameters registered */
-                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Re{cS}"].id()) != std::end(model));
-                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Im{cS}"].id()) != std::end(model));
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["b->smumu::Re{cS}"].id()) != std::end(model));
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["b->smumu::Im{cS}"].id()) != std::end(model));
 
                 std::list<Parameter::Id> unused_ids = {
-                        p["Re{cP}"].id(),
-                        p["Im{cP}"].id(),
-                        p["Re{cP'}"].id(),
-                        p["Im{cP'}"].id(),
-                        p["Re{cT}"].id(),
-                        p["Im{cT}"].id(),
-                        p["Re{cT5}"].id(),
-                        p["Im{cT5}"].id(),
+                        p["b->smumu::Re{cP}"].id(),
+                        p["b->smumu::Im{cP}"].id(),
+                        p["b->smumu::Re{cP'}"].id(),
+                        p["b->smumu::Im{cP'}"].id(),
+                        p["b->smumu::Re{cT}"].id(),
+                        p["b->smumu::Im{cT}"].id(),
+                        p["b->smumu::Re{cT5}"].id(),
+                        p["b->smumu::Im{cT5}"].id(),
                 };
                 for (auto & id : model)
                 {
@@ -266,19 +278,19 @@ class ConstrainedWilsonScanModelTest:
                 Options o;
                 ConstrainedWilsonScanModel model(p, o);
 
-                p["Re{c7}"] = 1.008;
-                p["Re{cS}"] = 42;
-                p["Im{cS}"] = 0.5;
-                p["Re{cS'}"] = 3.2;
-                p["Im{cS'}"] = 1.2;
-                p["Re{cP}"] = 100;
-                p["Im{cP'}"] = 35;
-                p["Re{cT}"] = 2.0;
-                p["Im{cT}"] = 9.0;
-                p["Re{cT5}"] = -43.0;
-                p["Im{cT5}"] = M_PI;
+                p["b->s::Re{c7}"] = 1.008;
+                p["b->smumu::Re{cS}"] = 42;
+                p["b->smumu::Im{cS}"] = 0.5;
+                p["b->smumu::Re{cS'}"] = 3.2;
+                p["b->smumu::Im{cS'}"] = 1.2;
+                p["b->smumu::Re{cP}"] = 100;
+                p["b->smumu::Im{cP'}"] = 35;
+                p["b->smumu::Re{cT}"] = 2.0;
+                p["b->smumu::Im{cT}"] = 9.0;
+                p["b->smumu::Re{cT5}"] = -43.0;
+                p["b->smumu::Im{cT5}"] = M_PI;
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
 
                 TEST_CHECK_RELATIVE_ERROR(real(wc.c7()),      1.008, eps);
 
@@ -301,18 +313,18 @@ class ConstrainedWilsonScanModelTest:
                 TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT5()),  0.0,   eps);
 
                 /* Used parameters registered */
-                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Re{cS}"].id()) != std::end(model));
-                TEST_CHECK(std::find(std::begin(model), std::end(model), p["Re{cS}"].id()) != std::end(model));
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["b->smumu::Re{cS}"].id()) != std::end(model));
+                TEST_CHECK(std::find(std::begin(model), std::end(model), p["b->smumu::Re{cS}"].id()) != std::end(model));
 
                 std::list<Parameter::Id> unused_ids = {
-                    p["Re{cP}"].id(),
-                    p["Im{cP}"].id(),
-                    p["Re{cP'}"].id(),
-                    p["Im{cP'}"].id(),
-                    p["Re{cT}"].id(),
-                    p["Im{cT}"].id(),
-                    p["Re{cT5}"].id(),
-                    p["Im{cT5}"].id(),
+                    p["b->smumu::Re{cP}"].id(),
+                    p["b->smumu::Im{cP}"].id(),
+                    p["b->smumu::Re{cP'}"].id(),
+                    p["b->smumu::Im{cP'}"].id(),
+                    p["b->smumu::Re{cT}"].id(),
+                    p["b->smumu::Im{cT}"].id(),
+                    p["b->smumu::Re{cT5}"].id(),
+                    p["b->smumu::Im{cT5}"].id(),
                 };
                 for (auto & id : model)
                 {
@@ -326,17 +338,17 @@ class ConstrainedWilsonScanModelTest:
                 Options o;
                 o.set("scan-mode", "cartesian");
 
-                p["Re{c7}"] = 1.008;
-                p["Re{cS}"] = 42;   p["Re{cP}"] = -1.0 * p["Re{cS}"]();
-                p["Im{cS'}"] = -12; p["Im{cP'}"] = p["Im{cS'}"]();
-                p["Re{cT}"] = 0.0;  p["Im{cT}"] = 0.0;
-                p["Re{cT5}"] = 0.0; p["Im{cT5}"] = 0.0;
+                p["b->s::Re{c7}"] = 1.008;
+                p["b->smumu::Re{cS}"] = 42;   p["b->smumu::Re{cP}"] = -1.0 * p["b->smumu::Re{cS}"]();
+                p["b->smumu::Im{cS'}"] = -12; p["b->smumu::Im{cP'}"] = p["b->smumu::Im{cS'}"]();
+                p["b->smumu::Re{cT}"] = 0.0;  p["b->smumu::Im{cT}"] = 0.0;
+                p["b->smumu::Re{cT5}"] = 0.0; p["b->smumu::Im{cT5}"] = 0.0;
 
                 ConstrainedWilsonScanModel constrained_model(p, o);
                 WilsonScanModel unconstrained_model(p, o);
 
-                WilsonCoefficients<BToS> constrained_wc = constrained_model.wilson_coefficients_b_to_s(false);
-                WilsonCoefficients<BToS> unconstrained_wc = constrained_model.wilson_coefficients_b_to_s(false);
+                WilsonCoefficients<BToS> constrained_wc = constrained_model.wilson_coefficients_b_to_s("mu", false);
+                WilsonCoefficients<BToS> unconstrained_wc = constrained_model.wilson_coefficients_b_to_s("mu", false);
 
                 auto ux = unconstrained_wc._sm_like_coefficients.begin();
                 for (auto & x : constrained_wc._sm_like_coefficients)

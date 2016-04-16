@@ -51,16 +51,16 @@ class BToKstarDileptonLowRecoilTest :
             {
                 Parameters p = Parameters::Defaults();
                 p["life_time::B_d"] = 1.530e-12;
-                p["c1"] = -0.32300000;
-                p["c2"] = +1.00931000;
-                p["c3"] = -0.00522869;
-                p["c4"] = -0.08794730;
-                p["c5"] = +0.00037476;
-                p["c6"] = +0.00105859;
-                p["Re{c7}"] = -0.331;
-                p["c8"] = -0.18100000;
-                p["Re{c9}"] = +4.27;
-                p["Re{c10}"] = -4.173;
+                p["b->s::c1"] = -0.32300000;
+                p["b->s::c2"] = +1.00931000;
+                p["b->s::c3"] = -0.00522869;
+                p["b->s::c4"] = -0.08794730;
+                p["b->s::c5"] = +0.00037476;
+                p["b->s::c6"] = +0.00105859;
+                p["b->s::Re{c7}"] = -0.331;
+                p["b->s::c8"] = -0.18100000;
+                p["b->smumu::Re{c9}"] = +4.27;
+                p["b->smumu::Re{c10}"] = -4.173;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;
@@ -79,6 +79,7 @@ class BToKstarDileptonLowRecoilTest :
 
                 Options oo;
                 oo.set("model", "WilsonScan");
+                oo.set("l", "mu");
                 oo.set("form-factors", "BZ2004");
 
                 BToKstarDilepton<LowRecoil> d(p, oo);
@@ -148,19 +149,19 @@ class BToKstarDileptonLowRecoilTest :
             /* Low Recoil (Benchmark Point) */
             {
                 Parameters p = Parameters::Defaults();
-                p["c1"] = -0.32300000;
-                p["c2"] = +1.00931000;
-                p["c3"] = -0.00522869;
-                p["c4"] = -0.08794730;
-                p["c5"] = +0.00037476;
-                p["c6"] = +0.00105859;
-                p["Re{c7}"] = 0.0;
-                p["Im{c7}"] = -0.3;
-                p["c8"] = -0.181;
-                p["Re{c9}"] = 0.0;
-                p["Im{c9}"] = 4.2;
-                p["Re{c10}"] = 0.0;
-                p["Im{c10}"] = -4.2;
+                p["b->s::c1"] = -0.32300000;
+                p["b->s::c2"] = +1.00931000;
+                p["b->s::c3"] = -0.00522869;
+                p["b->s::c4"] = -0.08794730;
+                p["b->s::c5"] = +0.00037476;
+                p["b->s::c6"] = +0.00105859;
+                p["b->s::Re{c7}"] = 0.0;
+                p["b->s::Im{c7}"] = -0.3;
+                p["b->s::c8"] = -0.181;
+                p["b->smumu::Re{c9}"] = 0.0;
+                p["b->smumu::Im{c9}"] = 4.2;
+                p["b->smumu::Re{c10}"] = 0.0;
+                p["b->smumu::Im{c10}"] = -4.2;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;
@@ -179,6 +180,7 @@ class BToKstarDileptonLowRecoilTest :
 
                 Options oo;
                 oo.set("model", "WilsonScan");
+                oo.set("l", "mu");
                 oo.set("form-factors", "BZ2004");
 
                 BToKstarDilepton<LowRecoil> d(p, oo);
@@ -217,16 +219,16 @@ class BToKstarDileptonLowRecoilTest :
             /* Low Recoil (Zero Point for C_7 = C_9 = C_10 = 0) */
             {
                 Parameters p = Parameters::Defaults();
-                p["c1"] = -0.32300000;
-                p["c2"] = +1.00931000;
-                p["c3"] = -0.00522869;
-                p["c4"] = -0.08794730;
-                p["c5"] = +0.00037476;
-                p["c6"] = +0.00105859;
-                p["Re{c7}"] = 0.0;
-                p["c8"] = -0.181;
-                p["Re{c9}"] = 0.0;
-                p["Re{c10}"] = 0.0;
+                p["b->s::c1"] = -0.32300000;
+                p["b->s::c2"] = +1.00931000;
+                p["b->s::c3"] = -0.00522869;
+                p["b->s::c4"] = -0.08794730;
+                p["b->s::c5"] = +0.00037476;
+                p["b->s::c6"] = +0.00105859;
+                p["b->s::Re{c7}"] = 0.0;
+                p["b->s::c8"] = -0.181;
+                p["b->smumu::Re{c9}"] = 0.0;
+                p["b->smumu::Re{c10}"] = 0.0;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;
@@ -243,6 +245,7 @@ class BToKstarDileptonLowRecoilTest :
 
                 Options oo;
                 oo.set("model", "WilsonScan");
+                oo.set("l", "mu");
                 oo.set("form-factors", "BZ2004");
 
                 BToKstarDilepton<LowRecoil> d(p, oo);
@@ -279,12 +282,12 @@ class BToKstarDileptonLowRecoilPolynomialTest :
         void run_one(const ObservablePtr & o, const WilsonPolynomial & p, const std::array<double, 6> & values) const
         {
             Parameters parameters = o->parameters();
-            Parameter abs_c7(parameters["Re{c7}"]);
-            Parameter arg_c7(parameters["Im{c7}"]);
-            Parameter abs_c9(parameters["Re{c9}"]);
-            Parameter arg_c9(parameters["Im{c9}"]);
-            Parameter abs_c10(parameters["Re{c10}"]);
-            Parameter arg_c10(parameters["Im{c10}"]);
+            Parameter abs_c7(parameters["b->s::Re{c7}"]);
+            Parameter arg_c7(parameters["b->s::Im{c7}"]);
+            Parameter abs_c9(parameters["b->smumu::Re{c9}"]);
+            Parameter arg_c9(parameters["b->smumu::Im{c9}"]);
+            Parameter abs_c10(parameters["b->smumu::Re{c10}"]);
+            Parameter arg_c10(parameters["b->smumu::Im{c10}"]);
 
             abs_c7 = values[0];
             arg_c7 = values[1];
@@ -327,12 +330,13 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 kinematics.set("s_max", 19.21);
                 Options options;
                 options.set("model", "WilsonScan");
+                options.set("l", "mu");
                 options.set("form-factors", "BZ2004");
 
                 for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
                 {
                     ObservablePtr observable = Observable::make(*n, parameters, kinematics, options);
-                    WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "Re{c7}", "Im{c7}", "Re{c9}", "Im{c9}", "Re{c10}", "Im{c10}" });
+                    WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
 
                     for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
                     {
@@ -382,7 +386,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                     A = A.central();
                 }
 
-                std::list<std::string> coefficients{"Re{c7}", "Im{c7}", "Re{c9}", "Im{c9}", "Re{c10}", "Im{c10}"};
+                std::list<std::string> coefficients{"b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}"};
 
                 // central ratio
                 {
@@ -446,9 +450,9 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
         {
             static const std::vector<std::string> variation_names
             {
-                "Re{c7}",  "Im{c7}",  "Re{c7'}",  "Im{c7'}",
-                "Re{c9}",  "Im{c9}",  "Re{c9'}",  "Im{c9'}",
-                "Re{c10}", "Im{c10}", "Re{c10'}", "Im{c10'}",
+                "b->s::Re{c7}",      "b->s::Im{c7}",      "b->s::Re{c7'}",      "b->s::Im{c7'}",
+                "b->smumu::Re{c9}",  "b->smumu::Im{c9}",  "b->smumu::Re{c9'}",  "b->smumu::Im{c9'}",
+                "b->smumu::Re{c10}", "b->smumu::Im{c10}", "b->smumu::Re{c10'}", "b->smumu::Im{c10'}",
             };
 
             Parameters p = Parameters::Defaults();
@@ -458,6 +462,7 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             p["mass::mu"] = 1e-5;
             Options o;
             o.set("model", "WilsonScan");
+            o.set("l", "mu");
             o.set("form-factors", "BZ2004");
 
             std::vector<Parameter> variations;
@@ -549,37 +554,37 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             // Christoph uses \Delta C instead of C for C9, C10
             // important to agree to alpha_s, can change values by 1%
             Parameters p = Parameters::Defaults();
-            p["c1"] = -0.3231323312;
-            p["c2"] = 1.009301831;
-            p["c3"] = -0.005233499106;
-            p["c4"] = -0.08829686414;
-            p["c5"] = 0.0003601965805;
-            p["c6"] = 0.001020749573;
-            p["Re{c7}"] = -0.3370422989 + 0.1;
-            p["Im{c7}"] = 0.2;
-            p["Re{c7'}"] = 0.3;
-            p["Im{c7'}"] = 0.4;
-            p["c8"] = -0.1827530948;
-            p["Re{c9}"] = 4.294489364 + 1;
-            p["Im{c9}"] = 0.5;
-            p["Re{c9'}"] = 2;
-            p["Im{c9'}"] = 1.5;
-            p["Re{c10}"] = -4.196294696 + 3;
-            p["Im{c10}"] = 2.5;
-            p["Re{c10'}"] = 4;
-            p["Im{c10'}"] = 3.5;
-            p["Re{cS}"] = 0.5;
-            p["Im{cS}"] = 1;
-            p["Re{cS'}"] = 0.6;
-            p["Im{cS'}"] = 1.1;
-            p["Re{cP}"] = 0.7;
-            p["Im{cP}"] = 1.2;
-            p["Re{cP'}"] = 0.8;
-            p["Im{cP'}"] = 1.3;
-            p["Re{cT}"] = 0.9;
-            p["Im{cT}"] = 1.4;
-            p["Re{cT5}"] = -1.0;
-            p["Im{cT5}"] = -1.5;
+            p["b->s::c1"] = -0.3231323312;
+            p["b->s::c2"] = 1.009301831;
+            p["b->s::c3"] = -0.005233499106;
+            p["b->s::c4"] = -0.08829686414;
+            p["b->s::c5"] = 0.0003601965805;
+            p["b->s::c6"] = 0.001020749573;
+            p["b->s::Re{c7}"] = -0.3370422989 + 0.1;
+            p["b->s::Im{c7}"] = 0.2;
+            p["b->s::Re{c7'}"] = 0.3;
+            p["b->s::Im{c7'}"] = 0.4;
+            p["b->s::c8"] = -0.1827530948;
+            p["b->smumu::Re{c9}"] = 4.294489364 + 1;
+            p["b->smumu::Im{c9}"] = 0.5;
+            p["b->smumu::Re{c9'}"] = 2;
+            p["b->smumu::Im{c9'}"] = 1.5;
+            p["b->smumu::Re{c10}"] = -4.196294696 + 3;
+            p["b->smumu::Im{c10}"] = 2.5;
+            p["b->smumu::Re{c10'}"] = 4;
+            p["b->smumu::Im{c10'}"] = 3.5;
+            p["b->smumu::Re{cS}"] = 0.5;
+            p["b->smumu::Im{cS}"] = 1;
+            p["b->smumu::Re{cS'}"] = 0.6;
+            p["b->smumu::Im{cS'}"] = 1.1;
+            p["b->smumu::Re{cP}"] = 0.7;
+            p["b->smumu::Im{cP}"] = 1.2;
+            p["b->smumu::Re{cP'}"] = 0.8;
+            p["b->smumu::Im{cP'}"] = 1.3;
+            p["b->smumu::Re{cT}"] = 0.9;
+            p["b->smumu::Im{cT}"] = 1.4;
+            p["b->smumu::Re{cT5}"] = -1.0;
+            p["b->smumu::Im{cT5}"] = -1.5;
 
             p["mass::s(2GeV)"] = 0.095;
 
@@ -714,16 +719,16 @@ class BToKDileptonLowRecoilTest :
             {
                 Parameters p = Parameters::Defaults();
                 p["life_time::B_d"] = 1.530e-12;
-                p["c1"] = -0.32300000;
-                p["c2"] = +1.00931000;
-                p["c3"] = -0.00522869;
-                p["c4"] = -0.08794730;
-                p["c5"] = +0.00037476;
-                p["c6"] = +0.00105859;
-                p["Re{c7}"] = -0.331;
-                p["c8"] = -0.181;
-                p["Re{c9}"] = 4.27;
-                p["Re{c10}"] = -4.17;
+                p["b->s::c1"] = -0.32300000;
+                p["b->s::c2"] = +1.00931000;
+                p["b->s::c3"] = -0.00522869;
+                p["b->s::c4"] = -0.08794730;
+                p["b->s::c5"] = +0.00037476;
+                p["b->s::c6"] = +0.00105859;
+                p["b->s::Re{c7}"] = -0.331;
+                p["b->s::c8"] = -0.181;
+                p["b->smumu::Re{c9}"] = 4.27;
+                p["b->smumu::Re{c10}"] = -4.17;
                 // PDG 2008 CKM parameters
                 p["CKM::A"] = 0.814;
                 p["CKM::lambda"] = 0.2257;
@@ -779,22 +784,23 @@ class BToKDileptonLowRecoilTest :
                 p["mass::K_d"] = 0.49761;
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.2;
-                p["c1"] = -0.32300000;
-                p["c2"] = +1.00931000;
-                p["c3"] = -0.00522869;
-                p["c4"] = -0.08794730;
-                p["c5"] = +0.00037476;
-                p["c6"] = +0.00105859;
-                p["Re{c7}"] = 0.0;
-                p["Im{c7}"] = -0.331;
-                p["c8"] = -0.181;
-                p["Re{c9}"] = 0.0;
-                p["Im{c9}"] = +4.27;
-                p["Re{c10}"] = 0.0;
-                p["Im{c10}"] = -4.17;
+                p["b->s::c1"] = -0.32300000;
+                p["b->s::c2"] = +1.00931000;
+                p["b->s::c3"] = -0.00522869;
+                p["b->s::c4"] = -0.08794730;
+                p["b->s::c5"] = +0.00037476;
+                p["b->s::c6"] = +0.00105859;
+                p["b->s::Re{c7}"] = 0.0;
+                p["b->s::Im{c7}"] = -0.331;
+                p["b->s::c8"] = -0.181;
+                p["b->smumu::Re{c9}"] = 0.0;
+                p["b->smumu::Im{c9}"] = +4.27;
+                p["b->smumu::Re{c10}"] = 0.0;
+                p["b->smumu::Im{c10}"] = -4.17;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
+                oo.set("l", "mu");
                 oo.set("form-factors", "BZ2004v2");
 
                 BToKDilepton<LowRecoil> d(p, oo);
@@ -826,9 +832,9 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
         {
             static const std::vector<std::string> variation_names
             {
-                "Re{c7}",  "Im{c7}",  "Re{c7'}",  "Im{c7'}",
-                "Re{c9}",  "Im{c9}",  "Re{c9'}",  "Im{c9'}",
-                "Re{c10}", "Im{c10}", "Re{c10'}", "Im{c10'}",
+                "b->s::Re{c7}",      "b->s::Im{c7}",      "b->s::Re{c7'}",      "b->s::Im{c7'}",
+                "b->smumu::Re{c9}",  "b->smumu::Im{c9}",  "b->smumu::Re{c9'}",  "b->smumu::Im{c9'}",
+                "b->smumu::Re{c10}", "b->smumu::Im{c10}", "b->smumu::Re{c10'}", "b->smumu::Im{c10'}",
             };
 
             Parameters p = Parameters::Defaults();

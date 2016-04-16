@@ -118,7 +118,7 @@ namespace eos
             SMComponent(const Parameters &, ParameterUser &);
 
             /* b->s Wilson coefficients */
-            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const bool & cp_conjugate) const;
+            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const std::string & lepton_flavour, const bool & cp_conjugate) const;
     };
 
     template <> class SMComponent<components::DeltaBU1> :

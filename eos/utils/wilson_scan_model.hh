@@ -51,39 +51,66 @@ namespace eos
             UsedParameter _c4;
             UsedParameter _c5;
             UsedParameter _c6;
-            UsedParameter _re_c7, _im_c7;
+            UsedParameter _re_c7,          _im_c7;
+            UsedParameter _re_c7prime,     _im_c7prime;
             UsedParameter _c8;
-            UsedParameter _re_c9, _im_c9;
-            UsedParameter _re_c10, _im_c10;
-            UsedParameter _re_c7prime, _im_c7prime;
             UsedParameter _c8prime;
-            UsedParameter _re_c9prime, _im_c9prime;
-            UsedParameter _re_c10prime, _im_c10prime;
-            UsedParameter _re_cS, _im_cS;
-            UsedParameter _re_cSprime, _im_cSprime;
-            UsedParameter _re_cP, _im_cP;
-            UsedParameter _re_cPprime, _im_cPprime;
-            UsedParameter _re_cT, _im_cT;
-            UsedParameter _re_cT5, _im_cT5;
+            /* b->see Wilson coefficients */
+            UsedParameter _e_re_c9,        _e_im_c9;
+            UsedParameter _e_re_c10,       _e_im_c10;
+            UsedParameter _e_re_c9prime,   _e_im_c9prime;
+            UsedParameter _e_re_c10prime,  _e_im_c10prime;
+            UsedParameter _e_re_cS,        _e_im_cS;
+            UsedParameter _e_re_cSprime,   _e_im_cSprime;
+            UsedParameter _e_re_cP,        _e_im_cP;
+            UsedParameter _e_re_cPprime,   _e_im_cPprime;
+            UsedParameter _e_re_cT,        _e_im_cT;
+            UsedParameter _e_re_cT5,       _e_im_cT5;
+            /* b->smumu Wilson coefficients */
+            UsedParameter _mu_re_c9,       _mu_im_c9;
+            UsedParameter _mu_re_c10,      _mu_im_c10;
+            UsedParameter _mu_re_c9prime,  _mu_im_c9prime;
+            UsedParameter _mu_re_c10prime, _mu_im_c10prime;
+            UsedParameter _mu_re_cS,       _mu_im_cS;
+            UsedParameter _mu_re_cSprime,  _mu_im_cSprime;
+            UsedParameter _mu_re_cP,       _mu_im_cP;
+            UsedParameter _mu_re_cPprime,  _mu_im_cPprime;
+            UsedParameter _mu_re_cT,       _mu_im_cT;
+            UsedParameter _mu_re_cT5,      _mu_im_cT5;
 
+            /* b->sgamma */
             std::function<complex<double> ()> _c7;
-            std::function<complex<double> ()> _c9;
-            std::function<complex<double> ()> _c10;
             std::function<complex<double> ()> _c7prime;
-            std::function<complex<double> ()> _c9prime;
-            std::function<complex<double> ()> _c10prime;
-            std::function<complex<double> ()> _cS;
-            std::function<complex<double> ()> _cSprime;
-            std::function<complex<double> ()> _cP;
-            std::function<complex<double> ()> _cPprime;
-            std::function<complex<double> ()> _cT;
-            std::function<complex<double> ()> _cT5;
+
+            /* b->see */
+            std::function<complex<double> ()> _e_c9;
+            std::function<complex<double> ()> _e_c10;
+            std::function<complex<double> ()> _e_c9prime;
+            std::function<complex<double> ()> _e_c10prime;
+            std::function<complex<double> ()> _e_cS;
+            std::function<complex<double> ()> _e_cSprime;
+            std::function<complex<double> ()> _e_cP;
+            std::function<complex<double> ()> _e_cPprime;
+            std::function<complex<double> ()> _e_cT;
+            std::function<complex<double> ()> _e_cT5;
+
+            /* b->smumu */
+            std::function<complex<double> ()> _mu_c9;
+            std::function<complex<double> ()> _mu_c10;
+            std::function<complex<double> ()> _mu_c9prime;
+            std::function<complex<double> ()> _mu_c10prime;
+            std::function<complex<double> ()> _mu_cS;
+            std::function<complex<double> ()> _mu_cSprime;
+            std::function<complex<double> ()> _mu_cP;
+            std::function<complex<double> ()> _mu_cPprime;
+            std::function<complex<double> ()> _mu_cT;
+            std::function<complex<double> ()> _mu_cT5;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
             /*! b->s Wilson coefficients */
-            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const bool & cp_conjugate) const;
+            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const std::string & lepton_flavour, const bool & cp_conjugate) const;
     };
 
     template <>

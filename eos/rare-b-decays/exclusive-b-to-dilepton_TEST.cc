@@ -49,8 +49,8 @@ class BToDileptonTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
-                p["Re{c10}"] = -4.150;
-                p["Re{c10'}"] = 0.000;
+                p["b->smumu::Re{c10}"] = -4.150;
+                p["b->smumu::Re{c10'}"] = 0.000;
                 // PDG 2010 CKM parameters
                 p["CKM::A"] = 0.812;
                 p["CKM::lambda"] = 0.22543;
@@ -127,18 +127,18 @@ class BToDileptonTest :
                 Parameters p = Parameters::Defaults();
 
                 // test large NP contributions
-                p["Re{c10}"] = -4.196294696 + 3;
-                p["Im{c10}"] = 2.5;
-                p["Re{c10'}"] = 4;
-                p["Im{c10'}"] = 3.5;
-                p["Re{cS}"] = 0.5;
-                p["Im{cS}"] = 1;
-                p["Re{cS'}"] = 0.6;
-                p["Im{cS'}"] = 1.1;
-                p["Re{cP}"] = 0.7;
-                p["Im{cP}"] = 1.2;
-                p["Re{cP'}"] = 0.8;
-                p["Im{cP'}"] = 1.3;
+                p["b->smumu::Re{c10}"] = -4.196294696 + 3;
+                p["b->smumu::Im{c10}"] = 2.5;
+                p["b->smumu::Re{c10'}"] = 4;
+                p["b->smumu::Im{c10'}"] = 3.5;
+                p["b->smumu::Re{cS}"] = 0.5;
+                p["b->smumu::Im{cS}"] = 1;
+                p["b->smumu::Re{cS'}"] = 0.6;
+                p["b->smumu::Im{cS'}"] = 1.1;
+                p["b->smumu::Re{cP}"] = 0.7;
+                p["b->smumu::Im{cP}"] = 1.2;
+                p["b->smumu::Re{cP'}"] = 0.8;
+                p["b->smumu::Im{cP'}"] = 1.3;
 
                 // 2013 default values
                 p["CKM::A"] = +0.827;

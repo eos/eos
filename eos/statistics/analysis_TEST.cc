@@ -66,12 +66,12 @@ class AnalysisTest :
 
 
                 // now change a parameter which is not scanned
-                TEST_CHECK(analysis.parameters()["Re{c7}"] != 2.599);
-                analysis.parameters()["Re{c7}"] = 2.599;
+                TEST_CHECK(analysis.parameters()["b->s::Re{c7}"] != 2.599);
+                analysis.parameters()["b->s::Re{c7}"] = 2.599;
                 AnalysisPtr clone3 = analysis.old_clone();
 
-                TEST_CHECK_EQUAL(double(analysis.parameters()["Re{c7}"] ),
-                                 double( clone3->parameters()["Re{c7}"] ));
+                TEST_CHECK_EQUAL(double(analysis.parameters()["b->s::Re{c7}"] ),
+                                 double( clone3->parameters()["b->s::Re{c7}"] ));
 
             }
 

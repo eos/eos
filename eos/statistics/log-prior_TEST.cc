@@ -314,7 +314,7 @@ class LogPriorTest :
             {
                 Parameters p = Parameters::Defaults();
 
-                std::string s_flat("Parameter: Re{c10}, prior type: flat, range: [-15,15]");
+                std::string s_flat("Parameter: b->smumu::Re{c10}, prior type: flat, range: [-15,15]");
                 LogPriorPtr prior_flat = LogPrior::Make(p, s_flat);
                 TEST_CHECK_EQUAL(s_flat, prior_flat->as_string());
 

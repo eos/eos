@@ -49,14 +49,14 @@ struct WilsonPolynomialTestObservable :
         n("WilsonPolynomialTestObservable"),
         p(p),
         k(k),
-        c1(p["c1"]),
-        c2(p["c2"]),
-        re_c7(p["Re{c7}"]),
-        im_c7(p["Im{c7}"]),
-        re_c9(p["Re{c9}"]),
-        im_c9(p["Im{c9}"]),
-        re_c10(p["Re{c10}"]),
-        im_c10(p["Im{c10}"])
+        c1(p["b->s::c1"]),
+        c2(p["b->s::c2"]),
+        re_c7(p["b->s::Re{c7}"]),
+        im_c7(p["b->s::Im{c7}"]),
+        re_c9(p["b->smumu::Re{c9}"]),
+        im_c9(p["b->smumu::Im{c9}"]),
+        re_c10(p["b->smumu::Re{c10}"]),
+        im_c10(p["b->smumu::Im{c10}"])
     {
     }
 
@@ -97,12 +97,12 @@ class WilsonPolynomialTest :
         void run_one(const ObservablePtr & o, const WilsonPolynomial & p, const std::array<double, 6> & values) const
         {
             Parameters parameters = o->parameters();
-            Parameter re_c7(parameters["Re{c7}"]);
-            Parameter im_c7(parameters["Im{c7}"]);
-            Parameter re_c9(parameters["Re{c9}"]);
-            Parameter im_c9(parameters["Im{c9}"]);
-            Parameter re_c10(parameters["Re{c10}"]);
-            Parameter im_c10(parameters["Im{c10}"]);
+            Parameter re_c7(parameters["b->s::Re{c7}"]);
+            Parameter im_c7(parameters["b->s::Im{c7}"]);
+            Parameter re_c9(parameters["b->smumu::Re{c9}"]);
+            Parameter im_c9(parameters["b->smumu::Im{c9}"]);
+            Parameter re_c10(parameters["b->smumu::Re{c10}"]);
+            Parameter im_c10(parameters["b->smumu::Im{c10}"]);
 
             re_c7 = values[0];
             im_c7 = values[1];
@@ -122,7 +122,7 @@ class WilsonPolynomialTest :
             Kinematics kinematics;
 
             ObservablePtr o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
-            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "Re{c7}", "Im{c7}", "Re{c9}", "Im{c9}", "Re{c10}", "Im{c10}" });
+            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
 
             WilsonPolynomialPrinter printer;
             std::cout << p.accept_returning<std::string>(printer) << std::endl;
@@ -161,7 +161,7 @@ class WilsonPolynomialClonerTest :
             Kinematics kinematics;
 
             ObservablePtr o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
-            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "Re{c7}", "Re{c9}", "Re{c10}" });
+            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "b->s::Re{c7}", "b->smumu::Re{c9}", "b->smumu::Re{c10}" });
 
             Parameters clone_parameters = Parameters::Defaults();
             WilsonPolynomialCloner cloner(clone_parameters);
@@ -173,10 +173,10 @@ class WilsonPolynomialClonerTest :
             WilsonPolynomialEvaluator evaluator;
             TEST_CHECK_EQUAL(p.accept_returning<double>(evaluator), c.accept_returning<double>(evaluator));
 
-            parameters["Re{c10}"] = 10;
+            parameters["b->smumu::Re{c10}"] = 10;
             TEST_CHECK(p.accept_returning<double>(evaluator) != c.accept_returning<double>(evaluator));
 
-            clone_parameters["Re{c10}"] = 10;
+            clone_parameters["b->smumu::Re{c10}"] = 10;
             TEST_CHECK_EQUAL(p.accept_returning<double>(evaluator), c.accept_returning<double>(evaluator));
         }
 } wilson_polynomial_cloner_test;

@@ -116,6 +116,8 @@ namespace eos
 
         char q;
 
+        std::string lepton_flavour;
+
         bool cp_conjugate;
 
         std::string ff_relation;
@@ -152,6 +154,7 @@ namespace eos
             uncertainty_xi_par(p["formfactors::xi_par_uncertainty"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
             e_q(-1.0/3.0),
+            lepton_flavour(o.get("l", "mu")),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             if (0.0 == m_l())
@@ -230,6 +233,11 @@ namespace eos
             std::cout << "calT_parallel   = " << dff.calT_parallel << std::endl;
             throw std::string("foo");
 #endif
+        }
+
+        WilsonCoefficients<BToS> wilson_coefficients() const
+        {
+            return model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
         }
 
         struct DipoleFormFactors
@@ -713,7 +721,7 @@ namespace eos
         {
             Amplitudes result;
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = wilson_coefficients();
 
             const double
                 shat = s_hat(s),
@@ -807,7 +815,7 @@ namespace eos
         {
             Amplitudes result;
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = wilson_coefficients();
 
             const double
                 shat = s_hat(s),
@@ -1002,7 +1010,7 @@ namespace eos
             static const double max_result = 7.0;
 
             // use calT_perp / xi_perp = C_7 as start point
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = wilson_coefficients();
             const double start = -2.0 * model->m_b_msbar(mu()) * m_B() * real(wc.c7() / wc.c9());
 
             double result = start;
@@ -2042,6 +2050,8 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         // spectator quark flavor
         char q;
 
+        std::string lepton_flavour;
+
         bool cp_conjugate;
 
         std::shared_ptr<FormFactors<PToP>> form_factors;
@@ -2068,6 +2078,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
             lambda_psd(p["B->Pll::Lambda_pseudo@LargeRecoil"], u),
             sl_phase_psd(p["B->Pll::sl_phase_pseudo@LargeRecoil"], u),
             e_q(-1.0/3.0),
+            lepton_flavour(o.get("l", "mu")),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "KMPW2010"), p);
@@ -2095,6 +2106,11 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
                 throw InternalError("Unsupported spectator quark");
         }
 
+        WilsonCoefficients<BToS> wilson_coefficients() const
+        {
+            return model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+        }
+
         complex<double> calT(const double & s) const
         {
             // charges of down- and up-type quarks
@@ -2118,7 +2134,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
             complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
             if (cp_conjugate)
                 lambda_hat_u = std::conj(lambda_hat_u);
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = wilson_coefficients();
 
             // Compute the QCDF Integrals
             double invm1_psd = 3.0 * (1.0 + a_1 + a_2); // <ubar^-1>
@@ -2373,7 +2389,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         // cf. [BHP2007], Eq. (4.8)
         double unnormalized_decay_width(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = wilson_coefficients();
 
             return 2.0 * (a_l(wc, s) + c_l(wc, s) / 3.0);
         }
@@ -2386,14 +2402,14 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         // cf. [BHP2007], Eq. (4.9)
         double differential_flat_term_numerator(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = wilson_coefficients();
 
             return 2.0 * (a_l(wc, s) + c_l(wc, s));
         }
 
         double differential_forward_backward_asymmetry_numerator(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(cp_conjugate);
+            WilsonCoefficients<BToS> wc = wilson_coefficients();
 
             return b_l(wc, s);
         }
@@ -2411,61 +2427,61 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     std::complex<double>
     BToKDilepton<LargeRecoil>::F_A(const double & s) const
     {
-        return _imp->F_A(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_A(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LargeRecoil>::F_V(const double & s) const
     {
-        return _imp->F_V(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_V(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LargeRecoil>::F_S(const double & s) const
     {
-        return _imp->F_S(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_S(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LargeRecoil>::F_P(const double & s) const
     {
-        return _imp->F_P(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_P(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LargeRecoil>::F_T(const double & s) const
     {
-        return _imp->F_T(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_T(_imp->wilson_coefficients(), s);
     }
 
     std::complex<double>
     BToKDilepton<LargeRecoil>::F_T5(const double & s) const
     {
-        return _imp->F_T5(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->F_T5(_imp->wilson_coefficients(), s);
     }
 
     double
     BToKDilepton<LargeRecoil>::a_l(const double & s) const
     {
-        return _imp->a_l(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->a_l(_imp->wilson_coefficients(), s);
     }
 
     double
     BToKDilepton<LargeRecoil>::b_l(const double & s) const
     {
-        return _imp->b_l(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->b_l(_imp->wilson_coefficients(), s);
     }
 
     double
     BToKDilepton<LargeRecoil>::c_l(const double & s) const
     {
-        return _imp->c_l(_imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate), s);
+        return _imp->c_l(_imp->wilson_coefficients(), s);
     }
 
     double
     BToKDilepton<LargeRecoil>::two_differential_decay_width(const double & s, const double & c_theta_l) const
     {
-        auto wc = _imp->model->wilson_coefficients_b_to_s(_imp->cp_conjugate);
+        auto wc = _imp->wilson_coefficients();
 
         // cf. [BHP2007], Eq. (4.1)
         return _imp->a_l(wc, s) + _imp->b_l(wc, s) * c_theta_l + _imp->c_l(wc, s) * c_theta_l * c_theta_l;
@@ -2495,12 +2511,14 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         double br_electrons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
             br_electrons = BToKDilepton<LargeRecoil>::differential_branching_ratio(s);
         }
 
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
             br_muons = BToKDilepton<LargeRecoil>::differential_branching_ratio(s);
         }
 
@@ -2632,12 +2650,14 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         double br_electrons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
             br_electrons = integrate(integrand, 64, s_min, s_max);
         }
 
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
             br_muons = integrate(integrand, 64, s_min, s_max);
         }
 

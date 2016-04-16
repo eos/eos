@@ -53,15 +53,15 @@ class BToKstarGammaTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
-                p["c1"] = -0.32300000;
-                p["c2"] = +1.00931000;
-                p["c3"] = -0.00522869;
-                p["c4"] = -0.08794730;
-                p["c5"] = +0.00037476;
-                p["c6"] = +0.00105859;
-                p["Re{c7}"] = -0.331;
-                p["Re{c7'}"] = -0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
-                p["c8"] = -0.181;
+                p["b->s::c1"] = -0.32300000;
+                p["b->s::c2"] = +1.00931000;
+                p["b->s::c3"] = -0.00522869;
+                p["b->s::c4"] = -0.08794730;
+                p["b->s::c5"] = +0.00037476;
+                p["b->s::c6"] = +0.00105859;
+                p["b->s::Re{c7}"] = -0.331;
+                p["b->s::Re{c7'}"] = -0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
+                p["b->s::c8"] = -0.181;
                 // PDG 2010 CKM parameters
                 p["CKM::A"] = 0.812;
                 p["CKM::lambda"] = 0.22543;
@@ -88,17 +88,17 @@ class BToKstarGammaTest :
             // Benchmark Point (CPV)
             {
                 Parameters p = Parameters::Defaults();
-                p["c1"] = -0.32300000;
-                p["c2"] = +1.00931000;
-                p["c3"] = -0.00522869;
-                p["c4"] = -0.08794730;
-                p["c5"] = +0.00037476;
-                p["c6"] = +0.00105859;
-                p["Re{c7}"] = 0.0;
-                p["Im{c7}"] = -0.331;
-                p["Re{c7'}"] = 0.0;
-                p["Im{c7'}"] = -0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
-                p["c8"] = -0.181;
+                p["b->s::c1"] = -0.32300000;
+                p["b->s::c2"] = +1.00931000;
+                p["b->s::c3"] = -0.00522869;
+                p["b->s::c4"] = -0.08794730;
+                p["b->s::c5"] = +0.00037476;
+                p["b->s::c6"] = +0.00105859;
+                p["b->s::Re{c7}"] = 0.0;
+                p["b->s::Im{c7}"] = -0.331;
+                p["b->s::Re{c7'}"] = 0.0;
+                p["b->s::Im{c7'}"] = -0.00659; // m_s(m_b) / m_b(m_b) * Abs{c7} = 85 / 4200 * Abs{c7}
+                p["b->s::c8"] = -0.181;
                 // PDG 2010 CKM parameters
                 p["CKM::A"] = 0.812;
                 p["CKM::lambda"] = 0.22543;
@@ -136,7 +136,7 @@ class BToKstarGammaBobethCompatibilityTest :
         {
             static const std::vector<std::string> variation_names
             {
-                "Re{c7}",  "Im{c7}",  "Re{c7'}",  "Im{c7'}",
+                "b->s::Re{c7}",  "b->s::Im{c7}",  "b->s::Re{c7'}",  "b->s::Im{c7'}",
             };
 
             Parameters p = Parameters::Defaults();

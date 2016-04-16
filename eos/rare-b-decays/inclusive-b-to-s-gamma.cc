@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -83,7 +83,7 @@ namespace eos
             double kappa = 1.0 - 2.0/3.0 * model->alpha_s(model->m_b_pole()) / M_PI * (1.5 + (M_PI * M_PI - 31.0 / 4.0) * pow(1.0 - m_c_hat, 2));
 
             double ckm = norm(model->ckm_tb() * conj(model->ckm_ts()) / model->ckm_cb());
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s("mu" /* fake lepton flavour */);
             complex<double> c7np = wc.c7() - c7sm;
 
             double result = (sm + sm_delta * uncertainty)
@@ -427,7 +427,7 @@ namespace eos
             double m_b_pole = 4.8;
             double lnmu = std::log(m_b_pole / mu);
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s("mu" /* fake lepton flavour */);
 
             // Perturbative contributions
             complex<double> D = perturbative_bsgamma(z, wc, alpha_s, lnmu);
@@ -481,7 +481,7 @@ namespace eos
             // Strong coupling
             double alpha_s = model->alpha_s(mu()), a_s = alpha_s / (4.0 * pi);
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s("mu" /* fake lepton flavour */);
 
             // Perturbative contributions
             complex<double> D = perturbative_bsgamma(z, wc, alpha_s, lnmu);

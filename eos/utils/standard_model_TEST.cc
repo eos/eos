@@ -351,7 +351,7 @@ class WilsonCoefficientsBToSTest :
                 parameters["mu"] = mu;
                 TEST_CHECK_NEARLY_EQUAL(+0.2209967815, model.alpha_s(mu), eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
                 TEST_CHECK_RELATIVE_ERROR(-0.279801085, real(wc.c1()),  eps);
                 TEST_CHECK_RELATIVE_ERROR(+1.009683640, real(wc.c2()),  eps);
                 TEST_CHECK_RELATIVE_ERROR(-0.005775920, real(wc.c3()),  eps);
@@ -385,7 +385,7 @@ class WilsonCoefficientsBToSTest :
                 parameters["mu"] = mu;
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
                 TEST_CHECK_RELATIVE_ERROR(-0.28768333, real(wc.c1()),  eps);
                 TEST_CHECK_RELATIVE_ERROR(+1.01013250, real(wc.c2()),  eps);
                 TEST_CHECK_RELATIVE_ERROR(-0.00600697, real(wc.c3()),  eps);
@@ -420,21 +420,21 @@ class WilsonCoefficientsBToSTest :
                 parameters["mu"] = mu;
                 TEST_CHECK_NEARLY_EQUAL(+0.2263282172, model.alpha_s(mu), eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(false);
-                TEST_CHECK_RELATIVE_ERROR(parameters["c1"],       real(wc.c1()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["c2"],       real(wc.c2()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["c3"],       real(wc.c3()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["c4"],       real(wc.c4()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["c5"],       real(wc.c5()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["c6"],       real(wc.c6()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["Re{c7}"],   real(wc.c7()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["c8"],       real(wc.c8()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["Re{c9}"],   real(wc.c9()),  eps);
-                TEST_CHECK_RELATIVE_ERROR(parameters["Re{c10}"],  real(wc.c10()), eps);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c1"],           real(wc.c1()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c2"],           real(wc.c2()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c3"],           real(wc.c3()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c4"],           real(wc.c4()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c5"],           real(wc.c5()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c6"],           real(wc.c6()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->s::Re{c7}"],       real(wc.c7()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->s::c8"],           real(wc.c8()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->smumu::Re{c9}"],   real(wc.c9()),  eps);
+                TEST_CHECK_RELATIVE_ERROR(parameters["b->smumu::Re{c10}"],  real(wc.c10()), eps);
 
-                TEST_CHECK_NEARLY_EQUAL(parameters["Im{c7}"],   imag(wc.c7()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Im{c9}"],   imag(wc.c9()),  eps);
-                TEST_CHECK_NEARLY_EQUAL(parameters["Im{c10}"],  imag(wc.c10()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["b->s::Im{c7}"],         imag(wc.c7()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["b->smumu::Im{c9}"],     imag(wc.c9()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(parameters["b->smumu::Im{c10}"],    imag(wc.c10()), eps);
             }
         }
 } wilson_coefficients_b_to_s_test;

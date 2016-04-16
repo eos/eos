@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2015 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
  *
@@ -97,7 +97,7 @@ namespace eos
 
         xi_t calc_amplitudes() const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s("mu");
 
             double factor = power_of<2>(m_B()) / 2.0 / m_l / (m_b + m_q);
             complex<double> S = std::sqrt(1.0 - 4.0 * power_of<2>(m_l / m_B)) * factor * (wc.cS() - wc.cSprime());
@@ -123,7 +123,7 @@ namespace eos
             double lambda_t = abs(lambda(model.get()));
             double beta_l = std::sqrt(1.0 - 4.0 * power_of<2>(m_l / m_B()));
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s("mu");
 
             return power_of<2>(g_fermi() * alpha_e() * lambda_t * f_B()) / 64.0 / power_of<3>(M_PI) * tau_B / hbar
                 * beta_l * power_of<3>(m_B()) * (
