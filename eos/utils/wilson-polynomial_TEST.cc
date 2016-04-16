@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -38,12 +38,12 @@ struct WilsonPolynomialTestObservable :
     Kinematics k;
     Parameter c1;
     Parameter c2;
-    Parameter abs_c7;
-    Parameter arg_c7;
-    Parameter abs_c9;
-    Parameter arg_c9;
-    Parameter abs_c10;
-    Parameter arg_c10;
+    Parameter re_c7;
+    Parameter im_c7;
+    Parameter re_c9;
+    Parameter im_c9;
+    Parameter re_c10;
+    Parameter im_c10;
 
     WilsonPolynomialTestObservable(const Parameters & p, const Kinematics & k, const Options &) :
         n("WilsonPolynomialTestObservable"),
@@ -51,12 +51,12 @@ struct WilsonPolynomialTestObservable :
         k(k),
         c1(p["c1"]),
         c2(p["c2"]),
-        abs_c7(p["Abs{c7}"]),
-        arg_c7(p["Arg{c7}"]),
-        abs_c9(p["Abs{c9}"]),
-        arg_c9(p["Arg{c9}"]),
-        abs_c10(p["Abs{c10}"]),
-        arg_c10(p["Arg{c10}"])
+        re_c7(p["Re{c7}"]),
+        im_c7(p["Im{c7}"]),
+        re_c9(p["Re{c9}"]),
+        im_c9(p["Im{c9}"]),
+        re_c10(p["Re{c10}"]),
+        im_c10(p["Im{c10}"])
     {
     }
 
@@ -69,9 +69,9 @@ struct WilsonPolynomialTestObservable :
 
     virtual double evaluate() const
     {
-        complex<double> c7 = abs_c7() * complex<double>(std::cos(arg_c7()), std::sin(arg_c7));
-        complex<double> c9 = abs_c9() * complex<double>(std::cos(arg_c9()), std::sin(arg_c9));
-        complex<double> c10 = abs_c10() * complex<double>(std::cos(arg_c10()), std::sin(arg_c10));
+        complex<double> c7(re_c7(), im_c7());
+        complex<double> c9(re_c9(), im_c9());
+        complex<double> c10(re_c10(), im_c10());
 
         return real(
                     0.01234
@@ -97,19 +97,19 @@ class WilsonPolynomialTest :
         void run_one(const ObservablePtr & o, const WilsonPolynomial & p, const std::array<double, 6> & values) const
         {
             Parameters parameters = o->parameters();
-            Parameter abs_c7(parameters["Abs{c7}"]);
-            Parameter arg_c7(parameters["Arg{c7}"]);
-            Parameter abs_c9(parameters["Abs{c9}"]);
-            Parameter arg_c9(parameters["Arg{c9}"]);
-            Parameter abs_c10(parameters["Abs{c10}"]);
-            Parameter arg_c10(parameters["Arg{c10}"]);
+            Parameter re_c7(parameters["Re{c7}"]);
+            Parameter im_c7(parameters["Im{c7}"]);
+            Parameter re_c9(parameters["Re{c9}"]);
+            Parameter im_c9(parameters["Im{c9}"]);
+            Parameter re_c10(parameters["Re{c10}"]);
+            Parameter im_c10(parameters["Im{c10}"]);
 
-            abs_c7 = values[0];
-            arg_c7 = values[1];
-            abs_c9 = values[2];
-            arg_c9 = values[3];
-            abs_c10 = values[4];
-            arg_c10 = values[5];
+            re_c7 = values[0];
+            im_c7 = values[1];
+            re_c9 = values[2];
+            im_c9 = values[3];
+            re_c10 = values[4];
+            im_c10 = values[5];
 
             static const double eps = 1e-10;
             WilsonPolynomialEvaluator evaluator;
@@ -122,7 +122,7 @@ class WilsonPolynomialTest :
             Kinematics kinematics;
 
             ObservablePtr o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
-            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "c7", "c9", "c10" });
+            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "Re{c7}", "Im{c7}", "Re{c9}", "Im{c9}", "Re{c10}", "Im{c10}" });
 
             WilsonPolynomialPrinter printer;
             std::cout << p.accept_returning<std::string>(printer) << std::endl;
@@ -161,7 +161,7 @@ class WilsonPolynomialClonerTest :
             Kinematics kinematics;
 
             ObservablePtr o = ObservablePtr(new WilsonPolynomialTestObservable(parameters, kinematics, Options()));
-            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "c7", "c9", "c10" });
+            WilsonPolynomial p = make_polynomial(o, std::list<std::string>{ "Re{c7}", "Re{c9}", "Re{c10}" });
 
             Parameters clone_parameters = Parameters::Defaults();
             WilsonPolynomialCloner cloner(clone_parameters);
@@ -173,10 +173,10 @@ class WilsonPolynomialClonerTest :
             WilsonPolynomialEvaluator evaluator;
             TEST_CHECK_EQUAL(p.accept_returning<double>(evaluator), c.accept_returning<double>(evaluator));
 
-            parameters["Abs{c10}"] = 10;
+            parameters["Re{c10}"] = 10;
             TEST_CHECK(p.accept_returning<double>(evaluator) != c.accept_returning<double>(evaluator));
 
-            clone_parameters["Abs{c10}"] = 10;
+            clone_parameters["Re{c10}"] = 10;
             TEST_CHECK_EQUAL(p.accept_returning<double>(evaluator), c.accept_returning<double>(evaluator));
         }
 } wilson_polynomial_cloner_test;

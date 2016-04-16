@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -98,27 +98,24 @@ namespace eos
     {
         Sum result;
 
-        std::list<std::tuple<Parameter, Parameter, double, double, double>> coefficients; // <r, phi, q_i, c_i, s_i>
+        std::list<std::tuple<Parameter, double, double>> coefficients; // <p_i, q_i, l_i>
         for (auto i = _coefficients.cbegin(), i_end = _coefficients.cend() ; i != i_end ; ++i)
         {
-            Parameter modulus = o->parameters()["Abs{" + *i + "}"];
-            Parameter phase = o->parameters()["Arg{" + *i + "}"];
-
-            coefficients.push_back(std::make_tuple(modulus, phase, 0.0, 0.0, 0.0));
+            coefficients.push_back(std::make_tuple(o->parameters()[*i], 0.0, 0.0));
         }
 
         /*
          * Wilson-Polynomials have the form
          *
          *   p = n
-         *     + \sum_i q_i Abs{C_i}^2 + c_i Abs{C_i} Cos[Arg{C_i}] + s_i Abs{C_i} Sin[Arg{C_i}]
-         *     + \sum_{i, j > i} Abs{C_i} Abs{C_j} (bl_{ij} + c_{ij} Cos[Arg{C_i} - Arg{C_j}] + s_{ij} Sin[Arg{C_i} - Arg{C_j}])
+         *     + \sum_i q_i P_i^2 + l_i P_i
+         *     + \sum_{i, j > i} c_ij P_i P_j
          */
 
         // Set all parameters to zero
         for (auto i = coefficients.begin(), i_end = coefficients.end() ; i != i_end ; ++i)
         {
-            std::get<0>(*i) = 0.0; std::get<1>(*i) = 0.0;
+            std::get<0>(*i) = 0.0;
         }
 
         // Determine the constant part 'n'
@@ -128,41 +125,34 @@ namespace eos
         // Determine the true quadratic terms 'q_i' and linear terms 'l_i'
         for (auto i = coefficients.begin(), i_end = coefficients.end() ; i != i_end ; ++i)
         {
-            Parameter r_i = std::get<0>(*i), phi_i = std::get<1>(*i);
+            Parameter p_i = std::get<0>(*i);
 
-            r_i = r_i.central();
+
             // calculate observables
-            phi_i = 0.0;
-            double pzero = o->evaluate();
-            phi_i = M_PI;
-            double ppluspi = o->evaluate();
-            phi_i = +M_PI / 2.0;
-            double ppluspihalf = o->evaluate();
-            phi_i = -M_PI / 2.0;
-            double pminuspihalf = o->evaluate();
+            p_i = +1.0;
+            double o_plus_one = o->evaluate();
 
-            double q_i = 0.5 * ((ppluspi + pzero) - 2.0 * n) / r_i() / r_i();
-            result.add(Product(Constant(q_i), Product(r_i, r_i)));
-            std::get<2>(*i) = q_i;
+            p_i = -1.0;
+            double o_minus_one = o->evaluate();
 
-            double c_i = 0.5 * ((pzero - ppluspi)) / r_i();
-            result.add(Product(Constant(c_i), Product(r_i, Cosine(phi_i))));
-            std::get<3>(*i) = c_i;
+            double q_i = 0.5 * ((o_plus_one + o_minus_one) - 2.0 * n);
+            result.add(Product(Constant(q_i), Product(p_i, p_i)));
+            std::get<1>(*i) = q_i;
 
-            double s_i = 0.5 * (ppluspihalf - pminuspihalf) / r_i();
-            result.add(Product(Constant(s_i), Product(r_i, Sine(phi_i))));
-            std::get<4>(*i) = s_i;
+            double l_i = 0.5 * (o_plus_one - o_minus_one);
+            result.add(Product(Constant(l_i), p_i));
+            std::get<2>(*i) = l_i;
 
-            // reset parameters
-            r_i = 0.0; phi_i = 0.0;
+            // reset parameter to zero
+            p_i = 0.0;
         }
 
-        // Determine the bilinear terms 'bl_{ij}', 'c_{ij}' and 's_{ij}'
+        // Determine the bilinear terms 'b_{ij}'
         for (auto i = coefficients.begin(), i_end = coefficients.end() ; i != i_end ; ++i)
         {
-            Parameter r_i = std::get<0>(*i), phi_i = std::get<1>(*i);
-            r_i = r_i.central(); phi_i = 0.0;
-            double q_i = std::get<2>(*i), c_i = std::get<3>(*i);
+            Parameter p_i = std::get<0>(*i);
+            double q_i = std::get<1>(*i), l_i = std::get<2>(*i);
+            p_i = 1.0;
 
             auto j = i;
             if (j != i_end)
@@ -170,43 +160,27 @@ namespace eos
 
             for ( ; j != i_end; ++j)
             {
-                Parameter r_j = std::get<0>(*j), phi_j = std::get<1>(*j);
-                r_j = r_j.central();
-                double q_j = std::get<2>(*j), c_j = std::get<3>(*j), s_j = std::get<4>(*j);
+                Parameter p_j = std::get<0>(*j);
+                double q_j = std::get<1>(*j), l_j = std::get<2>(*j);
+                p_j = 1.0;
 
-                // calculate observables
-                phi_j = +M_PI;
-                double ppluspi = o->evaluate();
-                phi_j = 0.0;
-                double pzero = o->evaluate();
-                phi_j = +M_PI / 2.0;
-                double ppluspihalf = o->evaluate();
-                phi_j = -M_PI / 2.0;
-                double pminuspihalf = o->evaluate();
+                // extract bilinear term
+                double b_ij = o->evaluate() - n - q_i - l_i - q_j - l_j;
 
-                // extract bilinear terms
-                double c_ij = 0.5 * ((pzero - ppluspi) - 2.0 * r_j() * c_j) / r_i() / r_j();
-                double b_ij = 0.5 * ((pzero + ppluspi) - 2.0 * (n + r_i() * r_i() * q_i + r_j() * r_j() * q_j + r_i() * c_i)) / r_i() / r_j();
-                double s_ij = 0.5 * ((pminuspihalf - ppluspihalf) + 2.0 * r_j() * s_j) / r_i() / r_j();
+                result.add(Product(Constant(b_ij), Product(p_i, p_j)));
 
-                Product bilinear(r_i, r_j);
-                result.add(Product(bilinear, Constant(b_ij)));
-                result.add(Product(bilinear, Product(Constant(c_ij), Cosine(Sum(phi_i, Product(Constant(-1.0), phi_j))))));
-                result.add(Product(bilinear, Product(Constant(s_ij), Sine(Sum(phi_i, Product(Constant(-1.0), phi_j))))));
-
-                r_j = 0.0; phi_j = 0.0;
+                p_j = 0.0;
             }
 
-            r_i = 0.0; phi_i = 0.0;
+            p_i = 0.0;
         }
 
         // Reset parameters to defaults
         for (auto i = coefficients.cbegin(), i_end = coefficients.cend() ; i != i_end ; ++i)
         {
-            Parameter r_i = std::get<0>(*i), phi_i = std::get<1>(*i);
+            Parameter p_i = std::get<0>(*i);
 
-            r_i = r_i.central();
-            phi_i = phi_i.central();
+            p_i = p_i.central();
         }
 
         return result;
