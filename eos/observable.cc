@@ -812,6 +812,10 @@ namespace eos
                     &BToKstarDilepton<LargeRecoil>::differential_d_6s,
                     std::make_tuple("s")),
 
+            make_observable("B->K^*ll::R_K^*(s)@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::differential_ratio_muons_electrons,
+                    std::make_tuple("s")),
+
             make_observable("B->K^*ll::A_FB@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_forward_backward_asymmetry,
                     std::make_tuple("s_min", "s_max")),
@@ -1037,6 +1041,10 @@ namespace eos
 
             make_observable("B->K^*ll::D_6s@LargeRecoil",
                     &BToKstarDilepton<LargeRecoil>::integrated_d_6s,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->K^*ll::R_K^*@LargeRecoil",
+                    &BToKstarDilepton<LargeRecoil>::integrated_ratio_muons_electrons,
                     std::make_tuple("s_min", "s_max")),
 
             // B -> K^* ll, Low Recoil

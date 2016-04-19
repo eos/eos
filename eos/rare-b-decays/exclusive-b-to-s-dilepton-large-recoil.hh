@@ -109,6 +109,7 @@ namespace eos
             double differential_d_4(const double & s) const;
             double differential_d_5(const double & s) const;
             double differential_d_6s(const double & s) const;
+            double differential_ratio_muons_electrons(const double & s) const;
 
             // Integrated Observables
             double integrated_decay_width(const double & s_min, const double & s_max) const;
@@ -161,6 +162,7 @@ namespace eos
             double integrated_d_4(const double & s_min, const double & s_max) const;
             double integrated_d_5(const double & s_min, const double & s_max) const;
             double integrated_d_6s(const double & s_min, const double & s_max) const;
+            double integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.

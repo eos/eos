@@ -1551,6 +1551,28 @@ namespace eos
     }
 
     double
+    BToKstarDilepton<LargeRecoil>::differential_ratio_muons_electrons(const double & s) const
+    {
+        double gamma_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
+
+            gamma_electrons = differential_decay_width(s);
+        }
+
+        double gamma_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
+
+            gamma_muons = differential_decay_width(s);
+        }
+
+        return gamma_muons / gamma_electrons;
+    }
+
+    double
     BToKstarDilepton<LargeRecoil>::integrated_decay_width(const double & s_min, const double & s_max) const
     {
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(s_min, s_max);
@@ -2057,6 +2079,29 @@ namespace eos
         }
 
         return (J6s_electrons - J6s_muons) * _imp->tau() / _imp->hbar();
+    }
+
+    double
+    BToKstarDilepton<LargeRecoil>::integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKstarDilepton<LargeRecoil>::differential_branching_ratio),
+                this, std::placeholders::_1);
+
+        double br_electrons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
+            br_electrons = integrate(integrand, 64, s_min, s_max);
+        }
+
+        double br_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
+            br_muons = integrate(integrand, 64, s_min, s_max);
+        }
+
+        return br_muons / br_electrons;
     }
 
     double
