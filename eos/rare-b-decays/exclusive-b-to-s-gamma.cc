@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -53,9 +53,9 @@ namespace eos
 
         UsedParameter a_2_par;
 
-        UsedParameter uncertainty_perp_left;
+        UsedParameter uncertainty_para;
 
-        UsedParameter uncertainty_perp_right;
+        UsedParameter uncertainty_perp;
 
         UsedParameter f_B;
 
@@ -92,8 +92,8 @@ namespace eos
             a_2_perp(p["B->K^*::a_2_perp"], u),
             a_1_par(p["B->K^*::a_1_par"], u),
             a_2_par(p["B->K^*::a_2_par"], u),
-            uncertainty_perp_left(p["B->K^*ll::" + std::string(destringify<bool>(o.get("simple-sl")) ? "sl" : "A_perp^L") + "_uncertainty@LargeRecoil"], u),
-            uncertainty_perp_right(p["B->K^*ll::" + std::string(destringify<bool>(o.get("simple-sl")) ? "sl" : "A_perp^R") + "_uncertainty@LargeRecoil"], u),
+            uncertainty_para(p["B->K^*ll::A_para_uncertainty@LargeRecoil"], u),
+            uncertainty_perp(p["B->K^*ll::A_perp_uncertainty@LargeRecoil"], u),
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], u),
             f_Kstar_par(p["B->K^*::f_Kstar_par"], u),
@@ -289,12 +289,28 @@ namespace eos
 
             // cf. [BFS2001], Eq. (15), and [BHP2008], Eq. (C.4)
             Amplitudes result;
-            result.left  = uncertainty_perp_left()  * complex<double>(0.0, +1.0) * (xi_perp_zero * C_perp_left
-                + power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_left
-                + Delta_T_perp);
-            result.right = uncertainty_perp_right() * complex<double>(0.0, -1.0) * (xi_perp_zero * C_perp_right
-                + power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_right
-                + Delta_T_perp);
+            result.left  = complex<double>(0.0, +1.0) * (
+                    xi_perp_zero * C_perp_left
+                    + (uncertainty_perp() + uncertainty_para()) / 2.0 * (
+                        power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_left
+                        + Delta_T_perp
+                    )
+                    + (uncertainty_perp() - uncertainty_para()) / 2.0 * (
+                        power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_right
+                        + Delta_T_perp
+                    )
+                    );
+            result.right = complex<double>(0.0, -1.0) * (
+                    xi_perp_zero * C_perp_right
+                    + (uncertainty_perp() - uncertainty_para()) / 2.0 * (
+                        power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_left
+                        + Delta_T_perp
+                    )
+                    + (uncertainty_perp() + uncertainty_para()) / 2.0 * (
+                        power_of<2>(M_PI) / 3.0 * (f_B * f_Kstar_perp) / m_B * T_perp_right
+                        + Delta_T_perp
+                    )
+                    );
 
             return result;
         }

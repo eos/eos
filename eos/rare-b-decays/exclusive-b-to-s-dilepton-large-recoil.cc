@@ -96,17 +96,11 @@ namespace eos
 
         UsedParameter a_2_perp;
 
-        UsedParameter uncertainty_par_left;
+        UsedParameter uncertainty_para;
 
-        UsedParameter uncertainty_par_right;
+        UsedParameter uncertainty_perp;
 
-        UsedParameter uncertainty_perp_left;
-
-        UsedParameter uncertainty_perp_right;
-
-        UsedParameter uncertainty_long_left;
-
-        UsedParameter uncertainty_long_right;
+        UsedParameter uncertainty_long;
 
         UsedParameter uncertainty_xi_perp;
 
@@ -147,12 +141,9 @@ namespace eos
             a_2_par(p["B->K^*::a_2_par"], u),
             a_1_perp(p["B->K^*::a_1_perp"], u),
             a_2_perp(p["B->K^*::a_2_perp"], u),
-            uncertainty_par_left(p["B->K^*ll::" + std::string(destringify<bool>(o.get("simple-sl")) ? "sl" : "A_par^L") + "_uncertainty@LargeRecoil"], u),
-            uncertainty_par_right(p["B->K^*ll::" + std::string(destringify<bool>(o.get("simple-sl")) ? "sl" : "A_par^R") + "_uncertainty@LargeRecoil"], u),
-            uncertainty_perp_left(p["B->K^*ll::" + std::string(destringify<bool>(o.get("simple-sl")) ? "sl" : "A_perp^L") + "_uncertainty@LargeRecoil"], u),
-            uncertainty_perp_right(p["B->K^*ll::" + std::string(destringify<bool>(o.get("simple-sl")) ? "sl" : "A_perp^R") + "_uncertainty@LargeRecoil"], u),
-            uncertainty_long_left(p["B->K^*ll::" + std::string(destringify<bool>(o.get("simple-sl")) ? "sl" : "A_0^L") + "_uncertainty@LargeRecoil"], u),
-            uncertainty_long_right(p["B->K^*ll::" + std::string(destringify<bool>(o.get("simple-sl")) ? "sl" : "A_0^R") + "_uncertainty@LargeRecoil"], u),
+            uncertainty_para(p["B->K^*ll::A_para_uncertainty@LargeRecoil"], u),
+            uncertainty_perp(p["B->K^*ll::A_perp_uncertainty@LargeRecoil"], u),
+            uncertainty_long(p["B->K^*ll::A_long_uncertainty@LargeRecoil"], u),
             uncertainty_xi_perp(p["formfactors::xi_perp_uncertainty"], u),
             uncertainty_xi_par(p["formfactors::xi_par_uncertainty"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
@@ -755,25 +746,25 @@ namespace eos
                         - lam(s) / m2_diff * dff.calT_parallel
                     );
 
-            result.a_long_right = uncertainty_long_right * prefactor_long * (wilson_minus_right * a + b);
-            result.a_long_left  = uncertainty_long_left  * prefactor_long * (wilson_minus_left  * a + b);
+            result.a_long_right = prefactor_long * (wilson_minus_right * a + uncertainty_long() * b);
+            result.a_long_left  = prefactor_long * (wilson_minus_left  * a + uncertainty_long() * b);
 
             // perpendicular amplitude
             const double prefactor_perp = +std::sqrt(2.0) * norm_s * m_B() * std::sqrt(lambda(1.0, mKhat2, shat));
 
-            result.a_perp_right = uncertainty_perp_right * prefactor_perp * (wilson_plus_right * xi_perp(s) + (2.0 * mbhat / shat) * dff.calT_perp_right);
-            result.a_perp_left  = uncertainty_perp_left  * prefactor_perp * (wilson_plus_left  * xi_perp(s) + (2.0 * mbhat / shat) * dff.calT_perp_right);
+            result.a_perp_right = prefactor_perp * (wilson_plus_right * xi_perp(s) + uncertainty_perp() * (2.0 * mbhat / shat) * dff.calT_perp_right);
+            result.a_perp_left  = prefactor_perp * (wilson_plus_left  * xi_perp(s) + uncertainty_perp() * (2.0 * mbhat / shat) * dff.calT_perp_right);
 
             // parallel amplitude
             const double prefactor_par = -std::sqrt(2.0) * norm_s * m2_diff;
 
-            result.a_par_right = uncertainty_par_right * prefactor_par * (
+            result.a_par_right = prefactor_par * (
                                     wilson_minus_right * xi_perp(s) * 2.0 * energy(s) / m2_diff
-                                    + 4.0 * m_b_PS() * energy(s) / s / m_B() * dff.calT_perp_left
+                                    + uncertainty_para() * 4.0 * m_b_PS() * energy(s) / s / m_B() * dff.calT_perp_left
                                  );
-            result.a_par_left  = uncertainty_par_left  * prefactor_par * (
+            result.a_par_left  = prefactor_par * (
                                     wilson_minus_left  * xi_perp(s) * 2.0 * energy(s) / m2_diff
-                                    + 4.0 * m_b_PS() * energy(s) / s / m_B() * dff.calT_perp_left
+                                    + uncertainty_para() * 4.0 * m_b_PS() * energy(s) / s / m_B() * dff.calT_perp_left
                                  );
 
             // timelike amplitude
@@ -889,20 +880,20 @@ namespace eos
                 a = (m2_diff - s) * m_sum * ff_A1 - lam(s) / m_sum * ff_A2,
                 b = (m_B2 + 3.0 * m_K2 - s) * ff_T2 - lam(s) / m2_diff * ff_T3;
 
-            result.a_long_right = uncertainty_long_right * pre_long * (c910_mi_r * a + c7_mi * b);
-            result.a_long_left  = uncertainty_long_left  * pre_long * (c910_mi_l * a + c7_mi * b);
+            result.a_long_right = pre_long * (c910_mi_r * a + c7_mi * b);
+            result.a_long_left  = pre_long * (c910_mi_l * a + c7_mi * b);
 
             // perpendicular amplitude
             const double pre_perp = +std::sqrt(2.0) * norm_s* m_B2 * std::sqrt(lambda(1.0, mKhat2, shat));
 
-            result.a_perp_right = uncertainty_perp_right * pre_perp * (c910_pl_r * ff_V / m_sum + c7_pl / s * ff_T1);
-            result.a_perp_left  = uncertainty_perp_left  * pre_perp * (c910_pl_l * ff_V / m_sum + c7_pl / s * ff_T1);
+            result.a_perp_right = pre_perp * (c910_pl_r * ff_V / m_sum + c7_pl / s * ff_T1);
+            result.a_perp_left  = pre_perp * (c910_pl_l * ff_V / m_sum + c7_pl / s * ff_T1);
 
             // parallel amplitude
             const double pre_par = -std::sqrt(2.0) * norm_s * m2_diff;
 
-            result.a_par_right = uncertainty_par_right * pre_par * (c910_mi_r * ff_A1 / m_diff + c7_mi / s * ff_T2);
-            result.a_par_left  = uncertainty_par_left  * pre_par * (c910_mi_l * ff_A1 / m_diff + c7_mi / s * ff_T2);
+            result.a_par_right = pre_par * (c910_mi_r * ff_A1 / m_diff + c7_mi / s * ff_T2);
+            result.a_par_left  = pre_par * (c910_mi_l * ff_A1 / m_diff + c7_mi / s * ff_T2);
 
             // timelike amplitude
             result.a_timelike = norm_s * sqrt_lam / sqrt_s
@@ -962,14 +953,14 @@ namespace eos
                 pre_p = std::sqrt(2.0) * norm_s * 2.0 * m_b_MSbar / s * (m_B2 - s),
                 pre_0 = norm_s / m_Kstar() / m_B2 / sqrt_s * m_b_MSbar * power_of<2>(m_B2 - s);
 
-            result.a_long_right += uncertainty_long_right * pre_0 * dff.calT_parallel;
-            result.a_long_left  += uncertainty_long_left  * pre_0 * dff.calT_parallel;
+            result.a_long_right += uncertainty_long() * pre_0 * dff.calT_parallel;
+            result.a_long_left  += uncertainty_long() * pre_0 * dff.calT_parallel;
 
-            result.a_perp_right += uncertainty_perp_right * pre_p * dff.calT_perp_right;
-            result.a_perp_left  += uncertainty_perp_left  * pre_p * dff.calT_perp_right;
+            result.a_perp_right += uncertainty_perp() * pre_p * dff.calT_perp_right;
+            result.a_perp_left  += uncertainty_perp() * pre_p * dff.calT_perp_right;
 
-            result.a_par_right  -= uncertainty_par_right  * pre_p * dff.calT_perp_left;
-            result.a_par_left   -= uncertainty_par_left   * pre_p * dff.calT_perp_left;
+            result.a_par_right  -= uncertainty_para() * pre_p * dff.calT_perp_left;
+            result.a_par_left   -= uncertainty_para() * pre_p * dff.calT_perp_left;
 
             return result;
         }
