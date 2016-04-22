@@ -124,6 +124,46 @@ class MCMCDataFile:
         return data
 
 
+class UncertaintyDataFile:
+    def __init__(self, file):
+        # open the input file for reading
+        self.file = h5py.File(file, 'r')
+
+        # check that the input file has format=PMC
+        if 'format' not in self.file.attrs:
+            warn('input file does not have attribute \'format\'; assuming format \'UNC\'')
+        elif 'UNC' != self.file.attrs['format']:
+            raise FileFormatError('UNC', self.file.attrs['format'])
+
+        # extract parameter descriptions of the n-tuples
+        self.parameters = []
+        if '/descriptions/parameters' in self.file:
+            for obsname in self.file['/descriptions/observables']:
+                desc = self.file['/descriptions/observables/%s' % obsname]
+                name = desc.attrs.get("name")
+                self.parameters.append([name, sys.float_info.min, sys.float_info.max, False, "flat"])
+        else:
+            error('input file has no valid parameter descriptions: is it corrupted?')
+
+    def __del__(self):
+        self.file.close()
+
+    """Retrieve data"""
+    def data(self):
+        if '/data/observables' not in self.file:
+            error('input file does not contain stored observables' % step)
+
+        dataset = self.file['/data/observables']
+        data = numpy.array(dataset[:])
+
+        # adjust min,max range for each parameter based on data
+        for i in range(0, len(self.parameters)):
+            self.parameters[i][1] = numpy.min(data[:, i])
+            self.parameters[i][2] = numpy.max(data[:, i])
+
+        return data
+
+
 class Plotter1D:
     def __init__(self, datafile, pdffile):
         self.datafile = datafile

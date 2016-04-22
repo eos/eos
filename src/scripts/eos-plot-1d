@@ -39,6 +39,8 @@ def main():
         datafile = MCMCDataFile(args.input)
     elif basename.startswith('pmc_monolithic'):
         datafile = PMCDataFile(args.input)
+    elif basename.startswith('unc'):
+        datafile = UncertaintyDataFile(args.input)
 
     # forward options
     argvars = vars(args)
