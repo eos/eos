@@ -2941,7 +2941,7 @@ namespace eos
          * but they could also be generated from the parametrization
          * given in the ancillary file http://arxiv.org/src/1503.05534v1/anc/BKstar_LCSR.json.
          */
-        static const MultivariateGaussianConstraintTemplate<16> B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015
+        static const MultivariateGaussianConstraintTemplate<16> B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_data
         {
             {{ "B->K^*::A_0(s)", "B->K^*::A_0(s)", "B->K^*::A_0(s)", "B->K^*::A_0(s)",
                "B->K^*::A_1(s)", "B->K^*::A_1(s)", "B->K^*::A_1(s)", "B->K^*::A_1(s)",
@@ -2992,6 +2992,70 @@ namespace eos
             0u,
         };
 
+        /*
+         * B -> K* LCSR form factors from [BSZ2015]
+         *
+         * Central values, uncertainties and correlation matrix as extracted
+         * from  the ancillary file http://arxiv.org/src/1503.05534v1/anc/BKstar_LCSR.json.
+         */
+        static const MultivariateGaussianConstraintTemplate<11> B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_parameters
+        {
+            {{
+                "B->K^*::alpha^A0_0@BSZ2015",  "B->K^*::alpha^A0_1@BSZ2015",  "B->K^*::alpha^A0_2@BSZ2015",
+                "B->K^*::alpha^A1_0@BSZ2015",  "B->K^*::alpha^A1_1@BSZ2015",  "B->K^*::alpha^A1_2@BSZ2015",
+                                               "B->K^*::alpha^A12_1@BSZ2015", "B->K^*::alpha^A12_2@BSZ2015",
+                "B->K^*::alpha^V_0@BSZ2015",   "B->K^*::alpha^V_1@BSZ2015",   "B->K^*::alpha^V_2@BSZ2015"
+            }},
+            {{ Kinematics{{ }}, Kinematics{{ }}, Kinematics{{ }},
+               Kinematics{{ }}, Kinematics{{ }}, Kinematics{{ }},
+               /* A12_0 */      Kinematics{{ }}, Kinematics{{ }},
+               Kinematics{{ }}, Kinematics{{ }}, Kinematics{{ }}
+            }},
+            {{
+               Options{}, Options{}, Options{},
+               Options{}, Options{}, Options{},
+               /*A12_0*/  Options{}, Options{},
+               Options{}, Options{}, Options{}
+            }},
+            {{
+                0.390635, -1.15441,  2.08102,
+                0.289097,  0.30781,  0.722586,
+                           0.571374, 0.138278,
+                0.365642, -1.08352,  2.46546
+            }},
+            {{
+                0.0352359, 0.283839, 1.50063,
+                0.0269348, 0.187527, 0.490349,
+                           0.217861, 0.862416,
+                0.0352129, 0.244872, 1.34565
+            }},
+            {{
+                0.0352359, 0.283839, 1.50063,
+                0.0269348, 0.187527, 0.490349,
+                           0.217861, 0.862416,
+                0.0352129, 0.244872, 1.34565
+            }},
+            {{
+                 0.0, 0.0, 0.0,
+                 0.0, 0.0, 0.0,
+                      0.0, 0.0,
+                 0.0, 0.0, 0.0,
+            }}, // we assign no systematic uncertainty
+            {{
+                {{1., 0.674673, -0.106172, 0.0147479, -0.0612755, -0.0715162, 0.700976, 0.302245, 0.0217612, -0.0652358, 0.00867737}},
+                {{0.674673, 1., 0.406627, 0.0436674, 0.0511913, -0.0843655, 0.935807, 0.663921, -0.0082598, 0.125468, -0.00317353}},
+                {{-0.106172, 0.406627, 1., 0.0221235, 0.098639, 0.0590552, 0.210894, 0.318309, -0.0158255, 0.105468, 0.00383135}},
+                {{0.0147479, 0.0436674, 0.0221235, 1., 0.511167, 0.082522, -0.000347802, -0.0240162, 0.804396, 0.471391, -0.111794}},
+                {{-0.0612755, 0.0511913, 0.098639, 0.511167, 1., 0.77434, 0.0103574, -0.0450572, 0.53296, 0.842091, 0.109062}},
+                {{-0.0715162, -0.0843655, 0.0590552, 0.082522, 0.77434, 1., -0.100931, -0.0903183, 0.17295, 0.56259, 0.204426}},
+                {{0.700976, 0.935807, 0.210894, -0.000347802, 0.0103574, -0.100931, 1., 0.774061, -0.0488149, 0.133226, 0.0329523}},
+                {{0.302245, 0.663921, 0.318309, -0.0240162, -0.0450572, -0.0903183, 0.774061, 1., -0.0860257, 0.0957555, 0.0892485}},
+                {{0.0217612, -0.0082598, -0.0158255, 0.804396, 0.53296, 0.17295, -0.0488149, -0.0860257, 1., 0.521976, -0.176688}},
+                {{-0.0652358, 0.125468, 0.105468, 0.471391, 0.842091, 0.56259, 0.133226, 0.0957555, 0.521976, 1., 0.396602}},
+                {{0.00867737, -0.00317353, 0.00383135, -0.111794, 0.109062, 0.204426, 0.0329523, 0.0892485, -0.176688, 0.396602, 1.}}
+            }},
+            0u,
+        };
         /*
          * B -> K* lattice form factors from [HLMW2015]
          *
@@ -4015,7 +4079,7 @@ namespace eos
             { "Lambda_b->Lambda::f_long^V@BFvD2014", make_factory(templates::LambdaB_to_Lambda_flongV_13dot5_to_20dot3_BFvD2014) },
             { "Lambda_b->Lambda::f_long^A@BFvD2014", make_factory(templates::LambdaB_to_Lambda_flongA_13dot5_to_20dot3_BFvD2014) },
 
-            { "B->K^*::V+A_0+A_1+A_2@BSZ2015", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015) },
+            { "B->K^*::V+A_0+A_1+A_2@BSZ2015", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_parameters) },
 
             { "B->K^*::V+A_0+A_1+A_12@HLMW2015", make_factory(templates::B_to_Kstar_V_A0_A1_A12_11dot9_to_17dot8_HLMW_2015) },
 
