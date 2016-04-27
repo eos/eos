@@ -278,8 +278,12 @@ namespace eos
                             &BToDLeptonNeutrino::integrated_branching_ratio,
                             std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->Dlnu::R_D(s)",
+                            &BToDLeptonNeutrino::differential_r_d,
+                            std::make_tuple("s")),
+
             make_observable("B->Dlnu::R_D",
-                            &BToDLeptonNeutrino::r_d),
+                            &BToDLeptonNeutrino::integrated_r_d),
 
             // B_s -> K^* l nubar
             make_observable("B_s->K^*lnu::F_perp(s)",

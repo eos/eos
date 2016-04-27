@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015 Danny van Dyk
+ * Copyright (c) 2015, 2016 Danny van Dyk
  * Copyright (c) 2015 Marzia Bordone
  *
  * This file is part of the EOS project. EOS is free software;
@@ -127,7 +127,25 @@ namespace eos
     }
 
     double
-    BToDLeptonNeutrino::r_d() const
+    BToDLeptonNeutrino::differential_r_d(const double & s) const
+    {
+        double br_muons;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, 0 /*_imp->parameters["mass::mu"]()*/);
+            br_muons = _imp->differential_branching_ratio(s);
+        }
+
+        double br_taus;
+        {
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
+            br_taus = _imp->differential_branching_ratio(s);
+        }
+
+        return br_taus / br_muons;
+    }
+
+    double
+    BToDLeptonNeutrino::integrated_r_d() const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::differential_branching_ratio,
                 _imp.get(), std::placeholders::_1);
@@ -145,6 +163,5 @@ namespace eos
         }
 
         return br_taus / br_muons;
-
     }
 }
