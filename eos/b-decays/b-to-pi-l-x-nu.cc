@@ -91,7 +91,7 @@ namespace eos
             return 3.0 / 4.0 * fp * fp * lam * sqrt(lam) * (1.0 - c_theta_mu * c_theta_mu) / Gamma_1;
         }
 
-        // normalized to N_3 = |V_vb|^2 G_F^2 / (384 pi^3 MB^3)
+        // normalized to N_3 = |V_ub|^2 G_F^2 / (384 pi^3 MB^3)
         //                   * tau_tau / hbar * G_F^2 m_tau^5 / (192 pi^3)
         double differential_decay_width_3nu(const double & s) const
         {
@@ -102,7 +102,7 @@ namespace eos
             double sqrtv = sqrt(1.0 - m_tau() * m_tau() / s);
             double v = sqrtv * sqrtv, v2 = v * v;
 
-            return sqrt(lam) * v2 * ((3.0 - v) * fp * fp * lam + 3.0 * (1.0 - v) * f0 * f0 * power_of<2>(m_B() * m_B() - m_pi() * m_pi()));
+            return sqrt(lam) * v2 * ((3.0 - v) * fp * fp * lam + 3.0 * (1.0 - v) * f0 * f0 * power_of<2>(m_B() * m_B() - m_pi() * m_pi())) * 4.0 / 3.0;
         }
 
         double normalized_differential_decay_width_3nu(const double & s, const double & snunubar,
@@ -123,31 +123,31 @@ namespace eos
 
             // constant in z
             const double a = power_of<2>((mtau2 - s) * (mtau2 - snunubar)) * sqrtlam / (mtau8 * M_PI * s3) * (
-                        -(mtau2 + 8.0 * snunubar) * (f02 * power_of<2>(mB2 - mD2) * mtau2 + fp2 * s * lam)
-                        +(mtau2 - 8.0 * snunubar) * (f02 * power_of<2>(mB2 - mD2) * mtau2 - fp2 * s * lam) * zst
+                        +(mtau2 + 2.0 * snunubar) * (f02 * power_of<2>(mB2 - mD2) * mtau2 + fp2 * s * lam)
+                        -(mtau2 - 2.0 * snunubar) * (f02 * power_of<2>(mB2 - mD2) * mtau2 - fp2 * s * lam) * zst
                     );
 
             // multiplying z
-            const double b = power_of<2>((mtau2 - s) * (mtau2 - snunubar)) * lam * 2.0 * f0 * fp * (mB2 - mD2) / (mtau6 * M_PI * s3) * (
-                        -(mtau2 + 8.0 * snunubar)
-                        +(mtau2 - 8.0 * snunubar) * zst
+            const double b = 2.0 * power_of<2>((mtau2 - s) * (mtau2 - snunubar)) * lam * f0 * fp * (mB2 - mD2) / (mtau6 * M_PI * s3) * (
+                        +(mtau2 + 2.0 * snunubar)
+                        -(mtau2 - 2.0 * snunubar) * zst
                     );
 
             // multiplying z^2
             const double c = power_of<2>((mtau2 - s) * (mtau2 - snunubar)) * lam * sqrtlam * fp2 / (mtau8 * M_PI * s3) * (
-                        -(mtau2 + 8.0 * snunubar) * (mtau2 - s)
-                        +(mtau2 - 8.0 * snunubar) * (mtau2 + s) * zst
+                        +(mtau2 + 2.0 * snunubar) * (mtau2 - s)
+                        -(mtau2 - 2.0 * snunubar) * (mtau2 + s) * zst
                     );
 
             // multiplying sqrt(1 - z^2)
-            const double d = -2.0 * mtau * power_of<2>(mtau2 - snunubar) * (mtau2 - 8.0 * snunubar) * f0 * fp * (mB2 - mD2) * lam / (mtau8 * M_PI * s2)
-                * (mtau4 / sqrts + (s - 2.0 * mtau2) * sqrts) * sqrt(1.0 - zst * zst);
+            const double d = 2.0 * mtau * sqrts * power_of<2>((mtau2 - snunubar) * (s - mtau2)) * (mtau2 - 2.0 * snunubar) * f0 * fp * (mB2 - mD2) * lam / (mtau8 * M_PI * s3)
+                * sqrt(1.0 - zst * zst);
 
             // multiplying z sqrt(1 - z^2)
-            const double e = -2.0 * mtau * power_of<2>(mtau2 - snunubar) * (mtau2 - 8.0 * snunubar) * fp2 * sqrtlam * lam / (mtau8 * M_PI * s2)
-                * (mtau4 / sqrts + (s - 2.0 * mtau2) * sqrts) * sqrt(1.0 - zst * zst);
+            const double e = 2.0 * mtau * sqrts * power_of<2>((mtau2 - snunubar) * (s - mtau2)) * (mtau2 - 2.0 * snunubar) * fp2 * sqrtlam * lam / (mtau8 * M_PI * s3)
+                * sqrt(1.0 - zst * zst);
 
-            return -(a + b * z + c * z2 + (d + e * z) * sqrt(1.0 - z2) * cos(phi)) / Gamma_3;
+            return (a + b * z + c * z2 + (d + e * z) * sqrt(1.0 - z2) * cos(phi)) / Gamma_3;
         }
 
     };
