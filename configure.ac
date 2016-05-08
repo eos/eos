@@ -93,6 +93,25 @@ fi
 AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$with_pmc" != "xno" -a "x$with_pmc" != x])
 dnl }}}
 
+dnl {{{ check if we should enable Python
+AC_ARG_ENABLE([python],
+	[AS_HELP_STRING([--enable-python], [enables interfacing EOS within python])],
+	[],
+	[])
+AM_CONDITIONAL([EOS_ENABLE_PYTHON], [test "x$enable_python" == "xyes"])
+dnl }}}
+dnl {{{ python checks (you can change the required python version below)
+if test "x$enable_python" == xyes ; then
+	AM_PATH_PYTHON(2.7.0)
+	PY_PREFIX=`$PYTHON -c 'import sys ; print sys.prefix'`
+	PYTHON_LIBS="-lpython$PYTHON_VERSION"
+	PYTHON_CFLAGS="-I$PY_PREFIX/include/python$PYTHON_VERSION"
+	AC_SUBST([PYTHON_LIBS])
+	AC_SUBST([PYTHON_CFLAGS])
+fi
+dnl }}}
+dnl }}}
+
 dnl {{{ check for git HEAD
 if test -d "${GIT_DIR:-${ac_top_srcdir:-./}/.git}" ; then
 	GITHEAD=`git describe 2> /dev/null`
@@ -203,7 +222,7 @@ AC_OUTPUT(
 	eos/Makefile
 	eos/form-factors/Makefile
 	eos/rare-b-decays/Makefile
-        eos/b-decays/Makefile
+	eos/b-decays/Makefile
 	eos/utils/Makefile
 	eos/statistics/Makefile
 	manual/Makefile
@@ -211,5 +230,6 @@ AC_OUTPUT(
 	src/Makefile
 	src/clients/Makefile
 	test/Makefile
+	python/Makefile
 	)
 dnl }}}

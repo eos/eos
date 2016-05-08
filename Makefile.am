@@ -4,7 +4,9 @@ MAINTAINERCLEANFILES = Makefile.in configure config/* aclocal.m4 \
 AUTOMAKE_OPTIONS = foreign dist-bzip2
 EXTRA_DIST = autogen.bash
 
-SUBDIRS = test eos src doc manual
+SUBDIRS = test eos python src doc manual
+
+
 
 doxygen:
 	$(MAKE) -C doc $@
