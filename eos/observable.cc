@@ -20,6 +20,7 @@
 
 #include <eos/observable.hh>
 #include <eos/form-factors/form-factor-adapter.hh>
+#include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
@@ -209,6 +210,22 @@ namespace eos
 
             make_observable("B_s->K^*::A_12(s)", "B_s->K^*",
                     &FormFactors<PToV>::a_12),
+
+            make_observable("B->pipi::Im{F_perp}",
+                    &AnalyticFormFactorBToPiPiBFvD2016::im_f_perp,
+                    std::make_tuple("q2", "k2", "z")),
+
+            make_observable("B->pipi::Im{F_para}",
+                    &AnalyticFormFactorBToPiPiBFvD2016::im_f_para,
+                    std::make_tuple("q2", "k2", "z")),
+
+            make_observable("B->pipi::Im{F_long}",
+                    &AnalyticFormFactorBToPiPiBFvD2016::im_f_long,
+                    std::make_tuple("q2", "k2", "z")),
+
+            make_observable("B->pipi::Im{F_time}",
+                    &AnalyticFormFactorBToPiPiBFvD2016::im_f_time,
+                    std::make_tuple("q2", "k2", "z")),
 
             // Lambda_b -> Lambda Form Factors
             make_observable("Lambda_b->Lambda::f_time^V(s)", "Lambda_b->Lambda",

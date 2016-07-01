@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2010, 2011 Christian Wacker
  *
@@ -20,6 +20,7 @@
  */
 
 #include <eos/form-factors/analytic-b-to-pi.hh>
+#include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/utils/destringify.hh>
 
@@ -345,4 +346,51 @@ namespace eos
 
         return result;
     }
+
+    /* P -> PP Processes */
+
+    FormFactors<PToPP>::~FormFactors()
+    {
+    }
+
+    std::shared_ptr<FormFactors<PToPP>>
+    FormFactorFactory<PToPP>::create(const std::string & label, const Parameters & parameters, const Options & options)
+    {
+        std::shared_ptr<FormFactors<PToPP>> result;
+
+        typedef std::tuple<std::string, std::string> KeyType;
+        typedef std::function<FormFactors<PToPP> * (const Parameters &, const Options &)> ValueType;
+        static const std::map<KeyType, ValueType> form_factors
+        {
+            // analytic computations
+            { KeyType("B->pipi",    "BFvD2016"), &AnalyticFormFactorBToPiPiBFvD2016::make   },
+            { KeyType("B->pipi",    "BFvD2016"), &AnalyticFormFactorBToPiPiBFvD2016::make   },
+        };
+
+        /*
+         * Labels have the form
+         *
+         *   PROCESS@NAME
+         *
+         * The brackets indicate the latter part to be optional.
+         */
+
+        std::string process, name, input(label);
+
+        std::string::size_type sep_at(input.find('@'));
+        if (std::string::npos == sep_at)
+            return result;
+
+        name = input.substr(sep_at + 1);
+        process = input.substr(0, sep_at);
+
+        auto i = form_factors.find(KeyType(process, name));
+        if (form_factors.cend() == i)
+            return result;
+
+        result = std::shared_ptr<FormFactors<PToPP>>(i->second(parameters, options));
+
+        return result;
+    }
+
 }

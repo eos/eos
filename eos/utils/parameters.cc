@@ -385,6 +385,9 @@ namespace eos
             Parameter::Template{"B->pi::s_0^B@DKMMO2008",                       +35.75,          +35.75,          +35.75          }, // GeV^2, cf. [DKMMO2008]
             Parameter::Template{"B->pi::sp_0^B@DKMMO2008",                      +35.5,           +35.6,           +36.0           }, // GeV^2, cf. [DKMMO2008]
 
+            // form factor parameters for QCDF calculation according to [BFvD2016]
+            Parameter::Template{"B->pipi::mu@BFvD2016",                           1.0,             1.5,             2.0           }, // GeV, cf. [BFvD2016]
+
             // form factor parameters for B->pi, B->K in [BCL2008] parametrization
             Parameter::Template{"B->pi::f_+(0)@BCL2008",                         +0.22,           +0.26,           +0.30          },
             Parameter::Template{"B->pi::b_+^1@BCL2008",                          +0.00,           +0.00,           +0.00          },

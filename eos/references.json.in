@@ -425,6 +425,10 @@
         "journal" : "JHEP 1501 (2015) 155",
         "eprint" : "arXiv:1410.2115 [hep-ph]"
     },
+    "BFvD2014" : {
+        "authors" : "Boeer, P. and Feldmann, Th. and van Dyk, D.",
+        "title" : "QCD Factorization Theorem for B ---> pi pi l nu Decays at Large Dipion Masses"
+    },
     "BFW2010" : {
         "authors" : "Bharucha, A. and Feldmann, Th. and Wick, M.",
         "title" : "Theoretical and Phenomenological Constraints on Form Factors and Semi-Leptonic B-Meson Decays",

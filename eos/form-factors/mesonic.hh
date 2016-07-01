@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2010 Christian Wacker
  *
@@ -23,7 +23,9 @@
 #define EOS_GUARD_SRC_FORM_FACTORS_MESONIC_HH 1
 
 #include <eos/form-factors/form-factors-fwd.hh>
+#include <eos/utils/complex.hh>
 #include <eos/utils/parameters.hh>
+#include <eos/utils/options.hh>
 
 #include <memory>
 #include <string>
@@ -41,6 +43,8 @@ namespace eos
     struct PToV { };
 
     struct PToP { };
+
+    struct PToPP { };
 
     template <>
     class FormFactors<PToV> :
@@ -89,6 +93,26 @@ namespace eos
     {
         public:
             static std::shared_ptr<FormFactors<PToP>> create(const std::string & label, const Parameters & parameters);
+    };
+
+    template <>
+    class FormFactors<PToPP> :
+        public ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const = 0;
+            virtual complex<double> f_para(const double & q2, const double & k2, const double & z) const = 0;
+            virtual complex<double> f_long(const double & q2, const double & k2, const double & z) const = 0;
+            virtual complex<double> f_time(const double & q2, const double & k2, const double & z) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<PToPP>
+    {
+        public:
+            static std::shared_ptr<FormFactors<PToPP>> create(const std::string & label, const Parameters & parameters, const Options & options);
     };
 }
 
