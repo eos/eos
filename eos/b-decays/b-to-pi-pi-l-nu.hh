@@ -49,6 +49,14 @@ namespace eos
                     const double & zmin, const double & zmax) const;
             double integrated_forward_backward_asymmetry(const double & q2min, const double & q2max,
                     const double & k2min, const double & k2max) const;
+
+            /*!
+             * Descriptions of the process and its kinematics.
+             */
+            static const std::string description;
+            static const std::string kinematics_description_q2;
+            static const std::string kinematics_description_k2;
+            static const std::string kinematics_description_z;
     };
 }
 

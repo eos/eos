@@ -20,6 +20,7 @@
 #include <eos/signal-pdf.hh>
 #include <eos/b-decays/b-to-d-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
+#include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
@@ -99,6 +100,14 @@ namespace eos
             /* Exclusive Decays */
 
             /* Exclusive B Decays */
+
+            make_signal_pdf("B->pipimunu::d^3Gamma@QCDF",
+                    &BToPiPiLeptonNeutrino::triple_differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.01, 0.93859, BToPiPiLeptonNeutrino::kinematics_description_q2 },
+                        KinematicRange{ "k2", 18.582, 27.872, BToPiPiLeptonNeutrino::kinematics_description_k2 },
+                        KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiPiLeptonNeutrino::kinematics_description_z }
+                    )),
 
             make_signal_pdf("B->Dmunu::d^2Gamma",
                     &BToDLeptonInclusiveNeutrinos::normalized_differential_decay_width_1nu,

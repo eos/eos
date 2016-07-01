@@ -251,4 +251,20 @@ namespace eos
     {
         return _imp->normalized_integrated_forward_backward_asymmetry(q2min, q2max, k2min, k2max);
     }
+
+    const std::string
+    BToPiPiLeptonNeutrino::description = "\
+The decay B->pi pi l nubar, where l=e,mu is a light lepton, see e.g. [FFKMvD2013].";
+
+    const std::string
+    BToPiPiLeptonNeutrino::kinematics_description_q2 = "\
+The invariant mass of the l-nubar pair in GeV^2.";
+
+    const std::string
+    BToPiPiLeptonNeutrino::kinematics_description_k2 = "\
+The invariant mass of the pi-pi pair in GeV^2.";
+
+    const std::string
+    BToPiPiLeptonNeutrino::kinematics_description_z = "\
+The cosine of the pion helicity angle in the pi-pi rest frame.";
 }

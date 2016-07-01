@@ -388,10 +388,11 @@ namespace eos
             // form factor parameters for QCDF calculation according to [BFvD2016]
             Parameter::Template{"B->pipi::mu@BFvD2016",                           1.0,             1.5,             2.0           }, // GeV, cf. [BFvD2016]
 
-            // form factor parameters for B->pi, B->K in [BCL2008] parametrization
-            Parameter::Template{"B->pi::f_+(0)@BCL2008",                         +0.22,           +0.26,           +0.30          },
-            Parameter::Template{"B->pi::b_+^1@BCL2008",                          +0.00,           +0.00,           +0.00          },
-            Parameter::Template{"B->pi::b_+^2@BCL2008",                          +0.00,           +0.00,           +0.00          },
+            // form factor parameters for B->pi, B->K in [BCL2008] parametrization, with
+            // f_+ taken from [IKMvD2014]
+            Parameter::Template{"B->pi::f_+(0)@BCL2008",                         +0.287,          +0.307,          +0.327         },
+            Parameter::Template{"B->pi::b_+^1@BCL2008",                          +1.73,           -1.31,           -0.89          },
+            Parameter::Template{"B->pi::b_+^2@BCL2008",                          -1.348,          -0.904,          -0.460         },
             Parameter::Template{"B->pi::b_0^1@BCL2008",                          +0.00,           +0.00,           +0.00          },
             Parameter::Template{"B->pi::b_0^2@BCL2008",                          +0.00,           +0.00,           +0.00          },
             Parameter::Template{"B->pi::f_T(0)@BCL2008",                         +0.00,           +0.00,           +0.00          },
