@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2016 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -229,6 +229,8 @@ namespace test
         auto j = reference.begin(); \
         for ( ; i != i_end ; ++i, ++j) \
         { \
+            if (std::isnan(i->value)) \
+                throw TestCaseFailedException(__LINE__, __FILE__, "Diagnostic error: " + i->description + "\n\tevaluates to NaN"); \
             if (std::abs(j->first - i->value) > j->second) \
                 throw TestCaseFailedException(__LINE__, __FILE__, "Diagnostic error: " + i->description + "\n\tevaluates to " + stringify(i->value, 7u) + "\n\tdelta to reference value " + stringify(j->first, 7u) + " is " + stringify(j->first - i->value, 7u)); \
         } \
