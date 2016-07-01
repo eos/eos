@@ -9,6 +9,7 @@ libeosbdecays_la_SOURCES = \
 	b-to-d-l-x-nu.cc b-to-d-l-x-nu.hh \
 	b-to-l-nu.cc b-to-l-nu.hh \
 	b-to-pi-l-nu.cc b-to-pi-l-nu.hh \
+	b-to-pi-pi-l-nu.cc b-to-pi-pi-l-nu.hh \
 	b-to-pi-l-x-nu.cc b-to-pi-l-x-nu.hh \
 	b-to-v-l-nu.hh \
 	bs-to-kstar-l-nu.cc bs-to-kstar-l-nu.hh \
@@ -28,6 +29,7 @@ EXTRA_DIST =
 
 TESTS = \
 	b-to-pi-l-nu_TEST \
+	b-to-pi-pi-l-nu_TEST \
 	bs-to-kstar-l-nu_TEST \
 	properties_TEST
 
@@ -40,6 +42,8 @@ LDADD = \
 
 check_PROGRAMS = $(TESTS)
 b_to_pi_l_nu_TEST_SOURCES = b-to-pi-l-nu_TEST.cc
+
+b_to_pi_pi_l_nu_TEST_SOURCES = b-to-pi-pi-l-nu_TEST.cc
 
 bs_to_kstar_l_nu_TEST_SOURCES = bs-to-kstar-l-nu_TEST.cc
 

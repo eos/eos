@@ -26,6 +26,7 @@
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-nu.hh>
+#include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-d-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/inclusive-b-to-u.hh>
@@ -285,6 +286,31 @@ namespace eos
             make_observable("B->pilnu::zeta",
                     &BToPiLeptonNeutrino::integrated_zeta,
                     std::make_tuple("s_min", "s_max")),
+
+            // B -> pi pi l nu
+            make_observable("B->pipilnu::BR(2)",
+                    &BToPiPiLeptonNeutrino::double_differential_branching_ratio,
+                    std::make_tuple("q2", "k2")),
+
+            make_observable("B->pipilnu::BR(3)",
+                    &BToPiPiLeptonNeutrino::triple_differential_branching_ratio,
+                    std::make_tuple("q2", "k2", "cos(theta_pi)")),
+
+            make_observable("B->pipilnu::A_FB(2)",
+                    &BToPiPiLeptonNeutrino::double_differential_forward_backward_asymmetry,
+                    std::make_tuple("q2", "k2")),
+
+            make_observable("B->pipilnu::P(z)",
+                    &BToPiPiLeptonNeutrino::partial_waves,
+                    std::make_tuple("q2", "k2", "cos(theta_pi)")),
+
+            make_observable("B->pipilnu::BR",
+                    &BToPiPiLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max", "z_min", "z_max")),
+
+            make_observable("B->pipilnu::A_FB",
+                    &BToPiPiLeptonNeutrino::integrated_forward_backward_asymmetry,
+                    std::make_tuple("q2_min", "q2_max", "k2_min", "k2_max")),
 
             // B -> D l nu
             make_observable("B->Dlnu::dBR/ds",
