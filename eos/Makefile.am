@@ -1,4 +1,7 @@
-CLEANFILES = *~
+CLEANFILES = \
+	*~ \
+	references.json \
+	references_TEST
 MAINTAINERCLEANFILES = Makefile.in
 
 SUBDIRS = utils statistics form-factors rare-b-decays b-decays .
@@ -26,7 +29,8 @@ include_eos_HEADERS = \
 	signal-pdf.hh
 
 TESTS = \
-	constraint_TEST
+	constraint_TEST \
+	references_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	$(top_builddir)/eos/utils/libeosutils.la \
@@ -35,6 +39,25 @@ LDADD = \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
 	$(top_builddir)/eos/libeos.la
 
-check_PROGRAMS = $(TESTS)
+check_PROGRAMS = \
+	constraint_TEST
 
 constraint_TEST_SOURCES = constraint_TEST.cc
+
+pkgdata_DATA = references.json
+EXTRA_DIST = \
+	references.json.in \
+	references_TEST.in
+
+references.json: references.json.in
+	sed \
+	    -e '/^\/\//d' \
+	    $< \
+	    > $@
+
+references_TEST: references_TEST.in
+	sed \
+	    -e "s/@TOPBUILDDIR@/$(top_builddir)/g" \
+	    $< \
+	    > $@
+	chmod a+x $@

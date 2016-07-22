@@ -229,6 +229,7 @@ AC_OUTPUT(
 	manual/figures/Makefile
 	src/Makefile
 	src/clients/Makefile
+	src/scripts/Makefile
 	test/Makefile
 	python/Makefile
 	)

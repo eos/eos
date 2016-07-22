@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+
+# Copyright (c) 2016 Danny van Dyk
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+import collections
+import json
+
+def isstring(x):
+    return isinstance(x, str) or isinstance(x, unicode)
+
+def collabify(x):
+    if not isstring(x) and isinstance(x, collections.Iterable):
+        result = "("
+        result += " collaboration, ".join(x)
+        result += " collaboration)"
+        return result
+    else:
+        return "(%s collaboration)" % x
+
+def listify(x):
+    if not isstring(x) and isinstance(x, collections.Iterable):
+        return ", ".join(x)
+    else:
+        return x
+
+def main():
+    with open('@PKGDATADIR@/references.json') as data_file:
+        refs = json.load(data_file)
+
+    keys = [key for key in refs]
+    keys.sort()
+
+    for key in keys:
+        r = refs[key]
+
+        if "authors" in r and "collaboration" in r:
+            print "[%s] : %s (%s collaboration)" % (key, listify(r["authors"]), r["collaboration"])
+        elif "collaboration" in r:
+            print "[%s] : (%s collaboration)" % (key, r["collaboration"])
+        elif "authors" in r:
+            print "[%s] : %s" % (key, listify(r["authors"]))
+
+        print "    %s" % r["title"]
+
+        if "journal" in r:
+            print "    %s" % listify(r["journal"])
+        if "eprint" in r:
+            print "    %s" % listify(r["eprint"])
+
+        print ""
+
+    exit(0);
+
+if __name__ == '__main__':
+    main()
