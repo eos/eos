@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -399,7 +399,7 @@ namespace eos
             Parameter::Template{"B->pi::b_T^1@BCL2008",                          +0.00,           +0.00,           +0.00          },
             Parameter::Template{"B->pi::b_T^2@BCL2008",                          +0.00,           +0.00,           +0.00          },
 
-            // form factor parameters for B->D from [BIvD2015] for [BCL2008] parametrization
+            // form factor parameters for B->D from [BIvD2016] for [BCL2008] parametrization
             Parameter::Template{"B->D::f_+(0)@BCL2008",                          +0.62,           +0.66,           +0.69          },
             Parameter::Template{"B->D::b_+^1@BCL2008",                           -5.00,           -4.00,           -3.10          },
             Parameter::Template{"B->D::b_+^2@BCL2008",                           -5.60,           -0.80,           +3.40          },
