@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015 Danny van Dyk
+ * Copyright (c) 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -64,6 +64,27 @@ namespace eos
                 result.push_back(ParameterDescription{ kvar, kinematic_range.min, kinematic_range.max, false });
 
                 return std::move(result);
+            }
+        };
+
+        template <unsigned i_, typename Tuple_> struct KinematicRangePrinter
+        {
+            static void print(std::ostream & os, const Tuple_ & kinematic_ranges)
+            {
+                KinematicRangePrinter<i_ - 1, Tuple_>::print(os, kinematic_ranges);
+                auto & kinematic_range = std::get<i_ - 1>(kinematic_ranges);
+
+                os << "    " << kinematic_range.name << "\t" << kinematic_range.description << std::endl;
+            }
+        };
+
+        template <typename Tuple_> struct KinematicRangePrinter<1u, Tuple_>
+        {
+            static void print(std::ostream & os, const Tuple_ & kinematic_ranges)
+            {
+                auto & kinematic_range = std::get<0u>(kinematic_ranges);
+
+                os << "    " << kinematic_range.name << "\t" << kinematic_range.description << std::endl;
             }
         };
     }
@@ -163,8 +184,8 @@ namespace eos
     };
 
     template <typename Decay_, typename ... Args_>
-    class ConcreteSignalPDFFactory :
-        public SignalPDFFactory
+    class ConcreteSignalPDFEntry :
+        public SignalPDFEntry
     {
         private:
             std::string _name;
@@ -174,7 +195,7 @@ namespace eos
             std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...> _kinematic_ranges;
 
         public:
-            ConcreteSignalPDFFactory(const std::string & name,
+            ConcreteSignalPDFEntry(const std::string & name,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & function,
                     const std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...> & kinematic_ranges) :
                 _name(name),
@@ -183,7 +204,7 @@ namespace eos
             {
             }
 
-            ~ConcreteSignalPDFFactory()
+            ~ConcreteSignalPDFEntry()
             {
             }
 
@@ -192,14 +213,23 @@ namespace eos
 
                 return SignalPDFPtr(new ConcreteSignalPDF<Decay_, Args_ ...>(_name, parameters, kinematics, options, _function, _kinematic_ranges));
             }
+
+            virtual std::ostream & insert(std::ostream & os) const
+            {
+                os << "    " << Decay_::description << std::endl;
+
+                impl::KinematicRangePrinter<sizeof...(Args_), std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...>>::print(os, _kinematic_ranges);
+
+                return os;
+            }
     };
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
-    SignalPDFFactory * make_concrete_observable_factory(const std::string & name, double (Decay_::* function)(const Args_ & ...) const,
+    SignalPDFEntry * make_concrete_signal_pdf_entry(const std::string & name, double (Decay_::* function)(const Args_ & ...) const,
             const Tuple_ & kinematic_ranges)
     {
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
-        return new ConcreteSignalPDFFactory<Decay_, Args_ ...>(name,
+        return new ConcreteSignalPDFEntry<Decay_, Args_ ...>(name,
                 std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(function)),
                 kinematic_ranges);
     }

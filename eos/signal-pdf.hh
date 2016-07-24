@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015 Danny van Dyk
+ * Copyright (c) 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -38,6 +38,8 @@ namespace eos
 
             const double min, max;
 
+            const std::string description;
+
             operator const char * () const
             {
                 return name;
@@ -69,14 +71,55 @@ namespace eos
             static SignalPDFPtr make(const std::string & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
     };
 
-    class SignalPDFFactory
+    /*!
+     * SignalPDFEntry is internally used to keep track of the SignalPDFDescription and the SignalPDFFactory
+     * for any given SignalPDF. This includes handling its construction (via the make() method), and
+     * describing it (via the ostream & insert() method).
+     */
+    class SignalPDFEntry
     {
         public:
-            SignalPDFFactory();
+            friend std::ostream & operator<< (std::ostream &, const SignalPDFEntry &);
 
-            virtual ~SignalPDFFactory();
+            SignalPDFEntry();
+
+            virtual ~SignalPDFEntry();
 
             virtual SignalPDFPtr make(const Parameters &, const Kinematics &, const Options &) const = 0;
+
+        protected:
+            virtual std::ostream & insert(std::ostream & os) const = 0;
+    };
+
+    /*!
+     * Output stream operator for SignalPDFEntry.
+     */
+    std::ostream & operator<< (std::ostream & os, const SignalPDFEntry & entry)
+    {
+        return entry.insert(os);
+    }
+
+    /*!
+     * Container around the known and implemented signal PDFs
+     */
+    class SignalPDFs :
+        public PrivateImplementationPattern<SignalPDFs>
+    {
+        public:
+            /// Constructor.
+            SignalPDFs();
+
+            /// Destructor.
+            ~SignalPDFs();
+
+            ///@name Iteration over known constraints
+            ///@{
+            struct SignalPDFIteratorTag;
+            typedef WrappedForwardIterator<SignalPDFIteratorTag, std::pair<const std::string, const SignalPDFEntry *>> SignalPDFIterator;
+
+            SignalPDFIterator begin() const;
+            SignalPDFIterator end() const;
+            ///@}
     };
 
     /*!
