@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2013 Bastian Müller
  *
  * This file is part of the EOS project. EOS is free software;
@@ -601,4 +601,24 @@ namespace eos
 
         return 4.0 / 9.0 * (2.0 * a_c.j1s + 3.0 * a_c.j3) / _imp->btopilnu.integrated_decay_width(0.02, 12.0);
     }
+
+    const std::string
+    BsToKstarLeptonNeutrino::description = "\
+The decay B_s->K^* l nubar, where l=e,mu is a light lepton.";
+
+    const std::string
+    BsToKstarLeptonNeutrino::kinematics_description_s = "\
+The invariant mass of the l-nubar pair in GeV^2.";
+
+    const std::string
+    BsToKstarLeptonNeutrino::kinematics_description_c_theta_l = "\
+The cosine of the charged lepton l's helicity angle theta_l in the l-nubar_l rest frame.";
+
+    const std::string
+    BsToKstarLeptonNeutrino::kinematics_description_c_theta_k = "\
+The cosine of the kaon's helicity angle theta_k in the K-pi rest frame of the decaying K^*.";
+
+    const std::string
+    BsToKstarLeptonNeutrino::kinematics_description_phi = "\
+The azimuthal angle between the l-nubar plane and the K-pi plane.";
 }

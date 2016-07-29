@@ -41,6 +41,17 @@ namespace eos
 
             double normalized_differential_decay_width_3nu(const double & s, const double & snunubar,
                     const double & c_theta_tau, const double & phi, const double & c_theta_mu_star) const;
+
+            /*!
+             * Descriptions of the process and its kinematics.
+             */
+            static const std::string description;
+            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_snunubar;
+            static const std::string kinematics_description_c_theta;
+            static const std::string kinematics_description_c_theta_tau;
+            static const std::string kinematics_description_c_theta_mu_star;
+            static const std::string kinematics_description_phi;
     };
 }
 

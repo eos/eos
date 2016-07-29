@@ -173,4 +173,34 @@ namespace eos
     {
         return _imp->normalized_differential_decay_width_3nu(s, snunubar, z, phi, zst);
     }
+
+    const std::string
+    BToPiLeptonInclusiveNeutrinos::description = "\
+The neutrino-inclusive decay B->pi l X_nu, where l=e,mu is a light lepton, and \
+X_nu = {nu, nu nubar nu} is either a one or three neutrino final state. The \
+numerical implementations for this process follow [BIvD2016].";
+
+    const std::string
+    BToPiLeptonInclusiveNeutrinos::kinematics_description_s = "\
+The invariant mass of the tau-nubar_tau pair in GeV^2.";
+
+    const std::string
+    BToPiLeptonInclusiveNeutrinos::kinematics_description_snunubar = "\
+The invariant mass of the nu_tau-nubar_mu pair in GeV^2.";
+
+    const std::string
+    BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta = "\
+The cosine of the charged lepton l's helicity angle theta in the l-nubar_l rest frame.";
+
+    const std::string
+    BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta_tau = "\
+The cosine of the tau's helicity angle theta_tau in the tau-nubar_tau rest frame.";
+
+    const std::string
+    BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta_mu_star = "\
+The cosine of the muon's helicity angle theta_mu^* in the tau's rest frame.";
+
+    const std::string
+    BToPiLeptonInclusiveNeutrinos::kinematics_description_phi = "\
+The azimuthal angle between the B-D plane and the tau-nubar_tau plane.";
 }
