@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
@@ -1967,6 +1967,27 @@ namespace eos
         return result;
     }
 
+    const std::string
+    BToKstarDilepton<LargeRecoil>::description = "\
+The decay Bbar->Kbar^*(-> Kbar pi) l^+ l^- in the region q^2 <= 6-8 GeV^2, with l=e,mu,tau\
+a charged lepton.";
+
+    const std::string
+    BToKstarDilepton<LargeRecoil>::kinematics_description_s = "\
+The invariant mass of the charged lepton pair in GeV^2.";
+
+    const std::string
+    BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_l = "\
+The cosine of the negatively-charged lepton l^-'s helicity angle theta_l in the l^+l^- rest frame.";
+
+    const std::string
+    BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_k = "\
+The cosine of the Kbar's helicity angle theta_k in the Kbar-pi rest frame.";
+
+    const std::string
+    BToKstarDilepton<LargeRecoil>::kinematics_description_phi = "\
+The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
+
     /*
      * Decay: B -> K l lbar at Large Recoil
      */
@@ -2623,4 +2644,17 @@ namespace eos
         // cf. [BHP2007], Eq. (4.10), p. 6
         return br_muons / br_electrons;
     }
+
+    const std::string
+    BToKDilepton<LargeRecoil>::description = "\
+The decay B->K l^+ l^- in the region q^2 <= 6-8 GeV^2, with l=e,mu,tau\
+a charged lepton.";
+
+    const std::string
+    BToKDilepton<LargeRecoil>::kinematics_description_s = "\
+The invariant mass of the charged lepton pair in GeV^2.";
+
+    const std::string
+    BToKDilepton<LargeRecoil>::kinematics_description_c_theta_l = "\
+The cosine of the negatively-charged lepton l^-'s helicity angle theta_l in the l^+l^- rest frame.";
 }

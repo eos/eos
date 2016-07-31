@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
@@ -155,6 +155,15 @@ namespace eos
             double integrated_j_9_normalized(const double & s_min, const double & s_max) const;
             double integrated_j_9_normalized_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_a_9(const double & s_min, const double & s_max) const;
+
+            /*!
+             * Descriptions of the process and its kinematics.
+             */
+            static const std::string description;
+            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_c_theta_l;
+            static const std::string kinematics_description_c_theta_k;
+            static const std::string kinematics_description_phi;
     };
 
     /*
@@ -201,6 +210,13 @@ namespace eos
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const;
+
+            /*!
+             * Descriptions of the process and its kinematics.
+             */
+            static const std::string description;
+            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_c_theta_l;
     };
 }
 
