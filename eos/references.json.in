@@ -52,7 +52,7 @@
     "BaBar:2012B" : {
         "authors" : "Ritchie, Jack",
         "collaboration" : "BABAR",
-        "title" : "Angular Analysis of B ---> K*l+l− in BABAR",
+        "title" : "Angular Analysis of B ---> K^*l^+l^- in BABAR",
         "eprint" : "arXiv:1301.1700 [hep-ex]"
     },
     "BaBar:2012C" : {
@@ -175,7 +175,7 @@
     "D0:2011A" : {
         "authors" : "Abazov, V.M. et al.",
         "collaboration" : "D0",
-        "title" : "Measurement of the CP-violating phase phi^J/psiphi_s using the flavor-tagged decay B0s -> J/psi phi in 8 fb−1 of p pbar collisions",
+        "title" : "Measurement of the CP-violating phase phi_s using the flavor-tagged decay B^0_s -> J/psi phi in 8 fb^(-1) of p-pbar collisions",
         "journal" : "Phys.Rev. D85 (2012) 032006",
         "eprint" : "arXiv:1109.3166"
     },
@@ -186,7 +186,7 @@
     },
     "LHCb:2011B" : {
         "collaboration" : "LHCb",
-        "title" : "Differential branching fraction and angular analysis of the decay B 0 ---> K^{∗0} mu^+ mu^-",
+        "title" : "Differential branching fraction and angular analysis of the decay B^0 ---> K^{*0} mu^+ mu^-",
         "eprint" : "arXiv:1112.3515v1 [hep-ex]"
     },
     "LHCb:2012A" : {
@@ -245,14 +245,14 @@
     "LHCb:2014A" : {
         "authors" : "Aaij, R. et al.",
         "collaboration" : "LHCb",
-        "title" : "Differential branching fractions and isospin asymmetries of B ---> K^{(*)} mu^+ mu^− decays",
+        "title" : "Differential branching fractions and isospin asymmetries of B ---> K^{(*)} mu^+ mu^- decays",
         "journal" : "JHEP 1406 (2014) 133",
         "eprint" : "arXiv:1403.8044 [hep-ex]"
     },
     "LHCb:2014B" : {
         "authors" : "Aaij, R. et al.",
         "collaboration" : "LHCb",
-        "title" : "Angular analysis of charged and neutral B ---> K mu^+ mu^− decays",
+        "title" : "Angular analysis of charged and neutral B ---> K mu^+ mu^- decays",
         "journal" : "JHEP 1405 (2014) 082",
         "eprint" : "arXiv:1403.8045 [hep-ex]"
     },
@@ -266,7 +266,7 @@
     "LHCb:2015A" : {
         "authors" : "Aaij, R. et al.",
         "collaboration" : "LHCb",
-        "title" : "Angular analysis of the Bbar^0 -> K^*0 mu^+ mu^- decay using 3 fb^−1 of integrated luminosity",
+        "title" : "Angular analysis of the Bbar^0 -> K^*0 mu^+ mu^- decay using 3 fb^-1 of integrated luminosity",
         "journal" : "JHEP 02 (2016) 104",
         "eprint" : "arXiv:1512.04442 [hep-ex]"
     },
@@ -568,7 +568,7 @@
     },
     "FNALMILC2015A" : {
         "authors" : "Jon. A. Bailey, and others",
-        "title" : "|V_ub| from B → pi l nu decays and (2+1)-flavor lattice QCD",
+        "title" : "|V_ub| from B ---> pi l nu decays and (2+1)-flavor lattice QCD",
         "eprint" : "arXiv:1503.07893 [hep-ph]"
     },
     "FY2011" : {
