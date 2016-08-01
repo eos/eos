@@ -561,6 +561,12 @@
         "title" : "On Branching Ratios of B_s Decays and the Search for New Physics in B0_s -> mu^+ mu^-",
         "eprint" : "arXiv:1208.2843"
     },
+    "FFKMvD2013" : {
+        "authors" : ["Feldmann, Th.", "Faller, S.", "Khodjamirian, A.", "Mannel, Th.", "van Dyk, D."],
+        "title" : "Disentangling the decay observables in B^- -> pi^+ pi^- l^- nubar",
+        "journall" : "Phys. Rev. D 89, 014015 (2014)",
+        "eprint" : "arXiv:1310.6660"
+    },
     "FM2002" : {
         "authors" : "Feldmann, Th. and Matias, J.",
         "title" : "Forward-backward and isospin asymmetry for B -> K^* l^+ l^- decay in the standard model and in supersymmetry",
