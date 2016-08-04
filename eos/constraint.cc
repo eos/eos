@@ -2487,6 +2487,17 @@ namespace eos
         };
 
         /*
+         * Data taken from [LHCb:2014C]
+         */
+        static const GaussianConstraintTemplate Bplus_to_Kplus_dilepton_r_k_1_to_6_LHCb_2014C
+        {
+            "B->Kll::R_K@LargeRecoil",
+            Kinematics{ { "s_min", 1.00 }, { "s_max", 6.00 } },
+            Options{ },
+            0.745, 0.090, 0.074, 0.036, 0.036
+        };
+
+        /*
          * CMS + LHCb Collaborations
          *
          * Data taken from [CMS-LHCb:2014A]
@@ -4043,6 +4054,7 @@ namespace eos
             { "B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_A_FB_15_to_22_LHCb_2014) },
             { "B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_1dot1_to_6_LHCb_2014) },
             { "B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dimuon_F_H_15_to_22_LHCb_2014) },
+            { "B^+->K^+l^+l^-::R_K[1.00,6.00]@LHCb-2014", make_factory(templates::Bplus_to_Kplus_dilepton_r_k_1_to_6_LHCb_2014C) },
             // CMS + LHCb
             { "B^0_s->mu^+mu^-::BR@CMS-LHCb-2014", make_factory(templates::B_s_to_dimuon_CMS_LHCb_2014A) },
             { "B^0_d->mu^+mu^-::BR@CMS-LHCb-2014", make_factory(templates::Bzero_to_dimuon_CMS_LHCb_2014A) },

@@ -256,6 +256,13 @@
         "journal" : "JHEP 1405 (2014) 082",
         "eprint" : "arXiv:1403.8045 [hep-ex]"
     },
+    "LHCb:2014C" : {
+        "authors" : "Aaij, R. et al.",
+        "collaboration" : "LHCb",
+        "title" : "Test of lepton universality using B^+ ---> K^+ l^+ l^- decays",
+        "journal" : "Phys. Rev. Lett. 113 (2014) 151601",
+        "eprint" : "arXiv:1406.6482 [hep-ex]"
+    },
     "LHCb:2015A" : {
         "authors" : "Aaij, R. et al.",
         "collaboration" : "LHCb",
