@@ -1,0 +1,19 @@
+sudo: required
+dist: trusty
+
+language: cpp
+compiler:
+    - gcc
+
+before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get install -y libhdf5-serial-dev
+    - sudo apt-get install -y libgsl0-dev
+    - sudo apt-get install -y libboost-python-dev
+    - ./.travis/install-minuit2.bash
+
+script:
+    - ./autogen.bash
+    - ./configure --without-pmc --with-minuit2=/tmp/Minuit2-5.34.14 --enable-python
+    - make all
+    - make check
