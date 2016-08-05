@@ -81,7 +81,7 @@ AC_ARG_WITH([pmc],
 	[],
 	[])
 if test "x$with_pmc" == xno -o "x$with_pmc" == x ; then
-	AC_MSG_NOTICE(["Building EOS without PMC support"])
+	AC_MSG_NOTICE([Building EOS without PMC support])
 else 
 	if ! test -d "$with_pmc" ; then
 		AC_MSG_FAILURE(["$with_pmc is not a directory"])
