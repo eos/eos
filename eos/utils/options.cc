@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -161,7 +161,20 @@ namespace eos
         Options result;
 
         result._imp->options.insert(lhs._imp->options.cbegin(), lhs._imp->options.cend());
-        result._imp->options.insert(rhs._imp->options.cbegin(), rhs._imp->options.cend());
+
+        /*
+         * merge all options from rhs into result. Make sure to overwrite
+         * existing lhs options with the same key.
+         */
+        for (auto o : rhs._imp->options)
+        {
+            auto retval = result._imp->options.insert(o);
+
+            if (! retval.second)
+            {
+                retval.first->second = o.second;
+            }
+        }
 
         return result;
     }

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -58,7 +58,7 @@ class OptionsTest :
                 TEST_CHECK_EQUAL("bar", options.get("foo", ""));
             }
 
-            // Merging
+            // Merging w/o duplicates
             {
                 Options o1
                 {
@@ -73,6 +73,25 @@ class OptionsTest :
                 Options o3 = o1 + o2;
 
                 TEST_CHECK_EQUAL("d",  o3.get("q", "s"));
+                TEST_CHECK_EQUAL("mu", o3.get("l", "tau"));
+            }
+
+            // Merging w/ duplicates
+            {
+                Options o1
+                {
+                    { "q", "d" }
+                };
+
+                Options o2
+                {
+                    { "q", "s" },
+                    { "l", "mu" }
+                };
+
+                Options o3 = o1 + o2;
+
+                TEST_CHECK_EQUAL("s",  o3.get("q", "foo"));
                 TEST_CHECK_EQUAL("mu", o3.get("l", "tau"));
             }
 
