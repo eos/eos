@@ -34,39 +34,43 @@ where the meta variables take the following meaning:
         \texttt{ID}.\\
 \end{description}
 
-Second, if a quantity exhibits a functional dependence on either a parameter or a kinematic variable,
-it is treated in a modular fashion. Per default, an abstract interface is created that allows for
-several implementation of the same quantity. The actual implementations of this interface are then
-accesible via a factory method. An excellent example for such a \emph{plugin} design is found within
-the scope of hadronic matrix elements, in particular hadronic form factors; see e.g.
-\refsec{physics:b-mesons:hme}. Each implementation of a plugin usually depends on its own set of
-parameters. For clarity, we use one of the hadronic form factor as an example. Consider the $B\to
-\pi$ vector form factor $f^{B\pi}_+$. One possible
-parametrization of this form factor has been dubbed BCL2008 \cite{Bourrely:2008za}. It is achieved in terms of
-three parameters: the normalization $f^{B\pi}_+(0)$, and two shape parameters $b^{B\pi,+}_1$ and
-$b^{B\pi,+}_2$. This parametrization is implemented within EOS, andobservables that depend on the
-$B\to \pi$ form factors can choose it through the option \texttt{form-factors=BCL2008}. The relevant
-parameters are contained in the namespace \texttt{B->pi}, and tagged for the \text{BCL2008} plugin:
+Second, if a quantity exhibits a functional dependence on either a parameter or
+a kinematic variable, it is treated in a modular fashion. Per default, an
+abstract interface is created that allows for several implementation of the
+same quantity. The actual implementations of this interface are then accesible
+via a factory method. An excellent example for such a \emph{plugin} design is
+found within the scope of hadronic matrix elements, in particular hadronic form
+factors. Each implementation of a plugin usually depends on its own set of
+parameters. For clarity, we use one of the hadronic form factor as an example.
+Consider the $B\to \pi$ vector form factor $f^{B\pi}_+$. One possible
+parametrization of this form factor has been proposed in \cite{Bourrely:2008za}
+(BCL2008). It is achieved in terms of three parameters: the normalization
+$f^{B\pi}_+(0)$, and two shape parameters $b^{B\pi,+}_1$ and $b^{B\pi,+}_2$.
+This parametrization is implemented within EOS, andobservables that depend on
+the $B\to \pi$ form factors can choose it through the option
+\texttt{form-factors=BCL2008}. The relevant parameters are contained in the
+namespace \texttt{B->pi}, and tagged for the \text{BCL2008} plugin:
 \begin{equation}
-    \texttt{B->pi::f\_+(0)\@BCL2008}\,,\quad\texttt{B->pi::b\_+\^1\@BCL2008}\,,
-    \quad\text{and}\quad\texttt{B->pi::b\_+\^2\@BCL2008}\,.
+    \texttt{B->pi::f\_+(0)\@BCL2008}\,,\quad\texttt{B->pi::b\_+\^{}1\@BCL2008}\,,
+    \quad\text{and}\quad\texttt{B->pi::b\_+\^{}2\@BCL2008}\,.
 \end{equation}
-As such, there is no risk of namespace collisions among the various plugins' parameters.\\
+As such, there is no risk of namespace collisions among the various plugins'
+parameters.\\
 
 
-%Third, \dots
-%
-%{Likelihood and Prior}
-%\begin{itemize}
-%    \item construct likelihood and prior at run time
-%    \item abstract tree, with leaves:
-%    \begin{itemize}
-%        \item (Multivariate) Gaussian distribution
-%        \item LogGamma distribution (for asymmetric uncertainty intervals)
-%        \item Amoroso (for limits)
-%        \item Flat (prior only)
-%    \end{itemize}
-%\end{itemize}
+Third, \dots
+
+{Likelihood and Prior}
+\begin{itemize}
+    \item construct likelihood and prior at run time
+    \item abstract tree, with leaves:
+    \begin{itemize}
+        \item (Multivariate) Gaussian distribution
+        \item LogGamma distribution (for asymmetric uncertainty intervals)
+        \item Amoroso (for limits)
+        \item Flat (prior only)
+    \end{itemize}
+\end{itemize}
 
 
 \section{Core Classes}

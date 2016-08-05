@@ -3,21 +3,28 @@
 \chapter{Usage}
 \label{ch:usage}
 
-EOS has been authored with two use cases in mind.\\
+EOS has been authored with several use cases in mind.
+\begin{itemize}
+\item The first such use case is the evaluation of observables and further
+theoretical quantities in the field of flavor physics. EOS aspires to produce
+theory estimates of publication quality, and has produced such estimates in the
+past.
 
-The first such use case is the evaluation of observables and further theoretical
-quantities in the field of flavor physics. EOS aspires to produce such evaluations
-in the course of theory estimates of publication quality.
+\item The second use case is the inference of parameters from experimental
+observations.  For this task, EOS defaults to the Bayesian framework of
+parameter inference.
 
-The second use case is the inference of parameters from experimental observations.
-For this task, EOS defaults to the Bayesian framework of parameter inference.\\
+\item The third use case is the production of toy events for a variety of
+flavor-physics-related processes.
+\end{itemize}
 
-In the remainder of this chapter, we document the usage of the existing
-EOS clients and scripts, in order to carry out tasks corresponding to the above use cases.
-We assume further that only the built-in observables, physics models and experimental
-constraints are used.
+In the remainder of this chapter, we document the usage of the existing EOS
+clients and scripts, in order to carry out tasks corresponding to the above use
+cases.  We assume further that only the built-in observables, physics models
+and experimental constraints are used. The necessary steps to extend EOS with
+new observables, physics models or constraints will be discussed in \refch{extending}.
 
-\section{Evaluating Observables using \client{eos-evaluate}}
+\section{Evaluating Observables}
 \label{sec:usage:eos-evaluate}
 
 
@@ -43,7 +50,45 @@ the following command line arguments:
         and \texttt{--range} arguments apply, and will be used by the new obervable.
         The kinematics will be reset (i.e., all kinematic variables will be removed)
         in anticipation of the next \texttt{--observable} argument.
+
+    \item[] \texttt{--vary NAME}\\[\medskipamount]
+        Estimate the uncertainty based on variation of the parameter \texttt{NAME},
+        as if the parameter was distributed like a univariate Gaussian.
+
+    \item[] \texttt{--budget NAME}\\[\medskipamount]
+        Create a new uncertainty budget, which encompasses all the subsequently issued
+        \texttt{--vary} commands (until the issue of a new \texttt{--budget} command).
+        By default, the \texttt{delta} budget always exists, and encompasses \emph{all}
+        variations.
 \end{itemize}
+
+As an example, we turn to the evaluation of the $q^2$-integrated branching ratio
+$\mathcal{B}(\bar{B}^0\to \pi^+\mu^-\bar\nu_\mu)$, which can be addressed in EOS
+through the observable name \observable{B->pilnu::BR}.
+For this example, let us use the integration range
+\begin{equation*}
+    0\,\GeV^2 \leq q^2 \leq 12\,\GeV^2\,.
+\end{equation*}
+Further, let us use the BCL2008 \cite{Bourrely:2008za} parametrization of the $\bar{B}\to \pi$ form factor,
+as well as the Wolfenstein parametrization of the CKM matrix. The latter is achieved
+by choosing the physics model 'SM'. By default, EOS uses the most recent results of
+the UTfit collaboration's fit of the CKM Wolfenstein parameter to data on tree-level decays.
+In this example, we will evaluate the observable, and estimate parametric uncertainties
+based on the naive expectation of Gaussian uncertainty propagation. Here, we will classify two
+budgets of parametric uncertainties: one for uncertainties pertaining to the form factors
+(labelled 'FF'), and one for uncertainties pertaining to the CKM matrix elements (labelled 'CKM').
+
+Our intentions translate to the following call to \client{eos-evaluate}:
+\commandlineexample{examples/evaluate-btopilnu-integrated}
+
+\begin{filecontents*}{examples/evaluate-btopilnu-integrated.out}
+# B->pilnu::BR: form-factors=BCL2008,l=mu
+# s_min	s_max	central	FF_min	FF_max	CKM_min	CKM_max	delta_min	delta_max
+0	12	0.000106816	3.00927e-05	1.46426e-05	9.14007e-06	9.70515e-06	3.14501e-05	1.75669e-05   (-29.4434% / +16.446%)
+\end{filecontents*}
+The above call yields the following output:
+\commandlineexample{examples/evaluate-btopilnu-integrated.out}
+
 The output of calls to \client{eos-evaluate} is structured as follows:
 \begin{itemize}
     \item The first row names the observable at hand, as well as all active options.
@@ -59,36 +104,24 @@ The output of calls to \client{eos-evaluate} is structured as follows:
 The above structure repeats itself for every observable, as well as for each variation point
 of the kinematic variables as described by occuring \texttt{--range} arguments.\\
 
-As an example, we turn to the evaluation of the $q^2$-integrated branching ratio
-$\mathcal{B}(\bar{B}^0\to \pi^+\ell^-\bar\nu_\ell)$.
-For this example, let us use the integration range
-\begin{equation*}
-    0\,\GeV^2 \leq q^2 \leq 12\,\GeV^2\,.
-\end{equation*}
-Further, let us use the BCL2008 \cite{Bourrely:2008za} parametrization of the $\bar{B}\to \pi$ form factor,
-as well as the Wolfenstein parametrization of the CKM matrix. The latter is achieved
-by choosing the physics model 'SM'. By default, EOS uses the most recent results of
-the UTfit collaboration's fit of the CKM Wolfenstein parameter to data on tree-level decays.
-In this example, we will evaluate the observable, and estimate parametric uncertainties
-based on the naive expectation of Gaussian uncertainty propagation. We will classify two
-budgets of parametric uncertainties: one for uncertainties pertaining to the form factors
-(labelled 'FF'), and one for uncertainties pertaining to the CKM matrix elements (labelled 'CKM').
-
-Our intentations translate to the following call to \client{eos-evaluate}:
-\commandlineexample{examples/evaluate-btopilnu-integrated}
-
 \section{Producing Random Parameter Samples}
 \label{sec:usage:eos-sample-mcmc+pmc}
 
-Both use cases, observable evaluation and Bayesian parameter inference, make use of
-random samples of some \gls{PDF} $P(\vec\theta)$. These random
-samples can be produced from Markov chains, using the Metropolis-Hastings algorithm,
-by calls to the \client{eos-sample-mcmc} client. In second step, refined samples,
-or samples for a very complicated setup, are obtained from an algorithm described
-in Ref.~\cite{Beaujean:2013}. This algorithm uses an adaptive importance sampling
-called Population Monte Carlo (PMC), implemented within the client \client{eos-sample-pmc}.
+For all the previously mentioned use cases (observable evaluation, Bayesian
+parameter inference, and production of pseudo events) one requires to draw
+random samples from some arbitrary \gls{PDF} $P(\vec\theta)$.  When using EOS,
+these random samples can be produced from Markov-Chain random walks, using the
+Metropolis-Hastings algorithm, by calls to the \client{eos-sample-mcmc} client.
+In a second step, refined samples or samples for a very complicated setup, can
+be obtained from an algorithm described in Ref.~\cite{Beaujean:2013}. This
+algorithm uses an adaptive importance sampling called Population Monte Carlo
+(PMC), implemented within the client \client{eos-sample-pmc}, and requires a
+prior run of \client{eos-sample-mcmc} for initialization.
 
-The \client{eos-sample-mcmc} clients accepts the following command-line arguments:
+
+The follow command-line arguments are common to the \client{eos-sample-mcmc} and 
+\client{eos-sample-pmc} clients, as well as further clients described in subsequent
+sections:
 \begin{itemize}
     \item[] \texttt{--scan NAME --prior flat MIN MAX}\\[-3\medskipamount]
     \item[] \texttt{--scan NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[-3\medskipamount]
@@ -99,9 +132,23 @@ The \client{eos-sample-mcmc} clients accepts the following command-line argument
         absolute interval.  The \texttt{--scan} and \texttt{--nuisance}
         arguments work identically, with one exception: \texttt{--nuisance}
         declares the associated parameter as a nuisance parameter, which is
-        flagged in the HDF5 output. The sampling algorithm \emph{does not}
-        treat nuisance parameters differently than scan parameter.
+        flagged in the HDF5 output. The sampling algorithm treats nuisance
+        parameters \emph{in the same way as} scan parameters.
 
+    \item[] \texttt{--constraint NAME}\\[\medskipamount]
+        The named constraint from the internal database will be used as part of
+        the likelihood. The functional form of the the likelihood, details such
+        as correlations, and the required options for the observables used will
+        be automatically looked up. In order to browse the entries of the
+        database, use the \client{eos-list-constraints} client.
+
+    \item[] \texttt{--fix NAME VALUE}\\[\medskipamount]
+        The value of parameter \texttt{NAME} will be set to the supplied
+        \texttt{VALUE}, and thus potentially deviate from its default value.
+\end{itemize}
+
+The \client{eos-sample-mcmc} client further accepts the following arguments:
+\begin{itemize}
     \item[] \texttt{--seed [time|VALUE]}\\[\medskipamount]
         This argument sets the seed value for the \gls{RNG}. Setting the
         seed to a fixed numerical \texttt{VALUE} ensures reproducibility of the results. This
@@ -124,41 +171,19 @@ The \client{eos-sample-mcmc} clients accepts the following command-line argument
     \item[] \texttt{--store-prerun [0|1]}\\[\medskipamount]
         Either disable or enable storing of the prerun samples to the output file.\\
 
-        \emph{Note}: Samples from the prerun should only be used for diagnostic purpose.
-
     \item[] \texttt{--output FILENAME}\\[\medskipamount]
         Use the file \texttt{FILENAME} to store the output, using the HDF5 file format.
+        The resulting HDF5 file follows the EOS-MCMC format, and can be accessed using, e.g.,
+        the \texttt{eosdata} Python module.
 \end{itemize}
 
-The \client{eos-sample-pmc} clients accepts the following command-line arguments:
+The \client{eos-sample-pmc} client additionally accepts the following command-line arguments:
 \begin{itemize}
-    \item[] \texttt{--scan NAME --prior flat MIN MAX}\\[-3\medskipamount]
-    \item[] \texttt{--scan NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[-3\medskipamount]
-    \item[] \texttt{--nuisance [...]}\\[\medskipamount]
-        These arguments add a parameter to the statistical analysis, with
-        either a flat or a gaussian prior. If \texttt{ABSMIN} and
-        \texttt{ABSMAX} are specified, the prior will be cropped to this
-        absolute interval.  The \texttt{--scan} and \texttt{--nuisance}
-        arguments work identically, with one exception: \texttt{--nuisance}
-        declares the associated parameter as a nuisance parameter, which is
-        flagged in the HDF5 output. The sampling algorithm \emph{does not}
-        treat nuisance parameters differently than scan parameter.
-
     \item[] \texttt{--seed [time|VALUE]}\\[\medskipamount]
         This argument sets the seed value for the \gls{RNG}. Setting the
         seed to a fixed numerical \texttt{VALUE} ensures reproducibility of the results. This
         is important for publication-quality usage of the client. If \texttt{time} is
         specified, the \gls{RNG} is seeded with an interger value based on the current time.
-
-    \item[] \texttt{--pmc-initialize-from-file HDF5FILE}\\[\medskipamount]
-        Use the samples from a MCMC HDF5 output file \texttt{HDF5FILE} as
-        generated with \client{eos-sample-mcmc}, in order to initialize the
-        mixture density of the initial PMC step.
-
-    \item[] \texttt{--pmc-group-by-r-value R}\\[\medskipamount]
-        When forming groups of MCs from the initialization file, only add
-        a chain to an existing group if the chain's $R$-value is less than \texttt{R};
-        create a new group otherwise.
 
     \item[] \texttt{--hc-target-ncomponents N}\\[\medskipamount]
         When creating mixture components, create \texttt{N} components per existing
@@ -171,31 +196,42 @@ The \client{eos-sample-pmc} clients accepts the following command-line arguments
     \item[] \texttt{--hc-skip-initial FRACTION}\\[\medskipamount]
         Skip the first \texttt{FRACTION} of all MCMC samples in the clustering step.
 
-        \emph{Note}: \texttt{FRACTION} must be a floating point number between $0$ and $1$.
+        \emph{Note}: \texttt{FRACTION} must be a decimal number between $0$ and $1$.
+
+    \item[] \texttt{--pmc-initialize-from-file HDF5FILE}\\[\medskipamount]
+        Use the samples from a MCMC HDF5 output file \texttt{HDF5FILE} as
+        generated with \client{eos-sample-mcmc}, in order to initialize the
+        mixture density of the initial PMC step.
+
+    \item[] \texttt{--pmc-group-by-r-value R}\\[\medskipamount]
+        When forming groups of MCs from the initialization file, only add
+        a chain to an existing group if the chain's $R$-value is less than \texttt{R};
+        create a new group otherwise.
 
     \item[] \texttt{--pmc-samples-per-component N}\\[\medskipamount]
         Set the number \texttt{N} of samples that will be drawn per component and
-        update step of the PMC run.
+        per update step of the PMC run.
 
     \item[] \texttt{--pmc-final-samples N}\\[\medskipamount]
         Set the number \texttt{N} of samples that will be drawn for the final step,
         i.e.: after the PMC updates have converged.
 
-    \item[] \texttt{--pmc-ignore-ess [0|1]}\\[\medskipamount]
-        Set whether convergence of the PMC updates shall be determined from the
-        effective sample size (ESS) \emph{in addition} to the perplexity.
-
-        \emph{Default}: Use the ESS.
-
     \item[] \texttt{--pmc-relative-std-deviation-over-last-step STD STEPS}\\[\medskipamount]
         If both perplexity and ESS have a standard deviation less than \texttt{STD} over the
         last \texttt{STEPS} updates, declare convergence.
 
+    \item[] \texttt{--pmc-ignore-ess [0|1]}\\[\medskipamount]
+        Set whether convergence of the PMC updates shall be determined from the
+        effective sample size (ESS) \emph{in addition} to the perplexity.\\
+        \emph{Default}: Use the ESS.
+
     \item[] \texttt{--output FILENAME}\\[\medskipamount]
         Use the file \texttt{FILENAME} to store the output, using the HDF5 file format.
+        The resulting HDF5 file follows the EOS-PMC structure, and can be accessed using, e.g.,
+        the \texttt{eosdata} Python module.
 \end{itemize}
 
-As an example, we define the a-priori \gls{PDF} for a study of the decay $\bar{B}\to \pi^+\ell^-\bar\nu_\ell$.
+As an example, we define the a-priori \gls{PDF} for a study of the decay $\bar{B}\to \pi^+\mu^-\bar\nu_\mu$.
 For the CKM Wolfenstein parameters, we use
 \begin{equation*}
 \begin{aligned}
@@ -205,37 +241,189 @@ For the CKM Wolfenstein parameters, we use
     \bar{\eta} & = 0.375 \pm 0.060\,.
 \end{aligned}
 \end{equation*}
-For the a-priori \gls{PDF}, we use uniform distributions for the BCL2008 \cite{Bourrely:2008za}
-parameters. However, we construct a likelihood from the results of a recent study of the form factor
-$f^{B\pi}_+(q^2)$ within \glspl{LCSR}. 
-We now intend to draw random numbers from the posterior PDF using EOS' adaptive Metropolis-Hasting algorithm.
-During its prerun phase, the algorithm adapts the chains' proposal
-functions. We should demand at least $500$, and -- for a problem of this complexity -- maximally
-$7500$ steps during the prerun phase; the adaption process should be executed
-after every $500$ steps. For the final samples, we wish for a total of $10^4$, which we artifically decompose
-into $10$ chunks with $1000$ samples each.\\
+For the a-priori \gls{PDF}, we use uniform distributions for the BCL2008
+\cite{Bourrely:2008za} parameters for the $B\to \pi$ form factor $f^{B\pi}_+$.
+However, we construct a likelihood from the results of a recent study
+(IKMvD2016 \cite{Imsong:2014oqa}) of the form factor $f^{B\pi}_+(q^2)$ within \glspl{LCSR}.
+We now intend to draw random numbers from the posterior PDF using EOS' adaptive
+Metropolis-Hasting algorithm.  During its prerun phase, the algorithm adapts
+the chains' proposal functions. As a consequence, the prerun samples will in
+general \emph{not} be distributed as the posterior \gls{PDF}. With a subequent
+PMC sampling run in mind, we should demand at least $500$ steps, and -- for a
+problem of this complexity -- maximally $7500$ steps during the prerun phase;
+the adaption process should be executed after every $500$ steps.\\
 
 Our intentions translate to the following call to \client{eos-sample-mcmc}:
 \commandlineexample{examples/sample-mcmc-btopi-ff}
 
-We use the above call to \client{eos-sample-mcmc} in order to initialize a PMC run. We wish for
-$4$ components per MC group, and to skip $20\%$ of the MCMC samples as part of the burn in.
-Groups will be grouped based on an $R$-value threshold of $1.5$. For each update, $500$ samples
-per mixture component shall be drawn, in order to produce $10^6$ samples in the final step.
-Convergence shall be declared upon a standard deviation for the perplexity only, of $0.05$
-over the last $4$ update steps. The call then reads:
-\commandlineexample{examples/sample-pmc-btopi-ff}
+Optionally, if the prerun converges, the client can be used to perform a main run, in which
+the proposal functions will be kept static. For such these main run samples, we wish for a
+total of $10^4$, which we artifically decompose
+into $10$ chunks with $1000$ samples each. While the sampling at hand will be quite quick,
+sampling of computationally expensive functions should be done with small chunks so that
+the progress of the computations can be monitored. The require options for these intentation
+are shown above with a leading hash mark. Also, for a main run,
+the \texttt{--prerun-only} flag would need to be removed.\\
 
-\section{Plotting Random Parameter Samples}
+We use the above call to \client{eos-sample-mcmc} in order to initialize a PMC
+run. We wish for $4$ mixture components per MC group, and to skip $20\%$ of the
+MCMC samples as part of the burn in. MC groups will be created based on an
+$R$-value \cite{Gelman:1992zz} threshold of $1.5$. For each update, $500$
+samples per mixture component shall be drawn, in order to produce $10^6$
+samples in the final step. Convergence shall be declared upon a standard
+deviation for the perplexity only, of $0.05$ over the last $4$ update steps.
+The call then reads: \commandlineexample{examples/sample-pmc-btopi-ff}
+
+Both clients output copious amounts diagnostic data to the standard output, which include
+\begin{itemize}
+    \item all information about the prior and the likelihood as specified on the command line (both clients);
+    \item information about the convergence of the Markov chains within the parameter space,
+    based on the $R$-value criterion \cite{Gelman:1992zz} (MCMC only);
+    \item information about the convergence of the PMC run based on the perplexity and
+    effective sampling size (PMC only).
+\end{itemize}
+
+\begin{figure}
+    \subfigure[%
+        Histogram of the marginal posterior of $|V_{ub}|$, using $4 \times 7500$ samples.
+        Despite the poor quality of these samples, they can be used to initialize the
+        PMC run as described in the text.
+    ]{%
+        \includegraphics[width=.49\textwidth]{figures/fig-vub-prerun.pdf}
+    }\quad
+    \subfigure[%
+        Histogram of the marginal posterior of $|V_{ub}|$, using $10^6$ samples.
+    ]{%
+        \includegraphics[width=.49\textwidth]{figures/fig-vub-pmc.pdf}
+    }
+    \caption{%
+        Histograms of the parameter of interest $|V_{ub}|$ in the two example
+        fits as described in \refsec{usage:eos-sample-mcmc+pmc}, and plotted
+        using the \client{eos-plot-1d} client; see \refsec{usage:eos-plot} for
+        details.
+    }
+    \label{fig:usage:vub-example-samples}
+\end{figure}
+
+We display the outcome of both the MCMC (prerun) sampling as well as the PMC sampling steps
+in \reffig{usage:vub-example-samples}.
+
+\section{Finding the Mode of a Probability Density}
+\label{sec:usage:eos-find-mode}
+
+The mode, best-fit point, or simply the most-likely value of some \gls{PDF}
+$P(\vec\theta)$ is regularly searched for in physics analyses. EOS supplies the
+client \client{eos-find-mode}, which accepts the common set of arguments
+describing the PDF as already discussed for the \client{eos-sample-mcmc} and
+\client{eos-sample-pmc} clients, see \refsec{usage:eos-sample-mcmc+pmc} for
+further information.  In addition, it accepts the following command-line
+arguments:
+\begin{itemize}
+    \item[] \texttt{--starting-point \{ VALUE1 VALUE2 ... VALUEN \}}\\[\medskipamount]
+        Set the starting point for the maximization of the PDF $P(\vec\theta)$
+        at $\theta = ( \texttt{VALUE1}, \dots, \texttt{VALUEN} )$.
+    \item[] \texttt{--max-iterations INTEGER}\\[\medskipamount]
+        The optimization algorithm is allowed to run at maximum \texttt{NUMBER} iterations.
+    \item[] \texttt{--target-precision NUMBER}\\[\medskipamount]
+        Attempt to determine the mode up to an uncertainty of \texttt{NUMBER}.
+\end{itemize}
+
+In order to illustrate the client's usage, we use the same example as
+discussed in \refsec{usage:eos-sample-mcmc+pmc}. The corresponding call
+then reads:
+\commandlineexample{examples/find-mode-btopi-ff}
+
+\begin{filecontents*}{examples/find-mode-btopi-ff.out}
+# Starting optimization at ( 0.0035 0.31 0 0 )
+
+# Found maximum at: 
+#   ( 3.568778e-03 2.661032e-01 -2.670912e+00 2.231637e-02 )
+#   value = -3.101594e+02
+\end{filecontents*}
+The output starts with same diagnostic information on the composition of
+prior and likelihood as for the sampling clients. The results are displayed
+in the last few lines, including
+\begin{itemize}
+    \item the starting point for the mode-finding process;
+    \item the coordinates of the best-fit point; and
+    \item the log-posterior at the best-fit point.
+\end{itemize}
+\commandlineexample{examples/find-mode-btopi-ff.out}
+
+\section{Bayesian Uncertainty Propagation}
+\label{sec:usage:eos-propagate-uncertainty}
+
+EOS presently supports two ways to prograpate theory uncertainties in the
+framework of Bayesian statistic: First, by using prior PDF that describes
+the nuisance parameters; second, by using samples from a posterior PDF that
+have been obtained from running \client{eos-sample-pmc}.\footnote{%
+    Note that using samples from \client{eos-sample-mcmc} is presently not supported.
+}
+It accepts the following command-line arguments:
+\begin{itemize}
+    \item[] \texttt{--vary NAME --prior flat MIN MAX}\\[-3\medskipamount]
+    \item[] \texttt{--vary NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[\medskipamount]
+        These arguments add a parameter to the statistical analysis, with
+        either a flat or a gaussian prior. If \texttt{ABSMIN} and
+        \texttt{ABSMAX} are specified, the prior will be cropped to this
+        absolute interval.
+
+    \item[] \texttt{--samples NUMBER}\\[\medskipamount]
+        Sets the number of samples that shall be produced per observable and
+        worker thread.
+
+    \item[] \texttt{--workers NUMBER}\\[\medskipamount]
+        Sets the number of worker threads.
+
+    \item[] \texttt{--pmc-input HDF5FILE BEGIN END}\\[\medskipamount]
+        Use the samples at index \texttt{BEGIN} up to index \texttt{END} from
+        a named data set in the file \texttt{HDF5FILE}.
+
+        \emph{Note:} The file must have been produced by the
+        \client{eos-sample-pmc} client.
+    \item[] \texttt{--pmc-sample-directory NAME}\\[\medskipamount]
+        Use the named data set within the file specified with \texttt{--pmc-input}.
+        Valid names are \texttt{/data/X}, where \text{X} stands for either
+        \texttt{initial}, \texttt{final}, or all numbers describing existing
+        update steps that were carried out in the PMC run.
+
+        \emph{Note:} You should use \texttt{/data/final} unless you are
+        debuging the PMC algorithm.
+\end{itemize}
+
+As an example of the first way, we would like to predict the branching
+ratio for the decay $B^- \to \tau^- \bar{\nu}_\tau$. This prediction involves
+two parameters: First, the absolute value of $V_{ub}$; and second, the value
+of the $B$-meson decay constant $f_{B}$. For the former, we choose the
+HFAG average of the inclusive determination $|V_{ub}| = (4.45 \pm 0.26) \cdot 10^{-3}$
+\cite{Amhis:2014hma}, while for the latter we use the FLAG average
+$f_{B} = 0.188 \pm 0.007\,\GeV$ \cite{Aoki:2013ldr}.
+Our intention translates to the following call to \client{eos-propagate-uncertainty}:
+\commandlineexample{examples/propagate-uncertainty-btotaunu}
+
+As an exmple of the second way, we would like to use samples from the posterior
+PDF as obtain in \refsec{usage:eos-sample-mcmc+pmc} in order to predict the
+branching ratio of the decay $\bar{B}^0\to \pi e^- \bar{\nu}_e$, in the
+same kinematic range as the decay to muons described previously.
+Our intention translates to the following call to \client{eos-propagate-uncertainty}:
+\commandlineexample{examples/propagate-uncertainty-btopilnu}
+
+For both ways, the samples of the predictive distributions within the HDF5 files
+can be accessed using the \texttt{eosdata} Python module.
+
+\section{Plotting Random Samples}
 \label{sec:usage:eos-plot}
 
-Once random samples from the posterior PDF have been obtained, e.g. as described in
-\refsec{usage:eos-sample-mcmc}, a visual inspection of the samples is the next step.
-EOS provides scripts for this purpose, which plot histograms of either
-a marginalized 1D (\texttt{eos-plot-1d}) or 2D (\texttt{eos-plot-2d}) probability density.
-Both scripts presently detect the output format by inspection of the resepective HDF5 file
-name. Files containing MCMC samples should be prefixed with \texttt{mcmc\_}, while
-PMC sample files should be prefixed with \texttt{pmc\_monolithic\_}.
+Once random samples have been obtained from either a posterior PDF (e.g. as
+described in \refsec{usage:eos-sample-mcmc+pmc}) or a predictive PDF (e.g. as
+described in \refsec{usage:eos-propagate-uncertainty}), a visual inspection of
+the samples is the next step.  EOS provides scripts for this purpose, which
+plot histograms of either a marginalized 1D (\texttt{eos-plot-1d}) or heatmaps
+of 2D (\texttt{eos-plot-2d}) PDFs.  Both scripts presently detect the output
+format by inspection of the resepective HDF5 file name. Files containing MCMC
+samples should be prefixed with \texttt{mcmc\_}, while PMC sample files should
+be prefixed with \texttt{pmc\_monolithic\_}. Files containing samples from the
+uncertainty propagation should be prefixed with \texttt{unc\_}.
 
 The \texttt{eos-plot-1d} produces a 1D histogram of the samples for one parameter.
 It accepts the following arguments:
@@ -291,9 +479,3 @@ It accepts the following arguments
         \texttt{YMIN} to \texttt{YMAX}. The default values are taken from the
         description of the parameter within the HDF5 input file.
 \end{itemize}
-
-%\section{Bayesian Uncertainty Propagation using \textbf{\texttt{eos-propagate-uncertainty}}}
-%\label{sec:usage:eos-propagate-uncertainty}
-%
-%Our intentions translate to the following call to \client{eos-sample-mcmc}:\todo{Does not work yet!}
-%\commandlineexample{examples/propagate-uncertainty-b-to-pi-l-nu}
