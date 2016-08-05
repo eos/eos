@@ -3639,7 +3639,7 @@ namespace eos
     {
     }
 
-    std::string
+    const std::string &
     Constraint::name() const
     {
         return _imp->name;
