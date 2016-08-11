@@ -14,7 +14,9 @@ bin_SCRIPTS = \
 endif
 
 EXTRA_DIST = \
-	eos-list-references.in
+	eos-list-references.in \
+	eos-plot-1d \
+	eos-plot-2d
 
 eos-list-references: eos-list-references.in Makefile
 	sed \

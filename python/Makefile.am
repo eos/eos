@@ -13,6 +13,6 @@ eos_la_CXXFLAGS = $(PYTHON_CFLAGS) -I$(top_srcdir) -std=c++0x
 eos_la_LDFLAGS = -module -avoid-version -export-symbols-regex initeos
 eos_la_LIBADD = $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosutils.la -lboost_python
 
-EXTRA_DIST = 
-
 endif
+
+EXTRA_DIST = eosdata.py
