@@ -16,4 +16,4 @@ script:
     - ./autogen.bash
     - ./configure --without-pmc --with-minuit2=/tmp/Minuit2-5.34.14 --enable-python
     - make all
-    - make check
+    - make check VERBOSE=1
