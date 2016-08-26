@@ -1,0 +1,108 @@
+#!/usr/bin/env python
+
+import eos
+import matplotlib
+import numpy as np
+import scipy.ndimage
+import matplotlib.cm as cm
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
+
+# Layout
+matplotlib.rcParams['xtick.direction'] = 'out'
+matplotlib.rcParams['ytick.direction'] = 'out'
+matplotlib.rcParams['text.usetex'] = True
+matplotlib.rcParams.update({'font.size': 13})
+
+# Kinematics
+k = eos.Kinematics(q2=1.0, k2=6.0)
+kx = k["q2"]
+ky = k["k2"]
+
+# Options
+o = eos.Options(l="mu")
+o.set("form-factors", "BFvD2016")
+print o.as_string()
+
+# Parameters
+p = eos.Parameters.Defaults()
+p["mass::B_d"].set(5.2795)
+p["mass::pi^+"].set(0.13957)
+p["mass::ud(2GeV)"].set(0.008)
+p["pi::a2@1GeV"].set(0.17)
+p["pi::a4@1GeV"].set(0.06)
+p["decay-constant::pi"].set(0.1304)
+p["B->pipi::mu@BFvD2016"].set(1.5)
+
+# Observable
+#   A_BF(2) is the two-differential pionic forward-backward asymmetry
+obs = eos.Observable.make("B->pipilnu::A_FB(2)", p, k, o)
+
+# Evaluate observable on a grid, with
+#   15.00 GeV^2 <= k^2 <= 26.40 GeV^2
+#    0.02 GeV^2 <= q^2 <= (M_B - sqrt(k^2))^2
+q2range = np.empty([80])
+k2range = np.arange(15.00, 26.40, 0.20)
+q2values, k2values = np.meshgrid(q2range, k2range)
+obsvalues = np.empty([k2range.size, q2range.size])
+obsvalues.fill(np.NAN)
+for i in range(q2range.size):
+    for j in range(k2range.size):
+        k2 = k2values[j, i]
+        q2 = 0.02 + ((5.2795 - np.sqrt(k2))**2 - 0.02) / q2range.size * i
+        q2values[j, i] = q2
+        kx.set(q2)
+        ky.set(k2)
+        obsvalues[j, i] = obs.evaluate()
+
+QCDFq2range = np.arange(0.02, 0.936, 0.002)
+QCDFk2range = map(lambda q2: (5.2795 - np.sqrt(q2))**2, QCDFq2range)
+Extraq2range = np.arange(0.02, 1.98, 0.02)
+Extrak2range = map(lambda q2: (5.2795 - np.sqrt(q2))**2, Extraq2range)
+PSq2range = np.arange(0.02, 1.98, 0.02)
+PSk2range = map(lambda q2: (5.2795 - np.sqrt(q2))**2, PSq2range)
+
+fig, ax = plt.subplots(1)
+
+# Create a filled area for the physical phase space
+ax.fill_between(Extraq2range, 15.00, Extrak2range, facecolor='#0066CC')
+ax.fill_between(QCDFq2range,  18.60, QCDFk2range,  facecolor='#00B2E5')
+
+# Create a simple contour plot with labels using default colors.  The
+# inline argument to clabel will control whether the labels are drawn
+# over the line segments of the contour, removing the lines beneath
+# the label
+levels = (-0.40, -0.30, -0.20)
+CS = plt.contour(q2values, k2values, obsvalues,
+        levels=levels,
+        colors=('black',),
+    )
+styles=[
+        [(0.0, (1.0, 1.0))],
+        [(0.0, (3.0, 3.0))],
+        [(0.0, (5.0, 5.0))]
+    ]
+idx = 0
+for c in CS.collections:
+    c.set_linestyle(styles[idx])
+    c.set_label("$A_\mathrm{FB}^\pi = %1.1g$" % levels[idx])
+    idx += 1
+
+# Title and labels
+plt.xlabel('$q^2$ $[\mathrm{GeV}^2]$')
+plt.ylabel('$k^2$ $[\mathrm{GeV}^2]$')
+plt.title('$A_\mathrm{FB}^\pi$')
+
+# Contour labels
+#plt.clabel(CS, inline=0, fontsize=9)
+
+# Axis limits
+plt.ylim(ymin=15, ymax=26.4)
+
+# Legend
+plt.legend(loc='upper right')
+
+# Adjust margins
+plt.subplots_adjust(left=0.07, right=0.98, bottom=0.09, top=0.91)
+
+fig.savefig('fig-afb.pdf', format='pdf')
