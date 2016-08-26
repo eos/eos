@@ -225,6 +225,7 @@ AC_OUTPUT(
 	eos/rare-b-decays/Makefile
 	eos/b-decays/Makefile
 	eos/utils/Makefile
+	eos/optimize/Makefile
 	eos/statistics/Makefile
 	manual/Makefile
 	manual/figures/Makefile

@@ -4,7 +4,7 @@ CLEANFILES = \
 	references_TEST
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = utils statistics form-factors rare-b-decays b-decays .
+SUBDIRS = utils optimize statistics form-factors rare-b-decays b-decays .
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
