@@ -18,6 +18,7 @@
  */
 
 #include "eos/observable.hh"
+#include "eos/signal-pdf.hh"
 #include "eos/utils/kinematic.hh"
 #include "eos/utils/parameters.hh"
 #include "eos/utils/options.hh"
@@ -124,5 +125,15 @@ BOOST_PYTHON_MODULE(eos)
         .staticmethod("make")
         .def("evaluate", &Observable::evaluate)
         .def("name", &Observable::name, return_value_policy<copy_const_reference>())
+        ;
+
+    register_ptr_to_python<std::shared_ptr<SignalPDF>>();
+
+    // SignalPDF
+    class_<SignalPDF, boost::noncopyable>("SignalPDF", no_init)
+        .def("make", &SignalPDF::make, return_value_policy<return_by_value>())
+        .staticmethod("make")
+        .def("evaluate", &SignalPDF::evaluate)
+        .def("name", &SignalPDF::name, return_value_policy<copy_const_reference>())
         ;
 }
