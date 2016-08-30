@@ -16,6 +16,11 @@ EOS is written in C++, and relies on as a small set of dependencies:
  - Minuit2 v5 (or greater)
  - libPMC (optional)
 
+Installation
+------------
+
+For instructions on how to build and install EOS on your computer please have a
+look at the [manual](https://eos.github.io/manual/manual.pdf).
 
 Authors and Contributors
 ------------------------
