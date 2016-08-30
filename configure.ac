@@ -103,7 +103,7 @@ dnl }}}
 dnl {{{ python checks (you can change the required python version below)
 if test "x$enable_python" == xyes ; then
 	AM_PATH_PYTHON(2.7.0)
-	PY_PREFIX=`$PYTHON -c 'import sys ; print sys.prefix'`
+	PY_PREFIX=`$PYTHON -c 'import sys ; print(sys.prefix)'`
 	PYTHON_LIBS="-lpython$PYTHON_VERSION"
 	PYTHON_CFLAGS="-I$PY_PREFIX/include/python$PYTHON_VERSION"
 	AC_SUBST([PYTHON_LIBS])
