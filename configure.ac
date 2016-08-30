@@ -108,6 +108,7 @@ if test "x$enable_python" == xyes ; then
 	PYTHON_CFLAGS="-I$PY_PREFIX/include/python$PYTHON_VERSION"
 	AC_SUBST([PYTHON_LIBS])
 	AC_SUBST([PYTHON_CFLAGS])
+	AC_SUBST([BOOST_PYTHON_SUFFIX])
 fi
 dnl }}}
 dnl }}}
