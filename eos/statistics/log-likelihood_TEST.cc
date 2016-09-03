@@ -333,10 +333,10 @@ namespace eos
                     // we get one sigma deviation as desired
                     cache_clone.parameters()["mass::b(MSbar)"] = min;
                     cache_clone.update();
-                    TEST_CHECK_RELATIVE_ERROR(+1.0, log_gamma_clone->significance(), 2.1e-6);
+                    TEST_CHECK_RELATIVE_ERROR(+1.0, log_gamma_clone->significance(), 1e-5);
                     cache_clone.parameters()["mass::b(MSbar)"] = max;
                     cache_clone.update();
-                    TEST_CHECK_RELATIVE_ERROR(-1.0, log_gamma_clone->significance(), 2.1e-6);
+                    TEST_CHECK_RELATIVE_ERROR(-1.0, log_gamma_clone->significance(), 1e-5);
                 }
 
                 // compare gaussian and loggamma
