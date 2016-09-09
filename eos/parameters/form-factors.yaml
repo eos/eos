@@ -1,0 +1,787 @@
+# Form factor uncertainties
+"formfactors::xi_perp_uncertainty" :
+    central: +1.0
+    min:     +0.89
+    max:     +1.11
+    comments: ""
+"formfactors::xi_par_uncertainty" :
+    central: +1.0
+    min:     +0.86
+    max:     +1.14
+    comments: ""
+
+# form factor parameters for LCSR calculation according to [DKMMO2008]
+"B->pi::zeta(NNLO)@DKMMO2008" :
+    central: 0.0
+    min:     -1.0
+    max:     +1.0
+    comments: ""
+"B->pi::M^2@DKMMO2008" :
+    central: +18.0
+    min:     +15.0
+    max:     +20.0
+    comments: " // GeV^2, cf. [DKMMO2008]"
+"B->pi::Mp^2@DKMMO2008" :
+    central: +5.0
+    min:     +5.0
+    max:     +5.0
+    comments: " // GeV^2, cf. [DKMMO2008]"
+"B->pi::mu@DKMMO2008" :
+    central: +3.0
+    min:     +3.0
+    max:     +3.0
+    comments: " // GeV, cf. [DKMMO2008]"
+"B->pi::s_0^B@DKMMO2008" :
+    central: +35.75
+    min:     +35.75
+    max:     +35.75
+    comments: " // GeV^2, cf. [DKMMO2008]"
+"B->pi::sp_0^B@DKMMO2008" :
+    central: +35.6
+    min:     +35.5
+    max:     +36.0
+    comments: " // GeV^2, cf. [DKMMO2008]"
+
+# form factor parameters for QCDF calculation according to [BFvD2016]
+"B->pipi::mu@BFvD2016" :
+    central: 1.5
+    min:     1.0
+    max:     2.0
+    comments: " // GeV, cf. [BFvD2016]"
+
+# form factor parameters for B->pi, B->K in [BCL2008] parametrization, with
+# f_+ taken from [IKMvD2014]
+"B->pi::f_+(0)@BCL2008" :
+    central: +0.307
+    min:     +0.287
+    max:     +0.327
+    comments: ""
+"B->pi::b_+^1@BCL2008" :
+    central: -1.31
+    min:     +1.73
+    max:     -0.89
+    comments: ""
+"B->pi::b_+^2@BCL2008" :
+    central: -0.904
+    min:     -1.348
+    max:     -0.460
+    comments: ""
+"B->pi::b_0^1@BCL2008" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::b_0^2@BCL2008" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::f_T(0)@BCL2008" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::b_T^1@BCL2008" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::b_T^2@BCL2008" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+
+# form factor parameters for B->D from [BIvD2016] for [BCL2008] parametrization
+"B->D::f_+(0)@BCL2008" :
+    central: +0.66
+    min:     +0.62
+    max:     +0.69
+    comments: ""
+"B->D::b_+^1@BCL2008" :
+    central: -4.00
+    min:     -5.00
+    max:     -3.10
+    comments: ""
+"B->D::b_+^2@BCL2008" :
+    central: -0.80
+    min:     -5.60
+    max:     +3.40
+    comments: ""
+"B->D::b_0^1@BCL2008" :
+    central: +0.40
+    min:     -0.20
+    max:     +0.80
+    comments: ""
+"B->D::b_0^2@BCL2008" :
+    central: -1.20
+    min:     -5.60
+    max:     +3.20
+    comments: ""
+
+# form factor parameters for B->K^* according to [BZ2004] (approximate)
+"B->K^*::a0_uncertainty@BZ2004" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+"B->K^*::a1_uncertainty@BZ2004" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+"B->K^*::a2_uncertainty@BZ2004" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+"B->K^*::v_uncertainty@BZ2004" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+"B->K^*::t1_uncertainty@BZ2004" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+"B->K^*::t2_uncertainty@BZ2004" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+"B->K^*::t3_uncertainty@BZ2004" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+
+# form factor parameters for B->K^* according to [KMPW2010], Table 4, p. 31
+"B->K^*::F^V(0)@KMPW2010" :
+    central: +0.36
+    min:     +0.24
+    max:     +0.59
+    comments: ""
+"B->K^*::F^A0(0)@KMPW2010" :
+    central: +0.29
+    min:     +0.22
+    max:     +0.39
+    comments: ""
+"B->K^*::F^A1(0)@KMPW2010" :
+    central: +0.25
+    min:     +0.15
+    max:     +0.41
+    comments: ""
+"B->K^*::F^A2(0)@KMPW2010" :
+    central: +0.23
+    min:     +0.13
+    max:     +0.42
+    comments: ""
+"B->K^*::F^T1(0)@KMPW2010" :
+    central: +0.31
+    min:     +0.21
+    max:     +0.49
+    comments: ""
+"B->K^*::F^T2(0)@KMPW2010" :
+    central: +0.31
+    min:     +0.21
+    max:     +0.49
+    comments: ""
+"B->K^*::F^T3(0)@KMPW2010" :
+    central: +0.22
+    min:     +0.12
+    max:     +0.39
+    comments: ""
+"B->K^*::b^V_1@KMPW2010" :
+    central: -4.8
+    min:     -5.2
+    max:     -4.0
+    comments: ""
+"B->K^*::b^A0_1@KMPW2010" :
+    central: -18.2
+    min:     -21.2
+    max:     -16.9
+    comments: ""
+"B->K^*::b^A1_1@KMPW2010" :
+    central: +0.34
+    min:     -0.46
+    max:     +1.2
+    comments: ""
+"B->K^*::b^A2_1@KMPW2010" :
+    central: -0.85
+    min:     -2.2
+    max:     +2.03
+    comments: ""
+"B->K^*::b^T1_1@KMPW2010" :
+    central: -4.6
+    min:     -5.01
+    max:     -3.79
+    comments: ""
+"B->K^*::b^T2_1@KMPW2010" :
+    central: -3.2
+    min:     -5.4
+    max:     -1.1
+    comments: ""
+"B->K^*::b^T3_1@KMPW2010" :
+    central: -10.3
+    min:     -13.4
+    max:     -7.8
+    comments: ""
+
+# form factor parameter for B_s->K^* according to [FMvD2015].
+"B_s->K^*::F_perp(0)@FMvD2015" :
+    central: 0.349
+    min:     0.349
+    max:     0.349
+    comments: ""
+"B_s->K^*::F_para(0)@FMvD2015" :
+    central: 0.379
+    min:     0.379
+    max:     0.379
+    comments: ""
+"B_s->K^*::F_long(0)@FMvD2015" :
+    central: 0.314
+    min:     0.314
+    max:     0.314
+    comments: ""
+"B_s->K^*::F_time(0)@FMvD2015" :
+    central: 0.314
+    min:     0.314
+    max:     0.314
+    comments: ""
+"B_s->K^*::beta_perp^1@FMvD2015" :
+    central: -4.980
+    min:     -4.980
+    max:     -4.980
+    comments: ""
+"B_s->K^*::beta_para^1@FMvD2015" :
+    central: +0.065
+    min:     +0.065
+    max:     +0.065
+    comments: ""
+"B_s->K^*::beta_time^1@FMvD2015" :
+    central: +0.065
+    min:     +0.065
+    max:     +0.065
+    comments: ""
+
+# form factor parameters for B->K^* simple series expansion (SSE) based on
+# LCSR according to [BFW2010], table 10, p. 33, corrected values from Aoife Bharucha
+"B->K^*::beta^V0_0@BFW2010" :
+    central: +0.31
+    min:     +0.31
+    max:     +0.31
+    comments: ""
+"B->K^*::beta^V0_1@BFW2010" :
+    central: +0.74
+    min:     +0.74
+    max:     +0.74
+    comments: ""
+"B->K^*::beta^V1_0@BFW2010" :
+    central: +0.62
+    min:     +0.62
+    max:     +0.62
+    comments: ""
+"B->K^*::beta^V1_1@BFW2010" :
+    central: -1.4
+    min:     -1.4
+    max:     -1.4
+    comments: ""
+"B->K^*::beta^V2_0@BFW2010" :
+    central: +0.45
+    min:     +0.45
+    max:     +0.45
+    comments: ""
+"B->K^*::beta^V2_1@BFW2010" :
+    central: +0.35
+    min:     +0.35
+    max:     +0.35
+    comments: ""
+"B->K^*::beta^Vt_0@BFW2010" :
+    central: +0.49
+    min:     +0.49
+    max:     +0.49
+    comments: ""
+"B->K^*::beta^Vt_1@BFW2010" :
+    central: -1.4
+    min:     -1.4
+    max:     -1.4
+    comments: ""
+
+# form factor parameters for B->K according to [BZ2004v2] (approximate)
+"B->K::fp_uncertainty@BZ2004v2" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+"B->K::f0_uncertainty@BZ2004v2" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+"B->K::ft_uncertainty@BZ2004v2" :
+    central: +1.0
+    min:     +0.85
+    max:     +1.15
+    comments: ""
+
+# form factor parameters for B->K according to [KMPW2010], Table 4, p. 31
+"B->K::F^p(0)@KMPW2010" :
+    central: +0.34
+    min:     +0.32
+    max:     +0.39
+    comments: ""
+"B->K::F^t(0)@KMPW2010" :
+    central: +0.39
+    min:     +0.36
+    max:     +0.44
+    comments: ""
+"B->K::b^p_1@KMPW2010" :
+    central: -2.1
+    min:     -3.7
+    max:     -1.2
+    comments: ""
+"B->K::b^0_1@KMPW2010" :
+    central: -4.3
+    min:     -5.2
+    max:     -3.5
+    comments: ""
+"B->K::b^t_1@KMPW2010" :
+    central: -2.2
+    min:     -4.2
+    max:     -1.2
+    comments: ""
+
+# form factor parameters for B->K simple series expansion (SSE) based on
+# LCSR according to [BFW2010], table 6, p. 22, corrected values from Aoife Bharucha
+"B->K::alpha^V0_0@BFW2010" :
+    central: +0.48
+    min:     +0.48
+    max:     +0.48
+    comments: ""
+"B->K::alpha^V0_1@BFW2010" :
+    central: -1.05
+    min:     -1.05
+    max:     -1.05
+    comments: ""
+"B->K::alpha^Vt_0np@BFW2010" :
+    central: +0.52
+    min:     +0.52
+    max:     +0.52
+    comments: ""
+"B->K::alpha^Vt_1np@BFW2010" :
+    central: -1.4
+    min:     -1.4
+    max:     -1.4
+    comments: ""
+"B->K::alpha^T0_0@BFW2010" :
+    central: +0.48
+    min:     +0.48
+    max:     +0.48
+    comments: ""
+"B->K::alpha^T0_1@BFW2010" :
+    central: -1.09
+    min:     -1.09
+    max:     -1.09
+    comments: ""
+
+# form factor parameters for Lambda_b -> Lambda decays according to
+# [BFvD2014], table ?, p. ??
+"Lambda_b->Lambda::f_0^V(0)@BFvD2014" :
+    central: +0.28
+    min:     +0.22
+    max:     +0.34
+    comments: ""
+"Lambda_b->Lambda::b_1_0^V@BFvD2014" :
+    central: -11.00
+    min:     -19.00
+    max:     -6.00
+    comments: ""
+"Lambda_b->Lambda::f_0^A(0)@BFvD2014" :
+    central: +0.27
+    min:     +0.21
+    max:     +0.33
+    comments: ""
+"Lambda_b->Lambda::b_1_0^A@BFvD2014" :
+    central: -8.00
+    min:     -16.00
+    max:     -5.00
+    comments: ""
+"Lambda_b->Lambda::f_perp^V(0)@BFvD2014" :
+    central: +0.28
+    min:     +0.22
+    max:     +0.34
+    comments: ""
+"Lambda_b->Lambda::b_1_perp^V@BFvD2014" :
+    central: -11.00
+    min:     -19.00
+    max:     -6.00
+    comments: ""
+"Lambda_b->Lambda::f_perp^A(0)@BFvD2014" :
+    central: +0.30
+    min:     +0.24
+    max:     +0.36
+    comments: ""
+"Lambda_b->Lambda::b_1_perp^A@BFvD2014" :
+    central: -6.00
+    min:     -12.00
+    max:     -3.00
+    comments: ""
+"Lambda_b->Lambda::sigma_perp^V@BFvD2014" :
+    central: 0.00
+    min:     -0.20
+    max:     +0.20
+    comments: ""
+"Lambda_b->Lambda::sigma_perp^A@BFvD2014" :
+    central: 0.00
+    min:     -0.30
+    max:     +0.30
+    comments: ""
+"Lambda_b->Lambda::sigma_long^V@BFvD2014" :
+    central: 0.00
+    min:     -0.21
+    max:     +0.21
+    comments: ""
+"Lambda_b->Lambda::sigma_long^A@BFvD2014" :
+    central: 0.00
+    min:     -0.30
+    max:     +0.30
+    comments: ""
+
+# form factor parameters for Lambda_b -> Lambda decays according to
+# [DM2016], table ?, p. ??
+"Lambda_b->Lambda::a_0_time^V@DM2016" :
+    central: +0.373
+    min:     +0.373
+    max:     +0.373
+    comments: ""
+"Lambda_b->Lambda::a_1_time^V@DM2016" :
+    central: -0.939
+    min:     -0.939
+    max:     -0.939
+    comments: ""
+"Lambda_b->Lambda::a_2_time^V@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda::a_0_time^A@DM2016" :
+    central: +0.403
+    min:     +0.403
+    max:     +0.403
+    comments: ""
+"Lambda_b->Lambda::a_1_time^A@DM2016" :
+    central: -1.029
+    min:     -1.029
+    max:     -1.029
+    comments: ""
+"Lambda_b->Lambda::a_2_time^A@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda::a_0_long^V@DM2016" :
+    central: +0.422
+    min:     +0.422
+    max:     +0.422
+    comments: ""
+"Lambda_b->Lambda::a_1_long^V@DM2016" :
+    central: -1.139
+    min:     -1.139
+    max:     -1.139
+    comments: ""
+"Lambda_b->Lambda::a_2_long^V@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda::a_0_perp^V@DM2016" :
+    central: +0.518
+    min:     +0.518
+    max:     +0.518
+    comments: ""
+"Lambda_b->Lambda::a_1_perp^V@DM2016" :
+    central: -1.350
+    min:     -1.350
+    max:     -1.350
+    comments: ""
+"Lambda_b->Lambda::a_2_perp^V@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda::a_0_long^A@DM2016" :
+    central: +0.356
+    min:     +0.356
+    max:     +0.356
+    comments: ""
+"Lambda_b->Lambda::a_1_long^A@DM2016" :
+    central: -1.061
+    min:     -1.061
+    max:     -1.061
+    comments: ""
+"Lambda_b->Lambda::a_2_long^A@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda::a_1_perp^A@DM2016" :
+    central: -1.136
+    min:     -1.136
+    max:     -1.136
+    comments: ""
+"Lambda_b->Lambda::a_2_perp^A@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda::a_0_long^T@DM2016" :
+    central: +0.496
+    min:     +0.496
+    max:     +0.496
+    comments: ""
+"Lambda_b->Lambda::a_1_long^T@DM2016" :
+    central: -1.128
+    min:     -1.128
+    max:     -1.128
+    comments: ""
+"Lambda_b->Lambda::a_2_long^T@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda::a_0_perp^T@DM2016" :
+    central: +0.388
+    min:     +0.388
+    max:     +0.388
+    comments: ""
+"Lambda_b->Lambda::a_1_perp^T@DM2016" :
+    central: -0.962
+    min:     -0.962
+    max:     -0.962
+    comments: ""
+"Lambda_b->Lambda::a_2_perp^T@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda::a_0_long^T5@DM2016" :
+    central: +0.340
+    min:     +0.340
+    max:     +0.340
+    comments: ""
+"Lambda_b->Lambda::a_1_long^T5@DM2016" :
+    central: -0.770
+    min:     -0.770
+    max:     -0.770
+    comments: ""
+"Lambda_b->Lambda::a_2_long^T5@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda::a_1_perp^T5@DM2016" :
+    central: -0.801
+    min:     -0.801
+    max:     -0.801
+    comments: ""
+"Lambda_b->Lambda::a_2_perp^T5@DM2016" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+
+# subleading parameter for Lambda_b -> Lambda ll decays according to
+# [MvD2016].
+"Lambda_b->Lambdall::r_perp_0@MvD2016" :
+    central: 0.00
+    min:     -0.03
+    max:     +0.03
+    comments: ""
+"Lambda_b->Lambdall::r_perp_1@MvD2016" :
+    central: 0.00
+    min:     -0.03
+    max:     +0.03
+    comments: ""
+"Lambda_b->Lambdall::r_para_0@MvD2016" :
+    central: 0.00
+    min:     -0.03
+    max:     +0.03
+    comments: ""
+"Lambda_b->Lambdall::r_para_1@MvD2016" :
+    central: 0.00
+    min:     -0.03
+    max:     +0.03
+    comments: ""
+
+# form-factor parameters for B->K* simple series
+# expansion (SSE) based on LCSR according to
+# [BSZ2015]. We don't use table 11, p. 40 but did our own
+# fit to the combination of LCSR and lattice inputs
+# [HLMW2015] with the info both groups provided to us.
+# Use (B.6) to replace A_12(0), and T_1(0) = T_2(0) to
+# replace T_2(0).
+"B->K^*::alpha^A0_0@BSZ2015" :
+    central: +0.35
+    min:     +0.32
+    max:     +0.37
+    comments: ""
+"B->K^*::alpha^A0_1@BSZ2015" :
+    central: -1.21
+    min:     -1.29
+    max:     -1.13
+    comments: ""
+"B->K^*::alpha^A0_2@BSZ2015" :
+    central: +0.77
+    min:     +0.29
+    max:     +1.22
+    comments: ""
+"B->K^*::alpha^A1_0@BSZ2015" :
+    central: +0.2625
+    min:     +0.2475
+    max:     +0.2775
+    comments: ""
+"B->K^*::alpha^A1_1@BSZ2015" :
+    central: +0.07
+    min:     -0.01
+    max:     +0.13
+    comments: ""
+"B->K^*::alpha^A1_2@BSZ2015" :
+    central: +0.045
+    min:     -0.105
+    max:     +0.165
+    comments: ""
+"B->K^*::alpha^A12_1@BSZ2015" :
+    central: +0.53
+    min:     +0.39
+    max:     +0.63
+    comments: ""
+"B->K^*::alpha^A12_2@BSZ2015" :
+    central: +0.315
+    min:     -0.075
+    max:     +0.645
+    comments: ""
+"B->K^*::alpha^V_0@BSZ2015" :
+    central: +0.3475
+    min:     +0.3225
+    max:     +0.3625
+    comments: ""
+"B->K^*::alpha^V_1@BSZ2015" :
+    central: -1.19
+    min:     -1.27
+    max:     -1.11
+    comments: ""
+"B->K^*::alpha^V_2@BSZ2015" :
+    central: +1.545
+    min:     +1.215
+    max:     +1.875
+    comments: ""
+"B->K^*::alpha^T1_0@BSZ2015" :
+    central: +0.3125
+    min:     +0.2925
+    max:     +0.3275
+    comments: ""
+"B->K^*::alpha^T1_1@BSZ2015" :
+    central: -1.07
+    min:     -1.15
+    max:     -0.99
+    comments: ""
+"B->K^*::alpha^T1_2@BSZ2015" :
+    central: +1.395
+    min:     +1.095
+    max:     +1.695
+    comments: ""
+"B->K^*::alpha^T2_1@BSZ2015" :
+    central: +0.33
+    min:     +0.23
+    max:     +0.41
+    comments: ""
+"B->K^*::alpha^T2_2@BSZ2015" :
+    central: +0.255
+    min:     +0.015
+    max:     +0.465
+    comments: ""
+"B->K^*::alpha^T23_0@BSZ2015" :
+    central: +0.6675
+    min:     +0.6225
+    max:     +0.7025
+    comments: ""
+"B->K^*::alpha^T23_1@BSZ2015" :
+    central: +0.93
+    min:     +0.71
+    max:     +1.21
+    comments: ""
+"B->K^*::alpha^T23_2@BSZ2015" :
+    central: -0.15
+    min:     -0.855
+    max:     +0.705
+    comments: ""
+
+# B LCDA parameters
+"lambda_B_p" :
+    central: +0.485
+    min:     +0.370
+    max:     +0.600
+    comments: " // GeV, cf. [BHvD2010], Table I"
+# B->K LCDA Parameter
+"B->K::a_1@1GeV" :
+    central: +0.06
+    min:     +0.03
+    max:     +0.09
+    comments: " // cf. [BBL2006], Table 3"
+"B->K::a_2@1GeV" :
+    central: +0.25
+    min:     +0.10
+    max:     +0.4
+    comments: " // cf. [BBL2006], Table 3"
+"B->K::a_4@1GeV" :
+    central: -0.015
+    min:     -0.115
+    max:     +0.085
+    comments: " // cf. [BZ2004v3], Eq. (24)"
+"B->K::a_1@2.2GeV" :
+    central: +0.048
+    min:     +0.024
+    max:     +0.071
+    comments: " // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25"
+"B->K::a_2@2.2GeV" :
+    central: +0.174
+    min:     +0.070
+    max:     +0.278
+    comments: " // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25"
+"B->K::a_4@2.2GeV" :
+    central: -0.0089
+    min:     -0.0679
+    max:     +0.0502
+    comments: " // cf. [BZ2004v3], Eq. (24) and cf. [BHP2007] App. A, pp. 24-25"
+# B->K^*, K^* LCDA parameters
+"B->K^*::a_1_par" :
+    central: +0.1
+    min:     +0.03
+    max:     +0.17
+    comments: ""
+"B->K^*::a_2_par" :
+    central: +0.1
+    min:     +0.0
+    max:     +0.2
+    comments: ""
+"B->K^*::a_1_perp" :
+    central: +0.1
+    min:     +0.03
+    max:     +0.17
+    comments: ""
+"B->K^*::a_2_perp" :
+    central: +0.1
+    min:     +0.0
+    max:     +0.2
+    comments: ""
+"B->K^*::f_Kstar_par" :
+    central: +0.217
+    min:     +0.212
+    max:     +0.222
+    comments: " // GeV, cf. [BHvD2010], Table I"
+"B->K^*::f_Kstar_perp@2GeV" :
+    central: +0.173
+    min:     +0.168
+    max:     +0.178
+    comments: " // GeV @2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD2010], Table I"

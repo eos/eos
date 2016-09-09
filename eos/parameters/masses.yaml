@@ -1,0 +1,137 @@
+# Masses in GeV
+# Lepton masses
+"mass::e" :
+    central: +5.10999e-4
+    min:     +5.10999e-4
+    max:     +5.10999e-4
+    comments: "cf. [PDG2012], p. 13"
+"mass::mu" :
+    central: +1.05658e-1
+    min:     +1.05658e-1
+    max:     +1.05658e-1
+    comments: "cf. [PDG2012], p. 13"
+"mass::tau" :
+    central: +1.77682
+    min:     +1.77666
+    max:     +1.77698
+    comments: "cf. [PDG2012], p. 14"
+
+# Quark masses
+"mass::d(2GeV)" :
+    central: +0.0048
+    min:     +0.0045
+    max:     +0.0055
+    comments: "cf. [PDG2012], p. 21"
+"mass::ud(2GeV)" :
+    central: +0.008
+    min:     +0.008
+    max:     +0.008
+    comments: ""
+"mass::s(2GeV)" :
+    central: +0.095
+    min:     +0.090
+    max:     +0.010
+    comments: "cf. [PDG2012], p. 21"
+"mass::c" :
+    central: +1.275
+    min:     +1.250
+    max:     +1.300
+    comments: "cf. [PDG2012], p. 21"
+"mass::b(MSbar)" :
+    central: +4.18
+    min:     +4.15
+    max:     +4.21
+    comments: "cf. [PDG2012], p. 21"
+"mass::t(pole)" :
+    central: +173.5
+    min:     +172.5
+    max:     +174.5
+    comments: "cf. [PDG2012], p. 22"
+
+# Pi meson masses
+"mass::pi^0" :
+    central: +0.1349766
+    min:     +0.1349760
+    max:     +0.1349772
+    comments: "cf. [PDG-Live], May 2014"
+"mass::pi^+" :
+    central: +0.13957018
+    min:     +0.13956983
+    max:     +0.13957053
+    comments: ""
+
+# K meson masses
+"mass::K_d" :
+    central: +0.497614
+    min:     +0.497590
+    max:     +0.497638
+    comments: "cf. [PDG2012], p. 41"
+"mass::K_u" :
+    central: +0.493677
+    min:     +0.493661
+    max:     +0.493693
+    comments: "cf. [PDG2012], p. 39"
+"mass::K^*_d" :
+    central: +0.89594
+    min:     +0.89572
+    max:     +0.89616
+    comments: "cf. [PDG2012], p. 45"
+"mass::K^*_u" :
+    central: +0.89166
+    min:     +0.89140
+    max:     +0.89192
+    comments: "cf. [PDG2012], p. 45"
+
+# D meson masses
+"mass::D^+" :
+    central: +1.86952
+    min:     +1.86961
+    max:     +1.86970
+"mass::D^0" :
+    central: +1.86479
+    min:     +1.86484
+    max:     +1.86489
+
+# B meson masses
+"mass::B_d" :
+    central: +5.27958
+    min:     +5.27941
+    max:     +5.27975
+    comments: "cf. [PDG2012], p. 84"
+"mass::B_u" :
+    central: +5.27925
+    min:     +5.27908
+    max:     +5.27942
+    comments: "cf. [PDG2012], p. 70"
+"mass::B_s" :
+    central: +5.36677
+    min:     +5.36653
+    max:     +5.36701
+    comments: "cf. [PDG2012], p. 105"
+
+# s baryon masses
+"mass::Lambda" :
+    central: +1.115683
+    min:     +1.115677
+    max:     +1.115689
+    comments: "cf. [PDG2012], p. 149"
+
+# b baryon masses
+"mass::Lambda_b" :
+    central: +5.6194
+    min:     +5.6187
+    max:     +5.6201
+    comments: "cf. [PDG2012], p. 165"
+
+# Gauge boson masses
+"mass::W" :
+    central: +80.385
+    min:     +80.370
+    max:     +80.400
+    comments: "cf. [PDG2012], p. 8"
+"mass::Z" :
+    central: +91.1876
+    min:     +91.1855
+    max:     +91.1897
+    comments: "cf. [PDG2012], p. 9"
+

@@ -16,7 +16,8 @@ libeosformfactors_la_SOURCES = \
 libeosformfactors_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	-lgslcblas \
-	-lgsl
+	-lgsl \
+	-lyaml-cpp
 
 include_eos_rarebdecaysdir = $(includedir)/eos/form-factors
 include_eos_rarebdecays_HEADERS = \
@@ -25,6 +26,9 @@ include_eos_rarebdecays_HEADERS = \
 	form-factor-adapter.hh \
 	form-factors.hh \
 	pi-lcdas.hh
+
+AM_TESTS_ENVIRONMENT = \
+	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
 	analytic-b-to-pi_TEST \

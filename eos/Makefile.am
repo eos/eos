@@ -4,7 +4,7 @@ CLEANFILES = \
 	references_TEST
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = utils optimize statistics form-factors rare-b-decays b-decays .
+SUBDIRS = parameters utils optimize statistics form-factors rare-b-decays b-decays .
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
@@ -27,6 +27,9 @@ include_eos_HEADERS = \
 	decays.hh \
 	observable.hh \
 	signal-pdf.hh
+
+AM_TESTS_ENVIRONMENT = \
+	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
 	constraint_TEST \

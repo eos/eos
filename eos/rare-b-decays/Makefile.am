@@ -22,8 +22,10 @@ libeosrarebdecays_la_SOURCES = \
 libeosrarebdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
+	-lboost_filesystem -lboost_system \
 	-lgslcblas \
-	-lgsl
+	-lgsl \
+	-lyaml-cpp
 
 include_eos_rarebdecaysdir = $(includedir)/eos/rare-b-decays
 include_eos_rarebdecays_HEADERS = \
@@ -44,6 +46,9 @@ EXTRA_DIST = \
 	exclusive-b-to-s-dilepton-low-recoil_TEST-btokll.data \
 	exclusive-b-to-s-dilepton-low-recoil_TEST-btokstarll.data \
 	exclusive-b-to-s-gamma_TEST-btokstargamma.data
+
+AM_TESTS_ENVIRONMENT = \
+	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
 	bremsstrahlung_TEST \

@@ -64,6 +64,9 @@ if EOS_ENABLE_PMC
 include_eos_statistics_HEADERS += population-monte-carlo-sampler.hh
 endif
 
+AM_TESTS_ENVIRONMENT = \
+	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
+
 TESTS = \
 	analysis_TEST \
 	chi-squared_TEST \

@@ -1,0 +1,82 @@
+# B->K^*ll uncertainties from subleading terms for Large Recoil
+"B->K^*ll::A_long_uncertainty@LargeRecoil" :
+    central: +1.0
+    min:     +0.95
+    max:     +1.05
+    comments: ""
+"B->K^*ll::A_para_uncertainty@LargeRecoil" :
+    central: +1.0
+    min:     +0.95
+    max:     +1.05
+    comments: ""
+"B->K^*ll::A_perp_uncertainty@LargeRecoil" :
+    central: +1.0
+    min:     +0.95
+    max:     +1.05
+    comments: ""
+
+# B->Pll uncertainties at subleading order at Large Recoil
+"B->Pll::Lambda_pseudo@LargeRecoil" :
+    central: +0.0
+    min:     -0.5
+    max:     +0.5
+    comments: ""
+"B->Pll::sl_phase_pseudo@LargeRecoil" :
+    central: +0.0
+    min:     -1.57079632679490
+    max:     +1.57079632679490
+    comments: ""
+
+# B->Pll uncertainties at subleading order at Low Recoil
+"B->Pll::Lambda_pseudo@LowRecoil" :
+    central: +0.0
+    min:     -0.5
+    max:     +0.5
+    comments: ""
+"B->Pll::sl_phase_pseudo@LowRecoil" :
+    central: +0.0
+    min:     -1.57079632679490
+    max:     +1.57079632679490
+    comments: ""
+
+# B->Vll uncertainties at subleading order at Low Recoil
+"B->Vll::Lambda@LowRecoil" :
+    central: +0.0
+    min:     -0.5
+    max:     +0.5
+    comments: ""
+"B->Vll::Lambda_0@LowRecoil" :
+    central: +0.0
+    min:     -0.5
+    max:     +0.5
+    comments: ""
+"B->Vll::Lambda_pa@LowRecoil" :
+    central: +0.0
+    min:     -0.5
+    max:     +0.5
+    comments: ""
+"B->Vll::Lambda_pp@LowRecoil" :
+    central: +0.0
+    min:     -0.5
+    max:     +0.5
+    comments: ""
+"B->Vll::sl_phase@LowRecoil" :
+    central: +0.0
+    min:     -1.57079632679490
+    max:     +1.57079632679490
+    comments: ""
+"B->Vll::sl_phase_0@LowRecoil" :
+    central: +0.0
+    min:     -1.57079632679490
+    max:     +1.57079632679490
+    comments: ""
+"B->Vll::sl_phase_pa@LowRecoil" :
+    central: +0.0
+    min:     -1.57079632679490
+    max:     +1.57079632679490
+    comments: ""
+"B->Vll::sl_phase_pp@LowRecoil" :
+    central: +0.0
+    min:     -1.57079632679490
+    max:     +1.57079632679490
+    comments: ""

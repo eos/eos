@@ -27,6 +27,9 @@ include_eos_bdecays_HEADERS = \
 
 EXTRA_DIST =
 
+AM_TESTS_ENVIRONMENT = \
+	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
+
 TESTS = \
 	b-to-pi-l-nu_TEST \
 	b-to-pi-pi-l-nu_TEST \

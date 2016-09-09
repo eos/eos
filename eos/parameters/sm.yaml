@@ -1,0 +1,42 @@
+"hbar" :
+    central: +6.58211928e-25
+    min:     +6.58211913e-25
+    max:     +6.58211943e-25
+    comments: "in GeV s, cf. [PDG2012]:  p. 4"
+# Factorization scale
+"mu" :
+    central: +4.2
+    min:     +2.4
+    max:     +9.6
+    comments: ""
+# GSW Parameter
+"GSW::sin^2(theta)" :
+    central: +0.23116
+    min:     +0.23104
+    max:     +0.23128
+    comments: "cf. [PDG2012]:  p. 4"
+# QED inputs
+"QED::alpha_e(m_b)" :
+    central: +0.00751879699248120
+    min:     +0.00751879699248120
+    max:     +0.00781250000000000
+    comments: "alpha_e(m_b) = 1/133 .. alpha_e(m_W) = 1/128"
+# G_Fermi
+"G_Fermi" :
+    central: +1.1663787e-5
+    min:     +1.1663781e-5
+    max:     +1.1663793e-5
+    comments: "cf. [PDG2012], p. 5"
+
+# b->s matching parameters
+"b->s::mu_0c" :
+    central: +80.0
+    min:     +80.0
+    max:     +80.0
+    comments: ""
+"b->s::mu_0t" :
+    central: +120.0
+    min:     +120.0
+    max:     +120.0
+    comments: ""
+

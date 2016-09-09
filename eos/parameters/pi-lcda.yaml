@@ -1,0 +1,31 @@
+# Pion LCDA parameters
+"pi::a2@1GeV" :
+    central: +0.16
+    min:     +0.16
+    max:     +0.16
+    comments: " // cf. [DKMMO2008]"
+"pi::a4@1GeV" :
+    central: +0.04
+    min:     +0.04
+    max:     +0.04
+    comments: " // cf. [DKMMO2008]"
+"pi::f3@1GeV" :
+    central: +0.0045
+    min:     +0.0030
+    max:     +0.0060
+    comments: " // GeV^2, cf. [DKMMO2008]"
+"pi::omega3@1GeV" :
+    central: -1.5
+    min:     -2.2
+    max:     -0.8
+    comments: " // cf. [DKMMO2008]"
+"pi::omega4@1GeV" :
+    central: +0.2
+    min:     +0.2
+    max:     +0.2
+    comments: " // cf. [DKMMO2008]"
+"pi::delta^2@1GeV" :
+    central: +0.18
+    min:     +0.12
+    max:     +0.24
+    comments: " // GeV^2, cf. [DKMMO2008]"

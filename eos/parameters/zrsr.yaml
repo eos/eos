@@ -1,0 +1,11 @@
+# Zero-Recoil Sum Rule for Lambda_b -> Lambda_c form factor
+"Lambda_b->Lambda_c::mu@ZRSR" :
+    central: +0.75
+    min:     +0.75
+    max:     +0.75
+    comments: ""
+"Lambda_b->Lambda_c::wM@ZRSR" :
+    central: +0.75
+    min:     +0.75
+    max:     +0.75
+    comments: ""

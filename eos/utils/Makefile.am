@@ -6,6 +6,7 @@ CLEANFILES = \
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
+AM_CXXFLAGS += -DEOS_DATADIR='"$(datadir)"'
 
 lib_LTLIBRARIES = libeosutils.la
 libeosutils_la_SOURCES = \
@@ -60,7 +61,14 @@ libeosutils_la_SOURCES = \
 	wilson-polynomial.cc wilson-polynomial.hh \
 	wilson_scan_model.cc wilson_scan_model.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
-libeosutils_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lhdf5 -lhdf5_hl -lMinuit2
+libeosutils_la_LIBADD = \
+	-lboost_filesystem -lboost_system \
+	-lgsl -lgslcblas \
+	-lhdf5 -lhdf5_hl \
+	-lm \
+	-lMinuit2 \
+	-lpthread \
+	-lyaml-cpp
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
@@ -117,6 +125,9 @@ include_eos_utils_HEADERS = \
 	wilson_scan_model.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 
+AM_TESTS_ENVIRONMENT = \
+	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
+
 TESTS = \
 	apply_TEST \
 	cartesian-product_TEST \
@@ -153,6 +164,7 @@ LDADD = \
 	-lgsl \
 	-lhdf5 \
 	-lMinuit2 \
+	-lyaml-cpp \
 	$(top_builddir)/test/libeostest.a \
 	libeosutils.la \
 	$(top_builddir)/eos/libeos.la

@@ -42,6 +42,26 @@ namespace eos
     };
 
     /*!
+     * ParameterInputFileParseError is thrown when a malformed parameter input
+     * file cannot be parsed by libyaml-cpp.
+     */
+    struct ParameterInputFileParseError :
+        public Exception
+    {
+        ParameterInputFileParseError(const std::string & file, const std::string & msg) throw ();
+    };
+
+    /*!
+     * ParameterInputFileNodeError is thrown when a malformed node is encountered
+     * within a parameter input file.
+     */
+    struct ParameterInputFileNodeError :
+        public Exception
+    {
+        ParameterInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw ();
+    };
+
+    /*!
      * Parameters keeps the set of all numeric parameters for any Observable.
      *
      * Access to any Parameter or their values is coherent, i.e., changes to

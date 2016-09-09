@@ -18,14 +18,16 @@ noinst_PROGRAMS = \
 	observables
 
 LDADD = \
-	-lhdf5 \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
 	$(top_builddir)/eos/optimize/libeosoptimize.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
-	$(top_builddir)/eos/libeos.la
+	$(top_builddir)/eos/libeos.la \
+	-lboost_filesystem -lboost_system \
+	-lhdf5 \
+	-lyaml-cpp
 
 if EOS_ENABLE_PMC
 bin_PROGRAMS += \

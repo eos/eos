@@ -16,6 +16,18 @@ AC_PROG_MAKE_SET
 PKG_PROG_PKG_CONFIG
 dnl }}}
 
+dnl {{{ check for required packages
+AC_CHECK_LIB([boost_filesystem], main,
+	[],
+	[AC_MSG_ERROR([you do seem to be lacking 'libboost_filesystem'.])]
+	)
+AC_CHECK_LIB([boost_system], main,
+	[],
+	[AC_MSG_ERROR([you do seem to be lacking 'libboost_system'.])]
+	)
+AC_CHECK_LIB([yaml-cpp], main)
+dnl }}}
+
 dnl {{{ use HDF5 path if supplied via --with-hdf5=, otherwise use pkg-config; check for HDF5
 AC_ARG_WITH([hdf5],
 	[AS_HELP_STRING([--with-hdf5], [used for I/O to scan data])]
@@ -224,6 +236,7 @@ AC_OUTPUT(
 	eos/form-factors/Makefile
 	eos/rare-b-decays/Makefile
 	eos/b-decays/Makefile
+	eos/parameters/Makefile
 	eos/utils/Makefile
 	eos/optimize/Makefile
 	eos/statistics/Makefile
