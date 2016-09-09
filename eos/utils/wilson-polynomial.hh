@@ -28,15 +28,15 @@
 
 namespace eos
 {
-    class Constant;
+    struct Constant;
 
-    class Sum;
+    struct Sum;
 
-    class Product;
+    struct Product;
 
-    class Sine;
+    struct Sine;
 
-    class Cosine;
+    struct Cosine;
 
     typedef OneOf<Constant, Sum, Product, Sine, Cosine, Parameter> WilsonPolynomial;
 

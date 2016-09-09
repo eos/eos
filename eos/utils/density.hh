@@ -60,7 +60,7 @@ namespace eos
              */
             virtual void dump_descriptions(hdf5::File & file, const std::string & data_set_base) const;
 
-            class Output;
+            struct Output;
     };
 
     /*!

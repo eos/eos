@@ -26,7 +26,7 @@
 namespace eos
 {
     // Forward Declaration
-    struct Mutable;
+    class Mutable;
 
     typedef std::shared_ptr<Mutable> MutablePtr;
 }

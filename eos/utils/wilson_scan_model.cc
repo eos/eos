@@ -179,22 +179,22 @@ namespace eos
         complex<double> a_s = alpha_s / 4.0 / M_PI;
         WilsonCoefficients<BToS> result;
         result._sm_like_coefficients = std::array<std::complex<double>, 15>
-        {
+        {{
             _c1(), _c2(), _c3(), _c4(), _c5(), _c6(),
             0.0, 0.0, 0.0, 0.0, 0.0,
             a_s * _c7(), a_s * _c8(), a_s * c9(), a_s * c10()
-        };
+        }};
         result._primed_coefficients = std::array<std::complex<double>, 15>
-        {
+        {{
             /* we only consider c7', c8', c9' and c10' */
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
             0.0, 0.0, 0.0, 0.0, 0.0,
             a_s * _c7prime(), a_s * _c8prime(), a_s * c9prime(), a_s * c10prime()
-        };
+        }};
         result._scalar_tensor_coefficients = std::array<std::complex<double>, 6>
-        {
+        {{
             cS(), cSprime(), cP(), cPprime(), cT(), cT5()
-        };
+        }};
         result._alpha_s = alpha_s;
 
         if (cp_conjugate)
