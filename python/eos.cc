@@ -89,6 +89,9 @@ BOOST_PYTHON_MODULE(eos)
     // Parameter
     class_<Parameter>("Parameter", no_init)
         .def(float_(self))
+        .def("central", &Parameter::central, return_value_policy<copy_const_reference>())
+        .def("max", &Parameter::max, return_value_policy<copy_const_reference>())
+        .def("min", &Parameter::min, return_value_policy<copy_const_reference>())
         .def("name", &Parameter::name, return_value_policy<copy_const_reference>())
         .def("set", &Parameter::set)
         ;
