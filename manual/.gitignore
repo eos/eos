@@ -1,0 +1,22 @@
+# Our LaTeX source is generated from manual.tex.in
+manual.tex
+
+# LaTeX output
+manual.acn
+manual.acr
+manual.alg
+manual.aux
+manual.bbl
+manual.bcf
+manual.blg
+manual.glg
+manual.glo
+manual.gls
+manual.ist
+manual.out
+manual.pdf
+manual.run.xml
+manual.toc
+
+# Generated files from LaTeX filecontents environments
+examples/*.out

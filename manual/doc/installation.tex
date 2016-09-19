@@ -28,15 +28,16 @@ software to be pre-installed:
 If you intend to use the Python \cite{Python} interface to the EOS library, you will need
 to additionally install
 \begin{description}
-    \item[libboost-python] the BOOST library for interfacing Python and C++.
+    \item[libboost-python-dev] the BOOST library for interfacing Python and C++.
 \end{description}
 We recommend that you install the above packages only via your system's software management system.
 
 \paragraph{Scientific Software} Building and using the EOS core libraries requires in addition
 the following scientific software to be pre-installed:
 \begin{description}
-    \item[\package{GSL}] the GNU Scientific Library \cite{GSL}, in version 1.16 or higher,
-    \item[\package{HDF5}] the Hierarchical Data Format v5 library \cite{HDF5}, in version 1.8.11 or higher,
+    \item[\package{libgsl0-dev}] the GNU Scientific Library \cite{GSL}, in version 1.16 or higher,
+    \item[\package{libhdf5-serial-dev}] the Hierarchical Data Format v5 library \cite{HDF5}, in version 1.8.11 or higher,
+    \item[\package{libfftw3-dev}] the \dots,
     \item[\package{Minuit2}] the physics analysis tool for function minimization, in version 5.28.00 or higher.
 \end{description}
 Except for \package{Minuit2}, we recommend the installation of the above packages using your system's
@@ -92,7 +93,7 @@ sudo sed -i \
     /opt/pkgs/pmclib-1.01/include/pmctools/maths.h
 popd
 popd
-rm -R /tmp/pmclib
+rm -R /tmp/libpmc
 \end{commandline}
 
 

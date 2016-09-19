@@ -7,23 +7,27 @@
 ]{scrbook}
 
 %% Packages
-\usepackage[
+\usepackage[%
     style=phys,%
-    articletitle=true,biblabel=brackets,%
+    eprint=true,%
+    articletitle=true,%
+    biblabel=brackets,%
     chaptertitle=false,pageranges=false,%
-    sorting=none%
+    sorting=none,%
+    defernumbers=true%
 ]{biblatex}                                      % for the bibliography
 \usepackage{booktabs}                            % for book-quality tables
 \usepackage{braket}                              % for the braket notation
 \usepackage{enumitem}                            % for modifications to the list-like environments
+\usepackage{filecontents}                        % for keeping files' contents within the document source
 \usepackage[acronym,toc]{glossaries}             % for acronyms and glossaries
 \usepackage{hyperref}                            % for hyperlinks in the PDF
 \usepackage{listings}                            % for source code and commandline listings
 \usepackage{multirow}                            % for table cells spanning multiple rows
-\usepackage{todonotes}                           % for margin notes on open tasks
+\usepackage{palatino}                            % for use of Palatino font
 \usepackage{slashed}                             % for Feynman slash notation
 \usepackage{subfigure}                           % for captioned subdividion of figures
-\usepackage{palatino}
+\usepackage{todonotes}                           % for margin notes on open tasks
 
 %% Physics Shortcuts
 \newcommand{\dd}{\mathrm{d}}
@@ -100,12 +104,17 @@
 
 %% refer to elements of the document
 \newcommand{\refapp}[1]{appendix~\ref{app:#1}}
+\newcommand{\refch}[1]{chapter~\ref{ch:#1}}
 \newcommand{\refeq}[1]{eq.~(\ref{eq:#1})}
 \newcommand{\refeqs}[2]{eqs.~(\ref{eq:#1})-(\ref{eq:#2})}
+\newcommand{\reffig}[1]{figure~\ref{fig:#1}}
 \newcommand{\refsec}[1]{section~\ref{sec:#1}}
 
-%% indent description environments by 2\parindent
-\setlist[description]{leftmargin=2\parindent,labelindent=2\parindent}
+%% indent description environments by 2\parindent ~= 2em
+\setlist[description]{leftmargin=2em,labelindent=2em}
+
+%% do not indent paragraphs
+\setlength{\parindent}{0pt}
 
 %% list observables
 \newenvironment{observables}{%
@@ -136,6 +145,7 @@
 \newcommand{\cpp}[1]{\texttt{#1}}
 \newcommand{\client}[1]{\texttt{#1}}
 \newcommand{\package}[1]{\textsf{\textbf{#1}}}
+\newcommand{\observable}[1]{\texttt{\lstinline{#1}}}
 
 
 %%
@@ -146,7 +156,7 @@
 %%
 %% Metadata
 %%
-\title{EOS --- A HEP\\ Programm for Flavor Physics}
+\title{EOS --- A HEP\\ Program for Flavour Physics}
 \subtitle{User Manual}
 \author{Danny van Dyk \\ Christoph Bobeth \and Frederik Beaujean}
 
@@ -194,13 +204,16 @@
 %% Contents
 \tableofcontents
 
+%% List of open ToDo items
+%\listoftodos
+
 \chapter*{Acknowledgments}
 
 \input{acknowledgments.tex}
 
 \mainmatter
 
-\part{Documentation}
+\part*{Software Documentation}
 
 \input{doc/installation.tex}
 
@@ -208,17 +221,45 @@
 
 \input{doc/interface.tex}
 
-%\chapter{Tutorials}
+\chapter{Extending EOS}
+\label{ch:extending}
+
+\section{How to add a new observable}
+
+\section{How to add a new measurement}
+
+%%
+%% Physics
+%%
+%\part*{Physics}
 %
-%\section{How to add a new observable}
+%\chapter{Effective Field Theories}
 %
-%\section{How to add a new measurement}
+%\input{physics/eft-b-to-s}
 %
-%\appendix
+%\chapter{$b$-Meson decays}
 %
-%\chapter{Conventions}
+%\input{physics/b-meson-hadronic-matrix-elements.tex}
 %
-%\input{conventions.tex}
+%\section{Semileptonic $B$ decays from Charged Currents}
+%
+%\input{physics/b-to-pi-l-nu.tex}
+%
+%\section{Rare radiative and semileptonic $B$ decays from Flavor Changing Neutral Currents}
+%
+%\input{physics/incl-b-to-s-gamma.tex}
+%\input{physics/incl-b-to-s-dilepton.tex}
+%\input{physics/christoph.tex}
+%
+%\chapter{$b$-Baryon decays}
+%
+%\input{physics/b-baryon-hadronic-matrix-elements.tex}
+
+\appendix
+
+\chapter{Conventions}
+
+\input{conventions.tex}
 
 \backmatter
 
