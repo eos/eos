@@ -35,16 +35,17 @@ namespace eos
 
         UsedParameter parameter;
 
-        Implementation(const Parameters & p, const std::string & n, ParameterUser & u) :
+        Implementation(const Parameters & p, const std::string & n, const Kinematics & k, ParameterUser & u) :
             parameters(p),
+            kinematics(k),
             name(n),
             parameter(p[n], u)
         {
         }
     };
 
-    ObservableStub::ObservableStub(const Parameters & parameters, const std::string & name) :
-        PrivateImplementationPattern<ObservableStub>(new Implementation<ObservableStub>(parameters, name, *this))
+    ObservableStub::ObservableStub(const Parameters & parameters, const std::string & name, const Kinematics & kinematics) :
+        PrivateImplementationPattern<ObservableStub>(new Implementation<ObservableStub>(parameters, name, kinematics, *this))
     {
     }
 
@@ -91,6 +92,6 @@ namespace eos
     ObservablePtr
     ObservableStub::clone(const Parameters & parameters) const
     {
-        return ObservablePtr(new ObservableStub(parameters, _imp->name));
+        return ObservablePtr(new ObservableStub(parameters, _imp->name, _imp->kinematics));
     }
 }

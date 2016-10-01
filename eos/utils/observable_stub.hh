@@ -30,7 +30,7 @@ namespace eos
         public PrivateImplementationPattern<ObservableStub>
     {
         public:
-            ObservableStub(const Parameters & parameters, const std::string & name);
+            ObservableStub(const Parameters & parameters, const std::string & name, const Kinematics & kinematics = Kinematics());
 
             ~ObservableStub();
 

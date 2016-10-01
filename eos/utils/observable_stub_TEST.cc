@@ -64,5 +64,16 @@ class ObservableStubTest :
                 p = p.central();
                 TEST_CHECK_EQUAL(o1->evaluate(), o2->evaluate());
             }
+
+            // Check name, kinematics, options after cloning
+            {
+                Parameters parameters = Parameters::Defaults();
+                ObservablePtr o1 = ObservablePtr(new ObservableStub(parameters, "mass::c"));
+                ObservablePtr o2 = o1->clone();
+
+                TEST_CHECK_EQUAL(o1->name(),        o2->name());
+                TEST_CHECK_EQUAL(o1->kinematics(),  o2->kinematics());
+                TEST_CHECK_EQUAL(o1->options(),     o2->options());
+            }
         }
 } observable_stub_test;
