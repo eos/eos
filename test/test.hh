@@ -22,6 +22,7 @@
 #define WILSON_FITTER_GUARD_TEST_TEST_HH 1
 
 #include <config.h>
+#include <eos/utils/exception.hh>
 #include <eos/utils/stringify.hh>
 
 #include <cmath>
@@ -197,6 +198,11 @@ namespace test
         try \
         { \
             expression; \
+        } \
+        catch (eos::Exception & e) \
+        { \
+            throw TestCaseFailedException(__LINE__, __FILE__, \
+                    "Caught unexpected eos::Exception in '" #expression "': " + std::string(e.what())); \
         } \
         catch (...) \
         { \
