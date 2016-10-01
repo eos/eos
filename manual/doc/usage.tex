@@ -79,7 +79,7 @@ budgets of parametric uncertainties: one for uncertainties pertaining to the for
 (labelled 'FF'), and one for uncertainties pertaining to the CKM matrix elements (labelled 'CKM').
 
 Our intentions translate to the following call to \client{eos-evaluate}:
-\commandlineexample{examples/evaluate-btopilnu-integrated}
+\commandlineexample{examples/evaluate-btopilnu-integrated.bash}
 
 \begin{filecontents*}{examples/evaluate-btopilnu-integrated.out}
 # B->pilnu::BR: form-factors=BCL2008,l=mu
@@ -254,7 +254,7 @@ problem of this complexity -- maximally $7500$ steps during the prerun phase;
 the adaption process should be executed after every $500$ steps.\\
 
 Our intentions translate to the following call to \client{eos-sample-mcmc}:
-\commandlineexample{examples/sample-mcmc-btopi-ff}
+\commandlineexample{examples/sample-mcmc-btopi-ff.bash}
 
 Optionally, if the prerun converges, the client can be used to perform a main run, in which
 the proposal functions will be kept static. For such these main run samples, we wish for a
@@ -272,7 +272,7 @@ $R$-value \cite{Gelman:1992zz} threshold of $1.5$. For each update, $500$
 samples per mixture component shall be drawn, in order to produce $10^6$
 samples in the final step. Convergence shall be declared upon a standard
 deviation for the perplexity only, of $0.05$ over the last $4$ update steps.
-The call then reads: \commandlineexample{examples/sample-pmc-btopi-ff}
+The call then reads: \commandlineexample{examples/sample-pmc-btopi-ff.bash}
 
 Both clients output copious amounts diagnostic data to the standard output, which include
 \begin{itemize}
@@ -331,7 +331,7 @@ arguments:
 In order to illustrate the client's usage, we use the same example as
 discussed in \refsec{usage:eos-sample-mcmc+pmc}. The corresponding call
 then reads:
-\commandlineexample{examples/find-mode-btopi-ff}
+\commandlineexample{examples/find-mode-btopi-ff.bash}
 
 \begin{filecontents*}{examples/find-mode-btopi-ff.out}
 # Starting optimization at ( 0.0035 0.31 0 0 )
@@ -399,14 +399,14 @@ HFAG average of the inclusive determination $|V_{ub}| = (4.45 \pm 0.26) \cdot 10
 \cite{Amhis:2014hma}, while for the latter we use the FLAG average
 $f_{B} = 0.188 \pm 0.007\,\GeV$ \cite{Aoki:2013ldr}.
 Our intention translates to the following call to \client{eos-propagate-uncertainty}:
-\commandlineexample{examples/propagate-uncertainty-btotaunu}
+\commandlineexample{examples/propagate-uncertainty-btotaunu.bash}
 
 As an exmple of the second way, we would like to use samples from the posterior
 PDF as obtain in \refsec{usage:eos-sample-mcmc+pmc} in order to predict the
 branching ratio of the decay $\bar{B}^0\to \pi e^- \bar{\nu}_e$, in the
 same kinematic range as the decay to muons described previously.
 Our intention translates to the following call to \client{eos-propagate-uncertainty}:
-\commandlineexample{examples/propagate-uncertainty-btopilnu}
+\commandlineexample{examples/propagate-uncertainty-btopilnu.bash}
 
 For both ways, the samples of the predictive distributions within the HDF5 files
 can be accessed using the \texttt{eosdata} Python module.
