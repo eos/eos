@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2015, 2016 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -50,7 +50,7 @@ namespace eos
                 // symmetric gaussian test
                 {
                     LogLikelihood llh(p);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +4.2, +4.3, +4.4);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)), +4.2, +4.3, +4.4);
 
                     p["mass::b(MSbar)"] = 4.2;
                     TEST_CHECK_NEARLY_EQUAL(llh(), +0.88364655978937656 , eps);
@@ -63,7 +63,7 @@ namespace eos
                 // values differ at one sigma from mode
                 {
                     LogLikelihood llh(p);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +4.24, +4.25, +4.3);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)), +4.24, +4.25, +4.3);
 
                     p["mass::b(MSbar)"] = 4.2;
                     TEST_CHECK_NEARLY_EQUAL(llh(), -9.912380635885128, eps);
@@ -79,9 +79,9 @@ namespace eos
                 // Just the sum of individual log(likelihood) terms
                 {
                     LogLikelihood llh(p);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +4.24, +4.25, +4.30);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::c")),        +1.33, +1.82, +1.90);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::tau")),      +1.85, +2.00, +2.18);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)), +4.24, +4.25, +4.30);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::c",        k)), +1.33, +1.82, +1.90);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::tau",      k)), +1.85, +2.00, +2.18);
 
                     p["mass::b(MSbar)"] = 4.2;
                     p["mass::c"] = 1.5;
@@ -93,7 +93,7 @@ namespace eos
                 // clone test
                 {
                     LogLikelihood llh1(p);
-                    llh1.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +4.2, +4.3, +4.4);
+                    llh1.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)), +4.2, +4.3, +4.4);
 
                     p["mass::b(MSbar)"] = 4.2;
                     TEST_CHECK_NEARLY_EQUAL(llh1(), 0.88364655978937656 , eps);
@@ -113,15 +113,16 @@ namespace eos
 
                 // iteration
                 {
+                    std::cout << "FOO" << std::endl;
                     LogLikelihood llh(p);
 
                     // add blocks manually
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +4.1, +4.2, +4.3);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::c")), +1.15, +1.2, +1.25);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)), +4.1,  +4.2, +4.3);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::c",        k)), +1.15, +1.2, +1.25);
 
                     // now add a  constraint
-                    auto obs = ObservablePtr(new TestObservable(p, k, "mass::e"));
-                    llh.add(Constraint("harr", std::vector<ObservablePtr>{ obs },
+                    auto obs = ObservablePtr(new ObservableStub(p, "mass::e", k));
+                    llh.add(Constraint("test::electron-mass", std::vector<ObservablePtr>{ obs },
                         std::vector<LogLikelihoodBlockPtr>{ LogLikelihoodBlock::LogGamma(llh.observable_cache(), obs, 0.1, 0.11, 0.13) } ));
 
                     // remember to evaluate likelihood to fill the cache
@@ -145,9 +146,9 @@ namespace eos
                     auto cache = llh.observable_cache();
                     for (unsigned i = 0 ; i < cache.size() ; ++i)
                     {
-                        observable_values += cache.observable(i)->name() + " = " + stringify(double(cache[i])) + "; ";
+                        observable_values += cache.observable(i)->name().str() + " = " + stringify(double(cache[i])) + "; ";
                     }
-                    TEST_CHECK_EQUAL("test-observable[mass::b(MSbar)] = 4.25; test-observable[mass::c] = 1.3; test-observable[mass::e] = 0.115; ", observable_values);
+                    TEST_CHECK_EQUAL_STR("mass::b(MSbar) = 4.25; mass::c = 1.3; mass::e = 0.115; ", observable_values);
 
                     // check that looping gives proper results as well
                     std::string constraints_significances;
@@ -155,7 +156,7 @@ namespace eos
                     {
                         for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
                         {
-                                constraints_significances += c->name() + ": " + stringify((**b).significance()) + "; ";
+                                constraints_significances += c->name().str() + ": " + stringify((**b).significance()) + "; ";
                         }
                     }
 
@@ -165,8 +166,8 @@ namespace eos
                 // multiple instances of same observable, to mimic results from different experiments
                 {
                     LogLikelihood llh(p);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +4.1, +4.2, +4.3);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +4.3, +4.4, +4.5);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)), +4.1, +4.2, +4.3);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)), +4.3, +4.4, +4.5);
 
                     p["mass::b(MSbar)"] = 4.30;
                     TEST_CHECK_NEARLY_EQUAL(llh(), 2 * 0.88364655978937656, eps);
@@ -181,8 +182,8 @@ namespace eos
                     kin.declare("s", 1.0);
 
                     LogLikelihood llh(p);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")),   +4.1, +4.2, +4.3);
-                    llh.add(ObservablePtr(new TestObservable(p, kin, "mass::b(MSbar)")), +4.3, +4.4, +4.5);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)),   +4.1, +4.2, +4.3);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", kin)), +4.3, +4.4, +4.5);
 
                     p["mass::b(MSbar)"] = 4.30;
                     TEST_CHECK_NEARLY_EQUAL(llh(), 2 * 0.88364655978937656, eps);
@@ -194,10 +195,12 @@ namespace eos
                 // observables vary only by option, but identical in name => they should be different predictions
                 {
                     LogLikelihood llh(p);
-                    llh.add(ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")), +4.1, +4.2, +4.3);
+                    llh.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)), +4.1, +4.2, +4.3);
 
-                    TestObservable * obs = new TestObservable(p, k, "mass::b(MSbar)");
+                    ObservableStub * obs = new ObservableStub(p, "mass::b(MSbar);opt=har", k);
+#if 0
                     obs->set_option("opt", "har");
+#endif
                     llh.add(ObservablePtr(obs), +4.3, +4.4, +4.5);
 
                     p["mass::b(MSbar)"] = 4.30;
@@ -209,7 +212,7 @@ namespace eos
 
                 // check single Gaussian block likelihood
                 {
-                    ObservablePtr obs(new TestObservable(p, k, "mass::b(MSbar)"));
+                    ObservablePtr obs(new ObservableStub(p, "mass::b(MSbar)", k));
                     ObservableCache cache(p);
 
                     auto block = LogLikelihoodBlock::Gaussian(cache, obs, +4.2, +4.3, +4.4);
@@ -284,7 +287,7 @@ namespace eos
                 {
                     static const double low_eps = 5e-4;
 
-                    ObservablePtr obs(new TestObservable(p, k, "mass::b(MSbar)"));
+                    ObservablePtr obs(new ObservableStub(p, "mass::b(MSbar)", k));
                     ObservableCache cache(p);
 
                     double min = 0.34;
@@ -341,7 +344,7 @@ namespace eos
 
                 // compare gaussian and loggamma
                 {
-                    ObservablePtr obs(new TestObservable(p, k, "mass::b(MSbar)"));
+                    ObservablePtr obs(new ObservableStub(p, "mass::b(MSbar)", k));
                     ObservableCache cache(p);
 
                     double min = 0.42;
@@ -390,7 +393,7 @@ namespace eos
                 // loggamma sampling
                 {
                     // sampling almost same as for gaussian, but with slight asymmetry
-                    ObservablePtr obs(new TestObservable(p, k, "mass::b(MSbar)"));
+                    ObservablePtr obs(new ObservableStub(p, "mass::b(MSbar)", k));
                     ObservableCache cache(p);
 
                     double min = 4.195;
@@ -433,7 +436,7 @@ namespace eos
 
                 // Amoroso limit
                 {
-                    ObservablePtr obs(new TestObservable(p, k, "mass::b(MSbar)"));
+                    ObservablePtr obs(new ObservableStub(p, "mass::b(MSbar)", k));
                     ObservableCache cache(p);
 
                     double mode = 0.0;
@@ -520,7 +523,7 @@ namespace eos
 
                 // Amoroso
                 {
-                    ObservablePtr obs(new TestObservable(p, k, "mass::b(MSbar)"));
+                    ObservablePtr obs(new ObservableStub(p, "mass::b(MSbar)", k));
                     ObservableCache cache(p);
 
                     // use 2011 LHCb/CMS limit on B_s -> mu mu
@@ -582,8 +585,8 @@ namespace eos
                 {
                     std::array<ObservablePtr, 2> obs
                     {{
-                        ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)")),
-                        ObservablePtr(new TestObservable(p, k, "mass::c"))
+                        ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)),
+                        ObservablePtr(new ObservableStub(p, "mass::c",        k))
                     }};
 
                     ObservableCache cache(p);
@@ -695,10 +698,8 @@ namespace eos
                 {
                     Parameters parameters  = Parameters::Defaults();
                     LogLikelihood llh(parameters);
-                    llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::c")), 1.182, 1.192, 1.202);
-                    llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::c")), 1.19, 1.2, 1.21);
+                    llh.add(ObservablePtr(new ObservableStub(parameters, "mass::c")), 1.182, 1.192, 1.202);
+                    llh.add(ObservablePtr(new ObservableStub(parameters, "mass::c")), 1.19, 1.2, 1.21);
 
                     parameters["mass::c"] = 1.196;
                     llh();
@@ -716,10 +717,8 @@ namespace eos
 
                     std::vector<LogLikelihoodBlockPtr> components
                     {
-                        LogLikelihoodBlock::Gaussian(cache, ObservablePtr(new TestObservable(p, Kinematics(), "mass::c")),
-                                                     -5, -4, -3),
-                        LogLikelihoodBlock::Gaussian(cache, ObservablePtr(new TestObservable(p, Kinematics(), "mass::c")),
-                                                     3, 4, 5)
+                        LogLikelihoodBlock::Gaussian(cache, ObservablePtr(new ObservableStub(p, "mass::c")), -5, -4, -3),
+                        LogLikelihoodBlock::Gaussian(cache, ObservablePtr(new ObservableStub(p, "mass::c")),  3,  4,  5)
                     };
                     std::vector<double> weights { 0.9, 0.1 };
 

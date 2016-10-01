@@ -47,11 +47,6 @@
 
 namespace eos
 {
-    ObservableNameError::ObservableNameError(const std::string & name) :
-        Exception("Observable name '" + name + "' is malformed")
-    {
-    }
-
     ObservableFactory::ObservableFactory()
     {
     }
@@ -101,9 +96,9 @@ namespace eos
     }
 
     ObservablePtr
-    Observable::make(const std::string & _name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
+    Observable::make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
     {
-        static const std::map<std::string, ObservableFactory *> simple_observables
+        static const std::map<QualifiedName, ObservableFactory *> simple_observables
         {
             /* B Meson Properties */
             make_observable("B::M_B^*-M_B",
@@ -1670,35 +1665,21 @@ namespace eos
                     std::make_tuple("E_min")),
         };
 
-        Options options;
-        std::string name(_name);
-
-        std::string::size_type pos;
-        while (std::string::npos != (pos = name.rfind(',')))
-        {
-            std::string::size_type sep(name.find('=', pos + 1));
-            if (std::string::npos == sep)
-                throw ObservableNameError(_name);
-
-            std::string key(name.substr(pos + 1, sep - pos - 1));
-            std::string value(name.substr(sep + 1));
-
-            options.set(key, value);
-            name.erase(pos);
-        }
-
         // check if 'name' matches a simple observable
         {
             auto i = simple_observables.find(name);
             if (simple_observables.end() != i)
-                return i->second->make(parameters, kinematics, options + _options);
+                return i->second->make(parameters, kinematics, name.options() + _options);
         }
 
         // check if 'name' matches a parameter
+        if (name.options().empty())
         {
-            auto i = std::find_if(parameters.begin(), parameters.end(), [&] (const Parameter & p) { return p.name() == name; });
-            if (options.empty() && (parameters.end() != i))
+            auto i = std::find_if(parameters.begin(), parameters.end(), [&] (const Parameter & p) { return p.name() == name.str(); });
+            if (parameters.end() != i)
+            {
                 return ObservablePtr(new ObservableStub(parameters, name));
+            }
         }
 
         return ObservablePtr();

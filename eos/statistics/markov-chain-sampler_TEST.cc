@@ -205,7 +205,7 @@ class MarkovChainSamplerTest :
                         auto data_set_pre = f.open_data_set("/descriptions/prerun/chain #1/constraints", constraint_type);
                         auto record_pre = std::make_tuple("parameter_name");
                         data_set_pre >> record_pre;
-                        TEST_CHECK_EQUAL(std::get<0>(record_pre), std::string("test-observable[mass::b(MSbar)]"));
+                        TEST_CHECK_EQUAL(std::get<0>(record_pre), std::string("mass::b(MSbar)"));
 
                         auto data_set_main = f.open_data_set("/descriptions/main run/chain #1/constraints", constraint_type);
                         auto record_main = std::make_tuple("parameter_name");

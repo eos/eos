@@ -21,6 +21,8 @@
 #define EOS_GUARD_SRC_STATISTICS_ANALYSIS_TEST_HH 1
 
 #include <eos/statistics/analysis.hh>
+#include <eos/utils/observable_stub.hh>
+#include <eos/utils/qualified-name.hh>
 #include <test/test.hh>
 
 using namespace test;
@@ -36,17 +38,17 @@ namespace eos
 
             Options o;
 
-            std::string n, mass_name;
+            QualifiedName n, mass_name;
 
             UsedParameter mass;
 
-            TestObservable(const Parameters & p, const Kinematics & k, const std::string & mass_name) :
+            TestObservable(const Parameters & p, const Kinematics & k, const QualifiedName & mass_name) :
                 p(p),
                 k(k),
                 o(),
-                n("test-observable[" + mass_name + "]"),
+                n(mass_name),
                 mass_name(mass_name),
-                mass(p[mass_name], *this)
+                mass(p[mass_name.str()], *this)
             {
             }
 
@@ -84,7 +86,7 @@ namespace eos
                 return o;
             }
 
-            const std::string & name() const
+            const QualifiedName & name() const
             {
                 return n;
             }
@@ -98,7 +100,7 @@ namespace eos
     struct AbsoluteTestObservable :
         public TestObservable
     {
-            AbsoluteTestObservable(const Parameters & p, const Kinematics & k, const std::string & mass_name) :
+            AbsoluteTestObservable(const Parameters & p, const Kinematics & k, const QualifiedName & mass_name) :
                 TestObservable(p, k, mass_name)
             {
             }
@@ -135,8 +137,7 @@ namespace eos
         Parameters parameters = Parameters::Defaults();
 
         LogLikelihood llh(parameters);
-        llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::b(MSbar)")), 4.1, 4.2, 4.3);
+        llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
         LogPriorPtr prior = flat ?
             LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{3.7, 4.9} ) :

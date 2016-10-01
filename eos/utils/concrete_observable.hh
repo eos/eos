@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@ namespace eos
         public:
 
         private:
-            std::string _name;
+            QualifiedName _name;
 
             Parameters _parameters;
 
@@ -53,7 +53,7 @@ namespace eos
             std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple;
 
         public:
-            ConcreteObservable(const std::string & name,
+            ConcreteObservable(const QualifiedName & name,
                     const Parameters & parameters,
                     const Kinematics & kinematics,
                     const Options & options,
@@ -71,7 +71,7 @@ namespace eos
                 uses(_decay);
             }
 
-            virtual const std::string & name() const
+            virtual const QualifiedName & name() const
             {
                 return _name;
             }

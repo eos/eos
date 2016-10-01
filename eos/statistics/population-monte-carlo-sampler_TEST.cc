@@ -81,7 +81,7 @@ class PopulationMonteCarloSamplerTest :
                 Parameters p = Parameters::Defaults();
                 Kinematics k;
                 std::array<ObservablePtr, 2> obs;
-                obs[0] = ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)"));
+                obs[0] = ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k));
                 obs[1] = ObservablePtr(new AbsoluteTestObservable(p, k, "mass::c"));
 
                 ObservableCache cache(p);
@@ -96,7 +96,7 @@ class PopulationMonteCarloSamplerTest :
                 auto block = LogLikelihoodBlock::MultivariateGaussian<2>(cache, obs, mean, covariance);
 
                 LogLikelihood llh(p);
-                llh.add(Constraint("Correlated Gaussian for m_b and m_c", std::vector<ObservablePtr>(obs.begin(), obs.end()), { block }));
+                llh.add(Constraint("test::correlated-gaussian-m_b-and-m_c", std::vector<ObservablePtr>(obs.begin(), obs.end()), { block }));
 
                 Analysis analysis(llh);
 

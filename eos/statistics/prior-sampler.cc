@@ -390,7 +390,7 @@ namespace eos
                 components << record;
 
                 auto attr_name = components.create_attribute("name", hdf5::Scalar<const char *>("name"));
-                attr_name = (**o).name().c_str();
+                attr_name = (**o).name().str().c_str();
 
                 auto attr_options = components.create_attribute("options", hdf5::Scalar<const char *>("options"));
                 attr_options = (**o).options().as_string().c_str();

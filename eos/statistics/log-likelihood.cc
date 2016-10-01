@@ -603,7 +603,7 @@ namespace eos
 
             virtual std::string as_string() const
             {
-                std::string name = cache.observable(id)->name();
+                std::string name = cache.observable(id)->name().str();
                 std::string result = "Amoroso limit: ";
                 result += "mode at " + name + " = " + stringify(mode(), 5);
                 result += " (a = " + stringify(physical_limit, 5) + ", theta = " + stringify(theta, 5);

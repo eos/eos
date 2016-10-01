@@ -54,9 +54,9 @@ class PriorSamplerTest :
 
                 // load observables
                 ObservableSet o;
-                o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::b(MSbar)")));
-                o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::c")));
-                o.add(ObservablePtr(new TestObservable(p, Kinematics(), "mass::s(2GeV)")));
+                o.add(ObservablePtr(new ObservableStub(p, "mass::b(MSbar)")));
+                o.add(ObservablePtr(new ObservableStub(p, "mass::c")));
+                o.add(ObservablePtr(new ObservableStub(p, "mass::s(2GeV)")));
 
                 PriorSampler sampler(o, config);
 

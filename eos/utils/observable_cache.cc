@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2016 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;

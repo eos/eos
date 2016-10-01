@@ -31,20 +31,21 @@ namespace eos
 
         Options options;
 
-        std::string name;
+        QualifiedName name;
 
         UsedParameter parameter;
 
-        Implementation(const Parameters & p, const std::string & n, const Kinematics & k, ParameterUser & u) :
+        Implementation(const Parameters & p, const QualifiedName & n, const Kinematics & k, ParameterUser & u) :
             parameters(p),
             kinematics(k),
+            options(n.options()),
             name(n),
-            parameter(p[n], u)
+            parameter(p[n.str()], u)
         {
         }
     };
 
-    ObservableStub::ObservableStub(const Parameters & parameters, const std::string & name, const Kinematics & kinematics) :
+    ObservableStub::ObservableStub(const Parameters & parameters, const QualifiedName & name, const Kinematics & kinematics) :
         PrivateImplementationPattern<ObservableStub>(new Implementation<ObservableStub>(parameters, name, kinematics, *this))
     {
     }
@@ -53,7 +54,7 @@ namespace eos
     {
     }
 
-    const std::string &
+    const QualifiedName &
     ObservableStub::name() const
     {
         return _imp->name;

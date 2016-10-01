@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Frederik Beaujean
- * Copyright (c) 2011, 2012, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2011, 2012, 2013, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -80,8 +80,7 @@ class AnalysisTest :
                 Parameters parameters = Parameters::Defaults();
 
                 LogLikelihood llh(parameters);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::b(MSbar)")), 4.1, 4.2, 4.3);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
                 Analysis analysis(llh);
 
                 // store a clone with no parameters
@@ -140,8 +139,7 @@ class AnalysisTest :
                 Parameters parameters = Parameters::Defaults();
 
                 LogLikelihood llh(parameters);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::b(MSbar)")), 4.1, 4.2, 4.3);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
                 Analysis analysis(llh);
 
                 TEST_CHECK_THROWS(InternalError, analysis.log_prior());
@@ -168,16 +166,11 @@ class AnalysisTest :
                 Parameters parameters = Parameters::Defaults();
 
                 LogLikelihood llh(parameters);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::b(MSbar)")), 4.1, 4.2, 4.3);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::c")), 1.15, 1.2, 1.25);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::s(2GeV)")), 5e-3, 10e-3, 15e-3);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::t(pole)")), 171, 172, 173);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                        "mass::e")), 510.5e-6, 511e-6, 511.5e-6);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")),  4.1,      4.2,    4.3);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::c")),         1.15,     1.2,    1.25);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::s(2GeV)")),   5e-3,    10e-3,  15e-3);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::t(pole)")), 171,      172,    173);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::e")),       510.5e-6, 511e-6, 511.5e-6);
 
                 Analysis analysis(llh);
 
@@ -236,10 +229,8 @@ class AnalysisTest :
                 Parameters parameters = Parameters::Defaults();
 
                 LogLikelihood llh(parameters);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                    "mass::c")), 1.182, 1.192, 1.202);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                    "mass::c")), 1.19, 1.2, 1.21);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::c")), 1.182, 1.192, 1.202);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::c")), 1.19, 1.2, 1.21);
 
                 Analysis analysis(llh);
 

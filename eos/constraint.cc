@@ -23,6 +23,7 @@
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/qualified-name.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
@@ -32,14 +33,14 @@
 
 namespace eos
 {
-    UnknownConstraintError::UnknownConstraintError(const std::string & name) :
-        Exception("Constraint '" + name + "' is unknown")
+    UnknownConstraintError::UnknownConstraintError(const QualifiedName & name) :
+        Exception("Constraint '" + name.str() + "' is unknown")
     {
     }
 
     struct GaussianConstraintTemplate
     {
-        std::string observable;
+        QualifiedName observable;
 
         Kinematics kinematics;
 
@@ -49,7 +50,7 @@ namespace eos
 
         unsigned number_of_observations;
 
-        GaussianConstraintTemplate(const std::string & observable,
+        GaussianConstraintTemplate(const QualifiedName & observable,
                 const Kinematics & kinematics, const Options & options,
                 const double & central,
                 const double & sigma_hi_stat, const double & sigma_lo_stat,
@@ -68,14 +69,14 @@ namespace eos
         }
 
         Constraint
-        make(const std::string & name, const Options & options) const
+        make(const QualifiedName & name, const Options & options) const
         {
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
             ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
             if (! observable.get())
-                throw InternalError("make_gaussian_constraint: " + name + ": '" + this->observable + "' is not a valid observable name");
+                throw InternalError("make_gaussian_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
 
             double min = 0.0, max = 0.0;
             if ("asymmetric+quadratic" == options.get("uncertainty", "asymmetric+quadratic"))
@@ -92,7 +93,7 @@ namespace eos
 
     struct AmorosoLimitConstraintTemplate
     {
-        std::string observable;
+        QualifiedName observable;
 
         Kinematics kinematics;
 
@@ -103,14 +104,14 @@ namespace eos
         double theta, alpha;
 
         Constraint
-        make(const std::string & name, const Options & options) const
+        make(const QualifiedName & name, const Options & options) const
         {
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
             ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
             if (! observable.get())
-                throw InternalError("make_amoroso_limit_constraint: " + name + ": '" + this->observable + "' is not a valid observable name");
+                throw InternalError("make_amoroso_limit_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
 
 
             LogLikelihoodBlockPtr block = LogLikelihoodBlock::AmorosoLimit(cache, observable, physical_limit, upper_limit_90,
@@ -122,7 +123,7 @@ namespace eos
 
     struct AmorosoModeConstraintTemplate
     {
-        std::string observable;
+        QualifiedName observable;
 
         Kinematics kinematics;
 
@@ -133,14 +134,14 @@ namespace eos
         double theta, alpha, beta;
 
         Constraint
-        make(const std::string & name, const Options & options) const
+        make(const QualifiedName & name, const Options & options) const
         {
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
             ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
             if (! observable.get())
-                throw InternalError("make_amoroso_constraint: " + name + ": '" + this->observable + "' is not a valid observable name");
+                throw InternalError("make_amoroso_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
 
 
             LogLikelihoodBlockPtr block = LogLikelihoodBlock::AmorosoMode(cache, observable, physical_limit,
@@ -153,7 +154,7 @@ namespace eos
 
     struct AmorosoTripleLimitConstraintTemplate
     {
-        std::string observable;
+        QualifiedName observable;
 
         Kinematics kinematics;
 
@@ -164,14 +165,14 @@ namespace eos
         double theta, alpha, beta;
 
         Constraint
-        make(const std::string & name, const Options & options) const
+        make(const QualifiedName & name, const Options & options) const
         {
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
             ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
             if (! observable.get())
-                throw InternalError("make_amoroso_constraint: " + name + ": '" + this->observable + "' is not a valid observable name");
+                throw InternalError("make_amoroso_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
 
 
             LogLikelihoodBlockPtr block = LogLikelihoodBlock::Amoroso(cache, observable, physical_limit,
@@ -184,7 +185,7 @@ namespace eos
 
     struct AmorosoConstraintTemplate
     {
-        std::string observable;
+        QualifiedName observable;
 
         Kinematics kinematics;
 
@@ -193,14 +194,14 @@ namespace eos
         double physical_limit, theta, alpha, beta;
 
         Constraint
-        make(const std::string & name, const Options & options) const
+        make(const QualifiedName & name, const Options & options) const
         {
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
             ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
             if (! observable.get())
-                throw InternalError("make_amoroso_constraint: " + name + ": '" + this->observable + "' is not a valid observable name");
+                throw InternalError("make_amoroso_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
 
             LogLikelihoodBlockPtr block = LogLikelihoodBlock::Amoroso(cache, observable, physical_limit, theta, alpha, beta);
 
@@ -211,7 +212,7 @@ namespace eos
     template <size_t dim_>
     struct MultivariateGaussianConstraintTemplate
     {
-        std::array<std::string, dim_> observables;
+        std::array<QualifiedName, dim_> observable_names;
 
         std::array<Kinematics, dim_> kinematics;
 
@@ -228,7 +229,7 @@ namespace eos
 
         unsigned number_of_observations;
 
-        MultivariateGaussianConstraintTemplate(const std::array<std::string, dim_> & observables,
+        MultivariateGaussianConstraintTemplate(const std::array<QualifiedName, dim_> & observable_names,
             const std::array<Kinematics, dim_> & kinematics,
             const std::array<Options, dim_> & options,
             const std::array<double, dim_> & means,
@@ -237,7 +238,7 @@ namespace eos
             const std::array<double, dim_> & sigma_sys,
             const std::array<std::array<double, dim_>, dim_> & correlation,
             const unsigned number_of_observations = dim_) :
-            observables(observables),
+            observable_names(observable_names),
             kinematics(kinematics),
             options(options),
             means(means),
@@ -250,7 +251,7 @@ namespace eos
         }
 
         Constraint
-        make(const std::string & name, const Options & options) const
+        make(const QualifiedName & name, const Options & options) const
         {
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
@@ -258,9 +259,9 @@ namespace eos
             std::array<ObservablePtr, dim_> observables;
             for (auto i = 0u ; i < dim_ ; ++i)
             {
-                observables[i] = Observable::make(this->observables[i], parameters, this->kinematics[i], this->options[i] + options);
+                observables[i] = Observable::make(this->observable_names[i], parameters, this->kinematics[i], this->options[i] + options);
                 if (! observables[i].get())
-                    throw InternalError("make_multivariate_gaussian_constraint<" + stringify(dim_) + ">: " + name + ": '" + this->observables[i] + "' is not a valid observable name");
+                    throw InternalError("make_multivariate_gaussian_constraint<" + stringify(dim_) + ">: " + name.str() + ": '" + this->observable_names[i].str() + "' is not a valid observable name");
             }
 
             std::array<double, dim_> variances;
@@ -285,7 +286,7 @@ namespace eos
     template <size_t dim_>
     struct MultivariateGaussianCovarianceConstraintTemplate
     {
-        std::array<std::string, dim_> observables;
+        std::array<QualifiedName, dim_> observables;
 
         std::array<Kinematics, dim_> kinematics;
 
@@ -297,7 +298,7 @@ namespace eos
 
         unsigned number_of_observations;
 
-        MultivariateGaussianCovarianceConstraintTemplate(const std::array<std::string, dim_> & observables,
+        MultivariateGaussianCovarianceConstraintTemplate(const std::array<QualifiedName, dim_> & observables,
             const std::array<Kinematics, dim_> & kinematics,
             const std::array<Options, dim_> & options,
             const std::array<double, dim_> & means,
@@ -313,7 +314,7 @@ namespace eos
         }
 
         Constraint
-        make(const std::string & name, const Options & options) const
+        make(const QualifiedName & name, const Options & options) const
         {
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
@@ -323,7 +324,7 @@ namespace eos
             {
                 observables[i] = Observable::make(this->observables[i], parameters, this->kinematics[i], this->options[i] + options);
                 if (! observables[i].get())
-                    throw InternalError("make_multivariate_gaussian_covariance_constraint<" + stringify(dim_) + ">: " + name + ": '" + this->observables[i] + "' is not a valid observable name");
+                    throw InternalError("make_multivariate_gaussian_covariance_constraint<" + stringify(dim_) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
             }
 
             auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, number_of_observations);
@@ -3691,13 +3692,13 @@ namespace eos
     template <>
     struct Implementation<Constraint>
     {
-        std::string name;
+        QualifiedName name;
 
         ObservableSet observables;
 
         std::vector<LogLikelihoodBlockPtr> blocks;
 
-        Implementation(const std::string & name,
+        Implementation(const QualifiedName & name,
                 const std::vector<ObservablePtr> & observables,
                 const std::vector<LogLikelihoodBlockPtr> & blocks) :
             name(name),
@@ -3710,7 +3711,7 @@ namespace eos
         }
     };
 
-    Constraint::Constraint(const std::string & name,
+    Constraint::Constraint(const QualifiedName & name,
                 const std::vector<ObservablePtr> & observables,
                 const std::vector<LogLikelihoodBlockPtr> & blocks) :
         PrivateImplementationPattern<Constraint>(new Implementation<Constraint>(name, observables, blocks))
@@ -3721,7 +3722,7 @@ namespace eos
     {
     }
 
-    const std::string &
+    const QualifiedName &
     Constraint::name() const
     {
         return _imp->name;
@@ -3751,7 +3752,7 @@ namespace eos
         return ObservableIterator(_imp->observables.end());
     }
 
-    typedef std::function<Constraint (const std::string &, const Options & options)> ConstraintFactory;
+    typedef std::function<Constraint (const QualifiedName &, const Options & options)> ConstraintFactory;
 
     template <typename Factory_>
     ConstraintFactory make_factory(const Factory_ & f)
@@ -3759,10 +3760,10 @@ namespace eos
         return std::bind(&Factory_::make, f, std::placeholders::_1, std::placeholders::_2);
     }
 
-    const std::map<std::string, ConstraintFactory> &
+    const std::map<QualifiedName, ConstraintFactory> &
     make_constraint_factories()
     {
-        static const std::map<std::string, ConstraintFactory> constraint_factories =
+        static const std::map<QualifiedName, ConstraintFactory> constraint_factories =
         {
             /* 2000 */
             // CLEO
@@ -4098,8 +4099,8 @@ namespace eos
             { "Lambda_b->Lambda::f_long^V@BFvD2014", make_factory(templates::LambdaB_to_Lambda_flongV_13dot5_to_20dot3_BFvD2014) },
             { "Lambda_b->Lambda::f_long^A@BFvD2014", make_factory(templates::LambdaB_to_Lambda_flongA_13dot5_to_20dot3_BFvD2014) },
 
-            { "B->K^*::V+A_0+A_1+A_2@BSZ2015[LCSR]", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsr_parameters) },
-            { "B->K^*::V+A_0+A_1+A_2@BSZ2015[LCSR+Lattice]", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsrlattice_parameters) },
+            { "B->K^*::V+A_0+A_1+A_2[LCSR]@BSZ2015", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsr_parameters) },
+            { "B->K^*::V+A_0+A_1+A_2[LCSR+Lattice]@BSZ2015", make_factory(templates::B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsrlattice_parameters) },
 
             { "B->K^*::V+A_0+A_1+A_12@HLMW2015", make_factory(templates::B_to_Kstar_V_A0_A1_A12_11dot9_to_17dot8_HLMW_2015) },
 
@@ -4119,7 +4120,7 @@ namespace eos
      * 4. Run constraint_TEST and check text output for new constraint
      */
     Constraint
-    Constraint::make(const std::string & name, const Options & options)
+    Constraint::make(const QualifiedName & name, const Options & options)
     {
         const auto & factories = make_constraint_factories();
 
@@ -4130,12 +4131,12 @@ namespace eos
         return f->second(f->first, options);
     }
 
-    template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::string &>;
+    template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const QualifiedName &>;
 
     template<>
     struct Implementation<Constraints>
     {
-        std::vector<std::string> constraints;
+        std::vector<QualifiedName> constraints;
 
         Implementation()
         {

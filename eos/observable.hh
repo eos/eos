@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,6 +24,7 @@
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
+#include <eos/utils/qualified-name.hh>
 
 #include <string>
 #include <memory>
@@ -40,7 +41,7 @@ namespace eos
         public ParameterUser
     {
         public:
-            virtual const std::string & name() const = 0;
+            virtual const QualifiedName & name() const = 0;
 
             virtual double evaluate() const = 0;
 
@@ -54,7 +55,7 @@ namespace eos
 
             virtual ObservablePtr clone(const Parameters & parameters) const = 0;
 
-            static ObservablePtr make(const std::string & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
+            static ObservablePtr make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
     };
 
     typedef std::shared_ptr<Observable> ObservablePtr;
@@ -68,7 +69,7 @@ namespace eos
 
             virtual ObservablePtr make(const Parameters &, const Kinematics &, const Options &) const = 0;
     };
-
+#if 0
     /*!
      * ObservableNameError is thrown when Observable::make encounters a malformed observable name.
      */
@@ -85,6 +86,7 @@ namespace eos
         ObservableNameError(const std::string & name);
         ///@}
     };
+#endif
 }
 
 #endif

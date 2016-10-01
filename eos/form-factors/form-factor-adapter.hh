@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013 Danny van Dyk
+ * Copyright (c) 2013, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,7 +31,7 @@ namespace eos
         public Observable
     {
         private:
-            std::string _name;
+            QualifiedName _name;
 
             std::string _process;
 
@@ -48,7 +48,7 @@ namespace eos
             std::function<double (const FormFactors<Transition_> *, const double &)> _form_factor_function;
 
         public:
-            FormFactorAdapter(const std::string & name,
+            FormFactorAdapter(const QualifiedName & name,
                     const std::string & process,
                     const Parameters & parameters,
                     const Kinematics & kinematics,
@@ -70,7 +70,7 @@ namespace eos
                     throw NoSuchFormFactorError(process, options["form-factors"]);
             }
 
-            virtual const std::string & name() const
+            virtual const QualifiedName & name() const
             {
                 return _name;
             }
@@ -111,14 +111,14 @@ namespace eos
         public ObservableFactory
     {
         private:
-            std::string _name;
+            QualifiedName _name;
 
             std::string _process;
 
             std::function<double (const FormFactors<Transition_> *, const double &)> _form_factor_function;
 
         public:
-            FormFactorAdapterFactory(const std::string & name,
+            FormFactorAdapterFactory(const QualifiedName & name,
                     const std::string & process,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_function) :
                 _name(name),
@@ -143,7 +143,7 @@ namespace eos
         public Observable
     {
         private:
-            std::string _name;
+            QualifiedName _name;
 
             std::string _process;
 
@@ -162,7 +162,7 @@ namespace eos
             std::function<double (const FormFactors<Transition_> *, const double &)> _form_factor_denominator;
 
         public:
-            FormFactorRatioAdapter(const std::string & name,
+            FormFactorRatioAdapter(const QualifiedName & name,
                     const std::string & process,
                     const Parameters & parameters,
                     const Kinematics & kinematics,
@@ -184,7 +184,7 @@ namespace eos
                 _form_factors = FormFactorFactory<Transition_>::create(process + '@' + options["form-factors"], _parameters);
             }
 
-            virtual const std::string & name() const
+            virtual const QualifiedName & name() const
             {
                 return _name;
             }
@@ -227,7 +227,7 @@ namespace eos
         public ObservableFactory
     {
         private:
-            std::string _name;
+            QualifiedName _name;
 
             std::string _process;
 
@@ -236,7 +236,7 @@ namespace eos
             std::function<double (const FormFactors<Transition_> *, const double &)> _form_factor_denominator;
 
         public:
-            FormFactorRatioAdapterFactory(const std::string & name,
+            FormFactorRatioAdapterFactory(const QualifiedName & name,
                     const std::string & process,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_numerator,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_denominator) :

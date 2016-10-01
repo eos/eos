@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -198,7 +198,7 @@ namespace eos
 
             Options _options;
 
-            std::string _name;
+            QualifiedName _name;
 
         public:
             WilsonPolynomialRatio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator,
@@ -206,7 +206,7 @@ namespace eos
                 _numerator(numerator),
                 _denominator(denominator),
                 _parameters(parameters),
-                _name("WilsonPolynomialRatio")
+                _name("WilsonPolynomial::Ratio")
             {
             }
 
@@ -214,7 +214,7 @@ namespace eos
             {
             }
 
-            virtual const std::string & name() const { return _name; }
+            virtual const QualifiedName & name() const { return _name; }
             virtual Kinematics kinematics() { return _kinematics; }
             virtual Parameters parameters() { return _parameters; }
             virtual Options options() { return _options; }
@@ -250,7 +250,7 @@ namespace eos
 
             Options _options;
 
-            std::string _name;
+            QualifiedName _name;
 
         public:
             WilsonPolynomialHTLikeRatio(const WilsonPolynomial & numerator, const WilsonPolynomial & denominator1,
@@ -259,7 +259,7 @@ namespace eos
                 _denominator1(denominator1),
                 _denominator2(denominator2),
                 _parameters(parameters),
-                _name("WilsonPolynomialRatio")
+                _name("WilsonPolynomial::HTLikeRatio")
             {
             }
 
@@ -267,7 +267,7 @@ namespace eos
             {
             }
 
-            virtual const std::string & name() const { return _name; }
+            virtual const QualifiedName & name() const { return _name; }
             virtual Kinematics kinematics() { return _kinematics; }
             virtual Parameters parameters() { return _parameters; }
             virtual Options options() { return _options; }

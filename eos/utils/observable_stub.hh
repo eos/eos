@@ -22,6 +22,7 @@
 
 #include <eos/observable.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/qualified-name.hh>
 
 namespace eos
 {
@@ -30,11 +31,11 @@ namespace eos
         public PrivateImplementationPattern<ObservableStub>
     {
         public:
-            ObservableStub(const Parameters & parameters, const std::string & name, const Kinematics & kinematics = Kinematics());
+            ObservableStub(const Parameters & parameters, const QualifiedName & name, const Kinematics & kinematics = Kinematics());
 
             ~ObservableStub();
 
-            virtual const std::string & name() const;
+            virtual const QualifiedName & name() const;
 
             virtual double evaluate() const;
 

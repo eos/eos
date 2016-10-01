@@ -43,7 +43,7 @@ namespace eos
     {
         public:
             /// Constructor.
-            Constraint(const std::string & name, const std::vector<ObservablePtr> & observable,
+            Constraint(const QualifiedName & name, const std::vector<ObservablePtr> & observable,
                     const std::vector<LogLikelihoodBlockPtr> & blocks);
 
             /// Destructor.
@@ -51,7 +51,7 @@ namespace eos
 
             ///@name Access
             ///@{
-            const std::string & name() const;
+            const QualifiedName & name() const;
             ///@}
 
             ///@name Iteration over Observables
@@ -73,14 +73,12 @@ namespace eos
             ///@}
 
             /*!
-             * Create one of the builtin constraints by name.
-             *
-             * Constraint names are structured as PROCESS::NAME@EXPERIMENT-YEAR
+             * Create one of the builtin constraints from a qualified name.
              *
              * @note You need to clone each LogLikelihoodBlock of a Constraint
              * to actually be able to use it.
              */
-            static Constraint make(const std::string & name, const Options & options);
+            static Constraint make(const QualifiedName & name, const Options & options);
     };
 
 
@@ -100,7 +98,7 @@ namespace eos
         ///@name Iteration over known constraints
         ///@{
         struct ConstraintIteratorTag;
-        typedef WrappedForwardIterator<ConstraintIteratorTag, const std::string &> ConstraintIterator;
+        typedef WrappedForwardIterator<ConstraintIteratorTag, const QualifiedName &> ConstraintIterator;
 
         ConstraintIterator begin() const;
         ConstraintIterator end() const;
@@ -120,7 +118,7 @@ namespace eos
          *
          * @param name The offending constraint name.
          */
-        UnknownConstraintError(const std::string & name);
+        UnknownConstraintError(const QualifiedName & name);
         ///@}
     };
 }

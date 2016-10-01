@@ -33,7 +33,7 @@ namespace eos
         std::vector<ObservablePtr> observables;
 
         // <observable name, index>
-        std::map<std::string, unsigned> observable_names;
+        std::map<QualifiedName, unsigned> observable_names;
 
         Implementation()
         {
@@ -61,16 +61,22 @@ namespace eos
         static bool identical_observables(const ObservablePtr & lhs, const ObservablePtr & rhs)
         {
             // compare name
-            if( lhs->name() != rhs->name())
+            if (lhs->name() != rhs->name())
+            {
                 return false;
+            }
 
             // compare kinematics
             if( lhs->kinematics() != rhs->kinematics())
+            {
                 return false;
+            }
 
             // compare options
             if (lhs->options() != rhs->options())
+            {
                 return false;
+            }
 
             return true;
         }

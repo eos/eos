@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2016 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -281,7 +281,7 @@ class MarkovChainTest :
                 Parameters parameters = Parameters::Defaults();
 
                 LogLikelihood llh(parameters);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
+                llh.add(ObservablePtr(new ObservableStub(parameters, Kinematics(),
                             "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
                 Analysis analysis(llh);
@@ -323,8 +323,7 @@ class MarkovChainTest :
                 Parameters parameters = Parameters::Defaults();
 
                 LogLikelihood llh(parameters);
-                llh.add(ObservablePtr(new TestObservable(parameters, Kinematics(),
-                            "mass::b(MSbar)")), 4.1, 4.2, 4.3);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
                 Analysis analysis(llh);
                 // the irrelevant parameter
@@ -373,8 +372,8 @@ class MarkovChainTest :
                 Parameters p = Parameters::Defaults();
                 Kinematics k;
                 std::array<ObservablePtr, 2> obs;
-                obs[0] = ObservablePtr(new TestObservable(p, k, "mass::b(MSbar)"));
-                obs[1] = ObservablePtr(new TestObservable(p, k, "mass::c"));
+                obs[0] = ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k));
+                obs[1] = ObservablePtr(new ObservableStub(p, "mass::c",        k));
 
                 ObservableCache cache(p);
 
@@ -388,7 +387,7 @@ class MarkovChainTest :
                 auto block = LogLikelihoodBlock::MultivariateGaussian<2>(cache, obs, mean, _covariance);
 
                 LogLikelihood llh(p);
-                llh.add(Constraint("Correlated Gaussian", std::vector<ObservablePtr>(obs.begin(), obs.end()), { block }));
+                llh.add(Constraint("test::correlated-gaussian", std::vector<ObservablePtr>(obs.begin(), obs.end()), { block }));
 
                 Analysis analysis(llh);
 

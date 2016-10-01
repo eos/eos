@@ -71,7 +71,7 @@ class ObservableStubTest :
                 ObservablePtr o1 = ObservablePtr(new ObservableStub(parameters, "mass::c"));
                 ObservablePtr o2 = o1->clone();
 
-                TEST_CHECK_EQUAL(o1->name(),        o2->name());
+                TEST_CHECK_EQUAL(o1->name().full(), o2->name().full());
                 TEST_CHECK_EQUAL(o1->kinematics(),  o2->kinematics());
                 TEST_CHECK_EQUAL(o1->options(),     o2->options());
             }

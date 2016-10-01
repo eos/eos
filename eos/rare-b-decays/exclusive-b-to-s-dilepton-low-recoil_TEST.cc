@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2015, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -307,8 +307,8 @@ class BToKstarDileptonLowRecoilPolynomialTest :
             {
                 static const std::vector<std::string> names
                 {
-                    "B->K^*ll::BR@LowRecoil,model=WilsonScan",
-                    "B->K^*ll::Abar_FB@LowRecoil,model=WilsonScan",
+                    "B->K^*ll::BR@LowRecoil;model=WilsonScan",
+                    "B->K^*ll::Abar_FB@LowRecoil;model=WilsonScan",
                 };
                 static const std::vector<std::array<double, 6>> inputs
                 {
@@ -477,9 +477,9 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             k.declare("s_max"); k.set("s_max", 19.21);
 
             std::vector<ObservablePtr> observables;
-            observables.push_back(Observable::make("B->K^*ll::BR@LowRecoil,q=d,l=mu",   p, k, o));
-            observables.push_back(Observable::make("B->K^*ll::A_FB@LowRecoil,q=d,l=mu", p, k, o));
-            observables.push_back(Observable::make("B->K^*ll::F_L@LowRecoil,q=d,l=mu",  p, k, o));
+            observables.push_back(Observable::make("B->K^*ll::BR@LowRecoil;q=d,l=mu",   p, k, o));
+            observables.push_back(Observable::make("B->K^*ll::A_FB@LowRecoil;q=d,l=mu", p, k, o));
+            observables.push_back(Observable::make("B->K^*ll::F_L@LowRecoil;q=d,l=mu",  p, k, o));
 
             std::string filename(EOS_SRCDIR "/eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil_TEST-btokstarll.data");
 #ifdef EOS_GENERATE_TEST_DATA
@@ -857,8 +857,8 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
 
             std::vector<ObservablePtr> observables;
             std::vector<std::string> observable_names = {
-                    "B->Kll::BR@LowRecoil,q=u,l=mu",
-                    "B->Kll::F_H@LowRecoil,q=u,l=mu",
+                    "B->Kll::BR@LowRecoil;q=u,l=mu",
+                    "B->Kll::F_H@LowRecoil;q=u,l=mu",
             };
             for (auto & s : observable_names)
             {

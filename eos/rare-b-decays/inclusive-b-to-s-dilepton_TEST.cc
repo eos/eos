@@ -173,7 +173,7 @@ class BToXsDileptonLargeRecoilPolynomialTest :
         {
             static const std::vector<std::string> names
             {
-                "B->X_sll::BR@HLMW2005,model=WilsonScan",
+                "B->X_sll::BR@HLMW2005;model=WilsonScan",
             };
             static const std::vector<std::array<double, 6>> inputs
             {

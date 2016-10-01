@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -134,7 +134,7 @@ main(int argc, char * argv[])
         {
             WilsonPolynomial polynomial = make_polynomial(i->observable, CommandLine::instance()->coefficients);
 
-            std::cout << i->observable->name() + "[";
+            std::cout << i->observable->name() << "[";
 
             auto c = CommandLine::instance()->coefficients.cbegin(), c_end = CommandLine::instance()->coefficients.cend();
             if (c != c_end)

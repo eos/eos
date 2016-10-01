@@ -221,7 +221,7 @@ namespace eos
            // loop over constraints
            for (const auto & c : _log_likelihood)
            {
-               std::get<0>(constraint_record) = c.name().c_str();
+               std::get<0>(constraint_record) = c.name().str().c_str();
                constraint_data_set << constraint_record;
            }
        }
@@ -241,7 +241,7 @@ namespace eos
            const unsigned & n_observables = cache.size();
            for (unsigned i = 0 ; i < n_observables ; ++i)
            {
-               std::get<0>(observables_record) = cache.observable(i)->name().c_str();
+               std::get<0>(observables_record) = cache.observable(i)->name().str().c_str();
                observables_data_set << observables_record;
            }
        }
