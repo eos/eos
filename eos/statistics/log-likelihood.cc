@@ -381,14 +381,14 @@ namespace eos
 
                 // second constraint: 68% interval
                 int ret_code = gsl_sf_gamma_inc_Q_e(alpha, std::exp(z_plus), &result);
-                if ( ! GSL_SUCCESS == ret_code)
+                if (GSL_SUCCESS != ret_code)
                     throw InternalError("LogLikelihoodBlock::LogGamma: cannot evaluate cumulative at lambda = " + stringify(lambda)
                                         + ", alpha = " + stringify(alpha) + ". GSL reports: " + gsl_strerror(ret_code)
                                         + ". Perhaps the input is too [a]symmetric?");
                 const double cdf_plus = result.val;
 
                 ret_code = gsl_sf_gamma_inc_Q_e(alpha, std::exp(z_minus), &result);
-                if ( ! GSL_SUCCESS == ret_code)
+                if (GSL_SUCCESS != ret_code)
                     throw InternalError("LogLikelihoodBlock::LogGamma: cannot evaluate cumulative at lambda = " + stringify(lambda)
                                         + ", alpha = " + stringify(alpha) + ". GSL reports: " + gsl_strerror(ret_code)
                                         + ". Perhaps the input is too [a]symmetric?");

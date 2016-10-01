@@ -432,14 +432,14 @@ namespace eos
 
                     // second constraint: 68% interval
                     int ret_code = gsl_sf_gamma_inc_Q_e(alpha, std::exp(z_plus), &result);
-                    if ( ! GSL_SUCCESS == ret_code)
+                    if (GSL_SUCCESS != ret_code)
                         throw InternalError("LogPrior::LogGamma: cannot evaluate cumulative for '" + _name + "' at lambda = " + stringify(lambda)
                                             + ", alpha = " + stringify(alpha) + ". GSL reports: " + gsl_strerror(ret_code)
                                             + ". Perhaps the input is too [a]symmetric?");
                     const double cdf_plus = result.val;
 
                     ret_code = gsl_sf_gamma_inc_Q_e(alpha, std::exp(z_minus), &result);
-                    if ( ! GSL_SUCCESS == ret_code)
+                    if (GSL_SUCCESS != ret_code)
                         throw InternalError("LogPrior::LogGamma: cannot evaluate cumulative for '" + _name + "' at lambda = " + stringify(lambda)
                                             + ", alpha = " + stringify(alpha) + ". GSL reports: " + gsl_strerror(ret_code)
                                             + ". Perhaps the input is too [a]symmetric?");
@@ -497,7 +497,7 @@ namespace eos
                 virtual double mean() const
                 {
                     gsl_sf_result result;
-                    if ( ! GSL_SUCCESS == gsl_sf_psi_e(_alpha, &result))
+                    if (GSL_SUCCESS != gsl_sf_psi_e(_alpha, &result))
                     {
                         Log::instance()->message("LogPrior::LogGamma.mean", ll_error)
                             << "Error in evaluating the digamma function in GSL";
@@ -509,7 +509,7 @@ namespace eos
                 virtual double variance() const
                 {
                     gsl_sf_result result;
-                    if ( ! GSL_SUCCESS == gsl_sf_psi_1_e(_alpha, &result))
+                    if (GSL_SUCCESS != gsl_sf_psi_1_e(_alpha, &result))
                     {
                         Log::instance()->message("LogPrior::LogGamma.variance", ll_error)
                             << "Error in evaluating the trigamma function in GSL";
