@@ -96,6 +96,14 @@ namespace test
     } \
     while (false)
 
+#define TEST_CHECK_EQUAL_STR(a, b) \
+    do \
+    { \
+        if (! ((a) == (b))) \
+            throw TestCaseFailedException(__LINE__, __FILE__, "'" + stringify(a) + "' is not equal to '" + stringify(b) + "'"); \
+    } \
+    while (false)
+
 #define TEST_CHECK_FAILED(s) \
     do \
     { \
