@@ -45,6 +45,7 @@ libeosutils_la_SOURCES = \
 	power_of.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh \
+	qualified-name.cc qualified-name.hh \
 	random_number_generator.cc random_number_generator.hh \
 	save.hh \
 	standard-model.cc standard-model.hh \
@@ -138,6 +139,7 @@ TESTS = \
 	polylog_TEST \
 	power_of_TEST \
 	qcd_TEST \
+	qualified-name_TEST \
 	random_number_generator_TEST \
 	save_TEST \
 	standard_model_TEST \
@@ -198,6 +200,8 @@ polylog_TEST_SOURCES = polylog_TEST.cc
 power_of_TEST_SOURCES = power_of_TEST.cc
 
 qcd_TEST_SOURCES = qcd_TEST.cc
+
+qualified_name_TEST_SOURCES = qualified-name_TEST.cc
 
 random_number_generator_TEST_SOURCES = random_number_generator_TEST.cc
 
