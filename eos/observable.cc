@@ -207,19 +207,19 @@ namespace eos
             make_observable("B_s->K^*::A_12(s)", "B_s->K^*",
                     &FormFactors<PToV>::a_12),
 
-            make_observable("B->pipi::Im{F_perp}",
+            make_observable("B->pipi::Im{F_perp}(q2,k2,z)",
                     &AnalyticFormFactorBToPiPiBFvD2016::im_f_perp,
                     std::make_tuple("q2", "k2", "z")),
 
-            make_observable("B->pipi::Im{F_para}",
+            make_observable("B->pipi::Im{F_para}(q2,k2,z)",
                     &AnalyticFormFactorBToPiPiBFvD2016::im_f_para,
                     std::make_tuple("q2", "k2", "z")),
 
-            make_observable("B->pipi::Im{F_long}",
+            make_observable("B->pipi::Im{F_long}(q2,k2,z)",
                     &AnalyticFormFactorBToPiPiBFvD2016::im_f_long,
                     std::make_tuple("q2", "k2", "z")),
 
-            make_observable("B->pipi::Im{F_time}",
+            make_observable("B->pipi::Im{F_time}(q2,k2,z)",
                     &AnalyticFormFactorBToPiPiBFvD2016::im_f_time,
                     std::make_tuple("q2", "k2", "z")),
 
@@ -283,19 +283,19 @@ namespace eos
                     std::make_tuple("s_min", "s_max")),
 
             // B -> pi pi l nu
-            make_observable("B->pipilnu::BR(2)",
+            make_observable("B->pipilnu::BR(q2,k2)",
                     &BToPiPiLeptonNeutrino::double_differential_branching_ratio,
                     std::make_tuple("q2", "k2")),
 
-            make_observable("B->pipilnu::BR(3)",
+            make_observable("B->pipilnu::BR(q2,k2,cos(theta_pi))",
                     &BToPiPiLeptonNeutrino::triple_differential_branching_ratio,
                     std::make_tuple("q2", "k2", "cos(theta_pi)")),
 
-            make_observable("B->pipilnu::A_FB(2)",
+            make_observable("B->pipilnu::A_FB(q2,k2)",
                     &BToPiPiLeptonNeutrino::double_differential_forward_backward_asymmetry,
                     std::make_tuple("q2", "k2")),
 
-            make_observable("B->pipilnu::P(z)",
+            make_observable("B->pipilnu::P(cos(theta_pi))",
                     &BToPiPiLeptonNeutrino::partial_waves,
                     std::make_tuple("q2", "k2", "cos(theta_pi)")),
 
