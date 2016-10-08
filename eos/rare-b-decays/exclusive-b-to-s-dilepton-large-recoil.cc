@@ -1503,7 +1503,7 @@ namespace eos
             J4_muons = differential_j_4(s);
         }
 
-        return (J4_electrons - J4_muons) * _imp->tau() / _imp->hbar();
+        return 4.0 / 3.0 * (J4_electrons - J4_muons) * _imp->tau() / _imp->hbar();
     }
 
     double
@@ -1525,7 +1525,7 @@ namespace eos
             J5_muons = differential_j_5(s);
         }
 
-        return (J5_electrons - J5_muons) * _imp->tau() / _imp->hbar();
+        return 3.0 / 4.0 * (J5_electrons - J5_muons) * _imp->tau() / _imp->hbar();
     }
 
     double
@@ -1547,7 +1547,7 @@ namespace eos
             J6s_muons = differential_j_6s(s);
         }
 
-        return (J6s_electrons - J6s_muons) * _imp->tau() / _imp->hbar();
+        return 3.0 / 4.0 * (J6s_electrons - J6s_muons) * _imp->tau() / _imp->hbar();
     }
 
     double
@@ -2034,7 +2034,7 @@ namespace eos
             J4_muons = integrated_j_4(s_min, s_max);
         }
 
-        return (J4_electrons - J4_muons) * _imp->tau() / _imp->hbar();
+        return 3.0 / 4.0 * (J4_electrons - J4_muons) * _imp->tau() / _imp->hbar();
     }
 
     double
@@ -2056,7 +2056,7 @@ namespace eos
             J5_muons = integrated_j_5(s_min, s_max);
         }
 
-        return (J5_electrons - J5_muons) * _imp->tau() / _imp->hbar();
+        return 3.0 / 4.0 * (J5_electrons - J5_muons) * _imp->tau() / _imp->hbar();
     }
 
     double
@@ -2078,7 +2078,7 @@ namespace eos
             J6s_muons = integrated_j_6s(s_min, s_max);
         }
 
-        return (J6s_electrons - J6s_muons) * _imp->tau() / _imp->hbar();
+        return 3.0 / 4.0 * (J6s_electrons - J6s_muons) * _imp->tau() / _imp->hbar();
     }
 
     double
