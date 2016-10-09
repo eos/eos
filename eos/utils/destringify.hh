@@ -20,10 +20,22 @@
 #ifndef EOS_GUARD_SRC_UTILS_DESTRINGIFY_HH
 #define EOS_GUARD_SRC_UTILS_DESTRINGIFY_HH 1
 
+#include <eos/utils/exception.hh>
+
 #include <sstream>
 
 namespace eos
 {
+    /**
+     * Exception thrown when destringification fails.
+     */
+    class DestringifyError :
+        public Exception
+    {
+        public:
+            DestringifyError(const std::string & str);
+    };
+
     namespace impl
     {
         template <typename T_>
@@ -35,20 +47,16 @@ namespace eos
                 T_ value;
 
                 ss >> value;
+                if (! ss.eof() || ss.fail())
+                {
+                    throw DestringifyError(input);
+                }
 
                 return value;
             }
         };
 
-        template <typename T_> struct DoDestringify;
-
-        template <> struct DoDestringify<double> : public SimpleDestringify<double> {};
-
-        template <> struct DoDestringify<unsigned> : public SimpleDestringify<unsigned> {};
-
-        template <> struct DoDestringify<long> : public SimpleDestringify<long> {};
-
-        template <> struct DoDestringify<unsigned long> : public SimpleDestringify<unsigned long> {};
+        template <typename T_> struct DoDestringify : public SimpleDestringify<T_> {};
 
         template <> struct DoDestringify<bool>
         {

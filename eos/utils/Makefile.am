@@ -20,7 +20,7 @@ libeosutils_la_SOURCES = \
 	condition_variable.cc condition_variable.hh \
 	density.cc density.hh density-fwd.hh density-impl.hh \
 	derivative.cc derivative.hh \
-	destringify.hh \
+	destringify.cc destringify.hh \
 	diagnostics.cc diagnostics.hh \
 	equation_solver.cc equation_solver.hh \
 	exception.cc exception.hh \
