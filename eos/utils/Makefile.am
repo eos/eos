@@ -25,6 +25,7 @@ libeosutils_la_SOURCES = \
 	equation_solver.cc equation_solver.hh \
 	exception.cc exception.hh \
 	hdf5.cc hdf5.hh hdf5-fwd.hh \
+	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.cc kinematic.hh \
@@ -91,6 +92,7 @@ include_eos_utils_HEADERS = \
 	equation_solver.hh \
 	exception.hh \
 	hdf5.hh hdf5-fwd.hh \
+	indirect-iterator.hh indirect-iterator-fwd.hh \
 	integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	kinematic.hh \
@@ -135,6 +137,7 @@ TESTS = \
 	derivative_TEST \
 	equation_solver_TEST \
 	hdf5_TEST \
+	indirect-iterator_TEST \
 	integrate_TEST \
 	kinematic_TEST \
 	lcda_TEST \
@@ -182,6 +185,8 @@ derivative_TEST_SOURCES = derivative_TEST.cc
 hdf5_TEST_SOURCES = hdf5_TEST.cc
 
 equation_solver_TEST_SOURCES = equation_solver_TEST.cc
+
+indirect_iterator_TEST_SOURCES = indirect-iterator_TEST.cc
 
 integrate_TEST_SOURCES = integrate_TEST.cc
 
