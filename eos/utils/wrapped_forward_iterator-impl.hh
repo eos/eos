@@ -1,7 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2007 Ciaran McCreesh
+ * Copyright (c) 2016 Danny van Dyk
+ *
+ * Copied from the Paludis package manager, which is
+ * Copyright (c) 2007-2009 Ciaran McCreesh
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,108 +20,111 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_UTIL_WRAPPED_FORWARD_ITERATOR_IMPL_HH
-#define EOS_GUARD_UTIL_WRAPPED_FORWARD_ITERATOR_IMPL_HH 1
+#ifndef EOS_GUARD_EOS_UTILS_WRAPPED_FORWARD_ITERATOR_IMPL_HH
+#define EOS_GUARD_EOS_UTILS_WRAPPED_FORWARD_ITERATOR_IMPL_HH 1
 
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 namespace eos
 {
-    template <typename Tag_, typename Value_>
-    struct WrappedForwardIterator<Tag_, Value_>::Base
+    template <typename T_>
+    void checked_delete(T_ * const t)
     {
-        virtual Base * clone() const = 0;
-        virtual void increment() = 0;
-        virtual typename WrappedForwardIterator<Tag_, Value_>::pointer pointer() const = 0;
-        virtual typename WrappedForwardIterator<Tag_, Value_>::reference reference() const = 0;
-        virtual bool equal(const Base *) const = 0;
-        virtual void * underlying_iterator_ptr() = 0;
-        virtual const void * underlying_iterator_ptr() const = 0;
+        typedef char make_sure_type_is_defined[sizeof(T_) ? 1 : -1];
+        static const int make_sure_type_is_defined_again __attribute__((unused)) = sizeof(make_sure_type_is_defined);
+        delete t;
+    }
 
-        virtual ~Base()
-        {
-        }
-    };
-
-    template <typename Tag_, typename Value_>
-    template <typename Iter_>
-    struct WrappedForwardIterator<Tag_, Value_>::BaseImpl :
-        WrappedForwardIterator<Tag_, Value_>::Base
+    template <typename WrappedIter_>
+    typename WrappedForwardIteratorTraits<typename WrappedIter_::Tag>::UnderlyingIterator *
+    wrapped_underlying_iterator_real_type(const WrappedIter_ &, void * i)
     {
-        Iter_ i;
+        return reinterpret_cast<typename WrappedForwardIteratorTraits<typename WrappedIter_::Tag>::UnderlyingIterator *>(i);
+    }
 
-        BaseImpl(const Iter_ & ii) :
-            i(ii)
-        {
-        }
-
-        Base * clone() const
-        {
-            return new BaseImpl(i);
-        }
-
-        void increment()
-        {
-            ++i;
-        }
-
-        typename WrappedForwardIterator<Tag_, Value_>::reference reference() const
-        {
-            return *i;
-        }
-
-        typename WrappedForwardIterator<Tag_, Value_>::pointer pointer() const
-        {
-            return i.operator-> ();
-        }
-
-        bool equal(const Base * other) const
-        {
-            return i == static_cast<const BaseImpl *>(other)->i;
-        }
-
-        void * underlying_iterator_ptr()
-        {
-            return &i;
-        }
-
-        const void * underlying_iterator_ptr() const
-        {
-            return &i;
-        }
-    };
+    template <typename WrappedIter_>
+    WrappedForwardIteratorUnderlyingIteratorHolder *
+    wrapped_underlying_iterator_hide_real_type(const WrappedIter_ &,
+            typename WrappedForwardIteratorTraits<typename WrappedIter_::Tag>::UnderlyingIterator * const i)
+    {
+        return reinterpret_cast<WrappedForwardIteratorUnderlyingIteratorHolder *>(i);
+    }
 
     template <typename Tag_, typename Value_>
     WrappedForwardIterator<Tag_, Value_>::WrappedForwardIterator() :
-        _base(0)
+        _iter(wrapped_underlying_iterator_hide_real_type(*this, new typename WrappedForwardIteratorTraits<Tag_>::UnderlyingIterator))
     {
     }
 
     template <typename Tag_, typename Value_>
     WrappedForwardIterator<Tag_, Value_>::~WrappedForwardIterator()
     {
-        delete _base;
+        checked_delete(wrapped_underlying_iterator_real_type(*this, _iter));
     }
 
-    template <typename Tag_, typename Value_>
-    WrappedForwardIterator<Tag_, Value_>::WrappedForwardIterator(const WrappedForwardIterator & other) :
-        _base(other._base ? other._base->clone() : other._base)
+    template <typename Tag_, typename Value_, typename Iter_>
+    struct WrappedForwardIteratorGetBase
     {
+        template <typename Traits_>
+        static typename Traits_::UnderlyingIterator real_get_iter(const typename Traits_::UnderlyingIterator & i)
+        {
+            return i;
+        }
+
+        template <typename Traits_>
+        static typename Traits_::UnderlyingIterator
+        real_get_iter(const typename Traits_::EquivalentNonConstIterator & i)
+        {
+            return typename Traits_::UnderlyingIterator(
+                    i.template underlying_iterator<typename WrappedForwardIteratorTraits<
+                    typename WrappedForwardIteratorTraits<Tag_>::EquivalentNonConstIterator::Tag
+                    >::UnderlyingIterator>()
+                    );
+        }
+
+        static typename WrappedForwardIteratorTraits<Tag_>::UnderlyingIterator get_iter(const Iter_ & i)
+        {
+            return real_get_iter<WrappedForwardIteratorTraits<Tag_> >(i);
+        }
+    };
+
+    template <typename Tag_, typename Value_>
+    struct WrappedForwardIteratorGetBase<Tag_, Value_, WrappedForwardIterator<Tag_, Value_> >
+    {
+        static WrappedForwardIterator<Tag_, Value_> get_iter(const WrappedForwardIterator<Tag_, Value_> & i)
+        {
+            return i.template underlying_iterator<typename WrappedForwardIteratorTraits<Tag_>::UnderlyingIterator>();
+        }
+    };
+
+    template <typename LHS_, typename RHS_>
+    void set_wrapped_forward_iterator_iterator(LHS_ & lhs, RHS_ rhs)
+    {
+        lhs = rhs;
     }
 
     template <typename Tag_, typename Value_>
     template <typename T_>
-    WrappedForwardIterator<Tag_, Value_>::WrappedForwardIterator(const T_ & base) :
-        _base(new BaseImpl<T_>(base))
+    WrappedForwardIterator<Tag_, Value_>::WrappedForwardIterator(const T_ & iter) :
+        _iter(wrapped_underlying_iterator_hide_real_type(*this, new typename WrappedForwardIteratorTraits<Tag_>::UnderlyingIterator))
+    {
+        set_wrapped_forward_iterator_iterator(
+                *wrapped_underlying_iterator_real_type(*this, _iter),
+                WrappedForwardIteratorGetBase<Tag_, Value_, T_>::get_iter(iter));
+    }
+
+    template <typename Tag_, typename Value_>
+    WrappedForwardIterator<Tag_, Value_>::WrappedForwardIterator(const WrappedForwardIterator & other) :
+        _iter(wrapped_underlying_iterator_hide_real_type(*this, new typename WrappedForwardIteratorTraits<Tag_>::UnderlyingIterator(
+                        *wrapped_underlying_iterator_real_type(other, other._iter))))
     {
     }
 
     template <typename Tag_, typename Value_>
     WrappedForwardIterator<Tag_, Value_> &
-    WrappedForwardIterator<Tag_, Value_>::operator= (const WrappedForwardIterator<Tag_, Value_> & other)
+    WrappedForwardIterator<Tag_, Value_>::operator= (const WrappedForwardIterator & other)
     {
-        if (this != &other)
-            _base = other._base ? other._base->clone() : other._base;
+        *wrapped_underlying_iterator_real_type(*this, _iter) = *wrapped_underlying_iterator_real_type(other, other._iter);
         return *this;
     }
 
@@ -126,7 +132,7 @@ namespace eos
     WrappedForwardIterator<Tag_, Value_> &
     WrappedForwardIterator<Tag_, Value_>::operator++ ()
     {
-        _base->increment();
+        ++*wrapped_underlying_iterator_real_type(*this, _iter);
         return *this;
     }
 
@@ -135,7 +141,7 @@ namespace eos
     WrappedForwardIterator<Tag_, Value_>::operator++ (int)
     {
         WrappedForwardIterator result(*this);
-        _base->increment();
+        operator++ ();
         return result;
     }
 
@@ -143,50 +149,44 @@ namespace eos
     typename WrappedForwardIterator<Tag_, Value_>::pointer
     WrappedForwardIterator<Tag_, Value_>::operator-> () const
     {
-        return _base->pointer();
+        return wrapped_underlying_iterator_real_type(*this, _iter)->operator-> ();
     }
 
     template <typename Tag_, typename Value_>
     typename WrappedForwardIterator<Tag_, Value_>::reference
     WrappedForwardIterator<Tag_, Value_>::operator* () const
     {
-        return _base->reference();
+        return wrapped_underlying_iterator_real_type(*this, _iter)->operator* ();
     }
 
     template <typename Tag_, typename Value_>
     bool
     WrappedForwardIterator<Tag_, Value_>::operator== (const WrappedForwardIterator & other) const
     {
-        if (! _base)
-            return ! other._base;
-
-        return _base->equal(other._base);
+        return *wrapped_underlying_iterator_real_type(*this, _iter) == *wrapped_underlying_iterator_real_type(other, other._iter);
     }
 
     template <typename Tag_, typename Value_>
     bool
     WrappedForwardIterator<Tag_, Value_>::operator!= (const WrappedForwardIterator & other) const
     {
-        if (! _base)
-            return 0 != other._base;
-
-        return ! _base->equal(other._base);
+        return *wrapped_underlying_iterator_real_type(*this, _iter) != *wrapped_underlying_iterator_real_type(other, other._iter);
     }
 
     template <typename Tag_, typename Value_>
-    template <typename Iter_>
-    Iter_ &
+    template <typename T_>
+    T_ &
     WrappedForwardIterator<Tag_, Value_>::underlying_iterator()
     {
-        return *static_cast<Iter_ *>(_base->underlying_iterator_ptr());
+        return *wrapped_underlying_iterator_real_type(*this, _iter);
     }
 
     template <typename Tag_, typename Value_>
-    template <typename Iter_>
-    const Iter_ &
+    template <typename T_>
+    const T_ &
     WrappedForwardIterator<Tag_, Value_>::underlying_iterator() const
     {
-        return *static_cast<const Iter_ *>(_base->underlying_iterator_ptr());
+        return *wrapped_underlying_iterator_real_type(*this, _iter);
     }
 }
 

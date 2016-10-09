@@ -66,6 +66,8 @@ namespace eos
             ///@}
     };
 
+    extern template class WrappedForwardIterator<Diagnostics::IteratorTag, const Diagnostics::Entry>;
+
     /*!
      * Data structure representing one entry of several diagnostic
      * evaluations. Used as part of the unit tests.

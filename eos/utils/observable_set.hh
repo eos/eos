@@ -81,6 +81,8 @@ namespace eos
             unsigned size() const;
             ///@}
     };
+
+    extern template class WrappedForwardIterator<ObservableSet::IteratorTag, ObservablePtr>;
 }
 
 #endif

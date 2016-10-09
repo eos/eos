@@ -20,10 +20,10 @@
 #include <config.h>
 
 #include <eos/statistics/analysis.hh>
+#include <eos/utils/density-impl.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/power_of.hh>
-#include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <Minuit2/FCNBase.h>
 #include <Minuit2/FunctionMinimum.h>
@@ -171,13 +171,13 @@ namespace eos
    Density::Iterator
    Analysis::begin() const
    {
-       return Density::Iterator(_parameter_descriptions.begin());
+       return Density::Iterator(_parameter_descriptions.cbegin());
    }
 
    Density::Iterator
    Analysis::end() const
    {
-       return Density::Iterator(_parameter_descriptions.end());
+       return Density::Iterator(_parameter_descriptions.cend());
    }
 
    void

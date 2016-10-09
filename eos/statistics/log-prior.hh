@@ -145,6 +145,8 @@ namespace eos
             static LogPriorPtr Make(const Parameters & parameters, const std::string & serialization);
             ///@}
     };
+
+    extern template class WrappedForwardIterator<LogPrior::IteratorTag, ParameterDescription>;
 }
 
 #endif

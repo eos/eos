@@ -33,7 +33,11 @@ namespace eos
 {
     /* Histogram<1> */
 
-    template class WrappedForwardIterator<Histogram<1>::ConstIteratorTag, const Histogram<1>::Bin>;
+    template <>
+    struct WrappedForwardIteratorTraits<Histogram<1>::ConstIteratorTag>
+    {
+        typedef std::list<Histogram<1>::Bin>::const_iterator UnderlyingIterator;
+    };
 
     template <> struct Implementation<Histogram<1>>
     {
@@ -158,11 +162,21 @@ namespace eos
         return result;
     }
 
+    template class WrappedForwardIterator<Histogram<1>::ConstIteratorTag, const Histogram<1>::Bin>;
+
     /* Histogram<2> */
 
-    template class WrappedForwardIterator<Histogram<2>::ConstIteratorTag, const Histogram<2>::Bin>;
+    template <>
+    struct WrappedForwardIteratorTraits<Histogram<2>::IteratorTag>
+    {
+        typedef std::vector<Histogram<2>::Bin>::iterator UnderlyingIterator;
+    };
 
-    template class WrappedForwardIterator<Histogram<2>::IteratorTag, Histogram<2>::Bin>;
+    template <>
+    struct WrappedForwardIteratorTraits<Histogram<2>::ConstIteratorTag>
+    {
+        typedef std::vector<Histogram<2>::Bin>::const_iterator UnderlyingIterator;
+    };
 
     template <> struct Implementation<Histogram<2>>
     {
@@ -288,4 +302,7 @@ namespace eos
     {
         return ConstIterator(_imp->bins.cend());
     }
+
+    template class WrappedForwardIterator<Histogram<2>::IteratorTag, Histogram<2>::Bin>;
+    template class WrappedForwardIterator<Histogram<2>::ConstIteratorTag, const Histogram<2>::Bin>;
 }

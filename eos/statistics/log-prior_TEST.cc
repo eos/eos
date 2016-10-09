@@ -18,8 +18,8 @@
  */
 
 #include <test/test.hh>
-#include <eos/statistics/log-prior.hh>
 #include <eos/statistics/histogram.hh>
+#include <eos/statistics/log-prior.hh>
 #include <eos/utils/power_of.hh>
 
 using namespace test;

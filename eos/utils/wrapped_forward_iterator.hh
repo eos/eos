@@ -1,7 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2007 Ciaran McCreesh
+ * Copyright (c) 2016 Danny van Dyk
+ *
+ * Copied from the Paludis package manager, which is
+ * Copyright (c) 2007-2009 Ciaran McCreesh
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,18 +20,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_UTILS_WRAPPED_FORWARD_ITERATOR_HH
-#define EOS_GUARD_UTILS_WRAPPED_FORWARD_ITERATOR_HH 1
+#ifndef EOS_GUARD_EOS_UTILs_WRAPPED_FORWARD_ITERATOR_HH
+#define EOS_GUARD_EOS_UTILs_WRAPPED_FORWARD_ITERATOR_HH 1
 
 #include <eos/utils/wrapped_forward_iterator-fwd.hh>
 
 #include <functional>
-#include <iterator>
 #include <type_traits>
+#include <iterator>
 
 namespace eos
 {
-    /*!
+    /**
      * A WrappedForwardIterator is a generic wrapper around a forward iterator,
      * hiding the underlying base iterator.
      */
@@ -36,12 +39,11 @@ namespace eos
     class WrappedForwardIterator
     {
         private:
-            struct Base;
-            template <typename T_> struct BaseImpl;
-
-            Base * _base;
+             WrappedForwardIteratorUnderlyingIteratorHolder * _iter;
 
         public:
+            typedef Tag_ Tag;
+
             ///@name Basic operations
             ///@{
 

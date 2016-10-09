@@ -3,9 +3,6 @@
 /*
  * Copyright (c) 2016 Danny van Dyk
  *
- * Copied from the Paludis package manager, which is
- * Copyright (c) 2007-2009 Ciaran McCreesh
- *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
  * Public License version 2, as published by the Free Software Foundation.
@@ -20,18 +17,21 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_UTILS_WRAPPED_FORWARD_ITERATOR_FWD_HH
-#define EOS_GUARD_EOS_UTILS_WRAPPED_FORWARD_ITERATOR_FWD_HH 1
+#ifndef EOS_GUARD_EOS_UTILS_DENSITY_IMPL_HH
+#define EOS_GUARD_EOS_UTILS_DENSITY_IMPL_HH 1
+
+#include <eos/utils/density.hh>
+#include <eos/utils/wrapped_forward_iterator-impl.hh>
+
+#include <vector>
 
 namespace eos
 {
-    template <typename Tag_, typename Value_>
-    class WrappedForwardIterator;
-
-    template <typename Tag_>
-    struct WrappedForwardIteratorTraits;
-
-    struct WrappedForwardIteratorUnderlyingIteratorHolder;
+    template <>
+    struct WrappedForwardIteratorTraits<Density::IteratorTag>
+    {
+        typedef std::vector<ParameterDescription>::const_iterator UnderlyingIterator;
+    };
 }
 
 #endif

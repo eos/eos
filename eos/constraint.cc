@@ -4134,7 +4134,18 @@ namespace eos
     }
 
     /* Constraint */
+    template <>
+    struct WrappedForwardIteratorTraits<Constraint::BlockIteratorTag>
+    {
+        typedef std::vector<LogLikelihoodBlockPtr>::iterator UnderlyingIterator;
+    };
     template class WrappedForwardIterator<Constraint::BlockIteratorTag, LogLikelihoodBlockPtr>;
+
+    template <>
+    struct WrappedForwardIteratorTraits<Constraint::ObservableIteratorTag>
+    {
+        typedef ObservableSet::Iterator UnderlyingIterator;
+    };
     template class WrappedForwardIterator<Constraint::ObservableIteratorTag, ObservablePtr>;
 
     template <>
@@ -4585,12 +4596,17 @@ namespace eos
         return e->second->make(e->first, options);
     }
 
-    template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, std::pair<const QualifiedName, const ConstraintEntry *>>;
+    template <>
+    struct WrappedForwardIteratorTraits<Constraints::ConstraintIteratorTag>
+    {
+        typedef std::map<QualifiedName, const ConstraintEntry *>::const_iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, const ConstraintEntry *>>;
 
     template<>
     struct Implementation<Constraints>
     {
-        std::map<QualifiedName, const ConstraintEntry *> constraint_entries;
+        const std::map<QualifiedName, const ConstraintEntry *> constraint_entries;
 
         Implementation() :
             constraint_entries(make_constraint_entries())
@@ -4610,12 +4626,12 @@ namespace eos
     Constraints::ConstraintIterator
     Constraints::begin() const
     {
-        return ConstraintIterator(_imp->constraint_entries.begin());
+        return ConstraintIterator(_imp->constraint_entries.cbegin());
     }
 
     Constraints::ConstraintIterator
     Constraints::end() const
     {
-        return ConstraintIterator(_imp->constraint_entries.end());
+        return ConstraintIterator(_imp->constraint_entries.cend());
     }
 }

@@ -1461,6 +1461,13 @@ namespace eos
                                              const unsigned & number_of_observations = 48u);
 
     template <>
+    struct WrappedForwardIteratorTraits<LogLikelihood::ConstraintIteratorTag>
+    {
+        typedef std::vector<Constraint>::iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<LogLikelihood::ConstraintIteratorTag, Constraint>;
+
+    template <>
     struct Implementation<LogLikelihood>
     {
         Parameters parameters;
@@ -1604,8 +1611,6 @@ namespace eos
         // retain a proper copy of the constraint to iterate over
         _imp->constraints.push_back(Constraint(constraint.name(), observables, blocks));
     }
-
-    template class WrappedForwardIterator<LogLikelihood::ConstraintIteratorTag, Constraint>;
 
     LogLikelihood::ConstraintIterator
     LogLikelihood::begin() const

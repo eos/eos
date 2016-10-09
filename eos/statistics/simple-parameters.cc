@@ -27,7 +27,11 @@
 
 namespace eos
 {
-    template class WrappedForwardIterator<SimpleParameters::IteratorTag, ParameterDescription>;
+    template <>
+    struct WrappedForwardIteratorTraits<SimpleParameters::IteratorTag>
+    {
+        typedef std::vector<ParameterDescription>::const_iterator UnderlyingIterator;
+    };
 
     template <>
     struct Implementation<SimpleParameters>
@@ -148,13 +152,13 @@ namespace eos
     SimpleParameters::Iterator
     SimpleParameters::begin() const
     {
-        return _imp->defs.begin();
+        return _imp->defs.cbegin();
     }
 
     SimpleParameters::Iterator
     SimpleParameters::end() const
     {
-        return _imp->defs.end();
+        return _imp->defs.cend();
     }
 
     SimpleParameter &
@@ -195,4 +199,6 @@ namespace eos
     {
         return *_imp->values;
     }
+
+    template class WrappedForwardIterator<SimpleParameters::IteratorTag, const ParameterDescription>;
 }

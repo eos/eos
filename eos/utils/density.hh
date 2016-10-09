@@ -63,6 +63,8 @@ namespace eos
             struct Output;
     };
 
+    extern template class WrappedForwardIterator<Density::IteratorTag, const ParameterDescription>;
+
     /*!
      * Boilerplate code to handle I/O to HDF5 files
      */

@@ -106,14 +106,14 @@ namespace eos
             ///@name Iteration over known constraints
             ///@{
             struct ObservableIteratorTag;
-            typedef WrappedForwardIterator<ObservableIteratorTag, std::pair<const QualifiedName, const ObservableEntry *>> ObservableIterator;
+            typedef WrappedForwardIterator<ObservableIteratorTag, const std::pair<const QualifiedName, const ObservableEntry *>> ObservableIterator;
 
             ObservableIterator begin() const;
             ObservableIterator end() const;
             ///@}
     };
 
-    extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, std::pair<const QualifiedName, const ObservableEntry *>>;
+    extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, const ObservableEntry *>>;
 }
 
 #endif

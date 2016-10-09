@@ -385,6 +385,8 @@ namespace eos
             double operator()() const;
             ///@}
     };
+
+    extern template class WrappedForwardIterator<LogLikelihood::ConstraintIteratorTag, Constraint>;
 }
 
 #endif

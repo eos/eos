@@ -80,6 +80,8 @@ namespace eos
              */
             static Constraint make(const QualifiedName & name, const Options & options);
     };
+    extern template class WrappedForwardIterator<Constraint::BlockIteratorTag, LogLikelihoodBlockPtr>;
+    extern template class WrappedForwardIterator<Constraint::ObservableIteratorTag, ObservablePtr>;
 
     /*!
      * ConstraintEntry is internally used to keep track of the Constraint and the factory method
@@ -131,12 +133,14 @@ namespace eos
         ///@name Iteration over known constraints
         ///@{
         struct ConstraintIteratorTag;
-        typedef WrappedForwardIterator<ConstraintIteratorTag, std::pair<const QualifiedName, const ConstraintEntry *>> ConstraintIterator;
+        typedef WrappedForwardIterator<ConstraintIteratorTag, const std::pair<const QualifiedName, const ConstraintEntry *>> ConstraintIterator;
 
         ConstraintIterator begin() const;
         ConstraintIterator end() const;
         ///@}
     };
+
+    extern template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, const ConstraintEntry *>>;
 
     /*!
      * UnknownConstraintError is thrown when Constraint::make encounters an unknown constraint name.

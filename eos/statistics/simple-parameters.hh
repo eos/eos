@@ -106,7 +106,7 @@ namespace eos
             ///@name Iteration
             ///@{
             struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, ParameterDescription> Iterator;
+            typedef WrappedForwardIterator<IteratorTag, const ParameterDescription> Iterator;
 
             Iterator begin() const;
             Iterator end() const;
@@ -151,5 +151,7 @@ namespace eos
              */
             bool operator!= (const SimpleParameters & rhs) const;
     };
+
+    extern template class WrappedForwardIterator<SimpleParameters::IteratorTag, const ParameterDescription>;
 }
 #endif

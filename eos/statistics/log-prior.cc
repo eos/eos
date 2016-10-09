@@ -38,7 +38,11 @@
 
 namespace eos
 {
-    template class WrappedForwardIterator<LogPrior::IteratorTag, ParameterDescription>;
+    template <>
+    struct WrappedForwardIteratorTraits<LogPrior::IteratorTag>
+    {
+        typedef std::vector<ParameterDescription>::iterator UnderlyingIterator;
+    };
 
     namespace priors
     {
@@ -653,4 +657,6 @@ namespace eos
 
         throw priors::UnknownPriorError("Cannot construct prior from '" + s + "'");
     }
+
+    template class WrappedForwardIterator<LogPrior::IteratorTag, ParameterDescription>;
 }

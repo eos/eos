@@ -162,6 +162,8 @@ namespace eos
             bool operator!= (const Parameters & rhs) const;
     };
 
+    extern template class WrappedForwardIterator<Parameters::IteratorTag, Parameter>;
+
     /*!
      * Parameter is the class that holds all information of one of Parameters' parameters.
      */
@@ -282,6 +284,8 @@ namespace eos
             void uses(const ParameterUser & user);
             ///@}
     };
+
+    extern template class WrappedForwardIterator<ParameterUser::ConstIteratorTag, const Parameter::Id>;
 
     /*!
      * Wrapper class to automate usage tracking of Parameter objects.

@@ -22,6 +22,7 @@
 
 #include <eos/signal-pdf.hh>
 #include <eos/utils/apply.hh>
+#include <eos/utils/density-impl.hh>
 #include <eos/utils/tuple-maker.hh>
 
 #include <functional>
@@ -174,12 +175,12 @@ namespace eos
 
             virtual Density::Iterator begin() const
             {
-                return Density::Iterator(_descriptions.begin());
+                return Density::Iterator(_descriptions.cbegin());
             }
 
             virtual Density::Iterator end() const
             {
-                return Density::Iterator(_descriptions.end());
+                return Density::Iterator(_descriptions.cend());
             }
     };
 

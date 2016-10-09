@@ -13,8 +13,6 @@
 
 namespace eos
 {
-    template class WrappedForwardIterator<ChainGroup::IteratorTag, const MarkovChain>;
-
     template <> struct Implementation<ChainGroup>
     {
         ChainGroup::RValueFunction rvalue_function;
@@ -210,4 +208,18 @@ namespace eos
     {
         return _imp->parameter_variances;
     }
+
+    template <>
+    struct WrappedForwardIteratorTraits<ChainGroup::IteratorTag>
+    {
+        typedef std::vector<HistoryPtr>::iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<ChainGroup::IteratorTag, HistoryPtr>;
+
+    template <>
+    struct WrappedForwardIteratorTraits<ChainGroup::IndexIteratorTag>
+    {
+        typedef std::vector<unsigned>::iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<ChainGroup::IndexIteratorTag, unsigned>;
 }

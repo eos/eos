@@ -25,6 +25,11 @@
 
 namespace eos
 {
+    template <>
+    struct WrappedForwardIteratorTraits<Diagnostics::IteratorTag>
+    {
+        typedef std::vector<Diagnostics::Entry>::const_iterator UnderlyingIterator;
+    };
     template class WrappedForwardIterator<Diagnostics::IteratorTag, const Diagnostics::Entry>;
 
     template <>

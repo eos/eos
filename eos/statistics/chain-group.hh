@@ -68,11 +68,14 @@ namespace eos
             Iterator begin() const;
             Iterator end() const;
 
-            struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, unsigned> IndexIterator;
+            struct IndexIteratorTag;
+            typedef WrappedForwardIterator<IndexIteratorTag, unsigned> IndexIterator;
             IndexIterator begin_indices() const;
             IndexIterator end_indices() const;
     };
+
+    extern template class WrappedForwardIterator<ChainGroup::IteratorTag, HistoryPtr>;
+    extern template class WrappedForwardIterator<ChainGroup::IndexIteratorTag, unsigned>;
 }
 
 #endif

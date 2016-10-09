@@ -1703,7 +1703,12 @@ namespace eos
         return ObservablePtr();
     }
 
-    template class WrappedForwardIterator<Observables::ObservableIteratorTag, std::pair<const QualifiedName, const ObservableEntry *>>;
+    template <>
+    struct WrappedForwardIteratorTraits<Observables::ObservableIteratorTag>
+    {
+        typedef std::map<QualifiedName, const ObservableEntry *>::const_iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, const ObservableEntry *>>;
 
     template<>
     struct Implementation<Observables>

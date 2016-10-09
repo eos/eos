@@ -97,6 +97,11 @@ namespace eos
         return _imp->add(observable);
     }
 
+    template <>
+    struct WrappedForwardIteratorTraits<ObservableSet::IteratorTag>
+    {
+        typedef std::vector<ObservablePtr>::iterator UnderlyingIterator;
+    };
     template class WrappedForwardIterator<ObservableSet::IteratorTag, ObservablePtr>;
 
     ObservableSet::Iterator

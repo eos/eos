@@ -72,22 +72,28 @@ namespace eos
              */
             void run();
 
-            struct IteratorTag;
             /// Loop over input components
-            typedef WrappedForwardIterator<IteratorTag, Component> InputIterator;
+            struct InputIteratorTag;
+            typedef WrappedForwardIterator<InputIteratorTag, Component> InputIterator;
             InputIterator begin_input() const;
             InputIterator end_input() const;
 
             /// Loop over output components (determined during clustering).
-            typedef WrappedForwardIterator<IteratorTag, Component> OutputIterator;
+            struct OutputIteratorTag;
+            typedef WrappedForwardIterator<OutputIteratorTag, Component> OutputIterator;
             OutputIterator begin_output() const;
             OutputIterator end_output() const;
 
             /// To which output is an input component mapped?
-            typedef WrappedForwardIterator<IteratorTag, unsigned> MapIterator;
+            struct MapIteratorTag;
+            typedef WrappedForwardIterator<MapIteratorTag, unsigned> MapIterator;
             MapIterator begin_map() const;
             MapIterator end_map() const;
     };
+
+    extern template class WrappedForwardIterator<HierarchicalClustering::InputIteratorTag, HierarchicalClustering::Component>;
+    extern template class WrappedForwardIterator<HierarchicalClustering::OutputIteratorTag, HierarchicalClustering::Component>;
+    extern template class WrappedForwardIterator<HierarchicalClustering::MapIteratorTag, unsigned>;
 
     /*!
      * Describe a component of a Gaussian mixture density, characterized

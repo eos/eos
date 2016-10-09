@@ -18,10 +18,17 @@
  */
 
 #include <eos/statistics/density-wrapper.hh>
+#include <eos/utils/density-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 namespace eos
 {
+    template <>
+    struct WrappedForwardIteratorTraits<SimpleParameters::IteratorTag>
+    {
+        typedef std::vector<ParameterDescription>::const_iterator UnderlyingIterator;
+    };
+
     DensityWrapper::DensityWrapper(const WrappedDensity & density) :
         _density(density)
     {
@@ -49,29 +56,29 @@ namespace eos
         return _parameters;
     }
 
-     double
-     DensityWrapper::evaluate() const
-     {
-         return _density(_parameters.values());
-     }
+    double
+    DensityWrapper::evaluate() const
+    {
+        return _density(_parameters.values());
+    }
 
-     DensityPtr
-     DensityWrapper::clone() const
-     {
-         DensityWrapper * density = new DensityWrapper(_density);
-         density->_parameters = this->_parameters.clone();
-         return DensityPtr(density);
-     }
+    DensityPtr
+    DensityWrapper::clone() const
+    {
+        DensityWrapper * density = new DensityWrapper(_density);
+        density->_parameters = this->_parameters.clone();
+        return DensityPtr(density);
+    }
 
-     Density::Iterator
-     DensityWrapper::begin() const
-     {
-         return _parameters.begin();
-     }
+    Density::Iterator
+    DensityWrapper::begin() const
+    {
+        return Density::Iterator(_parameters.begin().underlying_iterator<std::vector<ParameterDescription>::const_iterator>());
+    }
 
-     Density::Iterator
-     DensityWrapper::end() const
-     {
-         return _parameters.end();
-     }
+    Density::Iterator
+    DensityWrapper::end() const
+    {
+        return Density::Iterator(_parameters.end().underlying_iterator<std::vector<ParameterDescription>::const_iterator>());
+    }
 }

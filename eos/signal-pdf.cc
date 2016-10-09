@@ -25,6 +25,7 @@
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
 #include <eos/utils/concrete-signal-pdf.hh>
+#include <eos/utils/density.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
@@ -219,6 +220,11 @@ namespace eos
         return i->second->make(parameters, kinematics, options + _options);
     }
 
+    template <>
+    struct WrappedForwardIteratorTraits<SignalPDFs::SignalPDFIteratorTag>
+    {
+        typedef std::map<std::string, const SignalPDFEntry *>::iterator UnderlyingIterator;
+    };
     template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, std::pair<const std::string, const SignalPDFEntry *>>;
 
     template<>

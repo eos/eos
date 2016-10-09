@@ -80,6 +80,11 @@ namespace eos
         std::vector<Parameter::Data> data;
     };
 
+    template <>
+    struct WrappedForwardIteratorTraits<Parameters::IteratorTag>
+    {
+        typedef std::vector<Parameter>::iterator UnderlyingIterator;
+    };
     template class WrappedForwardIterator<Parameters::IteratorTag, Parameter>;
 
     template <>
@@ -377,6 +382,11 @@ namespace eos
         return _parameters_data->data[_index].id;
     }
 
+    template <>
+    struct WrappedForwardIteratorTraits<ParameterUser::ConstIteratorTag>
+    {
+        typedef std::set<Parameter::Id>::const_iterator UnderlyingIterator;
+    };
     template class WrappedForwardIterator<ParameterUser::ConstIteratorTag, const Parameter::Id>;
 
     ParameterUser::ConstIterator
