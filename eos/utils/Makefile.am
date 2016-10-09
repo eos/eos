@@ -38,6 +38,7 @@ libeosutils_la_SOURCES = \
 	model.cc model.hh \
 	mutable.cc mutable.hh mutable-fwd.hh \
 	mutex.cc mutex.hh \
+	named-value.hh named-value-fwd.hh \
 	observable_cache.cc observable_cache.hh \
 	observable_set.cc observable_set.hh \
 	observable_stub.cc observable_stub.hh \
@@ -58,7 +59,9 @@ libeosutils_la_SOURCES = \
 	ticket.cc ticket.hh \
 	top-loops.hh top-loops.cc \
 	tuple-maker.hh \
+	type-list.hh type-list-fwd.hh \
 	verify.cc verify.hh \
+	visitor.hh visitor-fwd.hh \
 	wilson_coefficients.cc wilson_coefficients.hh \
 	wilson-polynomial.cc wilson-polynomial.hh \
 	wilson_scan_model.cc wilson_scan_model.hh \
