@@ -17,12 +17,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include "eos/constraint.hh"
 #include "eos/observable.hh"
 #include "eos/signal-pdf.hh"
 #include "eos/utils/kinematic.hh"
 #include "eos/utils/parameters.hh"
 #include "eos/utils/options.hh"
 #include "eos/utils/qualified-name.hh"
+#include "eos/statistics/log-likelihood.hh"
 
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
@@ -147,5 +149,19 @@ BOOST_PYTHON_MODULE(eos)
         .staticmethod("make")
         .def("evaluate", &SignalPDF::evaluate)
         .def("name", &SignalPDF::name, return_value_policy<copy_const_reference>())
+        ;
+
+    // LogLikelihoodBlock
+    register_ptr_to_python<std::shared_ptr<LogLikelihoodBlock>>();
+    class_<LogLikelihoodBlock, boost::noncopyable>("LogLikelihoodBlock", no_init)
+        .def("as_string", &LogLikelihoodBlock::as_string)
+        ;
+
+    // Constraint
+    class_<Constraint>("Constraint", no_init)
+        .def("make", &Constraint::make, return_value_policy<return_by_value>())
+        .staticmethod("make")
+        .def("name", &Constraint::name, return_value_policy<copy_const_reference>())
+        .def("__iter__", range(&Constraint::begin_blocks, &Constraint::end_blocks))
         ;
 }
