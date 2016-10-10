@@ -22,6 +22,7 @@
 #include "eos/utils/kinematic.hh"
 #include "eos/utils/parameters.hh"
 #include "eos/utils/options.hh"
+#include "eos/utils/qualified-name.hh"
 
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
@@ -79,6 +80,16 @@ BOOST_PYTHON_MODULE(eos)
     using namespace boost::python;
     using namespace eos;
 
+    // QualifiedName
+    class_<QualifiedName>("QualifiedName", init<std::string>())
+        .def("__repr__", &QualifiedName::full, return_value_policy<copy_const_reference>())
+        .def("__str__", &QualifiedName::str, return_value_policy<copy_const_reference>())
+        .def("__eq__", &QualifiedName::operator==)
+        .def("__ne__", &QualifiedName::operator!=)
+        .def("__lt__", &QualifiedName::operator<)
+        ;
+    implicitly_convertible<std::string, QualifiedName>();
+
     // Parameters
     class_<Parameters>("Parameters", no_init)
         .def("Defaults", &Parameters::Defaults)
@@ -120,9 +131,8 @@ BOOST_PYTHON_MODULE(eos)
         .def("as_string", &Options::as_string)
         ;
 
-    register_ptr_to_python<std::shared_ptr<Observable>>();
-
     // Observable
+    register_ptr_to_python<std::shared_ptr<Observable>>();
     class_<Observable, boost::noncopyable>("Observable", no_init)
         .def("make", &Observable::make, return_value_policy<return_by_value>())
         .staticmethod("make")
@@ -130,9 +140,8 @@ BOOST_PYTHON_MODULE(eos)
         .def("name", &Observable::name, return_value_policy<copy_const_reference>())
         ;
 
-    register_ptr_to_python<std::shared_ptr<SignalPDF>>();
-
     // SignalPDF
+    register_ptr_to_python<std::shared_ptr<SignalPDF>>();
     class_<SignalPDF, boost::noncopyable>("SignalPDF", no_init)
         .def("make", &SignalPDF::make, return_value_policy<return_by_value>())
         .staticmethod("make")
