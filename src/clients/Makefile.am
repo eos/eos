@@ -3,6 +3,17 @@ MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
+noinst_LIBRARIES = libcli.a
+
+libcli_a_SOURCES = \
+	cli_dumper.cc cli_dumper.hh \
+	cli_error.cc cli_error.hh \
+	cli_group.cc cli_group.hh \
+	cli_handler.cc cli_handler.hh \
+	cli_section.cc cli_section.hh \
+	cli_option.cc cli_option.hh \
+	cli_visitor.cc cli_visitor.hh
+
 bin_PROGRAMS = \
 	eos-evaluate \
 	eos-find-mode \
@@ -27,6 +38,7 @@ LDADD = \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
 	$(top_builddir)/eos/libeos.la \
+	libcli.a \
 	-lboost_filesystem -lboost_system \
 	-lhdf5 \
 	-lyaml-cpp
