@@ -111,9 +111,6 @@ namespace eos
      */
     class QualifiedName
     {
-        friend bool operator< (const QualifiedName &, const QualifiedName &);
-        friend bool operator== (const QualifiedName &, const QualifiedName &);
-        friend bool operator!= (const QualifiedName &, const QualifiedName &);
         friend std::ostream & operator<< (std::ostream &, const QualifiedName &);
 
         private:
@@ -136,6 +133,15 @@ namespace eos
             inline const qnp::Name & name_part() const { return _name; };
             inline const qnp::Suffix & suffix_part() const { return _suffix; };
             inline const Options & options() const { return _options; };
+
+            /*
+             * Two qualified names are compared based on their short names only.
+             * As a consequence, two qualified names can be identical, even if their
+             * full names aren't.
+             */
+            inline bool operator<  (const QualifiedName & rhs) const { return this->_str <  rhs._str; };
+            inline bool operator== (const QualifiedName & rhs) const { return this->_str == rhs._str; };
+            inline bool operator!= (const QualifiedName & rhs) const { return this->_str != rhs._str; };
     };
 
     class QualifiedNameSyntaxError :
@@ -144,27 +150,6 @@ namespace eos
         public:
             QualifiedNameSyntaxError(const std::string & msg);
     };
-
-    /*
-     * Two qualified names are compared based on their short names only.
-     * As a consequence, two qualified names can be identical, even if their
-     * full names aren't.
-     */
-    inline bool operator< (const QualifiedName & lhs, const QualifiedName & rhs)
-    {
-        return lhs._str < rhs._str;
-    }
-
-    inline bool operator== (const QualifiedName & lhs, const QualifiedName & rhs)
-    {
-        return lhs._str == rhs._str;
-    }
-
-    inline bool operator!= (const QualifiedName & lhs, const QualifiedName & rhs)
-    {
-        return lhs._str != rhs._str;
-    }
-
 
     inline std::ostream & operator<< (std::ostream & lhs, const QualifiedName & rhs)
     {
