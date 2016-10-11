@@ -92,6 +92,17 @@
     min:     +1.86484
     max:     +1.86489
 
+# Charmonium masses
+"mass::J/psi" :
+    central: +3.096900
+    min:     +3.096894
+    max:     +3.096906
+
+"mass::psi(2S)" :
+    central: +3.686097
+    min:     +3.686072
+    max:     +3.686122
+
 # B meson masses
 "mass::B_d" :
     central: +5.27958
