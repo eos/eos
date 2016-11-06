@@ -157,6 +157,136 @@ namespace eos
                 std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(function)),
                 kinematics_names);
     }
+
+    template <typename Decay_, typename ... Args_>
+    class ConcreteObservableRatio :
+        public Observable
+    {
+        public:
+
+        private:
+            std::string _name;
+
+            Parameters _parameters;
+
+            Kinematics _kinematics;
+
+            Options _options;
+
+            Decay_ _decay;
+
+            std::function<double (const Decay_ *, const Args_ & ...)> _numerator, _denominator;
+
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
+
+            std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple;
+
+        public:
+            ConcreteObservableRatio(const std::string & name,
+                    const Parameters & parameters,
+                    const Kinematics & kinematics,
+                    const Options & options,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & numerator,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & denominator,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+                _name(name),
+                _parameters(parameters),
+                _kinematics(kinematics),
+                _options(options),
+                _decay(parameters, options),
+                _numerator(numerator),
+                _denominator(denominator),
+                _kinematics_names(kinematics_names),
+                _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, &_decay))
+            {
+                uses(_decay);
+            }
+
+            ~ConcreteObservableRatio() = default;
+
+            virtual const std::string & name() const
+            {
+                return _name;
+            }
+
+            virtual double evaluate() const
+            {
+                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
+
+                return apply(_numerator, values) / apply(_denominator, values);
+            };
+
+            virtual Parameters parameters()
+            {
+                return _parameters;
+            };
+
+            virtual Kinematics kinematics()
+            {
+                return _kinematics;
+            };
+
+            virtual Options options()
+            {
+                return _options;
+            }
+
+            virtual ObservablePtr clone() const
+            {
+                return ObservablePtr(new ConcreteObservableRatio(_name, _parameters.clone(), _kinematics.clone(), _options, _numerator, _denominator, _kinematics_names));
+            }
+
+            virtual ObservablePtr clone(const Parameters & parameters) const
+            {
+                return ObservablePtr(new ConcreteObservableRatio(_name, parameters, _kinematics.clone(), _options, _numerator, _denominator, _kinematics_names));
+            }
+    };
+
+    template <typename Decay_, typename ... Args_>
+    class ConcreteObservableRatioEntry :
+        public ObservableEntry
+    {
+        private:
+            std::string _name;
+
+            std::function<double (const Decay_ *, const Args_ & ...)> _numerator, _denominator;
+
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
+
+        public:
+            ConcreteObservableRatioEntry(const std::string & name,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & numerator,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & denominator,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+                _name(name),
+                _numerator(numerator),
+                _denominator(denominator),
+                _kinematics_names(kinematics_names)
+            {
+            }
+
+            ~ConcreteObservableRatioEntry() = default;
+
+            virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
+            {
+                return ObservablePtr(new ConcreteObservableRatio<Decay_, Args_ ...>(_name, parameters, kinematics, options, _numerator, _denominator, _kinematics_names));
+            }
+    };
+
+    template <typename Decay_, typename Tuple_, typename ... Args_>
+    ObservableEntry * make_concrete_observable_ratio_entry(const std::string & name,
+            double (Decay_::* numerator)(const Args_ & ...) const,
+            double (Decay_::* denominator)(const Args_ & ...) const,
+            const Tuple_ & kinematics_names = std::make_tuple())
+    {
+        static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
+
+        return new ConcreteObservableRatioEntry<Decay_, Args_ ...>(name,
+                std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(numerator)),
+                std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(denominator)),
+                kinematics_names);
+    }
+
 }
 
 #endif

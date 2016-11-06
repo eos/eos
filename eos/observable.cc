@@ -82,6 +82,30 @@ namespace eos
         return std::make_pair(qn, make_concrete_observable_entry(qn, function, kinematics_names));
     }
 
+    /* ratios of regular observables with a common set of kinematic variables */
+    template <typename Decay_, typename ... Args_>
+    std::pair<std::string, ObservableEntry *> make_observable_ratio(const char * name,
+            double (Decay_::* numerator)(const Args_ & ...) const,
+            double (Decay_::* denominator)(const Args_ & ...) const
+            )
+    {
+        std::string sname(name);
+
+        return std::make_pair(sname, make_concrete_observable_ratio_factory(sname, numerator, denominator, std::make_tuple()));
+    }
+
+    template <typename Decay_, typename Tuple_, typename ... Args_>
+    std::pair<std::string, ObservableEntry *> make_observable_ratio(const char * name,
+            double (Decay_::* numerator)(const Args_ & ...) const,
+            double (Decay_::* denominator)(const Args_ & ...) const,
+            const Tuple_ & kinematics_names)
+    {
+        std::string sname(name);
+
+        return std::make_pair(sname, make_concrete_observable_ratio_factory(sname, numerator, denominator, kinematics_names));
+    }
+
+    /* form factors as observables */
     template <typename Transition_>
     std::pair<QualifiedName, ObservableEntry *> make_observable(const char * name,
             const char * process,
