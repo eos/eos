@@ -139,6 +139,7 @@ class QualifiedNameTest :
         virtual void run() const
         {
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010"));
+            TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=BSZ2015"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("mass::b(MSbar);opt=har"));
 
             TEST_CHECK_EQUAL_STR(

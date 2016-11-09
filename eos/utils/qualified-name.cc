@@ -121,7 +121,7 @@ namespace eos
             // VALUE := ['a'-'z', 'A'-'Z', '0'-'9', '-']
             static const char * valid_option_value_characters =
                     "abcdefghijklmnopqrstuvwxyz"
-                    "ABCDEFGHIJKLMNOPQRTSUVW"
+                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
                     "0123456789"
                     "-";
 
