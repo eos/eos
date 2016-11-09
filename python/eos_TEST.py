@@ -123,6 +123,29 @@ class PythonTests:
         except:
             raise TestFailedError('cannote evaluate Observable')
 
+    """
+    Check if an instance of Constraint can be created, and if we can iterate over
+    its LogLikelihoodBlock range.
+    """
+    def check_007_Constraint(self):
+        from eos import Constraint, Options
+
+        con = None
+        try:
+            con = Constraint.make('B->D::f_++f_0@HPQCD2015A', Options())
+        except:
+            raise TestFailedError('cannot create Constraint')
+
+        if not con.name() == 'B->D::f_++f_0@HPQCD2015A':
+            raise TestFailedError('cannot obtain Constraint name')
+
+        for llhb in con.blocks():
+            print llhb.as_string()
+
+        for obs in con.observables():
+            print obs.name()
+
+
 
 """
 Run all test cases.

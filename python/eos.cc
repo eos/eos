@@ -162,6 +162,7 @@ BOOST_PYTHON_MODULE(eos)
         .def("make", &Constraint::make, return_value_policy<return_by_value>())
         .staticmethod("make")
         .def("name", &Constraint::name, return_value_policy<copy_const_reference>())
-        .def("__iter__", range(&Constraint::begin_blocks, &Constraint::end_blocks))
+        .def("blocks", range(&Constraint::begin_blocks, &Constraint::end_blocks))
+        .def("observables", range(&Constraint::begin_observables, &Constraint::end_observables))
         ;
 }
