@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2014, 2017 Danny van Dyk
  * Copyright (c) 2010 Christoph Bobeth
  * Copyright (c) 2010, 2011 Christian Wacker
  *
@@ -95,27 +95,36 @@ namespace eos
         if (m_q < 1e-4)
             return h(mu, s);
 
-        if (s < 1e-4)
-            return complex<double>(-4.0 / 9.0 * (1.0 - 2.0 * std::log(mu / m_q)), 0.0);
-
         const double z = 4.0 * m_q * m_q / s;
-        if (z < 1e-10)
-            return complex<double>(-4.0/9.0 * (2.0 * std::log(m_q / mu) + 1.0), 0.0);
+        if ((std::abs(s) < 1e-4) || (std::abs(z) < 1e-10))
+            return complex<double>(-4.0 / 9.0 * (1.0 + 2.0 * std::log(m_q / mu)), 0.0);
 
         const double sqrt1z = std::sqrt(std::abs(z - 1.0));
-
-        double a = 2.0 * std::log(m_q / mu) - 2.0 / 3.0 - z;
-        double b = (2.0 + z) * sqrt1z;
+        const double a = 2.0 * std::log(m_q / mu) - 2.0 / 3.0 - z;
+        const double b = (2.0 + z) * sqrt1z;
         double rc, ic;
-        if (z > 1.0)
+
+        if ((s > 0) && (z > 1.0))
         {
             ic = 0.0;
             rc = std::atan(1.0 / sqrt1z);
         }
-        else
+        else if ((s > 0) && (z > 0))
         {
             ic = -M_PI / 2.0;
             rc = std::log((1.0 + sqrt1z) / std::sqrt(z));
+        }
+        else if (s < 0) // we use [KMPW2010], Eq. (12), p. 7
+        {
+            ic = 0.0;
+            // note that our prefactor b varies from eq. (12) by a factor of 2.
+            // therefore, c = 0.5 * log(...)
+            //
+            rc = -0.5 * std::log((sqrt1z - 1.0) / (sqrt1z + 1.0));
+        }
+        else
+        {
+            throw InternalError("CharmLoops::h not prepared for its arguments");
         }
 
         // cf. [BFS2001], Eq. (11), p. 4

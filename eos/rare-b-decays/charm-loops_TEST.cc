@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2017 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -48,6 +48,36 @@ class OneLoopTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.58013, CharmLoops::h(mu, s, m_c), eps);
 
                 TEST_CHECK_NEARLY_EQUAL(-0.55926, CharmLoops::h(mu, s, m_b), eps);
+            }
+
+            /* One-Loop, m = m_c, as a function of s, in interval around s = 0 */
+            {
+                static const double mu = 4.2, m_c = 1.4, eps = 0.00001;
+
+                TEST_CHECK_NEARLY_EQUAL(+0.24674, real(CharmLoops::h(mu, -9.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.27049, real(CharmLoops::h(mu, -8.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.29564, real(CharmLoops::h(mu, -7.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.32236, real(CharmLoops::h(mu, -6.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.35086, real(CharmLoops::h(mu, -5.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.38141, real(CharmLoops::h(mu, -4.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.41433, real(CharmLoops::h(mu, -3.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.45003, real(CharmLoops::h(mu, -2.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.48906, real(CharmLoops::h(mu, -1.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.53210, real(CharmLoops::h(mu,  0.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.58014, real(CharmLoops::h(mu, +1.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.63454, real(CharmLoops::h(mu, +2.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.69738, real(CharmLoops::h(mu, +3.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.77198, real(CharmLoops::h(mu, +4.0, m_c)), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, -4.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, -3.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, -2.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, -1.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu,  0.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, +1.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, +2.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, +3.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, +4.0, m_c)), eps);
             }
 
             /* One-Loop, massless */
