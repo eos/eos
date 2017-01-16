@@ -9,7 +9,8 @@ before_install:
     - sudo apt-get -qq update
     - sudo apt-get install -y libhdf5-serial-dev
     - sudo apt-get install -y libgsl0-dev
-    - sudo apt-get install -y libboost-python-dev
+    - sudo apt-get install -y libboost-filesystem-dev libboost-python-dev libboost-system-dev
+    - sudo apt-get install -y libyaml-cpp-dev
     - ./.travis/install-minuit2.bash
 
 script:
