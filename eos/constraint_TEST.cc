@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2014, 2015, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -48,10 +48,10 @@ class ConstraintTest :
 
                 for (auto cf = constraints.begin(); cf != constraints.end(); ++cf, ++n)
                 {
-                    std::cout << "#  " << *cf << ": ";
+                    std::cout << "#  " << cf->first.full() << ": ";
 
-                    Constraint c = Constraint::make(*cf, o);
-                    TEST_CHECK_EQUAL(c.name(), *cf);
+                    Constraint c = Constraint::make(cf->first, o);
+                    TEST_CHECK_EQUAL(c.name(), cf->first);
                     TEST_CHECK(std::distance(c.begin_observables(), c.end_observables()) > 0);
                     TEST_CHECK(std::distance(c.begin_blocks(), c.end_blocks()) > 0);
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2012, 2013, 2014, 2016 Danny van Dyk
+ * Copyright (c) 2011, 2012, 2013, 2014, 2016, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -81,6 +81,39 @@ namespace eos
             static Constraint make(const QualifiedName & name, const Options & options);
     };
 
+    /*!
+     * ConstraintEntry is internally used to keep track of the Constraint and the factory method
+     * for any given Constraint. This includes handling its construction (via the make() method), and
+     * describing it (via the ostream & operator<<).
+     */
+    class ConstraintEntry
+    {
+        protected:
+            QualifiedName _name;
+
+        public:
+            friend std::ostream & operator<< (std::ostream &, const ConstraintEntry &);
+
+            ConstraintEntry(const QualifiedName & name);
+
+            virtual ~ConstraintEntry();
+
+            virtual Constraint make(const QualifiedName &, const Options &) const = 0;
+
+            inline const QualifiedName & name() { return _name; }
+
+        protected:
+            virtual std::ostream & insert(std::ostream & os) const = 0;
+    };
+
+    /*!
+     * Output stream operator for ConstraintEntry.
+     */
+    inline
+    std::ostream & operator<< (std::ostream & os, const ConstraintEntry & entry)
+    {
+        return entry.insert(os);
+    }
 
     /*!
      * Container around the known and implemented constraints
@@ -98,7 +131,7 @@ namespace eos
         ///@name Iteration over known constraints
         ///@{
         struct ConstraintIteratorTag;
-        typedef WrappedForwardIterator<ConstraintIteratorTag, const QualifiedName &> ConstraintIterator;
+        typedef WrappedForwardIterator<ConstraintIteratorTag, std::pair<const QualifiedName, const ConstraintEntry *>> ConstraintIterator;
 
         ConstraintIterator begin() const;
         ConstraintIterator end() const;
