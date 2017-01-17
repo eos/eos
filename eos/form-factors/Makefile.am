@@ -8,6 +8,7 @@ libeosformfactors_la_SOURCES = \
 	analytic-b-to-pi.hh analytic-b-to-pi.cc \
 	analytic-b-to-pi-pi.hh analytic-b-to-pi-pi.cc \
 	baryonic.cc baryonic.hh baryonic-impl.hh \
+	b-lcdas.cc b-lcdas.hh \
 	form-factor-adapter.hh \
 	form-factors.cc form-factors.hh form-factors-fwd.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
@@ -23,6 +24,7 @@ include_eos_rarebdecaysdir = $(includedir)/eos/form-factors
 include_eos_rarebdecays_HEADERS = \
 	analytic-b-to-pi.hh \
 	analytic-b-to-pi-pi.hh \
+	b-lcdas.hh \
 	form-factor-adapter.hh \
 	form-factors.hh \
 	pi-lcdas.hh
@@ -34,6 +36,7 @@ TESTS = \
 	analytic-b-to-pi_TEST \
 	analytic-b-to-pi-pi_TEST \
 	baryonic_TEST \
+	b-lcdas_TEST \
 	mesonic_TEST \
 	pi-lcdas_TEST
 LDADD = \
@@ -48,6 +51,8 @@ analytic_b_to_pi_TEST_SOURCES = analytic-b-to-pi_TEST.cc
 analytic_b_to_pi_pi_TEST_SOURCES = analytic-b-to-pi-pi_TEST.cc
 
 baryonic_TEST_SOURCES = baryonic_TEST.cc
+
+b_lcdas_TEST_SOURCES = b-lcdas_TEST.cc
 
 mesonic_TEST_SOURCES = mesonic_TEST.cc
 
