@@ -659,8 +659,8 @@ namespace eos
     complex<double>
     CharmLoops::F19_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
-        // F19(s) diverges for s -> 0. However, s * F89(s) -> 0 for s -> 0.
-        if (s < 1e-4)
+        // F19(s) diverges for s -> 0. However, s * F19(s) -> 0 for s -> 0.
+        if (abs(s) < 1e-4)
             throw InternalError("CharmLoops::F19_massive: F19 diverges for s -> 0. Check that F19 enters via 's * F19(s)' and replace by zero.");
 
         // cf. [ABGW2001], Appendix B, pp. 34-38
@@ -836,8 +836,8 @@ namespace eos
     complex<double>
     CharmLoops::F29_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
-        // F29(s) diverges for s -> 0. However, s * F89(s) -> 0 for s -> 0.
-        if (s < 1e-4)
+        // F29(s) diverges for s -> 0. However, s * F29(s) -> 0 for s -> 0.
+        if (abs(s) < 1e-4)
             throw InternalError("CharmLoops::F29_massive: F29 diverges for s -> 0. Check that F29 enters via 's * F29(s)' and replace by zero.");
 
         // cf. [ABGW2001], Appendix B, pp. 34-38
