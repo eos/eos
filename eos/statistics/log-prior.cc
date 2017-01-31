@@ -616,14 +616,14 @@ namespace eos
             loc1 = s.find_first_of('=', loc2 + 1);
             loc2 = s.find_first_of('+', loc2 + 1);
 
-            double central = destringify<double>(s.substr(loc1 + 2, loc2 - loc1 - 2));
+            double central = destringify<double>(s.substr(loc1 + 2, loc2 - loc1 - 3));
 
             double sigma_upper, sigma_lower;
 
             // extract sigma_upper, lower
             if ( s[loc2 + 1] == '-')
             {
-                sigma_upper = destringify<double>(s.substr(loc2 + 2));
+                sigma_upper = destringify<double>(s.substr(loc2 + 3));
                 sigma_lower = sigma_upper;
             }
             else
@@ -631,7 +631,7 @@ namespace eos
                 loc1 = loc2;
                 loc2 = s.find_first_of('-', loc2 + 1);
 
-                sigma_upper = destringify<double>(s.substr(loc1 + 1, loc2 - loc1 - 1));
+                sigma_upper = destringify<double>(s.substr(loc1 + 2, loc2 - loc1 - 3));
 
                 loc1 = loc2;
                 loc2 = s.find_first_of(',', loc2 + 1);
@@ -645,7 +645,7 @@ namespace eos
                 // don't parse until end of string, but until next comma
                 else
                 {
-                    sigma_lower = destringify<double>(s.substr(loc1 + 1, loc2 - loc1 -1));
+                    sigma_lower = destringify<double>(s.substr(loc1 + 2, loc2 - loc1 - 2));
                 }
             }
 
