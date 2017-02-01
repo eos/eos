@@ -3144,20 +3144,32 @@ namespace eos
         /*
          * Reproduced from [HPQCD:2013A].
          */
-        static const MultivariateGaussianConstraintEntry<3> B_to_K_fplus_17_to_23_HPQCD_2013A
+        static const MultivariateGaussianConstraintEntry<9> B_to_K_fzero_fplus_ftensor_17_to_23_HPQCD_2013A
         {
-            "B->K::f_+@HPQCD-2013A",
-            {{ "B->K::f_+(s)", "B->K::f_+(s)", "B->K::f_+(s)" }},
-            {{ Kinematics{ { "s", 17.0 } }, Kinematics{ { "s", 20.0 } }, Kinematics{ { "s", 23.0 } },}},
-            {{ Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" }}, Options{ { "form-factors", "KMPW2010" } } }},
-            {{ 1.07617,   1.50728,   2.34247   }},
-            {{ 0.0265336, 0.0299249, 0.0696341 }},
-            {{ 0.0265336, 0.0299249, 0.0696341 }},
-            {{ +0.00, +0.00, +0.00 }}, // we assign no systematic uncertainty
+            "B->K::f_0+f_++f_T@HPQCD-2013A",
+            {{ "B->K::f_0(s)", "B->K::f_0(s)", "B->K::f_0(s)",
+               "B->K::f_+(s)", "B->K::f_+(s)", "B->K::f_+(s)",
+               "B->K::f_T(s)", "B->K::f_T(s)", "B->K::f_T(s)" }},
+            {{ Kinematics{ { "s", 17.0 } }, Kinematics{ { "s", 20.0 } }, Kinematics{ { "s", 23.0 } },
+               Kinematics{ { "s", 17.0 } }, Kinematics{ { "s", 20.0 } }, Kinematics{ { "s", 23.0 } },
+               Kinematics{ { "s", 17.0 } }, Kinematics{ { "s", 20.0 } }, Kinematics{ { "s", 23.0 } } }},
+            {{ Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" } },
+               Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" } },
+               Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" } }, Options{ { "form-factors", "KMPW2010" } } }},
+            {{ 0.615697,  0.722728,  0.86973,   1.13053,   1.62747,   2.67559,  1.01869,   1.47371, 2.42477  }},
+            {{ 0.0423107, 0.0464784, 0.0545373, 0.0730107, 0.0973055, 0.186149, 0.0842842, 0.11937, 0.249658 }},
+            {{ 0.0423107, 0.0464784, 0.0545373, 0.0730107, 0.0973055, 0.186149, 0.0842842, 0.11937, 0.249658 }},
+            {{ +0.00, +0.00, +0.00, +0.00, +0.00, +0.00, +0.00, +0.00, +0.00 }}, // we assign no systematic uncertainty
             {{
-                {{ 1.000000, 0.778675, 0.290551 }},
-                {{ 0.778675, 1.000000, 0.708433 }},
-                {{ 0.290551, 0.708433, 1.000000 }}
+                {{ 1.,        0.929602,  0.727828,  0.576305,  0.477212, 0.230181,  0.128042,  0.0998671, 0.0477771 }},
+                {{ 0.929602,  1.,        0.872508,  0.405678,  0.451924, 0.243271,  0.0586115, 0.0933393, 0.0749594 }},
+                {{ 0.727828,  0.872508,  1.,        0.280099,  0.34324,  0.317962,  0.0103097, 0.046188,  0.0580487 }},
+                {{ 0.576305,  0.405678,  0.280099,  1.,        0.782097, 0.298457,  0.363865,  0.212712,  0.0508819 }},
+                {{ 0.477212,  0.451924,  0.34324,   0.782097,  1.,       0.712792,  0.222467,  0.262759,  0.197032  }},
+                {{ 0.230181,  0.243271,  0.317962,  0.298457,  0.712792, 1.,       -0.0249157, 0.140985,  0.220042  }},
+                {{ 0.128042,  0.0586115, 0.0103097, 0.363865,  0.222467,-0.0249157, 1.,        0.785177,  0.457065  }},
+                {{ 0.0998671, 0.0933393, 0.046188,  0.212712,  0.262759, 0.140985,  0.785177,  1.,        0.853052  }},
+                {{ 0.0477771, 0.0749594, 0.0580487, 0.0508819, 0.197032, 0.220042,  0.457065,  0.853052,  1.        }}
             }},
             0u
         };
@@ -4524,7 +4536,7 @@ namespace eos
             ValueType{ "Lambda_b->Lambdamu^+mu^-::A_FB^h[15.0,20.0]@LHCb-2015B", &entries::Lambdab_to_Lambda_dimuon_a_fb_h_15_to_20_LHCb_2015B },
 
             /* Theory Constraints */
-            ValueType{ "B->K::f_+@HPQCD-2013A", &entries::B_to_K_fplus_17_to_23_HPQCD_2013A },
+            ValueType{ "B->K::f_0+f_++f_T@HPQCD-2013A", &entries::B_to_K_fzero_fplus_ftensor_17_to_23_HPQCD_2013A },
             ValueType{ "B->K^*::V@MILC-2013A", &entries::B_to_Kstar_V_15_to_19dot21_MILC_2013A },
             ValueType{ "B->K^*::A_1@MILC-2013A", &entries::B_to_Kstar_A1_15_to_19dot21_MILC_2013A },
             ValueType{ "B->K^*::A_12@MILC-2013A", &entries::B_to_Kstar_A12_15_to_19dot21_MILC_2013A },
