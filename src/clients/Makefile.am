@@ -7,6 +7,7 @@ bin_PROGRAMS = \
 	eos-evaluate \
 	eos-find-mode \
 	eos-list-constraints \
+	eos-list-observables \
 	eos-list-parameters \
 	eos-list-signal-pdfs \
 	eos-print-polynomial \
@@ -47,6 +48,8 @@ eos_find_mode_SOURCES = eos-find-mode.cc
 eos_find_mode_LDADD = $(LDADD) -lgsl
 
 eos_list_constraints_SOURCES = eos-list-constraints.cc
+
+eos_list_observables_SOURCES = eos-list-observables.cc
 
 eos_list_parameters_SOURCES = eos-list-parameters.cc
 
