@@ -69,24 +69,6 @@ namespace eos
 
             virtual ObservablePtr make(const Parameters &, const Kinematics &, const Options &) const = 0;
     };
-#if 0
-    /*!
-     * ObservableNameError is thrown when Observable::make encounters a malformed observable name.
-     */
-    struct ObservableNameError :
-        public Exception
-    {
-        ///@name Basic Functions
-        ///@{
-        /*!
-         * Constructor.
-         *
-         * @param name The offending malformed observable name.
-         */
-        ObservableNameError(const std::string & name);
-        ///@}
-    };
-#endif
 }
 
 #endif
