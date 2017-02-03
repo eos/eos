@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015, 2016, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -110,18 +110,18 @@ namespace eos
     };
 
     template <typename Decay_, typename ... Args_>
-    class ConcreteObservableFactory :
-        public ObservableFactory
+    class ConcreteObservableEntry :
+        public ObservableEntry
     {
         private:
-            std::string _name;
+            QualifiedName _name;
 
             std::function<double (const Decay_ *, const Args_ & ...)> _function;
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
 
         public:
-            ConcreteObservableFactory(const std::string & name,
+            ConcreteObservableEntry(const QualifiedName & name,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & function,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
                 _name(name),
@@ -130,7 +130,7 @@ namespace eos
             {
             }
 
-            ~ConcreteObservableFactory()
+            ~ConcreteObservableEntry()
             {
             }
 
@@ -138,15 +138,22 @@ namespace eos
             {
                 return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, kinematics, options, _function, _kinematics_names));
             }
+
+            virtual std::ostream & insert(std::ostream & os) const
+            {
+                os << "    type: regular observable" << std::endl;
+
+                return os;
+            }
     };
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
-    ObservableFactory * make_concrete_observable_factory(const std::string & name, double (Decay_::* function)(const Args_ & ...) const,
+    ObservableEntry * make_concrete_observable_entry(const QualifiedName & name, double (Decay_::* function)(const Args_ & ...) const,
             const Tuple_ & kinematics_names = std::make_tuple())
     {
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
 
-        return new ConcreteObservableFactory<Decay_, Args_ ...>(name,
+        return new ConcreteObservableEntry<Decay_, Args_ ...>(name,
                 std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(function)),
                 kinematics_names);
     }

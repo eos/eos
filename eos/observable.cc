@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -41,64 +41,74 @@
 #include <eos/utils/concrete_observable.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/observable_stub.hh>
+#include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <algorithm>
 #include <map>
 
 namespace eos
 {
-    ObservableFactory::ObservableFactory()
+    ObservableEntry::ObservableEntry()
     {
     }
 
-    ObservableFactory::~ObservableFactory()
+    ObservableEntry::~ObservableEntry()
     {
+    }
+
+    std::ostream &
+    ObservableEntry::insert(std::ostream & os) const
+    {
+        os << "<empty Observable description>" << std::endl;
+        return os;
     }
 
     template <typename Decay_, typename ... Args_>
-    std::pair<std::string, ObservableFactory *> make_observable(const char * name,
+    std::pair<QualifiedName, ObservableEntry *> make_observable(const char * name,
             double (Decay_::* function)(const Args_ & ...) const)
     {
-        std::string sname(name);
+        QualifiedName qn(name);
 
-        return std::make_pair(sname, make_concrete_observable_factory(sname, function, std::make_tuple()));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, function, std::make_tuple()));
     }
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
-    std::pair<std::string, ObservableFactory *> make_observable(const char * name,
+    std::pair<QualifiedName, ObservableEntry *> make_observable(const char * name,
             double (Decay_::* function)(const Args_ & ...) const,
             const Tuple_ & kinematics_names)
     {
-        std::string sname(name);
+        QualifiedName qn(name);
 
-        return std::make_pair(sname, make_concrete_observable_factory(sname, function, kinematics_names));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, function, kinematics_names));
     }
 
     template <typename Transition_>
-    std::pair<std::string, ObservableFactory *> make_observable(const char * name,
+    std::pair<QualifiedName, ObservableEntry *> make_observable(const char * name,
             const char * process,
             double (FormFactors<Transition_>::* function)(const double &) const)
     {
-        std::string sname(name), sprocess(process);
+        QualifiedName qn(name);
+        qnp::Prefix pp(process);
 
-        return std::make_pair(sname, new FormFactorAdapterFactory<Transition_>(sname, sprocess, function));
+        return std::make_pair(qn, new FormFactorAdapterEntry<Transition_>(qn, pp, function));
     }
 
     template <typename Transition_>
-    std::pair<std::string, ObservableFactory *> make_observable(const char * name,
+    std::pair<QualifiedName, ObservableEntry *> make_observable(const char * name,
             const char * process,
             double (FormFactors<Transition_>::* numerator)(const double &) const,
             double (FormFactors<Transition_>::* denominator)(const double &) const)
     {
-        std::string sname(name), sprocess(process);
+        QualifiedName qn(name);
+        qnp::Prefix pp(process);
 
-        return std::make_pair(sname, new FormFactorRatioAdapterFactory<Transition_>(sname, sprocess, numerator, denominator));
+        return std::make_pair(qn, new FormFactorRatioAdapterEntry<Transition_>(qn, pp, numerator, denominator));
     }
 
-    ObservablePtr
-    Observable::make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
+    const std::map<QualifiedName, const ObservableEntry *> &
+    make_observable_entries()
     {
-        static const std::map<QualifiedName, ObservableFactory *> simple_observables
+        static const std::map<QualifiedName, const ObservableEntry *> observable_entries
         {
             /* B Meson Properties */
             make_observable("B::M_B^*-M_B",
@@ -1665,10 +1675,18 @@ namespace eos
                     std::make_tuple("E_min")),
         };
 
+        return observable_entries;
+    }
+
+    ObservablePtr
+    Observable::make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
+    {
+        static const std::map<QualifiedName, const ObservableEntry *> observable_entries = make_observable_entries();
+
         // check if 'name' matches a simple observable
         {
-            auto i = simple_observables.find(name);
-            if (simple_observables.end() != i)
+            auto i = observable_entries.find(name);
+            if (observable_entries.end() != i)
                 return i->second->make(parameters, kinematics, name.options() + _options);
         }
 
@@ -1683,5 +1701,39 @@ namespace eos
         }
 
         return ObservablePtr();
+    }
+
+    template class WrappedForwardIterator<Observables::ObservableIteratorTag, std::pair<const QualifiedName, const ObservableEntry *>>;
+
+    template<>
+    struct Implementation<Observables>
+    {
+        std::map<QualifiedName, const ObservableEntry *> observable_entries;
+
+        Implementation() :
+            observable_entries(make_observable_entries())
+        {
+        }
+    };
+
+    Observables::Observables() :
+        PrivateImplementationPattern<Observables>(new Implementation<Observables>())
+    {
+    }
+
+    Observables::~Observables()
+    {
+    }
+
+    Observables::ObservableIterator
+    Observables::begin() const
+    {
+        return ObservableIterator(_imp->observable_entries.begin());
+    }
+
+    Observables::ObservableIterator
+    Observables::end() const
+    {
+        return ObservableIterator(_imp->observable_entries.end());
     }
 }

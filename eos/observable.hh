@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2016 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2016, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -37,6 +37,10 @@ namespace eos
 
     typedef std::shared_ptr<Observable> ObservablePtr;
 
+    /**
+     * Observable is internally used to handle the creation,
+     * evaluation and cloning of any (pseudo)observable quantities.
+     */
     class Observable :
         public ParameterUser
     {
@@ -58,17 +62,58 @@ namespace eos
             static ObservablePtr make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
     };
 
-    typedef std::shared_ptr<Observable> ObservablePtr;
-
-    class ObservableFactory
+    /**
+     * ObservableEntry is internally used to keep track of the description and factory method
+     * for any given Observable. This includes handling its construction (via the make() method), and
+     * describing it (via the ostream & insert() method).
+     */
+    class ObservableEntry
     {
         public:
-            ObservableFactory();
+            friend std::ostream & operator<< (std::ostream &, const ObservableEntry &);
 
-            virtual ~ObservableFactory();
+            ObservableEntry();
+
+            virtual ~ObservableEntry();
 
             virtual ObservablePtr make(const Parameters &, const Kinematics &, const Options &) const = 0;
+
+        protected:
+            virtual std::ostream & insert(std::ostream & os) const = 0;
     };
+
+    /*!
+     * Output stream operator for ObservableEntry.
+     */
+    inline std::ostream & operator<< (std::ostream & os, const ObservableEntry & entry)
+    {
+        return entry.insert(os);
+    }
+
+    /*!
+     * Container around the known and implemented signal PDFs
+     */
+    class Observables :
+        public PrivateImplementationPattern<Observables>
+    {
+        public:
+            /// Constructor.
+            Observables();
+
+            /// Destructor.
+            ~Observables();
+
+            ///@name Iteration over known constraints
+            ///@{
+            struct ObservableIteratorTag;
+            typedef WrappedForwardIterator<ObservableIteratorTag, std::pair<const QualifiedName, const ObservableEntry *>> ObservableIterator;
+
+            ObservableIterator begin() const;
+            ObservableIterator end() const;
+            ///@}
+    };
+
+    extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, std::pair<const QualifiedName, const ObservableEntry *>>;
 }
 
 #endif

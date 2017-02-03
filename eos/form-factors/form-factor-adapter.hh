@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013, 2016 Danny van Dyk
+ * Copyright (c) 2013, 2016, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,7 +33,7 @@ namespace eos
         private:
             QualifiedName _name;
 
-            std::string _process;
+            qnp::Prefix _process;
 
             Parameters _parameters;
 
@@ -49,7 +49,7 @@ namespace eos
 
         public:
             FormFactorAdapter(const QualifiedName & name,
-                    const std::string & process,
+                    const qnp::Prefix & process,
                     const Parameters & parameters,
                     const Kinematics & kinematics,
                     const Options & options,
@@ -65,9 +65,9 @@ namespace eos
                 if (! _options.has("form-factors"))
                     throw UnknownOptionError("form-factors");
 
-                _form_factors = FormFactorFactory<Transition_>::create(process + '@' + options["form-factors"], _parameters);
+                _form_factors = FormFactorFactory<Transition_>::create(process.str() + '@' + options["form-factors"], _parameters);
                 if (! _form_factors)
-                    throw NoSuchFormFactorError(process, options["form-factors"]);
+                    throw NoSuchFormFactorError(process.str(), options["form-factors"]);
             }
 
             virtual const QualifiedName & name() const
@@ -107,19 +107,19 @@ namespace eos
     };
 
     template <typename Transition_>
-    class FormFactorAdapterFactory :
-        public ObservableFactory
+    class FormFactorAdapterEntry :
+        public ObservableEntry
     {
         private:
             QualifiedName _name;
 
-            std::string _process;
+            qnp::Prefix _process;
 
             std::function<double (const FormFactors<Transition_> *, const double &)> _form_factor_function;
 
         public:
-            FormFactorAdapterFactory(const QualifiedName & name,
-                    const std::string & process,
+            FormFactorAdapterEntry(const QualifiedName & name,
+                    const qnp::Prefix & process,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_function) :
                 _name(name),
                 _process(process),
@@ -127,13 +127,20 @@ namespace eos
             {
             }
 
-            ~FormFactorAdapterFactory()
+            ~FormFactorAdapterEntry()
             {
             }
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
                 return ObservablePtr(new FormFactorAdapter<Transition_>(_name, _process, parameters, kinematics, options, _form_factor_function));
+            }
+
+            virtual std::ostream & insert(std::ostream & os) const
+            {
+                os << "    type: adapter for one form factor" << std::endl;
+
+                return os;
             }
     };
 
@@ -145,7 +152,7 @@ namespace eos
         private:
             QualifiedName _name;
 
-            std::string _process;
+            qnp::Prefix _process;
 
             Parameters _parameters;
 
@@ -163,7 +170,7 @@ namespace eos
 
         public:
             FormFactorRatioAdapter(const QualifiedName & name,
-                    const std::string & process,
+                    const qnp::Prefix & process,
                     const Parameters & parameters,
                     const Kinematics & kinematics,
                     const Options & options,
@@ -181,7 +188,7 @@ namespace eos
                 if (! _options.has("form-factors"))
                     throw UnknownOptionError("form-factors");
 
-                _form_factors = FormFactorFactory<Transition_>::create(process + '@' + options["form-factors"], _parameters);
+                _form_factors = FormFactorFactory<Transition_>::create(process.str() + '@' + options["form-factors"], _parameters);
             }
 
             virtual const QualifiedName & name() const
@@ -223,21 +230,21 @@ namespace eos
     };
 
     template <typename Transition_>
-    class FormFactorRatioAdapterFactory :
-        public ObservableFactory
+    class FormFactorRatioAdapterEntry :
+        public ObservableEntry
     {
         private:
             QualifiedName _name;
 
-            std::string _process;
+            qnp::Prefix _process;
 
             std::function<double (const FormFactors<Transition_> *, const double &)> _form_factor_numerator;
 
             std::function<double (const FormFactors<Transition_> *, const double &)> _form_factor_denominator;
 
         public:
-            FormFactorRatioAdapterFactory(const QualifiedName & name,
-                    const std::string & process,
+            FormFactorRatioAdapterEntry(const QualifiedName & name,
+                    const qnp::Prefix & process,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_numerator,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_denominator) :
                 _name(name),
@@ -247,13 +254,20 @@ namespace eos
             {
             }
 
-            ~FormFactorRatioAdapterFactory()
+            ~FormFactorRatioAdapterEntry()
             {
             }
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
                 return ObservablePtr(new FormFactorRatioAdapter<Transition_>(_name, _process, parameters, kinematics, options, _form_factor_numerator, _form_factor_denominator));
+            }
+
+            virtual std::ostream & insert(std::ostream & os) const
+            {
+                os << "    type: adapter for a ratio of two form factors" << std::endl;
+
+                return os;
             }
     };
 }
