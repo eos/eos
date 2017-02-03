@@ -92,7 +92,6 @@ namespace eos
     class ConstraintEntry
     {
         public:
-            friend std::ostream & operator<< (std::ostream &, const ConstraintEntry &);
             virtual ~ConstraintEntry();
 
             virtual Constraint make(const QualifiedName &, const Options &) const = 0;
@@ -116,19 +115,8 @@ namespace eos
                 return IteratorRange<ObservableNameIterator>(begin_observable_names(), end_observable_names());
             }
             ///@}
-
-        protected:
-            virtual std::ostream & insert(std::ostream & os) const = 0;
     };
 
-    /*!
-     * Output stream operator for ConstraintEntry.
-     */
-    inline
-    std::ostream & operator<< (std::ostream & os, const ConstraintEntry & entry)
-    {
-        return entry.insert(os);
-    }
     extern template class WrappedForwardIterator<ConstraintEntry::ObservableNameIteratorTag, const QualifiedName>;
 
     /*!

@@ -40,12 +40,6 @@ namespace eos
 
     ConstraintEntry::~ConstraintEntry() = default;
 
-    std::ostream &
-    ConstraintEntry::insert(std::ostream & os) const
-    {
-        os << "<empty Constraint description>" << std::endl;
-        return os;
-    }
     template <>
     struct WrappedForwardIteratorTraits<ConstraintEntry::ObservableNameIteratorTag>
     {
