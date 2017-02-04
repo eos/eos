@@ -40,6 +40,8 @@ namespace eos
                 Prefix(const std::string &);
 
                 const std::string & str() const { return _prefix; };
+
+                inline bool operator<  (const Prefix & rhs) const { return this->_prefix <  rhs._prefix; };
         };
 
         class Name
@@ -51,6 +53,8 @@ namespace eos
                 Name(const std::string &);
 
                 const std::string & str() const { return _name; };
+
+                inline bool operator<  (const Name & rhs) const { return this->_name <  rhs._name; };
         };
 
         class Suffix
@@ -63,6 +67,8 @@ namespace eos
 
                 const std::string & str() const { return _suffix; };
                 bool empty() const { return _suffix.empty(); };
+
+                inline bool operator<  (const Suffix & rhs) const { return this->_suffix <  rhs._suffix; };
         };
 
         class OptionKey
