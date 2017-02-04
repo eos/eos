@@ -23,6 +23,7 @@
 
 #include <eos/observable.hh>
 #include <eos/statistics/log-likelihood-fwd.hh>
+#include <eos/utils/iterator-range.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
@@ -90,19 +91,31 @@ namespace eos
      */
     class ConstraintEntry
     {
-        protected:
-            QualifiedName _name;
-
         public:
             friend std::ostream & operator<< (std::ostream &, const ConstraintEntry &);
-
-            ConstraintEntry(const QualifiedName & name);
-
             virtual ~ConstraintEntry();
 
             virtual Constraint make(const QualifiedName &, const Options &) const = 0;
 
-            inline const QualifiedName & name() { return _name; }
+            /// Return the entry's name
+            virtual const QualifiedName & name() const = 0;
+
+            /// Return the entry's type description
+            virtual const std::string & type() const = 0;
+
+            ///@name Iteration over our Observables
+            ///@{
+            struct ObservableNameIteratorTag;
+            typedef WrappedForwardIterator<ObservableNameIteratorTag, const QualifiedName> ObservableNameIterator;
+
+            virtual ObservableNameIterator begin_observable_names() const = 0;
+            virtual ObservableNameIterator end_observable_names() const = 0;
+
+            inline IteratorRange<ObservableNameIterator> observable_names() const
+            {
+                return IteratorRange<ObservableNameIterator>(begin_observable_names(), end_observable_names());
+            }
+            ///@}
 
         protected:
             virtual std::ostream & insert(std::ostream & os) const = 0;
@@ -116,6 +129,7 @@ namespace eos
     {
         return entry.insert(os);
     }
+    extern template class WrappedForwardIterator<ConstraintEntry::ObservableNameIteratorTag, const QualifiedName>;
 
     /*!
      * Container around the known and implemented constraints

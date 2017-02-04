@@ -38,11 +38,6 @@ namespace eos
     {
     }
 
-    ConstraintEntry::ConstraintEntry(const QualifiedName & name) :
-        _name(name)
-    {
-    }
-
     ConstraintEntry::~ConstraintEntry() = default;
 
     std::ostream &
@@ -51,9 +46,59 @@ namespace eos
         os << "<empty Constraint description>" << std::endl;
         return os;
     }
+    template <>
+    struct WrappedForwardIteratorTraits<ConstraintEntry::ObservableNameIteratorTag>
+    {
+        typedef std::vector<QualifiedName>::const_iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<ConstraintEntry::ObservableNameIteratorTag, const QualifiedName>;
+
+    class ConstraintEntryBase :
+        public ConstraintEntry
+    {
+        protected:
+            QualifiedName _name;
+
+            std::vector<QualifiedName> _observable_names;
+
+            ConstraintEntryBase(const QualifiedName & name,
+                    std::vector<QualifiedName> && observable_names) :
+                _name(name),
+                _observable_names(std::move(observable_names))
+            {
+            }
+
+        public:
+            ConstraintEntryBase(const QualifiedName & name,
+                    const QualifiedName & observable_name) :
+                ConstraintEntryBase(name, std::vector<QualifiedName>{ observable_name })
+            {
+            }
+
+            template <unsigned long n_>
+            ConstraintEntryBase(const QualifiedName & name,
+                    const std::array<QualifiedName, n_> & observable_names) :
+                ConstraintEntryBase(name, std::vector<QualifiedName>(observable_names.begin(), observable_names.end()))
+            {
+            }
+
+            ~ConstraintEntryBase() = default;
+
+            virtual const QualifiedName & name() const { return _name; };
+
+            virtual ConstraintEntry::ObservableNameIterator begin_observable_names() const
+            {
+                return _observable_names.begin();
+            }
+
+            virtual ConstraintEntry::ObservableNameIterator end_observable_names() const
+            {
+                return _observable_names.end();
+            }
+    };
 
     struct GaussianConstraintEntry :
-        public ConstraintEntry
+        public ConstraintEntryBase
     {
         QualifiedName observable;
 
@@ -72,7 +117,7 @@ namespace eos
                 const double & sigma_hi_stat, const double & sigma_lo_stat,
                 const double & sigma_hi_sys, const double & sigma_lo_sys,
                 const unsigned & number_of_observations = 1u) :
-            ConstraintEntry(name),
+            ConstraintEntryBase(name, observable),
             observable(observable),
             kinematics(kinematics),
             options(options),
@@ -86,6 +131,13 @@ namespace eos
         }
 
         virtual ~GaussianConstraintEntry() = default;
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("Gaussian");
+
+            return type;
+        }
 
         virtual Constraint make(const QualifiedName & name, const Options & options) const
         {
@@ -119,7 +171,7 @@ namespace eos
     };
 
     struct AmorosoLimitConstraintEntry :
-        public ConstraintEntry
+        public ConstraintEntryBase
     {
         QualifiedName observable;
 
@@ -140,7 +192,7 @@ namespace eos
                 const double & upper_limit_95,
                 const double & theta,
                 const double & alpha) :
-            ConstraintEntry(name),
+            ConstraintEntryBase(name, observable),
             observable(observable),
             kinematics(kinematics),
             options(options),
@@ -153,6 +205,13 @@ namespace eos
         }
 
         virtual ~AmorosoLimitConstraintEntry() = default;
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("Amoroso (physical limit, 90% upper limit, 95% upper limit)");
+
+            return type;
+        }
 
         virtual Constraint make(const QualifiedName & name, const Options & options) const
         {
@@ -181,7 +240,7 @@ namespace eos
     };
 
     struct AmorosoModeConstraintEntry :
-        public ConstraintEntry
+        public ConstraintEntryBase
     {
         QualifiedName observable;
 
@@ -204,7 +263,7 @@ namespace eos
                 const double & theta,
                 const double & alpha,
                 const double & beta) :
-            ConstraintEntry(name),
+            ConstraintEntryBase(name, observable),
             observable(observable),
             kinematics(kinematics),
             options(options),
@@ -219,6 +278,13 @@ namespace eos
         }
 
         virtual ~AmorosoModeConstraintEntry() = default;
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("Amoroso (physical limit, mode, 90% upper limit, 95% upper limit)");
+
+            return type;
+        }
 
         virtual Constraint make(const QualifiedName & name, const Options & options) const
         {
@@ -248,7 +314,7 @@ namespace eos
     };
 
     struct AmorosoTripleLimitConstraintEntry :
-        public ConstraintEntry
+        public ConstraintEntryBase
     {
         QualifiedName observable;
 
@@ -271,7 +337,7 @@ namespace eos
                 const double & theta,
                 const double & alpha,
                 const double & beta) :
-            ConstraintEntry(name),
+            ConstraintEntryBase(name, observable),
             observable(observable),
             kinematics(kinematics),
             options(options),
@@ -286,6 +352,13 @@ namespace eos
         }
 
         virtual ~AmorosoTripleLimitConstraintEntry() = default;
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("Amoroso (physical limit, 10% upper limit, 90% upper limit, 95% upper limit)");
+
+            return type;
+        }
 
         virtual Constraint make(const QualifiedName & name, const Options & options) const
         {
@@ -315,7 +388,7 @@ namespace eos
     };
 
     struct AmorosoConstraintEntry :
-        public ConstraintEntry
+        public ConstraintEntryBase
     {
         QualifiedName observable;
 
@@ -333,7 +406,7 @@ namespace eos
                 const double & theta,
                 const double & alpha,
                 const double & beta) :
-            ConstraintEntry(name),
+            ConstraintEntryBase(name, observable),
             observable(observable),
             kinematics(kinematics),
             options(options),
@@ -345,6 +418,13 @@ namespace eos
         }
 
         virtual ~AmorosoConstraintEntry() = default;
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("Amoroso (physical limit, theta, alpha, beta)");
+
+            return type;
+        }
 
         virtual Constraint make(const QualifiedName & name, const Options & options) const
         {
@@ -372,7 +452,7 @@ namespace eos
 
     template <size_t dim_>
     struct MultivariateGaussianConstraintEntry :
-        public ConstraintEntry
+        public ConstraintEntryBase
     {
         std::array<QualifiedName, dim_> observable_names;
 
@@ -401,7 +481,7 @@ namespace eos
                 const std::array<double, dim_> & sigma_sys,
                 const std::array<std::array<double, dim_>, dim_> & correlation,
                 const unsigned number_of_observations = dim_) :
-            ConstraintEntry(name),
+            ConstraintEntryBase(name, observable_names),
             observable_names(observable_names),
             kinematics(kinematics),
             options(options),
@@ -415,6 +495,13 @@ namespace eos
         }
 
         virtual ~MultivariateGaussianConstraintEntry() = default;
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("MultivariateGaussian<" + stringify(dim_) + "> (using correlation matrix)");
+
+            return type;
+        }
 
         virtual Constraint make(const QualifiedName & name, const Options & options) const
         {
@@ -458,7 +545,7 @@ namespace eos
 
     template <size_t dim_>
     struct MultivariateGaussianCovarianceConstraintEntry :
-        public ConstraintEntry
+        public ConstraintEntryBase
     {
         std::array<QualifiedName, dim_> observables;
 
@@ -479,7 +566,7 @@ namespace eos
                 const std::array<double, dim_> & means,
                 const std::array<std::array<double, dim_>, dim_> & covariance,
                 const unsigned number_of_observations = dim_) :
-            ConstraintEntry(name),
+            ConstraintEntryBase(name, observables),
             observables(observables),
             kinematics(kinematics),
             options(options),
@@ -490,6 +577,13 @@ namespace eos
         }
 
         virtual ~MultivariateGaussianCovarianceConstraintEntry() = default;
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("MultivariateGaussian<" + stringify(dim_) + "> (using covariance matrix)");
+
+            return type;
+        }
 
         virtual Constraint make(const QualifiedName & name, const Options & options) const
         {
