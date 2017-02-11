@@ -18,7 +18,7 @@ libeosutils_la_SOURCES = \
 	concrete_observable.hh \
 	concrete-signal-pdf.hh \
 	condition_variable.cc condition_variable.hh \
-	density.cc density.hh density-fwd.hh \
+	density.cc density.hh density-fwd.hh density-impl.hh \
 	derivative.cc derivative.hh \
 	destringify.hh \
 	diagnostics.cc diagnostics.hh \
