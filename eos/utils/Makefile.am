@@ -28,6 +28,7 @@ libeosutils_la_SOURCES = \
 	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
+	iterator-range.hh \
 	kinematic.cc kinematic.hh \
 	lcda.cc lcda.hh \
 	lock.cc lock.hh \
@@ -95,6 +96,7 @@ include_eos_utils_HEADERS = \
 	indirect-iterator.hh indirect-iterator-fwd.hh \
 	integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
+	iterator-range.hh \
 	kinematic.hh \
 	lcda.hh \
 	lock.hh \
