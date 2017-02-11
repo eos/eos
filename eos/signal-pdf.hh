@@ -22,9 +22,11 @@
 
 #include <eos/utils/density.hh>
 #include <eos/utils/exception.hh>
+#include <eos/utils/iterator-range.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
+#include <eos/utils/qualified-name.hh>
 
 #include <string>
 #include <memory>
@@ -87,9 +89,31 @@ namespace eos
 
             virtual SignalPDFPtr make(const Parameters &, const Kinematics &, const Options &) const = 0;
 
+            /// Return the SignalPDF name
+            virtual const std::string & name() const = 0;
+
+            /// Return the SignalPDF description
+            virtual const std::string & description() const = 0;
+
+            ///@name Iteration over our kinematic ranges
+            ///@{
+            struct KinematicRangeIteratorTag;
+            typedef WrappedForwardIterator<KinematicRangeIteratorTag, const KinematicRange> KinematicRangeIterator;
+
+            virtual KinematicRangeIterator begin_kinematic_ranges() const = 0;
+            virtual KinematicRangeIterator end_kinematic_ranges() const = 0;
+
+            inline IteratorRange<KinematicRangeIterator> kinematic_ranges() const
+            {
+                return IteratorRange<KinematicRangeIterator>(begin_kinematic_ranges(), end_kinematic_ranges());
+            }
+            ///@}
+
         protected:
             virtual std::ostream & insert(std::ostream & os) const = 0;
     };
+
+    extern template class WrappedForwardIterator<SignalPDFEntry::KinematicRangeIteratorTag, const KinematicRange>;
 
     /*!
      * Output stream operator for SignalPDFEntry.

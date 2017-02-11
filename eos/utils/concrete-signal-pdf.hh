@@ -88,6 +88,72 @@ namespace eos
                 os << "    " << kinematic_range.name << "\t" << kinematic_range.description << std::endl;
             }
         };
+
+        template <typename Result_, unsigned n_> struct ArgumentMaker
+        {
+            template <typename Ranges_, typename ... TempArgs_>
+            static Result_ make(Kinematics & k, const Ranges_ & r, TempArgs_ ... args)
+            {
+                return ArgumentMaker<Result_, n_ - 1>::make(k, r, k[r[n_ - 1].name], args ...);
+            }
+        };
+
+        template <typename Result_> struct ArgumentMaker<Result_, 0>
+        {
+            template <typename Ranges_, typename ... TempArgs_>
+            static Result_ make(Kinematics &, const Ranges_ &, TempArgs_ ... args)
+            {
+                return Result_{ args ... };
+            }
+        };
+
+        template <unsigned long n_> auto make_arguments(Kinematics & kinematics, const std::array<KinematicRange, n_> & kinematic_ranges)
+             -> std::array<KinematicVariable, n_>
+        {
+            return ArgumentMaker<std::array<KinematicVariable, n_>, n_>::make(kinematics, kinematic_ranges);
+        }
+
+        template <unsigned long n_> std::vector<ParameterDescription> make_descriptions(Kinematics & kinematics, const std::array<KinematicRange, n_> & kinematic_ranges)
+        {
+            std::vector<ParameterDescription> result;
+
+            for (auto krange : kinematic_ranges)
+            {
+                auto kname = std::string(krange.name);
+                auto kvalue = (krange.max - krange.min) / 2.0;
+
+                MutablePtr kvar(new KinematicVariable(kinematics.declare(kname, kvalue)));
+
+                result.push_back(ParameterDescription{ kvar, krange.min, krange.max, false });
+            }
+
+            return result;
+        }
+
+        template <typename Result_, unsigned n_> struct Evaluator
+        {
+            template <typename Variables_, typename ... TempArgs_>
+            static Result_ evaluate(const Variables_ & v, TempArgs_ ... args)
+            {
+                return Evaluator<Result_, n_ - 1>::evaluate(v, v[n_ - 1].evaluate(), args ...);
+            }
+        };
+
+        template <typename Result_> struct Evaluator<Result_, 0>
+        {
+            template <typename Variables_, typename ... TempArgs_>
+            static Result_ evaluate(const Variables_ &, TempArgs_ ... args)
+            {
+                return Result_{ args ... };
+            }
+        };
+
+        template <unsigned long n_> auto evaluate(const std::array<KinematicVariable, n_> & kinematic_variables)
+             -> std::array<double, n_>
+        {
+            return Evaluator<std::array<double, n_>, n_>::evaluate(kinematic_variables);
+        }
+
     }
 
     template <typename Decay_, typename ... Args_>
@@ -111,9 +177,9 @@ namespace eos
 
             std::function<double (const Decay_ *, const Args_ & ...)> _function;
 
-            std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...> _kinematic_ranges;
+            std::array<KinematicRange, sizeof...(Args_)> _kinematic_ranges;
 
-            std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple;
+            std::array<KinematicVariable, sizeof...(Args_)> _arguments;
 
         public:
             ConcreteSignalPDF(const std::string & name,
@@ -121,16 +187,16 @@ namespace eos
                     const Kinematics & kinematics,
                     const Options & options,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & function,
-                    const std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...> & kinematic_ranges) :
+                    const std::array<KinematicRange, sizeof...(Args_)> & kinematic_ranges) :
                 _name(name),
                 _parameters(parameters),
                 _kinematics(kinematics),
-                _descriptions(impl::DescriptionFiller<sizeof...(Args_), std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...>>::fill(_kinematics, kinematic_ranges)),
+                _descriptions(impl::make_descriptions(_kinematics, kinematic_ranges)),
                 _options(options),
                 _decay(parameters, options),
                 _function(function),
                 _kinematic_ranges(kinematic_ranges),
-                _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematic_ranges, &_decay))
+                _arguments(impl::make_arguments(_kinematics, kinematic_ranges))
             {
             }
 
@@ -141,9 +207,9 @@ namespace eos
 
             virtual double evaluate() const
             {
-                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
+                std::array<double, sizeof...(Args_)> arguments = impl::evaluate(_arguments);
 
-                double result = apply(_function, values);
+                double result = apply(_function, &_decay, arguments);
 
                 return (result > 0 ? std::log(result) : -std::numeric_limits<double>::max());
             };
@@ -184,21 +250,21 @@ namespace eos
             }
     };
 
-    template <typename Decay_, typename ... Args_>
+    template <typename Decay_, typename ... FunctionArgs_>
     class ConcreteSignalPDFEntry :
         public SignalPDFEntry
     {
         private:
             std::string _name;
 
-            std::function<double (const Decay_ *, const Args_ & ...)> _function;
+            std::function<double (const Decay_ *, const FunctionArgs_ & ...)> _function;
 
-            std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...> _kinematic_ranges;
+            std::array<KinematicRange, sizeof...(FunctionArgs_)> _kinematic_ranges;
 
         public:
             ConcreteSignalPDFEntry(const std::string & name,
-                    const std::function<double (const Decay_ *, const Args_ & ...)> & function,
-                    const std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...> & kinematic_ranges) :
+                    const std::function<double (const Decay_ *, const FunctionArgs_ & ...)> & function,
+                    const std::array<KinematicRange, sizeof...(FunctionArgs_)> & kinematic_ranges) :
                 _name(name),
                 _function(function),
                 _kinematic_ranges(kinematic_ranges)
@@ -209,30 +275,48 @@ namespace eos
             {
             }
 
+            virtual const std::string & name() const
+            {
+                return _name;
+            }
+
+            virtual const std::string & description() const
+            {
+                return Decay_::description;
+            }
+
+            virtual SignalPDFEntry::KinematicRangeIterator begin_kinematic_ranges() const
+            {
+                return _kinematic_ranges.begin();
+            }
+
+            virtual SignalPDFEntry::KinematicRangeIterator end_kinematic_ranges() const
+            {
+                return _kinematic_ranges.end();
+            }
+
             virtual SignalPDFPtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
 
-                return SignalPDFPtr(new ConcreteSignalPDF<Decay_, Args_ ...>(_name, parameters, kinematics, options, _function, _kinematic_ranges));
+                return SignalPDFPtr(new ConcreteSignalPDF<Decay_, FunctionArgs_ ...>(_name, parameters, kinematics, options, _function, _kinematic_ranges));
             }
 
             virtual std::ostream & insert(std::ostream & os) const
             {
-                os << "    " << Decay_::description << std::endl;
-
-                impl::KinematicRangePrinter<sizeof...(Args_), std::tuple<typename impl::ConvertTo<Args_, KinematicRange>::Type ...>>::print(os, _kinematic_ranges);
-
                 return os;
             }
     };
 
-    template <typename Decay_, typename Tuple_, typename ... Args_>
-    SignalPDFEntry * make_concrete_signal_pdf_entry(const std::string & name, double (Decay_::* function)(const Args_ & ...) const,
-            const Tuple_ & kinematic_ranges)
+    template <typename Decay_, typename ... FunctionArgs_, typename ... KinematicRanges_>
+    SignalPDFEntry * make_concrete_signal_pdf_entry(const std::string & name,
+            double (Decay_::* function)(const FunctionArgs_ & ...) const,
+            const KinematicRanges_ & ... kinematic_ranges)
     {
-        static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
-        return new ConcreteSignalPDFEntry<Decay_, Args_ ...>(name,
-                std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(function)),
-                kinematic_ranges);
+        static_assert(sizeof...(FunctionArgs_) == sizeof...(KinematicRanges_), "Need as many function arguments as kinematics ranges!");
+
+        return new ConcreteSignalPDFEntry<Decay_, FunctionArgs_...>(name,
+                std::function<double (const Decay_ *, const FunctionArgs_ & ...)>(std::mem_fn(function)),
+                std::array<KinematicRange, sizeof...(FunctionArgs_)>{ kinematic_ranges... });
     }
 }
 
