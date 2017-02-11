@@ -26,49 +26,157 @@
 using namespace test;
 using namespace eos;
 
-struct TestPointerToMemberFunction
+namespace
 {
-    double _x, _y;
-    void f(const double & x, const double & y)
+    struct TestPointerToMemberFunction
     {
-        _x = x; _y = y;
-    }
-};
+        double _x, _y;
 
-class ApplyTest :
+        double nullary_function()
+        {
+            _x = -1.0;
+            _y = -7.0;
+
+            return M_PI;
+        }
+
+        void binary_function(const double & x, const double & y)
+        {
+            _x = x;
+            _y = y;
+        }
+    };
+
+    static double static_nullary_function()
+    {
+        return std::exp(1.0);
+    }
+
+    static double static_unary_function(const double & x)
+    {
+        return x;
+    }
+
+    static double static_ternary_function(const double & x, const double & y, const double & z)
+    {
+        return x * x + y * y + z * z - 2.0 * (x * y + y * z + z * x);
+    }
+}
+
+class ApplyTupleTest :
     public TestCase
 {
     public:
-        ApplyTest() :
-            TestCase("apply_test")
+        ApplyTupleTest() :
+            TestCase("apply_tuple_test")
         {
-        }
-
-        static double test_2(const double & x)
-        {
-            return x;
-        }
-
-        static double test_3_function()
-        {
-            return std::exp(1.0);
         }
 
         virtual void run() const
         {
-            TestPointerToMemberFunction test_1;
+            // Test pointer to memeber function
+            {
+                TestPointerToMemberFunction test;
 
-            apply(&TestPointerToMemberFunction::f, std::make_tuple(&test_1, 1.0, 2.0));
-            TEST_CHECK_EQUAL(test_1._x, 1.0);
-            TEST_CHECK_EQUAL(test_1._y, 2.0);
+                auto result = apply(&::TestPointerToMemberFunction::nullary_function, std::make_tuple(&test));
+                TEST_CHECK_EQUAL(result, M_PI);
+                TEST_CHECK_EQUAL(test._x, -1.0);
+                TEST_CHECK_EQUAL(test._y, -7.0);
 
-            double result;
+                apply(&::TestPointerToMemberFunction::binary_function, std::make_tuple(&test, 1.0, 2.0));
+                TEST_CHECK_EQUAL(test._x, 1.0);
+                TEST_CHECK_EQUAL(test._y, 2.0);
+            }
 
-            result = apply(&ApplyTest::test_2, std::make_tuple(M_PI));
-            TEST_CHECK_EQUAL(result, M_PI);
+            // Test static free-standing unary function
+            {
+                auto result = apply(&::static_unary_function, std::make_tuple(M_PI));
 
-            std::function<double ()> test_3(&ApplyTest::test_3_function);
-            result = apply(test_3, std::make_tuple());
-            TEST_CHECK_EQUAL(result, std::exp(1.0));
+                TEST_CHECK_EQUAL(result, M_PI);
+            }
+
+            // Test static free-standing ternay function
+            {
+                auto result = apply(&::static_ternary_function, std::make_tuple(1.0, 0.5, 0.5));
+
+                TEST_CHECK_EQUAL(result, -1.0);
+            }
+
+            // Test std::function<>-wrapped static member function
+            {
+                std::function<double ()> f(&::static_nullary_function);
+                auto result = apply(f, std::make_tuple());
+
+                TEST_CHECK_EQUAL(result, std::exp(1.0));
+            }
         }
-} apply_test;
+} apply_tuple_test;
+
+class ApplyArrayTest :
+    public TestCase
+{
+    public:
+        ApplyArrayTest() :
+            TestCase("apply_array_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // Test pointer to memeber function
+            {
+                TestPointerToMemberFunction test;
+
+                auto result = apply(&::TestPointerToMemberFunction::nullary_function, &test, std::array<double, 0ul>());
+
+                TEST_CHECK_EQUAL(result, M_PI);
+                TEST_CHECK_EQUAL(test._x, -1.0);
+                TEST_CHECK_EQUAL(test._y, -7.0);
+
+                apply(&::TestPointerToMemberFunction::binary_function, &test, std::array<double, 2ul>{ 1.0, 2.0 });
+
+                TEST_CHECK_EQUAL(test._x, 1.0);
+                TEST_CHECK_EQUAL(test._y, 2.0);
+            }
+
+            // Test std::function<>-wrapped pointer to memeber function
+            {
+                TestPointerToMemberFunction test;
+
+                auto f_nullary = std::function<double (::TestPointerToMemberFunction *)>(&::TestPointerToMemberFunction::nullary_function);
+                auto result = apply(f_nullary, &test, std::array<double, 0ul>());
+
+                TEST_CHECK_EQUAL(result, M_PI);
+                TEST_CHECK_EQUAL(test._x, -1.0);
+                TEST_CHECK_EQUAL(test._y, -7.0);
+
+                auto f_binary = std::function<void (::TestPointerToMemberFunction *, const double &, const double &)>(&::TestPointerToMemberFunction::binary_function);
+                apply(f_binary, &test, std::array<double, 2ul>{ 1.0, 2.0 });
+
+                TEST_CHECK_EQUAL(test._x, 1.0);
+                TEST_CHECK_EQUAL(test._y, 2.0);
+            }
+
+            // Test static free-standing unary function
+            {
+                auto result = apply(&::static_unary_function, std::array<double, 1ul>{ M_PI });
+
+                TEST_CHECK_EQUAL(result, M_PI);
+            }
+
+            // Test static free-standing ternay function
+            {
+                auto result = apply(&::static_ternary_function, std::array<double, 3ul>{ 1.0, 0.5, 0.5 });
+
+                TEST_CHECK_EQUAL(result, -1.0);
+            }
+
+            // Test std::function<>-wrapped static free-standing function
+            {
+                std::function<double ()> f(&::static_nullary_function);
+                auto result = apply(f, std::array<double, 0ul>());
+
+                TEST_CHECK_EQUAL(result, std::exp(1.0));
+            }
+        }
+} apply_array_test;
