@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015, 2016 Danny van Dyk
+ * Copyright (c) 2015, 2016, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,6 +18,7 @@
  */
 
 #include <eos/signal-pdf.hh>
+#include <eos/b-decays/b-to-d-l-nu.hh>
 #include <eos/b-decays/b-to-d-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
@@ -112,6 +113,10 @@ namespace eos
                     KinematicRange{ "q2", 0.01, 0.93859, BToPiPiLeptonNeutrino::kinematics_description_q2 },
                     KinematicRange{ "k2", 18.582, 27.872, BToPiPiLeptonNeutrino::kinematics_description_k2 },
                     KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiPiLeptonNeutrino::kinematics_description_z }),
+
+            make_signal_pdf("B->Dmunu::dGamma",
+                    &BToDLeptonNeutrino::differential_branching_ratio,
+                    KinematicRange{ "s", 0.0, 11.62, BToDLeptonNeutrino::kinematics_description_s }),
 
             make_signal_pdf("B->Dmunu::d^2Gamma",
                     &BToDLeptonInclusiveNeutrinos::normalized_differential_decay_width_1nu,

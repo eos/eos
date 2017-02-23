@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015, 2016 Danny van Dyk
+ * Copyright (c) 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2015 Marzia Bordone
  *
  * This file is part of the EOS project. EOS is free software;
@@ -164,4 +164,13 @@ namespace eos
 
         return br_taus / br_muons;
     }
+
+    const std::string
+    BToDLeptonNeutrino::description = "\
+The decay B->D l nu, where l=e,mu,tau is a lepton.";
+
+    const std::string
+    BToDLeptonNeutrino::kinematics_description_s = "\
+The invariant mass of the l-nubar pair in GeV^2.";
+
 }
