@@ -1,4 +1,4 @@
-# Copyright (c) 2016 Danny van Dyk
+# Copyright (c) 2016, 2017 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -126,6 +126,7 @@ class MCMCDataFile:
 
 class UncertaintyDataFile:
     def __init__(self, file):
+        self.name = file
         # open the input file for reading
         self.file = h5py.File(file, 'r')
 
