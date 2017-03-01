@@ -16,6 +16,8 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 from eosdata import *
+import numpy as np
+import scipy
 
 def main():
     parser = argparse.ArgumentParser(description='Print mean and standard deviation from an uncertainty propagation')
@@ -40,9 +42,25 @@ def main():
     parameters = datafile.parameters
 
     for i in range(0, len(parameters)):
-        print "# %s" % parameters[i][0]
-        print "#  mean = %e" % numpy.mean(data[:, i])
-        print "#   std = %e" % numpy.std(data[:, i])
+        print '# %s' % parameters[i][0]
+
+        x = numpy.sort(data[:, i])
+        print '        median: %f' % numpy.percentile(x, 0.5)
+        print '  68%% interval: [%f, %f]' % (numpy.percentile(x, 0.16), numpy.percentile(x, 0.84))
+        print '  95%% interval: [%f, %f]' % (numpy.percentile(x, 0.025), numpy.percentile(x, 0.975))
+
+        print '  mean = %e' % numpy.mean(data[:, i])
+        print '   std = %e' % numpy.std(data[:, i])
+        print '  skew = %e' % scipy.stats.skew(data[:, i])
+        print '  kurt = %e' % scipy.stats.kurtosis(data[:, i], fisher=False)
+
+    print '# covariance matrix'
+    print numpy.cov(data.T)
+
+    print '# correlation matrix'
+    corr = numpy.corrcoef(data.T)
+    print corr
+    print '# det(corr) = %g' % numpy.linalg.det(corr)
 
     exit(0);
 
