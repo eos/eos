@@ -139,8 +139,8 @@ class UncertaintyDataFile:
         # extract parameter descriptions of the n-tuples
         self.parameters = []
         if '/descriptions/parameters' in self.file:
-            for obsname in self.file['/descriptions/observables']:
-                desc = self.file['/descriptions/observables/%s' % obsname]
+            for i in range(len(self.file['/descriptions/observables'])):
+                desc = self.file['/descriptions/observables/%d' % i]
                 name = desc.attrs.get("name")
                 self.parameters.append([name, sys.float_info.min, sys.float_info.max, False, "flat"])
         else:
