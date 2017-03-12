@@ -2091,14 +2091,14 @@ namespace eos
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
             Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
-            br_electrons = integrate(integrand, 64, s_min, s_max);
+            br_electrons = integrate(integrand, 256, s_min, s_max);
         }
 
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
             Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
-            br_muons = integrate(integrand, 64, s_min, s_max);
+            br_muons = integrate(integrand, 256, s_min, s_max);
         }
 
         return br_muons / br_electrons;
