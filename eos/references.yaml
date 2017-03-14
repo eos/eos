@@ -540,7 +540,12 @@
         "title" : "Lambda_b -> Lambda l^+ l^- form factors and differential branching fraction from lattice QCD",
         "eprint" : "arXiv:1212.4827 [hep-lat]"
     },
-    "DM2015" : {
+    "DLM2015" : {
+        "authors" : "Detmold, W. and Lehner, C. and Meinel, S.",
+        "title" : "Lambda_b -> p l nu and Lambda_b -> Lambda_c l nu form factors from lattice QCD with relativistic heavy quarks",
+        "eprint" : "arXiv:1503.01421 [hep-lat]"
+    },
+    "DM2016" : {
         "authors" : "Detmold, W. and Meinel, S.",
         "title" : "Lambda_b -> Lambda form factors, differential branching fraction, and angular observables from lattice QCD with relativistic b quarks",
         "eprint" : "arXiv:1602.01399 [hep-lat]"
