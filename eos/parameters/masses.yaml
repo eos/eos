@@ -134,6 +134,18 @@
     max:     +5.6201
     comments: "cf. [PDG2012], p. 165"
 
+# c baryon masses
+"mass::Lambda_c(2625)" :
+    central: +2.62811
+    min:     +2.62792
+    max:     +2.62830
+    comments: "cf. [PDG2016], p. 175"
+"mass::Lambda_c(2595)" :
+    central: +2.59225
+    min:     +2.59197
+    max:     +2.59253
+    comments: "cf. [PDG2016], p. 175"
+
 # Gauge boson masses
 "mass::W" :
     central: +80.385
