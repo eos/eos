@@ -37,7 +37,7 @@ namespace eos
                     "abcdefghijklmnopqrstuvwxyz"
                     "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
                     "0123456789"
-                    ">^_*+-";
+                    ">^_*+-()";
 
             auto pos = prefix.find_first_not_of(valid_prefix_characters);
 
