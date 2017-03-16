@@ -6,3 +6,9 @@ eos-sample-mcmc
 eos-scan-mc
 integrated
 observables
+eos-find-mode
+eos-list-constraints
+eos-list-observables
+eos-list-signal-pdfs
+eos-sample-events-mcmc
+eos-list-references
