@@ -23,6 +23,7 @@ stamp-h1
 *.libs/
 *.pyc
 *.pyo
+*.json
 
 # Tests
 *_TEST
