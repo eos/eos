@@ -36,3 +36,6 @@ stamp-h1
 
 # performance / coverages
 *.gcno
+
+# Data files
+*.hdf5
