@@ -466,13 +466,13 @@ int main(int argc, char * argv[])
     {
     	// todo update
         std::cout << e.what() << std::endl;
-        std::cout << "Usage: eos-scan-mc" << std::endl;
+        std::cout << "Usage: eos-sample-events-mcmc" << std::endl;
         std::cout << "  [ [--kinematics NAME VALUE]* --observable NAME LOWER CENTRAL UPPER]+" << std::endl;
         std::cout << "  [--constraint NAME]+" << std::endl;
         std::cout << "  [ [ [--scan PARAMETER MIN MAX] | [--nuisance PARAMETER MIN MAX] ] --prior [flat | [gaussian LOWER CENTRAL UPPER] ] ]+" << std::endl;
         std::cout << "  [--chains VALUE]" << std::endl;
         std::cout << "  [--chunks VALUE]" << std::endl;
-        std::cout << "  [--chunksize VALUE]" << std::endl;
+        std::cout << "  [--chunk-size VALUE]" << std::endl;
         std::cout << "  [--debug]" << std::endl;
         std::cout << "  [--fix PARAMETER VALUE]+" << std::endl;
         std::cout << "  [--goodness_of_fit [{ PAR_VALUE1 PAR_VALUE2 ... PAR_VALUEN }]]" << std::endl;
