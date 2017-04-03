@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2016 Danny van Dyk
+ * Copyright (c) 2010, 2016, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,6 +23,8 @@
 
 #include <gsl/gsl_sf_dilog.h>
 
+#include <limits>
+
 namespace eos
 {
     inline double lcda_tw2(const double & u, const double & a_1, const double & a_2)
@@ -30,6 +32,49 @@ namespace eos
         return 6.0 * u * (1.0 - u) * (1.0 + a_1 * 3.0 * (2.0 * u - 1.0) + a_2 * 3.0 / 2.0 * (5.0 * power_of<2>(2.0 * u - 1.0) - 1.0));
     }
 
+    static complex<double> z_ratio(const double & s, const double mq2)
+    {
+        static const complex<double> i{0.0, 1.0};
+
+        if (s >= 4.0 * mq2)
+        {
+            const auto root = sqrt(s / (s - 4.0 * mq2));
+            return (root + 1.0) / (root - 1.0) + i * sqrt(std::numeric_limits<double>::epsilon());
+        }
+        else if (s > 0)
+        {
+            const auto root = sqrt((4.0 * mq2 - s) / s);
+            return (i - root) / (i + root) + i * sqrt(std::numeric_limits<double>::epsilon());
+        }
+        else if (s == 0)
+        {
+            return -1.0 + i * sqrt(std::numeric_limits<double>::epsilon());
+        }
+        else
+        {
+            const auto root = sqrt(-s / (-s + 4.0 * mq2));
+            return (root + 1.0) / (root - 1.0) + i * sqrt(std::numeric_limits<double>::epsilon());
+        }
+    }
+
+    complex<double>
+    HardScattering::I1(const double & q2, const double & u, const double & m_q, const double & m_B)
+    {
+        if (m_q == 0.0)
+            return complex<double>(1.0, 0.0);
+
+        const auto ubar = 1.0 - u;
+        const auto s    = ubar * m_B * m_B + u * q2;
+
+        const auto x_ratio = z_ratio(s,  m_q * m_q);
+        const auto y_ratio = z_ratio(q2, m_q * m_q);
+
+        const auto IauxX = -0.5 * M_PI * M_PI - 0.5 * pow(log(x_ratio), 2) + log(x_ratio) * log(-x_ratio);
+        const auto IauxY = -0.5 * M_PI * M_PI - 0.5 * pow(log(y_ratio), 2) + log(y_ratio) * log(-y_ratio);
+
+        return 1.0 + 2.0 * m_q * m_q / (ubar * (m_B * m_B - q2)) * (IauxX - IauxY);
+    }
+/*
     complex<double>
     HardScattering::I1(const double & s, const double & u, const double & m_q, const double & m_B)
     {
@@ -106,6 +151,7 @@ namespace eos
 
         return 1.0 + 2.0 * m_q2 / (ubar * (m_B2 - s)) * (LxpLxm - LypLym);
     }
+*/
 
     complex<double>
     HardScattering::t_perp_s0(const double & u, const double & m_q, const double & m_B)

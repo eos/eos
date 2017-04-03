@@ -23,6 +23,7 @@
 #include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/power_of.hh>
+#include <eos/utils/stringify.hh>
 
 #include <cmath>
 #include <complex>
@@ -317,7 +318,7 @@ namespace eos
     CharmLoops::F17_massive(const double & mu, const double & s, const double & m_b, const double & m_c)
     {
         // cf. [ABGW2001], Appendix B, pp. 34-38
-        static long double kap1700[7][5][2] = {
+        static double kap1700[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -327,7 +328,7 @@ namespace eos
             {{-1.21131, 2.89595}, {2.99588, -2.48225}, {-4.14815, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1710[7][5][2] = {
+        static double kap1710[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -337,7 +338,7 @@ namespace eos
             {{11.7509, 15.6984}, {18.9564, -24.8225}, {-14.6173, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1711[7][5][2] = {
+        static double kap1711[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -347,7 +348,7 @@ namespace eos
             {{6.73754, 1.86168}, {1.18519, -7.44674}, {-2.37037, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1720[7][5][2] = {
+        static double kap1720[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0.00555556, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -357,7 +358,7 @@ namespace eos
             {{38.1415, 34.8683}, {38.6436, -80.673}, {-41.5802, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1721[7][5][2] = {
+        static double kap1721[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -367,7 +368,7 @@ namespace eos
             {{27.5428, 3.72337}, {2.37037, -29.787}, {-9.48148, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1730[7][5][2] = {
+        static double kap1730[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-0.00010778, 0.00258567}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0.946811, -0.0258567}, {0.488889, 0}, {0.0987654, 0}, {0, 0}, {0, 0}},
@@ -377,7 +378,7 @@ namespace eos
             {{77.3602, 54.2499}, {58.4491, -184.927}, {-96.0988, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1731[7][5][2] = {
+        static double kap1731[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -390,12 +391,26 @@ namespace eos
         double m_c_hat = m_c / m_b, z = pow(m_c_hat, 2);
         double s_hat = s / pow(m_b, 2);
 
+        complex<double> log_s_hat = { std::log(std::abs(s_hat)), 0.0 };
+        if ((0.0 < s_hat) && (s_hat <= 0.45))
+        {
+            log_s_hat.imag(0.0);
+        }
+        else if ((-0.45 <= s_hat) && (s_hat <= -0.00))
+        {
+            log_s_hat.imag(+M_PI);
+        }
+        else
+        {
+            throw InternalError("CharmLoop::F17_massive used outside its domain of validity, s_hat = " + stringify(s_hat));
+        }
+
         const double rho17[4] = {
             1.94955 * pow(m_c_hat, 3), 11.6973 * m_c_hat, 70.1839 * m_c_hat, -3.8991 / m_c_hat + 159.863 * m_c_hat
         };
 
         // real part
-        double r = -208.0 / 243.0 * log(mu / m_b);
+        complex<double> r = -208.0 / 243.0 * log(mu / m_b);
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 4 ; m++)
@@ -407,7 +422,7 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap1711[l][m][0] * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_c_hat), m);
+                r = r + kap1711[l][m][0] * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
 
         for (int l = 2 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -415,7 +430,7 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap1721[l][m][0] * s_hat * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_c_hat), m);
+                r = r + kap1721[l][m][0] * s_hat * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -423,13 +438,13 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap1731[l][m][0] * pow(s_hat, 3) * log(s_hat) * pow(z, l-3) * pow(log(m_c_hat), m);
+                r = r + kap1731[l][m][0] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
 
         for (int l = 0 ; l < 4; l++)
             r = r + rho17[l] * pow(s_hat, l);
 
         // imaginary part
-        double i = 0.0;
+        complex<double> i = 0.0;
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -441,7 +456,7 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap1711[l][m][1] * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_c_hat), m);
+                i = i + kap1711[l][m][1] * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -449,7 +464,7 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap1721[l][m][1] * s_hat * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_c_hat), m);
+                i = i + kap1721[l][m][1] * s_hat * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -457,9 +472,9 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap1731[l][m][1] * pow(s_hat, 3) * log(s_hat) * pow(z, l-3) * pow(log(m_c_hat), m);
+                i = i + kap1731[l][m][1] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_c_hat), m);
 
-        return std::complex<double>(r, i);
+        return r + complex<double>(0.0, 1.0) * i;
     }
 
     namespace impl
@@ -505,7 +520,7 @@ namespace eos
     CharmLoops::F27_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
         // cf. [ABGW2001], Appendix B, pp. 34-38
-        static long double kap2700[7][5][2] = {
+        static double kap2700[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -515,7 +530,7 @@ namespace eos
             {{7.26787, -17.3757}, {-17.9753, 14.8935}, {24.8889, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2710[7][5][2] = {
+        static double kap2710[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -525,7 +540,7 @@ namespace eos
             {{-70.5057, -94.1903}, {-113.738, 148.935}, {87.7037, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2711[7][5][2] = {
+        static double kap2711[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -535,7 +550,7 @@ namespace eos
             {{-40.4253, -11.1701}, {-7.11111, 44.6804}, {14.2222, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2720[7][5][2] = {
+        static double kap2720[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-0.0333333, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -545,7 +560,7 @@ namespace eos
             {{-228.849, -209.21}, {-231.862, 484.038}, {249.481, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2721[7][5][2] = {
+        static double kap2721[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -555,7 +570,7 @@ namespace eos
             {{-165.257, -22.3402}, {-14.2222, 178.722}, {56.8889, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2730[7][5][2] = {
+        static double kap2730[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0.000646678, -0.015514}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-5.68087, 0.15514}, {-2.93333, 0}, {-0.592593, 0}, {0, 0}, {0, 0}},
@@ -565,7 +580,7 @@ namespace eos
             {{-464.161, -325.499}, {-350.695, 1109.56}, {576.593, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2731[7][5][2] = {
+        static double kap2731[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -578,7 +593,7 @@ namespace eos
         double m_q_hat = m_q / m_b, z = pow(m_q_hat, 2);
         double s_hat = s / m_b / m_b;
 
-        const long double rho27[4] = {
+        const double rho27[4] = {
             -11.6973 * pow(m_q_hat, 3), -70.1839 * m_q_hat, -421.103 * m_q_hat, 23.3946 / m_q_hat - 959.179 * m_q_hat
         };
 
@@ -587,8 +602,22 @@ namespace eos
             return impl::f27_0(mu, m_b, m_q);
         }
 
+        complex<double> log_s_hat = { std::log(std::abs(s_hat)), 0.0 };
+        if ((0.0 < s_hat) && (s_hat <= 0.45))
+        {
+            log_s_hat.imag(0.0);
+        }
+        else if ((-0.45 <= s_hat) && (s_hat <= -0.00))
+        {
+            log_s_hat.imag(+M_PI);
+        }
+        else
+        {
+            throw InternalError("CharmLoop::F27_massive used outside its domain of validity, s_hat = " + stringify(s_hat));
+        }
+
         // real part
-        double r = 416.0 / 81.0 * log(mu / m_b);
+        complex<double> r = 416.0 / 81.0 * log(mu / m_b);
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 4 ; m++)
@@ -600,7 +629,7 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap2711[l][m][0] * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2711[l][m][0] * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 2 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -608,7 +637,7 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap2721[l][m][0] * s_hat * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2721[l][m][0] * s_hat * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -616,13 +645,13 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap2731[l][m][0] * pow(s_hat, 3) * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2731[l][m][0] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0 ; l < 4; l++)
             r = r + rho27[l] * pow(s_hat, l);
 
         // imaginary part
-        double i = 0.0;
+        complex<double> i = 0.0;
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -634,7 +663,7 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap2711[l][m][1] * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2711[l][m][1] * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -642,7 +671,7 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap2721[l][m][1] * s_hat * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2721[l][m][1] * s_hat * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -650,9 +679,9 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap2731[l][m][1] * pow(s_hat, 3) * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2731[l][m][1] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
-        return complex<double>(r, i);
+        return r + complex<double>(0.0, 1.0) * i;
     }
 
     // cf. [AAGW2001], Eq. (54), p. 19
@@ -664,7 +693,7 @@ namespace eos
             throw InternalError("CharmLoops::F19_massive: F19 diverges for s -> 0. Check that F19 enters via 's * F19(s)' and replace by zero.");
 
         // cf. [ABGW2001], Appendix B, pp. 34-38
-        static long double kap1900[7][5][2] = {
+        static double kap1900[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -674,7 +703,7 @@ namespace eos
             {{-14.73, -23.6892}, {-28.5761, 34.7514}, {20.1481, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1901[7][5][2] = {
+        static double kap1901[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -684,7 +713,7 @@ namespace eos
             {{-9.20287, -1.65483}, {-1.0535, 9.92898}, {3.16049, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1910[7][5][2] = {
+        static double kap1910[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-2.48507, -0.186168}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -694,7 +723,7 @@ namespace eos
             {{-72.89, -63.7828}, {-68.135, 134.041}, {63.6049, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1911[7][5][2] = {
+        static double kap1911[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -704,7 +733,7 @@ namespace eos
             {{-41.6104, -3.72337}, {-2.37037, 44.6804}, {14.2222, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1920[7][5][2] = {
+        static double kap1920[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-0.403158, -0.0199466}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-0.0613169, 0.0620562}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -714,7 +743,7 @@ namespace eos
             {{-137.203, -106.832}, {-99.437, 330.139}, {168.889, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1921[7][5][2] = {
+        static double kap1921[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -724,7 +753,7 @@ namespace eos
             {{-111.356, 0}, {0, 119.148}, {37.9259, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1930[7][5][2] = {
+        static double kap1930[7][5][2] = {
             {{-0.0759415, -0.00295505}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-0.00480894, 0.00369382}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-1.81002, 0.0871741}, {-0.919459, 0}, {-0.197531, 0}, {0, 0}, {0, 0}},
@@ -734,7 +763,7 @@ namespace eos
             {{-279.268, -135.118}, {-146.853, 652.831}, {331.259, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap1931[7][5][2] = {
+        static double kap1931[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -747,13 +776,27 @@ namespace eos
         double m_q_hat = m_q / m_b, z = pow(m_q_hat, 2);
         double s_hat = s / m_b / m_b;
 
-        const long double rho19[4] = {
+        complex<double> log_s_hat = { std::log(std::abs(s_hat)), 0.0 };
+        if ((0.001 <= s_hat) && (s_hat <= 0.45))
+        {
+            log_s_hat.imag(0.0);
+        }
+        else if ((-0.45 <= s_hat) && (s_hat <= -0.001))
+        {
+            log_s_hat.imag(+M_PI);
+        }
+        else
+        {
+            throw InternalError("CharmLoop::F19_massive used outside its domain of validity, s_hat = " + stringify(s_hat));
+        }
+
+        const double rho19[4] = {
             3.8991 * pow(m_q_hat, 3), -23.3946 * m_q_hat, -140.368 * m_q_hat, 7.79821 / m_q_hat - 319.726 * m_q_hat
         };
 
         // real part
-        double r = (-1424.0 / 729.0 + 64.0 / 27.0 * log(m_q_hat)) * log(mu/m_b)
-            - 16.0 / 243.0 * log(mu/m_b) * log(s_hat)
+        complex<double> r = (-1424.0 / 729.0 + 64.0 / 27.0 * log(m_q_hat)) * log(mu/m_b)
+            - 16.0 / 243.0 * log(mu/m_b) * log_s_hat
             + (16.0 / 1215.0 - 32.0 / 135.0 /pow(m_q_hat, 2)) * log(mu/m_b) * s_hat
             + (4.0 / 2835.0 - 8.0 / 315.0 /pow(m_q_hat, 4)) * log(mu/m_b) * s_hat * s_hat
             + (16.0 / 76545.0 - 32.0 /8505.0 / pow(m_q_hat, 6)) * log(mu/m_b) * pow(s_hat, 3)
@@ -765,7 +808,7 @@ namespace eos
 
         for (int l = 3  ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap1901[l][m][0] * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap1901[l][m][0] * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 2  ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -773,7 +816,7 @@ namespace eos
 
         for (int l = 4  ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap1911[l][m][0] * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap1911[l][m][0] * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 1  ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -781,7 +824,7 @@ namespace eos
 
         for (int l = 3  ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap1921[l][m][0] * s_hat * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap1921[l][m][0] * s_hat * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0  ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -789,13 +832,13 @@ namespace eos
 
         for (int l = 3  ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap1931[l][m][0] * pow(s_hat, 3) * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap1931[l][m][0] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0  ; l < 4; l++)
             r = r + rho19[l] * pow(s_hat, l);
 
         // imaginary part
-        double i = 16.0 / 243.0 * M_PI * log(mu/m_b);
+        complex<double> i = 16.0 / 243.0 * M_PI * log(mu/m_b);
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -803,7 +846,7 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap1901[l][m][1] * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap1901[l][m][1] * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 2 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -811,7 +854,7 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap1911[l][m][1] * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap1911[l][m][1] * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -819,7 +862,7 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap1921[l][m][1] * s_hat * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap1921[l][m][1] * s_hat * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -827,9 +870,9 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap1931[l][m][1] * pow(s_hat, 3) * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap1931[l][m][1] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
-        return complex<double>(r, i);
+        return r + complex<double>(0.0, 1.0) * i;
     }
 
     // cf. [AAGW2001], Eq. (54), p. 19
@@ -841,7 +884,7 @@ namespace eos
             throw InternalError("CharmLoops::F29_massive: F29 diverges for s -> 0. Check that F29 enters via 's * F29(s)' and replace by zero.");
 
         // cf. [ABGW2001], Appendix B, pp. 34-38
-        static long double kap2900[7][5][2] = {
+        static double kap2900[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -851,7 +894,7 @@ namespace eos
             {{88.3801, 142.135}, {171.457, -208.509}, {-120.889, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2901[7][5][2] = {
+        static double kap2901[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -861,7 +904,7 @@ namespace eos
             {{55.2172, 9.92898}, {6.32099, -59.5739}, {-18.963, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2910[7][5][2] = {
+        static double kap2910[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0.8462, 1.11701}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -871,7 +914,7 @@ namespace eos
             {{437.34, 382.697}, {408.81, -804.248}, {-381.63, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2911[7][5][2] = {
+        static double kap2911[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -881,7 +924,7 @@ namespace eos
             {{249.663, 22.3402}, {14.2222, -268.083}, {-85.3333, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2920[7][5][2] = {{{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+        static double kap2920[7][5][2] = {{{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-0.0132191, 0.11968}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0.367901, -0.372337}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{-222.769, 8.19141}, {-132.372, 11.1701}, {-32., 0}, {-4.74074, 0}, {0, 0}},
@@ -890,7 +933,7 @@ namespace eos
             {{823.218, 640.989}, {596.622, -1980.83}, {-1013.33, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2921[7][5][2] = {
+        static double kap2921[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -900,7 +943,7 @@ namespace eos
             {{668.137, 0}, {0, -714.887}, {-227.556, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2930[7][5][2] = {
+        static double kap2930[7][5][2] = {
             {{-0.0142243, 0.0177303}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0.0288536, -0.0221629}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{10.8601, -0.523045}, {5.51675, 0}, {1.18519, 0}, {0, 0}, {0, 0}},
@@ -910,7 +953,7 @@ namespace eos
             {{1675.61, 810.709}, {881.117, -3916.98}, {-1987.56, 0}, {0, 0}, {0, 0}}
         };
 
-        static long double kap2931[7][5][2] = {
+        static double kap2931[7][5][2] = {
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
             {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
@@ -923,13 +966,27 @@ namespace eos
         double m_q_hat = m_q / m_b, z = pow(m_q_hat, 2);
         double s_hat = s / m_b / m_b;
 
-        const long double rho29[4] = {
+        complex<double> log_s_hat = { std::log(std::abs(s_hat)), 0.0 };
+        if ((0.001 <= s_hat) && (s_hat <= 0.45))
+        {
+            log_s_hat.imag(0.0);
+        }
+        else if ((-0.45 <= s_hat) && (s_hat <= -0.001))
+        {
+            log_s_hat.imag(+M_PI);
+        }
+        else
+        {
+            throw InternalError("CharmLoop::F29_massive used outside its domain of validity, s_hat = " + stringify(s_hat));
+        }
+
+        const double rho29[4] = {
             -23.3946 * pow(m_q_hat, 3), 140.368 * m_q_hat, 842.206 * m_q_hat, -46.7892 / m_q_hat + 1918.36 * m_q_hat
         };
 
         // real part
-        double r = (256.0 / 243.0 - 128.0 / 9.0 * log(m_q_hat)) * log(mu / m_b)
-            + 32.0 / 81.0 * log(mu / m_b) * log(s_hat)
+        complex<double> r = (256.0 / 243.0 - 128.0 / 9.0 * log(m_q_hat)) * log(mu / m_b)
+            + 32.0 / 81.0 * log(mu / m_b) * log_s_hat
             + (-32.0 / 405.0 + 64.0 / 45 / pow(m_q_hat, 2)) * log(mu / m_b) * s_hat
             + (-8.0 / 945.0 + 16.0 / 105 / pow(m_q_hat, 4)) * log(mu / m_b) * s_hat * s_hat
             + (-32.0 / 25515.0 + 64.0 / 2835 / pow(m_q_hat, 6)) * log(mu / m_b) * pow(s_hat, 3)
@@ -941,7 +998,7 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap2901[l][m][0] * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2901[l][m][0] * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 2 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -949,7 +1006,7 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap2911[l][m][0] * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2911[l][m][0] * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -957,7 +1014,7 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap2921[l][m][0] * s_hat * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2921[l][m][0] * s_hat * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0 ; l < 7 ; l++)
             for (int m = 0 ; m < 5 ; m++)
@@ -965,13 +1022,13 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
-                r = r + kap2931[l][m][0] * pow(s_hat, 3) * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                r = r + kap2931[l][m][0] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0 ; l < 4; l++)
             r = r + rho29[l] * pow(s_hat, l);
 
         // imaginary part
-        double i = - 32.0 / 81.0 * M_PI * log(mu/m_b);
+        complex<double> i = - 32.0 / 81.0 * M_PI * log(mu/m_b);
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -979,7 +1036,7 @@ namespace eos
 
         for (int l = 3 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap2901[l][m][1] * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2901[l][m][1] * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 2 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -987,7 +1044,7 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap2911[l][m][1] * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2911[l][m][1] * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 1 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -995,7 +1052,7 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap2921[l][m][1] * s_hat * s_hat * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2921[l][m][1] * s_hat * s_hat * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
         for (int l = 0 ; l < 7 ; l++)
             for (int m = 0 ; m < 3 ; m++)
@@ -1003,9 +1060,9 @@ namespace eos
 
         for (int l = 4 ; l < 7 ; l++)
             for (int m = 0 ; m < 2 ; m++)
-                i = i + kap2931[l][m][1] * pow(s_hat, 3) * log(s_hat) * pow(z, l-3) * pow(log(m_q_hat), m);
+                i = i + kap2931[l][m][1] * pow(s_hat, 3) * log_s_hat * pow(z, l-3) * pow(log(m_q_hat), m);
 
-        return complex<double>(r, i);
+        return r + complex<double>(0.0, 1.0) * i;
     }
 
     // cf. [AAGW2001], eqs. (48) and (49), p. 18
@@ -1094,14 +1151,18 @@ namespace eos
         double z = 4.0 * m_q * m_q / s;
         complex<double> result;
 
-        if (z > 1.0)
+        if (z > 1.0) // s > 4 m_q^2
         {
             result = complex<double>(-2.0 * std::sqrt(z - 1.0) * std::atan(1.0 / std::sqrt(z - 1.0)), 0.0);
         }
-        else
+        else if (z > 0) // s > 0 && s <= 4 m_q^2
         {
             result = complex<double>(std::sqrt(1.0 - z) * std::log((1.0 - std::sqrt(1 - z)) / (1.0 + std::sqrt(1.0 - z))),
                     std::sqrt(1.0 - z) * M_PI);
+        }
+        else if (z < 0) // s < 0
+        {
+            result = complex<double>(sqrt(1.0 - z) * log((sqrt(1.0 - z) - 1.0) / (sqrt(1.0 - z) + 1.0)), 0.0);
         }
 
         return result;

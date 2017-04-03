@@ -38,8 +38,7 @@ class OneLoopTest :
         virtual void run() const
         {
             /* Comparison with Christoph Bobeth's result from May 2010 */
-
-            /* One-Loop */
+            /* One-Loop h */
             {
                 static const double mu = 4.2, s = 1.0, m_c = 1.4, m_b = 4.8, eps = 0.00001;
                 TEST_CHECK_NEARLY_EQUAL(+1.57192, real(CharmLoops::h(mu, s)), eps);
@@ -50,7 +49,7 @@ class OneLoopTest :
                 TEST_CHECK_NEARLY_EQUAL(-0.55926, CharmLoops::h(mu, s, m_b), eps);
             }
 
-            /* One-Loop, m = m_c, as a function of s, in interval around s = 0 */
+            /* One-Loop h, m = m_c, as a function of s, in interval around s = 0 */
             {
                 static const double mu = 4.2, m_c = 1.4, eps = 0.00001;
 
@@ -68,6 +67,9 @@ class OneLoopTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.63454, real(CharmLoops::h(mu, +2.0, m_c)), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.69738, real(CharmLoops::h(mu, +3.0, m_c)), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.77198, real(CharmLoops::h(mu, +4.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.17626, real(CharmLoops::h(mu, +7.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.68173, real(CharmLoops::h(mu, +8.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.48786, real(CharmLoops::h(mu, +9.0, m_c)), eps);
 
                 TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, -4.0, m_c)), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, -3.0, m_c)), eps);
@@ -78,9 +80,11 @@ class OneLoopTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, +2.0, m_c)), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, +3.0, m_c)), eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::h(mu, +4.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.29422, imag(CharmLoops::h(mu, +8.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.71961, imag(CharmLoops::h(mu, +9.0, m_c)), eps);
             }
 
-            /* One-Loop, massless */
+            /* One-Loop h, massless */
             {
                 /* The imaginary part for massless h is always 4/9 Pi */
                 static const double mu = 4.2, eps = 0.00001;
@@ -89,6 +93,40 @@ class OneLoopTest :
                 TEST_CHECK_NEARLY_EQUAL(4.0 / 9.0 * M_PI, imag(CharmLoops::h(mu,  6.00)), eps);
                 TEST_CHECK_NEARLY_EQUAL(4.0 / 9.0 * M_PI, imag(CharmLoops::h(mu, 14.00)), eps);
                 TEST_CHECK_NEARLY_EQUAL(4.0 / 9.0 * M_PI, imag(CharmLoops::h(mu, 19.21)), eps);
+            }
+
+            /* One-Loop B0, m = m_c */
+            {
+                static const double m_c = 1.4, eps = 0.00001;
+
+                TEST_CHECK_NEARLY_EQUAL(-2.54698, real(CharmLoops::B0(-9.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-2.50056, real(CharmLoops::B0(-8.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-2.45159, real(CharmLoops::B0(-7.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-2.39975, real(CharmLoops::B0(-6.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-2.34468, real(CharmLoops::B0(-5.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-2.28592, real(CharmLoops::B0(-4.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-2.22288, real(CharmLoops::B0(-3.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-2.15488, real(CharmLoops::B0(-2.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-2.08099, real(CharmLoops::B0(-1.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-2.00000, real(CharmLoops::B0( 0.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.91028, real(CharmLoops::B0(+1.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.80952, real(CharmLoops::B0(+2.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.69427, real(CharmLoops::B0(+3.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-1.55906, real(CharmLoops::B0(+4.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.04026, real(CharmLoops::B0(+8.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.26980, real(CharmLoops::B0(+9.0, m_c)), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::B0(-4.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::B0(-3.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::B0(-2.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::B0(-1.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::B0( 0.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::B0(+1.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::B0(+2.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::B0(+3.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.0,     imag(CharmLoops::B0(+4.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+0.44429, imag(CharmLoops::B0(+8.0, m_c)), eps);
+                TEST_CHECK_NEARLY_EQUAL(+1.12787, imag(CharmLoops::B0(+9.0, m_c)), eps);
             }
         }
 } one_loop_test;
@@ -342,9 +380,9 @@ class FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(-1.925093602661525, real(CharmLoops::F89_massless(1.011 * m_b * m_b, m_b)), eps);
             }
 
-            /* Formfactors, massive loops */
+            /* Formfactors, massive loops at timelike s/q^2 */
             {
-                static const double mu = 4.2, s = 6.0, m_b = 4.6, m_c = 1.2, eps = 0.0000001;
+                static const double mu = 4.2, s = 6.0, m_b = 4.6, m_c = 1.2, eps = 1e-7;
                 TEST_CHECK_NEARLY_EQUAL(- 0.73093991, real(CharmLoops::F17_massive(mu, s, m_b, m_c)), eps);
                 TEST_CHECK_NEARLY_EQUAL(- 0.17771334, imag(CharmLoops::F17_massive(mu, s, m_b, m_c)), eps);
                 TEST_CHECK_NEARLY_EQUAL(+ 4.38563254, real(CharmLoops::F27_massive(mu, s, m_b, m_c)), eps);
@@ -353,6 +391,31 @@ class FormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(- 0.25864665, imag(CharmLoops::F19_massive(mu, s, m_b, m_c)), eps);
                 TEST_CHECK_NEARLY_EQUAL(+ 6.27364439, real(CharmLoops::F29_massive(mu, s, m_b, m_c)), eps);
                 TEST_CHECK_NEARLY_EQUAL(+ 1.55195807, imag(CharmLoops::F29_massive(mu, s, m_b, m_c)), eps);
+            }
+
+            /* Formfactors, massive loops at spacelike s/q^2 */
+            {
+                static const double mu = 4.2, m_b = 4.6, m_c = 1.2, eps = 1e-5;
+
+                TEST_CHECK_RELATIVE_ERROR(- 0.5851990,  real(CharmLoops::F17_massive(mu, -6.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(- 0.0622661,  imag(CharmLoops::F17_massive(mu, -6.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(- 0.6507510,  real(CharmLoops::F17_massive(mu, -1.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(- 0.0921000,  imag(CharmLoops::F17_massive(mu, -1.0, m_b, m_c)), eps);
+
+                TEST_CHECK_RELATIVE_ERROR(+ 3.5112500,  real(CharmLoops::F27_massive(mu, -6.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(+ 0.3736050,  imag(CharmLoops::F27_massive(mu, -6.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(+ 3.9045200,  real(CharmLoops::F27_massive(mu, -1.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(+ 0.5526040,  imag(CharmLoops::F27_massive(mu, -1.0, m_b, m_c)), eps);
+
+                TEST_CHECK_RELATIVE_ERROR(- 3.2450800,  real(CharmLoops::F19_massive(mu, -6.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(+ 0.1208170,  imag(CharmLoops::F19_massive(mu, -6.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(-10.1066000,  real(CharmLoops::F19_massive(mu, -1.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(+ 0.1100320,  imag(CharmLoops::F19_massive(mu, -1.0, m_b, m_c)), eps);
+
+                TEST_CHECK_RELATIVE_ERROR(+ 4.4729700,  real(CharmLoops::F29_massive(mu, -6.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(- 0.7247960,  imag(CharmLoops::F29_massive(mu, -6.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(+ 4.0282600,  real(CharmLoops::F29_massive(mu, -1.0, m_b, m_c)), eps);
+                TEST_CHECK_RELATIVE_ERROR(- 0.6601020,  imag(CharmLoops::F29_massive(mu, -1.0, m_b, m_c)), eps);
             }
         }
 } two_loop_test;
