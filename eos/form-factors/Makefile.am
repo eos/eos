@@ -5,6 +5,7 @@ AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
 
 lib_LTLIBRARIES = libeosformfactors.la
 libeosformfactors_la_SOURCES = \
+	analytic-b-to-kstar.hh analytic-b-to-kstar.cc \
 	analytic-b-to-pi.hh analytic-b-to-pi.cc \
 	analytic-b-to-pi-pi.hh analytic-b-to-pi-pi.cc \
 	baryonic.cc baryonic.hh baryonic-impl.hh \
@@ -23,6 +24,7 @@ libeosformfactors_la_LIBADD = \
 
 include_eos_rarebdecaysdir = $(includedir)/eos/form-factors
 include_eos_rarebdecays_HEADERS = \
+	analytic-b-to-kstar.hh \
 	analytic-b-to-pi.hh \
 	analytic-b-to-pi-pi.hh \
 	b-lcdas.hh \
@@ -34,6 +36,7 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
+	analytic-b-to-kstar_TEST \
 	analytic-b-to-pi_TEST \
 	analytic-b-to-pi-pi_TEST \
 	baryonic_TEST \
@@ -48,6 +51,8 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
+analytic_b_to_kstar_TEST_SOURCES = analytic-b-to-kstar_TEST.cc
+
 analytic_b_to_pi_TEST_SOURCES = analytic-b-to-pi_TEST.cc
 
 analytic_b_to_pi_pi_TEST_SOURCES = analytic-b-to-pi-pi_TEST.cc

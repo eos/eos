@@ -754,6 +754,7 @@
     min:     -0.0679
     max:     +0.0502
     comments: " // cf. [BZ2004v3], Eq. (24) and cf. [BHP2007] App. A, pp. 24-25"
+
 # B->K^*, K^* LCDA parameters
 "B->K^*::a_1_par" :
     central: +0.1
@@ -785,3 +786,15 @@
     min:     +0.168
     max:     +0.178
     comments: " // GeV @2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD2010], Table I"
+
+# parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [KMO2006] and [KMPW2010].
+"B->K^*::s_0@LCSR" :
+    central: 1.7
+    min:     1.7
+    max:     1.7
+    comments: "GeV^2"
+"B->K^*::M^2@LCSR" :
+    central: 1.0
+    min:     0.75
+    max:     1.25
+    comments: "GeV^2"

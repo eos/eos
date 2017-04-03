@@ -19,6 +19,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/form-factors/analytic-b-to-kstar.hh>
 #include <eos/form-factors/analytic-b-to-pi.hh>
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/mesonic-impl.hh>
@@ -140,6 +141,8 @@ namespace eos
             { KeyType("B_s->K^*",   "BFW2010"),  &BFW2010FormFactors<BsToKstar, PToV>::make },
             { KeyType("B_s->K^*",   "FMvD2015"), &FMvD2015FormFactors<BsToKstar>::make      },
             { KeyType("B_s->phi",   "BZ2004"),   &BZ2004FormFactors<BsToPhi, PToV>::make    },
+            // analytic computations
+            { KeyType("B->K^*",     "KMO2006"),  &AnalyticFormFactorBToKstarKMO2006::make   }
         };
 
         /*
