@@ -103,7 +103,7 @@ class MCMCDataFile:
             chain = group[chainname]
             dset = chain['samples']
 
-            if data == None:
+            if not data:
                 data = numpy.array(dset[:])
             else:
                 data = numpy.append(data, dset[:], axis=0)
