@@ -56,7 +56,7 @@ namespace eos
         public Density
     {
         public:
-            virtual const std::string & name() const = 0;
+            virtual const QualifiedName & name() const = 0;
 
             virtual double evaluate() const = 0;
 
@@ -70,7 +70,7 @@ namespace eos
 
             virtual DensityPtr clone(const Parameters & parameters) const = 0;
 
-            static SignalPDFPtr make(const std::string & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
+            static SignalPDFPtr make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
     };
 
     /*!
@@ -90,7 +90,7 @@ namespace eos
             virtual SignalPDFPtr make(const Parameters &, const Kinematics &, const Options &) const = 0;
 
             /// Return the SignalPDF name
-            virtual const std::string & name() const = 0;
+            virtual const QualifiedName & name() const = 0;
 
             /// Return the SignalPDF description
             virtual const std::string & description() const = 0;
@@ -139,7 +139,7 @@ namespace eos
             ///@name Iteration over known constraints
             ///@{
             struct SignalPDFIteratorTag;
-            typedef WrappedForwardIterator<SignalPDFIteratorTag, std::pair<const std::string, const SignalPDFEntry *>> SignalPDFIterator;
+            typedef WrappedForwardIterator<SignalPDFIteratorTag, std::pair<const QualifiedName, const SignalPDFEntry *>> SignalPDFIterator;
 
             SignalPDFIterator begin() const;
             SignalPDFIterator end() const;

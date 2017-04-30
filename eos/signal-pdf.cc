@@ -82,21 +82,21 @@ namespace eos
     }
 
     template <typename Decay_, typename ... FunctionArgs_, typename ... KinematicRanges_>
-    std::pair<std::string, SignalPDFEntry *> make_signal_pdf(const char * name,
+    std::pair<QualifiedName, SignalPDFEntry *> make_signal_pdf(const char * name,
             double (Decay_::* function)(const FunctionArgs_ & ...) const,
             const KinematicRanges_ & ... kinematic_ranges)
     {
         static_assert(sizeof...(FunctionArgs_) == sizeof...(KinematicRanges_), "Need as many function arguments as kinematics ranges!");
 
-        std::string sname(name);
+        QualifiedName qn(name);
 
-        return std::make_pair(sname, make_concrete_signal_pdf_entry(sname, function, kinematic_ranges...));
+        return std::make_pair(qn, make_concrete_signal_pdf_entry(qn, function, kinematic_ranges...));
     }
 
-    const std::map<std::string, const SignalPDFEntry *> &
+    const std::map<QualifiedName, const SignalPDFEntry *> &
     make_signal_pdf_entries()
     {
-        static const std::map<std::string, const SignalPDFEntry *> signal_pdf_entries
+        static const std::map<QualifiedName, const SignalPDFEntry *> signal_pdf_entries
         {
             /* Internal Tests */
 
@@ -182,45 +182,31 @@ namespace eos
     }
 
     SignalPDFPtr
-    SignalPDF::make(const std::string & _name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
+    SignalPDF::make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
     {
-        static const std::map<std::string, const SignalPDFEntry *> signal_pdf_entries = make_signal_pdf_entries();
+        static const std::map<QualifiedName, const SignalPDFEntry *> signal_pdf_entries = make_signal_pdf_entries();
 
-        Options options;
-        std::string name(_name);
-
-        std::string::size_type pos;
-        while (std::string::npos != (pos = name.rfind(',')))
+        // check if 'name' matches any of the implemented Signal PDFs
         {
-            std::string::size_type sep(name.find('=', pos + 1));
-            if (std::string::npos == sep)
-                throw SignalPDFNameError(_name);
-
-            std::string key(name.substr(pos + 1, sep - pos - 1));
-            std::string value(name.substr(sep + 1));
-
-            options.set(key, value);
-            name.erase(pos);
+            auto i = signal_pdf_entries.find(name);
+            if (signal_pdf_entries.end() != i)
+                return i->second->make(parameters, kinematics, name.options() + _options);
         }
 
-        auto i = signal_pdf_entries.find(name);
-        if (signal_pdf_entries.end() == i)
-            return SignalPDFPtr();
-
-        return i->second->make(parameters, kinematics, options + _options);
+        return SignalPDFPtr();
     }
 
     template <>
     struct WrappedForwardIteratorTraits<SignalPDFs::SignalPDFIteratorTag>
     {
-        typedef std::map<std::string, const SignalPDFEntry *>::iterator UnderlyingIterator;
+        typedef std::map<QualifiedName, const SignalPDFEntry *>::iterator UnderlyingIterator;
     };
-    template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, std::pair<const std::string, const SignalPDFEntry *>>;
+    template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, std::pair<const QualifiedName, const SignalPDFEntry *>>;
 
     template<>
     struct Implementation<SignalPDFs>
     {
-        std::map<std::string, const SignalPDFEntry *> signal_pdf_entries;
+        std::map<QualifiedName, const SignalPDFEntry *> signal_pdf_entries;
 
         Implementation() :
             signal_pdf_entries(make_signal_pdf_entries())

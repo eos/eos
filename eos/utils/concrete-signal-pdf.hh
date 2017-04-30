@@ -163,7 +163,7 @@ namespace eos
         public:
 
         private:
-            std::string _name;
+            QualifiedName _name;
 
             Parameters _parameters;
 
@@ -182,7 +182,7 @@ namespace eos
             std::array<KinematicVariable, sizeof...(Args_)> _arguments;
 
         public:
-            ConcreteSignalPDF(const std::string & name,
+            ConcreteSignalPDF(const QualifiedName & name,
                     const Parameters & parameters,
                     const Kinematics & kinematics,
                     const Options & options,
@@ -200,7 +200,7 @@ namespace eos
             {
             }
 
-            virtual const std::string & name() const
+            virtual const QualifiedName & name() const
             {
                 return _name;
             }
@@ -255,14 +255,14 @@ namespace eos
         public SignalPDFEntry
     {
         private:
-            std::string _name;
+            QualifiedName _name;
 
             std::function<double (const Decay_ *, const FunctionArgs_ & ...)> _function;
 
             std::array<KinematicRange, sizeof...(FunctionArgs_)> _kinematic_ranges;
 
         public:
-            ConcreteSignalPDFEntry(const std::string & name,
+            ConcreteSignalPDFEntry(const QualifiedName & name,
                     const std::function<double (const Decay_ *, const FunctionArgs_ & ...)> & function,
                     const std::array<KinematicRange, sizeof...(FunctionArgs_)> & kinematic_ranges) :
                 _name(name),
@@ -275,7 +275,7 @@ namespace eos
             {
             }
 
-            virtual const std::string & name() const
+            virtual const QualifiedName & name() const
             {
                 return _name;
             }
@@ -308,7 +308,7 @@ namespace eos
     };
 
     template <typename Decay_, typename ... FunctionArgs_, typename ... KinematicRanges_>
-    SignalPDFEntry * make_concrete_signal_pdf_entry(const std::string & name,
+    SignalPDFEntry * make_concrete_signal_pdf_entry(const QualifiedName & name,
             double (Decay_::* function)(const FunctionArgs_ & ...) const,
             const KinematicRanges_ & ... kinematic_ranges)
     {
