@@ -97,6 +97,7 @@ BOOST_PYTHON_MODULE(eos)
         .def("Defaults", &Parameters::Defaults)
         .staticmethod("Defaults")
         .def("__getitem__", (Parameter (Parameters::*)(const std::string &) const) &Parameters::operator[])
+        .def("__iter__", range(&Parameters::begin, &Parameters::end))
         ;
 
     // Parameter
