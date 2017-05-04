@@ -11,6 +11,7 @@ libeosformfactors_la_SOURCES = \
 	b-lcdas.cc b-lcdas.hh \
 	form-factor-adapter.hh \
 	form-factors.cc form-factors.hh form-factors-fwd.hh \
+	kstar-lcdas.cc kstar-lcdas.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
 	pi-lcdas.cc pi-lcdas.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
@@ -37,6 +38,7 @@ TESTS = \
 	analytic-b-to-pi-pi_TEST \
 	baryonic_TEST \
 	b-lcdas_TEST \
+	kstar-lcdas_TEST \
 	mesonic_TEST \
 	pi-lcdas_TEST
 LDADD = \
@@ -53,6 +55,8 @@ analytic_b_to_pi_pi_TEST_SOURCES = analytic-b-to-pi-pi_TEST.cc
 baryonic_TEST_SOURCES = baryonic_TEST.cc
 
 b_lcdas_TEST_SOURCES = b-lcdas_TEST.cc
+
+kstar_lcdas_TEST_SOURCES = kstar-lcdas_TEST.cc
 
 mesonic_TEST_SOURCES = mesonic_TEST.cc
 

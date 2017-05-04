@@ -9,6 +9,7 @@ PARAMETER_FILES = \
 	decay-constants.yaml \
 	form-factors.yaml \
 	hqe.yaml \
+	kstar-lcda.yaml \
 	life-times.yaml \
 	masses.yaml \
 	pi-lcda.yaml \

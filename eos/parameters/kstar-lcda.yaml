@@ -1,0 +1,31 @@
+# K^* LCDA parameters
+"K^*::a_1_para@1GeV" :
+    central: +0.06
+    min:     +0.00
+    max:     +0.10
+    comments: "cf. [BSZ2015], table 1"
+"K^*::a_2_para@1GeV" :
+    central: +0.16
+    min:     +0.07
+    max:     +0.23
+    comments: "cf. [BSZ2015], table 1"
+"K^*::f_para" :
+    central: +0.204
+    min:     +0.197
+    max:     +0.211
+    comments: "cf. [BSZ2015], table 1"
+"K^*::a_1_perp@1GeV" :
+    central: +0.04
+    min:     +0.01
+    max:     +0.07
+    comments: "cf. [BSZ2015], table 1"
+"K^*::a_2_perp@1GeV" :
+    central: +0.10
+    min:     +0.02
+    max:     +0.18
+    comments: "cf. [BSZ2015], table 1"
+"K^*::f_perp@1GeV" :
+    central: +0.159
+    min:     +0.153
+    max:     +0.165
+    comments: "cf. [BSZ2015], table 1"
