@@ -138,6 +138,12 @@ namespace eos
     }
 
     double
+    BMesonLCDAs::inverse_lambda_plus() const
+    {
+        return 1.0 / _imp->lambda_B_p();
+    }
+
+    double
     BMesonLCDAs::psi_A(const double & omega, const double & xi) const
     {
         return _imp->psi_A(omega, xi);

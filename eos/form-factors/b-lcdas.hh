@@ -54,6 +54,11 @@ namespace eos
             double Phibar(const double & omega) const;
 
             /*!
+             * Pseudo observables for the two-particle LCDAs
+             */
+            double inverse_lambda_plus() const;
+
+            /*!
              * Leading power three-particle LCDAs
              *
              * omega: plus-component of the spectator momentum

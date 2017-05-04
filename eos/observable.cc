@@ -21,6 +21,7 @@
 #include <eos/observable.hh>
 #include <eos/form-factors/form-factor-adapter.hh>
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
+#include <eos/form-factors/b-lcdas.hh>
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
@@ -137,6 +138,9 @@ namespace eos
             /* B Meson Properties */
             make_observable("B::M_B^*-M_B",
                     &BMesonProperties::mass_splitting_j1_j0),
+
+            make_observable("B::1/lambda_B_+",
+                    &BMesonLCDAs::inverse_lambda_plus),
 
             /* Form Factor for the Exclusive Decays */
 
