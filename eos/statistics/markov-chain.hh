@@ -38,10 +38,10 @@ namespace eos
         public PrivateImplementationPattern<MarkovChain>
     {
         public:
-            class History;
-            class State;
-            class ProposalFunction;
-            class Stats;
+            struct History;
+            struct ProposalFunction;
+            struct State;
+            struct Stats;
 
             ///@name Basic Functions
             ///@{

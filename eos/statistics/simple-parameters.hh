@@ -35,7 +35,7 @@ namespace eos
         public Mutable
     {
         public:
-            friend class Implementation<SimpleParameters>;
+            friend struct Implementation<SimpleParameters>;
 
             /*!
              * A unique number index of this parameter

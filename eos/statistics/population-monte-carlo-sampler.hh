@@ -33,9 +33,9 @@ namespace eos
         public PrivateImplementationPattern<PopulationMonteCarloSampler>
     {
         public:
-            class Config;
-            class Status;
-            class Output;
+            struct Config;
+            struct Status;
+            struct Output;
 
             ///@name Basic Functions
             ///@{

@@ -317,7 +317,7 @@ namespace eos
             public:
                 typedef hdf5::Composite<hdf5::Scalar<const char *>> PriorsType;
                 static PriorsType priors_type();
-                friend class MultivariateAccess;
+                friend struct MultivariateAccess;
             private:
                 // use these vectors to represent the full length and ordering
                 // as in Analysis

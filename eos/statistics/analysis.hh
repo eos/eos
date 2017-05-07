@@ -44,7 +44,7 @@ namespace ROOT
 
 namespace eos
 {
-    class MinuitAdapter;
+    struct MinuitAdapter;
 
     class Analysis :
         public Density

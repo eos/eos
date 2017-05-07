@@ -39,7 +39,7 @@ namespace eos
         public PrivateImplementationPattern<PriorSampler>
     {
         public:
-            class Config;
+            struct Config;
 
             typedef hdf5::Array<1, double> ObservablesType;
             typedef std::vector<std::vector<double>> SamplesList;
