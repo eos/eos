@@ -47,7 +47,10 @@ class MarkovChainTest :
             // empty Analysis
             TEST_SECTION("empty-analysis",
             {
-                Analysis analysis(LogLikelihood(Parameters::Defaults()));
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                Analysis analysis(llh);
+
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
                 TEST_CHECK_THROWS(InternalError, MarkovChain chain(analysis.clone(), 13, ppf));
             });
