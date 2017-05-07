@@ -147,7 +147,7 @@ namespace eos
 
     namespace impl
     {
-        template <typename R_, typename T_, bool is_pointer> class GetPointer;
+        template <typename R_, typename T_, bool is_pointer> struct GetPointer;
 
         template <typename R_, typename T_> struct GetPointer<R_, T_, true>
         {
@@ -175,7 +175,7 @@ namespace eos
 
     namespace impl
     {
-        template <typename R_, typename T_, bool is_pointer> class GetReference;
+        template <typename R_, typename T_, bool is_pointer> struct GetReference;
 
         template <typename R_, typename T_> struct GetReference<R_, T_, true>
         {
