@@ -490,7 +490,7 @@ namespace eos
                 }
                 while (status == GSL_CONTINUE && iter < max_iter);
 
-                if ( ! status == GSL_SUCCESS)
+                if (GSL_SUCCESS != status)
                 {
                     Log::instance()->message("LogGammaBlock::significance", ll_error)
                         << "Could not find the mirror point, stopped after "
@@ -733,7 +733,7 @@ namespace eos
                 }
                 while (status == GSL_CONTINUE && iter < max_iter);
 
-                if ( ! status == GSL_SUCCESS)
+                if (GSL_SUCCESS != status)
                 {
                     throw InternalError("Could not find the mirror point, stopped after "
                         + stringify(iter) + " iterations with f(" + stringify(estimate) + ") = " + stringify(f.function(estimate, f.params)));
