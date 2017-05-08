@@ -224,32 +224,27 @@ namespace eos
         const double c2 = (3.0 * x2 - 1.0) / 2.0;
         const double c4 = (35.0 * x4 - 30.0 * x2 + 3.0) / 8.0;
 
-        return 1.0 + 30.0 * eta3pi * c2 - 3.0 * eta3pi * _imp->omega3pi(mu) * c4;
+        return 1.0 + 30.0 * eta3pi * c2 - 3.0 * eta3pi * omega3pi * c4;
     }
 
     double
     PionLCDAs::phi3s(const double & u, const double & mu) const
     {
         // Setting lambda3pi and rhopi to zero.
-
-        const double mupi = _imp->m_pi * _imp->m_pi / _imp->m_ud_msbar(mu);
-        const double f3pi = _imp->f3pi(mu);
         const double eta3pi = _imp->eta3pi(mu);
+        const double omega3pi = _imp->omega3pi(mu);
 
         // Gegenbauer polynomials C_n^(3/2)
         const double x = 2.0 * u - 1.0, x2 = x * x;
         const double c2 = (15.0 * x2 - 3.0) / 2.0;
 
-        return 6.0 * u * (1.0 - u) * (1.0 + 0.5 * eta3pi * (10.0 - _imp->omega3pi(mu)) * c2);
+        return 6.0 * u * (1.0 - u) * (1.0 + 0.5 * eta3pi * (10.0 - omega3pi) * c2);
     }
 
     double
     PionLCDAs::phi3s_d1(const double & u, const double & mu) const
     {
         // Setting lambda3pi and rhopi to zero.
-        //
-        const double mupi = _imp->m_pi * _imp->m_pi / _imp->m_ud_msbar(mu);
-        const double f3pi = _imp->f3pi(mu);
         const double eta3pi = _imp->eta3pi(mu);
         const double omega3pi = _imp->omega3pi(mu);
 
