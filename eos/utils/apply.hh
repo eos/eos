@@ -146,7 +146,7 @@ namespace eos
 
     /* pointer to member function */
     template <typename Result_, typename ArrayBaseType_, typename Class_>
-    Result_ apply(Result_ (Class_::* f)() const, const Class_ * c, const std::array<ArrayBaseType_, 0ul> & a)
+    Result_ apply(Result_ (Class_::* f)() const, const Class_ * c, const std::array<ArrayBaseType_, 0ul> &)
     {
         return std::mem_fn(f)(c);
     }
