@@ -27,7 +27,7 @@ namespace eos
     class QCDFIntegrals
     {
         public:
-            class Results;
+            struct Results;
 
             /*!
              * Return all QCDF Integrals for a b quark-antiquark loop with s = 0, according to [vD2011].
