@@ -56,6 +56,7 @@ namespace eos
         static complex<double> F19_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> F27_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
         static complex<double> F29_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
+        static complex<double> delta_F29_massive(const double & mu, const double & s, const double & m_c);
 
         // helper functions for F8j, cf. [BFS2001], Eqs. (29) and (84), pp. 8 and 30
         static complex<double> B0(const double & s, const double & m_q);

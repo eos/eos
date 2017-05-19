@@ -999,6 +999,15 @@ namespace eos
         return complex<double>(r, i);
     }
 
+    // cf. [AAGW2001], eqs. (48) and (49), p. 18
+    complex<double>
+    CharmLoops::delta_F29_massive(const double & mu, const double & s, const double & m_q)
+    {
+        const double x = s / (4.0 * m_q * m_q);
+
+        return 64.0 / 945.0 * (2.0 / 3.0 + log(mu / m_q)) * (105.0 + 84.0 * x + 72.0 * x * x + 64.0 * x * x * x);
+    }
+
     // cf. [BFS2001], Eq. (82), p. 30
     complex<double>
     CharmLoops::F87_massless(const double & mu, const double & s, const double & m_q)
