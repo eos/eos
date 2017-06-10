@@ -19,6 +19,7 @@
  */
 
 #include <eos/statistics/log-likelihood.hh>
+#include <eos/statistics/test-statistic-impl.hh>
 #include <eos/utils/equation_solver.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_cache.hh>
@@ -189,6 +190,13 @@ namespace eos
                 // Return positive significance if measured value exceeds predictions.
                 // For the Gaussian, there still is 68% probability in [x-b, x+a], even if a != b
                 return (mode - value) / sigma;
+            }
+
+            virtual TestStatisticPtr primary_test_statistic() const
+            {
+                auto result = new test_statistics::ChiSquare(pow(significance(), 2));
+
+                return TestStatisticPtr(result);
             }
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
@@ -547,6 +555,13 @@ namespace eos
                 *df = (std::exp(zm) - log_gamma->alpha) / log_gamma->lambda;
             }
 
+            virtual TestStatisticPtr primary_test_statistic() const
+            {
+                auto result = new test_statistics::Empty();
+
+                return TestStatisticPtr(result);
+            }
+
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
             {
                 ObservablePtr observable = this->cache.observable(id)->clone(cache.parameters());
@@ -765,6 +780,13 @@ namespace eos
                     + std::pow(zm, a->beta) - std::pow(zp, a->beta);
             }
 
+            virtual TestStatisticPtr primary_test_statistic() const
+            {
+                auto result = new test_statistics::Empty();
+
+                return TestStatisticPtr(result);
+            }
+
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
             {
                 ObservablePtr observable = this->cache.observable(id)->clone(cache.parameters());
@@ -847,6 +869,13 @@ namespace eos
             double significance() const
             {
                 throw InternalError("LogLikelihoodBlock::MixtureBlock::significance() not implemented yet");
+            }
+
+            virtual TestStatisticPtr primary_test_statistic() const
+            {
+                auto result = new test_statistics::Empty();
+
+                return TestStatisticPtr(result);
             }
         };
 
@@ -1066,7 +1095,7 @@ namespace eos
                 return norm - 0.5 * dot(random_samples, covariance_inv * random_samples);
             }
 
-            virtual double significance() const
+            double chi_square() const
             {
                 std::array<double, n_> observables;
 
@@ -1080,7 +1109,12 @@ namespace eos
                 // center the gaussian
                 observables = observables - mean;
 
-                double chi_squared = dot(observables, covariance_inv * observables);
+                return dot(observables, covariance_inv * observables);
+            }
+
+            virtual double significance() const
+            {
+                const auto chi_squared = this->chi_square();
 
                 // find probability of this excess or less ( 1 - usual p-value)
                 double p = gsl_cdf_chisq_P(chi_squared, n_);
@@ -1089,6 +1123,13 @@ namespace eos
                 // return  significance is >= 0, since p >= 0
                 // and a negative significance is ruled out by definition
                 return gsl_cdf_ugaussian_Pinv((p + 1) / 2.0);
+            }
+
+            virtual TestStatisticPtr primary_test_statistic() const
+            {
+                auto result = new test_statistics::ChiSquare(this->chi_square());
+
+                return TestStatisticPtr(result);
             }
         };
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2011, 2013, 2014, 2017 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -24,6 +24,7 @@
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
 #include <eos/statistics/log-likelihood-fwd.hh>
+#include <eos/statistics/test-statistic.hh>
 #include <eos/utils/matrix.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/parameters.hh>
@@ -80,6 +81,13 @@ namespace eos
              * @note The significance is >= 0.
              */
             virtual double significance() const  = 0;
+
+            /*!
+             * Calculate the primary test statistic (e.g. a chi^2 or -2 log L) for
+             * the deviation between the observables' current values and
+             * the mode.
+             */
+            virtual TestStatisticPtr primary_test_statistic() const = 0;
 
             /*!
              * Create a new LogLikelihoodBlock for one normally distributed observable.
