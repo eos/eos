@@ -33,6 +33,7 @@ libeosstatistics_la_SOURCES = \
 	proposal-functions.cc proposal-functions.hh \
 	rvalue.cc rvalue.hh \
 	simple-parameters.cc simple-parameters.hh \
+	test-statistic.cc test-statistic.hh test-statistic-impl.hh \
 	welford.cc welford.hh
 libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lMinuit2
 
