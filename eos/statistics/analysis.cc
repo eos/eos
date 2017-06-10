@@ -433,6 +433,21 @@ namespace eos
            }
        }
 
+       /* output the test statistics */
+       Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+                        << "TestStatistic for each constraint:";
+       for (auto c = _log_likelihood.begin(), c_end = _log_likelihood.end() ; c != c_end ; ++c)
+       {
+           for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
+           {
+               std::stringstream ss;
+               ss << *(*b)->primary_test_statistic();
+
+               Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+                                << c->name() << ": " << ss.str();
+           }
+       }
+
        // store significances and chi^2
        if (f)
        {
