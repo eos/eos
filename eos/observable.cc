@@ -1642,6 +1642,143 @@ namespace eos
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_k4s,
                     std::make_tuple("s_min", "s_max")),
 
+	      
+	    make_observable("Lambda_b->Lambdall::M_1@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m1,
+		    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_2@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m2,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_3@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m3,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_4@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m4,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_5@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m5,
+                    std::make_tuple("s_min", "s_max")),
+	      
+	    make_observable("Lambda_b->Lambdall::M_6@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m6,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_7@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m7,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_8@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m8,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_9@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m9,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_10@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m10,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_11@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m11,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_12@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m12,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_13@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m13,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_14@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m14,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_15@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m15,
+                    std::make_tuple("s_min", "s_max")),
+	      
+	    make_observable("Lambda_b->Lambdall::M_16@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m16,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_17@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m17,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_18@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m18,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_19@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m19,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_20@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m20,
+                    std::make_tuple("s_min", "s_max")),	    
+	      
+	    make_observable("Lambda_b->Lambdall::M_21@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m21,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_22@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m22,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_23@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m23,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_24@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m24,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_25@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m25,
+                    std::make_tuple("s_min", "s_max")),
+	      
+	    make_observable("Lambda_b->Lambdall::M_26@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m26,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_27@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m27,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_28@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m8,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_29@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m29,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_30@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m30,
+                    std::make_tuple("s_min", "s_max")),  
+
+	    make_observable("Lambda_b->Lambdall::M_31@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m31,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_32@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m32,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_33@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m33,
+                    std::make_tuple("s_min", "s_max")),
+
+	    make_observable("Lambda_b->Lambdall::M_34@LowRecoil",
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m34,
+                    std::make_tuple("s_min", "s_max")),  
+	      
             /* Inclusive Decays */
 
             // B->X_u l nu (naive)
