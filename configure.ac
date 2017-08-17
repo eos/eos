@@ -85,24 +85,28 @@ elif test "x$with_minuit2" != xno -a "x$with_minuit2" != x ; then
 	LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
 fi
 dnl }}}
-dnl {{{ enable PMC path if supplied via --with-pmc=
+dnl {{{ use PMC path if supplied via --with-pmc=
 AC_ARG_WITH([pmc],
-	[AS_HELP_STRING([--with-pmc], [used to find perform population montecarlo sampling])]
+	[AS_HELP_STRING([--with-pmc], [used to perform population montecarlo sampling])]
 	[],
 	[])
-if test "x$with_pmc" == xno -o "x$with_pmc" == x ; then
-	AC_MSG_NOTICE([Building EOS without PMC support])
-else 
+if test "x$with_pmc" != x ; then
 	if ! test -d "$with_pmc" ; then
 		AC_MSG_FAILURE(["$with_pmc is not a directory"])
+	else
+		CXXFLAGS="-I$with_pmc/include $CXXFLAGS"
+		LDFLAGS="-Wl,-rpath,$with_pmc/lib -L$with_pmc/lib $LDFLAGS"
 	fi
-	CXXFLAGS="-I$with_pmc/include $CXXFLAGS"
-	LDFLAGS="-Wl,-rpath,$with_pmc/lib -L$with_pmc/lib $LDFLAGS"
-	AC_DEFINE([EOS_ENABLE_PMC], 1, [Whether we use PMC])
 fi
-AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$with_pmc" != "xno" -a "x$with_pmc" != x])
 dnl }}}
 
+dnl {{{ check if we should enable PMC
+AC_ARG_ENABLE([pmc],
+	[AS_HELP_STRING([--enable-pmc], [enables usage of pmclib by EOS])],
+	[],
+	[])
+AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$enable_pmc" == "xyes"])
+dnl }}}
 dnl {{{ check if we should enable Python
 AC_ARG_ENABLE([python],
 	[AS_HELP_STRING([--enable-python], [enables interfacing EOS within python])],
