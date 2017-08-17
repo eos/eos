@@ -83,8 +83,6 @@ elif test "x$with_minuit2" != xno -a "x$with_minuit2" != x ; then
 	fi
 	CXXFLAGS="-I$with_minuit2/include $CXXFLAGS"
 	LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
-else
-	AC_MSG_FAILURE(["Cannot build EOS without Minuit2"])
 fi
 dnl }}}
 dnl {{{ enable PMC path if supplied via --with-pmc=
