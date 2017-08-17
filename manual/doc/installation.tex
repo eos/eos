@@ -43,14 +43,40 @@ the following scientific software to be pre-installed:
     \item[\package{libgsl0-dev}] the GNU Scientific Library \cite{GSL}, in version 1.16 or higher,
     \item[\package{libhdf5-serial-dev}] the Hierarchical Data Format v5 library \cite{HDF5}, in version 1.8.11 or higher,
     \item[\package{libfftw3-dev}] the C subroutine library for computing the discrete Fourier transform,
-    \item[\package{Minuit2}] the physics analysis tool for function minimization, in version 5.28.00 or higher.
+    \item[\package{minuit2}] the physics analysis tool for function minimization, in version 5.28.00 or higher.
 \end{description}
-Except for \package{Minuit2}, we recommend the installation of the above packages using your system's
-software management system.\footnote{%
-    There is presently a bug in the Debian/Ubuntu packages for \package{Minuit2}, which prevents
+If you intend to use the \gls{PMC} sampling algorithm with EOS, you will need to install
+\begin{description}
+    \item[libpmc] a free implementation of said algorithm \cite{libpmc}, in version 1.01 or higher,
+\end{description}
+
+Except for \package{libpmc} and \package{minuit2}, we recommend the installation of the above packages
+using your system's software management system.\footnote{%
+    There is presently a bug in the Debian/Ubuntu packages for \package{minuit2}, which prevents
     linking.
 }
-For \package{Minuit2}, we recommend to install the package from source, and to
+For the remaining packages \package{libpmc} and \package{minuit2}, alternative means of installation
+are available, as discussed in the following.
+
+\subsection{Alternative: Installing with \texttt{apt}}
+
+Prebuilt binary package files for the Ubuntu long-term-support varieties
+``Trusty'' and ``Xenial'' are available for the packages \package{libpmc} and
+\package{minuit2}. Create a new file \texttt{eos.list} within the directory
+\texttt{/etc/apt/sources.list.d} with the following content:
+\begin{file}
+deb https://packagecloud.io/eos/eos/ubuntu/ DIST main
+deb-src https://packagecloud.io/eos/eos/ubuntu/ DIST main
+\end{file}
+where \texttt{DIST} has to replaced by either \texttt{trusty} or
+\texttt{xenial}, depending on your version of Ubuntu. Afterwards, run
+\texttt{apt-get update} to make this change take effect.
+You can then install the binary packages through \texttt{apt-get
+install minuit2 libpmc}.
+
+\subsection{Alternative: Installing from source}
+
+In order to install \package{minuit2} from source you will need to
 disable the automatic support for OpenMP. The installation can be done by
 executing the following commands:
 \begin{commandline}
@@ -67,14 +93,9 @@ popd
 rm -R /tmp/Minuit2
 \end{commandline}
 
-If you intend to use the \gls{PMC} sampling algorithm with EOS, you will need to install
-\begin{description}
-    \item[libpmc] a free implementation of said algorithm \cite{libpmc}, in version 1.01 or higher,
-\end{description}
-in addition to the core library dependencies. The \package{libpmc} package will -- in all likelihood -- not
-be installable via your system's software management system. In addition, EOS requires some
-modifications to libpmc's source code, in order to make it compatible with C++. We suggest
-the following commands to install it:
+For the \package{libpmc} package EOS requires some modifications to libpmc's
+source code, in order to make it compatible with C++. We suggest the following
+commands to install it:
 \begin{commandline}
 mkdir /tmp/libpmc
 pushd /tmp/libpmc
@@ -130,11 +151,11 @@ Next, you configure the build scripts using:
 ./configure \
     --prefix=/opt/pkgs/eos \
     --enable-python \
-    --with-minuit2=/opt/pkgs/Minuit2-5.28.00 \
-    --with-pmc=no
     # alternative 1: --disable-python
     # alternative 2: --with-minuit2=root
-    # alternative 3: --with-pmc=/opt/pkgs/pmclib-1.01
+    # alternative 3: --with-minuit2=/opt/pkgs/Minuit2-5.28.00
+    # alternative 4: --enable-pmc \
+                     --with-pmc=/opt/pkgs/pmclib-1.01
 \end{commandline}
 %
 In the above, three alternatives apply:
@@ -143,8 +164,11 @@ In the above, three alternatives apply:
     this interface, replace \texttt{--enable-python} with \texttt{--disable-python}.
     \item If you have installed ROOT on your system, you can use ROOT's internal copy of Minuit2.
     In such a case, issue \texttt{--with-minuit2=root} to the configure script.
+    \item If you have manually installed \package{minuit2}, you can use \texttt{--with-minuit2=PATH}
+    to specify its installation path to EOS.
     \item Building the EOS-PMC support is purely optional. In order to enable building this
-    support, issue \texttt{--with-pmc} with the appropriate installation path.
+    support, issue \texttt{--enable-pmc}. If you installed \package{libpmc} manually, use
+    \texttt{--with-pmc} to specify its installation path.
 \end{enumerate}
 If the \texttt{configure} script finds any problems with your system, it will complain loudly.\\
 
