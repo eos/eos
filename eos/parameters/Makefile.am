@@ -12,6 +12,7 @@ PARAMETER_FILES = \
 	life-times.yaml \
 	masses.yaml \
 	pi-lcda.yaml \
+	polarisations.yaml \
 	qcd.yaml \
 	sm.yaml \
 	zrsr.yaml

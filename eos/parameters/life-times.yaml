@@ -36,10 +36,3 @@
     min:     +0.070e+12
     max:     +0.092e+12
     comments: "cf. [PDG2012] and [PDG-Live], September 2013"
-
-# Decay parameter of the Lambda hyperon
-"Lambda::alpha" :
-    central: +0.642
-    min:     +0.629
-    max:     +0.655
-    comments: "cf. [PDG2012+]"
