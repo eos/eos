@@ -4,3 +4,16 @@
     min:     +0.629
     max:     +0.655
     comments: "cf. [PDG2012+]"
+
+# General polarisation parameter for the Lambda_b baryon polarisation
+"Lambda_b::polarisation@unpolarised" :
+    central:  0.0
+    min:      0.0
+    max:      0.0
+
+# Polarisation parameter for the Lambda_b baryon polarisation at the LHCb
+# experiment
+"Lambda_b::polarisation@LHCb" :
+    central: +0.06
+    min:     -0.01
+    max:     +0.13
