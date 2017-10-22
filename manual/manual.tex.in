@@ -7,6 +7,7 @@
 ]{scrbook}
 
 %% Packages
+\usepackage{array}                               % for \newcolumntype
 \usepackage[%
     style=phys,%
     eprint=true,%
@@ -18,6 +19,7 @@
 ]{biblatex}                                      % for the bibliography
 \usepackage{booktabs}                            % for book-quality tables
 \usepackage{braket}                              % for the braket notation
+\usepackage{caption}                             % for using captions outside floats
 \usepackage{enumitem}                            % for modifications to the list-like environments
 \usepackage{filecontents}                        % for keeping files' contents within the document source
 \usepackage[acronym,toc]{glossaries}             % for acronyms and glossaries
@@ -272,6 +274,8 @@
 %\input{physics/b-baryon-hadronic-matrix-elements.tex}
 
 \appendix
+
+\input{appendices/parameters.tex}
 
 \backmatter
 

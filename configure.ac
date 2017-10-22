@@ -243,6 +243,7 @@ AC_OUTPUT(
 	eos/optimize/Makefile
 	eos/statistics/Makefile
 	manual/Makefile
+	manual/appendices/Makefile
 	manual/figures/Makefile
 	src/Makefile
 	src/clients/Makefile

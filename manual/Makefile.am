@@ -19,7 +19,7 @@ CLEANFILES = \
 	manual.log
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = figures .
+SUBDIRS = figures appendices .
 
 TEXSOURCES = \
 	acknowledgments.tex \
@@ -27,7 +27,8 @@ TEXSOURCES = \
 	glossaries.tex \
 	doc/installation.tex \
 	doc/usage.tex \
-	doc/interface.tex
+	doc/interface.tex \
+	appendices/parameters.tex
 
 BIBSOURCES = \
 	references.bib
