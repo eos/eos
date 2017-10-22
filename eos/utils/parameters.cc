@@ -162,6 +162,10 @@ namespace eos
                     for (auto && p : node)
                     {
                         std::string name = p.first.Scalar();
+
+                        if ("@metadata@" == name)
+                            continue;
+
                         double central, min, max;
 
                         if (! p.second["central"])

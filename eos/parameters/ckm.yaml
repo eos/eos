@@ -1,91 +1,124 @@
+# vim: set sts=4 et tw=100 :
+
+'@metadata@' :
+    'description': >
+        The list of parameters describing the CKM matrix. For the Wolfenstein parameters of the CKM
+        matrix see e.g. @REF[UTFIT2013]@ for their definition.
+
 # Wolfenstein parameters of CKM, cf. [UTFIT2013]
-"CKM::A" :
+'CKM::A' :
     central: +0.827
     min:     +0.814
     max:     +0.840
-"CKM::lambda" :
+    latex:   '$A_\text{CKM}$'
+    comment: 'The Wolfenstein CKM parameter @MATH[A]@'
+'CKM::lambda' :
     central: +0.22535
     min:     +0.22470
     max:     +0.22600
-"CKM::rhobar" :
+    latex:   '$\lambda_\text{CKM}$'
+    comment: 'The Wolfenstein CKM parameter @MATH[\lambda]@'
+'CKM::rhobar' :
     central: +0.132
     min:     +0.111
     max:     +0.153
-"CKM::etabar" :
+    latex:   '$\bar{\rho}_\text{CKM}$'
+    comment: 'The Wolfenstein CKM parameter @MATH[\bar{\rho}]@'
+'CKM::etabar' :
     central: +0.350
     min:     +0.336
     max:     +0.364
+    latex:   '$\bar{\eta}_\text{CKM}$'
+    comment: 'The Wolfenstein CKM parameter @MATH[\bar{\eta}]@'
 
 # CKM matrix elements for use by CKMScanModel
-"CKM::abs(V_ud)" :
+'CKM::abs(V_ud)' :
     central: +1.00
     min:     +1.00
     max:     +1.00
-"CKM::arg(V_ud)" :
+    latex:   '$|V_{ud}|$'
+'CKM::arg(V_ud)' :
     central: +1.00
     min:     +1.00
     max:     +1.00
-"CKM::abs(V_us)" :
+    latex:   '$\arg{V_{ud}}$'
+'CKM::abs(V_us)' :
     central: +0.22
     min:     +0.22
     max:     +0.22
-"CKM::arg(V_us)" :
+    latex:   '$|V_{us}|$'
+'CKM::arg(V_us)' :
     central: +0.22
     min:     +0.22
     max:     +0.22
-"CKM::abs(V_ub)" :
+    latex:   '$\arg{V_{us}}$'
+'CKM::abs(V_ub)' :
     central: +0.00
     min:     +0.00
     max:     +0.00
-"CKM::arg(V_ub)" :
+    latex:   '$|V_{ub}|$'
+'CKM::arg(V_ub)' :
     central: +0.00
     min:     +0.00
     max:     +0.00
-"CKM::abs(V_cd)" :
+    latex:   '$\arg{V_{ub}}$'
+'CKM::abs(V_cd)' :
     central: +1.00
     min:     +1.00
     max:     +1.00
-"CKM::arg(V_cd)" :
+    latex:   '$|V_{cd}|$'
+'CKM::arg(V_cd)' :
     central: +1.00
     min:     +1.00
     max:     +1.00
-"CKM::abs(V_cs)" :
+    latex:   '$\arg{V_{cd}}$'
+'CKM::abs(V_cs)' :
     central: +0.22
     min:     +0.22
     max:     +0.22
-"CKM::arg(V_cs)" :
+    latex:   '$|V_{cs}|$'
+'CKM::arg(V_cs)' :
     central: +0.22
     min:     +0.22
     max:     +0.22
-"CKM::abs(V_cb)" :
+    latex:   '$\arg{V_{cs}}$'
+'CKM::abs(V_cb)' :
     central: +0.00
     min:     +0.00
     max:     +0.00
-"CKM::arg(V_cb)" :
+    latex:   '$|V_{cb}|$'
+'CKM::arg(V_cb)' :
     central: +0.00
     min:     +0.00
     max:     +0.00
-"CKM::abs(V_td)" :
+    latex:   '$\arg{V_{cb}}$'
+'CKM::abs(V_td)' :
     central: +0.00
     min:     +0.00
     max:     +0.00
-"CKM::arg(V_td)" :
+    latex:   '$|V_{td}|$'
+'CKM::arg(V_td)' :
     central: +0.00
     min:     +0.00
     max:     +0.00
-"CKM::abs(V_ts)" :
+    latex:   '$\arg{V_{td}}$'
+'CKM::abs(V_ts)' :
     central: +0.04
     min:     +0.04
     max:     +0.04
-"CKM::arg(V_ts)" :
+    latex:   '$|V_{ts}|$'
+'CKM::arg(V_ts)' :
     central: +0.04
     min:     +0.04
     max:     +0.04
-"CKM::abs(V_tb)" :
+    latex:   '$\arg{V_{ts}}$'
+'CKM::abs(V_tb)' :
     central: +1.00
     min:     +1.00
     max:     +1.00
-"CKM::arg(V_tb)" :
+    latex:   '$|V_{tb}|$'
+'CKM::arg(V_tb)' :
     central: +1.00
     min:     +1.00
     max:     +1.00
+    latex:   '$\arg{V_{tb}}$'
