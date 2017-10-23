@@ -273,10 +273,6 @@
 
 \appendix
 
-\chapter{Conventions}
-
-\input{conventions.tex}
-
 \backmatter
 
 %% Glossary
