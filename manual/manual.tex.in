@@ -83,6 +83,22 @@
 ]{#2}
 }
 
+%% create file environment
+\lstnewenvironment{file}[1][\normalsize]{%
+\lstset{
+    language={},
+    basicstyle={\scriptsize\ttfamily{#1}},
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    prebreak={\ttfamily\small\symbol{'134}},
+    %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
+    xleftmargin=.025\textwidth
+}
+}{}
+
 %% create source code environment
 \lstnewenvironment{sourcecode}[1][\normalsize]{%
 \lstset{
