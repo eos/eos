@@ -1,6 +1,6 @@
-// vim: set sts=4 et filetype=javascript :
+# vim: set sts=4 et filetype=javascript :
 {
-// Experimental results
+    # Experimental results
     "ATLAS:2013A" : {
         "type" : "experiment",
         "collaboration" : "ATLAS",
@@ -277,7 +277,7 @@
         "journal" : "JHEP 1506 (2015) 115",
         "eprint" : "arXiv:1503.07138 [hep-ex]"
     },
-// Averages
+    # Averages
     "FLAG2013" : {
         "collaboration" : "Flavor Lattice Averagin",
         "title" : "Review of lattice results concerning low energy particle physics",
@@ -333,7 +333,7 @@
         "note" : "Standard model fit, pre-Moriond results 2013",
         "url" : "http://www.utfit.org/UTfit/ResultsWinter2013PreMoriond"
     },
-// Theory results
+    # Theory results
     "2006zs" : {
         "authors" : "Misiak, M. et al",
         "title" : "The first estimate of B(anti-B -> X/s gamma) at O(alpha(s)^2)",
@@ -688,7 +688,7 @@
         "title" : "The four-loop beta-function in Quantum Chromodynamics",
         "eprint" : "arXiv:hep-ph/9701390"
     },
-// Numerical and statistical methods
+    # Numerical and statistical methods
     "C2006" : {
         "authors" : "Crandall, R.E.",
         "title" : "Note on fast polylogarithm computation",

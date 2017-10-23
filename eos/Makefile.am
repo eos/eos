@@ -1,6 +1,5 @@
 CLEANFILES = \
 	*~ \
-	references.json \
 	references_TEST
 MAINTAINERCLEANFILES = Makefile.in
 
@@ -43,20 +42,15 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = \
-	constraint_TEST
+	constraint_TEST \
+	references_TEST
 
 constraint_TEST_SOURCES = constraint_TEST.cc
 
-pkgdata_DATA = references.json
+pkgdata_DATA = references.yaml
 EXTRA_DIST = \
-	references.json.in \
+	references.yaml \
 	references_TEST.in
-
-references.json: references.json.in
-	sed \
-	    -e '/^\/\//d' \
-	    $< \
-	    > $@
 
 references_TEST: references_TEST.in
 	sed \
