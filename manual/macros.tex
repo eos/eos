@@ -1,0 +1,131 @@
+%% vim : set sts=4 et :
+
+%%
+%% Shortcuts and abreviations
+%%
+
+%% Physics Shortcuts
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\GeV}{\ensuremath{\mathrm{GeV}}}
+\newcommand{\MSbar}{\ensuremath{\overline{\text{MS}}}}
+
+%% Math Shortcuts
+\newcommand{\para}{\parallel}
+\newcommand{\nn}{\nonumber}
+
+%% Abbreviations
+\newcommand{\ie}{i.e.}
+\newcommand{\eg}{e.g.}
+\newcommand{\cf}{cf.}
+
+%%
+%% Formatting
+%%
+
+%% create commandline environment
+\lstnewenvironment{commandline}[1][\normalsize]{%
+\lstset{
+    language=bash,
+    basicstyle=\scriptsize\ttfamily{#1},
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    prebreak={\ttfamily\symbol{'134}},
+    %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
+    xleftmargin=.025\textwidth
+}
+}{}
+
+%% read in an example commandline from file
+\newcommand{\commandlineexample}[2][\normalsize]{%
+\lstinputlisting[
+    language=bash,
+    basicstyle={\scriptsize\ttfamily{#1}},
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    prebreak={\ttfamily\symbol{'134}},
+    %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
+    xleftmargin=.025\textwidth
+]{#2}
+}
+
+%% create file environment
+\lstnewenvironment{file}[1][\normalsize]{%
+\lstset{
+    language={},
+    basicstyle={\scriptsize\ttfamily{#1}},
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    prebreak={\ttfamily\small\symbol{'134}},
+    %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
+    xleftmargin=.025\textwidth
+}
+}{}
+
+%% create source code environment
+\lstnewenvironment{sourcecode}[1][\normalsize]{%
+\lstset{
+    language=c++,
+    basicstyle={\scriptsize\ttfamily{#1}},
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    prebreak={\ttfamily\small\symbol{'134}},
+    %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
+    xleftmargin=.025\textwidth,
+    numbers=left,
+    numbersep=5pt,
+    numberstyle=\color{gray}\tiny
+}
+}{}
+
+%% list observables
+\newenvironment{observables}{%
+\renewcommand{\arraystretch}{1.3}
+\begin{center}
+\begin{tabular}{l c c}
+    \toprule
+    Observable name & Mathematical Symbol & Reference\\
+    \midrule
+}{%
+    \bottomrule
+\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+}
+\newcommand{\singleobs}[3]{%
+    \texttt{#1} & #2 & #3\\
+}
+\newcommand{\multiobs}[4]{%
+    \texttt{#1} & #2 & \multirow{#4}{*}{#3}\\ \cmidrule{1-2}
+}
+\newcommand{\multiobsnr}[2]{%
+    \texttt{#1} & #2 & \\
+}
+
+%% refer to elements of the document
+\newcommand{\refapp}[1]{appendix~\ref{app:#1}}
+\newcommand{\refch}[1]{chapter~\ref{ch:#1}}
+\newcommand{\refeq}[1]{eq.~(\ref{eq:#1})}
+\newcommand{\refeqs}[2]{eqs.~(\ref{eq:#1})-(\ref{eq:#2})}
+\newcommand{\reffig}[1]{figure~\ref{fig:#1}}
+\newcommand{\refsec}[1]{section~\ref{sec:#1}}
+
+%% consisten typeset for various objects
+\newcommand{\class}[1]{\texttt{#1}}
+\newcommand{\cpp}[1]{\texttt{#1}}
+\newcommand{\client}[1]{\texttt{#1}}
+\newcommand{\package}[1]{\textsf{\textbf{#1}}}
+\newcommand{\observable}[1]{\texttt{\lstinline{#1}}}
+
