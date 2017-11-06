@@ -26,6 +26,7 @@ stamp-h1
 
 # Tests
 *_TEST
+*.trs
 
 #eclipse
 *.*project
