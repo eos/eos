@@ -29,7 +29,8 @@ TEXSOURCES = \
 	doc/installation.tex \
 	doc/usage.tex \
 	doc/interface.tex \
-	appendices/parameters.tex
+	appendices/parameters.tex \
+	physics/eft.tex
 
 BIBSOURCES = \
 	references.bib

@@ -31,6 +31,9 @@
 \usepackage{subfigure}                           % for captioned subdividion of figures
 \usepackage{todonotes}                           % for margin notes on open tasks
 
+%% load macros
+\input{macros.tex}
+
 %% Use defaults + roman as title font
 \addtokomafont{disposition}{\rmfamily}
 
@@ -120,32 +123,14 @@
 
 \section{How to add a new measurement}
 
-%%
-%% Physics
-%%
-%\part*{Physics}
 %
-%\chapter{Effective Field Theories}
+% Physics
 %
-%\input{physics/eft-b-to-s}
-%
-%\chapter{$b$-Meson decays}
-%
-%\input{physics/b-meson-hadronic-matrix-elements.tex}
-%
-%\section{Semileptonic $B$ decays from Charged Currents}
-%
-%\input{physics/b-to-pi-l-nu.tex}
-%
-%\section{Rare radiative and semileptonic $B$ decays from Flavor Changing Neutral Currents}
-%
-%\input{physics/incl-b-to-s-gamma.tex}
-%\input{physics/incl-b-to-s-dilepton.tex}
-%\input{physics/christoph.tex}
-%
-%\chapter{$b$-Baryon decays}
-%
-%\input{physics/b-baryon-hadronic-matrix-elements.tex}
+\part*{Physics}
+
+\chapter{Effective Field Theories}
+
+\input{physics/eft}
 
 \appendix
 
