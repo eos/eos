@@ -52,7 +52,7 @@ EXTRA_DIST = \
 	references.yaml \
 	references_TEST.in
 
-references_TEST: references_TEST.in
+references_TEST$(EXEEXT): references_TEST.in
 	sed \
 	    -e "s/@TOPBUILDDIR@/$(top_builddir)/g" \
 	    $< \
