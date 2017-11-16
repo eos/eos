@@ -1,3 +1,12 @@
+# vim: set sts=4 et tw=100 :
+
+'@metadata@' :
+    'description': >
+        The list of parameters describing the b->s{qqbar,gamma,ll} Wilson coefficients.
+        See the EOS manual for their physical definitions.
+    'wcxf-relevant': true
+
+
 # Wilson coefficients C1 - C6 at mu = 4.2 GeV to NNLL accuary as calculated in the SM by EOS's StandardModel class.
 # For the calculations, cf. [BMU1999].
 "b->s::c1" :
