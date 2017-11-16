@@ -128,6 +128,11 @@ namespace eos
                 std::string envvar = std::string(std::getenv("EOS_TESTS_PARAMETERS"));
                 base = fs::system_complete(envvar);
             }
+            else if (std::getenv("EOS_HOME"))
+            {
+                std::string envvar = std::string(std::getenv("EOS_HOME"));
+                base = fs::system_complete(envvar) / "parameters";
+            }
             else
             {
                 base = fs::system_complete(EOS_DATADIR "/eos/parameters/");
