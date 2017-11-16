@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+
+# Copyright (c) 2017 Danny van Dyk
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+from eosdata import *
+from shutil import copy2
+
+def main():
+    parser = argparse.ArgumentParser(description='Prepare a directoy to be used as an $EOS_HOME directory')
+    parser.add_argument('eoshome', metavar='EOSHOME', type=str, help='Name of the directy that shall be prepared.')
+    parser.add_argument('--eosdir', type=str, help='Root directory of the EOS installation. Defaults to /usr', default='/usr')
+
+    args = parser.parse_args()
+
+    # ensure that the EOS installation directory exists and is not empty
+    print(os.path.join(args.eosdir, 'share/eos/parameters'))
+    if not os.path.isdir(os.path.join(args.eosdir, 'share/eos/parameters')) or len(os.listdir(os.path.join(args.eosdir, 'share/eos/parameters'))) == 0:
+        error('\'{}\' is not a valid EOS installation directory'.format(args.eosdir))
+
+    # ensure that the EOSHOME is empty
+    print(os.path.join(args.eoshome, 'parameters'))
+    if os.path.isdir(args.eoshome) and len(os.listdir(args.eoshome)) > 0:
+        error('\'{}\' is not an empty directory'.format(args.eoshome))
+    elif not os.path.exists(args.eoshome):
+        os.makedirs(args.eoshome)
+        os.makedirs(os.path.join(args.eoshome, 'parameters'))
+
+    # copy all .yaml files from EOSDIR/parameters/ to EOSHOME/
+    files = os.listdir(os.path.join(args.eosdir, 'share/eos/parameters'))
+    print('Copying the following files to the new EOS home')
+    for f in files:
+        print('  {}'.format(f))
+        copy2(os.path.join(args.eosdir, 'share/eos/parameters/', f), os.path.join(args.eoshome, 'parameters'))
+
+    exit(0);
+
+if __name__ == '__main__':
+    main()
