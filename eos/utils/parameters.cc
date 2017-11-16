@@ -203,6 +203,11 @@ namespace eos
                         }
                         max = p.second["max"].as<double>();
 
+                        if (parameters_map.end() != parameters_map.find(name))
+                        {
+                            throw ParameterInputDuplicateError(file, name);
+                        }
+
                         parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max }, idx));
                         parameters_map[name] = idx;
                         parameters.push_back(Parameter(parameters_data, idx));
@@ -446,6 +451,11 @@ namespace eos
 
     ParameterInputFileNodeError::ParameterInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw () :
         Exception("Malformed parameter input file '" + file + "': Node '" + node + "' " + msg)
+    {
+    }
+
+    ParameterInputDuplicateError::ParameterInputDuplicateError(const std::string & file, const std::string & node) throw () :
+        Exception("Malformed parameter input file '" + file + "': Duplicate entry for parameter '" + node + "'")
     {
     }
 }

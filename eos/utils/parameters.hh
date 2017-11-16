@@ -62,6 +62,16 @@ namespace eos
     };
 
     /*!
+     * ParameterInputDuplicateError is thrown when a duplicate parameter entry is encountered when parsing
+     * several input files.
+     */
+    struct ParameterInputDuplicateError :
+        public Exception
+    {
+        ParameterInputDuplicateError(const std::string & file, const std::string & msg) throw ();
+    };
+
+    /*!
      * Parameters keeps the set of all numeric parameters for any Observable.
      *
      * Access to any Parameter or their values is coherent, i.e., changes to
