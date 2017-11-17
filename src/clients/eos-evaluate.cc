@@ -346,7 +346,7 @@ main(int argc, char * argv[])
         std::cout << "Example:" << std::endl;
         std::cout << "  eos-evaluate --budget \"SD\" --vary \"mu\" --vary \"mass::W\" \\" << std::endl;
         std::cout << "               --budget \"CKM\" --vary \"CKM::A\" --vary \"CKM::lambda\" \\" << std::endl;
-        std::cout << "               --range s 14.18 22.86 12 --observable \"B->Kll::dBR/ds@LowRecoil,l=tau\"" << std::endl;
+        std::cout << "               --range s 14.18 22.86 12 --observable \"B->Kll::dBR/ds@LowRecoil;l=tau\"" << std::endl;
     }
     catch(Exception & e)
     {
