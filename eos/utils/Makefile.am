@@ -117,6 +117,7 @@ include_eos_utils_HEADERS = \
 	power_of.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.hh \
+	qualified-name.hh \
 	random_number_generator.cc random_number_generator.hh \
 	save.hh \
 	standard-model.hh \
