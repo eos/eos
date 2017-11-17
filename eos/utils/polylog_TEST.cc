@@ -56,6 +56,15 @@ class PolylogarithmTest :
             // check that the C implementation uses the principal branch of the (complex) logarithm
             TEST_CHECK_RELATIVE_ERROR(+M_PI, imag(std::log(complex<double>(-1.0, 0.0))), eps);
 
+            if (! z_file)
+                TEST_CHECK_FAILED("Cannot open polylog_TEST_z.bin");
+
+            if (! dilog_file)
+                TEST_CHECK_FAILED("Cannot open polylog_TEST_dilog.bin");
+
+            if (! trilog_file)
+                TEST_CHECK_FAILED("Cannot open polylog_TEST_trilog.bin");
+
             while (! z_file.eof())
             {
                 complex<double> z = read_complex(z_file);
