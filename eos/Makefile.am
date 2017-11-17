@@ -52,9 +52,9 @@ EXTRA_DIST = \
 	references.yaml \
 	references_TEST.in
 
-references_TEST$(EXEEXT): references_TEST.in
+references_TEST$(EXEEXT): references_TEST.in Makefile
 	sed \
-	    -e "s/@TOPBUILDDIR@/$(top_builddir)/g" \
+	    -e "s#@TOPSRCDIR@#$(top_srcdir)#g" \
 	    $< \
 	    > $@
 	chmod a+x $@

@@ -21,13 +21,13 @@ import yaml
 
 def main():
     try:
-        f = open('@TOPBUILDDIR@/eos/references.yaml')
+        f = open('@TOPSRCDIR@/eos/references.yaml')
         yaml.load(f)
     except Exception as e:
         print "Error while parsing references.yaml"
         print e
 
-    exit(0);
+    sys.exit(0)
 
 if __name__ == '__main__':
     main()
