@@ -23,8 +23,7 @@ libeosrarebdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	-lboost_filesystem -lboost_system \
-	-lgslcblas \
-	-lgsl \
+	-lgsl -lgslcblas -lm \
 	-lyaml-cpp
 
 include_eos_rarebdecaysdir = $(includedir)/eos/rare-b-decays

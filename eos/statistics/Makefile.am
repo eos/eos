@@ -83,7 +83,6 @@ TESTS = \
 	simple-parameters_TEST \
 	welford_TEST
 LDADD = \
-	-lgsl \
 	-lhdf5 \
 	-lMinuit2 \
 	$(top_builddir)/test/libeostest.a \

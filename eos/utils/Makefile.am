@@ -69,9 +69,8 @@ libeosutils_la_SOURCES = \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 libeosutils_la_LIBADD = \
 	-lboost_filesystem -lboost_system \
-	-lgsl -lgslcblas \
+	-lgsl -lgslcblas -lm \
 	-lhdf5 -lhdf5_hl \
-	-lm \
 	-lMinuit2 \
 	-lpthread \
 	-lyaml-cpp
@@ -171,7 +170,6 @@ TESTS = \
 	wilson-polynomial_TEST \
 	wilson_scan_model_TEST
 LDADD = \
-	-lgsl \
 	-lhdf5 \
 	-lMinuit2 \
 	-lyaml-cpp \

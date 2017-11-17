@@ -41,6 +41,7 @@ LDADD = \
 	libcli.a \
 	-lboost_filesystem -lboost_system \
 	-lhdf5 \
+	-lMinuit2 \
 	-lyaml-cpp
 
 if EOS_ENABLE_PMC
@@ -51,13 +52,11 @@ LDADD += \
 	-lpmc -ldl
 
 eos_sample_pmc_SOURCES = eos-sample-pmc.cc
-eos_sample_pmc_LDADD = $(LDADD) -lgsl -lMinuit2
 endif
 
 eos_evaluate_SOURCES = eos-evaluate.cc
 
 eos_find_mode_SOURCES = eos-find-mode.cc
-eos_find_mode_LDADD = $(LDADD) -lgsl
 
 eos_list_constraints_SOURCES = eos-list-constraints.cc
 
@@ -76,7 +75,6 @@ eos_sample_mcmc_SOURCES = eos-sample-mcmc.cc
 eos_sample_events_mcmc_SOURCES = eos-sample-events-mcmc.cc
 
 eos_scan_mc_SOURCES = eos-scan-mc.cc
-eos_scan_mc_LDADD = $(LDADD) -lgsl -lMinuit2
 
 integrated_SOURCES = integrated.cc
 

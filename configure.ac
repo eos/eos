@@ -64,6 +64,43 @@ AC_CHECK_LIB(hdf5, H5open,
 	[AC_MSG_ERROR([you do seem to be lacking libhdf5 (http://hdf.ncsa.uiuc.edu/HDF5/).])])
 dnl }}}
 
+dnl {{{ use GSL path if supplied via --with-gsl=, otherwise use pkg-config; check for GSL
+AC_ARG_WITH([gsl],
+	[AS_HELP_STRING([--with-gsl], [used for e.g. RNG, special functions, linear algebra])]
+	[],
+	[])
+if test "x$with_gsl" == xno ; then
+	AC_MSG_FAILURE(["Cannot build EOS without GSL"])
+fi
+if test "x$with_gsl" != x -a "x$with_gsl" != xyes ; then
+	if ! test -d "$with_gsl" ; then
+		AC_MSG_FAILURE(["$with_gsl is not a directory"])
+	fi
+	GSL_CXXFLAGS="-I$with_gsl/include"
+	GSL_LDFLAGS="-L$with_gsl/lib"
+else # use pkg-config
+	PKG_CHECK_MODULES([GSL],
+		[gsl],
+		[
+			GSL_CXXFLAGS="$GSL_CFLAGS"
+			GSL_LDFLAGS="`pkg-config --libs-only-L gsl`"
+			AC_MSG_NOTICE([using pkg-config for GSL location])
+		],
+		[
+			GSL_CXXFLAGS=""
+			GSL_LDFLAGS=""
+			AC_MSG_NOTICE([falling back to default for GSL location])
+		])
+fi
+CXXFLAGS="$GSL_CXXFLAGS $CXXFLAGS"
+LDFLAGS="$GSL_LDFLAGS $LDFLAGS"
+
+AC_CHECK_LIB(gsl, gsl_sf_zeta,
+	[],
+	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library (http://www.gnu.org/software/gsl/).])],
+	[-lgslcblas -lm])
+dnl }}}
+
 dnl {{{ use Minuit2 path if supplied via --with-minuit2=
 AC_ARG_WITH([minuit2],
 	[AS_HELP_STRING([--with-minuit2], [used to find starting points for population montecarlo sampling])]
@@ -210,17 +247,6 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 )
 CXXFLAGS=$save_CXXFLAGS
 dnl }}}
-dnl }}}
-
-dnl {{{ check for libraries
-save_LIBS=$LIBS
-LIBS="$LIBS -lgslcblas" # work around Debian/Ubuntu oddities
-dnl {{{ check for -lgsl
-AC_CHECK_LIB(gsl, gsl_sf_zeta,
-	[],
-	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library (http://www.gnu.org/software/gsl/).])])
-dnl }}}
-LIBS=$save_LIBS
 dnl }}}
 
 dnl {{{ define relevant EOS_* macros
