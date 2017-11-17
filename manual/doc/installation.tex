@@ -122,6 +122,20 @@ popd
 rm -R /tmp/libpmc
 \end{commandline}
 
+\paragraph{Note} The \texttt{waf} script supplied by \package{libpmc} is written in Python version 2. On
+systems that use \texttt{python3} as the default Python interpreter, you will see an error message:
+\begin{file}
+./waf configure --m64 --prefix=/opt/pkgs/pmclib-1.01
+/tmp/src/libpmc/pmclib_v1.01/wscript: error: Traceback (most recent call last):
+  File "/tmp/src/libpmc/pmclib_v1.01/.waf3-1.5.17-496be6959d6e0cd406d5f087856c4d79/wafadmin/Utils.py", line 198, in load_module
+    exec(compile(code,file_path,'exec'),module.__dict__)
+  File "/tmp/src/libpmc/pmclib_v1.01/wscript", line 130
+    except Exception,e:
+                    ^
+SyntaxError: invalid syntax
+\end{file}
+This problem can usually be fixed by replacing \texttt{python} with \texttt{python2} in the very first
+line of the file \texttt{waf}.
 
 \section{Installing EOS}
 
