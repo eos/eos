@@ -13,6 +13,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+from __future__ import print_function
 import argparse
 import h5py
 import matplotlib
@@ -27,11 +28,11 @@ from scipy.stats.kde import gaussian_kde
 
 
 def error(message):
-    print >> sys.stderr, '%s: error: %s' % (os.path.basename(sys.argv[0]), message)
+    print('%s: error: %s' % (os.path.basename(sys.argv[0]), message), file=sys.stderr)
     exit(1)
 
 def warn(message):
-    print >> sys.stderr, '%s: warning: %s' % (os.path.basename(sys.argv[0]), message)
+    print('%s: warning: %s' % (os.path.basename(sys.argv[0]), message), file=sys.stderr)
 
 class FileFormatError(Exception):
     def __init__(self, expected, found):
