@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016, 2017 Danny van Dyk
  *
  * Copied from the Paludis package manager, which is
  * Copyright (c) 2008-2013 Ciaran McCreesh
@@ -24,6 +24,8 @@
 #define EOS_GUARD_EOS_UTILS_VISITOR_HH 1
 
 #include <eos/utils/visitor-fwd.hh>
+
+#include <functional>
 
 namespace eos
 {
