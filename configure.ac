@@ -225,7 +225,7 @@ dnl }}}
 
 dnl {{{ define relevant EOS_* macros
 AC_DEFINE_UNQUOTED([EOS_BUILDDIR], "$ac_pwd", [Absolute path to the build directory])
-AC_DEFINE_UNQUOTED([EOS_SRCDIR], "`readlink -f $ac_pwd/$srcdir`", [Absolute path to the top-level source directory])
+AC_DEFINE_UNQUOTED([EOS_SRCDIR], "$ac_abs_confdir", [Absolute path to the top-level source directory])
 dnl }}}
 
 dnl {{{ output
