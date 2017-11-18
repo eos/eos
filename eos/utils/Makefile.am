@@ -24,6 +24,7 @@ libeosutils_la_SOURCES = \
 	diagnostics.cc diagnostics.hh \
 	equation_solver.cc equation_solver.hh \
 	exception.cc exception.hh \
+	gsl-cblas-hack.cc \
 	hdf5.cc hdf5.hh hdf5-fwd.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
