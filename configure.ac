@@ -101,6 +101,43 @@ AC_CHECK_LIB(gsl, gsl_sf_zeta,
 	[-lgslcblas -lm])
 dnl }}}
 
+dnl {{{ use FFTW path if supplied via --with-fftw=, otherwise use pkg-config; check for FFTW
+AC_ARG_WITH([fftw3],
+	[AS_HELP_STRING([--with-fftw3], [used for e.g. RNG, special functions, linear algebra])]
+	[],
+	[])
+if test "x$with_fftw3" == xno ; then
+	AC_MSG_FAILURE(["Cannot build EOS without GSL"])
+fi
+if test "x$with_fftw3" != x -a "x$with_fftw3" != xyes ; then
+	if ! test -d "$with_fftw3" ; then
+		AC_MSG_FAILURE(["$with_fftw3 is not a directory"])
+	fi
+	FFTW3_CXXFLAGS="-I$with_fftw3/include"
+	FFTW3_LDFLAGS="-L$with_fftw3/lib"
+else # use pkg-config
+	PKG_CHECK_MODULES([FFTW3],
+		[fftw3],
+		[
+			FFTW3_CXXFLAGS="$FFTW3_CFLAGS"
+			FFTW3_LDFLAGS="`pkg-config --libs-only-L fftw3`"
+			AC_MSG_NOTICE([using pkg-config for FFTW3 location])
+		],
+		[
+			FFTW3_CXXFLAGS=""
+			FFTW3_LDFLAGS=""
+			AC_MSG_NOTICE([falling back to default for FFTW3 location])
+		])
+fi
+CXXFLAGS="$FFTW3_CXXFLAGS $CXXFLAGS"
+LDFLAGS="$FFTW3_LDFLAGS $LDFLAGS"
+
+AC_CHECK_LIB(fftw3, fftw_malloc,
+	[],
+	[AC_MSG_ERROR([you do seem to be lacking the FFTW Library (http://www.fftw.org/).])],
+	[])
+dnl }}}
+
 dnl {{{ use Minuit2 path if supplied via --with-minuit2=
 AC_ARG_WITH([minuit2],
 	[AS_HELP_STRING([--with-minuit2], [used to find starting points for population montecarlo sampling])]
