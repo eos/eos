@@ -22,11 +22,11 @@
 \usepackage{caption}                             % for using captions outside floats
 \usepackage{enumitem}                            % for modifications to the list-like environments
 \usepackage{filecontents}                        % for keeping files' contents within the document source
+\usepackage{fontspec}                            % for font selection
 \usepackage[acronym,toc]{glossaries}             % for acronyms and glossaries
 \usepackage{hyperref}                            % for hyperlinks in the PDF
 \usepackage{listings}                            % for source code and commandline listings
 \usepackage{multirow}                            % for table cells spanning multiple rows
-\usepackage{palatino}                            % for use of Palatino font
 \usepackage{slashed}                             % for Feynman slash notation
 \usepackage{subfigure}                           % for captioned subdividion of figures
 \usepackage{todonotes}                           % for margin notes on open tasks
@@ -34,7 +34,11 @@
 %% load macros
 \input{macros.tex}
 
-%% Use defaults + roman as title font
+%% Fonts
+%%   select defaults
+\setmainfont{TeX Gyre Pagella}
+\setmonofont{TeX Gyre Cursor}
+%%   use defaults + roman as title font
 \addtokomafont{disposition}{\rmfamily}
 
 %% indent description environments by 2\parindent ~= 2em
