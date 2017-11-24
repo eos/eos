@@ -98,6 +98,7 @@ BOOST_PYTHON_MODULE(eos)
         .staticmethod("Defaults")
         .def("__getitem__", (Parameter (Parameters::*)(const std::string &) const) &Parameters::operator[])
         .def("__iter__", range(&Parameters::begin, &Parameters::end))
+        .def("set", &Parameters::set)
         ;
 
     // Parameter
@@ -115,7 +116,7 @@ BOOST_PYTHON_MODULE(eos)
         .def("__init__", raw_function(&impl::Kinematics_ctor))
         .def(init<>())
         .def("__getitem__", (KinematicVariable (Kinematics::*)(const std::string &) const) &Kinematics::operator[])
-        .def("declare", (KinematicVariable (Kinematics::*)(const std::string &, const double &)) &Kinematics::declare, return_value_policy<return_by_value>())
+        .def("declare", &Kinematics::declare, return_value_policy<return_by_value>())
         .def("as_string", &Kinematics::as_string)
         ;
 
