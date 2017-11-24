@@ -47,8 +47,8 @@ manual.tex: manual.tex.in
 	    > manual.tex
 
 manual.pdf: $(SOURCES)
-	pdflatex manual.tex
-	pdflatex manual.tex
+	xelatex manual.tex
+	xelatex manual.tex
 	makeglossaries manual
 	biber manual
-	pdflatex manual.tex
+	xelatex manual.tex
