@@ -31,7 +31,7 @@
 %% create commandline environment
 \lstnewenvironment{commandline}[1][\normalsize]{%
 \lstset{
-    language=bash,
+    language={},
     basicstyle=\scriptsize\ttfamily{#1},
     showspaces=false,
     showtabs=false,
@@ -40,14 +40,17 @@
     breakatwhitespace=true,
     prebreak={\ttfamily\symbol{'134}},
     %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
-    xleftmargin=.025\textwidth
+    xleftmargin=.025\textwidth,
+    frame=single,
+    frameround=tttt,
+    backgroundcolor=\color{black!10!white}
 }
 }{}
 
 %% read in an example commandline from file
 \newcommand{\commandlineexample}[2][\normalsize]{%
 \lstinputlisting[
-    language=bash,
+    language={},
     basicstyle={\scriptsize\ttfamily{#1}},
     showspaces=false,
     showtabs=false,
@@ -56,7 +59,10 @@
     breakatwhitespace=true,
     prebreak={\ttfamily\symbol{'134}},
     %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
-    xleftmargin=.025\textwidth
+    xleftmargin=.025\textwidth,
+    frame=single,
+    frameround=tttt,
+    backgroundcolor=\color{black!10!white}
 ]{#2}
 }
 
@@ -72,7 +78,10 @@
     breakatwhitespace=true,
     prebreak={\ttfamily\small\symbol{'134}},
     %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
-    xleftmargin=.025\textwidth
+    xleftmargin=.025\textwidth,
+    frame=single,
+    frameround=tttt,
+    backgroundcolor=\color{black!10!white}
 }
 }{}
 
@@ -91,7 +100,10 @@
     xleftmargin=.025\textwidth,
     numbers=left,
     numbersep=5pt,
-    numberstyle=\color{gray}\tiny
+    numberstyle=\color{gray}\tiny,
+    frame=single,
+    frameround=tttt,
+    backgroundcolor=\color{purple!10!white}
 }
 }{}
 
