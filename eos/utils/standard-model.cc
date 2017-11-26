@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -310,7 +310,7 @@ namespace implementation
         double m_c_0 = _m_c_MSbar__qcd();
         double alpha_s_mu0 = alpha_s(m_c_0);
 
-        if (mu >= m_c_0)
+        if (mu >= _mu_c__qcd)
         {
             if (mu <= _mu_b__qcd)
                 return QCD::m_q_msbar(m_c_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
