@@ -30,6 +30,7 @@ libeosutils_la_SOURCES = \
 	integrate.cc integrate.hh integrate-impl.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	iterator-range.hh \
+	join.hh \
 	kinematic.cc kinematic.hh \
 	lcda.cc lcda.hh \
 	lock.cc lock.hh \
@@ -100,6 +101,7 @@ include_eos_utils_HEADERS = \
 	integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	iterator-range.hh \
+	join.hh \
 	kinematic.hh \
 	lcda.hh \
 	lock.hh \
@@ -145,6 +147,7 @@ TESTS = \
 	hdf5_TEST \
 	indirect-iterator_TEST \
 	integrate_TEST \
+	join_TEST \
 	kinematic_TEST \
 	lcda_TEST \
 	log_TEST \
@@ -194,6 +197,8 @@ equation_solver_TEST_SOURCES = equation_solver_TEST.cc
 indirect_iterator_TEST_SOURCES = indirect-iterator_TEST.cc
 
 integrate_TEST_SOURCES = integrate_TEST.cc
+
+join_TEST_SOURCES = join_TEST.cc
 
 kinematic_TEST_SOURCES = kinematic_TEST.cc
 
