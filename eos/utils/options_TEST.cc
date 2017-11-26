@@ -19,6 +19,7 @@
 
 #include <test/test.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/options-impl.hh>
 
 #include <cmath>
 
@@ -126,3 +127,110 @@ class OptionsTest :
             }
         }
 } options_test;
+
+class SwitchOptionTest :
+    public TestCase
+{
+    public:
+        SwitchOptionTest() :
+            TestCase("switch_option_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // Creation with valid default value, value = default value, non-empty list
+            {
+                SwitchOption so
+                {
+                    Options{ { "key", "value1" }, { "unused", "foo" } },
+                    "key",
+                    { "value1", "value2", "value4" },
+                    "value1"
+                };
+                TEST_CHECK_EQUAL(so.value(), "value1");
+            }
+
+            // Creation with unspecified value, non-empty list
+            {
+                SwitchOption so
+                {
+                    Options{ { "unused", "foo" } },
+                    "key",
+                    { "value1", "value2", "value4" },
+                    "value1"
+                };
+                TEST_CHECK_EQUAL(so.value(), "value1");
+            }
+
+            // Creation with non-empty list, no default value
+            {
+                SwitchOption so
+                {
+                    Options{ { "key", "value4" }, { "unused", "foo" } },
+                    "key",
+                    { "value1", "value2", "value4" }
+                };
+                TEST_CHECK_EQUAL(so.value(), "value4");
+            }
+
+            // Creation with unspecified value, non-empty list, no default value
+            {
+                auto test = [] ()
+                {
+                    SwitchOption so
+                    {
+                        Options{ { "unused", "foo" } },
+                        "key",
+                        { "value1", "value2", "value4" }
+                    };
+                };
+                TEST_CHECK_THROWS(UnspecifiedOptionError, test());
+            }
+
+            // Creation with value not in list of allowed values
+            {
+                auto test = [] ()
+                {
+                    SwitchOption so
+                    {
+                        Options{ { "key", "value3"}, { "unused", "foo" } },
+                        "key",
+                        { "value1", "value2", "value4" },
+                        "value1"
+                    };
+                };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+
+            // Creating with empty list
+            {
+                auto test = [] ()
+                {
+                    SwitchOption so
+                    {
+                        Options{ { "key", "value1" }, { "unused", "foo" } },
+                        "key",
+                        { },
+                        "value1"
+                    };
+                };
+                TEST_CHECK_THROWS(InternalError, test());
+            }
+
+            // Creating with empty list
+            {
+                auto test = [] ()
+                {
+                    SwitchOption so
+                    {
+                        Options{ { "key", "value1" }, { "unused", "foo" } },
+                        "key",
+                        { },
+                        "value1"
+                    };
+                };
+                TEST_CHECK_THROWS(InternalError, test());
+            }
+        }
+} switch_option_test;

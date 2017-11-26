@@ -47,6 +47,15 @@ namespace eos
     };
 
     /*!
+     * UnspecifiedOptionError is thrown when a mandatory option is not specified.
+     */
+    struct UnspecifiedOptionError :
+        public Exception
+    {
+        UnspecifiedOptionError(const std::string & key, const std::string & allowed = "") throw ();
+    };
+
+    /*!
      * Options keeps the set of all string options for any Observable.
      */
     class Options :

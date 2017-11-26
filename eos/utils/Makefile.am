@@ -45,7 +45,7 @@ libeosutils_la_SOURCES = \
 	observable_set.cc observable_set.hh \
 	observable_stub.cc observable_stub.hh \
 	one-of.hh \
-	options.cc options.hh \
+	options.cc options.hh options-impl.hh \
 	parameters.cc parameters.hh parameters-fwd.hh \
 	polylog.cc polylog.hh \
 	power_of.hh \

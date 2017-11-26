@@ -155,6 +155,11 @@ namespace eos
     {
     }
 
+    UnspecifiedOptionError::UnspecifiedOptionError(const std::string & key, const std::string & allowed) throw () :
+        Exception("Mandatory option '" + key + "' not specified'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
+    {
+    }
+
     Options
     operator+ (const Options & lhs, const Options & rhs)
     {
