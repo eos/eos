@@ -259,14 +259,18 @@ namespace eos
 
             std::function<double (const Decay_ *, const FunctionArgs_ & ...)> _function;
 
+            Options _default_options;
+
             std::array<KinematicRange, sizeof...(FunctionArgs_)> _kinematic_ranges;
 
         public:
             ConcreteSignalPDFEntry(const QualifiedName & name,
                     const std::function<double (const Decay_ *, const FunctionArgs_ & ...)> & function,
+                    const Options & default_options,
                     const std::array<KinematicRange, sizeof...(FunctionArgs_)> & kinematic_ranges) :
                 _name(name),
                 _function(function),
+                _default_options(default_options),
                 _kinematic_ranges(kinematic_ranges)
             {
             }
@@ -298,7 +302,7 @@ namespace eos
             virtual SignalPDFPtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
 
-                return SignalPDFPtr(new ConcreteSignalPDF<Decay_, FunctionArgs_ ...>(_name, parameters, kinematics, options, _function, _kinematic_ranges));
+                return SignalPDFPtr(new ConcreteSignalPDF<Decay_, FunctionArgs_ ...>(_name, parameters, kinematics, _default_options + options, _function, _kinematic_ranges));
             }
 
             virtual std::ostream & insert(std::ostream & os) const
@@ -310,12 +314,14 @@ namespace eos
     template <typename Decay_, typename ... FunctionArgs_, typename ... KinematicRanges_>
     SignalPDFEntry * make_concrete_signal_pdf_entry(const QualifiedName & name,
             double (Decay_::* function)(const FunctionArgs_ & ...) const,
+            const Options & default_options,
             const KinematicRanges_ & ... kinematic_ranges)
     {
         static_assert(sizeof...(FunctionArgs_) == sizeof...(KinematicRanges_), "Need as many function arguments as kinematics ranges!");
 
         return new ConcreteSignalPDFEntry<Decay_, FunctionArgs_...>(name,
                 std::function<double (const Decay_ *, const FunctionArgs_ & ...)>(std::mem_fn(function)),
+                default_options,
                 std::array<KinematicRange, sizeof...(FunctionArgs_)>{ kinematic_ranges... });
     }
 }
