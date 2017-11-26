@@ -164,6 +164,72 @@ namespace eos
         }
     };
 
+    struct LogGammaConstraintEntry :
+        public ConstraintEntryBase
+    {
+        QualifiedName observable;
+
+        Kinematics kinematics;
+
+        Options options;
+
+        double central, sigma_hi, sigma_lo;
+
+        unsigned number_of_observations;
+
+        LogGammaConstraintEntry(const std::string & name,
+                const QualifiedName & observable,
+                const Kinematics & kinematics, const Options & options,
+                const double & central,
+                const double & sigma_hi, const double & sigma_lo,
+                const unsigned & number_of_observations = 1u) :
+            ConstraintEntryBase(name, observable),
+            observable(observable),
+            kinematics(kinematics),
+            options(options),
+            central(central),
+            sigma_hi(sigma_hi),
+            sigma_lo(sigma_lo),
+            number_of_observations(number_of_observations)
+        {
+        }
+
+        virtual ~LogGammaConstraintEntry() = default;
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("LogGamma");
+
+            return type;
+        }
+
+        virtual Constraint make(const QualifiedName & name, const Options & options) const
+        {
+            Parameters parameters(Parameters::Defaults());
+            ObservableCache cache(parameters);
+
+            ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
+            if (! observable.get())
+                throw InternalError("make_LogGamma_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
+
+            double min = this->central - this->sigma_lo;
+            double max = this->central + this->sigma_hi;
+
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::LogGamma(cache, observable, min, this->central, max);
+
+            return Constraint(name, { observable }, { block });
+        }
+
+        virtual std::ostream & insert(std::ostream & os) const
+        {
+            os << _name.full() << ":" << std::endl;
+            os << "    type: LogGamma" << std::endl;
+            os << "    observable: " << observable << std::endl;
+
+            return os;
+        }
+    };
+
     struct AmorosoLimitConstraintEntry :
         public ConstraintEntryBase
     {

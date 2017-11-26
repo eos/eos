@@ -97,7 +97,6 @@ namespace eos
                     const double & min, const double & central, const double & max,
                     const unsigned & number_of_observations = 1u);
 
-            // todo remove LogGamma block? It is not used anywhere
             /*!
              * Create a new LogLikelihoodBlock for one a single observable with asymmetric uncertainties.
              *
