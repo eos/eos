@@ -30,3 +30,14 @@
     max:     +0.1326
     comments: "GeV, cf. [FLAG2013], eq. (43)"
 
+"decay-constant::J/psi" :
+    central: +0.2773
+    min:     +0.2733
+    max:     +0.2807
+    comments: "GeV, cf. [KMPW2010], table 5, multiplied by 2/3"
+
+"decay-constant::psi(2S)" :
+    central: +0.1980
+    min:     +0.1967
+    max:     +0.2000
+    comments: "GeV, cf. [KMPW2010], table 5, multiplied by 2/3"
