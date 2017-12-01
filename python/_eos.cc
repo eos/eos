@@ -77,7 +77,7 @@ namespace impl
     }
 }
 
-BOOST_PYTHON_MODULE(eos)
+BOOST_PYTHON_MODULE(_eos)
 {
     using namespace boost::python;
     using namespace eos;

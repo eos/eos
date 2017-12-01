@@ -15,13 +15,13 @@ if EOS_ENABLE_PYTHON
 eosdir = $(pkgpythondir)
 eos_PYTHON = 
 
-pyexec_LTLIBRARIES = eos.la
-pyexec_SCRIPTS = eosdata.py
+pyexec_LTLIBRARIES = _eos.la
+pyexec_SCRIPTS = eos.py eosdata.py
 
-eos_la_SOURCES = eos.cc
-eos_la_CXXFLAGS = $(PYTHON_CFLAGS) -I$(top_srcdir) -std=c++0x
-eos_la_LDFLAGS = -module -avoid-version -export-symbols-regex initeos
-eos_la_LIBADD = $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosutils.la -lboost_python$(BOOST_PYTHON_SUFFIX)
+_eos_la_SOURCES = _eos.cc
+_eos_la_CXXFLAGS = $(PYTHON_CFLAGS) -I$(top_srcdir) -std=c++0x
+_eos_la_LDFLAGS = -module -avoid-version -export-symbols-regex initeos
+_eos_la_LIBADD = $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosutils.la -lboost_python$(BOOST_PYTHON_SUFFIX)
 
 TESTS = \
 	eos_TEST.py
