@@ -109,6 +109,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("min", &Parameter::min, return_value_policy<copy_const_reference>())
         .def("name", &Parameter::name, return_value_policy<copy_const_reference>())
         .def("set", &Parameter::set)
+        .def("evaluate", &Parameter::evaluate)
         ;
 
     // Kinematics
