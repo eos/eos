@@ -140,10 +140,10 @@ class PythonTests:
             raise TestFailedError('cannot obtain Constraint name')
 
         for llhb in con.blocks():
-            print llhb.as_string()
+            print(llhb.as_string())
 
         for obs in con.observables():
-            print obs.name()
+            print(obs.name())
 
 
 

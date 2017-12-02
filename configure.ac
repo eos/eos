@@ -153,10 +153,11 @@ AM_CONDITIONAL([EOS_ENABLE_PYTHON], [test "x$enable_python" == "xyes"])
 dnl }}}
 dnl {{{ python checks (you can change the required python version below)
 if test "x$enable_python" == xyes ; then
-	AM_PATH_PYTHON(2.7.0)
+	AM_PATH_PYTHON([3.4])
 	PY_PREFIX=`$PYTHON -c 'import sys ; print(sys.prefix)'`
 	PYTHON_LIBS="-lpython$PYTHON_VERSION"
 	PYTHON_CFLAGS="-I$PY_PREFIX/include/python$PYTHON_VERSION"
+	BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
 	AC_SUBST([PYTHON_LIBS])
 	AC_SUBST([PYTHON_CFLAGS])
 	AC_SUBST([BOOST_PYTHON_SUFFIX])
