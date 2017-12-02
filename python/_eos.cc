@@ -93,7 +93,7 @@ BOOST_PYTHON_MODULE(_eos)
     implicitly_convertible<std::string, QualifiedName>();
 
     // Parameters
-    class_<Parameters>("Parameters", no_init)
+    class_<Parameters>("_Parameters", no_init)
         .def("Defaults", &Parameters::Defaults)
         .staticmethod("Defaults")
         .def("__getitem__", (Parameter (Parameters::*)(const std::string &) const) &Parameters::operator[])
