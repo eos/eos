@@ -2,7 +2,7 @@ plot:
     title: 'Example Plot'
     x:
         label: '$q^2$'
-        unit: '$\text{GeV}^2$'
+        unit: '$\textnormal{GeV}^2$'
         range: [0.0, 26]
     y:
         label: '$\mathcal{B}(B\to \pi\ell\nu)$'
@@ -10,7 +10,13 @@ plot:
         range: [1.0e-6, 1.0e-5]
 
 contents:
-    - name: "B->pi mu nu"
+    - name: 'B->pi mu nu (uncertainty)'
+      type: 'uncertainty'
+      color: 'red'
+      opacity: 0.5
+      hdf5-file: '/tmp/unc_btopilnu.hdf5'
+
+    - name: 'B->pi mu nu'
       type: 'observable'
       color: 'red'
       observable: 'B->pilnu::dBR/ds;l=mu,model=SM'
@@ -18,7 +24,7 @@ contents:
       range: [0.01, 26.0]
       samples: 200
 
-    - name: "B->pi mu nu (V_ub inclusive)"
+    - name: 'B->pi mu nu (V_ub inclusive)'
       type: 'observable'
       color: 'black'
       observable: 'B->pilnu::dBR/ds;l=mu,model=CKMScan'
