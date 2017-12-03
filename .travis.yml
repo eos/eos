@@ -1,20 +1,18 @@
 sudo: required
 dist: trusty
-
 language: cpp
+
+services:
+    - docker
+
 compiler:
     - gcc
 
+env:
+    - DOCKER_TARGET=xenial
+
 before_install:
-    - sudo apt-get -qq update
-    - sudo apt-get install -y libhdf5-serial-dev
-    - sudo apt-get install -y libgsl0-dev
-    - sudo apt-get install -y libboost-filesystem-dev libboost-python-dev libboost-system-dev
-    - sudo apt-get install -y libyaml-cpp-dev
-    - ./.travis/install-minuit2.bash
+    - docker build -t eos:${DOCKER_TARGET} -f .travis/${DOCKER_TARGET} .
 
 script:
-    - ./autogen.bash
-    - ./configure --with-minuit2=/tmp/Minuit2-5.34.14 --enable-python
-    - make all
-    - make check VERBOSE=1
+    - docker run -it eos:xenial /bin/bash /src/.travis/build-and-test.bash ${DOCKER_TARGET}
