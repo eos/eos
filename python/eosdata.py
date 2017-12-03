@@ -143,7 +143,8 @@ class UncertaintyDataFile:
             for i in range(len(self.file['/descriptions/observables'])):
                 desc = self.file['/descriptions/observables/%d' % i]
                 name = desc.attrs.get("name")
-                self.parameters.append([name, sys.float_info.min, sys.float_info.max, False, "flat"])
+                kinematics = desc.attrs.get("kinematics")
+                self.parameters.append([name, kinematics, sys.float_info.min, sys.float_info.max])
         else:
             error('input file has no valid parameter descriptions: is it corrupted?')
 
