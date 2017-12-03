@@ -10,9 +10,10 @@ compiler:
 
 env:
     - DOCKER_TARGET=xenial
+    - DOCKER_TARGET=artful
 
 before_install:
     - docker build -t eos:${DOCKER_TARGET} -f .travis/${DOCKER_TARGET} .
 
 script:
-    - docker run -it eos:xenial /bin/bash /src/.travis/build-and-test.bash ${DOCKER_TARGET}
+    - docker run -it eos:${DOCKER_TARGET} /bin/bash /src/.travis/build-and-test.bash ${DOCKER_TARGET}

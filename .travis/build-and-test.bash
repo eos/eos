@@ -18,6 +18,6 @@ function build_and_test_ubuntu() {
 name=${1}
 shift 1
 
-if [[ "xenial" == ${name} ]] ; then
+if [[ "xenial" == ${name} ]] || [[ "artful" == ${name} ]]; then
     build_and_test_ubuntu $@
 fi
