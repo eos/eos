@@ -159,7 +159,7 @@ if test "x$enable_python" == xyes ; then
 	PYTHON_CFLAGS="-I$PY_PREFIX/include/python$PYTHON_VERSION"
 	BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
 	AC_SUBST([PYTHON_LIBS])
-	AC_SUBST([PYTHON_CFLAGS])
+	AC_SUBST([PYTHON_CXXFLAGS])
 	AC_SUBST([BOOST_PYTHON_SUFFIX])
 fi
 dnl }}}
