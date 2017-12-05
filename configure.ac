@@ -156,8 +156,13 @@ if test "x$enable_python" == xyes ; then
 	AM_PATH_PYTHON([3.3])
 	PY_PREFIX=`$PYTHON -c 'import sys ; print(sys.prefix)'`
 	PYTHON_LIBS="-lpython$PYTHON_VERSION"
-	PYTHON_CFLAGS="-I$PY_PREFIX/include/python$PYTHON_VERSION"
-	BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
+	PYTHON_CXXFLAGS="`python$PYTHON_VERSION-config --includes`"
+	osid="`. /etc/os-release ; echo $ID`"
+	if test "x$os_id" == xubuntu ; then
+		BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
+	elif test "x$os_id" == xcentos ; then
+		BOOST_PYTHON_SUFFIX=""
+	fi
 	AC_SUBST([PYTHON_LIBS])
 	AC_SUBST([PYTHON_CXXFLAGS])
 	AC_SUBST([BOOST_PYTHON_SUFFIX])
