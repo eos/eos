@@ -204,7 +204,7 @@ namespace eos
 
             ~ConcreteObservableRatio() = default;
 
-            virtual const std::string & name() const
+            virtual const QualifiedName & name() const
             {
                 return _name;
             }
