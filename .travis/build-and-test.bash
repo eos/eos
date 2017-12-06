@@ -15,9 +15,16 @@ function build_and_test_ubuntu() {
     popd
 }
 
-name=${1}
+export OS=${1}
 shift 1
 
-if [[ "xenial" == ${name} ]] || [[ "artful" == ${name} ]]; then
+export CXX=${1}
+shift 1
+
+echo "==========="
+${CXX} --version
+echo "==========="
+
+if [[ "xenial" == ${OS} ]] || [[ "artful" == ${OS} ]]; then
     build_and_test_ubuntu $@
 fi
