@@ -130,13 +130,24 @@ namespace eos
             /* b->u Wilson coefficients */
             virtual WilsonCoefficients<BToU> wilson_coefficients_b_to_u(const bool & cp_conjugate) const;
     };
+    
+    template <> class SMComponent<components::DeltaBC1> :
+    public virtual ModelComponent<components::DeltaBC1>
+    {
+    public:
+        SMComponent(const Parameters &, ParameterUser &);
+        
+        /* b->c Wilson coefficients */
+        virtual WilsonCoefficients<BToC> wilson_coefficients_b_to_c(const bool & cp_conjugate) const;
+    };
 
     class StandardModel :
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
         public SMComponent<components::DeltaBS1>,
-        public SMComponent<components::DeltaBU1>
+        public SMComponent<components::DeltaBU1>,
+        public SMComponent<components::DeltaBC1>
     {
         public:
             StandardModel(const Parameters &);

@@ -141,7 +141,36 @@ namespace eos
             /* b->u Wilson coefficients */
             virtual WilsonCoefficients<BToU> wilson_coefficients_b_to_u(const bool & cp_conjugate) const;
     };
-
+    
+    template <>
+    class WilsonScanComponent<components::DeltaBC1> :
+    public virtual ModelComponent<components::DeltaBC1>
+    {
+    private:
+        /* b->c Wilson coefficients */
+        UsedParameter _re_csl;
+        UsedParameter _im_csl;
+        UsedParameter _re_csr;
+        UsedParameter _im_csr;
+        UsedParameter _re_cvl;
+        UsedParameter _im_cvl;
+        UsedParameter _re_cvr;
+        UsedParameter _im_cvr;
+        UsedParameter _re_ct;
+        UsedParameter _im_ct;
+        std::function<complex<double> ()> _csl;
+        std::function<complex<double> ()> _csr;
+        std::function<complex<double> ()> _cvl;
+        std::function<complex<double> ()> _cvr;
+        std::function<complex<double> ()> _ct;
+        
+    public:
+        WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+        
+        /* b->c Wilson coefficients */
+        virtual WilsonCoefficients<BToC> wilson_coefficients_b_to_c(const bool & cp_conjugate) const;
+    };
+    
     /*!
      * A model with all possible operators; their Wilson coefficients
      * are allowed to have arbitrary values.
@@ -151,7 +180,8 @@ namespace eos
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
         public WilsonScanComponent<components::DeltaBS1>,
-        public WilsonScanComponent<components::DeltaBU1>
+        public WilsonScanComponent<components::DeltaBU1>,
+        public WilsonScanComponent<components::DeltaBC1>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -179,7 +209,8 @@ namespace eos
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
         public ConstrainedWilsonScanComponent,
-        public WilsonScanComponent<components::DeltaBU1>
+        public WilsonScanComponent<components::DeltaBU1>,
+        public WilsonScanComponent<components::DeltaBC1>
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);

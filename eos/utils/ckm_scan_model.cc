@@ -112,7 +112,8 @@ namespace eos
         CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
         SMComponent<components::DeltaBS1>(parameters, *this),
-        SMComponent<components::DeltaBU1>(parameters, *this)
+        SMComponent<components::DeltaBU1>(parameters, *this),
+        SMComponent<components::DeltaBC1>(parameters, *this)
     {
     }
 

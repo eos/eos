@@ -77,7 +77,8 @@ namespace eos
         public CKMScanComponent,
         public SMComponent<components::QCD>,
         public SMComponent<components::DeltaBS1>,
-        public SMComponent<components::DeltaBU1>
+        public SMComponent<components::DeltaBU1>,
+        public SMComponent<components::DeltaBC1>
     {
         public:
             CKMScanModel(const Parameters &, const Options &);

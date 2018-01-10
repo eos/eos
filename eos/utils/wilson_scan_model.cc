@@ -259,6 +259,47 @@ namespace eos
         return result;
     }
 
+    /* b->c Wilson coefficients */
+    WilsonScanComponent<components::DeltaBC1>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+    _re_csl(p["b->clnu::Re{cSL}"], u),
+    _im_csl(p["b->clnu::Im{cSL}"], u),
+    _re_csr(p["b->clnu::Re{cSR}"], u),
+    _im_csr(p["b->clnu::Im{cSR}"], u),
+    _re_cvl(p["b->clnu::Re{cVL}"], u),
+    _im_cvl(p["b->clnu::Im{cVL}"], u),
+    _re_cvr(p["b->clnu::Re{cVR}"], u),
+    _im_cvr(p["b->clnu::Im{cVR}"], u),
+    _re_ct(p["b->clnu::Re{cT}"], u),
+    _im_ct(p["b->clnu::Im{cT}"], u),
+    _csl(std::bind(&wcimplementation::cartesian, _re_csl, _im_csl)),
+    _csr(std::bind(&wcimplementation::cartesian, _re_csr, _im_csr)),
+    _cvl(std::bind(&wcimplementation::cartesian, _re_cvl, _im_cvl)),
+    _cvr(std::bind(&wcimplementation::cartesian, _re_cvr, _im_cvr)),
+    _ct(std::bind(&wcimplementation::cartesian, _re_ct, _im_ct))
+    {
+    }
+    
+    WilsonCoefficients<BToC>
+    WilsonScanComponent<components::DeltaBC1>::wilson_coefficients_b_to_c(const bool & cp_conjugate) const
+    {
+        WilsonCoefficients<BToC> result
+        {
+            {{
+                _cvl(), _cvr(), _csl(), _csr(), _ct()
+            }},
+        };
+        
+        if (cp_conjugate)
+        {
+            for (auto c = result._coefficients.begin(), c_end = result._coefficients.end() ; c != c_end ; ++c)
+            {
+                *c = conj(*c);
+            }
+        }
+        
+        return result;
+    }
+    
     ConstrainedWilsonScanComponent::ConstrainedWilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
         WilsonScanComponent<components::DeltaBS1>(p, o, u)
     {
@@ -289,7 +330,8 @@ namespace eos
         SMComponent<components::CKM>(parameters, *this),
         SMComponent<components::QCD>(parameters, *this),
         WilsonScanComponent<components::DeltaBS1>(parameters, options, *this),
-        WilsonScanComponent<components::DeltaBU1>(parameters, options, *this)
+        WilsonScanComponent<components::DeltaBU1>(parameters, options, *this),
+        WilsonScanComponent<components::DeltaBC1>(parameters, options, *this)
     {
     }
 
@@ -307,7 +349,8 @@ namespace eos
         SMComponent<components::CKM>(parameters, *this),
         SMComponent<components::QCD>(parameters, *this),
         ConstrainedWilsonScanComponent(parameters, options, *this),
-        WilsonScanComponent<components::DeltaBU1>(parameters, options, *this)
+        WilsonScanComponent<components::DeltaBU1>(parameters, options, *this),
+        WilsonScanComponent<components::DeltaBC1>(parameters, options, *this)
     {
     }
 

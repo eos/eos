@@ -41,6 +41,7 @@ namespace eos
         struct QCD;
         struct DeltaBS1;
         struct DeltaBU1;
+        struct DeltaBC1;
         ///@}
     }
 
@@ -104,8 +105,18 @@ namespace eos
     template <> class ModelComponent<components::DeltaBU1>
     {
         public:
-            /* b->s Wilson coefficients */
+            /* b->u Wilson coefficients */
             virtual WilsonCoefficients<BToU> wilson_coefficients_b_to_u(const bool & cp_conjugate = false) const = 0;
+    };
+    
+    /*!
+     * Base class for the Delta B = 1 = Delta C CC component of models.
+     */
+    template <> class ModelComponent<components::DeltaBC1>
+    {
+    public:
+        /* b->c Wilson coefficients */
+        virtual WilsonCoefficients<BToC> wilson_coefficients_b_to_c(const bool & cp_conjugate = false) const = 0;
     };
 
     /*!
@@ -116,7 +127,8 @@ namespace eos
         public virtual ModelComponent<components::CKM>,
         public virtual ModelComponent<components::QCD>,
         public virtual ModelComponent<components::DeltaBS1>,
-        public virtual ModelComponent<components::DeltaBU1>
+        public virtual ModelComponent<components::DeltaBU1>,
+        public virtual ModelComponent<components::DeltaBC1>
     {
         public:
             virtual ~Model() = 0;
