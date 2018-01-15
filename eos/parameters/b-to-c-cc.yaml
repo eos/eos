@@ -1,0 +1,41 @@
+# b->c Wilson coefficients
+"b->clnu::Re{cVL}" :
+    central: 1.0
+    min:     1.0
+    max:     1.0
+"b->clnu::Im{cVL}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->clnu::Re{cVR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->clnu::Im{cVR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->clnu::Re{cSL}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->clnu::Im{cSL}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->clnu::Re{cSR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->clnu::Im{cSR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->clnu::Re{cT}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->clnu::Im{cT}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
