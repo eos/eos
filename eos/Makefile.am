@@ -47,6 +47,8 @@ check_PROGRAMS = \
 
 constraint_TEST_SOURCES = constraint_TEST.cc
 
+references_TEST_SOURCES = references_TEST.in
+
 pkgdata_DATA = references.yaml
 EXTRA_DIST = \
 	references.yaml \
