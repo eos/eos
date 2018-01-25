@@ -32,12 +32,14 @@ include_eos_rarebdecays_HEADERS = \
 	charm-loops.hh \
 	em-contributions.hh \
 	exclusive-b-to-dilepton.hh \
+	exclusive-b-to-s-dilepton.hh \
 	exclusive-b-to-s-dilepton-large-recoil.hh \
 	exclusive-b-to-s-dilepton-low-recoil.hh \
 	exclusive-b-to-s-gamma.hh \
 	inclusive-b-to-s-dilepton.hh \
 	inclusive-b-to-s-gamma.hh \
 	hard-scattering.hh \
+	lambda-b-to-lambda-dilepton.hh \
 	long-distance.hh \
 	qcdf_integrals.hh
 
