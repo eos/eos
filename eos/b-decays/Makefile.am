@@ -23,6 +23,15 @@ libeosbdecays_la_LIBADD = \
 
 include_eos_bdecaysdir = $(includedir)/eos/b-decays
 include_eos_bdecays_HEADERS = \
+	b-to-d-l-nu.hh \
+	b-to-d-l-x-nu.hh \
+	b-to-l-nu.hh \
+	b-to-pi-l-nu.hh \
+	b-to-pi-pi-l-nu.hh \
+	b-to-pi-l-x-nu.hh \
+	b-to-v-l-nu.hh \
+	bs-to-kstar-l-nu.hh \
+	inclusive-b-to-u.hh \
 	properties.hh
 
 EXTRA_DIST =
