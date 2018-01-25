@@ -1,6 +1,8 @@
 CLEANFILES = *~
 
-EXTRA_DIST = eosdata.py
+EXTRA_DIST = \
+	eos.py \
+	eosdata.py
 
 AM_TESTS_ENVIRONMENT = \
        export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters"; \
