@@ -160,7 +160,7 @@ if test "x$enable_python" == xyes ; then
 	PY_PREFIX=`$PYTHON -c 'import sys ; print(sys.prefix)'`
 	PYTHON_LIBS="-lpython$PYTHON_VERSION"
 	PYTHON_CXXFLAGS="`python$PYTHON_VERSION-config --includes`"
-	osid="`. /etc/os-release ; echo $ID`"
+	os_id="`. /etc/os-release ; echo $ID`"
 	if test "x$os_id" == xubuntu ; then
 		BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
 	elif test "x$os_id" == xcentos ; then
