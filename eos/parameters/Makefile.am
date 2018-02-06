@@ -5,6 +5,7 @@ PARAMETER_FILES = \
 	b-to-s-fcnc.yaml \
 	b-to-s-long-distance.yaml \
 	b-to-u-cc.yaml \
+	b-to-c-cc.yaml \
 	ckm.yaml \
 	decay-constants.yaml \
 	form-factors.yaml \
