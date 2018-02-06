@@ -11,7 +11,7 @@ function build_and_test_ubuntu() {
         --prefix=/usr \
         || exit 1
     make all || exit 1
-    make check VERBOSE=1 || exit 1
+    make distcheck DISTCHECK_CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr" VERBOSE=1 || exit 1
     popd
 }
 
