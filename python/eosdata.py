@@ -161,8 +161,8 @@ class UncertaintyDataFile:
 
         # adjust min,max range for each parameter based on data
         for i in range(0, len(self.parameters)):
-            self.parameters[i][1] = numpy.min(data[:, i])
-            self.parameters[i][2] = numpy.max(data[:, i])
+            self.parameters[i][2] = numpy.min(data[:, i])
+            self.parameters[i][3] = numpy.max(data[:, i])
 
         return data
 
