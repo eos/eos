@@ -142,7 +142,7 @@ AC_ARG_ENABLE([pmc],
 	[AS_HELP_STRING([--enable-pmc], [enables usage of pmclib by EOS])],
 	[],
 	[])
-if test "x$enable_PMC" == "xyes" ; then
+if test "x$enable_pmc" == "xyes" ; then
 	AC_DEFINE([EOS_ENABLE_PMC], [1], [Define if PMC is enabled.])
 fi
 AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$enable_pmc" == "xyes"])
