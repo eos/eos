@@ -42,7 +42,7 @@ def main():
     parameters = datafile.parameters
 
     for i in range(0, len(parameters)):
-        print '# %s' % parameters[i][0]
+        print '# %s (%s)' % (parameters[i][0],parameters[i][1])
 
         x = numpy.sort(data[:, i])
         print '        median: %f' % numpy.percentile(x, 0.5)
