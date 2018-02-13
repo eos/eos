@@ -332,7 +332,7 @@ namespace eos
         {
             std::function<std::array<double, 12> (const double &)> integrand =
                     std::bind(&Implementation<BToKstarDilepton<LowRecoil>>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate(integrand, 64, s_min, s_max);
+            std::array<double, 12> integrated_angular_coefficients_array = integrate1D(integrand, 64, s_min, s_max);
 
             return array_to_angular_coefficients(integrated_angular_coefficients_array);
         }
@@ -908,7 +908,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_forward_backward_asymmetry, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate1D(integrand, 64, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -972,7 +972,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_longitudinal_polarisation, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate1D(integrand, 64, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1022,7 +1022,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_2, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate1D(integrand, 64, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1039,7 +1039,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_3, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate1D(integrand, 64, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1056,7 +1056,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_transverse_asymmetry_4, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate1D(integrand, 64, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1136,7 +1136,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_1, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate1D(integrand, 64, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1152,7 +1152,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_2, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate1D(integrand, 64, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1168,7 +1168,7 @@ namespace eos
     {
         std::function<double (const double &)> integrand = std::bind(&BToKstarDilepton<LowRecoil>::differential_h_3, this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max) / (s_max - s_min);
+        return integrate1D(integrand, 64, s_min, s_max) / (s_max - s_min);
     }
 
     double
@@ -1929,7 +1929,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> integrand = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max);
+        return integrate1D(integrand, 64, s_min, s_max);
     }
 
     double
@@ -1938,7 +1938,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKDilepton<LowRecoil>::differential_branching_ratio),
                 this, std::placeholders::_1);
 
-        return integrate(integrand, 64, s_min, s_max);
+        return integrate1D(integrand, 64, s_min, s_max);
     }
 
     double
@@ -1948,9 +1948,9 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> integrand = std::bind(&BToKDilepton<LowRecoil>::differential_branching_ratio,
                 this, std::placeholders::_1);
 
-        double br = integrate(integrand, 64, s_min, s_max);
+        double br = integrate1D(integrand, 64, s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate(integrand, 64, s_min, s_max);
+        double br_bar = integrate1D(integrand, 64, s_min, s_max);
 
         return (br + br_bar) / 2.0;
     }
@@ -1963,8 +1963,8 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate1D(num, 64, s_min, s_max);
+        double denom_integrated = integrate1D(denom, 64, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -1978,13 +1978,13 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate1D(num, 64, s_min, s_max);
+        double denom_integrated = integrate1D(denom, 64, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate(num, 64, s_min, s_max);
-        denom_integrated += integrate(denom, 64, s_min, s_max);
+        num_integrated += integrate1D(num, 64, s_min, s_max);
+        denom_integrated += integrate1D(denom, 64, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -1997,8 +1997,8 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate1D(num, 64, s_min, s_max);
+        double denom_integrated = integrate1D(denom, 64, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2012,13 +2012,13 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate(num, 64, s_min, s_max);
-        double denom_integrated = integrate(denom, 64, s_min, s_max);
+        double num_integrated = integrate1D(num, 64, s_min, s_max);
+        double denom_integrated = integrate1D(denom, 64, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate(num, 64, s_min, s_max);
-        denom_integrated += integrate(denom, 64, s_min, s_max);
+        num_integrated += integrate1D(num, 64, s_min, s_max);
+        denom_integrated += integrate1D(denom, 64, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2032,13 +2032,13 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         double br_electrons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
-            br_electrons = integrate(integrand, 64, s_min, s_max);
+            br_electrons = integrate1D(integrand, 64, s_min, s_max);
         }
 
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            br_muons = integrate(integrand, 64, s_min, s_max);
+            br_muons = integrate1D(integrand, 64, s_min, s_max);
         }
 
         // cf. [BHP2007], Eq. (4.10), p. 6
@@ -2053,9 +2053,9 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> integrand = std::bind(std::mem_fn(&Implementation<BToKDilepton<LowRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double gamma = integrate(integrand, 64, s_min, s_max);
+        double gamma = integrate1D(integrand, 64, s_min, s_max);
         _imp->cp_conjugate = true;
-        double gamma_bar = integrate(integrand, 64, s_min, s_max);
+        double gamma_bar = integrate1D(integrand, 64, s_min, s_max);
 
         return (gamma - gamma_bar) / (gamma + gamma_bar);
     }

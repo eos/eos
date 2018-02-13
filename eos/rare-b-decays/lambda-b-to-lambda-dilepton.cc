@@ -486,7 +486,7 @@ namespace eos
         {
             std::function<std::array<double, 34> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
 
-            return integrate(integrand, 32, s_min, s_max);
+            return integrate1D(integrand, 32, s_min, s_max);
         }
 
         inline lambdab_to_lambda_dilepton::AngularObservables differential_angular_observables(const double & s)
@@ -1076,7 +1076,7 @@ namespace eos
         {
             std::function<std::array<double, 34> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
 
-            return integrate(integrand, 32, s_min, s_max);
+            return integrate1D(integrand, 32, s_min, s_max);
         }
 
         inline lambdab_to_lambda_dilepton::AngularObservables differential_angular_observables(const double & s)

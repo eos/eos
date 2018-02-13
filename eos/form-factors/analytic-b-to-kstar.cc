@@ -232,7 +232,7 @@ namespace eos
             const auto etaf0   = etaf(q2, sigma0);
             const auto Detaf0  = Detaf(q2, sigma0);
 
-            const auto integral = integrate(integrand, 128, 0.0, sigma0);
+            const auto integral = integrate1D(integrand, 128, 0.0, sigma0);
             const auto delta = (iota20 - (1.0 / M2 + Detaf0 / m_B2) / 2.0 * iota30 - etaf0 / (2.0 * m_B2) * Diota30)
                 * std::exp(-s0 / M2) / m_B2 * etaf0;
 
@@ -386,7 +386,7 @@ namespace eos
             const auto etaf0   = etaf(q2, sigma0);
             const auto Detaf0  = Detaf(q2, sigma0);
 
-            const auto integral = integrate(integrand, 128, 0.0, sigma0);
+            const auto integral = integrate1D(integrand, 128, 0.0, sigma0);
             const auto delta = (iota20 - (1.0 / M2 + Detaf0 / m_B2) / 2.0 * iota30 - etaf0 / (2.0 * m_B2) * Diota30)
                 * std::exp(-s0 / M2) / m_B2 * etaf0;
 
@@ -555,7 +555,7 @@ namespace eos
             const auto etaf0   = etaf(q2, sigma0);
             const auto Detaf0  = Detaf(q2, sigma0);
 
-            const auto integral = integrate(integrand, 128, 0.0, sigma0);
+            const auto integral = integrate1D(integrand, 128, 0.0, sigma0);
             const auto delta = (iota20 - (1.0 / M2 + Detaf0 / m_B2) / 2.0 * iota30 - etaf0 / (2.0 * m_B2) * Diota30)
                 * std::exp(-s0 / M2) / m_B2 * etaf0;
 
@@ -723,7 +723,7 @@ namespace eos
             const auto etaf0   = etaf(q2, sigma0);
             const auto Detaf0  = Detaf(q2, sigma0);
 
-            const auto integral = integrate(integrand, 128, 0.0, sigma0);
+            const auto integral = integrate1D(integrand, 128, 0.0, sigma0);
             const auto delta = (iota20 - (1.0 / M2 + Detaf0 / m_B2) / 2.0 * iota30 - etaf0 / (2.0 * m_B2) * Diota30)
                 * std::exp(-s0 / M2) / m_B2 * etaf0;
 
@@ -856,7 +856,7 @@ namespace eos
             const auto etaf0   = etaf(q2, sigma0);
             const auto Detaf0  = Detaf(q2, sigma0);
 
-            const auto integral = integrate(integrand, 128, 0.0, sigma0);
+            const auto integral = integrate1D(integrand, 128, 0.0, sigma0);
             const auto delta = (iota20 - (1.0 / M2 + Detaf0 / m_B2) / 2.0 * iota30 - etaf0 / (2.0 * m_B2) * Diota30)
                 * std::exp(-s0 / M2) / m_B2 * etaf0;
 
@@ -1017,7 +1017,7 @@ namespace eos
             const auto etaf0   = etaf(q2, sigma0);
             const auto Detaf0  = Detaf(q2, sigma0);
 
-            const auto integral = integrate(integrand, 128, 0.0, sigma0);
+            const auto integral = integrate1D(integrand, 128, 0.0, sigma0);
             const auto delta = (iota20 - (1.0 / M2 + Detaf0 / m_B2) / 2.0 * iota30 - etaf0 / (2.0 * m_B2) * Diota30)
                 * std::exp(-s0 / M2) / m_B2 * etaf0;
 
@@ -1198,7 +1198,7 @@ namespace eos
             const auto etaf0   = etaf(q2, sigma0);
             const auto Detaf0  = Detaf(q2, sigma0);
 
-            const auto integral = integrate(integrand, 128, 0.0, sigma0);
+            const auto integral = integrate1D(integrand, 128, 0.0, sigma0);
             const auto delta = (iota20 - (1.0 / M2 + Detaf0 / m_B2) / 2.0 * iota30 - etaf0 / (2.0 * m_B2) * Diota30)
                 * std::exp(-s0 / M2) / m_B2 * etaf0;
 
@@ -1266,7 +1266,7 @@ namespace eos
             const auto etaf0   = etaf(q2, sigma0);
             const auto Detaf0  = Detaf(q2, sigma0);
 
-            const auto integral = integrate(integrand, 128, 0.0, sigma0);
+            const auto integral = integrate1D(integrand, 128, 0.0, sigma0);
             const auto delta = (iota20 - (1.0 / M2 + Detaf0 / m_B2) / 2.0 * iota30 - etaf0 / (2.0 * m_B2) * Diota30)
                 * std::exp(-s0 / M2) / m_B2 * etaf0;
 
@@ -1322,7 +1322,7 @@ namespace eos
             const auto etaf0   = etaf(q2, sigma0);
             const auto Detaf0  = Detaf(q2, sigma0);
 
-            const auto integral = integrate(integrand, 128, 0.0, sigma0);
+            const auto integral = integrate1D(integrand, 128, 0.0, sigma0);
             const auto delta = (iota20 - (1.0 / M2 + Detaf0 / m_B2) / 2.0 * iota30 - etaf0 / (2.0 * m_B2) * Diota30)
                 * std::exp(-s0 / M2) / m_B2 * etaf0;
 

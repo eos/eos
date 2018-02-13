@@ -38,10 +38,10 @@ namespace eos
      * @param a      Lower limit of the domain of integration.
      * @param b      Upper limit of the domain of integration.
      */
-    double integrate(const std::function<double (const double &)> & f, unsigned n, const double & a, const double & b);
-    complex<double> integrate(const std::function<complex<double> (const double &)> & f, unsigned n, const double & a, const double & b);
+    double integrate1D(const std::function<double (const double &)> & f, unsigned n, const double & a, const double & b);
+    complex<double> integrate1D(const std::function<complex<double> (const double &)> & f, unsigned n, const double & a, const double & b);
 
-    template <std::size_t k> std::array<double, k> integrate(const std::function<std::array<double, k> (const double &)> & f, unsigned n, const double & a, const double & b);
+    template <std::size_t k> std::array<double, k> integrate1D(const std::function<std::array<double, k> (const double &)> & f, unsigned n, const double & a, const double & b);
     /// @}
 }
 
