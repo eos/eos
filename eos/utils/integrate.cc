@@ -20,8 +20,19 @@
 #include <eos/utils/integrate.hh>
 #include <eos/utils/matrix.hh>
 
+#include <gsl/gsl_errno.h>
+
 #include <limits>
 #include <vector>
+
+namespace
+{
+    double gsl_function_adapter(double x, void *params)
+    {
+        const auto& f = *static_cast<eos::GSL::fdd*>(params);
+        return f(x);
+    }
+}
 
 namespace eos
 {
@@ -149,5 +160,129 @@ namespace eos
         }
 
         return result;
+    }
+
+    namespace GSL
+    {
+        QNG::Config::Config() :
+            _epsabs(1e-3),
+            _epsrel(1e-4)
+        {
+        }
+
+        double QNG::Config::epsabs() const
+        {
+            return _epsabs;
+        }
+
+        QNG::Config & QNG::Config::epsabs(const double &x)
+        {
+            _epsabs = x;
+            return *this;
+        }
+
+        double QNG::Config::epsrel() const
+        {
+            return _epsrel;
+        }
+
+        QNG::Config & QNG::Config::epsrel(const double &x)
+        {
+            _epsrel = x;
+            return *this;
+        }
+
+        QAGS::Workspace::Workspace(int size) :
+            _work_space(gsl_integration_workspace_alloc(size))
+        {
+        }
+
+        QAGS::Workspace::~Workspace()
+        {
+            gsl_integration_workspace_free(_work_space);
+        }
+
+        QAGS::Config::Config() :
+            _qng(),
+            _key(2)
+        {
+        }
+
+        double QAGS::Config::epsabs() const
+        {
+            return _qng.epsabs();
+        }
+
+        QAGS::Config & QAGS::Config::epsabs(const double &x)
+        {
+            _qng.epsabs(x);
+            return *this;
+        }
+
+        double QAGS::Config::epsrel() const
+        {
+            return _qng.epsrel();
+        }
+
+        QAGS::Config & QAGS::Config::epsrel(const double &x)
+        {
+            _qng.epsrel(x);
+            return *this;
+        }
+
+        int QAGS::Config::key() const
+        {
+            return _key;
+        }
+
+        QAGS::Config & QAGS::Config::key(const int & x)
+        {
+            _key = x;
+            return *this;
+        }
+    }
+
+    template <>
+    double integrate<GSL::QNG>(const GSL::fdd &f, const double &a, const double &b, const GSL::QNG::Config &config)
+    {
+        double result, abserr;
+        size_t neval;
+        gsl_function F;
+        F.function = &gsl_function_adapter;
+        F.params = (void*)&f;
+
+        auto status = gsl_integration_qng(&F, a, b, config.epsabs(), config.epsrel(),
+                                          &result, &abserr, &neval);
+
+        if (status)
+        {
+            throw IntegrationError(gsl_strerror(status));
+        }
+        return result;
+    }
+
+    template <>
+    double integrate<GSL::QAGS>(const GSL::fdd &f, const double &a, const double &b, const GSL::QAGS::Config &config)
+    {
+        double result, abserr;
+        gsl_function F;
+        F.function = &gsl_function_adapter;
+        F.params = (void*)&f;
+
+        auto status = gsl_integration_qag(&F, a, b, config.epsabs(), config.epsrel(),
+                                          GSL::work_space.limit(), config.key(),
+                                          GSL::work_space,
+                                          &result, &abserr);
+
+        if (status)
+        {
+            throw IntegrationError(gsl_strerror(status));
+        }
+        return result;
+    }
+
+    IntegrationError::IntegrationError(const std::string & message) throw () :
+        Exception(message)
+    {
     }
 }

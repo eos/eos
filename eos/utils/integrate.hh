@@ -21,6 +21,13 @@
 #define EOS_GUARD_SRC_UTILS_INTEGRATE_HH 1
 
 #include <eos/utils/complex.hh>
+#include <eos/utils/exception.hh>
+
+// TODO Didn't manage to forward declare C struct
+// struct gsl_integration_workspace;
+// typedef gsl_integration_workspace gsl_integration_workspace;
+// struct gsl_integration_workspace;
+#include <gsl/gsl_integration.h>
 
 #include <array>
 #include <functional>
@@ -43,6 +50,88 @@ namespace eos
 
     template <std::size_t k> std::array<double, k> integrate1D(const std::function<std::array<double, k> (const double &)> & f, unsigned n, const double & a, const double & b);
     /// @}
+
+namespace GSL
+{
+    using fdd = std::function<double(const double &)>;
+    struct QNG
+    {
+        class Config
+        {
+            public:
+                Config();
+
+                double epsabs() const;
+                Config& epsabs(const double& x);
+
+                double epsrel() const;
+                Config& epsrel(const double& x);
+            private:
+              double _epsabs, _epsrel;
+        };
+    };
+
+    struct QAGS
+    {
+        class Workspace
+        {
+        public:
+            Workspace(int limit = 1000);
+            Workspace(const Workspace &) = delete;
+            Workspace(Workspace &&) = delete;
+            ~Workspace();
+            Workspace &operator=(const Workspace &) = delete;
+            Workspace &operator=(Workspace &&) = delete;
+            operator gsl_integration_workspace *() const { return _work_space; }
+            int limit() const { return _work_space->limit; }
+        private:
+            gsl_integration_workspace *_work_space;
+        };
+
+        class Config
+        {
+            public:
+                Config();
+
+                double epsabs() const;
+                Config& epsabs(const double& x);
+
+                double epsrel() const;
+                Config& epsrel(const double& x);
+
+                int key() const;
+                Config& key(const int&);
+            private:
+                QNG::Config _qng;
+                int _key;
+        };
+    };
+
+    static thread_local QAGS::Workspace work_space;
+}
+
+    /// @{
+    /*!
+     * Numerically integrate functions of one real-valued parameter.
+     *
+     * Two methods from the
+     * GNU scientific library are wrapped:
+     * 1) QNG: the non-adaptive Gauss-Kronrod rule
+     * 2) QAGS: the adaptive Clenshaw-Kurtis rule
+     */
+    /// @}
+    template <typename Method_>
+    double integrate(const std::function<double(const double &)> & f,
+                     const double &a, const double &b,
+                     const typename Method_::Config &config = typename Method_::Config());
+
+    class IntegrationError :
+        public Exception
+    {
+        public:
+            IntegrationError(const std::string & message) throw ();
+    };
+
 }
 
 #endif
