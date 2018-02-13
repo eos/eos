@@ -59,19 +59,19 @@ class IntegrateTest :
 
         virtual void run() const
         {
-            double q1 = integrate(std::function<double (const double &)>(&f1), 16, 0.0, 1.0), i1 = 1.0;
+            double q1 = integrate1D(std::function<double (const double &)>(&f1), 16, 0.0, 1.0), i1 = 1.0;
             std::cout << "\\int_0.0^1.0 f1(x) dx = " << q1 << ", eps = " << std::abs(i1 - q1) / q1 << " over 16 points" << std::endl;
             TEST_CHECK(std::abs(i1 - q1) / i1 < 0.01);
 
-            double q2 = integrate(std::function<double (const double &)>(&f2), 16, 0.00, 0.999999), i2 = 3.0;
+            double q2 = integrate1D(std::function<double (const double &)>(&f2), 16, 0.00, 0.999999), i2 = 3.0;
             std::cout << "\\int_0.0^1.0 f2(x) dx = " << q2 << ", eps = " << std::abs(i2 - q2) / q2 << " over 16 points" << std::endl;
             TEST_CHECK(std::abs(i2 - q2) / i2 < 0.01);
 
-            double q3 = integrate(std::function<double (const double &)>(&f3), 16, 0.00, 10.0), i3 = 1.0 - std::exp(-10.0);
+            double q3 = integrate1D(std::function<double (const double &)>(&f3), 16, 0.00, 10.0), i3 = 1.0 - std::exp(-10.0);
             std::cout << "\\int_0.0^10.0 f3(x) dx = " << q3 << ", eps = " << std::abs(i3 - q3) / q3 << " over 16 points" << std::endl;
             TEST_CHECK(std::abs(i3 - q3) / i3 < 0.01);
 
-            double q4 = integrate(std::function<double (const double &)>(&f4), 16, 1.0, std::exp(1)), i4 = 1.0;
+            double q4 = integrate1D(std::function<double (const double &)>(&f4), 16, 1.0, std::exp(1)), i4 = 1.0;
             std::cout << "\\int_0.0^10.0 f4(x) dx = " << q4 << ", eps = " << std::abs(i4 - q4) / q4 << " over 16 points" << std::endl;
             TEST_CHECK(std::abs(i4 - q4) / i4 < 0.01);
         }

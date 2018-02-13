@@ -553,7 +553,7 @@ namespace eos
     double
     BToXsDilepton<HLMW2005>::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
-        return integrate(std::function<double (const double &)>(
+        return integrate1D(std::function<double (const double &)>(
                     std::bind(&BToXsDilepton<HLMW2005>::differential_branching_ratio, this, std::placeholders::_1)),
                 32, s_min, s_max);
     }

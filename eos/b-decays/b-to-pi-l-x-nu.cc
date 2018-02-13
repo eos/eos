@@ -83,7 +83,7 @@ namespace eos
         {
             std::function<double (const double &)> integrand = std::bind(&Implementation<BToPiLeptonInclusiveNeutrinos>::differential_decay_width_1nu, this, std::placeholders::_1);
             const double s_min = 0.0, s_max = power_of<2>(m_B() - m_pi());
-            double Gamma_1 = integrate(integrand, 128, s_min, s_max);
+            double Gamma_1 = integrate1D(integrand, 128, s_min, s_max);
 
             double fp = form_factors->f_p(s);
             double lam = lambda(m_B * m_B, m_pi * m_pi, s);
@@ -110,7 +110,7 @@ namespace eos
         {
             std::function<double (const double &)> integrand = std::bind(&Implementation<BToPiLeptonInclusiveNeutrinos>::differential_decay_width_3nu, this, std::placeholders::_1);
             const double s_min = 3.16, s_max = power_of<2>(m_B() - m_pi());
-            const double Gamma_3 = integrate(integrand, 128, s_min, s_max);
+            const double Gamma_3 = integrate1D(integrand, 128, s_min, s_max);
 
             const double fp = form_factors->f_p(s), fp2 = fp * fp;
             const double f0 = form_factors->f_0(s), f02 = f0 * f0;

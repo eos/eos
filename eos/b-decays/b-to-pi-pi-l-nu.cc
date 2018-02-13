@@ -202,7 +202,7 @@ namespace eos
                 &Implementation<BToPiPiLeptonNeutrino>::differential_branching_ratio,
                 _imp.get(), q2, k2, std::placeholders::_1);
 
-        return integrate(integrand, 64, -1.0, +1.0);
+        return integrate1D(integrand, 64, -1.0, +1.0);
     }
 
     double
@@ -218,8 +218,8 @@ namespace eos
                 &Implementation<BToPiPiLeptonNeutrino>::normalized_differential_decay_width,
                 _imp.get(), q2, k2, std::placeholders::_1);
 
-        const double numerator = integrate(integrand, 64, 0.0, +1.0) - integrate(integrand, 64, -1.0, 0.0);
-        const double denominator = integrate(integrand, 64, -1.0, +1.0);
+        const double numerator = integrate1D(integrand, 64, 0.0, +1.0) - integrate1D(integrand, 64, -1.0, 0.0);
+        const double denominator = integrate1D(integrand, 64, -1.0, +1.0);
 
         return numerator / denominator;
     }
@@ -233,7 +233,7 @@ namespace eos
                 _imp.get(), q2, k2, std::placeholders::_1);
 
         return integrand(z)
-            / integrate(integrand, 64, -1.0, +1.0);
+            / integrate1D(integrand, 64, -1.0, +1.0);
     }
 
     double
