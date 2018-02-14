@@ -8,6 +8,8 @@ services:
 compiler:
     - gcc
 
+if: branch IN (master, testing)
+
 env:
     - DOCKER_TARGET=xenial DOCKER_CXX=g++
     - DOCKER_TARGET=xenial DOCKER_CXX=clang++-4.0
