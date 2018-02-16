@@ -122,7 +122,7 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>
-    FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(const std::string & label, const Parameters & parameters)
+    FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(const std::string & label, const Parameters & parameters, const Options &)
     {
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> result;
 
@@ -189,7 +189,7 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>>
-    FormFactorFactory<OneHalfPlusToOneHalfMinus>::create(const std::string & label, const Parameters & parameters)
+    FormFactorFactory<OneHalfPlusToOneHalfMinus>::create(const std::string & label, const Parameters & parameters, const Options &)
     {
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> result;
 
@@ -256,7 +256,7 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>>
-    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create(const std::string & label, const Parameters & parameters)
+    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create(const std::string & label, const Parameters & parameters, const Options &)
     {
         std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> result;
 

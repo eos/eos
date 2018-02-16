@@ -70,7 +70,7 @@ namespace eos
     class FormFactorFactory<PToV>
     {
         public:
-            static std::shared_ptr<FormFactors<PToV>> create(const std::string & label, const Parameters & parameters);
+            static std::shared_ptr<FormFactors<PToV>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
     template <>
@@ -92,7 +92,7 @@ namespace eos
     class FormFactorFactory<PToP>
     {
         public:
-            static std::shared_ptr<FormFactors<PToP>> create(const std::string & label, const Parameters & parameters);
+            static std::shared_ptr<FormFactors<PToP>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
     template <>
@@ -112,7 +112,7 @@ namespace eos
     class FormFactorFactory<PToPP>
     {
         public:
-            static std::shared_ptr<FormFactors<PToPP>> create(const std::string & label, const Parameters & parameters, const Options & options);
+            static std::shared_ptr<FormFactors<PToPP>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
     };
 }
 

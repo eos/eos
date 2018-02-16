@@ -135,7 +135,7 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<PToV>>
-    FormFactorFactory<PToV>::create(const std::string & label, const Parameters & parameters)
+    FormFactorFactory<PToV>::create(const std::string & label, const Parameters & parameters, const Options &)
     {
         std::shared_ptr<FormFactors<PToV>> result;
 
@@ -306,7 +306,7 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<PToP>>
-    FormFactorFactory<PToP>::create(const std::string & label, const Parameters & parameters)
+    FormFactorFactory<PToP>::create(const std::string & label, const Parameters & parameters, const Options &)
     {
         std::shared_ptr<FormFactors<PToP>> result;
 
