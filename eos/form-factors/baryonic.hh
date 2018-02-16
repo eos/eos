@@ -22,6 +22,7 @@
 
 #include <eos/form-factors/form-factors-fwd.hh>
 #include <eos/utils/diagnostics.hh>
+#include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 
 #include <memory>
@@ -72,7 +73,7 @@ namespace eos
     class FormFactorFactory<OneHalfPlusToOneHalfPlus>
     {
         public:
-            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> create(const std::string & label, const Parameters & parameters);
+            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
     template <>
@@ -97,7 +98,7 @@ namespace eos
     class FormFactorFactory<OneHalfPlusToOneHalfMinus>
     {
         public:
-            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> create(const std::string & label, const Parameters & parameters);
+            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
     template <>
@@ -124,7 +125,7 @@ namespace eos
     class FormFactorFactory<OneHalfPlusToThreeHalfMinus>
     {
         public:
-            static std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> create(const std::string & label, const Parameters & parameters);
+            static std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
     };
 }
 
