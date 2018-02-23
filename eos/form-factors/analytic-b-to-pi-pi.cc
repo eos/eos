@@ -168,7 +168,7 @@ namespace eos
         {
             std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiPiBFvD2016>::R_int_denom_integrand, *this, std::placeholders::_1));
 
-            return integrate1D(integrand, 64, 0.02, 0.95);
+            return integrate<GSL::QNG>(integrand, 0.02, 0.95);
         }
 
         inline void check_thorsten()
@@ -565,4 +565,3 @@ namespace eos
         return _imp->diagnostics();
     }
 }
-
