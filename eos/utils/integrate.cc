@@ -165,7 +165,7 @@ namespace eos
     namespace GSL
     {
         QNG::Config::Config() :
-            _epsabs(1e-3),
+            _epsabs(0),
             _epsrel(1e-4)
         {
         }
