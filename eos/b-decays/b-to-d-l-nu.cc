@@ -123,7 +123,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::differential_branching_ratio,
                 _imp.get(), std::placeholders::_1);
 
-        return integrate1D(f, 128, s_min, s_max);
+        return integrate<GSL::QNG>(f, s_min, s_max);
     }
 
     double
@@ -153,13 +153,13 @@ namespace eos
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, 0 /*_imp->parameters["mass::mu"]()*/);
-            br_muons = integrate1D(f, 128, 0.02, 11.62);
+            br_muons = integrate<GSL::QNG>(f, 0.02, 11.62);
         }
 
         double br_taus;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            br_taus = integrate1D(f, 128, 3.16, 11.62);
+            br_taus = integrate<GSL::QNG>(f, 3.16, 11.62);
         }
 
         return br_taus / br_muons;

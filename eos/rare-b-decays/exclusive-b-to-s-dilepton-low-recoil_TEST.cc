@@ -763,7 +763,7 @@ class BToKDileptonLowRecoilTest :
                     TEST_CHECK_RELATIVE_ERROR(d.differential_flat_term(22.0), 0.008213626852, eps);
 
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8),       1.5267386e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),             5.4236817e-03, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),             5.4236817e-03, 2*eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(14.18, 22.8), 1.0015589,     eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry(14.18, 22.8),          2.2706273e-05, eps);
                 }
@@ -811,7 +811,7 @@ class BToKDileptonLowRecoilTest :
 
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(14.18, 22.8),              1.5520940e-07, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(14.18, 22.8),  1.4629637e-07, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),                    5.3935506e-03, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(14.18, 22.8),                    5.3935506e-03, 2*eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(14.18, 22.8),        1.0015315,     eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry(14.18, 22.8),                 0.0609245,     eps);
                 }

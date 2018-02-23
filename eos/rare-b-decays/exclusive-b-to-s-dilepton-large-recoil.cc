@@ -2091,14 +2091,14 @@ namespace eos
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
             Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
-            br_electrons = integrate1D(integrand, 256, s_min, s_max);
+            br_electrons = integrate<GSL::QNG>(integrand, s_min, s_max);
         }
 
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
             Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
-            br_muons = integrate1D(integrand, 256, s_min, s_max);
+            br_muons = integrate<GSL::QNG>(integrand, s_min, s_max);
         }
 
         return br_muons / br_electrons;
@@ -2703,7 +2703,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> f = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        return integrate1D(f, 64, s_min, s_max);
+        return integrate<GSL::QNG>(f, s_min, s_max);
     }
 
     double
@@ -2712,7 +2712,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> f = std::bind(std::mem_fn(&BToKDilepton<LargeRecoil>::differential_branching_ratio),
                 this, std::placeholders::_1);
 
-        return integrate1D(f, 64, s_min, s_max);
+        return integrate<GSL::QNG>(f, s_min, s_max);
     }
 
     double
@@ -2722,9 +2722,9 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> f = std::bind(&BToKDilepton<LargeRecoil>::differential_branching_ratio,
                 this, std::placeholders::_1);
 
-        double br = integrate1D(f, 64, s_min, s_max);
+        double br = integrate<GSL::QNG>(f, s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate1D(f, 64, s_min, s_max);
+        double br_bar = integrate<GSL::QNG>(f, s_min, s_max);
 
         return (br + br_bar) / 2.0;
     }
@@ -2736,9 +2736,9 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> f = std::bind(&BToKDilepton<LargeRecoil>::differential_branching_ratio,
                 this, std::placeholders::_1);
 
-        double br = integrate1D(f, 64, s_min, s_max);
+        double br = integrate<GSL::QNG>(f, s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate1D(f, 64, s_min, s_max);
+        double br_bar = integrate<GSL::QNG>(f, s_min, s_max);
 
         return (br - br_bar) / (br + br_bar);
     }
@@ -2751,8 +2751,8 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate1D(num, 64, s_min, s_max);
-        double denom_integrated = integrate1D(denom, 64, s_min, s_max);
+        double num_integrated = integrate<GSL::QNG>(num, s_min, s_max);
+        double denom_integrated = integrate<GSL::QNG>(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2766,13 +2766,13 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate1D(num, 64, s_min, s_max);
-        double denom_integrated = integrate1D(denom, 64, s_min, s_max);
+        double num_integrated = integrate<GSL::QNG>(num, s_min, s_max);
+        double denom_integrated = integrate<GSL::QNG>(denom, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate1D(num, 64, s_min, s_max);
-        denom_integrated += integrate1D(denom, 64, s_min, s_max);
+        num_integrated += integrate<GSL::QNG>(num, s_min, s_max);
+        denom_integrated += integrate<GSL::QNG>(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2786,8 +2786,8 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate1D(num, 64, s_min, s_max);
-        double denom_integrated = integrate1D(denom, 64, s_min, s_max);
+        double num_integrated = integrate<GSL::QNG>(num, s_min, s_max);
+        double denom_integrated = integrate<GSL::QNG>(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2801,13 +2801,13 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate1D(num, 64, s_min, s_max);
-        double denom_integrated = integrate1D(denom, 64, s_min, s_max);
+        double num_integrated = integrate<GSL::QNG>(num, s_min, s_max);
+        double denom_integrated = integrate<GSL::QNG>(denom, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate1D(num, 64, s_min, s_max);
-        denom_integrated += integrate1D(denom, 64, s_min, s_max);
+        num_integrated += integrate<GSL::QNG>(num, s_min, s_max);
+        denom_integrated += integrate<GSL::QNG>(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2822,14 +2822,15 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
             Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
-            br_electrons = integrate1D(integrand, 64, s_min, s_max);
+            // br_electrons = integrate<GSL::QNG>(integrand, s_min, s_max);
+            br_electrons = integrate<GSL::QNG>(integrand, s_min, s_max);
         }
 
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
             Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
-            br_muons = integrate1D(integrand, 64, s_min, s_max);
+            br_muons = integrate<GSL::QNG>(integrand, s_min, s_max);
         }
 
         // cf. [BHP2007], Eq. (4.10), p. 6
