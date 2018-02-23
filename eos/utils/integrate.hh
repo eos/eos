@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2018 Danny van Dyk and Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -116,8 +117,8 @@ namespace GSL
      *
      * Two methods from the
      * GNU scientific library are wrapped:
-     * 1) QNG: the non-adaptive Gauss-Kronrod rule
-     * 2) QAGS: the adaptive Clenshaw-Kurtis rule
+     * 1) `QNG`: the non-adaptive Gauss-Kronrod rule
+     * 2) `QAGS`: the adaptive Clenshaw-Kurtis rule
      */
     /// @}
     template <typename Method_>
