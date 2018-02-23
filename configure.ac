@@ -38,7 +38,7 @@ if test "x$with_hdf5" == xno ; then
 fi
 if test "x$with_hdf5" != x -a "x$with_hdf5" != xyes ; then
 	if ! test -d "$with_hdf5" ; then
-		AC_MSG_FAILURE(["$with_hdf5 is not a directory"])
+		AC_MSG_FAILURE(["$with_hdf5 is not a directory. Please check the manual for how to compile with HDF5"])
 	fi
 	HDF5_CXXFLAGS="-I$with_hdf5/include"
 	HDF5_LDFLAGS="-L$with_hdf5/lib"
@@ -74,7 +74,7 @@ if test "x$with_gsl" == xno ; then
 fi
 if test "x$with_gsl" != x -a "x$with_gsl" != xyes ; then
 	if ! test -d "$with_gsl" ; then
-		AC_MSG_FAILURE(["$with_gsl is not a directory"])
+	AC_MSG_FAILURE(["$with_gsl is not a directory. Please check the manual for how to compile with GSL."])
 	fi
 	GSL_CXXFLAGS="-I$with_gsl/include"
 	GSL_LDFLAGS="-L$with_gsl/lib"
@@ -103,7 +103,7 @@ dnl }}}
 
 dnl {{{ use Minuit2 path if supplied via --with-minuit2=
 AC_ARG_WITH([minuit2],
-	[AS_HELP_STRING([--with-minuit2], [used to find starting points for population montecarlo sampling])]
+	[AS_HELP_STRING([--with-minuit2], [used to find starting points for population Monte Carlo sampling])]
 	[],
 	[])
 if test "x$with_minuit2" == xroot ; then
@@ -116,7 +116,7 @@ if test "x$with_minuit2" == xroot ; then
 	fi
 elif test "x$with_minuit2" != xno -a "x$with_minuit2" != x ; then
 	if ! test -d "$with_minuit2" ; then
-		AC_MSG_FAILURE(["$with_minuit2 is not a directory"])
+	AC_MSG_FAILURE(["$with_minuit2 is not a directory. Please check the manual for how to compile with Minuit2"])
 	fi
 	CXXFLAGS="-I$with_minuit2/include $CXXFLAGS"
 	LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
@@ -124,12 +124,12 @@ fi
 dnl }}}
 dnl {{{ use PMC path if supplied via --with-pmc=
 AC_ARG_WITH([pmc],
-	[AS_HELP_STRING([--with-pmc], [used to perform population montecarlo sampling])]
+	[AS_HELP_STRING([--with-pmc], [used to perform population Monte Carlo sampling])]
 	[],
 	[])
 if test "x$with_pmc" != x ; then
 	if ! test -d "$with_pmc" ; then
-		AC_MSG_FAILURE(["$with_pmc is not a directory"])
+	AC_MSG_FAILURE(["$with_pmc is not a directory. Please check the manual for how to compile with pmclib"])
 	else
 		CXXFLAGS="-I$with_pmc/include $CXXFLAGS"
 		LDFLAGS="-Wl,-rpath,$with_pmc/lib -L$with_pmc/lib $LDFLAGS"
