@@ -275,7 +275,7 @@ namespace eos
     HardScattering::j3_massless(const double & s, const double & u, const double & m_B,
             const double & a_1, const double & a_2)
     {
-        const double ubar = 1.0 - u, ubar2 = ubar * ubar;
+        const double ubar = 1.0 - u;
         const double s_hat = s / power_of<2>(m_B);
 
         return HardScattering::j2_massless(s, u, m_B, a_1, a_2) * (ubar + u * s_hat);
