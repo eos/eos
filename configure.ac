@@ -17,15 +17,26 @@ PKG_PROG_PKG_CONFIG
 dnl }}}
 
 dnl {{{ check for required packages
+dnl {{{ boost filesystem
 AC_CHECK_LIB([boost_filesystem], main,
 	[],
 	[AC_MSG_ERROR([you do seem to be lacking 'libboost_filesystem'.])]
 	)
+dnl }}}
+dnl {{{ boost system
 AC_CHECK_LIB([boost_system], main,
 	[],
 	[AC_MSG_ERROR([you do seem to be lacking 'libboost_system'.])]
 	)
+dnl }}}
+dnl {{{ yaml-cpp
 AC_CHECK_LIB([yaml-cpp], main)
+AC_CHECK_HEADERS([yaml-cpp/yaml.h],
+        [eos_found_yaml_cpp_headers=yes; break;])
+
+AS_IF([test "x$eos_found_yaml_cpp_headers" != "xyes"],
+        [AC_MSG_ERROR([you do seem to be lacking 'yaml-cpp-dev'.])])
+dnl }}}
 dnl }}}
 
 dnl {{{ use HDF5 path if supplied via --with-hdf5=, otherwise use pkg-config; check for HDF5
