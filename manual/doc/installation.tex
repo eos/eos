@@ -69,10 +69,16 @@ deb https://packagecloud.io/eos/eos/ubuntu/ DIST main
 deb-src https://packagecloud.io/eos/eos/ubuntu/ DIST main
 \end{file}
 where \texttt{DIST} has to replaced by either \texttt{trusty} or
-\texttt{xenial}, depending on your version of Ubuntu. Afterwards, run
-\texttt{apt-get update} to make this change take effect.
-You can then install the binary packages through \texttt{apt-get
-install minuit2 libpmc}.
+\texttt{xenial}, depending on your version of Ubuntu. Add our repository's
+GPG key by running
+\begin{commandline}
+curl -L "https://packagecloud.io/eos/eos/gpgkey" 2> /dev/null | apt-key add - &>/dev/null
+\end{commandline}
+You can then install the binary packages through
+\begin{commandline}
+apt-get update
+apt-get install minuit2 libpmc
+\end{commandline}
 
 \subsection{Alternative: Installing from source}
 
