@@ -354,7 +354,7 @@ namespace eos
         {
             const auto m_B2 = std::pow(m_B(), 2);
             const auto phi_m = b_lcdas.phi_minus(sigma * m_B());
-            const auto Phi   = b_lcdas.Phibar(sigma * m_B());
+            const auto Phi   = b_lcdas.phi_bar(sigma * m_B());
 
             // two-particle contribution
             const auto result_2p = std::exp(-(m_B2 * sigma - q2 * sigma / (1.0 - sigma)) / M2)
@@ -692,7 +692,7 @@ namespace eos
 
             const auto phi_p     = b_lcdas.phi_plus(sigma * m_B());
             const auto phi_m     = b_lcdas.phi_minus(sigma * m_B());
-            const auto Phi_bar   = b_lcdas.Phibar(sigma * m_B());
+            const auto Phi_bar   = b_lcdas.phi_bar(sigma * m_B());
             const auto phi_delta = phi_p - phi_m;
 
             const auto result_2p = std::exp(-(m_B2 * sigma - q2 * sigma / (1.0 - sigma)) / M2)
@@ -986,7 +986,7 @@ namespace eos
 
             const auto phi_p     = b_lcdas.phi_plus(sigma * m_B());
             const auto phi_m     = b_lcdas.phi_minus(sigma * m_B());
-            const auto Phi_bar   = b_lcdas.Phibar(sigma * m_B());
+            const auto Phi_bar   = b_lcdas.phi_bar(sigma * m_B());
             const auto phi_delta = phi_p - phi_m;
 
             const auto result_2p = std::exp(-(m_B2 * sigma - q2 * sigma / (1.0 - sigma)) / M2)
@@ -1167,7 +1167,7 @@ namespace eos
 
             const auto phi_p     = b_lcdas.phi_plus(sigma * m_B());
             const auto phi_m     = b_lcdas.phi_minus(sigma * m_B());
-            const auto Phi_bar   = b_lcdas.Phibar(sigma * m_B());
+            const auto Phi_bar   = b_lcdas.phi_bar(sigma * m_B());
             const auto phi_delta = phi_p - phi_m;
 
             const auto result_2p = -std::exp(-(m_B2 * sigma - q2 * sigma / (1.0 - sigma)) / M2)

@@ -2,6 +2,8 @@
 
 /*
  * Copyright (c) 2017 Danny van Dyk
+ * Copyright (c) 2018 Nico Gubernari
+ * Copyright (c) 2018 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -45,14 +47,57 @@ namespace eos
             ~BMesonLCDAs();
 
             /*!
-             * Leading power two-particle LCDAs
+             * Leading twist two-particle LCDAs
              *
              * omega: plus-component of the spectator momentum
              */
             double phi_plus(const double & omega) const;
             double phi_minus(const double & omega) const;
-            double Phibar(const double & omega) const;
+            double phi_bar(const double & omega) const;
+            double phi_bar_d1(const double & omega) const;
 
+            /*!
+             * Next-to-leading twist two-particle LCDAs
+             *
+             * omega: plus-component of the spectator momentum
+             */
+            double g_plus(const double & omega) const;
+            double g_plus_d1(const double & omega) const;
+            double g_plus_d2(const double & omega) const;
+
+            double g_minusWW(const double & omega) const;
+            double g_minusWW_d1(const double & omega) const;
+            double g_minusWW_d2(const double & omega) const;
+
+            double g_bar(const double & omega) const;
+            double g_bar_d1(const double & omega) const;
+            double g_bar_d2(const double & omega) const;
+            double g_bar_d3(const double & omega) const;
+
+
+            /*!
+             * Leading power three-particle LCDAs
+             *
+             * omega_1: plus-component of the spectator momentum
+             * omega_2: plus-component of the gluon momentum
+             * */
+            double phi_3(const double & omega_1, const double & omega_2) const;
+            double phi_4(const double & omega_1, const double & omega_2) const;
+
+            double phi_bar_3(const double & omega_1, const double & omega_2) const;
+            double phi_bar_4(const double & omega_1, const double & omega_2) const;
+
+            double phi_bar2_3(const double & omega_1, const double & omega_2) const;
+            double phi_bar2_4(const double & omega_1, const double & omega_2) const;
+
+            double phi_bar_bar_3(const double & omega_1, const double & omega_2) const;
+            double phi_bar_bar_4(const double & omega_1, const double & omega_2) const;
+
+            double psi_bar_4(const double & omega_1, const double & omega_2) const;
+            double chi_bar_4(const double & omega_1, const double & omega_2) const;
+
+            double psi_bar_bar_4(const double & omega_1, const double & omega_2) const;
+            double chi_bar_bar_4(const double & omega_1, const double & omega_2) const;
             /*!
              * Pseudo observables for the two-particle LCDAs
              */
