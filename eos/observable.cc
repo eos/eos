@@ -4,6 +4,7 @@
  * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -166,6 +167,18 @@ namespace eos
             make_form_factor_adapter("B->pi::f_0(s)", "B->pi",
                     &FormFactors<PToP>::f_0, std::make_tuple("s")),
 
+            make_observable("B->pi::f_+[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_p,
+                    std::make_tuple("q2")),
+
+            make_observable("B->pi::f_0[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_pm,
+                    std::make_tuple("q2")),
+
+            make_observable("B->pi::f_T[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_t,
+                    std::make_tuple("q2")),
+
             // B -> pi Form Factors (auxiliary variables, e.g. for determining the
             // LCSR/SVZ threshold parameters)
             make_observable("B->pi::M_B(LCSR)@DKMMO2008",
@@ -187,6 +200,18 @@ namespace eos
 
             make_form_factor_adapter("B->K::f_0(s)", "B->K",
                     &FormFactors<PToP>::f_0, std::make_tuple("s")),
+
+            make_observable("B->K::f_+[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_p,
+                    std::make_tuple("q2")),
+
+            make_observable("B->K::f_0[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_pm,
+                    std::make_tuple("q2")),
+
+            make_observable("B->K::f_T[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_t,
+                    std::make_tuple("q2")),
 
             // B -> D^* Form Factors
             make_form_factor_adapter("B->D^*::V(s)", "B->D^*",
@@ -316,7 +341,19 @@ namespace eos
                     &FormFactors<PToP>::f_0, std::make_tuple("s")),
 
             make_form_factor_adapter("B->D::f_T(s)", "B->D",
-                                     &FormFactors<PToP>::f_t, std::make_tuple("s")),
+                    &FormFactors<PToP>::f_t, std::make_tuple("s")),
+
+            make_observable("B->D::f_+[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_p,
+                    std::make_tuple("q2")),
+
+            make_observable("B->D::f_0[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_pm,
+                    std::make_tuple("q2")),
+
+            make_observable("B->D::f_T[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_t,
+                    std::make_tuple("q2")),
 
             // B_s -> K^* Form Factors
             make_form_factor_adapter("B_s->K^*::V(s)", "B_s->K^*",

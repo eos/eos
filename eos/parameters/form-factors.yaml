@@ -1602,4 +1602,225 @@
     central: +2.93
     min:     +1.12
     max:     +4.74
+
+# parameters for LCSR calculation of B->pi hadronic matrix elements, cf. [GKvD2018]
+"B->pi::s_0^+,0@B-LCSR" :
+    central: 0.7
+    min:     0.7
+    max:     0.7
+    comments: "GeV^2"
+"B->pi::s_0^+,1@B-LCSR" :
+    central: 0.0
+    min:     0.0
+    max:     1.0
+    comments: "1"
+"B->pi::s_0^+/-,0@B-LCSR" :
+    central: 0.7
+    min:     0.7
+    max:     0.7
+    comments: "GeV^2"
+"B->pi::s_0^+/-,1@B-LCSR" :
+    central: 0.0
+    min:     0.0
+    max:     1.0
+    comments: "1"
+"B->pi::s_0^T,0@B-LCSR" :
+    central: 0.7
+    min:     0.7
+    max:     0.7
+    comments: "GeV^2"
+"B->pi::s_0^T,1@B-LCSR" :
+    central: 0.0
+    min:     0.0
+    max:     1.0
+    comments: "1"
+"B->pi::M^2@B-LCSR" :
+    central: 1.0
+    min:     0.5
+    max:     1.5
+    comments: "GeV^2"
+"B->pi::mu@B-LCSR" :
+    central: 1.0
+    min:     0.7
+    max:     0.3
+    comments: ""
+
+# parameters for LCSR calculation of B->K hadronic matrix elements, cf. [GKvD2018]
+"B->K::s_0^+,0@B-LCSR" :
+    central: 1.05
+    min:     1.05
+    max:     1.05
+    comments: "GeV^2"
+"B->K::s_0^+,1@B-LCSR" :
+    central: 0.0
+    min:     0.0
+    max:     1.0
+    comments: "1"
+"B->K::s_0^+/-,0@B-LCSR" :
+    central: 1.05
+    min:     1.05
+    max:     1.05
+    comments: "GeV^2"
+"B->K::s_0^+/-,1@B-LCSR" :
+    central: 0.0
+    min:     0.0
+    max:     1.0
+    comments: "1"
+"B->K::s_0^T,0@B-LCSR" :
+    central: 1.05
+    min:     1.05
+    max:     1.05
+    comments: "GeV^2"
+"B->K::s_0^T,1@B-LCSR" :
+    central: 0.0
+    min:     0.0
+    max:     1.0
+    comments: "1"
+"B->K::M^2@B-LCSR" :
+    central: 1.0
+    min:     0.5
+    max:     1.5
+    comments: "GeV^2"
+"B->K::mu@B-LCSR" :
+    central: 1.0
+    min:     0.7
+    max:     0.3
+    comments: ""
+
+# parameters for LCSR calculation of B->D hadronic matrix elements, cf. [GKvD2018]
+"B->D::s_0^+,0@B-LCSR" :
+    central: 6.0
+    min:     6.0
+    max:     6.0
+    comments: "GeV^2"
+"B->D::s_0^+,1@B-LCSR" :
+    central: 0.0
+    min:     0.0
+    max:     1.0
+    comments: "1"
+"B->D::s_0^+/-,0@B-LCSR" :
+    central: 6.0
+    min:     6.0
+    max:     6.0
+    comments: "GeV^2"
+"B->D::s_0^+/-,1@B-LCSR" :
+    central: 0.0
+    min:     0.0
+    max:     1.0
+    comments: "1"
+"B->D::s_0^T,0@B-LCSR" :
+    central: 6.0
+    min:     6.0
+    max:     6.0
+    comments: "GeV^2"
+"B->D::s_0^T,1@B-LCSR" :
+    central: 0.0
+    min:     0.0
+    max:     1.0
+    comments: "1"
+"B->D::M^2@B-LCSR" :
+    central: 4.5
+    min:     3.0
+    max:     6.0
+    comments: "GeV^2"
+"B->D::mu@B-LCSR" :
+    central: 2.1213
+    min:     2.1213
+    max:     2.1213
+    comments: ""
+
+# parameters for LCSR calculation of B->rho hadronic matrix elements, cf. [GKvD2018]
+"B->rho::s_0^A1@B-LCSR" :
+    central: 1.6
+    min:     1.6
+    max:     1.6
+    comments: "GeV^2"
+"B->rho::s_0^A2@B-LCSR" :
+    central: 1.6
+    min:     1.6
+    max:     1.6
+    comments: "GeV^2"
+"B->rho::s_0^A30@B-LCSR" :
+    central: 1.6
+    min:     1.6
+    max:     1.6
+    comments: "GeV^2"
+"B->rho::s_0^V@B-LCSR" :
+    central: 1.6
+    min:     1.6
+    max:     1.6
+    comments: "GeV^2"
+"B->rho::M^2@B-LCSR" :
+    central: 1.0
+    min:     0.5
+    max:     1.5
+    comments: "GeV^2"
+"B->rho::mu@B-LCSR" :
+    central: 1.0
+    min:     0.7
+    max:     0.3
+    comments: ""
+
+# parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [GKvD2018]
+"B->K^*::s_0^A1@B-LCSR" :
+    central: 1.7
+    min:     1.7
+    max:     1.7
+    comments: "GeV^2"
+"B->K^*::s_0^A2@B-LCSR" :
+    central: 1.7
+    min:     1.7
+    max:     1.7
+    comments: "GeV^2"
+"B->K^*::s_0^A30@B-LCSR" :
+    central: 1.7
+    min:     1.7
+    max:     1.7
+    comments: "GeV^2"
+"B->K^*::s_0^V@B-LCSR" :
+    central: 1.7
+    min:     1.7
+    max:     1.7
+    comments: "GeV^2"
+"B->K^*::M^2@B-LCSR" :
+    central: 1.0
+    min:     0.5
+    max:     1.5
+    comments: "GeV^2"
+"B->K^*::mu@B-LCSR" :
+    central: 1.0
+    min:     0.7
+    max:     0.3
+    comments: ""
+
+# parameters for LCSR calculation of B->D^* hadronic matrix elements, cf. [GKvD2018]
+"B->D^*::s_0^A1@B-LCSR" :
+    central: 8.0
+    min:     8.0
+    max:     8.0
+    comments: "GeV^2"
+"B->D^*::s_0^A2@B-LCSR" :
+    central: 8.0
+    min:     8.0
+    max:     8.0
+    comments: "GeV^2"
+"B->D^*::s_0^A30@B-LCSR" :
+    central: 8.0
+    min:     8.0
+    max:     8.0
+    comments: "GeV^2"
+"B->D^*::s_0^V@B-LCSR" :
+    central: 8.0
+    min:     8.0
+    max:     8.0
+    comments: "GeV^2"
+"B->D^*::M^2@B-LCSR" :
+    central: 4.5
+    min:     3.0
+    max:     6.0
+    comments: "GeV^2"
+"B->D^*::mu@B-LCSR" :
+    central: 1.0
+    min:     0.7
+    max:     1.3
     comments: ""

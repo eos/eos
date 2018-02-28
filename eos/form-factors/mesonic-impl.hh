@@ -27,6 +27,7 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/analytic-b-to-pi.hh>
+#include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/utils/derivative.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
