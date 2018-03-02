@@ -239,19 +239,3 @@ class Plotter2D:
         plot.tight_layout()
 
         plot.savefig(self.pdffile)
-
-
-# set some default values for plotting
-matplotlib.rcParams['font.family'] = 'sans-serif'
-matplotlib.rcParams['font.serif'] = 'Computer Modern Sans serif'
-matplotlib.rcParams['font.size'] = 14
-matplotlib.rcParams['font.weight'] = 400
-
-matplotlib.rcParams['axes.labelsize'] = 16
-matplotlib.rcParams['axes.linewidth'] = 1
-
-matplotlib.rcParams['savefig.bbox'] = 'tight'
-matplotlib.rcParams['savefig.pad_inches'] = 0.1
-
-matplotlib.rcParams['xtick.direction'] = 'out'
-matplotlib.rcParams['ytick.direction'] = 'out'
