@@ -125,7 +125,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToPiLeptonNeutrino>::differential_branching_ratio,
                 _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QNG>(f, s_min, s_max);
+        return integrate<GSL::QAGS>(f, s_min, s_max);
     }
 
     double
@@ -134,7 +134,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToPiLeptonNeutrino>::differential_decay_width,
                 _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QNG>(f, s_min, s_max);
+        return integrate<GSL::QAGS>(f, s_min, s_max);
     }
 
     double
@@ -149,6 +149,6 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToPiLeptonNeutrino>::differential_zeta,
                 _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QNG>(f, s_min, s_max);
+        return integrate<GSL::QAGS>(f, s_min, s_max);
     }
 }
