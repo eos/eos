@@ -27,12 +27,14 @@
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/named-value.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/type-list.hh>
 #include <eos/utils/visitor.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <memory>
+#include <vector>
 
 namespace eos
 {
@@ -61,6 +63,8 @@ namespace eos
         class KinematicsSingleVariableArg;
         class KinematicsVariableRangeArg;
         class ObservableArg;
+        class ParameterBudgetArg;
+        class ParameterVariationArg;
 
         class Option :
             public virtual DeclareAbstractAcceptMethods<Option, MakeTypeList<
@@ -563,9 +567,55 @@ namespace eos
                  */
                 Kinematics kinematics() const;
         };
+
+        /**
+         * The '--parameter-budget' EOS-specific command line argument.
+         */
+        class ParameterBudgetArg :
+            public StringArg
+        {
+            public:
+                struct ParameterBudget
+                {
+                    std::string name;
+                    std::vector<Parameter> parameters;
+                };
+
+            private:
+                /// Our set of parameters.
+                Parameters _parameters;
+
+                /// Our list of parameter budgets.
+                std::vector<ParameterBudget> _budgets;
+
+            public:
+                ///@name Basic operations
+                ///@{
+
+                ParameterBudgetArg(Group * const, const std::string &, char, const std::string &, const Parameters &);
+                virtual ~ParameterBudgetArg();
+
+                ///@}
+
+                ///@name Iterate over our list of parameter budgets.
+                ///@{
+
+                struct ParameterBudgetArgConstIteratorTag;
+                typedef WrappedForwardIterator<ParameterBudgetArgConstIteratorTag,
+                        const ParameterBudget> ParameterBudgetArgConstIterator;
+
+                ParameterBudgetArgConstIterator begin_budgets() const;
+
+                ParameterBudgetArgConstIterator end_budgets() const;
+
+
+                ///@}
+        };
     }
 
     extern template class WrappedForwardIterator<cli::EnumArg::AllowedArgConstIteratorTag, const cli::AllowedEnumArg>;
+
+    extern template class WrappedForwardIterator<cli::ParameterBudgetArg::ParameterBudgetArgConstIteratorTag, const cli::ParameterBudgetArg::ParameterBudget>;
 }
 
 #endif

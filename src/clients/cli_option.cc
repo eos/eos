@@ -356,10 +356,21 @@ namespace eos
         {
             return _can_be_negated;
         }
+    }
 
+    template <>
+    struct WrappedForwardIteratorTraits<cli::ParameterBudgetArg::ParameterBudgetArgConstIteratorTag>
+    {
+        typedef std::vector<cli::ParameterBudgetArg::ParameterBudget>::const_iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<cli::ParameterBudgetArg::ParameterBudgetArgConstIteratorTag, const cli::ParameterBudgetArg::ParameterBudget>;
+
+
+    namespace cli
+    {
         // LogLevelArg
-        LogLevelArg::LogLevelArg(Group * const grp, const std::string & ln, char sh) :
-            EnumArg(grp, ln, sh, "Specify the log level",
+        LogLevelArg::LogLevelArg(Group * const our_group, const std::string & our_long_name, char our_short_name) :
+            EnumArg(our_group, our_long_name, our_short_name, "Specify the log level",
             EnumArgOptions
             ("debug",   'd', "Show debug output (noisy)")
             ("info",    'i', "Show informations and and warnings only")
@@ -390,9 +401,9 @@ namespace eos
         }
 
         // KinematicVariableArg
-        KinematicVariableArg::KinematicVariableArg(Group * const grp, const std::string & ln,
-                char sh, const Kinematics & k) :
-            KeyValueArg(grp, ln, sh, "Set the value of a kinematic variable"),
+        KinematicVariableArg::KinematicVariableArg(Group * const our_group, const std::string & our_long_name,
+                char our_short_name, const Kinematics & k) :
+            KeyValueArg(our_group, our_long_name, our_short_name, "Set the value of a kinematic variable"),
             _kinematics(k)
         {
         }
@@ -416,6 +427,28 @@ namespace eos
         KinematicVariableArg::kinematics() const
         {
             return _kinematics;
+        }
+
+        // ParameterBudgetArg
+        ParameterBudgetArg::ParameterBudgetArg(Group * const our_group, const std::string & our_long_name,
+                char our_short_name, const std::string & our_description, const Parameters & p) :
+            StringArg(our_group, our_long_name, our_short_name, our_description),
+            _parameters(p)
+        {
+        }
+
+        ParameterBudgetArg::~ParameterBudgetArg() = default;
+
+        ParameterBudgetArg::ParameterBudgetArgConstIterator
+        ParameterBudgetArg::begin_budgets() const
+        {
+            return _budgets.begin();
+        }
+
+        ParameterBudgetArg::ParameterBudgetArgConstIterator
+        ParameterBudgetArg::end_budgets() const
+        {
+            return _budgets.end();
         }
     }
 }

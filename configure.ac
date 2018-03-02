@@ -170,6 +170,7 @@ if test "x$enable_python" == xyes ; then
 	AM_PATH_PYTHON([3.3])
 	PY_PREFIX=`$PYTHON -c 'import sys ; print(sys.prefix)'`
 	PYTHON_LIBS="-lpython$PYTHON_VERSION"
+	PYTHON_LDFLAGS="`python$PYTHON_VERSION-config --ldflags`"
 	PYTHON_CXXFLAGS="`python$PYTHON_VERSION-config --includes`"
 	os_id="`. /etc/os-release ; echo $ID`"
 	if test "x$os_id" == xubuntu ; then
@@ -178,8 +179,26 @@ if test "x$enable_python" == xyes ; then
 		BOOST_PYTHON_SUFFIX=""
 	fi
 	AC_SUBST([PYTHON_LIBS])
+	AC_SUBST([PYTHON_LDFLAGS])
 	AC_SUBST([PYTHON_CXXFLAGS])
 	AC_SUBST([BOOST_PYTHON_SUFFIX])
+
+	_CXXFLAGS=$CXXFLAGS
+	_LDFLAGS=$LDFLAGS
+	_LIBS=$LIBS
+
+	CXXFLAGS=$PYRHON_CXXFLAGS
+	LDFLAGS=$PYTHON_LDFLAGS
+	LIBS=$PYTHON_LIBS
+
+	AC_CHECK_LIB([boost_python$BOOST_PYTHON_SUFFIX], main,
+	        [],
+	        [AC_MSG_ERROR([you do seem to be lacking 'libboost_python'.])]
+	)
+
+	CXXFLAGS=$_CXXFLAGS
+	LDFLAGS=$_LDFLAGS
+	LIBS=$_LIBS
 fi
 dnl }}}
 dnl }}}
