@@ -31,7 +31,7 @@ software to be pre-installed:
 If you intend to use the Python \cite{Python} interface to the EOS library, you will need
 to additionally install
 \begin{description}
-    \item[python3-dev] python3 interpreter and required header files,
+    \item[python3-dev] python3 interpreter in version 3.5 or higher, and required header files,
     \item[libboost-python-dev] the BOOST library for interfacing Python and C++,
     \item[python3-h5py] the Python interface to HDF5,
     \item[python3-matplotlib] the Python plotting library,
@@ -217,10 +217,10 @@ set up some environment variables. For the Bash, which is the default Debian/Ubu
 shell this can be achieved by adding the lines
 \begin{commandline}
 export PATH+=":/opt/pkgs/eos/bin"
-export PYTHONPATH+=":/opt/pkgs/eos/lib/python2.7/site-packages"
+export PYTHONPATH+=":/opt/pkgs/eos/lib/python3.5/site-packages"
 \end{commandline}
 to you \texttt{.bashrc} file. In the above, the last line is optional and should only be
-added if you built EOS with Python support. Note that \texttt{python2.7} should be
+added if you built EOS with Python support. Note that \texttt{python3.5} should be
 replaced by the apppropriate Python version against which EOS was built.
 
 
@@ -231,15 +231,3 @@ CXXFLAGS+=" -I/opt/pkgs/eos/include"
 LDFLAGS+=" -L/opt/pkgs/eos/lib"
 \end{commandline}
 to your makefile.
-
-\paragraph{Python 3} If you intend to build the EOS-Python interface using Python 3, there will be
-additional steps required on Debian/Ubuntu. You will need to pass the environment variables
-\texttt{PYTHON} and \texttt{BOOST\_PYTHON\_SUFFIX} to the configure script, e.g. like this:
-\begin{commandline}
-PYTHON=python3 BOOST_PYTHON_SUFFIX=-py34 ./configure \
-    ...
-\end{commandline}
-where the dots indicate all the options passed to \texttt{configure} on the commandline.
-Note that is is a bad idea to simultaneously install the EOS-Python interface for both
-Python 2.x and Python 3.x, since the \texttt{PYTHONPATH} environment variable is used
-by both versions and there is no versioning support for Python modules written in C++.
