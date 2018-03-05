@@ -40,7 +40,6 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la \
 	libcli.a \
 	-lboost_filesystem -lboost_system \
-	-lhdf5 \
 	-lMinuit2 \
 	-lyaml-cpp
 
@@ -52,6 +51,8 @@ LDADD += \
 	-lpmc -ldl
 
 eos_sample_pmc_SOURCES = eos-sample-pmc.cc
+eos_sample_pmc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+eos_sample_pmc_LDADD = $(LDADD) $(HDF5_LDFLAGS) -lpmc -ldl
 endif
 
 eos_evaluate_SOURCES = eos-evaluate.cc
@@ -69,12 +70,18 @@ eos_list_signal_pdfs_SOURCES = eos-list-signal-pdfs.cc
 eos_print_polynomial_SOURCES = eos-print-polynomial.cc
 
 eos_propagate_uncertainty_SOURCES = eos-propagate-uncertainty.cc
+eos_propagate_uncertainty_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+eos_propagate_uncertainty_LDADD = $(LDADD) $(HDF5_LDFLAGS)
 
 eos_sample_mcmc_SOURCES = eos-sample-mcmc.cc
 
 eos_sample_events_mcmc_SOURCES = eos-sample-events-mcmc.cc
+eos_sample_events_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+eos_sample_events_mcmc_LDADD = $(LDADD) $(HDF5_LDFLAGS)
 
 eos_scan_mc_SOURCES = eos-scan-mc.cc
+eos_scan_mc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+eos_scan_mc_LDADD = $(LDADD) $(HDF5_LDFLAGS)
 
 integrated_SOURCES = integrated.cc
 

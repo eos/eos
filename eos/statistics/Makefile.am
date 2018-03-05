@@ -36,6 +36,8 @@ libeosstatistics_la_SOURCES = \
 	test-statistic.cc test-statistic.hh test-statistic-impl.hh \
 	welford.cc welford.hh
 libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lMinuit2
+libeosstatistics_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
+libeosstatistics_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS)
 
 if EOS_ENABLE_PMC
 libeosstatistics_la_SOURCES += \
@@ -84,7 +86,6 @@ TESTS = \
 	simple-parameters_TEST \
 	welford_TEST
 LDADD = \
-	-lhdf5 \
 	-lMinuit2 \
 	$(top_builddir)/test/libeostest.a \
 	libeosstatistics.la \
@@ -93,7 +94,6 @@ LDADD = \
 
 if EOS_ENABLE_PMC
 TESTS += population-monte-carlo-sampler_TEST
-LDADD += -lpmc -ldl
 endif
 
 check_PROGRAMS = $(TESTS)
@@ -115,14 +115,22 @@ log_prior_TEST_SOURCES = log-prior_TEST.cc
 markov_chain_TEST_SOURCES = markov-chain_TEST.cc
 
 markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc density-wrapper_TEST.cc
+markov_chain_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+markov_chain_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
 
 if EOS_ENABLE_PMC
 population_monte_carlo_sampler_TEST_SOURCES = population-monte-carlo-sampler_TEST.cc density-wrapper_TEST.cc
+population_monte_carlo_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+population_monte_carlo_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS) -lpmc -ldl
 endif
 
 prior_sampler_TEST_SOURCES = prior-sampler_TEST.cc
+prior_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+prior_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
 
 proposal_functions_TEST_SOURCES = proposal-functions_TEST.cc
+proposal_functions_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+proposal_functions_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
 
 rvalue_TEST_SOURCES = rvalue_TEST.cc
 

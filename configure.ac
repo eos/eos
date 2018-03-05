@@ -67,12 +67,27 @@ else # use pkg-config
 			AC_MSG_NOTICE([falling back to default for HDF5 location])
 		])
 fi
+
+AC_SUBST([HDF5_LDFLAGS])
+AC_SUBST([HDF5_CXXFLAGS])
+
+_CXXFLAGS=$CXXFLAGS
+_LDFLAGS=$LDFLAGS
+_LIBS=$LIBS
+
 CXXFLAGS="$HDF5_CXXFLAGS $CXXFLAGS"
 LDFLAGS="$HDF5_LDFLAGS $LDFLAGS"
+LIBS=""
 
 AC_CHECK_LIB(hdf5, H5open,
 	[],
-	[AC_MSG_ERROR([you do seem to be lacking libhdf5 (http://hdf.ncsa.uiuc.edu/HDF5/).])])
+	[AC_MSG_ERROR([you do seem to be lacking libhdf5 (http://hdf.ncsa.uiuc.edu/HDF5/).])],
+	[]
+	)
+
+CXXFLAGS=$_CXXFLAGS
+LDFLAGS=$_LDFLAGS
+LIBS="$_LIBS"
 dnl }}}
 
 dnl {{{ use GSL path if supplied via --with-gsl=, otherwise use pkg-config; check for GSL
@@ -103,13 +118,21 @@ else # use pkg-config
 			AC_MSG_NOTICE([falling back to default for GSL location])
 		])
 fi
+_CXXFLAGS=$CXXFLAGS
+_LDFLAGS=$LDFLAGS
+_LIBS=$LIBS
+
 CXXFLAGS="$GSL_CXXFLAGS $CXXFLAGS"
 LDFLAGS="$GSL_LDFLAGS $LDFLAGS"
+LIBS=""
 
 AC_CHECK_LIB(gsl, gsl_sf_zeta,
 	[],
 	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library (http://www.gnu.org/software/gsl/).])],
 	[-lgslcblas -lm])
+CXXFLAGS=$_CXXFLAGS
+LDFLAGS=$_LDFLAGS
+LIBS="$LIBS $_LIBS"
 dnl }}}
 
 dnl {{{ use Minuit2 path if supplied via --with-minuit2=
@@ -129,8 +152,8 @@ elif test "x$with_minuit2" != xno -a "x$with_minuit2" != x ; then
 	if ! test -d "$with_minuit2" ; then
 	AC_MSG_FAILURE(["$with_minuit2 is not a directory. Please check the manual for how to compile with Minuit2"])
 	fi
-	CXXFLAGS="-I$with_minuit2/include $CXXFLAGS"
-	LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
+	MINUIT2_CXXFLAGS="-I$with_minuit2/include $CXXFLAGS"
+	MINUIT2_LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
 fi
 dnl }}}
 dnl {{{ use PMC path if supplied via --with-pmc=
