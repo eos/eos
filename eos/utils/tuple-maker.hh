@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015, 2018 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,7 +20,9 @@
 #ifndef EOS_GUARD_EOS_UTILS_TUPLE_MAKER_HH
 #define EOS_GUARD_EOS_UTILS_TUPLE_MAKER_HH 1
 
+#include <array>
 #include <tuple>
+#include <utility>
 
 namespace eos
 {
@@ -54,6 +56,28 @@ namespace eos
         {
             static const unsigned long size = sizeof...(TupleElements_);
         };
+
+        template <typename T_, typename Tuple_, std::size_t ... Indices_>
+        auto make_array(const Tuple_ & tuple, std::index_sequence<Indices_ ...>)
+        -> std::array<T_, std::tuple_size<Tuple_>::value>
+        {
+            return {{ std::get<Indices_>(tuple) ... }};
+        }
+
+        template <typename T_, typename Tuple_>
+        auto make_array(const Tuple_ & tuple)
+        -> std::array<T_, std::tuple_size<Tuple_>::value>
+        {
+            using Indices_ = std::make_index_sequence<std::tuple_size<Tuple_>::value>;
+
+            return make_array<T_>(tuple, Indices_{ });
+        }
+
+        template <typename T_>
+        std::array<T_, 0> make_array(const std::tuple<> &)
+        {
+            return {};
+        }
     }
 }
 
