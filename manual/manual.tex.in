@@ -36,8 +36,8 @@
 
 %% Fonts
 %%   select defaults
-\setmainfont{TeX Gyre Pagella}
-\setmonofont{TeX Gyre Cursor}
+\setmainfont{Roboto Light}
+\setmonofont{Latin Modern Mono Light}
 %%   use defaults + roman as title font
 \addtokomafont{disposition}{\rmfamily}
 
