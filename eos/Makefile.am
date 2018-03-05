@@ -5,7 +5,7 @@ MAINTAINERCLEANFILES = Makefile.in
 
 SUBDIRS = parameters utils optimize statistics form-factors rare-b-decays b-decays .
 
-AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
+AM_CXXFLAGS = @AM_CXXFLAGS@
 
 lib_LTLIBRARIES = libeos.la
 libeos_la_SOURCES = \

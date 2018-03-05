@@ -35,7 +35,7 @@ eosplot_SCRIPTS = \
 	eos/plot/plotter.py
 
 _eos_la_SOURCES = _eos.cc
-_eos_la_CXXFLAGS = $(PYTHON_CXXFLAGS) -I$(top_srcdir) -std=c++0x
+_eos_la_CXXFLAGS = $(PYTHON_CXXFLAGS) @AM_CXXFLAGS@
 _eos_la_LDFLAGS = -module -avoid-version -export-symbols-regex initeos
 _eos_la_LIBADD = $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosutils.la -lboost_python$(BOOST_PYTHON_SUFFIX)
 
