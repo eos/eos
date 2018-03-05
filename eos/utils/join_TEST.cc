@@ -20,6 +20,7 @@
 #include <test/test.hh>
 #include <eos/utils/join.hh>
 
+#include <list>
 #include <vector>
 
 #include <iostream>
@@ -38,12 +39,23 @@ class JoinTest :
 
         virtual void run() const
         {
-            std::vector<int> items{ 1, 4, 7 };
+            // filled vector
+            {
+                std::vector<int> items{ 1, 4, 7 };
 
-            std::cout << join(items.begin(), items.end()) << std::endl;
-            TEST_CHECK_EQUAL("1, 4, 7", join(items.begin(), items.end()));
-            TEST_CHECK_EQUAL("1, 4, 7", join(items.begin(), items.end(), ", "));
-            TEST_CHECK_EQUAL("1:4:7",   join(items.begin(), items.end(), ":"));
+                std::cout << join(items.begin(), items.end()) << std::endl;
+                TEST_CHECK_EQUAL("1, 4, 7", join(items.begin(), items.end()));
+                TEST_CHECK_EQUAL("1, 4, 7", join(items.begin(), items.end(), ", "));
+                TEST_CHECK_EQUAL("1:4:7",   join(items.begin(), items.end(), ":"));
+            }
 
+            // empty list
+            {
+                std::list<int> items;
+
+                TEST_CHECK_EQUAL("", join(items.begin(), items.end()));
+                TEST_CHECK_EQUAL("", join(items.begin(), items.end(), ", "));
+                TEST_CHECK_EQUAL("", join(items.begin(), items.end(), ":"));
+            }
         }
 } join_test;
