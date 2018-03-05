@@ -75,6 +75,8 @@ libeosutils_la_LIBADD = \
 	-lMinuit2 \
 	-lpthread \
 	-lyaml-cpp
+libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+libeosutils_la_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
@@ -173,7 +175,6 @@ TESTS = \
 	wilson-polynomial_TEST \
 	wilson_scan_model_TEST
 LDADD = \
-	-lhdf5 \
 	-lMinuit2 \
 	-lyaml-cpp \
 	$(top_builddir)/test/libeostest.a \
@@ -191,6 +192,8 @@ ckm_scan_model_TEST_SOURCES = ckm_scan_model_TEST.cc
 derivative_TEST_SOURCES = derivative_TEST.cc
 
 hdf5_TEST_SOURCES = hdf5_TEST.cc
+hdf5_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
+hdf5_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
 
 equation_solver_TEST_SOURCES = equation_solver_TEST.cc
 
