@@ -42,7 +42,7 @@ manual-am: manual.pdf manual.tex
 
 manual.tex: manual.tex.in
 	sed \
-	    -e "s/@GITREV@/$$(git describe --tags --long --abbrev=5 --always)/g" \
+	    -e "s/@EOS_VERSION@/$(PACKAGE_VERSION)/g" \
 	    < manual.tex.in \
 	    > manual.tex
 
