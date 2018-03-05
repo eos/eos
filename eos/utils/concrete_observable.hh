@@ -22,8 +22,10 @@
 
 #include <eos/observable.hh>
 #include <eos/utils/apply.hh>
+#include <eos/utils/join.hh>
 #include <eos/utils/tuple-maker.hh>
 
+#include <array>
 #include <functional>
 #include <string>
 
@@ -120,13 +122,16 @@ namespace eos
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
 
+            std::array<std::string, sizeof...(Args_)> _kinematics_names_array;
+
         public:
             ConcreteObservableEntry(const QualifiedName & name,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & function,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
                 _name(name),
                 _function(function),
-                _kinematics_names(kinematics_names)
+                _kinematics_names(kinematics_names),
+                _kinematics_names_array(impl::make_array<std::string>(kinematics_names))
             {
             }
 
@@ -142,6 +147,11 @@ namespace eos
             virtual std::ostream & insert(std::ostream & os) const
             {
                 os << "    type: regular observable" << std::endl;
+
+                if (sizeof...(Args_) > 0)
+                {
+                    os << "    kinematic variables: " << join(std::begin(_kinematics_names_array), std::end(_kinematics_names_array)) << std::endl;
+                }
 
                 return os;
             }
