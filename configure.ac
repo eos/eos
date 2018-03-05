@@ -266,9 +266,9 @@ int main(int, char **)
 dnl }}}
 
 dnl {{{ check for compiler requirements
-dnl {{{ check for -std=c++0x
-AC_MSG_CHECKING([for C++0x support])
-CHECK_CXXFLAG([-std=c++0x])
+dnl {{{ check for -std=c++14
+AC_MSG_CHECKING([for C++14 support])
+CHECK_CXXFLAG([-std=c++14])
 dnl }}}
 dnl {{{ check for braced initializers
 AC_MSG_CHECKING([for braced initializers])
@@ -321,6 +321,7 @@ dnl }}}
 dnl {{{ output
 AM_CONFIG_HEADER(config.h)
 AM_EXTRA_RECURSIVE_TARGETS([manual])
+AC_SUBST([AM_CXXFLAGS], '-I$(top_srcdir) -std=c++14 -Wall -Wextra -pedantic')
 AC_OUTPUT(
 	Makefile
 	doc/Makefile
