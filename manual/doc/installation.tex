@@ -168,11 +168,19 @@ cd eos
 ./autogen.bash
 \end{commandline}
 %
+For the installation you have to select an appropriate \texttt{PREFIX}:
+\begin{enumerate}
+    \item If you are administrating the computer on which you install EOS yourself,
+    you can choose any prefix. The default is \texttt{PREFIX=/usr/local/}~.
+    \item If you are not administrating your computer yourself, you can install
+    EOS into a prefix below your home directory or any other directory under your
+    control. We recommend to use \texttt{PREFIX=\$HOME/.eos/}~.
+\end{enumerate}
 Next, you configure the build scripts using:
 %
 \begin{commandline}
 ./configure \
-    --prefix=/opt/pkgs/eos \
+    --prefix=\$PREFIX \
     --enable-python \
     # alternative 1: --disable-python
     # alternative 2: --with-minuit2=root
@@ -187,19 +195,18 @@ In the above, three alternatives apply:
     this interface, replace \texttt{--enable-python} with \texttt{--disable-python}.
     \item If you have installed ROOT on your system, you can use ROOT's internal copy of Minuit2.
     In such a case, issue \texttt{--with-minuit2=root} to the configure script.
-    \item If you have manually installed \package{minuit2}, you can use \texttt{--with-minuit2=PATH}
-    to specify its installation path to EOS.
+    \item Only if you have \emph{manually} installed \package{minuit2}, you must specify its installation
+    path using\\ \texttt{--with-minuit2=MINUIT2-INSTALLATION-PATH}~.
     \item Building the EOS-PMC support is purely optional. In order to enable building this
-    support, issue \texttt{--enable-pmc}. If you installed \package{libpmc} manually, use
-    \texttt{--with-pmc} to specify its installation path.
+    support, issue \texttt{--enable-pmc}. If you \emph{manually} installed \package{libpmc}, you
+    must specify its installation path using \texttt{--with-pmc=PMC-INSTALLATION-PATH}~.
 \end{enumerate}
 If the \texttt{configure} script finds any problems with your system, it will complain loudly.\\
 
-After successful configuration, you can build and install EOS using:
+After successful configuration, you can build EOS using:
 %
 \begin{commandline}
 make all
-sudo make install
 \end{commandline}
 %
 Moreover, we urgently recommend to also run the complete test suite by executing:
@@ -209,7 +216,10 @@ make check
 \end{commandline}
 %
 within the source directory. Please contact the authors in the case that any
-test failures should occur.
+test failures should occur. If the test cases have successfully passed, you can install EOS using:
+\begin{commandline}
+make install # Use 'sudo make install' if you install e.g. to 'PREFIX=/usr/local'
+\end{commandline}
 
 
 In order to be able to use the EOS clients from the command line, you will need to
