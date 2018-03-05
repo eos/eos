@@ -31,6 +31,11 @@ namespace eos
     std::string join(Iter_ it, const Iter_ & end,
             const std::string & sep = ", ")
     {
+        if (it == end)
+        {
+            return {};
+        }
+
         std::stringstream ss;
 
         ss << *(it++);
