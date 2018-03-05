@@ -24,9 +24,50 @@ cases.  We assume further that only the built-in observables, physics models
 and experimental constraints are used. The necessary steps to extend EOS with
 new observables, physics models or constraints will be discussed in \refch{extending}.
 
+
+\section{Browsing the List of Parameters, Observables and Constraints}
+\label{sec:usage:parameters+observables+constraints}
+
+EOS has knowledge of parameters, observables, options, kinematic variables, and
+constraints.  Parameters, observables and constraints share a common naming
+scheme, in order to allow categorize these quantities more readily. The naming
+scheme is as follows: each name can be decomposed into a prefix (before the
+\texttt{::} separator), an optional tag (after the optional \texttt{\@}
+separator), and the short name (between the separators); e.g.:
+\begin{center}
+    \verb+K^*::a_1_para@1GeV+
+\end{center}
+Here \texttt{K\^{}*} indicated the association with the $K^*$ meson,
+\texttt{a\_1\_para} is the short name for this object, and the tag is present and
+reads \texttt{1GeV}.\\
+
+Amongst these objects, parameters are used as inputs to EOS. They are
+real-valued numbers that can be set to arbitrary values at run time.  The full
+list of parameters known to EOS can be browsed by running the
+\client{eos-list-parameters} client.\\
+
+Observables are functions that take a set of parameters and return a single
+(real-valued) number. They include true observables in the physical sense (e.g.
+a branching ratio) but also pseudo observables such as hadronic form factors.
+A full list of observables known to EOS can be perused by running
+\client{eos-list-observables}.\\
+
+Options are used to modify the behaviour of an observable. As such their
+names are specific to a single observable. There is presently no way to list
+all possible options.\\
+
+Kinematic variables are used to provide numerical inputs to an observable that can
+be changed on a per-observable level. As such, the names of kinematic variables are
+specific to each observable. The required kinematic variables for each observable
+can be looked up using the \client{eos-list-observables} client.\\
+
+Constraints represent a piece of a (statistical) likelihood function, be it either
+an experimental measurement or a theory prediction. The list of builtin constraints
+is available through usage of the \client{eos-list-constraints} client.
+
+
 \section{Evaluating Observables}
 \label{sec:usage:eos-evaluate}
-
 
 Observables can be evaluated using the \client{eos-evaluate} client. It accepts
 the following command line arguments:
