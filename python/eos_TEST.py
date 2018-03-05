@@ -3,7 +3,7 @@
 import inspect
 import os
 
-class TestFailedError:
+class TestFailedError(BaseException):
     def __init__(self, msg):
         self.msg = msg
 
@@ -24,6 +24,11 @@ class PythonTests:
     Check if the module Python/C++ interface can be imported.
     """
     def check_001_cpp_module(self):
+        try:
+            import _eos
+        except:
+            raise TestFailedError('importing \'_eos\' failed.')
+
         try:
             import eos
         except:
