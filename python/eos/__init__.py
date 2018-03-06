@@ -49,3 +49,4 @@ class Parameters(_Parameters):
 from _eos import *
 
 from .data import *
+from .plot import *
