@@ -1,4 +1,5 @@
-# Copyright (c) 2016, 2017 Danny van Dyk
+# Copyright (c) 2018 Frederik Beaujean
+# Copyright (c) 2016, 2017, 2018 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -13,23 +14,14 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import print_function
-import argparse
 import h5py
-import matplotlib
-# use PDF renderer by default
-matplotlib.use('AGG')
-import matplotlib.pyplot as plot
 import numpy
 import os
 import sys
 
-from scipy.stats.kde import gaussian_kde
-
-
 def error(message):
     print('%s: error: %s' % (os.path.basename(sys.argv[0]), message), file=sys.stderr)
-    exit(1)
+    sys.exit(1)
 
 def warn(message):
     print('%s: warning: %s' % (os.path.basename(sys.argv[0]), message), file=sys.stderr)
@@ -167,75 +159,3 @@ class UncertaintyDataFile:
         return data
 
 
-class Plotter1D:
-    def __init__(self, datafile, pdffile):
-        self.datafile = datafile
-        self.pdffile = pdffile
-
-    def histogram(self, index, **options):
-        data = self.datafile.data()[:, index]
-        # (name, min, max, nuisance, prior)
-        parameter = self.datafile.parameters[index]
-
-        plot.clf()
-        plot.figure(figsize=(10, 10), dpi=80)
-
-        # x axis
-        plot.xlabel(parameter[0])
-        xmin = options['xmin'] if options['xmin'] != None else parameter[1]
-        xmax = options['xmax'] if options['xmax'] != None else parameter[2]
-        plot.xlim(xmin, xmax)
-
-        # y axis
-        plot.ylabel('frequency')
-
-        # plot
-        plot.hist(data, bins=100, normed=1, alpha=.3)
-        if options['kde']:
-            kde = gaussian_kde(data)
-            kde.set_bandwidth(bw_method='silverman')
-            kde.set_bandwidth(bw_method=kde.factor * options['kde_bandwidth'])
-            x = numpy.linspace(xmin, xmax, 1000)
-            plot.plot(x, kde(x), 'r')
-
-        plot.tight_layout()
-
-        # save figure
-        plot.savefig(self.pdffile)
-
-
-class Plotter2D:
-    def __init__(self, datafile, pdffile):
-        self.datafile = datafile
-        self.pdffile = pdffile
-
-    def histogram(self, index1, index2, **options):
-        data = self.datafile.data()
-
-        # param 1
-        parameter1 = self.datafile.parameters[index1]
-        data1 = data[:, index1]
-
-        parameter2 = self.datafile.parameters[index2]
-        data2 = data[:, index2]
-
-        plot.clf()
-        plot.figure(figsize=(10, 10), dpi=80)
-
-        # x axis
-        plot.xlabel(parameter1[0])
-        xmin = options['xmin'] if options['xmin'] != None else parameter1[1]
-        xmax = options['xmax'] if options['xmax'] != None else parameter1[2]
-        plot.xlim(xmin, xmax)
-
-        # y axis
-        plot.ylabel(parameter2[0])
-        ymin = options['ymin'] if options['ymin'] != None else parameter2[1]
-        ymax = options['ymax'] if options['ymax'] != None else parameter2[2]
-        plot.ylim(ymin, ymax)
-
-        # plot
-        plot.hist2d(data1, data2, bins=100)
-        plot.tight_layout()
-
-        plot.savefig(self.pdffile)
