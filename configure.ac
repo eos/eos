@@ -35,7 +35,7 @@ AC_CHECK_HEADERS([yaml-cpp/yaml.h],
         [eos_found_yaml_cpp_headers=yes; break;])
 
 AS_IF([test "x$eos_found_yaml_cpp_headers" != "xyes"],
-        [AC_MSG_ERROR([you do seem to be lacking 'yaml-cpp-dev'.])])
+        [AC_MSG_ERROR([you do seem to be lacking 'libyaml-cpp-dev'.])])
 dnl }}}
 dnl }}}
 
