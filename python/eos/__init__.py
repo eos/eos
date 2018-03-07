@@ -1,4 +1,5 @@
-# Copyright (c) 2017 Danny van Dyk
+# Copyright (c) 2018 Frederik Beaujean
+# Copyright (c) 2017, 2018 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General

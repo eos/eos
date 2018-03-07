@@ -217,3 +217,81 @@ class Plotter:
 
         plt.show()
         plt.savefig(self.output)
+
+
+
+class Plotter1D:
+    def __init__(self, datafile, pdffile):
+        self.datafile = datafile
+        self.pdffile = pdffile
+
+
+    def histogram(self, index, **options):
+        data = self.datafile.data()[:, index]
+        # (name, min, max, nuisance, prior)
+        parameter = self.datafile.parameters[index]
+
+        plt.clf()
+        plt.figure(figsize=(10, 10), dpi=80)
+
+        # x axis
+        plt.xlabel("{} [{}]".format(str(parameter[0], 'utf-8'), str(parameter[1], 'utf-8')))
+        xmin = float(options['xmin'] if options['xmin'] != None else parameter[2])
+        xmax = float(options['xmax'] if options['xmax'] != None else parameter[3])
+        plt.xlim(xmin, xmax)
+
+        # y axis
+        plt.ylabel('frequency')
+
+        # plot
+        plt.hist(data, bins=100, normed=1, alpha=.3)
+        if options['kde']:
+            kde = gaussian_kde(data)
+            kde.set_bandwidth(bw_method='silverman')
+            kde.set_bandwidth(bw_method=kde.factor * options['kde_bandwidth'])
+            x = numpy.linspace(xmin, xmax, 1000)
+            plot.plot(x, kde(x), 'r')
+
+        plt.tight_layout()
+
+        # save figure
+        plt.savefig(self.pdffile)
+
+
+
+class Plotter2D:
+    def __init__(self, datafile, pdffile):
+        self.datafile = datafile
+        self.pdffile = pdffile
+
+
+    def histogram(self, index1, index2, **options):
+        data = self.datafile.data()
+
+        # param 1
+        parameter1 = self.datafile.parameters[index1]
+        data1 = data[:, index1]
+
+        parameter2 = self.datafile.parameters[index2]
+        data2 = data[:, index2]
+
+        plt.clf()
+        plt.figure(figsize=(10, 10), dpi=80)
+
+        # x axis
+        plt.xlabel("{} [{}]".format(str(parameter1[0], 'utf-8'), str(parameter1[1], 'utf-8')))
+        xmin = options['xmin'] if options['xmin'] != None else parameter1[2]
+        xmax = options['xmax'] if options['xmax'] != None else parameter1[3]
+        plt.xlim(xmin, xmax)
+
+        # y axis
+        plt.ylabel("{} [{}]".format(str(parameter2[0], 'utf-8'), str(parameter2[1], 'utf-8')))
+        ymin = options['ymin'] if options['ymin'] != None else parameter2[2]
+        ymax = options['ymax'] if options['ymax'] != None else parameter2[3]
+        plt.ylim(ymin, ymax)
+
+        # plot
+        plt.hist2d(data1, data2, bins=100)
+        plt.tight_layout()
+
+        plt.savefig(self.pdffile)
