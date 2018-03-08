@@ -31,8 +31,8 @@ class PythonTests:
 
         try:
             import eos
-        except:
-            raise TestFailedError('importing \'eos\' failed.')
+        except ImportError as e:
+            raise TestFailedError('importing \'eos\' failed: \'{}\''.format(str(e)))
 
     """
     Check if an instance of QualifiedName can be created.
