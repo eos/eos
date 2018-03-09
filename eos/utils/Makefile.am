@@ -6,7 +6,6 @@ CLEANFILES = \
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = -I$(top_srcdir) -std=c++0x -Wall -Wextra -pedantic
-AM_CXXFLAGS += -DEOS_DATADIR='"$(datadir)"'
 
 lib_LTLIBRARIES = libeosutils.la
 libeosutils_la_SOURCES = \

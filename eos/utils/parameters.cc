@@ -18,6 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <config.h>
+
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/stringify.hh>
