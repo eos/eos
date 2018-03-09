@@ -314,6 +314,8 @@ dnl }}}
 dnl {{{ define relevant EOS_* macros
 AC_DEFINE_UNQUOTED([EOS_BUILDDIR], "$ac_pwd", [Absolute path to the build directory])
 AC_DEFINE_UNQUOTED([EOS_SRCDIR], "$ac_abs_confdir", [Absolute path to the top-level source directory])
+eval ac_datadir=`eval x=$datadir ; echo $x`
+AC_DEFINE_UNQUOTED([EOS_DATADIR], "$ac_datadir", [Absolute path to the installation data directory])
 dnl }}}
 
 dnl {{{ output
