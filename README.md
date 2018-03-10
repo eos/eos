@@ -2,54 +2,69 @@ EOS - A HEP Program for Flavor Observables
 ==========================================
 
 EOS is a software package that addresses several use cases in the field of
-high-energy flavor physics:
+high-energy flavor physics (HEP):
 
- - calculation and uncertainty estimation of flavor observables within
-   various models, and
- - Bayesian inference of parameters from experimental and/or theoretical
-   constraints.
+ 1. calculation and uncertainty estimation of flavor observables within
+   various models,
+ 2. Bayesian inference of parameters from experimental and/or theoretical
+   constraints, and
+ 3. sampling process-specific probability density functions.
 
-EOS is written in C++, and relies on as a small set of dependencies:
+An up-to-date list of EOS related publications can be found [here](https://eos.github.io/publications/).
 
- - GNU Scientific Library
- - Hierarchical Data Format v5 (HDF5)
- - Minuit2 v5 (or greater)
- - libPMC (optional)
+EOS is written in C++14, with an optional interface to Python, and depends on
+as a small set of external software libraries:
+
+ - the GNU Scientific Library (libgsl),
+ - a subset of the BOOST C++ libraries,
+ - the Hierarchical Data Format v5 library (libdf5),
+ - the minimizer Minuit2 (as of ROOT version 5.14.00 or later),
+ - the Population Monte Carlo (PMC) library pmclib (optional),
+ - the Python interpreter (optional).
+
+For details on these dependencies we refer to the [user manual](https://eos.github.io/manual/manual.pdf).
 
 Installation
 ------------
 
+Presently EOS supports installation from source only. For Ubuntu users, two of the external software
+dependencies that are not available from the main repositories are provided in the official
+[EOS repository](https://packagecloud.io/eos/eos).
+
 For instructions on how to build and install EOS on your computer please have a
-look at the [manual](https://eos.github.io/manual/manual.pdf).
+look at the [user manual](https://eos.github.io/manual/manual.pdf).
 
 Authors and Contributors
 ------------------------
 
 The main authors are:
 
- * Danny van Dyk <danny.van.dyk@gmail.com>
- * Frederik Beaujean <frederik.beaujean@lmu.de>
- * Christoph Bobeth <christoph.bobeth@gmail.com>
+ * Danny van Dyk <danny.van.dyk@gmail.com>,
+ * Frederik Beaujean <frederik.beaujean@lmu.de>,
+ * Christoph Bobeth <christoph.bobeth@gmail.com>,
 
-Former contributors are:
+with contributions by:
 
- * Stephan Jahn
- * Christian Wacker
+ * Marzia Bordone,
+ * Thomas Blake,
+ * Nico Gubernari,
+ * Ahmet Kokulu,
+ * Stephan Jahn,
+ * Ismo Tojiala,
+ * Christian Wacker.
 
 We would like to extend our thanks to the following people whose input and
 support were most helpful in either the development or the maintenance of EOS:
 
- * Thomas Blake
  * Gudrun Hiller
  * David Leverton
  * Ciaran McCreesh
  * Hideki Miyake
  * Konstantinos Petridis
  * Alexander Shires
- * Ismo Tojiala
 
 Contact
 -------
 
-For additional information, please contact the authors. If you want to report an
-error or file a request, please file an issue at https://github.com/eos/eos/issues.
+For additional information, please contact any of the main authors. If you want to report an
+error or file a request, please file an issue [here](https://github.com/eos/eos/issues).
