@@ -59,6 +59,18 @@
     max:     +0.218
     comments: "GeV, cf. [BSZ2015]"
 
+"decay-constant::D" :
+    central: +0.200
+    min:     +0.180
+    max:     +0.220
+    comments: "GeV, cf. [FKKM2009], p. 9"
+
+"decay-constant::D^*" :
+    central: +0.270
+    min:     +0.240
+    max:     +0.300
+    comments: "GeV, cf. [FKKM2009], p. 9"
+
 # 3-particle couplings
 "decay-constant::g_{B^*Bpi}" :
     central: +30.0

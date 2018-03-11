@@ -24,6 +24,7 @@
 #include <eos/form-factors/analytic-b-to-pi.hh>
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
+#include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
@@ -156,6 +157,9 @@ namespace eos
             { KeyType("B_s->phi::BZ2004"),   &BZ2004FormFactors<BsToPhi, PToV>::make           },
             // analytic computations
             { KeyType("B->K^*::KMO2006"),    &AnalyticFormFactorBToKstarKMO2006::make          },
+            { KeyType("B->K^*::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make },
+            { KeyType("B->D^*::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::make },
+            { KeyType("B->rho::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::make   }
         };
 
         auto i = form_factors.find(name);
