@@ -41,6 +41,7 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
 	b-to-pi-l-nu_TEST \
+     b-to-d-l-nu_TEST \
 	b-to-pi-pi-l-nu_TEST \
 	bs-to-kstar-l-nu_TEST \
 	properties_TEST
@@ -53,6 +54,8 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
+b_to_d_l_nu_TEST_SOURCES = b-to-d-l-nu_TEST.cc
+
 b_to_pi_l_nu_TEST_SOURCES = b-to-pi-l-nu_TEST.cc
 
 b_to_pi_pi_l_nu_TEST_SOURCES = b-to-pi-pi-l-nu_TEST.cc

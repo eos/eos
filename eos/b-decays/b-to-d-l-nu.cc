@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2015 Marzia Bordone
+ * Copyright (c) 2018 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -39,6 +40,8 @@ namespace eos
         Parameters parameters;
 
         UsedParameter m_B;
+        
+        UsedParameter mu;
 
         UsedParameter tau_B;
 
@@ -54,6 +57,7 @@ namespace eos
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
             m_B(p["mass::B_" + o.get("q", "d")], u),
+            mu(p["mu"], u),
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
             m_D(p["mass::D^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
@@ -80,25 +84,45 @@ namespace eos
         {
             double fp = form_factors->f_p(s);
             double f0 = form_factors->f_0(s);
+            double mbMSbar = model->m_b_msbar(mu);
             double lam = lambda(m_B * m_B, m_D * m_D, s);
-            double norm = power_of<2>(g_fermi())
-                / (384.0 * power_of<3>(M_PI * m_B));
-            // make sure we return NaN if s < m_l^2
-            double sqrtv = sqrt(1.0 - m_l * m_l / s);
-            double v = sqrtv * sqrtv, v2 = v * v;
-
-            // correct result
-            return norm * sqrt(lam) * v2 * ((3.0 - v) * fp * fp * lam + 3.0 * f0 * f0 * (1.0 - v) * power_of<2>(m_B * m_B - m_D * m_D));
+            double p = sqrt(lam) / (2.0 * m_B);
+            // make sure we return NaN if s < m_l^2, v = lepton velocity in the dilepton rest frame
+            double v = (1.0 - m_l * m_l / s);
+            double mvm1 = m_l * m_l / s;
+            double v2 = v * v;
+            double norm = 8.0 * v2 * m_B * s * power_of<2>(g_fermi())
+                / (3.0 * 256.0 * power_of<3>(M_PI * m_B));
+            const double hh0 = 2.0 * m_B * p * fp / (sqrt(s));
+            const double hht = (m_B * m_B - m_D * m_D) * f0 / (sqrt(s));
+            // light quark masses neglected here
+            const double hhs = (m_B * m_B - m_D * m_D) * f0 / (mbMSbar);
+            
+            // NP contributions in EFT, cf. e.g. [DBG2013]
+            const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c();
+            const complex<double> gv = wc.cvl() + wc.cvr();
+            const complex<double> gs = wc.csl() + wc.csr();
+            
+            // normalized(|V_cb|=1) differential decay width including NP (in SM gv=1, and all other couplings are zero)
+            return norm * p * (power_of<2>(hh0) * std::norm(gv) * (1.0 + mvm1 / 2.0) + (3.0 * mvm1 / 2.0) * std::norm(hht * gv + hhs * gs / sqrt(mvm1)));
         }
 
+        // differential decay width including NP
         double differential_decay_width(const double & s) const
         {
             return normalized_differential_decay_width(s) * std::norm(model->ckm_cb());
         }
-
+       
+        // differential branching_ratio including NP
         double differential_branching_ratio(const double & s) const
         {
             return differential_decay_width(s) * tau_B / hbar;
+        }
+        
+        // "normalized"(|Vcb|=1) differential branching_ratio including NP
+        double normalized_differential_branching_ratio(const double & s) const
+        {
+            return normalized_differential_decay_width(s) * tau_B / hbar;
         }
     };
 
@@ -126,12 +150,29 @@ namespace eos
         return integrate<GSL::QNG>(f, s_min, s_max);
     }
 
+    // normalized_differential_branching_ratio (|V_cb|=1)
+    double
+    BToDLeptonNeutrino::normalized_differential_branching_ratio(const double & s) const
+    {
+        return _imp->normalized_differential_branching_ratio(s);
+    }
+    
+    // normalized(|Vcb|=1) integrated branching_ratio including NP
+    double
+    BToDLeptonNeutrino::normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::normalized_differential_branching_ratio,
+                                                             _imp.get(), std::placeholders::_1);
+        
+        return integrate<GSL::QNG>(f, s_min, s_max);
+    }
+
     double
     BToDLeptonNeutrino::differential_r_d(const double & s) const
     {
         double br_muons;
         {
-            Save<Parameter, double> save_m_l(_imp->m_l, 0 /*_imp->parameters["mass::mu"]()*/);
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
             br_muons = _imp->differential_branching_ratio(s);
         }
 
@@ -152,7 +193,9 @@ namespace eos
 
         double br_muons;
         {
-            Save<Parameter, double> save_m_l(_imp->m_l, 0 /*_imp->parameters["mass::mu"]()*/);
+
+            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+
             br_muons = integrate<GSL::QNG>(f, 0.02, 11.62);
         }
 
