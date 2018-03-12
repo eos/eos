@@ -380,7 +380,16 @@ namespace implementation
         }
         else
         {
-            throw InternalError("SMComponent<components::QCD>::m_s_msbar: Running of m_s_MSbar to mu < 2.0 GeV not yet implemented");
+            if (mu >= _mu_c__qcd)
+                return QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+
+            double alpha_s_c = alpha_s(_mu_c__qcd);
+            double m_s_c = QCD::m_q_msbar(m_s_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+
+            if (mu >= 0.5)
+                return QCD::m_q_msbar(m_s_c, alpha_s_c, alpha_s(mu), QCD::beta_function_nf_3, QCD::gamma_m_nf_3);
+
+            throw InternalError("SMComponent<components::QCD>::m_s_msbar: Running of m_s_MSbar to mu < 0.5 GeV not yet implemented");
         }
     }
 

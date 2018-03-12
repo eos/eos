@@ -217,6 +217,8 @@ class SMassesTest :
             Parameters p = reference_parameters();
             StandardModel model(p);
 
+            TEST_CHECK_NEARLY_EQUAL(0.136682, model.m_s_msbar(1.0),  eps);
+            TEST_CHECK_NEARLY_EQUAL(0.106128, model.m_s_msbar(1.7),  eps);
             TEST_CHECK_NEARLY_EQUAL(0.101000, model.m_s_msbar(2.0),  eps);
             TEST_CHECK_NEARLY_EQUAL(0.084980, model.m_s_msbar(4.2),  eps);
             TEST_CHECK_NEARLY_EQUAL(0.082967, model.m_s_msbar(4.8),  eps);
