@@ -13,7 +13,7 @@ if: branch IN (master, testing)
 env:
     - DOCKER_TARGET=xenial DOCKER_CXX=g++
     - DOCKER_TARGET=xenial DOCKER_CXX=clang++-4.0
-    - DOCKER_TARGET=artful DOCKER_CXX=g++
+    - DOCKER_TARGET=bionic DOCKER_CXX=g++
 
 allowed_failures:
     # presently fails with 'Illegal instruction' error in 'population-monte-carlo-sampler_TEST'

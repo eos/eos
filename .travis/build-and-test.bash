@@ -52,7 +52,7 @@ ${CXX} --version
 [[ -n ${COVERALLS_TOKEN} ]] || echo 'Skipping coverage report since $COVERALLS_TOKEN is empty'
 echo "==========="
 
-if [[ "xenial" == ${OS} ]] || [[ "artful" == ${OS} ]]; then
+if [[ "xenial" == ${OS} ]] || [[ "bionic" == ${OS} ]]; then
     build_and_test_ubuntu $@
 fi
 

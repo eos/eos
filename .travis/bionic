@@ -1,4 +1,5 @@
-FROM ubuntu:artful
+FROM ubuntu:bionic
+ENV DEBIAN_FRONTEND noninteractive
 RUN mkdir -p /src /build
 RUN apt-get -qq update && apt-get install -y apt-transport-https curl gnupg
 RUN curl -L https://packagecloud.io/eos/eos/gpgkey | apt-key add -
