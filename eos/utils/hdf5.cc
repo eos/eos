@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2018 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -21,6 +21,7 @@
 #include <config.h>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/hdf5.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 
 #include <hdf5.h>
@@ -52,12 +53,18 @@ namespace eos
             {
                 ret = H5Fflush(file_id, H5F_SCOPE_GLOBAL);
                 if (0 > ret)
-                    throw HDF5Error("H5Fflush failed and returned " + stringify(ret));
+                {
+                    Log::instance()->message("[hdf5::FileHandle::dtor]", ll_error)
+                        << "H5Fflush failed and returned " << stringify(ret);
+                }
             }
 
             ret = H5Fclose(file_id);
             if (0 > ret)
-                throw HDF5Error("H5Fclose failed and returned " + stringify(ret));
+            {
+                Log::instance()->message("[hdf5::FileHandle::dtor]", ll_error)
+                    << "H5Fclose failed and returned " << stringify(ret);
+            }
         }
     };
 
@@ -98,24 +105,39 @@ namespace eos
                 hsize_t dimension = size;
                 ret = H5Dset_extent(data_set_id, &dimension);
                 if (0 > ret)
-                    throw HDF5Error("H5Dset_extent failed and returned " + stringify(ret));
+                {
+                    Log::instance()->message("[hdf5::DataSetHandle::dtor]", ll_error)
+                        << "H5Dset_extent failed and returned " << stringify(ret);
+                }
             }
 
             ret = H5Sclose(space_id_memory_element);
             if (0 > ret)
-                throw HDF5Error("H5Sclose failed and returned " + stringify(ret));
+            {
+                Log::instance()->message("[hdf5::DataSetHandle::dtor]", ll_error)
+                    << "H5Sclose(space_id_memory_element) failed and returned " << stringify(ret);
+            }
 
             ret = H5Sclose(space_id_file);
             if (0 > ret)
-                throw HDF5Error("H5Sclose failed and returned " + stringify(ret));
+            {
+                Log::instance()->message("[hdf5::DataSetHandle::dtor]", ll_error)
+                    << "H5Sclose(space_id_file) failed and returned " << stringify(ret);
+            }
 
             ret = H5Tclose(type_id);
             if (0 > ret)
-                throw HDF5Error("H5Tclose failed and returned " + stringify(ret));
+            {
+                Log::instance()->message("[hdf5::DataSetHandle::dtor]", ll_error)
+                    << "H5Tclose(type_id) failed and returned " << stringify(ret);
+            }
 
             ret = H5Dclose(data_set_id);
             if (0 > ret)
-                throw HDF5Error("H5Dclose failed and returned " + stringify(ret));
+            {
+                Log::instance()->message("[hdf5::DataSetHandle::dtor]", ll_error)
+                    << "H5Dclose(data_set_id) failed and returned " << stringify(ret);
+            }
         }
     };
 
@@ -146,19 +168,31 @@ namespace eos
 
             ret = H5Sclose(space_id_memory);
             if (0 > ret)
-                throw HDF5Error("H5Sclose failed and returned " + stringify(ret));
+            {
+                Log::instance()->message("[hdf5::AttributeHandle::dtor]", ll_error)
+                    << "H5Sclose(space_id_memory) failed and returned " << stringify(ret);
+            }
 
             ret = H5Sclose(space_id_file);
             if (0 > ret)
-                throw HDF5Error("H5Sclose failed and returned " + stringify(ret));
+            {
+                Log::instance()->message("[hdf5::AttributeHandle::dtor]", ll_error)
+                    << "H5Sclose(space_id_file) failed and returned " << stringify(ret);
+            }
 
             ret = H5Tclose(type_id);
             if (0 > ret)
-                throw HDF5Error("H5Tclose failed and returned " + stringify(ret));
+            {
+                Log::instance()->message("[hdf5::AttributeHandle::dtor]", ll_error)
+                    << "H5Tclose(type_id) failed and returned " << stringify(ret);
+            }
 
             ret = H5Aclose(attribute_id);
             if (0 > ret)
-                throw HDF5Error("H5Aclose failed and returned " + stringify(ret));
+            {
+                Log::instance()->message("[hdf5::AttributeHandle::dtor]", ll_error)
+                    << "H5Aclose(attribute_id) failed and returned " << stringify(ret);
+            }
         }
     };
 
