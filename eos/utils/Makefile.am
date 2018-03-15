@@ -27,6 +27,7 @@ libeosutils_la_SOURCES = \
 	hdf5.cc hdf5.hh hdf5-fwd.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
+	integrate-cubature.hh integrate-cubature.cc \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	iterator-range.hh \
 	join.hh \
@@ -67,6 +68,7 @@ libeosutils_la_SOURCES = \
 	wilson-polynomial.cc wilson-polynomial.hh \
 	wilson_scan_model.cc wilson_scan_model.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
+
 libeosutils_la_LIBADD = \
 	-lboost_filesystem -lboost_system \
 	-lgsl -lgslcblas -lm \
