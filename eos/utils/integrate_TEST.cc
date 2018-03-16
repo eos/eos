@@ -73,17 +73,18 @@ class IntegrateTest :
             std::cout << "\\int_0.0^10.0 f3(x) dx = " << q3 << ", eps = " << std::abs(i3 - q3) / q3 << " over 16 points" << std::endl;
             TEST_CHECK_RELATIVE_ERROR(i3, q3, eps);
 
-            double q4 = integrate1D(std::function<double (const double &)>(&f4), 16, 1.0, std::exp(1)), i4 = 1.0;
+            auto f4obj = std::function<double (const double &)>(&f4);
+            double q4 = integrate1D(f4obj, 16, 1.0, std::exp(1)), i4 = 1.0;
             std::cout << "\\int_0.0^exp(1) f4(x) dx = " << q4 << ", eps = " << std::abs(i4 - q4) / q4 << " over 16 points" << std::endl;
             TEST_CHECK_RELATIVE_ERROR(i4, q4, eps);
 
             auto config_QNG = GSL::QNG::Config().epsrel(eps);
-            q4 = integrate<GSL::QNG>(std::function<double (const double &)>(&f4), 1.0, std::exp(1), config_QNG);
+            q4 = integrate<GSL::QNG>(f4obj, 1.0, std::exp(1), config_QNG);
             std::cout << "\\int_0.0^exp(1) f4(x) dx = " << q4 << ", eps = " << std::abs(i4 - q4) / q4 << " with QNG" << std::endl;
             TEST_CHECK_RELATIVE_ERROR(i4, q4, eps);
 
             auto config_QAGS = GSL::QAGS::Config().epsrel(1e-12);
-            q4 = integrate<GSL::QAGS>(std::function<double (const double &)>(&f4), 1.0, std::exp(1), config_QAGS);
+            q4 = integrate<GSL::QAGS>(f4obj, 1.0, std::exp(1), config_QAGS);
             std::cout << "\\int_0.0^exp(1) f4(x) dx = " << q4 << ", eps = " << std::abs(i4 - q4) / q4 << " with QAGS" << std::endl;
             TEST_CHECK_RELATIVE_ERROR(i4, q4, eps);
         }
