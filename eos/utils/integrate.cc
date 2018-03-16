@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2018 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -279,6 +280,48 @@ namespace eos
             throw IntegrationError(gsl_strerror(status));
         }
         return result;
+    }
+
+    namespace cubature
+    {
+        Config::Config() :
+            _qng(),
+            _maxeval(50000)
+        {
+        }
+
+        double Config::epsabs() const
+        {
+            return _qng.epsabs();
+        }
+
+        Config & Config::epsabs(const double &x)
+        {
+            _qng.epsabs(x);
+            return *this;
+        }
+
+        double Config::epsrel() const
+        {
+            return _qng.epsrel();
+        }
+
+        Config & Config::epsrel(const double &x)
+        {
+            _qng.epsrel(x);
+            return *this;
+        }
+
+        size_t Config::maxeval() const
+        {
+            return _maxeval;
+        }
+
+        Config & Config::maxeval(const size_t& x)
+        {
+            _maxeval = x;
+            return *this;
+        }
     }
 
     IntegrationError::IntegrationError(const std::string & message) throw () :

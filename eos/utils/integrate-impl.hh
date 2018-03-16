@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010, 2011 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
+ * Copyright (c) 2018 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,8 +23,10 @@
 #define EOS_GUARD_EOS_UTILS_INTEGRATE_IMPL_HH 1
 
 #include <eos/utils/integrate.hh>
+#include <eos/utils/integrate-cubature.hh>
 #include <eos/utils/matrix.hh>
 
+#include <cassert>
 #include <vector>
 
 namespace eos
@@ -114,6 +117,48 @@ namespace eos
             }
         }
     }
+
+    namespace cubature
+    {
+
+        template <size_t dim_>
+        int scalar_integrand(unsigned ndim , const double *x, void *data,
+                      unsigned fdim , double *fval)
+        {
+            assert(ndim == dim_);
+            assert(fdim == 1);
+
+            auto& f = *static_cast<cubature::fdd<dim_> *>(data);
+            // TODO use std::array_view once available
+            std::array<double, dim_> args;
+            std::copy(x, x + dim_, args.data());
+            *fval = f(args);
+
+            return 0;
+        }
+
+    }
+
+    template <size_t dim_>
+    double integrate(const cubature::fdd<dim_> & f,
+                     const std::array<double, dim_> &a,
+                     const std::array<double, dim_> &b,
+                     const cubature::Config &config)
+    {
+        // TODO Support infinite intervals by param trafo? Not for now.
+        constexpr unsigned nintegrands = 1;
+        double res;
+        double err;
+        if (hcubature(nintegrands, &cubature::scalar_integrand<dim_>,
+                      &const_cast<cubature::fdd<dim_>&>(f), dim_, a.data(), b.data(),
+                      config.maxeval(), config.epsabs(), config.epsrel(), ERROR_L2, &res, &err))
+        {
+            throw IntegrationError("hcubature failed");
+        }
+
+        return res;
+    }
+
 }
 
 #endif
