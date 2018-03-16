@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/integrate.hh>
+#include <eos/utils/integrate-impl.hh>
 
 #include <cmath>
 #include <limits>
@@ -87,5 +87,29 @@ class IntegrateTest :
             q4 = integrate<GSL::QAGS>(f4obj, 1.0, std::exp(1), config_QAGS);
             std::cout << "\\int_0.0^exp(1) f4(x) dx = " << q4 << ", eps = " << std::abs(i4 - q4) / q4 << " with QAGS" << std::endl;
             TEST_CHECK_RELATIVE_ERROR(i4, q4, eps);
+
+            auto config_cubature = cubature::Config().epsrel(eps);
+            auto f4lam = [](const std::array<double, 1> &args) -> double {
+                return f4(args[0]);
+            };
+            constexpr std::array<double, 1> a_4 { 1.0 };
+            static const std::array<double, 1> b_4 { std::exp(1) }; // std::exp isn't constexpr (yet)
+            q4 = integrate(cubature::fdd<1>(f4lam), a_4, b_4, config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(i4, q4, eps);
+
+            // Morokoff test function
+            constexpr size_t dim = 4;
+            constexpr std::array<double, dim> a_5 { 0, 0, 0, 0 };
+            constexpr std::array<double, dim> b_5 { 1, 1, 1, 1 };
+            auto f5lam = [&dim](const std::array<double, dim> &args) -> double {
+                double p = 1.0 / dim;
+                double prod = pow(1 + p, dim);
+                unsigned int i;
+                for (i = 0; i < dim; i++)
+                    prod *= pow(args[i], p);
+                return prod;
+            };
+            auto q5 = integrate(cubature::fdd<dim>(f5lam), a_5, b_5, config_cubature);
+            TEST_CHECK_RELATIVE_ERROR(q5, 1.0, eps);
         }
 } model_test;

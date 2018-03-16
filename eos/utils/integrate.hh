@@ -111,7 +111,6 @@ namespace GSL
     static thread_local QAGS::Workspace work_space;
 }
 
-    /// @{
     /*!
      * Numerically integrate functions of one real-valued parameter.
      *
@@ -120,11 +119,44 @@ namespace GSL
      * 1) `QNG`: the non-adaptive Gauss-Kronrod rule
      * 2) `QAGS`: the adaptive Clenshaw-Kurtis rule
      */
-    /// @}
     template <typename Method_>
     double integrate(const std::function<double(const double &)> & f,
                      const double &a, const double &b,
                      const typename Method_::Config &config = typename Method_::Config());
+
+namespace cubature
+{
+    template <size_t dim_>
+    using fdd = std::function<double(const std::array<double, dim_> &)>;
+
+    class Config
+    {
+    public:
+        Config();
+
+        double epsabs() const;
+        Config& epsabs(const double& x);
+
+        double epsrel() const;
+        Config& epsrel(const double& x);
+
+        size_t maxeval() const;
+        Config& maxeval(const size_t& x);
+    private:
+        GSL::QNG::Config _qng;
+        size_t _maxeval;
+    };
+}
+
+    /*!
+     * Numerically integrate functions of one or more than one variable with
+     * cubature methods.
+     */
+    template <size_t dim_>
+    double integrate(const std::function<double(const std::array<double, dim_> &)> & f,
+                     const std::array<double, dim_> &a,
+                     const std::array<double, dim_> &b,
+                     const cubature::Config &config = cubature::Config());
 
     class IntegrationError :
         public Exception
