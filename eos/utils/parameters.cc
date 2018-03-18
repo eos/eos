@@ -20,6 +20,7 @@
 
 #include <config.h>
 
+#include <eos/utils/log.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/stringify.hh>
@@ -122,6 +123,93 @@ namespace eos
         }
 
         void
+        override_from_file(const std::string & file)
+        {
+            fs::path file_path(file);
+
+            if (! fs::is_regular_file(fs::status(file_path)))
+            {
+                throw ParameterInputFileParseError(file, "expect the parameter file to be a regular file");
+            }
+
+            try
+            {
+                YAML::Node node = YAML::LoadFile(file);
+
+                for (auto && p : node)
+                {
+                    std::string name = p.first.Scalar();
+
+                    if ("@metadata@" == name)
+                        continue;
+
+                    double central, min, max;
+
+                    if (! p.second["central"])
+                    {
+                        throw ParameterInputFileNodeError(file, name, "has no entry named 'central'");
+                    }
+                    else if (YAML::NodeType::Scalar != p.second["central"].Type())
+                    {
+                        throw ParameterInputFileNodeError(file, name + ".central", "is not a scalar");
+                    }
+                    central = p.second["central"].as<double>();
+
+                    if (! p.second["min"])
+                    {
+                        throw ParameterInputFileNodeError(file, name, "has no entry named 'min'");
+                    }
+                    else if (YAML::NodeType::Scalar != p.second["min"].Type())
+                    {
+                        throw ParameterInputFileNodeError(file, name, "is not a scalar");
+                    }
+                    min = p.second["min"].as<double>();
+
+                    if (! p.second["max"])
+                    {
+                        throw ParameterInputFileNodeError(file, name, "has no entry named 'max'");
+                    }
+                    else if (YAML::NodeType::Scalar != p.second["max"].Type())
+                    {
+                        throw ParameterInputFileNodeError(file, name, "is not a scalar");
+                    }
+                    max = p.second["max"].as<double>();
+
+                    auto i = parameters_map.find(name);
+                    if (parameters_map.end() != i)
+                    {
+                        Log::instance()->message("[parameters.override]", ll_informational)
+                            << "Overriding existing parameter '" << name << "' with central value '" << central << "'";
+
+                        parameters_data->data[i->second].value = central;
+                        parameters_data->data[i->second].min = min;
+                        parameters_data->data[i->second].max = max;
+                    }
+                    else
+                    {
+                        Log::instance()->message("[parameters.override]", ll_informational)
+                            << "Adding new parameter '" << name << "' with central value '" << central << "'";
+
+                        auto idx = parameters_data->data.size();
+                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max }, idx));
+                        parameters_map[name] = idx;
+                        parameters.push_back(Parameter(parameters_data, idx));
+                    }
+
+                    if (i == parameters_map.end())
+                    {
+                        throw UnknownParameterError(name);
+                    }
+
+                }
+            }
+            catch (std::exception & e)
+            {
+                throw ParameterInputFileParseError(file, e.what());
+            }
+        }
+
+        void
         load_defaults()
         {
             fs::path base;
@@ -153,10 +241,10 @@ namespace eos
             unsigned idx = parameters.size();
             for (fs::directory_iterator f(base), f_end ; f != f_end ; ++f)
             {
-                if (! fs::is_regular_file(f->status()))
-                    continue;
-
                 auto file_path = f->path();
+
+                if (! fs::is_regular_file(status(file_path)))
+                    continue;
 
                 if (".yaml" != file_path.extension().string())
                     continue;
@@ -313,6 +401,12 @@ namespace eos
         imp->load_defaults();
 
         return Parameters(imp);
+    }
+
+    void
+    Parameters::override_from_file(const std::string & file)
+    {
+        _imp->override_from_file(file);
     }
 
     Parameter::Parameter(const std::shared_ptr<Parameters::Data> & parameters_data, unsigned index) :

@@ -161,6 +161,13 @@ namespace eos
              * @param id    The id of the Parameter that shall be retrived.
              */
             Parameter operator[] (const unsigned & id) const;
+
+            /*!
+             * Override the parameter values from an external YAML file.
+             *
+             * @param file  The name of the YAML fie.
+             */
+            void override_from_file(const std::string & file);
             ///@}
 
             /*!
