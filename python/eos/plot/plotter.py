@@ -94,6 +94,12 @@ class Plotter:
 
         # create parameters
         parameters = eos.Parameters.Defaults()
+        if 'parameters' in item and 'parameters-from-file' in item:
+            warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
+
+        if 'parameters-from-file' in item and type(item['parameters-from-file']) is str:
+            parameters.override_from_file(item['parameters-from-file'])
+
         if 'parameters' in item and type(item['parameters']) is dict:
             for key, value in item['parameters'].items():
                 parameters.set(key, value)
