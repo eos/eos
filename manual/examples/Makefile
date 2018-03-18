@@ -8,7 +8,8 @@ EXAMPLES = \
     sample-pmc-btopi-ff.bash \
     find-mode-btopi-ff.bash \
     propagate-uncertainty-btotaunu.bash \
-    propagate-uncertainty-btopilnu.bash
+    propagate-uncertainty-btopilnu.bash \
+    plot-btopilnu.bash
 
 examples: $(EXAMPLES)
 	for x in $(EXAMPLES) ; do \

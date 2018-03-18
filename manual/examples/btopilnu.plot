@@ -24,11 +24,7 @@ contents:
       kinematic: 's'
       range: [0.01, 26.0]
       samples: 200
-      parameters:
-        'CKM::abs(V_ub)':         3.57e-3
-        'B->pi::f_+(0)@BCL2008':  2.66e-1
-        'B->pi::b_+^1@BCL2008':  -2.67e+0
-        'B->pi::b_+^2@BCL2008':  +2.23e-2
+      parameters-from-file: '/tmp/mode-btopipi-ff.yaml'
 
     - name: 'B->pi mu nu (V_ub inclusive)'
       type: 'observable'
