@@ -123,6 +123,7 @@ class OptionValueTest :
             TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("KMPW2010"));
             TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("BCvD2016-model1"));
             TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("d"));
+            TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("tw2+tw3"));
 
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::OptionKey("D^*"));
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::OptionKey(""));

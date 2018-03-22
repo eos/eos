@@ -125,7 +125,7 @@ namespace eos
                     "abcdefghijklmnopqrstuvwxyz"
                     "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
                     "0123456789"
-                    "-";
+                    "+-";
 
             auto pos = value.find_first_not_of(valid_option_value_characters);
 
