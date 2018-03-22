@@ -1606,9 +1606,9 @@ namespace eos
     }
 
     FormFactors<PToV> *
-    AnalyticFormFactorBToKstarKMO2006::make(const Parameters & p, unsigned)
+    AnalyticFormFactorBToKstarKMO2006::make(const Parameters & p, const Options & o)
     {
-        return new AnalyticFormFactorBToKstarKMO2006(p, Options{});
+        return new AnalyticFormFactorBToKstarKMO2006(p, o);
     }
 
     double

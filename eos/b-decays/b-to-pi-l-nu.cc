@@ -69,7 +69,7 @@ namespace eos
                 throw InternalError("BToPiLeptonNeutrino: q = '" + o["q"] + "' is not a valid option for this decay channel");
             }
 
-            form_factors = FormFactorFactory<PToP>::create("B->pi@" + o.get("form-factors", "BCL2008"), p);
+            form_factors = FormFactorFactory<PToP>::create("B->pi::" + o.get("form-factors", "BCL2008"), p, o);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");

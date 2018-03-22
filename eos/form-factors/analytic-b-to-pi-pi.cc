@@ -61,7 +61,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
-            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi@" + o.get("soft-form-factor", "BCL2008"), p)),
+            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor", "BCL2008"), p, o)),
             m_B(p["mass::B_d"], u),
             f_pi(p["decay-constant::pi"], u),
             _mu(p["B->pipi::mu@BFvD2016"], u),
@@ -605,7 +605,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
-            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi@" + o.get("soft-form-factor", "BCL2008"), p)),
+            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor", "BCL2008"), p)),
             m_B(p["mass::B_d"], u),
             m_Bst(p["mass::B^*_d"], u),
             g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u)

@@ -101,7 +101,7 @@ namespace eos
         }
 
         public:
-            DKMR2017FormFactors(const Parameters & p) :
+            DKMR2017FormFactors(const Parameters & p, const Options & o) :
                 // time, V
                 _alpha_0_time_v(p[stringify(Process_::label) + "::a_0_time^V@DKMR2017"], *this),
                 _alpha_1_time_v(p[stringify(Process_::label) + "::a_1_time^V@DKMR2017"], *this),
@@ -145,9 +145,9 @@ namespace eos
         {
         }
 
-        static FormFactors<OneHalfPlusToOneHalfPlus> * make(const Parameters & parameters, unsigned)
+        static FormFactors<OneHalfPlusToOneHalfPlus> * make(const Parameters & parameters, const Options & options)
         {
-            return new DKMR2017FormFactors(parameters);
+            return new DKMR2017FormFactors(parameters, options);
         }
 
         // vector current
@@ -272,7 +272,7 @@ namespace eos
             }
 
         public:
-            DM2016FormFactors(const Parameters & p) :
+            DM2016FormFactors(const Parameters & p, const Options &) :
                 // time, V
                 _alpha_0_time_v(p[stringify(Process_::label) + "::a_0_time^V@DM2016"], *this),
                 _alpha_1_time_v(p[stringify(Process_::label) + "::a_1_time^V@DM2016"], *this),
@@ -316,9 +316,9 @@ namespace eos
             {
             }
 
-            static FormFactors<OneHalfPlusToOneHalfPlus> * make(const Parameters & parameters, unsigned)
+            static FormFactors<OneHalfPlusToOneHalfPlus> * make(const Parameters & parameters, const Options & options)
             {
-                return new DM2016FormFactors(parameters);
+                return new DM2016FormFactors(parameters, options);
             }
 
             // vector current

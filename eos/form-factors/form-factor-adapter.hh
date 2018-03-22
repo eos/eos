@@ -64,7 +64,7 @@ namespace eos
                 _parameters(parameters),
                 _kinematics(kinematics),
                 _options(options),
-                _form_factors(FormFactorFactory<Transition_>::create(process.str() + '@' + options["form-factors"], _parameters, options)),
+                _form_factors(FormFactorFactory<Transition_>::create(process.str() + "::" + options["form-factors"], _parameters, _options)),
                 _form_factor_function(form_factor_function),
                 _kinematics_names(kinematics_names),
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _form_factors.get()))
@@ -202,7 +202,7 @@ namespace eos
                 if (! _options.has("form-factors"))
                     throw UnknownOptionError("form-factors");
 
-                _form_factors = FormFactorFactory<Transition_>::create(process.str() + '@' + options["form-factors"], _parameters);
+                _form_factors = FormFactorFactory<Transition_>::create(process.str() + "::" + _options["form-factors"], _parameters, _options);
             }
 
             virtual const QualifiedName & name() const

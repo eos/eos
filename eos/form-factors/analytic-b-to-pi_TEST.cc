@@ -47,7 +47,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
             /* Factory */
             {
                 Parameters p = Parameters::Defaults();
-                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi@DKMMO2008", p);
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi::DKMMO2008", p, Options{ });
 
                 TEST_CHECK(0 != ff.get());
             }

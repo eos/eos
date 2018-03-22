@@ -332,7 +332,7 @@ namespace eos
             alpha_e(p["QED::alpha_e(m_b)"], u),
             mu(p["mu"], u)
         {
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda@" + o.get("form-factors", "BFvD2014"), p);
+            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
@@ -898,7 +898,7 @@ namespace eos
             public:
                 FormFactorTensorToVectorRatios(const Parameters & p, const Options & o)
                 {
-                    form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda@" + o.get("form-factors", "DM2016"), p);
+                    form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "DM2016"), p, o);
 
                     if (! form_factors.get())
                         throw InternalError("Form factors not found!");
@@ -993,7 +993,7 @@ namespace eos
             r_para_0(p["Lambda_b->Lambdall::r_para_0@MvD2016"], u),
             r_para_1(p["Lambda_b->Lambdall::r_para_1@MvD2016"], u)
         {
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda@" + o.get("form-factors", "DM2016"), p);
+            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "DM2016"), p, o);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");

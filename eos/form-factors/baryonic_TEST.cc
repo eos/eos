@@ -41,7 +41,7 @@ class BFvD2014FormFactorsTest :
             static const double eps = 1e-3;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> ff = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda@BFvD2014", p);
+            std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> ff = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::BFvD2014", p, Options{ });
 
             p["Lambda_b->Lambda::f_0^V(0)@BFvD2014"]    =  0.33;
             p["Lambda_b->Lambda::b_1_0^V@BFvD2014"]     = -1.75;
@@ -94,7 +94,7 @@ public:
         static const double eps = 1e-3;
 
         Parameters p = Parameters::Defaults();
-        std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> ff = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c@DKMR2017", p);
+        std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> ff = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::DKMR2017", p);
         // fix z-expansion parameters @DKMR2017 - all a_2's are zero by default
         // Note that a0_perp_A = a0_long_A ve a0_perp_T5 = a0_long_T5
         p["Lambda_b->Lambda_c::a_0_time^V@DKMR2017"]    =  0.33;

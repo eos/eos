@@ -86,9 +86,9 @@ namespace eos
             {
             }
 
-            static FormFactors<OneHalfPlusToOneHalfPlus> * make(const Parameters & parameters, unsigned)
+            static FormFactors<OneHalfPlusToOneHalfPlus> * make(const Parameters & parameters, const Options & options)
             {
-                return new BFvD2014FormFactors(parameters, Options());
+                return new BFvD2014FormFactors(parameters, options);
             }
 
             virtual double f_long_v(const double & s) const
@@ -137,48 +137,24 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>
-    FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(const std::string & label, const Parameters & parameters, const Options &)
+    FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> result;
 
-        typedef std::tuple<std::string, std::string> KeyType;
-        typedef std::function<FormFactors<OneHalfPlusToOneHalfPlus> * (const Parameters &, unsigned)> ValueType;
+        typedef QualifiedName KeyType;
+        typedef std::function<FormFactors<OneHalfPlusToOneHalfPlus> * (const Parameters &, const Options &)> ValueType;
         static const std::map<KeyType, ValueType> form_factors
         {
-            { KeyType("Lambda_b->Lambda",     "BFvD2014"),   &BFvD2014FormFactors::make                      },
-            { KeyType("Lambda_b->Lambda",     "DM2016"),     &DM2016FormFactors<LambdaBToLambda>::make       },
-            { KeyType("Lambda_b->Lambda_c",     "DKMR2017"),     &DKMR2017FormFactors<LambdaBToLambdaC>::make       },
+            { KeyType("Lambda_b->Lambda::BFvD2014"),   &BFvD2014FormFactors::make                      },
+            { KeyType("Lambda_b->Lambda::DM2016"),     &DM2016FormFactors<LambdaBToLambda>::make       },
+            { KeyType("Lambda_b->Lambda_c::DKMR2017"), &DKMR2017FormFactors<LambdaBToLambdaC>::make    }
         };
 
-        /*
-         * Labels have the form
-         *
-         *   PROCESS@NAME[:SET]
-         *
-         * The brackets indicate the latter part to be optional.
-         */
-
-        std::string process, name, input(label);
-        unsigned set(0);
-
-        std::string::size_type sep_at(input.find('@')), sep_colon(input.find(':'));
-        if (std::string::npos == sep_at)
-            return result;
-
-        if (std::string::npos != sep_colon)
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
         {
-            set = destringify<unsigned>(input.substr(sep_colon + 1));
-            input.erase(sep_colon + 1);
+            result.reset(i->second(parameters, name.options() + options));
         }
-
-        name = input.substr(sep_at + 1);
-        process = input.substr(0, sep_at);
-
-        auto i = form_factors.find(KeyType(process, name));
-        if (form_factors.cend() == i)
-            return result;
-
-        result = std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>(i->second(parameters, set));
 
         return result;
     }

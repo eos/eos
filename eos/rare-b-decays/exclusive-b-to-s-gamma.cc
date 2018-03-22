@@ -105,7 +105,7 @@ namespace eos
             g_fermi(p["G_Fermi"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
-            form_factors(FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p))
+            form_factors(FormFactorFactory<PToV>::create(QualifiedName("B->K^*::" + o.get("form-factors", "KMPW2010")), p, o))
         {
             u.uses(*model);
             u.uses(*form_factors);

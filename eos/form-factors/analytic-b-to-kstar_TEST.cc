@@ -321,7 +321,7 @@ class KMO2006FormFactorsTest :
                 static const double eps = 3e-3; // relative error < 0.3%
 
                 Parameters p = Parameters::Defaults();
-                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*@KMO2006", p);
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*::KMO2006", p, Options{ });
 
                 p["mu"]                  = 4.2;
                 p["lambda_B_p"]          = 0.460;

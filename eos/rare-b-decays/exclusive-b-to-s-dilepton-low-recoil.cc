@@ -122,7 +122,7 @@ namespace eos
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false"))),
             use_nlo(destringify<bool>(o.get("nlo", "true")))
         {
-            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p);
+            form_factors = FormFactorFactory<PToV>::create(QualifiedName("B->K^*::" + o.get("form-factors", "KMPW2010")), p, o);
 
             if (0.0 == m_l())
             {
@@ -1572,7 +1572,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             ccbar_resonance(destringify<bool>(o.get("ccbar-resonance", "false")))
         {
-            form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "KMPW2010"), p);
+            form_factors = FormFactorFactory<PToP>::create("B->K::" + o.get("form-factors", "KMPW2010"), p, o);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");

@@ -24,6 +24,7 @@
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
+#include <eos/utils/qualified-name.hh>
 
 #include <memory>
 #include <string>
@@ -73,7 +74,7 @@ namespace eos
     class FormFactorFactory<OneHalfPlusToOneHalfPlus>
     {
         public:
-            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
+            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
     };
 
     template <>

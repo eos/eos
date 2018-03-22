@@ -868,9 +868,9 @@ namespace eos
     }
 
     FormFactors<PToP> *
-    AnalyticFormFactorBToPiDKMMO2008::make(const Parameters & p, unsigned)
+    AnalyticFormFactorBToPiDKMMO2008::make(const Parameters & p, const Options & o)
     {
-        return new AnalyticFormFactorBToPiDKMMO2008(p, Options{ });
+        return new AnalyticFormFactorBToPiDKMMO2008(p, o);
     }
 
     double

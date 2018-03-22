@@ -36,7 +36,7 @@ namespace eos
 
             ~AnalyticFormFactorBToKstarKMO2006();
 
-            static FormFactors<PToV> * make(const Parameters &, unsigned);
+            static FormFactors<PToV> * make(const Parameters &, const Options &);
 
             /* Form factors */
             virtual double v(const double & s) const;

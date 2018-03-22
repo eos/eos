@@ -60,7 +60,7 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
             /* Factory */
             {
                 Parameters p = Parameters::Defaults();
-                std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi@BFvD2016", p, Options{ });
+                std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi::BFvD2016", p, Options{ });
 
                 TEST_CHECK(0 != ff.get());
             }
@@ -289,7 +289,7 @@ class AnalyticFormFactorBToPiPiFvDV2018Test :
             /* Factory */
             {
                 Parameters p = Parameters::Defaults();
-                std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi@FvDV2018-Dispersive", p, Options{ });
+                std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi::FvDV2018-Dispersive", p, Options{ });
 
                 TEST_CHECK(0 != ff.get());
 

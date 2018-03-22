@@ -71,7 +71,7 @@ namespace eos
             g_fermi(p["G_Fermi"], u),
             hbar(p["hbar"], u)
         {
-            form_factors = FormFactorFactory<PToP>::create("B->D@" + o.get("form-factors", "BCL2008"), p);
+            form_factors = FormFactorFactory<PToP>::create("B->D::" + o.get("form-factors", "BCL2008"), p, o);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");

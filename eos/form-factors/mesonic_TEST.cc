@@ -43,7 +43,7 @@ class BCL2008FormFactorsTest :
                 static const double eps = 1e-5;
 
                 Parameters p = Parameters::Defaults();
-                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi@BCL2008", p);
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi::BCL2008", p, Options{ });
 
                 p["B->pi::f_+(0)@BCL2008"] = 1.0;
                 p["B->pi::b_+^1@BCL2008"]  = 0.0;
@@ -90,7 +90,7 @@ class BToKstarBZ2004FormFactorsTest :
             static const double eps = 1e-4;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*@BZ2004", p);
+            std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*::BZ2004", p, Options{ });
             TEST_CHECK(ff.get() != nullptr);
 
             TEST_CHECK_NEARLY_EQUAL(0.435248700565, ff->v( 1.0),   eps);
@@ -172,7 +172,7 @@ class BsToPhiBZ2004FormFactorsTest :
             static const double eps = 1e-10;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->phi@BZ2004", p);
+            std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->phi::BZ2004", p, Options{ });
             TEST_CHECK(ff.get() != nullptr);
 
             TEST_CHECK_NEARLY_EQUAL(0.460064372742, ff->v( 1.0),   eps);
@@ -228,7 +228,7 @@ class BToKBZ2004FormFactorsTest :
             static const double eps = 1e-10;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K@BZ2004v2", p);
+            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::BZ2004v2", p, Options{ });
             TEST_CHECK(0 != ff.get());
 
             // compare with results from mathematica
@@ -279,7 +279,7 @@ class BToKBZ2004SplitFormFactorsTest :
             static const double eps = 1e-5;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K@BZ2004v2Split", p);
+            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::BZ2004v2Split", p, Options{ });
             TEST_CHECK(0 != ff.get());
 
             TEST_CHECK_NEARLY_EQUAL(0.326792, ff->f_p( 0.0), eps);
@@ -340,7 +340,7 @@ class BToKstarKMPW2010FormFactorsTest:
                 p["B->K^*::F^T1(0)@KMPW2010"] = 0.31; p["B->K^*::b^T1_1@KMPW2010"] =  -4.6;
                 p["B->K^*::F^T2(0)@KMPW2010"] = 0.31; p["B->K^*::b^T2_1@KMPW2010"] =  -3.2;
                 p["B->K^*::F^T3(0)@KMPW2010"] = 0.22; p["B->K^*::b^T3_1@KMPW2010"] = -10.3;
-                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*@KMPW2010", p);
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*::KMPW2010", p, Options{ });
                 TEST_CHECK(0 != ff.get());
 
                 // V
@@ -424,7 +424,7 @@ class BToKstarKMPW2010FormFactorsTest:
                 p["B->K^*::F^T1(0)@KMPW2010"] = 0.49; p["B->K^*::b^T1_1@KMPW2010"] =  -4.6 + 0.81;
                 p["B->K^*::F^T2(0)@KMPW2010"] = 0.49; p["B->K^*::b^T2_1@KMPW2010"] =  -3.2 + 2.1;
                 p["B->K^*::F^T3(0)@KMPW2010"] = 0.39; p["B->K^*::b^T3_1@KMPW2010"] = -10.3 + 2.5;
-                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*@KMPW2010", p);
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*::KMPW2010", p, Options{ });
                 TEST_CHECK(0 != ff.get());
 
                 // V
@@ -507,7 +507,7 @@ class BToKstarKMPW2010FormFactorsTest:
                 p["B->K^*::F^T1(0)@KMPW2010"] = 0.21; p["B->K^*::b^T1_1@KMPW2010"] =  -4.6 - 0.41;
                 p["B->K^*::F^T2(0)@KMPW2010"] = 0.21; p["B->K^*::b^T2_1@KMPW2010"] =  -3.2 - 2.2;
                 p["B->K^*::F^T3(0)@KMPW2010"] = 0.12; p["B->K^*::b^T3_1@KMPW2010"] = -10.3 - 3.1;
-                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*@KMPW2010", p);
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*::KMPW2010", p, Options{ });
                 TEST_CHECK(0 != ff.get());
 
                 // V
@@ -597,7 +597,7 @@ class BToKKMPW2010FormFactorsTest :
             static const double eps = 1e-10;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K@KMPW2010", p);
+            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::KMPW2010", p, Options{ });
             TEST_CHECK(0 != ff.get());
 
             TEST_CHECK_NEARLY_EQUAL(0.3844144474375, ff->f_p( 2.3), eps);
@@ -646,7 +646,7 @@ class BToBFW2010FormFactorsTest :
             static const double eps = 1e-10;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K@BFW2010", p);
+            std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::BFW2010", p, Options{ });
             TEST_CHECK(0 != ff.get());
 
             TEST_CHECK_NEARLY_EQUAL(0.3285329106071, ff->f_p( 0.0), eps);
@@ -698,7 +698,7 @@ public:
         static const double eps = 5.1e-3;
 
         Parameters p = Parameters::Defaults();
-        std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->D^*@BSZ2015", p);
+        std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->D^*::BSZ2015", p, Options{ });
         TEST_CHECK(ff.get() != nullptr);
 
         /*
@@ -777,7 +777,7 @@ class BToKstarBSZ2015FormFactorsTest :
             static const double eps = 5.1e-3;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*@BSZ2015", p);
+            std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*::BSZ2015", p, Options{ });
             TEST_CHECK(ff.get() != nullptr);
 
             /* compare with values from David Straub,
@@ -854,7 +854,7 @@ public:
         static const double eps = 5.1e-3;
 
         Parameters p = Parameters::Defaults();
-        std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->rho@BSZ2015", p);
+        std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->rho::BSZ2015", p, Options{ });
         TEST_CHECK(ff.get() != nullptr);
 
         /*
@@ -934,7 +934,7 @@ class BToPiPiFvDV2018FormFactorsTest :
             static const double eps = 5.1e-3;
 
             Parameters p = Parameters::Defaults();
-            std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi@FvDV2018", p, Options{ });
+            std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi::FvDV2018", p, Options{ });
             TEST_CHECK(ff.get() != nullptr);
 
             // time

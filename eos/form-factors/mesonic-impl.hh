@@ -151,9 +151,9 @@ namespace eos
             {
             }
 
-            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
+            static FormFactors<PToV> * make(const Parameters & parameters, const Options & options)
             {
-                return new BZ2004FormFactors(parameters, Options());
+                return new BZ2004FormFactors(parameters, options);
             }
 
             virtual double v(const double & s) const
@@ -256,9 +256,9 @@ namespace eos
             {
             }
 
-            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
+            static FormFactors<PToV> * make(const Parameters & parameters, const Options & options)
             {
-                return new KMPW2010FormFactors(parameters, Options());
+                return new KMPW2010FormFactors(parameters, options);
             }
 
             virtual double v(const double & s) const
@@ -359,9 +359,9 @@ namespace eos
             {
             }
 
-            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
+            static FormFactors<PToV> * make(const Parameters & parameters, const Options & options)
             {
-                return new BFW2010FormFactors(parameters, Options());
+                return new BFW2010FormFactors(parameters, options);
             }
 
             virtual double a_2(const double & s) const
@@ -481,9 +481,9 @@ namespace eos
             {
             }
 
-            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
+            static FormFactors<PToV> * make(const Parameters & parameters, const Options & options)
             {
-                return new FMvD2015FormFactors(parameters, Options());
+                return new FMvD2015FormFactors(parameters, options);
             }
 
             virtual double f_long(const double & s) const
@@ -650,9 +650,9 @@ namespace eos
             {
             }
 
-            static FormFactors<PToV> * make(const Parameters & parameters, unsigned)
+            static FormFactors<PToV> * make(const Parameters & parameters, const Options & options)
             {
-                return new BSZ2015FormFactors(parameters, Options());
+                return new BSZ2015FormFactors(parameters, options);
             }
 
             virtual double v(const double & s) const
@@ -890,9 +890,9 @@ namespace eos
             {
             }
 
-            static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
+            static FormFactors<PToP> * make(const Parameters & parameters, const Options & options)
             {
-                return new BCL2008FormFactors(parameters, Options());
+                return new BCL2008FormFactors(parameters, options);
             }
     };
 
@@ -915,9 +915,9 @@ namespace eos
             {
             }
 
-            static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
+            static FormFactors<PToP> * make(const Parameters & parameters, const Options & options)
             {
-                return new BZ2004FormFactors(parameters, Options());
+                return new BZ2004FormFactors(parameters, options);
             }
 
             virtual double f_p(const double & s) const
@@ -1004,9 +1004,9 @@ namespace eos
             {
             }
 
-            static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
+            static FormFactors<PToP> * make(const Parameters & parameters, const Options & options)
             {
-                return new BZ2004FormFactorsSplit(parameters, Options());
+                return new BZ2004FormFactorsSplit(parameters, options);
             }
 
             virtual double f_p(const double & s) const
@@ -1062,9 +1062,9 @@ namespace eos
             {
             }
 
-            static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
+            static FormFactors<PToP> * make(const Parameters & parameters, const Options & options)
             {
-                return new KMPW2010FormFactors(parameters, Options());
+                return new KMPW2010FormFactors(parameters, options);
             }
 
             virtual double f_p(const double & s) const
@@ -1120,9 +1120,9 @@ namespace eos
               {
               }
 
-              static FormFactors<PToP> * make(const Parameters & parameters, unsigned)
+              static FormFactors<PToP> * make(const Parameters & parameters, const Options & options)
               {
-                  return new BFW2010FormFactors(parameters, Options());
+                  return new BFW2010FormFactors(parameters, options);
               }
 
               virtual double f_p(const double & s) const

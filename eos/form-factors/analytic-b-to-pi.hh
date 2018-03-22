@@ -36,7 +36,7 @@ namespace eos
 
             ~AnalyticFormFactorBToPiDKMMO2008();
 
-            static FormFactors<PToP> * make(const Parameters &, unsigned);
+            static FormFactors<PToP> * make(const Parameters &, const Options &);
 
             /* Leading-order terms */
             double F_lo_tw2(const double & q2) const;

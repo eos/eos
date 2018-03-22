@@ -26,6 +26,7 @@
 #include <eos/utils/complex.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/qualified-name.hh>
 
 #include <memory>
 #include <string>
@@ -70,7 +71,7 @@ namespace eos
     class FormFactorFactory<PToV>
     {
         public:
-            static std::shared_ptr<FormFactors<PToV>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
+            static std::shared_ptr<FormFactors<PToV>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
     };
 
     template <>
@@ -92,7 +93,7 @@ namespace eos
     class FormFactorFactory<PToP>
     {
         public:
-            static std::shared_ptr<FormFactors<PToP>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
+            static std::shared_ptr<FormFactors<PToP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
     template <>
@@ -124,7 +125,7 @@ namespace eos
     class FormFactorFactory<PToPP>
     {
         public:
-            static std::shared_ptr<FormFactors<PToPP>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
+            static std::shared_ptr<FormFactors<PToPP>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
     };
 }
 

@@ -25,6 +25,7 @@
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/utils/destringify.hh>
+#include <eos/utils/qualified-name.hh>
 
 #include <map>
 #include <cmath>
@@ -135,56 +136,32 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<PToV>>
-    FormFactorFactory<PToV>::create(const std::string & label, const Parameters & parameters, const Options &)
+    FormFactorFactory<PToV>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<PToV>> result;
 
-        typedef std::tuple<std::string, std::string> KeyType;
-        typedef std::function<FormFactors<PToV> * (const Parameters &, unsigned)> ValueType;
+        typedef QualifiedName KeyType;
+        typedef std::function<FormFactors<PToV> * (const Parameters &, const Options &)> ValueType;
         static const std::map<KeyType, ValueType> form_factors
         {
-            { KeyType("B->K^*",     "BZ2004"),   &BZ2004FormFactors<BToKstar, PToV>::make   },
-            { KeyType("B->K^*",     "KMPW2010"), &KMPW2010FormFactors<PToV>::make           },
-            { KeyType("B->K^*",     "BFW2010"),  &BFW2010FormFactors<BToKstar,  PToV>::make  },
-            { KeyType("B->D^*",     "BSZ2015"),  &BSZ2015FormFactors<BToDstar,  PToV>::make  },
-            { KeyType("B->K^*",     "BSZ2015"),  &BSZ2015FormFactors<BToKstar,  PToV>::make  },
-            { KeyType("B->rho",     "BSZ2015"),  &BSZ2015FormFactors<BToRho,    PToV>::make    },
-            { KeyType("B_s->K^*",   "BFW2010"),  &BFW2010FormFactors<BsToKstar, PToV>::make },
-            { KeyType("B_s->K^*",   "FMvD2015"), &FMvD2015FormFactors<BsToKstar>::make      },
-            { KeyType("B_s->phi",   "BZ2004"),   &BZ2004FormFactors<BsToPhi, PToV>::make    },
+            { KeyType("B->K^*::BZ2004"),     &BZ2004FormFactors<BToKstar, PToV>::make          },
+            { KeyType("B->K^*::KMPW2010"),   &KMPW2010FormFactors<PToV>::make                  },
+            { KeyType("B->K^*::BFW2010"),    &BFW2010FormFactors<BToKstar,  PToV>::make        },
+            { KeyType("B->D^*::BSZ2015"),    &BSZ2015FormFactors<BToDstar,  PToV>::make        },
+            { KeyType("B->K^*::BSZ2015"),    &BSZ2015FormFactors<BToKstar,  PToV>::make        },
+            { KeyType("B->rho::BSZ2015"),    &BSZ2015FormFactors<BToRho,    PToV>::make        },
+            { KeyType("B_s->K^*::BFW2010"),  &BFW2010FormFactors<BsToKstar, PToV>::make        },
+            { KeyType("B_s->K^*::FMvD2015"), &FMvD2015FormFactors<BsToKstar>::make             },
+            { KeyType("B_s->phi::BZ2004"),   &BZ2004FormFactors<BsToPhi, PToV>::make           },
             // analytic computations
-            { KeyType("B->K^*",     "KMO2006"),  &AnalyticFormFactorBToKstarKMO2006::make   }
+            { KeyType("B->K^*::KMO2006"),    &AnalyticFormFactorBToKstarKMO2006::make          },
         };
 
-        /*
-         * Labels have the form
-         *
-         *   PROCESS@NAME[:SET]
-         *
-         * The brackets indicate the latter part to be optional.
-         */
-
-        std::string process, name, input(label);
-        unsigned set(0);
-
-        std::string::size_type sep_at(input.find('@')), sep_colon(input.find(':'));
-        if (std::string::npos == sep_at)
-            return result;
-
-        if (std::string::npos != sep_colon)
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
         {
-            set = destringify<unsigned>(input.substr(sep_colon + 1));
-            input.erase(sep_colon + 1);
+            result.reset(i->second(parameters, name.options() + options));
         }
-
-        name = input.substr(sep_at + 1);
-        process = input.substr(0, sep_at);
-
-        auto i = form_factors.find(KeyType(process, name));
-        if (form_factors.cend() == i)
-            return result;
-
-        result = std::shared_ptr<FormFactors<PToV>>(i->second(parameters, set));
 
         return result;
     }
@@ -306,58 +283,34 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<PToP>>
-    FormFactorFactory<PToP>::create(const std::string & label, const Parameters & parameters, const Options &)
+    FormFactorFactory<PToP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<PToP>> result;
 
-        typedef std::tuple<std::string, std::string> KeyType;
-        typedef std::function<FormFactors<PToP> * (const Parameters &, unsigned)> ValueType;
+        typedef QualifiedName KeyType;
+        typedef std::function<FormFactors<PToP> * (const Parameters &, const Options &)> ValueType;
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
             // b -> s
-            { KeyType("B->K",     "BCL2008"),       &BCL2008FormFactors<BToK>::make          },
-            { KeyType("B->K",     "BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make     },
-            { KeyType("B->K",     "BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make      },
-            { KeyType("B->K",     "KMPW2010"),      &KMPW2010FormFactors<PToP>::make         },
-            { KeyType("B->K",     "BFW2010"),       &BFW2010FormFactors<BToK, PToP>::make    },
+            { KeyType("B->K::BCL2008"),       &BCL2008FormFactors<BToK>::make                 },
+            { KeyType("B->K::BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make            },
+            { KeyType("B->K::BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make             },
+            { KeyType("B->K::KMPW2010"),      &KMPW2010FormFactors<PToP>::make                },
+            { KeyType("B->K::BFW2010"),       &BFW2010FormFactors<BToK, PToP>::make           },
             // b -> u
-            { KeyType("B->pi",    "BCL2008"),       &BCL2008FormFactors<BToPi>::make         },
+            { KeyType("B->pi::BCL2008"),      &BCL2008FormFactors<BToPi>::make                },
             // b -> c
-            { KeyType("B->D",     "BCL2008"),       &BCL2008FormFactors<BToD>::make          },
+            { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD>::make                 },
             // analytic computations
-            { KeyType("B->pi",    "DKMMO2008"), &AnalyticFormFactorBToPiDKMMO2008::make      },
+            { KeyType("B->pi::DKMMO2008"),    &AnalyticFormFactorBToPiDKMMO2008::make         },
         };
 
-        /*
-         * Labels have the form
-         *
-         *   PROCESS@NAME[:SET]
-         *
-         * The brackets indicate the latter part to be optional.
-         */
-
-        std::string process, name, input(label);
-        unsigned set(0);
-
-        std::string::size_type sep_at(input.find('@')), sep_colon(input.find(':'));
-        if (std::string::npos == sep_at)
-            return result;
-
-        if (std::string::npos != sep_colon)
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
         {
-            set = destringify<unsigned>(input.substr(sep_colon + 1));
-            input.erase(sep_colon + 1);
+            result.reset(i->second(parameters, name.options() + options));
         }
-
-        name = input.substr(sep_at + 1);
-        process = input.substr(0, sep_at);
-
-        auto i = form_factors.find(KeyType(process, name));
-        if (form_factors.cend() == i)
-            return result;
-
-        result = std::shared_ptr<FormFactors<PToP>>(i->second(parameters, set));
 
         return result;
     }
@@ -369,42 +322,25 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<PToPP>>
-    FormFactorFactory<PToPP>::create(const std::string & label, const Parameters & parameters, const Options & options)
+    FormFactorFactory<PToPP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<PToPP>> result;
 
-        typedef std::tuple<std::string, std::string> KeyType;
+        typedef QualifiedName KeyType;
         typedef std::function<FormFactors<PToPP> * (const Parameters &, const Options &)> ValueType;
         static const std::map<KeyType, ValueType> form_factors
         {
             // analytic computations
-            { KeyType("B->pipi",    "BFvD2016"),            &AnalyticFormFactorBToPiPiBFvD2016::make   },
-            { KeyType("B->pipi",    "FvDV2018-Dispersive"), &AnalyticFormFactorBToPiPiFvDV2018::make   },
-            { KeyType("B->pipi",    "FvDV2018"),            &FvDV2018FormFactors<BToPiPi>::make        },
+            { KeyType("B->pipi::BFvD2016"),            &AnalyticFormFactorBToPiPiBFvD2016::make   },
+            { KeyType("B->pipi::FvDV2018-Dispersive"), &AnalyticFormFactorBToPiPiFvDV2018::make   },
+            { KeyType("B->pipi::FvDV2018"),            &FvDV2018FormFactors<BToPiPi>::make        },
         };
 
-        /*
-         * Labels have the form
-         *
-         *   PROCESS@NAME
-         *
-         * The brackets indicate the latter part to be optional.
-         */
-
-        std::string process, name, input(label);
-
-        std::string::size_type sep_at(input.find('@'));
-        if (std::string::npos == sep_at)
-            return result;
-
-        name = input.substr(sep_at + 1);
-        process = input.substr(0, sep_at);
-
-        auto i = form_factors.find(KeyType(process, name));
-        if (form_factors.cend() == i)
-            return result;
-
-        result = std::shared_ptr<FormFactors<PToPP>>(i->second(parameters, options));
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+        }
 
         return result;
     }

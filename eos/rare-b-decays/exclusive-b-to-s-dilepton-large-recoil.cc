@@ -156,7 +156,7 @@ namespace eos
                 throw InternalError("Zero lepton mass leads to NaNs in timelike amplitudes. Use tiny lepton mass > 0!");
             }
 
-            form_factors = FormFactorFactory<PToV>::create("B->K^*@" + o.get("form-factors", "KMPW2010"), p);
+            form_factors = FormFactorFactory<PToV>::create(QualifiedName("B->K^*::" + o.get("form-factors", "KMPW2010")), p, o);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
@@ -2252,7 +2252,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
             lepton_flavour(o.get("l", "mu")),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
-            form_factors = FormFactorFactory<PToP>::create("B->K@" + o.get("form-factors", "KMPW2010"), p);
+            form_factors = FormFactorFactory<PToP>::create("B->K::" + o.get("form-factors", "KMPW2010"), p, o);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
