@@ -100,6 +100,8 @@ namespace eos
             // KEY := ['a'-'z', '-']
             static const char * valid_option_key_characters =
                     "abcdefghijklmnopqrstuvwxyz"
+                    "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
+                    "0123456789"
                     "-";
 
             auto pos = key.find_first_not_of(valid_option_key_characters);

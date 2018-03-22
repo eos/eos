@@ -102,9 +102,10 @@ class OptionKeyTest :
             TEST_CHECK_NO_THROW(auto k = qnp::OptionKey("form-factors"));
             TEST_CHECK_NO_THROW(auto k = qnp::OptionKey("correlator"));
             TEST_CHECK_NO_THROW(auto k = qnp::OptionKey("q"));
+            TEST_CHECK_NO_THROW(auto p = qnp::OptionKey("0-recoil"));
+            TEST_CHECK_NO_THROW(auto p = qnp::OptionKey("KEY"));
 
-            TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::OptionKey("0-recoil"));
-            TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::OptionKey("KEY"));
+            TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::OptionKey("key1+key2"));
         }
 } option_key_test;
 
