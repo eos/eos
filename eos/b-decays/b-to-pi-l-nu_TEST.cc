@@ -71,6 +71,9 @@ class BToPiLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 6.0,  8.0), 1.36135e-5, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 8.0, 10.0), 1.32564e-5, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(10.0, 12.0), 1.28071e-5, eps);
+
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.0, 12.0), 8.19780e-5, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.0, 25.0), 1.41237e-4, eps);
             }
         }
 } b_to_pi_l_nu_test;
