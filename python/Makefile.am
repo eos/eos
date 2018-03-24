@@ -19,8 +19,6 @@ if EOS_ENABLE_PYTHON
 
 eosdir = $(pkgpythondir)
 eos_PYTHON =
-
-eos_LTLIBRARIES = _eos.la
 eos_SCRIPTS = \
 	eos/__init__.py
 
@@ -34,6 +32,8 @@ eosplot_SCRIPTS = \
 	eos/plot/config.py \
 	eos/plot/plotter.py
 
+_eosdir = $(pythondir)
+_eos_LTLIBRARIES = _eos.la
 _eos_la_SOURCES = _eos.cc
 _eos_la_CXXFLAGS = $(PYTHON_CXXFLAGS) @AM_CXXFLAGS@
 _eos_la_LDFLAGS = -module -avoid-version -export-symbols-regex initeos
