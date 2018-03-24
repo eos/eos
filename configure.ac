@@ -100,12 +100,40 @@ AC_CHECK_LIB([boost_system], main,
 	)
 dnl }}}
 dnl {{{ yaml-cpp
+PKG_CHECK_MODULES([YAMLCPP],
+	[yaml-cpp],
+	[
+		YAMLCPP_CXXFLAGS="$YAMLCPP_CFLAGS"
+		YAMLCPP_LDFLAGS="$YAMLCPP_LIBS"
+		AC_MSG_NOTICE([using pkg-config for yaml-cpp location])
+	],
+	[
+		YAMLCPP_CXXFLAGS=""
+		YAMLCPP_LDFLAGS="-lyaml-cpp"
+		AC_MSG_NOTICE([falling back to default for yaml-cpp location])
+	])
+
+AC_SUBST([YAMLCPP_CXXFLAGS])
+AC_SUBST([YAMLCPP_LDFLAGS])
+
+_CXXFLAGS=$CXXFLAGS
+_LDFLAGS=$LDFLAGS
+_LIBS=$LIBS
+
+CXXFLAGS="$YAMLCPP_CXXFLAGS $CXXFLAGS"
+LDFLAGS="$YAMLCPP_LDFLAGS $LDFLAGS"
+LIBS=""
+
 AC_CHECK_LIB([yaml-cpp], main)
 AC_CHECK_HEADERS([yaml-cpp/yaml.h],
         [eos_found_yaml_cpp_headers=yes; break;])
 
 AS_IF([test "x$eos_found_yaml_cpp_headers" != "xyes"],
         [AC_MSG_ERROR([you do seem to be lacking 'libyaml-cpp-dev'.])])
+
+CXXFLAGS=$_CXXFLAGS
+LDFLAGS=$_LDFLAGS
+LIBS=$_LIBS
 dnl }}}
 dnl }}}
 

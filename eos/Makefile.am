@@ -20,6 +20,8 @@ libeos_la_LIBADD = \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la
+libeos_la_CXXFLAGS = $(AM_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
+libeos_la_LDFLAGS = $(AM_CXXFLAGS) $(YAMLCPP_LDFLAGS)
 
 include_eosdir = $(includedir)/eos
 include_eos_HEADERS = \
@@ -50,6 +52,7 @@ check_PROGRAMS = \
 
 constraint_TEST_SOURCES = constraint_TEST.cc
 constraint_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+constraint_TEST_LDADD = $(LDADD) -lyaml-cpp
 
 references_TEST_SOURCES = references_TEST.in
 

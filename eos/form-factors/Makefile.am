@@ -21,8 +21,7 @@ libeosformfactors_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosformfactors_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	-lgslcblas \
-	-lgsl \
-	-lyaml-cpp
+	-lgsl
 
 include_eos_rarebdecaysdir = $(includedir)/eos/form-factors
 include_eos_rarebdecays_HEADERS = \

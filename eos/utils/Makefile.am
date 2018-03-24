@@ -76,8 +76,8 @@ libeosutils_la_LIBADD = \
 	-lMinuit2 \
 	-lpthread \
 	-lyaml-cpp
-libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS)
-libeosutils_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) $(MINUIT2_LDFLAGS)
+libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
+libeosutils_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) $(MINUIT2_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
@@ -176,7 +176,6 @@ TESTS = \
 	wilson-polynomial_TEST \
 	wilson_scan_model_TEST
 LDADD = \
-	-lyaml-cpp \
 	$(top_builddir)/test/libeostest.a \
 	libeosutils.la \
 	$(top_builddir)/eos/libeos.la

@@ -35,9 +35,9 @@ libeosstatistics_la_SOURCES = \
 	simple-parameters.cc simple-parameters.hh \
 	test-statistic.cc test-statistic.hh test-statistic-impl.hh \
 	welford.cc welford.hh
-libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lMinuit2
-libeosstatistics_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS)
-libeosstatistics_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(MINUIT2_LDFLAGS)
+libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lMinuit2 -lyaml-cpp
+libeosstatistics_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
+libeosstatistics_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(MINUIT2_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
 if EOS_ENABLE_PMC
 libeosstatistics_la_SOURCES += \
