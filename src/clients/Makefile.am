@@ -40,8 +40,7 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la \
 	libcli.a \
 	-lboost_filesystem -lboost_system \
-	-lMinuit2 \
-	-lyaml-cpp
+	$(YAMLCPP_LDFLAGS)
 
 if EOS_ENABLE_PMC
 bin_PROGRAMS += \
@@ -58,10 +57,11 @@ endif
 eos_evaluate_SOURCES = eos-evaluate.cc
 
 eos_find_mode_SOURCES = eos-find-mode.cc
-eos_find_mode_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+eos_find_mode_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
 eos_find_mode_LDADD = $(LDADD) $(MINUIT2_LDFLAGS)
 
 eos_list_constraints_SOURCES = eos-list-constraints.cc
+eos_list_constraints_CXXFLAGS = $(AM_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
 
 eos_list_observables_SOURCES = eos-list-observables.cc
 
@@ -84,7 +84,7 @@ eos_sample_events_mcmc_LDADD = $(LDADD) $(HDF5_LDFLAGS)
 
 eos_scan_mc_SOURCES = eos-scan-mc.cc
 eos_scan_mc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS)
-eos_scan_mc_LDADD = $(LDADD) $(HDF5_LDFLAGS) $(MINUIT2_LDFLAGS)
+eos_scan_mc_LDADD = $(LDADD) $(HDF5_LDFLAGS) -lMinuit2 $(MINUIT2_LDFLAGS)
 
 integrated_SOURCES = integrated.cc
 
