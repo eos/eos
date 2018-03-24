@@ -24,3 +24,6 @@ deb:
 	    EOS_VERSION=$(VERSION) \
 	    FLAVOR=$(shell lsb_release -a | sed -n -e "/^Codename:/s/^Codename:\s*//p") \
 	    deb
+
+print-%:
+	@echo $($*)
