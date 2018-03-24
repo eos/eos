@@ -31,6 +31,10 @@
 #include <eos/utils/private_implementation_pattern.hh>
 
 #include <gsl/gsl_rng.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
+
+#include <cmath>
 
 namespace eos
 {
@@ -255,12 +259,22 @@ namespace eos
             // todo document
             static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components,
                                                  const std::vector<double> & weights);
+
             /*!
              * Create a new LogLikelihoodBlock for n observables distributed
              * according to a multivariate normal distribution.
              *
-             * @note For every dimension, this template and the corresponding implementation
-             *       have to be instantiated explicitly.
+             * @param cache         The Observable cache from which we draw the predictions.
+             * @param observables   The Observables whose distribution we model.
+             * @param mean          The vector of means.
+             * @param covariance    The covariance matrix
+             */
+            static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::vector<ObservablePtr> & observables,
+                    gsl_vector * mean, gsl_matrix * covariance, const unsigned & number_of_observations);
+
+            /*!
+             * Templated helper to create a new LogLikelihoodBlock for n observables distributed
+             * according to a multivariate normal distribution.
              *
              * @param cache         The Observable cache from which we draw the predictions.
              * @param observables   The Observables whose distribution we model.
@@ -269,15 +283,34 @@ namespace eos
              */
             template <std::size_t n_>
             static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
-                                                              const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance,
-                                                              const unsigned & number_of_observations = n_);
+                    const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance,
+                    const unsigned & number_of_observations = n_)
+            {
+                std::vector<ObservablePtr> _observables(observables.begin(), observables.end());
+
+                // create GSL vector for the mean
+                gsl_vector * _mean = gsl_vector_alloc(n_);
+                for (auto i = 0u ; i < n_ ; ++i)
+                {
+                    gsl_vector_set(_mean, i, mean[i]);
+                }
+
+                // create GSL matrix for the covariance
+                gsl_matrix * _covariance = gsl_matrix_alloc(n_, n_);
+                for (auto i = 0u ; i < n_ ; ++i)
+                {
+                    for (auto j = 0u ; j < n_ ; ++j)
+                    {
+                        gsl_matrix_set(_covariance, i, j, covariance[i][j]);
+                    }
+                }
+
+                return LogLikelihoodBlock::MultivariateGaussian(cache, _observables, _mean, _covariance, number_of_observations);
+            }
 
             /*!
-             * Create a new LogLikelihoodBlock for n observables distributed
+             * Templated helper to create a new LogLikelihoodBlock for n observables distributed
              * according to a multivariate normal distribution.
-             *
-             * @note For every dimension, this template and the corresponding implementation
-             *       have to be instantiated explicitly.
              *
              * @param cache         The Observable cache from which we draw the predictions.
              * @param observables   The Observables whose distribution we model.
@@ -287,10 +320,32 @@ namespace eos
              */
             template <std::size_t n_>
             static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
-                                                              const std::array<double, n_> & mean, const std::array<double, n_> & variances,
-                                                              const std::array<std::array<double, n_>, n_> & correlation,
-                                                              const unsigned & number_of_observations = n_);
+                    const std::array<double, n_> & mean, const std::array<double, n_> & variances,
+                    const std::array<std::array<double, n_>, n_> & correlation,
+                    const unsigned & number_of_observations = n_)
+            {
+                std::vector<ObservablePtr> _observables(observables.begin(), observables.end());
 
+                // create GSL vector for the mean
+                gsl_vector * _mean = gsl_vector_alloc(n_);
+                for (auto i = 0u ; i < n_ ; ++i)
+                {
+                    gsl_vector_set(_mean, i, mean[i]);
+                }
+
+                // create GSL matrix for the covariance
+                gsl_matrix * covariance = gsl_matrix_alloc(n_, n_);
+                for (auto i = 0u ; i < n_ ; ++i)
+                {
+                    for (auto j = 0u ; j < n_ ; ++j)
+                    {
+                        double value = std::sqrt(variances[i] * variances[j]) * correlation[i][j];
+                        gsl_matrix_set(covariance, i, j, value);
+                    }
+                }
+
+                return LogLikelihoodBlock::MultivariateGaussian(cache, _observables, _mean, covariance, number_of_observations);
+            }
     };
 
     /*!
