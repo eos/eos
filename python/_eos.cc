@@ -21,6 +21,7 @@
 #include "eos/observable.hh"
 #include "eos/signal-pdf.hh"
 #include "eos/utils/kinematic.hh"
+#include "eos/utils/model.hh"
 #include "eos/utils/parameters.hh"
 #include "eos/utils/options.hh"
 #include "eos/utils/qualified-name.hh"
@@ -168,5 +169,33 @@ BOOST_PYTHON_MODULE(_eos)
         .def("name", &Constraint::name, return_value_policy<copy_const_reference>())
         .def("blocks", range(&Constraint::begin_blocks, &Constraint::end_blocks))
         .def("observables", range(&Constraint::begin_observables, &Constraint::end_observables))
+        ;
+
+    // Model
+    register_ptr_to_python<std::shared_ptr<Model>>();
+    class_<Model, boost::noncopyable>("Model", no_init)
+        .def("make", &Model::make, return_value_policy<return_by_value>())
+        .staticmethod("make")
+        // CKM component
+        .def("ckm_cd", &Model::ckm_cd)
+        .def("ckm_cs", &Model::ckm_cs)
+        .def("ckm_cb", &Model::ckm_cb)
+        .def("ckm_ud", &Model::ckm_ud)
+        .def("ckm_us", &Model::ckm_us)
+        .def("ckm_ub", &Model::ckm_ub)
+        .def("ckm_td", &Model::ckm_td)
+        .def("ckm_ts", &Model::ckm_ts)
+        .def("ckm_tb", &Model::ckm_tb)
+        // QCD component
+        .def("m_t_msbar",  &Model::m_t_msbar)
+        .def("m_t_pole",   &Model::m_t_pole)
+        .def("m_b_kin",    &Model::m_b_kin)
+        .def("m_b_msbar",  &Model::m_b_msbar)
+        .def("m_b_pole",   &Model::m_b_pole)
+        .def("m_c_kin",    &Model::m_c_kin)
+        .def("m_c_msbar",  &Model::m_c_msbar)
+        .def("m_c_pole",   &Model::m_c_pole)
+        .def("m_s_msbar",  &Model::m_s_msbar)
+        .def("m_ud_msbar", &Model::m_ud_msbar)
         ;
 }
