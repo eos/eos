@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2011, 2013-2018 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -33,6 +33,7 @@
 #include <limits>
 #include <map>
 
+#include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_matrix.h>
@@ -40,6 +41,7 @@
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_result.h>
+#include <gsl/gsl_vector.h>
 
 namespace eos
 {
@@ -879,87 +881,106 @@ namespace eos
             }
         };
 
-        template <std::size_t n_>
         struct MultivariateGaussianBlock :
             public LogLikelihoodBlock
         {
-            ObservableCache cache;
+            ObservableCache _cache;
 
-            std::array<ObservableCache::Id, n_> ids;
+            std::vector<ObservableCache::Id> _ids;
 
-            std::array<double, n_> mean;
-            std::array<std::array<double, n_>, n_> covariance;
-            std::array<std::array<double, n_>, n_> covariance_inv;
+            // inputs
+            gsl_vector * const _mean;
+            gsl_matrix * const _covariance;
+            const unsigned _number_of_observations;
 
             // the normalization constant of the density
-            double norm;
+            const double _norm;
 
-            // cholesky matrix of covariance
-            std::array<std::array<double, n_>, n_> chol;
+            // cholesky matrix of covariance, and inverse of covariance
+            gsl_matrix * _chol;
+            gsl_matrix * _covariance_inv;
 
-            unsigned _number_of_observations;
+            // temporary storage for evaluation
+            gsl_vector * _observables;
+            gsl_vector * _observables_2;
 
-            MultivariateGaussianBlock(const ObservableCache & cache, const std::array<ObservableCache::Id, n_> & ids,
-                                     const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance,
-                                     const unsigned & number_of_observations) :
-                cache(cache),
-                ids(ids),
-                mean(mean),
-                covariance(covariance),
-                norm(compute_norm()),
-                _number_of_observations(number_of_observations)
+            MultivariateGaussianBlock(const ObservableCache & cache, const std::vector<ObservableCache::Id> && ids,
+                    gsl_vector * mean, gsl_matrix * covariance, const unsigned & number_of_observations) :
+                _cache(cache),
+                _ids(ids),
+                _mean(mean),
+                _covariance(covariance),
+                _number_of_observations(number_of_observations),
+                _norm(compute_norm()),
+                _chol(gsl_matrix_alloc(ids.size(), ids.size())),
+                _covariance_inv(gsl_matrix_alloc(ids.size(), ids.size())),
+                _observables(gsl_vector_alloc(ids.size())),
+                _observables_2(gsl_vector_alloc(ids.size()))
             {
-                unsigned k = mean.size();
+                const auto k = ids.size();
 
-                if ( ids.size() != k || covariance.size() != k|| covariance.front().size() != k)
-                    throw InternalError("MultivariateGaussianBlock.ctor: dimensions of observables, mean and covariance not aligned");
+                if (k != _mean->size)
+                    throw InternalError("MultivariateGaussianBlock: dimensions of observables and mean are not identical");
+
+                if (_covariance->size1 != _covariance->size2)
+                    throw InternalError("MultivariateGaussianBlock: covariance matrix is not a square matrix");
+
+                if (k != _covariance->size1)
+                    throw InternalError("MultivariateGaussianBlock: dimensions of observables and covariance matrix are not identical");
 
                 // cholesky decomposition (informally: the sqrt of the covariance matrix)
-                // the GSL matrix contains both the cholesky and its transpose, see gsl ref, ch. 14.5
-                gsl_matrix * chol = cholesky();
-                invert_covariance(chol);
+                // the GSL matrix contains both the cholesky and its transpose, see GSL reference, ch. 14.5
+                cholesky();
+                invert_covariance();
 
-                // copy only lower and diagonal part
-                // set upper to zero
-                for (unsigned i = 0 ; i < k ; ++i)
+                // keep only the lower and diagonal parts, set upper parts to zero
+                for (unsigned i = 0; i < k ; ++i)
                 {
-                    for (unsigned j = 0 ; j < k ; ++j)
+                    for (unsigned j = i + 1 ; j < k ; ++j)
                     {
-                        this->chol[i][j] = (j>i) ? 0 : gsl_matrix_get(chol, i, j);
+                        gsl_matrix_set(_chol, i, j, 0.0);
                     }
                 }
-                gsl_matrix_free(chol);
             }
 
             virtual ~MultivariateGaussianBlock()
             {
+                gsl_matrix_free(_covariance_inv);
+                gsl_matrix_free(_chol);
+                gsl_matrix_free(_covariance);
+
+                gsl_vector_free(_observables_2);
+                gsl_vector_free(_observables);
+                gsl_vector_free(_mean);
             }
 
             virtual std::string as_string() const
             {
+                const auto k = _mean->size;
+
                 std::string result = "Multivariate Gaussian: ";
                 result += "means = ( ";
-                for (std::size_t i = 0 ; i < n_ ; ++i)
+                for (std::size_t i = 0 ; i < k ; ++i)
                 {
-                    result += stringify(mean[i]) + " ";
+                    result += stringify(gsl_vector_get(_mean, i)) + " ";
                 }
                 result += "), covariance matrix = (";
-                for (std::size_t i = 0 ; i < n_ ; ++i)
+                for (std::size_t i = 0 ; i < k ; ++i)
                 {
                     result += "( ";
-                    for (std::size_t j = 0 ; j < n_ ; ++j)
+                    for (std::size_t j = 0 ; j < k ; ++j)
                     {
-                        result += stringify(covariance[i][j]) + " ";
+                        result += stringify(gsl_matrix_get(_covariance, i, j)) + " ";
                     }
                     result += ")";
                 }
                 result += "), inverse covariance matrix = (";
-                for (std::size_t i = 0 ; i < n_ ; ++i)
+                for (std::size_t i = 0 ; i < k ; ++i)
                 {
                     result += "( ";
-                    for (std::size_t j = 0 ; j < n_ ; ++j)
+                    for (std::size_t j = 0 ; j < k ; ++j)
                     {
-                        result += stringify(covariance_inv[i][j]) + " ";
+                        result += stringify(gsl_matrix_get(_covariance_inv, i, j)) + " ";
                     }
                     result += ")";
                 }
@@ -972,35 +993,43 @@ namespace eos
             }
 
             // compute cholesky decomposition of covariance matrix
-            gsl_matrix * cholesky()
+            void cholesky()
             {
-                // dimensionality of parameter space
-                unsigned k = mean.size();
-
                 // copy covariance matrix
-                gsl_matrix * L = gsl_matrix_alloc (k, k);
-                for (unsigned i = 0 ; i < k ; ++i)
-                {
-                    for (unsigned j = 0 ; j < k ; ++j)
-                        gsl_matrix_set(L, i, j, covariance[i][j]);
-                }
-
-                gsl_linalg_cholesky_decomp(L);
-
-                return L;
+                gsl_matrix_memcpy(_chol, _covariance);
+                gsl_linalg_cholesky_decomp(_chol);
             }
+
+            // invert covariance matrix based on previously obtained Cholesky decomposition
+            void invert_covariance()
+            {
+                // copy cholesky matrix
+                gsl_matrix_memcpy(_covariance_inv, _chol);
+
+                // compute inverse matrix from cholesky
+                gsl_linalg_cholesky_invert(_covariance_inv);
+            }
+
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
             {
-                std::array<ObservableCache::Id, n_> indices;
+                const auto k = _mean->size;
+
+                std::vector<ObservableCache::Id> ids;
 
                 // add observables to cache
-                for (auto i = 0u ; i < n_ ; ++i)
+                for (auto i = 0u ; i < k ; ++i)
                 {
-                    indices[i] = cache.add(this->cache.observable(this->ids[i])->clone(cache.parameters()));
+                    ids.push_back(cache.add(this->_cache.observable(this->_ids[i])->clone(cache.parameters())));
                 }
 
-                return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock<n_>(cache, indices, mean, covariance, _number_of_observations));
+                gsl_vector * mean = gsl_vector_alloc(k);
+                gsl_vector_memcpy(mean, _mean);
+
+                gsl_matrix * covariance = gsl_matrix_alloc(k, k);
+                gsl_matrix_memcpy(covariance, _covariance);
+
+                return LogLikelihoodBlockPtr(new MultivariateGaussianBlock(cache, std::move(ids), mean, covariance, _number_of_observations));
             }
 
             // compute the normalization constant on log scale
@@ -1008,70 +1037,50 @@ namespace eos
             double compute_norm()
             {
                 // dimensionality of parameter space
-                unsigned k = mean.size();
+                const auto k = _mean->size;
 
                 // copy covariance matrix
-                gsl_matrix * m = gsl_matrix_alloc (k, k);
-                for (unsigned i = 0 ; i < k ; ++i)
-                {
-                    for (unsigned j = 0 ; j < k ; ++j)
-                        gsl_matrix_set(m, i, j, covariance[i][j]);
-                }
+                gsl_matrix * M = gsl_matrix_alloc (k, k);
+                gsl_matrix_memcpy(M, _covariance);
 
                 // find LU decomposition
-                gsl_permutation * p = gsl_permutation_alloc(k);
                 int signum = 0;
-                gsl_linalg_LU_decomp(m, p, &signum);
+                gsl_permutation * p = gsl_permutation_alloc(k);
+                gsl_linalg_LU_decomp(M, p, &signum);
 
                 // calculate determinant
-                double log_det = gsl_linalg_LU_lndet(m);
+                const double log_det = gsl_linalg_LU_lndet(M);
 
                 gsl_permutation_free(p);
-                gsl_matrix_free(m);
+                gsl_matrix_free(M);
 
                 return -0.5 * k * std::log(2 * M_PI) - 0.5 * log_det;
             }
 
-            virtual double evaluate() const
+            double chi_square() const
             {
-                std::array<double, n_> observables;
-
-                // read out observable values
-                auto o = observables.begin();
-                for (auto i = ids.begin(), i_end = ids.end() ; i != i_end ; ++i, ++o)
+                // read observable values from cache, and subtract mean
+                for (auto i = 0u ; i < _mean->size ; ++i)
                 {
-                    *o = cache[*i];
+                    gsl_vector_set(_observables, i, _cache[_ids[i]]);
                 }
 
-                // center the gaussian
-                observables = observables - mean;
+                // center the gaussian:
+                //   observable <- observables - mean
+                gsl_vector_sub(_observables, _mean);
 
-                return norm - dot(observables, covariance_inv * observables) / 2.0;
+                // observables_2 <- inv(covariance) * observables
+                gsl_blas_dgemv(CblasNoTrans, 1.0, _covariance_inv, _observables, 0.0, _observables_2);
+
+                double result;
+                gsl_blas_ddot(_observables, _observables_2, &result);
+
+                return result;
             }
 
-            void invert_covariance(gsl_matrix * chol)
+            virtual double evaluate() const
             {
-                if ( ! chol)
-                    throw InternalError("MultivariateGaussianBlock.invert_covariance: cholesky decomposition undefined.");
-
-                // dimensionality of parameter space
-                unsigned k = mean.size();
-
-                // copy cholesky matrix
-                gsl_matrix * inverse = gsl_matrix_alloc (k, k);
-                gsl_matrix_memcpy(inverse, chol);
-
-                // compute inverse matrix from cholesky
-                gsl_linalg_cholesky_invert (inverse);
-
-                // copy elements
-                for (unsigned i = 0 ; i < k ; ++i)
-                {
-                    for (unsigned j = 0 ; j < k ; ++j)
-                        covariance_inv[i][j] = gsl_matrix_get(inverse, i, j);
-                }
-
-                gsl_matrix_free(inverse);
+                return _norm - 0.5 * chi_square();
             }
 
             virtual unsigned number_of_observations() const
@@ -1081,35 +1090,28 @@ namespace eos
 
             virtual double sample(gsl_rng * rng) const
             {
-                // Holds the samples in n dimensions
-                std::array<double, n_> random_samples;
+                const auto k = _mean->size;
 
-                // generate standard normals
-                std::generate(random_samples.begin(), random_samples.end(), std::bind(gsl_ran_ugaussian, rng));
+                // generate standard normals in observables
+                for (auto i = 0u ; i < k ; ++i)
+                {
+                    gsl_vector_set(_observables, i, gsl_ran_ugaussian(rng));
+                }
 
-                // transform
-                random_samples = chol * random_samples;
+                // transform: observables2 <- _chol * observables
+                gsl_blas_dgemv(CblasNoTrans, 1.0, _chol, _observables, 0.0, _observables_2);
 
                 // To be consistent with the univariate Gaussian, we would center observables around theory,
                 // then compare to theory. Hence we can forget about theory, and stay centered on zero.
-                return norm - 0.5 * dot(random_samples, covariance_inv * random_samples);
-            }
+                // transform: observables <- inv(covariance) * observables2
+                gsl_blas_dgemv(CblasNoTrans, 1.0, _covariance_inv, _observables_2, 0.0, _observables);
 
-            double chi_square() const
-            {
-                std::array<double, n_> observables;
+                double result;
+                gsl_blas_ddot(_observables, _observables_2, &result);
+                result *= -0.5;
+                result += _norm;
 
-                // read out observable values
-                auto o = observables.begin();
-                for (auto i = ids.begin(), i_end = ids.end() ; i != i_end ; ++i, ++o)
-                {
-                    *o = cache[*i];
-                }
-
-                // center the gaussian
-                observables = observables - mean;
-
-                return dot(observables, covariance_inv * observables);
+                return result;
             }
 
             virtual double significance() const
@@ -1117,7 +1119,7 @@ namespace eos
                 const auto chi_squared = this->chi_square();
 
                 // find probability of this excess or less ( 1 - usual p-value)
-                double p = gsl_cdf_chisq_P(chi_squared, n_);
+                const double p = gsl_cdf_chisq_P(chi_squared, _mean->size);
 
                 // transform to standard Gaussian sigma units
                 // return  significance is >= 0, since p >= 0
@@ -1132,25 +1134,6 @@ namespace eos
                 return TestStatisticPtr(result);
             }
         };
-
-        // explicit instantiation
-        template struct MultivariateGaussianBlock<2>;
-        template struct MultivariateGaussianBlock<3>;
-        template struct MultivariateGaussianBlock<4>;
-        template struct MultivariateGaussianBlock<5>;
-        template struct MultivariateGaussianBlock<6>;
-        template struct MultivariateGaussianBlock<7>;
-        template struct MultivariateGaussianBlock<8>;
-        template struct MultivariateGaussianBlock<9>;
-        template struct MultivariateGaussianBlock<11>;
-        template struct MultivariateGaussianBlock<12>;
-        template struct MultivariateGaussianBlock<16>;
-        template struct MultivariateGaussianBlock<18>;
-        template struct MultivariateGaussianBlock<19>;
-        template struct MultivariateGaussianBlock<22>;
-        template struct MultivariateGaussianBlock<24>;
-        template struct MultivariateGaussianBlock<36>;
-        template struct MultivariateGaussianBlock<48>;
     }
 
     LogLikelihoodBlock::~LogLikelihoodBlock()
@@ -1365,18 +1348,35 @@ namespace eos
     template <std::size_t n_>
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
-                                             const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance,
+                                             const std::array<double, n_> & _mean, const std::array<std::array<double, n_>, n_> & _covariance,
                                              const unsigned & number_of_observations)
     {
-        std::array<ObservableCache::Id, n_> indices;
+        std::vector<ObservableCache::Id> indices;
 
         // add observables to cache
         for (auto i = 0u ; i < n_ ; ++i)
         {
-            indices[i] = cache.add(observables[i]);
+            indices.push_back(cache.add(observables[i]));
         }
 
-        return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock<n_>(cache, indices, mean, covariance, number_of_observations));
+        // create GSL vector for the mean
+        gsl_vector * mean = gsl_vector_alloc(n_);
+        for (auto i = 0u ; i < n_ ; ++i)
+        {
+            gsl_vector_set(mean, i, _mean[i]);
+        }
+
+        // create GSL matrix for the covariance
+        gsl_matrix * covariance = gsl_matrix_alloc(n_, n_);
+        for (auto i = 0u ; i < n_ ; ++i)
+        {
+            for (auto j = 0u ; j < n_ ; ++j)
+            {
+                gsl_matrix_set(covariance, i, j, _covariance[i][j]);
+            }
+        }
+
+        return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock(cache, std::move(indices), mean, covariance, number_of_observations));
     }
 
     // explicit instantiation
@@ -1435,24 +1435,37 @@ namespace eos
     template <std::size_t n_>
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
-                                                      const std::array<double, n_> & mean, const std::array<double, n_> & variances,
+                                                      const std::array<double, n_> & _mean, const std::array<double, n_> & variances,
                                                       const std::array<std::array<double, n_>, n_> & correlation,
                                                       const unsigned & number_of_observations)
     {
-        // convert correlation matrix to covariance matrix
-        std::array<std::array<double, n_>, n_> covariance(correlation);
+        std::vector<ObservableCache::Id> indices;
+
+        // add observables to cache
         for (auto i = 0u ; i < n_ ; ++i)
         {
-            // diagonal elements are just the variances
-            covariance[i][i] = variances[i];
+            indices.push_back(cache.add(observables[i]));
+        }
 
-            for (auto j = i + 1 ; j < n_ ; ++j)
+        // create GSL vector for the mean
+        gsl_vector * mean = gsl_vector_alloc(n_);
+        for (auto i = 0u ; i < n_ ; ++i)
+        {
+            gsl_vector_set(mean, i, _mean[i]);
+        }
+
+        // create GSL matrix for the covariance
+        gsl_matrix * covariance = gsl_matrix_alloc(n_, n_);
+        for (auto i = 0u ; i < n_ ; ++i)
+        {
+            for (auto j = 0u ; j < n_ ; ++j)
             {
-                covariance[i][j] = covariance[j][i] = correlation[i][j] * std::sqrt(variances[i] * variances[j]);
+                double value = std::sqrt(variances[i] * variances[j]) * correlation[i][j];
+                gsl_matrix_set(covariance, i, j, value);
             }
         }
 
-        return MultivariateGaussian(cache, observables, mean, covariance, number_of_observations);
+        return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock(cache, std::move(indices), mean, covariance, number_of_observations));
     }
 
     // explicit instantiation
