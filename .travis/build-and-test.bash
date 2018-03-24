@@ -16,6 +16,7 @@ function build_and_test_ubuntu() {
         --prefix=/usr
     make distcheck -j2 DISTCHECK_CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr" VERBOSE=1
     make install
+    export PYTHONPATH+=":$(make print-pythondir)"
     make -C /src/manual/examples examples
     popd
 }
