@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-# Copyright (c) 2017 Danny van Dyk
+# Copyright (c) 2017, 2018 Danny van Dyk
+# Copyright (c) 2018 Frederik Beaujean
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,7 +23,7 @@ import sys
 import yaml
 
 def main():
-    parser = argparse.ArgumentParser(description='Plot 1D marginal distributions')
+    parser = argparse.ArgumentParser(description='Plot EOS results')
     parser.add_argument('input', metavar='PLOTFILE', type=str, help='Name of the plot input YAML file')
     parser.add_argument('output', metavar='PDFFILE', type=str, help='Name of the plot output PDF file')
 
@@ -30,7 +31,7 @@ def main():
 
     # ensure that the input file exists
     if not os.path.isfile(args.input):
-        error('\'%s\' is not a file' % args.input)
+        raise RuntimeError('\'%s\' is not a file' % args.input)
 
     instructions = None
     with open(args.input) as input_file:
@@ -40,7 +41,6 @@ def main():
     plotter = eos.plot.Plotter(instructions, args.output)
     plotter.plot()
 
-    sys.exit(0);
 
 if __name__ == '__main__':
     main()
