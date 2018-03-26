@@ -3,18 +3,15 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-
 function build_and_test_ubuntu() {
     pushd /src
     ./autogen.bash
     popd
     pushd /build
     export CXXFLAGS="-O2 -g"
-    /src/configure \
-        --enable-pmc \
-        --enable-python \
-        --prefix=/usr
-    make distcheck -j2 DISTCHECK_CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr" VERBOSE=1
+    CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr"
+    /src/configure ${CONFIGURE_FLAGS}
+    make distcheck -j2 DISTCHECK_CONFIGURE_FLAGS="${CONFIGURE_FLAGS}" VERBOSE=1
     make install
     export PYTHONPATH+=":$(make print-pythondir)"
     make -C /src/manual/examples examples
