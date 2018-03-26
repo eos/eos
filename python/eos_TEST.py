@@ -151,6 +151,29 @@ class PythonTests:
             print(obs.name())
 
 
+    """
+    Check if an instance of Model can be created, and if we can compute the
+    running MSbar mass of the b quark.
+    """
+    def check_008_Model(self):
+        from eos import Model, Parameters, Options
+
+        m = None
+        p = None
+        try:
+            p = Parameters.Defaults()
+            o = Options()
+            m = Model.make('SM', p, o)
+        except:
+            raise TestFailedError('cannot create Model')
+
+        try:
+            pvalue = p['mass::b(MSbar)'].evaluate()
+            mvalue = m.m_b_msbar(pvalue)
+            if not pvalue == mvalue:
+                raise TestFailedError('internal error')
+        except:
+            raise TestFailedError('cannot determine running b quark mass')
 
 """
 Run all test cases.
