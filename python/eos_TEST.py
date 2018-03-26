@@ -8,10 +8,8 @@ class TestFailedError(BaseException):
         self.msg = msg
 
 class PythonTests:
-    """
-    Check that the first term in the PYTHONPATH environment variable ends in '.libs'.
-    """
     def check_000_PYTHONPATH(self):
+        """Check that the first term in the PYTHONPATH environment variable ends in '.libs'."""
         try:
             pythonpath = os.environ['PYTHONPATH'].split(os.pathsep)[0]
             if not pythonpath.endswith('python/.libs/'):
@@ -20,10 +18,8 @@ class PythonTests:
         except KeyError:
             raise TestFailedError('PYTHONPATH not set')
 
-    """
-    Check if the module Python/C++ interface can be imported.
-    """
     def check_001_cpp_module(self):
+        """Check if the module Python/C++ interface can be imported."""
         try:
             import _eos
         except:
@@ -34,10 +30,8 @@ class PythonTests:
         except ImportError as e:
             raise TestFailedError('importing \'eos\' failed: \'{}\''.format(str(e)))
 
-    """
-    Check if an instance of QualifiedName can be created.
-    """
     def check_002_QualifiedName(self):
+        """Check if an instance of QualifiedName can be created."""
         from eos import QualifiedName
 
         try:
@@ -45,10 +39,8 @@ class PythonTests:
         except:
             raise TestFailedError('cannot initialize QualifiedName')
 
-    """
-    Check if an instance of Kinematics can be created.
-    """
     def check_003_Kinematics(self):
+        """Check if an instance of Kinematics can be created."""
         from eos import Kinematics
 
         try:
@@ -66,10 +58,8 @@ class PythonTests:
         except:
             raise TestFailedError('cannot initialize Kinematics with explicit kwargs')
 
-    """
-    Check if an instance of Options can be created.
-    """
     def check_004_Options(self):
+        """Check if an instance of Options can be created."""
         from eos import Options
 
         try:
@@ -87,10 +77,8 @@ class PythonTests:
         except:
             raise TestFailedError('cannot initialize Options with explicit kwargs')
 
-    """
-    Check if an instance of Parameters can be created.
-    """
     def check_005_Parameters(self):
+        """Check if an instance of Parameters can be created."""
         from eos import Parameters
 
         try:
@@ -103,10 +91,8 @@ class PythonTests:
         except:
             raise TestFailedError('cannot lookup existing Parameter \'mass::e\'')
 
-    """
-    Check if an instance of Observable can be created.
-    """
     def check_006_Observable(self):
+        """Check if an instance of Observable can be created."""
         from eos import Observable, Parameters, Kinematics, Options, QualifiedName
 
         obs = None
@@ -128,11 +114,11 @@ class PythonTests:
         except:
             raise TestFailedError('cannote evaluate Observable')
 
-    """
-    Check if an instance of Constraint can be created, and if we can iterate over
-    its LogLikelihoodBlock range.
-    """
     def check_007_Constraint(self):
+        """
+        Check if an instance of Constraint can be created, and if we can iterate over
+        its LogLikelihoodBlock range.
+        """
         from eos import Constraint, Options
 
         con = None
@@ -175,9 +161,7 @@ class PythonTests:
         except:
             raise TestFailedError('cannot determine running b quark mass')
 
-"""
-Run all test cases.
-"""
+# Run all test cases.
 tests = PythonTests()
 for (name, testcase) in inspect.getmembers(tests, predicate=inspect.ismethod):
     print("%s: " % name)
