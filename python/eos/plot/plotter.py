@@ -15,25 +15,13 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
+from logging import warn, info
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import sys
-
 import scipy
 from scipy.interpolate import spline
-
-# TODO monkeypathc warn() etc. cleaner
-import os
-def error(message):
-    print('%s: error: %s' % (os.path.basename(sys.argv[0]), message), file=sys.stderr)
-    exit(1)
-
-def warn(message):
-    print('%s: warning: %s' % (os.path.basename(sys.argv[0]), message), file=sys.stderr)
-
-def info(message):
-    print('%s: info: %s' % (os.path.basename(sys.argv[0]), message), file=sys.stderr)
+import sys
 
 class Plotter:
     def __init__(self, instructions, output):
@@ -47,7 +35,7 @@ class Plotter:
 
     def setup_plot(self):
         if not 'plot' in self.instructions:
-            error('no plot metadata specified')
+            raise KeyError('no plot metadata specified')
 
         myplot = self.instructions['plot']
 
@@ -107,7 +95,7 @@ class Plotter:
         # create kinematics
         kinematics = eos.Kinematics()
         if not 'kinematic' in item:
-            error('kinematic not found; do not know how to map x to a kinematic variable')
+            raise KeyError('kinematic not found; do not know how to map x to a kinematic variable')
         kvar = kinematics.declare(item['kinematic'], np.nan)
 
         # create (empty) options
@@ -139,7 +127,7 @@ class Plotter:
 
     def plot_uncertainty(self, item):
         if 'hdf5-file' not in item:
-            error('no hdf5-file specified')
+            raise KeyError('no hdf5-file specified')
             return
 
         h5fname = item['hdf5-file']
@@ -150,8 +138,8 @@ class Plotter:
         for o in uncfile.parameters:
             kin = o[1].split(b',')
             if len(kin) > 1:
-                error('more than one kinematic variable specified')
-                return
+                raise ValueError('more than one kinematic variable specified')
+
             name,value = kin[0].split(b'=')
             _xvalues.append(float(value))
 
@@ -194,14 +182,14 @@ class Plotter:
         contents = self.instructions['contents']
         for item in contents:
             if not type(item) is dict:
-                error('wrong data type for content item {}'.format(str(item)))
+                TypeError('wrong data type for content item {}'.format(str(item)))
 
             if not 'name' in item:
-                error('unnamed plot content')
+                raise KeyError('unnamed plot content')
             name = item['name']
 
             if not 'type' in item:
-                error('plot content "{}" has no type'.format(name))
+                raise KeyError('plot content "{}" has no type'.format(name))
             item_type = item['type']
 
             info('plotting "{}"'.format(name))
@@ -212,7 +200,7 @@ class Plotter:
             }
 
             if not item_type in plot_functions:
-                error('unknown content type: "{}"'.format(item_type))
+                KeyError('unknown content type: "{}"'.format(item_type))
 
             plot_functions[item_type](self, item)
 

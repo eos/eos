@@ -16,15 +16,9 @@
 
 import h5py
 import numpy
+from logging import warn
 import os
 import sys
-
-def error(message):
-    print('%s: error: %s' % (os.path.basename(sys.argv[0]), message), file=sys.stderr)
-    sys.exit(1)
-
-def warn(message):
-    print('%s: warning: %s' % (os.path.basename(sys.argv[0]), message), file=sys.stderr)
 
 class FileFormatError(Exception):
     def __init__(self, expected, found):
@@ -51,7 +45,7 @@ class PMCDataFile:
         if '/descriptions/parameters' in self.file:
             self.parameters = self.file['/descriptions/parameters']
         else:
-            error('input file has no valid parameter descriptions: is it corrupted?')
+            RuntimeError('input file has no valid parameter descriptions: is it corrupted?')
 
     def __del__(self):
         self.file.close()
@@ -61,7 +55,7 @@ class PMCDataFile:
         step = 'final'
 
         if '/data/%s/samples' % step not in self.file:
-            error('input file does not contain stored data for step %s' % step)
+            RuntimeError('input file does not contain stored data for step %s' % step)
 
         dataset = self.file['/data/%s/samples' % step]
 
@@ -86,7 +80,7 @@ class MCMCDataFile:
         elif '/descriptions/prerun/chain #0/parameters' in self.file:
             self.parameters = self.file['/descriptions/prerun/chain #0/parameters']
         else:
-            error('input file has no valid parameter descriptions: is it corrupted?')
+            RuntimeError('input file has no valid parameter descriptions: is it corrupted?')
 
     def __del__(self):
         self.file.close()
@@ -138,7 +132,7 @@ class UncertaintyDataFile:
                 kinematics = desc.attrs.get("kinematics")
                 self.parameters.append([name, kinematics, sys.float_info.min, sys.float_info.max])
         else:
-            error('input file has no valid parameter descriptions: is it corrupted?')
+            RuntimeError('input file has no valid parameter descriptions: is it corrupted?')
 
     def __del__(self):
         self.file.close()
@@ -146,7 +140,7 @@ class UncertaintyDataFile:
     """Retrieve data"""
     def data(self):
         if '/data/observables' not in self.file:
-            error('input file does not contain stored observables' % step)
+            RuntimeError('input file does not contain stored observables' % step)
 
         dataset = self.file['/data/observables']
         data = numpy.array(dataset[:])
@@ -157,5 +151,3 @@ class UncertaintyDataFile:
             self.parameters[i][3] = numpy.max(data[:, i])
 
         return data
-
-
