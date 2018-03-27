@@ -567,7 +567,7 @@ namespace eos
         virtual void serialize(YAML::Emitter & out) const
         {
             out << YAML::BeginMap;
-            out << YAML::Key << "type" << YAML::Value << "Amoroso(Mode)";
+            out << YAML::Key << "type" << YAML::Value << "Amoroso(TripleLimit)";
             out << YAML::Key << "observable" << YAML::Value << observable.full();
             out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
             for (const auto & k : kinematics)
@@ -657,7 +657,7 @@ namespace eos
         virtual void serialize(YAML::Emitter & out) const
         {
             out << YAML::BeginMap;
-            out << YAML::Key << "type" << YAML::Value << "Amoroso(Mode)";
+            out << YAML::Key << "type" << YAML::Value << "Amoroso";
             out << YAML::Key << "observable" << YAML::Value << observable.full();
             out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
             for (const auto & k : kinematics)
@@ -774,7 +774,7 @@ namespace eos
         virtual void serialize(YAML::Emitter & out) const
         {
             out << YAML::BeginMap;
-            out << YAML::Key << "type" << YAML::Value << "Amoroso(Mode)";
+            out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian";
             out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
             for (const auto & o : observable_names)
             {
@@ -831,9 +831,9 @@ namespace eos
             for (const auto & row : correlation)
             {
                 out << YAML::Flow << YAML::BeginSeq;
-                for (const auto & c : row)
+                for (const auto & corr : row)
                 {
-                    out << c;
+                    out << corr;
                 }
                 out << YAML::EndSeq;
             }
@@ -909,6 +909,59 @@ namespace eos
             os << "    type: MultivariateGaussianCovariance<" << dim_ << ">" << std::endl;
 
             return os;
+        }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian(Covariance)";
+            out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
+            for (const auto & o : observables)
+            {
+                out << o.full();
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::BeginSeq;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Flow << YAML::BeginMap;
+                for (const auto & kk : k)
+                {
+                    out << YAML::Key << kk.name() << YAML::Value << kk.evaluate();
+                }
+                out << YAML::EndMap;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "options" << YAML::Value << YAML::BeginSeq;
+            for (const auto & o : options)
+            {
+                out << YAML::Flow << YAML::BeginMap;
+                for (const auto & oo : o)
+                {
+                    out << YAML::Key << oo.first << YAML::Value << oo.second;
+                }
+                out << YAML::EndMap;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "means" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+            for (const auto & m : means)
+            {
+                out << m;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "covariance" << YAML::Value << YAML::BeginSeq;
+            for (const auto & row : covariance)
+            {
+                out << YAML::Flow << YAML::BeginSeq;
+                for (const auto & cov : row)
+                {
+                    out << cov;
+                }
+                out << YAML::EndSeq;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "dof" << YAML::Value << number_of_observations;
+            out << YAML::EndMap;
         }
     };
 
