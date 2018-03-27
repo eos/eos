@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2011-2018 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -26,6 +26,8 @@
 #include <eos/utils/qualified-name.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
+
+#include <yaml-cpp/yaml.h>
 
 #include <cmath>
 #include <map>
@@ -88,6 +90,14 @@ namespace eos
             virtual ConstraintEntry::ObservableNameIterator end_observable_names() const
             {
                 return _observable_names.end();
+            }
+
+            virtual void serialize(YAML::Emitter & out) const
+            {
+                out << YAML::BeginMap;
+                out << YAML::Key << "type";
+                out << YAML::Value << "unimplemented";
+                out << YAML::EndMap;
             }
     };
 
@@ -162,6 +172,36 @@ namespace eos
 
             return os;
         }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "Gaussian";
+            out << YAML::Key << "observable" << YAML::Value << observable.full();
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Key << k.name() << YAML::Value << k.evaluate();
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & o : options)
+            {
+                out << YAML::Key << o.first << YAML::Value << o.second;
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "mean" << YAML::Value << central;
+            out << YAML::Key << "sigma-stat" << YAML::Flow << YAML::BeginMap;
+            out << YAML::Key << "hi" << YAML::Value << sigma_hi_stat;
+            out << YAML::Key << "lo" << YAML::Value << sigma_lo_stat;
+            out << YAML::EndMap;
+            out << YAML::Key << "sigma-sys" << YAML::Flow << YAML::BeginMap;
+            out << YAML::Key << "hi" << YAML::Value << sigma_hi_sys;
+            out << YAML::Key << "lo" << YAML::Value << sigma_lo_sys;
+            out << YAML::EndMap;
+            out << YAML::Key << "dof" << YAML::Value << number_of_observations;
+            out << YAML::EndMap;
+        }
     };
 
     struct LogGammaConstraintEntry :
@@ -227,6 +267,32 @@ namespace eos
             os << "    observable: " << observable << std::endl;
 
             return os;
+        }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "LogGamma";
+            out << YAML::Key << "observable" << YAML::Value << observable.full();
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Key << k.name() << YAML::Value << k.evaluate();
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & o : options)
+            {
+                out << YAML::Key << o.first << YAML::Value << o.second;
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "mode" << YAML::Value << central;
+            out << YAML::Key << "sigma" << YAML::Flow << YAML::BeginMap;
+            out << YAML::Key << "hi" << YAML::Value << sigma_hi;
+            out << YAML::Key << "lo" << YAML::Value << sigma_lo;
+            out << YAML::EndMap;
+            out << YAML::Key << "dof" << YAML::Value << number_of_observations;
+            out << YAML::EndMap;
         }
     };
 
@@ -296,6 +362,31 @@ namespace eos
             os << "    observable: " << observable << std::endl;
 
             return os;
+        }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "Amoroso(Limit)";
+            out << YAML::Key << "observable" << YAML::Value << observable.full();
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Key << k.name() << YAML::Value << k.evaluate();
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & o : options)
+            {
+                out << YAML::Key << o.first << YAML::Value << o.second;
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "limit-physical" << YAML::Value << physical_limit;
+            out << YAML::Key << "limit-upper-90%" << YAML::Value << upper_limit_90;
+            out << YAML::Key << "limit-upper-95%" << YAML::Value << upper_limit_95;
+            out << YAML::Key << "theta" << YAML::Value << theta;
+            out << YAML::Key << "alpha" << YAML::Value << alpha;
+            out << YAML::EndMap;
         }
     };
 
@@ -371,6 +462,33 @@ namespace eos
 
             return os;
         }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "Amoroso(Mode)";
+            out << YAML::Key << "observable" << YAML::Value << observable.full();
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Key << k.name() << YAML::Value << k.evaluate();
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & o : options)
+            {
+                out << YAML::Key << o.first << YAML::Value << o.second;
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "mode" << YAML::Value << mode;
+            out << YAML::Key << "physical-limit" << YAML::Value << physical_limit;
+            out << YAML::Key << "limit-upper-90%" << YAML::Value << upper_limit_90;
+            out << YAML::Key << "limit-upper-95%" << YAML::Value << upper_limit_95;
+            out << YAML::Key << "theta" << YAML::Value << theta;
+            out << YAML::Key << "alpha" << YAML::Value << alpha;
+            out << YAML::Key << "beta" << YAML::Value << beta;
+            out << YAML::EndMap;
+        }
     };
 
     struct AmorosoTripleLimitConstraintEntry :
@@ -445,6 +563,33 @@ namespace eos
 
             return os;
         }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "Amoroso(Mode)";
+            out << YAML::Key << "observable" << YAML::Value << observable.full();
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Key << k.name() << YAML::Value << k.evaluate();
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & o : options)
+            {
+                out << YAML::Key << o.first << YAML::Value << o.second;
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "physical-limit" << YAML::Value << physical_limit;
+            out << YAML::Key << "limit-upper-10%" << YAML::Value << upper_limit_10;
+            out << YAML::Key << "limit-upper-50%" << YAML::Value << upper_limit_50;
+            out << YAML::Key << "limit-upper-90%" << YAML::Value << upper_limit_90;
+            out << YAML::Key << "theta" << YAML::Value << theta;
+            out << YAML::Key << "alpha" << YAML::Value << alpha;
+            out << YAML::Key << "beta" << YAML::Value << beta;
+            out << YAML::EndMap;
+        }
     };
 
     struct AmorosoConstraintEntry :
@@ -507,6 +652,30 @@ namespace eos
             os << "    observable: " << observable << std::endl;
 
             return os;
+        }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "Amoroso(Mode)";
+            out << YAML::Key << "observable" << YAML::Value << observable.full();
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Key << k.name() << YAML::Value << k.evaluate();
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & o : options)
+            {
+                out << YAML::Key << o.first << YAML::Value << o.second;
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "physical-limit" << YAML::Value << physical_limit;
+            out << YAML::Key << "theta" << YAML::Value << theta;
+            out << YAML::Key << "alpha" << YAML::Value << alpha;
+            out << YAML::Key << "beta" << YAML::Value << beta;
+            out << YAML::EndMap;
         }
     };
 
@@ -600,6 +769,77 @@ namespace eos
             os << "    type: MultivariateGaussian<" << dim_ << ">" << std::endl;
 
             return os;
+        }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "Amoroso(Mode)";
+            out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
+            for (const auto & o : observable_names)
+            {
+                out << o.full();
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::BeginSeq;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Flow << YAML::BeginMap;
+                for (const auto & kk : k)
+                {
+                    out << YAML::Key << kk.name() << YAML::Value << kk.evaluate();
+                }
+                out << YAML::EndMap;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "options" << YAML::Value << YAML::BeginSeq;
+            for (const auto & o : options)
+            {
+                out << YAML::Flow << YAML::BeginMap;
+                for (const auto & oo : o)
+                {
+                    out << YAML::Key << oo.first << YAML::Value << oo.second;
+                }
+                out << YAML::EndMap;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "means" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+            for (const auto & m : means)
+            {
+                out << m;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "sigma-stat-hi" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+            for (const auto & s : sigma_stat_hi)
+            {
+                out << s;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "sigma-stat-lo" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+            for (const auto & s : sigma_stat_lo)
+            {
+                out << s;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "sigma-sys" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+            for (const auto & s : sigma_sys)
+            {
+                out << s;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "correlations" << YAML::Value << YAML::BeginSeq;
+            for (const auto & row : correlation)
+            {
+                out << YAML::Flow << YAML::BeginSeq;
+                for (const auto & c : row)
+                {
+                    out << c;
+                }
+                out << YAML::EndSeq;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "dof" << YAML::Value << number_of_observations;
+            out << YAML::EndMap;
         }
     };
 
