@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2012, 2013, 2014, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2011-2018 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -29,6 +29,12 @@
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <vector>
+
+// forward declaration
+namespace YAML
+{
+    class Emitter;
+}
 
 namespace eos
 {
@@ -112,6 +118,9 @@ namespace eos
                 return IteratorRange<ObservableNameIterator>(begin_observable_names(), end_observable_names());
             }
             ///@}
+
+            /// Serialize to YAML
+            virtual void serialize(YAML::Emitter &) const = 0;
     };
 
     extern template class WrappedForwardIterator<ConstraintEntry::ObservableNameIteratorTag, const QualifiedName>;
