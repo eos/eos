@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2016 Danny van Dyk
+ * Copyright (c) 2011, 2016, 2018 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -124,6 +124,31 @@ class OptionsTest :
                 Options c = a;
                 TEST_CHECK(a == c);
                 TEST_CHECK(b == c);
+            }
+
+            // Iteration (check for names, values, and lexicographical order)
+            {
+                Options o
+                {
+                    { "l",     "tau"     },
+                    { "q",     "u"       },
+                    { "model", "CKMScan" },
+                };
+
+                auto i = o.begin();
+                TEST_CHECK("l" == i->first);
+                TEST_CHECK("tau" == i->second);
+
+                ++i;
+                TEST_CHECK("model" == i->first);
+                TEST_CHECK("CKMScan" == i->second);
+
+                ++i;
+                TEST_CHECK("q" == i->first);
+                TEST_CHECK("u" == i->second);
+
+                ++i;
+                TEST_CHECK(o.end() == i);
             }
         }
 } options_test;
