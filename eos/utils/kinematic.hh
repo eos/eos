@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015, 2018 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,6 +23,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/mutable.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/wrapped_forward_iterator.hh>
 
 namespace eos
 {
@@ -112,6 +113,15 @@ namespace eos
             KinematicVariable operator[] (const std::string & variable) const;
             ///@}
 
+            ///@name Iteration over our kinematic variables
+            ///@{
+            struct KinematicVariableIteratorTag;
+            typedef WrappedForwardIterator<KinematicVariableIteratorTag, const KinematicVariable> KinematicVariableIterator;
+
+            KinematicVariableIterator begin() const;
+            KinematicVariableIterator end() const;
+            ///@}
+
             ///@name Output
             ///@{
             /*!
@@ -122,6 +132,7 @@ namespace eos
             ///@}
     };
 
+    extern template class WrappedForwardIterator<Kinematics::KinematicVariableIteratorTag, const KinematicVariable>;
 
     /*!
      * KinematicVariable is the class that holds all information of one of KinematicVariables' parameters.
