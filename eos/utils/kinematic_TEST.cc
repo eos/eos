@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2018 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -87,6 +87,31 @@ class KinematicsTest :
                 Kinematics c = a;
                 TEST_CHECK(a == c);
                 TEST_CHECK(b == c);
+            }
+
+            // Iteration (check for names, values, and order)
+            {
+                Kinematics k
+                {
+                    { "s_min",       1.0 },
+                    { "s_max",       6.0 },
+                    { "cos(theta)", -0.5 },
+                };
+
+                auto i = k.begin();
+                TEST_CHECK("s_min" == i->name());
+                TEST_CHECK(1.0 == i->evaluate());
+
+                ++i;
+                TEST_CHECK("s_max" == i->name());
+                TEST_CHECK(6.0 == i->evaluate());
+
+                ++i;
+                TEST_CHECK("cos(theta)" == i->name());
+                TEST_CHECK(-0.5 == i->evaluate());
+
+                ++i;
+                TEST_CHECK(k.end() == i);
             }
         }
 } kinematics_test;

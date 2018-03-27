@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015, 2018 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,12 +20,20 @@
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/stringify.hh>
+#include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <map>
 #include <vector>
 
 namespace eos
 {
+    template <>
+    struct WrappedForwardIteratorTraits<Kinematics::KinematicVariableIteratorTag>
+    {
+        typedef std::vector<KinematicVariable>::iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<Kinematics::KinematicVariableIteratorTag, const KinematicVariable>;
+
     template <>
     struct Implementation<Kinematics>
     {
@@ -34,6 +42,8 @@ namespace eos
         std::map<std::string, unsigned> variables_map;
 
         std::vector<std::string> variables_names;
+
+        std::vector<KinematicVariable> variables;
     };
 
     Kinematics::Kinematics() :
@@ -44,22 +54,22 @@ namespace eos
     Kinematics::Kinematics(const std::initializer_list<std::pair<std::string, double>> & variables) :
         PrivateImplementationPattern<Kinematics>(new Implementation<Kinematics>)
     {
-        for (auto v = variables.begin(), v_end = variables.end() ; v != v_end ; ++v)
+        for (const auto & v : variables)
         {
-            auto i(_imp->variables_map.find(v->first));
+            auto i(_imp->variables_map.find(v.first));
 
             if (_imp->variables_map.end() == i)
             {
                 int index = _imp->variables_data.size();
-                _imp->variables_map[v->first] = index;
-                _imp->variables_data.push_back(v->second);
-                _imp->variables_names.push_back(v->first);
-
+                _imp->variables_map[v.first] = index;
+                _imp->variables_data.push_back(v.second);
+                _imp->variables_names.push_back(v.first);
+                _imp->variables.push_back(KinematicVariable(_imp, index));
             }
             else
             {
-                _imp->variables_data[i->second] = v->second;
-                _imp->variables_names[i->second] = v->first;
+                _imp->variables_data[i->second] = v.second;
+                _imp->variables_names[i->second] = v.first;
             }
         }
     }
@@ -101,7 +111,6 @@ namespace eos
     {
         return ! (*this == rhs);
     }
-
 
     KinematicVariable
     Kinematics::operator[] (const std::string & name) const
@@ -145,6 +154,7 @@ namespace eos
             _imp->variables_map[name] = index;
             _imp->variables_data.push_back(value);
             _imp->variables_names.push_back(name);
+            _imp->variables.push_back(KinematicVariable(_imp, index));
 
             return KinematicVariable(_imp, index);
         }
@@ -163,6 +173,18 @@ namespace eos
             throw UnknownKinematicVariableError(name);
 
         _imp->variables_data[i->second] = value;
+    }
+
+    Kinematics::KinematicVariableIterator
+    Kinematics::begin() const
+    {
+        return _imp->variables.begin();
+    }
+
+    Kinematics::KinematicVariableIterator
+    Kinematics::end() const
+    {
+        return _imp->variables.end();
     }
 
     KinematicVariable::KinematicVariable(const std::shared_ptr<Implementation<Kinematics>> & imp, unsigned index) :
