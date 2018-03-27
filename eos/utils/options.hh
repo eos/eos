@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2015, 2018 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +22,7 @@
 
 #include <eos/utils/exception.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <string>
 
@@ -104,7 +105,18 @@ namespace eos
 
             bool empty() const;
             ///@}
+
+            ///@name Iteration over our options
+            ///@{
+            struct OptionIteratorTag;
+            typedef WrappedForwardIterator<OptionIteratorTag, const std::pair<const std::string, std::string>> OptionIterator;
+
+            OptionIterator begin() const;
+            OptionIterator end() const;
+            ///@}
     };
+
+    extern template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const std::string, std::string>>;
 
     /// Merge operator.
     Options operator+ (const Options & lhs, const Options & rhs);
