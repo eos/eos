@@ -57,7 +57,7 @@ def main():
         print(r'\renewcommand{\arraystretch}{1.1}')
         print(r'\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}')
         print(r'\begin{center}')
-        print(r'\begin{tabular}{@{} p{.5\textwidth} p{.1\textwidth} L{.4\textwidth} @{}}')
+        print(r'\begin{longtable}{@{} p{.5\textwidth} p{.1\textwidth} L{.4\textwidth} @{}}')
         print(r'\toprule')
         print(r'    \textbf{Qualified Name} & \textbf{Parameter} & \textbf{Description} \\')
         print(r'\midrule')
@@ -75,7 +75,7 @@ def main():
             print(r'    \verb|{0}| & {1} & {2} \\'.format(key, latex, comment))
 
         print(r'\bottomrule')
-        print(r'\end{tabular}')
+        print(r'\end{longtable}')
         print(r'\end{center}')
         print(r'\captionof{{table}}{{ {0} }}'.format(description))
         print(r'}')
