@@ -16,6 +16,76 @@ AC_PROG_MAKE_SET
 PKG_PROG_PKG_CONFIG
 dnl }}}
 
+dnl {{{ define CHECK_CXXFLAG
+AC_DEFUN([CHECK_CXXFLAG], [
+	save_CXXFLAGS=$CXXFLAGS
+	CXXFLAGS="$CXXFLAGS $1 -Werror"
+	AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+#include <string>
+#include <iostream>
+template <typename T_> struct S { };
+int main(int, char **)
+{
+	std::string s("test");
+	std::cout << s << std::endl;
+}
+	])],
+		[AC_MSG_RESULT([yes])],
+		[AC_MSG_RESULT([no])
+		 AC_MSG_ERROR([your compiler does not support CXXFLAGS=]$1)
+		]
+	)
+	CXXFLAGS=$save_CXXFLAGS
+])
+dnl }}}
+
+dnl {{{ check for compiler requirements
+dnl {{{ check for -std=c++14
+AC_MSG_CHECKING([for C++14 support])
+CHECK_CXXFLAG([-std=c++14])
+dnl }}}
+dnl {{{ check for braced initializers
+AC_MSG_CHECKING([for braced initializers])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS -std=c++0x"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+	struct Foo { double x, y; };
+	int main(int, char **)
+	{
+		Foo foo{ 17.24, 23.08 };
+	}
+])],
+	[AC_MSG_RESULT([yes])],
+	[AC_MSG_RESULT([no])
+	 AC_MSG_ERROR([your compiler does not support braced initializers])
+	]
+)
+CXXFLAGS=$save_CXXFLAGS
+dnl }}}
+dnl {{{ check for constexpr const
+AC_MSG_CHECKING([for constexpr const])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS -std=c++0x"
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+	struct X
+	{
+		static constexpr const int foo = 42;
+	};
+	int main(int, char **)
+	{
+		return 42 == X::foo;
+	}
+])],
+	[AC_MSG_RESULT([yes])],
+	[AC_MSG_RESULT([no])
+	 AC_MSG_ERROR([your compiler does not support constexpr const])
+	]
+)
+CXXFLAGS=$save_CXXFLAGS
+dnl }}}
+CXXFLAGS="$CXXFLAGS -std=c++14"
+dnl }}}
+
 dnl {{{ check for required packages
 dnl {{{ boost filesystem
 AC_CHECK_LIB([boost_filesystem], main,
@@ -240,75 +310,6 @@ else
 fi
 AC_SUBST([GITHEAD])
 AC_DEFINE_UNQUOTED([EOS_GITHEAD], "$GITHEAD", [GIT revision of the sources])
-dnl }}}
-
-dnl {{{ define CHECK_CXXFLAG
-AC_DEFUN([CHECK_CXXFLAG], [
-	save_CXXFLAGS=$CXXFLAGS
-	CXXFLAGS="$CXXFLAGS $1 -Werror"
-	AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-#include <string>
-#include <iostream>
-template <typename T_> struct S { };
-int main(int, char **)
-{
-	std::string s("test");
-	std::cout << s << std::endl;
-}
-	])],
-		[AC_MSG_RESULT([yes])],
-		[AC_MSG_RESULT([no])
-		 AC_MSG_ERROR([your compiler does not support CXXFLAGS=]$1)
-		]
-	)
-	CXXFLAGS=$save_CXXFLAGS
-])
-dnl }}}
-
-dnl {{{ check for compiler requirements
-dnl {{{ check for -std=c++14
-AC_MSG_CHECKING([for C++14 support])
-CHECK_CXXFLAG([-std=c++14])
-dnl }}}
-dnl {{{ check for braced initializers
-AC_MSG_CHECKING([for braced initializers])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS -std=c++0x"
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-	struct Foo { double x, y; };
-	int main(int, char **)
-	{
-		Foo foo{ 17.24, 23.08 };
-	}
-])],
-	[AC_MSG_RESULT([yes])],
-	[AC_MSG_RESULT([no])
-	 AC_MSG_ERROR([your compiler does not support braced initializers])
-	]
-)
-CXXFLAGS=$save_CXXFLAGS
-dnl }}}
-dnl {{{ check for constexpr const
-AC_MSG_CHECKING([for constexpr const])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS -std=c++0x"
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-	struct X
-	{
-		static constexpr const int foo = 42;
-	};
-	int main(int, char **)
-	{
-		return 42 == X::foo;
-	}
-])],
-	[AC_MSG_RESULT([yes])],
-	[AC_MSG_RESULT([no])
-	 AC_MSG_ERROR([your compiler does not support constexpr const])
-	]
-)
-CXXFLAGS=$save_CXXFLAGS
-dnl }}}
 dnl }}}
 
 dnl {{{ define relevant EOS_* macros
