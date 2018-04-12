@@ -1,78 +1,90 @@
 \chapter{Installation}
 
-The aim of this section is to assist you in the installation of EOS
-from source. For the remainder of the section, we will assume that you
-build and install EOS on a Linux based operating system, such as Debian
-or Ubuntu.\footnote{%
+The following instructions explain how to install \EOS from source on a 
+Linux-based operating system, such as Debian
+or Ubuntu, \footnote{%
     Other flavours of Linux will work as well, however, note that
     we will exclusively use package names as they appear in the Debian/Ubuntu
     \text{apt} databases.
 }
-Installation on MacOS X is known to work, but not guaranteed to work out
-of the box.
+or MacOS X.
 
-\section{Installing the Dependencies}
+\section{Installing the dependencies}
 
-The dependencies can be roughly categorized as either system software, or
-scientific software.
+\subsection{Overview}
+\label{sec:inst:depend:overview}
 
-\paragraph{System software} Installing EOS from source will require the following system
-software to be pre-installed:
-\begin{description}
-    \item[\package{g++}] the GNU C++ compiler, in version 4.8.1 or higher,
-    \item[\package{autoconf}] the GNU tool for creating configure scripts, in version 2.69 or higher,
-    \item[\package{automake}] the GNU tool for creating makefiles, in version 1.14.1 or higher,
-    \item[\package{libtool}] the GNU tool for generic library support, in version 2.4.2 or higher,
-    \item[\package{pkg-config}] the freedesktop.org library helper, in version 0.28 or higher,
-    \item[\package{libboost-filesystem-dev}] the BOOST library for file system access,
-    \item[\package{libboost-system-dev}] the BOOST library for system-specific error conditions,
-    \item[\package{libyaml-cpp-dev}] the C++ interface to the YAML library.
+The dependencies can be roughly categorized as either system software, Python-related
+software, or scientific software.\\
+
+
+\EOS requires the following system software:
+\begin{description}[labelwidth=.15\textwidth]
+    \item[\package{g++}] the GNU C++ compiler, in version 4.8.1 or higher;
+    \item[\package{autoconf}] the GNU tool for creating configure scripts, in version 2.69 or higher;
+    \item[\package{automake}] the GNU tool for creating makefiles, in version 1.14.1 or higher;
+    \item[\package{libtool}] the GNU tool for generic library support, in version 2.4.2 or higher;
+    \item[\package{pkg-config}] the freedesktop.org library helper, in version 0.28 or higher;
+    \item[\package{BOOST}] the BOOST C++ libraries (sublibraries \package{boost-filesystem} and
+            \package{boost-system});
+    \item[\package{yaml-cpp}] a C++ YAML parser and interpreter library.
 \end{description}
-If you intend to use the Python \cite{Python} interface to the EOS library, you will need
-to additionally install
-\begin{description}
-    \item[python3-dev] python3 interpreter in version 3.5 or higher, and required header files,
-    \item[libboost-python-dev] the BOOST library for interfacing Python and C++,
-    \item[python3-h5py] the Python interface to HDF5,
-    \item[python3-matplotlib] the Python plotting library,
-    \item[python3-scipy] the Python scientific library,
-    \item[python3-yaml] the Python YAML library.
+The Phython \cite{Python} interface to \EOS requires the additional software:
+\begin{description}[labelwidth=.15\textwidth]
+    \item[\package{python3}] python3 interpreter in version 3.5 or higher, and required header files;
+    \item[\package{BOOST}] the BOOST C++ library \package{boost-python} for interfacing Python and C++;
+    \item[\package{h5py}] the Python interface to HDF5;
+    \item[\package{matplotlib}] the Python plotting library;
+    \item[\package{scipy}] the Python scientific library;
+    \item[\package{PyYAML}] the Python YAML parser and emitter library.
 \end{description}
-We recommend that you install the above packages only via your system's software management system.
+We recommend you install the above packages via your system's software management system.\\
 
-\paragraph{Scientific Software} Building and using the EOS core libraries requires in addition
-the following scientific software to be pre-installed:
-\begin{description}
-    \item[\package{libgsl0-dev}] the GNU Scientific Library \cite{GSL}, in version 1.16 or higher,
-    \item[\package{libhdf5-serial-dev}] the Hierarchical Data Format v5 library \cite{HDF5}, in version 1.8.11 or higher,
-    \item[\package{libfftw3-dev}] the C subroutine library for computing the discrete Fourier transform,
-    \item[\package{minuit2}] the physics analysis tool for function minimization, in version 5.28.00 or higher.
+
+\EOS requires the following scientific software:
+\begin{description}[labelwidth=.15\textwidth]
+    \item[\package{GSL}] the GNU Scientific Library \cite{GSL}, in version 1.16 or higher;
+    \item[\package{HDF5}] the Hierarchical Data Format v5 library \cite{HDF5}, in version 1.8.11 or higher;
+    \item[\package{FFTW3}] the C subroutine library for computing the discrete Fourier transform;
+    \item[\package{Minuit2}] the physics analysis tool for function minimization, in version 5.28.00 or higher.
 \end{description}
-If you intend to use the \gls{PMC} sampling algorithm with EOS, you will need to install
-\begin{description}
-    \item[libpmc] a free implementation of said algorithm \cite{libpmc}, in version 1.01 or higher,
+The optional (and highly recommended) \gls{PMC} sampling algorithm requires:
+\begin{description}[labelwidth=.15\textwidth]
+    \item[\package{pmclib}] a free implementation of said algorithm \cite{libpmc}, in version 1.01 or higher.
 \end{description}
 
-Except for \package{libpmc} and \package{minuit2}, we recommend the installation of the above packages
-using your system's software management system.\footnote{%
-    There is presently a bug in the Debian/Ubuntu packages for \package{minuit2}, which prevents
-    linking.
-}
-For the remaining packages \package{libpmc} and \package{minuit2}, alternative means of installation
-are available, as discussed in the following.
+We recommend you install the above packages via your system's software
+management system, except for \package{pmclib} and \package{Minuit2} in particular
+cases discussed below.
 
-\subsection{Alternative: Installing with \texttt{apt}}
+\subsection{Linux: Installing the dependencies with \package{APT} (Debian, Ubuntu)}
 
-Prebuilt binary package files for the Ubuntu long-term-support varieties
-``Trusty'' and ``Xenial'' are available for the packages \package{libpmc} and
-\package{minuit2}. Create a new file \texttt{eos.list} within the directory
-\texttt{/etc/apt/sources.list.d} with the following content:
+You can install the prerequisite software with the \package{apt} package
+management system on any Debian or Ubuntu system as follows:
+\begin{commandline}
+# for the 'System Software'
+apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libyaml-cpp-dev
+# for the 'Python Software'
+apt-get install python3-dev libboost-python-dev python3-h5py python3-matplotlib python3-scipy python3-yaml
+# for the 'Scientific Software'
+apt-get install libgsl0-dev libhdf5-serial-dev libfftw3-dev
+\end{commandline}
+Do not install \package{Minuit2} via \package{APT}, since there is presently a
+bug in the Debian/Ubuntu packages for \package{Minuit2}, which prevents
+linking.\\
+
+
+There are prebuilt binary package files for
+\package{pmclib} and \package{Minuit2} available for the Ubuntu
+long-term-support varieties Xenial and Bionic via the Packagecloud web service.
+To use the EOS third-party repository, create a new file \filename{eos.list} within
+the directory \directory{/etc/apt/sources.list.d} with the following contents:
 \begin{file}
 deb https://packagecloud.io/eos/eos/ubuntu/ DIST main
 deb-src https://packagecloud.io/eos/eos/ubuntu/ DIST main
 \end{file}
-where \texttt{DIST} has to replaced by either \texttt{trusty} or
-\texttt{xenial}, depending on your version of Ubuntu. Add our repository's
+where you must replace \texttt{DIST} with either \texttt{xenial} or
+\texttt{bionic}, depending on your version of Ubuntu. Add our repository's
 GPG key by running
 \begin{commandline}
 curl -L "https://packagecloud.io/eos/eos/gpgkey" 2> /dev/null | apt-key add - &>/dev/null
@@ -83,11 +95,12 @@ apt-get update
 apt-get install minuit2 libpmc
 \end{commandline}
 
-\subsection{Alternative: Installing from source}
+You can then proceed with the EOS installation as documented in \refsec{inst:EOS}.
 
-In order to install \package{minuit2} from source you will need to
-disable the automatic support for OpenMP. The installation can be done by
-executing the following commands:
+\subsection{Linux: Installing \package{Minuit2} and \package{pmclib} from source}
+
+To install \package{Minuit2} from source, you need to disable the automatic support
+for OpenMP. Execute the following commands:
 \begin{commandline}
 mkdir /tmp/Minuit2
 pushd /tmp/Minuit2
@@ -102,9 +115,9 @@ popd
 rm -R /tmp/Minuit2
 \end{commandline}
 
-For the \package{libpmc} package EOS requires some modifications to libpmc's
-source code, in order to make it compatible with C++. We suggest the following
-commands to install it:
+Installation of \package{pmclib} for \EOS's purposes requires some modifications
+to the source code to make it compatible with C++. Execute the following
+commands:
 \begin{commandline}
 mkdir /tmp/libpmc
 pushd /tmp/libpmc
@@ -131,8 +144,9 @@ popd
 rm -R /tmp/libpmc
 \end{commandline}
 
-\paragraph{Note} The \texttt{waf} script supplied by \package{libpmc} is written in Python version 2. On
-systems that use \texttt{python3} as the default Python interpreter, you will see an error message:
+\textbf{Note}: The \client{waf} build script used by \package{pmclib} is written in Python2. On
+systems that use Python3 as the default interpreter, you will see an error message similar
+to the following:
 \begin{file}
 ./waf configure --m64 --prefix=/opt/pkgs/pmclib-1.01
 /tmp/src/libpmc/pmclib_v1.01/wscript: error: Traceback (most recent call last):
@@ -143,101 +157,149 @@ systems that use \texttt{python3} as the default Python interpreter, you will se
                     ^
 SyntaxError: invalid syntax
 \end{file}
-This problem can usually be fixed by replacing \texttt{python} with \texttt{python2} in the very first
-line of the file \texttt{waf}.
+You can fixed this problem by replacing \texttt{python} with \texttt{python2} in the very first
+line of the file \filename{waf} in the top-level \package{pmclib} directory.\\
 
-\section{Installing EOS}
+You can then proceed with the EOS installation as documented in \refsec{inst:EOS}.
 
-The most recent version of EOS is contained in the public GIT \cite{GIT}
-repository at \url{http://github.com/eos/eos}.  In order to download it for the
-first time, create a new local clone of said repository via:
-%
+\subsection{MacOSX: Installing the Dependencies with \package{Homebrew} and \package{PyPi}}
+
+You can install most of the prerequisite software via \package{Homebrew}.
+You will need to make \package{Homebrew} aware of \EOS'
+third-party repository as follows:
 \begin{commandline}
-git clone \
-    -o eos \
-    -b master \
-    https://github.com/eos/eos.git \
-    eos
+brew tap eos/homebrew-eos
+\end{commandline}
+
+To install the packages, execute the following commands:
+\begin{commandline}
+# for the 'System Software'
+brew install autoconf automake libtool pkg-config boost yaml-cpp
+# for the 'Python Software'
+brew install python3 boost-python
+# for the 'Scientific Software'
+brew install gsl hdf5 minuit2 pmclib
+\end{commandline}
+
+Now you can use the \client{pip3} command to install the remaining
+packages from the \package{PyPi} package index:
+\begin{commandline}
+pip3 install h5py matplotlib scipy PyYAML
 \end{commandline}
 
 
-As a first step, you need to create all the necessary build scripts via:
+You can then proceed with the EOS installation as documented in \refsec{inst:EOS}.
+
+\section{Installing EOS}
+\label{sec:inst:EOS}
+
+You can obtain the most recent version of EOS is available from Github
+\footnote{\url{http://github.com/eos/eos}}.  To download it for the first time,
+clone the repository via
+%
+\begin{commandline}
+git clone -o eos -b master https://github.com/eos/eos.git
+\end{commandline}
+
+You must first create all the necessary build scripts via
 %
 \begin{commandline}
 cd eos
 ./autogen.bash
 \end{commandline}
 %
-For the installation you have to select an appropriate \texttt{PREFIX}:
+You must specify where \EOS will be installed by setting the \envvar{PREFIX}
+environment variable.
 \begin{enumerate}
-    \item If you are administrating the computer on which you install EOS yourself,
-    you can choose any prefix. The default is \texttt{PREFIX=/usr/local/}~.
-    \item If you are not administrating your computer yourself, you can install
-    EOS into a prefix below your home directory or any other directory under your
-    control. We recommend to use \texttt{PREFIX=\$HOME/.eos/}~.
+    \item If you are administrating the computer on which you install EOS,
+    you may choose any prefix. We recommend \directory{/usr/local}:
+\begin{commandline}
+export PREFIX=/usr/local
+\end{commandline}
+    We strongly discourage using \directory{/usr}, which avoids conflicts with
+    your operating system's package management software.
+    \item If you are not administrating the computer, you must install EOS into
+    a directory below your home directory or below any other directory for which
+    you have the needed permissions. We recommend \directory{\$HOME/.local}:
+\begin{commandline}
+export PREFIX=\$HOME/.eos/
+\end{commandline}
 \end{enumerate}
-Next, you configure the build scripts using:
+
+\subsubsection{Configuration}
+
+Next, you must configure the \EOS build using the \cli{configure} script.
+\begin{enumerate}
+    \item If you want to use the \EOS Python interface you must pass the \cli{--enable-python} option
+    to \cli{configure}. The default is \cli{--disable-python}.
+
+    \item If you want to use the \EOS \gls{PMC} algorithm you must pass the \cli{--enable-pmc} option
+    to \cli{configure}. The default is \cli{--disable-pmc}.
+    If you installed \package{pmclib} from source to a non-standard location,
+    you must specify its installation prefix by passing on
+    \cli{--with-pmc=PMC-INSTALLATION-PREFIX}.
+
+    \item If you want to use \package{ROOT}'s internal copy of Minuit2 you must
+    pass \cli{--with-minuit2=root} to \cli{configure}.
+
+    \item Otherwise, if you have installed \package{Minuit2} from source to a non-standard location
+    you must specify its installation prefix by passing on
+    \cli{--with-minuit2=MINUIT2-INSTALLATION-PREFIX}.
+\end{enumerate}
 %
+The recommended configuration is achieved using
 \begin{commandline}
 ./configure \
-    --prefix=\$PREFIX \
+    --prefix=$PREFIX \
     --enable-python \
-    # alternative 1: --disable-python
-    # alternative 2: --with-minuit2=root
-    # alternative 3: --with-minuit2=/opt/pkgs/Minuit2-5.28.00
-    # alternative 4: --enable-pmc \
-                     --with-pmc=/opt/pkgs/pmclib-1.01
+    --enable-pmc
 \end{commandline}
-%
-In the above, three alternatives apply:
-\begin{enumerate}
-    \item Building the EOS-Python interface is purely optional. In order to disable building
-    this interface, replace \texttt{--enable-python} with \texttt{--disable-python}.
-    \item If you have installed ROOT on your system, you can use ROOT's internal copy of Minuit2.
-    In such a case, issue \texttt{--with-minuit2=root} to the configure script.
-    \item Only if you have \emph{manually} installed \package{minuit2}, you must specify its installation
-    path using\\ \texttt{--with-minuit2=MINUIT2-INSTALLATION-PATH}~.
-    \item Building the EOS-PMC support is purely optional. In order to enable building this
-    support, issue \texttt{--enable-pmc}. If you \emph{manually} installed \package{libpmc}, you
-    must specify its installation path using \texttt{--with-pmc=PMC-INSTALLATION-PATH}~.
-\end{enumerate}
 If the \texttt{configure} script finds any problems with your system, it will complain loudly.\\
 
-After successful configuration, you can build EOS using:
+\subsubsection{Building and installing}
+After successful configuration, build \EOS using
 %
 \begin{commandline}
-make all
+make -j all
+\end{commandline}
+The \cli{-j} option instructs \cli{make} to use all available processors to parallelize
+the build process.
+%
+We strongly recommend testing the build by executing
+%
+\begin{commandline}
+make -j check VERBOSE=1
 \end{commandline}
 %
-Moreover, we urgently recommend to also run the complete test suite by executing:
-%
+within the build directory. Please contact the authors if any
+test fails by opening an issue in the official
+\EOS Github repository. If all tests pass, install \EOS using
 \begin{commandline}
-make check
-\end{commandline}
-%
-within the source directory. Please contact the authors in the case that any
-test failures should occur. If the test cases have successfully passed, you can install EOS using:
-\begin{commandline}
-make install # Use 'sudo make install' if you install e.g. to 'PREFIX=/usr/local'
+make install # Use 'sudo make install' if you install e.g. to '/usr/local'
+             # or a similarly privileged directory
 \end{commandline}
 
-
-In order to be able to use the EOS clients from the command line, you will need to
-set up some environment variables. For the Bash, which is the default Debian/Ubuntu
-shell this can be achieved by adding the lines
+If you installed \EOS to a non-standard location (\ie not
+\directory{/usr/local}), to use it from the command line you must set up some
+environment variable. For \package{BASH}, which is the default Debian/Ubuntu
+shell, add the following lines to \filename{\$HOME/.bash\_profile}:
 \begin{commandline}
-export PATH+=":/opt/pkgs/eos/bin"
-export PYTHONPATH+=":/opt/pkgs/eos/lib/python3.5/site-packages"
+export PATH+=":$PREFIX/bin"
+# uncomment the following line for Python support
+#export PYTHONPATH+=":$PREFIX/lib/python3.5/site-packages"
 \end{commandline}
-to you \texttt{.bashrc} file. In the above, the last line is optional and should only be
-added if you built EOS with Python support. Note that \texttt{python3.5} should be
-replaced by the apppropriate Python version against which EOS was built.
-
-
-In order to build you own programs that use the EOS libraries,
-add
+The last line should be uncommented only if you built \EOS with Python support.
+Note that \cli{python3.5} piece must be replaced by the appropriate Python
+version with which \EOS was built. You can determine the correct value
+using
 \begin{commandline}
-CXXFLAGS+=" -I/opt/pkgs/eos/include"
-LDFLAGS+=" -L/opt/pkgs/eos/lib"
+python3 -c "import sys; print('python{0}.{1}'.format(sys.version_info[0], sys.version_info[1]))"
 \end{commandline}
-to your makefile.
+
+\subsubsection{MacOS X short cut}
+The most recent development version of \EOS (and all of its dependencies) can
+also be installed automatically using \package{Homebrew}:
+\begin{commandline}
+brew tap eos/homebrew-eos
+brew install --HEAD eos
+\end{commandline}

@@ -81,7 +81,7 @@
     xleftmargin=.025\textwidth,
     frame=single,
     frameround=tttt,
-    backgroundcolor=\color{black!10!white}
+    backgroundcolor=\color{blue!25!white}
 }
 }{}
 
@@ -140,12 +140,21 @@
 \newcommand{\refsec}[1]{section~\ref{sec:#1}}
 \newcommand{\reftab}[1]{table~\ref{tab:#1}}
 
-%% consisten typeset for various objects
-\newcommand{\class}[1]{\texttt{#1}}
-\newcommand{\cpp}[1]{\texttt{#1}}
-\newcommand{\client}[1]{\texttt{#1}}
-\newcommand{\package}[1]{\textsf{\textbf{#1}}}
-\newcommand{\observable}[1]{\texttt{\lstinline{#1}}}
-\newcommand{\option}[1]{\texttt{\lstinline{#1}}}
-\newcommand{\parameter}[1]{\texttt{\lstinline{#1}}}
+%% consistent typesetting
+% C++
+\newcommand{\cpp}[1]{\mbox{\texttt{#1}}}
+\newcommand{\class}[1]{\mbox{\texttt{#1}}}
+% Shell
+\newcommand{\cli}[1]{\colorbox{black!10!white}{\texttt{#1}}}
+\newcommand{\client}[1]{\colorbox{black!10!white}{\texttt{#1}}}
+\newcommand{\envvar}[1]{\colorbox{black!10!white}{\texttt{\$#1}}}
+% OS
+\newcommand{\directory}[1]{\textcolor{blue!75!white}{\texttt{#1/}}}
+\newcommand{\filename}[1]{\textcolor{blue!75!white}{\texttt{#1}}}
+\newcommand{\package}[1]{\textcolor{black!50!green}{\textsf{\textbf{#1}}}}
+% EOS
+\newcommand{\EOS}{\mbox{\textcolor{black!75!white}{\textbf{EOS}}}\xspace}
+\newcommand{\observable}[1]{\mbox{\texttt{\lstinline{#1}}}}
+\newcommand{\option}[1]{\mbox{\texttt{\lstinline{#1}}}}
+\newcommand{\parameter}[1]{\mbox{\texttt{\lstinline{#1}}}}
 

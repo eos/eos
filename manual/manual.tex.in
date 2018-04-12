@@ -31,6 +31,7 @@
 \usepackage{slashed}                             % for Feynman slash notation
 \usepackage{subfigure}                           % for captioned subdividion of figures
 \usepackage{todonotes}                           % for margin notes on open tasks
+\usepackage{xspace}                              % for extra whitespace where needed
 
 %% load macros
 \input{macros.tex}
