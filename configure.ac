@@ -270,6 +270,8 @@ if test "x$enable_python" == xyes ; then
 		BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
 	elif test "x$os_id" == xcentos ; then
 		BOOST_PYTHON_SUFFIX=""
+	elif test "x`uname`" == xDarwin ; then
+		BOOST_PYTHON_SUFFIX="3"
 	fi
 	AC_SUBST([PYTHON_LIBS])
 	AC_SUBST([PYTHON_LDFLAGS])
