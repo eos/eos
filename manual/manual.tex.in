@@ -23,8 +23,8 @@
 \usepackage{enumitem}                            % for modifications to the list-like environments
 \usepackage{filecontents}                        % for keeping files' contents within the document source
 \usepackage{fontspec}                            % for font selection
-\usepackage[acronym,toc]{glossaries}             % for acronyms and glossaries
 \usepackage{hyperref}                            % for hyperlinks in the PDF
+\usepackage[acronym,toc]{glossaries}             % for acronyms and glossaries
 \usepackage{longtable}                           % for tables spanning more than one page
 \usepackage{listings}                            % for source code and commandline listings
 \usepackage{multirow}                            % for table cells spanning multiple rows

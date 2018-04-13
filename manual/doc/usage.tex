@@ -3,32 +3,30 @@
 \chapter{Usage}
 \label{ch:usage}
 
-EOS has been authored with several use cases in mind.
-\begin{itemize}
-\item The first such use case is the evaluation of observables and further
-theoretical quantities in the field of flavor physics. EOS aspires to produce
-theory estimates of publication quality, and has produced such estimates in the
-past.
+\EOS has been authored with several use cases in mind.
+\begin{enumerate}
+\item The evaluation of observables and further theoretical quantities in the
+field of flavor physics. \EOS aspires to produce theory estimates of publication
+quality, and has produced such estimates in the past.
 
-\item The second use case is the inference of parameters from experimental
-observations.  For this task, EOS defaults to the Bayesian framework of
-parameter inference.
+\item The inference of parameters from experimental observations.  For this
+task, \EOS defaults to the Bayesian framework of parameter inference.
 
-\item The third use case is the production of toy events for a variety of
-flavor-physics-related processes.
-\end{itemize}
+\item The production of toy events for a variety of flavor-physics-related
+processes using Monte Carlo methods.
+\end{enumerate}
 
-In the remainder of this chapter, we document the usage of the existing EOS
-clients and scripts, in order to carry out tasks corresponding to the above use
-cases.  We assume further that only the built-in observables, physics models
+In the remainder of this chapter we document the usage of the existing \EOS
+clients and scripts, to carry out tasks corresponding to the above use
+cases. We assume further that only the built-in observables, physics models
 and experimental constraints are used. The necessary steps to extend EOS with
-new observables, physics models or constraints will be discussed in \refch{extending}.
+new observables, physics models or constraints is discussed in \refch{extending}.
 
 
 \section{Browsing the List of Parameters, Observables and Constraints}
 \label{sec:usage:parameters+observables+constraints}
 
-EOS has knowledge of parameters, observables, options, kinematic variables, and
+\EOS has understands parameters, observables, options, kinematic variables, and
 constraints.  Parameters, observables and constraints share a common naming
 scheme, in order to allow categorize these quantities more readily. The naming
 scheme is as follows: each name can be decomposed into a prefix (before the
@@ -41,83 +39,87 @@ Here \texttt{K\^{}*} indicated the association with the $K^*$ meson,
 \texttt{a\_1\_para} is the short name for this object, and the tag is present and
 reads \texttt{1GeV}.\\
 
-Amongst these objects, parameters are used as inputs to EOS. They are
-real-valued numbers that can be set to arbitrary values at run time.  The full
-list of parameters known to EOS can be browsed by running the
-\client{eos-list-parameters} client.\\
+Parameters are scalar floating-point-valued inputs. They are real-valued
+numbers that can be set to arbitrarily at run time.  The full list of
+parameters known to EOS as well as their default values and ranges can be browsed
+by running \client{eos-list-parameters}.\\
 
-Observables are functions that take a set of parameters and return a single
-(real-valued) number. They include true observables in the physical sense (e.g.
+Observables are \EOS-internal functions that take a set of parameters and return a single
+(real-valued) number. These functions take a set of kinematic variables as their arguments.
+They include true observables in the physical sense (e.g.
 a branching ratio) but also pseudo observables such as hadronic form factors.
-A full list of observables known to EOS can be perused by running
+A full list of observables known to EOS can be listed by running
 \client{eos-list-observables}.\\
 
-Options are used to modify the behaviour of an observable. As such their
-names are specific to a single observable. There is presently no way to list
-all possible options.\\
+Options are used to modify the behaviour of an observable at run time.
+Universal examples include changing the physics model (via \option{model}) and
+changing form factor parametrisation (via \option{form-factors}). However,
+generally their names are specific to a single observable. There is presently
+no way to list all possible options that pertain to a given observable.\\
 
 Kinematic variables are used to provide numerical inputs to an observable that can
 be changed on a per-observable level. As such, the names of kinematic variables are
 specific to each observable. The required kinematic variables for each observable
 can be looked up using the \client{eos-list-observables} client.\\
 
-Constraints represent a piece of a (statistical) likelihood function, be it either
-an experimental measurement or a theory prediction. The list of builtin constraints
-is available through usage of the \client{eos-list-constraints} client.
+Constraints represent individual likelihood functions, either of
+an experimental measurement or a theoretical prediction. The list of built-in
+constraints is available through \client{eos-list-constraints}.
 
 
 \section{Evaluating Observables}
 \label{sec:usage:eos-evaluate}
 
-Observables can be evaluated using the \client{eos-evaluate} client. It accepts
+Observables can be evaluated using \client{eos-evaluate}. It accepts
 the following command line arguments:
 \begin{itemize}
-    \item[] \texttt{--kinematics NAME VALUE}\\[\medskipamount]
+    \item[] \cli{--kinematics NAME VALUE}\\[\medskipamount]
         Within the scope of the next observable, declare a new kinematic
-        variable with name \texttt{NAME} and numerical value \texttt{VALUE}.
+        variable with name \cli{NAME} and numerical value \cli{VALUE}.
 
-    \item[] \texttt{--range NAME MIN MAX POINTS}\\[\medskipamount]
+    \item[] \cli{--range NAME MIN MAX POINTS}\\[\medskipamount]
         Within the scope of the next observable, declare a new kinematic
-        variable with name \texttt{NAME}. Subdivide the interval [MIN, MAX]
-        in POINTS subintervals, and evaluate the observable at each subinterval
+        variable with name \cli{NAME}. Subdivide the interval [\cli{MIN}, \cli{MAX}]
+        in \cli{POINTS} subintervals, and evaluate the observable at each subinterval
         boundary.\\
 
-        \emph{Note}: More than one \texttt{--range} command can be issued per
-        observable, but only one \texttt{--range} command per kinematic variable.
+        \emph{Note}: More than one \cli{--range} command can be issued per
+        observable, but only one \cli{--range} command per kinematic variable.
 
-    \item[] \texttt{--observable NAME}\\[\medskipamount]
-        Add a new observable with name \texttt{NAME} to the list of observables
-        that shall be evaluated. All previously issued \texttt{--kinematics}
-        and \texttt{--range} arguments apply, and will be used by the new obervable.
+    \item[] \cli{--observable NAME}\\[\medskipamount]
+        Add a new observable with name \cli{NAME} to the list of observables
+        that shall be evaluated. All previously issued \cli{--kinematics}
+        and \cli{--range} arguments apply, and will be used by the new obervable.
         The kinematics will be reset (i.e., all kinematic variables will be removed)
-        in anticipation of the next \texttt{--observable} argument.
+        in anticipation of the next \cli{--observable} argument.
 
-    \item[] \texttt{--vary NAME}\\[\medskipamount]
-        Estimate the uncertainty based on variation of the parameter \texttt{NAME},
+    \item[] \cli{--vary NAME}\\[\medskipamount]
+        Estimate the uncertainty based on variation of the parameter \cli{NAME},
         as if the parameter was distributed like a univariate Gaussian.
 
-    \item[] \texttt{--budget NAME}\\[\medskipamount]
+    \item[] \cli{--budget NAME}\\[\medskipamount]
         Create a new uncertainty budget, which encompasses all the subsequently issued
-        \texttt{--vary} commands (until the issue of a new \texttt{--budget} command).
+        \cli{--vary} commands (until the issue of a new \cli{--budget} command).
         By default, the \texttt{delta} budget always exists, and encompasses \emph{all}
         variations.
 \end{itemize}
 
-As an example, we turn to the evaluation of the $q^2$-integrated branching ratio
-$\mathcal{B}(\bar{B}^0\to \pi^+\mu^-\bar\nu_\mu)$, which can be addressed in EOS
-through the observable name \observable{B->pilnu::BR}.
-For this example, let us use the integration range
+As an example, we use the evaluation of the $q^2$-integrated branching ratio
+$\mathcal{B}(\bar{B}^0\to \pi^+\mu^-\bar\nu_\mu)$, which is addressable as
+\observable{B->pilnu::BR}. For this example, we use the integration range
 \begin{equation*}
     0\,\GeV^2 \leq q^2 \leq 12\,\GeV^2\,.
 \end{equation*}
-Further, let us use the BCL2008 \cite{Bourrely:2008za} parametrization of the $\bar{B}\to \pi$ form factor,
-as well as the Wolfenstein parametrization of the CKM matrix. The latter is achieved
-by choosing the physics model 'SM'. By default, EOS uses the most recent results of
-the UTfit collaboration's fit of the CKM Wolfenstein parameter to data on tree-level decays.
-In this example, we will evaluate the observable, and estimate parametric uncertainties
-based on the naive expectation of Gaussian uncertainty propagation. Here, we will classify two
-budgets of parametric uncertainties: one for uncertainties pertaining to the form factors
-(labelled 'FF'), and one for uncertainties pertaining to the CKM matrix elements (labelled 'CKM').
+Further, we use the \option{BCL2008} \cite{Bourrely:2008za} parametrization of the
+$\bar{B}\to \pi$ form factor, as well as the Wolfenstein parametrization of the
+CKM matrix. The latter is achieved by choosing the physics model \option{SM}. By
+default, \EOS uses the most recent results of the UTfit collaboration's fit of
+the CKM Wolfenstein parameter to data on tree-level decays.  In this example,
+we evaluate the observable and estimate parametric uncertainties based on
+the naive expectation of Gaussian uncertainty propagation. We
+classify two budgets of parametric uncertainties: one for uncertainties
+pertaining to the form factors (labelled 'FF'), and one for uncertainties
+pertaining to the CKM matrix elements (labelled 'CKM').
 
 Our intentions translate to the following call to \client{eos-evaluate}:
 \commandlineexample{examples/evaluate-btopilnu-integrated.bash}
@@ -143,133 +145,134 @@ The output of calls to \client{eos-evaluate} is structured as follows:
         the end of the row the relative total uncertainties are given in parantheses.
 \end{itemize}
 The above structure repeats itself for every observable, as well as for each variation point
-of the kinematic variables as described by occuring \texttt{--range} arguments.\\
+of the kinematic variables as described by occuring \cli{--range} arguments.\\
 
 \section{Producing Random Parameter Samples}
 \label{sec:usage:eos-sample-mcmc+pmc}
 
 For all the previously mentioned use cases (observable evaluation, Bayesian
 parameter inference, and production of pseudo events) one requires to draw
-random samples from some arbitrary \gls{PDF} $P(\vec\theta)$.  When using EOS,
-these random samples can be produced from Markov-Chain random walks, using the
+random samples from some arbitrary \gls{PDF} $P(\vec\theta)$.  When using \EOS,
+these random samples can be produced from \gls{MCMC} random walks, using the
 Metropolis-Hastings algorithm, by calls to the \client{eos-sample-mcmc} client.
 In a second step, refined samples or samples for a very complicated setup, can
 be obtained from an algorithm described in Ref.~\cite{Beaujean:2013}. This
 algorithm uses an adaptive importance sampling called Population Monte Carlo
 (PMC), implemented within the client \client{eos-sample-pmc}, and requires a
-prior run of \client{eos-sample-mcmc} for initialization.
+prior run of \client{eos-sample-mcmc} for initialization.\\
 
 
 The follow command-line arguments are common to the \client{eos-sample-mcmc} and 
 \client{eos-sample-pmc} clients, as well as further clients described in subsequent
 sections:
 \begin{itemize}
-    \item[] \texttt{--scan NAME --prior flat MIN MAX}\\[-3\medskipamount]
-    \item[] \texttt{--scan NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[-3\medskipamount]
-    \item[] \texttt{--nuisance [...]}\\[\medskipamount]
+    \item[] \cli{--scan NAME --prior flat MIN MAX}\\[-3\medskipamount]
+    \item[] \cli{--scan NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[-3\medskipamount]
+    \item[] \cli{--nuisance [...]}\\[\medskipamount]
         These arguments add a parameter to the statistical analysis, with
-        either a flat or a gaussian prior. If \texttt{ABSMIN} and
-        \texttt{ABSMAX} are specified, the prior will be cropped to this
-        absolute interval.  The \texttt{--scan} and \texttt{--nuisance}
-        arguments work identically, with one exception: \texttt{--nuisance}
+        either a flat or a gaussian prior. If \cli{ABSMIN} and
+        \cli{ABSMAX} are specified, the prior will be cropped to this
+        absolute interval.  The \cli{--scan} and \cli{--nuisance}
+        arguments work identically, with one exception: \cli{--nuisance}
         declares the associated parameter as a nuisance parameter, which is
-        flagged in the HDF5 output. The sampling algorithm treats nuisance
+        flagged in the \gls{HDF5} output. The sampling algorithm treats nuisance
         parameters \emph{in the same way as} scan parameters.
 
-    \item[] \texttt{--constraint NAME}\\[\medskipamount]
+    \item[] \cli{--constraint NAME}\\[\medskipamount]
         The named constraint from the internal database will be used as part of
         the likelihood. The functional form of the the likelihood, details such
         as correlations, and the required options for the observables used will
         be automatically looked up. In order to browse the entries of the
         database, use the \client{eos-list-constraints} client.
 
-    \item[] \texttt{--fix NAME VALUE}\\[\medskipamount]
-        The value of parameter \texttt{NAME} will be set to the supplied
-        \texttt{VALUE}, and thus potentially deviate from its default value.
+    \item[] \cli{--fix NAME VALUE}\\[\medskipamount]
+        The value of parameter \cli{NAME} will be set to the supplied
+        \cli{VALUE}, and thus potentially deviate from its default value.
 \end{itemize}
 
 The \client{eos-sample-mcmc} client further accepts the following arguments:
 \begin{itemize}
-    \item[] \texttt{--seed [time|VALUE]}\\[\medskipamount]
+    \item[] \cli{--seed [time|VALUE]}\\[\medskipamount]
         This argument sets the seed value for the \gls{RNG}. Setting the
-        seed to a fixed numerical \texttt{VALUE} ensures reproducibility of the results. This
-        is important for publication-quality usage of the client. If \texttt{time} is
+        seed to a fixed numerical \cli{VALUE} ensures reproducibility of the results. This
+        is important for publication-quality usage of the client. If \cli{time} is
         specified, the \gls{RNG} is seeded with an interger value based on the current time.
 
-    \item[] \texttt{--prerun-min VALUE}\\[\medskipamount]
+    \item[] \cli{--prerun-min VALUE}\\[\medskipamount]
         For the prerun phase of the sampling algorithm, set the minimum number of
-        steps to \texttt{VALUE}.
+        steps to \cli{VALUE}.
 
-    \item[] \texttt{--prerun-max VALUE}\\[\medskipamount]
+    \item[] \cli{--prerun-max VALUE}\\[\medskipamount]
         For the prerun phase of the sampling algorithm, set the maximum number of
-        steps to \texttt{VALUE}.
+        steps to \cli{VALUE}.
 
-    \item[] \texttt{--prerun-update VALUE}\\[\medskipamount]
+    \item[] \cli{--prerun-update VALUE}\\[\medskipamount]
         For the prerun phase of the sampling algorithm, force an adaptation of the
-        Markov chain's proposal function to its environment after every \texttt{VALUE}
+        Markov chain's proposal function to its environment after every \cli{VALUE}
         steps.
 
-    \item[] \texttt{--store-prerun [0|1]}\\[\medskipamount]
+    \item[] \cli{--store-prerun [0|1]}\\[\medskipamount]
         Either disable or enable storing of the prerun samples to the output file.\\
 
-    \item[] \texttt{--output FILENAME}\\[\medskipamount]
-        Use the file \texttt{FILENAME} to store the output, using the HDF5 file format.
-        The resulting HDF5 file follows the EOS-MCMC format, and can be accessed using, e.g.,
+    \item[] \cli{--output FILENAME}\\[\medskipamount]
+        Use the file \cli{FILENAME} to store the output, using the \gls{HDF5} file format.
+        The resulting \gls{HDF5} file follows the EOS-\gls{MCMC} format, and can be accessed using, e.g.,
         the \texttt{eosdata} Python module.
 \end{itemize}
 
 The \client{eos-sample-pmc} client additionally accepts the following command-line arguments:
 \begin{itemize}
-    \item[] \texttt{--seed [time|VALUE]}\\[\medskipamount]
+    \item[] \cli{--seed [time|VALUE]}\\[\medskipamount]
         This argument sets the seed value for the \gls{RNG}. Setting the
-        seed to a fixed numerical \texttt{VALUE} ensures reproducibility of the results. This
-        is important for publication-quality usage of the client. If \texttt{time} is
+        seed to a fixed numerical \cli{VALUE} ensures reproducibility of the results. This
+        is important for publication-quality usage of the client. If \cli{time} is
         specified, the \gls{RNG} is seeded with an interger value based on the current time.
 
-    \item[] \texttt{--hc-target-ncomponents N}\\[\medskipamount]
-        When creating mixture components, create \texttt{N} components per existing
+    \item[] \cli{--hc-target-ncomponents N}\\[\medskipamount]
+        When creating mixture components, create \cli{N} components per existing
         MC group.
 
-    \item[] \texttt{--hc-patch-length LENGTH}\\[\medskipamount]
+    \item[] \cli{--hc-patch-length LENGTH}\\[\medskipamount]
         When clustering a group's MCs onto the mixture components, cut the
-        chains into patches of \texttt{LENGTH} samples each.
+        chains into patches of \cli{LENGTH} samples each.
 
-    \item[] \texttt{--hc-skip-initial FRACTION}\\[\medskipamount]
-        Skip the first \texttt{FRACTION} of all MCMC samples in the clustering step.
+    \item[] \cli{--hc-skip-initial FRACTION}\\[\medskipamount]
+        Skip the first \cli{FRACTION} of all MCMC samples in the clustering step.
 
-        \emph{Note}: \texttt{FRACTION} must be a decimal number between $0$ and $1$.
+        \emph{Note}: \cli{FRACTION} must be a decimal number between $0$ and $1$.
 
-    \item[] \texttt{--pmc-initialize-from-file HDF5FILE}\\[\medskipamount]
-        Use the samples from a MCMC HDF5 output file \texttt{HDF5FILE} as
+    \item[] \cli{--pmc-initialize-from-file HDF5FILE}\\[\medskipamount]
+        Use the samples from a MCMC HDF5 output file \cli{HDF5FILE} as
         generated with \client{eos-sample-mcmc}, in order to initialize the
         mixture density of the initial PMC step.
 
-    \item[] \texttt{--pmc-group-by-r-value R}\\[\medskipamount]
+    \item[] \cli{--pmc-group-by-r-value R}\\[\medskipamount]
         When forming groups of MCs from the initialization file, only add
-        a chain to an existing group if the chain's $R$-value is less than \texttt{R};
+        a chain to an existing group if the chain's $R$-value is less than \cli{R};
         create a new group otherwise.
 
-    \item[] \texttt{--pmc-samples-per-component N}\\[\medskipamount]
-        Set the number \texttt{N} of samples that will be drawn per component and
+    \item[] \cli{--pmc-samples-per-component N}\\[\medskipamount]
+        Set the number \cli{N} of samples that will be drawn per component and
         per update step of the PMC run.
 
-    \item[] \texttt{--pmc-final-samples N}\\[\medskipamount]
-        Set the number \texttt{N} of samples that will be drawn for the final step,
+    \item[] \cli{--pmc-final-samples N}\\[\medskipamount]
+        Set the number \cli{N} of samples that will be drawn for the final step,
         i.e.: after the PMC updates have converged.
 
-    \item[] \texttt{--pmc-relative-std-deviation-over-last-step STD STEPS}\\[\medskipamount]
-        If both perplexity and ESS have a standard deviation less than \texttt{STD} over the
-        last \texttt{STEPS} updates, declare convergence.
+    \item[] \cli{--pmc-relative-std-deviation-over-last-step STD STEPS}\\[\medskipamount]
+        If both perplexity and ESS have a standard deviation less than \cli{STD} over the
+        last \cli{STEPS} updates, declare convergence.
 
-    \item[] \texttt{--pmc-ignore-ess [0|1]}\\[\medskipamount]
+    \item[] \cli{--pmc-ignore-ess [0|1]}\\[\medskipamount]
         Set whether convergence of the PMC updates shall be determined from the
         effective sample size (ESS) \emph{in addition} to the perplexity.\\
         \emph{Default}: Use the ESS.
 
-    \item[] \texttt{--output FILENAME}\\[\medskipamount]
-        Use the file \texttt{FILENAME} to store the output, using the HDF5 file format.
-        The resulting HDF5 file follows the EOS-PMC structure, and can be accessed using, e.g.,
-        the \texttt{eosdata} Python module.
+    \item[] \cli{--output FILENAME}\\[\medskipamount]
+        Use the file \cli{FILENAME} to store the output, using the \gls{HDF5}
+        file format.  The resulting \gls{HDF5} file follows the EOS-\gls{PMC}
+        structure, and can be read using the \texttt{eosdata} Python
+        module.
 \end{itemize}
 
 As an example, we define the a-priori \gls{PDF} for a study of the decay $\bar{B}\to \pi^+\mu^-\bar\nu_\mu$.
@@ -360,15 +363,15 @@ describing the PDF as already discussed for the \client{eos-sample-mcmc} and
 further information.  In addition, it accepts the following command-line
 arguments:
 \begin{itemize}
-    \item[] \texttt{--starting-point \{ VALUE1 VALUE2 ... VALUEN \}}\\[\medskipamount]
+    \item[] \cli{--starting-point \{ VALUE1 VALUE2 ... VALUEN \}}\\[\medskipamount]
         Set the starting point for the maximization of the PDF $P(\vec\theta)$
-        at $\theta = ( \texttt{VALUE1}, \dots, \texttt{VALUEN} )$.
-    \item[] \texttt{--max-iterations INTEGER}\\[\medskipamount]
-        The optimization algorithm is allowed to run at maximum \texttt{NUMBER} iterations.
-    \item[] \texttt{--target-precision NUMBER}\\[\medskipamount]
-        Attempt to determine the mode up to an uncertainty of \texttt{NUMBER}.
-    \item[] \texttt{--output FILENAME}\\[\medskipamount]
-        Write a YAML file with name \texttt{FILENAME} that contains the information of
+        at $\theta = ( \cli{VALUE1}, \dots, \cli{VALUEN} )$.
+    \item[] \cli{--max-iterations INTEGER}\\[\medskipamount]
+        The optimization algorithm is allowed to run at maximum \cli{NUMBER} iterations.
+    \item[] \cli{--target-precision NUMBER}\\[\medskipamount]
+        Attempt to determine the mode up to an uncertainty of \cli{NUMBER}.
+    \item[] \cli{--output FILENAME}\\[\medskipamount]
+        Write a YAML file with name \cli{FILENAME} that contains the information of
         the mode in a machine-readable format.
 \end{itemize}
 
@@ -405,28 +408,28 @@ have been obtained from running \client{eos-sample-pmc}.\footnote{%
 }
 It accepts the following command-line arguments:
 \begin{itemize}
-    \item[] \texttt{--vary NAME --prior flat MIN MAX}\\[-3\medskipamount]
-    \item[] \texttt{--vary NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[\medskipamount]
+    \item[] \cli{--vary NAME --prior flat MIN MAX}\\[-3\medskipamount]
+    \item[] \cli{--vary NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[\medskipamount]
         These arguments add a parameter to the statistical analysis, with
-        either a flat or a gaussian prior. If \texttt{ABSMIN} and
-        \texttt{ABSMAX} are specified, the prior will be cropped to this
+        either a flat or a gaussian prior. If \cli{ABSMIN} and
+        \cli{ABSMAX} are specified, the prior will be cropped to this
         absolute interval.
 
-    \item[] \texttt{--samples NUMBER}\\[\medskipamount]
+    \item[] \cli{--samples NUMBER}\\[\medskipamount]
         Sets the number of samples that shall be produced per observable and
         worker thread.
 
-    \item[] \texttt{--workers NUMBER}\\[\medskipamount]
+    \item[] \cli{--workers NUMBER}\\[\medskipamount]
         Sets the number of worker threads.
 
-    \item[] \texttt{--pmc-input HDF5FILE BEGIN END}\\[\medskipamount]
-        Use the samples at index \texttt{BEGIN} up to index \texttt{END} from
-        a named data set in the file \texttt{HDF5FILE}.
+    \item[] \cli{--pmc-input HDF5FILE BEGIN END}\\[\medskipamount]
+        Use the samples at index \cli{BEGIN} up to index \cli{END} from
+        a named data set in the file \cli{HDF5FILE}.
 
         \emph{Note:} The file must have been produced by the
         \client{eos-sample-pmc} client.
-    \item[] \texttt{--pmc-sample-directory NAME}\\[\medskipamount]
-        Use the named data set within the file specified with \texttt{--pmc-input}.
+    \item[] \cli{--pmc-sample-directory NAME}\\[\medskipamount]
+        Use the named data set within the file specified with \cli{--pmc-input}.
         Valid names are \texttt{/data/X}, where \text{X} stands for either
         \texttt{initial}, \texttt{final}, or all numbers describing existing
         update steps that were carried out in the PMC run.
@@ -462,64 +465,64 @@ Once random samples have been obtained from either a posterior PDF (e.g. as
 described in \refsec{usage:eos-sample-mcmc+pmc}) or a predictive PDF (e.g. as
 described in \refsec{usage:eos-propagate-uncertainty}), a visual inspection of
 the samples is the next step.  EOS provides scripts for this purpose, which
-plot histograms of either a marginalized 1D (\texttt{eos-plot-1d}) or heatmaps
-of 2D (\texttt{eos-plot-2d}) PDFs.  Both scripts presently detect the output
+plot histograms of either a marginalized 1D (\client{eos-plot-1d}) or heatmaps
+of 2D (\client{eos-plot-2d}) PDFs.  Both scripts presently detect the output
 format by inspection of the resepective HDF5 file name. Files containing MCMC
 samples should be prefixed with \texttt{mcmc\_}, while PMC sample files should
 be prefixed with \texttt{pmc\_monolithic\_}. Files containing samples from the
 uncertainty propagation should be prefixed with \texttt{unc\_}.
 
-The \texttt{eos-plot-1d} produces a 1D histogram of the samples for one parameter.
+The \client{eos-plot-1d} produces a 1D histogram of the samples for one parameter.
 It accepts the following arguments:
 \begin{itemize}
-    \item[] \texttt{HDF5FILE}\\[\medskipamount]
+    \item[] \cli{HDF5FILE}\\[\medskipamount]
         The name of the HDF5 input file whose samples shall be plotted.
 
-    \item[] \texttt{IDX}\\[\medskipamount]
+    \item[] \cli{IDX}\\[\medskipamount]
         The numerical index for the parameter whose density function shall
-        be plotted. \texttt{IDX} starts with zero
+        be plotted. \cli{IDX} starts with zero
 
-    \item[] \texttt{PDFFILE}\\[\medskipamount]
+    \item[] \cli{PDFFILE}\\[\medskipamount]
         The name of the PDF output file, into which the plot shall be saved.
 
-    \item[] \texttt{--xmin XMIN}, \texttt{--xmax XMAX}\\[\medskipamount]
-        When specified, limit the plot range to the interval \texttt{XMIN} to \texttt{XMAX}.
+    \item[] \cli{--xmin XMIN}, \cli{--xmax XMAX}\\[\medskipamount]
+        When specified, limit the plot range to the interval \cli{XMIN} to \cli{XMAX}.
         The default values are taken from the description of the parameter within the
         HDF5 input file.
 
-    \item[] \texttt{--kde [0|1]}\\[\medskipamount]
+    \item[] \cli{--kde [0|1]}\\[\medskipamount]
         When enabled, plots a univariate Kernel Density Estimate of the probability
         density based on the available samples.
 
-    \item[] \texttt{--kde-bandwidth KDEBANDWIDTH}\\[\medskipamount]
+    \item[] \cli{--kde-bandwidth KDEBANDWIDTH}\\[\medskipamount]
         When specified, multiplies the automatically determined KDE bandwidth parameter
-        with \texttt{KDEBANDWIDTH}.
+        with \cli{KDEBANDWIDTH}.
 \end{itemize}
 
-The \texttt{eos-plot-2d} produces a 2D heatmap of the samples for two parameters.
+The \client{eos-plot-2d} produces a 2D heatmap of the samples for two parameters.
 It accepts the following arguments
 \begin{itemize}
-    \item[] \texttt{HDF5FILE}\\[\medskipamount]
+    \item[] \cli{HDF5FILE}\\[\medskipamount]
         The name of the HDF5 input file whose samples shall be plotted.
 
-    \item[] \texttt{XIDX}\\[\medskipamount]
+    \item[] \cli{XIDX}\\[\medskipamount]
         The numerical index for the parameter that shall be plotted on the
-        $x$ acis. \texttt{XIDX} starts with zero
+        $x$ acis. \cli{XIDX} starts with zero
 
-    \item[] \texttt{YIDX}\\[\medskipamount]
+    \item[] \cli{YIDX}\\[\medskipamount]
         The numerical index for the parameter that shall be plotted on the
-        $y$ acis. \texttt{YIDX} starts with zero
+        $y$ acis. \cli{YIDX} starts with zero
 
-    \item[] \texttt{PDFFILE}\\[\medskipamount]
+    \item[] \cli{PDFFILE}\\[\medskipamount]
         The name of the PDF output file, into which the plot shall be saved.
 
-    \item[] \texttt{--xmin XMIN}, \texttt{--xmax XMAX}\\[\medskipamount]
+    \item[] \cli{--xmin XMIN}, \cli{--xmax XMAX}\\[\medskipamount]
         When specified, limit the plot range on the $x$ axis to the interval
-        \texttt{XMIN} to \texttt{XMAX}. The default values are taken from the
+        \cli{XMIN} to \cli{XMAX}. The default values are taken from the
         description of the parameter within the HDF5 input file.
 
-    \item[] \texttt{--ymin YMIN}, \texttt{--ymax YMAX}\\[\medskipamount]
+    \item[] \cli{--ymin YMIN}, \cli{--ymax YMAX}\\[\medskipamount]
         When specified, limit the plot range on the $y$ axis to the interval
-        \texttt{YMIN} to \texttt{YMAX}. The default values are taken from the
+        \cli{YMIN} to \cli{YMAX}. The default values are taken from the
         description of the parameter within the HDF5 input file.
 \end{itemize}
