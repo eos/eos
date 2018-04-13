@@ -23,6 +23,7 @@ SUBDIRS = figures appendices .
 
 TEXSOURCES = \
 	acknowledgments.tex \
+	how-to-read.tex \
 	manual.tex \
 	macros.tex \
 	glossaries.tex \

@@ -112,6 +112,8 @@
 
 \input{acknowledgments.tex}
 
+\input{how-to-read.tex}
+
 \mainmatter
 
 \part*{Software Documentation}

@@ -42,7 +42,6 @@
     %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
     xleftmargin=.025\textwidth,
     frame=single,
-    frameround=tttt,
     backgroundcolor=\color{black!10!white}
 }
 }{}
@@ -61,7 +60,6 @@
     %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
     xleftmargin=.025\textwidth,
     frame=single,
-    frameround=tttt,
     backgroundcolor=\color{black!10!white}
 ]{#2}
 }
@@ -80,7 +78,6 @@
     %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
     xleftmargin=.025\textwidth,
     frame=single,
-    frameround=tttt,
     backgroundcolor=\color{blue!25!white}
 }
 }{}
@@ -102,8 +99,7 @@
     numbersep=5pt,
     numberstyle=\color{gray}\tiny,
     frame=single,
-    frameround=tttt,
-    backgroundcolor=\color{purple!10!white}
+    backgroundcolor=\color{orange!25!white}
 }
 }{}
 
@@ -144,6 +140,7 @@
 % C++
 \newcommand{\cpp}[1]{\mbox{\texttt{#1}}}
 \newcommand{\class}[1]{\mbox{\texttt{#1}}}
+\newcommand{\method}[1]{\mbox{\texttt{#1}}}
 % Shell
 \newcommand{\cli}[1]{\colorbox{black!10!white}{\texttt{#1}}}
 \newcommand{\client}[1]{\colorbox{black!10!white}{\texttt{#1}}}
@@ -151,10 +148,10 @@
 % OS
 \newcommand{\directory}[1]{\textcolor{blue!75!white}{\texttt{#1/}}}
 \newcommand{\filename}[1]{\textcolor{blue!75!white}{\texttt{#1}}}
-\newcommand{\package}[1]{\textcolor{black!50!green}{\textsf{\textbf{#1}}}}
+\newcommand{\package}[1]{\textcolor{black!50!green}{\textrm{\textbf{#1}}}}
 % EOS
-\newcommand{\EOS}{\mbox{\textcolor{black!75!white}{\textbf{EOS}}}\xspace}
-\newcommand{\observable}[1]{\mbox{\texttt{\lstinline{#1}}}}
-\newcommand{\option}[1]{\mbox{\texttt{\lstinline{#1}}}}
-\newcommand{\parameter}[1]{\mbox{\texttt{\lstinline{#1}}}}
+\newcommand{\EOS}{\mbox{\textcolor{black!50!white}{\textbf{EOS}}}\xspace}
+\newcommand{\observable}[1]{\mbox{\textcolor{orange!75!white}{\texttt{\lstinline{#1}}}}}
+\newcommand{\option}[1]{\mbox{\textcolor{orange!75!white}{\texttt{\lstinline{#1}}}}}
+\newcommand{\parameter}[1]{\mbox{\textcolor{orange!75!white}{\texttt{\lstinline{#1}}}}}
 
