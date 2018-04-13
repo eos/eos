@@ -40,7 +40,7 @@ SOURCES = \
 
 manual-am: manual.pdf manual.tex
 
-manual.tex: manual.tex.in
+manual.tex: manual.tex.in Makefile
 	sed \
 	    -e "s/@EOS_VERSION@/$(PACKAGE_VERSION)/g" \
 	    < manual.tex.in \
