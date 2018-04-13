@@ -108,8 +108,6 @@
 %% List of open ToDo items
 %\listoftodos
 
-\chapter*{Acknowledgments}
-
 \input{acknowledgments.tex}
 
 \input{how-to-read.tex}
