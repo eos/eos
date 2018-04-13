@@ -78,6 +78,7 @@
 
 %% Title
 \rule{\linewidth}{0.5mm}\\[0.4cm]
+{\includegraphics[scale=0.5]{eos-logo-160x90.png} \\[0.4cm] }
 {\huge \rmfamily \bfseries \@title \\[0.4cm] }
 {\large \rmfamily \bfseries \@subtitle \\[0.4cm] }
 \rule{\linewidth}{0.5mm}\\[1.5cm]
