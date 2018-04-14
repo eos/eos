@@ -32,3 +32,6 @@ stamp-h1
 *.*project
 .settings/*
 .settings/org.eclipse*
+
+# performance / coverages
+*.gcno
