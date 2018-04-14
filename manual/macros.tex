@@ -8,7 +8,7 @@
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\eps}{\varepsilon}
 \newcommand{\GeV}{\ensuremath{\mathrm{GeV}}}
-\newcommand{\MSbar}{\ensuremath{\overline{\text{MS}}}}
+\newcommand{\MSbar}{\ensuremath{\overline{\text{MS}}}\xspace}
 \newcommand{\op}[1]{\mathcal{O}_{#1}}
 \newcommand{\tildeop}[1]{\tilde{\mathcal{O}}_{#1}}
 \newcommand{\wilson}[2][{}]{\mathcal{C}_{#2}^{#1}}
@@ -81,6 +81,24 @@
     backgroundcolor=\color{blue!25!white}
 }
 }{}
+
+%% read in an example file
+\newcommand{\fileexample}[2][\normalsize]{%
+\lstinputlisting[
+    language={},
+    basicstyle={\scriptsize\ttfamily{#1}},
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    prebreak={\ttfamily\symbol{'134}},
+    %postbreak={\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}},
+    xleftmargin=.025\textwidth,
+    frame=single,
+    backgroundcolor=\color{blue!25!white}
+]{#2}
+}
 
 %% create source code environment
 \lstnewenvironment{sourcecode}[1][\normalsize]{%

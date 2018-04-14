@@ -1,0 +1,91 @@
+\chapter{Extending EOS}
+\label{ch:extending}
+
+We discuss the three most common cases of extending \EOS, by adding either
+a new parameter, a new observable, or a new measurement.
+For extensions that do not fall in these categories please contact the main authors, who will be
+happy to discuss your work with you. The most efficient way to contribute new code
+or modifications to \EOS is via a pull request in the main Github repository.\footnote{
+    \url{https://github.com/eos/eos}
+}
+
+\section{How to add a new parameter}
+\label{sec:extending:parameter}
+
+Parameters are stored in YAML files below \directory{eos/parameters}, including the default values and range,
+as well as metadata and the origin thereof. Each file contains key-to-value maps:
+\begin{itemize}
+    \item Keys starting and ending with an \texttt{@} sign are considered to be metadata pertaining
+    to the entire file.
+
+    \item All other keys declare a new parameter.
+\end{itemize}
+The values in this map are the definitions of a parameters, and are also structured as maps. Valid
+parameter definitions must include all of the following entries:
+\begin{description}[labelwidth=.15\textwidth]
+    \item[central] the default central value;
+    \item[min]     the minimal value for the default range;
+    \item[max]     the maximal value for the default range.
+\end{description}
+Optional entries include:
+\begin{description}[labelwidth=.15\textwidth]
+    \item[comment] a comment on the purpose;
+    \item[latex]   the LaTeX command for the display;
+    \item[unit]    the unit in which the parameter is expressed.
+\end{description}
+
+\subsection*{Example}
+
+We introduce two new parameters: \parameter{mass::X@Example}, and \parameter{decay-constant::X@Example},
+standing in for the mass and decay constant of a hypothetical particle $X$. We add the file
+\filename{eos/parameters/x.yaml} with contents:
+\fileexample{examples/x-parameters.yaml}
+
+\section{How to add a new observable}
+\label{sec:extending:observable}
+
+An Observable is implemented in EOS as follows:
+\begin{itemize}
+    \item The numerical code is implemented as the method \cpp{double P::o(...) const},
+    where \cpp{P} is the underlying class, and the dots stand in for any number
+    of \cpp{const double \&} arguments, including zero. The \cpp{class P} must
+    inherit from \cpp{class ParameterUser}. It must have one constructor accepting
+    a \cpp{class Parameters} and a \cpp{class Options} instance in that order.
+    Schematically:
+\begin{sourcecode}
+#include <eos/utils/parameters.hh>
+#include <eos/utils/options.hh>
+
+class P :
+    public ParameterUser
+{
+    P(const Parameters \&, const Options \&};
+    ~P();
+
+    double observable_without_kinematics() const;
+    double observable_with_one_kinematic_variable(const double &) const;
+};
+\end{sourcecode}
+
+    \item The method or methods are then associated with their names within
+    the file \filename{eos/observable.cc} within the free-standing function
+    \cpp{make\_observable\_entries()}. Within the existing map,
+    new entries are created through a call to \cpp{make\_observable(...)}.
+    For a regular observable the arguments are in order: the name of the observable;
+    the pointer to its method; and the tuple of \cpp{std::string}s that names
+    the kinematic variables in the order the method expects them. Schematically:
+\begin{sourcecode}
+# within eos/observable.cc
+# [...]
+make_observable("P::observable1",
+    &P::observable_without_kinematics);
+make_observable("P::observable2(variablename)",
+    &P::observable_with_one_kinematic_variable,
+    std::make_tuple("variablename"));
+# [...]
+\end{sourcecode}
+\end{itemize}
+
+\section{How to add a new constraint}
+
+TODO

@@ -123,12 +123,7 @@
 
 \input{doc/interface.tex}
 
-\chapter{Extending EOS}
-\label{ch:extending}
-
-\section{How to add a new observable}
-
-\section{How to add a new measurement}
+\input{doc/extending.tex}
 
 %
 % Physics

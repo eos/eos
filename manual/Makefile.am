@@ -30,6 +30,7 @@ TEXSOURCES = \
 	doc/installation.tex \
 	doc/usage.tex \
 	doc/interface.tex \
+	doc/extending.tex \
 	appendices/parameters.tex \
 	physics/eft.tex
 
