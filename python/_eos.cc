@@ -84,6 +84,27 @@ BOOST_PYTHON_MODULE(_eos)
     using namespace eos;
 
     // {{{ eos/utils
+    // qnp::Prefix
+    class_<qnp::Prefix>("qnpPrefix", init<std::string>())
+        .def("__repr__", &qnp::Prefix::str, return_value_policy<copy_const_reference>())
+        .def("__str__", &qnp::Prefix::str, return_value_policy<copy_const_reference>())
+        .def("__lt__", &qnp::Prefix::operator<)
+        ;
+
+    // qnp::Name
+    class_<qnp::Name>("qnpName", init<std::string>())
+        .def("__repr__", &qnp::Name::str, return_value_policy<copy_const_reference>())
+        .def("__str__", &qnp::Name::str, return_value_policy<copy_const_reference>())
+        .def("__lt__", &qnp::Name::operator<)
+        ;
+
+    // qnp::Suffix
+    class_<qnp::Suffix>("qnpSuffix", init<std::string>())
+        .def("__repr__", &qnp::Suffix::str, return_value_policy<copy_const_reference>())
+        .def("__str__", &qnp::Suffix::str, return_value_policy<copy_const_reference>())
+        .def("__lt__", &qnp::Suffix::operator<)
+        ;
+
     // QualifiedName
     class_<QualifiedName>("QualifiedName", init<std::string>())
         .def("__repr__", &QualifiedName::full, return_value_policy<copy_const_reference>())
@@ -91,6 +112,9 @@ BOOST_PYTHON_MODULE(_eos)
         .def("__eq__", &QualifiedName::operator==)
         .def("__ne__", &QualifiedName::operator!=)
         .def("__lt__", &QualifiedName::operator<)
+        .def("prefix_part", &QualifiedName::prefix_part, return_value_policy<copy_const_reference>())
+        .def("name_part", &QualifiedName::name_part, return_value_policy<copy_const_reference>())
+        .def("suffix_part", &QualifiedName::suffix_part, return_value_policy<copy_const_reference>())
         ;
     implicitly_convertible<std::string, QualifiedName>();
 
