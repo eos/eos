@@ -258,6 +258,9 @@ namespace eos
 
             /// Retrieve the Parameter's id.
             Id id() const;
+
+            /// Retrieve the Parameter's name as a LaTeX representation
+            const std::string & latex() const;
             ///@}
     };
 

@@ -61,6 +61,8 @@ namespace eos
         std::string name;
 
         double min, central, max;
+
+        std::string latex;
     };
 
     struct Parameter::Data :
@@ -145,6 +147,8 @@ namespace eos
 
                     double central, min, max;
 
+                    std::string latex;
+
                     if (! p.second["central"])
                     {
                         throw ParameterInputFileNodeError(file, name, "has no entry named 'central'");
@@ -175,6 +179,14 @@ namespace eos
                     }
                     max = p.second["max"].as<double>();
 
+                    if (p.second["latex"])
+                    {
+                        if (YAML::NodeType::Scalar != p.second["latex"].Type())
+                            throw ParameterInputFileNodeError(file, name + ".latex", "is not a scalar");
+
+                        latex = p.second["latex"].as<std::string>();
+                    }
+
                     auto i = parameters_map.find(name);
                     if (parameters_map.end() != i)
                     {
@@ -184,6 +196,7 @@ namespace eos
                         parameters_data->data[i->second].value = central;
                         parameters_data->data[i->second].min = min;
                         parameters_data->data[i->second].max = max;
+                        parameters_data->data[i->second].latex = latex;
                     }
                     else
                     {
@@ -191,7 +204,7 @@ namespace eos
                             << "Adding new parameter '" << name << "' with central value '" << central << "'";
 
                         auto idx = parameters_data->data.size();
-                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max }, idx));
+                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max, latex }, idx));
                         parameters_map[name] = idx;
                         parameters.push_back(Parameter(parameters_data, idx));
                     }
@@ -263,6 +276,8 @@ namespace eos
 
                         double central, min, max;
 
+                        std::string latex;
+
                         if (! p.second["central"])
                         {
                             throw ParameterInputFileNodeError(file, name, "has no entry named 'central'");
@@ -293,12 +308,20 @@ namespace eos
                         }
                         max = p.second["max"].as<double>();
 
+                        if (p.second["latex"])
+                        {
+                            if (YAML::NodeType::Scalar != p.second["latex"].Type())
+                                throw ParameterInputFileNodeError(file, name + ".latex", "is not a scalar");
+
+                            latex = p.second["latex"].as<std::string>();
+                        }
+
                         if (parameters_map.end() != parameters_map.find(name))
                         {
                             throw ParameterInputDuplicateError(file, name);
                         }
 
-                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max }, idx));
+                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max, latex }, idx));
                         parameters_map[name] = idx;
                         parameters.push_back(Parameter(parameters_data, idx));
 
@@ -358,7 +381,7 @@ namespace eos
 
         // create new parameter
         unsigned idx = _imp->parameters.size();
-        _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, value, value, value }, idx));
+        _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, value, value, value, "LaTeX display not supported for run-time declared parameters" }, idx));
         _imp->parameters_map[name] = idx;
         _imp->parameters.push_back(Parameter(_imp->parameters_data, idx));
 
@@ -484,6 +507,12 @@ namespace eos
     Parameter::name() const
     {
         return _parameters_data->data[_index].name;
+    }
+
+    const std::string &
+    Parameter::latex() const
+    {
+        return _parameters_data->data[_index].latex;
     }
 
     Parameter::Id
