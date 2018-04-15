@@ -154,6 +154,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def(float_(self))
         .def("name", &KinematicVariable::name, return_value_policy<copy_const_reference>())
         .def("set", &KinematicVariable::set)
+        .def("evaluate", &KinematicVariable::evaluate)
         ;
 
     // Options
