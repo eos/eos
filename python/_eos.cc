@@ -111,6 +111,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("max", &Parameter::max, return_value_policy<copy_const_reference>())
         .def("min", &Parameter::min, return_value_policy<copy_const_reference>())
         .def("name", &Parameter::name, return_value_policy<copy_const_reference>())
+        .def("latex", &Parameter::latex, return_value_policy<copy_const_reference>())
         .def("set", &Parameter::set)
         .def("evaluate", &Parameter::evaluate)
         ;
