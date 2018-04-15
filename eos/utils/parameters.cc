@@ -161,7 +161,7 @@ namespace eos
                     }
                     else if (YAML::NodeType::Scalar != p.second["min"].Type())
                     {
-                        throw ParameterInputFileNodeError(file, name, "is not a scalar");
+                        throw ParameterInputFileNodeError(file, name + ".min", "is not a scalar");
                     }
                     min = p.second["min"].as<double>();
 
@@ -171,7 +171,7 @@ namespace eos
                     }
                     else if (YAML::NodeType::Scalar != p.second["max"].Type())
                     {
-                        throw ParameterInputFileNodeError(file, name, "is not a scalar");
+                        throw ParameterInputFileNodeError(file, name + ".max", "is not a scalar");
                     }
                     max = p.second["max"].as<double>();
 
@@ -279,7 +279,7 @@ namespace eos
                         }
                         else if (YAML::NodeType::Scalar != p.second["min"].Type())
                         {
-                            throw ParameterInputFileNodeError(file, name, "is not a scalar");
+                            throw ParameterInputFileNodeError(file, name + ".min", "is not a scalar");
                         }
                         min = p.second["min"].as<double>();
 
@@ -289,7 +289,7 @@ namespace eos
                         }
                         else if (YAML::NodeType::Scalar != p.second["max"].Type())
                         {
-                            throw ParameterInputFileNodeError(file, name, "is not a scalar");
+                            throw ParameterInputFileNodeError(file, name + ".max", "is not a scalar");
                         }
                         max = p.second["max"].as<double>();
 
