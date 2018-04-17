@@ -331,6 +331,9 @@ AM_EXTRA_RECURSIVE_TARGETS([manual])
 AC_SUBST([AM_CXXFLAGS], '-I$(top_srcdir) -std=c++14 -Wall -Wextra -pedantic')
 AC_OUTPUT(
 	Makefile
+	debian/control-bionic
+	debian/control-xenial
+	debian/Makefile
 	doc/Makefile
 	eos/Makefile
 	eos/form-factors/Makefile
