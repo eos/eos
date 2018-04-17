@@ -15,10 +15,6 @@ env:
     - DOCKER_TARGET=xenial DOCKER_CXX=clang++-4.0
     - DOCKER_TARGET=bionic DOCKER_CXX=g++
 
-allowed_failures:
-    # presently fails with 'Illegal instruction' error in 'population-monte-carlo-sampler_TEST'
-    - DOCKER_TARGET=xenial DOCKER_CXX=clang++-4.0
-
 before_install:
     - docker build -t eos:${DOCKER_TARGET} -f .travis/${DOCKER_TARGET} .
 
