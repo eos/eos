@@ -19,4 +19,4 @@ before_install:
     - docker build -t eos:${DOCKER_TARGET} -f .travis/${DOCKER_TARGET} .
 
 script:
-    - docker run -it -e COVERALLS_TOKEN eos:${DOCKER_TARGET} /bin/bash /src/.travis/build-and-test.bash ${DOCKER_TARGET} ${DOCKER_CXX}
+    - docker run -it -e COVERALLS_TOKEN -e PACKAGECLOUD_TOKEN eos:${DOCKER_TARGET} /bin/bash /src/.travis/build-and-test.bash ${DOCKER_TARGET} ${DOCKER_CXX} "${TRAVIS_TAG}"
