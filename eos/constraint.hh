@@ -34,6 +34,7 @@
 namespace YAML
 {
     class Emitter;
+    class Node;
 }
 
 namespace eos
@@ -95,6 +96,12 @@ namespace eos
     class ConstraintEntry
     {
         public:
+            /*!
+             * Create a new ConstraintEntry by deserializing a YAML node.
+             */
+            static ConstraintEntry * FromYAML(const QualifiedName & name, const YAML::Node &);
+
+            /// Destructor
             virtual ~ConstraintEntry();
 
             /// Make a new constraint based on this entry.
@@ -165,6 +172,25 @@ namespace eos
          * @param name The offending constraint name.
          */
         UnknownConstraintError(const QualifiedName & name);
+        ///@}
+    };
+
+    /*!
+     * ConstrainDeserializationError is thrown when ConstraintEntry::FromYAML or ConstrainEntry::deserialize
+     * encounters an invalid YAML input.
+     */
+    struct ConstraintDeserializationError :
+        public Exception
+    {
+        ///@name Basic Functions
+        ///@{
+        /*!
+         * Constructor.
+         *
+         * @param type The name of the entry for which the error occured during deserialization.
+         * @param msg  The error message.
+         */
+        ConstraintDeserializationError(const QualifiedName & name, const std::string & msg);
         ///@}
     };
 }

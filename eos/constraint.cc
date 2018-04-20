@@ -1,4 +1,4 @@
-/* vim: set sw=4 sts=4 et foldmethod=syntax : */
+/* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
  * Copyright (c) 2011-2018 Danny van Dyk
@@ -40,7 +40,10 @@ namespace eos
     {
     }
 
-    ConstraintEntry::~ConstraintEntry() = default;
+    ConstraintDeserializationError::ConstraintDeserializationError(const QualifiedName & name, const std::string & msg) :
+        Exception("Could not deserialize entry '" + name.str() + "': " + msg)
+    {
+    }
 
     template <>
     struct WrappedForwardIteratorTraits<ConstraintEntry::ObservableNameIteratorTag>
@@ -49,6 +52,15 @@ namespace eos
     };
     template class WrappedForwardIterator<ConstraintEntry::ObservableNameIteratorTag, const QualifiedName>;
 
+    namespace impl
+    {
+        static bool less(const std::pair<YAML::Node, YAML::Node> & lhs, const std::pair<YAML::Node, YAML::Node> & rhs)
+        {
+            return lhs.first.as<std::string>() < rhs.first.as<std::string>();
+        }
+    }
+
+    /// {{{ ConstraintEntryBase
     class ConstraintEntryBase :
         public ConstraintEntry
     {
@@ -99,8 +111,15 @@ namespace eos
                 out << YAML::Value << "unimplemented";
                 out << YAML::EndMap;
             }
-    };
 
+            virtual ConstraintEntry * deserialize(const YAML::Node &) const
+            {
+                return nullptr;
+            }
+    };
+    /// }}}
+
+    /// {{{ GaussianConstraintEntry
     struct GaussianConstraintEntry :
         public ConstraintEntryBase
     {
@@ -202,8 +221,101 @@ namespace eos
             out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
-    };
 
+        static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
+        {
+            static const std::string required_keys[] =
+            {
+                "observable", "kinematics", "options", "mean", "sigma-stat", "sigma-sys", "dof"
+            };
+
+            for (auto && k : required_keys)
+            {
+                if (! n[k].IsDefined())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
+                }
+            }
+
+            static const std::string scalar_keys[] =
+            {
+                "observable", "mean", "dof"
+            };
+
+            for (auto && k : scalar_keys)
+            {
+                if (YAML::NodeType::Scalar != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
+                }
+            }
+
+            static const std::string map_keys[] =
+            {
+                "kinematics", "options", "sigma-stat", "sigma-sys"
+            };
+
+            for (auto && k : map_keys)
+            {
+                if (YAML::NodeType::Map != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a map");
+                }
+            }
+
+            try
+            {
+                QualifiedName observable(n["observable"].as<std::string>());
+                double mean = n["mean"].as<double>();
+                unsigned dof = n["dof"].as<unsigned>();
+
+                Kinematics kinematics;
+                std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(n["kinematics"].begin(), n["kinematics"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                kinematics_nodes.sort(&impl::less);
+                std::set<std::string> kinematics_keys;
+                for (auto && k : kinematics_nodes)
+                {
+                    std::string key = k.first.as<std::string>();
+                    if (! kinematics_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
+
+                    kinematics.declare(key, k.second.as<double>());
+                }
+
+                Options options;
+                std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(n["options"].begin(), n["options"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                options_nodes.sort(&impl::less);
+                std::set<std::string> options_keys;
+                for (auto && o : options_nodes)
+                {
+                    std::string key = o.first.as<std::string>();
+                    if (! options_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+
+                    options.set(key, o.second.as<std::string>());
+                }
+
+                double sigma_hi_stat = n["sigma-stat"]["hi"].as<double>();
+                double sigma_lo_stat = n["sigma-stat"]["lo"].as<double>();
+                double sigma_hi_sys  = n["sigma-sys"]["hi"].as<double>();
+                double sigma_lo_sys  = n["sigma-sys"]["lo"].as<double>();
+
+                return new GaussianConstraintEntry(name.str(), observable, kinematics, options, mean,
+                        sigma_hi_stat, sigma_lo_stat, sigma_hi_sys, sigma_lo_sys, dof);
+            }
+            catch (QualifiedNameSyntaxError & e)
+            {
+                throw ConstraintDeserializationError(name, "'" + n["observable"].as<std::string>() + "' is not a valid observable name (" + e.what() + ")");
+            }
+        }
+    };
+    /// }}}
+
+    /// {{{  LogGammaConstraintEntry
     struct LogGammaConstraintEntry :
         public ConstraintEntryBase
     {
@@ -294,8 +406,99 @@ namespace eos
             out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
-    };
 
+        static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
+        {
+            static const std::string required_keys[] =
+            {
+                "observable", "kinematics", "options", "mode", "sigma", "dof"
+            };
+
+            for (auto && k : required_keys)
+            {
+                if (! n[k].IsDefined())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
+                }
+            }
+
+            static const std::string scalar_keys[] =
+            {
+                "observable", "mode", "dof"
+            };
+
+            for (auto && k : scalar_keys)
+            {
+                if (YAML::NodeType::Scalar != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
+                }
+            }
+
+            static const std::string map_keys[] =
+            {
+                "kinematics", "options", "sigma"
+            };
+
+            for (auto && k : map_keys)
+            {
+                if (YAML::NodeType::Map != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a map");
+                }
+            }
+
+            try
+            {
+                QualifiedName observable(n["observable"].as<std::string>());
+                double mode = n["mode"].as<double>();
+                unsigned dof = n["dof"].as<unsigned>();
+
+                Kinematics kinematics;
+                std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(n["kinematics"].begin(), n["kinematics"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                kinematics_nodes.sort(&impl::less);
+                std::set<std::string> kinematics_keys;
+                for (auto && k : kinematics_nodes)
+                {
+                    std::string key = k.first.as<std::string>();
+                    if (! kinematics_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
+
+                    kinematics.declare(key, k.second.as<double>());
+                }
+
+                Options options;
+                std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(n["options"].begin(), n["options"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                options_nodes.sort(&impl::less);
+                std::set<std::string> options_keys;
+                for (auto && o : options_nodes)
+                {
+                    std::string key = o.first.as<std::string>();
+                    if (! options_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+
+                    options.set(key, o.second.as<std::string>());
+                }
+
+                double sigma_hi = n["sigma"]["hi"].as<double>();
+                double sigma_lo = n["sigma"]["lo"].as<double>();
+
+                return new LogGammaConstraintEntry(name.str(), observable, kinematics, options, mode,
+                        sigma_hi, sigma_lo, dof);
+            }
+            catch (QualifiedNameSyntaxError & e)
+            {
+                throw ConstraintDeserializationError(name, "'" + n["observable"].as<std::string>() + "' is not a valid observable name (" + e.what() + ")");
+            }
+        }
+    };
+    /// }}}
+
+    /// {{{  AmorosoLimitConstraintEntry
     struct AmorosoLimitConstraintEntry :
         public ConstraintEntryBase
     {
@@ -388,8 +591,15 @@ namespace eos
             out << YAML::Key << "alpha" << YAML::Value << alpha;
             out << YAML::EndMap;
         }
-    };
 
+        virtual ConstraintEntry * deserialize(const YAML::Node &) const
+        {
+            return nullptr;
+        }
+    };
+    /// }}}
+
+    /// {{{ AmorosoModeConstraintEntry
     struct AmorosoModeConstraintEntry :
         public ConstraintEntryBase
     {
@@ -489,8 +699,15 @@ namespace eos
             out << YAML::Key << "beta" << YAML::Value << beta;
             out << YAML::EndMap;
         }
-    };
 
+        virtual ConstraintEntry * deserialize(const YAML::Node &) const
+        {
+            return nullptr;
+        }
+    };
+    /// }}}
+
+    /// {{{ AmorosoTripleLimitConstraintEntry
     struct AmorosoTripleLimitConstraintEntry :
         public ConstraintEntryBase
     {
@@ -590,8 +807,104 @@ namespace eos
             out << YAML::Key << "beta" << YAML::Value << beta;
             out << YAML::EndMap;
         }
-    };
 
+        static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
+        {
+            static const std::string required_keys[] =
+            {
+                "observable", "kinematics", "options", "physical-limit", "limit-upper-10%", "limit-upper-50%", "limit-upper-90%",
+                "alpha", "beta", "theta"
+            };
+
+            for (auto && k : required_keys)
+            {
+                if (! n[k].IsDefined())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
+                }
+            }
+
+            static const std::string scalar_keys[] =
+            {
+                "observable", "physical-limit", "limit-upper-10%", "limit-upper-50%", "limit-upper-90%", "alpha", "beta", "theta"
+            };
+
+            for (auto && k : scalar_keys)
+            {
+                if (YAML::NodeType::Scalar != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
+                }
+            }
+
+            static const std::string map_keys[] =
+            {
+                "kinematics", "options"
+            };
+
+            for (auto && k : map_keys)
+            {
+                if (YAML::NodeType::Map != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a map");
+                }
+            }
+
+            try
+            {
+                QualifiedName observable(n["observable"].as<std::string>());
+
+                Kinematics kinematics;
+                std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(n["kinematics"].begin(), n["kinematics"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                kinematics_nodes.sort(&impl::less);
+                std::set<std::string> kinematics_keys;
+                for (auto && k : kinematics_nodes)
+                {
+                    std::string key = k.first.as<std::string>();
+                    if (! kinematics_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
+
+                    kinematics.declare(key, k.second.as<double>());
+                }
+
+                Options options;
+                std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(n["options"].begin(), n["options"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                options_nodes.sort(&impl::less);
+                std::set<std::string> options_keys;
+                for (auto && o : options_nodes)
+                {
+                    std::string key = o.first.as<std::string>();
+                    if (! options_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+
+                    options.set(key, o.second.as<std::string>());
+                }
+
+                double physical_limit = n["physical-limit"].as<double>();
+                double limit_upper_10 = n["limit-upper-10%"].as<double>();
+                double limit_upper_50 = n["limit-upper-50%"].as<double>();
+                double limit_upper_90 = n["limit-upper-90%"].as<double>();
+                double theta          = n["theta"].as<double>();
+                double alpha          = n["alpha"].as<double>();
+                double beta           = n["beta"].as<double>();
+
+                return new AmorosoTripleLimitConstraintEntry(name.str(), observable, kinematics, options,
+                        physical_limit, limit_upper_10, limit_upper_50, limit_upper_90,
+                        theta, alpha, beta);
+            }
+            catch (QualifiedNameSyntaxError & e)
+            {
+                throw ConstraintDeserializationError(name, "'" + n["observable"].as<std::string>() + "' is not a valid observable name (" + e.what() + ")");
+            }
+        }
+    };
+    /// }}}
+
+    /// {{{ AmorosoConstraintEntry
     struct AmorosoConstraintEntry :
         public ConstraintEntryBase
     {
@@ -677,8 +990,99 @@ namespace eos
             out << YAML::Key << "beta" << YAML::Value << beta;
             out << YAML::EndMap;
         }
-    };
 
+        static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
+        {
+            static const std::string required_keys[] =
+            {
+                "observable", "kinematics", "options", "physical-limit", "alpha", "beta", "theta"
+            };
+
+            for (auto && k : required_keys)
+            {
+                if (! n[k].IsDefined())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
+                }
+            }
+
+            static const std::string scalar_keys[] =
+            {
+                "observable", "physical-limit", "alpha", "beta", "theta"
+            };
+
+            for (auto && k : scalar_keys)
+            {
+                if (YAML::NodeType::Scalar != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
+                }
+            }
+
+            static const std::string map_keys[] =
+            {
+                "kinematics", "options"
+            };
+
+            for (auto && k : map_keys)
+            {
+                if (YAML::NodeType::Map != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a map");
+                }
+            }
+
+            try
+            {
+                QualifiedName observable(n["observable"].as<std::string>());
+
+                Kinematics kinematics;
+                std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(n["kinematics"].begin(), n["kinematics"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                kinematics_nodes.sort(&impl::less);
+                std::set<std::string> kinematics_keys;
+                for (auto && k : kinematics_nodes)
+                {
+                    std::string key = k.first.as<std::string>();
+                    if (! kinematics_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
+
+                    kinematics.declare(key, k.second.as<double>());
+                }
+
+                Options options;
+                std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(n["options"].begin(), n["options"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                options_nodes.sort(&impl::less);
+                std::set<std::string> options_keys;
+                for (auto && o : options_nodes)
+                {
+                    std::string key = o.first.as<std::string>();
+                    if (! options_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+
+                    options.set(key, o.second.as<std::string>());
+                }
+
+                double physical_limit = n["physical-limit"].as<double>();
+                double theta          = n["theta"].as<double>();
+                double alpha          = n["alpha"].as<double>();
+                double beta           = n["beta"].as<double>();
+
+                return new AmorosoConstraintEntry(name.str(), observable, kinematics, options,
+                        physical_limit, theta, alpha, beta);
+            }
+            catch (QualifiedNameSyntaxError & e)
+            {
+                throw ConstraintDeserializationError(name, "'" + n["observable"].as<std::string>() + "' is not a valid observable name (" + e.what() + ")");
+            }
+        }
+    };
+    /// }}}
+
+    /// {{{ MultivariateGaussianConstraintEntry
     template <size_t dim_>
     struct MultivariateGaussianConstraintEntry :
         public ConstraintEntryBase
@@ -841,8 +1245,15 @@ namespace eos
             out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
-    };
 
+        virtual ConstraintEntry * deserialize(const YAML::Node &) const
+        {
+            return nullptr;
+        }
+    };
+    /// }}}
+
+    /// {{{ MultivariateGaussianCovarianceConstraintEntry
     template <size_t dim_>
     struct MultivariateGaussianCovarianceConstraintEntry :
         public ConstraintEntryBase
@@ -963,7 +1374,46 @@ namespace eos
             out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
+
+        virtual ConstraintEntry * deserialize(const YAML::Node &) const
+        {
+            return nullptr;
+        }
     };
+    /// }}}
+
+    ConstraintEntry::~ConstraintEntry() = default;
+
+    ConstraintEntry *
+    ConstraintEntry::FromYAML(const QualifiedName & name, const YAML::Node & n)
+    {
+        // make sure we deserialize from a map
+        if (YAML::NodeType::Map != n.Type())
+        {
+            throw ConstraintDeserializationError(name, "YAML node is not a map");
+        }
+
+        if (! n["type"].IsDefined())
+        {
+            throw ConstraintDeserializationError(name, "YAML node has not key 'type'");
+        }
+
+        static const std::map<std::string, std::function<ConstraintEntry * (const QualifiedName &, const YAML::Node &)>> deserializers
+        {
+            { "Amoroso",  &AmorosoConstraintEntry::deserialize  },
+            { "Gaussian", &GaussianConstraintEntry::deserialize },
+            { "LogGamma", &LogGammaConstraintEntry::deserialize }
+        };
+
+        std::string type = n["type"].as<std::string>();
+        auto i = deserializers.find(type);
+        if (i == deserializers.end())
+        {
+            throw ConstraintDeserializationError(name, "unsupported type '" + type + "'");
+        }
+
+        return i->second(name, n);
+    }
 
     namespace entries
     {
@@ -4671,6 +5121,7 @@ namespace eos
     {
         using ValueType = std::map<QualifiedName, const ConstraintEntry *>::value_type;
 
+        // {{{ entries
         static const std::map<QualifiedName, const ConstraintEntry *> constraint_entries =
         {
             /* 2000 */
@@ -5021,6 +5472,7 @@ namespace eos
 
             ValueType{ "Lambda_b->Lambda::f_perp+long^V+A+T+T5@DM2016", &entries::Lambda_b_to_Lambda_v_a_t_t5_parameters_DM_2016 },
         };
+        // }}}
 
         return constraint_entries;
     }
