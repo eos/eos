@@ -379,6 +379,11 @@
         "title" : "The Rare Decays K -> pi nu nu, B -> X nu nu and B -> l^+ l^-",
         "eprint" : "arXiv:hep-ph/9901288"
     },
+    "BBGORvD2018" : {
+        "authors" : "Böer, P. and Bordone, M. and Graverini, E. and Rotondo, M. and van Dyk, D."
+        "title" : "Testing lepton flavour universality in semileptonic Lambda_b -> Lambda_c^* decays",
+        "eprint" : "arXiv:1801.08367"
+    },
     "BBL1995" : {
         "authors" : "Buchalla, G. and Buras, J.B. and Lautenbacher, M.E.",
         "title" : "Weak Decays Beyond Leading Logarithms",
