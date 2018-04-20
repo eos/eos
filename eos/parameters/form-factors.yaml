@@ -591,6 +591,28 @@
     max:     +0.000
     comments: ""
 
+# Initial parameters for Lambda_b->Lambda_c(2595, 2625) transitions in @BBGIOvD2017 parametrisation
+"Lambda_b->Lambda_c^*::zeta(q^2_max)@BBGIOvD2017" :
+    central: 0.013054
+    min:     0.000537
+    max:     0.023296
+    comments: "Normalisation of the LO IW function at zero recoil, [-1.0, 1.0]"
+"Lambda_b->Lambda_c^*::rho@BBGIOvD2017" :
+    central: 0.05
+    min:     -1.05
+    max:     +1.05
+    comments: "Slope of the LO IW function, [-1.0, 1.0]"
+"Lambda_b->Lambda_c^*::delta_3b@BBGIOvD2017" :
+    central: 0.007087
+    min:     0.000384
+    max:     0.013604
+    comments: "Constant part of of the NLO IW function, [-1.0, 1.0]"
+"Lambda_b->Lambda_c^*::rho_3b@BBGIOvD2017" :
+    central: 0.05
+    min:     -1.05
+    max:     +1.05
+    comments: "Slope of the NLO IW function, [-1.0, 1.0]"
+
 # subleading parameter for Lambda_b -> Lambda ll decays according to
 # [MvD2016].
 "Lambda_b->Lambdall::r_perp_0@MvD2016" :

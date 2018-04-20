@@ -78,3 +78,99 @@ class BFvD2014FormFactorsTest :
             TEST_CHECK_NEARLY_EQUAL(0.780, ff->f_perp_a(20.0), eps);
         }
 } bfvd2014_form_factors_test;
+
+class BBGIOvD2017OneHalfFormFactorsTest :
+    public TestCase
+{
+    public:
+        BBGIOvD2017OneHalfFormFactorsTest() :
+            TestCase("bbgiovd2017_one_half_form_factors_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            Parameters p = Parameters::Defaults();
+            p["Lambda_b->Lambda_c^*::zeta(q^2_max)@BBGIOvD2017"] =  1.00;
+            p["Lambda_b->Lambda_c^*::delta_3b@BBGIOvD2017"]      = -0.14;
+            p["Lambda_b->Lambda_c^*::rho@BBGIOvD2017"]           =  0.25;
+            p["Lambda_b->Lambda_c^*::rho_3b@BBGIOvD2017"]        =  0.25;
+
+            auto ff = FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)@BBGIOvD2017", p);
+
+            //Diagnostics diag = ff->diagnostics();
+            //for (auto d : diag)
+            //{
+            //    std::cout << d.description << ": " << d.value << std::endl;
+            //}
+
+            static constexpr double eps   = 1.0e-5;
+            static constexpr double s_max = 9.1643031076;
+
+            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_time_v( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0403576, ff->f_long_v( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL(-0.0231852, ff->f_perp_v( s_max), eps);
+
+            TEST_CHECK_NEARLY_EQUAL( 0.00362061, ff->f_time_a( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_long_a( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_perp_a( s_max), eps);
+
+            TEST_CHECK_NEARLY_EQUAL( 0.9668960, ff->f_time_v( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.2605130, ff->f_long_v( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.2989380, ff->f_perp_v( s_max - 3.0), eps);
+
+            TEST_CHECK_NEARLY_EQUAL( 0.1927110, ff->f_time_a( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.8316750, ff->f_long_a( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.8363200, ff->f_perp_a( s_max - 3.0), eps);
+        }
+} bbgiovd2017_one_half_form_factors_test;
+
+class BBGIOvD2017ThreeHalfFormFactorsTest :
+    public TestCase
+{
+    public:
+        BBGIOvD2017ThreeHalfFormFactorsTest() :
+            TestCase("bbgiovd2017_three_half_form_factors_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            Parameters p = Parameters::Defaults();
+            p["Lambda_b->Lambda_c^*::zeta(q^2_max)@BBGIOvD2017"] =  1.00;
+            p["Lambda_b->Lambda_c^*::delta_3b@BBGIOvD2017"]      = -0.14;
+            p["Lambda_b->Lambda_c^*::rho@BBGIOvD2017"]           =  0.25;
+            p["Lambda_b->Lambda_c^*::rho_3b@BBGIOvD2017"]        =  0.25;
+
+            auto ff = FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)@BBGIOvD2017", p);
+
+            //Diagnostics diag = ff->diagnostics();
+            //for (auto d : diag)
+            //{
+            //    std::cout << d.description << ": " << d.value << std::endl;
+            //}
+
+            static constexpr double eps   = 1.0e-5;
+            static constexpr double s_max = 8.9484739600;
+
+            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_time12_v( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL(-0.0480896, ff->f_long12_v( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL(-0.2032710, ff->f_perp12_v( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0249132, ff->f_perp32_v( s_max), eps);
+
+            TEST_CHECK_NEARLY_EQUAL(-0.0300177, ff->f_time12_a( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_long12_a( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_perp12_a( s_max), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0,       ff->f_perp32_a( s_max), eps);
+
+            TEST_CHECK_NEARLY_EQUAL( 0.7229910, ff->f_time12_v( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.1146480, ff->f_long12_v( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0155494, ff->f_perp12_v( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0408266, ff->f_perp32_v( s_max - 3.0), eps);
+
+            TEST_CHECK_NEARLY_EQUAL( 0.1363350, ff->f_time12_a( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.7351560, ff->f_long12_a( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.7668110, ff->f_perp12_a( s_max - 3.0), eps);
+            TEST_CHECK_NEARLY_EQUAL( 0.0089753, ff->f_perp32_a( s_max - 3.0), eps);
+        }
+} bbgiovd2017_three_half_form_factors_test;
