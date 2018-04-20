@@ -1,5 +1,23 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
+/*
+ * Copyright (c) 2015, 2017 Danny van Dyk
+ *
+ * This file is part of the EOS project. EOS is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License version 2, as published by the Free Software Foundation.
+ *
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -14,6 +32,8 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
+        /* inclusive bounds */
+
         // renormalization scale (kinetic scheme)
         UsedParameter mu;
 
@@ -26,14 +46,33 @@ namespace eos
         // matrix elements of dim 6
         UsedParameter rho3_D;
 
+        /* exclusive inelastic contributions */
+
+        // Lambda_b -> Lambda_c(2595) form factors
+        std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> ff_2595;
+
+        // Lambda_b -> Lambda_c(2625) form factors
+        std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> ff_2625;
+
+        // masses
+        UsedParameter m_Lambda_b;
+        UsedParameter m_Lambda_c_2595;
+        UsedParameter m_Lambda_c_2625;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             mu(p["Lambda_b->Lambda_c::mu@ZRSR"], u),
             wM(p["Lambda_b->Lambda_c::wM@ZRSR"], u),
             mu2_pi(p["Lambda_b->Lambda_b::mu_pi^2@1GeV"], u),
-            rho3_D(p["Lambda_b->Lambda_b::rho_D^3@1GeV"], u)
+            rho3_D(p["Lambda_b->Lambda_b::rho_D^3@1GeV"], u),
+            ff_2595(FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)@" + o.get("form-factors", "BBGIOvD2017"), p)),
+            ff_2625(FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)@" + o.get("form-factors", "BBGIOvD2017"), p)),
+            m_Lambda_b(p["mass::Lambda_b"], u),
+            m_Lambda_c_2595(p["mass::Lambda_c(2595)"], u),
+            m_Lambda_c_2625(p["mass::Lambda_c(2625)"], u)
         {
             u.uses(*model);
+            u.uses(*ff_2625);
         }
 
         inline double xiA() const
@@ -125,6 +164,44 @@ namespace eos
             return deltaV2 + deltaV3;
         }
 
+        // exclusive results for the inelastic contributions
+        double f_inel() const
+        {
+            const double q2max = pow(m_Lambda_b - m_Lambda_c_2625, 2);
+            const double r     = pow((m_Lambda_b + m_Lambda_c_2625) / (m_Lambda_b - m_Lambda_c_2625), 2);
+            const double fT    = ff_2595->f_time_v(q2max);
+            const double f0    = ff_2595->f_long_v(q2max);
+            const double fP    = ff_2595->f_perp_v(q2max);
+            const double F12T  = ff_2625->f_time12_v(q2max);
+            const double F120  = ff_2625->f_long12_v(q2max);
+            const double F12P  = ff_2625->f_perp12_v(q2max);
+            const double F32P  = ff_2625->f_perp32_v(q2max);
+
+            // note the normalization N_A = 1.0 in [MvD2015].
+            const double f_inel_2595 =  1.0 / 3.0 * (pow(f0,   2) + r * pow(fT,   2) + 2.0 * pow(fP,   2));
+            const double f_inel_2625 =  2.0 / 3.0 * (pow(F120, 2) + r * pow(F12T, 2) + 2.0 * pow(F12P, 2) + 6.0 * pow(F32P, 2));
+
+            return f_inel_2595 + f_inel_2625;
+        }
+
+        double g_inel() const
+        {
+            const double q2max = pow(m_Lambda_b - m_Lambda_c_2625, 2);
+            const double r     = pow((m_Lambda_b + m_Lambda_c_2625) / (m_Lambda_b - m_Lambda_c_2625), 2);
+            const double gT    = ff_2595->f_time_a(q2max);
+            const double g0    = ff_2595->f_long_a(q2max);
+            const double gP    = ff_2595->f_perp_a(q2max);
+            const double G12T  = ff_2625->f_time12_a(q2max);
+            const double G120  = ff_2625->f_long12_a(q2max);
+            const double G12P  = ff_2625->f_perp12_a(q2max);
+            const double G32P  = ff_2625->f_perp32_a(q2max);
+
+            // note the normalization N_A = 3.0 in [MvD2015].
+            const double g_inel_2595 = 1.0 / 9.0 * (pow(g0,   2) + r * pow(gT,   2) + 2.0 * pow(gP,   2));
+            const double g_inel_2625 = 2.0 / 9.0 * (pow(G120, 2) + r * pow(G12T, 2) + 2.0 * pow(G12P, 2) + 6.0 * pow(G32P, 2));
+
+            return g_inel_2595 + g_inel_2625;
+        }
     };
 
     ZeroRecoilSumRule<LambdaBToC>::ZeroRecoilSumRule(const Parameters & parameters, const Options & options) :
@@ -148,4 +225,15 @@ namespace eos
         return _imp->xiV() - _imp->deltaV();
     }
 
+    double
+    ZeroRecoilSumRule<LambdaBToC>::axialvector_current_inel() const
+    {
+        return _imp->g_inel();
+    }
+
+    double
+    ZeroRecoilSumRule<LambdaBToC>::vector_current_inel() const
+    {
+        return _imp->f_inel();
+    }
 }
