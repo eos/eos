@@ -12,6 +12,7 @@ libeosformfactors_la_SOURCES = \
 	b-lcdas.cc b-lcdas.hh \
 	form-factor-adapter.hh \
 	form-factors.cc form-factors.hh form-factors-fwd.hh \
+	hqet-b-to-c.hh hqet-b-to-c.cc \
 	kstar-lcdas.cc kstar-lcdas.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
 	pi-lcdas.cc pi-lcdas.hh \
@@ -41,6 +42,7 @@ TESTS = \
 	analytic-b-to-pi-pi_TEST \
 	baryonic_TEST \
 	b-lcdas_TEST \
+	hqet-b-to-c_TEST \
 	kstar-lcdas_TEST \
 	mesonic_TEST \
 	pi-lcdas_TEST
@@ -60,6 +62,8 @@ analytic_b_to_pi_pi_TEST_SOURCES = analytic-b-to-pi-pi_TEST.cc
 baryonic_TEST_SOURCES = baryonic_TEST.cc
 
 b_lcdas_TEST_SOURCES = b-lcdas_TEST.cc
+
+hqet_b_to_c_TEST_SOURCES = hqet-b-to-c_TEST.cc
 
 kstar_lcdas_TEST_SOURCES = kstar-lcdas_TEST.cc
 
