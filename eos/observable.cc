@@ -301,6 +301,12 @@ namespace eos
             make_observable("Lambda_b->Lambda_c::G(1)",
                     &ZeroRecoilSumRule<LambdaBToC>::axialvector_current),
 
+            make_observable("Lambda_b->Lambda_c::F_inel(1)",
+                    &ZeroRecoilSumRule<LambdaBToC>::vector_current_inel),
+
+            make_observable("Lambda_b->Lambda_c::G_inel(1)",
+                    &ZeroRecoilSumRule<LambdaBToC>::axialvector_current_inel),
+
             /* Exclusive Decays */
 
             /* Exclusive B Decays */
