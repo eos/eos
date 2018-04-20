@@ -97,6 +97,7 @@ namespace eos
         public:
             virtual ~ConstraintEntry();
 
+            /// Make a new constraint based on this entry.
             virtual Constraint make(const QualifiedName &, const Options &) const = 0;
 
             /// Return the entry's name
