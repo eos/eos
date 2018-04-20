@@ -21,6 +21,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_BARYONIC_HH 1
 
 #include <eos/form-factors/form-factors-fwd.hh>
+#include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 
 #include <memory>
@@ -34,6 +35,16 @@ namespace eos
      * J=1/2^+ -> J=1/2^+ transitions
      */
     struct OneHalfPlusToOneHalfPlus { };
+
+    /*
+     * J=1/2^+ -> J=1/2^- transitions
+     */
+    struct OneHalfPlusToOneHalfMinus { };
+
+    /*
+     * J=1/2^+ -> J=3/2^- transitions
+     */
+    struct OneHalfPlusToThreeHalfMinus { };
 
     template <>
     class FormFactors<OneHalfPlusToOneHalfPlus> :
@@ -62,6 +73,58 @@ namespace eos
     {
         public:
             static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> create(const std::string & label, const Parameters & parameters);
+    };
+
+    template <>
+    class FormFactors<OneHalfPlusToOneHalfMinus> :
+        public ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            virtual double f_time_v(const double & s) const = 0;
+            virtual double f_long_v(const double & s) const = 0;
+            virtual double f_perp_v(const double & s) const = 0;
+
+            virtual double f_time_a(const double & s) const = 0;
+            virtual double f_long_a(const double & s) const = 0;
+            virtual double f_perp_a(const double & s) const = 0;
+
+            virtual Diagnostics diagnostics() const;
+    };
+
+    template <>
+    class FormFactorFactory<OneHalfPlusToOneHalfMinus>
+    {
+        public:
+            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> create(const std::string & label, const Parameters & parameters);
+    };
+
+    template <>
+    class FormFactors<OneHalfPlusToThreeHalfMinus> :
+        public ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            virtual double f_time12_v(const double & s) const = 0;
+            virtual double f_long12_v(const double & s) const = 0;
+            virtual double f_perp12_v(const double & s) const = 0;
+            virtual double f_perp32_v(const double & s) const = 0;
+
+            virtual double f_time12_a(const double & s) const = 0;
+            virtual double f_long12_a(const double & s) const = 0;
+            virtual double f_perp12_a(const double & s) const = 0;
+            virtual double f_perp32_a(const double & s) const = 0;
+
+            virtual Diagnostics diagnostics() const;
+    };
+
+    template <>
+    class FormFactorFactory<OneHalfPlusToThreeHalfMinus>
+    {
+        public:
+            static std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> create(const std::string & label, const Parameters & parameters);
     };
 }
 

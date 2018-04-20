@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2016 Danny van Dyk
+ * Copyright (c) 2014-2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -163,6 +163,140 @@ namespace eos
             return result;
 
         result = std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>(i->second(parameters, set));
+
+        return result;
+    }
+
+    /* J=1/2^+ -> J=1/2^- Processes */
+
+    /* Lambda_b -> Lambda_c(2595) */
+
+    const constexpr double LambdaBToLambdaC2595::tm;
+    const constexpr double LambdaBToLambdaC2595::tp;
+    const constexpr double LambdaBToLambdaC2595::mR2_0m;
+    const constexpr double LambdaBToLambdaC2595::mR2_0p;
+    const constexpr double LambdaBToLambdaC2595::mR2_1m;
+    const constexpr double LambdaBToLambdaC2595::mR2_1p;
+
+    FormFactors<OneHalfPlusToOneHalfMinus>::~FormFactors()
+    {
+    }
+
+    Diagnostics
+    FormFactors<OneHalfPlusToOneHalfMinus>::diagnostics() const
+    {
+        return { };
+    }
+
+    std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>>
+    FormFactorFactory<OneHalfPlusToOneHalfMinus>::create(const std::string & label, const Parameters & parameters)
+    {
+        std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> result;
+
+        typedef std::tuple<std::string, std::string> KeyType;
+        typedef std::function<FormFactors<OneHalfPlusToOneHalfMinus> * (const Parameters &, unsigned)> ValueType;
+
+        static const std::map<KeyType, ValueType> form_factors
+        {
+            { KeyType("Lambda_b->Lambda_c(2595)", "HQET"),             &HQETFormFactors<OneHalfPlusToOneHalfMinus, LambdaBToLambdaC2595>::make },
+        };
+
+        /*
+         * Labels have the form
+         *
+         *   PROCESS@NAME[:SET]
+         *
+         * The brackets indicate the latter part to be optional.
+         */
+
+        std::string process, name, input(label);
+        unsigned set(0);
+
+        std::string::size_type sep_at(input.find('@')), sep_colon(input.find(':'));
+        if (std::string::npos == sep_at)
+            return result;
+
+        if (std::string::npos != sep_colon)
+        {
+            set = destringify<unsigned>(input.substr(sep_colon + 1));
+            input.erase(sep_colon + 1);
+        }
+
+        name = input.substr(sep_at + 1);
+        process = input.substr(0, sep_at);
+
+        auto i = form_factors.find(KeyType(process, name));
+        if (form_factors.cend() == i)
+            return result;
+
+        result = std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>>(i->second(parameters, set));
+
+        return result;
+    }
+
+    /* J=1/2^+ -> J=3/2^- Processes */
+
+    /* Lambda_b -> Lambda_c(2625) */
+
+    const constexpr double LambdaBToLambdaC2625::tm;
+    const constexpr double LambdaBToLambdaC2625::tp;
+    const constexpr double LambdaBToLambdaC2625::mR2_0m;
+    const constexpr double LambdaBToLambdaC2625::mR2_0p;
+    const constexpr double LambdaBToLambdaC2625::mR2_1m;
+    const constexpr double LambdaBToLambdaC2625::mR2_1p;
+
+    FormFactors<OneHalfPlusToThreeHalfMinus>::~FormFactors()
+    {
+    }
+
+    Diagnostics
+    FormFactors<OneHalfPlusToThreeHalfMinus>::diagnostics() const
+    {
+        return { };
+    }
+
+    std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>>
+    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create(const std::string & label, const Parameters & parameters)
+    {
+        std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> result;
+
+        typedef std::tuple<std::string, std::string> KeyType;
+        typedef std::function<FormFactors<OneHalfPlusToThreeHalfMinus> * (const Parameters &, unsigned)> ValueType;
+
+        static const std::map<KeyType, ValueType> form_factors
+        {
+            { KeyType("Lambda_b->Lambda_c(2625)", "HQET"),             &HQETFormFactors<OneHalfPlusToThreeHalfMinus, LambdaBToLambdaC2625>::make },
+        };
+
+        /*
+         * Labels have the form
+         *
+         *   PROCESS@NAME[:SET]
+         *
+         * The brackets indicate the latter part to be optional.
+         */
+
+        std::string process, name, input(label);
+        unsigned set(0);
+
+        std::string::size_type sep_at(input.find('@')), sep_colon(input.find(':'));
+        if (std::string::npos == sep_at)
+            return result;
+
+        if (std::string::npos != sep_colon)
+        {
+            set = destringify<unsigned>(input.substr(sep_colon + 1));
+            input.erase(sep_colon + 1);
+        }
+
+        name = input.substr(sep_at + 1);
+        process = input.substr(0, sep_at);
+
+        auto i = form_factors.find(KeyType(process, name));
+        if (form_factors.cend() == i)
+            return result;
+
+        result = std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>>(i->second(parameters, set));
 
         return result;
     }
