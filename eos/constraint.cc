@@ -2974,23 +2974,6 @@ namespace eos
             2.9708273062e-09, 8.2392613044e-01, 1.6993290032
         };
 
-        // Data taken from LHCb:2012D
-        /* fit Amoroso to result assuming
-         * a) cdf(0) = 0
-         * b) mode = 3.2
-         * c) 90% in (1.3, 5.8)
-         * d) pdf(1.3) = pdf(5.8) (smallest interval)
-         */
-        static const AmorosoModeConstraintEntry Bzero_to_dimuon_LHCb_Nov_2012
-        {
-            "B^0_s->mu^+mu^-::BR_limit@LHCb-Nov-2012",
-            "B_q->ll::BR@Untagged",
-            Kinematics(),
-            Options{ { "q", "s"  }, { "l", "mu" } },
-            0.0, 3.2e-9, 5.479025195034372e-9, 6.110034104385014e-9,
-            2.3625776605e-09, 2.2682156277, 1.7296007586
-        };
-
         // Data taken from [LHCb:2012E]
         static const GaussianConstraintEntry Bzero_to_Kstarzero_dimuon_A_CP_1_to_6_LHCb_2012E
         {
@@ -5231,8 +5214,6 @@ namespace eos
             ValueType{ "B^+->K^+mu^+mu^-::F_H[18.00,22.00]@LHCb-2012", &entries::Bplus_to_Kplus_dimuon_F_H_18_to_22_LHCb_2012 },
             // limit on B^0_s -> mu^+ mu^-
             ValueType{ "B^0_s->mu^+mu^-::BR_limit@LHCb-2012", &entries::Bzero_to_dimuon_LHCb_2012 },
-            // limit on B^0_s -> mu^+ mu^- of Nov 2012
-            ValueType{ "B^0_s->mu^+mu^-::BR_limit@LHCb-Nov-2012", &entries::Bzero_to_dimuon_LHCb_Nov_2012 },
             // B^0 -> K^*0 mu^+ mu^-
             ValueType{ "B^0->K^*0mu^+mu^-::A_CP[1.00,6.00]@LHCb-2012", &entries::Bzero_to_Kstarzero_dimuon_A_CP_1_to_6_LHCb_2012E },
             ValueType{ "B^0->K^*0mu^+mu^-::A_CP[14.18,16.00]@LHCb-2012", &entries::Bzero_to_Kstarzero_dimuon_A_CP_14dot18_to_16_LHCb_2012E },
