@@ -2307,16 +2307,6 @@ namespace eos
          *
          * Data taken from [LHCb:2011A]
          */
-        // limit on BR B^0_s -> mu^+ mu^-
-        static const AmorosoLimitConstraintEntry Bzero_to_dimuon_LHCb_CMS_2011
-        {
-            "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011",
-            "B_q->ll::BR@Untagged",
-            Kinematics{ },
-            Options{ { "q", "s"  }, { "l", "mu" } },
-            0.0, 0.9e-8, 1.08e-8,
-            0.74377978e-8, 0.53538044
-        };
         // use the data from the Bayes-Heinrich method
         // the mode is not at zero, but around 3.1e-9
         static const AmorosoTripleLimitConstraintEntry Bzero_to_dimuon_LHCb_CMS_2011_Bayes
@@ -5248,7 +5238,6 @@ namespace eos
 
             // limit on B^0_s -> mu^+ mu^-
             // LHCb + CMS
-            ValueType{ "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011", &entries::Bzero_to_dimuon_LHCb_CMS_2011 },
             ValueType{ "B^0_s->mu^+mu^-::BR_limit@LHCb-CMS-2011-Bayes", &entries::Bzero_to_dimuon_LHCb_CMS_2011_Bayes },
 
             /* 2012 */
