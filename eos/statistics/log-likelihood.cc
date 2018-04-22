@@ -1197,83 +1197,6 @@ namespace eos
     }
 
     LogLikelihoodBlockPtr
-    LogLikelihoodBlock::AmorosoLimit(ObservableCache cache, const ObservablePtr & observable,
-                    const double & physical_limit, const double & upper_limit_90, const double & upper_limit_95,
-                    const double & theta, const double & alpha,
-                    const unsigned & number_of_observations)
-    {
-        // check input
-        if (upper_limit_90 <= physical_limit)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_90 <= physical_limit");
-
-        if (upper_limit_95 <= physical_limit)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_95 <= physical_limit");
-
-        if (upper_limit_95 <= upper_limit_90)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_95 <= upper_limit_90");
-
-        unsigned index = cache.add(observable);
-
-        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, 1 / alpha, number_of_observations);
-
-        // check consistency
-        if (std::abs(a->cdf(upper_limit_90) - 0.90) > 1e-4)
-        {
-            throw InternalError("LogLikelihood::AmorosoLimit.ctor: For the current parameter values, cdf(x_90) = "
-                + stringify(a->cdf(upper_limit_90)) + " deviates from 90%.");
-
-        }
-        if (std::abs(a->cdf(upper_limit_95) - 0.95) > 1e-4)
-        {
-            throw InternalError("LogLikelihood::AmorosoLimit.ctor: For the current parameter values, cdf(x_95) = "
-                + stringify(a->cdf(upper_limit_95)) + " deviates from 95%.");
-        }
-
-        return LogLikelihoodBlockPtr(a);
-    }
-
-    LogLikelihoodBlockPtr
-    LogLikelihoodBlock::AmorosoMode(ObservableCache cache, const ObservablePtr & observable,
-                                const double & physical_limit, const double & mode,
-                                const double & upper_limit_90, const double & upper_limit_95,
-                                const double & theta, const double & alpha, const double & beta,
-                                const unsigned & number_of_observations)
-    {
-        // check input
-        if (mode <= physical_limit)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_5 <= physical_limit");
-
-        if (upper_limit_90 <= physical_limit)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_90 <= physical_limit");
-
-        if (upper_limit_95 <= upper_limit_90)
-            throw InternalError("LogLikelihoodBlock::AmorosoLimit: upper_limit_95 <= upper_limit_90");
-
-        unsigned index = cache.add(observable);
-
-        implementation::AmorosoBlock * a = new implementation::AmorosoBlock(cache, index, physical_limit, theta, alpha, beta, number_of_observations);
-
-        // check consistency
-        if (std::abs(a->mode() - mode) > 1e-4)
-        {
-            throw InternalError("LogLikelihood::Amoroso.ctor: For the current parameter values, Amoroso::mode() = "
-                + stringify(a->mode()) + " deviates from mode supplied " + stringify(mode));
-        }
-        if (std::abs(a->cdf(upper_limit_90) - 0.90) > 1e-4)
-        {
-            throw InternalError("LogLikelihood::Amoroso.ctor: For the current parameter values, cdf(x_90) = "
-                + stringify(a->cdf(upper_limit_90)) + " deviates from 90%.");
-        }
-        if (std::abs(a->cdf(upper_limit_95) - 0.95) > 1e-4)
-        {
-            throw InternalError("LogLikelihood::Amoroso.ctor: For the current parameter values, cdf(x_95) = "
-                + stringify(a->cdf(upper_limit_95)) + " deviates from 95%.");
-        }
-
-        return LogLikelihoodBlockPtr(a);
-    }
-
-    LogLikelihoodBlockPtr
     LogLikelihoodBlock::Amoroso(ObservableCache cache, const ObservablePtr & observable,
                                 const double & physical_limit, const double & upper_limit_10,
                                 const double & upper_limit_50, const double & upper_limit_90,
@@ -1312,7 +1235,6 @@ namespace eos
 
         return LogLikelihoodBlockPtr(a);
     }
-
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::Amoroso(ObservableCache cache, const ObservablePtr & observable,

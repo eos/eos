@@ -153,61 +153,6 @@ namespace eos
              *
              * Internally, it is represented by an Amoroso distribution [C2004] with
              * location parameter a set to the physical limit, scale parameter \theta and
-             * first shape parameter \alpha supplied by the user, and 2nd shape parameter \beta
-             * set to the inverse of \alpha, in order to ensure that the maximum of the density
-             * is at the physical limit.
-             *
-             * The limit values are required in order to check consistency with the parameter values.
-             *
-             * For example, consider a yet unobserved branching ratio, which has to be non-negative, x>= 0.
-             *
-             * @param cache The Observable cache from which we draw the predictions.
-             * @param observable The Observable whose distribution we model.
-             * @param mode The lower, physical limit. A branching ratio has to be >= 0. It is the maximum of the pdf.
-             * @param upper_limit_90 With 90% probability, x < upper_limit_90.
-             * @param upper_limit_95 With 95% probability, x < upper_limit_95.
-             * @param theta scale parameter
-             * @param alpha shape parameter
-             * @return
-             */
-            static LogLikelihoodBlockPtr AmorosoLimit(ObservableCache cache, const ObservablePtr & observable,
-                    const double & physical_limit, const double & upper_limit_90, const double & upper_limit_95,
-                    const double & theta, const double & alpha,
-                    const unsigned & number_of_observations = 1u);
-
-            /*!
-             * A likelihood contribution representing an upper limit on a quantity x.
-             *
-             * Internally, it is represented by an Amoroso distribution [C2004] with
-             * location parameter a set to the physical limit, scale parameter \theta and
-             * shape parameters \alpha, \beta supplied by the user.
-             *
-             * The limit values / mode are required in order to check consistency with the parameter values.
-             *
-             * For example, consider a yet unobserved branching ratio, which has to be non-negative, x>= 0.
-             *
-             * @param cache The Observable cache from which we draw the predictions.
-             * @param observable The Observable whose distribution we model.
-             * @param physical_limit The lower, physical limit. A branching ratio has to be >= 0.
-             * @param mode The maximum of the distribution.
-             * @param upper_limit_90 With 90% probability, x < upper_limit_90.
-             * @param upper_limit_95 With 95% probability, x < upper_limit_95.
-             * @param theta scale parameter
-             * @param alpha 1st shape parameter
-             * @param beta  2nd shape parameter
-             * @return
-             */
-            static LogLikelihoodBlockPtr AmorosoMode(ObservableCache cache, const ObservablePtr & observable,
-                    const double & physical_limit, const double & mode,
-                    const double & upper_limit_90, const double & upper_limit_95,
-                    const double & theta, const double & alpha, const double & beta,
-                    const unsigned & number_of_observations = 1u);
-
-            /*!
-             * A likelihood contribution representing an upper limit on a quantity x.
-             *
-             * Internally, it is represented by an Amoroso distribution [C2004] with
-             * location parameter a set to the physical limit, scale parameter \theta and
              * shape parameters \alpha, \beta supplied by the user.
              *
              * @note The mode of the distribution is typically not at the physical limit.
