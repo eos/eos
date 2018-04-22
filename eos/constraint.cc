@@ -1529,7 +1529,8 @@ namespace eos
             {{
                 {{ 1,  0.08 }},  /* Use correlation of the two measurements from */
                 {{ 0.08,  1 }},  /* http://www.slac.stanford.edu/xorg/hfag/triangle/moriond2011/index.shtml#bsgamma */
-            }}
+            }},
+            2u
         };
         ///@}
 
@@ -1569,7 +1570,8 @@ namespace eos
             {{
                 {{ 1,  0.05 }},  // Use correlation of the two results from
                 {{ 0.05,  1 }},  // http://www.slac.stanford.edu/xorg/hfag/triangle/moriond2011/index.shtml#bsgamma to calculate covariance matrix.
-            }}
+            }},
+            2u
         };
 
         /*
@@ -1606,7 +1608,8 @@ namespace eos
             {{
                 {{ +1.00,  -0.46 }},  // Use correlation of the two results from
                 {{ -0.46,  +1.00 }},  // as given in Table VII in [Belle:2008]
-            }}
+            }},
+            2u
         };
         ///@}
 
@@ -1805,7 +1808,8 @@ namespace eos
                  {{ 1.000, 0.670, 0.800 }},
                  {{ 0.670, 1.000, 0.780 }},
                  {{ 0.800, 0.780, 1.000 }},
-            }}
+            }},
+            3u
         };
         ///@}
 
@@ -1879,7 +1883,8 @@ namespace eos
                 {{ +0.1055, +0.0923, -0.0192, +1.0000, -0.0164, +0.2808 }},
                 {{ +0.1695, -0.0601, +0.3264, -0.0164, +1.0000, +0.0202 }},
                 {{ +0.1839, -0.0227, +0.2382, +0.2808, +0.0202, +1.0000 }}
-            }}
+            }},
+            6u
         };
 
         /*
@@ -1919,7 +1924,8 @@ namespace eos
                 {{ -0.0635, +0.3369, -0.0484, +1.0000, -0.1302, +0.1859 }},
                 {{ +0.1670, +0.0292, +0.2842, -0.1302, +1.0000, +0.1476 }},
                 {{ +0.1084, +0.0888, +0.2288, +0.1859, +0.1476, +1.0000 }}
-            }}
+            }},
+            6u
         };
         ///@}
 
@@ -1939,7 +1945,8 @@ namespace eos
             {{
                 {{ 1,  0.06 }},
                 {{ 0.06,  1 }},
-            }}
+            }},
+            2u
         };
         /*
          * CDF Collaboration
@@ -2511,7 +2518,8 @@ namespace eos
             {{
                  {{ +1.00, -0.88 }},
                  {{ -0.88, +1.00 }}
-            }}
+            }},
+            2u
         };
 
         /*
@@ -2552,7 +2560,8 @@ namespace eos
                 {{ +0.1432, +0.2174, -0.0889, +1.0000, +0.0218, +0.2772 }},
                 {{ +0.1831, +0.0718, +0.2250, +0.0218, +1.0000, -0.0425 }},
                 {{ +0.1471, +0.0975, +0.1076, +0.2772, -0.0425, +1.0000 }},
-            }}
+            }},
+            6u
         };
 
         /*
@@ -3257,7 +3266,8 @@ namespace eos
                 {{ -0.001, +0.008, -0.094, +1.000, -0.078, +0.005 }},
                 {{ +0.000, +0.000, +0.003, -0.078, +1.000, -0.097 }},
                 {{ +0.000, +0.001, -0.001, +0.005, -0.097, +1.000 }}
-            }}
+            }},
+            6u
         };
 
         /*
@@ -3868,7 +3878,8 @@ namespace eos
                 {{ +0.05, +0.00, +1.00, -0.00, -0.03 }},
                 {{ +0.12, +0.05, -0.00, +1.00, -0.06 }},
                 {{ +0.01, +0.05, -0.03, -0.06, +1.00 }},
-            }}
+            }},
+            5u
         };
         static const MultivariateGaussianConstraintEntry<5> Bzero_to_Kstarzero_dimuon_aobs_moments_2_to_3_LHCb_2015A
         {
@@ -3898,7 +3909,8 @@ namespace eos
                 {{ -0.14, -0.10, +1.00, -0.08, -0.00 }},
                 {{ -0.05, +0.07, -0.08, +1.00, -0.10 }},
                 {{ +0.12, +0.03, -0.00, -0.10, +1.00 }},
-            }}
+            }},
+            5u
         };
         static const MultivariateGaussianConstraintEntry<5> Bzero_to_Kstarzero_dimuon_aobs_moments_3_to_4_LHCb_2015A
         {
@@ -3928,7 +3940,8 @@ namespace eos
                 {{ -0.00, +0.00, +1.00, +0.17, +0.05 }},
                 {{ -0.05, -0.05, +0.17, +1.00, +0.01 }},
                 {{ -0.02, +0.02, +0.05, +0.01, +1.00 }},
-            }}
+            }},
+            5u
         };
         static const MultivariateGaussianConstraintEntry<5> Bzero_to_Kstarzero_dimuon_aobs_moments_4_to_5_LHCb_2015A
         {
@@ -3958,7 +3971,8 @@ namespace eos
                 {{ +0.02, -0.10, +1.00, +0.15, -0.03 }},
                 {{ -0.10, -0.11, +0.15, +1.00, -0.03 }},
                 {{ -0.03, +0.03, -0.03, -0.03, +1.00 }},
-            }}
+            }},
+            5u
         };
         static const MultivariateGaussianConstraintEntry<5> Bzero_to_Kstarzero_dimuon_aobs_moments_5_to_6_LHCb_2015A
         {
@@ -3988,7 +4002,8 @@ namespace eos
                 {{ -0.02, -0.03, +1.00, +0.09, +0.03 }},
                 {{ -0.02, -0.07, +0.09, +1.00, -0.07 }},
                 {{ -0.02, -0.10, +0.03, -0.07, +1.00 }},
-            }}
+            }},
+            5u
         };
 
         /*
@@ -4121,7 +4136,7 @@ namespace eos
                 {{ 1.000000, 0.204495 }},
                 {{ 0.204495, 1.000000 }},
             }},
-        0u
+            0u
         };
         // B_s -> K^*
         static const MultivariateGaussianConstraintEntry<2> Bs_to_Kstar_V_15_to_19dot21_MILC_2013A
@@ -4138,7 +4153,7 @@ namespace eos
                 {{ 1.000, 0.271 }},
                 {{ 0.271, 1.000 }},
             }},
-        0u
+            0u
         };
         static const MultivariateGaussianConstraintEntry<2> Bs_to_Kstar_A1_15_to_19dot21_MILC_2013A
         {
@@ -4154,7 +4169,7 @@ namespace eos
                 {{ 1.000, 0.305 }},
                 {{ 0.305, 1.000 }},
             }},
-        0u
+            0u
         };
         static const MultivariateGaussianConstraintEntry<2> Bs_to_Kstar_A12_15_to_19dot21_MILC_2013A
         {
@@ -4170,7 +4185,7 @@ namespace eos
                 {{ 1.000, 0.334 }},
                 {{ 0.334, 1.000 }},
             }},
-        0u
+            0u
         };
         ///@}
 
@@ -4197,7 +4212,7 @@ namespace eos
                 {{ 0.564, 0.863, 0.853, 0.814, 1.000, 0.647 }},
                 {{ 0.313, 0.246, 0.221, 0.389, 0.647, 1.000 }}
             }},
-        0u
+            0u
         };
 
         /*
@@ -4219,7 +4234,8 @@ namespace eos
                  {{ 0.556, 1.000, 0.773, 0.772 }},
                  {{ 0.773, 0.773, 1.000, 0.534 }},
                  {{ 0.771, 0.772, 0.534, 1.000 }}
-            }}
+            }},
+            0u
         };
         static const MultivariateGaussianConstraintEntry<2> LambdaB_to_Lambda_fperpV_13dot5_to_20dot3_BFvD2014
         {
@@ -4234,7 +4250,8 @@ namespace eos
             {{
                  {{ 1.000, 0.000 }},
                  {{ 0.000, 1.000 }}
-            }}
+            }},
+            0u
         };
         static const MultivariateGaussianConstraintEntry<2> LambdaB_to_Lambda_fperpA_13dot5_to_20dot3_BFvD2014
         {
@@ -4249,7 +4266,8 @@ namespace eos
             {{
                  {{ 1.000, 0.000 }},
                  {{ 0.000, 1.000 }}
-            }}
+            }},
+            0u
         };
         static const MultivariateGaussianConstraintEntry<2> LambdaB_to_Lambda_flongV_13dot5_to_20dot3_BFvD2014
         {
@@ -4264,7 +4282,8 @@ namespace eos
             {{
                  {{ 1.000, 0.000 }},
                  {{ 0.000, 1.000 }}
-            }}
+            }},
+            0u
         };
         static const MultivariateGaussianConstraintEntry<2> LambdaB_to_Lambda_flongA_13dot5_to_20dot3_BFvD2014
         {
@@ -4279,7 +4298,8 @@ namespace eos
             {{
                  {{ 1.000, 0.000 }},
                  {{ 0.000, 1.000 }}
-            }}
+            }},
+            0u
         };
         ///@}
 
