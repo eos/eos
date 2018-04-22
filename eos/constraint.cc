@@ -83,6 +83,13 @@ namespace eos
             {
             }
 
+            ConstraintEntryBase(const QualifiedName & name,
+                    const std::vector<QualifiedName> & observable_names) :
+                _name(name),
+                _observable_names(observable_names)
+            {
+            }
+
             template <unsigned long n_>
             ConstraintEntryBase(const QualifiedName & name,
                     const std::array<QualifiedName, n_> & observable_names) :
@@ -677,37 +684,38 @@ namespace eos
     /// }}}
 
     /// {{{ MultivariateGaussianConstraintEntry
-    template <size_t dim_>
     struct MultivariateGaussianConstraintEntry :
         public ConstraintEntryBase
     {
-        std::array<QualifiedName, dim_> observable_names;
+        std::vector<QualifiedName> observable_names;
 
-        std::array<Kinematics, dim_> kinematics;
+        std::vector<Kinematics> kinematics;
 
-        std::array<Options, dim_> options;
+        std::vector<Options> options;
 
-        std::array<double, dim_> means;
+        std::vector<double> means;
 
-        std::array<double, dim_> sigma_stat_hi;
-        std::array<double, dim_> sigma_stat_lo;
+        std::vector<double> sigma_stat_hi;
+        std::vector<double> sigma_stat_lo;
 
-        std::array<double, dim_> sigma_sys;
+        std::vector<double> sigma_sys;
 
-        std::array<std::array<double, dim_>, dim_> correlation;
+        std::vector<std::vector<double>> correlation;
 
         unsigned number_of_observations;
 
+        unsigned dim;
+
         MultivariateGaussianConstraintEntry(const QualifiedName & name,
-                const std::array<QualifiedName, dim_> & observable_names,
-                const std::array<Kinematics, dim_> & kinematics,
-                const std::array<Options, dim_> & options,
-                const std::array<double, dim_> & means,
-                const std::array<double, dim_> & sigma_stat_hi,
-                const std::array<double, dim_> & sigma_stat_lo,
-                const std::array<double, dim_> & sigma_sys,
-                const std::array<std::array<double, dim_>, dim_> & correlation,
-                const unsigned number_of_observations = dim_) :
+                const std::vector<QualifiedName> & observable_names,
+                const std::vector<Kinematics> & kinematics,
+                const std::vector<Options> & options,
+                const std::vector<double> & means,
+                const std::vector<double> & sigma_stat_hi,
+                const std::vector<double> & sigma_stat_lo,
+                const std::vector<double> & sigma_sys,
+                const std::vector<std::vector<double>> & correlation,
+                const unsigned number_of_observations) :
             ConstraintEntryBase(name, observable_names),
             observable_names(observable_names),
             kinematics(kinematics),
@@ -717,15 +725,35 @@ namespace eos
             sigma_stat_lo(sigma_stat_lo),
             sigma_sys(sigma_sys),
             correlation(correlation),
-            number_of_observations(number_of_observations)
+            number_of_observations(number_of_observations),
+            dim(observable_names.size())
         {
+            if (dim != kinematics.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of kinematics"); }
+
+            if (dim != options.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of options"); }
+
+            if (dim != means.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of means"); }
+
+            if (dim != sigma_stat_hi.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of sigma-stat(hi)"); }
+
+            if (dim != sigma_stat_lo.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of sigma-stat(lo)"); }
+
+            if (dim != sigma_sys.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of sigma-sys"); }
+
+            if (dim < number_of_observations) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of observations"); }
+
+            if (dim != correlation.size()) { throw InternalError("MultviateGaussianConstraintEntry: wrong number of rows in correlation"); }
+            for (auto i = 0u ; i < dim ; ++i)
+            {
+                if (dim != correlation[i].size()) { throw InternalError("MultviateGaussianConstraintEntry: wrong number of columns in correlation row " + stringify(i)); }
+            }
         }
 
         virtual ~MultivariateGaussianConstraintEntry() = default;
 
         virtual const std::string & type() const
         {
-            static const std::string type("MultivariateGaussian<" + stringify(dim_) + "> (using correlation matrix)");
+            static const std::string type("MultivariateGaussian<" + stringify(dim) + "> (using correlation matrix)");
 
             return type;
         }
@@ -735,19 +763,18 @@ namespace eos
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
-            std::array<ObservablePtr, dim_> observables;
-            for (auto i = 0u ; i < dim_ ; ++i)
+            std::vector<ObservablePtr> observables(dim, nullptr);
+            for (auto i = 0u ; i < dim ; ++i)
             {
                 observables[i] = Observable::make(this->observable_names[i], parameters, this->kinematics[i], this->options[i] + options);
                 if (! observables[i].get())
-                    throw InternalError("make_multivariate_gaussian_constraint<" + stringify(dim_) + ">: " + name.str() + ": '" + this->observable_names[i].str() + "' is not a valid observable name");
+                    throw InternalError("make_multivariate_gaussian_constraint<" + stringify(dim) + ">: " + name.str() + ": '" + this->observable_names[i].str() + "' is not a valid observable name");
             }
 
-            std::array<double, dim_> variances;
-
+            std::vector<double> variances(dim, 0.0);
             if ("symmetric+quadratic" == options.get("uncertainty", "symmetric+quadratic"))
             {
-                for (auto i = 0u ; i < dim_ ; ++i)
+                for (auto i = 0u ; i < dim ; ++i)
                 {
                     double combined_lo = power_of<2>(sigma_stat_lo[i]) + power_of<2>(sigma_sys[i]);
                     double combined_hi = power_of<2>(sigma_stat_hi[i]) + power_of<2>(sigma_sys[i]);
@@ -756,7 +783,25 @@ namespace eos
                 }
             }
 
-            LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, this->means, variances, this->correlation, number_of_observations);
+            // create GSL vector for the mean
+            gsl_vector * means = gsl_vector_alloc(dim);
+            for (auto i = 0u ; i < dim ; ++i)
+            {
+                gsl_vector_set(means, i, this->means[i]);
+            }
+
+            // create GSL matrix for the covariance
+            gsl_matrix * covariance = gsl_matrix_alloc(dim, dim);
+            for (auto i = 0u ; i < dim ; ++i)
+            {
+                for (auto j = 0u ; j < dim ; ++j)
+                {
+                    double value = std::sqrt(variances[i] * variances[j]) * correlation[i][j];
+                    gsl_matrix_set(covariance, i, j, value);
+                }
+            }
+
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, number_of_observations);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
@@ -764,7 +809,7 @@ namespace eos
         virtual std::ostream & insert(std::ostream & os) const
         {
             os << _name.full() << ":" << std::endl;
-            os << "    type: MultivariateGaussian<" << dim_ << ">" << std::endl;
+            os << "    type: MultivariateGaussian<" << dim << ">" << std::endl;
 
             return os;
         }
@@ -773,7 +818,7 @@ namespace eos
         {
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian";
-            out << YAML::Key << "dim" << YAML::Value << dim_;
+            out << YAML::Key << "dim" << YAML::Value << dim;
             out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
             for (const auto & o : observable_names)
             {
@@ -841,52 +886,205 @@ namespace eos
             out << YAML::EndMap;
         }
 
-        virtual ConstraintEntry * deserialize(const YAML::Node &) const
+        static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
         {
-            return nullptr;
+            static const std::string required_keys[] =
+            {
+                "dim", "observables", "kinematics", "options", "means", "sigma-stat-hi", "sigma-stat-lo", "sigma-sys", "correlations", "dof"
+            };
+
+            for (auto && k : required_keys)
+            {
+                if (! n[k].IsDefined())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
+                }
+            }
+
+            static const std::string scalar_keys[] =
+            {
+                "dim", "dof"
+            };
+
+            for (auto && k : scalar_keys)
+            {
+                if (YAML::NodeType::Scalar != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
+                }
+            }
+
+            static const std::string seq_keys[] =
+            {
+                "observables", "kinematics", "options", "means", "sigma-stat-hi", "sigma-stat-lo", "sigma-sys", "correlations"
+            };
+
+            for (auto && k : seq_keys)
+            {
+                if (YAML::NodeType::Sequence != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a sequence");
+                }
+            }
+
+            try
+            {
+                unsigned dof = n["dof"].as<unsigned>();
+
+                std::vector<QualifiedName> observables;
+                for (auto && o : n["observables"])
+                {
+                    observables.push_back(QualifiedName(o.as<std::string>()));
+                }
+
+                std::vector<Kinematics> kinematics;
+                for (auto && entry : n["kinematics"])
+                {
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in kinematics sequence");
+                    }
+
+                    kinematics.push_back(Kinematics{ });
+                    std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    kinematics_nodes.sort(&impl::less);
+                    std::set<std::string> kinematics_keys;
+                    for (auto && k : kinematics_nodes)
+                    {
+                        std::string key = k.first.as<std::string>();
+                        if (! kinematics_keys.insert(key).second)
+                            throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
+
+                        kinematics.back().declare(key, k.second.as<double>());
+                    }
+                }
+
+                std::vector<Options> options;
+                for (auto && entry : n["options"])
+                {
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in options sequence");
+                    }
+
+                    options.push_back(Options{ });
+                    std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    options_nodes.sort(&impl::less);
+                    std::set<std::string> options_keys;
+                    for (auto && o : options_nodes)
+                    {
+                        std::string key = o.first.as<std::string>();
+                        if (! options_keys.insert(key).second)
+                            throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+
+                        options.back().set(key, o.second.as<std::string>());
+                    }
+                }
+
+                std::vector<double> means;
+                for (auto && v : n["means"])
+                {
+                    means.push_back(v.as<double>());
+                }
+
+                std::vector<double> sigma_stat_hi;
+                for (auto && v : n["sigma-stat-hi"])
+                {
+                    sigma_stat_hi.push_back(v.as<double>());
+                }
+
+                std::vector<double> sigma_stat_lo;
+                for (auto && v : n["sigma-stat-lo"])
+                {
+                    sigma_stat_lo.push_back(v.as<double>());
+                }
+
+                std::vector<double> sigma_sys;
+                for (auto && v : n["sigma-sys"])
+                {
+                    sigma_sys.push_back(v.as<double>());
+                }
+
+                std::vector<std::vector<double>> correlations;
+                for (auto && row : n["correlations"])
+                {
+                    correlations.push_back(std::vector<double>());
+
+                    for (auto && v : row)
+                    {
+                        correlations.back().push_back(v.as<double>());
+                    }
+                }
+
+                return new MultivariateGaussianConstraintEntry(name.str(), observables, kinematics, options, means,
+                        sigma_stat_hi, sigma_stat_lo, sigma_sys, correlations, dof);
+            }
+            catch (QualifiedNameSyntaxError & e)
+            {
+                throw ConstraintDeserializationError(name, "'" + n["observable"].as<std::string>() + "' is not a valid observable name (" + e.what() + ")");
+            }
         }
     };
     /// }}}
 
     /// {{{ MultivariateGaussianCovarianceConstraintEntry
-    template <size_t dim_>
     struct MultivariateGaussianCovarianceConstraintEntry :
         public ConstraintEntryBase
     {
-        std::array<QualifiedName, dim_> observables;
+        std::vector<QualifiedName> observables;
 
-        std::array<Kinematics, dim_> kinematics;
+        std::vector<Kinematics> kinematics;
 
-        std::array<Options, dim_> options;
+        std::vector<Options> options;
 
-        std::array<double, dim_> means;
+        std::vector<double> means;
 
-        std::array<std::array<double, dim_>, dim_> covariance;
+        std::vector<std::vector<double>> covariance;
 
         unsigned number_of_observations;
 
+        unsigned dim;
+
         MultivariateGaussianCovarianceConstraintEntry(const QualifiedName & name,
-                const std::array<QualifiedName, dim_> & observables,
-                const std::array<Kinematics, dim_> & kinematics,
-                const std::array<Options, dim_> & options,
-                const std::array<double, dim_> & means,
-                const std::array<std::array<double, dim_>, dim_> & covariance,
-                const unsigned number_of_observations = dim_) :
+                const std::vector<QualifiedName> & observables,
+                const std::vector<Kinematics> & kinematics,
+                const std::vector<Options> & options,
+                const std::vector<double> & means,
+                const std::vector<std::vector<double>> & covariance,
+                const unsigned number_of_observations) :
             ConstraintEntryBase(name, observables),
             observables(observables),
             kinematics(kinematics),
             options(options),
             means(means),
             covariance(covariance),
-            number_of_observations(number_of_observations)
+            number_of_observations(number_of_observations),
+            dim(observables.size())
         {
+            if (dim != kinematics.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of kinematics"); }
+
+            if (dim != options.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of options"); }
+
+            if (dim != means.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of means"); }
+
+            if (dim < number_of_observations) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of observations"); }
+
+            if (dim != covariance.size()) { throw InternalError("MultviateGaussianConstraintEntry: wrong number of rows in covariance"); }
+            for (auto i = 0u ; i < dim ; ++i)
+            {
+                if (dim != covariance[i].size()) { throw InternalError("MultviateGaussianConstraintEntry: wrong number of columns in covariance row " + stringify(i)); }
+            }
         }
 
         virtual ~MultivariateGaussianCovarianceConstraintEntry() = default;
 
         virtual const std::string & type() const
         {
-            static const std::string type("MultivariateGaussian<" + stringify(dim_) + "> (using covariance matrix)");
+            static const std::string type("MultivariateGaussian<" + stringify(dim) + "> (using covariance matrix)");
 
             return type;
         }
@@ -896,12 +1094,29 @@ namespace eos
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
-            std::array<ObservablePtr, dim_> observables;
-            for (auto i = 0u ; i < dim_ ; ++i)
+            std::vector<ObservablePtr> observables(dim, nullptr);
+            for (auto i = 0u ; i < dim ; ++i)
             {
                 observables[i] = Observable::make(this->observables[i], parameters, this->kinematics[i], this->options[i] + options);
                 if (! observables[i].get())
-                    throw InternalError("make_multivariate_gaussian_covariance_constraint<" + stringify(dim_) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
+                    throw InternalError("make_multivariate_gaussian_covariance_constraint<" + stringify(dim) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
+            }
+
+            // create GSL vector for the mean
+            gsl_vector * means = gsl_vector_alloc(dim);
+            for (auto i = 0u ; i < dim ; ++i)
+            {
+                gsl_vector_set(means, i, this->means[i]);
+            }
+
+            // create GSL matrix for the covariance
+            gsl_matrix * covariance = gsl_matrix_alloc(dim, dim);
+            for (auto i = 0u ; i < dim ; ++i)
+            {
+                for (auto j = 0u ; j < dim ; ++j)
+                {
+                    gsl_matrix_set(covariance, i, j, this->covariance[i][j]);
+                }
             }
 
             auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, number_of_observations);
@@ -912,7 +1127,7 @@ namespace eos
         virtual std::ostream & insert(std::ostream & os) const
         {
             os << _name.full() << ":" << std::endl;
-            os << "    type: MultivariateGaussianCovariance<" << dim_ << ">" << std::endl;
+            os << "    type: MultivariateGaussianCovariance<" << dim << ">" << std::endl;
 
             return os;
         }
@@ -921,6 +1136,7 @@ namespace eos
         {
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian(Covariance)";
+            out << YAML::Key << "dim" << YAML::Value << dim;
             out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
             for (const auto & o : observables)
             {
@@ -970,9 +1186,128 @@ namespace eos
             out << YAML::EndMap;
         }
 
-        virtual ConstraintEntry * deserialize(const YAML::Node &) const
+        static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
         {
-            return nullptr;
+            static const std::string required_keys[] =
+            {
+                "dim", "observables", "kinematics", "options", "means", "covariance", "dof"
+            };
+
+            for (auto && k : required_keys)
+            {
+                if (! n[k].IsDefined())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
+                }
+            }
+
+            static const std::string scalar_keys[] =
+            {
+                "dim", "dof"
+            };
+
+            for (auto && k : scalar_keys)
+            {
+                if (YAML::NodeType::Scalar != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
+                }
+            }
+
+            static const std::string seq_keys[] =
+            {
+                "observables", "kinematics", "options", "means", "covariance"
+            };
+
+            for (auto && k : seq_keys)
+            {
+                if (YAML::NodeType::Sequence != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a sequence");
+                }
+            }
+
+            try
+            {
+                unsigned dof = n["dof"].as<unsigned>();
+
+                std::vector<QualifiedName> observables;
+                for (auto && o : n["observables"])
+                {
+                    observables.push_back(QualifiedName(o.as<std::string>()));
+                }
+
+                std::vector<Kinematics> kinematics;
+                for (auto && entry : n["kinematics"])
+                {
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in kinematics sequence");
+                    }
+
+                    kinematics.push_back(Kinematics{ });
+                    std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    kinematics_nodes.sort(&impl::less);
+                    std::set<std::string> kinematics_keys;
+                    for (auto && k : kinematics_nodes)
+                    {
+                        std::string key = k.first.as<std::string>();
+                        if (! kinematics_keys.insert(key).second)
+                            throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
+
+                        kinematics.back().declare(key, k.second.as<double>());
+                    }
+                }
+
+                std::vector<Options> options;
+                for (auto && entry : n["options"])
+                {
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in options sequence");
+                    }
+
+                    options.push_back(Options{ });
+                    std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    options_nodes.sort(&impl::less);
+                    std::set<std::string> options_keys;
+                    for (auto && o : options_nodes)
+                    {
+                        std::string key = o.first.as<std::string>();
+                        if (! options_keys.insert(key).second)
+                            throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+
+                        options.back().set(key, o.second.as<std::string>());
+                    }
+                }
+
+                std::vector<double> means;
+                for (auto && v : n["means"])
+                {
+                    means.push_back(v.as<double>());
+                }
+
+                std::vector<std::vector<double>> covariance;
+                for (auto && row : n["covariance"])
+                {
+                    covariance.push_back(std::vector<double>());
+
+                    for (auto && v : row)
+                    {
+                        covariance.back().push_back(v.as<double>());
+                    }
+                }
+
+                return new MultivariateGaussianCovarianceConstraintEntry(name.str(), observables, kinematics, options, means, covariance, dof);
+            }
+            catch (QualifiedNameSyntaxError & e)
+            {
+                throw ConstraintDeserializationError(name, "'" + n["observable"].as<std::string>() + "' is not a valid observable name (" + e.what() + ")");
+            }
         }
     };
     /// }}}
@@ -995,9 +1330,11 @@ namespace eos
 
         static const std::map<std::string, std::function<ConstraintEntry * (const QualifiedName &, const YAML::Node &)>> deserializers
         {
-            { "Amoroso",  &AmorosoConstraintEntry::deserialize  },
-            { "Gaussian", &GaussianConstraintEntry::deserialize },
-            { "LogGamma", &LogGammaConstraintEntry::deserialize }
+            { "Amoroso",                          &AmorosoConstraintEntry::deserialize                        },
+            { "Gaussian",                         &GaussianConstraintEntry::deserialize                       },
+            { "LogGamma",                         &LogGammaConstraintEntry::deserialize                       },
+            { "MultivariateGaussian",             &MultivariateGaussianConstraintEntry::deserialize           },
+            { "MultivariateGaussian(Covariance)", &MultivariateGaussianCovarianceConstraintEntry::deserialize }
         };
 
         std::string type = n["type"].as<std::string>();
@@ -1111,7 +1448,7 @@ namespace eos
             Options{ { "q", "d" } },
             +0.20, +0.24, -0.24, +0.05, -0.05
         };
-        static const MultivariateGaussianConstraintEntry<2> Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_Belle_2006
+        static const MultivariateGaussianConstraintEntry Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_Belle_2006
         {
             "B^0->K^*0gamma::S_K+C_K@Belle-2006",
             {{ "B->K^*gamma::S_K^*gamma", "B->K^*gamma::C_K^*gamma" }},
@@ -1152,7 +1489,7 @@ namespace eos
             Options{ { "q", "d" } },
             -0.14, +0.16, -0.16, +0.03, -0.03
         };
-        static const MultivariateGaussianConstraintEntry<2> Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_BaBar_2008
+        static const MultivariateGaussianConstraintEntry Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_BaBar_2008
         {
             "B^0->K^*0gamma::S_K+C_K@BaBar-2008",
             {{ "B->K^*gamma::S_K^*gamma", "B->K^*gamma::C_K^*gamma" }},
@@ -1190,7 +1527,7 @@ namespace eos
             Options{ },
             0.0305, 0.079, 0.079, 0.099, 0.099
         };
-        static const MultivariateGaussianConstraintEntry<2> B_to_Xs_gamma_E_1_and_E_2_1dot8_Belle_2008A
+        static const MultivariateGaussianConstraintEntry B_to_Xs_gamma_E_1_and_E_2_1dot8_Belle_2008A
         {
             "B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle-2008",
             {{ "B->X_sgamma::E_1(E_min)@NLO", "B->X_sgamma::E_2(E_min)@NLO" }},
@@ -1389,7 +1726,7 @@ namespace eos
             Options{ },
             3.36e-4, +0.13e-4, -0.13e-4, +0.25e-4, -0.25e-4
         };
-        static const MultivariateGaussianConstraintEntry<3> B_to_Xs_gamma_1dot8_Belle_2009B
+        static const MultivariateGaussianConstraintEntry B_to_Xs_gamma_1dot8_Belle_2009B
         {
             "B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle-2009B",
             {{ "B->X_sgamma::BR(E_min)@NLO", "B->X_sgamma::E_1(E_min)@NLO", "B->X_sgamma::E_2(E_min)@NLO" }},
@@ -1447,7 +1784,7 @@ namespace eos
          * 'without FSR' (final state radiation). This data supercedes [BaBar:2010A].
          * We combine correlations between the statistic uncertainties and systematic uncertainties.
          */
-        static const MultivariateGaussianConstraintEntry<6> Bzero_to_pi_l_nu_BR_BaBar_2010B
+        static const MultivariateGaussianConstraintEntry Bzero_to_pi_l_nu_BR_BaBar_2010B
         {
             "B^0->pi^+lnu::BR@BaBar-2010B",
             {{ "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR" }},
@@ -1488,7 +1825,7 @@ namespace eos
          * Data taken from [Belle:2010A], Table V, p. 14.
          * We combine correlations between the statistic uncertainties and systematic uncertainties.
          */
-        static const MultivariateGaussianConstraintEntry<6> Bzero_to_pi_l_nu_BR_Belle_2010A
+        static const MultivariateGaussianConstraintEntry Bzero_to_pi_l_nu_BR_Belle_2010A
         {
             "B^0->pi^+lnu::BR@Belle-2010A",
             {{ "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR" }},
@@ -1528,7 +1865,7 @@ namespace eos
         ///@{
         // Use correlation of the results from Belle and BaBar on S_K and C_K
         // http://www.slac.stanford.edu/xorg/hfag/triangle/moriond2011/index.shtml#bsgamma
-        static const MultivariateGaussianConstraintEntry<2> Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_HFAG_2011
+        static const MultivariateGaussianConstraintEntry Bzero_to_Kstarzero_gamma_time_dependent_cp_asymmetries_HFAG_2011
         {"B^0->K^*0gamma::S_K+C_K@HFAG-2011",
             {{ "B->K^*gamma::S_K^*gamma", "B->K^*gamma::C_K^*gamma" }},
             {{ Kinematics{ }, Kinematics{ } }},
@@ -2056,7 +2393,7 @@ namespace eos
             Options{ { "q", "d"  } },
             +4.84e-2, +5.3e-3, -5.3e-3, +7.7e-3, -7.7e-3
         };
-        static const MultivariateGaussianConstraintEntry<2> B_to_Xs_gamma_E_1_and_E_2_1dot8_BaBar_2012C
+        static const MultivariateGaussianConstraintEntry B_to_Xs_gamma_E_1_and_E_2_1dot8_BaBar_2012C
         {
             "B->X_sgamma::E_1[1.8]+E_2[1.8]@BaBar-2012",
             {{ "B->X_sgamma::E_1(E_min)@NLO", "B->X_sgamma::E_2(E_min)@NLO" }},
@@ -2080,7 +2417,7 @@ namespace eos
          * 'without FSR' (final state radiation).
          * We combine correlations between the statistic uncertainties and systematic uncertainties.
          */
-        static const MultivariateGaussianConstraintEntry<6> Bzero_to_pi_l_nu_BR_BaBar_2012D
+        static const MultivariateGaussianConstraintEntry Bzero_to_pi_l_nu_BR_BaBar_2012D
         {
             "B^0->pi^+lnu::BR@BaBar-2012D",
             {{ "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR" }},
@@ -2752,7 +3089,7 @@ namespace eos
          *
          * Data taken from [Belle:2013A], Table XVI and XVII, pp. 37-38.
          */
-        static const MultivariateGaussianConstraintEntry<6> Bzero_to_pi_l_nu_BR_Belle_2013A
+        static const MultivariateGaussianConstraintEntry Bzero_to_pi_l_nu_BR_Belle_2013A
         {
             "B^0->pi^+lnu::BR@Belle-2013A",
             {{ "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR", "B->pilnu::BR" }},
@@ -3367,7 +3704,7 @@ namespace eos
          * Data taken from [LHCb:2015A], table 6, 50 and appendix F.
          * We combine correlations between the statistic uncertainties and systematic uncertainties.
          */
-        static const MultivariateGaussianConstraintEntry<5> Bzero_to_Kstarzero_dimuon_aobs_moments_1dot1_to_2_LHCb_2015A
+        static const MultivariateGaussianConstraintEntry Bzero_to_Kstarzero_dimuon_aobs_moments_1dot1_to_2_LHCb_2015A
         {
             "B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb-2015A",
             {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
@@ -3398,7 +3735,7 @@ namespace eos
             }},
             5u
         };
-        static const MultivariateGaussianConstraintEntry<5> Bzero_to_Kstarzero_dimuon_aobs_moments_2_to_3_LHCb_2015A
+        static const MultivariateGaussianConstraintEntry Bzero_to_Kstarzero_dimuon_aobs_moments_2_to_3_LHCb_2015A
         {
             "B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb-2015A",
             {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
@@ -3429,7 +3766,7 @@ namespace eos
             }},
             5u
         };
-        static const MultivariateGaussianConstraintEntry<5> Bzero_to_Kstarzero_dimuon_aobs_moments_3_to_4_LHCb_2015A
+        static const MultivariateGaussianConstraintEntry Bzero_to_Kstarzero_dimuon_aobs_moments_3_to_4_LHCb_2015A
         {
             "B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb-2015A",
             {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
@@ -3460,7 +3797,7 @@ namespace eos
             }},
             5u
         };
-        static const MultivariateGaussianConstraintEntry<5> Bzero_to_Kstarzero_dimuon_aobs_moments_4_to_5_LHCb_2015A
+        static const MultivariateGaussianConstraintEntry Bzero_to_Kstarzero_dimuon_aobs_moments_4_to_5_LHCb_2015A
         {
             "B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb-2015A",
             {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
@@ -3491,7 +3828,7 @@ namespace eos
             }},
             5u
         };
-        static const MultivariateGaussianConstraintEntry<5> Bzero_to_Kstarzero_dimuon_aobs_moments_5_to_6_LHCb_2015A
+        static const MultivariateGaussianConstraintEntry Bzero_to_Kstarzero_dimuon_aobs_moments_5_to_6_LHCb_2015A
         {
             "B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A",
             {{ "B->K^*ll::F_L@LargeRecoil", "B->K^*ll::S_3@LargeRecoil", "B->K^*ll::S_4@LargeRecoil","B->K^*ll::S_5@LargeRecoil", "B->K^*ll::A_FB@LargeRecoil" }},
@@ -3573,7 +3910,7 @@ namespace eos
         /*
          * Reproduced from [HPQCD:2013A].
          */
-        static const MultivariateGaussianConstraintEntry<9> B_to_K_fzero_fplus_ftensor_17_to_23_HPQCD_2013A
+        static const MultivariateGaussianConstraintEntry B_to_K_fzero_fplus_ftensor_17_to_23_HPQCD_2013A
         {
             "B->K::f_0+f_++f_T@HPQCD-2013A",
             {{ "B->K::f_0(s)", "B->K::f_0(s)", "B->K::f_0(s)",
@@ -3607,7 +3944,7 @@ namespace eos
          * Reproduced from [MILC:2013A].
          */
         // B -> K^*
-        static const MultivariateGaussianConstraintEntry<2> B_to_Kstar_V_15_to_19dot21_MILC_2013A
+        static const MultivariateGaussianConstraintEntry B_to_Kstar_V_15_to_19dot21_MILC_2013A
         {
             "B->K^*::V@MILC-2013A",
             {{ "B->K^*::V(s)", "B->K^*::V(s)" }},
@@ -3623,7 +3960,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintEntry<2> B_to_Kstar_A1_15_to_19dot21_MILC_2013A
+        static const MultivariateGaussianConstraintEntry B_to_Kstar_A1_15_to_19dot21_MILC_2013A
         {
             "B->K^*::A_1@MILC-2013A",
             {{ "B->K^*::A_1(s)", "B->K^*::A_1(s)" }},
@@ -3639,7 +3976,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintEntry<2> B_to_Kstar_A12_15_to_19dot21_MILC_2013A
+        static const MultivariateGaussianConstraintEntry B_to_Kstar_A12_15_to_19dot21_MILC_2013A
         {
             "B->K^*::A_12@MILC-2013A",
             {{ "B->K^*::A_12(s)", "B->K^*::A_12(s)" }},
@@ -3656,7 +3993,7 @@ namespace eos
             0u
         };
         // B_s -> K^*
-        static const MultivariateGaussianConstraintEntry<2> Bs_to_Kstar_V_15_to_19dot21_MILC_2013A
+        static const MultivariateGaussianConstraintEntry Bs_to_Kstar_V_15_to_19dot21_MILC_2013A
         {
             "B_s->K^*::V@MILC-2013A",
             {{ "B_s->K^*::V(s)", "B_s->K^*::V(s)" }},
@@ -3672,7 +4009,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintEntry<2> Bs_to_Kstar_A1_15_to_19dot21_MILC_2013A
+        static const MultivariateGaussianConstraintEntry Bs_to_Kstar_A1_15_to_19dot21_MILC_2013A
         {
             "B_s->K^*::A_1@MILC-2013A",
             {{ "B_s->K^*::A_1(s)", "B_s->K^*::A_1(s)" }},
@@ -3688,7 +4025,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintEntry<2> Bs_to_Kstar_A12_15_to_19dot21_MILC_2013A
+        static const MultivariateGaussianConstraintEntry Bs_to_Kstar_A12_15_to_19dot21_MILC_2013A
         {
             "B_s->K^*::A_12@MILC-2013A",
             {{ "B_s->K^*::A_12(s)", "B_s->K^*::A_12(s)" }},
@@ -3711,7 +4048,7 @@ namespace eos
         /*
          * From [IKMvD:2014].
          */
-        static const MultivariateGaussianConstraintEntry<6> B_to_pi_fp_IKMvD_2014
+        static const MultivariateGaussianConstraintEntry B_to_pi_fp_IKMvD_2014
         {
             "B->pi::f_+@IKMvD-2014",
             {{ "B->pi::f_+(s)", "B->pi::f_+'(s)", "B->pi::f_+''(s)", "B->pi::f_+(s)", "B->pi::f_+'(s)", "B->pi::f_+''(s)" }},
@@ -3736,7 +4073,7 @@ namespace eos
          * From [BFvD2014], based on reproduction of data points from [DLMW2012] and [FY2011], and subleading Isgur-Wise functions
          * approximations.
          */
-        static const MultivariateGaussianConstraintEntry<4> LambdaB_to_Lambda_all_v_and_a_0_BFvD2014
+        static const MultivariateGaussianConstraintEntry LambdaB_to_Lambda_all_v_and_a_0_BFvD2014
         {
             "Lambda_b->Lambda::f_perp+long^V+A@BFvD2014",
             {{ "Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda::f_long^A(s)" }},
@@ -3754,7 +4091,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintEntry<2> LambdaB_to_Lambda_fperpV_13dot5_to_20dot3_BFvD2014
+        static const MultivariateGaussianConstraintEntry LambdaB_to_Lambda_fperpV_13dot5_to_20dot3_BFvD2014
         {
             "Lambda_b->Lambda::f_perp^V@BFvD2014",
             {{ "Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda::f_perp^V(s)" }},
@@ -3770,7 +4107,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintEntry<2> LambdaB_to_Lambda_fperpA_13dot5_to_20dot3_BFvD2014
+        static const MultivariateGaussianConstraintEntry LambdaB_to_Lambda_fperpA_13dot5_to_20dot3_BFvD2014
         {
             "Lambda_b->Lambda::f_perp^A@BFvD2014",
             {{ "Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda::f_perp^A(s)" }},
@@ -3786,7 +4123,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintEntry<2> LambdaB_to_Lambda_flongV_13dot5_to_20dot3_BFvD2014
+        static const MultivariateGaussianConstraintEntry LambdaB_to_Lambda_flongV_13dot5_to_20dot3_BFvD2014
         {
             "Lambda_b->Lambda::f_long^V@BFvD2014",
             {{ "Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda::f_long^V(s)" }},
@@ -3802,7 +4139,7 @@ namespace eos
             }},
             0u
         };
-        static const MultivariateGaussianConstraintEntry<2> LambdaB_to_Lambda_flongA_13dot5_to_20dot3_BFvD2014
+        static const MultivariateGaussianConstraintEntry LambdaB_to_Lambda_flongA_13dot5_to_20dot3_BFvD2014
         {
             "Lambda_b->Lambda::f_long^A@BFvD2014",
             {{ "Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda::f_long^A(s)" }},
@@ -3828,7 +4165,7 @@ namespace eos
          * Central values, uncertainties and correlation matrix as extracted
          * from  the ancillary file http://arxiv.org/src/1503.05534v2/anc/BKstar_LCSR.json.
          */
-        static const MultivariateGaussianConstraintEntry<11> B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsr_parameters
+        static const MultivariateGaussianConstraintEntry B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsr_parameters
         {
             "B->K^*::V+A_0+A_1+A_2[LCSR]@BSZ2015",
             {{
@@ -3894,7 +4231,7 @@ namespace eos
          * Central values, uncertainties and correlation matrix as extracted
          * from  the ancillary file http://arxiv.org/src/1503.05534v2/anc/BKstar_LCSR-Lattice.json.
          */
-        static const MultivariateGaussianConstraintEntry<11> B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsrlattice_parameters
+        static const MultivariateGaussianConstraintEntry B_to_Kstar_V_A0_A1_A2_0dot1_to_12dot1_BSZ_2015_lcsrlattice_parameters
         {
             "B->K^*::V+A_0+A_1+A_2[LCSR+Lattice]@BSZ2015",
             {{
@@ -3967,7 +4304,7 @@ namespace eos
          * c) Mathew's data includes extrapolation of the q^2 value to the physical
          * value. We neglect any uncertainty from this procedure.
          */
-        static const MultivariateGaussianCovarianceConstraintEntry<48> B_to_Kstar_V_A0_A1_A12_11dot9_to_17dot8_HLMW_2015
+        static const MultivariateGaussianCovarianceConstraintEntry B_to_Kstar_V_A0_A1_A12_11dot9_to_17dot8_HLMW_2015
         {
             "B->K^*::V+A_0+A_1+A_12@HLMW2015",
             {{ "B->K^*::V(s)", "B->K^*::V(s)", "B->K^*::V(s)", "B->K^*::V(s)", "B->K^*::V(s)", "B->K^*::V(s)",
@@ -4412,7 +4749,7 @@ namespace eos
         /*
          * B -> D lattice form factors from [HPQCD2015A]
          */
-        static const MultivariateGaussianCovarianceConstraintEntry<7> B_to_D_f_plus_f_zero_0_to_11dot62_HPQCD_2015A
+        static const MultivariateGaussianCovarianceConstraintEntry B_to_D_f_plus_f_zero_0_to_11dot62_HPQCD_2015A
         {
             "B->D::f_++f_0@HPQCD2015A",
             {{ "B->D::f_+(s)", "B->D::f_+(s)", "B->D::f_+(s)", "B->D::f_+(s)", "B->D::f_0(s)", "B->D::f_0(s)", "B->D::f_0(s)" }},
@@ -4450,7 +4787,7 @@ namespace eos
         /*
          * B -> pi lattice form factors from [FNALMILC2015A]
          */
-        static const MultivariateGaussianCovarianceConstraintEntry<6> B_to_pi_f_plus_f_zero_18_to_26_FNALMILC_2015A
+        static const MultivariateGaussianCovarianceConstraintEntry B_to_pi_f_plus_f_zero_18_to_26_FNALMILC_2015A
         {
             "B->pi::f_++f_0@FNALMILC2015A",
             {{ "B->pi::f_+(s)", "B->pi::f_+(s)", "B->pi::f_+(s)", "B->pi::f_0(s)", "B->pi::f_0(s)", "B->pi::f_0(s)" }},
@@ -4491,7 +4828,7 @@ namespace eos
          *
          * The covariance matrix covers both the statistical and systematic errors.
          */
-        static const MultivariateGaussianCovarianceConstraintEntry<22> Lambda_b_to_Lambda_v_a_t_t5_parameters_DM_2016
+        static const MultivariateGaussianCovarianceConstraintEntry Lambda_b_to_Lambda_v_a_t_t5_parameters_DM_2016
         {
             "Lambda_b->Lambda::f_perp+long^V+A+T+T5@DM2016",
             {{
