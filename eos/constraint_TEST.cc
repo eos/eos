@@ -443,6 +443,423 @@ class ConstraintDeserializationTest :
                 TEST_CHECK_RELATIVE_ERROR(llh(), -2.112174, 1e-6);
             }
             // }}}
+
+            // {{{ MultivariateGaussian (correct order)
+            {
+                static const std::string input(
+                    "type: MultivariateGaussian\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - Lambda_b->Lambda::f_perp^V(s)\n"
+                    "  - Lambda_b->Lambda::f_perp^V(s)\n"
+                    "kinematics:\n"
+                    "  - {s: 13.5}\n"
+                    "  - {s: 20.5}\n"
+                    "options:\n"
+                    "  - {form-factors: BFvD2014}\n"
+                    "  - {form-factors: BFvD2014}\n"
+                    "means: [0.73, 1.4]\n"
+                    "sigma-stat-hi: [0.2, 0.2]\n"
+                    "sigma-stat-lo: [0.2, 0.2]\n"
+                    "sigma-sys: [0, 0]\n"
+                    "correlations:\n"
+                    "  - [1, 0]\n"
+                    "  - [0, 1]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                YAML::Emitter out;
+                entry->serialize(out);
+
+                std::string output(out.c_str());
+
+                TEST_CHECK(input == output);
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian (incorrect order)
+            {
+                static const std::string input(
+                    "type: MultivariateGaussian\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - Lambda_b->Lambda::f_perp^V(s)\n"
+                    "  - Lambda_b->Lambda::f_perp^V(s)\n"
+                    "kinematics:\n"
+                    "  - {s: 13.5}\n"
+                    "  - {s: 20.5}\n"
+                    "options:\n"
+                    "  - {l: mu, form-factors: BFvD2014}\n"
+                    "  - {q: s, form-factors: BFvD2014}\n"
+                    "means: [0.73, 1.4]\n"
+                    "sigma-stat-hi: [0.2, 0.2]\n"
+                    "sigma-stat-lo: [0.2, 0.2]\n"
+                    "sigma-sys: [0, 0]\n"
+                    "correlations:\n"
+                    "  - [1, 0]\n"
+                    "  - [0, 1]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                YAML::Emitter out;
+                entry->serialize(out);
+
+                std::string output(out.c_str());
+
+                TEST_CHECK(input != output);
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian (double entries 1: kinematics, 2: options)
+            {
+                static const std::string input1(
+                    "type: MultivariateGaussian\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - Lambda_b->Lambda::f_perp^V(s)\n"
+                    "  - Lambda_b->Lambda::f_perp^V(s)\n"
+                    "kinematics:\n"
+                    "  - {s: 13.5, s: 20.5}\n"
+                    "  - {s: 20.5, s: 13.5}\n"
+                    "options:\n"
+                    "  - {form-factors: BFvD2014}\n"
+                    "  - {form-factors: BFvD2014}\n"
+                    "means: [0.73, 1.4]\n"
+                    "sigma-stat-hi: [0.2, 0.2]\n"
+                    "sigma-stat-lo: [0.2, 0.2]\n"
+                    "sigma-sys: [0, 0]\n"
+                    "correlations:\n"
+                    "  - [1, 0]\n"
+                    "  - [0, 1]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node1 = YAML::Load(input1);
+
+                TEST_CHECK_THROWS(ConstraintDeserializationError, std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian", node1)));
+
+                static const std::string input2(
+                    "type: MultivariateGaussian\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - Lambda_b->Lambda::f_perp^V(s)\n"
+                    "  - Lambda_b->Lambda::f_perp^V(s)\n"
+                    "kinematics:\n"
+                    "  - {s: 13.5}\n"
+                    "  - {s: 20.5}\n"
+                    "options:\n"
+                    "  - {form-factors: BFvD2014, form-factors: DM2016}\n"
+                    "  - {form-factors: BFvD2014, form-factors: DM2016}\n"
+                    "means: [0.73, 1.4]\n"
+                    "sigma-stat-hi: [0.2, 0.2]\n"
+                    "sigma-stat-lo: [0.2, 0.2]\n"
+                    "sigma-sys: [0, 0]\n"
+                    "correlations:\n"
+                    "  - [1, 0]\n"
+                    "  - [0, 1]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node2 = YAML::Load(input2);
+
+                TEST_CHECK_THROWS(ConstraintDeserializationError, std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian", node2)));
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian (value)
+            {
+                static const std::string input(
+                    "type: MultivariateGaussian\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - mass::b(MSbar)\n"
+                    "  - mass::c\n"
+                    "kinematics:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "options:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "means: [4.3, 1.1]\n"
+                    "sigma-stat-hi: [0.1, 0.05]\n"
+                    "sigma-stat-lo: [0.1, 0.05]\n"
+                    "sigma-sys: [0, 0]\n"
+                    "correlations:\n"
+                    "  - [1, 0.6]\n"
+                    "  - [0.6, 1]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                Constraint c = entry->make("Test::MultivariateGaussian", Options{ });
+                std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
+                TEST_CHECK_EQUAL(1, blocks.size());
+
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                llh.add(c);
+
+                // evaluation at mode
+                p["mass::b(MSbar)"] = 4.6;
+                p["mass::c"] = 1.3;
+                TEST_CHECK_NEARLY_EQUAL(llh(), -4.597666149, 1e-8);
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian(Covariance) (correct order)
+            {
+                static const std::string input(
+                    "type: MultivariateGaussian(Covariance)\n"
+                    "dim: 7\n"
+                    "observables:\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "kinematics:\n"
+                    "  - {s: 0}\n"
+                    "  - {s: 4}\n"
+                    "  - {s: 8}\n"
+                    "  - {s: 11.62}\n"
+                    "  - {s: 4}\n"
+                    "  - {s: 8}\n"
+                    "  - {s: 11.62}\n"
+                    "options:\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "means: [0.665, 0.798, 0.972, 1.177, 0.729, 0.8100000000000001, 0.901]\n"
+                    "covariance:\n"
+                    "  - [0.001128, 0.001042, 0.000923, 0.0007727, 0.001093, 0.001063, 0.001045]\n"
+                    "  - [0.001042, 0.001079, 0.001108, 0.001123, 0.001026, 0.001017, 0.001021]\n"
+                    "  - [0.000923, 0.001108, 0.001331, 0.001576, 0.0009307, 0.0009511, 0.0009865]\n"
+                    "  - [0.0007727, 0.001123, 0.001576, 0.002112, 0.0008108, 0.0008681, 0.0009425]\n"
+                    "  - [0.001093, 0.001026, 0.0009307, 0.0008108, 0.001126, 0.001165, 0.00121]\n"
+                    "  - [0.001063, 0.001017, 0.0009511, 0.0008681, 0.001165, 0.001283, 0.00141]\n"
+                    "  - [0.001045, 0.001021, 0.0009865, 0.0009425, 0.00121, 0.00141, 0.001635]\n"
+                    "dof: 0"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                YAML::Emitter out;
+                entry->serialize(out);
+
+                std::string output(out.c_str());
+
+                TEST_CHECK(input == output);
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian(Covariance) (incorrect order)
+            {
+                static const std::string input(
+                    "type: MultivariateGaussian(Covariance)\n"
+                    "dim: 7\n"
+                    "observables:\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "kinematics:\n"
+                    "  - {s: 0}\n"
+                    "  - {s: 4}\n"
+                    "  - {s: 8}\n"
+                    "  - {s: 11.62}\n"
+                    "  - {s: 4}\n"
+                    "  - {s: 8}\n"
+                    "  - {s: 11.62}\n"
+                    "options:\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {q: s, form-factors: BCL2008}\n"
+                    "means: [0.665, 0.798, 0.972, 1.177, 0.729, 0.8100000000000001, 0.901]\n"
+                    "covariance:\n"
+                    "  - [0.001128, 0.001042, 0.000923, 0.0007727, 0.001093, 0.001063, 0.001045]\n"
+                    "  - [0.001042, 0.001079, 0.001108, 0.001123, 0.001026, 0.001017, 0.001021]\n"
+                    "  - [0.000923, 0.001108, 0.001331, 0.001576, 0.0009307, 0.0009511, 0.0009865]\n"
+                    "  - [0.0007727, 0.001123, 0.001576, 0.002112, 0.0008108, 0.0008681, 0.0009425]\n"
+                    "  - [0.001093, 0.001026, 0.0009307, 0.0008108, 0.001126, 0.001165, 0.00121]\n"
+                    "  - [0.001063, 0.001017, 0.0009511, 0.0008681, 0.001165, 0.001283, 0.00141]\n"
+                    "  - [0.001045, 0.001021, 0.0009865, 0.0009425, 0.00121, 0.00141, 0.001635]\n"
+                    "dof: 0"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                YAML::Emitter out;
+                entry->serialize(out);
+
+                std::string output(out.c_str());
+
+                TEST_CHECK(input != output);
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian(Covariance) (double entries 1: kinematics, 2: options)
+            {
+                static const std::string input1(
+                    "type: MultivariateGaussian(Covariance)\n"
+                    "dim: 7\n"
+                    "observables:\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "kinematics:\n"
+                    "  - {s: 0}\n"
+                    "  - {s: 4}\n"
+                    "  - {s: 8}\n"
+                    "  - {s: 11.62}\n"
+                    "  - {s: 4, s: 8}\n"
+                    "  - {s: 8}\n"
+                    "  - {s: 11.62}\n"
+                    "options:\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "means: [0.665, 0.798, 0.972, 1.177, 0.729, 0.8100000000000001, 0.901]\n"
+                    "covariance:\n"
+                    "  - [0.001128, 0.001042, 0.000923, 0.0007727, 0.001093, 0.001063, 0.001045]\n"
+                    "  - [0.001042, 0.001079, 0.001108, 0.001123, 0.001026, 0.001017, 0.001021]\n"
+                    "  - [0.000923, 0.001108, 0.001331, 0.001576, 0.0009307, 0.0009511, 0.0009865]\n"
+                    "  - [0.0007727, 0.001123, 0.001576, 0.002112, 0.0008108, 0.0008681, 0.0009425]\n"
+                    "  - [0.001093, 0.001026, 0.0009307, 0.0008108, 0.001126, 0.001165, 0.00121]\n"
+                    "  - [0.001063, 0.001017, 0.0009511, 0.0008681, 0.001165, 0.001283, 0.00141]\n"
+                    "  - [0.001045, 0.001021, 0.0009865, 0.0009425, 0.00121, 0.00141, 0.001635]\n"
+                    "dof: 0"
+                );
+
+                YAML::Node node1 = YAML::Load(input1);
+
+                TEST_CHECK_THROWS(ConstraintDeserializationError, std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", node1)));
+
+                static const std::string input2(
+                    "type: MultivariateGaussian(Covariance)\n"
+                    "dim: 7\n"
+                    "observables:\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_+(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "  - B->D::f_0(s)\n"
+                    "kinematics:\n"
+                    "  - {s: 0}\n"
+                    "  - {s: 4}\n"
+                    "  - {s: 8}\n"
+                    "  - {s: 11.62}\n"
+                    "  - {s: 4}\n"
+                    "  - {s: 8}\n"
+                    "  - {s: 11.62}\n"
+                    "options:\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008, form-factors: invalid}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "  - {form-factors: BCL2008}\n"
+                    "means: [0.665, 0.798, 0.972, 1.177, 0.729, 0.8100000000000001, 0.901]\n"
+                    "covariance:\n"
+                    "  - [0.001128, 0.001042, 0.000923, 0.0007727, 0.001093, 0.001063, 0.001045]\n"
+                    "  - [0.001042, 0.001079, 0.001108, 0.001123, 0.001026, 0.001017, 0.001021]\n"
+                    "  - [0.000923, 0.001108, 0.001331, 0.001576, 0.0009307, 0.0009511, 0.0009865]\n"
+                    "  - [0.0007727, 0.001123, 0.001576, 0.002112, 0.0008108, 0.0008681, 0.0009425]\n"
+                    "  - [0.001093, 0.001026, 0.0009307, 0.0008108, 0.001126, 0.001165, 0.00121]\n"
+                    "  - [0.001063, 0.001017, 0.0009511, 0.0008681, 0.001165, 0.001283, 0.00141]\n"
+                    "  - [0.001045, 0.001021, 0.0009865, 0.0009425, 0.00121, 0.00141, 0.001635]\n"
+                    "dof: 0"
+                );
+
+                YAML::Node node2 = YAML::Load(input2);
+
+                TEST_CHECK_THROWS(ConstraintDeserializationError, std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", node2)));
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian(Covariance) (value)
+            {
+                static const std::string input(
+                    "type: MultivariateGaussian(Covariance)\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - mass::b(MSbar)\n"
+                    "  - mass::c\n"
+                    "kinematics:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "options:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "means: [4.3, 1.1]\n"
+                    "covariance:\n"
+                    "  - [0.0100, 0.0030]\n"
+                    "  - [0.0030, 0.0025]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                Constraint c = entry->make("Test::MultivariateGaussian(Covariance)", Options{ });
+                std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
+                TEST_CHECK_EQUAL(1, blocks.size());
+
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                llh.add(c);
+
+                // evaluation at mode
+                p["mass::b(MSbar)"] = 4.6;
+                p["mass::c"] = 1.3;
+                TEST_CHECK_NEARLY_EQUAL(llh(), -4.597666149, 1e-8);
+            }
+            // }}}
         }
 } constraint_deserialization_test;
 

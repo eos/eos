@@ -1179,6 +1179,7 @@ namespace eos
         {
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian";
+            out << YAML::Key << "dim" << YAML::Value << dim_;
             out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
             for (const auto & o : observable_names)
             {
