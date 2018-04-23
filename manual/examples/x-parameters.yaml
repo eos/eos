@@ -1,0 +1,15 @@
+'mass::X@Example' :
+    central: +1.0
+    min:     +0.5
+    max:     +1.5
+    unit:    'GeV'
+    latex:   '$M_X$'
+    comment: 'The mass of the unmotivated X particle'
+
+'decay-constant::X@Example' :
+    central: +0.10
+    min:     +0.09
+    max:     +0.11
+    unit:    'GeV'
+    latex:   '$f_X$'
+    comment: 'The decay constant of the unmotivated X particle'
