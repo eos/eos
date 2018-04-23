@@ -181,8 +181,12 @@ brew install python3 boost-python3
 brew install gsl hdf5 minuit2 pmclib
 \end{commandline}
 
-Now you can use the \client{pip3} command to install the remaining
-packages from the \package{PyPi} package index:
+Now you can use the \client{pip3} command\footnote{%
+    Due to problems with the \package{Python 3} installation provided by Mac OS
+    X, we strongly recommend to use the \package{Homebrew} provided
+    \client{pip3} instead via \cli{/usr/local/bin/pip3}~.
+}
+to install the remaining packages from the \package{PyPi} package index:
 \begin{commandline}
 pip3 install h5py matplotlib scipy PyYAML
 \end{commandline}
