@@ -32,9 +32,6 @@
 
 namespace eos
 {
-    // Forward declaration.
-    class Constraint;
-
     /*!
      * Constraint models experimental constraints via one or more LogLikelihoodBlock objects that
      * depend on one more Observable objects.
