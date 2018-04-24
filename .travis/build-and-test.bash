@@ -3,6 +3,7 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
+# Ubuntu specific functions
 function build_and_test_ubuntu() {
     pushd /src
     ./autogen.bash
@@ -44,6 +45,23 @@ function build_and_coverage_ubuntu() {
     popd
 }
 
+# OSX specific functions
+function build_and_test_osx() {
+    SUFFIX=$(python3 -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
+    echo using boost-python suffix ${SUFFIX}
+    ./autogen.bash
+    ./configure \
+        --enable-pmc \
+        --enable-python \
+        --with-boost-python-suffix=${SUFFIX} \
+        --prefix=/usr/local
+    make all -j2
+    make install
+    make check -j2 VERBOSE=1
+    export PYTHONPATH+=":$(make print-pythondir)"
+    make -C manual/examples examples
+}
+
 export OS=${1}
 shift 1
 
@@ -64,6 +82,8 @@ echo "==========="
 
 if [[ "xenial" == ${OS} ]] || [[ "bionic" == ${OS} ]]; then
     build_and_test_ubuntu $@
+elif [[ "osx" == ${OS} ]] ; then
+    build_and_test_osx $@
 fi
 
 if [[ -n ${COVERALLS_TOKEN} ]] && [[ "xenial" == ${OS} ]] && [[ "g++" == ${CXX} ]] ; then
