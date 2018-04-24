@@ -30,6 +30,8 @@
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-d-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
+#include <eos/b-decays/lambdab-to-lambdac2595-l-nu.hh>
+#include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/b-decays/inclusive-b-to-u.hh>
 #include <eos/b-decays/properties.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
@@ -299,6 +301,12 @@ namespace eos
             make_observable("Lambda_b->Lambda_c::G(1)",
                     &ZeroRecoilSumRule<LambdaBToC>::axialvector_current),
 
+            make_observable("Lambda_b->Lambda_c::F_inel(1)",
+                    &ZeroRecoilSumRule<LambdaBToC>::vector_current_inel),
+
+            make_observable("Lambda_b->Lambda_c::G_inel(1)",
+                    &ZeroRecoilSumRule<LambdaBToC>::axialvector_current_inel),
+
             /* Exclusive Decays */
 
             /* Exclusive B Decays */
@@ -551,6 +559,67 @@ namespace eos
 
             make_observable("B_s->K^*lnu::R_perp",
                     &BsToKstarLeptonNeutrinoRatios::ratio_perp),
+
+            // Lambda_b -> Lambda_c(2595) l nubar
+            make_observable("Lambda_b->Lambda_c(2595)lnu::dBR/ds",
+                    &LambdaBToLambdaC2595LeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_c(2595)lnu::dBR/dsdtheta_l",
+                    &LambdaBToLambdaC2595LeptonNeutrino::double_differential_branching_ratio,
+                    std::make_tuple("s", "theta_l")),
+
+            make_observable("Lambda_b->Lambda_c(2595)lnu::BR",
+                    &LambdaBToLambdaC2595LeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambda_c(2595)lnu::A_FB",
+                    &LambdaBToLambdaC2595LeptonNeutrino::integrated_forward_backward_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambda_c(2595)lnu::Gamma_normalized(s_min,s_max)",
+                    &LambdaBToLambdaC2595LeptonNeutrino::normalized_integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)(s)",
+                    &LambdaBToLambdaC2595LeptonNeutrino::differential_r_lambdac2595,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)",
+                    &LambdaBToLambdaC2595LeptonNeutrino::integrated_r_lambdac2595),
+
+            // Lambda_b -> Lambda_c(2625) l nubar
+            make_observable("Lambda_b->Lambda_c(2625)lnu::dBR/ds",
+                    &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_c(2625)lnu::A_FB(s)",
+                    &LambdaBToLambdaC2625LeptonNeutrino::differential_forward_backward_asymmetry,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_c(2625)lnu::dBR/dsdtheta_l",
+                    &LambdaBToLambdaC2625LeptonNeutrino::double_differential_branching_ratio,
+                    std::make_tuple("s", "theta_l")),
+
+            make_observable("Lambda_b->Lambda_c(2625)lnu::BR",
+                    &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambda_c(2625)lnu::A_FB",
+                    &LambdaBToLambdaC2625LeptonNeutrino::integrated_forward_backward_asymmetry,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambda_c(2625)lnu::Gamma_normalized(s_min,s_max)",
+                    &LambdaBToLambdaC2625LeptonNeutrino::normalized_integrated_branching_ratio,
+                    std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)(s)",
+                    &LambdaBToLambdaC2625LeptonNeutrino::differential_r_lambdac2625,
+                    std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)",
+                    &LambdaBToLambdaC2625LeptonNeutrino::integrated_r_lambdac2625),
+
 
             /* Exclusive Rare B Decays */
 

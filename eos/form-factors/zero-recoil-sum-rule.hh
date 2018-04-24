@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015 Danny van Dyk
+ * Copyright (c) 2015, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -40,8 +40,13 @@ namespace eos
 
             ~ZeroRecoilSumRule();
 
-            double axialvector_current() const;
+            // inclusive bounds
             double vector_current() const;
+            double axialvector_current() const;
+
+            // inelastic contributions from orbitally excited doublet Lambda_c^*
+            double vector_current_inel() const;
+            double axialvector_current_inel() const;
 
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
