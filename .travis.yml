@@ -1,22 +1,42 @@
-sudo: required
-dist: trusty
-language: cpp
-
-services:
-    - docker
-
-compiler:
-    - gcc
-
 if: branch IN (master, testing)
 
-env:
-    - DOCKER_TARGET=xenial DOCKER_CXX=g++
-    - DOCKER_TARGET=xenial DOCKER_CXX=clang++-4.0
-    - DOCKER_TARGET=bionic DOCKER_CXX=g++
-
-before_install:
+unused: &linux-template
+  os: linux
+  dist: trusty
+  language: cpp
+  services: docker
+  sudo: required
+  before_install:
     - docker build -t eos:${DOCKER_TARGET} -f .travis/${DOCKER_TARGET} .
+  script:
+    - >
+       docker run -it -e COVERALLS_TOKEN -e PACKAGECLOUD_TOKEN eos:${DOCKER_TARGET}
+       /bin/bash /src/.travis/build-and-test.bash ${DOCKER_TARGET} ${DOCKER_CXX} "${TRAVIS_TAG}"
 
-script:
-    - docker run -it -e COVERALLS_TOKEN -e PACKAGECLOUD_TOKEN eos:${DOCKER_TARGET} /bin/bash /src/.travis/build-and-test.bash ${DOCKER_TARGET} ${DOCKER_CXX} "${TRAVIS_TAG}"
+matrix:
+  include:
+    - <<: *linux-template
+      env:
+        - DOCKER_TARGET=xenial DOCKER_CXX=g++
+
+    - <<: *linux-template
+      env:
+        - DOCKER_TARGET=xenial DOCKER_CXX=clang++-4.0
+
+    - <<: *linux-template
+      env:
+        - DOCKER_TARGET=bionic DOCKER_CXX=g++
+
+    - os: osx
+      osx_image: xcode9.3
+      language: cpp
+      sudo: required
+      before_install:
+        - sudo rm /usr/local/include/c++
+        - brew tap eos/eos
+        - brew outdated boost || brew upgrade boost
+        - brew outdated boost-python3 || brew upgrade boost-python3
+        - brew install autoconf boost-python3 gsl hdf5 libtool minuit2 pmclib python3 yaml-cpp
+        - pip3 install h5py matplotlib scipy PyYAML
+      script:
+        - /bin/bash .travis/build-and-test.bash osx g++ "${TRAVIS_TAG}"
