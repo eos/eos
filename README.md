@@ -43,13 +43,17 @@ The main authors are:
  * Frederik Beaujean <frederik.beaujean@lmu.de>,
  * Christoph Bobeth <christoph.bobeth@gmail.com>,
 
-with contributions by:
+with code contributions by:
 
  * Marzia Bordone,
  * Thomas Blake,
+ * Elena Graverini,
  * Nico Gubernari,
- * Ahmet Kokulu,
  * Stephan Jahn,
+ * Ahmet Kokulu,
+ * Bastian Müller,
+ * Stefanie Reichert,
+ * Rafael Silva Coutinho,
  * Ismo Tojiala,
  * Christian Wacker.
 
