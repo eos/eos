@@ -12,6 +12,7 @@ class PythonTests:
         """Check that the first term in the PYTHONPATH environment variable ends in '.libs'."""
         try:
             pythonpath = os.environ['PYTHONPATH'].split(os.pathsep)[0]
+            print('PYTHONPATH={}'.format(os.environ['PYTHONPATH']))
             if not pythonpath.endswith('python/.libs/'):
                 raise TestFailedError('PYTHONPATH not correctly set for running test cases')
 
@@ -22,8 +23,8 @@ class PythonTests:
         """Check if the module Python/C++ interface can be imported."""
         try:
             import _eos
-        except:
-            raise TestFailedError('importing \'_eos\' failed.')
+        except ImportError as e:
+            raise TestFailedError('importing \'_eos\' failed: \'{}\''.format(str(e)))
 
         try:
             import eos
