@@ -84,7 +84,9 @@ namespace eos
         {
             double fp = form_factors->f_p(s);
             double f0 = form_factors->f_0(s);
-            double mbMSbar = model->m_b_msbar(mu);
+            // running quark masses
+            double mbatmu = model->m_b_msbar(mu);
+            double mcatmu = model->m_c_msbar(mu);
             double lam = lambda(m_B * m_B, m_D * m_D, s);
             double p = sqrt(lam) / (2.0 * m_B);
             // make sure we return NaN if s < m_l^2, v = lepton velocity in the dilepton rest frame
@@ -93,16 +95,14 @@ namespace eos
             double v2 = v * v;
             double norm = 8.0 * v2 * m_B * s * power_of<2>(g_fermi())
                 / (3.0 * 256.0 * power_of<3>(M_PI * m_B));
+            // helicity amplitudes
             const double hh0 = 2.0 * m_B * p * fp / (sqrt(s));
             const double hht = (m_B * m_B - m_D * m_D) * f0 / (sqrt(s));
-            // light quark masses neglected here
-            const double hhs = (m_B * m_B - m_D * m_D) * f0 / (mbMSbar);
-            
+            const double hhs = (m_B * m_B - m_D * m_D) * f0 / (mbatmu - mcatmu);
             // NP contributions in EFT, cf. e.g. [DBG2013]
             const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c();
             const complex<double> gv = wc.cvl() + wc.cvr();
             const complex<double> gs = wc.csl() + wc.csr();
-            
             // normalized(|V_cb|=1) differential decay width including NP (in SM gv=1, and all other couplings are zero)
             return norm * p * (power_of<2>(hh0) * std::norm(gv) * (1.0 + mvm1 / 2.0) + (3.0 * mvm1 / 2.0) * std::norm(hht * gv + hhs * gs / sqrt(mvm1)));
         }
@@ -147,7 +147,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::differential_branching_ratio,
                 _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QNG>(f, s_min, s_max);
+        return integrate<GSL::QAGS>(f, s_min, s_max);
     }
 
     // normalized_differential_branching_ratio (|V_cb|=1)
@@ -164,7 +164,7 @@ namespace eos
         std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::normalized_differential_branching_ratio,
                                                              _imp.get(), std::placeholders::_1);
         
-        return integrate<GSL::QNG>(f, s_min, s_max);
+        return integrate<GSL::QAGS>(f, s_min, s_max);
     }
 
     double
@@ -196,13 +196,13 @@ namespace eos
 
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
 
-            br_muons = integrate<GSL::QNG>(f, 0.02, 11.62);
+            br_muons = integrate<GSL::QAGS>(f, 0.02, 11.62);
         }
 
         double br_taus;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            br_taus = integrate<GSL::QNG>(f, 3.16, 11.62);
+            br_taus = integrate<GSL::QAGS>(f, 3.16, 11.62);
         }
 
         return br_taus / br_muons;
