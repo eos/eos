@@ -67,9 +67,11 @@ class BToDLeptonNeutrinoTest :
                 
                 const double eps = 1e-5;
                 
-                // test for two s-bins - the default lepton is muon
+                // test for different s-bins - the default lepton is muon
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 8.0), 4.413884800954554, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(8.0, 11.62), 1.0206050186357505, eps);
+                // the full phase-space region for muon
+                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.02629683128414, eps);
             }
 
             // tests for normalized NP Br (|V_cb|=1)
@@ -82,9 +84,10 @@ class BToDLeptonNeutrinoTest :
                 p2["B->D::b_0^2@BCL2008"]   = -1.20;
                 p2["mass::B_d"]             = 5.279;
                 p2["mass::D^+"]             = 1.870;
-                // scale is fixed at mass::b(MSbar)
-                p2["mu"]                    = 4.180;
-                p2["mass::b(MSbar)"]        = 4.180;
+                // fix the scale
+                p2["mu"]                    = 4.18;
+                p2["mass::b(MSbar)"]        = 4.18;
+                p2["mass::c"]               = 1.275;
                 p2["b->clnu::Re{cVL}"]      =  1.0;
                 p2["b->clnu::Im{cVL}"]      = -1.0;
                 p2["b->clnu::Re{cVR}"]      =  2.0;
@@ -102,9 +105,11 @@ class BToDLeptonNeutrinoTest :
                 
                 const double eps = 1e-5;
                 
-                // test for two s-bins - the default lepton is muon
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 8.0), 494.45315769, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(8.0, 11.62), 387.5066337, eps);
+                // test for different s-bins - the default lepton is muon
+                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 8.0), 749.0934190079766, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(8.0, 11.62), 616.8445050995084, eps);
+                // the full phase-space region for muon
+                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 1774.909629523804, eps);
             }
         }
 } b_to_d_l_nu_test;
