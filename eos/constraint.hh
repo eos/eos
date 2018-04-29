@@ -193,6 +193,24 @@ namespace eos
         ConstraintDeserializationError(const QualifiedName & name, const std::string & msg);
         ///@}
     };
+
+    /*!
+     * ConstrainInputFileParseError is thrown when an error occurs while parsing the constraint input files.
+     */
+    struct ConstraintInputFileParseError :
+        public Exception
+    {
+        ///@name Basic Functions
+        ///@{
+        /*!
+         * Constructor.
+         *
+         * @param filename The name of the constraint input file for which the error occured during deserialization.
+         * @param msg      The error message.
+         */
+        ConstraintInputFileParseError(const std::string & filename, const std::string & msg);
+        ///@}
+    };
 }
 
 #endif
