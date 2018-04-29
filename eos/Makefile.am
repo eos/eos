@@ -39,6 +39,7 @@ LDADD = \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
+	$(top_builddir)/eos/statistics/libeosstatistics.la \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = \
