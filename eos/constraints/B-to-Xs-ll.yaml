@@ -1,0 +1,52 @@
+# vim: set fdm=marker :
+
+#########
+# BaBar #
+#########
+#
+# 2004
+#
+# {{{
+B->X_sll::BR[1.0,6.0]@BaBar-2004A:
+    type: Gaussian
+    observable: B->X_sll::BR@HLMW2005
+    kinematics: {s_min: 1, s_max: 6}
+    options: {}
+    mean: 1.8e-06
+    sigma-stat: {hi: 7e-07, lo: 7e-07}
+    sigma-sys: {hi: 5e-07, lo: 5e-07}
+    dof: 1
+# }}}
+#
+# 2013
+#
+# {{{
+B->X_sll::BR[1.0,6.0]@BaBar-2013A:
+    type: Gaussian
+    observable: B->X_sll::BR@HLMW2005
+    kinematics: {s_min: 1, s_max: 6}
+    options: {}
+    mean: 1.6e-06
+    sigma-stat: {hi: 4.1e-07, lo: 3.9e-07}
+    sigma-sys: {hi: 2.5e-07, lo: 2.2e-07}
+    dof: 1
+# }}}
+
+#########
+# Belle #
+#########
+#
+# 2005
+#
+# {{{
+B->X_sll::BR[1.0,6.0]@Belle-2005A:
+    type: Gaussian
+    observable: B->X_sll::BR@HLMW2005
+    kinematics: {s_min: 1, s_max: 6}
+    options: {}
+    mean: 1.493e-06
+    sigma-stat: {hi: 5.04e-07, lo: 5.04e-07}
+    sigma-sys: {hi: 4.11e-07, lo: 3.21e-07}
+    dof: 1
+# }}}
+

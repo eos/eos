@@ -3,7 +3,7 @@ CLEANFILES = \
 	references_TEST
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = parameters utils optimize statistics form-factors rare-b-decays b-decays .
+SUBDIRS = constraints parameters utils optimize statistics form-factors rare-b-decays b-decays .
 
 AM_CXXFLAGS = @AM_CXXFLAGS@
 

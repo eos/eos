@@ -1,0 +1,200 @@
+# vim: set fdm=marker :
+
+#########
+# BaBar #
+#########
+#
+# 2008
+#
+# {{{
+B^0->K^*0gamma::C_K@BaBar-2008:
+    type: Gaussian
+    observable: B->K^*gamma::C_K^*gamma
+    kinematics: {}
+    options: {q: d}
+    mean: -0.14
+    sigma-stat: {hi: 0.16, lo: -0.16}
+    sigma-sys: {hi: 0.03, lo: -0.03}
+    dof: 1
+B^0->K^*0gamma::S_K@BaBar-2008:
+    type: Gaussian
+    observable: B->K^*gamma::S_K^*gamma
+    kinematics: {}
+    options: {q: d}
+    mean: -0.03
+    sigma-stat: {hi: 0.29, lo: -0.29}
+    sigma-sys: {hi: 0.03, lo: -0.03}
+    dof: 1
+B^0->K^*0gamma::S_K+C_K@BaBar-2008:
+    type: MultivariateGaussian
+    dim: 2
+    observables:
+        -   B->K^*gamma::S_K^*gamma
+        -   B->K^*gamma::C_K^*gamma
+    kinematics:
+        -   {}
+        -   {}
+    options:
+        -   {q: d}
+        -   {q: d}
+    means: [-0.03, -0.14]
+    sigma-stat-hi: [0.29, 0.16]
+    sigma-stat-lo: [0.29, 0.16]
+    sigma-sys: [0.03, 0.03]
+    correlations:
+        -   [1, 0.05]
+        -   [0.05, 1]
+    dof: 2
+# }}}
+
+#
+# 2009
+#
+# {{{
+B^+->K^*+gamma::BR@BaBar-2009:
+    type: Gaussian
+    observable: B->K^*gamma::BRavg
+    kinematics: {}
+    options: {q: u}
+    mean: 4.22e-05
+    sigma-stat: {hi: 1.4e-06, lo: -1.4e-06}
+    sigma-sys: {hi: 1.6e-06, lo: -1.6e-06}
+    dof: 1
+B^0->K^*0gamma::BR@BaBar-2009:
+    type: Gaussian
+    observable: B->K^*gamma::BRavg
+    kinematics: {}
+    options: {q: d}
+    mean: 4.47e-05
+    sigma-stat: {hi: 1e-06, lo: -1e-06}
+    sigma-sys: {hi: 1.6e-06, lo: -1.6e-06}
+    dof: 1
+# }}}
+
+#########
+# Belle #
+#########
+#
+# 2004
+#
+# {{{
+B^+->K^*+gamma::BR@Belle-2004:
+    type: Gaussian
+    observable: B->K^*gamma::BRavg
+    kinematics: {}
+    options: {q: u}
+    mean: 4.25e-05
+    sigma-stat: {hi: 3.1e-06, lo: 3.1e-06}
+    sigma-sys: {hi: 2.4e-06, lo: 2.4e-06}
+    dof: 1
+B^0->K^*0gamma::BR@Belle-2004:
+    type: Gaussian
+    observable: B->K^*gamma::BRavg
+    kinematics: {}
+    options: {q: d}
+    mean: 4.01e-05
+    sigma-stat: {hi: 2.1e-06, lo: 2.1e-06}
+    sigma-sys: {hi: 1.7e-06, lo: 1.7e-06}
+    dof: 1
+# }}}
+
+#
+# 2006
+#
+# {{{
+B^0->K^*0gamma::C_K@Belle-2006:
+    type: Gaussian
+    observable: B->K^*gamma::C_K^*gamma
+    kinematics: {}
+    options: {q: d}
+    mean: 0.2
+    sigma-stat: {hi: 0.24, lo: -0.24}
+    sigma-sys: {hi: 0.05, lo: -0.05}
+    dof: 1
+B^0->K^*0gamma::S_K@Belle-2006:
+    type: Gaussian
+    observable: B->K^*gamma::S_K^*gamma
+    kinematics: {}
+    options: {q: d}
+    mean: -0.32
+    sigma-stat: {hi: 0.36, lo: -0.33}
+    sigma-sys: {hi: 0.05, lo: -0.05}
+    dof: 1
+B^0->K^*0gamma::S_K+C_K@Belle-2006:
+    type: MultivariateGaussian
+    dim: 2
+    observables:
+        -   B->K^*gamma::S_K^*gamma
+        -   B->K^*gamma::C_K^*gamma
+    kinematics:
+        -   {}
+        -   {}
+    options:
+        -   {q: d}
+        -   {q: d}
+    means: [-0.32, 0.2]
+    sigma-stat-hi: [0.36, 0.24]
+    sigma-stat-lo: [0.33, 0.24]
+    sigma-sys: [0.05, 0.05]
+    correlations:
+        -   [1, 0.08]
+        -   [0.08, 1]
+    dof: 2
+# }}}
+
+########
+# CLEO #
+########
+#
+# 2000
+#
+# {{{
+B^+->K^*+gamma::BR@CLEO-2000:
+    type: Gaussian
+    observable: B->K^*gamma::BRavg
+    kinematics: {}
+    options: {q: u}
+    mean: 3.76e-05
+    sigma-stat: {hi: 8.899999999999999e-06, lo: 8.3e-06}
+    sigma-sys: {hi: 2.8e-06, lo: 2.8e-06}
+    dof: 1
+B^0->K^*0gamma::BR@CLEO-2000:
+    type: Gaussian
+    observable: B->K^*gamma::BRavg
+    kinematics: {}
+    options: {q: d}
+    mean: 4.55e-05
+    sigma-stat: {hi: 7.2e-06, lo: 6.8e-06}
+    sigma-sys: {hi: 3.4e-06, lo: 3.4e-06}
+    dof: 1
+# }}}
+
+#########
+# HFLAG #
+#########
+#
+# 2011
+#
+# {{{
+B^0->K^*0gamma::S_K+C_K@HFAG-2011:
+    type: MultivariateGaussian
+    dim: 2
+    observables:
+        -   B->K^*gamma::S_K^*gamma
+        -   B->K^*gamma::C_K^*gamma
+    kinematics:
+        -   {}
+        -   {}
+    options:
+        -   {q: d}
+        -   {q: d}
+    means: [-0.16, -0.04]
+    sigma-stat-hi: [0, 0]
+    sigma-stat-lo: [0, 0]
+    sigma-sys: [0.22, 0.14]
+    correlations:
+        -   [1, 0.06]
+        -   [0.06, 1]
+    dof: 2
+# }}}
+

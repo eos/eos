@@ -1,0 +1,143 @@
+# vim: set fdm=marker :
+
+#########
+# BaBar #
+#########
+#
+# 2012
+#
+# {{{
+B->X_sgamma::BR[1.8]@BaBar-2012:
+    type: Gaussian
+    observable: B->X_sgamma::BR(E_min)@NLO
+    kinematics: {E_min: 1.8}
+    options: {q: d}
+    mean: 0.000321
+    sigma-stat: {hi: 1.5e-05, lo: -1.5e-05}
+    sigma-sys: {hi: 2.9e-05, lo: -2.9e-05}
+    dof: 1
+B->X_sgamma::E_1[1.8]@BaBar-2012:
+    type: Gaussian
+    observable: B->X_sgamma::E_1(E_min)@NLO
+    kinematics: {E_min: 1.8}
+    options: {q: d}
+    mean: 2.267
+    sigma-stat: {hi: 0.019, lo: -0.019}
+    sigma-sys: {hi: 0.032, lo: -0.032}
+    dof: 1
+B->X_sgamma::E_2[1.8]@BaBar-2012:
+    type: Gaussian
+    observable: B->X_sgamma::E_2(E_min)@NLO
+    kinematics: {E_min: 1.8}
+    options: {q: d}
+    mean: 0.0484
+    sigma-stat: {hi: 0.0053, lo: -0.0053}
+    sigma-sys: {hi: 0.0077, lo: -0.0077}
+    dof: 1
+B->X_sgamma::E_1[1.8]+E_2[1.8]@BaBar-2012:
+    type: MultivariateGaussian
+    dim: 2
+    observables:
+        -   B->X_sgamma::E_1(E_min)@NLO
+        -   B->X_sgamma::E_2(E_min)@NLO
+    kinematics:
+        -   {E_min: 1.8}
+        -   {E_min: 1.8}
+    options:
+        -   {q: d}
+        -   {q: d}
+    means: [2.267, 0.0484]
+    sigma-stat-hi: [0.019, 0.0053]
+    sigma-stat-lo: [0.019, 0.0053]
+    sigma-sys: [0.032, 0.0077]
+    correlations:
+        -   [1, -0.88]
+        -   [-0.88, 1]
+    dof: 2
+# }}}
+
+#########
+# Belle #
+#########
+#
+# 2008
+#
+# {{{
+B->X_sgamma::E_1[1.8]@Belle-2008:
+    type: Gaussian
+    observable: B->X_sgamma::E_1(E_min)@NLO
+    kinematics: {E_min: 1.8}
+    options: {}
+    mean: 2.292
+    sigma-stat: {hi: 0.027, lo: 0.027}
+    sigma-sys: {hi: 0.033, lo: 0.033}
+    dof: 1
+B->X_sgamma::E_2[1.8]@Belle-2008:
+    type: Gaussian
+    observable: B->X_sgamma::E_2(E_min)@NLO
+    kinematics: {E_min: 1.8}
+    options: {}
+    mean: 0.0305
+    sigma-stat: {hi: 0.079, lo: 0.079}
+    sigma-sys: {hi: 0.099, lo: 0.099}
+    dof: 1
+B->X_sgamma::E_1[1.8]+E_2[1.8]@Belle-2008:
+    type: MultivariateGaussian
+    dim: 2
+    observables:
+        -   B->X_sgamma::E_1(E_min)@NLO
+        -   B->X_sgamma::E_2(E_min)@NLO
+    kinematics:
+        -   {E_min: 1.8}
+        -   {E_min: 1.8}
+    options:
+        -   {}
+        -   {}
+    means: [2.292, 0.0305]
+    sigma-stat-hi: [0.027, 0.007900000000000001]
+    sigma-stat-lo: [0.027, 0.007900000000000001]
+    sigma-sys: [0.033, 0.009900000000000001]
+    correlations:
+        -   [1, -0.46]
+        -   [-0.46, 1]
+    dof: 2
+# }}}
+#
+# 2009
+#
+# {{{
+B->X_sgamma::BR[1.8]@Belle-2009B:
+    type: Gaussian
+    observable: B->X_sgamma::BR(E_min)@NLO
+    kinematics: {E_min: 1.8}
+    options: {}
+    mean: 0.000336
+    sigma-stat: {hi: 1.3e-05, lo: -1.3e-05}
+    sigma-sys: {hi: 2.5e-05, lo: -2.5e-05}
+    dof: 1
+B->X_sgamma::BR[1.8]+E_1[1.8]+E_2[1.8]@Belle-2009B:
+    type: MultivariateGaussian
+    dim: 3
+    observables:
+        -   B->X_sgamma::BR(E_min)@NLO
+        -   B->X_sgamma::E_1(E_min)@NLO
+        -   B->X_sgamma::E_2(E_min)@NLO
+    kinematics:
+        -   {E_min: 1.8}
+        -   {E_min: 1.8}
+        -   {E_min: 1.8}
+    options:
+        -   {}
+        -   {}
+        -   {}
+    means: [0.000336, 2.294, 0.037]
+    sigma-stat-hi: [1.3e-05, 0.011, 0.0029]
+    sigma-stat-lo: [1.3e-05, 0.011, 0.0029]
+    sigma-sys: [2.5e-05, 0.028, 0.0081]
+    correlations:
+        -   [1, 0.67, 0.8]
+        -   [0.67, 1, 0.78]
+        -   [0.8, 0.78, 1]
+    dof: 3
+# }}}
+

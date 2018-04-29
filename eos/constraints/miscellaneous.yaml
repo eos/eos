@@ -1,0 +1,10 @@
+B^0::M_B^*-M_B@PDG-2012:
+    type: Gaussian
+    observable: B::M_B^*-M_B
+    kinematics: {}
+    options: {q: d}
+    mean: 0.04578
+    sigma-stat: {hi: 0.00035, lo: -0.00035}
+    sigma-sys: {hi: 0, lo: 0}
+    dof: 1
+
