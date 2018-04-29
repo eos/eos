@@ -1,0 +1,46 @@
+# vim: set fdm=marker :
+
+########
+# LHCb #
+########
+#
+# 2015
+#
+# {{{
+Lambda_b->Lambdamu^+mu^-::A_FB^h[15.0,20.0]@LHCb-2015B:
+    type: Gaussian
+    observable: Lambda_b->Lambdall::A_FB^h@LowRecoil
+    kinematics: {s_min: 15, s_max: 20}
+    options: {l: mu}
+    mean: -0.29
+    sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
+    sigma-sys: {hi: 0.03, lo: -0.03}
+    dof: 1
+Lambda_b->Lambdamu^+mu^-::A_FB^l[15.0,20.0]@LHCb-2015B:
+    type: Gaussian
+    observable: Lambda_b->Lambdall::A_FB^l@LowRecoil
+    kinematics: {s_min: 15, s_max: 20}
+    options: {l: mu}
+    mean: -0.05
+    sigma-stat: {hi: 0.09, lo: -0.09}
+    sigma-sys: {hi: 0.03, lo: -0.03}
+    dof: 1
+Lambda_b->Lambdamu^+mu^-::BR[15.0,20.0]@LHCb-2015B:
+    type: Gaussian
+    observable: Lambda_b->Lambdall::BR@LowRecoil
+    kinematics: {s_min: 15, s_max: 20}
+    options: {l: mu}
+    mean: 6e-07
+    sigma-stat: {hi: 4.5e-08, lo: -4.5e-08}
+    sigma-sys: {hi: 1.25e-07, lo: -1.25e-07}
+    dof: 1
+Lambda_b->Lambdamu^+mu^-::F_0[15.0,20.0]@LHCb-2015B:
+    type: Gaussian
+    observable: Lambda_b->Lambdall::F_0@LowRecoil
+    kinematics: {s_min: 15, s_max: 20}
+    options: {l: mu}
+    mean: 0.61
+    sigma-stat: {hi: 0.11, lo: -0.14}
+    sigma-sys: {hi: 0.03, lo: -0.03}
+    dof: 1
+# }}}

@@ -1,0 +1,64 @@
+# vim: set fdm=marker :
+
+#######
+# CMS #
+#######
+#
+# 2013
+#
+# {{{
+B^0_s->mu^+mu^-::BR@CMS-2013B:
+    type: Amoroso
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: s}
+    physical-limit: 0
+    theta: 1.985963346e-09
+    alpha: 2.7971996021
+    beta: 2.0218845762
+# }}}
+
+##############
+# CMS + LHCb #
+##############
+#
+# 2014
+#
+# {{{
+B^0_d->mu^+mu^-::BR@CMS-LHCb-2014:
+    type: Amoroso
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: d}
+    physical-limit: 0
+    theta: 3.09469e-10
+    alpha: 2.08667
+    beta: 1.98708
+B^0_s->mu^+mu^-::BR@CMS-LHCb-2014:
+    type: Amoroso
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: s}
+    physical-limit: 0
+    theta: 1.54243e-10
+    alpha: 19.4025
+    beta: 1.0048
+# }}}
+
+########
+# LHCb #
+########
+#
+# 2013
+#
+# {{{
+B^0_s->mu^+mu^-::BR@LHCb-2013D:
+    type: Amoroso
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: s}
+    physical-limit: 0
+    theta: 2.23067e-09
+    alpha: 2.19078
+    beta: 2.00322
+# }}}

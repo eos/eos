@@ -336,6 +336,7 @@ AC_OUTPUT(
 	debian/Makefile
 	doc/Makefile
 	eos/Makefile
+	eos/constraints/Makefile
 	eos/form-factors/Makefile
 	eos/rare-b-decays/Makefile
 	eos/b-decays/Makefile

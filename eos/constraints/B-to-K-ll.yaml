@@ -1,0 +1,507 @@
+# vim: set fdm=marker :
+
+#########
+# BaBar #
+#########
+#
+# 2012
+#
+# {{{
+B^+->K^+mu^+mu^-::BR[1.00,6.00]@BaBar-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 1.36e-07
+    sigma-stat: {hi: 2.7e-08, lo: -2.4e-08}
+    sigma-sys: {hi: 3e-09, lo: -3e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[14.21,16.00]@BaBar-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 14.21, s_max: 16}
+    options: {l: mu, q: u}
+    mean: 4.9e-08
+    sigma-stat: {hi: 1.5e-08, lo: -1.4e-08}
+    sigma-sys: {hi: 2e-09, lo: -2e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[16.00,22.86]@BaBar-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 22.86}
+    options: {l: mu, q: u}
+    mean: 6.7e-08
+    sigma-stat: {hi: 2.3e-08, lo: -2.1e-08}
+    sigma-sys: {hi: 5e-09, lo: -5e-09}
+    dof: 1
+# }}}
+
+#########
+# Belle #
+#########
+#
+# 2009
+#
+# {{{
+B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@Belle-2009:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 0.04
+    sigma-stat: {hi: 0.16, lo: -0.13}
+    sigma-sys: {hi: 0.05, lo: -0.05}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@Belle-2009:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: u}
+    mean: -0.04
+    sigma-stat: {hi: 0.26, lo: -0.32}
+    sigma-sys: {hi: 0.05, lo: -0.05}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@Belle-2009:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 22.86}
+    options: {l: mu, q: u}
+    mean: -0.02
+    sigma-stat: {hi: 0.08, lo: -0.11}
+    sigma-sys: {hi: 0.02, lo: -0.02}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[1.00,6.00]@Belle-2009:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 1.36e-07
+    sigma-stat: {hi: 2.3e-08, lo: -2.1e-08}
+    sigma-sys: {hi: 8e-09, lo: -8e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[14.18,16.00]@Belle-2009:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: u}
+    mean: 3.8e-08
+    sigma-stat: {hi: 1.9e-08, lo: -1.2e-08}
+    sigma-sys: {hi: 2e-09, lo: -2e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[16.00,22.86]@Belle-2009:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 22.86}
+    options: {l: mu, q: u}
+    mean: 9.8e-08
+    sigma-stat: {hi: 2e-08, lo: -1.9e-08}
+    sigma-sys: {hi: 6e-09, lo: -6e-09}
+    dof: 1
+# }}}
+
+#######
+# CDF #
+#######
+#
+# 2011
+#
+# {{{
+B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: -0.13
+    sigma-stat: {hi: 0.09, lo: -0.09}
+    sigma-sys: {hi: 0.02, lo: -0.02}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: u}
+    mean: 0.05
+    sigma-stat: {hi: 0.11, lo: -0.09}
+    sigma-sys: {hi: 0.03, lo: -0.03}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 22.86}
+    options: {l: mu, q: u}
+    mean: -0.09
+    sigma-stat: {hi: 0.13, lo: -0.17}
+    sigma-sys: {hi: 0.03, lo: -0.03}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 1.41e-07
+    sigma-stat: {hi: 2e-08, lo: -2e-08}
+    sigma-sys: {hi: 9e-09, lo: -9e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: u}
+    mean: 5.3e-08
+    sigma-stat: {hi: 1e-08, lo: -1.9e-08}
+    sigma-sys: {hi: 3e-09, lo: -3e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 22.86}
+    options: {l: mu, q: u}
+    mean: 4.8e-08
+    sigma-stat: {hi: 1.1e-08, lo: -1.1e-08}
+    sigma-sys: {hi: 3e-09, lo: -3e-09}
+    dof: 1
+# }}}
+#
+# 2012
+#
+# {{{
+B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: -0.13
+    sigma-stat: {hi: 0.1, lo: -0.11}
+    sigma-sys: {hi: 0.02, lo: -0.02}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: u}
+    mean: 0.07000000000000001
+    sigma-stat: {hi: 0.08, lo: -0.08}
+    sigma-sys: {hi: 0.01, lo: -0.01}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[16.00,22.86]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 22.86}
+    options: {l: mu, q: u}
+    mean: -0.05
+    sigma-stat: {hi: 0.1, lo: -0.18}
+    sigma-sys: {hi: 0.05, lo: -0.05}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[1.00,6.00]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 1.35e-07
+    sigma-stat: {hi: 1.8e-08, lo: -1.8e-08}
+    sigma-sys: {hi: 8e-09, lo: -8e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[14.18,16.00]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: u}
+    mean: 4.2e-08
+    sigma-stat: {hi: 8e-09, lo: -8e-09}
+    sigma-sys: {hi: 2e-09, lo: -2e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 22.86}
+    options: {l: mu, q: u}
+    mean: 5e-08
+    sigma-stat: {hi: 1e-08, lo: -1e-08}
+    sigma-sys: {hi: 2e-09, lo: -2e-09}
+    dof: 1
+# }}}
+
+########
+# LHCb #
+########
+#
+# 2012
+#
+# {{{
+B^+->K^+mu^+mu^-::A_FB[1.00,6.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: -0.02
+    sigma-stat: {hi: 0.03, lo: -0.05}
+    sigma-sys: {hi: 0.01, lo: -0.02}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[14.18,16.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: u}
+    mean: 0.01
+    sigma-stat: {hi: 0.06, lo: -0.12}
+    sigma-sys: {hi: 0.01, lo: -0.01}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[16.00,18.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 18}
+    options: {l: mu, q: u}
+    mean: 0.09
+    sigma-stat: {hi: 0.09, lo: -0.07000000000000001}
+    sigma-sys: {hi: 0.01, lo: -0.02}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[18.00,22.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 18, s_max: 22}
+    options: {l: mu, q: u}
+    mean: -0.02
+    sigma-stat: {hi: 0.11, lo: -0.11}
+    sigma-sys: {hi: 0.01, lo: -0.01}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[1.00,6.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 1.205e-07
+    sigma-stat: {hi: 8.5e-09, lo: -8.5e-09}
+    sigma-sys: {hi: 7e-09, lo: -7e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[14.18,16.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: u}
+    mean: 3.7674e-08
+    sigma-stat: {hi: 3.64e-09, lo: -3.64e-09}
+    sigma-sys: {hi: 1.456e-09, lo: -1.456e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[16.00,18.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 18}
+    options: {l: mu, q: u}
+    mean: 3.54e-08
+    sigma-stat: {hi: 3.6e-09, lo: -3.6e-09}
+    sigma-sys: {hi: 1.8e-09, lo: -1.8e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[18.00,22.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 18, s_max: 22}
+    options: {l: mu, q: u}
+    mean: 3.12e-08
+    sigma-stat: {hi: 4e-09, lo: -4e-09}
+    sigma-sys: {hi: 1.6e-09, lo: -1.6e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::F_H[1.00,6.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::F_Havg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 0.05
+    sigma-stat: {hi: 0.08, lo: -0.05}
+    sigma-sys: {hi: 0.04, lo: -0.02}
+    dof: 1
+B^+->K^+mu^+mu^-::F_H[14.18,16.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::F_Havg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: u}
+    mean: 0.08
+    sigma-stat: {hi: 0.28, lo: -0.08}
+    sigma-sys: {hi: 0.02, lo: -0.01}
+    dof: 1
+B^+->K^+mu^+mu^-::F_H[16.00,18.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::F_Havg@LowRecoil
+    kinematics: {s_min: 16, s_max: 18}
+    options: {l: mu, q: u}
+    mean: 0.18
+    sigma-stat: {hi: 0.22, lo: -0.14}
+    sigma-sys: {hi: 0.01, lo: -0.04}
+    dof: 1
+B^+->K^+mu^+mu^-::F_H[18.00,22.00]@LHCb-2012:
+    type: Gaussian
+    observable: B->Kll::F_Havg@LowRecoil
+    kinematics: {s_min: 18, s_max: 22}
+    options: {l: mu, q: u}
+    mean: 0.14
+    sigma-stat: {hi: 0.31, lo: -0.14}
+    sigma-sys: {hi: 0.01, lo: -0.02}
+    dof: 1
+# }}}
+#
+# 2014
+#
+# {{{
+B^+->K^+l^+l^-::R_K[1.00,6.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::R_K@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {}
+    mean: 0.745
+    sigma-stat: {hi: 0.09, lo: 0.074}
+    sigma-sys: {hi: 0.036, lo: 0.036}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[1.10,6.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LargeRecoil
+    kinematics: {s_min: 1.1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: -0.005
+    sigma-stat: {hi: 0.015, lo: -0.015}
+    sigma-sys: {hi: 0.01, lo: -0.01}
+    dof: 1
+B^+->K^+mu^+mu^-::A_FB[15.00,22.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::A_FBavg@LowRecoil
+    kinematics: {s_min: 15, s_max: 22}
+    options: {l: mu, q: u}
+    mean: 0.015
+    sigma-stat: {hi: 0.015, lo: -0.015}
+    sigma-sys: {hi: 0.01, lo: -0.01}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[1.10,2.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 1.1, s_max: 2}
+    options: {l: mu, q: u}
+    mean: 2.097e-08
+    sigma-stat: {hi: 1.35e-09, lo: -1.35e-09}
+    sigma-sys: {hi: 1.08e-09, lo: -1.08e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[2.00,3.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 2, s_max: 3}
+    options: {l: mu, q: u}
+    mean: 2.82e-08
+    sigma-stat: {hi: 1.6e-09, lo: -1.6e-09}
+    sigma-sys: {hi: 1.4e-09, lo: -1.4e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[3.00,4.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 3, s_max: 4}
+    options: {l: mu, q: u}
+    mean: 2.54e-08
+    sigma-stat: {hi: 1.5e-09, lo: -1.5e-09}
+    sigma-sys: {hi: 1.3e-09, lo: -1.3e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[4.00,5.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 4, s_max: 5}
+    options: {l: mu, q: u}
+    mean: 2.21e-08
+    sigma-stat: {hi: 1.4e-09, lo: -1.4e-09}
+    sigma-sys: {hi: 1.1e-09, lo: -1.1e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[5.00,6.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 5, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 2.31e-08
+    sigma-stat: {hi: 1.4e-09, lo: -1.4e-09}
+    sigma-sys: {hi: 1.2e-09, lo: -1.2e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[1.10,6.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 1.1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 1.1858e-07
+    sigma-stat: {hi: 3.43e-09, lo: -3.43e-09}
+    sigma-sys: {hi: 5.88e-09, lo: -5.88e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::BR[15.00,22.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 15, s_max: 22}
+    options: {l: mu, q: u}
+    mean: 8.470000000000001e-08
+    sigma-stat: {hi: 2.8e-09, lo: -2.8e-09}
+    sigma-sys: {hi: 4.2e-09, lo: -4.2e-09}
+    dof: 1
+B^+->K^+mu^+mu^-::F_H[1.10,6.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::F_Havg@LargeRecoil
+    kinematics: {s_min: 1.1, s_max: 6}
+    options: {l: mu, q: u}
+    mean: 0.03
+    sigma-stat: {hi: 0.03, lo: -0.03}
+    sigma-sys: {hi: 0.02, lo: -0.02}
+    dof: 1
+B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb-2014:
+    type: Gaussian
+    observable: B->Kll::F_Havg@LowRecoil
+    kinematics: {s_min: 15, s_max: 22}
+    options: {l: mu, q: u}
+    mean: 0.035
+    sigma-stat: {hi: 0.035, lo: -0.035}
+    sigma-sys: {hi: 0.02, lo: -0.02}
+    dof: 1
+# }}}
+
+B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: d}
+    mean: 9.8e-08
+    sigma-stat: {hi: 6.139999999999999e-08, lo: -6.139999999999999e-08}
+    sigma-sys: {hi: 7.4e-09, lo: -7.4e-09}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {s_min: 1, s_max: 6}
+    options: {l: mu, q: d}
+    mean: 1.11e-07
+    sigma-stat: {hi: 5.2e-08, lo: -5.2e-08}
+    sigma-sys: {hi: 1.4e-08, lo: -1.4e-08}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: d}
+    mean: 7.26e-08
+    sigma-stat: {hi: 2.57e-08, lo: -2.57e-08}
+    sigma-sys: {hi: 5.4e-09, lo: -5.4e-09}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 14.18, s_max: 16}
+    options: {l: mu, q: d}
+    mean: 4.3e-08
+    sigma-stat: {hi: 1.8e-08, lo: -1.8e-08}
+    sigma-sys: {hi: 4e-09, lo: -4e-09}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 22.86}
+    options: {l: mu, q: d}
+    mean: 2.14e-08
+    sigma-stat: {hi: 1.82e-08, lo: -1.82e-08}
+    sigma-sys: {hi: 1.6e-09, lo: -1.6e-09}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {s_min: 16, s_max: 22.86}
+    options: {l: mu, q: d}
+    mean: 2.6e-08
+    sigma-stat: {hi: 1.5e-08, lo: -1.5e-08}
+    sigma-sys: {hi: 3e-09, lo: -3e-09}
+    dof: 1
