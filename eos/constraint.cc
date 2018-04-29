@@ -3352,7 +3352,7 @@ namespace eos
             Options{ { "q", "d" }, { "l", "mu" } },
             +0.06, +0.11, -0.10, +0.01, -0.01
         };
-#if 0
+
         // A_9
         static const GaussianConstraintEntry Bzero_to_Kstarzero_dimuon_A_9_1_to_6_LHCb_2013B
         {
@@ -3378,7 +3378,7 @@ namespace eos
             Options{ { "q", "d" }, { "l", "mu" } },
             +0.00, +0.11, -0.10, +0.01, -0.01
         };
-#endif
+
         // A_T^2
         static const GaussianConstraintEntry Bzero_to_Kstarzero_dimuon_A_T2_1_to_6_LHCb_2013B
         {
@@ -5254,11 +5254,9 @@ namespace eos
             ValueType{ "B^0->K^*0mu^+mu^-::S_9[14.18,16.00]@LHCb-2013", &entries::Bzero_to_Kstarzero_dimuon_S_9_14dot18_to_16_LHCb_2013B },
             ValueType{ "B^0->K^*0mu^+mu^-::S_9[16.00,19.00]@LHCb-2013", &entries::Bzero_to_Kstarzero_dimuon_S_9_16_to_19_LHCb_2013B },
             // The following observables have not yet been implemented.
-#if 0
             ValueType{ "B^0->K^*0mu^+mu^-::A_9[1.00,6.00]@LHCb-2013", &entries::Bzero_to_Kstarzero_dimuon_A_9_1_to_6_LHCb_2013B },
             ValueType{ "B^0->K^*0mu^+mu^-::A_9[14.18,16.00]@LHCb-2013", &entries::Bzero_to_Kstarzero_dimuon_A_9_14dot18_to_16_LHCb_2013B },
             ValueType{ "B^0->K^*0mu^+mu^-::A_9[16.00,19.00]@LHCb-2013", &entries::Bzero_to_Kstarzero_dimuon_A_9_16_to_19_LHCb_2013B },
-#endif
             ValueType{ "B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@LHCb-2013", &entries::Bzero_to_Kstarzero_dimuon_A_T2_1_to_6_LHCb_2013B },
             ValueType{ "B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb-2013", &entries::Bzero_to_Kstarzero_dimuon_A_T2_14dot18_to_16_LHCb_2013B },
             ValueType{ "B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb-2013", &entries::Bzero_to_Kstarzero_dimuon_A_T2_16_to_19_LHCb_2013B },
