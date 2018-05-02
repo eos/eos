@@ -300,10 +300,36 @@ using
 python3 -c "import sys; print('python{0}.{1}'.format(sys.version_info[0], sys.version_info[1]))"
 \end{commandline}
 
-\subsubsection{MacOS X short cut}
+\subsection{MacOS X short cuts}
+
+\subsubsection{For users}
 The most recent development version of \EOS (and all of its dependencies) can
 also be installed automatically using \package{Homebrew}:
 \begin{commandline}
 brew tap eos/eos
 brew install --HEAD eos
 \end{commandline}
+
+\subsubsection{For developers}
+If you intend to make changes to the \EOS source code you can still use \package{Homebrew}.
+First, you should clone the \EOS repository into your home directory. We suggest
+\begin{commandline}
+mkdir -p ~/Repositories/eos
+cd ~/Repositories/eos
+# make and commit your changes
+\end{commandline}
+To setup your local for use with \package{Homebrew} you must ``tap'' the \EOS ``formula'' as usual, and then edit it:
+\begin{commandline}
+brew tap eos/eos
+brew edit eos
+\end{commandline}
+Change the line starting with \texttt{head} to look as follows:
+\begin{file}
+  head "/Users/USERNAME/Repositories/eos/.git", :branch => "master", :using => :git
+\end{file}
+where \texttt{USERNAME} is your username. You can determine it via \cli{whoami}.
+Proceed to install the modified \EOS version via \cli{brew install --HEAD eos}.
+To reinstall \EOS after further changes to the source code use
+\cli{brew reinstall --HEAD eos}.\\
+\textbf{Note}: Only changes that have been committed to the \texttt{master} branch of your local clone of the \EOS repository
+will be used for the installation.
