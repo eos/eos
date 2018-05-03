@@ -41,3 +41,10 @@
     min:     +0.1967
     max:     +0.2000
     comments: "GeV, cf. [KMPW2010], table 5, multiplied by 2/3"
+
+# 3-particle couplings
+"decay-constant::g_{B^*Bpi}" :
+    central: +30.0
+    min:     +25.0
+    max:     +35.0
+    comments: "cf. [IKMvD2014]"
