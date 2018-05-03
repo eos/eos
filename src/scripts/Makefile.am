@@ -8,6 +8,7 @@ if EOS_ENABLE_PYTHON
 
 bin_SCRIPTS = \
 	eos-list-references \
+	eos-make-constraint \
 	eos-merge-mcmc \
 	eos-plot \
 	eos-plot-1d \
@@ -18,6 +19,7 @@ endif
 
 EXTRA_DIST = \
 	eos-list-references.in \
+	eos-make-constraint \
 	eos-merge-mcmc \
 	eos-plot \
 	eos-plot-1d \
