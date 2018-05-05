@@ -193,7 +193,8 @@ namespace eos
                     gsl_vector_memcpy(mu_diff, output_components[j].mean());
                     gsl_vector_sub(mu_diff, input_components[*i].mean());
                     // sigma = (mu'_j - mu_i) (mu'_j - mu_i)^T
-                    gsl_blas_dsyr(CblasUpper, 1.0, mu_diff, sigma);
+                    gsl_matrix_set_all(sigma, 0);
+                    gsl_blas_dger(1.0, mu_diff, mu_diff, sigma);
                     // sigma += sigma_i
                     gsl_matrix_add(sigma, input_components[*i].covariance());
                     // multiply with alpha_i
