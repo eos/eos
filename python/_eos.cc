@@ -17,6 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include "config.h"
+
 #include "eos/constraint.hh"
 #include "eos/observable.hh"
 #include "eos/signal-pdf.hh"
@@ -75,6 +77,14 @@ namespace impl
         }
 
         return object();
+    }
+
+    const char *
+    version(void)
+    {
+        static const char version[] = PACKAGE_VERSION;
+
+        return version;
     }
 }
 
@@ -231,4 +241,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("name", &SignalPDF::name, return_value_policy<copy_const_reference>())
         ;
     // }}}
+
+    // EOS version
+    def("version", impl::version);
 }
