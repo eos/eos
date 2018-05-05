@@ -15,7 +15,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
-from logging import warn, info
+from logging import debug, info, warn
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -175,31 +175,71 @@ class Plotter:
         plt.plot(xvalues, ovalues_higher,  color=color, alpha=alpha)
 
 
+    def plot_eos_watermark(self, item):
+        width, height = (0.115, 0.035)
+
+        hpos, vpos = item['position'] if 'position' in item else ['right', 'bottom']
+
+        if hpos == 'right':
+            x = 0 + width
+        elif hpos == 'left':
+            x = 1 - width
+        elif hpos == 'center':
+            x = 0.5
+        else:
+            raise ValueError('invalid horizontal position \'{}\''.format(hpos))
+
+        if vpos == 'bottom':
+            y = 0 + height
+        elif vpos == 'top':
+            y = 1 - height
+        elif vpos == 'center':
+            y = 0.5
+        else:
+            raise ValueError('invalid vertical position \'{}\''.format(hpos))
+
+        logofont = matplotlib.font_manager.FontProperties(family='sans-serif', size='15')
+        ax = plt.gca()
+        ax.text(x, y, r'\textsf{{\textbf{{EOS v{version}}}}}'.format(version=eos.version()),
+                transform=ax.transAxes, fontproperties=logofont,
+                color='OrangeRed', alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
+                horizontalalignment='center', verticalalignment='center', zorder=+5)
+
+
     def plot_contents(self):
         if not 'contents' in self.instructions:
             return
 
+        plot_functions = {
+            'observable':  Plotter.plot_observable,
+            'uncertainty': Plotter.plot_uncertainty,
+            'watermark':   Plotter.plot_eos_watermark,
+        }
+
+        anonymous_types = [
+            'watermark',
+        ]
+
         contents = self.instructions['contents']
+
         for item in contents:
             if not type(item) is dict:
                 TypeError('wrong data type for content item {}'.format(str(item)))
-
-            if not 'name' in item:
-                raise KeyError('unnamed plot content')
-            name = item['name']
 
             if not 'type' in item:
                 raise KeyError('plot content "{}" has no type'.format(name))
             item_type = item['type']
 
-            info('plotting "{}"'.format(name))
+            if item_type not in anonymous_types and 'name' not in item:
+                raise KeyError('unnamed plot content')
+            elif 'name' not in item:
+                name = None
+                debug('plotting anonymous contents of type \'{}\''.format(item_type))
+            else:
+                name = item['name']
+                info('plotting "{}"'.format(name))
 
-            plot_functions = {
-                'observable': Plotter.plot_observable,
-                'uncertainty': Plotter.plot_uncertainty,
-            }
-
-            if not item_type in plot_functions:
+            if item_type not in plot_functions:
                 KeyError('unknown content type: "{}"'.format(item_type))
 
             plot_functions[item_type](self, item)
