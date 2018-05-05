@@ -1,4 +1,4 @@
-/* vim: set sw=4 sts=4 et foldmethod=syntax : */
+/* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
  * Copyright (c) 2016 Danny van Dyk
@@ -83,6 +83,7 @@ BOOST_PYTHON_MODULE(_eos)
     using namespace boost::python;
     using namespace eos;
 
+    // {{{ eos/utils
     // QualifiedName
     class_<QualifiedName>("QualifiedName", init<std::string>())
         .def("__repr__", &QualifiedName::full, return_value_policy<copy_const_reference>())
@@ -138,39 +139,6 @@ BOOST_PYTHON_MODULE(_eos)
         .def("as_string", &Options::as_string)
         ;
 
-    // Observable
-    register_ptr_to_python<std::shared_ptr<Observable>>();
-    class_<Observable, boost::noncopyable>("Observable", no_init)
-        .def("make", &Observable::make, return_value_policy<return_by_value>())
-        .staticmethod("make")
-        .def("evaluate", &Observable::evaluate)
-        .def("name", &Observable::name, return_value_policy<copy_const_reference>())
-        ;
-
-    // SignalPDF
-    register_ptr_to_python<std::shared_ptr<SignalPDF>>();
-    class_<SignalPDF, boost::noncopyable>("SignalPDF", no_init)
-        .def("make", &SignalPDF::make, return_value_policy<return_by_value>())
-        .staticmethod("make")
-        .def("evaluate", &SignalPDF::evaluate)
-        .def("name", &SignalPDF::name, return_value_policy<copy_const_reference>())
-        ;
-
-    // LogLikelihoodBlock
-    register_ptr_to_python<std::shared_ptr<LogLikelihoodBlock>>();
-    class_<LogLikelihoodBlock, boost::noncopyable>("LogLikelihoodBlock", no_init)
-        .def("as_string", &LogLikelihoodBlock::as_string)
-        ;
-
-    // Constraint
-    class_<Constraint>("Constraint", no_init)
-        .def("make", &Constraint::make, return_value_policy<return_by_value>())
-        .staticmethod("make")
-        .def("name", &Constraint::name, return_value_policy<copy_const_reference>())
-        .def("blocks", range(&Constraint::begin_blocks, &Constraint::end_blocks))
-        .def("observables", range(&Constraint::begin_observables, &Constraint::end_observables))
-        ;
-
     // Model
     register_ptr_to_python<std::shared_ptr<Model>>();
     class_<Model, boost::noncopyable>("Model", no_init)
@@ -198,4 +166,43 @@ BOOST_PYTHON_MODULE(_eos)
         .def("m_s_msbar",  &Model::m_s_msbar)
         .def("m_ud_msbar", &Model::m_ud_msbar)
         ;
+    // }}}
+
+    // {{{ eos/statistics
+    // LogLikelihoodBlock
+    register_ptr_to_python<std::shared_ptr<LogLikelihoodBlock>>();
+    class_<LogLikelihoodBlock, boost::noncopyable>("LogLikelihoodBlock", no_init)
+        .def("as_string", &LogLikelihoodBlock::as_string)
+        ;
+
+    // Constraint
+    class_<Constraint>("Constraint", no_init)
+        .def("make", &Constraint::make, return_value_policy<return_by_value>())
+        .staticmethod("make")
+        .def("name", &Constraint::name, return_value_policy<copy_const_reference>())
+        .def("blocks", range(&Constraint::begin_blocks, &Constraint::end_blocks))
+        .def("observables", range(&Constraint::begin_observables, &Constraint::end_observables))
+        ;
+
+    // }}}
+
+    // {{{ eos/
+    // Observable
+    register_ptr_to_python<std::shared_ptr<Observable>>();
+    class_<Observable, boost::noncopyable>("Observable", no_init)
+        .def("make", &Observable::make, return_value_policy<return_by_value>())
+        .staticmethod("make")
+        .def("evaluate", &Observable::evaluate)
+        .def("name", &Observable::name, return_value_policy<copy_const_reference>())
+        ;
+
+    // SignalPDF
+    register_ptr_to_python<std::shared_ptr<SignalPDF>>();
+    class_<SignalPDF, boost::noncopyable>("SignalPDF", no_init)
+        .def("make", &SignalPDF::make, return_value_policy<return_by_value>())
+        .staticmethod("make")
+        .def("evaluate", &SignalPDF::evaluate)
+        .def("name", &SignalPDF::name, return_value_policy<copy_const_reference>())
+        ;
+    // }}}
 }
