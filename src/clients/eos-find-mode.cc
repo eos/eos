@@ -23,7 +23,7 @@
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
 #include <eos/optimize/optimizer-gsl.hh>
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/log-posterior.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
@@ -92,7 +92,7 @@ class CommandLine :
 
         LogLikelihood likelihood;
 
-        Analysis analysis;
+        LogPosterior log_posterior;
 
         std::vector<std::shared_ptr<hdf5::File>> prerun_inputs;
 
@@ -119,7 +119,7 @@ class CommandLine :
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
-            analysis(likelihood),
+            log_posterior(likelihood),
             max_iterations(500),
             target_precision(1e-8)
         {
@@ -240,7 +240,7 @@ class CommandLine :
                     }
 
                     // check for error in setting the prior and adding the parameter
-                    if (! analysis.add(prior, nuisance))
+                    if (! log_posterior.add(prior, nuisance))
                         throw DoUsage("Error in assigning " + prior_type + " prior distribution to '" + name +
                                       "'. Perhaps '" + name + "' appears twice in the list of parameters?");
 
@@ -267,7 +267,7 @@ class CommandLine :
 
                 if ("--fix" == argument)
                 {
-                    auto parameters = analysis.parameters();
+                    auto parameters = log_posterior.parameters();
 
                     std::string par_name = std::string(*(++a));
                     double value = destringify<double> (*(++a));
@@ -432,24 +432,24 @@ int main(int argc, char * argv[])
         if ( ! inst->scan_parameters.empty())
         {
             std::cout << "# Scan parameters (" << inst->scan_parameters.size() << "):" << std::endl;
-            for (auto d = inst->analysis.parameter_descriptions().cbegin(), d_end = inst->analysis.parameter_descriptions().cend() ;
+            for (auto d = inst->log_posterior.parameter_descriptions().cbegin(), d_end = inst->log_posterior.parameter_descriptions().cend() ;
                  d != d_end ; ++d)
             {
                 if (d->nuisance)
                     continue;
-                std::cout << "#   " << inst->analysis.log_prior(d->parameter->name())->as_string() << std::endl;
+                std::cout << "#   " << inst->log_posterior.log_prior(d->parameter->name())->as_string() << std::endl;
             }
         }
 
         if ( ! inst->nuisance_parameters.empty())
         {
             std::cout << "# Nuisance parameters (" << inst->nuisance_parameters.size() << "):" << std::endl;
-            for (auto d = inst->analysis.parameter_descriptions().cbegin(), d_end = inst->analysis.parameter_descriptions().cend() ;
+            for (auto d = inst->log_posterior.parameter_descriptions().cbegin(), d_end = inst->log_posterior.parameter_descriptions().cend() ;
                  d != d_end ; ++d)
             {
                 if ( ! d->nuisance)
                     continue;
-                std::cout << "#   " << inst->analysis.log_prior(d->parameter->name())->as_string() << std::endl;
+                std::cout << "#   " << inst->log_posterior.log_prior(d->parameter->name())->as_string() << std::endl;
             }
         }
 
@@ -489,24 +489,24 @@ int main(int argc, char * argv[])
         {
             gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
             gsl_rng_set(rng, ::time(0));
-            for (auto i = inst->analysis.parameter_descriptions().begin(), i_end = inst->analysis.parameter_descriptions().end() ; i != i_end ; ++i)
+            for (auto i = inst->log_posterior.parameter_descriptions().begin(), i_end = inst->log_posterior.parameter_descriptions().end() ; i != i_end ; ++i)
             {
-                LogPriorPtr prior = inst->analysis.log_prior(i->parameter->name());
+                LogPriorPtr prior = inst->log_posterior.log_prior(i->parameter->name());
                 inst->starting_point.push_back(prior->sample(rng));
             }
         }
 
-        if (inst->starting_point.size() != inst->analysis.parameter_descriptions().size())
+        if (inst->starting_point.size() != inst->log_posterior.parameter_descriptions().size())
         {
             throw DoUsage("Starting point size of" + stringify(inst->starting_point.size())
-                          + " doesn't match with analysis size of " + stringify(inst->analysis.parameter_descriptions().size()));
+                          + " doesn't match with analysis size of " + stringify(inst->log_posterior.parameter_descriptions().size()));
         }
 
         std::cout << std::endl;
         std::cout << "# Starting optimization at " << stringify_container(inst->starting_point, 4) << std::endl;
         std::cout << std::endl;
 
-        DensityPtr density(new Analysis(inst->analysis));
+        DensityPtr density(new LogPosterior(inst->log_posterior));
         OptimizerPtr optimizer(new OptimizerGSL(density, inst->max_iterations, inst->target_precision));
         try
         {
@@ -514,7 +514,7 @@ int main(int argc, char * argv[])
 
             std::cout << "# Found maximum at: " << std::endl;
             std::cout << "#   (";
-            for (auto && p : inst->analysis)
+            for (auto && p : inst->log_posterior)
             {
                 std::cout << ' ' << p.parameter->evaluate();
             }

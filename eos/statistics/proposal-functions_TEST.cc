@@ -19,7 +19,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/statistics/analysis_TEST.hh>
+#include <eos/statistics/log-posterior_TEST.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/power_of.hh>

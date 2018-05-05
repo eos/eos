@@ -41,7 +41,7 @@ namespace eos
             /*!
              * Constructor.
              *
-             * @param analysis The density to sample from.
+             * @param density  The density to sample from.
              * @param config   The configuration of the samples.
              */
             MarkovChainSampler(const DensityPtr & density, const MarkovChainSampler::Config & config);

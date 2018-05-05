@@ -20,13 +20,13 @@
 
 #include <config.h>
 
+#include <eos/statistics/log-posterior.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/rvalue.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
-#include <eos/statistics/rvalue.hh>
 #include <eos/utils/thread_pool.hh>
 
 #include <Minuit2/FunctionMinimum.h>

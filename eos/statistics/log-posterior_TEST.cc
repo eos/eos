@@ -18,7 +18,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/statistics/analysis_TEST.hh>
+#include <eos/statistics/log-posterior_TEST.hh>
 
 #include <Minuit2/FunctionMinimum.h>
 #include <Minuit2/MnUserParameterState.h>
@@ -26,12 +26,12 @@
 using namespace test;
 using namespace eos;
 
-class AnalysisTest :
+class LogPosteriorTest :
     public TestCase
 {
     public:
-        AnalysisTest() :
-            TestCase("analysis_test")
+        LogPosteriorTest() :
+            TestCase("log_posterior_test")
         {
         }
 
@@ -41,10 +41,10 @@ class AnalysisTest :
 
             // check cloning and values
             {
-                Analysis analysis = make_analysis(false);
+                LogPosterior log_posterior = make_log_posterior(false);
 
-                auto clone1 = analysis.old_clone();
-                auto clone2 = analysis.old_clone();
+                auto clone1 = log_posterior.old_clone();
+                auto clone2 = log_posterior.old_clone();
 
                 // make sure observable's value is not equal to central value
                 MutablePtr p = (*clone1)[0];
@@ -66,11 +66,11 @@ class AnalysisTest :
 
 
                 // now change a parameter which is not scanned
-                TEST_CHECK(analysis.parameters()["b->s::Re{c7}"] != 2.599);
-                analysis.parameters()["b->s::Re{c7}"] = 2.599;
-                AnalysisPtr clone3 = analysis.old_clone();
+                TEST_CHECK(log_posterior.parameters()["b->s::Re{c7}"] != 2.599);
+                log_posterior.parameters()["b->s::Re{c7}"] = 2.599;
+                LogPosteriorPtr clone3 = log_posterior.old_clone();
 
-                TEST_CHECK_EQUAL(double(analysis.parameters()["b->s::Re{c7}"] ),
+                TEST_CHECK_EQUAL(double(log_posterior.parameters()["b->s::Re{c7}"] ),
                                  double( clone3->parameters()["b->s::Re{c7}"] ));
 
             }
@@ -81,31 +81,31 @@ class AnalysisTest :
 
                 LogLikelihood llh(parameters);
                 llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
-                Analysis analysis(llh);
+                LogPosterior log_posterior(llh);
 
                 // store a clone with no parameters
-                auto clone_bare = analysis.old_clone();
+                auto clone_bare = log_posterior.old_clone();
 
 
                 // 4.4 +- 0.1
-                analysis.add(LogPrior::Gauss(parameters, "mass::b(MSbar)",
+                log_posterior.add(LogPrior::Gauss(parameters, "mass::b(MSbar)",
                         ParameterRange
                             { 3.7, 4.9 }, 4.3, 4.4, 4.5));
 
 
 
-                MutablePtr p = analysis[0];
+                MutablePtr p = log_posterior[0];
                 p->set(4.3); //posterior mode
 
 
-                TEST_CHECK_NEARLY_EQUAL(analysis.log_likelihood()(), +0.88364655978936768, eps);
-                TEST_CHECK_NEARLY_EQUAL(analysis.log_prior(), 0.883646846442260436, eps);
+                TEST_CHECK_NEARLY_EQUAL(log_posterior.log_likelihood()(), +0.88364655978936768, eps);
+                TEST_CHECK_NEARLY_EQUAL(log_posterior.log_prior(), 0.883646846442260436, eps);
                 // slightly different due to normalization of prior
-                TEST_CHECK(analysis.log_likelihood()() != analysis.log_prior());
+                TEST_CHECK(log_posterior.log_likelihood()() != log_posterior.log_prior());
 
                 // now check cloning
 
-                auto clone = analysis.old_clone();
+                auto clone = log_posterior.old_clone();
                 MutablePtr p2 = (*clone)[0];
 
                 TEST_CHECK_EQUAL(p->evaluate(), p2->evaluate());
@@ -113,25 +113,25 @@ class AnalysisTest :
 
                 // change clone only
                 p2->set(4.112);
-                TEST_CHECK(analysis.log_likelihood()() != clone->log_likelihood()());
-                TEST_CHECK(analysis.log_prior() != clone->log_prior());
+                TEST_CHECK(log_posterior.log_likelihood()() != clone->log_likelihood()());
+                TEST_CHECK(log_posterior.log_prior() != clone->log_prior());
 
                 // same value for clone and original
                 p2->set(4.3);
 
-                TEST_CHECK_EQUAL(analysis.log_likelihood()(), clone->log_likelihood()());
-                TEST_CHECK_EQUAL(analysis.log_prior(), clone->log_prior());
+                TEST_CHECK_EQUAL(log_posterior.log_likelihood()(), clone->log_likelihood()());
+                TEST_CHECK_EQUAL(log_posterior.log_prior(), clone->log_prior());
             }
 
             // nuisance properties.nuisance())
             {
-                Analysis analysis = make_analysis(false);
+                LogPosterior log_posterior = make_log_posterior(false);
 
-                TEST_CHECK(!analysis.nuisance("mass::b(MSbar)"));
+                TEST_CHECK(!log_posterior.nuisance("mass::b(MSbar)"));
 
-                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::c", ParameterRange{ 1.4, 2.2}), true);
+                log_posterior.add(LogPrior::Flat(log_posterior.parameters(), "mass::c", ParameterRange{ 1.4, 2.2}), true);
 
-                TEST_CHECK(analysis.nuisance("mass::c"));
+                TEST_CHECK(log_posterior.nuisance("mass::c"));
             }
 
             // stop if prior undefined
@@ -140,20 +140,20 @@ class AnalysisTest :
 
                 LogLikelihood llh(parameters);
                 llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
-                Analysis analysis(llh);
+                LogPosterior log_posterior(llh);
 
-                TEST_CHECK_THROWS(InternalError, analysis.log_prior());
+                TEST_CHECK_THROWS(InternalError, log_posterior.log_prior());
             }
 
             // 1D optimization
             {
-                Analysis analysis = make_analysis(false);
+                LogPosterior log_posterior = make_log_posterior(false);
 
                 std::vector<double> initial_guess(1, 4.161345);
-                Analysis::OptimizationOptions options = Analysis::OptimizationOptions::Defaults();
+                LogPosterior::OptimizationOptions options = LogPosterior::OptimizationOptions::Defaults();
                 options.tolerance = 1e-5;
                 options.initial_step_size = 0.1;
-                auto pair = analysis.optimize(initial_guess, options);
+                auto pair = log_posterior.optimize(initial_guess, options);
 
                 auto best_fit_parameter = pair.first;
 
@@ -172,20 +172,20 @@ class AnalysisTest :
                 llh.add(ObservablePtr(new ObservableStub(parameters, "mass::t(pole)")), 171,      172,    173);
                 llh.add(ObservablePtr(new ObservableStub(parameters, "mass::e")),       510.5e-6, 511e-6, 511.5e-6);
 
-                Analysis analysis(llh);
+                LogPosterior log_posterior(llh);
 
-                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::b(MSbar)", ParameterRange{ 4     , 4.5   }));
-                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::c",        ParameterRange{ 1     , 2     }));
-                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::s(2GeV)",  ParameterRange{ 1e-3  , 25e-3 }));
-                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::t(pole)",  ParameterRange{ 168   , 177   }));
-                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::e",        ParameterRange{ 500e-6, 520e-6}));
+                log_posterior.add(LogPrior::Flat(log_posterior.parameters(), "mass::b(MSbar)", ParameterRange{ 4     , 4.5   }));
+                log_posterior.add(LogPrior::Flat(log_posterior.parameters(), "mass::c",        ParameterRange{ 1     , 2     }));
+                log_posterior.add(LogPrior::Flat(log_posterior.parameters(), "mass::s(2GeV)",  ParameterRange{ 1e-3  , 25e-3 }));
+                log_posterior.add(LogPrior::Flat(log_posterior.parameters(), "mass::t(pole)",  ParameterRange{ 168   , 177   }));
+                log_posterior.add(LogPrior::Flat(log_posterior.parameters(), "mass::e",        ParameterRange{ 500e-6, 520e-6}));
 
                 std::vector<double> initial_guess{ 4.1001, 1.90014, 3.00045e-3, 174.6345, 515.51e-6 };
 
-                Analysis::OptimizationOptions options = Analysis::OptimizationOptions::Defaults();
+                LogPosterior::OptimizationOptions options = LogPosterior::OptimizationOptions::Defaults();
                 options.tolerance = 1e-5;
                 options.initial_step_size = 0.1;
-                std::vector<double> optimum = analysis.optimize(initial_guess, options).first;
+                std::vector<double> optimum = log_posterior.optimize(initial_guess, options).first;
 
                 TEST_CHECK_NEARLY_EQUAL(optimum[0], 4.2   , 1e-5);
                 TEST_CHECK_NEARLY_EQUAL(optimum[1], 1.2   , 1e-5);
@@ -199,9 +199,9 @@ class AnalysisTest :
                 initial_guess[0] = 3.2;
 
                 // use lowest accuracy
-                auto config = Analysis::OptimizationOptions::Defaults();
+                auto config = LogPosterior::OptimizationOptions::Defaults();
                 config.strategy_level = 0;
-                const ROOT::Minuit2::FunctionMinimum & data_at_min = analysis.optimize_minuit(initial_guess, config);
+                const ROOT::Minuit2::FunctionMinimum & data_at_min = log_posterior.optimize_minuit(initial_guess, config);
 
                 // check parameters at mode
                 auto u_par = data_at_min.UserParameters();
@@ -232,23 +232,23 @@ class AnalysisTest :
                 llh.add(ObservablePtr(new ObservableStub(parameters, "mass::c")), 1.182, 1.192, 1.202);
                 llh.add(ObservablePtr(new ObservableStub(parameters, "mass::c")), 1.19, 1.2, 1.21);
 
-                Analysis analysis(llh);
+                LogPosterior log_posterior(llh);
 
-                analysis.add(LogPrior::Flat(analysis.parameters(), "mass::c", ParameterRange{ 1 , 2 }));
+                log_posterior.add(LogPrior::Flat(log_posterior.parameters(), "mass::c", ParameterRange{ 1 , 2 }));
 
                 // in middle of both observations
                 std::vector<double> best_fit_parameter(1, 1.196);
 
                 // each observation 0.4 sigma away from mode
-//                auto ret = analysis.goodness_of_fit(best_fit_parameter);
+//                auto ret = log_posterior.goodness_of_fit(best_fit_parameter);
 //                TEST_CHECK_NEARLY_EQUAL(ret.first, 0.32, eps);
 //                TEST_CHECK_NEARLY_EQUAL(ret.first, 0.57160764495333116, eps);
 
                 // now use simulation.
                 // p-value _not_ corrected for DoF, thus biased towards p=1
-                auto ret = analysis.goodness_of_fit(best_fit_parameter, 5e4);
+                auto ret = log_posterior.goodness_of_fit(best_fit_parameter, 5e4);
                 TEST_CHECK_NEARLY_EQUAL(ret.first, 0.852143788, 5e-3);
                 TEST_CHECK_NEARLY_EQUAL(ret.second, 0.57160, 5e-3);
             }
         }
-} analysis_test;
+} log_posterior_test;

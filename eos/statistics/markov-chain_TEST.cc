@@ -19,7 +19,7 @@
  */
 
 #include <config.h>
-#include <eos/statistics/analysis_TEST.hh>
+#include <eos/statistics/log-posterior_TEST.hh>
 #include <eos/statistics/markov-chain.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <test/test.hh>
@@ -42,23 +42,23 @@ class MarkovChainTest :
         virtual void run() const
         {
             static const double eps = 1e-14;
-            Analysis analysis = make_analysis(false);
+            LogPosterior log_posterior = make_log_posterior(false);
 
-            // empty Analysis
-            TEST_SECTION("empty-analysis",
+            // empty LogPosterior
+            TEST_SECTION("empty-log-posterior",
             {
                 Parameters p = Parameters::Defaults();
                 LogLikelihood llh(p);
-                Analysis analysis(llh);
+                LogPosterior log_posterior(llh);
 
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
-                TEST_CHECK_THROWS(InternalError, MarkovChain chain(analysis.clone(), 13, ppf));
+                TEST_CHECK_THROWS(InternalError, MarkovChain chain(log_posterior.clone(), 13, ppf));
             });
 
             // check if empty proposal function throws InternalError
             TEST_SECTION("empty-proposal-function",
             {
-                TEST_CHECK_THROWS(InternalError, MarkovChain chain(analysis.clone(), 13, std::shared_ptr<MarkovChain::ProposalFunction>()));
+                TEST_CHECK_THROWS(InternalError, MarkovChain chain(log_posterior.clone(), 13, std::shared_ptr<MarkovChain::ProposalFunction>()));
             });
 
             // check that clones are independent
@@ -68,8 +68,8 @@ class MarkovChainTest :
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf2(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
 
                 // create two chains and compare results
-                MarkovChain chain1(analysis.clone(), 13, ppf1);
-                MarkovChain chain2(analysis.clone(), 13134, ppf2);
+                MarkovChain chain1(log_posterior.clone(), 13, ppf1);
+                MarkovChain chain2(log_posterior.clone(), 13134, ppf2);
 
                 double mB1_before(chain1.parameter_descriptions().front().parameter->evaluate());
                 double mB2_before(chain2.parameter_descriptions().front().parameter->evaluate());
@@ -84,11 +84,11 @@ class MarkovChainTest :
                 TEST_CHECK_EQUAL(mB2_before, chain2.parameter_descriptions().front().parameter->evaluate());
             });
 #if 0
-            // step by step analysis of proposed moves. Out of range, too improbable, accepted... all in here
+            // step by step log_posterior of proposed moves. Out of range, too improbable, accepted... all in here
             TEST_SECTION("step-by-step",
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.03 }));
-                MarkovChain chain(analysis.clone(), 1313, ppf);
+                MarkovChain chain(log_posterior.clone(), 1313, ppf);
 
                 std::cout << "initial:" << std::endl;
                 std::cout << chain.current_state().point[0] << std::endl;
@@ -167,8 +167,8 @@ class MarkovChainTest :
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf1(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf2(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
-                MarkovChain chain1(analysis.clone(), 1313, ppf1);
-                MarkovChain chain2(analysis.clone(), 1313, ppf2);
+                MarkovChain chain1(log_posterior.clone(), 1313, ppf1);
+                MarkovChain chain2(log_posterior.clone(), 1313, ppf2);
 
                 static const unsigned N = 57;
                 for (unsigned i = 0 ; i < N; ++i)
@@ -189,7 +189,7 @@ class MarkovChainTest :
             TEST_SECTION("statistics",
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.05 }));
-                MarkovChain chain(analysis.clone(), 1313, ppf);
+                MarkovChain chain(log_posterior.clone(), 1313, ppf);
 
                 chain.run(1);
                 TEST_CHECK_EQUAL(chain.statistics().mean_of_parameters.front(), chain.current_state().point.front()); // mean of one iteration is just the current point
@@ -218,7 +218,7 @@ class MarkovChainTest :
             TEST_SECTION("statistics2",
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
-                MarkovChain chain(make_analysis(true), 13, ppf);
+                MarkovChain chain(make_log_posterior(true), 13, ppf);
 
                 chain.run(1000);
                 TEST_CHECK_RELATIVE_ERROR(chain.statistics().mean_of_parameters.front(),     4.18292971650058200, eps);
@@ -233,7 +233,7 @@ class MarkovChainTest :
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.03 }));
 
-                MarkovChain chain(analysis.clone(), 1313, ppf);
+                MarkovChain chain(log_posterior.clone(), 1313, ppf);
 
                 chain.run(50);
                 TEST_CHECK_EQUAL(chain.statistics().iterations_total,    50);
@@ -244,7 +244,7 @@ class MarkovChainTest :
             // check 3D as well
             TEST_SECTION("3d",
             {
-                auto clone = analysis.clone();
+                auto clone = log_posterior.clone();
                 clone->add(LogPrior::Flat(clone->parameters(), "Abs{c9}", ParameterRange{0.5, 4}), false);
                 clone->add(LogPrior::Flat(clone->parameters(), "mass::e", ParameterRange{5.1e-4, 5.11e-4}), true);
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(3,
@@ -287,13 +287,13 @@ class MarkovChainTest :
                 llh.add(ObservablePtr(new ObservableStub(parameters, Kinematics(),
                             "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
-                Analysis analysis(llh);
+                LogPosterior log_posterior(llh);
                 // the irrelevant parameter
-                analysis.add(LogPrior::Flat(parameters, "CKM::etabar", ParameterRange{ 3.7, 4.9 }));
+                log_posterior.add(LogPrior::Flat(parameters, "CKM::etabar", ParameterRange{ 3.7, 4.9 }));
                 // an interesting parameter that affects the observable
-                analysis.add(LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{ 3.7, 4.9 }));
+                log_posterior.add(LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{ 3.7, 4.9 }));
                 // another irrelevant parameters
-                analysis.add(LogPrior::Flat(parameters, "B->K^*::a1_uncertainty@BZ2004", ParameterRange{ 3.7, 4.9 }));
+                log_posterior.add(LogPrior::Flat(parameters, "B->K^*::a1_uncertainty@BZ2004", ParameterRange{ 3.7, 4.9 }));
 
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(3,
                             std::vector<double>
@@ -302,7 +302,7 @@ class MarkovChainTest :
                                 0.0,  0.09,  0.0,
                                 0.0,  0.0,   0.08
                             }));
-                MarkovChain chain(analysis.clone(), 12345, ppf);
+                MarkovChain chain(log_posterior.clone(), 12345, ppf);
 
                 // if this evaluates to NaN, initialization went wrong
                 TEST_CHECK_RELATIVE_ERROR(llh(), -14.758100406210971, eps);
@@ -313,8 +313,8 @@ class MarkovChainTest :
             TEST_SECTION("set-point",
             {
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(new proposal_functions::MultivariateGaussian(1, std::vector<double>{ 0.01 }));
-                auto analysis = make_analysis(false);
-                MarkovChain chain(analysis.clone(), 13, ppf);
+                auto log_posterior = make_log_posterior(false);
+                MarkovChain chain(log_posterior.clone(), 13, ppf);
 
                 chain.set_point(std::vector<double>{ 4.3});
                 TEST_CHECK_EQUAL(chain.current_state().point.front(), 4.3);
@@ -328,11 +328,11 @@ class MarkovChainTest :
                 LogLikelihood llh(parameters);
                 llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
-                Analysis analysis(llh);
+                LogPosterior log_posterior(llh);
                 // the irrelevant parameter
-                analysis.add(LogPrior::Flat(parameters, "mass::c", ParameterRange{ 1.2, 1.34 }));
+                log_posterior.add(LogPrior::Flat(parameters, "mass::c", ParameterRange{ 1.2, 1.34 }));
                 // an interesting parameter that affects the observable
-                analysis.add(LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{ 3.7, 4.9 }));
+                log_posterior.add(LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{ 3.7, 4.9 }));
 
                 // _covariance with zero correlation
                 std::vector<double> cov(4, 0.0);
@@ -343,7 +343,7 @@ class MarkovChainTest :
                 mvg->covariance_scale = 2.38 * 2.38 / 2.0;
 
                 std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvg);
-                MarkovChain chain(analysis.clone(), 12345, ppf);
+                MarkovChain chain(log_posterior.clone(), 12345, ppf);
 
                 chain.run(5e4);
                 double efficiency = 0.24;
@@ -392,15 +392,15 @@ class MarkovChainTest :
                 LogLikelihood llh(p);
                 llh.add(Constraint("test::correlated-gaussian", std::vector<ObservablePtr>(obs.begin(), obs.end()), { block }));
 
-                Analysis analysis(llh);
+                LogPosterior log_posterior(llh);
 
                 // an interesting parameter that affects the observable
-                analysis.add(LogPrior::Flat(p, "mass::b(MSbar)", ParameterRange{ 3.7, 4.9 }));
+                log_posterior.add(LogPrior::Flat(p, "mass::b(MSbar)", ParameterRange{ 3.7, 4.9 }));
 
                 // the 2nd parameter
                 // NOTE: it is crucial for the accuracy of the _covariance estimate that the range be large enough
                 //       to cover the gaussian peak out to many sigmas
-                analysis.add(LogPrior::Flat(p, "mass::c", ParameterRange{ 0.7, 1.34 }));
+                log_posterior.add(LogPrior::Flat(p, "mass::c", ParameterRange{ 0.7, 1.34 }));
 
                 //start with uncorrelated gaussian
                 std::vector<double> cov_initial
@@ -415,7 +415,7 @@ class MarkovChainTest :
                 {
                     proposal_functions::MultivariateGaussian* mvg = new proposal_functions::MultivariateGaussian(2, cov_initial, automatic_scaling);
                     std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvg);
-                    MarkovChain chain(analysis.clone(), 12345, ppf);
+                    MarkovChain chain(log_posterior.clone(), 12345, ppf);
 
                     chain.run(1e4);
 
@@ -441,7 +441,7 @@ class MarkovChainTest :
                     proposal_functions::MultivariateStudentT * mvt = new proposal_functions::MultivariateStudentT(2, cov_initial, dof);
 
                     std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvt);
-                    MarkovChain chain(analysis.clone(), 12345, ppf);
+                    MarkovChain chain(log_posterior.clone(), 12345, ppf);
 
                     chain.run(12e4);
 
@@ -478,7 +478,7 @@ class MarkovChainTest :
                     TEST_CHECK_RELATIVE_ERROR(mvt->evaluate(current, proposal), mvg->evaluate(current, proposal), 3e-2);
 
                     std::shared_ptr<MarkovChain::ProposalFunction> ppf(mvt);
-                    MarkovChain chain(analysis.clone(), 12345, ppf);
+                    MarkovChain chain(log_posterior.clone(), 12345, ppf);
 
                     chain.run(3e4);
 

@@ -19,13 +19,13 @@ AM_CXXFLAGS = @AM_CXXFLAGS@
 
 lib_LTLIBRARIES = libeosstatistics.la
 libeosstatistics_la_SOURCES = \
-	analysis.cc analysis.hh analysis-fwd.hh \
 	chain-group.cc chain-group.hh \
 	chi-squared.hh chi-squared.cc \
 	density-wrapper.cc density-wrapper.hh \
 	hierarchical-clustering.cc hierarchical-clustering.hh \
 	histogram.cc histogram.hh \
 	log-likelihood.cc log-likelihood.hh log-likelihood-fwd.hh \
+	log-posterior.cc log-posterior.hh log-posterior-fwd.hh \
 	log-prior.cc log-prior.hh log-prior-fwd.hh \
 	markov-chain.cc markov-chain.hh \
 	markov-chain-sampler.cc markov-chain-sampler.hh \
@@ -47,13 +47,13 @@ endif
 
 include_eos_statisticsdir = $(includedir)/eos/statistics
 include_eos_statistics_HEADERS = \
-	analysis.hh analysis-fwd.hh \
 	chain-group.hh \
 	chi-squared.hh \
 	density-wrapper.hh \
 	hierarchical-clustering.hh \
 	histogram.hh \
 	log-likelihood.hh log-likelihood-fwd.hh \
+	log-posterior.hh log-posterior-fwd.hh \
 	log-prior.hh log-prior-fwd.hh \
 	markov-chain.hh \
 	markov-chain-sampler.hh \
@@ -71,12 +71,12 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
-	analysis_TEST \
 	chi-squared_TEST \
 	density-wrapper_TEST \
 	hierarchical-clustering_TEST \
 	histogram_TEST \
 	log-likelihood_TEST \
+	log-posterior_TEST \
 	log-prior_TEST \
 	markov-chain_TEST \
 	markov-chain-sampler_TEST \
@@ -98,8 +98,6 @@ endif
 
 check_PROGRAMS = $(TESTS)
 
-analysis_TEST_SOURCES = analysis_TEST.cc analysis_TEST.hh
-
 chi_squared_TEST_SOURCES = chi-squared_TEST.cc
 
 density_wrapper_TEST_SOURCES = density-wrapper_TEST.cc density-wrapper_TEST.hh
@@ -109,6 +107,8 @@ hierarchical_clustering_TEST_SOURCES = hierarchical-clustering_TEST.cc
 histogram_TEST_SOURCES = histogram_TEST.cc
 
 log_likelihood_TEST_SOURCES = log-likelihood_TEST.cc
+
+log_posterior_TEST_SOURCES = log-posterior_TEST.cc log-posterior_TEST.hh
 
 log_prior_TEST_SOURCES = log-prior_TEST.cc
 

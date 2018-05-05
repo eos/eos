@@ -17,7 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/statistics/analysis_TEST.hh>
+#include <eos/statistics/log-posterior_TEST.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/statistics/prior-sampler.hh>
 #include <eos/utils/hdf5.hh>

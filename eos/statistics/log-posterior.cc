@@ -19,7 +19,7 @@
 
 #include <config.h>
 
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/log-posterior.hh>
 #include <eos/utils/density-impl.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/log.hh>
@@ -50,18 +50,18 @@ namespace eos
    struct MinuitAdapter :
        public ROOT::Minuit2::FCNBase
    {
-       Analysis & analysis;
+       LogPosterior log_posterior;
 
        MnUserParameters user_parameters;
 
        // stores results of minimization
        std::shared_ptr<FunctionMinimum> data_at_minimum;
 
-       MinuitAdapter(Analysis & analysis) :
-           analysis(analysis)
+       MinuitAdapter(LogPosterior & log_posterior) :
+           log_posterior(log_posterior)
        {
            // define parameters and limits
-           for (auto i = analysis.parameter_descriptions().begin(), i_end = analysis.parameter_descriptions().end() ; i != i_end ; ++i)
+           for (auto i = log_posterior.parameter_descriptions().begin(), i_end = log_posterior.parameter_descriptions().end() ; i != i_end ; ++i)
            {
                // name, value, error(?), min, max
                user_parameters.Add(i->parameter->name(), (i->min + i->max) / 2.0,  i->max - i->min, i->min, i->max);
@@ -81,28 +81,28 @@ namespace eos
        {
            // copy parameter values
            auto p = parameter_values.begin();
-           for (auto i = analysis.parameter_descriptions().begin(), i_end = analysis.parameter_descriptions().end() ; i != i_end ; ++i, ++p)
+           for (auto i = log_posterior.parameter_descriptions().begin(), i_end = log_posterior.parameter_descriptions().end() ; i != i_end ; ++i, ++p)
            {
                i->parameter->set(*p);
            }
-           return -analysis.log_posterior();
+           return -log_posterior.log_posterior();
        }
    };
 
-   Analysis::Analysis(const LogLikelihood & log_likelihood) :
+   LogPosterior::LogPosterior(const LogLikelihood & log_likelihood) :
         _log_likelihood(log_likelihood),
         _parameters(log_likelihood.parameters()),
         _minuit(nullptr)
    {
    }
 
-   Analysis::~Analysis()
+   LogPosterior::~LogPosterior()
    {
        delete _minuit;
    }
 
    bool
-   Analysis::add(const LogPriorPtr & prior, bool nuisance)
+   LogPosterior::add(const LogPriorPtr & prior, bool nuisance)
    {
        // clone has correct Parameters object selected
        LogPriorPtr prior_clone = prior->clone(_parameters);
@@ -126,23 +126,23 @@ namespace eos
    }
 
    DensityPtr
-   Analysis::clone() const
+   LogPosterior::clone() const
    {
        return DensityPtr(private_clone());
    }
 
-   AnalysisPtr
-   Analysis::old_clone() const
+   LogPosteriorPtr
+   LogPosterior::old_clone() const
    {
-       return AnalysisPtr(private_clone());
+       return LogPosteriorPtr(private_clone());
    }
 
-   Analysis *
-   Analysis::private_clone() const
+   LogPosterior *
+   LogPosterior::private_clone() const
    {
        // clone log_likelihood
        LogLikelihood llh = _log_likelihood.clone();
-       Analysis * result = new Analysis(llh);
+       LogPosterior * result = new LogPosterior(llh);
 
        // add parameters via prior clones
        for (auto i = _priors.cbegin(), i_end = _priors.cend(); i != i_end; ++i)
@@ -163,31 +163,31 @@ namespace eos
    }
 
    double
-   Analysis::evaluate() const
+   LogPosterior::evaluate() const
    {
        return log_posterior();
    }
 
    Density::Iterator
-   Analysis::begin() const
+   LogPosterior::begin() const
    {
        return Density::Iterator(_parameter_descriptions.cbegin());
    }
 
    Density::Iterator
-   Analysis::end() const
+   LogPosterior::end() const
    {
        return Density::Iterator(_parameter_descriptions.cend());
    }
 
    void
-   Analysis::dump_descriptions(hdf5::File & file, const std::string & data_set_base) const
+   LogPosterior::dump_descriptions(hdf5::File & file, const std::string & data_set_base) const
    {
        // store parameter info, including the prior
        {
-           auto data_set = file.create_data_set(data_set_base + "/parameters", Analysis::Output::description_type());
+           auto data_set = file.create_data_set(data_set_base + "/parameters", LogPosterior::Output::description_type());
 
-           auto record = Analysis::Output::description_record();
+           auto record = LogPosterior::Output::description_record();
            std::string prior;
 
            for (auto d = _parameter_descriptions.cbegin(), d_end = _parameter_descriptions.cend() ; d != d_end ; ++d)
@@ -248,12 +248,12 @@ namespace eos
    }
 
    std::vector<ParameterDescription>
-   Analysis::read_descriptions(const hdf5::File & file, std::string data_set_base)
+   LogPosterior::read_descriptions(const hdf5::File & file, std::string data_set_base)
    {
        hdf5::File & f = const_cast<hdf5::File &>(file);
-       auto data_set = f.open_data_set(data_set_base + "/parameters", Analysis::Output::description_type());
+       auto data_set = f.open_data_set(data_set_base + "/parameters", LogPosterior::Output::description_type());
 
-       auto record = Analysis::Output::description_record();
+       auto record = LogPosterior::Output::description_record();
 
        std::vector<ParameterDescription> descriptions;
        Parameters p = Parameters::Defaults();
@@ -268,7 +268,7 @@ namespace eos
    }
 
    void
-   Analysis::read_descriptions(hdf5::File & file, const std::string & data_set_base_name,
+   LogPosterior::read_descriptions(hdf5::File & file, const std::string & data_set_base_name,
            std::vector<ParameterDescription> & descr, std::vector<std::string> & priors,
            std::vector<std::string> & constraints, std::string & hash)
    {
@@ -318,13 +318,13 @@ namespace eos
    }
 
    Parameters
-   Analysis::parameters() const
+   LogPosterior::parameters() const
    {
        return _parameters;
    }
 
    std::pair<double, double>
-   Analysis::goodness_of_fit(const std::vector<double> & parameter_values, const unsigned & simulated_datasets, std::string output_file)
+   LogPosterior::goodness_of_fit(const std::vector<double> & parameter_values, const unsigned & simulated_datasets, std::string output_file)
    {
        // count scan parameters
        unsigned scan_parameters = 0;
@@ -336,7 +336,7 @@ namespace eos
        }
 
        if (_parameter_descriptions.size() != parameter_values.size())
-           throw InternalError("Analysis::goodness_of_fit: starting point doesn't have the correct dimension: "
+           throw InternalError("LogPosterior::goodness_of_fit: starting point doesn't have the correct dimension: "
                    + stringify(parameter_values.size()) + " vs " + stringify(_parameter_descriptions.size()) );
 
        std::shared_ptr<hdf5::File> f;
@@ -355,7 +355,7 @@ namespace eos
            ParameterDescription & desc = _parameter_descriptions[i];
            if (parameter_values[i] < desc.min || parameter_values[i] > desc.max)
            {
-               throw InternalError("Analysis::goodness_of_fit: parameter " + desc.parameter->name() +
+               throw InternalError("LogPosterior::goodness_of_fit: parameter " + desc.parameter->name() +
                        " out of bounds [" + stringify(desc.min) + ", " + stringify(desc.max) + "]: "
                        + stringify(parameter_values[i]));
            }
@@ -365,7 +365,7 @@ namespace eos
        // update observables for new parameter values
        const double ll = _log_likelihood();
 
-       Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+       Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                         << "Calculating p-values at parameters " << stringify(parameter_values.cbegin(), parameter_values.cend())
                         << " with log(post) = " << ll + log_prior();
 
@@ -382,17 +382,17 @@ namespace eos
        {
            p_analytical = gsl_cdf_chisq_Q(chi_squared, dof);
 
-           Log::instance()->message("analysis.goodness_of_fit", ll_debug)
+           Log::instance()->message("log_posterior.goodness_of_fit", ll_debug)
                                 << "dof = " << dof << ", _parameter_descriptions.size = " << _parameter_descriptions.size()
                                 << ", #observations = " << _log_likelihood.number_of_observations();
 
-           Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+           Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                                << "p-value from simulating pseudo experiments after applying DoF correction and using the \\chi^2-distribution"
                                << " (valid assumption?) has a value of " << p_analytical;
        }
        else
        {
-           Log::instance()->message("analysis.goodness_of_fit", ll_warning)
+           Log::instance()->message("log_posterior.goodness_of_fit", ll_warning)
                             << "Cannot compute p-value for non-positive dof (" << dof << "). Need more constraints / less parameters";
        }
 
@@ -403,14 +403,14 @@ namespace eos
        {
            double p_analytical_scan = gsl_cdf_chisq_Q(chi_squared, dof_scan);
 
-           Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+           Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                            << "p-value from simulating pseudo experiments after applying DoF correction (scan parameters only)"
                            << " and using the \\chi^2-distribution"
                            << " (valid assumption?) has a value of " << p_analytical_scan;
        }
        else
        {
-           Log::instance()->message("analysis.goodness_of_fit", ll_warning)
+           Log::instance()->message("log_posterior.goodness_of_fit", ll_warning)
                             << "Cannot compute p-value for negative dof_scan (" << dof_scan << "). Need more constraints / less parameters";
 
        }
@@ -418,7 +418,7 @@ namespace eos
        double total_significance_squared = 0;
        std::vector<double> significances;
 
-       Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+       Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                         << "Significances for each constraint:";
 
        for (auto c = _log_likelihood.begin(), c_end = _log_likelihood.end() ; c != c_end ; ++c)
@@ -426,7 +426,7 @@ namespace eos
            for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
            {
                double significance = (**b).significance();
-               Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+               Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                                 << c->name() << ": " << significance << " sigma";
                total_significance_squared += power_of<2>(significance);
                significances.push_back(significance);
@@ -434,7 +434,7 @@ namespace eos
        }
 
        /* output the test statistics */
-       Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+       Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                         << "TestStatistic for each constraint:";
        for (auto c = _log_likelihood.begin(), c_end = _log_likelihood.end() ; c != c_end ; ++c)
        {
@@ -443,7 +443,7 @@ namespace eos
                std::stringstream ss;
                ss << *(*b)->primary_test_statistic();
 
-               Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+               Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                                 << c->name() << ": " << ss.str();
            }
        }
@@ -461,20 +461,20 @@ namespace eos
            attr_sign = chi_squared;
        }
 
-       Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+       Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                         << "Listing the individual observables' predicted values:";
 
        const ObservableCache & cache = _log_likelihood.observable_cache();
        for (unsigned i = 0 ; i < cache.size() ; ++i)
        {
-           Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+           Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                             << cache.observable(i)->name() << " = " << cache[i];
        }
 
        if (dof > 0)
        {
            const double p_significance =  gsl_cdf_chisq_Q(total_significance_squared, dof);
-           Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+           Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                             << "p-value from calculating significances, treating them as coming from a Gaussian, is "
                             << p_significance << ". The pseudo chi_squared/dof is " << total_significance_squared
                             << "/" << dof << " = " << total_significance_squared / dof;
@@ -483,7 +483,7 @@ namespace eos
        if (dof_scan > 0)
        {
            const double p_significance_scan =  gsl_cdf_chisq_Q(total_significance_squared, dof_scan);
-           Log::instance()->message("analysis.goodness_of_fit", ll_informational)
+           Log::instance()->message("log_posterior.goodness_of_fit", ll_informational)
                                 << "p-value from calculating significances, treating them as coming from a Gaussian, is "
                                 << p_significance_scan << ". The pseudo chi_squared/dof (dof from scan parameters only) is "
                                 << total_significance_squared
@@ -494,7 +494,7 @@ namespace eos
    }
 
    unsigned
-   Analysis::index(const std::string & name) const
+   LogPosterior::index(const std::string & name) const
    {
        unsigned result = 0;
 
@@ -508,22 +508,22 @@ namespace eos
    }
 
    LogLikelihood
-   Analysis::log_likelihood() const
+   LogPosterior::log_likelihood() const
    {
        return _log_likelihood;
    }
 
    double
-   Analysis::log_posterior() const
+   LogPosterior::log_posterior() const
    {
        return log_prior() + _log_likelihood();
    }
 
    double
-   Analysis::log_prior() const
+   LogPosterior::log_prior() const
    {
        if (_priors.empty())
-           throw InternalError("Analysis::log_prior(): prior is undefined");
+           throw InternalError("LogPosterior::log_prior(): prior is undefined");
 
        double result = 0.0;
 
@@ -538,7 +538,7 @@ namespace eos
    }
 
    LogPriorPtr
-   Analysis::log_prior(const std::string & name) const
+   LogPosterior::log_prior(const std::string & name) const
    {
        LogPriorPtr prior;
 
@@ -556,21 +556,21 @@ namespace eos
    }
 
    double
-   Analysis::negative_log_posterior(const gsl_vector * pars, void * data)
+   LogPosterior::negative_log_posterior(const gsl_vector * pars, void * data)
    {
        // set all components of parameters
-       Analysis * analysis = static_cast<Analysis *>(data);
-       for (unsigned i = 0 ; i < analysis->_parameter_descriptions.size() ; ++i)
+       LogPosterior * log_posterior = static_cast<LogPosterior *>(data);
+       for (unsigned i = 0 ; i < log_posterior->_parameter_descriptions.size() ; ++i)
        {
-           analysis->_parameter_descriptions[i].parameter->set(gsl_vector_get(pars, i));
+           log_posterior->_parameter_descriptions[i].parameter->set(gsl_vector_get(pars, i));
        }
 
        // calculate negative posterior
-       return -(analysis->log_prior() + analysis->log_likelihood()());
+       return -(log_posterior->log_prior() + log_posterior->log_likelihood()());
    }
 
    bool
-   Analysis::nuisance(const std::string& par_name) const
+   LogPosterior::nuisance(const std::string& par_name) const
    {
        unsigned index = this->index(par_name);
 
@@ -585,23 +585,23 @@ namespace eos
    }
 
    MutablePtr
-   Analysis::operator[] (const unsigned & index) const
+   LogPosterior::operator[] (const unsigned & index) const
    {
        return _parameter_descriptions[index].parameter;
    }
 
    std::pair<std::vector<double>, double>
-   Analysis::optimize(const std::vector<double> & initial_guess, const Analysis::OptimizationOptions & options)
+   LogPosterior::optimize(const std::vector<double> & initial_guess, const LogPosterior::OptimizationOptions & options)
    {
        // input validation
        if (_parameter_descriptions.size() != initial_guess.size())
-           throw InternalError("Analysis::optimize: starting point doesn't have the correct dimension "
+           throw InternalError("LogPosterior::optimize: starting point doesn't have the correct dimension "
                    + stringify(_parameter_descriptions.size()) );
 
        // setup the function object as in GSL manual 36.4
        gsl_multimin_function posterior;
        posterior.n = _parameter_descriptions.size();
-       posterior.f = &Analysis::negative_log_posterior;
+       posterior.f = &LogPosterior::negative_log_posterior;
        posterior.params = (void *) this;
 
        // set starting guess
@@ -638,12 +638,12 @@ namespace eos
            simplex_size = gsl_multimin_fminimizer_size(minim);
            status = gsl_multimin_test_size(simplex_size, options.tolerance);
 
-           Log::instance()->message("analysis.optimize", ll_debug)
+           Log::instance()->message("log_posterior.optimize", ll_debug)
                                        << "f() = " << minim->fval << "\tsize = " << simplex_size;
 
            if (status == GSL_SUCCESS)
            {
-               Log::instance()->message("analysis.optimize", ll_informational)
+               Log::instance()->message("log_posterior.optimize", ll_informational)
                                << "Simplex algorithm converged after " << stringify(iter) << " iterations";
            }
        } while (status == GSL_CONTINUE && iter < options.maximum_iterations);
@@ -662,7 +662,7 @@ namespace eos
        //check if algorithm actually found a better minimum
        if (mode >= initial_minimum)
        {
-           Log::instance()->message("analysis.optimize", ll_warning)
+           Log::instance()->message("log_posterior.optimize", ll_warning)
                           << "Simplex algorithm did not improve on initial guess";
            return std::make_pair(initial_guess, -initial_minimum) ;
        }
@@ -672,7 +672,7 @@ namespace eos
        for (unsigned i = 0 ; i < posterior.n ; ++i)
            results += stringify(parameters_at_mode[i]) + " ";
        results += ")";
-       Log::instance()->message("analysis.optimize", ll_informational)
+       Log::instance()->message("log_posterior.optimize", ll_informational)
                        << results;
 
        //minus sign to convert to posterior
@@ -681,7 +681,7 @@ namespace eos
    }
 
    const ROOT::Minuit2::FunctionMinimum &
-   Analysis::optimize_minuit(const std::vector<double> & initial_guess, const Analysis::OptimizationOptions & options)
+   LogPosterior::optimize_minuit(const std::vector<double> & initial_guess, const LogPosterior::OptimizationOptions & options)
    {
        if (! _minuit)
        {
@@ -739,7 +739,7 @@ namespace eos
        }
 
        if (! minimizer)
-           throw InternalError("Analysis::optimize_minut: invalid algorithm option: " + options.algorithm);
+           throw InternalError("LogPosterior::optimize_minut: invalid algorithm option: " + options.algorithm);
 
        // minimize and save results
        _minuit->data_at_minimum.reset(new FunctionMinimum((*minimizer)(options.maximum_iterations, options.tolerance)));
@@ -758,12 +758,12 @@ namespace eos
    }
 
     const std::vector<ParameterDescription> &
-    Analysis::parameter_descriptions() const
+    LogPosterior::parameter_descriptions() const
     {
         return _parameter_descriptions;
     }
 
-    Analysis::OptimizationOptions::OptimizationOptions():
+    LogPosterior::OptimizationOptions::OptimizationOptions():
         algorithm("minimize"),
         fix_flat_nuisance(false),
         initial_step_size(0, 1, 0.1),
@@ -775,14 +775,14 @@ namespace eos
     {
     }
 
-    Analysis::OptimizationOptions
-    Analysis::OptimizationOptions::Defaults()
+    LogPosterior::OptimizationOptions
+    LogPosterior::OptimizationOptions::Defaults()
     {
         return OptimizationOptions();
     }
 
-    Analysis::Output::DescriptionType
-    Analysis::Output::description_type()
+    LogPosterior::Output::DescriptionType
+    LogPosterior::Output::description_type()
     {
         return
         DescriptionType
@@ -797,26 +797,26 @@ namespace eos
     }
 
     std::tuple<const char *, double, double, int, const char *>
-    Analysis::Output::description_record()
+    LogPosterior::Output::description_record()
     {
         return std::make_tuple("name", 1.0, 2.0, 3, "prior");
     }
 
     std::vector<double>
-    proposal_covariance(const Analysis & analysis,
+    proposal_covariance(const LogPosterior & log_posterior,
                         double scale_reduction,
                         bool scale_nuisance)
     {
-        const auto & npar = analysis.parameter_descriptions().size();
+        const auto & npar = log_posterior.parameter_descriptions().size();
 
         // zero off-diagonal
         std::vector<double> covariance (npar * npar, 0);
 
         // prior variance on the diagonal
         unsigned par = 0;
-        for (auto & def : analysis.parameter_descriptions())
+        for (auto & def : log_posterior.parameter_descriptions())
         {
-            LogPriorPtr prior = analysis.log_prior(def.parameter->name());
+            LogPriorPtr prior = log_posterior.log_prior(def.parameter->name());
             covariance[par + npar * par] = prior->variance();
 
             // rescale variance of scan parameters with a configurable value, in order

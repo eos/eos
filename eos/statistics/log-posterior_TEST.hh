@@ -17,10 +17,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_STATISTICS_ANALYSIS_TEST_HH
-#define EOS_GUARD_SRC_STATISTICS_ANALYSIS_TEST_HH 1
+#ifndef EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_TEST_HH
+#define EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_TEST_HH 1
 
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/log-posterior.hh>
 #include <eos/utils/observable_stub.hh>
 #include <eos/utils/qualified-name.hh>
 #include <test/test.hh>
@@ -126,13 +126,13 @@ namespace eos
     };
 
     /*
-     * Create analysis with gaussian likelihood and gaussian prior
+     * Create log posterior with gaussian likelihood and gaussian prior
      * The posterior is also a Gaussian with central value 4.3
      * and standard deviation sqrt(0.005)=0.070710678118654752
      *
      * flat = true turns Gaussian prior into flat prior
      */
-    Analysis make_analysis(bool flat)
+    LogPosterior make_log_posterior(bool flat)
     {
         Parameters parameters = Parameters::Defaults();
 
@@ -143,7 +143,7 @@ namespace eos
             LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{3.7, 4.9} ) :
             LogPrior::Gauss(parameters, "mass::b(MSbar)", ParameterRange{3.7, 4.9}, 4.3, 4.4, 4.5);
 
-        Analysis result(llh);
+        LogPosterior result(llh);
         result.add(prior);
 
         return result;

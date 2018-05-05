@@ -19,7 +19,7 @@
 #include <config.h>
 
 #include <eos/observable.hh>
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/log-posterior.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/statistics/prior-sampler.hh>
 #include <eos/utils/destringify.hh>
@@ -356,7 +356,7 @@ int main(int argc, char * argv[])
         if ( ! inst->pmc_sample_file.empty() && inst->pmc_sample_min < inst->pmc_sample_max)
         {
             auto f = hdf5::File::Open(inst->pmc_sample_file);
-            auto descriptions = Analysis::read_descriptions(f);
+            auto descriptions = LogPosterior::read_descriptions(f);
             std::vector<std::vector<double>> samples;
             samples.push_back(std::vector<double>(descriptions.size()));
             PopulationMonteCarloSampler::read_samples(inst->pmc_sample_file, inst->pmc_sample_directory, inst->pmc_sample_min, inst->pmc_sample_max, samples);

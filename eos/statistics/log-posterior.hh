@@ -17,11 +17,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_STATISTICS_ANALYSIS_HH
-#define EOS_GUARD_SRC_STATISTICS_ANALYSIS_HH 1
+#ifndef EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_HH
+#define EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_HH 1
 
-#include <eos/statistics/analysis-fwd.hh>
 #include <eos/statistics/log-likelihood.hh>
+#include <eos/statistics/log-posterior-fwd.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/hdf5-fwd.hh>
@@ -46,11 +46,11 @@ namespace eos
 {
     struct MinuitAdapter;
 
-    class Analysis :
+    class LogPosterior :
         public Density
     {
         public:
-            friend struct Implementation<Analysis>;
+            friend struct Implementation<LogPosterior>;
 
             struct OptimizationOptions;
             struct Output;
@@ -65,16 +65,16 @@ namespace eos
              *
              * @param log_likelihood  The LogLikelihood functor which shall be analysed.
              *
-             * @note Analysis assumes ownership of log_likelihood
+             * @note LogPosterior assumes ownership of log_likelihood
              */
-            Analysis(const LogLikelihood & log_likelihood);
+            LogPosterior(const LogLikelihood & log_likelihood);
 
             /// Destructor.
-            virtual ~Analysis();
+            virtual ~LogPosterior();
 
-            /// Clone this Analysis
+            /// Clone this LogPosterior
             // todo remove
-            AnalysisPtr old_clone() const;
+            LogPosteriorPtr old_clone() const;
 
             virtual DensityPtr clone() const;
 
@@ -126,7 +126,6 @@ namespace eos
             static std::vector<ParameterDescription> read_descriptions(const hdf5::File & file, std::string data_set_base = "/descriptions");
 
             /*!
-<<<<<<< HEAD:eos/statistics/analysis.hh
              * Read the description part of chain's prerun from hdf5 file.
              *
              * @param file
@@ -143,9 +142,6 @@ namespace eos
                                           std::string & hash);
 
             /*!
-             * Calculate the p-value based on the @f$\chi^2 @f$
-             * test statistic for fixed parameter_values
-=======
              * Calculate two p values based on the @f$\chi^2 @f$
              * test statistic for fixed parameter_values.
              *
@@ -160,7 +156,6 @@ namespace eos
              * cumulative of the @f$\chi^2 @f$-distribution with (N-k) degrees-of-freedom,
              * where N is the number of observations and k is the number of fitted parameters.
              *
->>>>>>> 40893a8... [utils] Improve Analysis.goodness_of_fit documentation and error messages:eos/utils/analysis.hh
              * @param parameter_values
              * @param simulated_datasets The number of data sets used to estimate the distribution of log-likelihood test statistic.
              * @param output_file If given, store pulls and @f$\chi^2 @f$ in an HDF5 file.
@@ -172,10 +167,10 @@ namespace eos
             std::pair<double, double>
             goodness_of_fit(const std::vector<double> & parameter_values, const unsigned & simulated_datasets, std::string output_file = "");
 
-            /// Retrieve the overall Log(likelihood) for this analysis.
+            /// Retrieve the overall Log(likelihood).
             LogLikelihood log_likelihood() const;
 
-            /// Retrieve the overall Log(prior) for this analysis.
+            /// Retrieve the overall Log(prior).
             double log_prior() const;
 
             /*!
@@ -183,12 +178,12 @@ namespace eos
              */
             LogPriorPtr log_prior(const std::string & name) const;
 
-            /// Retrieve the overall Log(posterior) for this analysis.
+            /// Retrieve the overall Log(posterior)
             /// Incorporate normalization constant, the evidence here in getter if available.
             double log_posterior() const;
 
             /*!
-             * Check if a given parameter is a nuisance parameter for this Analysis.
+             * Check if a given parameter is a nuisance parameter for this LogPosterior.
              *
              * @param name The name of the parameter we are interested in.
              */
@@ -198,7 +193,7 @@ namespace eos
             /*!
              * Optimize the posterior using the Nelder-Mead simplex algorithm.
              * @param initial_guess Starting point for simplex construction
-             * @param options If no tuning desired, use Analysis::OptimizationOptions::Defaults()
+             * @param options If no tuning desired, use LogPosterior::OptimizationOptions::Defaults()
              * @return <parameter values at mode, posterior value at mode>
              */
             std::pair<std::vector<double>, double>
@@ -219,13 +214,13 @@ namespace eos
              * routine needed for optimization. It returns the negative
              * log(posterior) at parameters
              * @param parameters the values of the parameters
-             * @param data pointer to an Analysis object
+             * @param data pointer to an LogPosterior object
              * @return
              */
             static double
             negative_log_posterior(const gsl_vector * pars, void * data);
 
-            Analysis *
+            LogPosterior *
             private_clone() const;
 
             LogLikelihood _log_likelihood;
@@ -247,7 +242,7 @@ namespace eos
     };
 
         // todo move optimization into separate class
-        struct Analysis::OptimizationOptions
+        struct LogPosterior::OptimizationOptions
         {
                 /// Options are: "migrad", "minimize", "scan", "simplex" from minuit2
                 std::string algorithm;
@@ -297,7 +292,7 @@ namespace eos
                 OptimizationOptions();
         };
 
-     struct Analysis::Output
+     struct LogPosterior::Output
      {
          typedef hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>, hdf5::Scalar<double>,
                                  hdf5::Scalar<int>, hdf5::Scalar<const char *>> DescriptionType;
@@ -311,12 +306,12 @@ namespace eos
       * The variance of each parameter is taken from the prior distribution
       * and scaled if desired for higher efficiency. Zero correlation is assumed a priori.
       *
-      * @param analysis The analysis supplying the prior information.
+      * @param log_posterior The log posterior supplying the prior information.
       * @param scale_reduction Value by which sqrt(variance) of parameters is divided.
       * @param scale_nuisance Decide whether only scan parameters or all parameters are scaled.
       * @return The covariance matrix in row major format.
       */
-     std::vector<double> proposal_covariance(const Analysis & analysis,
+     std::vector<double> proposal_covariance(const LogPosterior & log_posterior,
                                              double scale_reduction=1,
                                              bool scale_nuisance=true);
 }

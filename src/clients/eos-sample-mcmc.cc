@@ -20,7 +20,7 @@
 
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/log-posterior.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
@@ -78,7 +78,7 @@ class CommandLine :
 
         LogLikelihood likelihood;
 
-        Analysis analysis;
+        LogPosterior log_posterior;
 
         MarkovChainSampler::Config mcmc_config;
 
@@ -100,7 +100,7 @@ class CommandLine :
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
-            analysis(likelihood),
+            log_posterior(likelihood),
             mcmc_config(MarkovChainSampler::Config::Quick()),
             scale_nuisance(true),
             scale_reduction(1)
@@ -228,7 +228,7 @@ class CommandLine :
                     }
 
                     // check for error in setting the prior and adding the parameter
-                    if (! analysis.add(prior, nuisance))
+                    if (! log_posterior.add(prior, nuisance))
                         throw DoUsage("Error in assigning " + prior_type + " prior distribution to '" + name +
                                       "'. Perhaps '" + name + "' appears twice in the list of parameters?");
 
@@ -277,7 +277,7 @@ class CommandLine :
                 {
                     std::string par_name = std::string(*(++a));
                     double value = destringify<double> (*(++a));
-                    analysis.parameters()[par_name]=value;
+                    log_posterior.parameters()[par_name]=value;
 
                     continue;
                 }
@@ -484,24 +484,24 @@ int main(int argc, char * argv[])
         if ( ! inst->scan_parameters.empty())
         {
             std::cout << "# Scan parameters (" << inst->scan_parameters.size() << "):" << std::endl;
-            for (auto d = inst->analysis.parameter_descriptions().cbegin(), d_end = inst->analysis.parameter_descriptions().cend() ;
+            for (auto d = inst->log_posterior.parameter_descriptions().cbegin(), d_end = inst->log_posterior.parameter_descriptions().cend() ;
                  d != d_end ; ++d)
             {
                 if (d->nuisance)
                     continue;
-                std::cout << "#   " << inst->analysis.log_prior(d->parameter->name())->as_string() << std::endl;
+                std::cout << "#   " << inst->log_posterior.log_prior(d->parameter->name())->as_string() << std::endl;
             }
         }
 
         if ( ! inst->nuisance_parameters.empty())
         {
             std::cout << "# Nuisance parameters (" << inst->nuisance_parameters.size() << "):" << std::endl;
-            for (auto d = inst->analysis.parameter_descriptions().cbegin(), d_end = inst->analysis.parameter_descriptions().cend() ;
+            for (auto d = inst->log_posterior.parameter_descriptions().cbegin(), d_end = inst->log_posterior.parameter_descriptions().cend() ;
                  d != d_end ; ++d)
             {
                 if ( ! d->nuisance)
                     continue;
-                std::cout << "#   " << inst->analysis.log_prior(d->parameter->name())->as_string() << std::endl;
+                std::cout << "#   " << inst->log_posterior.log_prior(d->parameter->name())->as_string() << std::endl;
             }
         }
 
@@ -537,9 +537,9 @@ int main(int argc, char * argv[])
         }
 
         /* create initial proposal covariance */
-        inst->mcmc_config.proposal_initial_covariance = proposal_covariance(inst->analysis, inst->scale_reduction, inst->scale_nuisance);
+        inst->mcmc_config.proposal_initial_covariance = proposal_covariance(inst->log_posterior, inst->scale_reduction, inst->scale_nuisance);
 
-        MarkovChainSampler sampler(inst->analysis.clone(), inst->mcmc_config);
+        MarkovChainSampler sampler(inst->log_posterior.clone(), inst->mcmc_config);
 
         sampler.run();
     }

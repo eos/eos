@@ -17,7 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/statistics/analysis_TEST.hh>
+#include <eos/statistics/log-posterior_TEST.hh>
 #include <eos/statistics/density-wrapper_TEST.hh>
 #include <eos/statistics/population-monte-carlo-sampler.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
@@ -98,15 +98,15 @@ class PopulationMonteCarloSamplerTest :
                 LogLikelihood llh(p);
                 llh.add(Constraint("test::correlated-gaussian-m_b-and-m_c", std::vector<ObservablePtr>(obs.begin(), obs.end()), { block }));
 
-                Analysis analysis(llh);
+                LogPosterior log_posterior(llh);
 
                 // parameter that affects the observable
-                analysis.add(LogPrior::Flat(p, "mass::b(MSbar)", ParameterRange{ -10, 10 }));
+                log_posterior.add(LogPrior::Flat(p, "mass::b(MSbar)", ParameterRange{ -10, 10 }));
 
                 // the 2nd parameter
                 // NOTE: it is crucial for the accuracy of the covariance estimate that the range be large enough
                 //       to cover the gaussian peak out to many sigmas
-                analysis.add(LogPrior::Flat(p, "mass::c", ParameterRange{ -10, 10 }));
+                log_posterior.add(LogPrior::Flat(p, "mass::c", ParameterRange{ -10, 10 }));
 
                 /* setup the MCMC sampler for the prerun to create the proposal */
 
@@ -123,7 +123,7 @@ class PopulationMonteCarloSamplerTest :
                     config.prerun_iterations_update = 650;
                     config.prerun_iterations_max = 2000;
                     config.prerun_iterations_min = 5000;
-                    config.proposal_initial_covariance = proposal_covariance(analysis, 10);
+                    config.proposal_initial_covariance = proposal_covariance(log_posterior, 10);
                     config.output_file = mcmc_file_name;
                     config.seed = 784213135;
                     config.skip_initial = 0.2;
@@ -135,7 +135,7 @@ class PopulationMonteCarloSamplerTest :
                     //part.push_back(std::make_tuple(std::string("mass::c"), +4.5, +5.5));
 
                     Log::instance()->set_log_level(ll_silent);
-                    MarkovChainSampler sampler(analysis.clone(), config);
+                    MarkovChainSampler sampler(log_posterior.clone(), config);
                     sampler.run();
                     Log::instance()->set_log_level(ll_debug);
                 }
@@ -162,7 +162,7 @@ class PopulationMonteCarloSamplerTest :
                     temp_config.skip_initial = 0.2;
                     temp_config.patch_length = 400;
                     temp_config.target_ncomponents = 2;
-                    PopulationMonteCarloSampler pmc_sampler(analysis.clone(), hdf5::File::Open(mcmc_file_name), temp_config);
+                    PopulationMonteCarloSampler pmc_sampler(log_posterior.clone(), hdf5::File::Open(mcmc_file_name), temp_config);
                     pmc_sampler.run();
                     TEST_CHECK(pmc_sampler.status().converged);
                 }
@@ -174,14 +174,14 @@ class PopulationMonteCarloSamplerTest :
                     temp_config.skip_initial = 0.2;
                     temp_config.patch_length = 400;
                     temp_config.target_ncomponents = 2;
-                    PopulationMonteCarloSampler pmc_sampler(analysis.clone(), hdf5::File::Open(mcmc_file_name), temp_config);
+                    PopulationMonteCarloSampler pmc_sampler(log_posterior.clone(), hdf5::File::Open(mcmc_file_name), temp_config);
                     pmc_sampler.draw_samples();
                 }
 
                 // resuming from previous step
                 {
                     pmc_config.output_file = pmc_output_resume;
-                    PopulationMonteCarloSampler pmc_sampler(analysis.clone(), hdf5::File::Open(pmc_output_components), pmc_config);
+                    PopulationMonteCarloSampler pmc_sampler(log_posterior.clone(), hdf5::File::Open(pmc_output_components), pmc_config);
                     pmc_sampler.run();
                     TEST_CHECK(pmc_sampler.status().converged);
                 }
@@ -190,7 +190,7 @@ class PopulationMonteCarloSamplerTest :
                 {
                     pmc_config.samples_per_component = 3001;
                     pmc_config.output_file = pmc_output_split;
-                    PopulationMonteCarloSampler pmc_sampler(analysis.clone(), hdf5::File::Open(pmc_output_components), pmc_config);
+                    PopulationMonteCarloSampler pmc_sampler(log_posterior.clone(), hdf5::File::Open(pmc_output_components), pmc_config);
                     pmc_sampler.calculate_weights(pmc_output_components, 0, pmc_config.samples_per_component - 1);
                 }
 
@@ -204,7 +204,7 @@ class PopulationMonteCarloSamplerTest :
                     pmc_config.skip_initial = 0.2;
                     pmc_config.target_ncomponents = 2;
 
-                    Analysis ana(llh);
+                    LogPosterior ana(llh);
                     ana.add(LogPrior::Flat(p, "mass::b(MSbar)", ParameterRange{ -10, 10 }));
                     ana.add(LogPrior::Flat(p, "mass::c", ParameterRange{ -10, 0 }));
                     PopulationMonteCarloSampler pmc_sampler(ana.clone(), hdf5::File::Open(mcmc_file_name), pmc_config);

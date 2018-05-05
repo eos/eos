@@ -20,9 +20,9 @@
 #include <eos/statistics/markov-chain-sampler.hh>
 
 #include <test/test.hh>
-#include <eos/statistics/analysis_TEST.hh>
 #include <eos/statistics/density-wrapper_TEST.hh>
 #include <eos/statistics/histogram.hh>
+#include <eos/statistics/log-posterior_TEST.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/utils/hdf5.hh>
 #include <eos/utils/power_of.hh>
@@ -92,7 +92,7 @@ class MarkovChainSamplerTest :
                 // store to HDF5
                 TEST_SECTION("run-and-store",
                 {
-                    Analysis analysis(make_analysis(true));
+                    LogPosterior log_posterior(make_log_posterior(true));
 
                     MarkovChainSampler::Config config = MarkovChainSampler::Config::Quick();
                     config.chunk_size = 100;
@@ -105,7 +105,7 @@ class MarkovChainSamplerTest :
                     config.parallelize = true;
                     config.prerun_iterations_update = 500;
                     config.prerun_iterations_min = 1000;
-                    config.proposal_initial_covariance = proposal_covariance(analysis, 2);
+                    config.proposal_initial_covariance = proposal_covariance(log_posterior, 2);
                     config.rvalue_criterion_param = 1.1;
                     config.scale_automatic = true;
                     config.seed = 1346;
@@ -114,7 +114,7 @@ class MarkovChainSamplerTest :
                     config.use_posterior_rvalue = true;
                     config.use_strict_rvalue_definition = true;
 
-                    MarkovChainSampler sampler(analysis.clone(), config);
+                    MarkovChainSampler sampler(log_posterior.clone(), config);
                     sampler.run();
 
                     MarkovChainSampler::PreRunInfo pre_info(sampler.pre_run_info());

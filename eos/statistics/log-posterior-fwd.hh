@@ -17,17 +17,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_STATISTICS_ANALYSIS_FWD_HH
-#define EOS_GUARD_SRC_STATISTICS_ANALYSIS_FWD_HH 1
+#ifndef EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_FWD_HH
+#define EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_FWD_HH 1
 
 #include <memory>
 
 namespace eos
 {
     // forward declaration
-    class Analysis;
+    class LogPosterior;
 
-    typedef std::shared_ptr<Analysis> AnalysisPtr;
+    typedef std::shared_ptr<LogPosterior> LogPosteriorPtr;
 }
 
 #endif

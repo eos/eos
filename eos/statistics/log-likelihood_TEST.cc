@@ -19,8 +19,8 @@
  */
 
 #include <test/test.hh>
-#include <eos/statistics/analysis_TEST.hh>
 #include <eos/statistics/log-likelihood.hh>
+#include <eos/statistics/log-posterior_TEST.hh>
 #include <eos/utils/power_of.hh>
 #include <algorithm>
 

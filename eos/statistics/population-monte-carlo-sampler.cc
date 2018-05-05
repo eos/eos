@@ -18,9 +18,9 @@
  */
 #include <eos/statistics/population-monte-carlo-sampler.hh>
 
-#include <eos/statistics/analysis.hh>
 #include <eos/statistics/chain-group.hh>
 #include <eos/statistics/hierarchical-clustering.hh>
+#include <eos/statistics/log-posterior.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/statistics/proposal-functions.hh>
 #include <eos/statistics/rvalue.hh>
@@ -245,7 +245,7 @@ namespace eos
     {
         typedef std::vector<unsigned> IndexList;
 
-        // store reference, but don't own analysis
+        // store reference, but don't own log-posterior
         DensityPtr density;
 
         // our configuration options
@@ -751,7 +751,7 @@ namespace eos
             // exception handler look-alike
             pmc::ErrorHandler err;
 
-            // parameter cube: copy from analysis
+            // parameter cube: copy from log-posterior
             parabox * par_box = init_parabox(n_dim, err);
             int i = 0;
             for (auto & d : *density)
@@ -817,7 +817,7 @@ namespace eos
             /* final part */
 
             if (mmv->ndim != n_dim)
-                throw InternalError("PMC::ctor: mismatch of parameter dimensions of analysis vs proposal ("\
+                throw InternalError("PMC::ctor: mismatch of parameter dimensions of log-posterior vs proposal ("\
                                     + stringify(n_dim)
                                     + " vs " + stringify(mmv->ndim) + ")");
 
@@ -973,8 +973,8 @@ namespace eos
             if (ndim != std::distance(density->begin(), density->end()))
             {
                 Log::instance()->message("PMC_sampler.hierarchical_clustering", ll_warning)
-                    << "The analysis in MCMC prerun had dim " << ndim
-                    << ", but now the analysis has dim " << std::distance(density->begin(), density->end());
+                    << "The log-posterior in MCMC prerun had dim " << ndim
+                    << ", but now the log-posterior has dim " << std::distance(density->begin(), density->end());
             }
 
             HierarchicalClustering::Config conf = HierarchicalClustering::Config::Default();

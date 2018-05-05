@@ -20,7 +20,7 @@
 #include <config.h>
 
 #include <eos/signal-pdf.hh>
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/log-posterior.hh>
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/utils/density.hh>
@@ -85,7 +85,7 @@ class CommandLine :
         /// @{
         LogLikelihood likelihood;
 
-        Analysis analysis;
+        LogPosterior log_posterior;
 
         std::vector<Constraint> constraints;
         /// @}
@@ -99,7 +99,7 @@ class CommandLine :
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
-            analysis(likelihood),
+            log_posterior(likelihood),
             mcmc_config(MarkovChainSampler::Config::Quick()),
             scale_reduction(1)
         {
@@ -245,7 +245,7 @@ class CommandLine :
                     }
 
                     // check for error in setting the prior and adding the parameter
-                    if (! analysis.add(prior, true))
+                    if (! log_posterior.add(prior, true))
                         throw DoUsage("Error in assigning " + prior_type + " prior distribution to '" + name +
                                       "'. Perhaps '" + name + "' appears twice in the list of parameters?");
 
@@ -442,9 +442,9 @@ int main(int argc, char * argv[])
         }
 
         DensityPtr density;
-        if (inst->analysis.begin() != inst->analysis.end())
+        if (inst->log_posterior.begin() != inst->log_posterior.end())
         {
-            density = DensityPtr(new ProductDensity(inst->signal_pdf, inst->analysis.clone()));
+            density = DensityPtr(new ProductDensity(inst->signal_pdf, inst->log_posterior.clone()));
         }
         else
         {

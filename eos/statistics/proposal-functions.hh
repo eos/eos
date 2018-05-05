@@ -320,7 +320,7 @@ namespace eos
                 friend struct MultivariateAccess;
             private:
                 // use these vectors to represent the full length and ordering
-                // as in Analysis
+                // as in LogPosterior
                 std::vector<std::shared_ptr<double> > _tmp_vector_x;
                 std::vector<std::shared_ptr<double> > _tmp_vector_y;
 

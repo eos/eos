@@ -22,7 +22,7 @@
 
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
-#include <eos/statistics/analysis.hh>
+#include <eos/statistics/log-posterior.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
 #if EOS_ENABLE_PMC
 #include <eos/statistics/population-monte-carlo-sampler.hh>
@@ -93,7 +93,7 @@ class CommandLine :
 
         LogLikelihood likelihood;
 
-        Analysis analysis;
+        LogPosterior log_posterior;
 
         MarkovChainSampler::Config mcmc_config;
 
@@ -134,7 +134,7 @@ class CommandLine :
         CommandLine() :
             parameters(Parameters::Defaults()),
             likelihood(parameters),
-            analysis(likelihood),
+            log_posterior(likelihood),
             mcmc_config(MarkovChainSampler::Config::Quick()),
 #if EOS_ENABLE_PMC
             config_pmc(PopulationMonteCarloSampler::Config::Default()),
@@ -272,7 +272,7 @@ class CommandLine :
                     }
 
                     // check for error in setting the prior and adding the parameter
-                    if (! analysis.add(prior, nuisance))
+                    if (! log_posterior.add(prior, nuisance))
                         throw DoUsage("Error in assigning " + prior_type + " prior distribution to '" + name +
                                       "'. Perhaps '" + name + "' appears twice in the list of parameters?");
 
@@ -321,7 +321,7 @@ class CommandLine :
                 {
                     std::string par_name = std::string(*(++a));
                     double value = destringify<double> (*(++a));
-                    analysis.parameters()[par_name]=value;
+                    log_posterior.parameters()[par_name]=value;
 
                     continue;
                 }
@@ -766,24 +766,24 @@ int main(int argc, char * argv[])
         if ( ! inst->scan_parameters.empty())
         {
             std::cout << "# Scan parameters (" << inst->scan_parameters.size() << "):" << std::endl;
-            for (auto d = inst->analysis.parameter_descriptions().cbegin(), d_end = inst->analysis.parameter_descriptions().cend() ;
+            for (auto d = inst->log_posterior.parameter_descriptions().cbegin(), d_end = inst->log_posterior.parameter_descriptions().cend() ;
                  d != d_end ; ++d)
             {
                 if (d->nuisance)
                     continue;
-                std::cout << "#   " << inst->analysis.log_prior(d->parameter->name())->as_string() << std::endl;
+                std::cout << "#   " << inst->log_posterior.log_prior(d->parameter->name())->as_string() << std::endl;
             }
         }
 
         if ( ! inst->nuisance_parameters.empty())
         {
             std::cout << "# Nuisance parameters (" << inst->nuisance_parameters.size() << "):" << std::endl;
-            for (auto d = inst->analysis.parameter_descriptions().cbegin(), d_end = inst->analysis.parameter_descriptions().cend() ;
+            for (auto d = inst->log_posterior.parameter_descriptions().cbegin(), d_end = inst->log_posterior.parameter_descriptions().cend() ;
                  d != d_end ; ++d)
             {
                 if ( ! d->nuisance)
                     continue;
-                std::cout << "#   " << inst->analysis.log_prior(d->parameter->name())->as_string() << std::endl;
+                std::cout << "#   " << inst->log_posterior.log_prior(d->parameter->name())->as_string() << std::endl;
             }
         }
 
@@ -822,7 +822,7 @@ int main(int argc, char * argv[])
         // Optionally calculate a p-value at the mode.
         if (inst->optimize)
         {
-            Analysis & ana(inst->analysis);
+            LogPosterior & ana(inst->log_posterior);
             if (inst->starting_point.empty())
             {
                 gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
@@ -844,7 +844,7 @@ int main(int argc, char * argv[])
             std::cout << "# Starting optimization at " << stringify_container(inst->starting_point, 4) << std::endl;
             std::cout << std::endl;
 
-            auto options = Analysis::OptimizationOptions::Defaults();
+            auto options = LogPosterior::OptimizationOptions::Defaults();
             auto ret = ana.optimize_minuit(inst->starting_point, options);
 
             Log::instance()->message("eos-scan-mc", ll_informational)
@@ -863,7 +863,7 @@ int main(int argc, char * argv[])
         // goodness-of-fit for user specified parameter point
         if (inst->goodness_of_fit)
         {
-            inst->analysis.goodness_of_fit(inst->best_fit_point, 1e5, inst->mcmc_config.output_file);
+            inst->log_posterior.goodness_of_fit(inst->best_fit_point, 1e5, inst->mcmc_config.output_file);
 
             return EXIT_SUCCESS;
         }
@@ -871,7 +871,7 @@ int main(int argc, char * argv[])
 #if EOS_ENABLE_PMC
         if (CommandLine::instance()->use_pmc)
         {
-            PopulationMonteCarloSampler pop_sampler(inst->analysis.clone(), hdf5::File::Open(inst->pmc_initialization_file),
+            PopulationMonteCarloSampler pop_sampler(inst->log_posterior.clone(), hdf5::File::Open(inst->pmc_initialization_file),
             		inst->config_pmc, inst->pmc_update);
 
             if (inst->pmc_final)
@@ -898,7 +898,7 @@ int main(int argc, char * argv[])
         }
 #endif
 
-        MarkovChainSampler sampler(inst->analysis.clone(), inst->mcmc_config);
+        MarkovChainSampler sampler(inst->log_posterior.clone(), inst->mcmc_config);
 
         sampler.run();
     }
