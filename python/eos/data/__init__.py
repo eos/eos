@@ -151,3 +151,17 @@ class UncertaintyDataFile:
             self.parameters[i][3] = numpy.max(data[:, i])
 
         return data
+
+
+""" open HDF5 data file regardless of file type """
+def load_data_file(name):
+    basename = os.path.basename(name)
+    if basename.startswith('mcmc_'):
+        return MCMCDataFile(name)
+    elif basename.startswith('pmc_monolithic_'):
+        return PMCDataFile(name)
+    elif basename.startswith('unc_'):
+        return UncertaintyDataFile(name)
+    else:
+        raise RuntimeError('cannot determine HDF5 file type based on the file name')
+
