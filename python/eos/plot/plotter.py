@@ -60,6 +60,11 @@ class Plotter:
                 self.xrange = myx['range']
                 self.ax.set_xlim(tuple(self.xrange))
 
+            if 'scale' in myx:
+                self.xscale = float(myx['scale'])
+                self.xticks = matplotlib.ticker.FuncFormatter(lambda x, pos, xscale=self.xscale: '${0:.2f}$'.format(x / xscale))
+                self.ax.xaxis.set_major_formatter(self.xticks)
+
         if 'y' in myplot:
             myy = myplot['y']
 
@@ -72,6 +77,12 @@ class Plotter:
             if 'range' in myy:
                 self.yrange = myy['range']
                 self.ax.set_ylim(tuple(self.yrange))
+
+            if 'scale' in myy:
+                self.yscale = float(myy['scale'])
+                warn('scale: {}'.format(self.yscale))
+                self.yticks = matplotlib.ticker.FuncFormatter(lambda y, pos, yscale=self.yscale: '${0:.2f}$'.format(y / yscale))
+                self.ax.yaxis.set_major_formatter(self.yticks)
 
         self.ax.set(xlabel=myxlabel, ylabel=myylabel, title=mytitle)
 

@@ -8,7 +8,7 @@ plot:
         label: '$\mathcal{B}(B\to \pi\ell\nu)$'
         unit: '$10^{-5}\,/\,\textnormal{GeV}^2$'
         range: [1.0e-6, 1.0e-5]
-        rescale: 1e-5
+        scale: 1e-5
 
 contents:
     - name: 'B->pi mu nu (uncertainty)'
