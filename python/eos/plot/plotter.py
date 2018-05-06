@@ -186,6 +186,30 @@ class Plotter:
         plt.plot(xvalues, ovalues_higher,  color=color, alpha=alpha)
 
 
+    def plot_histogram(self, item):
+        if 'hdf5-file' not in item:
+            raise KeyError('no hdf5-file specified')
+
+        h5fname = item['hdf5-file']
+        info('   plotting histogram from file "{}"'.format(h5fname))
+        datafile = eos.data.load_data_file(h5fname)
+
+        if 'variable' not in item:
+            raise KeyError('no variable specificed')
+        variable = item['variable']
+
+        print(datafile.variable_indices)
+        if variable not in datafile.variable_indices:
+            raise ValueError('variable {} not contained in data file'.format(variable))
+
+        index = datafile.variable_indices[variable]
+        data  = datafile.data()[:, index]
+        alpha = item['opacity'] if 'opacity' in item else 0.3
+        color = item['color']   if 'color'   in item else 'blue'
+        bins  = item['bins']    if 'bins'    in item else 100
+        plt.hist(data, alpha=alpha, bins=bins, color=color, normed=1)
+
+
     def plot_eos_watermark(self, item):
         width, height = (0.115, 0.035)
 
@@ -222,6 +246,7 @@ class Plotter:
             return
 
         plot_functions = {
+            'histogram':   Plotter.plot_histogram,
             'observable':  Plotter.plot_observable,
             'uncertainty': Plotter.plot_uncertainty,
             'watermark':   Plotter.plot_eos_watermark,
