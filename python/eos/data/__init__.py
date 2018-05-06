@@ -29,7 +29,13 @@ class FileFormatError(Exception):
         return 'Expected file format %s, found %s instead' % (self.expected, self.found)
 
 
-class PMCDataFile:
+class DataFile:
+    def __init__(self):
+        # generate map
+        self.variable_indices = { self.parameters[i][0].decode('ascii'): i for i in range(0, len(self.parameters)) }
+
+
+class PMCDataFile(DataFile):
     def __init__(self, file):
         # open the input file for reading
         self.file = h5py.File(file, 'r')
@@ -47,8 +53,12 @@ class PMCDataFile:
         else:
             RuntimeError('input file has no valid parameter descriptions: is it corrupted?')
 
+        super().__init__()
+
+
     def __del__(self):
         self.file.close()
+
 
     """Retrieve data"""
     def data(self):
@@ -62,7 +72,7 @@ class PMCDataFile:
         return numpy.array(dataset[:])
 
 
-class MCMCDataFile:
+class MCMCDataFile(DataFile):
     def __init__(self, file):
         # open the input file for reading
         self.file = h5py.File(file, 'r')
@@ -82,8 +92,12 @@ class MCMCDataFile:
         else:
             RuntimeError('input file has no valid parameter descriptions: is it corrupted?')
 
+        super().__init__()
+
+
     def __del__(self):
         self.file.close()
+
 
     """Retrieve data"""
     def data(self):
@@ -111,7 +125,7 @@ class MCMCDataFile:
         return data
 
 
-class UncertaintyDataFile:
+class UncertaintyDataFile(DataFile):
     def __init__(self, file):
         self.name = file
         # open the input file for reading
@@ -134,8 +148,12 @@ class UncertaintyDataFile:
         else:
             RuntimeError('input file has no valid parameter descriptions: is it corrupted?')
 
+        super().__init__()
+
+
     def __del__(self):
         self.file.close()
+
 
     """Retrieve data"""
     def data(self):
