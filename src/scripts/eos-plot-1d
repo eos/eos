@@ -36,13 +36,7 @@ def main():
         error('\'%s\' is not a file' % args.input)
 
     # open HDF5 data file
-    basename = os.path.basename(args.input)
-    if basename.startswith('mcmc_'):
-        datafile = eos.data.MCMCDataFile(args.input)
-    elif basename.startswith('pmc_monolithic'):
-        datafile = eos.data.PMCDataFile(args.input)
-    elif basename.startswith('unc'):
-        datafile = eos.data.UncertaintyDataFile(args.input)
+    datafile = eos.data.load_hdf5_datafile(args.input)
 
     # forward options
     argvars = vars(args)
