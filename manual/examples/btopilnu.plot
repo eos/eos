@@ -38,3 +38,5 @@ contents:
         'B->pi::f_+(0)@BCL2008':  2.66e-1
         'B->pi::b_+^1@BCL2008':  -2.67e+0
         'B->pi::b_+^2@BCL2008':  +2.23e-2
+
+    - type: 'watermark'
