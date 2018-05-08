@@ -1,41 +1,125 @@
-# b->c Wilson coefficients
-"b->clnu::Re{cVL}" :
+# b->c Wilson coefficients - electron
+"b->cenue::Re{cVL}" :
     central: 1.0
     min:     1.0
     max:     1.0
-"b->clnu::Im{cVL}" :
+"b->cenue::Im{cVL}" :
     central: 0.0
     min:     0.0
     max:     0.0
-"b->clnu::Re{cVR}" :
+"b->cenue::Re{cVR}" :
     central: 0.0
     min:     0.0
     max:     0.0
-"b->clnu::Im{cVR}" :
+"b->cenue::Im{cVR}" :
     central: 0.0
     min:     0.0
     max:     0.0
-"b->clnu::Re{cSL}" :
+"b->cenue::Re{cSL}" :
     central: 0.0
     min:     0.0
     max:     0.0
-"b->clnu::Im{cSL}" :
+"b->cenue::Im{cSL}" :
     central: 0.0
     min:     0.0
     max:     0.0
-"b->clnu::Re{cSR}" :
+"b->cenue::Re{cSR}" :
     central: 0.0
     min:     0.0
     max:     0.0
-"b->clnu::Im{cSR}" :
+"b->cenue::Im{cSR}" :
     central: 0.0
     min:     0.0
     max:     0.0
-"b->clnu::Re{cT}" :
+"b->cenue::Re{cT}" :
     central: 0.0
     min:     0.0
     max:     0.0
-"b->clnu::Im{cT}" :
+"b->cenue::Im{cT}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+
+# b->c Wilson coefficients - muon
+"b->cmunumu::Re{cVL}" :
+    central: 1.0
+    min:     1.0
+    max:     1.0
+"b->cmunumu::Im{cVL}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->cmunumu::Re{cVR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->cmunumu::Im{cVR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->cmunumu::Re{cSL}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->cmunumu::Im{cSL}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->cmunumu::Re{cSR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->cmunumu::Im{cSR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->cmunumu::Re{cT}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->cmunumu::Im{cT}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+
+# b->c Wilson coefficients - tau
+"b->ctaunutau::Re{cVL}" :
+    central: 1.0
+    min:     1.0
+    max:     1.0
+"b->ctaunutau::Im{cVL}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->ctaunutau::Re{cVR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->ctaunutau::Im{cVR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->ctaunutau::Re{cSL}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->ctaunutau::Im{cSL}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->ctaunutau::Re{cSR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->ctaunutau::Im{cSR}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->ctaunutau::Re{cT}" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"b->ctaunutau::Im{cT}" :
     central: 0.0
     min:     0.0
     max:     0.0

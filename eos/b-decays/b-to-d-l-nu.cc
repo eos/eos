@@ -23,6 +23,7 @@
 #include <eos/b-decays/b-to-d-l-nu.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -47,6 +48,8 @@ namespace eos
 
         UsedParameter m_D;
 
+        SwitchOption opt_l;
+        
         UsedParameter m_l;
 
         UsedParameter g_fermi;
@@ -60,7 +63,8 @@ namespace eos
             mu(p["mu"], u),
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
             m_D(p["mass::D^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
-            m_l(p["mass::" + o.get("l", "mu")], u),
+            opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
+            m_l(p["mass::" + opt_l.value()], u),
             g_fermi(p["G_Fermi"], u),
             hbar(p["hbar"], u)
         {
@@ -100,7 +104,7 @@ namespace eos
             const double hht = (m_B * m_B - m_D * m_D) * f0 / (sqrt(s));
             const double hhs = (m_B * m_B - m_D * m_D) * f0 / (mbatmu - mcatmu);
             // NP contributions in EFT, cf. e.g. [DBG2013]
-            const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c();
+            const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
             const complex<double> gv = wc.cvl() + wc.cvr();
             const complex<double> gs = wc.csl() + wc.csr();
             // normalized(|V_cb|=1) differential decay width including NP (in SM gv=1, and all other couplings are zero)
@@ -173,12 +177,14 @@ namespace eos
         double br_muons;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_opt_l(_imp->opt_l._value, "mu");
             br_muons = _imp->differential_branching_ratio(s);
         }
 
         double br_taus;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
+            Save<std::string> save_opt_l(_imp->opt_l._value, "tau");
             br_taus = _imp->differential_branching_ratio(s);
         }
 
@@ -195,6 +201,7 @@ namespace eos
         {
 
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
+            Save<std::string> save_opt_l(_imp->opt_l._value, "mu");
 
             br_muons = integrate<GSL::QAGS>(f, 0.02, 11.62);
         }
@@ -202,6 +209,8 @@ namespace eos
         double br_taus;
         {
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
+            Save<std::string> save_opt_l(_imp->opt_l._value, "tau");
+
             br_taus = integrate<GSL::QAGS>(f, 3.16, 11.62);
         }
 

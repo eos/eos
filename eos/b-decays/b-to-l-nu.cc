@@ -2,6 +2,8 @@
 
 /*
  * Copyright (c) 2015 Danny van Dyk
+ * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +24,7 @@
 #include <eos/utils/model.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/options-impl.hh>
 
 namespace eos
 {
@@ -45,6 +48,8 @@ namespace eos
 
         UsedParameter tau_B;
 
+        SwitchOption opt_l;
+        
         UsedParameter m_l;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -54,7 +59,8 @@ namespace eos
             m_B(p["mass::B_u"], u),
             f_B(p["decay-constant::B_u"], u),
             tau_B(p["life_time::B_u"], u),
-            m_l(p["mass::" + o.get("l", "tau")], u)
+            opt_l(o, "l", {"e", "mu", "tau"}, "tau"),
+            m_l(p["mass::" + opt_l.value()], u)
         {
             u.uses(*model);
         }
@@ -66,7 +72,7 @@ namespace eos
 
         double decay_width() const
         {
-            const WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u();
+            const WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
 
             // cf. [DBG2013], eq. (5), p. 5
             const complex<double> ga = wc.cvl() - wc.cvr();

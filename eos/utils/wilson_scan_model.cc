@@ -3,7 +3,8 @@
 /*
  * Copyright (c) 2011, 2013, 2015 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
- * Copyright (c) 2014 Christoph Bobeth
+ * Copyright (c) 2014, 2018 Christoph Bobeth
+ * Copyright (c) 2018 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -261,31 +262,95 @@ namespace eos
 
     /* b->c Wilson coefficients */
     WilsonScanComponent<components::DeltaBC1>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
-    _re_csl(p["b->clnu::Re{cSL}"], u),
-    _im_csl(p["b->clnu::Im{cSL}"], u),
-    _re_csr(p["b->clnu::Re{cSR}"], u),
-    _im_csr(p["b->clnu::Im{cSR}"], u),
-    _re_cvl(p["b->clnu::Re{cVL}"], u),
-    _im_cvl(p["b->clnu::Im{cVL}"], u),
-    _re_cvr(p["b->clnu::Re{cVR}"], u),
-    _im_cvr(p["b->clnu::Im{cVR}"], u),
-    _re_ct(p["b->clnu::Re{cT}"], u),
-    _im_ct(p["b->clnu::Im{cT}"], u),
-    _csl(std::bind(&wcimplementation::cartesian, _re_csl, _im_csl)),
-    _csr(std::bind(&wcimplementation::cartesian, _re_csr, _im_csr)),
-    _cvl(std::bind(&wcimplementation::cartesian, _re_cvl, _im_cvl)),
-    _cvr(std::bind(&wcimplementation::cartesian, _re_cvr, _im_cvr)),
-    _ct(std::bind(&wcimplementation::cartesian, _re_ct, _im_ct))
+    _e_re_csl(p["b->cenue::Re{cSL}"], u),
+    _e_im_csl(p["b->cenue::Im{cSL}"], u),
+    _e_re_csr(p["b->cenue::Re{cSR}"], u),
+    _e_im_csr(p["b->cenue::Im{cSR}"], u),
+    _e_re_cvl(p["b->cenue::Re{cVL}"], u),
+    _e_im_cvl(p["b->cenue::Im{cVL}"], u),
+    _e_re_cvr(p["b->cenue::Re{cVR}"], u),
+    _e_im_cvr(p["b->cenue::Im{cVR}"], u),
+    _e_re_ct(p["b->cenue::Re{cT}"], u),
+    _e_im_ct(p["b->cenue::Im{cT}"], u),
+    
+    _mu_re_csl(p["b->cmunumu::Re{cSL}"], u),
+    _mu_im_csl(p["b->cmunumu::Im{cSL}"], u),
+    _mu_re_csr(p["b->cmunumu::Re{cSR}"], u),
+    _mu_im_csr(p["b->cmunumu::Im{cSR}"], u),
+    _mu_re_cvl(p["b->cmunumu::Re{cVL}"], u),
+    _mu_im_cvl(p["b->cmunumu::Im{cVL}"], u),
+    _mu_re_cvr(p["b->cmunumu::Re{cVR}"], u),
+    _mu_im_cvr(p["b->cmunumu::Im{cVR}"], u),
+    _mu_re_ct(p["b->cmunumu::Re{cT}"], u),
+    _mu_im_ct(p["b->cmunumu::Im{cT}"], u),
+    
+    _tau_re_csl(p["b->ctaunutau::Re{cSL}"], u),
+    _tau_im_csl(p["b->ctaunutau::Im{cSL}"], u),
+    _tau_re_csr(p["b->ctaunutau::Re{cSR}"], u),
+    _tau_im_csr(p["b->ctaunutau::Im{cSR}"], u),
+    _tau_re_cvl(p["b->ctaunutau::Re{cVL}"], u),
+    _tau_im_cvl(p["b->ctaunutau::Im{cVL}"], u),
+    _tau_re_cvr(p["b->ctaunutau::Re{cVR}"], u),
+    _tau_im_cvr(p["b->ctaunutau::Im{cVR}"], u),
+    _tau_re_ct(p["b->ctaunutau::Re{cT}"], u),
+    _tau_im_ct(p["b->ctaunutau::Im{cT}"], u),
+    
+    _e_csl(std::bind(&wcimplementation::cartesian, _e_re_csl, _e_im_csl)),
+    _e_csr(std::bind(&wcimplementation::cartesian, _e_re_csr, _e_im_csr)),
+    _e_cvl(std::bind(&wcimplementation::cartesian, _e_re_cvl, _e_im_cvl)),
+    _e_cvr(std::bind(&wcimplementation::cartesian, _e_re_cvr, _e_im_cvr)),
+    _e_ct(std::bind(&wcimplementation::cartesian, _e_re_ct, _e_im_ct)),
+    
+    _mu_csl(std::bind(&wcimplementation::cartesian, _mu_re_csl, _mu_im_csl)),
+    _mu_csr(std::bind(&wcimplementation::cartesian, _mu_re_csr, _mu_im_csr)),
+    _mu_cvl(std::bind(&wcimplementation::cartesian, _mu_re_cvl, _mu_im_cvl)),
+    _mu_cvr(std::bind(&wcimplementation::cartesian, _mu_re_cvr, _mu_im_cvr)),
+    _mu_ct(std::bind(&wcimplementation::cartesian, _mu_re_ct, _mu_im_ct)),
+    
+    _tau_csl(std::bind(&wcimplementation::cartesian, _tau_re_csl, _tau_im_csl)),
+    _tau_csr(std::bind(&wcimplementation::cartesian, _tau_re_csr, _tau_im_csr)),
+    _tau_cvl(std::bind(&wcimplementation::cartesian, _tau_re_cvl, _tau_im_cvl)),
+    _tau_cvr(std::bind(&wcimplementation::cartesian, _tau_re_cvr, _tau_im_cvr)),
+    _tau_ct(std::bind(&wcimplementation::cartesian, _tau_re_ct, _tau_im_ct))
     {
     }
     
     WilsonCoefficients<BToC>
-    WilsonScanComponent<components::DeltaBC1>::wilson_coefficients_b_to_c(const bool & cp_conjugate) const
+    WilsonScanComponent<components::DeltaBC1>::wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & cp_conjugate) const
     {
+        std::function<complex<double> ()> cvl;
+        std::function<complex<double> ()> cvr;
+        std::function<complex<double> ()> csl;
+        std::function<complex<double> ()> csr;
+        std::function<complex<double> ()> ct;
+        
+        if ("e" == lepton_flavour)
+        {
+            cvl = _e_cvl;   cvr = _e_cvr;
+            csl = _e_csl;   csr = _e_csr;
+            ct = _e_ct;
+        }
+        else if ("mu" == lepton_flavour)
+        {
+            cvl = _mu_cvl;   cvr = _mu_cvr;
+            csl = _mu_csl;   csr = _mu_csr;
+            ct = _mu_ct;
+        }
+        else if ("tau" == lepton_flavour)
+        {
+            cvl = _tau_cvl;   cvr = _tau_cvr;
+            csl = _tau_csl;   csr = _tau_csr;
+            ct = _tau_ct;
+        }
+        else
+        {
+            throw InternalError("WilsonScan implements 'e', 'mu' and 'tau' lepton flavours");
+        }
+        
         WilsonCoefficients<BToC> result
         {
             {{
-                _cvl(), _cvr(), _csl(), _csr(), _ct()
+                cvl(), cvr(), csl(), csr(), ct()
             }},
         };
         

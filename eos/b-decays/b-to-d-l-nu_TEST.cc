@@ -57,7 +57,7 @@ class BToDLeptonNeutrinoTest :
                 p1["B->D::b_0^2@BCL2008"]   = -1.20;
                 p1["mass::B_d"]             = 5.279;
                 p1["mass::D^+"]             = 1.870;
-                p1["b->clnu::Re{cVL}"]      = 1.0;
+                p1["b->cmunumu::Re{cVL}"]   = 1.0;
                 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -88,14 +88,14 @@ class BToDLeptonNeutrinoTest :
                 p2["mu"]                    = 4.18;
                 p2["mass::b(MSbar)"]        = 4.18;
                 p2["mass::c"]               = 1.275;
-                p2["b->clnu::Re{cVL}"]      =  1.0;
-                p2["b->clnu::Im{cVL}"]      = -1.0;
-                p2["b->clnu::Re{cVR}"]      =  2.0;
-                p2["b->clnu::Im{cVR}"]      = -2.0;
-                p2["b->clnu::Re{cSL}"]      =  3.0;
-                p2["b->clnu::Im{cSL}"]      = -3.0;
-                p2["b->clnu::Re{cSR}"]      =  4.0;
-                p2["b->clnu::Im{cSR}"]      = -4.0;
+                p2["b->cmunumu::Re{cVL}"]   =  1.0;
+                p2["b->cmunumu::Im{cVL}"]   = -1.0;
+                p2["b->cmunumu::Re{cVR}"]   =  2.0;
+                p2["b->cmunumu::Im{cVR}"]   = -2.0;
+                p2["b->cmunumu::Re{cSL}"]   =  3.0;
+                p2["b->cmunumu::Im{cSL}"]   = -3.0;
+                p2["b->cmunumu::Re{cSR}"]   =  4.0;
+                p2["b->cmunumu::Im{cSR}"]   = -4.0;
                 
                 Options oo;
                 oo.set("model", "WilsonScan");
