@@ -2,6 +2,8 @@
 
 /*
  * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -116,7 +118,7 @@ namespace eos
     {
     public:
         /* b->c Wilson coefficients */
-        virtual WilsonCoefficients<BToC> wilson_coefficients_b_to_c(const bool & cp_conjugate = false) const = 0;
+        virtual WilsonCoefficients<BToC> wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & cp_conjugate = false) const = 0;
     };
 
     /*!
