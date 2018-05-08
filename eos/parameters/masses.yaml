@@ -83,14 +83,36 @@
     comments: "cf. [PDG2012], p. 45"
 
 # D meson masses
-"mass::D^+" :
-    central: +1.86952
-    min:     +1.86961
-    max:     +1.86970
-"mass::D^0" :
-    central: +1.86479
-    min:     +1.86484
-    max:     +1.86489
+"mass::D_d" :
+    central: +1.86959
+    min:     +1.86950
+    max:     +1.86968
+    comments: "cf. [PDG2016]"
+"mass::D_u" :
+    central: +1.86483
+    min:     +1.86478
+    max:     +1.86488
+    comments: "cf. [PDG2016]"
+"mass::D_s" :
+    central: +1.96828
+    min:     +1.96818
+    max:     +1.96838
+    comments: "cf. [PDG2016]"
+"mass::D^*_d" :
+    central: +2.01026
+    min:     +2.01021
+    max:     +2.01031
+    comments: "cf. [PDG2016]"
+"mass::D^*_u" :
+    central: +2.00685
+    min:     +2.00680
+    max:     +2.00690
+    comments: "cf. [PDG2016]"
+"mass::D^*_s" :
+    central: +2.1121
+    min:     +2.1117
+    max:     +2.1125
+    comments: "cf. [PDG2016]"
 
 # Charmonium masses
 "mass::J/psi" :

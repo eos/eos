@@ -22,6 +22,7 @@
 #include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/model.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/save.hh>
@@ -32,6 +33,8 @@ namespace eos
     struct Implementation<BToDLeptonInclusiveNeutrinos>
     {
         std::shared_ptr<FormFactors<PToP>> form_factors;
+
+        SwitchOption opt_q;
 
         UsedParameter m_B;
 
@@ -48,20 +51,15 @@ namespace eos
         UsedParameter hbar;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            m_B(p["mass::B_" + o.get("q", "d")], u),
-            tau_B(p["life_time::B_" + o.get("q", "d")], u),
-            m_D(p["mass::D^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
+            opt_q(o, "q", { "u", "d" }, "d"),
+            m_B(p["mass::B_" + opt_q.value()], u),
+            tau_B(p["life_time::B_" + opt_q.value()], u),
+            m_D(p["mass::D_" + opt_q.value()], u),
             m_mu(p["mass::mu"], u),
             m_tau(p["mass::tau"], u),
             g_fermi(p["G_Fermi"], u),
             hbar(p["hbar"], u)
         {
-            if ((o.get("q", "d") != "d") && (o.get("q", "d") != "u")) // q = d is the default
-            {
-                // only B_{d,u} mesons can decay in this channel
-                throw InternalError("BToDLeptonInclusiveNeutrinos: q = '" + o["q"] + "' is not a valid option for this decay channel");
-            }
-
             form_factors = FormFactorFactory<PToP>::create("B->D@" + o.get("form-factors", "BCL2008"), p);
 
             if (! form_factors.get())

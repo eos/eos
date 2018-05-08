@@ -56,12 +56,13 @@ class BToDLeptonNeutrinoTest :
                 p1["B->D::b_0^1@BCL2008"]   = +0.40;
                 p1["B->D::b_0^2@BCL2008"]   = -1.20;
                 p1["mass::B_d"]             = 5.279;
-                p1["mass::D^+"]             = 1.870;
+                p1["mass::D_d"]             = 1.870;
                 p1["b->cmunumu::Re{cVL}"]   = 1.0;
                 
                 Options oo;
                 oo.set("model", "WilsonScan");
                 oo.set("form-factors", "BCL2008");
+                oo.set("q", "d");
                 
                 BToDLeptonNeutrino d(p1, oo);
                 
@@ -83,7 +84,7 @@ class BToDLeptonNeutrinoTest :
                 p2["B->D::b_0^1@BCL2008"]   = +0.400;
                 p2["B->D::b_0^2@BCL2008"]   = -1.20;
                 p2["mass::B_d"]             = 5.279;
-                p2["mass::D^+"]             = 1.870;
+                p2["mass::D_d"]             = 1.870;
                 // fix the scale
                 p2["mu"]                    = 4.18;
                 p2["mass::b(MSbar)"]        = 4.18;

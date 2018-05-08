@@ -40,8 +40,10 @@ namespace eos
 
         Parameters parameters;
 
+        SwitchOption opt_q;
+
         UsedParameter m_B;
-        
+
         UsedParameter mu;
 
         UsedParameter tau_B;
@@ -49,7 +51,7 @@ namespace eos
         UsedParameter m_D;
 
         SwitchOption opt_l;
-        
+
         UsedParameter m_l;
 
         UsedParameter g_fermi;
@@ -59,21 +61,16 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
-            m_B(p["mass::B_" + o.get("q", "d")], u),
+            opt_q(o, "q", { "u", "d" }, "d"),
+            m_B(p["mass::B_" + opt_q.value()], u),
             mu(p["mu"], u),
-            tau_B(p["life_time::B_" + o.get("q", "d")], u),
-            m_D(p["mass::D^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
+            tau_B(p["life_time::B_" + opt_q.value()], u),
+            m_D(p["mass::D_" + opt_q.value()], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
             g_fermi(p["G_Fermi"], u),
             hbar(p["hbar"], u)
         {
-            if ((o.get("q", "d") != "d") && (o.get("q", "d") != "u")) // q = d is the default
-            {
-                // only B_{d,u} mesons can decay in this channel
-                throw InternalError("BToDLeptonNeutrino: q = '" + o["q"] + "' is not a valid option for this decay channel");
-            }
-
             form_factors = FormFactorFactory<PToP>::create("B->D@" + o.get("form-factors", "BCL2008"), p);
 
             if (! form_factors.get())
