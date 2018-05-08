@@ -2,6 +2,8 @@
 
 /*
  * Copyright (c) 2014, 2015 Danny van Dyk
+ * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,6 +26,7 @@
 #include <eos/utils/model.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/options-impl.hh>
 
 namespace eos
 {
@@ -43,6 +46,8 @@ namespace eos
         UsedParameter g_fermi;
 
         UsedParameter hbar;
+        
+        SwitchOption opt_l;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
@@ -50,9 +55,10 @@ namespace eos
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
             m_pi(p["mass::pi^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
             g_fermi(p["G_Fermi"], u),
-            hbar(p["hbar"], u)
+            hbar(p["hbar"], u),
+            opt_l(o, "l", {"e", "mu"}, "mu")
         {
-            if (o.get("l", "mu") == "tau")
+            if (opt_l.value() == "tau")
             {
                 throw InternalError("BToPiLeptonNeutrino: l == 'tau' is not a valid option for this decay channel");
             }
@@ -82,7 +88,7 @@ namespace eos
                 / (192.0 * power_of<3>(M_PI * m_B));
 
             // NP contributions in EFT, cf. e.g. [DBG2013]
-            const WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u();
+            const WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
             double np = std::norm(wc.cvl() + wc.cvr());
 
             return norm * np * lam * std::sqrt(lam) * fp * fp;

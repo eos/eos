@@ -3,6 +3,8 @@
 /*
  * Copyright (c) 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2013 Bastian Müller
+ * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -28,6 +30,7 @@
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
@@ -55,6 +58,8 @@ namespace eos
 
         UsedParameter m_b_MSbar;
 
+        SwitchOption opt_l;
+        
         UsedParameter m_l;
 
         UsedParameter mu;
@@ -71,7 +76,8 @@ namespace eos
             m_Bs(p["mass::B_s"], u),
             m_Kstar(p["mass::K^*_u"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
-            m_l(p["mass::" + o.get("l", "mu")], u),
+            opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
+            m_l(p["mass::" + opt_l.value()], u),
             mu(p["mu"], u),
             g_fermi(p["G_Fermi"], u),
             tau(p["life_time::B_s"], u)
@@ -101,7 +107,7 @@ namespace eos
         {
             static const double sqrt2 = sqrt(2.0);
 
-            WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u();
+            WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
             double m_Bs2 = m_Bs * m_Bs;
             double sqrts = sqrt(s), lam = lambda(m_Bs * m_Bs, m_Kstar * m_Kstar, s), sqrtlam = sqrt(lam);
             double N = this->norm(s);

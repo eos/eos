@@ -619,7 +619,7 @@ namespace implementation
     }
 
     WilsonCoefficients<BToU>
-    SMComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const bool & /* cp_conjugate */) const
+    SMComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & /* cp_conjugate */) const
     {
         WilsonCoefficients<BToU> wc;
         wc._coefficients.fill(complex<double>(0.0));

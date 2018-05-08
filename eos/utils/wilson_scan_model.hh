@@ -120,27 +120,50 @@ namespace eos
     {
         private:
             /* b->u Wilson coefficients */
-            UsedParameter _re_csl;
-            UsedParameter _im_csl;
-            UsedParameter _re_csr;
-            UsedParameter _im_csr;
-            UsedParameter _re_cvl;
-            UsedParameter _im_cvl;
-            UsedParameter _re_cvr;
-            UsedParameter _im_cvr;
-            UsedParameter _re_ct;
-            UsedParameter _im_ct;
-            std::function<complex<double> ()> _csl;
-            std::function<complex<double> ()> _csr;
-            std::function<complex<double> ()> _cvl;
-            std::function<complex<double> ()> _cvr;
-            std::function<complex<double> ()> _ct;
+            /* b->u e nu_e */
+            UsedParameter _e_re_csl, _e_im_csl;
+            UsedParameter _e_re_csr, _e_im_csr;
+            UsedParameter _e_re_cvl, _e_im_cvl;
+            UsedParameter _e_re_cvr, _e_im_cvr;
+            UsedParameter _e_re_ct,  _e_im_ct;
+        
+            /* b->u mu nu_mu */
+            UsedParameter _mu_re_csl, _mu_im_csl;
+            UsedParameter _mu_re_csr, _mu_im_csr;
+            UsedParameter _mu_re_cvl, _mu_im_cvl;
+            UsedParameter _mu_re_cvr, _mu_im_cvr;
+            UsedParameter _mu_re_ct,  _mu_im_ct;
+        
+            /* b->u tau nu_tau */
+            UsedParameter _tau_re_csl, _tau_im_csl;
+            UsedParameter _tau_re_csr, _tau_im_csr;
+            UsedParameter _tau_re_cvl, _tau_im_cvl;
+            UsedParameter _tau_re_cvr, _tau_im_cvr;
+            UsedParameter _tau_re_ct,  _tau_im_ct;
+
+            std::function<complex<double> ()> _e_csl;
+            std::function<complex<double> ()> _e_csr;
+            std::function<complex<double> ()> _e_cvl;
+            std::function<complex<double> ()> _e_cvr;
+            std::function<complex<double> ()> _e_ct;
+        
+            std::function<complex<double> ()> _mu_csl;
+            std::function<complex<double> ()> _mu_csr;
+            std::function<complex<double> ()> _mu_cvl;
+            std::function<complex<double> ()> _mu_cvr;
+            std::function<complex<double> ()> _mu_ct;
+        
+            std::function<complex<double> ()> _tau_csl;
+            std::function<complex<double> ()> _tau_csr;
+            std::function<complex<double> ()> _tau_cvl;
+            std::function<complex<double> ()> _tau_cvr;
+            std::function<complex<double> ()> _tau_ct;
 
         public:
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
             /* b->u Wilson coefficients */
-            virtual WilsonCoefficients<BToU> wilson_coefficients_b_to_u(const bool & cp_conjugate) const;
+            virtual WilsonCoefficients<BToU> wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & cp_conjugate) const;
     };
     
     template <>

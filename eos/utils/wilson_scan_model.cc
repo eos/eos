@@ -221,31 +221,95 @@ namespace eos
 
     /* b->u Wilson coefficients */
     WilsonScanComponent<components::DeltaBU1>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
-        _re_csl(p["b->ulnu::Re{cSL}"], u),
-        _im_csl(p["b->ulnu::Im{cSL}"], u),
-        _re_csr(p["b->ulnu::Re{cSR}"], u),
-        _im_csr(p["b->ulnu::Im{cSR}"], u),
-        _re_cvl(p["b->ulnu::Re{cVL}"], u),
-        _im_cvl(p["b->ulnu::Im{cVL}"], u),
-        _re_cvr(p["b->ulnu::Re{cVR}"], u),
-        _im_cvr(p["b->ulnu::Im{cVR}"], u),
-        _re_ct(p["b->ulnu::Re{cT}"], u),
-        _im_ct(p["b->ulnu::Im{cT}"], u),
-        _csl(std::bind(&wcimplementation::cartesian, _re_csl, _im_csl)),
-        _csr(std::bind(&wcimplementation::cartesian, _re_csr, _im_csr)),
-        _cvl(std::bind(&wcimplementation::cartesian, _re_cvl, _im_cvl)),
-        _cvr(std::bind(&wcimplementation::cartesian, _re_cvr, _im_cvr)),
-        _ct(std::bind(&wcimplementation::cartesian, _re_ct, _im_ct))
+        _e_re_csl(p["b->uenue::Re{cSL}"], u),
+        _e_im_csl(p["b->uenue::Im{cSL}"], u),
+        _e_re_csr(p["b->uenue::Re{cSR}"], u),
+        _e_im_csr(p["b->uenue::Im{cSR}"], u),
+        _e_re_cvl(p["b->uenue::Re{cVL}"], u),
+        _e_im_cvl(p["b->uenue::Im{cVL}"], u),
+        _e_re_cvr(p["b->uenue::Re{cVR}"], u),
+        _e_im_cvr(p["b->uenue::Im{cVR}"], u),
+        _e_re_ct(p["b->uenue::Re{cT}"], u),
+        _e_im_ct(p["b->uenue::Im{cT}"], u),
+    
+        _mu_re_csl(p["b->umunumu::Re{cSL}"], u),
+        _mu_im_csl(p["b->umunumu::Im{cSL}"], u),
+        _mu_re_csr(p["b->umunumu::Re{cSR}"], u),
+        _mu_im_csr(p["b->umunumu::Im{cSR}"], u),
+        _mu_re_cvl(p["b->umunumu::Re{cVL}"], u),
+        _mu_im_cvl(p["b->umunumu::Im{cVL}"], u),
+        _mu_re_cvr(p["b->umunumu::Re{cVR}"], u),
+        _mu_im_cvr(p["b->umunumu::Im{cVR}"], u),
+        _mu_re_ct(p["b->umunumu::Re{cT}"], u),
+        _mu_im_ct(p["b->umunumu::Im{cT}"], u),
+    
+        _tau_re_csl(p["b->utaunutau::Re{cSL}"], u),
+        _tau_im_csl(p["b->utaunutau::Im{cSL}"], u),
+        _tau_re_csr(p["b->utaunutau::Re{cSR}"], u),
+        _tau_im_csr(p["b->utaunutau::Im{cSR}"], u),
+        _tau_re_cvl(p["b->utaunutau::Re{cVL}"], u),
+        _tau_im_cvl(p["b->utaunutau::Im{cVL}"], u),
+        _tau_re_cvr(p["b->utaunutau::Re{cVR}"], u),
+        _tau_im_cvr(p["b->utaunutau::Im{cVR}"], u),
+        _tau_re_ct(p["b->utaunutau::Re{cT}"], u),
+        _tau_im_ct(p["b->utaunutau::Im{cT}"], u),
+    
+        _e_csl(std::bind(&wcimplementation::cartesian, _e_re_csl, _e_im_csl)),
+        _e_csr(std::bind(&wcimplementation::cartesian, _e_re_csr, _e_im_csr)),
+        _e_cvl(std::bind(&wcimplementation::cartesian, _e_re_cvl, _e_im_cvl)),
+        _e_cvr(std::bind(&wcimplementation::cartesian, _e_re_cvr, _e_im_cvr)),
+        _e_ct(std::bind(&wcimplementation::cartesian, _e_re_ct, _e_im_ct)),
+    
+        _mu_csl(std::bind(&wcimplementation::cartesian, _mu_re_csl, _mu_im_csl)),
+        _mu_csr(std::bind(&wcimplementation::cartesian, _mu_re_csr, _mu_im_csr)),
+        _mu_cvl(std::bind(&wcimplementation::cartesian, _mu_re_cvl, _mu_im_cvl)),
+        _mu_cvr(std::bind(&wcimplementation::cartesian, _mu_re_cvr, _mu_im_cvr)),
+        _mu_ct(std::bind(&wcimplementation::cartesian, _mu_re_ct, _mu_im_ct)),
+    
+        _tau_csl(std::bind(&wcimplementation::cartesian, _tau_re_csl, _tau_im_csl)),
+        _tau_csr(std::bind(&wcimplementation::cartesian, _tau_re_csr, _tau_im_csr)),
+        _tau_cvl(std::bind(&wcimplementation::cartesian, _tau_re_cvl, _tau_im_cvl)),
+        _tau_cvr(std::bind(&wcimplementation::cartesian, _tau_re_cvr, _tau_im_cvr)),
+        _tau_ct(std::bind(&wcimplementation::cartesian, _tau_re_ct, _tau_im_ct))
     {
     }
 
     WilsonCoefficients<BToU>
-    WilsonScanComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const bool & cp_conjugate) const
+    WilsonScanComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & cp_conjugate) const
     {
+        std::function<complex<double> ()> cvl;
+        std::function<complex<double> ()> cvr;
+        std::function<complex<double> ()> csl;
+        std::function<complex<double> ()> csr;
+        std::function<complex<double> ()> ct;
+
+        if ("e" == lepton_flavour)
+        {
+            cvl = _e_cvl;   cvr = _e_cvr;
+            csl = _e_csl;   csr = _e_csr;
+            ct = _e_ct;
+        }
+        else if ("mu" == lepton_flavour)
+        {
+            cvl = _mu_cvl;   cvr = _mu_cvr;
+            csl = _mu_csl;   csr = _mu_csr;
+            ct = _mu_ct;
+        }
+        else if ("tau" == lepton_flavour)
+        {
+            cvl = _tau_cvl;   cvr = _tau_cvr;
+            csl = _tau_csl;   csr = _tau_csr;
+            ct = _tau_ct;
+        }
+        else
+        {
+            throw InternalError("WilsonScan implements 'e', 'mu' and 'tau' lepton flavours");
+        }
+        
         WilsonCoefficients<BToU> result
         {
             {{
-                _cvl(), _cvr(), _csl(), _csr(), _ct()
+                cvl(), cvr(), csl(), csr(), ct()
             }},
         };
 

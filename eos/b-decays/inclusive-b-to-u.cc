@@ -2,6 +2,8 @@
 
 /*
  * Copyright (c) 2015 Danny van Dyk
+ * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +23,7 @@
 #include <eos/utils/complex.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/options-impl.hh>
 
 namespace eos
 {
@@ -29,8 +32,11 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
+        SwitchOption opt_l;
+        
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "SM"), p, o))
+            model(Model::make(o.get("model", "SM"), p, o)),
+            opt_l(o, "l", {"e", "mu", "tau"}, "mu")
         {
             u.uses(*model);
         }
@@ -44,7 +50,7 @@ namespace eos
             // inclusive |V_ub|^2 = |V_ub^eff|^2 (|C_V,LL|^2 + |C_V,RL|^2)
 
             double v_ub_eff_squared = std::norm(model->ckm_ub());
-            WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u();
+            WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
 
             return std::sqrt(v_ub_eff_squared * (std::norm(wc.cvl()) + std::norm(wc.cvr())));
         }
