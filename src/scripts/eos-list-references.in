@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (c) 2016 Danny van Dyk
+# Copyright (c) 2016, 2018 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -16,19 +16,19 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import collections
-import json
+import yaml
 
 def isstring(x):
     return isinstance(x, str) or isinstance(x, unicode)
 
 def collabify(x):
     if not isstring(x) and isinstance(x, collections.Iterable):
-        result = "("
-        result += " collaboration, ".join(x)
-        result += " collaboration)"
+        result = '('
+        result += ' collaboration, '.join(x)
+        result += ' collaboration)'
         return result
     else:
-        return "(%s collaboration)" % x
+        return '({} collaboration)'.format(x)
 
 def listify(x):
     if not isstring(x) and isinstance(x, collections.Iterable):
@@ -37,8 +37,8 @@ def listify(x):
         return x
 
 def main():
-    with open('@PKGDATADIR@/references.json') as data_file:
-        refs = json.load(data_file)
+    with open('@PKGDATADIR@/references.yaml') as data_file:
+        refs = yaml.load(data_file)
 
     keys = [key for key in refs]
     keys.sort()
@@ -46,21 +46,21 @@ def main():
     for key in keys:
         r = refs[key]
 
-        if "authors" in r and "collaboration" in r:
-            print "[%s] : %s (%s collaboration)" % (key, listify(r["authors"]), r["collaboration"])
-        elif "collaboration" in r:
-            print "[%s] : (%s collaboration)" % (key, r["collaboration"])
-        elif "authors" in r:
-            print "[%s] : %s" % (key, listify(r["authors"]))
+        if 'authors' in r and 'collaboration' in r:
+            print('[{}] : {} ({} collaboration)'.format(key, listify(r['authors']), r['collaboration']))
+        elif 'collaboration' in r:
+            print('[{}] : ({} collaboration)'.format(key, r['collaboration']))
+        elif 'authors' in r:
+            print('[{}] : {}'.format(key, listify(r['authors'])))
 
-        print "    %s" % r["title"]
+        print('    {}'.format(r['title']))
 
-        if "journal" in r:
-            print "    %s" % listify(r["journal"])
-        if "eprint" in r:
-            print "    %s" % listify(r["eprint"])
+        if 'journal' in r:
+            print('    {}'.format(listify(r['journal'])))
+        if 'eprint' in r:
+            print('    {}'.format(listify(r['eprint'])))
 
-        print ""
+        print('')
 
     exit(0);
 
