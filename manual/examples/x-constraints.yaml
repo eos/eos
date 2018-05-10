@@ -1,0 +1,9 @@
+X::mass+decay-constant@Example:
+    type: MultivariateGaussian
+    dim: 2
+    observables: ['mass::X@Example', 'decay-constant::X@Example']
+    kinematics: [{}, {}]
+    options: [{}, {}]
+    means: [1.0, 0.1]
+    covariance: [[0.25, 2.5e-3], [2.5e-3, 1.0e-4]]
+    dof: 2
