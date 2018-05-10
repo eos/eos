@@ -217,7 +217,7 @@ The \client{eos-sample-mcmc} client further accepts the following arguments:
     \item[] \cli{--output FILENAME}\\[\medskipamount]
         Use the file \cli{FILENAME} to store the output, using the \gls{HDF5} file format.
         The resulting \gls{HDF5} file follows the EOS-\gls{MCMC} format, and can be accessed using, e.g.,
-        the \texttt{eosdata} Python module.
+        the \class{eos.data.MCMCDataFile} Python class.
 \end{itemize}
 
 The \client{eos-sample-pmc} client additionally accepts the following command-line arguments:
@@ -271,8 +271,8 @@ The \client{eos-sample-pmc} client additionally accepts the following command-li
     \item[] \cli{--output FILENAME}\\[\medskipamount]
         Use the file \cli{FILENAME} to store the output, using the \gls{HDF5}
         file format.  The resulting \gls{HDF5} file follows the EOS-\gls{PMC}
-        structure, and can be read using the \texttt{eosdata} Python
-        module.
+        structure, and can be read using the \class{eos.data.PMCDataFile} Python
+        class.
 \end{itemize}
 
 As an example, we define the a-priori \gls{PDF} for a study of the decay $\bar{B}\to \pi^+\mu^-\bar\nu_\mu$.
@@ -531,7 +531,7 @@ Our intention translates to the following call to \client{eos-propagate-uncertai
 \commandlineexample{examples/propagate-uncertainty-btopilnu.bash}
 
 For both ways, the samples of the predictive distributions within the HDF5 files
-can be accessed using the \texttt{eosdata} Python module.
+can be accessed using the \class{eos.data.UncertaintyDataFile} Python class.
 
 \section{Plotting Random Samples}
 \label{sec:usage:eos-plot}
