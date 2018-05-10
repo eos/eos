@@ -15,11 +15,13 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+import argparse
 import collections
 import yaml
+import sys
 
 def isstring(x):
-    return isinstance(x, str) or isinstance(x, unicode)
+    return isinstance(x, str)
 
 def collabify(x):
     if not isstring(x) and isinstance(x, collections.Iterable):
@@ -37,13 +39,25 @@ def listify(x):
         return x
 
 def main():
+    parser = argparse.ArgumentParser(description='List references used in EOS')
+    parser.add_argument('refs', metavar='REFS', type=str, nargs='*', help='Key for a reference')
+
+    args = parser.parse_args()
+
     with open('@PKGDATADIR@/references.yaml') as data_file:
         refs = yaml.load(data_file)
 
-    keys = [key for key in refs]
-    keys.sort()
+    if args.refs:
+        keys = [key for key in args.refs]
+    else:
+        keys = [key for key in refs]
+        keys.sort()
 
     for key in keys:
+        if key not in refs:
+            error('unknown reference {}'.format(key))
+            exit(-1)
+
         r = refs[key]
 
         if 'authors' in r and 'collaboration' in r:
