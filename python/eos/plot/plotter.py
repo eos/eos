@@ -209,7 +209,7 @@ class Plotter:
         alpha = item['opacity'] if 'opacity' in item else 0.3
         color = item['color']   if 'color'   in item else 'blue'
         bins  = item['bins']    if 'bins'    in item else 100
-        plt.hist(data, alpha=alpha, bins=bins, color=color, normed=1)
+        plt.hist(data, alpha=alpha, bins=bins, color=color, density=1)
 
 
     def plot_eos_watermark(self, item):
