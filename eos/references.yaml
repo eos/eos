@@ -704,6 +704,11 @@
     title: "Note on fast polylogarithm computation"
     url:  "http://people.reed.edu/~crandall/papers/Polylog.pdf"
 
+"C2010" :
+    authors: "Crooks, G.E."
+    title: "The Amoroso Distribution"
+    eprint: "arXiv:1005.3274"
+
 "GR1992" :
     authors: "Gelman, A. and Rubin, D.B."
     title: "Inference from Iterative Simulation Using Multiple Sequences"
