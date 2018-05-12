@@ -47,6 +47,9 @@ class Plotter:
         if 'title' in myplot:
             mytitle = myplot['title']
 
+        plt.locator_params(axis='x', nbins=5)
+        plt.locator_params(axis='y', nbins=5)
+
         if 'x' in myplot:
             myx = myplot['x']
 
