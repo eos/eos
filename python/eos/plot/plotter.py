@@ -213,23 +213,23 @@ class Plotter:
 
 
     def plot_eos_watermark(self, item):
-        width, height = (0.115, 0.035)
+        xdelta, ydelta = (0.04, 0.04)
 
-        hpos, vpos = item['position'] if 'position' in item else ['right', 'bottom']
+        hpos, vpos = item['position'] if 'position' in item else ['right', 'top']
 
         if hpos == 'right':
-            x = 0 + width
+            x = 1 - xdelta
         elif hpos == 'left':
-            x = 1 - width
+            x = xdelta
         elif hpos == 'center':
             x = 0.5
         else:
             raise ValueError('invalid horizontal position \'{}\''.format(hpos))
 
         if vpos == 'bottom':
-            y = 0 + height
+            y = 0 + ydelta
         elif vpos == 'top':
-            y = 1 - height
+            y = 1 - ydelta
         elif vpos == 'center':
             y = 0.5
         else:
@@ -240,7 +240,7 @@ class Plotter:
         ax.text(x, y, r'\textsf{{\textbf{{EOS v{version}}}}}'.format(version=eos.version()),
                 transform=ax.transAxes, fontproperties=logofont,
                 color='OrangeRed', alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
-                horizontalalignment='center', verticalalignment='center', zorder=+5)
+                horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
 
 
     def plot_contents(self):
