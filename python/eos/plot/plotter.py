@@ -20,6 +20,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy
+from scipy.stats import gaussian_kde
 from scipy.interpolate import spline
 import sys
 
@@ -188,6 +189,39 @@ class Plotter:
         plt.plot(xvalues, ovalues_higher,  color=color, alpha=alpha)
 
 
+    def plot_kde(self, item):
+        if 'hdf5-file' not in item:
+            raise KeyError('no hdf5-file specified')
+
+        h5fname = item['hdf5-file']
+        info('   plotting histogram from file "{}"'.format(h5fname))
+        datafile = eos.data.load_data_file(h5fname)
+
+        if 'variable' not in item:
+            raise KeyError('no variable specificed')
+        variable = item['variable']
+
+        print(datafile.variable_indices)
+        if variable not in datafile.variable_indices:
+            raise ValueError('variable {} not contained in data file'.format(variable))
+
+        index = datafile.variable_indices[variable]
+        data  = datafile.data()[:, index]
+        alpha = item['opacity']   if 'opacity'   in item else 0.3
+        color = item['color']     if 'color'     in item else 'blue'
+        bw    = item['bandwidth'] if 'bandwidth' in item else None
+
+        kde = gaussian_kde(data)
+        kde.set_bandwidth(bw_method='silverman')
+        if 'bandwidth' in item:
+            kde.set_bandwidth(bw_method=kde.factor * item['bandwidth'])
+
+        xmin, xmax = plt.xlim()
+        x = np.linspace(xmin, xmax, 1000)
+
+        plt.plot(x, kde(x), color=color)
+
+
     def plot_histogram(self, item):
         if 'hdf5-file' not in item:
             raise KeyError('no hdf5-file specified')
@@ -249,6 +283,7 @@ class Plotter:
 
         plot_functions = {
             'histogram':   Plotter.plot_histogram,
+            'kde':         Plotter.plot_kde,
             'observable':  Plotter.plot_observable,
             'uncertainty': Plotter.plot_uncertainty,
             'watermark':   Plotter.plot_eos_watermark,
