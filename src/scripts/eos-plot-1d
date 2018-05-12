@@ -19,15 +19,23 @@ import argparse
 import eos
 import os
 
+def variable_to_latex(variable):
+    p = eos.Parameters.Defaults()
+    if variable in [pp.name() for pp in p]:
+        return p[variable].latex()
+    else:
+        return r'\verb{' + variable + '}'
+
 def main():
     parser = argparse.ArgumentParser(description='Plot 1D marginal distributions')
     parser.add_argument('input', metavar='HDF5FILE', type=str, help='Name of the HDF5 input file')
-    parser.add_argument('index', metavar='IDX', type=int, help='Index of the n-tuple element to be plotted')
+    parser.add_argument('variable', metavar='VAR', type=str, help='Name of the variable to be plotted')
     parser.add_argument('output', metavar='PDFFILE', type=str, help='Name of the PDF output file')
-    parser.add_argument('--xmin', type=float, help='Minimum value on the x axis')
-    parser.add_argument('--xmax', type=float, help='Maximum value on the x axis')
+    parser.add_argument('--bins', type=int, default=100, help='Number of bins to use for the histogram')
     parser.add_argument('--kde', type=bool, default=False, help='Whether to use Kerndel Density Estimation (KDE) in the plot')
     parser.add_argument('--kde-bandwidth', type=float, default=1.0, help='Scaling factor for the automatically determined KDE bandwidth')
+    parser.add_argument('--xmin', type=float, help='Minimum value on the x axis')
+    parser.add_argument('--xmax', type=float, help='Maximum value on the x axis')
 
     args = parser.parse_args()
 
@@ -35,16 +43,49 @@ def main():
     if not os.path.isfile(args.input):
         error('\'%s\' is not a file' % args.input)
 
-    # open HDF5 data file
-    datafile = eos.data.load_hdf5_datafile(args.input)
+    # instructions for eos.plot.Plotter
+    instructions = {
+        'plot': {
+            'x': {
+                'label': variable_to_latex(args.variable),
+                'range': [args.xmin, args.xmax],
+            },
+            'y': {
+                'label': r'$\textsf{probability}$',
+            },
+        },
+        'contents' : [
+            {
+                'name': 'histogram',
+                'type': 'histogram',
+                'variable': args.variable,
+                'bins': args.bins,
+                'color': 'C0',
+                'opacity': 0.75,
+                'hdf5-file': args.input,
+            },
+            {
+                'type': 'watermark'
+            }
+        ]
+    }
+    if args.kde:
+        kde_item = {
+            'name': 'kde',
+            'type': 'kde',
+            'variable': args.variable,
+            'color': 'C0',
+            'opacity': 1.0,
+            'hdf5-file': args.input,
+        }
+        if args.kde_bandwidth:
+            kde_item.update({'bandwidth': args.kde_bandwidth})
 
-    # forward options
-    argvars = vars(args)
-    options = { key: argvars[key] for key in ['xmin', 'xmax', 'kde', 'kde_bandwidth'] }
+        instructions['contents'].append(kde_item)
 
     # plot data
-    plotter = eos.plot.Plotter1D(datafile, args.output)
-    plotter.histogram(args.index, **options)
+    plotter = eos.plot.Plotter(instructions, args.output)
+    plotter.plot()
 
     exit(0);
 
