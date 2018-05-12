@@ -83,7 +83,6 @@ class Plotter:
 
             if 'scale' in myy:
                 self.yscale = float(myy['scale'])
-                warn('scale: {}'.format(self.yscale))
                 self.yticks = matplotlib.ticker.FuncFormatter(lambda y, pos, yscale=self.yscale: '${0:.2f}$'.format(y / yscale))
                 self.ax.yaxis.set_major_formatter(self.yticks)
 
