@@ -346,13 +346,13 @@ class Plotter2D:
         plt.figure(figsize=(10, 10), dpi=80)
 
         # x axis
-        plt.xlabel("{} [{}]".format(str(parameter1[0], 'utf-8'), str(parameter1[1], 'utf-8')))
+        plt.xlabel("{}".format(parameter1[0].decode('ascii')))
         xmin = options['xmin'] if options['xmin'] != None else parameter1[2]
         xmax = options['xmax'] if options['xmax'] != None else parameter1[3]
         plt.xlim(xmin, xmax)
 
         # y axis
-        plt.ylabel("{} [{}]".format(str(parameter2[0], 'utf-8'), str(parameter2[1], 'utf-8')))
+        plt.ylabel("{}".format(parameter2[0].decode('ascii')))
         ymin = options['ymin'] if options['ymin'] != None else parameter2[2]
         ymax = options['ymax'] if options['ymax'] != None else parameter2[3]
         plt.ylim(ymin, ymax)

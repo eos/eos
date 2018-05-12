@@ -37,7 +37,7 @@ def main():
         error('\'%s\' is not a file' % args.input)
 
     # open HDF5 data file
-    datafile = eos.data.load_hdf5_datafile(args.input)
+    datafile = eos.data.load_data_file(args.input)
 
     # forward options
     argvars = vars(args)
