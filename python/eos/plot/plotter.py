@@ -253,6 +253,32 @@ class Plotter:
         plt.hist(data, alpha=alpha, bins=bins, color=color, density=1)
 
 
+    def plot_histogram2d(self, item):
+        if 'hdf5-file' not in item:
+            raise KeyError('no hdf5-file specified')
+
+        h5fname = item['hdf5-file']
+        info('   plotting 2D histogram from file "{}"'.format(h5fname))
+        datafile = eos.data.load_data_file(h5fname)
+
+        if 'variables' not in item:
+            raise KeyError('no variables specificed')
+
+        xvariable, yvariable = item['variables']
+
+        xindex = datafile.variable_indices[xvariable]
+        yindex = datafile.variable_indices[yvariable]
+        data = datafile.data()
+
+        cmap = plt.get_cmap('viridis')
+        cmap.set_under('w', 1)
+
+        xdata = data[:, xindex]
+        ydata = data[:, yindex]
+        bins  = item['bins']    if 'bins'    in item else 100
+        plt.hist2d(xdata, ydata, bins=bins, cmin=1)
+
+
     def plot_eos_watermark(self, item):
         xdelta, ydelta = (0.04, 0.04)
 
@@ -290,6 +316,7 @@ class Plotter:
 
         plot_functions = {
             'histogram':   Plotter.plot_histogram,
+            'histogram2D': Plotter.plot_histogram2d,
             'kde':         Plotter.plot_kde,
             'observable':  Plotter.plot_observable,
             'uncertainty': Plotter.plot_uncertainty,
