@@ -25,6 +25,8 @@ def main():
     parser.add_argument('xvariable', metavar='XVAR', type=str, help='Name of the variable to be plotted on the x axis')
     parser.add_argument('yvariable', metavar='YVAR', type=str, help='Name of the variable to be plotted on the y axis')
     parser.add_argument('output', metavar='PDFFILE', type=str, help='Name of the PDF output file')
+    parser.add_argument('--contours', dest='contours', default=False, action='store_true', help='Whether to draw 68%, 95% and 99% probability contours')
+    parser.add_argument('--no-histogram', dest='histogram', default=True, action='store_false', help='Whether to histogram the samples')
     parser.add_argument('--xmin', type=float, help='Minimum value on the x axis')
     parser.add_argument('--xmax', type=float, help='Maximum value on the x axis')
     parser.add_argument('--ymin', type=float, help='Minimum value on the y axis')
@@ -37,6 +39,23 @@ def main():
         error('\'%s\' is not a file' % args.input)
 
     # instructions for eos.plot.Plotter
+    contents = []
+    if args.histogram == True:
+        contents.append({
+            'name': 'histogram2D',
+            'type': 'histogram2D',
+            'variables': [args.xvariable, args.yvariable],
+            'hdf5-file': args.input,
+        })
+    if args.contours == True:
+        contents.append({
+            'name': 'contours2D',
+            'type': 'contours2D',
+            'variables': [args.xvariable, args.yvariable],
+            'hdf5-file': args.input,
+        })
+    contents.append({'type': 'watermark'})
+
     instructions = {
         'plot': {
             'size': [25, 25], # 25cm x 25cm
@@ -49,18 +68,12 @@ def main():
                 'range': [args.ymin, args.ymax],
             },
         },
-        'contents' : [
-            {
-                'name': 'histogram2D',
-                'type': 'histogram2D',
-                'variables': [args.xvariable, args.yvariable],
-                'hdf5-file': args.input,
-            },
-            {
-                'type': 'watermark'
-            }
-        ]
+        'contents' : contents,
     }
+    if args.xmin or args.xmax:
+        instructions['plot']['x']['range'] = [args.xmin, args.xmax]
+    if args.ymin or args.ymax:
+        instructions['plot']['y']['range'] = [args.ymin, args.ymax]
 
     # plot data
     plotter = eos.plot.Plotter(instructions, args.output)
