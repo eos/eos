@@ -55,41 +55,49 @@
     central: +0.307
     min:     +0.287
     max:     +0.327
+    latex:    '$f_+(0)^{B\to \pi}$'
     comments: ""
 "B->pi::b_+^1@BCL2008" :
     central: -1.31
     min:     +1.73
     max:     -0.89
+    latex:    '$b_{+, 1}^{B\to \pi}$'
     comments: ""
 "B->pi::b_+^2@BCL2008" :
     central: -0.904
     min:     -1.348
     max:     -0.460
+    latex:    '$b_{+, 2}^{B\to \pi}$'
     comments: ""
 "B->pi::b_0^1@BCL2008" :
     central: +0.00
     min:     +0.00
     max:     +0.00
+    latex:    '$b_{0, 1}^{B\to \pi}$'
     comments: ""
 "B->pi::b_0^2@BCL2008" :
     central: +0.00
     min:     +0.00
     max:     +0.00
+    latex:    '$b_{0, 2}^{B\to \pi}$'
     comments: ""
 "B->pi::f_T(0)@BCL2008" :
     central: +0.00
     min:     +0.00
     max:     +0.00
+    latex:    '$f_T(0)^{B\to \pi}$'
     comments: ""
 "B->pi::b_T^1@BCL2008" :
     central: +0.00
     min:     +0.00
     max:     +0.00
+    latex:    '$b_{T, 1}^{B\to \pi}$'
     comments: ""
 "B->pi::b_T^2@BCL2008" :
     central: +0.00
     min:     +0.00
     max:     +0.00
+    latex:    '$b_{T, 2}^{B\to \pi}$'
     comments: ""
 
 # form factor parameters for B->D from [BIvD2016] for [BCL2008] parametrization
