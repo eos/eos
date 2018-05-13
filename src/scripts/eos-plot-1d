@@ -39,6 +39,7 @@ def main():
     # instructions for eos.plot.Plotter
     instructions = {
         'plot': {
+            'size': [25, 25], # 25cm x 25cm
             'x': {
                 'label': eos.plot.variable_to_latex(variable),
                 'range': [args.xmin, args.xmax],
