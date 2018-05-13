@@ -19,13 +19,6 @@ import argparse
 import eos
 import os
 
-def variable_to_latex(variable):
-    p = eos.Parameters.Defaults()
-    if variable in [pp.name() for pp in p]:
-        return p[variable].latex()
-    else:
-        return r'\verb{' + variable + '}'
-
 def main():
     parser = argparse.ArgumentParser(description='Plot 1D marginal distributions')
     parser.add_argument('input', metavar='HDF5FILE', type=str, help='Name of the HDF5 input file')
@@ -47,7 +40,7 @@ def main():
     instructions = {
         'plot': {
             'x': {
-                'label': variable_to_latex(args.variable),
+                'label': eos.plot.variable_to_latex(variable),
                 'range': [args.xmin, args.xmax],
             },
             'y': {

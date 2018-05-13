@@ -333,6 +333,14 @@ class Plotter:
         plt.savefig(self.output)
 
 
+def variable_to_latex(variable):
+    p = eos.Parameters.Defaults()
+    if variable in [pp.name() for pp in p]:
+        return p[variable].latex()
+    else:
+        return r'\verb{' + variable + '}'
+
+
 class Plotter2D:
     def __init__(self, datafile, pdffile):
         self.datafile = datafile
