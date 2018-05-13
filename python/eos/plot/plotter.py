@@ -196,6 +196,61 @@ class Plotter:
         plt.plot(xvalues, ovalues_higher,  color=color, alpha=alpha)
 
 
+    def plot_contours2d(self, item):
+        if 'hdf5-file' not in item:
+            raise KeyError('no hdf5-file specified')
+
+        h5fname = item['hdf5-file']
+        info('   plotting 2D contours from file "{}"'.format(h5fname))
+        datafile = eos.data.load_data_file(h5fname)
+
+        if 'variables' not in item:
+            raise KeyError('no variables specificed')
+
+        xvariable, yvariable = item['variables']
+
+        data   = datafile.data()
+        xindex = datafile.variable_indices[xvariable]
+        xdata  = data[:, xindex]
+        yindex = datafile.variable_indices[yvariable]
+        ydata  = data[:, yindex]
+
+        if not np.array(self.xrange).any():
+            self.xrange = [np.amin(xdata), np.amax(xdata)]
+            self.ax.set_xlim(tuple(self.xrange))
+        if not np.array(self.yrange).any():
+            self.yrange = [np.amin(ydata), np.amax(ydata)]
+            self.ax.set_ylim(tuple(self.yrange))
+        plt.show()
+
+        xbins = 100
+        ybins = 100
+
+        H, xedges, yedges = np.histogram2d(xdata, ydata, bins=(xbins, ybins), normed=True)
+        x_bin_sizes = (xedges[1:] - xedges[:-1]).reshape((1,xbins))
+        y_bin_sizes = (yedges[1:] - yedges[:-1]).reshape((ybins,1))
+        pdf = (H*(x_bin_sizes*y_bin_sizes))
+
+        # find the PDF value corresponding to a given cummulative probability
+        plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
+        pone_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.68))
+        ptwo_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.95))
+        pthree_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.99))
+        levels = [pone_sigma, ptwo_sigma, pthree_sigma]
+        labels = ['68%', '95%', '99%']
+
+        CS = plt.contour(pdf.transpose(),
+                         colors='OrangeRed',
+                         extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]],
+                         levels=levels[::-1])
+
+        fmt = {}
+        for level, label in zip(CS.levels, labels[::-1]):
+            fmt[level] = label
+
+        plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+
+
     def plot_kde(self, item):
         if 'hdf5-file' not in item:
             raise KeyError('no hdf5-file specified')
@@ -315,6 +370,7 @@ class Plotter:
             return
 
         plot_functions = {
+            'contours2D':  Plotter.plot_contours2d,
             'histogram':   Plotter.plot_histogram,
             'histogram2D': Plotter.plot_histogram2d,
             'kde':         Plotter.plot_kde,
