@@ -368,39 +368,3 @@ def variable_to_latex(variable):
         return r'\verb{' + variable + '}'
 
 
-class Plotter2D:
-    def __init__(self, datafile, pdffile):
-        self.datafile = datafile
-        self.pdffile = pdffile
-
-
-    def histogram(self, index1, index2, **options):
-        data = self.datafile.data()
-
-        # param 1
-        parameter1 = self.datafile.parameters[index1]
-        data1 = data[:, index1]
-
-        parameter2 = self.datafile.parameters[index2]
-        data2 = data[:, index2]
-
-        plt.clf()
-        plt.figure(figsize=(10, 10), dpi=80)
-
-        # x axis
-        plt.xlabel("{}".format(parameter1[0].decode('ascii')))
-        xmin = options['xmin'] if options['xmin'] != None else parameter1[2]
-        xmax = options['xmax'] if options['xmax'] != None else parameter1[3]
-        plt.xlim(xmin, xmax)
-
-        # y axis
-        plt.ylabel("{}".format(parameter2[0].decode('ascii')))
-        ymin = options['ymin'] if options['ymin'] != None else parameter2[2]
-        ymax = options['ymax'] if options['ymax'] != None else parameter2[3]
-        plt.ylim(ymin, ymax)
-
-        # plot
-        plt.hist2d(data1, data2, bins=100)
-        plt.tight_layout()
-
-        plt.savefig(self.pdffile)
