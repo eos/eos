@@ -48,6 +48,13 @@ class Plotter:
         if 'title' in myplot:
             mytitle = myplot['title']
 
+        if 'size' in myplot:
+            xwidth, ywidth = myplot['size']
+            # convert from cm to inches
+            xwidth /= 2.54 # cm / inch
+            ywidth /= 2.54 # cm / inch
+            plt.gcf().set_size_inches((xwidth, ywidth))
+
         plt.locator_params(axis='x', nbins=5)
         plt.locator_params(axis='y', nbins=5)
 
