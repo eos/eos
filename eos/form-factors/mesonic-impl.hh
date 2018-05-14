@@ -5,6 +5,7 @@
  * Copyright (c) 2010, 2011 Christian Wacker
  * Copyright (c) 2015 Frederik Beaujean
  * Copyright (c) 2015 Christoph Bobeth
+ * Copyright (c) 2018 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -590,7 +591,7 @@ namespace eos
 
             static std::string _par_name(const std::string & ff_name)
             {
-                return std::string("B->K^*::alpha^") + ff_name + std::string("@BSZ2015");
+                return std::string(Process_::label) + std::string("::alpha^") + ff_name + std::string("@BSZ2015");
             }
 
         public:
