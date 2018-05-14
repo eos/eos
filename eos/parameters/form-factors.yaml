@@ -820,3 +820,219 @@
     min:     0.75
     max:     1.25
     comments: "GeV^2"
+
+# No valid form-factor parameters for B->D* case are available yet, so we leave everything at zero for the moment.
+"B->D^*::alpha^A0_0@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^A0_1@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^A0_2@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^A1_0@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^A1_1@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^A1_2@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^A12_0@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^A12_1@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^A12_2@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^V_0@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^V_1@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^V_2@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^T1_0@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^T1_1@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^T1_2@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^T2_0@BSZ2015" :
+    central: +0.0
+    min:     +0.0
+    max:     +0.0
+    comments: ""
+"B->D^*::alpha^T2_1@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^T2_2@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^T23_0@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^T23_1@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+"B->D^*::alpha^T23_2@BSZ2015" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+    comments: ""
+
+# form-factor parameters for B->rho simple series
+# expansion (SSE) based on LCSR according to
+# [BSZ2015], Table 14 of v3 of that paper.
+"B->rho::alpha^A0_0@BSZ2015" :
+    central: +0.36
+    min:     +0.32
+    max:     +0.40
+    comments: ""
+"B->rho::alpha^A0_1@BSZ2015" :
+    central: -0.83
+    min:     -1.03
+    max:     -0.63
+    comments: ""
+"B->rho::alpha^A0_2@BSZ2015" :
+    central: +1.33
+    min:     +0.28
+    max:     +2.38
+    comments: ""
+"B->rho::alpha^A1_0@BSZ2015" :
+    central: +0.26
+    min:     +0.23
+    max:     +0.29
+    comments: ""
+"B->rho::alpha^A1_1@BSZ2015" :
+    central: +0.39
+    min:     +0.25
+    max:     +0.53
+    comments: ""
+"B->rho::alpha^A1_2@BSZ2015" :
+    central: +0.16
+    min:     -0.25
+    max:     +0.57
+    comments: ""
+"B->rho::alpha^A12_0@BSZ2015" :
+    central: +0.30
+    min:     +0.27
+    max:     +0.33
+    comments: ""
+"B->rho::alpha^A12_1@BSZ2015" :
+    central: +0.76
+    min:     +0.56
+    max:     +0.96
+    comments: ""
+"B->rho::alpha^A12_2@BSZ2015" :
+    central: +0.46
+    min:     -0.36
+    max:     +1.22
+    comments: ""
+"B->rho::alpha^V_0@BSZ2015" :
+    central: +0.33
+    min:     +0.30
+    max:     +0.36
+    comments: ""
+"B->rho::alpha^V_1@BSZ2015" :
+    central: -0.86
+    min:     -1.04
+    max:     -0.68
+    comments: ""
+"B->rho::alpha^V_2@BSZ2015" :
+    central: +1.80
+    min:     +0.83
+    max:     +2.77
+    comments: ""
+"B->rho::alpha^T1_0@BSZ2015" :
+    central: +0.27
+    min:     +0.24
+    max:     +0.30
+    comments: ""
+"B->rho::alpha^T1_1@BSZ2015" :
+    central: -0.74
+    min:     -0.88
+    max:     -0.60
+    comments: ""
+"B->rho::alpha^T1_2@BSZ2015" :
+    central: +1.45
+    min:     +0.68
+    max:     +2.22
+    comments: ""
+"B->rho::alpha^T2_0@BSZ2015" :
+    central: +0.27
+    min:     +0.24
+    max:     +0.30
+    comments: ""
+"B->rho::alpha^T2_1@BSZ2015" :
+    central: +0.47
+    min:     +0.24
+    max:     +0.60
+    comments: ""
+"B->rho::alpha^T2_2@BSZ2015" :
+    central: +0.58
+    min:     +0.12
+    max:     +1.04
+    comments: ""
+"B->rho::alpha^T23_0@BSZ2015" :
+    central: +0.75
+    min:     +0.67
+    max:     +0.83
+    comments: ""
+"B->rho::alpha^T23_1@BSZ2015" :
+    central: +1.90
+    min:     +1.47
+    max:     +2.33
+    comments: ""
+"B->rho::alpha^T23_2@BSZ2015" :
+    central: +2.93
+    min:     +1.12
+    max:     +4.74
+    comments: ""

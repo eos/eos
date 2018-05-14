@@ -34,7 +34,7 @@
 
 namespace eos
 {
-    // Process    = B -> K^*, B_s -> phi etc.
+    // Process    = B -> K^*, B -> D^*, B -> rho, B_s -> phi etc.
     // Transition = B -> V or B -> P
 
     /* Form Factors according to [BZ2004] */
@@ -54,6 +54,16 @@ namespace eos
 
     /* P -> V Processes */
 
+    struct BToDstar {
+        static constexpr const char * label = "B->D^*";
+        static constexpr double mB = 5.279;
+        static constexpr double mV = 2.0103;
+        static constexpr double mBc = 6.2751;
+        static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
+        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
+        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+    };
+
     struct BToKstar {
         static constexpr const char * label = "B->K^*";
         static constexpr double mB = 5.279;
@@ -61,6 +71,15 @@ namespace eos
         static constexpr double mR2_0m = 5.336 * 5.336;
         static constexpr double mR2_1m = 5.412 * 5.412;
         static constexpr double mR2_1p = 5.829 * 5.829;
+    };
+
+    struct BToRho {
+        static constexpr const char * label = "B->rho";
+        static constexpr double mB = 5.279;
+        static constexpr double mV = 0.7751;
+        static constexpr double mR2_0m = 5.279 * 5.279;
+        static constexpr double mR2_1m = 5.325 * 5.325;
+        static constexpr double mR2_1p = 5.724 * 5.724;
     };
 
     struct BsToPhi {
