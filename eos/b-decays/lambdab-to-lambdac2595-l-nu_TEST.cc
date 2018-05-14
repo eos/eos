@@ -52,14 +52,14 @@ class LambdaBToLambdaC2595LeptonNeutrinoTest :
             static const double eps = 7.0e-3;
             static constexpr double s_max = 9.1643031076;
             static constexpr double s_min = 0.011163612964000001;
-            TEST_CHECK_RELATIVE_ERROR(d.a_l(s_max - 0.1),                                     0.304435051847,  eps);
-            TEST_CHECK_RELATIVE_ERROR(d.b_l(s_max - 0.1),                                     0.034710602799,  eps);
-            TEST_CHECK_RELATIVE_ERROR(d.c_l(s_max - 0.1),                                    -0.0813343733747, eps);
-            TEST_CHECK_RELATIVE_ERROR(d.a_l(s_max - 3.0),                                     7.90227659416,   eps);
-            TEST_CHECK_RELATIVE_ERROR(d.b_l(s_max - 3.0),                                    -3.06329677686,   eps);
+            TEST_CHECK_RELATIVE_ERROR(d.a_l(s_max - 0.1),                                     0.3170446650730, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.b_l(s_max - 0.1),                                     0.2657218590415, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.c_l(s_max - 0.1),                                    -0.0122146493426, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.a_l(s_max - 3.0),                                     7.6237858620049, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.b_l(s_max - 3.0),                                    -1.7643518917646, eps);
             TEST_CHECK_RELATIVE_ERROR(d.c_l(s_max - 3.0),                                    -3.02057556788,   eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(s_min, s_max),             0.04423377,      eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(s_min, s_max),             0.0430532787870, eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_r_lambdac2595(),                           0.08896965,      eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(s_min, s_max), -0.12733390,      eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(s_min, s_max), -0.0824034043085, eps);
         }
 } lambda_b_to_lambda_c_2595_l_nu_test;
