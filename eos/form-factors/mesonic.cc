@@ -4,6 +4,7 @@
  * Copyright (c) 2010, 2011, 2013, 2014, 2015, 2016 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2010, 2011 Christian Wacker
+ * Copyright (c) 2018 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -34,9 +35,17 @@ namespace eos
 
     /* B_{u,d} -> K^* */
 
+    constexpr double BToDstar::mR2_0m;
+    constexpr double BToDstar::mR2_1m;
+    constexpr double BToDstar::mR2_1p;
+
     constexpr double BToKstar::mR2_0m;
     constexpr double BToKstar::mR2_1m;
     constexpr double BToKstar::mR2_1p;
+
+    constexpr double BToRho::mR2_0m;
+    constexpr double BToRho::mR2_1m;
+    constexpr double BToRho::mR2_1p;
 
     constexpr double BsToPhi::mR2_0m;
     constexpr double BsToPhi::mR2_1m;
@@ -136,8 +145,10 @@ namespace eos
         {
             { KeyType("B->K^*",     "BZ2004"),   &BZ2004FormFactors<BToKstar, PToV>::make   },
             { KeyType("B->K^*",     "KMPW2010"), &KMPW2010FormFactors<PToV>::make           },
-            { KeyType("B->K^*",     "BFW2010"),  &BFW2010FormFactors<BToKstar, PToV>::make  },
-            { KeyType("B->K^*",     "BSZ2015"),  &BSZ2015FormFactors<BToKstar, PToV>::make  },
+            { KeyType("B->K^*",     "BFW2010"),  &BFW2010FormFactors<BToKstar,  PToV>::make  },
+            { KeyType("B->D^*",     "BSZ2015"),  &BSZ2015FormFactors<BToDstar,  PToV>::make  },
+            { KeyType("B->K^*",     "BSZ2015"),  &BSZ2015FormFactors<BToKstar,  PToV>::make  },
+            { KeyType("B->rho",     "BSZ2015"),  &BSZ2015FormFactors<BToRho,    PToV>::make    },
             { KeyType("B_s->K^*",   "BFW2010"),  &BFW2010FormFactors<BsToKstar, PToV>::make },
             { KeyType("B_s->K^*",   "FMvD2015"), &FMvD2015FormFactors<BsToKstar>::make      },
             { KeyType("B_s->phi",   "BZ2004"),   &BZ2004FormFactors<BsToPhi, PToV>::make    },

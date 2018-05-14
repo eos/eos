@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
+ * Copyright (c) 2018 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -184,6 +185,46 @@ namespace eos
             make_observable("B->K::f_0(s)", "B->K",
                     &FormFactors<PToP>::f_0),
 
+            // B -> D^* Form Factors
+            make_observable("B->D^*::V(s)", "B->D^*",
+                            &FormFactors<PToV>::v),
+
+            make_observable("B->D^*::A_0(s)", "B->D^*",
+                            &FormFactors<PToV>::a_0),
+
+            make_observable("B->D^*::A_1(s)", "B->D^*",
+                            &FormFactors<PToV>::a_1),
+
+            make_observable("B->D^*::A_2(s)", "B->D^*",
+                            &FormFactors<PToV>::a_2),
+
+            make_observable("B->D^*::A_12(s)", "B->D^*",
+                            &FormFactors<PToV>::a_12),
+
+            make_observable("B->D^*::T_1(s)", "B->D^*",
+                            &FormFactors<PToV>::t_1),
+
+            make_observable("B->D^*::T_2(s)", "B->D^*",
+                            &FormFactors<PToV>::t_2),
+
+            make_observable("B->D^*::T_3(s)", "B->D^*",
+                            &FormFactors<PToV>::t_3),
+
+            make_observable("B->D^*::T_23(s)", "B->D^*",
+                            &FormFactors<PToV>::t_23),
+
+            make_observable("B->D^*::V(s)/A_1(s)", "B->D^*",
+                            &FormFactors<PToV>::v, &FormFactors<PToV>::a_1),
+
+            make_observable("B->D^*::A_2(s)/A_1(s)", "B->D^*",
+                            &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1),
+
+            make_observable("B->D^*::A_12(s)/A_1(s)", "B->D^*",
+                            &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1),
+
+            make_observable("B->D^*::T_23(s)/T_2(s)", "B->D^*",
+                            &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
+
             // B -> K^* Form Factors
             make_observable("B->K^*::V(s)", "B->K^*",
                     &FormFactors<PToV>::v),
@@ -223,6 +264,46 @@ namespace eos
 
             make_observable("B->K^*::T_23(s)/T_2(s)", "B->K^*",
                     &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
+
+            // B -> rho Form Factors
+            make_observable("B->rho::V(s)", "B->rho",
+                            &FormFactors<PToV>::v),
+
+            make_observable("B->rho::A_0(s)", "B->rho",
+                            &FormFactors<PToV>::a_0),
+
+            make_observable("B->rho::A_1(s)", "B->rho",
+                            &FormFactors<PToV>::a_1),
+
+            make_observable("B->rho::A_2(s)", "B->rho",
+                            &FormFactors<PToV>::a_2),
+
+            make_observable("B->rho::A_12(s)", "B->rho",
+                            &FormFactors<PToV>::a_12),
+
+            make_observable("B->rho::T_1(s)", "B->rho",
+                            &FormFactors<PToV>::t_1),
+
+            make_observable("B->rho::T_2(s)", "B->rho",
+                            &FormFactors<PToV>::t_2),
+
+            make_observable("B->rho::T_3(s)", "B->rho",
+                            &FormFactors<PToV>::t_3),
+
+            make_observable("B->rho::T_23(s)", "B->rho",
+                            &FormFactors<PToV>::t_23),
+
+            make_observable("B->rho::V(s)/A_1(s)", "B->rho",
+                            &FormFactors<PToV>::v, &FormFactors<PToV>::a_1),
+
+            make_observable("B->rho::A_2(s)/A_1(s)", "B->rho",
+                            &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1),
+
+            make_observable("B->rho::A_12(s)/A_1(s)", "B->rho",
+                            &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1),
+
+            make_observable("B->rho::T_23(s)/T_2(s)", "B->rho",
+                            &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
 
             // B -> D Form Factors
             make_observable("B->D::f_+(s)", "B->D",
