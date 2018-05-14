@@ -2,6 +2,8 @@
 
 /*
  * Copyright (c) 2014, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2017 Elena Graverini
+ * Copyright (c) 2017, 2018 Marzia Bordone
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -335,7 +337,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result -= (2.0 * sp + s) / (mLb - mLcs) * _z3b(s);
+                result -= 2.0 * (mLb + mLcs) * (mLb + mLcs) / (mLb - mLcs) * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
@@ -360,7 +362,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result -= (2.0 * mLb2 - 2.0 * mLcs2 + s) / (mLb + mLcs) * _z3b(s);
+                result -= 2.0 * (mLb - mLcs) * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
@@ -381,7 +383,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result -= (3.0 * mLb + mLcs) * _z3b(s);
+                result -= 2.0 * mLb * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
@@ -407,7 +409,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result -= (2.0 * sm + 3.0 * s) / (mLb + mLcs) * _z3b(s);
+                result -= 2.0 * (mLb - mLcs) * (mLb - mLcs) / (mLb + mLcs) * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
@@ -432,7 +434,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result -= (2.0 * mLb2 - 2.0 * mLcs2 - s) / (mLb - mLcs) * _z3b(s);
+                result -= 2.0 * (mLb + mLcs) * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
@@ -453,7 +455,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result -= (mLb + mLcs) * _z3b(s);
+                result -= 2.0 * mLb * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
@@ -642,7 +644,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result += (sp + 2.0 * s) / (mLb - mLcs) * _z3b(s);
+                result += (mLb + mLcs) * (mLb + mLcs) / (mLb - mLcs) * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
@@ -667,7 +669,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result += (mLb2 - mLcs2 - s) / (mLb + mLcs) * _z3b(s);
+                result += (mLb - mLcs) * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
@@ -688,7 +690,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result -= mLcs * _z3b(s);
+                result += mLb * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
@@ -724,7 +726,9 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result += sm / (mLb + mLcs) * _z3b(s);
+                result += (mLb - mLcs) * (mLb - mLcs) / (mLb + mLcs) * _z3b(s);
+
+                // normalisation
                 result *= 0.5 * sqrt(sp / pow(mLb * mLcs, 3));
 
                 return result;
@@ -747,7 +751,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result += (mLb2 - mLcs2 + s) / (mLb - mLcs) * _z3b(s);
+                result += (mLb + mLcs) * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
@@ -768,7 +772,7 @@ namespace eos
                 result *= _z(s);
 
                 // next-to-leading-power IWF
-                result += (2.0 * mLb - mLcs) * _z3b(s);
+                result += mLb * _z3b(s);
 
                 // normalisation
                 result *= 0.5 * sqrt(sm / pow(mLb * mLcs, 3));
