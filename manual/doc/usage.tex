@@ -162,7 +162,7 @@ algorithm uses an adaptive importance sampling called Population Monte Carlo
 prior run of \client{eos-sample-mcmc} for initialization.\\
 
 
-The follow command-line arguments are common to the \client{eos-sample-mcmc} and 
+The follow command-line arguments are common to the \client{eos-sample-mcmc} and
 \client{eos-sample-pmc} clients, as well as further clients described in subsequent
 sections:
 \begin{itemize}
@@ -292,9 +292,9 @@ However, we construct a likelihood from the results of a recent study
 We now intend to draw random numbers from the posterior PDF using EOS' adaptive
 Metropolis-Hasting algorithm.  During its prerun phase, the algorithm adapts
 the chains' proposal functions. As a consequence, the prerun samples will in
-general \emph{not} be distributed as the posterior \gls{PDF}. With a subequent
-PMC sampling run in mind, we should demand at least $500$ steps, and -- for a
-problem of this complexity -- maximally $7500$ steps during the prerun phase;
+general \emph{not} be distributed according to the posterior \gls{PDF}. With a subequent
+PMC sampling run in mind, we should demand at least $500$ steps. In this simple
+problem, the Markov chains converge (the prerun finishes) after a few thousand iterations;
 the adaption process should be executed after every $500$ steps.\\
 
 Our intentions translate to the following call to \client{eos-sample-mcmc}:
@@ -352,10 +352,33 @@ Both clients output copious amounts diagnostic data to the standard output, whic
 We display the outcome of both the MCMC (prerun) sampling as well as the PMC sampling steps
 in \reffig{usage:vub-example-samples}.
 
+\section{Merging Markov Chains from multiple files}
+\label{sec:usage:eos-merge-mcmc}
+
+To run multiple Markov chains in parallel, one may use a compute cluster and submit
+independent jobs, each of which creates its own output file with one or more
+chains inside. To initialize PMC, it is necessary to have all Markov chains in a
+single HDF5 file. This is where \client{eos-merge-mcmc} comes into play. It
+allows one to merge chains from files into a single HDF5 file and optionally to
+apply a cut such that chains that got stuck in irrelevant local modes can be
+filtered out.
+\client{eos-merge-mcmc} accepts the following command-line arguments:
+\begin{itemize}
+    \item[] Any number of input files created by \cli{eos-sample-mcmc}\\[-3\medskipamount]
+    \item[] \cli{--cut-off NUMBER}\\[\medskipamount]
+        Skip chains whose maximum log posterior is below the cut-off.
+
+    \item[] \cli{--input-file-list LIST}\\[\medskipamount]
+        List input files in a text file, one file per line. If other input files are passed directly on the command line, then those take precedence but all files will be merged.
+
+    \item[] \cli{--output FILENAME}\\[\medskipamount]
+        The name of the output file in which the chains are stored.
+\end{itemize}
+
 \section{Finding the Mode of a Probability Density}
 \label{sec:usage:eos-find-mode}
 
-The mode, best-fit point, or simply the most-likely value of some \gls{PDF}
+The mode, best-fit point, or simply the most-likely value, of some \gls{PDF}
 $P(\vec\theta)$ is regularly searched for in physics analyses. EOS supplies the
 client \client{eos-find-mode}, which accepts the common set of arguments
 describing the PDF as already discussed for the \client{eos-sample-mcmc} and
@@ -383,7 +406,7 @@ then reads:
 \begin{filecontents*}{examples/find-mode-btopi-ff.out}
 # Starting optimization at ( 0.0035 0.31 0 0 )
 
-# Found maximum at: 
+# Found maximum at:
 #   ( 3.568778e-03 2.661032e-01 -2.670912e+00 2.231637e-02 )
 #   value = -3.101594e+02
 \end{filecontents*}
