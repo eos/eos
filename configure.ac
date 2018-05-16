@@ -222,8 +222,8 @@ elif test "x$with_minuit2" != xno -a "x$with_minuit2" != x ; then
 	if ! test -d "$with_minuit2" ; then
 	AC_MSG_FAILURE(["$with_minuit2 is not a directory. Please check the manual for how to compile with Minuit2"])
 	fi
-	MINUIT2_CXXFLAGS="-I$with_minuit2/include $CXXFLAGS"
-	MINUIT2_LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
+	CXXFLAGS="-I$with_minuit2/include $CXXFLAGS"
+	LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
 fi
 dnl }}}
 dnl {{{ use PMC path if supplied via --with-pmc=
@@ -258,7 +258,7 @@ AC_ARG_ENABLE([python],
 	[])
 AM_CONDITIONAL([EOS_ENABLE_PYTHON], [test "x$enable_python" == "xyes"])
 AC_ARG_WITH([boost-python-suffix],
-	[AS_HELP_STRING([--with-boost-python-suffix], [suffix used to specify the libboost-puthon shared object])]
+	[AS_HELP_STRING([--with-boost-python-suffix], [suffix used to specify the libboost-python shared object])]
 	[],
 	[])
 dnl }}}
@@ -270,7 +270,7 @@ if test "x$enable_python" == xyes ; then
 	PYTHON_LDFLAGS="`python$PYTHON_VERSION-config --ldflags`"
 	PYTHON_CXXFLAGS="`python$PYTHON_VERSION-config --includes`"
 	os_id="`. /etc/os-release ; echo $ID`"
-	if test "x$os_id" == xubuntu ; then
+	if test "x$os_id" == xubuntu -o "x$os_id" == xdebian ; then
 		BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
 	elif test "x$os_id" == xcentos ; then
 		BOOST_PYTHON_SUFFIX=""
@@ -286,7 +286,7 @@ if test "x$enable_python" == xyes ; then
 	_LDFLAGS=$LDFLAGS
 	_LIBS=$LIBS
 
-	CXXFLAGS=$PYRHON_CXXFLAGS
+	CXXFLAGS=$PYTHON_CXXFLAGS
 	LDFLAGS=$PYTHON_LDFLAGS
 	LIBS=$PYTHON_LIBS
 
