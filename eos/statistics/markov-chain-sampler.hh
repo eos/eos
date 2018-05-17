@@ -107,7 +107,7 @@ namespace eos
 
             /*!
              * The seed that is used to initialize the random number generator.
-             * Independant runs with identical seeds will produce
+             * Independent runs with identical seeds will produce identical results.
              */
             unsigned long seed;
 
