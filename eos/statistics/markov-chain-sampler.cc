@@ -609,7 +609,7 @@ namespace eos
     }
 
     std::vector<HistoryPtr>
-    MarkovChainSampler::read_chains(const std::vector<std::shared_ptr<hdf5::File>> & input_files)
+    MarkovChainSampler::read_chains(const std::vector<std::shared_ptr<hdf5::File>> & input_files, std::string base)
     {
         std::vector<HistoryPtr> result;
 
@@ -622,7 +622,7 @@ namespace eos
             unsigned c = 0;
             while (true)
             {
-                group_name = "/prerun/chain #" + stringify(c);
+                group_name = base + "/chain #" + stringify(c);
                 if (! (*f)->group_exists(group_name))
                     break;
 

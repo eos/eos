@@ -50,9 +50,10 @@ namespace eos
             ~MarkovChainSampler();
 
             /*!
-             * Read the history of Markov chains stored in the input files.
+             * Read the history of Markov chains stored in the input files under `base`.
              */
-            static std::vector<HistoryPtr> read_chains(const std::vector<std::shared_ptr<hdf5::File>> & input_files);
+            static std::vector<HistoryPtr> read_chains(const std::vector<std::shared_ptr<hdf5::File>> & input_files,
+                                                       std::string base = "/prerun");
             ///@}
 
             ///@name Sampling
