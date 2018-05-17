@@ -28,7 +28,7 @@ def invalid_chain(file, chain, cut_off=None):
     mode = file['/prerun/chain #%d/stats/mode' % chain][-1][-1]
 
     if cut_off is None:
-        print('chain %d has mode %g' % (chain, mode))
+        print('chain %d has mode %g in prerun' % (chain, mode))
         return False
 
     if mode > cut_off:
@@ -62,11 +62,16 @@ def merge_preruns(output_file_name, input_files, cut_off=None):
         input_file = h5py.File(file_name, 'r')
         nchains_in_file = len(input_file[groups[0]].keys())
 
+        these_groups = list(groups)
+
+        if '/main run' in input_file['/']:
+            these_groups.extend(['/main run', '/descriptions/main run'])
+
         # copy data
         for i in range(nchains_in_file):
             if invalid_chain(input_file, i, cut_off):
                 continue
-            for g in groups:
+            for g in these_groups:
                 input_file.copy(g + "/chain #%d" % i, output_file, name=g + "/chain #%d" % nchains_copied)
             nchains_copied += 1
         input_file.close()

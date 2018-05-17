@@ -355,18 +355,19 @@ in \reffig{usage:vub-example-samples}.
 \section{Merging Markov Chains from multiple files}
 \label{sec:usage:eos-merge-mcmc}
 
-To run multiple Markov chains in parallel, one may use a compute cluster and submit
-independent jobs, each of which creates its own output file with one or more
-chains inside. To initialize PMC, it is necessary to have all Markov chains in a
-single HDF5 file. This is where \client{eos-merge-mcmc} comes into play. It
-allows one to merge chains from files into a single HDF5 file and optionally to
-apply a cut such that chains that got stuck in irrelevant local modes can be
-filtered out.
-\client{eos-merge-mcmc} accepts the following command-line arguments:
+To run multiple Markov chains in parallel, one may use a compute cluster and
+submit independent jobs, each of which creates its own output file with one or
+more chains inside. To initialize PMC, it is necessary to have all Markov chains
+in a single HDF5 file. This is where \client{eos-merge-mcmc} comes into play. It
+allows one to merge chains from multiple files into a single HDF5 file and
+optionally to apply a cut such that chains that got stuck in irrelevant local
+modes in the prerun can be filtered out. Note that chains both from the prerun
+and main run are copied into the output file. \client{eos-merge-mcmc} accepts
+the following command-line arguments:
 \begin{itemize}
     \item[] Any number of input files created by \cli{eos-sample-mcmc}\\[-3\medskipamount]
     \item[] \cli{--cut-off NUMBER}\\[\medskipamount]
-        Skip chains whose maximum log posterior is below the cut-off.
+        Skip chains whose maximum log posterior in the prerun is below the cut-off.
 
     \item[] \cli{--input-file-list LIST}\\[\medskipamount]
         List input files in a text file, one file per line. If other input files are passed directly on the command line, then those take precedence but all files will be merged.
