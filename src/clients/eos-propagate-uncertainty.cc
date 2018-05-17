@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2012 Frederik Beaujean
+ * Copyright (c) 2011, 2012, 2018 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,7 @@
 #include <eos/observable.hh>
 #include <eos/statistics/log-posterior.hh>
 #include <eos/statistics/log-prior.hh>
+#include <eos/statistics/markov-chain-sampler.hh>
 #include <eos/statistics/prior-sampler.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/hdf5.hh>
@@ -82,6 +83,10 @@ class CommandLine :
 
         std::string pmc_sample_directory;
 
+        std::string mcmc_sample_file;
+        unsigned mcmc_sample_min, mcmc_sample_max;
+        bool mcmc_prefer_prerun;
+
         std::vector<LogPriorPtr> priors;
 
         CommandLine() :
@@ -89,7 +94,10 @@ class CommandLine :
             parameters(Parameters::Defaults()),
             pmc_sample_min(0),
             pmc_sample_max(0),
-            pmc_sample_directory("/data")
+            pmc_sample_directory("/data"),
+            mcmc_sample_min(0),
+            mcmc_sample_max(0),
+            mcmc_prefer_prerun(false)
         {
         }
 
@@ -206,6 +214,23 @@ class CommandLine :
                     continue;
                 }
 #endif
+
+                if ("--mcmc-input" == argument)
+                {
+                    // read samples from this file
+                    mcmc_sample_file = std::string(*(++a));
+                    mcmc_sample_min = destringify<unsigned>(*(++a));
+                    mcmc_sample_max = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
+
+                if ("--mcmc-prefer-prerun" == argument)
+                {
+                    mcmc_prefer_prerun = destringify<unsigned>(*(++a));
+
+                    continue;
+                }
 
                 if ("--seed" == argument)
                 {
@@ -337,8 +362,8 @@ int main(int argc, char * argv[])
         if (inst->inputs.empty())
             throw DoUsage("No inputs specified");
 
-        if (inst->priors.empty() and inst->pmc_sample_file.empty())
-            throw DoUsage("Either specify \n a) parameters to vary\n b) a PMC input file");
+        if (inst->priors.empty() && inst->pmc_sample_file.empty() && inst->mcmc_sample_file.empty())
+            throw DoUsage("Either specify \n a) parameters to vary\n b) a PMC input file c) an MCMC input file");
 
         std::cout << "Determining the uncertainty on the following observables:" << std::endl;
         for (auto o = inst->inputs.begin(), o_end = inst->inputs.end() ; o != o_end ; ++o)
@@ -351,44 +376,96 @@ int main(int argc, char * argv[])
 
         PriorSampler sampler(inst->unique_observables, inst->config);
 
-#if EOS_ENABLE_PMC
-        // read in parameter samples from the file and calculate observables for them
-        if ( ! inst->pmc_sample_file.empty() && inst->pmc_sample_min < inst->pmc_sample_max)
+        if (! inst->priors.empty())
         {
-            auto f = hdf5::File::Open(inst->pmc_sample_file);
-            auto descriptions = LogPosterior::read_descriptions(f);
+            std::cout << "Varying the following parameters:" << std::endl;
+        }
+
+        for (auto i = inst->priors.begin(), i_end = inst->priors.end() ; i != i_end ; ++i)
+        {
+            sampler.add(*i);
+
+            std::cout << (**i).as_string() << std::endl;
+        }
+
+        const bool have_mcmc = ! inst->mcmc_sample_file.empty() && inst->mcmc_sample_min < inst->mcmc_sample_max;
+        bool have_pmc = false;
+
+#if EOS_ENABLE_PMC
+        have_pmc = ! inst->pmc_sample_file.empty() && inst->pmc_sample_min < inst->pmc_sample_max;
+#endif
+
+        if (have_mcmc && have_pmc)
+        {
+            throw DoUsage("Both MCMC and PMC specified. Choose only one!");
+        }
+
+        if (have_mcmc || have_pmc)
+        {
+            std::vector<ParameterDescription> descriptions;
+            // both mcmc and pmc fill read `samples` from `f`
             std::vector<std::vector<double>> samples;
-            samples.push_back(std::vector<double>(descriptions.size()));
-            PopulationMonteCarloSampler::read_samples(inst->pmc_sample_file, inst->pmc_sample_directory, inst->pmc_sample_min, inst->pmc_sample_max, samples);
 
-            if (! inst->priors.empty())
+#if EOS_ENABLE_PMC
+            if (have_pmc)
             {
-                std::cout << "Varying the following parameters:" << std::endl;
+                auto f = hdf5::File::Open(inst->pmc_sample_file);
+                descriptions = LogPosterior::read_descriptions(f);
+                samples.push_back(std::vector<double>(descriptions.size()));
+                PopulationMonteCarloSampler::read_samples(inst->pmc_sample_file, inst->pmc_sample_directory, inst->pmc_sample_min, inst->pmc_sample_max, samples);
             }
-
-            for (auto i = inst->priors.begin(), i_end = inst->priors.end() ; i != i_end ; ++i)
+#endif
+            if (have_mcmc)
             {
-                sampler.add(*i);
+                auto f = hdf5::File::Open(inst->mcmc_sample_file);
+                descriptions = LogPosterior::read_descriptions(f, "/descriptions/prerun/chain #0");
 
-                std::cout << (**i).as_string() << std::endl;
+                // we only read chains from one file
+                std::vector<HistoryPtr> chains;
+                {
+                    std::vector<std::shared_ptr<hdf5::File>> input_files;
+                    input_files.push_back(std::make_shared<hdf5::File>(hdf5::File::Open(inst->mcmc_sample_file, H5F_ACC_RDONLY)));
+
+                    // check if main run exists: prefer that, otherwise read the prerun
+                    std::string base("/main run");
+                    const bool have_main = input_files.front()->group_exists(base);
+                    if ((have_main && inst->mcmc_prefer_prerun) || ! have_main)
+                        base = "/prerun";
+                    chains = MarkovChainSampler::read_chains(input_files, base);
+                }
+
+                // copy points into expected format
+                unsigned i = 0;
+                for (const auto & c : chains)
+                {
+                    if (inst->mcmc_sample_min > c->states.size())
+                    {
+                        throw DoUsage("For chain " + std::to_string(i) +
+                                      ", the minimum MCMC sample index is larger than the chain's length = " +
+                                      std::to_string(c->states.size()));
+                    }
+
+                    // copy slice of samples [a,b] but ignore b if it extends beyond the length of the chain to accomodate chains with variable lengths
+                    auto s = c->states.begin() + inst->mcmc_sample_min;
+                    const auto end = std::distance(s, c->states.end()) > (inst->mcmc_sample_max - inst->mcmc_sample_min) ?
+                        c->states.begin() + inst->mcmc_sample_max :
+                        c->states.end();
+
+                    for (; s != end; ++s)
+                    {
+                        samples.emplace_back(s->point);
+                    }
+                    ++i;
+                }
             }
 
             sampler.run(samples, descriptions);
 
             return EXIT_SUCCESS;
         }
-#endif
+
         // default: draw from priors
         {
-            std::cout << "Varying the following parameters:" << std::endl;
-
-            for (auto i = inst->priors.begin(), i_end = inst->priors.end() ; i != i_end ; ++i)
-            {
-                sampler.add(*i);
-
-                std::cout << (**i).as_string() << std::endl;
-            }
-
             sampler.run();
         }
     }
@@ -398,11 +475,13 @@ int main(int argc, char * argv[])
         std::cout << "Usage: eos-propagate-uncertainty" << std::endl;
         std::cout << "  [ [--kinematics NAME VALUE]* --observable]+" << std::endl;
         std::cout << "  [--vary PARAMETER MIN MAX --prior [flat | [gaussian LOWER CENTRAL UPPER] ] ]+" << std::endl;
-        std::cout << "  [--chunks VALUE]" << std::endl;
-        std::cout << "  [--chunk-size VALUE]" << std::endl;
+        std::cout << "  [--workers VALUE]" << std::endl;
+        std::cout << "  [--samples VALUE]" << std::endl;
         std::cout << "  [--fix PARAMETER VALUE]" << std::endl;
         std::cout << "  [--output FILENAME]" << std::endl;
         std::cout << "  [--parallel [0|1]]" << std::endl;
+        std::cout << "  [--mcmc-input FILENAME MIN_INDEX MAX_INDEX]" << std::endl;
+        std::cout << "  [--mcmc-prefer-prerun]" << std::endl;
 #if EOS_ENABLE_PMC
         std::cout << "  [--pmc-sample-directory DIRECTORY]" << std::endl;
         std::cout << "  [--pmc-input FILENAME MIN_INDEX MAX_INDEX]" << std::endl;
@@ -415,6 +494,10 @@ int main(int argc, char * argv[])
         std::cout << "prior distributions and the observables are calculated and stored to disk." << std::endl;
         std::cout << "One thread is created for each chunk." << std::endl;
         std::cout << "Optionally, the drawn parameters are stored as well." << std::endl;
+        std::cout << std::endl;
+        std::cout << "MCMC options:" << std::endl;
+        std::cout << "If an input file is specified, a slice of the samples from each chain in the file is taken," << std::endl;
+        std::cout << "and no new samples are drawn. If a main run is available, it is preferred over the prerun. This can be overridden." << std::endl;
 #if EOS_ENABLE_PMC
         std::cout << std::endl;
         std::cout << "PMC options:" << std::endl;
