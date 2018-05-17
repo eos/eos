@@ -425,12 +425,10 @@ in the last few lines, including
 \label{sec:usage:eos-propagate-uncertainty}
 
 EOS presently supports two ways to prograpate theory uncertainties in the
-framework of Bayesian statistic: First, by using prior PDF that describes
+framework of Bayesian statistics: First, by using prior PDFs that describes
 the nuisance parameters; second, by using samples from a posterior PDF that
-have been obtained from running \client{eos-sample-pmc}.\footnote{%
-    Note that using samples from \client{eos-sample-mcmc} is presently not supported.
-}
-It accepts the following command-line arguments:
+have been obtained from running either \client{eos-sample-mcmc} or
+\client{eos-sample-pmc}. It accepts the following command-line arguments:
 \begin{itemize}
     \item[] \cli{--vary NAME --prior flat MIN MAX}\\[-3\medskipamount]
     \item[] \cli{--vary NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[\medskipamount]
@@ -439,12 +437,50 @@ It accepts the following command-line arguments:
         \cli{ABSMAX} are specified, the prior will be cropped to this
         absolute interval.
 
+    \item[] \cli{--fix NAME VALUE}\\[\medskipamount]
+      Fix parameter to a certain value. Use this to change default values for
+      parameters that are not varied.
+
+    \item[] \cli{--kinematics NAME VALUE}\\[\medskipamount]
+        Within the scope of the next observable, declare a new kinematic
+        variable with name \cli{NAME} and numerical value \cli{VALUE}.
+
+    \item[] \cli{--observable NAME}\\[\medskipamount]
+        Add a new observable with name \cli{NAME} to the list of observables
+        that shall be evaluated. All previously issued \cli{--kinematics}
+        and \cli{--range} arguments apply, and will be used by the new obervable.
+        The kinematics will be reset (i.e., all kinematic variables will be removed)
+        in anticipation of the next \cli{--observable} argument.
+
+    \item[] \cli{--global-option NAME VALUE}\\[\medskipamount]
+      Set an option to a string value that applies to all following observables.
+
     \item[] \cli{--samples NUMBER}\\[\medskipamount]
         Sets the number of samples that shall be produced per observable and
         worker thread.
 
     \item[] \cli{--workers NUMBER}\\[\medskipamount]
-        Sets the number of worker threads.
+        Sets the number of worker threads. Default: 4.
+
+    \item[] \cli{--parallel [0|1]}\\[\medskipamount]
+        Activate multithreaded evaluation. Default: 1.
+
+    \item[] \cli{--mcmc-input HDF5FILE BEGIN END}\\[\medskipamount]
+        Use the samples at index \cli{BEGIN} up to index \cli{END} from
+        each chain in the file \cli{HDF5FILE}. If both preruns and main runs are
+        present in the file, preference is give to the main run. To use all
+        samples, use \cli{BEGIN=0} and choose a value for \cli{END} equal to or
+        larger than the actual length of any chain in the file.
+
+        \emph{Note:} The file must have been produced by the
+        \client{eos-sample-mcmc} client.
+
+        \emph{Note:} If you have the hdf5 commandline tools available, use
+        \cli{h5ls -r HDF5FILE} to see the number and length of the chains.
+
+    \item[] \cli{--mcmc-prefer-prerun [0|1]}\\[\medskipamount]
+      Override the default setting to take samples from the prerun instead of
+      the main run in case both are present in the \cli{HDF5FILE}. Default: 0.
 
     \item[] \cli{--pmc-input HDF5FILE BEGIN END}\\[\medskipamount]
         Use the samples at index \cli{BEGIN} up to index \cli{END} from
@@ -452,6 +488,7 @@ It accepts the following command-line arguments:
 
         \emph{Note:} The file must have been produced by the
         \client{eos-sample-pmc} client.
+
     \item[] \cli{--pmc-sample-directory NAME}\\[\medskipamount]
         Use the named data set within the file specified with \cli{--pmc-input}.
         Valid names are \texttt{/data/X}, where \text{X} stands for either
@@ -460,6 +497,20 @@ It accepts the following command-line arguments:
 
         \emph{Note:} You should use \texttt{/data/final} unless you are
         debuging the PMC algorithm.
+
+    \item[] \cli{--output NAME}\\[\medskipamount]
+      Set the output file name.
+
+    \item[] \cli{--store-parameters [0|1]}\\[\medskipamount]
+      Store the parameter samples drawn from the prior into the output file. Has
+      no effect with \cli{--mcmc-input} or \cli{--pmc-input}. Default: 0.
+
+    \item[] \cli{--seed VALUE}\\[\medskipamount]
+      Change the random number seed for generating parameter samples. Has no
+      effect with \cli{--mcmc-input} or \cli{--pmc-input}. By default a fixed
+      seed is chosen corresponding to \cli{VALUE=0}. To get different samples on
+      each invocation, use \cli{VALUE=time}.
+
 \end{itemize}
 
 As an example of the first way, we would like to predict the branching
