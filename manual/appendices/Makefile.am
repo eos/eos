@@ -18,7 +18,7 @@ manual-am: parameters.tex
 parameters-%.yaml.tex: $(top_srcdir)/eos/parameters/%.yaml parameters-to-latex.py
 	./parameters-to-latex.py $< > $@
 
-parameters.tex: $(SOURCES)
+parameters.tex: $(SOURCES) parameters-to-latex.py
 	@cp parameters.tex.in parameters.tex.tmp
 	@for f in $(YAMLTEXSOURCES) ; do \
 	    echo -e "%% from file '$$f'\n\\input{appendices/$$f}\n" \
