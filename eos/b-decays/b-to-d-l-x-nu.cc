@@ -2,6 +2,8 @@
 
 /*
  * Copyright (c) 2015, 2016 Danny van Dyk
+ * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -50,6 +52,10 @@ namespace eos
 
         UsedParameter hbar;
 
+        SwitchOption opt_model;
+
+        std::shared_ptr<Model> model;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_q(o, "q", { "u", "d" }, "d"),
             m_B(p["mass::B_" + opt_q.value()], u),
@@ -58,7 +64,9 @@ namespace eos
             m_mu(p["mass::mu"], u),
             m_tau(p["mass::tau"], u),
             g_fermi(p["G_Fermi"], u),
-            hbar(p["hbar"], u)
+            hbar(p["hbar"], u),
+            opt_model(o, "model", {"SM"}, "SM"),
+            model(Model::make(opt_model.value(), p, o))
         {
             form_factors = FormFactorFactory<PToP>::create("B->D@" + o.get("form-factors", "BCL2008"), p);
 
