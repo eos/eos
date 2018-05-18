@@ -54,6 +54,7 @@ def main():
             description = replace(parameters['@metadata@']['description'])
 
         print(r'{%')
+        print(r'\captionsetup{type=table}')
         print(r'\renewcommand{\arraystretch}{1.1}')
         print(r'\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}')
         print(r'\begin{center}')
