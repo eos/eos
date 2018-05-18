@@ -1,7 +1,5 @@
 \documentclass[
-    paper=a4paper,
     DIV=15,
-    BCRO=10mm,
     fontsize=11pt,
     bibliography=totoc
 ]{scrbook}
@@ -12,6 +10,7 @@
     style=phys,%
     eprint=true,%
     articletitle=true,%
+    backend=biber,%
     biblabel=brackets,%
     chaptertitle=false,pageranges=false,%
     sorting=none,%
@@ -28,6 +27,7 @@
 \usepackage{longtable}                           % for tables spanning more than one page
 \usepackage{listings}                            % for source code and commandline listings
 \usepackage{multirow}                            % for table cells spanning multiple rows
+\usepackage{scrhack}                             % for supression of warnings caused by listings (\float@addtolists deprecated)
 \usepackage{slashed}                             % for Feynman slash notation
 \usepackage{subfigure}                           % for captioned subdividion of figures
 \usepackage{todonotes}                           % for margin notes on open tasks
