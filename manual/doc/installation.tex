@@ -3,7 +3,7 @@
 The following instructions explain how to install \EOS from source on a 
 Linux-based operating system, such as Debian
 or Ubuntu, \footnote{%
-    Other flavours of Linux will work as well, however, note that
+    Other flavors of Linux will work as well, however, note that
     we will exclusively use package names as they appear in the Debian/Ubuntu
     \text{apt} databases.
 }
@@ -25,7 +25,7 @@ software, or scientific software.\\
     \item[\package{automake}] the GNU tool for creating makefiles, in version 1.14.1 or higher;
     \item[\package{libtool}] the GNU tool for generic library support, in version 2.4.2 or higher;
     \item[\package{pkg-config}] the freedesktop.org library helper, in version 0.28 or higher;
-    \item[\package{BOOST}] the BOOST C++ libraries (sublibraries \package{boost-filesystem} and
+    \item[\package{BOOST}] the BOOST C++ libraries (sub-libraries \package{boost-filesystem} and
             \package{boost-system});
     \item[\package{yaml-cpp}] a C++ YAML parser and interpreter library.
 \end{description}
@@ -74,7 +74,7 @@ bug in the Debian/Ubuntu packages for \package{Minuit2}, which prevents
 linking.\\
 
 
-There are prebuilt binary package files for
+There are pre-built binary package files for
 \package{pmclib} and \package{Minuit2} available for the Ubuntu
 long-term-support varieties Xenial and Bionic via the Packagecloud web service.
 To use the EOS third-party repository, create a new file \filename{eos.list} within
@@ -144,7 +144,7 @@ popd
 rm -R /tmp/libpmc
 \end{commandline}
 
-\textbf{Note}: The \client{waf} build script used by \package{pmclib} is written in Python2. On
+\textbf{Note}: The \filename{waf} build script used by \package{pmclib} is written in Python2. On
 systems that use Python3 as the default interpreter, you will see an error message similar
 to the following:
 \begin{file}
