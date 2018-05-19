@@ -51,9 +51,9 @@ a branching ratio) but also pseudo observables such as hadronic form factors.
 A full list of observables known to EOS can be listed by running
 \client{eos-list-observables}.\\
 
-Options are used to modify the behaviour of an observable at run time.
+Options are used to modify the behavior of an observable at run time.
 Universal examples include changing the physics model (via \option{model}) and
-changing form factor parametrisation (via \option{form-factors}). However,
+changing form factor parametrization (via \option{form-factors}). However,
 generally their names are specific to a single observable. There is presently
 no way to list all possible options that pertain to a given observable.\\
 
@@ -89,7 +89,7 @@ the following command line arguments:
     \item[] \cli{--observable NAME}\\[\medskipamount]
         Add a new observable with name \cli{NAME} to the list of observables
         that shall be evaluated. All previously issued \cli{--kinematics}
-        and \cli{--range} arguments apply, and will be used by the new obervable.
+        and \cli{--range} arguments apply, and will be used by the new observable.
         The kinematics will be reset (i.e., all kinematic variables will be removed)
         in anticipation of the next \cli{--observable} argument.
 
@@ -118,8 +118,8 @@ the CKM Wolfenstein parameter to data on tree-level decays.  In this example,
 we evaluate the observable and estimate parametric uncertainties based on
 the naive expectation of Gaussian uncertainty propagation. We
 classify two budgets of parametric uncertainties: one for uncertainties
-pertaining to the form factors (labelled 'FF'), and one for uncertainties
-pertaining to the CKM matrix elements (labelled 'CKM').
+pertaining to the form factors (labeled 'FF'), and one for uncertainties
+pertaining to the CKM matrix elements (labeled 'CKM').
 
 Our intentions translate to the following call to \client{eos-evaluate}:
 \commandlineexample{examples/evaluate-btopilnu-integrated.bash}
@@ -142,10 +142,10 @@ The output of calls to \client{eos-evaluate} is structured as follows:
             \item the total upper and lower uncertainty estimates.
         \end{itemize}
     \item The third row contains the result as described by the above columns. In addition, at
-        the end of the row the relative total uncertainties are given in parantheses.
+        the end of the row the relative total uncertainties are given in parentheses.
 \end{itemize}
 The above structure repeats itself for every observable, as well as for each variation point
-of the kinematic variables as described by occuring \cli{--range} arguments.\\
+of the kinematic variables as described by occurring \cli{--range} arguments.\\
 
 \section{Producing Random Parameter Samples}
 \label{sec:usage:eos-sample-mcmc+pmc}
@@ -180,7 +180,7 @@ sections:
 
     \item[] \cli{--constraint NAME}\\[\medskipamount]
         The named constraint from the internal database will be used as part of
-        the likelihood. The functional form of the the likelihood, details such
+        the likelihood. The functional form of the likelihood, details such
         as correlations, and the required options for the observables used will
         be automatically looked up. In order to browse the entries of the
         database, use the \client{eos-list-constraints} client.
@@ -194,9 +194,9 @@ The \client{eos-sample-mcmc} client further accepts the following arguments:
 \begin{itemize}
     \item[] \cli{--seed [time|VALUE]}\\[\medskipamount]
         This argument sets the seed value for the \gls{RNG}. Setting the
-        seed to a fixed numerical \cli{VALUE} ensures reproducibility of the results. This
+        seed to a fixed numerical \cli{VALUE} ensures being able to reproduce the results. This
         is important for publication-quality usage of the client. If \cli{time} is
-        specified, the \gls{RNG} is seeded with an interger value based on the current time.
+        specified, the \gls{RNG} is seeded with an integer value based on the current time.
 
     \item[] \cli{--prerun-min VALUE}\\[\medskipamount]
         For the prerun phase of the sampling algorithm, set the minimum number of
@@ -224,7 +224,7 @@ The \client{eos-sample-pmc} client additionally accepts the following command-li
 \begin{itemize}
     \item[] \cli{--seed [time|VALUE]}\\[\medskipamount]
         This argument sets the seed value for the \gls{RNG}. Setting the
-        seed to a fixed numerical \cli{VALUE} ensures reproducibility of the results. This
+        seed to a fixed numerical \cli{VALUE} ensures being able to reproduce the results. This
         is important for publication-quality usage of the client. If \cli{time} is
         specified, the \gls{RNG} is seeded with an interger value based on the current time.
 
@@ -424,7 +424,7 @@ in the last few lines, including
 \section{Bayesian Uncertainty Propagation}
 \label{sec:usage:eos-propagate-uncertainty}
 
-EOS presently supports two ways to prograpate theory uncertainties in the
+EOS presently supports two ways to propagate theory uncertainties in the
 framework of Bayesian statistics: First, by using prior PDFs that describes
 the nuisance parameters; second, by using samples from a posterior PDF that
 have been obtained from running either \client{eos-sample-mcmc} or
@@ -433,7 +433,7 @@ have been obtained from running either \client{eos-sample-mcmc} or
     \item[] \cli{--vary NAME --prior flat MIN MAX}\\[-3\medskipamount]
     \item[] \cli{--vary NAME [ABSMIN ABSMAX] --prior gaussian MIN CENTRAL MAX}\\[\medskipamount]
         These arguments add a parameter to the statistical analysis, with
-        either a flat or a gaussian prior. If \cli{ABSMIN} and
+        either a flat or a Gaussian prior. If \cli{ABSMIN} and
         \cli{ABSMAX} are specified, the prior will be cropped to this
         absolute interval.
 
@@ -453,7 +453,7 @@ have been obtained from running either \client{eos-sample-mcmc} or
         in anticipation of the next \cli{--observable} argument.
 
     \item[] \cli{--global-option NAME VALUE}\\[\medskipamount]
-      Set an option to a string value that applies to all following observables.
+        Set an option to a string value that applies to all following observables.
 
     \item[] \cli{--samples NUMBER}\\[\medskipamount]
         Sets the number of samples that shall be produced per observable and
@@ -475,12 +475,12 @@ have been obtained from running either \client{eos-sample-mcmc} or
         \emph{Note:} The file must have been produced by the
         \client{eos-sample-mcmc} client.
 
-        \emph{Note:} If you have the hdf5 commandline tools available, use
+        \emph{Note:} If you have the HDF5 commandline tools available, use
         \cli{h5ls -r HDF5FILE} to see the number and length of the chains.
 
     \item[] \cli{--mcmc-prefer-prerun [0|1]}\\[\medskipamount]
-      Override the default setting to take samples from the prerun instead of
-      the main run in case both are present in the \cli{HDF5FILE}. Default: 0.
+        Override the default setting to take samples from the prerun instead of
+        the main run in case both are present in the \cli{HDF5FILE}. Default: 0.
 
     \item[] \cli{--pmc-input HDF5FILE BEGIN END}\\[\medskipamount]
         Use the samples at index \cli{BEGIN} up to index \cli{END} from
@@ -499,17 +499,17 @@ have been obtained from running either \client{eos-sample-mcmc} or
         debuging the PMC algorithm.
 
     \item[] \cli{--output NAME}\\[\medskipamount]
-      Set the output file name.
+        Set the output file name.
 
     \item[] \cli{--store-parameters [0|1]}\\[\medskipamount]
-      Store the parameter samples drawn from the prior into the output file. Has
-      no effect with \cli{--mcmc-input} or \cli{--pmc-input}. Default: 0.
+        Store the parameter samples drawn from the prior into the output file. Has
+        no effect with \cli{--mcmc-input} or \cli{--pmc-input}. Default: 0.
 
     \item[] \cli{--seed VALUE}\\[\medskipamount]
-      Change the random number seed for generating parameter samples. Has no
-      effect with \cli{--mcmc-input} or \cli{--pmc-input}. By default a fixed
-      seed is chosen corresponding to \cli{VALUE=0}. To get different samples on
-      each invocation, use \cli{VALUE=time}.
+        Change the random number seed for generating parameter samples. Has no
+        effect with \cli{--mcmc-input} or \cli{--pmc-input}. By default a fixed
+        seed is chosen corresponding to \cli{VALUE=0}. To get different samples on
+        each invocation, use \cli{VALUE=time}.
 
 \end{itemize}
 

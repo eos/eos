@@ -105,10 +105,10 @@ form of the associated likelihood. \EOS understands the following types of const
 
 Type \texttt{Amoroso} uses a likelihood arising from the \gls{PDF} of the
 Amoroso distribution \cite{Crooks:2010}, a four-parameter distribution. It is
-useful for the modelling of upper limits on as-of-yet undiscovered decays at
+useful for the modeling of upper limits on as-of-yet undiscovered decays at
 given probabilities. For example, the upper limits on the decay $B_s \to
 \mu^+\mu^-$ by the LHCb experiment prior to the discovery of this decay are
-modelled using the \texttt{Amoroso} type of likelihood. The following keys are
+modeled using the \texttt{Amoroso} type of likelihood. The following keys are
 required in the description of the constraint:
 \begin{description}[labelwidth=.15\textwidth]
     \item[\texttt{observable}] the qualified name for an \texttt{Observable} or a \texttt{Parameter};
@@ -136,13 +136,13 @@ constraint:
     \item[\texttt{sigma-sys}] the same as \texttt{sigma-stat}, but for the systematic uncertainty;
     \item[\texttt{dof}] the degrees of freedom associated with this observation (should default to $1$).
 \end{description}
-By default the uncertainties are symmetrised, and statistical and systematical
+By default the uncertainties are symmetrized, and statistical and systematical
 uncertainties are added in quadrature.
 
 \subsection{Type \texttt{MultivariateGaussian}}
 
 Type \texttt{MultivariateGaussian} uses a multivariate Gaussian likelihood,
-parametrised in terms of its mode and correlation matrix. The following keys
+parametrized in terms of its mode and correlation matrix. The following keys
 are required in the description of the constraint:
 \begin{description}[labelwidth=.15\textwidth]
     \item[\texttt{dim}] the dimensionality of the multivariate distribution;
@@ -167,7 +167,7 @@ the variances $\sigma_i$ and the correlation matrix $\rho_{ij}$ as
 \subsection{Type \texttt{MultivariateGaussian(Covariance)}}
 
 Type \texttt{MultivariateGaussian(Covariance)} uses a multivariate Gaussian
-likelihood, parametrised in terms of its mode and covariance matrix. The
+likelihood, parametrized in terms of its mode and covariance matrix. The
 following keys are required in the description of the constraint:
 \begin{description}[labelwidth=.15\textwidth]
     \item[\texttt{dim}] the dimensionality of the multivariate distribution;
@@ -175,7 +175,7 @@ following keys are required in the description of the constraint:
     \item[\texttt{kinematics}] the list of size \texttt{dim} of map representations of the kinematic variables pertaining to each observable;
     \item[\texttt{options}] the list of size \texttt{dim} of map representations of the options pertaining to each observable;
     \item[\texttt{mean}] the list of size \texttt{dim} describing the mean of the distribution;
-    \item[\texttt{covariance}] the matrix of size \texttt{dim} $\times$ \texttt{dim} for the covariance of the distibution;
+    \item[\texttt{covariance}] the matrix of size \texttt{dim} $\times$ \texttt{dim} for the covariance of the distribution;
     \item[\texttt{dof}] the degrees of freedom associated with this observation (should default to \texttt{dim}).
 \end{description}
 
