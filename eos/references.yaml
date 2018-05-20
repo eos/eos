@@ -329,6 +329,7 @@
     collaboration: "UTfit"
     title: "The Unitarity Triangle Fit in the Standard Model and Hadronic Parameters from Lattice QCD: A Reappraisal after the Measurements of Delta m_s and BR(B ---> tau nu)"
     journal: "JHEP 10 (2006) 081"
+    inspire-id: "Bona:2006ah"
     eprint: "arXiv:hep-ph/0606167"
     note:  "Standard model fit, pre-Moriond results 2013"
     url:  "http://www.utfit.org/UTfit/ResultsWinter2013PreMoriond"
@@ -367,6 +368,7 @@
 "ALGH2001" :
     authors: ["Ali, A.", "Lunghi, E.", "Greub, C.", "Hiller, G."]
     title: "Improved Model-Independent Analysis of Semileptonic and Radiative Rare B Decays"
+    inspire-id: "Ali:2002jg"
     eprint: "arXiv:hep-ph/0112300"
 
 "B1998" :
@@ -394,9 +396,16 @@
     title: "Higher-Twist Distribution Amplitudes of the K Meson in QCD"
     eprint: "arXiv:hep-ph/0603063"
 
+"BBMU2003" :
+    authors: "Benson, D and Bigi, I.I. and Mannel, Th. and Uraltsev, N."
+    title: "Imprecated, yet impeccable: On the theoretical evaluation of Gamma(B ---> X(c) l nu)"
+    inspire-id: "Benson:2003kp"
+    eprint: "arXiv:hep-ph/0302262"
+
 "BCL2008" :
     authors: "Bourrely, C and Caprini, I. and Lellouch, L."
     title: "Model-independent description of B -> pi l nu decays and a determination of |V_ub|"
+    inspire-id: "Bourrely:2008za"
     eprint: "arXiv:0807.2722"
 
 "BCMU2002" :
