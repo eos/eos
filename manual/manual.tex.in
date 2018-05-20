@@ -63,6 +63,7 @@
 
 %% Add the bibliography
 \addbibresource{references.bib}
+\addbibresource{references-physics.bib}
 
 \begin{document}
 
