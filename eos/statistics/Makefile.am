@@ -36,8 +36,8 @@ libeosstatistics_la_SOURCES = \
 	test-statistic.cc test-statistic.hh test-statistic-impl.hh \
 	welford.cc welford.hh
 libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lMinuit2
-libeosstatistics_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
-libeosstatistics_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS)
+libeosstatistics_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+libeosstatistics_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(MINUIT2_LDFLAGS)
 
 if EOS_ENABLE_PMC
 libeosstatistics_la_SOURCES += \
@@ -86,7 +86,6 @@ TESTS = \
 	simple-parameters_TEST \
 	welford_TEST
 LDADD = \
-	-lMinuit2 \
 	$(top_builddir)/test/libeostest.a \
 	libeosstatistics.la \
 	$(top_builddir)/eos/libeos.la \
@@ -109,6 +108,8 @@ histogram_TEST_SOURCES = histogram_TEST.cc
 log_likelihood_TEST_SOURCES = log-likelihood_TEST.cc
 
 log_posterior_TEST_SOURCES = log-posterior_TEST.cc log-posterior_TEST.hh
+log_posterior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+log_posterior_TEST_LDFLAGS = $(MINUIT2_LDFLAGS) -lMinuit2
 
 log_prior_TEST_SOURCES = log-prior_TEST.cc
 
