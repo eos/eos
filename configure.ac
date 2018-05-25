@@ -213,8 +213,8 @@ AC_ARG_WITH([minuit2],
 if test "x$with_minuit2" == xroot ; then
 	AC_CHECK_PROG(ROOTCONFIG, root-config, yes)
 	if test "x$ROOTCONFIG" == xyes ; then
-		CXXFLAGS="-I`root-config --incdir` $CXXFLAGS"
-		LDFLAGS="-L`root-config --libdir` $LDFLAGS"
+		MINUIT2_CXXFLAGS="-I`root-config --incdir` $CXXFLAGS"
+		MINUIT2_LDFLAGS="-L`root-config --libdir` $LDFLAGS"
 	else
 		AC_MSG_FAILURE(["Cannot find root-config"])
 	fi
@@ -225,6 +225,8 @@ elif test "x$with_minuit2" != xno -a "x$with_minuit2" != x ; then
 	CXXFLAGS="-I$with_minuit2/include $CXXFLAGS"
 	LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
 fi
+AC_SUBST([MINUIT2_LDFLAGS])
+AC_SUBST([MINUIT2_CXXFLAGS])
 dnl }}}
 dnl {{{ use PMC path if supplied via --with-pmc=
 AC_ARG_WITH([pmc],

@@ -58,6 +58,8 @@ endif
 eos_evaluate_SOURCES = eos-evaluate.cc
 
 eos_find_mode_SOURCES = eos-find-mode.cc
+eos_find_mode_CXXFLAGS = $(AM_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+eos_find_mode_LDADD = $(LDADD) $(MINUIT2_LDFLAGS)
 
 eos_list_constraints_SOURCES = eos-list-constraints.cc
 
@@ -80,8 +82,8 @@ eos_sample_events_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
 eos_sample_events_mcmc_LDADD = $(LDADD) $(HDF5_LDFLAGS)
 
 eos_scan_mc_SOURCES = eos-scan-mc.cc
-eos_scan_mc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
-eos_scan_mc_LDADD = $(LDADD) $(HDF5_LDFLAGS)
+eos_scan_mc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+eos_scan_mc_LDADD = $(LDADD) $(HDF5_LDFLAGS) $(MINUIT2_LDFLAGS)
 
 integrated_SOURCES = integrated.cc
 

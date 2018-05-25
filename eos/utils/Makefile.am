@@ -76,8 +76,8 @@ libeosutils_la_LIBADD = \
 	-lMinuit2 \
 	-lpthread \
 	-lyaml-cpp
-libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
-libeosutils_la_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
+libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+libeosutils_la_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS) $(MINUIT2_LDFLAGS)
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
@@ -176,7 +176,6 @@ TESTS = \
 	wilson-polynomial_TEST \
 	wilson_scan_model_TEST
 LDADD = \
-	-lMinuit2 \
 	-lyaml-cpp \
 	$(top_builddir)/test/libeostest.a \
 	libeosutils.la \
@@ -197,6 +196,8 @@ hdf5_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
 hdf5_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
 
 equation_solver_TEST_SOURCES = equation_solver_TEST.cc
+equation_solver_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+equation_solver_TEST_LDFLAGS = $(MINUIT2_LDFLAGS)
 
 indirect_iterator_TEST_SOURCES = indirect-iterator_TEST.cc
 
