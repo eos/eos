@@ -24,11 +24,22 @@
     min:     +0.155
     max:     +0.1572
     comments: "GeV, cf. [LATAVG2011]"
+"decay-constant::K^*_d" :
+    central: +0.204
+    min:     +0.197
+    max:     +0.211
+    comments: "GeV, cf. [BSZ2015]"
+
 "decay-constant::pi" :
     central: +0.1302
     min:     +0.1288
     max:     +0.1326
     comments: "GeV, cf. [FLAG2013], eq. (43)"
+"decay-constant::rho" :
+    central: +0.213
+    min:     +0.208
+    max:     +0.218
+    comments: "GeV, cf. [BSZ2015]"
 
 "decay-constant::J/psi" :
     central: +0.2773
