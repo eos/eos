@@ -30,7 +30,7 @@
 "mass::s(2GeV)" :
     central: +0.095
     min:     +0.090
-    max:     +0.010
+    max:     +0.10
     comments: "cf. [PDG2012], p. 21"
 "mass::c" :
     central: +1.275
