@@ -77,7 +77,7 @@ namespace GSL
         class Workspace
         {
         public:
-            Workspace(int limit = 1000);
+            Workspace(int limit = 5000);
             Workspace(const Workspace &) = delete;
             Workspace(Workspace &&) = delete;
             ~Workspace();
