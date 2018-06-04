@@ -88,7 +88,17 @@
     min:     +1.86950
     max:     +1.86968
     comments: "cf. [PDG2016]"
+"mass::D^+" :
+    central: +1.86959
+    min:     +1.86950
+    max:     +1.86968
+    comments: "cf. [PDG2016]"
 "mass::D_u" :
+    central: +1.86483
+    min:     +1.86478
+    max:     +1.86488
+    comments: "cf. [PDG2016]"
+"mass::D^0" :
     central: +1.86483
     min:     +1.86478
     max:     +1.86488
@@ -112,6 +122,11 @@
     central: +2.1121
     min:     +2.1117
     max:     +2.1125
+    comments: "cf. [PDG2016]"
+"mass::rho^+" :
+    central: +0.77526
+    min:     +0.77501
+    max:     +0.77551
     comments: "cf. [PDG2016]"
 
 # Charmonium masses
