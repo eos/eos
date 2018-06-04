@@ -24,6 +24,11 @@
     min:     +0.155
     max:     +0.1572
     comments: "GeV, cf. [LATAVG2011]"
+"decay-constant::K" :
+    central: +0.1561
+    min:     +0.155
+    max:     +0.1572
+    comments: "GeV, cf. [LATAVG2011]"
 "decay-constant::K^*_d" :
     central: +0.204
     min:     +0.197
@@ -35,11 +40,6 @@
     min:     +0.1288
     max:     +0.1326
     comments: "GeV, cf. [FLAG2013], eq. (43)"
-"decay-constant::rho" :
-    central: +0.213
-    min:     +0.208
-    max:     +0.218
-    comments: "GeV, cf. [BSZ2015]"
 
 "decay-constant::J/psi" :
     central: +0.2773
@@ -52,6 +52,12 @@
     min:     +0.1967
     max:     +0.2000
     comments: "GeV, cf. [KMPW2010], table 5, multiplied by 2/3"
+
+"decay-constant::rho" :
+    central: +0.213
+    min:     +0.208
+    max:     +0.218
+    comments: "GeV, cf. [BSZ2015]"
 
 # 3-particle couplings
 "decay-constant::g_{B^*Bpi}" :
