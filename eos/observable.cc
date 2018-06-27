@@ -1874,7 +1874,7 @@ namespace eos
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_k4s,
                     std::make_tuple("s_min", "s_max")),
 
-	      
+
 	    make_observable("Lambda_b->Lambdall::M_1@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m1,
 		    std::make_tuple("s_min", "s_max")),
@@ -1894,7 +1894,7 @@ namespace eos
 	    make_observable("Lambda_b->Lambdall::M_5@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m5,
                     std::make_tuple("s_min", "s_max")),
-	      
+
 	    make_observable("Lambda_b->Lambdall::M_6@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m6,
                     std::make_tuple("s_min", "s_max")),
@@ -1934,7 +1934,7 @@ namespace eos
 	    make_observable("Lambda_b->Lambdall::M_15@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m15,
                     std::make_tuple("s_min", "s_max")),
-	      
+
 	    make_observable("Lambda_b->Lambdall::M_16@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m16,
                     std::make_tuple("s_min", "s_max")),
@@ -1953,8 +1953,8 @@ namespace eos
 
 	    make_observable("Lambda_b->Lambdall::M_20@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m20,
-                    std::make_tuple("s_min", "s_max")),	    
-	      
+                    std::make_tuple("s_min", "s_max")),
+
 	    make_observable("Lambda_b->Lambdall::M_21@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m21,
                     std::make_tuple("s_min", "s_max")),
@@ -1974,7 +1974,7 @@ namespace eos
 	    make_observable("Lambda_b->Lambdall::M_25@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m25,
                     std::make_tuple("s_min", "s_max")),
-	      
+
 	    make_observable("Lambda_b->Lambdall::M_26@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m26,
                     std::make_tuple("s_min", "s_max")),
@@ -1993,7 +1993,7 @@ namespace eos
 
 	    make_observable("Lambda_b->Lambdall::M_30@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m30,
-                    std::make_tuple("s_min", "s_max")),  
+                    std::make_tuple("s_min", "s_max")),
 
 	    make_observable("Lambda_b->Lambdall::M_31@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m31,
@@ -2009,8 +2009,8 @@ namespace eos
 
 	    make_observable("Lambda_b->Lambdall::M_34@LowRecoil",
                     &LambdaBToLambdaDilepton<LowRecoil>::integrated_m34,
-                    std::make_tuple("s_min", "s_max")),  
-	      
+                    std::make_tuple("s_min", "s_max")),
+
             /* Inclusive Decays */
 
             // B->X_u l nu (naive)
