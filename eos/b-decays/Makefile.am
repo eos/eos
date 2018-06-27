@@ -18,7 +18,8 @@ libeosbdecays_la_SOURCES = \
 	lambdab-to-lambdac2625-l-nu.cc lambdab-to-lambdac2625-l-nu.hh \
 	inclusive-b-to-u.cc inclusive-b-to-u.hh \
 	properties.cc properties.hh
-libeosbdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) 
+libeosbdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+libeosbdecays_la_LDFLAGS = $(GSL_LDFLAGS)
 libeosbdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \

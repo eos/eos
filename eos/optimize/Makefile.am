@@ -6,6 +6,7 @@ libeosoptimize_la_SOURCES = \
 	optimizer-gsl.cc optimizer-gsl.hh
 libeosoptimize_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosoptimize_la_LIBADD =
+libeosoptimize_la_LDFLAGS = $(GSL_LDFLAGS)
 
 include_eos_optimizedir = $(includedir)/eos/optimize
 include_eos_optimize_HEADERS = \
@@ -24,3 +25,4 @@ check_PROGRAMS = $(TESTS)
 
 optimizer_gsl_TEST_SOURCES = optimizer-gsl_TEST.cc
 optimizer_gsl_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+optimizer_gsl_TEST_LDFLAGS = $(GSL_LDFLAGS)

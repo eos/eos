@@ -196,13 +196,14 @@ hdf5_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
 hdf5_TEST_LDADD = $(LDADD) -lhdf5
 
 equation_solver_TEST_SOURCES = equation_solver_TEST.cc
-equation_solver_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(GSL_CXXFLAGS)
-equation_solver_TEST_LDFLAGS = $(MINUIT2_LDFLAGS)
+equation_solver_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+equation_solver_TEST_LDFLAGS = $(GSL_LDFLAGS) $(MINUIT2_LDFLAGS)
 
 indirect_iterator_TEST_SOURCES = indirect-iterator_TEST.cc
 
 integrate_TEST_SOURCES = integrate_TEST.cc
 integrate_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+integrate_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 join_TEST_SOURCES = join_TEST.cc
 
@@ -250,6 +251,7 @@ verify_TEST_SOURCES = verify_TEST.cc
 
 wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
 wilson_coefficients_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+wilson_coefficients_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 wilson_polynomial_TEST_SOURCES = wilson-polynomial_TEST.cc
 

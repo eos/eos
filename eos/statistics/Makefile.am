@@ -103,11 +103,13 @@ density_wrapper_TEST_SOURCES = density-wrapper_TEST.cc density-wrapper_TEST.hh
 
 hierarchical_clustering_TEST_SOURCES = hierarchical-clustering_TEST.cc
 hierarchical_clustering_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+hierarchical_clustering_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 histogram_TEST_SOURCES = histogram_TEST.cc
 
 log_likelihood_TEST_SOURCES = log-likelihood_TEST.cc
 log_likelihood_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+log_likelihood_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 log_posterior_TEST_SOURCES = log-posterior_TEST.cc log-posterior_TEST.hh
 log_posterior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS)
@@ -115,29 +117,31 @@ log_posterior_TEST_LDFLAGS = $(MINUIT2_LDFLAGS) -lMinuit2
 
 log_prior_TEST_SOURCES = log-prior_TEST.cc
 log_prior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+log_prior_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 markov_chain_TEST_SOURCES = markov-chain_TEST.cc
 markov_chain_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+markov_chain_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc density-wrapper_TEST.cc
-markov_chain_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
-markov_chain_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
+markov_chain_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
+markov_chain_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(HDF5_LDFLAGS)
 markov_chain_sampler_TEST_LDADD = $(LDADD) -lhdf5
 
 if EOS_ENABLE_PMC
 population_monte_carlo_sampler_TEST_SOURCES = population-monte-carlo-sampler_TEST.cc density-wrapper_TEST.cc
-population_monte_carlo_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
-population_monte_carlo_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS) -lpmc -ldl
+population_monte_carlo_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
+population_monte_carlo_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) -lpmc -ldl
 endif
 
 prior_sampler_TEST_SOURCES = prior-sampler_TEST.cc
-prior_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
-prior_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
+prior_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
+prior_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(HDF5_LDFLAGS)
 prior_sampler_TEST_LDADD = $(LDADD) -lhdf5
 
 proposal_functions_TEST_SOURCES = proposal-functions_TEST.cc
-proposal_functions_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
-proposal_functions_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
+proposal_functions_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
+proposal_functions_TEST_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(HDF5_LDFLAGS)
 proposal_functions_TEST_LDADD = $(LDADD) -lhdf5
 
 rvalue_TEST_SOURCES = rvalue_TEST.cc

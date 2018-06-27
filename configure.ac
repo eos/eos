@@ -216,6 +216,9 @@ else # use pkg-config
 			AC_MSG_NOTICE([falling back to default for GSL location])
 		])
 fi
+AC_SUBST([GSL_LDFLAGS])
+AC_SUBST([GSL_CXXFLAGS])
+
 _CXXFLAGS=$CXXFLAGS
 _LDFLAGS=$LDFLAGS
 _LIBS=$LIBS
@@ -228,6 +231,7 @@ AC_CHECK_LIB(gsl, gsl_sf_zeta,
 	[],
 	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library (http://www.gnu.org/software/gsl/).])],
 	[-lgslcblas -lm])
+
 CXXFLAGS=$_CXXFLAGS
 LDFLAGS=$_LDFLAGS
 LIBS="$LIBS $_LIBS"

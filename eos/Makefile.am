@@ -13,15 +13,14 @@ libeos_la_SOURCES = \
 	decays.hh \
 	observable.cc observable.hh \
 	signal-pdf.cc signal-pdf.hh
-libeos_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+libeos_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
+libeos_la_LDFLAGS = $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 libeos_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la
-libeos_la_CXXFLAGS = $(AM_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
-libeos_la_LDFLAGS = $(AM_CXXFLAGS) $(YAMLCPP_LDFLAGS)
 
 include_eosdir = $(includedir)/eos
 include_eos_HEADERS = \

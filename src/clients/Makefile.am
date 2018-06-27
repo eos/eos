@@ -50,15 +50,15 @@ LDADD += \
 	-lpmc -ldl
 
 eos_sample_pmc_SOURCES = eos-sample-pmc.cc
-eos_sample_pmc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
-eos_sample_pmc_LDADD = $(LDADD) $(HDF5_LDFLAGS) -lpmc -ldl
+eos_sample_pmc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
+eos_sample_pmc_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) -lpmc -ldl
 endif
 
 eos_evaluate_SOURCES = eos-evaluate.cc
 
 eos_find_mode_SOURCES = eos-find-mode.cc
 eos_find_mode_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
-eos_find_mode_LDADD = $(LDADD) $(MINUIT2_LDFLAGS)
+eos_find_mode_LDADD = $(LDADD) $(GSL_LDFLAGS) $(MINUIT2_LDFLAGS)
 
 eos_list_constraints_SOURCES = eos-list-constraints.cc
 eos_list_constraints_CXXFLAGS = $(AM_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
@@ -72,19 +72,20 @@ eos_list_signal_pdfs_SOURCES = eos-list-signal-pdfs.cc
 eos_print_polynomial_SOURCES = eos-print-polynomial.cc
 
 eos_propagate_uncertainty_SOURCES = eos-propagate-uncertainty.cc
-eos_propagate_uncertainty_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS) $(GSL_CXXFLAGS)
-eos_propagate_uncertainty_LDADD = $(LDADD) -lhdf5 $(HDF5_LDFLAGS)
+eos_propagate_uncertainty_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
+eos_propagate_uncertainty_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS)
 
 eos_sample_mcmc_SOURCES = eos-sample-mcmc.cc
 eos_sample_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+eos_sample_mcmc_LDADD = $(LDADD) $(GSL_LDFLAGS)
 
 eos_sample_events_mcmc_SOURCES = eos-sample-events-mcmc.cc
-eos_sample_events_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS) $(GSL_CXXFLAGS)
-eos_sample_events_mcmc_LDADD = $(LDADD) $(HDF5_LDFLAGS)
+eos_sample_events_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
+eos_sample_events_mcmc_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS)
 
 eos_scan_mc_SOURCES = eos-scan-mc.cc
-eos_scan_mc_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS)
-eos_scan_mc_LDADD = $(LDADD) $(HDF5_LDFLAGS) -lMinuit2 $(MINUIT2_LDFLAGS)
+eos_scan_mc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+eos_scan_mc_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) $(MINUIT2_LDFLAGS)
 
 integrated_SOURCES = integrated.cc
 
