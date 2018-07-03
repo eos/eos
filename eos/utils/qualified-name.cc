@@ -56,12 +56,12 @@ namespace eos
             }
 
             // NAME := ['a'-'z', 'A'-'Z', '0'-'9', '(', ')', '[', ']', '{', '}', '|'
-            //          '\'', ',', '.', '/', '^', '_', '*', '+', '-']
+            //          '\'', ',', '.', '/', '^', '_', '*', '+', '-', '=']
             static const char * valid_name_characters =
                     "abcdefghijklmnopqrstuvwxyz"
                     "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
                     "0123456789"
-                    "()[]{}|',./^_*+-";
+                    "()[]{}|',./^_*+-=";
 
             auto pos = name.find_first_not_of(valid_name_characters);
 

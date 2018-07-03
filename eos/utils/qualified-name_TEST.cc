@@ -60,6 +60,7 @@ class NameTest :
             TEST_CHECK_NO_THROW(auto n = qnp::Name("A_FB(s)"));
             TEST_CHECK_NO_THROW(auto n = qnp::Name("dBR/ds"));
             TEST_CHECK_NO_THROW(auto n = qnp::Name("BR(q2,k2,z)"));
+            TEST_CHECK_NO_THROW(auto n = qnp::Name("F_perp[sys=0.30]"));
 
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto n = qnp::Name("::BR(s)"));
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto n = qnp::Name(""));
