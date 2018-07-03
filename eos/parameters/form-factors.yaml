@@ -49,6 +49,348 @@
     max:     2.0
     comments: " // GeV, cf. [BFvD2016]"
 
+# form factor parameters for parametrization according to [FvDV2018]
+# para
+"B->pipi::a^Fperp_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fperp_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fperp_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fperp_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fperp_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fperp_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fperp_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fperp_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fperp_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fperp_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fperp_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fperp_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fperp_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fperp_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fperp_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fperp_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fperp_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fperp_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fperp_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fperp_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fperp_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+# para
+"B->pipi::a^Fpara_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fpara_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fpara_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fpara_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fpara_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fpara_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Fpara_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fpara_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fpara_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fpara_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fpara_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fpara_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fpara_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Fpara_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fpara_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fpara_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fpara_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fpara_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fpara_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fpara_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Fpara_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+# long
+"B->pipi::a^Flong_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Flong_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Flong_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Flong_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Flong_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Flong_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Flong_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Flong_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Flong_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Flong_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Flong_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Flong_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Flong_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Flong_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Flong_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Flong_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Flong_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Flong_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Flong_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Flong_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Flong_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+# time
+"B->pipi::a^Ftime_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Ftime_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Ftime_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Ftime_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Ftime_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Ftime_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::a^Ftime_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Ftime_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Ftime_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Ftime_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Ftime_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Ftime_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Ftime_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::b^Ftime_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Ftime_0_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Ftime_0_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Ftime_0_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Ftime_0_3@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Ftime_1_0@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Ftime_1_1@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+"B->pipi::c^Ftime_1_2@FvDV2018" :
+    central: 0.0
+    min:     0.0
+    max:     0.0
+
 # form factor parameters for B->pi, B->K in [BCL2008] parametrization, with
 # f_+ taken from [IKMvD2014]
 "B->pi::f_+(0)@BCL2008" :
