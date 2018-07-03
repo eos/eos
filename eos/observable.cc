@@ -344,8 +344,17 @@ namespace eos
             make_form_factor_adapter("B->pipi::Im{F_time}(q2,k2,z)", "B->pipi",
                     &FormFactors<PToPP>::im_f_time, std::make_tuple("q2", "k2", "z")),
 
-            make_form_factor_adapter("B->pipi::Res{F_perp}(q2,k2)", "B->pipi",
-                    &FormFactors<PToPP>::f_perp_res_qhat2, std::make_tuple("q2", "k2")),
+            make_form_factor_adapter("B->pipi::Im{Res{F_perp}}(q2,k2)", "B->pipi",
+                    &FormFactors<PToPP>::f_perp_im_res_qhat2, std::make_tuple("q2", "k2")),
+
+            make_form_factor_adapter("B->pipi::Im{Res{F_para}}(q2,k2)", "B->pipi",
+                    &FormFactors<PToPP>::f_para_im_res_qhat2, std::make_tuple("q2", "k2")),
+
+            make_form_factor_adapter("B->pipi::Im{Res{F_long}}(q2,k2)", "B->pipi",
+                    &FormFactors<PToPP>::f_long_im_res_qhat2, std::make_tuple("q2", "k2")),
+
+            make_form_factor_adapter("B->pipi::Im{Res{F_time}}(q2,k2)", "B->pipi",
+                    &FormFactors<PToPP>::f_time_im_res_qhat2, std::make_tuple("q2", "k2")),
 
             // Lambda_b -> Lambda Form Factors
             make_form_factor_adapter("Lambda_b->Lambda::f_time^V(s)", "Lambda_b->Lambda",

@@ -377,8 +377,9 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             // analytic computations
-            { KeyType("B->pipi",    "BFvD2016"), &AnalyticFormFactorBToPiPiBFvD2016::make   },
-            { KeyType("B->pipi",    "FvDV2018"), &FvDV2018FormFactors<BToPiPi>::make        },
+            { KeyType("B->pipi",    "BFvD2016"),            &AnalyticFormFactorBToPiPiBFvD2016::make   },
+            { KeyType("B->pipi",    "FvDV2018-Dispersive"), &AnalyticFormFactorBToPiPiFvDV2018::make   },
+            { KeyType("B->pipi",    "FvDV2018"),            &FvDV2018FormFactors<BToPiPi>::make        },
         };
 
         /*
@@ -406,5 +407,4 @@ namespace eos
 
         return result;
     }
-
 }
