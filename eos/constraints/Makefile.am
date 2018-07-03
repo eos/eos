@@ -9,6 +9,7 @@ CONSTRAINTS_FILES = \
 	B-to-Xs-gamma.yaml \
 	B-to-Xs-ll.yaml \
 	B-to-P-form-factors.yaml \
+	B-to-P-P-form-factors.yaml \
 	B-to-V-form-factors.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
