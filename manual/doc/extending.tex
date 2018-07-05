@@ -146,10 +146,10 @@ parametrized in terms of its mode and correlation matrix. The following keys
 are required in the description of the constraint:
 \begin{description}[labelwidth=.15\textwidth]
     \item[\texttt{dim}] the dimensionality of the multivariate distribution;
-    \item[\texttt{observable}] the list of size \texttt{dim} of qualified names for either \texttt{Observable}s or \texttt{Parameter}s;
+    \item[\texttt{observables}] the list of size \texttt{dim} of qualified names for either \texttt{Observable}s or \texttt{Parameter}s;
     \item[\texttt{kinematics}] the list of size \texttt{dim} of map representations of the kinematic variables pertaining to each observable;
     \item[\texttt{options}] the list of size \texttt{dim} of map representations of the options pertaining to each observable;
-    \item[\texttt{mean}] the list of size \texttt{dim} describing the mean of the distribution;
+    \item[\texttt{means}] the list of size \texttt{dim} describing the mean of the distribution;
     \item[\texttt{sigma-stat-hi}] the list of size \texttt{dim} for the upper statistical uncertainty of the distribution;
     \item[\texttt{sigma-stat-lo}] the list of size \texttt{dim} for the lower statistical uncertainty of the distribution;
     \item[\texttt{correlations}] the matrix of size \texttt{dim} $\times$ \texttt{dim} for the statistical correlations;
@@ -171,10 +171,10 @@ likelihood, parametrized in terms of its mode and covariance matrix. The
 following keys are required in the description of the constraint:
 \begin{description}[labelwidth=.15\textwidth]
     \item[\texttt{dim}] the dimensionality of the multivariate distribution;
-    \item[\texttt{observable}] the list of size \texttt{dim} of qualified names for either \texttt{Observable}s or \texttt{Parameter}s;
+    \item[\texttt{observables}] the list of size \texttt{dim} of qualified names for either \texttt{Observable}s or \texttt{Parameter}s;
     \item[\texttt{kinematics}] the list of size \texttt{dim} of map representations of the kinematic variables pertaining to each observable;
     \item[\texttt{options}] the list of size \texttt{dim} of map representations of the options pertaining to each observable;
-    \item[\texttt{mean}] the list of size \texttt{dim} describing the mean of the distribution;
+    \item[\texttt{means}] the list of size \texttt{dim} describing the mean of the distribution;
     \item[\texttt{covariance}] the matrix of size \texttt{dim} $\times$ \texttt{dim} for the covariance of the distribution;
     \item[\texttt{dof}] the degrees of freedom associated with this observation (should default to \texttt{dim}).
 \end{description}
