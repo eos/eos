@@ -174,11 +174,11 @@ class UncertaintyDataFile(DataFile):
 """ open HDF5 data file regardless of file type """
 def load_data_file(name):
     basename = os.path.basename(name)
-    if basename.startswith('mcmc_'):
+    if basename.startswith('mcmc'):
         return MCMCDataFile(name)
-    elif basename.startswith('pmc_monolithic_'):
+    elif basename.startswith('pmc'):
         return PMCDataFile(name)
-    elif basename.startswith('unc_'):
+    elif basename.startswith('unc'):
         return UncertaintyDataFile(name)
     else:
         raise RuntimeError('cannot determine HDF5 file type based on the file name')
