@@ -570,6 +570,11 @@
     title: "Power suppressed effects in Bbar -> X_s gamma at O(alpha_s)"
     eprint: "arXiv:0911.2175"
 
+"Fermilab-MILC-2014" :
+    authors: "J. A. Bailey et. al. [Fermilab/MILC]"
+    title: "Update of $|V_{cb}|$ from the ${\bar B} \to D^{*} \ell {\bar \nu}$ form factor at zero recoil with three-flavor lattice QCD"
+    eprint: "arXiv:1403.0635"
+
 "F2012" :
     authors: "Fleischer, R."
     title: "On Branching Ratios of B_s Decays and the Search for New Physics in B0_s -> mu^+ mu^-"
@@ -630,6 +635,11 @@
     authors: "Na, H. et al. [HPQCD]"
     title: "B ---> D l nu Form Factors at Non-Zero Recoil and Extraction of |V_cb|"
     eprint: "arXiv:1505.03925"
+
+"HPQCD-2017" :
+    authors: "J. Harrison, C. T. H. Davies, M. Wintage [HPQCD]"
+    title: "Lattice QCD calculation of the $B_{(s)} \to D^{*}_{(s)} \ell \nu$ form factors at zero recoil and implications for $|V_{cb}|$"
+    eprint: "arXiv:1711.11013"
 
 "IKKR2007" :
     authors: "Ivanov, M.A. and Korner, J.G. and Kovalenko, S.G. and Roberts, C.D."
