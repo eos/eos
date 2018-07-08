@@ -461,6 +461,7 @@
 "BHvD2010" :
     authors: "Bobeth, C. and Hiller, G. and van Dyk, D."
     title: "The Benefits of B -> K^* l^+ l^- Decays at Low Recoil"
+    inspire-id: "Bobeth:2010wg"
     eprint: "arXiv:1006.5013 [hep-ph]"
 
 "BHvD2011" :
@@ -471,6 +472,7 @@
 "BHvD2012" :
     authors: "Bobeth, C. and Hiller, G. and van Dyk, D."
     title: "General Analysis and Optimal Observables in B -> K^* (-> K pi) l^+ l^- at Low Recoil"
+    inspire-id: "Bobeth:2012vn"
     eprint: "arXiv:1212.2321"
 
 "BIvD2016" :
@@ -486,6 +488,7 @@
 "BMU1999" :
     authors: "Bobeth, C. and Misiak, M. and Urban, J."
     title: "Photonic penguins at two loops and m_t-dependence of BR[B -> X_s l^+ l^-]"
+    inspire-id: "Bobeth:1999mk"
     eprint: "arXiv:hep-ph/9910220"
 
 "BS2011" :
