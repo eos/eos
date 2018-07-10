@@ -169,9 +169,9 @@ class Plotter:
         _ovalues_central = []
         _ovalues_higher  = []
         for i in range(len(uncfile.parameters)):
-            lower   = np.percentile(data[:, i], q=0.15865)
-            central = np.percentile(data[:, i], q=0.5)
-            higher  = np.percentile(data[:, i], q=0.84135)
+            lower   = np.percentile(data[:, i], q=15.865)
+            central = np.percentile(data[:, i], q=50.000)
+            higher  = np.percentile(data[:, i], q=84.135)
             _ovalues_lower.append(lower)
             _ovalues_central.append(central)
             _ovalues_higher.append(higher)
