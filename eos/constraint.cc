@@ -1591,4 +1591,17 @@ namespace eos
     {
         return ConstraintIterator(_imp->constraint_entries.cend());
     }
+
+    std::shared_ptr<const ConstraintEntry>
+    Constraints::operator[] (const QualifiedName & name) const
+    {
+        auto i = _imp->constraint_entries.find(name);
+
+        if (_imp->constraint_entries.end() == i)
+        {
+            return {};
+        }
+
+        return i->second;
+    }
 }

@@ -157,6 +157,13 @@ namespace eos
         ConstraintIterator begin() const;
         ConstraintIterator end() const;
         ///@}
+
+        /*!
+         * Retrieve a ConstraintEntry object by name.
+         *
+         * @param name  The name of the ConstraintEntry that shall be retrieved.
+         */
+        std::shared_ptr<const ConstraintEntry> operator[] (const QualifiedName & name) const;
     };
 
     extern template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>>;
