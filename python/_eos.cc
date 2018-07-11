@@ -79,6 +79,33 @@ namespace impl
         return object();
     }
 
+    // converter for std::pair
+    // converts a std::pair instance to a Python tuple, from Boost Python example
+    template <typename T1, typename T2>
+    struct std_pair_to_tuple
+    {
+        static PyObject* convert(std::pair<T1, T2> const& p)
+        {
+            return boost::python::incref(
+                    boost::python::make_tuple(p.first, p.second).ptr());
+        }
+        static PyTypeObject const *get_pytype () {return &PyTuple_Type; }
+    };
+
+    // Helper for convenience.
+    template <typename T1, typename T2>
+    struct std_pair_to_python_converter
+    {
+        std_pair_to_python_converter()
+        {
+          boost::python::to_python_converter<
+              std::pair<T1, T2>,
+              std_pair_to_tuple<T1, T2>,
+              true //std_pair_to_tuple has get_pytype
+              >();
+        }
+    };
+
     const char *
     version(void)
     {
@@ -220,6 +247,19 @@ BOOST_PYTHON_MODULE(_eos)
         .def("observables", range(&Constraint::begin_observables, &Constraint::end_observables))
         ;
 
+    // ConstraintEntry
+    register_ptr_to_python<std::shared_ptr<const ConstraintEntry>>();
+    class_<eos::ConstraintEntry, boost::noncopyable>("ConstraintEntry", no_init)
+        .def("name", &ConstraintEntry::name, return_value_policy<copy_const_reference>())
+        .def("serialize", (std::string (ConstraintEntry::*)(void) const) &ConstraintEntry::serialize, return_value_policy<return_by_value>())
+        ;
+
+    // Constraints
+    impl::std_pair_to_python_converter<const QualifiedName, std::shared_ptr<const ConstraintEntry>> converter_constraints_iter;
+    class_<Constraints>("Constraints")
+        .def("__getitem__", (std::shared_ptr<const ConstraintEntry> (Constraints::*)(const QualifiedName &) const) &Constraints::operator[])
+        .def("__iter__", range(&Constraints::begin, &Constraints::end))
+        ;
     // }}}
 
     // {{{ eos/
