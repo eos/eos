@@ -152,14 +152,14 @@ namespace eos
         ///@name Iteration over known constraints
         ///@{
         struct ConstraintIteratorTag;
-        typedef WrappedForwardIterator<ConstraintIteratorTag, const std::pair<const QualifiedName, const ConstraintEntry *>> ConstraintIterator;
+        typedef WrappedForwardIterator<ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>> ConstraintIterator;
 
         ConstraintIterator begin() const;
         ConstraintIterator end() const;
         ///@}
     };
 
-    extern template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, const ConstraintEntry *>>;
+    extern template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>>;
 
     /*!
      * UnknownConstraintError is thrown when Constraint::make encounters an unknown constraint name.

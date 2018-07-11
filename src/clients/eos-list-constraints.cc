@@ -86,7 +86,7 @@ struct Filter
         return names.empty() && prefixes.empty();
     }
 
-    bool operator() (const std::pair<const QualifiedName, const ConstraintEntry *> & arg)
+    bool operator() (const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>> & arg)
     {
         if (prefixes.find(arg.first.prefix_part()) != prefixes.end())
             return true;
@@ -100,7 +100,7 @@ struct Filter
 
 struct Printer
 {
-    void print(const ConstraintEntry * rhs)
+    void print(const std::shared_ptr<const ConstraintEntry> & rhs)
     {
         cout << rhs->name().full() << endl;
         cout << "    type: " << rhs->type() << endl;

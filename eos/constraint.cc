@@ -1453,12 +1453,12 @@ namespace eos
         return std::bind(&Factory_::make, f, std::placeholders::_1, std::placeholders::_2);
     }
 
-    std::map<QualifiedName, const ConstraintEntry *>
+    std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>>
     load_constraint_entries()
     {
-        using ValueType = std::map<QualifiedName, const ConstraintEntry *>::value_type;
+        using ValueType = std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>>::value_type;
 
-        std::map<QualifiedName, const ConstraintEntry *> result;
+        std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> result;
 
         fs::path base;
         if (std::getenv("EOS_TESTS_CONSTRAINTS"))
@@ -1509,7 +1509,7 @@ namespace eos
                         continue;
 
                     QualifiedName name(keyname);
-                    ConstraintEntry * entry = ConstraintEntry::FromYAML(name, p.second);
+                    std::shared_ptr<const ConstraintEntry> entry{ ConstraintEntry::FromYAML(name, p.second) };
 
                     if (! result.insert(ValueType{ name, entry }).second)
                     {
@@ -1527,10 +1527,10 @@ namespace eos
     }
 
     static
-    const std::map<QualifiedName, const ConstraintEntry *> &
+    const std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> &
     make_constraint_entries()
     {
-        static const std::map<QualifiedName, const ConstraintEntry *> entries = load_constraint_entries();
+        static const std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> entries = load_constraint_entries();
 
         return entries;
     }
@@ -1556,14 +1556,14 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Constraints::ConstraintIteratorTag>
     {
-        typedef std::map<QualifiedName, const ConstraintEntry *>::const_iterator UnderlyingIterator;
+        typedef std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>>::const_iterator UnderlyingIterator;
     };
-    template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, const ConstraintEntry *>>;
+    template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>>;
 
     template<>
     struct Implementation<Constraints>
     {
-        const std::map<QualifiedName, const ConstraintEntry *> constraint_entries;
+        const std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> constraint_entries;
 
         Implementation() :
             constraint_entries(make_constraint_entries())
