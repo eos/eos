@@ -1358,6 +1358,15 @@ namespace eos
         return i->second(name, n);
     }
 
+    std::string
+    ConstraintEntry::serialize() const
+    {
+        YAML::Emitter out;
+        this->serialize(out);
+
+        return { out.c_str() };
+    }
+
     /* Constraint */
     template <>
     struct WrappedForwardIteratorTraits<Constraint::BlockIteratorTag>

@@ -129,6 +129,9 @@ namespace eos
 
             /// Serialize to YAML
             virtual void serialize(YAML::Emitter &) const = 0;
+
+            /// Return YAML representation as a string for use in EOS scripts
+            std::string serialize() const;
     };
 
     extern template class WrappedForwardIterator<ConstraintEntry::ObservableNameIteratorTag, const QualifiedName>;
