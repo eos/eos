@@ -508,6 +508,7 @@ class Plotter:
             if not type(item) is dict:
                 TypeError('wrong data type for content item {}'.format(str(item)))
 
+            name = item['name'] if 'name' in item else 'unnamed'
             if not 'type' in item:
                 raise KeyError('plot content "{}" has no type'.format(name))
             item_type = item['type']
