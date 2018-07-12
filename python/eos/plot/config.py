@@ -46,3 +46,5 @@ matplotlib.rcParams['pgf.preamble'] = [
     r'\usepackage{amsmath}',
     r'\usepackage{xcolor}'
 ]
+
+matplotlib.rcParams['errorbar.capsize'] = 5
