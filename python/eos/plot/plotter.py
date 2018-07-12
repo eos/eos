@@ -196,6 +196,91 @@ class Plotter:
         plt.plot(xvalues, ovalues_higher,  color=color, alpha=alpha)
 
 
+    def plot_constraint(self, item):
+        import yaml
+
+        constraints = eos.Constraints()
+
+        if 'constraints' not in item:
+            raise KeyError('no constraints specified')
+
+        names = item['constraints']
+        if type(names) == str:
+            names = [names]
+
+        for name in names:
+            entry = constraints[name]
+            if not entry:
+                raise ValueError('unknown constraint {}'.format(name))
+
+            constraint = yaml.load(entry.serialize())
+
+            xvalues = None
+            xerrors = None
+            yvalues = None
+            yerrors = None
+
+            if constraint['type'] == 'Gaussian':
+                kinematics = constraint['kinematics']
+                width = 1
+                if item['variable'] in kinematics:
+                    xvalues = [kinematics[item['variable']]]
+                    xerrors = None
+                elif (item['variable'] + '_min' in kinematics) and (item['variable'] + '_max' in kinematics):
+                    xvalues = [(kinematics[item['variable'] + '_max'] + kinematics[item['variable'] + '_min']) / 2]
+                    xerrors = [(kinematics[item['variable'] + '_max'] - kinematics[item['variable'] + '_min']) / 2]
+                    if item['rescale-by-width']:
+                        width = (kinematics[item['variable'] + '_max'] - kinematics[item['variable'] + '_min'])
+
+                yvalues = [constraint['mean'] / width]
+                sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2) / width
+                sigma_lo = np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2) / width
+                yerrors = [[sigma_hi, sigma_lo]]
+            elif constraint['type'] == 'MultivariateGaussian(Covariance)':
+                if 'observable' not in item:
+                    raise KeyError('observable needs to be specified for MultivariateGaussian(Covariance) constraints')
+                dim = constraint['dim']
+                covariance = np.array(constraint['covariance'])
+                observables = constraint['observables']
+                means = constraint['means']
+                kinematics = constraint['kinematics']
+
+                xvalues = []
+                xerrors = []
+                yvalues = []
+                yerrors = []
+                for i in range(0, dim):
+                    width = 1
+
+                    if not observables[i] == item['observable']:
+                        continue
+                    _kinematics = kinematics[i]
+                    if item['variable'] in _kinematics:
+                        xvalues.append(_kinematics[item['variable']])
+                        xerrors.append(0)
+                    elif (item['variable'] + '_min' in _kinematics) and (item['variable'] + '_max' in _kinematics):
+                        xvalues.append((_kinematics[item['variable'] + '_max'] + _kinematics[item['variable'] + '_min']) / 2)
+                        xerrors.append((_kinematics[item['variable'] + '_max'] - _kinematics[item['variable'] + '_min']) / 2)
+                        if item['rescale-by-width']:
+                            width = (_kinematics[item['variable'] + '_max'] - _kinematics[item['variable'] + '_min'])
+
+                    yvalues.append(means[i] / width)
+                    yerrors.append(np.sqrt(covariance[i, i]) / width)
+            else:
+                raise ValueError('type of constraint presently not supported')
+
+            xvalues = np.array(xvalues)
+            if xerrors:
+                xerrors = np.array(xerrors)
+            yvalues = np.array(yvalues)
+            yerrors = np.array(yerrors)
+
+            color = item['color'] if 'color' in item else 'black'
+
+            plt.errorbar(x=xvalues, y=yvalues, xerr=xerrors, yerr=yerrors.T,
+                color=color, elinewidth=1.0, fmt='_', linestyle='none')
+
+
     def plot_contours2d(self, item):
         if 'hdf5-file' not in item:
             raise KeyError('no hdf5-file specified')
@@ -370,6 +455,7 @@ class Plotter:
             return
 
         plot_functions = {
+            'constraint':  Plotter.plot_constraint,
             'contours2D':  Plotter.plot_contours2d,
             'histogram':   Plotter.plot_histogram,
             'histogram2D': Plotter.plot_histogram2d,
