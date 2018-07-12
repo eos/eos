@@ -39,4 +39,14 @@ contents:
         'B->pi::b_+^1@BCL2008':  -2.67e+0
         'B->pi::b_+^2@BCL2008':  +2.23e-2
 
+    - name: 'B->pi l nu (BaBar measurement)'
+      type: 'constraint'
+      constraints:
+        - 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar-2010A'
+        - 'B^0->pi^+lnu::BR[4.0,8.0]@BaBar-2010A'
+        - 'B^0->pi^+lnu::BR[8.0,12.0]@BaBar-2010A'
+      variable: 's'
+      color: 'gray'
+      rescale-by-width: true
+
     - type: 'watermark'
