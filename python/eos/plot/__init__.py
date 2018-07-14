@@ -14,6 +14,12 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+## minimal versions checks
+# matplotlib
+import matplotlib._version
+if matplotlib._version.get_versions()['version'] < '2.0':
+    raise ImportError('eos.plot requires matplotlib in version 2.0 or higher')
+
 from . import config
 
 from .plotter import *
