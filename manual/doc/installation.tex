@@ -34,7 +34,7 @@ The Phython \cite{Python} interface to \EOS requires the additional software:
     \item[\package{python3}] python3 interpreter in version 3.5 or higher, and required header files;
     \item[\package{BOOST}] the BOOST C++ library \package{boost-python} for interfacing Python and C++;
     \item[\package{h5py}] the Python interface to HDF5;
-    \item[\package{matplotlib}] the Python plotting library;
+    \item[\package{matplotlib}] the Python plotting library in version 2.0 or higher;
     \item[\package{scipy}] the Python scientific library;
     \item[\package{PyYAML}] the Python YAML parser and emitter library.
 \end{description}
@@ -92,7 +92,15 @@ apt-get install libgsl0-dev libhdf5-serial-dev libfftw3-dev
 \end{commandline}
 Do not install \package{Minuit2} via \package{APT}, since there is presently a
 bug in the Debian/Ubuntu packages for \package{Minuit2}, which prevents
-linking.\\
+linking. On Ubuntu Xenial you must upgrade \package{matplotlib} to version 2.0 or higher:
+\begin{commandline}
+# for the 'pip3' command
+apt-get install python3-pip
+# if you administrate your computer yourself
+pip3 install matplotlib --upgrade
+# otherwise
+pip3 install matplotlib --user
+\end{commandline}
 
 
 There are pre-built binary package files for
