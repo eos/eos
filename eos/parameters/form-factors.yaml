@@ -526,6 +526,132 @@
     max:      0.0
     comments: ""
 
+# form factor parameters for B->pi inspired by [BCL2015]
+"B->pi::alpha^f+_0@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::alpha^f+_1@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::alpha^f+_2@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::alpha^f0_1@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::alpha^f0_2@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::alpha^fT_0@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::alpha^fT_1@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->pi::alpha^fT_2@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+
+# form factor parameters for B->K inspired by [BCL2015]
+"B->K::alpha^f+_0@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->K::alpha^f+_1@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->K::alpha^f+_2@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->K::alpha^f0_1@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->K::alpha^f0_2@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->K::alpha^fT_0@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->K::alpha^fT_1@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->K::alpha^fT_2@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+
+# form factor parameters for B->D inspired by [BCL2015]
+"B->D::alpha^f+_0@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->D::alpha^f+_1@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->D::alpha^f+_2@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->D::alpha^f0_1@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->D::alpha^f0_2@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->D::alpha^fT_0@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->D::alpha^fT_1@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+"B->D::alpha^fT_2@BSZ2015" :
+    central: +0.00
+    min:     +0.00
+    max:     +0.00
+    comments: ""
+
 # form factor parameters for B->K^* according to [BZ2004] (approximate)
 "B->K^*::a0_uncertainty@BZ2004" :
     central: +1.0

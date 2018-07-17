@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2014, 2015, 2018 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  * Copyright (c) 2015 Frederik Beaujean
  * Copyright (c) 2015 Christoph Bobeth
@@ -75,6 +75,67 @@ class BCL2008FormFactorsTest :
             }
         }
 } bcl2008_form_factors_test;
+
+class BSZ2015FormFactorsTest :
+    public TestCase
+{
+    public:
+        BSZ2015FormFactorsTest() :
+            TestCase("bsz2015_form_factors_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* B -> pi */
+            {
+                // test case created by using the known relations among the BCL2008 parameters
+                // for the highest power.
+                static const double eps = 1e-5;
+
+                Parameters p = Parameters::Defaults();
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi::BSZ2015", p, Options{ });
+
+                p["B->pi::alpha^f+_0@BSZ2015"] = 1.0;
+                p["B->pi::alpha^f+_1@BSZ2015"] = 0.0;
+                p["B->pi::alpha^f+_2@BSZ2015"] = 0.0;
+
+                TEST_CHECK_NEARLY_EQUAL(1.00000, ff->f_p( 0.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.21408, ff->f_p( 5.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.54479, ff->f_p(10.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.12312, ff->f_p(15.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(3.39360, ff->f_p(20.0), eps);
+
+                p["B->pi::alpha^f+_1@BSZ2015"] = 1.0;
+                p["B->pi::alpha^f+_2@BSZ2015"] = 2.0;
+
+                TEST_CHECK_NEARLY_EQUAL(1.00000, ff->f_p( 0.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.16581, ff->f_p( 5.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.42261, ff->f_p(10.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.88375, ff->f_p(15.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.97499, ff->f_p(20.0), eps);
+
+                p["B->pi::alpha^f0_1@BSZ2015"] = 1.5;
+                p["B->pi::alpha^f0_2@BSZ2015"] = 1.5;
+
+                TEST_CHECK_NEARLY_EQUAL(1.00000, ff->f_0( 0.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.11998, ff->f_0( 5.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.28572, ff->f_0(10.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.53862, ff->f_0(15.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.00499, ff->f_0(20.0), eps);
+
+                p["B->pi::alpha^fT_0@BSZ2015"] =  1.0;
+                p["B->pi::alpha^fT_1@BSZ2015"] = -1.0;
+                p["B->pi::alpha^fT_2@BSZ2015"] =  2.5;
+
+                TEST_CHECK_NEARLY_EQUAL(1.00000, ff->f_t( 0.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.27271, ff->f_t( 5.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.73442, ff->f_t(10.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(2.64425, ff->f_t(15.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(4.99850, ff->f_t(20.0), eps);
+            }
+        }
+} bsz2015_form_factors_test;
 
 class BToKstarBZ2004FormFactorsTest :
     public TestCase

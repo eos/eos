@@ -303,10 +303,13 @@ namespace eos
             { KeyType("B->K::BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make             },
             { KeyType("B->K::KMPW2010"),      &KMPW2010FormFactors<PToP>::make                },
             { KeyType("B->K::BFW2010"),       &BFW2010FormFactors<BToK, PToP>::make           },
+            { KeyType("B->K::BSZ2015"),       &BSZ2015FormFactors<BToK, PToP>::make           },
             // b -> u
             { KeyType("B->pi::BCL2008"),      &BCL2008FormFactors<BToPi>::make                },
+            { KeyType("B->pi::BSZ2015"),      &BSZ2015FormFactors<BToPi, PToP>::make          },
             // b -> c
             { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD>::make                 },
+            { KeyType("B->D::BSZ2015"),       &BSZ2015FormFactors<BToD, PToP>::make           },
             // analytic computations
             { KeyType("B->pi::DKMMO2008"),    &AnalyticFormFactorBToPiDKMMO2008::make         },
             { KeyType("B->pi::B-LCSR"),       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make  },
@@ -324,6 +327,15 @@ namespace eos
     }
 
     /* P -> PP Processes */
+
+    constexpr double BToPi::m2_Br1m;
+    constexpr double BToPi::m2_Br0p;
+
+    constexpr double BToK::m2_Br1m;
+    constexpr double BToK::m2_Br0p;
+
+    constexpr double BToD::m2_Br1m;
+    constexpr double BToD::m2_Br0p;
 
     FormFactors<PToPP>::~FormFactors()
     {

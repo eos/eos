@@ -904,6 +904,97 @@ namespace eos
             }
     };
 
+    template <typename Process_> class BSZ2015FormFactors<Process_, PToP> :
+        public FormFactors<PToP>
+    {
+        private:
+            // fit parametrization for P -> P inspired by [BSZ2015]
+            std::array<UsedParameter, 3> _a_fp, _a_ft;
+            // use equation of motion to remove f_0(0) as a free parameter
+            std::array<UsedParameter, 2> _a_fz;
+
+            const double _mB, _mB2, _mP, _mP2;
+            const double _tau_p, _tau_0;
+            const double _z_0;
+
+            static double _calc_tau_0(const double & m_B, const double & m_P)
+            {
+                const double tau_p = power_of<2>(m_B + m_P);
+                const double tau_m = power_of<2>(m_B - m_P);
+                return tau_p * (1.0 - std::sqrt(1.0 - tau_m / tau_p));
+            }
+
+            double _calc_z(const double & s) const
+            {
+                return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
+            }
+
+            template <typename Parameter_>
+            double _calc_ff(const double & s, const double & m2_R, const std::array<Parameter_, 3> & a) const
+            {
+                const double diff_z = _calc_z(s) - _z_0;
+                return 1.0 / (1.0 - s / m2_R) *
+                       (a[0] + a[1] * diff_z + a[2] * power_of<2>(diff_z));
+            }
+
+            static std::string _par_name(const std::string & ff_name)
+            {
+                return std::string(Process_::label) + std::string("::alpha^") + ff_name + std::string("@BSZ2015");
+            }
+
+        public:
+            BSZ2015FormFactors(const Parameters & p, const Options &) :
+                _a_fp{{ UsedParameter(p[_par_name("f+_0")], *this),
+                        UsedParameter(p[_par_name("f+_1")], *this),
+                        UsedParameter(p[_par_name("f+_2")], *this) }},
+                _a_ft{{ UsedParameter(p[_par_name("fT_0")], *this),
+                        UsedParameter(p[_par_name("fT_1")], *this),
+                        UsedParameter(p[_par_name("fT_2")], *this) }},
+                _a_fz{{ UsedParameter(p[_par_name("f0_1")], *this),
+                        UsedParameter(p[_par_name("f0_2")], *this) }},
+                _mB(Process_::m_B),
+                _mB2(power_of<2>(_mB)),
+                _mP(Process_::m_P),
+                _mP2(power_of<2>(_mP)),
+                _tau_p(power_of<2>(_mB + _mP)),
+                _tau_0(_calc_tau_0(_mB, _mP)),
+                _z_0(_calc_z(0))
+            {
+            }
+
+            ~BSZ2015FormFactors()
+            {
+            }
+
+            static FormFactors<PToP> * make(const Parameters & parameters, const Options & options)
+            {
+                return new BSZ2015FormFactors(parameters, options);
+            }
+
+            virtual double f_p(const double & s) const
+            {
+                return _calc_ff(s, Process_::m2_Br1m, _a_fp);
+            }
+
+            virtual double f_t(const double & s) const
+            {
+                return _calc_ff(s, Process_::m2_Br1m, _a_ft);
+            }
+
+            virtual double f_0(const double & s) const
+            {
+                // use equation of motion to replace f_0(0) by f_+(0)
+                std::array<double, 3> values
+                {{
+                    _a_fp[0],
+                    _a_fz[1 - 1],
+                    _a_fz[2 - 1],
+                }};
+
+                return _calc_ff(s, Process_::m2_Br0p, values);
+            }
+    };
+
     /* Form Factors according to [BZ2004v2] */
     template <typename Process_> class BZ2004FormFactors<Process_, PToP> :
         public FormFactors<PToP>
