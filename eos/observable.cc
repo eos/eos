@@ -111,15 +111,17 @@ namespace eos
     }
 
     /* form factors as observables */
-    template <typename Transition_>
-    std::pair<QualifiedName, ObservableEntry *> make_observable(const char * name,
+    template <typename Transition_, typename Tuple_, typename ... Args_>
+    std::pair<QualifiedName, ObservableEntry *> make_form_factor_adapter(const char * name,
             const char * process,
-            double (FormFactors<Transition_>::* function)(const double &) const)
+            double (FormFactors<Transition_>::* _function)(const Args_ & ...) const,
+            const Tuple_ & kinematics_names)
     {
         QualifiedName qn(name);
         qnp::Prefix pp(process);
+        std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> function(_function);
 
-        return std::make_pair(qn, new FormFactorAdapterEntry<Transition_>(qn, pp, function));
+        return std::make_pair(qn, new FormFactorAdapterEntry<Transition_, Args_ ...>(qn, pp, function, kinematics_names));
     }
 
     template <typename Transition_>
@@ -149,20 +151,20 @@ namespace eos
             /* Form Factor for the Exclusive Decays */
 
             // B -> pi Form Factors
-            make_observable("B->pi::f_+(s)", "B->pi",
-                    &FormFactors<PToP>::f_p),
+            make_form_factor_adapter("B->pi::f_+(s)", "B->pi",
+                    &FormFactors<PToP>::f_p, std::make_tuple("s")),
 
-            make_observable("B->pi::f_+'(s)", "B->pi",
-                    &FormFactors<PToP>::f_p_d1),
+            make_form_factor_adapter("B->pi::f_+'(s)", "B->pi",
+                    &FormFactors<PToP>::f_p_d1, std::make_tuple("s")),
 
-            make_observable("B->pi::f_+''(s)", "B->pi",
-                    &FormFactors<PToP>::f_p_d2),
+            make_form_factor_adapter("B->pi::f_+''(s)", "B->pi",
+                    &FormFactors<PToP>::f_p_d2, std::make_tuple("s")),
 
-            make_observable("B->pi::f_T(s)", "B->pi",
-                    &FormFactors<PToP>::f_t),
+            make_form_factor_adapter("B->pi::f_T(s)", "B->pi",
+                    &FormFactors<PToP>::f_t, std::make_tuple("s")),
 
-            make_observable("B->pi::f_0(s)", "B->pi",
-                    &FormFactors<PToP>::f_0),
+            make_form_factor_adapter("B->pi::f_0(s)", "B->pi",
+                    &FormFactors<PToP>::f_0, std::make_tuple("s")),
 
             // B -> pi Form Factors (auxiliary variables, e.g. for determining the
             // LCSR/SVZ threshold parameters)
@@ -177,42 +179,42 @@ namespace eos
                     &AnalyticFormFactorBToPiDKMMO2008::decay_constant),
 
             // B -> K Form Factors
-            make_observable("B->K::f_+(s)", "B->K",
-                    &FormFactors<PToP>::f_p),
+            make_form_factor_adapter("B->K::f_+(s)", "B->K",
+                    &FormFactors<PToP>::f_p, std::make_tuple("s")),
 
-            make_observable("B->K::f_T(s)", "B->K",
-                    &FormFactors<PToP>::f_t),
+            make_form_factor_adapter("B->K::f_T(s)", "B->K",
+                    &FormFactors<PToP>::f_t, std::make_tuple("s")),
 
-            make_observable("B->K::f_0(s)", "B->K",
-                    &FormFactors<PToP>::f_0),
+            make_form_factor_adapter("B->K::f_0(s)", "B->K",
+                    &FormFactors<PToP>::f_0, std::make_tuple("s")),
 
             // B -> D^* Form Factors
-            make_observable("B->D^*::V(s)", "B->D^*",
-                            &FormFactors<PToV>::v),
+            make_form_factor_adapter("B->D^*::V(s)", "B->D^*",
+                            &FormFactors<PToV>::v, std::make_tuple("s")),
 
-            make_observable("B->D^*::A_0(s)", "B->D^*",
-                            &FormFactors<PToV>::a_0),
+            make_form_factor_adapter("B->D^*::A_0(s)", "B->D^*",
+                            &FormFactors<PToV>::a_0, std::make_tuple("s")),
 
-            make_observable("B->D^*::A_1(s)", "B->D^*",
-                            &FormFactors<PToV>::a_1),
+            make_form_factor_adapter("B->D^*::A_1(s)", "B->D^*",
+                            &FormFactors<PToV>::a_1, std::make_tuple("s")),
 
-            make_observable("B->D^*::A_2(s)", "B->D^*",
-                            &FormFactors<PToV>::a_2),
+            make_form_factor_adapter("B->D^*::A_2(s)", "B->D^*",
+                            &FormFactors<PToV>::a_2, std::make_tuple("s")),
 
-            make_observable("B->D^*::A_12(s)", "B->D^*",
-                            &FormFactors<PToV>::a_12),
+            make_form_factor_adapter("B->D^*::A_12(s)", "B->D^*",
+                            &FormFactors<PToV>::a_12, std::make_tuple("s")),
 
-            make_observable("B->D^*::T_1(s)", "B->D^*",
-                            &FormFactors<PToV>::t_1),
+            make_form_factor_adapter("B->D^*::T_1(s)", "B->D^*",
+                            &FormFactors<PToV>::t_1, std::make_tuple("s")),
 
-            make_observable("B->D^*::T_2(s)", "B->D^*",
-                            &FormFactors<PToV>::t_2),
+            make_form_factor_adapter("B->D^*::T_2(s)", "B->D^*",
+                            &FormFactors<PToV>::t_2, std::make_tuple("s")),
 
-            make_observable("B->D^*::T_3(s)", "B->D^*",
-                            &FormFactors<PToV>::t_3),
+            make_form_factor_adapter("B->D^*::T_3(s)", "B->D^*",
+                            &FormFactors<PToV>::t_3, std::make_tuple("s")),
 
-            make_observable("B->D^*::T_23(s)", "B->D^*",
-                            &FormFactors<PToV>::t_23),
+            make_form_factor_adapter("B->D^*::T_23(s)", "B->D^*",
+                            &FormFactors<PToV>::t_23, std::make_tuple("s")),
 
             make_observable("B->D^*::V(s)/A_1(s)", "B->D^*",
                             &FormFactors<PToV>::v, &FormFactors<PToV>::a_1),
@@ -227,32 +229,32 @@ namespace eos
                             &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
 
             // B -> K^* Form Factors
-            make_observable("B->K^*::V(s)", "B->K^*",
-                    &FormFactors<PToV>::v),
+            make_form_factor_adapter("B->K^*::V(s)", "B->K^*",
+                    &FormFactors<PToV>::v, std::make_tuple("s")),
 
-            make_observable("B->K^*::A_0(s)", "B->K^*",
-                    &FormFactors<PToV>::a_0),
+            make_form_factor_adapter("B->K^*::A_0(s)", "B->K^*",
+                    &FormFactors<PToV>::a_0, std::make_tuple("s")),
 
-            make_observable("B->K^*::A_1(s)", "B->K^*",
-                    &FormFactors<PToV>::a_1),
+            make_form_factor_adapter("B->K^*::A_1(s)", "B->K^*",
+                    &FormFactors<PToV>::a_1, std::make_tuple("s")),
 
-            make_observable("B->K^*::A_2(s)", "B->K^*",
-                    &FormFactors<PToV>::a_2),
+            make_form_factor_adapter("B->K^*::A_2(s)", "B->K^*",
+                    &FormFactors<PToV>::a_2, std::make_tuple("s")),
 
-            make_observable("B->K^*::A_12(s)", "B->K^*",
-                    &FormFactors<PToV>::a_12),
+            make_form_factor_adapter("B->K^*::A_12(s)", "B->K^*",
+                    &FormFactors<PToV>::a_12, std::make_tuple("s")),
 
-            make_observable("B->K^*::T_1(s)", "B->K^*",
-                    &FormFactors<PToV>::t_1),
+            make_form_factor_adapter("B->K^*::T_1(s)", "B->K^*",
+                    &FormFactors<PToV>::t_1, std::make_tuple("s")),
 
-            make_observable("B->K^*::T_2(s)", "B->K^*",
-                    &FormFactors<PToV>::t_2),
+            make_form_factor_adapter("B->K^*::T_2(s)", "B->K^*",
+                    &FormFactors<PToV>::t_2, std::make_tuple("s")),
 
-            make_observable("B->K^*::T_3(s)", "B->K^*",
-                    &FormFactors<PToV>::t_3),
+            make_form_factor_adapter("B->K^*::T_3(s)", "B->K^*",
+                    &FormFactors<PToV>::t_3, std::make_tuple("s")),
 
-            make_observable("B->K^*::T_23(s)", "B->K^*",
-                    &FormFactors<PToV>::t_23),
+            make_form_factor_adapter("B->K^*::T_23(s)", "B->K^*",
+                    &FormFactors<PToV>::t_23, std::make_tuple("s")),
 
             make_observable("B->K^*::V(s)/A_1(s)", "B->K^*",
                     &FormFactors<PToV>::v, &FormFactors<PToV>::a_1),
@@ -267,32 +269,32 @@ namespace eos
                     &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
 
             // B -> rho Form Factors
-            make_observable("B->rho::V(s)", "B->rho",
-                            &FormFactors<PToV>::v),
+            make_form_factor_adapter("B->rho::V(s)", "B->rho",
+                            &FormFactors<PToV>::v, std::make_tuple("s")),
 
-            make_observable("B->rho::A_0(s)", "B->rho",
-                            &FormFactors<PToV>::a_0),
+            make_form_factor_adapter("B->rho::A_0(s)", "B->rho",
+                            &FormFactors<PToV>::a_0, std::make_tuple("s")),
 
-            make_observable("B->rho::A_1(s)", "B->rho",
-                            &FormFactors<PToV>::a_1),
+            make_form_factor_adapter("B->rho::A_1(s)", "B->rho",
+                            &FormFactors<PToV>::a_1, std::make_tuple("s")),
 
-            make_observable("B->rho::A_2(s)", "B->rho",
-                            &FormFactors<PToV>::a_2),
+            make_form_factor_adapter("B->rho::A_2(s)", "B->rho",
+                            &FormFactors<PToV>::a_2, std::make_tuple("s")),
 
-            make_observable("B->rho::A_12(s)", "B->rho",
-                            &FormFactors<PToV>::a_12),
+            make_form_factor_adapter("B->rho::A_12(s)", "B->rho",
+                            &FormFactors<PToV>::a_12, std::make_tuple("s")),
 
-            make_observable("B->rho::T_1(s)", "B->rho",
-                            &FormFactors<PToV>::t_1),
+            make_form_factor_adapter("B->rho::T_1(s)", "B->rho",
+                            &FormFactors<PToV>::t_1, std::make_tuple("s")),
 
-            make_observable("B->rho::T_2(s)", "B->rho",
-                            &FormFactors<PToV>::t_2),
+            make_form_factor_adapter("B->rho::T_2(s)", "B->rho",
+                            &FormFactors<PToV>::t_2, std::make_tuple("s")),
 
-            make_observable("B->rho::T_3(s)", "B->rho",
-                            &FormFactors<PToV>::t_3),
+            make_form_factor_adapter("B->rho::T_3(s)", "B->rho",
+                            &FormFactors<PToV>::t_3, std::make_tuple("s")),
 
-            make_observable("B->rho::T_23(s)", "B->rho",
-                            &FormFactors<PToV>::t_23),
+            make_form_factor_adapter("B->rho::T_23(s)", "B->rho",
+                            &FormFactors<PToV>::t_23, std::make_tuple("s")),
 
             make_observable("B->rho::V(s)/A_1(s)", "B->rho",
                             &FormFactors<PToV>::v, &FormFactors<PToV>::a_1),
@@ -307,74 +309,83 @@ namespace eos
                             &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
 
             // B -> D Form Factors
-            make_observable("B->D::f_+(s)", "B->D",
-                    &FormFactors<PToP>::f_p),
+            make_form_factor_adapter("B->D::f_+(s)", "B->D",
+                    &FormFactors<PToP>::f_p, std::make_tuple("s")),
 
-            make_observable("B->D::f_0(s)", "B->D",
-                    &FormFactors<PToP>::f_0),
+            make_form_factor_adapter("B->D::f_0(s)", "B->D",
+                    &FormFactors<PToP>::f_0, std::make_tuple("s")),
 
             // B_s -> K^* Form Factors
-            make_observable("B_s->K^*::V(s)", "B_s->K^*",
-                    &FormFactors<PToV>::v),
+            make_form_factor_adapter("B_s->K^*::V(s)", "B_s->K^*",
+                    &FormFactors<PToV>::v, std::make_tuple("s")),
 
-            make_observable("B_s->K^*::A_0(s)", "B_s->K^*",
-                    &FormFactors<PToV>::a_0),
+            make_form_factor_adapter("B_s->K^*::A_0(s)", "B_s->K^*",
+                    &FormFactors<PToV>::a_0, std::make_tuple("s")),
 
-            make_observable("B_s->K^*::A_1(s)", "B_s->K^*",
-                    &FormFactors<PToV>::a_1),
+            make_form_factor_adapter("B_s->K^*::A_1(s)", "B_s->K^*",
+                    &FormFactors<PToV>::a_1, std::make_tuple("s")),
 
-            make_observable("B_s->K^*::A_2(s)", "B_s->K^*",
-                    &FormFactors<PToV>::a_2),
+            make_form_factor_adapter("B_s->K^*::A_2(s)", "B_s->K^*",
+                    &FormFactors<PToV>::a_2, std::make_tuple("s")),
 
-            make_observable("B_s->K^*::A_12(s)", "B_s->K^*",
-                    &FormFactors<PToV>::a_12),
+            make_form_factor_adapter("B_s->K^*::A_12(s)", "B_s->K^*",
+                    &FormFactors<PToV>::a_12, std::make_tuple("s")),
 
-            make_observable("B->pipi::Im{F_perp}(q2,k2,z)",
-                    &AnalyticFormFactorBToPiPiBFvD2016::im_f_perp,
-                    std::make_tuple("q2", "k2", "z")),
+            // B -> pi pi Form Factors
+            make_form_factor_adapter("B->pipi::Im{F_perp}(q2,k2,z)", "B->pipi",
+                    &FormFactors<PToPP>::im_f_perp, std::make_tuple("q2", "k2", "z")),
 
-            make_observable("B->pipi::Im{F_para}(q2,k2,z)",
-                    &AnalyticFormFactorBToPiPiBFvD2016::im_f_para,
-                    std::make_tuple("q2", "k2", "z")),
+            make_form_factor_adapter("B->pipi::Im{F_para}(q2,k2,z)", "B->pipi",
+                    &FormFactors<PToPP>::im_f_para, std::make_tuple("q2", "k2", "z")),
 
-            make_observable("B->pipi::Im{F_long}(q2,k2,z)",
-                    &AnalyticFormFactorBToPiPiBFvD2016::im_f_long,
-                    std::make_tuple("q2", "k2", "z")),
+            make_form_factor_adapter("B->pipi::Im{F_long}(q2,k2,z)", "B->pipi",
+                    &FormFactors<PToPP>::im_f_long, std::make_tuple("q2", "k2", "z")),
 
-            make_observable("B->pipi::Im{F_time}(q2,k2,z)",
-                    &AnalyticFormFactorBToPiPiBFvD2016::im_f_time,
-                    std::make_tuple("q2", "k2", "z")),
+            make_form_factor_adapter("B->pipi::Im{F_time}(q2,k2,z)", "B->pipi",
+                    &FormFactors<PToPP>::im_f_time, std::make_tuple("q2", "k2", "z")),
+
+            make_form_factor_adapter("B->pipi::Im{Res{F_perp}}(q2,k2)", "B->pipi",
+                    &FormFactors<PToPP>::f_perp_im_res_qhat2, std::make_tuple("q2", "k2")),
+
+            make_form_factor_adapter("B->pipi::Im{Res{F_para}}(q2,k2)", "B->pipi",
+                    &FormFactors<PToPP>::f_para_im_res_qhat2, std::make_tuple("q2", "k2")),
+
+            make_form_factor_adapter("B->pipi::Im{Res{F_long}}(q2,k2)", "B->pipi",
+                    &FormFactors<PToPP>::f_long_im_res_qhat2, std::make_tuple("q2", "k2")),
+
+            make_form_factor_adapter("B->pipi::Im{Res{F_time}}(q2,k2)", "B->pipi",
+                    &FormFactors<PToPP>::f_time_im_res_qhat2, std::make_tuple("q2", "k2")),
 
             // Lambda_b -> Lambda Form Factors
-            make_observable("Lambda_b->Lambda::f_time^V(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_v),
+            make_form_factor_adapter("Lambda_b->Lambda::f_time^V(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_v, std::make_tuple("s")),
 
-            make_observable("Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_v),
+            make_form_factor_adapter("Lambda_b->Lambda::f_long^V(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_v, std::make_tuple("s")),
 
-            make_observable("Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_v),
+            make_form_factor_adapter("Lambda_b->Lambda::f_perp^V(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_v, std::make_tuple("s")),
 
-            make_observable("Lambda_b->Lambda::f_time^A(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_a),
+            make_form_factor_adapter("Lambda_b->Lambda::f_time^A(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_a, std::make_tuple("s")),
 
-            make_observable("Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_a),
+            make_form_factor_adapter("Lambda_b->Lambda::f_long^A(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_a, std::make_tuple("s")),
 
-            make_observable("Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_a),
+            make_form_factor_adapter("Lambda_b->Lambda::f_perp^A(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_a, std::make_tuple("s")),
 
-            make_observable("Lambda_b->Lambda::f_long^T(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t),
+            make_form_factor_adapter("Lambda_b->Lambda::f_long^T(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t, std::make_tuple("s")),
 
-            make_observable("Lambda_b->Lambda::f_perp^T(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t),
+            make_form_factor_adapter("Lambda_b->Lambda::f_perp^T(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t, std::make_tuple("s")),
 
-            make_observable("Lambda_b->Lambda::f_long^T5(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t5),
+            make_form_factor_adapter("Lambda_b->Lambda::f_long^T5(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t5, std::make_tuple("s")),
 
-            make_observable("Lambda_b->Lambda::f_perp^T5(s)", "Lambda_b->Lambda",
-                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t5),
+            make_form_factor_adapter("Lambda_b->Lambda::f_perp^T5(s)", "Lambda_b->Lambda",
+                    &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t5, std::make_tuple("s")),
 
             // Zero-Recoil Sum Rule for the Lambda_b -> Lambda_c Form Factors
             make_observable("Lambda_b->Lambda_c::F(1)",

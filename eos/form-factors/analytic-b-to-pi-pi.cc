@@ -1,7 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016, 2018 Danny van Dyk
+ * Copyright (c) 2018 Keri Vos
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -30,13 +31,6 @@
 #include <eos/utils/qcd.hh>
 
 #include <functional>
-
-#if 0
-#include <gsl/gsl_monte.h>
-#include <gsl/gsl_monte_miser.h>
-
-#include <iostream>
-#endif
 
 namespace eos
 {
@@ -559,8 +553,193 @@ namespace eos
         return _imp->ff_lo_tw2(tr, q2, k2, z) + _imp->ff_lo_tw3(tr, q2, k2, z);
     }
 
+    double
+    AnalyticFormFactorBToPiPiBFvD2016::f_perp_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    double
+    AnalyticFormFactorBToPiPiBFvD2016::f_para_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    double
+    AnalyticFormFactorBToPiPiBFvD2016::f_long_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
+    double
+    AnalyticFormFactorBToPiPiBFvD2016::f_time_im_res_qhat2(const double & /*q2*/, const double & /*k2*/) const
+    {
+        throw InternalError("Not yet implemented");
+
+        return 0.0;
+    }
+
     Diagnostics
     AnalyticFormFactorBToPiPiBFvD2016::diagnostics() const
+    {
+        return _imp->diagnostics();
+    }
+
+    template <>
+    struct Implementation<AnalyticFormFactorBToPiPiFvDV2018>
+    {
+        std::shared_ptr<Model> model;
+
+        std::shared_ptr<FormFactors<PToP>> b_to_pi_ff;
+
+        // hadronic parameters
+        UsedParameter m_B;
+        UsedParameter m_Bst;
+        UsedParameter g_BstBpi;
+
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            model(Model::make("SM", p, o)),
+            b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi@" + o.get("soft-form-factor", "BCL2008"), p)),
+            m_B(p["mass::B_d"], u),
+            m_Bst(p["mass::B^*_d"], u),
+            g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u)
+        {
+        }
+
+        inline double xi_pi(const double & q2) const
+        {
+            return b_to_pi_ff->f_p(q2);
+        }
+
+        inline double lambda(const double & q2, const double & k2) const
+        {
+            return eos::lambda(q2, k2, m_B() * m_B());
+        }
+
+        inline double f_perp_im_res_qhat2(const double & q2, const double & k2) const
+        {
+            const double m_B2 = pow(this->m_B(), 2);
+            const double m_Bst2 = pow(this->m_Bst(), 2);
+            /* divided by i */
+            const double Im_contracted_T_perp = -1.0 * sqrt(k2 * lambda(q2, k2)) * (m_B2 + m_Bst2)
+                    / (4.0 * m_B() * m_Bst2);
+
+            return xi_pi(q2) * g_BstBpi() * Im_contracted_T_perp;
+        }
+
+        inline double f_para_im_res_qhat2(const double & q2, const double & k2) const
+        {
+            const double m_B2 = pow(this->m_B(), 2), m_B4 = pow(this->m_B(), 4);
+            const double m_Bst2 = pow(this->m_Bst(), 2);
+            /* divided by i */
+            const double Im_contracted_T_para = -1.0 * sqrt(k2) * (m_B4 + m_Bst2 * (q2 - k2) + m_B2 * (q2 - 3.0 * m_Bst2 - k2))
+                    / (4.0 * m_B() * m_Bst2);
+
+            return xi_pi(q2) * g_BstBpi() * Im_contracted_T_para;
+        }
+
+        inline double f_long_im_res_qhat2(const double & q2, const double & k2) const
+        {
+            const double m_B2 = pow(this->m_B(), 2);
+            const double m_Bst2 = pow(this->m_Bst(), 2);
+            /* divided by i */
+            const double Im_contracted_T_long = -1.0 * (k2 * (m_B2 + m_Bst2) - (m_B2 - q2) * (m_B2 - m_Bst2))
+                    * (k2 * m_Bst2 + m_B2 * (q2 - m_Bst2))
+                    / (2.0 * m_B() * m_Bst2 * std::sqrt(q2 * lambda(q2, k2)));
+
+            return xi_pi(q2) * g_BstBpi() * Im_contracted_T_long;
+        }
+
+        inline double f_time_im_res_qhat2(const double & q2, const double & k2) const
+        {
+            const double m_B2 = pow(this->m_B(), 2);
+            const double m_Bst2 = pow(this->m_Bst(), 2);
+            /* divided by i */
+            const double Im_contracted_T_time = -1.0 * (m_B2 * (m_B2 - m_Bst2) * (m_Bst2 - q2) - k2 * m_Bst2 * (m_B2 + m_Bst2))
+                    / (2.0 * m_B() * m_Bst2 * std::sqrt(q2));
+
+            return xi_pi(q2) * g_BstBpi() * Im_contracted_T_time;
+        }
+
+        Diagnostics diagnostics() const
+        {
+            Diagnostics results;
+
+            return results;
+        }
+    };
+
+    AnalyticFormFactorBToPiPiFvDV2018::AnalyticFormFactorBToPiPiFvDV2018(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<AnalyticFormFactorBToPiPiFvDV2018>(new Implementation<AnalyticFormFactorBToPiPiFvDV2018>(p, o, *this))
+    {
+    }
+
+    AnalyticFormFactorBToPiPiFvDV2018::~AnalyticFormFactorBToPiPiFvDV2018()
+    {
+    }
+
+    FormFactors<PToPP> *
+    AnalyticFormFactorBToPiPiFvDV2018::make(const Parameters & p, const Options & o)
+    {
+        return new AnalyticFormFactorBToPiPiFvDV2018(p, o);
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiFvDV2018::f_perp(const double & /*q2*/, const double & /*k2*/, const double & /*z*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiFvDV2018::f_para(const double & /*q2*/, const double & /*k2*/, const double & /*z*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiFvDV2018::f_long(const double & /*q2*/, const double & /*k2*/, const double & /*z*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    complex<double>
+    AnalyticFormFactorBToPiPiFvDV2018::f_time(const double & /*q2*/, const double & /*k2*/, const double & /*z*/) const
+    {
+        throw InternalError("Not available");
+    }
+
+    double
+    AnalyticFormFactorBToPiPiFvDV2018::f_perp_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        return _imp->f_perp_im_res_qhat2(q2, k2);
+    }
+
+    double
+    AnalyticFormFactorBToPiPiFvDV2018::f_para_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        return _imp->f_para_im_res_qhat2(q2, k2);
+    }
+
+    double
+    AnalyticFormFactorBToPiPiFvDV2018::f_long_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        return _imp->f_long_im_res_qhat2(q2, k2);
+    }
+
+    double
+    AnalyticFormFactorBToPiPiFvDV2018::f_time_im_res_qhat2(const double & q2, const double & k2) const
+    {
+        return _imp->f_time_im_res_qhat2(q2, k2);
+    }
+
+    Diagnostics
+    AnalyticFormFactorBToPiPiFvDV2018::diagnostics() const
     {
         return _imp->diagnostics();
     }

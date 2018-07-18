@@ -34,7 +34,7 @@ The Phython \cite{Python} interface to \EOS requires the additional software:
     \item[\package{python3}] python3 interpreter in version 3.5 or higher, and required header files;
     \item[\package{BOOST}] the BOOST C++ library \package{boost-python} for interfacing Python and C++;
     \item[\package{h5py}] the Python interface to HDF5;
-    \item[\package{matplotlib}] the Python plotting library;
+    \item[\package{matplotlib}] the Python plotting library in version 2.0 or higher;
     \item[\package{scipy}] the Python scientific library;
     \item[\package{PyYAML}] the Python YAML parser and emitter library.
 \end{description}
@@ -53,9 +53,30 @@ The optional (and highly recommended) \gls{PMC} sampling algorithm requires:
     \item[\package{pmclib}] a free implementation of said algorithm \cite{libpmc}, in version 1.01 or higher.
 \end{description}
 
+\textbf{If you have administrator access to the computers on which they use EOS}\quad
 We recommend you install the above packages via your system's software
 management system, except for \package{pmclib} and \package{Minuit2} in particular
-cases discussed below.
+cases discussed below. In this case \package{pmclib} and \package{Minuit2} should
+be installed below \directory{/usr/local}. This can be achieved through
+\begin{commandline}
+export PREFIX=/usr/local
+\end{commandline}
+and following the installation instructions in \refsec{inst:depend:minuit2+pmclib-source}.
+We strongly discourage using \directory{/usr}, which avoids conflicts with
+your operating system's package management software.\\
+
+\textbf{Users without administrator access}\quad
+We recommend you ask your administrator to install as many of the above packages via your
+system's software. In a compute cluster environment, some of the packages might be
+available through a \package{module} environment. For the remaining packages,
+including \package{pmclib} and \package{Minuit2}, we recommend to install the software
+below \directory{\${HOME}/.local}. This can be achieved through:
+\begin{commandline}
+export PREFIX=${HOME}/.local
+\end{commandline}
+For \package{pmclib} and \package{Minuit2} you can follow the instructions in
+\refsec{inst:minuit2+pmclib-source}. For all other packages you should follow the recommendations
+in their respective installation instructions.
 
 \subsection{Linux: Installing the dependencies with \package{APT} (Debian, Ubuntu)}
 
@@ -71,7 +92,15 @@ sudo apt-get install libgsl0-dev libhdf5-serial-dev libfftw3-dev
 \end{commandline}
 Do not install \package{Minuit2} via \package{APT}, since there is presently a
 bug in the Debian/Ubuntu packages for \package{Minuit2}, which prevents
-linking.\\
+linking. On Ubuntu Xenial you must upgrade \package{matplotlib} to version 2.0 or higher:
+\begin{commandline}
+# for the 'pip3' command
+apt-get install python3-pip
+# if you administrate your computer yourself
+pip3 install matplotlib --upgrade
+# otherwise
+pip3 install matplotlib --user
+\end{commandline}
 
 
 There are pre-built binary package files for
@@ -98,6 +127,7 @@ apt-get install minuit2 libpmc
 You can then proceed with the EOS installation as documented in \refsec{inst:EOS}.
 
 \subsection{Linux: Installing \package{Minuit2} and \package{pmclib} from source}
+\label{sec:inst:depend:minuit2+pmclib-source}
 
 To install \package{Minuit2} from source, you need to disable the automatic support
 for OpenMP. Execute the following commands:
@@ -107,9 +137,10 @@ pushd /tmp/Minuit2
 wget http://www.cern.ch/mathlibs/sw/5_28_00/Minuit2/Minuit2-5.28.00.tar.gz
 tar zxf Minuit2-5.28.00.tar.gz
 pushd Minuit2-5.28.00
-./configure --prefix=/opt/pkgs/Minuit2-5.28.00 --disable-openmp
+./configure --prefix=$PREFIX --disable-openmp
 make all
-sudo make install
+make install # Use 'sudo make install' if you install e.g. to 'PREFIX=/usr/local'
+             # or a similarly privileged directory
 popd
 popd
 rm -R /tmp/Minuit2
@@ -124,10 +155,12 @@ pushd /tmp/libpmc
 wget http://www2.iap.fr/users/kilbinge/CosmoPMC/pmclib_v1.01.tar.gz
 tar zxf pmclib_v1.01.tar.gz
 pushd pmclib_v1.01
-./waf configure --m64 --prefix=/opt/pkgs/pmclib-1.01
+./waf configure --m64 --prefix=$PREFIX
 ./waf
-sudo ./waf install
-sudo find /opt/pkgs/pmclib-1.01/include -name "*.h" \
+./waf install # Use 'sudo ./waf install' if you install e.g. to 'PREFIX=/usr/local'
+              # or a similarly privileged directory
+              # In this case, sudo will be required also for the next to commands
+find $PREFIX/include -name "*.h" \
     -exec sed -i \
     -e 's/#include "errorlist\.h"/#include <pmctools\/errorlist.h>/' \
     -e 's/#include "io\.h"/#include <pmctools\/io.h>/' \
@@ -135,10 +168,10 @@ sudo find /opt/pkgs/pmclib-1.01/include -name "*.h" \
     -e 's/#include "maths\.h"/#include <pmctools\/maths.h>/' \
     -e 's/#include "maths_base\.h"/#include <pmctools\/maths_base.h>/' \
     {} \;
-sudo sed -i \
+sed -i \
     -e 's/^double fmin(double/\/\/&/' \
     -e 's/^double fmax(double/\/\/&/' \
-    /opt/pkgs/pmclib-1.01/include/pmctools/maths.h
+    $PREFIX/include/pmctools/maths.h
 popd
 popd
 rm -R /tmp/libpmc
@@ -197,38 +230,31 @@ You can then proceed with the EOS installation as documented in \refsec{inst:EOS
 \section{Installing EOS}
 \label{sec:inst:EOS}
 
-You can obtain the most recent version of EOS is available from Github
-\footnote{\url{http://github.com/eos/eos}}.  To download it for the first time,
-clone the repository via
+\textbf{Most recent development software}\quad
+You can obtain the most recent version of EOS from the Github repository.
+To download it for the first time, clone the repository via
 %
 \begin{commandline}
 git clone -o eos -b master https://github.com/eos/eos.git
 \end{commandline}
 
-You must first create all the necessary build scripts via
+For installation from the source code repository, you must first create all the necessary build scripts via
 %
 \begin{commandline}
 cd eos
 ./autogen.bash
 \end{commandline}
 %
-You must specify where \EOS will be installed by setting the \envvar{PREFIX}
-environment variable.
-\begin{enumerate}
-    \item If you are administrating the computer on which you install EOS,
-    you may choose any prefix. We recommend \directory{/usr/local}:
-\begin{commandline}
-export PREFIX=/usr/local
-\end{commandline}
-    We strongly discourage using \directory{/usr}, which avoids conflicts with
-    your operating system's package management software.
-    \item If you are not administrating the computer, you must install EOS into
-    a directory below your home directory or below any other directory for which
-    you have the needed permissions. We recommend \directory{\$HOME/.local}:
-\begin{commandline}
-export PREFIX=$HOME/.local/
-\end{commandline}
-\end{enumerate}
+
+\textbf{Versioned releases}\quad
+Alternatively, you can download one of the versioned releases from the Github releases page
+\footnote{\url{http://github.com/eos/eos/releases}}. In this case, you can
+untar the compressed tarball and continue without running the \cli{./autogen.bash}
+command.\\
+
+For both cases above you must specify where \EOS will be installed. To proceed we
+require the user to have set the \envvar{PREFIX} environment variable following
+the discussion in \refsec{inst:depend:overview}.
 
 \subsubsection{Configuration}
 
@@ -241,14 +267,16 @@ Next, you must configure the \EOS build using the \cli{configure} script.
     to \cli{configure}. The default is \cli{--disable-pmc}.
     If you installed \package{pmclib} from source to a non-standard location,
     you must specify its installation prefix by passing on
-    \cli{--with-pmc=PMC-INSTALLATION-PREFIX}.
+    \cli{--with-pmc=PMC-INSTALLATION-PREFIX}. If you followed the instructions in this
+    manual, then \cli{PMC-INSTALLATION-PREFIX} corresponds to the value of \envvar{PREFIX}.
 
     \item If you want to use \package{ROOT}'s internal copy of Minuit2 you must
     pass \cli{--with-minuit2=root} to \cli{configure}.
 
     \item Otherwise, if you have installed \package{Minuit2} from source to a non-standard location
     you must specify its installation prefix by passing on
-    \cli{--with-minuit2=MINUIT2-INSTALLATION-PREFIX}.
+    \cli{--with-minuit2=MINUIT2-INSTALLATION-PREFIX}. If you followed the instructions in this
+    manual, then \cli{MINUIT2-INSTALLATION-PREFIX} corresponds to the value of \envvar{PREFIX}.
 \end{enumerate}
 %
 The recommended configuration is achieved using
@@ -279,7 +307,7 @@ within the build directory. Please contact the authors if any
 test fails by opening an issue in the official
 \EOS Github repository. If all tests pass, install \EOS using
 \begin{commandline}
-make install # Use 'sudo make install' if you install e.g. to '/usr/local'
+make install # Use 'sudo make install' if you install e.g. to 'PREFIX=/usr/local'
              # or a similarly privileged directory
 \end{commandline}
 

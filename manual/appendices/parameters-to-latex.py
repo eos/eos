@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # vim: set sw=4 sts=4 et tw=120 :
 
 import collections
@@ -12,21 +12,37 @@ _mapping_tag = yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG
 def dict_representer(dumper, data):
     return dumper.represent_dict(data.iteritems())
 
+
 def dict_constructor(loader, node):
     return collections.OrderedDict(loader.construct_pairs(node))
+
 
 yaml.add_representer(collections.OrderedDict, dict_representer)
 yaml.add_constructor(_mapping_tag, dict_constructor)
 
+references = { }
+
+def lookup(key):
+    global references
+
+    if not key in references:
+        return 'reference-unknown'
+
+    ref = references[key]
+    if not 'inspire-id' in ref:
+        return 'inspire-id-unknown'
+    else:
+        return ref['inspire-id']
+
 
 def replace(s):
     replacements = [
-        (r"@MATH\[([^\]]*)\]@",     r"$\1$"),
-        (r"@REF\[(.*)\]@",         r"\cite{\1}"),
+        (r"@MATH\[([^\]]*)\]@",    r'$\1$'),
+        (r'@REF\[([^\]]*)\]@',     lambda m: r'\cite{{{}}}'.format(lookup(str(m.group(1))))),
     ]
     result = s
-    for r in replacements:
-        result = re.sub(r[0], r[1], result)
+    for (e, r) in replacements:
+        result = re.sub(e, r, result)
 
     return result
 
@@ -35,6 +51,14 @@ def main():
     if not len(sys.argv) == 2:
         print('2 arguments required, {} given!'.format(len(sys.argv) - 1))
         exit(-1)
+
+    global references
+    with open('../../eos/references.yaml') as ref_file:
+        try:
+            references = yaml.load(ref_file)
+        except yaml.YAMLERROR as e:
+            print(e)
+            exit(-1)
 
     infilename = sys.argv[1]
 

@@ -329,6 +329,7 @@
     collaboration: "UTfit"
     title: "The Unitarity Triangle Fit in the Standard Model and Hadronic Parameters from Lattice QCD: A Reappraisal after the Measurements of Delta m_s and BR(B ---> tau nu)"
     journal: "JHEP 10 (2006) 081"
+    inspire-id: "Bona:2006ah"
     eprint: "arXiv:hep-ph/0606167"
     note:  "Standard model fit, pre-Moriond results 2013"
     url:  "http://www.utfit.org/UTfit/ResultsWinter2013PreMoriond"
@@ -367,6 +368,7 @@
 "ALGH2001" :
     authors: ["Ali, A.", "Lunghi, E.", "Greub, C.", "Hiller, G."]
     title: "Improved Model-Independent Analysis of Semileptonic and Radiative Rare B Decays"
+    inspire-id: "Ali:2002jg"
     eprint: "arXiv:hep-ph/0112300"
 
 "B1998" :
@@ -394,9 +396,16 @@
     title: "Higher-Twist Distribution Amplitudes of the K Meson in QCD"
     eprint: "arXiv:hep-ph/0603063"
 
+"BBMU2003" :
+    authors: "Benson, D and Bigi, I.I. and Mannel, Th. and Uraltsev, N."
+    title: "Imprecated, yet impeccable: On the theoretical evaluation of Gamma(B ---> X(c) l nu)"
+    inspire-id: "Benson:2003kp"
+    eprint: "arXiv:hep-ph/0302262"
+
 "BCL2008" :
     authors: "Bourrely, C and Caprini, I. and Lellouch, L."
     title: "Model-independent description of B -> pi l nu decays and a determination of |V_ub|"
+    inspire-id: "Bourrely:2008za"
     eprint: "arXiv:0807.2722"
 
 "BCMU2002" :
@@ -452,6 +461,7 @@
 "BHvD2010" :
     authors: "Bobeth, C. and Hiller, G. and van Dyk, D."
     title: "The Benefits of B -> K^* l^+ l^- Decays at Low Recoil"
+    inspire-id: "Bobeth:2010wg"
     eprint: "arXiv:1006.5013 [hep-ph]"
 
 "BHvD2011" :
@@ -462,6 +472,7 @@
 "BHvD2012" :
     authors: "Bobeth, C. and Hiller, G. and van Dyk, D."
     title: "General Analysis and Optimal Observables in B -> K^* (-> K pi) l^+ l^- at Low Recoil"
+    inspire-id: "Bobeth:2012vn"
     eprint: "arXiv:1212.2321"
 
 "BIvD2016" :
@@ -477,6 +488,7 @@
 "BMU1999" :
     authors: "Bobeth, C. and Misiak, M. and Urban, J."
     title: "Photonic penguins at two loops and m_t-dependence of BR[B -> X_s l^+ l^-]"
+    inspire-id: "Bobeth:1999mk"
     eprint: "arXiv:hep-ph/9910220"
 
 "BS2011" :
@@ -570,6 +582,11 @@
     title: "Power suppressed effects in Bbar -> X_s gamma at O(alpha_s)"
     eprint: "arXiv:0911.2175"
 
+"Fermilab-MILC-2014" :
+    authors: "J. A. Bailey et. al. [Fermilab/MILC]"
+    title: "Update of $|V_{cb}|$ from the ${\bar B} \to D^{*} \ell {\bar \nu}$ form factor at zero recoil with three-flavor lattice QCD"
+    eprint: "arXiv:1403.0635"
+
 "F2012" :
     authors: "Fleischer, R."
     title: "On Branching Ratios of B_s Decays and the Search for New Physics in B0_s -> mu^+ mu^-"
@@ -630,6 +647,11 @@
     authors: "Na, H. et al. [HPQCD]"
     title: "B ---> D l nu Form Factors at Non-Zero Recoil and Extraction of |V_cb|"
     eprint: "arXiv:1505.03925"
+
+"HPQCD-2017" :
+    authors: "J. Harrison, C. T. H. Davies, M. Wintage [HPQCD]"
+    title: "Lattice QCD calculation of the $B_{(s)} \to D^{*}_{(s)} \ell \nu$ form factors at zero recoil and implications for $|V_{cb}|$"
+    eprint: "arXiv:1711.11013"
 
 "IKKR2007" :
     authors: "Ivanov, M.A. and Korner, J.G. and Kovalenko, S.G. and Roberts, C.D."

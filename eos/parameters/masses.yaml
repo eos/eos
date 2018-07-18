@@ -30,7 +30,7 @@
 "mass::s(2GeV)" :
     central: +0.095
     min:     +0.090
-    max:     +0.010
+    max:     +0.10
     comments: "cf. [PDG2012], p. 21"
 "mass::c" :
     central: +1.275
@@ -141,6 +141,11 @@
     min:     +5.36653
     max:     +5.36701
     comments: "cf. [PDG2012], p. 105"
+"mass::B^*_d" :
+    central: +5.32465
+    min:     +5.32440
+    max:     +5.32490
+    comments: "cf. [PDG2012], p. 84"
 
 # s baryon masses
 "mass::Lambda" :

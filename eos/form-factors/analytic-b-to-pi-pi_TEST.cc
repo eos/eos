@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2018 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -262,3 +263,40 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
             }
         }
 } analytic_form_factor_b_to_pi_pi_BFvD2016_test;
+
+class AnalyticFormFactorBToPiPiFvDV2018Test :
+    public TestCase
+{
+    public:
+        AnalyticFormFactorBToPiPiFvDV2018Test() :
+            TestCase("analytic_form_factor_b_to_pi_pi_FvDV2018_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const double eps = 1.0e-5;
+
+            Parameters p = Parameters::Defaults();
+            p["mass::B_d"] = 5.2795;
+            p["mass::pi^+"] = 0.13957;
+            p["mass::ud(2GeV)"] = 0.008;
+            p["B->pipi::mu@BFvD2016"] = 1.5;
+            p["B->pi::f_+(0)@BCL2008"] = +3.07e-01;
+            p["B->pi::b_+^1@BCL2008"]  = -1.31e+00;
+            p["B->pi::b_+^2@BCL2008"]  = -9.04e-01;
+
+            /* Factory */
+            {
+                Parameters p = Parameters::Defaults();
+                std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi@FvDV2018-Dispersive", p, Options{ });
+
+                TEST_CHECK(0 != ff.get());
+
+                TEST_CHECK_RELATIVE_ERROR(2910.308, ff->f_time_im_res_qhat2(0.05, 13.0), eps);
+                TEST_CHECK_RELATIVE_ERROR(2927.843, ff->f_long_im_res_qhat2(0.05, 13.0), eps);
+                TEST_CHECK_RELATIVE_ERROR( -46.067, ff->f_perp_im_res_qhat2(0.05, 13.0), eps);
+                TEST_CHECK_RELATIVE_ERROR( 129.103, ff->f_para_im_res_qhat2(0.05, 13.0), eps);
+            }
+        }
+} analytic_form_factor_b_to_pi_pi_FvDV2018_test;

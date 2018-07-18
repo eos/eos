@@ -108,6 +108,11 @@ namespace eos
             for (unsigned i = 0 ; i < input_components.size() ; ++i)
             {
                 result += input_components[i].weight() * divergences[i * output_components.size() + mapping[i]];
+                if (! std::isfinite(result))
+                {
+                    Log::instance()->message("HierarchicalClustering::distance", ll_debug)
+                        << "Non-finite partial results for i = " << i;
+                }
             }
 
             return result;
@@ -126,6 +131,11 @@ namespace eos
             const unsigned dim = c1.mean()->size;
             gsl_matrix * matrix_res = gsl_matrix_alloc(dim, dim);
 
+            if (! std::isfinite(d))
+            {
+                throw InternalError("HieriarchicalClustering::kullback_leibler_divergence: first contribution not finite! det(c1) = " + stringify(c1.determinant()) + ", det(c2) = " + stringify(c2.determinant()));
+            }
+
             // second contribution: trace of product
             gsl_blas_dsymm(CblasLeft, CblasUpper, 1.0, c2.inverse_covariance(), c1.covariance(), 0.0, matrix_res);
             for (unsigned i = 0 ; i < dim ; ++i)
@@ -133,6 +143,11 @@ namespace eos
                 d += gsl_matrix_get(matrix_res, i, i);
             }
             gsl_matrix_free(matrix_res);
+
+            if (! std::isfinite(d))
+            {
+                throw InternalError("HieriarchicalClustering::kullback_leibler_divergence: second contribution not finite!");
+            }
 
             // third contribution: \chi^2
             gsl_vector * vector_res_left = gsl_vector_alloc(dim);
@@ -151,6 +166,11 @@ namespace eos
             gsl_vector_free(vector_res_right);
 
             d += chi_squared;
+            if (! std::isfinite(d))
+            {
+                throw InternalError("HieriarchicalClustering::kullback_leibler_divergence: third contribution not finite!");
+            }
+
 
             // fourth contribution: dimension
             d -= dim;
@@ -241,7 +261,7 @@ namespace eos
                 if (input_components.empty())
                     throw InternalError("HierarchicalClustering::run: no components specified");
 
-                if (input_components.size() <= output_components.size())
+                if (input_components.size() < output_components.size())
                     throw InternalError("HierarchicalClustering::run: cannot reduce #components. "
                             "Input: " + stringify(input_components.size()) +
                             " , output: " + stringify(output_components.size()));
@@ -255,6 +275,13 @@ namespace eos
                         input_components[i].weight() = 1.0 / input_components.size();
                     }
                 }
+            }
+
+            if (input_components.size() == output_components.size())
+            {
+                Log::instance()->message("HierarchicalClustering::run", ll_informational)
+                     << "Number of output component matches number of input components; skipping hierarchical clustering";
+                std::copy(input_components.begin(), input_components.end(), output_components.begin());
             }
 
             double old_distance = std::numeric_limits<double>::max();
@@ -278,6 +305,11 @@ namespace eos
 
                 Log::instance()->message("HierarchicalClustering::run", ll_debug)
                     << "Current distance in step " << step << ": " << stringify(new_distance, 16);
+
+                if (! std::isfinite(new_distance))
+                {
+                    throw InternalError("HierarchicalClustering::run: non-finite distance encountered");
+                }
 
                 if (new_distance == old_distance)
                 {
@@ -446,7 +478,7 @@ namespace eos
             gsl_linalg_cholesky_invert(inverse_covariance);
 
             // det(Sigma) = det(L)^2, and det(L) = Prod(diagonal)
-            determinant = 1;
+            determinant = 1.0;
             for (unsigned i = 0 ; i < dimension ; ++i)
             {
                 determinant *= gsl_matrix_get(covariance_chol, i, i);

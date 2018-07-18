@@ -70,7 +70,7 @@ namespace eos
     class FormFactorFactory<PToV>
     {
         public:
-            static std::shared_ptr<FormFactors<PToV>> create(const std::string & label, const Parameters & parameters);
+            static std::shared_ptr<FormFactors<PToV>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
     template <>
@@ -92,7 +92,7 @@ namespace eos
     class FormFactorFactory<PToP>
     {
         public:
-            static std::shared_ptr<FormFactors<PToP>> create(const std::string & label, const Parameters & parameters);
+            static std::shared_ptr<FormFactors<PToP>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
     template <>
@@ -102,17 +102,29 @@ namespace eos
         public:
             virtual ~FormFactors();
 
+            // form factors
             virtual complex<double> f_perp(const double & q2, const double & k2, const double & z) const = 0;
             virtual complex<double> f_para(const double & q2, const double & k2, const double & z) const = 0;
             virtual complex<double> f_long(const double & q2, const double & k2, const double & z) const = 0;
             virtual complex<double> f_time(const double & q2, const double & k2, const double & z) const = 0;
+
+            double im_f_perp(const double & q2, const double & k2, const double & z) const { return std::imag(f_perp(q2, k2, z)); }
+            double im_f_para(const double & q2, const double & k2, const double & z) const { return std::imag(f_para(q2, k2, z)); }
+            double im_f_long(const double & q2, const double & k2, const double & z) const { return std::imag(f_long(q2, k2, z)); }
+            double im_f_time(const double & q2, const double & k2, const double & z) const { return std::imag(f_time(q2, k2, z)); }
+
+            // residues
+            virtual double f_perp_im_res_qhat2(const double & q2, const double & k2) const = 0;
+            virtual double f_para_im_res_qhat2(const double & q2, const double & k2) const = 0;
+            virtual double f_long_im_res_qhat2(const double & q2, const double & k2) const = 0;
+            virtual double f_time_im_res_qhat2(const double & q2, const double & k2) const = 0;
     };
 
     template <>
     class FormFactorFactory<PToPP>
     {
         public:
-            static std::shared_ptr<FormFactors<PToPP>> create(const std::string & label, const Parameters & parameters, const Options & options);
+            static std::shared_ptr<FormFactors<PToPP>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
     };
 }
 

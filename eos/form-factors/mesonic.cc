@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2014, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2014, 2015, 2016, 2018 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2010, 2011 Christian Wacker
  * Copyright (c) 2018 Ahmet Kokulu
@@ -135,7 +135,7 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<PToV>>
-    FormFactorFactory<PToV>::create(const std::string & label, const Parameters & parameters)
+    FormFactorFactory<PToV>::create(const std::string & label, const Parameters & parameters, const Options &)
     {
         std::shared_ptr<FormFactors<PToV>> result;
 
@@ -306,7 +306,7 @@ namespace eos
     }
 
     std::shared_ptr<FormFactors<PToP>>
-    FormFactorFactory<PToP>::create(const std::string & label, const Parameters & parameters)
+    FormFactorFactory<PToP>::create(const std::string & label, const Parameters & parameters, const Options &)
     {
         std::shared_ptr<FormFactors<PToP>> result;
 
@@ -377,8 +377,9 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             // analytic computations
-            { KeyType("B->pipi",    "BFvD2016"), &AnalyticFormFactorBToPiPiBFvD2016::make   },
-            { KeyType("B->pipi",    "BFvD2016"), &AnalyticFormFactorBToPiPiBFvD2016::make   },
+            { KeyType("B->pipi",    "BFvD2016"),            &AnalyticFormFactorBToPiPiBFvD2016::make   },
+            { KeyType("B->pipi",    "FvDV2018-Dispersive"), &AnalyticFormFactorBToPiPiFvDV2018::make   },
+            { KeyType("B->pipi",    "FvDV2018"),            &FvDV2018FormFactors<BToPiPi>::make        },
         };
 
         /*
@@ -406,5 +407,4 @@ namespace eos
 
         return result;
     }
-
 }

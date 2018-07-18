@@ -208,12 +208,6 @@ namespace eos
                         parameters_map[name] = idx;
                         parameters.push_back(Parameter(parameters_data, idx));
                     }
-
-                    if (i == parameters_map.end())
-                    {
-                        throw UnknownParameterError(name);
-                    }
-
                 }
             }
             catch (std::exception & e)
