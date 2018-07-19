@@ -477,9 +477,14 @@ class Plotter:
 
         logofont = matplotlib.font_manager.FontProperties(family='sans-serif', size='15')
         ax = plt.gca()
-        ax.text(x, y, r'\textsf{{\textbf{{EOS v{version}}}}}'.format(version=eos.version()),
+        color = 'OrangeRed'
+        prelim = 'v{version}'.format(version=eos.version())
+        if 'preliminary' in item and item['preliminary']:
+            color = 'red'
+            prelim = 'Preliminary'
+        ax.text(x, y, r'\textsf{{\textbf{{EOS {prelim}}}}}'.format(prelim=prelim),
                 transform=ax.transAxes, fontproperties=logofont,
-                color='OrangeRed', alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
+                color=color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
                 horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
 
 
