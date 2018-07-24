@@ -25,6 +25,7 @@
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
+#include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
@@ -146,12 +147,13 @@ namespace eos
         typedef std::function<FormFactors<PToV> * (const Parameters &, const Options &)> ValueType;
         static const std::map<KeyType, ValueType> form_factors
         {
+            { KeyType("B->rho::BSZ2015"),      &BSZ2015FormFactors<BToRho,    PToV>::make          },
             { KeyType("B->K^*::BZ2004"),       &BZ2004FormFactors<BToKstar, PToV>::make            },
             { KeyType("B->K^*::KMPW2010"),     &KMPW2010FormFactors<PToV>::make                    },
             { KeyType("B->K^*::BFW2010"),      &BFW2010FormFactors<BToKstar,  PToV>::make          },
-            { KeyType("B->D^*::BSZ2015"),      &BSZ2015FormFactors<BToDstar,  PToV>::make          },
             { KeyType("B->K^*::BSZ2015"),      &BSZ2015FormFactors<BToKstar,  PToV>::make          },
-            { KeyType("B->rho::BSZ2015"),      &BSZ2015FormFactors<BToRho,    PToV>::make          },
+            { KeyType("B->D^*::BSZ2015"),      &BSZ2015FormFactors<BToDstar,  PToV>::make          },
+            { KeyType("B->D^*::HQET"),         &HQETFormFactors<BToDstar,  PToV>::make             },
             { KeyType("B_s->K^*::BFW2010"),    &BFW2010FormFactors<BsToKstar, PToV>::make          },
             { KeyType("B_s->K^*::FMvD2015"),   &FMvD2015FormFactors<BsToKstar>::make               },
             { KeyType("B_s->phi::BZ2004"),     &BZ2004FormFactors<BsToPhi, PToV>::make             },
@@ -333,6 +335,7 @@ namespace eos
             // b -> c
             { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD>::make                  },
             { KeyType("B->D::BSZ2015"),       &BSZ2015FormFactors<BToD, PToP>::make            },
+            { KeyType("B->D::HQET"),          &HQETFormFactors<BToD, PToP>::make               },
             // analytic computations
             { KeyType("B->pi::DKMMO2008"),    &AnalyticFormFactorBToPiDKMMO2008::make          },
             { KeyType("B->pi::B-LCSR"),       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make   },
@@ -406,6 +409,9 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
+            // b -> c
+            // not yet supported
+            //{ KeyType("B^*->D::HQET"),        &HQETFormFactors<BstarToD, VToP>::make          },
         };
 
         auto i = form_factors.find(name);
@@ -433,6 +439,9 @@ namespace eos
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
+            // b -> c
+            // not yet supported
+            //{ KeyType("B^*->D^*::HQET"),      &HQETFormFactors<BstarToDstar, VToV>::make      },
         };
 
         auto i = form_factors.find(name);

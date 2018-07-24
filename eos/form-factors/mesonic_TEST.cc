@@ -23,6 +23,9 @@
 
 #include <test/test.hh>
 #include <eos/form-factors/form-factors.hh>
+#include <eos/form-factors/mesonic-impl.hh>
+
+#include <vector>
 
 using namespace test;
 using namespace eos;
