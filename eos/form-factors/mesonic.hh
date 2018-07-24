@@ -53,7 +53,7 @@ namespace eos
 
     template <>
     class FormFactors<PToV> :
-        public ParameterUser
+        public virtual ParameterUser
     {
         public:
             virtual ~FormFactors();
@@ -80,7 +80,7 @@ namespace eos
 
     template <>
     class FormFactors<PToP> :
-        public ParameterUser
+        public virtual ParameterUser
     {
         public:
             virtual ~FormFactors();
@@ -103,7 +103,7 @@ namespace eos
 
     template <>
     class FormFactors<PToPP> :
-        public ParameterUser
+        public virtual ParameterUser
     {
         public:
             virtual ~FormFactors();
@@ -135,7 +135,7 @@ namespace eos
 
     template <>
     class FormFactors<VToP> :
-        public ParameterUser
+        public virtual ParameterUser
     {
         public:
             virtual ~FormFactors();
@@ -156,7 +156,7 @@ namespace eos
 
     template <>
     class FormFactors<VToV> :
-        public ParameterUser
+        public virtual ParameterUser
     {
         public:
             virtual ~FormFactors();

@@ -31,10 +31,15 @@
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/utils/derivative.hh>
 #include <eos/utils/kinematic.hh>
+#include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/polylog.hh>
 #include <eos/utils/power_of.hh>
+
 #include <array>
 #include <limits>
+
+#include <iostream> // <-- TODO: Remove!
 
 namespace eos
 {
@@ -60,6 +65,8 @@ namespace eos
 
     struct BToDstar {
         static constexpr const char * label = "B->D^*";
+        static constexpr const char * name_B = "mass::B_d";
+        static constexpr const char * name_V = "mass::D^*_u";
         static constexpr double mB = 5.279;
         static constexpr double mV = 2.0103;
         static constexpr double mBc = 6.2751;
@@ -754,6 +761,8 @@ namespace eos
     struct BToD {
         typedef PToP Transition;
         static constexpr const char * label = "B->D";
+        static constexpr const char * name_B = "mass::B_d";
+        static constexpr const char * name_P = "mass::D_u";
         static constexpr const double m_B = 5.279;
         static constexpr const double m_P = 1.870;
         // resonance masses from [HPQCD2015A]
@@ -1586,6 +1595,30 @@ namespace eos
 
                 return result;
             }
+    };
+
+    /* V -> P Processes */
+
+    struct BstarToD {
+        static constexpr const char * label = "B^*->D";
+        static constexpr const double mV = 5.324;
+        static constexpr const double mP = 1.870;
+        static constexpr const double mBc = 6.2751;
+        static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
+        static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
+        static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+    };
+
+    /* V -> V Processes */
+
+    struct BstarToDstar {
+        static constexpr const char * label = "B^*->D^*";
+        static constexpr const double mV1 = 5.324;
+        static constexpr const double mV2 = 2.010;
+        static constexpr const double mBc = 6.2751;
+        static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
+        static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
+        static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
     };
 }
 
