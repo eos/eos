@@ -162,7 +162,13 @@ class Plotter:
                 raise ValueError('more than one kinematic variable specified')
 
             name,value = kin[0].split(b'=')
+            value = float(value)
             _xvalues.append(float(value))
+
+        _xvalues = np.array(_xvalues)
+        if 'range' in item:
+            xmin,xmax = item['range']
+            _xvalues = np.ma.masked_outside(_xvalues, float(xmin), float(xmax))
 
         data = uncfile.data()
         _ovalues_lower   = []
