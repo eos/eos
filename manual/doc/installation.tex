@@ -84,11 +84,11 @@ You can install the prerequisite software with the \package{apt} package
 management system on any Debian or Ubuntu system as follows:
 \begin{commandline}
 # for the 'System Software'
-apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libyaml-cpp-dev
+sudo apt-get install g++ autoconf automake libtool pkg-config libboost-filesystem-dev libboost-system-dev libyaml-cpp-dev
 # for the 'Python Software'
-apt-get install python3-dev libboost-python-dev python3-h5py python3-matplotlib python3-scipy python3-yaml
+sudo apt-get install python3-dev libboost-python-dev python3-h5py python3-matplotlib python3-scipy python3-yaml
 # for the 'Scientific Software'
-apt-get install libgsl0-dev libhdf5-serial-dev libfftw3-dev
+sudo apt-get install libgsl0-dev libhdf5-serial-dev libfftw3-dev
 \end{commandline}
 Do not install \package{Minuit2} via \package{APT}, since there is presently a
 bug in the Debian/Ubuntu packages for \package{Minuit2}, which prevents
