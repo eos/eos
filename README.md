@@ -53,8 +53,10 @@ with code contributions by:
  * Ahmet Kokulu,
  * Bastian Müller,
  * Stefanie Reichert,
+ * Eduardo Romero,
  * Rafael Silva Coutinho,
  * Ismo Tojiala,
+ * Keri Vos,
  * Christian Wacker.
 
 We would like to extend our thanks to the following people whose input and

@@ -138,7 +138,7 @@ namespace eos
 
             auto imp = reinterpret_cast<const Implementation<BToPiPiLeptonNeutrino> *>(_imp);
 
-            if (lambda(q2, k2, imp->m_B() * imp->m_B()) <= 0)
+            if ((lambda(q2, k2, imp->m_B() * imp->m_B()) <= 0) || (q2 <= power_of<2>(imp->m_l())))
                 return 0.0;
 
             return imp->normalized_differential_decay_width(q2, k2, z);

@@ -35,7 +35,8 @@ TEXSOURCES = \
 	physics/eft.tex
 
 BIBSOURCES = \
-	references.bib
+	references.bib \
+	references-physics.bib
 
 SOURCES = \
 	$(BIBSOURCES) $(TEXSOURCES)
