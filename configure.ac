@@ -269,7 +269,7 @@ dnl {{{ python checks (you can change the required python version below)
 if test "x$enable_python" == xyes ; then
 	AM_PATH_PYTHON([3.5])
 	PY_PREFIX=`$PYTHON -c 'import sys ; print(sys.prefix)'`
-	PYTHON_LIBS="-lpython$PYTHON_VERSION"
+	PYTHON_LIBS="`python$PYTHON_VERSION-config --libs`"
 	PYTHON_LDFLAGS="`python$PYTHON_VERSION-config --ldflags`"
 	PYTHON_CXXFLAGS="`python$PYTHON_VERSION-config --includes`"
 	if test "x$has_boost_python_suffix" == "xno"; then
