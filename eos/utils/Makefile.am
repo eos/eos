@@ -76,8 +76,8 @@ libeosutils_la_LIBADD = \
 	-lMinuit2 \
 	-lpthread \
 	-lyaml-cpp
-libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS)
-libeosutils_la_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS) $(MINUIT2_LDFLAGS)
+libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+libeosutils_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) $(MINUIT2_LDFLAGS)
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
@@ -196,12 +196,13 @@ hdf5_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
 hdf5_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
 
 equation_solver_TEST_SOURCES = equation_solver_TEST.cc
-equation_solver_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+equation_solver_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(GSL_CXXFLAGS)
 equation_solver_TEST_LDFLAGS = $(MINUIT2_LDFLAGS)
 
 indirect_iterator_TEST_SOURCES = indirect-iterator_TEST.cc
 
 integrate_TEST_SOURCES = integrate_TEST.cc
+integrate_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 
 join_TEST_SOURCES = join_TEST.cc
 
@@ -248,6 +249,7 @@ top_loops_TEST_SOURCES = top-loops_TEST.cc
 verify_TEST_SOURCES = verify_TEST.cc
 
 wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
+wilson_coefficients_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 
 wilson_polynomial_TEST_SOURCES = wilson-polynomial_TEST.cc
 

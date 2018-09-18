@@ -102,18 +102,22 @@ chi_squared_TEST_SOURCES = chi-squared_TEST.cc
 density_wrapper_TEST_SOURCES = density-wrapper_TEST.cc density-wrapper_TEST.hh
 
 hierarchical_clustering_TEST_SOURCES = hierarchical-clustering_TEST.cc
+hierarchical_clustering_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 
 histogram_TEST_SOURCES = histogram_TEST.cc
 
 log_likelihood_TEST_SOURCES = log-likelihood_TEST.cc
+log_likelihood_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 
 log_posterior_TEST_SOURCES = log-posterior_TEST.cc log-posterior_TEST.hh
-log_posterior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(MINUIT2_CXXFLAGS)
+log_posterior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS)
 log_posterior_TEST_LDFLAGS = $(MINUIT2_LDFLAGS) -lMinuit2
 
 log_prior_TEST_SOURCES = log-prior_TEST.cc
+log_prior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 
 markov_chain_TEST_SOURCES = markov-chain_TEST.cc
+markov_chain_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 
 markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc density-wrapper_TEST.cc
 markov_chain_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)

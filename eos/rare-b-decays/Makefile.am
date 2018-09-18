@@ -19,6 +19,7 @@ libeosrarebdecays_la_SOURCES = \
 	long-distance.cc long-distance.hh \
 	lambda-b-to-lambda-dilepton.cc lambda-b-to-lambda-dilepton.hh \
 	qcdf_integrals.cc qcdf_integrals.hh
+libeosrarebdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) 
 libeosrarebdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
