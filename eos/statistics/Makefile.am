@@ -122,6 +122,7 @@ markov_chain_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 markov_chain_sampler_TEST_SOURCES = markov-chain-sampler_TEST.cc density-wrapper_TEST.cc
 markov_chain_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
 markov_chain_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
+markov_chain_sampler_TEST_LDADD = $(LDADD) -lhdf5
 
 if EOS_ENABLE_PMC
 population_monte_carlo_sampler_TEST_SOURCES = population-monte-carlo-sampler_TEST.cc density-wrapper_TEST.cc
@@ -132,10 +133,12 @@ endif
 prior_sampler_TEST_SOURCES = prior-sampler_TEST.cc
 prior_sampler_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
 prior_sampler_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
+prior_sampler_TEST_LDADD = $(LDADD) -lhdf5
 
 proposal_functions_TEST_SOURCES = proposal-functions_TEST.cc
 proposal_functions_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
 proposal_functions_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
+proposal_functions_TEST_LDADD = $(LDADD) -lhdf5
 
 rvalue_TEST_SOURCES = rvalue_TEST.cc
 
