@@ -203,6 +203,8 @@ AC_CHECK_LIB(gsl, gsl_sf_zeta,
 CXXFLAGS=$_CXXFLAGS
 LDFLAGS=$_LDFLAGS
 LIBS="$LIBS $_LIBS"
+AC_SUBST([GSL_LDFLAGS])
+AC_SUBST([GSL_CXXFLAGS])
 dnl }}}
 
 dnl {{{ use Minuit2 path if supplied via --with-minuit2=

@@ -17,6 +17,7 @@ libeosformfactors_la_SOURCES = \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
 	pi-lcdas.cc pi-lcdas.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
+libeosformfactors_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosformfactors_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	-lgslcblas \
@@ -58,6 +59,7 @@ analytic_b_to_kstar_TEST_SOURCES = analytic-b-to-kstar_TEST.cc
 analytic_b_to_pi_TEST_SOURCES = analytic-b-to-pi_TEST.cc
 
 analytic_b_to_pi_pi_TEST_SOURCES = analytic-b-to-pi-pi_TEST.cc
+analytic_b_to_pi_pi_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 
 baryonic_TEST_SOURCES = baryonic_TEST.cc
 

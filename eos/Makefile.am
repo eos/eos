@@ -13,6 +13,7 @@ libeos_la_SOURCES = \
 	decays.hh \
 	observable.cc observable.hh \
 	signal-pdf.cc signal-pdf.hh
+libeos_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeos_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
@@ -48,6 +49,7 @@ check_PROGRAMS = \
 	references_TEST
 
 constraint_TEST_SOURCES = constraint_TEST.cc
+constraint_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 
 references_TEST_SOURCES = references_TEST.in
 

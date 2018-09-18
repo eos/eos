@@ -4,7 +4,7 @@ lib_LTLIBRARIES = libeosoptimize.la
 libeosoptimize_la_SOURCES = \
 	optimizer.cc optimizer.hh \
 	optimizer-gsl.cc optimizer-gsl.hh
-libeosoptimize_la_CXXFLAGS = $(AM_CXXFLAGS)
+libeosoptimize_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosoptimize_la_LIBADD =
 
 include_eos_optimizedir = $(includedir)/eos/optimize
@@ -23,3 +23,4 @@ LDADD = \
 check_PROGRAMS = $(TESTS)
 
 optimizer_gsl_TEST_SOURCES = optimizer-gsl_TEST.cc
+optimizer_gsl_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
