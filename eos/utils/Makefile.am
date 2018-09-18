@@ -193,6 +193,7 @@ derivative_TEST_SOURCES = derivative_TEST.cc
 hdf5_TEST_SOURCES = hdf5_TEST.cc
 hdf5_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
 hdf5_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
+hdf5_TEST_LDADD = $(LDADD) -lhdf5
 
 equation_solver_TEST_SOURCES = equation_solver_TEST.cc
 equation_solver_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(GSL_CXXFLAGS)
