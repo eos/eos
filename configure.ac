@@ -259,10 +259,11 @@ AC_ARG_ENABLE([python],
 	[],
 	[])
 AM_CONDITIONAL([EOS_ENABLE_PYTHON], [test "x$enable_python" == "xyes"])
+has_boost_python_suffix=no
 AC_ARG_WITH([boost-python-suffix],
-	[AS_HELP_STRING([--with-boost-python-suffix], [suffix used to specify the libboost-python shared object])]
-	[],
-	[])
+	[AS_HELP_STRING([--with-boost-python-suffix], [suffix used to specify the libboost-python shared object])],
+	[has_boost_python_suffix=yes],
+	[with_boost_python_suffix=""])
 dnl }}}
 dnl {{{ python checks (you can change the required python version below)
 if test "x$enable_python" == xyes ; then
@@ -271,12 +272,14 @@ if test "x$enable_python" == xyes ; then
 	PYTHON_LIBS="-lpython$PYTHON_VERSION"
 	PYTHON_LDFLAGS="`python$PYTHON_VERSION-config --ldflags`"
 	PYTHON_CXXFLAGS="`python$PYTHON_VERSION-config --includes`"
-	os_id="`. /etc/os-release ; echo $ID`"
-	if test "x$os_id" == xubuntu -o "x$os_id" == xdebian ; then
-		BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
-	elif test "x$os_id" == xcentos ; then
-		BOOST_PYTHON_SUFFIX=""
-	elif test "x`uname`" == xDarwin ; then
+	if test "x$has_boost_python_suffix" == "xno"; then
+		os_id="`. /etc/os-release ; echo $ID`"
+		if test "x$os_id" == xubuntu -o "x$os_id" == xdebian ; then
+			BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
+		elif test "x$os_id" == xcentos ; then
+			BOOST_PYTHON_SUFFIX=""
+		fi
+	else
 		BOOST_PYTHON_SUFFIX=$with_boost_python_suffix
 	fi
 	AC_SUBST([PYTHON_LIBS])
