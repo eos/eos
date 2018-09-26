@@ -34,6 +34,9 @@ matrix:
       before_install:
         - sudo rm /usr/local/include/c++
         - brew tap eos/eos
+        - brew outdated python || brew upgrade python
+        - brew unlink python@2
+        - rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
         - brew outdated boost || brew upgrade boost
         - brew outdated boost-python3 || brew upgrade boost-python3
         - brew install autoconf boost-python3 gsl hdf5 libtool minuit2 pmclib python3 yaml-cpp
