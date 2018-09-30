@@ -315,6 +315,9 @@ namespace eos
             make_form_factor_adapter("B->D::f_0(s)", "B->D",
                     &FormFactors<PToP>::f_0, std::make_tuple("s")),
 
+            make_form_factor_adapter("B->D::f_T(s)", "B->D",
+                                     &FormFactors<PToP>::f_t, std::make_tuple("s")),
+
             // B_s -> K^* Form Factors
             make_form_factor_adapter("B_s->K^*::V(s)", "B_s->K^*",
                     &FormFactors<PToV>::v, std::make_tuple("s")),
