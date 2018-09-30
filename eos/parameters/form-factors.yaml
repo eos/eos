@@ -391,7 +391,7 @@
     min:     0.0
     max:     0.0
 
-# form factor parameters for B->pi, B->K in [BCL2008] parametrization, with
+# form factor parameters for B->pi in [BCL2008] parametrization, with
 # f_+ taken from [IKMvD2014]
 "B->pi::f_+(0)@BCL2008" :
     central: +0.307
@@ -440,6 +440,48 @@
     min:     +0.00
     max:     +0.00
     latex:    '$b_{T, 2}^{B\to \pi}$'
+    comments: ""
+
+# form factor parameters for B->K for [BCL2008] parametrization
+"B->K::f_+(0)@BCL2008" :
+    central: +0.0
+    min:     +0.0
+    max:     +0.0
+    comments: ""
+"B->K::f_T(0)@BCL2008" :
+    central: +0.0
+    min:     +0.0
+    max:     +0.0
+    comments: ""
+"B->K::b_+^1@BCL2008" :
+    central: +0.0
+    min:     +0.0
+    max:     +0.0
+    comments: ""
+"B->K::b_+^2@BCL2008" :
+    central: +0.0
+    min:     +0.0
+    max:     +0.0
+    comments: ""
+"B->K::b_0^1@BCL2008" :
+    central: +0.0
+    min:     +0.0
+    max:     +0.0
+    comments: ""
+"B->K::b_0^2@BCL2008" :
+    central:  0.0
+    min:      0.0
+    max:      0.0
+    comments: ""
+"B->K::b_T^1@BCL2008" :
+    central:  0.0
+    min:      0.0
+    max:      0.0
+    comments: ""
+"B->K::b_T^2@BCL2008" :
+    central:  0.0
+    min:      0.0
+    max:      0.0
     comments: ""
 
 # form factor parameters for B->D from [BIvD2016] for [BCL2008] parametrization
