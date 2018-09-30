@@ -316,6 +316,7 @@ namespace eos
         {
             // parametrizations
             // b -> s
+            { KeyType("B->K",     "BCL2008"),       &BCL2008FormFactors<BToK>::make          },
             { KeyType("B->K",     "BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make     },
             { KeyType("B->K",     "BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make      },
             { KeyType("B->K",     "KMPW2010"),      &KMPW2010FormFactors<PToP>::make         },
