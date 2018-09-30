@@ -776,7 +776,7 @@ namespace eos
         static constexpr const double m2_Br0p = 6.420 * 6.420; // B_c scalar
         static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
         static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
-        static constexpr const bool uses_tensor_form_factors = false;
+        static constexpr const bool uses_tensor_form_factors = true;
     };
 
     /*

@@ -490,6 +490,11 @@
     min:     +0.62
     max:     +0.69
     comments: ""
+"B->D::f_T(0)@BCL2008" :
+    central: +0.0
+    min:     +0.0
+    max:     +0.0
+    comments: ""
 "B->D::b_+^1@BCL2008" :
     central: -4.00
     min:     -5.00
@@ -509,6 +514,16 @@
     central: -1.20
     min:     -5.60
     max:     +3.20
+    comments: ""
+"B->D::b_T^1@BCL2008" :
+    central:  0.0
+    min:      0.0
+    max:      0.0
+    comments: ""
+"B->D::b_T^2@BCL2008" :
+    central:  0.0
+    min:      0.0
+    max:      0.0
     comments: ""
 
 # form factor parameters for B->K^* according to [BZ2004] (approximate)
