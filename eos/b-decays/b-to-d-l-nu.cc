@@ -85,6 +85,7 @@ namespace eos
         {
             double fp = form_factors->f_p(s);
             double f0 = form_factors->f_0(s);
+            double fT = form_factors->f_t(s);
             // running quark masses
             double mbatmu = model->m_b_msbar(mu);
             double mcatmu = model->m_c_msbar(mu);
@@ -97,15 +98,19 @@ namespace eos
             double norm = 8.0 * v2 * m_B * s * power_of<2>(g_fermi())
                 / (3.0 * 256.0 * power_of<3>(M_PI * m_B));
             // helicity amplitudes
-            const double hh0 = 2.0 * m_B * p * fp / (sqrt(s));
-            const double hht = (m_B * m_B - m_D * m_D) * f0 / (sqrt(s));
-            const double hhs = (m_B * m_B - m_D * m_D) * f0 / (mbatmu - mcatmu);
-            // NP contributions in EFT, cf. e.g. [DBG2013]
+            const double hhV0 = 2.0 * m_B * p * fp / (sqrt(s));
+            const double hhVt = (m_B * m_B - m_D * m_D) * f0 / (sqrt(s));
+            const double hhS  = (m_B * m_B - m_D * m_D) * f0 / (mbatmu - mcatmu);
+            const double hhT  = -2.0 * m_B * p * fT / (m_B + m_D);
+            // NP contributions in EFT including tensor operator, cf. e.g. Sakaki:2013bfa
             const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
-            const complex<double> gv = wc.cvl() + wc.cvr();
-            const complex<double> gs = wc.csl() + wc.csr();
-            // normalized(|V_cb|=1) differential decay width including NP (in SM gv=1, and all other couplings are zero)
-            return norm * p * (power_of<2>(hh0) * std::norm(gv) * (1.0 + mvm1 / 2.0) + (3.0 * mvm1 / 2.0) * std::norm(hht * gv + hhs * gs / sqrt(mvm1)));
+            const complex<double> cv1 = wc.cvl() - 1.0;
+            const complex<double> cv2 = wc.cvr();
+            const complex<double> cs1 = wc.csr();
+            const complex<double> cs2 = wc.csl();
+            const complex<double> cT  = wc.ct();
+            // normalized(|V_cb|=1) differential decay width including NP (in SM cvl=1, and all other couplings are zero)
+            return norm * p * (std::norm(1.0 + cv1 + cv2) * ((1.0 + mvm1 / 2.0) * power_of<2>(hhV0) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt)) + 3.0 / 2.0 * std::norm(cs1 + cs2) * power_of<2>(hhS) + 8.0 * std::norm(cT) * (1.0 + 2.0 * mvm1) * power_of<2>(hhT) + 3.0 * std::real((1.0 + cv1 + cv2) * (std::conj(cs1) + std::conj(cs2))) * sqrt(mvm1) * hhS * hhVt - 12.0 * std::real((1.0 + cv1 + cv2) * std::conj(cT)) * sqrt(mvm1) * hhT * hhV0);
         }
 
         // differential decay width including NP
