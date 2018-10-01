@@ -335,6 +335,13 @@
     url:  "http://www.utfit.org/UTfit/ResultsWinter2013PreMoriond"
 
 # Theory results
+"Sakaki:2013bfa" :
+    authors: "Sakaki, Yasuhito and Tanaka, Minoru and Tayduganov,
+                        Andrey and Watanabe, Ryoutaro"
+    title: "{Testing leptoquark models in $\bar B \to D^{(*)} \tau
+                        \bar\nu$}"
+    eprint: "arXiv:hep-ph/1309.0301"
+
 "2006zs" :
     authors: "Misiak, M. et al"
     title: "The first estimate of B(anti-B -> X/s gamma) at O(alpha(s)^2)"
