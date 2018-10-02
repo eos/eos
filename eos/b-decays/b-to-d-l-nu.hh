@@ -52,7 +52,7 @@ namespace eos
 
             // R_D
             double differential_r_d(const double & s) const;
-            double integrated_r_d() const;
+            double integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.

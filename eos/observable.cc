@@ -463,7 +463,8 @@ namespace eos
                             std::make_tuple("s")),
 
             make_observable("B->Dlnu::R_D",
-                            &BToDLeptonNeutrino::integrated_r_d),
+                            &BToDLeptonNeutrino::integrated_r_d,
+                            std::make_tuple("s_min_mu", "s_min_tau", "s_max")),
 
             // B -> D^* l nu
             make_observable("B->D^*lnu::dBR/ds",
