@@ -194,7 +194,7 @@ namespace eos
     }
 
     double
-    BToDLeptonNeutrino::integrated_r_d() const
+    BToDLeptonNeutrino::integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::differential_branching_ratio,
                 _imp.get(), std::placeholders::_1);
@@ -205,7 +205,7 @@ namespace eos
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
             Save<std::string> save_opt_l(_imp->opt_l._value, "mu");
 
-            br_muons = integrate<GSL::QAGS>(f, 0.02, 11.62);
+            br_muons = integrate<GSL::QAGS>(f, s_min_mu, s_max);
         }
 
         double br_taus;
@@ -213,7 +213,7 @@ namespace eos
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
             Save<std::string> save_opt_l(_imp->opt_l._value, "tau");
 
-            br_taus = integrate<GSL::QAGS>(f, 3.16, 11.62);
+            br_taus = integrate<GSL::QAGS>(f, s_min_tau, s_max);
         }
 
         return br_taus / br_muons;
