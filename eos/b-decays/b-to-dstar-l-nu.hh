@@ -49,9 +49,9 @@ namespace eos
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
 
-            // R_D
+            // R_Dstar
             double differential_r_d(const double & s) const;
-            double integrated_r_d() const;
+            double integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
