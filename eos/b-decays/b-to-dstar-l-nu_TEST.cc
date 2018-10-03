@@ -76,6 +76,7 @@ class BToDstarLeptonNeutrinoTest :
                 p1["B->D^*::alpha^T23_2@BSZ2015"] = +2.93;
                 p1["mass::B_d"]                   = +5.279;
                 p1["mass::D^*_d"]                 = +2.0103;
+                // by default, all other couplings are zero in eos
                 p1["b->cmunumu::Re{cVL}"]         = +1.0;
 
                 Options oo;
@@ -94,7 +95,7 @@ class BToDstarLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 10.68), 44.3961, eps);
             }
 
-            // tests for normalized NP Br (|V_cb|=1)
+            // tests for normalized NP Br (|V_cb|=1), no tensor operators contribution
             {
                 Parameters p2 = Parameters::Defaults();
                 /*
@@ -137,6 +138,9 @@ class BToDstarLeptonNeutrinoTest :
                 p2["b->cmunumu::Im{cSL}"]         = -3.0;
                 p2["b->cmunumu::Re{cSR}"]         = +4.0;
                 p2["b->cmunumu::Im{cSR}"]         = -4.0;
+                // set the tensor op. contr. to zero here
+                p2["b->cmunumu::Re{cT}"]          = +0.0;
+                p2["b->cmunumu::Im{cT}"]          = +0.0;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -151,6 +155,68 @@ class BToDstarLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(8.0, 10.68), 15.3374, eps);
                 // the full phase-space region for muon
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 10.68), 94.2214, eps);
+            }
+
+            // tests for normalized NP Br (|V_cb|=1), including tensor operators contribution, cf. Sakaki:2013bfa
+            {
+                Parameters p3 = Parameters::Defaults();
+                /*
+                 * for the TEST case below the B->D^* SSE parameters are randomly chosen. However, the correlations together with the EOM conditions among the FFs are respected in this choice. Namely, alpha^A0_0 is correlated with alpha^A12_0, and also alpha^T1_0 should be the same as alpha^T2_0.
+                 */
+                p3["B->D^*::alpha^A0_0@BSZ2015" ] = +1.0;
+                p3["B->D^*::alpha^A0_1@BSZ2015" ] = +0.24;
+                p3["B->D^*::alpha^A0_2@BSZ2015" ] = +0.21;
+                p3["B->D^*::alpha^A1_0@BSZ2015" ] = +0.5;
+                p3["B->D^*::alpha^A1_1@BSZ2015" ] = +0.4;
+                p3["B->D^*::alpha^A1_2@BSZ2015" ] = +0.3;
+                p3["B->D^*::alpha^A12_0@BSZ2015"] = +0.280646;
+                p3["B->D^*::alpha^A12_1@BSZ2015"] = +0.72;
+                p3["B->D^*::alpha^A12_2@BSZ2015"] = +1.33;
+                p3["B->D^*::alpha^V_0@BSZ2015"  ] = +0.01;
+                p3["B->D^*::alpha^V_1@BSZ2015"  ] = +0.02;
+                p3["B->D^*::alpha^V_2@BSZ2015"  ] = +0.03;
+                p3["B->D^*::alpha^T1_0@BSZ2015" ] = +0.27;
+                p3["B->D^*::alpha^T1_1@BSZ2015" ] = -0.74;
+                p3["B->D^*::alpha^T1_2@BSZ2015" ] = +1.45;
+                p3["B->D^*::alpha^T2_0@BSZ2015" ] = +0.27;
+                p3["B->D^*::alpha^T2_1@BSZ2015" ] = +0.47;
+                p3["B->D^*::alpha^T2_2@BSZ2015" ] = +0.58;
+                p3["B->D^*::alpha^T23_0@BSZ2015"] = +0.75;
+                p3["B->D^*::alpha^T23_1@BSZ2015"] = +1.90;
+                p3["B->D^*::alpha^T23_2@BSZ2015"] = +2.93;
+                p3["mass::B_d"]                   = +5.279;
+                p3["mass::D^*_d"]                 = +2.0103;
+                // fix scale
+                p3["mu"]                          = +4.18;
+                // mb(mb)
+                p3["mass::b(MSbar)"]              = +4.18;
+                // mc(mc)
+                p3["mass::c"]                     = +1.275;
+                p3["b->cmunumu::Re{cVL}"]         = +1.0;
+                p3["b->cmunumu::Im{cVL}"]         = -1.0;
+                p3["b->cmunumu::Re{cVR}"]         = +2.0;
+                p3["b->cmunumu::Im{cVR}"]         = -2.0;
+                p3["b->cmunumu::Re{cSL}"]         = +3.0;
+                p3["b->cmunumu::Im{cSL}"]         = -3.0;
+                p3["b->cmunumu::Re{cSR}"]         = +4.0;
+                p3["b->cmunumu::Im{cSR}"]         = -4.0;
+                // switch on the tensor op. contr. here
+                p3["b->cmunumu::Re{cT}"]          = +5.0;
+                p3["b->cmunumu::Im{cT}"]          = -5.0;
+
+                Options oo;
+                oo.set("model", "WilsonScan");
+                oo.set("form-factors", "BSZ2015");
+
+                BToDstarLeptonNeutrino d(p3, oo);
+
+                const double eps = 1e-5;
+
+                // test for different s-bins - the default lepton is muon
+                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 8.0), 2447.32, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(8.0, 10.68), 996.001, eps);
+                // the full phase-space region for muon
+                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 10.68), 5954.003147571892, eps);
             }
         }
 } b_to_dstar_l_nu_test;

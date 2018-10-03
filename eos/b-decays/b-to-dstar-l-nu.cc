@@ -83,10 +83,13 @@ namespace eos
         double normalized_differential_decay_width(const double & s) const
         {
             // form factors
-            double aff0 = form_factors->a_0(s);
-            double aff1 = form_factors->a_1(s);
-            double aff2 = form_factors->a_2(s);
-            double vff  = form_factors->v(s);
+            double aff0  = form_factors->a_0(s);
+            double aff1  = form_factors->a_1(s);
+            double aff2  = form_factors->a_2(s);
+            double vff   = form_factors->v(s);
+            double tff1  = form_factors->t_1(s);
+            double tff2  = form_factors->t_2(s);
+            double tff3  = form_factors->t_3(s);
             // running quark masses
             double mbatmu = model->m_b_msbar(mu);
             double mcatmu = model->m_c_msbar(mu);
@@ -97,24 +100,26 @@ namespace eos
             double mvm1 = m_l * m_l / s;
             double v2 = v * v;
             double norm = 8.0 * v2 * m_B * s * power_of<2>(g_fermi()) / (3.0 * 256.0 * power_of<3>(M_PI * m_B));
-            // define helicity amplitudes
-            const double aa0 = ((-4.0 * aff2 * m_B * m_B * p * p) / (m_B + m_Dstar) + aff1 * (m_B + m_Dstar) * (m_B * m_B - m_Dstar * m_Dstar - s)) / (2.0 * m_Dstar * sqrt(s));
-            const double aapar = 2.0 * (m_B + m_Dstar) * aff1 / sqrt(2.0);
-            const double aaperp = - 4.0 * m_B * p * vff / (sqrt(2.0) * (m_B + m_Dstar));
-            const double aat = 2.0 * m_B * p * aff0 / sqrt(s);
-            const double aap = - 2.0 * m_B * p * aff0 / (mcatmu + mbatmu);
+            // helicity amplitudes, cf. e.g. Sakaki:2013bfa
+            const double hhVp = (m_B + m_Dstar) * aff1 - 2.0 * m_B * p * vff / (m_B + m_Dstar);
+            const double hhVm = (m_B + m_Dstar) * aff1 + 2.0 * m_B * p * vff / (m_B + m_Dstar);
+            const double hhV0 = -((m_B + m_Dstar) / (2.0 * m_Dstar * sqrt(s))) * ((m_B * m_B - m_Dstar * m_Dstar - s) * aff1 - (4.0 * m_B * m_B * p * p * aff2) / ((m_B + m_Dstar) * (m_B + m_Dstar)));
+            const double hhVt = -2.0 * m_B * p * aff0 / sqrt(s);
+            const double hhS  = -2.0 * m_B * p * aff0 / (mcatmu + mbatmu);
+            const double hhTp =  (1.0 / sqrt(s)) * ((m_B * m_B - m_Dstar * m_Dstar) * tff2 + 2.0 * m_B * p * tff1);
+            const double hhTm =  (1.0 / sqrt(s)) * (-(m_B * m_B - m_Dstar * m_Dstar) * tff2 + 2.0 * m_B * p * tff1);
+            const double hhT0 =  (1.0 / (2.0 * m_Dstar)) * (-(m_B * m_B + 3.0 * m_Dstar * m_Dstar - s) * tff2 + 4.0 * m_B * m_B * p * p * tff3 / (m_B * m_B - m_Dstar * m_Dstar));
 
-            // NP contributions in EFT, cf. e.g. [DBG2013]
+            // NP contributions in EFT including tensor operator
             const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
-            const complex<double> gv = wc.cvl() + wc.cvr();
-            const complex<double> ga = wc.cvl() - wc.cvr();
-            const complex<double> gp = wc.csl() - wc.csr();
-            // further definitions
-            const complex<double> aatP = aat * ga + (1.0 / sqrt(mvm1)) * aap * gp;
-            const double aaAV2 = power_of<2>(aa0) * std::norm(ga) + power_of<2>(aapar) * std::norm(ga) + power_of<2>(aaperp) * std::norm(gv);
+            const complex<double> cv1 = wc.cvl() - 1.0;
+            const complex<double> cv2 = wc.cvr();
+            const complex<double> cs1 = wc.csr();
+            const complex<double> cs2 = wc.csl();
+            const complex<double> cT  = wc.ct();
 
-            // normalized(|V_cb|=1) differential decay width for B->Dstarlnu including NP (in SM gv=1, and all other couplings are zero)
-            return norm * p * (aaAV2 + (mvm1 / 2.0) * (aaAV2 + 3.0 * std::norm(aatP)));
+            // normalized(|V_cb|=1) differential decay width for B->Dstarlnu including tensor operators cont. (in SM cvl=1, and all other couplings are zero), cf. e.g. Sakaki:2013bfa
+            return norm * p * ((std::norm(1.0 + cv1) + std::norm(cv2)) * ((1.0 + mvm1 / 2.0) * (power_of<2>(hhVp) + power_of<2>(hhVm) + power_of<2>(hhV0)) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt)) - 2.0 * std::real((1.0 + cv1) * std::conj(cv2)) * ((1.0 + mvm1 / 2.0) * (power_of<2>(hhV0) + 2.0 * hhVp * hhVm) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt)) + (3.0 / 2.0) * std::norm(cs1 - cs2) * power_of<2>(hhS) + 8.0 * std::norm(cT) * (1.0 + 2.0 * mvm1) * (power_of<2>(hhTp) + power_of<2>(hhTm) + power_of<2>(hhT0)) + 3.0 * std::real((1.0 + cv1 - cv2) * (std::conj(cs1) - std::conj(cs2))) * sqrt(mvm1) * hhS * hhVt - 12.0 * std::real((1.0 + cv1) * std::conj(cT)) * sqrt(mvm1) * (hhT0 * hhV0 + hhTp * hhVp - hhTm * hhVm) + 12.0 * std::real(cv2 * std::conj(cT)) * sqrt(mvm1) * (hhT0 * hhV0 + hhTp * hhVm - hhTm * hhVp));
         }
 
         // differential decay width including NP
