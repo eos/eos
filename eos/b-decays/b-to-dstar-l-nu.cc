@@ -119,7 +119,14 @@ namespace eos
             const complex<double> cT  = wc.ct();
 
             // normalized(|V_cb|=1) differential decay width for B->Dstarlnu including tensor operators cont. (in SM cvl=1, and all other couplings are zero), cf. e.g. Sakaki:2013bfa
-            return norm * p * ((std::norm(1.0 + cv1) + std::norm(cv2)) * ((1.0 + mvm1 / 2.0) * (power_of<2>(hhVp) + power_of<2>(hhVm) + power_of<2>(hhV0)) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt)) - 2.0 * std::real((1.0 + cv1) * std::conj(cv2)) * ((1.0 + mvm1 / 2.0) * (power_of<2>(hhV0) + 2.0 * hhVp * hhVm) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt)) + (3.0 / 2.0) * std::norm(cs1 - cs2) * power_of<2>(hhS) + 8.0 * std::norm(cT) * (1.0 + 2.0 * mvm1) * (power_of<2>(hhTp) + power_of<2>(hhTm) + power_of<2>(hhT0)) + 3.0 * std::real((1.0 + cv1 - cv2) * (std::conj(cs1) - std::conj(cs2))) * sqrt(mvm1) * hhS * hhVt - 12.0 * std::real((1.0 + cv1) * std::conj(cT)) * sqrt(mvm1) * (hhT0 * hhV0 + hhTp * hhVp - hhTm * hhVm) + 12.0 * std::real(cv2 * std::conj(cT)) * sqrt(mvm1) * (hhT0 * hhV0 + hhTp * hhVm - hhTm * hhVp));
+            return norm * p * (
+                               (std::norm(1.0 + cv1) + std::norm(cv2)) * ((1.0 + mvm1 / 2.0) * (power_of<2>(hhVp) + power_of<2>(hhVm) + power_of<2>(hhV0)) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt))
+                               - 2.0 * std::real((1.0 + cv1) * std::conj(cv2)) * ((1.0 + mvm1 / 2.0) * (power_of<2>(hhV0) + 2.0 * hhVp * hhVm) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt))
+                               + (3.0 / 2.0) * std::norm(cs1 - cs2) * power_of<2>(hhS) + 8.0 * std::norm(cT) * (1.0 + 2.0 * mvm1) * (power_of<2>(hhTp) + power_of<2>(hhTm) + power_of<2>(hhT0))
+                               + 3.0 * std::real((1.0 + cv1 - cv2) * (std::conj(cs1) - std::conj(cs2))) * sqrt(mvm1) * hhS * hhVt
+                               - 12.0 * std::real((1.0 + cv1) * std::conj(cT)) * sqrt(mvm1) * (hhT0 * hhV0 + hhTp * hhVp - hhTm * hhVm)
+                               + 12.0 * std::real(cv2 * std::conj(cT)) * sqrt(mvm1) * (hhT0 * hhV0 + hhTp * hhVm - hhTm * hhVp)
+                               );
         }
 
         // differential decay width including NP
