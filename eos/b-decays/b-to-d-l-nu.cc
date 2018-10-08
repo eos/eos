@@ -110,7 +110,12 @@ namespace eos
             const complex<double> cs2 = wc.csl();
             const complex<double> cT  = wc.ct();
             // normalized(|V_cb|=1) differential decay width including NP (in SM cvl=1, and all other couplings are zero)
-            return norm * p * (std::norm(1.0 + cv1 + cv2) * ((1.0 + mvm1 / 2.0) * power_of<2>(hhV0) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt)) + 3.0 / 2.0 * std::norm(cs1 + cs2) * power_of<2>(hhS) + 8.0 * std::norm(cT) * (1.0 + 2.0 * mvm1) * power_of<2>(hhT) + 3.0 * std::real((1.0 + cv1 + cv2) * (std::conj(cs1) + std::conj(cs2))) * sqrt(mvm1) * hhS * hhVt - 12.0 * std::real((1.0 + cv1 + cv2) * std::conj(cT)) * sqrt(mvm1) * hhT * hhV0);
+            return norm * p * (
+                               std::norm(1.0 + cv1 + cv2) * ((1.0 + mvm1 / 2.0) * power_of<2>(hhV0) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt))
+                               + 3.0 / 2.0 * std::norm(cs1 + cs2) * power_of<2>(hhS) + 8.0 * std::norm(cT) * (1.0 + 2.0 * mvm1) * power_of<2>(hhT)
+                               + 3.0 * std::real((1.0 + cv1 + cv2) * (std::conj(cs1) + std::conj(cs2))) * sqrt(mvm1) * hhS * hhVt
+                               - 12.0 * std::real((1.0 + cv1 + cv2) * std::conj(cT)) * sqrt(mvm1) * hhT * hhV0
+                               );
         }
 
         // differential decay width including NP
