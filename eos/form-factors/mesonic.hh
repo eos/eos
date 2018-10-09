@@ -84,6 +84,7 @@ namespace eos
             virtual double f_p(const double & s) const = 0;
             virtual double f_0(const double & s) const = 0;
             virtual double f_t(const double & s) const = 0;
+            virtual double f_m(const double & s) const;
 
             virtual double f_p_d1(const double & s) const;
             virtual double f_p_d2(const double & s) const;

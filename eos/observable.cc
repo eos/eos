@@ -169,6 +169,9 @@ namespace eos
             make_form_factor_adapter("B->pi::f_0(s)", "B->pi",
                     &FormFactors<PToP>::f_0, std::make_tuple("s")),
 
+            make_form_factor_adapter("B->pi::f_-(s)", "B->pi",
+                    &FormFactors<PToP>::f_m, std::make_tuple("s")),
+
             make_observable("B->pi::f_+[s^1/s^0](q2)",
                     &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_p,
                     std::make_tuple("q2")),
@@ -202,6 +205,9 @@ namespace eos
 
             make_form_factor_adapter("B->K::f_0(s)", "B->K",
                     &FormFactors<PToP>::f_0, std::make_tuple("s")),
+
+            make_form_factor_adapter("B->K::f_-(s)", "B->K",
+                    &FormFactors<PToP>::f_m, std::make_tuple("s")),
 
             make_observable("B->K::f_+[s^1/s^0](q2)",
                     &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_p,
@@ -431,6 +437,9 @@ namespace eos
 
             make_form_factor_adapter("B->D::f_T(s)", "B->D",
                     &FormFactors<PToP>::f_t, std::make_tuple("s")),
+
+            make_form_factor_adapter("B->D::f_-(s)", "B->D",
+                    &FormFactors<PToP>::f_m, std::make_tuple("s")),
 
             make_observable("B->D::f_+[s^1/s^0](q2)",
                     &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_p,

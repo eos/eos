@@ -9519,6 +9519,13 @@ namespace eos
 
     template <typename Process_>
     double
+    AnalyticFormFactorBToPLCSR<Process_>::f_m(const double & q2) const
+    {
+        return this->_imp->f_pm(q2)-this->_imp->f_p(q2);
+    }
+
+    template <typename Process_>
+    double
     AnalyticFormFactorBToPLCSR<Process_>::f_t(const double & q2) const
     {
         return this->_imp->f_t(q2);

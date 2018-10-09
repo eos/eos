@@ -34,6 +34,7 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/power_of.hh>
 #include <array>
+#include <limits>
 
 namespace eos
 {
@@ -368,9 +369,9 @@ namespace eos
 
             virtual double a_2(const double & s) const
             {
-                // cf. [BFW2010], Eq. (44), p. 16, replacements Eq. (45), p. 16 and Eq. (11), p. 5 
+                // cf. [BFW2010], Eq. (44), p. 16, replacements Eq. (45), p. 16 and Eq. (11), p. 5
                 return (_m_B * (_m_B + _m_V)) / ((_tau_m-s) * (_tau_p-s)) * 1.0 / (1.0 - s / _m_R2_1p) * ((_m_B * _m_B -_m_V * _m_V - s) / sqrt(2)
-                        * (_beta_V2_0 + _beta_V2_1 * _calc_z(s)) - (2 * _m_B * _m_V) 
+                        * (_beta_V2_0 + _beta_V2_1 * _calc_z(s)) - (2 * _m_B * _m_V)
                         * (_beta_V0_0 + _beta_V0_1 * _calc_z(s)));
             }
 
@@ -725,6 +726,11 @@ namespace eos
     };
 
     /* P -> P Processes */
+
+    double FormFactors<PToP>::f_m(const double & s) const
+    {
+        return std::numeric_limits<double>::quiet_NaN();
+    }
 
     double FormFactors<PToP>::f_p_d1(const double & s) const
     {
@@ -1353,7 +1359,7 @@ namespace eos
                 const double qhat2  = mB2 + mP22 - 2.0 * mB * E2;
 
                 const double z  = this->_z(q2);
-                const double zh = this->_zhat(qhat2); 
+                const double zh = this->_zhat(qhat2);
 
                 const double a = _a_Fperp_0_0 + _a_Fperp_1_0 * z + _a_Fperp_0_1 * zh + _a_Fperp_1_1 * z * zh + _a_Fperp_1_2 * z * zh * zh + _a_Fperp_0_2 * zh * zh + _a_Fperp_0_3 * zh * zh * zh;
                 const double b = _b_Fperp_0_0 + _b_Fperp_1_0 * z + _b_Fperp_0_1 * zh + _b_Fperp_1_1 * z * zh + _b_Fperp_1_2 * z * zh * zh + _b_Fperp_0_2 * zh * zh + _b_Fperp_0_3 * zh * zh * zh;
@@ -1396,7 +1402,7 @@ namespace eos
                 const double qhat2  = mB2 + mP22 - 2.0 * mB * E2;
 
                 const double z  = this->_z(q2);
-                const double zh = this->_zhat(qhat2); 
+                const double zh = this->_zhat(qhat2);
 
                 const double a = _a_Fpara_0_0 + _a_Fpara_1_0 * z + _a_Fpara_0_1 * zh + _a_Fpara_1_1 * z * zh + _a_Fpara_1_2 * z * zh * zh + _a_Fpara_0_2 * zh * zh + _a_Fpara_0_3 * zh * zh * zh;
                 const double b = _b_Fpara_0_0 + _b_Fpara_1_0 * z + _b_Fpara_0_1 * zh + _b_Fpara_1_1 * z * zh + _b_Fpara_1_2 * z * zh * zh + _b_Fpara_0_2 * zh * zh + _b_Fpara_0_3 * zh * zh * zh;
@@ -1438,7 +1444,7 @@ namespace eos
                 const double qhat2  = mB2 + mP22 - 2.0 * mB * E2;
 
                 const double z  = this->_z(q2);
-                const double zh = this->_zhat(qhat2); 
+                const double zh = this->_zhat(qhat2);
 
                 const double a = _a_Flong_0_0 + _a_Flong_1_0 * z + _a_Flong_0_1 * zh + _a_Flong_1_1 * z * zh + _a_Flong_1_2 * z * zh * zh + _a_Flong_0_2 * zh * zh + _a_Flong_0_3 * zh * zh * zh;
                 const double b = _b_Flong_0_0 + _b_Flong_1_0 * z + _b_Flong_0_1 * zh + _b_Flong_1_1 * z * zh + _b_Flong_1_2 * z * zh * zh + _b_Flong_0_2 * zh * zh + _b_Flong_0_3 * zh * zh * zh;
