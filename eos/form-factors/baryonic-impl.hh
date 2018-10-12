@@ -29,6 +29,7 @@
 #include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/power_of.hh>
+#include <eos/utils/stringify.hh>
 
 namespace eos
 {
@@ -80,45 +81,45 @@ namespace eos
         public:
             DM2016FormFactors(const Parameters & p) :
                 // time, V
-                _alpha_0_time_v(p["Lambda_b->Lambda::a_0_time^V@DM2016"], *this),
-                _alpha_1_time_v(p["Lambda_b->Lambda::a_1_time^V@DM2016"], *this),
-                _alpha_2_time_v(p["Lambda_b->Lambda::a_2_time^V@DM2016"], *this),
+                _alpha_0_time_v(p[stringify(Process_::label) + "::a_0_time^V@DM2016"], *this),
+                _alpha_1_time_v(p[stringify(Process_::label) + "::a_1_time^V@DM2016"], *this),
+                _alpha_2_time_v(p[stringify(Process_::label) + "::a_2_time^V@DM2016"], *this),
                 // time, A
-                _alpha_0_time_a(p["Lambda_b->Lambda::a_0_time^A@DM2016"], *this),
-                _alpha_1_time_a(p["Lambda_b->Lambda::a_1_time^A@DM2016"], *this),
-                _alpha_2_time_a(p["Lambda_b->Lambda::a_2_time^A@DM2016"], *this),
+                _alpha_0_time_a(p[stringify(Process_::label) + "::a_0_time^A@DM2016"], *this),
+                _alpha_1_time_a(p[stringify(Process_::label) + "::a_1_time^A@DM2016"], *this),
+                _alpha_2_time_a(p[stringify(Process_::label) + "::a_2_time^A@DM2016"], *this),
 
                 // long, V
-                _alpha_0_long_v(p["Lambda_b->Lambda::a_0_long^V@DM2016"], *this),
-                _alpha_1_long_v(p["Lambda_b->Lambda::a_1_long^V@DM2016"], *this),
-                _alpha_2_long_v(p["Lambda_b->Lambda::a_2_long^V@DM2016"], *this),
+                _alpha_0_long_v(p[stringify(Process_::label) + "::a_0_long^V@DM2016"], *this),
+                _alpha_1_long_v(p[stringify(Process_::label) + "::a_1_long^V@DM2016"], *this),
+                _alpha_2_long_v(p[stringify(Process_::label) + "::a_2_long^V@DM2016"], *this),
                 // long, A
-                _alpha_0_long_a(p["Lambda_b->Lambda::a_0_long^A@DM2016"], *this),
-                _alpha_1_long_a(p["Lambda_b->Lambda::a_1_long^A@DM2016"], *this),
-                _alpha_2_long_a(p["Lambda_b->Lambda::a_2_long^A@DM2016"], *this),
+                _alpha_0_long_a(p[stringify(Process_::label) + "::a_0_long^A@DM2016"], *this),
+                _alpha_1_long_a(p[stringify(Process_::label) + "::a_1_long^A@DM2016"], *this),
+                _alpha_2_long_a(p[stringify(Process_::label) + "::a_2_long^A@DM2016"], *this),
                 // perp, V
-                _alpha_0_perp_v(p["Lambda_b->Lambda::a_0_perp^V@DM2016"], *this),
-                _alpha_1_perp_v(p["Lambda_b->Lambda::a_1_perp^V@DM2016"], *this),
-                _alpha_2_perp_v(p["Lambda_b->Lambda::a_2_perp^V@DM2016"], *this),
+                _alpha_0_perp_v(p[stringify(Process_::label) + "::a_0_perp^V@DM2016"], *this),
+                _alpha_1_perp_v(p[stringify(Process_::label) + "::a_1_perp^V@DM2016"], *this),
+                _alpha_2_perp_v(p[stringify(Process_::label) + "::a_2_perp^V@DM2016"], *this),
                 // perp, A
-                _alpha_1_perp_a(p["Lambda_b->Lambda::a_1_perp^A@DM2016"], *this),
-                _alpha_2_perp_a(p["Lambda_b->Lambda::a_2_perp^A@DM2016"], *this),
+                _alpha_1_perp_a(p[stringify(Process_::label) + "::a_1_perp^A@DM2016"], *this),
+                _alpha_2_perp_a(p[stringify(Process_::label) + "::a_2_perp^A@DM2016"], *this),
 
                 // long, T
-                _alpha_0_long_t(p["Lambda_b->Lambda::a_0_long^T@DM2016"], *this),
-                _alpha_1_long_t(p["Lambda_b->Lambda::a_1_long^T@DM2016"], *this),
-                _alpha_2_long_t(p["Lambda_b->Lambda::a_2_long^T@DM2016"], *this),
+                _alpha_0_long_t(p[stringify(Process_::label) + "::a_0_long^T@DM2016"], *this),
+                _alpha_1_long_t(p[stringify(Process_::label) + "::a_1_long^T@DM2016"], *this),
+                _alpha_2_long_t(p[stringify(Process_::label) + "::a_2_long^T@DM2016"], *this),
                 // long, T5
-                _alpha_0_long_t5(p["Lambda_b->Lambda::a_0_long^T5@DM2016"], *this),
-                _alpha_1_long_t5(p["Lambda_b->Lambda::a_1_long^T5@DM2016"], *this),
-                _alpha_2_long_t5(p["Lambda_b->Lambda::a_2_long^T5@DM2016"], *this),
+                _alpha_0_long_t5(p[stringify(Process_::label) + "::a_0_long^T5@DM2016"], *this),
+                _alpha_1_long_t5(p[stringify(Process_::label) + "::a_1_long^T5@DM2016"], *this),
+                _alpha_2_long_t5(p[stringify(Process_::label) + "::a_2_long^T5@DM2016"], *this),
                 // perp, T
-                _alpha_0_perp_t(p["Lambda_b->Lambda::a_0_perp^T@DM2016"], *this),
-                _alpha_1_perp_t(p["Lambda_b->Lambda::a_1_perp^T@DM2016"], *this),
-                _alpha_2_perp_t(p["Lambda_b->Lambda::a_2_perp^T@DM2016"], *this),
+                _alpha_0_perp_t(p[stringify(Process_::label) + "::a_0_perp^T@DM2016"], *this),
+                _alpha_1_perp_t(p[stringify(Process_::label) + "::a_1_perp^T@DM2016"], *this),
+                _alpha_2_perp_t(p[stringify(Process_::label) + "::a_2_perp^T@DM2016"], *this),
                 // perp, T5
-                _alpha_1_perp_t5(p["Lambda_b->Lambda::a_1_perp^T5@DM2016"], *this),
-                _alpha_2_perp_t5(p["Lambda_b->Lambda::a_2_perp^T5@DM2016"], *this)
+                _alpha_1_perp_t5(p[stringify(Process_::label) + "::a_1_perp^T5@DM2016"], *this),
+                _alpha_2_perp_t5(p[stringify(Process_::label) + "::a_2_perp^T5@DM2016"], *this)
             {
             }
 

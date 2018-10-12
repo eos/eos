@@ -28,6 +28,7 @@ namespace eos
 
     /* Lambda_b -> Lambda */
 
+    const constexpr char * LambdaBToLambda::label;
     const constexpr double LambdaBToLambda::tm;
     const constexpr double LambdaBToLambda::tp;
     const constexpr double LambdaBToLambda::mR2_0m;
