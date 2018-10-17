@@ -998,6 +998,150 @@
     max:     +0.000
     comments: ""
 
+# Form factor parameters for Lambda_b -> Lambda_c decay according to
+# [DKMR2017], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
+# params for tensor FFs are included.
+"Lambda_b->Lambda_c::a_0_time^V@DKMR2017" :
+    central: +0.74392566003686
+    min:     +0.74392566003686
+    max:     +0.74392566003686
+    comments: ""
+"Lambda_b->Lambda_c::a_1_time^V@DKMR2017" :
+    central: -4.6476511382467
+    min:     -4.6476511382467
+    max:     -4.6476511382467
+    comments: ""
+"Lambda_b->Lambda_c::a_2_time^V@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda_c::a_0_time^A@DKMR2017" :
+    central: +0.73960499809758
+    min:     +0.73960499809758
+    max:     +0.73960499809758
+    comments: ""
+"Lambda_b->Lambda_c::a_1_time^A@DKMR2017" :
+    central: -4.3664554520299
+    min:     -4.3664554520299
+    max:     -4.3664554520299
+    comments: ""
+"Lambda_b->Lambda_c::a_2_time^A@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda_c::a_0_long^V@DKMR2017" :
+    central: +0.81458549275845
+    min:     +0.81458549275845
+    max:     +0.81458549275845
+    comments: ""
+"Lambda_b->Lambda_c::a_1_long^V@DKMR2017" :
+    central: -4.8987680713973
+    min:     -4.8987680713973
+    max:     -4.8987680713973
+    comments: ""
+"Lambda_b->Lambda_c::a_2_long^V@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda_c::a_0_perp^V@DKMR2017" :
+    central: +1.077996185173
+    min:     +1.077996185173
+    max:     +1.077996185173
+    comments: ""
+"Lambda_b->Lambda_c::a_1_perp^V@DKMR2017" :
+    central: -6.4170836206134
+    min:     -6.4170836206134
+    max:     -6.4170836206134
+    comments: ""
+"Lambda_b->Lambda_c::a_2_perp^V@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda_c::a_0_long^A@DKMR2017" :
+    central: +0.6846557018386
+    min:     +0.6846557018386
+    max:     +0.6846557018386
+    comments: ""
+"Lambda_b->Lambda_c::a_1_long^A@DKMR2017" :
+    central: -4.4311552783827
+    min:     -4.4311552783827
+    max:     -4.4311552783827
+    comments: ""
+"Lambda_b->Lambda_c::a_2_long^A@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda_c::a_1_perp^A@DKMR2017" :
+    central: -4.4633624514401
+    min:     -4.4633624514401
+    max:     -4.4633624514401
+    comments: ""
+"Lambda_b->Lambda_c::a_2_perp^A@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda_c::a_0_long^T@DKMR2017" :
+    central: +0.97518189850197
+    min:     +0.97518189850197
+    max:     +0.97518189850197
+    comments: ""
+"Lambda_b->Lambda_c::a_1_long^T@DKMR2017" :
+    central: -5.4999842229709
+    min:     -5.4999842229709
+    max:     -5.4999842229709
+    comments: ""
+"Lambda_b->Lambda_c::a_2_long^T@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda_c::a_0_perp^T@DKMR2017" :
+    central: +0.70539533108116
+    min:     +0.70539533108116
+    max:     +0.70539533108116
+    comments: ""
+"Lambda_b->Lambda_c::a_1_perp^T@DKMR2017" :
+    central: -4.3577976693726
+    min:     -4.3577976693726
+    max:     -4.3577976693726
+    comments: ""
+"Lambda_b->Lambda_c::a_2_perp^T@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda_c::a_0_long^T5@DKMR2017" :
+    central: +0.67275080357035
+    min:     +0.67275080357035
+    max:     +0.67275080357035
+    comments: ""
+"Lambda_b->Lambda_c::a_1_long^T5@DKMR2017" :
+    central: -4.4321757873186
+    min:     -4.4321757873186
+    max:     -4.4321757873186
+    comments: ""
+"Lambda_b->Lambda_c::a_2_long^T5@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+"Lambda_b->Lambda_c::a_1_perp^T5@DKMR2017" :
+    central: -4.4927847697461
+    min:     -4.4927847697461
+    max:     -4.4927847697461
+    comments: ""
+"Lambda_b->Lambda_c::a_2_perp^T5@DKMR2017" :
+    central: +0.000
+    min:     +0.000
+    max:     +0.000
+    comments: ""
+
 # Initial parameters for Lambda_b->Lambda_c(2595, 2625) transitions in HQET parametrisation from [BBGORvD2018]
 "Lambda_b->Lambda_c^*::zeta(q^2_max)@HQET" :
     central: 0.013054
