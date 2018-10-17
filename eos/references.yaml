@@ -335,6 +335,15 @@
     url:  "http://www.utfit.org/UTfit/ResultsWinter2013PreMoriond"
 
 # Theory results
+
+"DKMR2017" :
+    authors: "Datta, Alakabha and Kamali, Saeed and Meinel, Stefan and
+                        Rashed, Ahmed"
+    title: "{Phenomenology of $ {\Lambda}_b\to {\Lambda}_c\tau
+                        {\overline{\nu}}_{\tau } $ using lattice QCD
+                        calculations}"
+    eprint: "arXiv:hep-ph/1702.02243"
+
 "Sakaki:2013bfa" :
     authors: "Sakaki, Yasuhito and Tanaka, Minoru and Tayduganov,
                         Andrey and Watanabe, Ryoutaro"
