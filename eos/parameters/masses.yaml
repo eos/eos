@@ -162,6 +162,11 @@
     comments: "cf. [PDG2012], p. 165"
 
 # c baryon masses
+"mass::Lambda_c" :
+    central: +2.2865
+    min:     +2.2865
+    max:     +2.2865
+    comments: "cf. [PDG2018]"
 "mass::Lambda_c(2625)" :
     central: +2.62811
     min:     +2.62792
