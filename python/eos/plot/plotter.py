@@ -266,6 +266,39 @@ class Plotter:
 
                     yvalues.append(means[i] / width)
                     yerrors.append(np.sqrt(covariance[i, i]) / width)
+            elif constraint['type'] == 'MultivariateGaussian':
+                if 'observable' not in item:
+                    raise KeyError('observable needs to be specified for MultivariateGaussian constraints')
+                dim = constraint['dim']
+                sigma_stat_hi = np.array(constraint['sigma-stat-hi'])
+                sigma_stat_lo = np.array(constraint['sigma-stat-lo'])
+                sigma_sys = np.array(constraint['sigma-sys'])
+                sigma = np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
+                observables = constraint['observables']
+                means = constraint['means']
+                kinematics = constraint['kinematics']
+
+                xvalues = []
+                xerrors = []
+                yvalues = []
+                yerrors = []
+                for i in range(0, dim):
+                    width = 1
+
+                    if not observables[i] == item['observable']:
+                        continue
+                    _kinematics = kinematics[i]
+                    if item['variable'] in _kinematics:
+                        xvalues.append(_kinematics[item['variable']])
+                        xerrors.append(0)
+                    elif (item['variable'] + '_min' in _kinematics) and (item['variable'] + '_max' in _kinematics):
+                        xvalues.append((_kinematics[item['variable'] + '_max'] + _kinematics[item['variable'] + '_min']) / 2)
+                        xerrors.append((_kinematics[item['variable'] + '_max'] - _kinematics[item['variable'] + '_min']) / 2)
+                        if item['rescale-by-width']:
+                            width = (_kinematics[item['variable'] + '_max'] - _kinematics[item['variable'] + '_min'])
+
+                    yvalues.append(means[i] / width)
+                    yerrors.append(sigma[i] / width)
             else:
                 raise ValueError('type of constraint presently not supported')
 
