@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2014-2017 Danny van Dyk
+ * Copyright (c) 2018 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -35,6 +36,19 @@ namespace eos
     const constexpr double LambdaBToLambda::mR2_0p;
     const constexpr double LambdaBToLambda::mR2_1m;
     const constexpr double LambdaBToLambda::mR2_1p;
+
+    /* Lambda_b -> Lambda_c */
+
+    const constexpr char * LambdaBToLambdaC::label;
+    const constexpr double LambdaBToLambdaC::tm;
+    const constexpr double LambdaBToLambdaC::tp_0m;
+    const constexpr double LambdaBToLambdaC::tp_0p;
+    const constexpr double LambdaBToLambdaC::tp_1m;
+    const constexpr double LambdaBToLambdaC::tp_1p;
+    const constexpr double LambdaBToLambdaC::mR2_0m;
+    const constexpr double LambdaBToLambdaC::mR2_0p;
+    const constexpr double LambdaBToLambdaC::mR2_1m;
+    const constexpr double LambdaBToLambdaC::mR2_1p;
 
     /* Form Factors according to [BFvD2014] */
     class BFvD2014FormFactors :
@@ -133,6 +147,7 @@ namespace eos
         {
             { KeyType("Lambda_b->Lambda",     "BFvD2014"),   &BFvD2014FormFactors::make                      },
             { KeyType("Lambda_b->Lambda",     "DM2016"),     &DM2016FormFactors<LambdaBToLambda>::make       },
+            { KeyType("Lambda_b->Lambda_c",     "DKMR2017"),     &DKMR2017FormFactors<LambdaBToLambdaC>::make       },
         };
 
         /*

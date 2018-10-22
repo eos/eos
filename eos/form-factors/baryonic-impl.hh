@@ -4,6 +4,7 @@
  * Copyright (c) 2014, 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2017 Elena Graverini
  * Copyright (c) 2017, 2018 Marzia Bordone
+ * Copyright (c) 2018 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -54,6 +55,198 @@ namespace eos
         static constexpr double mR2_0p = 5.711 * 5.711;
         static constexpr double mR2_1m = 5.416 * 5.416;
         static constexpr double mR2_1p = 5.750 * 5.750;
+    };
+
+    struct LambdaBToLambdaC {
+        static constexpr const char * label = "Lambda_b->Lambda_c";
+        // initial state mass
+        static constexpr double m1 = 5.61951;
+        // final state mass
+        static constexpr double m2 = 2.2865;
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m1 - m2) * (m1 - m2);
+        // first resonances sorted by spin/parity (from DLM2015 table VII)
+        static constexpr double mBc = 6.276;
+        static constexpr double mR2_0m = mBc * mBc;
+        static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
+        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
+        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+        // see cf. DKMR2017 for the def. of t_+'s; FF specific
+        static constexpr double tp_0m  = mR2_0m;
+        static constexpr double tp_0p  = mR2_0p;
+        static constexpr double tp_1m  = mR2_1m;
+        static constexpr double tp_1p  = mR2_1p;
+    };
+
+    template <typename Process_> class DKMR2017FormFactors :
+        public FormFactors<OneHalfPlusToOneHalfPlus>
+    {
+        private:
+            UsedParameter _alpha_0_time_v, _alpha_1_time_v, _alpha_2_time_v;
+            UsedParameter _alpha_0_time_a, _alpha_1_time_a, _alpha_2_time_a;
+
+            UsedParameter _alpha_0_long_v, _alpha_1_long_v, _alpha_2_long_v;
+            UsedParameter _alpha_0_long_a, _alpha_1_long_a, _alpha_2_long_a;
+            UsedParameter _alpha_0_perp_v, _alpha_1_perp_v, _alpha_2_perp_v;
+            UsedParameter                  _alpha_1_perp_a, _alpha_2_perp_a;
+
+            UsedParameter _alpha_0_long_t,  _alpha_1_long_t,  _alpha_2_long_t;
+            UsedParameter _alpha_0_long_t5, _alpha_1_long_t5, _alpha_2_long_t5;
+            UsedParameter _alpha_0_perp_t,  _alpha_1_perp_t,  _alpha_2_perp_t;
+            UsedParameter                   _alpha_1_perp_t5, _alpha_2_perp_t5;
+
+            static constexpr double _z(const double & t, const double & tp, const double & t0)
+        {
+            return (std::sqrt(tp - t) - std::sqrt(tp - t0)) / (std::sqrt(tp - t) + std::sqrt(tp - t0));
+        }
+
+        public:
+            DKMR2017FormFactors(const Parameters & p) :
+                // time, V
+                _alpha_0_time_v(p[stringify(Process_::label) + "::a_0_time^V@DKMR2017"], *this),
+                _alpha_1_time_v(p[stringify(Process_::label) + "::a_1_time^V@DKMR2017"], *this),
+                _alpha_2_time_v(p[stringify(Process_::label) + "::a_2_time^V@DKMR2017"], *this),
+                // time, A
+                _alpha_0_time_a(p[stringify(Process_::label) + "::a_0_time^A@DKMR2017"], *this),
+                _alpha_1_time_a(p[stringify(Process_::label) + "::a_1_time^A@DKMR2017"], *this),
+                _alpha_2_time_a(p[stringify(Process_::label) + "::a_2_time^A@DKMR2017"], *this),
+
+                // long, V
+                _alpha_0_long_v(p[stringify(Process_::label) + "::a_0_long^V@DKMR2017"], *this),
+                _alpha_1_long_v(p[stringify(Process_::label) + "::a_1_long^V@DKMR2017"], *this),
+                _alpha_2_long_v(p[stringify(Process_::label) + "::a_2_long^V@DKMR2017"], *this),
+                // long, A
+                _alpha_0_long_a(p[stringify(Process_::label) + "::a_0_long^A@DKMR2017"], *this),
+                _alpha_1_long_a(p[stringify(Process_::label) + "::a_1_long^A@DKMR2017"], *this),
+                _alpha_2_long_a(p[stringify(Process_::label) + "::a_2_long^A@DKMR2017"], *this),
+                // perp, V
+                _alpha_0_perp_v(p[stringify(Process_::label) + "::a_0_perp^V@DKMR2017"], *this),
+                _alpha_1_perp_v(p[stringify(Process_::label) + "::a_1_perp^V@DKMR2017"], *this),
+                _alpha_2_perp_v(p[stringify(Process_::label) + "::a_2_perp^V@DKMR2017"], *this),
+                // perp, A
+                _alpha_1_perp_a(p[stringify(Process_::label) + "::a_1_perp^A@DKMR2017"], *this),
+                _alpha_2_perp_a(p[stringify(Process_::label) + "::a_2_perp^A@DKMR2017"], *this),
+
+                // long, T
+                _alpha_0_long_t(p[stringify(Process_::label) + "::a_0_long^T@DKMR2017"], *this),
+                _alpha_1_long_t(p[stringify(Process_::label) + "::a_1_long^T@DKMR2017"], *this),
+                _alpha_2_long_t(p[stringify(Process_::label) + "::a_2_long^T@DKMR2017"], *this),
+                // long, T5
+                _alpha_0_long_t5(p[stringify(Process_::label) + "::a_0_long^T5@DKMR2017"], *this),
+                _alpha_1_long_t5(p[stringify(Process_::label) + "::a_1_long^T5@DKMR2017"], *this),
+                _alpha_2_long_t5(p[stringify(Process_::label) + "::a_2_long^T5@DKMR2017"], *this),
+                // perp, T
+                _alpha_0_perp_t(p[stringify(Process_::label) + "::a_0_perp^T@DKMR2017"], *this),
+                _alpha_1_perp_t(p[stringify(Process_::label) + "::a_1_perp^T@DKMR2017"], *this),
+                _alpha_2_perp_t(p[stringify(Process_::label) + "::a_2_perp^T@DKMR2017"], *this),
+                // perp, T5
+                _alpha_1_perp_t5(p[stringify(Process_::label) + "::a_1_perp^T5@DKMR2017"], *this),
+                _alpha_2_perp_t5(p[stringify(Process_::label) + "::a_2_perp^T5@DKMR2017"], *this)
+        {
+        }
+
+        static FormFactors<OneHalfPlusToOneHalfPlus> * make(const Parameters & parameters, unsigned)
+        {
+            return new DKMR2017FormFactors(parameters);
+        }
+
+        // vector current
+        virtual double f_time_v(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_0p;
+            
+            const double z = _z(s, Process_::tp_0p, Process_::tm), z2 = z * z;
+            
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_time_v() + _alpha_1_time_v() * z + _alpha_2_time_v() * z2);
+        }
+
+        virtual double f_long_v(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_1m;
+            
+            const double z = _z(s, Process_::tp_1m, Process_::tm), z2 = z * z;
+            
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_v() + _alpha_1_long_v() * z + _alpha_2_long_v() * z2);
+        }
+
+        virtual double f_perp_v(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_1m;
+            
+            const double z = _z(s, Process_::tp_1m, Process_::tm), z2 = z * z;
+            
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_perp_v() + _alpha_1_perp_v() * z + _alpha_2_perp_v() * z2);
+        }
+
+        // axial vector current
+        virtual double f_time_a(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_0m;
+            
+            const double z = _z(s, Process_::tp_0m, Process_::tm), z2 = z * z;
+            
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_time_a() + _alpha_1_time_a() * z + _alpha_2_time_a() * z2);
+        }
+
+        virtual double f_long_a(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_1p;
+            
+            const double z = _z(s, Process_::tp_1p, Process_::tm), z2 = z * z;
+            
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_a() + _alpha_1_long_a() * z + _alpha_2_long_a() * z2);
+        }
+
+        virtual double f_perp_a(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_1p;
+            
+            const double z = _z(s, Process_::tp_1p, Process_::tm), z2 = z * z;
+
+            // Using alpha_0_long_a instead of alpha_0_perp_a, in order to
+            // fulfill relation eq. (7), [DM2016], p. 3.
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_a() + _alpha_1_perp_a() * z + _alpha_2_perp_a() * z2);
+        }
+
+        // tensor current
+        virtual double f_long_t(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_1m;
+            
+            const double z = _z(s, Process_::tp_1m, Process_::tm), z2 = z * z;
+            
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t() + _alpha_1_long_t() * z + _alpha_2_long_t() * z2);
+        }
+
+        virtual double f_perp_t(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_1m;
+            
+            const double z = _z(s, Process_::tp_1m, Process_::tm), z2 = z * z;
+            
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_perp_t() + _alpha_1_perp_t() * z + _alpha_2_perp_t() * z2);
+        }
+
+        // axial tensor current
+        virtual double f_long_t5(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_1p;
+            
+            const double z = _z(s, Process_::tp_1p, Process_::tm), z2 = z * z;
+            
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t5() + _alpha_1_long_t5() * z + _alpha_2_long_t5() * z2);
+        }
+
+        virtual double f_perp_t5(const double & s) const
+        {
+            static const double mR2 = Process_::mR2_1p;
+            
+            const double z = _z(s, Process_::tp_1p, Process_::tm), z2 = z * z;
+            
+            // Using alpha_0_long_t5 instead of alpha_0_perp_t5, in order to
+            // fulfill relation eq. (8), [DM2016], p. 3.
+            return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t5() + _alpha_1_perp_t5() * z + _alpha_2_perp_t5() * z2);
+        }
     };
 
     template <typename Process_> class DM2016FormFactors :
