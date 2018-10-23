@@ -256,8 +256,11 @@ elif test "x$with_minuit2" != xno -a "x$with_minuit2" != x ; then
 	if ! test -d "$with_minuit2" ; then
 	AC_MSG_FAILURE(["$with_minuit2 is not a directory. Please check the manual for how to compile with Minuit2"])
 	fi
-	CXXFLAGS="-I$with_minuit2/include $CXXFLAGS"
-	LDFLAGS="-L$with_minuit2/lib $LDFLAGS"
+	MINUIT2_CXXFLAGS="-I$with_minuit2/include"
+	MINUIT2_LDFLAGS="-L$with_minuit2/lib -lMinuit2"
+else
+	MINUIT2_CXXFLAGS=""
+	MINUIT2_LDFLAGS="-lMinuit2"
 fi
 AC_SUBST([MINUIT2_LDFLAGS])
 AC_SUBST([MINUIT2_CXXFLAGS])
