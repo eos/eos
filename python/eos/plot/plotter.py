@@ -458,6 +458,25 @@ class Plotter:
         plt.hist2d(xdata, ydata, bins=bins, cmin=1)
 
 
+    def plot_function(self, item):
+        if 'f' not in item:
+            raise KeyError('no function specificied')
+        f = item['f']
+        alpha  = item['opacity'] if 'opacity' in item else 1.0
+        color  = item['color']   if 'color'   in item else 'black'
+        style  = item['style']   if 'style'   in item else '-'
+        points = item['points']  if 'points'  in item else 100
+
+        xmin, xmax = plt.xlim()
+        x = np.linspace(xmin, xmax, points)
+        y = []
+
+        for xvalue in x:
+            y.append(eval(f, {}, {'x': xvalue}))
+
+        plt.plot(x, y, color=color, alpha=alpha, linestyle=style)
+
+
     def plot_eos_watermark(self, item):
         xdelta, ydelta = (0.04, 0.04)
 
@@ -501,6 +520,7 @@ class Plotter:
         plot_functions = {
             'constraint':  Plotter.plot_constraint,
             'contours2D':  Plotter.plot_contours2d,
+            'function':    Plotter.plot_function,
             'histogram':   Plotter.plot_histogram,
             'histogram2D': Plotter.plot_histogram2d,
             'kde':         Plotter.plot_kde,
