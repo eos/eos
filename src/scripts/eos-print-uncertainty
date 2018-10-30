@@ -45,9 +45,9 @@ def main():
         print('# %s (%s)' % (parameters[i][0],parameters[i][1]))
 
         x = numpy.sort(data[:, i])
-        print('        median: %f' % numpy.percentile(x, 0.5))
-        print('  68%% interval: [%f, %f]' % (numpy.percentile(x, 0.16), numpy.percentile(x, 0.84)))
-        print('  95%% interval: [%f, %f]' % (numpy.percentile(x, 0.025), numpy.percentile(x, 0.975)))
+        print('        median: %f' % numpy.percentile(x, 50))
+        print('  68%% interval: [%f, %f]' % (numpy.percentile(x, 16), numpy.percentile(x, 84)))
+        print('  95%% interval: [%f, %f]' % (numpy.percentile(x, 2.5), numpy.percentile(x, 97.5)))
 
         print('  mean = %e' % numpy.mean(data[:, i]))
         print('   std = %e' % numpy.std(data[:, i]))
