@@ -190,13 +190,15 @@ class Plotter:
         if 'opacity' in item:
             alpha = item['opacity']
 
+        label = item['label'] if 'label' in item else None
+
         # TODO: replace scipy.interpolate.spline
         xvalues = np.linspace(np.min(_xvalues),np.max(_xvalues),100)
         ovalues_lower   = scipy.interpolate.spline(_xvalues, _ovalues_lower,   xvalues)
         ovalues_central = scipy.interpolate.spline(_xvalues, _ovalues_central, xvalues)
         ovalues_higher  = scipy.interpolate.spline(_xvalues, _ovalues_higher,  xvalues)
 
-        plt.fill_between(xvalues, ovalues_lower, ovalues_higher, lw=0, color=color, alpha=alpha)
+        plt.fill_between(xvalues, ovalues_lower, ovalues_higher, lw=0, color=color, alpha=alpha, label=label)
         plt.plot(xvalues, ovalues_lower,   color=color, alpha=alpha)
         plt.plot(xvalues, ovalues_central, color=color, alpha=alpha)
         plt.plot(xvalues, ovalues_higher,  color=color, alpha=alpha)
@@ -315,9 +317,10 @@ class Plotter:
             yerrors = np.array(yerrors)
 
             color = item['color'] if 'color' in item else 'black'
+            label = item['label'] if 'label'   in item else None
 
             plt.errorbar(x=xvalues, y=yvalues, xerr=xerrors, yerr=yerrors.T,
-                color=color, elinewidth=1.0, fmt='_', linestyle='none')
+                color=color, elinewidth=1.0, fmt='_', linestyle='none', label=label)
 
 
     def plot_contours2d(self, item):
@@ -466,6 +469,7 @@ class Plotter:
         color  = item['color']   if 'color'   in item else 'black'
         style  = item['style']   if 'style'   in item else '-'
         points = item['points']  if 'points'  in item else 100
+        label  = item['label']   if 'label'   in item else None
 
         xmin, xmax = plt.xlim()
         x = np.linspace(xmin, xmax, points)
@@ -474,7 +478,7 @@ class Plotter:
         for xvalue in x:
             y.append(eval(f, {}, {'x': xvalue}))
 
-        plt.plot(x, y, color=color, alpha=alpha, linestyle=style)
+        plt.plot(x, y, color=color, alpha=alpha, linestyle=style, label=label)
 
 
     def plot_eos_watermark(self, item):
@@ -557,6 +561,10 @@ class Plotter:
                 KeyError('unknown content type: "{}"'.format(item_type))
 
             plot_functions[item_type](self, item)
+
+        if 'legend' in self.instructions['plot']:
+            if 'location' in self.instructions['plot']['legend']:
+                self.ax.legend(loc=self.instructions['plot']['legend']['location'])
 
 
     def plot(self):
