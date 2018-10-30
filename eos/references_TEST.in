@@ -26,6 +26,7 @@ def main():
     except Exception as e:
         print("Error while parsing references.yaml")
         print(e)
+        sys.exit(-1)
 
     sys.exit(0)
 
