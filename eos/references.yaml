@@ -337,19 +337,14 @@
 # Theory results
 
 "DKMR2017" :
-    authors: "Datta, Alakabha and Kamali, Saeed and Meinel, Stefan and
-                        Rashed, Ahmed"
-    title: "{Phenomenology of $ {\Lambda}_b\to {\Lambda}_c\tau
-                        {\overline{\nu}}_{\tau } $ using lattice QCD
-                        calculations}"
-    eprint: "arXiv:hep-ph/1702.02243"
+    authors: "Datta, A. and Kamali, S. and Meinel, S. and Rashed, A."
+    title: "Phenomenology of Lambda_b ---> Lambda_c tau nubar_tau using lattice QCD calculations"
+    eprint: "arXiv:1702.02243 [hep-ph]"
 
-"Sakaki:2013bfa" :
-    authors: "Sakaki, Yasuhito and Tanaka, Minoru and Tayduganov,
-                        Andrey and Watanabe, Ryoutaro"
-    title: "{Testing leptoquark models in $\bar B \to D^{(*)} \tau
-                        \bar\nu$}"
-    eprint: "arXiv:hep-ph/1309.0301"
+"STTW2013" :
+    authors: "Sakaki, Y. and Tanaka, M. and Tayduganov, A. and Watanabe, R."
+    title: "Testing leptoquark models in B ---> D^(*) tau nubar"
+    eprint: "arXiv:1309.0301 [hep-ph]"
 
 "2006zs" :
     authors: "Misiak, M. et al"
@@ -398,7 +393,7 @@
     eprint: "arXiv:hep-ph/9901288"
 
 "BBGORvD2018" :
-    authors: "Böer, P. and Bordone, M. and Graverini, E. and Rotondo, M. and van Dyk, D."
+    authors: "Boeer, P. and Bordone, M. and Graverini, E. and Rotondo, M. and van Dyk, D."
     title: "Testing lepton flavour universality in semileptonic Lambda_b -> Lambda_c^* decays"
     eprint: "arXiv:1801.08367"
 
