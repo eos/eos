@@ -2227,6 +2227,42 @@ B_s->K^*::V@MILC-2013A:
 # B -> rho form factors #
 #########################
 # {{{
+B->rho::A_1@KMO2006:
+  type: Gaussian
+  observable: 'B->rho::A_1(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.24
+  sigma-stat: {hi: 0.08, lo: 0.08}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->rho::A_2@KMO2006:
+  type: Gaussian
+  observable: 'B->rho::A_2(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.21
+  sigma-stat: {hi: 0.09, lo: 0.09}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->rho::V@KMO2006:
+  type: Gaussian
+  observable: 'B->rho::V(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.32
+  sigma-stat: {hi: 0.10, lo: 0.10}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->rho::T_1@KMO2006:
+  type: Gaussian
+  observable: 'B->rho::T_1(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.28
+  sigma-stat: {hi: 0.09, lo: 0.09}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
 B->rho::FormFactors[A_0,A_1,A_2,V,T_1,T_2,T_23]@GKvD2018:
   type: MultivariateGaussian(Covariance)
   dim: 33
