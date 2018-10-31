@@ -22,6 +22,33 @@ B->D^*::A_1[s_max]@HPQCD-2017:
     sigma-stat: {hi: 0.00893455, lo: -0.00893455}
     sigma-sys:  {hi: 0.0214429,  lo: -0.0214429}
     dof: 1
+B->D^*::A_1@FKKM2008:
+  type: Gaussian
+  observable: 'B->D^*::A_1(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.73
+  sigma-stat: {hi: 0.19, lo: 0.19}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->D^*::A_2@FKKM2008:
+  type: Gaussian
+  observable: 'B->D^*::A_2(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.66
+  sigma-stat: {hi: 0.30, lo: 0.30}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->D^*::V@FKKM2008:
+  type: Gaussian
+  observable: 'B->D^*::V(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.96
+  sigma-stat: {hi: 0.29, lo: 0.29}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
 B->D^(*)::FormFactors[f_+,f_0,f_T,A_0,A_1,A_2,V,T_1,T_2,T_23]@GKvD2018:
   type: MultivariateGaussian(Covariance)
   dim: 37

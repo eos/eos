@@ -578,4 +578,14 @@ B->D::f_++f_0@HPQCD2015A:
         -   [0.001063, 0.001017, 0.0009511, 0.0008681, 0.001165, 0.001283, 0.00141]
         -   [0.001045, 0.001021, 0.0009865, 0.0009425, 0.00121, 0.00141, 0.001635]
     dof: 0
+B->D::f_+@FKKM2008:
+  type: Gaussian
+  observable: 'B->D::f_+(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.69
+  sigma-stat: {hi: 0.20, lo: 0.20}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
 # }}}
+
