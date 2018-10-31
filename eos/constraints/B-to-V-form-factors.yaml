@@ -1056,6 +1056,42 @@ B->D^(*)::FormFactors[parametric,LCSRLattice]@GKvD2018:
 # B -> K^* form factors #
 #########################
 # {{{
+B->K^*::A_1@KMO2006:
+  type: Gaussian
+  observable: 'B->K^*::A_1(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.30
+  sigma-stat: {hi: 0.08, lo: 0.08}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->K^*::A_2@KMO2006:
+  type: Gaussian
+  observable: 'B->K^*::A_2(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.26
+  sigma-stat: {hi: 0.08, lo: 0.08}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->K^*::V@KMO2006:
+  type: Gaussian
+  observable: 'B->K^*::V(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.39
+  sigma-stat: {hi: 0.11, lo: 0.11}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->K^*::T_1@KMO2006:
+  type: Gaussian
+  observable: 'B->K^*::T_1(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.33
+  sigma-stat: {hi: 0.11, lo: 0.11}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
 B->K^*::A_12@MILC-2013A:
     type: MultivariateGaussian
     dim: 2
