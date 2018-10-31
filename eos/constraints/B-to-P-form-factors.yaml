@@ -331,6 +331,24 @@ B->K::f_0+f_++f_T@HPQCD-2013A:
         -   [0.0998671, 0.0933393, 0.046188, 0.212712, 0.262759, 0.140985, 0.785177, 1, 0.853052]
         -   [0.0477771, 0.0749594, 0.0580487, 0.0508819, 0.197032, 0.220042, 0.457065, 0.853052, 1]
     dof: 0
+B->K::f_+@KMO2006:
+  type: Gaussian
+  observable: 'B->K::f_+(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.31
+  sigma-stat: {hi: 0.04, lo: 0.04}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->K::f_T@KMO2006:
+  type: Gaussian
+  observable: 'B->K::f_T(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.27
+  sigma-stat: {hi: 0.04, lo: 0.04}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
 B->K::FormFactors[f_+,f_0,f_T]@GKvD2018:
   type: MultivariateGaussian(Covariance)
   dim: 14
