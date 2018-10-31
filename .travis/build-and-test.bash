@@ -26,8 +26,10 @@ function build_and_test_ubuntu() {
 }
 
 function build_and_coverage_ubuntu() {
+    pushd /src
+    ./autogen.bash
+    popd
     pushd /build
-    make distclean
     export CXXFLAGS="-O2 -g --coverage"
     /src/configure \
         --enable-pmc \
@@ -71,6 +73,9 @@ shift 1
 export TAG=${1}
 shift 1
 
+export USE=${1}
+shift 1
+
 echo "==========="
 ${CXX} --version
 
@@ -81,11 +86,14 @@ echo "==========="
 echo "==========="
 
 if [[ "xenial" == ${OS} ]] || [[ "bionic" == ${OS} ]]; then
-    build_and_test_ubuntu $@
+    if [[ "test" == ${USE} ]] ; then
+        build_and_test_ubuntu $@
+    elif [[ "coverage" == ${USE} ]] ; then
+        if [[ -n ${COVERALLS_TOKEN} ]] ; then
+            build_and_coverage_ubuntu $@
+        fi
+    fi
 elif [[ "osx" == ${OS} ]] ; then
     build_and_test_osx $@
 fi
 
-if [[ -n ${COVERALLS_TOKEN} ]] && [[ "xenial" == ${OS} ]] && [[ "g++" == ${CXX} ]] ; then
-    build_and_coverage_ubuntu $@
-fi

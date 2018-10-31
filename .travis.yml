@@ -11,21 +11,25 @@ unused: &linux-template
   script:
     - >
        docker run -it -e COVERALLS_TOKEN -e PACKAGECLOUD_TOKEN eos:${DOCKER_TARGET}
-       /bin/bash /src/.travis/build-and-test.bash ${DOCKER_TARGET} ${DOCKER_CXX} "${TRAVIS_TAG}"
+       /bin/bash /src/.travis/build-and-test.bash ${DOCKER_TARGET} ${DOCKER_CXX} "${TRAVIS_TAG}" ${DOCKER_USE}
 
 matrix:
   include:
     - <<: *linux-template
       env:
-        - DOCKER_TARGET=xenial DOCKER_CXX=g++
+        - DOCKER_TARGET=xenial DOCKER_CXX=g++          DOCKER_USE=coverage
 
     - <<: *linux-template
       env:
-        - DOCKER_TARGET=xenial DOCKER_CXX=clang++-4.0
+        - DOCKER_TARGET=xenial DOCKER_CXX=g++          DOCKER_USE=test
 
     - <<: *linux-template
       env:
-        - DOCKER_TARGET=bionic DOCKER_CXX=g++
+        - DOCKER_TARGET=xenial DOCKER_CXX=clang++-4.0  DOCKER_USE=test
+
+    - <<: *linux-template
+      env:
+        - DOCKER_TARGET=bionic DOCKER_CXX=g++          DOCKER_USE=test
 
     - os: osx
       osx_image: xcode9.3
@@ -42,7 +46,7 @@ matrix:
         - brew install autoconf boost-python3 gsl hdf5 libtool minuit2 pmclib python3 yaml-cpp
         - pip3 install h5py matplotlib scipy PyYAML
       script:
-        - /bin/bash .travis/build-and-test.bash osx g++ "${TRAVIS_TAG}"
+        - /bin/bash .travis/build-and-test.bash osx g++ "${TRAVIS_TAG}" test
 
 notifications:
   webhooks:
