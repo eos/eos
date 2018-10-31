@@ -73,6 +73,24 @@ B->pi::f_+@IKMvD-2014:
         -   [0.5639999999999999, 0.863, 0.853, 0.8139999999999999, 1, 0.647]
         -   [0.313, 0.246, 0.221, 0.389, 0.647, 1]
     dof: 0
+B->pi::f_+@KMO2006:
+  type: Gaussian
+  observable: 'B->pi::f_+(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.25
+  sigma-stat: {hi: 0.05, lo: 0.05}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B->pi::f_T@KMO2006:
+  type: Gaussian
+  observable: 'B->pi::f_T(s)'
+  kinematics: {s: 0}
+  options: {form-factors: BSZ2015}
+  mean: 0.21
+  sigma-stat: {hi: 0.04, lo: 0.04}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
 B->pi::FormFactors[f_+,f_0,f_T]@GKvD2018:
   type: MultivariateGaussian(Covariance)
   dim: 14
