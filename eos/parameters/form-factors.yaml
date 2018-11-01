@@ -526,130 +526,133 @@
     max:      0.0
     comments: ""
 
-# form factor parameters for B->pi inspired by [BCL2015]
+# form factor parameters for B->pi inspired by [BSZ2015]
+# new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
 "B->pi::alpha^f+_0@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.1959500850585235
+    min:     +0.1959500850585235
+    max:     +0.1959500850585235
     comments: ""
 "B->pi::alpha^f+_1@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -0.7763565146997043
+    min:     -0.7763565146997043
+    max:     -0.7763565146997043
     comments: ""
 "B->pi::alpha^f+_2@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -0.19660537219243024
+    min:     -0.19660537219243024
+    max:     -0.19660537219243024
     comments: ""
 "B->pi::alpha^f0_1@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -0.01446803146697799
+    min:     -0.01446803146697799
+    max:     -0.01446803146697799
     comments: ""
 "B->pi::alpha^f0_2@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -0.19529667411047308
+    min:     -0.19529667411047308
+    max:     -0.19529667411047308
     comments: ""
 "B->pi::alpha^fT_0@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.17311654822482725
+    min:     +0.17311654822482725
+    max:     +0.17311654822482725
     comments: ""
 "B->pi::alpha^fT_1@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -0.40903716524130396
+    min:     -0.40903716524130396
+    max:     -0.40903716524130396
     comments: ""
 "B->pi::alpha^fT_2@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -0.2580355775883392
+    min:     -0.2580355775883392
+    max:     -0.2580355775883392
     comments: ""
 
-# form factor parameters for B->K inspired by [BCL2015]
+# form factor parameters for B->K inspired by [BSZ2015]
+# new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
 "B->K::alpha^f+_0@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.32908992854636815
+    min:     +0.32908992854636815
+    max:     +0.32908992854636815
     comments: ""
 "B->K::alpha^f+_1@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -0.8669465867427438
+    min:     -0.8669465867427438
+    max:     -0.8669465867427438
     comments: ""
 "B->K::alpha^f+_2@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.006095669673341246
+    min:     +0.006095669673341246
+    max:     +0.006095669673341246
     comments: ""
 "B->K::alpha^f0_1@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.19511719957037596
+    min:     +0.19511719957037596
+    max:     +0.19511719957037596
     comments: ""
 "B->K::alpha^f0_2@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -0.4461264576740431
+    min:     -0.4461264576740431
+    max:     -0.4461264576740431
     comments: ""
 "B->K::alpha^fT_0@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.2993831492500477
+    min:     +0.2993831492500477
+    max:     +0.2993831492500477
     comments: ""
 "B->K::alpha^fT_1@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -0.7735456824025474
+    min:     -0.7735456824025474
+    max:     -0.7735456824025474
     comments: ""
 "B->K::alpha^fT_2@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.009554375102511888
+    min:     +0.009554375102511888
+    max:     +0.009554375102511888
     comments: ""
 
-# form factor parameters for B->D inspired by [BCL2015]
+# form factor parameters for B->D inspired by [BSZ2015]
+# new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
 "B->D::alpha^f+_0@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.680881482963591
+    min:     +0.680881482963591
+    max:     +0.680881482963591
     comments: ""
 "B->D::alpha^f+_1@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -2.221782088112512
+    min:     -2.221782088112512
+    max:     -2.221782088112512
     comments: ""
 "B->D::alpha^f+_2@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.6541000835887975
+    min:     +0.6541000835887975
+    max:     +0.6541000835887975
     comments: ""
 "B->D::alpha^f0_1@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.5779088408438552
+    min:     +0.5779088408438552
+    max:     +0.5779088408438552
     comments: ""
 "B->D::alpha^f0_2@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +1.3271162015486215
+    min:     +1.3271162015486215
+    max:     +1.3271162015486215
     comments: ""
 "B->D::alpha^fT_0@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +0.5648201165054019
+    min:     +0.5648201165054019
+    max:     +0.5648201165054019
     comments: ""
 "B->D::alpha^fT_1@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: -2.5027753865334676
+    min:     -2.5027753865334676
+    max:     -2.5027753865334676
     comments: ""
 "B->D::alpha^fT_2@BSZ2015" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
+    central: +10.591752810763625
+    min:     +10.591752810763625
+    max:     +10.591752810763625
     comments: ""
 
 # form factor parameters for B->K^* according to [BZ2004] (approximate)
@@ -1313,107 +1316,103 @@
     max:     +0.03
     comments: ""
 
-# form-factor parameters for B->K* simple series
-# expansion (SSE) based on LCSR according to
-# [BSZ2015]. We don't use table 11, p. 40 but did our own
-# fit to the combination of LCSR and lattice inputs
-# [HLMW2015] with the info both groups provided to us.
-# Use (B.6) to replace A_12(0), and T_1(0) = T_2(0) to
-# replace T_2(0).
+# form-factor parameters for B->K* 
+# new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
+# Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
 "B->K^*::alpha^A0_0@BSZ2015" :
-    central: +0.35
-    min:     +0.32
-    max:     +0.37
+    central: +0.34339209971345386
+    min:     +0.34339209971345386
+    max:     +0.34339209971345386
     comments: ""
 "B->K^*::alpha^A0_1@BSZ2015" :
-    central: -1.21
-    min:     -1.29
-    max:     -1.13
+    central: -1.1296312022549928
+    min:     -1.1296312022549928
+    max:     -1.1296312022549928
     comments: ""
 "B->K^*::alpha^A0_2@BSZ2015" :
-    central: +0.77
-    min:     +0.29
-    max:     +1.22
+    central: +2.3262919488225116
+    min:     +2.3262919488225116
+    max:     +2.3262919488225116
     comments: ""
 "B->K^*::alpha^A1_0@BSZ2015" :
-    central: +0.2625
-    min:     +0.2475
-    max:     +0.2775
+    central: +0.30123836969938433
+    min:     +0.30123836969938433
+    max:     +0.30123836969938433
     comments: ""
 "B->K^*::alpha^A1_1@BSZ2015" :
-    central: +0.07
-    min:     -0.01
-    max:     +0.13
+    central: +0.5046280709625639
+    min:     +0.5046280709625639
+    max:     +0.5046280709625639
     comments: ""
 "B->K^*::alpha^A1_2@BSZ2015" :
-    central: +0.045
-    min:     -0.105
-    max:     +0.165
+    central: +1.1417500321900251
+    min:     +1.1417500321900251
+    max:     +1.1417500321900251
     comments: ""
 "B->K^*::alpha^A12_1@BSZ2015" :
-    central: +0.53
-    min:     +0.39
-    max:     +0.63
+    central: +0.5553962796553867
+    min:     +0.5553962796553867
+    max:     +0.5553962796553867
     comments: ""
 "B->K^*::alpha^A12_2@BSZ2015" :
-    central: +0.315
-    min:     -0.075
-    max:     +0.645
+    central: +0.6647053900993466
+    min:     +0.6647053900993466
+    max:     +0.6647053900993466
     comments: ""
 "B->K^*::alpha^V_0@BSZ2015" :
-    central: +0.3475
-    min:     +0.3225
-    max:     +0.3625
+    central: +0.3815471168511042
+    min:     +0.3815471168511042
+    max:     +0.3815471168511042
     comments: ""
 "B->K^*::alpha^V_1@BSZ2015" :
-    central: -1.19
-    min:     -1.27
-    max:     -1.11
+    central: -1.1035111471855805
+    min:     -1.1035111471855805
+    max:     -1.1035111471855805
     comments: ""
 "B->K^*::alpha^V_2@BSZ2015" :
-    central: +1.545
-    min:     +1.215
-    max:     +1.875
+    central: +2.1066350644810394
+    min:     +2.1066350644810394
+    max:     +2.1066350644810394
     comments: ""
 "B->K^*::alpha^T1_0@BSZ2015" :
-    central: +0.3125
-    min:     +0.2925
-    max:     +0.3275
+    central: +0.33781962513574243
+    min:     +0.33781962513574243
+    max:     +0.33781962513574243
     comments: ""
 "B->K^*::alpha^T1_1@BSZ2015" :
-    central: -1.07
-    min:     -1.15
-    max:     -0.99
+    central: -0.8677845009935159
+    min:     -0.8677845009935159
+    max:     -0.8677845009935159
     comments: ""
 "B->K^*::alpha^T1_2@BSZ2015" :
-    central: +1.395
-    min:     +1.095
-    max:     +1.695
+    central: -0.11694434665663116
+    min:     -0.11694434665663116
+    max:     -0.11694434665663116
     comments: ""
 "B->K^*::alpha^T2_1@BSZ2015" :
-    central: +0.33
-    min:     +0.23
-    max:     +0.41
+    central: +0.6959696346749498
+    min:     +0.6959696346749498
+    max:     +0.6959696346749498
     comments: ""
 "B->K^*::alpha^T2_2@BSZ2015" :
-    central: +0.255
-    min:     +0.015
-    max:     +0.465
+    central: -1.1136735066833228
+    min:     -1.1136735066833228
+    max:     -1.1136735066833228
     comments: ""
 "B->K^*::alpha^T23_0@BSZ2015" :
-    central: +0.6675
-    min:     +0.6225
-    max:     +0.7025
+    central: +0.6454874220120908
+    min:     +0.6454874220120908
+    max:     +0.6454874220120908
     comments: ""
 "B->K^*::alpha^T23_1@BSZ2015" :
-    central: +0.93
-    min:     +0.71
-    max:     +1.21
+    central: +0.7287741888333001
+    min:     +0.7287741888333001
+    max:     +0.7287741888333001
     comments: ""
 "B->K^*::alpha^T23_2@BSZ2015" :
-    central: -0.15
-    min:     -0.855
-    max:     +0.705
+    central: -0.3112553766962693
+    min:     -0.3112553766962693
+    max:     -0.3112553766962693
     comments: ""
 
 # B LCDA parameters
@@ -1514,220 +1513,203 @@
     max:     1.25
     comments: "GeV^2"
 
-# No valid form-factor parameters for B->D* case are available yet, so we leave everything at zero for the moment.
+# new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
+# Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
 "B->D^*::alpha^A0_0@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +0.6759274184148141
+    min:     +0.6759274184148141
+    max:     +0.6759274184148141
     comments: ""
 "B->D^*::alpha^A0_1@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: -2.6637000799846655
+    min:     -2.6637000799846655
+    max:     -2.6637000799846655
     comments: ""
 "B->D^*::alpha^A0_2@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +9.24495323738047
+    min:     +9.24495323738047
+    max:     +9.24495323738047
     comments: ""
 "B->D^*::alpha^A1_0@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +0.601315572767782
+    min:     +0.601315572767782
+    max:     +0.601315572767782
     comments: ""
 "B->D^*::alpha^A1_1@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +0.2689438444495897
+    min:     +0.2689438444495897
+    max:     +0.2689438444495897
     comments: ""
 "B->D^*::alpha^A1_2@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-    comments: ""
-"B->D^*::alpha^A12_0@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +10.486032487112988
+    min:     +10.486032487112988
+    max:     +10.486032487112988
     comments: ""
 "B->D^*::alpha^A12_1@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: -0.14876383294863582
+    min:     -0.14876383294863582
+    max:     -0.14876383294863582
     comments: ""
 "B->D^*::alpha^A12_2@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +5.724359813703122
+    min:     +5.724359813703122
+    max:     +5.724359813703122
     comments: ""
 "B->D^*::alpha^V_0@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +0.6851323923652662
+    min:     +0.6851323923652662
+    max:     +0.6851323923652662
     comments: ""
 "B->D^*::alpha^V_1@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: -1.1678379355866901
+    min:     -1.1678379355866901
+    max:     -1.1678379355866901
     comments: ""
 "B->D^*::alpha^V_2@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: -4.016847943717434
+    min:     -4.016847943717434
+    max:     -4.016847943717434
     comments: ""
 "B->D^*::alpha^T1_0@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +0.6302298493900512
+    min:     +0.6302298493900512
+    max:     +0.6302298493900512
     comments: ""
 "B->D^*::alpha^T1_1@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: -1.4175767766320952
+    min:     -1.4175767766320952
+    max:     -1.4175767766320952
     comments: ""
 "B->D^*::alpha^T1_2@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-    comments: ""
-"B->D^*::alpha^T2_0@BSZ2015" :
-    central: +0.0
-    min:     +0.0
-    max:     +0.0
+    central: -0.6878528871949201
+    min:     -0.6878528871949201
+    max:     -0.6878528871949201
     comments: ""
 "B->D^*::alpha^T2_1@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +1.5226848746033717
+    min:     +1.5226848746033717
+    max:     +1.5226848746033717
     comments: ""
 "B->D^*::alpha^T2_2@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +0.006625613047247359
+    min:     +0.006625613047247359
+    max:     +0.006625613047247359
     comments: ""
 "B->D^*::alpha^T23_0@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +0.806230464649646
+    min:     +0.806230464649646
+    max:     +0.806230464649646
     comments: ""
 "B->D^*::alpha^T23_1@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +0.5855443911134184
+    min:     +0.5855443911134184
+    max:     +0.5855443911134184
     comments: ""
 "B->D^*::alpha^T23_2@BSZ2015" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+    central: +4.667079193615467
+    min:     +4.667079193615467
+    max:     +4.667079193615467
     comments: ""
 
-# form-factor parameters for B->rho simple series
-# expansion (SSE) based on LCSR according to
-# [BSZ2015], Table 14 of v3 of that paper.
+
+# form-factor parameters for B->rho
+# new updated results based on LCSR-only fit from the GKvD2018 calculation
+# note that no lattice results exists for B->rho FFs yet
+# Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
 "B->rho::alpha^A0_0@BSZ2015" :
-    central: +0.36
-    min:     +0.32
-    max:     +0.40
+    central: +0.2925336490766787
+    min:     +0.2925336490766787
+    max:     +0.2925336490766787
     comments: ""
 "B->rho::alpha^A0_1@BSZ2015" :
-    central: -0.83
-    min:     -1.03
-    max:     -0.63
+    central: -0.7432269609691062
+    min:     -0.7432269609691062
+    max:     -0.7432269609691062
     comments: ""
 "B->rho::alpha^A0_2@BSZ2015" :
-    central: +1.33
-    min:     +0.28
-    max:     +2.38
+    central: -0.013648222902133517
+    min:     -0.013648222902133517
+    max:     -0.013648222902133517
     comments: ""
 "B->rho::alpha^A1_0@BSZ2015" :
-    central: +0.26
-    min:     +0.23
-    max:     +0.29
+    central: +0.2142700210705677
+    min:     +0.2142700210705677
+    max:     +0.2142700210705677
     comments: ""
 "B->rho::alpha^A1_1@BSZ2015" :
-    central: +0.39
-    min:     +0.25
-    max:     +0.53
+    central: +0.4948341716573042
+    min:     +0.4948341716573042
+    max:     +0.4948341716573042
     comments: ""
 "B->rho::alpha^A1_2@BSZ2015" :
-    central: +0.16
-    min:     -0.25
-    max:     +0.57
-    comments: ""
-"B->rho::alpha^A12_0@BSZ2015" :
-    central: +0.30
-    min:     +0.27
-    max:     +0.33
+    central: -0.5898416575860281
+    min:     -0.5898416575860281
+    max:     -0.5898416575860281
     comments: ""
 "B->rho::alpha^A12_1@BSZ2015" :
-    central: +0.76
-    min:     +0.56
-    max:     +0.96
+    central: +0.5301085432518904
+    min:     +0.5301085432518904
+    max:     +0.5301085432518904
     comments: ""
 "B->rho::alpha^A12_2@BSZ2015" :
-    central: +0.46
-    min:     -0.36
-    max:     +1.22
+    central: -0.1698995165626285
+    min:     -0.1698995165626285
+    max:     -0.1698995165626285
     comments: ""
 "B->rho::alpha^V_0@BSZ2015" :
-    central: +0.33
-    min:     +0.30
-    max:     +0.36
+    central: +0.2712565197401259
+    min:     +0.2712565197401259
+    max:     +0.2712565197401259
     comments: ""
 "B->rho::alpha^V_1@BSZ2015" :
-    central: -0.86
-    min:     -1.04
-    max:     -0.68
+    central: -0.4925853027266176
+    min:     -0.4925853027266176
+    max:     -0.4925853027266176
     comments: ""
 "B->rho::alpha^V_2@BSZ2015" :
-    central: +1.80
-    min:     +0.83
-    max:     +2.77
+    central: -1.1971343036772617
+    min:     -1.1971343036772617
+    max:     -1.1971343036772617
     comments: ""
 "B->rho::alpha^T1_0@BSZ2015" :
-    central: +0.27
-    min:     +0.24
-    max:     +0.30
+    central: +0.2375503875107005
+    min:     +0.2375503875107005
+    max:     +0.2375503875107005
     comments: ""
 "B->rho::alpha^T1_1@BSZ2015" :
-    central: -0.74
-    min:     -0.88
-    max:     -0.60
+    central: -0.45934079379480375
+    min:     -0.45934079379480375
+    max:     -0.45934079379480375
     comments: ""
 "B->rho::alpha^T1_2@BSZ2015" :
-    central: +1.45
-    min:     +0.68
-    max:     +2.22
-    comments: ""
-"B->rho::alpha^T2_0@BSZ2015" :
-    central: +0.27
-    min:     +0.24
-    max:     +0.30
+    central: -0.8719619977491347
+    min:     -0.8719619977491347
+    max:     -0.8719619977491347
     comments: ""
 "B->rho::alpha^T2_1@BSZ2015" :
-    central: +0.47
-    min:     +0.24
-    max:     +0.60
+    central: +0.648543608510588
+    min:     +0.648543608510588
+    max:     +0.648543608510588
     comments: ""
 "B->rho::alpha^T2_2@BSZ2015" :
-    central: +0.58
-    min:     +0.12
-    max:     +1.04
+    central: -0.8367381225762223
+    min:     -0.8367381225762223
+    max:     -0.8367381225762223
     comments: ""
 "B->rho::alpha^T23_0@BSZ2015" :
-    central: +0.75
-    min:     +0.67
-    max:     +0.83
+    central: +0.558651527683086
+    min:     +0.558651527683086
+    max:     +0.558651527683086
     comments: ""
 "B->rho::alpha^T23_1@BSZ2015" :
-    central: +1.90
-    min:     +1.47
-    max:     +2.33
+    central: +0.9756780226625973
+    min:     +0.9756780226625973
+    max:     +0.9756780226625973
     comments: ""
 "B->rho::alpha^T23_2@BSZ2015" :
-    central: +2.93
-    min:     +1.12
-    max:     +4.74
+    central: -0.617057014268725
+    min:     -0.617057014268725
+    max:     -0.617057014268725
 
 # parameters for LCSR calculation of B->pi hadronic matrix elements, cf. [GKvD2018]
 "B->pi::s_0^+,0@B-LCSR" :

@@ -771,7 +771,6 @@ public:
         p["B->D^*::alpha^A1_0@BSZ2015" ] = 0.0;
         p["B->D^*::alpha^A1_1@BSZ2015" ] = 0.0;
         p["B->D^*::alpha^A1_2@BSZ2015" ] = 0.0;
-        p["B->D^*::alpha^A12_0@BSZ2015"] = 0.0;
         p["B->D^*::alpha^A12_1@BSZ2015"] = 0.0;
         p["B->D^*::alpha^A12_2@BSZ2015"] = 0.0;
         p["B->D^*::alpha^V_0@BSZ2015"  ] = 0.0;
@@ -780,7 +779,6 @@ public:
         p["B->D^*::alpha^T1_0@BSZ2015" ] = 0.0;
         p["B->D^*::alpha^T1_1@BSZ2015" ] = 0.0;
         p["B->D^*::alpha^T1_2@BSZ2015" ] = 0.0;
-        p["B->D^*::alpha^T2_0@BSZ2015" ] = 0.0;
         p["B->D^*::alpha^T2_1@BSZ2015" ] = 0.0;
         p["B->D^*::alpha^T2_2@BSZ2015" ] = 0.0;
         p["B->D^*::alpha^T23_0@BSZ2015"] = 0.0;
@@ -927,7 +925,6 @@ public:
         p["B->rho::alpha^A1_0@BSZ2015" ] = +0.26;
         p["B->rho::alpha^A1_1@BSZ2015" ] = +0.39;
         p["B->rho::alpha^A1_2@BSZ2015" ] = +0.16;
-        p["B->rho::alpha^A12_0@BSZ2015"] = +0.30;
         p["B->rho::alpha^A12_1@BSZ2015"] = +0.76;
         p["B->rho::alpha^A12_2@BSZ2015"] = +0.46;
         p["B->rho::alpha^V_0@BSZ2015"  ] = +0.33;
@@ -936,7 +933,6 @@ public:
         p["B->rho::alpha^T1_0@BSZ2015" ] = +0.27;
         p["B->rho::alpha^T1_1@BSZ2015" ] = -0.74;
         p["B->rho::alpha^T1_2@BSZ2015" ] = +1.45;
-        p["B->rho::alpha^T2_0@BSZ2015" ] = +0.27;
         p["B->rho::alpha^T2_1@BSZ2015" ] = +0.47;
         p["B->rho::alpha^T2_2@BSZ2015" ] = +0.58;
         p["B->rho::alpha^T23_0@BSZ2015"] = +0.75;

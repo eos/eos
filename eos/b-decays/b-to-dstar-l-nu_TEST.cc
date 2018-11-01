@@ -59,7 +59,6 @@ class BToDstarLeptonNeutrinoTest :
                 p1["B->D^*::alpha^A1_0@BSZ2015" ] = +0.5;
                 p1["B->D^*::alpha^A1_1@BSZ2015" ] = +0.4;
                 p1["B->D^*::alpha^A1_2@BSZ2015" ] = +0.3;
-                p1["B->D^*::alpha^A12_0@BSZ2015"] = +0.280646;
                 p1["B->D^*::alpha^A12_1@BSZ2015"] = +0.72;
                 p1["B->D^*::alpha^A12_2@BSZ2015"] = +1.33;
                 p1["B->D^*::alpha^V_0@BSZ2015"  ] = +0.01;
@@ -68,7 +67,6 @@ class BToDstarLeptonNeutrinoTest :
                 p1["B->D^*::alpha^T1_0@BSZ2015" ] = +0.27;
                 p1["B->D^*::alpha^T1_1@BSZ2015" ] = -0.74;
                 p1["B->D^*::alpha^T1_2@BSZ2015" ] = +1.45;
-                p1["B->D^*::alpha^T2_0@BSZ2015" ] = +0.27;
                 p1["B->D^*::alpha^T2_1@BSZ2015" ] = +0.47;
                 p1["B->D^*::alpha^T2_2@BSZ2015" ] = +0.58;
                 p1["B->D^*::alpha^T23_0@BSZ2015"] = +0.75;
@@ -107,7 +105,6 @@ class BToDstarLeptonNeutrinoTest :
                 p2["B->D^*::alpha^A1_0@BSZ2015" ] = +0.5;
                 p2["B->D^*::alpha^A1_1@BSZ2015" ] = +0.4;
                 p2["B->D^*::alpha^A1_2@BSZ2015" ] = +0.3;
-                p2["B->D^*::alpha^A12_0@BSZ2015"] = +0.280646;
                 p2["B->D^*::alpha^A12_1@BSZ2015"] = +0.72;
                 p2["B->D^*::alpha^A12_2@BSZ2015"] = +1.33;
                 p2["B->D^*::alpha^V_0@BSZ2015"  ] = +0.01;
@@ -116,7 +113,6 @@ class BToDstarLeptonNeutrinoTest :
                 p2["B->D^*::alpha^T1_0@BSZ2015" ] = +0.27;
                 p2["B->D^*::alpha^T1_1@BSZ2015" ] = -0.74;
                 p2["B->D^*::alpha^T1_2@BSZ2015" ] = +1.45;
-                p2["B->D^*::alpha^T2_0@BSZ2015" ] = +0.27;
                 p2["B->D^*::alpha^T2_1@BSZ2015" ] = +0.47;
                 p2["B->D^*::alpha^T2_2@BSZ2015" ] = +0.58;
                 p2["B->D^*::alpha^T23_0@BSZ2015"] = +0.75;
@@ -169,7 +165,6 @@ class BToDstarLeptonNeutrinoTest :
                 p3["B->D^*::alpha^A1_0@BSZ2015" ] = +0.5;
                 p3["B->D^*::alpha^A1_1@BSZ2015" ] = +0.4;
                 p3["B->D^*::alpha^A1_2@BSZ2015" ] = +0.3;
-                p3["B->D^*::alpha^A12_0@BSZ2015"] = +0.280646;
                 p3["B->D^*::alpha^A12_1@BSZ2015"] = +0.72;
                 p3["B->D^*::alpha^A12_2@BSZ2015"] = +1.33;
                 p3["B->D^*::alpha^V_0@BSZ2015"  ] = +0.01;
@@ -178,7 +173,6 @@ class BToDstarLeptonNeutrinoTest :
                 p3["B->D^*::alpha^T1_0@BSZ2015" ] = +0.27;
                 p3["B->D^*::alpha^T1_1@BSZ2015" ] = -0.74;
                 p3["B->D^*::alpha^T1_2@BSZ2015" ] = +1.45;
-                p3["B->D^*::alpha^T2_0@BSZ2015" ] = +0.27;
                 p3["B->D^*::alpha^T2_1@BSZ2015" ] = +0.47;
                 p3["B->D^*::alpha^T2_2@BSZ2015" ] = +0.58;
                 p3["B->D^*::alpha^T23_0@BSZ2015"] = +0.75;
