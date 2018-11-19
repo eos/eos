@@ -389,4 +389,31 @@ namespace eos
 
         return result;
     }
+
+    /* V -> P Processes */
+
+    FormFactors<VToP>::~FormFactors()
+    {
+    }
+
+    std::shared_ptr<FormFactors<VToP>>
+    FormFactorFactory<VToP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
+    {
+        std::shared_ptr<FormFactors<VToP>> result;
+
+        typedef QualifiedName KeyType;
+        typedef std::function<FormFactors<VToP> * (const Parameters &, const Options &)> ValueType;
+        static const std::map<KeyType, ValueType> form_factors
+        {
+            // parametrizations
+        };
+
+        auto i = form_factors.find(name);
+        if (form_factors.end() != i)
+        {
+            result.reset(i->second(parameters, name.options() + options));
+        }
+
+        return result;
+    }
 }

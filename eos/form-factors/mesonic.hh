@@ -47,6 +47,8 @@ namespace eos
 
     struct PToPP { };
 
+    struct VToP { };
+
     template <>
     class FormFactors<PToV> :
         public ParameterUser
@@ -128,6 +130,28 @@ namespace eos
         public:
             static std::shared_ptr<FormFactors<PToPP>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
     };
+
+    template <>
+    class FormFactors<VToP> :
+        public ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            virtual double h_vbar(const double & s) const = 0;
+
+            virtual double h_abar_1(const double & s) const = 0;
+            virtual double h_abar_2(const double & s) const = 0;
+            virtual double h_abar_3(const double & s) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<VToP>
+    {
+        public:
+            static std::shared_ptr<FormFactors<VToP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
+    };
+
 }
 
 
