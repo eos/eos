@@ -49,6 +49,8 @@ namespace eos
 
     struct VToP { };
 
+    struct VToV { };
+
     template <>
     class FormFactors<PToV> :
         public ParameterUser
@@ -150,6 +152,35 @@ namespace eos
     {
         public:
             static std::shared_ptr<FormFactors<VToP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
+    };
+
+    template <>
+    class FormFactors<VToV> :
+        public ParameterUser
+    {
+        public:
+            virtual ~FormFactors();
+
+            // vector current
+            virtual double h_1(const double & s) const = 0;
+            virtual double h_2(const double & s) const = 0;
+            virtual double h_3(const double & s) const = 0;
+            virtual double h_4(const double & s) const = 0;
+            virtual double h_5(const double & s) const = 0;
+            virtual double h_6(const double & s) const = 0;
+
+            // axial current
+            virtual double h_7(const double & s) const = 0;
+            virtual double h_8(const double & s) const = 0;
+            virtual double h_9(const double & s) const = 0;
+            virtual double h_10(const double & s) const = 0;
+    };
+
+    template <>
+    class FormFactorFactory<VToV>
+    {
+        public:
+            static std::shared_ptr<FormFactors<VToV>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
     };
 
 }
