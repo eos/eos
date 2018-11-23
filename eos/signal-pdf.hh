@@ -118,7 +118,7 @@ namespace eos
     /*!
      * Output stream operator for SignalPDFEntry.
      */
-    std::ostream & operator<< (std::ostream & os, const SignalPDFEntry & entry)
+    inline std::ostream & operator<< (std::ostream & os, const SignalPDFEntry & entry)
     {
         return entry.insert(os);
     }
