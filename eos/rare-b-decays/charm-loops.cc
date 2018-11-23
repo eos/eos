@@ -97,7 +97,8 @@ namespace eos
             return h(mu, s);
 
         const double z = 4.0 * m_q * m_q / s;
-        if ((std::abs(s) < 1e-4) || (std::abs(z) < 1e-10))
+        // treat s smaller than dielectron threshold as zero
+        if ((std::abs(s) < 1e-6) || (std::abs(z) < 1e-10))
             return complex<double>(-4.0 / 9.0 * (1.0 + 2.0 * std::log(m_q / mu)), 0.0);
 
         const double sqrt1z = std::sqrt(std::abs(z - 1.0));
@@ -136,7 +137,7 @@ namespace eos
     CharmLoops::A(const double & mu, const double & s, const double & m_b)
     {
         /* in the limit s -> 0 all terms vanish, except for the mu-dependent log term. */
-        if (0 == s)
+        if (std::abs(s) <= 1e-6) // treat s smaller than dielectron threshold as zero
         {
             return -104.0 / 243.0 * 2.0 * log(m_b / mu);
         }
@@ -689,7 +690,7 @@ namespace eos
     CharmLoops::F19_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
         // F19(s) diverges for s -> 0. However, s * F19(s) -> 0 for s -> 0.
-        if (abs(s) < 1e-4)
+        if (abs(s) < 1e-6) // allow for s = 1e-6, corresponding roughly to the dielectron threshold
             throw InternalError("CharmLoops::F19_massive: F19 diverges for s -> 0. Check that F19 enters via 's * F19(s)' and replace by zero.");
 
         // cf. [ABGW2001], Appendix B, pp. 34-38
@@ -777,11 +778,11 @@ namespace eos
         double s_hat = s / m_b / m_b;
 
         complex<double> log_s_hat = { std::log(std::abs(s_hat)), 0.0 };
-        if ((0.001 <= s_hat) && (s_hat <= 0.45))
+        if ((0.000 <= s_hat) && (s_hat <= 0.45))
         {
             log_s_hat.imag(0.0);
         }
-        else if ((-0.45 <= s_hat) && (s_hat <= -0.001))
+        else if ((-0.45 <= s_hat) && (s_hat <= -0.000))
         {
             log_s_hat.imag(+M_PI);
         }
@@ -880,7 +881,7 @@ namespace eos
     CharmLoops::F29_massive(const double & mu, const double & s, const double & m_b, const double & m_q)
     {
         // F29(s) diverges for s -> 0. However, s * F29(s) -> 0 for s -> 0.
-        if (abs(s) < 1e-4)
+        if (abs(s) < 1e-6) // allow for s = 1e-6, corresponding roughly to the dielectron threshold
             throw InternalError("CharmLoops::F29_massive: F29 diverges for s -> 0. Check that F29 enters via 's * F29(s)' and replace by zero.");
 
         // cf. [ABGW2001], Appendix B, pp. 34-38
@@ -967,11 +968,11 @@ namespace eos
         double s_hat = s / m_b / m_b;
 
         complex<double> log_s_hat = { std::log(std::abs(s_hat)), 0.0 };
-        if ((0.001 <= s_hat) && (s_hat <= 0.45))
+        if ((0.000 <= s_hat) && (s_hat <= 0.45))
         {
             log_s_hat.imag(0.0);
         }
-        else if ((-0.45 <= s_hat) && (s_hat <= -0.001))
+        else if ((-0.45 <= s_hat) && (s_hat <= -0.000))
         {
             log_s_hat.imag(+M_PI);
         }
@@ -1078,7 +1079,7 @@ namespace eos
     complex<double>
     CharmLoops::F87_massless(const double & mu, const double & s, const double & m_q)
     {
-        if (s < 1e-4)
+        if (abs(s) < 1e-6) // allow for s = 1e-6, roughly corresponding to the dielectron threshold
             return -4.0 / 9.0 * (complex<double>(8.0 * std::log(mu / m_q) + 11.0, 2.0 * M_PI) + 4.0 * C0(0.0, m_q));
 
         // Loop-Functions are calculated for the pole mass!
@@ -1111,7 +1112,7 @@ namespace eos
     CharmLoops::F89_massless(const double & s, const double & m_q)
     {
         // F89(s) diverges for s -> 0. However, s * F89(s) -> 0 for s -> 0.
-        if (s < 1e-4)
+        if (abs(s) < 1e-6) // allow for s = 1e-6, roughly corresponding to the dielectron threshold
             throw InternalError("CharmLoops::F89_massless: F89 diverges for s -> 0. Check that F89 enters via 's * F89(s)' and replace by zero.");
 
         // Loop-Functions are calculated for the pole mass!
