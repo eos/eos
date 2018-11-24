@@ -36,7 +36,6 @@ matrix:
       language: cpp
       sudo: required
       before_install:
-        - sudo rm /usr/local/include/c++
         - brew tap eos/eos
         - brew outdated python || brew upgrade python
         - brew unlink python@2
