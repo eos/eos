@@ -76,8 +76,14 @@ shift 1
 export USE=${1}
 shift 1
 
-echo "==========="
+echo "======================="
 ${CXX} --version
+echo "Running with arguments:"
+echo "    OS  = ${OS}"
+echo "    CXX = ${CXX}"
+echo "    TAG = ${TAG}"
+echo "    USE = ${USE}"
+echo "======================="
 
 [[ -n ${COVERALLS_TOKEN} ]] || echo 'Skipping coverage report since $COVERALLS_TOKEN is empty'
 echo "==========="
