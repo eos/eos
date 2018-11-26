@@ -161,6 +161,7 @@ BOOST_PYTHON_MODULE(_eos)
         .staticmethod("Defaults")
         .def("__getitem__", (Parameter (Parameters::*)(const std::string &) const) &Parameters::operator[])
         .def("__iter__", range(&Parameters::begin, &Parameters::end))
+        .def("declare", &Parameters::declare, return_value_policy<return_by_value>())
         .def("set", &Parameters::set)
         .def("override_from_file", &Parameters::override_from_file)
         ;
