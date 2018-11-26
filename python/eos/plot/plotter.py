@@ -115,9 +115,17 @@ class Plotter:
 
         # create kinematics
         kinematics = eos.Kinematics()
-        if not 'kinematic' in item:
-            raise KeyError('kinematic not found; do not know how to map x to a kinematic variable')
-        kvar = kinematics.declare(item['kinematic'], np.nan)
+        if not 'kinematic' in item and not 'parameter' in item:
+            raise KeyError('neither kinematic nor parameter found; do not know how to map x to a variable')
+        if 'kinematic' in item and 'parameter' in item:
+            raise KeyError('both kinematic and parameter found; do not know how to map x to a variable')
+        if 'kinematic' in item:
+            var = kinematics.declare(item['kinematic'], np.nan)
+        else:
+            var = parameters.declare(item['parameter'], np.nan)
+            if 'kinematics' in item:
+                for k, v in item['kinematics'].items():
+                    kinematics.declare(k, v)
 
         # create (empty) options
         options = eos.Options()
@@ -136,7 +144,7 @@ class Plotter:
         xvalues = np.linspace(xlo, xhi, samples + 1)
         ovalues = np.array([])
         for xvalue in xvalues:
-            kvar.set(xvalue)
+            var.set(xvalue)
             ovalues = np.append(ovalues, observable.evaluate())
 
         color = 'black'
