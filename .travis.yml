@@ -1,4 +1,4 @@
-if: branch IN (master, testing)
+if: branch IN (master, testing) OR tag IS present
 
 unused: &linux-template
   os: linux
