@@ -43,7 +43,7 @@ function build_and_coverage_ubuntu() {
         --remove /tmp/coverage.info '/usr/*' '/test/*' \
         --output-file /tmp/coverage.info
     pushd /src
-    coveralls-lcov --repo-token ${COVERALLS_TOKEN} /tmp/coverage.info
+    coveralls-lcov --source-encoding=ISO-8859-1 --repo-token ${COVERALLS_TOKEN} /tmp/coverage.info
     popd
 }
 
