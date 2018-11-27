@@ -6,6 +6,8 @@ set -e
 # Ubuntu specific functions
 function build_and_test_ubuntu() {
     pushd /src
+    export EOS_VERSION=${TAG:-$(git describe --abbrev=0 --tags)}
+    export EOS_VERSION=${EOS_VERSION#v}
     ./autogen.bash
     popd
     pushd /build
@@ -16,11 +18,13 @@ function build_and_test_ubuntu() {
     make install
     export PYTHONPATH+=":$(make print-pythondir)"
     make -C /src/manual/examples examples
+    echo Building debian package for ${OS}
+    export DESTDIR=/tmp/eos-${EOS_VERSION}
+    make deb DESTDIR=${DESTDIR} OS=${OS}
+    dpkg -i /tmp/eos-${EOS_VERSION}.deb
     if [[ -n ${TAG} ]] && [[ "g++" == ${CXX} ]]; then
-        echo Building debian package for ${OS}
-        export DESTDIR=/tmp/eos-${TAG#v}
-        make deb DESTDIR=${DESTDIR} OS=${OS}
-        package_cloud push eos/eos/ubuntu/${OS} /tmp/eos-${TAG#v}.deb
+        echo Deploying debian package to package cloud ...
+        package_cloud push eos/eos/ubuntu/${OS} /tmp/eos-${EOS_VERSION}.deb
     fi
     popd
 }
