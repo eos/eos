@@ -40,7 +40,7 @@ Authors and Contributors
 The main authors are:
 
  * Danny van Dyk <danny.van.dyk@gmail.com>,
- * Frederik Beaujean <frederik.beaujean@lmu.de>,
+ * Frederik Beaujean <beaujean@mpp.mpg.de>,
  * Christoph Bobeth <christoph.bobeth@gmail.com>,
 
 with code contributions by:
