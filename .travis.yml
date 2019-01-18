@@ -36,6 +36,7 @@ matrix:
       language: cpp
       sudo: required
       before_install:
+        - export HOMEBREW_LOGS=/tmp
         - brew tap eos/eos
         - brew outdated python || brew upgrade python
         - brew unlink python@2
