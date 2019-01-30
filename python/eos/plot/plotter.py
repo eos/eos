@@ -477,25 +477,40 @@ class Plotter:
                 raise KeyError('no variable specificed')
             variable = item['variable']
 
-            print(datafile.variable_indices)
             if variable not in datafile.variable_indices:
                 raise ValueError('variable {} not contained in data file'.format(variable))
 
-            index = datafile.variable_indices[variable]
-            data  = datafile.data()[:, index]
-            alpha = item['opacity']   if 'opacity'   in item else 0.3
-            color = item['color']     if 'color'     in item else 'blue'
-            bw    = item['bandwidth'] if 'bandwidth' in item else None
+            alpha   = item['opacity']   if 'opacity'   in item else 0.3
+            color   = item['color']     if 'color'     in item else 'blue'
+            bw      = item['bandwidth'] if 'bandwidth' in item else None
+            level   = item['level']     if 'level'     in item else None
+            stride  = item['stride']    if 'stride'    in item else 50
+            samples = item['samples']   if 'samples'   in item else 100
+
+            index  = datafile.variable_indices[variable]
+            data   = datafile.data()[::stride, index]
+
+            if not np.array(self.xrange).any():
+                self.xrange = [np.amin(xdata), np.amax(xdata)]
+                self.ax.set_xlim(tuple(self.xrange))
+            plt.show()
 
             kde = gaussian_kde(data)
             kde.set_bandwidth(bw_method='silverman')
-            if 'bandwidth' in item:
-                kde.set_bandwidth(bw_method=kde.factor * item['bandwidth'])
+            if bw:
+                kde.set_bandwidth(bw_method=kde.factor * bw)
 
-            xmin, xmax = plt.xlim()
-            x = np.linspace(xmin, xmax, 1000)
+            x = np.linspace(self.xrange[0], self.xrange[1], samples)
+            pdf = kde(x)
+            pdf /= pdf.sum()
 
-            plt.plot(x, kde(x), color=color)
+            # find the PDF value corresponding to a given cummulative probability
+            if level:
+                plevelf = lambda x, pdf, P: pdf[pdf > x].sum() - P
+                plevel = scipy.optimize.brentq(plevelf, 0., 1., args=(pdf, level / 100.0))
+                self.ax.fill_between(x[pdf >= plevel], pdf[pdf >= plevel], facecolor=color, alpha=alpha)
+
+            plt.plot(x, pdf, color=color)
 
 
     """ Plots contours of a 2D Kernel Density Estimate (KDE) of pre-existing random samples. """
