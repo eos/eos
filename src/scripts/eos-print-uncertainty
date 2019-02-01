@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright (c) 2017 Danny van Dyk
+# Copyright (c) 2017, 2019 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -15,9 +15,13 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from eosdata import *
-import numpy as np
-import scipy
+import argparse
+import eos
+from eos.data import *
+from logging import error, info, warn
+import os
+import scipy, scipy.stats
+import sys
 
 def main():
     parser = argparse.ArgumentParser(description='Print mean and standard deviation from an uncertainty propagation')
@@ -48,6 +52,7 @@ def main():
         print('        median: %f' % numpy.percentile(x, 50))
         print('  68%% interval: [%f, %f]' % (numpy.percentile(x, 16), numpy.percentile(x, 84)))
         print('  95%% interval: [%f, %f]' % (numpy.percentile(x, 2.5), numpy.percentile(x, 97.5)))
+        print('  99%% interval: [%f, %f]' % (numpy.percentile(x, 0.5), numpy.percentile(x, 99.5)))
 
         print('  mean = %e' % numpy.mean(data[:, i]))
         print('   std = %e' % numpy.std(data[:, i]))
