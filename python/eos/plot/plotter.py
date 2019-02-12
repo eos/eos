@@ -562,11 +562,12 @@ class Plotter:
                 raise ValueError('variable {} not contained in data file'.format(variable))
 
             alpha   = item['opacity']   if 'opacity'   in item else 0.3
-            color   = item['color']     if 'color'     in item else 'blue'
             bw      = item['bandwidth'] if 'bandwidth' in item else None
+            color   = item['color']     if 'color'     in item else 'blue'
+            label   = item['label']     if 'label'     in item else None
             level   = item['level']     if 'level'     in item else None
-            stride  = item['stride']    if 'stride'    in item else 50
             samples = item['samples']   if 'samples'   in item else 100
+            stride  = item['stride']    if 'stride'    in item else 50
 
             index  = datafile.variable_indices[variable]
             data   = datafile.data()[::stride, index]
@@ -591,7 +592,7 @@ class Plotter:
                 plevel = scipy.optimize.brentq(plevelf, 0., 1., args=(pdf, level / 100.0))
                 self.ax.fill_between(x[pdf >= plevel], pdf[pdf >= plevel], facecolor=color, alpha=alpha)
 
-            plt.plot(x, pdf, color=color)
+            plt.plot(x, pdf, color=color, label=label)
 
 
     """ Plots contours of a 2D Kernel Density Estimate (KDE) of pre-existing random samples. """
