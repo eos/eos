@@ -137,9 +137,10 @@ class Plotter:
             var = kinematics.declare(item['kinematic'], np.nan)
         else:
             var = parameters.declare(item['parameter'], np.nan)
-            if 'kinematics' in item:
-                for k, v in item['kinematics'].items():
-                    kinematics.declare(k, v)
+
+        if 'kinematics' in item:
+            for k, v in item['kinematics'].items():
+                kinematics.declare(k, v)
 
         # create (empty) options
         options = eos.Options()
