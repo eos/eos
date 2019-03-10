@@ -89,9 +89,6 @@ class Plotter:
             ywidth /= 2.54 # cm / inch
             plt.gcf().set_size_inches((xwidth, ywidth))
 
-        plt.locator_params(axis='x', nbins=5)
-        plt.locator_params(axis='y', nbins=5)
-
         if 'x' in myplot:
             myx = myplot['x']
 
@@ -104,6 +101,9 @@ class Plotter:
             if 'range' in myx:
                 self.xrange = myx['range']
                 self.ax.set_xlim(tuple(self.xrange))
+
+            self.ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            self.ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
 
             if 'scale' in myx:
                 self.xscale = float(myx['scale'])
@@ -122,6 +122,9 @@ class Plotter:
             if 'range' in myy:
                 self.yrange = myy['range']
                 self.ax.set_ylim(tuple(self.yrange))
+
+            self.ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+            self.ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
 
             if 'scale' in myy:
                 self.yscale = float(myy['scale'])
