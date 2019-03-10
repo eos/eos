@@ -24,8 +24,20 @@ from scipy.stats import gaussian_kde
 from scipy.interpolate import spline
 import sys
 
+""" Plotter it used to produce publication quality plots with EOS.
+
+Plotter uses matplotlib to produce EOS plots within PDF files. It is the backend
+for the eos-plot-* scripts.
+"""
 class Plotter:
     def __init__(self, instructions, output):
+        """
+        Parameters
+        ----------
+
+        instructions : Dictionary containing the instructions on what to plot in which manner.
+        output       : Name of the output PDF file.
+        """
         self.instructions = instructions
         self.output = output
         self.fig = None
@@ -34,6 +46,7 @@ class Plotter:
         self.yrange = None
 
 
+    """ Setting up the plot based on the provided instruction. """
     def setup_plot(self):
         if not 'plot' in self.instructions:
             raise KeyError('no plot metadata specified')
@@ -50,6 +63,7 @@ class Plotter:
 
         if 'size' in myplot:
             xwidth, ywidth = myplot['size']
+            # size is specified in cm, matplotlib expects inches
             # convert from cm to inches
             xwidth /= 2.54 # cm / inch
             ywidth /= 2.54 # cm / inch
@@ -97,6 +111,7 @@ class Plotter:
         self.ax.set(xlabel=myxlabel, ylabel=myylabel, title=mytitle)
 
 
+    """ Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter. """
     def plot_observable(self, item):
         oname = item['observable']
         info('   plotting EOS observable "{}"'.format(oname))
@@ -153,7 +168,10 @@ class Plotter:
 
         plt.plot(xvalues, ovalues, color=color)
 
+    """ Plots an uncertainty band as a function of one kinematic variable.
 
+    This routine expects the uncertainty propagation to have produces an HDF5 file.
+    """
     def plot_uncertainty(self, item):
         if 'hdf5-file' not in item:
             raise KeyError('no hdf5-file specified')
@@ -212,6 +230,7 @@ class Plotter:
         plt.plot(xvalues, ovalues_higher,  color=color, alpha=alpha)
 
 
+    """ Plots constraints from the EOS library of experimental and theoretical likelihoods. """
     def plot_constraint(self, item):
         import yaml
 
@@ -331,6 +350,7 @@ class Plotter:
                 color=color, elinewidth=1.0, fmt='_', linestyle='none', label=label)
 
 
+    """ Plots 2D contours of a pair of parameters based on pre-existing random samples. """
     def plot_contours2d(self, item):
         if 'hdf5-file' not in item:
             raise KeyError('no hdf5-file specified')
@@ -386,6 +406,7 @@ class Plotter:
         plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
 
 
+    """ Plots a 1D Kernel Density Estimate (KDE) of pre-existing random samples. """
     def plot_kde(self, item):
         if 'hdf5-file' not in item:
             raise KeyError('no hdf5-file specified')
@@ -419,6 +440,7 @@ class Plotter:
         plt.plot(x, kde(x), color=color)
 
 
+    """ Plots a 1D histogram of pre-existing random samples. """
     def plot_histogram(self, item):
         if 'hdf5-file' not in item:
             raise KeyError('no hdf5-file specified')
@@ -443,6 +465,7 @@ class Plotter:
         plt.hist(data, alpha=alpha, bins=bins, color=color, density=1)
 
 
+    """ Plots a 2D histogram of pre-existing random samples. """
     def plot_histogram2d(self, item):
         if 'hdf5-file' not in item:
             raise KeyError('no hdf5-file specified')
@@ -489,6 +512,7 @@ class Plotter:
         plt.plot(x, y, color=color, alpha=alpha, linestyle=style, label=label)
 
 
+    """ Inserts an EOS watermark into the plots. """
     def plot_eos_watermark(self, item):
         xdelta, ydelta = (0.04, 0.04)
 
@@ -525,6 +549,7 @@ class Plotter:
                 horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
 
 
+    """ Plots the contents specified in the instructions provided to Plotter. """
     def plot_contents(self):
         if not 'contents' in self.instructions:
             return
@@ -575,6 +600,7 @@ class Plotter:
                 self.ax.legend(loc=self.instructions['plot']['legend']['location'])
 
 
+    """ Produces the plot. """
     def plot(self):
         self.setup_plot()
         self.plot_contents()
