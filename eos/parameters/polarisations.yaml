@@ -5,6 +5,13 @@
     max:     +0.655
     comments: "cf. [PDG2012+]"
 
+# Decay parameter of the Lambda_c baryon from FOCUS collaboration
+"Lambda_c::alpha" :
+    central: -0.780
+    min:     -0.986
+    max:     -0.574
+    comments: "cf. [PDG2018]"
+
 # General polarisation parameter for the Lambda_b baryon polarisation
 "Lambda_b::polarisation@unpolarised" :
     central:  0.0
