@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2019 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,6 +24,7 @@
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
+#include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
@@ -160,6 +162,11 @@ namespace eos
                     KinematicRange{ "cos(theta_l)", -1.0, +1.0, BsToKstarLeptonNeutrino::kinematics_description_c_theta_l },
                     KinematicRange{ "cos(theta_k)", -1.0, +1.0, BsToKstarLeptonNeutrino::kinematics_description_c_theta_k },
                     KinematicRange{ "phi", 0.0, 2.0 * M_PI, BsToKstarLeptonNeutrino::kinematics_description_phi }),
+
+            make_signal_pdf("Lambda_b->Lambda_clnu::dGamma",
+                            &LambdaBToLambdaCLeptonNeutrino::differential_branching_ratio,
+                            Options{ },
+                            KinematicRange{ "s", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_s }),
 
             make_signal_pdf("Lambda_b->Lambda_c(2625)lnu::dGamma",
                     &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
