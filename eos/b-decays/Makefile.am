@@ -14,6 +14,7 @@ libeosbdecays_la_SOURCES = \
 	b-to-pi-l-x-nu.cc b-to-pi-l-x-nu.hh \
 	b-to-v-l-nu.hh \
 	bs-to-kstar-l-nu.cc bs-to-kstar-l-nu.hh \
+	lambdab-to-lambdac-l-nu.cc lambdab-to-lambdac-l-nu.hh \
 	lambdab-to-lambdac2595-l-nu.cc lambdab-to-lambdac2595-l-nu.hh \
 	lambdab-to-lambdac2625-l-nu.cc lambdab-to-lambdac2625-l-nu.hh \
 	inclusive-b-to-u.cc inclusive-b-to-u.hh \
@@ -38,6 +39,7 @@ include_eos_bdecays_HEADERS = \
 	b-to-v-l-nu.hh \
 	bs-to-kstar-l-nu.hh \
 	inclusive-b-to-u.hh \
+	lambdab-to-lambdac-l-nu.hh \
 	properties.hh
 
 EXTRA_DIST =
@@ -51,6 +53,7 @@ TESTS = \
 	b-to-dstar-l-nu_TEST \
 	b-to-pi-pi-l-nu_TEST \
 	bs-to-kstar-l-nu_TEST \
+	lambdab-to-lambdac-l-nu_TEST \
 	lambdab-to-lambdac2595-l-nu_TEST \
 	lambdab-to-lambdac2625-l-nu_TEST \
 	properties_TEST
@@ -72,6 +75,8 @@ b_to_pi_l_nu_TEST_SOURCES = b-to-pi-l-nu_TEST.cc
 b_to_pi_pi_l_nu_TEST_SOURCES = b-to-pi-pi-l-nu_TEST.cc
 
 bs_to_kstar_l_nu_TEST_SOURCES = bs-to-kstar-l-nu_TEST.cc
+
+lambdab_to_lambdac_l_nu_TEST_SOURCES = lambdab-to-lambdac-l-nu_TEST.cc
 
 lambdab_to_lambdac2595_l_nu_TEST_SOURCES = lambdab-to-lambdac2595-l-nu_TEST.cc
 
