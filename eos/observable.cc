@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2018 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
@@ -35,6 +35,7 @@
 #include <eos/b-decays/b-to-d-l-nu.hh>
 #include <eos/b-decays/b-to-dstar-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
+#include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2595-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/b-decays/inclusive-b-to-u.hh>
@@ -1886,6 +1887,63 @@ namespace eos
             make_observable("B->K^*ll::A_9@LowRecoil",
                     &BToKstarDilepton<LowRecoil>::integrated_a_9,
                     std::make_tuple("s_min", "s_max")),
+
+            // Lambda_b -> Lambda_C l nu
+            make_observable("Lambda_b->Lambda_clnu::dBR/ds",
+                            &LambdaBToLambdaCLeptonNeutrino::differential_branching_ratio,
+                            std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_clnu::A_FB^l(s)",
+                            &LambdaBToLambdaCLeptonNeutrino::differential_a_fb_leptonic,
+                            std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_clnu::A_FB^h(s)",
+                            &LambdaBToLambdaCLeptonNeutrino::differential_a_fb_hadronic,
+                            std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_clnu::A_FB^c(s)",
+                            &LambdaBToLambdaCLeptonNeutrino::differential_a_fb_combined,
+                            std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_clnu::F_0(s)",
+                            &LambdaBToLambdaCLeptonNeutrino::differential_fzero,
+                            std::make_tuple("s")),
+
+            make_observable("Lambda_b->Lambda_clnu::BR",
+                            &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
+                            std::make_tuple("s_min", "s_max")),
+            //*
+            make_observable("Lambda_b->Lambda_clnu::R_Lambda_c(s)",
+                            &LambdaBToLambdaCLeptonNeutrino::differential_ratio_tau_mu,
+                            std::make_tuple("s")),
+            //*
+            make_observable("Lambda_b->Lambda_clnu::R_Lambda_c",
+                            &LambdaBToLambdaCLeptonNeutrino::integrated_ratio_tau_mu,
+                            std::make_tuple("s_min_mu", "s_min_tau", "s_max_mu", "s_max_tau")),
+
+            make_observable("Lambda_b->Lambda_clnu::A_FB^l",
+                            &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_leptonic,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambda_clnu::A_FB^h",
+                            &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_hadronic,
+                            std::make_tuple("s_min", "s_max")),
+            //*
+            make_observable("Lambda_b->Lambda_clnu::R_Lambda_c_A_FB^h(s)",
+                            &LambdaBToLambdaCLeptonNeutrino::differential_ratio_a_fb_hadronic_tau_mu,
+                            std::make_tuple("s")),
+            //*
+            make_observable("Lambda_b->Lambda_clnu::R_Lambda_c_A_FB^h",
+                            &LambdaBToLambdaCLeptonNeutrino::integrated_ratio_a_fb_hadronic_tau_mu,
+                            std::make_tuple("s_min_mu", "s_min_tau", "s_max_mu", "s_max_tau")),
+
+            make_observable("Lambda_b->Lambda_clnu::A_FB^c",
+                            &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_combined,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("Lambda_b->Lambda_clnu::F_0",
+                            &LambdaBToLambdaCLeptonNeutrino::integrated_fzero,
+                            std::make_tuple("s_min", "s_max")),
 
             // Lambda_b -> Lambda l^+ l^-, Large Recoil
             make_observable("Lambda_b->Lambdall::dBR/ds@LargeRecoil",
