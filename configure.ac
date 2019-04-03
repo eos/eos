@@ -153,16 +153,24 @@ if test "x$with_hdf5" != x -a "x$with_hdf5" != xyes ; then
 	HDF5_LDFLAGS="-L$with_hdf5/lib"
 else # use pkg-config
 	PKG_CHECK_MODULES([HDF5],
-		[hdf5],
+		[hdf5-serial],
 		[
 			HDF5_CXXFLAGS="$HDF5_CFLAGS"
 			HDF5_LDFLAGS="$HDF5_LIBS"
 			AC_MSG_NOTICE([using pkg-config for HDF5 location])
 		],
-		[
-			HDF5_CXXFLAGS=""
-			HDF5_LDFLAGS="-lhdf5"
-			AC_MSG_NOTICE([falling back to default for HDF5 location])
+		[PKG_CHECK_MODULES([HDF5],
+						   [hdf5],
+						   [
+								HDF5_CXXFLAGS="$HDF5_CFLAGS"
+								HDF5_LDFLAGS="$HDF5_LIBS"
+								AC_MSG_NOTICE([using pkg-config for HDF5 location])
+							],
+						    [
+								HDF5_CXXFLAGS=""
+								HDF5_LDFLAGS="-lhdf5"
+								AC_MSG_NOTICE([falling back to default for HDF5 location])
+							])
 		])
 fi
 
