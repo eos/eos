@@ -131,9 +131,11 @@ QED corrections in \cite{Bobeth:2003at, Huber:2005ig}. The Lagrangian
 \\
   & + \frac{4 G_F}{\sqrt{2}} \lambda_{t}^{(s)} \left[
       \sum_{i=1}^{2}  \wilson{i} \op{i}^c
-    + \sum_{i=3}^{10} \wilson{i} \op{i}
+    + \sum_{i=3}^{8} \wilson{i} \op{i}
     + \sum_{i=3}^{6}  \wilson{iQ} \op{iQ}
-    + \wilson{b}\op{b} \right] + \mbox{h.c.} \,.
+    + \wilson{b}\op{b} 
+    + \sum_{\ell = e,\mu,\tau} \sum_{i=9}^{10}  \wilson[\ell]{i} \op{i}^\ell    
+    \right] + \mbox{h.c.} \,.
 \end{aligned}
 \end{equation}
 incorporates unitarity of the CKM matrix  $\lambda_u^{(s)} + \lambda_c^{(s)} + 
@@ -143,12 +145,12 @@ sector $\sim \lambda_u^{(s)}$ is doubly-Cabibbo suppressed for $b\to s$
 transitions and leads to tiny CP-asymmetries in the SM.
 
 The current-current ($U = u,\, c$) operators are defined as 
-\begin{equation}
-\begin{aligned}
-  \op{1}^U & = (\bar{s} \gamma_\mu P_L T^a U) (\bar{U} \gamma^\mu P_L T^a b) \,, &
-  \op{2}^U & = (\bar{s} \gamma_\mu P_L U) (\bar{U} \gamma^\mu P_L b) \,, 
-\end{aligned}
-\end{equation}
+\begin{align}
+  \op{1}^U & 
+  = (\bar{s} \gamma_\mu P_L T^a U) (\bar{U} \gamma^\mu P_L T^a b) \,, &
+  \op{2}^U & 
+  = (\bar{s} \gamma_\mu P_L U) (\bar{U} \gamma^\mu P_L b) \,, 
+\end{align}
 which arise already at tree-level from decoupling the $W$-boson in $b\to s + 
 (\bar{u}u,\, \bar{c}c)$ and mix into all other operators, except the
 semi-leptonic $\op{10}$. Here and below $P_{L,R} = (1 \mp \gamma_5)/2$ denote
@@ -182,8 +184,8 @@ Analogous QED-penguin operators are defined as
              \sum_q Q_q (\bar{q} \gamma^{\mu\nu\rho} T^a q) \,,
 \end{aligned}
 \end{equation}
-where $Q_q$ denotes the quark charges as multiples of $e$. Further, an additional
-operator has to be considered
+where $Q_q$ denotes the quark charges as multiples of $e$, i.e. $Q_u = +2/3$
+and $Q_d = -1/3$. Further, an additional operator has to be considered
 \begin{align}
   \op{b} & = -\frac{1}{3}  (\bar{s} \gamma_\mu P_L b)(\bar{b} \gamma^\mu b)
              +\frac{1}{12} (\bar{s} \gamma_{\mu\nu\rho} P_L b)
@@ -195,13 +197,14 @@ the above form allows to avoid traces with $\gamma_5$ to all orders in QCD.
 
 The electro- and chromo-magnetic dipole operators
 \begin{align}
-  \tildeop{7} & = \frac{e}{g_s^2} [\bar{s} \sigma^{\mu \nu} 
-                  (\overline{m}_b P_R + \overline{m}_s P_L) b] F_{\mu \nu} \,, &
-  \tildeop{8} & = \frac{1}{g_s}   [\bar{s} \sigma^{\mu \nu}
-                  (\overline{m}_b P_R + \overline{m}_s P_L) T^a b] G_{\mu \nu}^a \,, &  
+  \tildeop{7} & 
+  = \frac{e}{g_s^2} \overline{m}_b [\bar{s} \sigma^{\mu \nu} P_R b] F_{\mu \nu} \,, &
+  \tildeop{8} & 
+  = \frac{1}{g_s}   \overline{m}_b [\bar{s} \sigma^{\mu \nu} P_R T^a b] G_{\mu \nu}^a \,,
 \end{align}
-receive contributions from on-shell photon and gluon penguins. The appearing
-quark masses are renormalized in the $\overline{\mbox{MS}}$ scheme. 
+receive contributions from penguin-type diagrams with on-shell photons and gluons
+respectively. The appearing $b$-quark mass is renormalized in the $\overline{\mbox{MS}}$ 
+scheme. 
 
 In the SM there are two semi-leptonic operators
 \begin{align}
@@ -214,13 +217,16 @@ describing $b\to s + \bar\ell\ell$ transitions. In this case the lepton
 charge $Q_\ell$ has been pulled into the definition of the Wilson
 coefficient.
 
-{\em note definition of evanescent operators, without whom ADM's and initial Wilson 
-coefficients are meaningless ...} 
+(It should be kept in mind that at higher orders the definition of evanescent
+operators implicitly enters the results of the initial Wilson coefficients and
+anomalous dimensions. Such scheme dependences will cancel however in the final
+observable.) 
 
-For the tilde operators the normalization to $(4\pi/g_s)^2$, the QCD coupling, has been chosen
-for practical reasons such that the leading SM 1-loop correction to the initial Wilson coefficients
-counts formally as a strong correction rather then an electro-magnetic one. The 
-initial Wilson coefficients are known up to NNLO in QCD and NLO in EW corrections
+For the tilde operators the normalization to $(4\pi/g_s)^2$, the QCD coupling, 
+has been chosen for practical reasons such that the leading SM 1-loop correction
+to the initial Wilson coefficients counts formally as a strong correction rather
+then an electro-magnetic one. The initial Wilson coefficients are known up to
+NNLO in QCD and NLO in EW corrections
 \begin{align}
   \wilson{i}(\mu_0) = \dots
 \end{align}
@@ -256,7 +262,8 @@ For practical applications, however, we use operators without a tilde, which are
 \label{tab:eft:bsll:naming}
 \end{table}
 
-The full basis of semi-leptonic operators is spanned by $\op{9,10}$ as above, and additionally
+The full basis of semi-leptonic operators is spanned by $\op{9,10}^\ell$ as above, and
+additionally
 \begin{align}
   \op{9'}^{\ell}  & = \frac{e^2}{(4\pi)^2} (\bar{s} \gamma_\mu P_R b) 
                       (\bar{\ell} \gamma^\mu \ell) \,, &
@@ -275,6 +282,13 @@ The full basis of semi-leptonic operators is spanned by $\op{9,10}$ as above, an
   \op{T5}^{\ell}  & = \frac{e^2}{(4\pi)^2} (\bar{s} \sigma_{\mu\nu} b)
                       (\bar{\ell} \sigma^{\mu\nu} \gamma_5 \ell) \,.
 \end{align}
+Further there are chirality-flipped dipole operators
+\begin{align}
+  \op{7'} & 
+  = \frac{e}{(4\pi)^2}   \overline{m}_b [\bar{s} \sigma^{\mu \nu} P_L b] F_{\mu \nu} \,, &
+  \op{8'} & 
+  = \frac{g_s}{(4\pi)^2} \overline{m}_b [\bar{s} \sigma^{\mu \nu} P_L T^a b] G_{\mu \nu}^a \,.
+\end{align}
 For studies of NP effects in these operators the values of the respective Wilson coefficients
 can be changed within the EOS code at run time. For the changed to take effect, the observables
 must be constructed with the option \option{model} set to \texttt{WilsonScan}. In that case, the
@@ -282,7 +296,7 @@ coefficients $\wilson{i}$ with $i\in \lbrace 7,7',9,9',10,10',S,S',P,P',T,T5\rbr
 as complex-valued parameters.
 Since EOS parameters are real-valued only, this implies that real and
 imaginary part of these coefficients can be adjusted separately.
-The coefficients $\wilson{j}{U}$ with $j=\lbrace 1,2\rbrace$ are presently
+The coefficients $\wilson[(U)]{j}$ with $j\in\lbrace 1,2\rbrace$ are presently
 $U$-flavour-universal, and are simply considered as two independent coefficients $\wilson{j}$.
 The coefficients with $j=\lbrace 1\dots 6, 8\rbrace$ are treated as real-valued parameters.
 The naming scheme for these coefficients is listed in \reftab{eft:bsll:naming}.
