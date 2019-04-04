@@ -868,6 +868,8 @@ namespace eos
             }
 
             // add first chain as first group
+            Log::instance()->message("PMC.hierarchical_clustering", ll_debug)
+                            << "Added chain " << 0 << " to group " << 0;
             std::vector<ChainGroup> groups{ ChainGroup(r, config.group_by_r_value,
                     available_chains.front(), 0, config.skip_initial) };
             groups.back().parameter_indices(parameter_indices);
