@@ -95,23 +95,42 @@ namespace eos
     template <typename Decay_, typename ... Args_>
     std::pair<std::string, ObservableEntry *> make_observable_ratio(const char * name,
             double (Decay_::* numerator)(const Args_ & ...) const,
-            double (Decay_::* denominator)(const Args_ & ...) const
+            const Options & forced_options_numerator,
+            double (Decay_::* denominator)(const Args_ & ...) const,
+            const Options & forced_options_denominator
             )
     {
         std::string sname(name);
 
-        return std::make_pair(sname, make_concrete_observable_ratio_factory(sname, numerator, denominator, std::make_tuple()));
+        return std::make_pair(
+                sname,
+                make_concrete_observable_ratio_entry(
+                        sname,
+                        numerator,   std::make_tuple(), forced_options_numerator,
+                        denominator, std::make_tuple(), forced_options_denominator
+                        )
+                );
     }
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
     std::pair<std::string, ObservableEntry *> make_observable_ratio(const char * name,
             double (Decay_::* numerator)(const Args_ & ...) const,
+            const Tuple_ & kinematics_names_numerator,
+            const Options & forced_options_numerator,
             double (Decay_::* denominator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names)
+            const Tuple_ & kinematics_names_denominator,
+            const Options & forced_options_denominator
+            )
     {
         std::string sname(name);
 
-        return std::make_pair(sname, make_concrete_observable_ratio_factory(sname, numerator, denominator, kinematics_names));
+        return std::make_pair(sname,
+                make_concrete_observable_ratio_entry(
+                        sname,
+                        numerator,   kinematics_names_numerator,   forced_options_numerator,
+                        denominator, kinematics_names_denominator, forced_options_denominator
+                        )
+                );
     }
 
     /* form factors as observables */

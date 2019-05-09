@@ -175,41 +175,50 @@ namespace eos
         public:
 
         private:
-            std::string _name;
+            QualifiedName _name;
 
             Parameters _parameters;
 
             Kinematics _kinematics;
 
-            Options _options;
+            Options _options, _forced_options_numerator, _forced_options_denominator;
 
-            Decay_ _decay;
+            Decay_ _decay_numerator, _decay_denominator;
 
             std::function<double (const Decay_ *, const Args_ & ...)> _numerator, _denominator;
 
-            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names_numerator, _kinematics_names_denominator;
 
-            std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple;
+            std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple_numerator, _argument_tuple_denominator;
 
         public:
-            ConcreteObservableRatio(const std::string & name,
+            ConcreteObservableRatio(const QualifiedName & name,
                     const Parameters & parameters,
                     const Kinematics & kinematics,
                     const Options & options,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & numerator,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_numerator,
+                    const Options & forced_options_numerator,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & denominator,
-                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_denominator,
+                    const Options & forced_options_denominator) :
                 _name(name),
                 _parameters(parameters),
                 _kinematics(kinematics),
                 _options(options),
-                _decay(parameters, options),
+                _forced_options_numerator(forced_options_numerator),
+                _forced_options_denominator(forced_options_denominator),
+                _decay_numerator(parameters, options + _forced_options_numerator),
+                _decay_denominator(parameters, options + _forced_options_denominator),
                 _numerator(numerator),
                 _denominator(denominator),
-                _kinematics_names(kinematics_names),
-                _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, &_decay))
+                _kinematics_names_numerator(kinematics_names_numerator),
+                _kinematics_names_denominator(kinematics_names_denominator),
+                _argument_tuple_numerator(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names_numerator, &_decay_numerator)),
+                _argument_tuple_denominator(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names_denominator, &_decay_denominator))
             {
-                uses(_decay);
+                uses(_decay_numerator);
+                uses(_decay_denominator);
             }
 
             ~ConcreteObservableRatio() = default;
@@ -221,9 +230,10 @@ namespace eos
 
             virtual double evaluate() const
             {
-                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
+                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values_numerator   = _argument_tuple_numerator;
+                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values_denominator = _argument_tuple_denominator;
 
-                return apply(_numerator, values) / apply(_denominator, values);
+                return apply(_numerator, values_numerator) / apply(_denominator, values_denominator);
             };
 
             virtual Parameters parameters()
@@ -243,12 +253,16 @@ namespace eos
 
             virtual ObservablePtr clone() const
             {
-                return ObservablePtr(new ConcreteObservableRatio(_name, _parameters.clone(), _kinematics.clone(), _options, _numerator, _denominator, _kinematics_names));
+                return ObservablePtr(new ConcreteObservableRatio(_name, _parameters.clone(), _kinematics.clone(), _options,
+                        _numerator,   _kinematics_names_numerator,   _forced_options_numerator,
+                        _denominator, _kinematics_names_denominator, _forced_options_denominator));
             }
 
             virtual ObservablePtr clone(const Parameters & parameters) const
             {
-                return ObservablePtr(new ConcreteObservableRatio(_name, parameters, _kinematics.clone(), _options, _numerator, _denominator, _kinematics_names));
+                return ObservablePtr(new ConcreteObservableRatio(_name, parameters, _kinematics.clone(), _options,
+                        _numerator,   _kinematics_names_numerator,   _forced_options_numerator,
+                        _denominator, _kinematics_names_denominator, _forced_options_denominator));
             }
     };
 
@@ -257,21 +271,33 @@ namespace eos
         public ObservableEntry
     {
         private:
-            std::string _name;
+            QualifiedName _name;
 
             std::function<double (const Decay_ *, const Args_ & ...)> _numerator, _denominator;
 
-            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
+            Options _forced_options_numerator, _forced_options_denominator;
+
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names_numerator, _kinematics_names_denominator;
+
+            std::array<std::string, sizeof...(Args_)> _kinematics_names_array_numerator, _kinematics_names_array_denominator;
 
         public:
-            ConcreteObservableRatioEntry(const std::string & name,
+            ConcreteObservableRatioEntry(const QualifiedName & name,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & numerator,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_numerator,
+                    const Options & forced_options_numerator,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & denominator,
-                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_denominator,
+                    const Options & forced_options_denominator) :
                 _name(name),
                 _numerator(numerator),
                 _denominator(denominator),
-                _kinematics_names(kinematics_names)
+                _forced_options_numerator(forced_options_numerator),
+                _forced_options_denominator(forced_options_denominator),
+                _kinematics_names_numerator(kinematics_names_numerator),
+                _kinematics_names_denominator(kinematics_names_denominator),
+                _kinematics_names_array_numerator(impl::make_array<std::string>(kinematics_names_numerator)),
+                _kinematics_names_array_denominator(impl::make_array<std::string>(kinematics_names_denominator))
             {
             }
 
@@ -279,24 +305,45 @@ namespace eos
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
-                return ObservablePtr(new ConcreteObservableRatio<Decay_, Args_ ...>(_name, parameters, kinematics, options, _numerator, _denominator, _kinematics_names));
+                return ObservablePtr(new ConcreteObservableRatio<Decay_, Args_ ...>(_name, parameters, kinematics, options,
+                        _numerator,   _kinematics_names_numerator,   _forced_options_numerator,
+                        _denominator, _kinematics_names_denominator, _forced_options_denominator));
+            }
+
+            virtual std::ostream & insert(std::ostream & os) const
+            {
+                os << "    type: observable ratio" << std::endl;
+
+                if (sizeof...(Args_) > 0)
+                {
+                    os << "    kinematic variables numerator:   " << join(std::begin(_kinematics_names_array_numerator),   std::end(_kinematics_names_array_numerator))   << std::endl;
+                    os << "    kinematic variables denominator: " << join(std::begin(_kinematics_names_array_denominator), std::end(_kinematics_names_array_denominator)) << std::endl;
+                }
+
+                return os;
             }
     };
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
-    ObservableEntry * make_concrete_observable_ratio_entry(const std::string & name,
+    ObservableEntry * make_concrete_observable_ratio_entry(const QualifiedName & name,
             double (Decay_::* numerator)(const Args_ & ...) const,
+            const Tuple_ & kinematics_names_numerator,
+            const Options & forced_options_numerator,
             double (Decay_::* denominator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names = std::make_tuple())
+            const Tuple_ & kinematics_names_denominator,
+            const Options & forced_options_denominator)
     {
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
 
         return new ConcreteObservableRatioEntry<Decay_, Args_ ...>(name,
                 std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(numerator)),
+                kinematics_names_numerator,
+                forced_options_numerator,
                 std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(denominator)),
-                kinematics_names);
+                kinematics_names_denominator,
+                forced_options_denominator
+                );
     }
-
 }
 
 #endif
