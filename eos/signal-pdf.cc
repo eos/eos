@@ -20,6 +20,7 @@
 
 #include <eos/signal-pdf.hh>
 #include <eos/b-decays/b-to-d-l-nu.hh>
+#include <eos/b-decays/b-to-dstar-l-nu.hh>
 #include <eos/b-decays/b-to-d-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
@@ -124,6 +125,19 @@ namespace eos
                     &BToDLeptonNeutrino::differential_branching_ratio,
                     Options{ },
                     KinematicRange{ "s", 0.0, 11.62, BToDLeptonNeutrino::kinematics_description_s }),
+
+            make_signal_pdf("B->D^*munu::dBR",
+                            &BToDstarLeptonNeutrino::differential_branching_ratio,
+                            Options{ {"l", "mu"} },
+                            KinematicRange{ "s", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_s }),
+
+            make_signal_pdf("B->D^*munu::d^4Gamma",
+                            &BToDstarLeptonNeutrino::normalized_four_differential_decay_width,
+                            Options{ {"l", "mu"} },
+                            KinematicRange{ "s", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_s },
+                            KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_l },
+                            KinematicRange{ "cos(theta_d)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_d },
+                            KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDstarLeptonNeutrino::kinematics_description_phi }),
 
             make_signal_pdf("B->Dmunu::d^2Gamma",
                     &BToDLeptonInclusiveNeutrinos::normalized_differential_decay_width_1nu,
