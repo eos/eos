@@ -95,42 +95,23 @@ namespace eos
     template <typename Decay_, typename ... Args_>
     std::pair<std::string, ObservableEntry *> make_observable_ratio(const char * name,
             double (Decay_::* numerator)(const Args_ & ...) const,
-            const Options & forced_options_numerator,
-            double (Decay_::* denominator)(const Args_ & ...) const,
-            const Options & forced_options_denominator
+            double (Decay_::* denominator)(const Args_ & ...) const
             )
     {
         std::string sname(name);
 
-        return std::make_pair(
-                sname,
-                make_concrete_observable_ratio_entry(
-                        sname,
-                        numerator,   std::make_tuple(), forced_options_numerator,
-                        denominator, std::make_tuple(), forced_options_denominator
-                        )
-                );
+        return std::make_pair(sname, make_concrete_observable_ratio_factory(sname, numerator, denominator, std::make_tuple()));
     }
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
     std::pair<std::string, ObservableEntry *> make_observable_ratio(const char * name,
             double (Decay_::* numerator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names_numerator,
-            const Options & forced_options_numerator,
             double (Decay_::* denominator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names_denominator,
-            const Options & forced_options_denominator
-            )
+            const Tuple_ & kinematics_names)
     {
         std::string sname(name);
 
-        return std::make_pair(sname,
-                make_concrete_observable_ratio_entry(
-                        sname,
-                        numerator,   kinematics_names_numerator,   forced_options_numerator,
-                        denominator, kinematics_names_denominator, forced_options_denominator
-                        )
-                );
+        return std::make_pair(sname, make_concrete_observable_ratio_factory(sname, numerator, denominator, kinematics_names));
     }
 
     /* form factors as observables */
@@ -647,17 +628,69 @@ namespace eos
                             &BToDstarLeptonNeutrino::differential_branching_ratio,
                             std::make_tuple("s")),
 
+            make_observable("B->D^*lnu::normdBR/ds",
+                            &BToDstarLeptonNeutrino::normalized_differential_branching_ratio,
+                            std::make_tuple("s")),
+
             make_observable("B->D^*lnu::BR",
                             &BToDstarLeptonNeutrino::integrated_branching_ratio,
                             std::make_tuple("s_min", "s_max")),
 
+            make_observable("B->D^*lnu::normBR",
+                            &BToDstarLeptonNeutrino::normalized_integrated_branching_ratio,
+                            std::make_tuple("s_min", "s_max")),
+
             make_observable("B->D^*lnu::R_D^*(s)",
-                            &BToDstarLeptonNeutrino::differential_r_d,
+                            &BToDstarLeptonNeutrino::differential_ratio_tau_mu,
                             std::make_tuple("s")),
 
             make_observable("B->D^*lnu::R_D^*",
-                            &BToDstarLeptonNeutrino::integrated_r_d,
-                            std::make_tuple("s_min_mu", "s_min_tau", "s_max")),
+                            &BToDstarLeptonNeutrino::integrated_ratio_tau_mu,
+                            std::make_tuple("s_min_mu", "s_min_tau", "s_max_mu", "s_max_tau")),
+
+            make_observable("B->D^*lnu::A_FB(s)",
+                            &BToDstarLeptonNeutrino::differential_a_fb_leptonic,
+                            std::make_tuple("s")),
+
+            make_observable("B->D^*lnu::A_FB",
+                            &BToDstarLeptonNeutrino::integrated_a_fb_leptonic,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->D^*lnu::A_L",
+                            &BToDstarLeptonNeutrino::integrated_amplitude_polarization_L,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->D^*lnu::A_T",
+                            &BToDstarLeptonNeutrino::integrated_amplitude_polarization_T,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->D^*lnu::F_L",
+                            &BToDstarLeptonNeutrino::integrated_f_L,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->D^*lnu::A_C^1",
+                            &BToDstarLeptonNeutrino::integrated_a_c_1,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->D^*lnu::A_C^2",
+                            &BToDstarLeptonNeutrino::integrated_a_c_2,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->D^*lnu::A_C^3",
+                            &BToDstarLeptonNeutrino::integrated_a_c_3,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->D^*lnu::A_T^1",
+                            &BToDstarLeptonNeutrino::integrated_a_t_1,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->D^*lnu::A_T^2",
+                            &BToDstarLeptonNeutrino::integrated_a_t_2,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->D^*lnu::A_T^3",
+                            &BToDstarLeptonNeutrino::integrated_a_t_3,
+                            std::make_tuple("s_min", "s_max")),
 
             // B_s -> K^* l nubar
             make_observable("B_s->K^*lnu::F_perp(s)",
@@ -965,14 +998,9 @@ namespace eos
                     &BToKDilepton<LargeRecoil>::differential_forward_backward_asymmetry,
                     std::make_tuple("s")),
 
-            make_observable_ratio("B->Kll::R_K(s)@LargeRecoil",
-                    &BToKDilepton<LargeRecoil>::differential_branching_ratio,
-                    std::make_tuple("s"),
-                    Options{ { "l", "mu" } },
-                    &BToKDilepton<LargeRecoil>::differential_branching_ratio,
-                    std::make_tuple("s"),
-                    Options{ { "l", "e" } }
-                    ),
+            make_observable("B->Kll::R_K(s)@LargeRecoil",
+                    &BToKDilepton<LargeRecoil>::differential_ratio_muons_electrons,
+                    std::make_tuple("s")),
 
             make_observable("B->Kll::BR@LargeRecoil",
                     &BToKDilepton<LargeRecoil>::integrated_branching_ratio,
