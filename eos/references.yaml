@@ -277,6 +277,13 @@
     journal: "JHEP 1506 (2015) 115"
     eprint: "arXiv:1503.07138 [hep-ex]"
 
+"LHCb:2018A" :
+    authors: "Aaij, R. et al."
+    collaboration: "LHCb"
+    title: ""
+    journal: ""
+    eprint: ""
+
 # Averages
 "FLAG2013" :
     collaboration: "Flavor Lattice Averagin"
