@@ -27,7 +27,10 @@
 #include "eos/utils/parameters.hh"
 #include "eos/utils/options.hh"
 #include "eos/utils/qualified-name.hh"
+#include "eos/statistics/goodness-of-fit.hh"
 #include "eos/statistics/log-likelihood.hh"
+#include "eos/statistics/log-posterior.hh"
+#include "eos/statistics/test-statistic-impl.hh"
 
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
@@ -239,6 +242,11 @@ BOOST_PYTHON_MODULE(_eos)
         .def("as_string", &LogLikelihoodBlock::as_string)
         ;
 
+    // LogLikelihood
+    class_<LogLikelihood>("LogLikelihood", init<Parameters>())
+        .def("add", (void (LogLikelihood::*)(const Constraint &)) &LogLikelihood::add)
+        ;
+
     // Constraint
     class_<Constraint>("Constraint", no_init)
         .def("make", &Constraint::make, return_value_policy<return_by_value>())
@@ -261,6 +269,25 @@ BOOST_PYTHON_MODULE(_eos)
         .def("__getitem__", (std::shared_ptr<const ConstraintEntry> (Constraints::*)(const QualifiedName &) const) &Constraints::operator[])
         .def("__iter__", range(&Constraints::begin, &Constraints::end))
         ;
+
+    // LogPosterior
+    class_<LogPosterior>("LogPosterior", init<LogLikelihood>())
+        ;
+
+    // test_statistics::ChiSquare
+    class_<test_statistics::ChiSquare>("test_statisticsChiSquare", no_init)
+        .def_readonly("chi2", &test_statistics::ChiSquare::chi2)
+        .def_readonly("dof", &test_statistics::ChiSquare::dof)
+        ;
+
+    // GoodnessOfFit
+    impl::std_pair_to_python_converter<const QualifiedName, test_statistics::ChiSquare> converter_goodnessoffit_chi_square_iter;
+    class_<GoodnessOfFit>("GoodnessOfFit", init<LogPosterior>())
+        .def("__iter__", range(&GoodnessOfFit::begin_chi_square, &GoodnessOfFit::end_chi_square))
+        .def("total_chi_square", &GoodnessOfFit::total_chi_square)
+        .def("total_degrees_of_freedom", &GoodnessOfFit::total_degrees_of_freedom)
+        ;
+
     // }}}
 
     // {{{ eos/
