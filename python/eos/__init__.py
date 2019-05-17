@@ -57,9 +57,10 @@ try:
         ip = get_ipython()
         html_formatter = ip.display_formatter.formatters['text/html']
 
-        from .ipython import __format_Parameter, __format_KinematicVariable, __format_Observable
+        from .ipython import __format_Parameter, __format_KinematicVariable, __format_Observable, __format_GoodnessOfFit
         html_formatter.for_type(Parameter, __format_Parameter)
         html_formatter.for_type(KinematicVariable, __format_KinematicVariable)
         html_formatter.for_type(Observable, __format_Observable)
+        html_formatter.for_type(GoodnessOfFit, __format_GoodnessOfFit)
 except NameError as e:
     pass

@@ -15,6 +15,8 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+import scipy
+
 def __format_Parameter(p):
     name = ''
     latex = p.latex()
@@ -79,3 +81,20 @@ def __format_Observable(obs):
             name=name,
             value=obs.evaluate()
     ))
+
+def __format_GoodnessOfFit(gof):
+    result = '<table>\n'
+    result += '<tr><th>constraint</th><th>&chi;<sup>2</sup></th><th>d.o.f.</th></tr>\n'
+    for entry in gof:
+        result += '<tr><td><tt>{name}</tt></td><td>{chi2:4.2g}</td><td>{dof}</td></tr>\n'.format(
+            name=entry[0], chi2=entry[1].chi2, dof=entry[1].dof)
+    result += '</table><br/>\n'
+    chi2 = gof.total_chi_square()
+    dof  = gof.total_degrees_of_freedom()
+    pvalue = 1.0 - scipy.stats.chi2(dof).cdf(chi2)
+    result += '<table>\n'
+    result += '<tr><th>total &chi;<sup>2</sup></th><td>{chi2:4.2g}</td></tr>\n'.format(chi2=chi2)
+    result += '<tr><th>total degrees of freedom</th><td>{dof}</td></tr>\n'.format(dof=dof)
+    result += '<tr><th>p-value</th><td>{p:4.2g}%</td></tr>\n'.format(p=pvalue * 100)
+    result += '</table>\n'
+    return(result)
