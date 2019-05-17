@@ -225,6 +225,8 @@ namespace eos
 
             LogLikelihood _log_likelihood;
 
+            LogLikelihood log_likelihood() { return _log_likelihood; }
+
             Parameters _parameters;
 
             /// prior in N dimensions can decouple
