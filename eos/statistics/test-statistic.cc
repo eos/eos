@@ -18,10 +18,37 @@
  */
 
 #include <eos/statistics/test-statistic.hh>
+#include <eos/statistics/test-statistic-impl.hh>
 
 namespace eos
 {
     TestStatistic::~TestStatistic()
     {
+    }
+
+    namespace test_statistics
+    {
+        Empty::Empty() = default;
+
+        Empty::~Empty() = default;
+
+        void
+        Empty::output(std::ostream & stream) const
+        {
+            stream << "No test statistic available" << std::endl;
+        }
+
+        ChiSquare::ChiSquare(const double & value) :
+            value(value)
+        {
+        }
+
+        ChiSquare::~ChiSquare() = default;
+
+        void
+        ChiSquare::output(std::ostream & stream) const
+        {
+            stream << "chi^2 = " << value << std::endl;
+        }
     }
 }
