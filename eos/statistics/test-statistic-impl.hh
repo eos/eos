@@ -27,18 +27,11 @@ namespace eos
             public TestStatistic
         {
             public:
-                Empty()
-                {
-                }
+                Empty();
 
-                ~Empty()
-                {
-                }
+                ~Empty();
 
-                virtual void output(std::ostream & stream) const
-                {
-                    stream << "No test statistic available" << std::endl;
-                }
+                virtual void output(std::ostream & stream) const;
         };
 
         class ChiSquare :
@@ -47,19 +40,11 @@ namespace eos
             public:
                 double value;
 
-                ChiSquare(const double & value) :
-                    value(value)
-                {
-                }
+                ChiSquare(const double & value);
 
-                ~ChiSquare()
-                {
-                }
+                ~ChiSquare();
 
-                virtual void output(std::ostream & stream) const
-                {
-                    stream << "chi^2 = " << value << std::endl;
-                }
+                virtual void output(std::ostream & stream) const;
         };
     }
 }
