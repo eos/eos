@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2013-2018 Danny van Dyk
+ * Copyright (c) 2011, 2013-2019 Danny van Dyk
  * Copyright (c) 2011 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -194,11 +194,9 @@ namespace eos
                 return (mode - value) / sigma;
             }
 
-            virtual TestStatisticPtr primary_test_statistic() const
+            virtual TestStatistic primary_test_statistic() const
             {
-                auto result = new test_statistics::ChiSquare(pow(significance(), 2));
-
-                return TestStatisticPtr(result);
+                return test_statistics::ChiSquare(pow(significance(), 2), 1.0);
             }
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
@@ -557,11 +555,9 @@ namespace eos
                 *df = (std::exp(zm) - log_gamma->alpha) / log_gamma->lambda;
             }
 
-            virtual TestStatisticPtr primary_test_statistic() const
+            virtual TestStatistic primary_test_statistic() const
             {
-                auto result = new test_statistics::Empty();
-
-                return TestStatisticPtr(result);
+                return test_statistics::Empty();
             }
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
@@ -782,11 +778,9 @@ namespace eos
                     + std::pow(zm, a->beta) - std::pow(zp, a->beta);
             }
 
-            virtual TestStatisticPtr primary_test_statistic() const
+            virtual TestStatistic primary_test_statistic() const
             {
-                auto result = new test_statistics::Empty();
-
-                return TestStatisticPtr(result);
+                return test_statistics::Empty();
             }
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
@@ -873,11 +867,9 @@ namespace eos
                 throw InternalError("LogLikelihoodBlock::MixtureBlock::significance() not implemented yet");
             }
 
-            virtual TestStatisticPtr primary_test_statistic() const
+            virtual TestStatistic primary_test_statistic() const
             {
-                auto result = new test_statistics::Empty();
-
-                return TestStatisticPtr(result);
+                return test_statistics::Empty();
             }
         };
 
@@ -1127,11 +1119,9 @@ namespace eos
                 return gsl_cdf_ugaussian_Pinv((p + 1) / 2.0);
             }
 
-            virtual TestStatisticPtr primary_test_statistic() const
+            virtual TestStatistic primary_test_statistic() const
             {
-                auto result = new test_statistics::ChiSquare(this->chi_square());
-
-                return TestStatisticPtr(result);
+                return test_statistics::ChiSquare(this->chi_square(), this->_number_of_observations);
             }
         };
     }

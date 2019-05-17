@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017 Danny van Dyk
+ * Copyright (c) 2017, 2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,31 +20,21 @@
 #ifndef EOS_GUARD_EOS_STATISTICS_TEST_STATISTIC_HH
 #define EOS_GUARD_EOS_STATISTICS_TEST_STATISTIC_HH 1
 
+#include <eos/utils/one-of.hh>
+
 #include <memory>
 #include <ostream>
 
 namespace eos
 {
-    /*!
-     * TestStatistic is the base class to return a test stastic
-     * for the LogLikelihood in any given parameter point.
-     */
-    class TestStatistic
+    namespace test_statistics
     {
-        public:
-            virtual ~TestStatistic();
+        class Empty;
 
-            friend std::ostream & operator<<(std::ostream & lhs, const TestStatistic & rhs)
-            {
-                rhs.output(lhs);
-                return lhs;
-            }
+        class ChiSquare;
+    }
 
-        private:
-            virtual void output(std::ostream &) const = 0;
-    };
-
-    using TestStatisticPtr = std::shared_ptr<TestStatistic>;
+    typedef OneOf<test_statistics::Empty, test_statistics::ChiSquare> TestStatistic;
 }
 
 #endif
