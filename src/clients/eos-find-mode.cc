@@ -23,7 +23,9 @@
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
 #include <eos/optimize/optimizer-gsl.hh>
+#include <eos/statistics/goodness-of-fit.hh>
 #include <eos/statistics/log-posterior.hh>
+#include <eos/statistics/test-statistic-impl.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
@@ -536,14 +538,11 @@ int main(int argc, char * argv[])
                 std::cout << "#   value = " << maximum << std::endl;
 
 
-                std::cout << "# Primary test statistics: " << std::endl;
-                auto log_likelihood = inst->log_posterior.log_likelihood();
-                for (auto c = log_likelihood.begin(), c_end = log_likelihood.end() ; c != c_end ; ++c)
+                std::cout << "# Chi^2 values: " << std::endl;
+                GoodnessOfFit gof(inst->log_posterior);
+                for (auto c = gof.begin_chi_square(), c_end = gof.end_chi_square() ; c != c_end ; ++c)
                 {
-                    for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
-                    {
-                        std::cout << *(*b)->primary_test_statistic() << std::endl;
-                    }
+                    std::cout << "#  " << c->first << ": " << c->second.chi2 << " (dof = " << c->second.dof << ")" << std::endl;
                 }
             }
             catch (OptimizerError & e)

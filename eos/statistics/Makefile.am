@@ -22,6 +22,7 @@ libeosstatistics_la_SOURCES = \
 	chain-group.cc chain-group.hh \
 	chi-squared.hh chi-squared.cc \
 	density-wrapper.cc density-wrapper.hh \
+	goodness-of-fit.cc goodness-of-fit.hh \
 	hierarchical-clustering.cc hierarchical-clustering.hh \
 	histogram.cc histogram.hh \
 	log-likelihood.cc log-likelihood.hh log-likelihood-fwd.hh \

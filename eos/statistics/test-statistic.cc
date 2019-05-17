@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017 Danny van Dyk
+ * Copyright (c) 2017, 2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,10 +22,6 @@
 
 namespace eos
 {
-    TestStatistic::~TestStatistic()
-    {
-    }
-
     namespace test_statistics
     {
         Empty::Empty() = default;
@@ -38,8 +34,9 @@ namespace eos
             stream << "No test statistic available" << std::endl;
         }
 
-        ChiSquare::ChiSquare(const double & value) :
-            value(value)
+        ChiSquare::ChiSquare(const double & chi2, const int & dof) :
+            chi2(chi2),
+            dof(dof)
         {
         }
 
@@ -48,7 +45,7 @@ namespace eos
         void
         ChiSquare::output(std::ostream & stream) const
         {
-            stream << "chi^2 = " << value << std::endl;
+            stream << "chi^2 = " << chi2 << " with d.o.f. = " << dof << std::endl;
         }
     }
 }

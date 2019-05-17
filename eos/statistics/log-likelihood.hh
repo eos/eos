@@ -91,7 +91,7 @@ namespace eos
              * the deviation between the observables' current values and
              * the mode.
              */
-            virtual TestStatisticPtr primary_test_statistic() const = 0;
+            virtual TestStatistic primary_test_statistic() const = 0;
 
             /*!
              * Create a new LogLikelihoodBlock for one normally distributed observable.
