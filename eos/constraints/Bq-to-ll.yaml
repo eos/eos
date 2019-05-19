@@ -17,6 +17,20 @@ B^0_s->mu^+mu^-::BR@CMS-2013B:
     alpha: 2.7971996021
     beta: 2.0218845762
 # }}}
+#
+# 2016
+#
+# {{{
+B^0_s->mu^+mu^-::BR@CMS-2016A:
+    type: Gaussian
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: s}
+    mean: 3.0e-9
+    sigma-stat: { hi: 1.0e-9, lo: 0.9e-9 }
+    sigma-sys: { hi: 0.0e-9, lo: 0.0e-9 }
+    dof: 1
+# }}}
 
 ##############
 # CMS + LHCb #
@@ -61,6 +75,20 @@ B^0_s->mu^+mu^-::BR@LHCb-2013D:
     theta: 2.23067e-09
     alpha: 2.19078
     beta: 2.00322
+# }}}
+#
+# 2017
+#
+# {{{
+B^0_s->mu^+mu^-::BR@LHCb-2017A:
+    type: Gaussian
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: s}
+    mean: 3.0e-9
+    sigma-stat: { hi: 0.6e-9, lo: 0.6e-9 }
+    sigma-sys: { hi: 0.3e-9, lo: 0.2e-9 }
+    dof: 1
 # }}}
 
 #########

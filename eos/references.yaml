@@ -172,6 +172,11 @@
     title: "Measurement of the B_s ---> mu mu branching fraction and search for B_0 ---> mu mu with the CMS Experiment"
     eprint: "arXiv:1307.5025 [hep-ex]"
 
+"CMS:2016A" :
+    collaboration: "CMS"
+    title: "Search and measurement of the B -> mu^+mu^- rare processes with LHC Run I data "
+    journal: "Nucl.Part.Phys.Proc. 273-275 (2016) 1308-1313"
+
 "D0:2011A" :
     authors: "Abazov, V.M. et al."
     collaboration: "D0"
@@ -276,6 +281,14 @@
     title: "Differential branching ratio and angular analysis of Lambda_b -> Lambda mu^+ mu^- decays"
     journal: "JHEP 1506 (2015) 115"
     eprint: "arXiv:1503.07138 [hep-ex]"
+
+"LHCb:2017A" :
+    authors: "Aaij, R. et al."
+    collaboration: "LHCb"
+    title: "Measurement of the B^0_s -> mu^+mu^- branching fraction and effective lifetime and search for B^0 -> mu^+mu^- decays"
+    journal: "PHYS. REV. LETT. 118 (2017) 191801"
+    eprint: "arXiv:1703.05747 [hep-ex]"
+    inspire-id: "Aaij:2017vad"
 
 "LHCb:2018A" :
     authors: "Aaij, R. et al."
