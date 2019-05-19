@@ -305,8 +305,23 @@ namespace eos
 
                 double _norm;
 
-                LogGamma(const Parameters & parameters) :
-                    LogPrior(parameters)
+                LogGamma(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+                        const double & central, const double & sigma_lower, const double & sigma_upper,
+                        const double & sigma_plus, const double & sigma_minus,
+                        const double & nu, const double & lambda, const double & alpha,
+                        const double & norm) :
+                    LogPrior(parameters),
+                    _name(name),
+                    _range(range),
+                    _central(central),
+                    _sigma_lower(sigma_lower),
+                    _sigma_upper(sigma_upper),
+                    _sigma_plus(sigma_plus),
+                    _sigma_minus(sigma_minus),
+                    _nu(nu),
+                    _lambda(lambda),
+                    _alpha(alpha),
+                    _norm(norm)
                 {
                 }
 
@@ -473,19 +488,10 @@ namespace eos
                 // change private members by hand. Saves time on optimization
                 virtual LogPriorPtr clone(const Parameters & parameters) const
                 {
-                    priors::LogGamma * log_gamma = new priors::LogGamma(parameters);
-                    log_gamma->_alpha = _alpha;
-                    log_gamma->_central = _central;
-                    log_gamma->_lambda = _lambda;
-                    log_gamma->_name = _name;
-                    log_gamma->_norm = _norm;
-                    log_gamma->_nu = _nu;
+                    priors::LogGamma * log_gamma = new priors::LogGamma(parameters, _name, _range, _central,
+                            _sigma_lower, _sigma_upper, _sigma_minus, _sigma_plus, _nu, _lambda, _alpha, _norm);
                     log_gamma->_parameter_descriptions.push_back(ParameterDescription{ parameters[_name].clone(), _range.min, _range.max, false });
-                    log_gamma->_range = _range;
-                    log_gamma->_sigma_lower = _sigma_lower;
-                    log_gamma->_sigma_minus = _sigma_minus;
-                    log_gamma->_sigma_plus = _sigma_plus;
-                    log_gamma->_sigma_upper = _sigma_upper;
+
                     return LogPriorPtr(log_gamma);
                 }
 
