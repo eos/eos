@@ -397,7 +397,7 @@
     central: +0.307
     min:     +0.287
     max:     +0.327
-    latex:    '$f_+(0)^{B\to \pi}$'
+    latex:    '$f^{B\to \pi}_+(0)$'
     comments: ""
 "B->pi::b_+^1@BCL2008" :
     central: -1.31
@@ -427,7 +427,7 @@
     central: +0.00
     min:     +0.00
     max:     +0.00
-    latex:    '$f_T(0)^{B\to \pi}$'
+    latex:    '$f^{B\to \pi}_T(0)$'
     comments: ""
 "B->pi::b_T^1@BCL2008" :
     central: +0.00
