@@ -30,6 +30,7 @@
 #include "eos/statistics/goodness-of-fit.hh"
 #include "eos/statistics/log-likelihood.hh"
 #include "eos/statistics/log-posterior.hh"
+#include "eos/statistics/log-prior.hh"
 #include "eos/statistics/test-statistic-impl.hh"
 
 #include <boost/python.hpp>
@@ -181,6 +182,10 @@ BOOST_PYTHON_MODULE(_eos)
         .def("evaluate", &Parameter::evaluate)
         ;
 
+    // ParameterRange
+    class_<ParameterRange>("ParameterRange", init<double, double>())
+        ;
+
     // Kinematics
     class_<Kinematics>("Kinematics", no_init)
         .def("__init__", raw_function(&impl::Kinematics_ctor))
@@ -245,6 +250,7 @@ BOOST_PYTHON_MODULE(_eos)
     // LogLikelihood
     class_<LogLikelihood>("LogLikelihood", init<Parameters>())
         .def("add", (void (LogLikelihood::*)(const Constraint &)) &LogLikelihood::add)
+        .def("__iter__", range(&LogLikelihood::begin, &LogLikelihood::end))
         ;
 
     // Constraint
@@ -270,8 +276,17 @@ BOOST_PYTHON_MODULE(_eos)
         .def("__iter__", range(&Constraints::begin, &Constraints::end))
         ;
 
+    // LogPrior
+    register_ptr_to_python<std::shared_ptr<LogPrior>>();
+    class_<LogPrior, boost::noncopyable>("LogPrior", no_init)
+        .def("Flat", &LogPrior::Flat, return_value_policy<return_by_value>())
+        .staticmethod("Flat")
+        ;
+
     // LogPosterior
     class_<LogPosterior>("LogPosterior", init<LogLikelihood>())
+        .def("add", &LogPosterior::add)
+        .def("evaluate", &LogPosterior::evaluate)
         ;
 
     // test_statistics::ChiSquare
@@ -298,6 +313,7 @@ BOOST_PYTHON_MODULE(_eos)
         .staticmethod("make")
         .def("evaluate", &Observable::evaluate)
         .def("name", &Observable::name, return_value_policy<copy_const_reference>())
+        .def("options", &Observable::options)
         ;
 
     // SignalPDF
