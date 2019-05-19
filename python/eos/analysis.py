@@ -63,7 +63,21 @@ class Analysis:
                 parameter = prior['parameter']
                 minv = prior['min']
                 maxv = prior['max']
-                self.log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, eos.ParameterRange(minv, maxv)), False)
+                prior_type = prior['type']
+                if 'uniform' == prior_type or 'flat' == prior_type:
+                    self.log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, eos.ParameterRange(minv, maxv)), False)
+                elif 'gauss' == prior_type or 'gaussian' == prior_type:
+                    central = prior['central']
+                    sigma = prior['sigma']
+                    self.log_posterior.add(
+                        eos.LogPrior.Gauss(
+                            self.parameters, parameter, eos.ParameterRange(minv, maxv),
+                            central - sigma, central, central + sigma
+                        ),
+                        False)
+                else:
+                    raise ValueError('Unknown prior type \'{}\''.format(prior_type))
+
                 self.varied_parameters.append(self.parameters[parameter])
 
         if 'likelihood' in kwargs:
