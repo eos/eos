@@ -2,6 +2,7 @@ CLEANFILES = *~
 
 EXTRA_DIST = \
 	eos/__init__.py \
+	eos/analysis.py \
 	eos/ipython.py \
 	eos/data/__init__.py \
 	eos/plot/__init__.py \
@@ -23,6 +24,7 @@ eosdir = $(pkgpythondir)
 eos_PYTHON =
 eos_SCRIPTS = \
 	eos/__init__.py \
+	eos/analysis.py \
 	eos/ipython.py
 
 eosdatadir = $(pkgpythondir)/data
