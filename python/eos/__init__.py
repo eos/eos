@@ -51,6 +51,7 @@ from _eos import *
 
 from .data import *
 from .plot import *
+from .analysis import Analysis, BestFitPoint
 
 try:
     if __IPYTHON__:
