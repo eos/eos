@@ -281,6 +281,8 @@ BOOST_PYTHON_MODULE(_eos)
     class_<LogPrior, boost::noncopyable>("LogPrior", no_init)
         .def("Flat", &LogPrior::Flat, return_value_policy<return_by_value>())
         .staticmethod("Flat")
+        .def("Gauss", &LogPrior::Gauss, return_value_policy<return_by_value>())
+        .staticmethod("Gauss")
         ;
 
     // LogPosterior
