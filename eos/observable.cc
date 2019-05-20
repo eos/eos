@@ -2229,7 +2229,7 @@ namespace eos
                     std::make_tuple("s_min", "s_max")),
 
 	    make_observable("Lambda_b->Lambdall::M_28@LowRecoil",
-                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m8,
+                    &LambdaBToLambdaDilepton<LowRecoil>::integrated_m28,
                     std::make_tuple("s_min", "s_max")),
 
 	    make_observable("Lambda_b->Lambdall::M_29@LowRecoil",
