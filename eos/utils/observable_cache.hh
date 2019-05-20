@@ -22,6 +22,7 @@
 #define EOS_GUARD_SRC_UTILS_OBSERVABLE_CACHE_HH 1
 
 #include <eos/observable.hh>
+#include <eos/utils/observable_set.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 
@@ -77,6 +78,11 @@ namespace eos
 
             /// Retrieve the number of independent predictions from the cache.
             unsigned size() const;
+
+            using Iterator = ObservableSet::Iterator;
+            Iterator begin() const;
+            Iterator end() const;
+            ///@}
 
             /// Clone this cache whilst keeping the observables in the given order, i.e. all ids remain valid.
             ObservableCache clone(const Parameters & parameters) const;
