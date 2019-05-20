@@ -238,6 +238,11 @@ BOOST_PYTHON_MODULE(_eos)
         .def("m_s_msbar",  &Model::m_s_msbar)
         .def("m_ud_msbar", &Model::m_ud_msbar)
         ;
+
+    // ObservableCache
+    class_<ObservableCache>("ObservableCache", no_init)
+        .def("__iter__", range(&ObservableCache::begin, &ObservableCache::end))
+        ;
     // }}}
 
     // {{{ eos/statistics
@@ -251,6 +256,7 @@ BOOST_PYTHON_MODULE(_eos)
     class_<LogLikelihood>("LogLikelihood", init<Parameters>())
         .def("add", (void (LogLikelihood::*)(const Constraint &)) &LogLikelihood::add)
         .def("__iter__", range(&LogLikelihood::begin, &LogLikelihood::end))
+        .def("observable_cache", &LogLikelihood::observable_cache)
         ;
 
     // Constraint

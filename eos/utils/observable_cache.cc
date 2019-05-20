@@ -116,6 +116,18 @@ namespace eos
         return _imp->observables.size();
     }
 
+    ObservableCache::Iterator
+    ObservableCache::begin() const
+    {
+        return _imp->observables.begin();
+    }
+
+    ObservableCache::Iterator
+    ObservableCache::end() const
+    {
+        return _imp->observables.end();
+    }
+
     ObservableCache
     ObservableCache::clone(const Parameters & parameters) const
     {
