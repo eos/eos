@@ -188,6 +188,11 @@ namespace eos
              * @param name The name of the parameter we are interested in.
              */
             bool nuisance(const std::string & name) const;
+
+            /*!
+             * Returns the number of informative priors.
+             */
+            unsigned informative_priors() const;
             ///@}
 
             /*!
@@ -232,6 +237,8 @@ namespace eos
             /// prior in N dimensions can decouple
             /// at most into N 1D priors
             std::vector<LogPriorPtr> _priors;
+
+            unsigned _informative_priors;
 
             /// Parameter, minimum, maximum, nuisance
             std::vector<ParameterDescription> _parameter_descriptions;

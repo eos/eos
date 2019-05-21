@@ -92,6 +92,7 @@ namespace eos
    LogPosterior::LogPosterior(const LogLikelihood & log_likelihood) :
         _log_likelihood(log_likelihood),
         _parameters(log_likelihood.parameters()),
+        _informative_priors(0),
         _minuit(nullptr)
    {
    }
@@ -106,6 +107,7 @@ namespace eos
    {
        // clone has correct Parameters object selected
        LogPriorPtr prior_clone = prior->clone(_parameters);
+       _informative_priors += 1 ? prior->informative() : 0;
 
        // check if param exists already
        // read out parameters from prior
@@ -583,6 +585,12 @@ namespace eos
            return _parameter_descriptions[index].nuisance;
        }
    }
+
+    unsigned
+    LogPosterior::informative_priors() const
+    {
+        return _informative_priors;
+    }
 
    MutablePtr
    LogPosterior::operator[] (const unsigned & index) const
