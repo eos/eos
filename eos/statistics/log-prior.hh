@@ -105,6 +105,11 @@ namespace eos
              * Return the variance of this distribution.
              */
             virtual double variance() const = 0;
+
+            /*!
+             * Return whether or not this prior is informative.
+             */
+            virtual bool informative() const = 0;
             ///@}
 
             ///@name Named constructors for 1D prior distributions
