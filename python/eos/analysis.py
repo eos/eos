@@ -34,7 +34,7 @@ class BestFitPoint:
             name = p.name()
             latex = p.latex()
             name = latex if latex else name
-            result += '<tr><td>{n}</td><td>{v:4.2g}</td></tr>'.format(n=name, v=v)
+            result += '<tr><td>{n}</td><td>{v:6.4f}</td></tr>'.format(n=name, v=v)
         result += '</table>'
 
         return(result)

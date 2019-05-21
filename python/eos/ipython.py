@@ -86,15 +86,15 @@ def __format_GoodnessOfFit(gof):
     result = '<table>\n'
     result += '<tr><th>constraint</th><th>&chi;<sup>2</sup></th><th>d.o.f.</th></tr>\n'
     for entry in gof:
-        result += '<tr><td><tt>{name}</tt></td><td>{chi2:4.2g}</td><td>{dof}</td></tr>\n'.format(
+        result += '<tr><td><tt>{name}</tt></td><td>{chi2:6.4f}</td><td>{dof}</td></tr>\n'.format(
             name=entry[0], chi2=entry[1].chi2, dof=entry[1].dof)
     result += '</table><br/>\n'
     chi2 = gof.total_chi_square()
     dof  = gof.total_degrees_of_freedom()
     pvalue = 1.0 - scipy.stats.chi2(dof).cdf(chi2)
     result += '<table>\n'
-    result += '<tr><th>total &chi;<sup>2</sup></th><td>{chi2:4.2g}</td></tr>\n'.format(chi2=chi2)
+    result += '<tr><th>total &chi;<sup>2</sup></th><td>{chi2:6.4f}</td></tr>\n'.format(chi2=chi2)
     result += '<tr><th>total degrees of freedom</th><td>{dof}</td></tr>\n'.format(dof=dof)
-    result += '<tr><th>p-value</th><td>{p:4.2g}%</td></tr>\n'.format(p=pvalue * 100)
+    result += '<tr><th>p-value</th><td>{p:6.4f}%</td></tr>\n'.format(p=pvalue * 100)
     result += '</table>\n'
     return(result)
