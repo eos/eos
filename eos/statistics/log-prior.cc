@@ -127,6 +127,11 @@ namespace eos
                 {
                     return power_of<2>(_range.max - _range.min) / 12.0;
                 }
+
+                virtual bool informative() const
+                {
+                    return false;
+                }
         };
 
         /*!
@@ -253,6 +258,11 @@ namespace eos
                 virtual double variance() const
                 {
                     return (power_of<2>(_sigma_upper) + power_of<2>(_sigma_lower)) / 2.0;
+                }
+
+                virtual bool informative() const
+                {
+                    return true;
                 }
         };
 
@@ -519,6 +529,11 @@ namespace eos
                             << "Error in evaluating the trigamma function in GSL";
                     }
                     return power_of<2>(_lambda) * result.val;
+                }
+
+                virtual bool informative() const
+                {
+                    return true;
                 }
         };
     }
