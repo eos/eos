@@ -62,3 +62,21 @@ B^0_s->mu^+mu^-::BR@LHCb-2013D:
     alpha: 2.19078
     beta: 2.00322
 # }}}
+
+#########
+# Belle #
+#########
+#
+# 2015
+#
+# {{{
+B^+->tau^+nu::BR@Belle-2015A:
+    type: Gaussian
+    observable: B_u->lnu::BR
+    kinematics: {}
+    options: {l: tau, q: u}
+    mean: 1.25e-4
+    sigma-stat: { hi: 0.28e-4, lo: 0.28e-4 }
+    sigma-sys: { hi: 0.27e-4, lo: 0.27e-4 }
+    dof: 1
+# }}}
