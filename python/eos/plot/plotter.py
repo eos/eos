@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 from scipy.stats import gaussian_kde
-from scipy.interpolate import spline
 import sys
 
 """ Plotter it used to produce publication quality plots with EOS.
@@ -218,11 +217,18 @@ class Plotter:
 
         label = item['label'] if 'label' in item else None
 
-        # TODO: replace scipy.interpolate.spline
         xvalues = np.linspace(np.min(_xvalues),np.max(_xvalues),100)
-        ovalues_lower   = scipy.interpolate.spline(_xvalues, _ovalues_lower,   xvalues)
-        ovalues_central = scipy.interpolate.spline(_xvalues, _ovalues_central, xvalues)
-        ovalues_higher  = scipy.interpolate.spline(_xvalues, _ovalues_higher,  xvalues)
+        # work around CubicSpline missing in SciPy version < 0.18
+        if scipy.__version__ >= '0.18':
+            from scipy.interpolate import CubicSpline
+            interpolate = lambda x, y, xv: CubicSpline(x, y)(xv)
+        else:
+            from scipy.interpolate import spline
+            interpolate = spline
+
+        ovalues_lower   = interpolate(_xvalues, _ovalues_lower,   xvalues)
+        ovalues_central = interpolate(_xvalues, _ovalues_central, xvalues)
+        ovalues_higher  = interpolate(_xvalues, _ovalues_higher,  xvalues)
 
         plt.fill_between(xvalues, ovalues_lower, ovalues_higher, lw=0, color=color, alpha=alpha, label=label)
         plt.plot(xvalues, ovalues_lower,   color=color, alpha=alpha)
