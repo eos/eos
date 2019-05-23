@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2015 Marzia Bordone
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018, 2019 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -80,7 +80,58 @@ namespace eos
             u.uses(*model);
         }
 
-        // normalized to V_cb = 1
+        //* normalized(|Vcb|=1) two-fold-distribution, cf. [DSD2014], eq. (12), p. 6
+        double normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const
+        {
+            //  d^2 Gamma, cf. [DSD2014], p. 6, eq. (13)
+            // Trigonometric identities
+            double c_theta_l_2 = c_theta_l * c_theta_l;
+            double s_theta_l_2 = 1.0 - c_theta_l_2;
+            double s_theta_l = std::sqrt(s_theta_l_2);
+            double c_2_theta_l = 2.0 * c_theta_l_2 - 1.0;
+            double s_2_theta_l = 2.0 * s_theta_l * c_theta_l;
+
+            double fp = form_factors->f_p(s);
+            double f0 = form_factors->f_0(s);
+            double fT = form_factors->f_t(s);
+            // running quark masses
+            double mbatmu = model->m_b_msbar(mu);
+            double mcatmu = model->m_c_msbar(mu);
+
+            double lam = lambda(m_B * m_B, m_D * m_D, s);
+            double p = sqrt(lam) / (2.0 * m_B);
+            // make sure we return NaN if s < m_l^2, v = lepton velocity in the dilepton rest frame
+            double v = (1.0 - m_l * m_l / s);
+            double v2 = v * v;
+            double ml_hat = sqrt(1.0 - v);
+            double nD = v2 * m_B * s * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI * m_B));
+            // NP contributions in EFT including tensor operator (cf. [DSD2014]). (in SM cvl=1, and all other couplings are zero)
+            const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
+            const complex<double> vl = wc.cvl() - 1.0;
+            const complex<double> vr = wc.cvr();
+            const complex<double> sl = wc.csl();
+            const complex<double> sr = wc.csr();
+            const complex<double> gV = vr + vl;
+            const complex<double> gA = vr - vl;
+            const complex<double> gS = sr + sl;
+            const complex<double> gP = sr - sl;
+            const complex<double> tl = wc.ct();
+            // helicity amplitudes, cf. [DSD2014] eqs. 13-14
+            const complex<double> hh0 = 2.0 * m_B * p * fp * (1.0 + gV) / sqrt(s) ;
+            const complex<double> hht = (1.0 + gV) * (m_B * m_B - m_D * m_D) * f0 / sqrt(s);
+            const complex<double> hhS = - gS * (m_B * m_B - m_D * m_D) * f0 / (mbatmu - mcatmu);
+            const complex<double> hhT = - 2.0 * m_B * p * fT * tl / (m_B + m_D);
+            const complex<double> hhtS = hht - hhS / ml_hat;
+
+            double result = 2.0 * nD * p * (
+                                            std::norm(hh0) * s_theta_l_2 + (1.0 - v) * power_of<2>(std::abs(hh0) * c_theta_l - std::abs(hhtS))
+                                            + 8.0 * ( ((2.0 - v) + v * c_2_theta_l) * std::norm(hhT) - ml_hat * std::real(hhT * (std::conj(hh0) - std::conj(hhtS) * c_theta_l)))
+                                            );
+
+            return result;
+        }
+
+        // normalized to V_cb = 1, obtained using cf. [DSD2014], eq. (12), agrees with Sakaki'13 et al cf. [STTW2013]
         double normalized_differential_decay_width(const double & s) const
         {
             double fp = form_factors->f_p(s);
@@ -89,48 +140,87 @@ namespace eos
             // running quark masses
             double mbatmu = model->m_b_msbar(mu);
             double mcatmu = model->m_c_msbar(mu);
+
             double lam = lambda(m_B * m_B, m_D * m_D, s);
             double p = sqrt(lam) / (2.0 * m_B);
             // make sure we return NaN if s < m_l^2, v = lepton velocity in the dilepton rest frame
             double v = (1.0 - m_l * m_l / s);
-            double mvm1 = m_l * m_l / s;
             double v2 = v * v;
-            double norm = 8.0 * v2 * m_B * s * power_of<2>(g_fermi())
-                / (3.0 * 256.0 * power_of<3>(M_PI * m_B));
-            // helicity amplitudes
-            const double hhV0 = 2.0 * m_B * p * fp / (sqrt(s));
-            const double hhVt = (m_B * m_B - m_D * m_D) * f0 / (sqrt(s));
-            const double hhS  = (m_B * m_B - m_D * m_D) * f0 / (mbatmu - mcatmu);
-            const double hhT  = -2.0 * m_B * p * fT / (m_B + m_D);
-            // NP contributions in EFT including tensor operator, cf. e.g. Sakaki:2013bfa
+            double ml_hat = sqrt(1.0 - v);
+            double nD = v2 * m_B * s * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI * m_B));
+            // NP contributions in EFT including tensor operator (cf. [DSD2014]). (in SM cvl=1, and all other couplings are zero)
             const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
-            const complex<double> cv1 = wc.cvl() - 1.0;
-            const complex<double> cv2 = wc.cvr();
-            const complex<double> cs1 = wc.csr();
-            const complex<double> cs2 = wc.csl();
-            const complex<double> cT  = wc.ct();
-            // normalized(|V_cb|=1) differential decay width including NP (in SM cvl=1, and all other couplings are zero)
-            return norm * p * (
-                               std::norm(1.0 + cv1 + cv2) * ((1.0 + mvm1 / 2.0) * power_of<2>(hhV0) + (3.0 * mvm1 / 2.0) * power_of<2>(hhVt))
-                               + 3.0 / 2.0 * std::norm(cs1 + cs2) * power_of<2>(hhS) + 8.0 * std::norm(cT) * (1.0 + 2.0 * mvm1) * power_of<2>(hhT)
-                               + 3.0 * std::real((1.0 + cv1 + cv2) * (std::conj(cs1) + std::conj(cs2))) * sqrt(mvm1) * hhS * hhVt
-                               - 12.0 * std::real((1.0 + cv1 + cv2) * std::conj(cT)) * sqrt(mvm1) * hhT * hhV0
-                               );
+            const complex<double> vl = wc.cvl() - 1.0;
+            const complex<double> vr = wc.cvr();
+            const complex<double> sl = wc.csl();
+            const complex<double> sr = wc.csr();
+            const complex<double> gV = vr + vl;
+            const complex<double> gA = vr - vl;
+            const complex<double> gS = sr + sl;
+            const complex<double> gP = sr - sl;
+            const complex<double> tl = wc.ct();
+            // helicity amplitudes, cf. [DSD2014] eqs. 13-14
+            const complex<double> hh0 = 2.0 * m_B * p * fp * (1.0 + gV) / sqrt(s) ;
+            const complex<double> hht = (1.0 + gV) * (m_B * m_B - m_D * m_D) * f0 / sqrt(s);
+            const complex<double> hhS = - gS * (m_B * m_B - m_D * m_D) * f0 / (mbatmu - mcatmu);
+            const complex<double> hhT = - 2.0 * m_B * p * fT * tl / (m_B + m_D);
+            const complex<double> hhtS = hht - hhS / ml_hat;
+
+            // normalized(|V_cb|=1) differential decay width
+            return 4.0 / 3.0 * nD * p * ( std::norm(hh0) * (3.0 - v) + 3.0 * std::norm(hhtS) * (1.0 - v) + 16.0 * std::norm(hhT) * (3.0 - 2.0 * v) - 24.0 * ml_hat * std::real(hhT * std::conj(hh0)) );
         }
 
-        // differential decay width including NP
+        // obtained using cf. [DSD2014], eq. (12), defined as int_1^0 d^2Gamma - int_0^-1 d^2Gamma
+        double numerator_differential_a_fb_leptonic(const double & s) const
+        {
+            double fp = form_factors->f_p(s);
+            double f0 = form_factors->f_0(s);
+            double fT = form_factors->f_t(s);
+            // running quark masses
+            double mbatmu = model->m_b_msbar(mu);
+            double mcatmu = model->m_c_msbar(mu);
+
+            double lam = lambda(m_B * m_B, m_D * m_D, s);
+            double p = sqrt(lam) / (2.0 * m_B);
+            // make sure we return NaN if s < m_l^2, v = lepton velocity in the dilepton rest frame
+            double v = (1.0 - m_l * m_l / s);
+            double v2 = v * v;
+            double ml_hat = sqrt(1.0 - v);
+            double nD = v2 * m_B * s * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI * m_B));
+            // NP contributions in EFT including tensor operator (cf. [DSD2014]). (in SM cvl=1, and all other couplings are zero)
+            const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
+            const complex<double> vl = wc.cvl() - 1.0;
+            const complex<double> vr = wc.cvr();
+            const complex<double> sl = wc.csl();
+            const complex<double> sr = wc.csr();
+            const complex<double> gV = vr + vl;
+            const complex<double> gA = vr - vl;
+            const complex<double> gS = sr + sl;
+            const complex<double> gP = sr - sl;
+            const complex<double> tl = wc.ct();
+            // helicity amplitudes, cf. [DSD2014] eqs. 13-14
+            const complex<double> hh0 = 2.0 * m_B * p * fp * (1.0 + gV) / sqrt(s) ;
+            const complex<double> hht = (1.0 + gV) * (m_B * m_B - m_D * m_D) * f0 / sqrt(s);
+            const complex<double> hhS = - gS * (m_B * m_B - m_D * m_D) * f0 / (mbatmu - mcatmu);
+            const complex<double> hhT = - 2.0 * m_B * p * fT * tl / (m_B + m_D);
+            const complex<double> hhtS = hht - hhS / ml_hat;
+
+            return - 4.0 * nD * p * ( std::abs(hh0) * std::abs(hhtS) * (1.0 - v) - 4.0 * ml_hat * std::real(hhT * std::conj(hhtS)) );
+        }
+
+        // differential decay width
         double differential_decay_width(const double & s) const
         {
             return normalized_differential_decay_width(s) * std::norm(model->ckm_cb());
         }
-       
-        // differential branching_ratio including NP
+
+        // differential branching_ratio
         double differential_branching_ratio(const double & s) const
         {
             return differential_decay_width(s) * tau_B / hbar;
         }
-        
-        // "normalized"(|Vcb|=1) differential branching_ratio including NP
+
+        // "normalized"(|Vcb|=1) differential branching_ratio
         double normalized_differential_branching_ratio(const double & s) const
         {
             return normalized_differential_decay_width(s) * tau_B / hbar;
@@ -144,6 +234,13 @@ namespace eos
 
     BToDLeptonNeutrino::~BToDLeptonNeutrino()
     {
+    }
+
+    //* normalized(|Vcb|=1) two-fold-distribution, cf. [DSD2014], eq. (13), p. 6
+    double
+    BToDLeptonNeutrino::normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const
+    {
+        return _imp->normalized_two_differential_decay_width(s, c_theta_l);
     }
 
     double
@@ -167,8 +264,8 @@ namespace eos
     {
         return _imp->normalized_differential_branching_ratio(s);
     }
-    
-    // normalized(|Vcb|=1) integrated branching_ratio including NP
+
+    // normalized(|Vcb|=1) integrated branching_ratio
     double
     BToDLeptonNeutrino::normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
@@ -176,6 +273,32 @@ namespace eos
                                                              _imp.get(), std::placeholders::_1);
         
         return integrate<GSL::QAGS>(f, s_min, s_max);
+    }
+
+    double
+    BToDLeptonNeutrino::differential_a_fb_leptonic(const double & s) const
+    {
+        return _imp->numerator_differential_a_fb_leptonic(s) / _imp->normalized_differential_decay_width(s);
+    }
+
+    double
+    BToDLeptonNeutrino::integrated_a_fb_leptonic(const double & s_min, const double & s_max) const
+    {
+        double integrated_numerator;
+        {
+            std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::numerator_differential_a_fb_leptonic,
+                                                                 _imp.get(), std::placeholders::_1);
+            integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max);
+        }
+
+        double integrated_denominator;
+        {
+            std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::normalized_differential_decay_width,
+                                                                 _imp.get(), std::placeholders::_1);
+            integrated_denominator = integrate<GSL::QAGS>(f, s_min, s_max);
+        }
+
+        return integrated_numerator / integrated_denominator;
     }
 
     double
@@ -199,7 +322,7 @@ namespace eos
     }
 
     double
-    BToDLeptonNeutrino::integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max) const
+    BToDLeptonNeutrino::integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max_mu, const double & s_max_tau) const
     {
         std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::differential_branching_ratio,
                 _imp.get(), std::placeholders::_1);
@@ -210,7 +333,7 @@ namespace eos
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
             Save<std::string> save_opt_l(_imp->opt_l._value, "mu");
 
-            br_muons = integrate<GSL::QAGS>(f, s_min_mu, s_max);
+            br_muons = integrate<GSL::QAGS>(f, s_min_mu, s_max_mu);
         }
 
         double br_taus;
@@ -218,7 +341,7 @@ namespace eos
             Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
             Save<std::string> save_opt_l(_imp->opt_l._value, "tau");
 
-            br_taus = integrate<GSL::QAGS>(f, s_min_tau, s_max);
+            br_taus = integrate<GSL::QAGS>(f, s_min_tau, s_max_tau);
         }
 
         return br_taus / br_muons;
@@ -226,10 +349,14 @@ namespace eos
 
     const std::string
     BToDLeptonNeutrino::description = "\
-The decay B->D l nu, where l=e,mu,tau is a lepton.";
+    The decay B->D l nu, where l=e,mu,tau is a lepton.";
 
     const std::string
     BToDLeptonNeutrino::kinematics_description_s = "\
-The invariant mass of the l-nubar pair in GeV^2.";
+    The invariant mass of the l-nubar pair in GeV^2.";
+
+    const std::string
+    BToDLeptonNeutrino::kinematics_description_c_theta_l = "\
+    The cosine of the polar angle theta_l between the charged lepton and the direction opposite to D meson in the l-nubar rest frame.";
 
 }

@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2013, 2014, 2015, 2016, 2017 Danny van Dyk
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018, 2019 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -41,24 +41,32 @@ namespace eos
             // Differential Observables
             double differential_branching_ratio(const double & s) const;
 
+            double differential_a_fb_leptonic(const double & s) const;
+
             // Differential Observables - normalized(|Vcb|=1)
             double normalized_differential_branching_ratio(const double & s) const;
 
+            // two differential observables - normalized(|Vcb|=1)
+            double normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const;
+
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
+
+            double integrated_a_fb_leptonic(const double & s_min, const double & s_max) const;
 
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
 
             // R_D
             double differential_r_d(const double & s) const;
-            double integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max) const;
+            double integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max_mu, const double & s_max_tau) const;
 
             /*!
              * Descriptions of the process and its kinematics.
              */
             static const std::string description;
             static const std::string kinematics_description_s;
+            static const std::string kinematics_description_c_theta_l;
     };
 }
 

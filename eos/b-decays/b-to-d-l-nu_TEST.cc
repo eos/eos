@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2018, 2019 Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -46,8 +46,7 @@ class BToDLeptonNeutrinoTest :
 
         virtual void run() const
         {
-
-            // tests for normalized SM Br (|V_cb|=1), Re{cVL}=1 in the SM and all other couplings are zero
+            // SM tests
             {
                 Parameters p1 = Parameters::Defaults();
                 p1["B->D::f_+(0)@BCL2008"]  = +0.660;
@@ -60,9 +59,8 @@ class BToDLeptonNeutrinoTest :
                 p1["B->D::b_T^2@BCL2008"]   = +0.00;
                 p1["mass::B_d"]             =  5.279;
                 p1["mass::D_d"]             =  1.870;
+                // by default, all other couplings are zero in eos
                 p1["b->cmunumu::Re{cVL}"]   =  1.0;
-                p1["b->cmunumu::Re{cT}"]    =  0.0;
-                p1["b->cmunumu::Im{cT}"]    =  0.0;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -71,59 +69,15 @@ class BToDLeptonNeutrinoTest :
 
                 BToDLeptonNeutrino d(p1, oo);
 
-                const double eps = 1e-5;
+                const double eps = 1e-3;
 
-                // test for different s-bins - the default lepton is muon
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 8.0), 4.413884800954554, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(8.0, 11.62), 1.0206050186357505, eps);
-                // the full phase-space region for muon
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.02629683128414, eps);
+                // the default lepton is muon
+                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.0263, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.0138762, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_r_d(0.011164, 3.15702, 11.62, 11.62), 0.299132, eps);
             }
 
-            // tests for normalized NP Br (|V_cb|=1), no tensor operator contribution
-            {
-                Parameters p2 = Parameters::Defaults();
-                p2["B->D::f_+(0)@BCL2008"]  = +0.660;
-                p2["B->D::f_T(0)@BCL2008"]  = +0.00;
-                p2["B->D::b_+^1@BCL2008"]   = -4.00;
-                p2["B->D::b_+^2@BCL2008"]   = -0.800;
-                p2["B->D::b_0^1@BCL2008"]   = +0.400;
-                p2["B->D::b_0^2@BCL2008"]   = -1.20;
-                p2["B->D::b_T^1@BCL2008"]   = +0.00;
-                p2["B->D::b_T^2@BCL2008"]   = +0.00;
-                p2["mass::B_d"]             =  5.279;
-                p2["mass::D_d"]             =  1.870;
-                // fix the scale
-                p2["mu"]                    =  4.18;
-                p2["mass::b(MSbar)"]        =  4.18;
-                p2["mass::c"]               =  1.275;
-                p2["b->cmunumu::Re{cVL}"]   =  1.0;
-                p2["b->cmunumu::Im{cVL}"]   = -1.0;
-                p2["b->cmunumu::Re{cVR}"]   =  2.0;
-                p2["b->cmunumu::Im{cVR}"]   = -2.0;
-                p2["b->cmunumu::Re{cSL}"]   =  3.0;
-                p2["b->cmunumu::Im{cSL}"]   = -3.0;
-                p2["b->cmunumu::Re{cSR}"]   =  4.0;
-                p2["b->cmunumu::Im{cSR}"]   = -4.0;
-                p2["b->cmunumu::Re{cT}"]    =  0.0;
-                p2["b->cmunumu::Im{cT}"]    =  0.0;
-
-                Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "BCL2008");
-
-                BToDLeptonNeutrino d(p2, oo);
-
-                const double eps = 1e-5;
-
-                // test for different s-bins - the default lepton is muon
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 8.0), 749.0934190079766, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(8.0, 11.62), 616.8445050995084, eps);
-                // the full phase-space region for muon
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 1774.909629523804, eps);
-            }
-
-            // tests for normalized NP Br (|V_cb|=1), including the tensor operator contribution, cf. Sakaki:2013bfa
+            // NP tests
             {
                 Parameters p3 = Parameters::Defaults();
                 p3["B->D::f_+(0)@BCL2008"]  = +0.660;
@@ -140,16 +94,28 @@ class BToDLeptonNeutrinoTest :
                 p3["mu"]                    =  4.18;
                 p3["mass::b(MSbar)"]        =  4.18;
                 p3["mass::c"]               =  1.275;
-                p3["b->cmunumu::Re{cVL}"]   =  1.0;
-                p3["b->cmunumu::Im{cVL}"]   = -1.0;
-                p3["b->cmunumu::Re{cVR}"]   =  2.0;
-                p3["b->cmunumu::Im{cVR}"]   = -2.0;
-                p3["b->cmunumu::Re{cSL}"]   =  3.0;
-                p3["b->cmunumu::Im{cSL}"]   = -3.0;
-                p3["b->cmunumu::Re{cSR}"]   =  4.0;
-                p3["b->cmunumu::Im{cSR}"]   = -4.0;
-                p3["b->cmunumu::Re{cT}"]    =  5.0;
-                p3["b->cmunumu::Im{cT}"]    = -5.0;
+                // mu mode
+                p3["b->cmunumu::Re{cVL}"]         = +1.0;
+                p3["b->cmunumu::Im{cVL}"]         = -2.0;
+                p3["b->cmunumu::Re{cVR}"]         = +2.0;
+                p3["b->cmunumu::Im{cVR}"]         = -2.0;
+                p3["b->cmunumu::Re{cSL}"]         = +3.0;
+                p3["b->cmunumu::Im{cSL}"]         = -3.0;
+                p3["b->cmunumu::Re{cSR}"]         = +4.0;
+                p3["b->cmunumu::Im{cSR}"]         = -4.0;
+                p3["b->cmunumu::Re{cT}"]          = +5.0;
+                p3["b->cmunumu::Im{cT}"]          = -5.0;
+                // tau mode
+                p3["b->ctaunutau::Re{cVL}"]       = +1.0;
+                p3["b->ctaunutau::Im{cVL}"]       = -5.0;
+                p3["b->ctaunutau::Re{cVR}"]       = +2.1;
+                p3["b->ctaunutau::Im{cVR}"]       = -6.0;
+                p3["b->ctaunutau::Re{cSL}"]       = +3.1;
+                p3["b->ctaunutau::Im{cSL}"]       = -7.0;
+                p3["b->ctaunutau::Re{cSR}"]       = +4.1;
+                p3["b->ctaunutau::Im{cSR}"]       = -8.0;
+                p3["b->ctaunutau::Re{cT}"]        = +5.1;
+                p3["b->ctaunutau::Im{cT}"]        = -9.0;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -157,13 +123,12 @@ class BToDLeptonNeutrinoTest :
 
                 BToDLeptonNeutrino d(p3, oo);
 
-                const double eps = 1e-5;
+                const double eps = 1e-3;
 
-                // test for different s-bins - the default lepton is muon
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 8.0), 1074.2803668903907, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(8.0, 11.62), 706.6625032909665, eps);
-                // the full phase-space region for muon
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 2461.2412433585673, eps);
+                // the default lepton is muon
+                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 2581.58, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.621944, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_r_d(0.011164, 3.15702, 11.62, 11.62), 1.43554, eps);
             }
         }
 } b_to_d_l_nu_test;
