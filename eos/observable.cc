@@ -611,8 +611,16 @@ namespace eos
                             &BToDLeptonNeutrino::differential_branching_ratio,
                             std::make_tuple("s")),
 
+            make_observable("B->Dlnu::normdBR/ds",
+                            &BToDLeptonNeutrino::normalized_differential_branching_ratio,
+                            std::make_tuple("s")),
+
             make_observable("B->Dlnu::BR",
                             &BToDLeptonNeutrino::integrated_branching_ratio,
+                            std::make_tuple("s_min", "s_max")),
+
+            make_observable("B->Dlnu::normBR",
+                            &BToDLeptonNeutrino::normalized_integrated_branching_ratio,
                             std::make_tuple("s_min", "s_max")),
 
             make_observable("B->Dlnu::R_D(s)",
@@ -621,7 +629,15 @@ namespace eos
 
             make_observable("B->Dlnu::R_D",
                             &BToDLeptonNeutrino::integrated_r_d,
-                            std::make_tuple("s_min_mu", "s_min_tau", "s_max")),
+                            std::make_tuple("s_min_mu", "s_min_tau", "s_max_mu", "s_max_tau")),
+
+            make_observable("B->Dlnu::A_FB(s)",
+                            &BToDLeptonNeutrino::differential_a_fb_leptonic,
+                            std::make_tuple("s")),
+
+            make_observable("B->Dlnu::A_FB",
+                            &BToDLeptonNeutrino::integrated_a_fb_leptonic,
+                            std::make_tuple("s_min", "s_max")),
 
             // B -> D^* l nu
             make_observable("B->D^*lnu::dBR/ds",
