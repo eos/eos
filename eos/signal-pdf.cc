@@ -126,6 +126,12 @@ namespace eos
                     Options{ },
                     KinematicRange{ "s", 0.0, 11.62, BToDLeptonNeutrino::kinematics_description_s }),
 
+            make_signal_pdf("B->Dmunu::d^2Gamma",
+                            &BToDLeptonNeutrino::normalized_two_differential_decay_width,
+                            Options{ {"l", "mu"} },
+                            KinematicRange{ "s", 0.0, 11.62, BToDLeptonNeutrino::kinematics_description_s },
+                            KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToDLeptonNeutrino::kinematics_description_c_theta_l}),
+
             make_signal_pdf("B->D^*munu::dBR",
                             &BToDstarLeptonNeutrino::differential_branching_ratio,
                             Options{ {"l", "mu"} },
