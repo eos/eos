@@ -30,6 +30,7 @@ namespace eos
             constexpr static const char * m_V  = "mass::K^*_d";
             constexpr static const char * f_V  = "B->K^*::f_Kstar_par";
             constexpr static const char   q_v  = 's';
+            constexpr static const char   q_s  = 'd';
             constexpr static const double chi2 = 1.0;
         };
 

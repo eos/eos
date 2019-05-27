@@ -53,7 +53,7 @@ class BMesonLCDAsTest :
 
                 /* Two-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ });
+                    BMesonLCDAs B(p, Options{ { "q", "u" } });
 
                     // phi_plus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
                     TEST_CHECK_NEARLY_EQUAL( 0.537484,   B.phi_plus(1.0),    eps);

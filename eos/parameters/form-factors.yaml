@@ -1437,6 +1437,23 @@
     max:     +0.540000
     comments: "GeV^2"
 
+# B LCDA parameters
+"B_s::1/lambda_B_p" :
+    central: +2.1739
+    min:     +1.60
+    max:     +2.80
+    comments: " // GeV^{-1}, cf. [GKvD2018]"
+"B_s::lambda_E^2" :
+    central: +0.352838
+    min:     +0.205350
+    max:     +0.540000
+    comments: "GeV^2"
+"B_s::lambda_H^2" :
+    central: +0.352838
+    min:     +0.205350
+    max:     +0.540000
+    comments: "GeV^2"
+
 # B->K LCDA Parameter
 "B->K::a_1@1GeV" :
     central: +0.06

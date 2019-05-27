@@ -24,6 +24,7 @@
 #include <eos/utils/model.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
+#include <eos/utils/qualified-name.hh>
 
 #include <gsl/gsl_sf_expint.h>
 
@@ -32,6 +33,8 @@ namespace eos
     template <>
     struct Implementation<BMesonLCDAs>
     {
+        SwitchOption opt_q;
+
         UsedParameter lambda_B_inv;
         UsedParameter lambda_E2;
         UsedParameter lambda_H2;
@@ -40,10 +43,22 @@ namespace eos
 
         double switch_gminus;
 
+        inline
+        QualifiedName parameter(const char * _name) const
+        {
+            qnp::Name name(_name);
+
+            if (opt_q.value() == "s")
+                return QualifiedName(qnp::Prefix("B_s"), name);
+
+            return QualifiedName(qnp::Prefix("B"), name);
+        }
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            lambda_B_inv(p["B::1/lambda_B_p"], u),
-            lambda_E2(p["B::lambda_E^2"], u),
-            lambda_H2(p["B::lambda_H^2"], u),
+            opt_q(o, "q", { "u", "d", "s" }, "u"),
+            lambda_B_inv(p[parameter("1/lambda_B_p").str()], u),
+            lambda_E2(p[parameter("lambda_E^2").str()], u),
+            lambda_H2(p[parameter("lambda_H^2").str()], u),
             opt_gminus(o, "gminus", { "zero", "WW-limit" }, "WW-limit"),
             switch_gminus(1.0)
         {
