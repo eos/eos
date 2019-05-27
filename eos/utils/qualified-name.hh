@@ -132,6 +132,7 @@ namespace eos
             QualifiedName(const std::string & name);
             QualifiedName(const char * name);
             QualifiedName(const QualifiedName & other);
+            QualifiedName(const qnp::Prefix & prefix, const qnp::Name & name, const qnp::Suffix & suffix = qnp::Suffix());
             ~QualifiedName();
 
             inline const std::string & str() const { return _str; };

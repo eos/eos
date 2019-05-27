@@ -145,6 +145,7 @@ class QualifiedNameTest :
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=BSZ2015"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("mass::b(MSbar);opt=har"));
+            TEST_CHECK_NO_THROW(auto qn = QualifiedName(qnp::Prefix("mass"), qnp::Name("b(MSbar)"), qnp::Suffix("non-empty")));
 
             TEST_CHECK_EQUAL_STR(
                     "B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010",
@@ -162,6 +163,16 @@ class QualifiedNameTest :
             TEST_CHECK_EQUAL_STR(
                     "B->K^*ll::A_FB(s)@LargeRecoil",
                     QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010,model=WilsonScan").str()
+                    );
+
+            TEST_CHECK_EQUAL_STR(
+                    "mass::b(MSbar)@non-empty",
+                    QualifiedName(qnp::Prefix("mass"), qnp::Name("b(MSbar)"), qnp::Suffix("non-empty")).str()
+                    );
+
+            TEST_CHECK_EQUAL_STR(
+                    "mass::b(MSbar)",
+                    QualifiedName(qnp::Prefix("mass"), qnp::Name("b(MSbar)")).str()
                     );
 
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto qn = QualifiedName(""));

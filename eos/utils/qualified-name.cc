@@ -234,6 +234,16 @@ namespace eos
     {
     }
 
+    QualifiedName::QualifiedName(const qnp::Prefix & p, const qnp::Name & n, const qnp::Suffix & s) :
+        _str(p.str() + "::" + n.str() + (s.empty() ? std::string() : "@" + s.str())),
+        _full(_str),
+        _prefix(p),
+        _name(n),
+        _suffix(s),
+        _options()
+    {
+    }
+
     QualifiedName::~QualifiedName()
     {
     }
