@@ -31,32 +31,9 @@ namespace eos
 {
     namespace lcsr
     {
-        struct BToPi
-        {
-            constexpr static const char * P    = "pi";
-            constexpr static const char * m_P  = "mass::pi^+";
-            constexpr static const char * f_P  = "decay-constant::pi";
-            constexpr static const char   q_v  = 'u';
-            constexpr static const double chi2 = 1.0;
-        };
-
-        struct BToK
-        {
-            constexpr static const char * P    = "K";
-            constexpr static const char * m_P  = "mass::K_d";
-            constexpr static const char * f_P  = "decay-constant::K";
-            constexpr static const char   q_v  = 's';
-            constexpr static const double chi2 = 1.0;
-        };
-
-        struct BToD
-        {
-            constexpr static const char * P    = "D";
-            constexpr static const char * m_P  = "mass::D^+";
-            constexpr static const char * f_P  = "decay-constant::D";
-            constexpr static const char   q_v  = 'c';
-            constexpr static const double chi2 = 1.0;
-        };
+        struct BToPi;
+        struct BToK;
+        struct BToD;
     }
 
     template <typename Process_>
