@@ -33,41 +33,11 @@ namespace eos
             constexpr static const double chi2 = 1.0;
         };
 
-        struct BToKstar
-        {
-            constexpr static const char * V    = "K^*";
-            constexpr static const char * m_V  = "mass::K^*_d";
-            constexpr static const char * f_V  = "B->K^*::f_Kstar_par";
-            constexpr static const char   q_v  = 's';
-            constexpr static const double chi2 = 1.0;
-        };
-
-        struct BToDstar
-        {
-            constexpr static const char * V    = "D^*";
-            constexpr static const char * m_V  = "mass::D^*_d";
-            constexpr static const char * f_V  = "decay-constant::D^*";
-            constexpr static const char   q_v  = 'c';
-            constexpr static const double chi2 = 1.0;
-        };
-
         // B -> rho
         constexpr const char * BToRho::V;
         constexpr const char * BToRho::m_V;
         constexpr const char * BToRho::f_V;
-
-        // B -> K^*
-        constexpr const char * BToKstar::V;
-        constexpr const char * BToKstar::m_V;
-        constexpr const char * BToKstar::f_V;
-
-        // B -> D^*
-        constexpr const char * BToDstar::V;
-        constexpr const char * BToDstar::m_V;
-        constexpr const char * BToDstar::f_V;
     }
 
     template class AnalyticFormFactorBToVLCSR<lcsr::BToRho>;
-    template class AnalyticFormFactorBToVLCSR<lcsr::BToKstar>;
-    template class AnalyticFormFactorBToVLCSR<lcsr::BToDstar>;
 }
