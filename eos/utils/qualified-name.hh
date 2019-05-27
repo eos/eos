@@ -63,6 +63,7 @@ namespace eos
                 std::string _suffix;
 
             public:
+                Suffix();
                 Suffix(const std::string &);
 
                 const std::string & str() const { return _suffix; };

@@ -71,6 +71,11 @@ namespace eos
             }
         }
 
+        Suffix::Suffix() :
+            _suffix()
+        {
+        }
+
         Suffix::Suffix(const std::string & suffix) :
             _suffix(suffix)
         {

@@ -82,6 +82,7 @@ class SuffixTest :
             TEST_CHECK_NO_THROW(auto p = qnp::Suffix("LHCB-2014A"));
 
             // empty suffixes are permitted
+            TEST_CHECK_NO_THROW(auto p = qnp::Suffix());
             TEST_CHECK_NO_THROW(auto p = qnp::Suffix(""));
 
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::Suffix("@LargeRecoil"));
