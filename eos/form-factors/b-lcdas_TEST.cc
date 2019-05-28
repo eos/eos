@@ -44,6 +44,7 @@ class BMesonLCDAsTest :
         {
             static const double eps = 1e-5;
 
+            /* m_s = u */
             /* test cases in the limit lambda_E2 = lambda_H2 as used in [KMPW2010] */
             {
                 Parameters p = Parameters::Defaults();
@@ -128,7 +129,7 @@ class BMesonLCDAsTest :
 
                 /* Three-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ });
+                    BMesonLCDAs B(p, Options{ { "q", "u" } });
 
                     // phi_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL( 0.0         , B.phi_3(1.0, 0.1), eps);
@@ -287,7 +288,7 @@ class BMesonLCDAsTest :
                     TEST_CHECK_NEARLY_EQUAL( 3.0990400e-2, B.chi_bar_bar_4(3.0, 0.5), eps);
                 }
                 {
-                    BMesonLCDAs B(p, Options{ });
+                    BMesonLCDAs B(p, Options{ { "q", "u" } });
 
                     // psi_A at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL( 1.0811700e-3, B.psi_A(1.0, 0.1), eps);
@@ -344,7 +345,7 @@ class BMesonLCDAsTest :
 
                 /* Auxiliary functions to three-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ });
+                    BMesonLCDAs B(p, Options{ { "q", "u" } });
 
                     // Xbar_A at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL( 2.1832900e-2, B.Xbar_A(1.0, 0.1),eps);
@@ -383,7 +384,7 @@ class BMesonLCDAsTest :
 
                 /* Two-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ });
+                    BMesonLCDAs B(p, Options{ { "q", "u" } });
 
                     // phi_plus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
                     TEST_CHECK_NEARLY_EQUAL( 0.537484,   B.phi_plus(1.0),    eps);
@@ -458,7 +459,7 @@ class BMesonLCDAsTest :
 
                 /* Three-particle LCDAs */
                 {
-                    BMesonLCDAs B(p, Options{ });
+                    BMesonLCDAs B(p, Options{ { "q", "u" } });
 
                     // phi_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
                     TEST_CHECK_NEARLY_EQUAL(-7.0511100e-3, B.phi_3(1.0, 0.1), eps);
@@ -615,6 +616,144 @@ class BMesonLCDAsTest :
                     TEST_CHECK_NEARLY_EQUAL( 8.0100900e-2, B.chi_bar_bar_4(1.0, 0.5), eps);
                     TEST_CHECK_NEARLY_EQUAL( 1.1667800e-1, B.chi_bar_bar_4(2.0, 0.5), eps);
                     TEST_CHECK_NEARLY_EQUAL( 1.2396100e-1, B.chi_bar_bar_4(3.0, 0.5), eps);
+                }
+            }
+
+            /* m_s = s */
+            {
+                Parameters p = Parameters::Defaults();
+                p["B_s::1/lambda_B_p"] = 1.69348;
+                p["B_s::lambda_E^2"]   = 0.5;
+                p["B_s::lambda_H^2"]   = 0.8;
+
+                /* Two-particle LCDAs */
+                {
+                    BMesonLCDAs B(p, Options{ { "q", "s" } });
+
+                    // phi_plus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 0.527341,   B.phi_plus(1.0),    eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.193933,   B.phi_plus(2.0),    eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0534902,  B.phi_plus(3.0),    eps);
+
+                    // phi_minus at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 0.283025,   B.phi_minus(1.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0570498,  B.phi_minus(2.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0142975,  B.phi_minus(3.0),   eps);
+
+                    // phi_bar at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL(-0.315957,   B.phi_bar(1.0),     eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.106926,   B.phi_bar(2.0),     eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0269353,  B.phi_bar(3.0),     eps);
+
+                    // phi_bar' at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 0.244316,   B.phi_bar_d1(1.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.136883,   B.phi_bar_d1(2.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0391927,  B.phi_bar_d1(3.0),  eps);
+
+                    // g_+ at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 0.138237,   B.g_plus(1.0),      eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.104952,   B.g_plus(2.0),      eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0441973,  B.g_plus(3.0),      eps);
+
+                    // g_+' at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 0.0487100,  B.g_plus_d1(1.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0704267,  B.g_plus_d1(2.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0447601,  B.g_plus_d1(3.0),   eps);
+
+                    // g_+'' at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL(-0.265357,   B.g_plus_d2(1.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.00652033, B.g_plus_d2(2.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0352610,  B.g_plus_d2(3.0),   eps);
+
+                    // g_- WW at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 0.137909,    B.g_minusWW(1.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.050717,    B.g_minusWW(2.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0139886,   B.g_minusWW(3.0),   eps);
+
+                    // g_-' WW at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL( -0.0956371,  B.g_minusWW_d1(1.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL( -0.0605297,  B.g_minusWW_d1(2.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL( -0.0190266,  B.g_minusWW_d1(3.0),   eps);
+
+                    // g_-'' WW at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV
+                    TEST_CHECK_NEARLY_EQUAL(-0.0715865,   B.g_minusWW_d2(1.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0595617,   B.g_minusWW_d2(2.0),   eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0243247,   B.g_minusWW_d2(3.0),   eps);
+                }
+
+                /* Three-particle LCDAs */
+                {
+                    BMesonLCDAs B(p, Options{ { "q", "s" } });
+
+                    // phi_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL(-1.0810700e-3, B.phi_3(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-1.0965700e-4, B.phi_3(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(-6.9343100e-3, B.phi_3(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-7.0337400e-4, B.phi_3(3.0, 0.3), eps);
+
+                    // phi_4 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 2.7662800e-3, B.phi_4(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 9.3531600e-5, B.phi_4(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL( 1.7743700e-2, B.phi_4(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 5.9993900e-4, B.phi_4(3.0, 0.3), eps);
+
+                    // phi_bar_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL(-1.0347100e-3, B.phi_bar_3(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-1.9725500e-3, B.phi_bar_3(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(-6.6369500e-3, B.phi_bar_3(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-1.2652500e-2, B.phi_bar_3(3.0, 0.3), eps);
+
+                    // phi_bar_4 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 7.2500400e-3, B.phi_bar_4(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 8.8283000e-3, B.phi_bar_4(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL( 4.6503900e-2, B.phi_bar_4(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 5.6627300e-2, B.phi_bar_4(3.0, 0.3), eps);
+
+                    // phi_bar_bar_3 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL(-3.6001500e-5, B.phi_bar_bar_3(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-6.8632300e-5, B.phi_bar_bar_3(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(-7.5733800e-4, B.phi_bar_bar_3(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-1.4437700e-3, B.phi_bar_bar_3(3.0, 0.3), eps);
+
+                    // phi_bar_bar_4 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 2.5225600e-4, B.phi_bar_bar_4(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 3.0717000e-4, B.phi_bar_bar_4(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL( 5.3065300e-3, B.phi_bar_bar_4(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 6.4617000e-3, B.phi_bar_bar_4(3.0, 0.3), eps);
+
+                    // psi_bar_4 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 2.0366600e-2, B.psi_bar_4(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 3.8826300e-2, B.psi_bar_4(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL( 4.3545800e-2, B.psi_bar_4(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 8.3014400e-2, B.psi_bar_4(3.0, 0.3), eps);
+
+                    // psi_bar_bar_4 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 1.0783300e-3, B.psi_bar_bar_4(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 2.0557000e-3, B.psi_bar_bar_4(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL( 7.7941000e-3, B.psi_bar_bar_4(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 1.4858400e-2, B.psi_bar_bar_4(3.0, 0.3), eps);
+
+                    // chi_bar_4 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 3.2586600e-2, B.chi_bar_4(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 6.2122100e-2, B.chi_bar_4(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL( 6.9673200e-2, B.chi_bar_4(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 1.3282300e-1, B.chi_bar_4(3.0, 0.3), eps);
+
+                    // chi_bar_bar_4 at omega = 1.0 GeV, 2.0 GeV and 3.0 GeV, and xi = 0.1 GeV, 0.3 GeV and 0.5 GeV
+                    TEST_CHECK_NEARLY_EQUAL( 1.7253300e-3, B.chi_bar_bar_4(1.0, 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 3.2891200e-3, B.chi_bar_bar_4(3.0, 0.1), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL( 1.2470600e-2, B.chi_bar_bar_4(1.0, 0.3), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 2.3773500e-2, B.chi_bar_bar_4(3.0, 0.3), eps);
                 }
             }
         }
