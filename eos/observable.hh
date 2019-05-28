@@ -1,7 +1,7 @@
-/* vim: set sw=4 sts=4 et foldmethod=syntax : */
+/* vim: set sw=4 sts=4 et tw=150 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2016-2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,6 +20,7 @@
 #ifndef EOS_GUARD_SRC_UTILS_OBSERVABLE_HH
 #define EOS_GUARD_SRC_UTILS_OBSERVABLE_HH 1
 
+#include <eos/observable-fwd.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
@@ -27,16 +28,9 @@
 #include <eos/utils/qualified-name.hh>
 
 #include <string>
-#include <memory>
 
 namespace eos
 {
-    class Observable;
-
-    class Options;
-
-    typedef std::shared_ptr<Observable> ObservablePtr;
-
     /**
      * Observable is internally used to handle the creation,
      * evaluation and cloning of any (pseudo)observable quantities.
@@ -63,6 +57,65 @@ namespace eos
     };
 
     /**
+     * ObservableSection is used to keep track of one or more ObservableGroup objects, and groups
+     * them together under a common name. Examples of observable sections include semileptonic B decays and form factors.
+     */
+    class ObservableSection :
+        public PrivateImplementationPattern<ObservableSection>
+    {
+        public:
+            ObservableSection(Implementation<ObservableSection> *);
+
+            ~ObservableSection();
+
+            ///@name Iteration over groups
+            ///@{
+            struct GroupIteratorTag;
+            typedef WrappedForwardIterator<GroupIteratorTag, const ObservableGroup &> GroupIterator;
+
+            GroupIterator begin() const;
+            GroupIterator end() const;
+            ///@}
+
+            ///@name Meta data
+            ///@{
+            const std::string & name() const;
+            const std::string & description() const;
+            ///@}
+    };
+
+    extern template class WrappedForwardIterator<ObservableSection::GroupIteratorTag, const ObservableGroup &>;
+
+    /**
+     * ObservableGroup is used to keep track of one or more ObservableEntry objects, and groups
+     * them together under a common name and description. Examples of Observables Groups include B->pilnu observables and B->D form factors.
+     */
+    class ObservableGroup :
+        public PrivateImplementationPattern<ObservableGroup>
+    {
+        public:
+            ObservableGroup(Implementation<ObservableGroup> *);
+
+            ~ObservableGroup();
+
+            ///@name Iteration over observables
+            ///@{
+            struct ObservableIteratorTag;
+            typedef WrappedForwardIterator<ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>> ObservableIterator;
+
+            ObservableIterator begin() const;
+            ObservableIterator end() const;
+            ///@}
+
+            ///@name Meta data
+            ///@{
+            const std::string & name() const;
+            const std::string & description() const;
+            ///@}
+    };
+    extern template class WrappedForwardIterator<ObservableGroup::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
+
+    /**
      * ObservableEntry is internally used to keep track of the description and factory method
      * for any given Observable. This includes handling its construction (via the make() method), and
      * describing it (via the ostream & insert() method).
@@ -77,6 +130,10 @@ namespace eos
             virtual ~ObservableEntry();
 
             virtual ObservablePtr make(const Parameters &, const Kinematics &, const Options &) const = 0;
+
+            virtual const QualifiedName & name() const = 0;
+
+            virtual const std::string & latex() const = 0;
 
         protected:
             virtual std::ostream & insert(std::ostream & os) const = 0;
@@ -103,17 +160,27 @@ namespace eos
             /// Destructor.
             ~Observables();
 
-            ///@name Iteration over known constraints
+            ///@name Iteration over observables
             ///@{
             struct ObservableIteratorTag;
-            typedef WrappedForwardIterator<ObservableIteratorTag, const std::pair<const QualifiedName, const ObservableEntry *>> ObservableIterator;
+            typedef WrappedForwardIterator<ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>> ObservableIterator;
 
             ObservableIterator begin() const;
             ObservableIterator end() const;
             ///@}
+
+            ///@name Iteration over groups of observables
+            ///@{
+            struct SectionIteratorTag;
+            typedef WrappedForwardIterator<SectionIteratorTag, const ObservableSection &> SectionIterator;
+
+            SectionIterator begin_sections() const;
+            SectionIterator end_sections() const;
+            ///@}
     };
 
-    extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, const ObservableEntry *>>;
+    extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
+    extern template class WrappedForwardIterator<Observables::SectionIteratorTag, const ObservableSection &>;
 }
 
 #endif

@@ -20,8 +20,8 @@ contents:
     - name: 'B->pi mu nu'
       type: 'observable'
       color: 'red'
-      observable: 'B->pilnu::dBR/ds;l=mu,model=SM'
-      kinematic: 's'
+      observable: 'B->pilnu::dBR/dq2;l=mu,model=SM'
+      kinematic: 'q2'
       range: [0.01, 26.0]
       samples: 200
       parameters-from-file: '/tmp/mode-btopipi-ff.yaml'
@@ -29,8 +29,8 @@ contents:
     - name: 'B->pi mu nu (V_ub inclusive)'
       type: 'observable'
       color: 'black'
-      observable: 'B->pilnu::dBR/ds;l=mu,model=CKMScan'
-      kinematic: 's'
+      observable: 'B->pilnu::dBR/dq2;l=mu,model=CKMScan'
+      kinematic: 'q2'
       range: [0.01, 26.0]
       samples: 200
       parameters:
@@ -45,7 +45,7 @@ contents:
         - 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar-2010A'
         - 'B^0->pi^+lnu::BR[4.0,8.0]@BaBar-2010A'
         - 'B^0->pi^+lnu::BR[8.0,12.0]@BaBar-2010A'
-      variable: 's'
+      variable: 'q2'
       color: 'gray'
       rescale-by-width: true
 

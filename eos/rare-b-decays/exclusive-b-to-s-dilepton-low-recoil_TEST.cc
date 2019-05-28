@@ -323,15 +323,17 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 };
 
                 Parameters parameters = Parameters::Defaults();
-                Kinematics kinematics;
-                kinematics.declare("s_min");
-                kinematics.set("s_min", 14.18);
-                kinematics.declare("s_max");
-                kinematics.set("s_max", 19.21);
-                Options options;
-                options.set("model", "WilsonScan");
-                options.set("l", "mu");
-                options.set("form-factors", "BZ2004");
+                Kinematics kinematics
+                {
+                    { "q2_min", 14.18 },
+                    { "q2_max", 19.21 }
+                };
+                Options options
+                {
+                    { "model",        "WilsonScan" },
+                    { "l",            "mu"         },
+                    { "form-factors", "BZ2004"     }
+                };
 
                 for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
                 {
@@ -348,11 +350,11 @@ class BToKstarDileptonLowRecoilPolynomialTest :
             // Test ratios
             {
                 static const double eps = 1e-7;
-                Kinematics kinematics;
-                kinematics.declare("s_min");
-                kinematics.set("s_min", 14.18);
-                kinematics.declare("s_max");
-                kinematics.set("s_max", 19.21);
+                Kinematics kinematics
+                {
+                    { "q2_min", 14.18 },
+                    { "q2_max", 19.21 }
+                };
 
                 Parameters parameters = Parameters::Defaults();
                 parameters["life_time::B_d"] = 1.530e-12;
@@ -472,9 +474,11 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
                 variations.push_back(p[*n]);
             }
 
-            Kinematics k;
-            k.declare("s_min"); k.set("s_min", 14.18);
-            k.declare("s_max"); k.set("s_max", 19.21);
+            Kinematics k
+            {
+                { "q2_min", 14.18 },
+                { "q2_max", 19.21 }
+            };
 
             std::vector<ObservablePtr> observables;
             observables.push_back(Observable::make("B->K^*ll::BR@LowRecoil;q=d,l=mu",   p, k, o));
@@ -851,9 +855,11 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
                 variations.push_back(p[*n]);
             }
 
-            Kinematics k;
-            k.declare("s_min"); k.set("s_min", 14.18);
-            k.declare("s_max"); k.set("s_max", 22.86);
+            Kinematics k
+            {
+                { "q2_min", 14.18 },
+                { "q2_max", 22.86 }
+            };
 
             std::vector<ObservablePtr> observables;
             std::vector<std::string> observable_names = {

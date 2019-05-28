@@ -11,7 +11,7 @@ lib_LTLIBRARIES = libeos.la
 libeos_la_SOURCES = \
 	constraint.cc constraint.hh \
 	decays.hh \
-	observable.cc observable.hh \
+	observable.cc observable.hh observable-fwd.hh observable-impl.hh \
 	signal-pdf.cc signal-pdf.hh
 libeos_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
 libeos_la_LDFLAGS = $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)

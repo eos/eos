@@ -118,6 +118,8 @@ namespace eos
         private:
             QualifiedName _name;
 
+            std::string _latex;
+
             std::function<double (const Decay_ *, const Args_ & ...)> _function;
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
@@ -125,10 +127,11 @@ namespace eos
             std::array<std::string, sizeof...(Args_)> _kinematics_names_array;
 
         public:
-            ConcreteObservableEntry(const QualifiedName & name,
+            ConcreteObservableEntry(const QualifiedName & name, const std::string & latex,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & function,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
                 _name(name),
+                _latex(latex),
                 _function(function),
                 _kinematics_names(kinematics_names),
                 _kinematics_names_array(impl::make_array<std::string>(kinematics_names))
@@ -137,6 +140,16 @@ namespace eos
 
             ~ConcreteObservableEntry()
             {
+            }
+
+            virtual const QualifiedName & name() const
+            {
+                return _name;
+            }
+
+            virtual const std::string & latex() const
+            {
+                return _latex;
             }
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
@@ -158,12 +171,13 @@ namespace eos
     };
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
-    ObservableEntry * make_concrete_observable_entry(const QualifiedName & name, double (Decay_::* function)(const Args_ & ...) const,
+    ObservableEntryPtr make_concrete_observable_entry(const QualifiedName & name, const std::string & latex,
+            double (Decay_::* function)(const Args_ & ...) const,
             const Tuple_ & kinematics_names = std::make_tuple())
     {
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
 
-        return new ConcreteObservableEntry<Decay_, Args_ ...>(name,
+        return std::make_shared<ConcreteObservableEntry<Decay_, Args_ ...>>(name, latex,
                 std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(function)),
                 kinematics_names);
     }
@@ -273,6 +287,8 @@ namespace eos
         private:
             QualifiedName _name;
 
+            std::string _latex;
+
             std::function<double (const Decay_ *, const Args_ & ...)> _numerator, _denominator;
 
             Options _forced_options_numerator, _forced_options_denominator;
@@ -282,7 +298,7 @@ namespace eos
             std::array<std::string, sizeof...(Args_)> _kinematics_names_array_numerator, _kinematics_names_array_denominator;
 
         public:
-            ConcreteObservableRatioEntry(const QualifiedName & name,
+            ConcreteObservableRatioEntry(const QualifiedName & name, const std::string & latex,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & numerator,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_numerator,
                     const Options & forced_options_numerator,
@@ -290,6 +306,7 @@ namespace eos
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_denominator,
                     const Options & forced_options_denominator) :
                 _name(name),
+                _latex(latex),
                 _numerator(numerator),
                 _denominator(denominator),
                 _forced_options_numerator(forced_options_numerator),
@@ -302,6 +319,16 @@ namespace eos
             }
 
             ~ConcreteObservableRatioEntry() = default;
+
+            virtual const QualifiedName & name() const
+            {
+                return _name;
+            }
+
+            virtual const std::string & latex() const
+            {
+                return _latex;
+            }
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
@@ -325,7 +352,7 @@ namespace eos
     };
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
-    ObservableEntry * make_concrete_observable_ratio_entry(const QualifiedName & name,
+    ObservableEntryPtr make_concrete_observable_ratio_entry(const QualifiedName & name, const std::string & latex,
             double (Decay_::* numerator)(const Args_ & ...) const,
             const Tuple_ & kinematics_names_numerator,
             const Options & forced_options_numerator,
@@ -335,7 +362,7 @@ namespace eos
     {
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
 
-        return new ConcreteObservableRatioEntry<Decay_, Args_ ...>(name,
+        return std::make_shared<ConcreteObservableRatioEntry<Decay_, Args_ ...>>(name, latex,
                 std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(numerator)),
                 kinematics_names_numerator,
                 forced_options_numerator,

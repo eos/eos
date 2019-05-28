@@ -188,11 +188,11 @@ class BToXsDileptonLargeRecoilPolynomialTest :
             };
 
             Parameters parameters = Parameters::Defaults();
-            Kinematics kinematics;
-            kinematics.declare("s_min");
-            kinematics.set("s_min", 1.0);
-            kinematics.declare("s_max");
-            kinematics.set("s_max", 6.0);
+            Kinematics kinematics
+            {
+                { "q2_min", 1.0 },
+                { "q2_max", 6.0 }
+            };
 
             for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
             {

@@ -10,7 +10,7 @@
 B^0->pi^+lnu::BR[0.0,4.0]@BaBar-2010A:
     type: Gaussian
     observable: B->pilnu::BR
-    kinematics: {s_min: 0, s_max: 4}
+    kinematics: {q2_min: 0, q2_max: 4}
     options: {q: d}
     mean: 3.13e-05
     sigma-stat: {hi: 3e-06, lo: -3e-06}
@@ -19,7 +19,7 @@ B^0->pi^+lnu::BR[0.0,4.0]@BaBar-2010A:
 B^0->pi^+lnu::BR[4.0,8.0]@BaBar-2010A:
     type: Gaussian
     observable: B->pilnu::BR
-    kinematics: {s_min: 4, s_max: 8}
+    kinematics: {q2_min: 4, q2_max: 8}
     options: {q: d}
     mean: 3.29e-05
     sigma-stat: {hi: 1.8e-06, lo: -1.8e-06}
@@ -28,7 +28,7 @@ B^0->pi^+lnu::BR[4.0,8.0]@BaBar-2010A:
 B^0->pi^+lnu::BR[8.0,12.0]@BaBar-2010A:
     type: Gaussian
     observable: B->pilnu::BR
-    kinematics: {s_min: 8, s_max: 12}
+    kinematics: {q2_min: 8, q2_max: 12}
     options: {q: d}
     mean: 2.41e-05
     sigma-stat: {hi: 1.8e-06, lo: -1.8e-06}
@@ -45,12 +45,12 @@ B^0->pi^+lnu::BR@BaBar-2010B:
         -   B->pilnu::BR
         -   B->pilnu::BR
     kinematics:
-        -   {s_min: 0, s_max: 2}
-        -   {s_min: 2, s_max: 4}
-        -   {s_min: 4, s_max: 6}
-        -   {s_min: 6, s_max: 8}
-        -   {s_min: 8, s_max: 10}
-        -   {s_min: 10, s_max: 12}
+        -   {q2_min: 0, q2_max: 2}
+        -   {q2_min: 2, q2_max: 4}
+        -   {q2_min: 4, q2_max: 6}
+        -   {q2_min: 6, q2_max: 8}
+        -   {q2_min: 8, q2_max: 10}
+        -   {q2_min: 10, q2_max: 12}
     options:
         -   {q: d}
         -   {q: d}
@@ -86,12 +86,12 @@ B^0->pi^+lnu::BR@BaBar-2012D:
         -   B->pilnu::BR
         -   B->pilnu::BR
     kinematics:
-        -   {s_min: 0, s_max: 2}
-        -   {s_min: 2, s_max: 4}
-        -   {s_min: 4, s_max: 6}
-        -   {s_min: 6, s_max: 8}
-        -   {s_min: 8, s_max: 10}
-        -   {s_min: 10, s_max: 12}
+        -   {q2_min: 0, q2_max: 2}
+        -   {q2_min: 2, q2_max: 4}
+        -   {q2_min: 4, q2_max: 6}
+        -   {q2_min: 6, q2_max: 8}
+        -   {q2_min: 8, q2_max: 10}
+        -   {q2_min: 10, q2_max: 12}
     options:
         -   {q: d}
         -   {q: d}
@@ -131,12 +131,12 @@ B^0->pi^+lnu::BR@Belle-2010A:
         -   B->pilnu::BR
         -   B->pilnu::BR
     kinematics:
-        -   {s_min: 0, s_max: 2}
-        -   {s_min: 2, s_max: 4}
-        -   {s_min: 4, s_max: 6}
-        -   {s_min: 6, s_max: 8}
-        -   {s_min: 8, s_max: 10}
-        -   {s_min: 10, s_max: 12}
+        -   {q2_min: 0, q2_max: 2}
+        -   {q2_min: 2, q2_max: 4}
+        -   {q2_min: 4, q2_max: 6}
+        -   {q2_min: 6, q2_max: 8}
+        -   {q2_min: 8, q2_max: 10}
+        -   {q2_min: 10, q2_max: 12}
     options:
         -   {q: d}
         -   {q: d}
@@ -172,12 +172,12 @@ B^0->pi^+lnu::BR@Belle-2013A:
         -   B->pilnu::BR
         -   B->pilnu::BR
     kinematics:
-        -   {s_min: 0, s_max: 2}
-        -   {s_min: 2, s_max: 4}
-        -   {s_min: 4, s_max: 6}
-        -   {s_min: 6, s_max: 8}
-        -   {s_min: 8, s_max: 10}
-        -   {s_min: 10, s_max: 12}
+        -   {q2_min: 0, q2_max: 2}
+        -   {q2_min: 2, q2_max: 4}
+        -   {q2_min: 4, q2_max: 6}
+        -   {q2_min: 6, q2_max: 8}
+        -   {q2_min: 8, q2_max: 10}
+        -   {q2_min: 10, q2_max: 12}
     options:
         -   {q: d}
         -   {q: d}

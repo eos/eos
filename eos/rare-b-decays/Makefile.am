@@ -18,6 +18,7 @@ libeosrarebdecays_la_SOURCES = \
 	hard-scattering.cc hard-scattering.hh \
 	long-distance.cc long-distance.hh \
 	lambda-b-to-lambda-dilepton.cc lambda-b-to-lambda-dilepton.hh \
+	observables.cc observables.hh \
 	qcdf_integrals.cc qcdf_integrals.hh
 libeosrarebdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosrarebdecays_la_LDFLAGS = $(GSL_LDFLAGS)
