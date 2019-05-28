@@ -8,19 +8,19 @@ B->pi::f_++f_0@FNALMILC2015A:
     type: MultivariateGaussian(Covariance)
     dim: 6
     observables:
-        -   B->pi::f_+(s)
-        -   B->pi::f_+(s)
-        -   B->pi::f_+(s)
-        -   B->pi::f_0(s)
-        -   B->pi::f_0(s)
-        -   B->pi::f_0(s)
+        -   B->pi::f_+(q2)
+        -   B->pi::f_+(q2)
+        -   B->pi::f_+(q2)
+        -   B->pi::f_0(q2)
+        -   B->pi::f_0(q2)
+        -   B->pi::f_0(q2)
     kinematics:
-        -   {s: 18}
-        -   {s: 22}
-        -   {s: 26}
-        -   {s: 18}
-        -   {s: 22}
-        -   {s: 26}
+        -   {q2: 18}
+        -   {q2: 22}
+        -   {q2: 26}
+        -   {q2: 18}
+        -   {q2: 22}
+        -   {q2: 26}
     options:
         -   {form-factors: BSZ2015}
         -   {form-factors: BSZ2015}
@@ -41,19 +41,19 @@ B->pi::f_+@IKMvD-2014:
     type: MultivariateGaussian
     dim: 6
     observables:
-        -   B->pi::f_+(s)
-        -   B->pi::f_+'(s)
-        -   B->pi::f_+''(s)
-        -   B->pi::f_+(s)
-        -   B->pi::f_+'(s)
-        -   B->pi::f_+''(s)
+        -   B->pi::f_+(q2)
+        -   B->pi::f_+'(q2)
+        -   B->pi::f_+''(q2)
+        -   B->pi::f_+(q2)
+        -   B->pi::f_+'(q2)
+        -   B->pi::f_+''(q2)
     kinematics:
-        -   {s: 0}
-        -   {s: 0}
-        -   {s: 0}
-        -   {s: 10}
-        -   {s: 10}
-        -   {s: 10}
+        -   {q2: 0}
+        -   {q2: 0}
+        -   {q2: 0}
+        -   {q2: 10}
+        -   {q2: 10}
+        -   {q2: 10}
     options:
         -   {form-factors: BCL2008}
         -   {form-factors: BCL2008}
@@ -75,8 +75,8 @@ B->pi::f_+@IKMvD-2014:
     dof: 6
 B->pi::f_+@KMO2006:
   type: Gaussian
-  observable: 'B->pi::f_+(s)'
-  kinematics: {s: 0}
+  observable: 'B->pi::f_+(q2)'
+  kinematics: {q2: 0}
   options: {form-factors: BSZ2015}
   mean: 0.25
   sigma-stat: {hi: 0.05, lo: 0.05}
@@ -84,8 +84,8 @@ B->pi::f_+@KMO2006:
   dof: 1
 B->pi::f_T@KMO2006:
   type: Gaussian
-  observable: 'B->pi::f_T(s)'
-  kinematics: {s: 0}
+  observable: 'B->pi::f_T(q2)'
+  kinematics: {q2: 0}
   options: {form-factors: BSZ2015}
   mean: 0.21
   sigma-stat: {hi: 0.04, lo: 0.04}
@@ -94,24 +94,24 @@ B->pi::f_T@KMO2006:
 B->pi::FormFactors[f_+,f_0,f_T]@GKvD2018:
   type: MultivariateGaussian(Covariance)
   dim: 14
-  observables: ['B->pi::f_+(s)', 'B->pi::f_+(s)', 'B->pi::f_+(s)', 'B->pi::f_+(s)',
-    'B->pi::f_+(s)', 'B->pi::f_0(s)', 'B->pi::f_0(s)', 'B->pi::f_0(s)', 'B->pi::f_0(s)',
-    'B->pi::f_T(s)', 'B->pi::f_T(s)', 'B->pi::f_T(s)', 'B->pi::f_T(s)', 'B->pi::f_T(s)']
+  observables: ['B->pi::f_+(q2)', 'B->pi::f_+(q2)', 'B->pi::f_+(q2)', 'B->pi::f_+(q2)',
+    'B->pi::f_+(q2)', 'B->pi::f_0(q2)', 'B->pi::f_0(q2)', 'B->pi::f_0(q2)', 'B->pi::f_0(q2)',
+    'B->pi::f_T(q2)', 'B->pi::f_T(q2)', 'B->pi::f_T(q2)', 'B->pi::f_T(q2)', 'B->pi::f_T(q2)']
   kinematics:
-  - {s: -15.0}
-  - {s: -10.0}
-  - {s: -5.0}
-  - {s: 0.0}
-  - {s: 5.0}
-  - {s: -15.0}
-  - {s: -10.0}
-  - {s: -5.0}
-  - {s: 5.0}
-  - {s: -15.0}
-  - {s: -10.0}
-  - {s: -5.0}
-  - {s: 0.0}
-  - {s: 5.0}
+  - {q2: -15.0}
+  - {q2: -10.0}
+  - {q2: -5.0}
+  - {q2: 0.0}
+  - {q2: 5.0}
+  - {q2: -15.0}
+  - {q2: -10.0}
+  - {q2: -5.0}
+  - {q2: 5.0}
+  - {q2: -15.0}
+  - {q2: -10.0}
+  - {q2: -5.0}
+  - {q2: 0.0}
+  - {q2: 5.0}
   options:
   - {form-factors: BSZ2015}
   - {form-factors: BSZ2015}
@@ -287,25 +287,25 @@ B->K::f_0+f_++f_T@HPQCD-2013A:
     type: MultivariateGaussian
     dim: 9
     observables:
-        -   B->K::f_0(s)
-        -   B->K::f_0(s)
-        -   B->K::f_0(s)
-        -   B->K::f_+(s)
-        -   B->K::f_+(s)
-        -   B->K::f_+(s)
-        -   B->K::f_T(s)
-        -   B->K::f_T(s)
-        -   B->K::f_T(s)
+        -   B->K::f_0(q2)
+        -   B->K::f_0(q2)
+        -   B->K::f_0(q2)
+        -   B->K::f_+(q2)
+        -   B->K::f_+(q2)
+        -   B->K::f_+(q2)
+        -   B->K::f_T(q2)
+        -   B->K::f_T(q2)
+        -   B->K::f_T(q2)
     kinematics:
-        -   {s: 17}
-        -   {s: 20}
-        -   {s: 23}
-        -   {s: 17}
-        -   {s: 20}
-        -   {s: 23}
-        -   {s: 17}
-        -   {s: 20}
-        -   {s: 23}
+        -   {q2: 17}
+        -   {q2: 20}
+        -   {q2: 23}
+        -   {q2: 17}
+        -   {q2: 20}
+        -   {q2: 23}
+        -   {q2: 17}
+        -   {q2: 20}
+        -   {q2: 23}
     options:
         -   {form-factors: BSZ2015}
         -   {form-factors: BSZ2015}
@@ -333,8 +333,8 @@ B->K::f_0+f_++f_T@HPQCD-2013A:
     dof: 0
 B->K::f_+@KMO2006:
   type: Gaussian
-  observable: 'B->K::f_+(s)'
-  kinematics: {s: 0}
+  observable: 'B->K::f_+(q2)'
+  kinematics: {q2: 0}
   options: {form-factors: BSZ2015}
   mean: 0.31
   sigma-stat: {hi: 0.04, lo: 0.04}
@@ -342,8 +342,8 @@ B->K::f_+@KMO2006:
   dof: 1
 B->K::f_T@KMO2006:
   type: Gaussian
-  observable: 'B->K::f_T(s)'
-  kinematics: {s: 0}
+  observable: 'B->K::f_T(q2)'
+  kinematics: {q2: 0}
   options: {form-factors: BSZ2015}
   mean: 0.27
   sigma-stat: {hi: 0.04, lo: 0.04}
@@ -352,24 +352,24 @@ B->K::f_T@KMO2006:
 B->K::FormFactors[f_+,f_0,f_T]@GKvD2018:
   type: MultivariateGaussian(Covariance)
   dim: 14
-  observables: ['B->K::f_+(s)', 'B->K::f_+(s)', 'B->K::f_+(s)', 'B->K::f_+(s)', 'B->K::f_+(s)',
-    'B->K::f_0(s)', 'B->K::f_0(s)', 'B->K::f_0(s)', 'B->K::f_0(s)', 'B->K::f_T(s)',
-    'B->K::f_T(s)', 'B->K::f_T(s)', 'B->K::f_T(s)', 'B->K::f_T(s)']
+  observables: ['B->K::f_+(q2)', 'B->K::f_+(q2)', 'B->K::f_+(q2)', 'B->K::f_+(q2)', 'B->K::f_+(q2)',
+    'B->K::f_0(q2)', 'B->K::f_0(q2)', 'B->K::f_0(q2)', 'B->K::f_0(q2)', 'B->K::f_T(q2)',
+    'B->K::f_T(q2)', 'B->K::f_T(q2)', 'B->K::f_T(q2)', 'B->K::f_T(q2)']
   kinematics:
-  - {s: -15.0}
-  - {s: -10.0}
-  - {s: -5.0}
-  - {s: 0.0}
-  - {s: 5.0}
-  - {s: -15.0}
-  - {s: -10.0}
-  - {s: -5.0}
-  - {s: 5.0}
-  - {s: -15.0}
-  - {s: -10.0}
-  - {s: -5.0}
-  - {s: 0.0}
-  - {s: 5.0}
+  - {q2: -15.0}
+  - {q2: -10.0}
+  - {q2: -5.0}
+  - {q2: 0.0}
+  - {q2: 5.0}
+  - {q2: -15.0}
+  - {q2: -10.0}
+  - {q2: -5.0}
+  - {q2: 5.0}
+  - {q2: -15.0}
+  - {q2: -10.0}
+  - {q2: -5.0}
+  - {q2: 0.0}
+  - {q2: 5.0}
   options:
   - {form-factors: BSZ2015}
   - {form-factors: BSZ2015}
@@ -545,21 +545,21 @@ B->D::f_++f_0@HPQCD2015A:
     type: MultivariateGaussian(Covariance)
     dim: 7
     observables:
-        -   B->D::f_+(s)
-        -   B->D::f_+(s)
-        -   B->D::f_+(s)
-        -   B->D::f_+(s)
-        -   B->D::f_0(s)
-        -   B->D::f_0(s)
-        -   B->D::f_0(s)
+        -   B->D::f_+(q2)
+        -   B->D::f_+(q2)
+        -   B->D::f_+(q2)
+        -   B->D::f_+(q2)
+        -   B->D::f_0(q2)
+        -   B->D::f_0(q2)
+        -   B->D::f_0(q2)
     kinematics:
-        -   {s: 0}
-        -   {s: 4}
-        -   {s: 8}
-        -   {s: 11.62}
-        -   {s: 4}
-        -   {s: 8}
-        -   {s: 11.62}
+        -   {q2: 0}
+        -   {q2: 4}
+        -   {q2: 8}
+        -   {q2: 11.62}
+        -   {q2: 4}
+        -   {q2: 8}
+        -   {q2: 11.62}
     options:
         -   {form-factors: BSZ2015}
         -   {form-factors: BSZ2015}
@@ -580,8 +580,8 @@ B->D::f_++f_0@HPQCD2015A:
     dof: 0
 B->D::f_+@FKKM2008:
   type: Gaussian
-  observable: 'B->D::f_+(s)'
-  kinematics: {s: 0}
+  observable: 'B->D::f_+(q2)'
+  kinematics: {q2: 0}
   options: {form-factors: BSZ2015}
   mean: 0.69
   sigma-stat: {hi: 0.20, lo: 0.20}

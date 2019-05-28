@@ -8,11 +8,11 @@ Lambda_b->Lambda::f_long^A@BFvD2014:
     type: MultivariateGaussian
     dim: 2
     observables:
-        -   Lambda_b->Lambda::f_long^A(s)
-        -   Lambda_b->Lambda::f_long^A(s)
+        -   Lambda_b->Lambda::f_long^A(q2)
+        -   Lambda_b->Lambda::f_long^A(q2)
     kinematics:
-        -   {s: 13.5}
-        -   {s: 20.5}
+        -   {q2: 13.5}
+        -   {q2: 20.5}
     options:
         -   {form-factors: BFvD2014}
         -   {form-factors: BFvD2014}
@@ -28,15 +28,15 @@ Lambda_b->Lambda::f_perp+long^V+A@BFvD2014:
     type: MultivariateGaussian
     dim: 4
     observables:
-        -   Lambda_b->Lambda::f_perp^V(s)
-        -   Lambda_b->Lambda::f_perp^A(s)
-        -   Lambda_b->Lambda::f_long^V(s)
-        -   Lambda_b->Lambda::f_long^A(s)
+        -   Lambda_b->Lambda::f_perp^V(q2)
+        -   Lambda_b->Lambda::f_perp^A(q2)
+        -   Lambda_b->Lambda::f_long^V(q2)
+        -   Lambda_b->Lambda::f_long^A(q2)
     kinematics:
-        -   {s: 0}
-        -   {s: 0}
-        -   {s: 0}
-        -   {s: 0}
+        -   {q2: 0}
+        -   {q2: 0}
+        -   {q2: 0}
+        -   {q2: 0}
     options:
         -   {form-factors: BFvD2014}
         -   {form-factors: BFvD2014}
@@ -56,11 +56,11 @@ Lambda_b->Lambda::f_perp^A@BFvD2014:
     type: MultivariateGaussian
     dim: 2
     observables:
-        -   Lambda_b->Lambda::f_perp^A(s)
-        -   Lambda_b->Lambda::f_perp^A(s)
+        -   Lambda_b->Lambda::f_perp^A(q2)
+        -   Lambda_b->Lambda::f_perp^A(q2)
     kinematics:
-        -   {s: 13.5}
-        -   {s: 20.5}
+        -   {q2: 13.5}
+        -   {q2: 20.5}
     options:
         -   {form-factors: BFvD2014}
         -   {form-factors: BFvD2014}
@@ -76,11 +76,11 @@ Lambda_b->Lambda::f_perp^V@BFvD2014:
     type: MultivariateGaussian
     dim: 2
     observables:
-        -   Lambda_b->Lambda::f_perp^V(s)
-        -   Lambda_b->Lambda::f_perp^V(s)
+        -   Lambda_b->Lambda::f_perp^V(q2)
+        -   Lambda_b->Lambda::f_perp^V(q2)
     kinematics:
-        -   {s: 13.5}
-        -   {s: 20.5}
+        -   {q2: 13.5}
+        -   {q2: 20.5}
     options:
         -   {form-factors: BFvD2014}
         -   {form-factors: BFvD2014}
@@ -199,11 +199,11 @@ Lambda_b->Lambda::f_long^V@BFvD2014:
     type: MultivariateGaussian
     dim: 2
     observables:
-        -   Lambda_b->Lambda::f_long^V(s)
-        -   Lambda_b->Lambda::f_long^V(s)
+        -   Lambda_b->Lambda::f_long^V(q2)
+        -   Lambda_b->Lambda::f_long^V(q2)
     kinematics:
-        -   {s: 13.5}
-        -   {s: 20.5}
+        -   {q2: 13.5}
+        -   {q2: 20.5}
     options:
         -   {form-factors: BFvD2014}
         -   {form-factors: BFvD2014}

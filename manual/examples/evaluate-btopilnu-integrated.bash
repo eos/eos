@@ -1,6 +1,6 @@
 eos-evaluate \
-    --kinematics s_min  0.0 \
-    --kinematics s_max 12.0 \
+    --kinematics q2_min  0.0 \
+    --kinematics q2_max 12.0 \
     --observable "B->pilnu::BR;l=mu,form-factors=BCL2008" \
     --budget "FF" \
     --vary "B->pi::f_+(0)@BCL2008" \

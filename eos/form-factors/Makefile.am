@@ -20,6 +20,7 @@ libeosformfactors_la_SOURCES = \
 	hqet-b-to-c.hh hqet-b-to-c.cc \
 	kstar-lcdas.cc kstar-lcdas.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
+	observables.cc observables.hh \
 	pi-lcdas.cc pi-lcdas.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
 libeosformfactors_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
@@ -36,6 +37,7 @@ include_eos_rarebdecays_HEADERS = \
 	b-lcdas.hh \
 	form-factor-adapter.hh \
 	form-factors.hh \
+	observables.hh \
 	pi-lcdas.hh
 
 AM_TESTS_ENVIRONMENT = \

@@ -18,6 +18,7 @@ libeosbdecays_la_SOURCES = \
 	lambdab-to-lambdac2595-l-nu.cc lambdab-to-lambdac2595-l-nu.hh \
 	lambdab-to-lambdac2625-l-nu.cc lambdab-to-lambdac2625-l-nu.hh \
 	inclusive-b-to-u.cc inclusive-b-to-u.hh \
+	observables.cc observables.hh \
 	properties.cc properties.hh
 libeosbdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosbdecays_la_LDFLAGS = $(GSL_LDFLAGS)
@@ -40,6 +41,7 @@ include_eos_bdecays_HEADERS = \
 	bs-to-kstar-l-nu.hh \
 	inclusive-b-to-u.hh \
 	lambdab-to-lambdac-l-nu.hh \
+	observables.hh \
 	properties.hh
 
 EXTRA_DIST =
