@@ -81,17 +81,21 @@
     max:     +0.2504
     comments: "GeV, cf. [Fermilab-MILC-2017]"
 
-"decay-constant::D^*" :
+"decay-constant::D^*_d" :
     central: +0.242
     min:     +0.222
     max:     +0.252
-    comments: "GeV, cf. [GKPR2013]"
-
+    comments: "GeV, cf. [GKPR2013], symmetrized errors"
+"decay-constant::D^*_u" :
+    central: +0.242
+    min:     +0.222
+    max:     +0.252
+    comments: "GeV, cf. [GKPR2013], symmetrized errors"
 "decay-constant::D^*_s" :
     central: +0.293
     min:     +0.274
     max:     +0.312
-    comments: "GeV, cf. [GKPR2013]"
+    comments: "GeV, cf. [GKPR2013], symmetrized errors"
 
 # 3-particle couplings
 "decay-constant::g_{B^*Bpi}" :

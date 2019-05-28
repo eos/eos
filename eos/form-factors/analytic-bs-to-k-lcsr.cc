@@ -24,28 +24,27 @@ namespace eos
 {
     namespace lcsr
     {
-        struct BToD
+        struct BsToK
         {
-            constexpr static const char * B    = "B";
-            constexpr static const char * m_B  = "mass::B_d";
-            constexpr static const char * f_B  = "decay-constant::B_d";
-            constexpr static const char * P    = "D";
-            constexpr static const char * m_P  = "mass::D^+";
-            constexpr static const char * f_P  = "decay-constant::D_d";
-            constexpr static const char   q_v  = 'c';
-            constexpr static const char   q_s  = 'd';
-            constexpr static const double chi2 = 1.0;
+            constexpr static const char * B      = "B_s";
+            constexpr static const char * m_B    = "mass::B_s";
+            constexpr static const char * f_B    = "decay-constant::B_s";
+            constexpr static const char * P      = "K";
+            constexpr static const char * m_P    = "mass::K^+";
+            constexpr static const char * f_P    = "decay-constant::K";
+            constexpr static const char   q_v    = 'u';
+            constexpr static const char   q_s    = 's';
+            constexpr static const double chi2   = 1.0;
         };
 
-
-        // B -> D
-        constexpr const char * BToD::B;
-        constexpr const char * BToD::m_B;
-        constexpr const char * BToD::f_B;
-        constexpr const char * BToD::P;
-        constexpr const char * BToD::m_P;
-        constexpr const char * BToD::f_P;
+        // B -> K
+        constexpr const char * BsToK::B;
+        constexpr const char * BsToK::m_B;
+        constexpr const char * BsToK::f_B;
+        constexpr const char * BsToK::P;
+        constexpr const char * BsToK::m_P;
+        constexpr const char * BsToK::f_P;
     }
 
-    template class AnalyticFormFactorBToPLCSR<lcsr::BToD>;
+    template class AnalyticFormFactorBToPLCSR<lcsr::BsToK>;
 }
