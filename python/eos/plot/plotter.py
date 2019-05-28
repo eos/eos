@@ -121,6 +121,7 @@ class Plotter:
             warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
 
         if 'parameters-from-file' in item and type(item['parameters-from-file']) is str:
+            warn('    overriding parameters from file')
             parameters.override_from_file(item['parameters-from-file'])
 
         if 'parameters' in item and type(item['parameters']) is dict:
