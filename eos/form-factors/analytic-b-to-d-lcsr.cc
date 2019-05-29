@@ -26,6 +26,9 @@ namespace eos
     {
         struct BToD
         {
+            constexpr static const char * B    = "B";
+            constexpr static const char * m_B  = "mass::B_d";
+            constexpr static const char * f_B  = "decay-constant::B_d";
             constexpr static const char * P    = "D";
             constexpr static const char * m_P  = "mass::D^+";
             constexpr static const char * f_P  = "decay-constant::D";
@@ -36,6 +39,9 @@ namespace eos
 
 
         // B -> D
+        constexpr const char * BToD::B;
+        constexpr const char * BToD::m_B;
+        constexpr const char * BToD::f_B;
         constexpr const char * BToD::P;
         constexpr const char * BToD::m_P;
         constexpr const char * BToD::f_P;
