@@ -26,6 +26,9 @@ namespace eos
     {
         struct BToDstar
         {
+            constexpr static const char * B    = "B";
+            constexpr static const char * m_B  = "mass::B_d";
+            constexpr static const char * f_B  = "decay-constant::B_d";
             constexpr static const char * V    = "D^*";
             constexpr static const char * m_V  = "mass::D^*_d";
             constexpr static const char * f_V  = "decay-constant::D^*";
@@ -35,9 +38,13 @@ namespace eos
         };
 
         // B -> D^*
+        constexpr const char * BToDstar::B;
+        constexpr const char * BToDstar::m_B;
+        constexpr const char * BToDstar::f_B;
         constexpr const char * BToDstar::V;
         constexpr const char * BToDstar::m_V;
         constexpr const char * BToDstar::f_V;
+        constexpr const char   BToDstar::q_s;
     }
 
     template class AnalyticFormFactorBToVLCSR<lcsr::BToDstar>;
