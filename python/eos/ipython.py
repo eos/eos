@@ -64,6 +64,18 @@ def __format_KinematicVariable(kv):
             value=kv.evaluate()
     ))
 
+def __format_ObservableEntry(e):
+    result = '<table>\n'
+    result += '<tr><th>QualifedName</th><td><tt style="color:grey">{qn}</tt></td></tr>'.format(qn=e.name())
+    result += '<tr><th>Description</th><td>$${latex}$$</td></tr>'.format(latex=e.latex())
+    kvs = [kv for kv in e.kinematic_variables()]
+    if len(kvs) > 0:
+        result += '<tr><th rowspan={rows}>Kinematic Variables</th><td>{kv}</td></tr>'.format(rows=len(kvs),kv=kvs[0])
+    for i in range(1, len(kvs)):
+        result += '<tr><td>{kv}</td></tr>'.format(kv=kvs[i])
+    result += '</table>'
+    return(result)
+
 def __format_Observable(obs):
     name = obs.name()
 

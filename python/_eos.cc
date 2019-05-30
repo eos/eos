@@ -324,6 +324,38 @@ BOOST_PYTHON_MODULE(_eos)
         .def("options", &Observable::options)
         ;
 
+    // ObservableEntry
+    register_ptr_to_python<std::shared_ptr<const ObservableEntry>>();
+    class_<ObservableEntry, boost::noncopyable>("ObservableEntry", no_init)
+        .def("name", &ObservableEntry::name, return_value_policy<copy_const_reference>())
+        .def("latex", &ObservableEntry::latex, return_value_policy<copy_const_reference>())
+        .def("kinematic_variables", range(&ObservableEntry::begin_kinematic_variables, &ObservableEntry::end_kinematic_variables))
+        ;
+
+    // ObservableGroup
+    register_ptr_to_python<std::shared_ptr<ObservableGroup>>();
+    class_<ObservableGroup>("ObservableGroup", no_init)
+        .def("__iter__", range(&ObservableGroup::begin, &ObservableGroup::end))
+        .def("name", &ObservableGroup::name, return_value_policy<copy_const_reference>())
+        .def("description", &ObservableGroup::description, return_value_policy<copy_const_reference>())
+        ;
+
+    // ObservableSection
+    register_ptr_to_python<std::shared_ptr<ObservableSection>>();
+    class_<ObservableSection>("ObservableSection", no_init)
+        .def("__iter__", range(&ObservableSection::begin, &ObservableSection::end))
+        .def("name", &ObservableSection::name, return_value_policy<copy_const_reference>())
+        .def("description", &ObservableSection::description, return_value_policy<copy_const_reference>())
+        ;
+
+    // Observables
+    impl::std_pair_to_python_converter<const QualifiedName, ObservableEntryPtr> converter_observables_iter;
+    class_<Observables>("_Observables")
+        .def("__iter__", range(&Observables::begin, &Observables::end))
+        .def("sections", range(&Observables::begin_sections, &Observables::end_sections))
+        ;
+
+
     // SignalPDF
     register_ptr_to_python<std::shared_ptr<SignalPDF>>();
     class_<SignalPDF, boost::noncopyable>("SignalPDF", no_init)

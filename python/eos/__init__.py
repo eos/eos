@@ -52,16 +52,18 @@ from _eos import *
 from .data import *
 from .plot import *
 from .analysis import Analysis, BestFitPoint
+from .observable import Observables
 
 try:
     if __IPYTHON__:
         ip = get_ipython()
         html_formatter = ip.display_formatter.formatters['text/html']
 
-        from .ipython import __format_Parameter, __format_KinematicVariable, __format_Observable, __format_GoodnessOfFit
+        from .ipython import __format_Parameter, __format_KinematicVariable, __format_Observable, __format_ObservableEntry, __format_GoodnessOfFit
         html_formatter.for_type(Parameter, __format_Parameter)
         html_formatter.for_type(KinematicVariable, __format_KinematicVariable)
         html_formatter.for_type(Observable, __format_Observable)
+        html_formatter.for_type(ObservableEntry, __format_ObservableEntry)
         html_formatter.for_type(GoodnessOfFit, __format_GoodnessOfFit)
 except NameError as e:
     pass
