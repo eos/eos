@@ -339,6 +339,14 @@
     journal: "Phys. Rev. D 86 010001 (2012)"
     url:  "http://pdg.lbl.gov"
 
+"PDG2018" :
+    authors: "Tanabashi, N. and others"
+    collaboration: "Particle Data Group"
+    title: "Particle Physics Booklet (January 2018)"
+    title: "Review of Particle Physics"
+    journal: "Phys. Rev. D 98 030001 (2018)"
+    url:  "http://pdg.lbl.gov"
+
 "TEWWG2010" :
     collaboration: "Tevatron Electroweak Working Group"
     title: "Combination of CDF and D0 Results on the Mass of the Top Quark using up to 5.6fb^-1 of data"
@@ -355,6 +363,16 @@
     url:  "http://www.utfit.org/UTfit/ResultsWinter2013PreMoriond"
 
 # Theory results
+
+"Fermilab-MILC-2017" :
+    authors: "Bailey, A.  et. al. [Fermilab/MILC]"
+    title: "B- and D-meson leptonic decay constants from four-flavor lattice QCD"
+    eprint: "arXiv:1712.09262v3 [hep-lat]"
+
+"GKPR2013" :
+    authors: "Gelhausen, P. and Khodjamirian, A. and Pivarov, A. and Rosenthal, D."
+    title: "Decay constants of heavy-light vector mesons from QCD sum rules"
+    eprint: "arXiv:1305.5432v3 [hep-ph]"
 
 "DKMR2017" :
     authors: "Datta, A. and Kamali, S. and Meinel, S. and Rashed, A."
