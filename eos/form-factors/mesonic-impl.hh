@@ -727,7 +727,7 @@ namespace eos
 
     /* P -> P Processes */
 
-    double FormFactors<PToP>::f_m(const double & s) const
+    double FormFactors<PToP>::f_m(const double & /*s*/) const
     {
         return std::numeric_limits<double>::quiet_NaN();
     }
