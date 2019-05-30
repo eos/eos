@@ -727,29 +727,6 @@ namespace eos
 
     /* P -> P Processes */
 
-    double FormFactors<PToP>::f_m(const double & /*s*/) const
-    {
-        return std::numeric_limits<double>::quiet_NaN();
-    }
-
-    double FormFactors<PToP>::f_p_d1(const double & s) const
-    {
-        using namespace std::placeholders;
-
-        auto f = std::function<double (const double &)>(std::bind(&FormFactors<PToP>::f_p, this, _1));
-
-        return derivative<1u, deriv::TwoSided>(f, s);
-    }
-
-    double FormFactors<PToP>::f_p_d2(const double & s) const
-    {
-        using namespace std::placeholders;
-
-        auto f = std::function<double (const double &)>(std::bind(&FormFactors<PToP>::f_p, this, _1));
-
-        return derivative<2u, deriv::TwoSided>(f, s);
-    }
-
     struct BToK {
         typedef PToP Transition;
         static constexpr const char * label = "B->K";

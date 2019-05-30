@@ -284,10 +284,31 @@ namespace eos
     // [BCL2008]
     template class BCL2008FormFactors<BToD>;
 
+    FormFactors<PToP>::~FormFactors() = default;
 
-    FormFactors<PToP>::~FormFactors()
+    double FormFactors<PToP>::f_m(const double & /*s*/) const
     {
+        return std::numeric_limits<double>::quiet_NaN();
     }
+
+    double FormFactors<PToP>::f_p_d1(const double & s) const
+    {
+        using namespace std::placeholders;
+
+        auto f = std::function<double (const double &)>(std::bind(&FormFactors<PToP>::f_p, this, _1));
+
+        return derivative<1u, deriv::TwoSided>(f, s);
+    }
+
+    double FormFactors<PToP>::f_p_d2(const double & s) const
+    {
+        using namespace std::placeholders;
+
+        auto f = std::function<double (const double &)>(std::bind(&FormFactors<PToP>::f_p, this, _1));
+
+        return derivative<2u, deriv::TwoSided>(f, s);
+    }
+
 
     std::shared_ptr<FormFactors<PToP>>
     FormFactorFactory<PToP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
