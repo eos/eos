@@ -1,19 +1,19 @@
 # Decay constants
 "decay-constant::B_d" :
-    central: +0.1906
-    min:     +0.1859
-    max:     +0.1953
-    comments: "GeV, cf. [LATAVG2011]"
+    central: +0.1905
+    min:     +0.1892
+    max:     +0.1918
+    comments: "GeV, cf. [Fermilab-MILC-2017]"
 "decay-constant::B_u" :
-    central: +0.1906
-    min:     +0.1859
-    max:     +0.1953
-    comments: "GeV, cf. [LATAVG2011]"
+    central: +0.1894
+    min:     +0.1880
+    max:     +0.1908
+    comments: "GeV, cf. [Fermilab-MILC-2017]"
 "decay-constant::B_s" :
-    central: +0.2276
-    min:     +0.2226
-    max:     +0.2326
-    comments: "GeV, cf. [LATAVG2011]"
+    central: +0.2307
+    min:     +0.2294
+    max:     +0.2330
+    comments: "GeV, cf. [Fermilab-MILC-2017]"
 "decay-constant::K_d" :
     central: +0.1561
     min:     +0.155
@@ -59,17 +59,39 @@
     max:     +0.218
     comments: "GeV, cf. [BSZ2015]"
 
-"decay-constant::D" :
-    central: +0.200
-    min:     +0.180
-    max:     +0.220
-    comments: "GeV, cf. [FKKM2009], p. 9"
+"decay-constant::phi" :
+    central: +0.233
+    min:     +0.228
+    max:     +0.238
+    comments: "GeV, cf. [BSZ2015]"
+
+"decay-constant::D_d" :
+    central: +0.2127
+    min:     +0.2121
+    max:     +0.2133
+    comments: "GeV, cf. [Fermilab-MILC-2017]"
+"decay-constant::D_u" :
+    central: +0.2116
+    min:     +0.2109
+    max:     +0.2123
+    comments: "GeV, cf. [Fermilab-MILC-2017]"
+"decay-constant::D_s" :
+    central: +0.2499
+    min:     +0.2494
+    max:     +0.2504
+    comments: "GeV, cf. [Fermilab-MILC-2017]"
 
 "decay-constant::D^*" :
-    central: +0.270
-    min:     +0.240
-    max:     +0.300
-    comments: "GeV, cf. [FKKM2009], p. 9"
+    central: +0.242
+    min:     +0.222
+    max:     +0.252
+    comments: "GeV, cf. [GKPR2013]"
+
+"decay-constant::D^*_s" :
+    central: +0.293
+    min:     +0.274
+    max:     +0.312
+    comments: "GeV, cf. [GKPR2013]"
 
 # 3-particle couplings
 "decay-constant::g_{B^*Bpi}" :

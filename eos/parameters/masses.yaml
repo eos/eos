@@ -82,6 +82,13 @@
     max:     +0.89192
     comments: "cf. [PDG2012], p. 45"
 
+# phi meson masses
+"mass::phi" :
+    central: +1.019461
+    min:     +1.019459
+    max:     +1.019463
+    comments: "cf. [PDG2018]"
+
 # D meson masses
 "mass::D_d" :
     central: +1.86959
