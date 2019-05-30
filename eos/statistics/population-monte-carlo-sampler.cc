@@ -102,7 +102,7 @@ namespace eos
         };
 
         // replace pmclib C style error handling with a true exception
-        void check_error(error ** errorp) throw (PMC_Error)
+        void check_error(error ** errorp)
         {
             if (!_isError(*errorp))
                 return;
