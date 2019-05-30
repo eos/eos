@@ -140,6 +140,7 @@ class BToKstarGammaBobethCompatibilityTest :
             };
 
             Parameters p = Parameters::Defaults();
+            p["decay-constant::B_d"] = 0.1906;
             Options o;
             o.set("model", "WilsonScan");
             o.set("form-factors", "KMPW2010");
