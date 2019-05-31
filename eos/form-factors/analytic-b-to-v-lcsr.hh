@@ -34,6 +34,9 @@ namespace eos
         struct BToRho;
         struct BToKstar;
         struct BToDstar;
+        struct BsToKstar;
+        struct BsToPhi;
+        struct BsToDsstar;
     }
 
     template <typename Process_>
@@ -76,5 +79,8 @@ namespace eos
     extern template class AnalyticFormFactorBToVLCSR<lcsr::BToRho>;
     extern template class AnalyticFormFactorBToVLCSR<lcsr::BToKstar>;
     extern template class AnalyticFormFactorBToVLCSR<lcsr::BToDstar>;
+    extern template class AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>;
+    extern template class AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>;
+    extern template class AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>;
 }
 #endif

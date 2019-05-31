@@ -4,7 +4,7 @@
  * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018, 2019 Ahmet Kokulu
- * Copyright (c) 2018 Nico Gubernari
+ * Copyright (c) 2018, 2019 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -222,6 +222,31 @@ namespace eos
                     &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_t,
                     std::make_tuple("q2")),
 
+            // B -> D Form Factors
+            make_form_factor_adapter("B->D::f_+(s)", "B->D",
+                    &FormFactors<PToP>::f_p, std::make_tuple("s")),
+
+            make_form_factor_adapter("B->D::f_0(s)", "B->D",
+                    &FormFactors<PToP>::f_0, std::make_tuple("s")),
+
+            make_form_factor_adapter("B->D::f_T(s)", "B->D",
+                    &FormFactors<PToP>::f_t, std::make_tuple("s")),
+
+            make_form_factor_adapter("B->D::f_-(s)", "B->D",
+                    &FormFactors<PToP>::f_m, std::make_tuple("s")),
+
+            make_observable("B->D::f_+[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_p,
+                    std::make_tuple("q2")),
+
+            make_observable("B->D::f_0[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_pm,
+                    std::make_tuple("q2")),
+
+            make_observable("B->D::f_T[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_t,
+                    std::make_tuple("q2")),
+
             // B -> D^* Form Factors
             make_form_factor_adapter("B->D^*::V(s)", "B->D^*",
                             &FormFactors<PToV>::v, std::make_tuple("s")),
@@ -429,46 +454,268 @@ namespace eos
                             &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_t_23B,
                             std::make_tuple("q2")),
 
-            // B -> D Form Factors
-            make_form_factor_adapter("B->D::f_+(s)", "B->D",
+            // B_s -> K Form Factors
+            make_form_factor_adapter("B_s->K::f_+(s)", "B_s->K",
                     &FormFactors<PToP>::f_p, std::make_tuple("s")),
 
-            make_form_factor_adapter("B->D::f_0(s)", "B->D",
-                    &FormFactors<PToP>::f_0, std::make_tuple("s")),
-
-            make_form_factor_adapter("B->D::f_T(s)", "B->D",
+            make_form_factor_adapter("B_s->K::f_T(s)", "B_s->K",
                     &FormFactors<PToP>::f_t, std::make_tuple("s")),
 
-            make_form_factor_adapter("B->D::f_-(s)", "B->D",
+            make_form_factor_adapter("B_s->K::f_0(s)", "B_s->K",
+                    &FormFactors<PToP>::f_0, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->K::f_-(s)", "B_s->K",
                     &FormFactors<PToP>::f_m, std::make_tuple("s")),
 
-            make_observable("B->D::f_+[s^1/s^0](q2)",
-                    &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_p,
+            make_observable("B_s->K::f_+[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_p,
                     std::make_tuple("q2")),
 
-            make_observable("B->D::f_0[s^1/s^0](q2)",
-                    &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_pm,
+            make_observable("B_s->K::f_0[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_pm,
                     std::make_tuple("q2")),
 
-            make_observable("B->D::f_T[s^1/s^0](q2)",
-                    &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_t,
+            make_observable("B_s->K::f_T[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_t,
+                    std::make_tuple("q2")),
+
+            // B_s -> D_s Form Factors
+            make_form_factor_adapter("B_s->D_s::f_+(s)", "B_s->D_s",
+                    &FormFactors<PToP>::f_p, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D_s::f_0(s)", "B_s->D_s",
+                    &FormFactors<PToP>::f_0, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D_s::f_T(s)", "B_s->D_s",
+                    &FormFactors<PToP>::f_t, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D_s::f_-(s)", "B_s->D_s",
+                    &FormFactors<PToP>::f_m, std::make_tuple("s")),
+
+            make_observable("B_s->D_s::f_+[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_p,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->D_s::f_0[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_pm,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->D_s::f_T[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_t,
                     std::make_tuple("q2")),
 
             // B_s -> K^* Form Factors
             make_form_factor_adapter("B_s->K^*::V(s)", "B_s->K^*",
-                    &FormFactors<PToV>::v, std::make_tuple("s")),
+                            &FormFactors<PToV>::v, std::make_tuple("s")),
 
             make_form_factor_adapter("B_s->K^*::A_0(s)", "B_s->K^*",
-                    &FormFactors<PToV>::a_0, std::make_tuple("s")),
+                            &FormFactors<PToV>::a_0, std::make_tuple("s")),
 
             make_form_factor_adapter("B_s->K^*::A_1(s)", "B_s->K^*",
-                    &FormFactors<PToV>::a_1, std::make_tuple("s")),
+                            &FormFactors<PToV>::a_1, std::make_tuple("s")),
 
             make_form_factor_adapter("B_s->K^*::A_2(s)", "B_s->K^*",
-                    &FormFactors<PToV>::a_2, std::make_tuple("s")),
+                            &FormFactors<PToV>::a_2, std::make_tuple("s")),
 
             make_form_factor_adapter("B_s->K^*::A_12(s)", "B_s->K^*",
-                    &FormFactors<PToV>::a_12, std::make_tuple("s")),
+                            &FormFactors<PToV>::a_12, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->K^*::T_1(s)", "B_s->K^*",
+                            &FormFactors<PToV>::t_1, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->K^*::T_2(s)", "B_s->K^*",
+                            &FormFactors<PToV>::t_2, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->K^*::T_3(s)", "B_s->K^*",
+                            &FormFactors<PToV>::t_3, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->K^*::T_23(s)", "B_s->K^*",
+                            &FormFactors<PToV>::t_23, std::make_tuple("s")),
+
+            make_observable("B_s->K^*::V(s)/A_1(s)", "B_s->K^*",
+                            &FormFactors<PToV>::v, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->K^*::A_2(s)/A_1(s)", "B_s->K^*",
+                            &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->K^*::A_12(s)/A_1(s)", "B_s->K^*",
+                            &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->K^*::T_23(s)/T_2(s)", "B_s->K^*",
+                            &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
+
+            make_observable("B_s->K^*::A_0(s)/A_1(s)", "B_s->K^*",
+                    &FormFactors<PToV>::a_0, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->K^*::A_1[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_a_1,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->K^*::A_2[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_a_2,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->K^*::A_30[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_a_30,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->K^*::V[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_v,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->K^*::T_1[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_t_1,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->K^*::T_23A[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_t_23A,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->K^*::T_23B[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_t_23B,
+                    std::make_tuple("q2")),
+
+            // B_s -> phi Form Factors
+            make_form_factor_adapter("B_s->phi::V(s)", "B_s->phi",
+                            &FormFactors<PToV>::v, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->phi::A_0(s)", "B_s->phi",
+                            &FormFactors<PToV>::a_0, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->phi::A_1(s)", "B_s->phi",
+                            &FormFactors<PToV>::a_1, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->phi::A_2(s)", "B_s->phi",
+                            &FormFactors<PToV>::a_2, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->phi::A_12(s)", "B_s->phi",
+                            &FormFactors<PToV>::a_12, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->phi::T_1(s)", "B_s->phi",
+                            &FormFactors<PToV>::t_1, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->phi::T_2(s)", "B_s->phi",
+                            &FormFactors<PToV>::t_2, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->phi::T_3(s)", "B_s->phi",
+                            &FormFactors<PToV>::t_3, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->phi::T_23(s)", "B_s->phi",
+                            &FormFactors<PToV>::t_23, std::make_tuple("s")),
+
+            make_observable("B_s->phi::V(s)/A_1(s)", "B_s->phi",
+                            &FormFactors<PToV>::v, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->phi::A_2(s)/A_1(s)", "B_s->phi",
+                            &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->phi::A_12(s)/A_1(s)", "B_s->phi",
+                            &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->phi::T_23(s)/T_2(s)", "B_s->phi",
+                            &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
+
+            make_observable("B_s->phi::A_0(s)/A_1(s)", "B_s->phi",
+                    &FormFactors<PToV>::a_0, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->phi::A_1[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_a_1,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->phi::A_2[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_a_2,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->phi::A_30[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_a_30,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->phi::V[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_v,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->phi::T_1[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_1,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->phi::T_23A[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_23A,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->phi::T_23B[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_23B,
+                    std::make_tuple("q2")),
+
+            // B_s -> D^* Form Factors
+            make_form_factor_adapter("B_s->D^*_s::V(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::v, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D^*_s::A_0(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::a_0, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D^*_s::A_1(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::a_1, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D^*_s::A_2(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::a_2, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D^*_s::A_12(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::a_12, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D^*_s::T_1(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::t_1, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D^*_s::T_2(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::t_2, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D^*_s::T_3(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::t_3, std::make_tuple("s")),
+
+            make_form_factor_adapter("B_s->D^*_s::T_23(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::t_23, std::make_tuple("s")),
+
+            make_observable("B_s->D^*_s::V(s)/A_1(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::v, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->D^*_s::A_2(s)/A_1(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->D^*_s::A_12(s)/A_1(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->D^*_s::T_23(s)/T_2(s)", "B_s->D^*_s",
+                            &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2),
+
+            make_observable("B_s->D^*_s::A_0(s)/A_1(s)", "B_s->D^*_s",
+                    &FormFactors<PToV>::a_0, &FormFactors<PToV>::a_1),
+
+            make_observable("B_s->D^*_s::A_1[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_a_1,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->D^*_s::A_2[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_a_2,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->D^*_s::A_30[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_a_30,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->D^*_s::V[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_v,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->D^*_s::T_1[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_t_1,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->D^*_s::T_23A[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_t_23A,
+                    std::make_tuple("q2")),
+
+            make_observable("B_s->D^*_s::T_23B[s^1/s^0](q2)",
+                    &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_t_23B,
+                    std::make_tuple("q2")),
 
             // B -> pi pi Form Factors
             make_form_factor_adapter("B->pipi::Im{F_perp}(q2,k2,z)", "B->pipi",

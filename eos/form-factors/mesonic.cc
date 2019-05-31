@@ -5,6 +5,7 @@
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2010, 2011 Christian Wacker
  * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2019 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -146,20 +147,23 @@ namespace eos
         typedef std::function<FormFactors<PToV> * (const Parameters &, const Options &)> ValueType;
         static const std::map<KeyType, ValueType> form_factors
         {
-            { KeyType("B->K^*::BZ2004"),     &BZ2004FormFactors<BToKstar, PToV>::make          },
-            { KeyType("B->K^*::KMPW2010"),   &KMPW2010FormFactors<PToV>::make                  },
-            { KeyType("B->K^*::BFW2010"),    &BFW2010FormFactors<BToKstar,  PToV>::make        },
-            { KeyType("B->D^*::BSZ2015"),    &BSZ2015FormFactors<BToDstar,  PToV>::make        },
-            { KeyType("B->K^*::BSZ2015"),    &BSZ2015FormFactors<BToKstar,  PToV>::make        },
-            { KeyType("B->rho::BSZ2015"),    &BSZ2015FormFactors<BToRho,    PToV>::make        },
-            { KeyType("B_s->K^*::BFW2010"),  &BFW2010FormFactors<BsToKstar, PToV>::make        },
-            { KeyType("B_s->K^*::FMvD2015"), &FMvD2015FormFactors<BsToKstar>::make             },
-            { KeyType("B_s->phi::BZ2004"),   &BZ2004FormFactors<BsToPhi, PToV>::make           },
+            { KeyType("B->K^*::BZ2004"),       &BZ2004FormFactors<BToKstar, PToV>::make            },
+            { KeyType("B->K^*::KMPW2010"),     &KMPW2010FormFactors<PToV>::make                    },
+            { KeyType("B->K^*::BFW2010"),      &BFW2010FormFactors<BToKstar,  PToV>::make          },
+            { KeyType("B->D^*::BSZ2015"),      &BSZ2015FormFactors<BToDstar,  PToV>::make          },
+            { KeyType("B->K^*::BSZ2015"),      &BSZ2015FormFactors<BToKstar,  PToV>::make          },
+            { KeyType("B->rho::BSZ2015"),      &BSZ2015FormFactors<BToRho,    PToV>::make          },
+            { KeyType("B_s->K^*::BFW2010"),    &BFW2010FormFactors<BsToKstar, PToV>::make          },
+            { KeyType("B_s->K^*::FMvD2015"),   &FMvD2015FormFactors<BsToKstar>::make               },
+            { KeyType("B_s->phi::BZ2004"),     &BZ2004FormFactors<BsToPhi, PToV>::make             },
             // analytic computations
-            { KeyType("B->K^*::KMO2006"),    &AnalyticFormFactorBToKstarKMO2006::make          },
-            { KeyType("B->K^*::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make },
-            { KeyType("B->D^*::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::make },
-            { KeyType("B->rho::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::make   }
+            { KeyType("B->K^*::KMO2006"),      &AnalyticFormFactorBToKstarKMO2006::make            },
+            { KeyType("B->K^*::B-LCSR"),       &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make   },
+            { KeyType("B->D^*::B-LCSR"),       &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::make   },
+            { KeyType("B->rho::B-LCSR"),       &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::make     },
+            { KeyType("B_s->K^*::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::make  },
+            { KeyType("B_s->phi::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::make    },
+            { KeyType("B_s->D^*_s::B-LCSR"),   &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::make }
         };
 
         auto i = form_factors.find(name);
@@ -298,23 +302,25 @@ namespace eos
         {
             // parametrizations
             // b -> s
-            { KeyType("B->K::BCL2008"),       &BCL2008FormFactors<BToK>::make                 },
-            { KeyType("B->K::BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make            },
-            { KeyType("B->K::BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make             },
-            { KeyType("B->K::KMPW2010"),      &KMPW2010FormFactors<PToP>::make                },
-            { KeyType("B->K::BFW2010"),       &BFW2010FormFactors<BToK, PToP>::make           },
-            { KeyType("B->K::BSZ2015"),       &BSZ2015FormFactors<BToK, PToP>::make           },
+            { KeyType("B->K::BCL2008"),       &BCL2008FormFactors<BToK>::make                  },
+            { KeyType("B->K::BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make             },
+            { KeyType("B->K::BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make              },
+            { KeyType("B->K::KMPW2010"),      &KMPW2010FormFactors<PToP>::make                 },
+            { KeyType("B->K::BFW2010"),       &BFW2010FormFactors<BToK, PToP>::make            },
+            { KeyType("B->K::BSZ2015"),       &BSZ2015FormFactors<BToK, PToP>::make            },
             // b -> u
-            { KeyType("B->pi::BCL2008"),      &BCL2008FormFactors<BToPi>::make                },
-            { KeyType("B->pi::BSZ2015"),      &BSZ2015FormFactors<BToPi, PToP>::make          },
+            { KeyType("B->pi::BCL2008"),      &BCL2008FormFactors<BToPi>::make                 },
+            { KeyType("B->pi::BSZ2015"),      &BSZ2015FormFactors<BToPi, PToP>::make           },
             // b -> c
-            { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD>::make                 },
-            { KeyType("B->D::BSZ2015"),       &BSZ2015FormFactors<BToD, PToP>::make           },
+            { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD>::make                  },
+            { KeyType("B->D::BSZ2015"),       &BSZ2015FormFactors<BToD, PToP>::make            },
             // analytic computations
-            { KeyType("B->pi::DKMMO2008"),    &AnalyticFormFactorBToPiDKMMO2008::make         },
-            { KeyType("B->pi::B-LCSR"),       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make  },
-            { KeyType("B->K::B-LCSR"),        &AnalyticFormFactorBToPLCSR<lcsr::BToK>::make   },
-            { KeyType("B->D::B-LCSR"),        &AnalyticFormFactorBToPLCSR<lcsr::BToD>::make   }
+            { KeyType("B->pi::DKMMO2008"),    &AnalyticFormFactorBToPiDKMMO2008::make          },
+            { KeyType("B->pi::B-LCSR"),       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make   },
+            { KeyType("B->K::B-LCSR"),        &AnalyticFormFactorBToPLCSR<lcsr::BToK>::make    },
+            { KeyType("B->D::B-LCSR"),        &AnalyticFormFactorBToPLCSR<lcsr::BToD>::make    },
+            { KeyType("B_s->K::B-LCSR"),      &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::make   },
+            { KeyType("B_s->D_s::B-LCSR"),    &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::make  }
         };
 
         auto i = form_factors.find(name);
