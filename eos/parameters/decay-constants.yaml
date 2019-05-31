@@ -34,6 +34,11 @@
     min:     +0.197
     max:     +0.211
     comments: "GeV, cf. [BSZ2015]"
+"decay-constant::K^*_u" :
+    central: +0.204
+    min:     +0.197
+    max:     +0.211
+    comments: "GeV, cf. [BSZ2015]"
 
 "decay-constant::pi" :
     central: +0.1302
