@@ -364,16 +364,6 @@
 
 # Theory results
 
-"Fermilab-MILC-2017" :
-    authors: "Bailey, A.  et. al. [Fermilab/MILC]"
-    title: "B- and D-meson leptonic decay constants from four-flavor lattice QCD"
-    eprint: "arXiv:1712.09262v3 [hep-lat]"
-
-"GKPR2013" :
-    authors: "Gelhausen, P. and Khodjamirian, A. and Pivarov, A. and Rosenthal, D."
-    title: "Decay constants of heavy-light vector mesons from QCD sum rules"
-    eprint: "arXiv:1305.5432v3 [hep-ph]"
-
 "DKMR2017" :
     authors: "Datta, A. and Kamali, S. and Meinel, S. and Rashed, A."
     title: "Phenomenology of Lambda_b ---> Lambda_c tau nubar_tau using lattice QCD calculations"
@@ -652,6 +642,12 @@
     title: "Forward-backward and isospin asymmetry for B -> K^* l^+ l^- decay in the standard model and in supersymmetry"
     eprint: "arXiv:hep-ph/0212158"
 
+"Fermilab-MILC-2017" :
+    authors: "Bailey, A.  et. al. [Fermilab/MILC]"
+    title: "B- and D-meson leptonic decay constants from four-flavor lattice QCD"
+    eprint: "arXiv:1712.09262v3 [hep-lat]"
+
+
 "FNALMILC2015A" :
     authors: "Jon. A. Bailey, and others"
     title: "|V_ub| from B ---> pi l nu decays and (2+1)-flavor lattice QCD"
@@ -661,6 +657,11 @@
     authors: "Feldmann, Th. and Yip, M.W.Y."
     title: "Form Factors for Lambda_b -> Lambda Transitions in SCET"
     eprint: "arXiv:1111.1844 [hep-ph]"
+
+"GKPR2013" :
+    authors: "Gelhausen, P. and Khodjamirian, A. and Pivarov, A. and Rosenthal, D."
+    title: "Decay constants of heavy-light vector mesons from QCD sum rules"
+    eprint: "arXiv:1305.5432v3 [hep-ph]"
 
 "GM2001" :
     authors: "Gambino, P. and Misiak, M."
@@ -743,6 +744,11 @@
     authors: "Melnikov, K. and van Ritbergen, T."
     title: "The three-loop relation between the MSbar and the pole quark masses"
     eprint: "arXiv:hep-ph/9912391"
+
+"NT2011" :
+    authors: "Nishikawa, T.  and Tanaka, K."
+    title: "QCD Sum Rules for Quark-Gluon Three-Body Components in the B Meson"
+    eprint: "arXiv:1109.6786  [hep-lat]"
 
 "PS" :
     authors: "Peskin, M. and Schroeder, D."
