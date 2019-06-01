@@ -169,6 +169,11 @@ namespace eos
             /// Destructor.
             ~Observables();
 
+            ///@name Access of individual ObserableEntry instances
+            ///@{
+            ObservableEntryPtr operator[] (const QualifiedName &) const;
+            ///@}
+
             ///@name Iteration over observables
             ///@{
             struct ObservableIteratorTag;

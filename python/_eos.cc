@@ -352,6 +352,7 @@ BOOST_PYTHON_MODULE(_eos)
     // Observables
     impl::std_pair_to_python_converter<const QualifiedName, ObservableEntryPtr> converter_observables_iter;
     class_<Observables>("_Observables")
+        .def("__getitem__", &Observables::operator[])
         .def("__iter__", range(&Observables::begin, &Observables::end))
         .def("sections", range(&Observables::begin_sections, &Observables::end_sections))
         ;
