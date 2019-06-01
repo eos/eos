@@ -32,6 +32,7 @@ TEXSOURCES = \
 	doc/interface.tex \
 	doc/extending.tex \
 	appendices/parameters.tex \
+	appendices/observables.tex \
 	physics/eft.tex
 
 BIBSOURCES = \
