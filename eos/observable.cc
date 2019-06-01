@@ -227,6 +227,16 @@ namespace eos
     {
     }
 
+    ObservableEntryPtr
+    Observables::operator[] (const QualifiedName & qn) const
+    {
+        auto i = _imp->observable_entries.find(qn);
+        if (i != _imp->observable_entries.end())
+            return i->second;
+
+        return ObservableEntryPtr(nullptr);
+    }
+
     Observables::ObservableIterator
     Observables::begin() const
     {
