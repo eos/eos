@@ -272,6 +272,7 @@ BOOST_PYTHON_MODULE(_eos)
     register_ptr_to_python<std::shared_ptr<const ConstraintEntry>>();
     class_<eos::ConstraintEntry, boost::noncopyable>("ConstraintEntry", no_init)
         .def("name", &ConstraintEntry::name, return_value_policy<copy_const_reference>())
+        .def("type", &ConstraintEntry::type, return_value_policy<copy_const_reference>())
         .def("serialize", (std::string (ConstraintEntry::*)(void) const) &ConstraintEntry::serialize, return_value_policy<return_by_value>())
         ;
 
