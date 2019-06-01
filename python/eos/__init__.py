@@ -53,6 +53,7 @@ from .data import *
 from .plot import *
 from .analysis import Analysis, BestFitPoint
 from .observable import Observables
+from .constraint import Constraints
 
 try:
     if __IPYTHON__:
