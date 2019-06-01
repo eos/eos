@@ -278,7 +278,7 @@ BOOST_PYTHON_MODULE(_eos)
 
     // Constraints
     impl::std_pair_to_python_converter<const QualifiedName, std::shared_ptr<const ConstraintEntry>> converter_constraints_iter;
-    class_<Constraints>("Constraints")
+    class_<Constraints>("_Constraints")
         .def("__getitem__", (std::shared_ptr<const ConstraintEntry> (Constraints::*)(const QualifiedName &) const) &Constraints::operator[])
         .def("__iter__", range(&Constraints::begin, &Constraints::end))
         ;
