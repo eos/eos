@@ -55,8 +55,10 @@ from .analysis import Analysis, BestFitPoint
 from .observable import Observables
 from .constraint import Constraints
 
+__ipython__ = False
 try:
     if __IPYTHON__:
+        __ipython__ = True
         ip = get_ipython()
         html_formatter = ip.display_formatter.formatters['text/html']
 

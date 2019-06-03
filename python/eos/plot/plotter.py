@@ -43,6 +43,27 @@ class Plotter:
         self.ax = None
         self.xrange = None
         self.yrange = None
+        self.__next_z_order = 0
+        self.__next_color = 0
+        self.savefig = not eos.__ipython__
+        self.colors = [
+            'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'
+        ]
+
+
+    """ Returns the next available z-order value, incremented for each plot w/o pre-defined z-order value. """
+    @property
+    def next_z_order(self):
+        result = self.__next_z_order
+        self.__next_z_order += 1
+        return(result)
+
+    """ Returns the next available color. """
+    @property
+    def next_color(self):
+        result = self.colors[self.__next_color]
+        self.__next_color = (self.__next_color + 1) % len(self.colors)
+        return(result)
 
 
     """ Setting up the plot based on the provided instruction. """
@@ -109,452 +130,503 @@ class Plotter:
 
         self.ax.set(xlabel=myxlabel, ylabel=myylabel, title=mytitle)
 
+    """ Base class for any of the plots supported by Plotter. """
+    class BasePlot:
+        def __init__(self, plotter, item):
+            self.plotter = plotter
+            self.item    = item
+            self.z_order = int(item['z-order']) if 'z-order' in item else plotter.next_z_order
+
+            # obtain the defaults if otherwise unavailable
+            self.alpha         = item['opacity'] if 'opacity' in item else 0.5
+            self.color         = item['color']   if 'color'   in item else self.plotter.next_color
+            self.label         = item['label']   if 'label'   in item else None
+            self.samples       = item['samples'] if 'samples' in item else 100
+            self.style         = item['style']   if 'style'   in item else '-'
+            self.xlo, self.xhi = item['range']   if 'range'   in item else self.plotter.xrange
+
+        def __lt__(self, other):
+            return(self.z_order < other.z_order)
+
 
     """ Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter. """
-    def plot_observable(self, item):
-        oname = item['observable']
-        info('   plotting EOS observable "{}"'.format(oname))
+    class Observable(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
 
-        # create parameters
-        parameters = eos.Parameters.Defaults()
-        if 'parameters' in item and 'parameters-from-file' in item:
-            warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
+        def plot(self):
+            item = self.item
+            oname = item['observable']
+            info('   plotting EOS observable "{}"'.format(oname))
 
-        if 'parameters-from-file' in item and type(item['parameters-from-file']) is str:
-            warn('    overriding parameters from file')
-            parameters.override_from_file(item['parameters-from-file'])
+            # create parameters
+            parameters = eos.Parameters.Defaults()
+            if 'parameters' in item and 'parameters-from-file' in item:
+                warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
 
-        if 'parameters' in item and type(item['parameters']) is dict:
-            for key, value in item['parameters'].items():
-                parameters.set(key, value)
+            if 'parameters-from-file' in item and type(item['parameters-from-file']) is str:
+                warn('    overriding parameters from file')
+                parameters.override_from_file(item['parameters-from-file'])
 
-        # create kinematics
-        kinematics = eos.Kinematics()
-        if not 'kinematic' in item and not 'parameter' in item:
-            raise KeyError('neither kinematic nor parameter found; do not know how to map x to a variable')
-        if 'kinematic' in item and 'parameter' in item:
-            raise KeyError('both kinematic and parameter found; do not know how to map x to a variable')
-        if 'kinematic' in item:
-            var = kinematics.declare(item['kinematic'], np.nan)
-        else:
-            var = parameters.declare(item['parameter'], np.nan)
+            if 'parameters' in item and type(item['parameters']) is dict:
+                for key, value in item['parameters'].items():
+                    parameters.set(key, value)
 
-        if 'kinematics' in item:
-            for k, v in item['kinematics'].items():
-                kinematics.declare(k, v)
+            # create kinematics
+            kinematics = eos.Kinematics()
+            if not 'kinematic' in item and not 'parameter' in item:
+                raise KeyError('neither kinematic nor parameter found; do not know how to map x to a variable')
+            if 'kinematic' in item and 'parameter' in item:
+                raise KeyError('both kinematic and parameter found; do not know how to map x to a variable')
+            if 'kinematic' in item:
+                var = kinematics.declare(item['kinematic'], np.nan)
+            else:
+                var = parameters.declare(item['parameter'], np.nan)
 
-        # create (empty) options
-        options = eos.Options()
+            if 'kinematics' in item:
+                for k, v in item['kinematics'].items():
+                    kinematics.declare(k, v)
 
-        # create observable
-        observable = eos.Observable.make(oname, parameters, kinematics, options)
+            # create (empty) options
+            options = eos.Options()
 
-        xlo, xhi = self.xrange
-        if 'range' in item:
-            xlo, xhi = item['range']
+            # create observable
+            observable = eos.Observable.make(oname, parameters, kinematics, options)
 
-        samples = 100
-        if 'samples' in item:
-            samples = item['samples']
+            xvalues = np.linspace(self.xlo, self.xhi, self.samples + 1)
+            ovalues = np.array([])
+            for xvalue in xvalues:
+                var.set(xvalue)
+                ovalues = np.append(ovalues, observable.evaluate())
 
-        xvalues = np.linspace(xlo, xhi, samples + 1)
-        ovalues = np.array([])
-        for xvalue in xvalues:
-            var.set(xvalue)
-            ovalues = np.append(ovalues, observable.evaluate())
-
-        color = 'black'
-        if 'color' in item:
-            color = item['color']
-
-        plt.plot(xvalues, ovalues, color=color)
+            plt.plot(xvalues, ovalues, alpha=self.alpha, color=self.color, label=self.label, ls=self.style)
 
     """ Plots an uncertainty band as a function of one kinematic variable.
 
     This routine expects the uncertainty propagation to have produces an HDF5 file.
     """
-    def plot_uncertainty(self, item):
-        if 'hdf5-file' not in item:
-            raise KeyError('no hdf5-file specified')
-            return
+    class Uncertainty(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
 
-        h5fname = item['hdf5-file']
-        info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
+        def plot(self):
+            item = self.item
+            if 'hdf5-file' not in item:
+                raise KeyError('no hdf5-file specified')
+                return
 
-        uncfile = eos.data.UncertaintyDataFile(h5fname)
-        _xvalues = []
-        for o in uncfile.parameters:
-            kin = o[1].split(b',')
-            if len(kin) > 1:
-                raise ValueError('more than one kinematic variable specified')
+            h5fname = item['hdf5-file']
+            info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
 
-            name,value = kin[0].split(b'=')
-            value = float(value)
-            _xvalues.append(float(value))
+            uncfile = eos.data.UncertaintyDataFile(h5fname)
+            _xvalues = []
+            for o in uncfile.parameters:
+                kin = o[1].split(b',')
+                if len(kin) > 1:
+                    raise ValueError('more than one kinematic variable specified')
 
-        _xvalues = np.array(_xvalues)
-        if 'range' in item:
-            xmin,xmax = item['range']
-            _xvalues = np.ma.masked_outside(_xvalues, float(xmin), float(xmax))
+                name,value = kin[0].split(b'=')
+                value = float(value)
+                _xvalues.append(float(value))
 
-        data = uncfile.data()
-        _ovalues_lower   = []
-        _ovalues_central = []
-        _ovalues_higher  = []
-        for i in range(len(uncfile.parameters)):
-            lower   = np.percentile(data[:, i], q=15.865)
-            central = np.percentile(data[:, i], q=50.000)
-            higher  = np.percentile(data[:, i], q=84.135)
-            _ovalues_lower.append(lower)
-            _ovalues_central.append(central)
-            _ovalues_higher.append(higher)
+            _xvalues = np.array(_xvalues)
+            if 'range' in item:
+                xmin,xmax = item['range']
+                _xvalues = np.ma.masked_outside(_xvalues, float(xmin), float(xmax))
 
-        color = 'black'
-        if 'color' in item:
-            color = item['color']
+            data = uncfile.data()
+            _ovalues_lower   = []
+            _ovalues_central = []
+            _ovalues_higher  = []
+            for i in range(len(uncfile.parameters)):
+                lower   = np.percentile(data[:, i], q=15.865)
+                central = np.percentile(data[:, i], q=50.000)
+                higher  = np.percentile(data[:, i], q=84.135)
+                _ovalues_lower.append(lower)
+                _ovalues_central.append(central)
+                _ovalues_higher.append(higher)
 
-        alpha = 1.0
-        if 'opacity' in item:
-            alpha = item['opacity']
 
-        label = item['label'] if 'label' in item else None
+            xvalues = np.linspace(np.min(_xvalues),np.max(_xvalues),100)
+            # work around CubicSpline missing in SciPy version < 0.18
+            if scipy.__version__ >= '0.18':
+                from scipy.interpolate import CubicSpline
+                interpolate = lambda x, y, xv: CubicSpline(x, y)(xv)
+            else:
+                from scipy.interpolate import spline
+                interpolate = spline
 
-        xvalues = np.linspace(np.min(_xvalues),np.max(_xvalues),100)
-        # work around CubicSpline missing in SciPy version < 0.18
-        if scipy.__version__ >= '0.18':
-            from scipy.interpolate import CubicSpline
-            interpolate = lambda x, y, xv: CubicSpline(x, y)(xv)
-        else:
-            from scipy.interpolate import spline
-            interpolate = spline
+            ovalues_lower   = interpolate(_xvalues, _ovalues_lower,   xvalues)
+            ovalues_central = interpolate(_xvalues, _ovalues_central, xvalues)
+            ovalues_higher  = interpolate(_xvalues, _ovalues_higher,  xvalues)
 
-        ovalues_lower   = interpolate(_xvalues, _ovalues_lower,   xvalues)
-        ovalues_central = interpolate(_xvalues, _ovalues_central, xvalues)
-        ovalues_higher  = interpolate(_xvalues, _ovalues_higher,  xvalues)
-
-        plt.fill_between(xvalues, ovalues_lower, ovalues_higher, lw=0, color=color, alpha=alpha, label=label)
-        plt.plot(xvalues, ovalues_lower,   color=color, alpha=alpha)
-        plt.plot(xvalues, ovalues_central, color=color, alpha=alpha)
-        plt.plot(xvalues, ovalues_higher,  color=color, alpha=alpha)
+            plt.fill_between(xvalues, ovalues_lower, ovalues_higher, alpha=self.alpha, color=self.color, label=self.label, lw=0)
+            plt.plot(xvalues, ovalues_lower,                         alpha=self.alpha, color=self.color)
+            plt.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color)
+            plt.plot(xvalues, ovalues_higher,                        alpha=self.alpha, color=self.color)
 
 
     """ Plots constraints from the EOS library of experimental and theoretical likelihoods. """
-    def plot_constraint(self, item):
-        import yaml
+    class Constraint(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
 
-        constraints = eos.Constraints()
+            if 'constraints' not in item:
+                raise KeyError('no constraints specified')
 
-        if 'constraints' not in item:
-            raise KeyError('no constraints specified')
+            if 'variable' not in item:
+                raise KeyError('no variable specified')
 
-        names = item['constraints']
-        if type(names) == str:
-            names = [names]
+            # extract information
+            self.names            = item['constraints']
+            self.observable       = item['observable']       if 'observable'       in item else None
+            self.rescale_by_width = item['rescale-by-width'] if 'rescale-by-width' in item else False
+            self.variable         = item['variable']
 
-        for name in names:
-            entry = constraints[name]
-            if not entry:
-                raise ValueError('unknown constraint {}'.format(name))
+            if type(self.names) == str:
+                self.names = [self.names]
 
-            constraint = yaml.load(entry.serialize())
+        def plot(self):
+            import yaml
 
-            xvalues = None
-            xerrors = None
-            yvalues = None
-            yerrors = None
+            constraints = eos.Constraints()
 
-            if constraint['type'] == 'Gaussian':
-                kinematics = constraint['kinematics']
-                width = 1
-                if item['variable'] in kinematics:
-                    xvalues = [kinematics[item['variable']]]
-                    xerrors = None
-                elif (item['variable'] + '_min' in kinematics) and (item['variable'] + '_max' in kinematics):
-                    xvalues = [(kinematics[item['variable'] + '_max'] + kinematics[item['variable'] + '_min']) / 2]
-                    xerrors = [(kinematics[item['variable'] + '_max'] - kinematics[item['variable'] + '_min']) / 2]
-                    if item['rescale-by-width']:
-                        width = (kinematics[item['variable'] + '_max'] - kinematics[item['variable'] + '_min'])
+            for name in self.names:
+                entry = constraints[name]
+                if not entry:
+                    raise ValueError('unknown constraint {}'.format(name))
 
-                yvalues = [constraint['mean'] / width]
-                sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2) / width
-                sigma_lo = np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2) / width
-                yerrors = [[sigma_hi, sigma_lo]]
-            elif constraint['type'] == 'MultivariateGaussian(Covariance)':
-                if 'observable' not in item:
-                    raise KeyError('observable needs to be specified for MultivariateGaussian(Covariance) constraints')
-                dim = constraint['dim']
-                covariance = np.array(constraint['covariance'])
-                observables = constraint['observables']
-                means = constraint['means']
-                kinematics = constraint['kinematics']
+                constraint = yaml.load(entry.serialize())
 
-                xvalues = []
-                xerrors = []
-                yvalues = []
-                yerrors = []
-                for i in range(0, dim):
+                xvalues = None
+                xerrors = None
+                yvalues = None
+                yerrors = None
+
+                if constraint['type'] == 'Gaussian':
+                    kinematics = constraint['kinematics']
                     width = 1
+                    if self.variable in kinematics:
+                        xvalues = [kinematics[self.variable]]
+                        xerrors = None
+                    elif (self.variable + '_min' in kinematics) and (self.variable + '_max' in kinematics):
+                        xvalues = [(kinematics[self.variable + '_max'] + kinematics[self.variable + '_min']) / 2]
+                        xerrors = [(kinematics[self.variable + '_max'] - kinematics[self.variable + '_min']) / 2]
+                        if self.rescale_by_width:
+                            width = (kinematics[self.variable + '_max'] - kinematics[self.variable + '_min'])
 
-                    if not observables[i] == item['observable']:
-                        continue
-                    _kinematics = kinematics[i]
-                    if item['variable'] in _kinematics:
-                        xvalues.append(_kinematics[item['variable']])
-                        xerrors.append(0)
-                    elif (item['variable'] + '_min' in _kinematics) and (item['variable'] + '_max' in _kinematics):
-                        xvalues.append((_kinematics[item['variable'] + '_max'] + _kinematics[item['variable'] + '_min']) / 2)
-                        xerrors.append((_kinematics[item['variable'] + '_max'] - _kinematics[item['variable'] + '_min']) / 2)
-                        if item['rescale-by-width']:
-                            width = (_kinematics[item['variable'] + '_max'] - _kinematics[item['variable'] + '_min'])
+                    yvalues = [constraint['mean'] / width]
+                    sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2) / width
+                    sigma_lo = np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2) / width
+                    yerrors = [[sigma_hi, sigma_lo]]
+                elif constraint['type'] == 'MultivariateGaussian(Covariance)':
+                    if not self.observable:
+                        raise KeyError('observable needs to be specified for MultivariateGaussian(Covariance) constraints')
+                    dim = constraint['dim']
+                    covariance = np.array(constraint['covariance'])
+                    observables = constraint['observables']
+                    means = constraint['means']
+                    kinematics = constraint['kinematics']
 
-                    yvalues.append(means[i] / width)
-                    yerrors.append(np.sqrt(covariance[i, i]) / width)
-            elif constraint['type'] == 'MultivariateGaussian':
-                if 'observable' not in item:
-                    raise KeyError('observable needs to be specified for MultivariateGaussian constraints')
-                dim = constraint['dim']
-                sigma_stat_hi = np.array(constraint['sigma-stat-hi'])
-                sigma_stat_lo = np.array(constraint['sigma-stat-lo'])
-                sigma_sys = np.array(constraint['sigma-sys'])
-                sigma = np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
-                observables = constraint['observables']
-                means = constraint['means']
-                kinematics = constraint['kinematics']
+                    xvalues = []
+                    xerrors = []
+                    yvalues = []
+                    yerrors = []
+                    for i in range(0, dim):
+                        width = 1
 
-                xvalues = []
-                xerrors = []
-                yvalues = []
-                yerrors = []
-                for i in range(0, dim):
-                    width = 1
+                        if not observables[i] == self.observable:
+                            continue
+                        _kinematics = kinematics[i]
+                        if self.variable in _kinematics:
+                            xvalues.append(_kinematics[self.variable])
+                            xerrors.append(0)
+                        elif (self.variable + '_min' in _kinematics) and (self.variable + '_max' in _kinematics):
+                            xvalues.append((_kinematics[self.variable + '_max'] + _kinematics[self.variable + '_min']) / 2)
+                            xerrors.append((_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min']) / 2)
+                            if self.rescale_by_width:
+                                width = (_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min'])
 
-                    if not observables[i] == item['observable']:
-                        continue
-                    _kinematics = kinematics[i]
-                    if item['variable'] in _kinematics:
-                        xvalues.append(_kinematics[item['variable']])
-                        xerrors.append(0)
-                    elif (item['variable'] + '_min' in _kinematics) and (item['variable'] + '_max' in _kinematics):
-                        xvalues.append((_kinematics[item['variable'] + '_max'] + _kinematics[item['variable'] + '_min']) / 2)
-                        xerrors.append((_kinematics[item['variable'] + '_max'] - _kinematics[item['variable'] + '_min']) / 2)
-                        if item['rescale-by-width']:
-                            width = (_kinematics[item['variable'] + '_max'] - _kinematics[item['variable'] + '_min'])
+                        yvalues.append(means[i] / width)
+                        yerrors.append(np.sqrt(covariance[i, i]) / width)
+                elif constraint['type'] == 'MultivariateGaussian':
+                    if not self.observable:
+                        raise KeyError('observable needs to be specified for MultivariateGaussian constraints')
+                    dim = constraint['dim']
+                    sigma_stat_hi = np.array(constraint['sigma-stat-hi'])
+                    sigma_stat_lo = np.array(constraint['sigma-stat-lo'])
+                    sigma_sys = np.array(constraint['sigma-sys'])
+                    sigma = np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
+                    observables = constraint['observables']
+                    means = constraint['means']
+                    kinematics = constraint['kinematics']
 
-                    yvalues.append(means[i] / width)
-                    yerrors.append(sigma[i] / width)
-            else:
-                raise ValueError('type of constraint presently not supported')
+                    xvalues = []
+                    xerrors = []
+                    yvalues = []
+                    yerrors = []
+                    for i in range(0, dim):
+                        width = 1
 
-            xvalues = np.array(xvalues)
-            if xerrors:
-                xerrors = np.array(xerrors)
-            yvalues = np.array(yvalues)
-            yerrors = np.array(yerrors)
+                        if not observables[i] == self.observable:
+                            continue
+                        _kinematics = kinematics[i]
+                        if self.variable in _kinematics:
+                            xvalues.append(_kinematics[self.variable])
+                            xerrors.append(0)
+                        elif (self.variable + '_min' in _kinematics) and (self.variable + '_max' in _kinematics):
+                            xvalues.append((_kinematics[self.variable + '_max'] + _kinematics[self.variable + '_min']) / 2)
+                            xerrors.append((_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min']) / 2)
+                            if self.rescale_by_width:
+                                width = (_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min'])
 
-            color = item['color'] if 'color' in item else 'black'
-            label = item['label'] if 'label'   in item else None
+                        yvalues.append(means[i] / width)
+                        yerrors.append(sigma[i] / width)
+                else:
+                    raise ValueError('type of constraint presently not supported')
 
-            plt.errorbar(x=xvalues, y=yvalues, xerr=xerrors, yerr=yerrors.T,
-                color=color, elinewidth=1.0, fmt='_', linestyle='none', label=label)
+                xvalues = np.array(xvalues)
+                if xerrors:
+                    xerrors = np.array(xerrors)
+                yvalues = np.array(yvalues)
+                yerrors = np.array(yerrors)
+
+                plt.errorbar(x=xvalues, y=yvalues, xerr=xerrors, yerr=yerrors.T,
+                    color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
+                # disable the label for subsequent plots
+                self.label = None
+
 
 
     """ Plots 2D contours of a pair of parameters based on pre-existing random samples. """
-    def plot_contours2d(self, item):
-        if 'hdf5-file' not in item:
-            raise KeyError('no hdf5-file specified')
+    class Contours2D(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
 
-        h5fname = item['hdf5-file']
-        info('   plotting 2D contours from file "{}"'.format(h5fname))
-        datafile = eos.data.load_data_file(h5fname)
+        def plot(self):
+            item = self.item
+            if 'hdf5-file' not in item:
+                raise KeyError('no hdf5-file specified')
 
-        if 'variables' not in item:
-            raise KeyError('no variables specificed')
+            h5fname = item['hdf5-file']
+            info('   plotting 2D contours from file "{}"'.format(h5fname))
+            datafile = eos.data.load_data_file(h5fname)
 
-        xvariable, yvariable = item['variables']
+            if 'variables' not in item:
+                raise KeyError('no variables specificed')
 
-        data   = datafile.data()
-        xindex = datafile.variable_indices[xvariable]
-        xdata  = data[:, xindex]
-        yindex = datafile.variable_indices[yvariable]
-        ydata  = data[:, yindex]
+            xvariable, yvariable = item['variables']
 
-        if not np.array(self.xrange).any():
-            self.xrange = [np.amin(xdata), np.amax(xdata)]
-            self.ax.set_xlim(tuple(self.xrange))
-        if not np.array(self.yrange).any():
-            self.yrange = [np.amin(ydata), np.amax(ydata)]
-            self.ax.set_ylim(tuple(self.yrange))
-        plt.show()
+            data   = datafile.data()
+            xindex = datafile.variable_indices[xvariable]
+            xdata  = data[:, xindex]
+            yindex = datafile.variable_indices[yvariable]
+            ydata  = data[:, yindex]
 
-        xbins = 100
-        ybins = 100
+            if not np.array(self.plotter.xrange).any():
+                self.plotter.xrange = [np.amin(xdata), np.amax(xdata)]
+                self.plotter.ax.set_xlim(tuple(self.plotter.xrange))
+            if not np.array(self.plotter.yrange).any():
+                self.plotter.yrange = [np.amin(ydata), np.amax(ydata)]
+                self.plotter.ax.set_ylim(tuple(self.plotter.yrange))
+            plt.show()
 
-        H, xedges, yedges = np.histogram2d(xdata, ydata, bins=(xbins, ybins), normed=True)
-        x_bin_sizes = (xedges[1:] - xedges[:-1]).reshape((1,xbins))
-        y_bin_sizes = (yedges[1:] - yedges[:-1]).reshape((ybins,1))
-        pdf = (H*(x_bin_sizes*y_bin_sizes))
+            xbins = 100
+            ybins = 100
 
-        # find the PDF value corresponding to a given cummulative probability
-        plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
-        pone_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.68))
-        ptwo_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.95))
-        pthree_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.99))
-        levels = [pone_sigma, ptwo_sigma, pthree_sigma]
-        labels = ['68%', '95%', '99%']
+            H, xedges, yedges = np.histogram2d(xdata, ydata, bins=(xbins, ybins), normed=True)
+            x_bin_sizes = (xedges[1:] - xedges[:-1]).reshape((1,xbins))
+            y_bin_sizes = (yedges[1:] - yedges[:-1]).reshape((ybins,1))
+            pdf = (H*(x_bin_sizes*y_bin_sizes))
 
-        CS = plt.contour(pdf.transpose(),
-                         colors='OrangeRed',
-                         extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]],
-                         levels=levels[::-1])
+            # find the PDF value corresponding to a given cummulative probability
+            plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
+            pone_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.68))
+            ptwo_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.95))
+            pthree_sigma = scipy.optimize.brentq(plevel, 0., 1., args=(pdf, 0.99))
+            levels = [pone_sigma, ptwo_sigma, pthree_sigma]
+            labels = ['68%', '95%', '99%']
 
-        fmt = {}
-        for level, label in zip(CS.levels, labels[::-1]):
-            fmt[level] = label
+            CS = plt.contour(pdf.transpose(),
+                             colors='OrangeRed',
+                             extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]],
+                             levels=levels[::-1])
 
-        plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+            fmt = {}
+            for level, label in zip(CS.levels, labels[::-1]):
+                fmt[level] = label
+
+            plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
 
 
     """ Plots a 1D Kernel Density Estimate (KDE) of pre-existing random samples. """
-    def plot_kde(self, item):
-        if 'hdf5-file' not in item:
-            raise KeyError('no hdf5-file specified')
+    class KernelDensityEstimate1D(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
 
-        h5fname = item['hdf5-file']
-        info('   plotting histogram from file "{}"'.format(h5fname))
-        datafile = eos.data.load_data_file(h5fname)
+        def plot(self):
+            item = self.item
+            if 'hdf5-file' not in item:
+                raise KeyError('no hdf5-file specified')
 
-        if 'variable' not in item:
-            raise KeyError('no variable specificed')
-        variable = item['variable']
+            h5fname = item['hdf5-file']
+            info('   plotting histogram from file "{}"'.format(h5fname))
+            datafile = eos.data.load_data_file(h5fname)
 
-        print(datafile.variable_indices)
-        if variable not in datafile.variable_indices:
-            raise ValueError('variable {} not contained in data file'.format(variable))
+            if 'variable' not in item:
+                raise KeyError('no variable specificed')
+            variable = item['variable']
 
-        index = datafile.variable_indices[variable]
-        data  = datafile.data()[:, index]
-        alpha = item['opacity']   if 'opacity'   in item else 0.3
-        color = item['color']     if 'color'     in item else 'blue'
-        bw    = item['bandwidth'] if 'bandwidth' in item else None
+            print(datafile.variable_indices)
+            if variable not in datafile.variable_indices:
+                raise ValueError('variable {} not contained in data file'.format(variable))
 
-        kde = gaussian_kde(data)
-        kde.set_bandwidth(bw_method='silverman')
-        if 'bandwidth' in item:
-            kde.set_bandwidth(bw_method=kde.factor * item['bandwidth'])
+            index = datafile.variable_indices[variable]
+            data  = datafile.data()[:, index]
+            alpha = item['opacity']   if 'opacity'   in item else 0.3
+            color = item['color']     if 'color'     in item else 'blue'
+            bw    = item['bandwidth'] if 'bandwidth' in item else None
 
-        xmin, xmax = plt.xlim()
-        x = np.linspace(xmin, xmax, 1000)
+            kde = gaussian_kde(data)
+            kde.set_bandwidth(bw_method='silverman')
+            if 'bandwidth' in item:
+                kde.set_bandwidth(bw_method=kde.factor * item['bandwidth'])
 
-        plt.plot(x, kde(x), color=color)
+            xmin, xmax = plt.xlim()
+            x = np.linspace(xmin, xmax, 1000)
+
+            plt.plot(x, kde(x), color=color)
 
 
     """ Plots a 1D histogram of pre-existing random samples. """
-    def plot_histogram(self, item):
-        if 'hdf5-file' not in item:
-            raise KeyError('no hdf5-file specified')
+    class Histogram1D(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
 
-        h5fname = item['hdf5-file']
-        info('   plotting histogram from file "{}"'.format(h5fname))
-        datafile = eos.data.load_data_file(h5fname)
+        def plot(self):
+            item = self.item
+            if 'hdf5-file' not in item:
+                raise KeyError('no hdf5-file specified')
 
-        if 'variable' not in item:
-            raise KeyError('no variable specificed')
-        variable = item['variable']
+            h5fname = item['hdf5-file']
+            info('   plotting histogram from file "{}"'.format(h5fname))
+            datafile = eos.data.load_data_file(h5fname)
 
-        print(datafile.variable_indices)
-        if variable not in datafile.variable_indices:
-            raise ValueError('variable {} not contained in data file'.format(variable))
+            if 'variable' not in item:
+                raise KeyError('no variable specificed')
+            variable = item['variable']
 
-        index = datafile.variable_indices[variable]
-        data  = datafile.data()[:, index]
-        alpha = item['opacity'] if 'opacity' in item else 0.3
-        color = item['color']   if 'color'   in item else 'blue'
-        bins  = item['bins']    if 'bins'    in item else 100
-        plt.hist(data, alpha=alpha, bins=bins, color=color, density=1)
+            print(datafile.variable_indices)
+            if variable not in datafile.variable_indices:
+                raise ValueError('variable {} not contained in data file'.format(variable))
+
+            index = datafile.variable_indices[variable]
+            data  = datafile.data()[:, index]
+            alpha = item['opacity'] if 'opacity' in item else 0.3
+            color = item['color']   if 'color'   in item else 'blue'
+            bins  = item['bins']    if 'bins'    in item else 100
+            plt.hist(data, alpha=alpha, bins=bins, color=color, density=1)
 
 
     """ Plots a 2D histogram of pre-existing random samples. """
-    def plot_histogram2d(self, item):
-        if 'hdf5-file' not in item:
-            raise KeyError('no hdf5-file specified')
+    class Histogram2D(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
 
-        h5fname = item['hdf5-file']
-        info('   plotting 2D histogram from file "{}"'.format(h5fname))
-        datafile = eos.data.load_data_file(h5fname)
+        def plot(self):
+            item = self.item
+            if 'hdf5-file' not in item:
+                raise KeyError('no hdf5-file specified')
 
-        if 'variables' not in item:
-            raise KeyError('no variables specificed')
+            h5fname = item['hdf5-file']
+            info('   plotting 2D histogram from file "{}"'.format(h5fname))
+            datafile = eos.data.load_data_file(h5fname)
 
-        xvariable, yvariable = item['variables']
+            if 'variables' not in item:
+                raise KeyError('no variables specificed')
 
-        xindex = datafile.variable_indices[xvariable]
-        yindex = datafile.variable_indices[yvariable]
-        data = datafile.data()
+            xvariable, yvariable = item['variables']
 
-        cmap = plt.get_cmap('viridis')
-        cmap.set_under('w', 1)
+            xindex = datafile.variable_indices[xvariable]
+            yindex = datafile.variable_indices[yvariable]
+            data = datafile.data()
 
-        xdata = data[:, xindex]
-        ydata = data[:, yindex]
-        bins  = item['bins']    if 'bins'    in item else 100
-        plt.hist2d(xdata, ydata, bins=bins, cmin=1)
+            cmap = plt.get_cmap('viridis')
+            cmap.set_under('w', 1)
+
+            xdata = data[:, xindex]
+            ydata = data[:, yindex]
+            bins  = item['bins']    if 'bins'    in item else 100
+            plt.hist2d(xdata, ydata, bins=bins, cmin=1)
 
 
-    def plot_function(self, item):
-        if 'f' not in item:
-            raise KeyError('no function specificied')
-        f = item['f']
-        alpha  = item['opacity'] if 'opacity' in item else 1.0
-        color  = item['color']   if 'color'   in item else 'black'
-        style  = item['style']   if 'style'   in item else '-'
-        points = item['points']  if 'points'  in item else 100
-        label  = item['label']   if 'label'   in item else None
+    """ Plots a given expression. """
+    class Expression(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
 
-        xmin, xmax = plt.xlim()
-        x = np.linspace(xmin, xmax, points)
-        y = []
+        def plot(self):
+            item = self.item
+            if 'f' not in item:
+                raise KeyError('no function specificied')
+            f = item['f']
+            alpha  = item['opacity'] if 'opacity' in item else 1.0
+            color  = item['color']   if 'color'   in item else 'black'
+            style  = item['style']   if 'style'   in item else '-'
+            samples = item['samples'] if 'samples' in item else 100
+            label  = item['label']   if 'label'   in item else None
 
-        for xvalue in x:
-            y.append(eval(f, {}, {'x': xvalue}))
+            xmin, xmax = plt.xlim()
+            x = np.linspace(xmin, xmax, samples)
+            y = []
 
-        plt.plot(x, y, color=color, alpha=alpha, linestyle=style, label=label)
+            for xvalue in x:
+                y.append(eval(f, {}, {'x': xvalue}))
+
+            plt.plot(x, y, color=color, alpha=alpha, linestyle=style, label=label)
 
 
     """ Inserts an EOS watermark into the plots. """
-    def plot_eos_watermark(self, item):
-        xdelta, ydelta = (0.04, 0.04)
+    class Watermark(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+            self.z_order = sys.maxsize
 
-        hpos, vpos = item['position'] if 'position' in item else ['right', 'top']
+        def plot(self):
+            item = self.item
+            xdelta, ydelta = (0.04, 0.04)
 
-        if hpos == 'right':
-            x = 1 - xdelta
-        elif hpos == 'left':
-            x = xdelta
-        elif hpos == 'center':
-            x = 0.5
-        else:
-            raise ValueError('invalid horizontal position \'{}\''.format(hpos))
+            hpos, vpos = item['position'] if 'position' in item else ['right', 'top']
 
-        if vpos == 'bottom':
-            y = 0 + ydelta
-        elif vpos == 'top':
-            y = 1 - ydelta
-        elif vpos == 'center':
-            y = 0.5
-        else:
-            raise ValueError('invalid vertical position \'{}\''.format(hpos))
+            if hpos == 'right':
+                x = 1 - xdelta
+            elif hpos == 'left':
+                x = xdelta
+            elif hpos == 'center':
+                x = 0.5
+            else:
+                raise ValueError('invalid horizontal position \'{}\''.format(hpos))
 
-        logofont = matplotlib.font_manager.FontProperties(family='sans-serif', size='15')
-        ax = plt.gca()
-        color = 'OrangeRed'
-        prelim = 'v{version}'.format(version=eos.version())
-        if 'preliminary' in item and item['preliminary']:
-            color = 'red'
-            prelim = 'Preliminary'
-        ax.text(x, y, r'\textsf{{\textbf{{EOS {prelim}}}}}'.format(prelim=prelim),
-                transform=ax.transAxes, fontproperties=logofont,
-                color=color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
-                horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
+            if vpos == 'bottom':
+                y = 0 + ydelta
+            elif vpos == 'top':
+                y = 1 - ydelta
+            elif vpos == 'center':
+                y = 0.5
+            else:
+                raise ValueError('invalid vertical position \'{}\''.format(hpos))
+
+            logofont = matplotlib.font_manager.FontProperties(family='sans-serif', size='15')
+            ax = plt.gca()
+            color = 'OrangeRed'
+            prelim = 'v{version}'.format(version=eos.version())
+            if 'preliminary' in item and item['preliminary']:
+                color = 'red'
+                prelim = 'Preliminary'
+            ax.text(x, y, r'\textsf{{\textbf{{EOS {prelim}}}}}'.format(prelim=prelim),
+                    transform=ax.transAxes, fontproperties=logofont,
+                    color=color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
+                    horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
 
 
     """ Plots the contents specified in the instructions provided to Plotter. """
@@ -562,16 +634,16 @@ class Plotter:
         if not 'contents' in self.instructions:
             return
 
-        plot_functions = {
-            'constraint':  Plotter.plot_constraint,
-            'contours2D':  Plotter.plot_contours2d,
-            'function':    Plotter.plot_function,
-            'histogram':   Plotter.plot_histogram,
-            'histogram2D': Plotter.plot_histogram2d,
-            'kde':         Plotter.plot_kde,
-            'observable':  Plotter.plot_observable,
-            'uncertainty': Plotter.plot_uncertainty,
-            'watermark':   Plotter.plot_eos_watermark,
+        plot_types = {
+            'constraint':  Plotter.Constraint,
+            'contours2D':  Plotter.Contours2D,
+            'expression':  Plotter.Expression,
+            'histogram':   Plotter.Histogram1D,
+            'histogram2D': Plotter.Histogram2D,
+            'kde':         Plotter.KernelDensityEstimate1D,
+            'observable':  Plotter.Observable,
+            'uncertainty': Plotter.Uncertainty,
+            'watermark':   Plotter.Watermark,
         }
 
         anonymous_types = [
@@ -580,6 +652,7 @@ class Plotter:
 
         contents = self.instructions['contents']
 
+        plots = []
         for item in contents:
             if not type(item) is dict:
                 TypeError('wrong data type for content item {}'.format(str(item)))
@@ -598,10 +671,14 @@ class Plotter:
                 name = item['name']
                 info('plotting "{}"'.format(name))
 
-            if item_type not in plot_functions:
+            if item_type not in plot_types:
                 KeyError('unknown content type: "{}"'.format(item_type))
 
-            plot_functions[item_type](self, item)
+            plots.append(plot_types[item_type](self, item))
+
+        plots.sort()
+        for plot in plots:
+            plot.plot()
 
         if 'legend' in self.instructions['plot']:
             if 'location' in self.instructions['plot']['legend']:
@@ -614,7 +691,8 @@ class Plotter:
         self.plot_contents()
 
         plt.show()
-        plt.savefig(self.output)
+        if self.savefig:
+            plt.savefig(self.output)
 
 
 def variable_to_latex(variable):
