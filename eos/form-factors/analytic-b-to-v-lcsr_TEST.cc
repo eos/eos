@@ -2872,65 +2872,408 @@ class LCSRFormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.normalized_moment_1_t_23B( 5.0), 0.809531, 1.0e-3);
             }
 
+
+            /* B -> rho form factor values */
+            {
+                static const double eps = 1.0e-4; // relative error < 0.3%
+
+                Parameters p = Parameters::Defaults();
+                p["B::1/lambda_B_p"]               = 2.173913;
+                p["B::lambda_E^2"]                 = 0.03;
+                p["B::lambda_H^2"]                 = 0.06;
+                p["mass::B_d"]                     = 5.27958;
+                p["mass::rho^+"]                   = 0.77526;
+                p["decay-constant::B_d"]           = 0.1905;
+                p["decay-constant::rho"]           = 0.213;
+                p["B->rho::mu@B-LCSR"]             = 1.0;
+                p["B->rho::s_0^A1,0@B-LCSR"]       = 1.6;
+                p["B->rho::s_0^A1,1@B-LCSR"]       = 0.0;
+                p["B->rho::s_0^A2,0@B-LCSR"]       = 1.6;
+                p["B->rho::s_0^A2,1@B-LCSR"]       = 0.0;
+                p["B->rho::s_0^A30,0@B-LCSR"]      = 1.6;
+                p["B->rho::s_0^A30,1@B-LCSR"]      = 0.0;
+                p["B->rho::s_0^V,0@B-LCSR"]        = 1.6;
+                p["B->rho::s_0^V,1@B-LCSR"]        = 0.0;
+                p["B->rho::s_0^T1,0@B-LCSR"]       = 1.6;
+                p["B->rho::s_0^T1,1@B-LCSR"]       = 0.0;
+                p["B->rho::s_0^T23A,0@B-LCSR"]     = 1.6;
+                p["B->rho::s_0^T23A,1@B-LCSR"]     = 0.0;
+                p["B->rho::s_0^T23B,0@B-LCSR"]     = 1.6;
+                p["B->rho::s_0^T23B,1@B-LCSR"]     = 0.0;
+                p["B->rho::M^2@B-LCSR"]            = 1.0;
+
+                Options o = {
+                    { "2pt",    "all"  },
+                    { "3pt",    "all"  },
+                    { "gminus", "WW-limit" }
+                };
+
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->rho::B-LCSR", p, o);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.202868, ff->v(-5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.254891, ff->v( 0.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.325801, ff->v(+5.0),           eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.231651, ff->a_0(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.299211, ff->a_0( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.400604, ff->a_0(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.187824, ff->a_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.202553, ff->a_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.218425, ff->a_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.143643, ff->a_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.169280, ff->a_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.196516, ff->a_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.177540, ff->t_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.223847, ff->t_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.288414, ff->t_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.209924, ff->t_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.223847, ff->t_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.236963, ff->t_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.132538, ff->t_3(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.156777, ff->t_3( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.181452, ff->t_3(+5.0),         eps);
+            }
+
+
             /* B -> K^* form factor values */
             {
                 static const double eps = 1.0e-4; // relative error < 0.3%
 
                 Parameters p = Parameters::Defaults();
-                p["B::1/lambda_B_p"]          = 2.173913;
-                p["B::lambda_E^2"]            = 0.3174;
-                p["B::lambda_H^2"]            = 1.2696;
-                p["mass::ud(2GeV)"]           = 0.008;
-                p["mass::B_d"]                = 5.2795;
-                p["mass::K^*_d"]              = 0.896;
-                p["decay-constant::B_d"]      = 0.180;
-                p["B->K^*::f_Kstar_par"]      = 0.217;
-                p["B->K^*::mu@B-LCSR"]        = 1.0;
-                p["B->K^*::s_0^A1,0@B-LCSR"]  = 1.7;
-                p["B->K^*::s_0^A1,1@B-LCSR"]  = 0.0;
-                p["B->K^*::s_0^A2,0@B-LCSR"]  = 1.7;
-                p["B->K^*::s_0^A2,1@B-LCSR"]  = 0.0;
-                p["B->K^*::s_0^A30,0@B-LCSR"] = 1.7;
-                p["B->K^*::s_0^A30,1@B-LCSR"] = 0.0;
-                p["B->K^*::s_0^V,0@B-LCSR"]   = 1.7;
-                p["B->K^*::s_0^V,1@B-LCSR"]   = 0.0;
-                p["B->K^*::M^2@B-LCSR"]       = 1.0;
+                p["B::1/lambda_B_p"]               = 2.173913;
+                p["B::lambda_E^2"]                 = 0.03;
+                p["B::lambda_H^2"]                 = 0.06;
+                p["mass::B_d"]                     = 5.27958;
+                p["mass::K^*_d"]                   = 0.89594;
+                p["decay-constant::B_d"]           = 0.1905;
+                p["B->K^*::f_Kstar_par"]           = 0.204;
+                p["B->K^*::mu@B-LCSR"]             = 1.0;
+                p["B->K^*::s_0^A1,0@B-LCSR"]       = 1.7;
+                p["B->K^*::s_0^A1,1@B-LCSR"]       = 0.0;
+                p["B->K^*::s_0^A2,0@B-LCSR"]       = 1.7;
+                p["B->K^*::s_0^A2,1@B-LCSR"]       = 0.0;
+                p["B->K^*::s_0^A30,0@B-LCSR"]      = 1.7;
+                p["B->K^*::s_0^A30,1@B-LCSR"]      = 0.0;
+                p["B->K^*::s_0^V,0@B-LCSR"]        = 1.7;
+                p["B->K^*::s_0^V,1@B-LCSR"]        = 0.0;
+                p["B->K^*::s_0^T1,0@B-LCSR"]       = 1.7;
+                p["B->K^*::s_0^T1,1@B-LCSR"]       = 0.0;
+                p["B->K^*::s_0^T23A,0@B-LCSR"]     = 1.7;
+                p["B->K^*::s_0^T23A,1@B-LCSR"]     = 0.0;
+                p["B->K^*::s_0^T23B,0@B-LCSR"]     = 1.7;
+                p["B->K^*::s_0^T23B,1@B-LCSR"]     = 0.0;
+                p["B->K^*::M^2@B-LCSR"]            = 1.0;
 
                 Options o = {
                     { "2pt",    "all"  },
                     { "3pt",    "all"  },
-                    { "gminus", "zero" }
+                    { "gminus", "WW-limit" }
                 };
 
                 std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*::B-LCSR", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.190982, ff->a_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.200176, ff->a_1( 0.0),   2.0 * eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.205437, ff->a_1(+5.0),   5.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.260799, ff->v(-5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.328805, ff->v( 0.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.423196, ff->v(+5.0),           eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.103649, ff->a_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.097584, ff->a_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.055975, ff->a_2(+5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.268280, ff->a_0(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.346213, ff->a_0( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.463291, ff->a_0(+5.0),         eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.206460, ff->v(-5.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.249919, ff->v( 0.0),           eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.298892, ff->v(+5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.242241, ff->a_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.264235, ff->a_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.290082, ff->a_1(+5.0),         eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.339110, ff->a_0(-5.0),   2.0 * eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.451131, ff->a_0( 0.0),   3.0 * eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.634642, ff->a_0(+5.0),   6.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.192709, ff->a_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.230725, ff->a_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.275801, ff->a_2(+5.0),         eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.181423, ff->t_1(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.220680, ff->t_1( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.267045, ff->t_1(+5.0),   3.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.229660, ff->t_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.290716, ff->t_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.377439, ff->t_1(+5.0),         eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.213140, ff->t_2(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.220680, ff->t_2( 0.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.221944, ff->t_2(+5.0),   3.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.269636, ff->t_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.290716, ff->t_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.313430, ff->t_2(+5.0),         eps);
 
-                TEST_CHECK_RELATIVE_ERROR( 0.103510, ff->t_3(-5.0),         eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.104617, ff->t_3( 0.0),   2.0 * eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.077692, ff->t_3(+5.0),   5.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.167315, ff->t_3(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.200133, ff->t_3( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.236724, ff->t_3(+5.0),         eps);
+            }
+
+
+            /* B -> D^* form factor values */
+            {
+                static const double eps = 1.0e-4; // relative error < 0.3%
+
+                Parameters p = Parameters::Defaults();
+                /*charm mass = 1.066273     */
+                p["B::1/lambda_B_p"]               = 2.173913;
+                p["B::lambda_E^2"]                 = 0.03;
+                p["B::lambda_H^2"]                 = 0.06;
+                p["mass::B_d"]                     = 5.27958;
+                p["mass::D^*_d"]                   = 2.01026;
+                p["decay-constant::B_d"]           = 0.1905;
+                p["decay-constant::D^*_d"]         = 0.242;
+                p["B->D^*::mu@B-LCSR"]             = 2.1213;
+                p["B->D^*::s_0^A1,0@B-LCSR"]       = 8.0;
+                p["B->D^*::s_0^A1,1@B-LCSR"]       = 0.0;
+                p["B->D^*::s_0^A2,0@B-LCSR"]       = 8.0;
+                p["B->D^*::s_0^A2,1@B-LCSR"]       = 0.0;
+                p["B->D^*::s_0^A30,0@B-LCSR"]      = 8.0;
+                p["B->D^*::s_0^A30,1@B-LCSR"]      = 0.0;
+                p["B->D^*::s_0^V,0@B-LCSR"]        = 8.0;
+                p["B->D^*::s_0^V,1@B-LCSR"]        = 0.0;
+                p["B->D^*::s_0^T1,0@B-LCSR"]       = 8.0;
+                p["B->D^*::s_0^T1,1@B-LCSR"]       = 0.0;
+                p["B->D^*::s_0^T23A,0@B-LCSR"]     = 8.0;
+                p["B->D^*::s_0^T23A,1@B-LCSR"]     = 0.0;
+                p["B->D^*::s_0^T23B,0@B-LCSR"]     = 8.0;
+                p["B->D^*::s_0^T23B,1@B-LCSR"]     = 0.0;
+                p["B->D^*::M^2@B-LCSR"]            = 4.5;
+
+                Options o = {
+                    { "2pt",    "all"  },
+                    { "3pt",    "off"  },
+                    { "gminus", "WW-limit" }
+                };
+
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->D^*::B-LCSR", p, o);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.874062, ff->v(-5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 1.024130, ff->v( 0.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 1.231090, ff->v(+5.0),           eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.732174, ff->a_0(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.871237, ff->a_0( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 1.058420, ff->a_0(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.770035, ff->a_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.803015, ff->a_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.838538, ff->a_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.649193, ff->a_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.719118, ff->a_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.692782, ff->a_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.744459, ff->t_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.870939, ff->t_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 1.039270, ff->t_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.854086, ff->t_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.870939, ff->t_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.879057, ff->t_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.429351, ff->t_3(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.473056, ff->t_3( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.399784, ff->t_3(+5.0),         eps);
+            }
+
+
+            /* B_s -> K^* form factor values */
+            {
+                static const double eps = 1.0e-4; // relative error < 0.3%
+
+                Parameters p = Parameters::Defaults();
+                p["B_s::1/lambda_B_p"]               = 1.69348;
+                p["B_s::lambda_E^2"]                 = 0.03;
+                p["B_s::lambda_H^2"]                 = 0.06;
+                p["mass::B_s"]                       = 5.36677;
+                p["mass::K^*_u"]                     = 0.89166;
+                p["decay-constant::B_s"]             = 0.2307;
+                p["decay-constant::K^*_u"]           = 0.204;
+                p["B_s->K^*::mu@B-LCSR"]             = 1.0;
+                p["B_s->K^*::s_0^A1,0@B-LCSR"]       = 1.7;
+                p["B_s->K^*::s_0^A1,1@B-LCSR"]       = 0.0;
+                p["B_s->K^*::s_0^A2,0@B-LCSR"]       = 1.7;
+                p["B_s->K^*::s_0^A2,1@B-LCSR"]       = 0.0;
+                p["B_s->K^*::s_0^A30,0@B-LCSR"]      = 1.7;
+                p["B_s->K^*::s_0^A30,1@B-LCSR"]      = 0.0;
+                p["B_s->K^*::s_0^V,0@B-LCSR"]        = 1.7;
+                p["B_s->K^*::s_0^V,1@B-LCSR"]        = 0.0;
+                p["B_s->K^*::s_0^T1,0@B-LCSR"]       = 1.7;
+                p["B_s->K^*::s_0^T1,1@B-LCSR"]       = 0.0;
+                p["B_s->K^*::s_0^T23A,0@B-LCSR"]     = 1.7;
+                p["B_s->K^*::s_0^T23A,1@B-LCSR"]     = 0.0;
+                p["B_s->K^*::s_0^T23B,0@B-LCSR"]     = 1.7;
+                p["B_s->K^*::s_0^T23B,1@B-LCSR"]     = 0.0;
+                p["B_s->K^*::M^2@B-LCSR"]            = 1.0;
+
+                Options o = {
+                    { "2pt",    "all"  },
+                    { "3pt",    "all"  },
+                    { "gminus", "WW-limit" }
+                };
+
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->K^*::B-LCSR", p, o);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.167330, ff->v(-5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.203912, ff->v( 0.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.246149, ff->v(+5.0),           eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.219685, ff->a_0(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.278868, ff->a_0( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.362594, ff->a_0(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.154442, ff->a_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.165623, ff->a_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.177698, ff->a_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.107336, ff->a_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.120495, ff->a_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.129637, ff->a_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.147053, ff->t_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.181221, ff->t_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.224128, ff->t_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.172067, ff->t_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.181221, ff->t_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.188704, ff->t_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.094625, ff->t_3(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.104721, ff->t_3( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.107054, ff->t_3(+5.0),         eps);
+            }
+
+
+            /* B_s -> phi form factor values */
+            {
+                static const double eps = 1.0e-4; // relative error < 0.3%
+
+                Parameters p = Parameters::Defaults();
+                p["B_s::1/lambda_B_p"]               = 1.69348;
+                p["B_s::lambda_E^2"]                 = 0.03;
+                p["B_s::lambda_H^2"]                 = 0.06;
+                p["mass::B_s"]                       = 5.36677;
+                p["mass::phi"]                       = 1.019461;
+                p["decay-constant::B_s"]             = 0.2307;
+                p["decay-constant::phi"]             = 0.233;
+                p["B_s->phi::mu@B-LCSR"]             = 1.0;
+                p["B_s->phi::s_0^A1,0@B-LCSR"]       = 1.7;
+                p["B_s->phi::s_0^A1,1@B-LCSR"]       = 0.0;
+                p["B_s->phi::s_0^A2,0@B-LCSR"]       = 1.7;
+                p["B_s->phi::s_0^A2,1@B-LCSR"]       = 0.0;
+                p["B_s->phi::s_0^A30,0@B-LCSR"]      = 1.7;
+                p["B_s->phi::s_0^A30,1@B-LCSR"]      = 0.0;
+                p["B_s->phi::s_0^V,0@B-LCSR"]        = 1.7;
+                p["B_s->phi::s_0^V,1@B-LCSR"]        = 0.0;
+                p["B_s->phi::s_0^T1,0@B-LCSR"]       = 1.7;
+                p["B_s->phi::s_0^T1,1@B-LCSR"]       = 0.0;
+                p["B_s->phi::s_0^T23A,0@B-LCSR"]     = 1.7;
+                p["B_s->phi::s_0^T23A,1@B-LCSR"]     = 0.0;
+                p["B_s->phi::s_0^T23B,0@B-LCSR"]     = 1.7;
+                p["B_s->phi::s_0^T23B,1@B-LCSR"]     = 0.0;
+                p["B_s->phi::M^2@B-LCSR"]            = 1.0;
+
+                Options o = {
+                    { "2pt",    "all"  },
+                    { "3pt",    "all"  },
+                    { "gminus", "WW-limit" }
+                };
+
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->phi::B-LCSR", p, o);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.188667, ff->v(-5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.232526, ff->v( 0.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.286883, ff->v(+5.0),           eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.210868, ff->a_0(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.267878, ff->a_0( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.348945, ff->a_0(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.174001, ff->a_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.189710, ff->a_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.208671, ff->a_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.131226, ff->a_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.153049, ff->a_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.177031, ff->a_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.166630, ff->t_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.207632, ff->t_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.262038, ff->t_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.193698, ff->t_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.207632, ff->t_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.222445, ff->t_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.107931, ff->t_3(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.123576, ff->t_3( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.135953, ff->t_3(+5.0),         eps);
+            }
+
+
+            /* B_s -> D^*_s form factor values */
+            {
+                static const double eps = 1.0e-4; // relative error < 0.3%
+
+                Parameters p = Parameters::Defaults();
+                /*charm mass = 1.066273     */
+                p["B_s::1/lambda_B_p"]               = 1.69348;
+                p["B_s::lambda_E^2"]                 = 0.03;
+                p["B_s::lambda_H^2"]                 = 0.06;
+                p["mass::B_s"]                       = 5.36677;
+                p["mass::D^*_s"]                     = 2.1121;
+                p["decay-constant::B_s"]             = 0.2307;
+                p["decay-constant::D^*_s"]           = 0.293;
+                p["B_s->D^*_s::mu@B-LCSR"]           = 2.1213;
+                p["B_s->D^*_s::s_0^A1,0@B-LCSR"]     = 8.0;
+                p["B_s->D^*_s::s_0^A1,1@B-LCSR"]     = 0.0;
+                p["B_s->D^*_s::s_0^A2,0@B-LCSR"]     = 8.0;
+                p["B_s->D^*_s::s_0^A2,1@B-LCSR"]     = 0.0;
+                p["B_s->D^*_s::s_0^A30,0@B-LCSR"]    = 8.0;
+                p["B_s->D^*_s::s_0^A30,1@B-LCSR"]    = 0.0;
+                p["B_s->D^*_s::s_0^V,0@B-LCSR"]      = 8.0;
+                p["B_s->D^*_s::s_0^V,1@B-LCSR"]      = 0.0;
+                p["B_s->D^*_s::s_0^T1,0@B-LCSR"]     = 8.0;
+                p["B_s->D^*_s::s_0^T1,1@B-LCSR"]     = 0.0;
+                p["B_s->D^*_s::s_0^T23A,0@B-LCSR"]   = 8.0;
+                p["B_s->D^*_s::s_0^T23A,1@B-LCSR"]   = 0.0;
+                p["B_s->D^*_s::s_0^T23B,0@B-LCSR"]   = 8.0;
+                p["B_s->D^*_s::s_0^T23B,1@B-LCSR"]   = 0.0;
+                p["B_s->D^*_s::M^2@B-LCSR"]          = 4.5;
+
+                Options o = {
+                    { "2pt",    "all"  },
+                    { "3pt",    "off"  },
+                    { "gminus", "WW-limit" }
+                };
+
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->D^*_s::B-LCSR", p, o);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.653061, ff->v(-5.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.758854, ff->v( 0.0),           eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.868634, ff->v(+5.0),           eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.596366, ff->a_0(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.716505, ff->a_0( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.871324, ff->a_0(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.590307, ff->a_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.630581, ff->a_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.683596, ff->a_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.471994, ff->a_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.519060, ff->a_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.480577, ff->a_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.569470, ff->t_1(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.670264, ff->t_1( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.793728, ff->t_1(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.645332, ff->t_2(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.670264, ff->t_2( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.696802, ff->t_2(+5.0),         eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.279428, ff->t_3(-5.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.286126, ff->t_3( 0.0),         eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.150783, ff->t_3(+5.0),         eps);
             }
         }
 } kmo2006_form_factors_test;
