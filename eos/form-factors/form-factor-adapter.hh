@@ -24,6 +24,7 @@
 #include <eos/form-factors/form-factors.hh>
 #include <eos/utils/apply.hh>
 #include <eos/utils/tuple-maker.hh>
+#include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 namespace eos
 {
@@ -131,6 +132,8 @@ namespace eos
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
 
+            std::array<const std::string, sizeof...(Args_)> _kinematics_names_array;
+
         public:
             FormFactorAdapterEntry(const QualifiedName & name,
                     const std::string & latex,
@@ -141,7 +144,8 @@ namespace eos
                 _latex(latex),
                 _process(process),
                 _form_factor_function(form_factor_function),
-                _kinematics_names(kinematics_names)
+                _kinematics_names(kinematics_names),
+                _kinematics_names_array(impl::make_array<const std::string>(kinematics_names))
             {
             }
 
@@ -157,6 +161,16 @@ namespace eos
             virtual const std::string & latex() const
             {
                 return _latex;
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
+            {
+                return _kinematics_names_array.begin();
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const
+            {
+                return _kinematics_names_array.end();
             }
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
@@ -285,6 +299,8 @@ namespace eos
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
 
+            std::array<const std::string, sizeof...(Args_)> _kinematics_names_array;
+
         public:
             FormFactorRatioAdapterEntry(const QualifiedName & name,
                     const std::string & latex,
@@ -295,7 +311,8 @@ namespace eos
                 _latex(latex),
                 _form_factor_numerator(form_factor_numerator),
                 _form_factor_denominator(form_factor_denominator),
-                _kinematics_names(kinematics_names)
+                _kinematics_names(kinematics_names),
+                _kinematics_names_array(impl::make_array<const std::string>(kinematics_names))
             {
             }
 
@@ -311,6 +328,16 @@ namespace eos
             virtual const std::string & latex() const
             {
                 return _latex;
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
+            {
+                return _kinematics_names_array.begin();
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const
+            {
+                return _kinematics_names_array.end();
             }
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const

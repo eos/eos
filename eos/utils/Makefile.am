@@ -14,7 +14,7 @@ libeosutils_la_SOURCES = \
 	cartesian-product.hh \
 	ckm_scan_model.cc ckm_scan_model.hh \
 	complex.hh \
-	concrete_observable.hh \
+	concrete_observable.cc concrete_observable.hh \
 	concrete-signal-pdf.hh \
 	condition_variable.cc condition_variable.hh \
 	density.cc density.hh density-fwd.hh density-impl.hh \

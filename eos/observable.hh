@@ -135,6 +135,15 @@ namespace eos
 
             virtual const std::string & latex() const = 0;
 
+            ///@name Iteration over kinematic variables
+            ///@{
+            struct KinematicVariableIteratorTag;
+            using KinematicVariableIterator = WrappedForwardIterator<KinematicVariableIteratorTag, const std::string &>;
+
+            virtual KinematicVariableIterator begin_kinematic_variables() const = 0;
+            virtual KinematicVariableIterator end_kinematic_variables() const = 0;
+            ///@}
+
         protected:
             virtual std::ostream & insert(std::ostream & os) const = 0;
     };

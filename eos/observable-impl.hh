@@ -130,6 +130,12 @@ namespace eos
         return std::make_pair(sname, make_concrete_observable_ratio_factory(sname, numerator, denominator, kinematics_names));
     }
 #endif
+
+    template <>
+    struct WrappedForwardIteratorTraits<ObservableEntry::KinematicVariableIteratorTag>
+    {
+        using UnderlyingIterator = std::array<const std::string, 1u>::iterator;
+    };
 }
 
 #endif

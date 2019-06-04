@@ -20,10 +20,11 @@
 #ifndef EOS_GUARD_SRC_UTILS_CONCRETE_OBSERVABLE_HH
 #define EOS_GUARD_SRC_UTILS_CONCRETE_OBSERVABLE_HH 1
 
-#include <eos/observable.hh>
+#include <eos/observable-impl.hh>
 #include <eos/utils/apply.hh>
 #include <eos/utils/join.hh>
 #include <eos/utils/tuple-maker.hh>
+#include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <array>
 #include <functional>
@@ -124,7 +125,7 @@ namespace eos
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
 
-            std::array<std::string, sizeof...(Args_)> _kinematics_names_array;
+            std::array<const std::string, sizeof...(Args_)> _kinematics_names_array;
 
         public:
             ConcreteObservableEntry(const QualifiedName & name, const std::string & latex,
@@ -134,7 +135,7 @@ namespace eos
                 _latex(latex),
                 _function(function),
                 _kinematics_names(kinematics_names),
-                _kinematics_names_array(impl::make_array<std::string>(kinematics_names))
+                _kinematics_names_array(impl::make_array<const std::string>(kinematics_names))
             {
             }
 
@@ -150,6 +151,16 @@ namespace eos
             virtual const std::string & latex() const
             {
                 return _latex;
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
+            {
+                return _kinematics_names_array.begin();
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const
+            {
+                return _kinematics_names_array.end();
             }
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
@@ -295,7 +306,7 @@ namespace eos
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names_numerator, _kinematics_names_denominator;
 
-            std::array<std::string, sizeof...(Args_)> _kinematics_names_array_numerator, _kinematics_names_array_denominator;
+            std::array<const std::string, sizeof...(Args_)> _kinematics_names_array_numerator, _kinematics_names_array_denominator;
 
         public:
             ConcreteObservableRatioEntry(const QualifiedName & name, const std::string & latex,
@@ -313,8 +324,8 @@ namespace eos
                 _forced_options_denominator(forced_options_denominator),
                 _kinematics_names_numerator(kinematics_names_numerator),
                 _kinematics_names_denominator(kinematics_names_denominator),
-                _kinematics_names_array_numerator(impl::make_array<std::string>(kinematics_names_numerator)),
-                _kinematics_names_array_denominator(impl::make_array<std::string>(kinematics_names_denominator))
+                _kinematics_names_array_numerator(impl::make_array<const std::string>(kinematics_names_numerator)),
+                _kinematics_names_array_denominator(impl::make_array<const std::string>(kinematics_names_denominator))
             {
             }
 
@@ -328,6 +339,16 @@ namespace eos
             virtual const std::string & latex() const
             {
                 return _latex;
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
+            {
+                return _kinematics_names_array_numerator.begin();
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const
+            {
+                return _kinematics_names_array_numerator.end();
             }
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
