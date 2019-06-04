@@ -85,9 +85,15 @@ namespace eos
                         &BToKDilepton<LargeRecoil>::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
 
-                make_observable("B->Kll::R_K(s)@LargeRecoil",
-                        &BToKDilepton<LargeRecoil>::differential_ratio_muons_electrons,
-                        std::make_tuple("q2")),
+                make_observable_ratio("B->Kll::R_K(q2)@LargeRecoil",
+                        R"(R_K(q^2))",
+                        &BToKDilepton<LargeRecoil>::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "l", "mu" } },
+                        nullptr,//&BToKDilepton<LargeRecoil>::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "l", "e" } }
+                        ),
 
                 make_observable("B->Kll::BR@LargeRecoil",
                         &BToKDilepton<LargeRecoil>::integrated_branching_ratio,
