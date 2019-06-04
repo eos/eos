@@ -1195,41 +1195,186 @@ class LCSRFormFactorsTest :
 
             }
 
-            /* B -> pi form factor values 2-particle contribution*/
+
+            /* B -> K form factor values */
             {
-                static const double eps = 3e-3; // relative error < 0.3%
+                static const double eps = 1.0e-4; // relative error < 0.3%
 
                 Parameters p = Parameters::Defaults();
                 p["B::1/lambda_B_p"]          = 2.173913;
-                p["B::lambda_E^2"]            = 0.3174;
-                p["B::lambda_H^2"]            = 1.2696;
-                p["mass::ud(2GeV)"]           = 0.008;
-                p["mass::B_d"]                = 5.2795;
-                p["mass::pi^+"]               = 0.13957;
-                p["decay-constant::B_d"]      = 0.180;
-                p["decay-constant::pi"]       = 0.1302;
-                p["B->pi::mu@B-LCSR"]         = 1.0;
-                p["B->pi::s_0^+,0@B-LCSR"]    = 0.7;
-                p["B->pi::s_0^+,1@B-LCSR"]    = 0.0;
-                p["B->pi::s_0^+/-,0@B-LCSR"]  = 0.7;
-                p["B->pi::s_0^+/-,1@B-LCSR"]  = 0.0;
-                p["B->pi::s_0^T,0@B-LCSR"]    = 0.7;
-                p["B->pi::s_0^T,1@B-LCSR"]    = 0.0;
-                p["B->pi::M^2@B-LCSR"]        = 1.0;
+                p["B::lambda_E^2"]            = 0.03;
+                p["B::lambda_H^2"]            = 0.06;
+                p["mass::B_d"]                = 5.27958;
+                p["mass::K_d"]                = 0.497614;
+                p["decay-constant::B_d"]      = 0.1905;
+                p["decay-constant::K_d"]      = 0.1561;
+                p["B->K::mu@B-LCSR"]          = 1.0;
+                p["B->K::s_0^+,0@B-LCSR"]     = 1.05;
+                p["B->K::s_0^+,1@B-LCSR"]     = 0.0;
+                p["B->K::s_0^+/-,0@B-LCSR"]   = 1.05;
+                p["B->K::s_0^+/-,1@B-LCSR"]   = 0.0;
+                p["B->K::s_0^T,0@B-LCSR"]     = 1.05;
+                p["B->K::s_0^T,1@B-LCSR"]     = 0.0;
+                p["B->K::M^2@B-LCSR"]         = 1.0;
 
-                Options o ={
+                Options o = {
                     { "2pt",    "all"  },
                     { "3pt",    "all"  },
-                    { "gminus", "zero" }
+                    { "gminus", "WW-limit" }
                 };
 
-                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi::B-LCSR", p, o);
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::B-LCSR", p, o);
 
-              /*TEST_CHECK_RELATIVE_ERROR( 1.128773, ff->f_t(-5.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.178427, ff->f_t( 0.0),       eps);
-                TEST_CHECK_RELATIVE_ERROR( 0.209817, ff->f_t(+5.0),       eps);*/
+                TEST_CHECK_RELATIVE_ERROR( 0.208620, ff->f_p(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.267282, ff->f_p( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.354006, ff->f_p(+5.0),       eps);
 
+                TEST_CHECK_RELATIVE_ERROR( 0.240493, ff->f_0(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.267282, ff->f_0( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.299113, ff->f_0(+5.0),       eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.196080, ff->f_t(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.252352, ff->f_t( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.336631, ff->f_t(+5.0),       eps);
+
+            }
+
+
+            /* B -> D form factor values */
+            {
+                static const double eps = 1.0e-4; // relative error < 0.3%
+
+                Parameters p = Parameters::Defaults();
+                /*charm mass = 1.066273     */
+                p["B::1/lambda_B_p"]          = 2.173913;
+                p["B::lambda_E^2"]            = 0.03;
+                p["B::lambda_H^2"]            = 0.06;
+                p["mass::B_d"]                = 5.27958;
+                p["mass::D^+"]                = 1.86959;
+                p["decay-constant::B_d"]      = 0.1905;
+                p["decay-constant::D_d"]      = 0.2127;
+                p["B->D::mu@B-LCSR"]          = 2.1213;
+                p["B->D::s_0^+,0@B-LCSR"]     = 6.0;
+                p["B->D::s_0^+,1@B-LCSR"]     = 0.0;
+                p["B->D::s_0^+/-,0@B-LCSR"]   = 6.0;
+                p["B->D::s_0^+/-,1@B-LCSR"]   = 0.0;
+                p["B->D::s_0^T,0@B-LCSR"]     = 6.0;
+                p["B->D::s_0^T,1@B-LCSR"]     = 0.0;
+                p["B->D::M^2@B-LCSR"]         = 4.5;
+
+                Options o = {
+                    { "2pt",    "all"  },
+                    { "3pt",    "all"  },
+                    { "gminus", "WW-limit" }
+                };
+
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->D::B-LCSR", p, o);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.628668, ff->f_p(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.745726, ff->f_p( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.917246, ff->f_p(+5.0),       eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.692330, ff->f_0(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.745726, ff->f_0( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.810308, ff->f_0(+5.0),       eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.501645, ff->f_t(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.616377, ff->f_t( 0.0), 3.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.823555, ff->f_t(+5.0), 9.0 * eps);
+
+            }
+
+
+            /* B_s -> K form factor values */
+            {
+                static const double eps = 1.0e-4; // relative error < 0.3%
+
+                Parameters p = Parameters::Defaults();
+                p["B_s::1/lambda_B_p"]          = 1.69348;
+                p["B_s::lambda_E^2"]            = 0.03;
+                p["B_s::lambda_H^2"]            = 0.06;
+                p["mass::B_s"]                  = 5.36677;
+                p["mass::K_u"]                  = 0.493677;
+                p["decay-constant::B_s"]        = 0.2307;
+                p["decay-constant::K_u"]        = 0.1561;
+                p["B_s->K::mu@B-LCSR"]          = 1.0;
+                p["B_s->K::s_0^+,0@B-LCSR"]     = 1.05;
+                p["B_s->K::s_0^+,1@B-LCSR"]     = 0.0;
+                p["B_s->K::s_0^+/-,0@B-LCSR"]   = 1.05;
+                p["B_s->K::s_0^+/-,1@B-LCSR"]   = 0.0;
+                p["B_s->K::s_0^T,0@B-LCSR"]     = 1.05;
+                p["B_s->K::s_0^T,1@B-LCSR"]     = 0.0;
+                p["B_s->K::M^2@B-LCSR"]         = 1.0;
+
+                Options o = {
+                    { "2pt",    "all"  },
+                    { "3pt",    "all"  },
+                    { "gminus", "WW-limit" }
+                };
+
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B_s->K::B-LCSR", p, o);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.189587, ff->f_p(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.239226, ff->f_p( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.308755, ff->f_p(+5.0),       eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.219599, ff->f_0(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.239226, ff->f_0( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.259143, ff->f_0(+5.0),       eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.184833, ff->f_t(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.234306, ff->f_t( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.304495, ff->f_t(+5.0),       eps);
+
+            }
+
+
+            /* B_s -> D_s form factor values */
+            {
+                static const double eps = 1.0e-4; // relative error < 0.3%
+
+                Parameters p = Parameters::Defaults();
+                /*charm mass = 1.066273     */
+                p["B_s::1/lambda_B_p"]            = 1.69348;
+                p["B_s::lambda_E^2"]              = 0.03;
+                p["B_s::lambda_H^2"]              = 0.06;
+                p["mass::B_s"]                    = 5.36677;
+                p["mass::D_s"]                    = 1.96828;
+                p["decay-constant::B_s"]          = 0.2307;
+                p["decay-constant::D_s"]          = 0.2499;
+                p["B_s->D_s::mu@B-LCSR"]          = 2.1213;
+                p["B_s->D_s::s_0^+,0@B-LCSR"]     = 6.0;
+                p["B_s->D_s::s_0^+,1@B-LCSR"]     = 0.0;
+                p["B_s->D_s::s_0^+/-,0@B-LCSR"]   = 6.0;
+                p["B_s->D_s::s_0^+/-,1@B-LCSR"]   = 0.0;
+                p["B_s->D_s::s_0^T,0@B-LCSR"]     = 6.0;
+                p["B_s->D_s::s_0^T,1@B-LCSR"]     = 0.0;
+                p["B_s->D_s::M^2@B-LCSR"]         = 4.5;
+
+                Options o = {
+                    { "2pt",    "all"  },
+                    { "3pt",    "all"  },
+                    { "gminus", "WW-limit" }
+                };
+
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B_s->D_s::B-LCSR", p, o);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.539744, ff->f_p(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.642184, ff->f_p( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.787744, ff->f_p(+5.0),       eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.600434, ff->f_0(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.642184, ff->f_0( 0.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.688616, ff->f_0(+5.0),       eps);
+
+                TEST_CHECK_RELATIVE_ERROR( 0.518002, ff->f_t(-5.0),       eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.643604, ff->f_t( 0.0), 2.0 * eps);
+                TEST_CHECK_RELATIVE_ERROR( 0.862329, ff->f_t(+5.0), 5.0 * eps);
 
             }
         }
 } kmo2006_form_factors_test;
+
+
+
+
