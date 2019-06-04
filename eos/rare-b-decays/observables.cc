@@ -70,18 +70,22 @@ namespace eos
             {
                 // B -> K ll, Large Recoil
                 make_observable("B->Kll::d^2Gamma@LargeRecoil",
+                        R"(d^2\mathcal{\Gamma(\bar{B}\to \bar{K}\ell^+\ell^-)}/(dq^2\, d\cos\theta_\ell))",
                         &BToKDilepton<LargeRecoil>::two_differential_decay_width,
                         std::make_tuple("s", "cos(theta_l)")),
 
                 make_observable("B->Kll::dBR/ds@LargeRecoil",
+                        R"(d\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/dq^2)",
                         &BToKDilepton<LargeRecoil>::differential_branching_ratio,
                         std::make_tuple("q2")),
 
                 make_observable("B->Kll::F_H(q2)@LargeRecoil",
+                        R"(F_\text{H}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
                         &BToKDilepton<LargeRecoil>::differential_flat_term,
                         std::make_tuple("q2")),
 
                 make_observable("B->Kll::A_FB(q2)@LargeRecoil",
+                        R"(A_\text{FB}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
                         &BToKDilepton<LargeRecoil>::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
 
@@ -90,12 +94,13 @@ namespace eos
                         &BToKDilepton<LargeRecoil>::differential_branching_ratio,
                         std::make_tuple("q2"),
                         Options{ { "l", "mu" } },
-                        nullptr,//&BToKDilepton<LargeRecoil>::differential_branching_ratio,
+                        &BToKDilepton<LargeRecoil>::differential_branching_ratio,
                         std::make_tuple("q2"),
                         Options{ { "l", "e" } }
                         ),
 
                 make_observable("B->Kll::BR@LargeRecoil",
+                        R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-))",
                         &BToKDilepton<LargeRecoil>::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -104,6 +109,7 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::A_CP@LargeRecoil",
+                        R"(A_\text{CP}(\bar{B}\to \bar{K}\ell^+\ell^-))",
                         &BToKDilepton<LargeRecoil>::integrated_cp_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -112,6 +118,7 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::F_H@LargeRecoil",
+                        R"(F_\text{H}(\bar{B}\to \bar{K}\ell^+\ell^-))",
                         &BToKDilepton<LargeRecoil>::integrated_flat_term,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -120,12 +127,23 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::A_FB@LargeRecoil",
+                        R"(A_\text{FB}(\bar{B}\to \bar{K}\ell^+\ell^-))",
                         &BToKDilepton<LargeRecoil>::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::A_FBavg@LargeRecoil",
                         &BToKDilepton<LargeRecoil>::integrated_forward_backward_asymmetry_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
+
+                make_observable_ratio("B->Kll::R_K@LargeRecoil",
+                        R"(R_K)",
+                        &BToKDilepton<LargeRecoil>::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "l", "mu" } },
+                        &BToKDilepton<LargeRecoil>::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "l", "e" } }
+                        ),
 
                 make_observable("B->Kll::R_K@LargeRecoil",
                         &BToKDilepton<LargeRecoil>::integrated_ratio_muons_electrons,
