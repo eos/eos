@@ -55,6 +55,7 @@ namespace eos
                 const std::string & str() const { return _name; };
 
                 inline bool operator<  (const Name & rhs) const { return this->_name <  rhs._name; };
+                inline bool operator== (const Name & rhs) const { return this->_name == rhs._name; };
         };
 
         class Suffix
