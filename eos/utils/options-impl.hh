@@ -24,11 +24,55 @@
 
 #include <eos/utils/join.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/qualified-name.hh>
 
 #include <algorithm>
 
 namespace eos
 {
+    class NameOption
+    {
+        public:
+            std::unique_ptr<qnp::Name> _value;
+
+        public:
+            NameOption(const Options & options, const std::string & key) :
+                _value(nullptr)
+            {
+                if (! options.has(key))
+                    throw UnspecifiedOptionError(key);
+
+                std::string raw_value(options[key]);
+                try
+                {
+                    _value = std::make_unique<qnp::Name>(raw_value);
+                }
+                catch (QualifiedNameSyntaxError & e)
+                {
+                    throw InvalidOptionValueError(key, raw_value);
+                }
+            }
+
+            NameOption(const Options & options, const std::string & key, const qnp::Name & default_value) :
+                _value(std::make_unique<qnp::Name>(default_value))
+            {
+                if (options.has(key))
+                {
+                    std::string raw_value(options[key]);
+                    try
+                    {
+                        _value = std::make_unique<qnp::Name>(raw_value);
+                    }
+                    catch (QualifiedNameSyntaxError & e)
+                    {
+                        throw InvalidOptionValueError(key, raw_value);
+                    }
+                }
+            }
+
+            const qnp::Name & value() const { return *_value; };
+    };
+
     class SwitchOption
     {
         public:
