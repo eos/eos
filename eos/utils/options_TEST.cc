@@ -153,6 +153,78 @@ class OptionsTest :
         }
 } options_test;
 
+class NameOptionTest :
+    public TestCase
+{
+    public:
+        NameOptionTest() :
+            TestCase("name_option_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            // Creation with valid default value, value = default value
+            {
+                NameOption no
+                {
+                    Options{ { "key", "value1" }, { "unused", "foo" } },
+                    "key",
+                    qnp::Name("value1")
+                };
+                TEST_CHECK_EQUAL(no.value(), qnp::Name("value1"));
+            }
+
+            // Creation with unspecified value
+            {
+                NameOption no
+                {
+                    Options{ { "unused", "foo" } },
+                    "key",
+                    qnp::Name("value1")
+                };
+                TEST_CHECK_EQUAL(no.value(), qnp::Name("value1"));
+            }
+
+            // Creation without default value
+            {
+                NameOption no
+                {
+                    Options{ { "key", "value4" }, { "unused", "foo" } },
+                    "key",
+                };
+                TEST_CHECK_EQUAL(no.value(), qnp::Name("value4"));
+            }
+
+            // Creation with unspecified value, non-empty list, no default value
+            {
+                auto test = [] ()
+                {
+                    NameOption no
+                    {
+                        Options{ { "unused", "foo" } },
+                        "key"
+                    };
+                };
+                TEST_CHECK_THROWS(UnspecifiedOptionError, test());
+            }
+
+            // Creation with invalid value
+            {
+                auto test = [] ()
+                {
+                    NameOption so
+                    {
+                        Options{ { "key", "invalid@value"}, { "unused", "foo" } },
+                        "key",
+                        qnp::Name("value1")
+                    };
+                };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+        }
+} name_option_test;
+
 class SwitchOptionTest :
     public TestCase
 {
