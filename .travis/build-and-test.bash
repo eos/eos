@@ -3,33 +3,12 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
-# Ubuntu specific functions
-function build_and_test_ubuntu() {
-    pushd /src
-    export EOS_VERSION=${TAG:-$(git describe --abbrev=0 --tags)}
-    export EOS_VERSION=${EOS_VERSION#v}
-    ./autogen.bash
-    popd
-    pushd /build
-    export CXXFLAGS="-O2 -g -march=x86-64" # build for generic x86-64 architecture
-    CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr"
-    /src/configure ${CONFIGURE_FLAGS}
-    make distcheck -j2 DISTCHECK_CONFIGURE_FLAGS="${CONFIGURE_FLAGS}" VERBOSE=1
-    make install
-    export PYTHONPATH+=":$(make print-pythondir)"
-    make -C /src/manual/examples examples
-    echo Building debian package for ${OS}
-    export DESTDIR=/tmp/eos-${EOS_VERSION}
-    make deb DESTDIR=${DESTDIR} OS=${OS}
-    dpkg -i /tmp/eos-${EOS_VERSION}.deb
-    if [[ -n ${TAG} ]] && [[ "g++" == ${CXX} ]]; then
-        echo Deploying debian package to package cloud ...
-        package_cloud push eos/eos/ubuntu/${OS} /tmp/eos-${EOS_VERSION}.deb
-    fi
-    popd
-}
+#############################
+# Ubuntu specific functions #
+#############################
 
-function build_and_coverage_ubuntu() {
+function ubuntu_coverage() {
+    [[ -z ${COVERALLS_TOKEN} ]] && exit 0
     pushd /src
     ./autogen.bash
     popd
@@ -51,8 +30,50 @@ function build_and_coverage_ubuntu() {
     popd
 }
 
-# OSX specific functions
-function build_and_test_osx() {
+function ubuntu_deploy() {
+    pushd /src
+    export EOS_VERSION=${TAG:-$(git describe --abbrev=0 --tags)}
+    export EOS_VERSION=${EOS_VERSION#v}
+    ./autogen.bash
+    popd
+    pushd /build
+    export CXXFLAGS="-O2 -g -march=x86-64" # build for generic x86-64 architecture
+    CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr"
+    /src/configure ${CONFIGURE_FLAGS}
+    make -j2 all
+    make -j2 check VERBOSE=1
+    make install
+    export PYTHONPATH+=":$(make print-pythondir)"
+    make -C /src/manual/examples examples
+    echo Building debian package for ${OS}
+    export DESTDIR=/tmp/eos-${EOS_VERSION}
+    make deb DESTDIR=${DESTDIR} OS=${OS}
+    dpkg -i /tmp/eos-${EOS_VERSION}.deb
+    if [[ -n ${TAG} ]] && [[ "g++" == ${CXX} ]]; then
+        echo Deploying debian package to package cloud ...
+        package_cloud push eos/eos/ubuntu/${OS} /tmp/eos-${EOS_VERSION}.deb
+    fi
+    popd
+}
+
+function ubuntu_distcheck() {
+    pushd /src
+    export EOS_VERSION=${TAG:-$(git describe --abbrev=0 --tags)}
+    export EOS_VERSION=${EOS_VERSION#v}
+    ./autogen.bash
+    popd
+    pushd /build
+    export CXXFLAGS="-O2 -g -march=x86-64" # build for generic x86-64 architecture
+    CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr"
+    /src/configure ${CONFIGURE_FLAGS}
+    make distcheck -j2 DISTCHECK_CONFIGURE_FLAGS="${CONFIGURE_FLAGS}" VERBOSE=1
+    popd
+}
+
+##########################
+# OSX specific functions #
+##########################
+function osx_build_and_test() {
     SUFFIX=$(python3 -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
     echo using boost-python suffix ${SUFFIX}
     ./autogen.bash
@@ -96,14 +117,21 @@ echo "==========="
 echo "==========="
 
 if [[ "xenial" == ${OS} ]] || [[ "bionic" == ${OS} ]]; then
-    if [[ "test" == ${USE} ]] ; then
-        build_and_test_ubuntu $@
-    elif [[ "coverage" == ${USE} ]] ; then
-        if [[ -n ${COVERALLS_TOKEN} ]] ; then
-            build_and_coverage_ubuntu $@
-        fi
-    fi
+    case ${USE} in
+        "distcheck")
+            ubuntu_distcheck $@
+            ;;
+        "coverage")
+            ubuntu_coverage $@
+            ;;
+        "deploy")
+            ubuntu_deploy $@
+            ;;
+        *)
+            echo "ERROR: Unknown USE in Ubuntu tests!"
+            ;;
+    esac
 elif [[ "osx" == ${OS} ]] ; then
-    build_and_test_osx $@
+    osx_build_and_test $@
 fi
 
