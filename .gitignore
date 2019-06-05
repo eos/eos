@@ -39,3 +39,7 @@ stamp-h1
 
 # Data files
 *.hdf5
+
+# Distributions
+eos-*/
+eos-*.t*
