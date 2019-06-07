@@ -133,6 +133,8 @@ class Analysis:
 
         :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters.
         :type x: iterable
+        :param args: Dummy parameter (ignored)
+        :type args: optional
         """
         for p, v in zip(self.varied_parameters, x):
             p.set(v)
@@ -146,6 +148,8 @@ class Analysis:
 
         :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters.
         :type x: iterable
+        :param args: Dummy parameter (ignored)
+        :type args: optional
         """
         for p, v in zip(self.varied_parameters, x):
             p.set(v)
