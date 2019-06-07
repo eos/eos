@@ -38,12 +38,11 @@ function ubuntu_deploy() {
     popd
     pushd /build
     export CXXFLAGS="-O2 -g -march=x86-64" # build for generic x86-64 architecture
-    CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr"
+    CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr --with-custom-pythondir=dist-packages"
     /src/configure ${CONFIGURE_FLAGS}
     make -j2 all
     make -j2 check VERBOSE=1
     make install
-    export PYTHONPATH+=":$(make print-pythondir)"
     make -C /src/manual/examples examples
     echo Building debian package for ${OS}
     export DESTDIR=/tmp/eos-${EOS_VERSION}
