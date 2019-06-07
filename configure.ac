@@ -298,6 +298,13 @@ if test "x$enable_pmc" == "xyes" ; then
 fi
 AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$enable_pmc" == "xyes"])
 dnl }}}
+
+dnl {{{ use custom pythondir if supplied via --with-pmc=
+AC_ARG_WITH([custom-pythondir],
+	[AS_HELP_STRING([--with-custom-pythondir], [used to override Debian/Ubuntu default choice for \${pythondir} and \${pyexecdir}])],
+	[],
+	[])
+dnl }}}
 dnl {{{ check if we should enable Python
 AC_ARG_ENABLE([python],
 	[AS_HELP_STRING([--enable-python], [enables interfacing EOS within python])],
@@ -331,6 +338,15 @@ if test "x$enable_python" == xyes ; then
 	AC_SUBST([PYTHON_LDFLAGS])
 	AC_SUBST([PYTHON_CXXFLAGS])
 	AC_SUBST([BOOST_PYTHON_SUFFIX])
+	if test "x$with_custom_pythondir" != "x"; then
+		# override: Debian/Ubuntu use 'dist-packages' rather than 'site-packages'
+		AC_MSG_NOTICE([replacing python script directory with \${prefix}/lib/python$PYTHON_VERSION/$with_custom_pythondir])
+		pythondir="\${prefix}/lib/python$PYTHON_VERSION/$with_custom_pythondir"
+		AC_MSG_NOTICE([replacing python extension directory with \${exec_prefix}/lib/python$PYTHON_VERSION/$with_custom_pythondir])
+		pyexecdir="\${exec_prefix}/lib/python$PYTHON_VERSION/$with_custom_pythondir"
+		AC_SUBST([pythondir])
+		AC_SUBST([pyexecdir])
+	fi
 
 	_CXXFLAGS=$CXXFLAGS
 	_LDFLAGS=$LDFLAGS
