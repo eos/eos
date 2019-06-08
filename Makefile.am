@@ -4,7 +4,7 @@ MAINTAINERCLEANFILES = Makefile.in configure config/* aclocal.m4 \
 AUTOMAKE_OPTIONS = foreign dist-bzip2
 EXTRA_DIST = autogen.bash
 
-SUBDIRS = test eos python src doc manual debian
+SUBDIRS = test eos python src manual debian
 
 
 
