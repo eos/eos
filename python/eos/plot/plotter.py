@@ -29,7 +29,7 @@ Plotter uses matplotlib to produce EOS plots within PDF files. It is the backend
 for the eos-plot-* scripts.
 """
 class Plotter:
-    def __init__(self, instructions, output):
+    def __init__(self, instructions, output=None):
         """
         Parameters
         ----------
@@ -45,7 +45,6 @@ class Plotter:
         self.yrange = None
         self.__next_z_order = 0
         self.__next_color = 0
-        self.savefig = not eos.__ipython__
         self.colors = [
             'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'
         ]
@@ -865,11 +864,12 @@ class Plotter:
         self.setup_plot()
         self.plot_contents()
 
-        plt.show()
         plt.tight_layout()
 
-        if self.savefig:
-            plt.savefig(self.output)
+        if self.output:
+            plt.savefig(self.output, bbox_inches='tight', dpi=300)
+
+        plt.show()
 
 
 def variable_to_latex(variable):
