@@ -823,10 +823,6 @@ class Plotter:
             'watermark':          Plotter.Watermark,
         }
 
-        anonymous_types = [
-            'watermark',
-        ]
-
         contents = self.instructions['contents']
 
         plots = []
@@ -839,9 +835,7 @@ class Plotter:
                 raise KeyError('plot content "{}" has no type'.format(name))
             item_type = item['type']
 
-            if item_type not in anonymous_types and 'name' not in item:
-                raise KeyError('unnamed plot content')
-            elif 'name' not in item:
+            if 'name' not in item:
                 name = None
                 debug('plotting anonymous contents of type \'{}\''.format(item_type))
             else:
@@ -852,6 +846,10 @@ class Plotter:
                 KeyError('unknown content type: "{}"'.format(item_type))
 
             plots.append(plot_types[item_type](self, item))
+
+        # ensure watermarking
+        if Plotter.Watermark not in [type(p) for p in plots]:
+            plots.append(Plotter.Watermark(self, item))
 
         plots.sort()
         for plot in plots:
