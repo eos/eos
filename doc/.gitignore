@@ -1,2 +1,8 @@
-#ignore doxygen
-html/*
+# custom Makefile
+!Makefile
+
+# Sphinx output
+_build
+
+# VIM files
+.*.swp
