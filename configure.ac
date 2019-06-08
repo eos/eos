@@ -400,7 +400,6 @@ AC_OUTPUT(
 	debian/control-bionic
 	debian/control-xenial
 	debian/Makefile
-	doc/Makefile
 	eos/Makefile
 	eos/constraints/Makefile
 	eos/form-factors/Makefile
