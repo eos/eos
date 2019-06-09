@@ -547,54 +547,55 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
+            if 'data' not in item and 'hdf5-file' not in item:
+                raise KeyError('neither data nor hdf5-file specified')
+
+            if 'data' in item and 'hdf5-file' in item:
+                warn('   both data and hdf5-file specified; assuming interactive use is intended')
+
+            self.samples = None
+            self.weights = None
+            if 'data' in item:
+                self.samples = item['data']['samples']
+                self.weights = np.exp(item['data']['log_weights']) if 'log_weights' in item['data'] else None
+            else:
+                h5fname = item['hdf5-file']
+                info('   plotting histogram from file "{}"'.format(h5fname))
+                datafile = eos.data.load_data_file(h5fname)
+
+                if 'variable' not in item:
+                    raise KeyError('no variable specificed')
+                variable = item['variable']
+
+                if variable not in datafile.variable_indices:
+                    raise ValueError('variable {} not contained in data file'.format(variable))
+
+                index        = datafile.variable_indices[variable]
+                self.samples = datafile.data()[:, index]
+                # TODO: use weights from data file
+                self.weights = None
+
+            self.bw       = item['bandwidth'] if 'bandwidth' in item else None
+            self.level    = item['level']     if 'level'     in item else 68.29
+            self.xrange   = plotter.xrange    if plotter.xrange      else (np.amin(self.samples), np.amax(self.samples))
+
         def plot(self):
-            item = self.item
-            if 'hdf5-file' not in item:
-                raise KeyError('no hdf5-file specified')
-
-            h5fname = item['hdf5-file']
-            info('   plotting histogram from file "{}"'.format(h5fname))
-            datafile = eos.data.load_data_file(h5fname)
-
-            if 'variable' not in item:
-                raise KeyError('no variable specificed')
-            variable = item['variable']
-
-            if variable not in datafile.variable_indices:
-                raise ValueError('variable {} not contained in data file'.format(variable))
-
-            alpha   = item['opacity']   if 'opacity'   in item else 0.3
-            bw      = item['bandwidth'] if 'bandwidth' in item else None
-            color   = item['color']     if 'color'     in item else 'blue'
-            label   = item['label']     if 'label'     in item else None
-            level   = item['level']     if 'level'     in item else None
-            samples = item['samples']   if 'samples'   in item else 100
-            stride  = item['stride']    if 'stride'    in item else 50
-
-            index  = datafile.variable_indices[variable]
-            data   = datafile.data()[::stride, index]
-
-            if not np.array(self.xrange).any():
-                self.xrange = [np.amin(xdata), np.amax(xdata)]
-                self.ax.set_xlim(tuple(self.xrange))
-            plt.show()
-
-            kde = gaussian_kde(data)
+            kde = gaussian_kde(self.samples, weights=self.weights)
             kde.set_bandwidth(bw_method='silverman')
-            if bw:
-                kde.set_bandwidth(bw_method=kde.factor * bw)
+            if self.bw:
+                kde.set_bandwidth(bw_method=kde.factor * self.bw)
 
-            x = np.linspace(self.xrange[0], self.xrange[1], samples)
+            x = np.linspace(self.xrange[0], self.xrange[1], 100)
             pdf = kde(x)
-            pdf /= pdf.sum()
+            pdf_norm = pdf.sum()
 
             # find the PDF value corresponding to a given cummulative probability
-            if level:
-                plevelf = lambda x, pdf, P: pdf[pdf > x].sum() - P
-                plevel = scipy.optimize.brentq(plevelf, 0., 1., args=(pdf, level / 100.0))
-                self.ax.fill_between(x[pdf >= plevel], pdf[pdf >= plevel], facecolor=color, alpha=alpha)
+            if self.level:
+                plevelf = lambda x, pdf, P: pdf[pdf > x * pdf_norm].sum() - P * pdf_norm
+                plevel = scipy.optimize.brentq(plevelf, 0., 1., args=(pdf, self.level / 100.0 ))
+                self.plotter.ax.fill_between(x[pdf >= plevel * pdf_norm], pdf[pdf >= plevel * pdf_norm], facecolor=self.color, alpha=self.alpha)
 
-            plt.plot(x, pdf, color=color, label=label)
+            plt.plot(x, pdf, color=self.color, label=self.label)
 
 
     """ Plots contours of a 2D Kernel Density Estimate (KDE) of pre-existing random samples. """
@@ -677,29 +678,42 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
+            if 'data' not in item and 'hdf5-file' not in item:
+                raise KeyError('neither data nor hdf5-file specified')
+
+            if 'data' in item and 'hdf5-file' in item:
+                warn('   both data and hdf5-file specified; assuming interactive use is intended')
+
+            self.samples = None
+            self.weights = None
+            if 'data' in item:
+                self.samples = item['data']['samples']
+                self.weights = np.exp(item['data']['log_weights']) if 'log_weights' in item['data'] else None
+            else:
+                h5fname = item['hdf5-file']
+                info('   plotting histogram from file "{}"'.format(h5fname))
+                datafile = eos.data.load_data_file(h5fname)
+
+                if 'variable' not in item:
+                    raise KeyError('no variable specificed')
+                variable = item['variable']
+
+                if variable not in datafile.variable_indices:
+                    raise ValueError('variable {} not contained in data file'.format(variable))
+
+                index        = datafile.variable_indices[variable]
+                self.samples = datafile.data()[:, index]
+                # TODO: use weights from data file
+                self.weights = None
+
+            self.bins     = item['bins']      if 'bins'      in item     else 100
+            self.histtype = item['histtype']  if 'histtype'  in item     else 'bar'
+            self.lw       = 3                 if self.histtype == 'step' else 1
+
         def plot(self):
-            item = self.item
-            if 'hdf5-file' not in item:
-                raise KeyError('no hdf5-file specified')
-
-            h5fname = item['hdf5-file']
-            info('   plotting histogram from file "{}"'.format(h5fname))
-            datafile = eos.data.load_data_file(h5fname)
-
-            if 'variable' not in item:
-                raise KeyError('no variable specificed')
-            variable = item['variable']
-
-            print(datafile.variable_indices)
-            if variable not in datafile.variable_indices:
-                raise ValueError('variable {} not contained in data file'.format(variable))
-
-            index = datafile.variable_indices[variable]
-            data  = datafile.data()[:, index]
-            alpha = item['opacity'] if 'opacity' in item else 0.3
-            color = item['color']   if 'color'   in item else 'blue'
-            bins  = item['bins']    if 'bins'    in item else 100
-            plt.hist(data, alpha=alpha, bins=bins, color=color, density=1)
+            plt.hist(self.samples, weights=self.weights, density=True,
+                    alpha=self.alpha, bins=self.bins, color=self.color,
+                    histtype=self.histtype, label=self.label, lw=self.lw)
 
 
     """ Plots a 2D histogram of pre-existing random samples. """
