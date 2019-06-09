@@ -211,45 +211,53 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
+            if 'data' not in item and 'hdf5-file' not in item:
+                raise KeyError('neither data nor hdf5-file specified')
+
+            if 'data' in item and 'hdf5-file' in item:
+                warn('   both data and hdf5-file specified; assuming interactive use is intended')
+
+            self.xvalues = None
+            self.samples = None
+            if 'data' in item:
+                self.xvalues = np.array(item['data']['xvalues'])
+                self.samples = item['data']['samples']
+            else:
+                h5fname = item['hdf5-file']
+                info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
+                uncfile = eos.data.UncertaintyDataFile(h5fname)
+
+                _xvalues = []
+                for o in uncfile.parameters:
+                    kin = o[1].split(b',')
+                    if len(kin) > 1:
+                        raise ValueError('more than one kinematic variable specified')
+
+                    name, value = kin[0].split(b'=')
+                    value = float(value)
+                    _xvalues.append(value)
+
+                self.xvalues = np.array(_xvalues)
+                self.samples = uncfile.data()
+
+            self.xrange = item['range'] if 'range' in item else None
+
         def plot(self):
-            item = self.item
-            if 'hdf5-file' not in item:
-                raise KeyError('no hdf5-file specified')
-                return
-
-            h5fname = item['hdf5-file']
-            info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
-
-            uncfile = eos.data.UncertaintyDataFile(h5fname)
-            _xvalues = []
-            for o in uncfile.parameters:
-                kin = o[1].split(b',')
-                if len(kin) > 1:
-                    raise ValueError('more than one kinematic variable specified')
-
-                name,value = kin[0].split(b'=')
-                value = float(value)
-                _xvalues.append(float(value))
-
-            _xvalues = np.array(_xvalues)
-            if 'range' in item:
-                xmin,xmax = item['range']
-                _xvalues = np.ma.masked_outside(_xvalues, float(xmin), float(xmax))
-
-            data = uncfile.data()
             _ovalues_lower   = []
             _ovalues_central = []
             _ovalues_higher  = []
-            for i in range(len(uncfile.parameters)):
-                lower   = np.percentile(data[:, i], q=15.865)
-                central = np.percentile(data[:, i], q=50.000)
-                higher  = np.percentile(data[:, i], q=84.135)
+            for i in range(len(self.samples[0])):
+                lower   = np.percentile(self.samples[:, i], q=15.865)
+                central = np.percentile(self.samples[:, i], q=50.000)
+                higher  = np.percentile(self.samples[:, i], q=84.135)
                 _ovalues_lower.append(lower)
                 _ovalues_central.append(central)
                 _ovalues_higher.append(higher)
 
+            xvalues = np.linspace(np.min(self.xvalues),np.max(self.xvalues),100)
+            if self.xrange:
+                xvalues = np.ma.masked_outside(xvalues, float(self.xrange[0]), float(self.xrange[1]))
 
-            xvalues = np.linspace(np.min(_xvalues),np.max(_xvalues),100)
             # work around CubicSpline missing in SciPy version < 0.18
             if scipy.__version__ >= '0.18':
                 from scipy.interpolate import CubicSpline
@@ -258,14 +266,14 @@ class Plotter:
                 from scipy.interpolate import spline
                 interpolate = spline
 
-            ovalues_lower   = interpolate(_xvalues, _ovalues_lower,   xvalues)
-            ovalues_central = interpolate(_xvalues, _ovalues_central, xvalues)
-            ovalues_higher  = interpolate(_xvalues, _ovalues_higher,  xvalues)
+            ovalues_lower   = interpolate(self.xvalues, _ovalues_lower,   xvalues)
+            ovalues_central = interpolate(self.xvalues, _ovalues_central, xvalues)
+            ovalues_higher  = interpolate(self.xvalues, _ovalues_higher,  xvalues)
 
-            plt.fill_between(xvalues, ovalues_lower, ovalues_higher, alpha=self.alpha, color=self.color, label=self.label, lw=0)
-            plt.plot(xvalues, ovalues_lower,                         alpha=self.alpha, color=self.color)
-            plt.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color)
-            plt.plot(xvalues, ovalues_higher,                        alpha=self.alpha, color=self.color)
+            self.plotter.ax.fill_between(xvalues, ovalues_lower, ovalues_higher, alpha=self.alpha, color=self.color, label=self.label, lw=0)
+            self.plotter.ax.plot(xvalues, ovalues_lower,                         alpha=self.alpha, color=self.color)
+            self.plotter.ax.plot(xvalues, ovalues_central,                       alpha=self.alpha, color=self.color)
+            self.plotter.ax.plot(xvalues, ovalues_higher,                        alpha=self.alpha, color=self.color)
 
 
     """ Plots one or more uncertainty band integrated over one kinematic variable.
