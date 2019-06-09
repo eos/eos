@@ -6,6 +6,7 @@ CONSTRAINTS_FILES = \
 	B-to-K-ll.yaml \
 	B-to-Kstar-gamma.yaml \
 	B-to-Kstar-ll.yaml \
+	B-to-D-l-nu.yaml \
 	B-to-pi-l-nu.yaml \
 	B-to-Xs-gamma.yaml \
 	B-to-Xs-ll.yaml \
