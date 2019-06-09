@@ -17,7 +17,9 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
+import numpy as np
 import scipy
+import random
 
 class BestFitPoint:
     """
@@ -157,10 +159,26 @@ class Analysis:
         return(-self.log_posterior.evaluate())
 
 
-    def sample(self, N=1000, stride=5, pre_N=150, pre_runs=3, observables=None):
+    def sample(self, N=1000, stride=5, pre_N=150, preruns=3, observables=None):
+        """
+        Return samples of the parameters, log(weights), and optionally posterior-predictive samples for a sequence of observables.
+
+        Obtains random samples of the log(posterior) using an adaptive Markov Chain Monte Carlo with PyPMC.
+        A prerun with adaptations is carried out first and its samples are discared.
+
+        :param N: Number of samples that shall be returned
+        :param stride: Stride, i.e., the number by which the actual amount of samples shall be thinned to return N samples.
+        :param pre_N: Number of samples in each prerun.
+        :param preruns: Number of preruns.
+        :param observables: Observables for which posterior-predictive samples shall be obtained.
+        :type observables: list-like, optional
+
+        :return: A tuple of the parameters as array of size N, the logarithmic weights as array of size N, and optionally the posterior-predictive samples of the observables as array of size N x len(observables).
+
+        .. note::
+           This method requiries the PyPMC python module, which can be installed from PyPI.
+        """
         import pypmc
-        import numpy as np
-        import random
 
         ind_lower = np.array([bound[0] for bound in self.bounds])
         ind_upper = np.array([bound[1] for bound in self.bounds])
@@ -181,7 +199,7 @@ class Analysis:
         sampler = pypmc.sampler.markov_chain.AdaptiveMarkovChain(log_target, log_proposal, start_point, save_target_values=True)
 
         # pre run to adapt markov chains
-        for i in range(0, pre_runs):
+        for i in range(0, preruns):
             sampler.run(pre_N)
             sampler.adapt()
         sampler.clear()
