@@ -132,7 +132,7 @@ class PythonTests:
             raise TestFailedError('cannot obtain Constraint name')
 
         for llhb in con.blocks():
-            print(llhb.as_string())
+            print(llhb)
 
         for obs in con.observables():
             print(obs.name())
