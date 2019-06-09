@@ -192,7 +192,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def(init<>())
         .def("__getitem__", (KinematicVariable (Kinematics::*)(const std::string &) const) &Kinematics::operator[])
         .def("declare", &Kinematics::declare, return_value_policy<return_by_value>())
-        .def("as_string", &Kinematics::as_string)
+        .def("__str__", &Kinematics::as_string)
         ;
 
     // KinematicVariable
@@ -208,7 +208,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("__init__", raw_function(&impl::Options_ctor))
         .def(init<>())
         .def("set", &Options::set)
-        .def("as_string", &Options::as_string)
+        .def("__str__", &Options::as_string)
         ;
 
     // Model
@@ -249,7 +249,7 @@ BOOST_PYTHON_MODULE(_eos)
     // LogLikelihoodBlock
     register_ptr_to_python<std::shared_ptr<LogLikelihoodBlock>>();
     class_<LogLikelihoodBlock, boost::noncopyable>("LogLikelihoodBlock", no_init)
-        .def("as_string", &LogLikelihoodBlock::as_string)
+        .def("__str__", &LogLikelihoodBlock::as_string)
         ;
 
     // LogLikelihood
