@@ -127,6 +127,13 @@
     journal: "Phys.Rev. D88 (2013) 3, 032005"
     eprint: "arXiv:1306.2781 [hep-ex]"
 
+"Belle:2015A" :
+    authors: "Glattauer, R. et al."
+    collaboration: "BELLE"
+    title: "Measurement of the decay B --> D l nu in fully reconstructed events and determination of the Cabibbo-Kobayashi-Maskawa matrix element |Vcb|"
+    journal: "Phys.Rev. D93 (2016) no.3, 032006"
+    eprint: "arXiv:1510.03657 [hep-ex]"
+
 "CDF:2011A" :
     authors: "Aaltonen, T. et al."
     collaboration: "CDF"
