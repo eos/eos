@@ -159,7 +159,7 @@ class Analysis:
         return(-self.log_posterior.evaluate())
 
 
-    def sample(self, N=1000, stride=5, pre_N=150, preruns=3, observables=None):
+    def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None):
         """
         Return samples of the parameters, log(weights), and optionally posterior-predictive samples for a sequence of observables.
 
@@ -170,6 +170,7 @@ class Analysis:
         :param stride: Stride, i.e., the number by which the actual amount of samples shall be thinned to return N samples.
         :param pre_N: Number of samples in each prerun.
         :param preruns: Number of preruns.
+        :param cov_scale: Scale factor for the initial guess of the covariance matrix.
         :param observables: Observables for which posterior-predictive samples shall be obtained.
         :type observables: list-like, optional
 
@@ -178,6 +179,7 @@ class Analysis:
         .. note::
            This method requiries the PyPMC python module, which can be installed from PyPI.
         """
+        import logging
         import pypmc
 
         ind_lower = np.array([bound[0] for bound in self.bounds])
@@ -187,25 +189,32 @@ class Analysis:
         log_target = pypmc.tools.indicator.merge_function_with_indicator(self.log_pdf, ind, -np.inf)
 
         # create initial covariance
-        sigma = np.diag([np.square(bound[1] - bound[0]) / 12 for bound in self.bounds])
+        sigma = np.diag([np.square(bound[1] - bound[0]) / 12 * cov_scale for bound in self.bounds])
         log_proposal = pypmc.density.gauss.LocalGauss(sigma)
 
-        # create start point
-        u = np.array([random.uniform(0.0, 1.0) for j in range(0, len(ind_lower))])
-        ubar = 1.0 - u
-        start_point = ubar * ind_upper + u * ind_lower
+        # create start point, if not provided
+        if start_point is None:
+            u = np.array([random.uniform(0.0, 1.0) for j in range(0, len(ind_lower))])
+            ubar = 1.0 - u
+            start_point = ubar * ind_upper + u * ind_lower
 
         # create MC sampler
         sampler = pypmc.sampler.markov_chain.AdaptiveMarkovChain(log_target, log_proposal, start_point, save_target_values=True)
 
         # pre run to adapt markov chains
         for i in range(0, preruns):
-            sampler.run(pre_N)
+            logging.info('Prerun {} out of {}'.format(i, preruns))
+            accept_count = sampler.run(pre_N)
+            accept_rate  = accept_count / pre_N * 100
+            logging.info('Prerun {}: acceptance rate is {:3.0f}%'.format(i, accept_rate))
             sampler.adapt()
         sampler.clear()
 
         # obtain final samples
-        sampler.run(N * stride)
+        logging.info('Main run: started ...')
+        accept_count = sampler.run(N * stride)
+        accept_rate  = accept_count / (N * stride) * 100
+        logging.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
 
         parameter_samples = sampler.samples[-1][::stride]
         weights = sampler.target_values[-1][::stride, 0]
