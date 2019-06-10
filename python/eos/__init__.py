@@ -55,6 +55,10 @@ from .analysis import Analysis, BestFitPoint
 from .observable import Observables
 from .constraint import Constraints
 
+import logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 __ipython__ = False
 try:
     if __IPYTHON__:
