@@ -209,7 +209,7 @@ Here :code:`N=5000` samples are produced. To illustrate these samples we use EOS
            { 'label': r'$\ell=\tau$','type': 'histogram', 'bins': 30, 'data': { 'samples': observable_samples[:, 1], 'log_weights': log_weights }},
        ]
    }
-   eos.plot.Plotter(plot_args, '/home/dvandyk/Repositories/eos/master/doc/images/use-cases_hist-b-to-d-l-nu.png').plot()
+   eos.plot.Plotter(plot_args).plot()
 
 .. image:: /images/use-cases_prediction_hist-b-to-d-l-nu.png
    :width: 600
