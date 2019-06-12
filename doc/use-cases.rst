@@ -120,7 +120,7 @@ It is accessible through the name ``B->Dlnu::dBR/dq2``. To illustrate it, we use
 
 which yields:
 
-.. image:: /images/use-cases_plot-example.png
+.. image:: /images/use-cases_prediction_plot-example.png
    :width: 600
 
 
@@ -211,7 +211,7 @@ Here :code:`N=5000` samples are produced. To illustrate these samples we use EOS
    }
    eos.plot.Plotter(plot_args, '/home/dvandyk/Repositories/eos/master/doc/images/use-cases_hist-b-to-d-l-nu.png').plot()
 
-.. image:: /images/use-cases_hist-b-to-d-l-nu.png
+.. image:: /images/use-cases_prediction_hist-b-to-d-l-nu.png
    :width: 600
 
 and
@@ -231,7 +231,7 @@ and
    }
    eos.plot.Plotter(plot_args).plot()
 
-.. image:: /images/use-cases_hist-r-d.png
+.. image:: /images/use-cases_prediction_hist-r-d.png
    :width: 600
 
 Numerically, we obtain:
@@ -295,7 +295,7 @@ We can plot these samples with EOS' plotting framework by running:
    }
    eos.plot.Plotter(plot_args).plot()
 
-.. image:: /images/use-cases_plot-uncertainty.png
+.. image:: /images/use-cases_prediction_plot-uncertainty.png
    :width: 600
 
 
