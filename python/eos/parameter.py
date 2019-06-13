@@ -97,26 +97,25 @@ class Parameters(_Parameters):
 
         # the following coefficients are treated as real-valued in EOS
         real_coeffs = [
-            'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c8'
+            'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c8', 'c8\''
         ]
 
         parameters = _Parameters.Defaults()
         for name in wc.dict:
-            prefix, coeff = name.split('::')
-            value = wc.dict[name]
-            real_coeffs = [
-                'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c8'
-            ]
+            qn     = eos.QualifiedName(name)
+            prefix = qn.prefix_part()
+            coeff  = qn.name_part()
+            value  = wc.dict[name]
             if (not value.imag == 0) and (coeff in real_coeffs):
                 raise ValueError('WC {0} does not support non-zero imaginary part'.format(name))
 
             # Add values provided by WCxf to EOS central (SM) values
-            if coeff in real_coeffs:
-                p = parameters[prefix + '::' + coeff]
+            if str(coeff) in real_coeffs:
+                p = parameters[str(prefix) + '::' + str(coeff)]
                 p.set(p.central() + value.real)
             else:
-                pr = parameters[prefix + '::Re{' + coeff + '}']
-                pi = parameters[prefix + '::Im{' + coeff + '}']
+                pr = parameters[str(prefix) + '::Re{' + str(coeff) + '}']
+                pi = parameters[str(prefix) + '::Im{' + str(coeff) + '}']
                 pr.set(pr.central() + value.real)
                 pi.set(pi.central() + value.imag)
 
