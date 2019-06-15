@@ -43,6 +43,7 @@ function ubuntu_deploy() {
     make -j2 all
     make -j2 check VERBOSE=1
     make install
+    make -C /src/doc/ html BUILDDIR=/build/doc  O=-a
     make -C /src/manual/examples examples
     echo Building debian package for ${OS}
     export DESTDIR=/tmp/eos-${EOS_VERSION}
