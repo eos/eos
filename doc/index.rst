@@ -27,3 +27,4 @@ Installation instructions can be found `here <installation.html>`_.
    use-cases
    api/python
    observables
+   parameters
