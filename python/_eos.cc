@@ -27,6 +27,7 @@
 #include "eos/utils/parameters.hh"
 #include "eos/utils/options.hh"
 #include "eos/utils/qualified-name.hh"
+#include "eos/utils/reference-name.hh"
 #include "eos/statistics/goodness-of-fit.hh"
 #include "eos/statistics/log-likelihood.hh"
 #include "eos/statistics/log-posterior.hh"
@@ -265,6 +266,16 @@ BOOST_PYTHON_MODULE(_eos)
     class_<ObservableCache>("ObservableCache", no_init)
         .def("__iter__", range(&ObservableCache::begin, &ObservableCache::end))
         ;
+
+    // ReferenceName
+    class_<ReferenceName>("ReferenceName", init<std::string>())
+        .def("__str__", &ReferenceName::str, return_value_policy<copy_const_reference>())
+        .def("__eq__", &ReferenceName::operator==)
+        .def("__ne__", &ReferenceName::operator!=)
+        .def("__lt__", &ReferenceName::operator<)
+        ;
+    implicitly_convertible<std::string, ReferenceName>();
+
     // }}}
 
     // {{{ eos/statistics
