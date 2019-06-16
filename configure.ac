@@ -327,7 +327,19 @@ if test "x$enable_python" == xyes ; then
 	if test "x$has_boost_python_suffix" == "xno"; then
 		os_id="`. /etc/os-release ; echo $ID`"
 		if test "x$os_id" == xubuntu -o "x$os_id" == xdebian ; then
-			BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
+			codename="`. /etc/os-release ; echo $VERSION_CODENAME`"
+			case $codename in
+				xenial|bionic)
+					BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
+					;;
+				disco)
+					BOOST_PYTHON_SUFFIX="`echo $PYTHON_VERSION | sed -e 's/\.//'`"
+					;;
+				*)
+					AC_MSG_NOTICE([assuming Ubuntu Disco or more recent, BOOST_PYTHON_SUFFIX might be wrong!])
+					BOOST_PYTHON_SUFFIX="`echo $PYTHON_VERSION | sed -e 's/\.//'`"
+					;;
+			esac
 		elif test "x$os_id" == xcentos ; then
 			BOOST_PYTHON_SUFFIX=""
 		fi
