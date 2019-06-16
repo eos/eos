@@ -410,6 +410,7 @@ AC_SUBST([AM_CXXFLAGS], '-I$(top_srcdir) -std=c++14 -Wall -Wextra -pedantic')
 AC_OUTPUT(
 	Makefile
 	debian/control-bionic
+	debian/control-disco
 	debian/control-xenial
 	debian/Makefile
 	eos/Makefile
