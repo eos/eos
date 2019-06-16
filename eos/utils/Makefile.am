@@ -53,6 +53,7 @@ libeosutils_la_SOURCES = \
 	qcd.cc qcd.hh \
 	qualified-name.cc qualified-name.hh \
 	random_number_generator.cc random_number_generator.hh \
+	reference-name.cc reference-name.hh \
 	save.hh \
 	standard-model.cc standard-model.hh \
 	stringify.hh \
@@ -129,6 +130,7 @@ include_eos_utils_HEADERS = \
 	qcd.hh \
 	qualified-name.hh \
 	random_number_generator.cc random_number_generator.hh \
+	reference-name.hh \
 	save.hh \
 	standard-model.hh \
 	stringify.hh \
@@ -172,6 +174,7 @@ TESTS = \
 	qcd_TEST \
 	qualified-name_TEST \
 	random_number_generator_TEST \
+	reference-name_TEST \
 	save_TEST \
 	standard_model_TEST \
 	top-loops_TEST \
@@ -243,6 +246,8 @@ qcd_TEST_SOURCES = qcd_TEST.cc
 qualified_name_TEST_SOURCES = qualified-name_TEST.cc
 
 random_number_generator_TEST_SOURCES = random_number_generator_TEST.cc
+
+reference_name_TEST_SOURCES = reference-name_TEST.cc
 
 save_TEST_SOURCES = save_TEST.cc
 
