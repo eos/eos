@@ -39,6 +39,10 @@ matrix:
       env:
         - DOCKER_TARGET=bionic DOCKER_CXX=g++          DOCKER_USE=distcheck
 
+    - <<: *linux-template
+      env:
+        - DOCKER_TARGET=disco  DOCKER_CXX=g++          DOCKER_USE=deploy
+
     - os: osx
       osx_image: xcode9.3
       language: cpp

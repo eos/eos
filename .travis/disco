@@ -1,0 +1,3 @@
+FROM eoshep/build-essentials:disco
+RUN mkdir -p /src /build
+ADD . /src
