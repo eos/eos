@@ -131,7 +131,7 @@ echo "==========="
 [[ -n ${PACKAGECLOUD_TOKEN} ]] || echo 'Skipping packagecloud.io deployment since $PACKAGECLOUD_TOKEN is empty'
 echo "==========="
 
-if [[ "xenial" == ${OS} ]] || [[ "bionic" == ${OS} ]]; then
+if [[ "xenial" == ${OS} ]] || [[ "bionic" == ${OS} ]] || [[ "disco" == ${OS} ]]; then
     case ${USE} in
         "distcheck")
             ubuntu_distcheck $@
