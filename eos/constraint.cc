@@ -1323,6 +1323,163 @@ namespace eos
     };
     /// }}}
 
+    /// {{{ UniformBoundConstraintEntry
+    struct UniformBoundConstraintEntry :
+        public ConstraintEntryBase
+    {
+        QualifiedName observable;
+
+        Kinematics kinematics;
+
+        Options options;
+
+        UniformBoundConstraintEntry(const std::string & name,
+                const QualifiedName & observable,
+                const Kinematics & kinematics, const Options & options) :
+            ConstraintEntryBase(name, observable),
+            observable(observable),
+            kinematics(kinematics),
+            options(options)
+        {
+        }
+
+        virtual ~UniformBoundConstraintEntry() = default;
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("UniformBound");
+
+            return type;
+        }
+
+        virtual Constraint make(const QualifiedName & name, const Options & options) const
+        {
+            Parameters parameters(Parameters::Defaults());
+            ObservableCache cache(parameters);
+
+            ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
+            if (! observable.get())
+                throw InternalError("make_uniform_bound_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
+
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::UniformBound(cache, observable);
+
+            return Constraint(name, { observable }, { block });
+        }
+
+        virtual std::ostream & insert(std::ostream & os) const
+        {
+            os << _name.full() << ":" << std::endl;
+            os << "    type: UniformBound" << std::endl;
+            os << "    observable: " << observable << std::endl;
+
+            return os;
+        }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "UniformBound";
+            out << YAML::Key << "observable" << YAML::Value << observable.full();
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Key << k.name() << YAML::Value << k.evaluate();
+            }
+            out << YAML::EndMap;
+            out << YAML::Key << "options" << YAML::Value << YAML::Flow << YAML::BeginMap;
+            for (const auto & o : options)
+            {
+                out << YAML::Key << o.first << YAML::Value << o.second;
+            }
+            out << YAML::EndMap;
+            out << YAML::EndMap;
+        }
+
+        static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
+        {
+            static const std::string required_keys[] =
+            {
+                "observable", "kinematics", "options"
+            };
+
+            for (auto && k : required_keys)
+            {
+                if (! n[k].IsDefined())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
+                }
+            }
+
+            static const std::string scalar_keys[] =
+            {
+                "observable"
+            };
+
+            for (auto && k : scalar_keys)
+            {
+                if (YAML::NodeType::Scalar != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
+                }
+            }
+
+            static const std::string map_keys[] =
+            {
+                "kinematics", "options"
+            };
+
+            for (auto && k : map_keys)
+            {
+                if (YAML::NodeType::Map != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a map");
+                }
+            }
+
+            try
+            {
+                QualifiedName observable(n["observable"].as<std::string>());
+
+                Kinematics kinematics;
+                std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(n["kinematics"].begin(), n["kinematics"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                kinematics_nodes.sort(&impl::less);
+                std::set<std::string> kinematics_keys;
+                for (auto && k : kinematics_nodes)
+                {
+                    std::string key = k.first.as<std::string>();
+                    if (! kinematics_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
+
+                    kinematics.declare(key, k.second.as<double>());
+                }
+
+                Options options;
+                std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(n["options"].begin(), n["options"].end());
+                // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                // by sorting the entries lexicographically.
+                options_nodes.sort(&impl::less);
+                std::set<std::string> options_keys;
+                for (auto && o : options_nodes)
+                {
+                    std::string key = o.first.as<std::string>();
+                    if (! options_keys.insert(key).second)
+                        throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+
+                    options.set(key, o.second.as<std::string>());
+                }
+
+                return new UniformBoundConstraintEntry(name.str(), observable, kinematics, options);
+            }
+            catch (QualifiedNameSyntaxError & e)
+            {
+                throw ConstraintDeserializationError(name, "'" + n["observable"].as<std::string>() + "' is not a valid observable name (" + e.what() + ")");
+            }
+        }
+    };
+    /// }}}
+
     ConstraintEntry::~ConstraintEntry() = default;
 
     ConstraintEntry *
@@ -1345,7 +1502,8 @@ namespace eos
             { "Gaussian",                         &GaussianConstraintEntry::deserialize                       },
             { "LogGamma",                         &LogGammaConstraintEntry::deserialize                       },
             { "MultivariateGaussian",             &MultivariateGaussianConstraintEntry::deserialize           },
-            { "MultivariateGaussian(Covariance)", &MultivariateGaussianCovarianceConstraintEntry::deserialize }
+            { "MultivariateGaussian(Covariance)", &MultivariateGaussianCovarianceConstraintEntry::deserialize },
+            { "UniformBound",                     &UniformBoundConstraintEntry::deserialize                   },
         };
 
         std::string type = n["type"].as<std::string>();

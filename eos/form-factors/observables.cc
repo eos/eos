@@ -26,6 +26,7 @@
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/observables.hh>
+#include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/utils/concrete_observable.hh>
 
@@ -987,6 +988,34 @@ namespace eos
 
     // }}}
 
+    // unitarity bounds
+    // {{{
+
+    ObservableGroup
+    make_unitarity_bounds_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Unitarity Bounds)",
+            R"(Pseudo observables representing the various unitarity bounds for $b\to c$ semileptonic form factors.)",
+            {
+                make_observable("b->c::Bound[0^+]@CLN", R"(B^{b\toc}_{0^+})",
+                        &HQETUnitarityBounds::bound_0p),
+
+                make_observable("b->c::Bound[0^-]@CLN", R"(B^{b\toc}_{0^-})",
+                        &HQETUnitarityBounds::bound_0m),
+
+                make_observable("b->c::Bound[1^+]@CLN", R"(B^{b\toc}_{1^+})",
+                        &HQETUnitarityBounds::bound_1p),
+
+                make_observable("b->c::Bound[1^-]@CLN", R"(B^{b\toc}_{1^-})",
+                        &HQETUnitarityBounds::bound_1m),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     ObservableSection
     make_form_factors_section()
     {
@@ -1013,6 +1042,9 @@ namespace eos
                 // Lb -> 1/2^+
                 make_lambdab_to_lambda_form_factors_group(),
                 make_lambdab_to_lambdac_form_factors_group(),
+
+                // unitarity bounds
+                make_unitarity_bounds_group(),
             }
         );
 
