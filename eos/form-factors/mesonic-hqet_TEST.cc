@@ -66,8 +66,9 @@ class BToDHQETFormFactorsTest :
                 p["mass::D_u"]                   =  1.86723; // mixture of D0 and D+ masses
 
                 auto oo = Options{
-                    { "z-order-lp",  "3" },
-                    { "z-order-slp", "1" }
+                    { "z-order-lp",   "3" },
+                    { "z-order-slp",  "1" },
+                    { "z-order-sslp", "1" }
                 };
                 HQETFormFactors<BToD, PToP> ff(p, oo);
 
@@ -226,8 +227,9 @@ class BToDHQETFormFactorsTest :
                 p["mass::D_u"]                   =  1.86723; // mixture of D0 and D+ masses
 
                 auto oo = Options{
-                    { "z-order-lp",  "4" },
-                    { "z-order-slp", "2" }
+                    { "z-order-lp",   "4" },
+                    { "z-order-slp",  "2" },
+                    { "z-order-sslp", "1" }
                 };
                 HQETFormFactors<BToD, PToP> ff(p, oo);
 
@@ -386,8 +388,9 @@ class BToDHQETFormFactorsTest :
                 p["mass::D_u"]                   =  1.86723; // mixture of D0 and D+ masses
 
                 auto oo = Options{
-                    { "z-order-lp",  "4" },
-                    { "z-order-slp", "2" }
+                    { "z-order-lp",   "4" },
+                    { "z-order-slp",  "2" },
+                    { "z-order-sslp", "1" }
                 };
                 HQETFormFactors<BToD, PToP> ff(p, oo);
 
@@ -546,8 +549,9 @@ class BToDHQETFormFactorsTest :
                 p["mass::D_u"]                   =  1.86723; // mixture of D0 and D+ masses
 
                 auto oo = Options{
-                    { "z-order-lp",  "4" },
-                    { "z-order-slp", "2" }
+                    { "z-order-lp",   "4" },
+                    { "z-order-slp",  "2" },
+                    { "z-order-sslp", "1" }
                 };
                 HQETFormFactors<BToD, PToP> ff(p, oo);
 
@@ -719,8 +723,9 @@ class BToDstarHQETFormFactorsTest :
                 p["B(*)->D(*)::a@HQET"]          =  1.0;
 
                 auto oo = Options{
-                    { "z-order-lp",  "3" },
-                    { "z-order-slp", "1" }
+                    { "z-order-lp",   "3" },
+                    { "z-order-slp",  "1" },
+                    { "z-order-sslp", "1" },
                 };
                 HQETFormFactors<BToDstar, PToV> ff(p, oo);
 
@@ -877,8 +882,9 @@ class BToDstarHQETFormFactorsTest :
                 p["B(*)->D(*)::a@HQET"]          =  1.0;
 
                 auto oo = Options{
-                    { "z-order-lp",  "4" },
-                    { "z-order-slp", "2" }
+                    { "z-order-lp",   "4" },
+                    { "z-order-slp",  "2" },
+                    { "z-order-sslp", "1" }
                 };
                 HQETFormFactors<BToDstar, PToV> ff(p, oo);
 
@@ -1035,8 +1041,9 @@ class BToDstarHQETFormFactorsTest :
                 p["B(*)->D(*)::a@HQET"]          =  1.25;
 
                 auto oo = Options{
-                    { "z-order-lp",  "4" },
-                    { "z-order-slp", "2" }
+                    { "z-order-lp",   "4" },
+                    { "z-order-slp",  "2" },
+                    { "z-order-sslp", "1" }
                 };
                 HQETFormFactors<BToDstar, PToV> ff(p, oo);
 
