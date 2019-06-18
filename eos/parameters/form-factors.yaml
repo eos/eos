@@ -2357,11 +2357,19 @@ groups:
           central: 0
           min: 0
           max: 0
+      "B(*)->D(*)::l_1''(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
       "B(*)->D(*)::l_2(1)@HQET" :
           central: -2.299
           min: -2.693
           max: -1.905
       "B(*)->D(*)::l_2'(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::l_2''(1)@HQET" :
           central: 0
           min: 0
           max: 0
@@ -2373,11 +2381,19 @@ groups:
           central: 0
           min: 0
           max: 0
+      "B(*)->D(*)::l_3''(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
       "B(*)->D(*)::l_4(1)@HQET" :
           central: +0.0
           min: +0.0
           max: +0.0
       "B(*)->D(*)::l_4'(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::l_4''(1)@HQET" :
           central: 0
           min: 0
           max: 0
@@ -2389,11 +2405,19 @@ groups:
           central: 0
           min: 0
           max: 0
+      "B(*)->D(*)::l_5''(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
       "B(*)->D(*)::l_6(1)@HQET" :
           central: +0.0
           min: +0.0
           max: +0.0
       "B(*)->D(*)::l_6'(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::l_6''(1)@HQET" :
           central: 0
           min: 0
           max: 0
@@ -2555,4 +2579,3 @@ groups:
           max:     +1.57079632679490
           comments: ''
   # }}}
-

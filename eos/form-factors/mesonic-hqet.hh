@@ -64,6 +64,10 @@ namespace eos
             SwitchOption _opt_slp_zorder;
             double _enable_slp_z2;
 
+            // option to determine if we use z^2 terms in the subsubleading-power IW function
+            SwitchOption _opt_sslp_zorder;
+            double _enable_sslp_z2;
+
             // parameters for the leading Isgur-Wise function xi
             UsedParameter _xipone, _xippone, _xipppone, _xippppone, _xipppppone;
 
@@ -77,16 +81,16 @@ namespace eos
             UsedParameter _etaone, _etapone, _etappone;
 
             // parameters for subsubleading 1/m_c corrections in h_+ (B->D), equal to delta_{h_+}
-            UsedParameter _l1one, _l1pone;
+            UsedParameter _l1one, _l1pone, _l1ppone;
 
             // parameters for subsubleading 1/m_c corrections in h_A1 (B->D^*), equal to delta_{A_1}
-            UsedParameter _l2one, _l2pone;
+            UsedParameter _l2one, _l2pone, _l2ppone;
 
             // parameters for subsubleading 1/m_c corrections
-            UsedParameter _l3one, _l3pone;
-            UsedParameter _l4one, _l4pone;
-            UsedParameter _l5one, _l5pone;
-            UsedParameter _l6one, _l6pone;
+            UsedParameter _l3one, _l3pone, _l3ppone;
+            UsedParameter _l4one, _l4pone, _l4ppone;
+            UsedParameter _l5one, _l5pone, _l5ppone;
+            UsedParameter _l6one, _l6pone, _l6ppone;
 
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o) :
@@ -99,6 +103,8 @@ namespace eos
                 _enable_lp_z5(1.0 ? _opt_lp_zorder.value() >= "5" : 0.0),
                 _opt_slp_zorder(o, "z-order-slp", { "1", "2" }, "2"),
                 _enable_slp_z2(1.0 ? _opt_slp_zorder.value() >= "2" : 0.0),
+                _opt_sslp_zorder(o, "z-order-sslp", { "1", "2" }, "1"),
+                _enable_sslp_z2(1.0 ? _opt_sslp_zorder.value() >= "2" : 0.0),
                 _xipone(p["B(*)->D(*)::xi'(1)@HQET"], *this),
                 _xippone(p["B(*)->D(*)::xi''(1)@HQET"], *this),
                 _xipppone(p["B(*)->D(*)::xi'''(1)@HQET"], *this),
@@ -114,16 +120,22 @@ namespace eos
                 _etappone(p["B(*)->D(*)::eta''(1)@HQET"], *this),
                 _l1one(p["B(*)->D(*)::l_1(1)@HQET"], *this),
                 _l1pone(p["B(*)->D(*)::l_1'(1)@HQET"], *this),
+                _l1ppone(p["B(*)->D(*)::l_1''(1)@HQET"], *this),
                 _l2one(p["B(*)->D(*)::l_2(1)@HQET"], *this),
                 _l2pone(p["B(*)->D(*)::l_2'(1)@HQET"], *this),
+                _l2ppone(p["B(*)->D(*)::l_2''(1)@HQET"], *this),
                 _l3one(p["B(*)->D(*)::l_3(1)@HQET"], *this),
                 _l3pone(p["B(*)->D(*)::l_3'(1)@HQET"], *this),
+                _l3ppone(p["B(*)->D(*)::l_3''(1)@HQET"], *this),
                 _l4one(p["B(*)->D(*)::l_4(1)@HQET"], *this),
                 _l4pone(p["B(*)->D(*)::l_4'(1)@HQET"], *this),
+                _l4ppone(p["B(*)->D(*)::l_4''(1)@HQET"], *this),
                 _l5one(p["B(*)->D(*)::l_5(1)@HQET"], *this),
                 _l5pone(p["B(*)->D(*)::l_5'(1)@HQET"], *this),
+                _l5ppone(p["B(*)->D(*)::l_5''(1)@HQET"], *this),
                 _l6one(p["B(*)->D(*)::l_6(1)@HQET"], *this),
-                _l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], *this)
+                _l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], *this),
+                _l6ppone(p["B(*)->D(*)::l_6''(1)@HQET"], *this)
             {
                 using std::placeholders::_1;
 
@@ -363,75 +375,99 @@ namespace eos
             /* Power corrections */
             inline double _l1(const double & w) const
             {
-                const double a = _a();
+                const double a = _a(), a2 = a * a;
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
                 const double  z   = (_zw(w) - z_0);
+                const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
+                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
 
-                return _l1one + _l1pone * wm11;
+                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+
+                return _l1one + _l1pone * wm11 + _l1ppone / 2.0 * wm12;
             }
             inline double _l2(const double & w) const
             {
-                const double a = _a();
+                const double a = _a(), a2 = a * a;
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
                 const double  z   = (_zw(w) - z_0);
+                const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
+                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
 
-                return _l2one + _l2pone * wm11;
+                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+
+                return _l2one + _l2pone * wm11 + _l2ppone / 2.0 * wm12;
             }
             inline double _l3(const double & w) const
             {
-                const double a = _a();
+                const double a = _a(), a2 = a * a;
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
                 const double  z   = (_zw(w) - z_0);
+                const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
+                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
 
-                return _l3one + _l3pone * wm11;
+                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+
+                return _l3one + _l3pone * wm11 + _l3ppone / 2.0 * wm12;
             }
             inline double _l4(const double & w) const
             {
-                const double a = _a();
+                const double a = _a(), a2 = a * a;
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
                 const double  z   = (_zw(w) - z_0);
+                const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
+                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
 
-                return _l4one + _l4pone * wm11;
+                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+
+                return _l4one + _l4pone * wm11 + _l4ppone / 2.0 * wm12;
             }
             inline double _l5(const double & w) const
             {
-                const double a = _a();
+                const double a = _a(), a2 = a * a;
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
                 const double  z   = (_zw(w) - z_0);
+                const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
+                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
 
-                return _l5one + _l5pone * wm11;
+                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+
+                return _l5one + _l5pone * wm11 + _l5ppone / 2.0 * wm12;
             }
             inline double _l6(const double & w) const
             {
-                const double a = _a();
+                const double a = _a(), a2 = a * a;
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
                 const double  z   = (_zw(w) - z_0);
+                const double z2   =  z * z * _enable_sslp_z2;
 
-                const double wm11 =  2.0 * pow(1.0 + a, 2) / a * z;
+                const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
+                                  + (3.0 +       a) * pow(1.0 + a, 3) / (2.0 * a2) * z2;
 
-                return _l6one + _l6pone * wm11;
+                const double wm12 =   4.0           * pow(1.0 + a, 4) / a2         * z2;
+
+                return _l6one + _l6pone * wm11 + _l6ppone / 2.0 * wm12;
             }
 
             /* Wilson Coefficients */
