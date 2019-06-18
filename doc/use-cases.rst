@@ -234,7 +234,8 @@ and
 .. image:: /images/use-cases_prediction_hist-r-d.png
    :width: 600
 
-Numerically, we obtain:
+Using the Numpy routines :code:`numpy.average` and :code:`numpy.var` we can produce numerical estimates
+of the weighted mean and its standard deviation:
 
 .. code-block::
 
@@ -255,7 +256,17 @@ Numerically, we obtain:
        std=np.sqrt(np.var(observable_samples[:, 1]))
    ))
 
-To obtain uncertainty bands for a plot of the differential branching ratios, we can now run:
+From the above we obtain:
+
+.. code-block::
+
+   B->Dlnu::BR;form-factors=BSZ2015,l=mu  = 0.0231 +/- 0.0007
+   B->Dlnu::BR;form-factors=BSZ2015,l=tau = 0.0070 +/- 0.0001
+   B->Dlnu::R_D;form-factors=BSZ2015      = 0.3020 +/- 0.0001
+
+To obtain uncertainty bands for a plot of the differential branching ratios, we can now produce a
+sequence of observables at different points in phase space. We then pass these observables on to
+:method:`analysis.sample <eos.Analysis.sample>`, to obtain posterior-predictive samples:
 
 .. code-block:
 
@@ -272,7 +283,7 @@ To obtain uncertainty bands for a plot of the differential branching ratios, we 
    _, log_weights, mu_samples  = analysis.sample(N=5000, pre_N=1000, observables=mu_obs)
    _, log_weights, tau_samples = analysis.sample(N=5000, pre_N=1000, observables=tau_obs)
 
-We can plot these samples with EOS' plotting framework by running:
+We can plot the so-obtained posterior-predictive samples with EOS' plotting framework by running:
 
 .. code-block::
 
@@ -607,6 +618,9 @@ The result looks like this:
 .. image:: /images/use-cases_inference_plot-a-posteriori.png
    :width: 600
 
+
+.. image:: /images/use-cases_inference_hist-Vcb-f_+-zero.png
+   :width: 600
 
 **************************
 Production of Peudo Events
