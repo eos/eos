@@ -13,6 +13,7 @@ CONSTRAINTS_FILES = \
 	B-to-P-form-factors.yaml \
 	B-to-P-P-form-factors.yaml \
 	B-to-V-form-factors.yaml \
+	hqet.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
 	miscellaneous.yaml

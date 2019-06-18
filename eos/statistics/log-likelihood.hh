@@ -291,6 +291,16 @@ namespace eos
 
                 return LogLikelihoodBlock::MultivariateGaussian(cache, _observables, _mean, covariance, number_of_observations);
             }
+
+            /*!
+             * Create a new LogLikelihoodBlock for a unform bound on the parameter space expressed through a single observable.
+             *
+             * @note The value of the LogLikelihood is returned by the observables, and should only take the
+             * values 0 (for a valid parameter point), and -inf (for an invalid point).
+             *
+             * @param observable The pseudo observable implementing the bound.
+             */
+            static LogLikelihoodBlockPtr UniformBound(ObservableCache cache, const ObservablePtr & observable);
     };
 
     /*!
