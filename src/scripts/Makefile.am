@@ -13,6 +13,7 @@ bin_SCRIPTS = \
 	eos-plot \
 	eos-plot-1d \
 	eos-plot-2d \
+	eos-print-modes \
 	eos-print-uncertainty
 
 endif
@@ -24,6 +25,7 @@ EXTRA_DIST = \
 	eos-plot \
 	eos-plot-1d \
 	eos-plot-2d \
+	eos-print-modes \
 	eos-print-uncertainty
 
 eos-list-references: eos-list-references.in Makefile

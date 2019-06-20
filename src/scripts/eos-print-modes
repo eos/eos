@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+
+# Copyright (c) 2019 Danny van Dyk
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+import argparse
+import eos
+from eos.data import *
+from logging import error, info, warn
+import os
+import scipy, scipy.stats
+import sys
+
+def main():
+    parser = argparse.ArgumentParser(description='Print modes of Markov Chain data files')
+    parser.add_argument('input', metavar='HDF5FILE', type=str, help='Name of the HDF5 input file')
+
+    args = parser.parse_args()
+
+    # ensure that the input file exists
+    if not os.path.isfile(args.input):
+        error('\'%s\' is not a file' % args.input)
+
+    # open HDF5 data file
+    basename = os.path.basename(args.input)
+    if basename.startswith('mcmc_'):
+        datafile = MCMCDataFile(args.input)
+
+    for i, (mode, log_posterior) in enumerate(datafile.modes()):
+        print('# Mode of chain {i} with log(posterior)={log_posterior}'.format(i=i, log_posterior=log_posterior))
+        print('export GOF_MODE_{i}={{ {mode} }}'.format(i=i, mode=' '.join([str(p) for p in mode])))
+        if datafile.modes()[i][-1] > datafile.modes()[i-1][-1]:
+            global_mode = i
+    print('Global mode found in Chain {global_mode}'.format(global_mode=global_mode))
+
+    exit(0);
+
+if __name__ == '__main__':
+    main()
