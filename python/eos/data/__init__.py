@@ -124,6 +124,30 @@ class MCMCDataFile(DataFile):
 
         return data
 
+    """Retrieve the modes of the chains"""
+    def modes(self):
+        groupname = 'main run'
+
+        if 'main run' not in self.file:
+            warn('input file does not contain results from a main run')
+            groupname = 'prerun'
+
+        group = self.file[groupname]
+
+        # start with no data
+        result = []
+
+        # append each dataset to data
+        for chainname in group:
+            chain = group[chainname]
+            dset = chain['stats/mode']
+
+            log_posterior = dset[-1][-1]
+            mode          = dset[-1][0:-1]
+
+            result.append((mode, log_posterior))
+
+        return result
 
 class UncertaintyDataFile(DataFile):
     def __init__(self, file):
