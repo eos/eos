@@ -45,7 +45,7 @@ def main():
     args = parser.parse_args()
 
     with open('@PKGDATADIR@/references.yaml') as data_file:
-        refs = yaml.load(data_file)
+        refs = yaml.load(data_file, Loader=yaml.SafeLoader)
 
     if args.refs:
         keys = [key for key in args.refs]
