@@ -841,8 +841,8 @@ namespace eos
     make_b_to_pi_pi_form_factors_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Form factors for $B_s\to \bar{K}^*$ transitions)",
-            R"(Pseudo observables representing the full basis of $B_s\to \bar{K}^*$ form factors. )"
+            R"(Form factors for $B \to \pi \pi$ transitions)",
+            R"(Pseudo observables representing the $B \to \pi \pi$ form factors. )"
             R"(The specific parametrization can be chosen via the "form-factors" option.)",
             {
                 make_form_factor_adapter("B->pipi::Im{F_perp}(q2,k2,z)", R"(\text{Im}\,F_\perp^{B\to \pi\pi}(q^2,k^2,z))",
