@@ -174,12 +174,14 @@ class Plotter:
 
             # create kinematics
             kinematics = eos.Kinematics()
-            if not 'kinematic' in item and not 'parameter' in item:
-                raise KeyError('neither kinematic nor parameter found; do not know how to map x to a variable')
-            if 'kinematic' in item and 'parameter' in item:
-                raise KeyError('both kinematic and parameter found; do not know how to map x to a variable')
+            if not ('kinematic' in item or 'variable' in item) and not 'parameter' in item:
+                raise KeyError('neither kinematic variable nor parameter found; do not know how to map x to a variable')
+            if ('kinematic' in item or 'variable' in item) and 'parameter' in item:
+                raise KeyError('both kinematic variable and parameter found; do not know how to map x to a variable')
             if 'kinematic' in item:
                 var = kinematics.declare(item['kinematic'], np.nan)
+            elif 'variable' in item:
+                var = kinematics.declare(item['variable'], np.nan)
             else:
                 var = parameters.declare(item['parameter'], np.nan)
 
