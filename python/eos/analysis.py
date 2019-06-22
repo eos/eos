@@ -77,7 +77,7 @@ class Analysis:
             parameter = prior['parameter']
             minv = prior['min']
             maxv = prior['max']
-            prior_type = prior['type']
+            prior_type = prior['type'] if 'type' in prior else 'uniform'
             if 'uniform' == prior_type or 'flat' == prior_type:
                 self.log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, eos.ParameterRange(minv, maxv)), False)
             elif 'gauss' == prior_type or 'gaussian' == prior_type:
