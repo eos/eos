@@ -55,7 +55,7 @@ def main():
     global references
     with open('../../eos/references.yaml') as ref_file:
         try:
-            references = yaml.load(ref_file)
+            references = yaml.load(ref_file, Loader=yaml.SafeLoader)
         except yaml.YAMLERROR as e:
             print(e)
             exit(-1)
@@ -64,7 +64,7 @@ def main():
 
     with open(infilename) as data_file:
         try:
-            parameters = yaml.load(data_file)
+            parameters = yaml.load(data_file, Loader=yaml.SafeLoader)
         except yaml.YAMLERROR as e:
             print(e)
             exit(-1)

@@ -387,7 +387,7 @@ class Plotter:
                 if not entry:
                     raise ValueError('unknown constraint {}'.format(name))
 
-                constraint = yaml.load(entry.serialize())
+                constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
 
                 xvalues = None
                 xerrors = None
