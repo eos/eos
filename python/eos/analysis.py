@@ -54,7 +54,7 @@ class Analysis:
     :type global_options: dict, optional
     :param priors: The priors for this analysis as a list of prior descriptions. See :ref priors: for what consitutes a valid prior description.
     :type priors: iterable
-    :param likelihood: The likelihood as a list of individual constraints from the internal data base of experimental and theoretical constraints. See :ref constraints: for a complete list of constraints.
+    :param likelihood: The likelihood as a list of individual constraints from the internal data base of experimental and theoretical constraints; cf. `the complete list of constraints <../constraints.html>`_.
     :type likelihood: iterable
     """
 
