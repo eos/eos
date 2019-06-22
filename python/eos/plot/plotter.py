@@ -654,7 +654,7 @@ class Plotter:
             self.yrange = plotter.xrange    if plotter.yrange      else (np.amin(self.samples[:, 1]), np.amax(self.samples[:, 1]))
 
         def plot(self):
-            kde = gaussian_kde(self.samples)
+            kde = gaussian_kde(self.samples, weights=self.weights)
             kde.set_bandwidth(bw_method='silverman')
             if self.bw:
                 kde.set_bandwidth(bw_method=kde.factor * self.bw)
