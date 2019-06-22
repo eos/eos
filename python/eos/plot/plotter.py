@@ -620,7 +620,7 @@ class Plotter:
             self.samples = None
             self.weights = None
             if 'data' in item:
-                self.samples = item['data']['samples']
+                self.samples = item['data']['samples'].T
                 self.weights = np.exp(item['data']['log_weights']) if 'log_weights' in item['data'] else None
             else:
                 h5fname = item['hdf5-file']
