@@ -23,21 +23,19 @@ import scipy
 from scipy.stats import gaussian_kde
 import sys
 
-""" Plotter it used to produce publication quality plots with EOS.
-
-Plotter uses matplotlib to produce EOS plots within PDF files. It is the backend
-for the eos-plot-* scripts.
-"""
 class Plotter:
-    def __init__(self, instructions, output=None):
-        """
-        Parameters
-        ----------
+    """ Produces publication-quality plots
 
-        instructions : Dictionary containing the instructions on what to plot in which manner.
-        output       : Name of the output PDF file.
-        """
-        self.instructions = instructions
+    Plots can contain EOS observables, EOS constraints, and :class:`Analysis <eos.Analysis>` results.
+    See `Plot description format`_ for documentation of how to create a plot.
+
+    :param description: Description of the plot and its contents, see `Plot description format`_.
+    :type description: dict
+    :param output: Name of the output file. The file format is automatically determined based on the file's extension.
+    :type output: string, optional
+    """
+    def __init__(self, description, output=None):
+        self.instructions = description
         self.output = output
         self.fig = None
         self.ax = None
