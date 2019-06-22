@@ -298,13 +298,45 @@ We can plot these samples with EOS' plotting framework by running:
 .. image:: /images/use-cases_plot-uncertainty.png
    :width: 600
 
+
 *******************
 Parameter Inference
 *******************
 
-.. todo::
+EOS can infer parameters based on a database of experimental or theoetical constraints and its built-in observables.
+The examples following in this section illustrate how to find a specific constraint from the list of all built-in observables,
+construct an :class:`Analysis <eos.Analysis>` object that represents the statistical analysis,
+and infer mean value and standard deviation of a list of parameters.
 
-  Write section on parameter inference
+.. note::
+
+   The following examples are also available as an interactive `Jupyter <https://jupyter.org/>`_ notebook `from here <https://github.com/eos/eos/blob/master/examples/inference.ipynb>`_.
+
+
+Listing the built-in Constraints
+================================
+
+The full list of built-in constraints for the most-recent EOS release is available online `here <https://eos.github.io/doc/constraints>`_.
+For an interactive apporach to see the list of constraints available to you, run the following in a Jupyter notebook:
+
+.. code-block::
+
+   import eos
+   display(eos.Constraints())
+
+Searching for a specific observable is possible filtering by the constraint name's `prefix`, `name`, or `suffix`, e.g.:
+
+.. code-block::
+
+   display(eos.Constraints(prefix='B^0->D^+'))
+
+
+Visualizing the built-in Constraints
+====================================
+
+For what follows we will use the two experimental constraints ``B^0->D^+e^-nu::BRs@Belle-2015A`` and ``B^0->D^+mu^-nu::BRs@Belle-2015A``,
+to infer the CKM matrix element :math:`|V_{cb}|`. We can readily display these two constraints, along with the default theory prediction,
+using the following code:
 
 .. code-block::
 
@@ -345,20 +377,34 @@ Parameter Inference
    }
    eos.plot.Plotter(plot_args).plot()
 
+The resulting plot looks like this:
+
 .. image:: /images/use-cases_inference_plot-a-priori.png
    :width: 600
+
+
+Defining the statistical Analysis
+=================================
+
+To define our statistical analysis for the inference of :math:`|V_{cb}|` from :math:`\bar{B}\to D\ell^-\bar\nu` branching ratios,
+some decisions are needed.
+First, we must decide how to parametrize the hadronic form factors that emerge in semileptonic :math:`\bar{B}\to D` transitions.
+For what follows we will use the [BSZ2015]_ parametrization.
+Next, we must decide the theory input for the form factors. For what follows we will combine the correlated lattice QCD results published by the Fermilab/MILC and HPQCD collaborations in 2015.
+
+We then create an :class:`Analysis <eos.Analysis>` object as follows:
 
 .. code-block::
 
    analysis_args = {
        'global_options': { 'form-factors': 'BSZ2015', 'model': 'CKMScan' },
        'priors': [
-           { 'parameter': 'CKM::abs(V_cb)',           'min':  38e-3, 'max':  45e-3,  'type': 'uniform' },
-           { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0,   'max':  1.0,    'type': 'uniform' },
-           { 'parameter': 'B->D::alpha^f+_1@BSZ2015', 'min': -4.0,   'max': -1.0,    'type': 'uniform' },
-           { 'parameter': 'B->D::alpha^f+_2@BSZ2015', 'min': +4.0,   'max': +6.0,    'type': 'uniform' },
-           { 'parameter': 'B->D::alpha^f0_1@BSZ2015', 'min': -1.0,   'max': +2.0,    'type': 'uniform' },
-           { 'parameter': 'B->D::alpha^f0_2@BSZ2015', 'min': -2.0,   'max':  0.0,    'type': 'uniform' }
+           { 'parameter': 'CKM::abs(V_cb)',           'min':  38e-3, 'max':  45e-3, },
+           { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0,   'max':  1.0,   },
+           { 'parameter': 'B->D::alpha^f+_1@BSZ2015', 'min': -4.0,   'max': -1.0,   },
+           { 'parameter': 'B->D::alpha^f+_2@BSZ2015', 'min': +4.0,   'max': +6.0,   },
+           { 'parameter': 'B->D::alpha^f0_1@BSZ2015', 'min': -1.0,   'max': +2.0,   },
+           { 'parameter': 'B->D::alpha^f0_2@BSZ2015', 'min': -2.0,   'max':  0.0,   }
        ],
        'likelihood': [
            'B->D::f_++f_0@HPQCD2015A',
@@ -370,6 +416,87 @@ Parameter Inference
    analysis = eos.Analysis(**analysis_args)
    analysis.parameters['CKM::abs(V_cb)'].set(42.0e-3)
 
+In the above, the global options ensure that our choice of form factor parametrization is used throughout,
+and that for CKM matrix elements the `CKMScan` model is used. The latter provides access to :math:`V_{cb}` matrix element through two :class:`parameters <eos.Parameter>`:
+the absolute value ``CKM::abs(V_cb)`` and the complex phase ``CKM::arg(V_cb)``.
+We provide the parameters in our analysis through the specifications of the Bayesian priors.
+In the above, each prior is by default a uniform prior that covers the range from ``min`` to ``max``.
+The likelihood is defined through a list constraints, which in the above includes both the experimental measurements by the Belle collaboration as well as the theoretical lattice QCD results.
+Finally, we set the starting value of ``CKM::abs(V_cb)`` to a sensible value of :math:`42\cdot 10^{-3}`.
+
+We can now proceed to optimize the log(posterior) through a call to ``analysis.optimize``.
+In a Jupyter notebook, it is useful to display the return value of this method, which illustrates the best-fit point.
+We can further display a summary of the goodness-of-fit information.
+
+.. code-block::
+
+   bfp = analysis.optimize()
+   display(bfp)
+   display(analysis.goodness_of_fit())
+
+The resulting best-fit point looks like this:
+
+.. list-table::
+   :widths: 25, 25
+
+   * - parameter
+     - value
+   * - :math:`|V_{cb}|`
+     - 0.0422
+   * - ``B->D::alpha^f+_0@BSZ2015``
+     - 0.6671
+   * - ``B->D::alpha^f+_1@BSZ2015``
+     - -2.5314
+   * - ``B->D::alpha^f+_2@BSZ2015``
+     - 4.8813
+   * - ``B->D::alpha^f0_1@BSZ2015``
+     - 0.2660
+   * - ``B->D::alpha^f0_2@BSZ2015``
+     - -0.8410
+
+The goodness-of-fit summary consists of a table listing all constraints,
+
+.. list-table::
+   :widths: 25, 25, 25
+
+   * - constraint
+     - :math:`\chi^2`
+     - d.o.f.
+   * - ``B->D::f_++f_0@FNALMILC2015A``
+     - 3.4847
+     - 7
+   * - ``B->D::f_++f_0@HPQCD2015A``
+     - 3.1016
+     - 5
+   * - ``B^0->D^+e^-nu::BRs@Belle-2015A``
+     - 11.8206
+     - 10
+   * - ``B^0->D^+mu^-nu::BRs@Belle-2015A``
+     - 5.2242
+     - 10
+
+and the overall information including the p value:
+
+.. list-table::
+   :widths: 25, 25
+
+   * - total :math:`\chi^2`
+     - 23.6310
+   * - total degrees of freedom
+     - 26
+   * - p-value
+     - 59.7053%
+
+
+Sampling from the posterior
+===========================
+
+To sample from the posterior, EOS provides the :meth:`sample <eos.Analysis.sample>` method.
+Optionally, it can also produce posterior-predictive samples for a list of observables.
+For this example, we produce such samples for the differential :math:`\bar{B}\to D^+e^-\bar\nu` branching ratio in 40 points in the phase space.
+We can use this to illustrate the results of our fit in relation to the constraints.
+The call is:
+
 .. code-block::
 
    e_q2values  = np.unique(np.concatenate((np.linspace(0.02,  1.00, 20), np.linspace(1.00, 11.60, 20))))
@@ -379,6 +506,66 @@ Parameter Inference
                  for q2 in e_q2values]
    parameter_samples, log_weights, e_samples  = analysis.sample(N=20000, stride=5, pre_N=1000, preruns=5, cov_scale=0.05, start_point=bfp.point, observables=e_obs)
 
+In the above we start sampling at the best-fit point, and carry out :code:`preruns = 5` burn-in runs/preruns of :code:`pre_N = 1000` samples each,
+and the main run with a total of :code:`N * stride = 100000` random Markov Chain samples.
+The latter are thinned down by a factor of :code:`stride = 5` to obtain :code:`N = 20000` samples in :code:`parameter_samples`.
+The values of the log(posterior) are stored in :code:`log_weights`.
+The posterior-preditive samples for the observables are stored in :code:`e_samples`, and are only returned if the :code:`observables` keyword argument is provided.
+
+
+We can illustrate the posterior samples either as a histogram or as a kernel density estimate (KDE) using the built-in plotting functions:
+
+.. code-block::
+
+   plot_args = {
+       'plot': {
+           'x': { 'label': r'$|V_{cb}|$', 'range': [38e-3, 45e-3] },
+           'legend': { 'location': 'upper left' }
+       },
+       'contents': [
+           {
+               'type': 'histogram',
+               'data': { 'samples': parameter_samples[:, 0], 'log_weights': log_weights }
+           },
+           {
+               'type': 'kde', 'color': 'C0', 'label': 'posterior', 'bandwidth': 2,
+               'range': [40e-3, 45e-3],
+               'data': { 'samples': parameter_samples[:, 0], 'log_weights': log_weights }
+           }
+       ]
+   }
+   eos.plot.Plotter(plot_args).plot()
+
+The result looks like this:
+
+.. image:: /images/use-cases_inference_hist-Vcb.png
+   :width: 600
+
+Contours at given levels of posterior probability can be obtained for any pair of parameters using:
+
+.. code-block::
+
+   plot_args = {
+       'plot': {
+           'x': { 'label': r'$|V_{cb}|$', 'range': [38e-3, 47e-3] },
+           'y': { 'label': r'$f_+(0)$', 'range': [0.6, 0.75] },
+       },
+       'contents': [
+           {
+               'type': 'kde2D', 'color': 'C1', 'label': 'posterior',
+               'range': [40e-3, 45e-3], 'levels': [68, 99], 'bandwidth': 3,
+               'data': { 'samples': parameter_samples[:, (0,1)], 'log_weights': log_weights }
+           }
+       ]
+   }
+   eos.plot.Plotter(plot_args).plot()
+
+The result looks like this:
+
+.. image:: /images/use-cases_inference_hist-Vcb-f_+-zero.png
+   :width: 600
+
+We can visualize the posterior-predictive samples using:
 
 .. code-block::
 
@@ -415,32 +602,11 @@ Parameter Inference
    }
    eos.plot.Plotter(plot_args).plot()
 
+The result looks like this:
+
 .. image:: /images/use-cases_inference_plot-a-posteriori.png
    :width: 600
 
-.. code-block::
-
-   plot_args = {
-       'plot': {
-           'x': { 'label': r'$|V_{cb}|$', 'range': [38e-3, 45e-3] },
-           'legend': { 'location': 'upper left' }
-       },
-       'contents': [
-           {
-               'type': 'histogram',
-               'data': { 'samples': parameter_samples[:, 0], 'log_weights': log_weights }
-           },
-           {
-               'type': 'kde', 'color': 'C0', 'label': 'posterior', 'bandwidth': 2,
-               'range': [40e-3, 45e-3],
-               'data': { 'samples': parameter_samples[:, 0], 'log_weights': log_weights }
-           }
-       ]
-   }
-   eos.plot.Plotter(plot_args).plot()
-
-.. image:: /images/use-cases_inference_hist-Vcb.png
-   :width: 600
 
 **************************
 Production of Peudo Events
