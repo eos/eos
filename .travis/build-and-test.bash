@@ -34,6 +34,7 @@ function ubuntu_deploy() {
     pushd /src
     export EOS_VERSION=${TAG:-$(git describe --abbrev=0 --tags)}
     export EOS_VERSION=${EOS_VERSION#v}
+    export EOS_GIT_REVISION=$(git describe --exact-match HEAD 2> /dev/null || git rev-parse --short HEAD)
     ./autogen.bash
     popd
     pushd /build
@@ -43,15 +44,29 @@ function ubuntu_deploy() {
     make -j2 all
     make -j2 check VERBOSE=1
     make install
+    if [[ -n ${GITHUB_TOKEN} ]] ; then
+        git clone -o gh "https://eos:${GITHUB_TOKEN}@github.com/eos/doc/" /build/doc/html
+    fi
     make -C /src/doc/ html BUILDDIR=/build/doc  O=-a
     make -C /src/manual/examples examples
     echo Building debian package for ${OS}
     export DESTDIR=/tmp/eos-${EOS_VERSION}
     make deb DESTDIR=${DESTDIR} OS=${OS}
     dpkg -i /tmp/eos-${EOS_VERSION}.deb
-    if [[ -n ${TAG} ]] && [[ "g++" == ${CXX} ]]; then
+    if [[ -n ${TAG} ]] && [[ "g++" == ${CXX} ]] && [[ -n ${PACKAGECLOUD_TOKEN} ]]; then
         echo Deploying debian package to package cloud ...
         package_cloud push eos/eos/ubuntu/${OS} /tmp/eos-${EOS_VERSION}.deb
+    fi
+    if [[ -n ${TAG} ]] && [[ -n ${GITHUB_TOKEN} ]]; then
+        pushd /build/doc/html/
+        echo Deploying documentation for ${EOS_GIT_REVISION}
+        git config user.email "eos-developers@googlegroups.com"
+        git config user.name  "EOS"
+        git add --all
+        git commit \
+            -m "Updating documentation based on EOS revision ${EOS_GIT_REVISION}"
+        git push
+        popd
     fi
     popd
 }
