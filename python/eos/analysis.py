@@ -106,22 +106,34 @@ class Analysis:
         return eos.GoodnessOfFit(self.log_posterior)
 
 
-    def optimize(self, start_point=None):
+    def optimize(self, start_point=None, **kwargs):
         """
         Optimize the log(posterior) and returns a best-fit-point summary.
 
         :param start_point: Parameter point from which to start the optimization, with the elements in the same order as in eos.Analysis.varied_parameters. If not specified, optimization starts at the current parameter point.
         :param start_point: iterable, optional
         """
+        from logging import info, warn
 
         if start_point == None:
             start_point = [float(p) for p in self.varied_parameters]
+
+        default_kwargs = { 'method': 'SLSQP', 'options': { 'ftol': 1.0e-13 } }
+        if kwargs is None:
+            kwargs = default_kwargs
 
         res = scipy.optimize.minimize(
             self.negative_log_pdf,
             start_point,
             args=None,
-            bounds=self.bounds)
+            bounds=self.bounds,
+            **kwargs)
+
+        if not res.success:
+            warn('Optimization did not succeed')
+            warn('  optimizer'' message reas: {}'.format(res.message))
+        else:
+            info('Optimization goal achieved after {nfev} function evaluations'.format(nfev=res.nfev))
 
         for p, v in zip(self.varied_parameters, res.x):
             p.set(v)
