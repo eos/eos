@@ -1,0 +1,576 @@
+# vim: set sts=2 et tw=150 fdm=marker :
+title: 'Standard Model \& Effective Field Theory Parameters'
+description: ''
+groups:
+  # Pseudoscalar Meson Masses
+  # {{{
+  - title: 'Pseudoscalar Meson Masses'
+    description: ''
+    parameters:
+      # unflavoured meson masses
+      'mass::pi^0' :
+          central: +0.1349766
+          min:     +0.1349760
+          max:     +0.1349772
+          comments: 'cf. [PDG-Live], May 2014'
+      'mass::pi^+' :
+          central: +0.13957018
+          min:     +0.13956983
+          max:     +0.13957053
+          comments: ''
+      # K meson masses
+      'mass::K_d' :
+          central: +0.497614
+          min:     +0.497590
+          max:     +0.497638
+          comments: 'cf. [PDG2012], p. 41'
+      'mass::K_u' :
+          central: +0.493677
+          min:     +0.493661
+          max:     +0.493693
+          comments: 'cf. [PDG2012], p. 39'
+      # D meson masses
+      'mass::D_d' :
+          central: +1.86959
+          min:     +1.86950
+          max:     +1.86968
+          comments: 'cf. [PDG2016]'
+      'mass::D^+' :
+          central: +1.86959
+          min:     +1.86950
+          max:     +1.86968
+          comments: 'cf. [PDG2016]'
+      'mass::D_u' :
+          central: +1.86483
+          min:     +1.86478
+          max:     +1.86488
+          comments: 'cf. [PDG2016]'
+      'mass::D^0' :
+          central: +1.86483
+          min:     +1.86478
+          max:     +1.86488
+          comments: 'cf. [PDG2016]'
+      'mass::D_s' :
+          central: +1.96828
+          min:     +1.96818
+          max:     +1.96838
+          comments: 'cf. [PDG2016]'
+      # B meson masses
+      'mass::B_d' :
+          central: +5.27958
+          min:     +5.27941
+          max:     +5.27975
+          comments: 'cf. [PDG2012], p. 84'
+      'mass::B_u' :
+          central: +5.27925
+          min:     +5.27908
+          max:     +5.27942
+          comments: 'cf. [PDG2012], p. 70'
+      'mass::B_s' :
+          central: +5.36677
+          min:     +5.36653
+          max:     +5.36701
+          comments: 'cf. [PDG2012], p. 105'
+  # }}}
+
+  # Vector Meson Masses
+  # {{{
+  - title: 'Vector Meson Masses'
+    description: ''
+    parameters:
+      # unflavoured meson masses
+      'mass::rho^+' :
+          central: +0.77526
+          min:     +0.77501
+          max:     +0.77551
+          comments: 'cf. [PDG2016]'
+      'mass::phi' :
+          central: +1.019461
+          min:     +1.019459
+          max:     +1.019463
+          comments: 'cf. [PDG2018]'
+      # K meson masses
+      'mass::K^*_d' :
+          central: +0.89594
+          min:     +0.89572
+          max:     +0.89616
+          comments: 'cf. [PDG2012], p. 45'
+      'mass::K^*_u' :
+          central: +0.89166
+          min:     +0.89140
+          max:     +0.89192
+          comments: 'cf. [PDG2012], p. 45'
+      # D meson masses
+      'mass::D^*_d' :
+          central: +2.01026
+          min:     +2.01021
+          max:     +2.01031
+          comments: 'cf. [PDG2016]'
+      'mass::D^*_u' :
+          central: +2.00685
+          min:     +2.00680
+          max:     +2.00690
+          comments: 'cf. [PDG2016]'
+      'mass::D^*_s' :
+          central: +2.1121
+          min:     +2.1117
+          max:     +2.1125
+          comments: 'cf. [PDG2016]'
+      # Charmonium masses
+      'mass::J/psi' :
+          central: +3.096900
+          min:     +3.096894
+          max:     +3.096906
+      'mass::psi(2S)' :
+          central: +3.686097
+          min:     +3.686072
+          max:     +3.686122
+      # B meson masses
+      'mass::B^*_d' :
+          central: +5.32465
+          min:     +5.32440
+          max:     +5.32490
+          comments: 'cf. [PDG2012], p. 84'
+  # }}}
+
+  # Baryon Masses
+  # {{{
+  - title: 'Baryon Masses'
+    description: ''
+    parameters:
+      # s baryon masses
+      'mass::Lambda' :
+          central: +1.115683
+          min:     +1.115677
+          max:     +1.115689
+          comments: 'cf. [PDG2012], p. 149'
+      # c baryon masses
+      'mass::Lambda_c' :
+          central: +2.2865
+          min:     +2.2865
+          max:     +2.2865
+          comments: 'cf. [PDG2018]'
+      'mass::Lambda_c(2625)' :
+          central: +2.62811
+          min:     +2.62792
+          max:     +2.62830
+          comments: 'cf. [PDG2016], p. 175'
+      'mass::Lambda_c(2595)' :
+          central: +2.59225
+          min:     +2.59197
+          max:     +2.59253
+          comments: 'cf. [PDG2016], p. 175'
+      # b baryon masses
+      'mass::Lambda_b' :
+          central: +5.6194
+          min:     +5.6187
+          max:     +5.6201
+          comments: 'cf. [PDG2012], p. 165'
+  # }}}
+
+  # Decay Constants
+  # {{{
+  - title: 'Decay Constants'
+    description: ''
+    parameters:
+      'decay-constant::B_d' :
+          central: +0.1905
+          min:     +0.1892
+          max:     +0.1918
+          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+      'decay-constant::B_u' :
+          central: +0.1894
+          min:     +0.1880
+          max:     +0.1908
+          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+      'decay-constant::B_s' :
+          central: +0.2307
+          min:     +0.2294
+          max:     +0.2330
+          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+      'decay-constant::K_d' :
+          central: +0.1561
+          min:     +0.155
+          max:     +0.1572
+          comments: 'GeV, cf. [LATAVG2011]'
+      'decay-constant::K_u' :
+          central: +0.1561
+          min:     +0.155
+          max:     +0.1572
+          comments: 'GeV, cf. [LATAVG2011]'
+      'decay-constant::K' :
+          central: +0.1561
+          min:     +0.155
+          max:     +0.1572
+          comments: 'GeV, cf. [LATAVG2011]'
+      'decay-constant::K^*_d' :
+          central: +0.204
+          min:     +0.197
+          max:     +0.211
+          comments: 'GeV, cf. [BSZ2015]'
+      'decay-constant::K^*_u' :
+          central: +0.204
+          min:     +0.197
+          max:     +0.211
+          comments: 'GeV, cf. [BSZ2015]'
+      'decay-constant::pi' :
+          central: +0.1302
+          min:     +0.1288
+          max:     +0.1326
+          comments: 'GeV, cf. [FLAG2013], eq. (43)'
+      'decay-constant::J/psi' :
+          central: +0.2773
+          min:     +0.2733
+          max:     +0.2807
+          comments: 'GeV, cf. [KMPW2010], table 5, multiplied by 2/3'
+      'decay-constant::psi(2S)' :
+          central: +0.1980
+          min:     +0.1967
+          max:     +0.2000
+          comments: 'GeV, cf. [KMPW2010], table 5, multiplied by 2/3'
+      'decay-constant::rho' :
+          central: +0.213
+          min:     +0.208
+          max:     +0.218
+          comments: 'GeV, cf. [BSZ2015]'
+      'decay-constant::phi' :
+          central: +0.233
+          min:     +0.228
+          max:     +0.238
+          comments: 'GeV, cf. [BSZ2015]'
+      'decay-constant::D_d' :
+          central: +0.2127
+          min:     +0.2121
+          max:     +0.2133
+          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+      'decay-constant::D_u' :
+          central: +0.2116
+          min:     +0.2109
+          max:     +0.2123
+          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+      'decay-constant::D_s' :
+          central: +0.2499
+          min:     +0.2494
+          max:     +0.2504
+          comments: 'GeV, cf. [Fermilab-MILC-2017]'
+      'decay-constant::D^*_d' :
+          central: +0.242
+          min:     +0.222
+          max:     +0.252
+          comments: 'GeV, cf. [GKPR2013], symmetrized errors'
+      'decay-constant::D^*_u' :
+          central: +0.242
+          min:     +0.222
+          max:     +0.252
+          comments: 'GeV, cf. [GKPR2013], symmetrized errors'
+      'decay-constant::D^*_s' :
+          central: +0.293
+          min:     +0.274
+          max:     +0.312
+          comments: 'GeV, cf. [GKPR2013], symmetrized errors'
+      # 3-particle couplings
+      'decay-constant::g_{B^*Bpi}' :
+          central: +30.0
+          min:     +25.0
+          max:     +35.0
+          comments: 'cf. [IKMvD2014]'
+  # }}}
+
+  # Mean Meson Lifetimes
+  # {{{
+  - title: 'Mean Meson Lifetimes'
+    description: ''
+    parameters:
+      # Mean life times
+      'life_time::B_d' :
+          central: +1.519e-12
+          min:     +1.512e-12
+          max:     +1.526e-12
+          comments: 'cf. [PDG2012], p. 84'
+      'life_time::B_u' :
+          central: +1.641e-12
+          min:     +1.633e-12
+          max:     +1.649e-12
+          comments: 'cf. [PDG2012], p. 70'
+      'life_time::B_s' :
+          central: +1.516e-12
+          min:     +1.505e-12
+          max:     +1.527e-12
+          comments: 'cf. [PDG-Live], September 2013'
+      'life_time::B@Y(4S)' :
+          central: +1.580e-12
+          min:     +1.573e-12
+          max:     +1.589e-12
+          comments: 'based on 50:50 admixture of B^+B^- and B^0Bbar^0 @ Y(4S)'
+      'life_time::Lambda_b' :
+          central: +1.451e-12
+          min:     +1.438e-12
+          max:     +1.464e-12
+          comments: 'cf. PDG2014 update by [HFAG]'
+      # Decay width differences in neutral meson systems
+      'life_time::Delta_B_d' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          comments: 'smaller than 1eV, i.e. zero for all intents and purposes, cf. [PDG2012]'
+      'life_time::Delta_B_s' :
+          central: +0.081e+12
+          min:     +0.070e+12
+          max:     +0.092e+12
+          comments: 'cf. [PDG2012] and [PDG-Live], September 2013'
+  # }}}
+
+  # Parameters for Miscellaneous Baryon Properties
+  # {{{
+  - title: 'Parameters for Miscellaneous Baryon Properties'
+    description: ''
+    parameters:
+      # Decay parameter of the Lambda hyperon
+      'Lambda::alpha' :
+          central: +0.642
+          min:     +0.629
+          max:     +0.655
+          comments: 'cf. [PDG2012+]'
+      # Decay parameter of the Lambda_c baryon from FOCUS collaboration
+      'Lambda_c::alpha' :
+          central: -0.780
+          min:     -0.986
+          max:     -0.574
+          comments: 'cf. [PDG2018]'
+      # General polarisation parameter for the Lambda_b baryon polarisation
+      'Lambda_b::polarisation@unpolarised' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+      # Polarisation parameter for the Lambda_b baryon polarisation at the LHCb
+      # experiment
+      'Lambda_b::polarisation@LHCb' :
+          central: +0.06
+          min:     -0.01
+          max:     +0.13
+  # }}}
+
+  # Parameters in Light-Cone Distribution Amplitudes
+  # {{{
+  - title: 'Parameters in Light-Cone Distribution Amplitudes'
+    description: ''
+    parameters:
+      # Pion LCDA parameters
+      'pi::a2@1GeV' :
+          central: +0.16
+          min:     +0.16
+          max:     +0.16
+          comments: ' // cf. [DKMMO2008]'
+      'pi::a4@1GeV' :
+          central: +0.04
+          min:     +0.04
+          max:     +0.04
+          comments: ' // cf. [DKMMO2008]'
+      'pi::f3@1GeV' :
+          central: +0.0045
+          min:     +0.0030
+          max:     +0.0060
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+      'pi::omega3@1GeV' :
+          central: -1.5
+          min:     -2.2
+          max:     -0.8
+          comments: ' // cf. [DKMMO2008]'
+      'pi::omega4@1GeV' :
+          central: +0.2
+          min:     +0.2
+          max:     +0.2
+          comments: ' // cf. [DKMMO2008]'
+      'pi::delta^2@1GeV' :
+          central: +0.18
+          min:     +0.12
+          max:     +0.24
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+      # K^* LCDA parameters
+      'K^*::a_1_para@1GeV' :
+          central: +0.06
+          min:     +0.00
+          max:     +0.10
+          comments: 'cf. [BSZ2015], table 1'
+      'K^*::a_2_para@1GeV' :
+          central: +0.16
+          min:     +0.07
+          max:     +0.23
+          comments: 'cf. [BSZ2015], table 1'
+      'K^*::f_para' :
+          central: +0.204
+          min:     +0.197
+          max:     +0.211
+          comments: 'cf. [BSZ2015], table 1'
+      'K^*::a_1_perp@1GeV' :
+          central: +0.04
+          min:     +0.01
+          max:     +0.07
+          comments: 'cf. [BSZ2015], table 1'
+      'K^*::a_2_perp@1GeV' :
+          central: +0.10
+          min:     +0.02
+          max:     +0.18
+          comments: 'cf. [BSZ2015], table 1'
+      'K^*::f_perp@1GeV' :
+          central: +0.159
+          min:     +0.153
+          max:     +0.165
+          comments: 'cf. [BSZ2015], table 1'
+      # B->K LCDA Parameter
+      'B->K::a_1@1GeV' :
+          central: +0.06
+          min:     +0.03
+          max:     +0.09
+          comments: ' // cf. [BBL2006], Table 3'
+      'B->K::a_2@1GeV' :
+          central: +0.25
+          min:     +0.10
+          max:     +0.4
+          comments: ' // cf. [BBL2006], Table 3'
+      'B->K::a_4@1GeV' :
+          central: -0.015
+          min:     -0.115
+          max:     +0.085
+          comments: ' // cf. [BZ2004v3], Eq. (24)'
+      'B->K::a_1@2.2GeV' :
+          central: +0.048
+          min:     +0.024
+          max:     +0.071
+          comments: ' // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
+      'B->K::a_2@2.2GeV' :
+          central: +0.174
+          min:     +0.070
+          max:     +0.278
+          comments: ' // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
+      'B->K::a_4@2.2GeV' :
+          central: -0.0089
+          min:     -0.0679
+          max:     +0.0502
+          comments: ' // cf. [BZ2004v3], Eq. (24) and cf. [BHP2007] App. A, pp. 24-25'
+      # B->K^*, K^* LCDA parameters
+      'B->K^*::a_1_par' :
+          central: +0.1
+          min:     +0.03
+          max:     +0.17
+          comments: ''
+      'B->K^*::a_2_par' :
+          central: +0.1
+          min:     +0.0
+          max:     +0.2
+          comments: ''
+      'B->K^*::a_1_perp' :
+          central: +0.1
+          min:     +0.03
+          max:     +0.17
+          comments: ''
+      'B->K^*::a_2_perp' :
+          central: +0.1
+          min:     +0.0
+          max:     +0.2
+          comments: ''
+      'B->K^*::f_Kstar_par' :
+          central: +0.217
+          min:     +0.212
+          max:     +0.222
+          comments: ' // GeV, cf. [BHvD2010], Table I'
+      'B->K^*::f_Kstar_perp@2GeV' :
+          central: +0.173
+          min:     +0.168
+          max:     +0.178
+          comments: ' // GeV @2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD2010], Table I'
+      # B LCDA parameters
+      'lambda_B_p' :
+          central: +0.485
+          min:     +0.370
+          max:     +0.600
+          comments: ' // GeV, cf. [BHvD2010], Table I'
+      'B::1/lambda_B_p' :
+          central: +2.1739
+          min:     +1.60
+          max:     +2.80
+          comments: ' // GeV^{-1}, cf. [GKvD2018]'
+      'B::lambda_E^2' :
+          central: +0.03
+          min:     +0.01
+          max:     +0.05
+          comments: 'GeV^2, cf. [NT2011]'
+      'B::lambda_H^2' :
+          central: +0.06
+          min:     +0.03
+          max:     +0.09
+          comments: 'GeV^2, cf. [NT2011]'
+      # B_s LCDA parameters
+      'B_s::1/lambda_B_p' :
+          central: +1.6934
+          min:     +1.29
+          max:     +2.09
+          comments: ' // GeV^{-1}, cf. [GKvD2018]'
+      'B_s::lambda_E^2' :
+          central: +0.03
+          min:     +0.01
+          max:     +0.05
+          comments: 'GeV^2, cf. [NT2011]'
+      'B_s::lambda_H^2' :
+          central: +0.06
+          min:     +0.03
+          max:     +0.09
+          comments: 'GeV^2, cf. [NT2011]'
+  # }}}
+
+  # Parameters in the Heavy Quark Exapnsion
+  # {{{
+  - title: 'Parameters in the Heavy Quark Expansion'
+    description: ''
+    parameters:
+      # HQET parameters
+      'HQET::lambda_1' :
+          central: -0.20
+          min:     -0.20
+          max:     -0.20
+          latex:   '$\lambda_1$'
+          comment: 'cf. @REF[ALGH2001]@, Table 2, p. 13'
+      'HQET::lambda_2' :
+          central: +0.12
+          min:     +0.12
+          max:     +0.12
+          latex:   '$\lambda_2$'
+          comment: 'cf. @REF[ALGH2001]@, Table 2, p. 13'
+      # Heavy Quark Expansion parameters for hadronic matrix elements ~ <B|O|B>
+      'B->B::mu_pi^2@1GeV' :
+          central: +0.45
+          min:     +0.35
+          max:     +0.55
+          latex:   '$\mu_\pi^2(1\,\GeV)$'
+          comment: 'cf. @REF[BBMU2003]@, Eq. (19), p. 9'
+      'B->B::mu_G^2@1GeV' :
+          central: +0.35
+          min:     +0.33
+          max:     +0.38
+          latex:   '$\mu_G^2(1\,\GeV)$'
+          comment: 'cf. @REF[BBMU2003]@, Eq. (17), p. 9'
+      'B->B::rho_D^3@1GeV' :
+          central: +0.20
+          min:     +0.10
+          max:     +0.30
+          latex:   '$\rho_D^3(1\,\GeV)$'
+          comment: 'cf. @REF[BBMU2003]@, between Eqs. (19),(20), p. 9'
+      'B->B::rho_LS^3@1GeV' :
+          central: -0.15
+          min:     -0.30
+          max:     -0.00
+          latex:   '$\rho_{LS}^3(1\,\GeV)$'
+          comment: 'cf. @REF[BBMU2003]@, Eq. (20), p. 9'
+      # Heavy Quark Expansion parameters for hadronic matrix elements ~ <Lambda_b|O|Lambda_b>
+      'Lambda_b->Lambda_b::mu_pi^2@1GeV' :
+          central: +0.50
+          min:     +0.40
+          max:     +0.60
+          latex:   '$\mu_\pi^2(1\,\GeV)$'
+          comment: 'cf. @REF[MvD2015]@'
+      'Lambda_b->Lambda_b::rho_D^3@1GeV' :
+          central: +0.17
+          min:     +0.09
+          max:     +0.25
+          latex:   '$\rho_D^3(1\,\GeV)$'
+          comment: 'cf. @REF[MvD2015]@'

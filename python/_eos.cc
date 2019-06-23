@@ -159,6 +159,21 @@ BOOST_PYTHON_MODULE(_eos)
         ;
     implicitly_convertible<std::string, QualifiedName>();
 
+
+    // ParameterSection
+    class_<ParameterSection>("ParameterSection", no_init)
+        .def("__iter__", range(&ParameterSection::begin, &ParameterSection::end))
+        .def("name", &ParameterSection::name, return_value_policy<copy_const_reference>())
+        .def("description", &ParameterSection::description, return_value_policy<copy_const_reference>())
+        ;
+
+    // ParameterGroup
+    class_<ParameterGroup>("ParameterGroup", no_init)
+        .def("__iter__", range(&ParameterGroup::begin, &ParameterGroup::end))
+        .def("name", &ParameterGroup::name, return_value_policy<copy_const_reference>())
+        .def("description", &ParameterGroup::description, return_value_policy<copy_const_reference>())
+        ;
+
     // Parameters
     class_<Parameters>("_Parameters", no_init)
         .def("Defaults", &Parameters::Defaults)
@@ -166,6 +181,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("__getitem__", (Parameter (Parameters::*)(const std::string &) const) &Parameters::operator[])
         .def("__iter__", range(&Parameters::begin, &Parameters::end))
         .def("declare", &Parameters::declare, return_value_policy<return_by_value>())
+        .def("sections", range(&Parameters::begin_sections, &Parameters::end_sections))
         .def("set", &Parameters::set)
         .def("override_from_file", &Parameters::override_from_file)
         ;

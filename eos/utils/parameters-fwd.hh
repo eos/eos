@@ -24,6 +24,8 @@ namespace eos
 {
     // Forward declaration
     class Parameter;
+    class ParameterGroup;
+    class ParameterSection;
 }
 
 #endif
