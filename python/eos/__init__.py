@@ -14,46 +14,13 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from _eos import _Parameters
-
-class Parameters(_Parameters):
-    @staticmethod
-    def FromWCxf(wc):
-
-        # the following coefficients are treated as real-valued in EOS
-        real_coeffs = [
-            'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c8'
-        ]
-
-        parameters = _Parameters.Defaults()
-        for name in wc.dict:
-            prefix, coeff = name.split('::')
-            value = wc.dict[name]
-            real_coeffs = [
-                'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c8'
-            ]
-            if (not value.imag == 0) and (coeff in real_coeffs):
-                raise ValueError('WC {0} does not support non-zero imaginary part'.format(name))
-
-            # Add values provided by WCxf to EOS central (SM) values
-            if coeff in real_coeffs:
-                p = parameters[prefix + '::' + coeff]
-                p.set(p.central() + value.real)
-            else:
-                pr = parameters[prefix + '::Re{' + coeff + '}']
-                pi = parameters[prefix + '::Im{' + coeff + '}']
-                pr.set(pr.central() + value.real)
-                pi.set(pi.central() + value.imag)
-
-        return parameters
-
 from _eos import *
-
 from .data import *
 from .plot import *
 from .analysis import Analysis, BestFitPoint
-from .observable import Observables
 from .constraint import Constraints
+from .observable import Observables
+from .parameter import Parameters
 
 import logging
 logger = logging.getLogger()
