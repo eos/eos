@@ -24,6 +24,7 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/stringify.hh>
 
+#include <algorithm>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -117,30 +118,29 @@ main(int argc, char * argv[])
         CommandLine::instance()->parse(argc, argv);
 
         std::string::size_type max_name_length = 20;
-        std::vector<Parameter> parameters;
+        std::set<Parameter::Id> ids;
 
         if (CommandLine::instance()->observables.empty())
         {
-            parameters.insert(parameters.begin(), CommandLine::instance()->parameters.begin(), CommandLine::instance()->parameters.end());
+            for (const auto & p : CommandLine::instance()->parameters)
+            {
+                ids.insert(p.id());
+            }
         }
         else
         {
-            std::set<Parameter::Id> ids;
-
             for (auto o = CommandLine::instance()->observables.begin(), o_end = CommandLine::instance()->observables.end() ; o != o_end ; ++o)
             {
                 ids.insert((*o)->begin(), (*o)->end());
             }
-
-            for (auto i = ids.cbegin(), i_end = ids.cend() ; i != i_end ; ++i)
-            {
-                parameters.push_back(CommandLine::instance()->parameters[*i]);
-            }
         }
 
-        for (auto p = parameters.begin(), p_end = parameters.end() ; p != p_end ; ++p)
+        for (const auto & p : CommandLine::instance()->parameters)
         {
-            max_name_length = std::max(max_name_length, p->name().length());
+            if (ids.end() == ids.find(p.id()))
+                continue;
+
+            max_name_length = std::max(max_name_length, p.name().length());
         }
 
         if (CommandLine::instance()->scan_format)
@@ -149,14 +149,14 @@ main(int argc, char * argv[])
             double number_of_sigmas = 2.0;
             std::string::size_type max_prior_length = std::string("log-gamma").length();
 
-            for (auto p = parameters.begin(), p_end = parameters.end() ; p != p_end ; ++p)
+            for (const auto & p : CommandLine::instance()->parameters)
             {
                 std::string prior;
                 std::string min, max;
 
                 // upper and lower ranges
-                double delta_down = (*p)() - p->min();
-                double delta_up = p->max() - (*p)();
+                double delta_down = p() - p.min();
+                double delta_up = p.max() - p();
 
                 if ((delta_down == 0) && (delta_up == 0))
                 {
@@ -171,19 +171,19 @@ main(int argc, char * argv[])
                     std::stringstream ss;
                     ss
                     << std::setprecision(4)
-                    << double(*p) - number_of_sigmas * delta_down;
+                    << double(p) - number_of_sigmas * delta_down;
                     min = ss.str();
                     ss.str("");
                     ss
                     << std::setprecision(4)
-                    << double(*p) + number_of_sigmas * delta_up;
+                    << double(p) + number_of_sigmas * delta_up;
                     max = ss.str();
                 }
 
                 std::cout
                 << "    --scan" << '\t'
                 << std::setw(max_name_length) << std::setiosflags(std::ios::left)
-                << "\"" + p->name() + "\"" << '\t'
+                << "\"" + p.name() + "\"" << '\t'
                 << min << '\t' << max << '\t'
                 << "--prior" << '\t'
                 << std::setw(max_prior_length) << std::setiosflags(std::ios::left)
@@ -193,7 +193,7 @@ main(int argc, char * argv[])
                 {
                     std::cout
                     << std::setw(7) << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos)
-                    << '\t' << p->min() << '\t' << (*p)() << '\t' << p->max();
+                    << '\t' << p.min() << '\t' << p() << '\t' << p.max();
                 }
 
                 std::cout << " \\" << std::endl;
@@ -201,14 +201,71 @@ main(int argc, char * argv[])
         }
         else
         {
-            for (auto p = parameters.begin(), p_end = parameters.end() ; p != p_end ; ++p)
+            for (auto s = CommandLine::instance()->parameters.begin_sections(), s_end = CommandLine::instance()->parameters.end_sections() ; s != s_end ; ++s)
             {
+                std::string section_title(s->name());
+
                 std::cout
-                << std::setw(max_name_length) << std::setiosflags(std::ios::right)
-                << p->name() << '\t'
-                << std::setw(7) << std::scientific << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos)
-                << p->min() << '\t' << (*p)() << '\t' << p->max()
-                << std::endl;
+                << std::string(section_title.length(), '=') << '\n'
+                << section_title << '\n'
+                << std::string(section_title.length(), '=') << '\n' << '\n';
+
+                for (const auto & g : *s)
+                {
+                    std::string group_title(g.name());
+
+                    std::cout
+                    << group_title << '\n'
+                    << std::string(group_title.length(), '-') << '\n' << '\n';
+
+
+                    std::vector<Parameter> group_parameters(g.begin(), g.end());
+                    // nasty hack to sort
+                    // TODO: remove entirely once all parameter names are QualifiedName compatible
+                    std::sort(group_parameters.begin(), group_parameters.end(), [] (const Parameter & x, const Parameter & y) -> bool
+                    {
+                        bool x_is_qualified_name = false;
+                        try
+                        {
+                            QualifiedName qnx(x.name()); x_is_qualified_name = true;
+                            QualifiedName qny(y.name());
+
+                            if (qnx.prefix_part() < qny.prefix_part())
+                                return true;
+                            else if (qny.prefix_part() < qnx.prefix_part())
+                                return false;
+
+                            if (qnx.suffix_part() < qny.suffix_part())
+                                return true;
+                            else if (qny.suffix_part() < qnx.suffix_part())
+                                return true;
+
+                            return qnx.name_part() < qny.name_part();
+                        }
+                        catch (QualifiedNameSyntaxError & e)
+                        {
+                            if (x_is_qualified_name)
+                                return false;
+
+                            return x.name() < y.name();
+                        }
+                    });
+
+                    for (const auto & p : group_parameters)
+                    {
+                        if (ids.end() == ids.find(p.id()))
+                            continue;
+
+                        std::cout
+                        << std::setw(max_name_length) << std::setiosflags(std::ios::right)
+                        << p.name() << '\t'
+                        << std::setw(7) << std::scientific << std::setprecision(4) << std::setiosflags(std::ios::left | std::ios::showpos)
+                        << p.min() << '\t' << p() << '\t' << p.max()
+                        << std::endl;
+                    }
+
+                    std::cout << std::endl;
+                }
             }
         }
     }
