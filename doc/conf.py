@@ -26,6 +26,7 @@ import eos
 project = 'EOS'
 copyright = '2019, Danny van Dyk and others'
 author = 'Danny van Dyk and others'
+master_doc = 'index'
 
 # The full version, including alpha/beta/rc tags
 release = eos.version()
