@@ -1,2548 +1,2558 @@
-# Form factor uncertainties
-"formfactors::xi_perp_uncertainty" :
-    central: +1.0
-    min:     +0.89
-    max:     +1.11
-    comments: ""
-"formfactors::xi_par_uncertainty" :
-    central: +1.0
-    min:     +0.86
-    max:     +1.14
-    comments: ""
+# vim: set sts=2 et tw=150 fdm=marker :
+title: 'Form Factor Parameters'
+description: ''
+groups:
+  # Parameters in B -> P Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in $B\to P$ Form Factor Parametrizations'
+    description: ''
+    parameters:
+      # form factor parameters for B->pi in [BCL2008] parametrization, with
+      # f_+ taken from [IKMvD2014]
+      'B->pi::f_+(0)@BCL2008' :
+          central: +0.307
+          min:     +0.287
+          max:     +0.327
+          latex:    '$f^{B\to \pi}_+(0)$'
+          comments: ''
+      'B->pi::b_+^1@BCL2008' :
+          central: -1.31
+          min:     +1.73
+          max:     -0.89
+          latex:    '$b_{+, 1}^{B\to \pi}$'
+          comments: ''
+      'B->pi::b_+^2@BCL2008' :
+          central: -0.904
+          min:     -1.348
+          max:     -0.460
+          latex:    '$b_{+, 2}^{B\to \pi}$'
+          comments: ''
+      'B->pi::b_0^1@BCL2008' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:    '$b_{0, 1}^{B\to \pi}$'
+          comments: ''
+      'B->pi::b_0^2@BCL2008' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:    '$b_{0, 2}^{B\to \pi}$'
+          comments: ''
+      'B->pi::f_T(0)@BCL2008' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:    '$f^{B\to \pi}_T(0)$'
+          comments: ''
+      'B->pi::b_T^1@BCL2008' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:    '$b_{T, 1}^{B\to \pi}$'
+          comments: ''
+      'B->pi::b_T^2@BCL2008' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:    '$b_{T, 2}^{B\to \pi}$'
+          comments: ''
+      # form factor parameters for B->pi inspired by [BSZ2015]
+      # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
+      'B->pi::alpha^f+_0@BSZ2015' :
+          central: +0.1959500850585235
+          min:     +0.1959500850585235
+          max:     +0.1959500850585235
+          comments: ''
+      'B->pi::alpha^f+_1@BSZ2015' :
+          central: -0.7763565146997043
+          min:     -0.7763565146997043
+          max:     -0.7763565146997043
+          comments: ''
+      'B->pi::alpha^f+_2@BSZ2015' :
+          central: -0.19660537219243024
+          min:     -0.19660537219243024
+          max:     -0.19660537219243024
+          comments: ''
+      'B->pi::alpha^f0_1@BSZ2015' :
+          central: -0.01446803146697799
+          min:     -0.01446803146697799
+          max:     -0.01446803146697799
+          comments: ''
+      'B->pi::alpha^f0_2@BSZ2015' :
+          central: -0.19529667411047308
+          min:     -0.19529667411047308
+          max:     -0.19529667411047308
+          comments: ''
+      'B->pi::alpha^fT_0@BSZ2015' :
+          central: +0.17311654822482725
+          min:     +0.17311654822482725
+          max:     +0.17311654822482725
+          comments: ''
+      'B->pi::alpha^fT_1@BSZ2015' :
+          central: -0.40903716524130396
+          min:     -0.40903716524130396
+          max:     -0.40903716524130396
+          comments: ''
+      'B->pi::alpha^fT_2@BSZ2015' :
+          central: -0.2580355775883392
+          min:     -0.2580355775883392
+          max:     -0.2580355775883392
+          comments: ''
+      # form factor parameters for B->K for [BCL2008] parametrization
+      'B->K::f_+(0)@BCL2008' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          comments: ''
+      'B->K::f_T(0)@BCL2008' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          comments: ''
+      'B->K::b_+^1@BCL2008' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          comments: ''
+      'B->K::b_+^2@BCL2008' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          comments: ''
+      'B->K::b_0^1@BCL2008' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          comments: ''
+      'B->K::b_0^2@BCL2008' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B->K::b_T^1@BCL2008' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B->K::b_T^2@BCL2008' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      # form factor parameters for B->K according to [BZ2004v2] (approximate)
+      'B->K::fp_uncertainty@BZ2004v2' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      'B->K::f0_uncertainty@BZ2004v2' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      'B->K::ft_uncertainty@BZ2004v2' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      # form factor parameters for B->K simple series expansion (SSE) based on
+      # LCSR according to [BFW2010], table 6, p. 22, corrected values from Aoife Bharucha
+      'B->K::alpha^V0_0@BFW2010' :
+          central: +0.48
+          min:     +0.48
+          max:     +0.48
+          comments: ''
+      'B->K::alpha^V0_1@BFW2010' :
+          central: -1.05
+          min:     -1.05
+          max:     -1.05
+          comments: ''
+      'B->K::alpha^Vt_0np@BFW2010' :
+          central: +0.52
+          min:     +0.52
+          max:     +0.52
+          comments: ''
+      'B->K::alpha^Vt_1np@BFW2010' :
+          central: -1.4
+          min:     -1.4
+          max:     -1.4
+          comments: ''
+      'B->K::alpha^T0_0@BFW2010' :
+          central: +0.48
+          min:     +0.48
+          max:     +0.48
+          comments: ''
+      'B->K::alpha^T0_1@BFW2010' :
+          central: -1.09
+          min:     -1.09
+          max:     -1.09
+          comments: ''
+      # form factor parameters for B->K inspired by [BSZ2015]
+      # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
+      'B->K::alpha^f+_0@BSZ2015' :
+          central: +0.32908992854636815
+          min:     +0.32908992854636815
+          max:     +0.32908992854636815
+          comments: ''
+      'B->K::alpha^f+_1@BSZ2015' :
+          central: -0.8669465867427438
+          min:     -0.8669465867427438
+          max:     -0.8669465867427438
+          comments: ''
+      'B->K::alpha^f+_2@BSZ2015' :
+          central: +0.006095669673341246
+          min:     +0.006095669673341246
+          max:     +0.006095669673341246
+          comments: ''
+      'B->K::alpha^f0_1@BSZ2015' :
+          central: +0.19511719957037596
+          min:     +0.19511719957037596
+          max:     +0.19511719957037596
+          comments: ''
+      'B->K::alpha^f0_2@BSZ2015' :
+          central: -0.4461264576740431
+          min:     -0.4461264576740431
+          max:     -0.4461264576740431
+          comments: ''
+      'B->K::alpha^fT_0@BSZ2015' :
+          central: +0.2993831492500477
+          min:     +0.2993831492500477
+          max:     +0.2993831492500477
+          comments: ''
+      'B->K::alpha^fT_1@BSZ2015' :
+          central: -0.7735456824025474
+          min:     -0.7735456824025474
+          max:     -0.7735456824025474
+          comments: ''
+      'B->K::alpha^fT_2@BSZ2015' :
+          central: +0.009554375102511888
+          min:     +0.009554375102511888
+          max:     +0.009554375102511888
+          comments: ''
+      # form factor parameters for B->K according to [KMPW2010], Table 4, p. 31
+      'B->K::F^p(0)@KMPW2010' :
+          central: +0.34
+          min:     +0.32
+          max:     +0.39
+          comments: ''
+      'B->K::F^t(0)@KMPW2010' :
+          central: +0.39
+          min:     +0.36
+          max:     +0.44
+          comments: ''
+      'B->K::b^p_1@KMPW2010' :
+          central: -2.1
+          min:     -3.7
+          max:     -1.2
+          comments: ''
+      'B->K::b^0_1@KMPW2010' :
+          central: -4.3
+          min:     -5.2
+          max:     -3.5
+          comments: ''
+      'B->K::b^t_1@KMPW2010' :
+          central: -2.2
+          min:     -4.2
+          max:     -1.2
+          comments: ''
+      # form factor parameters for B->D from [BIvD2016] for [BCL2008] parametrization
+      'B->D::f_+(0)@BCL2008' :
+          central: +0.66
+          min:     +0.62
+          max:     +0.69
+          comments: ''
+      'B->D::f_T(0)@BCL2008' :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          comments: ''
+      'B->D::b_+^1@BCL2008' :
+          central: -4.00
+          min:     -5.00
+          max:     -3.10
+          comments: ''
+      'B->D::b_+^2@BCL2008' :
+          central: -0.80
+          min:     -5.60
+          max:     +3.40
+          comments: ''
+      'B->D::b_0^1@BCL2008' :
+          central: +0.40
+          min:     -0.20
+          max:     +0.80
+          comments: ''
+      'B->D::b_0^2@BCL2008' :
+          central: -1.20
+          min:     -5.60
+          max:     +3.20
+          comments: ''
+      'B->D::b_T^1@BCL2008' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B->D::b_T^2@BCL2008' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      # form factor parameters for B->D inspired by [BSZ2015]
+      # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
+      'B->D::alpha^f+_0@BSZ2015' :
+          central: +0.680881482963591
+          min:     +0.680881482963591
+          max:     +0.680881482963591
+          comments: ''
+      'B->D::alpha^f+_1@BSZ2015' :
+          central: -2.221782088112512
+          min:     -2.221782088112512
+          max:     -2.221782088112512
+          comments: ''
+      'B->D::alpha^f+_2@BSZ2015' :
+          central: +0.6541000835887975
+          min:     +0.6541000835887975
+          max:     +0.6541000835887975
+          comments: ''
+      'B->D::alpha^f0_1@BSZ2015' :
+          central: +0.5779088408438552
+          min:     +0.5779088408438552
+          max:     +0.5779088408438552
+          comments: ''
+      'B->D::alpha^f0_2@BSZ2015' :
+          central: +1.3271162015486215
+          min:     +1.3271162015486215
+          max:     +1.3271162015486215
+          comments: ''
+      'B->D::alpha^fT_0@BSZ2015' :
+          central: +0.5648201165054019
+          min:     +0.5648201165054019
+          max:     +0.5648201165054019
+          comments: ''
+      'B->D::alpha^fT_1@BSZ2015' :
+          central: -2.5027753865334676
+          min:     -2.5027753865334676
+          max:     -2.5027753865334676
+          comments: ''
+      'B->D::alpha^fT_2@BSZ2015' :
+          central: +10.591752810763625
+          min:     +10.591752810763625
+          max:     +10.591752810763625
+          comments: ''
+  # }}}
 
-# form factor parameters for LCSR calculation according to [DKMMO2008]
-"B->pi::zeta(NNLO)@DKMMO2008" :
-    central: 0.0
-    min:     -1.0
-    max:     +1.0
-    comments: ""
-"B->pi::M^2@DKMMO2008" :
-    central: +18.0
-    min:     +15.0
-    max:     +20.0
-    comments: " // GeV^2, cf. [DKMMO2008]"
-"B->pi::Mp^2@DKMMO2008" :
-    central: +5.0
-    min:     +5.0
-    max:     +5.0
-    comments: " // GeV^2, cf. [DKMMO2008]"
-"B->pi::mu@DKMMO2008" :
-    central: +3.0
-    min:     +3.0
-    max:     +3.0
-    comments: " // GeV, cf. [DKMMO2008]"
-"B->pi::s_0^B@DKMMO2008" :
-    central: +35.75
-    min:     +35.75
-    max:     +35.75
-    comments: " // GeV^2, cf. [DKMMO2008]"
-"B->pi::sp_0^B@DKMMO2008" :
-    central: +35.6
-    min:     +35.5
-    max:     +36.0
-    comments: " // GeV^2, cf. [DKMMO2008]"
+  # Parameters in B -> V Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in $B\to V$ Form Factor Parametrizations'
+    description: ''
+    parameters:
+      # form factor parameters for B->K^* according to [BZ2004] (approximate)
+      'B->K^*::a0_uncertainty@BZ2004' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      'B->K^*::a1_uncertainty@BZ2004' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      'B->K^*::a2_uncertainty@BZ2004' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      'B->K^*::v_uncertainty@BZ2004' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      'B->K^*::t1_uncertainty@BZ2004' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      'B->K^*::t2_uncertainty@BZ2004' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      'B->K^*::t3_uncertainty@BZ2004' :
+          central: +1.0
+          min:     +0.85
+          max:     +1.15
+          comments: ''
+      # form factor parameters for B->K^* according to [KMPW2010], Table 4, p. 31
+      'B->K^*::F^V(0)@KMPW2010' :
+          central: +0.36
+          min:     +0.24
+          max:     +0.59
+          comments: ''
+      'B->K^*::F^A0(0)@KMPW2010' :
+          central: +0.29
+          min:     +0.22
+          max:     +0.39
+          comments: ''
+      'B->K^*::F^A1(0)@KMPW2010' :
+          central: +0.25
+          min:     +0.15
+          max:     +0.41
+          comments: ''
+      'B->K^*::F^A2(0)@KMPW2010' :
+          central: +0.23
+          min:     +0.13
+          max:     +0.42
+          comments: ''
+      'B->K^*::F^T1(0)@KMPW2010' :
+          central: +0.31
+          min:     +0.21
+          max:     +0.49
+          comments: ''
+      'B->K^*::F^T2(0)@KMPW2010' :
+          central: +0.31
+          min:     +0.21
+          max:     +0.49
+          comments: ''
+      'B->K^*::F^T3(0)@KMPW2010' :
+          central: +0.22
+          min:     +0.12
+          max:     +0.39
+          comments: ''
+      'B->K^*::b^V_1@KMPW2010' :
+          central: -4.8
+          min:     -5.2
+          max:     -4.0
+          comments: ''
+      'B->K^*::b^A0_1@KMPW2010' :
+          central: -18.2
+          min:     -21.2
+          max:     -16.9
+          comments: ''
+      'B->K^*::b^A1_1@KMPW2010' :
+          central: +0.34
+          min:     -0.46
+          max:     +1.2
+          comments: ''
+      'B->K^*::b^A2_1@KMPW2010' :
+          central: -0.85
+          min:     -2.2
+          max:     +2.03
+          comments: ''
+      'B->K^*::b^T1_1@KMPW2010' :
+          central: -4.6
+          min:     -5.01
+          max:     -3.79
+          comments: ''
+      'B->K^*::b^T2_1@KMPW2010' :
+          central: -3.2
+          min:     -5.4
+          max:     -1.1
+          comments: ''
+      'B->K^*::b^T3_1@KMPW2010' :
+          central: -10.3
+          min:     -13.4
+          max:     -7.8
+          comments: ''
+      # form factor parameter for B_s->K^* according to [FMvD2015].
+      'B_s->K^*::F_perp(0)@FMvD2015' :
+          central: 0.349
+          min:     0.349
+          max:     0.349
+          comments: ''
+      'B_s->K^*::F_para(0)@FMvD2015' :
+          central: 0.379
+          min:     0.379
+          max:     0.379
+          comments: ''
+      'B_s->K^*::F_long(0)@FMvD2015' :
+          central: 0.314
+          min:     0.314
+          max:     0.314
+          comments: ''
+      'B_s->K^*::F_time(0)@FMvD2015' :
+          central: 0.314
+          min:     0.314
+          max:     0.314
+          comments: ''
+      'B_s->K^*::beta_perp^1@FMvD2015' :
+          central: -4.980
+          min:     -4.980
+          max:     -4.980
+          comments: ''
+      'B_s->K^*::beta_para^1@FMvD2015' :
+          central: +0.065
+          min:     +0.065
+          max:     +0.065
+          comments: ''
+      'B_s->K^*::beta_time^1@FMvD2015' :
+          central: +0.065
+          min:     +0.065
+          max:     +0.065
+          comments: ''
+      # form factor parameters for B->K^* simple series expansion (SSE) based on
+      # LCSR according to [BFW2010], table 10, p. 33, corrected values from Aoife Bharucha
+      'B->K^*::beta^V0_0@BFW2010' :
+          central: +0.31
+          min:     +0.31
+          max:     +0.31
+          comments: ''
+      'B->K^*::beta^V0_1@BFW2010' :
+          central: +0.74
+          min:     +0.74
+          max:     +0.74
+          comments: ''
+      'B->K^*::beta^V1_0@BFW2010' :
+          central: +0.62
+          min:     +0.62
+          max:     +0.62
+          comments: ''
+      'B->K^*::beta^V1_1@BFW2010' :
+          central: -1.4
+          min:     -1.4
+          max:     -1.4
+          comments: ''
+      'B->K^*::beta^V2_0@BFW2010' :
+          central: +0.45
+          min:     +0.45
+          max:     +0.45
+          comments: ''
+      'B->K^*::beta^V2_1@BFW2010' :
+          central: +0.35
+          min:     +0.35
+          max:     +0.35
+          comments: ''
+      'B->K^*::beta^Vt_0@BFW2010' :
+          central: +0.49
+          min:     +0.49
+          max:     +0.49
+          comments: ''
+      'B->K^*::beta^Vt_1@BFW2010' :
+          central: -1.4
+          min:     -1.4
+          max:     -1.4
+          comments: ''
+      # form-factor parameters for B->rho
+      # new updated results based on LCSR-only fit from the GKvD2018 calculation
+      # note that no lattice results exists for B->rho FFs yet
+      # Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
+      'B->rho::alpha^A0_0@BSZ2015' :
+          central: +0.2925336490766787
+          min:     +0.2925336490766787
+          max:     +0.2925336490766787
+          comments: ''
+      'B->rho::alpha^A0_1@BSZ2015' :
+          central: -0.7432269609691062
+          min:     -0.7432269609691062
+          max:     -0.7432269609691062
+          comments: ''
+      'B->rho::alpha^A0_2@BSZ2015' :
+          central: -0.013648222902133517
+          min:     -0.013648222902133517
+          max:     -0.013648222902133517
+          comments: ''
+      'B->rho::alpha^A1_0@BSZ2015' :
+          central: +0.2142700210705677
+          min:     +0.2142700210705677
+          max:     +0.2142700210705677
+          comments: ''
+      'B->rho::alpha^A1_1@BSZ2015' :
+          central: +0.4948341716573042
+          min:     +0.4948341716573042
+          max:     +0.4948341716573042
+          comments: ''
+      'B->rho::alpha^A1_2@BSZ2015' :
+          central: -0.5898416575860281
+          min:     -0.5898416575860281
+          max:     -0.5898416575860281
+          comments: ''
+      'B->rho::alpha^A12_1@BSZ2015' :
+          central: +0.5301085432518904
+          min:     +0.5301085432518904
+          max:     +0.5301085432518904
+          comments: ''
+      'B->rho::alpha^A12_2@BSZ2015' :
+          central: -0.1698995165626285
+          min:     -0.1698995165626285
+          max:     -0.1698995165626285
+          comments: ''
+      'B->rho::alpha^V_0@BSZ2015' :
+          central: +0.2712565197401259
+          min:     +0.2712565197401259
+          max:     +0.2712565197401259
+          comments: ''
+      'B->rho::alpha^V_1@BSZ2015' :
+          central: -0.4925853027266176
+          min:     -0.4925853027266176
+          max:     -0.4925853027266176
+          comments: ''
+      'B->rho::alpha^V_2@BSZ2015' :
+          central: -1.1971343036772617
+          min:     -1.1971343036772617
+          max:     -1.1971343036772617
+          comments: ''
+      'B->rho::alpha^T1_0@BSZ2015' :
+          central: +0.2375503875107005
+          min:     +0.2375503875107005
+          max:     +0.2375503875107005
+          comments: ''
+      'B->rho::alpha^T1_1@BSZ2015' :
+          central: -0.45934079379480375
+          min:     -0.45934079379480375
+          max:     -0.45934079379480375
+          comments: ''
+      'B->rho::alpha^T1_2@BSZ2015' :
+          central: -0.8719619977491347
+          min:     -0.8719619977491347
+          max:     -0.8719619977491347
+          comments: ''
+      'B->rho::alpha^T2_1@BSZ2015' :
+          central: +0.648543608510588
+          min:     +0.648543608510588
+          max:     +0.648543608510588
+          comments: ''
+      'B->rho::alpha^T2_2@BSZ2015' :
+          central: -0.8367381225762223
+          min:     -0.8367381225762223
+          max:     -0.8367381225762223
+          comments: ''
+      'B->rho::alpha^T23_0@BSZ2015' :
+          central: +0.558651527683086
+          min:     +0.558651527683086
+          max:     +0.558651527683086
+          comments: ''
+      'B->rho::alpha^T23_1@BSZ2015' :
+          central: +0.9756780226625973
+          min:     +0.9756780226625973
+          max:     +0.9756780226625973
+          comments: ''
+      'B->rho::alpha^T23_2@BSZ2015' :
+          central: -0.617057014268725
+          min:     -0.617057014268725
+          max:     -0.617057014268725
+      # form-factor parameters for B->K* 
+      # new updated results based on a combined LQCD+LCSR fit from the GKvD2018 calculation
+      # Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
+      'B->K^*::alpha^A0_0@BSZ2015' :
+          central: +0.333565209671414
+          min:     +0.333565209671414
+          max:     +0.333565209671414
+          comments: ''
+      'B->K^*::alpha^A0_1@BSZ2015' :
+          central: -1.1164087925500106
+          min:     -1.1164087925500106
+          max:     -1.1164087925500106
+          comments: ''
+      'B->K^*::alpha^A0_2@BSZ2015' :
+          central: +2.497069832700105
+          min:     +2.497069832700105
+          max:     +2.497069832700105
+          comments: ''
+      'B->K^*::alpha^A1_0@BSZ2015' :
+          central: +0.28899504979162
+          min:     +0.28899504979162
+          max:     +0.28899504979162
+          comments: ''
+      'B->K^*::alpha^A1_1@BSZ2015' :
+          central: +0.4566061262798284
+          min:     +0.4566061262798284
+          max:     +0.4566061262798284
+          comments: ''
+      'B->K^*::alpha^A1_2@BSZ2015' :
+          central: +1.1829764611868705
+          min:     +1.1829764611868705
+          max:     +1.1829764611868705
+          comments: ''
+      'B->K^*::alpha^A12_1@BSZ2015' :
+          central: +0.5041466779610547
+          min:     +0.5041466779610547
+          max:     +0.5041466779610547
+          comments: ''
+      'B->K^*::alpha^A12_2@BSZ2015' :
+          central: +0.523751990094357
+          min:     +0.523751990094357
+          max:     +0.523751990094357
+          comments: ''
+      'B->K^*::alpha^V_0@BSZ2015' :
+          central: +0.3641736466070142
+          min:     +0.3641736466070142
+          max:     +0.3641736466070142
+          comments: ''
+      'B->K^*::alpha^V_1@BSZ2015' :
+          central: -1.0924590752515513
+          min:     -1.0924590752515513
+          max:     -1.0924590752515513
+          comments: ''
+      'B->K^*::alpha^V_2@BSZ2015' :
+          central: +2.5954783573262934
+          min:     +2.5954783573262934
+          max:     +2.5954783573262934
+          comments: ''
+      'B->K^*::alpha^T1_0@BSZ2015' :
+          central: +0.31922162296608125
+          min:     +0.31922162296608125
+          max:     +0.31922162296608125
+          comments: ''
+      'B->K^*::alpha^T1_1@BSZ2015' :
+          central: -0.9539833567723242
+          min:     -0.9539833567723242
+          max:     -0.9539833567723242
+          comments: ''
+      'B->K^*::alpha^T1_2@BSZ2015' :
+          central: +2.040771175053964
+          min:     +2.040771175053964
+          max:     +2.040771175053964
+          comments: ''
+      'B->K^*::alpha^T2_1@BSZ2015' :
+          central: +0.6020794846388718
+          min:     +0.6020794846388718
+          max:     +0.6020794846388718
+          comments: ''
+      'B->K^*::alpha^T2_2@BSZ2015' :
+          central: +1.699282551872677
+          min:     +1.699282551872677
+          max:     +1.699282551872677
+          comments: ''
+      'B->K^*::alpha^T23_0@BSZ2015' :
+          central: +0.6058860992660229
+          min:     +0.6058860992660229
+          max:     +0.6058860992660229
+          comments: ''
+      'B->K^*::alpha^T23_1@BSZ2015' :
+          central: +0.8867716020286049
+          min:     +0.8867716020286049
+          max:     +0.8867716020286049
+          comments: ''
+      'B->K^*::alpha^T23_2@BSZ2015' :
+          central: +1.8831160249369858
+          min:     +1.8831160249369858
+          max:     +1.8831160249369858
+          comments: ''
+      # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
+      # Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
+      'B->D^*::alpha^A0_0@BSZ2015' :
+          central: +0.6759274184148141
+          min:     +0.6759274184148141
+          max:     +0.6759274184148141
+          comments: ''
+      'B->D^*::alpha^A0_1@BSZ2015' :
+          central: -2.6637000799846655
+          min:     -2.6637000799846655
+          max:     -2.6637000799846655
+          comments: ''
+      'B->D^*::alpha^A0_2@BSZ2015' :
+          central: +9.24495323738047
+          min:     +9.24495323738047
+          max:     +9.24495323738047
+          comments: ''
+      'B->D^*::alpha^A1_0@BSZ2015' :
+          central: +0.601315572767782
+          min:     +0.601315572767782
+          max:     +0.601315572767782
+          comments: ''
+      'B->D^*::alpha^A1_1@BSZ2015' :
+          central: +0.2689438444495897
+          min:     +0.2689438444495897
+          max:     +0.2689438444495897
+          comments: ''
+      'B->D^*::alpha^A1_2@BSZ2015' :
+          central: +10.486032487112988
+          min:     +10.486032487112988
+          max:     +10.486032487112988
+          comments: ''
+      'B->D^*::alpha^A12_1@BSZ2015' :
+          central: -0.14876383294863582
+          min:     -0.14876383294863582
+          max:     -0.14876383294863582
+          comments: ''
+      'B->D^*::alpha^A12_2@BSZ2015' :
+          central: +5.724359813703122
+          min:     +5.724359813703122
+          max:     +5.724359813703122
+          comments: ''
+      'B->D^*::alpha^V_0@BSZ2015' :
+          central: +0.6851323923652662
+          min:     +0.6851323923652662
+          max:     +0.6851323923652662
+          comments: ''
+      'B->D^*::alpha^V_1@BSZ2015' :
+          central: -1.1678379355866901
+          min:     -1.1678379355866901
+          max:     -1.1678379355866901
+          comments: ''
+      'B->D^*::alpha^V_2@BSZ2015' :
+          central: -4.016847943717434
+          min:     -4.016847943717434
+          max:     -4.016847943717434
+          comments: ''
+      'B->D^*::alpha^T1_0@BSZ2015' :
+          central: +0.6302298493900512
+          min:     +0.6302298493900512
+          max:     +0.6302298493900512
+          comments: ''
+      'B->D^*::alpha^T1_1@BSZ2015' :
+          central: -1.4175767766320952
+          min:     -1.4175767766320952
+          max:     -1.4175767766320952
+          comments: ''
+      'B->D^*::alpha^T1_2@BSZ2015' :
+          central: -0.6878528871949201
+          min:     -0.6878528871949201
+          max:     -0.6878528871949201
+          comments: ''
+      'B->D^*::alpha^T2_1@BSZ2015' :
+          central: +1.5226848746033717
+          min:     +1.5226848746033717
+          max:     +1.5226848746033717
+          comments: ''
+      'B->D^*::alpha^T2_2@BSZ2015' :
+          central: +0.006625613047247359
+          min:     +0.006625613047247359
+          max:     +0.006625613047247359
+          comments: ''
+      'B->D^*::alpha^T23_0@BSZ2015' :
+          central: +0.806230464649646
+          min:     +0.806230464649646
+          max:     +0.806230464649646
+          comments: ''
+      'B->D^*::alpha^T23_1@BSZ2015' :
+          central: +0.5855443911134184
+          min:     +0.5855443911134184
+          max:     +0.5855443911134184
+          comments: ''
+      'B->D^*::alpha^T23_2@BSZ2015' :
+          central: +4.667079193615467
+          min:     +4.667079193615467
+          max:     +4.667079193615467
+          comments: ''
+  # }}}
 
-# form factor parameters for QCDF calculation according to [BFvD2016]
-"B->pipi::mu@BFvD2016" :
-    central: 1.5
-    min:     1.0
-    max:     2.0
-    comments: " // GeV, cf. [BFvD2016]"
+  # Parameters in B -> P P Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in $B\to PP$ Form Factor Parametrizations'
+    description: ''
+    parameters:
+      # form factor parameters for parametrization according to [FvDV2018]
+      # para
+      'B->pipi::a^Fperp_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fperp_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fperp_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fperp_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fperp_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fperp_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fperp_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fperp_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fperp_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fperp_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fperp_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fperp_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fperp_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fperp_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fperp_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fperp_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fperp_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fperp_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fperp_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fperp_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fperp_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      # para
+      'B->pipi::a^Fpara_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fpara_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fpara_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fpara_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fpara_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fpara_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Fpara_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fpara_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fpara_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fpara_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fpara_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fpara_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fpara_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Fpara_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fpara_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fpara_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fpara_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fpara_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fpara_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fpara_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Fpara_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      # long
+      'B->pipi::a^Flong_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Flong_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Flong_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Flong_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Flong_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Flong_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Flong_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Flong_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Flong_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Flong_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Flong_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Flong_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Flong_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Flong_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Flong_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Flong_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Flong_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Flong_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Flong_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Flong_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Flong_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      # time
+      'B->pipi::a^Ftime_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Ftime_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Ftime_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Ftime_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Ftime_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Ftime_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::a^Ftime_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Ftime_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Ftime_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Ftime_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Ftime_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Ftime_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Ftime_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::b^Ftime_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Ftime_0_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Ftime_0_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Ftime_0_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Ftime_0_3@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Ftime_1_0@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Ftime_1_1@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'B->pipi::c^Ftime_1_2@FvDV2018' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+  # }}}
 
-# form factor parameters for parametrization according to [FvDV2018]
-# para
-"B->pipi::a^Fperp_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fperp_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fperp_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fperp_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fperp_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fperp_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fperp_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fperp_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fperp_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fperp_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fperp_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fperp_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fperp_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fperp_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fperp_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fperp_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fperp_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fperp_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fperp_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fperp_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fperp_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-# para
-"B->pipi::a^Fpara_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fpara_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fpara_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fpara_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fpara_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fpara_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Fpara_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fpara_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fpara_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fpara_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fpara_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fpara_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fpara_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Fpara_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fpara_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fpara_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fpara_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fpara_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fpara_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fpara_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Fpara_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-# long
-"B->pipi::a^Flong_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Flong_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Flong_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Flong_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Flong_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Flong_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Flong_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Flong_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Flong_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Flong_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Flong_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Flong_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Flong_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Flong_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Flong_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Flong_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Flong_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Flong_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Flong_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Flong_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Flong_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-# time
-"B->pipi::a^Ftime_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Ftime_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Ftime_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Ftime_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Ftime_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Ftime_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::a^Ftime_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Ftime_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Ftime_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Ftime_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Ftime_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Ftime_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Ftime_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::b^Ftime_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Ftime_0_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Ftime_0_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Ftime_0_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Ftime_0_3@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Ftime_1_0@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Ftime_1_1@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
-"B->pipi::c^Ftime_1_2@FvDV2018" :
-    central: 0.0
-    min:     0.0
-    max:     0.0
+  # Parameters in LCSR Calculations with Light-Meson LCDAs
+  # {{{
+  - title: 'Parameters in LCSR Calculations with Light-Meson LCDAs'
+    description: ''
+    parameters:
+      # form factor parameters for LCSR calculation according to [DKMMO2008]
+      'B->pi::zeta(NNLO)@DKMMO2008' :
+          central: 0.0
+          min:     -1.0
+          max:     +1.0
+          comments: ''
+      'B->pi::M^2@DKMMO2008' :
+          central: +18.0
+          min:     +15.0
+          max:     +20.0
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+      'B->pi::Mp^2@DKMMO2008' :
+          central: +5.0
+          min:     +5.0
+          max:     +5.0
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+      'B->pi::mu@DKMMO2008' :
+          central: +3.0
+          min:     +3.0
+          max:     +3.0
+          comments: ' // GeV, cf. [DKMMO2008]'
+      'B->pi::s_0^B@DKMMO2008' :
+          central: +35.75
+          min:     +35.75
+          max:     +35.75
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+      'B->pi::sp_0^B@DKMMO2008' :
+          central: +35.6
+          min:     +35.5
+          max:     +36.0
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+      # parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [KMO2006] and [KMPW2010].
+      "B->K^*::s_0@LCSR" :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: "GeV^2"
+      "B->K^*::M^2@LCSR" :
+          central: 1.0
+          min:     0.75
+          max:     1.25
+          comments: "GeV^2"
+  # }}}
 
-# form factor parameters for B->pi in [BCL2008] parametrization, with
-# f_+ taken from [IKMvD2014]
-"B->pi::f_+(0)@BCL2008" :
-    central: +0.307
-    min:     +0.287
-    max:     +0.327
-    latex:    '$f^{B\to \pi}_+(0)$'
-    comments: ""
-"B->pi::b_+^1@BCL2008" :
-    central: -1.31
-    min:     +1.73
-    max:     -0.89
-    latex:    '$b_{+, 1}^{B\to \pi}$'
-    comments: ""
-"B->pi::b_+^2@BCL2008" :
-    central: -0.904
-    min:     -1.348
-    max:     -0.460
-    latex:    '$b_{+, 2}^{B\to \pi}$'
-    comments: ""
-"B->pi::b_0^1@BCL2008" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
-    latex:    '$b_{0, 1}^{B\to \pi}$'
-    comments: ""
-"B->pi::b_0^2@BCL2008" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
-    latex:    '$b_{0, 2}^{B\to \pi}$'
-    comments: ""
-"B->pi::f_T(0)@BCL2008" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
-    latex:    '$f^{B\to \pi}_T(0)$'
-    comments: ""
-"B->pi::b_T^1@BCL2008" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
-    latex:    '$b_{T, 1}^{B\to \pi}$'
-    comments: ""
-"B->pi::b_T^2@BCL2008" :
-    central: +0.00
-    min:     +0.00
-    max:     +0.00
-    latex:    '$b_{T, 2}^{B\to \pi}$'
-    comments: ""
+  # Parameters in LCSR Calculations with B-meson LCDAs
+  # {{{
+  - title: 'Parameters in LCSR Calculations with B-meson LCDAs'
+    description: ''
+    parameters:
+      # parameters for LCSR calculation of B->pi hadronic matrix elements, cf. [GKvD2018]
+      'B->pi::s_0^+,0@B-LCSR' :
+          central: 0.7
+          min:     0.7
+          max:     0.7
+          comments: 'GeV^2'
+      'B->pi::s_0^+,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->pi::s_0^+/-,0@B-LCSR' :
+          central: 0.7
+          min:     0.7
+          max:     0.7
+          comments: 'GeV^2'
+      'B->pi::s_0^+/-,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->pi::s_0^T,0@B-LCSR' :
+          central: 0.7
+          min:     0.7
+          max:     0.7
+          comments: 'GeV^2'
+      'B->pi::s_0^T,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->pi::M^2@B-LCSR' :
+          central: 1.0
+          min:     0.5
+          max:     1.5
+          comments: 'GeV^2'
+      'B->pi::mu@B-LCSR' :
+          central: 1.0
+          min:     0.7
+          max:     0.3
+          comments: ''
+      # parameters for LCSR calculation of B->K hadronic matrix elements, cf. [GKvD2018]
+      'B->K::s_0^+,0@B-LCSR' :
+          central: 1.05
+          min:     1.05
+          max:     1.05
+          comments: 'GeV^2'
+      'B->K::s_0^+,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K::s_0^+/-,0@B-LCSR' :
+          central: 1.05
+          min:     1.05
+          max:     1.05
+          comments: 'GeV^2'
+      'B->K::s_0^+/-,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K::s_0^T,0@B-LCSR' :
+          central: 1.05
+          min:     1.05
+          max:     1.05
+          comments: 'GeV^2'
+      'B->K::s_0^T,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K::M^2@B-LCSR' :
+          central: 1.0
+          min:     0.5
+          max:     1.5
+          comments: 'GeV^2'
+      'B->K::mu@B-LCSR' :
+          central: 1.0
+          min:     0.7
+          max:     0.3
+          comments: ''
+      # parameters for LCSR calculation of B_s->K hadronic matrix elements
+      'B_s->K::s_0^+,0@B-LCSR' :
+          central: 1.05
+          min:     1.05
+          max:     1.05
+          comments: 'GeV^2'
+      'B_s->K::s_0^+,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K::s_0^+/-,0@B-LCSR' :
+          central: 1.05
+          min:     1.05
+          max:     1.05
+          comments: 'GeV^2'
+      'B_s->K::s_0^+/-,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K::s_0^T,0@B-LCSR' :
+          central: 1.05
+          min:     1.05
+          max:     1.05
+          comments: 'GeV^2'
+      'B_s->K::s_0^T,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K::M^2@B-LCSR' :
+          central: 1.0
+          min:     0.5
+          max:     1.5
+          comments: 'GeV^2'
+      'B_s->K::mu@B-LCSR' :
+          central: 1.0
+          min:     0.7
+          max:     0.3
+          comments: ''
+      # parameters for LCSR calculation of B->D hadronic matrix elements, cf. [GKvD2018]
+      'B->D::s_0^+,0@B-LCSR' :
+          central: 6.0
+          min:     6.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B->D::s_0^+,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D::s_0^+/-,0@B-LCSR' :
+          central: 6.0
+          min:     6.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B->D::s_0^+/-,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D::s_0^T,0@B-LCSR' :
+          central: 6.0
+          min:     6.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B->D::s_0^T,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D::M^2@B-LCSR' :
+          central: 4.5
+          min:     3.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B->D::mu@B-LCSR' :
+          central: 2.1213
+          min:     2.1213
+          max:     2.1213
+          comments: ''
+      # parameters for LCSR calculation of B_s->D_s hadronic matrix elements
+      'B_s->D_s::s_0^+,0@B-LCSR' :
+          central: 6.0
+          min:     6.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B_s->D_s::s_0^+,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D_s::s_0^+/-,0@B-LCSR' :
+          central: 6.0
+          min:     6.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B_s->D_s::s_0^+/-,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D_s::s_0^T,0@B-LCSR' :
+          central: 6.0
+          min:     6.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B_s->D_s::s_0^T,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D_s::M^2@B-LCSR' :
+          central: 4.5
+          min:     3.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B_s->D_s::mu@B-LCSR' :
+          central: 2.1213
+          min:     2.1213
+          max:     2.1213
+          comments: ''
+      # parameters for LCSR calculation of B->rho hadronic matrix elements, cf. [GKvD2018]
+      'B->rho::s_0^A1,0@B-LCSR' :
+          central: 1.6
+          min:     1.6
+          max:     1.6
+          comments: 'GeV^2'
+      'B->rho::s_0^A1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->rho::s_0^A2,0@B-LCSR' :
+          central: 1.6
+          min:     1.6
+          max:     1.6
+          comments: 'GeV^2'
+      'B->rho::s_0^A2,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->rho::s_0^A30,0@B-LCSR' :
+          central: 1.6
+          min:     1.6
+          max:     1.6
+          comments: 'GeV^2'
+      'B->rho::s_0^A30,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->rho::s_0^V,0@B-LCSR' :
+          central: 1.6
+          min:     1.6
+          max:     1.6
+          comments: 'GeV^2'
+      'B->rho::s_0^V,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->rho::s_0^T1,0@B-LCSR' :
+          central: 1.6
+          min:     1.6
+          max:     1.6
+          comments: 'GeV^2'
+      'B->rho::s_0^T1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->rho::s_0^T23A,0@B-LCSR' :
+          central: 1.6
+          min:     1.6
+          max:     1.6
+          comments: 'GeV^2'
+      'B->rho::s_0^T23A,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->rho::s_0^T23B,0@B-LCSR' :
+          central: 1.6
+          min:     1.6
+          max:     1.6
+          comments: 'GeV^2'
+      'B->rho::s_0^T23B,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->rho::M^2@B-LCSR' :
+          central: 1.0
+          min:     0.5
+          max:     1.5
+          comments: 'GeV^2'
+      'B->rho::mu@B-LCSR' :
+          central: 1.0
+          min:     0.7
+          max:     0.3
+          comments: ''
+      
+      # parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [GKvD2018]
+      'B->K^*::s_0^A1,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B->K^*::s_0^A1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K^*::s_0^A2,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B->K^*::s_0^A2,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K^*::s_0^A30,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B->K^*::s_0^A30,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K^*::s_0^V,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B->K^*::s_0^V,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K^*::s_0^T1,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B->K^*::s_0^T1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K^*::s_0^T23A,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B->K^*::s_0^T23A,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K^*::s_0^T23B,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B->K^*::s_0^T23B,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->K^*::M^2@B-LCSR' :
+          central: 1.0
+          min:     0.5
+          max:     1.5
+          comments: 'GeV^2'
+      'B->K^*::mu@B-LCSR' :
+          central: 1.0
+          min:     0.7
+          max:     0.3
+          comments: ''
+      # parameters for LCSR calculation of B_s->K^* hadronic matrix elements
+      'B_s->K^*::s_0^A1,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->K^*::s_0^A1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K^*::s_0^A2,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->K^*::s_0^A2,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K^*::s_0^A30,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->K^*::s_0^A30,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K^*::s_0^V,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->K^*::s_0^V,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K^*::s_0^T1,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->K^*::s_0^T1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K^*::s_0^T23A,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->K^*::s_0^T23A,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K^*::s_0^T23B,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->K^*::s_0^T23B,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->K^*::M^2@B-LCSR' :
+          central: 1.0
+          min:     0.5
+          max:     1.5
+          comments: 'GeV^2'
+      'B_s->K^*::mu@B-LCSR' :
+          central: 1.0
+          min:     0.7
+          max:     0.3
+          comments: ''
+      # parameters for LCSR calculation of B->D^* hadronic matrix elements, cf. [GKvD2018]
+      'B->D^*::s_0^A1,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B->D^*::s_0^A1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D^*::s_0^A2,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B->D^*::s_0^A2,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D^*::s_0^A30,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B->D^*::s_0^A30,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D^*::s_0^V,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B->D^*::s_0^V,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D^*::s_0^T1,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B->D^*::s_0^T1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D^*::s_0^T23A,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B->D^*::s_0^T23A,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D^*::s_0^T23B,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B->D^*::s_0^T23B,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B->D^*::M^2@B-LCSR' :
+          central: 4.5
+          min:     3.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B->D^*::mu@B-LCSR' :
+          central: 2.1213
+          min:     2.1213
+          max:     2.1213
+          comments: ''
+      # parameters for LCSR calculation of B_s->D^*_s hadronic matrix elements
+      'B_s->D^*_s::s_0^A1,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B_s->D^*_s::s_0^A1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D^*_s::s_0^A2,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B_s->D^*_s::s_0^A2,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D^*_s::s_0^A30,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B_s->D^*_s::s_0^A30,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D^*_s::s_0^V,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B_s->D^*_s::s_0^V,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D^*_s::s_0^T1,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B_s->D^*_s::s_0^T1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D^*_s::s_0^T23A,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B_s->D^*_s::s_0^T23A,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D^*_s::s_0^T23B,0@B-LCSR' :
+          central: 8.0
+          min:     8.0
+          max:     8.0
+          comments: 'GeV^2'
+      'B_s->D^*_s::s_0^T23B,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->D^*_s::M^2@B-LCSR' :
+          central: 4.5
+          min:     3.0
+          max:     6.0
+          comments: 'GeV^2'
+      'B_s->D^*_s::mu@B-LCSR' :
+          central: 2.1213
+          min:     2.1213
+          max:     2.1213
+          comments: ''
+      # parameters for LCSR calculation of B_s->phi hadronic matrix elements
+      'B_s->phi::s_0^A1,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->phi::s_0^A1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->phi::s_0^A2,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->phi::s_0^A2,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->phi::s_0^A30,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->phi::s_0^A30,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->phi::s_0^V,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->phi::s_0^V,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->phi::s_0^T1,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->phi::s_0^T1,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->phi::s_0^T23A,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->phi::s_0^T23A,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->phi::s_0^T23B,0@B-LCSR' :
+          central: 1.7
+          min:     1.7
+          max:     1.7
+          comments: 'GeV^2'
+      'B_s->phi::s_0^T23B,1@B-LCSR' :
+          central: 0.0
+          min:     0.0
+          max:     1.0
+          comments: '1'
+      'B_s->phi::M^2@B-LCSR' :
+          central: 1.0
+          min:     0.5
+          max:     1.5
+          comments: 'GeV^2'
+      'B_s->phi::mu@B-LCSR' :
+          central: 1.0
+          min:     0.7
+          max:     0.3
+          comments: ''
+  # }}}
 
-# form factor parameters for B->K for [BCL2008] parametrization
-"B->K::f_+(0)@BCL2008" :
-    central: +0.0
-    min:     +0.0
-    max:     +0.0
-    comments: ""
-"B->K::f_T(0)@BCL2008" :
-    central: +0.0
-    min:     +0.0
-    max:     +0.0
-    comments: ""
-"B->K::b_+^1@BCL2008" :
-    central: +0.0
-    min:     +0.0
-    max:     +0.0
-    comments: ""
-"B->K::b_+^2@BCL2008" :
-    central: +0.0
-    min:     +0.0
-    max:     +0.0
-    comments: ""
-"B->K::b_0^1@BCL2008" :
-    central: +0.0
-    min:     +0.0
-    max:     +0.0
-    comments: ""
-"B->K::b_0^2@BCL2008" :
-    central:  0.0
-    min:      0.0
-    max:      0.0
-    comments: ""
-"B->K::b_T^1@BCL2008" :
-    central:  0.0
-    min:      0.0
-    max:      0.0
-    comments: ""
-"B->K::b_T^2@BCL2008" :
-    central:  0.0
-    min:      0.0
-    max:      0.0
-    comments: ""
+  # Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations
+  # {{{
+  - title: 'Parameters in ${}^1/_2{}^+ \to {}^1/_2{}^+$ Form Factor Parametrizations'
+    description: ''
+    parameters:
+      # form factor parameters for Lambda_b -> Lambda decays according to
+      # [BFvD2014], table ?, p. ??
+      'Lambda_b->Lambda::f_0^V(0)@BFvD2014' :
+          central: +0.28
+          min:     +0.22
+          max:     +0.34
+          comments: ''
+      'Lambda_b->Lambda::b_1_0^V@BFvD2014' :
+          central: -11.00
+          min:     -19.00
+          max:     -6.00
+          comments: ''
+      'Lambda_b->Lambda::f_0^A(0)@BFvD2014' :
+          central: +0.27
+          min:     +0.21
+          max:     +0.33
+          comments: ''
+      'Lambda_b->Lambda::b_1_0^A@BFvD2014' :
+          central: -8.00
+          min:     -16.00
+          max:     -5.00
+          comments: ''
+      'Lambda_b->Lambda::f_perp^V(0)@BFvD2014' :
+          central: +0.28
+          min:     +0.22
+          max:     +0.34
+          comments: ''
+      'Lambda_b->Lambda::b_1_perp^V@BFvD2014' :
+          central: -11.00
+          min:     -19.00
+          max:     -6.00
+          comments: ''
+      'Lambda_b->Lambda::f_perp^A(0)@BFvD2014' :
+          central: +0.30
+          min:     +0.24
+          max:     +0.36
+          comments: ''
+      'Lambda_b->Lambda::b_1_perp^A@BFvD2014' :
+          central: -6.00
+          min:     -12.00
+          max:     -3.00
+          comments: ''
+      'Lambda_b->Lambda::sigma_perp^V@BFvD2014' :
+          central: 0.00
+          min:     -0.20
+          max:     +0.20
+          comments: ''
+      'Lambda_b->Lambda::sigma_perp^A@BFvD2014' :
+          central: 0.00
+          min:     -0.30
+          max:     +0.30
+          comments: ''
+      'Lambda_b->Lambda::sigma_long^V@BFvD2014' :
+          central: 0.00
+          min:     -0.21
+          max:     +0.21
+          comments: ''
+      'Lambda_b->Lambda::sigma_long^A@BFvD2014' :
+          central: 0.00
+          min:     -0.30
+          max:     +0.30
+          comments: ''
+      # form factor parameters for Lambda_b -> Lambda decays according to
+      # [DM2016], table ?, p. ??
+      'Lambda_b->Lambda::a_0_time^V@DM2016' :
+          central: +0.373
+          min:     +0.373
+          max:     +0.373
+          comments: ''
+      'Lambda_b->Lambda::a_1_time^V@DM2016' :
+          central: -0.939
+          min:     -0.939
+          max:     -0.939
+          comments: ''
+      'Lambda_b->Lambda::a_2_time^V@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda::a_0_time^A@DM2016' :
+          central: +0.403
+          min:     +0.403
+          max:     +0.403
+          comments: ''
+      'Lambda_b->Lambda::a_1_time^A@DM2016' :
+          central: -1.029
+          min:     -1.029
+          max:     -1.029
+          comments: ''
+      'Lambda_b->Lambda::a_2_time^A@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda::a_0_long^V@DM2016' :
+          central: +0.422
+          min:     +0.422
+          max:     +0.422
+          comments: ''
+      'Lambda_b->Lambda::a_1_long^V@DM2016' :
+          central: -1.139
+          min:     -1.139
+          max:     -1.139
+          comments: ''
+      'Lambda_b->Lambda::a_2_long^V@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda::a_0_perp^V@DM2016' :
+          central: +0.518
+          min:     +0.518
+          max:     +0.518
+          comments: ''
+      'Lambda_b->Lambda::a_1_perp^V@DM2016' :
+          central: -1.350
+          min:     -1.350
+          max:     -1.350
+          comments: ''
+      'Lambda_b->Lambda::a_2_perp^V@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda::a_0_long^A@DM2016' :
+          central: +0.356
+          min:     +0.356
+          max:     +0.356
+          comments: ''
+      'Lambda_b->Lambda::a_1_long^A@DM2016' :
+          central: -1.061
+          min:     -1.061
+          max:     -1.061
+          comments: ''
+      'Lambda_b->Lambda::a_2_long^A@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda::a_1_perp^A@DM2016' :
+          central: -1.136
+          min:     -1.136
+          max:     -1.136
+          comments: ''
+      'Lambda_b->Lambda::a_2_perp^A@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda::a_0_long^T@DM2016' :
+          central: +0.496
+          min:     +0.496
+          max:     +0.496
+          comments: ''
+      'Lambda_b->Lambda::a_1_long^T@DM2016' :
+          central: -1.128
+          min:     -1.128
+          max:     -1.128
+          comments: ''
+      'Lambda_b->Lambda::a_2_long^T@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda::a_0_perp^T@DM2016' :
+          central: +0.388
+          min:     +0.388
+          max:     +0.388
+          comments: ''
+      'Lambda_b->Lambda::a_1_perp^T@DM2016' :
+          central: -0.962
+          min:     -0.962
+          max:     -0.962
+          comments: ''
+      'Lambda_b->Lambda::a_2_perp^T@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda::a_0_long^T5@DM2016' :
+          central: +0.340
+          min:     +0.340
+          max:     +0.340
+          comments: ''
+      'Lambda_b->Lambda::a_1_long^T5@DM2016' :
+          central: -0.770
+          min:     -0.770
+          max:     -0.770
+          comments: ''
+      'Lambda_b->Lambda::a_2_long^T5@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda::a_1_perp^T5@DM2016' :
+          central: -0.801
+          min:     -0.801
+          max:     -0.801
+          comments: ''
+      'Lambda_b->Lambda::a_2_perp^T5@DM2016' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      # Form factor parameters for Lambda_b -> Lambda_c decay according to
+      # [DKMR2017], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
+      # params for tensor FFs are included.
+      'Lambda_b->Lambda_c::a_0_time^V@DKMR2017' :
+          central: +0.74392566003686
+          min:     +0.74392566003686
+          max:     +0.74392566003686
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_time^V@DKMR2017' :
+          central: -4.6476511382467
+          min:     -4.6476511382467
+          max:     -4.6476511382467
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_time^V@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda_c::a_0_time^A@DKMR2017' :
+          central: +0.73960499809758
+          min:     +0.73960499809758
+          max:     +0.73960499809758
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_time^A@DKMR2017' :
+          central: -4.3664554520299
+          min:     -4.3664554520299
+          max:     -4.3664554520299
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_time^A@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda_c::a_0_long^V@DKMR2017' :
+          central: +0.81458549275845
+          min:     +0.81458549275845
+          max:     +0.81458549275845
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_long^V@DKMR2017' :
+          central: -4.8987680713973
+          min:     -4.8987680713973
+          max:     -4.8987680713973
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_long^V@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda_c::a_0_perp^V@DKMR2017' :
+          central: +1.077996185173
+          min:     +1.077996185173
+          max:     +1.077996185173
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_perp^V@DKMR2017' :
+          central: -6.4170836206134
+          min:     -6.4170836206134
+          max:     -6.4170836206134
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_perp^V@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda_c::a_0_long^A@DKMR2017' :
+          central: +0.6846557018386
+          min:     +0.6846557018386
+          max:     +0.6846557018386
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_long^A@DKMR2017' :
+          central: -4.4311552783827
+          min:     -4.4311552783827
+          max:     -4.4311552783827
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_long^A@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_perp^A@DKMR2017' :
+          central: -4.4633624514401
+          min:     -4.4633624514401
+          max:     -4.4633624514401
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_perp^A@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda_c::a_0_long^T@DKMR2017' :
+          central: +0.97518189850197
+          min:     +0.97518189850197
+          max:     +0.97518189850197
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_long^T@DKMR2017' :
+          central: -5.4999842229709
+          min:     -5.4999842229709
+          max:     -5.4999842229709
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_long^T@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda_c::a_0_perp^T@DKMR2017' :
+          central: +0.70539533108116
+          min:     +0.70539533108116
+          max:     +0.70539533108116
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_perp^T@DKMR2017' :
+          central: -4.3577976693726
+          min:     -4.3577976693726
+          max:     -4.3577976693726
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_perp^T@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda_c::a_0_long^T5@DKMR2017' :
+          central: +0.67275080357035
+          min:     +0.67275080357035
+          max:     +0.67275080357035
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_long^T5@DKMR2017' :
+          central: -4.4321757873186
+          min:     -4.4321757873186
+          max:     -4.4321757873186
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_long^T5@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+      'Lambda_b->Lambda_c::a_1_perp^T5@DKMR2017' :
+          central: -4.4927847697461
+          min:     -4.4927847697461
+          max:     -4.4927847697461
+          comments: ''
+      'Lambda_b->Lambda_c::a_2_perp^T5@DKMR2017' :
+          central: +0.000
+          min:     +0.000
+          max:     +0.000
+          comments: ''
+  # }}}
 
-# form factor parameters for B->D from [BIvD2016] for [BCL2008] parametrization
-"B->D::f_+(0)@BCL2008" :
-    central: +0.66
-    min:     +0.62
-    max:     +0.69
-    comments: ""
-"B->D::f_T(0)@BCL2008" :
-    central: +0.0
-    min:     +0.0
-    max:     +0.0
-    comments: ""
-"B->D::b_+^1@BCL2008" :
-    central: -4.00
-    min:     -5.00
-    max:     -3.10
-    comments: ""
-"B->D::b_+^2@BCL2008" :
-    central: -0.80
-    min:     -5.60
-    max:     +3.40
-    comments: ""
-"B->D::b_0^1@BCL2008" :
-    central: +0.40
-    min:     -0.20
-    max:     +0.80
-    comments: ""
-"B->D::b_0^2@BCL2008" :
-    central: -1.20
-    min:     -5.60
-    max:     +3.20
-    comments: ""
-"B->D::b_T^1@BCL2008" :
-    central:  0.0
-    min:      0.0
-    max:      0.0
-    comments: ""
-"B->D::b_T^2@BCL2008" :
-    central:  0.0
-    min:      0.0
-    max:      0.0
-    comments: ""
+  # Parameters of the Heavy Quark Expansion of Heavy-to-Heavy Form Factors
+  # {{{
+  - title: 'Parameters of the Heavy Quark Expansion of Heavy-to-Heavy Form Factors'
+    description: ''
+    parameters:
+      # Parameters for B*->D* form factors in the Heavy-Quark Expansion (HQE)
+      # The implementation is based on [N1993], and inspired by the parametrization
+      # in [BLPR2017] and its modification in [JS2018].
+      "B(*)->D(*)::a@HQET" :
+          central: 1.0
+          min: 1.0
+          max: 2.0
+          latex: '$a$'
+      "B(*)->D(*)::xi'(1)@HQET" :
+          central: -1.306
+          min: -6.0
+          max:  0.0
+          latex: '$\xi^{(1)}(1)$'
+      "B(*)->D(*)::xi''(1)@HQET" :
+          central: 2.440
+          min: -6.0
+          max: +6.0
+          latex: '$\xi^{(2)}(1)$'
+      "B(*)->D(*)::xi'''(1)@HQET" :
+          central: 0.0
+          min: -12.0
+          max: +12.0
+          latex: '$\xi^{(3)}(1)$'
+      "B(*)->D(*)::xi''''(1)@HQET" :
+          central: 0.0
+          min: -72.0
+          max: +72.0
+          latex: '$\xi^{(4)}(1)$'
+      "B(*)->D(*)::xi'''''(1)@HQET" :
+          central: 0.0
+          min: -144.0
+          max: +144.0
+          latex: '$\xi^{(5)}(1)$'
+      "B(*)->D(*)::chi_2(1)@HQET" :
+          central: -0.058
+          min: -0.077
+          max: -0.039
+          latex: '$\chi_2(1)$'
+      "B(*)->D(*)::chi_2'(1)@HQET" :
+          central: -0.001
+          min: -0.021
+          max: +0.019
+          latex: '$\chi^{(1)}_2(1)$'
+      "B(*)->D(*)::chi_2''(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+          latex: '$\chi^{(2)}_2(1)$'
+      "B(*)->D(*)::chi_3'(1)@HQET" :
+          central: +0.035
+          min: +0.054
+          max: +0.016
+      "B(*)->D(*)::chi_3''(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::eta(1)@HQET" :
+          central: 0.358
+          min: 0.315
+          max: 0.402
+      "B(*)->D(*)::eta'(1)@HQET" :
+          central: 0.044
+          min: -0.081
+          max: 0.169
+      "B(*)->D(*)::eta''(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::l_1(1)@HQET" :
+          central: +0.485
+          min: +0.216
+          max: +0.754
+      "B(*)->D(*)::l_1'(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::l_2(1)@HQET" :
+          central: -2.299
+          min: -2.693
+          max: -1.905
+      "B(*)->D(*)::l_2'(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::l_3(1)@HQET" :
+          central: +0.0
+          min: +0.0
+          max: +0.0
+      "B(*)->D(*)::l_3'(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::l_4(1)@HQET" :
+          central: +0.0
+          min: +0.0
+          max: +0.0
+      "B(*)->D(*)::l_4'(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::l_5(1)@HQET" :
+          central: +0.0
+          min: +0.0
+          max: +0.0
+      "B(*)->D(*)::l_5'(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      "B(*)->D(*)::l_6(1)@HQET" :
+          central: +0.0
+          min: +0.0
+          max: +0.0
+      "B(*)->D(*)::l_6'(1)@HQET" :
+          central: 0
+          min: 0
+          max: 0
+      # Initial parameters for Lambda_b->Lambda_c(2595, 2625) transitions in HQET parametrisation from [BBGORvD2018]
+      "Lambda_b->Lambda_c^*::zeta(q^2_max)@HQET" :
+          central: 0.013054
+          min:     0.000537
+          max:     0.023296
+          comments: "Normalisation of the LO IW function at zero recoil, [-1.0, 1.0]"
+      "Lambda_b->Lambda_c^*::rho@HQET" :
+          central: 0.05
+          min:     -1.05
+          max:     +1.05
+          comments: "Slope of the LO IW function, [-1.0, 1.0]"
+      "Lambda_b->Lambda_c^*::delta_3b@HQET" :
+          central: 0.007087
+          min:     0.000384
+          max:     0.013604
+          comments: "Constant part of of the NLO IW function, [-1.0, 1.0]"
+      "Lambda_b->Lambda_c^*::rho_3b@HQET" :
+          central: 0.05
+          min:     -1.05
+          max:     +1.05
+          comments: "Slope of the NLO IW function, [-1.0, 1.0]"
+  # }}}
 
-# form factor parameters for B->pi inspired by [BSZ2015]
-# new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
-"B->pi::alpha^f+_0@BSZ2015" :
-    central: +0.1959500850585235
-    min:     +0.1959500850585235
-    max:     +0.1959500850585235
-    comments: ""
-"B->pi::alpha^f+_1@BSZ2015" :
-    central: -0.7763565146997043
-    min:     -0.7763565146997043
-    max:     -0.7763565146997043
-    comments: ""
-"B->pi::alpha^f+_2@BSZ2015" :
-    central: -0.19660537219243024
-    min:     -0.19660537219243024
-    max:     -0.19660537219243024
-    comments: ""
-"B->pi::alpha^f0_1@BSZ2015" :
-    central: -0.01446803146697799
-    min:     -0.01446803146697799
-    max:     -0.01446803146697799
-    comments: ""
-"B->pi::alpha^f0_2@BSZ2015" :
-    central: -0.19529667411047308
-    min:     -0.19529667411047308
-    max:     -0.19529667411047308
-    comments: ""
-"B->pi::alpha^fT_0@BSZ2015" :
-    central: +0.17311654822482725
-    min:     +0.17311654822482725
-    max:     +0.17311654822482725
-    comments: ""
-"B->pi::alpha^fT_1@BSZ2015" :
-    central: -0.40903716524130396
-    min:     -0.40903716524130396
-    max:     -0.40903716524130396
-    comments: ""
-"B->pi::alpha^fT_2@BSZ2015" :
-    central: -0.2580355775883392
-    min:     -0.2580355775883392
-    max:     -0.2580355775883392
-    comments: ""
+  # Miscellaneous Form Factor Parameters
+  # {{{
+  - title: 'Miscellaneous Form Factor Parameters'
+    description: ''
+    parameters:
+      # Form factor uncertainties
+      'formfactors::xi_perp_uncertainty' :
+          central: +1.0
+          min:     +0.89
+          max:     +1.11
+          comments: ''
+      'formfactors::xi_par_uncertainty' :
+          central: +1.0
+          min:     +0.86
+          max:     +1.14
+          comments: ''
+      # form factor parameters for QCDF calculation according to [BFvD2016]
+      'B->pipi::mu@BFvD2016' :
+          central: 1.5
+          min:     1.0
+          max:     2.0
+          comments: ' // GeV, cf. [BFvD2016]'
+      # subleading parameter for Lambda_b -> Lambda ll decays according to
+      # [MvD2016].
+      'Lambda_b->Lambdall::r_perp_0@MvD2016' :
+          central: 0.00
+          min:     -0.03
+          max:     +0.03
+          comments: ''
+      'Lambda_b->Lambdall::r_perp_1@MvD2016' :
+          central: 0.00
+          min:     -0.03
+          max:     +0.03
+          comments: ''
+      'Lambda_b->Lambdall::r_para_0@MvD2016' :
+          central: 0.00
+          min:     -0.03
+          max:     +0.03
+          comments: ''
+      'Lambda_b->Lambdall::r_para_1@MvD2016' :
+          central: 0.00
+          min:     -0.03
+          max:     +0.03
+          comments: ''
+      # Zero-Recoil Sum Rule for Lambda_b -> Lambda_c form factor
+      'Lambda_b->Lambda_c::mu@ZRSR' :
+          central: +0.75
+          min:     +0.75
+          max:     +0.75
+          comments: ''
+      'Lambda_b->Lambda_c::wM@ZRSR' :
+          central: +0.75
+          min:     +0.75
+          max:     +0.75
+          comments: ''
+      # B->K^*ll uncertainties from subleading terms for Large Recoil
+      'B->K^*ll::A_long_uncertainty@LargeRecoil' :
+          central: +1.0
+          min:     +0.95
+          max:     +1.05
+          comments: ''
+      'B->K^*ll::A_para_uncertainty@LargeRecoil' :
+          central: +1.0
+          min:     +0.95
+          max:     +1.05
+          comments: ''
+      'B->K^*ll::A_perp_uncertainty@LargeRecoil' :
+          central: +1.0
+          min:     +0.95
+          max:     +1.05
+          comments: ''
+      # B->Pll uncertainties at subleading order at Large Recoil
+      'B->Pll::Lambda_pseudo@LargeRecoil' :
+          central: +0.0
+          min:     -0.5
+          max:     +0.5
+          comments: ''
+      'B->Pll::sl_phase_pseudo@LargeRecoil' :
+          central: +0.0
+          min:     -1.57079632679490
+          max:     +1.57079632679490
+          comments: ''
+      # B->Pll uncertainties at subleading order at Low Recoil
+      'B->Pll::Lambda_pseudo@LowRecoil' :
+          central: +0.0
+          min:     -0.5
+          max:     +0.5
+          comments: ''
+      'B->Pll::sl_phase_pseudo@LowRecoil' :
+          central: +0.0
+          min:     -1.57079632679490
+          max:     +1.57079632679490
+          comments: ''
+      # B->Vll uncertainties at subleading order at Low Recoil
+      'B->Vll::Lambda@LowRecoil' :
+          central: +0.0
+          min:     -0.5
+          max:     +0.5
+          comments: ''
+      'B->Vll::Lambda_0@LowRecoil' :
+          central: +0.0
+          min:     -0.5
+          max:     +0.5
+          comments: ''
+      'B->Vll::Lambda_pa@LowRecoil' :
+          central: +0.0
+          min:     -0.5
+          max:     +0.5
+          comments: ''
+      'B->Vll::Lambda_pp@LowRecoil' :
+          central: +0.0
+          min:     -0.5
+          max:     +0.5
+          comments: ''
+      'B->Vll::sl_phase@LowRecoil' :
+          central: +0.0
+          min:     -1.57079632679490
+          max:     +1.57079632679490
+          comments: ''
+      'B->Vll::sl_phase_0@LowRecoil' :
+          central: +0.0
+          min:     -1.57079632679490
+          max:     +1.57079632679490
+          comments: ''
+      'B->Vll::sl_phase_pa@LowRecoil' :
+          central: +0.0
+          min:     -1.57079632679490
+          max:     +1.57079632679490
+          comments: ''
+      'B->Vll::sl_phase_pp@LowRecoil' :
+          central: +0.0
+          min:     -1.57079632679490
+          max:     +1.57079632679490
+          comments: ''
+  # }}}
 
-# form factor parameters for B->K inspired by [BSZ2015]
-# new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
-"B->K::alpha^f+_0@BSZ2015" :
-    central: +0.32908992854636815
-    min:     +0.32908992854636815
-    max:     +0.32908992854636815
-    comments: ""
-"B->K::alpha^f+_1@BSZ2015" :
-    central: -0.8669465867427438
-    min:     -0.8669465867427438
-    max:     -0.8669465867427438
-    comments: ""
-"B->K::alpha^f+_2@BSZ2015" :
-    central: +0.006095669673341246
-    min:     +0.006095669673341246
-    max:     +0.006095669673341246
-    comments: ""
-"B->K::alpha^f0_1@BSZ2015" :
-    central: +0.19511719957037596
-    min:     +0.19511719957037596
-    max:     +0.19511719957037596
-    comments: ""
-"B->K::alpha^f0_2@BSZ2015" :
-    central: -0.4461264576740431
-    min:     -0.4461264576740431
-    max:     -0.4461264576740431
-    comments: ""
-"B->K::alpha^fT_0@BSZ2015" :
-    central: +0.2993831492500477
-    min:     +0.2993831492500477
-    max:     +0.2993831492500477
-    comments: ""
-"B->K::alpha^fT_1@BSZ2015" :
-    central: -0.7735456824025474
-    min:     -0.7735456824025474
-    max:     -0.7735456824025474
-    comments: ""
-"B->K::alpha^fT_2@BSZ2015" :
-    central: +0.009554375102511888
-    min:     +0.009554375102511888
-    max:     +0.009554375102511888
-    comments: ""
-
-# form factor parameters for B->D inspired by [BSZ2015]
-# new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
-"B->D::alpha^f+_0@BSZ2015" :
-    central: +0.680881482963591
-    min:     +0.680881482963591
-    max:     +0.680881482963591
-    comments: ""
-"B->D::alpha^f+_1@BSZ2015" :
-    central: -2.221782088112512
-    min:     -2.221782088112512
-    max:     -2.221782088112512
-    comments: ""
-"B->D::alpha^f+_2@BSZ2015" :
-    central: +0.6541000835887975
-    min:     +0.6541000835887975
-    max:     +0.6541000835887975
-    comments: ""
-"B->D::alpha^f0_1@BSZ2015" :
-    central: +0.5779088408438552
-    min:     +0.5779088408438552
-    max:     +0.5779088408438552
-    comments: ""
-"B->D::alpha^f0_2@BSZ2015" :
-    central: +1.3271162015486215
-    min:     +1.3271162015486215
-    max:     +1.3271162015486215
-    comments: ""
-"B->D::alpha^fT_0@BSZ2015" :
-    central: +0.5648201165054019
-    min:     +0.5648201165054019
-    max:     +0.5648201165054019
-    comments: ""
-"B->D::alpha^fT_1@BSZ2015" :
-    central: -2.5027753865334676
-    min:     -2.5027753865334676
-    max:     -2.5027753865334676
-    comments: ""
-"B->D::alpha^fT_2@BSZ2015" :
-    central: +10.591752810763625
-    min:     +10.591752810763625
-    max:     +10.591752810763625
-    comments: ""
-
-# form factor parameters for B->K^* according to [BZ2004] (approximate)
-"B->K^*::a0_uncertainty@BZ2004" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-"B->K^*::a1_uncertainty@BZ2004" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-"B->K^*::a2_uncertainty@BZ2004" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-"B->K^*::v_uncertainty@BZ2004" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-"B->K^*::t1_uncertainty@BZ2004" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-"B->K^*::t2_uncertainty@BZ2004" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-"B->K^*::t3_uncertainty@BZ2004" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-
-# form factor parameters for B->K^* according to [KMPW2010], Table 4, p. 31
-"B->K^*::F^V(0)@KMPW2010" :
-    central: +0.36
-    min:     +0.24
-    max:     +0.59
-    comments: ""
-"B->K^*::F^A0(0)@KMPW2010" :
-    central: +0.29
-    min:     +0.22
-    max:     +0.39
-    comments: ""
-"B->K^*::F^A1(0)@KMPW2010" :
-    central: +0.25
-    min:     +0.15
-    max:     +0.41
-    comments: ""
-"B->K^*::F^A2(0)@KMPW2010" :
-    central: +0.23
-    min:     +0.13
-    max:     +0.42
-    comments: ""
-"B->K^*::F^T1(0)@KMPW2010" :
-    central: +0.31
-    min:     +0.21
-    max:     +0.49
-    comments: ""
-"B->K^*::F^T2(0)@KMPW2010" :
-    central: +0.31
-    min:     +0.21
-    max:     +0.49
-    comments: ""
-"B->K^*::F^T3(0)@KMPW2010" :
-    central: +0.22
-    min:     +0.12
-    max:     +0.39
-    comments: ""
-"B->K^*::b^V_1@KMPW2010" :
-    central: -4.8
-    min:     -5.2
-    max:     -4.0
-    comments: ""
-"B->K^*::b^A0_1@KMPW2010" :
-    central: -18.2
-    min:     -21.2
-    max:     -16.9
-    comments: ""
-"B->K^*::b^A1_1@KMPW2010" :
-    central: +0.34
-    min:     -0.46
-    max:     +1.2
-    comments: ""
-"B->K^*::b^A2_1@KMPW2010" :
-    central: -0.85
-    min:     -2.2
-    max:     +2.03
-    comments: ""
-"B->K^*::b^T1_1@KMPW2010" :
-    central: -4.6
-    min:     -5.01
-    max:     -3.79
-    comments: ""
-"B->K^*::b^T2_1@KMPW2010" :
-    central: -3.2
-    min:     -5.4
-    max:     -1.1
-    comments: ""
-"B->K^*::b^T3_1@KMPW2010" :
-    central: -10.3
-    min:     -13.4
-    max:     -7.8
-    comments: ""
-
-# form factor parameter for B_s->K^* according to [FMvD2015].
-"B_s->K^*::F_perp(0)@FMvD2015" :
-    central: 0.349
-    min:     0.349
-    max:     0.349
-    comments: ""
-"B_s->K^*::F_para(0)@FMvD2015" :
-    central: 0.379
-    min:     0.379
-    max:     0.379
-    comments: ""
-"B_s->K^*::F_long(0)@FMvD2015" :
-    central: 0.314
-    min:     0.314
-    max:     0.314
-    comments: ""
-"B_s->K^*::F_time(0)@FMvD2015" :
-    central: 0.314
-    min:     0.314
-    max:     0.314
-    comments: ""
-"B_s->K^*::beta_perp^1@FMvD2015" :
-    central: -4.980
-    min:     -4.980
-    max:     -4.980
-    comments: ""
-"B_s->K^*::beta_para^1@FMvD2015" :
-    central: +0.065
-    min:     +0.065
-    max:     +0.065
-    comments: ""
-"B_s->K^*::beta_time^1@FMvD2015" :
-    central: +0.065
-    min:     +0.065
-    max:     +0.065
-    comments: ""
-
-# form factor parameters for B->K^* simple series expansion (SSE) based on
-# LCSR according to [BFW2010], table 10, p. 33, corrected values from Aoife Bharucha
-"B->K^*::beta^V0_0@BFW2010" :
-    central: +0.31
-    min:     +0.31
-    max:     +0.31
-    comments: ""
-"B->K^*::beta^V0_1@BFW2010" :
-    central: +0.74
-    min:     +0.74
-    max:     +0.74
-    comments: ""
-"B->K^*::beta^V1_0@BFW2010" :
-    central: +0.62
-    min:     +0.62
-    max:     +0.62
-    comments: ""
-"B->K^*::beta^V1_1@BFW2010" :
-    central: -1.4
-    min:     -1.4
-    max:     -1.4
-    comments: ""
-"B->K^*::beta^V2_0@BFW2010" :
-    central: +0.45
-    min:     +0.45
-    max:     +0.45
-    comments: ""
-"B->K^*::beta^V2_1@BFW2010" :
-    central: +0.35
-    min:     +0.35
-    max:     +0.35
-    comments: ""
-"B->K^*::beta^Vt_0@BFW2010" :
-    central: +0.49
-    min:     +0.49
-    max:     +0.49
-    comments: ""
-"B->K^*::beta^Vt_1@BFW2010" :
-    central: -1.4
-    min:     -1.4
-    max:     -1.4
-    comments: ""
-
-# form factor parameters for B->K according to [BZ2004v2] (approximate)
-"B->K::fp_uncertainty@BZ2004v2" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-"B->K::f0_uncertainty@BZ2004v2" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-"B->K::ft_uncertainty@BZ2004v2" :
-    central: +1.0
-    min:     +0.85
-    max:     +1.15
-    comments: ""
-
-# form factor parameters for B->K according to [KMPW2010], Table 4, p. 31
-"B->K::F^p(0)@KMPW2010" :
-    central: +0.34
-    min:     +0.32
-    max:     +0.39
-    comments: ""
-"B->K::F^t(0)@KMPW2010" :
-    central: +0.39
-    min:     +0.36
-    max:     +0.44
-    comments: ""
-"B->K::b^p_1@KMPW2010" :
-    central: -2.1
-    min:     -3.7
-    max:     -1.2
-    comments: ""
-"B->K::b^0_1@KMPW2010" :
-    central: -4.3
-    min:     -5.2
-    max:     -3.5
-    comments: ""
-"B->K::b^t_1@KMPW2010" :
-    central: -2.2
-    min:     -4.2
-    max:     -1.2
-    comments: ""
-
-# form factor parameters for B->K simple series expansion (SSE) based on
-# LCSR according to [BFW2010], table 6, p. 22, corrected values from Aoife Bharucha
-"B->K::alpha^V0_0@BFW2010" :
-    central: +0.48
-    min:     +0.48
-    max:     +0.48
-    comments: ""
-"B->K::alpha^V0_1@BFW2010" :
-    central: -1.05
-    min:     -1.05
-    max:     -1.05
-    comments: ""
-"B->K::alpha^Vt_0np@BFW2010" :
-    central: +0.52
-    min:     +0.52
-    max:     +0.52
-    comments: ""
-"B->K::alpha^Vt_1np@BFW2010" :
-    central: -1.4
-    min:     -1.4
-    max:     -1.4
-    comments: ""
-"B->K::alpha^T0_0@BFW2010" :
-    central: +0.48
-    min:     +0.48
-    max:     +0.48
-    comments: ""
-"B->K::alpha^T0_1@BFW2010" :
-    central: -1.09
-    min:     -1.09
-    max:     -1.09
-    comments: ""
-
-# form factor parameters for Lambda_b -> Lambda decays according to
-# [BFvD2014], table ?, p. ??
-"Lambda_b->Lambda::f_0^V(0)@BFvD2014" :
-    central: +0.28
-    min:     +0.22
-    max:     +0.34
-    comments: ""
-"Lambda_b->Lambda::b_1_0^V@BFvD2014" :
-    central: -11.00
-    min:     -19.00
-    max:     -6.00
-    comments: ""
-"Lambda_b->Lambda::f_0^A(0)@BFvD2014" :
-    central: +0.27
-    min:     +0.21
-    max:     +0.33
-    comments: ""
-"Lambda_b->Lambda::b_1_0^A@BFvD2014" :
-    central: -8.00
-    min:     -16.00
-    max:     -5.00
-    comments: ""
-"Lambda_b->Lambda::f_perp^V(0)@BFvD2014" :
-    central: +0.28
-    min:     +0.22
-    max:     +0.34
-    comments: ""
-"Lambda_b->Lambda::b_1_perp^V@BFvD2014" :
-    central: -11.00
-    min:     -19.00
-    max:     -6.00
-    comments: ""
-"Lambda_b->Lambda::f_perp^A(0)@BFvD2014" :
-    central: +0.30
-    min:     +0.24
-    max:     +0.36
-    comments: ""
-"Lambda_b->Lambda::b_1_perp^A@BFvD2014" :
-    central: -6.00
-    min:     -12.00
-    max:     -3.00
-    comments: ""
-"Lambda_b->Lambda::sigma_perp^V@BFvD2014" :
-    central: 0.00
-    min:     -0.20
-    max:     +0.20
-    comments: ""
-"Lambda_b->Lambda::sigma_perp^A@BFvD2014" :
-    central: 0.00
-    min:     -0.30
-    max:     +0.30
-    comments: ""
-"Lambda_b->Lambda::sigma_long^V@BFvD2014" :
-    central: 0.00
-    min:     -0.21
-    max:     +0.21
-    comments: ""
-"Lambda_b->Lambda::sigma_long^A@BFvD2014" :
-    central: 0.00
-    min:     -0.30
-    max:     +0.30
-    comments: ""
-
-# form factor parameters for Lambda_b -> Lambda decays according to
-# [DM2016], table ?, p. ??
-"Lambda_b->Lambda::a_0_time^V@DM2016" :
-    central: +0.373
-    min:     +0.373
-    max:     +0.373
-    comments: ""
-"Lambda_b->Lambda::a_1_time^V@DM2016" :
-    central: -0.939
-    min:     -0.939
-    max:     -0.939
-    comments: ""
-"Lambda_b->Lambda::a_2_time^V@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda::a_0_time^A@DM2016" :
-    central: +0.403
-    min:     +0.403
-    max:     +0.403
-    comments: ""
-"Lambda_b->Lambda::a_1_time^A@DM2016" :
-    central: -1.029
-    min:     -1.029
-    max:     -1.029
-    comments: ""
-"Lambda_b->Lambda::a_2_time^A@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda::a_0_long^V@DM2016" :
-    central: +0.422
-    min:     +0.422
-    max:     +0.422
-    comments: ""
-"Lambda_b->Lambda::a_1_long^V@DM2016" :
-    central: -1.139
-    min:     -1.139
-    max:     -1.139
-    comments: ""
-"Lambda_b->Lambda::a_2_long^V@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda::a_0_perp^V@DM2016" :
-    central: +0.518
-    min:     +0.518
-    max:     +0.518
-    comments: ""
-"Lambda_b->Lambda::a_1_perp^V@DM2016" :
-    central: -1.350
-    min:     -1.350
-    max:     -1.350
-    comments: ""
-"Lambda_b->Lambda::a_2_perp^V@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda::a_0_long^A@DM2016" :
-    central: +0.356
-    min:     +0.356
-    max:     +0.356
-    comments: ""
-"Lambda_b->Lambda::a_1_long^A@DM2016" :
-    central: -1.061
-    min:     -1.061
-    max:     -1.061
-    comments: ""
-"Lambda_b->Lambda::a_2_long^A@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda::a_1_perp^A@DM2016" :
-    central: -1.136
-    min:     -1.136
-    max:     -1.136
-    comments: ""
-"Lambda_b->Lambda::a_2_perp^A@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda::a_0_long^T@DM2016" :
-    central: +0.496
-    min:     +0.496
-    max:     +0.496
-    comments: ""
-"Lambda_b->Lambda::a_1_long^T@DM2016" :
-    central: -1.128
-    min:     -1.128
-    max:     -1.128
-    comments: ""
-"Lambda_b->Lambda::a_2_long^T@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda::a_0_perp^T@DM2016" :
-    central: +0.388
-    min:     +0.388
-    max:     +0.388
-    comments: ""
-"Lambda_b->Lambda::a_1_perp^T@DM2016" :
-    central: -0.962
-    min:     -0.962
-    max:     -0.962
-    comments: ""
-"Lambda_b->Lambda::a_2_perp^T@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda::a_0_long^T5@DM2016" :
-    central: +0.340
-    min:     +0.340
-    max:     +0.340
-    comments: ""
-"Lambda_b->Lambda::a_1_long^T5@DM2016" :
-    central: -0.770
-    min:     -0.770
-    max:     -0.770
-    comments: ""
-"Lambda_b->Lambda::a_2_long^T5@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda::a_1_perp^T5@DM2016" :
-    central: -0.801
-    min:     -0.801
-    max:     -0.801
-    comments: ""
-"Lambda_b->Lambda::a_2_perp^T5@DM2016" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-
-# Form factor parameters for Lambda_b -> Lambda_c decay according to
-# [DKMR2017], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
-# params for tensor FFs are included.
-"Lambda_b->Lambda_c::a_0_time^V@DKMR2017" :
-    central: +0.74392566003686
-    min:     +0.74392566003686
-    max:     +0.74392566003686
-    comments: ""
-"Lambda_b->Lambda_c::a_1_time^V@DKMR2017" :
-    central: -4.6476511382467
-    min:     -4.6476511382467
-    max:     -4.6476511382467
-    comments: ""
-"Lambda_b->Lambda_c::a_2_time^V@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda_c::a_0_time^A@DKMR2017" :
-    central: +0.73960499809758
-    min:     +0.73960499809758
-    max:     +0.73960499809758
-    comments: ""
-"Lambda_b->Lambda_c::a_1_time^A@DKMR2017" :
-    central: -4.3664554520299
-    min:     -4.3664554520299
-    max:     -4.3664554520299
-    comments: ""
-"Lambda_b->Lambda_c::a_2_time^A@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda_c::a_0_long^V@DKMR2017" :
-    central: +0.81458549275845
-    min:     +0.81458549275845
-    max:     +0.81458549275845
-    comments: ""
-"Lambda_b->Lambda_c::a_1_long^V@DKMR2017" :
-    central: -4.8987680713973
-    min:     -4.8987680713973
-    max:     -4.8987680713973
-    comments: ""
-"Lambda_b->Lambda_c::a_2_long^V@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda_c::a_0_perp^V@DKMR2017" :
-    central: +1.077996185173
-    min:     +1.077996185173
-    max:     +1.077996185173
-    comments: ""
-"Lambda_b->Lambda_c::a_1_perp^V@DKMR2017" :
-    central: -6.4170836206134
-    min:     -6.4170836206134
-    max:     -6.4170836206134
-    comments: ""
-"Lambda_b->Lambda_c::a_2_perp^V@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda_c::a_0_long^A@DKMR2017" :
-    central: +0.6846557018386
-    min:     +0.6846557018386
-    max:     +0.6846557018386
-    comments: ""
-"Lambda_b->Lambda_c::a_1_long^A@DKMR2017" :
-    central: -4.4311552783827
-    min:     -4.4311552783827
-    max:     -4.4311552783827
-    comments: ""
-"Lambda_b->Lambda_c::a_2_long^A@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda_c::a_1_perp^A@DKMR2017" :
-    central: -4.4633624514401
-    min:     -4.4633624514401
-    max:     -4.4633624514401
-    comments: ""
-"Lambda_b->Lambda_c::a_2_perp^A@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda_c::a_0_long^T@DKMR2017" :
-    central: +0.97518189850197
-    min:     +0.97518189850197
-    max:     +0.97518189850197
-    comments: ""
-"Lambda_b->Lambda_c::a_1_long^T@DKMR2017" :
-    central: -5.4999842229709
-    min:     -5.4999842229709
-    max:     -5.4999842229709
-    comments: ""
-"Lambda_b->Lambda_c::a_2_long^T@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda_c::a_0_perp^T@DKMR2017" :
-    central: +0.70539533108116
-    min:     +0.70539533108116
-    max:     +0.70539533108116
-    comments: ""
-"Lambda_b->Lambda_c::a_1_perp^T@DKMR2017" :
-    central: -4.3577976693726
-    min:     -4.3577976693726
-    max:     -4.3577976693726
-    comments: ""
-"Lambda_b->Lambda_c::a_2_perp^T@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda_c::a_0_long^T5@DKMR2017" :
-    central: +0.67275080357035
-    min:     +0.67275080357035
-    max:     +0.67275080357035
-    comments: ""
-"Lambda_b->Lambda_c::a_1_long^T5@DKMR2017" :
-    central: -4.4321757873186
-    min:     -4.4321757873186
-    max:     -4.4321757873186
-    comments: ""
-"Lambda_b->Lambda_c::a_2_long^T5@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-"Lambda_b->Lambda_c::a_1_perp^T5@DKMR2017" :
-    central: -4.4927847697461
-    min:     -4.4927847697461
-    max:     -4.4927847697461
-    comments: ""
-"Lambda_b->Lambda_c::a_2_perp^T5@DKMR2017" :
-    central: +0.000
-    min:     +0.000
-    max:     +0.000
-    comments: ""
-
-# Initial parameters for Lambda_b->Lambda_c(2595, 2625) transitions in HQET parametrisation from [BBGORvD2018]
-"Lambda_b->Lambda_c^*::zeta(q^2_max)@HQET" :
-    central: 0.013054
-    min:     0.000537
-    max:     0.023296
-    comments: "Normalisation of the LO IW function at zero recoil, [-1.0, 1.0]"
-"Lambda_b->Lambda_c^*::rho@HQET" :
-    central: 0.05
-    min:     -1.05
-    max:     +1.05
-    comments: "Slope of the LO IW function, [-1.0, 1.0]"
-"Lambda_b->Lambda_c^*::delta_3b@HQET" :
-    central: 0.007087
-    min:     0.000384
-    max:     0.013604
-    comments: "Constant part of of the NLO IW function, [-1.0, 1.0]"
-"Lambda_b->Lambda_c^*::rho_3b@HQET" :
-    central: 0.05
-    min:     -1.05
-    max:     +1.05
-    comments: "Slope of the NLO IW function, [-1.0, 1.0]"
-
-# subleading parameter for Lambda_b -> Lambda ll decays according to
-# [MvD2016].
-"Lambda_b->Lambdall::r_perp_0@MvD2016" :
-    central: 0.00
-    min:     -0.03
-    max:     +0.03
-    comments: ""
-"Lambda_b->Lambdall::r_perp_1@MvD2016" :
-    central: 0.00
-    min:     -0.03
-    max:     +0.03
-    comments: ""
-"Lambda_b->Lambdall::r_para_0@MvD2016" :
-    central: 0.00
-    min:     -0.03
-    max:     +0.03
-    comments: ""
-"Lambda_b->Lambdall::r_para_1@MvD2016" :
-    central: 0.00
-    min:     -0.03
-    max:     +0.03
-    comments: ""
-
-# form-factor parameters for B->K* 
-# new updated results based on a combined LQCD+LCSR fit from the GKvD2018 calculation
-# Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
-"B->K^*::alpha^A0_0@BSZ2015" :
-    central: +0.333565209671414
-    min:     +0.333565209671414
-    max:     +0.333565209671414
-    comments: ""
-"B->K^*::alpha^A0_1@BSZ2015" :
-    central: -1.1164087925500106
-    min:     -1.1164087925500106
-    max:     -1.1164087925500106
-    comments: ""
-"B->K^*::alpha^A0_2@BSZ2015" :
-    central: +2.497069832700105
-    min:     +2.497069832700105
-    max:     +2.497069832700105
-    comments: ""
-"B->K^*::alpha^A1_0@BSZ2015" :
-    central: +0.28899504979162
-    min:     +0.28899504979162
-    max:     +0.28899504979162
-    comments: ""
-"B->K^*::alpha^A1_1@BSZ2015" :
-    central: +0.4566061262798284
-    min:     +0.4566061262798284
-    max:     +0.4566061262798284
-    comments: ""
-"B->K^*::alpha^A1_2@BSZ2015" :
-    central: +1.1829764611868705
-    min:     +1.1829764611868705
-    max:     +1.1829764611868705
-    comments: ""
-"B->K^*::alpha^A12_1@BSZ2015" :
-    central: +0.5041466779610547
-    min:     +0.5041466779610547
-    max:     +0.5041466779610547
-    comments: ""
-"B->K^*::alpha^A12_2@BSZ2015" :
-    central: +0.523751990094357
-    min:     +0.523751990094357
-    max:     +0.523751990094357
-    comments: ""
-"B->K^*::alpha^V_0@BSZ2015" :
-    central: +0.3641736466070142
-    min:     +0.3641736466070142
-    max:     +0.3641736466070142
-    comments: ""
-"B->K^*::alpha^V_1@BSZ2015" :
-    central: -1.0924590752515513
-    min:     -1.0924590752515513
-    max:     -1.0924590752515513
-    comments: ""
-"B->K^*::alpha^V_2@BSZ2015" :
-    central: +2.5954783573262934
-    min:     +2.5954783573262934
-    max:     +2.5954783573262934
-    comments: ""
-"B->K^*::alpha^T1_0@BSZ2015" :
-    central: +0.31922162296608125
-    min:     +0.31922162296608125
-    max:     +0.31922162296608125
-    comments: ""
-"B->K^*::alpha^T1_1@BSZ2015" :
-    central: -0.9539833567723242
-    min:     -0.9539833567723242
-    max:     -0.9539833567723242
-    comments: ""
-"B->K^*::alpha^T1_2@BSZ2015" :
-    central: +2.040771175053964
-    min:     +2.040771175053964
-    max:     +2.040771175053964
-    comments: ""
-"B->K^*::alpha^T2_1@BSZ2015" :
-    central: +0.6020794846388718
-    min:     +0.6020794846388718
-    max:     +0.6020794846388718
-    comments: ""
-"B->K^*::alpha^T2_2@BSZ2015" :
-    central: +1.699282551872677
-    min:     +1.699282551872677
-    max:     +1.699282551872677
-    comments: ""
-"B->K^*::alpha^T23_0@BSZ2015" :
-    central: +0.6058860992660229
-    min:     +0.6058860992660229
-    max:     +0.6058860992660229
-    comments: ""
-"B->K^*::alpha^T23_1@BSZ2015" :
-    central: +0.8867716020286049
-    min:     +0.8867716020286049
-    max:     +0.8867716020286049
-    comments: ""
-"B->K^*::alpha^T23_2@BSZ2015" :
-    central: +1.8831160249369858
-    min:     +1.8831160249369858
-    max:     +1.8831160249369858
-    comments: ""
-
-# B LCDA parameters
-"lambda_B_p" :
-    central: +0.485
-    min:     +0.370
-    max:     +0.600
-    comments: " // GeV, cf. [BHvD2010], Table I"
-"B::1/lambda_B_p" :
-    central: +2.1739
-    min:     +1.60
-    max:     +2.80
-    comments: " // GeV^{-1}, cf. [GKvD2018]"
-"B::lambda_E^2" :
-    central: +0.03
-    min:     +0.01
-    max:     +0.05
-    comments: "GeV^2, cf. [NT2011]"
-"B::lambda_H^2" :
-    central: +0.06
-    min:     +0.03
-    max:     +0.09
-    comments: "GeV^2, cf. [NT2011]"
-
-# B_s LCDA parameters
-"B_s::1/lambda_B_p" :
-    central: +1.6934
-    min:     +1.29
-    max:     +2.09
-    comments: " // GeV^{-1}, cf. [GKvD2018]"
-"B_s::lambda_E^2" :
-    central: +0.03
-    min:     +0.01
-    max:     +0.05
-    comments: "GeV^2, cf. [NT2011]"
-"B_s::lambda_H^2" :
-    central: +0.06
-    min:     +0.03
-    max:     +0.09
-    comments: "GeV^2, cf. [NT2011]"
-
-# B->K LCDA Parameter
-"B->K::a_1@1GeV" :
-    central: +0.06
-    min:     +0.03
-    max:     +0.09
-    comments: " // cf. [BBL2006], Table 3"
-"B->K::a_2@1GeV" :
-    central: +0.25
-    min:     +0.10
-    max:     +0.4
-    comments: " // cf. [BBL2006], Table 3"
-"B->K::a_4@1GeV" :
-    central: -0.015
-    min:     -0.115
-    max:     +0.085
-    comments: " // cf. [BZ2004v3], Eq. (24)"
-"B->K::a_1@2.2GeV" :
-    central: +0.048
-    min:     +0.024
-    max:     +0.071
-    comments: " // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25"
-"B->K::a_2@2.2GeV" :
-    central: +0.174
-    min:     +0.070
-    max:     +0.278
-    comments: " // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25"
-"B->K::a_4@2.2GeV" :
-    central: -0.0089
-    min:     -0.0679
-    max:     +0.0502
-    comments: " // cf. [BZ2004v3], Eq. (24) and cf. [BHP2007] App. A, pp. 24-25"
-
-# B->K^*, K^* LCDA parameters
-"B->K^*::a_1_par" :
-    central: +0.1
-    min:     +0.03
-    max:     +0.17
-    comments: ""
-"B->K^*::a_2_par" :
-    central: +0.1
-    min:     +0.0
-    max:     +0.2
-    comments: ""
-"B->K^*::a_1_perp" :
-    central: +0.1
-    min:     +0.03
-    max:     +0.17
-    comments: ""
-"B->K^*::a_2_perp" :
-    central: +0.1
-    min:     +0.0
-    max:     +0.2
-    comments: ""
-"B->K^*::f_Kstar_par" :
-    central: +0.217
-    min:     +0.212
-    max:     +0.222
-    comments: " // GeV, cf. [BHvD2010], Table I"
-"B->K^*::f_Kstar_perp@2GeV" :
-    central: +0.173
-    min:     +0.168
-    max:     +0.178
-    comments: " // GeV @2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD2010], Table I"
-
-# parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [KMO2006] and [KMPW2010].
-"B->K^*::s_0@LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B->K^*::M^2@LCSR" :
-    central: 1.0
-    min:     0.75
-    max:     1.25
-    comments: "GeV^2"
-
-# new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
-# Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
-"B->D^*::alpha^A0_0@BSZ2015" :
-    central: +0.6759274184148141
-    min:     +0.6759274184148141
-    max:     +0.6759274184148141
-    comments: ""
-"B->D^*::alpha^A0_1@BSZ2015" :
-    central: -2.6637000799846655
-    min:     -2.6637000799846655
-    max:     -2.6637000799846655
-    comments: ""
-"B->D^*::alpha^A0_2@BSZ2015" :
-    central: +9.24495323738047
-    min:     +9.24495323738047
-    max:     +9.24495323738047
-    comments: ""
-"B->D^*::alpha^A1_0@BSZ2015" :
-    central: +0.601315572767782
-    min:     +0.601315572767782
-    max:     +0.601315572767782
-    comments: ""
-"B->D^*::alpha^A1_1@BSZ2015" :
-    central: +0.2689438444495897
-    min:     +0.2689438444495897
-    max:     +0.2689438444495897
-    comments: ""
-"B->D^*::alpha^A1_2@BSZ2015" :
-    central: +10.486032487112988
-    min:     +10.486032487112988
-    max:     +10.486032487112988
-    comments: ""
-"B->D^*::alpha^A12_1@BSZ2015" :
-    central: -0.14876383294863582
-    min:     -0.14876383294863582
-    max:     -0.14876383294863582
-    comments: ""
-"B->D^*::alpha^A12_2@BSZ2015" :
-    central: +5.724359813703122
-    min:     +5.724359813703122
-    max:     +5.724359813703122
-    comments: ""
-"B->D^*::alpha^V_0@BSZ2015" :
-    central: +0.6851323923652662
-    min:     +0.6851323923652662
-    max:     +0.6851323923652662
-    comments: ""
-"B->D^*::alpha^V_1@BSZ2015" :
-    central: -1.1678379355866901
-    min:     -1.1678379355866901
-    max:     -1.1678379355866901
-    comments: ""
-"B->D^*::alpha^V_2@BSZ2015" :
-    central: -4.016847943717434
-    min:     -4.016847943717434
-    max:     -4.016847943717434
-    comments: ""
-"B->D^*::alpha^T1_0@BSZ2015" :
-    central: +0.6302298493900512
-    min:     +0.6302298493900512
-    max:     +0.6302298493900512
-    comments: ""
-"B->D^*::alpha^T1_1@BSZ2015" :
-    central: -1.4175767766320952
-    min:     -1.4175767766320952
-    max:     -1.4175767766320952
-    comments: ""
-"B->D^*::alpha^T1_2@BSZ2015" :
-    central: -0.6878528871949201
-    min:     -0.6878528871949201
-    max:     -0.6878528871949201
-    comments: ""
-"B->D^*::alpha^T2_1@BSZ2015" :
-    central: +1.5226848746033717
-    min:     +1.5226848746033717
-    max:     +1.5226848746033717
-    comments: ""
-"B->D^*::alpha^T2_2@BSZ2015" :
-    central: +0.006625613047247359
-    min:     +0.006625613047247359
-    max:     +0.006625613047247359
-    comments: ""
-"B->D^*::alpha^T23_0@BSZ2015" :
-    central: +0.806230464649646
-    min:     +0.806230464649646
-    max:     +0.806230464649646
-    comments: ""
-"B->D^*::alpha^T23_1@BSZ2015" :
-    central: +0.5855443911134184
-    min:     +0.5855443911134184
-    max:     +0.5855443911134184
-    comments: ""
-"B->D^*::alpha^T23_2@BSZ2015" :
-    central: +4.667079193615467
-    min:     +4.667079193615467
-    max:     +4.667079193615467
-    comments: ""
-
-
-# form-factor parameters for B->rho
-# new updated results based on LCSR-only fit from the GKvD2018 calculation
-# note that no lattice results exists for B->rho FFs yet
-# Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
-"B->rho::alpha^A0_0@BSZ2015" :
-    central: +0.2925336490766787
-    min:     +0.2925336490766787
-    max:     +0.2925336490766787
-    comments: ""
-"B->rho::alpha^A0_1@BSZ2015" :
-    central: -0.7432269609691062
-    min:     -0.7432269609691062
-    max:     -0.7432269609691062
-    comments: ""
-"B->rho::alpha^A0_2@BSZ2015" :
-    central: -0.013648222902133517
-    min:     -0.013648222902133517
-    max:     -0.013648222902133517
-    comments: ""
-"B->rho::alpha^A1_0@BSZ2015" :
-    central: +0.2142700210705677
-    min:     +0.2142700210705677
-    max:     +0.2142700210705677
-    comments: ""
-"B->rho::alpha^A1_1@BSZ2015" :
-    central: +0.4948341716573042
-    min:     +0.4948341716573042
-    max:     +0.4948341716573042
-    comments: ""
-"B->rho::alpha^A1_2@BSZ2015" :
-    central: -0.5898416575860281
-    min:     -0.5898416575860281
-    max:     -0.5898416575860281
-    comments: ""
-"B->rho::alpha^A12_1@BSZ2015" :
-    central: +0.5301085432518904
-    min:     +0.5301085432518904
-    max:     +0.5301085432518904
-    comments: ""
-"B->rho::alpha^A12_2@BSZ2015" :
-    central: -0.1698995165626285
-    min:     -0.1698995165626285
-    max:     -0.1698995165626285
-    comments: ""
-"B->rho::alpha^V_0@BSZ2015" :
-    central: +0.2712565197401259
-    min:     +0.2712565197401259
-    max:     +0.2712565197401259
-    comments: ""
-"B->rho::alpha^V_1@BSZ2015" :
-    central: -0.4925853027266176
-    min:     -0.4925853027266176
-    max:     -0.4925853027266176
-    comments: ""
-"B->rho::alpha^V_2@BSZ2015" :
-    central: -1.1971343036772617
-    min:     -1.1971343036772617
-    max:     -1.1971343036772617
-    comments: ""
-"B->rho::alpha^T1_0@BSZ2015" :
-    central: +0.2375503875107005
-    min:     +0.2375503875107005
-    max:     +0.2375503875107005
-    comments: ""
-"B->rho::alpha^T1_1@BSZ2015" :
-    central: -0.45934079379480375
-    min:     -0.45934079379480375
-    max:     -0.45934079379480375
-    comments: ""
-"B->rho::alpha^T1_2@BSZ2015" :
-    central: -0.8719619977491347
-    min:     -0.8719619977491347
-    max:     -0.8719619977491347
-    comments: ""
-"B->rho::alpha^T2_1@BSZ2015" :
-    central: +0.648543608510588
-    min:     +0.648543608510588
-    max:     +0.648543608510588
-    comments: ""
-"B->rho::alpha^T2_2@BSZ2015" :
-    central: -0.8367381225762223
-    min:     -0.8367381225762223
-    max:     -0.8367381225762223
-    comments: ""
-"B->rho::alpha^T23_0@BSZ2015" :
-    central: +0.558651527683086
-    min:     +0.558651527683086
-    max:     +0.558651527683086
-    comments: ""
-"B->rho::alpha^T23_1@BSZ2015" :
-    central: +0.9756780226625973
-    min:     +0.9756780226625973
-    max:     +0.9756780226625973
-    comments: ""
-"B->rho::alpha^T23_2@BSZ2015" :
-    central: -0.617057014268725
-    min:     -0.617057014268725
-    max:     -0.617057014268725
-
-# parameters for LCSR calculation of B->pi hadronic matrix elements, cf. [GKvD2018]
-"B->pi::s_0^+,0@B-LCSR" :
-    central: 0.7
-    min:     0.7
-    max:     0.7
-    comments: "GeV^2"
-"B->pi::s_0^+,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->pi::s_0^+/-,0@B-LCSR" :
-    central: 0.7
-    min:     0.7
-    max:     0.7
-    comments: "GeV^2"
-"B->pi::s_0^+/-,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->pi::s_0^T,0@B-LCSR" :
-    central: 0.7
-    min:     0.7
-    max:     0.7
-    comments: "GeV^2"
-"B->pi::s_0^T,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->pi::M^2@B-LCSR" :
-    central: 1.0
-    min:     0.5
-    max:     1.5
-    comments: "GeV^2"
-"B->pi::mu@B-LCSR" :
-    central: 1.0
-    min:     0.7
-    max:     0.3
-    comments: ""
-
-# parameters for LCSR calculation of B->K hadronic matrix elements, cf. [GKvD2018]
-"B->K::s_0^+,0@B-LCSR" :
-    central: 1.05
-    min:     1.05
-    max:     1.05
-    comments: "GeV^2"
-"B->K::s_0^+,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K::s_0^+/-,0@B-LCSR" :
-    central: 1.05
-    min:     1.05
-    max:     1.05
-    comments: "GeV^2"
-"B->K::s_0^+/-,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K::s_0^T,0@B-LCSR" :
-    central: 1.05
-    min:     1.05
-    max:     1.05
-    comments: "GeV^2"
-"B->K::s_0^T,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K::M^2@B-LCSR" :
-    central: 1.0
-    min:     0.5
-    max:     1.5
-    comments: "GeV^2"
-"B->K::mu@B-LCSR" :
-    central: 1.0
-    min:     0.7
-    max:     0.3
-    comments: ""
-
-# parameters for LCSR calculation of B_s->K hadronic matrix elements
-"B_s->K::s_0^+,0@B-LCSR" :
-    central: 1.05
-    min:     1.05
-    max:     1.05
-    comments: "GeV^2"
-"B_s->K::s_0^+,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K::s_0^+/-,0@B-LCSR" :
-    central: 1.05
-    min:     1.05
-    max:     1.05
-    comments: "GeV^2"
-"B_s->K::s_0^+/-,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K::s_0^T,0@B-LCSR" :
-    central: 1.05
-    min:     1.05
-    max:     1.05
-    comments: "GeV^2"
-"B_s->K::s_0^T,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K::M^2@B-LCSR" :
-    central: 1.0
-    min:     0.5
-    max:     1.5
-    comments: "GeV^2"
-"B_s->K::mu@B-LCSR" :
-    central: 1.0
-    min:     0.7
-    max:     0.3
-    comments: ""
-
-# parameters for LCSR calculation of B->D hadronic matrix elements, cf. [GKvD2018]
-"B->D::s_0^+,0@B-LCSR" :
-    central: 6.0
-    min:     6.0
-    max:     6.0
-    comments: "GeV^2"
-"B->D::s_0^+,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D::s_0^+/-,0@B-LCSR" :
-    central: 6.0
-    min:     6.0
-    max:     6.0
-    comments: "GeV^2"
-"B->D::s_0^+/-,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D::s_0^T,0@B-LCSR" :
-    central: 6.0
-    min:     6.0
-    max:     6.0
-    comments: "GeV^2"
-"B->D::s_0^T,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D::M^2@B-LCSR" :
-    central: 4.5
-    min:     3.0
-    max:     6.0
-    comments: "GeV^2"
-"B->D::mu@B-LCSR" :
-    central: 2.1213
-    min:     2.1213
-    max:     2.1213
-    comments: ""
-
-# parameters for LCSR calculation of B_s->D_s hadronic matrix elements
-"B_s->D_s::s_0^+,0@B-LCSR" :
-    central: 6.0
-    min:     6.0
-    max:     6.0
-    comments: "GeV^2"
-"B_s->D_s::s_0^+,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D_s::s_0^+/-,0@B-LCSR" :
-    central: 6.0
-    min:     6.0
-    max:     6.0
-    comments: "GeV^2"
-"B_s->D_s::s_0^+/-,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D_s::s_0^T,0@B-LCSR" :
-    central: 6.0
-    min:     6.0
-    max:     6.0
-    comments: "GeV^2"
-"B_s->D_s::s_0^T,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D_s::M^2@B-LCSR" :
-    central: 4.5
-    min:     3.0
-    max:     6.0
-    comments: "GeV^2"
-"B_s->D_s::mu@B-LCSR" :
-    central: 2.1213
-    min:     2.1213
-    max:     2.1213
-    comments: ""
-
-# parameters for LCSR calculation of B->rho hadronic matrix elements, cf. [GKvD2018]
-"B->rho::s_0^A1,0@B-LCSR" :
-    central: 1.6
-    min:     1.6
-    max:     1.6
-    comments: "GeV^2"
-"B->rho::s_0^A1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->rho::s_0^A2,0@B-LCSR" :
-    central: 1.6
-    min:     1.6
-    max:     1.6
-    comments: "GeV^2"
-"B->rho::s_0^A2,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->rho::s_0^A30,0@B-LCSR" :
-    central: 1.6
-    min:     1.6
-    max:     1.6
-    comments: "GeV^2"
-"B->rho::s_0^A30,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->rho::s_0^V,0@B-LCSR" :
-    central: 1.6
-    min:     1.6
-    max:     1.6
-    comments: "GeV^2"
-"B->rho::s_0^V,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->rho::s_0^T1,0@B-LCSR" :
-    central: 1.6
-    min:     1.6
-    max:     1.6
-    comments: "GeV^2"
-"B->rho::s_0^T1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->rho::s_0^T23A,0@B-LCSR" :
-    central: 1.6
-    min:     1.6
-    max:     1.6
-    comments: "GeV^2"
-"B->rho::s_0^T23A,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->rho::s_0^T23B,0@B-LCSR" :
-    central: 1.6
-    min:     1.6
-    max:     1.6
-    comments: "GeV^2"
-"B->rho::s_0^T23B,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->rho::M^2@B-LCSR" :
-    central: 1.0
-    min:     0.5
-    max:     1.5
-    comments: "GeV^2"
-"B->rho::mu@B-LCSR" :
-    central: 1.0
-    min:     0.7
-    max:     0.3
-    comments: ""
-
-# parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [GKvD2018]
-"B->K^*::s_0^A1,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B->K^*::s_0^A1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K^*::s_0^A2,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B->K^*::s_0^A2,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K^*::s_0^A30,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B->K^*::s_0^A30,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K^*::s_0^V,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B->K^*::s_0^V,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K^*::s_0^T1,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B->K^*::s_0^T1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K^*::s_0^T23A,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B->K^*::s_0^T23A,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K^*::s_0^T23B,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B->K^*::s_0^T23B,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->K^*::M^2@B-LCSR" :
-    central: 1.0
-    min:     0.5
-    max:     1.5
-    comments: "GeV^2"
-"B->K^*::mu@B-LCSR" :
-    central: 1.0
-    min:     0.7
-    max:     0.3
-    comments: ""
-
-# parameters for LCSR calculation of B_s->K^* hadronic matrix elements
-"B_s->K^*::s_0^A1,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->K^*::s_0^A1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K^*::s_0^A2,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->K^*::s_0^A2,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K^*::s_0^A30,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->K^*::s_0^A30,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K^*::s_0^V,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->K^*::s_0^V,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K^*::s_0^T1,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->K^*::s_0^T1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K^*::s_0^T23A,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->K^*::s_0^T23A,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K^*::s_0^T23B,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->K^*::s_0^T23B,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->K^*::M^2@B-LCSR" :
-    central: 1.0
-    min:     0.5
-    max:     1.5
-    comments: "GeV^2"
-"B_s->K^*::mu@B-LCSR" :
-    central: 1.0
-    min:     0.7
-    max:     0.3
-    comments: ""
-
-# parameters for LCSR calculation of B->D^* hadronic matrix elements, cf. [GKvD2018]
-"B->D^*::s_0^A1,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B->D^*::s_0^A1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D^*::s_0^A2,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B->D^*::s_0^A2,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D^*::s_0^A30,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B->D^*::s_0^A30,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D^*::s_0^V,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B->D^*::s_0^V,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D^*::s_0^T1,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B->D^*::s_0^T1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D^*::s_0^T23A,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B->D^*::s_0^T23A,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D^*::s_0^T23B,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B->D^*::s_0^T23B,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B->D^*::M^2@B-LCSR" :
-    central: 4.5
-    min:     3.0
-    max:     6.0
-    comments: "GeV^2"
-"B->D^*::mu@B-LCSR" :
-    central: 2.1213
-    min:     2.1213
-    max:     2.1213
-    comments: ""
-
-# parameters for LCSR calculation of B_s->D^*_s hadronic matrix elements
-"B_s->D^*_s::s_0^A1,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B_s->D^*_s::s_0^A1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D^*_s::s_0^A2,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B_s->D^*_s::s_0^A2,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D^*_s::s_0^A30,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B_s->D^*_s::s_0^A30,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D^*_s::s_0^V,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B_s->D^*_s::s_0^V,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D^*_s::s_0^T1,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B_s->D^*_s::s_0^T1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D^*_s::s_0^T23A,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B_s->D^*_s::s_0^T23A,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D^*_s::s_0^T23B,0@B-LCSR" :
-    central: 8.0
-    min:     8.0
-    max:     8.0
-    comments: "GeV^2"
-"B_s->D^*_s::s_0^T23B,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->D^*_s::M^2@B-LCSR" :
-    central: 4.5
-    min:     3.0
-    max:     6.0
-    comments: "GeV^2"
-"B_s->D^*_s::mu@B-LCSR" :
-    central: 2.1213
-    min:     2.1213
-    max:     2.1213
-    comments: ""
-
-# parameters for LCSR calculation of B_s->phi hadronic matrix elements
-"B_s->phi::s_0^A1,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->phi::s_0^A1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->phi::s_0^A2,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->phi::s_0^A2,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->phi::s_0^A30,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->phi::s_0^A30,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->phi::s_0^V,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->phi::s_0^V,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->phi::s_0^T1,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->phi::s_0^T1,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->phi::s_0^T23A,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->phi::s_0^T23A,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->phi::s_0^T23B,0@B-LCSR" :
-    central: 1.7
-    min:     1.7
-    max:     1.7
-    comments: "GeV^2"
-"B_s->phi::s_0^T23B,1@B-LCSR" :
-    central: 0.0
-    min:     0.0
-    max:     1.0
-    comments: "1"
-"B_s->phi::M^2@B-LCSR" :
-    central: 1.0
-    min:     0.5
-    max:     1.5
-    comments: "GeV^2"
-"B_s->phi::mu@B-LCSR" :
-    central: 1.0
-    min:     0.7
-    max:     0.3
-    comments: ""
-
-# Parameters for B*->D* form factors in the Heavy-Quark Expansion (HQE)
-# The implementation is based on [N1993], and inspired by the parametrization
-# in [BLPR2017] and its modification in [JS2018].
-"B(*)->D(*)::a@HQET" :
-    central: 1.0
-    min: 1.0
-    max: 2.0
-    latex: '$a$'
-"B(*)->D(*)::xi'(1)@HQET" :
-    central: -1.306
-    min: -6.0
-    max:  0.0
-    latex: '$\xi^{(1)}(1)$'
-"B(*)->D(*)::xi''(1)@HQET" :
-    central: 2.440
-    min: -6.0
-    max: +6.0
-    latex: '$\xi^{(2)}(1)$'
-"B(*)->D(*)::xi'''(1)@HQET" :
-    central: 0.0
-    min: -12.0
-    max: +12.0
-    latex: '$\xi^{(3)}(1)$'
-"B(*)->D(*)::xi''''(1)@HQET" :
-    central: 0.0
-    min: -72.0
-    max: +72.0
-    latex: '$\xi^{(4)}(1)$'
-"B(*)->D(*)::xi'''''(1)@HQET" :
-    central: 0.0
-    min: -144.0
-    max: +144.0
-    latex: '$\xi^{(5)}(1)$'
-"B(*)->D(*)::chi_2(1)@HQET" :
-    central: -0.058
-    min: -0.077
-    max: -0.039
-    latex: '$\chi_2(1)$'
-"B(*)->D(*)::chi_2'(1)@HQET" :
-    central: -0.001
-    min: -0.021
-    max: +0.019
-    latex: '$\chi^{(1)}_2(1)$'
-"B(*)->D(*)::chi_2''(1)@HQET" :
-    central: 0
-    min: 0
-    max: 0
-    latex: '$\chi^{(2)}_2(1)$'
-"B(*)->D(*)::chi_3'(1)@HQET" :
-    central: +0.035
-    min: +0.054
-    max: +0.016
-"B(*)->D(*)::chi_3''(1)@HQET" :
-    central: 0
-    min: 0
-    max: 0
-"B(*)->D(*)::eta(1)@HQET" :
-    central: 0.358
-    min: 0.315
-    max: 0.402
-"B(*)->D(*)::eta'(1)@HQET" :
-    central: 0.044
-    min: -0.081
-    max: 0.169
-"B(*)->D(*)::eta''(1)@HQET" :
-    central: 0
-    min: 0
-    max: 0
-"B(*)->D(*)::l_1(1)@HQET" :
-    central: +0.485
-    min: +0.216
-    max: +0.754
-"B(*)->D(*)::l_1'(1)@HQET" :
-    central: 0
-    min: 0
-    max: 0
-"B(*)->D(*)::l_2(1)@HQET" :
-    central: -2.299
-    min: -2.693
-    max: -1.905
-"B(*)->D(*)::l_2'(1)@HQET" :
-    central: 0
-    min: 0
-    max: 0
-"B(*)->D(*)::l_3(1)@HQET" :
-    central: +0.0
-    min: +0.0
-    max: +0.0
-"B(*)->D(*)::l_3'(1)@HQET" :
-    central: 0
-    min: 0
-    max: 0
-"B(*)->D(*)::l_4(1)@HQET" :
-    central: +0.0
-    min: +0.0
-    max: +0.0
-"B(*)->D(*)::l_4'(1)@HQET" :
-    central: 0
-    min: 0
-    max: 0
-"B(*)->D(*)::l_5(1)@HQET" :
-    central: +0.0
-    min: +0.0
-    max: +0.0
-"B(*)->D(*)::l_5'(1)@HQET" :
-    central: 0
-    min: 0
-    max: 0
-"B(*)->D(*)::l_6(1)@HQET" :
-    central: +0.0
-    min: +0.0
-    max: +0.0
-"B(*)->D(*)::l_6'(1)@HQET" :
-    central: 0
-    min: 0
-    max: 0

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -121,13 +121,22 @@ namespace eos
             ~Parameters();
             ///@}
 
-            ///@name Iteration
+            ///@name Iteration over parameters
             ///@{
             struct IteratorTag;
             typedef WrappedForwardIterator<IteratorTag, Parameter> Iterator;
 
             Iterator begin() const;
             Iterator end() const;
+            ///@}
+
+            ///@name Iteration over parameter sections
+            ///@{
+            struct SectionIteratorTag;
+            typedef WrappedForwardIterator<SectionIteratorTag, const ParameterSection &> SectionIterator;
+
+            SectionIterator begin_sections() const;
+            SectionIterator end_sections() const;
             ///@}
 
             ///@name Parameter access
@@ -263,6 +272,66 @@ namespace eos
             const std::string & latex() const;
             ///@}
     };
+
+    /**
+     * ParameterSection is used to keep track of one or more ParameterGroup objects, and groups
+     * them together under a common name. Examples of observable sections include SM & EFT parameters,
+     * and form factor parameters.
+     */
+    class ParameterSection :
+        public PrivateImplementationPattern<ParameterSection>
+    {
+        public:
+            ParameterSection(Implementation<ParameterSection> *);
+
+            ~ParameterSection();
+
+            ///@name Iteration over groups
+            ///@{
+            struct GroupIteratorTag;
+            typedef WrappedForwardIterator<GroupIteratorTag, const ParameterGroup &> GroupIterator;
+
+            GroupIterator begin() const;
+            GroupIterator end() const;
+            ///@}
+
+            ///@name Meta data
+            ///@{
+            const std::string & name() const;
+            const std::string & description() const;
+            ///@}
+    };
+    extern template class WrappedForwardIterator<ParameterSection::GroupIteratorTag, const ParameterGroup &>;
+
+    /*!
+     * ParameterGroup is used to keep track of one or more Parameter objects, and groups
+     * them together under a common name and description. Examples of Parameter Groups
+     * include fermion mass parameters and B->D form factors parameters.
+     */
+    class ParameterGroup :
+        public PrivateImplementationPattern<ParameterGroup>
+    {
+        public:
+            ParameterGroup(Implementation<ParameterGroup> *);
+
+            ~ParameterGroup();
+
+            ///@name Iteration over parameters
+            ///@{
+            struct ParameterIteratorTag;
+            typedef WrappedForwardIterator<ParameterIteratorTag, const Parameter> ParameterIterator;
+
+            ParameterIterator begin() const;
+            ParameterIterator end() const;
+            ///@}
+
+            ///@name Meta data
+            ///@{
+            const std::string & name() const;
+            const std::string & description() const;
+            ///@}
+    };
+    extern template class WrappedForwardIterator<ParameterGroup::ParameterIteratorTag, const Parameter>;
 
     /*!
      * Base class for all users of Parameter objects.

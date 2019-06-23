@@ -23,6 +23,7 @@
 #include <eos/utils/log.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/qualified-name.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
@@ -54,6 +55,120 @@ namespace eos
     		return false;
 
     	return true;
+    }
+
+    /* ParameterGroup */
+
+    template <>
+    struct Implementation<ParameterGroup>
+    {
+        std::string name;
+
+        std::string description;
+
+        std::vector<Parameter> entries;
+
+        Implementation(const std::string & name, const std::string & description, std::vector<Parameter> && entries) :
+            name(name),
+            description(description),
+            entries(entries)
+        {
+        }
+    };
+
+    template <>
+    struct WrappedForwardIteratorTraits<ParameterGroup::ParameterIteratorTag>
+    {
+        typedef std::vector<Parameter>::const_iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<ParameterGroup::ParameterIteratorTag, const Parameter>;
+
+    ParameterGroup::ParameterGroup(Implementation<ParameterGroup> * imp) :
+        PrivateImplementationPattern<ParameterGroup>(imp)
+    {
+    }
+
+    ParameterGroup::~ParameterGroup() = default;
+
+    ParameterGroup::ParameterIterator
+    ParameterGroup::begin() const
+    {
+        return _imp->entries.begin();
+    }
+
+    ParameterGroup::ParameterIterator
+    ParameterGroup::end() const
+    {
+        return _imp->entries.end();
+    }
+
+    const std::string &
+    ParameterGroup::name() const
+    {
+        return _imp->name;
+    }
+
+    const std::string &
+    ParameterGroup::description() const
+    {
+        return _imp->description;
+    }
+
+    /* ParameterSection */
+
+    template <>
+    struct Implementation<ParameterSection>
+    {
+        std::string name;
+
+        std::string description;
+
+        std::vector<ParameterGroup> groups;
+
+        Implementation(const std::string & name, const std::string & description, const std::vector<ParameterGroup> & groups) :
+            name(name),
+            description(description),
+            groups(groups)
+        {
+        }
+    };
+
+    template <>
+    struct WrappedForwardIteratorTraits<ParameterSection::GroupIteratorTag>
+    {
+        typedef std::vector<ParameterGroup>::const_iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<ParameterSection::GroupIteratorTag, const ParameterGroup &>;
+
+    ParameterSection::ParameterSection(Implementation<ParameterSection> * imp) :
+        PrivateImplementationPattern<ParameterSection>(imp)
+    {
+    }
+
+    ParameterSection::~ParameterSection() = default;
+
+    ParameterSection::GroupIterator
+    ParameterSection::begin() const
+    {
+        return _imp->groups.begin();
+    }
+
+    ParameterSection::GroupIterator
+    ParameterSection::end() const
+    {
+        return _imp->groups.end();
+    }
+
+    const std::string &
+    ParameterSection::name() const
+    {
+        return _imp->name;
+    }
+
+    const std::string &
+    ParameterSection::description() const
+    {
+        return _imp->description;
     }
 
     struct Parameter::Template
@@ -93,6 +208,13 @@ namespace eos
     template class WrappedForwardIterator<Parameters::IteratorTag, Parameter>;
 
     template <>
+    struct WrappedForwardIteratorTraits<Parameters::SectionIteratorTag>
+    {
+        typedef std::vector<ParameterSection>::const_iterator UnderlyingIterator;
+    };
+    template class WrappedForwardIterator<Parameters::SectionIteratorTag, const ParameterSection &>;
+
+    template <>
     struct Implementation<Parameters>
     {
         std::shared_ptr<Parameters::Data> parameters_data;
@@ -100,6 +222,8 @@ namespace eos
         std::map<std::string, unsigned> parameters_map;
 
         std::vector<Parameter> parameters;
+
+        std::vector<ParameterSection> sections;
 
         Implementation(const std::initializer_list<Parameter::Template> & list) :
             parameters_data(new Parameters::Data)
@@ -259,68 +383,110 @@ namespace eos
                 std::string file = file_path.string();
                 try
                 {
-                    YAML::Node node = YAML::LoadFile(file);
+                    YAML::Node root_node = YAML::LoadFile(file);
+                    std::vector<ParameterGroup> section_groups;
 
-                    for (auto && p : node)
+                    // parse the section metadata
+                    auto section_title_node = root_node["title"];
+                    if (! section_title_node)
+                        throw ParameterInputFileNodeError(file, "/", "has no entry named 'title'");
+                    if (YAML::NodeType::Scalar != section_title_node.Type())
+                        throw ParameterInputFileNodeError(file, "title", "is not a scalar");
+                    std::string section_title = section_title_node.as<std::string>();
+
+                    auto section_desc_node = root_node["description"];
+                    if (! section_desc_node)
+                        throw ParameterInputFileNodeError(file, "/", "has no entry named 'description'");
+                    if (YAML::NodeType::Scalar != section_desc_node.Type())
+                        throw ParameterInputFileNodeError(file, "description", "is not a scalar");
+                    std::string section_desc = section_desc_node.as<std::string>();
+
+                    auto section_groups_node = root_node["groups"];
+                    if (! section_groups_node)
+                        throw ParameterInputFileNodeError(file, "/", "has no entry named 'group'");
+                    if (YAML::NodeType::Sequence != section_groups_node.Type())
+                        throw ParameterInputFileNodeError(file, "groups", "is not a sequence");
+
+                    // parse the section's groups
+                    for (auto && group_node : section_groups_node)
                     {
-                        std::string name = p.first.Scalar();
+                        std::vector<Parameter> group_parameters;
 
-                        if ("@metadata@" == name)
-                            continue;
+                        auto group_title_node = group_node["title"];
+                        if (! group_title_node)
+                            throw ParameterInputFileNodeError(file, "", "has no entry named 'title'");
+                        if (YAML::NodeType::Scalar != group_title_node.Type())
+                            throw ParameterInputFileNodeError(file, "title", "is not a scalar");
+                        std::string group_title = group_title_node.as<std::string>();
 
-                        double central, min, max;
+                        auto group_desc_node = group_node["description"];
+                        if (! group_desc_node)
+                            throw ParameterInputFileNodeError(file, group_title, "has no entry named 'description'");
+                        if (YAML::NodeType::Scalar != group_desc_node.Type())
+                            throw ParameterInputFileNodeError(file, "'" + group_title + "'.description", "is not a scalar");
+                        std::string group_desc = group_desc_node.as<std::string>();
 
-                        std::string latex;
+                        auto group_parameters_node = group_node["parameters"];
+                        if (! group_parameters_node)
+                            throw ParameterInputFileNodeError(file, group_title, "has no entry named 'parameters'");
+                        if (YAML::NodeType::Map != group_parameters_node.Type())
+                            throw ParameterInputFileNodeError(file, "'" + group_title + "'.parameters", "is not a map");
 
-                        if (! p.second["central"])
+                        // parse the group's parameters
+                        for (auto && p : group_parameters_node)
                         {
-                            throw ParameterInputFileNodeError(file, name, "has no entry named 'central'");
-                        }
-                        else if (YAML::NodeType::Scalar != p.second["central"].Type())
-                        {
-                            throw ParameterInputFileNodeError(file, name + ".central", "is not a scalar");
-                        }
-                        central = p.second["central"].as<double>();
+                            std::string name = p.first.Scalar();
 
-                        if (! p.second["min"])
-                        {
-                            throw ParameterInputFileNodeError(file, name, "has no entry named 'min'");
-                        }
-                        else if (YAML::NodeType::Scalar != p.second["min"].Type())
-                        {
-                            throw ParameterInputFileNodeError(file, name + ".min", "is not a scalar");
-                        }
-                        min = p.second["min"].as<double>();
+                            double central, min, max;
 
-                        if (! p.second["max"])
-                        {
-                            throw ParameterInputFileNodeError(file, name, "has no entry named 'max'");
+                            std::string latex;
+
+                            auto central_node = p.second["central"];
+                            if (! central_node)
+                                throw ParameterInputFileNodeError(file, name, "has no entry named 'central'");
+                            if (YAML::NodeType::Scalar != central_node.Type())
+                                throw ParameterInputFileNodeError(file, name + ".central", "is not a scalar");
+                            central = central_node.as<double>();
+
+                            auto min_node = p.second["min"];
+                            if (! min_node)
+                                throw ParameterInputFileNodeError(file, name, "has no entry named 'min'");
+                            if (YAML::NodeType::Scalar != min_node.Type())
+                                throw ParameterInputFileNodeError(file, name + ".min", "is not a scalar");
+                            min = min_node.as<double>();
+
+                            auto max_node = p.second["max"];
+                            if (! max_node)
+                                throw ParameterInputFileNodeError(file, name, "has no entry named 'max'");
+                            if (YAML::NodeType::Scalar != max_node.Type())
+                                throw ParameterInputFileNodeError(file, name + ".max", "is not a scalar");
+                            max = max_node.as<double>();
+
+                            auto latex_node = p.second["latex"];
+                            if (latex_node)
+                            {
+                                if (YAML::NodeType::Scalar != latex_node.Type())
+                                    throw ParameterInputFileNodeError(file, name + ".latex", "is not a scalar");
+
+                                latex = latex_node.as<std::string>();
+                            }
+
+                            if (parameters_map.end() != parameters_map.find(name))
+                            {
+                                throw ParameterInputDuplicateError(file, name);
+                            }
+
+                            parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max, latex }, idx));
+                            parameters_map[name] = idx;
+                            parameters.push_back(Parameter(parameters_data, idx));
+                            group_parameters.push_back(Parameter(parameters_data, idx));
+
+                            ++idx;
                         }
-                        else if (YAML::NodeType::Scalar != p.second["max"].Type())
-                        {
-                            throw ParameterInputFileNodeError(file, name + ".max", "is not a scalar");
-                        }
-                        max = p.second["max"].as<double>();
 
-                        if (p.second["latex"])
-                        {
-                            if (YAML::NodeType::Scalar != p.second["latex"].Type())
-                                throw ParameterInputFileNodeError(file, name + ".latex", "is not a scalar");
-
-                            latex = p.second["latex"].as<std::string>();
-                        }
-
-                        if (parameters_map.end() != parameters_map.find(name))
-                        {
-                            throw ParameterInputDuplicateError(file, name);
-                        }
-
-                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max, latex }, idx));
-                        parameters_map[name] = idx;
-                        parameters.push_back(Parameter(parameters_data, idx));
-
-                        ++idx;
+                        section_groups.push_back(ParameterGroup(new Implementation<ParameterGroup>(group_title, group_desc, std::move(group_parameters))));
                     }
+                    sections.push_back(ParameterSection(new Implementation<ParameterSection>(section_title, section_desc, std::move(section_groups))));
                 }
                 catch (std::exception & e)
                 {
@@ -403,6 +569,18 @@ namespace eos
     Parameters::end() const
     {
         return Parameters::Iterator(_imp->parameters.end());
+    }
+
+    Parameters::SectionIterator
+    Parameters::begin_sections() const
+    {
+        return _imp->sections.begin();
+    }
+
+    Parameters::SectionIterator
+    Parameters::end_sections() const
+    {
+        return _imp->sections.end();
     }
 
     bool
@@ -514,6 +692,8 @@ namespace eos
     {
         return _parameters_data->data[_index].id;
     }
+
+    /* ParameterUser */
 
     template <>
     struct WrappedForwardIteratorTraits<ParameterUser::ConstIteratorTag>

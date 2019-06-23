@@ -1,0 +1,866 @@
+# vim: set sts=2 et tw=150 fdm=marker :
+title: 'Standard Model \& Effective Field Theory Parameters'
+description: ''
+groups:
+  # SM Parameters
+  # {{{
+  - title: 'Standard Model Parameters'
+    description: ''
+    parameters:
+      'hbar' :
+          central: +6.58211928e-25
+          min:     +6.58211913e-25
+          max:     +6.58211943e-25
+          comments: 'in GeV s, cf. [PDG2012]:  p. 4'
+      # Factorization scale
+      'mu' :
+          central: +4.2
+          min:     +2.4
+          max:     +9.6
+          comments: ''
+      # GSW Parameter
+      'GSW::sin^2(theta)' :
+          central: +0.23116
+          min:     +0.23104
+          max:     +0.23128
+          comments: 'cf. [PDG2012]:  p. 4'
+      # QED inputs
+      'QED::alpha_e(m_b)' :
+          central: +0.00751879699248120
+          min:     +0.00751879699248120
+          max:     +0.00781250000000000
+          comments: 'alpha_e(m_b) = 1/133 .. alpha_e(m_W) = 1/128'
+      # G_Fermi
+      'G_Fermi' :
+          central: +1.1663787e-5
+          min:     +1.1663781e-5
+          max:     +1.1663793e-5
+          comments: 'cf. [PDG2012], p. 5'
+      # b->s matching parameters
+      'b->s::mu_0c' :
+          central: +80.0
+          min:     +80.0
+          max:     +80.0
+          comments: ''
+      'b->s::mu_0t' :
+          central: +120.0
+          min:     +120.0
+          max:     +120.0
+          comments: ''
+      # QCD inputs
+      'QCD::alpha_s(MZ)' :
+          central: +0.1184
+          min:     +0.1191
+          max:     +0.1177
+          comments: 'cf. [PDG2012], p. 1'
+      'QCD::mu_t' :
+          central: +170.0
+          min:     +170.0
+          max:     +170.0
+      'QCD::mu_b' :
+          central: +4.2
+          min:     +4.2
+          max:     +4.2
+      'QCD::mu_c' :
+          central: +1.0
+          min:     +1.0
+          max:     +1.0
+      'QCD::Lambda' :
+          central: +0.5
+          min:     +0.5
+          max:     +0.5
+      'QCD::cond_GG' :
+          central: +0.012
+          min:     +0.000
+          max:     +0.018
+      'QCD::m_0' :
+          central: +0.89443
+          min:     +0.7746
+          max:     +1.0
+          comments: 'in GeV, cf. [DKMMO2008]'
+      'QCD::r_vac' :
+          central: +0.55
+          min:     +0.1
+          max:     +1.0
+          comments: 'cf. [DKMMO2008]'
+      # Wolfenstein parameters of CKM, cf. [UTFIT2013]
+      'CKM::A' :
+          central: +0.827
+          min:     +0.814
+          max:     +0.840
+          latex:   '$A_\text{CKM}$'
+          comment: 'The Wolfenstein CKM parameter @MATH[A]@'
+      'CKM::lambda' :
+          central: +0.22535
+          min:     +0.22470
+          max:     +0.22600
+          latex:   '$\lambda_\text{CKM}$'
+          comment: 'The Wolfenstein CKM parameter @MATH[\lambda]@'
+      'CKM::rhobar' :
+          central: +0.132
+          min:     +0.111
+          max:     +0.153
+          latex:   '$\bar{\rho}_\text{CKM}$'
+          comment: 'The Wolfenstein CKM parameter @MATH[\bar{\rho}]@'
+      'CKM::etabar' :
+          central: +0.350
+          min:     +0.336
+          max:     +0.364
+          latex:   '$\bar{\eta}_\text{CKM}$'
+          comment: 'The Wolfenstein CKM parameter @MATH[\bar{\eta}]@'
+      # Lepton masses
+      'mass::e' :
+          central: +5.10999e-4
+          min:     +5.10999e-4
+          max:     +5.10999e-4
+          comments: 'cf. [PDG2012], p. 13'
+      'mass::mu' :
+          central: +1.05658e-1
+          min:     +1.05658e-1
+          max:     +1.05658e-1
+          comments: 'cf. [PDG2012], p. 13'
+      'mass::tau' :
+          central: +1.77682
+          min:     +1.77666
+          max:     +1.77698
+          comments: 'cf. [PDG2012], p. 14'
+      # Quark masses
+      'mass::d(2GeV)' :
+          central: +0.0048
+          min:     +0.0045
+          max:     +0.0055
+          comments: 'cf. [PDG2012], p. 21'
+      'mass::ud(2GeV)' :
+          central: +0.008
+          min:     +0.008
+          max:     +0.008
+          comments: ''
+      'mass::s(2GeV)' :
+          central: +0.095
+          min:     +0.090
+          max:     +0.10
+          comments: 'cf. [PDG2012], p. 21'
+      'mass::c' :
+          central: +1.275
+          min:     +1.250
+          max:     +1.300
+          comments: 'cf. [PDG2012], p. 21'
+      'mass::b(MSbar)' :
+          central: +4.18
+          min:     +4.15
+          max:     +4.21
+          comments: 'cf. [PDG2012], p. 21'
+      'mass::t(pole)' :
+          central: +173.5
+          min:     +172.5
+          max:     +174.5
+          comments: 'cf. [PDG2012], p. 22'
+      # Gauge boson masses
+      'mass::W' :
+          central: +80.385
+          min:     +80.370
+          max:     +80.400
+          comments: 'cf. [PDG2012], p. 8'
+      'mass::Z' :
+          central: +91.1876
+          min:     +91.1855
+          max:     +91.1897
+          comments: 'cf. [PDG2012], p. 9'
+  # }}}
+
+  # CKM Parameters
+  # {{{
+  - title: 'CKM Parameters w/o the Assumption of CKM Unitarity'
+    description: ''
+    parameters:
+      # CKM matrix elements for use by CKMScanModel
+      'CKM::abs(V_ud)' :
+          central: +1.00
+          min:     +1.00
+          max:     +1.00
+          latex:   '$|V_{ud}|$'
+      'CKM::arg(V_ud)' :
+          central: +1.00
+          min:     +1.00
+          max:     +1.00
+          latex:   '$\arg{V_{ud}}$'
+      'CKM::abs(V_us)' :
+          central: +0.22
+          min:     +0.22
+          max:     +0.22
+          latex:   '$|V_{us}|$'
+      'CKM::arg(V_us)' :
+          central: +0.22
+          min:     +0.22
+          max:     +0.22
+          latex:   '$\arg{V_{us}}$'
+      'CKM::abs(V_ub)' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:   '$|V_{ub}|$'
+      'CKM::arg(V_ub)' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:   '$\arg{V_{ub}}$'
+      'CKM::abs(V_cd)' :
+          central: +1.00
+          min:     +1.00
+          max:     +1.00
+          latex:   '$|V_{cd}|$'
+      'CKM::arg(V_cd)' :
+          central: +1.00
+          min:     +1.00
+          max:     +1.00
+          latex:   '$\arg{V_{cd}}$'
+      'CKM::abs(V_cs)' :
+          central: +0.22
+          min:     +0.22
+          max:     +0.22
+          latex:   '$|V_{cs}|$'
+      'CKM::arg(V_cs)' :
+          central: +0.22
+          min:     +0.22
+          max:     +0.22
+          latex:   '$\arg{V_{cs}}$'
+      'CKM::abs(V_cb)' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:   '$|V_{cb}|$'
+      'CKM::arg(V_cb)' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:   '$\arg{V_{cb}}$'
+      'CKM::abs(V_td)' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:   '$|V_{td}|$'
+      'CKM::arg(V_td)' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:   '$\arg{V_{td}}$'
+      'CKM::abs(V_ts)' :
+          central: +0.04
+          min:     +0.04
+          max:     +0.04
+          latex:   '$|V_{ts}|$'
+      'CKM::arg(V_ts)' :
+          central: +0.04
+          min:     +0.04
+          max:     +0.04
+          latex:   '$\arg{V_{ts}}$'
+      'CKM::abs(V_tb)' :
+          central: +1.00
+          min:     +1.00
+          max:     +1.00
+          latex:   '$|V_{tb}|$'
+      'CKM::arg(V_tb)' :
+          central: +1.00
+          min:     +1.00
+          max:     +1.00
+          latex:   '$\arg{V_{tb}}$'
+  # }}}
+
+  # b -> s {qqbar, gamma, l^+l^-} WET Parameters
+  # {{{
+  - title: '$b\to s\left\lbrace \bar{q}q,\, \gamma,\, \ell^+\ell^-\right\rbrace$ WET Parameters'
+    description: >
+        The list of parameters describing the $b\to s \left\lbrace
+        q\bar{q},\gamma,\ell^+\ell^-\right\rbrace$ Wilson coefficients.
+        See the EOS manual for their physical definitions.
+    wcxf-relevant: true
+    parameters:
+      # Wilson coefficients C1 - C6 at mu = 4.2 GeV to NNLL accuary as calculated in the SM by EOS's StandardModel class.
+      # For the calculations, cf. [BMU1999].
+      "b->s::c1" :
+          central: -0.29063621
+          min:     -0.29063621
+          max:     -0.29063621
+          latex:   $\mathcal{C}_1$
+          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+      "b->s::c2" :
+          central: +1.01029623
+          min:     +1.01029623
+          max:     +1.01029623
+          latex:   $\mathcal{C}_2$
+          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+      "b->s::c3" :
+          central: -0.00616220
+          min:     -0.00616220
+          max:     -0.00616220
+          latex:   $\mathcal{C}_3$
+          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+      "b->s::c4" :
+          central: -0.08730376
+          min:     -0.08730376
+          max:     -0.08730376
+          latex:   $\mathcal{C}_4$
+          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+      "b->s::c5" :
+          central: +0.00042854
+          min:     +0.00042854
+          max:     +0.00042854
+          latex:   $\mathcal{C}_5$
+          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+      "b->s::c6" :
+          central: +0.00115807
+          min:     +0.00115807
+          max:     +0.00115807
+          latex:   $\mathcal{C}_6$
+          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+      "b->s::Re{c7}" :
+          central: -0.33726473
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_7$
+          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+      "b->s::Im{c7}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_7$
+          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+      "b->s::c8" :
+          central: -0.18288898
+          min:     -0.18288898
+          max:     -0.18288898
+          latex:   $\mathcal{C}_8$
+          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+      "b->see::Re{c9}" :
+          central: +4.27342842
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Re\mathcal{C}_9^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->see::Im{c9}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Im\mathcal{C}_9^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->see::Re{c10}" :
+          central: -4.16611761
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Re\mathcal{C}_{10}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->see::Im{c10}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Im\mathcal{C}_{10}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->smumu::Re{c9}" :
+          central: +4.27342842
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Re\mathcal{C}_9^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->smumu::Im{c9}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Im\mathcal{C}_9^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->smumu::Re{c10}" :
+          central: -4.16611761
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Re\mathcal{C}_{10}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->smumu::Im{c10}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Im\mathcal{C}_{10}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+
+      # Primed Wilson coefficients are negligible in the SM
+      "b->s::Re{c7'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{7'}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->s::Im{c7'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{7'}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->s::c8'" :
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          latex:   $\mathcal{C}_{8'}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3), with the replacement @MATH[e F_{\mu\nu} \to g_s G_{\mu\nu}]@'
+      "b->see::Re{c9'}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Re\mathcal{C}_{9'}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->see::Im{c9'}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Im\mathcal{C}_{9'}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->see::Re{c10'}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Re\mathcal{C}_{10'}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->see::Im{c10'}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Im\mathcal{C}_{10'}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->smumu::Re{c9'}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Re\mathcal{C}_{9'}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->smumu::Im{c9'}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Im\mathcal{C}_{9'}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->smumu::Re{c10'}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Re\mathcal{C}_{10'}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+      "b->smumu::Im{c10'}" :
+          central: +0.0
+          min:     -15.0
+          max:     +15.0
+          latex:   $\Im\mathcal{C}_{10'}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+
+      # scalar, pseudoscalar, and tensor b -> s ll coefficients
+      "b->see::Re{cS}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{S}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->see::Im{cS}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{S}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->see::Re{cS'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{S'}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->see::Im{cS'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{S'}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->see::Re{cP}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{P}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->see::Im{cP}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{P}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->see::Re{cP'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{P'}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->see::Im{cP'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{P'}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->see::Re{cT}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{T}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+      "b->see::Im{cT}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{T}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+      "b->see::Re{cT5}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{T5}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+      "b->see::Im{cT5}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{T5}^{(e)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+      "b->smumu::Re{cS}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{S}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->smumu::Im{cS}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{S}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->smumu::Re{cS'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{S'}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->smumu::Im{cS'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{S'}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->smumu::Re{cP}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{P}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->smumu::Im{cP}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{P}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->smumu::Re{cP'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{P'}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->smumu::Im{cP'}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{P'}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+      "b->smumu::Re{cT}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{T}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+      "b->smumu::Im{cT}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{T}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+      "b->smumu::Re{cT5}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Re\mathcal{C}_{T5}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+      "b->smumu::Im{cT5}" :
+          central: +0.0
+          min:     -1.0
+          max:     +1.0
+          latex:   $\Im\mathcal{C}_{T5}^{(\mu)}$
+          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+  # }}}
+
+  # b -> c l^- nubar WET Parameters
+  # {{{
+  - title: '$b\to c\ell^-\bar\nu$ WET Parameters'
+    description: >
+        The list of parameters describing the $b\to c\ell^-\bar\nu$ Wilson coefficients.
+        See the EOS manual for their physical definitions.
+    wcxf-relevant: true
+    parameters:
+      # b->c Wilson coefficients - electron
+      'b->cenue::Re{cVL}' :
+          central: 1.0
+          min:     1.0
+          max:     1.0
+      'b->cenue::Im{cVL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cenue::Re{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cenue::Im{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cenue::Re{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cenue::Im{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cenue::Re{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cenue::Im{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cenue::Re{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cenue::Im{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+
+      # b->c Wilson coefficients - muon
+      'b->cmunumu::Re{cVL}' :
+          central: 1.0
+          min:     1.0
+          max:     1.0
+      'b->cmunumu::Im{cVL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cmunumu::Re{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cmunumu::Im{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cmunumu::Re{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cmunumu::Im{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cmunumu::Re{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cmunumu::Im{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cmunumu::Re{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->cmunumu::Im{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+
+      # b->c Wilson coefficients - tau
+      'b->ctaunutau::Re{cVL}' :
+          central: 1.0
+          min:     1.0
+          max:     1.0
+      'b->ctaunutau::Im{cVL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->ctaunutau::Re{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->ctaunutau::Im{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->ctaunutau::Re{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->ctaunutau::Im{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->ctaunutau::Re{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->ctaunutau::Im{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->ctaunutau::Re{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->ctaunutau::Im{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+  # }}}
+
+  # b -> u l^- nubar WET Parameters
+  # {{{
+  - title: '$b\to u\ell^-\bar\nu$ WET Parameters'
+    description: >
+        The list of parameters describing the $b\to u\ell^-\bar\nu$ Wilson coefficients.
+        See the EOS manual for their physical definitions.
+    wcxf-relevant: true
+    parameters:
+      # b->u Wilson coefficients - electron
+      'b->uenue::Re{cVL}' :
+          central: 1.0
+          min:     1.0
+          max:     1.0
+      'b->uenue::Im{cVL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->uenue::Re{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->uenue::Im{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->uenue::Re{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->uenue::Im{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->uenue::Re{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->uenue::Im{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->uenue::Re{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->uenue::Im{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+
+      # b->u Wilson coefficients - muon
+      'b->umunumu::Re{cVL}' :
+          central: 1.0
+          min:     1.0
+          max:     1.0
+      'b->umunumu::Im{cVL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->umunumu::Re{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->umunumu::Im{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->umunumu::Re{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->umunumu::Im{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->umunumu::Re{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->umunumu::Im{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->umunumu::Re{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->umunumu::Im{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+
+      # b->u Wilson coefficients - tau
+      'b->utaunutau::Re{cVL}' :
+          central: 1.0
+          min:     1.0
+          max:     1.0
+      'b->utaunutau::Im{cVL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->utaunutau::Re{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->utaunutau::Im{cVR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->utaunutau::Re{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->utaunutau::Im{cSL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->utaunutau::Re{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->utaunutau::Im{cSR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->utaunutau::Re{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+      'b->utaunutau::Im{cT}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+  # }}}
