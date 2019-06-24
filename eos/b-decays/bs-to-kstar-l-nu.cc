@@ -21,7 +21,7 @@
  */
 
 #include <eos/b-decays/b-to-l-nu.hh>
-#include <eos/b-decays/b-to-pi-l-nu.hh>
+#include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/b-decays/b-to-v-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/form-factors/form-factors.hh>
@@ -107,7 +107,7 @@ namespace eos
         {
             static const double sqrt2 = sqrt(2.0);
 
-            WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
+            WilsonCoefficients<ChargedCurrent> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
             double m_Bs2 = m_Bs * m_Bs;
             double sqrts = sqrt(s), lam = lambda(m_Bs * m_Bs, m_Kstar * m_Kstar, s), sqrtlam = sqrt(lam);
             double N = this->norm(s);
@@ -558,16 +558,22 @@ namespace eos
     template <>
     struct Implementation<BsToKstarLeptonNeutrinoRatios>
     {
+        UsedParameter hbar;
+
+        UsedParameter tau;
+
         BsToKstarLeptonNeutrino bstokstarlnu;
 
         BToLeptonNeutrino btolnu;
 
-        BToPiLeptonNeutrino btopilnu;
+        BToPseudoscalarLeptonNeutrino btopilnu;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            hbar(p["hbar"], u),
+            tau(p["life_time::B_d"], u),
             bstokstarlnu(p, o + Options{ std::make_pair("l", "mu")}),
             btolnu(p, o + Options{ std::make_pair("l", "tau") }),
-            btopilnu(p, o + Options{ std::make_pair("l", "mu") })
+            btopilnu(p, o + Options{ { "l", "mu" }, { "U", "u" }, { "q", "d" } })
         {
             u.uses(bstokstarlnu);
             u.uses(btolnu);
@@ -605,7 +611,7 @@ namespace eos
     {
         AngularCoefficients a_c = _imp->bstokstarlnu._imp->integrated_angular_coefficients(0.02, 19.71);
 
-        return 4.0 / 9.0 * (2.0 * a_c.j1s + 3.0 * a_c.j3) / _imp->btopilnu.integrated_decay_width(0.02, 12.0);
+        return 4.0 / 9.0 * (2.0 * a_c.j1s + 3.0 * a_c.j3) * _imp->tau() / _imp->hbar() / _imp->btopilnu.integrated_branching_ratio(0.02, 12.0);
     }
 
     const std::string

@@ -50,7 +50,7 @@ namespace eos
             // inclusive |V_ub|^2 = |V_ub^eff|^2 (|C_V,LL|^2 + |C_V,RL|^2)
 
             double v_ub_eff_squared = std::norm(model->ckm_ub());
-            WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
+            auto wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
 
             return std::sqrt(v_ub_eff_squared * (std::norm(wc.cvl()) + std::norm(wc.cvr())));
         }

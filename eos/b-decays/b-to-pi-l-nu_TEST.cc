@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014 Danny van Dyk
+ * Copyright (c) 2014, 2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,7 +19,7 @@
 
 #include <test/test.hh>
 #include <eos/observable.hh>
-#include <eos/b-decays/b-to-pi-l-nu.hh>
+#include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
@@ -57,23 +57,28 @@ class BToPiLeptonNeutrinoTest :
                 p["mass::B_d"]             =  5.2796;
                 p["mass::pi^+"]            =  1.3957e-1;
 
-                Options oo;
-                oo.set("model", "CKMScan");
-                oo.set("form-factors", "BCL2008");
+                Options oo
+                {
+                    { "model",        "CKMScan" },
+                    { "form-factors", "BCL2008" },
+                    { "U",            "u"       },
+                    { "q",            "d"       },
+                    { "l",            "e"       }
+                };
 
-                BToPiLeptonNeutrino d(p, oo);
+                BToPseudoscalarLeptonNeutrino d(p, oo);
 
-                const double eps = 1e-4;
+                const double eps = 1e-8;
 
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.0,  2.0), 1.42880e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 2.0,  4.0), 1.41174e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 4.0,  6.0), 1.38961e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 6.0,  8.0), 1.36135e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 8.0, 10.0), 1.32564e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(10.0, 12.0), 1.28071e-5, eps);
+                TEST_CHECK_NEARLY_EQUAL(1.44047e-05, d.integrated_branching_ratio( 0.01,  2.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.43046e-05, d.integrated_branching_ratio( 2.00,  4.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.40803e-05, d.integrated_branching_ratio( 4.00,  6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.37941e-05, d.integrated_branching_ratio( 6.00,  8.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.34323e-05, d.integrated_branching_ratio( 8.00, 10.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.29770e-05, d.integrated_branching_ratio(10.00, 12.00), eps);
 
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.0, 12.0), 8.19780e-5, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.0, 25.0), 1.41237e-4, eps);
+                TEST_CHECK_NEARLY_EQUAL(8.29930e-5,  d.integrated_branching_ratio( 0.01, 12.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.43035e-4,  d.integrated_branching_ratio( 0.01, 25.00), eps);
             }
         }
 } b_to_pi_l_nu_test;

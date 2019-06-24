@@ -33,28 +33,9 @@ namespace eos
 {
     template <typename Tag_> struct WilsonCoefficients;
 
-    struct BToC {};
-    
-    template <> struct WilsonCoefficients<BToC>
-    {
-        /*
-         * For the definition, cf. [FMvD2013].
-         */
-        
-        /* Order: C_V,L, C_V,R, C_S,L, C_S,R, C_T */
-        std::array<complex<double>, 5> _coefficients;
-        
-        // cf. [FMvD2015], Eqs. (1) and (2)
-        inline complex<double> cvl() const { return _coefficients[0]; }
-        inline complex<double> cvr() const { return _coefficients[1]; }
-        inline complex<double> csl() const { return _coefficients[2]; }
-        inline complex<double> csr() const { return _coefficients[3]; }
-        inline complex<double> ct()  const { return _coefficients[4]; }
-    };
-    
-    struct BToU {};
+    struct ChargedCurrent {};
 
-    template <> struct WilsonCoefficients<BToU>
+    template <> struct WilsonCoefficients<ChargedCurrent>
     {
         /*
          * For the definition, cf. [FMvD2013].

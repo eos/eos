@@ -18,12 +18,11 @@
  */
 
 #include <eos/observable-impl.hh>
-#include <eos/b-decays/b-to-l-nu.hh>
-#include <eos/b-decays/b-to-pi-l-nu.hh>
-#include <eos/b-decays/b-to-pi-pi-l-nu.hh>
-#include <eos/b-decays/b-to-d-l-nu.hh>
 #include <eos/b-decays/b-to-d-pi-l-nu.hh>
 #include <eos/b-decays/b-to-dstar-l-nu.hh>
+#include <eos/b-decays/b-to-l-nu.hh>
+#include <eos/b-decays/b-to-pi-pi-l-nu.hh>
+#include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2595-l-nu.hh>
@@ -66,16 +65,19 @@ namespace eos
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 make_observable("B->pilnu::dBR/dq2", R"(d\mathcal{B}(B\to\pi\ell^-\bar\nu)/dq^2)",
-                        &BToPiLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2")),
+                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "u" } }),
 
                 make_observable("B->pilnu::BR", R"(\mathcal{B}(B\to\pi\ell^-\bar\nu))",
-                        &BToPiLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max")),
+                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" } }),
 
                 make_observable("B->pilnu::zeta",
-                        &BToPiLeptonNeutrino::integrated_zeta,
-                        std::make_tuple("q2_min", "q2_max")),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" } }),
             }
         );
 
@@ -94,49 +96,59 @@ namespace eos
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 make_observable("B->Dlnu::dBR/dq2", R"(d\mathcal{B}(B\to \bar{D}\ell^-\bar\nu)/dq^2)",
-                        &BToDLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2")),
+                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::BR", R"(\mathcal{B}(B\to \bar{D}\ell^-\bar\nu))",
-                        &BToDLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max")),
+                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::normdBR/ds",
-                        &BToDLeptonNeutrino::normalized_differential_branching_ratio,
-                        std::make_tuple("q2")),
+                        &BToPseudoscalarLeptonNeutrino::normalized_differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::normBR",
-                        &BToDLeptonNeutrino::normalized_integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max")),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::R_D(q2)",
-                        &BToDLeptonNeutrino::differential_r_d,
-                        std::make_tuple("q2")),
+                        &BToPseudoscalarLeptonNeutrino::differential_r_d,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::R_D",
-                        &BToDLeptonNeutrino::integrated_r_d,
-                        std::make_tuple("q2_mu_min", "q2_tau_min", "q2_mu_max", "q2_tau_max")),
+                        &BToPseudoscalarLeptonNeutrino::integrated_r_d,
+                        std::make_tuple("q2_mu_min", "q2_tau_min", "q2_mu_max", "q2_tau_max"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::A_FB(q2)", R"(A_{\text{FB}}(B\to \bar{D}\ell^-\bar\nu)(q^2))",
-                        &BToDLeptonNeutrino::differential_a_fb_leptonic,
-                        std::make_tuple("q2")),
+                        &BToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::A_FB", R"(A_{\text{FB}}(B\to \bar{D}\ell^-\bar\nu))",
-                        &BToDLeptonNeutrino::integrated_a_fb_leptonic,
-                        std::make_tuple("q2_min", "q2_max")),
+                        &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::P(w)",
-                        &BToDLeptonNeutrino::differential_pdf_w,
-                        std::make_tuple("w")),
+                        &BToPseudoscalarLeptonNeutrino::differential_pdf_w,
+                        std::make_tuple("w"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::P(w_min,w_max)",
-                        &BToDLeptonNeutrino::integrated_pdf_w,
-                        std::make_tuple("w_min", "w_max")),
+                        &BToPseudoscalarLeptonNeutrino::integrated_pdf_w,
+                        std::make_tuple("w_min", "w_max"),
+                        Options{ { "U", "c" } }),
 
                 make_observable("B->Dlnu::A_l",
-                        &BToDLeptonNeutrino::integrated_lepton_polarization,
-                        std::make_tuple("q2_min", "q2_max")),
-
+                        &BToPseudoscalarLeptonNeutrino::integrated_lepton_polarization,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "c" } }),
             }
         );
 

@@ -127,15 +127,19 @@ namespace eos
 
             std::array<const std::string, sizeof...(Args_)> _kinematics_names_array;
 
+            Options _forced_options;
+
         public:
             ConcreteObservableEntry(const QualifiedName & name, const std::string & latex,
                     const std::function<double (const Decay_ *, const Args_ & ...)> & function,
-                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names,
+                    const Options & forced_options) :
                 _name(name),
                 _latex(latex),
                 _function(function),
                 _kinematics_names(kinematics_names),
-                _kinematics_names_array(impl::make_array<const std::string>(kinematics_names))
+                _kinematics_names_array(impl::make_array<const std::string>(kinematics_names)),
+                _forced_options(forced_options)
             {
             }
 
@@ -165,7 +169,7 @@ namespace eos
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
-                return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, kinematics, options, _function, _kinematics_names));
+                return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, kinematics, options + _forced_options, _function, _kinematics_names));
             }
 
             virtual std::ostream & insert(std::ostream & os) const
@@ -184,13 +188,14 @@ namespace eos
     template <typename Decay_, typename Tuple_, typename ... Args_>
     ObservableEntryPtr make_concrete_observable_entry(const QualifiedName & name, const std::string & latex,
             double (Decay_::* function)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names = std::make_tuple())
+            const Tuple_ & kinematics_names,
+            const Options & forced_options)
     {
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
 
         return std::make_shared<ConcreteObservableEntry<Decay_, Args_ ...>>(name, latex,
                 std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(function)),
-                kinematics_names);
+                kinematics_names, forced_options);
     }
 
     template <typename Decay_, typename ... Args_>

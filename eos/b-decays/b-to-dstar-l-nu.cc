@@ -249,7 +249,7 @@ namespace eos
             b_to_dstar_l_nu::Amplitudes result;
 
             // NP contributions in EFT including tensor operator cf. [DSD2014], p. 3
-            const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
+            const WilsonCoefficients<ChargedCurrent> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
             const complex<double> VL = wc.cvl() - 1.0;
             const complex<double> VR = wc.cvr();
             const complex<double> SL = wc.csl();

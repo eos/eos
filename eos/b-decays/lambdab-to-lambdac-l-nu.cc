@@ -303,8 +303,7 @@ namespace eos
             lambdab_to_lambdac_l_nu::Amplitudes result;
 
             // uses the b->c WCs in EOS basis
-            const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
-
+            const auto wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
             const complex<double> cvl = wc.cvl();
             const complex<double> cvr = wc.cvr();
             const complex<double> csl = wc.csl();
