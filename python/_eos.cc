@@ -179,6 +179,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("Defaults", &Parameters::Defaults)
         .staticmethod("Defaults")
         .def("__getitem__", (Parameter (Parameters::*)(const std::string &) const) &Parameters::operator[])
+        .def("by_id", (Parameter (Parameters::*)(const Parameter::Id &) const) &Parameters::operator[])
         .def("__iter__", range(&Parameters::begin, &Parameters::end))
         .def("declare", &Parameters::declare, return_value_policy<return_by_value>())
         .def("sections", range(&Parameters::begin_sections, &Parameters::end_sections))
@@ -196,6 +197,11 @@ BOOST_PYTHON_MODULE(_eos)
         .def("latex", &Parameter::latex, return_value_policy<copy_const_reference>())
         .def("set", &Parameter::set)
         .def("evaluate", &Parameter::evaluate)
+        ;
+
+    // ParameterUser
+    class_<ParameterUser>("ParameterUser", no_init)
+        .def("used_parameter_ids", range(&ParameterUser::begin, &ParameterUser::end))
         ;
 
     // ParameterRange
@@ -333,7 +339,7 @@ BOOST_PYTHON_MODULE(_eos)
     // {{{ eos/
     // Observable
     register_ptr_to_python<std::shared_ptr<Observable>>();
-    class_<Observable, boost::noncopyable>("Observable", no_init)
+    class_<Observable, bases<ParameterUser>, boost::noncopyable>("Observable", no_init)
         .def("make", &Observable::make, return_value_policy<return_by_value>())
         .staticmethod("make")
         .def("evaluate", &Observable::evaluate)
