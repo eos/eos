@@ -17,6 +17,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
+from logging import info, warn
 import numpy as np
 import scipy
 import random
@@ -99,6 +100,18 @@ class Analysis:
         for constraint_name in likelihood:
             constraint = eos.Constraint.make(constraint_name, self.global_options)
             self.log_likelihood.add(constraint)
+
+        # perform some sanity checks
+        varied_parameter_names = set([p.name() for p in self.varied_parameters])
+        used_parameter_names = set()
+        for observable in self.log_likelihood.observable_cache():
+            for i in observable.used_parameter_ids():
+                used_parameter_names.add(self.parameters.by_id(i).name())
+
+        for n in used_parameter_names - varied_parameter_names:
+            info('likelihood probably depends on parameter \'{}\', but this parameter does not appear in the prior; check prior?'.format(n))
+        for n in varied_parameter_names - used_parameter_names:
+            warn('likelihood does not depend on parameter \'{}\'; remove from prior or check options!'.format(n))
 
 
     def goodness_of_fit(self):
