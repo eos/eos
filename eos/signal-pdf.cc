@@ -19,9 +19,9 @@
  */
 
 #include <eos/signal-pdf.hh>
-#include <eos/b-decays/b-to-d-l-nu.hh>
-#include <eos/b-decays/b-to-dstar-l-nu.hh>
 #include <eos/b-decays/b-to-d-l-x-nu.hh>
+#include <eos/b-decays/b-to-dstar-l-nu.hh>
+#include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
@@ -122,15 +122,15 @@ namespace eos
                     KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiPiLeptonNeutrino::kinematics_description_z }),
 
             make_signal_pdf("B->Dmunu::dGamma",
-                    &BToDLeptonNeutrino::differential_branching_ratio,
-                    Options{ },
-                    KinematicRange{ "s", 0.0, 11.62, BToDLeptonNeutrino::kinematics_description_s }),
+                    &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                    Options{ { "U", "c" } },
+                    KinematicRange{ "s", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_s }),
 
             make_signal_pdf("B->Dmunu::d^2Gamma",
-                            &BToDLeptonNeutrino::normalized_two_differential_decay_width,
-                            Options{ {"l", "mu"} },
-                            KinematicRange{ "s", 0.0, 11.62, BToDLeptonNeutrino::kinematics_description_s },
-                            KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToDLeptonNeutrino::kinematics_description_c_theta_l}),
+                            &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                            Options{ {"l", "mu"}, {"U", "c"} },
+                            KinematicRange{ "s", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_s },
+                            KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}),
 
             make_signal_pdf("B->D^*munu::dBR",
                             &BToDstarLeptonNeutrino::differential_branching_ratio,

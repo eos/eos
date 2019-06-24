@@ -130,17 +130,17 @@ namespace eos
             SMComponent(const Parameters &, ParameterUser &);
 
             /* b->u Wilson coefficients */
-            virtual WilsonCoefficients<BToU> wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & cp_conjugate) const;
+            virtual WilsonCoefficients<ChargedCurrent> wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & cp_conjugate) const;
     };
-    
+
     template <> class SMComponent<components::DeltaBC1> :
     public virtual ModelComponent<components::DeltaBC1>
     {
     public:
         SMComponent(const Parameters &, ParameterUser &);
-        
+
         /* b->c Wilson coefficients */
-        virtual WilsonCoefficients<BToC> wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & cp_conjugate) const;
+        virtual WilsonCoefficients<ChargedCurrent> wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & cp_conjugate) const;
     };
 
     class StandardModel :

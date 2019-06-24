@@ -699,27 +699,27 @@ namespace implementation
     {
     }
 
-    WilsonCoefficients<BToU>
+    WilsonCoefficients<ChargedCurrent>
     SMComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & /* cp_conjugate */) const
     {
-        WilsonCoefficients<BToU> wc;
+        WilsonCoefficients<ChargedCurrent> wc;
         wc._coefficients.fill(complex<double>(0.0));
         wc._coefficients[0] = complex<double>(1.0);
 
         return wc;
     }
-    
+
     SMComponent<components::DeltaBC1>::SMComponent(const Parameters & /* p */, ParameterUser & /* c */)
     {
     }
-    
-    WilsonCoefficients<BToC>
+
+    WilsonCoefficients<ChargedCurrent>
     SMComponent<components::DeltaBC1>::wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & /* cp_conjugate */) const
     {
-        WilsonCoefficients<BToC> wc;
+        WilsonCoefficients<ChargedCurrent> wc;
         wc._coefficients.fill(complex<double>(0.0));
         wc._coefficients[0] = complex<double>(1.0);
-        
+
         return wc;
     }
 

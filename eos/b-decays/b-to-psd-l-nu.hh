@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_B_DECAYS_B_TO_D_L_NU_HH
-#define EOS_GUARD_EOS_B_DECAYS_B_TO_D_L_NU_HH 1
+#ifndef EOS_GUARD_EOS_B_DECAYS_B_TO_PSD_L_NU_HH
+#define EOS_GUARD_EOS_B_DECAYS_B_TO_PSD_L_NU_HH 1
 
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
@@ -28,25 +28,25 @@
 namespace eos
 {
     /*
-     * Decay: B -> D l nu
+     * Decay: B -> P(seudoscalar) l nu
      */
-    class BToDLeptonNeutrino :
+    class BToPseudoscalarLeptonNeutrino :
         public ParameterUser,
-        public PrivateImplementationPattern<BToDLeptonNeutrino>
+        public PrivateImplementationPattern<BToPseudoscalarLeptonNeutrino>
     {
         public:
-            BToDLeptonNeutrino(const Parameters & parameters, const Options & options);
-            ~BToDLeptonNeutrino();
+            BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options);
+            ~BToPseudoscalarLeptonNeutrino();
 
             // Differential Observables
             double differential_branching_ratio(const double & s) const;
 
             double differential_a_fb_leptonic(const double & s) const;
 
-            // Differential Observables - normalized(|Vcb|=1)
+            // Differential Observables - normalized(|V{c,u}b|=1)
             double normalized_differential_branching_ratio(const double & s) const;
 
-            // two differential observables - normalized(|Vcb|=1)
+            // two differential observables - normalized(|V{c,u}b|=1)
             double normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const;
 
             // Integrated Observables
@@ -58,7 +58,7 @@ namespace eos
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
 
-            // R_D
+            // R_P
             double differential_r_d(const double & s) const;
             double integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max_mu, const double & s_max_tau) const;
 

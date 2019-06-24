@@ -49,7 +49,7 @@ namespace eos
         UsedParameter tau_B;
 
         SwitchOption opt_l;
-        
+
         UsedParameter m_l;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -72,7 +72,7 @@ namespace eos
 
         double decay_width() const
         {
-            const WilsonCoefficients<BToU> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
+            const WilsonCoefficients<ChargedCurrent> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
 
             // cf. [DBG2013], eq. (5), p. 5
             const complex<double> ga = wc.cvl() - wc.cvr();

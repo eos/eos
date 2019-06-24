@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
+ * Copyright (c) 2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,7 +20,7 @@
 
 #include <test/test.hh>
 #include <eos/observable.hh>
-#include <eos/b-decays/b-to-d-l-nu.hh>
+#include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
@@ -85,6 +86,7 @@ class BToDLeptonNeutrinoTest :
                 Options o{
                     { "l",             "e"       },
                     { "model",         "CKMScan" },
+                    { "U",             "c"       },
                     { "q",             "d"       },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
@@ -92,7 +94,7 @@ class BToDLeptonNeutrinoTest :
                     { "form-factors",  "HQET"    }
                 };
 
-                BToDLeptonNeutrino d(p, o);
+                BToPseudoscalarLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 11.643), 13.462, eps);
@@ -137,6 +139,7 @@ class BToDLeptonNeutrinoTest :
                 Options o{
                     { "l",             "tau"     },
                     { "model",         "CKMScan" },
+                    { "U",             "c"       },
                     { "q",             "d"       },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
@@ -144,7 +147,7 @@ class BToDLeptonNeutrinoTest :
                     { "form-factors",  "HQET"    }
                 };
 
-                BToDLeptonNeutrino d(p, o);
+                BToPseudoscalarLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_lepton_polarization(3.157, 11.643), -0.320914, eps);
@@ -166,12 +169,14 @@ class BToDLeptonNeutrinoTest :
                 // by default, all other couplings are zero in eos
                 p1["b->cmunumu::Re{cVL}"]   =  1.0;
 
-                Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "BCL2008");
-                oo.set("q", "d");
+                Options oo
+                {
+                    { "model",        "WilsonScan" },
+                    { "form-factors", "BCL2008"    },
+                    { "U",            "c"          }
+                };
 
-                BToDLeptonNeutrino d(p1, oo);
+                BToPseudoscalarLeptonNeutrino d(p1, oo);
 
                 const double eps = 1e-3;
 
@@ -221,11 +226,14 @@ class BToDLeptonNeutrinoTest :
                 p3["b->ctaunutau::Re{cT}"]        = +5.1;
                 p3["b->ctaunutau::Im{cT}"]        = -9.0;
 
-                Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "BCL2008");
+                Options oo
+                {
+                    { "model",        "WilsonScan" },
+                    { "form-factors", "BCL2008"    },
+                    { "U",            "c"          }
+                };
 
-                BToDLeptonNeutrino d(p3, oo);
+                BToPseudoscalarLeptonNeutrino d(p3, oo);
 
                 const double eps = 1e-3;
 

@@ -110,9 +110,9 @@ namespace eos
     {
         public:
             /* b->u Wilson coefficients */
-            virtual WilsonCoefficients<BToU> wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & cp_conjugate = false) const = 0;
+            virtual WilsonCoefficients<ChargedCurrent> wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & cp_conjugate = false) const = 0;
     };
-    
+
     /*!
      * Base class for the Delta B = 1 = Delta C CC component of models.
      */
@@ -120,7 +120,7 @@ namespace eos
     {
     public:
         /* b->c Wilson coefficients */
-        virtual WilsonCoefficients<BToC> wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & cp_conjugate = false) const = 0;
+        virtual WilsonCoefficients<ChargedCurrent> wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & cp_conjugate = false) const = 0;
     };
 
     /*!

@@ -65,45 +65,49 @@ namespace eos
         }
     };
 
-    /* Helper functions to create ObserableEntry */
+    /* Helper functions to create ObservableEntry */
     template <typename Decay_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable(const char * name,
-            double (Decay_::* function)(const Args_ & ...) const)
+            double (Decay_::* function)(const Args_ & ...) const,
+            const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, "", function, std::make_tuple()));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, "", function, std::make_tuple(), forced_options));
     }
 
     template <typename Decay_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable(const char * name,
             const char * latex,
-            double (Decay_::* function)(const Args_ & ...) const)
+            double (Decay_::* function)(const Args_ & ...) const,
+            const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, function, std::make_tuple()));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, function, std::make_tuple(), forced_options));
     }
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable(const char * name,
             double (Decay_::* function)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names)
+            const Tuple_ & kinematics_names,
+            const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, "", function, kinematics_names));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, "", function, kinematics_names, forced_options));
     }
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable(const char * name,
             const char * latex,
             double (Decay_::* function)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names)
+            const Tuple_ & kinematics_names,
+            const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, function, kinematics_names));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, function, kinematics_names, forced_options));
     }
 
     /* ratios of regular observables */
