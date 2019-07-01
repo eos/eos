@@ -22,6 +22,8 @@
 
 #include <eos/constraint.hh>
 #include <eos/observable.hh>
+#include <eos/statistics/goodness-of-fit.hh>
+#include <eos/statistics/test-statistic-impl.hh>
 #include <eos/statistics/log-posterior.hh>
 #include <eos/statistics/markov-chain-sampler.hh>
 #if EOS_ENABLE_PMC
@@ -43,6 +45,8 @@
 #include <Minuit2/MnPrint.h>
 
 #include <time.h>
+
+#include <gsl/gsl_cdf.h>
 
 using namespace eos;
 
@@ -822,7 +826,7 @@ int main(int argc, char * argv[])
         // Optionally calculate a p-value at the mode.
         if (inst->optimize)
         {
-            LogPosterior & ana(inst->log_posterior);
+            LogPosterior ana = inst->log_posterior;
             if (inst->starting_point.empty())
             {
                 gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
@@ -854,8 +858,27 @@ int main(int argc, char * argv[])
                 << stringify_container(ret.UserParameters().Params(), 6)
                 << " = " << -1.0 * ret.Fval();
 
-            if (inst->goodness_of_fit && inst->best_fit_point.empty())
-                ana.goodness_of_fit(ret.UserParameters().Params(), 1e5);
+            {
+                auto gof = GoodnessOfFit(CommandLine::instance()->log_posterior);
+                Log::instance()->message("eos-scan-mc", ll_informational)
+                    << "Goodness-of-Fit summary";
+                for (auto c = gof.begin_chi_square(), c_end = gof.end_chi_square() ; c != c_end ; ++c)
+                {
+                    Log::instance()->message("eos-scan-mc", ll_informational)
+                        << "  " << c->first << " : chi^2 = " << c->second.chi2;
+                }
+                Log::instance()->message("eos-scan-mc", ll_informational)
+                    << "----------------";
+                Log::instance()->message("eos-scan-mc", ll_informational)
+                    << " total chi^2  = " << gof.total_chi_square();
+                Log::instance()->message("eos-scan-mc", ll_informational)
+                    << " total d.o.f. = " << gof.total_degrees_of_freedom();
+                Log::instance()->message("eos-scan-mc", ll_informational)
+                    << " p value      = " << gsl_cdf_chisq_Q(gof.total_chi_square(), gof.total_degrees_of_freedom());
+            }
+
+//            if (inst->goodness_of_fit && inst->best_fit_point.empty())
+//                ana.goodness_of_fit(ret.UserParameters().Params(), 1e5);
 
             return EXIT_SUCCESS;
         }
