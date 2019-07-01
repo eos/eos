@@ -43,6 +43,15 @@ or in the command line using the ``eos-plot`` script.
 For all of these cases a description of the plot is required in the format described below.
 For the command-line script ``eos-plot``, the Python dictionary describing the plots must be provided as a YAML file.
 
+.. note::
+
+   Import ``eos.plot`` before you do something like ``import matplotlib.pyplot as plt``,
+   because the ``eos.plot`` module sets its default plot style and a matplotlib backend.
+   All options (except the backend) can be overwritten by updating ``matplotlib.rcParams[...]``;
+   see also the ``matplotlib`` documentation.
+   Note that the default plots use LaTeX to create labels and math expressions,
+   so for this to work latex needs to be available on your system.
+
 .. autoclass:: eos.plot.Plotter
    :members:
 
