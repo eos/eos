@@ -21,6 +21,7 @@
 #define EOS_GUARD_EOS_STATISTICS_GOODNESS_OF_FIT_HH 1
 
 #include <eos/statistics/log-posterior.hh>
+#include <eos/statistics/test-statistic.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/wrapped_forward_iterator-fwd.hh>
 
@@ -45,6 +46,7 @@ namespace eos
             ChiSquareIterator end_chi_square() const;
             ///q}
     };
+    extern template class WrappedForwardIterator<GoodnessOfFit::ChiSquareIteratorTag, const std::pair<const QualifiedName, test_statistics::ChiSquare>>;
 }
 
 #endif
