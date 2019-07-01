@@ -168,7 +168,7 @@ namespace eos
 
                 make_observable("B->D^*lnu::R_D^*",
                                 &BToDstarLeptonNeutrino::integrated_ratio_tau_mu,
-                                std::make_tuple("q2_mu_min", "q2_tau_min_tau", "q2_mu_max", "q2_tau_max")),
+                                std::make_tuple("q2_mu_min", "q2_tau_min", "q2_mu_max", "q2_tau_max")),
 
                 make_observable("B->D^*lnu::A_FB(q2)", R"(A_{\text{FB}}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
                                 &BToDstarLeptonNeutrino::differential_a_fb_leptonic,
