@@ -1017,15 +1017,14 @@ class Plotter:
             else:
                 raise ValueError('invalid vertical position \'{}\''.format(hpos))
 
-            logofont = matplotlib.font_manager.FontProperties(family='sans-serif', size='15')
             ax = plt.gca()
             color = 'OrangeRed'
-            prelim = 'v{version}'.format(version=eos.version())
+            version = 'v{version}'.format(version=eos.version())
             if 'preliminary' in item and item['preliminary']:
                 color = 'red'
-                prelim = 'Preliminary'
-            ax.text(x, y, r'\textsf{{\textbf{{EOS {prelim}}}}}'.format(prelim=prelim),
-                    transform=ax.transAxes, fontproperties=logofont,
+                version = 'Preliminary'
+            ax.text(x, y, r'\textsf{{\textbf{{EOS {version}}}}}'.format(version=version),
+                    transform=ax.transAxes,
                     color=color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),
                     horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
 
