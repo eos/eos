@@ -853,6 +853,9 @@ int main(int argc, char * argv[])
 
             Log::instance()->message("eos-scan-mc", ll_informational)
                 << "Result from minuit:" << ret << ret.UserCovariance();
+            if (inst->goodness_of_fit && inst->best_fit_point.empty())
+                ana.goodness_of_fit(ret.UserParameters().Params(), 1e5);
+
             Log::instance()->message("eos-scan-mc", ll_informational)
                 << "Best result: log(posterior) at "
                 << stringify_container(ret.UserParameters().Params(), 6)
@@ -876,9 +879,6 @@ int main(int argc, char * argv[])
                 Log::instance()->message("eos-scan-mc", ll_informational)
                     << " p value      = " << gsl_cdf_chisq_Q(gof.total_chi_square(), gof.total_degrees_of_freedom());
             }
-
-//            if (inst->goodness_of_fit && inst->best_fit_point.empty())
-//                ana.goodness_of_fit(ret.UserParameters().Params(), 1e5);
 
             return EXIT_SUCCESS;
         }
