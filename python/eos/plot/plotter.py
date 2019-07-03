@@ -521,7 +521,7 @@ class Plotter:
                         _kinematics = kinematics[i]
                         if self.variable in _kinematics:
                             xvalues.append(_kinematics[self.variable])
-                            xerrors.append(0)
+                            xerrors = None
                         elif (self.variable + '_min' in _kinematics) and (self.variable + '_max' in _kinematics):
                             xvalues.append((_kinematics[self.variable + '_max'] + _kinematics[self.variable + '_min']) / 2)
                             xerrors.append((_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min']) / 2)
@@ -554,7 +554,7 @@ class Plotter:
                         _kinematics = kinematics[i]
                         if self.variable in _kinematics:
                             xvalues.append(_kinematics[self.variable])
-                            xerrors.append(0)
+                            xerrors = None
                         elif (self.variable + '_min' in _kinematics) and (self.variable + '_max' in _kinematics):
                             xvalues.append((_kinematics[self.variable + '_max'] + _kinematics[self.variable + '_min']) / 2)
                             xerrors.append((_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min']) / 2)
