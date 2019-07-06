@@ -148,6 +148,9 @@ class Plotter:
         def __lt__(self, other):
             return(self.z_order < other.z_order)
 
+        def handles_labels(self):
+            return ([], [])
+
 
     """ Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter. """
     class Observable(BasePlot):
@@ -648,10 +651,13 @@ class Plotter:
                 # TODO: use weights from data file
                 self.weights = None
 
-            self.bw     = item['bandwidth'] if 'bandwidth' in item else None
-            self.levels = item['levels']    if 'levels'    in item else [68,95,99]
-            self.xrange = plotter.xrange    if plotter.xrange      else (np.amin(self.samples[:, 0]), np.amax(self.samples[:, 0]))
-            self.yrange = plotter.xrange    if plotter.yrange      else (np.amin(self.samples[:, 1]), np.amax(self.samples[:, 1]))
+            self.bw       = item['bandwidth'] if 'bandwidth' in item else None
+            self.levels   = item['levels']    if 'levels'    in item else [0, 68, 95, 99]
+            if 0 not in self.levels:
+                self.levels = [0] + self.levels
+            self.contours = item['contours']  if 'contours'  in item else ['lines']
+            self.xrange   = plotter.xrange    if plotter.xrange      else (np.amin(self.samples[:, 0]), np.amax(self.samples[:, 0]))
+            self.yrange   = plotter.xrange    if plotter.yrange      else (np.amin(self.samples[:, 1]), np.amax(self.samples[:, 1]))
 
         def plot(self):
             kde = gaussian_kde(self.samples, weights=self.weights)
@@ -672,16 +678,34 @@ class Plotter:
                 plevels.append(scipy.optimize.brentq(plevel, 0., 1., args=(pdf, level / 100.0)))
                 labels.append('{}%'.format(level))
 
-            CS = plt.contour(pdf.transpose(),
-                             colors=self.color,
+            if 'areas' in self.contours:
+                colors = [matplotlib.colors.to_rgba(self.color, alpha) for alpha in np.linspace(0.50, 1.00, len(self.levels))]
+                plt.contourf(pdf.transpose(),
+                             colors=colors,
                              extent=[self.plotter.xrange[0], self.plotter.xrange[1], self.plotter.yrange[0], self.plotter.yrange[1]],
                              levels=plevels[::-1])
 
-            fmt = {}
-            for level, label in zip(CS.levels, labels[::-1]):
-                fmt[level] = label
+            CS = plt.contour(pdf.transpose(),
+                             colors=self.color,
+                             extent=[self.plotter.xrange[0], self.plotter.xrange[1], self.plotter.yrange[0], self.plotter.yrange[1]],
+                             levels=plevels[::-1],
+                             linestyles=self.style)
 
-            plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+            if 'labels' in self.contours:
+                fmt = {}
+                for level, label in zip(CS.levels, labels[::-1]):
+                    fmt[level] = label
+
+                plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+
+        def handles_labels(self):
+            handle = None
+            if 'areas' in self.contours:
+                handle = plt.Rectangle((0,0),1,1, color=self.color)
+            else:
+                handle = plt.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.style)
+
+            return ([handle], [self.label])
 
 
     """ Plots a 1D histogram of pre-existing random samples. """
@@ -881,7 +905,12 @@ class Plotter:
 
         if 'legend' in self.instructions['plot']:
             if 'location' in self.instructions['plot']['legend']:
-                self.ax.legend(loc=self.instructions['plot']['legend']['location'])
+                handles, labels = self.ax.get_legend_handles_labels()
+                for plot in plots:
+                    add_handles, add_labels = plot.handles_labels()
+                    handles = handles + add_handles
+                    labels  = labels  + add_labels
+                self.ax.legend(handles, labels, loc=self.instructions['plot']['legend']['location'])
 
 
     """ Produces the plot. """
