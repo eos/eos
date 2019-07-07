@@ -152,6 +152,28 @@ class Plotter:
             return ([], [])
 
 
+    """ Plots a single point. """
+    class Point(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+            if 'x' not in item:
+                raise KeyError('x coordinate not provided')
+            self.x = item['x']
+
+            if 'y' not in item:
+                raise KeyError('y coordinate not provided')
+            self.y = item['y']
+
+            self.marker = item['marker'] if 'marker' in item else 'x'
+
+        def plot(self):
+            plt.plot(self.x, self.y,
+                alpha=self.alpha, color=self.color,
+                label=self.label, linestyle='None',
+                marker=self.marker, markeredgecolor=self.color, markerfacecolor='None')
+
+
     """ Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter. """
     class Observable(BasePlot):
         def __init__(self, plotter, item):
@@ -866,6 +888,7 @@ class Plotter:
             'kde':                Plotter.KernelDensityEstimate1D,
             'kde2D':              Plotter.KernelDensityEstimate2D,
             'observable':         Plotter.Observable,
+            'point':              Plotter.Point,
             'uncertainty':        Plotter.Uncertainty,
             'uncertainty-binned': Plotter.UncertaintyBinned,
             'watermark':          Plotter.Watermark,
