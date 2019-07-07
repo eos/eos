@@ -206,6 +206,11 @@ class Analysis:
         """
         import logging
         import pypmc
+        try:
+            from tqdm import tqdm
+            progressbar = tqdm
+        except ModuleNotFoundError:
+            progressbar = lambda x: x
 
         ind_lower = np.array([bound[0] for bound in self.bounds])
         ind_upper = np.array([bound[1] for bound in self.bounds])
@@ -237,12 +242,17 @@ class Analysis:
 
         # obtain final samples
         logging.info('Main run: started ...')
-        accept_count = sampler.run(N * stride)
+        sample_total  = N * stride
+        sample_chunk  = sample_total // 100
+        sample_chunks = [sample_chunk for i in range(0, 99)]
+        sample_chunks.append(sample_total - 99 * sample_chunk)
+        for current_chunk in progressbar(sample_chunks):
+            accept_count = accept_count + sampler.run(current_chunk)
         accept_rate  = accept_count / (N * stride) * 100
         logging.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
 
-        parameter_samples = sampler.samples[-1][::stride]
-        weights = sampler.target_values[-1][::stride, 0]
+        parameter_samples = sampler.samples[:][::stride]
+        weights = sampler.target_values[:][::stride, 0]
 
         if not observables:
             return(parameter_samples, weights)
