@@ -174,6 +174,31 @@ class Plotter:
                 marker=self.marker, markeredgecolor=self.color, markerfacecolor='None')
 
 
+    """ Plots a shaded band. """
+    class Band(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+            if 'x' not in item and 'y' not in item:
+                raise KeyError('neither x nor y coordinates provided')
+
+            self.x = tuple(item['x']) if 'x' in item else self.plotter.xrange
+            self.y = tuple(item['y']) if 'y' in item else self.plotter.yrange
+            self.xmin, self.xmax = self.x
+            self.ymin, self.ymax = self.y
+
+        def plot(self):
+            rect = plt.Rectangle((self.xmin, self.ymin), self.xmax - self.xmin, self.ymax - self.ymin,
+                                 alpha=self.alpha, color=self.color,
+                                 linewidth=0, fill=True)
+            self.plotter.ax.add_patch(rect)
+
+        def handles_labels(self):
+            handle = plt.Rectangle((0,0),1,1, color=self.color)
+            label  = self.label
+            return ([handle], [label])
+
+
     """ Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter. """
     class Observable(BasePlot):
         def __init__(self, plotter, item):
@@ -880,6 +905,7 @@ class Plotter:
             return
 
         plot_types = {
+            'band':               Plotter.Band,
             'constraint':         Plotter.Constraint,
             'contours2D':         Plotter.Contours2D,
             'expression':         Plotter.Expression,
