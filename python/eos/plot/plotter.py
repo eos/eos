@@ -141,7 +141,7 @@ class Plotter:
             self.alpha         = item['opacity'] if 'opacity' in item else 0.5
             self.color         = item['color']   if 'color'   in item else self.plotter.next_color
             self.label         = item['label']   if 'label'   in item else None
-            self.samples       = item['samples'] if 'samples' in item else 100
+            self.xsamples      = item['samples'] if 'samples' in item else 100
             self.style         = item['style']   if 'style'   in item else '-'
             self.xlo, self.xhi = item['range']   if 'range'   in item else self.plotter.xrange
 
@@ -245,7 +245,7 @@ class Plotter:
             # create observable
             observable = eos.Observable.make(oname, parameters, kinematics, options)
 
-            xvalues = np.linspace(self.xlo, self.xhi, self.samples + 1)
+            xvalues = np.linspace(self.xlo, self.xhi, self.xsamples + 1)
             ovalues = np.array([])
             for xvalue in xvalues:
                 var.set(xvalue)
@@ -773,7 +773,7 @@ class Plotter:
             if self.bw:
                 kde.set_bandwidth(bw_method=kde.factor * self.bw)
 
-            x = np.linspace(self.xrange[0], self.xrange[1], 100)
+            x = np.linspace(self.xrange[0], self.xrange[1], self.xsamples)
             pdf = kde(x)
             pdf_norm = pdf.sum()
 
