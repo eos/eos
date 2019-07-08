@@ -27,7 +27,7 @@ except NameError as e:
 matplotlib.rcParams['font.family'] = 'serif'
 matplotlib.rcParams['font.serif'] = 'Computer Modern Sans serif'
 matplotlib.rcParams['font.size'] = 14
-matplotlib.rcParams['font.weight'] = 400
+matplotlib.rcParams['font.weight'] = 'normal'
 
 matplotlib.rcParams['axes.labelsize'] = 16
 matplotlib.rcParams['axes.linewidth'] = 1
