@@ -22,6 +22,7 @@
 #include <eos/b-decays/b-to-pi-l-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-d-l-nu.hh>
+#include <eos/b-decays/b-to-d-pi-l-nu.hh>
 #include <eos/b-decays/b-to-dstar-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
@@ -213,6 +214,43 @@ namespace eos
                 make_observable("B->D^*lnu::A_T^3", R"(A_{\text{T}}^3(B\to \bar{D}^*\ell^-\bar\nu))",
                                 &BToDstarLeptonNeutrino::integrated_a_t_3,
                                 std::make_tuple("q2_min", "q2_max")),
+
+                // B -> D pi l nu
+                make_observable("B->Dpilnu::P(c_D)",
+                                &BToDPiLeptonNeutrino::differential_pdf_d,
+                                std::make_tuple("c_D")),
+
+                make_observable("B->Dpilnu::P(c_l)",
+                                &BToDPiLeptonNeutrino::differential_pdf_l,
+                                std::make_tuple("c_l")),
+
+                make_observable("B->Dpilnu::P(chi)",
+                                &BToDPiLeptonNeutrino::differential_pdf_chi,
+                                std::make_tuple("chi")),
+
+                make_observable("B->Dpilnu::P(w)",
+                                &BToDPiLeptonNeutrino::differential_pdf_w,
+                                std::make_tuple("w")),
+
+                make_observable("B->Dpilnu::P(q2)",
+                                &BToDPiLeptonNeutrino::differential_pdf_q2,
+                                std::make_tuple("q2")),
+
+                make_observable("B->Dpilnu::P(c_D_min,c_D_max)",
+                                &BToDPiLeptonNeutrino::integrated_pdf_d,
+                                std::make_tuple("c_D_min", "c_D_max")),
+
+                make_observable("B->Dpilnu::P(c_l_min,c_l_max)",
+                                &BToDPiLeptonNeutrino::integrated_pdf_l,
+                                std::make_tuple("c_l_min", "c_l_max")),
+
+                make_observable("B->Dpilnu::P(chi_min,chi_max)",
+                                &BToDPiLeptonNeutrino::integrated_pdf_chi,
+                                std::make_tuple("chi_min", "chi_max")),
+
+                make_observable("B->Dpilnu::P(w_min,w_max)",
+                                &BToDPiLeptonNeutrino::integrated_pdf_w,
+                                std::make_tuple("w_min", "w_max")),
             }
         );
 
