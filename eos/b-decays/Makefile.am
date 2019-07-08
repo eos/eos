@@ -7,6 +7,7 @@ lib_LTLIBRARIES = libeosbdecays.la
 libeosbdecays_la_SOURCES = \
 	b-to-d-l-nu.cc b-to-d-l-nu.hh \
 	b-to-dstar-l-nu.cc b-to-dstar-l-nu.hh \
+	b-to-d-pi-l-nu.cc b-to-d-pi-l-nu.hh \
 	b-to-d-l-x-nu.cc b-to-d-l-x-nu.hh \
 	b-to-l-nu.cc b-to-l-nu.hh \
 	b-to-pi-l-nu.cc b-to-pi-l-nu.hh \
@@ -32,6 +33,7 @@ include_eos_bdecaysdir = $(includedir)/eos/b-decays
 include_eos_bdecays_HEADERS = \
 	b-to-d-l-nu.hh \
 	b-to-dstar-l-nu.hh \
+	b-to-d-pi-l-nu.hh \
 	b-to-d-l-x-nu.hh \
 	b-to-l-nu.hh \
 	b-to-pi-l-nu.hh \
@@ -53,6 +55,7 @@ TESTS = \
 	b-to-pi-l-nu_TEST \
 	b-to-d-l-nu_TEST \
 	b-to-dstar-l-nu_TEST \
+	b-to-d-pi-l-nu_TEST \
 	b-to-pi-pi-l-nu_TEST \
 	bs-to-kstar-l-nu_TEST \
 	lambdab-to-lambdac-l-nu_TEST \
@@ -71,6 +74,8 @@ check_PROGRAMS = $(TESTS)
 b_to_d_l_nu_TEST_SOURCES = b-to-d-l-nu_TEST.cc
 
 b_to_dstar_l_nu_TEST_SOURCES = b-to-dstar-l-nu_TEST.cc
+
+b_to_d_pi_l_nu_TEST_SOURCES = b-to-d-pi-l-nu_TEST.cc
 
 b_to_pi_l_nu_TEST_SOURCES = b-to-pi-l-nu_TEST.cc
 
