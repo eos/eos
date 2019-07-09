@@ -124,6 +124,14 @@ namespace eos
                 make_observable("B->Dlnu::A_FB", R"(A_{\text{FB}}(B\to \bar{D}\ell^-\bar\nu))",
                         &BToDLeptonNeutrino::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B->Dlnu::P(w)",
+                        &BToDLeptonNeutrino::differential_pdf_w,
+                        std::make_tuple("w")),
+
+                make_observable("B->Dlnu::P(w_min,w_max)",
+                        &BToDLeptonNeutrino::integrated_pdf_w,
+                        std::make_tuple("w_min", "w_max")),
             }
         );
 

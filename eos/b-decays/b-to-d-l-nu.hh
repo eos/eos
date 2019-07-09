@@ -61,6 +61,10 @@ namespace eos
             double differential_r_d(const double & s) const;
             double integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max_mu, const double & s_max_tau) const;
 
+            // PDF
+            double differential_pdf_w(const double & w) const;
+            double integrated_pdf_w(const double & w_min, const double & w_max) const;
+
             /*!
              * Descriptions of the process and its kinematics.
              */
