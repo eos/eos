@@ -225,6 +225,49 @@ namespace eos
         {
             return normalized_differential_decay_width(s) * tau_B / hbar;
         }
+
+        double pdf_q2(const double & q2) const
+        {
+            const double q2_min = power_of<2>(m_l());
+            const double q2_max = power_of<2>(m_B() - m_D());
+
+            std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::normalized_differential_branching_ratio, this, std::placeholders::_1);
+            const double num   = normalized_differential_branching_ratio(q2);
+            const double denom = integrate1D(f, 32, q2_min, q2_max);
+
+            return num / denom;
+        }
+
+        double pdf_w(const double & w) const
+        {
+            const double m_B = this->m_B(), m_B2 = m_B * m_B;
+            const double m_D = this->m_D(), m_D2 = m_D * m_D;
+            const double q2  = m_B2 + m_D2 - 2.0 * m_B * m_D * w;
+
+            return 2.0 * m_B * m_D * pdf_q2(q2);
+        }
+
+        double integrated_pdf_q2(const double & q2_min, const double & q2_max) const
+        {
+            const double q2_abs_min = power_of<2>(m_l());
+            const double q2_abs_max = power_of<2>(m_B() - m_D());
+
+            std::function<double (const double &)> f = std::bind(&Implementation<BToDLeptonNeutrino>::normalized_differential_branching_ratio, this, std::placeholders::_1);
+            const double num   = integrate<GSL::QAGS>(f, q2_min,     q2_max);
+            const double denom = integrate<GSL::QAGS>(f, q2_abs_min, q2_abs_max);
+
+            return num / denom;
+        }
+
+        double integrated_pdf_w(const double & w_min, const double & w_max) const
+        {
+            const double m_B    = this->m_B(), m_B2 = m_B * m_B;
+            const double m_D    = this->m_D(), m_D2 = m_D * m_D;
+            const double q2_max = m_B2 + m_D2 - 2.0 * m_B * m_D * w_min;
+            const double q2_min = m_B2 + m_D2 - 2.0 * m_B * m_D * w_max;
+
+            return integrated_pdf_q2(q2_min, q2_max) / (w_max - w_min);
+        }
     };
 
     BToDLeptonNeutrino::BToDLeptonNeutrino(const Parameters & parameters, const Options & options) :
@@ -345,6 +388,18 @@ namespace eos
         }
 
         return br_taus / br_muons;
+    }
+
+    double
+    BToDLeptonNeutrino::differential_pdf_w(const double & w) const
+    {
+        return _imp->pdf_w(w);
+    }
+
+    double
+    BToDLeptonNeutrino::integrated_pdf_w(const double & w_min, const double & w_max) const
+    {
+        return _imp->integrated_pdf_w(w_min, w_max);
     }
 
     const std::string
