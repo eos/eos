@@ -377,3 +377,18 @@ Lambda_b->Lambdamu^+mu^-::AngularObservables[all,15.0,20.0]@LHCb-2018A:
         ]
     dof: 33
 # }}}
+#
+# Updated 2015 LHCb BF
+#
+# {{{
+Lambda_b->Lambdamu^+mu^-::BR[15.0,20.0]@BMvD-2019:
+    type: Gaussian
+    observable: Lambda_b->Lambdall::BR@LowRecoil
+    kinematics: {q2_min: 15, q2_max: 20}
+    options: {l: mu}
+    mean: 3.49e-07
+    sigma-stat: {hi: 2.6e-08, lo: -2.6e-08}
+    sigma-sys: {hi: 9.2e-08, lo: -9.2e-08}
+    dof: 1
+# }}}
+ 
