@@ -209,7 +209,7 @@ class Analysis:
         try:
             from tqdm import tqdm
             progressbar = tqdm
-        except ModuleNotFoundError:
+        except ImportError:
             progressbar = lambda x: x
 
         ind_lower = np.array([bound[0] for bound in self.bounds])
