@@ -40,6 +40,162 @@ class BToDHQETFormFactorsTest :
         {
             static const double eps = 1.0e-6;
 
+            // using z_* with a = 1.0 and LP z-order = 2 and SLP z-order 2 and SSLP z-order 1
+            // Martin's best-fit point
+            {
+                Parameters p = Parameters::Defaults();
+                p["B(*)->D(*)::xi'(1)@HQET"]     = -0.849472;
+                p["B(*)->D(*)::xi''(1)@HQET"]    =  2.0 * 0.583711;
+                p["B(*)->D(*)::xi'''(1)@HQET"]   =  0.0;
+                p["B(*)->D(*)::xi''''(1)@HQET"]  =  0.0;
+                p["B(*)->D(*)::chi_2(1)@HQET"]   = -0.0600533;
+                p["B(*)->D(*)::chi_2'(1)@HQET"]  =  6.97061e-6;
+                p["B(*)->D(*)::chi_2''(1)@HQET"] =  0.0314499;
+                p["B(*)->D(*)::chi_3'(1)@HQET"]  =  0.0400298;
+                p["B(*)->D(*)::chi_3''(1)@HQET"] = -0.039123;
+                p["B(*)->D(*)::eta(1)@HQET"]     =  0.604052;
+                p["B(*)->D(*)::eta'(1)@HQET"]    = -0.00545745;
+                p["B(*)->D(*)::eta''(1)@HQET"]   = -0.268764;
+                p["B(*)->D(*)::l_1(1)@HQET"]     = +0.111274;
+                p["B(*)->D(*)::l_2(1)@HQET"]     = -2.01963;
+                p["B(*)->D(*)::l_3(1)@HQET"]     =  0.0687349;
+                p["B(*)->D(*)::l_4(1)@HQET"]     = -2.02231;
+                p["B(*)->D(*)::l_5(1)@HQET"]     =  4.21978;
+                p["B(*)->D(*)::l_6(1)@HQET"]     =  4.52949;
+                p["B(*)->D(*)::l_1'(1)@HQET"]    = -15.0241;
+                p["B(*)->D(*)::l_2'(1)@HQET"]    = -9.43754;
+                p["B(*)->D(*)::l_3'(1)@HQET"]    = -0.616533;
+                p["B(*)->D(*)::l_4'(1)@HQET"]    = +0.604533;
+                p["B(*)->D(*)::l_5'(1)@HQET"]    = +0.115125;
+                p["B(*)->D(*)::l_6'(1)@HQET"]    = -1.4777;
+                p["B(*)->D(*)::a@HQET"]          =  1.0;
+                p["mass::B_d"]                   =  5.27942; // mixture of B0 and B+ masses
+                p["mass::D_u"]                   =  1.86723; // mixture of D0 and D+ masses
+
+                auto oo = Options{
+                    { "z-order-lp",   "2" },
+                    { "z-order-slp",  "2" },
+                    { "z-order-sslp", "1" }
+                };
+                HQETFormFactors<BToD, PToP> ff(p, oo);
+
+                Diagnostics diag = ff.diagnostics();
+                //std::cout << "a = 1, LP z^3, SLP z^1" << std::endl;
+                //for (auto d : diag)
+                //{
+                //    std::cout << d.description << ": " << d.value << std::endl;
+                //}
+                static const std::vector<std::pair<double, double>> ref
+                {
+                    /* Inputs */
+                    std::make_pair(+0.292994, eps), // z  = m_c^1S / m_b^1S
+                    std::make_pair(+1.853019, eps), // wz = 1/2 (z + 1/z)
+
+                    /* Options */
+                    std::make_pair(+0.0, eps), // LP z^3 terms enabled?
+                    std::make_pair(+0.0, eps),
+                    std::make_pair(+0.0, eps),
+                    std::make_pair(+1.0, eps), // SLP z^2 terms enabled?
+
+                    /* z(w) */
+                    std::make_pair(0.01219690, eps), // w = 1.10
+                    std::make_pair(0.00617307, eps), // w = 1.05
+                    std::make_pair(0.0,        eps), // w = 1.00
+
+                    /* xi(w) */
+                    std::make_pair(+0.541418, eps), // w = 2.10
+                    std::make_pair(+0.656849, eps), // w = 1.60
+                    std::make_pair(+0.920648, eps), // w = 1.10
+                    std::make_pair(+0.958955, eps), // w = 1.05
+                    std::make_pair(+1.000000, eps), // w = 1.00
+
+                    /* chi2(w) */
+                    std::make_pair(-0.0480609, eps), // w = 2.10
+                    std::make_pair(-0.0557318, eps), // w = 1.60
+                    std::make_pair(-0.0599029, eps), // w = 1.10
+                    std::make_pair(-0.0600146, eps), // w = 1.05
+                    std::make_pair(-0.0600533, eps), // w = 1.00
+
+                    /* chi3(w) */
+                    std::make_pair(+0.027665,  eps), // w = 2.10
+                    std::make_pair(+0.0183516, eps), // w = 1.60
+                    std::make_pair(+0.00381496,eps), // w = 1.10
+                    std::make_pair(+0.00195355,eps), // w = 1.05
+                    std::make_pair( 0.0,       eps), // w = 1.00
+
+                    /* eta(w) */
+                    std::make_pair(+0.495827, eps), // w = 2.10
+                    std::make_pair(+0.563923, eps), // w = 1.60
+                    std::make_pair(+0.602227, eps), // w = 1.10
+                    std::make_pair(+0.603451, eps), // w = 1.05
+                    std::make_pair(+0.604052, eps), // w = 1.00
+
+                    /* r(w) */
+                    std::make_pair(+0.967945, eps), // w = 1.1
+                    std::make_pair(+0.999767, eps), // w = 1.0007
+                    std::make_pair(+0.999967, eps), // w = 1.0001
+                    std::make_pair(+0.999983, eps), // w = 1.00005
+                    std::make_pair(+1.0,      eps), // w = 1.0
+
+                    /* Omega(w, z = 0.25) */
+                    std::make_pair(+1.294026, eps), // w = 1.1
+                    std::make_pair(+1.310389, eps), // w = 1.0007
+                    std::make_pair(+1.310476, eps), // w = 1.0001
+                    std::make_pair(+1.310483, eps), // w = 1.00005
+                    std::make_pair(+1.310491, eps), // w = 1.0
+
+                    /* Omega(w, z = 0.20) */
+                    std::make_pair(+1.403808, eps), // w = 1.1
+                    std::make_pair(+1.414099, eps), // w = 1.0007
+                    std::make_pair(+1.414149, eps), // w = 1.0001
+                    std::make_pair(+1.414153, eps), // w = 1.00005
+                    std::make_pair(+1.414157, eps), // w = 1.0
+
+                    /* WCs at (w = 1.2, z = 0.20) */
+                    std::make_pair(-0.591250, eps), // C_{S  }
+                    std::make_pair(+0.659746, eps), // C_{P  }
+                    std::make_pair(+1.123905, eps), // C_{V_1}
+                    std::make_pair(-0.454499, eps), // C_{V_2}
+                    std::make_pair(-0.162046, eps), // C_{V_3}
+                    std::make_pair(-0.127091, eps), // C_{A_1}
+                    std::make_pair(-1.247185, eps), // C_{A_2}
+                    std::make_pair( 0.316106, eps), // C_{A_3}
+                    std::make_pair(+0.694295, eps), // C_{T_1}
+                    std::make_pair(-0.931381, eps), // C_{T_2}
+                    std::make_pair( 0.319615, eps), // C_{T_3}
+
+                    /* WCs at (w = 1.0, z = 0.25) */
+                    std::make_pair(-0.666667, eps), // C_{S  }
+                    std::make_pair(+0.666667, eps), // C_{P  }
+                    std::make_pair(+0.977157, eps), // C_{V_1}
+                    std::make_pair(-0.478135, eps), // C_{V_2}
+                    std::make_pair(-0.188532, eps), // C_{V_3}
+                    std::make_pair(-0.356176, eps), // C_{A_1}
+                    std::make_pair(-1.250411, eps), // C_{A_2}
+                    std::make_pair( 0.381601, eps), // C_{A_3}
+                    std::make_pair(+0.413987, eps), // C_{T_1}
+                    std::make_pair(-0.956270, eps), // C_{T_2}
+                    std::make_pair( 0.377063, eps), // C_{T_3}
+
+                    /* HQET form factors at w = 1.4 */
+                    std::make_pair(+0.672776, eps), // h_{p}
+                    std::make_pair(-0.042011,eps), // h_{m}
+                    std::make_pair(+0.777201, eps), // h_{T}
+
+                    /* HQET form factors at w = 1.2 */
+                    std::make_pair(+0.821816, eps), // h_{p}
+                    std::make_pair(-0.048623, eps), // h_{m}
+                    std::make_pair(+0.937161, eps), // h_{T}
+
+                    /* HQET form factors at w = 1.0 */
+                    std::make_pair(+1.023833, eps), // h_{p}
+                    std::make_pair(-0.059743, eps), // h_{m}
+                    std::make_pair(+1.157401, eps), // h_{T}
+                };
+
+                TEST_CHECK_DIAGNOSTICS(diag, ref);
+            }
+
             // using z_* with a = 1.0 and LP z-order = 3 and SLP z-order 1
             {
                 Parameters p = Parameters::Defaults();
@@ -698,6 +854,173 @@ class BToDstarHQETFormFactorsTest :
         virtual void run() const
         {
             static const double eps = 1.0e-6;
+
+            // using z_* with a = 1.0 and LP z-order = 2 and SLP z-order 2 and SSLP z-order 1
+            {
+                Parameters p = Parameters::Defaults();
+                p["B(*)->D(*)::xi'(1)@HQET"]     = -0.849472;
+                p["B(*)->D(*)::xi''(1)@HQET"]    =  2.0 * 0.583711;
+                p["B(*)->D(*)::xi'''(1)@HQET"]   =  0.0;
+                p["B(*)->D(*)::xi''''(1)@HQET"]  =  0.0;
+                p["B(*)->D(*)::chi_2(1)@HQET"]   = -0.0600533;
+                p["B(*)->D(*)::chi_2'(1)@HQET"]  =  6.97061e-6;
+                p["B(*)->D(*)::chi_2''(1)@HQET"] =  0.0314499;
+                p["B(*)->D(*)::chi_3'(1)@HQET"]  =  0.0400298;
+                p["B(*)->D(*)::chi_3''(1)@HQET"] = -0.039123;
+                p["B(*)->D(*)::eta(1)@HQET"]     =  0.604052;
+                p["B(*)->D(*)::eta'(1)@HQET"]    = -0.00545745;
+                p["B(*)->D(*)::eta''(1)@HQET"]   = -0.268764;
+                p["B(*)->D(*)::l_1(1)@HQET"]     = +0.111274;
+                p["B(*)->D(*)::l_2(1)@HQET"]     = -2.01963;
+                p["B(*)->D(*)::l_3(1)@HQET"]     =  0.0687349;
+                p["B(*)->D(*)::l_4(1)@HQET"]     = -2.02231;
+                p["B(*)->D(*)::l_5(1)@HQET"]     =  4.21978;
+                p["B(*)->D(*)::l_6(1)@HQET"]     =  4.52949;
+                p["B(*)->D(*)::l_1'(1)@HQET"]    = -15.0241;
+                p["B(*)->D(*)::l_2'(1)@HQET"]    = -9.43754;
+                p["B(*)->D(*)::l_3'(1)@HQET"]    = -0.616533;
+                p["B(*)->D(*)::l_4'(1)@HQET"]    = +0.604533;
+                p["B(*)->D(*)::l_5'(1)@HQET"]    = +0.115125;
+                p["B(*)->D(*)::l_6'(1)@HQET"]    = -1.4777;
+                p["B(*)->D(*)::a@HQET"]          =  1.0;
+                p["mass::B_d"]                   =  5.27942; // mixture of B0 and B+ masses
+                p["mass::D_u"]                   =  1.86723; // mixture of D0 and D+ masses
+
+                auto oo = Options{
+                    { "z-order-lp",   "2" },
+                    { "z-order-slp",  "2" },
+                    { "z-order-sslp", "1" }
+                };
+                HQETFormFactors<BToDstar, PToV> ff(p, oo);
+
+                Diagnostics diag = ff.diagnostics();
+                //std::cout << "a = 1, LP z^3, SLP z^1" << std::endl;
+                //for (auto d : diag)
+                //{
+                //    std::cout << d.description << ": " << d.value << std::endl;
+                //}
+                static const std::vector<std::pair<double, double>> ref
+                {
+                    /* Inputs */
+                    std::make_pair(+0.292994, eps), // z  = m_c^1S / m_b^1S
+                    std::make_pair(+1.853019, eps), // wz = 1/2 (z + 1/z)
+
+                    /* Options */
+                    std::make_pair(+0.0, eps),
+                    std::make_pair(+0.0, eps),
+                    std::make_pair(+0.0, eps),
+                    std::make_pair(+1.0, eps),
+
+                    /* z(w) */
+                    std::make_pair(0.01219690, eps), // w = 1.10
+                    std::make_pair(0.00617307, eps), // w = 1.05
+                    std::make_pair(0.0,        eps), // w = 1.00
+
+                    /* xi(w) */
+                    std::make_pair(+0.541418, eps), // w = 2.10
+                    std::make_pair(+0.656849, eps), // w = 1.60
+                    std::make_pair(+0.920648, eps), // w = 1.10
+                    std::make_pair(+0.958955, eps), // w = 1.05
+                    std::make_pair(+1.000000, eps), // w = 1.00
+
+                    /* chi2(w) */
+                    std::make_pair(-0.0480609, eps), // w = 2.10
+                    std::make_pair(-0.0557318, eps), // w = 1.60
+                    std::make_pair(-0.0599029, eps), // w = 1.10
+                    std::make_pair(-0.0600146, eps), // w = 1.05
+                    std::make_pair(-0.0600533, eps), // w = 1.00
+
+                    /* chi3(w) */
+                    std::make_pair(+0.027665,  eps), // w = 2.10
+                    std::make_pair(+0.0183516, eps), // w = 1.60
+                    std::make_pair(+0.00381496,eps), // w = 1.10
+                    std::make_pair(+0.00195355,eps), // w = 1.05
+                    std::make_pair( 0.0,       eps), // w = 1.00
+
+                    /* eta(w) */
+                    std::make_pair(+0.495827, eps), // w = 2.10
+                    std::make_pair(+0.563923, eps), // w = 1.60
+                    std::make_pair(+0.602227, eps), // w = 1.10
+                    std::make_pair(+0.603451, eps), // w = 1.05
+                    std::make_pair(+0.604052, eps), // w = 1.00
+
+                    /* r(w) */
+                    std::make_pair(+0.967945, eps), // w = 1.1
+                    std::make_pair(+0.999767, eps), // w = 1.0007
+                    std::make_pair(+0.999967, eps), // w = 1.0001
+                    std::make_pair(+0.999983, eps), // w = 1.00005
+                    std::make_pair(+1.0,      eps), // w = 1.0
+
+                    /* Omega(w, z = 0.25) */
+                    std::make_pair(+1.294026, eps), // w = 1.1
+                    std::make_pair(+1.310389, eps), // w = 1.0007
+                    std::make_pair(+1.310476, eps), // w = 1.0001
+                    std::make_pair(+1.310483, eps), // w = 1.00005
+                    std::make_pair(+1.310491, eps), // w = 1.0
+
+                    /* Omega(w, z = 0.20) */
+                    std::make_pair(+1.403808, eps), // w = 1.1
+                    std::make_pair(+1.414099, eps), // w = 1.0007
+                    std::make_pair(+1.414149, eps), // w = 1.0001
+                    std::make_pair(+1.414153, eps), // w = 1.00005
+                    std::make_pair(+1.414157, eps), // w = 1.0
+
+                    /* WCs at (w = 1.2, z = 0.20) */
+                    std::make_pair(-0.591250, eps), // C_{S  }
+                    std::make_pair(+0.659746, eps), // C_{P  }
+                    std::make_pair(+1.123905, eps), // C_{V_1}
+                    std::make_pair(-0.454499, eps), // C_{V_2}
+                    std::make_pair(-0.162046, eps), // C_{V_3}
+                    std::make_pair(-0.127091, eps), // C_{A_1}
+                    std::make_pair(-1.247185, eps), // C_{A_2}
+                    std::make_pair( 0.316106, eps), // C_{A_3}
+                    std::make_pair(+0.694295, eps), // C_{T_1}
+                    std::make_pair(-0.931381, eps), // C_{T_2}
+                    std::make_pair( 0.319615, eps), // C_{T_3}
+
+                    /* WCs at (w = 1.0, z = 0.25) */
+                    std::make_pair(-0.666667, eps), // C_{S  }
+                    std::make_pair(+0.666667, eps), // C_{P  }
+                    std::make_pair(+0.977157, eps), // C_{V_1}
+                    std::make_pair(-0.478135, eps), // C_{V_2}
+                    std::make_pair(-0.188532, eps), // C_{V_3}
+                    std::make_pair(-0.356176, eps), // C_{A_1}
+                    std::make_pair(-1.250411, eps), // C_{A_2}
+                    std::make_pair( 0.381601, eps), // C_{A_3}
+                    std::make_pair(+0.413987, eps), // C_{T_1}
+                    std::make_pair(-0.956270, eps), // C_{T_2}
+                    std::make_pair( 0.377063, eps), // C_{T_3}
+
+                    /* HQET form factors at w = 1.4 */
+                    std::make_pair(+0.604662, eps), // h_{A_1}
+                    std::make_pair(-0.180031, eps), // h_{A_2}
+                    std::make_pair(+0.602671, eps), // h_{A_3}
+                    std::make_pair(+0.697766, eps), // h_{V}
+                    std::make_pair(+0.634045, eps), // h_{T_1}
+                    std::make_pair(-0.071109, eps), // h_{T_2}
+                    std::make_pair(-0.095800, eps), // h_{T_3}
+
+                    /* HQET form factors at w = 1.2 */
+                    std::make_pair(+0.730339, eps), // h_{A_1}
+                    std::make_pair(-0.222682, eps), // h_{A_2}
+                    std::make_pair(+0.715769, eps), // h_{A_3}
+                    std::make_pair(+0.844071, eps), // h_{V}
+                    std::make_pair(+0.773011, eps), // h_{T_1}
+                    std::make_pair(-0.082976, eps), // h_{T_2}
+                    std::make_pair(-0.129127, eps), // h_{T_3}
+
+                    /* HQET form factors at w = 1.0 */
+                    std::make_pair(+0.900672, eps), // h_{A_1}
+                    std::make_pair(-0.281876, eps), // h_{A_2}
+                    std::make_pair(+0.867138, eps), // h_{A_3}
+                    std::make_pair(+1.044116, eps), // h_{V}
+                    std::make_pair(+0.962607, eps), // h_{T_1}
+                    std::make_pair(-0.097881, eps), // h_{T_2}
+                    std::make_pair(-0.177963, eps), // h_{T_3}
+                };
+
+                TEST_CHECK_DIAGNOSTICS(diag, ref);
+            }
 
             // using z_* with a = 1.0 and LP z-order = 3 and SLP z-order 1
             {
