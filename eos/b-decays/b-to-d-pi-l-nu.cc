@@ -146,11 +146,26 @@ namespace eos
             return 2.0 * m_B * m_Dstar * pdf_q2(q2);
         }
 
+        double integrated_pdf_q2(const double & q2_min, const double & q2_max) const
+        {
+            const double q2_abs_min = power_of<2>(m_l());
+            const double q2_abs_max = power_of<2>(m_B() - m_Dstar());
+
+            std::function<double (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::dist_q2, this, std::placeholders::_1);
+            const double num   = integrate<GSL::QAGS>(f, q2_min,     q2_max);
+            const double denom = integrate<GSL::QAGS>(f, q2_abs_min, q2_abs_max);
+
+            return num / denom;
+        }
+
         double integrated_pdf_w(const double & w_min, const double & w_max) const
         {
-            std::function<double (const double &)> f = std::bind(&Implementation<BToDPiLeptonNeutrino>::pdf_w, this, std::placeholders::_1);
+            const double m_B     = this->m_B(),     m_B2 = m_B * m_B;
+            const double m_Dstar = this->m_Dstar(), m_Dstar2 = m_Dstar * m_Dstar;
+            const double q2_max  = m_B2 + m_Dstar2 - 2.0 * m_B * m_Dstar * w_min;
+            const double q2_min  = m_B2 + m_Dstar2 - 2.0 * m_B * m_Dstar * w_max;
 
-            return integrate<GSL::QAGS>(f, w_min, w_max) / (w_max - w_min);
+            return integrated_pdf_q2(q2_min, q2_max) / (w_max - w_min);
         }
 
         std::array<double, 2u> pdf_coefficients_q2d(const double & q2) const
