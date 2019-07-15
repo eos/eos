@@ -402,6 +402,7 @@ class Plotter:
                 ohi      /= width
                 print("{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}".format(xmin=xmin, xmax=xmax, olo=olo, ocentral=ocentral, ohi=ohi))
                 plt.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=color, alpha=alpha, label=label)
+                label = None
                 plt.plot([xmin, xmax], [olo,      olo],      color=color, alpha=alpha)
                 plt.plot([xmin, xmax], [ocentral, ocentral], color=color, alpha=alpha)
                 plt.plot([xmin, xmax], [ohi,      ohi],      color=color, alpha=alpha)
