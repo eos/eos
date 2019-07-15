@@ -71,6 +71,11 @@ groups:
           min:     +5.36653
           max:     +5.36701
           comments: 'cf. [PDG2012], p. 105'
+      # B^* meson masses
+      'mass::B_d^*' :
+          central: +5.325
+          min:     +5.325
+          max:     +5.325
   # }}}
 
   # Vector Meson Masses
