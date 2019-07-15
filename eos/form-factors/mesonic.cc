@@ -410,8 +410,7 @@ namespace eos
         {
             // parametrizations
             // b -> c
-            // not yet supported
-            //{ KeyType("B^*->D::HQET"),        &HQETFormFactors<BstarToD, VToP>::make          },
+            { KeyType("B^*->D::HQET"),        &HQETFormFactors<BstarToD, VToP>::make          },
         };
 
         auto i = form_factors.find(name);
@@ -441,7 +440,7 @@ namespace eos
             // parametrizations
             // b -> c
             // not yet supported
-            //{ KeyType("B^*->D^*::HQET"),      &HQETFormFactors<BstarToDstar, VToV>::make      },
+            { KeyType("B^*->D^*::HQET"),      &HQETFormFactors<BstarToDstar, VToV>::make      },
         };
 
         auto i = form_factors.find(name);
