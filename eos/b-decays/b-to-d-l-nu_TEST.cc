@@ -80,8 +80,6 @@ class BToDLeptonNeutrinoTest :
                 p["mass::B_d"].set(5.27942);
                 p["mass::D_u"].set(1.86723);
                 p["mass::D_d"].set(1.86723);
-                p["mass::D^*_u"].set(2.01000);
-                p["mass::D^*_d"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{
@@ -134,8 +132,6 @@ class BToDLeptonNeutrinoTest :
                 p["mass::B_d"].set(5.27942);
                 p["mass::D_u"].set(1.86723);
                 p["mass::D_d"].set(1.86723);
-                p["mass::D^*_u"].set(2.01000);
-                p["mass::D^*_d"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{

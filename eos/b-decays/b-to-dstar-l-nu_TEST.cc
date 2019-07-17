@@ -78,10 +78,8 @@ class BToDstarLeptonNeutrinoTest :
                 p["mass::e"].set(0.000001);
                 p["B(*)->D(*)::a@HQET"].set(1.000);
                 p["mass::B_d"].set(5.27942);
-                p["mass::D_u"].set(1.86723);
-                p["mass::D_d"].set(1.86723);
-                p["mass::D^*_u"].set(2.01000);
-                p["mass::D^*_d"].set(2.01000);
+                p["mass::D_u^*"].set(2.01000);
+                p["mass::D_d^*"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{
@@ -132,10 +130,8 @@ class BToDstarLeptonNeutrinoTest :
                 p["CKM::abs(V_cb)"].set(1.0);
                 p["B(*)->D(*)::a@HQET"].set(1.000);
                 p["mass::B_d"].set(5.27942);
-                p["mass::D_u"].set(1.86723);
-                p["mass::D_d"].set(1.86723);
-                p["mass::D^*_u"].set(2.01000);
-                p["mass::D^*_d"].set(2.01000);
+                p["mass::D_u^*"].set(2.01000);
+                p["mass::D_d^*"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{
@@ -181,7 +177,7 @@ class BToDstarLeptonNeutrinoTest :
                 p1["B->D^*::alpha^T23_1@BSZ2015"] = +1.90;
                 p1["B->D^*::alpha^T23_2@BSZ2015"] = +2.93;
                 p1["mass::B_d"]                   = +5.279;
-                p1["mass::D^*_d"]                 = +2.0103;
+                p1["mass::D_d^*"]                 = +2.0103;
                 // by default, all other couplings are zero in eos
                 p1["b->cmunumu::Re{cVL}"]         = +1.0;
 
@@ -233,7 +229,7 @@ class BToDstarLeptonNeutrinoTest :
                 p3["B->D^*::alpha^T23_1@BSZ2015"] = +1.90;
                 p3["B->D^*::alpha^T23_2@BSZ2015"] = +2.93;
                 p3["mass::B_d"]                   = +5.279;
-                p3["mass::D^*_d"]                 = +2.0103;
+                p3["mass::D_d^*"]                 = +2.0103;
                 // fix scale
                 p3["mu"]                          = +4.18;
                 // mb(mb)

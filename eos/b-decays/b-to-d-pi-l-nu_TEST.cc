@@ -70,8 +70,8 @@ class BToDPiLeptonNeutrinoTest :
                 p["mass::B_d"].set(5.27942);
                 p["mass::D_u"].set(1.86723);
                 p["mass::D_d"].set(1.86723);
-                p["mass::D^*_u"].set(2.01000);
-                p["mass::D^*_d"].set(2.01000);
+                p["mass::D_u^*"].set(2.01000);
+                p["mass::D_d^*"].set(2.01000);
 
                 Options o{
                     { "l",             "tau"     },
@@ -120,8 +120,8 @@ class BToDPiLeptonNeutrinoTest :
                 p["mass::B_d"].set(5.27942);
                 p["mass::D_u"].set(1.86723);
                 p["mass::D_d"].set(1.86723);
-                p["mass::D^*_u"].set(2.01000);
-                p["mass::D^*_d"].set(2.01000);
+                p["mass::D_u^*"].set(2.01000);
+                p["mass::D_d^*"].set(2.01000);
 
                 Options o{
                     { "l",             "mu"      },

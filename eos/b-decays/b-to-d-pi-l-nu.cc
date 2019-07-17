@@ -36,7 +36,7 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_model(o, "model", { "SM", "CKMScan" }, "SM"),
             m_B(p["mass::B_d"], u),
-            m_Dstar(p["mass::D^*_d"], u),
+            m_Dstar(p["mass::D_d^*"], u),
             opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
             ff(FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors", "HQET"), p, o))

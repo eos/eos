@@ -128,7 +128,7 @@ namespace eos
             m_c(p["mass::c"], u),
             m_s_MSbar(p["mass::s(2GeV)"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
-            m_Kstar(p["mass::K^*_d"], u),
+            m_Kstar(p["mass::K_d^*"], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),

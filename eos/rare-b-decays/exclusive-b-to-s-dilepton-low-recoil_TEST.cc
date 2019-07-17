@@ -67,7 +67,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
                 // Kaon mass
-                p["mass::K^*_d"] = 0.896;
+                p["mass::K_d^*"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
                 // s quark mass
@@ -168,7 +168,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
                 // Kaon mass
-                p["mass::K^*_d"] = 0.896;
+                p["mass::K_d^*"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
                 // s quark mass
@@ -235,7 +235,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["CKM::rhobar"] = 0.135;
                 p["CKM::etabar"] = 0.349;
                 // Kaon mass
-                p["mass::K^*_d"] = 0.896;
+                p["mass::K_d^*"] = 0.896;
                 // B mass
                 p["mass::B_d"] = 5.27953;
                 // s quark mass

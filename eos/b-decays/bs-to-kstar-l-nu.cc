@@ -74,7 +74,7 @@ namespace eos
             model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["hbar"], u),
             m_Bs(p["mass::B_s"], u),
-            m_Kstar(p["mass::K^*_u"], u),
+            m_Kstar(p["mass::K_u^*"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
             m_l(p["mass::" + opt_l.value()], u),

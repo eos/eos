@@ -46,7 +46,7 @@ class BsToKstarLeptonNeutrinoTest :
                 p["CKM::rhobar"] = 0.132;
                 p["CKM::etabar"] = 0.340;
                 // Kaon mass
-                p["mass::K^*_u"] = 0.89166;
+                p["mass::K_u^*"] = 0.89166;
                 // B mass
                 p["mass::B_s"] = 5.3668;
                 // b quark mass
