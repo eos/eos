@@ -66,7 +66,7 @@ namespace eos
     struct BToDstar {
         static constexpr const char * label = "B->D^*";
         static constexpr const char * name_B = "mass::B_d";
-        static constexpr const char * name_V = "mass::D^*_u";
+        static constexpr const char * name_V = "mass::D_u^*";
         static constexpr double mB = 5.279;
         static constexpr double mV = 2.0103;
         static constexpr double mBc = 6.2751;

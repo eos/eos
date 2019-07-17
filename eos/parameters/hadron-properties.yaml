@@ -95,28 +95,28 @@ groups:
           max:     +1.019463
           comments: 'cf. [PDG2018]'
       # K meson masses
-      'mass::K^*_d' :
+      'mass::K_d^*' :
           central: +0.89594
           min:     +0.89572
           max:     +0.89616
           comments: 'cf. [PDG2012], p. 45'
-      'mass::K^*_u' :
+      'mass::K_u^*' :
           central: +0.89166
           min:     +0.89140
           max:     +0.89192
           comments: 'cf. [PDG2012], p. 45'
       # D meson masses
-      'mass::D^*_d' :
+      'mass::D_d^*' :
           central: +2.01026
           min:     +2.01021
           max:     +2.01031
           comments: 'cf. [PDG2016]'
-      'mass::D^*_u' :
+      'mass::D_u^*' :
           central: +2.00685
           min:     +2.00680
           max:     +2.00690
           comments: 'cf. [PDG2016]'
-      'mass::D^*_s' :
+      'mass::D_s^*' :
           central: +2.1121
           min:     +2.1117
           max:     +2.1125
@@ -208,12 +208,12 @@ groups:
           min:     +0.155
           max:     +0.1572
           comments: 'GeV, cf. [LATAVG2011]'
-      'decay-constant::K^*_d' :
+      'decay-constant::K_d^*' :
           central: +0.204
           min:     +0.197
           max:     +0.211
           comments: 'GeV, cf. [BSZ2015]'
-      'decay-constant::K^*_u' :
+      'decay-constant::K_u^*' :
           central: +0.204
           min:     +0.197
           max:     +0.211
@@ -258,17 +258,17 @@ groups:
           min:     +0.2494
           max:     +0.2504
           comments: 'GeV, cf. [Fermilab-MILC-2017]'
-      'decay-constant::D^*_d' :
+      'decay-constant::D_d^*' :
           central: +0.242
           min:     +0.222
           max:     +0.252
           comments: 'GeV, cf. [GKPR2013], symmetrized errors'
-      'decay-constant::D^*_u' :
+      'decay-constant::D_u^*' :
           central: +0.242
           min:     +0.222
           max:     +0.252
           comments: 'GeV, cf. [GKPR2013], symmetrized errors'
-      'decay-constant::D^*_s' :
+      'decay-constant::D_s^*' :
           central: +0.293
           min:     +0.274
           max:     +0.312

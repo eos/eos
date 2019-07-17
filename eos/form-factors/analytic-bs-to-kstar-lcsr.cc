@@ -30,8 +30,8 @@ namespace eos
             constexpr static const char * m_B    = "mass::B_s";
             constexpr static const char * f_B    = "decay-constant::B_s";
             constexpr static const char * V      = "K^*";
-            constexpr static const char * m_V    = "mass::K^*_u";
-            constexpr static const char * f_V    = "decay-constant::K^*_u";
+            constexpr static const char * m_V    = "mass::K_u^*";
+            constexpr static const char * f_V    = "decay-constant::K_u^*";
             constexpr static const char   q_v    = 'u';
             constexpr static const char   q_s    = 's';
             constexpr static const double chi2   = 1.0;

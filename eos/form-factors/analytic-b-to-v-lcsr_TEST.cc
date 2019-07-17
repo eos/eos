@@ -47,7 +47,7 @@ class LCSRFormFactorsTest :
                 p["B::lambda_H^2"]            = 1.2696;
                 p["mass::ud(2GeV)"]           = 0.008;
                 p["mass::B_d"]                = 5.2795;
-                p["mass::K^*_d"]              = 0.896;
+                p["mass::K_d^*"]              = 0.896;
                 p["decay-constant::B_d"]      = 0.180;
                 p["B->K^*::f_Kstar_par"]      = 0.217;
                 p["B->K^*::mu@B-LCSR"]        = 1.0;
@@ -2949,7 +2949,7 @@ class LCSRFormFactorsTest :
                 p["B::lambda_E^2"]                 = 0.03;
                 p["B::lambda_H^2"]                 = 0.06;
                 p["mass::B_d"]                     = 5.27958;
-                p["mass::K^*_d"]                   = 0.89594;
+                p["mass::K_d^*"]                   = 0.89594;
                 p["decay-constant::B_d"]           = 0.1905;
                 p["B->K^*::f_Kstar_par"]           = 0.204;
                 p["B->K^*::mu@B-LCSR"]             = 1.0;
@@ -3017,9 +3017,9 @@ class LCSRFormFactorsTest :
                 p["B::lambda_E^2"]                 = 0.03;
                 p["B::lambda_H^2"]                 = 0.06;
                 p["mass::B_d"]                     = 5.27958;
-                p["mass::D^*_d"]                   = 2.01026;
+                p["mass::D_d^*"]                   = 2.01026;
                 p["decay-constant::B_d"]           = 0.1905;
-                p["decay-constant::D^*_d"]         = 0.242;
+                p["decay-constant::D_d^*"]         = 0.242;
                 p["B->D^*::mu@B-LCSR"]             = 2.1213;
                 p["B->D^*::s_0^A1,0@B-LCSR"]       = 8.0;
                 p["B->D^*::s_0^A1,1@B-LCSR"]       = 0.0;
@@ -3084,9 +3084,9 @@ class LCSRFormFactorsTest :
                 p["B_s::lambda_E^2"]                 = 0.03;
                 p["B_s::lambda_H^2"]                 = 0.06;
                 p["mass::B_s"]                       = 5.36677;
-                p["mass::K^*_u"]                     = 0.89166;
+                p["mass::K_u^*"]                     = 0.89166;
                 p["decay-constant::B_s"]             = 0.2307;
-                p["decay-constant::K^*_u"]           = 0.204;
+                p["decay-constant::K_u^*"]           = 0.204;
                 p["B_s->K^*::mu@B-LCSR"]             = 1.0;
                 p["B_s->K^*::s_0^A1,0@B-LCSR"]       = 1.7;
                 p["B_s->K^*::s_0^A1,1@B-LCSR"]       = 0.0;
@@ -3209,7 +3209,7 @@ class LCSRFormFactorsTest :
             }
 
 
-            /* B_s -> D^*_s form factor values */
+            /* B_s -> D_s^* form factor values */
             {
                 static const double eps = 1.0e-4; // relative error < 0.3%
 
@@ -3219,25 +3219,25 @@ class LCSRFormFactorsTest :
                 p["B_s::lambda_E^2"]                 = 0.03;
                 p["B_s::lambda_H^2"]                 = 0.06;
                 p["mass::B_s"]                       = 5.36677;
-                p["mass::D^*_s"]                     = 2.1121;
+                p["mass::D_s^*"]                     = 2.1121;
                 p["decay-constant::B_s"]             = 0.2307;
-                p["decay-constant::D^*_s"]           = 0.293;
-                p["B_s->D^*_s::mu@B-LCSR"]           = 2.1213;
-                p["B_s->D^*_s::s_0^A1,0@B-LCSR"]     = 8.0;
-                p["B_s->D^*_s::s_0^A1,1@B-LCSR"]     = 0.0;
-                p["B_s->D^*_s::s_0^A2,0@B-LCSR"]     = 8.0;
-                p["B_s->D^*_s::s_0^A2,1@B-LCSR"]     = 0.0;
-                p["B_s->D^*_s::s_0^A30,0@B-LCSR"]    = 8.0;
-                p["B_s->D^*_s::s_0^A30,1@B-LCSR"]    = 0.0;
-                p["B_s->D^*_s::s_0^V,0@B-LCSR"]      = 8.0;
-                p["B_s->D^*_s::s_0^V,1@B-LCSR"]      = 0.0;
-                p["B_s->D^*_s::s_0^T1,0@B-LCSR"]     = 8.0;
-                p["B_s->D^*_s::s_0^T1,1@B-LCSR"]     = 0.0;
-                p["B_s->D^*_s::s_0^T23A,0@B-LCSR"]   = 8.0;
-                p["B_s->D^*_s::s_0^T23A,1@B-LCSR"]   = 0.0;
-                p["B_s->D^*_s::s_0^T23B,0@B-LCSR"]   = 8.0;
-                p["B_s->D^*_s::s_0^T23B,1@B-LCSR"]   = 0.0;
-                p["B_s->D^*_s::M^2@B-LCSR"]          = 4.5;
+                p["decay-constant::D_s^*"]           = 0.293;
+                p["B_s->D_s^*::mu@B-LCSR"]           = 2.1213;
+                p["B_s->D_s^*::s_0^A1,0@B-LCSR"]     = 8.0;
+                p["B_s->D_s^*::s_0^A1,1@B-LCSR"]     = 0.0;
+                p["B_s->D_s^*::s_0^A2,0@B-LCSR"]     = 8.0;
+                p["B_s->D_s^*::s_0^A2,1@B-LCSR"]     = 0.0;
+                p["B_s->D_s^*::s_0^A30,0@B-LCSR"]    = 8.0;
+                p["B_s->D_s^*::s_0^A30,1@B-LCSR"]    = 0.0;
+                p["B_s->D_s^*::s_0^V,0@B-LCSR"]      = 8.0;
+                p["B_s->D_s^*::s_0^V,1@B-LCSR"]      = 0.0;
+                p["B_s->D_s^*::s_0^T1,0@B-LCSR"]     = 8.0;
+                p["B_s->D_s^*::s_0^T1,1@B-LCSR"]     = 0.0;
+                p["B_s->D_s^*::s_0^T23A,0@B-LCSR"]   = 8.0;
+                p["B_s->D_s^*::s_0^T23A,1@B-LCSR"]   = 0.0;
+                p["B_s->D_s^*::s_0^T23B,0@B-LCSR"]   = 8.0;
+                p["B_s->D_s^*::s_0^T23B,1@B-LCSR"]   = 0.0;
+                p["B_s->D_s^*::M^2@B-LCSR"]          = 4.5;
 
                 Options o = {
                     { "2pt",    "all"  },
@@ -3245,7 +3245,7 @@ class LCSRFormFactorsTest :
                     { "gminus", "WW-limit" }
                 };
 
-                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->D^*_s::B-LCSR", p, o);
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B_s->D_s^*::B-LCSR", p, o);
 
                 TEST_CHECK_RELATIVE_ERROR( 0.653061, ff->v(-5.0),           eps);
                 TEST_CHECK_RELATIVE_ERROR( 0.758854, ff->v( 0.0),           eps);

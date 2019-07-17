@@ -104,7 +104,7 @@ namespace eos
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
-            m_Kstar(p["mass::K^*_d"], u),
+            m_Kstar(p["mass::K_d^*"], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
             m_s(p["mass::s(2GeV)"], u),
             mu(p["mu"], u),

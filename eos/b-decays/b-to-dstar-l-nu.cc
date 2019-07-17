@@ -218,7 +218,7 @@ namespace eos
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
             m_B(p["mass::B_" + opt_q.value()], u),
-            m_Dstar(p["mass::D^*_" + opt_q.value()], u),
+            m_Dstar(p["mass::D_" + opt_q.value() + "^*"], u),
             mu(p["mu"], u)
         {
             form_factors = FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors", "BSZ2015"), p, o);
