@@ -66,6 +66,7 @@ namespace eos
 
             // option to determine if we use z^2 terms in the subsubleading-power IW function
             SwitchOption _opt_sslp_zorder;
+            double _enable_sslp_z1;
             double _enable_sslp_z2;
 
             // parameters for the leading Isgur-Wise function xi
@@ -103,7 +104,8 @@ namespace eos
                 _enable_lp_z5(1.0 ? _opt_lp_zorder.value() >= "5" : 0.0),
                 _opt_slp_zorder(o, "z-order-slp", { "1", "2" }, "2"),
                 _enable_slp_z2(1.0 ? _opt_slp_zorder.value() >= "2" : 0.0),
-                _opt_sslp_zorder(o, "z-order-sslp", { "1", "2" }, "1"),
+                _opt_sslp_zorder(o, "z-order-sslp", { "0", "1", "2" }, "1"),
+                _enable_sslp_z1(1.0 ? _opt_sslp_zorder.value() >= "1" : 0.0),
                 _enable_sslp_z2(1.0 ? _opt_sslp_zorder.value() >= "2" : 0.0),
                 _xipone(p["B(*)->D(*)::xi'(1)@HQET"], *this),
                 _xippone(p["B(*)->D(*)::xi''(1)@HQET"], *this),
@@ -379,7 +381,7 @@ namespace eos
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
-                const double  z   = (_zw(w) - z_0);
+                const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
                 const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
@@ -395,7 +397,7 @@ namespace eos
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
-                const double  z   = (_zw(w) - z_0);
+                const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
                 const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
@@ -411,7 +413,7 @@ namespace eos
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
-                const double  z   = (_zw(w) - z_0);
+                const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
                 const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
@@ -427,7 +429,7 @@ namespace eos
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
-                const double  z   = (_zw(w) - z_0);
+                const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
                 const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
@@ -443,7 +445,7 @@ namespace eos
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
-                const double  z   = (_zw(w) - z_0);
+                const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
                 const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
@@ -459,7 +461,7 @@ namespace eos
 
                 // expansion in z around z_0
                 const double  z_0 = (1.0 - a) / (1.0 + a);
-                const double  z   = (_zw(w) - z_0);
+                const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
                 const double z2   =  z * z * _enable_sslp_z2;
 
                 const double wm11 =  2.0            * pow(1.0 + a, 2) / a          * z
