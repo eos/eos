@@ -1028,6 +1028,10 @@ namespace eos
                 make_b_to_k_form_factors_group(),
                 make_b_to_d_form_factors_group(),
 
+                // B_s -> P
+                make_bs_to_k_form_factors_group(),
+                make_bs_to_ds_form_factors_group(),
+
                 // B -> V
                 make_b_to_rho_form_factors_group(),
                 make_b_to_kstar_form_factors_group(),
@@ -1035,6 +1039,8 @@ namespace eos
 
                 // B_s -> V
                 make_bs_to_kstar_form_factors_group(),
+                make_bs_to_phi_form_factors_group(),
+                make_bs_to_dsstar_form_factors_group(),
 
                 // B -> P P
                 make_b_to_pi_pi_form_factors_group(),
