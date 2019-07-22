@@ -514,9 +514,9 @@ groups:
           comments: 'GeV^2, cf. [NT2011]'
       # B_s LCDA parameters
       'B_s::1/lambda_B_p' :
-          central: +1.6934
-          min:     +1.29
-          max:     +2.09
+          central: +2.0
+          min:     +1.5
+          max:     +2.5
           comments: ' // GeV^{-1}, cf. [GKvD2018]'
       'B_s::lambda_E^2' :
           central: +0.03
