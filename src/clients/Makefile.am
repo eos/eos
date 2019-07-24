@@ -73,7 +73,7 @@ eos_print_polynomial_SOURCES = eos-print-polynomial.cc
 
 eos_propagate_uncertainty_SOURCES = eos-propagate-uncertainty.cc
 eos_propagate_uncertainty_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
-eos_propagate_uncertainty_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS)
+eos_propagate_uncertainty_LDADD = $(LDADD) $(GSL_LDFLAGS) -lhdf5 $(HDF5_LDFLAGS)
 
 eos_sample_mcmc_SOURCES = eos-sample-mcmc.cc
 eos_sample_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
