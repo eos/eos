@@ -186,7 +186,7 @@ namespace eos
             make_signal_pdf("Lambda_b->Lambda_clnu::dGamma",
                             &LambdaBToLambdaCLeptonNeutrino::differential_branching_ratio,
                             Options{ },
-                            KinematicRange{ "s", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_s }),
+                            KinematicRange{ "s", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 }),
 
             make_signal_pdf("Lambda_b->Lambda_c(2625)lnu::dGamma",
                     &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,

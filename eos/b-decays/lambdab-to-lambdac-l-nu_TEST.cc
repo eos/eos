@@ -45,52 +45,82 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
         virtual void run() const
         {
-
-            // tests for SM observables, Re{cVL}=1.0 in the SM and all other couplings are zero
+            // tests for SM observables, Re{cVL}=1.0 in the SM and all other couplings are zero, l = mu
             {
-                Parameters p1 = Parameters::Defaults();
+                Parameters p = Parameters::Defaults();
+                p["Lambda_c::alpha"]       = -0.78;
+
                 // the parameters are fixed as EOS default values
 
-                Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "DKMR2017");
-                oo.set("l", "mu");
+                Options oo
+                {
+                    { "model",        "WilsonScan" },
+                    { "form-factors", "DKMR2017"   },
+                    { "l",            "mu"         }
+                };
 
-                LambdaBToLambdaCLeptonNeutrino d(p1, oo);
+                LambdaBToLambdaCLeptonNeutrino d(p, oo);
 
-                const double eps = 1e-3;
+                const double eps = 1e-4;
 
                 // the full phase-space region for muon
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1), -0.2028, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  0.3274, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1), -0.1177, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),  0.5869, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1), -0.20287, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  0.32745, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1), -0.11776, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),          0.58698, eps);
             }
-            // tests for NP observables
+
+            // tests for SM observables, Re{cVL}=1.0 in the SM and all other couplings are zero, l = mu
             {
-                Parameters p2 = Parameters::Defaults();
+                Parameters p = Parameters::Defaults();
+                p["Lambda_c::alpha"]       = -0.78;
+
+                // the parameters are fixed as EOS default values
+
+                Options oo
+                {
+                    { "model",        "WilsonScan" },
+                    { "form-factors", "DKMR2017"   },
+                    { "l",            "tau"        }
+                };
+
+                LambdaBToLambdaCLeptonNeutrino d(p, oo);
+
+                const double eps = 1e-4;
+
+                // the full phase-space region for muon
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(3.154, 11.1), +0.02449, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(3.154, 11.1),  0.29620, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(3.154, 11.1), -0.02203, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(3.154, 11.1),          0.38041, eps);
+            }
+
+            // tests for NP observables (no tensors)
+            {
+                Parameters p = Parameters::Defaults();
                 // the rest of input is fixed to default EOS values
-                p2["b->cmunumu::Re{cVL}"]   =  1.0;
-                p2["b->cmunumu::Im{cVL}"]   = -1.0;
-                p2["b->cmunumu::Re{cVR}"]   =  2.0;
-                p2["b->cmunumu::Im{cVR}"]   = -2.0;
-                p2["b->cmunumu::Re{cSL}"]   =  3.0;
-                p2["b->cmunumu::Im{cSL}"]   = -3.0;
-                p2["b->cmunumu::Re{cSR}"]   =  4.0;
-                p2["b->cmunumu::Im{cSR}"]   = -4.0;
-                p2["b->cmunumu::Re{cT}"]    =  0.0;
-                p2["b->cmunumu::Im{cT}"]    =  0.0;
+                p["b->cmunumu::Re{cVL}"]   =  1.0;
+                p["b->cmunumu::Im{cVL}"]   = -1.0;
+                p["b->cmunumu::Re{cVR}"]   =  2.0;
+                p["b->cmunumu::Im{cVR}"]   = -2.0;
+                p["b->cmunumu::Re{cSL}"]   =  3.0;
+                p["b->cmunumu::Im{cSL}"]   = -3.0;
+                p["b->cmunumu::Re{cSR}"]   =  4.0;
+                p["b->cmunumu::Im{cSR}"]   = -4.0;
+                p["b->cmunumu::Re{cT}"]    =  0.0;
+                p["b->cmunumu::Im{cT}"]    =  0.0;
                 // fix the scale
-                p2["mu"]                    =  4.18;
-                p2["mass::b(MSbar)"]        =  4.18;
-                p2["mass::c"]               =  1.275;
+                p["mu"]                    =  4.18;
+                p["mass::b(MSbar)"]        =  4.18;
+                p["mass::c"]               =  1.275;
+                p["Lambda_c::alpha"]       = -0.78;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
                 oo.set("form-factors", "DKMR2017");
                 oo.set("l", "mu");
 
-                LambdaBToLambdaCLeptonNeutrino d(p2, oo);
+                LambdaBToLambdaCLeptonNeutrino d(p, oo);
 
                 const double eps = 1e-2;
 
@@ -98,7 +128,43 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1),   0.0465, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  -0.0179, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1),  -0.0150, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),  0.4016, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),           0.4016, eps);
+            }
+
+            // tests for NP observables (no tensors)
+            {
+                Parameters p = Parameters::Defaults();
+                // the rest of input is fixed to default EOS values
+                p["b->cmunumu::Re{cVL}"]   =  1.0;
+                p["b->cmunumu::Im{cVL}"]   = -1.0;
+                p["b->cmunumu::Re{cVR}"]   =  2.0;
+                p["b->cmunumu::Im{cVR}"]   = -2.0;
+                p["b->cmunumu::Re{cSL}"]   =  3.0;
+                p["b->cmunumu::Im{cSL}"]   = -3.0;
+                p["b->cmunumu::Re{cSR}"]   =  4.0;
+                p["b->cmunumu::Im{cSR}"]   = -4.0;
+                p["b->cmunumu::Re{cT}"]    =  1.0;
+                p["b->cmunumu::Im{cT}"]    = -2.0;
+                // fix the scale
+                p["mu"]                    =  4.18;
+                p["mass::b(MSbar)"]        =  4.18;
+                p["mass::c"]               =  1.275;
+                p["Lambda_c::alpha"]       = -0.78;
+
+                Options oo;
+                oo.set("model", "WilsonScan");
+                oo.set("form-factors", "DKMR2017");
+                oo.set("l", "mu");
+
+                LambdaBToLambdaCLeptonNeutrino d(p, oo);
+
+                const double eps = 1e-2;
+
+                // the full phase-space region for muon
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1),   0.1336, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  -0.0147, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1),  -0.1180, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),           0.3742, eps);
             }
         }
 } lambdab_to_lambdac_l_nu_test;

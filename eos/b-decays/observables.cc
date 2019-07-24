@@ -512,13 +512,13 @@ namespace eos
                         &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambda_clnu::R_Lambda_c(q2)",
-                        &LambdaBToLambdaCLeptonNeutrino::differential_ratio_tau_mu,
-                        std::make_tuple("q2")),
-
-                make_observable("Lambda_b->Lambda_clnu::R_Lambda_c",
-                        &LambdaBToLambdaCLeptonNeutrino::integrated_ratio_tau_mu,
-                        std::make_tuple("q2_min_mu", "q2_min_tau", "q2_max_mu", "q2_max_tau")),
+                make_observable_ratio("Lambda_b->Lambda_clnu::R(Lambda_c)", R"(R(\Lambda_c))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_tau_min", "q2_tau_max"),
+                        Options{ { "l", "tau" } },
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_mu_min", "q2_mu_max"),
+                        Options{ { "l", "mu" } }),
 
                 make_observable("Lambda_b->Lambda_clnu::A_FB^l",
                         &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_leptonic,
@@ -528,13 +528,21 @@ namespace eos
                         &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_hadronic,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambda_clnu::R_Lambda_c_A_FB^h(q2)",
-                        &LambdaBToLambdaCLeptonNeutrino::differential_ratio_a_fb_hadronic_tau_mu,
-                        std::make_tuple("q2")),
+                make_observable_ratio("Lambda_b->Lambda_clnu::R(A_FB^h)(q2)", R"(R(A_{\text{FB}}^{\Lambda_c})(q^2))",
+                        &LambdaBToLambdaCLeptonNeutrino::differential_a_fb_hadronic,
+                        std::make_tuple("q2"),
+                        Options{ { "l", "tau" } },
+                        &LambdaBToLambdaCLeptonNeutrino::differential_a_fb_hadronic,
+                        std::make_tuple("q2"),
+                        Options{ { "l", "mu" } }),
 
-                make_observable("Lambda_b->Lambda_clnu::R_Lambda_c_A_FB^h",
-                        &LambdaBToLambdaCLeptonNeutrino::integrated_ratio_a_fb_hadronic_tau_mu,
-                        std::make_tuple("q2_min_mu", "q2_min_tau", "q2_max_mu", "q2_max_tau")),
+                make_observable_ratio("Lambda_b->Lambda_clnu::R(A_FB^h)", R"(R(A_{\text{FB}}^{\Lambda_c}))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_hadronic,
+                        std::make_tuple("q2_tau_min", "q2_tau_max"),
+                        Options{ { "l", "tau" } },
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_hadronic,
+                        std::make_tuple("q2_mu_min", "q2_mu_max"),
+                        Options{ { "l", "mu" } }),
 
                 make_observable("Lambda_b->Lambda_clnu::A_FB^c",
                         &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_combined,
@@ -542,6 +550,46 @@ namespace eos
 
                 make_observable("Lambda_b->Lambda_clnu::F_0",
                         &LambdaBToLambdaCLeptonNeutrino::integrated_fzero,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_1ss", R"(K_{1ss}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k1ss,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_1cc", R"(K_{1cc}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k1cc,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_1c", R"(K_{1c}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k1c,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_2ss", R"(K_{2ss}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k2ss,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_2cc", R"(K_{2cc}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k2cc,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_2c", R"(K_{2c}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k2c,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_3sc", R"(K_{3sc}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k3sc,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_3s", R"(K_{3s}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k3s,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_4sc", R"(K_{4sc}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k4sc,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("Lambda_b->Lambda_clnu::K_4s", R"(K_{4s}(\Lambda_b\to\Lambda_c(\to \Lambda\pi)\ell^-\bar\nu))",
+                        &LambdaBToLambdaCLeptonNeutrino::integrated_k4s,
                         std::make_tuple("q2_min", "q2_max")),
 
                 // Lambda_b -> Lambda_c(2595) l nubar
