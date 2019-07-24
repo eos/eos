@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2019 Ahmet Kokulu
+ * Copyright (c) 2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -47,14 +48,20 @@ namespace eos
     {
         struct Amplitudes
         {
-            complex<double> a_perp_0_L;
-            complex<double> a_para_0_L;
-            complex<double> a_perp_1_L;
-            complex<double> a_para_1_L;
-            complex<double> a_perp_t_L;
-            complex<double> a_para_t_L;
+            complex<double> perp_0_L;
+            complex<double> para_0_L;
+            complex<double> perp_1_L;
+            complex<double> para_1_L;
+            complex<double> perp_t_L;
+            complex<double> para_t_L;
+
+            complex<double> perp_0_T;
+            complex<double> para_0_T;
+            complex<double> perp_1_T;
+            complex<double> para_1_T;
+
             double alpha;
-            double v;
+            double beta;
         };
 
         struct AngularObservables
@@ -63,36 +70,119 @@ namespace eos
 
             AngularObservables(const Amplitudes & a)
             {
-                // charged lepton velocity in the dilepton rest frame
-                double v = a.v;
+                using std::norm;
+                using std::real;
+                using std::imag;
+                using std::conj;
+                using std::sqrt;
 
-                _k[0] = ( (2.0 - v) * (std::norm(a.a_perp_1_L) + std::norm(a.a_para_1_L)) +
-                          2.0 * std::norm(a.a_perp_0_L) +
-                         2.0 * std::norm(a.a_para_0_L) + 2.0 * (1.0 - v) * (std::norm(a.a_perp_t_L) + std::norm(a.a_para_t_L)) ) / 4.0;
+                double beta       = a.beta;
+                double sqrt1mbeta = sqrt(1.0 - beta);
 
-                _k[1] = ( std::norm(a.a_perp_1_L) +
-                         std::norm(a.a_para_1_L) + (1.0 - v) * ( std::norm(a.a_perp_0_L) + std::norm(a.a_para_0_L) + std::norm(a.a_perp_t_L) + std::norm(a.a_para_t_L) ) ) / 2.0;
+                // cf. [BKTvD2019], eqs. (2.5)-(2.14), pp. 4-5.
 
-                _k[2] = std::real( a.a_perp_1_L*std::conj(a.a_para_1_L) + (1.0 - v) * ( a.a_perp_0_L*std::conj(a.a_perp_t_L) + a.a_para_0_L*std::conj(a.a_para_t_L) ) );
+                // K_{1ss}
+                _k[0] = (
+                            + 2.0                * (norm(a.para_0_L) + norm(a.perp_0_L))
+                            + (2.0 - beta)       * (norm(a.para_1_L) + norm(a.perp_1_L) + norm(a.para_1_T) + norm(a.perp_1_T))
+                            + 2.0 * (1.0 - beta) * (norm(a.para_t_L) + norm(a.perp_t_L) + norm(a.para_0_T) + norm(a.perp_0_T))
+                            - 4.0 * sqrt1mbeta   * real(
+                                  a.para_0_T * conj(a.para_0_L) + a.perp_0_T * conj(a.perp_0_L)
+                                + a.para_1_T * conj(a.para_1_L) + a.perp_1_T * conj(a.perp_1_L)
+                            )
+                        ) / 4.0;
 
-                _k[3] = a.alpha * std::real( 2.0 * (1.0 - v) * a.a_perp_t_L*std::conj(a.a_para_t_L) + (2.0 - v) * a.a_perp_1_L*std::conj(a.a_para_1_L) + 2.0 * a.a_perp_0_L*std::conj(a.a_para_0_L) ) / 2.0;
+                // K_{1cc}
+                _k[1] = (
+                            +                    (norm(a.para_1_L) + norm(a.perp_1_L) + norm(a.para_0_T) + norm(a.perp_0_T))
+                            + (1.0 - beta)     * (norm(a.para_0_L) + norm(a.perp_0_L) + norm(a.para_t_L) + norm(a.perp_t_L) + norm(a.para_1_T) + norm(a.perp_1_T))
+                            - 2.0 * sqrt1mbeta * real(
+                                  a.para_0_T * conj(a.para_0_L) + a.perp_0_T * conj(a.perp_0_L)
+                                + a.para_1_T * conj(a.para_1_L) + a.perp_1_T * conj(a.perp_1_L)
+                            )
+                        ) / 2.0;
 
-                _k[4] = a.alpha * std::real( a.a_perp_1_L*std::conj(a.a_para_1_L) + (1.0 - v) * (a.a_perp_0_L*std::conj(a.a_para_0_L) + a.a_perp_t_L*std::conj(a.a_para_t_L)) );
+                // K_{1c}
+                _k[2] = real(
+                            +                 a.perp_1_L * conj(a.para_1_L)
+                            + (1.0 - beta) * (a.para_0_L * conj(a.para_t_L) + a.perp_0_L * conj(a.perp_t_L) + a.perp_1_T * conj(a.para_1_T))
+                            - sqrt1mbeta   * (
+                                  a.perp_1_T * conj(a.para_1_L) + a.para_1_T * conj(a.perp_1_L)
+                                + a.para_0_T * conj(a.para_t_L) + a.perp_0_T * conj(a.perp_t_L)
+                            )
+                        );
 
-                _k[5] = ( std::norm(a.a_perp_1_L) +
-                         std::norm(a.a_para_1_L) + 2.0 * (1.0 - v) * std::real( a.a_perp_0_L*std::conj(a.a_para_t_L) + a.a_para_0_L*std::conj(a.a_perp_t_L) ) ) * a.alpha / 2.0;
+                // K_{2ss}
+                _k[3] = a.alpha * real(
+                            + 2.0                *  a.perp_0_L * conj(a.para_0_L)
+                            + (2.0 - beta)       * (a.perp_1_L * conj(a.para_1_L) - a.perp_1_T * conj(a.para_1_T))
+                            + 2.0 * (1.0 - beta) * (a.perp_t_L * conj(a.para_t_L) - a.perp_0_T * conj(a.para_0_T))
+                            - 2.0 * sqrt1mbeta   * (
+                                  a.perp_0_T * conj(a.para_0_L) + a.para_0_T * conj(a.perp_0_L)
+                                + a.perp_1_T * conj(a.para_1_L) + a.para_1_T * conj(a.perp_1_L)
+                            )
+                        ) / 2.0;
 
-                _k[6] = v * std::imag( a.a_perp_1_L*std::conj(a.a_perp_0_L) -
-                                      a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.alpha / std::sqrt(2.0);
+                // K_{2cc}
+                _k[4] = a.alpha * real(
+                            +                (a.perp_1_L * conj(a.para_1_L) + a.perp_0_T * conj(a.para_0_T))
+                            + (1.0 - beta) * (a.perp_0_L * conj(a.para_0_L) + a.perp_t_L * conj(a.para_t_L) + a.perp_1_T * conj(a.para_1_T))
+                            - sqrt1mbeta   * (
+                                  a.perp_0_T * conj(a.para_0_L) + a.para_0_T * conj(a.perp_0_L)
+                                + a.perp_1_T * conj(a.para_1_L) + a.para_1_T * conj(a.perp_1_L)
+                            )
+                        );
 
-                _k[7] = std::imag( - a.a_perp_1_L*std::conj(a.a_para_0_L) +
-                                  a.a_para_1_L*std::conj(a.a_perp_0_L) + (1.0 - v) * ( a.a_para_1_L*std::conj(a.a_para_t_L) - a.a_perp_1_L*std::conj(a.a_perp_t_L) ) ) * a.alpha / std::sqrt(2.0);
+                // K_{2c}
+                _k[5] = a.alpha * (
+                            +                      (norm(a.para_1_L) + norm(a.perp_1_L))
+                            + (1.0 - beta)       * (norm(a.para_1_T) + norm(a.perp_1_T))
+                            + 2.0 * (1.0 - beta) * real(
+                                a.perp_0_L * conj(a.para_t_L) + a.para_0_L * conj(a.perp_t_L)
+                            )
+                            - 2.0 * sqrt1mbeta   * real(
+                                  a.para_1_T * conj(a.para_1_L) + a.perp_1_T * conj(a.perp_1_L)
+                                + a.perp_0_T * conj(a.para_t_L) + a.para_0_T * conj(a.perp_t_L)
+                            )
+                        ) / 2.0;
 
-                _k[8] = v * std::real( a.a_perp_1_L*std::conj(a.a_para_0_L) -
-                                      a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.alpha / std::sqrt(2.0);
+                // K_{3sc}
+                _k[6] = a.alpha * beta * imag(
+                            + a.perp_1_L * conj(a.perp_0_L) - a.para_1_L * conj(a.para_0_L)
+                            + a.para_1_T * conj(a.para_0_T) - a.perp_1_T * conj(a.perp_0_T)
+                        ) / sqrt(2.0);
 
-                _k[9] = std::real( -a.a_perp_1_L*std::conj(a.a_perp_0_L) +
-                                  a.a_para_1_L*std::conj(a.a_para_0_L) + (1.0 - v) * ( a.a_para_1_L*std::conj(a.a_perp_t_L) - a.a_perp_1_L*std::conj(a.a_para_t_L) ) ) * a.alpha / std::sqrt(2.0);
+                // K_{3s}
+                _k[7] = a.alpha * imag(
+                            +                (a.para_1_L * conj(a.perp_0_L) - a.perp_1_L * conj(a.para_0_L))
+                            + (1.0 - beta) * (
+                                + a.para_1_L * conj(a.para_t_L) - a.perp_1_L * conj(a.perp_t_L)
+                                + a.para_1_T * conj(a.perp_0_T) - a.perp_1_T * conj(a.para_0_T)
+                            )
+                            + sqrt1mbeta   * (
+                                + a.perp_0_T * conj(a.para_1_L) + a.perp_1_T * conj(a.para_0_L) + a.perp_1_T * conj(a.perp_t_L)
+                                - a.para_0_T * conj(a.perp_1_L) - a.para_1_T * conj(a.perp_0_L) - a.para_1_T * conj(a.para_t_L)
+                            )
+                        ) / sqrt(2.0);
+
+                // K_{4sc}
+                _k[8] = a.alpha * beta * real(
+                              a.perp_1_L * conj(a.para_0_L) - a.para_1_L * conj(a.perp_0_L)
+                            + a.perp_0_T * conj(a.para_1_T) - a.perp_1_T * conj(a.para_0_T)
+                        ) / sqrt(2.0);
+
+                // K_{4s}
+                _k[9] = a.alpha * real(
+                            +                (a.para_1_L * conj(a.para_0_L) - a.perp_1_L * conj(a.perp_0_L))
+                            + (1.0 - beta) * (
+                                + a.para_1_L * conj(a.perp_t_L) - a.perp_1_L * conj(a.para_t_L)
+                                + a.para_1_T * conj(a.para_0_T) - a.perp_1_T * conj(a.perp_0_T)
+                            )
+                            + sqrt1mbeta   * (
+                                + a.perp_0_T * conj(a.perp_1_L) + a.perp_1_T * conj(a.perp_0_L) + a.perp_1_T * conj(a.para_t_L)
+                                - a.para_0_T * conj(a.para_1_L) - a.para_1_T * conj(a.para_0_L) - a.para_1_T * conj(a.perp_t_L)
+                            )
+                        ) / sqrt(2.0);
             }
 
             AngularObservables(const std::array<double, 10> & k) :
@@ -149,8 +239,6 @@ namespace eos
         };
     }
 
-    /**/
-
     template <> struct Implementation<LambdaBToLambdaCLeptonNeutrino>
     {
         std::shared_ptr<Model> model;
@@ -193,88 +281,102 @@ namespace eos
 
             u.uses(*form_factors);
             u.uses(*model);
-
         }
 
-        const complex<double> norm(const double & s) const
+        const complex<double> norm(const double & q2) const
         {
-            // charged lepton velocity in the dilepton rest frame
-            double v = (1.0 - m_l * m_l / s);
-            double lam = lambda(m_Lambda_b * m_Lambda_b, m_Lambda_c * m_Lambda_c, s);
+            double lam = lambda(m_Lambda_b * m_Lambda_b, m_Lambda_c * m_Lambda_c, q2);
 
-            return g_fermi() * 4.0 * M_PI * model->ckm_cb() * v * std::sqrt(s / 3.0 / 2048 / std::pow(M_PI, 5.0) / power_of<3>(m_Lambda_b()) * std::sqrt(lam));
+            if ((lam <= 0) || (q2 <= m_l * m_l))
+                return 0.0;
+
+            // cf. [BKTvD2019], eq. (2.24), w/o the branching fraction B(L_c -> L^0 pi^+).
+            // The latter cancels in the angular distribution, and is not needed for the
+            // branching fraction Lb -> L_c l nu.
+            return g_fermi() * model->ckm_cb() * (1.0 - m_l * m_l / q2) * std::sqrt(q2 / 3.0 / 128 / power_of<3>(M_PI * m_Lambda_b()) * std::sqrt(lam));
         }
 
         lambdab_to_lambdac_l_nu::Amplitudes amplitudes(const double & s)
         {
+            using std::sqrt;
+
             lambdab_to_lambdac_l_nu::Amplitudes result;
 
-            // define below the b->c WCs in EOS basis
+            // uses the b->c WCs in EOS basis
             const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
 
-            const complex<double> cvl        = wc.cvl();
-            const complex<double> cvr        = wc.cvr();
-            const complex<double> csl        = wc.csl();
-            const complex<double> csr        = wc.csr();
-            const complex<double> ct         = wc.ct();
+            const complex<double> cvl = wc.cvl();
+            const complex<double> cvr = wc.cvr();
+            const complex<double> csl = wc.csl();
+            const complex<double> csr = wc.csr();
+            const complex<double> ct  = wc.ct();
 
             // baryonic form factors (10)
-            double fftV  = form_factors->f_time_v(s);
-            double ff0V  = form_factors->f_long_v(s);
-            double ffpV  = form_factors->f_perp_v(s);
-            double fftA  = form_factors->f_time_a(s);
-            double ff0A  = form_factors->f_long_a(s);
-            double ffpA  = form_factors->f_perp_a(s);
-            double ff0T  = form_factors->f_long_t(s);
-            double ff0T5 = form_factors->f_long_t5(s);
-            double ffpT  = form_factors->f_perp_t(s);
-            double ffpT5 = form_factors->f_perp_t5(s);
+            const double fftV  = form_factors->f_time_v(s);
+            const double ff0V  = form_factors->f_long_v(s);
+            const double ffpV  = form_factors->f_perp_v(s);
+            const double fftA  = form_factors->f_time_a(s);
+            const double ff0A  = form_factors->f_long_a(s);
+            const double ffpA  = form_factors->f_perp_a(s);
+            const double ff0T  = form_factors->f_long_t(s);
+            const double ff0T5 = form_factors->f_long_t5(s);
+            const double ffpT  = form_factors->f_perp_t(s);
+            const double ffpT5 = form_factors->f_perp_t5(s);
             // running quark masses
-            double mbatmu = model->m_b_msbar(mu);
-            double mcatmu = model->m_c_msbar(mu);
-            // charged lepton velocity in the dilepton rest frame
-            double v = (1.0 - m_l * m_l / s);
-            double m_l_hat = std::sqrt(1.0 - v);
+            const double mbatmu = model->m_b_msbar(mu);
+            const double mcatmu = model->m_c_msbar(mu);
 
-            double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_b - m_Lambda_c) - s), sqrtsplus = std::sqrt(power_of<2>(m_Lambda_b + m_Lambda_c) - s), sqrts = std::sqrt(s);
+            // kinematics
+            const double beta = (1.0 - m_l * m_l / s);
+            const double m_l_hat = std::sqrt(1.0 - beta);
+            const double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_b - m_Lambda_c) - s);
+            const double sqrtsplus  = std::sqrt(power_of<2>(m_Lambda_b + m_Lambda_c) - s);
+            const double sqrts      = std::sqrt(s);
+
+            // normalization
             const complex<double> N = norm(s);
 
-            // b->c case transversity amplitudes A's. cf. from [BKvD2019]
-            // VA & SP operators' contributions
-            result.a_perp_1_L = -2.0 * N * ffpV * (cvl + cvr) * sqrtsminus;
-            result.a_para_1_L = +2.0 * N * ffpA * (cvl - cvr) * sqrtsplus;
-            result.a_perp_0_L = +std::sqrt(2.0) * N * ff0V * ((m_Lambda_b + m_Lambda_c) / sqrts) * (cvl + cvr) * sqrtsminus;
-            result.a_para_0_L = -std::sqrt(2.0) * N * ff0A * ((m_Lambda_b - m_Lambda_c) / sqrts) * (cvl - cvr) * sqrtsplus;
-            result.a_perp_t_L = +std::sqrt(2.0) * N * sqrtsplus * fftV * ( ((m_Lambda_b - m_Lambda_c) / sqrts) * (cvl + cvr) + ((m_Lambda_b - m_Lambda_c) / (mbatmu - mcatmu)) * (csl + csr) / m_l_hat );
-            result.a_para_t_L = -std::sqrt(2.0) * N * sqrtsminus * fftA * ( ((m_Lambda_b + m_Lambda_c) / sqrts) * (cvl - cvr) - ((m_Lambda_b + m_Lambda_c) / (mbatmu + mcatmu)) * (csl - csr) / m_l_hat );
+            // b->c case transversity amplitudes
+            // cf. [BKTvD2019], eqs. (2.18)-(2.23), p. 6, including contributions from the vector and scalar operators.
+            result.perp_1_L = -2.0 * N * ffpV * (cvl + cvr) * sqrtsminus;
+            result.para_1_L = +2.0 * N * ffpA * (cvl - cvr) * sqrtsplus;
+            result.perp_0_L = +std::sqrt(2.0) * N * ff0V * ((m_Lambda_b + m_Lambda_c) / sqrts) * (cvl + cvr) * sqrtsminus;
+            result.para_0_L = -std::sqrt(2.0) * N * ff0A * ((m_Lambda_b - m_Lambda_c) / sqrts) * (cvl - cvr) * sqrtsplus;
+            result.perp_t_L = +std::sqrt(2.0) * N * sqrtsplus  * fftV * ( ((m_Lambda_b - m_Lambda_c) / sqrts) * (cvl + cvr) + ((m_Lambda_b - m_Lambda_c) / (mbatmu - mcatmu)) * (csl + csr) / m_l_hat );
+            result.para_t_L = -std::sqrt(2.0) * N * sqrtsminus * fftA * ( ((m_Lambda_b + m_Lambda_c) / sqrts) * (cvl - cvr) - ((m_Lambda_b + m_Lambda_c) / (mbatmu + mcatmu)) * (csl - csr) / m_l_hat );
+
+            // cf. [BKTvD2019], eqs. (2.26)-(2.29), p. 6, including contributions from the tensor operator.
+            result.para_0_T = -sqrt(8.0) * N * ff0T5 * sqrtsplus  * ct;
+            result.perp_0_T = -sqrt(8.0) * N * ff0T  * sqrtsminus * ct;
+            result.para_1_T = +sqrt(4.0) * N * ffpT5 * sqrtsplus  * ct * (m_Lambda_b - m_Lambda_c) / sqrts;
+            result.perp_1_T = +sqrt(4.0) * N * ffpT  * sqrtsminus * ct * (m_Lambda_b + m_Lambda_c) / sqrts;
 
             result.alpha = this->alpha();
-            result.v     = v;
+            result.beta  = beta;
 
             return result;
         }
 
-        std::array<double, 10> _differential_angular_observables(const double & s)
+        std::array<double, 10> _differential_angular_observables(const double & q2)
         {
-            return lambdab_to_lambdac_l_nu::AngularObservables(this->amplitudes(s))._k;
+            return lambdab_to_lambdac_l_nu::AngularObservables(this->amplitudes(q2))._k;
         }
 
-        // define below integrated observables in generic form
-        std::array<double, 10> _integrated_angular_observables(const double & s_min, const double & s_max)
+        std::array<double, 10> _integrated_angular_observables(const double & q2_min, const double & q2_max)
         {
             std::function<std::array<double, 10> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
-            // second argument of integrate1D is some power of 2
-            return integrate1D(integrand, 32, s_min, s_max);
+
+            return integrate1D(integrand, 32, q2_min, q2_max);
         }
 
-        inline lambdab_to_lambdac_l_nu::AngularObservables differential_angular_observables(const double & s)
+        inline lambdab_to_lambdac_l_nu::AngularObservables differential_angular_observables(const double & q2)
         {
-            return lambdab_to_lambdac_l_nu::AngularObservables{ _differential_angular_observables(s) };
+            return lambdab_to_lambdac_l_nu::AngularObservables{ _differential_angular_observables(q2) };
         }
 
-        inline lambdab_to_lambdac_l_nu::AngularObservables integrated_angular_observables(const double & s_min, const double & s_max)
+        inline lambdab_to_lambdac_l_nu::AngularObservables integrated_angular_observables(const double & q2_min, const double & q2_max)
         {
-            return lambdab_to_lambdac_l_nu::AngularObservables{ _integrated_angular_observables(s_min, s_max) };
+            return lambdab_to_lambdac_l_nu::AngularObservables{ _integrated_angular_observables(q2_min, q2_max) };
         }
     };
 
@@ -288,73 +390,39 @@ namespace eos
     }
 
     /* q^2-differential observables */
+
     double
-    LambdaBToLambdaCLeptonNeutrino::differential_branching_ratio(const double & s) const
+    LambdaBToLambdaCLeptonNeutrino::differential_branching_ratio(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
+        return _imp->differential_angular_observables(q2).decay_width() * _imp->tau_Lambda_b / _imp->hbar;
     }
 
     double
-    LambdaBToLambdaCLeptonNeutrino::differential_a_fb_leptonic(const double & s) const
+    LambdaBToLambdaCLeptonNeutrino::differential_a_fb_leptonic(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).a_fb_leptonic();
+        return _imp->differential_angular_observables(q2).a_fb_leptonic();
     }
 
     double
-    LambdaBToLambdaCLeptonNeutrino::differential_a_fb_hadronic(const double & s) const
+    LambdaBToLambdaCLeptonNeutrino::differential_a_fb_hadronic(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).a_fb_hadronic();
+        return _imp->differential_angular_observables(q2).a_fb_hadronic();
     }
 
     double
-    LambdaBToLambdaCLeptonNeutrino::differential_a_fb_combined(const double & s) const
+    LambdaBToLambdaCLeptonNeutrino::differential_a_fb_combined(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).a_fb_combined();
+        return _imp->differential_angular_observables(q2).a_fb_combined();
     }
 
     double
-    LambdaBToLambdaCLeptonNeutrino::differential_fzero(const double & s) const
+    LambdaBToLambdaCLeptonNeutrino::differential_fzero(const double & q2) const
     {
-        return _imp->differential_angular_observables(s).f_zero();
-    }
-
-    double
-    LambdaBToLambdaCLeptonNeutrino::differential_ratio_tau_mu(const double &s) const
-    {
-        double br_tau;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            br_tau = this->differential_branching_ratio(s);
-        }
-
-        double br_mu;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            br_mu = this->differential_branching_ratio(s);
-        }
-
-        return br_tau / br_mu;
-    }
-
-    double
-    LambdaBToLambdaCLeptonNeutrino::differential_ratio_a_fb_hadronic_tau_mu(const double &s) const
-    {
-        double a_fb_hadronic_tau;
-        {
-            Save<Parameter,     double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            a_fb_hadronic_tau = this->differential_a_fb_hadronic(s);
-        }
-
-        double a_fb_hadronic_mu;
-        {
-            Save<Parameter,    double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            a_fb_hadronic_mu = this->differential_a_fb_hadronic(s);
-        }
-
-        return a_fb_hadronic_tau / a_fb_hadronic_mu;
+        return _imp->differential_angular_observables(q2).f_zero();
     }
 
     /* q^2-integrated observables */
+
     double
     LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
@@ -385,55 +453,6 @@ namespace eos
         return _imp->integrated_angular_observables(s_min, s_max).f_zero();
     }
 
-    //*
-    double
-    LambdaBToLambdaCLeptonNeutrino::integrated_ratio_tau_mu(const double & s_min_mu, const double & s_min_tau, const double & s_max_mu, const double & s_max_tau) const
-    {
-
-        double br_mu;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            Save<std::string> save_opt_l(_imp->opt_l._value, "mu");
-            
-            br_mu = this->integrated_branching_ratio(s_min_mu, s_max_mu);
-        }
-
-        double br_tau;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            Save<std::string> save_opt_l(_imp->opt_l._value, "tau");
-            
-            br_tau = this->integrated_branching_ratio(s_min_tau, s_max_tau);
-        }
-        
-        return br_tau / br_mu;
-    }
-
-    //*
-    double
-    LambdaBToLambdaCLeptonNeutrino::integrated_ratio_a_fb_hadronic_tau_mu(const double & s_min_mu, const double & s_min_tau, const double & s_max_mu, const double & s_max_tau) const
-    {
-
-        double integrated_a_fb_hadronic_mu;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            Save<std::string> save_opt_l(_imp->opt_l._value, "mu");
-            
-            integrated_a_fb_hadronic_mu = this->integrated_a_fb_hadronic(s_min_mu, s_max_mu);
-        }
-
-        double integrated_a_fb_hadronic_tau;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            Save<std::string> save_opt_l(_imp->opt_l._value, "tau");
-            
-            integrated_a_fb_hadronic_tau = this->integrated_a_fb_hadronic(s_min_tau, s_max_tau);
-        }
-
-        return integrated_a_fb_hadronic_tau / integrated_a_fb_hadronic_mu;
-    }
-
-    //*
     double
     LambdaBToLambdaCLeptonNeutrino::integrated_k1ss(const double & s_min, const double & s_max) const
     {
@@ -503,15 +522,13 @@ namespace eos
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k4s() / o.decay_width();
     }
-    //*
-
 
     const std::string
     LambdaBToLambdaCLeptonNeutrino::description = "\
     The decay Lambda_b -> Lambda_c l nu, where l=e,mu,tau is a lepton.";
 
     const std::string
-    LambdaBToLambdaCLeptonNeutrino::kinematics_description_s = "\
+    LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 = "\
     The invariant mass of the l-nubar pair in GeV^2.";
 
 }
