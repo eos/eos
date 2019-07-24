@@ -238,7 +238,7 @@ main(int argc, char * argv[])
                             if (qnx.suffix_part() < qny.suffix_part())
                                 return true;
                             else if (qny.suffix_part() < qnx.suffix_part())
-                                return true;
+                                return false;
 
                             return qnx.name_part() < qny.name_part();
                         }
