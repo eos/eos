@@ -64,38 +64,37 @@ class BsToKstarLeptonNeutrinoTest :
                 {
                     const double eps = 1e-4;
 
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(14.00, 19.21), -0.418740, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(14.00, 19.21) ,  0.346047, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(14.00, 19.21)    , -0.495774, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(14.00, 19.21)    ,  1.716900, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(14.00, 19.21)    ,  0.579048, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(14.00, 19.21)    ,  0.079527, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(14.00, 19.21)   , -0.853762, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(14.00, 19.21)   ,  0       , eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(14.00, 19.21)                       ,  0.996836, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(14.00, 19.21)                       , -0.994166, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(14.00, 19.21)                       , -0.983086, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(14.00, 19.21)                       ,  0       , eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(14.00, 19.21)                       , -0       , eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.4135349871, d.integrated_forward_backward_asymmetry(14.00, 19.21), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.3518246532, d.integrated_longitudinal_polarisation(14.00, 19.21),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.5011185215, d.integrated_transverse_asymmetry_2(14.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 1.7292976680, d.integrated_transverse_asymmetry_3(14.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.5748039652, d.integrated_transverse_asymmetry_4(14.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0794505257, d.integrated_transverse_asymmetry_5(14.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.8506648478, d.integrated_transverse_asymmetry_re(14.00, 19.21),    eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0,            d.integrated_transverse_asymmetry_im(14.00, 19.21),    eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.9969214819, d.integrated_h_1(14.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.9940071566, d.integrated_h_2(14.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.9829972541, d.integrated_h_3(14.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0,            d.integrated_h_4(14.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0,            d.integrated_h_5(14.00, 19.21),                        eps);
                 }
 
                 /* q^2 = [16.00, 19.21] */
                 {
                     const double eps = 1e-4;
-
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_forward_backward_asymmetry(16.00, 19.21), -0.400842, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_longitudinal_polarisation(16.00, 19.21) ,  0.333477, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_2(16.00, 19.21)    , -0.582726, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_3(16.00, 19.21)    ,  1.945210, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_4(16.00, 19.21)    ,  0.510689, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_5(16.00, 19.21)    ,  0.066059, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_re(16.00, 19.21)   , -0.801858, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_transverse_asymmetry_im(16.00, 19.21)   ,  0       , eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_1(16.00, 19.21)                       ,  0.998788, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_2(16.00, 19.21)                       , -0.993396, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_3(16.00, 19.21)                       , -0.986697, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_4(16.00, 19.21)                       ,  0       , eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.integrated_h_5(16.00, 19.21)                       , -0       , eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.3954967727, d.integrated_forward_backward_asymmetry(16.00, 19.21), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.3394169517, d.integrated_longitudinal_polarisation(16.00, 19.21),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.5876929534, d.integrated_transverse_asymmetry_2(16.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 1.9600282930, d.integrated_transverse_asymmetry_3(16.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.5067653631, d.integrated_transverse_asymmetry_4(16.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0658956517, d.integrated_transverse_asymmetry_5(16.00, 19.21),     eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.7982781751, d.integrated_transverse_asymmetry_re(16.00, 19.21),    eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0,            d.integrated_transverse_asymmetry_im(16.00, 19.21),    eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.9988251301, d.integrated_h_1(16.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.9932744499, d.integrated_h_2(16.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.9866443167, d.integrated_h_3(16.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0,            d.integrated_h_4(16.00, 19.21),                        eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0,            d.integrated_h_5(16.00, 19.21),                        eps);
                 }
             }
         }

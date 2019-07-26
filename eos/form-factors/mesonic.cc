@@ -59,6 +59,10 @@ namespace eos
     constexpr double BsToKstar::mR2_1m;
     constexpr double BsToKstar::mR2_1p;
 
+    constexpr double BsToDsstar::mR2_0m;
+    constexpr double BsToDsstar::mR2_1m;
+    constexpr double BsToDsstar::mR2_1p;
+
     /* For the values below, cf. [BZ2004], Table 8, p. 28 */
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_v_r1 = +0.923;
     template <> const double BZ2004FormFactors<BToKstar, PToV>::_v_r2 = -0.511;
@@ -157,6 +161,9 @@ namespace eos
             { KeyType("B_s->K^*::BFW2010"),    &BFW2010FormFactors<BsToKstar, PToV>::make          },
             { KeyType("B_s->K^*::FMvD2015"),   &FMvD2015FormFactors<BsToKstar>::make               },
             { KeyType("B_s->phi::BZ2004"),     &BZ2004FormFactors<BsToPhi, PToV>::make             },
+            { KeyType("B_s->K^*::BSZ2015"),    &BSZ2015FormFactors<BsToKstar,    PToV>::make       },
+            { KeyType("B_s->D_s^*::BSZ2015"),  &BSZ2015FormFactors<BsToDsstar,    PToV>::make      },
+            { KeyType("B_s->phi::BSZ2015"),    &BSZ2015FormFactors<BsToPhi,    PToV>::make         },
             // analytic computations
             { KeyType("B->K^*::B-LCSR"),       &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make   },
             { KeyType("B->D^*::B-LCSR"),       &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::make   },
@@ -332,10 +339,12 @@ namespace eos
             // b -> u
             { KeyType("B->pi::BCL2008"),      &BCL2008FormFactors<BToPi>::make                 },
             { KeyType("B->pi::BSZ2015"),      &BSZ2015FormFactors<BToPi, PToP>::make           },
+            { KeyType("B_s->K::BSZ2015"),     &BSZ2015FormFactors<BsToK, PToP>::make           },
             // b -> c
             { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD>::make                  },
             { KeyType("B->D::BSZ2015"),       &BSZ2015FormFactors<BToD, PToP>::make            },
             { KeyType("B->D::HQET"),          &HQETFormFactors<BToD, PToP>::make               },
+            { KeyType("B_s->D_s::BSZ2015"),   &BSZ2015FormFactors<BsToDs, PToP>::make          },
             // analytic computations
             { KeyType("B->pi::DKMMO2008"),    &AnalyticFormFactorBToPiDKMMO2008::make          },
             { KeyType("B->pi::B-LCSR"),       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make   },
@@ -364,6 +373,12 @@ namespace eos
 
     constexpr double BToD::m2_Br1m;
     constexpr double BToD::m2_Br0p;
+
+    constexpr double BsToK::m2_Br1m;
+    constexpr double BsToK::m2_Br0p;
+
+    constexpr double BsToDs::m2_Br1m;
+    constexpr double BsToDs::m2_Br0p;
 
     FormFactors<PToPP>::~FormFactors()
     {

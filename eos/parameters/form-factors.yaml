@@ -256,6 +256,47 @@ groups:
           min:     -4.2
           max:     -1.2
           comments: ''
+      # form factor parameters for B_s->K inspired by [BSZ2015]
+      'B_s->K::alpha^f+_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K::alpha^f+_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K::alpha^f+_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K::alpha^f0_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K::alpha^f0_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K::alpha^fT_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K::alpha^fT_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K::alpha^fT_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
       # form factor parameters for B->D from [BIvD2016] for [BCL2008] parametrization
       'B->D::f_+(0)@BCL2008' :
           central: +0.66
@@ -338,6 +379,47 @@ groups:
           central: +10.591752810763625
           min:     +10.591752810763625
           max:     +10.591752810763625
+          comments: ''
+      # form factor parameters for B_s->D_s inspired by [BSZ2015]
+      'B_s->D_s::alpha^f+_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s::alpha^f+_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s::alpha^f+_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s::alpha^f0_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s::alpha^f0_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s::alpha^fT_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s::alpha^fT_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s::alpha^fT_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
           comments: ''
   # }}}
 
@@ -531,6 +613,101 @@ groups:
           min:     -1.4
           max:     -1.4
           comments: ''
+      # form factor parameters for B_s->K^* inspired by [BSZ2015]
+      'B_s->K^*::alpha^A0_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^A0_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^A0_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^A1_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^A1_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^A1_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^A12_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^A12_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^V_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^V_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^V_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^T1_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^T1_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^T1_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^T2_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^T2_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^T23_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^T23_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->K^*::alpha^T23_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
       # form-factor parameters for B->rho
       # new updated results based on LCSR-only fit from the GKvD2018 calculation
       # note that no lattice results exists for B->rho FFs yet
@@ -727,6 +904,101 @@ groups:
           min:     +1.8831160249369858
           max:     +1.8831160249369858
           comments: ''
+      # form factor parameters for B_s->phi inspired by [BSZ2015]
+      'B_s->phi::alpha^A0_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^A0_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^A0_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^A1_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^A1_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^A1_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^A12_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^A12_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^V_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^V_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^V_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^T1_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^T1_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^T1_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^T2_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^T2_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^T23_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^T23_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->phi::alpha^T23_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
       # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
       # Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
       'B->D^*::alpha^A0_0@BSZ2015' :
@@ -824,6 +1096,101 @@ groups:
           min:     +4.667079193615467
           max:     +4.667079193615467
           comments: ''
+      # form factor parameters for B_s->D_s^* inspired by [BSZ2015]
+      'B_s->D_s^*::alpha^A0_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^A0_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^A0_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^A1_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^A1_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^A1_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^A12_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^A12_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^V_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^V_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^V_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^T1_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^T1_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^T1_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^T2_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^T2_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^T23_0@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^T23_1@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
+          comments: ''
+      'B_s->D_s^*::alpha^T23_2@BSZ2015' :
+          central:  0.0
+          min:      0.0
+          max:      0.0
   # }}}
 
   # Parameters in B -> P P Form Factor Parametrizations
