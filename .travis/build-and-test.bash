@@ -64,6 +64,7 @@ function ubuntu_deploy() {
         git config user.name  "EOS"
         git add --all
         git commit \
+            --allow-empty \
             -m "Updating documentation based on EOS revision ${EOS_GIT_REVISION}"
         git push
         popd
