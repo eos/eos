@@ -362,7 +362,7 @@ namespace eos
             double m_b_MSbar = model->m_b_msbar(mu), m_b_PS = model->m_b_ps(2.0), m_b_PS2 = m_b_PS * m_b_PS;
             double m_c_pole = model->m_c_pole();
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s("mu");
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu");
 
             complex<double> lambda_hat_u = model->ckm_ub() * conj(model->ckm_us()) / std::abs(model->ckm_tb() * conj(model->ckm_ts()));
             double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = std::sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = std::sqrt(s);
@@ -1023,7 +1023,7 @@ namespace eos
             lambdab_to_lambda_dilepton::Amplitudes result;
 
             double alpha_s = model->alpha_s(mu()), m_b = model->m_b_ps(2.0), m_c = model->m_c_msbar(mu());
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s("mu");
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu");
             complex<double> lambda_hat_u = model->ckm_ub() * conj(model->ckm_us()) / std::abs(model->ckm_tb() * conj(model->ckm_ts()));
             double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = std::sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = std::sqrt(s);
             double N = norm(s), kappa = this->kappa();

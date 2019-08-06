@@ -113,14 +113,11 @@ namespace eos
             UsedParameter _mu_0c__deltabs1;
             UsedParameter _mu_0t__deltabs1;
 
-            /* Renormalization scale */
-            UsedParameter _mu__deltabs1;
-
         public:
             SMComponent(const Parameters &, ParameterUser &);
 
             /* b->s Wilson coefficients */
-            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const std::string & lepton_flavour, const bool & cp_conjugate) const;
+            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const std::string & lepton_flavour, const bool & cp_conjugate) const;
     };
 
     template <> class SMComponent<components::DeltaBU1> :

@@ -137,7 +137,7 @@ namespace eos
     }
 
     WilsonCoefficients<BToS>
-    WilsonScanComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const std::string & lepton_flavour, const bool & cp_conjugate) const
+    WilsonScanComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const std::string & lepton_flavour, const bool & cp_conjugate) const
     {
         std::function<complex<double> ()> c9,  c9prime;
         std::function<complex<double> ()> c10, c10prime;

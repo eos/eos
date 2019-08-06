@@ -108,7 +108,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.29063621, real(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+1.01029623, real(wc.c2()),  eps);
@@ -166,7 +166,7 @@ class WilsonCoefficientsBToSTest :
 
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, wc._alpha_s, eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.29063621, real(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+1.01029623, real(wc.c2()),  eps);
@@ -197,7 +197,7 @@ class WilsonCoefficientsBToSTest :
                 TEST_CHECK_NEARLY_EQUAL(+0.0,        imag(wc.c9prime()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-M_PI,       imag(wc.c10prime()), eps);
 
-                wc = model.wilson_coefficients_b_to_s("e", false);
+                wc = model.wilson_coefficients_b_to_s(mu, "e", false);
                 TEST_CHECK_NEARLY_EQUAL(+3.27,       real(wc.c9()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.007,      real(wc.c9prime()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(+0.006,      real(wc.c10prime()), eps);
@@ -218,6 +218,7 @@ class ConstrainedWilsonScanModelTest:
 
         virtual void run() const
         {
+            static const double mu  = 4.2; // approximate value of the b quark mass in the MSbar scheme
             static const double eps = 1e-15;
 
             /* Vary parameters that should be ignored */
@@ -234,7 +235,7 @@ class ConstrainedWilsonScanModelTest:
                 p["b->smumu::Re{cT}"] = 2.0;
                 p["b->smumu::Re{cT5}"] = -43.0;
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
 
                 TEST_CHECK_RELATIVE_ERROR(std::real(wc.c7()),  1.008, eps);
 
@@ -290,7 +291,7 @@ class ConstrainedWilsonScanModelTest:
                 p["b->smumu::Re{cT5}"] = -43.0;
                 p["b->smumu::Im{cT5}"] = M_PI;
 
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s("mu", false);
+                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
 
                 TEST_CHECK_RELATIVE_ERROR(real(wc.c7()),      1.008, eps);
 
@@ -347,8 +348,8 @@ class ConstrainedWilsonScanModelTest:
                 ConstrainedWilsonScanModel constrained_model(p, o);
                 WilsonScanModel unconstrained_model(p, o);
 
-                WilsonCoefficients<BToS> constrained_wc = constrained_model.wilson_coefficients_b_to_s("mu", false);
-                WilsonCoefficients<BToS> unconstrained_wc = constrained_model.wilson_coefficients_b_to_s("mu", false);
+                WilsonCoefficients<BToS> constrained_wc = constrained_model.wilson_coefficients_b_to_s(mu, "mu", false);
+                WilsonCoefficients<BToS> unconstrained_wc = constrained_model.wilson_coefficients_b_to_s(mu, "mu", false);
 
                 auto ux = unconstrained_wc._sm_like_coefficients.begin();
                 for (auto & x : constrained_wc._sm_like_coefficients)
