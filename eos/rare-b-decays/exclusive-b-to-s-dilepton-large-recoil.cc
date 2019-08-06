@@ -210,7 +210,7 @@ namespace eos
             std::cout << "lam_up    = " << (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts())) << std::endl;
             std::cout << "xi_par(3) = " << xi_par(3.0) << std::endl;
             std::cout << "xi_perp(3)= " << xi_perp(3.0) << std::endl;
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s();
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu());
             std::cout << "C9       = " << wc.c9() << std::endl;
             std::cout << "C10      = " << wc.c10() << std::endl;
             std::cout << "C9 - C10 = " << wc.c9() - wc.c10() << std::endl;
@@ -231,7 +231,7 @@ namespace eos
 
         WilsonCoefficients<BToS> wilson_coefficients() const
         {
-            return model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            return model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
         }
 
         struct DipoleFormFactors
@@ -2279,7 +2279,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
 
         WilsonCoefficients<BToS> wilson_coefficients() const
         {
-            return model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            return model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
         }
 
         complex<double> calT(const double & s) const

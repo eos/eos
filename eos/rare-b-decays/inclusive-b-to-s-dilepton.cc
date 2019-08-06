@@ -299,7 +299,7 @@ namespace eos
             //double u2 = 27.1 + 23.0 / 3.0 * u1 * log(mu / m_b);
             //double uem = 12.0 / 23.0 * (model->alpha_s(m_Z) / alpha_s - 1.0);
 
-            WilsonCoefficients<BToS> w = model->wilson_coefficients_b_to_s("mu" /* fake lepton flavour */);
+            WilsonCoefficients<BToS> w = model->wilson_coefficients_b_to_s(mu(), "mu" /* fake lepton flavour */);
 
             // cf. [HLMW2005], Eq. (69), p. 16
             complex<double> c7eff = w.c7() - w.c3() / 3.0 - 4.0 * w.c4() / 9.0 - 20.0 * w.c5() / 3.0 - 80.0 * w.c6() / 9.0;

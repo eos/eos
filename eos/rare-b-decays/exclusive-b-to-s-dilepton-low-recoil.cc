@@ -167,28 +167,28 @@ namespace eos
 
         double rho_1(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
 
             return std::norm(c9eff(wc, s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(wc, s)) + std::norm(wc.c10());
         }
 
         double rho_2(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
 
             return real((c9eff(wc, s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(wc, s)) * conj(wc.c10()));
         }
 
         complex<double> rho_L(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
 
             return c9eff(wc, s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(wc, s) - wc.c10();
         }
 
         complex<double> rho_R(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
 
             return c9eff(wc, s) + kappa() * (2.0 * m_b_MSbar * m_B / s) * c7eff(wc, s) + wc.c10();
         }
@@ -225,7 +225,7 @@ namespace eos
             // TODO: possibly optimize the calculation
             Amplitudes result;
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
 
             const double m_B2 = m_B * m_B, m_Kstar2 = m_Kstar * m_Kstar, m2_diff = m_B2 - m_Kstar2;
             const double m_Kstarhat = m_Kstar / m_B;
@@ -340,7 +340,7 @@ namespace eos
         // Quantity Y = Y_9 + lambda_u_hat Y_9^u + kappa_hat Y_7, the strong phase contributor of the amplitudes
         complex<double> Y(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
 
             return (c9eff(wc, s) - wc.c9()) + kappa() * (c7eff(wc, s) - wc.c7()) * (2.0 * m_b_MSbar * m_B / s);
         }
@@ -458,7 +458,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::real_c9eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->lepton_flavour, _imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->mu(), _imp->lepton_flavour, _imp->cp_conjugate);
 
         return real(_imp->c9eff(wc, s));
     }
@@ -466,7 +466,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::imag_c9eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->lepton_flavour, _imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->mu(), _imp->lepton_flavour, _imp->cp_conjugate);
 
         return imag(_imp->c9eff(wc, s));
     }
@@ -474,7 +474,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::real_c7eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->lepton_flavour, _imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->mu(), _imp->lepton_flavour, _imp->cp_conjugate);
 
         return real(_imp->c7eff(wc, s));
     }
@@ -482,7 +482,7 @@ namespace eos
     double
     BToKstarDilepton<LowRecoil>::imag_c7eff(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->lepton_flavour, _imp->cp_conjugate);
+        WilsonCoefficients<BToS> wc = _imp->model->wilson_coefficients_b_to_s(_imp->mu(), _imp->lepton_flavour, _imp->cp_conjugate);
 
         return imag(_imp->c7eff(wc, s));
     }
@@ -1587,7 +1587,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
 
         WilsonCoefficients<BToS> wilson_coefficients() const
         {
-            return model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            return model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
         }
 
         // We use the PS mass except for kappa
@@ -1750,7 +1750,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
 
         double unnormalized_decay_width(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
 
             return 2.0 * (a_l(wc, s) + c_l(wc, s) / 3.0);
         }
@@ -1762,14 +1762,14 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
 
         double differential_flat_term_numerator(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
 
             return 2.0 * (a_l(wc, s) + c_l(wc, s));
         }
 
         double differential_forward_backward_asymmetry_numerator(const double & s) const
         {
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(lepton_flavour, cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
 
             return b_l(wc, s);
         }

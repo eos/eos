@@ -439,8 +439,7 @@ namespace implementation
         _m_W__deltabs1(p["mass::W"], u),
         _m_Z__deltabs1(p["mass::Z"], u),
         _mu_0c__deltabs1(p["b->s::mu_0c"], u),
-        _mu_0t__deltabs1(p["b->s::mu_0t"], u),
-        _mu__deltabs1(p["mu"], u)
+        _mu_0t__deltabs1(p["b->s::mu_0t"], u)
     {
     }
 
@@ -550,7 +549,7 @@ namespace implementation
 }
 
     WilsonCoefficients<BToS>
-    SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const std::string & /*lepton_flavour*/, const bool & /*cp_conjugate*/) const
+    SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const std::string & /*lepton_flavour*/, const bool & /*cp_conjugate*/) const
     {
         /*
          * In the SM all Wilson coefficients are real-valued -> all weak phases are zero.
@@ -561,10 +560,10 @@ namespace implementation
 
         // Calculation according to [BMU1999], Eq. (25), p. 7
 
-        if (_mu__deltabs1 >= _mu_t__deltabs1)
+        if (mu >= _mu_t__deltabs1)
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_b_to_s: Evolution to mu >= mu_t is not yet implemented!");
 
-        if (_mu__deltabs1 <= _mu_c__deltabs1)
+        if (mu <= _mu_c__deltabs1)
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_b_to_s: Evolution to mu <= mu_c is not yet implemented!");
 
         // only evolve the wilson coefficients for 5 active flavors
@@ -575,14 +574,14 @@ namespace implementation
         const double alpha_s_mu_0t = QCD::alpha_s(_mu_0t__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
 
         double alpha_s = 0.0;
-        if (_mu__deltabs1 < _mu_b__deltabs1)
+        if (mu < _mu_b__deltabs1)
         {
             alpha_s = QCD::alpha_s(_mu_b__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
-            alpha_s = QCD::alpha_s(_mu__deltabs1, alpha_s, _mu_b__deltabs1, QCD::beta_function_nf_4);
+            alpha_s = QCD::alpha_s(mu, alpha_s, _mu_b__deltabs1, QCD::beta_function_nf_4);
         }
         else
         {
-            alpha_s = QCD::alpha_s(_mu__deltabs1, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
+            alpha_s = QCD::alpha_s(mu, _alpha_s_Z__deltabs1, _m_Z__deltabs1, QCD::beta_function_nf_5);
         }
 
         double alpha_s_m_t_pole = 0.0;
