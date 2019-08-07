@@ -22,6 +22,15 @@ B->D^*::A_1[s_max]@HPQCD-2017:
     sigma-stat: {hi: 0.00893455, lo: -0.00893455}
     sigma-sys:  {hi: 0.0214429,  lo: -0.0214429}
     dof: 1
+B->D^*::A_1[s_max]@HFLAV-2019:
+    type: Gaussian
+    observable: B->D^*::A_1(q2)
+    kinematics: {q2: 10.68}
+    options: {form-factors: BSZ2015}
+    mean: 0.807973
+    sigma-stat: {hi: 0.0107253,  lo: -0.0107253}
+    sigma-sys:  {hi: 0.0,        lo: -0.0      }
+    dof: 1
 B->D^*::A_1@FKKM2008:
   type: Gaussian
   observable: 'B->D^*::A_1(q2)'
