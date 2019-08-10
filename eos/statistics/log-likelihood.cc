@@ -1378,7 +1378,11 @@ namespace eos
             {
                 for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
                 {
-                    result += (*b)->evaluate();
+                    double llh = (*b)->evaluate();
+                    if (! std::isfinite(llh))
+                        return llh;
+
+                    result += llh;
                 }
             }
 
