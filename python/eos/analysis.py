@@ -61,6 +61,7 @@ class Analysis:
 
     def __init__(self, priors, likelihood, global_options=None):
         """Constructor."""
+        self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options }
         self.parameters = eos.Parameters.Defaults()
         self.global_options = eos.Options()
         self.log_likelihood = eos.LogLikelihood(self.parameters)
@@ -113,6 +114,9 @@ class Analysis:
         for n in varied_parameter_names - used_parameter_names:
             warn('likelihood does not depend on parameter \'{}\'; remove from prior or check options!'.format(n))
 
+    def clone(self):
+        """Returns an independent instance of eos.Analysis."""
+        return eos.Analysis(**self.init_args)
 
     def goodness_of_fit(self):
         """Returns a goodness-of-fit summary for the current parameter point."""
