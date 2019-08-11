@@ -1,5 +1,23 @@
 # vim: set fdm=marker :
 
+#########
+# ATLAS #
+#########
+#
+# 2018
+#
+# {{{
+B^0_s->mu^+mu^-::BR@ATLAS-2018A:
+    type: Gaussian
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: s}
+    mean: 2.8e-9
+    sigma-stat: { hi: 0.8e-9, lo: 0.7e-9 }
+    sigma-sys: { hi: 0.0e-9, lo: 0.0e-9 }
+    dof: 1
+# }}}
+
 #######
 # CMS #
 #######
