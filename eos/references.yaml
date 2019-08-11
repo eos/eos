@@ -7,6 +7,12 @@
     title: "Angular Analysis of B_d ---> K^*0 mu^+ mu^- with the ATLAS experiment"
     eprint: ["ATLAS-CONF-2013-038", "ATLAS-COM-CONF-2013-043"]
 
+"ATLAS:2018A" :
+    collaboration: "ATLAS"
+    title: "Study of the rare decays of B0s and B0 mesons into muon pairs using data collected during 2015 and 2016 with the ATLAS detector"
+    journal: "JHEP 04 (2019) 098"
+    eprint: "arXiv:1812.03017 [hep-ex]"
+
 "BaBar:2004A" :
     authors: "Aubert, B. et al."
     collaboration: "BABAR"
