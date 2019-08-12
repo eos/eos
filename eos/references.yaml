@@ -772,6 +772,11 @@
     authors: "Peskin, M. and Schroeder, D."
     title: "An Introduction to Quantum Field Theory"
 
+"S1982" :
+    authors: "Sirlin, A."
+    title: "Large M_W and M_Z behaviour of the order alpha corrections to semileptonic processes mediated by W"
+    journal: "Nucl.Phys. B196 (1982) 83-92"
+
 "S2004" :
     authors: "Seidel, D."
     title: "Analytic two-loop virtual corrections to b -> d l^+ l^-"

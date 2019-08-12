@@ -104,7 +104,9 @@ namespace eos
             double v = (1.0 - m_l * m_l / s);
             double v2 = v * v;
             double ml_hat = sqrt(1.0 - v);
-            double nD = v2 * m_B * s * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI * m_B));
+            // universal electroweak correction, cf. [S1982]
+            double etaEW = 1.0066;
+            double nD = v2 * m_B * s * power_of<2>(g_fermi() * etaEW) / (256.0 * power_of<3>(M_PI * m_B));
             // NP contributions in EFT including tensor operator (cf. [DSD2014]). (in SM cvl=1, and all other couplings are zero)
             const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
             const complex<double> vl = wc.cvl() - 1.0;
@@ -147,7 +149,9 @@ namespace eos
             double v = (1.0 - m_l * m_l / s);
             double v2 = v * v;
             double ml_hat = sqrt(1.0 - v);
-            double nD = v2 * m_B * s * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI * m_B));
+            // universal electroweak correction, cf. [S1982]
+            double etaEW = 1.0066;
+            double nD = v2 * m_B * s * power_of<2>(g_fermi() * etaEW) / (256.0 * power_of<3>(M_PI * m_B));
             // NP contributions in EFT including tensor operator (cf. [DSD2014]). (in SM cvl=1, and all other couplings are zero)
             const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
             const complex<double> vl = wc.cvl() - 1.0;
@@ -186,7 +190,9 @@ namespace eos
             double v = (1.0 - m_l * m_l / s);
             double v2 = v * v;
             double ml_hat = sqrt(1.0 - v);
-            double nD = v2 * m_B * s * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI * m_B));
+            // universal electroweak correction, cf. [S1982]
+            double etaEW = 1.0066;
+            double nD = v2 * m_B * s * power_of<2>(g_fermi() * etaEW) / (256.0 * power_of<3>(M_PI * m_B));
             // NP contributions in EFT including tensor operator (cf. [DSD2014]). (in SM cvl=1, and all other couplings are zero)
             const WilsonCoefficients<BToC> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
             const complex<double> vl = wc.cvl() - 1.0;
