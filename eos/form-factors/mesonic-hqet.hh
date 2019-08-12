@@ -166,9 +166,8 @@ namespace eos
             inline double _mu() const { return 2.31; } // mu^2 = m_b * m_c
             inline double _alpha_s() const { return 0.26; }
             inline double _m_b_1S() const { return 4.71; }
-            inline double _m_c_1S() const { return 1.38; }
             inline double _m_b_pole() const { return _m_b_1S() * (1 + 2.0 / 9.0 * power_of<2>(_alpha_s())); }
-            inline double _m_c_pole() const { return _m_c_1S() * (1 + 2.0 / 9.0 * power_of<2>(_alpha_s())); }
+            inline double _m_c_pole() const { return _m_b_pole() - 3.40; }
             inline double _lambda_1() const { return -0.30; }
             inline double _LambdaBar() const { return 5.313 - _m_b_pole() + _lambda_1() / (2.0 * _m_b_1S()); }
 
