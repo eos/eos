@@ -238,8 +238,10 @@ namespace eos
             double v    = (1.0 - m_l * m_l / s);
             double lam  = lambda(m_B * m_B, m_Dstar * m_Dstar, s);
             double p    = std::sqrt(lam) / (2.0 * m_B);
+            // universal electroweak correction, cf. [S1982]
+            double etaEW = 1.0066;
             // normalized prefactor (|Vcb|^2=1)
-            return power_of<2>(g_fermi()) * p * s * power_of<2>(v) / (3.0 * 64.0 * power_of<3>(M_PI) * m_B * m_B);
+            return power_of<2>(g_fermi() * etaEW) * p * s * power_of<2>(v) / (3.0 * 64.0 * power_of<3>(M_PI) * m_B * m_B);
         }
 
         b_to_dstar_l_nu::Amplitudes amplitudes(const double & s)
