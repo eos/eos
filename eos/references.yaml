@@ -140,6 +140,12 @@
     journal: "Phys.Rev. D93 (2016) no.3, 032006"
     eprint: "arXiv:1510.03657 [hep-ex]"
 
+"Belle:2017A" :
+    authors: "Abdesselam, A. and others"
+    collaboration: "BELLE"
+    title: "Precise determination of the CKM matrix element $\\left| V_{cb}\\right|$ with $\\bar B^0 \\to D^{*+} \\ell^- \\bar \\nu_\\ell$ decays with hadronic tagging at Belle"
+    eprint: "1702.01521"
+
 "CDF:2011A" :
     authors: "Aaltonen, T. et al."
     collaboration: "CDF"
