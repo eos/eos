@@ -688,6 +688,7 @@ class Plotter:
                 if yvariable not in datafile.variable_indices:
                     raise ValueError('x variable {} not contained in data file'.format(variable))
 
+                stride = item['stride'] if 'stride' in item else 1
                 data   = datafile.data()
                 xindex = datafile.variable_indices[xvariable]
                 xdata  = data[::stride, xindex]
