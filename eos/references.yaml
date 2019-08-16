@@ -190,6 +190,11 @@
     title: "Search and measurement of the B -> mu^+mu^- rare processes with LHC Run I data "
     journal: "Nucl.Part.Phys.Proc. 273-275 (2016) 1308-1313"
 
+"CMS:2019A" :
+    collaboration: "CMS"
+    title: "Measurement of properties of B_s^0 to mu^+mu^- decays and search for B^0 to mu^+mu^- with the CMS experiment"
+    eprint: "CMS-PAS-BPH-16-004"
+
 "D0:2011A" :
     authors: "Abazov, V.M. et al."
     collaboration: "D0"
