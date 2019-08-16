@@ -49,6 +49,20 @@ B^0_s->mu^+mu^-::BR@CMS-2016A:
     sigma-sys: { hi: 0.0e-9, lo: 0.0e-9 }
     dof: 1
 # }}}
+#
+# 2019
+#
+# {{{
+B^0_s->mu^+mu^-::BR@CMS-2019A:
+    type: Gaussian
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: s}
+    mean: 2.9e-9
+    sigma-stat: { hi: 0.7e-9, lo: 0.6e-9 }
+    sigma-sys: { hi: 0.2e-9, lo: 0.2e-9 }
+    dof: 1
+# }}}
 
 ##############
 # CMS + LHCb #
