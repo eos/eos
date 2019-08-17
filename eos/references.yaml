@@ -146,6 +146,12 @@
     title: "Precise determination of the CKM matrix element $\\left| V_{cb}\\right|$ with $\\bar B^0 \\to D^{*+} \\ell^- \\bar \\nu_\\ell$ decays with hadronic tagging at Belle"
     eprint: "1702.01521"
 
+"Belle:20178" :
+    authors: "Abdesselam, A. and others"
+    collaboration: "BELLE"
+    title: "Measurement of CKM Matrix Element $|V_{cb}|$ from $\\bar{B} \to D^{*+} \\ell^{-} \\bar{\\nu}_\\ell$"
+    eprint: "1809.03290"
+
 "CDF:2011A" :
     authors: "Aaltonen, T. et al."
     collaboration: "CDF"
