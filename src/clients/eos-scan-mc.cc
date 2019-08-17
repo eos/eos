@@ -887,6 +887,22 @@ int main(int argc, char * argv[])
         if (inst->goodness_of_fit)
         {
             inst->log_posterior.goodness_of_fit(inst->best_fit_point, 1e5, inst->mcmc_config.output_file);
+            auto gof = GoodnessOfFit(CommandLine::instance()->log_posterior);
+            Log::instance()->message("eos-scan-mc", ll_informational)
+                << "Goodness-of-Fit summary";
+            for (auto c = gof.begin_chi_square(), c_end = gof.end_chi_square() ; c != c_end ; ++c)
+            {
+                Log::instance()->message("eos-scan-mc", ll_informational)
+                    << "  " << c->first << " : chi^2 = " << c->second.chi2;
+            }
+            Log::instance()->message("eos-scan-mc", ll_informational)
+                << "----------------";
+            Log::instance()->message("eos-scan-mc", ll_informational)
+                << " total chi^2  = " << gof.total_chi_square();
+            Log::instance()->message("eos-scan-mc", ll_informational)
+                << " total d.o.f. = " << gof.total_degrees_of_freedom();
+            Log::instance()->message("eos-scan-mc", ll_informational)
+                << " p value      = " << gsl_cdf_chisq_Q(gof.total_chi_square(), gof.total_degrees_of_freedom());
 
             return EXIT_SUCCESS;
         }
