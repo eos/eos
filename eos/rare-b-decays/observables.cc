@@ -1237,139 +1237,139 @@ namespace eos
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k4s,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_1@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_1@LowRecoil", R"(M_1)",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m1,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_2@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_2@LowRecoil", R"(M_2)",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m2,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_3@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_3@LowRecoil", R"(M_3)",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m3,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_4@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_4@LowRecoil", R"(M_4)",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m4,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_5@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_5@LowRecoil", R"(M_5)",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m5,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_6@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_6@LowRecoil", R"(M_6)",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m6,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_7@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_7@LowRecoil", R"(M_7)",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m7,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_8@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_8@LowRecoil", R"(M_8)",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m8,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_9@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_9@LowRecoil", R"(M_9)",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m9,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_10@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_10@LowRecoil", R"(M_{10})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m10,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_11@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_11@LowRecoil", R"(M_{11})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m11,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_12@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_12@LowRecoil", R"(M_{12})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m12,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_13@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_13@LowRecoil", R"(M_{13})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m13,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_14@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_14@LowRecoil", R"(M_{14})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m14,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_15@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_15@LowRecoil", R"(M_{15})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m15,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_16@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_16@LowRecoil", R"(M_{16})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m16,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_17@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_17@LowRecoil", R"(M_{17})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m17,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_18@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_18@LowRecoil", R"(M_{18})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m18,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_19@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_19@LowRecoil", R"(M_{19})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m19,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_20@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_20@LowRecoil", R"(M_{20})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m20,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_21@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_21@LowRecoil", R"(M_{21})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m21,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_22@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_22@LowRecoil", R"(M_{22})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m22,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_23@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_23@LowRecoil", R"(M_{23})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m23,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_24@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_24@LowRecoil", R"(M_{24})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m24,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_25@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_25@LowRecoil", R"(M_{25})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m25,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_26@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_26@LowRecoil", R"(M_{26})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m26,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_27@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_27@LowRecoil", R"(M_{27})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m27,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_28@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_28@LowRecoil", R"(M_{28})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m28,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_29@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_29@LowRecoil", R"(M_{29})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m29,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_30@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_30@LowRecoil", R"(M_{30})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m30,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_31@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_31@LowRecoil", R"(M_{31})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m31,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_32@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_32@LowRecoil", R"(M_{32})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m32,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_33@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_33@LowRecoil", R"(M_{33})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m33,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::M_34@LowRecoil",
+                make_observable("Lambda_b->Lambdall::M_34@LowRecoil", R"(M_{34})",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m34,
                         std::make_tuple("q2_min", "q2_max")),
             }
