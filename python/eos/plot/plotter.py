@@ -538,6 +538,96 @@ class Plotter:
                 self.label = None
 
 
+    """ Plots overview of several constraints from the EOS library of experimental and theoretical likelihoods. """
+    class ConstraintOverview(BasePlot):
+        def __init__(self, plotter, item):
+            import yaml
+
+            super().__init__(plotter, item)
+
+            if 'constraints' not in item:
+                raise KeyError('no constraints specified')
+
+            # extract information
+            self.names            = item['constraints']
+            self.constraints      = []
+
+            if type(self.names) == str:
+                self.names = [self.names]
+
+            constraints = eos.Constraints()
+
+            for name in self.names:
+                entry = constraints[name]
+                if not entry:
+                    raise ValueError('unknown constraint {}'.format(name))
+
+                constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
+                self.constraints.append(constraint)
+
+        def plot(self):
+            xvalues     = []
+            xticklabels = []
+            yvalues     = []
+            yerrors     = []
+            idx = 0
+            for constraint in self.constraints:
+                if constraint['type'] == 'Gaussian':
+                    sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2) / width
+                    sigma_lo = np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2) / width
+                    latex = '$' + eos.Observables()[constraint['observable']].latex() + '$'
+                    xvalues.append(idx)
+                    xticklabels.append(latex)
+                    yvalues.append(constraint['mean'])
+                    yerrors.append([sigma_hi, sigma_lo])
+                    idx = idx + 1
+                elif constraint['type'] == 'MultivariateGaussian(Covariance)':
+                    dim         = constraint['dim']
+                    observables = constraint['observables']
+                    kinematics  = constraint['kinematics']
+                    options     = constraint['options']
+                    covariance  = np.array(constraint['covariance'])
+                    means       = constraint['means']
+
+                    for i in range(0, dim):
+                        latex = '$' + eos.Observables()[observables[i]].latex() + '$'
+                        sigma = np.sqrt(covariance[i, i])
+                        xvalues.append(idx)
+                        xticklabels.append(latex)
+                        yvalues.append(means[i])
+                        yerrors.append([sigma, sigma])
+                        idx = idx + 1
+                elif constraint['type'] == 'MultivariateGaussian':
+                    dim = constraint['dim']
+                    observables = constraint['observables']
+                    sigma_stat_hi = np.array(constraint['sigma-stat-hi'])
+                    sigma_stat_lo = np.array(constraint['sigma-stat-lo'])
+                    sigma_sys = np.array(constraint['sigma-sys'])
+                    sigma = np.sqrt(np.power(sigma_sys, 2) + 0.25 * np.power(sigma_stat_hi + sigma_stat_lo, 2))
+                    means = constraint['means']
+
+                    for i in range(0, dim):
+                        latex = '$' + eos.Observables()[observables[i]].latex() + '$'
+                        xvalues.append(idx)
+                        xticklabels.append(latex)
+                        yvalues.append(means[i])
+                        yerrors.append(sigma[i])
+                        idx = idx + 1
+                else:
+                    raise ValueError('type of constraint presently not supported')
+
+            xvalues = np.array(xvalues)
+            yvalues = np.array(yvalues)
+            yerrors = np.array(yerrors)
+
+            self.plotter.ax.tick_params(axis='x', which='minor', bottom=False)
+            plt.xticks(xvalues, xticklabels, rotation='vertical')
+            plt.errorbar(x=xvalues, y=yvalues, xerr=None, yerr=yerrors.T,
+                color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
+            plt.margins(0.2)
+            # Tweak spacing to prevent clipping of tick-labels
+            plt.subplots_adjust(bottom=0.15)
+
 
     """ Plots 2D contours of a pair of parameters based on pre-existing random samples. """
     class Contours2D(BasePlot):
@@ -906,19 +996,20 @@ class Plotter:
             return
 
         plot_types = {
-            'band':               Plotter.Band,
-            'constraint':         Plotter.Constraint,
-            'contours2D':         Plotter.Contours2D,
-            'expression':         Plotter.Expression,
-            'histogram':          Plotter.Histogram1D,
-            'histogram2D':        Plotter.Histogram2D,
-            'kde':                Plotter.KernelDensityEstimate1D,
-            'kde2D':              Plotter.KernelDensityEstimate2D,
-            'observable':         Plotter.Observable,
-            'point':              Plotter.Point,
-            'uncertainty':        Plotter.Uncertainty,
-            'uncertainty-binned': Plotter.UncertaintyBinned,
-            'watermark':          Plotter.Watermark,
+            'band':                  Plotter.Band,
+            'constraint':            Plotter.Constraint,
+            'constraint-overview':   Plotter.ConstraintOverview,
+            'contours2D':            Plotter.Contours2D,
+            'expression':            Plotter.Expression,
+            'histogram':             Plotter.Histogram1D,
+            'histogram2D':           Plotter.Histogram2D,
+            'kde':                   Plotter.KernelDensityEstimate1D,
+            'kde2D':                 Plotter.KernelDensityEstimate2D,
+            'observable':            Plotter.Observable,
+            'point':                 Plotter.Point,
+            'uncertainty':           Plotter.Uncertainty,
+            'uncertainty-binned':    Plotter.UncertaintyBinned,
+            'watermark':             Plotter.Watermark,
         }
 
         contents = self.instructions['contents']
