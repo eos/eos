@@ -407,6 +407,46 @@ class Plotter:
                 plt.plot([xmin, xmax], [ohi,      ohi],      color=color, alpha=alpha)
 
 
+    """ Plots an overview of uncertainty estimates.
+
+    This routine expects the uncertainty propagation to have produced an HDF5 file.
+    """
+    class UncertaintyOverview(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+            if 'hdf5-file' not in item:
+                raise KeyError('hdf5-file not specified')
+
+            if 'observables' not in item:
+                raise KeyError('observables not specified')
+
+            h5fname = item['hdf5-file']
+            info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
+            uncfile = eos.data.UncertaintyDataFile(h5fname)
+
+            self.observables    = item['observables']
+            self.observable_map = {}
+            for idx, p in enumerate(uncfile.parameters):
+                name = p[0].decode('ascii')
+                self.observable_map[name] = idx
+
+            for observable in self.observables:
+                if observable not in self.observable_map:
+                    raise ValueError('observable \'{}\' not contained in HDF5 file'.format(observable))
+
+            self.samples = uncfile.data()
+
+        def plot(self):
+            for xvalue, observable in enumerate(self.observables):
+                data_idx = self.observable_map[observable]
+                lower    = np.percentile(self.samples[:, data_idx], q=15.865)
+                upper    = np.percentile(self.samples[:, data_idx], q=84.135)
+
+                self.plotter.ax.fill_between([xvalue - 0.5, xvalue + 0.5], [lower, lower], [upper, upper], alpha=self.alpha, color=self.color, label=self.label, lw=0)
+                self.label = None
+
+
     """ Plots constraints from the EOS library of experimental and theoretical likelihoods. """
     class Constraint(BasePlot):
         def __init__(self, plotter, item):
@@ -1009,6 +1049,7 @@ class Plotter:
             'point':                 Plotter.Point,
             'uncertainty':           Plotter.Uncertainty,
             'uncertainty-binned':    Plotter.UncertaintyBinned,
+            'uncertainty-overview':  Plotter.UncertaintyOverview,
             'watermark':             Plotter.Watermark,
         }
 
