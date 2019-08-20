@@ -1092,7 +1092,9 @@ class Plotter:
                     add_handles, add_labels = plot.handles_labels()
                     handles = handles + add_handles
                     labels  = labels  + add_labels
-                self.ax.legend(handles, labels, loc=self.instructions['plot']['legend']['location'])
+                loc  = self.instructions['plot']['legend']['location']
+                ncol = self.instructions['plot']['legend']['columns'] if 'columns' in self.instructions['plot']['legend'] else 1
+                self.ax.legend(handles, labels, loc=loc, ncol=ncol)
 
 
     """ Produces the plot. """
