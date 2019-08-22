@@ -100,6 +100,60 @@ class BToDLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 11.643), 13.462, eps);
             }
 
+            // comparison with Martin Jung in 3/2/1 model
+            {
+                Parameters p = Parameters::Defaults();
+
+                p["B(*)->D(*)::xi'(1)@HQET"].set(-1.06919);
+                p["B(*)->D(*)::xi''(1)@HQET"].set(1.66581);
+                p["B(*)->D(*)::xi'''(1)@HQET"].set(-2.91356);
+                p["B(*)->D(*)::chi_2(1)@HQET"].set(-0.0600518);
+                p["B(*)->D(*)::chi_2'(1)@HQET"].set(-0.0000101998);
+                p["B(*)->D(*)::chi_2''(1)@HQET"].set(-0.085385);
+                p["B(*)->D(*)::chi_3'(1)@HQET"].set(0.0400584);
+                p["B(*)->D(*)::chi_3''(1)@HQET"].set(-0.0522346);
+                p["B(*)->D(*)::eta(1)@HQET"].set(0.586099);
+                p["B(*)->D(*)::eta'(1)@HQET"].set(-0.0233426);
+                p["B(*)->D(*)::eta''(1)@HQET"].set(-0.0288193);
+                p["B(*)->D(*)::l_1(1)@HQET"].set(0.113962);
+                p["B(*)->D(*)::l_1'(1)@HQET"].set(-8.15957);
+                p["B(*)->D(*)::l_2(1)@HQET"].set(-1.90706);
+                p["B(*)->D(*)::l_2'(1)@HQET"].set(-3.16227);
+                p["B(*)->D(*)::l_3(1)@HQET"].set(-3.41861);
+                p["B(*)->D(*)::l_3'(1)@HQET"].set(5.6966);
+                p["B(*)->D(*)::l_4(1)@HQET"].set(-1.89465);
+                p["B(*)->D(*)::l_4'(1)@HQET"].set(0.220492);
+                p["B(*)->D(*)::l_5(1)@HQET"].set(4.97017);
+                p["B(*)->D(*)::l_5'(1)@HQET"].set(-2.34767);
+                p["B(*)->D(*)::l_6(1)@HQET"].set(1.98608);
+                p["B(*)->D(*)::l_6'(1)@HQET"].set(1.42747);
+
+                p["CKM::abs(V_cb)"].set(1.0);
+                p["mass::e"].set(0.000001);
+                p["B(*)->D(*)::a@HQET"].set(1.000);
+                p["mass::B_d"].set(5.27942);
+                p["mass::D_u"].set(1.86723);
+                p["mass::D_d"].set(1.86723);
+                p["mass::D^*_u"].set(2.01000);
+                p["mass::D^*_d"].set(2.01000);
+                p["life_time::B_d"].set(1.520e-12);
+
+                Options o{
+                    { "l",             "tau"     },
+                    { "model",         "CKMScan" },
+                    { "q",             "d"       },
+                    { "z-order-lp",    "3"       },
+                    { "z-order-slp",   "2"       },
+                    { "z-order-sslp",  "1"       },
+                    { "form-factors",  "HQET"    }
+                };
+
+                BToDLeptonNeutrino d(p, o);
+
+                const double eps = 1e-3;
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_lepton_polarization(3.157, 11.643), -0.320914, eps);
+            }
+
             // SM tests
             {
                 Parameters p1 = Parameters::Defaults();

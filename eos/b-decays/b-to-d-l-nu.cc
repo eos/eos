@@ -274,6 +274,68 @@ namespace eos
 
             return integrated_pdf_q2(q2_min, q2_max) / (w_max - w_min);
         }
+
+        double lepton_polarization_numerator(const double & q2) const
+        {
+            const double m_l2 = m_l() * m_l();
+            const double m_B  = this->m_B(), m_B2 = m_B * m_B;
+            const double m_D  = this->m_D(), m_D2 = m_D * m_D;
+            const double p_D  = sqrt(eos::lambda(m_B2, m_D2, q2)) / (2.0 * m_B);
+            const double sqrt_q2  = sqrt(q2);
+
+            const double f_p = form_factors->f_p(q2);
+            const double f_0 = form_factors->f_0(q2);
+
+            // cf. [CJLP2012]
+            const double H_0 = 2.0 * m_B * p_D / sqrt_q2 * f_p;
+            const double H_t = (m_B2 - m_D2) / sqrt_q2 * f_0;
+
+            const double H_02 = H_0 * H_0;
+            const double H_t2 = H_t * H_t;
+
+            const double nf = p_D * q2 * pow(1.0 - m_l2 / q2, 2);
+
+            // cf. [CJLP2012]], eq. (20), p. 13
+            const double num  = H_02 * (1.0 - 0.5 * m_l2 / q2) - 3.0 / 2.0 * m_l2 / q2 * H_t2;
+
+            return nf * num;
+        }
+
+        double lepton_polarization_denominator(const double & q2) const
+        {
+            const double m_l2 = m_l() * m_l();
+            const double m_B  = this->m_B(), m_B2 = m_B * m_B;
+            const double m_D  = this->m_D(), m_D2 = m_D * m_D;
+            const double p_D  = sqrt(eos::lambda(m_B2, m_D2, q2)) / (2.0 * m_B);
+            const double sqrt_q2  = sqrt(q2);
+
+            const double f_p = form_factors->f_p(q2);
+            const double f_0 = form_factors->f_0(q2);
+
+            // cf. [CJLP2012]
+            const double H_0 = 2.0 * m_B * p_D / sqrt_q2 * f_p;
+            const double H_t = (m_B2 - m_D2) / sqrt_q2 * f_0;
+
+            const double H_02 = H_0 * H_0;
+            const double H_t2 = H_t * H_t;
+
+            const double nf = p_D * q2 * pow(1.0 - m_l2 / q2, 2);
+
+            // cf. [CJLP2012]], eq. (20), p. 13
+            const double denom  = H_02 * (1.0 + 0.5 * m_l2 / q2) + 3.0 / 2.0 * m_l2 / q2 * H_t2;
+
+            return nf * denom;
+        }
+
+        double lepton_polarization(const double & q2_min, const double & q2_max) const
+        {
+            std::function<double (const double &)> integrand_num   = std::bind(&Implementation<BToDLeptonNeutrino>::lepton_polarization_numerator,   this, std::placeholders::_1);
+            std::function<double (const double &)> integrand_denom = std::bind(&Implementation<BToDLeptonNeutrino>::lepton_polarization_denominator, this, std::placeholders::_1);
+            const auto num   = integrate<GSL::QAGS>(integrand_num,   q2_min, q2_max);
+            const auto denom = integrate<GSL::QAGS>(integrand_denom, q2_min, q2_max);
+
+            return num / denom;
+        }
     };
 
     BToDLeptonNeutrino::BToDLeptonNeutrino(const Parameters & parameters, const Options & options) :
@@ -328,6 +390,12 @@ namespace eos
     BToDLeptonNeutrino::differential_a_fb_leptonic(const double & s) const
     {
         return _imp->numerator_differential_a_fb_leptonic(s) / _imp->normalized_differential_decay_width(s);
+    }
+
+    double
+    BToDLeptonNeutrino::integrated_lepton_polarization(const double & q2_min, const double & q2_max) const
+    {
+        return _imp->lepton_polarization(q2_min, q2_max);
     }
 
     double
