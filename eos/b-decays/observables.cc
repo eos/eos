@@ -132,6 +132,11 @@ namespace eos
                 make_observable("B->Dlnu::P(w_min,w_max)",
                         &BToDLeptonNeutrino::integrated_pdf_w,
                         std::make_tuple("w_min", "w_max")),
+
+                make_observable("B->Dlnu::A_l",
+                        &BToDLeptonNeutrino::integrated_lepton_polarization,
+                        std::make_tuple("q2_min", "q2_max")),
+
             }
         );
 

@@ -53,6 +53,7 @@ namespace eos
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
 
             double integrated_a_fb_leptonic(const double & s_min, const double & s_max) const;
+            double integrated_lepton_polarization(const double & s_min, const double & s_max) const;
 
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
