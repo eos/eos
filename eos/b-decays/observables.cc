@@ -249,6 +249,10 @@ namespace eos
                                 &BToDPiLeptonNeutrino::differential_pdf_q2,
                                 std::make_tuple("q2")),
 
+                make_observable("B->Dpilnu::A_l",
+                                &BToDPiLeptonNeutrino::integrated_lepton_polarization,
+                                std::make_tuple("q2_min", "q2_max")),
+
                 make_observable("B->Dpilnu::P(c_D_min,c_D_max)",
                                 &BToDPiLeptonNeutrino::integrated_pdf_d,
                                 std::make_tuple("c_D_min", "c_D_max")),
