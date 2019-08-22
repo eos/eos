@@ -51,6 +51,8 @@ namespace eos
             double integrated_pdf_chi(const double & chi_min, const double & chi_max) const;
             double integrated_pdf_w(const double & w_min, const double & w_max) const;
 
+            double integrated_lepton_polarization(const double & q2_min, const double & q2_max) const;
+
             /*!
              * Descriptions of the process and its kinematics.
              */
