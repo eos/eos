@@ -174,6 +174,26 @@ class Plotter:
                 marker=self.marker, markeredgecolor=self.color, markerfacecolor='None')
 
 
+    """ Plots a single errors bar. """
+    class ErrorBar(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+            if 'x' not in item:
+                raise KeyError('x coordinate not provided')
+            self.x    = item['x']
+            self.xerr = item['xerr'] if 'xerr' in item else None
+
+            if 'y' not in item:
+                raise KeyError('y coordinate not provided')
+            self.y    = item['y']
+            self.yerr = item['yerr'] if 'yerr' in item else None
+
+        def plot(self):
+            plt.errorbar(x=self.x, y=self.y, xerr=self.xerr, yerr=self.yerr,
+                color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
+
+
     """ Plots a shaded band. """
     class Band(BasePlot):
         def __init__(self, plotter, item):
@@ -1041,6 +1061,7 @@ class Plotter:
             'constraint-overview':   Plotter.ConstraintOverview,
             'contours2D':            Plotter.Contours2D,
             'expression':            Plotter.Expression,
+            'errorbar':              Plotter.ErrorBar,
             'histogram':             Plotter.Histogram1D,
             'histogram2D':           Plotter.Histogram2D,
             'kde':                   Plotter.KernelDensityEstimate1D,
