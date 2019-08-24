@@ -5942,6 +5942,69 @@ B->K^*::FormFactors[parametric,LCSRLattice]@GKvD2018:
 # B_s -> K^* form factors #
 ###########################
 # {{{
+B_s->K^*::A_0@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->K^*::A_0(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.314
+  sigma-stat: {hi: 0.048, lo: 0.048}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->K^*::A_1@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->K^*::A_1(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.230
+  sigma-stat: {hi: 0.025, lo: 0.025}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->K^*::A_12@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->K^*::A_12(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.229
+  sigma-stat: {hi: 0.035, lo: 0.035}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->K^*::V@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->K^*::V(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.296
+  sigma-stat: {hi: 0.030, lo: 0.030}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->K^*::T_1@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->K^*::T_1(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.239
+  sigma-stat: {hi: 0.024, lo: 0.024}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->K^*::T_2@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->K^*::T_2(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.239
+  sigma-stat: {hi: 0.024, lo: 0.024}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->K^*::T_23@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->K^*::A_0(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.597
+  sigma-stat: {hi: 0.076, lo: 0.076}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
 B_s->K^*::A_12@MILC-2013A:
     type: MultivariateGaussian
     dim: 2
@@ -8798,6 +8861,69 @@ B->rho::FormFactors[parametric,LCSR]@GKvD2018:
 # B_s -> phi form factors #
 ###########################
 # {{{
+B_s->phi::A_0@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->phi::A_0(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.389
+  sigma-stat: {hi: 0.045, lo: 0.045}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->phi::A_1@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->phi::A_1(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.296
+  sigma-stat: {hi: 0.027, lo: 0.027}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->phi::A_12@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->phi::A_12(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.246
+  sigma-stat: {hi: 0.029, lo: 0.029}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->phi::V@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->phi::V(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.387
+  sigma-stat: {hi: 0.033, lo: 0.033}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->phi::T_1@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->phi::T_1(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.309
+  sigma-stat: {hi: 0.027, lo: 0.027}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->phi::T_2@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->phi::T_2(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.309
+  sigma-stat: {hi: 0.027, lo: 0.027}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
+B_s->phi::T_23@BSZ2015:
+  type: Gaussian
+  observable: 'B_s->phi::A_0(q2)'
+  kinematics: {q2: 0.1}
+  options: {form-factors: BSZ2015}
+  mean: 0.676
+  sigma-stat: {hi: 0.071, lo: 0.071}
+  sigma-sys: {hi: 0, lo: 0}
+  dof: 1
 B_s->phi::FormFactors[A_0,A_1,A_2,V,T_1,T_2,T_23]@GvDV2019:
   type: MultivariateGaussian(Covariance)
   dim: 33
