@@ -524,7 +524,7 @@ class Plotter:
                         if self.rescale_by_width:
                             width = (kinematics[self.variable + '_max'] - kinematics[self.variable + '_min'])
 
-                    yvalues = [constraint['mean'] / width]
+                    yvalues = [float(constraint['mean']) / width]
                     sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2) / width
                     sigma_lo = np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2) / width
                     yerrors = [[sigma_hi, sigma_lo]]
