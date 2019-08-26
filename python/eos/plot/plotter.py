@@ -354,78 +354,85 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
+            if 'hdf5-file' not in item and 'data' not in item:
+                raise KeyError('neither hdf5-file nor data specified')
+
+            if 'data' in item:
+                self.xvalues = item['data']['xvalues']
+                self.samples = item['data']['samples']
+            else:
+                h5fname = item['hdf5-file']
+                info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
+
+                uncfile = eos.data.UncertaintyDataFile(h5fname)
+
+                if 'kinematic' not in item:
+                    raise KeyError('kinematic not found; do not know how to map x to a kinematic variable')
+
+                xname = item['kinematic']
+
+                self.xvalues = []
+                for o in uncfile.parameters:
+                    kin = o[1].decode('ascii').split(',')
+                    if len(kin) != 2:
+                        raise ValueError('expected exactly two kinematic variables, got {}'.format(len(kin)))
+
+                    name,value = kin[0].strip().split('=')
+                    if name == xname + '_min':
+                        xmin = float(value)
+                    elif name == xname + '_max':
+                        xmax = float(value)
+                    else:
+                        raise ValueError('unexpected kinematic variable \'{}\''.format(name))
+
+                    name,value = kin[1].strip().split('=')
+                    if name == xname + '_min':
+                        xmin = float(value)
+                    elif name == xname + '_max':
+                        xmax = float(value)
+                    else:
+                        raise ValueError('unexpected kinematic variable \'{}\''.format(name))
+
+                    self.xvalues.append([xmin, xmax])
+
+                self.samples = uncfile.data()
+
+            self.xvalues = np.array(self.xvalues)
+
+            if 'range' in item:
+                xmin, xmax   = item['range']
+                xmin, xmax   = (float(xmin), float(xmax))
+                self.xvalues = np.ma.masked_outside(self.xvalues, xmin, xmax)
+
+            self.rescale_by_width = item['rescale-by-width'] if 'rescale-by-width' in item else False
+
+
         def plot(self):
             item = self.item
-            if 'hdf5-file' not in item:
-                raise KeyError('no hdf5-file specified')
-                return
 
-            h5fname = item['hdf5-file']
-            info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
-
-            uncfile = eos.data.UncertaintyDataFile(h5fname)
-
-            if 'kinematic' not in item:
-                raise KeyError('kinematic not found; do not know how to map x to a kinematic variable')
-
-            xname = item['kinematic']
-
-            xvalues = []
-            for o in uncfile.parameters:
-                kin = o[1].decode('ascii').split(',')
-                if len(kin) != 2:
-                    raise ValueError('expected exactly two kinematic variables, got {}'.format(len(kin)))
-
-                name,value = kin[0].strip().split('=')
-                if name == xname + '_min':
-                    xmin = float(value)
-                elif name == xname + '_max':
-                    xmax = float(value)
-                else:
-                    raise ValueError('unexpected kinematic variable \'{}\''.format(name))
-
-                name,value = kin[1].strip().split('=')
-                if name == xname + '_min':
-                    xmin = float(value)
-                elif name == xname + '_max':
-                    xmax = float(value)
-                else:
-                    raise ValueError('unexpected kinematic variable \'{}\''.format(name))
-
-                xvalues.append([xmin, xmax])
-
-            xvalues = np.array(xvalues)
-            if 'range' in item:
-                xmin,xmax = item['range']
-                xvalues = np.ma.masked_outside(xvalues, float(xmin), float(xmax))
-
-            data = uncfile.data()
             ovalues_lower   = []
             ovalues_central = []
             ovalues_higher  = []
-            for i in range(len(uncfile.parameters)):
-                lower   = np.percentile(data[:, i], q=15.865)
-                central = np.percentile(data[:, i], q=50.000)
-                higher  = np.percentile(data[:, i], q=84.135)
+            for i in range(len(self.xvalues)):
+                lower   = np.percentile(self.samples[:, i], q=15.865)
+                central = np.percentile(self.samples[:, i], q=50.000)
+                higher  = np.percentile(self.samples[:, i], q=84.135)
                 ovalues_lower.append(lower)
                 ovalues_central.append(central)
                 ovalues_higher.append(higher)
 
-            alpha   = item['opacity']   if 'opacity'   in item else 0.3
-            color   = item['color']     if 'color'     in item else 'black'
-            label   = item['label']     if 'label'     in item else None
-
-            for [xmin, xmax], olo, ocentral, ohi in zip(xvalues, ovalues_lower, ovalues_central, ovalues_higher):
-                width = (xmax - xmin) if item['rescale-by-width'] else 1
+            for [xmin, xmax], olo, ocentral, ohi in zip(self.xvalues, ovalues_lower, ovalues_central, ovalues_higher):
+                width = (xmax - xmin) if self.rescale_by_width else 1
                 olo      /= width
                 ocentral /= width
                 ohi      /= width
                 print("{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}".format(xmin=xmin, xmax=xmax, olo=olo, ocentral=ocentral, ohi=ohi))
-                plt.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=color, alpha=alpha, label=label)
+                plt.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=self.alpha, label=self.label)
                 label = None
-                plt.plot([xmin, xmax], [olo,      olo],      color=color, alpha=alpha)
-                plt.plot([xmin, xmax], [ocentral, ocentral], color=color, alpha=alpha)
-                plt.plot([xmin, xmax], [ohi,      ohi],      color=color, alpha=alpha)
+                plt.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=self.alpha)
+                plt.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=self.alpha)
+                plt.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=self.alpha)
+                self.label = None
 
 
     """ Plots an overview of uncertainty estimates.
