@@ -178,9 +178,9 @@ namespace eos
     make_b_to_d_form_factors_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Form factors for $B\to \bar{D}$ transitions)",
+            R"(Form factors for $B\to \bar{D}$ transitions and related pseudo-observables)",
             R"(Pseudo observables representing the full basis of $B\to\bar{D}$ form factors. )"
-            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            R"(For most pseudo-observables, the specific parametrization can be chosen via the "form-factors" option.)",
             {
                 // B -> D Form Factors
                 make_form_factor_adapter("B->D::f_+(q2)", R"(f_+^{B\to \bar{D}}(q^2))",
@@ -206,6 +206,56 @@ namespace eos
                 make_observable("B->D::f_T[s^1/s^0](q2)",
                         &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
+
+                make_observable("B->D::a_0[S_1]@HQE", R"(a_0^{S_1})",
+                        &BGLCoefficients::S1_a0),
+
+                make_observable("B->D::a_1[S_1]@HQE", R"(a_1^{S_1})",
+                        &BGLCoefficients::S1_a1),
+
+                make_observable("B->D::a_2[S_1]@HQE", R"(a_2^{S_1})",
+                        &BGLCoefficients::S1_a2),
+
+                make_observable_ratio("B->D^*::a_1/a_0[S_1]@HQE", R"(a_1^{S_1}/a_0^{S_1})",
+                        &BGLCoefficients::S1_a1,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::S1_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable_ratio("B->D^*::a_2/a_0[S_1]@HQE", R"(a_2^{S_1}/a_0^{S_1})",
+                        &BGLCoefficients::S1_a2,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::S1_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable("B->D::a_0[V_1]@HQE", R"(a_0^{V_1})",
+                        &BGLCoefficients::V1_a0),
+
+                make_observable("B->D::a_1[V_1]@HQE", R"(a_1^{V_1})",
+                        &BGLCoefficients::V1_a1),
+
+                make_observable("B->D::a_2[V_1]@HQE", R"(a_2^{V_1})",
+                        &BGLCoefficients::V1_a2),
+
+                make_observable_ratio("B->D^*::a_1/a_0[V_1]@HQE", R"(a_1^{V_1}/a_0^{V_1})",
+                        &BGLCoefficients::V1_a1,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::V1_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable_ratio("B->D^*::a_2/a_0[V_1]@HQE", R"(a_2^{V_1}/a_0^{V_1})",
+                        &BGLCoefficients::V1_a2,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::V1_a0,
+                        std::make_tuple(),
+                        Options()),
             }
         );
 
@@ -484,9 +534,9 @@ namespace eos
     make_b_to_dstar_form_factors_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Form factors for $B\to \bar{D}^*$ transitions)",
+            R"(Form factors for $B\to \bar{D}^*$ transitions and related pseudo-observables)",
             R"(Pseudo observables representing the full basis of $B\to \bar{D}^*$ form factors. )"
-            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            R"(For most pseudo-observables, the specific parametrization can be chosen via the "form-factors" option.)",
             {
                 make_form_factor_adapter("B->D^*::V(q2)",
                         &FormFactors<PToV>::v, std::make_tuple("q2")),
@@ -558,6 +608,106 @@ namespace eos
                 make_observable("B->D^*::T_23B[s^1/s^0](q2)",
                         &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
+
+                make_observable("B->D^*::a_0[A_1]@HQE", R"(a_0^{A_1})",
+                        &BGLCoefficients::A1_a0),
+
+                make_observable("B->D^*::a_1[A_1]@HQE", R"(a_1^{A_1})",
+                        &BGLCoefficients::A1_a1),
+
+                make_observable("B->D^*::a_2[A_1]@HQE", R"(a_2^{A_1})",
+                        &BGLCoefficients::A1_a2),
+
+                make_observable_ratio("B->D^*::a_1/a_0[A_1]@HQE", R"(a_1^{A_1}/a_0^{A_1})",
+                        &BGLCoefficients::A1_a1,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::A1_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable_ratio("B->D^*::a_2/a_0[A_1]@HQE", R"(a_2^{A_1}/a_0^{A_1})",
+                        &BGLCoefficients::A1_a2,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::A1_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable("B->D^*::a_0[A_5]@HQE", R"(a_0^{A_5})",
+                        &BGLCoefficients::A5_a0),
+
+                make_observable("B->D^*::a_1[A_5]@HQE", R"(a_1^{A_5})",
+                        &BGLCoefficients::A5_a1),
+
+                make_observable("B->D^*::a_2[A_5]@HQE", R"(a_2^{A_5})",
+                        &BGLCoefficients::A5_a2),
+
+                make_observable_ratio("B->D^*::a_1/a_0[A_5]@HQE", R"(a_1^{A_5}/a_0^{A_5})",
+                        &BGLCoefficients::A5_a1,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::A5_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable_ratio("B->D^*::a_2/a_0[A_5]@HQE", R"(a_2^{A_5}/a_0^{A_5})",
+                        &BGLCoefficients::A5_a2,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::A5_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable("B->D^*::a_0[P_1]@HQE", R"(a_0^{P_1})",
+                        &BGLCoefficients::P1_a0),
+
+                make_observable("B->D^*::a_1[P_1]@HQE", R"(a_1^{P_1})",
+                        &BGLCoefficients::P1_a1),
+
+                make_observable("B->D^*::a_2[P_1]@HQE", R"(a_2^{P_1})",
+                        &BGLCoefficients::P1_a2),
+
+                make_observable_ratio("B->D^*::a_1/a_0[P_1]@HQE", R"(a_1^{P_1}/a_0^{P_1})",
+                        &BGLCoefficients::P1_a1,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::P1_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable_ratio("B->D^*::a_2/a_0[P_1]@HQE", R"(a_2^{P_1}/a_0^{P_1})",
+                        &BGLCoefficients::P1_a2,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::P1_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable("B->D^*::a_0[V_4]@HQE", R"(a_0^{V_4})",
+                        &BGLCoefficients::V4_a0),
+
+                make_observable("B->D^*::a_1[V_4]@HQE", R"(a_1^{V_4})",
+                        &BGLCoefficients::V4_a1),
+
+                make_observable("B->D^*::a_2[V_4]@HQE", R"(a_2^{V_4})",
+                        &BGLCoefficients::V4_a2),
+
+                make_observable_ratio("B->D^*::a_1/a_0[V_4]@HQE", R"(a_1^{V_4}/a_0^{V_4})",
+                        &BGLCoefficients::V4_a1,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::V4_a0,
+                        std::make_tuple(),
+                        Options()),
+
+                make_observable_ratio("B->D^*::a_2/a_0[V_4]@HQE", R"(a_2^{V_4}/a_0^{V_4})",
+                        &BGLCoefficients::V4_a2,
+                        std::make_tuple(),
+                        Options(),
+                        &BGLCoefficients::V4_a0,
+                        std::make_tuple(),
+                        Options()),
             }
         );
 
@@ -996,7 +1146,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Unitarity Bounds)",
-            R"(Pseudo observables representing the various unitarity bounds for $b\to c$ semileptonic form factors.)",
+            R"(Pseudo observables arising in the various unitarity bounds for $b\to c$ semileptonic form factors.)",
             {
                 make_observable("b->c::Bound[0^+]@CLN", R"(B^{b\to c}_{0^+})",
                         &HQETUnitarityBounds::bound_0p),

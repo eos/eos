@@ -56,7 +56,8 @@ TESTS = \
 	kstar-lcdas_TEST \
 	mesonic_TEST \
 	mesonic-hqet_TEST \
-	pi-lcdas_TEST
+	pi-lcdas_TEST \
+	unitarity-bounds_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	libeosformfactors.la \
@@ -87,3 +88,6 @@ mesonic_TEST_SOURCES = mesonic_TEST.cc
 mesonic_hqet_TEST_SOURCES = mesonic-hqet_TEST.cc
 
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
+
+unitarity_bounds_TEST_SOURCES = unitarity-bounds_TEST.cc
+
