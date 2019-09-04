@@ -49,6 +49,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "unpolarised");
 
                     Parameters p = Parameters::Defaults();
+                    p["life_time::Lambda_b"] = 1.451e-12;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
@@ -101,6 +102,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "LHCb");
 
                     Parameters p = Parameters::Defaults();
+                    p["life_time::Lambda_b"] = 1.451e-12;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
@@ -153,6 +155,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     Parameters p = Parameters::Defaults();
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
+                    p["life_time::Lambda_b"] = 1.451e-12;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
@@ -206,6 +209,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     Parameters p = Parameters::Defaults();
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
+                    p["life_time::Lambda_b"] = 1.451e-12;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
