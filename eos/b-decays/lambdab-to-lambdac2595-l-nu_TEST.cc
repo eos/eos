@@ -58,7 +58,7 @@ class LambdaBToLambdaC2595LeptonNeutrinoTest :
             TEST_CHECK_RELATIVE_ERROR(d.a_l(s_max - 3.0),                                     7.6237858620049, eps);
             TEST_CHECK_RELATIVE_ERROR(d.b_l(s_max - 3.0),                                    -1.7643518917646, eps);
             TEST_CHECK_RELATIVE_ERROR(d.c_l(s_max - 3.0),                                    -3.02057556788,   eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(s_min, s_max),             0.0430532787870, eps);
+            TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(s_min, s_max),             0.0436467078537, eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_r_lambdac2595(),                           0.08896965,      eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(s_min, s_max), -0.0824034043085, eps);
         }
