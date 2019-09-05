@@ -419,3 +419,42 @@ class FormFactorsTest :
             }
         }
 } two_loop_test;
+
+class LowRecoilTest :
+    public TestCase
+{
+    public:
+        LowRecoilTest() :
+            TestCase("low_recoil_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            using std::imag;
+            using std::real;
+
+            /* Comparison with Stefan Meinel from September 2019 */
+
+            Parameters p  = Parameters::Defaults();
+            auto       m  = Model::make("WilsonScan", p, Options());
+
+            {
+                static const double mu = 4.2, s = 15.0, eps = 1e-2;
+                const double        alpha_s = m->alpha_s(mu);
+                const double        m_b_PS = m->m_b_ps(2.0);
+                const auto          m_c = m->m_c_msbar(mu);
+                const auto          wc = m->wilson_coefficients_b_to_s(mu, "mu", false);
+
+                TEST_CHECK_NEARLY_EQUAL( 4.46, m_b_PS,         eps);
+
+                const auto c7eff = ShortDistanceLowRecoil::c7eff(s, mu, alpha_s, m_b_PS, true, wc);
+                TEST_CHECK_NEARLY_EQUAL(-0.39, real(c7eff),    eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.10, imag(c7eff),    eps);
+
+                const auto c9eff = ShortDistanceLowRecoil::c9eff(s, mu, alpha_s, m_b_PS, m_c, true, false, 0.0, wc);
+                TEST_CHECK_NEARLY_EQUAL(+4.66, real(c9eff),    eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.55, imag(c9eff),    eps);
+            }
+        }
+} low_recoil_test;
