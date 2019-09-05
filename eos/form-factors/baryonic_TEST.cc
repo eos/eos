@@ -80,6 +80,109 @@ class BFvD2014FormFactorsTest :
         }
 } bfvd2014_form_factors_test;
 
+class DM2016FormFactorsTest :
+    public TestCase
+{
+public:
+    DM2016FormFactorsTest() :
+        TestCase("dm2016_form_factors_test")
+    {
+    }
+
+    virtual void run() const
+    {
+        static const double eps = 1e-3;
+
+        Parameters p = Parameters::Defaults();
+        std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> ff = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::DM2016", p);
+        // fix z-expansion parameters @DM2016 - all a_2's are zero by default
+        p["Lambda_b->Lambda::a_0_time^V@DM2016"]    =  0.3725;
+        p["Lambda_b->Lambda::a_1_time^V@DM2016"]    = -0.9389;
+        p["Lambda_b->Lambda::a_2_time^V@DM2016"]    = +0.0000;
+
+        p["Lambda_b->Lambda::a_0_long^V@DM2016"]    =  0.4221;
+        p["Lambda_b->Lambda::a_1_long^V@DM2016"]    = -1.1386;
+        p["Lambda_b->Lambda::a_2_long^V@DM2016"]    =  0.0000;
+
+        p["Lambda_b->Lambda::a_0_perp^V@DM2016"]    = +0.5182;
+        p["Lambda_b->Lambda::a_1_perp^V@DM2016"]    = -1.3495;
+        p["Lambda_b->Lambda::a_2_perp^V@DM2016"]    = +0.0000;
+
+        p["Lambda_b->Lambda::a_0_time^A@DM2016"]    = +0.4028;
+        p["Lambda_b->Lambda::a_1_time^A@DM2016"]    = -1.0290;
+        p["Lambda_b->Lambda::a_2_time^A@DM2016"]    = -0.0000;
+
+        p["Lambda_b->Lambda::a_0_long^A@DM2016"]    =  0.3563;
+        p["Lambda_b->Lambda::a_1_long^A@DM2016"]    = -1.0612;
+        p["Lambda_b->Lambda::a_2_long^A@DM2016"]    = -0.0000;
+
+        // a_0_perp^A == a_0_long^A
+        p["Lambda_b->Lambda::a_1_perp^A@DM2016"]    = -1.1357;
+        p["Lambda_b->Lambda::a_2_perp^A@DM2016"]    = -0.0000;
+
+        p["Lambda_b->Lambda::a_0_long^T@DM2016"]    =  0.4960;
+        p["Lambda_b->Lambda::a_1_long^T@DM2016"]    = -1.1275;
+        p["Lambda_b->Lambda::a_2_long^T@DM2016"]    =  0.0000;
+
+        p["Lambda_b->Lambda::a_0_perp^T@DM2016"]    =  0.3876;
+        p["Lambda_b->Lambda::a_1_perp^T@DM2016"]    = -0.9623;
+        p["Lambda_b->Lambda::a_2_perp^T@DM2016"]    = -0.0000;
+
+        p["Lambda_b->Lambda::a_0_long^T5@DM2016"]   =  0.3403;
+        p["Lambda_b->Lambda::a_1_long^T5@DM2016"]   = -0.7697;
+        p["Lambda_b->Lambda::a_2_long^T5@DM2016"]   = -0.0000;
+
+        // a_0_perp^T5 == a_0_long^T5
+        p["Lambda_b->Lambda::a_1_perp^T5@DM2016"]   = -0.8008;
+        p["Lambda_b->Lambda::a_2_perp^T5@DM2016"]   =  0.0000;
+
+        p["mass::Lambda_b"]                             = 5.61951;
+        p["mass::Lambda"]                               = 1.1157;
+
+        // test of the ten baryonic FFs
+        TEST_CHECK_NEARLY_EQUAL(0.1562487236, ff->f_time_v( 0.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2275900892, ff->f_time_v( 5.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.3417796225, ff->f_time_v(10.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.5422197258, ff->f_time_v(15.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.1598530053, ff->f_long_v( 0.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2459877325, ff->f_long_v( 5.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.3910960039, ff->f_long_v(10.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.6661662119, ff->f_long_v(15.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2073776573, ff->f_perp_v( 0.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.3131482081, ff->f_perp_v( 5.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.4907199746, ff->f_perp_v(10.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.8262231044, ff->f_perp_v(15.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.1657965242, ff->f_time_a( 0.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2489615034, ff->f_time_a( 5.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.3895093452, ff->f_time_a(10.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.6583338379, ff->f_time_a(15.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.1118800889, ff->f_long_a( 0.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.1803545293, ff->f_long_a( 5.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2912190226, ff->f_long_a(10.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.4874045714, ff->f_long_a(15.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.0947209451, ff->f_perp_a( 0.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.1635457816, ff->f_perp_a( 5.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2758041356, ff->f_perp_a(10.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.4758361015, ff->f_perp_a(15.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2363096025, ff->f_long_t( 0.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.3376352752, ff->f_long_t( 5.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.5056514080, ff->f_long_t(10.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.8193320135, ff->f_long_t(15.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.1659591402, ff->f_perp_t( 0.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2450975156, ff->f_perp_t( 5.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.3773577270, ff->f_perp_t(10.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.6261686996, ff->f_perp_t(15.0),  eps);
+        TEST_CHECK_NEARLY_EQUAL(0.1630195575, ff->f_long_t5( 0.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2272722059, ff->f_long_t5( 5.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.3285959782, ff->f_long_t5(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.5033819243, ff->f_long_t5(15.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.1558564787, ff->f_perp_t5( 0.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.2202553997, ff->f_perp_t5( 5.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.3221610388, ff->f_perp_t5(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.4985526705, ff->f_perp_t5(15.0), eps);
+    }
+} dm2016_form_factors_test;
+
 class DKMR2017FormFactorsTest :
 public TestCase
 {
