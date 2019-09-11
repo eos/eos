@@ -39,7 +39,9 @@
 
 namespace eos
 {
+    using std::abs;
     using std::norm;
+    using std::sqrt;
 
     namespace lambdab_to_lambda_dilepton
     {
@@ -60,17 +62,17 @@ namespace eos
             AngularObservables(const Amplitudes & a)
             {
                 // extend to include full basis
-                _k[0] = ( std::norm(a.a_perp_1_R) + std::norm(a.a_para_1_R) +
-                          std::norm(a.a_perp_1_L) + std::norm(a.a_para_1_L) +
-                          2.0 * std::norm(a.a_perp_0_R) +
-                          2.0 * std::norm(a.a_para_0_R) +
-                          2.0 * std::norm(a.a_perp_0_L) +
-                          2.0 * std::norm(a.a_para_0_L) ) / 4.0;
+                _k[0] = ( norm(a.a_perp_1_R) + norm(a.a_para_1_R) +
+                          norm(a.a_perp_1_L) + norm(a.a_para_1_L) +
+                          2.0 * norm(a.a_perp_0_R) +
+                          2.0 * norm(a.a_para_0_R) +
+                          2.0 * norm(a.a_perp_0_L) +
+                          2.0 * norm(a.a_para_0_L) ) / 4.0;
 
-                _k[1] = ( std::norm(a.a_perp_1_R) +
-                          std::norm(a.a_para_1_R) +
-                          std::norm(a.a_perp_1_L) +
-                          std::norm(a.a_para_1_L) ) / 2.0;
+                _k[1] = ( norm(a.a_perp_1_R) +
+                          norm(a.a_para_1_R) +
+                          norm(a.a_perp_1_L) +
+                          norm(a.a_para_1_L) ) / 2.0;
 
                 _k[2] = -std::real( a.a_perp_1_R*std::conj(a.a_para_1_R) -
                                     a.a_perp_1_L*std::conj(a.a_para_1_L) );
@@ -83,30 +85,30 @@ namespace eos
                 _k[4] = std::real( a.a_perp_1_R*std::conj(a.a_para_1_R) +
                                    a.a_perp_1_L*std::conj(a.a_para_1_L)) * a.alpha;
 
-                _k[5] = -( std::norm(a.a_perp_1_R) +
-                           std::norm(a.a_para_1_R) -
-                           std::norm(a.a_perp_1_L) -
-                           std::norm(a.a_para_1_L) ) * a.alpha / 2.0 ;
+                _k[5] = -( norm(a.a_perp_1_R) +
+                           norm(a.a_para_1_R) -
+                           norm(a.a_perp_1_L) -
+                           norm(a.a_para_1_L) ) * a.alpha / 2.0 ;
 
                 _k[6] = -std::real( a.a_para_1_R*std::conj(a.a_perp_0_R) -
                                     a.a_perp_1_R*std::conj(a.a_para_0_R) +
                                     a.a_para_1_L*std::conj(a.a_perp_0_L) -
-                                    a.a_perp_1_L*std::conj(a.a_para_0_L) ) * a.alpha / std::sqrt(2.0);
+                                    a.a_perp_1_L*std::conj(a.a_para_0_L) ) * a.alpha / sqrt(2.0);
 
                 _k[7] = -std::real( a.a_para_1_R*std::conj(a.a_para_0_R) -
                                     a.a_perp_1_R*std::conj(a.a_perp_0_R) -
                                     a.a_para_1_L*std::conj(a.a_para_0_L) +
-                                    a.a_perp_1_L*std::conj(a.a_perp_0_L) ) * a.alpha /  std::sqrt(2.0);
+                                    a.a_perp_1_L*std::conj(a.a_perp_0_L) ) * a.alpha /  sqrt(2.0);
 
                 _k[8] = std::imag( a.a_perp_1_R*std::conj(a.a_perp_0_R) -
                                    a.a_para_1_R*std::conj(a.a_para_0_R) +
                                    a.a_perp_1_L*std::conj(a.a_perp_0_L) -
-                                   a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.alpha / std::sqrt(2.0);
+                                   a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.alpha / sqrt(2.0);
 
                 _k[9] = std::imag( a.a_perp_1_R*std::conj(a.a_para_0_R) -
                                    a.a_para_1_R*std::conj(a.a_perp_0_R) -
                                    a.a_perp_1_L*std::conj(a.a_para_0_L) +
-                                   a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.alpha / std::sqrt(2.0);
+                                   a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.alpha / sqrt(2.0);
 
                 _k[10] = -std::real( a.a_perp_1_R*std::conj(a.a_para_1_R) -
                                     2.0 * a.a_perp_0_R*std::conj(a.a_para_0_R) +
@@ -116,24 +118,24 @@ namespace eos
                 _k[11] = -std::real( a.a_perp_1_R*std::conj(a.a_para_1_R) +
                                     a.a_perp_1_L*std::conj(a.a_para_1_L) ) * a.polarisation;
 
-                _k[12] = ( std::norm(a.a_perp_1_R) +
-                           std::norm(a.a_para_1_R ) -
-                           std::norm(a.a_perp_1_L) -
-                           std::norm(a.a_para_1_L) ) * a.polarisation / 2.0;
+                _k[12] = ( norm(a.a_perp_1_R) +
+                           norm(a.a_para_1_R ) -
+                           norm(a.a_perp_1_L) -
+                           norm(a.a_para_1_L) ) * a.polarisation / 2.0;
 
-                _k[13] = -( std::norm(a.a_perp_1_R) +
-                            std::norm(a.a_para_1_R) -
-                            2.0 * std::norm(a.a_perp_0_R) -
-                            2.0 * std::norm(a.a_para_0_R) +
-                            std::norm(a.a_perp_1_L) +
-                            std::norm(a.a_para_1_L) -
-                            2.0 * std::norm(a.a_perp_0_L) -
-                            2.0 * std::norm(a.a_para_0_L) ) * a.alpha * a.polarisation / 4.0;
+                _k[13] = -( norm(a.a_perp_1_R) +
+                            norm(a.a_para_1_R) -
+                            2.0 * norm(a.a_perp_0_R) -
+                            2.0 * norm(a.a_para_0_R) +
+                            norm(a.a_perp_1_L) +
+                            norm(a.a_para_1_L) -
+                            2.0 * norm(a.a_perp_0_L) -
+                            2.0 * norm(a.a_para_0_L) ) * a.alpha * a.polarisation / 4.0;
 
-                _k[14] = -( std::norm(a.a_perp_1_R) +
-                            std::norm(a.a_para_1_R) +
-                            std::norm(a.a_perp_1_L) +
-                            std::norm(a.a_para_1_L) ) * a.alpha * a.polarisation / 2.0;
+                _k[14] = -( norm(a.a_perp_1_R) +
+                            norm(a.a_para_1_R) +
+                            norm(a.a_perp_1_L) +
+                            norm(a.a_para_1_L) ) * a.alpha * a.polarisation / 2.0;
 
                 _k[15] = std::real( a.a_perp_1_R*std::conj(a.a_para_1_R) -
                                     a.a_perp_1_L*std::conj(a.a_para_1_L) ) * a.alpha * a.polarisation ;
@@ -142,62 +144,62 @@ namespace eos
                 _k[16] = std::real( a.a_perp_1_R*std::conj(a.a_perp_0_R) -
                                     a.a_para_1_R*std::conj(a.a_para_0_R) +
                                     a.a_perp_1_L*std::conj(a.a_perp_0_L) -
-                                    a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.alpha * a.polarisation / std::sqrt(2.0);
+                                    a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.alpha * a.polarisation / sqrt(2.0);
 
                 _k[17] = std::real( a.a_perp_1_R*std::conj(a.a_para_0_R) -
                                     a.a_para_1_R*std::conj(a.a_perp_0_R) -
                                     a.a_perp_1_L*std::conj(a.a_para_0_L) +
-                                    a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.alpha * a.polarisation / std::sqrt(2.0);
+                                    a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.alpha * a.polarisation / sqrt(2.0);
 
                 _k[18] = -std::imag( a.a_para_1_R*std::conj(a.a_perp_0_R) -
                                      a.a_perp_1_R*std::conj(a.a_para_0_R) +
                                      a.a_para_1_L*std::conj(a.a_perp_0_L) -
-                                     a.a_perp_1_L*std::conj(a.a_para_0_L) ) * a.alpha * a.polarisation / std::sqrt(2.0);
+                                     a.a_perp_1_L*std::conj(a.a_para_0_L) ) * a.alpha * a.polarisation / sqrt(2.0);
 
                 _k[19] = -std::imag( a.a_para_1_R*std::conj(a.a_para_0_R) -
                                     a.a_perp_1_R*std::conj(a.a_perp_0_R) -
                                     a.a_para_1_L*std::conj(a.a_para_0_L) +
-                                    a.a_perp_1_L*std::conj(a.a_perp_0_L) ) * a.alpha * a.polarisation / std::sqrt(2.0);
+                                    a.a_perp_1_L*std::conj(a.a_perp_0_L) ) * a.alpha * a.polarisation / sqrt(2.0);
 
                 _k[20] =  std::imag( a.a_para_1_R*std::conj(a.a_para_0_R) +
                                      a.a_perp_1_R*std::conj(a.a_perp_0_R) +
                                      a.a_para_1_L*std::conj(a.a_para_0_L) +
-                                     a.a_perp_1_L*std::conj(a.a_perp_0_L) ) * a.polarisation / std::sqrt(2.0);
+                                     a.a_perp_1_L*std::conj(a.a_perp_0_L) ) * a.polarisation / sqrt(2.0);
 
                 _k[21] = -std::imag( a.a_perp_1_R*std::conj(a.a_para_0_R) +
                                      a.a_para_1_R*std::conj(a.a_perp_0_R) -
                                      a.a_perp_1_L*std::conj(a.a_para_0_L) -
-                                     a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.polarisation / std::sqrt(2.0);
+                                     a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.polarisation / sqrt(2.0);
 
                 _k[22] = -std::real( a.a_perp_1_R*std::conj(a.a_para_0_R) +
                                      a.a_para_1_R*std::conj(a.a_perp_0_R) +
                                      a.a_perp_1_L*std::conj(a.a_para_0_L) +
-                                     a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.polarisation / std::sqrt(2.0);
+                                     a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.polarisation / sqrt(2.0);
 
                 _k[23] = std::real( a.a_perp_1_R*std::conj(a.a_perp_0_R) +
                                     a.a_para_1_R*std::conj(a.a_para_0_R) -
                                     a.a_perp_1_L*std::conj(a.a_perp_0_L) -
-                                    a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.polarisation / std::sqrt(2.0);
+                                    a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.polarisation / sqrt(2.0);
 
                 _k[24] = std::imag( a.a_perp_1_R*std::conj(a.a_para_0_R) +
                                     a.a_para_1_R*std::conj(a.a_perp_0_R) +
                                     a.a_perp_1_L*std::conj(a.a_para_0_L) +
-                                    a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.alpha * a.polarisation / std::sqrt(2.0);
+                                    a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.alpha * a.polarisation / sqrt(2.0);
 
                 _k[25] = -std::imag( a.a_perp_1_R*std::conj(a.a_perp_0_R) +
                                      a.a_para_1_R*std::conj(a.a_para_0_R) -
                                      a.a_perp_1_L*std::conj(a.a_perp_0_L) -
-                                     a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.alpha * a.polarisation / std::sqrt(2.0);
+                                     a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.alpha * a.polarisation / sqrt(2.0);
 
                 _k[26] = -std::real( a.a_perp_1_R*std::conj(a.a_perp_0_R) +
                                      a.a_para_1_R*std::conj(a.a_para_0_R) +
                                      a.a_perp_1_L*std::conj(a.a_perp_0_L) +
-                                     a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.alpha * a.polarisation /  std::sqrt(2.0);
+                                     a.a_para_1_L*std::conj(a.a_para_0_L) ) * a.alpha * a.polarisation /  sqrt(2.0);
 
                 _k[27] = std::real( a.a_perp_1_R*std::conj(a.a_para_0_R) +
                                     a.a_para_1_R*std::conj(a.a_perp_0_R) -
                                     a.a_perp_1_L*std::conj(a.a_para_0_L) -
-                                    a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.alpha * a.polarisation / std::sqrt(2.0);
+                                    a.a_para_1_L*std::conj(a.a_perp_0_L) ) * a.alpha * a.polarisation / sqrt(2.0);
 
                 _k[28] = 0.0;
 
@@ -206,15 +208,15 @@ namespace eos
 
                 _k[30] = 0.0;
 
-                _k[31] = ( std::norm(a.a_perp_0_R) -
-                           std::norm(a.a_para_0_R) +
-                           std::norm(a.a_perp_0_L) -
-                           std::norm(a.a_para_0_L) ) * a.alpha * a.polarisation / 2.0;
+                _k[31] = ( norm(a.a_perp_0_R) -
+                           norm(a.a_para_0_R) +
+                           norm(a.a_perp_0_L) -
+                           norm(a.a_para_0_L) ) * a.alpha * a.polarisation / 2.0;
 
-                _k[32] = ( std::norm(a.a_perp_1_R) -
-                           std::norm(a.a_para_1_R) +
-                           std::norm(a.a_perp_1_L) -
-                           std::norm(a.a_para_1_L) ) * a.alpha * a.polarisation / 4.0;
+                _k[32] = ( norm(a.a_perp_1_R) -
+                           norm(a.a_para_1_R) +
+                           norm(a.a_perp_1_L) -
+                           norm(a.a_para_1_L) ) * a.alpha * a.polarisation / 4.0;
 
                 _k[33] = std::imag( a.a_perp_1_R*std::conj(a.a_para_1_R) +
                                     a.a_perp_1_L*std::conj(a.a_para_1_L) ) * a.alpha * a.polarisation / 2.0;
@@ -345,8 +347,8 @@ namespace eos
         double norm(const double & s) const
         {
             return g_fermi() * alpha_e() * abs(model->ckm_tb() * conj(model->ckm_ts()))
-                * std::sqrt(s / 3.0 / 2048 / std::pow(M_PI, 5.0) / power_of<3>(m_Lambda_b())
-                * std::sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD2014], Eq. (?), p. ??
+                * sqrt(s / 3.0 / 2048 / std::pow(M_PI, 5.0) / power_of<3>(m_Lambda_b())
+                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD2014], Eq. (?), p. ??
         }
 
         double kappa() const
@@ -365,7 +367,7 @@ namespace eos
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu");
 
             complex<double> lambda_hat_u = model->ckm_ub() * conj(model->ckm_us()) / std::abs(model->ckm_tb() * conj(model->ckm_ts()));
-            double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = std::sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = std::sqrt(s);
+            double sqrtsminus = sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = sqrt(s);
             double N = norm(s);
 
             /* Y(s) for the up and the top sector */
@@ -812,147 +814,6 @@ namespace eos
     }
 
 
-    /* Low Recoil */
-
-    namespace lambdab_to_lambda_dilepton
-    {
-        // Handle ratio of tensor to vector form factors
-        // model-independently.
-        class TensorToVectorRatios :
-            public ParameterUser
-        {
-            public:
-                virtual ~TensorToVectorRatios()
-                {
-                }
-
-                virtual double R_perp_V(const double & s) const = 0;
-                virtual double R_perp_A(const double & s) const = 0;
-                virtual double R_long_V(const double & s) const = 0;
-                virtual double R_long_A(const double & s) const = 0;
-
-                static TensorToVectorRatios * make(const std::string & name, const Parameters & p, const Options & o);
-        };
-
-        // HQET estimates based on [BFvD2014]
-        class EstimatedTensorToVectorRatios :
-            public TensorToVectorRatios
-        {
-            private:
-                UsedParameter _sigma_perp_V;
-                UsedParameter _sigma_perp_A;
-                UsedParameter _sigma_long_V;
-                UsedParameter _sigma_long_A;
-
-            public:
-                EstimatedTensorToVectorRatios(const Parameters & p, const Options &) :
-                    _sigma_perp_V(p["Lambda_b->Lambda::sigma_perp^V@BFvD2014"], *this),
-                    _sigma_perp_A(p["Lambda_b->Lambda::sigma_perp^A@BFvD2014"], *this),
-                    _sigma_long_V(p["Lambda_b->Lambda::sigma_long^V@BFvD2014"], *this),
-                    _sigma_long_A(p["Lambda_b->Lambda::sigma_long^A@BFvD2014"], *this)
-                {
-                }
-
-                ~EstimatedTensorToVectorRatios()
-                {
-                }
-
-                virtual double R_perp_V(const double & s) const
-                {
-                    // cf. [BFvD2014], eq. (C.2) and table 4.
-                    return 1.205 - 1.00e-2 * s + _sigma_perp_V() * (5.01 - 0.195 * s);
-                }
-
-                virtual double R_perp_A(const double & s) const
-                {
-                    // cf. [BFvD2014], eq. (C.2) and table 4.
-                    return 1.342 - 1.57e-2 * s + _sigma_perp_A() * (4.51 - 0.171 * s);
-                }
-
-                virtual double R_long_V(const double & s) const
-                {
-                    // cf. [BFvD2014], eq. (C.2) and table 4.
-                    return 1.235 - 1.00e-2 * s + _sigma_long_V() * (5.74 - 0.231 * s);
-                }
-
-                virtual double R_long_A(const double & s) const
-                {
-                    // cf. [BFvD2014], eq. (C.2) and table 4.
-                    return 1.294 - 1.29e-2 * s + _sigma_long_A() * (4.61 - 0.176 * s);
-                }
-
-                static EstimatedTensorToVectorRatios * make(const Parameters & p, const Options & o)
-                {
-                    return new EstimatedTensorToVectorRatios(p, o);
-                }
-        };
-
-        // full ratios as obtained from LQCD calculation of tensor and vector
-        // form factors
-        class FormFactorTensorToVectorRatios :
-            public TensorToVectorRatios
-        {
-            private:
-                std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
-
-            public:
-                FormFactorTensorToVectorRatios(const Parameters & p, const Options & o)
-                {
-                    form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "DM2016"), p, o);
-
-                    if (! form_factors.get())
-                        throw InternalError("Form factors not found!");
-                }
-
-                ~FormFactorTensorToVectorRatios()
-                {
-                }
-
-                virtual double R_perp_V(const double & s) const
-                {
-                    return form_factors->f_perp_t(s) / form_factors->f_perp_v(s);
-                }
-
-                virtual double R_perp_A(const double & s) const
-                {
-                    return form_factors->f_perp_t5(s) / form_factors->f_perp_a(s);
-                }
-
-                virtual double R_long_V(const double & s) const
-                {
-                    return form_factors->f_long_t(s) / form_factors->f_long_v(s);
-                }
-
-                virtual double R_long_A(const double & s) const
-                {
-                    return form_factors->f_long_t(s) / form_factors->f_long_v(s);
-                }
-
-                static FormFactorTensorToVectorRatios * make(const Parameters & p, const Options & o)
-                {
-                    return new FormFactorTensorToVectorRatios(p, o);
-                }
-        };
-
-        TensorToVectorRatios *
-        TensorToVectorRatios::make(const std::string & name, const Parameters & p, const Options & o)
-        {
-            typedef std::function<TensorToVectorRatios * (const Parameters &, const Options &)> RatiosMaker;
-            static const std::map<std::string, RatiosMaker> ratios_makers
-            {
-                std::make_pair("estimate",     &EstimatedTensorToVectorRatios::make),
-                std::make_pair("form-factors", &FormFactorTensorToVectorRatios::make),
-            };
-
-            auto i = ratios_makers.find(name);
-
-            if (ratios_makers.cend() == i)
-                throw InternalError("No such ratio '" + name + "'");
-
-            return i->second(p, o);
-        }
-    }
-
     template <> struct Implementation<LambdaBToLambdaDilepton<LowRecoil>>
     {
         std::shared_ptr<Model> model;
@@ -975,8 +836,6 @@ namespace eos
 
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
 
-        std::shared_ptr<lambdab_to_lambda_dilepton::TensorToVectorRatios> ratios;
-
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["hbar"], u),
@@ -998,10 +857,6 @@ namespace eos
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
 
-            using namespace lambdab_to_lambda_dilepton;
-            ratios = std::shared_ptr<TensorToVectorRatios>(TensorToVectorRatios::make(o.get("ratios", "form-factors"), p, o));
-
-            u.uses(*ratios);
             u.uses(*form_factors);
             u.uses(*model);
         }
@@ -1009,8 +864,8 @@ namespace eos
         double norm(const double & s) const
         {
             return g_fermi() * alpha_e() * abs(model->ckm_tb() * conj(model->ckm_ts()))
-                * std::sqrt(s / 3.0 / 2048 / std::pow(M_PI, 5.0) / power_of<3>(m_Lambda_b())
-                * std::sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD2014], Eq. (3.18), p. 6
+                * sqrt(s / 3.0 / 2048 / std::pow(M_PI, 5.0) / power_of<3>(m_Lambda_b())
+                * sqrt(lambda(m_Lambda_b * m_Lambda_b, m_Lambda * m_Lambda, s))); // cf. [BFvD2014], Eq. (3.18), p. 6
         }
 
         double kappa() const
@@ -1024,8 +879,8 @@ namespace eos
 
             double alpha_s = model->alpha_s(mu()), m_b = model->m_b_ps(2.0), m_c = model->m_c_msbar(mu());
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu");
-            complex<double> lambda_hat_u = model->ckm_ub() * conj(model->ckm_us()) / std::abs(model->ckm_tb() * conj(model->ckm_ts()));
-            double sqrtsminus = std::sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = std::sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = std::sqrt(s);
+            complex<double> lambda_hat_u = model->ckm_ub() * conj(model->ckm_us()) / abs(model->ckm_tb() * conj(model->ckm_ts()));
+            double sqrtsminus = sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = sqrt(s);
             double N = norm(s), kappa = this->kappa();
 
             // calculate effective wilson coefficients
@@ -1033,10 +888,10 @@ namespace eos
             complex<double> c9eff = ShortDistanceLowRecoil::c9eff(s, mu(), alpha_s, m_b, m_c, true, false, lambda_hat_u, wc);
 
             // cf. [BFvD2014], eq.s (??), p. ??
-            double zeta_perp_V = (m_Lambda_b + m_Lambda) / m_Lambda_b * (ratios->R_perp_V(s) - 1.0) + m_Lambda / m_Lambda_b;
-            double zeta_perp_A = (m_Lambda_b - m_Lambda) / m_Lambda_b * (ratios->R_perp_A(s) - 1.0) - m_Lambda / m_Lambda_b;
-            double zeta_long_V = s / ((m_Lambda_b + m_Lambda) * m_Lambda_b) * ratios->R_long_V(s) - 1.0;
-            double zeta_long_A = s / ((m_Lambda_b - m_Lambda) * m_Lambda_b) * ratios->R_long_A(s) - 1.0;
+            double zeta_perp_V = (m_Lambda_b + m_Lambda) / m_Lambda_b * form_factors->f_perp_t(s)  / form_factors->f_perp_v(s);
+            double zeta_perp_A = (m_Lambda_b - m_Lambda) / m_Lambda_b * form_factors->f_perp_t5(s) / form_factors->f_perp_a(s);
+            double zeta_long_V = s / ((m_Lambda_b + m_Lambda) * m_Lambda_b) * form_factors->f_long_t(s)  / form_factors->f_long_v(s);
+            double zeta_long_A = s / ((m_Lambda_b - m_Lambda) * m_Lambda_b) * form_factors->f_long_t5(s) / form_factors->f_long_a(s);
 
             // parametrize subleading power corrections, cf. [MvD2016], eq. (B1), p. ??
             complex<double> x_perp_0 = (4.0 / 3.0 * wc.c1() + wc.c2()) * r_perp_0();
