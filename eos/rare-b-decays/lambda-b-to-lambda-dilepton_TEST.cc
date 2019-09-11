@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2017 Thomas Blake
+ * Copyright (c) 2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -49,48 +50,46 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "unpolarised");
 
                     Parameters p = Parameters::Defaults();
-                    p["life_time::Lambda_b"] = 1.451e-12;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.0), +1.0923e-7, eps);
-		   
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m1(15.0,19.0),   0.3536, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m2(15.0,19.0),   0.2928, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m3(15.0,19.0),  -0.2451, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m4(15.0,19.0),  -0.2055, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m5(15.0,19.0),  -0.1604, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m6(15.0,19.0),   0.1842, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m7(15.0,19.0),  -0.0228, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m8(15.0,19.0),  -0.0888, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m9(15.0,19.0),   0.0004, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m10(15.0,19.0), -0.0006, eps);
+                    TEST_CHECK_RELATIVE_ERROR(8.250965481e-08, d.differential_branching_ratio(16.0), eps);
 
-		    TEST_CHECK_EQUAL(d.integrated_m11(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m12(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m13(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m14(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m15(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m16(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m17(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m18(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m19(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m20(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m21(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m22(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m23(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m24(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m25(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m26(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m27(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m28(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m29(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m30(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m31(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m32(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m33(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m34(15.0,19.0), 0);
- 
+                    TEST_CHECK_NEARLY_EQUAL(0.3550388404,     d.integrated_m1(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(0.2899223192,     d.integrated_m2(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.2437315574,    d.integrated_m3(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.2054611527,    d.integrated_m4(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.158558312,     d.integrated_m5(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(0.1838396079,     d.integrated_m6(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.02081000733,   d.integrated_m7(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.09222727907,   d.integrated_m8(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(6.268957094e-05,  d.integrated_m9(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0003204765254, d.integrated_m10(15.0,19.0), eps);
+
+                    TEST_CHECK_EQUAL(d.integrated_m11(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m12(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m13(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m14(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m15(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m16(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m17(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m18(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m19(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m20(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m21(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m22(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m23(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m24(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m25(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m26(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m27(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m28(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m29(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m30(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m31(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m32(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m33(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m34(15.0,19.0), 0);
                 }
 
                 // LHCb-polarised SM
@@ -102,47 +101,46 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "LHCb");
 
                     Parameters p = Parameters::Defaults();
-                    p["life_time::Lambda_b"] = 1.451e-12;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.0), +1.0923e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(8.250965481e-08, d.differential_branching_ratio(16.0), eps);
 
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m1(15.0,19.0),   0.3536, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m2(15.0,19.0),   0.2928, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m3(15.0,19.0),  -0.2451, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m4(15.0,19.0),  -0.2055, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m5(15.0,19.0),  -0.1604, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m6(15.0,19.0),   0.1842, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m7(15.0,19.0),  -0.0228, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m8(15.0,19.0),  -0.0888, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m9(15.0,19.0),   0.0004, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m10(15.0,19.0), -0.0006, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m11(15.0,19.0), -0.0042, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m12(15.0,19.0),  0.0150, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m13(15.0,19.0), -0.0172, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m14(15.0,19.0),  0.0023, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m15(15.0,19.0), -0.0113, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m16(15.0,19.0),  0.0094, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m17(15.0,19.0),  0.0054, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m18(15.0,19.0),  0.0013, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m19(15.0,19.0),  0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m20(15.0,19.0), -0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m21(15.0,19.0),  0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m22(15.0,19.0), -0.0001, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m23(15.0,19.0), -0.0188, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m24(15.0,19.0),  0.0203, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m25(15.0,19.0), -0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m26(15.0,19.0),  0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m27(15.0,19.0),  0.0133, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m28(15.0,19.0), -0.0118, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m29(15.0,19.0),  0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m30(15.0,19.0), -0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m31(15.0,19.0),  0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m32(15.0,19.0), -0.0024, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m33(15.0,19.0), -0.0028, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m34(15.0,19.0),  0.0000, eps);
-		}
+                    TEST_CHECK_NEARLY_EQUAL( 0.3550388404,    d.integrated_m1(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.2899223192,    d.integrated_m2(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.2437315574,    d.integrated_m3(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.2054611527,    d.integrated_m4(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.158558312,     d.integrated_m5(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.1838396079,    d.integrated_m6(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.02081000733,   d.integrated_m7(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.09222727907,   d.integrated_m8(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 6.268957094e-05, d.integrated_m9(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0003204765254, d.integrated_m10(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.004383443052,  d.integrated_m11(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.01481853383,   d.integrated_m12(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01718127177,   d.integrated_m13(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.002508288396,  d.integrated_m14(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01116780774,   d.integrated_m15(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.009388539593,  d.integrated_m16(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.005590173438,  d.integrated_m17(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.001256615897,  d.integrated_m18(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 1.10643968e-05,  d.integrated_m19(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-6.528475969e-06, d.integrated_m20(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 9.830834396e-05, d.integrated_m21(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0001927931588, d.integrated_m22(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01876460111,   d.integrated_m23(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.02062474436,   d.integrated_m24(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-7.118517544e-05, d.integrated_m25(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0001096620272, d.integrated_m26(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.01335263112,   d.integrated_m27(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01194850199,   d.integrated_m28(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0,               d.integrated_m29(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-2.156083411e-05, d.integrated_m30(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0,               d.integrated_m31(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.002612205688,  d.integrated_m32(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.002820345385,  d.integrated_m33(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 1.055598677e-05, d.integrated_m34(15.0,19.0), eps);
+                }
 
                 // unpolarised BMP
                 {
@@ -155,47 +153,47 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     Parameters p = Parameters::Defaults();
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
-                    p["life_time::Lambda_b"] = 1.451e-12;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.0), +0.8251e-7, eps);
 
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m1(15.0,19.0), 0.3567, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m2(15.0,19.0), 0.2867, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m3(15.0,19.0), -0.2639, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m4(15.0,19.0), -0.2131, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m5(15.0,19.0), -0.1674, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m6(15.0,19.0), 0.1730, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m7(15.0,19.0), -0.0225, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m8(15.0,19.0), -0.0351, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m9(15.0,19.0), 0.0006, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m10(15.0,19.0), -0.0008, eps);
-		    
-		    TEST_CHECK_EQUAL(d.integrated_m11(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m12(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m13(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m14(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m15(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m16(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m17(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m18(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m19(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m20(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m21(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m22(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m23(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m24(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m25(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m26(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m27(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m28(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m29(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m30(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m31(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m32(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m33(15.0,19.0), 0);
-		    TEST_CHECK_EQUAL(d.integrated_m34(15.0,19.0), 0);
+                    TEST_CHECK_RELATIVE_ERROR(6.367037677e-08, d.differential_branching_ratio(16.0), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL( 0.3572380627,    d.integrated_m1(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.2855238745,    d.integrated_m2(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.234809903,     d.integrated_m3(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.2080679346,    d.integrated_m4(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.1618563161,    d.integrated_m5(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.144676431,     d.integrated_m6(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01842966894,   d.integrated_m7(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01208460395,   d.integrated_m8(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.000632757932,  d.integrated_m9(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0004266646439, d.integrated_m10(15.0,19.0), eps);
+
+                    TEST_CHECK_EQUAL(d.integrated_m11(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m12(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m13(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m14(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m15(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m16(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m17(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m18(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m19(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m20(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m21(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m22(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m23(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m24(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m25(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m26(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m27(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m28(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m29(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m30(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m31(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m32(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m33(15.0,19.0), 0);
+                    TEST_CHECK_EQUAL(d.integrated_m34(15.0,19.0), 0);
                 }
 
                 // LHCb-polarised BMP
@@ -209,46 +207,45 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     Parameters p = Parameters::Defaults();
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
-                    p["life_time::Lambda_b"] = 1.451e-12;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio(16.0), +0.8251e-7, eps);
+                    TEST_CHECK_RELATIVE_ERROR(6.367037677e-08, d.differential_branching_ratio(16.0), eps);
 
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m1(15.0,19.0),   0.3567, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m2(15.0,19.0),   0.2867, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m3(15.0,19.0),  -0.2639, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m4(15.0,19.0),  -0.2131, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m5(15.0,19.0),  -0.1674, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m6(15.0,19.0),   0.1730, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m7(15.0,19.0),  -0.0225, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m8(15.0,19.0),  -0.0351, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m9(15.0,19.0),   0.0006, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m10(15.0,19.0), -0.0008, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m11(15.0,19.0), -0.0043, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m12(15.0,19.0),  0.0156, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m13(15.0,19.0), -0.0162, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m14(15.0,19.0),  0.0027, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m15(15.0,19.0), -0.0110, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m16(15.0,19.0),  0.0102, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m17(15.0,19.0),  0.0026, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m18(15.0,19.0),  0.0015, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m19(15.0,19.0), -0.0005, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m20(15.0,19.0), -0.0001, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m21(15.0,19.0),  0.0001, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m22(15.0,19.0), -0.0002, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m23(15.0,19.0), -0.0195, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m24(15.0,19.0),  0.0196, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m25(15.0,19.0),  0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m26(15.0,19.0),  0.0001, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m27(15.0,19.0),  0.0134, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m28(15.0,19.0), -0.0128, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m29(15.0,19.0),  0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m30(15.0,19.0),  0.0003, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m31(15.0,19.0),  0.0000, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m32(15.0,19.0), -0.0006, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m33(15.0,19.0), -0.0017, eps);
-		    TEST_CHECK_NEARLY_EQUAL(d.integrated_m34(15.0,19.0),  0.0002, eps);   
+                    TEST_CHECK_NEARLY_EQUAL( 0.3572380627,    d.integrated_m1(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.2855238745,    d.integrated_m2(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.234809903,     d.integrated_m3(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.2080679346,    d.integrated_m4(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.1618563161,    d.integrated_m5(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.144676431,     d.integrated_m6(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01842966894,   d.integrated_m7(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01208460395,   d.integrated_m8(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.000632757932,  d.integrated_m9(15.0,19.0),  eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0004266646439, d.integrated_m10(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.004318842853,  d.integrated_m11(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.01512675851,   d.integrated_m12(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01352116178,   d.integrated_m13(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.00276243053,   d.integrated_m14(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01099837965,   d.integrated_m15(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.009044877463,  d.integrated_m16(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.00303700215,   d.integrated_m17(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.001302784642,  d.integrated_m18(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0003501096568, d.integrated_m19(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-8.691650257e-06, d.integrated_m20(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 7.954450124e-05, d.integrated_m21(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.0002566741022, d.integrated_m22(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01899696629,   d.integrated_m23(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.01711256795,   d.integrated_m24(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-6.720120155e-06, d.integrated_m25(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0001459979315, d.integrated_m26(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.01337143711,   d.integrated_m27(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.01169255641,   d.integrated_m28(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0,               d.integrated_m29(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0002233789303, d.integrated_m30(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0,               d.integrated_m31(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.00096592011,   d.integrated_m32(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL(-0.00181996628,   d.integrated_m33(15.0,19.0), eps);
+                    TEST_CHECK_NEARLY_EQUAL( 0.0001388284105, d.integrated_m34(15.0,19.0), eps);
                 }
             }
         }
