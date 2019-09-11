@@ -64,6 +64,30 @@ namespace test
             std::string where() const;
     };
 
+#ifdef EOS_GENERATE_TESTS
+
+#define TEST_CHECK_NEARLY_EQUAL(a, b, eps) \
+    do \
+    { \
+        std::cout << "TEST_CHECK_NEARLY_EQUAL(" + stringify(b) + ", "  #b  ", " #eps ");" << std::endl; \
+    } \
+    while (false)
+
+#define TEST_CHECK_RELATIVE_ERROR(a, b, eps) \
+    do \
+    { \
+        std::cout << "TEST_CHECK_RELATIVE_ERROR(" + stringify(b) + ", "  #b  ", " #eps ");" << std::endl; \
+    } \
+    while (false)
+
+#define TEST_CHECK_EQUAL(a, b) \
+    do \
+    { \
+    } \
+    while (false)
+
+#else
+
 #define TEST_SECTION(name, body) \
     do \
     { \
@@ -250,6 +274,8 @@ namespace test
         } \
     } \
     while (false)
+
+#endif
 
 }
 #endif
