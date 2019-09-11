@@ -244,42 +244,52 @@ public:
         TEST_CHECK_NEARLY_EQUAL(0.299748, ff->f_time_v( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.351122, ff->f_time_v( 5.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.419267, ff->f_time_v(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.513241, ff->f_time_v(15.0), eps);
 
         TEST_CHECK_NEARLY_EQUAL(0.461852, ff->f_long_v( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.517426, ff->f_long_v( 5.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.589584, ff->f_long_v(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.687469, ff->f_long_v(15.0), eps);
 
         TEST_CHECK_NEARLY_EQUAL(-0.486008, ff->f_perp_v( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(-0.571162, ff->f_perp_v( 5.0), eps);
         TEST_CHECK_NEARLY_EQUAL(-0.687539, ff->f_perp_v(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(-0.855001, ff->f_perp_v(15.0), eps);
 
         TEST_CHECK_NEARLY_EQUAL(1.65909, ff->f_time_a( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(1.94289, ff->f_time_a( 5.0), eps);
-        TEST_CHECK_NEARLY_EQUAL(2.3313, ff->f_time_a(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(2.3313,  ff->f_time_a(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(2.89206, ff->f_time_a(15.0), eps);
 
         TEST_CHECK_NEARLY_EQUAL(2.03046, ff->f_long_a( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(2.33035, ff->f_long_a( 5.0), eps);
         TEST_CHECK_NEARLY_EQUAL(2.72177, ff->f_long_a(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(3.25185, ff->f_long_a(15.0), eps);
 
         TEST_CHECK_NEARLY_EQUAL(2.04987, ff->f_perp_a( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(2.34308, ff->f_perp_a( 5.0), eps);
         TEST_CHECK_NEARLY_EQUAL(2.72459, ff->f_perp_a(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(3.23947, ff->f_perp_a(15.0), eps);
 
         TEST_CHECK_NEARLY_EQUAL(0.726996, ff->f_long_t( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.822619, ff->f_long_t( 5.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.948552, ff->f_long_t(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(1.122315, ff->f_long_t(15.0), eps);
 
         TEST_CHECK_NEARLY_EQUAL(-0.259424, ff->f_perp_t( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(-0.287293, ff->f_perp_t( 5.0), eps);
         TEST_CHECK_NEARLY_EQUAL(-0.322751, ff->f_perp_t(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(-0.369644, ff->f_perp_t(15.0), eps);
 
         TEST_CHECK_NEARLY_EQUAL(0.130294, ff->f_long_t5( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.150786, ff->f_long_t5( 5.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.177691, ff->f_long_t5(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.214357, ff->f_long_t5(15.0), eps);
 
         TEST_CHECK_NEARLY_EQUAL(0.357693, ff->f_perp_t5( 0.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.299983, ff->f_perp_t5( 5.0), eps);
         TEST_CHECK_NEARLY_EQUAL(0.210694, ff->f_perp_t5(10.0), eps);
+        TEST_CHECK_NEARLY_EQUAL(0.069375, ff->f_perp_t5(15.0), eps);
     }
 } dkmr2017_form_factors_test;
 
