@@ -73,6 +73,7 @@ namespace eos
         static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
         static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
         static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+        static constexpr const char * hqe_prefix = "B(*)->D(*)";
     };
 
     struct BsToDsstar {
@@ -85,6 +86,7 @@ namespace eos
         static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
         static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
         static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+        static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
     };
 
     struct BToKstar {
@@ -795,6 +797,7 @@ namespace eos
         static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
         static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
         static constexpr const bool uses_tensor_form_factors = true;
+        static constexpr const char * hqe_prefix = "B(*)->D(*)";
     };
 
     struct BsToDs {
@@ -810,6 +813,7 @@ namespace eos
         static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
         static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
         static constexpr const bool uses_tensor_form_factors = true;
+        static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
     };
 
     /*
@@ -1646,7 +1650,22 @@ namespace eos
         static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
         static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
         static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+        static constexpr const char * hqe_prefix = "B(*)->D(*)";
     };
+
+    struct BsstarToDs {
+        static constexpr const char * label = "B_s^*->D_s";
+        static constexpr const char * name_Bst = "mass::B_s^*";
+        static constexpr const char * name_P   = "mass::D_s";
+        static constexpr const double m_B = 5.324;
+        static constexpr const double m_P = 1.968;
+        static constexpr const double mBc  = 6.2751;
+        static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
+        static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
+        static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+        static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
+    };
+
 
     /* V -> V Processes */
 
@@ -1660,6 +1679,20 @@ namespace eos
         static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
         static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
         static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+        static constexpr const char * hqe_prefix = "B(*)->D(*)";
+    };
+
+    struct BsstarToDsstar {
+        static constexpr const char * label = "B_s^*->D_s^*";
+        static constexpr const char * name_Bst = "mass::B_s^*";
+        static constexpr const char * name_P   = "mass::D_s";
+        static constexpr const double m_B = 5.324;
+        static constexpr const double m_V = 2.010;
+        static constexpr const double mBc  = 6.2751;
+        static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
+        static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
+        static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
+        static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
     };
 }
 

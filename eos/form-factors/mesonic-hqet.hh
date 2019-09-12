@@ -94,9 +94,9 @@ namespace eos
             UsedParameter _l6one, _l6pone, _l6ppone;
 
         public:
-            HQETFormFactorBase(const Parameters & p, const Options & o) :
+            HQETFormFactorBase(const Parameters & p, const Options & o, const std::string & prefix) :
                 _model(Model::make("SM", p, o)),
-                _a(p["B(*)->D(*)::a@HQET"], *this),
+                _a(p[prefix + "::a@HQET"], *this),
                 _opt_lp_model(o, "model-lp", { "power-series", "exponential" }, "power-series"),
                 _opt_lp_zorder(o, "z-order-lp", { "2", "3", "4", "5" }, "3"),
                 _enable_lp_z3(1.0 ? _opt_lp_zorder.value() >= "3" : 0.0),
@@ -107,37 +107,37 @@ namespace eos
                 _opt_sslp_zorder(o, "z-order-sslp", { "0", "1", "2" }, "1"),
                 _enable_sslp_z1(1.0 ? _opt_sslp_zorder.value() >= "1" : 0.0),
                 _enable_sslp_z2(1.0 ? _opt_sslp_zorder.value() >= "2" : 0.0),
-                _xipone(p["B(*)->D(*)::xi'(1)@HQET"], *this),
-                _xippone(p["B(*)->D(*)::xi''(1)@HQET"], *this),
-                _xipppone(p["B(*)->D(*)::xi'''(1)@HQET"], *this),
-                _xippppone(p["B(*)->D(*)::xi''''(1)@HQET"], *this),
-                _xipppppone(p["B(*)->D(*)::xi'''''(1)@HQET"], *this),
-                _chi2one(p["B(*)->D(*)::chi_2(1)@HQET"], *this),
-                _chi2pone(p["B(*)->D(*)::chi_2'(1)@HQET"], *this),
-                _chi2ppone(p["B(*)->D(*)::chi_2''(1)@HQET"], *this),
-                _chi3pone(p["B(*)->D(*)::chi_3'(1)@HQET"], *this),
-                _chi3ppone(p["B(*)->D(*)::chi_3''(1)@HQET"], *this),
-                _etaone(p["B(*)->D(*)::eta(1)@HQET"], *this),
-                _etapone(p["B(*)->D(*)::eta'(1)@HQET"], *this),
-                _etappone(p["B(*)->D(*)::eta''(1)@HQET"], *this),
-                _l1one(p["B(*)->D(*)::l_1(1)@HQET"], *this),
-                _l1pone(p["B(*)->D(*)::l_1'(1)@HQET"], *this),
-                _l1ppone(p["B(*)->D(*)::l_1''(1)@HQET"], *this),
-                _l2one(p["B(*)->D(*)::l_2(1)@HQET"], *this),
-                _l2pone(p["B(*)->D(*)::l_2'(1)@HQET"], *this),
-                _l2ppone(p["B(*)->D(*)::l_2''(1)@HQET"], *this),
-                _l3one(p["B(*)->D(*)::l_3(1)@HQET"], *this),
-                _l3pone(p["B(*)->D(*)::l_3'(1)@HQET"], *this),
-                _l3ppone(p["B(*)->D(*)::l_3''(1)@HQET"], *this),
-                _l4one(p["B(*)->D(*)::l_4(1)@HQET"], *this),
-                _l4pone(p["B(*)->D(*)::l_4'(1)@HQET"], *this),
-                _l4ppone(p["B(*)->D(*)::l_4''(1)@HQET"], *this),
-                _l5one(p["B(*)->D(*)::l_5(1)@HQET"], *this),
-                _l5pone(p["B(*)->D(*)::l_5'(1)@HQET"], *this),
-                _l5ppone(p["B(*)->D(*)::l_5''(1)@HQET"], *this),
-                _l6one(p["B(*)->D(*)::l_6(1)@HQET"], *this),
-                _l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], *this),
-                _l6ppone(p["B(*)->D(*)::l_6''(1)@HQET"], *this)
+                _xipone(p[prefix + "::xi'(1)@HQET"], *this),
+                _xippone(p[prefix + "::xi''(1)@HQET"], *this),
+                _xipppone(p[prefix + "::xi'''(1)@HQET"], *this),
+                _xippppone(p[prefix + "::xi''''(1)@HQET"], *this),
+                _xipppppone(p[prefix + "::xi'''''(1)@HQET"], *this),
+                _chi2one(p[prefix + "::chi_2(1)@HQET"], *this),
+                _chi2pone(p[prefix + "::chi_2'(1)@HQET"], *this),
+                _chi2ppone(p[prefix + "::chi_2''(1)@HQET"], *this),
+                _chi3pone(p[prefix + "::chi_3'(1)@HQET"], *this),
+                _chi3ppone(p[prefix + "::chi_3''(1)@HQET"], *this),
+                _etaone(p[prefix + "::eta(1)@HQET"], *this),
+                _etapone(p[prefix + "::eta'(1)@HQET"], *this),
+                _etappone(p[prefix + "::eta''(1)@HQET"], *this),
+                _l1one(p[prefix + "::l_1(1)@HQET"], *this),
+                _l1pone(p[prefix + "::l_1'(1)@HQET"], *this),
+                _l1ppone(p[prefix + "::l_1''(1)@HQET"], *this),
+                _l2one(p[prefix + "::l_2(1)@HQET"], *this),
+                _l2pone(p[prefix + "::l_2'(1)@HQET"], *this),
+                _l2ppone(p[prefix + "::l_2''(1)@HQET"], *this),
+                _l3one(p[prefix + "::l_3(1)@HQET"], *this),
+                _l3pone(p[prefix + "::l_3'(1)@HQET"], *this),
+                _l3ppone(p[prefix + "::l_3''(1)@HQET"], *this),
+                _l4one(p[prefix + "::l_4(1)@HQET"], *this),
+                _l4pone(p[prefix + "::l_4'(1)@HQET"], *this),
+                _l4ppone(p[prefix + "::l_4''(1)@HQET"], *this),
+                _l5one(p[prefix + "::l_5(1)@HQET"], *this),
+                _l5pone(p[prefix + "::l_5'(1)@HQET"], *this),
+                _l5ppone(p[prefix + "::l_5''(1)@HQET"], *this),
+                _l6one(p[prefix + "::l_6(1)@HQET"], *this),
+                _l6pone(p[prefix + "::l_6'(1)@HQET"], *this),
+                _l6ppone(p[prefix + "::l_6''(1)@HQET"], *this)
             {
                 using std::placeholders::_1;
 
@@ -757,7 +757,7 @@ namespace eos
 
         public:
             HQETFormFactors(const Parameters & p, const Options & o) :
-                HQETFormFactorBase(p, o),
+                HQETFormFactorBase(p, o, Process_::hqe_prefix),
                 _m_B(p[Process_::name_B], *static_cast<ParameterUser *>(this)),
                 _m_P(p[Process_::name_P], *static_cast<ParameterUser *>(this))
             {
@@ -1182,7 +1182,7 @@ namespace eos
 
         public:
             HQETFormFactors(const Parameters & p, const Options & o) :
-                HQETFormFactorBase(p, o),
+                HQETFormFactorBase(p, o, Process_::hqe_prefix),
                 _m_B(p[Process_::name_B], *static_cast<ParameterUser *>(this)),
                 _m_V(p[Process_::name_V], *static_cast<ParameterUser *>(this))
             {
@@ -1466,7 +1466,7 @@ namespace eos
 
         public:
             HQETFormFactors(const Parameters & p, const Options & o) :
-                HQETFormFactorBase(p, o),
+                HQETFormFactorBase(p, o, Process_::hqe_prefix),
                 _m_Bst(p[Process_::name_Bst], *static_cast<ParameterUser *>(this)),
                 _m_P(p[Process_::name_P], *static_cast<ParameterUser *>(this))
             {
@@ -1776,7 +1776,7 @@ namespace eos
 
         public:
             HQETFormFactors(const Parameters & p, const Options & o) :
-                HQETFormFactorBase(p, o)
+                HQETFormFactorBase(p, o, Process_::hqe_prefix)
             {
             }
 
