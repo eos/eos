@@ -101,6 +101,7 @@ class Plotter:
 
             self.ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
             self.ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+            self.ax.xaxis.set_ticks_position('both')
 
             if 'scale' in myx:
                 self.xscale = float(myx['scale'])
@@ -122,6 +123,7 @@ class Plotter:
 
             self.ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
             self.ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
+            self.ax.yaxis.set_ticks_position('both')
 
             if 'scale' in myy:
                 self.yscale = float(myy['scale'])
