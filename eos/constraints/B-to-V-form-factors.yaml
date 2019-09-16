@@ -1460,6 +1460,15 @@ B_s->D_s^*::A_1[s_max]@HPQCD-2017:
     sigma-stat: {hi: 0.0108041,  lo: -0.0108041}
     sigma-sys:  {hi: 0.0252096,  lo: -0.0252096}
     dof: 1
+B_s->D_s^*::A_1[s_max]@HPQCD-2019:
+    type: Gaussian
+    observable: B_s->D_s^*::A_1(q2)
+    kinematics: {q2: 10.59}
+    options: {form-factors: BSZ2015}
+    mean: 0.812109
+    sigma-stat: {hi: 0.008643,  lo: -0.008643}
+    sigma-sys:  {hi: 0.008104,  lo: -0.008104}
+    dof: 1
 B_s->D_s^(*)::FormFactors[f_+,f_0,f_T,A_0,A_1,A_2,V,T_1,T_2,T_23]@BGJvD2019:
   type: MultivariateGaussian(Covariance)
   dim: 37
