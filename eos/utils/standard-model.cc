@@ -175,7 +175,8 @@ namespace implementation
         _m_b_MSbar__qcd(p["mass::b(MSbar)"], u),
         _m_c_MSbar__qcd(p["mass::c"], u),
         _m_s_MSbar__qcd(p["mass::s(2GeV)"], u),
-        _m_ud_MSbar__qcd(p["mass::ud(2GeV)"], u),
+        _m_d_MSbar__qcd(p["mass::d(2GeV)"], u),
+        _m_u_MSbar__qcd(p["mass::u(2GeV)"], u),
         _m_Z__qcd(p["mass::Z"], u)
     {
     }
@@ -396,7 +397,7 @@ namespace implementation
     double
     SMComponent<components::QCD>::m_ud_msbar(const double & mu) const
     {
-        double m_ud_0 = _m_ud_MSbar__qcd();
+        double m_ud_0 = _m_u_MSbar__qcd() + _m_d_MSbar__qcd();
         double alpha_s_mu0 = alpha_s(2.0);
 
         if (mu >= 2.0)
@@ -426,6 +427,78 @@ namespace implementation
                 return QCD::m_q_msbar(m_ud_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_3, QCD::gamma_m_nf_3);
 
             throw InternalError("SMComponent<components::QCD>::m_ud_msbar: Running of m_ud_MSbar to mu < 1.0 GeV not yet implemented");
+        }
+    }
+
+    double
+    SMComponent<components::QCD>::m_u_msbar(const double & mu) const
+    {
+        double m_u_0 = _m_u_MSbar__qcd();
+        double alpha_s_mu0 = alpha_s(2.0);
+
+        if (mu >= 2.0)
+        {
+            if (mu <= _mu_b__qcd)
+                return QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+
+            double alpha_s_b = alpha_s(_mu_b__qcd);
+            m_u_0 = QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0 = alpha_s_b;
+
+            if (mu <= _mu_t__qcd)
+                return QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+
+            throw InternalError("SMComponent<components::QCD>::m_u_msbar: Running of m_u_MSbar to mu > mu_t not yet implemented");
+        }
+        else
+        {
+            if (mu >= _mu_c__qcd)
+                return QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+
+            double alpha_s_c = alpha_s(_mu_c__qcd);
+            m_u_0 = QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0 = alpha_s_c;
+
+            if (mu >= 1.0)
+                return QCD::m_q_msbar(m_u_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_3, QCD::gamma_m_nf_3);
+
+            throw InternalError("SMComponent<components::QCD>::m_u_msbar: Running of m_u_MSbar to mu < 1.0 GeV not yet implemented");
+        }
+    }
+
+    double
+    SMComponent<components::QCD>::m_d_msbar(const double & mu) const
+    {
+        double m_d_0 = _m_d_MSbar__qcd();
+        double alpha_s_mu0 = alpha_s(2.0);
+
+        if (mu >= 2.0)
+        {
+            if (mu <= _mu_b__qcd)
+                return QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+
+            double alpha_s_b = alpha_s(_mu_b__qcd);
+            m_d_0 = QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s_b, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0 = alpha_s_b;
+
+            if (mu <= _mu_t__qcd)
+                return QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_5, QCD::gamma_m_nf_5);
+
+            throw InternalError("SMComponent<components::QCD>::m_d_msbar: Running of m_d_MSbar to mu > mu_t not yet implemented");
+        }
+        else
+        {
+            if (mu >= _mu_c__qcd)
+                return QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+
+            double alpha_s_c = alpha_s(_mu_c__qcd);
+            m_d_0 = QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s_c, QCD::beta_function_nf_4, QCD::gamma_m_nf_4);
+            alpha_s_mu0 = alpha_s_c;
+
+            if (mu >= 1.0)
+                return QCD::m_q_msbar(m_d_0, alpha_s_mu0, alpha_s(mu), QCD::beta_function_nf_3, QCD::gamma_m_nf_3);
+
+            throw InternalError("SMComponent<components::QCD>::m_d_msbar: Running of m_d_MSbar to mu < 1.0 GeV not yet implemented");
         }
     }
 

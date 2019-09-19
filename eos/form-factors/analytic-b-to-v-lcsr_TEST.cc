@@ -45,7 +45,8 @@ class LCSRFormFactorsTest :
                 p["B::1/lambda_B_p"]          = 2.173913;
                 p["B::lambda_E^2"]            = 0.3174;
                 p["B::lambda_H^2"]            = 1.2696;
-                p["mass::ud(2GeV)"]           = 0.008;
+                p["mass::d(2GeV)"]            = 0.0048;
+                p["mass::u(2GeV)"]            = 0.0032;
                 p["mass::B_d"]                = 5.2795;
                 p["mass::K_d^*"]              = 0.896;
                 p["decay-constant::B_d"]      = 0.180;

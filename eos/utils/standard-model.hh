@@ -70,7 +70,8 @@ namespace eos
             UsedParameter _m_b_MSbar__qcd;
             UsedParameter _m_c_MSbar__qcd;
             UsedParameter _m_s_MSbar__qcd;
-            UsedParameter _m_ud_MSbar__qcd;
+            UsedParameter _m_d_MSbar__qcd;
+            UsedParameter _m_u_MSbar__qcd;
             UsedParameter _m_Z__qcd;
 
         public:
@@ -89,6 +90,8 @@ namespace eos
             virtual double m_c_pole() const;
             virtual double m_s_msbar(const double & mu) const;
             virtual double m_ud_msbar(const double & mu) const;
+            virtual double m_u_msbar(const double & mu) const;
+            virtual double m_d_msbar(const double & mu) const;
     };
 
     template <> class SMComponent<components::DeltaBS1> :
