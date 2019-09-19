@@ -46,7 +46,8 @@ class AnalyticFormFactorBToPiPiBFvD2016Test :
             Parameters p = Parameters::Defaults();
             p["mass::B_d"] = 5.2795;
             p["mass::pi^+"] = 0.13957;
-            p["mass::ud(2GeV)"] = 0.008;
+            p["mass::d(2GeV)"] = 0.0048;
+            p["mass::u(2GeV)"] = 0.0032;
             p["pi::a2@1GeV"] = 0.17;
             p["pi::a4@1GeV"] = 0.06;
             p["decay-constant::pi"] = 0.1304;
@@ -280,7 +281,8 @@ class AnalyticFormFactorBToPiPiFvDV2018Test :
             Parameters p = Parameters::Defaults();
             p["mass::B_d"] = 5.2795;
             p["mass::pi^+"] = 0.13957;
-            p["mass::ud(2GeV)"] = 0.008;
+            p["mass::d(2GeV)"] = 0.0048;
+            p["mass::u(2GeV)"] = 0.0032;
             p["B->pipi::mu@BFvD2016"] = 1.5;
             p["B->pi::f_+(0)@BCL2008"] = +3.07e-01;
             p["B->pi::b_+^1@BCL2008"]  = -1.31e+00;

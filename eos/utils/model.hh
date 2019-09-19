@@ -89,6 +89,8 @@ namespace eos
             virtual double m_c_pole() const = 0;
             virtual double m_s_msbar(const double & mu) const = 0;
             virtual double m_ud_msbar(const double & mu) const = 0;
+            virtual double m_u_msbar(const double & mu) const = 0;
+            virtual double m_d_msbar(const double & mu) const = 0;
     };
 
     /*!

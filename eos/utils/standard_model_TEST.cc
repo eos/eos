@@ -38,7 +38,8 @@ reference_parameters()
     result["mass::b(MSbar)"] = 4.2;
     result["mass::c"] = 1.27;
     result["mass::s(2GeV)"] = 0.101;
-    result["mass::ud(2GeV)"] = 0.008;
+    result["mass::d(2GeV)"] = 0.0048;
+    result["mass::u(2GeV)"] = 0.0032;
     result["mass::W"] = 80.398;
     result["mass::Z"] = 91.1876;
     result["GSW::sin^2(theta)"] = 0.23116;

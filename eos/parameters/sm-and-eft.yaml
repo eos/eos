@@ -125,16 +125,16 @@ groups:
           max:     +1.77698
           comments: 'cf. [PDG2012], p. 14'
       # Quark masses
+      'mass::u(2GeV)' :
+          central: +0.0032
+          min:     +0.0025
+          max:     +0.0035
+          comments: 'cf. [PDG2012], p. 21'
       'mass::d(2GeV)' :
           central: +0.0048
           min:     +0.0045
           max:     +0.0055
           comments: 'cf. [PDG2012], p. 21'
-      'mass::ud(2GeV)' :
-          central: +0.008
-          min:     +0.008
-          max:     +0.008
-          comments: ''
       'mass::s(2GeV)' :
           central: +0.095
           min:     +0.090

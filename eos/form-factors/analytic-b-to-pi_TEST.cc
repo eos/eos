@@ -91,7 +91,8 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 Parameters p = Parameters::Defaults();
                 p["mass::pi^+"] = 0.13957;
                 p["mass::b(MSbar)"] = 4.18;
-                p["mass::ud(2GeV)"] = 0.008;
+                p["mass::d(2GeV)"] = 0.0048;
+                p["mass::u(2GeV)"] = 0.0032;
                 p["pi::a2@1GeV"] = 0.17;
                 p["pi::a4@1GeV"] = 0.06;
                 p["pi::f3@1GeV"] = 0.0045;

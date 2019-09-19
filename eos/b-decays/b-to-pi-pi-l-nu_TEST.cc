@@ -49,7 +49,8 @@ class BToPiPiLeptonNeutrinoTest :
                 p["B->pi::b_+^2@BCL2008"]  = -0.441;
                 p["mass::B_d"]             =  5.2796;
                 p["mass::pi^+"]            =  1.3957e-1;
-                p["mass::ud(2GeV)"]        =  0.008;
+                p["mass::d(2GeV)"]         =  0.0048;
+                p["mass::u(2GeV)"]         =  0.0032;
                 p["pi::a2@1GeV"]           = +0.16;
                 p["pi::a4@1GeV"]           = +0.04;
                 p["B->pipi::mu@BFvD2016"]  = +1.5;
