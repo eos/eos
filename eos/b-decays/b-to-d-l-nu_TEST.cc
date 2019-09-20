@@ -155,92 +155,117 @@ class BToDLeptonNeutrinoTest :
 
             // SM tests
             {
-                Parameters p1 = Parameters::Defaults();
-                p1["B->D::f_+(0)@BCL2008"]  = +0.660;
-                p1["B->D::f_T(0)@BCL2008"]  = +0.00;
-                p1["B->D::b_+^1@BCL2008"]   = -4.00;
-                p1["B->D::b_+^2@BCL2008"]   = -0.80;
-                p1["B->D::b_0^1@BCL2008"]   = +0.40;
-                p1["B->D::b_0^2@BCL2008"]   = -1.20;
-                p1["B->D::b_T^1@BCL2008"]   = +0.00;
-                p1["B->D::b_T^2@BCL2008"]   = +0.00;
-                p1["mass::B_d"]             =  5.279;
-                p1["mass::D_d"]             =  1.870;
+                Parameters p = Parameters::Defaults();
+                p["B->D::f_+(0)@BCL2008"]  = +0.660;
+                p["B->D::f_T(0)@BCL2008"]  = +0.00;
+                p["B->D::b_+^1@BCL2008"]   = -4.00;
+                p["B->D::b_+^2@BCL2008"]   = -0.80;
+                p["B->D::b_0^1@BCL2008"]   = +0.40;
+                p["B->D::b_0^2@BCL2008"]   = -1.20;
+                p["B->D::b_T^1@BCL2008"]   = +0.00;
+                p["B->D::b_T^2@BCL2008"]   = +0.00;
+                p["mass::B_d"]             =  5.279;
+                p["mass::D_d"]             =  1.870;
                 // by default, all other couplings are zero in eos
-                p1["b->cmunumu::Re{cVL}"]   =  1.0;
+                p["b->cmunumu::Re{cVL}"]   =  1.0;
 
                 Options oo
                 {
                     { "model",        "WilsonScan" },
                     { "form-factors", "BCL2008"    },
-                    { "U",            "c"          }
+                    { "U",            "c"          },
+                    { "q",            "d"          },
+                    { "l",            "mu"         }
                 };
 
-                BToPseudoscalarLeptonNeutrino d(p1, oo);
 
                 const double eps = 1e-3;
+                {
+                    BToPseudoscalarLeptonNeutrino d(p, oo);
 
-                // the default lepton is muon
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.1988, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.0138762, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_r_d(0.011164, 3.15702, 11.62, 11.62), 0.299132, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.1988, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.0138762, eps);
+
+                    auto k      = Kinematics{
+                        { "q2_mu_min",   0.011164 },
+                        { "q2_mu_max",  11.62     },
+                        { "q2_tau_min",  3.15702  },
+                        { "q2_tau_max", 11.62     }
+                    };
+                    auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
+
+                    TEST_CHECK(obs_RD.get() != nullptr);
+                    TEST_CHECK_RELATIVE_ERROR(0.299132, obs_RD->evaluate(), eps);
+                }
             }
 
             // NP tests
             {
-                Parameters p3 = Parameters::Defaults();
-                p3["B->D::f_+(0)@BCL2008"]  = +0.660;
-                p3["B->D::f_T(0)@BCL2008"]  = +1.00;
-                p3["B->D::b_+^1@BCL2008"]   = -4.00;
-                p3["B->D::b_+^2@BCL2008"]   = -0.800;
-                p3["B->D::b_0^1@BCL2008"]   = +0.400;
-                p3["B->D::b_0^2@BCL2008"]   = -1.20;
-                p3["B->D::b_T^1@BCL2008"]   = +3.00;
-                p3["B->D::b_T^2@BCL2008"]   = -0.60;
-                p3["mass::B_d"]             =  5.279;
-                p3["mass::D_d"]             =  1.870;
+                Parameters p = Parameters::Defaults();
+                p["B->D::f_+(0)@BCL2008"]  = +0.660;
+                p["B->D::f_T(0)@BCL2008"]  = +1.00;
+                p["B->D::b_+^1@BCL2008"]   = -4.00;
+                p["B->D::b_+^2@BCL2008"]   = -0.800;
+                p["B->D::b_0^1@BCL2008"]   = +0.400;
+                p["B->D::b_0^2@BCL2008"]   = -1.20;
+                p["B->D::b_T^1@BCL2008"]   = +3.00;
+                p["B->D::b_T^2@BCL2008"]   = -0.60;
+                p["mass::B_d"]             =  5.279;
+                p["mass::D_d"]             =  1.870;
                 // fix the scale
-                p3["mu"]                    =  4.18;
-                p3["mass::b(MSbar)"]        =  4.18;
-                p3["mass::c"]               =  1.275;
+                p["mu"]                    =  4.18;
+                p["mass::b(MSbar)"]        =  4.18;
+                p["mass::c"]               =  1.275;
                 // mu mode
-                p3["b->cmunumu::Re{cVL}"]         = +1.0;
-                p3["b->cmunumu::Im{cVL}"]         = -2.0;
-                p3["b->cmunumu::Re{cVR}"]         = +2.0;
-                p3["b->cmunumu::Im{cVR}"]         = -2.0;
-                p3["b->cmunumu::Re{cSL}"]         = +3.0;
-                p3["b->cmunumu::Im{cSL}"]         = -3.0;
-                p3["b->cmunumu::Re{cSR}"]         = +4.0;
-                p3["b->cmunumu::Im{cSR}"]         = -4.0;
-                p3["b->cmunumu::Re{cT}"]          = +5.0;
-                p3["b->cmunumu::Im{cT}"]          = -5.0;
+                p["b->cmunumu::Re{cVL}"]         = +1.0;
+                p["b->cmunumu::Im{cVL}"]         = -2.0;
+                p["b->cmunumu::Re{cVR}"]         = +2.0;
+                p["b->cmunumu::Im{cVR}"]         = -2.0;
+                p["b->cmunumu::Re{cSL}"]         = +3.0;
+                p["b->cmunumu::Im{cSL}"]         = -3.0;
+                p["b->cmunumu::Re{cSR}"]         = +4.0;
+                p["b->cmunumu::Im{cSR}"]         = -4.0;
+                p["b->cmunumu::Re{cT}"]          = +5.0;
+                p["b->cmunumu::Im{cT}"]          = -5.0;
                 // tau mode
-                p3["b->ctaunutau::Re{cVL}"]       = +1.0;
-                p3["b->ctaunutau::Im{cVL}"]       = -5.0;
-                p3["b->ctaunutau::Re{cVR}"]       = +2.1;
-                p3["b->ctaunutau::Im{cVR}"]       = -6.0;
-                p3["b->ctaunutau::Re{cSL}"]       = +3.1;
-                p3["b->ctaunutau::Im{cSL}"]       = -7.0;
-                p3["b->ctaunutau::Re{cSR}"]       = +4.1;
-                p3["b->ctaunutau::Im{cSR}"]       = -8.0;
-                p3["b->ctaunutau::Re{cT}"]        = +5.1;
-                p3["b->ctaunutau::Im{cT}"]        = -9.0;
+                p["b->ctaunutau::Re{cVL}"]       = +1.0;
+                p["b->ctaunutau::Im{cVL}"]       = -5.0;
+                p["b->ctaunutau::Re{cVR}"]       = +2.1;
+                p["b->ctaunutau::Im{cVR}"]       = -6.0;
+                p["b->ctaunutau::Re{cSL}"]       = +3.1;
+                p["b->ctaunutau::Im{cSL}"]       = -7.0;
+                p["b->ctaunutau::Re{cSR}"]       = +4.1;
+                p["b->ctaunutau::Im{cSR}"]       = -8.0;
+                p["b->ctaunutau::Re{cT}"]        = +5.1;
+                p["b->ctaunutau::Im{cT}"]        = -9.0;
 
                 Options oo
                 {
                     { "model",        "WilsonScan" },
                     { "form-factors", "BCL2008"    },
-                    { "U",            "c"          }
+                    { "U",            "c"          },
+                    { "q",            "d"          },
+                    { "l",            "mu"         }
                 };
 
-                BToPseudoscalarLeptonNeutrino d(p3, oo);
-
                 const double eps = 1e-3;
+                {
+                    BToPseudoscalarLeptonNeutrino d(p, oo);
 
-                // the default lepton is muon
-                TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 2615.77, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.621944, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_r_d(0.011164, 3.15702, 11.62, 11.62), 1.43554, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 2615.77, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.621944, eps);
+
+                    auto k      = Kinematics{
+                        { "q2_mu_min",   0.011164 },
+                        { "q2_mu_max",  11.62     },
+                        { "q2_tau_min",  3.15702  },
+                        { "q2_tau_max", 11.62     }
+                    };
+                    auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
+
+                    TEST_CHECK(obs_RD.get() != nullptr);
+                    TEST_CHECK_RELATIVE_ERROR(1.43554, obs_RD->evaluate(), eps);
+                }
             }
         }
 } b_to_d_l_nu_test;

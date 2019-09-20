@@ -58,10 +58,6 @@ namespace eos
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
 
-            // R_P
-            double differential_r_d(const double & s) const;
-            double integrated_r_d(const double & s_min_mu, const double & s_min_tau, const double & s_max_mu, const double & s_max_tau) const;
-
             // PDF
             double differential_pdf_w(const double & w) const;
             double integrated_pdf_w(const double & w_min, const double & w_max) const;
