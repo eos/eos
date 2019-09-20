@@ -76,6 +76,11 @@ groups:
           central: +5.325
           min:     +5.325
           max:     +5.325
+      'mass::B_s^*' :
+          central: +5.4154
+          min:     +5.4136
+          max:     +5.4172
+          comments: 'cf. [PDG2019]'
   # }}}
 
   # Vector Meson Masses
