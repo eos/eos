@@ -640,9 +640,9 @@ B_s->D_s::f_++f_0@HPQCD2019:
   kinematics:
   - q2:  0.0
   - q2:  5.77524
-  - q2: 11.5505
+  - q2: 11.5497
   - q2:  5.77524
-  - q2: 11.5505
+  - q2: 11.5497
   options:
   - {form-factors: BSZ2015}
   - {form-factors: BSZ2015}
