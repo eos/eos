@@ -18,11 +18,12 @@
 from _eos import _Observables
 
 class Observables(_Observables):
-    def __init__(self, prefix=None, name=None, suffix=None):
+    def __init__(self, prefix=None, name=None, suffix=None, showall=False):
         super().__init__()
         self.prefix=prefix
         self.name=name
         self.suffix=suffix
+        self.showall=showall
 
     def filter_entry(self, qn):
         if self.prefix and not self.prefix in str(qn.prefix_part()):
@@ -48,7 +49,7 @@ class Observables(_Observables):
                     latex = entry.latex()
                     if not self.filter_entry(qn):
                         continue
-                    if 0 == len(latex):
+                    if (0 == len(latex)) and not self.showall:
                         continue
                     group_result += r'      <tr><th><tt style="color:grey">{qn}</tt></th><td style="text-align:left">$${latex}$$</td></tr>'.format(qn=qn,latex=latex)
                     group_entries += 1
