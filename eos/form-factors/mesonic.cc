@@ -163,6 +163,7 @@ namespace eos
             { KeyType("B_s->phi::BZ2004"),     &BZ2004FormFactors<BsToPhi, PToV>::make             },
             { KeyType("B_s->K^*::BSZ2015"),    &BSZ2015FormFactors<BsToKstar,    PToV>::make       },
             { KeyType("B_s->D_s^*::BSZ2015"),  &BSZ2015FormFactors<BsToDsstar,    PToV>::make      },
+            { KeyType("B_s->D_s^*::HQET"),     &HQETFormFactors<BsToDsstar, PToV>::make            },
             { KeyType("B_s->phi::BSZ2015"),    &BSZ2015FormFactors<BsToPhi,    PToV>::make         },
             // analytic computations
             { KeyType("B->K^*::B-LCSR"),       &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make   },
@@ -345,6 +346,7 @@ namespace eos
             { KeyType("B->D::BSZ2015"),       &BSZ2015FormFactors<BToD, PToP>::make            },
             { KeyType("B->D::HQET"),          &HQETFormFactors<BToD, PToP>::make               },
             { KeyType("B_s->D_s::BSZ2015"),   &BSZ2015FormFactors<BsToDs, PToP>::make          },
+            { KeyType("B_s->D_s::HQET"),      &HQETFormFactors<BsToDs, PToP>::make             },
             // analytic computations
             { KeyType("B->pi::DKMMO2008"),    &AnalyticFormFactorBToPiDKMMO2008::make          },
             { KeyType("B->pi::B-LCSR"),       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make   },
