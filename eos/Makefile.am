@@ -13,7 +13,10 @@ libeos_la_SOURCES = \
 	decays.hh \
 	observable.cc observable.hh observable-fwd.hh observable-impl.hh \
 	signal-pdf.cc signal-pdf.hh
-libeos_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
+libeos_la_CXXFLAGS = $(AM_CXXFLAGS) \
+	-DEOS_DATADIR='"$(datadir)"' \
+	$(GSL_CXXFLAGS) \
+	$(YAMLCPP_CXXFLAGS)
 libeos_la_LDFLAGS = $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 libeos_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
