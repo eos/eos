@@ -55,10 +55,6 @@ namespace eos
             // Integrated Observables (normalized to 1)
             double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
 
-            // R_Lambda_c_2595
-            double differential_r_lambdac2595(const double & s) const;
-            double integrated_r_lambdac2595() const;
-
             /*!
              * Descriptions of the process and its kinematics.
              */

@@ -256,45 +256,6 @@ namespace eos
         return _imp->integrated_branching_ratio(s_min, s_max) / _imp->integrated_branching_ratio(abs_s_min, abs_s_max);
     }
 
-    double
-    LambdaBToLambdaC2595LeptonNeutrino::differential_r_lambdac2595(const double & s) const
-    {
-        double br_muons;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            br_muons = _imp->differential_branching_ratio(s);
-        }
-
-        double br_taus;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            br_taus = _imp->differential_branching_ratio(s);
-        }
-
-        return br_taus / br_muons;
-    }
-
-    double
-    LambdaBToLambdaC2595LeptonNeutrino::integrated_r_lambdac2595() const
-    {
-        std::function<double (const double &)> f = std::bind(&Implementation<LambdaBToLambdaC2595LeptonNeutrino>::differential_branching_ratio,
-                _imp.get(), std::placeholders::_1);
-
-        double br_muons;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            br_muons = integrate<GSL::QAGS>(f, power_of<2>(_imp->parameters["mass::mu"]()), power_of<2>(_imp->m_LambdaB - _imp->m_LambdaC2595));
-        }
-
-        double br_taus;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            br_taus = integrate<GSL::QAGS>(f, power_of<2>(_imp->parameters["mass::tau"]()), power_of<2>(_imp->m_LambdaB - _imp->m_LambdaC2595));
-        }
-
-        return br_taus / br_muons;
-    }
-
     const std::string
     LambdaBToLambdaC2595LeptonNeutrino::description = "\
 The decay Lambda_b -> Lambda_c(2595) l nu, where l=e,mu,tau is a lepton.";
