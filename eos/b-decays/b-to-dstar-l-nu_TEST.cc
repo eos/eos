@@ -193,7 +193,6 @@ class BToDstarLeptonNeutrinoTest :
                 // the default lepton is muon
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 10.68), 25.4230, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(4.0, 10.68), 0.000494949, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_tau_mu(4.0, 4.0, 10.68, 10.68), 0.379092, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(4.0, 10.68), 0.737489, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(4.0, 10.68), -0.130926, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_2(4.0, 10.68), 0.00266046, eps);
@@ -201,6 +200,14 @@ class BToDstarLeptonNeutrinoTest :
                 //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(4.0, 10.68), 0.0, eps);
                 //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(4.0, 10.68), 0.0, eps);
                 //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_3(4.0, 10.68), 0.0, eps);
+
+                Kinematics k
+                {
+                    { "q2_mu_min",   4.00 }, { "q2_mu_max",  10.68 },
+                    { "q2_tau_min",  4.00 }, { "q2_tau_max", 10.68 },
+                };
+                auto obs_RDst = Observable::make("B->D^*lnu::R_D^*", p1, k, oo);
+                TEST_CHECK_RELATIVE_ERROR(0.379092, obs_RDst->evaluate(), eps);
             }
 
             // NP tests cf. [DSD2014]
@@ -270,7 +277,6 @@ class BToDstarLeptonNeutrinoTest :
                 // the default lepton is muon
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 10.68), 3431.13, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(4.0, 10.68), 0.0409932, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_tau_mu(4.0, 4.0, 10.68, 10.68), 1.20331, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(4.0, 10.68), 0.50729, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(4.0, 10.68), 0.184031, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_2(4.0, 10.68), -0.0282197, eps);
@@ -278,6 +284,14 @@ class BToDstarLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(4.0, 10.68), 0.0000348895, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(4.0, 10.68), 0.000268975, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_3(4.0, 10.68), -0.0000320251, eps);
+
+                Kinematics k
+                {
+                    { "q2_mu_min",   4.00 }, { "q2_mu_max",  10.68 },
+                    { "q2_tau_min",  4.00 }, { "q2_tau_max", 10.68 },
+                };
+                auto obs_RDst = Observable::make("B->D^*lnu::R_D^*", p3, k, oo);
+                TEST_CHECK_RELATIVE_ERROR(1.20331, obs_RDst->evaluate(), eps);
             }
         }
 } b_to_dstar_l_nu_test;

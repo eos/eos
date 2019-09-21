@@ -354,26 +354,6 @@ namespace eos
         return _imp->differential_angular_observables(s).a_fb_leptonic();
     }
 
-    double
-    BToDstarLeptonNeutrino::differential_ratio_tau_mu(const double &s) const
-    {
-        double br_tau;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            Save<std::string> save_opt_l(_imp->opt_l._value, "tau");
-            br_tau = this->normalized_differential_branching_ratio(s);
-        }
-
-        double br_mu;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            Save<std::string> save_opt_l(_imp->opt_l._value, "mu");
-            br_mu = this->normalized_differential_branching_ratio(s);
-        }
-
-        return br_tau / br_mu;
-    }
-
     /* q^2-integrated observables */
 
     // |Vcb|=1
@@ -393,29 +373,6 @@ namespace eos
     BToDstarLeptonNeutrino::integrated_a_fb_leptonic(const double & s_min, const double & s_max) const
     {
         return _imp->integrated_angular_observables(s_min, s_max).a_fb_leptonic();
-    }
-
-    double
-    BToDstarLeptonNeutrino::integrated_ratio_tau_mu(const double & s_min_mu, const double & s_min_tau, const double & s_max_mu, const double & s_max_tau) const
-    {
-
-        double br_mu;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            Save<std::string> save_opt_l(_imp->opt_l._value, "mu");
-            
-            br_mu = this->normalized_integrated_branching_ratio(s_min_mu, s_max_mu);
-        }
-
-        double br_tau;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::tau"]());
-            Save<std::string> save_opt_l(_imp->opt_l._value, "tau");
-            
-            br_tau = this->normalized_integrated_branching_ratio(s_min_tau, s_max_tau);
-        }
-
-        return br_tau / br_mu;
     }
 
     double

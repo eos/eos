@@ -51,7 +51,6 @@ namespace eos
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
             double integrated_a_fb_leptonic(const double & s_min, const double & s_max) const;
-            double integrated_ratio_tau_mu(const double & s_min_mu, const double & s_min_tau, const double & s_max_mu, const double & s_max_tau) const;
 
             double integrated_amplitude_polarization_L(const double & s_min, const double & s_max) const;
             double integrated_amplitude_polarization_T(const double & s_min, const double & s_max) const;
