@@ -743,12 +743,21 @@ namespace eos
                         &LambdaBToLambdaC2625LeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)(q2)",
-                        &LambdaBToLambdaC2625LeptonNeutrino::differential_r_lambdac2625,
-                        std::make_tuple("q2")),
+                make_observable_ratio("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)(q2)", R"(R_{\Lambda_c(2625}(q^2))",
+                        &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "l", "tau" } },
+                        &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "l", "mu" } }),
 
-                make_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)",
-                        &LambdaBToLambdaC2625LeptonNeutrino::integrated_r_lambdac2625),
+                make_observable_ratio("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)", R"(R_{\Lambda_c(2625})",
+                        &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_tau_min", "q2_tau_max"),
+                        Options{ { "l", "tau" } },
+                        &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_mu_min", "q2_mu_max"),
+                        Options{ { "l", "mu" } }),
             }
         );
 
