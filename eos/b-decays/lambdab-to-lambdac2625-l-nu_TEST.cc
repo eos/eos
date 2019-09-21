@@ -59,7 +59,14 @@ class LambdaBToLambdaC2625LeptonNeutrinoTest :
             TEST_CHECK_RELATIVE_ERROR(d.b_l(s_max - 3.0),                                     2.0707523203345,  eps);
             TEST_CHECK_RELATIVE_ERROR(d.c_l(s_max - 3.0),                                    -1.9517657097361,  eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(s_min, s_max),             0.0443817800606,  eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_r_lambdac2625(),                           0.0994558945773,  eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(s_min, s_max),  0.0392696772213,  eps);
+
+            Kinematics k
+            {
+                { "q2_mu_min",  0.0111 }, { "q2_mu_max",  8.948 },
+                { "q2_tau_min", 3.1570 }, { "q2_tau_max", 8.948 }
+            };
+            auto obs_R = Observable::make("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)", p, k, o);
+            TEST_CHECK_RELATIVE_ERROR(0.0994558945773, obs_R->evaluate(), eps);
         }
 } lambda_b_to_lambda_c_2625_l_nu_test;
