@@ -76,7 +76,12 @@ libeosutils_la_LIBADD = \
 	-lMinuit2 \
 	-lpthread \
 	-lyaml-cpp
-libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
+libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) \
+	-DEOS_DATADIR='"$(datadir)"' \
+	$(GSL_CXXFLAGS) \
+	$(HDF5_CXXFLAGS) \
+	$(MINUIT2_CXXFLAGS) \
+	$(YAMLCPP_CXXFLAGS)
 libeosutils_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) $(MINUIT2_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
 EXTRA_DIST = \
