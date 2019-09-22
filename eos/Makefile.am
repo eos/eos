@@ -12,6 +12,7 @@ libeos_la_SOURCES = \
 	constraint.cc constraint.hh \
 	decays.hh \
 	observable.cc observable.hh observable-fwd.hh observable-impl.hh \
+	reference.cc reference.hh \
 	signal-pdf.cc signal-pdf.hh
 libeos_la_CXXFLAGS = $(AM_CXXFLAGS) \
 	-DEOS_DATADIR='"$(datadir)"' \
@@ -30,15 +31,18 @@ include_eos_HEADERS = \
 	constraint.hh \
 	decays.hh \
 	observable.hh \
+	reference.hh \
 	signal-pdf.hh
 
 AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_CONSTRAINTS="$(top_srcdir)/eos/constraints"; \
-	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
+	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters"; \
+	export EOS_TESTS_REFERENCES="$(top_srcdir)/eos/";
 
 TESTS = \
 	constraint_TEST \
-	references_TEST
+	reference_TEST
+
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	$(top_builddir)/eos/utils/libeosutils.la \
@@ -50,22 +54,16 @@ LDADD = \
 
 check_PROGRAMS = \
 	constraint_TEST \
-	references_TEST
+	reference_TEST
 
 constraint_TEST_SOURCES = constraint_TEST.cc
 constraint_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 constraint_TEST_LDADD = $(LDADD) -lyaml-cpp
 
-references_TEST_SOURCES = references_TEST.in
+reference_TEST_SOURCES = reference_TEST.cc
+reference_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+reference_TEST_LDADD = $(LDADD) -lyaml-cpp
 
 pkgdata_DATA = references.yaml
 EXTRA_DIST = \
-	references.yaml \
-	references_TEST.in
-
-references_TEST$(EXEEXT): references_TEST.in Makefile
-	sed \
-	    -e "s#@TOPSRCDIR@#$(top_srcdir)#g" \
-	    $< \
-	    > $@
-	chmod a+x $@
+	references.yaml

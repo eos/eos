@@ -18,6 +18,7 @@
  */
 
 #include <eos/utils/reference-name.hh>
+#include <eos/utils/stringify.hh>
 
 namespace eos
 {
@@ -59,12 +60,12 @@ namespace eos
         {
             if (year.empty())
             {
-                throw ReferenceNameSyntaxError("A qualified name's year part must not be empty");
+                throw ReferenceNameSyntaxError("A reference name's year part must not be empty");
             }
 
             if (4 != year.length())
             {
-                throw ReferenceNameSyntaxError("A qualified name's year part must be exactly 4 digits long");
+                throw ReferenceNameSyntaxError("A reference name's year part must be exactly 4 digits long, is " + stringify(year.length()) + " characters long");
             }
 
             // YEAR          := ['0'-'9'] ['0'-'9'] ['0'-'9'] ['0'-'9']
@@ -88,12 +89,12 @@ namespace eos
 
             if (index.empty())
             {
-                throw ReferenceNameSyntaxError("A qualified name's index part must not be empty");
+                throw ReferenceNameSyntaxError("A reference name's index part must not be empty");
             }
 
             if (std::string::npos != pos)
             {
-                throw ReferenceNameSyntaxError("'" + index + "' is not a valid index part: Character '" + index[pos] + "' may not be used");
+                throw ReferenceNameSyntaxError("'" + index + "' is not a valid index part: character '" + index[pos] + "' may not be used");
             }
         }
     }
@@ -109,7 +110,7 @@ namespace eos
             throw ReferenceNameSyntaxError("A reference name must not be empty");
         }
 
-        if (input.length() < 8)
+        if (input.length() < 7)
         {
             throw ReferenceNameSyntaxError("A reference name must at least 8 characters long");
         }
@@ -125,25 +126,16 @@ namespace eos
             throw ReferenceNameSyntaxError("A reference name must contain exactly one ':'");
         }
 
-        const auto pos_dash = input.find('-');
-        if (std::string::npos == pos_dash)
+        static const char * valid_digits = "0123456789";
+        const auto pos_non_digit = input.find_first_not_of(valid_digits, pos_colon + 1);
+        if (std::string::npos == pos_non_digit)
         {
-            throw ReferenceNameSyntaxError("A reference name must contain at least one '-'");
-        }
-        const auto pos_extra_dash = input.find('-', pos_dash + 1);
-        if (std::string::npos != pos_extra_dash)
-        {
-            throw ReferenceNameSyntaxError("A reference name must contain exactly one '-'");
-        }
-
-        if (pos_dash < pos_colon)
-        {
-            throw ReferenceNameSyntaxError("In a reference name, the ':' must preceed the '-'");
+            throw ReferenceNameSyntaxError("A reference name must contain an index part");
         }
 
         _name  = rnp::Name(input.substr(0, pos_colon));
-        _year  = rnp::Year(input.substr(pos_colon + 1, pos_dash - pos_colon - 1));
-        _index = rnp::Index(input.substr(pos_dash + 1));
+        _year  = rnp::Year(input.substr(pos_colon + 1, pos_non_digit - (pos_colon + 1)));
+        _index = rnp::Index(input.substr(pos_non_digit));
     }
 
     ReferenceName::ReferenceName(const char * input) :
