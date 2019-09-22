@@ -118,12 +118,20 @@ namespace impl
 
         return version;
     }
+
+    void translate_exception(const Exception & e)
+    {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+    }
 }
 
 BOOST_PYTHON_MODULE(_eos)
 {
     using namespace boost::python;
     using namespace eos;
+
+    // eos::Exception
+    register_exception_translator<Exception>(&impl::translate_exception);
 
     // {{{ eos/utils
     // qnp::Prefix
