@@ -107,10 +107,10 @@ class ReferenceNameTest :
 
         virtual void run() const
         {
-            TEST_CHECK_NO_THROW(auto qn = ReferenceName("A:2010-A"));
-            TEST_CHECK_NO_THROW(auto qn = ReferenceName("IKMvD:2014-A"));
-            TEST_CHECK_NO_THROW(auto qn = ReferenceName("BES2:2006-A"));
-            TEST_CHECK_NO_THROW(auto qn = ReferenceName("LHCb:2010-A"));
+            TEST_CHECK_NO_THROW(auto qn = ReferenceName("A:2010A"));
+            TEST_CHECK_NO_THROW(auto qn = ReferenceName("IKMvD:2014A"));
+            TEST_CHECK_NO_THROW(auto qn = ReferenceName("BES2:2006A"));
+            TEST_CHECK_NO_THROW(auto qn = ReferenceName("LHCb:2010A"));
 
             TEST_CHECK_THROWS(ReferenceNameSyntaxError, auto qn = ReferenceName(""));
             TEST_CHECK_THROWS(ReferenceNameSyntaxError, auto qn = ReferenceName("A"));
@@ -120,4 +120,4 @@ class ReferenceNameTest :
             TEST_CHECK_THROWS(ReferenceNameSyntaxError, auto qn = ReferenceName("A:1999-"));
             TEST_CHECK_THROWS(ReferenceNameSyntaxError, auto qn = ReferenceName("[A:1999-B]"));
         }
-} qualified_name_test;
+} reference_name_test;

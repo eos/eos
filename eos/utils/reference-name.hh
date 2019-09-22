@@ -74,7 +74,7 @@ namespace eos
      *
      * The syntax of a reference name follows:
      *
-     *   NAME ':' YEAR '-' INDEX
+     *   NAME ':' YEAR INDEX
      *
      * with
      *

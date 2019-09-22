@@ -21,6 +21,7 @@ from .analysis import Analysis, BestFitPoint
 from .constraint import Constraints
 from .observable import Observables
 from .parameter import Parameters
+from .reference import References
 
 import logging
 logger = logging.getLogger()
