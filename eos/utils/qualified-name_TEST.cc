@@ -79,7 +79,7 @@ class SuffixTest :
         virtual void run() const
         {
             TEST_CHECK_NO_THROW(auto p = qnp::Suffix("LargeRecoil"));
-            TEST_CHECK_NO_THROW(auto p = qnp::Suffix("LHCB-2014A"));
+            TEST_CHECK_NO_THROW(auto p = qnp::Suffix("LHCb:2014A"));
 
             // empty suffixes are permitted
             TEST_CHECK_NO_THROW(auto p = qnp::Suffix());
@@ -144,6 +144,7 @@ class QualifiedNameTest :
         {
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=BSZ2015"));
+            TEST_CHECK_NO_THROW(auto qn = QualifiedName("B^0->K^*0mu^+mu^-::A_FB@LHCb:2015-A;form-factors=BSZ2015"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("mass::b(MSbar);opt=har"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName(qnp::Prefix("mass"), qnp::Name("b(MSbar)"), qnp::Suffix("non-empty")));
 
