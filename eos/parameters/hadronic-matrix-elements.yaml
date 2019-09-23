@@ -2657,19 +2657,19 @@ groups:
           max: 2.0
           latex: '$a$'
       "B(*)->D(*)::xi'(1)@HQET" :
-          central: -1.306
-          min: -6.0
-          max:  0.0
+          central: -1.14
+          min:  -1.32
+          max:  -0.93
           latex: '$\xi^{(1)}(1)$'
       "B(*)->D(*)::xi''(1)@HQET" :
-          central: 2.440
-          min: -6.0
-          max: +6.0
+          central: 1.88
+          min: 1.57
+          max: 2.52
           latex: '$\xi^{(2)}(1)$'
       "B(*)->D(*)::xi'''(1)@HQET" :
-          central: 0.0
-          min: -12.0
-          max: +12.0
+          central: -3.29
+          min: -5.13
+          max: -2.90
           latex: '$\xi^{(3)}(1)$'
       "B(*)->D(*)::xi''''(1)@HQET" :
           central: 0.0
@@ -2682,112 +2682,135 @@ groups:
           max: +144.0
           latex: '$\xi^{(5)}(1)$'
       "B(*)->D(*)::chi_2(1)@HQET" :
-          central: -0.058
-          min: -0.077
-          max: -0.039
+          central: -0.06
+          min: -0.08
+          max: -0.04
           latex: '$\chi_2(1)$'
       "B(*)->D(*)::chi_2'(1)@HQET" :
-          central: -0.001
-          min: -0.021
-          max: +0.019
+          central: -0.00
+          min: -0.02
+          max: +0.02
           latex: '$\chi^{(1)}_2(1)$'
       "B(*)->D(*)::chi_2''(1)@HQET" :
-          central: 0
-          min: 0
-          max: 0
+          central: 0.06
+          min: -0.21
+          max: +0.16
           latex: '$\chi^{(2)}_2(1)$'
       "B(*)->D(*)::chi_3'(1)@HQET" :
-          central: +0.035
-          min: +0.054
-          max: +0.016
+          central: +0.04
+          min: +0.02
+          max: +0.06
+          latex: '$\chi^{(1)}_3(1)$'
       "B(*)->D(*)::chi_3''(1)@HQET" :
-          central: 0
-          min: 0
-          max: 0
+          central: -0.05
+          min: -0.16
+          max: -0.04
+          latex: '$\chi^{(2)}_3(1)$'
       "B(*)->D(*)::eta(1)@HQET" :
-          central: 0.358
-          min: 0.315
-          max: 0.402
+          central: 0.60
+          min: 0.44
+          max: 0.69
+          latex: '$\eta(1)$'
       "B(*)->D(*)::eta'(1)@HQET" :
-          central: 0.044
-          min: -0.081
-          max: 0.169
+          central: -0.02
+          min: -0.18
+          max: 0.18
+          latex: '$\eta^{(1)}(1)$'
       "B(*)->D(*)::eta''(1)@HQET" :
-          central: 0
-          min: 0
-          max: 0
+          central: -0.04
+          min: -0.84
+          max: +0.32
+          latex: '$\eta^{(2)}(1)$'
       "B(*)->D(*)::l_1(1)@HQET" :
-          central: +0.485
-          min: +0.216
-          max: +0.754
+          central: +0.12
+          min: -0.10
+          max: +0.36
+          latex: '$l^_1(1)$'
       "B(*)->D(*)::l_1'(1)@HQET" :
-          central: 0
-          min: 0
-          max: 0
+          central: -5.78
+          min: -12.5
+          max: -0.16
+          latex: '$l^{(1)}_1(1)$'
       "B(*)->D(*)::l_1''(1)@HQET" :
           central: 0
           min: 0
           max: 0
+          latex: '$l^{(2)}_1(1)$'
       "B(*)->D(*)::l_2(1)@HQET" :
-          central: -2.299
-          min: -2.693
-          max: -1.905
+          central: -1.89
+          min: -2.26
+          max: -1.54
+          latex: '$l^_2(1)$'
       "B(*)->D(*)::l_2'(1)@HQET" :
-          central: 0
-          min: 0
-          max: 0
+          central: -3.14
+          min: -9.53
+          max: +1.31
+          latex: '$l^{(1)}_2(1)$'
       "B(*)->D(*)::l_2''(1)@HQET" :
           central: 0
           min: 0
           max: 0
+          latex: '$l^{(2)}_2(1)$'
       "B(*)->D(*)::l_3(1)@HQET" :
-          central: +0.0
-          min: +0.0
-          max: +0.0
+          central: +0.86
+          min: -8.29
+          max: +5.17
+          latex: '$l^_3(1)$'
       "B(*)->D(*)::l_3'(1)@HQET" :
-          central: 0
-          min: 0
-          max: 0
+          central: 0.06
+          min: -2.96
+          max: +9.55
+          latex: '$l^{(1)}_3(1)$'
       "B(*)->D(*)::l_3''(1)@HQET" :
           central: 0
           min: 0
           max: 0
+          latex: '$l^{(2)}_3(1)$'
       "B(*)->D(*)::l_4(1)@HQET" :
-          central: +0.0
-          min: +0.0
-          max: +0.0
+          central: -2.02
+          min: -3.53
+          max: -0.75
+          latex: '$l^_4(1)$'
       "B(*)->D(*)::l_4'(1)@HQET" :
-          central: 0
-          min: 0
-          max: 0
+          central: -0.05
+          min: -1.88
+          max: +1.71
+          latex: '$l^{(1)}_4(1)$'
       "B(*)->D(*)::l_4''(1)@HQET" :
           central: 0
           min: 0
           max: 0
+          latex: '$l^{(2)}_4(1)$'
       "B(*)->D(*)::l_5(1)@HQET" :
-          central: +0.0
-          min: +0.0
-          max: +0.0
+          central: +3.79
+          min: +0.16
+          max: +5.20
+          latex: '$l^_5(1)$'
       "B(*)->D(*)::l_5'(1)@HQET" :
-          central: 0
-          min: 0
-          max: 0
+          central: -1.40
+          min: -2.63
+          max: +3.26
+          latex: '$l^{(1)}_5(1)$'
       "B(*)->D(*)::l_5''(1)@HQET" :
           central: 0
           min: 0
           max: 0
+          latex: '$l^{(2)}_5(1)$'
       "B(*)->D(*)::l_6(1)@HQET" :
-          central: +0.0
-          min: +0.0
-          max: +0.0
+          central: +3.53
+          min: -0.67
+          max: +6.43
+          latex: '$l^_6(1)$'
       "B(*)->D(*)::l_6'(1)@HQET" :
-          central: 0
-          min: 0
-          max: 0
+          central: 0.04
+          min: -3.43
+          max: +4.49
+          latex: '$l^{(1)}_6(1)$'
       "B(*)->D(*)::l_6''(1)@HQET" :
           central: 0
           min: 0
           max: 0
+          latex: '$l^{(2)}_6(1)$'
       # Parameters for B_s*->D_s* form factors in the Heavy-Quark Expansion (HQE)
       "B_s(*)->D_s(*)::a@HQET" :
           central: 1.0
