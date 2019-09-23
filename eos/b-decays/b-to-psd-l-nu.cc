@@ -377,7 +377,7 @@ namespace eos
             const double num   = integrate<GSL::QAGS>(f, q2_min,     q2_max);
             const double denom = integrate<GSL::QAGS>(f, q2_abs_min, q2_abs_max);
 
-            return num / denom;
+            return num / denom / (q2_max - q2_min);
         }
 
         double integrated_pdf_w(const double & w_min, const double & w_max) const
@@ -387,7 +387,7 @@ namespace eos
             const double q2_max = m_B2 + m_P2 - 2.0 * m_B * m_P * w_min;
             const double q2_min = m_B2 + m_P2 - 2.0 * m_B * m_P * w_max;
 
-            return integrated_pdf_q2(q2_min, q2_max) / (w_max - w_min);
+            return integrated_pdf_q2(q2_min, q2_max) * (q2_max - q2_min) / (w_max - w_min);
         }
     };
 
@@ -528,9 +528,21 @@ namespace eos
     }
 
     double
+    BToPseudoscalarLeptonNeutrino::differential_pdf_q2(const double & q2) const
+    {
+        return _imp->pdf_q2(q2);
+    }
+
+    double
     BToPseudoscalarLeptonNeutrino::differential_pdf_w(const double & w) const
     {
         return _imp->pdf_w(w);
+    }
+
+    double
+    BToPseudoscalarLeptonNeutrino::integrated_pdf_q2(const double & q2_min, const double & q2_max) const
+    {
+        return _imp->integrated_pdf_q2(q2_min, q2_max);
     }
 
     double
