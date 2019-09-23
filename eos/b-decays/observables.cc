@@ -90,6 +90,16 @@ namespace eos
                         std::make_tuple("q2_tau_min", "q2_tau_max"),
                         Options{ { "U", "u" }, { "l", "mu"} }),
 
+                make_observable("B->pilnu::P(q2)", R"(dP(B\to\pi\ell^-\bar\nu)/dq^2)",
+                        &BToPseudoscalarLeptonNeutrino::differential_pdf_q2,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "u" } }),
+
+                make_observable("B->pilnu::P(q2_min,q2_max)", R"(P(B\to\pi\ell^-\bar\nu))",
+                        &BToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" } }),
+
                 make_observable("B->pilnu::zeta",
                         &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
