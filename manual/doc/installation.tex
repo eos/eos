@@ -114,9 +114,10 @@ deb-src https://packagecloud.io/eos/eos/ubuntu/ DIST main
 \end{file}
 where you must replace \texttt{DIST} with either \texttt{xenial} or
 \texttt{bionic}, depending on your version of Ubuntu. Add our repository's
-GPG key by running
+GPG key by making sure that the \package{curl} command line utility is installed, and
+run
 \begin{commandline}
-curl -L "https://packagecloud.io/eos/eos/gpgkey" 2> /dev/null | apt-key add - &>/dev/null
+curl -L "https://packagecloud.io/eos/eos/gpgkey" 2> /dev/null | sudo apt-key add -
 \end{commandline}
 You can then install the binary packages through
 \begin{commandline}
