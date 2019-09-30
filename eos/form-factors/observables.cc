@@ -998,16 +998,16 @@ namespace eos
             R"(Unitarity Bounds)",
             R"(Pseudo observables representing the various unitarity bounds for $b\to c$ semileptonic form factors.)",
             {
-                make_observable("b->c::Bound[0^+]@CLN", R"(B^{b\toc}_{0^+})",
+                make_observable("b->c::Bound[0^+]@CLN", R"(B^{b\to c}_{0^+})",
                         &HQETUnitarityBounds::bound_0p),
 
-                make_observable("b->c::Bound[0^-]@CLN", R"(B^{b\toc}_{0^-})",
+                make_observable("b->c::Bound[0^-]@CLN", R"(B^{b\to c}_{0^-})",
                         &HQETUnitarityBounds::bound_0m),
 
-                make_observable("b->c::Bound[1^+]@CLN", R"(B^{b\toc}_{1^+})",
+                make_observable("b->c::Bound[1^+]@CLN", R"(B^{b\to c}_{1^+})",
                         &HQETUnitarityBounds::bound_1p),
 
-                make_observable("b->c::Bound[1^-]@CLN", R"(B^{b\toc}_{1^-})",
+                make_observable("b->c::Bound[1^-]@CLN", R"(B^{b\to c}_{1^-})",
                         &HQETUnitarityBounds::bound_1m),
             }
         );
