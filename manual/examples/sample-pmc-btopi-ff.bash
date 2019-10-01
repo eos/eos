@@ -15,7 +15,7 @@ eos-sample-pmc \
     --hc-skip-initial 0.2 \
     --pmc-samples-per-component 500 \
     --pmc-group-by-r-value 1.5 \
-    --pmc-final-samples 1000000 \
+    --pmc-final-samples 50000 \
     --pmc-ignore-ess 1 \
     --pmc-relative-std-deviation-over-last-steps 0.05 4 \
     --output /tmp/pmc_monolithic_btopi+ff.hdf5
