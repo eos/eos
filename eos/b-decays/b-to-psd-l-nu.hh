@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2013, 2014, 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2018, 2019 Ahmet Kokulu
+ * Copyright (c) 2019 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -38,21 +39,22 @@ namespace eos
             BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options);
             ~BToPseudoscalarLeptonNeutrino();
 
-            // Differential Observables
-            double differential_branching_ratio(const double & s) const;
-
-            double differential_a_fb_leptonic(const double & s) const;
-
-            // Differential Observables - normalized(|V{c,u}b|=1)
-            double normalized_differential_branching_ratio(const double & s) const;
-
-            // two differential observables - normalized(|V{c,u}b|=1)
+            // Two-fold differential observables - normalized(|V{c,u}b|=1)
             double normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const;
+
+            // Single-differential Observables
+            double differential_branching_ratio(const double & s) const;
+            double differential_a_fb_leptonic(const double & s) const;
+            double differential_flat_term(const double & s) const;
+            double differential_lepton_polarization(const double & s) const;
+
+            // Single-differential Observables - normalized(|V{c,u}b|=1)
+            double normalized_differential_branching_ratio(const double & s) const;
 
             // Integrated Observables
             double integrated_branching_ratio(const double & s_min, const double & s_max) const;
-
             double integrated_a_fb_leptonic(const double & s_min, const double & s_max) const;
+            double integrated_flat_term(const double & s_min, const double & s_max) const;
             double integrated_lepton_polarization(const double & s_min, const double & s_max) const;
 
             // Integrated Observables - normalized(|Vcb|=1)

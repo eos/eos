@@ -150,7 +150,7 @@ class BToDLeptonNeutrinoTest :
                 BToPseudoscalarLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_lepton_polarization(3.157, 11.643), -0.320914, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_lepton_polarization(3.157, 11.643), +0.320914, eps);
             }
 
             // SM tests

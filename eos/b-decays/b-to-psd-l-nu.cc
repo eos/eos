@@ -199,9 +199,9 @@ namespace eos
 
         b_to_psd_l_nu::Amplitudes amplitudes(const double & s) const
         {           
-            // NP contributions in EFT including tensor operator (cf. [DSD2014]). (in SM cvl=1, and all other couplings are zero)
+            // NP contributions in EFT including tensor operator (cf. [DSD2014]). 
             auto wc = this->wc(opt_l.value(), false);
-            const complex<double> gV = wc.cvr() + (wc.cvl() - 1.0);
+            const complex<double> gV = wc.cvr() + (wc.cvl() - 1.0); // in SM cvl=1 => gV contains NP contribution of cvl
             const complex<double> gS = wc.csr() + wc.csl();
             const complex<double> gT = wc.ct();
 
@@ -219,18 +219,18 @@ namespace eos
             const double lam = eos::lambda(m_B2, m_P2, s);
             const double p = std::sqrt(lam) / (2.0 * m_B);
             
-            // make sure we return NaN if s < m_l^2, v = lepton velocity in the dilepton rest frame
-            const double v = (1.0 - this->m_l() * this->m_l() / s);
-            const double v2 = v * v;
+            // v = lepton velocity in the dilepton rest frame
+            const double m_l = this->m_l();
+            const double v = (1.0 - m_l * m_l / s);
             const double ml_hat = std::sqrt(1.0 - v);
             // universal electroweak correction, cf. [S1982]
             const double etaEW = 1.0066;
-            const double NF = v2 * m_B * s * power_of<2>(g_fermi() * etaEW) / (256.0 * power_of<3>(M_PI * m_B));
+            const double NF = v * v * s * power_of<2>(g_fermi() * etaEW) / (256.0 * power_of<3>(M_PI) * m_B2);
           
             // helicity amplitudes, cf. [DSD2014] eqs. 13-14
             b_to_psd_l_nu::Amplitudes result;
 
-            if (s >= power_of<2>(this->m_l()) && s <= power_of<2>(m_B - m_P))
+            if (s >= power_of<2>(m_l) && s <= power_of<2>(m_B - m_P))
             {
                 result.h_0  = 2.0 * m_B * p * fp * (1.0 + gV) / std::sqrt(s);
                 result.h_t  = (1.0 + gV) * (m_B2 - m_P2) * f0 / std::sqrt(s);
@@ -300,6 +300,35 @@ namespace eos
                    );
         }
 
+        // obtained using cf. [DSD2014], eq. (12) and [BHP2007] eq.(1.2)
+        double numerator_differential_flat_term(const double & s) const
+        {
+            b_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+
+            return amp.NF * amp.p * (
+                       (std::norm(amp.h_0) + std::norm(amp.h_tS)) * (1.0 - amp.v)
+                       + 16.0 * std::norm(amp.h_T) 
+                       - 8.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_0))
+                   );
+        }
+
+        // obtained using cf. [STTW2013], eq. (49a - 49b)
+        double numerator_differential_lepton_polarization(const double & s) const
+        {
+            b_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+
+            const double dGplus = (std::norm(amp.h_0) + 3.0 * std::norm(amp.h_t)) * (1.0 - amp.v) / 2.0
+                                + 3.0 / 2.0 * std::norm(amp.h_S)
+                                + 8.0 * std::norm(amp.h_T)
+                                - std::sqrt(1.0 - amp.v) * std::real(3.0 * amp.h_t * std::conj(amp.h_S) 
+                                                                   + 4.0 * amp.h_0 * std::conj(amp.h_T));
+            const double dGminus = std::norm(amp.h_0) 
+                                 + 16.0 * std::norm(amp.h_T) * (1.0 - amp.v)
+                                 - 8.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_0 * std::conj(amp.h_T));
+
+            return 8.0 / 3.0 * amp.NF * amp.p * (dGplus - dGminus);
+        }
+
         // differential decay width
         double differential_decay_width(const double & s) const
         {
@@ -360,68 +389,6 @@ namespace eos
 
             return integrated_pdf_q2(q2_min, q2_max) / (w_max - w_min);
         }
-
-        double lepton_polarization_numerator(const double & q2) const
-        {
-            const double m_l2 = m_l() * m_l();
-            const double m_B  = this->m_B(), m_B2 = m_B * m_B;
-            const double m_P  = this->m_P(), m_P2 = m_P * m_P;
-            const double p_P  = std::sqrt(eos::lambda(m_B2, m_P2, q2)) / (2.0 * m_B);
-            const double sqrt_q2  = std::sqrt(q2);
-
-            const double f_p = form_factors->f_p(q2);
-            const double f_0 = form_factors->f_0(q2);
-
-            // cf. [CJLP2012]
-            const double H_0 = 2.0 * m_B * p_P / sqrt_q2 * f_p;
-            const double H_t = (m_B2 - m_P2) / sqrt_q2 * f_0;
-
-            const double H_02 = H_0 * H_0;
-            const double H_t2 = H_t * H_t;
-
-            const double nf = p_P * q2 * power_of<2>(1.0 - m_l2 / q2);
-
-            // cf. [CJLP2012]], eq. (20), p. 13
-            const double num  = H_02 * (1.0 - 0.5 * m_l2 / q2) - 3.0 / 2.0 * m_l2 / q2 * H_t2;
-
-            return nf * num;
-        }
-
-        double lepton_polarization_denominator(const double & q2) const
-        {
-            const double m_l2 = m_l() * m_l();
-            const double m_B  = this->m_B(), m_B2 = m_B * m_B;
-            const double m_P  = this->m_P(), m_P2 = m_P * m_P;
-            const double p_P  = std::sqrt(eos::lambda(m_B2, m_P2, q2)) / (2.0 * m_B);
-            const double sqrt_q2  = std::sqrt(q2);
-
-            const double f_p = form_factors->f_p(q2);
-            const double f_0 = form_factors->f_0(q2);
-
-            // cf. [CJLP2012]
-            const double H_0 = 2.0 * m_B * p_P / sqrt_q2 * f_p;
-            const double H_t = (m_B2 - m_P2) / sqrt_q2 * f_0;
-
-            const double H_02 = H_0 * H_0;
-            const double H_t2 = H_t * H_t;
-
-            const double nf = p_P * q2 * power_of<2>(1.0 - m_l2 / q2);
-
-            // cf. [CJLP2012]], eq. (20), p. 13
-            const double denom  = H_02 * (1.0 + 0.5 * m_l2 / q2) + 3.0 / 2.0 * m_l2 / q2 * H_t2;
-
-            return nf * denom;
-        }
-
-        double lepton_polarization(const double & q2_min, const double & q2_max) const
-        {
-            std::function<double (const double &)> integrand_num   = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::lepton_polarization_numerator,   this, std::placeholders::_1);
-            std::function<double (const double &)> integrand_denom = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::lepton_polarization_denominator, this, std::placeholders::_1);
-            const auto num   = integrate<GSL::QAGS>(integrand_num,   q2_min, q2_max);
-            const auto denom = integrate<GSL::QAGS>(integrand_denom, q2_min, q2_max);
-
-            return num / denom;
-        }
     };
 
     BToPseudoscalarLeptonNeutrino::BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :
@@ -479,17 +446,63 @@ namespace eos
     }
 
     double
-    BToPseudoscalarLeptonNeutrino::integrated_lepton_polarization(const double & q2_min, const double & q2_max) const
-    {
-        return _imp->lepton_polarization(q2_min, q2_max);
-    }
-
-    double
     BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic(const double & s_min, const double & s_max) const
     {
         double integrated_numerator;
         {
             std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::numerator_differential_a_fb_leptonic,
+                                                                 _imp.get(), std::placeholders::_1);
+            integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max);
+        }
+
+        double integrated_denominator;
+        {
+            std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
+                                                                 _imp.get(), std::placeholders::_1);
+            integrated_denominator = integrate<GSL::QAGS>(f, s_min, s_max);
+        }
+
+        return integrated_numerator / integrated_denominator;
+    }
+
+    double
+    BToPseudoscalarLeptonNeutrino::differential_flat_term(const double & s) const
+    {
+        return _imp->numerator_differential_flat_term(s) / _imp->normalized_differential_decay_width(s);
+    }
+
+    double
+    BToPseudoscalarLeptonNeutrino::integrated_flat_term(const double & s_min, const double & s_max) const
+    {
+        double integrated_numerator;
+        {
+            std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::numerator_differential_flat_term,
+                                                                 _imp.get(), std::placeholders::_1);
+            integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max);
+        }
+
+        double integrated_denominator;
+        {
+            std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
+                                                                 _imp.get(), std::placeholders::_1);
+            integrated_denominator = integrate<GSL::QAGS>(f, s_min, s_max);
+        }
+
+        return integrated_numerator / integrated_denominator;
+    }
+
+    double
+    BToPseudoscalarLeptonNeutrino::differential_lepton_polarization(const double & s) const
+    {
+        return _imp->numerator_differential_lepton_polarization(s) / _imp->normalized_differential_decay_width(s);
+    }
+
+    double
+    BToPseudoscalarLeptonNeutrino::integrated_lepton_polarization(const double & s_min, const double & s_max) const
+    {
+        double integrated_numerator;
+        {
+            std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::numerator_differential_lepton_polarization,
                                                                  _imp.get(), std::placeholders::_1);
             integrated_numerator = integrate<GSL::QAGS>(f, s_min, s_max);
         }
