@@ -800,6 +800,12 @@
     title: "The decay constants f_Ds, f_D+, f_Bs and f_B from lattice QCD"
     journal: "PoS LATTICE2010 (2010) 317"
 
+"STTW2013" :
+    authors: "Sakaki, Yasuhito and Tanaka, Minoru and Tayduganov, Andrey and Watanabe, Ryoutaro"
+    title: "Testing leptoquark models in $\bar B \to D^{(*)} \tau\bar\nu$"
+    journal: "Phys. Rev. D88 (2013) 094012"
+    eprint: "arXiv:1309.0301"
+
 "U2001" :
     authors: "Uraltsev, N."
     title: "On the chromomagnetic expectation value mu^2_G and higher power corrections in heavy flavor mesons"
