@@ -121,16 +121,27 @@ namespace eos
                     KinematicRange{ "k2", 18.582, 27.872, BToPiPiLeptonNeutrino::kinematics_description_k2 },
                     KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiPiLeptonNeutrino::kinematics_description_z }),
 
-            make_signal_pdf("B->Dmunu::dGamma",
+            make_signal_pdf("B->pilnu::dGamma/dq2",
+                    &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                    Options{ { "U", "u" } },
+                    KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }),
+
+            make_signal_pdf("B->pilnu::d^2Gamma/dq2/dcos(theta_l)",
+                    &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                    Options{ {"U", "u"} },
+                    KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
+                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}),
+
+            make_signal_pdf("B->Dlnu::dGamma/dq2",
                     &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                     Options{ { "U", "c" } },
-                    KinematicRange{ "s", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_s }),
+                    KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }),
 
-            make_signal_pdf("B->Dmunu::d^2Gamma",
-                            &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
-                            Options{ {"l", "mu"}, {"U", "c"} },
-                            KinematicRange{ "s", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_s },
-                            KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}),
+            make_signal_pdf("B->Dlnu::d^2Gamma/dq2/dcos(theta_l)",
+                    &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                    Options{ {"U", "c"} },
+                    KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
+                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}),
 
             make_signal_pdf("B->D^*munu::dBR",
                             &BToDstarLeptonNeutrino::differential_branching_ratio,
@@ -145,7 +156,7 @@ namespace eos
                             KinematicRange{ "cos(theta_d)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_d },
                             KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDstarLeptonNeutrino::kinematics_description_phi }),
 
-            make_signal_pdf("B->Dmunu::d^2Gamma",
+            make_signal_pdf("B->Dmu1nu::d^2Gamma",
                     &BToDLeptonInclusiveNeutrinos::normalized_differential_decay_width_1nu,
                     Options{ },
                     KinematicRange{ "s", 0.0, 19.71, BToDLeptonInclusiveNeutrinos::kinematics_description_s },
@@ -160,7 +171,7 @@ namespace eos
                     KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDLeptonInclusiveNeutrinos::kinematics_description_phi },
                     KinematicRange{ "cos(theta_mu^*)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta_mu_star }),
 
-            make_signal_pdf("B->pimunu::d^2Gamma",
+            make_signal_pdf("B->pimu1nu::d^2Gamma",
                     &BToPiLeptonInclusiveNeutrinos::normalized_differential_decay_width_1nu,
                     Options{ },
                     KinematicRange{ "s", 0.0, 26.41, BToPiLeptonInclusiveNeutrinos::kinematics_description_s},

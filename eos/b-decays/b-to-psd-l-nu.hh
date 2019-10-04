@@ -40,25 +40,25 @@ namespace eos
             ~BToPseudoscalarLeptonNeutrino();
 
             // Two-fold differential observables - normalized(|V{c,u}b|=1)
-            double normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const;
+            double normalized_two_differential_decay_width(const double & q2, const double & c_theta_l) const;
 
             // Single-differential Observables
-            double differential_branching_ratio(const double & s) const;
-            double differential_a_fb_leptonic(const double & s) const;
-            double differential_flat_term(const double & s) const;
-            double differential_lepton_polarization(const double & s) const;
+            double differential_branching_ratio(const double & q2) const;
+            double differential_a_fb_leptonic(const double & q2) const;
+            double differential_flat_term(const double & q2) const;
+            double differential_lepton_polarization(const double & q2) const;
 
             // Single-differential Observables - normalized(|V{c,u}b|=1)
-            double normalized_differential_branching_ratio(const double & s) const;
+            double normalized_differential_branching_ratio(const double & q2) const;
 
             // Integrated Observables
-            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
-            double integrated_a_fb_leptonic(const double & s_min, const double & s_max) const;
-            double integrated_flat_term(const double & s_min, const double & s_max) const;
-            double integrated_lepton_polarization(const double & s_min, const double & s_max) const;
+            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const;
+            double integrated_flat_term(const double & q2_min, const double & q2_max) const;
+            double integrated_lepton_polarization(const double & q2_min, const double & q2_max) const;
 
             // Integrated Observables - normalized(|Vcb|=1)
-            double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
 
             // PDF
             double differential_pdf_w(const double & w) const;
@@ -68,7 +68,8 @@ namespace eos
              * Descriptions of the process and its kinematics.
              */
             static const std::string description;
-            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_q2;
+            static const std::string kinematics_description_w;
             static const std::string kinematics_description_c_theta_l;
     };
 }

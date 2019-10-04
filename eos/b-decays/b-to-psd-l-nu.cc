@@ -531,14 +531,17 @@ namespace eos
 
     const std::string
     BToPseudoscalarLeptonNeutrino::description = "\
-    The decay B->P l nu, where P=(U qbar), and l=e,mu,tau is a lepton.";
+    The decay B->P l nu, where both B=(B qbar) and P=(U qbar) are pseudoscalars, and l=e,mu,tau is a lepton.";
 
     const std::string
-    BToPseudoscalarLeptonNeutrino::kinematics_description_s = "\
+    BToPseudoscalarLeptonNeutrino::kinematics_description_q2 = "\
     The invariant mass of the l-nubar pair in GeV^2.";
+
+    const std::string
+    BToPseudoscalarLeptonNeutrino::kinematics_description_w = "\
+    The recoil parameter of the B and P states, with w=1 corresponding to zero recoil.";
 
     const std::string
     BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l = "\
     The cosine of the polar angle theta_l between the charged lepton and the direction opposite to P(seudoscalar) meson in the l-nubar rest frame.";
-
 }
