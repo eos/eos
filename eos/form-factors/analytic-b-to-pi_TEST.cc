@@ -148,6 +148,12 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL( 0.3777, ff.f_p( 5.0), 10 * eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.5346, ff.f_p(10.0), 10 * eps);
 
+                // f_0 LO, tw3
+                TEST_CHECK_NEARLY_EQUAL( 0.0483, ff.Ftil_lo_tw3( 0.0), 1000. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0514, ff.Ftil_lo_tw3( 1.0), 1000. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0681, ff.Ftil_lo_tw3( 5.0), 1000. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1063, ff.Ftil_lo_tw3(10.0), 1000. * eps);
+
             }
         }
 } analytic_form_factor_b_to_pi_DKMMO2008_test;

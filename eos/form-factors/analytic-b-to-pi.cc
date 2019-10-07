@@ -760,6 +760,117 @@ namespace eos
                 );
         }
 
+        // expressions for the \tilde{F}
+           
+        double Ftil_lo_tw3_integrand(const double & u, const double & q2, const double _M2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi;
+            const double mupi = pi.mupi(mu);
+            const double omega3pi = pi.omega3pi(mu);
+
+            // auxilliary functions and their first derivatives
+            auto I3til = [&] (const double & u) -> double
+            {
+                const double u2 = u * u, ubar2 = (1.0 - u) * (1.0 - u);
+
+                return 5.0 / 2.0 * u2 * ubar2 * (28.0 * u2 * omega3pi - 2.0 * u * (17.0 * omega3pi + 12.0) + 9.0 * (omega3pi + 4.0));
+            };
+            auto I3til_d1 = [&] (const double & u) -> double
+            {
+                const double u2 = u * u, u3 = u2 * u;
+
+                return 15.0 * u * (u - 1.0) * (28.0 * u3 * omega3pi - u2 * (47.0 * omega3pi + 20.0) + u * (23.0 * omega3pi + 36.0) - 3.0 * (omega3pi + 4.0));
+            };
+
+            const double u2 = u * u;
+            const double tw3a = pi.phi3p(u, mu) / u
+                + 1 / (6 * u) * pi.phi3s_d1(u, mu);
+            const double tw3b = mpi2 / (mb2 - q2 + u2 * mpi2)
+                * (I3til_d1(u) - (2.0 * u * mpi2) / (mb2 - q2 + u2 * mpi2) * I3til(u));
+
+            return std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2))
+                * (mupi / mb * tw3a + pi.f3pi(mu) / (mb * fpi) * tw3b);
+        }
+
+        double Ftil_lo_tw3(const double & q2, const double & _M2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0B - q2));
+
+            std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::Ftil_lo_tw3_integrand, this, std::placeholders::_1, q2, _M2));
+
+            return mb2 * fpi * integrate<GSL::QNG>(integrand, u0, 1.000);
+        }
+
+        double Ftil_lo_tw4(const double & q2, const double & _M2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi, mpi4 = mpi2 * mpi2;
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0B - q2));
+            const double a2pi = pi.a2pi(mu);
+            const double deltapipi = pi.deltapipi(mu);
+            const double omega4pi = pi.omega4pi(mu);
+
+            // auxilliary functions and their first derivatives
+            auto I4bar = [&] (const double & u) -> double
+            {
+                const double u2 = u * u, u3 = u2 * u;
+                const double ubar = 1.0 - u;
+
+                return 1.0 / 48.0 * u * ubar * (
+                        mpi2 * (
+                            -(54.0 * u3 - 81.0 * u2 - 27.0 * u + 27.0)
+                            + 27.0 * a2pi * (32.0 * u3 - 43.0 * u2 + 11.0 * u + 1.0)
+                        )
+                        - 20.0 * u * (
+                            (12.0 - 20.0 * u)
+                            + (378.0 * u2 - 567.0 * u + 189.0) * omega4pi
+                        ) * deltapipi
+                    );
+            };
+            auto I4barI = [&] (const double & u) -> double
+            {
+                const double u2 = u * u;
+                const double ubar = 1.0 - u, ubar2 = ubar * ubar;
+
+                return 1.0 / 96.0 * u2 * ubar2 * (
+                        mpi2 * (
+                            9.0 * (3.0 + 2.0 * ubar * u)
+                            + 9.0 * a2pi * (32.0 * u2 - 26.0 * u - 3.0)
+                        )
+                        + 40.0 * u * (4.0 + 63.0 * ubar * omega4pi) * deltapipi
+                    );
+            };
+            auto I4bar_d1 = [&] (const double & u) -> double
+            {
+                const double u2 = u * u, u3 = u2 * u, u4 = u2 * u2;
+
+                return 1.0 / 48.0 * (
+                        27.0 * mpi2 * (
+                            (10.0 * u4 - 20.0 * u3 + 6.0 * u2 + 4.0 * u - 1.0)
+                            - a2pi * (160.0 * u4 - 300.0 * u3 + 162.0 * u2 - 20.0 * u - 1.0)
+                        )
+                        + 40.0 * u * (
+                            (-40.0 * u2 + 48.0 * u - 12.0)
+                            + 189.0 * (5.0 * u3 - 10.0 *  u2 + 6.0 * u - 1.0) * omega4pi
+                        ) * deltapipi
+                    );
+            };
+            std::function<double (const double &)> integrand(
+                [&] (const double & u) -> double
+                {
+                    const double u2 = u * u;
+
+                    const double tw4psi = pi.psi4(u, mu) - (2.0 * u * mpi2) / (mb2 - q2 + u2 * mpi2) * pi.psi4_i(u, mu);
+                    const double tw4I4bar = (- I4bar_d1(u) + (6.0 * u * mpi2) / (mb2 - q2 + u2 * mpi2) * I4bar(u) + (12.0 * u2 * mpi4) / power_of<2>(mb2 - q2 + u2 * mpi2) * I4barI(u)) * 2.0 * u * mpi2 / (mb2 - q2 + u2 * mpi2);
+
+                    return std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2)) *
+                            (tw4psi + tw4I4bar) / (mb2 - q2 + u2 * mpi2);
+                }
+            );
+
+            return mb2 * fpi * integrate<GSL::QNG>(integrand, u0, 1 - 1e-10);
+        }
+
         double rescale_factor(const double & q2) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
@@ -838,6 +949,20 @@ namespace eos
             return std::exp(MB2 / M2_rescaled) / (2.0 * MB2 * fB) * (F_lo + alpha_s / (3.0 * M_PI) * F_nlo + alpha_s * alpha_s / (9.0 * M_PI * M_PI) * F_nnlo);
         }
 
+        double f_0(const double & q2) const
+        {
+            const double MB2 = MB * MB, mpi2 = mpi * mpi;
+            const double M2_rescaled = this->M2() * this->rescale_factor(q2);
+            const double fB = decay_constant();
+            const double F_lo = F_lo_tw2(q2, M2_rescaled) + F_lo_tw3(q2, M2_rescaled) + F_lo_tw4(q2, M2_rescaled);
+            const double Ftil_lo = Ftil_lo_tw3(q2, M2_rescaled) + Ftil_lo_tw4(q2, M2_rescaled);
+            //const double Ftil_nlo = F_nlo_tw2(q2, M2_rescaled) + F_nlo_tw3(q2, M2_rescaled);
+            //const double Ftil_nnlo = F_nlo * F_nlo / F_lo * zeta_nnlo;
+            //const double alpha_s = model->alpha_s(mu);
+
+            return std::exp(MB2 / M2_rescaled) / (2.0 * MB2 * fB) * (2.0 * q2 * Ftil_lo / (MB2 - mpi2) + (1.0 - q2 / (MB2 - mpi)) * F_lo);
+        }
+
         Diagnostics diagnostics() const
         {
             Diagnostics results;
@@ -902,6 +1027,19 @@ namespace eos
     {
         return _imp->F_nlo_tw3(q2, _imp->M2() * _imp->rescale_factor(q2));
     }
+    
+    double
+    AnalyticFormFactorBToPiDKMMO2008::Ftil_lo_tw3(const double & q2) const
+    {
+        return _imp->Ftil_lo_tw3(q2, _imp->M2() * _imp->rescale_factor(q2));
+    }
+
+    double
+    AnalyticFormFactorBToPiDKMMO2008::Ftil_lo_tw4(const double & q2) const
+    {
+        return _imp->Ftil_lo_tw4(q2, _imp->M2() * _imp->rescale_factor(q2));
+    }
+
 
     double
     AnalyticFormFactorBToPiDKMMO2008::f_p(const double & q2) const
@@ -910,9 +1048,10 @@ namespace eos
     }
 
     double
-    AnalyticFormFactorBToPiDKMMO2008::f_0(const double &) const
+    AnalyticFormFactorBToPiDKMMO2008::f_0(const double & q2) const
     {
-        throw InternalError("AnalyticFormFactorBToPiDKMMO2008::f_0: Evaluation of time-like form factor not yet implemented");
+        return _imp->f_0(q2);
+        //throw InternalError("AnalyticFormFactorBToPiDKMMO2008::f_0: Evaluation of time-like form factor not yet implemented");
     }
 
     double
