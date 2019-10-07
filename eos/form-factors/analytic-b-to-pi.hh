@@ -42,6 +42,8 @@ namespace eos
             double F_lo_tw2(const double & q2) const;
             double F_lo_tw3(const double & q2) const;
             double F_lo_tw4(const double & q2) const;
+            double Ftil_lo_tw3(const double & q2) const;
+            double Ftil_lo_tw4(const double & q2) const;
 
             /* Next-to-leading-order terms */
             double F_nlo_tw2(const double & q2) const;
