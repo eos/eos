@@ -35,7 +35,7 @@ namespace eos
     {
         struct Amplitudes
         {
-            // helicity amplitudes, cf. [DSD2014] eqs. 13-14
+            // helicity amplitudes, cf. [DDS:2014A] eqs. 13-14
             complex<double> h_0;
             complex<double> h_t;
             complex<double> h_S;
@@ -198,8 +198,8 @@ namespace eos
         }
 
         b_to_psd_l_nu::Amplitudes amplitudes(const double & s) const
-        {           
-            // NP contributions in EFT including tensor operator (cf. [DSD2014]). 
+        {
+            // NP contributions in EFT including tensor operator (cf. [DDS:2014A]).
             auto wc = this->wc(opt_l.value(), false);
             const complex<double> gV = wc.cvr() + (wc.cvl() - 1.0); // in SM cvl=1 => gV contains NP contribution of cvl
             const complex<double> gS = wc.csr() + wc.csl();
@@ -209,7 +209,7 @@ namespace eos
             const double fp = form_factors->f_p(s);
             const double f0 = form_factors->f_0(s);
             const double fT = form_factors->f_t(s);
-            
+
             // running quark masses
             const double mbatmu = model->m_b_msbar(mu);
             const double mUatmu = m_U_msbar(mu);
@@ -218,16 +218,16 @@ namespace eos
             const double m_P = this->m_P(), m_P2 = m_P * m_P;
             const double lam = eos::lambda(m_B2, m_P2, s);
             const double p = std::sqrt(lam) / (2.0 * m_B);
-            
+
             // v = lepton velocity in the dilepton rest frame
             const double m_l = this->m_l();
             const double v = (1.0 - m_l * m_l / s);
             const double ml_hat = std::sqrt(1.0 - v);
-            // universal electroweak correction, cf. [S1982]
+            // universal electroweak correction, cf. [S:1982A]
             const double etaEW = 1.0066;
             const double NF = v * v * s * power_of<2>(g_fermi() * etaEW) / (256.0 * power_of<3>(M_PI) * m_B2);
-          
-            // helicity amplitudes, cf. [DSD2014] eqs. 13-14
+
+            // helicity amplitudes, cf. [DDS:2014A] eqs. 13-14
             b_to_psd_l_nu::Amplitudes result;
 
             if (s >= power_of<2>(m_l) && s <= power_of<2>(m_B - m_P))
@@ -237,7 +237,7 @@ namespace eos
                 result.h_S  = - gS * (m_B2 - m_P2) * f0 / (mbatmu - mUatmu);
                 result.h_T  = - 2.0 * m_B * p * fT * gT / (m_B + m_P);
                 result.h_tS = result.h_t - result.h_S / ml_hat;
-            
+
                 result.v  = v;
                 result.p  = p;
                 result.NF = NF;
@@ -248,20 +248,20 @@ namespace eos
                 result.h_t  = 0.0;
                 result.h_S  = 0.0;
                 result.h_T  = 0.0;
-                result.h_tS = 0.0; 
+                result.h_tS = 0.0;
 
                 result.v  = 1.0;
                 result.p  = 0.0;
-                result.NF = 0.0;                 
-            } 
-  
+                result.NF = 0.0;
+            }
+
             return result;
         }
 
-        // normalized (|V_Ub| = 1) two-fold-distribution, cf. [DSD2014], eq. (12), p. 6
+        // normalized (|V_Ub| = 1) two-fold-distribution, cf. [DDS:2014A], eq. (12), p. 6
         double normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const
         {
-            //  d^2 Gamma, cf. [DSD2014], p. 6, eq. (13)
+            //  d^2 Gamma, cf. [DDS:2014A], p. 6, eq. (13)
             double c_thl_2 = c_theta_l * c_theta_l;
             double s_thl_2 = 1.0 - c_thl_2;
             double c_2_thl = 2.0 * c_thl_2 - 1.0;
@@ -269,45 +269,45 @@ namespace eos
             b_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
 
             return 2.0 * amp.NF * amp.p * (
-                       std::norm(amp.h_0) * s_thl_2 
+                       std::norm(amp.h_0) * s_thl_2
                        + (1.0 - amp.v) * power_of<2>(std::abs(amp.h_0) * c_theta_l - std::abs(amp.h_tS))
-                       + 8.0 * ( ((2.0 - amp.v) + amp.v * c_2_thl) * std::norm(amp.h_T) 
+                       + 8.0 * ( ((2.0 - amp.v) + amp.v * c_2_thl) * std::norm(amp.h_T)
                            - std::sqrt(1.0 - amp.v) * std::real(amp.h_T * (std::conj(amp.h_0) - std::conj(amp.h_tS) * c_theta_l)))
                    );
         }
 
-        // normalized to |V_Ub = 1|, obtained using cf. [DSD2014], eq. (12), agrees with Sakaki'13 et al cf. [STTW2013]
+        // normalized to |V_Ub = 1|, obtained using cf. [DSD:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
         double normalized_differential_decay_width(const double & s) const
         {
             b_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
 
-            return 4.0 / 3.0 * amp.NF * amp.p * ( 
-                       std::norm(amp.h_0) * (3.0 - amp.v) 
-                       + 3.0 * std::norm(amp.h_tS) * (1.0 - amp.v) 
+            return 4.0 / 3.0 * amp.NF * amp.p * (
+                       std::norm(amp.h_0) * (3.0 - amp.v)
+                       + 3.0 * std::norm(amp.h_tS) * (1.0 - amp.v)
                        + 16.0 * std::norm(amp.h_T) * (3.0 - 2.0 * amp.v)
                        - 24.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_0))
                    );
         }
 
-        // obtained using cf. [DSD2014], eq. (12), defined as int_1^0 d^2Gamma - int_0^-1 d^2Gamma
+        // obtained using cf. [DDS:2014A], eq. (12), defined as int_1^0 d^2Gamma - int_0^-1 d^2Gamma
         double numerator_differential_a_fb_leptonic(const double & s) const
         {
             b_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
 
             return - 4.0 * amp.NF * amp.p * (
-                       std::abs(amp.h_0) * std::abs(amp.h_tS) * (1.0 - amp.v) 
+                       std::abs(amp.h_0) * std::abs(amp.h_tS) * (1.0 - amp.v)
                        - 4.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_tS))
                    );
         }
 
-        // obtained using cf. [DSD2014], eq. (12) and [BHP2007] eq.(1.2)
+        // obtained using cf. [DDS:2014A], eq. (12) and [BHP2007] eq.(1.2)
         double numerator_differential_flat_term(const double & s) const
         {
             b_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
 
             return amp.NF * amp.p * (
                        (std::norm(amp.h_0) + std::norm(amp.h_tS)) * (1.0 - amp.v)
-                       + 16.0 * std::norm(amp.h_T) 
+                       + 16.0 * std::norm(amp.h_T)
                        - 8.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_0))
                    );
         }
@@ -320,9 +320,9 @@ namespace eos
             const double dGplus = (std::norm(amp.h_0) + 3.0 * std::norm(amp.h_t)) * (1.0 - amp.v) / 2.0
                                 + 3.0 / 2.0 * std::norm(amp.h_S)
                                 + 8.0 * std::norm(amp.h_T)
-                                - std::sqrt(1.0 - amp.v) * std::real(3.0 * amp.h_t * std::conj(amp.h_S) 
+                                - std::sqrt(1.0 - amp.v) * std::real(3.0 * amp.h_t * std::conj(amp.h_S)
                                                                    + 4.0 * amp.h_0 * std::conj(amp.h_T));
-            const double dGminus = std::norm(amp.h_0) 
+            const double dGminus = std::norm(amp.h_0)
                                  + 16.0 * std::norm(amp.h_T) * (1.0 - amp.v)
                                  - 8.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_0 * std::conj(amp.h_T));
 
@@ -400,7 +400,7 @@ namespace eos
     {
     }
 
-    // normalized (|V_Ub|=1) two-fold-distribution, cf. [DSD2014], eq. (13), p. 6
+    // normalized (|V_Ub|=1) two-fold-distribution, cf. [DDS:2014A], eq. (13), p. 6
     double
     BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width(const double & s, const double & c_theta_l) const
     {
@@ -544,4 +544,12 @@ namespace eos
     const std::string
     BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l = "\
     The cosine of the polar angle theta_l between the charged lepton and the direction opposite to P(seudoscalar) meson in the l-nubar rest frame.";
+
+    const std::set<ReferenceName>
+    BToPseudoscalarLeptonNeutrino::references
+    {
+        "S:1982A"_rn,
+        "DDS:2014A"_rn,
+        "STTW:2013A"_rn
+    };
 }
