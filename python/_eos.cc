@@ -357,9 +357,33 @@ BOOST_PYTHON_MODULE(_eos)
     // }}}
 
     // {{{ eos/
+    // Reference
+    register_ptr_to_python<ReferencePtr>();
+    class_<Reference>("Reference", no_init)
+        .def("name", &Reference::name, return_value_policy<copy_const_reference>())
+        .def("authors", &Reference::authors, return_value_policy<copy_const_reference>())
+        .def("eprint_archive", &Reference::eprint_archive, return_value_policy<copy_const_reference>())
+        .def("eprint_id", &Reference::eprint_id, return_value_policy<copy_const_reference>())
+        .def("title", &Reference::title, return_value_policy<copy_const_reference>())
+        .def("inspire_id", &Reference::inspire_id, return_value_policy<copy_const_reference>())
+        ;
+
+    // References
+    impl::std_pair_to_python_converter<const ReferenceName, ReferencePtr> converter_references_iter;
+    class_<References>("_References")
+        .def("__getitem__", &References::operator[])
+        .def("__iter__", range(&References::begin, &References::end))
+        ;
+
+    // ReferenceUser
+    class_<ReferenceUser>("ReferenceUser", no_init)
+        .def("used_reference_names", range(&ReferenceUser::begin_references, &ReferenceUser::end_references))
+        ;
+
+
     // Observable
     register_ptr_to_python<std::shared_ptr<Observable>>();
-    class_<Observable, bases<ParameterUser>, boost::noncopyable>("Observable", no_init)
+    class_<Observable, bases<ParameterUser, ReferenceUser>, boost::noncopyable>("Observable", no_init)
         .def("make", &Observable::make, return_value_policy<return_by_value>())
         .staticmethod("make")
         .def("evaluate", &Observable::evaluate)
@@ -407,25 +431,6 @@ BOOST_PYTHON_MODULE(_eos)
         .staticmethod("make")
         .def("evaluate", &SignalPDF::evaluate)
         .def("name", &SignalPDF::name, return_value_policy<copy_const_reference>())
-        ;
-
-
-    // Reference
-    register_ptr_to_python<ReferencePtr>();
-    class_<Reference>("Reference", no_init)
-        .def("name", &Reference::name, return_value_policy<copy_const_reference>())
-        .def("authors", &Reference::authors, return_value_policy<copy_const_reference>())
-        .def("eprint_archive", &Reference::eprint_archive, return_value_policy<copy_const_reference>())
-        .def("eprint_id", &Reference::eprint_id, return_value_policy<copy_const_reference>())
-        .def("title", &Reference::title, return_value_policy<copy_const_reference>())
-        .def("inspire_id", &Reference::inspire_id, return_value_policy<copy_const_reference>())
-        ;
-
-    // References
-    impl::std_pair_to_python_converter<const ReferenceName, ReferencePtr> converter_references_iter;
-    class_<References>("_References")
-        .def("__getitem__", &References::operator[])
-        .def("__iter__", range(&References::begin, &References::end))
         ;
     // }}}
 

@@ -256,6 +256,25 @@ namespace eos
         return i->second;
     }
 
+    template <>
+    struct WrappedForwardIteratorTraits<ReferenceUser::ReferenceIteratorTag>
+    {
+        using UnderlyingIterator = std::set<ReferenceName>::const_iterator;
+    };
+    template class WrappedForwardIterator<ReferenceUser::ReferenceIteratorTag, const ReferenceName>;
+
+    ReferenceUser::ReferenceIterator
+    ReferenceUser::begin_references() const
+    {
+        return ReferenceIterator(_references.begin());
+    }
+
+    ReferenceUser::ReferenceIterator
+    ReferenceUser::end_references() const
+    {
+        return ReferenceIterator(_references.end());
+    }
+
     UnknownReferenceError::UnknownReferenceError(const ReferenceName & name) :
         Exception("Reference '" + name.str() + "' is unknown")
     {
