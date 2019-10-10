@@ -24,6 +24,8 @@
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
+#include <set>
+
 // forward declaration
 namespace YAML
 {
@@ -107,6 +109,58 @@ namespace eos
     };
 
     extern template class WrappedForwardIterator<References::ReferenceIteratorTag, const std::pair<const ReferenceName, ReferencePtr>>;
+
+    /*!
+     * Base class for all users of Reference objects.
+     */
+    class ReferenceUser
+    {
+        protected:
+            std::set<ReferenceName> _references;
+
+        public:
+            ReferenceUser() = default;
+            ~ReferenceUser() = default;
+
+            ///@name Iteration over references
+            ///@{
+            struct ReferenceIteratorTag;
+            using ReferenceIterator = WrappedForwardIterator<ReferenceIteratorTag, const ReferenceName>;
+
+            ReferenceIterator begin_references() const;
+            ReferenceIterator end_references() const;
+            ///@}
+
+            ///@name Access
+            ///@{
+            /*!
+             * Add a given reference to our list of used references.
+             *
+             * @param name   The reference name that we use.
+             */
+            inline void uses(const ReferenceName & name) { this->_references.insert(name); }
+
+            /*!
+             * Convenience access to add an entire set of used references.
+             */
+            inline void uses(const std::set<ReferenceName> & names)
+            {
+                for (const auto & name : names)
+                {
+                    uses(name);
+                }
+            }
+
+            /*!
+             * Copy reference names of another ReferenceUser to our list of used names.
+             *
+             * @param user The other ReferenceUser whose reference we are going to copy.
+             */
+            inline void uses(const ReferenceUser & user) { this->uses(user._references); }
+            ///@}
+    };
+
+    extern template class WrappedForwardIterator<ReferenceUser::ReferenceIteratorTag, const ReferenceName>;
 
     /*!
      * UnknownReferenceError is thrown when References encounters an unknown constraint name.

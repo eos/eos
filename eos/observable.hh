@@ -21,6 +21,7 @@
 #define EOS_GUARD_SRC_UTILS_OBSERVABLE_HH 1
 
 #include <eos/observable-fwd.hh>
+#include <eos/reference.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
@@ -36,7 +37,8 @@ namespace eos
      * evaluation and cloning of any (pseudo)observable quantities.
      */
     class Observable :
-        public ParameterUser
+        public ParameterUser,
+        public ReferenceUser
     {
         public:
             virtual const QualifiedName & name() const = 0;
@@ -54,6 +56,9 @@ namespace eos
             virtual ObservablePtr clone(const Parameters & parameters) const = 0;
 
             static ObservablePtr make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
+
+            using ParameterUser::uses;
+            using ReferenceUser::uses;
     };
 
     /**
