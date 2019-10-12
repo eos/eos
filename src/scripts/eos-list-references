@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+
+# Copyright (c) 2016, 2018 Danny van Dyk
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
+import argparse
+import eos
+import collections
+import yaml
+import sys
+
+def main():
+    parser = argparse.ArgumentParser(description='List references used in EOS')
+    parser.add_argument('refs', metavar='REFS', type=str, nargs='*', help='Key for a reference')
+
+    args = parser.parse_args()
+
+    refs = eos.References()
+
+    for rn, r in refs:
+        if args.refs and rn not in args.refs:
+            continue
+
+        eprint = None
+        if r.eprint_archive() == 'arXiv':
+            pos = r.eprint_id()[::-1].find(':')
+            eprint = 'arXiv:' + r.eprint_id()[pos:]
+
+        print('[{}] : {}'.format(rn, r.authors()))
+        print('    {}'.format(r.title()))
+        if eprint:
+            print('    {}'.format(eprint))
+        print()
+
+    exit(0);
+
+if __name__ == '__main__':
+    main()

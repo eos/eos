@@ -1,6 +1,5 @@
 CLEANFILES = \
-	*~ \
-	eos-list-references
+	*~
 
 MAINTAINERCLEANFILES = Makefile.in
 
@@ -19,7 +18,7 @@ bin_SCRIPTS = \
 endif
 
 EXTRA_DIST = \
-	eos-list-references.in \
+	eos-list-references \
 	eos-make-constraint \
 	eos-merge-mcmc \
 	eos-plot \
@@ -27,10 +26,3 @@ EXTRA_DIST = \
 	eos-plot-2d \
 	eos-print-modes \
 	eos-print-uncertainty
-
-eos-list-references: eos-list-references.in Makefile
-	sed \
-	    -e "s#@PKGDATADIR@#$(pkgdatadir)#g" \
-	    $< \
-	    > $@
-	chmod a+x $@
