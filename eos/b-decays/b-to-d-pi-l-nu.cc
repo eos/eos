@@ -527,4 +527,9 @@ The azimuthal angle between the decay planes.";
     const std::string
     BToDPiLeptonNeutrino::kinematics_description_q2 = "\
 The squared mass of the dilepton pair.";
+
+    const std::set<ReferenceName>
+    BToDPiLeptonNeutrino::references
+    {
+    };
 }

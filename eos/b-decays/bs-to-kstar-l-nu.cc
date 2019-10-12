@@ -633,4 +633,14 @@ The cosine of the kaon's helicity angle theta_k in the K-pi rest frame of the de
     const std::string
     BsToKstarLeptonNeutrino::kinematics_description_phi = "\
 The azimuthal angle between the l-nubar plane and the K-pi plane.";
+
+    const std::set<ReferenceName>
+    BsToKstarLeptonNeutrino::references
+    {
+    };
+
+    const std::set<ReferenceName>
+    BsToKstarLeptonNeutrinoRatios::references
+    {
+    };
 }

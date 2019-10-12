@@ -281,4 +281,9 @@ The invariant mass of the l-nubar pair in GeV^2.";
     const std::string
     LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_c_theta_l = "\
 The cosine of the helicity angle between the direction of flight of the muon and of the Lambda_c(2625) in the l-nubar rest frame.";
+
+    const std::set<ReferenceName>
+    LambdaBToLambdaC2625LeptonNeutrino::references
+    {
+    };
 }

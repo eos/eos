@@ -496,4 +496,8 @@ namespace eos
     BToDstarLeptonNeutrino::kinematics_description_phi = "\
     The azimuthal angle between the D-pi plane and the l-nubar  plane.";
 
+    const std::set<ReferenceName>
+    BToDstarLeptonNeutrino::references
+    {
+    };
 }
