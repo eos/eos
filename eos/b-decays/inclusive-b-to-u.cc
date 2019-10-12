@@ -70,4 +70,9 @@ namespace eos
     {
         return _imp->v_ub();
     }
+
+    const std::set<ReferenceName>
+    BToXuLeptonNeutrino<Naive>::references
+    {
+    };
 }

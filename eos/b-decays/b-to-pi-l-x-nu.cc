@@ -203,4 +203,9 @@ The cosine of the muon's helicity angle theta_mu^* in the tau's rest frame.";
     const std::string
     BToPiLeptonInclusiveNeutrinos::kinematics_description_phi = "\
 The azimuthal angle between the B-D plane and the tau-nubar_tau plane.";
+
+    const std::set<ReferenceName>
+    BToPiLeptonInclusiveNeutrinos::references
+    {
+    };
 }

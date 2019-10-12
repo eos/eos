@@ -84,4 +84,9 @@ namespace eos
     {
         return _imp->mass_splitting_j1_j0();
     }
+
+    const std::set<ReferenceName>
+    BMesonProperties::references
+    {
+    };
 }

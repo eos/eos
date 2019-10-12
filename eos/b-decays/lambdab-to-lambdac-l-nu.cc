@@ -530,4 +530,8 @@ namespace eos
     LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 = "\
     The invariant mass of the l-nubar pair in GeV^2.";
 
+    const std::set<ReferenceName>
+    LambdaBToLambdaCLeptonNeutrino::references
+    {
+    };
 }

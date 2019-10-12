@@ -108,4 +108,9 @@ namespace eos
     {
         return _imp->decay_width();
     }
+
+    const std::set<ReferenceName>
+    BToLeptonNeutrino::references
+    {
+    };
 }

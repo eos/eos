@@ -267,4 +267,9 @@ The invariant mass of the pi-pi pair in GeV^2.";
     const std::string
     BToPiPiLeptonNeutrino::kinematics_description_z = "\
 The cosine of the pion helicity angle in the pi-pi rest frame.";
+
+    const std::set<ReferenceName>
+    BToPiPiLeptonNeutrino::references
+    {
+    };
 }

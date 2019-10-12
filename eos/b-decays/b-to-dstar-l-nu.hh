@@ -23,6 +23,7 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/reference-name.hh>
 
 namespace eos
 {
@@ -73,6 +74,11 @@ namespace eos
             static const std::string kinematics_description_c_theta_l;
             static const std::string kinematics_description_c_theta_d;
             static const std::string kinematics_description_phi;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 }
 
