@@ -212,6 +212,7 @@ namespace eos
 
         virtual void serialize(YAML::Emitter & out) const
         {
+            out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "Gaussian";
             out << YAML::Key << "observable" << YAML::Value << observable.full();
@@ -401,6 +402,7 @@ namespace eos
 
         virtual void serialize(YAML::Emitter & out) const
         {
+            out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "LogGamma";
             out << YAML::Key << "observable" << YAML::Value << observable.full();
@@ -581,6 +583,7 @@ namespace eos
 
         virtual void serialize(YAML::Emitter & out) const
         {
+            out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "Amoroso";
             out << YAML::Key << "observable" << YAML::Value << observable.full();
@@ -827,6 +830,7 @@ namespace eos
 
         virtual void serialize(YAML::Emitter & out) const
         {
+            out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian";
             out << YAML::Key << "dim" << YAML::Value << dim;
@@ -1145,6 +1149,7 @@ namespace eos
 
         virtual void serialize(YAML::Emitter & out) const
         {
+            out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian(Covariance)";
             out << YAML::Key << "dim" << YAML::Value << dim;
@@ -1377,6 +1382,7 @@ namespace eos
 
         virtual void serialize(YAML::Emitter & out) const
         {
+            out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "UniformBound";
             out << YAML::Key << "observable" << YAML::Value << observable.full();
