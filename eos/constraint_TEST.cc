@@ -649,12 +649,12 @@ class ConstraintDeserializationTest :
                     "  - {form-factors: BCL2008}\n"
                     "  - {form-factors: BCL2008}\n"
                     "  - {form-factors: BCL2008}\n"
-                    "means: [0.665, 0.798, 0.972, 1.177, 0.729, 0.8100000000000001, 0.901]\n"
+                    "means: [0.665, 0.798, 0.972, 1.177, 0.729, 0.81, 0.901]\n"
                     "covariance:\n"
                     "  - [0.001128, 0.001042, 0.000923, 0.0007727, 0.001093, 0.001063, 0.001045]\n"
                     "  - [0.001042, 0.001079, 0.001108, 0.001123, 0.001026, 0.001017, 0.001021]\n"
-                    "  - [0.000923, 0.001108, 0.001331, 0.001576, 0.0009307, 0.0009511, 0.0009865]\n"
-                    "  - [0.0007727, 0.001123, 0.001576, 0.002112, 0.0008108, 0.0008681, 0.0009425]\n"
+                    "  - [0.000923, 0.001108, 0.001331, 0.001576, 0.000931, 0.0009511, 0.0009865]\n"
+                    "  - [0.000773, 0.001123, 0.001576, 0.002112, 0.000811, 0.0008681, 0.0009425]\n"
                     "  - [0.001093, 0.001026, 0.0009307, 0.0008108, 0.001126, 0.001165, 0.00121]\n"
                     "  - [0.001063, 0.001017, 0.0009511, 0.0008681, 0.001165, 0.001283, 0.00141]\n"
                     "  - [0.001045, 0.001021, 0.0009865, 0.0009425, 0.00121, 0.00141, 0.001635]\n"
@@ -876,52 +876,76 @@ class ConstraintTest :
         {
             /* Test making constraints */
             {
-                std::cout << "# Constraints :" << std::endl;
-
-                Options o;
-                auto constraints = Constraints();
-                unsigned n = 0;
-
-                for (auto cf = constraints.begin(); cf != constraints.end(); ++cf, ++n)
+                try
                 {
-                    std::cout << "#  " << cf->first.full() << ": ";
+                    std::cout << "# Constraints :" << std::endl;
 
-                    Constraint c = Constraint::make(cf->first, o);
-                    TEST_CHECK_EQUAL(c.name(), cf->first);
-                    TEST_CHECK(std::distance(c.begin_observables(), c.end_observables()) > 0);
-                    TEST_CHECK(std::distance(c.begin_blocks(), c.end_blocks()) > 0);
+                    Options o;
+                    auto constraints = Constraints();
+                    unsigned n = 0;
 
-                    for (auto o = c.begin_observables(), o_end = c.end_observables(); o != o_end ; ++o)
+                    for (auto cf = constraints.begin(); cf != constraints.end(); ++cf, ++n)
                     {
-                        std::cout << (**o).name() << '['
-                                << (**o).kinematics().as_string() << ']'
-                                << " with options: " << (**o).options().as_string();
-                    }
-                    for (auto b = c.begin_blocks(), b_end = c.end_blocks(); b != b_end ; ++b)
-                    {
-                        std::cout << ", " << (**b).as_string();
+                        std::cout << "#  " << cf->first.full() << ": ";
+
+                        Constraint c = Constraint::make(cf->first, o);
+                        TEST_CHECK_EQUAL(c.name(), cf->first);
+                        TEST_CHECK(std::distance(c.begin_observables(), c.end_observables()) > 0);
+                        TEST_CHECK(std::distance(c.begin_blocks(), c.end_blocks()) > 0);
+
+                        for (auto o = c.begin_observables(), o_end = c.end_observables(); o != o_end ; ++o)
+                        {
+                            std::cout << (**o).name() << '['
+                                    << (**o).kinematics().as_string() << ']'
+                                    << " with options: " << (**o).options().as_string();
+                        }
+                        for (auto b = c.begin_blocks(), b_end = c.end_blocks(); b != b_end ; ++b)
+                        {
+                            std::cout << ", " << (**b).as_string();
+                        }
+                        std::cout << std::endl;
                     }
                     std::cout << std::endl;
+                    std::cout << "# Found " << n << " constraints" << std::endl;
                 }
-                std::cout << std::endl;
-                std::cout << "# Found " << n << " constraints" << std::endl;
+                catch (std::exception & e)
+                {
+                    std::cerr << "Caught unexpected exception: " << e.what() << std::endl;
+                    throw e;
+                }
+                catch (...)
+                {
+                    std::cerr << "Caught unexpected unknown exception" << std::endl;
+                }
             }
 
             /* Test retrieving ConstraintEntry by name */
             {
-                auto constraints = Constraints();
-
-                static const std::vector<QualifiedName> names
+                try
                 {
-                    "B->pi::f_+@IKMvD-2014",
-                    "B->K::f_0+f_++f_T@HPQCD-2013A"
-                };
+                    auto constraints = Constraints();
 
-                for (auto & n : names)
+                    static const std::vector<QualifiedName> names
+                    {
+                        "B->pi::f_+@IKMvD-2014",
+                        "B->K::f_0+f_++f_T@HPQCD-2013A"
+                    };
+
+                    for (auto & n : names)
+                    {
+                        std::shared_ptr<const ConstraintEntry> c;
+                        TEST_CHECK_NO_THROW(c = constraints[n]);
+                        TEST_CHECK(c.get() != nullptr);
+                    }
+                }
+                catch (std::exception & e)
                 {
-                    std::shared_ptr<const ConstraintEntry> c;
-                    TEST_CHECK_NO_THROW(c = constraints[n]);
-                    TEST_CHECK(c.get() != nullptr);
+                    std::cerr << "Caught unexpected exception: " << e.what() << std::endl;
+                    throw e;
+                }
+                catch (...)
+                {
+                    std::cerr << "Caught unexpected unknown exception" << std::endl;
                 }
             }
         }
