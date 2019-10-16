@@ -2651,6 +2651,11 @@ groups:
       # Parameters for B*->D* form factors in the Heavy-Quark Expansion (HQE)
       # The implementation is based on [N1993], and inspired by the parametrization
       # in [BLPR2017] and its modification in [JS2018].
+      "B(*)->D(*)::n_f@HQET" :
+          central: 2.0
+          min: 2.0
+          max: 2.0
+          latex: '$n_f$'
       "B(*)->D(*)::a@HQET" :
           central: 1.0
           min: 1.0
@@ -2812,6 +2817,11 @@ groups:
           max: 0
           latex: '$l^{(2)}_6(1)$'
       # Parameters for B_s*->D_s* form factors in the Heavy-Quark Expansion (HQE)
+      "B_s(*)->D_s(*)::n_s@HQET" :
+          central: 1.0
+          min: 1.0
+          max: 1.0
+          latex: '$n_s$'
       "B_s(*)->D_s(*)::a@HQET" :
           central: 1.0
           min: 1.0
