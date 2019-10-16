@@ -1422,63 +1422,16 @@ namespace eos
         SwitchOption opt_zorder_bound;
         unsigned zorder_bound;
 
-        // parameters for the leading Isgur-Wise function xi
-        UsedParameter xipone, xippone, xipppone;
-
-        // parameters for the subleading Isgur-Wise function chi2
-        UsedParameter chi2one, chi2pone, chi2ppone;
-
-        // parameters for the subleading Isgur-Wise function chi3
-        UsedParameter chi3pone, chi3ppone;
-
-        // parameters for the subleading Isgur-Wise function eta
-        UsedParameter etaone, etapone, etappone;
-
-        // parameters for subsubleading 1/mc corrections in h+ (B->D), equal to delta{h+}
-        UsedParameter l1one, l1pone, l1ppone;
-
-        // parameters for subsubleading 1/mc corrections in hA1 (B->D^*), equal to delta{A1}
-        UsedParameter l2one, l2pone, l2ppone;
-
-        // parameters for subsubleading 1/m_c corrections
-        UsedParameter l3one, l3pone, l3ppone;
-        UsedParameter l4one, l4pone, l4ppone;
-        UsedParameter l5one, l5pone, l5ppone;
-        UsedParameter l6one, l6pone, l6ppone;
+        // number of light flavor multiplets
+        UsedParameter nf;
+        UsedParameter ns;
 
         std::shared_ptr<BGLCoefficients> bgl;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_zorder_bound(o, "z-order-bound", { "1", "2" }, "2"),
-            xipone(p["B(*)->D(*)::xi'(1)@HQET"], u),
-            xippone(p["B(*)->D(*)::xi''(1)@HQET"], u),
-            xipppone(p["B(*)->D(*)::xi'''(1)@HQET"], u),
-            chi2one(p["B(*)->D(*)::chi_2(1)@HQET"], u),
-            chi2pone(p["B(*)->D(*)::chi_2'(1)@HQET"], u),
-            chi2ppone(p["B(*)->D(*)::chi_2''(1)@HQET"], u),
-            chi3pone(p["B(*)->D(*)::chi_3'(1)@HQET"], u),
-            chi3ppone(p["B(*)->D(*)::chi_3''(1)@HQET"], u),
-            etaone(p["B(*)->D(*)::eta(1)@HQET"], u),
-            etapone(p["B(*)->D(*)::eta'(1)@HQET"], u),
-            etappone(p["B(*)->D(*)::eta''(1)@HQET"], u),
-            l1one(p["B(*)->D(*)::l_1(1)@HQET"], u),
-            l1pone(p["B(*)->D(*)::l_1'(1)@HQET"], u),
-            l1ppone(p["B(*)->D(*)::l_1''(1)@HQET"], u),
-            l2one(p["B(*)->D(*)::l_2(1)@HQET"], u),
-            l2pone(p["B(*)->D(*)::l_2'(1)@HQET"], u),
-            l2ppone(p["B(*)->D(*)::l_2''(1)@HQET"], u),
-            l3one(p["B(*)->D(*)::l_3(1)@HQET"], u),
-            l3pone(p["B(*)->D(*)::l_3'(1)@HQET"], u),
-            l3ppone(p["B(*)->D(*)::l_3''(1)@HQET"], u),
-            l4one(p["B(*)->D(*)::l_4(1)@HQET"], u),
-            l4pone(p["B(*)->D(*)::l_4'(1)@HQET"], u),
-            l4ppone(p["B(*)->D(*)::l_4''(1)@HQET"], u),
-            l5one(p["B(*)->D(*)::l_5(1)@HQET"], u),
-            l5pone(p["B(*)->D(*)::l_5'(1)@HQET"], u),
-            l5ppone(p["B(*)->D(*)::l_5''(1)@HQET"], u),
-            l6one(p["B(*)->D(*)::l_6(1)@HQET"], u),
-            l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], u),
-            l6ppone(p["B(*)->D(*)::l_6''(1)@HQET"], u),
+            nf(p["B(*)->D(*)::n_f@HQET"], u),
+            ns(p["B_s(*)->D_s(*)::n_s@HQET"], u),
             bgl(new BGLCoefficients(p, o))
         {
             if ("1" == opt_zorder_bound.value())
@@ -1518,7 +1471,7 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2) * 2.0; // assuming isospin symmetry
+                    result += pow(ff[i], 2) * nf; // to account for flavour symmetry
                 }
             }
 
@@ -1538,7 +1491,7 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2);
+                    result += pow(ff[i], 2) * ns;
                 }
             }
 
@@ -1577,7 +1530,7 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2) * 2.0; // assuming isospin symmetry
+                    result += pow(ff[i], 2) * nf; // to account for flavour symmetry
                 }
             }
 
@@ -1597,13 +1550,13 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2);
+                    result += pow(ff[i], 2) * ns;
                 }
             }
 
             if (result < 0.0)
             {
-                throw InternalError("Contribution to 0^+ unitarity bound must be positive; found to be negative!");
+                throw InternalError("Contribution to 0^- unitarity bound must be positive; found to be negative!");
             }
             else if ((0.0 <= result) && (result < 1.0))
             {
@@ -1612,7 +1565,7 @@ namespace eos
             else
             {
                 // add an r-fit like penalty
-                static const double sigma = 0.0130561; // cf. [BG2016], eq. (2.8), p.5
+                static const double sigma = 0.0130561; // using the same relative uncertainty as for 0^+, cf. [BG2016], eq. (2.8), p.5
                 return -pow((result - 1.0) / sigma, 2) / 2.0;
             }
         }
@@ -1644,7 +1597,7 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2) * 2.0; // assuming isospin symmetry
+                    result += pow(ff[i], 2) * nf; // to account for flavour symmetry
                 }
             }
 
@@ -1672,13 +1625,13 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2);
+                    result += pow(ff[i], 2) * ns;
                 }
             }
 
             if (result < 0.0)
             {
-                throw InternalError("Contribution to 0^+ unitarity bound must be positive; found to be negative!");
+                throw InternalError("Contribution to 1^+ unitarity bound must be positive; found to be negative!");
             }
             else if ((0.0 <= result) && (result < 1.0))
             {
@@ -1687,7 +1640,7 @@ namespace eos
             else
             {
                 // add an r-fit like penalty
-                static const double sigma = 0.0130561; // cf. [BG2016], eq. (2.8), p.5
+                static const double sigma = 0.0093549; // cf. [BG2016], eq. (2.8), p.5
                 return -pow((result - 1.0) / sigma, 2) / 2.0;
             }
         }
@@ -1719,7 +1672,7 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2) * 2.0; // assuming isospin symmetry
+                    result += pow(ff[i], 2) * nf; // to account for flavour symmetry
                 }
             }
 
@@ -1747,13 +1700,13 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2);
+                    result += pow(ff[i], 2) * ns;
                 }
             }
 
             if (result < 0.0)
             {
-                throw InternalError("Contribution to 0^+ unitarity bound must be positive; found to be negative!");
+                throw InternalError("Contribution to 1^- unitarity bound must be positive; found to be negative!");
             }
             else if ((0.0 <= result) && (result < 1.0))
             {
@@ -1762,7 +1715,7 @@ namespace eos
             else
             {
                 // add an r-fit like penalty
-                static const double sigma = 0.0130561; // cf. [BG2016], eq. (2.8), p.5
+                static const double sigma = 0.0093549; // same relative uncertainty as for 1^-, cf. [BG2016], eq. (2.8), p.5
                 return -pow((result - 1.0) / sigma, 2) / 2.0;
             }
         }
