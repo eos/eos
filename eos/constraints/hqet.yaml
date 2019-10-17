@@ -4,22 +4,22 @@
 # {{{
 b->c::Bound[0^+]@CLN:
     type: UniformBound
-    observable: b->c::Bound[0^+]@CLN
+    observable: b->c::Prior[0^+]@CLN
     kinematics: {}
     options: {}
 b->c::Bound[0^-]@CLN:
     type: UniformBound
-    observable: b->c::Bound[0^-]@CLN
+    observable: b->c::Prior[0^-]@CLN
     kinematics: {}
     options: {}
 b->c::Bound[1^+]@CLN:
     type: UniformBound
-    observable: b->c::Bound[1^+]@CLN
+    observable: b->c::Prior[1^+]@CLN
     kinematics: {}
     options: {}
 b->c::Bound[1^-]@CLN:
     type: UniformBound
-    observable: b->c::Bound[1^-]@CLN
+    observable: b->c::Prior[1^-]@CLN
     kinematics: {}
     options: {}
 # }}}

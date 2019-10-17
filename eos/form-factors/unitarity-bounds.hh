@@ -228,6 +228,16 @@ namespace eos
             HQETUnitarityBounds(const Parameters &, const Options &);
             ~HQETUnitarityBounds();
 
+            // unitarity bounds as priors
+            double bound_0p_prior() const;
+
+            double bound_0m_prior() const;
+
+            double bound_1p_prior() const;
+
+            double bound_1m_prior() const;
+
+            // unitarity bounds as pseudo observables
             double bound_0p() const;
 
             double bound_0m() const;
