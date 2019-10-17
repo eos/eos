@@ -1159,6 +1159,18 @@ namespace eos
 
                 make_observable("b->c::Bound[1^-]@CLN", R"(B^{b\to c}_{1^-})",
                         &HQETUnitarityBounds::bound_1m),
+
+                make_observable("b->c::Prior[0^+]@CLN", R"(B^{b\to c}_{0^+})",
+                        &HQETUnitarityBounds::bound_0p_prior),
+
+                make_observable("b->c::Prior[0^-]@CLN", R"(B^{b\to c}_{0^-})",
+                        &HQETUnitarityBounds::bound_0m_prior),
+
+                make_observable("b->c::Prior[1^+]@CLN", R"(B^{b\to c}_{1^+})",
+                        &HQETUnitarityBounds::bound_1p_prior),
+
+                make_observable("b->c::Prior[1^-]@CLN", R"(B^{b\to c}_{1^-})",
+                        &HQETUnitarityBounds::bound_1m_prior),
             }
         );
 
