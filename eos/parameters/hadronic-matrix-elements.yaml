@@ -2656,6 +2656,10 @@ groups:
           min: 2.0
           max: 2.0
           latex: '$n_f$'
+      "B(*)->D(*)::mBar@HQET" :
+          central: 5.313
+          min: 5.313
+          max: 5.313
       "B(*)->D(*)::a@HQET" :
           central: 1.0
           min: 1.0
@@ -2822,6 +2826,11 @@ groups:
           min: 1.0
           max: 1.0
           latex: '$n_s$'
+      "B_s(*)->D_s(*)::mBar@HQET" :
+          central: 5.403
+          min: 5.403
+          max: 5.403
+          latex: '$a$'
       "B_s(*)->D_s(*)::a@HQET" :
           central: 1.0
           min: 1.0
