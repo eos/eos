@@ -47,6 +47,9 @@ namespace eos
         protected:
             std::shared_ptr<Model> _model;
 
+            // spin avaraged mB mass
+            UsedParameter _mBar;
+
             // parameter for modifying the z function
             UsedParameter _a;
 
@@ -96,6 +99,7 @@ namespace eos
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o, const std::string & prefix) :
                 _model(Model::make("SM", p, o)),
+                _mBar(p[prefix + "::mBar@HQET"], *this),
                 _a(p[prefix + "::a@HQET"], *this),
                 _opt_lp_model(o, "model-lp", { "power-series", "exponential" }, "power-series"),
                 _opt_lp_zorder(o, "z-order-lp", { "2", "3", "4", "5" }, "3"),
@@ -169,7 +173,7 @@ namespace eos
             inline double _m_b_pole() const { return _m_b_1S() * (1 + 2.0 / 9.0 * power_of<2>(_alpha_s())); }
             inline double _m_c_pole() const { return _m_b_pole() - 3.40; }
             inline double _lambda_1() const { return -0.30; }
-            inline double _LambdaBar() const { return 5.313 - _m_b_pole() + _lambda_1() / (2.0 * _m_b_1S()); }
+            inline double _LambdaBar() const { return _mBar - _m_b_pole() + _lambda_1() / (2.0 * _m_b_1S()); }
 
             /*
              * Interface to Process_-specific kinematics.
