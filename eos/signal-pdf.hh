@@ -60,6 +60,8 @@ namespace eos
 
             virtual double evaluate() const = 0;
 
+            virtual double normalization() const = 0;
+
             virtual Kinematics kinematics() = 0;
 
             virtual Parameters parameters() = 0;

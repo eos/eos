@@ -439,6 +439,16 @@ namespace eos
         return integrate<GSL::QAGS>(f, s_min, s_max);
     }
 
+    // normalized (|V_Ub|=1) integrated decay_width
+    double
+    BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
+                                                             _imp.get(), std::placeholders::_1);
+
+        return integrate<GSL::QAGS>(f, s_min, s_max);
+    }
+
     double
     BToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic(const double & s) const
     {

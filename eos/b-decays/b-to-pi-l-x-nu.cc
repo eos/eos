@@ -71,7 +71,7 @@ namespace eos
         }
 
         // normalized to N_1 = |V_vb|^2 G_F^2 / (192 pi^3 MB^3)
-        double differential_decay_width_1nu(const double & s) const
+        double differential_decay_width_1nu_1var(const double & s) const
         {
             double fp = form_factors->f_p(s);
             double lam = lambda(m_B * m_B, m_pi * m_pi, s);
@@ -79,21 +79,17 @@ namespace eos
             return sqrt(lam) * (3.0 * fp * fp * lam);
         }
 
-        double normalized_differential_decay_width_1nu(const double & s, const double & c_theta_mu) const
+        double differential_decay_width_1nu(const double & s, const double & c_theta_mu) const
         {
-            std::function<double (const double &)> integrand = std::bind(&Implementation<BToPiLeptonInclusiveNeutrinos>::differential_decay_width_1nu, this, std::placeholders::_1);
-            const double s_min = 0.0, s_max = power_of<2>(m_B() - m_pi());
-            double Gamma_1 = integrate<GSL::QNG>(integrand, s_min, s_max);
-
             double fp = form_factors->f_p(s);
             double lam = lambda(m_B * m_B, m_pi * m_pi, s);
 
-            return 3.0 / 4.0 * fp * fp * lam * sqrt(lam) * (1.0 - c_theta_mu * c_theta_mu) / Gamma_1;
+            return 3.0 / 4.0 * fp * fp * lam * sqrt(lam) * (1.0 - c_theta_mu * c_theta_mu);
         }
 
         // normalized to N_3 = |V_ub|^2 G_F^2 / (384 pi^3 MB^3)
         //                   * tau_tau / hbar * G_F^2 m_tau^5 / (192 pi^3)
-        double differential_decay_width_3nu(const double & s) const
+        double differential_decay_width_3nu_1var(const double & s) const
         {
             double fp = form_factors->f_p(s);
             double f0 = form_factors->f_0(s);
@@ -105,13 +101,9 @@ namespace eos
             return sqrt(lam) * v2 * ((3.0 - v) * fp * fp * lam + 3.0 * (1.0 - v) * f0 * f0 * power_of<2>(m_B() * m_B() - m_pi() * m_pi())) * 4.0 / 3.0;
         }
 
-        double normalized_differential_decay_width_3nu(const double & s, const double & snunubar,
+        double differential_decay_width_3nu(const double & s, const double & snunubar,
                 const double & z, const double & phi, const double & zst) const
         {
-            std::function<double (const double &)> integrand = std::bind(&Implementation<BToPiLeptonInclusiveNeutrinos>::differential_decay_width_3nu, this, std::placeholders::_1);
-            const double s_min = 3.16, s_max = power_of<2>(m_B() - m_pi());
-            const double Gamma_3 = integrate<GSL::QNG>(integrand, s_min, s_max);
-
             const double fp = form_factors->f_p(s), fp2 = fp * fp;
             const double f0 = form_factors->f_0(s), f02 = f0 * f0;
             const double lam = lambda(m_B * m_B, m_pi * m_pi, s), sqrtlam = sqrt(lam);
@@ -147,7 +139,7 @@ namespace eos
             const double e = 2.0 * mtau * sqrts * power_of<2>((mtau2 - snunubar) * (s - mtau2)) * (mtau2 - 2.0 * snunubar) * fp2 * sqrtlam * lam / (mtau8 * M_PI * s3)
                 * sqrt(1.0 - zst * zst);
 
-            return (a + b * z + c * z2 + (d + e * z) * sqrt(1.0 - z2) * cos(phi)) / Gamma_3;
+            return (a + b * z + c * z2 + (d + e * z) * sqrt(1.0 - z2) * cos(phi));
         }
 
     };
@@ -162,16 +154,34 @@ namespace eos
     }
 
     double
-    BToPiLeptonInclusiveNeutrinos::normalized_differential_decay_width_1nu(const double & s, const double & c_theta_mu) const
+    BToPiLeptonInclusiveNeutrinos::differential_decay_width_1nu(const double & s, const double & c_theta_mu) const
     {
-        return _imp->normalized_differential_decay_width_1nu(s, c_theta_mu);
+        return _imp->differential_decay_width_1nu(s, c_theta_mu);
     }
 
     double
-    BToPiLeptonInclusiveNeutrinos::normalized_differential_decay_width_3nu(const double & s, const double & snunubar,
+    BToPiLeptonInclusiveNeutrinos::differential_decay_width_3nu(const double & s, const double & snunubar,
             const double & z, const double & phi, const double & zst) const
     {
-        return _imp->normalized_differential_decay_width_3nu(s, snunubar, z, phi, zst);
+        return _imp->differential_decay_width_3nu(s, snunubar, z, phi, zst);
+    }
+
+    double
+    BToPiLeptonInclusiveNeutrinos::integrated_decay_width_1nu(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> f = std::bind(&Implementation<BToPiLeptonInclusiveNeutrinos>::differential_decay_width_1nu_1var,
+                                                             _imp.get(), std::placeholders::_1);
+
+        return integrate<GSL::QAGS>(f, s_min, s_max);
+    }
+
+    double
+    BToPiLeptonInclusiveNeutrinos::integrated_decay_width_3nu(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> f = std::bind(&Implementation<BToPiLeptonInclusiveNeutrinos>::differential_decay_width_3nu_1var,
+                                                             _imp.get(), std::placeholders::_1);
+
+        return integrate<GSL::QAGS>(f, s_min, s_max);
     }
 
     const std::string
