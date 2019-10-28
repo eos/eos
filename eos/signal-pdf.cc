@@ -29,11 +29,11 @@
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
-#include <eos/utils/concrete-signal-pdf.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include <functional>
 #include <map>
 #include <ostream>
 
@@ -49,9 +49,16 @@ namespace eos
                 {
                 }
 
-                double result(const double & z) const
+                double pdf(const double & z) const
                 {
-                    return (9.0 + 8.0 * z + 9.0 * z * z) / 24.0;
+                    return (9.0 + 8.0 * z + 9.0 * z * z);
+                }
+
+                double norm(const double & z_min, const double & z_max) const
+                {
+                    using std::pow;
+
+                    return (9.0 * (z_max - z_min) + 4.0 * (pow(z_max, 2.0) - pow(z_min, 2.0)) + 3.0 * (pow(z_max, 3.0) - pow(z_min, 3.0)));
                 }
 
                 static const std::string description;
@@ -59,7 +66,12 @@ namespace eos
 
         const std::string Legendre1DPDF::description = "1D PDF up to 2nd order in z; used for unit tests only.";
     }
+}
 
+#include <eos/utils/concrete-signal-pdf.hh>
+
+namespace eos
+{
     SignalPDFNameError::SignalPDFNameError(const std::string & name) :
         Exception("SignalPDF name '" + name + "' is malformed")
     {
@@ -85,17 +97,20 @@ namespace eos
         return os;
     }
 
-    template <typename Decay_, typename ... FunctionArgs_, typename ... KinematicRanges_>
+    template <typename Decay_, typename ... PDFArgs_, typename ... PDFKinematicRanges_, typename ... NormArgs_,  typename ... NormKinematicNames_>
     std::pair<QualifiedName, SignalPDFEntry *> make_signal_pdf(const char * name,
-            double (Decay_::* function)(const FunctionArgs_ & ...) const,
             const Options & default_options,
-            const KinematicRanges_ & ... kinematic_ranges)
+            double (Decay_::* pdf)(const PDFArgs_ & ...) const,
+            const std::tuple<PDFKinematicRanges_ ...> & pdf_kinematic_ranges,
+            double (Decay_::* norm)(const NormArgs_ & ...) const,
+            const std::tuple<NormKinematicNames_ ...> & norm_kinematic_names)
     {
-        static_assert(sizeof...(FunctionArgs_) == sizeof...(KinematicRanges_), "Need as many function arguments as kinematics ranges!");
+        static_assert(sizeof...(PDFArgs_) == sizeof...(PDFKinematicRanges_), "Need as many function arguments for the PDF as kinematics ranges!");
+        static_assert(sizeof...(NormArgs_) == sizeof...(NormKinematicNames_), "Need as many function arguments for the normalization as kinematics names!");
 
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_signal_pdf_entry(qn, function, default_options, kinematic_ranges...));
+        return std::make_pair(qn, make_concrete_signal_pdf_entry(qn, default_options, pdf, pdf_kinematic_ranges, norm, norm_kinematic_names));
     }
 
     const std::map<QualifiedName, const SignalPDFEntry *> &
@@ -106,139 +121,304 @@ namespace eos
             /* Internal Tests */
 
             make_signal_pdf("Test::Legendre1D",
-                    &test::Legendre1DPDF::result,
                     Options{ },
-                    KinematicRange{ "z", -1.0, +1.0, "" }),
+                    &test::Legendre1DPDF::pdf,
+                    std::make_tuple(
+                        KinematicRange{ "z", -1.0, +1.0, "" }
+                    ),
+                    &test::Legendre1DPDF::norm,
+                    std::make_tuple(
+                        "z_min",
+                        "z_max"
+                    )
+                ),
 
             /* Exclusive Decays */
 
             /* Exclusive B Decays */
 
             make_signal_pdf("B->pipimunu::d^3Gamma@QCDF",
-                    &BToPiPiLeptonNeutrino::triple_differential_branching_ratio,
                     Options{ },
-                    KinematicRange{ "q2", 0.01, 0.93859, BToPiPiLeptonNeutrino::kinematics_description_q2 },
-                    KinematicRange{ "k2", 18.582, 27.872, BToPiPiLeptonNeutrino::kinematics_description_k2 },
-                    KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiPiLeptonNeutrino::kinematics_description_z }),
+                    &BToPiPiLeptonNeutrino::triple_differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.01, 0.93859, BToPiPiLeptonNeutrino::kinematics_description_q2 },
+                        KinematicRange{ "k2", 18.582, 27.872, BToPiPiLeptonNeutrino::kinematics_description_k2 },
+                        KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiPiLeptonNeutrino::kinematics_description_z }
+                    ),
+                    &BToPiPiLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max",
+                        "k2_min",
+                        "k2_max",
+                        "cos(theta)_min",
+                        "cos(theta)_max"
+                    )
+                ),
 
             make_signal_pdf("B->pilnu::dGamma/dq2",
-                    &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                     Options{ { "U", "u" } },
-                    KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }),
+                    &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }
+                    ),
+                    &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max"
+                    )
+                ),
 
             make_signal_pdf("B->pilnu::d^2Gamma/dq2/dcos(theta_l)",
-                    &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
                     Options{ {"U", "u"} },
-                    KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
-                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}),
+                    &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}
+                    ),
+                    &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max"
+                    )
+                ),
 
             make_signal_pdf("B->Dlnu::dGamma/dq2",
-                    &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                     Options{ { "U", "c" } },
-                    KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }),
+                    &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }
+                    ),
+                    &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max"
+                    )
+                ),
 
             make_signal_pdf("B->Dlnu::d^2Gamma/dq2/dcos(theta_l)",
-                    &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
                     Options{ {"U", "c"} },
-                    KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
-                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}),
+                    &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l}
+                    ),
+                    &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max"
+                    )
+                ),
 
             make_signal_pdf("B->D^*munu::dBR",
-                            &BToDstarLeptonNeutrino::differential_branching_ratio,
-                            Options{ {"l", "mu"} },
-                            KinematicRange{ "s", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_s }),
+                    Options{ {"l", "mu"} },
+                    &BToDstarLeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "s", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_s }
+                    ),
+                    &BToDstarLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("B->D^*munu::d^4Gamma",
-                            &BToDstarLeptonNeutrino::normalized_four_differential_decay_width,
-                            Options{ {"l", "mu"} },
-                            KinematicRange{ "s", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_s },
-                            KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_l },
-                            KinematicRange{ "cos(theta_d)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_d },
-                            KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDstarLeptonNeutrino::kinematics_description_phi }),
+                    Options{ {"l", "mu"} },
+                    &BToDstarLeptonNeutrino::normalized_four_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "s", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_d)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_d },
+                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDstarLeptonNeutrino::kinematics_description_phi }
+                    ),
+                    &BToDstarLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("B->Dmu1nu::d^2Gamma",
-                    &BToDLeptonInclusiveNeutrinos::normalized_differential_decay_width_1nu,
                     Options{ },
-                    KinematicRange{ "s", 0.0, 19.71, BToDLeptonInclusiveNeutrinos::kinematics_description_s },
-                    KinematicRange{ "cos(theta)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta}),
+                    &BToDLeptonInclusiveNeutrinos::differential_decay_width_1nu,
+                    std::make_tuple(
+                        KinematicRange{ "s", 0.0, 19.71, BToDLeptonInclusiveNeutrinos::kinematics_description_s },
+                        KinematicRange{ "cos(theta)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta}
+                    ),
+                    &BToDLeptonInclusiveNeutrinos::integrated_decay_width_1nu,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("B->Dmu3nu::d^5Gamma",
-                    &BToDLeptonInclusiveNeutrinos::normalized_differential_decay_width_3nu,
                     Options{ },
-                    KinematicRange{ "s", 3.16, 19.71, BToDLeptonInclusiveNeutrinos::kinematics_description_s },
-                    KinematicRange{ "snunubar", 0.0, 3.16, BToDLeptonInclusiveNeutrinos::kinematics_description_snunubar },
-                    KinematicRange{ "cos(theta_tau)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta_tau },
-                    KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDLeptonInclusiveNeutrinos::kinematics_description_phi },
-                    KinematicRange{ "cos(theta_mu^*)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta_mu_star }),
+                    &BToDLeptonInclusiveNeutrinos::differential_decay_width_3nu,
+                    std::make_tuple(
+                        KinematicRange{ "s", 3.16, 19.71, BToDLeptonInclusiveNeutrinos::kinematics_description_s },
+                        KinematicRange{ "snunubar", 0.0, 3.16, BToDLeptonInclusiveNeutrinos::kinematics_description_snunubar },
+                        KinematicRange{ "cos(theta_tau)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta_tau },
+                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDLeptonInclusiveNeutrinos::kinematics_description_phi },
+                        KinematicRange{ "cos(theta_mu^*)", -1.0, +1.0, BToDLeptonInclusiveNeutrinos::kinematics_description_c_theta_mu_star }
+                    ),
+                    &BToDLeptonInclusiveNeutrinos::integrated_decay_width_3nu,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("B->pimu1nu::d^2Gamma",
-                    &BToPiLeptonInclusiveNeutrinos::normalized_differential_decay_width_1nu,
                     Options{ },
-                    KinematicRange{ "s", 0.0, 26.41, BToPiLeptonInclusiveNeutrinos::kinematics_description_s},
-                    KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta}),
+                    &BToPiLeptonInclusiveNeutrinos::differential_decay_width_1nu,
+                    std::make_tuple(
+                        KinematicRange{ "s", 0.0, 26.41, BToPiLeptonInclusiveNeutrinos::kinematics_description_s},
+                        KinematicRange{ "cos(theta)", -1.0, +1.0, BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta}
+                    ),
+                    &BToPiLeptonInclusiveNeutrinos::integrated_decay_width_1nu,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("B->pimu3nu::d^5Gamma",
-                    &BToPiLeptonInclusiveNeutrinos::normalized_differential_decay_width_3nu,
                     Options{ },
-                    KinematicRange{ "s", 3.16, 26.41, BToPiLeptonInclusiveNeutrinos::kinematics_description_s },
-                    KinematicRange{ "snunubar", 0.0, 3.16, BToPiLeptonInclusiveNeutrinos::kinematics_description_snunubar },
-                    KinematicRange{ "cos(theta_tau)", -1.0, +1.0, BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta_tau },
-                    KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToPiLeptonInclusiveNeutrinos::kinematics_description_phi },
-                    KinematicRange{ "cos(theta_mu^*)", -1.0, +1.0, BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta_mu_star }),
+                    &BToPiLeptonInclusiveNeutrinos::differential_decay_width_3nu,
+                    std::make_tuple(
+                        KinematicRange{ "s", 3.16, 26.41, BToPiLeptonInclusiveNeutrinos::kinematics_description_s },
+                        KinematicRange{ "snunubar", 0.0, 3.16, BToPiLeptonInclusiveNeutrinos::kinematics_description_snunubar },
+                        KinematicRange{ "cos(theta_tau)", -1.0, +1.0, BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta_tau },
+                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToPiLeptonInclusiveNeutrinos::kinematics_description_phi },
+                        KinematicRange{ "cos(theta_mu^*)", -1.0, +1.0, BToPiLeptonInclusiveNeutrinos::kinematics_description_c_theta_mu_star }
+                    ),
+                    &BToPiLeptonInclusiveNeutrinos::integrated_decay_width_3nu,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("B_s->K^*lnu::d^4Gamma",
-                    &BsToKstarLeptonNeutrino::four_differential_decay_width,
                     Options{ },
-                    KinematicRange{ "s", 0.02, 19.71, BsToKstarLeptonNeutrino::kinematics_description_s },
-                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, BsToKstarLeptonNeutrino::kinematics_description_c_theta_l },
-                    KinematicRange{ "cos(theta_k)", -1.0, +1.0, BsToKstarLeptonNeutrino::kinematics_description_c_theta_k },
-                    KinematicRange{ "phi", 0.0, 2.0 * M_PI, BsToKstarLeptonNeutrino::kinematics_description_phi }),
+                    &BsToKstarLeptonNeutrino::four_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "s", 0.02, 19.71, BsToKstarLeptonNeutrino::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BsToKstarLeptonNeutrino::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BsToKstarLeptonNeutrino::kinematics_description_c_theta_k },
+                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BsToKstarLeptonNeutrino::kinematics_description_phi }
+                    ),
+                    &BsToKstarLeptonNeutrino::integrated_decay_width,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("Lambda_b->Lambda_clnu::dGamma",
-                            &LambdaBToLambdaCLeptonNeutrino::differential_branching_ratio,
-                            Options{ },
-                            KinematicRange{ "s", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 }),
+                    Options{ },
+                    &LambdaBToLambdaCLeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "s", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 }
+                    ),
+                    &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("Lambda_b->Lambda_c(2625)lnu::dGamma",
-                    &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
                     Options{ },
-                    KinematicRange{ "s", 0.011, 8.9478, LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_s }),
+                    &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "s", 0.011, 8.9478, LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_s }
+                    ),
+                    &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("Lambda_b->Lambda_c(2625)lnu::d^2Gamma",
-                    &LambdaBToLambdaC2625LeptonNeutrino::double_differential_branching_ratio,
                     Options{ },
-                    KinematicRange{ "s", 0.011, 8.9478, LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_s },
-                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_c_theta_l }),
+                    &LambdaBToLambdaC2625LeptonNeutrino::double_differential_branching_ratio,
+                    std::make_tuple(
+                        KinematicRange{ "s", 0.011, 8.9478, LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, LambdaBToLambdaC2625LeptonNeutrino::kinematics_description_c_theta_l }
+                    ),
+                    &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             /* Exclusive Rare B Decays */
 
             make_signal_pdf("B->Kll::d^2Gamma@LargeRecoil",
-                    &BToKDilepton<LargeRecoil>::two_differential_decay_width,
                     Options{ },
-                    KinematicRange{ "s", 1.00, 6.00, BToKDilepton<LargeRecoil>::kinematics_description_s },
-                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKDilepton<LargeRecoil>::kinematics_description_c_theta_l }),
+                    &BToKDilepton<LargeRecoil>::two_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "s", 1.00, 6.00, BToKDilepton<LargeRecoil>::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKDilepton<LargeRecoil>::kinematics_description_c_theta_l }
+                    ),
+                    &BToKDilepton<LargeRecoil>::integrated_decay_width,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("B->Kll::d^2Gamma@LowRecoil",
-                    &BToKDilepton<LowRecoil>::two_differential_decay_width,
                     Options{ },
-                    KinematicRange{ "s", 15.00, 22.87, BToKDilepton<LowRecoil>::kinematics_description_s },
-                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKDilepton<LowRecoil>::kinematics_description_c_theta_l }),
+                    &BToKDilepton<LowRecoil>::two_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "s", 15.00, 22.87, BToKDilepton<LowRecoil>::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKDilepton<LowRecoil>::kinematics_description_c_theta_l }
+                    ),
+                    &BToKDilepton<LowRecoil>::integrated_decay_width,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("B->K^*ll::d^4Gamma@LargeRecoil",
-                    &BToKstarDilepton<LargeRecoil>::four_differential_decay_width,
                     Options{ },
-                    KinematicRange{ "s", 1.00, 6.00, BToKstarDilepton<LargeRecoil>::kinematics_description_s },
-                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_l },
-                    KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_k },
-                    KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton<LargeRecoil>::kinematics_description_phi }),
+                    &BToKstarDilepton<LargeRecoil>::four_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "s", 1.00, 6.00, BToKstarDilepton<LargeRecoil>::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_k },
+                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton<LargeRecoil>::kinematics_description_phi }
+                    ),
+                    &BToKstarDilepton<LargeRecoil>::integrated_decay_width,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
 
             make_signal_pdf("B->K^*ll::d^4Gamma@LowRecoil",
-                    &BToKstarDilepton<LowRecoil>::four_differential_decay_width,
                     Options{ },
-                    KinematicRange{ "s", 15.00, 19.21, BToKstarDilepton<LowRecoil>::kinematics_description_s },
-                    KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_l },
-                    KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_k },
-                    KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton<LowRecoil>::kinematics_description_phi }),
+                    &BToKstarDilepton<LowRecoil>::four_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "s", 15.00, 19.21, BToKstarDilepton<LowRecoil>::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_k },
+                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton<LowRecoil>::kinematics_description_phi }
+                    ),
+                    &BToKstarDilepton<LowRecoil>::integrated_decay_width,
+                    std::make_tuple(
+                        "s_min",
+                        "s_max"
+                    )
+                ),
+
         };
 
         return signal_pdf_entries;

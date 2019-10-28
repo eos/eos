@@ -38,10 +38,15 @@ namespace eos
             BToDLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options);
             ~BToDLeptonInclusiveNeutrinos();
 
-            double normalized_differential_decay_width_1nu(const double & s, const double & c_theta_tau) const;
+            double differential_decay_width_1nu(const double & s, const double & c_theta_tau) const;
 
-            double normalized_differential_decay_width_3nu(const double & s, const double & snunubar,
+            double differential_decay_width_3nu(const double & s, const double & snunubar,
                     const double & c_theta_tau, const double & phi, const double & c_theta_mu_star) const;
+
+            double integrated_decay_width_1nu(const double & s_min, const double & s_max) const;
+
+            double integrated_decay_width_3nu(const double & s_min, const double & s_max) const;
+
 
             /*!
              * Descriptions of the process and its kinematics.
