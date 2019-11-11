@@ -1454,7 +1454,7 @@ B->D^(*)::FormFactors[parametric,LCSRLattice]@GKvD2018:
 B_s->D_s^*::A_1[s_max]@HPQCD-2017:
     type: Gaussian
     observable: B_s->D_s^*::A_1(q2)
-    kinematics: {q2: 10.59}
+    kinematics: {q2: 10.592}
     options: {form-factors: BSZ2015}
     mean: 0.795002
     sigma-stat: {hi: 0.0108041,  lo: -0.0108041}
@@ -1463,7 +1463,7 @@ B_s->D_s^*::A_1[s_max]@HPQCD-2017:
 B_s->D_s^*::A_1[s_max]@HPQCD-2019:
     type: Gaussian
     observable: B_s->D_s^*::A_1(q2)
-    kinematics: {q2: 10.59}
+    kinematics: {q2: 10.592}
     options: {form-factors: BSZ2015}
     mean: 0.812109
     sigma-stat: {hi: 0.008643,  lo: -0.008643}
