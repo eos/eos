@@ -25,6 +25,7 @@
 #include <eos/form-factors/b-lcdas.hh>
 #include <eos/form-factors/baryonic-impl.hh>
 #include <eos/form-factors/mesonic-impl.hh>
+#include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/observables.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
@@ -1178,6 +1179,29 @@ namespace eos
     }
     // }}}
 
+    // heavy-quark expansion
+    // {{{
+    ObservableGroup
+    make_hqe_group()
+    {
+        auto imp = new Implementation<ObservableGroup>{
+            R"(Heavy Quark Expansion)",
+            R"(Pseudo observables for the parameters of the heavy-quark expansion in exclusive $b\to c$ semileptonic form factors)",
+            {
+                make_observable_ratio("B_q(*)->D_q(*)::R(xi')@HQET", R"(\xi^\prime_{s}(1)/\xi^\prime(1))",
+                        &HQETIsgurWiseFunctionParameters::xipone,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } },
+                        &HQETIsgurWiseFunctionParameters::xipone,
+                        std::make_tuple(),
+                        Options{ { "q", "d" } }),
+            }
+        };
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     ObservableSection
     make_form_factors_section()
     {
@@ -1213,6 +1237,9 @@ namespace eos
 
                 // unitarity bounds
                 make_unitarity_bounds_group(),
+
+                // heavy-quark expansion
+                make_hqe_group(),
             }
         );
 
