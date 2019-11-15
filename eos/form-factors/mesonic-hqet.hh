@@ -72,6 +72,9 @@ namespace eos
             double _enable_sslp_z1;
             double _enable_sslp_z2;
 
+            // option to determine if we use the SU3_F-symmetry limit for the subsubleading-power IW functions
+            SwitchOption _opt_sslp_limit;
+
             // parameters for the leading Isgur-Wise function xi
             UsedParameter _xipone, _xippone, _xipppone, _xippppone, _xipppppone;
 
@@ -96,6 +99,17 @@ namespace eos
             UsedParameter _l5one, _l5pone, _l5ppone;
             UsedParameter _l6one, _l6pone, _l6ppone;
 
+            std::string _sslp_prefix(const std::string & prefix)
+            {
+                if ("B(*)->D(*)" == prefix)
+                    return prefix;
+
+                if ("1" == _opt_sslp_limit.value())
+                    return "B(*)->D(*)";
+
+                return prefix;
+            }
+
         public:
             HQETFormFactorBase(const Parameters & p, const Options & o, const std::string & prefix) :
                 _model(Model::make("SM", p, o)),
@@ -111,6 +125,7 @@ namespace eos
                 _opt_sslp_zorder(o, "z-order-sslp", { "0", "1", "2" }, "1"),
                 _enable_sslp_z1(1.0 ? _opt_sslp_zorder.value() >= "1" : 0.0),
                 _enable_sslp_z2(1.0 ? _opt_sslp_zorder.value() >= "2" : 0.0),
+                _opt_sslp_limit(o, "SU3F-limit-sslp", { "0", "1" }, "0"),
                 _xipone(p[prefix + "::xi'(1)@HQET"], *this),
                 _xippone(p[prefix + "::xi''(1)@HQET"], *this),
                 _xipppone(p[prefix + "::xi'''(1)@HQET"], *this),
@@ -124,24 +139,24 @@ namespace eos
                 _etaone(p[prefix + "::eta(1)@HQET"], *this),
                 _etapone(p[prefix + "::eta'(1)@HQET"], *this),
                 _etappone(p[prefix + "::eta''(1)@HQET"], *this),
-                _l1one(p[prefix + "::l_1(1)@HQET"], *this),
-                _l1pone(p[prefix + "::l_1'(1)@HQET"], *this),
-                _l1ppone(p[prefix + "::l_1''(1)@HQET"], *this),
-                _l2one(p[prefix + "::l_2(1)@HQET"], *this),
-                _l2pone(p[prefix + "::l_2'(1)@HQET"], *this),
-                _l2ppone(p[prefix + "::l_2''(1)@HQET"], *this),
-                _l3one(p[prefix + "::l_3(1)@HQET"], *this),
-                _l3pone(p[prefix + "::l_3'(1)@HQET"], *this),
-                _l3ppone(p[prefix + "::l_3''(1)@HQET"], *this),
-                _l4one(p[prefix + "::l_4(1)@HQET"], *this),
-                _l4pone(p[prefix + "::l_4'(1)@HQET"], *this),
-                _l4ppone(p[prefix + "::l_4''(1)@HQET"], *this),
-                _l5one(p[prefix + "::l_5(1)@HQET"], *this),
-                _l5pone(p[prefix + "::l_5'(1)@HQET"], *this),
-                _l5ppone(p[prefix + "::l_5''(1)@HQET"], *this),
-                _l6one(p[prefix + "::l_6(1)@HQET"], *this),
-                _l6pone(p[prefix + "::l_6'(1)@HQET"], *this),
-                _l6ppone(p[prefix + "::l_6''(1)@HQET"], *this)
+                _l1one(p[_sslp_prefix(prefix) + "::l_1(1)@HQET"], *this),
+                _l1pone(p[_sslp_prefix(prefix) + "::l_1'(1)@HQET"], *this),
+                _l1ppone(p[_sslp_prefix(prefix) + "::l_1''(1)@HQET"], *this),
+                _l2one(p[_sslp_prefix(prefix) + "::l_2(1)@HQET"], *this),
+                _l2pone(p[_sslp_prefix(prefix) + "::l_2'(1)@HQET"], *this),
+                _l2ppone(p[_sslp_prefix(prefix) + "::l_2''(1)@HQET"], *this),
+                _l3one(p[_sslp_prefix(prefix) + "::l_3(1)@HQET"], *this),
+                _l3pone(p[_sslp_prefix(prefix) + "::l_3'(1)@HQET"], *this),
+                _l3ppone(p[_sslp_prefix(prefix) + "::l_3''(1)@HQET"], *this),
+                _l4one(p[_sslp_prefix(prefix) + "::l_4(1)@HQET"], *this),
+                _l4pone(p[_sslp_prefix(prefix) + "::l_4'(1)@HQET"], *this),
+                _l4ppone(p[_sslp_prefix(prefix) + "::l_4''(1)@HQET"], *this),
+                _l5one(p[_sslp_prefix(prefix) + "::l_5(1)@HQET"], *this),
+                _l5pone(p[_sslp_prefix(prefix) + "::l_5'(1)@HQET"], *this),
+                _l5ppone(p[_sslp_prefix(prefix) + "::l_5''(1)@HQET"], *this),
+                _l6one(p[_sslp_prefix(prefix) + "::l_6(1)@HQET"], *this),
+                _l6pone(p[_sslp_prefix(prefix) + "::l_6'(1)@HQET"], *this),
+                _l6ppone(p[_sslp_prefix(prefix) + "::l_6''(1)@HQET"], *this)
             {
                 using std::placeholders::_1;
 
