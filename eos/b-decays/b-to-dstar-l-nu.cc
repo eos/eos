@@ -208,10 +208,30 @@ namespace eos
 
         UsedParameter mu;
 
+        inline std::string _process() const
+        {
+            switch (opt_q.value()[0])
+            {
+                case 'd':
+                case 'u':
+                    return std::string("B->D^*");
+                    break;
+
+                case 's':
+                    return std::string("B_s->D^*_s");
+                    break;
+
+                default:
+                    throw InternalError("Should never reach this part, either!");
+            }
+
+            return "";
+        }
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
-            opt_q(o, "q", { "u", "d" }, "d"),
+            opt_q(o, "q", { "u", "d", "s" }, "d"),
             hbar(p["hbar"], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
             g_fermi(p["G_Fermi"], u),
@@ -221,7 +241,7 @@ namespace eos
             m_Dstar(p["mass::D_" + opt_q.value() + "^*"], u),
             mu(p["mu"], u)
         {
-            form_factors = FormFactorFactory<PToV>::create("B->D^*::" + o.get("form-factors", "BSZ2015"), p, o);
+            form_factors = FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
@@ -362,7 +382,7 @@ namespace eos
     {
         return _imp->integrated_angular_observables(s_min, s_max).normalized_decay_width() * _imp->tau_B / _imp->hbar;
     }
-    
+
     double
     BToDstarLeptonNeutrino::integrated_branching_ratio(const double & s_min, const double & s_max) const
     {
