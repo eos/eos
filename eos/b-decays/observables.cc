@@ -178,6 +178,83 @@ namespace eos
     }
     // }}}
 
+    // B_s -> D_s l nu
+    // {{{
+    ObservableGroup
+    make_bs_to_ds_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_s\to \bar{D_s} \ell^-\bar\nu$ decays)",
+            R"(The option "l" selects the charged lepton flavour.)"
+            R"(The option "form-factors" selects the form factor parametrization.)",
+            {
+                make_observable("B_s->D_slnu::dBR/dq2", R"(d\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu)/dq^2)",
+                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_slnu::BR", R"(\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu))",
+                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_slnu::normdBR/ds",
+                        &BToPseudoscalarLeptonNeutrino::normalized_differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_slnu::normBR",
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable_ratio("B_s->D_slnu::R_D_s(q2)", R"(R_D_s(q^2))",
+                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "c" }, {"q", "s"}, { "l", "tau" } },
+                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "c" }, {"q", "s"}, { "l", "mu" } }),
+
+                make_observable_ratio("B_s->D_slnu::R_D_s", R"(R_D_s)",
+                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_tau_min", "q2_tau_max"),
+                        Options{ { "U", "c" }, {"q", "s"}, { "l", "tau"} },
+                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_mu_min", "q2_mu_max"),
+                        Options{ { "U", "c" }, {"q", "s"}, { "l", "mu"} }),
+
+                make_observable("B_s->D_slnu::A_FB(q2)", R"(A_{\text{FB}}(B_s\to \bar{D}_s\ell^-\bar\nu)(q^2))",
+                        &BToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_slnu::A_FB", R"(A_{\text{FB}}(B_s\to \bar{D}_s\ell^-\bar\nu))",
+                        &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_slnu::P(w)",
+                        &BToPseudoscalarLeptonNeutrino::differential_pdf_w,
+                        std::make_tuple("w"),
+                        Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_slnu::P(w_min,w_max)",
+                        &BToPseudoscalarLeptonNeutrino::integrated_pdf_w,
+                        std::make_tuple("w_min", "w_max"),
+                        Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_slnu::A_l",
+                        &BToPseudoscalarLeptonNeutrino::integrated_lepton_polarization,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "c" }, {"q", "s"} }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // }}}
 
     // Semileptonic B -> V(seudoscalar) decays
@@ -310,6 +387,99 @@ namespace eos
                 make_observable("B->Dpilnu::P(w_min,w_max)",
                                 &BToDPiLeptonNeutrino::integrated_pdf_w,
                                 std::make_tuple("w_min", "w_max")),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // B_s -> D_s^* l nu
+    // {{{
+    ObservableGroup
+    make_bs_to_dsstar_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $\bar{B}_s\to D_s^* \ell^-\bar\nu$ decays)",
+            R"(The option "l" selects the charged lepton flavour.)"
+            R"(The option "form-factors" selects the form factor parametrization.)",
+            {
+                // B -> D^* l nu
+                make_observable("B_s->D_s^*lnu::dBR/dq2", R"(d\mathcal{B}(B_s\to \bar{D}_s^*\ell^-\bar\nu)/dq^2)",
+                                &BToDstarLeptonNeutrino::differential_branching_ratio,
+                                std::make_tuple("q2")),
+
+                make_observable("B_s->D_s^*lnu::normdBR/dq2",
+                                &BToDstarLeptonNeutrino::normalized_differential_branching_ratio,
+                                std::make_tuple("q2")),
+
+                make_observable("B_s->D_s^*lnu::BR", R"(\mathcal{B}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::normBR",
+                                &BToDstarLeptonNeutrino::normalized_integrated_branching_ratio,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable_ratio("B_s->D_s^*lnu::R_D_s^*(q2)", R"(R_{D_s^*}(q^2))",
+                                &BToDstarLeptonNeutrino::differential_branching_ratio,
+                                std::make_tuple("q2"),
+                                Options{ { "l", "tau" } },
+                                &BToDstarLeptonNeutrino::differential_branching_ratio,
+                                std::make_tuple("q2"),
+                                Options{ { "l", "mu" } }),
+
+                make_observable_ratio("B_s->D_s^*lnu::R_D_s^*", R"(R_{D_s^*})",
+                                &BToDstarLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_tau_min", "q2_tau_max"),
+                                Options{ { "l", "tau" } },
+                                &BToDstarLeptonNeutrino::integrated_branching_ratio,
+                                std::make_tuple("q2_mu_min", "q2_mu_max"),
+                                Options{ { "l", "mu" } }),
+
+                make_observable("B_s->D_s^*lnu::A_FB(q2)", R"(A_{\text{FB}}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_a_fb_leptonic,
+                                std::make_tuple("q2")),
+
+                make_observable("B_s->D_s^*lnu::A_FB", R"(A_{\text{FB}}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_a_fb_leptonic,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::A_L",
+                                &BToDstarLeptonNeutrino::integrated_amplitude_polarization_L,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::A_T",
+                                &BToDstarLeptonNeutrino::integrated_amplitude_polarization_T,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::F_L", R"(F_{\text{L}}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_f_L,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::A_C^1", R"(A_{\text{C}}^1(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_a_c_1,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::A_C^2", R"(A_{\text{C}}^2(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_a_c_2,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::A_C^3", R"(A_{\text{C}}^3(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_a_c_3,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::A_T^1", R"(A_{\text{T}}^1(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_a_t_1,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::A_T^2", R"(A_{\text{T}}^2(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_a_t_2,
+                                std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->D_s^*lnu::A_T^3", R"(A_{\text{T}}^3(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_a_t_3,
+                                std::make_tuple("q2_min", "q2_max")),
             }
         );
 
@@ -808,11 +978,15 @@ namespace eos
                 make_b_to_pi_l_nu_group(),
                 make_b_to_d_l_nu_group(),
 
+                // B_s -> P l^- nubar
+                make_bs_to_ds_l_nu_group(),
+
                 // B_{u,d} -> V l^- nubar
                 make_b_to_dstar_l_nu_group(),
 
                 // B_s -> V l^- nubar
                 make_bs_to_kstar_l_nu_group(),
+                make_bs_to_dsstar_l_nu_group(),
 
                 // Lambda_b
                 make_lambdab_to_lambdac_l_nu_group(),
