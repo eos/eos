@@ -202,7 +202,13 @@ namespace eos
 
             Options _options;
 
-            std::shared_ptr<FormFactors<Transition_>> _form_factors;
+            std::string _prefix_numerator;
+
+            std::string _prefix_denominator;
+
+            std::shared_ptr<FormFactors<Transition_>> _form_factors_numerator;
+
+            std::shared_ptr<FormFactors<Transition_>> _form_factors_denominator;
 
             std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> _form_factor_numerator;
 
@@ -210,7 +216,9 @@ namespace eos
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names;
 
-            std::tuple<const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple;
+            std::tuple<const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple_numerator;
+
+            std::tuple<const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple_denominator;
 
         public:
             FormFactorRatioAdapter(const QualifiedName & name,
@@ -218,7 +226,9 @@ namespace eos
                     const Parameters & parameters,
                     const Kinematics & kinematics,
                     const Options & options,
+                    const std::string & prefix_numerator,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_numerator,
+                    const std::string & prefix_denominator,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_denominator,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
                 _name(name),
@@ -226,19 +236,27 @@ namespace eos
                 _parameters(parameters),
                 _kinematics(kinematics),
                 _options(options),
-                _form_factors(FormFactorFactory<Transition_>::create(name.prefix_part().str() + "::" + options["form-factors"], _parameters, _options)),
+                _prefix_numerator(prefix_numerator),
+                _prefix_denominator(prefix_denominator),
+                _form_factors_numerator(FormFactorFactory<Transition_>::create(prefix_numerator + "::" + options["form-factors"], _parameters, _options)),
+                _form_factors_denominator(FormFactorFactory<Transition_>::create(prefix_denominator + "::" + options["form-factors"], _parameters, _options)),
                 _form_factor_numerator(form_factor_numerator),
                 _form_factor_denominator(form_factor_denominator),
                 _kinematics_names(kinematics_names),
-                _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _form_factors.get()))
+                _argument_tuple_numerator(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _form_factors_numerator.get())),
+                _argument_tuple_denominator(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _form_factors_denominator.get()))
             {
                 if (! _options.has("form-factors"))
                     throw UnknownOptionError("form-factors");
 
-                if (! _form_factors)
-                    throw NoSuchFormFactorError(_name.prefix_part().str(), options["form-factors"]);
+                if (! _form_factors_numerator)
+                    throw NoSuchFormFactorError(prefix_numerator, options["form-factors"]);
 
-                uses(*_form_factors);
+                if (! _form_factors_denominator)
+                    throw NoSuchFormFactorError(prefix_denominator, options["form-factors"]);
+
+                uses(*_form_factors_numerator);
+                uses(*_form_factors_denominator);
             }
 
             virtual const QualifiedName & name() const
@@ -253,9 +271,10 @@ namespace eos
 
             virtual double evaluate() const
             {
-                std::tuple<const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
+                std::tuple<const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, double>::Type ...> values_numerator   = _argument_tuple_numerator;
+                std::tuple<const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, double>::Type ...> values_denominator = _argument_tuple_denominator;
 
-                return apply(_form_factor_numerator, values) / apply(_form_factor_denominator, values);
+                return apply(_form_factor_numerator, values_numerator) / apply(_form_factor_denominator, values_denominator);
             };
 
             virtual Parameters parameters()
@@ -275,12 +294,12 @@ namespace eos
 
             virtual ObservablePtr clone() const
             {
-                return ObservablePtr(new FormFactorRatioAdapter(_name, _latex, _parameters.clone(), _kinematics.clone(), _options, _form_factor_numerator, _form_factor_denominator, _kinematics_names));
+                return ObservablePtr(new FormFactorRatioAdapter(_name, _latex, _parameters.clone(), _kinematics.clone(), _options, _prefix_numerator, _form_factor_numerator, _prefix_denominator, _form_factor_denominator, _kinematics_names));
             }
 
             virtual ObservablePtr clone(const Parameters & parameters) const
             {
-                return ObservablePtr(new FormFactorRatioAdapter(_name, _latex, parameters, _kinematics.clone(), _options, _form_factor_numerator, _form_factor_denominator, _kinematics_names));
+                return ObservablePtr(new FormFactorRatioAdapter(_name, _latex, parameters, _kinematics.clone(), _options, _prefix_numerator, _form_factor_numerator, _prefix_denominator, _form_factor_denominator, _kinematics_names));
             }
     };
 
@@ -293,6 +312,10 @@ namespace eos
 
             std::string _latex;
 
+            std::string _prefix_numerator;
+
+            std::string _prefix_denominator;
+
             std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> _form_factor_numerator;
 
             std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> _form_factor_denominator;
@@ -304,11 +327,15 @@ namespace eos
         public:
             FormFactorRatioAdapterEntry(const QualifiedName & name,
                     const std::string & latex,
+                    const std::string & prefix_numerator,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_numerator,
+                    const std::string & prefix_denominator,
                     const std::function<double (const FormFactors<Transition_> *, const double &)> & form_factor_denominator,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
                 _name(name),
                 _latex(latex),
+                _prefix_numerator(prefix_numerator),
+                _prefix_denominator(prefix_denominator),
                 _form_factor_numerator(form_factor_numerator),
                 _form_factor_denominator(form_factor_denominator),
                 _kinematics_names(kinematics_names),
@@ -342,7 +369,7 @@ namespace eos
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
-                return ObservablePtr(new FormFactorRatioAdapter<Transition_, Args_ ...>(_name, _latex, parameters, kinematics, options, _form_factor_numerator, _form_factor_denominator, _kinematics_names));
+                return ObservablePtr(new FormFactorRatioAdapter<Transition_, Args_ ...>(_name, _latex, parameters, kinematics, options, _prefix_numerator, _form_factor_numerator, _prefix_denominator, _form_factor_denominator, _kinematics_names));
             }
 
             virtual std::ostream & insert(std::ostream & os) const
