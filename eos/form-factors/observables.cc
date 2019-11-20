@@ -259,6 +259,11 @@ namespace eos
                         &BGLCoefficients::V1_a0,
                         std::make_tuple(),
                         Options()),
+
+                make_form_factor_adapter("B->D::f_T(q2)/f_+(q2)",
+                        "B->D", &FormFactors<PToP>::f_t,
+                        "B->D", &FormFactors<PToP>::f_p,
+                        std::make_tuple("q2")),
             }
         );
 
@@ -349,6 +354,11 @@ namespace eos
                 make_form_factor_adapter("B(_s)->D(_s)::f_0(q2)/f_0(q2)",
                         "B_s->D_s", &FormFactors<PToP>::f_0,
                         "B->D",     &FormFactors<PToP>::f_0,
+                        std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->D_s::f_T(q2)/f_+(q2)",
+                        "B_s->D_s", &FormFactors<PToP>::f_t,
+                        "B_s->D_s", &FormFactors<PToP>::f_p,
                         std::make_tuple("q2")),
             }
         );
