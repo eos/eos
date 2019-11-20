@@ -345,6 +345,11 @@ namespace eos
                 make_observable("B_s->D_s::f_T[s^1/s^0](q2)",
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
+
+                make_form_factor_adapter("B(_s)->D(_s)::f_0(q2)/f_0(q2)",
+                        "B_s->D_s", &FormFactors<PToP>::f_0,
+                        "B->D",     &FormFactors<PToP>::f_0,
+                        std::make_tuple("q2")),
             }
         );
 
