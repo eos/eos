@@ -61,7 +61,9 @@ namespace eos
 
     template <typename Transition_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_form_factor_adapter(const char * name,
+            const char * prefix_numerator,
             double (FormFactors<Transition_>::* _numerator)(const Args_ & ...) const,
+            const char * prefix_denominator,
             double (FormFactors<Transition_>::* _denominator)(const Args_ & ...) const,
             const Tuple_ & kinematics_names)
     {
@@ -69,7 +71,7 @@ namespace eos
         std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> numerator(_numerator);
         std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> denominator(_denominator);
 
-        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<Transition_, Args_ ...>>(qn, "", numerator, denominator, kinematics_names));
+        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<Transition_, Args_ ...>>(qn, "", prefix_numerator, numerator, prefix_denominator, denominator, kinematics_names));
     }
 
     // B -> P(seudoscalar)
@@ -393,19 +395,23 @@ namespace eos
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->rho::V(q2)/A_1(q2)",
-                        &FormFactors<PToV>::v, &FormFactors<PToV>::a_1,
+                        "B->rho", &FormFactors<PToV>::v,
+                        "B->rho", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->rho::A_2(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1,
+                        "B->rho", &FormFactors<PToV>::a_2,
+                        "B->rho", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->rho::A_12(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1,
+                        "B->rho", &FormFactors<PToV>::a_12,
+                        "B->rho", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->rho::T_23(q2)/T_2(q2)",
-                        &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2,
+                        "B->rho", &FormFactors<PToV>::t_23,
+                        "B->rho", &FormFactors<PToV>::t_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::A_1[s^1/s^0](q2)",
@@ -480,19 +486,23 @@ namespace eos
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->K^*::V(q2)/A_1(q2)",
-                        &FormFactors<PToV>::v, &FormFactors<PToV>::a_1,
+                        "B->K^*", &FormFactors<PToV>::v,
+                        "B->K^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->K^*::A_2(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1,
+                        "B->K^*", &FormFactors<PToV>::a_2,
+                        "B->K^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->K^*::A_12(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1,
+                        "B->K^*", &FormFactors<PToV>::a_12,
+                        "B->K^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->K^*::T_23(q2)/T_2(q2)",
-                        &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2,
+                        "B->K^*", &FormFactors<PToV>::t_23,
+                        "B->K^*", &FormFactors<PToV>::t_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::A_1[s^1/s^0](q2)",
@@ -567,19 +577,23 @@ namespace eos
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->D^*::V(q2)/A_1(q2)",
-                        &FormFactors<PToV>::v, &FormFactors<PToV>::a_1,
+                        "B->D^*", &FormFactors<PToV>::v,
+                        "B->D^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->D^*::A_2(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1,
+                        "B->D^*", &FormFactors<PToV>::a_2,
+                        "B->D^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->D^*::A_12(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1,
+                        "B->D^*", &FormFactors<PToV>::a_12,
+                        "B->D^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->D^*::T_23(q2)/T_2(q2)",
-                        &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2,
+                        "B->D^*", &FormFactors<PToV>::t_23,
+                        "B->D^*", &FormFactors<PToV>::t_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::A_1[s^1/s^0](q2)",
@@ -759,19 +773,23 @@ namespace eos
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->K^*::V(q2)/A_1(q2)",
-                        &FormFactors<PToV>::v, &FormFactors<PToV>::a_1,
+                        "B_s->K^*", &FormFactors<PToV>::v,
+                        "B_s->K^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->K^*::A_2(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1,
+                        "B_s->K^*", &FormFactors<PToV>::a_2,
+                        "B_s->K^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->K^*::A_12(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1,
+                        "B_s->K^*", &FormFactors<PToV>::a_12,
+                        "B_s->K^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->K^*::T_23(q2)/T_2(q2)",
-                        &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2,
+                        "B_s->K^*", &FormFactors<PToV>::t_23,
+                        "B_s->K^*", &FormFactors<PToV>::t_2,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::A_1[s^1/s^0](q2)",
@@ -846,19 +864,23 @@ namespace eos
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->phi::V(q2)/A_1(q2)",
-                        &FormFactors<PToV>::v, &FormFactors<PToV>::a_1,
+                        "B_s->phi", &FormFactors<PToV>::v,
+                        "B_s->phi", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->phi::A_2(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1,
+                        "B_s->phi", &FormFactors<PToV>::a_2,
+                        "B_s->phi", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->phi::A_12(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1,
+                        "B_s->phi", &FormFactors<PToV>::a_12,
+                        "B_s->phi", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->phi::T_23(q2)/T_2(q2)",
-                        &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2,
+                        "B_s->phi", &FormFactors<PToV>::t_23,
+                        "B_s->phi", &FormFactors<PToV>::t_2,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::A_1[s^1/s^0](q2)",
@@ -933,19 +955,23 @@ namespace eos
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->D_s^*::V(q2)/A_1(q2)",
-                        &FormFactors<PToV>::v, &FormFactors<PToV>::a_1,
+                        "B_s->D_s^*", &FormFactors<PToV>::v,
+                        "B_s->D_s^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->D_s^*::A_2(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_2, &FormFactors<PToV>::a_1,
+                        "B_s->D_s^*", &FormFactors<PToV>::a_2,
+                        "B_s->D_s^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->D_s^*::A_12(q2)/A_1(q2)",
-                        &FormFactors<PToV>::a_12, &FormFactors<PToV>::a_1,
+                        "B_s->D_s^*", &FormFactors<PToV>::a_12,
+                        "B_s->D_s^*", &FormFactors<PToV>::a_1,
                         std::make_tuple("q2")),
 
                 make_form_factor_adapter("B_s->D_s^*::T_23(q2)/T_2(q2)",
-                        &FormFactors<PToV>::t_23, &FormFactors<PToV>::t_2,
+                        "B_s->D_s^*", &FormFactors<PToV>::t_23,
+                        "B_s->D_s^*", &FormFactors<PToV>::t_2,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::A_1[s^1/s^0](q2)",
