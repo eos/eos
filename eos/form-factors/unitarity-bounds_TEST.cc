@@ -183,78 +183,78 @@ class HQETUnitarityBoundsTest :
                 BGLCoefficients bgl(p, Options{ });
                 // B_s -> D_s form factors
                 // {{{
-                TEST_CHECK_NEARLY_EQUAL(0.004999810032, bgl.V1s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.006479848759, bgl.V1s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0235512688, bgl.V1s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.02839021048, bgl.S1s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.06800885888, bgl.S1s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.05818215908, bgl.S1s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.005000217918, bgl.V1s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.006466750504, bgl.V1s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.02361042361, bgl.V1s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.02839282209, bgl.S1s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.06789224686, bgl.S1s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.05756204815, bgl.S1s_a2(), eps);
                 // }}}
 
                 // B_s -> D_s^* form factors
                 // {{{
-                TEST_CHECK_NEARLY_EQUAL(0.003376760806, bgl.A1s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.01092541431, bgl.A1s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.04900478381, bgl.A1s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.002187179324, bgl.A5s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.009908394091, bgl.A5s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.05986829205, bgl.A5s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.005143979142, bgl.V4s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.004461420957, bgl.V4s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.07510579372, bgl.V4s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.01867864367, bgl.P1s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.002616399546, bgl.P1s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.279931139, bgl.P1s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.00337612586, bgl.A1s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.01093213157, bgl.A1s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.04897929728, bgl.A1s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.002186707326, bgl.A5s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.00992311644, bgl.A5s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.05984468038, bgl.A5s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.005143733896, bgl.V4s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.004447453494, bgl.V4s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.07513693178, bgl.V4s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.01868222787, bgl.P1s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.00256410114, bgl.P1s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.2800710952, bgl.P1s_a2(), eps);
                 // }}}
 
                 // B_s^* -> D_s form factors
                 // {{{
-                TEST_CHECK_NEARLY_EQUAL(0.03003225295, bgl.P2s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.05940031439, bgl.P2s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1588341602, bgl.P2s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.005801579333, bgl.V5s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.007579360997, bgl.V5s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.05215419135, bgl.V5s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.004906916467, bgl.A2s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.006432668511, bgl.A2s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.03297738509, bgl.A2s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.003438583196, bgl.A6s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.008792660599, bgl.A6s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.01115177087, bgl.A6s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.03005624013, bgl.P2s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.05938452843, bgl.P2s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1592400379, bgl.P2s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.005803257378, bgl.V5s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.007572282267, bgl.V5s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.05220022977, bgl.V5s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.004908142725, bgl.A2s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.006442527051, bgl.A2s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.03299777215, bgl.A2s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.003439343211, bgl.A6s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.008766690699, bgl.A6s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.01121396414, bgl.A6s_a2(), eps);
                 // }}}
 
                 // B_s^* -> D_s^* form factors
                 // {{{
-                TEST_CHECK_NEARLY_EQUAL(0.02489211964, bgl.S2s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.01569145473, bgl.S2s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.5254139564, bgl.S2s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.0176013866, bgl.S3s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.001243731446, bgl.S3s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.3846074579, bgl.S3s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.02032035007, bgl.P3s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0008076552162, bgl.P3s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.3569918932, bgl.P3s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.004462280149, bgl.V2s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.002222965926, bgl.V2s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.07984499414, bgl.V2s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.003324691584, bgl.V3s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.002470518091, bgl.V3s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.06407761242, bgl.V3s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.005774428399, bgl.V6s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.003482583946, bgl.V6s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1054201708, bgl.V6s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.005283927977, bgl.V7s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.004327768631, bgl.V7s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0886453271, bgl.V7s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.00282325239, bgl.A3s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.01118697484, bgl.A3s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.04938683782, bgl.A3s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.00282325239, bgl.A4s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.01221827038, bgl.A4s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.04708621016, bgl.A4s_a2(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.002610239861, bgl.A7s_a0(), eps);
-                TEST_CHECK_NEARLY_EQUAL(0.004633227622, bgl.A7s_a1(), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.06998978489, bgl.A7s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.02490042677, bgl.S2s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.01559912616, bgl.S2s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.5258204053, bgl.S2s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.01760726063, bgl.S3s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.001307787675, bgl.S3s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.3848882849, bgl.S3s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.0203329674, bgl.P3s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0007609840494, bgl.P3s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.3572204296, bgl.P3s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.004464032737, bgl.V2s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.002213376599, bgl.V2s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.07988386599, bgl.V2s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.003325891417, bgl.V3s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.002463495914, bgl.V3s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0641042013, bgl.V3s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.005775324706, bgl.V6s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.003474061239, bgl.V6s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1054484923, bgl.V6s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.005284912023, bgl.V7s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.004319366843, bgl.V7s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.08867635877, bgl.V7s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.00282394552, bgl.A3s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.01119342895, bgl.A3s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.04938129245, bgl.A3s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.00282394552, bgl.A4s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.01222442229, bgl.A4s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.04708050602, bgl.A4s_a2(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.002610754138, bgl.A7s_a0(), eps);
+                TEST_CHECK_NEARLY_EQUAL(0.004655520028, bgl.A7s_a1(), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.06999610402, bgl.A7s_a2(), eps);
                 // }}}
 
                 //throw std::string("foo");
