@@ -60,6 +60,9 @@ namespace eos
         UsedParameter l6one, l6pone, l6ppone;
 
         //B^_s(*)->D_s^(*)
+        // option to determine if we use the SU3_F-symmetry limit for the subsubleading-power IW functions
+        SwitchOption opt_sslp_limit;
+
         // parameters for the leading Isgur-Wise function xi
         UsedParameter xispone, xisppone, xispppone;
 
@@ -84,7 +87,15 @@ namespace eos
         UsedParameter l5sone, l5spone, l5sppone;
         UsedParameter l6sone, l6spone, l6sppone;
 
-        Implementation(const Parameters & p, const Options & /*o*/, ParameterUser & u) :
+        std::string _sslp_prefix()
+        {
+            if ("1" == opt_sslp_limit.value())
+                return "B(*)->D(*)";
+
+            return "B_s(*)->D_s(*)";
+        }
+
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             xipone(p["B(*)->D(*)::xi'(1)@HQET"], u),
             xippone(p["B(*)->D(*)::xi''(1)@HQET"], u),
             xipppone(p["B(*)->D(*)::xi'''(1)@HQET"], u),
@@ -114,6 +125,7 @@ namespace eos
             l6one(p["B(*)->D(*)::l_6(1)@HQET"], u),
             l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], u),
             l6ppone(p["B(*)->D(*)::l_6''(1)@HQET"], u),
+            opt_sslp_limit(o, "SU3F-limit-sslp", { "0", "1" }, "0"),
             xispone(p["B_s(*)->D_s(*)::xi'(1)@HQET"], u),
             xisppone(p["B_s(*)->D_s(*)::xi''(1)@HQET"], u),
             xispppone(p["B_s(*)->D_s(*)::xi'''(1)@HQET"], u),
@@ -125,24 +137,24 @@ namespace eos
             etasone(p["B_s(*)->D_s(*)::eta(1)@HQET"], u),
             etaspone(p["B_s(*)->D_s(*)::eta'(1)@HQET"], u),
             etasppone(p["B_s(*)->D_s(*)::eta''(1)@HQET"], u),
-            l1sone(p["B_s(*)->D_s(*)::l_1(1)@HQET"], u),
-            l1spone(p["B_s(*)->D_s(*)::l_1'(1)@HQET"], u),
-            l1sppone(p["B_s(*)->D_s(*)::l_1''(1)@HQET"], u),
-            l2sone(p["B_s(*)->D_s(*)::l_2(1)@HQET"], u),
-            l2spone(p["B_s(*)->D_s(*)::l_2'(1)@HQET"], u),
-            l2sppone(p["B_s(*)->D_s(*)::l_2''(1)@HQET"], u),
-            l3sone(p["B_s(*)->D_s(*)::l_3(1)@HQET"], u),
-            l3spone(p["B_s(*)->D_s(*)::l_3'(1)@HQET"], u),
-            l3sppone(p["B_s(*)->D_s(*)::l_3''(1)@HQET"], u),
-            l4sone(p["B_s(*)->D_s(*)::l_4(1)@HQET"], u),
-            l4spone(p["B_s(*)->D_s(*)::l_4'(1)@HQET"], u),
-            l4sppone(p["B_s(*)->D_s(*)::l_4''(1)@HQET"], u),
-            l5sone(p["B_s(*)->D_s(*)::l_5(1)@HQET"], u),
-            l5spone(p["B_s(*)->D_s(*)::l_5'(1)@HQET"], u),
-            l5sppone(p["B_s(*)->D_s(*)::l_5''(1)@HQET"], u),
-            l6sone(p["B_s(*)->D_s(*)::l_6(1)@HQET"], u),
-            l6spone(p["B_s(*)->D_s(*)::l_6'(1)@HQET"], u),
-            l6sppone(p["B_s(*)->D_s(*)::l_6''(1)@HQET"], u)
+            l1sone(p[_sslp_prefix() + "::l_1(1)@HQET"], u),
+            l1spone(p[_sslp_prefix() + "::l_1'(1)@HQET"], u),
+            l1sppone(p[_sslp_prefix() + "::l_1''(1)@HQET"], u),
+            l2sone(p[_sslp_prefix() + "::l_2(1)@HQET"], u),
+            l2spone(p[_sslp_prefix() + "::l_2'(1)@HQET"], u),
+            l2sppone(p[_sslp_prefix() + "::l_2''(1)@HQET"], u),
+            l3sone(p[_sslp_prefix() + "::l_3(1)@HQET"], u),
+            l3spone(p[_sslp_prefix() + "::l_3'(1)@HQET"], u),
+            l3sppone(p[_sslp_prefix() + "::l_3''(1)@HQET"], u),
+            l4sone(p[_sslp_prefix() + "::l_4(1)@HQET"], u),
+            l4spone(p[_sslp_prefix() + "::l_4'(1)@HQET"], u),
+            l4sppone(p[_sslp_prefix() + "::l_4''(1)@HQET"], u),
+            l5sone(p[_sslp_prefix() + "::l_5(1)@HQET"], u),
+            l5spone(p[_sslp_prefix() + "::l_5'(1)@HQET"], u),
+            l5sppone(p[_sslp_prefix() + "::l_5''(1)@HQET"], u),
+            l6sone(p[_sslp_prefix() + "::l_6(1)@HQET"], u),
+            l6spone(p[_sslp_prefix() + "::l_6'(1)@HQET"], u),
+            l6sppone(p[_sslp_prefix() + "::l_6''(1)@HQET"], u)
         {
         }
 
