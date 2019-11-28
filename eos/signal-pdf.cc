@@ -214,12 +214,12 @@ namespace eos
                     Options{ {"l", "mu"} },
                     &BToDstarLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
-                        KinematicRange{ "s", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_s }
+                        KinematicRange{ "q2", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_q2 }
                     ),
                     &BToDstarLeptonNeutrino::integrated_branching_ratio,
                     std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min",
+                        "q2_max"
                     )
                 ),
 
@@ -227,15 +227,15 @@ namespace eos
                     Options{ {"l", "mu"} },
                     &BToDstarLeptonNeutrino::normalized_four_differential_decay_width,
                     std::make_tuple(
-                        KinematicRange{ "s", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_s },
+                        KinematicRange{ "q2", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_q2 },
                         KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_l },
                         KinematicRange{ "cos(theta_d)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_d },
                         KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDstarLeptonNeutrino::kinematics_description_phi }
                     ),
                     &BToDstarLeptonNeutrino::integrated_branching_ratio,
                     std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min",
+                        "q2_max"
                     )
                 ),
 
