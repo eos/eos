@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
+ * Copyright (c) 2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -95,8 +96,20 @@ class BToDstarLeptonNeutrinoTest :
                 BToDstarLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 10.689), 33.311, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(0.001, 10.689),              0.546, eps);
+                TEST_CHECK_NEARLY_EQUAL(33.311,       d.integrated_branching_ratio(0.001, 10.689), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.546,       d.integrated_f_L(0.001, 10.689),             eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.409302220, d.integrated_J1c_normalized(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_J1s_normalized(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.409302220, d.integrated_J2c_normalized(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.085174445, d.integrated_J2s_normalized(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.134468151, d.integrated_J3_normalized(0.001, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.231808464, d.integrated_J4_normalized(0.001, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.165381861, d.integrated_J5_normalized(0.001, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_J6c_normalized(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.200153929, d.integrated_J6s_normalized(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0,         d.integrated_J7_normalized(0.001, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_J8_normalized(0.001, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0,         d.integrated_J9_normalized(0.001, 10.689),   eps);
             }
 
             // comparison with Martin Jung in 3/2/1 model
@@ -147,8 +160,20 @@ class BToDstarLeptonNeutrinoTest :
                 BToDstarLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(3.157, 10.689),  8.209, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(3.157, 10.689),              0.475, eps);
+                TEST_CHECK_NEARLY_EQUAL( 8.209,        d.integrated_branching_ratio(3.157, 10.689), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.475,        d.integrated_f_L(3.157, 10.689),             eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.4325856250, d.integrated_J1c_normalized(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2779590234, d.integrated_J1s_normalized(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1287773345, d.integrated_J2c_normalized(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0471441750, d.integrated_J2s_normalized(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0819412032, d.integrated_J3_normalized(3.157, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1057578408, d.integrated_J4_normalized(3.157, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2056068494, d.integrated_J5_normalized(3.157, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2766922602, d.integrated_J6c_normalized(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1598442669, d.integrated_J6s_normalized(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0,          d.integrated_J7_normalized(3.157, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_J8_normalized(3.157, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0,          d.integrated_J9_normalized(3.157, 10.689),   eps);
             }
 
             // SM tests cf. [DSD2014]

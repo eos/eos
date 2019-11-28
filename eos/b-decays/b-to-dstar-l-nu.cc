@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
+ * Copyright (c) 2019 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -374,6 +375,90 @@ namespace eos
         return _imp->differential_angular_observables(q2).a_fb_leptonic();
     }
 
+    double
+    BToDstarLeptonNeutrino::differential_J1c_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * o.vv10() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J1s_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * o.vv1T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J2c_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * o.vv20() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J2s_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * o.vv2T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J3_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * o.vv4T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J4_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * -o.vv10T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J5_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * o.vv20T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J6c_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * -o.vv30() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J6s_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * -o.vv3T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J7_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * -o.vv30T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J8_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * o.vv40T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::differential_J9_normalized(const double & q2) const
+    {
+        auto   o = _imp->differential_angular_observables(q2);
+        return 3.0 / 4.0 * -o.vv5T() / o.normalized_decay_width();
+    }
+
     /* q^2-integrated observables */
 
     // |Vcb|=1
@@ -456,6 +541,90 @@ namespace eos
     {
         auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.a_t_3();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J1c_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * o.vv10() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J1s_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * o.vv1T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J2c_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * o.vv20() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J2s_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * o.vv2T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J3_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * o.vv4T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J4_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * -o.vv10T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J5_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * o.vv20T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J6c_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * -o.vv30() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J6s_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * -o.vv3T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J7_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * -o.vv30T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J8_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * o.vv40T() / o.normalized_decay_width();
+    }
+
+    double
+    BToDstarLeptonNeutrino::integrated_J9_normalized(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return 3.0 / 4.0 * -o.vv5T() / o.normalized_decay_width();
     }
 
     //* cf. [DSD2014], eq. (6), p. 5 - normalized(|Vcb|=1)
