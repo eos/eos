@@ -39,38 +39,38 @@ namespace eos
             ~BToDstarLeptonNeutrino();
 
             // Differential Observables
-            double differential_branching_ratio(const double & s) const;
-            double differential_a_fb_leptonic(const double & s) const;
-            double differential_ratio_tau_mu(const double & s) const;
+            double differential_branching_ratio(const double & q2) const;
+            double differential_a_fb_leptonic(const double & q2) const;
+            double differential_ratio_tau_mu(const double & q2) const;
 
             // Differential Observables - normalized(|Vcb|=1)
-            double normalized_differential_branching_ratio(const double & s) const;
+            double normalized_differential_branching_ratio(const double & q2) const;
 
             // Four Differential Observables - normalized(|Vcb|=1)
-            double normalized_four_differential_decay_width(const double & s, const double & c_theta_l, const double & c_theta_d, const double & phi) const;
+            double normalized_four_differential_decay_width(const double & q2, const double & c_theta_l, const double & c_theta_d, const double & phi) const;
 
             // Integrated Observables
-            double integrated_branching_ratio(const double & s_min, const double & s_max) const;
-            double integrated_a_fb_leptonic(const double & s_min, const double & s_max) const;
+            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const;
 
-            double integrated_amplitude_polarization_L(const double & s_min, const double & s_max) const;
-            double integrated_amplitude_polarization_T(const double & s_min, const double & s_max) const;
-            double integrated_f_L(const double & s_min, const double & s_max) const;
-            double integrated_a_c_1(const double & s_min, const double & s_max) const;
-            double integrated_a_c_2(const double & s_min, const double & s_max) const;
-            double integrated_a_c_3(const double & s_min, const double & s_max) const;
-            double integrated_a_t_1(const double & s_min, const double & s_max) const;
-            double integrated_a_t_2(const double & s_min, const double & s_max) const;
-            double integrated_a_t_3(const double & s_min, const double & s_max) const;
+            double integrated_amplitude_polarization_L(const double & q2_min, const double & q2_max) const;
+            double integrated_amplitude_polarization_T(const double & q2_min, const double & q2_max) const;
+            double integrated_f_L(const double & q2_min, const double & q2_max) const;
+            double integrated_a_c_1(const double & q2_min, const double & q2_max) const;
+            double integrated_a_c_2(const double & q2_min, const double & q2_max) const;
+            double integrated_a_c_3(const double & q2_min, const double & q2_max) const;
+            double integrated_a_t_1(const double & q2_min, const double & q2_max) const;
+            double integrated_a_t_2(const double & q2_min, const double & q2_max) const;
+            double integrated_a_t_3(const double & q2_min, const double & q2_max) const;
 
             // Integrated Observables - normalized(|Vcb|=1)
-            double normalized_integrated_branching_ratio(const double & s_min, const double & s_max) const;
+            double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
              */
             static const std::string description;
-            static const std::string kinematics_description_s;
+            static const std::string kinematics_description_q2;
             static const std::string kinematics_description_c_theta_l;
             static const std::string kinematics_description_c_theta_d;
             static const std::string kinematics_description_phi;
