@@ -277,7 +277,6 @@ namespace eos
             const complex<double> SR = wc.csr();
             const complex<double> gV = VR + VL;
             const complex<double> gA = VR - VL;
-            const complex<double> gS = SR + SL;
             const complex<double> gP = SR - SL;
             const complex<double> TL = wc.ct();
 
