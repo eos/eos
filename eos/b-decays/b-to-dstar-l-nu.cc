@@ -219,7 +219,7 @@ namespace eos
                     break;
 
                 case 's':
-                    return std::string("B_s->D^*_s");
+                    return std::string("B_s->D_s^*");
                     break;
 
                 default:
