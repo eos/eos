@@ -620,6 +620,7 @@ class Plotter:
 
             # extract information
             self.names            = item['constraints']
+            self.rotation         = 'vertical' if 'rotation' not in item else item['rotation']
             self.constraints      = []
 
             if type(self.names) == str:
@@ -691,7 +692,7 @@ class Plotter:
             yerrors = np.array(yerrors)
 
             self.plotter.ax.tick_params(axis='x', which='minor', bottom=False)
-            plt.xticks(xvalues, xticklabels, rotation='vertical')
+            plt.xticks(xvalues, xticklabels, rotation=self.rotation)
             plt.errorbar(x=xvalues, y=yvalues, xerr=None, yerr=yerrors.T,
                 color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
             plt.margins(0.2)
