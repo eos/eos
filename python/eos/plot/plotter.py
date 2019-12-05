@@ -130,6 +130,9 @@ class Plotter:
                 self.yticks = matplotlib.ticker.FuncFormatter(lambda y, pos, yscale=self.yscale: '${0:.2f}$'.format(y / yscale))
                 self.ax.yaxis.set_major_formatter(self.yticks)
 
+        if 'grid' in myplot:
+            self.ax.grid(b=True, which=myplot['grid'])
+
         self.ax.set(xlabel=myxlabel, ylabel=myylabel, title=mytitle)
 
     """ Base class for any of the plots supported by Plotter. """
