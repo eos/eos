@@ -170,13 +170,15 @@ class Plotter:
                 raise KeyError('y coordinate not provided')
             self.y = item['y']
 
-            self.marker = item['marker'] if 'marker' in item else 'x'
+            self.marker     = item['marker']     if 'marker'     in item else 'x'
+            self.markersize = item['markersize'] if 'markersize' in item else None
 
         def plot(self):
             plt.plot(self.x, self.y,
                 alpha=self.alpha, color=self.color,
                 label=self.label, linestyle='None',
-                marker=self.marker, markeredgecolor=self.color, markerfacecolor='None')
+                marker=self.marker, markeredgecolor=self.color, markerfacecolor='None',
+                markersize=self.markersize)
 
 
     """ Plots a single errors bar. """
