@@ -870,6 +870,8 @@ class Plotter:
             self.contours = item['contours']  if 'contours'  in item else ['lines']
             self.xrange   = plotter.xrange    if plotter.xrange      else (np.amin(self.samples[:, 0]), np.amax(self.samples[:, 0]))
             self.yrange   = plotter.xrange    if plotter.yrange      else (np.amin(self.samples[:, 1]), np.amax(self.samples[:, 1]))
+            if type(self.style) is not list:
+                self.style= [self.style]
 
         def plot(self):
             kde = gaussian_kde(self.samples, weights=self.weights)
@@ -901,7 +903,7 @@ class Plotter:
                              colors=self.color,
                              extent=[self.plotter.xrange[0], self.plotter.xrange[1], self.plotter.yrange[0], self.plotter.yrange[1]],
                              levels=plevels[::-1],
-                             linestyles=self.style)
+                             linestyles=self.style[::-1])
 
             if 'labels' in self.contours:
                 fmt = {}
@@ -915,7 +917,7 @@ class Plotter:
             if 'areas' in self.contours:
                 handle = plt.Rectangle((0,0),1,1, color=self.color)
             else:
-                handle = plt.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.style)
+                handle = plt.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.style[0])
 
             return ([handle], [self.label])
 
