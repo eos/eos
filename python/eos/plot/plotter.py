@@ -147,7 +147,7 @@ class Plotter:
             self.color         = item['color']   if 'color'   in item else self.plotter.next_color
             self.label         = item['label']   if 'label'   in item else None
             self.xsamples      = item['samples'] if 'samples' in item else 100
-            self.style         = item['style']   if 'style'   in item else '-'
+            self.style         = item['style']   if 'style'   in item else 'solid'
             self.xlo, self.xhi = item['range']   if 'range'   in item else self.plotter.xrange
 
         def __lt__(self, other):
