@@ -103,10 +103,18 @@ class Plotter:
             self.ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
             self.ax.xaxis.set_ticks_position('both')
 
+            if 'format' in myx:
+                self.xformat = myx['format']
+            else:
+                self.xformat = '${x}$'
+
             if 'scale' in myx:
                 self.xscale = float(myx['scale'])
-                self.xticks = matplotlib.ticker.FuncFormatter(lambda x, pos, xscale=self.xscale: '${0:.2f}$'.format(x / xscale))
-                self.ax.xaxis.set_major_formatter(self.xticks)
+                self.xticks = matplotlib.ticker.FuncFormatter(lambda x, pos, xscale=self.xscale: self.xformat.format(x=x / xscale))
+            else:
+                self.xticks = matplotlib.ticker.StrMethodFormatter(self.xformat)
+
+            self.ax.xaxis.set_major_formatter(self.xticks)
 
         if 'y' in myplot:
             myy = myplot['y']
@@ -125,10 +133,18 @@ class Plotter:
             self.ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
             self.ax.yaxis.set_ticks_position('both')
 
+            if 'format' in myy:
+                self.yformat = myy['format']
+            else:
+                self.yformat = '${x}$'
+
             if 'scale' in myy:
                 self.yscale = float(myy['scale'])
-                self.yticks = matplotlib.ticker.FuncFormatter(lambda y, pos, yscale=self.yscale: '${0:.2f}$'.format(y / yscale))
-                self.ax.yaxis.set_major_formatter(self.yticks)
+                self.yticks = matplotlib.ticker.FuncFormatter(lambda y, pos, yscale=self.yscale: self.yformat.format(x=y / yscale))
+            else:
+                self.yticks = matplotlib.ticker.StrMethodFormatter(self.yformat)
+
+            self.ax.yaxis.set_major_formatter(self.yticks)
 
         if 'grid' in myplot:
             self.ax.grid(b=True, which=myplot['grid'])
