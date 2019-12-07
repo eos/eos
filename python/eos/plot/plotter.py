@@ -86,6 +86,9 @@ class Plotter:
             ywidth /= 2.54 # cm / inch
             plt.gcf().set_size_inches((xwidth, ywidth))
 
+        if 'axes' in myplot:
+            self.ax.axis(myplot['axes'])
+
         if 'x' in myplot:
             myx = myplot['x']
 
