@@ -330,7 +330,7 @@ namespace eos
         {
             std::function<std::array<double, 12> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
             // second argument of integrate1D is some power of 2
-            return integrate1D(integrand, 64, q2_min, q2_max);
+            return integrate1D(integrand, 256, q2_min, q2_max);
         }
 
         inline b_to_dstar_l_nu::AngularObservables differential_angular_observables(const double & q2)

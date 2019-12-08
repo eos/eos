@@ -96,7 +96,7 @@ class BToDstarLeptonNeutrinoTest :
                 BToDstarLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
-                TEST_CHECK_NEARLY_EQUAL(33.311,       d.integrated_branching_ratio(0.001, 10.689), eps);
+                TEST_CHECK_NEARLY_EQUAL(33.323,       d.integrated_branching_ratio(0.001, 10.689), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.546,       d.integrated_f_L(0.001, 10.689),             eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.409302220, d.integrated_J1c_normalized(0.001, 10.689),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_J1s_normalized(0.001, 10.689),  eps);
@@ -160,7 +160,7 @@ class BToDstarLeptonNeutrinoTest :
                 BToDstarLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
-                TEST_CHECK_NEARLY_EQUAL( 8.209,        d.integrated_branching_ratio(3.157, 10.689), eps);
+                TEST_CHECK_NEARLY_EQUAL( 8.213,        d.integrated_branching_ratio(3.157, 10.689), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.475,        d.integrated_f_L(3.157, 10.689),             eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.4325856250, d.integrated_J1c_normalized(3.157, 10.689),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.2779590234, d.integrated_J1s_normalized(3.157, 10.689),  eps);
