@@ -854,7 +854,7 @@ int main(int argc, char * argv[])
             Log::instance()->message("eos-scan-mc", ll_informational)
                 << "Result from minuit:" << ret << ret.UserCovariance();
             if (inst->goodness_of_fit && inst->best_fit_point.empty())
-                ana.goodness_of_fit(ret.UserParameters().Params(), 1e5);
+                ana.goodness_of_fit(ret.UserParameters().Params(), 1e5, inst->mcmc_config.output_file);
 
             Log::instance()->message("eos-scan-mc", ll_informational)
                 << "Best result: log(posterior) at "
