@@ -283,8 +283,52 @@ namespace eos
                                 &BToDstarLeptonNeutrino::differential_a_fb_leptonic,
                                 std::make_tuple("q2")),
 
+                make_observable("B->D^*lnu::J_1c(q2)", R"(J_{1c}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J1c_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_1s(q2)", R"(J_{1s}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J1s_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_2c(q2)", R"(J_{2c}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J2c_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_2s(q2)", R"(J_{2s}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J2s_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_3(q2)", R"(J_{3}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J3_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_4(q2)", R"(J_{4}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J4_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_5(q2)", R"(J_{5}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J5_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_6c(q2)", R"(J_{6c}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J6c_normalized,
+                                std::make_tuple("q2")),
+
                 make_observable("B->D^*lnu::J_6s(q2)", R"(J_{6s}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
                                 &BToDstarLeptonNeutrino::differential_J6s_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_7(q2)", R"(J_{7}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J7_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_8(q2)", R"(J_{8}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J8_normalized,
+                                std::make_tuple("q2")),
+
+                make_observable("B->D^*lnu::J_9(q2)", R"(J_{9}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J9_normalized,
                                 std::make_tuple("q2")),
 
                 make_observable("B->D^*lnu::BR", R"(\mathcal{B}(B\to \bar{D}^*\ell^-\bar\nu))",
@@ -467,6 +511,71 @@ namespace eos
                                 std::make_tuple("q2"),
                                 Options{ { "U", "c" }, {"q", "s"} }),
 
+                make_observable("B_s->D_s^*lnu::A_FB(q2)", R"(A_{\text{FB}}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_a_fb_leptonic,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_1c(q2)", R"(J_{1c}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J1c_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_1s(q2)", R"(J_{1s}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J1s_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_2c(q2)", R"(J_{2c}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J2c_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_2s(q2)", R"(J_{2s}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J2s_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_3(q2)", R"(J_{3}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J3_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_4(q2)", R"(J_{4}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J4_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_5(q2)", R"(J_{5}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J5_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_6c(q2)", R"(J_{6c}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J6c_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_6s(q2)", R"(J_{6s}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J6s_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_7(q2)", R"(J_{7}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J7_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_8(q2)", R"(J_{8}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J8_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_9(q2)", R"(J_{9}(B_s\to \bar{D_s}^*\ell^-\bar\nu)(q^2))",
+                                &BToDstarLeptonNeutrino::differential_J9_normalized,
+                                std::make_tuple("q2"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
                 make_observable("B_s->D_s^*lnu::BR", R"(\mathcal{B}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
                                 &BToDstarLeptonNeutrino::integrated_branching_ratio,
                                 std::make_tuple("q2_min", "q2_max"),
@@ -492,11 +601,6 @@ namespace eos
                                 &BToDstarLeptonNeutrino::integrated_branching_ratio,
                                 std::make_tuple("q2_mu_min", "q2_mu_max"),
                                 Options{ { "l", "mu" }, { "U", "c" }, {"q", "s"} }),
-
-                make_observable("B_s->D_s^*lnu::A_FB(q2)", R"(A_{\text{FB}}(B_s\to \bar{D}_s^*\ell^-\bar\nu)(q^2))",
-                                &BToDstarLeptonNeutrino::differential_a_fb_leptonic,
-                                std::make_tuple("q2"),
-                                Options{ { "U", "c" }, {"q", "s"} }),
 
                 make_observable("B_s->D_s^*lnu::A_FB", R"(A_{\text{FB}}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
                                 &BToDstarLeptonNeutrino::integrated_a_fb_leptonic,
@@ -545,6 +649,66 @@ namespace eos
 
                 make_observable("B_s->D_s^*lnu::A_T^3", R"(A_{\text{T}}^3(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
                                 &BToDstarLeptonNeutrino::integrated_a_t_3,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_1c", R"(J_{1c}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J1c_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_1s", R"(J_{1s}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J1s_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_2c", R"(J_{2c}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J2c_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_2s", R"(J_{2s}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J2s_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_3", R"(J_{3}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J3_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_4", R"(J_{4}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J4_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_5", R"(J_{5}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J5_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_6c", R"(J_{6c}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J6c_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_6s", R"(J_{6s}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J6s_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_7", R"(J_{7}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J7_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_8", R"(J_{8}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J8_normalized,
+                                std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::J_9", R"(J_{9}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
+                                &BToDstarLeptonNeutrino::integrated_J9_normalized,
                                 std::make_tuple("q2_min", "q2_max"),
                                 Options{ { "U", "c" }, {"q", "s"} }),
             }
