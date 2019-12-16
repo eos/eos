@@ -215,7 +215,7 @@ namespace eos
              * @param covariance    The covariance matrix
              */
             static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::vector<ObservablePtr> & observables,
-                    gsl_vector * mean, gsl_matrix * covariance, const unsigned & number_of_observations);
+                    gsl_vector * mean, gsl_matrix * covariance, gsl_matrix * response, const unsigned & number_of_observations);
 
             /*!
              * Templated helper to create a new LogLikelihoodBlock for n observables distributed
@@ -250,7 +250,11 @@ namespace eos
                     }
                 }
 
-                return LogLikelihoodBlock::MultivariateGaussian(cache, _observables, _mean, _covariance, number_of_observations);
+                // create GSL matrix for the response matrix
+                gsl_matrix * _response = gsl_matrix_calloc(n_, n_);
+                gsl_matrix_set_identity(_response);
+
+                return LogLikelihoodBlock::MultivariateGaussian(cache, _observables, _mean, _covariance, _response, number_of_observations);
             }
 
             /*!
@@ -289,7 +293,11 @@ namespace eos
                     }
                 }
 
-                return LogLikelihoodBlock::MultivariateGaussian(cache, _observables, _mean, covariance, number_of_observations);
+                // create GSL matrix for the response matrix
+                gsl_matrix * _response = gsl_matrix_calloc(n_, n_);
+                gsl_matrix_set_identity(_response);
+
+                return LogLikelihoodBlock::MultivariateGaussian(cache, _observables, _mean, covariance, _response, number_of_observations);
             }
 
             /*!

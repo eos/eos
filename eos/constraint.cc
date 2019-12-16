@@ -815,7 +815,10 @@ namespace eos
                 }
             }
 
-            LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, number_of_observations);
+            gsl_matrix * response = gsl_matrix_calloc(dim, dim);
+            gsl_matrix_set_identity(response);
+
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
@@ -1134,7 +1137,11 @@ namespace eos
                 }
             }
 
-            auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, number_of_observations);
+            // create GSL matrix for the response
+            gsl_matrix * response = gsl_matrix_calloc(dim, dim);
+            gsl_matrix_set_identity(response);
+
+            auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }

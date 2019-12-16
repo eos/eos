@@ -883,6 +883,7 @@ namespace eos
             // inputs
             gsl_vector * const _mean;
             gsl_matrix * const _covariance;
+            gsl_matrix * const _response;
             const unsigned _number_of_observations;
 
             // the normalization constant of the density
@@ -897,11 +898,12 @@ namespace eos
             gsl_vector * _observables_2;
 
             MultivariateGaussianBlock(const ObservableCache & cache, const std::vector<ObservableCache::Id> && ids,
-                    gsl_vector * mean, gsl_matrix * covariance, const unsigned & number_of_observations) :
+                    gsl_vector * mean, gsl_matrix * covariance, gsl_matrix * response, const unsigned & number_of_observations) :
                 _cache(cache),
                 _ids(ids),
                 _mean(mean),
                 _covariance(covariance),
+                _response(response),
                 _number_of_observations(number_of_observations),
                 _norm(compute_norm()),
                 _chol(gsl_matrix_alloc(ids.size(), ids.size())),
@@ -940,6 +942,7 @@ namespace eos
                 gsl_matrix_free(_covariance_inv);
                 gsl_matrix_free(_chol);
                 gsl_matrix_free(_covariance);
+                gsl_matrix_free(_response);
 
                 gsl_vector_free(_observables_2);
                 gsl_vector_free(_observables);
@@ -1021,7 +1024,10 @@ namespace eos
                 gsl_matrix * covariance = gsl_matrix_alloc(k, k);
                 gsl_matrix_memcpy(covariance, _covariance);
 
-                return LogLikelihoodBlockPtr(new MultivariateGaussianBlock(cache, std::move(ids), mean, covariance, _number_of_observations));
+                gsl_matrix * response = gsl_matrix_alloc(k, k);
+                gsl_matrix_memcpy(response, _response);
+
+                return LogLikelihoodBlockPtr(new MultivariateGaussianBlock(cache, std::move(ids), mean, covariance, response, _number_of_observations));
             }
 
             // compute the normalization constant on log scale
@@ -1057,12 +1063,16 @@ namespace eos
                     gsl_vector_set(_observables, i, _cache[_ids[i]]);
                 }
 
-                // center the gaussian:
-                //   observable <- observables - mean
-                gsl_vector_sub(_observables, _mean);
+                // prepare for centering
+                //   observables_2 <- mean
+                gsl_vector_memcpy(_observables_2, _mean);
 
-                // observables_2 <- inv(covariance) * observables
-                gsl_blas_dgemv(CblasNoTrans, 1.0, _covariance_inv, _observables, 0.0, _observables_2);
+                // apply response matrix and center the gaussian:
+                //   observables_2 <- R * observables - observables_2
+                gsl_blas_dgemv(CblasNoTrans, 1.0, _response, _observables, -1.0, _observables_2);
+
+                // observables <- inv(covariance) * observables_2
+                gsl_blas_dgemv(CblasNoTrans, 1.0, _covariance_inv, _observables_2, 0.0, _observables);
 
                 double result;
                 gsl_blas_ddot(_observables, _observables_2, &result);
@@ -1316,7 +1326,7 @@ namespace eos
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::MultivariateGaussian(ObservableCache cache, const std::vector<ObservablePtr> & observables,
-            gsl_vector * mean, gsl_matrix * covariance, const unsigned & number_of_observations)
+            gsl_vector * mean, gsl_matrix * covariance, gsl_matrix * response, const unsigned & number_of_observations)
     {
         std::vector<unsigned> indices;
         for (auto & o : observables)
@@ -1324,7 +1334,7 @@ namespace eos
             indices.push_back(cache.add(o));
         }
 
-        return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock(cache, std::move(indices), mean, covariance, number_of_observations));
+        return LogLikelihoodBlockPtr(new implementation::MultivariateGaussianBlock(cache, std::move(indices), mean, covariance, response, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
