@@ -40,6 +40,9 @@ namespace eos
             LambdaBToLambdaCLeptonNeutrino(const Parameters &, const Options &);
             ~LambdaBToLambdaCLeptonNeutrino();
 
+            double four_differential_decay_width(const double & q2, const double & c_lep, const double & c_lam, const double & phi) const;
+            double integrated_decay_width(const double & q2_min, const double & q2_max) const;
+
             double differential_branching_ratio(const double & q2) const;
             double differential_a_fb_leptonic(const double & q2) const;
             double differential_a_fb_hadronic(const double & q2) const;
@@ -67,6 +70,9 @@ namespace eos
             */
             static const std::string description;
             static const std::string kinematics_description_q2;
+            static const std::string kinematics_description_c_theta_l;
+            static const std::string kinematics_description_c_theta_L;
+            static const std::string kinematics_description_phi;
 
             /*!
              * References used in the computation of our observables.
