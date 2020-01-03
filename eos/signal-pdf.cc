@@ -330,6 +330,22 @@ namespace eos
                     )
                 ),
 
+            make_signal_pdf("Lambda_b->Lambda_clnu::d^4Gamma",
+                    Options{ },
+                    &LambdaBToLambdaCLeptonNeutrino::four_differential_decay_width,
+                    std::make_tuple(
+                        KinematicRange{ "q2", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, LambdaBToLambdaCLeptonNeutrino::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_L)", -1.0, +1.0, LambdaBToLambdaCLeptonNeutrino::kinematics_description_c_theta_L },
+                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, LambdaBToLambdaCLeptonNeutrino::kinematics_description_phi }
+                    ),
+                    &LambdaBToLambdaCLeptonNeutrino::integrated_decay_width,
+                    std::make_tuple(
+                        "q2_min",
+                        "q2_max"
+                    )
+                ),
+
             make_signal_pdf("Lambda_b->Lambda_c(2625)lnu::dGamma",
                     Options{ },
                     &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,

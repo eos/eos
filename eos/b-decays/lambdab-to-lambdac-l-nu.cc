@@ -236,6 +236,23 @@ namespace eos
             {
                 return (2.0 * k1ss() - k1cc()) / decay_width();
             }
+
+            inline double d4gamma(const double & c_lep, const double & c_lam, const double & phi) const
+            {
+                const double c2_lep = c_lep * c_lep;
+                const double s2_lep = 1.0 - c2_lep;
+                const double s_lep  = std::sqrt(s2_lep);
+                const double s_lam  = std::sqrt(1.0 - c_lam * c_lam);
+                const double c_phi  = std::cos(phi), s_phi = std::sin(phi);
+
+                // cf. [BKTvD2019], p. 2, eqs. (2.3) and (2.4)
+                return 3.0 / (8.0 * M_PI) * (
+                       k1ss() * s2_lep        + k1cc() * c2_lep + k1c() * c_lep
+                    + (k2ss() * s2_lep        + k2cc() * c2_lep + k2c() * c_lep) * c_lam
+                    + (k3sc() * s_lep * c_lep + k3s()  * s_lep) * s_lam * s_phi
+                    + (k4sc() * s_lep * c_lep + k4s()  * s_lep) * s_lam * c_phi
+                );
+            }
         };
     }
 
@@ -388,6 +405,20 @@ namespace eos
     {
     }
 
+    /* for four-differential signal PDF */
+    double
+    LambdaBToLambdaCLeptonNeutrino::four_differential_decay_width(const double & q2, const double & c_lep,
+            const double & c_lam, const double & phi) const
+    {
+        return _imp->differential_angular_observables(q2).d4gamma(c_lep, c_lam, phi);
+    }
+
+    double
+    LambdaBToLambdaCLeptonNeutrino::integrated_decay_width(const double & q2_min, const double & q2_max) const
+    {
+        return _imp->integrated_angular_observables(q2_min, q2_max).decay_width();
+    }
+
     /* q^2-differential observables */
 
     double
@@ -529,6 +560,18 @@ namespace eos
     const std::string
     LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 = "\
     The invariant mass of the l-nubar pair in GeV^2.";
+
+    const std::string
+    LambdaBToLambdaCLeptonNeutrino::kinematics_description_c_theta_l = "\
+    The cosine of the helicity angle between the direction of flight of the muon and of the Lambda_c in the l-nubar rest frame.";
+
+    const std::string
+    LambdaBToLambdaCLeptonNeutrino::kinematics_description_c_theta_L = "\
+    The cosine of the helicity angle between the direction of flight of the Lambda and of the pion in the Lambda_c rest frame.";
+
+    const std::string
+    LambdaBToLambdaCLeptonNeutrino::kinematics_description_phi = "\
+    The azimuthal angle between the two decay planes.";
 
     const std::set<ReferenceName>
     LambdaBToLambdaCLeptonNeutrino::references
