@@ -321,12 +321,12 @@ namespace eos
                     Options{ },
                     &LambdaBToLambdaCLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
-                        KinematicRange{ "s", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 }
+                        KinematicRange{ "q2", 0.011, 11.1, LambdaBToLambdaCLeptonNeutrino::kinematics_description_q2 }
                     ),
                     &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
                     std::make_tuple(
-                        "s_min",
-                        "s_max"
+                        "q2_min",
+                        "q2_max"
                     )
                 ),
 
