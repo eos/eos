@@ -215,9 +215,11 @@ class Plotter:
             self.y    = item['y']
             self.yerr = item['yerr'] if 'yerr' in item else None
 
+            self.elinewidth = item['elinewidth'] if 'elinewidth' in item else 1.0
+
         def plot(self):
             plt.errorbar(x=self.x, y=self.y, xerr=self.xerr, yerr=self.yerr,
-                color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
+                color=self.color, elinewidth=self.elinewidth, fmt='_', linestyle='none', label=self.label)
 
 
     """ Plots a shaded band. """
