@@ -1885,12 +1885,16 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         return _imp->c_l(wc, s);
     }
 
-    // Two Differential Observables
+    // Two Differential decay width
     double
-    BToKDilepton<LowRecoil>::two_differential_decay_width(const double & s, const double & c_theta_l) const
+    BToKDilepton<LowRecoil>::two_differential_decay_width(const double & s, const double & c_theta_l_LHCb) const
     {
-        WilsonCoefficients<BToS> wc = _imp->wilson_coefficients();
+        const auto wc = _imp->wilson_coefficients();
 
+        // using the angular convention of the LHCb experiment
+        const double c_theta_l = -c_theta_l_LHCb;
+
+        // cf. [BHP2007], Eq. (4.1)
         return _imp->a_l(wc, s) + _imp->b_l(wc, s) * c_theta_l + _imp->c_l(wc, s) * c_theta_l * c_theta_l;
     }
 
@@ -2080,5 +2084,5 @@ The invariant mass of the charged lepton pair in GeV^2.";
 
     const std::string
     BToKDilepton<LowRecoil>::kinematics_description_c_theta_l = "\
-The cosine of the negatively-charged lepton l^-'s helicity angle theta_l in the l^+l^- rest frame.";
+The cosine of the lepton's helicity angle theta_l in the l^+l^- rest frame using the LHCb convention.";
 }
