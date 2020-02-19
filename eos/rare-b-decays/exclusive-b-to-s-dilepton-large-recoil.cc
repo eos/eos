@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2020 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
@@ -2105,42 +2105,48 @@ namespace eos
     }
 
     double
-    BToKstarDilepton<LargeRecoil>::four_differential_decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const
+    BToKstarDilepton<LargeRecoil>::four_differential_decay_width(const double & s, const double & c_theta_l_LHCb, const double & c_theta_k_LHCb, const double & phi_LHCb) const
     {
-        // compute d^4 Gamma, cf. [BHvD2010], p. 5, Eq. (2.6)
+        // compute d^4 Gamma, cf. [BHvD2010], p. 5, Eq. (2.6),
+        // using the angular convention of the LHCb experiment
+        const double c_theta_k = +c_theta_k_LHCb;
+        const double c_theta_l = -c_theta_l_LHCb;
+        const double c_phi     = +cos(phi_LHCb);
+        const double s_phi     = -sin(phi_LHCb);
+
+        // account for CP mode: B^0 vs Bbar^0
+        const double cp_conjugate = _imp->cp_conjugate ? -1.0 : +1.0; // -1 for B^0; +1 for Bbar^0
+
         // Cosine squared of the angles
-        double c_theta_k_2 = c_theta_k * c_theta_k;
-        double c_theta_l_2 = c_theta_l * c_theta_l;
-        double c_phi = cos(phi);
+        const double c_theta_k_2 = c_theta_k * c_theta_k;
+        const double c_theta_l_2 = c_theta_l * c_theta_l;
         // Sine squared of the angles
-        double s_theta_k_2 = 1.0 - c_theta_k_2;
-        double s_theta_l_2 = 1.0 - c_theta_l_2;
+        const double s_theta_k_2 = 1.0 - c_theta_k_2;
+        const double s_theta_l_2 = 1.0 - c_theta_l_2;
         // Sine of the angles
-        double s_theta_k = sqrt(s_theta_k_2);
-        double s_theta_l = sqrt(s_theta_l_2);
-        double s_phi = sin(phi);
+        const double s_theta_k   = sqrt(s_theta_k_2);
+        const double s_theta_l   = sqrt(s_theta_l_2);
         // Cosine of twice the angle
-        //double c_2_theta_k = 2.0 * c_theta_k_2 - 1.0;
-        double c_2_theta_l = 2.0 * c_theta_l_2 - 1.0;
-        double c_2_phi = cos(2.0 * phi);
+        const double c_2_theta_l = 2.0 * c_theta_l_2 - 1.0;
+        const double c_2_phi     = 2.0 * c_phi * c_phi - 1.0;
         // Sine of twice the angle
-        double s_2_theta_k = 2.0 * s_theta_k * c_theta_k;
-        double s_2_theta_l = 2.0 * s_theta_l * c_theta_l;
-        double s_2_phi = sin(2.0 * phi);
+        const double s_2_theta_k = 2.0 * s_theta_k * c_theta_k;
+        const double s_2_theta_l = 2.0 * s_theta_l * c_theta_l;
+        const double s_2_phi     = 2.0 * s_phi * c_phi;
 
         AngularCoefficients a_c = _imp->differential_angular_coefficients(s);
-        double Gamma = decay_width(_imp->integrated_angular_coefficients(1.00, 6.00));
+        const double Gamma = decay_width(_imp->integrated_angular_coefficients(1.00, 6.00));
 
-        double result = 3.0 / 8.0 / M_PI * (
+        const double result = 3.0 / 8.0 / M_PI * (
                  a_c.j1s + (a_c.j1c - a_c.j1s) * c_theta_k_2
                 +  (a_c.j2s + (a_c.j2c - a_c.j2s) * c_theta_k_2) * c_2_theta_l
                 +  a_c.j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
                 +  a_c.j4 * s_2_theta_k * s_2_theta_l * c_phi
-                +  a_c.j5 * s_2_theta_k * s_theta_l * c_phi
-                +  (a_c.j6s * s_theta_k_2 + a_c.j6c * c_theta_k_2) * c_theta_l
+                +  a_c.j5 * s_2_theta_k * s_theta_l * c_phi * cp_conjugate
+                +  (a_c.j6s * s_theta_k_2 + a_c.j6c * c_theta_k_2) * c_theta_l * cp_conjugate
                 +  a_c.j7 * s_2_theta_k * s_theta_l * s_phi
-                +  a_c.j8 * s_2_theta_k * s_2_theta_l * s_phi
-                +  a_c.j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi
+                +  a_c.j8 * s_2_theta_k * s_2_theta_l * s_phi * cp_conjugate
+                +  a_c.j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi * cp_conjugate
                 ) / Gamma;
 
         return result;
@@ -2157,15 +2163,15 @@ The invariant mass of the charged lepton pair in GeV^2.";
 
     const std::string
     BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_l = "\
-The cosine of the negatively-charged lepton l^-'s helicity angle theta_l in the l^+l^- rest frame.";
+The cosine of the lepton's helicity angle theta_l in the l^+l^- rest frame using the LHCb convention.";
 
     const std::string
     BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_k = "\
-The cosine of the Kbar's helicity angle theta_k in the Kbar-pi rest frame.";
+The cosine of the Kbar's helicity angle theta_k in the Kbar-pi rest frame using the LHCb convention.";
 
     const std::string
     BToKstarDilepton<LargeRecoil>::kinematics_description_phi = "\
-The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
+The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHCb convention.";
 
     /*
      * Decay: B -> K l lbar at Large Recoil
