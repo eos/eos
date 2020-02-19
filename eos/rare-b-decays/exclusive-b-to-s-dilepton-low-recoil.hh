@@ -221,7 +221,7 @@ namespace eos
             double b_l(const double & s) const;
             double c_l(const double & s) const;
 
-            // Two Differential Observables
+            // Two Differential decay width in LHCb angular convention
             double two_differential_decay_width(const double & s, const double & c_theta_l) const;
 
             // Differential Observables
