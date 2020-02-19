@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2020 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
@@ -63,7 +63,7 @@ namespace eos
             // Inverse Observables
             double a_fb_zero_crossing() const;
 
-            // Four Differential Observables
+            // Four Differential decay width in LHCb angular convention
             double four_differential_decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const;
 
             // Single Differential Observables

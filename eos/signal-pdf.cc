@@ -391,10 +391,10 @@ namespace eos
                     Options{ },
                     &BToKstarDilepton<LargeRecoil>::four_differential_decay_width,
                     std::make_tuple(
-                        KinematicRange{ "s", 1.00, 6.00, BToKstarDilepton<LargeRecoil>::kinematics_description_s },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_k },
-                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton<LargeRecoil>::kinematics_description_phi }
+                        KinematicRange{ "s",                  1.00,  6.00,       BToKstarDilepton<LargeRecoil>::kinematics_description_s         },
+                        KinematicRange{ "cos(theta_l)^LHCb", -1.0,  +1.0,        BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_k)^LHCb", -1.0,  +1.0,        BToKstarDilepton<LargeRecoil>::kinematics_description_c_theta_k },
+                        KinematicRange{ "phi^LHCb",           0.0,   2.0 * M_PI, BToKstarDilepton<LargeRecoil>::kinematics_description_phi       }
                     ),
                     &BToKstarDilepton<LargeRecoil>::integrated_decay_width,
                     std::make_tuple(
@@ -407,10 +407,10 @@ namespace eos
                     Options{ },
                     &BToKstarDilepton<LowRecoil>::four_differential_decay_width,
                     std::make_tuple(
-                        KinematicRange{ "s", 15.00, 19.21, BToKstarDilepton<LowRecoil>::kinematics_description_s },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_k)", -1.0, +1.0, BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_k },
-                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToKstarDilepton<LowRecoil>::kinematics_description_phi }
+                        KinematicRange{ "s",                  15.00,  19.21,      BToKstarDilepton<LowRecoil>::kinematics_description_s },
+                        KinematicRange{ "cos(theta_l)^LHCb", -1.0,   +1.0,        BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_k)^LHCb", -1.0,   +1.0,        BToKstarDilepton<LowRecoil>::kinematics_description_c_theta_k },
+                        KinematicRange{ "phi^LHCb",           0.0,    2.0 * M_PI, BToKstarDilepton<LowRecoil>::kinematics_description_phi }
                     ),
                     &BToKstarDilepton<LowRecoil>::integrated_decay_width,
                     std::make_tuple(

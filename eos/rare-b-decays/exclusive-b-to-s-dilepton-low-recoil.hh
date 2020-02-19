@@ -68,7 +68,7 @@ namespace eos
             double rho_1(const double & s) const;
             double rho_2(const double & s) const;
 
-            // Four Differential Observables
+            // Four Differential decay width in LHCb angular convention
             double four_differential_decay_width(const double & s, const double & c_theta_l, const double & c_theta_k, const double & phi) const;
 
             // Single Differential Observables
