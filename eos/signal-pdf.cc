@@ -210,8 +210,7 @@ namespace eos
                     )
                 ),
 
-            make_signal_pdf("B->D^*munu::dBR",
-                    Options{ {"l", "mu"} },
+            make_signal_pdf("B->D^*lnu::dBR",
                     &BToDstarLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_q2 }
@@ -223,14 +222,13 @@ namespace eos
                     )
                 ),
 
-            make_signal_pdf("B->D^*munu::d^4Gamma",
-                    Options{ {"l", "mu"} },
+            make_signal_pdf("B->D^*lnu::d^4Gamma",
                     &BToDstarLeptonNeutrino::normalized_four_differential_decay_width,
                     std::make_tuple(
-                        KinematicRange{ "q2", 0.0, 10.68, BToDstarLeptonNeutrino::kinematics_description_q2 },
-                        KinematicRange{ "cos(theta_l)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_l },
-                        KinematicRange{ "cos(theta_d)", -1.0, +1.0, BToDstarLeptonNeutrino::kinematics_description_c_theta_d },
-                        KinematicRange{ "phi", 0.0, 2.0 * M_PI, BToDstarLeptonNeutrino::kinematics_description_phi }
+                        KinematicRange{ "q2",            0.0,  10.68,      BToDstarLeptonNeutrino::kinematics_description_q2        },
+                        KinematicRange{ "cos(theta_l)", -1.0, +1.0,        BToDstarLeptonNeutrino::kinematics_description_c_theta_l },
+                        KinematicRange{ "cos(theta_d)", -1.0, +1.0,        BToDstarLeptonNeutrino::kinematics_description_c_theta_d },
+                        KinematicRange{ "phi",           0.0,  2.0 * M_PI, BToDstarLeptonNeutrino::kinematics_description_phi       }
                     ),
                     &BToDstarLeptonNeutrino::integrated_branching_ratio,
                     std::make_tuple(
