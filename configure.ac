@@ -373,6 +373,24 @@ if test "x$enable_python" == xyes ; then
 	        [AC_MSG_ERROR([you do seem to be lacking 'libboost_python'.])]
 	)
 
+	AC_MSG_CHECKING([for working boost_python])
+	AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+		#include <boost/python.hpp>
+		char const* greet() {
+			return "Hello, world!";
+		}
+		BOOST_PYTHON_MODULE(hello)
+		{
+			boost::python::def("greet", greet);
+		}
+	])],
+		[AC_MSG_RESULT([yes])],
+		[AC_MSG_RESULT([no])
+		 AC_MSG_ERROR([boost_python example does not compile])
+		]
+	)
+	CXXFLAGS=$save_CXXFLAGS
+
 	CXXFLAGS=$_CXXFLAGS
 	LDFLAGS=$_LDFLAGS
 	LIBS=$_LIBS
