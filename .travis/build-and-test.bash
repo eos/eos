@@ -90,14 +90,22 @@ function ubuntu_distcheck() {
 # OSX specific functions #
 ##########################
 function osx_build_and_test() {
-    SUFFIX=$(python3 -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
+    # Contrary to the documentation, homebrew changed the naming scheme for the Python3 executable
+    # from 'python3' to 'python'. Moreover, '/usr/local/opt/python' is shadowed by the 'python'
+    # executable in the default $PATH.
+    ls -l /usr/local/opt/python
+    ls -l /usr/local/opt/python/bin
+    export PYTHON=/usr/local/opt/python/bin/python3
+    export PATH="/usr/local/opt/python/bin/:${PATH}"
+    SUFFIX=$($PYTHON -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
     echo using boost-python suffix ${SUFFIX}
     ./autogen.bash
     ./configure \
         --enable-pmc \
         --enable-python \
         --with-boost-python-suffix=${SUFFIX} \
-        --prefix=/usr/local
+        --prefix=/usr/local \
+        PYTHON=${PYTHON}
     make all -j2
     make install
     make check -j2 VERBOSE=1
