@@ -55,7 +55,7 @@ matrix:
         - rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
         - brew outdated boost || brew upgrade boost || true
         - brew outdated boost-python3 || brew upgrade boost-python3 || true
-        - brew install autoconf boost-python3 gsl hdf5 libtool minuit2 pmclib python3 yaml-cpp
+        - brew install autoconf boost-python3 gsl hdf5 libtool minuit2 pmclib yaml-cpp
         - pip3 install h5py matplotlib scipy PyYAML
       script:
         - /bin/bash .travis/build-and-test.bash osx g++ "${TRAVIS_TAG}" test
