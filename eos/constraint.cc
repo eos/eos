@@ -756,10 +756,10 @@ namespace eos
 
             if (dim < number_of_observations) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of observations"); }
 
-            if (dim != correlation.size()) { throw InternalError("MultviateGaussianConstraintEntry: wrong number of rows in correlation"); }
+            if (dim != correlation.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of rows in correlation"); }
             for (auto i = 0u ; i < dim ; ++i)
             {
-                if (dim != correlation[i].size()) { throw InternalError("MultviateGaussianConstraintEntry: wrong number of columns in correlation row " + stringify(i)); }
+                if (dim != correlation[i].size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of columns in correlation row " + stringify(i)); }
             }
         }
 
@@ -1065,7 +1065,7 @@ namespace eos
 
         unsigned number_of_observations;
 
-        unsigned dim;
+        unsigned dim_meas, dim_pred;
 
         MultivariateGaussianCovarianceConstraintEntry(const QualifiedName & name,
                 const std::vector<QualifiedName> & observables,
@@ -1081,28 +1081,29 @@ namespace eos
             means(means),
             covariance(covariance),
             number_of_observations(number_of_observations),
-            dim(observables.size())
+            dim_meas(means.size()),
+            dim_pred(observables.size())
         {
-            if (dim != kinematics.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of kinematics"); }
+            if (dim_meas != dim_pred) { throw InternalError("MultivariateGaussianConstraintEntry: number of measurements does not equal number of predictions"); }
 
-            if (dim != options.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of options"); }
-
-            if (dim != means.size()) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of means"); }
-
-            if (dim < number_of_observations) { throw InternalError("MultivariateGaussianConstraintEntry: wrong number of observations"); }
-
-            if (dim != covariance.size()) { throw InternalError("MultviateGaussianConstraintEntry: wrong number of rows in covariance"); }
-            for (auto i = 0u ; i < dim ; ++i)
+            if (dim_meas != covariance.size()) { throw InternalError("MultivariateGaussianConstraintEntry: number of rows in covariance does not equal number of measurements"); }
+            for (auto i = 0u ; i < dim_meas ; ++i)
             {
-                if (dim != covariance[i].size()) { throw InternalError("MultviateGaussianConstraintEntry: wrong number of columns in covariance row " + stringify(i)); }
+                if (dim_meas != covariance[i].size()) { throw InternalError("MultivariateGaussianConstraintEntry: number of columns in covariance row " + stringify(i) + " does not equal number of measurements"); }
             }
+
+            if (dim_pred != kinematics.size()) { throw InternalError("MultivariateGaussianConstraintEntry: number of kinematics entries does not equal number of predictions"); }
+
+            if (dim_pred != options.size()) { throw InternalError("MultivariateGaussianConstraintEntry: number of options entries does not equal number of predictions"); }
+
+            if (dim_meas < number_of_observations) { throw InternalError("MultivariateGaussianConstraintEntry: number of observations larger than number of measurements"); }
         }
 
         virtual ~MultivariateGaussianCovarianceConstraintEntry() = default;
 
         virtual const std::string & type() const
         {
-            static const std::string type("MultivariateGaussian<" + stringify(dim) + "> (using covariance matrix)");
+            static const std::string type("MultivariateGaussian<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + "> (using covariance matrix)");
 
             return type;
         }
@@ -1112,33 +1113,33 @@ namespace eos
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
-            std::vector<ObservablePtr> observables(dim, nullptr);
-            for (auto i = 0u ; i < dim ; ++i)
+            std::vector<ObservablePtr> observables(dim_pred, nullptr);
+            for (auto i = 0u ; i < dim_pred ; ++i)
             {
                 observables[i] = Observable::make(this->observables[i], parameters, this->kinematics[i], this->options[i] + options);
                 if (! observables[i].get())
-                    throw InternalError("make_multivariate_gaussian_covariance_constraint<" + stringify(dim) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
+                    throw InternalError("make_multivariate_gaussian_covariance_constraint<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
             }
 
             // create GSL vector for the mean
-            gsl_vector * means = gsl_vector_alloc(dim);
-            for (auto i = 0u ; i < dim ; ++i)
+            gsl_vector * means = gsl_vector_alloc(dim_meas);
+            for (auto i = 0u ; i < dim_meas ; ++i)
             {
                 gsl_vector_set(means, i, this->means[i]);
             }
 
             // create GSL matrix for the covariance
-            gsl_matrix * covariance = gsl_matrix_alloc(dim, dim);
-            for (auto i = 0u ; i < dim ; ++i)
+            gsl_matrix * covariance = gsl_matrix_alloc(dim_meas, dim_meas);
+            for (auto i = 0u ; i < dim_meas ; ++i)
             {
-                for (auto j = 0u ; j < dim ; ++j)
+                for (auto j = 0u ; j < dim_meas ; ++j)
                 {
                     gsl_matrix_set(covariance, i, j, this->covariance[i][j]);
                 }
             }
 
             // create GSL matrix for the response
-            gsl_matrix * response = gsl_matrix_calloc(dim, dim);
+            gsl_matrix * response = gsl_matrix_calloc(dim_meas, dim_pred);
             gsl_matrix_set_identity(response);
 
             auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
@@ -1149,7 +1150,7 @@ namespace eos
         virtual std::ostream & insert(std::ostream & os) const
         {
             os << _name.full() << ":" << std::endl;
-            os << "    type: MultivariateGaussianCovariance<" << dim << ">" << std::endl;
+            os << "    type: MultivariateGaussianCovariance<measurements=" << dim_meas << ",predictions=" << dim_pred << ">" << std::endl;
 
             return os;
         }
@@ -1159,7 +1160,7 @@ namespace eos
             out << YAML::DoublePrecision(9);
             out << YAML::BeginMap;
             out << YAML::Key << "type" << YAML::Value << "MultivariateGaussian(Covariance)";
-            out << YAML::Key << "dim" << YAML::Value << dim;
+            out << YAML::Key << "dim" << YAML::Value << dim_meas;
             out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
             for (const auto & o : observables)
             {
