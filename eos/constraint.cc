@@ -1061,7 +1061,9 @@ namespace eos
 
         gsl_vector * const means;
 
-        std::vector<std::vector<double>> covariance;
+        gsl_matrix * const covariance;
+
+        gsl_matrix * response;
 
         unsigned number_of_observations;
 
@@ -1072,7 +1074,8 @@ namespace eos
                 const std::vector<Kinematics> & kinematics,
                 const std::vector<Options> & options,
                 gsl_vector * const means,
-                const std::vector<std::vector<double>> & covariance,
+                gsl_matrix * const covariance,
+                gsl_matrix * const response,
                 const unsigned number_of_observations) :
             ConstraintEntryBase(name, observables),
             observables(observables),
@@ -1080,17 +1083,18 @@ namespace eos
             options(options),
             means(means),
             covariance(covariance),
+            response(response),
             number_of_observations(number_of_observations),
             dim_meas(means->size),
             dim_pred(observables.size())
         {
-            if (dim_meas != dim_pred) { throw InternalError("MultivariateGaussianConstraintEntry: number of measurements does not equal number of predictions"); }
+            if ((nullptr == response) && (dim_meas != dim_pred)) { throw InternalError("MultivariateGaussianConstraintEntry: number of measurements does not equal number of predictions in absence of a response matrix"); }
 
-            if (dim_meas != covariance.size()) { throw InternalError("MultivariateGaussianConstraintEntry: number of rows in covariance does not equal number of measurements"); }
-            for (auto i = 0u ; i < dim_meas ; ++i)
-            {
-                if (dim_meas != covariance[i].size()) { throw InternalError("MultivariateGaussianConstraintEntry: number of columns in covariance row " + stringify(i) + " does not equal number of measurements"); }
-            }
+            if (dim_meas != covariance->size1) { throw InternalError("MultivariateGaussianConstraintEntry: number of rows in covariance does not equal number of measurements"); }
+            if (dim_meas != covariance->size2) { throw InternalError("MultivariateGaussianConstraintEntry: number of columns in covariance does not equal number of measurements"); }
+
+            if ((nullptr != response) && (dim_meas != response->size1)) { throw InternalError("MultivariateGaussianConstraintEntry: number of rows in response does not equal number of measurements");}
+            if ((nullptr != response) && (dim_pred != response->size2)) { throw InternalError("MultivariateGaussianConstraintEntry: number of columns in response does not equal number of predictions");}
 
             if (dim_pred != kinematics.size()) { throw InternalError("MultivariateGaussianConstraintEntry: number of kinematics entries does not equal number of predictions"); }
 
@@ -1102,6 +1106,13 @@ namespace eos
         virtual ~MultivariateGaussianCovarianceConstraintEntry()
         {
             gsl_vector_free(means);
+
+            gsl_matrix_free(covariance);
+
+            if (response)
+            {
+                gsl_matrix_free(response);
+            }
         }
 
         virtual const std::string & type() const
@@ -1130,17 +1141,18 @@ namespace eos
 
             // create GSL matrix for the covariance
             gsl_matrix * covariance = gsl_matrix_alloc(dim_meas, dim_meas);
-            for (auto i = 0u ; i < dim_meas ; ++i)
-            {
-                for (auto j = 0u ; j < dim_meas ; ++j)
-                {
-                    gsl_matrix_set(covariance, i, j, this->covariance[i][j]);
-                }
-            }
+            gsl_matrix_memcpy(covariance, this->covariance);
 
             // create GSL matrix for the response
             gsl_matrix * response = gsl_matrix_calloc(dim_meas, dim_pred);
-            gsl_matrix_set_identity(response);
+            if (this->response)
+            {
+                gsl_matrix_memcpy(response, this->response);
+            }
+            else
+            {
+                gsl_matrix_set_identity(response);
+            }
 
             auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
 
@@ -1196,16 +1208,30 @@ namespace eos
             }
             out << YAML::EndSeq;
             out << YAML::Key << "covariance" << YAML::Value << YAML::BeginSeq;
-            for (const auto & row : covariance)
+            for (auto i = 0u ; i < dim_meas ; ++i)
             {
                 out << YAML::Flow << YAML::BeginSeq;
-                for (const auto & cov : row)
+                for (auto j = 0u ; j < dim_meas ; ++j)
                 {
-                    out << cov;
+                    out << gsl_matrix_get(covariance, i, j);
                 }
                 out << YAML::EndSeq;
             }
             out << YAML::EndSeq;
+            if (response)
+            {
+                out << YAML::Key << "response" << YAML::Value << YAML::BeginSeq;
+                for (auto i = 0u ; i < dim_meas ; ++i)
+                {
+                    out << YAML::Flow << YAML::BeginSeq;
+                    for (auto j = 0u ; j < dim_pred ; ++j)
+                    {
+                        out << gsl_matrix_get(response, i, j);
+                    }
+                    out << YAML::EndSeq;
+                }
+                out << YAML::EndSeq;
+            }
             out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
@@ -1320,18 +1346,67 @@ namespace eos
                     gsl_vector_set(means, i, _means[i]);
                 }
 
-                std::vector<std::vector<double>> covariance;
+                std::vector<std::vector<double>> _covariance;
                 for (auto && row : n["covariance"])
                 {
-                    covariance.push_back(std::vector<double>());
+                    _covariance.push_back(std::vector<double>());
 
                     for (auto && v : row)
                     {
-                        covariance.back().push_back(v.as<double>());
+                        _covariance.back().push_back(v.as<double>());
+                    }
+                }
+                gsl_matrix * covariance = gsl_matrix_alloc(_covariance.size(), _covariance.size());
+                for (auto i = 0u ; i < _covariance.size() ; ++i)
+                {
+                    const auto & _row = _covariance[i];
+
+                    if (_row.size() != _covariance.size())
+                    {
+                        throw ConstraintDeserializationError(name, "covariance matrix is not square; row " + stringify(i) + " has " + stringify(_row.size()) + " columns; expected " + stringify(_covariance.size()));
+                    }
+
+                    for (auto j = 0u ; j < _row.size() ; ++j)
+                    {
+                        gsl_matrix_set(covariance, i, j, _row[j]);
                     }
                 }
 
-                return new MultivariateGaussianCovarianceConstraintEntry(name.str(), observables, kinematics, options, means, covariance, dof);
+                gsl_matrix * response = nullptr;
+                if (n["response"].IsDefined())
+                {
+                    std::vector<std::vector<double>> _response;
+                    for (auto && row : n["response"])
+                    {
+                        _response.push_back(std::vector<double>());
+
+                        for (auto && v : row)
+                        {
+                            _response.back().push_back(v.as<double>());
+                        }
+                    }
+
+                    unsigned _response_rows = _response.size();
+                    unsigned _response_cols = _response[0].size();
+
+                    response = gsl_matrix_alloc(_response_rows, _response_cols);
+                    for (auto i = 0u ; i < _response_rows ; ++i)
+                    {
+                        const auto & _row = _response[i];
+
+                        if (_row.size() != _response_cols)
+                        {
+                            throw ConstraintDeserializationError(name, "response matrix is invalid; row " + stringify(i) + " has " + stringify(_row.size()) + " columns; expected " + stringify(_response_cols));
+                        }
+
+                        for (auto j = 0u ; j < _row.size() ; ++j)
+                        {
+                            gsl_matrix_set(response, i, j, _row[j]);
+                        }
+                    }
+                }
+
+                return new MultivariateGaussianCovarianceConstraintEntry(name.str(), observables, kinematics, options, means, covariance, response, dof);
             }
             catch (QualifiedNameSyntaxError & e)
             {
