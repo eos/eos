@@ -854,9 +854,103 @@ class ConstraintDeserializationTest :
                 LogLikelihood llh(p);
                 llh.add(c);
 
-                // evaluation at mode
+                // evaluation off mode
                 p["mass::b(MSbar)"] = 4.6;
                 p["mass::c"] = 1.3;
+                TEST_CHECK_NEARLY_EQUAL(llh(), -4.597666149, 1e-8);
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian(Covariance) (value; trivial response matrix)
+            {
+                static const std::string input(
+                    "type: MultivariateGaussian(Covariance)\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - mass::s(2GeV)\n"
+                    "  - mass::b(MSbar)\n"
+                    "  - mass::c\n"
+                    "kinematics:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "options:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "means: [4.3, 1.1]\n"
+                    "covariance:\n"
+                    "  - [0.0100, 0.0030]\n"
+                    "  - [0.0030, 0.0025]\n"
+                    "response:\n"
+                    "  - [0, 1, 0]\n"
+                    "  - [0, 0, 1]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                Constraint c = entry->make("Test::MultivariateGaussian(Covariance)", Options{ });
+                std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
+                TEST_CHECK_EQUAL(1, blocks.size());
+
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                llh.add(c);
+
+                // evaluation off mode
+                p["mass::b(MSbar)"] = 4.6;
+                p["mass::c"] = 1.3;
+                TEST_CHECK_NEARLY_EQUAL(llh(), -4.597666149, 1e-8);
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian(Covariance) (value; non-trivial response matrix)
+            {
+                static const std::string input(
+                    "type: MultivariateGaussian(Covariance)\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - mass::s(2GeV)\n"
+                    "  - mass::b(MSbar)\n"
+                    "  - mass::c\n"
+                    "kinematics:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "options:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "means: [4.3, 1.1]\n"
+                    "covariance:\n"
+                    "  - [0.0100, 0.0030]\n"
+                    "  - [0.0030, 0.0025]\n"
+                    "response:\n"
+                    "  - [0, +0.5, +0.5]\n"
+                    "  - [0, -0.5, +0.5]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                Constraint c = entry->make("Test::MultivariateGaussian(Covariance)", Options{ });
+                std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
+                TEST_CHECK_EQUAL(1, blocks.size());
+
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                llh.add(c);
+
+                // evaluation off mode
+                p["mass::b(MSbar)"] = 3.3;
+                p["mass::c"] = 5.9;
                 TEST_CHECK_NEARLY_EQUAL(llh(), -4.597666149, 1e-8);
             }
             // }}}
