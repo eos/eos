@@ -880,6 +880,9 @@ namespace eos
 
             std::vector<ObservableCache::Id> _ids;
 
+            const unsigned _dim_pred;
+            const unsigned _dim_meas;
+
             // inputs
             gsl_vector * const _mean;
             gsl_matrix * const _covariance;
@@ -895,32 +898,37 @@ namespace eos
 
             // temporary storage for evaluation
             gsl_vector * _observables;
-            gsl_vector * _observables_2;
+            gsl_vector * _measurements;
+            gsl_vector * _measurements_2;
 
             MultivariateGaussianBlock(const ObservableCache & cache, const std::vector<ObservableCache::Id> && ids,
                     gsl_vector * mean, gsl_matrix * covariance, gsl_matrix * response, const unsigned & number_of_observations) :
                 _cache(cache),
                 _ids(ids),
+                _dim_pred(ids.size()),
+                _dim_meas(mean->size),
                 _mean(mean),
                 _covariance(covariance),
                 _response(response),
                 _number_of_observations(number_of_observations),
                 _norm(compute_norm()),
-                _chol(gsl_matrix_alloc(ids.size(), ids.size())),
-                _covariance_inv(gsl_matrix_alloc(ids.size(), ids.size())),
-                _observables(gsl_vector_alloc(ids.size())),
-                _observables_2(gsl_vector_alloc(ids.size()))
+                _chol(gsl_matrix_alloc(covariance->size1, covariance->size2)),
+                _covariance_inv(gsl_matrix_alloc(covariance->size1, covariance->size2)),
+                _observables(gsl_vector_alloc(_dim_pred)),
+                _measurements(gsl_vector_alloc(_dim_meas)),
+                _measurements_2(gsl_vector_alloc(_dim_meas))
             {
-                const auto k = ids.size();
-
-                if (k != _mean->size)
-                    throw InternalError("MultivariateGaussianBlock: dimensions of observables and mean are not identical");
-
                 if (_covariance->size1 != _covariance->size2)
                     throw InternalError("MultivariateGaussianBlock: covariance matrix is not a square matrix");
 
-                if (k != _covariance->size1)
-                    throw InternalError("MultivariateGaussianBlock: dimensions of observables and covariance matrix are not identical");
+                if (_dim_meas != _covariance->size1)
+                    throw InternalError("MultivariateGaussianBlock: number of measurements and dimension of covariance matrix are not identical");
+
+                if (_dim_meas != _response->size1)
+                    throw InternalError("MultivariateGaussianBlock: number of measurements and number of rows in response matrix are not identical");
+
+                if (_dim_pred != _response->size2)
+                    throw InternalError("MultivariateGaussianBlock: number of predictions and number of columns in response matrix are not identical");
 
                 // cholesky decomposition (informally: the sqrt of the covariance matrix)
                 // the GSL matrix contains both the cholesky and its transpose, see GSL reference, ch. 14.5
@@ -928,9 +936,9 @@ namespace eos
                 invert_covariance();
 
                 // keep only the lower and diagonal parts, set upper parts to zero
-                for (unsigned i = 0; i < k ; ++i)
+                for (unsigned i = 0; i < _dim_meas ; ++i)
                 {
-                    for (unsigned j = i + 1 ; j < k ; ++j)
+                    for (unsigned j = i + 1 ; j < _dim_meas ; ++j)
                     {
                         gsl_matrix_set(_chol, i, j, 0.0);
                     }
@@ -944,7 +952,8 @@ namespace eos
                 gsl_matrix_free(_covariance);
                 gsl_matrix_free(_response);
 
-                gsl_vector_free(_observables_2);
+                gsl_vector_free(_measurements_2);
+                gsl_vector_free(_measurements);
                 gsl_vector_free(_observables);
                 gsl_vector_free(_mean);
             }
@@ -1035,16 +1044,13 @@ namespace eos
             // -k/2 * log 2 Pi - 1/2 log(abs(det(V^{-1})))
             double compute_norm()
             {
-                // dimensionality of parameter space
-                const auto k = _mean->size;
-
                 // copy covariance matrix
-                gsl_matrix * M = gsl_matrix_alloc (k, k);
+                gsl_matrix * M = gsl_matrix_alloc(_dim_meas, _dim_meas);
                 gsl_matrix_memcpy(M, _covariance);
 
                 // find LU decomposition
                 int signum = 0;
-                gsl_permutation * p = gsl_permutation_alloc(k);
+                gsl_permutation * p = gsl_permutation_alloc(_dim_meas);
                 gsl_linalg_LU_decomp(M, p, &signum);
 
                 // calculate determinant
@@ -1053,30 +1059,30 @@ namespace eos
                 gsl_permutation_free(p);
                 gsl_matrix_free(M);
 
-                return -0.5 * k * std::log(2 * M_PI) - 0.5 * log_det;
+                return -0.5 * _dim_meas * std::log(2 * M_PI) - 0.5 * log_det;
             }
 
             double chi_square() const
             {
                 // read observable values from cache, and subtract mean
-                for (auto i = 0u ; i < _mean->size ; ++i)
+                for (auto i = 0u ; i < _dim_pred ; ++i)
                 {
                     gsl_vector_set(_observables, i, _cache[_ids[i]]);
                 }
 
                 // prepare for centering
-                //   observables_2 <- mean
-                gsl_vector_memcpy(_observables_2, _mean);
+                //   measurements <- mean
+                gsl_vector_memcpy(_measurements, _mean);
 
                 // apply response matrix and center the gaussian:
-                //   observables_2 <- R * observables - observables_2
-                gsl_blas_dgemv(CblasNoTrans, 1.0, _response, _observables, -1.0, _observables_2);
+                //   measurements <- R * observables - measurements
+                gsl_blas_dgemv(CblasNoTrans, 1.0, _response, _observables, -1.0, _measurements);
 
-                // observables <- inv(covariance) * observables_2
-                gsl_blas_dgemv(CblasNoTrans, 1.0, _covariance_inv, _observables_2, 0.0, _observables);
+                // observables <- inv(covariance) * measurements
+                gsl_blas_dgemv(CblasNoTrans, 1.0, _covariance_inv, _measurements, 0.0, _measurements_2);
 
                 double result;
-                gsl_blas_ddot(_observables, _observables_2, &result);
+                gsl_blas_ddot(_measurements, _measurements_2, &result);
 
                 return result;
             }
@@ -1093,24 +1099,22 @@ namespace eos
 
             virtual double sample(gsl_rng * rng) const
             {
-                const auto k = _mean->size;
-
                 // generate standard normals in observables
-                for (auto i = 0u ; i < k ; ++i)
+                for (auto i = 0u ; i < _dim_meas ; ++i)
                 {
-                    gsl_vector_set(_observables, i, gsl_ran_ugaussian(rng));
+                    gsl_vector_set(_measurements, i, gsl_ran_ugaussian(rng));
                 }
 
                 // transform: observables2 <- _chol * observables
-                gsl_blas_dgemv(CblasNoTrans, 1.0, _chol, _observables, 0.0, _observables_2);
+                gsl_blas_dgemv(CblasNoTrans, 1.0, _chol, _measurements, 0.0, _measurements_2);
 
                 // To be consistent with the univariate Gaussian, we would center observables around theory,
                 // then compare to theory. Hence we can forget about theory, and stay centered on zero.
                 // transform: observables <- inv(covariance) * observables2
-                gsl_blas_dgemv(CblasNoTrans, 1.0, _covariance_inv, _observables_2, 0.0, _observables);
+                gsl_blas_dgemv(CblasNoTrans, 1.0, _covariance_inv, _measurements_2, 0.0, _measurements);
 
                 double result;
-                gsl_blas_ddot(_observables, _observables_2, &result);
+                gsl_blas_ddot(_measurements, _measurements_2, &result);
                 result *= -0.5;
                 result += _norm;
 
