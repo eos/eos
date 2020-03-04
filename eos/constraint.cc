@@ -1059,7 +1059,7 @@ namespace eos
 
         std::vector<Options> options;
 
-        std::vector<double> means;
+        gsl_vector * const means;
 
         std::vector<std::vector<double>> covariance;
 
@@ -1071,7 +1071,7 @@ namespace eos
                 const std::vector<QualifiedName> & observables,
                 const std::vector<Kinematics> & kinematics,
                 const std::vector<Options> & options,
-                const std::vector<double> & means,
+                gsl_vector * const means,
                 const std::vector<std::vector<double>> & covariance,
                 const unsigned number_of_observations) :
             ConstraintEntryBase(name, observables),
@@ -1081,7 +1081,7 @@ namespace eos
             means(means),
             covariance(covariance),
             number_of_observations(number_of_observations),
-            dim_meas(means.size()),
+            dim_meas(means->size),
             dim_pred(observables.size())
         {
             if (dim_meas != dim_pred) { throw InternalError("MultivariateGaussianConstraintEntry: number of measurements does not equal number of predictions"); }
@@ -1099,7 +1099,10 @@ namespace eos
             if (dim_meas < number_of_observations) { throw InternalError("MultivariateGaussianConstraintEntry: number of observations larger than number of measurements"); }
         }
 
-        virtual ~MultivariateGaussianCovarianceConstraintEntry() = default;
+        virtual ~MultivariateGaussianCovarianceConstraintEntry()
+        {
+            gsl_vector_free(means);
+        }
 
         virtual const std::string & type() const
         {
@@ -1123,10 +1126,7 @@ namespace eos
 
             // create GSL vector for the mean
             gsl_vector * means = gsl_vector_alloc(dim_meas);
-            for (auto i = 0u ; i < dim_meas ; ++i)
-            {
-                gsl_vector_set(means, i, this->means[i]);
-            }
+            gsl_vector_memcpy(means, this->means);
 
             // create GSL matrix for the covariance
             gsl_matrix * covariance = gsl_matrix_alloc(dim_meas, dim_meas);
@@ -1190,9 +1190,9 @@ namespace eos
             }
             out << YAML::EndSeq;
             out << YAML::Key << "means" << YAML::Value << YAML::Flow << YAML::BeginSeq;
-            for (const auto & m : means)
+            for (auto i = 0u ; i < dim_meas ; ++i)
             {
-                out << m;
+                out << gsl_vector_get(this->means, i);
             }
             out << YAML::EndSeq;
             out << YAML::Key << "covariance" << YAML::Value << YAML::BeginSeq;
@@ -1309,10 +1309,15 @@ namespace eos
                     }
                 }
 
-                std::vector<double> means;
+                std::vector<double> _means;
                 for (auto && v : n["means"])
                 {
-                    means.push_back(v.as<double>());
+                    _means.push_back(v.as<double>());
+                }
+                gsl_vector * means = gsl_vector_alloc(_means.size());
+                for (auto i = 0u ; i < _means.size() ; ++i)
+                {
+                    gsl_vector_set(means, i, _means[i]);
                 }
 
                 std::vector<std::vector<double>> covariance;
