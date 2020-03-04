@@ -1008,23 +1008,24 @@ namespace eos
 
             virtual LogLikelihoodBlockPtr clone(ObservableCache cache) const
             {
-                const auto k = _mean->size;
+                const auto dim_meas = _mean->size;
+                const auto dim_pred = _ids.size();
 
                 std::vector<ObservableCache::Id> ids;
 
                 // add observables to cache
-                for (auto i = 0u ; i < k ; ++i)
+                for (auto i = 0u ; i < dim_pred ; ++i)
                 {
                     ids.push_back(cache.add(this->_cache.observable(this->_ids[i])->clone(cache.parameters())));
                 }
 
-                gsl_vector * mean = gsl_vector_alloc(k);
+                gsl_vector * mean = gsl_vector_alloc(dim_meas);
                 gsl_vector_memcpy(mean, _mean);
 
-                gsl_matrix * covariance = gsl_matrix_alloc(k, k);
+                gsl_matrix * covariance = gsl_matrix_alloc(dim_meas, dim_meas);
                 gsl_matrix_memcpy(covariance, _covariance);
 
-                gsl_matrix * response = gsl_matrix_alloc(k, k);
+                gsl_matrix * response = gsl_matrix_alloc(dim_meas, dim_pred);
                 gsl_matrix_memcpy(response, _response);
 
                 return LogLikelihoodBlockPtr(new MultivariateGaussianBlock(cache, std::move(ids), mean, covariance, response, _number_of_observations));
