@@ -273,6 +273,8 @@ namespace eos
 
                     std::string latex;
 
+                    bool has_min = false, has_max = false, has_latex = false;
+
                     if (! p.second["central"])
                     {
                         throw ParameterInputFileNodeError(file, name, "has no entry named 'central'");
@@ -283,25 +285,25 @@ namespace eos
                     }
                     central = p.second["central"].as<double>();
 
-                    if (! p.second["min"])
+                    if (p.second["min"])
                     {
-                        throw ParameterInputFileNodeError(file, name, "has no entry named 'min'");
+                        if (YAML::NodeType::Scalar != p.second["min"].Type())
+                        {
+                            throw ParameterInputFileNodeError(file, name + ".min", "is not a scalar");
+                        }
+                        min = p.second["min"].as<double>();
+                        has_min = true;
                     }
-                    else if (YAML::NodeType::Scalar != p.second["min"].Type())
-                    {
-                        throw ParameterInputFileNodeError(file, name + ".min", "is not a scalar");
-                    }
-                    min = p.second["min"].as<double>();
 
-                    if (! p.second["max"])
+                    if (p.second["max"])
                     {
-                        throw ParameterInputFileNodeError(file, name, "has no entry named 'max'");
+                        if (YAML::NodeType::Scalar != p.second["max"].Type())
+                        {
+                            throw ParameterInputFileNodeError(file, name + ".max", "is not a scalar");
+                        }
+                        max = p.second["max"].as<double>();
+                        has_max = true;
                     }
-                    else if (YAML::NodeType::Scalar != p.second["max"].Type())
-                    {
-                        throw ParameterInputFileNodeError(file, name + ".max", "is not a scalar");
-                    }
-                    max = p.second["max"].as<double>();
 
                     if (p.second["latex"])
                     {
@@ -309,6 +311,7 @@ namespace eos
                             throw ParameterInputFileNodeError(file, name + ".latex", "is not a scalar");
 
                         latex = p.second["latex"].as<std::string>();
+                        has_latex = true;
                     }
 
                     auto i = parameters_map.find(name);
@@ -318,14 +321,32 @@ namespace eos
                             << "Overriding existing parameter '" << name << "' with central value '" << central << "'";
 
                         parameters_data->data[i->second].value = central;
-                        parameters_data->data[i->second].min = min;
-                        parameters_data->data[i->second].max = max;
-                        parameters_data->data[i->second].latex = latex;
+                        if (has_min)
+                        {
+                            parameters_data->data[i->second].min = min;
+                        }
+                        if (has_max)
+                        {
+                            parameters_data->data[i->second].max = max;
+                        }
+                        if (has_latex)
+                        {
+                            parameters_data->data[i->second].latex = latex;
+                        }
                     }
                     else
                     {
                         Log::instance()->message("[parameters.override]", ll_informational)
                             << "Adding new parameter '" << name << "' with central value '" << central << "'";
+
+                        if (! has_min)
+                        {
+                            min = central;
+                        }
+                        if (! has_max)
+                        {
+                            max = central;
+                        }
 
                         auto idx = parameters_data->data.size();
                         parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max, latex }, idx));
