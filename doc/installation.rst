@@ -16,7 +16,7 @@ They can be installed through the following steps:
 
 ::
 
-  DIST=$(lsb_release -c)
+  DIST=$(lsb_release -sc)
   echo deb https://packagecloud.io/eos/eos/ubuntu/ $DIST main \
       | sudo tee /etc/apt/sources.list.d/eos.list
 
