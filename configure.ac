@@ -86,6 +86,19 @@ dnl }}}
 CXXFLAGS="$CXXFLAGS -std=c++14"
 dnl }}}
 
+dnl {{{ determine which pieces of EOS to build
+AC_ARG_ENABLE([cli],
+	[AS_HELP_STRING([--enable-cli],
+	    [build command-line utilities (default is yes)])]
+)
+if test "x$enable_cli" = xno ; then
+    MAYBE_SRC=
+else
+    MAYBE_SRC=src
+fi
+AC_SUBST([MAYBE_SRC])
+dnl }}}
+
 dnl {{{ check for required packages
 dnl {{{ boost filesystem
 AC_CHECK_LIB([boost_filesystem], main,
