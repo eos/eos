@@ -346,6 +346,8 @@ namespace eos
 
         double central, sigma_hi, sigma_lo;
 
+        double alpha, lambda;
+
         unsigned number_of_observations;
 
         LogGammaConstraintEntry(const std::string & name,
@@ -353,6 +355,7 @@ namespace eos
                 const Kinematics & kinematics, const Options & options,
                 const double & central,
                 const double & sigma_hi, const double & sigma_lo,
+                const double & alpha, const double & lambda,
                 const unsigned & number_of_observations = 1u) :
             ConstraintEntryBase(name, observable),
             observable(observable),
@@ -361,6 +364,8 @@ namespace eos
             central(central),
             sigma_hi(sigma_hi),
             sigma_lo(sigma_lo),
+            alpha(alpha),
+            lambda(lambda),
             number_of_observations(number_of_observations)
         {
         }
@@ -386,7 +391,7 @@ namespace eos
             double min = this->central - this->sigma_lo;
             double max = this->central + this->sigma_hi;
 
-            LogLikelihoodBlockPtr block = LogLikelihoodBlock::LogGamma(cache, observable, min, this->central, max);
+            LogLikelihoodBlockPtr block = LogLikelihoodBlock::LogGamma(cache, observable, min, this->central, max, alpha, lambda, 1u);
 
             return Constraint(name, { observable }, { block });
         }
@@ -423,6 +428,8 @@ namespace eos
             out << YAML::Key << "hi" << YAML::Value << sigma_hi;
             out << YAML::Key << "lo" << YAML::Value << sigma_lo;
             out << YAML::EndMap;
+            out << YAML::Key << "alpha" << YAML::Value << alpha;
+            out << YAML::Key << "lambda" << YAML::Value << lambda;
             out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
@@ -431,7 +438,7 @@ namespace eos
         {
             static const std::string required_keys[] =
             {
-                "observable", "kinematics", "options", "mode", "sigma", "dof"
+                "observable", "kinematics", "options", "mode", "sigma", "alpha", "lambda", "dof"
             };
 
             for (auto && k : required_keys)
@@ -444,7 +451,7 @@ namespace eos
 
             static const std::string scalar_keys[] =
             {
-                "observable", "mode", "dof"
+                "observable", "mode", "alpha", "lambda", "dof"
             };
 
             for (auto && k : scalar_keys)
@@ -507,8 +514,11 @@ namespace eos
                 double sigma_hi = n["sigma"]["hi"].as<double>();
                 double sigma_lo = n["sigma"]["lo"].as<double>();
 
+                double alpha  = n["alpha"].as<double>();
+                double lambda = n["lambda"].as<double>();
+
                 return new LogGammaConstraintEntry(name.str(), observable, kinematics, options, mode,
-                        sigma_hi, sigma_lo, dof);
+                        sigma_hi, sigma_lo, alpha, lambda, dof);
             }
             catch (QualifiedNameSyntaxError & e)
             {

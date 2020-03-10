@@ -118,34 +118,22 @@ namespace eos
              * - the density at min is the same as at max
              * For details see [C2004].
              *
-             * @note Finding the correct parameter values is accomplished by solving a set of two equations numerically.
-             * This is unstable if max and min uncertainty differ by less than 5%.
-             * In that case, just a Gaussian instead.
+             * @note Finding the correct parameter values needs to be accomplished by the user, by solving
+             * a set of two equations corresponding to the condition above, numerically. This is unstable
+             * if max and min uncertainty differ by less than 5%. In that case, just a Gaussian instead.
+             * However, the consistency of (alpha, lambda) and (min, mode, max) is checked.
              *
              * @param cache      The Observable cache from which we draw the predictions.
              * @param observable The Observable whose distribution we model.
              * @param min        The value one sigma below the mean of the experimental distribution.
              * @param central    The mean value of the experimental distribution.
              * @param max        The value one sigma above the mean of the experimental distribution.
+             * @param alpha      The shape parameter of a LogGamma distribution.
+             * @param lambda     The scale parameter of a LogGamma distribution.
              */
             static LogLikelihoodBlockPtr LogGamma(ObservableCache cache, const ObservablePtr & observable,
                     const double & min, const double & central, const double & max,
-                    const unsigned & number_of_observations = 1u);
-
-            /*!
-             * Create a new LogLikelihoodBlock for one a single observable with asymmetric uncertainties.
-             *
-             * @note The only difference to the constructor without the \lambda and \alpha arguments
-             * is that now the LogGamma distribution is defined explicitly, and no numerical
-             * equation solving is needed. However, consistency is checked.
-             *
-             * @param lambda The scale parameter of a LogGamma distribution.
-             * @param alpha The shape parameter of a LogGamma distribution.
-             * @return
-             */
-            static LogLikelihoodBlockPtr LogGamma(ObservableCache cache, const ObservablePtr & observable,
-                    const double & min, const double & central, const double & max,
-                    const double & lambda, const double & alpha,
+                    const double & alpha, const double & lambda,
                     const unsigned & number_of_observations = 1u);
 
             /*!

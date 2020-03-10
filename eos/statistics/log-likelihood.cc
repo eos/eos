@@ -20,7 +20,6 @@
 
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/test-statistic-impl.hh>
-#include <eos/utils/equation_solver.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/power_of.hh>
@@ -223,77 +222,9 @@ namespace eos
 
             unsigned _number_of_observations;
 
-            LogGammaBlock(const ObservableCache & cache, ObservableCache::Id id, const double & min, const double & central, const double & max,
-                    const unsigned & number_of_observations) :
-                cache(cache),
-                id(id),
-                central(central),
-                sigma_lower(central - min),
-                sigma_upper(max - central),
-                _number_of_observations(number_of_observations)
-            {
-                // standardize scales, such that lower is one, thus fixing the sign of lambda
-                const double sigma_plus( (sigma_upper > sigma_lower)? sigma_upper / sigma_lower : sigma_lower / sigma_upper);
-                const double sigma_minus(1.0);
-                if (sigma_plus < 1 + 6e-2)
-                {
-                    Log::instance()->message("LogLikelihoodBlock::LogGamma.ctor", ll_warning)
-                        << "For nearly symmetric uncertainties (" << sigma_lower << " vs " << sigma_upper
-                        << "), this procedure may fail to find the correct parameter values. "
-                           "Please use a Gaussian block instead.";
-                }
-
-                // for positive skew, \lambda is negative
-                // in the fit, \lambda always considered negative, so it only changes sign for negative skew
-                const double lambda_scale_factor = sigma_upper > sigma_lower ? sigma_lower / sigma_minus : -1.0 * sigma_upper / sigma_minus;
-
-                /* find the parameters using good starting values. Assume upper > lower=1, and fix sign at the end */
-
-                // functions only good up to 10 % in region where uncertainties differ by 3-100 %. Not accurate for very [a]symmetric cases.
-                // They are found by playing around in mathematica, using that
-                // 1. \alpha depends only on \sigma_{+}
-                // 2. \lambda is a scale parameter, so we solve the problem for the standard case, and then rescale
-                double lambda_initial = -56 + 55.0 * gsl_cdf_gaussian_P(sigma_plus - 1.0, 0.05);
-                double alpha_initial = std::pow(1.13 / (sigma_plus - 1), 1.3);
-
-                EquationSolver solver(EquationSolver::Config::Default());
-
-                //add free Parameter: initial value, error
-                solver.add("lambda", lambda_initial, lambda_initial / 10.0);
-                //add positive Parameter: initial value, error, min, max. \alpha for 5% asymmetry at 500, so 1000 is well above
-                solver.add("alpha", alpha_initial, alpha_initial / 5.0, 0.0, 1000);
-
-                // add constraints for standardized problem
-                solver.add(std::bind(&LogGammaBlock::constraint, *this, std::placeholders::_1, sigma_plus, sigma_minus));
-
-                // check errors manually, then restore default behavior later
-                gsl_error_handler_t * default_gsl_error_handler = gsl_set_error_handler_off();
-
-                // find the solution
-                auto solution = solver.solve();
-
-                // global minimum at zero value, often Minuit claims to not have found it while it actually did
-                if (! solution.valid && solution.value > 1e-3)
-                {
-                    Log::instance()->message("LogLikelihood::LogGamma.ctor", ll_error)
-                        << "Solution of constraints failed";
-                }
-
-                // now we have all values
-                lambda = lambda_scale_factor * solution.parameters[0];
-                alpha  = solution.parameters[1];
-                nu = central - lambda * std::log(alpha);
-
-                // calculate normalization factors that are independent of x
-                norm = -1.0 * gsl_sf_lngamma(alpha) - std::log(std::fabs(lambda));
-
-                // restore default error handler
-                gsl_set_error_handler(default_gsl_error_handler);
-            }
-
             LogGammaBlock(const ObservableCache & cache, ObservableCache::Id id,
                           const double & min, const double & central, const double & max,
-                          const double & lambda, const double & alpha,
+                          const double & alpha, const double & lambda,
                           const unsigned & number_of_observations) :
                 cache(cache),
                 id(id),
@@ -316,19 +247,20 @@ namespace eos
                 }
 
                 // check consistency
-                static const double eps = 1e-4;
-                if (std::abs(cdf(central + sigma_upper) - cdf(central - sigma_lower) - 0.68268949213708585 ) > eps)
+                static const double eps_cdf = 1.0e-4;
+                if (std::abs(cdf(central + sigma_upper) - cdf(central - sigma_lower) - 0.68268949213708585 ) > eps_cdf)
                 {
                     throw InternalError("LogLikelihoodBlock::LogGamma.ctor: For the current parameter values, "
-                                        "the interval [lower, upper] doesn't contain approx. 68%");
+                                        "the interval [lower, upper] doesn't contain approx. 68%; contents is " + stringify(cdf(central + sigma_upper) - cdf(central - sigma_lower)));
 
                 }
                 const double z_plus = (central + sigma_upper - nu) / lambda;
                 const double z_minus = (central - sigma_lower - nu) / lambda;
-                if (std::fabs(alpha * z_plus - std::exp(z_plus) - alpha * z_minus + std::exp(z_minus)) > eps)
+                static const double eps_pdf = 2.5e-2;
+                if (std::fabs(alpha * z_plus - std::exp(z_plus) - alpha * z_minus + std::exp(z_minus)) > eps_pdf)
                 {
                     throw InternalError("LogLikelihoodBlock::LogGamma.ctor: For the current parameter values, "
-                                        "the probability density at lower is not equal to the probability density at upper");
+                                        "the probability density at lower is not equal to the probability density at upper" + stringify(std::fabs(alpha * z_plus - std::exp(z_plus) - alpha * z_minus + std::exp(z_minus))));
                 }
 
                 // calculate normalization factors that are independent of x
@@ -361,50 +293,6 @@ namespace eos
 
                 else
                     return 1.0 - gsl_sf_gamma_inc_Q(alpha, z);
-            }
-
-            // Implements the constraint that the cumulative(x = \mu +- sigma_{+-} | \lambda, \alpha) = 0.84 [0.16]
-            double constraint(const std::vector<double> & parameters, const double & sigma_plus, const double & sigma_minus)
-            {
-                if (parameters.size() != 2)
-                {
-                    throw InternalError("LogLikelihoodBlock::LogGamma.constraint: parameter dimension is "
-                        + stringify(parameters.size()) + ", should be 2.");
-                }
-
-                const double & lambda = parameters[0];
-                const double & alpha  = parameters[1];
-
-                // standardized mode at 0
-                const double nu = 0.0 - lambda * std::log(alpha);
-
-                gsl_sf_result result;
-
-                // standardized coordinates at plus/minus
-                const double z_plus = (sigma_plus - nu) / lambda;
-                const double z_minus = (-sigma_minus  - nu) / lambda;
-
-                // first constraint: pdf's should be equal, neglect prefactors
-                const double first = std::fabs(alpha * z_plus - std::exp(z_plus) - alpha * z_minus + std::exp(z_minus));
-
-                // second constraint: 68% interval
-                int ret_code = gsl_sf_gamma_inc_Q_e(alpha, std::exp(z_plus), &result);
-                if (GSL_SUCCESS != ret_code)
-                    throw InternalError("LogLikelihoodBlock::LogGamma: cannot evaluate cumulative at lambda = " + stringify(lambda)
-                                        + ", alpha = " + stringify(alpha) + ". GSL reports: " + gsl_strerror(ret_code)
-                                        + ". Perhaps the input is too [a]symmetric?");
-                const double cdf_plus = result.val;
-
-                ret_code = gsl_sf_gamma_inc_Q_e(alpha, std::exp(z_minus), &result);
-                if (GSL_SUCCESS != ret_code)
-                    throw InternalError("LogLikelihoodBlock::LogGamma: cannot evaluate cumulative at lambda = " + stringify(lambda)
-                                        + ", alpha = " + stringify(alpha) + ". GSL reports: " + gsl_strerror(ret_code)
-                                        + ". Perhaps the input is too [a]symmetric?");
-                const double cdf_minus = result.val;
-
-                const double second = std::fabs((cdf_plus - cdf_minus) - 0.68268949213708585);
-
-                return first + second;
             }
 
             virtual double evaluate() const
@@ -565,7 +453,7 @@ namespace eos
                 ObservablePtr observable = this->cache.observable(id)->clone(cache.parameters());
 
                 return LogLikelihoodBlockPtr(new LogGammaBlock(cache, cache.add(observable),
-                    central - sigma_lower, central, central + sigma_upper, lambda, alpha, _number_of_observations));
+                    central - sigma_lower, central, central + sigma_upper, alpha, lambda, _number_of_observations));
             }
         };
 
@@ -1222,26 +1110,10 @@ namespace eos
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::LogGamma(ObservableCache cache, const ObservablePtr & observable,
             const double & min, const double & central, const double & max,
+            const double & alpha, const double & lambda,
             const unsigned & number_of_observations)
     {
-        // check input
-        if (min >= central)
-            throw InternalError("LogLikelihoodBlock::LogGamma: min value >= central value");
 
-        if (max <= central)
-            throw InternalError("LogLikelihoodBlock::LogGamma: max value <= central value");
-
-        unsigned index = cache.add(observable);
-
-        return LogLikelihoodBlockPtr(new implementation::LogGammaBlock(cache, index, min, central, max, number_of_observations));
-    }
-
-    LogLikelihoodBlockPtr
-    LogLikelihoodBlock::LogGamma(ObservableCache cache, const ObservablePtr & observable,
-            const double & min, const double & central, const double & max,
-            const double & lambda, const double & alpha,
-            const unsigned & number_of_observations)
-    {
         // check input
         if (min >= central)
             throw InternalError("LogLikelihoodBlock::LogGamma: min value >= central value");
@@ -1255,7 +1127,7 @@ namespace eos
 
         unsigned index = cache.add(observable);
 
-        return LogLikelihoodBlockPtr(new implementation::LogGammaBlock(cache, index, min, central, max, lambda, alpha, number_of_observations));
+        return LogLikelihoodBlockPtr(new implementation::LogGammaBlock(cache, index, min, central, max, alpha, lambda, number_of_observations));
     }
 
     LogLikelihoodBlockPtr
