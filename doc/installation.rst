@@ -59,9 +59,9 @@ We recommend to install the most up-to-date Python package with from the Python 
 
   pip3 install --user h5py matplotlib numpy pypmc pyyaml scipy
 
-***********************
-Installation from Souce
-***********************
+************************
+Installation from Source
+************************
 
 .. todo::
 
