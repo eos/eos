@@ -207,10 +207,12 @@ class ConstraintDeserializationTest :
                 static const std::string input(
                     "type: LogGamma\n"
                     "observable: Lambda_b->Lambdall::BR@LowRecoil\n"
-                    "kinematics: {s_max: 20, s_min: 15}\n"
+                    "kinematics: {q2_max: 20, q2_min: 15}\n"
                     "options: {form-factors: DM2016, l: mu}\n"
                     "mode: 6e-07\n"
-                    "sigma: {hi: 1.2e-08, lo: -3.4e-08}\n"
+                    "sigma: {hi: 1.2e-08, lo: 3.4e-08}\n"
+                    "alpha: 0.17132\n"
+                    "lambda: 5.78825e-09\n"
                     "dof: 1"
                 );
 
@@ -224,6 +226,7 @@ class ConstraintDeserializationTest :
 
                 std::string output(out.c_str());
 
+                //std::cerr << output << std::endl;
                 TEST_CHECK(input == output);
             }
             // }}}
@@ -233,10 +236,12 @@ class ConstraintDeserializationTest :
                 static const std::string input(
                     "type: LogGamma\n"
                     "observable: Lambda_b->Lambdall::BR@LowRecoil\n"
-                    "kinematics: {s_min: 15, s_max: 20}\n"
+                    "kinematics: {q2_min: 15, q2_max: 20}\n"
                     "options: {form-factors: DM2016, l: mu}\n"
                     "mode: 6e-07\n"
-                    "sigma: {hi: 1.2e-08, lo: -3.4e-08}\n"
+                    "sigma: {hi: 1.2e-08, lo: 3.4e-08}\n"
+                    "alpha: 0.17132\n"
+                    "lambda: 5.78825e-09\n"
                     "dof: 1"
                 );
 
@@ -259,10 +264,12 @@ class ConstraintDeserializationTest :
                 static const std::string input1(
                     "type: LogGamma\n"
                     "observable: Lambda_b->Lambdall::BR@LowRecoil\n"
-                    "kinematics: {s_min: 15, s_max: 20, s_max: 13.5}\n"
+                    "kinematics: {q2_min: 15, q2_max: 20, q2_max: 13.5}\n"
                     "options: {form-factors: DM2016, l: mu}\n"
                     "mode: 6e-07\n"
-                    "sigma: {hi: 1.2e-08, lo: -3.4e-08}\n"
+                    "sigma: {hi: 1.2e-08, lo: 3.4e-08}\n"
+                    "alpha: 0.17132\n"
+                    "lambda: 5.78825e-09\n"
                     "dof: 1"
                 );
 
@@ -273,10 +280,12 @@ class ConstraintDeserializationTest :
                 static const std::string input2(
                     "type: LogGamma\n"
                     "observable: Lambda_b->Lambdall::BR@LowRecoil\n"
-                    "kinematics: {s_min: 15, s_max: 20}\n"
+                    "kinematics: {q2_min: 15, q2_max: 20}\n"
                     "options: {form-factors: DM2016, l: mu, l: tau}\n"
                     "mode: 6e-07\n"
-                    "sigma: {hi: 1.2e-08, lo: -3.4e-08}\n"
+                    "sigma: {hi: 1.2e-08, lo: 3.4e-08}\n"
+                    "alpha: 0.17132\n"
+                    "lambda: 5.78825e-09\n"
                     "dof: 1"
                 );
 
@@ -295,6 +304,8 @@ class ConstraintDeserializationTest :
                     "options: {}\n"
                     "mode: 0.53\n"
                     "sigma: {hi: 0.1, lo: 0.19}\n"
+                    "alpha: 0.383056\n"
+                    "lambda: 0.0687907\n"
                     "dof: 1"
                 );
 
@@ -1043,4 +1054,4 @@ class ConstraintTest :
                 }
             }
         }
-} constraint_test;
+};// constraint_test;

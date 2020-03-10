@@ -123,7 +123,7 @@ namespace eos
                     // now add a  constraint
                     auto obs = ObservablePtr(new ObservableStub(p, "mass::e", k));
                     llh.add(Constraint("test::electron-mass", std::vector<ObservablePtr>{ obs },
-                        std::vector<LogLikelihoodBlockPtr>{ LogLikelihoodBlock::LogGamma(llh.observable_cache(), obs, 0.1, 0.11, 0.13) } ));
+                        std::vector<LogLikelihoodBlockPtr>{ LogLikelihoodBlock::LogGamma(llh.observable_cache(), obs, 0.1, 0.11, 0.13, 0.338082, -0.00649023) } ));
 
                     // remember to evaluate likelihood to fill the cache
                     p["mass::b(MSbar)"] = 4.25;
@@ -293,7 +293,7 @@ namespace eos
                     double min = 0.34;
                     double central = 0.53;
                     double max = 0.63;
-                    auto log_gamma = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max);
+                    auto log_gamma = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max, 0.383056, 0.0687907);
 
                     // the model prediction
                     p["mass::b(MSbar)"] = 0.57;
@@ -314,7 +314,7 @@ namespace eos
                     TEST_CHECK(pdf_max < pdf_min);
 
                     // construct with known parameters (expect no exception)
-                    auto log_gamma_manual = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max, 6.8790736808e-02, 3.8305604649e-01);
+                    auto log_gamma_manual = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max, 3.8305604649e-01, 6.8790736808e-02);
                     TEST_CHECK_RELATIVE_ERROR(log_gamma->evaluate(), log_gamma_manual->evaluate(), low_eps);
 
                     // cloning
@@ -350,7 +350,7 @@ namespace eos
                     double min = 0.42;
                     double central = 0.53;
                     double max = 0.63;
-                    auto log_gamma = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max);
+                    auto log_gamma = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max, 11.867, 0.358334);
                     auto gauss = LogLikelihoodBlock::Gaussian(cache, obs, min, central, max);
 
                     /* agreement not very precise due to slight asymmetry of uncertainties */
@@ -371,7 +371,7 @@ namespace eos
                     min = 0.425;
                     central = 0.53;
                     max = 0.63;
-                    log_gamma = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max);
+                    log_gamma = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max, 80.2465, 0.916982);
                     gauss = LogLikelihoodBlock::Gaussian(cache, obs, min, central, max);
 
                     /* agreement not very precise due to slight asymmetry of uncertainties */
@@ -399,7 +399,7 @@ namespace eos
                     double min = 4.195;
                     double central = 4.3;
                     double max = 4.4;
-                    auto log_gamma = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max);
+                    auto log_gamma = LogLikelihoodBlock::LogGamma(cache, obs, min, central, max, 46.8496, 0.699917);
 
                     gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
                     gsl_rng_set(rng, 2022);
