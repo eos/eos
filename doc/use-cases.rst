@@ -21,7 +21,7 @@ Listing the built-in Observables
 ================================
 
 The full list of built-in observables for the most-recent EOS release is available online `here <https://eos.github.io/doc/observables>`_.
-For an interactive apporach to see the list of observables available to you, run the following in a Jupyter notebook:
+For an interactive apporach to see the list of observables available to you, run the following in a Jupyter notebook
 
 .. code-block::
 
@@ -68,6 +68,7 @@ From this we understand that ``B->Dlnu::BR`` expects two kinematic variables,
 corresponding here to the lower and upper integration boundaries of the dilepton invariant mass :math:`q^2`.
 
 To create an :class:`Obervable <eos.Observable>` object with the default set of parameters and options through:
+
 .. code-block::
 
    params = eos.Parameters.Defaults()
@@ -191,7 +192,7 @@ In the above, we made sure to use :code:`form-factors=BSZ2015` to ensure that th
 
 Sampling from the log(posterior) and -- at the same time -- producing posterior-predictive samples of the :code:`observables` is achieved by running:
 
-.. code-block:
+.. code-block::
 
    parameter_samples, log_weights, observable_samples = analysis.sample(N=5000, pre_N=1000, observables=observables)
 
@@ -266,9 +267,9 @@ From the above we obtain:
 
 To obtain uncertainty bands for a plot of the differential branching ratios, we can now produce a
 sequence of observables at different points in phase space. We then pass these observables on to
-:method:`analysis.sample <eos.Analysis.sample>`, to obtain posterior-predictive samples:
+:meth:`sample <eos.Analysis.sample>`, to obtain posterior-predictive samples:
 
-.. code-block:
+.. code-block::
 
    mu_q2values  = np.unique(np.concatenate((np.linspace(0.02,  1.00, 20), np.linspace(1.00, 11.60, 20))))
    mu_obs       = [eos.Observable.make(
@@ -618,9 +619,6 @@ The result looks like this:
 .. image:: /images/use-cases_inference_plot-a-posteriori.png
    :width: 600
 
-
-.. image:: /images/use-cases_inference_hist-Vcb-f_+-zero.png
-   :width: 600
 
 **************************
 Production of Peudo Events
