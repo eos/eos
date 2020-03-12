@@ -57,7 +57,7 @@ function ubuntu_deploy() {
         echo Deploying debian package to package cloud ...
         package_cloud push eos/eos/ubuntu/${OS} /tmp/eos-${EOS_VERSION}.deb
     fi
-    if [[ -n ${TAG} ]] && [[ -n ${GITHUB_TOKEN} ]]; then
+    if [[ -n ${TAG} ]] && [[ -n ${GITHUB_TOKEN} ]] && [[ "bionic" == ${OS} ]]; then
         pushd /build/doc/html/
         echo Deploying documentation for ${EOS_GIT_REVISION}
         git config user.email "eos-developers@googlegroups.com"
