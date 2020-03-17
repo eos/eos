@@ -131,6 +131,10 @@ BOOST_PYTHON_MODULE(_eos)
     using namespace boost::python;
     using namespace eos;
 
+    // enable manually defined docstrings and python signatures, but disable
+    // automatically generated C++ signatures.
+    docstring_options local_docstring_options(true, true, false);
+
     // eos::Exception
     register_exception_translator<Exception>(&impl::translate_exception);
 
