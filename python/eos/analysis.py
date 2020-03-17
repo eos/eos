@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2018 Danny van Dyk
+# Copyright (c) 2018, 2019, 2020 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,7 +24,7 @@ import random
 
 class BestFitPoint:
     """
-    Represents the best-fit point of a Bayesian analysis undertaken with the eos.Analysis class.
+    Represents the best-fit point of a Bayesian analysis undertaken with the :class:`Analysis <eos.Analysis>` class.
     """
     def __init__(self, analysis, point):
         self.analysis = analysis
@@ -53,7 +53,7 @@ class Analysis:
 
     :param global_options: The options as (key, value) pairs that shall be forwarded to all theory predictions.
     :type global_options: dict, optional
-    :param priors: The priors for this analysis as a list of prior descriptions. See :ref priors: for what consitutes a valid prior description.
+    :param priors: The priors for this analysis as a list of prior descriptions. See :ref:`below <eos-Analysis-prior-descriptions>` for what consitutes a valid prior description.
     :type priors: iterable
     :param likelihood: The likelihood as a list of individual constraints from the internal data base of experimental and theoretical constraints; cf. `the complete list of constraints <../constraints.html>`_.
     :type likelihood: iterable
@@ -199,7 +199,7 @@ class Analysis:
         Return samples of the parameters, log(weights), and optionally posterior-predictive samples for a sequence of observables.
 
         Obtains random samples of the log(posterior) using an adaptive Markov Chain Monte Carlo with PyPMC.
-        A prerun with adaptations is carried out first and its samples are discared.
+        A prerun with adaptations is carried out first and its samples are discarded.
 
         :param N: Number of samples that shall be returned
         :param stride: Stride, i.e., the number by which the actual amount of samples shall be thinned to return N samples.

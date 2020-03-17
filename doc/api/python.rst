@@ -6,8 +6,28 @@ Python API
 Module ``eos``
 **************
 
+EOS provides its basic functionality via the main ``eos`` module.
+
 .. autoclass:: eos.Analysis
    :members:
+
+   .. _eos-Analysis-prior-descriptions:
+
+   Each prior description is a dictionary with the following mandatory elements:
+
+   * **type** (*str*) -- The type specification of the prior. Must be one of ``uniform``, ``flat``, or ``gaussian``.
+   * **parameter** (*str*) -- The name of the parameter for which the prior shall apply.
+   * **min** (*float*) -- The lower boundary of the prior's support.
+   * **max** (*float*) -- The upper boundary of the prior's support.
+
+   A ``uniform`` or ``flat`` prior does not require any further description. A ``gaussian`` prior requires in addition
+   providing the following two elements:
+
+   * **central** (*float*) -- The median value of the parameter.
+   * **sigma** (*float*, or *list*, *tuple* of *float*) -- The width of the 68% probability interval. If a list or tuple
+     of two numbers is provided, the prior will by a asymmetric but continuous. The two values are then taken to be the
+     distance to the lower and upper end of the 68% probability interval.
+
 
 .. autoclass:: eos.BestFitPoint
    :members:
@@ -16,6 +36,16 @@ Module ``eos``
    :members:
 
 .. autoclass:: eos.Kinematics
+   :members:
+   :inherited-members:
+
+.. autoclass:: eos.LogLikelihood
+   :members:
+
+.. autoclass:: eos.LogPosterior
+   :members:
+
+.. autoclass:: eos.LogPrior
    :members:
 
 .. autoclass:: eos.Observable
@@ -49,7 +79,7 @@ For the command-line script ``eos-plot``, the Python dictionary describing the p
    because the ``eos.plot`` module sets its default plot style and a matplotlib backend.
    All options (except the backend) can be overwritten by updating ``matplotlib.rcParams[...]``;
    see also the ``matplotlib`` documentation.
-   Note that the default plots use LaTeX to create labels and math expressions,
+   Note that the default settings use LaTeX to create labels and math expressions,
    so for this to work latex needs to be available on your system.
 
 .. autoclass:: eos.plot.Plotter

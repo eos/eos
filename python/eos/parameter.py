@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2019 Danny van Dyk
+# Copyright (c) 2017-2020 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,6 +17,12 @@ from _eos import _Parameters, QualifiedName
 import re
 
 class Parameters(_Parameters):
+    """
+    Represents the set of parameters known to EOS.
+
+    An independent instance of the default parameters can be obtained from the :meth:`Defaults <eos.Parameters.Defaults>` method.
+    See also `the complete list of parameters <../parameters.html>`_.
+    """
     def __new__(cls, *args, **kwargs):
         instance = _Parameters.Defaults()
         instance.__class__ = Parameters

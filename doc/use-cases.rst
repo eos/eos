@@ -155,7 +155,7 @@ For this example, we will use both results and create a combined likelihood:
            { 'parameter': 'B->D::alpha^f0_2@BSZ2015', 'min': -5.0, 'max': +5.0, 'type': 'uniform' }
        ],
        'likelihood': [
-           'B->D::f_++f_0@HPQCD2015A'
+           'B->D::f_++f_0@HPQCD2015A',
            'B->D::f_++f_0@FNALMILC2015A'
        ]
    }
