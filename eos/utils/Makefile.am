@@ -21,7 +21,6 @@ libeosutils_la_SOURCES = \
 	derivative.cc derivative.hh \
 	destringify.cc destringify.hh \
 	diagnostics.cc diagnostics.hh \
-	equation_solver.cc equation_solver.hh \
 	exception.cc exception.hh \
 	gsl-cblas-hack.cc \
 	hdf5.cc hdf5.hh hdf5-fwd.hh \
@@ -103,7 +102,6 @@ include_eos_utils_HEADERS = \
 	density.hh density-fwd.hh \
 	derivative.hh \
 	destringify.hh \
-	equation_solver.hh \
 	exception.hh \
 	hdf5.hh hdf5-fwd.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh \
@@ -153,7 +151,6 @@ TESTS = \
 	cartesian-product_TEST \
 	ckm_scan_model_TEST \
 	derivative_TEST \
-	equation_solver_TEST \
 	hdf5_TEST \
 	indirect-iterator_TEST \
 	integrate_TEST \
