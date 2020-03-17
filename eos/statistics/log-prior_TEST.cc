@@ -188,7 +188,7 @@ class LogPriorTest :
                 gsl_rng_free(rng);
             }
 
-                /* symmetric Gaussian with small range */
+            /* symmetric Gaussian with small range */
             {
                 ParameterRange range  = ParameterRange{ 4.1, 4.5 };
                 LogPriorPtr gauss_prior = LogPrior::Gauss(parameters, "mass::b(MSbar)", range, 4.2, 4.3, 4.4);
@@ -240,76 +240,6 @@ class LogPriorTest :
                 gsl_rng_free(rng);
             }
 
-            // LogGamma prior
-            {
-                static const double low_eps = 5e-5;
-
-                LogPriorPtr log_gamma = LogPrior::LogGamma(parameters, "mass::b(MSbar)", ParameterRange{ -10, 10 }, 0.34, 0.53, 0.63);
-
-                parameters["mass::b(MSbar)"] = 0.57;
-                TEST_CHECK_RELATIVE_ERROR((*log_gamma)(), +1.005543554, low_eps);
-                parameters["mass::b(MSbar)"] = 0.3;
-                TEST_CHECK_RELATIVE_ERROR((*log_gamma)(), +0.1737006298, low_eps);
-
-                // lead to trouble when alpha was allowed to be negative
-                // so make sure ctor doesn't throw
-                log_gamma = LogPrior::LogGamma(parameters, "mass::c", ParameterRange{ 1.09, 1.41 }, +1.18, +1.27, +1.34);
-
-                // bad starting point?
-                log_gamma = LogPrior::LogGamma(parameters, "B->K::F^p(0)@KMPW2010", ParameterRange{ 0.3, 0.44 }, 0.32, 0.34, 0.39);
-
-                // barely soluble
-                log_gamma = LogPrior::LogGamma(parameters, "mass::c", ParameterRange{ -10, 10 }, -1, 0, +1.03);
-
-                // completely symmetric
-                TEST_CHECK_THROWS(InternalError, LogPrior::LogGamma(parameters, "mass::c", ParameterRange{ 1.09, 1.41 }, +1.18, +1.27, +1.36));
-
-                // almost symmetric
-                TEST_CHECK_THROWS(InternalError, LogPrior::LogGamma(parameters, "mass::c", ParameterRange{ 1.09, 1.41 }, +0.99, +1.00, +1.01002));
-
-                // shouldn't throw
-                LogPrior::LogGamma(parameters, "mass::c", ParameterRange{ 1.09, 1.41 }, +0.99, +1.00, +1.0108);
-
-                // back to useful example
-                log_gamma = LogPrior::LogGamma(parameters, "mass::b(MSbar)", ParameterRange{ -10, 10 }, 0.66, 1.20, 1.8);
-
-                parameters["mass::b(MSbar)"] = 0.57;
-                TEST_CHECK_NEARLY_EQUAL((*log_gamma)(), -1.05802105, 4e-4);
-                parameters["mass::b(MSbar)"] = 0.92;
-                TEST_CHECK_NEARLY_EQUAL((*log_gamma)(), -0.4842376414, 4e-4);
-
-                // cloning
-                auto p = Parameters::Defaults();
-                p["mass::b(MSbar)"] = 1.7;
-                auto clone = log_gamma->clone(p);
-                TEST_CHECK((*log_gamma)() != (*clone)());
-                p["mass::b(MSbar)"] = 0.92;
-                TEST_CHECK_EQUAL((*log_gamma)(), (*clone)());
-
-                // sampling
-                gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
-                gsl_rng_set(rng, 2022);
-
-                double mean = 0.0;
-                unsigned N = 1e4;
-                for (unsigned i = 0 ; i < N ; ++i)
-                {
-                    mean += log_gamma->sample(rng);
-                }
-
-                mean /= double(N);
-
-                // mean = \nu + \lambda * \psi(\alpha)
-                TEST_CHECK_RELATIVE_ERROR(mean, 1.28979, 3e-3);
-
-                gsl_rng_free(rng);
-
-                // finite range increases pdf
-                log_gamma = LogPrior::LogGamma(parameters, "mass::b(MSbar)", ParameterRange{ 0.2, 0.7 }, 0.34, 0.53, 0.63);
-                parameters["mass::b(MSbar)"] = 0.57;
-                TEST_CHECK_RELATIVE_ERROR((*log_gamma)(), 1.139778733, low_eps);
-            }
-
             //Make
             {
                 Parameters p = Parameters::Defaults();
@@ -321,12 +251,6 @@ class LogPriorTest :
                 std::string s_gauss("Parameter: CKM::A, prior type: Gaussian, range: [0.774,0.834], x = 0.804 +- 0.01");
                 LogPriorPtr prior_gauss = LogPrior::Make(p, s_gauss);
                 TEST_CHECK_EQUAL(s_gauss, prior_gauss->as_string());
-
-                LogPriorPtr prior_gamma2 = LogPrior::LogGamma(p, "mass::c", ParameterRange{ 1.0, 1.48 }, 1.18, 1.27, 1.34);
-                LogPriorPtr prior_gamma1 = LogPrior::Make(p, prior_gamma2->as_string());
-
-                // creation from string should give same result
-                TEST_CHECK_EQUAL(prior_gamma1->as_string(), prior_gamma2->as_string());
             }
         }
 } log_prior_test;

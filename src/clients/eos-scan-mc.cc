@@ -232,7 +232,7 @@ class CommandLine :
 
                     ParameterRange range{ min, max };
 
-                    if (prior_type == "gaussian" || prior_type == "log-gamma")
+                    if (prior_type == "gaussian")
                     {
                         double lower = destringify<double> (*(++a));
                         double central = destringify<double> (*(++a));
@@ -247,10 +247,6 @@ class CommandLine :
                         if (prior_type == "gaussian")
                         {
                             prior = LogPrior::Gauss(parameters, name, range, lower, central, upper);
-                        }
-                        else
-                        {
-                            prior = LogPrior::LogGamma(parameters, name, range, lower, central, upper);
                         }
                     }
                     else if (prior_type == "flat")
