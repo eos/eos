@@ -85,10 +85,16 @@ class Analysis:
             elif 'gauss' == prior_type or 'gaussian' == prior_type:
                 central = prior['central']
                 sigma = prior['sigma']
+                if type(sigma) is list or type(sigma) is tuple:
+                    sigma_lo = sigma[0]
+                    sigma_hi = sigma[1]
+                else:
+                    sigma_lo = sigma
+                    sigma_hi = sigma
                 self.log_posterior.add(
                     eos.LogPrior.Gauss(
                         self.parameters, parameter, eos.ParameterRange(minv, maxv),
-                        central - sigma, central, central + sigma
+                        central - sigma_lo, central, central + sigma_hi
                     ),
                     False)
             else:
