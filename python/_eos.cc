@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016, 2019, 2020 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -161,15 +161,30 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // QualifiedName
-    class_<QualifiedName>("QualifiedName", init<std::string>())
+    class_<QualifiedName>("QualifiedName", R"(
+            Represent a qualified (i.e. complete and syntactically correct) name.
+
+            EOS uses qualified names when naming any observable or constraint. The
+            composition is approximately::
+
+                PREFIX::NAME@SUFFIX;OPTIONS
+
+        )", init<std::string>())
         .def("__repr__", &QualifiedName::full, return_value_policy<copy_const_reference>())
         .def("__str__", &QualifiedName::str, return_value_policy<copy_const_reference>())
         .def("__eq__", &QualifiedName::operator==)
         .def("__ne__", &QualifiedName::operator!=)
         .def("__lt__", &QualifiedName::operator<)
-        .def("prefix_part", &QualifiedName::prefix_part, return_value_policy<copy_const_reference>())
-        .def("name_part", &QualifiedName::name_part, return_value_policy<copy_const_reference>())
-        .def("suffix_part", &QualifiedName::suffix_part, return_value_policy<copy_const_reference>())
+        .def("prefix_part", &QualifiedName::prefix_part, return_value_policy<copy_const_reference>(), R"(
+            Returns the prefix part of the name, i.e., the part preceeding the '::'.
+        )")
+        .def("name_part", &QualifiedName::name_part, return_value_policy<copy_const_reference>(), R"(
+            Returns the name part of the name, i.e., the part following the '::' and preceeding any
+            optional '@'.
+        )")
+        .def("suffix_part", &QualifiedName::suffix_part, return_value_policy<copy_const_reference>(), R"(
+            Returns the optional suffix part of the name, i.e., the part following the optional '@'.
+        )")
         ;
     implicitly_convertible<std::string, QualifiedName>();
 
@@ -223,11 +238,29 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // Kinematics
-    class_<Kinematics>("Kinematics", no_init)
+    class_<Kinematics>("Kinematics", R"(
+            Represents the set of kinematic variables relevant to an :class:`observable <eos.Obserable>`.
+
+            Initialize a new set of kinematic variables. The inital set of variables and their initial
+            set of values can be provided through keyword arguments, e.g. using
+
+            .. code-block::
+
+               k = eos.Kinematics(q2=0.4, k2=0.0)                      # default keyword arguments
+               k = eos.Kinematics(**{'q2': 0.4, 'cos(theta_l)': -1.0}) # use a dictionary if variable names are not
+                                                                       # valid python identifiers
+        )", no_init)
         .def("__init__", raw_function(&impl::Kinematics_ctor))
         .def(init<>())
         .def("__getitem__", (KinematicVariable (Kinematics::*)(const std::string &) const) &Kinematics::operator[])
-        .def("declare", &Kinematics::declare, return_value_policy<return_by_value>())
+        .def("declare", &Kinematics::declare, return_value_policy<return_by_value>(), R"(
+            Declares a new kinematic variable.
+
+            :param name: The name of the new kinematic variable.
+            :type name: str
+            :param value: The initial value for the new kinematic variable.
+            :type value: float
+        )", args("self", "name", "value"))
         .def("__str__", &Kinematics::as_string)
         ;
 
@@ -240,7 +273,19 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // Options
-    class_<Options>("Options", no_init)
+    class_<Options>("Options", R"(
+            Represents the set of options provided to an observable.
+
+            Options are pairs of (key, value) pairs. The list of valid keys and their
+            respective valid options are specific to each observable. The initialization
+            accepts keyword arguments, e.g.:
+
+            .. code-block::
+
+               o = eos.Options(model='WilsonScan')            # default keyword arguments
+               o = eos.Options(**{'form-factors': 'BSZ2015'}) # use a dictionary if option keys are not
+                                                              # valid python identifiers
+        )", no_init)
         .def("__init__", raw_function(&impl::Options_ctor))
         .def(init<>())
         .def("set", &Options::set)
@@ -299,7 +344,9 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // LogLikelihood
-    class_<LogLikelihood>("LogLikelihood", init<Parameters>())
+    class_<LogLikelihood>("LogLikelihood", R"(
+            Represents the log(likelihood) of a Bayesian analysis undertaken with the :class:`Analysis <eos.Analysis>` class.
+        )", init<Parameters>())
         .def("add", (void (LogLikelihood::*)(const Constraint &)) &LogLikelihood::add)
         .def("__iter__", range(&LogLikelihood::begin, &LogLikelihood::end))
         .def("observable_cache", &LogLikelihood::observable_cache)
@@ -331,10 +378,48 @@ BOOST_PYTHON_MODULE(_eos)
 
     // LogPrior
     register_ptr_to_python<std::shared_ptr<LogPrior>>();
-    class_<LogPrior, boost::noncopyable>("LogPrior", no_init)
-        .def("Flat", &LogPrior::Flat, return_value_policy<return_by_value>())
+    class_<LogPrior, boost::noncopyable>("LogPrior", R"(
+            Represents a Bayesian prior on the log scale.
+
+            New LogPrior objects can only be created using the capitalized static methods:
+            :meth:`LogPrior.Uniform` and :meth:`LogPrior.Gaussian`.
+        )", no_init)
+        .def("Uniform", &LogPrior::Flat, return_value_policy<return_by_value>(), R"(
+            Returns a new uniform prior as a LogPrior.
+
+            The prior's support is provided by the `range` parameter.
+
+            :param parameters: The parameters to which this LogPrior is bound.
+            :type parameters: eos.Parameters
+            :param name: The name of the parameter for which the LogPrior is defined.
+            :type name: str
+            :param range: The range [min, max] for the values that the parameter is allowed to take.
+            :type range: tuple of two floating point numbers
+        )", args("parameters", "name", "range"))
+        .staticmethod("Uniform")
+        .def("Flat", &LogPrior::Flat, return_value_policy<return_by_value>(), "Alias for :meth:`LogPrior.Uniform`.",
+            args("parameters", "name", "range"))
         .staticmethod("Flat")
-        .def("Gauss", &LogPrior::Gauss, return_value_policy<return_by_value>())
+        .def("Gauss", &LogPrior::Gauss, return_value_policy<return_by_value>(), R"(
+            Returns a new Gaussian prior as a LogPrior.
+
+            The prior's support is provided by the `range` parameter, with the
+            68% probability interval [`lower`, `upper`] and the mode provided
+            by the parameter `central`.
+
+            :param parameters: The parameters to which this LogPrior is bound.
+            :type parameters: eos.Parameters
+            :param name: The name of the parameter for which the LogPrior is defined.
+            :type name: str
+            :param range: The range [min, max] for the values that the parameter is allowed to take.
+            :type range: tuple of two floating point numbers
+            :param lower: The lower boundary of the 68% probability interval.
+            :type lower: float
+            :param central: The mode and median of the prior.
+            :type central: float
+            :param upper: The upper boundary of the 68% probability interval.
+            :type upper: float
+        )", args("parameters", "name", "range", "lower", "central", "upper"))
         .staticmethod("Gauss")
         ;
 
@@ -352,10 +437,17 @@ BOOST_PYTHON_MODULE(_eos)
 
     // GoodnessOfFit
     impl::std_pair_to_python_converter<const QualifiedName, test_statistics::ChiSquare> converter_goodnessoffit_chi_square_iter;
-    class_<GoodnessOfFit>("GoodnessOfFit", init<LogPosterior>())
+    class_<GoodnessOfFit>("GoodnessOfFit", R"(
+            Represents the goodness of fit characteristics of the log(posterior).
+        )", init<LogPosterior>())
         .def("__iter__", range(&GoodnessOfFit::begin_chi_square, &GoodnessOfFit::end_chi_square))
-        .def("total_chi_square", &GoodnessOfFit::total_chi_square)
-        .def("total_degrees_of_freedom", &GoodnessOfFit::total_degrees_of_freedom)
+        .def("total_chi_square", &GoodnessOfFit::total_chi_square, R"(
+            Returns the total :math:`\chi^2` value of the log(likelihood). Only (multivariate) gaussian
+            likelihoods are considered for this result.
+        )")
+        .def("total_degrees_of_freedom", &GoodnessOfFit::total_degrees_of_freedom, R"(
+            Returns the total number of degrees of freedom in the log(posterior).
+        )")
         ;
 
     // }}}
@@ -387,12 +479,40 @@ BOOST_PYTHON_MODULE(_eos)
 
     // Observable
     register_ptr_to_python<std::shared_ptr<Observable>>();
-    class_<Observable, bases<ParameterUser, ReferenceUser>, boost::noncopyable>("Observable", no_init)
-        .def("make", &Observable::make, return_value_policy<return_by_value>())
+    class_<Observable, bases<ParameterUser, ReferenceUser>, boost::noncopyable>("Observable", R"(
+            Represents an observable or pseudo observable known to EOS.
+
+            New observable objects are created using the :meth:`make <eos.Observable.make>` static method.
+            See also `the complete list of observables <../observables.html>`_.
+        )", no_init)
+        .def("make", &Observable::make, return_value_policy<return_by_value>(), R"(
+            Makes a new :class:`Observable` object.
+
+            :param name: The name of the observable. See `the complete list of observables <../observables.html>`_.
+            :type name: eos.QualifiedName
+            :param parameters: The set of parameters to which this observable is bound.
+            :type parameters: eos.Parameters
+            :param kinematics: The set of kinematic variables to which this observable is bound.
+            :type kinematics: eos.Kinematics
+            :param options: The set of options relevant to this observable.
+            :type options: eos.Options
+
+            :return: The new observable object.
+            :rtype: eos.Observable
+        )", args("name", "parameters", "kinematics", "options"))
         .staticmethod("make")
-        .def("evaluate", &Observable::evaluate)
-        .def("name", &Observable::name, return_value_policy<copy_const_reference>())
-        .def("options", &Observable::options)
+        .def("evaluate", &Observable::evaluate, R"(
+            Evaluates the observable for the present values of its bound set of parameters and set of kinematic variables.
+
+            :return: The value of the observable.
+            :rtype: float
+        )", args("self"))
+        .def("name", &Observable::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of the observable.
+        )")
+        .def("options", &Observable::options, R"(
+            Returns the set of options used when creating the observable.
+        )")
         ;
 
     // ObservableEntry

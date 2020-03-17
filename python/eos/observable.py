@@ -18,6 +18,21 @@
 from _eos import _Observables
 
 class Observables(_Observables):
+    """
+    Represents the complete list of observables known to EOS.
+
+    Objects of this class are visualized as tables in Jupyter notebooks for easy
+    overview. Filters can be applied through keyword arguments to the initialization.
+
+    :param prefix: Only show observables whose qualified names contain the provided ``prefix`` in their prefix part.
+    :type prefix: str
+    :param name: Only show observables whose qualified names contain the provided ``name`` in their name part.
+    :type name: str
+    :param suffix: Only show observables whose qualified names contain the provided ``suffix`` in their suffix part.
+    :type suffix: str
+
+    See also `the complete list of observables <../observables.html>`_ in this documentation.
+    """
     def __init__(self, prefix=None, name=None, suffix=None, showall=False):
         super().__init__()
         self.prefix=prefix
