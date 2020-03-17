@@ -350,6 +350,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("add", (void (LogLikelihood::*)(const Constraint &)) &LogLikelihood::add)
         .def("__iter__", range(&LogLikelihood::begin, &LogLikelihood::end))
         .def("observable_cache", &LogLikelihood::observable_cache)
+        .def("evaluate", &LogLikelihood::operator())
         ;
 
     // Constraint
@@ -426,6 +427,7 @@ BOOST_PYTHON_MODULE(_eos)
     // LogPosterior
     class_<LogPosterior>("LogPosterior", init<LogLikelihood>())
         .def("add", &LogPosterior::add)
+        .def("log_likelihood", &LogPosterior::log_likelihood)
         .def("evaluate", &LogPosterior::evaluate)
         ;
 
