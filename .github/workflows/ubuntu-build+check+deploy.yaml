@@ -1,0 +1,258 @@
+on:
+    push:
+        branches: [ master, testing ]
+
+    pull_request:
+
+name: Build/Check/Deploy on Ubuntu
+
+jobs:
+    ubuntu-build:
+        strategy:
+            matrix:
+                cfg:
+                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: bionic,   cxx: clang++-6.0,  cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: disco,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+        name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
+        runs-on: ubuntu-18.04
+        container:
+            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+        steps:
+            - name: Checkout git repository
+              uses: actions/checkout@v2
+              with:
+                path: _src/
+
+            - name: Fetch tags
+              shell: bash
+              run: |
+                pushd _src
+                git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+                popd
+
+            - name: Create build directory
+              shell: bash
+              run: mkdir -p _build
+
+            - name: Configure
+              shell: bash
+              env:
+                CXX: "${{ matrix.cfg.cxx }}"
+                CXXFLAGS: "${{ matrix.cfg.cxxflags }}"
+              run: |
+                pushd _src
+                ./autogen.bash
+                popd
+                pushd _build
+                which ${CXX} || ( echo c++ compiler not found ; exit 1 )
+                ../_src/configure --enable-pmc --enable-python --prefix=/usr --with-custom-pythondir=dist-packages || ( cat config.log ; exit 2 )
+                popd
+
+            - name: Build
+              shell: bash
+              run: |
+                pushd _build
+                make -j2 all
+                popd
+
+            - name: Upload configured source as artifact
+              uses: actions/upload-artifact@v1
+              with:
+                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _src
+
+            - name: Upload build as artifact
+              uses: actions/upload-artifact@v1
+              with:
+                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _build
+
+    ubuntu-build-doc:
+        needs: ubuntu-build
+        strategy:
+            matrix:
+                cfg:
+                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+        name: Documentation on ${{ matrix.cfg.os }}
+        runs-on: ubuntu-18.04
+        container:
+            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+        steps:
+            - name: Download configured source as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _src
+
+            - name: Download build as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _build
+
+            - name: Build documentation
+              shell: bash
+              run: |
+                pushd _build
+                make install
+                make -C ../_src/doc/ html BUILDDIR=$(pwd)/doc O=-a
+                popd
+
+            - name: Upload documentation as artifact
+              uses: actions/upload-artifact@v1
+              with:
+                name: eos-doc-${{ github.sha }}
+                path: _build/doc/html
+
+    ubuntu-check:
+        needs: ubuntu-build
+        strategy:
+            matrix:
+                cfg:
+                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: bionic,   cxx: clang++-6.0,  cxxflags: '-O2 -g -march=x86-64' }
+        name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
+        runs-on: ubuntu-18.04
+        container:
+            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+        steps:
+            - name: Download configured source as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _src
+
+            - name: Download build as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _build
+
+            - name: Check
+              shell: bash
+              run: |
+                pushd _build
+                make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr" VERBOSE=1
+                popd
+
+    ubuntu-examples:
+        needs: ubuntu-build
+        strategy:
+            matrix:
+                cfg:
+                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: bionic,   cxx: clang++-6.0,  cxxflags: '-O2 -g -march=x86-64' }
+        name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
+        runs-on: ubuntu-18.04
+        container:
+            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+        steps:
+            - name: Download configured source as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _src
+
+            - name: Download build as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _build
+
+            - name: Run examples
+              shell: bash
+              run: |
+                pushd _build
+                make install
+                popd
+                pushd _src
+                make -C manual/examples examples
+                popd
+
+    ubuntu-deploy:
+        needs: [ ubuntu-build, ubuntu-build-doc, ubuntu-check, ubuntu-examples ]
+        strategy:
+            matrix:
+                cfg:
+                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: disco,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+        name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
+        runs-on: ubuntu-18.04
+        container:
+            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+        steps:
+            - name: Download configured source as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _src
+
+            - name: Download build as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _build
+
+            - name: Deploy to Packagecloud.io
+              shell: bash
+              env:
+                PACKAGECLOUD_TOKEN: "${{ secrets.PACKAGECLOUD_TOKEN }}"
+              run: |
+                pushd _src
+                # check if this is not a tagged commit, and exit immediatly if true.
+                if ! git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then exit 0 ; fi
+                export EOS_VERSION=$(git describe --abbrev=0 --tags)
+                export EOS_VERSION=${EOS_VERSION#v}
+                popd
+                pushd _build
+                echo Building debian package for ${{ matrix.cfg.os }}
+                export DESTDIR=/tmp/eos-${EOS_VERSION}
+                make deb DESTDIR=${DESTDIR} OS=${{ matrix.cfg.os }}
+                dpkg -i /tmp/eos-${EOS_VERSION}.deb
+                package_cloud push eos/eos/ubuntu/${{ matrix.cfg.os }} /tmp/eos-${EOS_VERSION}.deb
+                popd
+
+    ubuntu-deploy-doc:
+        needs: ubuntu-build-doc
+        strategy:
+            matrix:
+                cfg:
+                    - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+        name: Deploy documentation
+        runs-on: ubuntu-18.04
+        steps:
+            - name: Download configured source as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _src
+
+            - name: Create repository
+              shell: bash
+              env:
+                GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
+              run: |
+                git clone -o gh "https://eos:${GITHUB_ACCESS_TOKEN}@github.com/eos/doc" _build/doc/html
+
+            - name: Download documentation as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-doc-${{ github.sha }}
+                path: _build/doc/html
+
+            - name: Deploy documentation
+              shell: bash
+              run: |
+                pushd _src
+                # check if this is not a tagged commit, and exit immediatly if true.
+                if ! git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then exit 0 ; fi
+                popd
+                pushd _build/doc/html
+                git config user.email "eos-developers@googlegroups.com"
+                git config user.name  "EOS"
+                git add --all
+                git commit --allow-empty -m "Updating documentation based on EOS revision ${{ github.sha }}"
+                git push
+                popd
+
