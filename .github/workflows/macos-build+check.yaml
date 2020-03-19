@@ -1,0 +1,90 @@
+on:
+    push:
+        branches: [ master, testing ]
+
+    pull_request:
+
+name: Build/Check on MacOS
+
+jobs:
+    macos-build-check:
+        name: Build on MacOS
+        runs-on: macos-latest
+
+        steps:
+            - name: Checkout git repository
+              uses: actions/checkout@v2
+              with:
+                path: _src/
+
+            - name: Fetch tags
+              shell: bash
+              run: |
+                pushd _src
+                git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+                popd
+
+            - name: Prepare VM
+              shell: bash
+              run: |
+                export HOMEBREW_LOGS=/tmp
+                brew tap eos/eos
+                brew outdated python || brew upgrade python || true
+                brew unlink python@2
+                rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
+                brew outdated boost || brew upgrade boost || true
+                brew outdated boost-python3 || brew upgrade boost-python3 || true
+                brew install autoconf automake boost-python3 gsl hdf5 libtool minuit2 pkg-config pmclib yaml-cpp
+                pip3 install h5py matplotlib scipy PyYAML
+
+            - name: Create build directory
+              shell: bash
+              run: mkdir -p _build
+
+            - name: Configure
+              shell: bash
+              env:
+                CXXFLAGS: "-O2 -g -march=x86-64"
+              run: |
+                ls -l /usr/local/opt/python
+                ls -l /usr/local/opt/python/bin
+                export PYTHON=/usr/local/opt/python/bin/python3
+                export PATH="/usr/local/opt/python/bin/:${PATH}"
+                SUFFIX=$($PYTHON -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
+                echo using boost-python suffix ${SUFFIX}
+                pushd _src
+                ./autogen.bash
+                popd
+                pushd _build
+                ../_src/configure \
+                    --enable-pmc \
+                    --enable-python \
+                    --with-boost-python-suffix=${SUFFIX} \
+                    --prefix=/usr/local \
+                    PYTHON=${PYTHON}
+                popd
+
+            - name: Build & Install
+              shell: bash
+              run: |
+                pushd _build
+                make -j2 all
+                make install
+                popd
+
+            - name: Check
+              shell: bash
+              run: |
+                pushd _build
+                make check -j2 VERBOSE=1
+                popd
+
+            - name: Run examples
+              shell: bash
+              run: |
+                pushd _build
+                export PYTHONPATH+=":$(make print-pythondir)"
+                popd
+                pushd _src
+                make -C manual/examples examples
+                popd
