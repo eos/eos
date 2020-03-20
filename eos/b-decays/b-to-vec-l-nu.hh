@@ -31,13 +31,13 @@ namespace eos
     /*
      * Decay: B -> D^* l nu
      */
-    class BToDstarLeptonNeutrino :
+    class BToVectorLeptonNeutrino :
         public ParameterUser,
-        public PrivateImplementationPattern<BToDstarLeptonNeutrino>
+        public PrivateImplementationPattern<BToVectorLeptonNeutrino>
     {
         public:
-            BToDstarLeptonNeutrino(const Parameters & parameters, const Options & options);
-            ~BToDstarLeptonNeutrino();
+            BToVectorLeptonNeutrino(const Parameters & parameters, const Options & options);
+            ~BToVectorLeptonNeutrino();
 
             // Differential Observables
             double differential_branching_ratio(const double & q2) const;

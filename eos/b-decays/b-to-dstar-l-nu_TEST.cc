@@ -20,7 +20,7 @@
 
 #include <test/test.hh>
 #include <eos/observable.hh>
-#include <eos/b-decays/b-to-dstar-l-nu.hh>
+#include <eos/b-decays/b-to-vec-l-nu.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
@@ -36,11 +36,11 @@
 using namespace test;
 using namespace eos;
 
-class BToDstarLeptonNeutrinoTest :
+class BToVectorLeptonNeutrinoTest :
     public TestCase
 {
     public:
-        BToDstarLeptonNeutrinoTest() :
+        BToVectorLeptonNeutrinoTest() :
             TestCase("b_to_dstar_l_nu_test")
         {
         }
@@ -93,7 +93,7 @@ class BToDstarLeptonNeutrinoTest :
                     { "form-factors",  "HQET"    }
                 };
 
-                BToDstarLeptonNeutrino d(p, o);
+                BToVectorLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
                 TEST_CHECK_NEARLY_EQUAL(33.323,       d.integrated_branching_ratio(0.001, 10.689), eps);
@@ -157,7 +157,7 @@ class BToDstarLeptonNeutrinoTest :
                     { "form-factors",  "HQET"    }
                 };
 
-                BToDstarLeptonNeutrino d(p, o);
+                BToVectorLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
                 TEST_CHECK_NEARLY_EQUAL( 8.213,        d.integrated_branching_ratio(3.157, 10.689), eps);
@@ -211,7 +211,7 @@ class BToDstarLeptonNeutrinoTest :
                 oo.set("form-factors", "BSZ2015");
                 oo.set("q", "d");
 
-                BToDstarLeptonNeutrino d(p1, oo);
+                BToVectorLeptonNeutrino d(p1, oo);
 
                 const double eps = 1e-3;
 
@@ -295,7 +295,7 @@ class BToDstarLeptonNeutrinoTest :
                 oo.set("model", "WilsonScan");
                 oo.set("form-factors", "BSZ2015");
 
-                BToDstarLeptonNeutrino d(p3, oo);
+                BToVectorLeptonNeutrino d(p3, oo);
 
                 const double eps = 1e-3;
 
