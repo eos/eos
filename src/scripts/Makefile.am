@@ -6,6 +6,7 @@ MAINTAINERCLEANFILES = Makefile.in
 if EOS_ENABLE_PYTHON
 
 bin_SCRIPTS = \
+	eos-analysis \
 	eos-list-references \
 	eos-make-constraint \
 	eos-merge-mcmc \
@@ -18,6 +19,7 @@ bin_SCRIPTS = \
 endif
 
 EXTRA_DIST = \
+	eos-analysis \
 	eos-list-references \
 	eos-make-constraint \
 	eos-merge-mcmc \
