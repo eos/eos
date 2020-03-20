@@ -18,6 +18,7 @@ from _eos import *
 from .data import *
 from .plot import *
 from .analysis import Analysis, BestFitPoint
+from .analysis_file import AnalysisFile
 from .constraint import Constraints
 from .observable import Observables
 from .parameter import Parameters

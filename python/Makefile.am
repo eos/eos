@@ -3,6 +3,7 @@ CLEANFILES = *~
 EXTRA_DIST = \
 	eos/__init__.py \
 	eos/analysis.py \
+	eos/analysis_file.py \
 	eos/constraint.py \
 	eos/ipython.py \
 	eos/observable.py \
@@ -29,6 +30,7 @@ eos_PYTHON =
 eos_SCRIPTS = \
 	eos/__init__.py \
 	eos/analysis.py \
+	eos/analysis_file.py \
 	eos/constraint.py \
 	eos/ipython.py \
 	eos/observable.py \
