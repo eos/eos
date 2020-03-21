@@ -233,6 +233,7 @@ jobs:
               env:
                 GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
               run: |
+                [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
                 git clone -o gh "https://eos:${GITHUB_ACCESS_TOKEN}@github.com/eos/doc" _build/doc/html
 
             - name: Download documentation as artifact
@@ -243,7 +244,10 @@ jobs:
 
             - name: Deploy documentation
               shell: bash
+              env:
+                GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
               run: |
+                [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
                 pushd _src
                 # check if this is not a tagged commit, and exit immediatly if true.
                 if ! git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then exit 0 ; fi
