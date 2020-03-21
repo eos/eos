@@ -93,10 +93,15 @@ AC_ARG_ENABLE([cli],
 )
 if test "x$enable_cli" = xno ; then
     MAYBE_SRC=
+    need_minuit2=
 else
     MAYBE_SRC=src
+    need_minuit2=yes
 fi
 AC_SUBST([MAYBE_SRC])
+if test "x$need_minuit2" = xyes ; then
+	AC_DEFINE([HAVE_MINUIT2], [1], [Define if building against Minuit2 is enabled.])
+fi
 dnl }}}
 
 dnl {{{ check for required packages
@@ -261,6 +266,7 @@ AC_SUBST([GSL_CXXFLAGS])
 dnl }}}
 
 dnl {{{ use Minuit2 path if supplied via --with-minuit2=
+if test "x$need_minuit2" == xyes ; then
 AC_ARG_WITH([minuit2],
 	[AS_HELP_STRING([--with-minuit2], [used to find starting points for population Monte Carlo sampling])]
 	[],
@@ -279,10 +285,14 @@ elif test "x$with_minuit2" != xno -a "x$with_minuit2" != x ; then
 	fi
 	MINUIT2_CXXFLAGS="-I$with_minuit2/include"
 	MINUIT2_LDFLAGS="-L$with_minuit2/lib -lMinuit2"
+	MINUIT2_LIBADD="-lMinuit2"
 else
 	MINUIT2_CXXFLAGS=""
 	MINUIT2_LDFLAGS="-lMinuit2"
+	MINUIT2_LIBADD="-lMinuit2"
 fi
+fi
+AC_SUBST([MINUIT2_LIBADD])
 AC_SUBST([MINUIT2_LDFLAGS])
 AC_SUBST([MINUIT2_CXXFLAGS])
 dnl }}}

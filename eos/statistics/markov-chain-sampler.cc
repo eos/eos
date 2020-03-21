@@ -29,9 +29,6 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/thread_pool.hh>
 
-#include <Minuit2/FunctionMinimum.h>
-#include <Minuit2/MnPrint.h>
-
 #include <algorithm>
 #include <map>
 #include <limits>

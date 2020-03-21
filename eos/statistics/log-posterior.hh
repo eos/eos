@@ -20,6 +20,8 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_HH
 #define EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_HH 1
 
+#include <config.h>
+
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/log-posterior-fwd.hh>
 #include <eos/statistics/log-prior.hh>
@@ -34,6 +36,7 @@
 #include <gsl/gsl_multimin.h>
 #include <gsl/gsl_vector.h>
 
+#if HAVE_MINUIT2
 namespace ROOT
 {
     namespace Minuit2
@@ -41,10 +44,13 @@ namespace ROOT
         class FunctionMinimum;
     }
 }
+#endif
 
 namespace eos
 {
+#if HAVE_MINUIT2
     struct MinuitAdapter;
+#endif
 
     class LogPosterior :
         public Density
@@ -204,8 +210,10 @@ namespace eos
             std::pair<std::vector<double>, double>
             optimize(const std::vector<double> & initial_guess, const OptimizationOptions & options);
 
+#if HAVE_MINUIT2
             const ROOT::Minuit2::FunctionMinimum &
             optimize_minuit(const std::vector<double> & initial_guess, const OptimizationOptions & options);
+#endif
 
         private:
             /*!
@@ -244,8 +252,10 @@ namespace eos
             /// names of all parameters. prevent using a parameter twice
             std::set<std::string> _parameter_names;
 
+#if HAVE_MINUIT2
             /// Adapter to let minuit operate on posterior
             MinuitAdapter * _minuit;
+#endif
     };
 
         // todo move optimization into separate class

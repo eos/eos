@@ -25,16 +25,20 @@
 #include <eos/utils/log.hh>
 #include <eos/utils/power_of.hh>
 
+#ifdef HAVE_MINUIT2
 #include <Minuit2/FCNBase.h>
 #include <Minuit2/FunctionMinimum.h>
 #include <Minuit2/MnMigrad.h>
 #include <Minuit2/MnMinimize.h>
 #include <Minuit2/MnScan.h>
 #include <Minuit2/MnSimplex.h>
+#endif
 
 #include <gsl/gsl_cdf.h>
 
+#ifdef HAVE_MINUIT2
 using namespace ROOT::Minuit2;
+#endif
 
 namespace eos
 {
@@ -47,6 +51,7 @@ namespace eos
         }
     };
 
+#ifdef HAVE_MINUIT2
    struct MinuitAdapter :
        public ROOT::Minuit2::FCNBase
    {
@@ -88,19 +93,24 @@ namespace eos
            return -log_posterior.log_posterior();
        }
    };
+#endif
 
    LogPosterior::LogPosterior(const LogLikelihood & log_likelihood) :
         _log_likelihood(log_likelihood),
         _parameters(log_likelihood.parameters()),
-        _informative_priors(0),
-        _minuit(nullptr)
-   {
-   }
+        _informative_priors(0)
+    {
+#if HAVE_MINUIT2
+        _minuit = nullptr;
+#endif
+    }
 
-   LogPosterior::~LogPosterior()
-   {
+    LogPosterior::~LogPosterior()
+    {
+#if HAVE_MINUIT2
        delete _minuit;
-   }
+#endif
+    }
 
    bool
    LogPosterior::add(const LogPriorPtr & prior, bool nuisance)
@@ -673,6 +683,7 @@ namespace eos
 
    }
 
+#ifdef HAVE_MINUIT2
    const ROOT::Minuit2::FunctionMinimum &
    LogPosterior::optimize_minuit(const std::vector<double> & initial_guess, const LogPosterior::OptimizationOptions & options)
    {
@@ -749,6 +760,7 @@ namespace eos
 
        return *_minuit->data_at_minimum;
    }
+#endif
 
     const std::vector<ParameterDescription> &
     LogPosterior::parameter_descriptions() const

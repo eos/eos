@@ -36,7 +36,7 @@ libeosstatistics_la_SOURCES = \
 	simple-parameters.cc simple-parameters.hh \
 	test-statistic.cc test-statistic.hh test-statistic-impl.hh \
 	welford.cc welford.hh
-libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lMinuit2 -lyaml-cpp
+libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm $(MINUIT2_LIBADD) -lyaml-cpp
 libeosstatistics_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
 libeosstatistics_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(MINUIT2_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
@@ -114,7 +114,7 @@ log_likelihood_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 log_posterior_TEST_SOURCES = log-posterior_TEST.cc log-posterior_TEST.hh
 log_posterior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS)
-log_posterior_TEST_LDFLAGS = $(MINUIT2_LDFLAGS) -lMinuit2
+log_posterior_TEST_LDFLAGS = $(MINUIT2_LDFLAGS)
 
 log_prior_TEST_SOURCES = log-prior_TEST.cc
 log_prior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
