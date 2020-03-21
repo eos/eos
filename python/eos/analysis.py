@@ -20,7 +20,6 @@ import eos
 from logging import info, warn
 import numpy as np
 import scipy
-import random
 
 class BestFitPoint:
     """
@@ -194,7 +193,7 @@ class Analysis:
         return(-self.log_posterior.evaluate())
 
 
-    def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None):
+    def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None, rng=np.random.mtrand):
         """
         Return samples of the parameters, log(weights), and optionally posterior-predictive samples for a sequence of observables.
 
@@ -208,6 +207,9 @@ class Analysis:
         :param cov_scale: Scale factor for the initial guess of the covariance matrix.
         :param observables: Observables for which posterior-predictive samples shall be obtained.
         :type observables: list-like, optional
+        :param start_point: Optional starting point for the chain
+        :type start_point: list-like, optional
+        :param rng: Optional random number generator (must be compatible with the requirements of pypmc.sampler.markov_chain.MarkovChain)
 
         :return: A tuple of the parameters as array of size N, the logarithmic weights as array of size N, and optionally the posterior-predictive samples of the observables as array of size N x len(observables).
 
@@ -234,12 +236,12 @@ class Analysis:
 
         # create start point, if not provided
         if start_point is None:
-            u = np.array([random.uniform(0.0, 1.0) for j in range(0, len(ind_lower))])
+            u = np.array([rng.uniform(0.0, 1.0) for j in range(0, len(ind_lower))])
             ubar = 1.0 - u
             start_point = ubar * ind_upper + u * ind_lower
 
         # create MC sampler
-        sampler = pypmc.sampler.markov_chain.AdaptiveMarkovChain(log_target, log_proposal, start_point, save_target_values=True)
+        sampler = pypmc.sampler.markov_chain.AdaptiveMarkovChain(log_target, log_proposal, start_point, save_target_values=True, rng=rng)
 
         # pre run to adapt markov chains
         for i in range(0, preruns):
