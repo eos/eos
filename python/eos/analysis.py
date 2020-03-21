@@ -17,7 +17,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
-from logging import info, warn
+from logging import info, warn, debug
 import numpy as np
 import scipy
 
@@ -114,8 +114,11 @@ class Analysis:
             for i in observable.used_parameter_ids():
                 used_parameter_names.add(self.parameters.by_id(i).name())
 
-        for n in used_parameter_names - varied_parameter_names:
-            info('likelihood probably depends on parameter \'{}\', but this parameter does not appear in the prior; check prior?'.format(n))
+        used_but_unvaried = used_parameter_names - varied_parameter_names
+        if (len(used_but_unvaried) > 0):
+            info('likelihood probably depends on {} parameter(s) that do not appear in the prior; check prior?'.format(len(used_but_unvaried)))
+        for n in used_but_unvaried:
+            debug('used, but not included in any prior: \'{}\''.format(n))
         for n in varied_parameter_names - used_parameter_names:
             warn('likelihood does not depend on parameter \'{}\'; remove from prior or check options!'.format(n))
 
