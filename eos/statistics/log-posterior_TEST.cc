@@ -18,10 +18,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <config.h>
+
 #include <eos/statistics/log-posterior_TEST.hh>
 
+#ifdef HAVE_MINUIT2
 #include <Minuit2/FunctionMinimum.h>
 #include <Minuit2/MnUserParameterState.h>
+#endif
 
 using namespace test;
 using namespace eos;
@@ -193,6 +197,7 @@ class LogPosteriorTest :
                 TEST_CHECK_NEARLY_EQUAL(optimum[3], 172   , 2e-5);
                 TEST_CHECK_NEARLY_EQUAL(optimum[4], 511e-6, 1e-5);
 
+#ifdef HAVE_MINUIT2
                 /* try again with Minuit */
 
                 //somehow minuit doesn't coverge with 4.1001
@@ -222,6 +227,7 @@ class LogPosteriorTest :
                 // no correlation present
                 TEST_CHECK_NEARLY_EQUAL(u_cov(0,1) / sqrt(fabs(u_cov(0,0) * u_cov(1,1))), 0   , 5e-3);
                 TEST_CHECK_NEARLY_EQUAL(u_cov(1,3) / sqrt(fabs(u_cov(1,1) * u_cov(3,3))), 0   , 2e-2);
+#endif
             }
 
             // goodness_of_fit
