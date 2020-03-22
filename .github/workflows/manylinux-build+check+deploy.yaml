@@ -1,0 +1,196 @@
+on:
+    push:
+        branches: [ master, testing ]
+
+    pull_request:
+
+name: Build/Check/Deploy for PyPI
+
+jobs:
+    pypi-build:
+        name: Build on manylinux2014
+        runs-on: ubuntu-18.04
+        strategy:
+            matrix:
+                cfg:
+                    - { pypath: cp36-cp36m, pysuffix: cp36, pyboostsuffix: 36 }
+                    - { pypath: cp37-cp37m, pysuffix: cp37, pyboostsuffix: 37 }
+                    - { pypath: cp38-cp38,  pysuffix: cp38, pyboostsuffix: 38 }
+        container:
+            image: eoshep/build-essentials:manylinux2014-${{ matrix.cfg.pysuffix }}
+        steps:
+            - name: Checkout git repository
+              uses: actions/checkout@v2
+              with:
+                path: _src/
+
+            - name: Fetch tags
+              shell: bash
+              run: |
+                pushd _src
+                git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+                popd
+
+            - name: Create build directory
+              shell: bash
+              run: mkdir -p _build
+
+            - name: Configure
+              shell: bash
+              env:
+                PYTHON_PATH:       /opt/python/${{ matrix.cfg.pypath }}/bin
+                PYTHON:            /opt/python/${{ matrix.cfg.pypath }}/bin/python
+                CXXFLAGS:          "-O2 -g -march=x86-64"
+                BOOST_PYTHON_SKIP: yes
+              run: |
+                pushd _src
+                ./autogen.bash
+                popd
+                pushd _build
+                export PATH="$PYTHON_PATH:$PATH"
+                ../_src/configure --disable-cli --disable-pmc --enable-python --with-boost-python-suffix=${{ matrix.cfg.pyboostsuffix }}
+                popd
+
+            - name: Build
+              shell: bash
+              run: |
+                pushd _build
+                make -j2 all
+                popd
+
+            - name: Upload configured source as artifact
+              uses: actions/upload-artifact@v1
+              with:
+                name: eos-source-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
+                path: _src
+
+            - name: Upload build as artifact
+              uses: actions/upload-artifact@v1
+              with:
+                name: eos-build-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
+                path: _build
+
+    pypi-check:
+        needs: pypi-build
+        name: Check on manylinux2014
+        runs-on: ubuntu-18.04
+        strategy:
+            matrix:
+                cfg:
+                    - { pypath: cp36-cp36m, pysuffix: cp36, pyboostsuffix: 36 }
+                    - { pypath: cp37-cp37m, pysuffix: cp37, pyboostsuffix: 37 }
+                    - { pypath: cp38-cp38,  pysuffix: cp38, pyboostsuffix: 38 }
+        container:
+            image: eoshep/build-essentials:manylinux2014-${{ matrix.cfg.pysuffix }}
+        steps:
+            - name: Download configured source as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-source-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
+                path: _src
+
+            - name: Download build as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-build-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
+                path: _build
+
+            - name: Check
+              shell: bash
+              env:
+                PYTHON_PATH:       /opt/python/${{ matrix.cfg.pypath }}/bin
+                PYTHON:            /opt/python/${{ matrix.cfg.pypath }}/bin/python
+                CXXFLAGS:          "-O2 -g -march=x86-64"
+                BOOST_PYTHON_SKIP: yes
+              run: |
+                pushd _build
+                export PATH="$PYTHON_PATH:$PATH"
+                make -j2 check VERBOSE=1
+                popd
+
+    pypi-deploy:
+        needs: [ pypi-build, pypi-check ]
+        name: Deploy on PyPI
+        runs-on: ubuntu-18.04
+        strategy:
+            matrix:
+                cfg:
+                    - { pypath: cp36-cp36m, pysuffix: cp36, pyboostsuffix: 36 }
+                    - { pypath: cp37-cp37m, pysuffix: cp37, pyboostsuffix: 37 }
+                    - { pypath: cp38-cp38,  pysuffix: cp38, pyboostsuffix: 38 }
+        container:
+            image: eoshep/build-essentials:manylinux2014-${{ matrix.cfg.pysuffix }}
+        steps:
+            - name: Download configured source as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-source-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
+                path: _src
+
+            - name: Download build as artifact
+              uses: actions/download-artifact@v1
+              with:
+                name: eos-build-manylinux2014-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
+                path: _build
+
+            - name: Prepare the Python extension
+              shell: bash
+              env:
+                PYTHON_PATH:       /opt/python/${{ matrix.cfg.pypath }}/bin
+                PYTHON:            /opt/python/${{ matrix.cfg.pypath }}/bin/python
+                CXXFLAGS:          "-O2 -g -march=x86-64"
+                BOOST_PYTHON_SKIP: yes
+              run: |
+                mkdir _pypi
+                pushd _pypi
+                export PATH="$PYTHON_PATH:$PATH"
+                cp ../_build/python/.libs/_eos.so ./
+                LIBRARIES='libaec|libboost|libeos|libhdf5|libgsl|libquadmath|libsatlas|libsz|libyaml|libz'
+                for f in $(ldd _eos.so | grep '=>' | grep -E "$LIBRARIES" | awk '{print $3}') ; do
+                    cp $f ./
+                done
+                cp ../_build/python/setup.py ./
+                chrpath -r '$ORIGIN/_eos_libs' _eos.so
+                for f in libeos*.so* ; do
+                    chrpath -l $f || continue
+                    chrpath -r '$ORIGIN' $f
+                done
+                cp -r ../_src/python/eos ./
+                mkdir _eos_data
+                for d in ../_src/eos/constraints ../_src/eos/parameters ; do
+                    cp -r $d _eos_data/
+                done
+                echo 'is_wheel = True' >> eos/config.py
+                echo 'int foo() { return -1; }' > dummy.cc
+                $PYTHON setup.py build
+                for f in $(find build/ -name "_eos.*.so") ; do
+                    cp _eos.so ${f}
+                done
+                $PYTHON setup.py bdist_wheel
+                for f in dist/*.whl ; do
+                    mv ${f} ${f//-linux_/-manylinux2014_}
+                done
+                popd
+
+            - name: Upload wheel as artifact
+              uses: actions/upload-artifact@v1
+              with:
+                name: eos-wheels-${{ matrix.cfg.pysuffix }}-g++-${{ github.sha }}
+                path: _pypi/dist
+
+            - name: Upload wheel to pypi.org
+              shell: bash
+              env:
+                PYTHON_PATH:    /opt/python/${{ matrix.cfg.pypath }}/bin
+                PYTHON:         /opt/python/${{ matrix.cfg.pypath }}/bin/python
+                TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+                TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+              run: |
+                pushd _src
+                # check if this is not a tagged commit, and exit immediatly if true.
+                if ! git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then exit 0 ; fi
+                popd
+                pushd _pypi
+                export PATH="$PYTHON_PATH:$PATH"
+                twine upload dist/*.whl
+                popd
