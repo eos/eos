@@ -368,11 +368,15 @@ if test "x$enable_python" == xyes ; then
 		fi
 	else
 		BOOST_PYTHON_SUFFIX=$with_boost_python_suffix
+		PYTHON_CXXFLAGS="$PYTHON_CXXFLAGS $BOOST_PYTHON_CXXFLAGS"
+		PYTHON_LDFLAGS="$PYTHON_LDFLAGS $BOOST_PYTHON_LDFLAGS"
 	fi
 	AC_SUBST([PYTHON_LIBS])
 	AC_SUBST([PYTHON_LDFLAGS])
 	AC_SUBST([PYTHON_CXXFLAGS])
 	AC_SUBST([BOOST_PYTHON_SUFFIX])
+	AC_SUBST([BOOST_PYTHON_LDFLAGS])
+	AC_SUBST([BOOST_PYTHON_CXXFLAGS])
 	if test "x$with_custom_pythondir" != "x"; then
 		# override: Debian/Ubuntu use 'dist-packages' rather than 'site-packages'
 		AC_MSG_NOTICE([replacing python script directory with \${prefix}/lib/python$PYTHON_VERSION/$with_custom_pythondir])
