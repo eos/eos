@@ -91,6 +91,12 @@ namespace eos
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
 
+            // PDF
+            double differential_pdf_q2(const double & q2) const;
+            double differential_pdf_w(const double & w) const;
+            double integrated_pdf_q2(const double & q2_min, const double & q2_max) const;
+            double integrated_pdf_w(const double & w_min, const double & w_max) const;
+
             /*!
              * Descriptions of the process and its kinematics.
              */
