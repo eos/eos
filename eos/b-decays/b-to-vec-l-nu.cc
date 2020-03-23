@@ -265,7 +265,7 @@ namespace eos
             return power_of<2>(g_fermi() * etaEW) * p * q2 * power_of<2>(v) / (3.0 * 64.0 * power_of<3>(M_PI) * m_B * m_B);
         }
 
-        b_to_dstar_l_nu::Amplitudes amplitudes(const double & q2)
+        b_to_dstar_l_nu::Amplitudes amplitudes(const double & q2) const
         {
             b_to_dstar_l_nu::Amplitudes result;
 
@@ -321,27 +321,54 @@ namespace eos
         }
 
 
-        std::array<double, 12> _differential_angular_observables(const double & q2)
+        std::array<double, 12> _differential_angular_observables(const double & q2) const
         {
             return b_to_dstar_l_nu::AngularObservables(this->amplitudes(q2))._vv;
         }
 
         // define below integrated observables in generic form
-        std::array<double, 12> _integrated_angular_observables(const double & q2_min, const double & q2_max)
+        std::array<double, 12> _integrated_angular_observables(const double & q2_min, const double & q2_max) const
         {
             std::function<std::array<double, 12> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
             // second argument of integrate1D is some power of 2
             return integrate1D(integrand, 256, q2_min, q2_max);
         }
 
-        inline b_to_dstar_l_nu::AngularObservables differential_angular_observables(const double & q2)
+        inline b_to_dstar_l_nu::AngularObservables differential_angular_observables(const double & q2) const
         {
             return b_to_dstar_l_nu::AngularObservables{ _differential_angular_observables(q2) };
         }
 
-        inline b_to_dstar_l_nu::AngularObservables integrated_angular_observables(const double & q2_min, const double & q2_max)
+        inline b_to_dstar_l_nu::AngularObservables integrated_angular_observables(const double & q2_min, const double & q2_max) const
         {
             return b_to_dstar_l_nu::AngularObservables{ _integrated_angular_observables(q2_min, q2_max) };
+        }
+
+        double normalized_decay_width(const double & q2) const
+        {
+            return this->differential_angular_observables(q2).normalized_decay_width();
+        }
+
+        double integrated_pdf_q2(const double & q2_min, const double & q2_max) const
+        {
+            const double q2_abs_min = power_of<2>(m_l());
+            const double q2_abs_max = power_of<2>(m_B() - m_V());
+
+            std::function<double (const double &)> f = std::bind(&Implementation<BToVectorLeptonNeutrino>::normalized_decay_width, this, std::placeholders::_1);
+            const double num   = integrate<GSL::QAGS>(f, q2_min,     q2_max);
+            const double denom = integrate<GSL::QAGS>(f, q2_abs_min, q2_abs_max);
+
+            return num / denom / (q2_max - q2_min);
+        }
+
+        double integrated_pdf_w(const double & w_min, const double & w_max) const
+        {
+            const double m_B    = this->m_B(), m_B2 = m_B * m_B;
+            const double m_V    = this->m_V(), m_V2 = m_V * m_V;
+            const double q2_max = m_B2 + m_V2 - 2.0 * m_B * m_V * w_min;
+            const double q2_min = m_B2 + m_V2 - 2.0 * m_B * m_V * w_max;
+
+            return integrated_pdf_q2(q2_min, q2_max) * (q2_max - q2_min) / (w_max - w_min);
         }
     };
 
@@ -474,6 +501,17 @@ namespace eos
         return _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width() * std::norm(_imp->model->ckm_cb()) * _imp->tau_B / _imp->hbar;
     }
 
+    double
+    BToVectorLeptonNeutrino::integrated_pdf_q2(const double & q2_min, const double & q2_max) const
+    {
+        return _imp->integrated_pdf_q2(q2_min, q2_max);
+    }
+
+    double
+    BToVectorLeptonNeutrino::integrated_pdf_w(const double & w_min, const double & w_max) const
+    {
+        return _imp->integrated_pdf_w(w_min, w_max);
+    }
     double
     BToVectorLeptonNeutrino::integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const
     {
