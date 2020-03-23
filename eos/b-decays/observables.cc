@@ -453,6 +453,11 @@ namespace eos
                                 &BToVectorLeptonNeutrino::integrated_J9_normalized,
                                 std::make_tuple("q2_min", "q2_max")),
 
+                make_observable("B->D^*lnu::P(w_min,w_max)",
+                                &BToVectorLeptonNeutrino::integrated_pdf_w,
+                                std::make_tuple("w_min", "w_max"),
+                                Options{ { "U", "c" }, {"q", "d"} }),
+
                 // B -> D pi l nu
                 make_observable("B->Dpilnu::P(c_D)",
                                 &BToDPiLeptonNeutrino::differential_pdf_d,
@@ -720,6 +725,11 @@ namespace eos
                 make_observable("B_s->D_s^*lnu::J_9", R"(J_{9}(B_s\to \bar{D_s}^*\ell^-\bar\nu))",
                                 &BToVectorLeptonNeutrino::integrated_J9_normalized,
                                 std::make_tuple("q2_min", "q2_max"),
+                                Options{ { "U", "c" }, {"q", "s"} }),
+
+                make_observable("B_s->D_s^*lnu::P(w_min,w_max)",
+                                &BToVectorLeptonNeutrino::integrated_pdf_w,
+                                std::make_tuple("w_min", "w_max"),
                                 Options{ { "U", "c" }, {"q", "s"} }),
             }
         );
