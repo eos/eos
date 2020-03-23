@@ -345,6 +345,11 @@ if test "x$enable_python" == xyes ; then
 	AM_PATH_PYTHON([3.5])
 	PY_PREFIX=`$PYTHON -c 'import sys ; print(sys.prefix)'`
 	PYTHON_LIBS="`python$PYTHON_VERSION-config --libs`"
+	if python$PYTHON_VERSION-config --libs --embed 2>&1 > /dev/null ; then
+		PYTHON_LIBS_CONFTEST=`python$PYTHON_VERSION-config --libs --embed`
+	else
+		PYTHON_LIBS_CONFTEST=$PYTHON_LIBS
+	fi
 	PYTHON_LDFLAGS="`python$PYTHON_VERSION-config --ldflags`"
 	PYTHON_CXXFLAGS="`python$PYTHON_VERSION-config --includes`"
 	if test "x$has_boost_python_suffix" == "xno"; then
@@ -393,7 +398,7 @@ if test "x$enable_python" == xyes ; then
 
 	CXXFLAGS=$PYTHON_CXXFLAGS
 	LDFLAGS=$PYTHON_LDFLAGS
-	LIBS=$PYTHON_LIBS
+	LIBS=$PYTHON_LIBS_CONFTEST
 
 	AC_CHECK_LIB([boost_python$BOOST_PYTHON_SUFFIX], main,
 	        [],
@@ -416,7 +421,6 @@ if test "x$enable_python" == xyes ; then
 		 AC_MSG_ERROR([boost_python example does not compile])
 		]
 	)
-	CXXFLAGS=$save_CXXFLAGS
 
 	CXXFLAGS=$_CXXFLAGS
 	LDFLAGS=$_LDFLAGS
