@@ -983,6 +983,14 @@ LHCb:2018A:
   inspire-id: Aaij:2018gwm
   title: Angular moments of the decay $\Lambda_b^0 \rightarrow \Lambda \mu^{+} \mu^{-}$
     at low hadronic recoil
+LHCb:2020A:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2003.08453
+  inspire-id: Aaij:2018xjy
+  title: Measurement of the shape of the B_s^0 -> D_s^{*-}\mu^{+}\nu_{\mu} differential decay rate
 LT:2007A:
   authors: Ligeti, Zoltan and Tackmann, Frank J.
   eprint:
