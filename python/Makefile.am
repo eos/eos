@@ -10,6 +10,7 @@ EXTRA_DIST = \
 	eos/parameter.py \
 	eos/reference.py \
 	eos/data/__init__.py \
+	eos/data/hdf5.py \
 	eos/plot/__init__.py \
 	eos/plot/config.py \
 	eos/plot/plotter.py
@@ -39,7 +40,8 @@ eos_SCRIPTS = \
 
 eosdatadir = $(pkgpythondir)/data
 eosdata_SCRIPTS = \
-	eos/data/__init__.py
+	eos/data/__init__.py \
+	eos/data/hdf5.py
 
 eosplotdir = $(pkgpythondir)/plot
 eosplot_SCRIPTS = \
