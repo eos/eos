@@ -262,8 +262,14 @@ namespace eos
             /// Retrieve the Parameter's (default) maximal value.
             const double & max() const;
 
+            /// Set the Parameter's maximal value.
+            void set_max(const double &);
+
             /// Retrieve the Parameter's (default) minimal value.
             const double & min() const;
+
+            /// Set the Parameter's maximal value.
+            void set_min(const double &);
 
             /// Retrieve the Parameter's id.
             Id id() const;
