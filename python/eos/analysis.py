@@ -100,7 +100,10 @@ class Analysis:
                 raise ValueError('Unknown prior type \'{}\''.format(prior_type))
 
             self.bounds.append((minv, maxv))
-            self.varied_parameters.append(self.parameters[parameter])
+            p = self.parameters[parameter]
+            p.set_min(minv)
+            p.set_max(maxv)
+            self.varied_parameters.append(p)
 
         # create the likelihood
         for constraint_name in likelihood:
