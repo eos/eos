@@ -690,10 +690,22 @@ namespace eos
         return _parameters_data->data[_index].max;
     }
 
+    void
+    Parameter::set_max(const double & value)
+    {
+        _parameters_data->data[_index].max = value;
+    }
+
     const double &
     Parameter::min() const
     {
         return _parameters_data->data[_index].min;
+    }
+
+    void
+    Parameter::set_min(const double & value)
+    {
+        _parameters_data->data[_index].min = value;
     }
 
     const std::string &
