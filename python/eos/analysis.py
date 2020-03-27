@@ -17,6 +17,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
+import copy as _cp
 from logging import info, warn, debug
 import numpy as np
 import scipy
@@ -285,3 +286,63 @@ class Analysis:
             return(parameter_samples, weights, np.array(observable_samples))
 
 
+    def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand):
+        """
+        Return samples of the parameters and log(weights)
+
+        Obtains random samples of the log(posterior) using adaptive importance sampling following
+        the Popoulation Monte Carlo approach with PyPMC.
+
+        :param step_N: Number of samples that shall be drawn in each adaptation step.
+        :param steps: Number of adaptation steps.
+        :param final_N: Number of samples that shall be drawn after all adaptation steps.
+        :param rng: Optional random number generator (must be compatible with the requirements of pypmc.sampler.importance_sampler.ImportancSampler)
+
+        :return: A tuple of the parameters as array of length N = pre_N * steps + final_N, the (linear) weights as array of length N, and the
+            final proposal function as pypmc.density.mixture.MixtureDensity.
+
+        .. note::
+           This method requires the PyPMC python module, which can be installed from PyPI.
+        """
+        import logging
+        import pypmc
+        try:
+            from tqdm import tqdm
+            progressbar = tqdm
+        except ImportError:
+            progressbar = lambda x: x
+
+        ind_lower = np.array([bound[0] for bound in self.bounds])
+        ind_upper = np.array([bound[1] for bound in self.bounds])
+        ind = pypmc.tools.indicator.hyperrectangle(ind_lower, ind_upper)
+
+        log_target = pypmc.tools.indicator.merge_function_with_indicator(self.log_pdf, ind, -np.inf)
+
+        # create PMC sampler
+        sampler = pypmc.sampler.importance_sampling.ImportanceSampler(log_target, log_proposal, save_target_values=True)#, rng=rng)
+        generating_components = []
+
+        # carry out adaptions
+        for step in progressbar(range(steps)):
+            origins = sampler.run(pre_N, trace_sort=True)
+            generating_components.append(origins)
+            samples = sampler.samples[:]
+            weights = sampler.weights[:][:, 0]
+            normalized_weights = np.ma.masked_where(weights <= 0, weights) / np.sum(weights)
+            entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
+            perplexity = np.exp(entropy) / len(normalized_weights)
+            debug('Perplexity after sampling in step {}: {}'.format(step, perplexity))
+            pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, weights, mincount=0, rb=True, copy=False)
+            sampler.proposal.normalize()
+
+        # draw final samples
+        origins = sampler.run(final_N, trace_sort=True)
+        generating_components.append(origins)
+        samples = sampler.samples[:]
+        weights = sampler.weights[:][:, 0]
+        normalized_weights = np.ma.masked_where(weights <= 0, weights) / np.sum(weights)
+        entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
+        perplexity = np.exp(entropy) / len(normalized_weights)
+        info('Perplexity after final samples: {}'.format(step, perplexity))
+
+        return samples, weights, sampler.proposal
