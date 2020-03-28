@@ -5,7 +5,7 @@ AAGW:2001A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0109140
   inspire-id: Asatryan:2001zw
-  title: Calculation of two loop virtual corrections to $b \to  s l^+ l^-$ in the
+  title: Calculation of two loop virtual corrections to $b \to s \ell^+ \ell^-$ in the
     standard model
 ABBBSW:2008A:
   authors: Altmannshofer, Wolfgang and Ball, Patricia and Bharucha, Aoife and Buras,
@@ -22,12 +22,12 @@ ABGW:2003A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0312063
   inspire-id: Asatrian:2003vq
-  title: Virtual corrections and bremsstrahlung corrections to b ---> d l+ l- in the
+  title: Virtual corrections and bremsstrahlung corrections to $b \to d \ell^+ \ell^- in the
     standard model
 ABHH:1999A:
   authors: Ali, Ahmed and Ball, Patricia and Handoko, L.T. and Hiller, G.
   inspire-id: Ali:1999mm
-  title: A Comparative study of the decays $B \to$ ($K$, $K^{*)} \ell^+ \ell^-$ in
+  title: A Comparative study of the decays $B \to K^{(*)} \ell^+ \ell^-$ in
     standard model and supersymmetric theories
 AEMSS:2002A:
   authors: Ahmady, M.R. and Elias, V. and McKeon, D.G.C. and Squires, A. and Steele,
@@ -53,7 +53,7 @@ ATLAS:2013A:
     archive: CDS
     id: 2029577
   inspire-id: ATLAS:2015pua
-  title: Angular Analysis of B_d ---> K^*0 mu^+ mu^- with the ATLAS experiment
+  title: Angular Analysis of $B_d \to K^{*0} \mu^+ \mu^-$ with the ATLAS experiment
 ATLAS:2018A:
   authors: Aaboud, Morad et al.
   collaboration: ATLAS
@@ -73,8 +73,8 @@ B:1998A:
 BB:1999A:
   authors: Buchalla, Gerhard and Buras, Andrzej J.
   inspire-id: Buchalla:1998ba
-  title: 'The rare decays $K\to \pi \nu\bar\nu$, $B \to X \nu\bar\nu$ and $B \to l^+
-    l^-$: An Update'
+  title: 'The rare decays $K\to \pi \nu\bar\nu$, $B \to X \nu\bar\nu$ and $B \to \ell^+
+    \ell^-$: An Update'
 BBGORvD:2018A:
   authors: "B\xF6er, Philipp and Bordone, Marzia and Graverini, Elena and Owen, Patrick\
     \ and Rotondo, Marcello and Van Dyk, Danny"
@@ -104,16 +104,16 @@ BBMU:2003A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0302262
   inspire-id: Benson:2003kp
-  title: 'Imprecated, yet impeccable: On the theoretical evaluation of Gamma(B --->
-    X(c) l nu)'
+  title: 'Imprecated, yet impeccable: On the theoretical evaluation of $\Gamma(B \to
+    X_c \ell \nu)$'
 BCL:2008A:
   authors: Bourrely, Claude and Caprini, Irinel and Lellouch, Laurent
   eprint:
     archive: arXiv
     id: oai:arXiv.org:0807.2722
   inspire-id: Bourrely:2008za
-  title: Model-independent description of B ---> pi l nu decays and a determination
-    of |V(ub)|
+  title: Model-independent description of $B \to \pi \ell \nu$ decays and a determination
+    of $|V_{ub}|$
 BCMU:2002A:
   authors: Buras, Andrzej J. and Czarnecki, Andrzej and Misiak, Mikolaj and Urban,
     Jorg
@@ -121,22 +121,22 @@ BCMU:2002A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0203135
   inspire-id: Buras:2002tp
-  title: Completing the NLO QCD calculation of anti-B ---> X(s gamma)
+  title: Completing the NLO QCD calculation of $\bar{B} \to X_s \gamma$
 BEKU:2002A:
   authors: Bobeth, C. and Ewerth, T. and Kruger, F. and Urban, J.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0204225
   inspire-id: Bobeth:2002ch
-  title: Enhancement of B(anti-B($d$) $\to \mu^{+} \mu^{-)}$ / B(anti-B($s$) $\to
-    \mu^{+} \mu^{-)}$ in the MSSM with minimal flavor violation and large tan beta
+  title: Enhancement of $\mathcal{B}(\bar{B}_d \to \mu^{+} \mu^{-}) / \mathcal{B}(\bar{B}_s \to \mu^{+} \mu^{-})$
+    in the MSSM with minimal flavor violation and large tan beta
 BF:2001A:
   authors: Beneke, M. and Feldmann, T.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0008255
   inspire-id: Beneke:2000wa
-  title: Symmetry breaking corrections to heavy to light B meson form-factors at large
+  title: Symmetry breaking corrections to heavy to light $B$ meson form-factors at large
     recoil
 BFS:2001A:
   authors: Beneke, M. and Feldmann, T. and Seidel, D.
@@ -144,14 +144,14 @@ BFS:2001A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0106067
   inspire-id: Beneke:2001at
-  title: Systematic approach to exclusive $B \to  V l^+ l^-$, $V \gamma$ decays
+  title: Systematic approach to exclusive $B \to  V \ell^+ \ell^-$, $V \gamma$ decays
 BFS:2004A:
   authors: Beneke, M. and Feldmann, Th. and Seidel, D.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0412400
   inspire-id: Beneke:2004dp
-  title: Exclusive radiative and electroweak $b \to  d$ and $b \to  s$ penguin decays
+  title: Exclusive radiative and electroweak $b \to d$ and $b \to s$ penguin decays
     at NLO
 BFW:2010A:
   authors: Bharucha, Aoife and Feldmann, Thorsten and Wick, Michael
@@ -160,7 +160,7 @@ BFW:2010A:
     id: oai:arXiv.org:1004.3249
   inspire-id: Bharucha:2010im
   title: Theoretical and Phenomenological Constraints on Form Factors for Radiative
-    and Semi-Leptonic B-Meson Decays
+    and Semi-Leptonic $B$-Meson Decays
 BFvD:2014A:
   authors: Böer, Philipp and Feldmann, Thorsten and van Dyk, Danny
   eprint:
@@ -174,7 +174,7 @@ BFvD:2016A:
     archive: arXiv
     id: oai:arXiv.org:1608.07127
   inspire-ird: Boer:2016iez
-  title: QCD Factorization Theorem for B ---> pi pi l nu Decays at Large Dipion Masses
+  title: QCD Factorization Theorem for $B \to \pi \pi \ell \nu$ Decays at Large Dipion Masses
 BHP:2007A:
   authors: Bobeth, Christoph and Hiller, Gudrun and Piranishvili, Giorgi
   eprint:
@@ -197,7 +197,7 @@ BHvD:2010A:
     archive: arXiv
     id: oai:arXiv.org:1006.5013
   inspire-id: Bobeth:2010wg
-  title: The Benefits of $\bar{B} -> \bar{K}^* l^+ l^-$ Decays at Low Recoil
+  title: The Benefits of $\bar{B} \to \bar{K}^* l^+ l^-$ Decays at Low Recoil
 BHvD:2011A:
   authors: Bobeth, Christoph and Hiller, Gudrun and van Dyk, Danny
   eprint:
@@ -227,7 +227,7 @@ BM:1995A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/9501281
   inspire-id: Buras:1994dj
-  title: Effective Hamiltonian for B ---> X(s) e+ e- beyond leading logarithms in
+  title: Effective Hamiltonian for $B \to X_s e^+ e^-$ beyond leading logarithms in
     the NDR and HV schemes
 BMU:1999A:
   authors: Bobeth, Christoph and Misiak, Mikolaj and Urban, Jorg
@@ -235,15 +235,15 @@ BMU:1999A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/9910220
   inspire-id: Bobeth:1999mk
-  title: Photonic penguins at two loops and $m_t$ dependence of $BR[B \to  X_s l^+
-    l^-]$
+  title: Photonic penguins at two loops and $m_t$ dependence of $\mathcal{B}(B \to  X_s \ell^+
+    \ell^-)$
 BS:2011A:
   authors: Becirevic, Damir and Schneider, Elia
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1106.3283
   inspire-id: Becirevic:2011bp
-  title: On transverse asymmetries in B --> K* l+l-
+  title: On transverse asymmetries in $B \to K^* \ell^+\ell^-$
 BSZ:2015A:
   authors: Bharucha, Aoife and Straub, David M. and Zwicky, Roman
   eprint:
@@ -265,7 +265,7 @@ BZ:2004B:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0406261
   inspire-id: Ball:2004hn
-  title: B ---> pi, K, eta decay formfactors from light-cone sum rules
+  title: $B \to \pi, K, \eta$ decay formfactors from light-cone sum rules
 BZ:2004C:
   authors: Ball, Patricia and Zwicky, Roman
   eprint:
@@ -324,7 +324,7 @@ BaBar:2012B:
     archive: arXiv
     id: oai:arXiv.org:1301.1700
   inspire-id: Ritchie:2013mx
-  title: Angular Analysis of B -> K*l+l- in BABAR
+  title: Angular Analysis of $B \to K^*\ell^+\ell^-$ in BABAR
 BaBar:2012C:
   authors: Lees, J.P. et al.
   collaboration: BaBar
@@ -347,7 +347,7 @@ BaBar:2013A:
     archive: arXiv
     id: oai:arXiv.org:1312.5364
   inspire-id: Lees:2013nxa
-  title: Measurement of the $B \to X_s l^+l^-$ branching fraction and search for direct
+  title: Measurement of the $B \to X_s \ell^+\ell^-$ branching fraction and search for direct
     CP violation from a sum of exclusive final states
 Belle:2004A:
   authors: Nakao, M. et al.
@@ -364,7 +364,7 @@ Belle:2005A:
     archive: arXiv
     id: oai:arXiv.org:hep-ex/0503044
   inspire-id: Iwasaki:2005sy
-  title: Improved measurement of the electroweak penguin process $B \to X_s l^+ l^-$
+  title: Improved measurement of the electroweak penguin process $B \to X_s \ell^+ \ell^-$
 Belle:2006A:
   authors: Ushiroda, Y. et al.
   collaboration: Belle
@@ -380,8 +380,8 @@ Belle:2008A:
     archive: arXiv
     id: oai:arXiv.org:0803.2158
   inspire-id: Schwanda:2008kw
-  title: Measurement of the Moments of the Photon Energy Spectrum in B ---> X(s) gamma
-    Decays and Determination of |V(cb)| and m(b) at Belle
+  title: Measurement of the Moments of the Photon Energy Spectrum in $B \to X_s \gamma$
+    Decays and Determination of $|V_{cb}|$ and $m_b$ at Belle
 Belle:2009A:
   authors: Wei, J.-T. et al.
   collaboration: Belle
@@ -484,7 +484,7 @@ CDF:2012A:
   collaboration: CDF
   inspire-id: Miyake:2012exl
   note: Preliminary results for summer 2012 conferences
-  title: Precise measurements of exclusive b ---> s mu^+ mu^- decay amplitudes using
+  title: Precise measurements of exclusive $b \to s \mu^+ \mu^-$ decay amplitudes using
     the full CDF data set
   url: http://www-cdf.fnal.gov/physics/new/bottom/120628.blessed-b2smumu_96/public_b2smumu.pdf
 CERN:2003A:
@@ -555,7 +555,7 @@ CMS:2016A:
     id: 1957565
   inspire-id: Leonardo:2016grh
   journal: Nucl.Part.Phys.Proc. 273-275 (2016) 1308-1313
-  title: 'Search and measurement of the B -> mu^+mu^- rare processes with LHC Run
+  title: 'Search and measurement of the $B \to \mu^+\mu^-$ rare processes with LHC Run
     I data '
 CMS:2019A:
   authors: The CMS Collaboration
@@ -563,8 +563,8 @@ CMS:2019A:
   eprint:
     archive: CDS
     id: 2684828
-  title: Measurement of properties of B_s^0 to mu^+mu^- decays and search for B^0
-    to mu^+mu^- with the CMS experiment
+  title: Measurement of properties of $B_s^0 \to \mu^+\mu^-$ decays and search for $B^0
+    \to \mu^+\mu^-$ with the CMS experiment
 D0:2011A:
   authors: Abazov, Victor Mukhamedovich et al.
   collaboration: D0
@@ -580,8 +580,7 @@ DBG:2013A:
     archive: arXiv
     id: oai:arXiv.org:1307.6653
   inspire-id: Dutta:2013qaa
-  title: "Effective theory approach to new physics in b \u2192 u and b \u2192 c leptonic\
-    \ and semileptonic decays"
+  title: 'Effective theory approach to new physics in $b \to u$ and $b \to c$ leptonic and semileptonic decays'
 DDS:2014A:
   authors: Datta, A. and Duraisamy, M. and Sharma, P
   eprint:
@@ -596,7 +595,7 @@ DKMMO:2008A:
     archive: arXiv
     id: oai:arXiv.org:0801.1796
   inspire-id: Duplancic:2008ix
-  title: Light-cone sum rules for B ---> pi form factors revisited
+  title: Light-cone sum rules for $B \to \pi$ form factors revisited
 DKMR:2017A:
   authors: Datta, Alakabha and Kamali, Saeed and Meinel, Stefan and Rashed, Ahmed
   eprint:
@@ -619,8 +618,7 @@ DLMW:2012A:
     archive: arXiv
     id: oai:arXiv.org:1212.4827
   inspire-id: Detmold:2012vy
-  title: "\u039Bb\u2192\u039B\u2113+\u2113- form factors and differential branching\
-    \ fraction from lattice QCD"
+  title: '$\Lambda_b\to\Lambda \ell^+\ell^-$ form factors and differential branching fraction from lattice QCD'
 DM:2016A:
   authors: Detmold, William and Meinel, Stefan
   eprint:
@@ -636,7 +634,7 @@ DMRV:2012A:
     archive: arXiv
     id: oai:arXiv.org:1207.2753
   inspire-id: DescotesGenon:2012zf
-  title: Implications from clean observables for the binned analysis of $B -> K*\mu^+\mu^-$
+  title: Implications from clean observables for the binned analysis of $B \to K*\mu^+\mu^-$
     at large recoil
 EGN:2010A:
   authors: Ewerth, Thorsten and Gambino, Paolo and Nandi, Soumitra
@@ -644,7 +642,7 @@ EGN:2010A:
     archive: arXiv
     id: oai:arXiv.org:0911.2175
   inspire-id: Ewerth:2009yr
-  title: Power suppressed effects in anti-B ---> X(s) gamma at O(alpha(s))
+  title: Power suppressed effects in $\bar{B} \to X_s \gamma$ at $O(\alpha_s)$
 EHMRR:2010A:
   authors: Egede, Ulrik and Hurth, Tobias and Matias, Joaquim and Ramon, Marc and
     Reece, Will
@@ -682,7 +680,7 @@ FM:2002A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0212158
   inspire-id: Feldmann:2002iw
-  title: Forward backward and isospin asymmetry for $B \to K^* l^+ l^-$ decay in the
+  title: Forward backward and isospin asymmetry for $B \to K^* \ell^+ \ell^-$ decay in the
     standard model and in supersymmetry
 FNALMILC:2014A:
   authors: Bailey, Jon A. et al.
@@ -729,14 +727,14 @@ GM:2001A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0104034
   inspire-id: Gambino:2001ew
-  title: Quark mass effects in anti-B ---> X(s gamma)
+  title: Quark mass effects in $\bar{B} \to X_s \gamma$
 GN:1997A:
   authors: Guetta, Dafne and Nardi, Enrico
   eprint:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/9707371
   inspire-id: Guetta:1997fw
-  title: Searching for new physics in rare B ---> tau decays
+  title: Searching for new physics in rare $B \to \tau$ decays
 GP:2004A:
   authors: Grinstein, Benjamin and Pirjol, Dan
   inspire-id: Grinstein:2004vb
@@ -756,7 +754,7 @@ HLMW:2005A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0512066
   inspire-id: Huber:2005ig
-  title: Electromagnetic logarithms in $\bar B \to  X_s l^+ l^-$
+  title: Electromagnetic logarithms in $\bar B \to  X_s \ell^+ \ell^-$
 HLMW:2013A:
   authors: Horgan, Ronald R. and Liu, Zhaofeng and Meinel, Stefan and Wingate, Matthew
   eprint:
@@ -815,7 +813,7 @@ IKMvD:2014A:
     archive: arXiv
     id: oai:arXiv.org:1409.7816
   inspire-id: Imsong:2014oqa
-  title: "Extrapolation and unitarity bounds for the B \u2192 \u03C0 form factor"
+  title: 'Extrapolation and unitarity bounds for the $B \to \pi$ form factor'
 KMPW:2010A:
   authors: Khodjamirian, A. and Mannel, Th. and Pivovarov, A.A. and Wang, Y.-M.
   eprint:
@@ -829,8 +827,7 @@ KS:1996A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/9603237
   inspire-id: Kruger:1996cv
-  title: Lepton polarization in the decays b ---> X(s) mu+ mu- and B ---> X(s) tau+
-    tau-
+  title: Lepton polarization in the decays $B \to X_s \mu^+ \mu^-$ and $B \to X_s \tau^+ \tau^-$
 LATAVG:2011A:
   authors: Laiho, Jack and Lunghi, Enrico and Van de Water, Ruth S.
   eprint:
@@ -844,7 +841,7 @@ LHCb:2011A:
   eprint:
     archive: CDS
     id: 1374913
-  title: Search for the rare decay B^0_s ---> mu^+ mu^- with the CMS and LHCb experiments
+  title: Search for the rare decay $B^0_s \to \mu^+ \mu^-$ with the CMS and LHCb experiments
 LHCb:2011B:
   authors: Aaij, R et al.
   collaboration: LHCb
@@ -911,7 +908,7 @@ LHCb:2013C:
   authors: Nicola Serra
   collaboration: LHCb
   note: Talk given at EPS-HEP, Stockholm, July 19th 2013
-  title: Studies of Electroweak Penguin Transitions in b -> s mu mu
+  title: Studies of Electroweak Penguin Transitions in $b \to s \mu \mu$
 LHCb:2013D:
   authors: Aaij, R. et al.
   collaboration: LHCb
@@ -1004,7 +1001,7 @@ M:2006A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0609232
   inspire-id: Misiak:2006zs
-  title: Estimate of $\mathcal{B} (\bar B \to X_s \gamma)$ at $O(\alpha_s^2)$
+  title: Estimate of $\mathcal{B}(\bar B \to X_s \gamma)$ at $\mathcal{O}(\alpha_s^2)$
 MvD:2016A:
   authors: Meinel, Stefan and van Dyk, Danny
   eprint:
@@ -1019,7 +1016,7 @@ MvR:1999A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/9912391
   inspire-id: Melnikov:2000qh
-  title: The Three loop relation between the MS-bar and the pole quark masses
+  title: The Three loop relation between the $\overline{\text{MS}}$ and the pole quark masses
 NT:2011A:
   authors: Nishikawa, Tetsuo and Tanaka, Kazuhiro
   eprint:
@@ -1069,14 +1066,14 @@ S:2004A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0403185
   inspire-id: Seidel:2004jh
-  title: Analytic two loop virtual corrections to b ---> d l+ l-
+  title: Analytic two loop virtual corrections to $b \to d \ell^+ \ell^-$
 S:2010A:
   authors: Simone, J. and others
   collaboration:
   - Fermilab Lattice
   - MILC Collaborations
   journal: PoS LATTICE2010 (2010) 317
-  title: The decay constants f_Ds, f_D+, f_Bs and f_B from lattice QCD
+  title: The decay constants $f_{D_s}$, $f_{D^+}$, $f_{B_s}$ and $f_B$ from lattice QCD
 STTW:2013A:
   authors: Sakaki, Yasuhito and Tanaka, Minoru and Tayduganov, Andrey and Watanabe,
     Ryoutaro
@@ -1100,7 +1097,7 @@ U:2001A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0111166
   inspire-id: Uraltsev:2001ih
-  title: On the chromomagnetic expectation value mu**2(G) and higher power corrections
+  title: On the chromomagnetic expectation value $\mu^2_G$ and higher power corrections
     in heavy flavor mesons
 UTFIT:2013A:
   authors: Bona, M. et al.
@@ -1110,8 +1107,7 @@ UTFIT:2013A:
     id: oai:arXiv.org:hep-ph/0606167
   inspire-id: Bona:2006ah
   title: 'The Unitarity Triangle Fit in the Standard Model and Hadronic Parameters
-    from Lattice QCD: A Reappraisal after the Measurements of Delta m(s) and BR(B
-    ---> tau nu(tau))'
+    from Lattice QCD: A Reappraisal after the Measurements of $\Delta m_s$ and $\mathcal{B}(B \to \tau \nu_\tau)$'
 vRVL:1997A:
   authors: van Ritbergen, T. and Vermaseren, J.A.M. and Larin, S.A.
   eprint:
