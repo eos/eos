@@ -64,6 +64,21 @@ EOS provides its basic functionality via the main ``eos`` module.
    :members:
 
 *******************
+Module ``eos.data``
+*******************
+
+EOS provides access to save and load the various (intermediate) results of analyses via the ``eos.data`` module.
+
+.. autoclass:: eos.data.MarkovChain
+   :members:
+
+.. autoclass:: eos.data.MixtureDensity
+   :members:
+
+.. autoclass:: eos.data.PMCSampler
+   :members:
+
+*******************
 Module ``eos.plot``
 *******************
 
