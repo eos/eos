@@ -29,11 +29,12 @@ for section in observables.sections():
 
         print('\n')
         print('.. list-table::')
-        print('   :widths: 25, 25')
+        print('   :widths: 50, 25, 25')
         print('   :header-rows: 1')
         print('')
         print('   * - Qualified Name')
         print('     - Description')
+        print('     - Kinematic Variables')
         for qn, entry in group:
             latex = entry.latex()
             if 0 == len(latex):
@@ -41,8 +42,10 @@ for section in observables.sections():
 
             entry_name = str(qn)
             entry_desc = latex_to_rst(latex)
+            entry_kv   = ', '.join([('``' + kv + '``') for kv in entry.kinematic_variables()])
             print('   * - ``{qn}``'.format(qn=entry_name))
             print('     - :math:`{desc}`'.format(desc=entry_desc))
+            print('     - {kv}'.format(kv=entry_kv))
 
 
         print('\n\n')
