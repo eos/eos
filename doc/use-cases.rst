@@ -401,7 +401,7 @@ Defining the statistical Analysis
 To define our statistical analysis for the inference of :math:`|V_{cb}|` from :math:`\bar{B}\to D\ell^-\bar\nu` branching ratios,
 some decisions are needed.
 First, we must decide how to parametrize the hadronic form factors that emerge in semileptonic :math:`\bar{B}\to D` transitions.
-For what follows we will use the [BSZ2015]_ parametrization.
+For what follows we will use the [BSZ:2015A]_ parametrization.
 Next, we must decide the theory input for the form factors. For what follows we will combine the correlated lattice QCD results published by the Fermilab/MILC and HPQCD collaborations in 2015.
 
 We then create an :class:`Analysis <eos.Analysis>` object as follows:
