@@ -29,3 +29,4 @@ Installation instructions can be found `here <installation.html>`_.
    constraints
    observables
    parameters
+   references
