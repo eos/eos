@@ -28,6 +28,13 @@ for section in observables.sections():
         print('=' * len(group_title))
 
         print('\n')
+        translation = {
+            ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
+            ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
+            ord('>'): 'to'
+        }
+        for qn, _ in group:
+            print('.. _{qn}:'.format(qn=str(qn).translate(translation).lower()))
         print('.. list-table::')
         print('   :widths: 50, 25, 25')
         print('   :header-rows: 1')
