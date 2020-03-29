@@ -3,6 +3,7 @@
 
 import eos
 import re
+import yaml
 
 constraints = eos.Constraints()
 
@@ -17,10 +18,26 @@ print('\n')
 print('The following is the full list of constraints (both experimental and theoretical as of EOS v{}.\n\n'.format(eos.version()))
 print('\n')
 print('.. list-table::')
-print('   :widths: 25')
+print('   :widths: 50,50')
 print('   :header-rows: 1')
 print('')
 print('   * - Qualified Name')
+print('     - Observables')
 for qn, entry in constraints:
     print('   * - ``{qn}``'.format(qn=qn))
+    data = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
+    translation = {
+        ord(':'): 'co', ord('@'): 'at', ord('/'): 'sl', ord('_'): 'un',
+        ord('('): 'po', ord(')'): 'pc', ord('+'): 'pp', ord('-'): 'mm',
+        ord('>'): 'to'
+    }
+    unique_observables = ''
+    if 'observable' in data:
+        unique_observables = set([str(data['observable'])])
+    elif 'observables' in data:
+        unique_observables = set([str(o) for o in data['observables']])
+
+    entries = ['`{qn} <observables.html#{anchor}>`_'.format(qn=qn, anchor=qn.translate(translation).lower()) for qn in unique_observables]
+    observables = ', '.join(entries)
+    print('     - {}'.format(observables))
 print('\n\n')
