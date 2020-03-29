@@ -35,7 +35,10 @@ jobs:
                 brew outdated boost || brew upgrade boost || true
                 brew outdated boost-python3 || brew upgrade boost-python3 || true
                 brew install autoconf automake boost-python3 gsl hdf5 libtool minuit2 pkg-config pmclib yaml-cpp
-                pip3 install h5py matplotlib scipy PyYAML
+                pip3 install -U cython h5py matplotlib numpy PyYAML scipy
+                curl -L -O https://github.com/fredRos/pypmc/archive/v1.1.4.tar.gz
+                tar zxf v1.1.4.tar.gz
+                pip3 install ./pypmc-1.1.4
 
             - name: Create build directory
               shell: bash
