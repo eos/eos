@@ -400,6 +400,11 @@ if test "x$enable_python" == xyes ; then
 	LDFLAGS=$PYTHON_LDFLAGS
 	LIBS=$PYTHON_LIBS_CONFTEST
 
+	if test "x$BOOST_PYTHON_SKIP" == "xyes"; then
+	AC_MSG_NOTICE([skipping checks for -lboost_python$BOOST_PYTHON_SUFFIX])
+	PYTHON_LDFLAGS="$BOOST_PYTHON_LDFLAGS"
+	PYTHON_LIBS="$BOOST_PYTHON_LIBS"
+	else
 	AC_CHECK_LIB([boost_python$BOOST_PYTHON_SUFFIX], main,
 	        [],
 	        [AC_MSG_ERROR([you do seem to be lacking 'libboost_python'.])]
@@ -421,6 +426,7 @@ if test "x$enable_python" == xyes ; then
 		 AC_MSG_ERROR([boost_python example does not compile])
 		]
 	)
+	fi
 
 	CXXFLAGS=$_CXXFLAGS
 	LDFLAGS=$_LDFLAGS
