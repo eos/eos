@@ -324,7 +324,7 @@ class Analysis:
 
         # carry out adaptions
         for step in progressbar(range(steps)):
-            origins = sampler.run(pre_N, trace_sort=True)
+            origins = sampler.run(step_N, trace_sort=True)
             generating_components.append(origins)
             samples = sampler.samples[:]
             weights = sampler.weights[:][:, 0]
@@ -343,6 +343,6 @@ class Analysis:
         normalized_weights = np.ma.masked_where(weights <= 0, weights) / np.sum(weights)
         entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
         perplexity = np.exp(entropy) / len(normalized_weights)
-        info('Perplexity after final samples: {}'.format(step, perplexity))
+        info('Perplexity after final samples: {}'.format(perplexity))
 
         return samples, weights, sampler.proposal
