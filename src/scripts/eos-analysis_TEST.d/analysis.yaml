@@ -1,0 +1,76 @@
+likelihoods:
+  - name: lattice
+    constraints:
+      - B->pi::f_++f_0@FNALMILC2015A
+  - name: lcsr
+    constraints:
+      - B->pi::f_+@KMO2006
+  - name: BaBar
+    constraints:
+      - B^0->pi^+lnu::BR@BaBar-2010B
+  - name: Belle
+    constraints:
+      - B^0->pi^+lnu::BR@Belle-2010A
+
+priors:
+  - name: CKM
+    parameters:
+      - parameter: CKM::abs(V_ub)
+        min:  3.0e-3
+        max:  5.0e-3
+        type: uniform
+  - name: FF-norm
+    parameters:
+      - parameter: B->pi::f_+(0)@BCL2008
+        min: 0.15
+        max: 0.30
+  - name: FF-shape
+    parameters:
+      - parameter: B->pi::b_+^1@BCL2008
+        min: -4
+        max: +4
+      - parameter: B->pi::b_+^2@BCL2008
+        min: -4
+        max: +4
+      - parameter: B->pi::b_0^1@BCL2008
+        min: -4
+        max: +4
+      - parameter: B->pi::b_0^2@BCL2008
+        min: -4
+        max: +4
+
+posteriors:
+  - name: FF
+    global_options:
+        model: CKMScan
+        form-factors: BCL2008
+    likelihood:
+      - lattice
+      - lcsr
+    prior:
+      - FF-norm
+      - FF-shape
+
+  - name: CKM+FF
+    global_options:
+        model: CKMScan
+        form-factors: BCL2008
+    likelihood:
+      - lattice
+      - lcsr
+      - BaBar
+      - Belle
+    prior:
+      - CKM
+      - FF-norm
+      - FF-shape
+
+predictions:
+  - name: PDF
+    global_options:
+        model: CKMScan
+        form-factors: BCL2008
+    observables:
+      - name: B->pilnu::P(q2_min,q2_max)
+        kinematics: { 'q2_min': 0.01, 'q2_max': 2.00 }
+      - name: B_u->lnu::BR
