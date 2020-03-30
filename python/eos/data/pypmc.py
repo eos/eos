@@ -73,7 +73,7 @@ class MarkovChain:
         description['version'] = eos.version()
         description['type'] = 'MarkovChain'
         description['parameters'] = [{
-            'parameter': p.name(),
+            'name': p.name(),
             'min': p.min(),
             'max': p.max()
         } for p in parameters]
@@ -207,7 +207,7 @@ class PMCSampler:
         description['version'] = eos.version()
         description['type'] = 'PMCSampler'
         description['parameters'] = [{
-            'parameter': p.name(),
+            'name': p.name(),
             'min': p.min(),
             'max': p.max()
         } for p in parameters]
