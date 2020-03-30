@@ -58,6 +58,11 @@ class AnalysisFile:
 
         self._posteriors = { posterior['name'] : dict(posterior) for posterior in input_data['posteriors'] }
 
+        if 'predictions' not in input_data:
+            self._predictions = []
+        else:
+            self._predictions = { pred['name'] : dict(pred) for pred in input_data['predictions'] }
+
 
     def analysis(self, _posterior):
         """Create an eos.Analysis object for the named posterior."""
@@ -79,6 +84,21 @@ class AnalysisFile:
         return eos.Analysis(prior, likelihood, global_options)
 
 
+    def observables(self, _prediction, parameters):
+        """Creates a list of eos.Observable objects for the named set of predictions."""
+        if _prediction not in self.predictions:
+            raise RuntimeError('Cannot create observables for unknown set of predictions: \'{}\''.format(_prediction))
+
+        prediction = self.predictions[_prediction]
+        options = eos.Options(**prediction['global_options'])
+        return [eos.Observable.make(
+            o['name'],
+            parameters,
+            eos.Kinematics(**(o['kinematics'] if 'kinematics' in o else {})),
+            options
+        ) for o in prediction['observables']]
+
+
     @property
     def priors(self):
         """Returns a list of all priors recorded in the analysis file."""
@@ -98,3 +118,9 @@ class AnalysisFile:
         """Returns a list of all posteriors recorded in the analysis file."""
 
         return self._posteriors
+
+    @property
+    def predictions(self):
+        """Returns a list of all predictions recorded in the analysis file."""
+
+        return self._predictions
