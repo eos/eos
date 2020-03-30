@@ -61,6 +61,13 @@ def main():
     )
     parser_list_posteriors.set_defaults(cmd = cmd_list_posteriors)
 
+    # list-predictions
+    parser_list_predictions = subparsers.add_parser('list-predictions',
+        description = 'Lists the predictions defined within the scope of this analysis.',
+        help = 'list the known predictions'
+    )
+    parser_list_predictions.set_defaults(cmd = cmd_list_predictions)
+
     # sample-mcmc
     parser_sample_mcmc = subparsers.add_parser('sample-mcmc',
         description = 'Samples from a posterior using Markov Chain Monte Carlo (MCMC) methods.',
@@ -170,15 +177,35 @@ def main():
     )
     parser_find_clusters.set_defaults(cmd = cmd_find_clusters)
 
+    # predict-observables
+    parser_predict_observables = subparsers.add_parser('predict-observables',
+        description = 'Predict a set of observables based on previously obtained PMC samples.',
+        help = 'predict observables'
+    )
+    parser_predict_observables.add_argument('prediction', metavar = 'PREDICTION',
+        help = 'name set of observables to predict',
+        action = 'store', type = str
+    )
+    parser_predict_observables.add_argument('path', metavar = 'INPUT_PATH',
+        help = 'path to the sampling data',
+        action = 'store', type = str
+    )
+    parser_predict_observables.add_argument('-b', '--base-directory',
+        help = 'base directory where to store samples',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_predict_observables.set_defaults(cmd = cmd_predict_observables)
+
     ## end of commands
 
     # add verbosity arg to all commands
     parsers = [
         parser,
         parser_find_clusters, parser_find_mode,
-        parser_list_priors, parser_list_likelihoods, parser_list_posteriors,
+        parser_list_priors, parser_list_likelihoods, parser_list_posteriors, parser_list_predictions,
         parser_plot_samples,
-        parser_sample_mcmc, parser_sample_pmc
+        parser_sample_mcmc, parser_sample_pmc,
+        parser_predict_observables
     ]
     for p in parsers:
         p.add_argument('-v', '--verbose',
@@ -330,6 +357,38 @@ def cmd_sample_pmc(args):
     eos.data.PMCSampler.create(output_path, analysis.varied_parameters, samples, weights, proposal)
 
 
+# Predict observables
+def cmd_predict_observables(args):
+    _parameters = eos.Parameters()
+    analysis_file = make_analysis_file(args)
+    observables = analysis_file.observables(args.prediction, _parameters)
+
+    basename = os.path.basename(os.path.normpath(args.path))
+    if basename.startswith('mcmc-'):
+        data = eos.data.MarkovChain(args.path)
+    elif basename.startswith('pmc'):
+        data = eos.data.PMCSampler(args.path)
+    else:
+        raise RuntimeError('unsupported data set: {}'.format(args.path))
+
+    try:
+        from tqdm import tqdm
+        progressbar = tqdm
+    except ImportError:
+        progressbar = lambda x: x
+
+    parameters = [_parameters[p['name']] for p in data.varied_parameters]
+    observable_samples = []
+    for sample in progressbar(data.samples):
+        for p, v in zip(parameters, sample):
+            p.set(v)
+        observable_samples.append([o.evaluate() for o in observables])
+    observable_samples = _np.array(observable_samples)
+
+    output_path = os.path.join(args.base_directory, args.prediction, 'pred')
+    eos.data.Prediction.create(output_path, observables, observable_samples, data.weights)
+
+
 # List priors
 def cmd_list_priors(args):
     analysis_file = make_analysis_file(args)
@@ -341,6 +400,13 @@ def cmd_list_priors(args):
 def cmd_list_likelihoods(args):
     analysis_file = make_analysis_file(args)
     for name, lh in analysis_file.likelihoods.items():
+        print(name)
+
+
+# List predictions
+def cmd_list_predictions(args):
+    analysis_file = make_analysis_file(args)
+    for name, pred in analysis_file.predictions.items():
         print(name)
 
 
