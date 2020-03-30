@@ -204,7 +204,9 @@ def main():
 
     log.basicConfig(level=levels[args.verbose])
 
-    if not callable(args.cmd):
+    if not 'cmd' in args:
+        parser.print_help()
+    elif not callable(args.cmd):
         parser.print_help()
     else:
         args.cmd(args)
