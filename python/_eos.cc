@@ -518,6 +518,9 @@ BOOST_PYTHON_MODULE(_eos)
         .def("options", &Observable::options, R"(
             Returns the set of options used when creating the observable.
         )")
+        .def("kinematics", &Observable::kinematics, R"(
+            Returns the set of kinematic variables used within this observable.
+        )")
         ;
 
     // ObservableEntry
