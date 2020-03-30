@@ -272,9 +272,15 @@ def cmd_plot_samples(args):
 
     parameters = eos.Parameters()
     for idx, p in enumerate(data.varied_parameters):
-        print('plotting histogram for {}'.format(p['parameter']))
-        pp = parameters[p['parameter']]
-        label = pp.latex()
+        print('plotting histogram for {}'.format(p['name']))
+        if data.type in ['Prediction']:
+            label = eos.Observables()[p['name']]
+        elif data.type in ['MarkovChain', 'PMCSampler']:
+            pp = parameters[p['name']]
+            label = pp.latex()
+        else:
+            label = r'\verb+{}+'.format(p['name'])
+
         description = {
             'plot': {
                 'x': { 'label': label, 'format':  '${x:.5f}$', 'range': [p['min'], p['max']] },
