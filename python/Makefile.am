@@ -4,6 +4,7 @@ EXTRA_DIST = \
 	eos/__init__.py \
 	eos/analysis.py \
 	eos/analysis_file.py \
+	eos/config.py \
 	eos/constraint.py \
 	eos/ipython.py \
 	eos/observable.py \
@@ -33,6 +34,7 @@ eos_SCRIPTS = \
 	eos/__init__.py \
 	eos/analysis.py \
 	eos/analysis_file.py \
+	eos/config.py \
 	eos/constraint.py \
 	eos/ipython.py \
 	eos/observable.py \
