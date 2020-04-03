@@ -11,6 +11,7 @@ lib_LTLIBRARIES = libeos.la
 libeos_la_SOURCES = \
 	constraint.cc constraint.hh \
 	decays.hh \
+	init.cc \
 	observable.cc observable.hh observable-fwd.hh observable-impl.hh \
 	reference.cc reference.hh \
 	signal-pdf.cc signal-pdf.hh
