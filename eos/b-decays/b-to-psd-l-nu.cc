@@ -253,7 +253,7 @@ namespace eos
                 result.h_T  = 0.0;
                 result.h_tS = 0.0;
 
-                result.v  = 1.0;
+                result.v  = 0.99; // avoid NaN in std::sqrt(1.0 - v);
                 result.p  = 0.0;
                 result.NF = 0.0;
             }
