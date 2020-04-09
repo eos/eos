@@ -23,6 +23,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/model.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/polylog.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -45,6 +46,8 @@ namespace eos
         UsedParameter fpi;
 
         // Borel parameters, thresholds and renormalization scale
+        SwitchOption opt_rescale_borel;
+        std::function<double (const double &)> rescale_factor;
         UsedParameter M2;
         UsedParameter Mprime2;
         UsedParameter s0B;
@@ -66,6 +69,7 @@ namespace eos
             MB(p["mass::B_d"], u),
             mpi(p["mass::pi^+"], u),
             fpi(p["decay-constant::pi"], u),
+            opt_rescale_borel(o, "rescale-borel", { "1", "0" }, "1"),
             M2(p["B->pi::M^2@DKMMO2008"], u),
             Mprime2(p["B->pi::Mp^2@DKMMO2008"], u),
             s0B(p["B->pi::s_0^B@DKMMO2008"], u),
@@ -76,7 +80,17 @@ namespace eos
             cond_GG(p["QCD::cond_GG"], u),
             r_vac(p["QCD::r_vac"], u),
             pi(p, o)
-        {
+        {            
+            using namespace std::placeholders;
+
+            if ('1' == opt_rescale_borel.value()[0])
+            {
+                rescale_factor = std::bind(&Implementation::_rescale_factor, this, _1);
+            }
+            else
+            {
+                rescale_factor = std::bind(&Implementation::_no_rescale_factor, this, _1);
+            }
         }
 
         inline double m_b_msbar(const double & mu) const
@@ -871,7 +885,12 @@ namespace eos
             return mb2 * fpi * integrate<GSL::QNG>(integrand, u0, 1 - 1e-10);
         }
 
-        double rescale_factor(const double & q2) const
+        inline double _no_rescale_factor(const double &) const
+        {
+            return 1.0;
+        }
+
+        double _rescale_factor(const double & q2) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
             const double u0_q2 = std::max(1e-10, (mb2 - q2) / (s0B - q2));
