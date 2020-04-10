@@ -47,10 +47,12 @@ namespace eos
 
         // Borel parameters, thresholds and renormalization scale
         SwitchOption opt_rescale_borel;
-        std::function<double (const double &)> rescale_factor;
+        std::function<double (const double &)> rescale_factor_p;
+        std::function<double (const double &)> rescale_factor_0;
         UsedParameter M2;
         UsedParameter Mprime2;
         UsedParameter s0B;
+        UsedParameter s0tilB;
         UsedParameter sprime0B;
         UsedParameter mu;
 
@@ -73,6 +75,7 @@ namespace eos
             M2(p["B->pi::M^2@DKMMO2008"], u),
             Mprime2(p["B->pi::Mp^2@DKMMO2008"], u),
             s0B(p["B->pi::s_0^B@DKMMO2008"], u),
+            s0tilB(p["B->pi::stil_0^B@DKMMO2008"], u),
             sprime0B(p["B->pi::sp_0^B@DKMMO2008"], u),
             mu(p["B->pi::mu@DKMMO2008"], u),
             zeta_nnlo(p["B->pi::zeta(NNLO)@DKMMO2008"], u),
@@ -85,11 +88,15 @@ namespace eos
 
             if ('1' == opt_rescale_borel.value()[0])
             {
-                rescale_factor = std::bind(&Implementation::_rescale_factor, this, _1);
+                rescale_factor_p = std::bind(&Implementation::_rescale_factor_p, this, _1);
+                rescale_factor_0 = std::bind(&Implementation::_rescale_factor_0, this, _1);
+
             }
             else
             {
-                rescale_factor = std::bind(&Implementation::_no_rescale_factor, this, _1);
+                rescale_factor_p = std::bind(&Implementation::_no_rescale_factor, this, _1);
+                rescale_factor_0 = std::bind(&Implementation::_no_rescale_factor, this, _1);
+
             }
         }
 
@@ -809,7 +816,7 @@ namespace eos
         double Ftil_lo_tw3(const double & q2, const double & _M2) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
-            const double u0 = std::max(1e-10, (mb2 - q2) / (s0B - q2));
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0tilB - q2));
 
             std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::Ftil_lo_tw3_integrand, this, std::placeholders::_1, q2, _M2));
 
@@ -819,7 +826,7 @@ namespace eos
         double Ftil_lo_tw4(const double & q2, const double & _M2) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi, mpi4 = mpi2 * mpi2;
-            const double u0 = std::max(1e-10, (mb2 - q2) / (s0B - q2));
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0tilB - q2));
             const double a2pi = pi.a2pi(mu);
             const double deltapipi = pi.deltapipi(mu);
             const double omega4pi = pi.omega4pi(mu);
@@ -885,12 +892,257 @@ namespace eos
             return mb2 * fpi * integrate<GSL::QNG>(integrand, u0, 1 - 1e-10);
         }
 
+        double Ftil_nlo_tw2(const double & q2, const double & _M2) const
+        {
+            // Reminder: q2 is the kinematic variable associated with the momentum
+            // transfer, while s is the kinematic variable in which the function is
+            // analytically continued. See also comment at beginning of Appendix B
+            // of [DKMMO2008], p. 21.
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
+            const double a2pi = pi.a2pi(mu), a4pi = pi.a4pi(mu);
+            const double r1 = q2 / mb2;
+
+            // imaginary parts of the hard scattering kernel, integrated over rho.
+            auto T1tiltw2theta1mrho = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1, r14 = r12 * r12, r15 = r14 * r1, r16 = r13 * r13;
+                const double r22 = r2 * r2, r23 = r22 * r2, r24 = r22 * r22, r25 = r24 * r2;
+
+                const double ca0 = -r1 + 2.0 * r12 - r13 
+                    + r2 * (1.0 - r1 - r12 + r13)
+                    + r22 * (-1.0 + 2.0 * r1 - r12);
+                const double ca2 = -15.0 + 40.0 * r1 - 36.0 * r12 + 12.0 * r13 - r14
+                    + r2 * (35.0 - 88.0 * r1 + 72.0 * r12 - 20.0 * r13 + r14)
+                    + r22 * (-26.0 + 60.0 * r1 - 42.0 * r12 + 8.0 * r13)
+                    + r23 * (6.0 - 12.0 * r1 + 6.0 * r12);
+                const double ca4 = -210.0 + 756.0 * r1 - 1050.0 * r12 + 700.0 * r13 - 225.0 * r14 + 30.0 * r15 - r16
+                    + r2 * (714.0 - 2436.0 * r1 + 3150.0 * r12 - 1900.0 * r13 + 525.0 * r14 - 54.0 * r15 + r16)
+                    + r22 * (-924.0 + 2940.0 * r1 - 3450.0 * r12 + 1800.0 * r13 - 390.0 * r14 + 24.0 * r15)
+                    + r23 * (560.0 - 1620.0 * r1 + 1650.0 * r12 - 680.0 * r13 + 90.0 * r14)
+                    + r24 * (-155.0 + 390.0 * r1 - 315.0 * r12 + 80.0 * r13)
+                    + r25 * (15.0 - 30.0 * r1 + 15.0 * r12);
+
+                return -6.0 / (r2 * power_of<7>(r1 - r2)) * (
+                            power_of<3>(r1 - r2) * ca0 + power_of<2>(r1 - r2) * ca2 * a2pi + ca4 * a4pi
+                        );
+
+            };
+            auto T1tiltw2thetarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1, r14 = r12 * r12, r15 = r14 * r1;
+                const double r22 = r2 * r2, r23 = r22 * r2, r24 = r22 * r22, r25 = r24 * r2, r26 = r23 * r23, r27 = r24 * r23;
+                const double Lr2 = std::log(r2);
+
+                const double ca00 = 1 - 2.0 * r1
+                    + r2 * (-1.0 + 4.0 * r1)
+                    + r22 * (-1.0 - 2.0 * r1)
+                    + r23;
+                const double ca0r2 = -r2 * r1 + r22 * (1.0 + r1) - r23;
+
+                const double ca20 = (15.0 - 40.0 * r1 + 36.0 * r12 - 12.0 * r13)
+                    + r2 * (-35.0 + 93.0 * r1 - 87.0 * r12 + 24.0 * r13)
+                    + r22 * (21.0 - 45.0 * r1 + 96.0 * r12 - 12.0 * r13)
+                    + r23 * (-6.0 - 29.0 * r1 - 45.0 * r12)
+                    + r24 * (-16.0 + 21.0 * r1)
+                    + r25 * (21.0);
+                const double ca2r2 = r2 * (-6 * r13)
+                    + r22 * (6.0 * r13 + 18.0 * r12)
+                    + r23 * (12.0 * r1 + 12.0 * r12)
+                    + r24 * (-24.0 - 12.0 * r1)
+                    + r25 * (-6.0);
+
+                const double ca40 = 420.0 - 1512.0 * r1 + 2100.0 * r12 - 1400.0 * r13 + 450.0 * r14 - 60.0 * r15
+                    + r2  * (-1428.0 + 4935.0 * r1 - 6510.0 * r12 + 4080.0 * r13 - 1260.0 * r14 + 120.0 * r15)
+                    + r22 * (1785.0 - 5775.0 * r1 + 6900.0 * r12 - 3600.0 * r13 + 1590.0 * r14 - 60.0 * r15)
+                    + r23 * (-1015.0 + 2820.0 * r1 - 2040.0 * r12 + 2240.0 * r13 - 780.0 * r14)
+                    + r24 * (450.0 - 1200.0 * r1 - 1080.0 * r12 - 1320.0 * r13)
+                    + r25 * (-660.0 - 243.0 * r1 + 630.0 * r12)
+                    + r26 * (313.0 + 975.0 * r1)
+                    + r27 * (135.0);
+                const double ca4r2 = r2 * (-15.0 * r15)
+                    + r22 * (75.0 * r14 + 15.0 * r15)
+                    + r23 * (690.0 * r13 + 135.0 * r14)
+                    + r24 * (150.0 * r12 + 150.0 * r13)
+                    + r25 * (-705.0 * r1 - 150.0 * r12)
+                    + r26 * (-195.0 - 135.0 * r1)
+                    + r27 * (-15.0);
+
+                return -6.0 / (r2 * power_of<7>(r1 - r2)) * (power_of<4>(r1 - r2) * (ca00 + ca0r2 * Lr2)
+                        + power_of<2>(r1 - r2) * (ca20 + ca2r2 * Lr2) * a2pi
+                        + (ca40 / 2.0 + ca4r2 * Lr2) * a4pi
+                        );
+            };
+            auto T1tiltw2delta = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1, r14 = r12 * r12, r15 = r13 * r12, r16 = r13 * r13, r17 = r14 * r13;
+                const double r22 = r2 * r2, r23 = r22 * r2, r24 = r22 * r22, r25 = r23 * r22, r26 = r23 * r23;
+                const double L1mr1 = std::log(1.0 - r1);
+
+                const double ca00 = r1 - r12 + r2 * (-1.0 + r12) + r22 * (1.0 - r1);
+                const double ca0r1 = r1 - 2.0 * r12 + r13
+                    + r2 * (-1.0 + r1 + r12 - r13)
+                    + r22 * (1.0 - 2 * r1 + r12);
+
+                const double ca20 = 5.0 * r1 - 10.0 * r12 + 6.0 * r13 - r14
+                    + r2 * (-5.0 + 12.0 * r12 - 8.0 * r13 + r14)
+                    + r22 * (10.0 - 12.0 * r1 + 2.0 * r13)
+                    + r23 * (-6.0 + 8.0 * r1 - 2.0 * r12)
+                    + r24 * (1.0 - r1);
+                const double ca2r1 = 5.0 * r1 - 15.0 * r12 + 16.0 * r13 - 7.0 * r14 + r15
+                    + r2 * (-5.0 + 5.0 * r1 + 12.0 * r12 - 20.0 * r13 + 9.0 * r14 - r15)
+                    + r22 * (10.0 - 22.0 * r1 + 12.0 * r12 + 2.0 * r13 - 2.0 * r14)
+                    + r23 * (-6.0 + 14.0 * r1 - 10.0 * r12 + 2.0 * r13)
+                    + r24 * (1.0 - 2.0 * r1 + r12);
+
+                const double ca40 = 42.0 * r1 - 126.0 * r12 + 140.0 * r13 - 70.0 * r14 + 15.0 * r15 - r16
+                    + r2 * (-42.0 + 210.0 * r12 - 280.0 * r13 + 135.0 * r14 - 24.0 * r15 + r16)
+                    + r22 * (126.0 - 210.0 * r1 + 150.0 * r13 - 75.0 * r14 + 9.0 * r15)
+                    + r23 * (-140.0 + 280.0 * r1 - 150.0 * r12 + 10.0 * r14)
+                    + r24 * (70.0 - 135.0 * r1 + 75.0 * r12 - 10.0 * r13)
+                    + r25 * (-15.0 + 24.0 * r1 - 9.0 * r12)
+                    + r26 * (1.0 - r1);
+                const double ca4r1 = 42.0 * r1 - 168.0 * r12 + 266.0 * r13 - 210.0 * r14 + 85.0 * r15 - 16.0 * r16 + r17
+                    + r2 * (-42.0 + 42.0 * r1 + 210.0 * r12 - 490.0 * r13 + 415.0 * r14 - 159.0 * r15 + 25.0 * r16 - r17)
+                    + r22 * (126.0 - 336.0 * r1 + 210.0 * r12 + 150.0 * r13 - 225.0 * r14 + 84.0 * r15 - 9.0 * r16)
+                    + r23 * (-140.0 + 420.0 * r1 - 430.0 * r12 + 150.0 * r13 + 10.0 * r14 - 10.0 * r15)
+                    + r24 * (70.0 - 205.0 * r1 + 210.0 * r12 - 85.0 * r13 + 10.0 * r14)
+                    + r25 * (-15.0 + 39.0 * r1 - 33.0 * r12 + 9.0 * r13)
+                    + r26 * (1.0 - 2.0 * r1 + r12);
+
+                return -6.0 / (r1 * r1 * power_of<7>(r1 - r2)) * (
+                            power_of<4>(r1 - r2) * (ca00 * r1 + ca0r1 * L1mr1)
+                            + 6.0 * power_of<2>(r1 - r2) * (ca20 * r1 + ca2r1 * L1mr1) * a2pi
+                            + 15.0 * (ca40 * r1 + ca4r1 * L1mr1) * a4pi
+                        );
+
+            };
+            std::function<double (const double &)> integrand(
+                [&] (const double & r2) -> double
+                {
+                    return (T1tiltw2theta1mrho(r1, r2) + T1tiltw2thetarhom1(r1, r2) + T1tiltw2delta(r1, r2))
+                       * std::exp(-mb2 * r2 / _M2);
+                }
+            );
+
+            static const double eps = 1e-12;
+
+            auto config = GSL::QAGS::Config().epsrel(1e-8);
+
+            return mb2 * fpi * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0tilB / mb2, config);
+        }
+
+        double Ftil_nlo_tw3(const double & q2, const double _M2) const
+        {
+            // Reminder: q2 is the kinematic variable associated with the momentum
+            // transfer, while s is the kinematic variable in which the function is
+            // analytically continued. See also comment at beginning of Appendix B
+            // of [DKMMO2008], p. 21.
+
+            static const double pi2 = M_PI * M_PI;
+
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
+            const double r1 = q2 / mb2;
+            const double lmu = 2.0 * std::log(mb / mu());
+
+            const double mupi = pi.mupi(mu);
+
+            auto T1tiltw3ptheta1mrho = [&] (const double & r1, const double & r2) -> double
+            {
+                const double l1 = std::log((r2 - 1.0)/(r2 - r1)), l2 = lmu + std::log((r2 - 1.0) * (r2 - 1.0) / r2);
+
+                return 2.0 * l1 * (r2 * l2 - 1.0);
+            };
+            auto T1tiltw3pthetarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double logr1 = std::log(r1);
+                const double logr2 = std::log(r2);
+                const double log1mr1 = std::log(1.0 - r1);
+                const double logr2m1 = std::log(r2 - 1.0);
+                const double logr2mr1 = std::log(r2 - r1);
+                const double dl1 = (-1.0 - 5.0 * pi2 / 3.0  + 2.0 * (std::real(dilog(1.0 / r2)) + 2.0 * std::real(dilog(1.0 / r1)) + 2.0 * std::real(dilog(r2)) - 2.0 * std::real(dilog(r2 / r1)) + 4.0 * std::real(dilog((r2 - 1.0) / (r1 - 1.0))))) * r1 * r2 + r1;
+                const double dl2 = ((3.0 + 4.0 * logr1 + 2.0 * logr2m1 - 4.0 * logr2mr1)* r1 - 2.0) * r2 - 2.0 * r1;
+                const double dl3 = 8.0 * (logr2mr1 - log1mr1) * r1 * r2;
+                const double dl4 = 2.0 * ((1.0 - 2.0 * lmu) * r1 - 1.0) * r2;
+                const double dl5 = 2.0 * ((-1.0 + 2.0 * lmu) * r1 + 1.0) * r2;
+                return (dl1 + dl2 * logr2 + dl3 * logr2m1 + dl4 * log1mr1 + dl5 * logr2mr1) / r1;
+            };
+
+            auto T1tiltw3pdeltarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1;
+                const double logr2 = std::log(r2);
+                const double logr2m1 = std::log(r2 - 1.0);
+                const double log1mr1 = std::log(1.0 - r1);
+                const double l1 = std::log((r2 - 1.0)/(1.0 - r1));
+                const double dl1 = (3.0 + 4.0 * pi2 / 3.0 - 2.0 * lmu + 4.0 * std::real(dilog(1.0 - r2))) * r12 * r2 + r1 * r2;
+                const double dl2 = (-2.0 * r12 + (1.0 - 2.0 * r1 + r12) * r2);
+                const double dl3 = (4.0 - (6.0 + 4.0 * l1) * r2) * r12;
+                const double dl4 = 2.0 * r12 * r2 * (logr2m1 + l1);
+                const double dl5 = 2.0 * r12 * r2 * (1 - lmu);
+                return (dl1 + dl2 * log1mr1 + dl3 * logr2m1 + dl4 * logr2 + dl5 * l1) / r12;
+            };
+            auto T1tiltw3sigmatheta1mrho = [&] (const double & r1, const double & r2) -> double
+            {
+                const double lr2 = std::log(r2), lr2m1 = std::log(r2 - 1.0);
+                const double lr2mr1 = std::log(r2 - r1);
+
+                return - 6.0 * ((r1 - r2) * (lr2mr1 - lr2m1) - r1 + 1.0) * (r2 * (lmu + 2.0 * lr2m1 - lr2) - 1.0);
+            };
+            auto T1tiltw3sigmathetarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r22 = r2 * r2;
+                const double lr1 = std::log(r1), l1mr1 = std::log(1.0 - r1);
+                const double lr2 = std::log(r2), lr2m1 = std::log(r2 - 1.0);
+                const double lr2mr1 = std::log(r2 - r1);
+                const double dil = -2.0 * (2.0 * std::real(dilog(1/r1)) + 4.0 * std::real(dilog((r2 - 1.0)/(r1 - 1.0))) + std::real(dilog(1/r2)) + 2.0 * std::real(dilog(r2)) - 2.0 * std::real(dilog(r2 / r1)) + 4.0 * std::log((r1 - r2)/(r1 - 1)) * std::log(r2 - 1.0)) * (r2 - r1) * r2;
+                const double dl1 = -(r2 - 1.0) * (2.0 - r2 + r1 * (-1.0 + 2.0 * r2));
+                const double dl2 = ((r12 * (r2 - 2.0) - r1 * (r2 - 2.0) * r2 + 2.0 * r22) / r1 + 2.0 * (r2 - r1) * r2 * (2.0 * (lr2mr1 - lr1) - lr2m1)) * lr2;
+                const double dl3 = -2.0 * (r1 - 1.0) * r2 * (r2 - r1) * l1mr1 / r1;
+                const double dl4 = 2.0 * (r1 - 1.0) * r2 * (r2 - r1) * lr2mr1 / r1;
+                const double dl5 = 4.0 * (l1mr1 - lr2mr1) * (r2 - r1) * r2;
+                const double dl6 = 5.0 * (r2 - r1) * r2 / 3.0;
+
+                return 3.0 * (dl1 + dl2 + dl3 + dl4 + dl5 * lmu + pi2 * dl6 + dil);
+            };
+            auto T1tiltw3sigmadeltarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1, r22 = r2 * r2;
+                const double l1mr1 = std::log(1.0 - r1);
+                const double lr2 = std::log(r2), lr2m1 = std::log(r2 - 1.0);
+                const double dl1 = (- 17.0 * r1 - r12 + (1.0 - r1 + 2.0 * r12) * r2) / r1;
+                const double dl2 = 2.0 * (2.0 * r1 + r2 - 3.0) / 3.0;
+                const double dl3 = -4.0 * (-2.0 + r1 + r2) * (-1.0 + r2 * (2.0 * lr2m1 - lr2)) * lr2m1;
+                const double dl4 = (4.0 * r12 - 2.0 * r13 + (-r13 - 4.0 * r12 + r1) * r2 + (3.0 * r12 - 2.0 * r1 + 1.0) * r22 
+                        + 2.0 * r12 * r2 * (-2.0 + r1 + r2) * (2.0 * lr2m1 - lr2)) * l1mr1 / r12;
+                const double dl5 = -4.0 * (r2 - 1.0) * l1mr1 * l1mr1 + 4.0 * (r1 + 2.0 * r2 - 3.0) * lr2m1 * lr2m1;
+                const double dl6 = 2.0 * (5.0 + r2 - (l1mr1 - lr2m1) * (r2 - r1));
+                const double dl7 = 4.0 * (-3.0 + r1 + 2.0 * r2) * std::real(dilog(1.0 - r2)) - 4.0 * (r2 - 1.0) * std::real(dilog(r1));
+
+                return 3.0 * ((dl1 + pi2 * dl2 + dl5 + dl6 * lmu + dl7) * r2 + dl3 + dl4);
+            };
+            std::function<double (const double &)> integrand(
+                [&] (const double & r2) -> double
+                {
+                    return (
+                            1.0 / (r2 * (r2 - r1)) * (T1tiltw3pthetarhom1(r1, r2) + T1tiltw3ptheta1mrho(r1, r2) + T1tiltw3pdeltarhom1(r1, r2))
+                            + 1.0 / (3.0 * r2 * power_of<2>(r2 - r1)) * (T1tiltw3sigmatheta1mrho(r1, r2) + T1tiltw3sigmathetarhom1(r1, r2) + T1tiltw3sigmadeltarhom1(r1, r2))
+                        ) * std::exp(-mb2 * r2 / _M2);
+                }
+            );
+
+            static const double eps = 1e-12;
+
+            auto config = GSL::QAGS::Config().epsrel(1e-6);
+
+            return fpi * mupi * mb * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0tilB / mb2, config);
+        }
+
         inline double _no_rescale_factor(const double &) const
         {
             return 1.0;
         }
 
-        double _rescale_factor(const double & q2) const
+        double _rescale_factor_p(const double & q2) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
             const double u0_q2 = std::max(1e-10, (mb2 - q2) / (s0B - q2));
@@ -923,13 +1175,49 @@ namespace eos
 
             double result = integrate<GSL::QNG>(integrand_numerator_zero, u0_zero, 1.000) / integrate<GSL::QNG>(integrand_numerator_q2, u0_q2, 1.000)
                 / integrate<GSL::QNG>(integrand_denominator_zero, u0_zero, 1.000) * integrate<GSL::QNG>(integrand_denominator_q2, u0_q2, 1.000);
+            return result;
+        }
+
+        double _rescale_factor_0(const double & q2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
+            const double u0_q2 = std::max(1e-10, (mb2 - q2) / (s0tilB - q2));
+            const double u0_zero = std::max(1e-10, mb2 / s0tilB);
+
+            std::function<double (const double &)> integrand_numerator_q2(
+                [&] (const double & u) -> double
+                {
+                    return u * (0.0 + Ftil_lo_tw3_integrand(u, q2, this->M2));
+                }
+            );
+            std::function<double (const double &)> integrand_denominator_q2(
+                [&] (const double & u) -> double
+                {
+                    return (0.0 + Ftil_lo_tw3_integrand(u, q2, this->M2()));
+                }
+            );
+            std::function<double (const double &)> integrand_numerator_zero(
+                [&] (const double & u) -> double
+                {
+                    return u * (0.0 + Ftil_lo_tw3_integrand(u, 0.0, this->M2()));
+                }
+            );
+            std::function<double (const double &)> integrand_denominator_zero(
+                [&] (const double & u) -> double
+                {
+                    return (0.0 + Ftil_lo_tw3_integrand(u, 0.0, this->M2()));
+                }
+            );
+
+            double result = integrate<GSL::QNG>(integrand_numerator_zero, u0_zero, 1.000) / integrate<GSL::QNG>(integrand_numerator_q2, u0_q2, 1.000)
+                / integrate<GSL::QNG>(integrand_denominator_zero, u0_zero, 1.000) * integrate<GSL::QNG>(integrand_denominator_q2, u0_q2, 1.000);
 
             return result;
         }
 
         double MB_lcsr(const double & q2) const
         {
-            const double M2_rescaled = this->M2() * this->rescale_factor(q2);
+            const double M2_rescaled = this->M2() * this->rescale_factor_p(q2);
             const double alpha_s = model->alpha_s(mu);
 
             std::function<double (const double &)> F(
@@ -951,10 +1239,34 @@ namespace eos
             return std::sqrt(MB2);
         }
 
+        double MB0_lcsr(const double & q2) const
+        {
+            const double M2_rescaled = this->M2() * this->rescale_factor_0(q2);
+            const double alpha_s = model->alpha_s(mu);
+
+            std::function<double (const double &)> F(
+                [&] (const double & _M2) -> double
+                {
+                    const double Ftil_lo  = Ftil_lo_tw3(q2, _M2) + Ftil_lo_tw4(q2, _M2);
+                    const double Ftil_nlo = Ftil_nlo_tw2(q2, _M2) + Ftil_lo_tw3(q2, _M2);
+
+                    return Ftil_lo + alpha_s / (3.0 * M_PI) * Ftil_nlo;
+                }
+            );
+
+
+            double MB2 = M2_rescaled * M2_rescaled * derivative<1, deriv::TwoSided>(F, M2_rescaled) / F(M2_rescaled);
+
+            if (MB2 < 0.0)
+                return 0.0;
+
+            return std::sqrt(MB2);
+        }
+
         double f_p(const double & q2) const
         {
             const double MB2 = MB * MB;
-            const double M2_rescaled = this->M2() * this->rescale_factor(q2);
+            const double M2_rescaled = this->M2() * this->rescale_factor_p(q2);
             const double fB = decay_constant();
             const double F_lo = F_lo_tw2(q2, M2_rescaled) + F_lo_tw3(q2, M2_rescaled) + F_lo_tw4(q2, M2_rescaled);
             const double F_nlo = F_nlo_tw2(q2, M2_rescaled) + F_nlo_tw3(q2, M2_rescaled);
@@ -970,16 +1282,22 @@ namespace eos
 
         double f_0(const double & q2) const
         {
+
+            if (std::abs(q2) < 1e-6)
+                return f_p(q2);
+
             const double MB2 = MB * MB, mpi2 = mpi * mpi;
-            const double M2_rescaled = this->M2() * this->rescale_factor(q2);
+            const double M2_rescaled = this->M2() * this->rescale_factor_0(q2);
             const double fB = decay_constant();
             const double F_lo = F_lo_tw2(q2, M2_rescaled) + F_lo_tw3(q2, M2_rescaled) + F_lo_tw4(q2, M2_rescaled);
+            const double F_nlo = F_nlo_tw2(q2, M2_rescaled) + F_nlo_tw3(q2, M2_rescaled);
             const double Ftil_lo = Ftil_lo_tw3(q2, M2_rescaled) + Ftil_lo_tw4(q2, M2_rescaled);
-            //const double Ftil_nlo = F_nlo_tw2(q2, M2_rescaled) + F_nlo_tw3(q2, M2_rescaled);
+            const double Ftil_nlo = Ftil_nlo_tw2(q2, M2_rescaled) + Ftil_nlo_tw3(q2, M2_rescaled);
             //const double Ftil_nnlo = F_nlo * F_nlo / F_lo * zeta_nnlo;
-            //const double alpha_s = model->alpha_s(mu);
+            const double alpha_s = model->alpha_s(mu);
 
-            return std::exp(MB2 / M2_rescaled) / (2.0 * MB2 * fB) * (2.0 * q2 * Ftil_lo / (MB2 - mpi2) + (1.0 - q2 / (MB2 - mpi)) * F_lo);
+            return std::exp(MB2 / M2_rescaled) / (2.0 * MB2 * fB) * (2.0 * q2 / (MB2 - mpi2) * (Ftil_lo + alpha_s / (3.0 * M_PI) * Ftil_nlo) + (1.0 - q2 / (MB2 - mpi)) * (F_lo + alpha_s / (3.0 * M_PI) * F_nlo));
+
         }
 
         Diagnostics diagnostics() const
@@ -995,8 +1313,8 @@ namespace eos
 
             results.add(Diagnostics::Entry{ this->decay_constant(), "f_B, [DKMM02008]" });
 
-            results.add(Diagnostics::Entry{ this->rescale_factor( 0.0), "rescale_factor(s =  0.0), [DKMMO2008]" });
-            results.add(Diagnostics::Entry{ this->rescale_factor(10.0), "rescale_factor(s = 10.0), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_p( 0.0), "rescale_factor(s =  0.0), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_p(10.0), "rescale_factor(s = 10.0), [DKMMO2008]" });
 
             return results;
         }
@@ -1020,45 +1338,56 @@ namespace eos
     double
     AnalyticFormFactorBToPiDKMMO2008::F_lo_tw2(const double & q2) const
     {
-        return _imp->F_lo_tw2(q2, _imp->M2() * _imp->rescale_factor(q2));
+        return _imp->F_lo_tw2(q2, _imp->M2() * _imp->rescale_factor_p(q2));
     }
 
     double
     AnalyticFormFactorBToPiDKMMO2008::F_lo_tw3(const double & q2) const
     {
-        return _imp->F_lo_tw3(q2, _imp->M2() * _imp->rescale_factor(q2));
+        return _imp->F_lo_tw3(q2, _imp->M2() * _imp->rescale_factor_p(q2));
     }
 
     double
     AnalyticFormFactorBToPiDKMMO2008::F_lo_tw4(const double & q2) const
     {
-        return _imp->F_lo_tw4(q2, _imp->M2() * _imp->rescale_factor(q2));
+        return _imp->F_lo_tw4(q2, _imp->M2() * _imp->rescale_factor_p(q2));
     }
 
     double
     AnalyticFormFactorBToPiDKMMO2008::F_nlo_tw2(const double & q2) const
     {
-        return _imp->F_nlo_tw2(q2, _imp->M2() * _imp->rescale_factor(q2));
+        return _imp->F_nlo_tw2(q2, _imp->M2() * _imp->rescale_factor_p(q2));
     }
 
     double
     AnalyticFormFactorBToPiDKMMO2008::F_nlo_tw3(const double & q2) const
     {
-        return _imp->F_nlo_tw3(q2, _imp->M2() * _imp->rescale_factor(q2));
+        return _imp->F_nlo_tw3(q2, _imp->M2() * _imp->rescale_factor_p(q2));
     }
     
     double
     AnalyticFormFactorBToPiDKMMO2008::Ftil_lo_tw3(const double & q2) const
     {
-        return _imp->Ftil_lo_tw3(q2, _imp->M2() * _imp->rescale_factor(q2));
+        return _imp->Ftil_lo_tw3(q2, _imp->M2() * _imp->rescale_factor_0(q2));
     }
 
     double
     AnalyticFormFactorBToPiDKMMO2008::Ftil_lo_tw4(const double & q2) const
     {
-        return _imp->Ftil_lo_tw4(q2, _imp->M2() * _imp->rescale_factor(q2));
+        return _imp->Ftil_lo_tw4(q2, _imp->M2() * _imp->rescale_factor_0(q2));
     }
 
+    double
+    AnalyticFormFactorBToPiDKMMO2008::Ftil_nlo_tw2(const double & q2) const
+    {
+        return _imp->Ftil_nlo_tw2(q2, _imp->M2() * _imp->rescale_factor_0(q2));
+    }
+
+    double
+    AnalyticFormFactorBToPiDKMMO2008::Ftil_nlo_tw3(const double & q2) const
+    {
+        return _imp->Ftil_nlo_tw3(q2, _imp->M2() * _imp->rescale_factor_0(q2));
+    }
 
     double
     AnalyticFormFactorBToPiDKMMO2008::f_p(const double & q2) const
@@ -1083,6 +1412,12 @@ namespace eos
     AnalyticFormFactorBToPiDKMMO2008::MB_lcsr(const double & q2) const
     {
         return _imp->MB_lcsr(q2);
+    }
+
+    double
+    AnalyticFormFactorBToPiDKMMO2008::MB0_lcsr(const double & q2) const
+    {
+        return _imp->MB0_lcsr(q2);
     }
 
     double

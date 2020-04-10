@@ -103,6 +103,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["B->pi::Mp^2@DKMMO2008"] = 4.5;
                 p["B->pi::mu@DKMMO2008"] = 3.0;
                 p["B->pi::s_0^B@DKMMO2008"] = 37.5;
+                p["B->pi::stil_0^B@DKMMO2008"] = 37.5;
                 p["B->pi::sp_0^B@DKMMO2008"] = 36.5;
                 p["QCD::m_0"] = std::sqrt(0.8);
                 p["QCD::cond_GG"] = 0.012;
@@ -142,17 +143,43 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL(-1.4371, ff.F_nlo_tw3( 5.0), nlo_eps);
                 TEST_CHECK_NEARLY_EQUAL(-2.7571, ff.F_nlo_tw3(10.0), nlo_eps);
 
-                // form factor @ mu = 3.0
+                // fp form factor @ mu = 3.0
                 TEST_CHECK_NEARLY_EQUAL( 0.2831, ff.f_p( 0.0), 10 * eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.2988, ff.f_p( 1.0), 10 * eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.3777, ff.f_p( 5.0), 10 * eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.5346, ff.f_p(10.0), 10 * eps);
 
-                // f_0 LO, tw3
-                TEST_CHECK_NEARLY_EQUAL( 0.0483, ff.Ftil_lo_tw3( 0.0), 1000. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0514, ff.Ftil_lo_tw3( 1.0), 1000. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0681, ff.Ftil_lo_tw3( 5.0), 1000. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.1063, ff.Ftil_lo_tw3(10.0), 1000. * eps);
+                AnalyticFormFactorBToPiDKMMO2008 ff_no_rescale(p, Options{{"rescale-borel", "0"}});
+
+                // Ftil LO, tw3
+                TEST_CHECK_NEARLY_EQUAL( 0.0480, ff_no_rescale.Ftil_lo_tw3( 0.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0512, ff_no_rescale.Ftil_lo_tw3( 1.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0677, ff_no_rescale.Ftil_lo_tw3( 5.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1058, ff_no_rescale.Ftil_lo_tw3(10.0), 1. * eps);
+
+                // Ftil LO, tw4
+                TEST_CHECK_NEARLY_EQUAL( 0.0012, ff_no_rescale.Ftil_lo_tw4( 0.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0013, ff_no_rescale.Ftil_lo_tw4( 1.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0012, ff_no_rescale.Ftil_lo_tw4( 5.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0006, ff_no_rescale.Ftil_lo_tw4(10.0), 1. * eps);
+
+                // Ftil NLO, tw2
+                TEST_CHECK_NEARLY_EQUAL( 0.2454, ff_no_rescale.Ftil_nlo_tw2(1e-5), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2513, ff_no_rescale.Ftil_nlo_tw2( 1.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2775, ff_no_rescale.Ftil_nlo_tw2( 5.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.3147, ff_no_rescale.Ftil_nlo_tw2(10.0), 1. * eps);
+
+                // Ftil NLO, tw3
+                TEST_CHECK_NEARLY_EQUAL( 1.1373, ff_no_rescale.Ftil_nlo_tw3(1e-5), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 1.1747, ff_no_rescale.Ftil_nlo_tw3( 1.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 1.3439, ff_no_rescale.Ftil_nlo_tw3( 5.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 1.5684, ff_no_rescale.Ftil_nlo_tw3(10.0), 1. * eps);
+
+                // f0 form factor @ mu = 3.0
+                TEST_CHECK_NEARLY_EQUAL( 0.2834, ff_no_rescale.f_0( 0.0), 10. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2941, ff_no_rescale.f_0( 1.0), 10. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.3456, ff_no_rescale.f_0( 5.0), 10. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.4425, ff_no_rescale.f_0(10.0), 10. * eps);
 
             }
         }
