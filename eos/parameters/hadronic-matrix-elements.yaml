@@ -1572,6 +1572,11 @@ groups:
           min:     +35.75
           max:     +35.75
           comments: ' // GeV^2, cf. [DKMMO2008]'
+      'B->pi::stil_0^B@DKMMO2008' :
+          central: +35.75
+          min:     +35.75
+          max:     +35.75
+          comments: ' // GeV^2, cf. [DKMMO2008]'
       'B->pi::sp_0^B@DKMMO2008' :
           central: +35.6
           min:     +35.5
