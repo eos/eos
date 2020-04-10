@@ -30,6 +30,7 @@
 #include <eos/utils/qcd.hh>
 
 #include <functional>
+#include <limits>
 
 #include <gsl/gsl_sf_gamma.h>
 
@@ -49,10 +50,12 @@ namespace eos
         SwitchOption opt_rescale_borel;
         std::function<double (const double &)> rescale_factor_p;
         std::function<double (const double &)> rescale_factor_0;
+        std::function<double (const double &)> rescale_factor_T;
         UsedParameter M2;
         UsedParameter Mprime2;
         UsedParameter s0B;
         UsedParameter s0tilB;
+        UsedParameter s0TB;
         UsedParameter sprime0B;
         UsedParameter mu;
 
@@ -76,6 +79,7 @@ namespace eos
             Mprime2(p["B->pi::Mp^2@DKMMO2008"], u),
             s0B(p["B->pi::s_0^B@DKMMO2008"], u),
             s0tilB(p["B->pi::stil_0^B@DKMMO2008"], u),
+            s0TB(p["B->pi::sT_0^B@DKMMO2008"], u),
             sprime0B(p["B->pi::sp_0^B@DKMMO2008"], u),
             mu(p["B->pi::mu@DKMMO2008"], u),
             zeta_nnlo(p["B->pi::zeta(NNLO)@DKMMO2008"], u),
@@ -90,12 +94,14 @@ namespace eos
             {
                 rescale_factor_p = std::bind(&Implementation::_rescale_factor_p, this, _1);
                 rescale_factor_0 = std::bind(&Implementation::_rescale_factor_0, this, _1);
+                rescale_factor_T = std::bind(&Implementation::_rescale_factor_T, this, _1);
 
             }
             else
             {
                 rescale_factor_p = std::bind(&Implementation::_no_rescale_factor, this, _1);
                 rescale_factor_0 = std::bind(&Implementation::_no_rescale_factor, this, _1);
+                rescale_factor_T = std::bind(&Implementation::_no_rescale_factor, this, _1);
 
             }
         }
@@ -1137,6 +1143,456 @@ namespace eos
             return fpi * mupi * mb * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0tilB / mb2, config);
         }
 
+        double FT_lo_tw2_integrand(const double & u, const double & q2, const double _M2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi;
+
+            return std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2)) / u * this->pi.phi(u, mu);
+        }
+
+        double FT_lo_tw2(const double & q2, const double & _M2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0TB - q2));
+
+            std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::FT_lo_tw2_integrand, this, std::placeholders::_1, q2, _M2));
+
+            return mb * fpi * integrate<GSL::QNG>(integrand, u0, 1.000);
+        }
+
+        double FT_lo_tw3_integrand(const double & u, const double & q2, const double & _M2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi;
+            const double mupi = pi.mupi(mu);
+            const double u2 = u * u;
+
+            return - mb * mupi * std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2))
+                * (pi.phi3s_d1(u, mu) - 2 * u * mpi2 * pi.phi3s(u, mu) / (mb2 - q2 + u2 * mpi2)) / (3.0 * (mb2 - q2 + u2 * mpi2));
+        }
+
+        double FT_lo_tw3(const double & q2, const double & _M2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0TB - q2));
+
+            std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::FT_lo_tw3_integrand, this, std::placeholders::_1, q2, _M2));
+
+            return mb * fpi * integrate<GSL::QNG>(integrand, u0, 1.000);
+        }
+        
+        double FT_lo_tw4(const double & q2, const double & _M2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi, mpi4 = mpi2 * mpi2;
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0TB - q2));
+            const double a2pi = pi.a2pi(mu);
+            const double deltapipi = pi.deltapipi(mu);
+            const double omega4pi = pi.omega4pi(mu);
+
+            // auxilliary functions and their first derivatives
+            auto I4T = [&] (const double & u) -> double
+            {
+                const double u2 = u * u, u3 = u2 * u, u4 = u2 * u2, u5 = u4 * u;
+                const double ubar = 1.0 - u, ubar2 = ubar * ubar;
+
+                return 1.0 / 40.0 * (
+                        mpi2 * (
+                            + (90.0 * u5 - 225.0 * u4 + 90.0 * u3 + 90.0 * u2 - 45.0 * u)
+                            + 9.0 * a2pi * (70.0 * u5 - 227.0 * u4 + 254.0 * u3 - 94.0 * u2 - 3.0 * u + 16.0 * (6.0 * u2 - 15.0 * u + 10.0) * u3 * std::atanh(1 - 2.0 * u) - 8.0 * std::log(ubar))
+                        )
+                        + 10.0 * (
+                            40.0 * u2 * ubar2
+                            - 21.0 * (-40.0 * u5 + 87.0 * u4 - 54.0 * u3 + 9.0 * u2 - 2.0 * u + 4.0 * (6.0 * u2 - 15.0 * u + 10.0) * u3 * std::atanh(1 - 2.0 * u) - 2.0 * std::log(ubar)) * omega4pi
+                        ) * deltapipi
+                    );
+            };
+            auto I4T_d1 = [&] (const double & u) -> double
+            {
+                const double u2 = u * u, u3 = u2 * u, u4 = u3 * u;
+                const double ubar = 1.0 - u, ubar2 = ubar * ubar;
+
+                return 1.0 / 8.0 * (
+                        mpi2 * (
+                            + (90.0 * u4 - 180.0 * u3 + 54.0 * u2 + 36.0 * u - 9.0)
+                            + 9.0 * a2pi * (70.0 * u4 - 172.0 * u3 + 138.0 * u2 - 36.0 * u + 1.0 + 96.0 * ubar2 * u2 * std::atanh(1 - 2.0 * u))
+                        )
+                        + 40.0 * u * (
+                            4.0 * (1.0 - 3.0 * u + 2.0 * u2)
+                            + 21.0 * ubar * (-1.0 + 8.0 * u - 10.0 * u2 - 6.0 * ubar * u * std::atanh(1 - 2.0 * u)) * omega4pi
+                        ) * deltapipi
+                    );
+            };
+            std::function<double (const double &)> integrand(
+                [&] (const double & u) -> double
+                {
+                    const double u2 = u * u;
+
+                    const double tw4phi1 = (pi.phi4_d1(u, mu) - 2 * u * mpi2 * pi.phi4(u, mu) / (mb2 - q2 + u2 * mpi2)) / 4.0;
+                    const double tw4phi2 = - mb2 * u * (pi.phi4_d2(u, mu) - 6.0 * u * mpi2 * pi.phi4_d1(u, mu) / (mb2 - q2 + u2 * mpi2) + 12.0 * u * mpi4 * pi.phi4(u, mu) / power_of<2>(mb2 - q2 + u2 * mpi2)) 
+                        / (4.0 * (mb2 - q2 + u2 * mpi2));
+                    const double tw4I4T = - (I4T_d1(u) - 2.0 * u * mpi2 * I4T(u) / (mb2 - q2 + u2 * mpi2));
+
+                    return std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2)) *
+                            (tw4phi1 + tw4phi2 + tw4I4T) / (mb2 - q2 + u2 * mpi2);
+                }
+            );
+
+            return mb * fpi * integrate<GSL::QNG>(integrand, u0, 1 - 1e-10);
+        }
+
+        double FT_nlo_tw2(const double & q2, const double & _M2) const
+        {
+            // Reminder: q2 is the kinematic variable associated with the momentum
+            // transfer, while s is the kinematic variable in which the function is
+            // analytically continued. See also comment at beginning of Appendix B
+            // of [DKMMO2008], p. 21.
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
+            const double a2pi = pi.a2pi(mu), a4pi = pi.a4pi(mu);
+            const double r1 = q2 / mb2;
+
+            // imaginary parts of the hard scattering kernel, integrated over rho.
+            auto T1Ttw2theta1mrho = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1, r14 = r12 * r12, r15 = r14 * r1;
+                const double r22 = r2 * r2, r23 = r22 * r2, r24 = r22 * r22, r25 = r24 * r2;
+                const double L = std::log(power_of<2>(r2 - 1.0) * mb2 / (mu * mu * r2));
+
+                const double ca0 = power_of<4>(r1 - r2) * (-r1 * 2.0 + r2 * (1.0 + r1));
+                const double ca2 = power_of<2>(r1 - r2) * (-2.0 * (r1 * 55.0 - r12 * 65.0 + 16.0 * r13)
+                        + r2 * (95.0 - r1 * 15.0 - r12 * 45.0 + r13)
+                        + r22 * 2.0 * (-35.0 + r1 * 13.0 + r12 * 4.0)
+                        + r23 * 6.0 * (1.0 + r1));
+                const double ca4 = (-2877.0 * r1 + 6258.0 * r12 - r13 * 4592.0 + r14 * 1288.0 - r15 * 107.0)
+                        + r2  * (2667.0 - r1 * 462.0 - r12 * 5502.0 + r13 * 4228.0 - r14 * 782.0 + r15)
+                        + r22 * 6.0 * (-791.0 + r1 * 889.0 - r12 * 21.0 - r13 * 131.0 + r14 * 4.0)
+                        + r23 * 10.0 * (266.0 - r1 * 280.0 + r12 * 35.0 + r13 * 9.0)
+                        + r24 * 10.0 * (-49.0 + r1 * 26.0 + r12 * 8.0)
+                        + r25 * 15.0 * (1.0 + r1);
+
+                const double cb0 = power_of<4>(r1 - r2) * (-1.0 - r1 + 2.0 * r2);
+                const double cb2 = power_of<2>(r1 - r2) * (-15.0 - r1 * 85.0 + r12 * 119.0 - r13 * 31.0 
+                        + r2 * 2.0 * (65.0 - r1 * 34.0 - r12 * 13.0)
+                        + r22 * 12.0 * (-8.0 + r1 * 5.0)
+                        + r23 * 12.0);
+                const double cb4 = (-210.0 - r1 * 2331.0 + r12 * 5754.0 - r13 * 4396.0 + r14 * 1259.0 - r15 * 106.0)
+                        + r2  * 3.0 * (1127.0 - r1 * 728.0 - r12 * 1358.0 + r13 * 1252.0 - r14 * 243.0)
+                        + r22 * 30.0 * (-189.0 + r1 * 245.0 - r12 * 52.0 - r13 * 14.0)
+                        + r23 * 20.0 * (161.0 - r1 * 193.0 + 47.0 * r12)
+                        + r24 * 15.0 * (-43.0 + 33.0 * r1)
+                        + r25 * 30.0;
+
+                return - (
+                        ca0 + ca2 * a2pi + ca4 * a4pi - L * r2 * (cb0 + cb2 * a2pi + cb4 * a4pi)
+                       ) * (r1 - 1.0) * (r2 - 1.0) * 3.0 / (power_of<8>(r1 - r2) * r2);
+            };
+            auto T1Ttw2thetarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1, r14 = r12 * r12, r15 = r14 * r1, r16 = r13 * r13;
+                const double r22 = r2 * r2, r23 = r22 * r2, r24 = r22 * r22, r25 = r24 * r2, r26 = r23 * r23, r27 = r24 * r23;
+                const double Lr2 = std::log(r2), Lr2m1 = std::log(r2 - 1.0), Lmu = std::log(mb2 / (mu * mu));
+
+                const double C0 = r2 - 1.0;
+                const double Clr2 = 60.0 * r2;
+                const double Cl = 60.0 * (r1 - 1.0) * (r2 - 1.0) * r2;
+
+                const double ca00 = -60.0 * (r1 * 2.0
+                    + r2  * (-1.0 - r1 * 12.0 + r12 * 4.0)
+                    + r22 * 2.0 * (5.0 - r1)
+                    + r23 * (-1.0));
+                const double ca0mu = -1.0 + 2.0 * r1 - r2;
+                const double ca0r2 = 1.0 + r12 + r2 * (-3.0 - r1 * 2.0 - r12 * 3.0) + r22 * (4.0 + r1 * 2.0);
+                const double ca0r2m1 = 2.0 * ca0mu;
+
+                const double ca20 = -5.0 * (24.0 * (r1 * 55.0 - r12 * 90.0 + r13 * 36.0)
+                    + r2 * (-1140.0 - r1 * 7475.0 + r12 * 13780.0 - r13 * 5544.0 + r14 * 288.0)
+                    + r22 * (8915.0 - r1 * 3467.0 - r12 * 8672.0 + r13 * 2520.0)
+                    + r23 * (-10097.0 + r1 * 10501.0 - r12 * 836.0)
+                    + r24 * 5.0 * (-351.0 * r1 + 599.0)
+                    + r25 * (-37.0));
+                const double ca2mu = -15.0 + r1 * 130.0 - r12 * 96.0 + r13 * 12.0
+                    + r2 * (-85.0 - r1 * 68.0 + r12 * 60)
+                    + r22 * (119.0 - r1 * 26.0)
+                    + r23 * (-31.0);
+                const double ca2r2 = 15.0 + r1 * 70.0 - r12 * 144.0 + r13 * 60.0 + r14 * 6.0
+                    + r2 * (-145.0 + r1 * 128.0 + r12 * 12.0 - r13 * 24.0 - r14 * 18.0)
+                    + r22 * (166.0 - r1 * 204.0 + r12 * 54.0 - r13 * 72.0)
+                    + r23 * (-18.0 + r1 * 40.0 + r12 * 38.0)
+                    + r24 * (-1.0 + r1 * 37.0);
+                const double ca2r2m1 = 2.0 * ca2mu;
+
+                const double ca40 = 2.0 * (-30.0 * (r1 * 2877.0 - r12 * 7875.0 + r13 * 7700.0 - r14 * 3150.0 + r15 * 450.0)
+                    + r2  * (80010.0 + r1 * 544677.0 - r12 * 1770111.0 - 25.0 * (- r13 * 69041.0 + 2.0 * (r14 * 13331.0 - r15 * 1746.0 + r16 * 36.0)))
+                    + r22 * (-743127.0 + r1 * 499947.0 + r12 * 1581699.0 - 25.0 * (r13 * 78527.0 - r14 * 27488.0 + r15 * 1944.0))
+                    + r23 * (1406664.0 - r1 * 2265963.0 + r12 * 539679.0 + 25.0 * (r13 * 19705.0 - r14 * 4702.0))
+                    + r24 * (-1010261.0 + r1 * 1718047.0 - r12 * 769551.0 + r13 * 40025.0)
+                    + r25 * (290999.0 + 2.0 * (- r1 * 215674.0 + 51507.0 * r12))
+                    + r26 * 2.0 * (- 14213.0 + 9245.0 * r1)
+                    + r27 * 121.0);
+                const double ca4mu = -210.0 + r1 * 3381.0 - r12 * 5670.0 + r13 * 3220.0 - r14 * 645.0 + r15 * 30.0
+                    + r2 * (-2331.0 - r1 * 2184.0 + r12 * 7350.0 - r13 * 3860.0 + r14 * 495.0)
+                    + r22 * (5754.0 - r1 * 4074.0 - r12 * 1560.0 + r13 * 940.0)
+                    + r23 * (-4396.0 + r1 * 3756.0 - r12 * 420.0)
+                    + r24 * (1259.0 - r1 * 729.0)
+                    + r25 * (-106.0);
+                const double ca4r2 = 210.0 + r1 * 2121.0 - r12 * 6825.0 + r13 * 7000.0 - r14 * 2925.0 + r15 * 420.0 + r16 * 15.0
+                    + r2 * (- 3591.0 + r1 * 3444.0 + r12 * 5565.0 - r13 * 7900.0 + r14 * 2475.0 - r15 * 90.0 - r16 * 45.0)
+                    + r22 * (7791.0 - r1 * 14175.0 + r12 * 7020.0 - r13 * 1500.0 + r14 * 270.0 - r15 * 630.0)
+                    + r23 * (-5740.0 + r1 * 10020.0 - r12 * 5520.0 + r13 * 1480.0 - r14 * 1090.0)
+                    + r24 * (1135.0 - r1 * 555.0 + r12 * 180.0 + r13 * 570.0)
+                    + r25 * (270.0 - r1 * 354.0 + r12 * 864.0)
+                    + r26 * (-31.0 + 121.0 * r1);
+                const double ca4r2m1 = 2.0 * ca4mu;
+
+                return -1.0 / (20.0 * r2 * power_of<8>(r1 - r2)) * (power_of<4>(r1 - r2) * (C0 * ca00 + Cl * ca0mu * Lmu + Clr2 * ca0r2 * Lr2 + Cl * ca0r2m1 * Lr2m1)
+                    + power_of<2>(r1 - r2) * (C0 * ca20 + Cl * ca2mu * Lmu + Clr2 * ca2r2 * Lr2 + Cl * ca2r2m1 * Lr2m1) * a2pi
+                    + (C0 * ca40 + Cl * ca4mu * Lmu + Clr2 * ca4r2 * Lr2 + Cl * ca4r2m1 * Lr2m1) * a4pi);
+
+            };
+            auto T1Ttw2delta = [&] (const double & r1, const double & r2) -> double
+            {
+                static const double pi = M_PI, pi2 = pi * pi;
+
+                const double r12 = r1 * r1, r13 = r12 * r1, r14 = r12 * r12, r15 = r13 * r12, r16 = r13 * r13;
+                const double r22 = r2 * r2, r23 = r22 * r2, r24 = r22 * r22, r25 = r23 * r22, r26 = r23 * r23;
+                const double L1mr1 = std::log(1.0 - r1), Lr2 = std::log(r2), Lr2m1 = std::log(r2 - 1.0), Lmu = std::log(mb2 / (mu * mu));
+                const double L1mr1_ser = - 1. - r1 / 2. - r12 / 3. - r13 / 4.;
+                const double dilogr1 = real(dilog(complex<double>(r1, 0.0)));
+                const double dilog1mr2 = real(dilog(complex<double>(1.0 - r2, 0.0)));
+
+                const double ca00 = r2 * (-14.0 + 6.0 * r1 + (6.0 + 2.0 * r1) * r2 + pi2 * (-1.0 + r1 + (1.0 - r1) * r2));
+                const double ca0mu = r2 * (11.0 - 5.0 * r1 + (-5.0 - r1) * r2);
+                const double ca01mr1 = 2.0 * (r1 - r12 + (1.0 - 4.0 * r1 + 3.0 * r12) * r2 + (-1.0 + 3.0 * r1 - 2.0 * r12) * r22);
+                const double ca0r2m1 = 4.0 * (-1.0 + r1 + (2.0 - 2.0 * r1) * r2 + (-1.0 + 1.0 * r1) * r22);
+                const double ca0log2 = 2.0 * r2 * (1.0 - r1 + (-1.0 + r1) * r2);
+                const double ca0dlr1 = 2.0 * r2 * (1.0 - r1 + (-1.0 + r1) * r2);
+                const double ca0dl1mr2 = 2.0 * r2 * (-3.0 + 3.0 * r1 + (3.0 - 3.0 * r1) * r2);
+
+                const double ca20 = r2 * (10.0 * (pi2 + 30.0) - 20.0 * (pi2 + 22.0) * r1 + 12.0 * (pi2 + 14.0) * r12 - 2.0 * (pi2 + 6.0) * r13)
+                    + r22 * (-20.0 * (pi2 + 22.0) + 36.0 * (pi2 + 14.0) * r1 - 18.0 * (pi2 + 6.0) * r12 + 2.0 * (pi2 - 2.0) * r13)
+                    + r23 * (12.0 * (pi2 + 14.0) - 18.0 * (pi2 + 6.0) * r1 + 6.0 * (pi2 - 2.0) * r12)
+                    + r24 * (-2.0 * (pi2 + 6.0) + 2.0 * (pi2 - 2.0) * r1);
+                const double ca2mu = r2 * (-230.0 + 340.0 * r1 - 132.0 * r12 + 10.0 * r13)
+                    + r22 * (340.0 - 396.0 * r1 + 90.0 * r12 + 2.0 * r13)
+                    + r23 * (-132.0 + 90.0 * r1 + 6.0 * r12)
+                    + r24 * (10.0 + 2.0 * r1);
+                const double ca2l2 = r2 * (-10.0 + 20.0 * r1 - 12.0 * r12 + 2.0 * r13)
+                    + r22 * (20.0 - 36.0 * r1 + 18.0 * r12 - 2.0 * r13)
+                    + r23 * (-12.0 + 18.0 * r1 - 6.0 * r12)
+                    + r24 * (2.0 - 2.0 * r1);
+                const double ca2r2m1 = 40.0 - 80.0 * r1 + 48.0 * r12 - 8.0 * r13
+                    + r2 * (-120.0 + 224.0 * r1 - 120.0 * r12 + 16.0 * r13)
+                    + r22 * (128.0 - 216.0 * r1 + 96.0 * r12 - 8.0 * r13)
+                    + r23 * (-56.0 + 80.0 * r1 - 24.0 * r12)
+                    + r24 * (8.0 - 8.0 * r1);
+                const double ca21mr1 = -20.0 * r1 + 40.0 * r12 - 24.0 * r13 + 4.0 * r14
+                    + r2 * (-20.0 + 120.0 * r1 - 176.0 * r12 + 88.0 * r13 - 12.0 * r14)
+                    + r22 * (40.0 - 176.0 * r1 + 216.0 * r12 - 88.0 * r13 + 8.0 * r14)
+                    + r23 * (-24.0 + 88.0 * r1 - 88.0 * r12 + 24.0 * r13)
+                    + r24 * (4.0 - 12.0 * r1 + 8.0 * r12);
+
+                const double ca40 = r2 * (42.0 * (46.0 + pi2) - 126.0 * (38.0 + pi2) * r1 + 140.0 * (30.0 + pi2) * r12 - 70.0 * (22.0 + pi2) * r13 + 15.0 * (14.0 + pi2) * r14 - (6.0 + pi2) * r15)
+                    + r22 * (-126.0 * (38.0 + pi2) + 350.0 * (30.0 + pi2) * r1 - 350.0 * (22.0 + pi2) * r12 + 150.0 * (14.0 + pi2) * r13 - 25.0 * (6.0 + pi2) * r14 + (-2.0 + pi2) * r15)
+                    + r23 * (140.0 * (30.0 + pi2) - 350.0 * (22.0 + pi2) * r1 + 300.0 * (14.0 + pi2) * r12 - 100.0 * (6.0 + pi2) * r13 + 10.0 * (-2.0 + pi2) * r14)
+                    + r24 * (-70.0 * (22.0 + pi2) + 150.0 * (14.0 + pi2) * r1 - 100.0 * (6.0 + pi2) * r12 + 20.0 * (-2.0 + pi2) * r13)
+                    + r25 * (15.0 * (14.0 + pi2) - 25.0 * (6.0 + pi2) * r1 + 10.0 * (-2.0 + pi2) * r12)
+                    + r26 * (-6.0 - pi2 + (-2.0 + pi2) * r1);
+                const double ca4mu = r2 * (-1470.0 + 3654.0 * r1 - 3220.0 * r12 + 1190.0 * r13 - 165.0 * r14 + 5.0 * r15)
+                    + r22 * (3654.0 - 8050.0 * r1 + 5950.0 * r12 - 1650.0 * r13 + 125.0 * r14 + r15)
+                    + r23 * (-3220.0 + 5950.0 * r1 - 3300.0 * r12 + 500.0 * r13 + 10.0 * r14)
+                    + r24 * (1190.0 - 1650.0 * r1 + 500.0 * r12 + 20.0 * r13)
+                    + r25 * (-165.0 + 125.0 * r1 + 10.0 * r12)
+                    + r26 * (5.0 + r1);
+                const double ca4l2 = r2 * (-42.0 + 126.0 * r1 - 140.0 * r12 + 70.0 * r13 - 15.0 * r14 + r15)
+                    + r22 * (126.0 - 350.0 * r1 + 350.0 * r12 - 150.0 * r13 + 25.0 * r14 - r15)
+                    + r23 * (-140.0 + 350.0 * r1 - 300.0 * r12 + 100.0 * r13 - 10.0 * r14)
+                    + r24 * (70.0 - 150.0 * r1 + 100.0 * r12 - 20.0 * r13)
+                    + r25 * (-15.0 + 25.0 * r1 - 10.0 * r12)
+                    + r26 * (1.0 - r1);
+                const double ca4r2m1 = 168.0 - 504.0 * r1 + 560.0 * r12 - 280.0 * r13 + 60.0 * r14 - 4.0 * r15
+                    + r2 * (-672.0 + 1904.0 * r1 - 1960.0 * r12 + 880.0 * r13 - 160.0 * r14 + 8.0 * r15)
+                    + r22 * (1064.0 - 2800.0 * r1 + 2600.0 * r12 - 1000.0 * r13 + 140.0 * r14 - 4.0 * r15)
+                    + r23 * (-840.0 + 2000.0 * r1 - 1600.0 * r12 + 480.0 * r13 - 40.0 * r14)
+                    + r24 * (340.0 - 700.0 * r1 + 440.0 * r12 - 80.0 * r13)
+                    + r25 * (-64.0 + 104.0 * r1 - 40.0 * r12)
+                    + r26 * (4.0 - 4.0 * r1);
+                const double ca41mr1 = -84.0 * r1 + 252.0 * r12 - 280.0 * r13 + 140.0 * r14 - 30.0 * r15 + 2.0 * r16
+                    + r2 * (-84.0 + 672.0 * r1 - 1484.0 * r12 + 1400.0 * r13 - 610.0 * r14 + 112.0 * r15 - 6.0 * r16)
+                    + r22 * (252.0 - 1484.0 * r1 + 2800.0 * r12 - 2300.0 * r13 + 850.0 * r14 - 122.0 * r15 + 4.0 * r16)
+                    + r23 * (-280.0 + 1400.0 * r1 - 2300.0 * r12 + 1600.0 * r13 - 460.0 * r14 + 40.0 * r15)
+                    + r24 * (140.0 - 610.0 * r1 + 850.0 * r12 - 460.0 * r13 + 80.0 * r14)
+                    + r25 * (-30.0 + 112.0 * r1 - 122.0 * r12 + 40.0 * r13)
+                    + r26 * (2.0 - 6.0 * r1 + 4.0 * r12);
+
+                if ( std::abs(r1) < std::sqrt(std::numeric_limits<double>::epsilon()) ) {
+                    return -3.0 / (r2 * power_of<7>(r1 - r2)) * (
+                                power_of<4>(r1 - r2) * (ca00 + ca0mu * Lmu + ca01mr1 * L1mr1_ser + ca0r2m1 * Lr2m1
+                                    + ca0log2 * (L1mr1_ser * (L1mr1_ser * r1 + Lr2 - 2.0 * Lr2m1) * r1 + Lr2m1 * (Lr2m1 - 2.0 * Lr2)) + ca0dlr1 * dilogr1 + ca0dl1mr2 * dilog1mr2)
+                                - 3.0 * power_of<2>(r1 - r2) * (ca20 + ca2mu * Lmu + ca21mr1 * L1mr1_ser + ca2r2m1 * Lr2m1
+                                    + ca2l2 * (2.0 * power_of<2>(L1mr1_ser * r1 - Lr2m1) - 4.0 * Lr2m1 * Lr2 + 2.0 * L1mr1_ser * Lr2 * r1 + 2.0 * dilogr1 - 6.0 * dilog1mr2)) * a2pi
+                                - 15.0 * (ca40 + ca4mu * Lmu + ca4r2m1 * Lr2m1 + ca41mr1 * L1mr1_ser
+                                    + ca4l2 * (2.0 * power_of<2>(L1mr1_ser * r1 - Lr2m1) - 4.0 * Lr2m1 * Lr2 + 2.0 * L1mr1_ser * Lr2 * r1 + 2.0 * dilogr1 - 6.0 * dilog1mr2)) * a4pi
+                            );
+                }
+
+                return -3.0 / (r2 * power_of<7>(r1 - r2)) * (
+                            power_of<4>(r1 - r2) * (ca00 + ca0mu * Lmu + ca01mr1 * L1mr1 / r1 + ca0r2m1 * Lr2m1
+                                + ca0log2 * (L1mr1 * (L1mr1 + Lr2 - 2.0 * Lr2m1) + Lr2m1 * (Lr2m1 - 2.0 * Lr2)) + ca0dlr1 * dilogr1 + ca0dl1mr2 * dilog1mr2)
+                            - 3.0 * power_of<2>(r1 - r2) * (ca20 + ca2mu * Lmu + ca21mr1 * L1mr1 / r1 + ca2r2m1 * Lr2m1
+                                + ca2l2 * (2.0 * power_of<2>(L1mr1 - Lr2m1) - 4.0 * Lr2m1 * Lr2 + 2.0 * L1mr1 * Lr2 + 2.0 * dilogr1 - 6.0 * dilog1mr2)) * a2pi
+                            - 15.0 * (ca40 + ca4mu * Lmu + ca4r2m1 * Lr2m1 + ca41mr1 * L1mr1 / r1
+                                + ca4l2 * (2.0 * power_of<2>(L1mr1 - Lr2m1) - 4.0 * Lr2m1 * Lr2 + 2.0 * L1mr1 * Lr2 + 2.0 * dilogr1 - 6.0 * dilog1mr2)) * a4pi
+                        );
+            };
+            std::function<double (const double &)> integrand(
+                [&] (const double & r2) -> double
+                {
+                    return 2.0 * (T1Ttw2thetarhom1(r1, r2) + T1Ttw2theta1mrho(r1, r2) + T1Ttw2delta(r1, r2))
+                        * std::exp(-mb2 * r2 / _M2);
+                }
+            );
+
+            static const double eps = 1e-12;
+
+            auto config = GSL::QAGS::Config().epsrel(1e-6);
+
+            return mb * fpi * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0TB / mb2, config);
+        }
+
+        double FT_nlo_tw3(const double & q2, const double _M2) const
+        {
+            // Reminder: q2 is the kinematic variable associated with the momentum
+            // transfer, while s is the kinematic variable in which the function is
+            // analytically continued. See also comment at beginning of Appendix B
+            // of [DKMMO2008], p. 21.
+
+            static const double pi2 = M_PI * M_PI;
+
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
+            const double r1 = q2 / mb2;
+            const double lmu = 2.0 * std::log(mb / mu());
+
+            const double mupi = pi.mupi(mu);
+
+            auto T1Ttw3ptheta1mrho = [&] (const double & r1, const double & r2) -> double
+            {
+                const double lr2 = std::log(r2), lr2m1 = std::log(r2 - 1.0);
+                const double l = std::log((r2 - r1)/(r2 - 1.0));
+                return l * (-1.0 + 6.0 * lr2m1 - 3.0 * lr2 + 3.0 * lmu);
+            };
+            auto T1Ttw3pthetarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1, r14 = r13 * r1;
+                const double r22 = r2 * r2, r23 = r22 * r2, r24 = r23 * r2;
+                const double lr2 = std::log(r2), lr2m1 = std::log(r2 - 1.0);
+                const double lr1 = std::log(std::abs(r1)), l1mr1 = std::log(1.0 - r1);
+                const double lr2mr1 = std::log(r2 - r1), l = std::log((r1 - r2)/(r1 - 1.0));
+                const double dl = - 3.0 * (std::real(dilog(1.0 / r1)) + std::real(dilog(r2)) - std::real(dilog(r2 / r1)) + 2.0 * std::real(dilog((r2 - 1.0)/(r1 - 1.0))) + lr2 * (lr1 + lr2m1 - lr2mr1 - lr2 / 2.0));
+                const double dl_ser = - 6.0 * std::real(dilog(1.0 - r2)) + 3.0 * std::real(dilog(1.0 / r2)) - pi2 + 3.0 * lr2 * (3.0 * lr2 / 2.0 - lr2m1)
+                    + 3.0 * r1 * (r2 + (2.0 * r2 - 1.0) * lr2 - 1.0) / r2
+                    + 3.0 * r12 * ((4.0 * r22 - 2.0) * lr2 + (r2 - 1.0) * (5.0 * r2 + 1.0)) / (4.0 * r22)
+                    + r13 * ((6.0 * r23 - 3.0) * lr2 + (r2 - 1.0) * (2.0 * r2 * (5.0 * r2 + 2.0) + 1.0)) / (3.0 * r23)
+                    + r14 * (12.0 * (2.0 * r24 - 1.0) * lr2 + (r2 - 1.0) * (r2 * (r2 * (47.0 * r2 + 23.0) + 11.0) + 3.0)) / (16.0 * r24);
+
+                if ( std::abs(r1) < std::sqrt(std::numeric_limits<double>::epsilon()) )
+                    return 3.0 * pi2 / 2.0 - 2.0 * lr2 + 3.0 * lmu * (l1mr1 - lr2mr1) + l * (1.0 - 6.0 * lr2m1) + dl_ser;
+                return 3.0 * pi2 / 2.0 - 2.0 * lr2 + 3.0 * lmu * (l1mr1 - lr2mr1) + l * (1.0 - 6.0 * lr2m1) + dl;
+            };
+
+            auto T1Ttw3pdeltarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1;
+                const double lr2 = std::log(r2);
+                const double lr2m1 = std::log(r2 - 1.0);
+                const double l1mr1 = std::log(1.0 - r1);
+                const double l1mr1_ser = - 1.0 - r1 / 2.0 - r12 / 3.0 - r13 / 4.0;
+                const double l = std::log((r2 - 1.0)/(1.0 - r1));
+                const double dl = - std::real(dilog(r1)) - std::real(dilog(1.0 - r2));
+
+                if ( std::abs(r1) < std::sqrt(std::numeric_limits<double>::epsilon()) )
+                {
+                    return (-5.0 * pi2 / 6.0 + (-1.0 + (4.0 + 1.0 / r2) * r1 - l1mr1_ser * r12) * l1mr1_ser + (-2.0 - 2.0 / r2 - 2.0 * l1mr1_ser * r1 + 3.0 * lr2m1) * lr2m1
+                            + (l1mr1_ser * r1 - 2.0 * lr2m1) * lr2 + 2.0 * l * lmu + dl);
+                }
+                return (-5.0 * pi2 / 6.0 + (4.0 - 1.0 / r1 + 1.0 / r2 - l1mr1) * l1mr1 + (-2.0 - 2.0 / r2 - 2.0 * l1mr1 + 3.0 * lr2m1) * lr2m1
+                        + (l1mr1 - 2.0 * lr2m1) * lr2 + 2.0 * l * lmu + dl);
+            };
+            auto T1Ttw3sigmatheta1mrho = [&] (const double & r1, const double & r2) -> double
+            {
+                const double lr2 = std::log(r2), lr2m1 = std::log(r2 - 1.0);
+                const double lr2mr1 = std::log(r2 - r1);
+
+                return 3.0 * ((r1 - 1.0) * (-3.0 + 2.0 * r2) + (r1 - r2) * r2 * (
+                        lr2m1 * (1.0 + 3.0 * lr2 - 6.0 * lr2m1 + 6.0 * lr2mr1 - 3.0 * lmu)
+                        + lr2mr1 * (-1.0 - 3.0 * lr2 + 3.0 * lmu))
+                        );
+            };
+            auto T1Ttw3sigmathetarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1, r14 = r13 * r1;
+                const double r22 = r2 * r2, r23 = r22 * r2;
+                const double lr2 = std::log(r2), lr2m1 = std::log(r2 - 1.0);
+                const double lr1 = std::log(std::abs(r1)), l1mr1 = std::log(1.0 - r1);
+                const double lr2mr1 = std::log(r2 - r1);
+                const double dl = r2 * (r1 - r2) * 3.0 * (std::real(dilog(1.0 / r1)) + std::real(dilog(r2)) - std::real(dilog(r2 / r1)) + 2.0 * std::real(dilog((r2 - 1.0)/(r1 - 1.0))) + lr2 * lr1);
+                const double dl_ser = - r22 * (6.0 * std::real(dilog(1.0 - r2)) - 3.0 * std::real(dilog(1.0 / r2)) + pi2)
+                    + r1 * r2 * (6.0 * std::real(dilog(1.0 - r2)) - 3.0 * std::real(dilog(1.0 / r2)) + 3.0 * r2 + 6.0 * r2 * lr2 + pi2 - 3.0)
+                    + r12 * 3.0 * (3.0 - 8.0 * r2 + 5.0 * r2 + 4.0 * (r2 - 2.0) * r2 * lr2) / 4.0
+                    + r13 * (5.0 / (4.0 * r2) + 6.0 - 69.0 * r2 / 4.0 + 10.0 * r22 + 3.0 * (2.0 * r2 - 3.0) * r2 * lr2) / 3.0
+                    + r14 * ((r2 - 1.0) * (r2 * (r2 * (141.0 * r2 - 91.0) - 31.0) - 7.0) + 24.0 * (3.0 * r2 - 4.0) * r23 * lr2) / (48.0 * r22);
+
+                if ( std::abs(r1) < std::sqrt(std::numeric_limits<double>::epsilon()) )
+                {
+                    return - 3.0 * (4.0 - 9.0 * r2 + 5.0 * r22
+                        - lr2 * r2 * (r1 - 1.0) - 2.0 * lr2m1 * r2 * (r2 - 1.0) - (r2 - 1.0) * r2 * lmu
+                        - r2 * (r1 - r2) * (6.0 * lr2 * (lr2mr1 - lr2m1 + lr2 / 2.0) + 12.0 * lr2m1 * (l1mr1 - lr2mr1)
+                        + 2.0 * lr2mr1 * (1.0 - 3.0 * lmu) + 2.0 * l1mr1 * (-1.0 + 3.0 * lmu) + 3.0 * pi2) / 2.0
+                        + dl_ser);
+                }
+                return - 3.0 * (4.0 - 9.0 * r2 + 5.0 * r22
+                    - lr2 * r2 * (r1 - 1.0) - 2.0 * lr2m1 * r2 * (r2 - 1.0) - (r2 - 1.0) * r2 * lmu
+                    - r2 * (r1 - r2) * (6.0 * lr2 * (lr2mr1 - lr2m1 + lr2 / 2.0) + 12.0 * lr2m1 * (l1mr1 - lr2mr1) 
+                    + 2.0 * lr2mr1 * (1.0 - 3.0 * lmu) + 2.0 * l1mr1 * (-1.0 + 3.0 * lmu) + 3.0 * pi2) / 2.0
+                    + dl);
+            };
+            auto T1Ttw3sigmadeltarhom1 = [&] (const double & r1, const double & r2) -> double
+            {
+                const double r12 = r1 * r1, r13 = r12 * r1, r22 = r2 * r2;
+                const double l1mr1 = std::log(1.0 - r1);
+                const double lr2 = std::log(r2), lr2m1 = std::log(r2 - 1.0);
+                const double l = std::log((r2 - 1.0)/(1.0 - r1));
+
+                const double l0 = r2 * (26.0 - 5.0 * r1 - 5.0 * r2 - (-12.0 + 11.0 * r1 + r2) * pi2 / 6.0);
+                const double l1 = - (4.0 * r1 - 3.0 * r12 + (-6.0 * r1 + 2.0 * r12) * r2 + (1.0 + 2.0 * r1) * r22) * l1mr1 / r1;
+                const double l1_ser = - (4.0 * r1 - 3.0 * r12 + (-6.0 * r1 + 2.0 * r12) * r2 + (1.0 + 2.0 * r1) * r22) * (-1.0 - r1 / 2.0 - r12 / 3.0 - r13 / 4.0);
+                const double l2 = 2.0 * (4.0 - 3.0 * r1 + (-3.0 + r1) * r2 + r22) * lr2m1;
+                const double l3 = r2 * (-14.0 + r1 + r2) * lmu;
+                const double dl1 = r2 * ((-4.0 + r1 + 3.0 * r2) * l1mr1 * l1mr1 + (-4.0 + 5.0 * r1 - r2) * lr2m1 * lr2m1 + (-4.0 + 3.0 * r1 + r2) * l1mr1 * lr2
+                        - 2.0 * (-4.0 + 3.0 * r1 + r2) * (l1mr1 + lr2) * lr2m1 + 2.0 * (r1 - r2) * l * lmu);
+                const double dl2 = r2 * ((-4.0 + r1 + 3.0 * r2) * std::real(dilog(r1)) + (12.0 - 7.0 * r1 - 5.0 * r2) * std::real(dilog(1.0 - r2)));
+
+                if ( std::abs(r1) < std::sqrt(std::numeric_limits<double>::epsilon()) )
+                    return 3.0 * (l0 + l1_ser + l2 + l3 + dl1 + dl2);
+                return 3.0 * (l0 + l1 + l2 + l3 + dl1 + dl2);
+            };
+            std::function<double (const double &)> integrand(
+                [&] (const double & r2) -> double
+                {
+                    return (
+                            2.0 / power_of<2>(r2 - r1) * (T1Ttw3pthetarhom1(r1, r2) + T1Ttw3ptheta1mrho(r1, r2) + T1Ttw3pdeltarhom1(r1, r2))
+                            + 2.0 / (3.0 * r2 * power_of<3>(r2 - r1)) * (T1Ttw3sigmatheta1mrho(r1, r2) + T1Ttw3sigmathetarhom1(r1, r2) + T1Ttw3sigmadeltarhom1(r1, r2)) 
+                        ) * std::exp(-mb2 * r2 / _M2);
+                }
+            );
+
+            static const double eps = 1e-12;
+
+            auto config = GSL::QAGS::Config().epsrel(1e-6);
+
+            return fpi * mupi * (integrate<GSL::QAGS>(integrand, 1.0 + eps, s0TB / mb2, config)
+                    - 4.0 * (4.0 - 3.0 * lmu) * std::exp(-mb2 / _M2) / power_of<2>(1.0 - q2 / mb2)
+                    );
+        }
+
+
         inline double _no_rescale_factor(const double &) const
         {
             return 1.0;
@@ -1215,6 +1671,44 @@ namespace eos
             return result;
         }
 
+        double _rescale_factor_T(const double & q2) const
+        {
+            const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
+            const double u0_q2 = std::max(1e-10, (mb2 - q2) / (s0TB - q2));
+            const double u0_zero = std::max(1e-10, mb2 / s0TB);
+
+            std::function<double (const double &)> integrand_numerator_q2(
+                [&] (const double & u) -> double
+                {
+                    return u * (FT_lo_tw2_integrand(u, q2, this->M2()) + FT_lo_tw3_integrand(u, q2, this->M2));
+                }
+            );
+            std::function<double (const double &)> integrand_denominator_q2(
+                [&] (const double & u) -> double
+                {
+                    return (FT_lo_tw2_integrand(u, q2, this->M2()) + FT_lo_tw3_integrand(u, q2, this->M2()));
+                }
+            );
+            std::function<double (const double &)> integrand_numerator_zero(
+                [&] (const double & u) -> double
+                {
+                    return u * (FT_lo_tw2_integrand(u, 0.0, this->M2()) + FT_lo_tw3_integrand(u, 0.0, this->M2()));
+                }
+            );
+            std::function<double (const double &)> integrand_denominator_zero(
+                [&] (const double & u) -> double
+                {
+                    return (FT_lo_tw2_integrand(u, 0.0, this->M2()) + FT_lo_tw3_integrand(u, 0.0, this->M2()));
+                }
+            );
+
+            double result = integrate<GSL::QNG>(integrand_numerator_zero, u0_zero, 1.000) / integrate<GSL::QNG>(integrand_numerator_q2, u0_q2, 1.000)
+                / integrate<GSL::QNG>(integrand_denominator_zero, u0_zero, 1.000) * integrate<GSL::QNG>(integrand_denominator_q2, u0_q2, 1.000);
+
+            return result;
+        }
+
+
         double MB_lcsr(const double & q2) const
         {
             const double M2_rescaled = this->M2() * this->rescale_factor_p(q2);
@@ -1263,6 +1757,30 @@ namespace eos
             return std::sqrt(MB2);
         }
 
+        double MBT_lcsr(const double & q2) const
+        {
+            const double M2_rescaled = this->M2() * this->rescale_factor_T(q2);
+            const double alpha_s = model->alpha_s(mu);
+
+            std::function<double (const double &)> F(
+                [&] (const double & _M2) -> double
+                {
+                    const double FT_lo  = FT_lo_tw2(q2, _M2) + FT_lo_tw3(q2, _M2) + FT_lo_tw4(q2, _M2);
+                    const double FT_nlo = FT_nlo_tw2(q2, _M2) + FT_lo_tw3(q2, _M2);
+
+                    return FT_lo + alpha_s / (3.0 * M_PI) * FT_nlo;
+                }
+            );
+
+
+            double MB2 = M2_rescaled * M2_rescaled * derivative<1, deriv::TwoSided>(F, M2_rescaled) / F(M2_rescaled);
+
+            if (MB2 < 0.0)
+                return 0.0;
+
+            return std::sqrt(MB2);
+        }
+
         double f_p(const double & q2) const
         {
             const double MB2 = MB * MB;
@@ -1297,7 +1815,20 @@ namespace eos
             const double alpha_s = model->alpha_s(mu);
 
             return std::exp(MB2 / M2_rescaled) / (2.0 * MB2 * fB) * (2.0 * q2 / (MB2 - mpi2) * (Ftil_lo + alpha_s / (3.0 * M_PI) * Ftil_nlo) + (1.0 - q2 / (MB2 - mpi)) * (F_lo + alpha_s / (3.0 * M_PI) * F_nlo));
+        }
 
+        double f_t(const double & q2) const
+        {
+            const double mb = this->m_b_msbar(mu);
+            const double MB2 = MB * MB;
+            const double M2_rescaled = this->M2() * this->rescale_factor_T(q2);
+            const double fB = decay_constant();
+            const double FT_lo = FT_lo_tw2(q2, M2_rescaled) + FT_lo_tw3(q2, M2_rescaled) + FT_lo_tw4(q2, M2_rescaled);
+            const double FT_nlo = FT_nlo_tw2(q2, M2_rescaled) + FT_nlo_tw3(q2, M2_rescaled);
+            //const double FT_nnlo = FT_nlo * FT_nlo / FT_lo * zeta_nnlo;
+            const double alpha_s = model->alpha_s(mu);
+
+            return std::exp(MB2 / M2_rescaled) / (2.0 * MB2 * fB) * (MB + mpi) * (FT_lo + alpha_s / (3.0 * M_PI) * FT_nlo);
         }
 
         Diagnostics diagnostics() const
@@ -1390,6 +1921,36 @@ namespace eos
     }
 
     double
+    AnalyticFormFactorBToPiDKMMO2008::FT_lo_tw2(const double & q2) const
+    {
+        return _imp->FT_lo_tw2(q2, _imp->M2() * _imp->rescale_factor_T(q2));
+    }
+
+    double
+    AnalyticFormFactorBToPiDKMMO2008::FT_lo_tw3(const double & q2) const
+    {
+        return _imp->FT_lo_tw3(q2, _imp->M2() * _imp->rescale_factor_T(q2));
+    }
+
+    double
+    AnalyticFormFactorBToPiDKMMO2008::FT_lo_tw4(const double & q2) const
+    {
+        return _imp->FT_lo_tw4(q2, _imp->M2() * _imp->rescale_factor_T(q2));
+    }
+
+    double
+    AnalyticFormFactorBToPiDKMMO2008::FT_nlo_tw2(const double & q2) const
+    {
+        return _imp->FT_nlo_tw2(q2, _imp->M2() * _imp->rescale_factor_T(q2));
+    }
+
+    double
+    AnalyticFormFactorBToPiDKMMO2008::FT_nlo_tw3(const double & q2) const
+    {
+        return _imp->FT_nlo_tw3(q2, _imp->M2() * _imp->rescale_factor_T(q2));
+    }
+
+    double
     AnalyticFormFactorBToPiDKMMO2008::f_p(const double & q2) const
     {
         return _imp->f_p(q2);
@@ -1403,9 +1964,10 @@ namespace eos
     }
 
     double
-    AnalyticFormFactorBToPiDKMMO2008::f_t(const double &) const
+    AnalyticFormFactorBToPiDKMMO2008::f_t(const double & q2) const
     {
-        throw InternalError("AnalyticFormFactorBToPiDKMMO2008::f_t: Evaluation of tensor form factor not yet implemented");
+        return _imp->f_t(q2);
+        //throw InternalError("AnalyticFormFactorBToPiDKMMO2008::f_t: Evaluation of tensor form factor not yet implemented");
     }
 
     double
@@ -1418,6 +1980,12 @@ namespace eos
     AnalyticFormFactorBToPiDKMMO2008::MB0_lcsr(const double & q2) const
     {
         return _imp->MB0_lcsr(q2);
+    }
+
+    double
+    AnalyticFormFactorBToPiDKMMO2008::MBT_lcsr(const double & q2) const
+    {
+        return _imp->MBT_lcsr(q2);
     }
 
     double

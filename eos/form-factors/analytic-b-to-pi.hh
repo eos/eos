@@ -44,12 +44,17 @@ namespace eos
             double F_lo_tw4(const double & q2) const;
             double Ftil_lo_tw3(const double & q2) const;
             double Ftil_lo_tw4(const double & q2) const;
+            double FT_lo_tw2(const double & q2) const;
+            double FT_lo_tw3(const double & q2) const;
+            double FT_lo_tw4(const double & q2) const;
 
             /* Next-to-leading-order terms */
             double F_nlo_tw2(const double & q2) const;
             double F_nlo_tw3(const double & q2) const;
             double Ftil_nlo_tw2(const double & q2) const;
             double Ftil_nlo_tw3(const double & q2) const;
+            double FT_nlo_tw2(const double & q2) const;
+            double FT_nlo_tw3(const double & q2) const;
 
             /* Form factors */
             virtual double f_p(const double & q2) const;
@@ -59,6 +64,7 @@ namespace eos
             /* B mass from the LCSR and the SVZ sum rule, respectively */
             double MB_lcsr(const double & q2) const;
             double MB0_lcsr(const double & q2) const;
+            double MBT_lcsr(const double & q2) const;
             double MB_svz() const;
 
             /* B meson decay constant at NLO */
