@@ -1710,7 +1710,7 @@ namespace eos
         }
 
 
-        double MB_lcsr(const double & q2) const
+        double MBp_lcsr(const double & q2) const
         {
             const double M2_rescaled = this->M2() * this->rescale_factor_p(q2);
             const double alpha_s = model->alpha_s(mu);
@@ -1972,9 +1972,9 @@ namespace eos
     }
 
     double
-    AnalyticFormFactorBToPiDKMMO2008::MB_lcsr(const double & q2) const
+    AnalyticFormFactorBToPiDKMMO2008::MBp_lcsr(const double & q2) const
     {
-        return _imp->MB_lcsr(q2);
+        return _imp->MBp_lcsr(q2);
     }
 
     double
