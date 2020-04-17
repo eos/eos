@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015 Danny van Dyk
+ * Copyright (c) 2014, 2015, 2020 Danny van Dyk
  * Copyright (c) 2019, 2020 Domagoj Leljak
  *
  * This file is part of the EOS project. EOS is free software;
@@ -63,7 +63,7 @@ namespace eos
             virtual double f_t(const double & q2) const;
 
             /* B mass from the LCSR and the SVZ sum rule, respectively */
-            double MB_lcsr(const double & q2) const;
+            double MBp_lcsr(const double & q2) const;
             double MB0_lcsr(const double & q2) const;
             double MBT_lcsr(const double & q2) const;
             double MB_svz() const;

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019, 2020 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -135,9 +135,17 @@ namespace eos
                         std::make_tuple("q2")),
 
                 // auxiliary variables, e.g. for determining the pi-LCSR/SVZ threshold parameters
-                make_observable("B->pi::M_B(LCSR)@DKMMO2008",
-                        &AnalyticFormFactorBToPiDKMMO2008::MB_lcsr,
-                        std::make_tuple("s")),
+                make_observable("B->pi::M_B(f_+,LCSR)@DKMMO2008",
+                        &AnalyticFormFactorBToPiDKMMO2008::MBp_lcsr,
+                        std::make_tuple("q2")),
+
+                make_observable("B->pi::M_B(f_0,LCSR)@DKMMO2008",
+                        &AnalyticFormFactorBToPiDKMMO2008::MB0_lcsr,
+                        std::make_tuple("q2")),
+
+                make_observable("B->pi::M_B(f_T,LCSR)@DKMMO2008",
+                        &AnalyticFormFactorBToPiDKMMO2008::MBT_lcsr,
+                        std::make_tuple("q2")),
 
                 make_observable("B->pi::M_B(SVZ)@DKMMO2008",
                         &AnalyticFormFactorBToPiDKMMO2008::MB_svz),
