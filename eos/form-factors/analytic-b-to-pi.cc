@@ -1637,6 +1637,7 @@ namespace eos
 
         double _rescale_factor_0(const double & q2) const
         {
+            const double MB2 = MB * MB, mpi2 = mpi * mpi;
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
             const double u0_q2 = std::max(1e-10, (mb2 - q2) / (s0tilB - q2));
             const double u0_zero = std::max(1e-10, mb2 / s0tilB);
@@ -1644,25 +1645,31 @@ namespace eos
             std::function<double (const double &)> integrand_numerator_q2(
                 [&] (const double & u) -> double
                 {
-                    return u * (0.0 + Ftil_lo_tw3_integrand(u, q2, this->M2));
+                    const double F    = F_lo_tw2_integrand(u, q2, this->M2()) + F_lo_tw3_integrand(u, q2, this->M2);
+                    const double Ftil = Ftil_lo_tw3_integrand(u, q2, this->M2);
+                    return u * (2.0 * q2 / (MB2 - mpi2) * Ftil + (1.0 - q2 / (MB2 - mpi)) * F);
                 }
             );
             std::function<double (const double &)> integrand_denominator_q2(
                 [&] (const double & u) -> double
                 {
-                    return (0.0 + Ftil_lo_tw3_integrand(u, q2, this->M2()));
+                    const double F    = F_lo_tw2_integrand(u, q2, this->M2()) + F_lo_tw3_integrand(u, q2, this->M2);
+                    const double Ftil = Ftil_lo_tw3_integrand(u, q2, this->M2);
+                    return 2.0 * q2 / (MB2 - mpi2) * Ftil + (1.0 - q2 / (MB2 - mpi)) * F;
                 }
             );
             std::function<double (const double &)> integrand_numerator_zero(
                 [&] (const double & u) -> double
                 {
-                    return u * (0.0 + Ftil_lo_tw3_integrand(u, 0.0, this->M2()));
+                    const double F    = F_lo_tw2_integrand(u, 0.0, this->M2()) + F_lo_tw3_integrand(u, 0.0, this->M2);
+                    return u * F;
                 }
             );
             std::function<double (const double &)> integrand_denominator_zero(
                 [&] (const double & u) -> double
                 {
-                    return (0.0 + Ftil_lo_tw3_integrand(u, 0.0, this->M2()));
+                    const double F    = F_lo_tw2_integrand(u, 0.0, this->M2()) + F_lo_tw3_integrand(u, 0.0, this->M2);
+                    return F;
                 }
             );
 
@@ -1845,8 +1852,14 @@ namespace eos
 
             results.add(Diagnostics::Entry{ this->decay_constant(), "f_B, [DKMM02008]" });
 
-            results.add(Diagnostics::Entry{ this->rescale_factor_p( 0.0), "rescale_factor(s =  0.0), [DKMMO2008]" });
-            results.add(Diagnostics::Entry{ this->rescale_factor_p(10.0), "rescale_factor(s = 10.0), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_p( 0.0), "rescale_factor_p(s =  0.0), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_p(10.0), "rescale_factor_p(s = 10.0), [DKMMO2008]" });
+
+            results.add(Diagnostics::Entry{ this->rescale_factor_0( 0.0), "rescale_factor_0(s =  0.0), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_0(10.0), "rescale_factor_0(s = 10.0), [DKMMO2008]" });
+
+            results.add(Diagnostics::Entry{ this->rescale_factor_T( 0.0), "rescale_factor_T(s =  0.0), [DKMMO2008]" });
+            results.add(Diagnostics::Entry{ this->rescale_factor_T(10.0), "rescale_factor_T(s = 10.0), [DKMMO2008]" });
 
             return results;
         }

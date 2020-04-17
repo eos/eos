@@ -59,8 +59,11 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["mass::B_d"] = 5.2795;
                 p["mass::b(MSbar)"] = 4.2;
                 p["B->pi::mu@DKMMO2008"] = 4.2;
-                p["B->pi::Mp^2@DKMMO2008"] = 5.0;
-                p["B->pi::sp_0^B@DKMMO2008"] = 35.75;
+                p["B->pi::Mp^2@DKMMO2008"] = 5.0;       // decay constant
+                p["B->pi::sp_0^B@DKMMO2008"] = 35.75;   // decay constant
+                p["B->pi::s_0^B@DKMMO2008"]    = 35.75; // f_+
+                p["B->pi::stil_0^B@DKMMO2008"] = 35.75; // f_0
+                p["B->pi::sT_0^B@DKMMO2008"]   = 35.75; // f_T
                 p["QCD::m_0"] = std::sqrt(0.8);
                 p["QCD::cond_GG"] = 0.012;
                 p["QCD::r_vac"] = 1.0;
@@ -72,8 +75,12 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                     std::make_pair(-4.62757,  eps), // rho_1(s = 22.05, m_b = 4.16, mu = 4.16)
                     std::make_pair(+0.67764,  eps), // rho_1(s = 25.20, m_b = 4.16, mu = 4.16)
                     std::make_pair( 0.22315, 1e-3), // f_B
-                    std::make_pair( 1.00000,  eps), // rescale factor at s =  0.0 GeV^2
-                    std::make_pair( 1.09915, eps), // rescale factor at s = 10.0 GeV^2
+                    std::make_pair( 1.00000,  eps), // rescale factor for f_+ at s =  0.0 GeV^2
+                    std::make_pair( 1.09915,  eps), // rescale factor for f_+ at s = 10.0 GeV^2
+                    std::make_pair( 1.00000,  eps), // rescale factor for f_0 at s =  0.0 GeV^2
+                    std::make_pair( 1.14429,  eps), // rescale factor for f_0 at s = 10.0 GeV^2
+                    std::make_pair( 1.00000,  eps), // rescale factor for f_T at s =  0.0 GeV^2
+                    std::make_pair( 1.07898,  eps), // rescale factor for f_T at s = 10.0 GeV^2
                 };
 
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
