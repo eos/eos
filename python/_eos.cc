@@ -371,6 +371,8 @@ BOOST_PYTHON_MODULE(_eos)
         .def("name", &ConstraintEntry::name, return_value_policy<copy_const_reference>())
         .def("type", &ConstraintEntry::type, return_value_policy<copy_const_reference>())
         .def("serialize", (std::string (ConstraintEntry::*)(void) const) &ConstraintEntry::serialize, return_value_policy<return_by_value>())
+        .def("deserialize", (ConstraintEntry * (*)(const QualifiedName &, const std::string &)) &ConstraintEntry::FromYAML, return_value_policy<manage_new_object>())
+        .staticmethod("deserialize")
         ;
 
     // Constraints
