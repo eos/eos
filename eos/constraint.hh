@@ -96,10 +96,11 @@ namespace eos
     class ConstraintEntry
     {
         public:
-            /*!
-             * Create a new ConstraintEntry by deserializing a YAML node.
-             */
+            /// Create a new ConstraintEntry by deserializing a YAML node.
             static ConstraintEntry * FromYAML(const QualifiedName & name, const YAML::Node &);
+
+            /// Create a new ConstraintEntry by derializing a string.
+            static ConstraintEntry * FromYAML(const QualifiedName & name, const std::string &);
 
             /// Destructor
             virtual ~ConstraintEntry();
