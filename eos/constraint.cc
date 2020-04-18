@@ -1587,6 +1587,14 @@ namespace eos
     ConstraintEntry::~ConstraintEntry() = default;
 
     ConstraintEntry *
+    ConstraintEntry::FromYAML(const QualifiedName & name, const std::string & s)
+    {
+        YAML::Node node = YAML::Load(s);
+
+        return ConstraintEntry::FromYAML(name, node);
+    }
+
+    ConstraintEntry *
     ConstraintEntry::FromYAML(const QualifiedName & name, const YAML::Node & n)
     {
         // make sure we deserialize from a map
