@@ -17,7 +17,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
-from logging import info, warn
+from logging import debug, error, info, warn
 import os
 import yaml
 
@@ -76,12 +76,14 @@ class AnalysisFile:
             prior.extend(self._priors[p]['parameters'])
 
         likelihood = []
+        manual_constraints = {}
         for lh in posterior['likelihood']:
-            likelihood.extend(self._likelihoods[lh]['constraints'])
+            likelihood.extend(self._likelihoods[lh]['constraints'] if 'constraints' in self._likelihoods[lh] else [])
+            manual_constraints.update(self._likelihoods[lh]['manual_constraints'] if 'manual_constraints' in self._likelihoods[lh] else {})
 
         global_options = posterior['global_options'] if 'global_options' in posterior else None
 
-        return eos.Analysis(prior, likelihood, global_options)
+        return eos.Analysis(prior, likelihood, global_options, manual_constraints=manual_constraints)
 
 
     def observables(self, _prediction, parameters):
