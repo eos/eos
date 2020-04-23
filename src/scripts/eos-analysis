@@ -18,7 +18,7 @@
 import argparse
 import eos
 import logging as log
-from logging import debug, info, warn
+from logging import debug, info, warn, error
 import numpy as _np
 import os
 import pypmc
@@ -51,6 +51,10 @@ def main():
     parser_list_likelihoods = subparsers.add_parser('list-likelihoods',
         description = 'Lists the likelihoods defined within the scope of this analysis.',
         help = 'list the known likelihoods'
+    )
+    parser_list_likelihoods.add_argument('-d', '--display-details',
+        help = 'display details for each likelihood',
+        dest = 'display', action = 'store_true', default = False
     )
     parser_list_likelihoods.set_defaults(cmd = cmd_list_likelihoods)
 
@@ -401,6 +405,18 @@ def cmd_list_likelihoods(args):
     analysis_file = make_analysis_file(args)
     for name, lh in analysis_file.likelihoods.items():
         print(name)
+        if not args.display:
+            continue
+
+        if not 'constraints' in lh and not 'manual_constraints' in lh:
+            error('Likelihoods {name} specifies neither the \'constraints\' nor the \'manual_constraints\' key'.format(name=name))
+            continue
+
+        for c in lh['constraints'] if 'constraints' in lh else []:
+            print(' - {}'.format(c))
+
+        for mc in lh['manual_constraints'] if 'manual_constraints' in lh else {}:
+            print(' - {} [manual]'.format(mc))
 
 
 # List predictions
