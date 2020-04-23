@@ -57,11 +57,13 @@ class Analysis:
     :type priors: iterable
     :param likelihood: The likelihood as a list of individual constraints from the internal data base of experimental and theoretical constraints; cf. `the complete list of constraints <../constraints.html>`_.
     :type likelihood: iterable
+    :param manual_constraints: Additional manually-specified constraints that shall be added to the log(likelihood).
+    :type manual_constraints: dict, optional
     """
 
-    def __init__(self, priors, likelihood, global_options=None):
+    def __init__(self, priors, likelihood, global_options=None, manual_constraints=None):
         """Constructor."""
-        self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options }
+        self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints }
         self.parameters = eos.Parameters.Defaults()
         self.global_options = eos.Options()
         self.log_likelihood = eos.LogLikelihood(self.parameters)
@@ -109,6 +111,14 @@ class Analysis:
         # create the likelihood
         for constraint_name in likelihood:
             constraint = eos.Constraint.make(constraint_name, self.global_options)
+            self.log_likelihood.add(constraint)
+
+        # add manual constraints to the likelihood
+        for constraint_name, constraint_data in manual_constraints.items():
+            import yaml
+            yaml_string = yaml.dump(constraint_data)
+            constraint_entry = eos.ConstraintEntry.deserialize(constraint_name, yaml_string)
+            constraint = constraint_entry.make(constraint_name, self.global_options)
             self.log_likelihood.add(constraint)
 
         # perform some sanity checks
