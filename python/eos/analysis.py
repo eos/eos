@@ -71,6 +71,18 @@ class Analysis:
         self.varied_parameters = []
         self.bounds = []
 
+        info('Creating analysis with {nprior} priors, {nconst} EOS-wide constraints, {nopts} global options, and {nmanual} manually-entered constraints'.format(
+            nprior=len(priors), nconst=len(likelihood), nopts=len(global_options), nmanual=len(manual_constraints)))
+        debug('priors:')
+        for p in priors:
+            debug(' - {name} ({type}) [{min}, {max}]'.format(name=p['parameter'], type=p['type'], min=p['min'], max=p['max']))
+        debug('constraints:')
+        for cn in likelihood:
+            debug(' - {name}'.format(name=cn))
+        debug('manual_constraints:')
+        for cn, ce in manual_constraints.items():
+            debug(' - {name}'.format(name=cn))
+
         # collect the global options
         if global_options:
             for key, value in global_options.items():

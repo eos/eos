@@ -24,20 +24,25 @@ priors:
       - parameter: B->pi::f_+(0)@BCL2008
         min: 0.15
         max: 0.30
+        type: uniform
   - name: FF-shape
     parameters:
       - parameter: B->pi::b_+^1@BCL2008
         min: -4
         max: +4
+        type: uniform
       - parameter: B->pi::b_+^2@BCL2008
         min: -4
         max: +4
+        type: uniform
       - parameter: B->pi::b_0^1@BCL2008
         min: -4
         max: +4
+        type: uniform
       - parameter: B->pi::b_0^2@BCL2008
         min: -4
         max: +4
+        type: uniform
 
 posteriors:
   - name: FF
