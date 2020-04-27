@@ -179,6 +179,10 @@ def main():
         help = 'R value threshold',
         dest = 'threshold', action = 'store', type = float, default = 2.0
     )
+    parser_find_clusters.add_argument('-c', '--clusters-per-group',
+        help = 'number by which the final number of cluster shall be mulitplied',
+        dest = 'K_g', action = 'store', type = int, default = 1
+    )
     parser_find_clusters.set_defaults(cmd = cmd_find_clusters)
 
     # predict-observables
@@ -336,7 +340,7 @@ def cmd_find_clusters(args):
     variances = [_np.var(chain,  axis=0) for chain in chains]
     groups    = pypmc.mix_adapt.r_value.r_group(means, variances, len(chains[0]), critical_r=args.threshold)
     info('Found {} groups using an R value threshold of {}'.format(len(groups), args.threshold))
-    density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=len(groups), critical_r=args.threshold)
+    density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=args.K_g, critical_r=args.threshold)
     eos.data.MixtureDensity.create(args.output_path, density)
 
 
