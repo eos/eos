@@ -73,7 +73,7 @@ groups:
           central: +0.012
           min:     +0.000
           max:     +0.018
-      'QCD::m_0' :
+      'QCD::m_0^2' :
           central: +0.89443
           min:     +0.7746
           max:     +1.0
