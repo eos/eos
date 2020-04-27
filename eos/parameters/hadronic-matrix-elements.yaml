@@ -1557,36 +1557,43 @@ groups:
           min:     +15.0
           max:     +20.0
           comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    '$M^2\,\text{(LCSR)}$'
       'B->pi::Mp^2@DKMMO2008' :
           central: +5.0
           min:     +5.0
           max:     +5.0
           comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    '$M^2\,\text{(SVZSR)}$'
       'B->pi::mu@DKMMO2008' :
           central: +3.0
           min:     +3.0
           max:     +3.0
           comments: ' // GeV, cf. [DKMMO2008]'
+          latex:    '$\mu$'
       'B->pi::s_0^B@DKMMO2008' :
           central: +35.75
           min:     +35.75
           max:     +35.75
           comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    '$s_0^{f_+}$'
       'B->pi::stil_0^B@DKMMO2008' :
           central: +35.75
           min:     +35.75
           max:     +35.75
           comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    '$s_0^{f_0}$'
       'B->pi::sT_0^B@DKMMO2008' :
           central: +35.75
           min:     +35.75
           max:     +35.75
           comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    '$s_0^{f_T}$'
       'B->pi::sp_0^B@DKMMO2008' :
           central: +35.6
           min:     +35.5
           max:     +36.0
           comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    '$s_0^{f_B}$'
       # parameters for LCSR calculation of B->K^* hadronic matrix elements, cf. [KMO2006] and [KMPW2010].
       "B->K^*::s_0@LCSR" :
           central: 1.7
