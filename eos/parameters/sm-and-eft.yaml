@@ -52,37 +52,45 @@ groups:
           central: +0.1184
           min:     +0.1191
           max:     +0.1177
+          latex:    '$\alpha_s(M_Z)$'
           comments: 'cf. [PDG2012], p. 1'
       'QCD::mu_t' :
           central: +170.0
           min:     +170.0
           max:     +170.0
+          latex:    '$\mu_t$'
       'QCD::mu_b' :
           central: +4.2
           min:     +4.2
           max:     +4.2
+          latex:    '$\mu_b$'
       'QCD::mu_c' :
           central: +1.0
           min:     +1.0
           max:     +1.0
+          latex:    '$\mu_c$'
       'QCD::Lambda' :
           central: +0.5
           min:     +0.5
           max:     +0.5
+          latex:    '$\Lambda_\text{QCD}$'
       'QCD::cond_GG' :
           central: +0.012
           min:     +0.000
           max:     +0.018
+          latex:    '$\left\langle \frac{\alpha_s}{\pi} G^2\right\rangle$'
       'QCD::m_0^2' :
           central: +0.89443
           min:     +0.7746
           max:     +1.0
           comments: 'in GeV, cf. [DKMMO2008]'
+          latex:    '$\left\langle \bar{q} g_s G q\right\rangle / \left\langle \bar{q} q\right\rangle$'
       'QCD::r_vac' :
           central: +0.55
           min:     +0.1
           max:     +1.0
           comments: 'cf. [DKMMO2008]'
+          latex:    '$\left\langle \bar{q} q\bar{q}q\right\rangle / \left\langle \bar{q}q\right\rangle^2$'
       # Wolfenstein parameters of CKM, cf. [UTFIT2013]
       'CKM::A' :
           central: +0.827
