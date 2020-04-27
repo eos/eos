@@ -64,7 +64,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["B->pi::s_0^B@DKMMO2008"]    = 35.75; // f_+
                 p["B->pi::stil_0^B@DKMMO2008"] = 35.75; // f_0
                 p["B->pi::sT_0^B@DKMMO2008"]   = 35.75; // f_T
-                p["QCD::m_0"] = std::sqrt(0.8);
+                p["QCD::m_0^2"] = 0.8;
                 p["QCD::cond_GG"] = 0.012;
                 p["QCD::r_vac"] = 1.0;
 
@@ -119,7 +119,7 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["B->pi::stil_0^B@DKMMO2008"] = 37.5;
                 p["B->pi::sT_0^B@DKMMO2008"] = 37.5;
                 p["B->pi::sp_0^B@DKMMO2008"] = 36.5;
-                p["QCD::m_0"] = std::sqrt(0.8);
+                p["QCD::m_0^2"] = 0.8;
                 p["QCD::cond_GG"] = 0.012;
                 p["QCD::r_vac"] = 1.0;
                 p["QCD::alpha_s(MZ)"] = 0.1184;

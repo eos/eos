@@ -64,7 +64,7 @@ namespace eos
         UsedParameter zeta_nnlo;
 
         // QCD parameters
-        UsedParameter m0;
+        UsedParameter m02;
         UsedParameter cond_GG;
         UsedParameter r_vac;
 
@@ -86,7 +86,7 @@ namespace eos
             sprime0B(p["B->pi::sp_0^B@DKMMO2008"], u),
             mu(p["B->pi::mu@DKMMO2008"], u),
             zeta_nnlo(p["B->pi::zeta(NNLO)@DKMMO2008"], u),
-            m0(p["QCD::m_0"], u),
+            m02(p["QCD::m_0^2"], u),
             cond_GG(p["QCD::cond_GG"], u),
             r_vac(p["QCD::r_vac"], u),
             pi(p, o),
@@ -148,7 +148,6 @@ namespace eos
             const double MB2 = MB * MB, MB4 = MB2 * MB2;
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
             const double Mprime4 = Mprime2 * Mprime2;
-            const double m02 = m0 * m0;
 
             const double cond_qq_mu = -fpi * fpi * this->pi.mupi(mu) / 2.0; // <qq>@mu
             const double cond_qq_1 = -fpi * fpi * this->pi.mupi(1.0) / 2.0; // <qq>@1GeV
@@ -193,7 +192,6 @@ namespace eos
 
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mb4 = mb2 * mb2;
             const double Mprime4 = Mprime2 * Mprime2;
-            const double m02 = m0 * m0;
 
             const double cond_qq_mu = -fpi * fpi * this->pi.mupi(mu) / 2.0; // <qq>@mu
             const double cond_qq_1 = -fpi * fpi * this->pi.mupi(1.0) / 2.0; // <qq>@1GeV
