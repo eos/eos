@@ -387,10 +387,14 @@ def cmd_predict_observables(args):
 
     parameters = [_parameters[p['name']] for p in data.varied_parameters]
     observable_samples = []
-    for sample in progressbar(data.samples):
+    for i, sample in enumerate(progressbar(data.samples)):
         for p, v in zip(parameters, sample):
             p.set(v)
-        observable_samples.append([o.evaluate() for o in observables])
+        try:
+            observable_samples.append([o.evaluate() for o in observables])
+        except RuntimeError as e:
+            error('skipping prediction for sample {i} due to runtime error ({e}): {s}'.format(i=i, e=e, s=sample))
+            observable_samples.append([_np.nan for o in observables])
     observable_samples = _np.array(observable_samples)
 
     output_path = os.path.join(args.base_directory, args.prediction, 'pred')
