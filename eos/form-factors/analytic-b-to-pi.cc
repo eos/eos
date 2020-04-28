@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015 Danny van Dyk
+ * Copyright (c) 2014, 2015, 2020 Danny van Dyk
  * Copyright (c) 2019, 2020 Domagoj Leljak
  *
  * This file is part of the EOS project. EOS is free software;
@@ -70,6 +70,8 @@ namespace eos
 
         PionLCDAs pi;
 
+        GSL::QAGS::Config config;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
             MB(p["mass::B_d"], u),
@@ -87,7 +89,8 @@ namespace eos
             m0(p["QCD::m_0"], u),
             cond_GG(p["QCD::cond_GG"], u),
             r_vac(p["QCD::r_vac"], u),
-            pi(p, o)
+            pi(p, o),
+            config(GSL::QAGS::Config().epsrel(1e-4))
         {            
             using namespace std::placeholders;
 
@@ -105,6 +108,8 @@ namespace eos
                 rescale_factor_T = std::bind(&Implementation::_no_rescale_factor, this, _1);
 
             }
+
+            u.uses(*model);
         }
 
         inline double m_b_msbar(const double & mu) const
@@ -159,7 +164,7 @@ namespace eos
                     return std::exp(-s / Mprime2) * ((s - mb2) * (s - mb2) / s + 4.0 * alpha_s_mu / (3.0 * pi) * rho_1(s, mb, mu));
                 }
             );
-            const double integral = integrate<GSL::QNG>(integrand, mb2 + eps, sprime0B);
+            const double integral = integrate<GSL::QAGS>(integrand, mb2 + eps, sprime0B, config);
 
             double result = std::exp(MB2 / Mprime2) / MB4 * (3.0 * mb2 / (8.0 * pi2) * integral
                 + mb2 * std::exp(-mb2 / Mprime2) * (
@@ -204,14 +209,14 @@ namespace eos
                     return std::exp(-s / Mprime2) * ((s - mb2) * (s - mb2) + 4.0 * s * alpha_s_mu / (3.0 * pi) * rho_1(s, mb, mu));
                 }
             );
-            const double integral_numerator = integrate<GSL::QNG>(integrand_numerator, mb2 + eps, sprime0B);
+            const double integral_numerator = integrate<GSL::QAGS>(integrand_numerator, mb2 + eps, sprime0B, config);
             std::function<double (const double &)> integrand_denominator(
                 [&] (const double & s) -> double
                 {
                     return std::exp(-s / Mprime2) * ((s - mb2) * (s - mb2) / s + 4.0 * alpha_s_mu / (3.0 * pi) * rho_1(s, mb, mu));
                 }
             );
-            const double integral_denominator = integrate<GSL::QNG>(integrand_denominator, mb2 + eps, sprime0B);
+            const double integral_denominator = integrate<GSL::QAGS>(integrand_denominator, mb2 + eps, sprime0B, config);
 
             double numerator = 3.0 * mb2 / (8.0 * pi2) * integral_numerator
                 + mb4 * std::exp(-mb2 / Mprime2) * (
@@ -250,7 +255,7 @@ namespace eos
 
             std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::F_lo_tw2_integrand, this, std::placeholders::_1, q2, _M2));
 
-            return mb2 * fpi * integrate<GSL::QNG>(integrand, u0, 1.000);
+            return mb2 * fpi * integrate<GSL::QAGS>(integrand, u0, 1.000, config);
         }
 
         double F_lo_tw3_integrand(const double & u, const double & q2, const double & _M2) const
@@ -308,7 +313,7 @@ namespace eos
 
             std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::F_lo_tw3_integrand, this, std::placeholders::_1, q2, _M2));
 
-            return mb2 * fpi * integrate<GSL::QNG>(integrand, u0, 1.000);
+            return mb2 * fpi * integrate<GSL::QAGS>(integrand, u0, 1.000, config);
         }
 
         double F_lo_tw4(const double & q2, const double & _M2) const
@@ -406,7 +411,7 @@ namespace eos
                 }
             );
 
-            return mb2 * fpi * integrate<GSL::QNG>(integrand, u0, 1 - 1e-10);
+            return mb2 * fpi * integrate<GSL::QAGS>(integrand, u0, 1 - 1e-10, config);
         }
 
         double F_nlo_tw2(const double & q2, const double & _M2) const
@@ -596,8 +601,6 @@ namespace eos
 
             static const double eps = 1e-12;
 
-            auto config = GSL::QAGS::Config().epsrel(1e-6);
-
             return mb2 * fpi * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0B / mb2, config);
         }
 
@@ -777,8 +780,6 @@ namespace eos
 
             static const double eps = 1e-12;
 
-            auto config = GSL::QAGS::Config().epsrel(1e-6);
-
             return fpi * mupi * mb * (
                     integrate<GSL::QAGS>(integrand, 1.0 + eps, s0B / mb2, config)
                     - (
@@ -827,7 +828,7 @@ namespace eos
 
             std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::Ftil_lo_tw3_integrand, this, std::placeholders::_1, q2, _M2));
 
-            return mb2 * fpi * integrate<GSL::QNG>(integrand, u0, 1.000);
+            return mb2 * fpi * integrate<GSL::QAGS>(integrand, u0, 1.000, config);
         }
 
         double Ftil_lo_tw4(const double & q2, const double & _M2) const
@@ -896,7 +897,7 @@ namespace eos
                 }
             );
 
-            return mb2 * fpi * integrate<GSL::QNG>(integrand, u0, 1 - 1e-10);
+            return mb2 * fpi * integrate<GSL::QAGS>(integrand, u0, 1 - 1e-10, config);
         }
 
         double Ftil_nlo_tw2(const double & q2, const double & _M2) const
@@ -1033,8 +1034,6 @@ namespace eos
 
             static const double eps = 1e-12;
 
-            auto config = GSL::QAGS::Config().epsrel(1e-8);
-
             return mb2 * fpi * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0tilB / mb2, config);
         }
 
@@ -1139,8 +1138,6 @@ namespace eos
 
             static const double eps = 1e-12;
 
-            auto config = GSL::QAGS::Config().epsrel(1e-6);
-
             return fpi * mupi * mb * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0tilB / mb2, config);
         }
 
@@ -1158,7 +1155,7 @@ namespace eos
 
             std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::FT_lo_tw2_integrand, this, std::placeholders::_1, q2, _M2));
 
-            return mb * fpi * integrate<GSL::QNG>(integrand, u0, 1.000);
+            return mb * fpi * integrate<GSL::QAGS>(integrand, u0, 1.000, config);
         }
 
         double FT_lo_tw3_integrand(const double & u, const double & q2, const double & _M2) const
@@ -1178,7 +1175,7 @@ namespace eos
 
             std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::FT_lo_tw3_integrand, this, std::placeholders::_1, q2, _M2));
 
-            return mb * fpi * integrate<GSL::QNG>(integrand, u0, 1.000);
+            return mb * fpi * integrate<GSL::QAGS>(integrand, u0, 1.000, config);
         }
         
         double FT_lo_tw4(const double & q2, const double & _M2) const
@@ -1237,7 +1234,7 @@ namespace eos
                 }
             );
 
-            return mb * fpi * integrate<GSL::QNG>(integrand, u0, 1 - 1e-10);
+            return mb * fpi * integrate<GSL::QAGS>(integrand, u0, 1 - 1e-10, config);
         }
 
         double FT_nlo_tw2(const double & q2, const double & _M2) const
@@ -1453,8 +1450,6 @@ namespace eos
 
             static const double eps = 1e-12;
 
-            auto config = GSL::QAGS::Config().epsrel(1e-6);
-
             return mb * fpi * integrate<GSL::QAGS>(integrand, 1.0 + eps, s0TB / mb2, config);
         }
 
@@ -1586,8 +1581,6 @@ namespace eos
 
             static const double eps = 1e-12;
 
-            auto config = GSL::QAGS::Config().epsrel(1e-6);
-
             return fpi * mupi * (integrate<GSL::QAGS>(integrand, 1.0 + eps, s0TB / mb2, config)
                     - 4.0 * (4.0 - 3.0 * lmu) * std::exp(-mb2 / _M2) / power_of<2>(1.0 - q2 / mb2)
                     );
@@ -1630,8 +1623,8 @@ namespace eos
                 }
             );
 
-            double result = integrate<GSL::QNG>(integrand_numerator_zero, u0_zero, 1.000) / integrate<GSL::QNG>(integrand_numerator_q2, u0_q2, 1.000)
-                / integrate<GSL::QNG>(integrand_denominator_zero, u0_zero, 1.000) * integrate<GSL::QNG>(integrand_denominator_q2, u0_q2, 1.000);
+            double result = integrate<GSL::QAGS>(integrand_numerator_zero, u0_zero, 1.000, config) / integrate<GSL::QAGS>(integrand_numerator_q2, u0_q2, 1.000, config)
+                / integrate<GSL::QAGS>(integrand_denominator_zero, u0_zero, 1.000, config) * integrate<GSL::QAGS>(integrand_denominator_q2, u0_q2, 1.000, config);
             return result;
         }
 
@@ -1673,8 +1666,8 @@ namespace eos
                 }
             );
 
-            double result = integrate<GSL::QNG>(integrand_numerator_zero, u0_zero, 1.000) / integrate<GSL::QNG>(integrand_numerator_q2, u0_q2, 1.000)
-                / integrate<GSL::QNG>(integrand_denominator_zero, u0_zero, 1.000) * integrate<GSL::QNG>(integrand_denominator_q2, u0_q2, 1.000);
+            double result = integrate<GSL::QAGS>(integrand_numerator_zero, u0_zero, 1.000, config) / integrate<GSL::QAGS>(integrand_numerator_q2, u0_q2, 1.000, config)
+                / integrate<GSL::QAGS>(integrand_denominator_zero, u0_zero, 1.000, config) * integrate<GSL::QAGS>(integrand_denominator_q2, u0_q2, 1.000, config);
 
             return result;
         }
@@ -1710,8 +1703,8 @@ namespace eos
                 }
             );
 
-            double result = integrate<GSL::QNG>(integrand_numerator_zero, u0_zero, 1.000) / integrate<GSL::QNG>(integrand_numerator_q2, u0_q2, 1.000)
-                / integrate<GSL::QNG>(integrand_denominator_zero, u0_zero, 1.000) * integrate<GSL::QNG>(integrand_denominator_q2, u0_q2, 1.000);
+            double result = integrate<GSL::QAGS>(integrand_numerator_zero, u0_zero, 1.000, config) / integrate<GSL::QAGS>(integrand_numerator_q2, u0_q2, 1.000, config)
+                / integrate<GSL::QAGS>(integrand_denominator_zero, u0_zero, 1.000, config) * integrate<GSL::QAGS>(integrand_denominator_q2, u0_q2, 1.000, config);
 
             return result;
         }

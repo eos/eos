@@ -76,17 +76,17 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                     std::make_pair(+0.67764,  eps), // rho_1(s = 25.20, m_b = 4.16, mu = 4.16)
                     std::make_pair( 0.22315, 1e-3), // f_B
                     std::make_pair( 1.00000,  eps), // rescale factor for f_+ at s =  0.0 GeV^2
-                    std::make_pair( 1.09915,  eps), // rescale factor for f_+ at s = 10.0 GeV^2
+                    std::make_pair( 1.09609,  eps), // rescale factor for f_+ at s = 10.0 GeV^2
                     std::make_pair( 1.00000,  eps), // rescale factor for f_0 at s =  0.0 GeV^2
-                    std::make_pair( 1.14429,  eps), // rescale factor for f_0 at s = 10.0 GeV^2
+                    std::make_pair( 1.14470,  eps), // rescale factor for f_0 at s = 10.0 GeV^2
                     std::make_pair( 1.00000,  eps), // rescale factor for f_T at s =  0.0 GeV^2
-                    std::make_pair( 1.07898,  eps), // rescale factor for f_T at s = 10.0 GeV^2
-                    std::make_pair( 5.03142,  eps), // M_B for f_+ at s =  0.0 GeV^2
-                    std::make_pair( 4.88644,  eps), // M_B for f_+ at s = 10.0 GeV^2
-                    std::make_pair( 5.03142,  eps), // M_B for f_0 at s =  0.0 GeV^2
-                    std::make_pair( 5.22755,  eps), // M_B for f_0 at s = 10.0 GeV^2
-                    std::make_pair( 5.02776,  eps), // M_B for f_T at s =  0.0 GeV^2
-                    std::make_pair( 4.88504,  eps), // M_B for f_T at s = 10.0 GeV^2
+                    std::make_pair( 1.07532,  eps), // rescale factor for f_T at s = 10.0 GeV^2
+                    std::make_pair( 5.07482,  eps), // M_B for f_+ at s =  0.0 GeV^2
+                    std::make_pair( 4.91462,  eps), // M_B for f_+ at s = 10.0 GeV^2
+                    std::make_pair( 5.07482,  eps), // M_B for f_0 at s =  0.0 GeV^2
+                    std::make_pair( 5.25937,  eps), // M_B for f_0 at s = 10.0 GeV^2
+                    std::make_pair( 5.07051,  eps), // M_B for f_T at s =  0.0 GeV^2
+                    std::make_pair( 4.91132,  eps), // M_B for f_T at s = 10.0 GeV^2
                 };
 
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
