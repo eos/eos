@@ -349,9 +349,14 @@ def cmd_sample_mcmc(args):
     analysis_file = make_analysis_file(args)
     analysis = analysis_file.analysis(args.posterior)
     rng = _np.random.mtrand.RandomState(int(args.chain) + 1701)
-    samples, weights = analysis.sample(N=args.N, stride=args.stride, pre_N=args.pre_N, preruns=args.preruns, rng=rng)
-    output_path = os.path.join(args.base_directory, args.posterior, 'mcmc-{:04}'.format(int(args.chain)))
-    eos.data.MarkovChain.create(output_path, analysis.varied_parameters, samples, weights)
+    try:
+        samples, weights = analysis.sample(N=args.N, stride=args.stride, pre_N=args.pre_N, preruns=args.preruns, rng=rng)
+        output_path = os.path.join(args.base_directory, args.posterior, 'mcmc-{:04}'.format(int(args.chain)))
+        eos.data.MarkovChain.create(output_path, analysis.varied_parameters, samples, weights)
+    except RuntimeError as e:
+        error('encountered run time error ({e}) in parameter point:'.format(e=e))
+        for p in analysis.varied_parameters:
+            error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
 
 
 # Sample PMC
