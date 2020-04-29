@@ -1869,6 +1869,15 @@ namespace eos
             results.add(Diagnostics::Entry{ this->rescale_factor_T( 0.0), "rescale_factor_T(s =  0.0), [DKMMO2008]" });
             results.add(Diagnostics::Entry{ this->rescale_factor_T(10.0), "rescale_factor_T(s = 10.0), [DKMMO2008]" });
 
+            results.add(Diagnostics::Entry{ this->MBp_lcsr( 0.0), "M_B(f_+, q2 =  0.0), [DKMMO2008]"});
+            results.add(Diagnostics::Entry{ this->MBp_lcsr(10.0), "M_B(f_+, q2 =  0.0), [DKMMO2008]"});
+
+            results.add(Diagnostics::Entry{ this->MB0_lcsr( 0.0), "M_B(f_0, q2 =  0.0), [DKMMO2008]"});
+            results.add(Diagnostics::Entry{ this->MB0_lcsr(10.0), "M_B(f_0, q2 = 10.0), [DKMMO2008]"});
+
+            results.add(Diagnostics::Entry{ this->MBT_lcsr( 0.0), "M_B(f_T, q2 =  0.0), [DKMMO2008]"});
+            results.add(Diagnostics::Entry{ this->MBT_lcsr(10.0), "M_B(f_T, q2 = 10.0), [DKMMO2008]"});
+
             return results;
         }
     };

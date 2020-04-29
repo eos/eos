@@ -81,6 +81,12 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                     std::make_pair( 1.14429,  eps), // rescale factor for f_0 at s = 10.0 GeV^2
                     std::make_pair( 1.00000,  eps), // rescale factor for f_T at s =  0.0 GeV^2
                     std::make_pair( 1.07898,  eps), // rescale factor for f_T at s = 10.0 GeV^2
+                    std::make_pair( 5.03142,  eps), // M_B for f_+ at s =  0.0 GeV^2
+                    std::make_pair( 4.88644,  eps), // M_B for f_+ at s = 10.0 GeV^2
+                    std::make_pair( 5.03142,  eps), // M_B for f_0 at s =  0.0 GeV^2
+                    std::make_pair( 5.22755,  eps), // M_B for f_0 at s = 10.0 GeV^2
+                    std::make_pair( 5.02776,  eps), // M_B for f_T at s =  0.0 GeV^2
+                    std::make_pair( 4.88504,  eps), // M_B for f_T at s = 10.0 GeV^2
                 };
 
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
