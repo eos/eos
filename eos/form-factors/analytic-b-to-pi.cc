@@ -1743,21 +1743,29 @@ namespace eos
 
         double MB0_lcsr(const double & q2) const
         {
+            if (std::abs(q2) < 1e-6)
+                return MBp_lcsr(q2);
+
+            const double _MB2 = MB * MB, mpi2 = mpi * mpi;
             const double M2_rescaled = this->M2() * this->rescale_factor_0(q2);
             const double alpha_s = model->alpha_s(mu);
 
-            std::function<double (const double &)> F(
+            std::function<double (const double &)> F0(
                 [&] (const double & _M2) -> double
                 {
+                    const double F_lo     = F_lo_tw2(q2, _M2) + F_lo_tw3(q2, _M2) + F_lo_tw4(q2, _M2);
+                    const double F_nlo    = F_nlo_tw2(q2, _M2) + F_nlo_tw3(q2, _M2);
                     const double Ftil_lo  = Ftil_lo_tw3(q2, _M2) + Ftil_lo_tw4(q2, _M2);
                     const double Ftil_nlo = Ftil_nlo_tw2(q2, _M2) + Ftil_lo_tw3(q2, _M2);
 
-                    return Ftil_lo + alpha_s / (3.0 * M_PI) * Ftil_nlo;
+                    const double F        = F_lo + alpha_s / (3.0 * M_PI) * F_nlo;
+                    const double Ftil     = Ftil_lo + alpha_s / (3.0 * M_PI) * Ftil_nlo;
+
+                    return 2.0 * q2 / (_MB2 - mpi2) * Ftil + (1.0 - q2 / (_MB2 - mpi)) * F;
                 }
             );
 
-
-            double MB2 = M2_rescaled * M2_rescaled * derivative<1, deriv::TwoSided>(F, M2_rescaled) / F(M2_rescaled);
+            double MB2 = M2_rescaled * M2_rescaled * derivative<1, deriv::TwoSided>(F0, M2_rescaled) / F0(M2_rescaled);
 
             if (MB2 < 0.0)
                 return 0.0;
