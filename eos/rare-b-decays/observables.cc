@@ -1140,6 +1140,15 @@ namespace eos
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
+                make_observable_ratio("Lambda_b->Lambdall::R_Lambda@LargeRecoil", R"(R_{\Lambda}(q^2))",
+                        &LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio,
+                        std::make_tuple("q2_mu_min", "q2_mu_max"),
+                        Options{ { "l", "mu" } },
+                        &LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio,
+                        std::make_tuple("q2_mu_min", "q2_mu_max"),
+                        Options{ { "l", "e" } }
+                        ),
+
                 make_observable("Lambda_b->Lambdall::A_FB^l@LargeRecoil", R"(A_\text{FB}^\ell(\Lambda_b\to\Lambda\ell^+\ell^-))",
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max")),
