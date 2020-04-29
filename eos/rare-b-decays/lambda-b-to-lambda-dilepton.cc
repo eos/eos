@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2014, 2015, 2016, 2019, 2020 Danny van Dyk
  * Copyright (c) 2017 Thomas Blake
  *
  * This file is part of the EOS project. EOS is free software;
@@ -29,6 +29,7 @@
 #include <eos/utils/memoise.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
@@ -320,6 +321,8 @@ namespace eos
         UsedParameter alpha_e;
         UsedParameter mu;
 
+        SwitchOption opt_l;
+
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -332,7 +335,8 @@ namespace eos
             alpha(p["Lambda::alpha"], u),
             polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation","unpolarised") ], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            mu(p["mu"], u)
+            mu(p["mu"], u),
+            opt_l(o, "l", {"e", "mu", "tau"}, "mu")
         {
             form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o);
 
@@ -341,7 +345,6 @@ namespace eos
 
             u.uses(*form_factors);
             u.uses(*model);
-
         }
 
         double norm(const double & s) const
@@ -364,7 +367,7 @@ namespace eos
             double m_b_MSbar = model->m_b_msbar(mu), m_b_PS = model->m_b_ps(2.0), m_b_PS2 = m_b_PS * m_b_PS;
             double m_c_pole = model->m_c_pole();
 
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu");
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), opt_l.value());
 
             complex<double> lambda_hat_u = model->ckm_ub() * conj(model->ckm_us()) / std::abs(model->ckm_tb() * conj(model->ckm_ts()));
             double sqrtsminus = sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = sqrt(s);
@@ -834,6 +837,8 @@ namespace eos
         UsedParameter r_perp_0, r_perp_1;
         UsedParameter r_para_0, r_para_1;
 
+        SwitchOption opt_l;
+
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -850,7 +855,8 @@ namespace eos
             r_perp_0(p["Lambda_b->Lambdall::r_perp_0@MvD2016"], u),
             r_perp_1(p["Lambda_b->Lambdall::r_perp_1@MvD2016"], u),
             r_para_0(p["Lambda_b->Lambdall::r_para_0@MvD2016"], u),
-            r_para_1(p["Lambda_b->Lambdall::r_para_1@MvD2016"], u)
+            r_para_1(p["Lambda_b->Lambdall::r_para_1@MvD2016"], u),
+            opt_l(o, "l", {"e", "mu", "tau"}, "mu")
         {
             form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "DM2016"), p, o);
 
@@ -878,7 +884,7 @@ namespace eos
             lambdab_to_lambda_dilepton::Amplitudes result;
 
             double alpha_s = model->alpha_s(mu()), m_b = model->m_b_ps(2.0), m_c = model->m_c_msbar(mu());
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), "mu");
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), opt_l.value());
             complex<double> lambda_hat_u = model->ckm_ub() * conj(model->ckm_us()) / abs(model->ckm_tb() * conj(model->ckm_ts()));
             double sqrtsminus = sqrt(power_of<2>(m_Lambda_b - m_Lambda) - s), sqrtsplus = sqrt(power_of<2>(m_Lambda_b + m_Lambda) - s), sqrts = sqrt(s);
             double N = norm(s), kappa = this->kappa();
