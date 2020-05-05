@@ -367,10 +367,11 @@ namespace eos
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
-                make_form_factor_adapter("B(_s)->D(_s)::f_0(q2)/f_0(q2)",
+                make_form_factor_adapter("B(_s)->D(_s)::f_0(q2_num)/f_0(q2_denom)",
                         "B_s->D_s", &FormFactors<PToP>::f_0,
+                        std::make_tuple("q2_num"),
                         "B->D",     &FormFactors<PToP>::f_0,
-                        std::make_tuple("q2")),
+                        std::make_tuple("q2_denom")),
 
                 make_form_factor_adapter("B_s->D_s::f_T(q2)/f_+(q2)",
                         "B_s->D_s", &FormFactors<PToP>::f_t,
