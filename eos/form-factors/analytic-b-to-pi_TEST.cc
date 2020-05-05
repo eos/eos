@@ -61,9 +61,11 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["B->pi::mu@DKMMO2008"] = 4.2;
                 p["B->pi::Mp^2@DKMMO2008"] = 5.0;       // decay constant
                 p["B->pi::sp_0^B@DKMMO2008"] = 35.75;   // decay constant
-                p["B->pi::s_0^B@DKMMO2008"]    = 35.75; // f_+
-                p["B->pi::stil_0^B@DKMMO2008"] = 35.75; // f_0
-                p["B->pi::sT_0^B@DKMMO2008"]   = 35.75; // f_T
+                p["B->pi::s_0^+(0)@DKMMO2008"] = 37.5;  // f_+
+                p["B->pi::s_0^+'(0)@DKMMO2008"] = 0.0;  // f_+
+                p["B->pi::s_0^0'(0)@DKMMO2008"] = 0.0;  // f_0
+                p["B->pi::s_0^T(0)@DKMMO2008"] = 37.5;  // f_T
+                p["B->pi::s_0^T'(0)@DKMMO2008"] = 0.0;  // f_T
                 p["QCD::m_0^2"] = 0.8;
                 p["QCD::cond_GG"] = 0.012;
                 p["QCD::r_vac"] = 1.0;
@@ -115,9 +117,11 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 p["B->pi::M^2@DKMMO2008"] = 12.0;
                 p["B->pi::Mp^2@DKMMO2008"] = 4.5;
                 p["B->pi::mu@DKMMO2008"] = 3.0;
-                p["B->pi::s_0^B@DKMMO2008"] = 37.5;
-                p["B->pi::stil_0^B@DKMMO2008"] = 37.5;
-                p["B->pi::sT_0^B@DKMMO2008"] = 37.5;
+                p["B->pi::s_0^+(0)@DKMMO2008"] = 37.5;
+                p["B->pi::s_0^+'(0)@DKMMO2008"] = 0.0;
+                p["B->pi::s_0^0'(0)@DKMMO2008"] = 0.0;
+                p["B->pi::s_0^T(0)@DKMMO2008"] = 37.5;
+                p["B->pi::s_0^T'(0)@DKMMO2008"] = 0.0;
                 p["B->pi::sp_0^B@DKMMO2008"] = 36.5;
                 p["QCD::m_0^2"] = 0.8;
                 p["QCD::cond_GG"] = 0.012;
@@ -127,12 +131,16 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 AnalyticFormFactorBToPiDKMMO2008 ff(p, Options{ });
 
                 // LO, tw2
+                TEST_CHECK_NEARLY_EQUAL( 0.1167, ff.F_lo_tw2(-5.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1484, ff.F_lo_tw2(-1.0),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.1584, ff.F_lo_tw2( 0.0),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.1696, ff.F_lo_tw2( 1.0),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.2290, ff.F_lo_tw2( 5.0),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.3604, ff.F_lo_tw2(10.0),  eps);
 
                 // LO, tw3
+                TEST_CHECK_NEARLY_EQUAL( 0.1261, ff.F_lo_tw3(-5.0),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1628, ff.F_lo_tw3(-1.0),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.1746, ff.F_lo_tw3( 0.0),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.1876, ff.F_lo_tw3( 1.0),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.2580, ff.F_lo_tw3( 5.0),  eps);
