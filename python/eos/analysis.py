@@ -18,7 +18,7 @@
 
 import eos
 import copy as _cp
-from logging import info, warn, debug
+from logging import debug, error, info, warn
 import numpy as np
 import scipy
 
@@ -204,7 +204,13 @@ class Analysis:
         for p, v in zip(self.varied_parameters, x):
             p.set(v)
 
-        return(self.log_posterior.evaluate())
+        try:
+            return(self.log_posterior.evaluate())
+        except RuntimeError as e:
+            error('encountered run time error ({e}) when evaluating log(posterior) in parameter point:'.format(e=e))
+            for p in self.varied_parameters:
+                error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+            return(-np.inf)
 
 
     def negative_log_pdf(self, x, *args):
@@ -219,7 +225,13 @@ class Analysis:
         for p, v in zip(self.varied_parameters, x):
             p.set(v)
 
-        return(-self.log_posterior.evaluate())
+        try:
+            return(-self.log_posterior.evaluate())
+        except RuntimeError as e:
+            error('encountered run time error ({e}) when evaluating negative log(posterior) in parameter point:'.format(e=e))
+            for p in self.varied_parameters:
+                error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+            return(+np.inf)
 
 
     def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None, rng=np.random.mtrand):
