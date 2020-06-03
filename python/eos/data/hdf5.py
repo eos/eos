@@ -29,13 +29,13 @@ class FileFormatError(Exception):
         return 'Expected file format %s, found %s instead' % (self.expected, self.found)
 
 
-class DataFile:
+class HDF5DataFile:
     def __init__(self):
         # generate map
         self.variable_indices = { self.parameters[i][0].decode('ascii'): i for i in range(0, len(self.parameters)) }
 
 
-class PMCDataFile(DataFile):
+class PMCDataFile(HDF5DataFile):
     def __init__(self, file):
         # open the input file for reading
         self.file = h5py.File(file, 'r')
@@ -72,7 +72,7 @@ class PMCDataFile(DataFile):
         return numpy.array(dataset[:])
 
 
-class MCMCDataFile(DataFile):
+class MCMCDataFile(HDF5DataFile):
     def __init__(self, file):
         # open the input file for reading
         self.file = h5py.File(file, 'r')
@@ -149,7 +149,7 @@ class MCMCDataFile(DataFile):
 
         return result
 
-class UncertaintyDataFile(DataFile):
+class UncertaintyDataFile(HDF5DataFile):
     def __init__(self, file):
         self.name = file
         # open the input file for reading
