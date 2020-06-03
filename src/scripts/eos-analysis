@@ -198,6 +198,14 @@ def main():
         help = 'path to the sampling data',
         action = 'store', type = str
     )
+    parser_predict_observables.add_argument('-B', '--begin-index',
+        help = 'index of the first sample to use for the predictions',
+        dest = 'begin', action = 'store', type = int, default = 0
+    )
+    parser_predict_observables.add_argument('-E', '--end-index',
+        help = 'index beyond the last sample to use for the predictions',
+        dest = 'end', action = 'store', type = int, default = -1
+    )
     parser_predict_observables.add_argument('-b', '--base-directory',
         help = 'base directory where to store samples',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
@@ -392,7 +400,7 @@ def cmd_predict_observables(args):
 
     parameters = [_parameters[p['name']] for p in data.varied_parameters]
     observable_samples = []
-    for i, sample in enumerate(progressbar(data.samples)):
+    for i, sample in enumerate(progressbar(data.samples[args.begin:args.end])):
         for p, v in zip(parameters, sample):
             p.set(v)
         try:
@@ -403,7 +411,7 @@ def cmd_predict_observables(args):
     observable_samples = _np.array(observable_samples)
 
     output_path = os.path.join(args.base_directory, args.prediction, 'pred')
-    eos.data.Prediction.create(output_path, observables, observable_samples, data.weights)
+    eos.data.Prediction.create(output_path, observables, observable_samples, data.weights[args.begin:args.end])
 
 
 # List priors
