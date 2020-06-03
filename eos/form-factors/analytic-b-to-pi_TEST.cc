@@ -234,10 +234,13 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL(-0.6184, ff_no_rescale.FT_nlo_tw3(10.0), 1. * eps);
 
                 // fT form factor @ mu = 3.0
-                TEST_CHECK_NEARLY_EQUAL( 0.2647, ff_no_rescale.f_t( 0.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2790, ff_no_rescale.f_t( 1.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.3510, ff_no_rescale.f_t( 5.0), 1. * eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4904, ff_no_rescale.f_t(10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1685, ff_no_rescale.f_t(-10.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2080, ff_no_rescale.f_t( -5.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2515, ff_no_rescale.f_t( -1.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2647, ff_no_rescale.f_t(  0.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2790, ff_no_rescale.f_t(  1.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.3510, ff_no_rescale.f_t(  5.0), 1. * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.4904, ff_no_rescale.f_t( 10.0), 1. * eps);
 
             }
         }
