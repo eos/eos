@@ -59,35 +59,35 @@ namespace eos
         return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, "", pp, function, kinematics_names));
     }
 
-    template <typename Transition_, typename Tuple_, typename ... Args_>
+    template <typename TransitionNumerator_, typename TransitionDenominator_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_form_factor_adapter(const char * name,
             const char * prefix_numerator,
-            double (FormFactors<Transition_>::* _numerator)(const Args_ & ...) const,
+            double (FormFactors<TransitionNumerator_>::* _numerator)(const Args_ & ...) const,
             const char * prefix_denominator,
-            double (FormFactors<Transition_>::* _denominator)(const Args_ & ...) const,
+            double (FormFactors<TransitionDenominator_>::* _denominator)(const Args_ & ...) const,
             const Tuple_ & kinematics_names)
     {
         QualifiedName qn(name);
-        std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> numerator(_numerator);
-        std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> denominator(_denominator);
+        std::function<double (const FormFactors<TransitionNumerator_> *, const Args_ & ...)> numerator(_numerator);
+        std::function<double (const FormFactors<TransitionDenominator_> *, const Args_ & ...)> denominator(_denominator);
 
-        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<Transition_, Args_ ...>>(qn, "", prefix_numerator, numerator, kinematics_names, prefix_denominator, denominator, kinematics_names));
+        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<TransitionNumerator_, TransitionDenominator_, Args_ ...>>(qn, "", prefix_numerator, numerator, kinematics_names, prefix_denominator, denominator, kinematics_names));
     }
 
-    template <typename Transition_, typename Tuple_, typename ... Args_>
+    template <typename TransitionNumerator_, typename TransitionDenominator_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_form_factor_adapter(const char * name,
             const char * prefix_numerator,
-            double (FormFactors<Transition_>::* _numerator)(const Args_ & ...) const,
+            double (FormFactors<TransitionNumerator_>::* _numerator)(const Args_ & ...) const,
             const Tuple_ & kinematics_names_numerator,
             const char * prefix_denominator,
-            double (FormFactors<Transition_>::* _denominator)(const Args_ & ...) const,
+            double (FormFactors<TransitionDenominator_>::* _denominator)(const Args_ & ...) const,
             const Tuple_ & kinematics_names_denominator)
     {
         QualifiedName qn(name);
-        std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> numerator(_numerator);
-        std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> denominator(_denominator);
+        std::function<double (const FormFactors<TransitionNumerator_> *, const Args_ & ...)> numerator(_numerator);
+        std::function<double (const FormFactors<TransitionDenominator_> *, const Args_ & ...)> denominator(_denominator);
 
-        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<Transition_, Args_ ...>>(qn, "", prefix_numerator, numerator, kinematics_names_numerator, prefix_denominator, denominator, kinematics_names_denominator));
+        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<TransitionNumerator_, TransitionDenominator_, Args_ ...>>(qn, "", prefix_numerator, numerator, kinematics_names_numerator, prefix_denominator, denominator, kinematics_names_denominator));
     }
 
     // B -> P(seudoscalar)
