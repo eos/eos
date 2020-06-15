@@ -69,6 +69,7 @@ namespace eos
             double integrated_amplitude_polarization_L(const double & q2_min, const double & q2_max) const;
             double integrated_amplitude_polarization_T(const double & q2_min, const double & q2_max) const;
             double integrated_f_L(const double & q2_min, const double & q2_max) const;
+            double integrated_ftilde_L(const double & q2_min, const double & q2_max) const;
             double integrated_a_c_1(const double & q2_min, const double & q2_max) const;
             double integrated_a_c_2(const double & q2_min, const double & q2_max) const;
             double integrated_a_c_3(const double & q2_min, const double & q2_max) const;

@@ -381,6 +381,10 @@ namespace eos
                                 &BToVectorLeptonNeutrino::integrated_f_L,
                                 std::make_tuple("q2_min", "q2_max")),
 
+                make_observable("B->D^*lnu::Ftilde_L", R"(\tilde{F}_{\text{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
+                                &BToVectorLeptonNeutrino::integrated_ftilde_L,
+                                std::make_tuple("q2_min", "q2_max")),
+
                 make_observable("B->D^*lnu::A_C^1", R"(A_{\text{C}}^1(B\to \bar{D}^*\ell^-\bar\nu))",
                                 &BToVectorLeptonNeutrino::integrated_a_c_1,
                                 std::make_tuple("q2_min", "q2_max")),
