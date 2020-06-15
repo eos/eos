@@ -93,12 +93,21 @@ class AnalysisFile:
 
         prediction = self.predictions[_prediction]
         options = eos.Options(**prediction['global_options'])
-        return [eos.Observable.make(
+        observables = [eos.Observable.make(
             o['name'],
             parameters,
             eos.Kinematics(**(o['kinematics'] if 'kinematics' in o else {})),
             options
         ) for o in prediction['observables']]
+
+        if None in observables:
+            unknown_observables = set()
+            for p, o in zip(prediction['observables'], observables):
+                if o is None:
+                    unknown_observables.add(p['name'])
+            raise RuntimeError('Prediction \'{}\' contains unknown observable names: {}'.format(_prediction, unknown_observables))
+
+        return observables
 
 
     @property
