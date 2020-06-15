@@ -142,6 +142,13 @@ namespace eos
                 return  normalized_amplitude_polarization_L() / (normalized_amplitude_polarization_L() + normalized_amplitude_polarization_T());
             }
 
+            // polarization fraction from cos(theta_l) distribution; identical to F_L in the SM and the limit m_l -> 0.
+            inline double ftilde_L() const
+            {
+                // (1 - 3 Ftilde_L)  == 16/3 (S2s + S2c/2)
+                return (1.0 / 3.0 - 16.0 / 9.0 * (vv2T() + vv20() / 2.0) / (normalized_amplitude_polarization_L() + normalized_amplitude_polarization_T())) / 2.0;
+            }
+
             // a_fb leptonic
             inline double a_fb_leptonic() const
             {
@@ -537,6 +544,13 @@ namespace eos
     {
         auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
         return o.f_L();
+    }
+
+    double
+    BToVectorLeptonNeutrino::integrated_ftilde_L(const double & q2_min, const double & q2_max) const
+    {
+        auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
+        return o.ftilde_L();
     }
 
     double
