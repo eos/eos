@@ -309,20 +309,33 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
-            if 'data' not in item and 'hdf5-file' not in item:
-                raise KeyError('neither data nor hdf5-file specified')
+            if 'data' not in item and 'data-file' not in item and 'hdf5-file' not in item:
+                raise KeyError('neither data, data-file nor hdf5-file specified')
 
-            if 'data' in item and 'hdf5-file' in item:
-                warn('   both data and hdf5-file specified; assuming interactive use is intended')
+            if 'data' in item and ('data-file' in item or 'hdf5-file' in item):
+                warn('   both data and one of data-file or hdf5-file specified; assuming interactive use is intended')
 
             self.xvalues = None
             self.samples = None
             if 'data' in item:
                 self.xvalues = np.array(item['data']['xvalues'])
                 self.samples = item['data']['samples']
+            elif 'data-file' in item:
+                dfname = item['data-file']
+                info('   plotting uncertainty propagation from "{}"'.format(dfname))
+                df = eos.data.Prediction(dfname)
+                _xvalues = []
+                for vp in df.varied_parameters:
+                    if len(vp['kinematics']) > 1:
+                        raise ValueError('more than one kinematic variable specified')
+                    _xvalues.append(list(vp['kinematics'].values())[0])
+
+                self.xvalues = np.array(_xvalues)
+                self.samples = df.samples
+                self.weights = df.weights
             else:
                 h5fname = item['hdf5-file']
-                info('   plotting uncertainty propagation from file "{}"'.format(h5fname))
+                info('   plotting uncertainty propagation from HDF5 file "{}"'.format(h5fname))
                 uncfile = eos.data.UncertaintyDataFile(h5fname)
 
                 _xvalues = []
