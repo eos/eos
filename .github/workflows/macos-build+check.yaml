@@ -26,19 +26,22 @@ jobs:
 
             - name: Prepare VM
               shell: bash
+              env:
+                PYTHON: /usr/local/Cellar/python@3.8/3.8.3/bin/python3
               run: |
                 export HOMEBREW_LOGS=/tmp
                 brew tap eos/eos
-                brew outdated python || brew upgrade python || true
+                brew outdated python@3.8 || brew upgrade python@3.8 || true
                 brew unlink python@2
                 rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
                 brew outdated boost || brew upgrade boost || true
                 brew outdated boost-python3 || brew upgrade boost-python3 || true
                 brew install autoconf automake boost-python3 gsl hdf5 libtool minuit2 pkg-config pmclib yaml-cpp
-                pip3 install -U cython h5py matplotlib numpy PyYAML scipy
+                brew link --overwrite python@3.8
+                $PYTHON -m pip install -U cython h5py matplotlib numpy PyYAML scipy
                 curl -L -O https://github.com/fredRos/pypmc/archive/v1.1.4.tar.gz
                 tar zxf v1.1.4.tar.gz
-                pip3 install ./pypmc-1.1.4
+                $PYTHON -m pip install ./pypmc-1.1.4
 
             - name: Create build directory
               shell: bash
@@ -48,11 +51,16 @@ jobs:
               shell: bash
               env:
                 CXXFLAGS: "-O2 -g -march=x86-64"
+                PYTHON: /usr/local/Cellar/python@3.8/3.8.3/bin/python3
               run: |
-                ls -l /usr/local/opt/python
-                ls -l /usr/local/opt/python/bin
-                export PYTHON=/usr/local/opt/python/bin/python3
-                export PATH="/usr/local/opt/python/bin/:${PATH}"
+                echo ===
+                ls -ld /usr/local/Cellar/python*
+                echo ===
+                ls -ld /usr/local/Cellar/python@3.8/
+                echo ===
+                find /usr/local/Cellar/python@3.8 -name "python3*"
+                echo ===
+                export PATH="/usr/local/Cellar/python@3.8/3.8.3/bin:${PATH}"
                 SUFFIX=$($PYTHON -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
                 echo using boost-python suffix ${SUFFIX}
                 pushd _src
