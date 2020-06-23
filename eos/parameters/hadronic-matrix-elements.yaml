@@ -1582,12 +1582,24 @@ groups:
           max:     +10.00
           comments: ' // GeV^2, cf. [DKMMO2008]'
           latex:    "$s_0'^{f_+}(q^2 = 0)$"
+      "B->pi::s_0^+''(0)@DKMMO2008" :
+          central:   0.00
+          min:     -10.00
+          max:     +10.00
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    "$s_0''^{f_+}(q^2 = 0)$"
       "B->pi::s_0^0'(0)@DKMMO2008" :
           central:   0.00
           min:     -10.00
           max:     +10.00
           comments: ' // GeV^2, cf. [DKMMO2008]'
           latex:    "$s_0'^{f_0}(q^2 = 0)$"
+      "B->pi::s_0^0''(0)@DKMMO2008" :
+          central:   0.00
+          min:     -10.00
+          max:     +10.00
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    "$s_0''^{f_0}(q^2 = 0)$"
       'B->pi::s_0^T(0)@DKMMO2008' :
           central: +35.75
           min:     +35.75
@@ -1600,6 +1612,12 @@ groups:
           max:     +10.00
           comments: ' // GeV^2, cf. [DKMMO2008]'
           latex:    "$s_0'^{f_T}(q^2 = 0)$"
+      "B->pi::s_0^T''(0)@DKMMO2008" :
+          central:   0.00
+          min:     -10.00
+          max:     +10.00
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    "$s_0''^{f_T}(q^2 = 0)$"
       'B->pi::sp_0^B@DKMMO2008' :
           central: +35.6
           min:     +35.5
