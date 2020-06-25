@@ -160,6 +160,10 @@ def main():
         help = 'number of points from which minization is started',
         dest = 'points', action = 'store', type = int, default = 10
     )
+    parser_find_mode.add_argument('-i', '--init-from-file',
+        help = 'name of the MCMC data file from which the minimization is started',
+        dest = 'init_file', action = 'store', type = str, default = ''
+    )
     parser_find_mode.set_defaults(cmd = cmd_find_mode)
 
     # find-clusters
@@ -294,6 +298,16 @@ def cmd_find_mode(args):
     gof = None
     bfp = None
     info('Starting minimization in {} points'.format(args.points))
+    starting_points = []
+    if args.init_file is not '':
+        info('Initializing starting point from MCMC data file')
+        chain = eos.data.MarkovChain(args.init_file)
+        idx_mode = _np.argmax(chain.weights)
+        for p, v in zip(analysis.varied_parameters, chain.samples[idx_mode]):
+            p.set(v)
+    else:
+        info('Using random starting point')
+
     for i in range(args.points):
         starting_point = [float(p) for p in analysis.varied_parameters]
         _bfp = analysis.optimize(starting_point)
@@ -302,7 +316,10 @@ def cmd_find_mode(args):
         if _chi2 < min_chi2:
             gof = _gof
             bfp = _bfp
+            min_chi2 = _chi2
+
     print('best-fit point = {}'.format(bfp.point))
+    print('total chi^2 = {}'.format(min_chi2))
     print('p value = {:.1f}%'.format(100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))))
     print('individual test statistics:')
     for n, e in gof:
