@@ -37,8 +37,20 @@ from .parameter import Parameters
 from .reference import References
 
 import logging
-logger = logging.getLogger()
+logger = logging.getLogger('EOS')
 logger.setLevel(logging.INFO)
+
+def debug(msg, *args, **kwargs):
+    logger.debug(msg, *args, **kwargs)
+
+def error(msg, *args, **kwargs):
+    logger.error(msg, *args, **kwargs)
+
+def info(msg, *args, **kwargs):
+    logger.info(msg, *args, **kwargs)
+
+def warn(msg, *args, **kwargs):
+    logger.warn(msg, *args, **kwargs)
 
 __ipython__ = False
 try:

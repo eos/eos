@@ -17,8 +17,8 @@
 
 import argparse
 import eos
-import logging as log
-from logging import debug, info, warn, error
+from eos import debug, info, warn, error
+import logging
 import numpy as _np
 import os
 import pypmc
@@ -239,13 +239,13 @@ def main():
         args.verbose = 3
 
     levels = {
-        0: log.ERROR,
-        1: log.WARNING,
-        2: log.INFO,
-        3: log.DEBUG
+        0: logging.ERROR,
+        1: logging.WARNING,
+        2: logging.INFO,
+        3: logging.DEBUG
     }
 
-    log.basicConfig(level=levels[args.verbose])
+    logging.basicConfig(level=levels[args.verbose])
 
     if not 'cmd' in args:
         parser.print_help()
@@ -259,6 +259,12 @@ def make_analysis_file(args):
     analysis_file = eos.AnalysisFile(args.analysis_file)
     return analysis_file
 
+def set_log_file(path, name='log'):
+    os.makedirs(path, exist_ok=True)
+    formatter = logging.Formatter('%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s')
+    handler = logging.FileHandler(os.path.join(path, name), mode='w')
+    handler.setFormatter(formatter)
+    eos.logger.addHandler(handler)
 
 class RNG:
     def __init__(self, seed):
@@ -354,12 +360,13 @@ def cmd_find_clusters(args):
 
 # Sample MCMC
 def cmd_sample_mcmc(args):
+    output_path = os.path.join(args.base_directory, args.posterior, 'mcmc-{:04}'.format(int(args.chain)))
+    set_log_file(output_path, 'log')
     analysis_file = make_analysis_file(args)
     analysis = analysis_file.analysis(args.posterior)
     rng = _np.random.mtrand.RandomState(int(args.chain) + 1701)
     try:
         samples, weights = analysis.sample(N=args.N, stride=args.stride, pre_N=args.pre_N, preruns=args.preruns, rng=rng)
-        output_path = os.path.join(args.base_directory, args.posterior, 'mcmc-{:04}'.format(int(args.chain)))
         eos.data.MarkovChain.create(output_path, analysis.varied_parameters, samples, weights)
     except RuntimeError as e:
         error('encountered run time error ({e}) in parameter point:'.format(e=e))

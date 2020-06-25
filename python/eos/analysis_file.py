@@ -17,7 +17,6 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
-from logging import debug, error, info, warn
 import os
 import yaml
 
