@@ -14,9 +14,9 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+import eos
 import h5py
 import numpy
-from logging import warn
 import os
 import sys
 
@@ -42,7 +42,7 @@ class PMCDataFile(HDF5DataFile):
 
         # check that the input file has format=PMC
         if 'format' not in self.file.attrs:
-            warn('input file does not have attribute \'format\'; assuming format \'PMC\'')
+            eos.warn('input file does not have attribute \'format\'; assuming format \'PMC\'')
         elif 'PMC' != self.file.attrs['format']:
             raise FileFormatError('PMC', self.file.attrs['format'])
 
@@ -79,7 +79,7 @@ class MCMCDataFile(HDF5DataFile):
 
         # check that the input file has format=MCMC
         if 'format' not in self.file.attrs:
-            warn('input file does not have attribute \'format\'; assuming format \'MCMC\'')
+            eos.warn('input file does not have attribute \'format\'; assuming format \'MCMC\'')
         elif 'MCMC' != self.file.attrs['format']:
             raise FileFormatError('MCMC', self.file.attrs['format'])
 
@@ -104,7 +104,7 @@ class MCMCDataFile(HDF5DataFile):
         groupname = 'main run'
 
         if 'main run' not in self.file:
-            warn('input file does not contain results from a main run')
+            eos.warn('input file does not contain results from a main run')
             groupname = 'prerun'
 
         group = self.file[groupname]
@@ -129,7 +129,7 @@ class MCMCDataFile(HDF5DataFile):
         groupname = 'main run'
 
         if 'main run' not in self.file:
-            warn('input file does not contain results from a main run')
+            eos.warn('input file does not contain results from a main run')
             groupname = 'prerun'
 
         group = self.file[groupname]
@@ -157,7 +157,7 @@ class UncertaintyDataFile(HDF5DataFile):
 
         # check that the input file has format=PMC
         if 'format' not in self.file.attrs:
-            warn('input file does not have attribute \'format\'; assuming format \'UNC\'')
+            eos.warn('input file does not have attribute \'format\'; assuming format \'UNC\'')
         elif 'UNC' != self.file.attrs['format']:
             raise FileFormatError('UNC', self.file.attrs['format'])
 

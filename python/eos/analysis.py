@@ -18,7 +18,6 @@
 
 import eos
 import copy as _cp
-from logging import debug, error, info, warn
 import numpy as np
 import scipy
 
@@ -71,17 +70,17 @@ class Analysis:
         self.varied_parameters = []
         self.bounds = []
 
-        info('Creating analysis with {nprior} priors, {nconst} EOS-wide constraints, {nopts} global options, and {nmanual} manually-entered constraints'.format(
+        eos.info('Creating analysis with {nprior} priors, {nconst} EOS-wide constraints, {nopts} global options, and {nmanual} manually-entered constraints'.format(
             nprior=len(priors), nconst=len(likelihood), nopts=len(global_options), nmanual=len(manual_constraints)))
-        debug('priors:')
+        eos.debug('priors:')
         for p in priors:
-            debug(' - {name} ({type}) [{min}, {max}]'.format(name=p['parameter'], type=p['type'], min=p['min'], max=p['max']))
-        debug('constraints:')
+            eos.debug(' - {name} ({type}) [{min}, {max}]'.format(name=p['parameter'], type=p['type'], min=p['min'], max=p['max']))
+        eos.debug('constraints:')
         for cn in likelihood:
-            debug(' - {name}'.format(name=cn))
-        debug('manual_constraints:')
+            eos.debug(' - {name}'.format(name=cn))
+        eos.debug('manual_constraints:')
         for cn, ce in manual_constraints.items():
-            debug(' - {name}'.format(name=cn))
+            eos.debug(' - {name}'.format(name=cn))
 
         # collect the global options
         if global_options:
@@ -142,11 +141,11 @@ class Analysis:
 
         used_but_unvaried = used_parameter_names - varied_parameter_names
         if (len(used_but_unvaried) > 0):
-            info('likelihood probably depends on {} parameter(s) that do not appear in the prior; check prior?'.format(len(used_but_unvaried)))
+            eos.info('likelihood probably depends on {} parameter(s) that do not appear in the prior; check prior?'.format(len(used_but_unvaried)))
         for n in used_but_unvaried:
-            debug('used, but not included in any prior: \'{}\''.format(n))
+            eos.debug('used, but not included in any prior: \'{}\''.format(n))
         for n in varied_parameter_names - used_parameter_names:
-            warn('likelihood does not depend on parameter \'{}\'; remove from prior or check options!'.format(n))
+            eos.warn('likelihood does not depend on parameter \'{}\'; remove from prior or check options!'.format(n))
 
     def clone(self):
         """Returns an independent instance of eos.Analysis."""
@@ -164,8 +163,6 @@ class Analysis:
         :param start_point: Parameter point from which to start the optimization, with the elements in the same order as in eos.Analysis.varied_parameters. If not specified, optimization starts at the current parameter point.
         :param start_point: iterable, optional
         """
-        from logging import info, warn
-
         if start_point == None:
             start_point = [float(p) for p in self.varied_parameters]
 
@@ -181,10 +178,10 @@ class Analysis:
             **kwargs)
 
         if not res.success:
-            warn('Optimization did not succeed')
-            warn('  optimizer'' message reas: {}'.format(res.message))
+            eos.warn('Optimization did not succeed')
+            eos.warn('  optimizer'' message reas: {}'.format(res.message))
         else:
-            info('Optimization goal achieved after {nfev} function evaluations'.format(nfev=res.nfev))
+            eos.info('Optimization goal achieved after {nfev} function evaluations'.format(nfev=res.nfev))
 
         for p, v in zip(self.varied_parameters, res.x):
             p.set(v)
@@ -257,7 +254,6 @@ class Analysis:
         .. note::
            This method requiries the PyPMC python module, which can be installed from PyPI.
         """
-        import logging
         import pypmc
         try:
             from tqdm import tqdm
@@ -286,15 +282,15 @@ class Analysis:
 
         # pre run to adapt markov chains
         for i in range(0, preruns):
-            logging.info('Prerun {} out of {}'.format(i, preruns))
+            eos.info('Prerun {} out of {}'.format(i, preruns))
             accept_count = sampler.run(pre_N)
             accept_rate  = accept_count / pre_N * 100
-            logging.info('Prerun {}: acceptance rate is {:3.0f}%'.format(i, accept_rate))
+            eos.info('Prerun {}: acceptance rate is {:3.0f}%'.format(i, accept_rate))
             sampler.adapt()
         sampler.clear()
 
         # obtain final samples
-        logging.info('Main run: started ...')
+        eos.info('Main run: started ...')
         sample_total  = N * stride
         sample_chunk  = sample_total // 100
         sample_chunks = [sample_chunk for i in range(0, 99)]
@@ -302,7 +298,7 @@ class Analysis:
         for current_chunk in progressbar(sample_chunks):
             accept_count = accept_count + sampler.run(current_chunk)
         accept_rate  = accept_count / (N * stride) * 100
-        logging.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
+        eos.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
 
         parameter_samples = sampler.samples[:][::stride]
         weights = sampler.target_values[:][::stride, 0]
@@ -338,7 +334,6 @@ class Analysis:
         .. note::
            This method requires the PyPMC python module, which can be installed from PyPI.
         """
-        import logging
         import pypmc
         try:
             from tqdm import tqdm
@@ -365,7 +360,7 @@ class Analysis:
             normalized_weights = np.ma.masked_where(weights <= 0, weights) / np.sum(weights)
             entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
             perplexity = np.exp(entropy) / len(normalized_weights)
-            debug('Perplexity after sampling in step {}: {}'.format(step, perplexity))
+            eos.debug('Perplexity after sampling in step {}: {}'.format(step, perplexity))
             pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, weights, mincount=0, rb=True, copy=False)
             sampler.proposal.normalize()
 
@@ -377,6 +372,6 @@ class Analysis:
         normalized_weights = np.ma.masked_where(weights <= 0, weights) / np.sum(weights)
         entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
         perplexity = np.exp(entropy) / len(normalized_weights)
-        info('Perplexity after final samples: {}'.format(perplexity))
+        eos.info('Perplexity after final samples: {}'.format(perplexity))
 
         return samples, weights, sampler.proposal
