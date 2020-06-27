@@ -27,7 +27,7 @@ class MarkovChain:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.formt(path))
+            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
@@ -102,7 +102,7 @@ class MixtureDensity:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.formt(path))
+            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
@@ -162,7 +162,7 @@ class PMCSampler:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.formt(path))
+            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
@@ -239,7 +239,7 @@ class Prediction:
         :type path: str
         """
         if not os.path.exists(path) or not os.path.isdir(path):
-            raise RuntimeError('Path {} does not exist or is not a directory'.formt(path))
+            raise RuntimeError('Path {} does not exist or is not a directory'.format(path))
 
         f = os.path.join(path, 'description.yaml')
         if not os.path.exists(f) or not os.path.isfile(f):
