@@ -324,6 +324,10 @@ def cmd_find_mode(args):
     print('individual test statistics:')
     for n, e in gof:
         print('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
+    print('individual observable values:')
+    for c in analysis.log_likelihood:
+        for o in c.observables():
+            print('  - {} -> {:f}'.format(o.name(), o.evaluate()))
 
 
 # Plot samples
