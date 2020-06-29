@@ -146,7 +146,7 @@ namespace eos
             inline double ftilde_L() const
             {
                 // (1 - 3 Ftilde_L)  == 16/3 (S2s + S2c/2)
-                return (1.0 / 3.0 - 16.0 / 9.0 * (vv2T() + vv20() / 2.0) / (normalized_amplitude_polarization_L() + normalized_amplitude_polarization_T())) / 2.0;
+                return (1.0 / 3.0 - 16.0 / 9.0 * (vv2T() + vv20() / 2.0) / (normalized_amplitude_polarization_L() + normalized_amplitude_polarization_T()));
             }
 
             // a_fb leptonic
