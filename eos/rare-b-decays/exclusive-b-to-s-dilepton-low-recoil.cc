@@ -27,7 +27,7 @@
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/destringify.hh>
-#include <eos/utils/integrate.hh>
+#include <eos/utils/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/memoise.hh>
