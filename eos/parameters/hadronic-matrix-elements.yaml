@@ -27,6 +27,12 @@ groups:
           max:     -0.460
           latex:    '$b_{+, 2}^{B\to \pi}$'
           comments: ''
+      'B->pi::b_+^3@BCL2008' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:    '$b_{+, 3}^{B\to \pi}$'
+          comments: 'only used when $K \geq 4$'
       'B->pi::b_0^1@BCL2008' :
           central: +0.00
           min:     +0.00
@@ -39,6 +45,12 @@ groups:
           max:     +0.00
           latex:    '$b_{0, 2}^{B\to \pi}$'
           comments: ''
+      'B->pi::b_0^3@BCL2008' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:    '$b_{0, 3}^{B\to \pi}$'
+          comments: 'only used when $K \geq 3$'
       'B->pi::f_T(0)@BCL2008' :
           central: +0.00
           min:     +0.00
@@ -57,6 +69,12 @@ groups:
           max:     +0.00
           latex:    '$b_{T, 2}^{B\to \pi}$'
           comments: ''
+      'B->pi::b_T^3@BCL2008' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          latex:    '$b_{T, 3}^{B\to \pi}$'
+          comments: 'only used when $K \geq 4$'
       # form factor parameters for B->pi inspired by [BSZ2015]
       # new updated results based on a combined LQCD&LCSR fit from the GKvD2018 calculation
       'B->pi::alpha^f+_0@BSZ2015' :
