@@ -190,7 +190,7 @@ namespace eos
     /* B_{u,d} -> K */
 
     // [BCL2008]
-    template class BCL2008FormFactors<BToK>;
+    template class BCL2008FormFactors<BToK, 3u>;
 
     /* For the values below, cf. [BZ2004v2], Table 1, p. 8 */
     template <> const double BZ2004FormFactors<BToK, PToP>::_r1_p     = 0.162;
@@ -289,12 +289,13 @@ namespace eos
     /* B_{u,d} -> pi */
 
     // [BCL2008]
-    template class BCL2008FormFactors<BToPi>;
+    template class BCL2008FormFactors<BToPi, 3u>;
+    template class BCL2008FormFactors<BToPi, 4u>;
 
     /* B_{u,d -> D */
 
     // [BCL2008]
-    template class BCL2008FormFactors<BToD>;
+    template class BCL2008FormFactors<BToD, 3u>;
 
     FormFactors<PToP>::~FormFactors() = default;
 
@@ -333,18 +334,19 @@ namespace eos
         {
             // parametrizations
             // b -> s
-            { KeyType("B->K::BCL2008"),       &BCL2008FormFactors<BToK>::make                  },
+            { KeyType("B->K::BCL2008"),       &BCL2008FormFactors<BToK, 3u>::make              },
             { KeyType("B->K::BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make             },
             { KeyType("B->K::BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make              },
             { KeyType("B->K::KMPW2010"),      &KMPW2010FormFactors<PToP>::make                 },
             { KeyType("B->K::BFW2010"),       &BFW2010FormFactors<BToK, PToP>::make            },
             { KeyType("B->K::BSZ2015"),       &BSZ2015FormFactors<BToK, PToP>::make            },
             // b -> u
-            { KeyType("B->pi::BCL2008"),      &BCL2008FormFactors<BToPi>::make                 },
+            { KeyType("B->pi::BCL2008"),      &BCL2008FormFactors<BToPi, 3u>::make             },
+            { KeyType("B->pi::BCL2008-4"),    &BCL2008FormFactors<BToPi, 4u>::make             },
             { KeyType("B->pi::BSZ2015"),      &BSZ2015FormFactors<BToPi, PToP>::make           },
             { KeyType("B_s->K::BSZ2015"),     &BSZ2015FormFactors<BsToK, PToP>::make           },
             // b -> c
-            { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD>::make                  },
+            { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD, 3u>::make              },
             { KeyType("B->D::BSZ2015"),       &BSZ2015FormFactors<BToD, PToP>::make            },
             { KeyType("B->D::HQET"),          &HQETFormFactors<BToD, PToP>::make               },
             { KeyType("B->D::BGL1997"),       &BGL1997FormFactors<BToD>::make                  },
