@@ -328,7 +328,7 @@ def cmd_find_mode(args):
         print('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
     print('individual observable values:')
     for o in _bfp.analysis.log_likelihood.observable_cache():
-        print('  - {} -> {:f}'.format(o.name(), o.evaluate()))
+        print('  - {n}[{k}];{o} -> {v:f}'.format(n=o.name(), k=o.kinematics(), o=o.options(), v=o.evaluate()))
 
 
 # Plot samples
