@@ -187,122 +187,122 @@ groups:
           central: +0.1905
           min:     +0.1892
           max:     +0.1918
-          latex:    'f_{\bar{B}^0}'
+          latex:    '$f_{\bar{B}^0}$'
           comments: 'GeV, cf. [Fermilab-MILC-2017]'
       'decay-constant::B_u' :
           central: +0.1894
           min:     +0.1880
           max:     +0.1908
-          latex:    'f_{B^-}'
+          latex:    '$f_{B^-}$'
           comments: 'GeV, cf. [Fermilab-MILC-2017]'
       'decay-constant::B_s' :
           central: +0.2307
           min:     +0.2294
           max:     +0.2330
-          latex:    'f_{\bar{B}_s^0}'
+          latex:    '$f_{\bar{B}_s^0}$'
           comments: 'GeV, cf. [Fermilab-MILC-2017]'
       'decay-constant::K_d' :
           central: +0.1561
           min:     +0.155
           max:     +0.1572
-          latex:    'f_{\bar{K}^0}'
+          latex:    '$f_{\bar{K}^0}$'
           comments: 'GeV, cf. [LATAVG2011]'
       'decay-constant::K_u' :
           central: +0.1561
           min:     +0.155
           max:     +0.1572
-          latex:    'f_{K^-}'
+          latex:    '$f_{K^-}$'
           comments: 'GeV, cf. [LATAVG2011]'
       'decay-constant::K' :
           central: +0.1561
           min:     +0.155
           max:     +0.1572
-          latex:    'f_{\bar{K}}'
+          latex:    '$f_{\bar{K}}$'
           comments: 'GeV, cf. [LATAVG2011]'
       'decay-constant::K_d^*' :
           central: +0.204
           min:     +0.197
           max:     +0.211
-          latex:    'f_{\bar{K}^{*0}}'
+          latex:    '$f_{\bar{K}^{*0}}$'
           comments: 'GeV, cf. [BSZ2015]'
       'decay-constant::K_u^*' :
           central: +0.204
           min:     +0.197
           max:     +0.211
-          latex:    'f_{K^{*-}}'
+          latex:    '$f_{K^{*-}}$'
           comments: 'GeV, cf. [BSZ2015]'
       'decay-constant::pi' :
           central: +0.1302
           min:     +0.1288
           max:     +0.1326
-          latex:    'f_\pi'
+          latex:    '$f_\pi$'
           comments: 'GeV, cf. [FLAG2013], eq. (43)'
       'decay-constant::J/psi' :
           central: +0.2773
           min:     +0.2733
           max:     +0.2807
-          latex:    'f_{J/\psi}'
+          latex:    '$f_{J/\psi}$'
           comments: 'GeV, cf. [KMPW2010], table 5, multiplied by 2/3'
       'decay-constant::psi(2S)' :
           central: +0.1980
           min:     +0.1967
           max:     +0.2000
-          latex:    'f_{\psi(2S)}'
+          latex:    '$f_{\psi(2S)}$'
           comments: 'GeV, cf. [KMPW2010], table 5, multiplied by 2/3'
       'decay-constant::rho' :
           central: +0.213
           min:     +0.208
           max:     +0.218
-          latex:    'f_{\rho}'
+          latex:    '$f_{\rho}$'
           comments: 'GeV, cf. [BSZ2015]'
       'decay-constant::phi' :
           central: +0.233
           min:     +0.228
           max:     +0.238
-          latex:    'f_{\phi}'
+          latex:    '$f_{\phi}$'
           comments: 'GeV, cf. [BSZ2015]'
       'decay-constant::D_d' :
           central: +0.2127
           min:     +0.2121
           max:     +0.2133
-          latex:    'f_{D^-}'
+          latex:    '$f_{D^-}$'
           comments: 'GeV, cf. [Fermilab-MILC-2017]'
       'decay-constant::D_u' :
           central: +0.2116
           min:     +0.2109
           max:     +0.2123
-          latex:    'f_{D^0}'
+          latex:    '$f_{D^0}$'
           comments: 'GeV, cf. [Fermilab-MILC-2017]'
       'decay-constant::D_s' :
           central: +0.2499
           min:     +0.2494
           max:     +0.2504
-          latex:    'f_{D_s^-}'
+          latex:    '$f_{D_s^-}$'
           comments: 'GeV, cf. [Fermilab-MILC-2017]'
       'decay-constant::D_d^*' :
           central: +0.242
           min:     +0.222
           max:     +0.252
-          latex:    'f_{D^{*-}}'
+          latex:    '$f_{D^{*-}}$'
           comments: 'GeV, cf. [GKPR2013], symmetrized errors'
       'decay-constant::D_u^*' :
           central: +0.242
           min:     +0.222
           max:     +0.252
-          latex:    'f_{D^{*0}}'
+          latex:    '$f_{D^{*0}}$'
           comments: 'GeV, cf. [GKPR2013], symmetrized errors'
       'decay-constant::D_s^*' :
           central: +0.293
           min:     +0.274
           max:     +0.312
-          latex:    'f_{D_s^{*0}}'
+          latex:    '$f_{D_s^{*0}}$'
           comments: 'GeV, cf. [GKPR2013], symmetrized errors'
       # 3-particle couplings
       'decay-constant::g_{B^*Bpi}' :
           central: +30.0
           min:     +25.0
           max:     +35.0
-          latex:    'g_{B^*B\pi}'
+          latex:    '$g_{B^*B\pi}$'
           comments: 'cf. [IKMvD2014]'
   # }}}
 
