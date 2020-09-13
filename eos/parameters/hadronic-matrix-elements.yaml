@@ -1810,6 +1810,12 @@ groups:
           max:     +10.00
           comments: ' // GeV^2, cf. [DKMMO2008]'
           latex:    "$s_0''^{f_+}(q^2 = 0)$"
+      "B->pi::s_0^0(0)@DKMMO2008" :
+          central: +36.00
+          min:     +36.00
+          max:     +36.00
+          comments: ' // GeV^2, cf. [DKMMO2008]'
+          latex:    "$s_0^{f_0}(q^2 = 0)$"
       "B->pi::s_0^0'(0)@DKMMO2008" :
           central:   0.00
           min:     -10.00
