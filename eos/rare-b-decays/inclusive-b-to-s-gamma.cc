@@ -386,7 +386,7 @@ namespace eos
             // keep c1 to c6 at their SM values (i.e. 0).
             complex<double> Dprime = wc.c7prime();
             Dprime += a_s * wc.c7prime() * (r[7 - 1] + gamma7[7 - 1] * lnmu);
-            //Dprime += a_s * wc.c8prime() * (r[8 - 1] + gamma7[8 - 1] * lnmu);
+            Dprime += a_s * wc.c8prime() * (r[8 - 1] + gamma7[8 - 1] * lnmu);
 
             return Dprime;
         }
