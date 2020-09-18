@@ -23,6 +23,7 @@ libeosformfactors_la_SOURCES = \
 	mesonic-hqet.hh \
 	mesonic-processes.hh \
 	observables.cc observables.hh \
+	parametric-bgl1997.hh parametric-bgl1997-impl.hh parametric-bgl1997.cc \
 	pi-lcdas.cc pi-lcdas.hh \
 	unitarity-bounds.cc unitarity-bounds.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
@@ -41,6 +42,7 @@ include_eos_rarebdecays_HEADERS = \
 	form-factor-adapter.hh \
 	form-factors.hh \
 	observables.hh \
+	parametric-bgl1997.hh \
 	pi-lcdas.hh
 
 AM_TESTS_ENVIRONMENT = \
@@ -57,6 +59,7 @@ TESTS = \
 	kstar-lcdas_TEST \
 	mesonic_TEST \
 	mesonic-hqet_TEST \
+	parametric-bgl1997_TEST \
 	pi-lcdas_TEST \
 	unitarity-bounds_TEST
 LDADD = \
@@ -87,6 +90,8 @@ kstar_lcdas_TEST_SOURCES = kstar-lcdas_TEST.cc
 mesonic_TEST_SOURCES = mesonic_TEST.cc
 
 mesonic_hqet_TEST_SOURCES = mesonic-hqet_TEST.cc
+
+parametric_bgl1997_TEST_SOURCES = parametric-bgl1997_TEST.cc
 
 pi_lcdas_TEST_SOURCES = pi-lcdas_TEST.cc
 
