@@ -27,6 +27,7 @@
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/mesonic-impl.hh>
+#include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -158,6 +159,7 @@ namespace eos
             { KeyType("B->K^*::BSZ2015"),      &BSZ2015FormFactors<BToKstar,  PToV>::make          },
             { KeyType("B->D^*::BSZ2015"),      &BSZ2015FormFactors<BToDstar,  PToV>::make          },
             { KeyType("B->D^*::HQET"),         &HQETFormFactors<BToDstar,  PToV>::make             },
+            { KeyType("B->D^*::BGL1997"),      &BGL1997FormFactors<BToDstar>::make                 },
             { KeyType("B_s->K^*::BFW2010"),    &BFW2010FormFactors<BsToKstar, PToV>::make          },
             { KeyType("B_s->K^*::FMvD2015"),   &FMvD2015FormFactors<BsToKstar>::make               },
             { KeyType("B_s->phi::BZ2004"),     &BZ2004FormFactors<BsToPhi, PToV>::make             },
@@ -345,6 +347,7 @@ namespace eos
             { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD>::make                  },
             { KeyType("B->D::BSZ2015"),       &BSZ2015FormFactors<BToD, PToP>::make            },
             { KeyType("B->D::HQET"),          &HQETFormFactors<BToD, PToP>::make               },
+            { KeyType("B->D::BGL1997"),       &BGL1997FormFactors<BToD>::make                  },
             { KeyType("B_s->D_s::BSZ2015"),   &BSZ2015FormFactors<BsToDs, PToP>::make          },
             { KeyType("B_s->D_s::HQET"),      &HQETFormFactors<BsToDs, PToP>::make             },
             // analytic computations

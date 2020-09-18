@@ -380,6 +380,79 @@ groups:
           min:     +10.591752810763625
           max:     +10.591752810763625
           comments: ''
+      # form factor parameters for B->D for [BGL:1997A]
+      'B->D::a^f+_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{+,0}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^f+_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{+,1}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^f+_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{+,2}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^f+_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{+,3}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^f0_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{0,0}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^f0_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{0,1}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^f0_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{0,2}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^f0_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{0,3}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^fT_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T,0}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^fT_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T,1}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^fT_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T,2}^{B\to D,\text{BGL97}}$'
+          comments: ''
+      'B->D::a^fT_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{T,3}^{B\to D,\text{BGL97}}$'
+          comments: ''
       # form factor parameters for B_s->D_s inspired by [BSZ2015]
       'B_s->D_s::alpha^f+_0@BSZ2015' :
           central:  0.0
@@ -1095,6 +1168,103 @@ groups:
           central: +4.667079193615467
           min:     +4.667079193615467
           max:     +4.667079193615467
+          comments: ''
+      # form factor parameters for B->D^* for [BGL:1997A]
+      'B->D^*::a^g_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{g,0}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^g_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{g,1}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^g_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{g,2}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^g_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{g,3}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^f_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{f,0}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^f_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{f,1}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^f_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{f,2}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^f_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{f,3}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^F1_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{F1,0}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^F1_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{F1,1}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^F1_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{F1,2}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^F1_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{F1,3}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^F2_0@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{F2,0}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^F2_1@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{F2,1}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^F2_2@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{F2,2}^{B\to D^*,\text{BGL97}}$'
+          comments: ''
+      'B->D^*::a^F2_3@BGL1997' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:    '$a_{F2,3}^{B\to D^*,\text{BGL97}}$'
           comments: ''
       # form factor parameters for B_s->D_s^* inspired by [BSZ2015]
       'B_s->D_s^*::alpha^A0_0@BSZ2015' :
