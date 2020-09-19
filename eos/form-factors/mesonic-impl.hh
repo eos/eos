@@ -26,6 +26,7 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_FORM_FACTORS_IMPL_HH 1
 
 #include <eos/form-factors/mesonic.hh>
+#include <eos/form-factors/mesonic-processes.hh>
 #include <eos/form-factors/analytic-b-to-pi.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
@@ -60,70 +61,6 @@ namespace eos
 
     /* Form Factors according to [BSZ2015] */
     template <typename Process_, typename Transition_> class BSZ2015FormFactors;
-
-    /* P -> V Processes */
-
-    struct BToDstar {
-        static constexpr const char * label = "B->D^*";
-        static constexpr const char * name_B = "mass::B_d";
-        static constexpr const char * name_V = "mass::D_u^*";
-        static constexpr double mB = 5.279;
-        static constexpr double mV = 2.0103;
-        static constexpr double mBc = 6.2751;
-        static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
-        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-        static constexpr const char * hqe_prefix = "B(*)->D(*)";
-    };
-
-    struct BsToDsstar {
-        static constexpr const char * label = "B_s->D_s^*";
-        static constexpr const char * name_B = "mass::B_s";
-        static constexpr const char * name_V = "mass::D_s^*";
-        static constexpr double mB = 5.366;
-        static constexpr double mV = 2.1121;
-        static constexpr double mBc = 6.2751;
-        static constexpr double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
-        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-        static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
-    };
-
-    struct BToKstar {
-        static constexpr const char * label = "B->K^*";
-        static constexpr double mB = 5.279;
-        static constexpr double mV = 0.896;
-        static constexpr double mR2_0m = 5.336 * 5.336;
-        static constexpr double mR2_1m = 5.412 * 5.412;
-        static constexpr double mR2_1p = 5.829 * 5.829;
-    };
-
-    struct BToRho {
-        static constexpr const char * label = "B->rho";
-        static constexpr double mB = 5.279;
-        static constexpr double mV = 0.7751;
-        static constexpr double mR2_0m = 5.279 * 5.279;
-        static constexpr double mR2_1m = 5.325 * 5.325;
-        static constexpr double mR2_1p = 5.724 * 5.724;
-    };
-
-    struct BsToPhi {
-        static constexpr const char * label = "B_s->phi";
-        static constexpr double mB = 5.366;
-        static constexpr double mV = 1.020;
-        static constexpr double mR2_0m = 5.336 * 5.336;
-        static constexpr double mR2_1m = 5.412 * 5.412;
-        static constexpr double mR2_1p = 5.829 * 5.829;
-    };
-
-    struct BsToKstar {
-        static constexpr const char * label = "B_s->K^*";
-        static constexpr double mB = 5.366;
-        static constexpr double mV = 0.896;
-        static constexpr double mR2_0m = 5.279 * 5.279;
-        static constexpr double mR2_1m = 5.325 * 5.325;
-        static constexpr double mR2_1p = 5.723 * 5.723;
-    };
 
     template <typename Process_> class BZ2004FormFactors<Process_, PToV> :
         public FormFactors<PToV>
@@ -744,76 +681,6 @@ namespace eos
             {
                 return _calc_ff(s, Process_::mR2_1p, _a_T23);
             }
-    };
-
-    /* P -> P Processes */
-
-    struct BToK {
-        using Transition = PToP;
-        static constexpr const char * label = "B->K";
-        static constexpr const double m_B = 5.279;
-        static constexpr const double m_P = 0.492;
-        static constexpr const double m2_Br1m = 5.415 * 5.415; // B_s^*
-        static constexpr const double m2_Br0p = 5.630 * 5.630; // B_s scalar
-        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
-        static constexpr const bool uses_tensor_form_factors = true;
-    };
-
-    struct BToPi {
-        using Transition = PToP;
-        static constexpr const char * label = "B->pi";
-        static constexpr const double m_B = 5.279;
-        static constexpr const double m_P = 0.135;
-        static constexpr const double m2_Br1m = 5.325 * 5.325; // B_{u,d}^*
-        static constexpr const double m2_Br0p = 5.540 * 5.540; // B_{u,d} scalar: M(B_s scalar) - M(B_s^*) + M(B_{u,d}^*)
-        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
-        static constexpr const bool uses_tensor_form_factors = true;
-    };
-
-    struct BsToK {
-        using Transition = PToP;
-        static constexpr const char * label = "B_s->K";
-        static constexpr const double m_B = 5.366;
-        static constexpr const double m_P = 0.494;
-        static constexpr const double m2_Br1m = 5.325 * 5.325; // B_{u,d}^*
-        static constexpr const double m2_Br0p = 5.540 * 5.540; // B_{u,d} scalar: M(B_s scalar) - M(B_s^*) + M(B_{u,d}^*)
-        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
-        static constexpr const bool uses_tensor_form_factors = true;
-    };
-
-    struct BToD {
-        using Transition = PToP;
-        static constexpr const char * label = "B->D";
-        static constexpr const char * name_B = "mass::B_d";
-        static constexpr const char * name_P = "mass::D_u";
-        static constexpr const double m_B = 5.279;
-        static constexpr const double m_P = 1.870;
-        // resonance masses from [HPQCD2015A]
-        static constexpr const double m2_Br1m = 6.330 * 6.330; // B_c^*
-        static constexpr const double m2_Br0p = 6.420 * 6.420; // B_c scalar
-        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
-        static constexpr const bool uses_tensor_form_factors = true;
-        static constexpr const char * hqe_prefix = "B(*)->D(*)";
-    };
-
-    struct BsToDs {
-        using Transition = PToP;
-        static constexpr const char * label = "B_s->D_s";
-        static constexpr const char * name_B = "mass::B_s";
-        static constexpr const char * name_P = "mass::D_s";
-        static constexpr const double m_B = 5.366;
-        static constexpr const double m_P = 1.968;
-        // resonance masses from [HPQCD2015A]
-        static constexpr const double m2_Br1m = 6.330 * 6.330; // B_c^*
-        static constexpr const double m2_Br0p = 6.420 * 6.420; // B_c scalar
-        static constexpr const double tau_p = (m_B + m_P) * (m_B + m_P);
-        static constexpr const double tau_m = (m_B - m_P) * (m_B - m_P);
-        static constexpr const bool uses_tensor_form_factors = true;
-        static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
     };
 
     /*
@@ -1638,61 +1505,6 @@ namespace eos
 
                 return result;
             }
-    };
-
-    /* V -> P Processes */
-
-    struct BstarToD {
-        static constexpr const char * label    = "B^*->D";
-        static constexpr const char * name_Bst = "mass::B_d^*";
-        static constexpr const char * name_P   = "mass::D_u";
-        static constexpr const double mBc  = 6.2751;
-        static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
-        static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-        static constexpr const char * hqe_prefix = "B(*)->D(*)";
-    };
-
-    struct BsstarToDs {
-        static constexpr const char * label = "B_s^*->D_s";
-        static constexpr const char * name_Bst = "mass::B_s^*";
-        static constexpr const char * name_P   = "mass::D_s";
-        static constexpr const double m_B = 5.324;
-        static constexpr const double m_P = 1.968;
-        static constexpr const double mBc  = 6.2751;
-        static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
-        static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-        static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
-    };
-
-
-    /* V -> V Processes */
-
-    struct BstarToDstar {
-        static constexpr const char * label = "B^*->D^*";
-        static constexpr const char * name_Bst = "mass::B_d^*";
-        static constexpr const char * name_V   = "mass::D_u^*";
-        static constexpr const double mV1 = 5.324;
-        static constexpr const double mV2 = 2.010;
-        static constexpr const double mBc = 6.2751;
-        static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
-        static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-        static constexpr const char * hqe_prefix = "B(*)->D(*)";
-    };
-
-    struct BsstarToDsstar {
-        static constexpr const char * label = "B_s^*->D_s^*";
-        static constexpr const char * name_Bst = "mass::B_s^*";
-        static constexpr const char * name_P   = "mass::D_s";
-        static constexpr const double m_B = 5.324;
-        static constexpr const double m_V = 2.010;
-        static constexpr const double mBc  = 6.2751;
-        static constexpr const double mR2_0m = (mBc + 0.000) * (mBc + 0.000);
-        static constexpr const double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr const double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-        static constexpr const char * hqe_prefix = "B_s(*)->D_s(*)";
     };
 }
 

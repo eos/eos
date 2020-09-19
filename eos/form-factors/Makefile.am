@@ -21,6 +21,7 @@ libeosformfactors_la_SOURCES = \
 	kstar-lcdas.cc kstar-lcdas.hh \
 	mesonic.cc mesonic.hh mesonic-impl.hh \
 	mesonic-hqet.hh \
+	mesonic-processes.hh \
 	observables.cc observables.hh \
 	pi-lcdas.cc pi-lcdas.hh \
 	unitarity-bounds.cc unitarity-bounds.hh \
