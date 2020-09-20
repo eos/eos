@@ -27,7 +27,7 @@ jobs:
             - name: Prepare VM
               shell: bash
               env:
-                PYTHON: /usr/local/Cellar/python@3.8/3.8.3/bin/python3
+                PYTHON: /usr/local/bin/python3.8
               run: |
                 export HOMEBREW_LOGS=/tmp
                 brew tap eos/eos
@@ -50,7 +50,7 @@ jobs:
               shell: bash
               env:
                 CXXFLAGS: "-O2 -g -march=x86-64"
-                PYTHON: /usr/local/Cellar/python@3.8/3.8.3/bin/python3
+                PYTHON: /usr/local/bin/python3.8
               run: |
                 echo ===
                 ls -ld /usr/local/Cellar/python*
@@ -59,7 +59,6 @@ jobs:
                 echo ===
                 find /usr/local/Cellar/python@3.8 -name "python3*"
                 echo ===
-                export PATH="/usr/local/Cellar/python@3.8/3.8.3/bin:${PATH}"
                 SUFFIX=$($PYTHON -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
                 echo using boost-python suffix ${SUFFIX}
                 pushd _src
