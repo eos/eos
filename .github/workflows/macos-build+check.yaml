@@ -32,7 +32,6 @@ jobs:
                 export HOMEBREW_LOGS=/tmp
                 brew tap eos/eos
                 brew outdated python@3.8 || brew upgrade python@3.8 || true
-                brew unlink python@2
                 rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
                 brew outdated boost || brew upgrade boost || true
                 brew outdated boost-python3 || brew upgrade boost-python3 || true
