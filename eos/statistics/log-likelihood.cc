@@ -1330,7 +1330,7 @@ namespace eos
                 {
                     double llh = (*b)->evaluate();
                     if (! std::isfinite(llh))
-                        return llh;
+                        return -std::numeric_limits<double>::infinity();
 
                     result += llh;
                 }
