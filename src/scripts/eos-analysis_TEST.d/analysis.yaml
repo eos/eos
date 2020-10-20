@@ -1,7 +1,7 @@
 likelihoods:
   - name: lattice
     constraints:
-      - B->pi::f_++f_0@FNALMILC2015A
+      - B->pi::f_++f_0@RBCUKQCD:2015A
   - name: lcsr
     constraints:
       - B->pi::f_+@KMO2006
