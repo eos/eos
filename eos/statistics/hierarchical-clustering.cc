@@ -569,21 +569,21 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<HierarchicalClustering::InputIteratorTag>
     {
-        typedef HierarchicalClustering::MixtureDensity::iterator UnderlyingIterator;
+        using UnderlyingIterator = HierarchicalClustering::MixtureDensity::iterator;
     };
     template class WrappedForwardIterator<HierarchicalClustering::InputIteratorTag, HierarchicalClustering::Component>;
 
     template <>
     struct WrappedForwardIteratorTraits<HierarchicalClustering::OutputIteratorTag>
     {
-        typedef HierarchicalClustering::MixtureDensity::iterator UnderlyingIterator;
+        using UnderlyingIterator = HierarchicalClustering::MixtureDensity::iterator;
     };
     template class WrappedForwardIterator<HierarchicalClustering::OutputIteratorTag, HierarchicalClustering::Component>;
 
     template <>
     struct WrappedForwardIteratorTraits<HierarchicalClustering::MapIteratorTag>
     {
-        typedef std::vector<unsigned>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<unsigned>::iterator;
     };
     template class WrappedForwardIterator<HierarchicalClustering::MapIteratorTag, unsigned>;
 }

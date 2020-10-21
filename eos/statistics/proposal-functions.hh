@@ -48,10 +48,10 @@ namespace eos
         /*!
          * This data type descriptor is needed to identify the proposal function type
          */
-        typedef hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<unsigned>> MetaType;
+        using MetaType = hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<unsigned>>;
         MetaType meta_type();
 
-        typedef std::tuple<const char *, unsigned> MetaRecord;
+        using MetaRecord = std::tuple<const char *, unsigned>;
         MetaRecord meta_record();
 
         /*!
@@ -151,7 +151,7 @@ namespace eos
             public MarkovChain::ProposalFunction
         {
             public:
-                typedef hdf5::Array<1, double> CovarianceType;
+                using CovarianceType = hdf5::Array<1, double>;
                 static CovarianceType covariance_type(const unsigned & dimension);
 
             protected:
@@ -251,13 +251,13 @@ namespace eos
                 virtual void set_indices(const std::vector<unsigned> & index_list);
         };
 
-        typedef std::shared_ptr<Multivariate> MultivariateProposalPtr;
+        using MultivariateProposalPtr = std::shared_ptr<Multivariate>;
 
         class MultivariateGaussian :
             public Multivariate
         {
             public:
-                typedef hdf5::Composite<hdf5::Scalar<double>, hdf5::Scalar<double>, hdf5::Scalar<unsigned>> ScalarsType;
+                using ScalarsType = hdf5::Composite<hdf5::Scalar<double>, hdf5::Scalar<double>, hdf5::Scalar<unsigned>>;
                 static ScalarsType scalars_type();
 
             protected:
@@ -281,7 +281,7 @@ namespace eos
             public Multivariate
         {
             public:
-                typedef hdf5::Composite<hdf5::Scalar<double>, hdf5::Scalar<double>, hdf5::Scalar<unsigned>, hdf5::Scalar<double>> ScalarsType;
+                using ScalarsType = hdf5::Composite<hdf5::Scalar<double>, hdf5::Scalar<double>, hdf5::Scalar<unsigned>, hdf5::Scalar<double>>;
                 static ScalarsType scalars_type();
 
             protected:
@@ -315,7 +315,7 @@ namespace eos
             public MarkovChain::ProposalFunction
         {
             public:
-                typedef hdf5::Composite<hdf5::Scalar<const char *>> PriorsType;
+                using PriorsType = hdf5::Composite<hdf5::Scalar<const char *>>;
                 static PriorsType priors_type();
                 friend struct MultivariateAccess;
             private:

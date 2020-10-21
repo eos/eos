@@ -163,7 +163,7 @@ namespace eos
      */
     struct MarkovChain::State
     {
-        typedef std::vector<State>::const_iterator Iterator;
+        using Iterator = std::vector<State>::const_iterator;
 
         /// position in parameter space
         std::vector<double> point;
@@ -231,7 +231,7 @@ namespace eos
         double variance_of_log_density;
     };
 
-    typedef std::shared_ptr<MarkovChain::History> HistoryPtr;
+    using HistoryPtr = std::shared_ptr<MarkovChain::History>;
 
     /*!
      * Holds the entire history of a run of a MarkovChain
@@ -275,7 +275,7 @@ namespace eos
                                    std::vector<double> & mean, std::vector<double> & variance) const;
     };
 
-    typedef std::shared_ptr<MarkovChain::ProposalFunction> ProposalFunctionPtr;
+    using ProposalFunctionPtr = std::shared_ptr<MarkovChain::ProposalFunction>;
 
     /*!
      * Interface to proposal functions for a MarkovChain.

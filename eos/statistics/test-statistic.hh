@@ -34,7 +34,7 @@ namespace eos
         class ChiSquare;
     }
 
-    typedef OneOf<test_statistics::Empty, test_statistics::ChiSquare> TestStatistic;
+    using TestStatistic = OneOf<test_statistics::Empty, test_statistics::ChiSquare>;
 }
 
 #endif

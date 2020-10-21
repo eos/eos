@@ -13,7 +13,7 @@ namespace eos
         public PrivateImplementationPattern<ChainGroup>
     {
         public:
-            typedef std::function<double (const std::vector<double> &, const std::vector<double> &, const unsigned &)> RValueFunction;
+            using RValueFunction = std::function<double (const std::vector<double> &, const std::vector<double> &, const unsigned &)>;
 
             /*!
              * Construct a cluster, which checks if two chains overlap by
@@ -64,12 +64,12 @@ namespace eos
             void parameter_indices(const std::vector<unsigned> & indices);
 
             struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, HistoryPtr> Iterator;
+            using Iterator = WrappedForwardIterator<IteratorTag, HistoryPtr>;
             Iterator begin() const;
             Iterator end() const;
 
             struct IndexIteratorTag;
-            typedef WrappedForwardIterator<IndexIteratorTag, unsigned> IndexIterator;
+            using IndexIterator = WrappedForwardIterator<IndexIteratorTag, unsigned>;
             IndexIterator begin_indices() const;
             IndexIterator end_indices() const;
     };

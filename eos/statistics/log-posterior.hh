@@ -311,8 +311,8 @@ namespace eos
 
      struct LogPosterior::Output
      {
-         typedef hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>, hdf5::Scalar<double>,
-                                 hdf5::Scalar<int>, hdf5::Scalar<const char *>> DescriptionType;
+         using  DescriptionType = hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>, hdf5::Scalar<double>,
+                                                  hdf5::Scalar<int>, hdf5::Scalar<const char *>>;
          static DescriptionType description_type();
          static std::tuple<const char *, double, double, int, const char *> description_record();
      };

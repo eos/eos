@@ -26,7 +26,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<SimpleParameters::IteratorTag>
     {
-        typedef std::vector<ParameterDescription>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<ParameterDescription>::const_iterator;
     };
 
     DensityWrapper::DensityWrapper(const WrappedDensity & density) :

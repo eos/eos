@@ -76,7 +76,7 @@ namespace eos
             ///@name Iteration over descriptions
             ///@{
             struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, ParameterDescription> Iterator;
+            using Iterator = WrappedForwardIterator<IteratorTag, ParameterDescription>;
 
             Iterator begin();
             Iterator end();

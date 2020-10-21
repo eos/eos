@@ -41,8 +41,8 @@ namespace eos
         public:
             struct Config;
 
-            typedef hdf5::Array<1, double> ObservablesType;
-            typedef std::vector<std::vector<double>> SamplesList;
+            using ObservablesType = hdf5::Array<1, double>;
+            using SamplesList = std::vector<std::vector<double>>;
 
             static ObservablesType observables_type(const unsigned & dimension);
 

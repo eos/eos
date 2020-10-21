@@ -29,7 +29,7 @@ namespace eos
     // Forward declarations.
     class LogLikelihoodBlock;
 
-    typedef std::shared_ptr<LogLikelihoodBlock> LogLikelihoodBlockPtr;
+    using LogLikelihoodBlockPtr = std::shared_ptr<LogLikelihoodBlock>;
 }
 
 #endif

@@ -36,7 +36,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Histogram<1>::ConstIteratorTag>
     {
-        typedef std::list<Histogram<1>::Bin>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::list<Histogram<1>::Bin>::const_iterator;
     };
 
     template <> struct Implementation<Histogram<1>>
@@ -169,13 +169,13 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Histogram<2>::IteratorTag>
     {
-        typedef std::vector<Histogram<2>::Bin>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<Histogram<2>::Bin>::iterator;
     };
 
     template <>
     struct WrappedForwardIteratorTraits<Histogram<2>::ConstIteratorTag>
     {
-        typedef std::vector<Histogram<2>::Bin>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<Histogram<2>::Bin>::const_iterator;
     };
 
     template <> struct Implementation<Histogram<2>>

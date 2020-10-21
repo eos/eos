@@ -31,13 +31,13 @@ namespace eos
 {
     namespace
     {
-        typedef PriorSampler::SamplesList SamplesList;
+        using SamplesList = PriorSampler::SamplesList;
     }
 
     template<>
     struct Implementation<PriorSampler>
     {
-        typedef std::function<void (void)> Function;
+        using Function = std::function<void (void)>;
 
         struct Worker
         {

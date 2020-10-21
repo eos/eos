@@ -212,14 +212,14 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<ChainGroup::IteratorTag>
     {
-        typedef std::vector<HistoryPtr>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<HistoryPtr>::iterator;
     };
     template class WrappedForwardIterator<ChainGroup::IteratorTag, HistoryPtr>;
 
     template <>
     struct WrappedForwardIteratorTraits<ChainGroup::IndexIteratorTag>
     {
-        typedef std::vector<unsigned>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<unsigned>::iterator;
     };
     template class WrappedForwardIterator<ChainGroup::IndexIteratorTag, unsigned>;
 }

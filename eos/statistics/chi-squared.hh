@@ -32,7 +32,7 @@ namespace eos
          * Signature for Chi-Squared functions.
          */
 
-        typedef std::function<double (double, double, double, double, double, double)> Function;
+        using Function = std::function<double (double, double, double, double, double, double)>;
 
         /*
          * Chi-Squared function with theory offset.
