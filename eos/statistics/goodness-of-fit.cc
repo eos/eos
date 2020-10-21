@@ -84,7 +84,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<GoodnessOfFit::ChiSquareIteratorTag>
     {
-        typedef std::map<QualifiedName, test_statistics::ChiSquare>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::map<QualifiedName, test_statistics::ChiSquare>::const_iterator;
     };
     template class WrappedForwardIterator<GoodnessOfFit::ChiSquareIteratorTag, const std::pair<const QualifiedName, test_statistics::ChiSquare>>;
 

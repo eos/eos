@@ -349,7 +349,7 @@ namespace eos
             ///@name Iteration and Access
             ///@{
             struct ConstraintIteratorTag;
-            typedef WrappedForwardIterator<ConstraintIteratorTag, Constraint> ConstraintIterator;
+            using ConstraintIterator = WrappedForwardIterator<ConstraintIteratorTag, Constraint>;
 
             /// Iterator to the first constraint.
             ConstraintIterator begin() const;

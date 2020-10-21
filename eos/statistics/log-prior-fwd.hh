@@ -27,7 +27,7 @@ namespace eos
     // forward declarations
     class LogPrior;
 
-    typedef std::shared_ptr<LogPrior> LogPriorPtr;
+    using LogPriorPtr = std::shared_ptr<LogPrior>;
 }
 
 #endif

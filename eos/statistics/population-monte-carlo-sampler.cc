@@ -147,7 +147,7 @@ namespace eos
             return value;
         }
 
-        typedef std::pair<unsigned, double> index_pair;
+        using index_pair = std::pair<unsigned, double>;
 
         /*
          * Find the minimal partition of N into K parts, such that the smallest
@@ -243,7 +243,7 @@ namespace eos
     template<>
     struct Implementation<PopulationMonteCarloSampler>
     {
-        typedef std::vector<unsigned> IndexList;
+        using IndexList = std::vector<unsigned>;
 
         // store reference, but don't own log-posterior
         DensityPtr density;

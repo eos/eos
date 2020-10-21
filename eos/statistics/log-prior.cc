@@ -40,7 +40,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<LogPrior::IteratorTag>
     {
-        typedef std::vector<ParameterDescription>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<ParameterDescription>::iterator;
     };
 
     namespace priors

@@ -71,7 +71,7 @@ namespace eos
             ///@name Iteration
             ///@{
             struct ConstIteratorTag;
-            typedef WrappedForwardIterator<ConstIteratorTag, const Bin> ConstIterator;
+            using ConstIterator = WrappedForwardIterator<ConstIteratorTag, const Bin>;
 
             ConstIterator begin() const;
             ConstIterator end() const;
@@ -171,7 +171,7 @@ namespace eos
             ///@name Iteration
             ///@{
             struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, Bin> Iterator;
+            using Iterator = WrappedForwardIterator<IteratorTag, Bin>;
 
             Iterator begin();
             Iterator find(const std::array<double, 2> & coordinates);
@@ -181,7 +181,7 @@ namespace eos
             ///@name Constant Iteration
             ///@{
             struct ConstIteratorTag;
-            typedef WrappedForwardIterator<ConstIteratorTag, const Bin> ConstIterator;
+            using ConstIterator = WrappedForwardIterator<ConstIteratorTag, const Bin>;
 
             ConstIterator cbegin() const;
             ConstIterator cend() const;

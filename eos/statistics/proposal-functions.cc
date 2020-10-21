@@ -273,7 +273,7 @@ namespace eos
                 }
         };
 
-        typedef std::function< ProposalFunctionPtr (hdf5::File &, const std::string & data_set_base_name, const unsigned & dimension)> ProposalFactory;
+        using ProposalFactory = std::function< ProposalFunctionPtr (hdf5::File &, const std::string & data_set_base_name, const unsigned & dimension)>;
 
         template <typename Factory_> ProposalFactory
         make_factory(const Factory_ &)

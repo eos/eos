@@ -324,11 +324,11 @@ namespace eos
      */
     struct PopulationMonteCarloSampler::Output
     {
-         typedef hdf5::Composite<hdf5::Scalar<double>, hdf5::Array<1, double>, hdf5::Array<1, double>> ComponentType;
-         typedef hdf5::Scalar<short> IgnoreType;
-         typedef hdf5::Array<1, double> SampleType;
-         typedef hdf5::Composite<hdf5::Scalar<double>, hdf5::Scalar<double>, hdf5::Scalar<double>> StatisticsType;
-         typedef hdf5::Composite<hdf5::Scalar<double>, hdf5::Scalar<double>> WeightType;
+         using ComponentType = hdf5::Composite<hdf5::Scalar<double>, hdf5::Array<1, double>, hdf5::Array<1, double>>;
+         using IgnoreType = hdf5::Scalar<short>;
+         using SampleType = hdf5::Array<1, double>;
+         using StatisticsType = hdf5::Composite<hdf5::Scalar<double>, hdf5::Scalar<double>, hdf5::Scalar<double>>;
+         using WeightType = hdf5::Composite<hdf5::Scalar<double>, hdf5::Scalar<double>>;
 
          static ComponentType component_type(const unsigned & dimension);
          static IgnoreType ignore_type();

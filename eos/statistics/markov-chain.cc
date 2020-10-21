@@ -81,7 +81,7 @@ namespace eos
         double welford_data_density;
 
         // Output data types
-        typedef hdf5::Array<1, double> SampleType;
+        using SampleType = hdf5::Array<1, double>;
         const SampleType sample_type;
 
         Implementation(const DensityPtr & density, unsigned long seed, const std::shared_ptr<MarkovChain::ProposalFunction> & proposal_function) :

@@ -40,8 +40,8 @@ namespace eos
         public Density
     {
         public:
-            typedef double (* RawDensity)(const std::vector<double> &);
-            typedef std::function< double (const std::vector<double> &)> WrappedDensity;
+            using RawDensity = double(*)(const std::vector<double> &);
+            using WrappedDensity = std::function< double (const std::vector<double> &)>;
 
             /// Initialize with a WrappedDensity, that could point for example to a member method
             DensityWrapper(const WrappedDensity &);

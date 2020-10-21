@@ -41,7 +41,7 @@ namespace eos
         public:
             class Config;
             class Component;
-            typedef std::vector<HierarchicalClustering::Component> MixtureDensity;
+            using MixtureDensity = std::vector<HierarchicalClustering::Component>;
 
             ///@name Basic Functions
             ///@{
@@ -74,19 +74,19 @@ namespace eos
 
             /// Loop over input components
             struct InputIteratorTag;
-            typedef WrappedForwardIterator<InputIteratorTag, Component> InputIterator;
+            using InputIterator = WrappedForwardIterator<InputIteratorTag, Component>;
             InputIterator begin_input() const;
             InputIterator end_input() const;
 
             /// Loop over output components (determined during clustering).
             struct OutputIteratorTag;
-            typedef WrappedForwardIterator<OutputIteratorTag, Component> OutputIterator;
+            using OutputIterator = WrappedForwardIterator<OutputIteratorTag, Component>;
             OutputIterator begin_output() const;
             OutputIterator end_output() const;
 
             /// To which output is an input component mapped?
             struct MapIteratorTag;
-            typedef WrappedForwardIterator<MapIteratorTag, unsigned> MapIterator;
+            using MapIterator = WrappedForwardIterator<MapIteratorTag, unsigned>;
             MapIterator begin_map() const;
             MapIterator end_map() const;
     };

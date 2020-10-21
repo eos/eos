@@ -40,7 +40,7 @@ namespace eos
             /*!
              * A unique number index of this parameter
              */
-            typedef size_t Index;
+            using Index = size_t;
 
             ///@name Basic Operations
             ///@{
@@ -106,7 +106,7 @@ namespace eos
             ///@name Iteration
             ///@{
             struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, const ParameterDescription> Iterator;
+            using Iterator = WrappedForwardIterator<IteratorTag, const ParameterDescription>;
 
             Iterator begin() const;
             Iterator end() const;

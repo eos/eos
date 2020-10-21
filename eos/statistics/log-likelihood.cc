@@ -1223,7 +1223,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<LogLikelihood::ConstraintIteratorTag>
     {
-        typedef std::vector<Constraint>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<Constraint>::iterator;
     };
     template class WrappedForwardIterator<LogLikelihood::ConstraintIteratorTag, Constraint>;
 

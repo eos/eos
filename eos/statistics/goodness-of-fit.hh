@@ -40,7 +40,7 @@ namespace eos
             int total_degrees_of_freedom() const;
 
             struct ChiSquareIteratorTag;
-            typedef WrappedForwardIterator<ChiSquareIteratorTag, const std::pair<const QualifiedName, test_statistics::ChiSquare>> ChiSquareIterator;
+            using ChiSquareIterator = WrappedForwardIterator<ChiSquareIteratorTag, const std::pair<const QualifiedName, test_statistics::ChiSquare>>;
 
             ChiSquareIterator begin_chi_square() const;
             ChiSquareIterator end_chi_square() const;
