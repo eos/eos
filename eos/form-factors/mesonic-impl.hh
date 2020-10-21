@@ -749,7 +749,7 @@ namespace eos
     /* P -> P Processes */
 
     struct BToK {
-        typedef PToP Transition;
+        using Transition = PToP;
         static constexpr const char * label = "B->K";
         static constexpr const double m_B = 5.279;
         static constexpr const double m_P = 0.492;
@@ -761,7 +761,7 @@ namespace eos
     };
 
     struct BToPi {
-        typedef PToP Transition;
+        using Transition = PToP;
         static constexpr const char * label = "B->pi";
         static constexpr const double m_B = 5.279;
         static constexpr const double m_P = 0.135;
@@ -773,7 +773,7 @@ namespace eos
     };
 
     struct BsToK {
-        typedef PToP Transition;
+        using Transition = PToP;
         static constexpr const char * label = "B_s->K";
         static constexpr const double m_B = 5.366;
         static constexpr const double m_P = 0.494;
@@ -785,7 +785,7 @@ namespace eos
     };
 
     struct BToD {
-        typedef PToP Transition;
+        using Transition = PToP;
         static constexpr const char * label = "B->D";
         static constexpr const char * name_B = "mass::B_d";
         static constexpr const char * name_P = "mass::D_u";
@@ -801,7 +801,7 @@ namespace eos
     };
 
     struct BsToDs {
-        typedef PToP Transition;
+        using Transition = PToP;
         static constexpr const char * label = "B_s->D_s";
         static constexpr const char * name_B = "mass::B_s";
         static constexpr const char * name_P = "mass::D_s";
@@ -1277,7 +1277,7 @@ namespace eos
     /* P -> PP Processes */
 
     struct BToPiPi {
-        typedef PToPP Transition;
+        using Transition = PToPP;
         static constexpr const char * label = "B->pipi";
         static constexpr double mB  = 5.2795;
         static constexpr double mP1 = 0.13957;
