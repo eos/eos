@@ -147,8 +147,8 @@ namespace eos
     {
         std::shared_ptr<FormFactors<PToV>> result;
 
-        typedef QualifiedName KeyType;
-        typedef std::function<FormFactors<PToV> * (const Parameters &, const Options &)> ValueType;
+        using KeyType = QualifiedName;
+        using ValueType = std::function<FormFactors<PToV> * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> form_factors
         {
             { KeyType("B->rho::BSZ2015"),      &BSZ2015FormFactors<BToRho,    PToV>::make          },
@@ -325,8 +325,8 @@ namespace eos
     {
         std::shared_ptr<FormFactors<PToP>> result;
 
-        typedef QualifiedName KeyType;
-        typedef std::function<FormFactors<PToP> * (const Parameters &, const Options &)> ValueType;
+        using KeyType = QualifiedName;
+        using ValueType = std::function<FormFactors<PToP> * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
@@ -391,8 +391,8 @@ namespace eos
     {
         std::shared_ptr<FormFactors<PToPP>> result;
 
-        typedef QualifiedName KeyType;
-        typedef std::function<FormFactors<PToPP> * (const Parameters &, const Options &)> ValueType;
+        using KeyType = QualifiedName;
+        using ValueType = std::function<FormFactors<PToPP> * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> form_factors
         {
             // analytic computations
@@ -421,8 +421,8 @@ namespace eos
     {
         std::shared_ptr<FormFactors<VToP>> result;
 
-        typedef QualifiedName KeyType;
-        typedef std::function<FormFactors<VToP> * (const Parameters &, const Options &)> ValueType;
+        using KeyType = QualifiedName;
+        using ValueType = std::function<FormFactors<VToP> * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations
@@ -450,8 +450,8 @@ namespace eos
     {
         std::shared_ptr<FormFactors<VToV>> result;
 
-        typedef QualifiedName KeyType;
-        typedef std::function<FormFactors<VToV> * (const Parameters &, const Options &)> ValueType;
+        using KeyType = QualifiedName;
+        using ValueType = std::function<FormFactors<VToV> * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> form_factors
         {
             // parametrizations

@@ -141,8 +141,8 @@ namespace eos
     {
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> result;
 
-        typedef QualifiedName KeyType;
-        typedef std::function<FormFactors<OneHalfPlusToOneHalfPlus> * (const Parameters &, const Options &)> ValueType;
+        using KeyType = QualifiedName;
+        using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfPlus> * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> form_factors
         {
             { KeyType("Lambda_b->Lambda::BFvD2014"),   &BFvD2014FormFactors::make                      },
@@ -185,8 +185,8 @@ namespace eos
     {
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> result;
 
-        typedef std::tuple<std::string, std::string> KeyType;
-        typedef std::function<FormFactors<OneHalfPlusToOneHalfMinus> * (const Parameters &, unsigned)> ValueType;
+        using KeyType = std::tuple<std::string, std::string>;
+        using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfMinus> * (const Parameters &, unsigned)>;
 
         static const std::map<KeyType, ValueType> form_factors
         {
@@ -252,8 +252,8 @@ namespace eos
     {
         std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> result;
 
-        typedef std::tuple<std::string, std::string> KeyType;
-        typedef std::function<FormFactors<OneHalfPlusToThreeHalfMinus> * (const Parameters &, unsigned)> ValueType;
+        using KeyType = std::tuple<std::string, std::string>;
+        using ValueType = std::function<FormFactors<OneHalfPlusToThreeHalfMinus> * (const Parameters &, unsigned)>;
 
         static const std::map<KeyType, ValueType> form_factors
         {
