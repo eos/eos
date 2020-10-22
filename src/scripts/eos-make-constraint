@@ -91,11 +91,15 @@ def print_multivariate_gaussian(parameters, data, **kwargs):
     constraint = OrderedDict()
     constraint['type']        = 'MultivariateGaussian(Covariance)'
     constraint['dim']         = dim
-    constraint['observables'] = [p[0].decode('ascii') for p in parameters]
     if kwargs['datafmt'] == 'UNC':
-        constraint['kinematics'] = [kinstr_to_dict(p[1].decode('ascii')) for p in parameters]
+        constraint['observables'] = [p[0].decode('ascii') for p in parameters]
+        constraint['kinematics']  = [kinstr_to_dict(p[1].decode('ascii')) for p in parameters]
+    elif kwargs['datafmt'] == 'Prediction':
+        constraint['observables'] = [p['name'] for p in parameters]
+        constraint['kinematics']  = [p['kinematics'] for p in parameters]
     else:
-        constraint['kinematics'] = [[] for x in range(0, dim)]
+        constraint['observables'] = [p[0].decode('ascii') for p in parameters]
+        constraint['kinematics']  = [[] for x in range(0, dim)]
     constraint['options']     = [{} for x in range(0, dim)]
     constraint['means']       = means.tolist()
     constraint['covariance']  = cov_tot.tolist()
@@ -129,20 +133,27 @@ def main():
     if not os.path.isfile(args.input):
         error('\'%s\' is not a file' % args.input)
 
-    # open HDF5 data file
-    basename = os.path.basename(args.input)
-    if basename.startswith('mcmc_'):
-        datafile = MCMCDataFile(args.input)
-        datafmt = 'MCMC'
-    elif basename.startswith('pmc_monolithic'):
-        datafile = PMCDataFile(args.input)
-        datafmt = 'PMC'
-    elif basename.startswith('unc'):
-        datafile = UncertaintyDataFile(args.input)
-        datafmt = 'UNC'
+    if os.path.isdir(args.input):
+        # open EOS numpy/yaml-based data file
+        datafile = Prediction(args.input)
+        data = datafile.samples
+        parameters = datafile.varied_parameters
+        datafmt = 'Prediction'
+    else:
+        # open HDF5 data file
+        basename = os.path.basename(args.input)
+        if basename.startswith('mcmc_'):
+            datafile = MCMCDataFile(args.input)
+            datafmt = 'MCMC'
+        elif basename.startswith('pmc_monolithic'):
+            datafile = PMCDataFile(args.input)
+            datafmt = 'PMC'
+        elif basename.startswith('unc'):
+            datafile = UncertaintyDataFile(args.input)
+            datafmt = 'UNC'
 
-    parameters = datafile.parameters
-    data = datafile.data()[:, 0:len(parameters)]
+        parameters = datafile.parameters
+        data = datafile.data()[:, 0:len(parameters)]
 
     # forward options
     argvars = vars(args)
