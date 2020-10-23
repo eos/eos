@@ -26,6 +26,8 @@
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
+#include <gsl/gsl_sf_dilog.h>
+
 #include <cmath>
 
 #include <iostream>
@@ -1815,5 +1817,151 @@ namespace eos
     HQETUnitarityBounds::bound_1m_prior() const
     {
         return _imp->bound_1m_prior();
+    }
+
+    template <> struct Implementation<OPEUnitarityBounds>
+    {
+        const double cond_qq, cond_G2;
+        const double mu;   // TODO maybe declare the scale of alpha_s(mu) as a UsedParameter
+
+        std::shared_ptr<Model> model;
+
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            cond_qq(-0.02/12), // (p["B->D^*::<qq>@BGL1997"], u),         // [BGL1997] quark condensate
+            cond_G2(0.02),     // (p["B->D^*::<alS/pi G^2>@BGL1997"], u), // [BGL1997] gluon condensate
+            mu(4.2),                                       // TODO remove hard-coded numerical value
+            model(Model::make("SM", p, o))
+        {
+            u.uses(*model);
+        }
+
+        ~Implementation() = default;
+
+
+        double chi_T(const double & u) const
+        {
+            // [BGL:1997A] eq.(4.1) + (4.2) + (4.5, 4.8)
+            // limit for u -> 1 in eq.(4.11)
+            // limit for u -> 0 in eq.(4.10)
+            const double aS = model->alpha_s(mu) / M_PI;
+            const double u2 = power_of<2>(u);
+            const double u3 = power_of<3>(u);
+            const double u4 = power_of<4>(u);
+            const double u5 = power_of<5>(u);
+            const double u6 = power_of<6>(u);
+            const double lnu = std::log(u2);
+
+            const double m_b = model->m_b_pole();
+
+            const double chi_pert =
+                1.0 / 32.0 * ( 
+                   (1.0 - u2) * (3. + 4. * u - 21. * u2 + 40. * u3 - 21. * u4 + 4. * u5 + 3. * u6)
+                   + 12. * u3 * (2. - 3. * u + 2. * u2) * lnu 
+                )
+                + aS / (576.0 * (1.0 - u2)) * (
+                   power_of<2>(1.0 - u2) * (75. + 360. * u - 1031. * u2 + 1776. * u3 - 1031. * u4 + 360. * u5 + 75. * u6)
+                   + 4.0 * u * (1.0 - u2) * (18. - 99. * u + 732. * u2 - 1010. * u3 + 732. * u4 - 99. * u5 + 18. * u6) * lnu
+                   + 4.0 * u3 * (108. - 324. * u + 648. * u2 - 456. * u3 + 132. * u4 + 59. * u5 - 12. * u6 - 9. *u6 * u) * lnu * lnu
+                   + 8.0 * power_of<3>(1.0 - u2) * (9. + 12. * u - 32. * u2 + 12. * u3 + 9. * u4) * gsl_sf_dilog(1.0 - u2)
+                );
+
+            const double chi_cond =
+                -1.0 * cond_qq / 2.0 * (2. - 3. * u + 2. * u2) 
+                -1.0 * cond_G2 / (24.0 * m_b * power_of<2>(1.0 - u2) ) * (
+                    (1.0 - u2) * (2. - 104. * u + 148. * u2 - 270. * u3 + 145. * u4 - 104. * u5 + 5. * u6 - 2. * u6 * u)
+                   - 12.0 * u * (3. - 5. * u + 17. * u2 - 15. * u3 + 17. * u4 - 5. * u5 + 3. * u6) * lnu
+                );
+
+            //  TODO catch u->1 and u->0, but should not be needed for b->c
+            return chi_pert / (power_of<2>(m_b * M_PI) * power_of<5>(1.0 - u2))
+                 + chi_cond / (power_of<5>(m_b * (1.0 - u2)) );
+        }
+
+        double chi_L(const double & u) const
+        {
+            // [BGL1997] eq.(4.1) + (4.3) + (4.6, 4.9)
+            // limit for u -> 1 in eq.(4.11)
+            // limit for u -> 0 in eq.(4.10)
+            const double aS = model->alpha_s(mu) / M_PI;
+            const double u2 = power_of<2>(u);
+            const double u3 = power_of<3>(u);
+            const double u4 = power_of<4>(u);
+            const double u5 = power_of<5>(u);
+            const double lnu = std::log(u2);
+
+            const double m_b = model->m_b_pole();
+
+            const double chi_pert =
+                1.0 / 8.0 * ( 
+                   (1.0 - u2) * (1. + u + u2) * (1 - 4. * u + u2) - 6. * u3 * lnu 
+                )
+                + aS / (48.0 * (1.0 - u2)) * (
+                   power_of<2>(1.0 - u2) * (1. - 36. * u - 22. * u2 - 36. * u3 + u4)
+                   - 2.0 * u * (1.0 - u2) * (9. + 4. * u + 66. * u2 + 4. * u3 + 9. * u4) * lnu
+                   - 4.0 * u3 * (9. + 18. * u2 - 2. * u3 - 3. * u4 + u5) * lnu * lnu
+                   + 8.0 * power_of<3>(1.0 - u2) * (1. - 3. * u + u2) * gsl_sf_dilog(1.0 - u2)
+                );
+
+            const double chi_cond =
+                cond_qq + cond_G2 / (12.0 * m_b * power_of<2>(1.0 - u2) ) * (
+                    (1.0 - u2) * (1. - 21. * u + 10. * u2 - 20. * u3 + u4 - u5)
+                   - 3.0 * u * (3. - 2. * u + 8. * u2 - 2. * u3 + 3. * u4) * lnu
+                );
+
+            //  TODO catch u->1 and u->0, but should not be needed for b->c
+            return chi_pert/(M_PI * M_PI * power_of<3>(1.0 - u2))
+                 + chi_cond / (power_of<3>(m_b * (1.0 - u2)) );    
+        }
+
+        double chi_1m() const
+        {
+            return chi_T(+1.0 * model->m_c_pole() / model->m_b_pole());
+        }
+
+        double chi_1p() const
+        {
+            return chi_T(-1.0 * model->m_c_pole() / model->m_b_pole());
+        }
+
+        double chi_0p() const
+        {
+            return chi_L(+1.0 * model->m_c_pole() / model->m_b_pole());
+        }
+
+        double chi_0m() const
+        {
+            return chi_L(-1.0 * model->m_c_pole() / model->m_b_pole());
+        }
+    };
+
+    OPEUnitarityBounds::OPEUnitarityBounds(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<OPEUnitarityBounds>(new Implementation<OPEUnitarityBounds>(p, o, *this))
+    {
+    }
+
+    OPEUnitarityBounds::~OPEUnitarityBounds() = default;
+
+    double
+    OPEUnitarityBounds::bound_0p() const
+    {
+        return _imp->chi_0p();
+    }
+
+    double
+    OPEUnitarityBounds::bound_0m() const
+    {
+        return _imp->chi_0m();
+    }
+
+    double
+    OPEUnitarityBounds::bound_1p() const
+    {
+        return _imp->chi_1p();
+    }
+
+    double
+    OPEUnitarityBounds::bound_1m() const
+    {
+        return _imp->chi_1m();
     }
 }
