@@ -266,4 +266,32 @@ namespace eos
 
             double bound_1m() const;
     };
+
+    /* Unitarity bound implemented as discussed in [BGL:1997A] */
+    class BGLUnitarityBounds :
+        public virtual ParameterUser,
+        public PrivateImplementationPattern<BGLUnitarityBounds>
+    {
+        public:
+            BGLUnitarityBounds(const Parameters &, const Options &);
+            ~BGLUnitarityBounds();
+
+            // unitarity bounds as priors
+            double bound_0p_prior() const;
+
+            double bound_0m_prior() const;
+
+            double bound_1p_prior() const;
+
+            double bound_1m_prior() const;
+
+            // unitarity bounds as pseudo observables
+            double bound_0p() const;
+
+            double bound_0m() const;
+
+            double bound_1p() const;
+
+            double bound_1m() const;
+    };
 }

@@ -1854,9 +1854,9 @@ namespace eos
             const double m_b = model->m_b_pole();
 
             const double chi_pert =
-                1.0 / 32.0 * ( 
+                1.0 / 32.0 * (
                    (1.0 - u2) * (3. + 4. * u - 21. * u2 + 40. * u3 - 21. * u4 + 4. * u5 + 3. * u6)
-                   + 12. * u3 * (2. - 3. * u + 2. * u2) * lnu 
+                   + 12. * u3 * (2. - 3. * u + 2. * u2) * lnu
                 )
                 + aS / (576.0 * (1.0 - u2)) * (
                    power_of<2>(1.0 - u2) * (75. + 360. * u - 1031. * u2 + 1776. * u3 - 1031. * u4 + 360. * u5 + 75. * u6)
@@ -1866,7 +1866,7 @@ namespace eos
                 );
 
             const double chi_cond =
-                -1.0 * cond_qq / 2.0 * (2. - 3. * u + 2. * u2) 
+                -1.0 * cond_qq / 2.0 * (2. - 3. * u + 2. * u2)
                 -1.0 * cond_G2 / (24.0 * m_b * power_of<2>(1.0 - u2) ) * (
                     (1.0 - u2) * (2. - 104. * u + 148. * u2 - 270. * u3 + 145. * u4 - 104. * u5 + 5. * u6 - 2. * u6 * u)
                    - 12.0 * u * (3. - 5. * u + 17. * u2 - 15. * u3 + 17. * u4 - 5. * u5 + 3. * u6) * lnu
@@ -1892,8 +1892,8 @@ namespace eos
             const double m_b = model->m_b_pole();
 
             const double chi_pert =
-                1.0 / 8.0 * ( 
-                   (1.0 - u2) * (1. + u + u2) * (1 - 4. * u + u2) - 6. * u3 * lnu 
+                1.0 / 8.0 * (
+                   (1.0 - u2) * (1. + u + u2) * (1 - 4. * u + u2) - 6. * u3 * lnu
                 )
                 + aS / (48.0 * (1.0 - u2)) * (
                    power_of<2>(1.0 - u2) * (1. - 36. * u - 22. * u2 - 36. * u3 + u4)
@@ -1910,7 +1910,7 @@ namespace eos
 
             //  TODO catch u->1 and u->0, but should not be needed for b->c
             return chi_pert/(M_PI * M_PI * power_of<3>(1.0 - u2))
-                 + chi_cond / (power_of<3>(m_b * (1.0 - u2)) );    
+                 + chi_cond / (power_of<3>(m_b * (1.0 - u2)) );
         }
 
         double chi_1m() const
@@ -1963,5 +1963,271 @@ namespace eos
     OPEUnitarityBounds::bound_1m() const
     {
         return _imp->chi_1m();
+    }
+
+    template <> struct Implementation<BGLUnitarityBounds>
+    {
+        // B->D^* parameters
+        std::array<UsedParameter, 4> _a_g, _a_f, _a_F1, _a_F2;
+        // B->D parameters
+        std::array<UsedParameter, 4> _a_f_p, _a_f_0, _a_f_t;
+
+        // option to determine if we use z^3 terms in the leading-power IW function
+        SwitchOption opt_zorder_bound;
+        unsigned zorder_bound;
+
+        // number of light flavor multiplets
+        UsedParameter nf;
+        UsedParameter ns;
+
+        std::string _par_name_dstar(const std::string & ff_name)
+        {
+            return std::string("B->D^*") + std::string("::a^") + ff_name + std::string("@BGL1997");
+        }
+
+        std::string _par_name_d(const std::string & ff_name)
+        {
+            return std::string("B->D") + std::string("::a^") + ff_name + std::string("@BGL1997");
+        }
+
+        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            // B->D^*
+            _a_g{{   UsedParameter(p[_par_name_dstar("g_0")],  u),
+                     UsedParameter(p[_par_name_dstar("g_1")],  u),
+                     UsedParameter(p[_par_name_dstar("g_2")],  u),
+                     UsedParameter(p[_par_name_dstar("g_3")],  u) }},
+            _a_f{{   UsedParameter(p[_par_name_dstar("f_0")],  u),
+                     UsedParameter(p[_par_name_dstar("f_1")],  u),
+                     UsedParameter(p[_par_name_dstar("f_2")],  u),
+                     UsedParameter(p[_par_name_dstar("f_3")],  u) }},
+            _a_F1{{  UsedParameter(p[_par_name_dstar("F1_0")], u),
+                     UsedParameter(p[_par_name_dstar("F1_1")], u),
+                     UsedParameter(p[_par_name_dstar("F1_2")], u),
+                     UsedParameter(p[_par_name_dstar("F1_3")], u) }},
+            _a_F2{{  UsedParameter(p[_par_name_dstar("F2_0")], u),
+                     UsedParameter(p[_par_name_dstar("F2_1")], u),
+                     UsedParameter(p[_par_name_dstar("F2_2")], u),
+                     UsedParameter(p[_par_name_dstar("F2_3")], u) }},
+            // B->D
+            _a_f_p{{ UsedParameter(p[_par_name_d("f+_0")], u),
+                     UsedParameter(p[_par_name_d("f+_1")], u),
+                     UsedParameter(p[_par_name_d("f+_2")], u),
+                     UsedParameter(p[_par_name_d("f+_3")], u) }},
+            _a_f_0{{ UsedParameter(p[_par_name_d("f0_0")], u),
+                     UsedParameter(p[_par_name_d("f0_1")], u),
+                     UsedParameter(p[_par_name_d("f0_2")], u),
+                     UsedParameter(p[_par_name_d("f0_3")], u) }},
+            _a_f_t{{ UsedParameter(p[_par_name_d("fT_0")], u),
+                     UsedParameter(p[_par_name_d("fT_1")], u),
+                     UsedParameter(p[_par_name_d("fT_2")], u),
+                     UsedParameter(p[_par_name_d("fT_3")], u) }},
+            // further parameters
+            opt_zorder_bound(o, "z-order-bound", { "1", "2" }, "2"),
+            nf(p["B(*)->D(*)::n_f@BGL"], u),
+            ns(p["B_s(*)->D_s(*)::n_s@BGL"], u)
+        {
+            if ("1" == opt_zorder_bound.value())
+            {
+                zorder_bound = 1;
+            }
+            else if ("2" == opt_zorder_bound.value())
+            {
+                zorder_bound = 2;
+            }
+            else
+            {
+                throw InternalError("Only z-order-bound=2 is presently supported");
+            }
+        }
+
+        ~Implementation() = default;
+
+        // bounds up to z^2
+        // {{{
+        double bound_0p() const
+        {
+            double result = 0.0;
+
+            for (unsigned i = 0 ; i <= zorder_bound ; ++i)
+            {
+                result += pow(_a_f_0[i], 2) * nf; // to account for flavour symmetry
+            }
+
+            return result;
+        }
+
+        double bound_0p_prior() const
+        {
+            const double value = bound_0p();
+
+            if (value < 0.0)
+            {
+                throw InternalError("Contribution to 0^+ unitarity bound must be positive; found to be negative!");
+            }
+            else if ((0.0 <= value) && (value < 1.0))
+            {
+                return 0.0;
+            }
+            else
+            {
+                // add an r-fit like penalty
+                static const double sigma = 0.0130561; // cf. [BG2016], eq. (2.8), p.5
+                return -pow((value - 1.0) / sigma, 2) / 2.0;
+            }
+        }
+
+        double bound_0m() const
+        {
+            double result = 0.0;
+
+            for (unsigned i = 0 ; i <= zorder_bound ; ++i)
+            {
+                result += pow(_a_F2[i], 2) * nf; // to account for flavour symmetry
+            }
+
+            return result;
+        }
+
+        double bound_0m_prior() const
+        {
+            const double value = bound_0m();
+
+            if (value < 0.0)
+            {
+                throw InternalError("Contribution to 0^- unitarity bound must be positive; found to be negative!");
+            }
+            else if ((0.0 <= value) && (value < 1.0))
+            {
+                return 0.0;
+            }
+            else
+            {
+                // add an r-fit like penalty
+                static const double sigma = 0.0130561; // using the same relative uncertainty as for 0^+, cf. [BG2016], eq. (2.8), p.5
+                return -pow((value - 1.0) / sigma, 2) / 2.0;
+            }
+        }
+
+        double bound_1p() const
+        {
+            double result = 0.0;
+
+            for (unsigned i = 0 ; i <= zorder_bound ; ++i)
+            {
+                result += pow(_a_f[i],  2) * nf; // to account for flavour symmetry
+                result += pow(_a_F1[i], 2) * nf; // to account for flavour symmetry
+            }
+
+            return result;
+        }
+
+        double bound_1p_prior() const
+        {
+            const double value = bound_1p();
+
+            if (value < 0.0)
+            {
+                throw InternalError("Contribution to 1^+ unitarity bound must be positive; found to be negative!");
+            }
+            else if ((0.0 <= value) && (value < 1.0))
+            {
+                return 0.0;
+            }
+            else
+            {
+                // add an r-fit like penalty
+                static const double sigma = 0.0093549; // cf. [BG2016], eq. (2.8), p.5
+                return -pow((value - 1.0) / sigma, 2) / 2.0;
+            }
+        }
+
+        double bound_1m() const
+        {
+            double result = 0.0;
+
+            for (unsigned i = 0 ; i <= zorder_bound ; ++i)
+            {
+                result += pow(_a_f_p[i], 2) * nf; // to account for flavour symmetry
+                result += pow(_a_g[i],   2) * nf; // to account for flavour symmetry
+            }
+
+            return result;
+        }
+
+        double bound_1m_prior() const
+        {
+            const double value = bound_1m();
+
+            if (value < 0.0)
+            {
+                throw InternalError("Contribution to 1^- unitarity bound must be positive; found to be negative!");
+            }
+            else if ((0.0 <= value) && (value < 1.0))
+            {
+                return 0.0;
+            }
+            else
+            {
+                // add an r-fit like penalty
+                static const double sigma = 0.0093549; // same relative uncertainty as for 1^-, cf. [BG2016], eq. (2.8), p.5
+                return -pow((value - 1.0) / sigma, 2) / 2.0;
+            }
+        }
+        // }}}
+    };
+
+    BGLUnitarityBounds::BGLUnitarityBounds(const Parameters & p, const Options & o) :
+        PrivateImplementationPattern<BGLUnitarityBounds>(new Implementation<BGLUnitarityBounds>(p, o, *this))
+    {
+    }
+
+    BGLUnitarityBounds::~BGLUnitarityBounds() = default;
+
+    double
+    BGLUnitarityBounds::bound_0p() const
+    {
+        return _imp->bound_0p();
+    }
+
+    double
+    BGLUnitarityBounds::bound_0m() const
+    {
+        return _imp->bound_0m();
+    }
+
+    double
+    BGLUnitarityBounds::bound_1p() const
+    {
+        return _imp->bound_1p();
+    }
+
+    double
+    BGLUnitarityBounds::bound_1m() const
+    {
+        return _imp->bound_1m();
+    }
+
+    double
+    BGLUnitarityBounds::bound_0p_prior() const
+    {
+        return _imp->bound_0p_prior();
+    }
+
+    double
+    BGLUnitarityBounds::bound_0m_prior() const
+    {
+        return _imp->bound_0m_prior();
+    }
+
+    double
+    BGLUnitarityBounds::bound_1p_prior() const
+    {
+        return _imp->bound_1p_prior();
+    }
+
+    double
+    BGLUnitarityBounds::bound_1m_prior() const
+    {
+        return _imp->bound_1m_prior();
     }
 }
