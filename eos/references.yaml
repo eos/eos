@@ -181,6 +181,13 @@ BGL:1997A:
     id: oai:arXiv.org:hep-ph/9705252
   inspire-id: Boyd:1997kz
   title: Precision corrections to dispersive bounds on form-factors
+BGS:2017A:
+  authors: Bigi, Dante and Gambino, Paolo and Schacht, Stefan
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1707.09509
+  inspire-id: Bigi:2017jbd
+  title: $R(D^*)$, $|V_{cb}|$, and the Heavy Quark Symmetry relations between form factors
 BHP:2007A:
   authors: Bobeth, Christoph and Hiller, Gudrun and Piranishvili, Giorgi
   eprint:
