@@ -261,3 +261,30 @@ class HQETUnitarityBoundsTest :
             }
         }
 } unitarity_bounds_test;
+
+class OPEUnitarityBoundsTest :
+    public TestCase
+{
+    public:
+        OPEUnitarityBoundsTest() :
+            TestCase("ope_unitarity_bounds_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            static const double eps = 1.0e-6;
+
+            // values
+            {
+                Parameters p = Parameters::Defaults();
+
+                OPEUnitarityBounds bounds(p, Options{ });
+
+                TEST_CHECK_RELATIVE_ERROR( 5.693e-04, bounds.bound_1m(), 1e-4);
+                TEST_CHECK_RELATIVE_ERROR( 3.309e-04, bounds.bound_1p(), 1e-4);
+                TEST_CHECK_RELATIVE_ERROR(24.928e-03, bounds.bound_0m(), 1e-4);
+                TEST_CHECK_RELATIVE_ERROR( 4.640e-03, bounds.bound_0p(), 1e-4);
+            }
+        }
+} ope_unitarity_bounds_test;

@@ -1,7 +1,8 @@
 /* vim: set sw=4 sts=4 tw=120 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2020 Christoph Bobeth
+ * Copyright (c) 2019, 2020 Danny van Dyk
  * Copyright (c) 2019 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
@@ -236,6 +237,25 @@ namespace eos
             double bound_1p_prior() const;
 
             double bound_1m_prior() const;
+
+            // unitarity bounds as pseudo observables
+            double bound_0p() const;
+
+            double bound_0m() const;
+
+            double bound_1p() const;
+
+            double bound_1m() const;
+    };
+
+    /* Unitarity bounds as calculated in the OPE up to dim=4 operators and to NLO in alpha_s [BGL:1997A] */
+    class OPEUnitarityBounds :
+        public virtual ParameterUser,
+        public PrivateImplementationPattern<OPEUnitarityBounds>
+    {
+        public:
+            OPEUnitarityBounds(const Parameters &, const Options &);
+            ~OPEUnitarityBounds();
 
             // unitarity bounds as pseudo observables
             double bound_0p() const;
