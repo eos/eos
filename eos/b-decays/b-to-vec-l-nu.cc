@@ -290,7 +290,7 @@ namespace eos
             // form factors
             double aff0  = form_factors->a_0(q2);
             double aff1  = form_factors->a_1(q2);
-            double aff2  = form_factors->a_2(q2);
+            double aff12 = form_factors->a_12(q2);
             double vff   = form_factors->v(q2);
             double tff1  = form_factors->t_1(q2);
             double tff2  = form_factors->t_2(q2);
@@ -307,7 +307,7 @@ namespace eos
             double NF = norm(q2);
 
             // transversity amplitudes A's. cf. [DSD2014], p.17
-            result.a_0          = (1.0 - gA) * (m_B + m_V) / (2.0 * m_V * sqrtq2) * ( (m_B * m_B - m_V * m_V - q2) * aff1 - lam * aff2 / power_of<2>(m_B + m_V) );
+            result.a_0          = (1.0 - gA) * 8.0 * m_B() * m_V() / sqrtq2 * aff12;
             result.a_0_T        = TL / (2.0 * m_V) * ( (m_B * m_B + 3.0 * m_V * m_V - q2) * tff2 - lam * tff3 / (m_B * m_B - m_V * m_V) );
             result.a_plus       = ( (m_B + m_V) * aff1 * (1.0 - gA) - std::sqrt(lam) * vff * (1.0 + gV) / (m_B + m_V) );
             result.a_minus      = ( (m_B + m_V) * aff1 * (1.0 - gA) + std::sqrt(lam) * vff * (1.0 + gV) / (m_B + m_V) );
