@@ -318,7 +318,9 @@ def cmd_find_mode(args):
             bfp = _bfp
             min_chi2 = _chi2
 
-    print('best-fit point = {}'.format(bfp.point))
+    print('best-fit point:')
+    for p, v in zip(analysis.varied_parameters, _bfp.point):
+        print('  - {} -> {}'.format(p.name(), v))
     print('total chi^2 = {}'.format(min_chi2))
     print('p value = {:.1f}%'.format(100 * (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))))
     print('individual test statistics:')
