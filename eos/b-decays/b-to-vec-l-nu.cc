@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019, 2020 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -265,7 +265,7 @@ namespace eos
             // charged lepton velocity in the dilepton rest frame
             double v    = (1.0 - m_l * m_l / q2);
             double lam  = lambda(m_B * m_B, m_V * m_V, q2);
-            double p    = std::sqrt(lam) / (2.0 * m_B);
+            double p    = (lam > 0.0) ? std::sqrt(lam) / (2.0 * m_B) : 0.0;
             // universal electroweak correction, cf. [S1982]
             double etaEW = 1.0066;
             // normalized prefactor (|Vcb|^2=1)
@@ -302,6 +302,7 @@ namespace eos
             double v        = (1.0 - m_l * m_l / q2);
             double m_l_hat  = std::sqrt(1.0 - v);
             double lam      = lambda(m_B * m_B, m_V * m_V, q2);
+            double sqrt_lam = (lam > 0.0) ? std::sqrt(lam) : 0.0;
 
             double sqrtq2 = std::sqrt(q2);
             double NF = norm(q2);
@@ -309,12 +310,12 @@ namespace eos
             // transversity amplitudes A's. cf. [DSD2014], p.17
             result.a_0          = (1.0 - gA) * 8.0 * m_B() * m_V() / sqrtq2 * aff12;
             result.a_0_T        = TL / (2.0 * m_V) * ( (m_B * m_B + 3.0 * m_V * m_V - q2) * tff2 - lam * tff3 / (m_B * m_B - m_V * m_V) );
-            result.a_plus       = ( (m_B + m_V) * aff1 * (1.0 - gA) - std::sqrt(lam) * vff * (1.0 + gV) / (m_B + m_V) );
-            result.a_minus      = ( (m_B + m_V) * aff1 * (1.0 - gA) + std::sqrt(lam) * vff * (1.0 + gV) / (m_B + m_V) );
-            result.a_plus_T     = TL * ( (m_B * m_B - m_V * m_V) * tff2 / sqrtq2 + std::sqrt(lam) * tff1 / sqrtq2 );
-            result.a_minus_T    = TL * ( (m_B * m_B - m_V * m_V) * tff2 / sqrtq2 - std::sqrt(lam) * tff1 / sqrtq2 );
-            result.a_t          =  std::sqrt(lam) * aff0 * (1.0 - gA) / sqrtq2;
-            result.a_P          =  std::sqrt(lam) * aff0 * gP / (mbatmu + mcatmu);
+            result.a_plus       = ( (m_B + m_V) * aff1 * (1.0 - gA) - sqrt_lam * vff * (1.0 + gV) / (m_B + m_V) );
+            result.a_minus      = ( (m_B + m_V) * aff1 * (1.0 - gA) + sqrt_lam * vff * (1.0 + gV) / (m_B + m_V) );
+            result.a_plus_T     = TL * ( (m_B * m_B - m_V * m_V) * tff2 / sqrtq2 + sqrt_lam * tff1 / sqrtq2 );
+            result.a_minus_T    = TL * ( (m_B * m_B - m_V * m_V) * tff2 / sqrtq2 - sqrt_lam * tff1 / sqrtq2 );
+            result.a_t          =  sqrt_lam * aff0 * (1.0 - gA) / sqrtq2;
+            result.a_P          =  sqrt_lam * aff0 * gP / (mbatmu + mcatmu);
             result.a_t_P        =  result.a_t + result.a_P / m_l_hat;
             result.a_para       =  (result.a_plus + result.a_minus) / std::sqrt(2.0);
             result.a_para_T     =  (result.a_plus_T + result.a_minus_T) / std::sqrt(2.0);
