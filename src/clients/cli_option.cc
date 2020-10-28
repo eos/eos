@@ -75,7 +75,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<cli::EnumArg::AllowedArgConstIteratorTag>
     {
-        typedef std::vector<cli::AllowedEnumArg>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<cli::AllowedEnumArg>::const_iterator;
     };
 
     template class WrappedForwardIterator<cli::EnumArg::AllowedArgConstIteratorTag, const cli::AllowedEnumArg>;
@@ -89,7 +89,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<cli::StringListArg::ConstIteratorTag>
     {
-        typedef std::vector<std::string>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<std::string>::const_iterator;
     };
 
     template class WrappedForwardIterator<cli::StringListArg::ConstIteratorTag, const std::string>;
@@ -361,7 +361,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<cli::ParameterBudgetArg::ParameterBudgetArgConstIteratorTag>
     {
-        typedef std::vector<cli::ParameterBudgetArg::ParameterBudget>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<cli::ParameterBudgetArg::ParameterBudget>::const_iterator;
     };
     template class WrappedForwardIterator<cli::ParameterBudgetArg::ParameterBudgetArgConstIteratorTag, const cli::ParameterBudgetArg::ParameterBudget>;
 

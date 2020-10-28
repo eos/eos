@@ -48,7 +48,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<cli::Section::GroupsConstIteratorTag>
     {
-        typedef IndirectIterator<std::list<cli::Group *>::const_iterator> UnderlyingIterator;
+        using UnderlyingIterator = IndirectIterator<std::list<cli::Group *>::const_iterator>;
     };
 
     template class WrappedForwardIterator<cli::Section::GroupsConstIteratorTag, const cli::Group>;

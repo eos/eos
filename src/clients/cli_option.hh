@@ -40,9 +40,9 @@ namespace eos
 {
     namespace n
     {
-        typedef Name<struct name_description> description;
-        typedef Name<struct name_long_name> long_name;
-        typedef Name<struct name_short_name> short_name;
+        using description = Name<struct name_description>;
+        using long_name = Name<struct name_long_name>;
+        using short_name = Name<struct name_short_name>;
     }
 
     namespace cli
@@ -320,7 +320,7 @@ namespace eos
                  * Iterate over our args.
                  */
                 struct ConstIteratorTag;
-                typedef WrappedForwardIterator<ConstIteratorTag, const std::string> ConstIterator;
+                using ConstIterator = WrappedForwardIterator<ConstIteratorTag, const std::string>;
 
                 ConstIterator begin_args() const;
                 ConstIterator end_args() const;
@@ -504,8 +504,8 @@ namespace eos
                 ///@{
 
                 struct AllowedArgConstIteratorTag;
-                typedef WrappedForwardIterator<AllowedArgConstIteratorTag,
-                        const AllowedEnumArg> AllowedArgConstIterator;
+                using AllowedArgConstIterator = WrappedForwardIterator<AllowedArgConstIteratorTag,
+                                                                       const AllowedEnumArg>;
 
                 AllowedArgConstIterator begin_allowed_args() const;
 
@@ -601,8 +601,8 @@ namespace eos
                 ///@{
 
                 struct ParameterBudgetArgConstIteratorTag;
-                typedef WrappedForwardIterator<ParameterBudgetArgConstIteratorTag,
-                        const ParameterBudget> ParameterBudgetArgConstIterator;
+                using ParameterBudgetArgConstIterator = WrappedForwardIterator<ParameterBudgetArgConstIteratorTag,
+                                                                               const ParameterBudget>;
 
                 ParameterBudgetArgConstIterator begin_budgets() const;
 

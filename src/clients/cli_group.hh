@@ -81,7 +81,7 @@ namespace eos
                 ///\{
 
                 struct ConstIteratorTag;
-                typedef WrappedForwardIterator<ConstIteratorTag, Option * const> ConstIterator;
+                using ConstIterator = WrappedForwardIterator<ConstIteratorTag, Option * const>;
 
                 ConstIterator begin() const;
                 ConstIterator end() const;

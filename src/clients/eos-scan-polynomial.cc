@@ -77,7 +77,7 @@ struct ObservableHTLikeRatioInput
     double min, central, max;
 };
 
-typedef OneOf<ObservableInput, ObservableRatioInput, ObservableHTLikeRatioInput> Input;
+using Input = OneOf<ObservableInput, ObservableRatioInput, ObservableHTLikeRatioInput>;
 
 struct ScanData
 {

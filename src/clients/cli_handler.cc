@@ -68,49 +68,49 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<cli::Handler::SectionsConstIteratorTag>
     {
-        typedef IndirectIterator<std::list<cli::Section *>::const_iterator> UnderlyingIterator;
+        using UnderlyingIterator = IndirectIterator<std::list<cli::Section *>::const_iterator>;
     };
 
     template <>
     struct WrappedForwardIteratorTraits<cli::Handler::ParametersConstIteratorTag>
     {
-        typedef std::list<std::string>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::list<std::string>::const_iterator;
     };
 
     template <>
     struct WrappedForwardIteratorTraits<cli::Handler::NotesIteratorTag>
     {
-        typedef std::list<std::string>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::list<std::string>::const_iterator;
     };
 
     template <>
     struct WrappedForwardIteratorTraits<cli::Handler::DescriptionLineConstIteratorTag>
     {
-        typedef std::list<std::string>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::list<std::string>::const_iterator;
     };
 
     template <>
     struct WrappedForwardIteratorTraits<cli::Handler::ExamplesConstIteratorTag>
     {
-        typedef std::list<std::pair<std::string, std::string> >::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::list<std::pair<std::string, std::string> >::const_iterator;
     };
 
     template <>
     struct WrappedForwardIteratorTraits<cli::Handler::UsageLineConstIteratorTag>
     {
-        typedef std::list<std::string>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::list<std::string>::const_iterator;
     };
 
     template <>
     struct WrappedForwardIteratorTraits<cli::Handler::ArgsIteratorTag>
     {
-        typedef std::list<std::string>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::list<std::string>::iterator;
     };
 
     template <>
     struct WrappedForwardIteratorTraits<cli::Handler::SeeAlsoConstIteratorTag>
     {
-        typedef std::list<std::pair<std::string, int> >::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::list<std::pair<std::string, int> >::const_iterator;
     };
 
     namespace cli
