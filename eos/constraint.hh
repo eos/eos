@@ -62,7 +62,7 @@ namespace eos
             ///@name Iteration over Observables
             ///@{
             struct ObservableIteratorTag;
-            typedef WrappedForwardIterator<ObservableIteratorTag, ObservablePtr> ObservableIterator;
+            using ObservableIterator = WrappedForwardIterator<ObservableIteratorTag, ObservablePtr>;
 
             ObservableIterator begin_observables() const;
             ObservableIterator end_observables() const;
@@ -71,7 +71,7 @@ namespace eos
             ///@name Iteration over Blocks
             ///@{
             struct BlockIteratorTag;
-            typedef WrappedForwardIterator<BlockIteratorTag, LogLikelihoodBlockPtr> BlockIterator;
+            using BlockIterator = WrappedForwardIterator<BlockIteratorTag, LogLikelihoodBlockPtr>;
 
             BlockIterator begin_blocks() const;
             BlockIterator end_blocks() const;
@@ -117,7 +117,7 @@ namespace eos
             ///@name Iteration over our Observables
             ///@{
             struct ObservableNameIteratorTag;
-            typedef WrappedForwardIterator<ObservableNameIteratorTag, const QualifiedName> ObservableNameIterator;
+            using ObservableNameIterator = WrappedForwardIterator<ObservableNameIteratorTag, const QualifiedName>;
 
             virtual ObservableNameIterator begin_observable_names() const = 0;
             virtual ObservableNameIterator end_observable_names() const = 0;
@@ -153,7 +153,7 @@ namespace eos
         ///@name Iteration over known constraints
         ///@{
         struct ConstraintIteratorTag;
-        typedef WrappedForwardIterator<ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>> ConstraintIterator;
+        using ConstraintIterator = WrappedForwardIterator<ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>>;
 
         ConstraintIterator begin() const;
         ConstraintIterator end() const;

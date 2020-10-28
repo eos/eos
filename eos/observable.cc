@@ -107,7 +107,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<ObservableGroup::ObservableIteratorTag>
     {
-        typedef std::map<QualifiedName, ObservableEntryPtr>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::map<QualifiedName, ObservableEntryPtr>::const_iterator;
     };
     template class WrappedForwardIterator<ObservableGroup::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
 
@@ -147,7 +147,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<ObservableSection::GroupIteratorTag>
     {
-        typedef std::vector<ObservableGroup>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<ObservableGroup>::const_iterator;
     };
     template class WrappedForwardIterator<ObservableSection::GroupIteratorTag, const ObservableGroup &>;
 
@@ -187,14 +187,14 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Observables::ObservableIteratorTag>
     {
-        typedef std::map<QualifiedName, ObservableEntryPtr>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::map<QualifiedName, ObservableEntryPtr>::const_iterator;
     };
     template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
 
     template <>
     struct WrappedForwardIteratorTraits<Observables::SectionIteratorTag>
     {
-        typedef std::vector<ObservableSection>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<ObservableSection>::const_iterator;
     };
     template class WrappedForwardIterator<Observables::SectionIteratorTag, const ObservableSection &>;
 

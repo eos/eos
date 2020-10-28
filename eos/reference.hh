@@ -94,7 +94,7 @@ namespace eos
             ///@name Iteration over known constraints
             ///@{
             struct ReferenceIteratorTag;
-            typedef WrappedForwardIterator<ReferenceIteratorTag, const std::pair<const ReferenceName, ReferencePtr>> ReferenceIterator;
+            using ReferenceIterator = WrappedForwardIterator<ReferenceIteratorTag, const std::pair<const ReferenceName, ReferencePtr>>;
 
             ReferenceIterator begin() const;
             ReferenceIterator end() const;

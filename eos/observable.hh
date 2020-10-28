@@ -76,7 +76,7 @@ namespace eos
             ///@name Iteration over groups
             ///@{
             struct GroupIteratorTag;
-            typedef WrappedForwardIterator<GroupIteratorTag, const ObservableGroup &> GroupIterator;
+            using GroupIterator = WrappedForwardIterator<GroupIteratorTag, const ObservableGroup &>;
 
             GroupIterator begin() const;
             GroupIterator end() const;
@@ -106,7 +106,7 @@ namespace eos
             ///@name Iteration over observables
             ///@{
             struct ObservableIteratorTag;
-            typedef WrappedForwardIterator<ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>> ObservableIterator;
+            using ObservableIterator = WrappedForwardIterator<ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
 
             ObservableIterator begin() const;
             ObservableIterator end() const;
@@ -182,7 +182,7 @@ namespace eos
             ///@name Iteration over observables
             ///@{
             struct ObservableIteratorTag;
-            typedef WrappedForwardIterator<ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>> ObservableIterator;
+            using ObservableIterator = WrappedForwardIterator<ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
 
             ObservableIterator begin() const;
             ObservableIterator end() const;
@@ -191,7 +191,7 @@ namespace eos
             ///@name Iteration over groups of observables
             ///@{
             struct SectionIteratorTag;
-            typedef WrappedForwardIterator<SectionIteratorTag, const ObservableSection &> SectionIterator;
+            using SectionIterator = WrappedForwardIterator<SectionIteratorTag, const ObservableSection &>;
 
             SectionIterator begin_sections() const;
             SectionIterator end_sections() const;

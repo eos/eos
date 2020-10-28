@@ -59,7 +59,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<ConstraintEntry::ObservableNameIteratorTag>
     {
-        typedef std::vector<QualifiedName>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<QualifiedName>::const_iterator;
     };
     template class WrappedForwardIterator<ConstraintEntry::ObservableNameIteratorTag, const QualifiedName>;
 
@@ -1641,14 +1641,14 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Constraint::BlockIteratorTag>
     {
-        typedef std::vector<LogLikelihoodBlockPtr>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<LogLikelihoodBlockPtr>::iterator;
     };
     template class WrappedForwardIterator<Constraint::BlockIteratorTag, LogLikelihoodBlockPtr>;
 
     template <>
     struct WrappedForwardIteratorTraits<Constraint::ObservableIteratorTag>
     {
-        typedef ObservableSet::Iterator UnderlyingIterator;
+        using UnderlyingIterator = ObservableSet::Iterator;
     };
     template class WrappedForwardIterator<Constraint::ObservableIteratorTag, ObservablePtr>;
 
@@ -1715,7 +1715,7 @@ namespace eos
         return ObservableIterator(_imp->observables.end());
     }
 
-    typedef std::function<Constraint (const QualifiedName &, const Options & options)> ConstraintFactory;
+    using ConstraintFactory = std::function<Constraint (const QualifiedName &, const Options & options)>;
 
     template <typename Factory_>
     ConstraintFactory make_factory(const Factory_ & f)
@@ -1826,7 +1826,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Constraints::ConstraintIteratorTag>
     {
-        typedef std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>>::const_iterator;
     };
     template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>>;
 
