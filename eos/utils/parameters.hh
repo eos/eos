@@ -124,7 +124,7 @@ namespace eos
             ///@name Iteration over parameters
             ///@{
             struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, Parameter> Iterator;
+            using Iterator = WrappedForwardIterator<IteratorTag, Parameter>;
 
             Iterator begin() const;
             Iterator end() const;
@@ -133,7 +133,7 @@ namespace eos
             ///@name Iteration over parameter sections
             ///@{
             struct SectionIteratorTag;
-            typedef WrappedForwardIterator<SectionIteratorTag, const ParameterSection &> SectionIterator;
+            using SectionIterator = WrappedForwardIterator<SectionIteratorTag, const ParameterSection &>;
 
             SectionIterator begin_sections() const;
             SectionIterator end_sections() const;
@@ -219,7 +219,7 @@ namespace eos
             /*!
              * A unique number that identifies this parameter at run time.
              */
-            typedef unsigned Id;
+            using Id = unsigned;
 
             ///@name Basic Functions
             ///@{
@@ -295,7 +295,7 @@ namespace eos
             ///@name Iteration over groups
             ///@{
             struct GroupIteratorTag;
-            typedef WrappedForwardIterator<GroupIteratorTag, const ParameterGroup &> GroupIterator;
+            using GroupIterator = WrappedForwardIterator<GroupIteratorTag, const ParameterGroup &>;
 
             GroupIterator begin() const;
             GroupIterator end() const;
@@ -325,7 +325,7 @@ namespace eos
             ///@name Iteration over parameters
             ///@{
             struct ParameterIteratorTag;
-            typedef WrappedForwardIterator<ParameterIteratorTag, const Parameter> ParameterIterator;
+            using ParameterIterator = WrappedForwardIterator<ParameterIteratorTag, const Parameter>;
 
             ParameterIterator begin() const;
             ParameterIterator end() const;
@@ -351,7 +351,7 @@ namespace eos
             ///@name Iteration over ids
             ///@{
             struct ConstIteratorTag;
-            typedef WrappedForwardIterator<ConstIteratorTag, const Parameter::Id> ConstIterator;
+            using ConstIterator = WrappedForwardIterator<ConstIteratorTag, const Parameter::Id>;
 
             ConstIterator begin() const;
             ConstIterator end() const;

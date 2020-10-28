@@ -36,7 +36,7 @@ class OneOfTest :
 
         virtual void run() const
         {
-            typedef OneOf<int, std::string> Type;
+            using Type = OneOf<int, std::string>;
 
             Type x = 0;
             Type y = std::string("foo");
@@ -80,7 +80,7 @@ class OneOfVisitorReturningVoidTest :
 
         virtual void run() const
         {
-            typedef OneOf<Foo, Bar, Baz> Type;
+            using Type = OneOf<Foo, Bar, Baz>;
             std::array<Type, 5> items
             {{
                 Type{Foo()},
@@ -130,7 +130,7 @@ class OneOfVisitorReturningStringTest :
 
         virtual void run() const
         {
-            typedef OneOf<Foo, Bar, Baz> Type;
+            using Type = OneOf<Foo, Bar, Baz>;
             std::array<Type, 5> items
             {{
                 Type{Foo()},

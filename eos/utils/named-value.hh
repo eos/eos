@@ -56,8 +56,8 @@ namespace eos
             V_ _value;
 
         public:
-            typedef K_ KeyType;
-            typedef V_ ValueType;
+            using KeyType = K_;
+            using ValueType = V_;
 
             template <typename T_>
             NamedValue(const NamedValue<K_, T_> & v) :

@@ -79,7 +79,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<ParameterGroup::ParameterIteratorTag>
     {
-        typedef std::vector<Parameter>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<Parameter>::const_iterator;
     };
     template class WrappedForwardIterator<ParameterGroup::ParameterIteratorTag, const Parameter>;
 
@@ -136,7 +136,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<ParameterSection::GroupIteratorTag>
     {
-        typedef std::vector<ParameterGroup>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<ParameterGroup>::const_iterator;
     };
     template class WrappedForwardIterator<ParameterSection::GroupIteratorTag, const ParameterGroup &>;
 
@@ -203,14 +203,14 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Parameters::IteratorTag>
     {
-        typedef std::vector<Parameter>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<Parameter>::iterator;
     };
     template class WrappedForwardIterator<Parameters::IteratorTag, Parameter>;
 
     template <>
     struct WrappedForwardIteratorTraits<Parameters::SectionIteratorTag>
     {
-        typedef std::vector<ParameterSection>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<ParameterSection>::const_iterator;
     };
     template class WrappedForwardIterator<Parameters::SectionIteratorTag, const ParameterSection &>;
 
@@ -731,7 +731,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<ParameterUser::ConstIteratorTag>
     {
-        typedef std::set<Parameter::Id>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::set<Parameter::Id>::const_iterator;
     };
     template class WrappedForwardIterator<ParameterUser::ConstIteratorTag, const Parameter::Id>;
 

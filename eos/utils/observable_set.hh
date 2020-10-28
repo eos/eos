@@ -47,7 +47,7 @@ namespace eos
             ///@name Iteration and Access
             ///@{
             struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, ObservablePtr> Iterator;
+            using Iterator = WrappedForwardIterator<IteratorTag, ObservablePtr>;
 
             /// Iterator to the first observable.
             Iterator begin() const;

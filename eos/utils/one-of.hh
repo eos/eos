@@ -39,17 +39,17 @@ namespace eos
     template <typename Want_>
     struct SelectOneOfType<Want_>
     {
-        typedef UnknownTypeForOneOf Type;
+        using Type = UnknownTypeForOneOf;
     };
 
     template <typename Want_, typename Try_, typename ... Rest_>
     struct SelectOneOfType<Want_, Try_, Rest_ ...>
     {
-        typedef typename std::conditional<
+        using Type = typename std::conditional<
             std::is_same<Want_, Try_>::value,
             Try_,
             typename SelectOneOfType<Want_, Rest_ ...>::Type
-                >::type Type;
+                >::type;
     };
 
     /* OneOfVisitor */

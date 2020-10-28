@@ -36,7 +36,7 @@ namespace eos
             Visitor_ & _v;
 
         public:
-            typedef void result_type;
+            using result_type = void;
 
             /// @name Visitor operations
             /// @{
@@ -60,7 +60,7 @@ namespace eos
             Visitor_ & _v;
 
         public:
-            typedef Returning_ result_type;
+            using result_type = Returning_;
 
             /// @name Visitor operations
             /// @{
@@ -98,7 +98,7 @@ namespace eos
     template <typename T_, typename R_, typename A1_, typename... As_>
     struct ExtractFirstArgumentType<R_ (T_::*) (A1_, As_...) const>
     {
-        typedef A1_ Type;
+        using Type = A1_;
     };
 
     template <typename T_>
@@ -110,7 +110,7 @@ namespace eos
     template <typename T_, typename R_, typename... As_>
     struct ExtractResultType<R_ (T_::*) (As_...) const>
     {
-        typedef R_ Type;
+        using Type = R_;
     };
 
     template <typename T_>
@@ -308,8 +308,8 @@ namespace eos
             virtual void _real_accept_const(WrappedVisitorBase<typename MakeTypeListConst<VisitableTypeList_>::Type> &) const = 0;
 
         public:
-            typedef VisitableTypeList_ VisitableTypeList;
-            typedef BaseClass_ VisitableBaseClass;
+            using VisitableTypeList = VisitableTypeList_;
+            using VisitableBaseClass = BaseClass_;
 
             template <typename UnwrappedVisitor_>
             void accept(UnwrappedVisitor_ & v)

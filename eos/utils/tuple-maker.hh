@@ -28,7 +28,7 @@ namespace eos
 {
     namespace impl
     {
-        template <typename T_, typename U_> struct ConvertTo { typedef U_ Type; };
+        template <typename T_, typename U_> struct ConvertTo { using Type = U_; };
 
         template <unsigned n_> struct TupleMaker
         {

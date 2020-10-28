@@ -43,7 +43,7 @@ namespace eos
     {
         public:
             /// Our function type.
-            typedef std::function<void ()> Function;
+            using Function = std::function<void ()>;
 
             /// \name Constructor and destructor
             /// \{

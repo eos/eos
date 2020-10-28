@@ -178,8 +178,8 @@ class MatrixMultiplicationTest :
 
             // vector * matrix
             {
-                typedef array<array<double, 3>, 3> Matrix;
-                typedef array<double, 3> Vector;
+                using Matrix = array<array<double, 3>, 3>;
+                using Vector = array<double, 3>;
 
                 const Matrix A
                 {{
@@ -200,7 +200,7 @@ class MatrixMultiplicationTest :
 
             // scalar product
             {
-                typedef array<double, 3> Vector;
+                using Vector = array<double, 3>;
 
                 const Vector x {{1/2., 1/3., 1/4.}};
                 const Vector y {{43/12., 14/3., 23/4.}};
@@ -210,7 +210,7 @@ class MatrixMultiplicationTest :
 
             // vector - vector
             {
-                typedef array<double, 3> Vector;
+                using Vector = array<double, 3>;
 
                 const Vector x {{1 / 2., 1 / 3., 1 / 4.}};
                 const Vector y {{43 / 12., 14 / 3., 23 / 4.}};

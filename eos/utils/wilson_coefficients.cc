@@ -44,7 +44,7 @@ namespace eos
             const double & alpha_s_0, const double & alpha_s, const double & nf, const QCD::BetaFunction & beta)
     {
         using std::array;
-        typedef array<array<complex<double>, 15>, 15> Matrix;
+        using Matrix = array<array<complex<double>, 15>, 15>;
 
         // diagonalisation matrix of gamma_qcd_0
         static const Matrix V

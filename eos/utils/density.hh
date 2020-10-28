@@ -49,7 +49,7 @@ namespace eos
             /// Iterate over the parameters relevant to this density function.
             ///@{
             struct IteratorTag;
-            typedef WrappedForwardIterator<IteratorTag, const ParameterDescription> Iterator;
+            using Iterator = WrappedForwardIterator<IteratorTag, const ParameterDescription>;
 
             virtual Iterator begin() const = 0;
             virtual Iterator end() const = 0;
@@ -70,8 +70,8 @@ namespace eos
      */
     struct Density::Output
     {
-        typedef hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>, hdf5::Scalar<double>,
-                                hdf5::Scalar<int>> DescriptionType;
+        using DescriptionType = hdf5::Composite<hdf5::Scalar<const char *>, hdf5::Scalar<double>,
+                                               hdf5::Scalar<double>, hdf5::Scalar<int>>;
         static DescriptionType description_type();
         static std::tuple<const char *, double, double, int> description_record();
     };

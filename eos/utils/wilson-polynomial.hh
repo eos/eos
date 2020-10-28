@@ -38,7 +38,7 @@ namespace eos
 
     struct Cosine;
 
-    typedef OneOf<Constant, Sum, Product, Sine, Cosine, Parameter> WilsonPolynomial;
+    using WilsonPolynomial = OneOf<Constant, Sum, Product, Sine, Cosine, Parameter>;
 
     WilsonPolynomial make_polynomial(const ObservablePtr &, const std::list<std::string> &);
 

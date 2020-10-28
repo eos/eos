@@ -30,7 +30,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Kinematics::KinematicVariableIteratorTag>
     {
-        typedef std::vector<KinematicVariable>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<KinematicVariable>::iterator;
     };
     template class WrappedForwardIterator<Kinematics::KinematicVariableIteratorTag, const KinematicVariable>;
 

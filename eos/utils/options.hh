@@ -109,7 +109,7 @@ namespace eos
             ///@name Iteration over our options
             ///@{
             struct OptionIteratorTag;
-            typedef WrappedForwardIterator<OptionIteratorTag, const std::pair<const std::string, std::string>> OptionIterator;
+            using OptionIterator = WrappedForwardIterator<OptionIteratorTag, const std::pair<const std::string, std::string>>;
 
             OptionIterator begin() const;
             OptionIterator end() const;

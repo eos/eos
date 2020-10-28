@@ -33,7 +33,7 @@ namespace eos
     std::shared_ptr<Model>
     Model::make(const std::string & name, const Parameters & parameters, const Options & options)
     {
-        typedef std::function<std::shared_ptr<Model> (const Parameters &, const Options &)> ModelMaker;
+        using ModelMaker = std::function<std::shared_ptr<Model> (const Parameters &, const Options &)>;
         static const std::map<std::string, ModelMaker> model_makers
         {
             std::make_pair("CKMScan", &CKMScanModel::make),
