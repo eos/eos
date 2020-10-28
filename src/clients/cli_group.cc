@@ -44,7 +44,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<cli::Group::ConstIteratorTag>
     {
-        typedef std::list<cli::Option *>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::list<cli::Option *>::const_iterator;
     };
 
     namespace cli

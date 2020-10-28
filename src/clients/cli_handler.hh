@@ -101,7 +101,7 @@ namespace eos
                 ///@{
 
                 struct ParametersConstIteratorTag;
-                typedef WrappedForwardIterator<ParametersConstIteratorTag, const std::string> ParametersConstIterator;
+                using ParametersConstIterator = WrappedForwardIterator<ParametersConstIteratorTag, const std::string>;
 
                 ParametersConstIterator begin_parameters() const;
                 ParametersConstIterator end_parameters() const;
@@ -155,7 +155,7 @@ namespace eos
                 ///@{
 
                 struct UsageLineConstIteratorTag;
-                typedef WrappedForwardIterator<UsageLineConstIteratorTag, const std::string> UsageLineConstIterator;
+                using UsageLineConstIterator = WrappedForwardIterator<UsageLineConstIteratorTag, const std::string>;
 
                 UsageLineConstIterator begin_usage_lines() const;
                 UsageLineConstIterator end_usage_lines() const;
@@ -170,8 +170,8 @@ namespace eos
                 ///@{
 
                 struct ExamplesConstIteratorTag;
-                typedef WrappedForwardIterator<ExamplesConstIteratorTag,
-                        const std::pair<std::string, std::string> > ExamplesConstIterator;
+                using ExamplesConstIterator = WrappedForwardIterator<ExamplesConstIteratorTag,
+                                                                     const std::pair<std::string, std::string> >;
 
                 ExamplesConstIterator begin_examples() const;
                 ExamplesConstIterator end_examples() const;
@@ -186,7 +186,7 @@ namespace eos
                 ///@{
 
                 struct SectionsConstIteratorTag;
-                typedef WrappedForwardIterator<SectionsConstIteratorTag, const Section> SectionsConstIterator;
+                using SectionsConstIterator = WrappedForwardIterator<SectionsConstIteratorTag, const Section>;
 
                 SectionsConstIterator begin_args_sections() const;
                 SectionsConstIterator end_args_sections() const;
@@ -208,7 +208,7 @@ namespace eos
                 ///@{
 
                 struct NotesIteratorTag;
-                typedef WrappedForwardIterator<NotesIteratorTag, const std::string > NotesIterator;
+                using NotesIterator = WrappedForwardIterator<NotesIteratorTag, const std::string >;
 
                 NotesIterator begin_notes() const;
                 NotesIterator end_notes() const;
@@ -223,7 +223,7 @@ namespace eos
                 ///@{
 
                 struct DescriptionLineConstIteratorTag;
-                typedef WrappedForwardIterator<DescriptionLineConstIteratorTag, const std::string> DescriptionLineConstIterator;
+                using DescriptionLineConstIterator = WrappedForwardIterator<DescriptionLineConstIteratorTag, const std::string>;
 
                 DescriptionLineConstIterator begin_description_lines() const;
                 DescriptionLineConstIterator end_description_lines() const;
@@ -239,7 +239,7 @@ namespace eos
                 ///@{
 
                 struct SeeAlsoConstIteratorTag;
-                typedef WrappedForwardIterator<SeeAlsoConstIteratorTag, const std::pair<std::string, int> > SeeAlsoConstIterator;
+                using SeeAlsoConstIterator = WrappedForwardIterator<SeeAlsoConstIteratorTag, const std::pair<std::string, int> >;
 
                 SeeAlsoConstIterator begin_see_alsos() const;
                 SeeAlsoConstIterator end_see_alsos() const;
@@ -254,7 +254,7 @@ namespace eos
                 ///@{
 
                 struct ArgsIteratorTag;
-                typedef WrappedForwardIterator<ArgsIteratorTag, std::string> ArgsIterator;
+                using ArgsIterator = WrappedForwardIterator<ArgsIteratorTag, std::string>;
 
                 ///@}
 

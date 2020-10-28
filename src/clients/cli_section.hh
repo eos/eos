@@ -46,7 +46,7 @@ namespace eos
                 ~Section();
 
                 struct GroupsConstIteratorTag;
-                typedef WrappedForwardIterator<GroupsConstIteratorTag, const cli::Group> GroupsConstIterator;
+                using GroupsConstIterator = WrappedForwardIterator<GroupsConstIteratorTag, const cli::Group>;
                 GroupsConstIterator begin() const;
                 GroupsConstIterator end() const;
 
