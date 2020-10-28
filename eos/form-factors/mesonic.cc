@@ -291,6 +291,7 @@ namespace eos
     // [BCL2008]
     template class BCL2008FormFactors<BToPi, 3u>;
     template class BCL2008FormFactors<BToPi, 4u>;
+    template class BCL2008FormFactors<BToPi, 5u>;
 
     /* B_{u,d -> D */
 
@@ -343,6 +344,7 @@ namespace eos
             // b -> u
             { KeyType("B->pi::BCL2008"),      &BCL2008FormFactors<BToPi, 3u>::make             },
             { KeyType("B->pi::BCL2008-4"),    &BCL2008FormFactors<BToPi, 4u>::make             },
+            { KeyType("B->pi::BCL2008-5"),    &BCL2008FormFactors<BToPi, 5u>::make             },
             { KeyType("B->pi::BSZ2015"),      &BSZ2015FormFactors<BToPi, PToP>::make           },
             { KeyType("B_s->K::BSZ2015"),     &BSZ2015FormFactors<BsToK, PToP>::make           },
             // b -> c
