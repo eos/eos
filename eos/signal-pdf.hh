@@ -50,7 +50,7 @@ namespace eos
 
     class SignalPDF;
 
-    typedef std::shared_ptr<SignalPDF> SignalPDFPtr;
+    using SignalPDFPtr = std::shared_ptr<SignalPDF>;
 
     class SignalPDF :
         public Density
@@ -100,7 +100,7 @@ namespace eos
             ///@name Iteration over our kinematic ranges
             ///@{
             struct KinematicRangeIteratorTag;
-            typedef WrappedForwardIterator<KinematicRangeIteratorTag, const KinematicRange> KinematicRangeIterator;
+            using KinematicRangeIterator = WrappedForwardIterator<KinematicRangeIteratorTag, const KinematicRange>;
 
             virtual KinematicRangeIterator begin_kinematic_ranges() const = 0;
             virtual KinematicRangeIterator end_kinematic_ranges() const = 0;
@@ -141,7 +141,7 @@ namespace eos
             ///@name Iteration over known constraints
             ///@{
             struct SignalPDFIteratorTag;
-            typedef WrappedForwardIterator<SignalPDFIteratorTag, std::pair<const QualifiedName, const SignalPDFEntry *>> SignalPDFIterator;
+            using SignalPDFIterator = WrappedForwardIterator<SignalPDFIteratorTag, std::pair<const QualifiedName, const SignalPDFEntry *>>;
 
             SignalPDFIterator begin() const;
             SignalPDFIterator end() const;

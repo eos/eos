@@ -86,7 +86,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<SignalPDFEntry::KinematicRangeIteratorTag>
     {
-        typedef const KinematicRange * UnderlyingIterator;
+        using UnderlyingIterator = const KinematicRange *;
     };
     template class WrappedForwardIterator<SignalPDFEntry::KinematicRangeIteratorTag, const KinematicRange>;
 
@@ -458,7 +458,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<SignalPDFs::SignalPDFIteratorTag>
     {
-        typedef std::map<QualifiedName, const SignalPDFEntry *>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::map<QualifiedName, const SignalPDFEntry *>::iterator;
     };
     template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, std::pair<const QualifiedName, const SignalPDFEntry *>>;
 

@@ -58,7 +58,7 @@ namespace eos
 
         std::function<complex<double> (const Model *)> lambda;
 
-        typedef std::array<complex<double>, 4> xi_t;
+        using xi_t = std::array<complex<double>, 4>;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),

@@ -32,7 +32,7 @@ namespace eos
 {
     class Optimizer;
 
-    typedef std::shared_ptr<Optimizer> OptimizerPtr;
+    using OptimizerPtr = std::shared_ptr<Optimizer>;
 
     /*!
      * Optimizer takes a Density and modified its parameters such that the
