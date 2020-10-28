@@ -1327,7 +1327,7 @@ namespace eos
                 const double lambda = eos::lambda(m_B2, m_V2, q2);
 
                 double result = (m_B + m_V) * (m_B + m_V) * (m_B2 - m_V2 - q2) * a_1(q2) - lambda * a_2(q2);
-                result /= 8.0 * m_B * m_V2 * (m_B - m_V);
+                result /= 16.0 * m_B * m_V2 * (m_B + m_V);
 
                 return result;
             }
