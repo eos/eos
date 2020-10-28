@@ -42,7 +42,7 @@ namespace eos
              WrappedForwardIteratorUnderlyingIteratorHolder * _iter;
 
         public:
-            typedef Tag_ Tag;
+            using Tag = Tag_;
 
             ///@name Basic operations
             ///@{
@@ -61,11 +61,11 @@ namespace eos
             ///@name Standard library typedefs
             ///@{
 
-            typedef typename std::remove_reference<Value_>::type & value_type;
-            typedef typename std::remove_reference<Value_>::type & reference;
-            typedef typename std::remove_reference<Value_>::type * pointer;
-            typedef std::ptrdiff_t difference_type;
-            typedef std::forward_iterator_tag iterator_category;
+            using value_type = typename std::remove_reference<Value_>::type &;
+            using reference = typename std::remove_reference<Value_>::type &;
+            using pointer = typename std::remove_reference<Value_>::type *;
+            using difference_type = std::ptrdiff_t;
+            using iterator_category = std::forward_iterator_tag;
 
             ///@}
 

@@ -32,7 +32,7 @@ namespace eos
     template <typename T_> class CartesianProduct
     {
         private:
-            typedef std::vector<typename T_::const_iterator> IteratorState;
+            using IteratorState = std::vector<typename T_::const_iterator>;
 
             // All stored containers.
             std::vector<T_> _data;
@@ -43,13 +43,13 @@ namespace eos
             // The overall number of elements stored in CartesianProduct.
             size_t _size;
 
-            typedef std::vector<size_t> Sizes;
+            using Sizes = std::vector<size_t>;
             Sizes _sizes;
 
             template <typename U_> class _Iterator
             {
                 private:
-                    typedef std::vector<typename U_::const_iterator> IteratorState;
+                    using IteratorState = std::vector<typename U_::const_iterator>;
 
                     IteratorState _state;
                     Sizes _sizes;
@@ -137,7 +137,7 @@ namespace eos
             /*!
              * @brief This is a random access iterator for CartesianPoduct.
              */
-            typedef _Iterator<T_> Iterator;
+            using Iterator = _Iterator<T_>;
 
             /*!
              * Initializes an empty CartesianProduct.

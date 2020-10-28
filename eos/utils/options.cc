@@ -28,7 +28,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Options::OptionIteratorTag>
     {
-        typedef std::map<std::string, std::string>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::map<std::string, std::string>::const_iterator;
     };
     template class WrappedForwardIterator<Options::OptionIteratorTag, const std::pair<const std::string, std::string>>;
 

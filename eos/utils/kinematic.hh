@@ -116,7 +116,7 @@ namespace eos
             ///@name Iteration over our kinematic variables
             ///@{
             struct KinematicVariableIteratorTag;
-            typedef WrappedForwardIterator<KinematicVariableIteratorTag, const KinematicVariable> KinematicVariableIterator;
+            using KinematicVariableIterator = WrappedForwardIterator<KinematicVariableIteratorTag, const KinematicVariable>;
 
             KinematicVariableIterator begin() const;
             KinematicVariableIterator end() const;

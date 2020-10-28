@@ -28,10 +28,10 @@ namespace eos
     {
         public:
             /// The four leading coefficients of the \f$\alpha_s\f$ expansion of the quark mass' anomalous dimension \f$\gamma_m\f$.
-            typedef std::array<double, 4> AnomalousMassDimension;
+            using AnomalousMassDimension = std::array<double, 4>;
 
             /// The four leading coefficient of the \f$\alpha_s\f$ expansion of the beta function of QCD.
-            typedef std::array<double, 4> BetaFunction;
+            using BetaFunction = std::array<double, 4>;
 
             /*!
              * Calculate RGE running of strong coupling alpha_s from scale mu_0 down to scale mu in the MSbar scheme.

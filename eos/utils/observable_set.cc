@@ -100,7 +100,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<ObservableSet::IteratorTag>
     {
-        typedef std::vector<ObservablePtr>::iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<ObservablePtr>::iterator;
     };
     template class WrappedForwardIterator<ObservableSet::IteratorTag, ObservablePtr>;
 

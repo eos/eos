@@ -27,7 +27,7 @@
 
 namespace eos
 {
-    typedef std::shared_ptr<Mutable> MutablePtr;
+    using MutablePtr = std::shared_ptr<Mutable>;
 
     /// Base class for all mutable entities, e.g. a Parameter.
     class Mutable

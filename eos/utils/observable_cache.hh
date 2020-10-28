@@ -47,7 +47,7 @@ namespace eos
 
             ///@name Access
             ///@{
-            typedef unsigned Id;
+            using Id = unsigned;
 
             /*!
              * Add a given observable to the cache and return its unique Id.

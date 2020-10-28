@@ -104,7 +104,7 @@ namespace eos
             virtual void copy_from_hdf5(const void * src, void * dest) const = 0;
         };
 
-        typedef std::shared_ptr<Type> TypePtr;
+        using TypePtr = std::shared_ptr<Type>;
 
         /*!
          * Scalar represents a scalar built-in HDF5 data type.
@@ -118,7 +118,7 @@ namespace eos
                 std::string _name;
 
             public:
-                typedef T_ Type;
+                using Type = T_;
 
                 Scalar(const std::string & name) :
                     _type_id(hdf5::DataType<T_>::type_id()),
@@ -167,7 +167,7 @@ namespace eos
                 unsigned _elements;
 
             public:
-                typedef std::vector<T_> Type;
+                using Type = std::vector<T_>;
 
                 Array(const std::string & name, const std::initializer_list<hsize_t> & dimensions) :
                     _name(name)
@@ -293,7 +293,7 @@ namespace eos
                 }
 
             public:
-                typedef std::tuple<typename T_::Type ...> Type;
+                using Type = std::tuple<typename T_::Type ...>;
 
                 Composite(const std::string & name, const T_ & ... t) :
                     _type_id(_insert(H5Tcreate(H5T_COMPOUND, _compute_size(t ...)), 0, t ...)),
@@ -543,7 +543,7 @@ namespace eos
         template <typename T_> class DataSet
         {
             public:
-                typedef typename T_::Type RecordType;
+                using RecordType = typename T_::Type;
 
             private:
                 DataSetHandle _handle;
@@ -698,7 +698,7 @@ namespace eos
         template <typename T_> class Attribute
         {
             public:
-                typedef typename T_::Type RecordType;
+                using RecordType = typename T_::Type;
 
             private:
                 AttributeHandle _handle;

@@ -30,7 +30,7 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<Density::IteratorTag>
     {
-        typedef std::vector<ParameterDescription>::const_iterator UnderlyingIterator;
+        using UnderlyingIterator = std::vector<ParameterDescription>::const_iterator;
     };
 }
 

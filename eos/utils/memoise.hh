@@ -86,13 +86,13 @@ namespace eos
         template <typename Result_, typename Class_, typename ... Args_>
         struct ResultOf<Result_ (Class_::*) (Args_ ...)>
         {
-            typedef Result_ Type;
+            using Type = Result_;
         };
 
         template <typename Result_, typename ... Args_>
         struct ResultOf<Result_ (*) (Args_ ...)>
         {
-            typedef Result_ Type;
+            using Type = Result_;
         };
     }
 
@@ -119,8 +119,8 @@ namespace eos
         public InstantiationPolicy<Memoiser<Result_, Params_ ...>, Singleton>
     {
         public:
-            typedef Result_ (*FunctionType)(const Params_ & ...);
-            typedef std::tuple<FunctionType, Params_...> KeyType;
+            using FunctionType = Result_(*)(const Params_ & ...);
+            using KeyType = std::tuple<FunctionType, Params_...>;
 
         private:
             Mutex * const _mutex;

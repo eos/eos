@@ -28,7 +28,7 @@ namespace eos
     // Forward declaration.
     class Density;
 
-    typedef std::shared_ptr<Density> DensityPtr;
+    using DensityPtr = std::shared_ptr<Density>;
 }
 
 #endif

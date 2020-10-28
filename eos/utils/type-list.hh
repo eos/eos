@@ -34,38 +34,38 @@ namespace eos
     template <typename Item_, typename Tail_>
     struct TypeListEntry
     {
-        typedef Item_ Item;
-        typedef Tail_ Tail;
+        using Item = Item_;
+        using Tail = Tail_;
     };
 
     template <>
     struct MakeTypeList<>
     {
-        typedef TypeListTail Type;
+        using Type = TypeListTail;
     };
 
     template <typename H_, typename... T_>
     struct MakeTypeList<H_, T_...>
     {
-        typedef TypeListEntry<H_, typename MakeTypeList<T_...>::Type> Type;
+        using Type = TypeListEntry<H_, typename MakeTypeList<T_...>::Type>;
     };
 
     template <>
     struct MakeTypeListConstEntry<TypeListTail>
     {
-        typedef TypeListTail Type;
+        using Type = TypeListTail;
     };
 
     template <typename Item_, typename Tail_>
     struct MakeTypeListConstEntry<TypeListEntry<Item_, Tail_> >
     {
-        typedef TypeListEntry<const Item_, typename MakeTypeListConstEntry<Tail_>::Type> Type;
+        using Type = TypeListEntry<const Item_, typename MakeTypeListConstEntry<Tail_>::Type>;
     };
 
     template <typename TypeList_>
     struct MakeTypeListConst
     {
-        typedef typename MakeTypeListConstEntry<TypeList_>::Type Type;
+        using Type = typename MakeTypeListConstEntry<TypeList_>::Type;
     };
 
     template <typename Item_>

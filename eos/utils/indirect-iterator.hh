@@ -34,37 +34,37 @@ namespace eos
     template <typename T_>
     struct IndirectIteratorValueType
     {
-        typedef typename std::iterator_traits<T_>::value_type Type;
+        using Type = typename std::iterator_traits<T_>::value_type;
     };
 
     template <typename T_>
     struct IndirectIteratorValueType<T_ *>
     {
-        typedef T_ Type;
+        using Type = T_;
     };
 
     template <typename T_>
     struct IndirectIteratorValueType<std::shared_ptr<T_> >
     {
-        typedef T_ Type;
+        using Type = T_;
     };
 
     template <typename T_>
     struct IndirectIteratorValueType<std::shared_ptr<const T_> >
     {
-        typedef const T_ Type;
+        using Type = const T_;
     };
 
     template <typename T_>
     struct IndirectIteratorValueType<const T_>
     {
-        typedef typename IndirectIteratorValueType<T_>::Type Type;
+        using Type = typename IndirectIteratorValueType<T_>::Type;
     };
 
     template <typename T_>
     struct IndirectIteratorValueType<T_ &>
     {
-        typedef typename IndirectIteratorValueType<T_>::Type Type;
+        using Type = typename IndirectIteratorValueType<T_>::Type;
     };
 
     /**
@@ -100,15 +100,15 @@ namespace eos
             typedef typename std::remove_reference<Value_>::type & value_type;
             typedef typename std::remove_reference<Value_>::type & reference;
             typedef typename std::remove_reference<Value_>::type * pointer;
-            typedef std::ptrdiff_t difference_type;
-            typedef std::forward_iterator_tag iterator_category;
+            using difference_type = std::ptrdiff_t;
+            using iterator_category = std::forward_iterator_tag;
 
             ///@}
 
             ///@name Additional typedefs
             ///@{
 
-            typedef Iter_ underlying_iterator_type;
+            using underlying_iterator_type = Iter_;
 
             ///@}
 

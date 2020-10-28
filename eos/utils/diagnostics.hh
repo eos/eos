@@ -53,7 +53,7 @@ namespace eos
 
             struct IteratorTag;
             /// Iterator over entries.
-            typedef WrappedForwardIterator<IteratorTag, const Entry> Iterator;
+            using Iterator = WrappedForwardIterator<IteratorTag, const Entry>;
 
             /// Returns Iterator pointing to the first entry.
             Iterator begin() const;

@@ -28,7 +28,7 @@ namespace eos
     // Forward Declaration
     class Mutable;
 
-    typedef std::shared_ptr<Mutable> MutablePtr;
+    using MutablePtr = std::shared_ptr<Mutable>;
 }
 
 #endif

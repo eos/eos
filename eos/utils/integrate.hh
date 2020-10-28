@@ -26,7 +26,7 @@
 
 // TODO Didn't manage to forward declare C struct
 // struct gsl_integration_workspace;
-// typedef gsl_integration_workspace gsl_integration_workspace;
+// using gsl_integration_workspace = gsl_integration_workspace;
 // struct gsl_integration_workspace;
 #include <gsl/gsl_integration.h>
 
