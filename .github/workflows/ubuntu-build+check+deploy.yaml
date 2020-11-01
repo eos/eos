@@ -14,6 +14,7 @@ jobs:
                     - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
                     - { os: bionic,   cxx: clang++-6.0,  cxxflags: '-O2 -g -march=x86-64' }
                     - { os: disco,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: focal,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-18.04
         container:
@@ -112,6 +113,7 @@ jobs:
                 cfg:
                     - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
                     - { os: bionic,   cxx: clang++-6.0,  cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: focal,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-18.04
         container:
@@ -133,7 +135,7 @@ jobs:
               shell: bash
               run: |
                 pushd _build
-                make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="--enable-pmc --enable-python --prefix=/usr" VERBOSE=1
+                make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="--disable-pmc --enable-python --prefix=/usr" VERBOSE=1
                 popd
 
     ubuntu-examples:
