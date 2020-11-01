@@ -1,0 +1,90 @@
+priors:
+  - name: CKM
+    parameters:
+      - parameter: CKM::abs(V_ub)
+        min: 2.0e-3
+        max: 5.0e-3
+        type: uniform
+
+  - name: FF-BCL2008
+    parameters:
+      - parameter: B->pi::f_+(0)@BCL2008
+        min: 0.2
+        max: 0.4
+        type: uniform
+      - parameter: B->pi::b_+^1@BCL2008
+        min: -20.0
+        max: +20.0
+        type: uniform
+      - parameter: B->pi::b_+^2@BCL2008
+        min: -20.0
+        max: +20.0
+        type: uniform
+
+likelihoods:
+  - name: theory
+    constraints:
+      - B->pi::f_+@IKMvD-2014
+
+  - name: BaBar
+    constraints:
+      - B^0->pi^+lnu::BR@BaBar-2010B
+      - B^0->pi^+lnu::BR@BaBar-2012D
+
+  - name: Belle
+    constraints:
+      - B^0->pi^+lnu::BR@Belle-2010A
+      - B^0->pi^+lnu::BR@Belle-2013A
+
+posteriors:
+  - name: th+exp
+    global_options:
+      model: CKMScan
+      form-factors: BCL2008
+    prior:
+      - CKM
+      - FF-BCL2008
+    likelihood:
+      - theory
+      - BaBar
+      - Belle
+
+predictions:
+  - name: differential
+    global_options:
+      model: CKMScan
+      form-factors: BCL2008
+      l: e
+    observables:
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  0.05 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  0.10 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  0.25 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  0.50 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  0.75 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  1.00 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  1.50 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  2.00 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  2.50 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  3.00 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  3.50 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  4.00 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  6.00 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2:  8.00 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2: 10.00 }
+      - name: B->pilnu::dBR/dq2
+        kinematics: { q2: 12.00 }

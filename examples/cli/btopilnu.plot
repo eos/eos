@@ -13,22 +13,13 @@ plot:
 contents:
     - name: 'B->pi mu nu (uncertainty)'
       type: 'uncertainty'
-      color: 'red'
+      color: 'C0'
       opacity: 0.5
-      hdf5-file: '/tmp/unc_btopilnu.hdf5'
-
-    - name: 'B->pi mu nu'
-      type: 'observable'
-      color: 'red'
-      observable: 'B->pilnu::dBR/dq2;l=mu,model=SM'
-      variable: 'q2'
-      range: [0.01, 26.0]
-      samples: 200
-      parameters-from-file: '/tmp/mode-btopipi-ff.yaml'
+      data-file: '/tmp/btopilnu/differential/pred'
 
     - name: 'B->pi mu nu (V_ub inclusive)'
       type: 'observable'
-      color: 'black'
+      color: 'C1'
       observable: 'B->pilnu::dBR/dq2;l=mu,model=CKMScan'
       kinematic: 'q2'
       range: [0.01, 26.0]
@@ -41,12 +32,12 @@ contents:
 
     - name: 'B->pi l nu (BaBar measurement)'
       type: 'constraint'
+      color: 'C2'
       constraints:
         - 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar-2010A'
         - 'B^0->pi^+lnu::BR[4.0,8.0]@BaBar-2010A'
         - 'B^0->pi^+lnu::BR[8.0,12.0]@BaBar-2010A'
       variable: 'q2'
-      color: 'gray'
       rescale-by-width: true
 
     - type: 'watermark'
