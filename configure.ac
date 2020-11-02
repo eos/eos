@@ -464,6 +464,7 @@ AC_OUTPUT(
 	Makefile
 	debian/control-bionic
 	debian/control-disco
+	debian/control-focal
 	debian/control-xenial
 	debian/Makefile
 	eos/Makefile
