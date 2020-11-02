@@ -205,14 +205,14 @@ jobs:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
                 path: _build
 
-            - name: Deploy to Packagecloud.io
+            - name: Build .deb file and deploy to Packagecloud.io
               shell: bash
               env:
                 PACKAGECLOUD_TOKEN: "${{ secrets.PACKAGECLOUD_TOKEN }}"
               run: |
                 pushd _src
-                # check if this is not a tagged commit, and exit immediatly if true.
-                if ! git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then exit 0 ; fi
+                # check if this is not a tagged commit
+                if git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then export EOS_IS_TAGGED=1 ; fi
                 export EOS_VERSION=$(git describe --abbrev=0 --tags)
                 export EOS_VERSION=${EOS_VERSION#v}
                 popd
@@ -221,8 +221,14 @@ jobs:
                 export DESTDIR=/tmp/eos-${EOS_VERSION}
                 make deb DESTDIR=${DESTDIR} OS=${{ matrix.cfg.os }}
                 dpkg -i /tmp/eos-${EOS_VERSION}.deb
-                package_cloud push eos/eos/ubuntu/${{ matrix.cfg.os }} /tmp/eos-${EOS_VERSION}.deb
+                if [[ -n $EOS_IS_TAGGED ]] ; then package_cloud push eos/eos/ubuntu/${{ matrix.cfg.os }} /tmp/eos-${EOS_VERSION}.deb ; fi
                 popd
+
+            - name: Upload .deb file as artifact
+              uses: actions/upload-artifact@v2
+              with:
+                name: eos-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}.deb
+                path: /tmp/eos-*.deb
 
     ubuntu-deploy-doc:
         needs: ubuntu-build-doc
