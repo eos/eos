@@ -1775,7 +1775,7 @@ groups:
           max:     +1.0
           comments: ''
       'B->pi::M^2@DKMMO2008' :
-          central: +18.0
+          central: +16.0
           min:     +15.0
           max:     +20.0
           comments: ' // GeV^2, cf. [DKMMO2008]'
