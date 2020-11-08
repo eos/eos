@@ -385,7 +385,7 @@ class Analysis:
         weights = sampler.weights[:][:, 0]
         adjusted_weights = np.copy(weights)
         for i, w in enumerate(adjusted_weights):
-            if w < 0 or np.isnan(w):
+            if w <= 0 or np.isnan(w):
                 adjusted_weights[i] = eps
         normalized_weights = adjusted_weights / np.sum(adjusted_weights)
         entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
