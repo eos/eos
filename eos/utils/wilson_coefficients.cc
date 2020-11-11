@@ -247,4 +247,9 @@ namespace eos
 
         return result;
     }
+
+    WilsonCoefficients<wc::SBSB>::WilsonCoefficients()
+    {
+        _coefficients.fill(0.0);
+    }
 }

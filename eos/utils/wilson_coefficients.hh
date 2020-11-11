@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2015 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2013, 2015, 2021 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
  *
@@ -122,6 +122,43 @@ namespace eos
             const std::array<complex<double>, 15> & wc_qcd_2,
             const double & alpha_s_0, const double & alpha_s,
             const double & nf, const QCD::BetaFunction & beta);
+
+    namespace wc
+    {
+        struct SBSB {};
+    }
+
+    /* Wilson coefficients for |Delta B| = |Delta S| = 2 operators */
+    template <> struct WilsonCoefficients<wc::SBSB>
+    {
+        /*
+         * The eight operators are defined as in [AFGV:2017A], eq. (2.4), p. 6
+         *
+         * C++ idx -> operator
+         * 0       -> O_1
+         * 1       -> O_2
+         * 2       -> O_3
+         * 3       -> O_4
+         * 4       -> O_5
+         * 5       -> O_1'
+         * 6       -> O_2'
+         * 7       -> O_3'
+         */
+        std::array<complex<double>, 8> _coefficients;
+
+        /*! Default ctor */
+        WilsonCoefficients();
+
+        // AFGV basis
+        inline complex<double> c1()   const { return _coefficients[0]; }
+        inline complex<double> c2()   const { return _coefficients[1]; }
+        inline complex<double> c3()   const { return _coefficients[2]; }
+        inline complex<double> c4()   const { return _coefficients[3]; }
+        inline complex<double> c5()   const { return _coefficients[4]; }
+        inline complex<double> c1p()  const { return _coefficients[5]; }
+        inline complex<double> c2p()  const { return _coefficients[6]; }
+        inline complex<double> c3p()  const { return _coefficients[7]; }
+    };
 }
 
 #endif
