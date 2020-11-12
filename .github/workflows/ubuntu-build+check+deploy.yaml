@@ -95,9 +95,18 @@ jobs:
             - name: Build documentation
               shell: bash
               run: |
+                pushd _src
+                # determine the release id
+                export EOS_RELEASE=$(git describe --abbrev=0 --tags --exact-match HEAD)
+                popd
                 pushd _build
                 make install
                 make -C ../_src/doc/ html BUILDDIR=$(pwd)/doc O=-a
+                if [[ -n ${EOS_RELEASE} ]] ; then
+                    mv $(pwd)/doc/html $(pwd)/doc/${EOS_RELEASE}
+                    mkdir $(pwd)/doc/html
+                    mv $(pwd)/doc/${EOS_RELEASE} $(pwd)/doc/html/
+                fi
                 popd
 
             - name: Upload documentation as artifact
@@ -250,15 +259,14 @@ jobs:
                 GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
               run: |
                 [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
-                pushd _src
-                # check if this is not a tagged commit, and exit immediatly if true.
-                if ! git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then exit 0 ; fi
-                popd
                 pushd _build/doc/html
                 git config user.email "eos-developers@googlegroups.com"
                 git config user.name  "EOS"
                 git add --all
                 git commit --allow-empty -m "Updating documentation based on EOS revision ${{ github.sha }}"
-                git push
+                # only push if running for the master branch
+                if [[ ${GITHUB_REF#refs/heads/} == "master" ]] ; then
+                    git push
+                fi
                 popd
 
