@@ -17,8 +17,7 @@ MACOSX_EXAMPLES = \
     btopilnu-find-mode.bash \
     btopilnu-find-clusters.bash \
     btopilnu-sample-pmc.bash \
-    btopilnu-predict-observables.bash \
-    btopilnu-plot.bash
+    btopilnu-predict-observables.bash
 
 ifeq ($(shell uname),Darwin)
     EXAMPLES=$(MACOSX_EXAMPLES)
