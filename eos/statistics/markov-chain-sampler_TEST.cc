@@ -102,7 +102,7 @@ class MarkovChainSamplerTest :
                     config.need_prerun = true;
                     config.number_of_chains = 3;
                     config.output_file = file_name;
-                    config.parallelize = true;
+                    config.parallelize = false;
                     config.prerun_iterations_update = 500;
                     config.prerun_iterations_min = 1000;
                     config.proposal_initial_covariance = proposal_covariance(log_posterior, 2);

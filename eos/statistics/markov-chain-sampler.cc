@@ -670,7 +670,7 @@ namespace eos
     MarkovChainSampler::Config::Config() :
         number_of_chains(1, std::numeric_limits<unsigned>::max(), 4),
         seed(0),
-        parallelize(true),
+        parallelize(false),
         min_efficiency(0, 1, 0.15), // incompatible with BAT defaults [0.15, 0.5]
         max_efficiency(0, 1, 0.35),
         rvalue_criterion_param(1, 100, 1.1),

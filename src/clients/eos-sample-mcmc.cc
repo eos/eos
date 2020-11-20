@@ -109,7 +109,7 @@ class CommandLine :
             mcmc_config.number_of_chains = 4;
             mcmc_config.need_prerun = true;
             mcmc_config.chunk_size = 1000;
-            mcmc_config.parallelize = true;
+            mcmc_config.parallelize = false;
             mcmc_config.use_strict_rvalue_definition = true;
         }
 
@@ -345,7 +345,7 @@ class CommandLine :
 
                 if ("--parallel" == argument)
                 {
-                    mcmc_config.parallelize = destringify<unsigned>(*(++a));
+                    mcmc_config.parallelize = false;
 
                     continue;
                 }
