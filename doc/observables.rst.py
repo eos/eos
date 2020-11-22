@@ -15,7 +15,7 @@ print('#' * len(page_title))
 print(page_title)
 print('#' * len(page_title))
 print('\n')
-print('The following is a (incomplete) list observables that EOS can predict.\n\n')
+print('The following is a list of observables that is available in EOS v{}.\n\n'.format(eos.version()))
 for section in observables.sections():
     section_title = latex_to_rst(section.name())
     print('*' * len(section_title))
