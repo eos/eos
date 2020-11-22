@@ -32,7 +32,7 @@ print('#' * len(page_title))
 print(page_title)
 print('#' * len(page_title))
 print('\n')
-print('The following the full list of parameters and their values as of EOS v{}.\n\n'.format(eos.version()))
+print('The following is the full list of parameters and their values used in EOS v{}.\n\n'.format(eos.version()))
 for section in parameters.sections():
     section_title = latex_to_rst(section.name())
     print('*' * len(section_title))
