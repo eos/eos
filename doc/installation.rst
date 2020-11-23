@@ -278,7 +278,7 @@ To install the packages, run the following commands in a shell:
   # for the 'Python Software'
   brew install python3 boost-python3
   # for the 'Scientific Software'
-  brew install gsl hdf5 minuit2
+  brew install gsl hdf5 minuit2 pmclib
 
 You can now use the ``pip3`` command to install the remaining packages from the \package{PyPi} package index.
 
