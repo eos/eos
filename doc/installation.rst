@@ -53,8 +53,8 @@ You might need to install the ``curl`` program first, if not already installed. 
   pip3 install --user h5py matplotlib numpy pypmc pyyaml scipy
 
 
-MacOS X
-=======
+macOS
+=====
 
 The most recent development version of EOS (and all of its dependencies) can be installed automatically using `Homebrew <https://brew.sh/>`_:
 
@@ -259,8 +259,8 @@ To this end, run the following commands
   rm -R /tmp/Minuit2
 
 
-Installing the Dependencies with Homebrew and PyPi
-==================================================
+Installing the dependencies on macOS with Homebrew and PyPi
+===========================================================
 
 You can install most of the prerequisite software via ``Homebrew``.
 You will need to make ``Homebrew`` aware of the EOS third-party repository by running the following command in a shell
