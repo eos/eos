@@ -60,7 +60,7 @@ class Analysis:
     :type manual_constraints: dict, optional
     """
 
-    def __init__(self, priors, likelihood, global_options=None, manual_constraints=None):
+    def __init__(self, priors, likelihood, global_options={}, manual_constraints={}):
         """Constructor."""
         self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints }
         self.parameters = eos.Parameters.Defaults()
@@ -83,9 +83,8 @@ class Analysis:
             eos.debug(' - {name}'.format(name=cn))
 
         # collect the global options
-        if global_options:
-            for key, value in global_options.items():
-                self.global_options.set(key, value)
+        for key, value in global_options.items():
+            self.global_options.set(key, value)
 
         # create the priors
         for prior in priors:
