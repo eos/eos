@@ -1160,7 +1160,7 @@ namespace eos
                 const double lr2 = std::log(r2), lr2m1 = std::log(r2 - 1.0);
                 const double lr2mr1 = std::log(r2 - r1);
 
-                return - 6.0 * ((r1 - r2) * (lr2mr1 - lr2m1) - r1 + 1.0) * (r2 * (lmu + 2.0 * lr2m1 - lr2) - 1.0);
+                return - 6.0 * ((r1 - r2) * (lr2mr1 - lr2m1) + r1 - 1.0) * (r2 * (lmu + 2.0 * lr2m1 - lr2) - 1.0);
             };
             auto T1tiltw3sigmathetarhom1 = [&] (const double & r1, const double & r2) -> double
             {
