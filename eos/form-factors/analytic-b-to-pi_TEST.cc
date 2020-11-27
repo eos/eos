@@ -263,7 +263,52 @@ class AnalyticFormFactorBToPiDKMMO2008Test :
                 TEST_CHECK_NEARLY_EQUAL( 0.2937, ff_no_rescale.f_t(  1.0), 1. * eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.3728, ff_no_rescale.f_t(  5.0), 1. * eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.5326, ff_no_rescale.f_t( 10.0), 1. * eps);
+            }
 
+            {
+                // Comparison with Blazenka's notebook underlysing the [DKKMO:2008A] results
+                static const double eps = 1e-4;
+
+                Parameters p = Parameters::Defaults();
+                p["decay-constant::pi"] = 0.1307;
+                p["mass::B_d"] = 5.279;
+                p["mass::pi^+"] = 0.13957;
+                p["mass::b(MSbar)"] = 4.164;
+                p["mass::d(2GeV)"] = 0.006;
+                p["mass::u(2GeV)"] = 0.003;
+                p["pi::a2@1GeV"] = 0.161995;
+                p["pi::a4@1GeV"] = 0.038004;
+                p["pi::f3@1GeV"] = 0.0045;
+                p["pi::omega3@1GeV"] = -1.5;
+                p["pi::omega4@1GeV"] = 0.2;
+                p["pi::delta^2@1GeV"] = 0.18;
+                p["B->pi::M^2@DKMMO2008"] = 18.0;
+                p["B->pi::Mp^2@DKMMO2008"] = 5.;
+                p["B->pi::mu@DKMMO2008"] = 3.0;
+                p["B->pi::s_0^+(0)@DKMMO2008"] = 35.75;
+                p["B->pi::s_0^+'(0)@DKMMO2008"] = 0.0;
+                p["B->pi::s_0^0(0)@DKMMO2008"] = 35.75;
+                p["B->pi::s_0^0'(0)@DKMMO2008"] = 0.0;
+                p["B->pi::s_0^T(0)@DKMMO2008"] = 35.75;
+                p["B->pi::s_0^T'(0)@DKMMO2008"] = 0.0;
+                p["B->pi::sp_0^B@DKMMO2008"] = 35.6;
+                p["QCD::m_0^2"] = 0.8;
+                p["QCD::cond_GG"] = 0.012;
+                p["QCD::r_vac"] = 1.0;
+                p["QCD::alpha_s(MZ)"] = 0.1176;
+
+                AnalyticFormFactorBToPiDKMMO2008 ff_no_rescale(p, Options{{"rescale-borel", "0"}});
+
+                TEST_CHECK_NEARLY_EQUAL( 0.2644, ff_no_rescale.f_p(  0.0),   2 * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.4964, ff_no_rescale.f_p( 10.0),  15 * eps);
+                // f_0(0) = f_+(0)
+                TEST_CHECK_NEARLY_EQUAL( 0.3725, ff_no_rescale.f_0( 10.0),   2 * eps);
+
+                // The values for f_T used here differe from the published manuscript due to a typeo
+                // in the formulas for the leading-order expression. The shift is ~2%, and the values
+                // below are taken from an updated Mathematica notebook free of this typo.
+                TEST_CHECK_NEARLY_EQUAL( 0.2606, ff_no_rescale.f_t(  0.0),  10 * eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.4990, ff_no_rescale.f_t( 10.0),  15 * eps);
             }
         }
 } analytic_form_factor_b_to_pi_DKMMO2008_test;
