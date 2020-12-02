@@ -319,8 +319,7 @@ To do this, run the following command
 
   export PREFIX=${HOME}/.local
 
-Next, you must configure the EOS build using the ``configure`` script.
-The fo
+Next, you must configure the EOS build using the ``configure`` script:
 
 1. To use the EOS Python interface you must pass ``--enable-python`` to the call ``configure``.
    The default is \cli{--disable-python}.
