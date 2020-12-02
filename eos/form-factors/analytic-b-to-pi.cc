@@ -1645,13 +1645,13 @@ namespace eos
                 if ( std::abs(r1) < std::sqrt(std::numeric_limits<double>::epsilon()) )
                 {
                     return - 3.0 * (4.0 - 9.0 * r2 + 5.0 * r22
-                        - lr2 * r2 * (r1 - 1.0) - 2.0 * lr2m1 * r2 * (r2 - 1.0) - (r2 - 1.0) * r2 * lmu
+                        - lr2 * r2 * (- 3.0 + 2.0 * r2 - r1 * (2 * r2 - 3.0)) - 2.0 * lr2m1 * r2 * (r2 - 1.0) - lmu * r2 * (r2 - 1.0)
                         - r2 * (r1 - r2) * (6.0 * lr2 * (lr2mr1 - lr2m1 + lr2 / 2.0) + 12.0 * lr2m1 * (l1mr1 - lr2mr1)
                         + 2.0 * lr2mr1 * (1.0 - 3.0 * lmu) + 2.0 * l1mr1 * (-1.0 + 3.0 * lmu) + 3.0 * pi2) / 2.0
                         + dl_ser);
                 }
                 return - 3.0 * (4.0 - 9.0 * r2 + 5.0 * r22
-                    - lr2 * r2 * (r1 - 1.0) - 2.0 * lr2m1 * r2 * (r2 - 1.0) - (r2 - 1.0) * r2 * lmu
+                    - lr2 * r2 * (- 3.0 + 2.0 * r2 - r1 * (2 * r2 - 3.0)) - 2.0 * lr2m1 * r2 * (r2 - 1.0) - lmu * r2 * (r2 - 1.0)
                     - r2 * (r1 - r2) * (6.0 * lr2 * (lr2mr1 - lr2m1 + lr2 / 2.0) + 12.0 * lr2m1 * (l1mr1 - lr2mr1) 
                     + 2.0 * lr2mr1 * (1.0 - 3.0 * lmu) + 2.0 * l1mr1 * (-1.0 + 3.0 * lmu) + 3.0 * pi2) / 2.0
                     + dl);
