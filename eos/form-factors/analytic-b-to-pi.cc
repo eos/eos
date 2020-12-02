@@ -273,10 +273,11 @@ namespace eos
             return weight * std::exp(-(mb2 - q2 * (1.0 - u) + mpi2 * u * (1.0 - u)) / (u * _M2)) / u * this->pi.phi(u, mu);
         }
 
-        double F_lo_tw2(const double & q2, const double & _M2, const double & _select_weight = 0.0) const
+        double F_lo_tw2(const double & q2, const double & _M2, const double & _select_weight = 0.0, const double & _select_corr = 0.0) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
-            const double u0 = std::max(1e-10, (mb2 - q2) / (s0B(q2) - q2));
+            const double s0 = s0B(q2) * (1.0 - _select_corr) + s0tilB(q2) * _select_corr;
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0 - q2));
 
             std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::F_lo_tw2_integrand, this, std::placeholders::_1, q2, _M2, _select_weight));
 
@@ -336,20 +337,22 @@ namespace eos
                 * weight * (mupi / mb * tw3a - pi.f3pi(mu) / (mb * fpi) * (tw3b + tw3c));
         }
 
-        double F_lo_tw3(const double & q2, const double & _M2, const double & _select_weight = 0.0) const
+        double F_lo_tw3(const double & q2, const double & _M2, const double & _select_weight = 0.0, const double & _select_corr = 0.0) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb;
-            const double u0 = std::max(1e-10, (mb2 - q2) / (s0B(q2) - q2));
+            const double s0 = s0B(q2) * (1.0 - _select_corr) + s0tilB(q2) * _select_corr;
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0 - q2));
 
             std::function<double (const double &)> integrand(std::bind(&Implementation<AnalyticFormFactorBToPiDKMMO2008>::F_lo_tw3_integrand, this, std::placeholders::_1, q2, _M2, _select_weight));
 
             return mb2 * fpi * integrate<GSL::QAGS>(integrand, u0, 1.000, config);
         }
 
-        double F_lo_tw4(const double & q2, const double & _M2, const double & _select_weight = 0.0) const
+        double F_lo_tw4(const double & q2, const double & _M2, const double & _select_weight = 0.0, const double & _select_corr = 0.0) const
         {
             const double mb = this->m_b_msbar(mu), mb2 = mb * mb, mpi2 = mpi * mpi, mpi4 = mpi2 * mpi2;
-            const double u0 = std::max(1e-10, (mb2 - q2) / (s0B(q2) - q2));
+            const double s0 = s0B(q2) * (1.0 - _select_corr) + s0tilB(q2) * _select_corr;
+            const double u0 = std::max(1e-10, (mb2 - q2) / (s0 - q2));
             const double a2pi = pi.a2pi(mu);
             const double deltapipi = pi.deltapipi(mu);
             const double omega4pi = pi.omega4pi(mu);
@@ -1846,20 +1849,29 @@ namespace eos
 
         double MB0_lcsr(const double & _q2) const
         {
+            const double _MB2 = MB * MB, mpi2 = mpi * mpi;
             const double q2 = (std::abs(_q2) > 1e-3) ? _q2 : 1e-3;
 
             const double M2_rescaled = this->M2() * this->rescale_factor_0(q2);
             const double alpha_s = model->alpha_s(mu);
 
-            const double Ftil_lo          = Ftil_lo_tw3(q2, M2_rescaled, 0.0)  + Ftil_lo_tw4(q2, M2_rescaled, 0.0);
-            const double Ftil_lo_D1M2inv  = Ftil_lo_tw3(q2, M2_rescaled, 1.0)  + Ftil_lo_tw4(q2, M2_rescaled, 1.0);
-            const double Ftil_nlo         = Ftil_nlo_tw2(q2, M2_rescaled, 0.0) + Ftil_nlo_tw3(q2, M2_rescaled, 0.0);
-            const double Ftil_nlo_D1M2inv = Ftil_nlo_tw2(q2, M2_rescaled, 1.0) + Ftil_nlo_tw3(q2, M2_rescaled, 1.0);
+            const double F_lo             = F_lo_tw2(q2, M2_rescaled, 0.0, 1.0)     + F_lo_tw3(q2, M2_rescaled, 0.0, 1.0)   + F_lo_tw4(q2, M2_rescaled, 0.0, 1.0);
+            const double F_lo_D1M2inv     = F_lo_tw2(q2, M2_rescaled, 1.0, 1.0)     + F_lo_tw3(q2, M2_rescaled, 1.0, 1.0)   + F_lo_tw4(q2, M2_rescaled, 1.0, 1.0);
+            const double F_nlo            = F_nlo_tw2(q2, M2_rescaled, 0.0) + F_nlo_tw3(q2, M2_rescaled, 0.0);
+            const double F_nlo_D1M2inv    = F_nlo_tw2(q2, M2_rescaled, 1.0) + F_nlo_tw3(q2, M2_rescaled, 1.0);
+            const double Ftil_lo          = Ftil_lo_tw3(q2, M2_rescaled, 0.0)       + Ftil_lo_tw4(q2, M2_rescaled, 0.0);
+            const double Ftil_lo_D1M2inv  = Ftil_lo_tw3(q2, M2_rescaled, 1.0)       + Ftil_lo_tw4(q2, M2_rescaled, 1.0);
+            const double Ftil_nlo         = Ftil_nlo_tw2(q2, M2_rescaled, 0.0)      + Ftil_nlo_tw3(q2, M2_rescaled, 0.0);
+            const double Ftil_nlo_D1M2inv = Ftil_nlo_tw2(q2, M2_rescaled, 1.0)      + Ftil_nlo_tw3(q2, M2_rescaled, 1.0);
 
+            const double F                = F_lo            + alpha_s / (3.0 * M_PI) * F_nlo;
+            const double F_D1M2inv        = F_lo_D1M2inv    + alpha_s / (3.0 * M_PI) * F_nlo_D1M2inv;
             const double Ftil             = Ftil_lo         + alpha_s / (3.0 * M_PI) * Ftil_nlo;
             const double Ftil_D1M2inv     = Ftil_lo_D1M2inv + alpha_s / (3.0 * M_PI) * Ftil_nlo_D1M2inv;
 
-            double MB2 = Ftil_D1M2inv / Ftil;
+            const double denom = 2.0 * q2 / (_MB2 - mpi2) * Ftil         + (1.0 - q2 / (_MB2 - mpi)) * F;
+            const double num   = 2.0 * q2 / (_MB2 - mpi2) * Ftil_D1M2inv + (1.0 - q2 / (_MB2 - mpi)) * F_D1M2inv;
+            double MB2 = num / denom;
 
             if (MB2 < 0.0)
             {
@@ -1928,7 +1940,7 @@ namespace eos
 
         double f_t(const double & q2) const
         {
-            const double mb = this->m_b_msbar(mu);
+            const double b = this->m_b_msbar(mu);
             const double MB2 = MB * MB;
             const double M2_rescaled = this->M2() * this->rescale_factor_T(q2);
             const double fB = decay_constant();
