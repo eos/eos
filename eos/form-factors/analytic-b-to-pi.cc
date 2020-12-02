@@ -1940,7 +1940,6 @@ namespace eos
 
         double f_t(const double & q2) const
         {
-            const double b = this->m_b_msbar(mu);
             const double MB2 = MB * MB;
             const double M2_rescaled = this->M2() * this->rescale_factor_T(q2);
             const double fB = decay_constant();
