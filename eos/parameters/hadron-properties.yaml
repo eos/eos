@@ -135,12 +135,6 @@ groups:
           central: +3.686097
           min:     +3.686072
           max:     +3.686122
-      # B meson masses
-      'mass::B^*_d' :
-          central: +5.32465
-          min:     +5.32440
-          max:     +5.32490
-          comments: 'cf. [PDG2012], p. 84'
   # }}}
 
   # Baryon Masses
