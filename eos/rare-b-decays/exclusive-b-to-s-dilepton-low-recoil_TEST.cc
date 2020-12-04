@@ -462,6 +462,9 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             // but this leads to a NaN in the timelike transversity amplitude
             // so make the mass very small
             p["mass::mu"] = 1e-5;
+            p["mass::B_d"] = 5.27958;
+            p["mass::K_d^*"] = 0.89594;
+
             Options o;
             o.set("model", "WilsonScan");
             o.set("l", "mu");
@@ -591,6 +594,8 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             p["b->smumu::Im{cT5}"] = -1.5;
 
             p["mass::s(2GeV)"] = 0.095;
+            p["mass::B_d"] = 5.27958;
+            p["mass::K_d^*"] = 0.89594;
 
             // increase sensitivity to m_l^2/q^2 terms
             p["mass::mu"] = 1.5;
