@@ -9,78 +9,93 @@ groups:
     parameters:
       # unflavoured meson masses
       'mass::pi^0' :
-          central: +0.1349766
-          min:     +0.1349760
-          max:     +0.1349772
-          comments: 'cf. [PDG-Live], May 2014'
+          central: +0.1349768
+          min:     +0.1349763
+          max:     +0.1349773
+          latex:   '$m_{\pi^0}$'
+          comments: "cf. [PDG-Live], December 2020"
       'mass::pi^+' :
-          central: +0.13957018
-          min:     +0.13956983
-          max:     +0.13957053
-          comments: ''
+          central: +0.13957039
+          min:     +0.13956921
+          max:     +0.13957057
+          latex:   '$m_{\pi^\pm}$'
+          comments: "cf. [PDG-Live], December 2020"
       # K meson masses
       'mass::K_d' :
-          central: +0.497614
-          min:     +0.497590
-          max:     +0.497638
-          comments: 'cf. [PDG2012], p. 41'
+          central: +0.497611
+          min:     +0.497598
+          max:     +0.497624
+          latex:   '$m_{K^0}$'
+          comments: "cf. [PDG-Live], December 2020"
       'mass::K_u' :
           central: +0.493677
           min:     +0.493661
           max:     +0.493693
+          latex:   '$m_{K^\pm}$'
           comments: 'cf. [PDG2012], p. 39'
       # D meson masses
       'mass::D_d' :
-          central: +1.86959
-          min:     +1.86950
-          max:     +1.86968
-          comments: 'cf. [PDG2016]'
+          central: +1.86965
+          min:     +1.86960
+          max:     +1.86970
+          latex:   '$m_{D^\pm}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::D^+' :
-          central: +1.86959
-          min:     +1.86950
-          max:     +1.86968
-          comments: 'cf. [PDG2016]'
+          central: +1.86965
+          min:     +1.86960
+          max:     +1.86970
+          latex:   '$m_{D^\pm}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::D_u' :
           central: +1.86483
           min:     +1.86478
           max:     +1.86488
+          latex:   '$m_{D^0}$'
           comments: 'cf. [PDG2016]'
       'mass::D^0' :
           central: +1.86483
           min:     +1.86478
           max:     +1.86488
+          latex:   '$m_{D^0}$'
           comments: 'cf. [PDG2016]'
       'mass::D_s' :
-          central: +1.96828
-          min:     +1.96818
-          max:     +1.96838
-          comments: 'cf. [PDG2016]'
+          central: +1.96834
+          min:     +1.96827
+          max:     +1.96841
+          latex:   '$m_{D_s}$'
+          comments: 'cf. [PDG-Live], December 2020'
       # B meson masses
       'mass::B_d' :
-          central: +5.27958
-          min:     +5.27941
-          max:     +5.27975
-          comments: 'cf. [PDG2012], p. 84'
+          central: +5.27965
+          min:     +5.27953
+          max:     +5.27977
+          latex:   '$m_{B^0}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::B_u' :
-          central: +5.27925
-          min:     +5.27908
-          max:     +5.27942
-          comments: 'cf. [PDG2012], p. 70'
+          central: +5.27934
+          min:     +5.27922
+          max:     +5.27946
+          latex:   '$m_{B^\pm}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::B_s' :
-          central: +5.36677
-          min:     +5.36653
-          max:     +5.36701
-          comments: 'cf. [PDG2012], p. 105'
+          central: +5.36688
+          min:     +5.36674
+          max:     +5.36702
+          latex:   '$m_{B^0_s}$'
+          comments: 'cf. [PDG-Live], December 2020'
       # B^* meson masses
       'mass::B_d^*' :
-          central: +5.325
-          min:     +5.325
-          max:     +5.325
+          central: +5.32470
+          min:     +5.32449
+          max:     +5.32491
+          latex:   '$m_{B^*}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::B_s^*' :
           central: +5.4154
-          min:     +5.4136
+          min:     +5.4139
           max:     +5.4172
-          comments: 'cf. [PDG2019]'
+          latex:   '$m_{B_s^*}$'
+          comments: 'cf. [PDG-Live], December 2020'
   # }}}
 
   # Vector Meson Masses
@@ -90,51 +105,86 @@ groups:
     parameters:
       # unflavoured meson masses
       'mass::rho^+' :
-          central: +0.77526
-          min:     +0.77501
-          max:     +0.77551
-          comments: 'cf. [PDG2016]'
+          central: +0.77511
+          min:     +0.77477
+          max:     +0.77545
+          latex:   '$m_{\rho^\pm}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::phi' :
           central: +1.019461
-          min:     +1.019459
-          max:     +1.019463
-          comments: 'cf. [PDG2018]'
+          min:     +1.019445
+          max:     +1.019477
+          latex:   '$m_{\phi}$'
+          comments: 'cf. [PDG-Live], December 2020'
       # K meson masses
       'mass::K_d^*' :
-          central: +0.89594
-          min:     +0.89572
-          max:     +0.89616
-          comments: 'cf. [PDG2012], p. 45'
+          central: +0.89555
+          min:     +0.89535
+          max:     +0.89575
+          latex:   '$m_{K^{0*}}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::K_u^*' :
           central: +0.89166
           min:     +0.89140
           max:     +0.89192
+          latex:   '$m_{K^{\pm*}}$'
           comments: 'cf. [PDG2012], p. 45'
       # D meson masses
       'mass::D_d^*' :
           central: +2.01026
           min:     +2.01021
           max:     +2.01031
+          latex:   '$m_{D^{\pm*}}$'
           comments: 'cf. [PDG2016]'
       'mass::D_u^*' :
           central: +2.00685
           min:     +2.00680
           max:     +2.00690
+          latex:   '$m_{D^{0*}}$'
           comments: 'cf. [PDG2016]'
       'mass::D_s^*' :
-          central: +2.1121
-          min:     +2.1117
-          max:     +2.1125
-          comments: 'cf. [PDG2016]'
+          central: +2.1122
+          min:     +2.1118
+          max:     +2.1126
+          latex:   '$m_{D_s^*}$'
+          comments: 'cf. [PDG-Live], December 2020'
       # Charmonium masses
       'mass::J/psi' :
           central: +3.096900
           min:     +3.096894
           max:     +3.096906
+          latex:   '$m_{J/\psi}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::psi(2S)' :
-          central: +3.686097
-          min:     +3.686072
-          max:     +3.686122
+          central: +3.68610
+          min:     +3.68604
+          max:     +3.68616
+          latex:   '$m_{\psi(2S)}$'
+          comments: 'cf. [PDG-Live], December 2020'
+      'mass::psi(3770)' :
+          central: +3.7737
+          min:     +3.7733
+          max:     +3.7741
+          latex:   '$m_{\psi(3770)}$'
+          comments: 'cf. [PDG-Live], December 2020'
+      'mass::psi(4040)' :
+          central: +4.039
+          min:     +4.038
+          max:     +4.040
+          latex:   '$m_{\psi(4040)}$'
+          comments: 'cf. [PDG-Live], December 2020'
+      'mass::psi(4160)' :
+          central: +4.191
+          min:     +4.186
+          max:     +4.196
+          latex:   '$m_{\psi(4160)}$'
+          comments: 'cf. [PDG-Live], December 2020'
+      'mass::psi(4415)' :
+          central: +4.421
+          min:     +4.417
+          max:     +4.425
+          latex:   '$m_{\psi(4415)}$'
+          comments: 'cf. [PDG-Live], December 2020'
   # }}}
 
   # Baryon Masses
@@ -147,29 +197,34 @@ groups:
           central: +1.115683
           min:     +1.115677
           max:     +1.115689
+          latex:   '$m_{\Lambda}$'
           comments: 'cf. [PDG2012], p. 149'
       # c baryon masses
       'mass::Lambda_c' :
-          central: +2.2865
-          min:     +2.2865
-          max:     +2.2865
-          comments: 'cf. [PDG2018]'
+          central: +2.28646
+          min:     +2.28632
+          max:     +2.28660
+          latex:   '$m_{\Lambda_c}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::Lambda_c(2625)' :
           central: +2.62811
           min:     +2.62792
           max:     +2.62830
+          latex:   '$m_{\Lambda_c(2625)}$'
           comments: 'cf. [PDG2016], p. 175'
       'mass::Lambda_c(2595)' :
           central: +2.59225
           min:     +2.59197
           max:     +2.59253
+          latex:   '$m_{\Lambda_c(2595)}$'
           comments: 'cf. [PDG2016], p. 175'
       # b baryon masses
       'mass::Lambda_b' :
-          central: +5.6194
-          min:     +5.6187
-          max:     +5.6201
-          comments: 'cf. [PDG2012], p. 165'
+          central: +5.61960
+          min:     +5.61843
+          max:     +5.61977
+          latex:   '$m_{\Lambda_b}$'
+          comments: 'cf. [PDG-Live], December 2020'
   # }}}
 
   # Decay Constants
