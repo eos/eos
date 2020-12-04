@@ -50,6 +50,8 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
             {
                 Parameters p = Parameters::Defaults();
                 p["Lambda_c::alpha"]       = -0.78;
+                p["mass::Lambda_b"]        = 5.6194;
+                p["mass::Lambda_c"]        = 2.2865;
 
                 // the parameters are fixed as EOS default values
 
@@ -75,6 +77,8 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
             {
                 Parameters p = Parameters::Defaults();
                 p["Lambda_c::alpha"]       = -0.78;
+                p["mass::Lambda_b"]        = 5.6194;
+                p["mass::Lambda_c"]        = 2.2865;
 
                 // the parameters are fixed as EOS default values
 
@@ -115,6 +119,8 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["mass::b(MSbar)"]        =  4.18;
                 p["mass::c"]               =  1.275;
                 p["Lambda_c::alpha"]       = -0.78;
+                p["mass::Lambda_b"]        = 5.6194;
+                p["mass::Lambda_c"]        = 2.2865;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -151,6 +157,8 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["mass::b(MSbar)"]        =  4.18;
                 p["mass::c"]               =  1.275;
                 p["Lambda_c::alpha"]       = -0.78;
+                p["mass::Lambda_b"]        = 5.6194;
+                p["mass::Lambda_c"]        = 2.2865;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
