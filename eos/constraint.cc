@@ -27,6 +27,7 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qualified-name.hh>
 #include <eos/utils/stringify.hh>
+#include <eos/utils/destringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <boost/filesystem/operations.hpp>
@@ -1145,19 +1146,30 @@ namespace eos
                     throw InternalError("make_multivariate_gaussian_covariance_constraint<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
             }
 
+            //If specified, these options allow to specify a subset of the measurements
+            unsigned begin = destringify<unsigned>(options.get("begin", "0"));
+            unsigned end = destringify<unsigned>(options.get("end", stringify(dim_meas)));
+            unsigned subdim_meas = end - begin;
+
+            if (0 > subdim_meas)
+                throw InternalError("make_multivariate_gaussian_covariance_constraint<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + ">: The number of measurments cannot be restricted to a non-positive number.");
+
             // create GSL vector for the mean
-            gsl_vector * means = gsl_vector_alloc(dim_meas);
-            gsl_vector_memcpy(means, this->means);
+            gsl_vector * means = gsl_vector_alloc(subdim_meas);
+            gsl_vector_view means_subset = gsl_vector_subvector(this->means, begin, subdim_meas);
+            gsl_vector_memcpy(means, &(means_subset.vector));
 
             // create GSL matrix for the covariance
-            gsl_matrix * covariance = gsl_matrix_alloc(dim_meas, dim_meas);
-            gsl_matrix_memcpy(covariance, this->covariance);
+            gsl_matrix * covariance = gsl_matrix_alloc(subdim_meas, subdim_meas);
+            gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->covariance, begin, begin, subdim_meas, subdim_meas);
+            gsl_matrix_memcpy(covariance, &(covariance_subset.matrix));
 
             // create GSL matrix for the response
-            gsl_matrix * response = gsl_matrix_calloc(dim_meas, dim_pred);
+            gsl_matrix * response = gsl_matrix_calloc(subdim_meas, dim_pred);
             if (this->response)
             {
-                gsl_matrix_memcpy(response, this->response);
+                gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->response, begin, 0, subdim_meas, dim_pred);
+                gsl_matrix_memcpy(response, &(covariance_subset.matrix));
             }
             else
             {
