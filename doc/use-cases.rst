@@ -134,7 +134,7 @@ The latter interprets the theory parameters as random variables and assigns *a p
 .. note::
 
   For technical reasons, EOS can only use uncorrelated prior PDFs.
-  The same effects a having correlated prior PDFs can be achieved by using a correlated likelihood and uniform prior PDFs.
+  The same effects as having correlated prior PDFs can be achieved by using a correlated likelihood and uniform prior PDFs.
 
 We carry on using the integrated branching ratios of :math:`\bar{B}^-\to D^0\left\lbrace\mu^-, \tau^-\right\rbrace\bar\nu` decays as examples.
 The largest source of theoretical uncertainty in these decays arises from the hadronic matrix elements, i.e.,
