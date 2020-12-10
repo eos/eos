@@ -607,7 +607,7 @@ namespace eos
             model(Model::make("SM", p, o)),
             b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor", "BCL2008"), p)),
             m_B(p["mass::B_d"], u),
-            m_Bst(p["mass::B^*_d"], u),
+            m_Bst(p["mass::B_d^*"], u),
             g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u)
         {
         }

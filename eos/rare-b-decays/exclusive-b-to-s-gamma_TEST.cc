@@ -70,6 +70,8 @@ class BToKstarGammaTest :
                 p["decay-constant::B_d"] = 0.200;
                 p["mass::b(MSbar)"] = 4.2;
                 p["mass::c"] = 1.27;
+                p["mass::B_d"] = 5.27958;
+                p["mass::K_d^*"] = 0.89594;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -106,6 +108,8 @@ class BToKstarGammaTest :
                 p["CKM::etabar"] = 0.342;
                 p["decay-constant::B_d"] = 0.200;
                 p["mass::b(MSbar)"] = 4.2;
+                p["mass::B_d"] = 5.27958;
+                p["mass::K_d^*"] = 0.89594;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -141,6 +145,8 @@ class BToKstarGammaBobethCompatibilityTest :
 
             Parameters p = Parameters::Defaults();
             p["decay-constant::B_d"] = 0.1906;
+            p["mass::B_d"] = 5.27958;
+            p["mass::K_d^*"] = 0.89594;
             Options o;
             o.set("model", "WilsonScan");
             o.set("form-factors", "KMPW2010");

@@ -50,7 +50,9 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "unpolarised");
 
                     Parameters p = Parameters::Defaults();
+                    p["mass::Lambda_b"] = 5.6194;
 
+		    
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
                     TEST_CHECK_RELATIVE_ERROR(8.250965481e-08, d.differential_branching_ratio(16.0), eps);
@@ -101,6 +103,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "LHCb");
 
                     Parameters p = Parameters::Defaults();
+                    p["mass::Lambda_b"] = 5.6194;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
@@ -153,6 +156,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     Parameters p = Parameters::Defaults();
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
+                    p["mass::Lambda_b"] = 5.6194;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
@@ -205,6 +209,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "LHCb");
 
                     Parameters p = Parameters::Defaults();
+                    p["mass::Lambda_b"] = 5.6194;
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
 

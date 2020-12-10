@@ -278,19 +278,12 @@ class AnalyticFormFactorBToPiPiFvDV2018Test :
         {
             static const double eps = 1.0e-5;
 
-            Parameters p = Parameters::Defaults();
-            p["mass::B_d"] = 5.2795;
-            p["mass::pi^+"] = 0.13957;
-            p["mass::d(2GeV)"] = 0.0048;
-            p["mass::u(2GeV)"] = 0.0032;
-            p["B->pipi::mu@BFvD2016"] = 1.5;
-            p["B->pi::f_+(0)@BCL2008"] = +3.07e-01;
-            p["B->pi::b_+^1@BCL2008"]  = -1.31e+00;
-            p["B->pi::b_+^2@BCL2008"]  = -9.04e-01;
-
             /* Factory */
             {
                 Parameters p = Parameters::Defaults();
+                p["mass::B_d"] = 5.27958;
+                p["mass::B_d^*"] = 5.32465;
+
                 std::shared_ptr<FormFactors<PToPP>> ff = FormFactorFactory<PToPP>::create("B->pipi::FvDV2018-Dispersive", p, Options{ });
 
                 TEST_CHECK(0 != ff.get());
