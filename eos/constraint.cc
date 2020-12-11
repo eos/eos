@@ -1149,10 +1149,14 @@ namespace eos
             //If specified, these options allow to specify a subset of the measurements
             unsigned begin = destringify<unsigned>(options.get("begin", "0"));
             unsigned end = destringify<unsigned>(options.get("end", stringify(dim_meas)));
-            unsigned subdim_meas = end - begin;
 
-            if (0 > subdim_meas)
-                throw InternalError("make_multivariate_gaussian_covariance_constraint<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + ">: The number of measurments cannot be restricted to a non-positive number.");
+            if (end > dim_meas)
+                throw InvalidOptionValueError("End of the measurements sub-sample: end", options.get("end", stringify(dim_meas)) , "Cannot use a value of 'end' pointing beyond the number of measurements.");
+
+            if (begin >= end)
+                throw InvalidOptionValueError("First measurement of the sub-sample: begin", options.get("begin", "0"), "Cannot use a value for 'begin' equal to or larger than 'end'");
+
+            unsigned subdim_meas = end - begin;
 
             // create GSL vector for the mean
             gsl_vector * means = gsl_vector_alloc(subdim_meas);
