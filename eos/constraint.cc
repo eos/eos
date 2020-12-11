@@ -1180,7 +1180,7 @@ namespace eos
                 gsl_matrix_set_identity(response);
             }
 
-            auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, number_of_observations);
+            auto block = LogLikelihoodBlock::MultivariateGaussian(cache, observables, means, covariance, response, subdim_meas);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
@@ -1836,7 +1836,7 @@ namespace eos
         if (e == entries.end())
             throw UnknownConstraintError(name);
 
-        return e->second->make(e->first, options);
+        return e->second->make(e->first, name.options() + options); // options supersede name.options
     }
 
     template <>
