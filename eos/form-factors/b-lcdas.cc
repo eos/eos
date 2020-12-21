@@ -31,6 +31,8 @@
 
 namespace eos
 {
+    // BMesonLCDAsBase
+    // eos/form-factors/analytic-b-to-p-...hh
     template <>
     struct Implementation<BMesonLCDAs>
     {
@@ -82,7 +84,8 @@ namespace eos
             // cf. [KMO2006], eq. (53), p. 16
             const double omega_0 = lambda_B();
 
-            return omega / (omega_0 * omega_0) * std::exp(-omega / omega_0);
+            return omega / (omega_0 * omega_0) 
+                * std::exp(-omega / omega_0);
         }
 
         inline double phi_minus(const double & omega) const
@@ -102,7 +105,6 @@ namespace eos
         inline double phi_bar(const double & omega) const
         {
             const double omega_0 = lambda_B();
-
             const double limitWW = -omega / omega_0 * std::exp(-omega / omega_0);
             const double nonWW   = (lambda_E2 - lambda_H2) / (18.0 * power_of<4>(omega_0))
                 * (2.0 * omega_0 - omega) * omega * std::exp(-omega / omega_0);
