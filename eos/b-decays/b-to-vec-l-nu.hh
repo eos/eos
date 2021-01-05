@@ -42,19 +42,18 @@ namespace eos
             // Differential Observables
             double differential_branching_ratio(const double & q2) const;
             double differential_a_fb_leptonic(const double & q2) const;
-            double differential_J1c_normalized(const double & q2) const;
-            double differential_J1s_normalized(const double & q2) const;
-            double differential_J2c_normalized(const double & q2) const;
-            double differential_J2s_normalized(const double & q2) const;
-            double differential_J3_normalized(const double & q2) const;
-            double differential_J4_normalized(const double & q2) const;
-            double differential_J5_normalized(const double & q2) const;
-            double differential_J6c_normalized(const double & q2) const;
-            double differential_J6s_normalized(const double & q2) const;
-            double differential_J7_normalized(const double & q2) const;
-            double differential_J8_normalized(const double & q2) const;
-            double differential_J9_normalized(const double & q2) const;
-            double differential_ratio_tau_mu(const double & q2) const;
+            double differential_J1c(const double & q2) const;
+            double differential_J1s(const double & q2) const;
+            double differential_J2c(const double & q2) const;
+            double differential_J2s(const double & q2) const;
+            double differential_J3 (const double & q2) const;
+            double differential_J4 (const double & q2) const;
+            double differential_J5 (const double & q2) const;
+            double differential_J6c(const double & q2) const;
+            double differential_J6s(const double & q2) const;
+            double differential_J7 (const double & q2) const;
+            double differential_J8 (const double & q2) const;
+            double differential_J9 (const double & q2) const;
 
             // Differential Observables - normalized(|Vcb|=1)
             double normalized_differential_branching_ratio(const double & q2) const;
@@ -64,8 +63,10 @@ namespace eos
 
             // Integrated Observables
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double integrated_CPave_branching_ratio(const double & q2_min, const double & q2_max) const;
+            
+            // integrate ratio of numerator and denominator
             double integrated_a_fb_leptonic(const double & q2_min, const double & q2_max) const;
-
             double integrated_amplitude_polarization_L(const double & q2_min, const double & q2_max) const;
             double integrated_amplitude_polarization_T(const double & q2_min, const double & q2_max) const;
             double integrated_f_L(const double & q2_min, const double & q2_max) const;
@@ -76,18 +77,50 @@ namespace eos
             double integrated_a_t_1(const double & q2_min, const double & q2_max) const;
             double integrated_a_t_2(const double & q2_min, const double & q2_max) const;
             double integrated_a_t_3(const double & q2_min, const double & q2_max) const;
-            double integrated_J1c_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J1s_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J2c_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J2s_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J3_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J4_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J5_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J6c_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J6s_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J7_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J8_normalized(const double & q2_min, const double & q2_max) const;
-            double integrated_J9_normalized(const double & q2_min, const double & q2_max) const;
+
+            double integrated_J1c(const double & q2_min, const double & q2_max) const;
+            double integrated_J1s(const double & q2_min, const double & q2_max) const;
+            double integrated_J2c(const double & q2_min, const double & q2_max) const;
+            double integrated_J2s(const double & q2_min, const double & q2_max) const;
+            double integrated_J3 (const double & q2_min, const double & q2_max) const;
+            double integrated_J4 (const double & q2_min, const double & q2_max) const;
+            double integrated_J5 (const double & q2_min, const double & q2_max) const;
+            double integrated_J6c(const double & q2_min, const double & q2_max) const;
+            double integrated_J6s(const double & q2_min, const double & q2_max) const;
+            double integrated_J7 (const double & q2_min, const double & q2_max) const;
+            double integrated_J8 (const double & q2_min, const double & q2_max) const;
+            double integrated_J9 (const double & q2_min, const double & q2_max) const;
+
+            // take ratio of integrated numerator and denominator
+            double integrated_CPave_a_fb_leptonic(const double & q2_min, const double & q2_max) const;
+            double integrated_CPave_f_L(const double & q2_min, const double & q2_max) const;
+            double integrated_CPave_ftilde_L(const double & q2_min, const double & q2_max) const;
+
+            double integrated_S1c(const double & q2_min, const double & q2_max) const;
+            double integrated_S1s(const double & q2_min, const double & q2_max) const;
+            double integrated_S2c(const double & q2_min, const double & q2_max) const;
+            double integrated_S2s(const double & q2_min, const double & q2_max) const;
+            double integrated_S3 (const double & q2_min, const double & q2_max) const;
+            double integrated_S4 (const double & q2_min, const double & q2_max) const;
+            double integrated_S5 (const double & q2_min, const double & q2_max) const;
+            double integrated_S6c(const double & q2_min, const double & q2_max) const;
+            double integrated_S6s(const double & q2_min, const double & q2_max) const;
+            double integrated_S7 (const double & q2_min, const double & q2_max) const;
+            double integrated_S8 (const double & q2_min, const double & q2_max) const;
+            double integrated_S9 (const double & q2_min, const double & q2_max) const;
+
+            double integrated_A1c(const double & q2_min, const double & q2_max) const;
+            double integrated_A1s(const double & q2_min, const double & q2_max) const;
+            double integrated_A2c(const double & q2_min, const double & q2_max) const;
+            double integrated_A2s(const double & q2_min, const double & q2_max) const;
+            double integrated_A3 (const double & q2_min, const double & q2_max) const;
+            double integrated_A4 (const double & q2_min, const double & q2_max) const;
+            double integrated_A5 (const double & q2_min, const double & q2_max) const;
+            double integrated_A6c(const double & q2_min, const double & q2_max) const;
+            double integrated_A6s(const double & q2_min, const double & q2_max) const;
+            double integrated_A7 (const double & q2_min, const double & q2_max) const;
+            double integrated_A8 (const double & q2_min, const double & q2_max) const;
+            double integrated_A9 (const double & q2_min, const double & q2_max) const;
 
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;

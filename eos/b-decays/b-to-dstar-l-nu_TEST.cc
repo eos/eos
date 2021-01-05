@@ -98,19 +98,19 @@ class BToVectorLeptonNeutrinoTest :
 
                 const double eps = 1e-3;
                 TEST_CHECK_NEARLY_EQUAL(33.323,       d.integrated_branching_ratio(0.001, 10.689), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.546,       d.integrated_f_L(0.001, 10.689),             eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.409302220, d.integrated_J1c_normalized(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_J1s_normalized(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.409302220, d.integrated_J2c_normalized(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.085174445, d.integrated_J2s_normalized(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.134468151, d.integrated_J3_normalized(0.001, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.231808464, d.integrated_J4_normalized(0.001, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.165381861, d.integrated_J5_normalized(0.001, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_J6c_normalized(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.200153929, d.integrated_J6s_normalized(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0,         d.integrated_J7_normalized(0.001, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_J8_normalized(0.001, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0,         d.integrated_J9_normalized(0.001, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.546,       d.integrated_f_L(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.409302220, d.integrated_S1c(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_S1s(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.409302220, d.integrated_S2c(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.085174445, d.integrated_S2s(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.134468151, d.integrated_S3 (0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.231808464, d.integrated_S4 (0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.165381861, d.integrated_S5 (0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S6c(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.200153929, d.integrated_S6s(0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0,         d.integrated_S7 (0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S8 (0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0,         d.integrated_S9 (0.001, 10.689),  eps);
             }
 
             // comparison with Martin Jung in 3/2/1 model
@@ -162,19 +162,19 @@ class BToVectorLeptonNeutrinoTest :
 
                 const double eps = 1e-3;
                 TEST_CHECK_NEARLY_EQUAL( 8.213,        d.integrated_branching_ratio(3.157, 10.689), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.475,        d.integrated_f_L(3.157, 10.689),             eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4325856250, d.integrated_J1c_normalized(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2779590234, d.integrated_J1s_normalized(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1287773345, d.integrated_J2c_normalized(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0471441750, d.integrated_J2s_normalized(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0819412032, d.integrated_J3_normalized(3.157, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1057578408, d.integrated_J4_normalized(3.157, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2056068494, d.integrated_J5_normalized(3.157, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2766922602, d.integrated_J6c_normalized(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1598442669, d.integrated_J6s_normalized(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0,          d.integrated_J7_normalized(3.157, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_J8_normalized(3.157, 10.689),   eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0,          d.integrated_J9_normalized(3.157, 10.689),   eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.475,        d.integrated_f_L(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.4325856250, d.integrated_S1c(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2779590234, d.integrated_S1s(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1287773345, d.integrated_S2c(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0471441750, d.integrated_S2s(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0819412032, d.integrated_S3 (3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1057578408, d.integrated_S4 (3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2056068494, d.integrated_S5 (3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2766922602, d.integrated_S6c(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1598442669, d.integrated_S6s(3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0,          d.integrated_S7 (3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_S8 (3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0,          d.integrated_S9 (3.157, 10.689),  eps);
             }
 
             // SM tests cf. [DSD2014]
