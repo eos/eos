@@ -4,6 +4,7 @@
  * Copyright (c) 2015, 2016, 2017 Danny van Dyk
  * Copyright (c) 2015 Marzia Bordone
  * Copyright (c) 2018, 2019 Ahmet Kokulu
+ * Copyright (c) 2021 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +22,7 @@
 
 #include <eos/form-factors/form-factors.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
+#include <eos/utils/destringify.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options-impl.hh>
@@ -80,6 +82,8 @@ namespace eos
         std::function<WilsonCoefficients<ChargedCurrent> (const std::string &, bool)> wc;
 
         GSL::QAGS::Config int_config;
+
+        bool cp_conjugate;
 
         inline std::string _mass_P() const
         {
@@ -174,7 +178,8 @@ namespace eos
             m_l(p["mass::" + opt_l.value()], u),
             g_fermi(p["G_Fermi"], u),
             hbar(p["hbar"], u),
-            int_config(GSL::QAGS::Config().epsrel(0.5e-3))
+            int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
+            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             form_factors = FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o);
 
@@ -203,7 +208,7 @@ namespace eos
         b_to_psd_l_nu::Amplitudes amplitudes(const double & s) const
         {
             // NP contributions in EFT including tensor operator (cf. [DDS:2014A]).
-            auto wc = this->wc(opt_l.value(), false);
+            auto wc = this->wc(opt_l.value(), cp_conjugate);
             const complex<double> gV = wc.cvr() + (wc.cvl() - 1.0); // in SM cvl=1 => gV contains NP contribution of cvl
             const complex<double> gS = wc.csr() + wc.csl();
             const complex<double> gT = wc.ct();
@@ -226,9 +231,7 @@ namespace eos
             const double m_l = this->m_l();
             const double v = (1.0 - m_l * m_l / s);
             const double ml_hat = std::sqrt(1.0 - v);
-            // universal electroweak correction, cf. [S:1982A]
-            const double etaEW = 1.0066;
-            const double NF = v * v * s * power_of<2>(g_fermi() * etaEW) / (256.0 * power_of<3>(M_PI) * m_B2);
+            const double NF = v * v * s * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI) * m_B2);
 
             // helicity amplitudes, cf. [DDS:2014A] eqs. 13-14
             b_to_psd_l_nu::Amplitudes result;
