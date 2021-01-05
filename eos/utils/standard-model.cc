@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2017 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
- * Copyright (c) 2018 Christoph Bobeth
+ * Copyright (c) 2018, 2021 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -702,9 +702,14 @@ namespace implementation
     WilsonCoefficients<ChargedCurrent>
     SMComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & /* cp_conjugate */) const
     {
+        // universal electroweak correction, cf. [S1982]
+        // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
+        // TODO: provide this to b->ulv and b->clv
+        const double etaEW = 1.0066;
+
         WilsonCoefficients<ChargedCurrent> wc;
         wc._coefficients.fill(complex<double>(0.0));
-        wc._coefficients[0] = complex<double>(1.0);
+        wc._coefficients[0] = complex<double>(etaEW);
 
         return wc;
     }
@@ -716,9 +721,14 @@ namespace implementation
     WilsonCoefficients<ChargedCurrent>
     SMComponent<components::DeltaBC1>::wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & /* cp_conjugate */) const
     {
+        // universal electroweak correction, cf. [S1982]
+        // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
+        // TODO: provide this to b->ulv and b->clv
+        const double etaEW = 1.0066;
+
         WilsonCoefficients<ChargedCurrent> wc;
         wc._coefficients.fill(complex<double>(0.0));
-        wc._coefficients[0] = complex<double>(1.0);
+        wc._coefficients[0] = complex<double>(etaEW);
 
         return wc;
     }

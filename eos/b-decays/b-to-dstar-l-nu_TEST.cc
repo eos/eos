@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2021 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -204,7 +205,8 @@ class BToVectorLeptonNeutrinoTest :
                 p1["mass::B_d"]                   = +5.279;
                 p1["mass::D_d^*"]                 = +2.0103;
                 // by default, all other couplings are zero in eos
-                p1["b->cmunumu::Re{cVL}"]         = +1.0;
+                p1["b->cmunumu::Re{cVL}"]         = +1.0066;  // include Sirlin correction
+                p1["b->ctaunutau::Re{cVL}"]       = +1.0066;  // include Sirlin correction
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -237,9 +239,14 @@ class BToVectorLeptonNeutrinoTest :
 
             // NP tests cf. [DSD2014]
             {
+                const double etaEW = 1.0066;
+
                 Parameters p3 = Parameters::Defaults();
                 /*
-                 * for the TEST case below the B->D^* SSE parameters are randomly chosen. However, the correlations together with the EOM conditions among the FFs are respected in this choice. Namely, alpha^A0_0 is correlated with alpha^A12_0, and also alpha^T1_0 should be the same as alpha^T2_0.
+                 * for the TEST case below the B->D^* SSE parameters are randomly chosen.
+                 * However, the correlations together with the EOM conditions among the FFs
+                 * are respected in this choice. Namely, alpha^A0_0 is correlated with alpha^A12_0,
+                 * and also alpha^T1_0 should be the same as alpha^T2_0.
                  */
                 p3["B->D^*::alpha^A0_0@BSZ2015" ] = +1.0;
                 p3["B->D^*::alpha^A0_1@BSZ2015" ] = +0.24;
@@ -269,27 +276,27 @@ class BToVectorLeptonNeutrinoTest :
                 // mc(mc)
                 p3["mass::c"]                     = +1.275;
                 // mu mode
-                p3["b->cmunumu::Re{cVL}"]         = +1.0;
-                p3["b->cmunumu::Im{cVL}"]         = -2.0;
-                p3["b->cmunumu::Re{cVR}"]         = +2.0;
-                p3["b->cmunumu::Im{cVR}"]         = -2.0;
-                p3["b->cmunumu::Re{cSL}"]         = +3.0;
-                p3["b->cmunumu::Im{cSL}"]         = -3.0;
-                p3["b->cmunumu::Re{cSR}"]         = +4.0;
-                p3["b->cmunumu::Im{cSR}"]         = -4.0;
-                p3["b->cmunumu::Re{cT}"]          = +5.0;
-                p3["b->cmunumu::Im{cT}"]          = -5.0;
+                p3["b->cmunumu::Re{cVL}"]         = +1.0 * etaEW;
+                p3["b->cmunumu::Im{cVL}"]         = -2.0 * etaEW;
+                p3["b->cmunumu::Re{cVR}"]         = +2.0 * etaEW;
+                p3["b->cmunumu::Im{cVR}"]         = -2.0 * etaEW;
+                p3["b->cmunumu::Re{cSL}"]         = +3.0 * etaEW;
+                p3["b->cmunumu::Im{cSL}"]         = -3.0 * etaEW;
+                p3["b->cmunumu::Re{cSR}"]         = +4.0 * etaEW;
+                p3["b->cmunumu::Im{cSR}"]         = -4.0 * etaEW;
+                p3["b->cmunumu::Re{cT}"]          = +5.0 * etaEW;
+                p3["b->cmunumu::Im{cT}"]          = -5.0 * etaEW;
                 // tau mode
-                p3["b->ctaunutau::Re{cVL}"]       = +1.0;
-                p3["b->ctaunutau::Im{cVL}"]       = -5.0;
-                p3["b->ctaunutau::Re{cVR}"]       = +2.1;
-                p3["b->ctaunutau::Im{cVR}"]       = -6.0;
-                p3["b->ctaunutau::Re{cSL}"]       = +3.1;
-                p3["b->ctaunutau::Im{cSL}"]       = -7.0;
-                p3["b->ctaunutau::Re{cSR}"]       = +4.1;
-                p3["b->ctaunutau::Im{cSR}"]       = -8.0;
-                p3["b->ctaunutau::Re{cT}"]        = +5.1;
-                p3["b->ctaunutau::Im{cT}"]        = -9.0;
+                p3["b->ctaunutau::Re{cVL}"]       = +1.0 * etaEW;
+                p3["b->ctaunutau::Im{cVL}"]       = -5.0 * etaEW;
+                p3["b->ctaunutau::Re{cVR}"]       = +2.1 * etaEW;
+                p3["b->ctaunutau::Im{cVR}"]       = -6.0 * etaEW;
+                p3["b->ctaunutau::Re{cSL}"]       = +3.1 * etaEW;
+                p3["b->ctaunutau::Im{cSL}"]       = -7.0 * etaEW;
+                p3["b->ctaunutau::Re{cSR}"]       = +4.1 * etaEW;
+                p3["b->ctaunutau::Im{cSR}"]       = -8.0 * etaEW;
+                p3["b->ctaunutau::Re{cT}"]        = +5.1 * etaEW;
+                p3["b->ctaunutau::Im{cT}"]        = -9.0 * etaEW;
 
                 Options oo;
                 oo.set("model", "WilsonScan");

@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2019, 2020 Danny van Dyk
+ * Copyright (c) 2021 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -216,6 +217,8 @@ namespace eos
 
         UsedParameter mu;
 
+        bool cp_conjugate;
+
         inline std::string _process() const
         {
             switch (opt_q.value()[0])
@@ -247,7 +250,8 @@ namespace eos
             m_l(p["mass::" + opt_l.value()], u),
             m_B(p["mass::B_" + opt_q.value()], u),
             m_V(p["mass::D_" + opt_q.value() + "^*"], u),
-            mu(p["mu"], u)
+            mu(p["mu"], u),
+            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
             form_factors = FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o);
 
@@ -266,10 +270,9 @@ namespace eos
             double v    = (1.0 - m_l * m_l / q2);
             double lam  = lambda(m_B * m_B, m_V * m_V, q2);
             double p    = (lam > 0.0) ? std::sqrt(lam) / (2.0 * m_B) : 0.0;
-            // universal electroweak correction, cf. [S1982]
-            double etaEW = 1.0066;
+
             // normalized prefactor (|Vcb|^2=1)
-            return power_of<2>(g_fermi() * etaEW) * p * q2 * power_of<2>(v) / (3.0 * 64.0 * power_of<3>(M_PI) * m_B * m_B);
+            return power_of<2>(g_fermi()) * p * q2 * power_of<2>(v) / (3.0 * 64.0 * power_of<3>(M_PI) * m_B * m_B);
         }
 
         b_to_dstar_l_nu::Amplitudes amplitudes(const double & q2) const
@@ -277,44 +280,38 @@ namespace eos
             b_to_dstar_l_nu::Amplitudes result;
 
             // NP contributions in EFT including tensor operator cf. [DSD2014], p. 3
-            const WilsonCoefficients<ChargedCurrent> wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
-            const complex<double> VL = wc.cvl() - 1.0;
-            const complex<double> VR = wc.cvr();
-            const complex<double> SL = wc.csl();
-            const complex<double> SR = wc.csr();
-            const complex<double> gV = VR + VL;
-            const complex<double> gA = VR - VL;
-            const complex<double> gP = SR - SL;
+            const WilsonCoefficients<ChargedCurrent> wc = model->wilson_coefficients_b_to_c(opt_l.value(), cp_conjugate);
+            const complex<double> gV_pl = wc.cvl() + wc.cvr();  // gV_pl = 1 + gV = 1 + VL + VR = cVL + cVR
+            const complex<double> gV_mi = wc.cvl() - wc.cvr();  // gV_mi = 1 - gA = 1 + VL - VR = cVL - cVR
+            const complex<double> gP = wc.csr() - wc.csl();
             const complex<double> TL = wc.ct();
 
             // form factors
-            double aff0  = form_factors->a_0(q2);
-            double aff1  = form_factors->a_1(q2);
-            double aff12 = form_factors->a_12(q2);
-            double vff   = form_factors->v(q2);
-            double tff1  = form_factors->t_1(q2);
-            double tff2  = form_factors->t_2(q2);
-            double tff3  = form_factors->t_3(q2);
+            const double aff0  = form_factors->a_0(q2);
+            const double aff1  = form_factors->a_1(q2);
+            const double aff12 = form_factors->a_12(q2);
+            const double vff   = form_factors->v(q2);
+            const double tff1  = form_factors->t_1(q2);
+            const double tff2  = form_factors->t_2(q2);
+            const double tff3  = form_factors->t_3(q2);
             // running quark masses
-            double mbatmu = model->m_b_msbar(mu);
-            double mcatmu = model->m_c_msbar(mu);
+            const double mbatmu = model->m_b_msbar(mu);
+            const double mcatmu = model->m_c_msbar(mu);
             // charged lepton velocity in the dilepton rest frame
-            double v        = (1.0 - m_l * m_l / q2);
-            double m_l_hat  = std::sqrt(1.0 - v);
-            double lam      = lambda(m_B * m_B, m_V * m_V, q2);
-            double sqrt_lam = (lam > 0.0) ? std::sqrt(lam) : 0.0;
-
-            double sqrtq2 = std::sqrt(q2);
-            double NF = norm(q2);
+            const double v  = (1.0 - m_l * m_l / q2);
+            const double m_l_hat  = std::sqrt(1.0 - v);
+            const double lam      = lambda(m_B * m_B, m_V * m_V, q2);
+            const double sqrt_lam = (lam > 0.0) ? std::sqrt(lam) : 0.0;
+            const double sqrtq2 = std::sqrt(q2);
 
             // transversity amplitudes A's. cf. [DSD2014], p.17
-            result.a_0          = (1.0 - gA) * 8.0 * m_B() * m_V() / sqrtq2 * aff12;
+            result.a_0          = gV_mi * 8.0 * m_B() * m_V() / sqrtq2 * aff12;
             result.a_0_T        = TL / (2.0 * m_V) * ( (m_B * m_B + 3.0 * m_V * m_V - q2) * tff2 - lam * tff3 / (m_B * m_B - m_V * m_V) );
-            result.a_plus       = ( (m_B + m_V) * aff1 * (1.0 - gA) - sqrt_lam * vff * (1.0 + gV) / (m_B + m_V) );
-            result.a_minus      = ( (m_B + m_V) * aff1 * (1.0 - gA) + sqrt_lam * vff * (1.0 + gV) / (m_B + m_V) );
-            result.a_plus_T     = TL * ( (m_B * m_B - m_V * m_V) * tff2 / sqrtq2 + sqrt_lam * tff1 / sqrtq2 );
-            result.a_minus_T    = TL * ( (m_B * m_B - m_V * m_V) * tff2 / sqrtq2 - sqrt_lam * tff1 / sqrtq2 );
-            result.a_t          =  sqrt_lam * aff0 * (1.0 - gA) / sqrtq2;
+            result.a_plus       = (m_B + m_V) * aff1 * gV_mi - sqrt_lam * vff * gV_pl / (m_B + m_V);
+            result.a_minus      = (m_B + m_V) * aff1 * gV_mi + sqrt_lam * vff * gV_pl / (m_B + m_V);
+            result.a_plus_T     = TL / sqrtq2 * ( (m_B * m_B - m_V * m_V) * tff2 + sqrt_lam * tff1 );
+            result.a_minus_T    = TL / sqrtq2 * ( (m_B * m_B - m_V * m_V) * tff2 - sqrt_lam * tff1 );
+            result.a_t          =  sqrt_lam * aff0 * gV_mi / sqrtq2;
             result.a_P          =  sqrt_lam * aff0 * gP / (mbatmu + mcatmu);
             result.a_t_P        =  result.a_t + result.a_P / m_l_hat;
             result.a_para       =  (result.a_plus + result.a_minus) / std::sqrt(2.0);
@@ -322,8 +319,8 @@ namespace eos
             result.a_perp       =  (result.a_plus - result.a_minus) / std::sqrt(2.0);
             result.a_perp_T     =  (result.a_plus_T - result.a_minus_T) / std::sqrt(2.0);
 
-            result.v     = v;
-            result.NF    = NF;
+            result.v  = v;
+            result.NF = norm(q2);
 
             return result;
         }

@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2021 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -167,7 +168,8 @@ class BToDLeptonNeutrinoTest :
                 p["mass::B_d"]             =  5.279;
                 p["mass::D_d"]             =  1.870;
                 // by default, all other couplings are zero in eos
-                p["b->cmunumu::Re{cVL}"]   =  1.0;
+                p["b->cmunumu::Re{cVL}"]   =  1.0066;  // include Sirlin correction
+                p["b->ctaunutau::Re{cVL}"] =  1.0066;  // include Sirlin correction
 
                 Options oo
                 {
@@ -201,6 +203,8 @@ class BToDLeptonNeutrinoTest :
 
             // NP tests
             {
+                const double etaEW = 1.0066;
+
                 Parameters p = Parameters::Defaults();
                 p["B->D::f_+(0)@BCL2008"]  = +0.660;
                 p["B->D::f_T(0)@BCL2008"]  = +1.00;
@@ -217,27 +221,27 @@ class BToDLeptonNeutrinoTest :
                 p["mass::b(MSbar)"]        =  4.18;
                 p["mass::c"]               =  1.275;
                 // mu mode
-                p["b->cmunumu::Re{cVL}"]         = +1.0;
-                p["b->cmunumu::Im{cVL}"]         = -2.0;
-                p["b->cmunumu::Re{cVR}"]         = +2.0;
-                p["b->cmunumu::Im{cVR}"]         = -2.0;
-                p["b->cmunumu::Re{cSL}"]         = +3.0;
-                p["b->cmunumu::Im{cSL}"]         = -3.0;
-                p["b->cmunumu::Re{cSR}"]         = +4.0;
-                p["b->cmunumu::Im{cSR}"]         = -4.0;
-                p["b->cmunumu::Re{cT}"]          = +5.0;
-                p["b->cmunumu::Im{cT}"]          = -5.0;
+                p["b->cmunumu::Re{cVL}"]         = +1.0 * etaEW;
+                p["b->cmunumu::Im{cVL}"]         = -2.0 * etaEW;
+                p["b->cmunumu::Re{cVR}"]         = +2.0 * etaEW;
+                p["b->cmunumu::Im{cVR}"]         = -2.0 * etaEW;
+                p["b->cmunumu::Re{cSL}"]         = +3.0 * etaEW;
+                p["b->cmunumu::Im{cSL}"]         = -3.0 * etaEW;
+                p["b->cmunumu::Re{cSR}"]         = +4.0 * etaEW;
+                p["b->cmunumu::Im{cSR}"]         = -4.0 * etaEW;
+                p["b->cmunumu::Re{cT}"]          = +5.0 * etaEW;
+                p["b->cmunumu::Im{cT}"]          = -5.0 * etaEW;
                 // tau mode
-                p["b->ctaunutau::Re{cVL}"]       = +1.0;
-                p["b->ctaunutau::Im{cVL}"]       = -5.0;
-                p["b->ctaunutau::Re{cVR}"]       = +2.1;
-                p["b->ctaunutau::Im{cVR}"]       = -6.0;
-                p["b->ctaunutau::Re{cSL}"]       = +3.1;
-                p["b->ctaunutau::Im{cSL}"]       = -7.0;
-                p["b->ctaunutau::Re{cSR}"]       = +4.1;
-                p["b->ctaunutau::Im{cSR}"]       = -8.0;
-                p["b->ctaunutau::Re{cT}"]        = +5.1;
-                p["b->ctaunutau::Im{cT}"]        = -9.0;
+                p["b->ctaunutau::Re{cVL}"]       = +1.0 * etaEW;
+                p["b->ctaunutau::Im{cVL}"]       = -5.0 * etaEW;
+                p["b->ctaunutau::Re{cVR}"]       = +2.1 * etaEW;
+                p["b->ctaunutau::Im{cVR}"]       = -6.0 * etaEW;
+                p["b->ctaunutau::Re{cSL}"]       = +3.1 * etaEW;
+                p["b->ctaunutau::Im{cSL}"]       = -7.0 * etaEW;
+                p["b->ctaunutau::Re{cSR}"]       = +4.1 * etaEW;
+                p["b->ctaunutau::Im{cSR}"]       = -8.0 * etaEW;
+                p["b->ctaunutau::Re{cT}"]        = +5.1 * etaEW;
+                p["b->ctaunutau::Im{cT}"]        = -9.0 * etaEW;
 
                 Options oo
                 {
