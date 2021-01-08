@@ -397,6 +397,225 @@ namespace eos
                 forced_options_denominator
                 );
     }
+
+
+
+    template <typename Decay_, typename ... Args_>
+    class ConcreteObservableSum :
+        public Observable
+    {
+        public:
+
+        private:
+            QualifiedName _name;
+
+            Parameters _parameters;
+
+            Kinematics _kinematics;
+
+            Options _options, _forced_options_numerator, _forced_options_denominator;
+
+            Decay_ _decay_numerator, _decay_denominator;
+
+            std::function<double (const Decay_ *, const Args_ & ...)> _numerator, _denominator;
+
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names_numerator, _kinematics_names_denominator;
+
+            std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type ...> _argument_tuple_numerator, _argument_tuple_denominator;
+
+            const double _weight_numerator, _weight_denominator;
+
+        public:
+            ConcreteObservableSum(const QualifiedName & name,
+                    const Parameters & parameters,
+                    const Kinematics & kinematics,
+                    const Options & options,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & numerator,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_numerator,
+                    const Options & forced_options_numerator,
+                    const double & weight_numerator,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & denominator,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_denominator,
+                    const Options & forced_options_denominator,
+                    const double & weight_denominator) :
+                _name(name),
+                _parameters(parameters),
+                _kinematics(kinematics),
+                _options(options),
+                _forced_options_numerator(forced_options_numerator),
+                _forced_options_denominator(forced_options_denominator),
+                _decay_numerator(parameters, options + _forced_options_numerator),
+                _decay_denominator(parameters, options + _forced_options_denominator),
+                _numerator(numerator),
+                _denominator(denominator),
+                _kinematics_names_numerator(kinematics_names_numerator),
+                _kinematics_names_denominator(kinematics_names_denominator),
+                _argument_tuple_numerator(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names_numerator, &_decay_numerator)),
+                _argument_tuple_denominator(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names_denominator, &_decay_denominator)),
+                _weight_numerator(weight_numerator),
+                _weight_denominator(weight_denominator)
+            {
+                uses(_decay_numerator);
+                uses(_decay_denominator);
+            }
+
+            ~ConcreteObservableSum() = default;
+
+            virtual const QualifiedName & name() const
+            {
+                return _name;
+            }
+
+            virtual double evaluate() const
+            {
+                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values_numerator   = _argument_tuple_numerator;
+                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values_denominator = _argument_tuple_denominator;
+
+                return _weight_numerator * apply(_numerator, values_numerator) + _weight_denominator * apply(_denominator, values_denominator);
+            };
+
+            virtual Parameters parameters()
+            {
+                return _parameters;
+            };
+
+            virtual Kinematics kinematics()
+            {
+                return _kinematics;
+            };
+
+            virtual Options options()
+            {
+                return _options;
+            }
+
+            virtual ObservablePtr clone() const
+            {
+                return ObservablePtr(new ConcreteObservableSum(_name, _parameters.clone(), _kinematics.clone(), _options,
+                        _numerator,   _kinematics_names_numerator,   _forced_options_numerator, _weight_numerator,
+                        _denominator, _kinematics_names_denominator, _forced_options_denominator, _weight_denominator));
+            }
+
+            virtual ObservablePtr clone(const Parameters & parameters) const
+            {
+                return ObservablePtr(new ConcreteObservableSum(_name, parameters, _kinematics.clone(), _options,
+                        _numerator,   _kinematics_names_numerator,   _forced_options_numerator, _weight_numerator,
+                        _denominator, _kinematics_names_denominator, _forced_options_denominator, _weight_denominator));
+            }
+    };
+
+    template <typename Decay_, typename ... Args_>
+    class ConcreteObservableSumEntry :
+        public ObservableEntry
+    {
+        private:
+            QualifiedName _name;
+
+            std::string _latex;
+
+            std::function<double (const Decay_ *, const Args_ & ...)> _numerator, _denominator;
+
+            Options _forced_options_numerator, _forced_options_denominator;
+
+            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> _kinematics_names_numerator, _kinematics_names_denominator;
+
+            std::array<const std::string, sizeof...(Args_)> _kinematics_names_array_numerator, _kinematics_names_array_denominator;
+
+            const double _weight_numerator, _weight_denominator;
+
+        public:
+            ConcreteObservableSumEntry(const QualifiedName & name, const std::string & latex,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & numerator,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_numerator,
+                    const Options & forced_options_numerator,
+                    const double & weight_numerator,
+                    const std::function<double (const Decay_ *, const Args_ & ...)> & denominator,
+                    const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_denominator,
+                    const Options & forced_options_denominator,
+                    const double & weight_denominator) :
+                _name(name),
+                _latex(latex),
+                _numerator(numerator),
+                _denominator(denominator),
+                _forced_options_numerator(forced_options_numerator),
+                _forced_options_denominator(forced_options_denominator),
+                _kinematics_names_numerator(kinematics_names_numerator),
+                _kinematics_names_denominator(kinematics_names_denominator),
+                _kinematics_names_array_numerator(impl::make_array<const std::string>(kinematics_names_numerator)),
+                _kinematics_names_array_denominator(impl::make_array<const std::string>(kinematics_names_denominator)),
+                _weight_numerator(weight_numerator),
+                _weight_denominator(weight_denominator)
+            {
+            }
+
+            ~ConcreteObservableSumEntry() = default;
+
+            virtual const QualifiedName & name() const
+            {
+                return _name;
+            }
+
+            virtual const std::string & latex() const
+            {
+                return _latex;
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
+            {
+                return _kinematics_names_array_numerator.begin();
+            }
+
+            virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const
+            {
+                return _kinematics_names_array_numerator.end();
+            }
+
+            virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
+            {
+                return ObservablePtr(new ConcreteObservableSum<Decay_, Args_ ...>(_name, parameters, kinematics, options,
+                        _numerator,   _kinematics_names_numerator,   _forced_options_numerator, _weight_numerator,
+                        _denominator, _kinematics_names_denominator, _forced_options_denominator, _weight_denominator));
+            }
+
+            virtual std::ostream & insert(std::ostream & os) const
+            {
+                os << "    type: observable sum" << std::endl;
+
+                if (sizeof...(Args_) > 0)
+                {
+                    os << "    kinematic variables numerator:   " << join(std::begin(_kinematics_names_array_numerator),   std::end(_kinematics_names_array_numerator))   << std::endl;
+                    os << "    kinematic variables denominator: " << join(std::begin(_kinematics_names_array_denominator), std::end(_kinematics_names_array_denominator)) << std::endl;
+                }
+
+                return os;
+            }
+    };
+
+    template <typename Decay_, typename Tuple_, typename ... Args_>
+    ObservableEntryPtr make_concrete_observable_sum_entry(const QualifiedName & name, const std::string & latex,
+            double (Decay_::* numerator)(const Args_ & ...) const,
+            const Tuple_ & kinematics_names_numerator,
+            const Options & forced_options_numerator,
+            const double & weight_numerator,
+            double (Decay_::* denominator)(const Args_ & ...) const,
+            const Tuple_ & kinematics_names_denominator,
+            const Options & forced_options_denominator,
+            const double & weight_denominator)
+    {
+        static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
+
+        return std::make_shared<ConcreteObservableSumEntry<Decay_, Args_ ...>>(name, latex,
+                std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(numerator)),
+                kinematics_names_numerator,
+                forced_options_numerator,
+                weight_numerator,
+                std::function<double (const Decay_ *, const Args_ & ...)>(std::mem_fn(denominator)),
+                kinematics_names_denominator,
+                forced_options_denominator,
+                weight_denominator
+                );
+    }
 }
+
 
 #endif
