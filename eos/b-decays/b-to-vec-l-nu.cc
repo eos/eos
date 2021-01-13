@@ -56,12 +56,11 @@ namespace eos
             complex<double> a_minus_T;
             complex<double> a_P;
             complex<double> a_t;
-            complex<double> a_t_P;
             complex<double> a_para;
             complex<double> a_para_T;
             complex<double> a_perp;
             complex<double> a_perp_T;
-            double v;
+            double mlH;
             double NF;
         };
 
@@ -73,32 +72,70 @@ namespace eos
             AngularObservables(const Amplitudes & a)
             {
                 // charged lepton velocity in the dilepton rest frame
-                double v  = a.v;
-                double NF = a.NF;
+                const double mlH = a.mlH;
+                const double mlH2 = mlH * mlH;
+                const double NF = a.NF;
 
-                _vv[0] = NF * 2.0 * ( (2.0 - v) * (std::norm(a.a_0) + 16.0 * std::norm(a.a_0_T)) + 2.0 * (1.0 - v) * std::norm(a.a_t_P) - 16.0 * std::sqrt(1.0 - v) * std::real(a.a_0_T * std::conj(a.a_0)) );
+                _vv[0] = NF * 2.0 * (
+                            (1.0 + mlH2) * (std::norm(a.a_0) + 16.0 * std::norm(a.a_0_T))
+                          + 2.0 * mlH2 * std::norm(a.a_t)
+                          + 2.0 * std::norm(a.a_P)
+                          + 4.0 * mlH * std::real(a.a_t * std::conj(a.a_P))
+                          - 16.0 * mlH * std::real(a.a_0_T * std::conj(a.a_0))
+                         );
 
-                _vv[1] = NF * 2.0 * v * ( - std::norm(a.a_0) + 16.0 * std::norm(a.a_0_T) );
+                _vv[1] = NF * 2.0 * (1.0 - mlH2) * ( - std::norm(a.a_0) + 16.0 * std::norm(a.a_0_T) );
 
-                _vv[2] = - NF * 8.0 * std::real( (1.0 - v) * a.a_t_P * std::conj(a.a_0) - 4.0 * std::sqrt(1.0 - v) * a.a_t_P * std::conj(a.a_0_T) );
+                _vv[2] = - NF * 8.0 * std::real(
+                            mlH * (mlH * a.a_t + a.a_P) * std::conj(a.a_0)
+                          - 4.0 * (mlH * a.a_t + a.a_P) * std::conj(a.a_0_T)
+                        );
 
-                _vv[3] = NF * ( (4.0 - v) * (std::norm(a.a_para) + std::norm(a.a_perp)) / 2.0 + 8.0 * (4.0 - 3.0 * v) * (std::norm(a.a_para_T) + std::norm(a.a_perp_T)) - 16.0 * std::sqrt(1.0 - v) * std::real( a.a_para_T * std::conj(a.a_para) + a.a_perp_T * std::conj(a.a_perp) ) );
+                _vv[3] = NF * (
+                            (3.0 + mlH2) * (std::norm(a.a_para) + std::norm(a.a_perp)) / 2.0
+                          + 8.0 * (1.0 + 3.0 * mlH2) * (std::norm(a.a_para_T) + std::norm(a.a_perp_T))
+                          - 16.0 * mlH * std::real(a.a_para_T * std::conj(a.a_para) + a.a_perp_T * std::conj(a.a_perp))
+                        );
 
-                _vv[4] = NF * v * ( (std::norm(a.a_para) + std::norm(a.a_perp)) / 2.0 - 8.0 * (std::norm(a.a_para_T) + std::norm(a.a_perp_T)) );
+                _vv[4] = NF * (1.0 - mlH2) * (
+                            (std::norm(a.a_para) + std::norm(a.a_perp)) / 2.0
+                          - 8.0 * (std::norm(a.a_para_T) + std::norm(a.a_perp_T))
+                        );
 
-                _vv[5] = NF * 4.0 * std::real( - a.a_para * std::conj(a.a_perp) - 16.0 * (1.0 - v) * a.a_para_T * std::conj(a.a_perp_T) + 4.0 * std::sqrt(1.0 - v) * ( a.a_perp_T * std::conj(a.a_para) + a.a_para_T * std::conj(a.a_perp) ) );
+                _vv[5] = NF * 4.0 * std::real(
+                          - a.a_para * std::conj(a.a_perp) 
+                          - 16.0 * mlH2 * a.a_para_T * std::conj(a.a_perp_T)
+                          + 4.0 * mlH * (a.a_perp_T * std::conj(a.a_para) + a.a_para_T * std::conj(a.a_perp))
+                        );
 
-                _vv[6] = NF * v * ( - (std::norm(a.a_para) - std::norm(a.a_perp)) + 16.0 * (std::norm(a.a_para_T) - std::norm(a.a_perp_T)) );
+                _vv[6] = NF * (1.0 - mlH2) * (
+                          - (std::norm(a.a_para) - std::norm(a.a_perp))
+                          + 16.0 * (std::norm(a.a_para_T) - std::norm(a.a_perp_T))
+                        );
 
-                _vv[7] = NF * 2.0 * v * std::imag( a.a_para * std::conj(a.a_perp) );
+                _vv[7] = NF * 2.0 * (1.0 - mlH2) * std::imag( a.a_para * std::conj(a.a_perp));
 
-                _vv[8] = NF * std::sqrt(2.0) * v * std::real( a.a_para * std::conj(a.a_0) - 16.0 * a.a_para_T * std::conj(a.a_0_T) );
+                _vv[8] = NF * std::sqrt(2.0) * (1.0 - mlH2) * std::real(
+                            a.a_para * std::conj(a.a_0)
+                          - 16.0 * a.a_para_T * std::conj(a.a_0_T)
+                        );
 
-                _vv[9] = NF * 2.0 * std::sqrt(2.0) * std::real( - a.a_perp * std::conj(a.a_0) + (1.0 - v) * ( a.a_para * std::conj(a.a_t_P) - 16.0 * a.a_perp_T * std::conj(a.a_0_T) ) + 4.0 * std::sqrt(1.0 - v) * ( a.a_0_T * std::conj(a.a_perp) + a.a_perp_T * std::conj(a.a_0) - a.a_para_T * std::conj(a.a_t_P) ) );
+                _vv[9] = NF * 2.0 * std::sqrt(2.0) * std::real(
+                          - a.a_perp * std::conj(a.a_0)
+                          + a.a_para * mlH * std::conj(mlH * a.a_t + a.a_P) 
+                          - 16.0 * mlH2 * a.a_perp_T * std::conj(a.a_0_T)
+                          + 4.0 * mlH * (a.a_0_T * std::conj(a.a_perp) + a.a_perp_T * std::conj(a.a_0))
+                          - 4.0 * a.a_para_T * std::conj(mlH * a.a_t + a.a_P)
+                        );
 
-                _vv[10] = NF * 2.0 * std::sqrt(2.0) * std::imag( - a.a_para * std::conj(a.a_0) + (1.0 - v) * a.a_perp * std::conj(a.a_t_P) + 4.0 * std::sqrt(1.0 - v) * ( a.a_0_T * std::conj(a.a_para) - a.a_para_T * std::conj(a.a_0) + a.a_perp_T * std::conj(a.a_t_P) ) );
+                _vv[10] = NF * 2.0 * std::sqrt(2.0) * std::imag(
+                          - a.a_para * std::conj(a.a_0) 
+                          + mlH * a.a_perp * std::conj(mlH * a.a_t + a.a_P)
+                          + 4.0 * mlH * ( a.a_0_T * std::conj(a.a_para) - a.a_para_T * std::conj(a.a_0))
+                          + 4.0 * a.a_perp_T * std::conj(mlH * a.a_t + a.a_P) 
+                        );
 
-                _vv[11] = NF * std::sqrt(2.0) * v * std::imag( a.a_perp * std::conj(a.a_0) );
+                _vv[11] = NF * std::sqrt(2.0) * (1.0 - mlH2) * std::imag( a.a_perp * std::conj(a.a_0));
             }
 
             AngularObservables(const std::array<double, 12> & vv) :
@@ -266,13 +303,11 @@ namespace eos
         // normalization cf. [DSD2014] eq. (7), p. 5
         double norm(const double & q2) const
         {
-            // charged lepton velocity in the dilepton rest frame
-            double v    = (1.0 - m_l * m_l / q2);
-            double lam  = lambda(m_B * m_B, m_V * m_V, q2);
-            double p    = (lam > 0.0) ? std::sqrt(lam) / (2.0 * m_B) : 0.0;
+            const double lam  = lambda(m_B * m_B, m_V * m_V, q2);
+            const double p    = (lam > 0.0) ? std::sqrt(lam) / (2.0 * m_B) : 0.0;
 
             // normalized prefactor (|Vcb|^2=1)
-            return power_of<2>(g_fermi()) * p * q2 * power_of<2>(v) / (3.0 * 64.0 * power_of<3>(M_PI) * m_B * m_B);
+            return power_of<2>(g_fermi()) * p * q2 * power_of<2>(1.0 - m_l * m_l / q2) / (3.0 * 64.0 * power_of<3>(M_PI) * m_B * m_B);
         }
 
         b_to_dstar_l_nu::Amplitudes amplitudes(const double & q2) const
@@ -297,9 +332,6 @@ namespace eos
             // running quark masses
             const double mbatmu = model->m_b_msbar(mu);
             const double mcatmu = model->m_c_msbar(mu);
-            // charged lepton velocity in the dilepton rest frame
-            const double v  = (1.0 - m_l * m_l / q2);
-            const double m_l_hat  = std::sqrt(1.0 - v);
             const double lam      = lambda(m_B * m_B, m_V * m_V, q2);
             const double sqrt_lam = (lam > 0.0) ? std::sqrt(lam) : 0.0;
             const double sqrtq2 = std::sqrt(q2);
@@ -313,13 +345,12 @@ namespace eos
             result.a_minus_T    = TL / sqrtq2 * ( (m_B * m_B - m_V * m_V) * tff2 - sqrt_lam * tff1 );
             result.a_t          =  sqrt_lam * aff0 * gV_mi / sqrtq2;
             result.a_P          =  sqrt_lam * aff0 * gP / (mbatmu + mcatmu);
-            result.a_t_P        =  result.a_t + result.a_P / m_l_hat;
             result.a_para       =  (result.a_plus + result.a_minus) / std::sqrt(2.0);
             result.a_para_T     =  (result.a_plus_T + result.a_minus_T) / std::sqrt(2.0);
             result.a_perp       =  (result.a_plus - result.a_minus) / std::sqrt(2.0);
             result.a_perp_T     =  (result.a_plus_T - result.a_minus_T) / std::sqrt(2.0);
 
-            result.v  = v;
+            result.mlH = (m_l > 0.0) ? std::sqrt(m_l * m_l / q2) : 0.0;
             result.NF = norm(q2);
 
             return result;
