@@ -597,7 +597,7 @@ class Plotter:
                                 width = (_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min'])
 
                         yvalues.append(means[i] / width)
-                        yerrors.append(np.sqrt(covariance[i, i]) / width)
+                        yerrors.append(np.sqrt(np.float(covariance[i, i])) / width)
                 elif constraint['type'] == 'MultivariateGaussian':
                     if not self.observable:
                         raise KeyError('observable needs to be specified for MultivariateGaussian constraints')
