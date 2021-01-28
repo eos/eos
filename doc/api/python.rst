@@ -180,7 +180,8 @@ warnings or errors.
  * ``type`` (*str*, mandatory) -- The type of the plot item, from one of the following recognized item types:
 
     - ``observable`` -- See `Plotting observables`_ for the description of this type of plot item.
-    - ``constraints`` -- See `Plotting constraints`_. for the description of this type of plot item.
+    - ``constraints`` -- See `Plotting constraints`_ for the description of this type of plot item.
+    - ``point`` -- See `Plotting points`_ for the description of this type of plot item.
 
  * ``name`` (*str*, optional) -- The name of the plot item, for convenience when reporting warnings and errors.
 
@@ -260,6 +261,41 @@ Example:
                'observable': 'B->Dlnu::BR',
                'variable': 'q2',
                'rescale-by-width': False
+           }
+       ]
+   }
+
+
+Plotting points
+---------------
+
+Content items of type ``point`` are used to display a single data point manually.
+The following keys are mandatory:
+
+ * ``x`` (*number*) -- The point's x coordinate.
+ * ``y`` (*number*) -- The point's y coordinate.
+
+Beside the common set of optional keys, this item type recognizes the following optional
+keys:
+
+ * ``marker`` (*str*, a valid Matplotlib marker style) -- The point's marker style.
+ * ``markersize`` (*number*, a valid Matplotlib marker size) -- The point's marker size in pts.
+
+Example:
+
+.. code-block::
+
+   plot_args = {
+       'plot': { ... },
+       'contents': [
+           {
+               'label': r'LCSR (Bharucha 2012)',
+               'type': 'point',
+               'color': 'C0',
+               'x': 0,
+               'y': 0.261,
+               'marker': 'o',
+               'markersize': 12
            }
        ]
    }
