@@ -1,18 +1,18 @@
-EOS - A HEP Program for Flavor Observables
-==========================================
+EOS - A HEP Program for Flavour Observables
+===========================================
 
 EOS is a software package that addresses several use cases in the field of
 high-energy flavor physics (HEP):
 
- 1. calculation and uncertainty estimation of flavor observables within
-   various models,
- 2. Bayesian inference of parameters from experimental and/or theoretical
-   constraints, and
- 3. sampling process-specific probability density functions.
+ 1. calculation and uncertainty estimation of flavour observables within
+   the Standard Model or within the Weak Effective Theory;
+ 2. Bayesian inference of parameters from both experimental and theoretical
+   constraints; and
+ 3. Monte Carlo simulation of flavour processes.
 
-An up-to-date list of EOS related publications can be found [here](https://eos.github.io/publications/).
+An up-to-date list of High Energy Physics publications can be found [here](https://eos.github.io/publications/).
 
-EOS is written in C++14, with an optional interface to Python, and depends on
+EOS is written in C++14, with an recommended interface to Python 3, and depends on
 as a small set of external software libraries:
 
  - the GNU Scientific Library (libgsl),
@@ -20,19 +20,19 @@ as a small set of external software libraries:
  - the Hierarchical Data Format v5 library (libdf5),
  - the minimizer Minuit2 (as of ROOT version 5.14.00 or later),
  - the Population Monte Carlo (PMC) library pmclib (optional),
- - the Python interpreter (optional).
+ - the Python 3 interpreter.
 
-For details on these dependencies we refer to the [user manual](https://eos.github.io/manual/manual.pdf).
+For details on these dependencies we refer to the [online documentation](https://eos.github.io/doc/installation.html#installing-the-dependencies-on-linux).
 
 Installation
 ------------
 
-Presently EOS supports installation from source only. For Ubuntu users, two of the external software
-dependencies that are not available from the main repositories are provided in the official
-[EOS repository](https://packagecloud.io/eos/eos).
+EOS supports several methods of installation. For Linux users, the recommended method
+is installation via PyPI: ```pip3 install eoshep```. For macOS users the documentation details
+instructions to use the homebrew software repositories to install EOS and its dependencies.
 
 For instructions on how to build and install EOS on your computer please have a
-look at the [user manual](https://eos.github.io/manual/manual.pdf).
+look at the [online documentation](https://eos.github.io/doc/installation.html).
 
 Authors and Contributors
 ------------------------
@@ -42,15 +42,18 @@ The main authors are:
  * Danny van Dyk <danny.van.dyk@gmail.com>,
  * Frederik Beaujean <beaujean@mpp.mpg.de>,
  * Christoph Bobeth <christoph.bobeth@gmail.com>,
+ * Nico Gubernari <nicogubernari@gmail.com>,
+ * Meril Reboud <reboud@gmail.com>,
 
-with code contributions by:
+with further code contributions by:
 
  * Marzia Bordone,
  * Thomas Blake,
  * Elena Graverini,
- * Nico Gubernari,
  * Stephan Jahn,
  * Ahmet Kokulu,
+ * Stephan Kürten,
+ * Philip Lüghausen,
  * Bastian Müller,
  * Stefanie Reichert,
  * Eduardo Romero,
