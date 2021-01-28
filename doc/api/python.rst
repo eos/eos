@@ -113,9 +113,10 @@ expressed in terms of independent plot items.
 
    plot_desc = {
        'plot': {
-           'x': { ... }, # description of the x axis
-           'y': { ... }, # description of the y axis
-           'legend': { ... } # description of the legend
+           'x': { ... },       # description of the x axis
+           'y': { ... },       # description of the y axis
+           'legend': { ... },  # description of the legend
+           ...                 # further layouting options
        },
        'contents': [
            { ... }, # first plot item
@@ -130,13 +131,28 @@ The format is automatically determined based on the file name extension.
 Plot layouting
 --------------
 
-By default plots lack any axis labels and units, and legend.
+By default plots lack any axis labels and units, and any legend.
 
-Axis descriptions can be provided through the following key/value pairs, which apply equally to the x and y axis:
+An axis' description is provided through the following key/value pairs, which can apply equally to the x and y axis:
 
  * ``label`` (*str*, may contain LaTeX commands) -- The axis' label.
+ * ``format`` (*str*, Pyton 3 format string) -- The axis' tick label format. Due to a Matplotlib peculiarity, the format string
+   must always format the variable ``x``. See Matplotlib format strings for details.
  * ``unit``  (*str*, may contain LaTeX commands) -- The axis' unit, which will be appended to the axis' label in square brackets.
  * ``range`` (*list* or *tuple* of two *float*) -- The tuple of [minimal, maximal] values, which will be displayed along the axis.
+ * ``scale`` (*number*) -- The axis' scale by which all tick coordinate will be divided. The scale will *not* be appended to
+   the axis' label automatically.
+
+The legend description presently only includes options for its location:
+
+ * ``location`` (*str*, valid Matplotlib legend location) -- The legend's location within the plot.
+
+Further layouting options are:
+
+ * ``title`` (*str*) -- The plot's title.
+ * ``size`` (*tuple of two numbers*) -- The plot's size in x and y directions provided in centimeters.
+ * ``axes`` (*str*, ``equal``) -- Enforces equal scaling of the plot's x and y axes, if set.
+ * ``grid`` (*str*, either ``major``, ``minor``, or ``both``) -- Enables the plot's gridline, if set.
 
 An example illustrating plot layouting follows:
 
@@ -146,7 +162,8 @@ An example illustrating plot layouting follows:
        'plot': {
            'x': { 'label': r'$q^2$', 'unit': r'$\textnormal{GeV}^2$', 'range': [0.0, 11.60] },
            'y': { 'label': r'$d\mathcal{B}/dq^2$',                    'range': [0.0,  5e-3] },
-           'legend': { 'location': 'upper center' }
+           'legend': { 'location': 'upper center' },
+           'size': [10, 5]
        },
        'contents': [
            ...
