@@ -92,4 +92,45 @@ namespace eos
         return complex<double>(0.0);
     }
 
+    namespace nff_utils
+    {
+
+        complex<double> z(const double & q2, complex<double> s_plus, complex<double> s_0)
+        {
+            return (pow(s_plus - q2, 0.5) - pow(s_plus - s_0, 0.5)) / (pow(s_plus - q2, 0.5) + pow(s_plus - s_0, 0.5));
+        }
+
+        // Blaschke factor capturing the two poles for J/psi and psi(2S).
+        complex<double> blaschke_cc(const complex<double> z, const complex<double> z_Jpsi, const complex<double> z_psi2S)
+        {
+            return (z - z_Jpsi)/(1.0 - z * std::conj(z_Jpsi)) * (z - z_psi2S)/(1.0 - z * std::conj(z_psi2S));
+        }
+
+        //Expansion in z monomials (they form a basis on the unit circle)
+        complex<double> P(complex<double> z, const complex<double> & alpha_0, const complex<double> & alpha_1, const complex<double> & alpha_2)
+        {
+            return 1.0 / sqrt(2*M_PI) * (alpha_0 + alpha_1*z + alpha_2*z*z);
+        }
+
+        //Expansion in polynomials orthogonal on the arc of the unit circle (zXY, zXY*)
+        complex<double> PGvDV2020(complex<double> z, const complex<double> zXY,
+            const complex<double> & alpha_0, const complex<double> & alpha_1, const complex<double> & alpha_2)
+        {
+
+            const double alphaXY = std::abs(std::arg(zXY));
+
+            const double denom = 2*pow(alphaXY, 2) + cos(2*alphaXY) - 1;
+
+            const complex<double> P0z = 1.0/sqrt(2*alphaXY);
+            const complex<double> P1z = (z - sin(alphaXY)/alphaXY)*sqrt(alphaXY/denom);
+            const complex<double> P2z = ( z*z + z*sin(alphaXY)*(sin(2*alphaXY)-2*alphaXY)/denom +
+                                        2*sin(alphaXY)*(sin(alphaXY)-alphaXY*cos(alphaXY))/denom) *
+                                        sqrt( 2*denom/(-9*alphaXY + 8*pow(alphaXY,3) + 8*alphaXY*cos(2*alphaXY) +
+                                        alphaXY*cos(4*alphaXY) + 4*sin(2*alphaXY) - 2*sin(4*alphaXY)) );
+
+            return alpha_0*P0z + alpha_1*P1z + alpha_2*P2z;
+        }
+
+    }
+
 }
