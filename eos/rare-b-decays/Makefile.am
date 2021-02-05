@@ -5,6 +5,7 @@ AM_CXXFLAGS = @AM_CXXFLAGS@
 
 lib_LTLIBRARIES = libeosrarebdecays.la
 libeosrarebdecays_la_SOURCES = \
+	b-to-k-charmonium.cc b-to-k-charmonium.hh \
 	b-to-kstar-charmonium.cc b-to-kstar-charmonium.hh \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	charm-loops.cc charm-loops.hh \
@@ -73,7 +74,8 @@ TESTS = \
 	qcdf_integrals_TEST \
 	nonlocal-formfactors-p-to-p_TEST \
 	nonlocal-formfactors-p-to-v_TEST \
-	b-to-kstar-charmonium_TEST
+	b-to-kstar-charmonium_TEST \
+	b-to-k-charmonium_TEST
 XFAIL_TESTS = \
 	exclusive-b-to-s-dilepton-large-recoil_TEST # One of the QCDF integrals has a bug in the imaginary part
 LDADD = \
@@ -114,3 +116,5 @@ nonlocal_formfactors_p_to_p_TEST_SOURCES = nonlocal-formfactors-p-to-p_TEST.cc
 nonlocal_formfactors_p_to_v_TEST_SOURCES = nonlocal-formfactors-p-to-v_TEST.cc
 
 b_to_kstar_charmonium_TEST_SOURCES = b-to-kstar-charmonium_TEST.cc
+
+b_to_k_charmonium_TEST_SOURCES = b-to-k-charmonium_TEST.cc
