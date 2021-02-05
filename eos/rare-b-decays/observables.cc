@@ -26,6 +26,7 @@
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
 #include <eos/rare-b-decays/b-to-kstar-charmonium.hh>
+#include <eos/rare-b-decays/b-to-k-charmonium.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
 #include <eos/utils/concrete_observable.hh>
 
@@ -282,6 +283,26 @@ namespace eos
                 make_observable("B->K^*gamma::A_I",
                         &BToKstarGamma::isospin_asymmetry),
             }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // B_q -> P charmonium
+    // {{{
+    ObservableGroup
+    make_b_to_p_charmonium_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q \to P charmonium$ decays)",
+            R"(The option "q" selects the spectator quark flavour.)",
+            {
+                /// Branching ratio of B -> K psi
+                make_observable("B->Kcharmonium::branching_ratio",
+                        &BToKCharmonium::branching_ratio)
+            }
+
         );
 
         return ObservableGroup(imp);
@@ -1583,6 +1604,7 @@ namespace eos
                 make_b_to_v_group(),
 
                 // B_q -> M charmonium
+                make_b_to_p_charmonium_group(),
                 make_b_to_v_charmonium_group(),
 
                 // Lambda_b -> Lambda l^+ l^-
