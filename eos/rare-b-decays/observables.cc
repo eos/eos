@@ -25,6 +25,9 @@
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
+#include <eos/rare-b-decays/b-to-kstar-charmonium.hh>
+#include <eos/rare-b-decays/b-to-k-charmonium.hh>
+#include <eos/rare-b-decays/nonlocal-formfactors.hh>
 #include <eos/utils/concrete_observable.hh>
 
 namespace eos
@@ -285,6 +288,152 @@ namespace eos
         return ObservableGroup(imp);
     }
     // }}}
+
+    // B_q -> P charmonium
+    // {{{
+    ObservableGroup
+    make_b_to_p_charmonium_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q \to P charmonium$ decays)",
+            R"(The option "q" selects the spectator quark flavour.)",
+            {
+                /// Branching ratio of B -> K psi
+                make_observable("B->Kcharmonium::branching_ratio",
+                        &BToKCharmonium::branching_ratio)
+            }
+
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // B_q -> V charmonium
+    // {{{
+    ObservableGroup
+    make_b_to_v_charmonium_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q \to V charmonium$ decays)",
+            R"(The option "q" selects the spectator quark flavour.)",
+            {
+                /// Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
+                make_observable("B->K^*charmonium::S_1s_LHCb",
+                        &BToKstarCharmonium::S_1s_LHCb),
+                make_observable("B->K^*charmonium::S_1c_LHCb",
+                        &BToKstarCharmonium::S_1c_LHCb),
+                make_observable("B->K^*charmonium::S_3_LHCb",
+                        &BToKstarCharmonium::S_3_LHCb),
+                make_observable("B->K^*charmonium::S_4_LHCb",
+                        &BToKstarCharmonium::S_4_LHCb),
+                make_observable("B->K^*charmonium::S_8_LHCb",
+                        &BToKstarCharmonium::S_8_LHCb),
+                make_observable("B->K^*charmonium::S_9_LHCb",
+                        &BToKstarCharmonium::S_9_LHCb),
+
+                /// Branching ratio of B -> K^* psi
+                make_observable("B->K^*charmonium::branching_ratio",
+                        &BToKstarCharmonium::branching_ratio)
+
+            }
+
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // B_q -> P
+    // {{{
+    ObservableGroup
+    make_b_to_p_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q \to P$ decays)",
+            R"(The option "q" selects the spectator quark flavour.)",
+            {
+                make_observable("B->K::re_H_plus(q2)",
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::re_H_plus,
+                        std::make_tuple("q2")),
+                make_observable("B->K::im_H_plus(q2)",
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::im_H_plus,
+                        std::make_tuple("q2")),
+                make_observable("B->K::abs_H_plus(q2)",
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::abs_H_plus,
+                        std::make_tuple("q2")),
+                make_observable("B->K::re_Hhat_plus(q2)",
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::re_Hhat_plus,
+                        std::make_tuple("q2")),
+                make_observable("B->K::im_Hhat_plus(q2)",
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::im_Hhat_plus,
+                        std::make_tuple("q2")),
+                make_observable("B->K::abs_Hhat_plus(q2)",
+                        &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::abs_Hhat_plus,
+                        std::make_tuple("q2"))
+            }
+
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // B_q -> V
+    // {{{
+    ObservableGroup
+    make_b_to_v_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B_q \to V$ decays)",
+            R"(The option "q" selects the spectator quark flavour.)",
+            {
+                make_observable("B->K^*::re_H_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_H_perp,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*::im_H_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_H_perp,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*::abs_H_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_H_perp,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*::abs_Hhat_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_Hhat_perp,
+                        std::make_tuple("q2")),
+
+                make_observable("B->K^*::re_H_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_H_para,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*::im_H_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_H_para,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*::abs_H_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_H_para,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*::abs_Hhat_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_Hhat_para,
+                        std::make_tuple("q2")),
+
+                make_observable("B->K^*::re_H_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_H_long,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*::im_H_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_H_long,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*::abs_H_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_H_long,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*::abs_Hhat_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_Hhat_long,
+                        std::make_tuple("q2")),
+            }
+
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
 
     // B_q -> V l^+l^-
     // {{{
@@ -1447,6 +1596,16 @@ namespace eos
 
                 // B_q -> V l^+ l^-
                 make_b_to_v_ll_group(),
+
+                // B_q -> P
+                make_b_to_p_group(),
+
+                // B_q -> V
+                make_b_to_v_group(),
+
+                // B_q -> M charmonium
+                make_b_to_p_charmonium_group(),
+                make_b_to_v_charmonium_group(),
 
                 // Lambda_b -> Lambda l^+ l^-
                 make_lambdab_to_lambda_ll_group(),
