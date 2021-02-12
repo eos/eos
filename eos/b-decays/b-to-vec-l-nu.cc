@@ -256,6 +256,10 @@ namespace eos
 
         bool cp_conjugate;
 
+        SwitchOption opt_int_points;
+
+        int int_points;
+
         inline std::string _process() const
         {
             switch (opt_q.value()[0])
@@ -288,7 +292,9 @@ namespace eos
             m_B(p["mass::B_" + opt_q.value()], u),
             m_V(p["mass::D_" + opt_q.value() + "^*"], u),
             mu(p["mu"], u),
-            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
+            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+            opt_int_points(o, "integration-points", {"256", "4096"}, "256"),
+            int_points(destringify<int>(opt_int_points.value()))
         {
             form_factors = FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors", "BSZ2015"), p, o);
 
@@ -367,7 +373,7 @@ namespace eos
         {
             std::function<std::array<double, 12> (const double &)> integrand(std::bind(&Implementation::_differential_angular_observables, this, std::placeholders::_1));
             // second argument of integrate1D is some power of 2
-            return integrate1D(integrand, 256, q2_min, q2_max);
+            return integrate1D(integrand, int_points, q2_min, q2_max);
         }
 
         inline b_to_dstar_l_nu::AngularObservables differential_angular_observables(const double & q2) const
