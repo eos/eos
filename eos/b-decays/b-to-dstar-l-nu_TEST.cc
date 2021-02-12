@@ -49,6 +49,7 @@ class BToVectorLeptonNeutrinoTest :
         virtual void run() const
         {
             // comparison with Martin Jung in 3/2/1 model
+            // l = electron
             {
                 Parameters p = Parameters::Defaults();
 
@@ -91,13 +92,16 @@ class BToVectorLeptonNeutrinoTest :
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    }
+                    { "form-factors",  "HQET"    },
+                    { "integration-points",    "4096"    }
                 };
 
                 BToVectorLeptonNeutrino d(p, o);
 
                 const double eps = 1e-3;
-                TEST_CHECK_NEARLY_EQUAL(33.323,       d.integrated_branching_ratio(0.001, 10.689), eps);
+                // Christoph Bobeth: Adjusted test case because increased number of integration points
+                //                   in numerical integration from 256 -> 4096
+                TEST_CHECK_NEARLY_EQUAL( 33.3247,     d.integrated_branching_ratio(0.001, 10.689), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.546,       d.integrated_f_L(0.001, 10.689),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.409302220, d.integrated_S1c(0.001, 10.689),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_S1s(0.001, 10.689),  eps);
@@ -114,6 +118,7 @@ class BToVectorLeptonNeutrinoTest :
             }
 
             // comparison with Martin Jung in 3/2/1 model
+            // l = tau
             {
                 Parameters p = Parameters::Defaults();
 
@@ -155,7 +160,8 @@ class BToVectorLeptonNeutrinoTest :
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },
-                    { "form-factors",  "HQET"    }
+                    { "form-factors",  "HQET"    },
+                    { "integration-points",    "4096"    }
                 };
 
                 BToVectorLeptonNeutrino d(p, o);
@@ -175,6 +181,86 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL(/*-*/0.0,          d.integrated_S7 (3.157, 10.689),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_S8 (3.157, 10.689),  eps);
                 TEST_CHECK_NEARLY_EQUAL(/*-*/0.0,          d.integrated_S9 (3.157, 10.689),  eps);
+            }
+
+            // New physics comparison with Martin Jung:
+            {
+                Parameters p = Parameters::Defaults();
+
+                p["B(*)->D(*)::xi'(1)@HQET"].set(-1.10422);
+                p["B(*)->D(*)::xi''(1)@HQET"].set(2* 0.912531);
+                p["B(*)->D(*)::xi'''(1)@HQET"].set(6* (-0.565251));
+                p["B(*)->D(*)::chi_2(1)@HQET"].set(-0.0648414);
+                p["B(*)->D(*)::chi_2'(1)@HQET"].set(-0.0138642);
+                p["B(*)->D(*)::chi_2''(1)@HQET"].set(-0.0850267);
+                p["B(*)->D(*)::chi_3'(1)@HQET"].set(0.0380865);
+                p["B(*)->D(*)::chi_3''(1)@HQET"].set(-0.104527);
+                p["B(*)->D(*)::eta(1)@HQET"].set(0.626659);
+                p["B(*)->D(*)::eta'(1)@HQET"].set(0.0402494);
+                p["B(*)->D(*)::eta''(1)@HQET"].set(-0.338511);
+                p["B(*)->D(*)::l_1(1)@HQET"].set(0.178431);
+                p["B(*)->D(*)::l_1'(1)@HQET"].set(-6.99412);
+                p["B(*)->D(*)::l_2(1)@HQET"].set(-1.58674);
+                p["B(*)->D(*)::l_2'(1)@HQET"].set(-3.32927);
+                p["B(*)->D(*)::l_3(1)@HQET"].set(-4.0127);
+                p["B(*)->D(*)::l_3'(1)@HQET"].set(6.64143);
+                p["B(*)->D(*)::l_4(1)@HQET"].set(-2.22468);
+                p["B(*)->D(*)::l_4'(1)@HQET"].set(-0.607232);
+                p["B(*)->D(*)::l_5(1)@HQET"].set(4.79295);
+                p["B(*)->D(*)::l_5'(1)@HQET"].set(-2.06147);
+                p["B(*)->D(*)::l_6(1)@HQET"].set(1.95851);
+                p["B(*)->D(*)::l_6'(1)@HQET"].set(1.22043);
+
+                p["CKM::abs(V_cb)"].set(1.0);
+                p["mass::e"].set(0.00000000000001);
+                p["B(*)->D(*)::a@HQET"].set(1.000);
+                p["mass::B_d"].set(5.27942);
+                p["mass::D_u^*"].set(2.01000);
+                p["mass::D_d^*"].set(2.01000);
+                p["life_time::B_d"].set(1.520e-12);
+ 
+                p["b->cmunumu::Re{cVL}"].set(+1.2);
+                p["b->cmunumu::Im{cVL}"].set(+0.0);
+                p["b->cmunumu::Re{cVR}"].set(-0.4*1.2);
+                p["b->cmunumu::Im{cVR}"].set(+0.2*1.2);
+                p["b->cmunumu::Re{cSL}"].set(+0.2*1.2);
+                p["b->cmunumu::Im{cSL}"].set(+0.6*1.2);
+                p["b->cmunumu::Re{cSR}"].set(+0.8*1.2);
+                p["b->cmunumu::Im{cSR}"].set(+0.3*1.2);
+                p["b->cmunumu::Re{cT}"].set(-0.1*1.2);
+                p["b->cmunumu::Im{cT}"].set(+0.2*1.2);
+
+                p["mu"].set(2.295);  // to get m_b,c in amp_P comparable to Martin
+
+                Options o{
+                    { "l",             "mu"      },
+                    { "model",         "WilsonScan" },
+                    { "q",             "d"       },
+                    { "z-order-lp",    "3"       },
+                    { "z-order-slp",   "2"       },
+                    { "z-order-sslp",  "1"       },
+                    { "form-factors",  "HQET"    },
+                    { "integration-points",    "4096"    }
+                };
+
+                BToVectorLeptonNeutrino d(p, o);
+
+                const double eps = 1e-3;
+                const double q2min = p["mass::mu"]* p["mass::mu"];
+                const double q2max = 10.689;
+                // 
+                TEST_CHECK_NEARLY_EQUAL( 0.362439,  d.integrated_S1c(q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.268109,  d.integrated_S1s(q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.228862,  d.integrated_S2c(q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0375834, d.integrated_S2s(q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0600368, d.integrated_S3 (q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0897816, d.integrated_S4 (q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0837827, d.integrated_S5 (q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0716409, d.integrated_S6c(q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0433597, d.integrated_S6s(q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0205058, d.integrated_A7 (q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0113015, d.integrated_A8 (q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.013735,  d.integrated_A9 (q2min, q2max), eps);
             }
 
             // SM tests cf. [DSD2014]
@@ -212,6 +298,7 @@ class BToVectorLeptonNeutrinoTest :
                 oo.set("model", "WilsonScan");
                 oo.set("form-factors", "BSZ2015");
                 oo.set("q", "d");
+                oo.set("integration-points", "4096");
 
                 BToVectorLeptonNeutrino d(p1, oo);
 
@@ -301,6 +388,7 @@ class BToVectorLeptonNeutrinoTest :
                 Options oo;
                 oo.set("model", "WilsonScan");
                 oo.set("form-factors", "BSZ2015");
+                oo.set("integration-points", "4096");
 
                 BToVectorLeptonNeutrino d(p3, oo);
 
