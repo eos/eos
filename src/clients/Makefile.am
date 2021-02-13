@@ -16,7 +16,6 @@ libcli_a_SOURCES = \
 
 bin_PROGRAMS = \
 	eos-evaluate \
-	eos-find-mode \
 	eos-list-constraints \
 	eos-list-observables \
 	eos-list-parameters \
@@ -24,8 +23,7 @@ bin_PROGRAMS = \
 	eos-print-polynomial \
 	eos-propagate-uncertainty \
 	eos-sample-mcmc \
-	eos-sample-events-mcmc \
-	eos-scan-mc
+	eos-sample-events-mcmc
 noinst_PROGRAMS = \
 	integrated \
 	observables
@@ -56,10 +54,6 @@ endif
 
 eos_evaluate_SOURCES = eos-evaluate.cc
 
-eos_find_mode_SOURCES = eos-find-mode.cc
-eos_find_mode_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
-eos_find_mode_LDADD = $(LDADD) $(GSL_LDFLAGS) $(MINUIT2_LDFLAGS)
-
 eos_list_constraints_SOURCES = eos-list-constraints.cc
 eos_list_constraints_CXXFLAGS = $(AM_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
 
@@ -82,10 +76,6 @@ eos_sample_mcmc_LDADD = $(LDADD) $(GSL_LDFLAGS)
 eos_sample_events_mcmc_SOURCES = eos-sample-events-mcmc.cc
 eos_sample_events_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
 eos_sample_events_mcmc_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS)
-
-eos_scan_mc_SOURCES = eos-scan-mc.cc
-eos_scan_mc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(MINUIT2_CXXFLAGS)
-eos_scan_mc_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) -lMinuit2 $(MINUIT2_LDFLAGS)
 
 integrated_SOURCES = integrated.cc
 

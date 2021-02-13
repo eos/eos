@@ -36,22 +36,8 @@
 #include <gsl/gsl_multimin.h>
 #include <gsl/gsl_vector.h>
 
-#if HAVE_MINUIT2
-namespace ROOT
-{
-    namespace Minuit2
-    {
-        class FunctionMinimum;
-    }
-}
-#endif
-
 namespace eos
 {
-#if HAVE_MINUIT2
-    struct MinuitAdapter;
-#endif
-
     class LogPosterior :
         public Density
     {
@@ -210,11 +196,6 @@ namespace eos
             std::pair<std::vector<double>, double>
             optimize(const std::vector<double> & initial_guess, const OptimizationOptions & options);
 
-#if HAVE_MINUIT2
-            const ROOT::Minuit2::FunctionMinimum &
-            optimize_minuit(const std::vector<double> & initial_guess, const OptimizationOptions & options);
-#endif
-
         private:
             /*!
              * Find index of definition of parameter
@@ -251,63 +232,55 @@ namespace eos
 
             /// names of all parameters. prevent using a parameter twice
             std::set<std::string> _parameter_names;
-
-#if HAVE_MINUIT2
-            /// Adapter to let minuit operate on posterior
-            MinuitAdapter * _minuit;
-#endif
     };
 
-        // todo move optimization into separate class
-        struct LogPosterior::OptimizationOptions
-        {
-                /// Options are: "migrad", "minimize", "scan", "simplex" from minuit2
-                std::string algorithm;
+     // todo move optimization into separate class
+     struct LogPosterior::OptimizationOptions
+     {
+             /// Keep the value of nuisance parameters with a flat prior fixed at the current value during optimization,
+             /// to avoid flat directions that cause Migrad to fail.
+             bool fix_flat_nuisance;
 
-                /// Keep the value of nuisance parameters with a flat prior fixed at the current value during optimization,
-                /// to avoid flat directions that cause Migrad to fail.
-                bool fix_flat_nuisance;
+             /// Fraction of parameter range, in [0,1].
+             /// Useful only for simplex method
+             VerifiedRange<double> initial_step_size;
 
-                /// Fraction of parameter range, in [0,1].
-                /// Useful only for simplex method
-                VerifiedRange<double> initial_step_size;
+             /// If algorithm doesn't converge before, quit
+             /// after maximum_iterations.
+             unsigned maximum_iterations;
 
-                /// If algorithm doesn't converge before, quit
-                /// after maximum_iterations.
-                unsigned maximum_iterations;
+             /*!
+              * If non-zero, perform MCMC iterations first,
+              * before Minuit2 is invoked from the last point of the chain.
+              *
+              * @note This is only useful when call from MarkovChainSampler,
+              *       further control of the chain is taken from the MarkovChainSampler::Config object.
+              */
+             bool mcmc_pre_run;
 
-                /*!
-                 * If non-zero, perform MCMC iterations first,
-                 * before Minuit2 is invoked from the last point of the chain.
-                 *
-                 * @note This is only useful when call from MarkovChainSampler,
-                 *       further control of the chain is taken from the MarkovChainSampler::Config object.
-                 */
-                bool mcmc_pre_run;
+             /*!
+              *  Once the algorithm has shrunk the probe
+              *  simplex below this size, convergence is declared.
+              *
+              *  For minuit, it is just their tolerance parameter
+              */
+             VerifiedRange<double> tolerance;
 
-                /*!
-                 *  Once the algorithm has shrunk the probe
-                 *  simplex below this size, convergence is declared.
-                 *
-                 *  For minuit, it is just their tolerance parameter
-                 */
-                VerifiedRange<double> tolerance;
+             /*!
+              * When comparing two modes found by minuit to decide whether they correspond
+              * to the same mode, the splitting_tolerance decides how far
+              * in relative units their distance may be.
+              */
+             VerifiedRange<double> splitting_tolerance;
 
-                /*!
-                 * When comparing two modes found by minuit to decide whether they correspond
-                 * to the same mode, the splitting_tolerance decides how far
-                 * in relative units their distance may be.
-                 */
-                VerifiedRange<double> splitting_tolerance;
+             /// 0 - low, 1 - medium, 2 - high precision
+             VerifiedRange<unsigned> strategy_level;
 
-                /// 0 - low, 1 - medium, 2 - high precision
-                VerifiedRange<unsigned> strategy_level;
+             static OptimizationOptions Defaults();
 
-                static OptimizationOptions Defaults();
-
-            private:
-                OptimizationOptions();
-        };
+         private:
+             OptimizationOptions();
+     };
 
      struct LogPosterior::Output
      {

@@ -22,11 +22,6 @@
 
 #include <eos/statistics/log-posterior_TEST.hh>
 
-#ifdef HAVE_MINUIT2
-#include <Minuit2/FunctionMinimum.h>
-#include <Minuit2/MnUserParameterState.h>
-#endif
-
 using namespace test;
 using namespace eos;
 
@@ -196,38 +191,6 @@ class LogPosteriorTest :
                 TEST_CHECK_NEARLY_EQUAL(optimum[2], 1e-2  , 1e-5);
                 TEST_CHECK_NEARLY_EQUAL(optimum[3], 172   , 2e-5);
                 TEST_CHECK_NEARLY_EQUAL(optimum[4], 511e-6, 1e-5);
-
-#ifdef HAVE_MINUIT2
-                /* try again with Minuit */
-
-                //somehow minuit doesn't coverge with 4.1001
-                initial_guess[0] = 3.2;
-
-                // use lowest accuracy
-                auto config = LogPosterior::OptimizationOptions::Defaults();
-                config.strategy_level = 0;
-                const ROOT::Minuit2::FunctionMinimum & data_at_min = log_posterior.optimize_minuit(initial_guess, config);
-
-                // check parameters at mode
-                auto u_par = data_at_min.UserParameters();
-                TEST_CHECK_NEARLY_EQUAL(u_par.Value(0), 4.2   , 1e-4);
-                TEST_CHECK_NEARLY_EQUAL(u_par.Value(1), 1.2   , 1e-4);
-                TEST_CHECK_NEARLY_EQUAL(u_par.Value(2), 1e-2  , 1e-4);
-                TEST_CHECK_NEARLY_EQUAL(u_par.Value(3), 172   , 1e-4);
-                TEST_CHECK_NEARLY_EQUAL(u_par.Value(4), 511e-6, 1e-4);
-
-                // should find input uncertainties
-                auto u_cov = data_at_min.UserCovariance();
-                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(0,0)) , 0.10   , 5e-3);
-                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(1,1)) , 0.05   , 5e-3);
-                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(2,2)) , 5e-3   , 5e-5);
-                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(3,3)) , 1      , 5e-2);
-                TEST_CHECK_NEARLY_EQUAL(sqrt(u_cov(4,4)) , 5e-7   , 5e-9);
-
-                // no correlation present
-                TEST_CHECK_NEARLY_EQUAL(u_cov(0,1) / sqrt(fabs(u_cov(0,0) * u_cov(1,1))), 0   , 5e-3);
-                TEST_CHECK_NEARLY_EQUAL(u_cov(1,3) / sqrt(fabs(u_cov(1,1) * u_cov(3,3))), 0   , 2e-2);
-#endif
             }
 
             // goodness_of_fit
