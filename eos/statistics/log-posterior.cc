@@ -25,20 +25,7 @@
 #include <eos/utils/log.hh>
 #include <eos/utils/power_of.hh>
 
-#ifdef HAVE_MINUIT2
-#include <Minuit2/FCNBase.h>
-#include <Minuit2/FunctionMinimum.h>
-#include <Minuit2/MnMigrad.h>
-#include <Minuit2/MnMinimize.h>
-#include <Minuit2/MnScan.h>
-#include <Minuit2/MnSimplex.h>
-#endif
-
 #include <gsl/gsl_cdf.h>
-
-#ifdef HAVE_MINUIT2
-using namespace ROOT::Minuit2;
-#endif
 
 namespace eos
 {
@@ -51,65 +38,15 @@ namespace eos
         }
     };
 
-#ifdef HAVE_MINUIT2
-   struct MinuitAdapter :
-       public ROOT::Minuit2::FCNBase
-   {
-       LogPosterior log_posterior;
-
-       MnUserParameters user_parameters;
-
-       // stores results of minimization
-       std::shared_ptr<FunctionMinimum> data_at_minimum;
-
-       MinuitAdapter(LogPosterior & log_posterior) :
-           log_posterior(log_posterior)
-       {
-           // define parameters and limits
-           for (auto i = log_posterior.parameter_descriptions().begin(), i_end = log_posterior.parameter_descriptions().end() ; i != i_end ; ++i)
-           {
-               // name, value, error(?), min, max
-               user_parameters.Add(i->parameter->name(), (i->min + i->max) / 2.0,  i->max - i->min, i->min, i->max);
-           }
-       }
-
-       virtual ~MinuitAdapter()
-       {
-       }
-
-       virtual double Up() const
-       {
-           return 0.5;
-       }
-
-       virtual double operator()(const std::vector<double> & parameter_values) const
-       {
-           // copy parameter values
-           auto p = parameter_values.begin();
-           for (auto i = log_posterior.parameter_descriptions().begin(), i_end = log_posterior.parameter_descriptions().end() ; i != i_end ; ++i, ++p)
-           {
-               i->parameter->set(*p);
-           }
-           return -log_posterior.log_posterior();
-       }
-   };
-#endif
-
-   LogPosterior::LogPosterior(const LogLikelihood & log_likelihood) :
+    LogPosterior::LogPosterior(const LogLikelihood & log_likelihood) :
         _log_likelihood(log_likelihood),
         _parameters(log_likelihood.parameters()),
         _informative_priors(0)
     {
-#if HAVE_MINUIT2
-        _minuit = nullptr;
-#endif
     }
 
     LogPosterior::~LogPosterior()
     {
-#if HAVE_MINUIT2
-       delete _minuit;
-#endif
     }
 
    bool
@@ -683,85 +620,6 @@ namespace eos
 
    }
 
-#ifdef HAVE_MINUIT2
-   const ROOT::Minuit2::FunctionMinimum &
-   LogPosterior::optimize_minuit(const std::vector<double> & initial_guess, const LogPosterior::OptimizationOptions & options)
-   {
-       if (! _minuit)
-       {
-           _minuit = new MinuitAdapter(*this);
-       }
-       // copy values
-       MnUserParameters & mn_par(_minuit->user_parameters);
-       unsigned j = 0;
-       for (auto i = initial_guess.begin(), i_end = initial_guess.end() ; i != i_end ; ++i, ++j)
-       {
-           mn_par.SetValue(j, *i);
-       }
-
-       // fix nuisance parameters with a flat prior to avoid flat directions causing Minuit to fail
-       if (options.fix_flat_nuisance)
-       {
-           // loop over parameters and find those nuisance parameters with flat prior
-           unsigned i = 0;
-           for (auto d = _parameter_descriptions.cbegin(), i_end = _parameter_descriptions.cend() ; d != i_end ; ++d, ++i)
-           {
-               if ( ! d->nuisance)
-                   continue;
-
-               auto p = log_prior(d->parameter->name());
-
-               // dirty hack: check for flat prior from the variance: works only if this dimension is not partitioned
-               if (std::fabs(p->variance() - power_of<2>(d->max - d->min) / 12.0) < 1e-15)
-               {
-                   // to simplify mode identification, the fixed values agree between different chains
-                   mn_par.SetValue(i, d->min);
-                   mn_par.Fix(i);
-               }
-           }
-       }
-
-       // create MIGRAD minimizer
-       std::shared_ptr<ROOT::Minuit2::MnApplication> minimizer;
-
-       if (options.algorithm == "migrad")
-       {
-           minimizer.reset(new MnMigrad(*_minuit, mn_par, options.strategy_level));
-       }
-       // uses minuit, reverts to simplex if it failed, then call minuit again
-       if (options.algorithm == "minimize")
-       {
-           minimizer.reset(new MnMinimize(*_minuit, mn_par, options.strategy_level));
-       }
-       if (options.algorithm == "scan")
-       {
-           minimizer.reset(new MnScan(*_minuit, mn_par, options.strategy_level));
-       }
-       if (options.algorithm == "simplex")
-       {
-           minimizer.reset(new MnSimplex(*_minuit, mn_par, options.strategy_level));
-       }
-
-       if (! minimizer)
-           throw InternalError("LogPosterior::optimize_minut: invalid algorithm option: " + options.algorithm);
-
-       // minimize and save results
-       _minuit->data_at_minimum.reset(new FunctionMinimum((*minimizer)(options.maximum_iterations, options.tolerance)));
-
-       // release parameters again
-       if (options.fix_flat_nuisance)
-       {
-           unsigned i = 0;
-           for (auto d = _parameter_descriptions.cbegin(), i_end = _parameter_descriptions.cend() ; d != i_end ; ++d, ++i)
-           {
-               mn_par.Release(i);
-           }
-       }
-
-       return *_minuit->data_at_minimum;
-   }
-#endif
-
     const std::vector<ParameterDescription> &
     LogPosterior::parameter_descriptions() const
     {
@@ -769,7 +627,6 @@ namespace eos
     }
 
     LogPosterior::OptimizationOptions::OptimizationOptions():
-        algorithm("minimize"),
         fix_flat_nuisance(false),
         initial_step_size(0, 1, 0.1),
         maximum_iterations(8000),
