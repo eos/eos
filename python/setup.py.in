@@ -40,6 +40,11 @@ setup(
         '_eos_libs': ['lib*.so*'],
         '_eos_data': ['constraints/*.yaml', 'parameters/*.yaml'],
     },
+    scripts=[
+        'bin/eos-analysis',
+        'bin/eos-list-references',
+        'bin/eos-plot',
+    ],
     include_package_data=True,
     ext_modules=[Extension('_eos', sources=['dummy.cc'])],
     python_requires='~=3.6'
