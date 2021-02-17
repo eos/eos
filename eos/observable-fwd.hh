@@ -26,6 +26,8 @@ namespace eos
 {
     class Observable;
 
+    class CacheableObservable;
+
     using ObservablePtr = std::shared_ptr<Observable>;
 
     class ObservableEntry;

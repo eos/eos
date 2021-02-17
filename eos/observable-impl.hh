@@ -65,7 +65,7 @@ namespace eos
         }
     };
 
-    /* Helper functions to create ObservableEntry */
+    /* Helper functions to create ObservableEntry for a regular observable */
     template <typename Decay_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable(const char * name,
             double (Decay_::* function)(const Args_ & ...) const,
@@ -108,6 +108,20 @@ namespace eos
         QualifiedName qn(name);
 
         return std::make_pair(qn, make_concrete_observable_entry(qn, latex, function, kinematics_names, forced_options));
+    }
+
+    /* Helper functions to create ObservableEntry for a cacheable observable */
+    template <typename Decay_, typename Tuple_, typename ... Args_>
+    std::pair<QualifiedName, ObservableEntryPtr> make_cacheable_observable(const char * name,
+            const char * latex,
+            const typename Decay_::IntermediateResult * (Decay_::* prepare_fn)(const Args_ & ...) const,
+            double (Decay_::* evaluate_fn)(const typename Decay_::IntermediateResult *) const,
+            const Tuple_ & kinematics_names,
+            const Options & forced_options = Options{})
+    {
+        QualifiedName qn(name);
+
+        return std::make_pair(qn, make_concrete_cacheable_observable_entry(qn, latex, prepare_fn, evaluate_fn, kinematics_names, forced_options));
     }
 
     /* ratios of regular observables */
