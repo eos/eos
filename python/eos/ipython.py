@@ -78,20 +78,39 @@ def __format_ObservableEntry(e):
 
 def __format_Observable(obs):
     name = obs.name()
+    kinematics = [(kv.name(), kv.evaluate()) for kv in obs.kinematics()]
+    first_kinematics = "<td colspan=2>none</td>"
+    further_kinematics = ""
+    span = 1
+    if len(kinematics) > 0:
+        first_kinematics = "<th>{kvn}</th><td>{kvv}</td>".format(kvn=kinematics[0][0], kvv=kinematics[0][1])
+        further_kinematics = "\n".join([
+            "<th>{kvn}</th><td>{kvv}</td>".format(kvn=kvn, kvv=kvv)
+            for kvn, kvv in kinematics[1:]
+        ])
+        span = len(kinematics)
 
     return("""
         <table>
             <tr>
                 <th>{name}</th>
-                <td>(eos.Observable)</td>
+                <td colspan="2">(eos.Observable)</td>
             </tr>
             <tr>
+                <th rowspan="{span}">kinematics</th>
+                {first_kinematics}
+            </tr>
+            {further_kinematics}
+            <tr>
                 <th>current value</th>
-                <td><tt>{value:1.4g}</tt></td>
+                <td colspan="2"><tt>{value:1.4g}</tt></td>
             </tr>
         </table>""".format(
             name=name,
-            value=obs.evaluate()
+            value=obs.evaluate(),
+            first_kinematics=first_kinematics,
+            span=span,
+            further_kinematics=further_kinematics
     ))
 
 def __format_GoodnessOfFit(gof):
