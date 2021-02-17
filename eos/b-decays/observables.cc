@@ -29,6 +29,7 @@
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/b-decays/inclusive-b-to-u.hh>
 #include <eos/b-decays/properties.hh>
+#include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
 namespace eos
