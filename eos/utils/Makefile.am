@@ -147,6 +147,7 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
 	apply_TEST \
+	cacheable-observable_TEST \
 	cartesian-product_TEST \
 	ckm_scan_model_TEST \
 	derivative_TEST \
@@ -187,6 +188,8 @@ LDADD = \
 check_PROGRAMS = $(TESTS)
 
 apply_TEST_SOURCES = apply_TEST.cc
+
+cacheable_observable_TEST_SOURCES = cacheable_observable_TEST.cc
 
 cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 
