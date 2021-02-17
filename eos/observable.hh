@@ -62,6 +62,25 @@ namespace eos
     };
 
     /**
+     * CacheableObservable is internally used to handle such observables
+     * that have a computationally expensive intermediate result.
+     */
+    class CacheableObservable :
+        public Observable
+    {
+        public:
+            struct IntermediateResult {};
+
+            virtual const IntermediateResult * prepare() const = 0;
+
+            virtual double evaluate(const IntermediateResult *) const = 0;
+
+            virtual double evaluate() const = 0;
+
+            virtual ObservablePtr make_cached_observable(const CacheableObservable *) const = 0;
+    };
+
+    /**
      * ObservableSection is used to keep track of one or more ObservableGroup objects, and groups
      * them together under a common name. Examples of observable sections include semileptonic B decays and form factors.
      */
