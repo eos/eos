@@ -79,7 +79,8 @@ namespace eos
             /// Retrieve the number of independent predictions from the cache.
             unsigned size() const;
 
-            using Iterator = ObservableSet::Iterator;
+            struct IteratorTag;
+            using Iterator = WrappedForwardIterator<IteratorTag, ObservablePtr>;
             Iterator begin() const;
             Iterator end() const;
             ///@}
@@ -87,6 +88,8 @@ namespace eos
             /// Clone this cache whilst keeping the observables in the given order, i.e. all ids remain valid.
             ObservableCache clone(const Parameters & parameters) const;
     };
+
+    extern template class WrappedForwardIterator<ObservableCache::IteratorTag, ObservablePtr>;
 }
 
 #endif
