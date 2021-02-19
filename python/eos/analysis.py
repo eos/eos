@@ -347,7 +347,7 @@ class Analysis:
         log_target = pypmc.tools.indicator.merge_function_with_indicator(self.log_pdf, ind, -np.inf)
 
         # create PMC sampler
-        sampler = pypmc.sampler.importance_sampling.ImportanceSampler(log_target, log_proposal, save_target_values=True)#, rng=rng)
+        sampler = pypmc.sampler.importance_sampling.ImportanceSampler(log_target, log_proposal, save_target_values=True, rng=rng)
         generating_components = []
 
         eps = np.finfo(float).eps
