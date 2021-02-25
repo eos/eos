@@ -162,15 +162,10 @@ HDF5
   the \gls{HDF5} \cite{HDF5}, in version 1.8.11 or higher;
 FFTW3
   the C subroutine library for computing the discrete Fourier transform;
-Minuit2
-  the physics analysis tool for function minimization, in version 5.28.00 or higher.
 
 
 If you have administrator access to the computers on which you use EOS,
 we recommend you install the above packages via your system's software management system.
-The ``Minuit2`` is excempted from this recommendation, since its Debian/Ubuntu packages are affected by an unresolved bug.
-Installing a prebuilt version of ``Minuit2`` is discussed in `Installing Minuit2 via APT`_.
-Installing ``Minuit2`` from source is discussed in `Installing Minuit2 from Source`_.
 
 On a Debian/Ubuntu based operating system you can install the prerequisite software with the ``APT`` package management system,
 by running the following commands
@@ -184,8 +179,6 @@ by running the following commands
   # for the 'Scientific Software'
   sudo apt-get install libgsl0-dev libhdf5-serial-dev libfftw3-dev
 
-Do not install the ``Minuit2`` software via ``APT``, since there is presently a bug in the Debian/Ubuntu packages,
-which prevents EOS linking against the needed libraries.
 We recommend that you upgrade ``matplotlib`` to the latest available version by running the following command:
 
 ::
@@ -193,70 +186,6 @@ We recommend that you upgrade ``matplotlib`` to the latest available version by 
   # for the 'pip3' command
   apt-get install python3-pip
   pip3 install matplotlib --user --upgrade
-
-
-Installing Minuit2 via APT
---------------------------
-
-There are pre-built binary package files for the ``Minuit2`` software available for the Ubuntu long-term-support releases 16.04 and 18.04 via the Packagecloud web service.
-To use the EOS third-party repository, create a new file ``eos.list`` within the directory ``/etc/apt/sources.list.d`` with the following contents:
-
-::
-
-  deb https://packagecloud.io/eos/eos/ubuntu/ DIST main
-  deb-src https://packagecloud.io/eos/eos/ubuntu/ DIST main
-
-where you must replace the metavariable ``DIST`` with either ``xenial`` or ``bionic``, depending on your version of Ubuntu.
-Add our repository's GPG key by making sure that the ``curl`` command line utility is installed, and
-
-::
-
-  curl -L "https://packagecloud.io/eos/eos/gpgkey" 2> /dev/null | sudo apt-key add -
-
-You can then install the binary package through
-
-::
-
-  apt-get update
-  apt-get install minuit2
-
-You can then proceed with the EOS installation from source in `Installing EOS`_.
-
-
-Installing Minuit2 from Source
-------------------------------
-
-We recommend to Minuit2 to be installed below ``/usr/local``, if you have administrator access to your computer.
-In preparation for the installation, run the following command
-
-::
-
-  export PREFIX=/usr/local
-
-Instead, if you do not have administrator access to your computer, we recommend to ``Minuit2`` to be installed below ``$HOME/.local``.
-In preparation for the installation, run the following command
-
-::
-
-  export PREFIX=${HOME}/.local
-
-When installing ``Minuit2`` from source, you need to disable the automatic support for parallelization with the OpenMP framework.
-To this end, run the following commands
-
-::
-
-  mkdir /tmp/Minuit2
-  pushd /tmp/Minuit2
-  wget http://www.cern.ch/mathlibs/sw/5_28_00/Minuit2/Minuit2-5.28.00.tar.gz
-  tar zxf Minuit2-5.28.00.tar.gz
-  pushd Minuit2-5.28.00
-  ./configure --prefix=$PREFIX --disable-openmp
-  make all
-  make install # Use 'sudo make install' if you install e.g. to 'PREFIX=/usr/local'
-               # or a similarly privileged directory
-  popd
-  popd
-  rm -R /tmp/Minuit2
 
 
 Installing the dependencies on macOS with Homebrew and PyPi
@@ -278,7 +207,7 @@ To install the packages, run the following commands in a shell:
   # for the 'Python Software'
   brew install python3 boost-python3
   # for the 'Scientific Software'
-  brew install gsl hdf5 minuit2
+  brew install gsl hdf5
 
 You can now use the ``pip3`` command to install the remaining packages from the \package{PyPi} package index.
 
@@ -319,17 +248,9 @@ To do this, run the following command
 
   export PREFIX=${HOME}/.local
 
-Next, you must configure the EOS build using the ``configure`` script:
-
-1. To use the EOS Python interface you must pass ``--enable-python`` to the call ``configure``.
-   The default is \cli{--disable-python}.
-
-2. To use the ROOT software's internal copy of Minuit2 you must pass ``--with-minuit2=root`` to the call to ``configure``.
-
-3. Otherwise, if you have installed ``Minuit2`` from source to a non-standard location you must specify its installation
-   prefix by passing on ``--with-minuit2=MINUIT2-INSTALLATION-PREFIX``.
-   If you followed the instructions in this manual, then the metavariable ``MINUIT2-INSTALLATION-PREFIX``
-   corresponds to either ``/usr/local`` or ``$HOME/.local``.
+Next, you must configure the EOS build using the ``configure`` script.
+To use the EOS Python interface you must pass ``--enable-python`` to the call ``configure``.
+The default is \cli{--disable-python}.
 
 The recommended configuration is achieved by running the following command
 
