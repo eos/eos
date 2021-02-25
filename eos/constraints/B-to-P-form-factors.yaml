@@ -53,7 +53,7 @@ B->pi::f_++f_0+f_T@FNALMILC2015A:
 B->pi::f_++f_0@RBCUKQCD:2015A:
     type: MultivariateGaussian(Covariance)
     dim: 6
-    observables: 
+    observables:
         - 'B->pi::f_+(q2)'
         - 'B->pi::f_+(q2)'
         - 'B->pi::f_+(q2)'
