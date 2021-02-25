@@ -1013,6 +1013,13 @@ LHCb:2020A:
     id: oai:arXiv.org:2003.08453
   inspire-id: Aaij:2018xjy
   title: Measurement of the shape of the B_s^0 -> D_s^{*-}\mu^{+}\nu_{\mu} differential decay rate
+LMvD:2021A:
+  authors: Leljak, Domagoj and Melic, Blazenka and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2102.07233
+  inspire-id: Leljak:2021vte
+  title: The $\bar{B}\to \pi$ form factors from QCD and their impact on $|V_{ub}|$
 LT:2007A:
   authors: Ligeti, Zoltan and Tackmann, Frank J.
   eprint:
