@@ -106,6 +106,16 @@ namespace eos
                         std::make_tuple("q2_mu_min", "q2_mu_max"),
                         Options{ { "U", "u" }, { "l", "mu"} }),
 
+                make_observable("B->pilnu::A_FB(q2)", R"(A_{\text{FB}}(B\to \pi\ell^-\bar\nu)(q^2))",
+                        &BToPseudoscalarLeptonNeutrino::differential_a_fb_leptonic,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "u" } }),
+
+                make_observable("B->pilnu::A_FB", R"(A_{\text{FB}}(B\to \pi\ell^-\bar\nu))",
+                        &BToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" } }),
+
                 make_observable("B->pilnu::P(q2)", R"(dP(B\to\pi\ell^-\bar\nu)/dq^2)",
                         &BToPseudoscalarLeptonNeutrino::differential_pdf_q2,
                         std::make_tuple("q2"),
@@ -113,6 +123,16 @@ namespace eos
 
                 make_observable("B->pilnu::P(q2_min,q2_max)", R"(P(B\to\pi\ell^-\bar\nu))",
                         &BToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" } }),
+
+                make_observable("B->pilnu::A_l",
+                        &BToPseudoscalarLeptonNeutrino::integrated_lepton_polarization,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" } }),
+
+                make_observable("B->pilnu::F_H",
+                        &BToPseudoscalarLeptonNeutrino::integrated_flat_term,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "U", "u" } }),
 
