@@ -768,6 +768,13 @@ GR:2004A:
   authors: Goldberger, J. and Roweis, S.
   url: http://eprints.pascal-network.org/archive/00001565/
   title: Hierarchical clustering of a mixture model
+HFLAV:2019A:
+  authors: Amhis, Yasmine Sara and others
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1909.12524
+  inspire-id: Amhis:2019ckw
+  title: 'Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of 2018'
 HLMW:2005A:
   authors: Huber, Tobias and Lunghi, Enrico and Misiak, Mikolaj and Wyler, Daniel
   eprint:
