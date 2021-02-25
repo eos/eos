@@ -358,19 +358,19 @@ class Analysis:
             generating_components.append(origins)
             samples = sampler.samples[:]
             last_weights = np.copy(sampler.weights[-1][:, 0])
-            for i, w in enumerate(last_weights):
-                if w <= 0 or np.isnan(w):
-                    last_weights[i] = eps
             normalized_last_weights = last_weights / np.sum(last_weights)
+            for i, w in enumerate(normalized_last_weights):
+                if not np.isfinite(w) or w <= 0:
+                    normalized_last_weights[i] = eps
             last_entropy = -1.0 * np.dot(np.log(normalized_last_weights), normalized_last_weights)
             last_perplexity = np.exp(last_entropy) / len(normalized_last_weights)
             eos.info('Perplexity of the last samples after sampling in step {}: {}'.format(step, last_perplexity))
             weights = sampler.weights[:][:, 0]
             adjusted_weights = np.copy(weights)
-            for i, w in enumerate(adjusted_weights):
-                if w <= 0 or np.isnan(w):
-                    adjusted_weights[i] = eps
             normalized_weights = adjusted_weights / np.sum(adjusted_weights)
+            for i, w in enumerate(normalized_weights):
+                if not np.isfinite(w) or w <= 0:
+                    normalized_weights[i] = eps
             entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
             perplexity = np.exp(entropy) / len(normalized_weights)
             eos.info('Perplexity of all previous samples after sampling in step {}: {}'.format(step, perplexity))
