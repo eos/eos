@@ -276,7 +276,7 @@ namespace eos
 
             return 2.0 * amp.NF * amp.p * (
                        std::norm(amp.h_0) * s_thl_2
-                       + (1.0 - amp.v) * power_of<2>(std::abs(amp.h_0) * c_theta_l - std::abs(amp.h_tS))
+                       + (1.0 - amp.v) * std::norm(amp.h_0 * c_theta_l - amp.h_tS)
                        + 8.0 * ( ((2.0 - amp.v) + amp.v * c_2_thl) * std::norm(amp.h_T)
                            - std::sqrt(1.0 - amp.v) * std::real(amp.h_T * (std::conj(amp.h_0) - std::conj(amp.h_tS) * c_theta_l)))
                    );
@@ -314,12 +314,14 @@ namespace eos
         }
 
         // obtained using cf. [DDS:2014A], eq. (12), defined as int_1^0 d^2Gamma - int_0^-1 d^2Gamma
+        // in eq. (12) from cf. [DDS:2014A], (H0 * cos(theta) - HtS)^2 we interpret as |H0 * cos(theta) - HtS|^2
+        // crosschecked against [BFNT:2019A] and [STTW:2013A]
         double numerator_differential_a_fb_leptonic(const double & s) const
         {
             b_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
 
             return - 4.0 * amp.NF * amp.p * (
-                       std::abs(amp.h_0) * std::abs(amp.h_tS) * (1.0 - amp.v)
+                       std::real(amp.h_0 * std::conj(amp.h_tS)) * (1.0 - amp.v)
                        - 4.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_tS))
                    );
         }
