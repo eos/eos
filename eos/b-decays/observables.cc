@@ -82,6 +82,22 @@ namespace eos
                         std::make_tuple("q2"),
                         Options{ { "U", "u" }, { "l", "mu" } }),
 
+                make_observable_ratio("B->pilnu::R_pi_p", R"(R_{\pi})",
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_p,
+                        std::make_tuple("q2_tau_min", "q2_tau_max"),
+                        Options{ { "U", "u" }, { "l", "tau"} },
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_mu_min", "q2_mu_max"),
+                        Options{ { "U", "u" }, { "l", "mu"} }),
+
+                make_observable_ratio("B->pilnu::R_pi_0", R"(R_{\pi})",
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_0,
+                        std::make_tuple("q2_tau_min", "q2_tau_max"),
+                        Options{ { "U", "u" }, { "l", "tau"} },
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_mu_min", "q2_mu_max"),
+                        Options{ { "U", "u" }, { "l", "mu"} }),
+
                 make_observable_ratio("B->pilnu::R_pi", R"(R_{\pi})",
                         &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_tau_min", "q2_tau_max"),
