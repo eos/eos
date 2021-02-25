@@ -137,6 +137,13 @@ BF:2001A:
   inspire-id: Beneke:2000wa
   title: Symmetry breaking corrections to heavy to light $B$ meson form-factors at large
     recoil
+BFNT:2019A:
+  authors: Becirevic, D. and Fedele, M. and Nisandzic I. and Tayduganov, A.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1907.02257
+  inspire-id: Becirevic:2019tpx
+  title: Lepton Flavor Universality tests through angular observables of $\bar{B} \to D^{(*)} \ell \bar{nu}$ decay modes
 BFS:2001A:
   authors: Beneke, M. and Feldmann, T. and Seidel, D.
   eprint:
