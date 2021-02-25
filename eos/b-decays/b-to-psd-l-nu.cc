@@ -295,6 +295,24 @@ namespace eos
                    );
         }
 
+        double normalized_differential_decay_width_p(const double & s) const
+        {
+            b_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+
+            return 4.0 / 3.0 * amp.NF * amp.p * (
+                       std::norm(amp.h_0) * (3.0 - amp.v)
+                       );
+        }
+
+        double normalized_differential_decay_width_0(const double & s) const
+        {
+            b_to_psd_l_nu::Amplitudes amp(this->amplitudes(s));
+
+            return 4.0 / 3.0 * amp.NF * amp.p * (
+                       3.0 * std::norm(amp.h_t) * (1.0 - amp.v)
+                   );
+        }
+
         // obtained using cf. [DDS:2014A], eq. (12), defined as int_1^0 d^2Gamma - int_0^-1 d^2Gamma
         double numerator_differential_a_fb_leptonic(const double & s) const
         {
@@ -446,6 +464,24 @@ namespace eos
     }
 
     // normalized (|V_Ub|=1) integrated decay_width
+    double
+    BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_p(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_p,
+                                                             _imp.get(), std::placeholders::_1);
+
+        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+    }
+
+    double
+    BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_0(const double & s_min, const double & s_max) const
+    {
+        std::function<double (const double &)> f = std::bind(&Implementation<BToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_0,
+                                                             _imp.get(), std::placeholders::_1);
+
+        return integrate<GSL::QAGS>(f, s_min, s_max, _imp->int_config);
+    }
+
     double
     BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width(const double & s_min, const double & s_max) const
     {

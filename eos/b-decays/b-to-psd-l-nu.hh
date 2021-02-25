@@ -61,6 +61,8 @@ namespace eos
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
             double normalized_integrated_decay_width(const double & q2_min, const double & q2_max) const;
+            double normalized_integrated_decay_width_0(const double & q2_min, const double & q2_max) const;
+            double normalized_integrated_decay_width_p(const double & q2_min, const double & q2_max) const;
 
             // PDF
             double differential_pdf_q2(const double & q2) const;
