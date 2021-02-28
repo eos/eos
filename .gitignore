@@ -24,6 +24,8 @@ stamp-h1
 *.pyc
 *.pyo
 *.json
+debian/control-*
+!debian/control-*.in
 
 # Tests
 *_TEST
