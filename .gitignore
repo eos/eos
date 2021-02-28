@@ -46,3 +46,9 @@ python/setup.py
 # Distributions
 eos-*/
 eos-*.t*
+
+# patch files
+*.orig
+*.rej
+*.diff
+*.patch
