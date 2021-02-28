@@ -202,10 +202,6 @@ hdf5_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
 hdf5_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
 hdf5_TEST_LDADD = $(LDADD) -lhdf5
 
-equation_solver_TEST_SOURCES = equation_solver_TEST.cc
-equation_solver_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS)
-equation_solver_TEST_LDFLAGS = $(GSL_LDFLAGS) $(MINUIT2_LDFLAGS)
-
 indirect_iterator_TEST_SOURCES = indirect-iterator_TEST.cc
 
 integrate_TEST_SOURCES = integrate_TEST.cc
