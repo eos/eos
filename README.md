@@ -1,3 +1,9 @@
+[![PyPI version](https://badge.fury.io/py/eoshep.svg)](https://badge.fury.io/py/eoshep)
+[![Build Status](https://github.com/eos/eos/actions/workflows/manylinux-build+check+deploy.yaml/badge.svg)](https://github.com/eos/eos/actions/workflows/manylinux-build+check+deploy.yaml)
+[![Build Status](https://github.com/eos/eos/actions/workflows/ubuntu-build+check+deploy.yaml/badge.svg)](https://github.com/eos/eos/actions/workflows/ubuntu-build+check+deploy.yaml)
+
+![EOS logo](https://eos.github.io/public/eos-logo-160x90.png)
+
 EOS - A HEP Program for Flavour Observables
 ===========================================
 
@@ -18,7 +24,6 @@ as a small set of external software libraries:
  - the GNU Scientific Library (libgsl),
  - a subset of the BOOST C++ libraries,
  - the Hierarchical Data Format v5 library (libdf5),
- - the minimizer Minuit2 (as of ROOT version 5.14.00 or later),
  - the Population Monte Carlo (PMC) library pmclib (optional),
  - the Python 3 interpreter.
 
