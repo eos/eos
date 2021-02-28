@@ -166,6 +166,7 @@ jobs:
                 for f in ../_src/src/scripts/* ; do
                     cp -r $f bin/
                 done
+                cp ../_src/README.md ./
                 $PYTHON setup.py build -e '/usr/bin/env python3'
                 for f in $(find build/ -name "_eos.*.so") ; do
                     cp _eos.so ${f}
