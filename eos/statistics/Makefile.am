@@ -113,8 +113,7 @@ log_likelihood_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 log_likelihood_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 log_posterior_TEST_SOURCES = log-posterior_TEST.cc log-posterior_TEST.hh
-log_posterior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(MINUIT2_CXXFLAGS)
-log_posterior_TEST_LDFLAGS = $(MINUIT2_LDFLAGS)
+log_posterior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 
 log_prior_TEST_SOURCES = log-prior_TEST.cc
 log_prior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
