@@ -221,7 +221,12 @@ namespace eos
                 if (other->_options != this->_options)
                     return { nullptr };
 
-                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = _argument_tuple;
+                /*
+                 * The values tuple contains a pointer to the Decay_ object, which owns the persistent pointer
+                 * to the intermediate result. We make sure to use _other->_argument tuples, to ensure that
+                 * the correct pointer to the intermediate result is used.
+                 */
+                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type ...> values = other->_argument_tuple;
 
                 return ObservablePtr(new ConcreteCachedObservable<Decay_, Args_ ...>(_name, _parameters, _kinematics, _options, other->_decay, apply(other->_prepare_fn, values), _prepare_fn, _evaluate_fn, _kinematics_names));
             }
