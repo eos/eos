@@ -83,7 +83,14 @@ namespace eos
             ///@name Evaluate the first normalized moment of the formfactor.
             ///@{
 
-            virtual complex<double> normalized_moment_A(const double & /*q2*/) const { return moments_not_implemented(); };
+            virtual complex<double> normalized_moment_A(const double &) const { return moments_not_implemented(); };
+
+            ///@}
+
+            ///@name Ratio between non local and local formfactors
+            ///@{
+
+            virtual complex<double> ratio_plus(const double & q2) const = 0;
 
             ///@}
 
@@ -124,24 +131,12 @@ namespace eos
 
             ///@}
 
-            ///@name FormFactor normalized to form factor as observable
-            ///@{
-
-            double re_ratio_plus(const double & q2) const;
-
-            double im_ratio_plus(const double & q2) const;
-
-            ///@}
-
             ///@name FormFactor as observable
             ///@{
 
             double re_H_plus(const double & q2) const;
-
             double im_H_plus(const double & q2) const;
-
             double abs_H_plus(const double & q2) const;
-
             double arg_H_plus(const double & q2) const;
 
             double re_Hhat_plus(const double & q2) const;
@@ -154,10 +149,19 @@ namespace eos
             ///@{
 
             double re_normalized_moment_A(const double & q2) const;
-
             double im_normalized_moment_A(const double & q2) const;
 
             ///@}
+
+            ///@name Ratio between non local and local formfactors
+            ///@{
+
+            double re_ratio_plus(const double & q2) const;
+            double im_ratio_plus(const double & q2) const;
+            double abs_ratio_plus(const double & q2) const;
+
+            ///@}
+
     };
     extern template class NonlocalFormFactorObservable<nff::BToK, nff::PToP>;
 
@@ -190,10 +194,8 @@ namespace eos
 
             virtual complex<double> H_perp(const double & q2) const = 0;
             virtual complex<double> Hhat_perp(const double & q2) const = 0;
-
             virtual complex<double> H_para(const double & q2) const = 0;
             virtual complex<double> Hhat_para(const double & q2) const = 0;
-
             virtual complex<double> H_long(const double & q2) const = 0;
             virtual complex<double> Hhat_long(const double & q2) const = 0;
 
@@ -203,20 +205,27 @@ namespace eos
             ///@{
 
             virtual complex<double> normalized_moment_V1(const double & /*q2*/) const { return moments_not_implemented(); };
-
             virtual complex<double> normalized_moment_V2(const double & /*q2*/) const { return moments_not_implemented(); };
-
             virtual complex<double> normalized_moment_V23(const double & /*q2*/) const { return moments_not_implemented(); };
 
             ///@}
+
+
+            ///@name Evaluate the ratio between non-local and local formfactors.
+            ///@{
+
+            virtual complex<double> ratio_perp(const double & q2) const = 0;
+            virtual complex<double> ratio_para(const double & q2) const = 0;
+            virtual complex<double> ratio_long(const double & q2) const = 0;
+
+            ///@}
+
 
             ///@name Evaluate the residue of the formfactor on the J/psi pole.
             ///@{
 
             virtual complex<double> H_perp_residue_jpsi() const { return jpsi_residues_not_implemented(); };
-
             virtual complex<double> H_para_residue_jpsi() const { return jpsi_residues_not_implemented(); };
-
             virtual complex<double> H_long_residue_jpsi() const { return jpsi_residues_not_implemented(); };
 
             ///@}
@@ -225,9 +234,7 @@ namespace eos
             ///@{
 
             virtual complex<double> H_perp_residue_psi2s() const { return psi2s_residues_not_implemented(); };
-
             virtual complex<double> H_para_residue_psi2s() const { return psi2s_residues_not_implemented(); };
-
             virtual complex<double> H_long_residue_psi2s() const { return psi2s_residues_not_implemented(); };
 
             ///@}
@@ -255,48 +262,20 @@ namespace eos
 
             ///@}
 
-            ///@name FormFactor normalized to form factor as observable
-            ///@{
-
-            double re_ratio_perp(const double & q2) const;
-
-            double im_ratio_perp(const double & q2) const;
-
-            double re_ratio_para(const double & q2) const;
-
-            double im_ratio_para(const double & q2) const;
-
-            double re_ratio_zero(const double & q2) const;
-
-            double im_ratio_zero(const double & q2) const;
-
-            ///@}
-
             ///@name FormFactor as observable
             ///@{
 
             double re_H_perp(const double & q2) const;
-
             double im_H_perp(const double & q2) const;
-
             double abs_H_perp(const double & q2) const;
-
             double arg_H_perp(const double & q2) const;
-
             double re_H_para(const double & q2) const;
-
             double im_H_para(const double & q2) const;
-
             double abs_H_para(const double & q2) const;
-
             double arg_H_para(const double & q2) const;
-
             double re_H_long(const double & q2) const;
-
             double im_H_long(const double & q2) const;
-
             double abs_H_long(const double & q2) const;
-
             double arg_H_long(const double & q2) const;
 
             double re_Hhat_perp(const double & q2) const;
@@ -315,17 +294,26 @@ namespace eos
             ///@{
 
             double re_normalized_moment_V1(const double & q2) const;
-
             double im_normalized_moment_V1(const double & q2) const;
-
             double re_normalized_moment_V2(const double & q2) const;
-
             double im_normalized_moment_V2(const double & q2) const;
-
             double re_normalized_moment_V23(const double & q2) const;
-
             double im_normalized_moment_V23(const double & q2) const;
 
+            ///@}
+
+            ///@name Ratio between non local and local formfactors
+            ///@{
+
+            double re_ratio_perp(const double & q2) const;
+            double im_ratio_perp(const double & q2) const;
+            double abs_ratio_perp(const double & q2) const;
+            double re_ratio_para(const double & q2) const;
+            double im_ratio_para(const double & q2) const;
+            double abs_ratio_para(const double & q2) const;
+            double re_ratio_long(const double & q2) const;
+            double im_ratio_long(const double & q2) const;
+            double abs_ratio_long(const double & q2) const;
             ///@}
     };
     extern template class NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>;
