@@ -30,6 +30,8 @@
 
 namespace eos
 {
+    using std::abs;
+
     namespace nff
     {
         struct BToK
@@ -56,12 +58,17 @@ namespace eos
                     return 0.0;
                 }
 
-                virtual complex<double> Hhat_plus(const double & q2) const
+                virtual complex<double> Hhat_plus(const double &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> normalized_moment_A(const double & q2) const
+                virtual complex<double> ratio_plus(const double &) const
+                {
+                    return 0.0;
+                }
+
+                virtual complex<double> normalized_moment_A(const double &) const
                 {
                     return 0.0;
                 }
@@ -85,7 +92,7 @@ namespace eos
             public NonlocalFormFactor<nff::PToP>
         {
             public:
-                std::shared_ptr<Model> model;
+                std::shared_ptr<FormFactors<PToP>> form_factors;
 
                 //Polynomial expansion parameters
                 UsedParameter re_alpha_0_plus;
@@ -114,6 +121,8 @@ namespace eos
                 UsedParameter chiOPE;
 
                 GvDV2020(const Parameters & p, const Options & o) :
+                    form_factors(FormFactorFactory<PToP>::create(stringify(Process_::label) + "::" + o.get("form-factors", "BSZ2015"), p)),
+
                     re_alpha_0_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_0^plus}@GvDV2020"], *this),
                     im_alpha_0_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_0^plus}@GvDV2020"], *this),
                     re_alpha_1_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_1^plus}@GvDV2020"], *this),
@@ -134,6 +143,7 @@ namespace eos
                     t_s(p["b->sccbar::t_s"], *this),
                     chiOPE(p["b->sccbar::chiOPE@GvDV2020"], *this)
                 {
+                    this->uses(*form_factors);
                 }
 
                 ~GvDV2020() = default;
@@ -156,13 +166,14 @@ namespace eos
 
                     const double a = phiParam[0], b = phiParam[1], c = phiParam[2], d = phiParam[3];
 
-                    const complex<double> Nlambda = 4. * M_PI * pow(m_B2, 0.5*(a-b+c+d) - 1.) * pow( 2.*(4.*m_D02-s_0)/3./chi, 0.5); //(C6)
-                    const complex<double> phi1 = -pow(2.*pow((4.*m_D02-Q2)*(4.*m_D02-s_0), 0.5) + 8.*m_D02 - Q2 - s_0, 0.5) /
-                                                (2.*pow((4.*m_D02-Q2)*(4.*m_D02-s_0), 0.5) + 8.*m_D02 + Q2*(z-1.) - s_0*(z+1.)); //(C7)
-                    const complex<double> phi2 = pow(m_B4*pow(z-1., 4.) - 2.*m_B2*pow(z-1., 2)*(-16*m_D02*z + m_P2*pow(z-1., 2) + s_0*pow(z+1., 2)) +
-                                                pow(16*m_D02*z + m_P2*pow(z-1., 2) - s_0*pow(z+1., 2), 2), 0.5);//(C8)
-                    const complex<double> phi3 = pow(8*m_D02 + 4*pow(4*m_D04-s_0*m_D02, 0.5) - s_0, 0.5)/(-8*m_D02 - 4*pow(4*m_D04-s_0*m_D02, 0.5) + s_0*(z+1.)); //(C9)
-                    const complex<double> phi4 = pow(s_0 * pow(z+1., 2.) - 16.*z*m_D02, -0.5); //(C10)
+                    const double Nlambda = 4 * M_PI * pow(m_B2, 0.5 * (a - b + c + d) - 1.) * pow(2 * (4 * m_D02 - s_0) / 3 / chi, 0.5); //(C6)
+                    const complex<double> phi1 = -pow(2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 - Q2 - s_0, 0.5) /
+                                                (2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 + Q2 * (z - 1.) - s_0 * (z + 1.)); //(C7)
+                    const complex<double> phi2 = pow(m_B4 * pow(z - 1., 4) - 2 * m_B2 * pow(z - 1., 2) * (-16 * m_D02 * z + m_P2 * pow(z - 1., 2) + s_0 * pow(z + 1., 2)) +
+                                                pow(16 * m_D02 * z + m_P2 * pow(z - 1., 2) - s_0 * pow(z + 1., 2), 2), 0.5);//(C8)
+                    const complex<double> phi3 = pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) /
+                                                (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0*(z+1.)); //(C9)
+                    const complex<double> phi4 = pow(s_0 * pow(z + 1., 2.) - 16. * z * m_D02, -0.5); //(C10)
 
                     return Nlambda * pow(1.+z, 0.5) * pow(1.-z, a-b+c+d-1.5) * pow(phi1, a) * pow(phi2, 0.5*b) * pow(phi3, c) * pow(phi4, d); //(C5)
                 }
@@ -176,14 +187,14 @@ namespace eos
 
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * pow(m_D0, 2);
-                    const auto zBP     = eos::nff_utils::z(pow(m_B+m_P, 2), s_p, s_0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,         s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2,        s_p, s_0);
+                    const auto zBP     = eos::nff_utils::z(pow(m_B + m_P, 2), s_p, s_0);
+                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,           s_p, s_0);
+                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2,          s_p, s_0);
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_Jpsi2, -0.5) * pow(pow(s_p - m_Jpsi2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
                     return eos::nff_utils::PGvDV2020(z_Jpsi, zBP, alpha_0, alpha_1, alpha_2) / phi(m_Jpsi2, phiParam) *
-                            (1 - norm(z_Jpsi)) * (1. - z_Jpsi*std::conj(z_psi2S)) / (z_Jpsi - z_psi2S) / dzds;
+                            (1 - norm(z_Jpsi)) * (1. - z_Jpsi * std::conj(z_psi2S)) / (z_Jpsi - z_psi2S) / dzds;
                 }
 
                 // Residue of H at s = m_psi2S2 computed as the residue wrt z -z_psi2S divided by dz/ds evaluated at s = m_psi2S2
@@ -195,14 +206,14 @@ namespace eos
 
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * pow(m_D0, 2);
-                    const auto zBP     = eos::nff_utils::z(pow(m_B+m_P, 2), s_p, s_0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,         s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2,        s_p, s_0);
+                    const auto zBP     = eos::nff_utils::z(pow(m_B + m_P, 2), s_p, s_0);
+                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,           s_p, s_0);
+                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2,          s_p, s_0);
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_psi2S2, -0.5) * pow(pow(s_p - m_psi2S2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
                     return eos::nff_utils::PGvDV2020(z_psi2S, zBP, alpha_0, alpha_1, alpha_2) / phi(m_psi2S2, phiParam) *
-                            (1 - norm(z_psi2S)) * (1. - z_psi2S*std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
+                            (1 - norm(z_psi2S)) * (1. - z_psi2S * std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
                 }
 
 
@@ -236,7 +247,7 @@ namespace eos
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * pow(m_D0, 2);
                     const auto z       = eos::nff_utils::z(q2, s_p, s_0);
-                    const auto zBP     = eos::nff_utils::z(pow(m_B+m_P, 2), s_p, s_0);
+                    const auto zBP     = eos::nff_utils::z(pow(m_B + m_P, 2), s_p, s_0);
 
                     return eos::nff_utils::PGvDV2020(z, zBP, alpha_0, alpha_1, alpha_2);
                 }
@@ -264,9 +275,16 @@ namespace eos
                     return H_residue_psi2s(phiParam, alpha_0, alpha_1, alpha_2);
                 }
 
-                virtual complex<double> normalized_moment_A(const double & q2) const
+                virtual complex<double> normalized_moment_A(const double &) const
                 {
                     return 0.0;
+                }
+
+                virtual complex<double> ratio_plus(const double & q2) const
+                {
+                    const double F_plus = form_factors->f_p(q2);
+
+                    return H_plus(q2) / F_plus;
                 }
 
                 static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
@@ -307,7 +325,7 @@ namespace eos
             public NonlocalFormFactor<nff::PToP>
         {
             public:
-                std::shared_ptr<Model> model;
+                std::shared_ptr<FormFactors<PToP>> form_factors;
 
                 //Polynomial expansion parameters
                 UsedParameter re_alpha_0_plus;
@@ -337,6 +355,8 @@ namespace eos
                 UsedParameter chiOPE;
 
                 GRvDV2021(const Parameters & p, const Options & o) :
+                    form_factors(FormFactorFactory<PToP>::create(stringify(Process_::label) + "::" + o.get("form-factors", "BSZ2015"), p)),
+
                     re_alpha_0_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_0^plus}@GRvDV2021"], *this),
                     im_alpha_0_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_0^plus}@GRvDV2021"], *this),
                     re_alpha_1_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_1^plus}@GRvDV2021"], *this),
@@ -358,6 +378,7 @@ namespace eos
                     t_s(p["b->sccbar::t_s"], *this),
                     chiOPE(p["b->sccbar::chiOPE@GRvDV2021"], *this)
                 {
+                    this->uses(*form_factors);
                 }
 
                 ~GRvDV2021() = default;
@@ -381,16 +402,17 @@ namespace eos
 
                     const double a = phiParam[0], b = phiParam[1], c = phiParam[2], d = phiParam[3], e = phiParam[4];
 
-                    const complex<double> Nlambda = 4. * M_PI * pow(m_B2, 0.5*(a-b+c+d-e) - 1.) * pow( 2.*(4.*m_D02-s_0)/3./chi, 0.5);
-                    const complex<double> phi1 = -pow(2.*pow((4.*m_D02-Q2)*(4.*m_D02-s_0), 0.5) + 8.*m_D02 - Q2 - s_0, 0.5) /
-                                                (2.*pow((4.*m_D02-Q2)*(4.*m_D02-s_0), 0.5) + 8.*m_D02 + Q2*(z-1.) - s_0*(z+1.));
-                    const complex<double> phi2 = pow(m_B4*pow(z-1., 4.) - 2.*m_B2*pow(z-1., 2)*(-16*m_D02*z + m_P2*pow(z-1., 2) + s_0*pow(z+1., 2)) +
-                                                pow(16*m_D02*z + m_P2*pow(z-1., 2) - s_0*pow(z+1., 2), 2), 0.5);
-                    const complex<double> phi3 = pow(8*m_D02 + 4*pow(4*m_D04-s_0*m_D02, 0.5) - s_0, 0.5)/(-8*m_D02 - 4*pow(4*m_D04-s_0*m_D02, 0.5) + s_0*(z+1.));
-                    const complex<double> phi4 = pow(s_0 * pow(z+1., 2.) - 16.*z*m_D02, -0.5);
-                    const complex<double> phi5 = pow(s_0 * pow(z+1., 2.) - 16.*z*m_D02 - m_Bsst2*pow(-z+1., 2.), 0.5);
+                    const complex<double> Nlambda = 4. * M_PI * pow(m_B2, 0.5 * (a - b + c + d - e) - 1.) * pow(2. * (4. * m_D02 - s_0) / 3. / chi, 0.5);
+                    const complex<double> phi1 = -pow(2. * pow((4. * m_D02 - Q2) * (4. * m_D02 - s_0), 0.5) + 8. * m_D02 - Q2 - s_0, 0.5) /
+                                                (2. * pow((4. * m_D02 - Q2) * (4. * m_D02 - s_0), 0.5) + 8. * m_D02 + Q2 * (z - 1.) - s_0*(z + 1.));
+                    const complex<double> phi2 = pow(m_B4 * pow(z - 1., 4.) - 2. * m_B2 * pow(z - 1., 2) * (-16 * m_D02 * z + m_P2 * pow(z - 1., 2) +
+                                                s_0 * pow(z + 1., 2)) + pow(16 * m_D02 * z + m_P2 * pow(z - 1., 2) - s_0 * pow(z + 1., 2), 2), 0.5);
+                    const complex<double> phi3 = pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) /
+                                                (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0 * (z + 1.));
+                    const complex<double> phi4 = pow(s_0 * pow(z + 1., 2.) - 16. * z * m_D02, -0.5);
+                    const complex<double> phi5 = pow(s_0 * pow(z + 1., 2.) - 16. * z * m_D02 - m_Bsst2 * pow(-z + 1., 2.), 0.5);
 
-                    return Nlambda * pow(1.+z, 0.5) * pow(1.-z, a-b+c+d-e-1.5) * pow(phi1, a) * pow(phi2, 0.5*b) * pow(phi3, c) * pow(phi4, d) * pow(phi5, e);
+                    return Nlambda * pow(1. + z, 0.5) * pow(1. - z, a - b + c + d - e - 1.5) * pow(phi1, a) * pow(phi2, 0.5*b) * pow(phi3, c) * pow(phi4, d) * pow(phi5, e);
                 }
 
                 // Residue of H at s = m_Jpsi2 computed as the residue wrt z -z_Jpsi divided by dz/ds evaluated at s = m_Jpsi2
@@ -402,13 +424,13 @@ namespace eos
 
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * pow(m_D0, 2);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,         s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2,        s_p, s_0);
+                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
+                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_Jpsi2, -0.5) * pow(pow(s_p - m_Jpsi2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
                     return eos::nff_utils::P(z_Jpsi, alpha_0, alpha_1, alpha_2) / phi(m_Jpsi2, phiParam) *
-                            (1 - norm(z_Jpsi)) * (1. - z_Jpsi*std::conj(z_psi2S)) / (z_Jpsi - z_psi2S) / dzds;
+                            (1 - norm(z_Jpsi)) * (1. - z_Jpsi * std::conj(z_psi2S)) / (z_Jpsi - z_psi2S) / dzds;
                 }
 
                 // Residue of H at s = m_psi2S2 computed as the residue wrt z -z_psi2S divided by dz/ds evaluated at s = m_psi2S2
@@ -420,13 +442,13 @@ namespace eos
 
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * pow(m_D0, 2);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,         s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2,        s_p, s_0);
+                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
+                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_psi2S2, -0.5) * pow(pow(s_p - m_psi2S2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
                     return eos::nff_utils::P(z_psi2S, alpha_0, alpha_1, alpha_2) / phi(m_psi2S2, phiParam) *
-                            (1 - norm(z_psi2S)) * (1. - z_psi2S*std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
+                            (1 - norm(z_psi2S)) * (1. - z_psi2S * std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
                 }
 
 
@@ -486,9 +508,16 @@ namespace eos
                     return H_residue_psi2s(phiParam, alpha_0, alpha_1, alpha_2);
                 };
 
-                virtual complex<double> normalized_moment_A(const double & q2) const
+                virtual complex<double> normalized_moment_A(const double &) const
                 {
                     return 0.0;
+                }
+
+                virtual complex<double> ratio_plus(const double & q2) const
+                {
+                    const double F_plus = form_factors->f_p(q2);
+
+                    return H_plus(q2) / F_plus;
                 }
 
                 static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
@@ -608,6 +637,27 @@ namespace eos
     NonlocalFormFactorObservable<Process_, nff::PToP>::abs_Hhat_plus(const double & q2) const
     {
         return abs(this->_imp->nff->Hhat_plus(q2));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::re_ratio_plus(const double & q2) const
+    {
+        return real(this->_imp->nff->ratio_plus(q2));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::im_ratio_plus(const double & q2) const
+    {
+        return imag(this->_imp->nff->ratio_plus(q2));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::abs_ratio_plus(const double & q2) const
+    {
+        return abs(this->_imp->nff->ratio_plus(q2));
     }
 
     template <typename Process_>
