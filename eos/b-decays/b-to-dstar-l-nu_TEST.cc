@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019, 2021 Danny van Dyk
  * Copyright (c) 2021 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
@@ -103,18 +103,19 @@ class BToVectorLeptonNeutrinoTest :
                 //                   in numerical integration from 256 -> 4096
                 TEST_CHECK_NEARLY_EQUAL( 33.3247,     d.integrated_branching_ratio(0.001, 10.689), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.546,       d.integrated_f_L(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.409302220, d.integrated_S1c(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_S1s(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.409302220, d.integrated_S2c(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.085174445, d.integrated_S2s(0.001, 10.689),  eps);
+                auto ir = d.prepare(0.001, 10.689);
+                TEST_CHECK_NEARLY_EQUAL( 0.409302220, d.integrated_S1c(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_S1s(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.409302220, d.integrated_S2c(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.085174445, d.integrated_S2s(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.134468151, d.integrated_S3 (0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.231808464, d.integrated_S4 (0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.165381861, d.integrated_S5 (0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S6c(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.200153929, d.integrated_S6s(0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S7 (0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S8 (0.001, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S9 (0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.231808464, d.integrated_S4 (ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.165381861, d.integrated_S5 (ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S6c(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.200153929, d.integrated_S6s(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S7 (ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S8 (ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S9 (ir),  eps);
             }
 
             // comparison with Martin Jung in 3/2/1 model
@@ -169,18 +170,19 @@ class BToVectorLeptonNeutrinoTest :
                 const double eps = 1e-3;
                 TEST_CHECK_NEARLY_EQUAL( 8.213,        d.integrated_branching_ratio(3.157, 10.689), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.475,        d.integrated_f_L(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.4325856250, d.integrated_S1c(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2779590234, d.integrated_S1s(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.1287773345, d.integrated_S2c(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0471441750, d.integrated_S2s(3.157, 10.689),  eps);
+                auto ir = d.prepare(3.157, 10.689);
+                TEST_CHECK_NEARLY_EQUAL( 0.4325856250, d.integrated_S1c(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2779590234, d.integrated_S1s(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.1287773345, d.integrated_S2c(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0471441750, d.integrated_S2s(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.0819412032, d.integrated_S3 (3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(/*-*/0.1057578408, d.integrated_S4 (3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.2056068494, d.integrated_S5 (3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(/*+*/-0.2766922602, d.integrated_S6c(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(/*-*/0.1598442669, d.integrated_S6s(3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(/*-*/0.0,          d.integrated_S7 (3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_S8 (3.157, 10.689),  eps);
-                TEST_CHECK_NEARLY_EQUAL(/*-*/0.0,          d.integrated_S9 (3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1057578408, d.integrated_S4 (ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.2056068494, d.integrated_S5 (ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.2766922602, d.integrated_S6c(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.1598442669, d.integrated_S6s(ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_S7 (ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_S8 (ir),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0,          d.integrated_S9 (ir),  eps);
             }
 
             // New physics comparison with Martin Jung:
@@ -249,18 +251,19 @@ class BToVectorLeptonNeutrinoTest :
                 const double q2min = p["mass::mu"]* p["mass::mu"];
                 const double q2max = 10.689;
                 // 
-                TEST_CHECK_NEARLY_EQUAL( 0.362439,  d.integrated_S1c(q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.268109,  d.integrated_S1s(q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.228862,  d.integrated_S2c(q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0375834, d.integrated_S2s(q2min, q2max), eps);
+                auto ir = d.prepare(q2min, q2max);
+                TEST_CHECK_NEARLY_EQUAL( 0.362439,  d.integrated_S1c(ir), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.268109,  d.integrated_S1s(ir), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.228862,  d.integrated_S2c(ir), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0375834, d.integrated_S2s(ir), eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.0600368, d.integrated_S3 (q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0897816, d.integrated_S4 (q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0837827, d.integrated_S5 (q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0716409, d.integrated_S6c(q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0433597, d.integrated_S6s(q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.0205058, d.integrated_A7 (q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0113015, d.integrated_A8 (q2min, q2max), eps);
-                TEST_CHECK_NEARLY_EQUAL( 0.013735,  d.integrated_A9 (q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0897816, d.integrated_S4 (ir), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0837827, d.integrated_S5 (ir), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0716409, d.integrated_S6c(ir), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0433597, d.integrated_S6s(ir), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.0205058, d.integrated_A7 (ir), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0113015, d.integrated_A8 (ir), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.013735,  d.integrated_A9 (ir), eps);
             }
 
             // SM tests cf. [DSD2014]

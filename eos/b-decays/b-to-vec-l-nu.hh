@@ -62,6 +62,8 @@ namespace eos
             double normalized_four_differential_decay_width(const double & q2, const double & c_theta_l, const double & c_theta_d, const double & phi) const;
 
             // Integrated Observables
+            class IntermediateResult;
+            const IntermediateResult * prepare(const double & q2_min, const double & q2_max) const;
             double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
             double integrated_CPave_branching_ratio(const double & q2_min, const double & q2_max) const;
             
@@ -96,31 +98,31 @@ namespace eos
             double integrated_CPave_f_L(const double & q2_min, const double & q2_max) const;
             double integrated_CPave_ftilde_L(const double & q2_min, const double & q2_max) const;
 
-            double integrated_S1c(const double & q2_min, const double & q2_max) const;
-            double integrated_S1s(const double & q2_min, const double & q2_max) const;
-            double integrated_S2c(const double & q2_min, const double & q2_max) const;
-            double integrated_S2s(const double & q2_min, const double & q2_max) const;
-            double integrated_S3 (const double & q2_min, const double & q2_max) const;
-            double integrated_S4 (const double & q2_min, const double & q2_max) const;
-            double integrated_S5 (const double & q2_min, const double & q2_max) const;
-            double integrated_S6c(const double & q2_min, const double & q2_max) const;
-            double integrated_S6s(const double & q2_min, const double & q2_max) const;
-            double integrated_S7 (const double & q2_min, const double & q2_max) const;
-            double integrated_S8 (const double & q2_min, const double & q2_max) const;
-            double integrated_S9 (const double & q2_min, const double & q2_max) const;
+            double integrated_S1c(const IntermediateResult *) const;
+            double integrated_S1s(const IntermediateResult *) const;
+            double integrated_S2c(const IntermediateResult *) const;
+            double integrated_S2s(const IntermediateResult *) const;
+            double integrated_S3 (const double & q2_min, const double & q2_max) const; // Convert once SigmaS3, DeltaS3 are handled
+            double integrated_S4 (const IntermediateResult *) const;
+            double integrated_S5 (const IntermediateResult *) const;
+            double integrated_S6c(const IntermediateResult *) const;
+            double integrated_S6s(const IntermediateResult *) const;
+            double integrated_S7 (const IntermediateResult *) const;
+            double integrated_S8 (const IntermediateResult *) const;
+            double integrated_S9 (const IntermediateResult *) const;
 
-            double integrated_A1c(const double & q2_min, const double & q2_max) const;
-            double integrated_A1s(const double & q2_min, const double & q2_max) const;
-            double integrated_A2c(const double & q2_min, const double & q2_max) const;
-            double integrated_A2s(const double & q2_min, const double & q2_max) const;
-            double integrated_A3 (const double & q2_min, const double & q2_max) const;
-            double integrated_A4 (const double & q2_min, const double & q2_max) const;
-            double integrated_A5 (const double & q2_min, const double & q2_max) const;
-            double integrated_A6c(const double & q2_min, const double & q2_max) const;
-            double integrated_A6s(const double & q2_min, const double & q2_max) const;
-            double integrated_A7 (const double & q2_min, const double & q2_max) const;
-            double integrated_A8 (const double & q2_min, const double & q2_max) const;
-            double integrated_A9 (const double & q2_min, const double & q2_max) const;
+            double integrated_A1c(const IntermediateResult *) const;
+            double integrated_A1s(const IntermediateResult *) const;
+            double integrated_A2c(const IntermediateResult *) const;
+            double integrated_A2s(const IntermediateResult *) const;
+            double integrated_A3 (const IntermediateResult *) const;
+            double integrated_A4 (const IntermediateResult *) const;
+            double integrated_A5 (const IntermediateResult *) const;
+            double integrated_A6c(const IntermediateResult *) const;
+            double integrated_A6s(const IntermediateResult *) const;
+            double integrated_A7 (const IntermediateResult *) const;
+            double integrated_A8 (const IntermediateResult *) const;
+            double integrated_A9 (const IntermediateResult *) const;
 
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
