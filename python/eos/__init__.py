@@ -52,6 +52,11 @@ def info(msg, *args, **kwargs):
 def warn(msg, *args, **kwargs):
     logger.warn(msg, *args, **kwargs)
 
+import time as _time
+import os as _os
+def installation_time():
+    return _time.ctime(_os.path.getmtime(eos.__file__))
+
 __ipython__ = False
 try:
     if __IPYTHON__:
