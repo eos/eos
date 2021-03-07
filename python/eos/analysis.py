@@ -255,10 +255,10 @@ class Analysis:
         """
         import pypmc
         try:
-            from tqdm import tqdm
+            from tqdm.auto import tqdm
             progressbar = tqdm
         except ImportError:
-            progressbar = lambda x: x
+            progressbar = lambda x, **kw: x
 
         ind_lower = np.array([bound[0] for bound in self.bounds])
         ind_upper = np.array([bound[1] for bound in self.bounds])
@@ -280,7 +280,7 @@ class Analysis:
         sampler = pypmc.sampler.markov_chain.AdaptiveMarkovChain(log_target, log_proposal, start_point, save_target_values=True, rng=rng)
 
         # pre run to adapt markov chains
-        for i in range(0, preruns):
+        for i in progressbar(range(0, preruns), desc="Pre-runs", leave=False):
             eos.info('Prerun {} out of {}'.format(i, preruns))
             accept_count = sampler.run(pre_N)
             accept_rate  = accept_count / pre_N * 100
@@ -294,7 +294,7 @@ class Analysis:
         sample_chunk  = sample_total // 100
         sample_chunks = [sample_chunk for i in range(0, 99)]
         sample_chunks.append(sample_total - 99 * sample_chunk)
-        for current_chunk in progressbar(sample_chunks):
+        for current_chunk in progressbar(sample_chunks, desc="Main run", leave=False):
             accept_count = accept_count + sampler.run(current_chunk)
         accept_rate  = accept_count / (N * stride) * 100
         eos.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
@@ -335,10 +335,10 @@ class Analysis:
         """
         import pypmc
         try:
-            from tqdm import tqdm
+            from tqdm.auto import tqdm
             progressbar = tqdm
         except ImportError:
-            progressbar = lambda x: x
+            progressbar = lambda x, **kw: x
 
         ind_lower = np.array([bound[0] for bound in self.bounds])
         ind_upper = np.array([bound[1] for bound in self.bounds])
@@ -353,7 +353,7 @@ class Analysis:
         eps = np.finfo(float).eps
 
         # carry out adaptions
-        for step in progressbar(range(steps)):
+        for step in progressbar(range(steps), desc="Adaptions", leave=False):
             origins = sampler.run(step_N, trace_sort=True)
             generating_components.append(origins)
             samples = sampler.samples[:]
