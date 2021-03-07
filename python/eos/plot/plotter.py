@@ -814,7 +814,16 @@ class Plotter:
             self.weights = None
             if 'data' in item:
                 self.samples = item['data']['samples']
-                self.weights = np.exp(item['data']['log_weights']) if 'log_weights' in item['data'] else None
+
+                if 'weights' in item['data'] and 'log_weights' in item['data']:
+                    raise KeyError("Only one of 'weights' and 'log_weights' must be specified")
+                elif 'weights' in item['data']:
+                    self.weights = item['data']['weights']
+                elif 'log_weights' in item['data']:
+                    self.weights = np.exp(item['data']['log_weights'])
+                else:
+                    self.weights = None
+
             else:
                 h5fname = item['hdf5-file']
                 eos.info('   plotting histogram from file "{}"'.format(h5fname))
@@ -870,7 +879,16 @@ class Plotter:
             self.weights = None
             if 'data' in item:
                 self.samples = item['data']['samples'].T
-                self.weights = np.exp(item['data']['log_weights']) if 'log_weights' in item['data'] else None
+
+                if 'weights' in item['data'] and 'log_weights' in item['data']:
+                    raise KeyError("Only one of 'weights' and 'log_weights' must be specified")
+                elif 'weights' in item['data']:
+                    self.weights = item['data']['weights']
+                elif 'log_weights' in item['data']:
+                    self.weights = np.exp(item['data']['log_weights'])
+                else:
+                    self.weights = None
+
             else:
                 h5fname = item['hdf5-file']
                 eos.info('   plotting 2D KDE from file "{}"'.format(h5fname))
@@ -972,7 +990,16 @@ class Plotter:
             self.weights = None
             if 'data' in item:
                 self.samples = item['data']['samples']
-                self.weights = np.exp(item['data']['log_weights']) if 'log_weights' in item['data'] else None
+
+                if 'weights' in item['data'] and 'log_weights' in item['data']:
+                    raise KeyError("Only one of 'weights' and 'log_weights' must be specified")
+                elif 'weights' in item['data']:
+                    self.weights = item['data']['weights']
+                elif 'log_weights' in item['data']:
+                    self.weights = np.exp(item['data']['log_weights'])
+                else:
+                    self.weights = None
+
             else:
                 h5fname = item['hdf5-file']
                 eos.info('   plotting histogram from file "{}"'.format(h5fname))
