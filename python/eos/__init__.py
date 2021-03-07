@@ -65,5 +65,11 @@ try:
         html_formatter.for_type(Observable, __format_Observable)
         html_formatter.for_type(ObservableEntry, __format_ObservableEntry)
         html_formatter.for_type(GoodnessOfFit, __format_GoodnessOfFit)
+
+        # print logger in notebook
+        import logging
+        logger = logging.getLogger('EOS')
+        logger.setLevel(logging.INFO)
+        logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 except NameError as e:
     pass
