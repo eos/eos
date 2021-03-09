@@ -19,6 +19,7 @@
 
 #include <test/test.hh>
 #include <eos/constraint.hh>
+#include <eos/observable.hh>
 #include <eos/statistics/log-likelihood.hh>
 
 #include <yaml-cpp/yaml.h>
@@ -1010,6 +1011,112 @@ class ConstraintDeserializationTest :
                 TEST_CHECK_NEARLY_EQUAL(llh(), -4.597666149, 1e-8);
             }
             // }}}
+
+            // {{{ UniformBound (correct order)
+            {
+                static const std::string input(
+                    "type: UniformBound\n"
+                    "observable: b->c::Prior[0^+]@CLN\n"
+                    "kinematics: {}\n"
+                    "options: {}"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::UniformBound", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                YAML::Emitter out;
+                entry->serialize(out);
+
+                std::string output(out.c_str());
+
+                TEST_CHECK(input == output);
+            }
+            // }}}
+
+            // {{{ UniformBound (incorrect order)
+            {
+                static const std::string input(
+                    "type: UniformBound\n"
+                    "kinematics: {}\n"
+                    "observable: b->c::Prior[0^+]@CLN\n"
+                    "options: {}"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::UniformBound", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                YAML::Emitter out;
+                entry->serialize(out);
+
+                std::string output(out.c_str());
+
+                TEST_CHECK(input != output);
+            }
+            // }}}
+
+            // {{{ UniformBound (value)
+            {
+                static const std::string input(
+                    "type: UniformBound\n"
+                    "observable: mass::b(MSbar)\n"
+                    "kinematics: {}\n"
+                    "options: {}"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::UniformBound", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                Constraint c = entry->make("Test::UniformBound", Options{ });
+                std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
+                TEST_CHECK_EQUAL(1, blocks.size());
+
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                llh.add(c);
+
+                p["mass::b(MSbar)"] = 0.0;
+                TEST_CHECK_NEARLY_EQUAL(llh(), 0.0, 1e-17);
+
+                p["mass::b(MSbar)"] = 1.0;
+                TEST_CHECK_NEARLY_EQUAL(llh(), 1.0, 1e-17);
+
+                p["mass::b(MSbar)"] = 9.0;
+                TEST_CHECK_NEARLY_EQUAL(llh(), 9.0, 1e-17);
+            }
+            // }}}
+
+            // {{{ UniformBound (value with non-trivial kinematics & options)
+            {
+                // abusing the B->pi form factor to have an observable with non-trivial kinematics and options.
+                static const std::string input(
+                    "type: UniformBound\n"
+                    "observable: B->pi::f_+(q2)\n"
+                    "kinematics: {q2: 1.0}\n"
+                    "options: {form-factors: BSZ2015}"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::UniformBound", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                Constraint c = entry->make("Test::UniformBound", Options{ });
+                std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
+                TEST_CHECK_EQUAL(1, blocks.size());
+
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                llh.add(c);
+
+                ObservablePtr o = Observable::make("B->pi::f_+(q2);form-factors=BSZ2015", p, Kinematics{ { "q2", 1.0 } }, Options{ });
+                TEST_CHECK_NEARLY_EQUAL(llh(), o->evaluate(), 1e-17);
+            }
         }
 } constraint_deserialization_test;
 
