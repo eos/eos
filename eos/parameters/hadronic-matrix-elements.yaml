@@ -3009,7 +3009,7 @@ groups:
           central: +0.12
           min: -0.10
           max: +0.36
-          latex: '$l^_1(1)$'
+          latex: '$l_1(1)$'
       "B(*)->D(*)::l_1'(1)@HQET" :
           central: -5.78
           min: -12.5
@@ -3024,7 +3024,7 @@ groups:
           central: -1.89
           min: -2.26
           max: -1.54
-          latex: '$l^_2(1)$'
+          latex: '$l_2(1)$'
       "B(*)->D(*)::l_2'(1)@HQET" :
           central: -3.14
           min: -9.53
@@ -3039,7 +3039,7 @@ groups:
           central: +0.86
           min: -8.29
           max: +5.17
-          latex: '$l^_3(1)$'
+          latex: '$l_3(1)$'
       "B(*)->D(*)::l_3'(1)@HQET" :
           central: 0.06
           min: -2.96
@@ -3054,7 +3054,7 @@ groups:
           central: -2.02
           min: -3.53
           max: -0.75
-          latex: '$l^_4(1)$'
+          latex: '$l_4(1)$'
       "B(*)->D(*)::l_4'(1)@HQET" :
           central: -0.05
           min: -1.88
@@ -3069,7 +3069,7 @@ groups:
           central: +3.79
           min: +0.16
           max: +5.20
-          latex: '$l^_5(1)$'
+          latex: '$l_5(1)$'
       "B(*)->D(*)::l_5'(1)@HQET" :
           central: -1.40
           min: -2.63
@@ -3084,7 +3084,7 @@ groups:
           central: +3.53
           min: -0.67
           max: +6.43
-          latex: '$l^_6(1)$'
+          latex: '$l_6(1)$'
       "B(*)->D(*)::l_6'(1)@HQET" :
           central: 0.04
           min: -3.43
