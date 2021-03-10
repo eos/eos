@@ -34,10 +34,6 @@
 #include <eos/utils/stringify.hh>
 #include <eos/utils/thread_pool.hh>
 
-#include <Minuit2/FCNGradientBase.h>
-#include <Minuit2/FunctionMinimum.h>
-#include <Minuit2/MnPrint.h>
-
 extern "C" {
 #include <pmclib/pmc.h>
 }
@@ -198,8 +194,6 @@ namespace eos
 
            // points at which posterior is evaluated
            std::vector<double> parameter_samples;
-
-           std::shared_ptr<ROOT::Minuit2::FunctionMinimum> minimum;
 
            Worker(const DensityPtr & density) :
                density(density->clone())
