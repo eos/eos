@@ -32,6 +32,7 @@ matplotlib.rcParams['font.weight'] = 'normal'
 matplotlib.rcParams['axes.labelsize'] = 16
 matplotlib.rcParams['axes.linewidth'] = 1
 matplotlib.rcParams['axes.titlepad'] = 12
+matplotlib.rcParams['axes.formatter.use_mathtext'] = True
 
 matplotlib.rcParams['savefig.bbox'] = 'tight'
 matplotlib.rcParams['savefig.pad_inches'] = 0.1
