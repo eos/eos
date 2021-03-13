@@ -136,12 +136,15 @@ By default plots lack any axis labels and units, and any legend.
 An axis' description is provided through the following key/value pairs, which can apply equally to the x and y axis:
 
  * ``label`` (*str*, may contain LaTeX commands) -- The axis' label.
- * ``format`` (*str*, Pyton 3 format string) -- The axis' tick label format. Due to a Matplotlib peculiarity, the format string
-   must always format the variable ``x``. See Matplotlib format strings for details.
  * ``unit``  (*str*, may contain LaTeX commands) -- The axis' unit, which will be appended to the axis' label in square brackets.
  * ``range`` (*list* or *tuple* of two *float*) -- The tuple of [minimal, maximal] values, which will be displayed along the axis.
- * ``scale`` (*number*) -- The axis' scale by which all tick coordinate will be divided. The scale will *not* be appended to
-   the axis' label automatically.
+ * ``scale`` (*number*) -- The axis' scale by which all tick coordinates will be divided. The scale will *not* be appended to
+   the axis' label automatically. Using this argument is not recommended as it prevents automatic axis tick formatting and providing
+   the argument below is required.
+ * ``format`` (*str*, Python 3 format string) -- The axis' tick label format can be provided and is only in use when ``scale`` is used, to
+   avoid a bad string representation of the axis ticks. For example, the user might need to determine the necessary number of digits
+   manually. Due to a Matplotlib peculiarity, the format string must always format the variable ``x``. See Matplotlib format strings for
+   details.
 
 The legend description presently only includes options for its location:
 
