@@ -45,6 +45,24 @@ class Plotter:
         self.colors = [
             'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'
         ]
+        self.plot_types = {
+            'band':                  Plotter.Band,
+            'constraint':            Plotter.Constraint,
+            'constraint-overview':   Plotter.ConstraintOverview,
+            'contours2D':            Plotter.Contours2D,
+            'expression':            Plotter.Expression,
+            'errorbar':              Plotter.ErrorBar,
+            'histogram':             Plotter.Histogram1D,
+            'histogram2D':           Plotter.Histogram2D,
+            'kde':                   Plotter.KernelDensityEstimate1D,
+            'kde2D':                 Plotter.KernelDensityEstimate2D,
+            'observable':            Plotter.Observable,
+            'point':                 Plotter.Point,
+            'uncertainty':           Plotter.Uncertainty,
+            'uncertainty-binned':    Plotter.UncertaintyBinned,
+            'uncertainty-overview':  Plotter.UncertaintyOverview,
+            'watermark':             Plotter.Watermark,
+        }
 
 
     """ Returns the next available z-order value, incremented for each plot w/o pre-defined z-order value. """
@@ -1138,25 +1156,6 @@ class Plotter:
         if not 'contents' in self.instructions:
             return
 
-        plot_types = {
-            'band':                  Plotter.Band,
-            'constraint':            Plotter.Constraint,
-            'constraint-overview':   Plotter.ConstraintOverview,
-            'contours2D':            Plotter.Contours2D,
-            'expression':            Plotter.Expression,
-            'errorbar':              Plotter.ErrorBar,
-            'histogram':             Plotter.Histogram1D,
-            'histogram2D':           Plotter.Histogram2D,
-            'kde':                   Plotter.KernelDensityEstimate1D,
-            'kde2D':                 Plotter.KernelDensityEstimate2D,
-            'observable':            Plotter.Observable,
-            'point':                 Plotter.Point,
-            'uncertainty':           Plotter.Uncertainty,
-            'uncertainty-binned':    Plotter.UncertaintyBinned,
-            'uncertainty-overview':  Plotter.UncertaintyOverview,
-            'watermark':             Plotter.Watermark,
-        }
-
         contents = self.instructions['contents']
 
         plots = []
@@ -1176,10 +1175,10 @@ class Plotter:
                 name = item['name']
                 eos.info('plotting "{}"'.format(name))
 
-            if item_type not in plot_types:
+            if item_type not in self.plot_types:
                 KeyError('unknown content type: "{}"'.format(item_type))
 
-            plots.append(plot_types[item_type](self, item))
+            plots.append(self.plot_types[item_type](self, item))
 
         # ensure watermarking
         if Plotter.Watermark not in [type(p) for p in plots]:
