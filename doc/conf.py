@@ -69,5 +69,5 @@ html_baseurl = 'https://eos.github.io/doc/'
 
 html_show_sourcelink = False
 
-html_logo = '_static/eos-logo-160x90.png'
+html_logo = '_static/github-eos-logo.png'
 logo_only = True
