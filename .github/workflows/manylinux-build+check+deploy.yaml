@@ -141,6 +141,12 @@ jobs:
                 CXXFLAGS:          "-O2 -g -march=x86-64"
                 BOOST_PYTHON_SKIP: yes
               run: |
+                pushd _src
+                # check if this is a tagged commit, and export a flag variable.
+                if git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then
+                  export EOS_IS_TAGGED=1
+                fi
+                popd
                 mkdir _pypi
                 pushd _pypi
                 export PATH="$PYTHON_PATH:$PATH"
@@ -149,7 +155,14 @@ jobs:
                 for f in $(ldd _eos.so | grep '=>' | grep -E "$LIBRARIES" | awk '{print $3}') ; do
                     cp $f ./
                 done
-                cp ../_build/python/setup.py ./
+                if [[ ${EOS_IS_TAGGED} == 1 ]] ; then
+                    cp ../_build/python/setup.py ./
+                else
+                    sed -e "s/\(^.*version=.*\)',/\1+run${GITHUB_RUN_NUMBER}',/" \
+                        -e "s/\(^.*name=.*\)',/\1-latest',/" \
+                        < ../_build/python/setup.py \
+                        > ./setup.py
+                fi
                 chrpath -r '$ORIGIN/_eos_libs' _eos.so
                 for f in libeos*.so* ; do
                     chrpath -l $f || continue
@@ -192,10 +205,16 @@ jobs:
                 TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
               run: |
                 pushd _src
-                # check if this is not a tagged commit, and exit immediatly if true.
-                if ! git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then exit 0 ; fi
+                # check if this is a tagged commit, and export a flag variable.
+                if git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then
+                    export EOS_IS_TAGGED=1
+                fi
                 popd
                 pushd _pypi
                 export PATH="$PYTHON_PATH:$PATH"
-                twine upload dist/*.whl
+                if [[ ${EOS_IS_TAGGED} == 1 ]] ; then
+                    twine upload dist/*.whl
+                else
+                    twine upload --repository testpypi dist/*.whl
+                fi
                 popd
