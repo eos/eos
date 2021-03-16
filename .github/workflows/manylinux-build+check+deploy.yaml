@@ -158,7 +158,7 @@ jobs:
                 if [[ ${EOS_IS_TAGGED} == 1 ]] ; then
                     cp ../_build/python/setup.py ./
                 else
-                    sed -e "s/\(^.*version=.*\)',/\1+run${GITHUB_RUN_NUMBER}',/" \
+                    sed -e "s/\(^.*version=.*\)',/\1.post${GITHUB_RUN_NUMBER}',/" \
                         -e "s/\(^.*name=.*\)',/\1-latest',/" \
                         < ../_build/python/setup.py \
                         > ./setup.py
