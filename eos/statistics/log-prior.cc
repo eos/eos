@@ -264,6 +264,94 @@ namespace eos
                     return true;
                 }
         };
+
+        /*!
+         * Prior distribution for renormalization scales
+         */
+        class Scale :
+            public LogPrior
+        {
+            private:
+                const std::string _name;
+
+                const ParameterRange _range;
+
+                const double _mu_0, _lambda;
+
+                const double _min, _max;
+
+                const double _ln_lambda;
+
+            public:
+                Scale(const Parameters & parameters, const std::string & name, const ParameterRange & range, const double & mu_0, const double & lambda) :
+                    LogPrior(parameters),
+                    _name(name),
+                    _range(range),
+                    _mu_0(mu_0),
+                    _lambda(lambda),
+                    _min(mu_0 / lambda),
+                    _max(mu_0 * lambda),
+                    _ln_lambda(std::log(lambda))
+                {
+                    _parameter_descriptions.push_back(ParameterDescription{ _parameters[name].clone(), mu_0 / lambda, mu_0 * lambda, false });
+                }
+
+                virtual ~Scale()
+                {
+                }
+
+                virtual std::string as_string() const
+                {
+                    std::string result = "Parameter: " + _name + ", prior type: Scale, range: [" + stringify(_mu_0 / _lambda) + "," + stringify(_mu_0 * _lambda) + "]";
+                    result += ", mu_0 = " + stringify(_mu_0) + ", lambda = " + stringify(_lambda);
+
+                    return result;
+                }
+
+                virtual double operator()() const
+                {
+                    // read parameter's current value
+                    double x = _parameter_descriptions.front().parameter->evaluate();
+
+                    if ((x < _min) || (_max < x))
+                        return -std::numeric_limits<double>::infinity();
+
+                    return 1.0 / (2.0 * _ln_lambda * x);
+                }
+
+                virtual LogPriorPtr clone(const Parameters & parameters) const
+                {
+                    return LogPriorPtr(new priors::Scale(parameters, _name, _range, _mu_0, _lambda));
+                }
+
+                virtual double sample(gsl_rng * rng) const
+                {
+                    const double u = gsl_rng_uniform(rng);
+
+                    // get a sample from using inverse transform method
+                    // CDF = [\ln \mu - \ln \mu_0 + \ln \lambda] / (2.0 \ln \lambda)
+                    // inverse CDF = \mu_0 * \lambda^(2 u - 1)
+
+                    return _mu_0 * std::pow(_lambda, 2.0 * u - 1.0);
+                }
+
+                virtual double mean() const
+                {
+                    return _mu_0 * (_lambda * _lambda - 1.0) / (2.0 * _lambda * _ln_lambda);
+                }
+
+                ///Only true if parameter range is the whole real line
+                virtual double variance() const
+                {
+                    return _mu_0 * _mu_0 * (_lambda * _lambda - 1.0) * (1.0 - _lambda * _lambda + (1.0 + _lambda * _lambda) * _ln_lambda)
+                        / (4.0 * _lambda * _lambda * _ln_lambda * _ln_lambda);
+                }
+
+                virtual bool informative() const
+                {
+                    return true;
+                }
+        };
     }
 
     LogPrior::LogPrior(const Parameters & parameters) :
@@ -303,6 +391,22 @@ namespace eos
             throw InternalError("LogPrior::Gauss: upper value (" + stringify(upper) + ") <= central value (" + stringify(central) + ")");
 
         LogPriorPtr prior = std::make_shared<eos::priors::Gauss>(parameters, name, range, lower, central, upper);
+
+        return prior;
+    }
+
+    LogPriorPtr
+    LogPrior::Scale(const Parameters & parameters, const std::string & name, const ParameterRange & range,
+            const double & mu_0, const double & lambda)
+    {
+        // check input
+        if (mu_0 <= 0.0)
+            throw InternalError("LogPrior::Scale: default value mu_0 must be strictly positive");
+
+        if (lambda <= 1.0)
+            throw InternalError("LogPrior::Scale: scale factor lambda must be strictly larger than 1");
+
+        LogPriorPtr prior = std::make_shared<eos::priors::Scale>(parameters, name, range, mu_0, lambda);
 
         return prior;
     }

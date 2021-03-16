@@ -117,6 +117,8 @@ namespace eos
             static LogPriorPtr Flat(const Parameters & parameters, const std::string & name, const ParameterRange & range);
             static LogPriorPtr Gauss(const Parameters & parameters, const std::string & name, const ParameterRange & range,
                     const double & lower, const double & central, const double & upper);
+            static LogPriorPtr Scale(const Parameters & parameter, const std::string & name, const ParameterRange & range,
+                    const double & mu_0, const double & lambda);
 
             /*!
              * Construct a prior from its string representation.

@@ -42,6 +42,8 @@ class LogPriorTest :
             static const double central = 4.3;
             static const double sig_lower = 0.1;
             static const double sig_upper = 0.2;
+            static const double mu_0 = 4.18;
+            static const double lambda = 2.0;
 
             // parameter range
             {
@@ -238,6 +240,22 @@ class LogPriorTest :
                 TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.7 * n_bins) - 1] - cumulative_vec[unsigned(0.3 * n_bins) - 1], 0.95 * scale_factor,  1.4e-2);
 
                 gsl_rng_free(rng);
+            }
+
+            // Scale prior
+            {
+                // use factory
+                LogPriorPtr scale_prior = LogPrior::Scale(parameters, "mass::b(MSbar)", ParameterRange{ 2.0, 10.0 },
+                    mu_0, lambda);
+
+                parameters["mass::b(MSbar)"] = 3.0;
+                TEST_CHECK_NEARLY_EQUAL((*scale_prior)(), 0.2404491734814939, eps);
+
+                parameters["mass::b(MSbar)"] = 4.0;
+                TEST_CHECK_NEARLY_EQUAL((*scale_prior)(), 0.1803368801111204, eps);
+
+                parameters["mass::b(MSbar)"] = 7.0;
+                TEST_CHECK_NEARLY_EQUAL((*scale_prior)(), 0.1030496457777831, eps);
             }
 
             //Make
