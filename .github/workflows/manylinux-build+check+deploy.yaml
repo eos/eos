@@ -210,6 +210,9 @@ jobs:
                     export EOS_IS_TAGGED=1
                 fi
                 popd
+                if [[ ${TWINE_USERNAME} == "" ]] ; then
+                    exit 0
+                fi
                 pushd _pypi
                 export PATH="$PYTHON_PATH:$PATH"
                 if [[ ${EOS_IS_TAGGED} == 1 ]] ; then
