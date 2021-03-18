@@ -432,7 +432,7 @@ BOOST_PYTHON_MODULE(_eos)
             :type upper: float
         )", args("parameters", "name", "range", "lower", "central", "upper"))
         .staticmethod("Gauss")
-        .def("Scale", &LogPrior::Scale, return_value_policy<return_by_value>(, R"(
+        .def("Scale", &LogPrior::Scale, return_value_policy<return_by_value>(), R"(
             Returns a new Scale prior as a LogPrior.
 
             The prior's support is provided by the `range` parameter, which should
@@ -451,7 +451,14 @@ BOOST_PYTHON_MODULE(_eos)
             :type mu_0: float, strictly positive
             :param lambda: The scale factor.
             :type lambda: float, strictly positive
-        )", args("parameters", "name", "range", "mu_0", "scale")))
+        )", args("parameters", "name", "range", "mu_0", "scale"))
+        .staticmethod("Scale")
+        .def("inverse_cdf", &LogPrior::inverse_cdf, R"(
+            Returns the parameter value corresponding to the cumulative propability :math:`p`.
+
+            :param p: The cumulative propability.
+            :type p: float, [0.0, 1.0]
+        )", args("p"))
         ;
 
     // LogPosterior
