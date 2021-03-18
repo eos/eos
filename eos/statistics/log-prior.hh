@@ -97,6 +97,13 @@ namespace eos
             virtual double sample(gsl_rng * rng) const = 0;
 
             /*!
+             * Evaluate the inverse cumulative density function of the prior.
+             *
+             * @param p The cumulative probability for which we seek the parameter value.
+             */
+            virtual double inverse_cdf(const double & p) const = 0;
+
+            /*!
              * Return the mean of the distribution.
              */
             virtual double mean() const = 0;
