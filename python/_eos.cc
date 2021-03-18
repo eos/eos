@@ -393,7 +393,7 @@ BOOST_PYTHON_MODULE(_eos)
             Represents a Bayesian prior on the log scale.
 
             New LogPrior objects can only be created using the capitalized static methods:
-            :meth:`LogPrior.Uniform` and :meth:`LogPrior.Gaussian`.
+            :meth:`LogPrior.Uniform`, :meth:`LogPrior.Gaussian`, and :meth:`LogPrior.Scale`.
         )", no_init)
         .def("Uniform", &LogPrior::Flat, return_value_policy<return_by_value>(), R"(
             Returns a new uniform prior as a LogPrior.
@@ -432,6 +432,26 @@ BOOST_PYTHON_MODULE(_eos)
             :type upper: float
         )", args("parameters", "name", "range", "lower", "central", "upper"))
         .staticmethod("Gauss")
+        .def("Scale", &LogPrior::Scale, return_value_policy<return_by_value>(, R"(
+            Returns a new Scale prior as a LogPrior.
+
+            The prior's support is provided by the `range` parameter, which should
+            coincide with [`mu_0 / lambda`, `mu_0 * lambda`]. The PDF is chosen
+            such that a renormalization scale is varied in this range and with
+            central value `mu_0` such that :math:`\ln x / \mu_0` is uniformly
+            distributed in the interval :math:`[-\ln \lambda, +\ln \lambda]`.
+
+            :param parameters: The parameters to which this LogPrior is bound.
+            :type parameters: eos.Parameters
+            :param name: The name of the parameter for which the LogPrior is defined.
+            :type name: str
+            :param range: The range [min, max] for the values that the parameter is allowed to take.
+            :type range: tuple of two floating point numbers
+            :param mu_0: The central value of the parameter.
+            :type mu_0: float, strictly positive
+            :param lambda: The scale factor.
+            :type lambda: float, strictly positive
+        )", args("parameters", "name", "range", "mu_0", "scale")))
         ;
 
     // LogPosterior
