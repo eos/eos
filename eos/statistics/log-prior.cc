@@ -114,7 +114,14 @@ namespace eos
 
                 virtual double sample(gsl_rng * rng) const
                 {
-                    return gsl_rng_uniform(rng) * (_range.max - _range.min) + _range.min;
+                    const double p = gsl_rng_uniform(rng);
+
+                    return inverse_cdf(p);
+                }
+
+                virtual double inverse_cdf(const double & p) const
+                {
+                    return p * (_range.max - _range.min) + _range.min;
                 }
 
                 virtual double mean() const
@@ -237,15 +244,21 @@ namespace eos
 
                 virtual double sample(gsl_rng * rng) const
                 {
-                    // find out if sample in upper or lower part
-                    const double u = gsl_rng_uniform(rng);
-
                     // get a sample from lower or upper part using inverse transform method
+                    const double p = gsl_rng_uniform(rng);
+
+                    return inverse_cdf(p);
+                }
+
+                virtual double inverse_cdf(const double & p) const
+                {
                     // CDF = c \Phi(x - x_{central} / \sigma) + b
-                    if (u < _prob_lower)
-                       return gsl_cdf_gaussian_Pinv((u - _prob_lower) / _c_b + 0.5, _sigma_lower) + _central;
+
+                    // find out if sample in upper or lower part
+                    if (p < _prob_lower)
+                       return gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_b + 0.5, _sigma_lower) + _central;
                     else
-                       return gsl_cdf_gaussian_Pinv((u - _prob_lower) / _c_a + 0.5,  _sigma_upper) + _central;
+                       return gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_a + 0.5,  _sigma_upper) + _central;
                 }
 
                 virtual double mean() const
@@ -326,13 +339,18 @@ namespace eos
 
                 virtual double sample(gsl_rng * rng) const
                 {
-                    const double u = gsl_rng_uniform(rng);
-
                     // get a sample from using inverse transform method
-                    // CDF = [\ln \mu - \ln \mu_0 + \ln \lambda] / (2.0 \ln \lambda)
-                    // inverse CDF = \mu_0 * \lambda^(2 u - 1)
+                    const double p = gsl_rng_uniform(rng);
 
-                    return _mu_0 * std::pow(_lambda, 2.0 * u - 1.0);
+                    return inverse_cdf(p);
+                }
+
+                virtual double inverse_cdf(const double & p) const
+                {
+                    // CDF: p = [\ln x - \ln \mu_0 + \ln \lambda] / (2.0 \ln \lambda)
+                    // inverse CDF: x = \mu_0 * \lambda^(2 p - 1)
+
+                    return _mu_0 * std::pow(_lambda, 2.0 * p - 1.0);
                 }
 
                 virtual double mean() const

@@ -57,9 +57,12 @@ class LogPriorTest :
             {
                 // use factory
                 LogPriorPtr flat_prior = LogPrior::Flat(parameters, "mass::b(MSbar)", ParameterRange{ 4.2, 4.5 });
-                TEST_CHECK_NEARLY_EQUAL((*flat_prior)(), 1.2039728043259361, eps);
+                TEST_CHECK_NEARLY_EQUAL((*flat_prior)(),              1.2039728043259361, eps);
+                TEST_CHECK_NEARLY_EQUAL(flat_prior->inverse_cdf(0.0), 4.2,                eps);
+                TEST_CHECK_NEARLY_EQUAL(flat_prior->inverse_cdf(0.5), 4.35,               eps);
+                TEST_CHECK_NEARLY_EQUAL(flat_prior->inverse_cdf(1.0), 4.5,                eps);
 
-                //a continuous parameter of interest
+                // a continuous parameter of interest
                 TEST_CHECK( ! flat_prior->begin()->nuisance);
                 TEST_CHECK_EQUAL(flat_prior->begin()->parameter->name(), "mass::b(MSbar)");
             }
@@ -77,7 +80,7 @@ class LogPriorTest :
             {
                 // use factory
                 LogPriorPtr gauss_prior = LogPrior::Gauss(parameters, "mass::b(MSbar)", ParameterRange{ 4.15, 4.57 },
-                        central - sig_lower, central, central+sig_upper);
+                        central - sig_lower, central, central + sig_upper);
 
                 parameters["mass::b(MSbar)"] = 4.2;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 0.6555737246958322 /*1.0524382901193807*/, eps);
@@ -94,6 +97,8 @@ class LogPriorTest :
 
                 parameters["mass::b(MSbar)"] = 4.3 + 1e-7;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), lower_limit, eps);
+
+                // no CDF checks here: mean and median do not coincide for asymmetric uncertainties
             }
 
             // cloning
@@ -144,6 +149,13 @@ class LogPriorTest :
                 /* symmetric Gaussian with huge range */
                 range  = ParameterRange{ 3, 6 };
                 gauss_prior = LogPrior::Gauss(parameters, "mass::b(MSbar)", range, 4.2, 4.3, 4.4);
+
+                // median and mean coincide
+                TEST_CHECK_NEARLY_EQUAL(gauss_prior->inverse_cdf(0.5),         4.3,       1.0e-10);
+                // at lower bound of the 1 sigma interval
+                TEST_CHECK_NEARLY_EQUAL(gauss_prior->inverse_cdf(0.158655254), 4.3 - 0.1, 1.0e-10);
+                // at upper bound of the 1 sigma interval
+                TEST_CHECK_NEARLY_EQUAL(gauss_prior->inverse_cdf(0.841344746), 4.3 + 0.1, 1.0e-10);
 
                 gsl_rng_set(rng, 1243);
 
@@ -256,6 +268,13 @@ class LogPriorTest :
 
                 parameters["mass::b(MSbar)"] = 7.0;
                 TEST_CHECK_NEARLY_EQUAL((*scale_prior)(), 0.1030496457777831, eps);
+
+                // central value at p = 0.5
+                TEST_CHECK_NEARLY_EQUAL(scale_prior->inverse_cdf(0.5), mu_0,          eps);
+                // lower boundary at p = 0.0
+                TEST_CHECK_NEARLY_EQUAL(scale_prior->inverse_cdf(0.0), mu_0 / lambda, eps);
+                // upper boundary at p = 1.0
+                TEST_CHECK_NEARLY_EQUAL(scale_prior->inverse_cdf(1.0), mu_0 * lambda, eps);
             }
 
             //Make
