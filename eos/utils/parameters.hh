@@ -24,7 +24,6 @@
 #include <eos/utils/mutable.hh>
 #include <eos/utils/parameters-fwd.hh>
 #include <eos/utils/private_implementation_pattern.hh>
-#include <eos/utils/random_number_generator.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <set>
