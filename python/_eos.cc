@@ -561,11 +561,39 @@ BOOST_PYTHON_MODULE(_eos)
 
     // SignalPDF
     register_ptr_to_python<std::shared_ptr<SignalPDF>>();
-    class_<SignalPDF, boost::noncopyable>("SignalPDF", no_init)
-        .def("make", &SignalPDF::make, return_value_policy<return_by_value>())
+    class_<SignalPDF, boost::noncopyable>("_SignalPDF", R"(
+            Represents a probability density function (PDF) for any of the physics signals known to EOS.
+
+            New PDF objects are created using the :meth:`make <eos.SignalPDF.make>` static method.
+            See also `the complete list of PDFs <../signal-pdfs.html>`_.
+    )", no_init)
+        .def("make", &SignalPDF::make, return_value_policy<return_by_value>()) // docstring is maintained in python/eos/signal_pdf.py
         .staticmethod("make")
-        .def("evaluate", &SignalPDF::evaluate)
-        .def("name", &SignalPDF::name, return_value_policy<copy_const_reference>())
+        .def("evaluate", &SignalPDF::evaluate, R"(
+            Evaluates the (unnormalized) PDF for the present values of the sets of parameters and kinematic variables that it is bound to.
+
+            :return: The value of the PDF.
+            :rtype: float
+        )", args("self"))
+        .def("normalization", &SignalPDF::normalization, R"(
+            Evaluates the normalization of the PDF.
+
+            To speed up sampling from the PDF, the :meth:`evaluate <eos.SignalPDF.evaluate>` returns values of an
+            unnormalized function proportional to the actual PDF. To ensure that the integral over the PDF is
+            normalized to 1, the values returned by evaluate need to be divided by the return value of this method.
+        )")
+        .def("name", &SignalPDF::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of the PDF.
+        )")
+        .def("parameters", &SignalPDF::parameters, R"(
+            Returns the set of parameters bound to this PDF.
+        )")
+        .def("options", &SignalPDF::options, R"(
+            Returns the set of options used when creating the PDF.
+        )")
+        .def("kinematics", &SignalPDF::kinematics, R"(
+            Returns the set of kinematic variables bound to this PDF.
+        )")
         ;
     // }}}
 
