@@ -63,6 +63,9 @@ EOS provides its basic functionality via the main ``eos`` module.
 .. autoclass:: eos.QualifiedName
    :members:
 
+.. autoclass:: eos.SignalPDF
+   :members:
+
 *******************
 Module ``eos.data``
 *******************
