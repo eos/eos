@@ -58,6 +58,7 @@ class Plotter:
             'kde2D':                 Plotter.KernelDensityEstimate2D,
             'observable':            Plotter.Observable,
             'point':                 Plotter.Point,
+            'signal-pdf':            Plotter.SignalPDF,
             'uncertainty':           Plotter.Uncertainty,
             'uncertainty-binned':    Plotter.UncertaintyBinned,
             'uncertainty-overview':  Plotter.UncertaintyOverview,
@@ -1081,6 +1082,58 @@ class Plotter:
             ydata = data[:, yindex]
             bins  = item['bins']    if 'bins'    in item else 100
             plt.hist2d(xdata, ydata, bins=bins, cmin=1)
+
+
+    """ Plots a single EOS signal PDF w/o uncertainties as a function of one kinemtic variable. """
+    class SignalPDF(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+        def plot(self):
+            item = self.item
+            pname = item['pdf']
+            eos.info('   plotting EOS PDF "{}"'.format(pname))
+
+            # create parameters
+            parameters = eos.Parameters.Defaults()
+            if 'parameters' in item and 'parameters-from-file' in item:
+                eos.warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
+
+            if 'parameters-from-file' in item and type(item['parameters-from-file']) is str:
+                eos.warn('    overriding parameters from file')
+                parameters.override_from_file(item['parameters-from-file'])
+
+            if 'parameters' in item and type(item['parameters']) is dict:
+                for key, value in item['parameters'].items():
+                    parameters.set(key, value)
+
+            # create kinematics
+            kinematics = eos.Kinematics()
+            if not ('kinematic' in item or 'variable' in item):
+                raise KeyError('no kinematic variable specified; do not know how to map x to a variable')
+            if 'kinematic' in item:
+                var = kinematics.declare(item['kinematic'], np.nan)
+            elif 'variable' in item:
+                var = kinematics.declare(item['variable'], np.nan)
+
+            if 'kinematics' in item:
+                for k, v in item['kinematics'].items():
+                    kinematics.declare(k, v)
+
+            # create (empty) options
+            options = eos.Options()
+
+            # create observable
+            pdf  = eos.SignalPDF.make(pname, parameters, kinematics, options)
+            norm = pdf.normalization()
+
+            xvalues = np.linspace(self.xlo, self.xhi, self.xsamples + 1)
+            pvalues = np.array([])
+            for xvalue in xvalues:
+                var.set(xvalue)
+                pvalues = np.append(pvalues, pdf.evaluate())
+
+            plt.plot(xvalues, np.exp(pvalues - norm), alpha=self.alpha, color=self.color, label=self.label, ls=self.style)
 
 
     """ Plots a given expression. """
