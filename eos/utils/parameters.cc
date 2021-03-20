@@ -382,7 +382,7 @@ namespace eos
 
             if (! fs::exists(base))
             {
-                throw InternalError("Could not find the parameter input files");
+                throw InternalError("Could not find the parameter input files, '" + base.string() + "' does not exist");
             }
 
             if (! fs::is_directory(base))
