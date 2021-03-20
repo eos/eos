@@ -35,6 +35,7 @@ from .constraint import Constraints
 from .observable import Observables
 from .parameter import Parameters
 from .reference import References
+from .signal_pdf import SignalPDF
 
 import logging
 logger = logging.getLogger('EOS')

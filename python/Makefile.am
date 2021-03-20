@@ -10,6 +10,7 @@ EXTRA_DIST = \
 	eos/observable.py \
 	eos/parameter.py \
 	eos/reference.py \
+	eos/signal_pdf.py \
 	eos/data/__init__.py \
 	eos/data/hdf5.py \
 	eos/data/pypmc.py \
@@ -39,7 +40,8 @@ eos_SCRIPTS = \
 	eos/ipython.py \
 	eos/observable.py \
 	eos/parameter.py \
-	eos/reference.py
+	eos/reference.py \
+	eos/signal_pdf.py
 
 eosdatadir = $(pkgpythondir)/data
 eosdata_SCRIPTS = \
