@@ -98,7 +98,7 @@ namespace eos
     }
 
     template <typename Decay_, typename ... PDFArgs_, typename ... PDFKinematicRanges_, typename ... NormArgs_,  typename ... NormKinematicNames_>
-    std::pair<QualifiedName, SignalPDFEntry *> make_signal_pdf(const char * name,
+    std::pair<QualifiedName, std::shared_ptr<SignalPDFEntry>> make_signal_pdf(const char * name,
             const Options & default_options,
             double (Decay_::* pdf)(const PDFArgs_ & ...) const,
             const std::tuple<PDFKinematicRanges_ ...> & pdf_kinematic_ranges,
@@ -110,13 +110,13 @@ namespace eos
 
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_signal_pdf_entry(qn, default_options, pdf, pdf_kinematic_ranges, norm, norm_kinematic_names));
+        return std::make_pair(qn, std::shared_ptr<SignalPDFEntry>(make_concrete_signal_pdf_entry(qn, default_options, pdf, pdf_kinematic_ranges, norm, norm_kinematic_names)));
     }
 
-    const std::map<QualifiedName, const SignalPDFEntry *> &
+    const std::map<QualifiedName, std::shared_ptr<SignalPDFEntry>> &
     make_signal_pdf_entries()
     {
-        static const std::map<QualifiedName, const SignalPDFEntry *> signal_pdf_entries
+        static const std::map<QualifiedName, std::shared_ptr<SignalPDFEntry>> signal_pdf_entries
         {
             /* Internal Tests */
 
@@ -443,7 +443,7 @@ namespace eos
     SignalPDFPtr
     SignalPDF::make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
     {
-        static const std::map<QualifiedName, const SignalPDFEntry *> signal_pdf_entries = make_signal_pdf_entries();
+        static const std::map<QualifiedName, std::shared_ptr<SignalPDFEntry>> signal_pdf_entries = std::move(make_signal_pdf_entries());
 
         // check if 'name' matches any of the implemented Signal PDFs
         {
@@ -458,14 +458,14 @@ namespace eos
     template <>
     struct WrappedForwardIteratorTraits<SignalPDFs::SignalPDFIteratorTag>
     {
-        using UnderlyingIterator = std::map<QualifiedName, const SignalPDFEntry *>::iterator;
+        using UnderlyingIterator = std::map<QualifiedName, std::shared_ptr<SignalPDFEntry>>::iterator;
     };
-    template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, std::pair<const QualifiedName, const SignalPDFEntry *>>;
+    template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, std::pair<const QualifiedName, std::shared_ptr<SignalPDFEntry>>>;
 
     template<>
     struct Implementation<SignalPDFs>
     {
-        std::map<QualifiedName, const SignalPDFEntry *> signal_pdf_entries;
+        std::map<QualifiedName, std::shared_ptr<SignalPDFEntry>> signal_pdf_entries;
 
         Implementation() :
             signal_pdf_entries(make_signal_pdf_entries())
