@@ -595,6 +595,20 @@ BOOST_PYTHON_MODULE(_eos)
             Returns the set of kinematic variables bound to this PDF.
         )")
         ;
+
+    // SignalPDFEntry
+    register_ptr_to_python<std::shared_ptr<SignalPDFEntry>>();
+    class_<SignalPDFEntry, boost::noncopyable>("SignalPDFEntry", no_init)
+        .def("name", &SignalPDFEntry::name, return_value_policy<copy_const_reference>())
+        .def("description", &SignalPDFEntry::description, return_value_policy<copy_const_reference>())
+        ;
+
+    // SignalPDFs
+    impl::std_pair_to_python_converter<const QualifiedName, std::shared_ptr<SignalPDFEntry>> converter_signalpdfs_iter;
+    class_<SignalPDFs>("_SignalPDFs")
+        .def("__iter__", range(&SignalPDFs::begin, &SignalPDFs::end))
+        ;
+
     // }}}
 
     // EOS version

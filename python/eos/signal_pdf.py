@@ -15,7 +15,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from _eos import _SignalPDF
+from _eos import _SignalPDF, _SignalPDFs
 import eos
 import numpy as np
 
@@ -130,3 +130,47 @@ class SignalPDF(_SignalPDF):
         pdf.bounds = [(kinematics[v.name() + '_min'], kinematics[v.name() + '_max']) for v in pdf.variables]
 
         return pdf
+
+class SignalPDFs(_SignalPDFs):
+    """
+    Represents the complete list of probability density functions (PDFs) known to EOS.
+
+    Objects of this class are visualized as tables in Jupyter notebooks for easy
+    overview. Filters can be applied through keyword arguments to the initialization.
+
+    :param prefix: Only show observables whose qualified names contain the provided ``prefix`` in their prefix part.
+    :type prefix: str
+    :param name: Only show observables whose qualified names contain the provided ``name`` in their name part.
+    :type name: str
+    :param suffix: Only show observables whose qualified names contain the provided ``suffix`` in their suffix part.
+    :type suffix: str
+
+    See also `the complete list of signal PDFs <../signal-pdfs.html>`_ in this documentation.
+    """
+    def __init__(self, prefix=None, name=None, suffix=None, showall=False):
+        super().__init__()
+        self.prefix=prefix
+        self.name=name
+        self.suffix=suffix
+        self.showall=showall
+
+    def filter_entry(self, qn):
+        if self.prefix and not self.prefix in str(qn.prefix_part()):
+            return False
+
+        if self.name and not self.name in str(qn.name_part()):
+            return False
+
+        if self.suffix and not self.suffix in str(qn.suffix_part()):
+            return False
+
+        return True
+
+    def _repr_html_(self):
+        result = '<table>\n'
+        for qn, entry in self:
+            if not self.filter_entry(qn):
+                continue
+            result += r'      <tr><th><tt style="color:grey">{qn}</tt></th><td style="text-align:left">{desc}</td></tr>'.format(qn=qn,desc=entry.description())
+
+        return result
