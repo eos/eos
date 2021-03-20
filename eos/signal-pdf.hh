@@ -141,7 +141,7 @@ namespace eos
             ///@name Iteration over known constraints
             ///@{
             struct SignalPDFIteratorTag;
-            using SignalPDFIterator = WrappedForwardIterator<SignalPDFIteratorTag, std::pair<const QualifiedName, const SignalPDFEntry *>>;
+            using SignalPDFIterator = WrappedForwardIterator<SignalPDFIteratorTag, std::pair<const QualifiedName, std::shared_ptr<SignalPDFEntry>>>;
 
             SignalPDFIterator begin() const;
             SignalPDFIterator end() const;

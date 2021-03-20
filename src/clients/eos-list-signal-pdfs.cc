@@ -77,7 +77,7 @@ struct Filter
         return names.empty() && prefixes.empty();
     }
 
-    bool operator() (const std::pair<const QualifiedName, const SignalPDFEntry *> & arg)
+    bool operator() (const std::pair<const QualifiedName, std::shared_ptr<SignalPDFEntry>> & arg)
     {
         if (prefixes.find(arg.first.prefix_part()) != prefixes.end())
             return true;
@@ -91,7 +91,7 @@ struct Filter
 
 struct Printer
 {
-    void print(const SignalPDFEntry * rhs)
+    void print(const std::shared_ptr<SignalPDFEntry> & rhs)
     {
         cout << rhs->name() << endl;
 
