@@ -21,14 +21,15 @@ Listing the built-in Observables
 ================================
 
 The full list of built-in observables for the most-recent EOS release is available online `here <https://eos.github.io/doc/observables>`_.
-For an interactive apporach to see the list of observables available to you, run the following in a Jupyter notebook
+For an interactive approach to see the list of observables available to you, run the following in a Jupyter notebook
 
 .. code-block::
 
    import eos
    display(eos.Observables())
 
-Searching for a specific observable is possible filtering by the observable name's `prefix`, `name`, or `suffix`, e.g.:
+Searching for a specific observable is possible by filtering for specific strings in the observable name's `prefix`, `name`, or `suffix` parts. The
+following example only shows observables that contain a `'A_FB`' in the name part, and `'B->pi` in the prefix part, and `'Untagged'` in the suffix part.
 
 .. code-block::
 
@@ -50,7 +51,7 @@ which also contains information about the kinematic variables required:
 
 .. code-block::
 
-  display(eos.Observables()['B->pilnu::BR'])
+  display(eos.Observables()['B->Dlnu::BR'])
 
 which outputs the following table:
 
@@ -64,10 +65,11 @@ which outputs the following table:
    * - Kinematic Variable
      - ``q2_min``, ``q2_max``
 
-From this we understand that ``B->Dlnu::BR`` expects two kinematic variables,
+From this output we understand that ``B->Dlnu::BR`` expects two kinematic variables,
 corresponding here to the lower and upper integration boundaries of the dilepton invariant mass :math:`q^2`.
 
-To create an :class:`Obervable <eos.Observable>` object with the default set of parameters and options through:
+We proceed to create an :class:`Obervable <eos.Observable>` object with the default set of parameters and options,
+and then display it:
 
 .. code-block::
 
@@ -76,8 +78,10 @@ To create an :class:`Obervable <eos.Observable>` object with the default set of 
    obs = eos.Observable.make('B->Dlnu::BR', params, kinematics, eos.Options())
    display(obs)
 
-The default options select a spectator :math:`\ell=\mu` yielding a value of :math:`2.3\%`,
-which is compatible with the current world average for the :math:`\bar{B}^-\to D^0\mu^-\bar\nu` branching ratio.
+The default options select :math:`\ell=\mu` as the lepton flavour. The value of the observable
+is shown to be about :math:`2.4\%`, which is compatible with the current world average for the :math:`\bar{B}^-\to D^0\mu^-\bar\nu` branching ratio.
+
+By setting the ``l`` option to the value ``'tau'``, we have create a different observable representing the :math:`\bar{B}^-\to D^0\tau^-\bar\nu` branching ratio.
 
 .. code-block::
 
@@ -86,11 +90,11 @@ which is compatible with the current world average for the :math:`\bar{B}^-\to D
    obs = eos.Observable.make('B->Dlnu::BR', parameters, kinematics, eos.Options(l='tau'))
    display(obs)
 
-By setting the ``l`` option to the value ``'tau'``, we have create a different observable representing the :math:`\bar{B}^-\to D^0\tau^-\bar\nu` branching ratio.
 The new observable yields a value of :math:`0.69\%`.
 
-So far we evaluated the integrated branching ratio. EOS also provides the corresponding differential branching ratio as a function of :math:`q^2`.
-It is accessible through the name ``B->Dlnu::dBR/dq2``. To illustrate it, we use EOS's plot functions:
+So far we evaluated the integrated branching ratio. EOS also provides the corresponding differential branching ratio
+as a function of the squared momentum transfer :math:`q^2`.
+The differential branching fraction is accessible through the name ``B->Dlnu::dBR/dq2``. To illustrate it, we use EOS's plot functions:
 
 .. code-block::
 
@@ -140,8 +144,10 @@ We carry on using the integrated branching ratios of :math:`\bar{B}^-\to D^0\lef
 The largest source of theoretical uncertainty in these decays arises from the hadronic matrix elements, i.e.,
 from the form factors :math:`f^{B\to \bar{D}}_+(q^2)` and :math:`f^{B\to \bar{D}}_0(q^2)`.
 Both form factors have been obtained independently using lattice QCD simulations by the HPQCD and Fermilab/MILC (FNALMILC) collaborations.
-The joint likelihoods for both form factors at different :math:`q^2` values of each experiment are available in EOS under the names ``B->D::f_++f_0@HPQCD2015A`` and ``B->D::f_++f_0@FNALMILC2015A``.
-For this example, we will use both results and create a combined likelihood:
+The joint likelihoods for both form factors at different :math:`q^2` values of each experiment are available in EOS
+as :class:`Constraint <eos.Constraint>` objects under the names ``B->D::f_++f_0@HPQCD2015A`` and ``B->D::f_++f_0@FNALMILC2015A``.
+We will discuss such constraints in more detail in the section `Parameter Inference`_.
+For this example, we will use both the HPQCD and FNALMILC results and create a combined likelihood as follows:
 
 .. code-block::
 
@@ -161,9 +167,11 @@ For this example, we will use both results and create a combined likelihood:
    }
    analysis = eos.Analysis(**analysis_args)
 
-Next we create three observables: the semi-muonic branching ratio, the semi-tauonic branching ratio, and the ratio of the former two.
-By using :code:`analysis.parameter` we ensure that all observables and the Analysis object share the same parameter set.
-
+Next we create three observables: the semi-muonic branching ratio, the semi-tauonic branching ratio,
+and the ratio of the former two. By using :code:`analysis.parameter` in the construction of these
+observables, we ensure that all observables and the Analysis object share the same parameter set.
+This means that changes to the :class:`Analysis <eos.Analysis>`' parameters will affect the evaluation
+of all three observables.
 
 .. code-block::
 
@@ -187,7 +195,7 @@ By using :code:`analysis.parameter` we ensure that all observables and the Analy
    )
    observables=(obs_mu, obs_tau, obs_R_D)
 
-In the above, we made sure to use :code:`form-factors=BSZ2015` to ensure that the right form factor plugin is used.
+In the above, we made sure to provide the option :code:`form-factors=BSZ2015` to ensure that the right form factor plugin is used.
 
 
 Sampling from the log(posterior) and -- at the same time -- producing posterior-predictive samples of the :code:`observables` is achieved by running:
@@ -215,7 +223,9 @@ Here :code:`N=5000` samples are produced. To illustrate these samples we use EOS
 .. image:: /images/use-cases_prediction_hist-b-to-d-l-nu.png
    :width: 600
 
-and
+We can convince ourselves of the usefullness of the correlated samples by computing the lepton-flavour universality
+ratio :math:`R_D` twice: once using EOS' built-in observable :code:`B->Dlnu::R_D` as sampled above,
+and once by calculating the ratio manually for each sample:
 
 .. code-block::
 
@@ -225,8 +235,8 @@ and
            'legend': { 'location': 'upper left' }
        },
        'contents': [
-           { 'label': r'$R_D$ (EOS)',     'type': 'histogram', 'bins': 30, 'color': 'C3', 'data': { 'samples': observable_samples[:, 2], 'log_weights': log_weights }},
-           { 'label': r'$R_D$ (manually)','type': 'histogram', 'bins': 30, 'color': 'C4', 'data': { 'samples': [o[1] / o[0] for o in observable_samples[:]], 'log_weights': log_weights },
+           { 'label': r'$R_D$ (EOS)',     'type': 'histogram', 'bins': 30, 'color': 'C3', 'data': { 'samples': observable_samples[:, 2] }},
+           { 'label': r'$R_D$ (manually)','type': 'histogram', 'bins': 30, 'color': 'C4', 'data': { 'samples': [o[1] / o[0] for o in observable_samples[:]] },
              'histtype': 'step'},
        ]
    }
@@ -236,7 +246,7 @@ and
    :width: 600
 
 Using the Numpy routines :code:`numpy.average` and :code:`numpy.var` we can produce numerical estimates
-of the weighted mean and its standard deviation:
+of the mean and the standard deviation:
 
 .. code-block::
 
@@ -261,9 +271,9 @@ From the above we obtain:
 
 .. code-block::
 
-   B->Dlnu::BR;form-factors=BSZ2015,l=mu  = 0.0231 +/- 0.0007
-   B->Dlnu::BR;form-factors=BSZ2015,l=tau = 0.0070 +/- 0.0001
-   B->Dlnu::R_D;form-factors=BSZ2015      = 0.3020 +/- 0.0001
+   B->Dlnu::BR;form-factors=BSZ2015,l=mu  = 0.0235 +/- 0.0007
+   B->Dlnu::BR;form-factors=BSZ2015,l=tau = 0.0071 +/- 0.0001
+   B->Dlnu::R_D;form-factors=BSZ2015      = 0.3014 +/- 0.0001
 
 To obtain uncertainty bands for a plot of the differential branching ratios, we can now produce a
 sequence of observables at different points in phase space. We then pass these observables on to
