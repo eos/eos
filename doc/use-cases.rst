@@ -326,9 +326,9 @@ Parameter Inference
 *******************
 
 EOS can infer parameters based on a database of experimental or theoetical constraints and its built-in observables.
-The examples following in this section illustrate how to find a specific constraint from the list of all built-in observables,
+The examples following in this section illustrate how to find a specific constraint from the list of all built-in constraints,
 construct an :class:`Analysis <eos.Analysis>` object that represents the statistical analysis,
-and infer mean value and standard deviation of a list of parameters.
+and infer mean value and standard deviation of a list of parameters through optimization or Monte Carlo methods.
 
 .. note::
 
@@ -339,14 +339,15 @@ Listing the built-in Constraints
 ================================
 
 The full list of built-in constraints for the most-recent EOS release is available online `here <https://eos.github.io/doc/constraints>`_.
-For an interactive apporach to see the list of constraints available to you, run the following in a Jupyter notebook:
+For an interactive approach to see the list of constraints available to you, run the following in a Jupyter notebook:
 
 .. code-block::
 
    import eos
    display(eos.Constraints())
 
-Searching for a specific observable is possible filtering by the constraint name's `prefix`, `name`, or `suffix`, e.g.:
+Searching for a specific observable is possible by filtering for specific strings in the constraint name's `prefix`, `name`, or `suffix` parts.
+The following example only show constraints that contain `'B^0->D^+'` in the prefix part:
 
 .. code-block::
 
@@ -405,7 +406,7 @@ The resulting plot looks like this:
    :width: 600
 
 
-Defining the statistical Analysis
+Defining the Statistical Analysis
 =================================
 
 To define our statistical analysis for the inference of :math:`|V_{cb}|` from :math:`\bar{B}\to D\ell^-\bar\nu` branching ratios,
@@ -510,14 +511,20 @@ and the overall information including the p value:
      - 59.7053%
 
 
-Sampling from the posterior
+Sampling from the Posterior
 ===========================
 
 To sample from the posterior, EOS provides the :meth:`sample <eos.Analysis.sample>` method.
-Optionally, it can also produce posterior-predictive samples for a list of observables.
-For this example, we produce such samples for the differential :math:`\bar{B}\to D^+e^-\bar\nu` branching ratio in 40 points in the phase space.
-We can use this to illustrate the results of our fit in relation to the constraints.
-The call is:
+Optionally, this can also produce posterior-predictive samples for a list of observables.
+We can use these samples to illustrate the results of our fit in relation to the experimental constraints.
+
+For this example, we produce such posterior-predictive samples for the differential :math:`\bar{B}\to D^+e^-\bar\nu`
+branching ratio in 40 points in the kinematical variable :math:`q^2`:; the square of the momentum transfer
+to the :math:`e^-\bar\nu` pair.
+Due to the strong dependence of the branching ratio on :math:`q^2`, we do not distribute the points
+equally across the full phase space. Instead, we equally distribute half of
+the points in the interval :math:`[0.02\,\text{GeV}^2, 1.00\,\text{GeV}^2]` and the other
+half in the remainder of the phase space.
 
 .. code-block::
 

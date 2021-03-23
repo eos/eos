@@ -1057,31 +1057,59 @@ class Plotter:
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
+            if 'data' not in item and 'hdf5-file' not in item:
+                raise KeyError('neither data nor hdf5-file specified')
+
+            if 'data' in item and 'hdf5-file' in item:
+                eos.warn('   both data and hdf5-file specified; assuming interactive use is intended')
+
+            self.samples = None
+            self.weights = None
+            if 'data' in item:
+                self.samples = item['data']['samples']
+
+                if 'weights' in item['data'] and 'log_weights' in item['data']:
+                    raise KeyError("Only one of 'weights' and 'log_weights' must be specified")
+                elif 'weights' in item['data']:
+                    self.weights = item['data']['weights']
+                elif 'log_weights' in item['data']:
+                    self.weights = np.exp(item['data']['log_weights'])
+                else:
+                    self.weights = None
+
+            else:
+                h5fname = item['hdf5-file']
+                eos.info('   plotting histogram from file "{}"'.format(h5fname))
+                datafile = eos.data.load_data_file(h5fname)
+
+                if 'variables' not in item:
+                    raise KeyError('no variables specificed')
+
+                xvariable, yvariable = item['variables']
+
+                if xvariable not in datafile.variable_indices:
+                    raise ValueError('variable {} not contained in data file'.format(xvariable))
+
+                xindex = datafile.variable_indices[xvariable]
+
+                if xvariable not in datafile.variable_indices:
+                    raise ValueError('variable {} not contained in data file'.format(yvariable))
+
+                yindex = datafile.variable_indices[yvariable]
+
+                data = datafile.data()
+                self.samples = datafile.data()[:, (xindex, yindex)]
+                # TODO: use weights from data file
+                self.weights = None
+
+            self.bins  = item['bins']    if 'bins'    in item else 100
+
         def plot(self):
-            item = self.item
-            if 'hdf5-file' not in item:
-                raise KeyError('no hdf5-file specified')
+            #cmap = plt.get_cmap('viridis')
+            #cmap.set_under('w', 1)
 
-            h5fname = item['hdf5-file']
-            eos.info('   plotting 2D histogram from file "{}"'.format(h5fname))
-            datafile = eos.data.load_data_file(h5fname)
-
-            if 'variables' not in item:
-                raise KeyError('no variables specificed')
-
-            xvariable, yvariable = item['variables']
-
-            xindex = datafile.variable_indices[xvariable]
-            yindex = datafile.variable_indices[yvariable]
-            data = datafile.data()
-
-            cmap = plt.get_cmap('viridis')
-            cmap.set_under('w', 1)
-
-            xdata = data[:, xindex]
-            ydata = data[:, yindex]
-            bins  = item['bins']    if 'bins'    in item else 100
-            plt.hist2d(xdata, ydata, bins=bins, cmin=1)
+            plt.hist2d(self.samples[:, 0], self.samples[:, 1], bins=self.bins, cmin=1, cmap=plt.get_cmap('viridis'),
+                       label=self.label)
 
 
     """ Plots a single EOS signal PDF w/o uncertainties as a function of one kinemtic variable. """
