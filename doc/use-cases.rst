@@ -533,13 +533,18 @@ half in the remainder of the phase space.
                      'B->Dlnu::dBR/dq2', analysis.parameters, eos.Kinematics(q2=q2),
                      eos.Options(**{'form-factors': 'BSZ2015', 'l': 'e', 'q': 'd'}))
                  for q2 in e_q2values]
-   parameter_samples, log_weights, e_samples  = analysis.sample(N=20000, stride=5, pre_N=1000, preruns=5, cov_scale=0.05, start_point=bfp.point, observables=e_obs)
+   parameter_samples, log_weights, e_samples  = analysis.sample(N=20000, stride=5, pre_N=1000, preruns=5, start_point=bfp.point, observables=e_obs)
 
-In the above we start sampling at the best-fit point, and carry out :code:`preruns = 5` burn-in runs/preruns of :code:`pre_N = 1000` samples each,
-and the main run with a total of :code:`N * stride = 100000` random Markov Chain samples.
-The latter are thinned down by a factor of :code:`stride = 5` to obtain :code:`N = 20000` samples in :code:`parameter_samples`.
-The values of the log(posterior) are stored in :code:`log_weights`.
-The posterior-preditive samples for the observables are stored in :code:`e_samples`, and are only returned if the :code:`observables` keyword argument is provided.
+In the above we start sampling at the best-fit point as obtained earlier through optimization,
+which is optional. We carry out :code:`preruns = 5` burn-in runs/preruns of :code:`pre_N = 1000` samples each.
+The samples obtained in each of these preruns are used to adapt the Markov chain. The prerun samples are
+discarded.
+The main run then produces a total of :code:`N * stride = 100000` random Markov Chain samples.
+The latter are thinned down by a factor of :code:`stride = 5` to obtain :code:`N = 20000` samples, which
+are stored in :code:`parameter_samples`. The thinning reduces the autocorrelation of the samples.
+The values of the log(posterior) are stored in :code:`log_posterior`.
+The posterior-preditive samples for the observables are stored in :code:`e_samples`,
+and are only returned if the :code:`observables` keyword argument is provided.
 
 
 We can illustrate the posterior samples either as a histogram or as a kernel density estimate (KDE) using the built-in plotting functions:
@@ -637,10 +642,238 @@ The result looks like this:
    :width: 600
 
 
-**************************
-Production of Peudo Events
-**************************
+**********************
+Peudo Event Simulation
+**********************
 
-.. todo::
+EOS can simulate pseudo events from any of its built-in PDFs using Markov chain Monte Carlo techniques.
+The examples following in this section illustrate how to find a specific PDF from the list of all built-in PDFs,
+simulate the pseudo events from this object, compare to the pseudo events with the analytic results,
+and plot 1D and 2D histograms of the pseudo events.
 
-  Write section on production of pseudo events
+.. note::
+
+   The following examples are also available as an interactive `Jupyter <https://jupyter.org/>`_ notebook `from here <https://github.com/eos/eos/blob/master/examples/simulation.ipynb>`_.
+
+
+Listing the built-in Probability Density Functions
+==================================================
+
+The full list of built-in PDFs for the most-recent EOS release is available online `here <https://eos.github.io/doc/signal-pdfs>`_.
+For an interactive approach to see the list of PDFs available to you, run the following in a Jupyter notebook:
+
+.. code-block::
+
+   import eos
+   display(eos.SignalPDFs())
+
+Searching for a specific PDF is possible by filtering for specific strings in the PDF name's *prefix*, *name*, or *suffix* parts.
+The following example only shows PDFs that contain `'B->Dlnu'` in the prefix part.
+
+.. code-block::
+
+   display(eos.SignalPDFs(prefix='B->Dlnu'))
+
+
+Constructing a 1D PDF and Simulating Pseudo Events
+==================================================
+
+We construct the one-dimension PDF describing the decay distribution in the variable :math:`q^2` and for :math:`\ell=\mu` leptons.
+We create the ``q2`` kinematic variable and set it to an arbitrary starting value.
+We set boundaries for the phase space from which we want to sample through the kinematic variables ``q2_min`` and ``q2_max``.
+If needed, we can shrink the phase space to a volume smaller than physically allowed. The normalization of the PDF will automatically adapt.
+
+We simulate ``stride * N=250000`` pseudo events/samples from the PDF, which are thinned down to ``N=50000``.
+The Markov chains can self adapt to the PDF in ``preruns=3`` preruns with ``pre_N=1000`` pseudo events/samples each.
+
+.. code-block::
+
+   mu_kinematics = eos.Kinematics(**{
+       'q2':            2.0,  'q2_min':            0.02,     'q2_max':           11.6,
+   })
+   mu_pdf = eos.SignalPDF.make('B->Dlnu::dGamma/dq2', eos.Parameters(), mu_kinematics, eos.Options())
+   rng = np.random.mtrand.RandomState(74205)
+   mu_samples, mu_weights = mu_pdf.sample_mcmc(N=50000, stride=5, pre_N=1000, preruns=3, rng=rng)
+
+We repeat the exercise for :math:`\ell=\tau` leptons, and adapt the phase space accordingly.
+
+.. code-block::
+
+   tau_kinematics = eos.Kinematics(**{
+       'q2':            4.0,  'q2_min':            3.17,     'q2_max':           11.6,
+   })
+   tau_pdf = eos.SignalPDF.make('B->Dlnu::dGamma/dq2', eos.Parameters(), tau_kinematics, eos.Options(l='tau'))
+   rng = np.random.mtrand.RandomState(74205)
+   tau_samples, tau_weights = tau_pdf.sample_mcmc(N=50000, stride=5, pre_N=1000, preruns=3, rng=rng)
+
+
+Comparing the 1D PDF pseudo events with the analytic result
+=====================================================
+
+We can now histogram the pseudo events/samples and compare the histogram with the analytical result.
+Similar to observables, ``SignalPDF`` objects can be plotted as a function of a single kinematic variable,
+while keeping all other kinematic variables fixed. The latter is achieved via the ``kinematics`` key.
+
+.. code-block::
+
+   plot_args = {
+       'plot': {
+           'x': { 'label': r'$q^2$', 'unit': r'$\textnormal{GeV}^2$', 'range': [0.0, 11.60] },
+           'y': { 'label': r'$P(q^2)$',                               'range': [0.0,  0.25] },
+           'legend': { 'location': 'upper left' }
+       },
+       'contents': [
+           {
+               'label': r'samples ($\ell=\mu$)',
+               'type': 'histogram',
+               'data': {
+                   'samples': mu_samples
+               },
+               'color': 'C0'
+           },
+           {
+               'label': r'samples ($\ell=\tau$)',
+               'type': 'histogram',
+               'data': {
+                   'samples': tau_samples
+               },
+               'color': 'C1'
+           },
+           {
+               'label': r'PDF ($\ell=\mu$)',
+               'type': 'signal-pdf',
+               'pdf': 'B->Dlnu::dGamma/dq2;l=mu',
+               'kinematic': 'q2',
+               'range': [0.02, 11.60],
+               'kinematics': {
+                   'q2_min':  0.02,
+                   'q2_max': 11.60,
+               },
+               'color': 'C0'
+           },
+           {
+               'label': r'PDF ($\ell=\tau$)',
+               'type': 'signal-pdf',
+               'pdf': 'B->Dlnu::dGamma/dq2;l=tau',
+               'kinematic': 'q2',
+               'range': [3.17, 11.60],
+               'kinematics': {
+                   'q2_min':  3.17,
+                   'q2_max': 11.60,
+               },
+               'color': 'C1'
+           },
+       ]
+   }
+   eos.plot.Plotter(plot_args).plot()
+
+The result looks like this:
+
+.. image:: /images/use-cases_simulation_hist-vs-plot.png
+   :width: 600
+
+As you can see, we have excellent agreement between our simulations and the respective analytic expressions for the PDFs.
+
+
+Constructing a 4D PDF and Simulating Pseudo Events
+==================================================
+
+We can also draw samples for PDFs with more than two kinematic variables. Here, we
+use the full four-dimensional PDF for :math:`\bar{B}\to D^*\ell^-\bar\nu` decays.
+
+We declare and initialize all four kinematic variables (``q2``, ``cos(theta_l)``, ``cos(theta_d)``, and ``phi``),
+and provide the phase space boundaries (same names appended with ``_min`` and ``_max``).
+
+We then produce the samples as for the 1D PDF.
+
+.. code-block::
+
+   dstarlnu_kinematics = eos.Kinematics(**{
+       'q2':            2.0,  'q2_min':            0.02,     'q2_max':           10.5,
+       'cos(theta_l)':  0.0,  'cos(theta_l)_min': -1.0,      'cos(theta_l)_max': +1.0,
+       'cos(theta_d)':  0.0,  'cos(theta_d)_min': -1.0,      'cos(theta_d)_max': +1.0,
+       'phi':           0.3,  'phi_min':           0.0,      'phi_max':           2.0 * np.pi
+   })
+   dstarlnu_pdf = eos.SignalPDF.make('B->D^*lnu::d^4Gamma', eos.Parameters(), dstarlnu_kinematics, eos.Options())
+   rng = np.random.mtrand.RandomState(74205)
+   dstarlnu_samples, _ = dstarlnu_pdf.sample_mcmc(N=50000, stride=5, pre_N=1000, preruns=3, rng=rng)
+
+We can now show correlations of the kinematic variables by plotting 2D histograms, beginning with :math:`q^2` vs :math:`\cos\theta_\ell`, ...
+
+.. code-block::
+
+   plot_args = {
+       'plot': {
+           'x': { 'label': r'$q^2$', 'unit': r'$\textnormal{GeV}^2$', 'range': [ 0.0, 10.50] },
+           'y': { 'label': r'$cos(\theta_\ell)$',                     'range': [-1.0,  +1.0] },
+           'legend': { 'location': 'upper left' }
+       },
+       'contents': [
+           {
+               'label': r'samples ($\ell=\mu$)',
+               'type': 'histogram2D',
+               'data': {
+                   'samples': dstarlnu_samples[:, (0, 1)]
+               },
+               'bins': 40
+           },
+       ]
+   }
+   eos.plot.Plotter(plot_args).plot()
+
+... over :math:`\cos\theta_\ell` vs :math:`\cos\theta_D` ...
+
+.. code-block::
+
+   plot_args = {
+       'plot': {
+           'x': { 'label': r'$cos(\theta_\ell)$',                     'range': [-1.0,  +1.0] },
+           'y': { 'label': r'$cos(\theta_D)$',                        'range': [-1.0,  +1.0] },
+           'legend': { 'location': 'upper left' }
+       },
+       'contents': [
+           {
+               'label': r'samples ($\ell=\mu$)',
+               'type': 'histogram2D',
+               'data': {
+                   'samples': dstarlnu_samples[:, (1, 2)]
+               },
+               'bins': 40
+           },
+       ]
+   }
+   eos.plot.Plotter(plot_args).plot()
+
+... to :math:`q^2` vs :math:`\phi`.
+
+.. code-block::
+
+   plot_args = {
+       'plot': {
+           'x': { 'label': r'$q^2$', 'unit': r'$\textnormal{GeV}^2$', 'range': [0.0, 10.70] },
+           'y': { 'label': r'$\phi$',                                 'range': [0.0,  6.28] },
+           'legend': { 'location': 'upper left' }
+       },
+       'contents': [
+           {
+               'label': r'samples ($\ell=\mu$)',
+               'type': 'histogram2D',
+               'data': {
+                   'samples': dstarlnu_samples[:, (0, 3)]
+               },
+               'bins': 40
+           },
+       ]
+   }
+   eos.plot.Plotter(plot_args).plot()
+
+The results look as follows:
+
+.. image:: /images/use-cases_simulation_hist2d-0-1.png
+   :width: 600
+
+.. image:: /images/use-cases_simulation_hist2d-1-2.png
+   :width: 600
+
+.. image:: /images/use-cases_simulation_hist2d-0-3.png
+   :width: 600
