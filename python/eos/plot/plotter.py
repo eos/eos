@@ -1,5 +1,5 @@
 # Copyright (c) 2018 Frederik Beaujean
-# Copyright (c) 2017, 2018 Danny van Dyk
+# Copyright (c) 2017, 2018, 2021 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -48,6 +48,7 @@ class Plotter:
         self.plot_types = {
             'band':                  Plotter.Band,
             'constraint':            Plotter.Constraint,
+            'constraint2D':         Plotter.Constraint2D,
             'constraint-overview':   Plotter.ConstraintOverview,
             'contours2D':            Plotter.Contours2D,
             'expression':            Plotter.Expression,
@@ -669,6 +670,189 @@ class Plotter:
                     color=self.color, elinewidth=1.0, fmt='_', linestyle='none', label=self.label)
                 # disable the label for subsequent plots
                 self.label = None
+
+
+    """ Plot 2D contours for two correlated observables from a single constraint. """
+    class Constraint2D(BasePlot):
+        def __init__(self, plotter, item):
+            super().__init__(plotter, item)
+
+            # mandatory keys
+            if 'constraint' not in item:
+                raise KeyError('no constraint specified')
+            self.constraint = item['constraint']
+
+            self.sigmas = item['sigmas'] if 'sigmas' in item else [1.0]
+            self.sigmas.sort(reverse=True)
+            self.alphas = np.linspace(0.0, self.alpha, len(self.sigmas) + 1)[1:]
+
+        def plot(self):
+            item = self.item
+            import yaml
+
+            constraints = eos.Constraints()
+            entry = constraints[self.constraint]
+            if not entry:
+                raise ValueError('unknown constraint {}'.format(constraint))
+
+            constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
+            if constraint['type'] not in ['Gaussian', 'MultivariateGaussian', 'MultivariateGaussian(Covariance)']:
+                raise ValueError('constraint type \'{}\' presently not supported'.format(constraint['type']))
+
+            if constraint['type'] in ['MultivariateGaussian(Covariance)', 'MultivariateGaussian']:
+                xmean  = None
+                xsigma = None
+                ymean  = None
+                ysigma = None
+                rho    = None
+
+                if 'x' not in item:
+                    raise KeyError('no x-axis specification for 2D constraint')
+
+                xitem = item['x']
+                if 'observable' not in xitem:
+                    raise KeyError('no observable in 2D constraint\'s x-axis specification')
+                self.xobservable = xitem['observable']
+                self.xkinematics = xitem['kinematics'] if 'kinematics' in xitem else {}
+                self.xoptions    = xitem['options']    if 'options'    in xitem else {}
+
+                if 'y' not in item:
+                    raise KeyError('no y-axis specification for 2D constraint')
+
+                yitem = item['y']
+                if 'observable' not in yitem:
+                    raise KeyError('no observable in 2D constraint\'s y-axis specification')
+                self.yobservable = yitem['observable']
+                self.ykinematics = yitem['kinematics'] if 'kinematics' in yitem else {}
+                self.yoptions    = yitem['options']    if 'options'    in yitem else {}
+
+                if constraint['type'] == 'MultivariateGaussian(Covariance)':
+                    observables = list(zip(constraint['observables'], constraint['kinematics'], constraint['options']))
+
+                    xobservable = (self.xobservable, self.xkinematics, self.xoptions)
+                    yobservable = (self.yobservable, self.ykinematics, self.yoptions)
+
+                    if xobservable not in observables:
+                        raise ValueError('x-axis observable {} not contained in constraint {}'.format(self.xobservable, self.constraint))
+
+                    if yobservable not in observables:
+                        raise ValueError('y-axis observable {} not contained in constraint {}'.format(self.yobservable, self.constraint))
+
+                    xidx = observables.index(xobservable)
+                    yidx = observables.index(yobservable)
+
+                    means  = np.array(constraint['means'])
+                    xmean  = means[xidx]
+                    ymean  = means[yidx]
+
+                    cov    = np.array(constraint['covariance'])
+                    xsigma = np.sqrt(covariance[xidx, xidx])
+                    ysigma = np.sqrt(covariance[yidx, yidx])
+                    rho    = cov[xidx, yidx] / (xsigma * ysigma)
+                elif constraint['type'] == 'MultivariateGaussian':
+                    observables = list(zip(constraint['observables'], constraint['kinematics'], constraint['options']))
+
+                    xobservable = (self.xobservable, self.xkinematics, self.xoptions)
+                    yobservable = (self.yobservable, self.ykinematics, self.yoptions)
+
+                    if xobservable not in observables:
+                        raise ValueError('x-axis observable {} not contained in constraint {}'.format(self.xobservable, self.constraint))
+
+                    if yobservable not in observables:
+                        raise ValueError('y-axis observable {} not contained in constraint {}'.format(self.yobservable, self.constraint))
+
+                    xidx = observables.index(xobservable)
+                    yidx = observables.index(yobservable)
+
+                    means  = np.array(constraint['means'])
+                    xmean  = means[xidx]
+                    ymean  = means[yidx]
+
+                    sigmas = np.sqrt(
+                          (np.abs(np.array(constraint['sigma-stat-hi'])) + np.abs(np.array(constraint['sigma-stat-lo'])))**2 / 4.0
+                        +  np.array(constraint['sigma-sys'])**2
+                    )
+                    xsigma = sigmas[xidx]
+                    ysigma = sigmas[yidx]
+
+                    rho    = np.array(constraint['correlations'])[xidx, yidx]
+
+                for sigma, alpha in zip(self.sigmas, self.alphas):
+                    xwidth = 2.0 * np.sqrt(1.0 + rho)
+                    ywidth = 2.0 * np.sqrt(1.0 - rho)
+
+                    ellipse = matplotlib.patches.Ellipse((0.0, 0.0), width=xwidth, height=ywidth,
+                                          alpha=alpha, color=self.color, linewidth=1, fill=True)
+                    transf = matplotlib.transforms.Affine2D() \
+                        .rotate_deg(45) \
+                        .scale(xsigma * sigma, ysigma * sigma) \
+                        .translate(xmean, ymean)
+                    ellipse.set_transform(transf + self.plotter.ax.transData)
+                    self.plotter.ax.add_patch(ellipse)
+            elif constraint['type'] == 'Gaussian':
+                if 'x' in self.item and 'y' in self.item:
+                    raise ValueError('both \'x\' and \'y\' specified for univariate constraint')
+
+                if 'x' in self.item:
+                    xitem = self.item['x']
+
+                    if 'observable' not in xitem:
+                        raise KeyError('no observable in 2D constraint\'s x-axis specification')
+
+                    self.xobservable = xitem['observable']
+                    self.xkinematics = xitem['kinematics'] if 'kinematics' in xitem else {}
+                    self.xoptions    = xitem['options']    if 'options'    in xitem else {}
+
+                    observable  = (constraint['observable'], constraint['kinematics'], constraint['options'])
+                    xobservable = (self.xobservable, self.xkinematics, self.xoptions)
+
+                    if xobservable != observable:
+                        raise ValueError('x-axis observable {} not contained in constraint {}'.format(self.xobservable, self.constraint))
+
+                    mean     = float(constraint['mean'])
+                    sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2)
+                    sigma_lo = np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2)
+
+                    for sigma, alpha in zip(self.sigmas, self.alphas):
+                        xlo, xhi = (mean - sigma * sigma_lo, mean + sigma * sigma_hi)
+                        ylo, yhi = self.plotter.yrange
+
+                        rect = matplotlib.patches.Rectangle((xlo, ylo), width=(xhi - xlo) * sigma, height=yhi - ylo,
+                                                       alpha=alpha, color=self.color)
+                        self.plotter.ax.add_patch(rect)
+                elif 'y' in self.item:
+                    yitem = self.item['y']
+
+                    if 'observable' not in yitem:
+                        raise KeyError('no observable in 2D constraint\'s y-axis specification')
+
+                    self.yobservable = yitem['observable']
+                    self.ykinematics = yitem['kinematics'] if 'kinematics' in yitem else {}
+                    self.yoptions    = yitem['options']    if 'options'    in yitem else {}
+
+                    observable  = (constraint['observable'], constraint['kinematics'], constraint['options'])
+                    yobservable = (self.yobservable, self.ykinematics, self.yoptions)
+
+                    if yobservable != observable:
+                        raise ValueError('y-axis observable {} not contained in constraint {}'.format(self.yobservable, self.constraint))
+
+                    mean     = float(constraint['mean'])
+                    sigma_hi = np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2)
+                    sigma_lo = np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2)
+
+                    for sigma, alpha in zip(self.sigmas, self.alphas):
+                        ylo, yhi = (mean - sigma * sigma_lo, mean + sigma * sigma_hi)
+                        xlo, xhi = self.plotter.xrange
+
+                        rect = matplotlib.patches.Rectangle((xlo, ylo), width=xhi - xlo, height=(yhi - ylo) * sigma,
+                                                       alpha=alpha, color=self.color)
+                        self.plotter.ax.add_patch(rect)
+
+
+        def handles_labels(self):
+            handle = plt.Rectangle((0,0),1,1, color=self.color, alpha=self.alpha)
+            label  = self.label
+            return ([handle], [label])
 
 
     """ Plots overview of several constraints from the EOS library of experimental and theoretical likelihoods. """
