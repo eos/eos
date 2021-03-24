@@ -475,6 +475,11 @@ C:2010A:
     archive: arXiv
     id: oai:arXiv.org:1005.3274
   title: The Amoroso Distribution
+CBHKSS:1995A:
+  authors: Chung, S.U. and Brose, J. and Hackmann, R. and Klempt, E. and Spanier, S. and Strassburger, C.
+  inspire-id: Chung:1995dx
+  journal: Ann.Physik 4 (1995) 404-430
+  title: Partial wave analysis in K-matrix formalism
 CDF:2011A:
   authors: Aaltonen, T. et al.
   collaboration: CDF
