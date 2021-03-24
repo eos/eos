@@ -32,6 +32,7 @@ libeosutils_la_SOURCES = \
 	iterator-range.hh \
 	join.hh \
 	kinematic.cc kinematic.hh \
+	kmatrix.hh kmatrix-impl.hh\
 	lcda.cc lcda.hh \
 	lock.cc lock.hh \
 	log.cc log.hh \
@@ -109,6 +110,7 @@ include_eos_utils_HEADERS = \
 	iterator-range.hh \
 	join.hh \
 	kinematic.hh \
+	kmatrix.hh kmatrix-impl.hh\
 	lcda.hh \
 	lock.hh \
 	log.hh \
@@ -156,6 +158,7 @@ TESTS = \
 	integrate_TEST \
 	join_TEST \
 	kinematic_TEST \
+	kmatrix_TEST \
 	lcda_TEST \
 	log_TEST \
 	matrix_TEST \
@@ -211,6 +214,8 @@ integrate_TEST_LDFLAGS = $(GSL_LDFLAGS)
 join_TEST_SOURCES = join_TEST.cc
 
 kinematic_TEST_SOURCES = kinematic_TEST.cc
+
+kmatrix_TEST_SOURCES = kmatrix_TEST.cc
 
 lcda_TEST_SOURCES = lcda_TEST.cc
 
