@@ -519,11 +519,14 @@ BOOST_PYTHON_MODULE(_eos)
         .def("name", &Observable::name, return_value_policy<copy_const_reference>(), R"(
             Returns the name of the observable.
         )")
-        .def("options", &Observable::options, R"(
-            Returns the set of options used when creating the observable.
+        .def("parameters", &Observable::parameters, R"(
+            Returns the set of parameters bound to this observable.
         )")
         .def("kinematics", &Observable::kinematics, R"(
-            Returns the set of kinematic variables used within this observable.
+            Returns the set of kinematic variables bound to this observable.
+        )")
+        .def("options", &Observable::options, R"(
+            Returns the set of options used when creating the observable.
         )")
         ;
 
