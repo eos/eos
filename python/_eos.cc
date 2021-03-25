@@ -254,6 +254,7 @@ BOOST_PYTHON_MODULE(_eos)
         )", no_init)
         .def("__init__", raw_function(&impl::Kinematics_ctor))
         .def(init<>())
+        .def("__add__", &Kinematics::operator+)
         .def("__iter__", range(&Kinematics::begin, &Kinematics::end))
         .def("__getitem__", (KinematicVariable (Kinematics::*)(const std::string &) const) &Kinematics::operator[])
         .def("declare", &Kinematics::declare, return_value_policy<return_by_value>(), R"(

@@ -88,6 +88,19 @@ namespace eos
         return result;
     }
 
+    Kinematics
+    Kinematics::operator+(const Kinematics & rhs) const
+    {
+        Kinematics result = this->clone();
+
+        for (const auto & kv : rhs)
+        {
+            result.declare(kv.name(), kv.evaluate());
+        }
+
+        return result;
+    }
+
     bool
     Kinematics::operator== (const Kinematics & rhs) const
     {
