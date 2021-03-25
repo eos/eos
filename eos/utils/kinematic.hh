@@ -80,6 +80,8 @@ namespace eos
              */
             Kinematics clone() const;
 
+            Kinematics operator+(const Kinematics & rhs) const;
+
             /// Equality comparison operator.
             bool operator== (const Kinematics & rhs) const;
 
