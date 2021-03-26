@@ -58,11 +58,13 @@ class Analysis:
     :type likelihood: iterable
     :param manual_constraints: Additional manually-specified constraints that shall be added to the log(likelihood).
     :type manual_constraints: dict, optional
+    :param fixed_parameters: Values of parameters that are set when the analysis is defined.
+    :type fixed_parameters: dict, optional
     """
 
-    def __init__(self, priors, likelihood, global_options={}, manual_constraints={}):
+    def __init__(self, priors, likelihood, global_options={}, manual_constraints={}, fixed_parameters={}):
         """Constructor."""
-        self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints }
+        self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
         self.parameters = eos.Parameters.Defaults()
         self.global_options = eos.Options()
         self.log_likelihood = eos.LogLikelihood(self.parameters)
@@ -70,8 +72,8 @@ class Analysis:
         self.varied_parameters = []
         self.bounds = []
 
-        eos.info('Creating analysis with {nprior} priors, {nconst} EOS-wide constraints, {nopts} global options, and {nmanual} manually-entered constraints'.format(
-            nprior=len(priors), nconst=len(likelihood), nopts=len(global_options), nmanual=len(manual_constraints)))
+        eos.info('Creating analysis with {nprior} priors, {nconst} EOS-wide constraints, {nopts} global options, {nmanual} manually-entered constraints and {nparams} fixed parameters.'.format(
+            nprior=len(priors), nconst=len(likelihood), nopts=len(global_options), nmanual=len(manual_constraints), nparams=len(fixed_parameters)))
         eos.debug('priors:')
         for p in priors:
             eos.debug(' - {name} ({type}) [{min}, {max}]'.format(name=p['parameter'], type=p['type'], min=p['min'], max=p['max']))
@@ -81,10 +83,17 @@ class Analysis:
         eos.debug('manual_constraints:')
         for cn, ce in manual_constraints.items():
             eos.debug(' - {name}'.format(name=cn))
+        eos.debug('fixed_parameters:')
+        for pn, pe in fixed_parameters.items():
+            eos.debug(' - {name}'.format(name=pn))
 
         # collect the global options
         for key, value in global_options.items():
             self.global_options.set(key, value)
+
+        # Fix specified parameters
+        for param, value in fixed_parameters.items():
+            self.parameters.set(param, value)
 
         # create the priors
         for prior in priors:
