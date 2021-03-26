@@ -175,6 +175,14 @@ BEKU:2002A:
   inspire-id: Bobeth:2002ch
   title: Enhancement of $\mathcal{B}(\bar{B}_d \to \mu^{+} \mu^{-}) / \mathcal{B}(\bar{B}_s \to \mu^{+} \mu^{-})$
     in the MSSM with minimal flavor violation and large tan beta
+BES:2002A:
+  authors: Bai, J. Z. et al.
+  collaboration: BES
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0102003
+  inspire-id: BES:2001ckj
+  title: Measurements of the cross-section for $e^+ e^- \to$ hadrons at center-of-mass energies from 2 GeV to 5 GeV
 BF:2001A:
   authors: Beneke, M. and Feldmann, T.
   eprint:
@@ -388,6 +396,14 @@ BaBar:2007A:
   inspire-id: BaBar:2007rbr
   title: Measurement of decay amplitudes of $B \to J/\psi K^{*}, \psi(2S) K^{*}$,
     and $\chi_{c1} K^{*}$ with an angular analysis
+BaBar:2007B:
+  authors: Aubert, Bernard et al.
+  collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0710.1371
+  inspire-id: BaBar:2008drv
+  title: Study of the Exclusive Initial-State-Radiation Production of the D anti-D System
 BaBar:2008A:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
@@ -416,6 +432,14 @@ BaBar:2010B:
   title: Measurement of the $B^0 \to \pi^\ell \ell^+ \nu$ and $B^+ \to \eta^{(')}
     \ell^+ \nu$ Branching Fractions, the $B^0 \to \pi^- \ell^+ \nu$ and $B^+ \to \eta
     \ell^+ \nu$ Form-Factor Shapes, and Determination of $|V_{ub}|$
+BaBar:2010C:
+  authors: del Amo Sanchez, P. et al.
+  collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1008.0338
+  inspire-id: BaBar:2010plp
+  title: Exclusive Production of $D^+_s D^-_s$, $D^{*+}_s D^-_s$, and $D^{*+}_s D^{*-}_s$ via $e^+ e^-$ Annihilation with Initial-State-Radiation
 BaBar:2012A:
   authors: Lees, J.P. et al.
   collaboration: BaBar
@@ -490,6 +514,14 @@ Belle:2008A:
   inspire-id: Schwanda:2008kw
   title: Measurement of the Moments of the Photon Energy Spectrum in $B \to X_s \gamma$
     Decays and Determination of $|V_{cb}|$ and $m_b$ at Belle
+Belle:2008B:
+  authors: Pakhlova, G. et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0708.0082
+  inspire-id: Belle:2007qxm
+  title: Measurement of the near-threshold $e^+ e^- \to D \bar{D}$ cross section using initial-state radiation
 Belle:2009A:
   authors: Wei, J.-T. et al.
   collaboration: Belle
@@ -516,6 +548,14 @@ Belle:2010A:
     id: oai:arXiv.org:1012.0090
   inspire-id: Ha:2010rf
   title: Measurement of the decay $B^0\to\pi^-\ell^+\nu$ and determination of $|V_{ub}|$
+Belle:2010B:
+  authors: Pakhlova, G. et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1011.4397
+  inspire-id: Belle:2010fwv
+  title: Measurement of $e^+e^-\to D_s^{(*)+} D_s^{(*)-}$ cross sections near threshold using initial-state radiation
 Belle:2013A:
   authors: Sibidanov, A. et al.
   collaboration: Belle
@@ -569,6 +609,15 @@ Belle:2017B:
   inspire-id: Abdesselam:2018nnh
   title: Measurement of the CKM matrix element $|V_{cb}|$ from $B^0\to D^{*-}\ell^
     {+} \nu_\ell$ at Belle
+Belle:2017C:
+  authors: Zhukova, V. et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1707.09167
+  inspire-id: Belle:2017grj
+  title: Angular analysis of the $e^+ e^- \to D^{(*) \pm} D^{* \mp}$ process near the
+    open charm threshold using initial-state radiation
 Belle:2019A:
   authors: Prim, Markus T. et. al.
   collaboration: Belle
@@ -685,6 +734,14 @@ CLEO:2000A:
     id: oai:arXiv.org:hep-ex/9912057
   inspire-id: Coan:1999kh
   title: Study of exclusive radiative B meson decays
+CLEO:2008A:
+  authors: Cronin-Hennessy, D. et al.
+  collaboration: CLEO
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0801.3418
+  inspire-id: CLEO:2008ojp
+  title: Measurement of Charm Production Cross Sections in $e^+ e^-$ Annihilation at Energies between 3.97 and 4.26-GeV
 CMM:1996A:
   authors: Chetyrkin, Konstantin G. and Misiak, Mikolaj and Munz, Manfred
   eprint:
