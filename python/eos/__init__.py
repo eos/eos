@@ -58,6 +58,9 @@ import os as _os
 def installation_time():
     return _time.ctime(_os.path.getmtime(eos.__file__))
 
+def installation_dir():
+    return _os.path.dirname(eos.__file__)
+
 __ipython__ = False
 try:
     if __IPYTHON__:
