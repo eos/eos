@@ -382,6 +382,7 @@ BOOST_PYTHON_MODULE(_eos)
     class_<Constraints>("_Constraints")
         .def("__getitem__", (std::shared_ptr<const ConstraintEntry> (Constraints::*)(const QualifiedName &) const) &Constraints::operator[])
         .def("__iter__", range(&Constraints::begin, &Constraints::end))
+        .def("insert", &Constraints::insert)
         ;
 
     // LogPrior
