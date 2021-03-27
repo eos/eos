@@ -165,6 +165,13 @@ namespace eos
          * @param name  The name of the ConstraintEntry that shall be retrieved.
          */
         std::shared_ptr<const ConstraintEntry> operator[] (const QualifiedName & name) const;
+
+        /*!
+         * Insert a new ConstraintEntry.
+         * @param name  The name of the new ConstraintEntry.
+         * @param entry A YAML-formatted string representing the new ConstraintEntry.
+         */
+        std::shared_ptr<const ConstraintEntry> insert(const QualifiedName & name, const std::string & entry) const;
     };
 
     extern template class WrappedForwardIterator<Constraints::ConstraintIteratorTag, const std::pair<const QualifiedName, std::shared_ptr<const ConstraintEntry>>>;

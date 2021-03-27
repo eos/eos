@@ -22,6 +22,7 @@
 #include <eos/constraint.hh>
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/utils/exception.hh>
+#include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -1812,25 +1813,37 @@ namespace eos
         return result;
     }
 
-    static
-    const std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> &
-    make_constraint_entries()
+    class ConstraintEntries :
+        public InstantiationPolicy<ConstraintEntries, Singleton>
     {
-        static const std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> entries = load_constraint_entries();
+        private:
+            std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> _entries;
 
-        return entries;
-    }
+            ConstraintEntries() :
+                _entries(load_constraint_entries())
+            {
+            }
 
-    /*
-     * Adding a new constraint:
-     * 1. Instantiate an existing ConstraintEntry in namespace entries{...}
-     * 2. Add an entry to the map in make_constraint_entries
-     * 4. Run constraint_TEST and check text output for new constraint
-     */
+            ~ConstraintEntries() = default;
+
+        public:
+            friend class InstantiationPolicy<ConstraintEntries, Singleton>;
+
+            const std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> & entries() const
+            {
+                return _entries;
+            }
+
+            void insert(const QualifiedName & key, std::shared_ptr<const ConstraintEntry> & value)
+            {
+                _entries[key] = value;
+            }
+    };
+
     Constraint
     Constraint::make(const QualifiedName & name, const Options & options)
     {
-        auto & entries = make_constraint_entries();
+        auto & entries = ConstraintEntries::instance()->entries();
 
         auto e = entries.find(name);
         if (e == entries.end())
@@ -1852,7 +1865,7 @@ namespace eos
         const std::map<QualifiedName, std::shared_ptr<const ConstraintEntry>> constraint_entries;
 
         Implementation() :
-            constraint_entries(make_constraint_entries())
+            constraint_entries(ConstraintEntries::instance()->entries())
         {
         }
     };
@@ -1889,5 +1902,18 @@ namespace eos
         }
 
         return i->second;
+    }
+
+    std::shared_ptr<const ConstraintEntry>
+    Constraints::insert(const QualifiedName & name, const std::string & entry) const
+    {
+        std::shared_ptr<const ConstraintEntry> _entry(ConstraintEntry::FromYAML(name, entry));
+
+        if (nullptr == _entry.get())
+            throw InternalError("ConstraintEntry::FromYAML should never return nullptr");
+
+        ConstraintEntries::instance()->insert(name, _entry);
+
+        return _entry;
     }
 }
