@@ -55,7 +55,7 @@ namespace eos
             alpha_e(p["QED::alpha_e(m_b)"], u),
             br_bcsl(p["exp::BR(B->X_clnu)"], u),
             uncertainty(p["B->X_sgamma::uncertainty"], u),
-            mu(p["mu"], u)
+            mu(p["b->s::mu_b"], u)
         {
             if ("SM" != o.get("model", "SM"))
             {
@@ -144,7 +144,7 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["QM::hbar"], u),
-            mu(p["mu"], u),
+            mu(p["b->s::mu_b"], u),
             m_B(p["mass::B_d"], u),
             mu2_g(p["B->B::mu_G^2@1GeV"], u),
             mu2_pi(p["B->B::mu_pi^2@1GeV"], u),

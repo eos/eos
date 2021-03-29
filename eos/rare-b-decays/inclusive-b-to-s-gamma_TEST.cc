@@ -52,7 +52,7 @@ class BToXsGammaNLOTest :
                 p["b->s::c6"] = +0.0009;
                 p["b->s::Re{c7}"] = -0.32372;
                 p["b->s::c8"] = -0.159167;
-                p["mu"] = 5.0;
+                p["b->s::mu_b"] = 5.0;
                 // PDG 2010 CKM parameters
                 p["CKM::A"] = 0.812;
                 p["CKM::lambda"] = 0.2243;
