@@ -504,32 +504,32 @@ groups:
           max:     +0.165
           comments: 'cf. [BSZ2015], table 1'
       # B->K LCDA Parameter
-      'B->K::a_1@1GeV' :
+      'K::a_1@1GeV' :
           central: +0.06
           min:     +0.03
           max:     +0.09
           comments: ' // cf. [BBL2006], Table 3'
-      'B->K::a_2@1GeV' :
+      'K::a_2@1GeV' :
           central: +0.25
           min:     +0.10
           max:     +0.4
           comments: ' // cf. [BBL2006], Table 3'
-      'B->K::a_4@1GeV' :
+      'K::a_4@1GeV' :
           central: -0.015
           min:     -0.115
           max:     +0.085
           comments: ' // cf. [BZ2004v3], Eq. (24)'
-      'B->K::a_1@2.2GeV' :
+      'K::a_1@2.2GeV' :
           central: +0.048
           min:     +0.024
           max:     +0.071
           comments: ' // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
-      'B->K::a_2@2.2GeV' :
+      'K::a_2@2.2GeV' :
           central: +0.174
           min:     +0.070
           max:     +0.278
           comments: ' // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
-      'B->K::a_4@2.2GeV' :
+      'K::a_4@2.2GeV' :
           central: -0.0089
           min:     -0.0679
           max:     +0.0502

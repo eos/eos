@@ -1201,9 +1201,9 @@ namespace eos
                 _f_p_factor(p["B->K::fp_uncertainty@BZ2004v2"], *this),
                 _f_0_factor(p["B->K::f0_uncertainty@BZ2004v2"], *this),
                 _f_t_factor(p["B->K::ft_uncertainty@BZ2004v2"], *this),
-                _a_1(p["B->K::a_1@2.2GeV"], *this),
-                _a_2(p["B->K::a_2@2.2GeV"], *this),
-                _a_4(p["B->K::a_4@2.2GeV"], *this)
+                _a_1(p["K::a_1@2.2GeV"], *this),
+                _a_2(p["K::a_2@2.2GeV"], *this),
+                _a_4(p["K::a_4@2.2GeV"], *this)
             {
             }
 
