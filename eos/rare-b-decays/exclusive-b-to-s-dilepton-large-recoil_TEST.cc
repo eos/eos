@@ -252,7 +252,7 @@ class BToKDileptonLargeRecoilBobethCompatibilityTest :
             TEST_CHECK_RELATIVE_ERROR(d.b_l(s),  9.694697008e-21, eps);
             TEST_CHECK_RELATIVE_ERROR(d.c_l(s), -2.756810607e-20, eps);
 
-            const double tau_over_hbar = p["life_time::B_u"] / p["hbar"];
+            const double tau_over_hbar = p["life_time::B_u"] / p["QM::hbar"];
             TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(1, 6),
                                       2.898727023e-19 * tau_over_hbar, eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_cp_averaged(1, 6),
