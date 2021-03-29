@@ -150,7 +150,7 @@ namespace eos
             mu2_pi(p["B->B::mu_pi^2@1GeV"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            gfermi(p["G_Fermi"], u),
+            gfermi(p["WET::G_Fermi"], u),
             tau(p["life_time::B" + (destringify<bool>(o.get("admixture", "true")) ? ("@Y(4S)") : ("_" + o.get("q", "d")))], u)
         {
             u.uses(*model);

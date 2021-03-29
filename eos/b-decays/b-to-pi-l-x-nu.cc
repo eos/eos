@@ -53,7 +53,7 @@ namespace eos
             m_pi(p["mass::pi^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
             m_mu(p["mass::mu"], u),
             m_tau(p["mass::tau"], u),
-            g_fermi(p["G_Fermi"], u),
+            g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u)
         {
             if ((o.get("q", "d") != "d") && (o.get("q", "d") != "u")) // q = d is the default

@@ -102,7 +102,7 @@ namespace eos
             m_Kstar(p["mass::K_d^*"], u),
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            g_fermi(p["G_Fermi"], u),
+            g_fermi(p["WET::G_Fermi"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
             form_factors(FormFactorFactory<PToV>::create(QualifiedName("B->K^*::" + o.get("form-factors", "KMPW2010")), p, o))
