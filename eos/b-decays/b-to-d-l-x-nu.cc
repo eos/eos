@@ -64,7 +64,7 @@ namespace eos
             m_mu(p["mass::mu"], u),
             m_tau(p["mass::tau"], u),
             g_fermi(p["G_Fermi"], u),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             opt_model(o, "model", {"SM"}, "SM"),
             model(Model::make(opt_model.value(), p, o))
         {

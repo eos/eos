@@ -284,7 +284,7 @@ namespace eos
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
             opt_q(o, "q", { "u", "d", "s" }, "d"),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
             g_fermi(p["G_Fermi"], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),

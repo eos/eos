@@ -72,7 +72,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             m_Bs(p["mass::B_s"], u),
             m_Kstar(p["mass::K_u^*"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
@@ -569,7 +569,7 @@ namespace eos
         BToPseudoscalarLeptonNeutrino btopilnu;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             tau(p["life_time::B_d"], u),
             bstokstarlnu(p, o + Options{ std::make_pair("l", "mu")}),
             btolnu(p, o + Options{ std::make_pair("l", "tau") }),

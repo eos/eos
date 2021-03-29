@@ -54,7 +54,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             g_fermi(p["G_Fermi"], u),
             m_B(p["mass::B_u"], u),
             f_B(p["decay-constant::B_u"], u),

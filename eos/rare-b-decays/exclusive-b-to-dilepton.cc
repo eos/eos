@@ -69,7 +69,7 @@ namespace eos
             mu(p["mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["G_Fermi"], u),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
             m_b(p["mass::b(MSbar)"], u),
             m_q(p["mass::" + o.get("q", "d") + "(2GeV)"], u)

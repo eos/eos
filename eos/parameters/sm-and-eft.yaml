@@ -7,7 +7,7 @@ groups:
   - title: 'Standard Model Parameters'
     description: ''
     parameters:
-      'hbar' :
+      'QM::hbar' :
           central: +6.58211928e-25
           min:     +6.58211913e-25
           max:     +6.58211943e-25

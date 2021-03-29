@@ -327,7 +327,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             g_fermi(p["G_Fermi"], u),
             m_Lambda_b(p["mass::Lambda_b"], u),
@@ -843,7 +843,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             g_fermi(p["G_Fermi"], u),
             m_Lambda_b(p["mass::Lambda_b"], u),

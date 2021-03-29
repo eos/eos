@@ -177,7 +177,7 @@ namespace eos
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
             g_fermi(p["G_Fermi"], u),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {

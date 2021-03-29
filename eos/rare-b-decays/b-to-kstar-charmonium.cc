@@ -74,7 +74,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             g_fermi(p["G_Fermi"], u),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             model(Model::make(o.get("model", "SM"), p, o)),
             opt_q(o, "q", { "d", "u" }, "d"),
             m_B(p["mass::B_" + opt_q.value()], u),

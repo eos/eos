@@ -143,7 +143,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             mu(p["mu"], u),
             m_B(p["mass::B_d"], u),
             mu2_g(p["B->B::mu_G^2@1GeV"], u),

@@ -123,7 +123,7 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "WilsonScan"), p, o)),
             parameters(p),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
             m_s_MSbar(p["mass::s(2GeV)"], u),
@@ -2236,7 +2236,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             parameters(p),
             model(Model::make(o.get("model", "SM"), p, o)),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c(p["mass::c"], u),
             m_s_MSbar(p["mass::s(2GeV)"], u),
