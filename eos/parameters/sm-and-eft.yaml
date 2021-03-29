@@ -294,6 +294,13 @@ groups:
         See the EOS manual for their physical definitions.
     wcxf-relevant: true
     parameters:
+      # Factorization scale
+      'b->s::mu_b' :
+          central: +4.2
+          min:     +2.4
+          max:     +9.6
+          comments: ''
+
       # Wilson coefficients C1 - C6 at mu = 4.2 GeV to NNLL accuary as calculated in the SM by EOS's StandardModel class.
       # For the calculations, cf. [BMU1999].
       "b->s::c1" :

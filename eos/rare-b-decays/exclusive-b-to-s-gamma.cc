@@ -100,7 +100,7 @@ namespace eos
             lambda_B_p(p["lambda_B_p"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_Kstar(p["mass::K_d^*"], u),
-            mu(p["mu"], u),
+            mu(p["b->s::mu_b"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["WET::G_Fermi"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),

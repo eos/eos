@@ -335,7 +335,7 @@ namespace eos
             alpha(p["Lambda::alpha"], u),
             polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation","unpolarised") ], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            mu(p["mu"], u),
+            mu(p["b->s::mu_b"], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu")
         {
             form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors", "BFvD2014"), p, o);
@@ -851,7 +851,7 @@ namespace eos
             alpha(p["Lambda::alpha"], u),
             polarisation(p["Lambda_b::polarisation@" + o.get("production-polarisation","unpolarised") ], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
-            mu(p["mu"], u),
+            mu(p["b->s::mu_b"], u),
             r_perp_0(p["Lambda_b->Lambdall::r_perp_0@MvD2016"], u),
             r_perp_1(p["Lambda_b->Lambdall::r_perp_1@MvD2016"], u),
             r_para_0(p["Lambda_b->Lambdall::r_para_0@MvD2016"], u),
