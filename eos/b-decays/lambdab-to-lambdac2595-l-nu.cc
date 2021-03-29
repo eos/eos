@@ -58,7 +58,7 @@ namespace eos
             tau_LambdaB(p["life_time::Lambda_b"], u),
             m_LambdaC2595(p["mass::Lambda_c(2595)"], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
-            g_fermi(p["G_Fermi"], u),
+            g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u)
         {
             form_factors = FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)@" + o.get("form-factors","HQET"), p);

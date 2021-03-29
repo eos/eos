@@ -79,7 +79,7 @@ namespace eos
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
             mu(p["mu"], u),
-            g_fermi(p["G_Fermi"], u),
+            g_fermi(p["WET::G_Fermi"], u),
             tau(p["life_time::B_s"], u)
         {
             form_factors = FormFactorFactory<PToV>::create("B_s->K^*::" + o.get("form-factors", "FMvD2015"), p, o);

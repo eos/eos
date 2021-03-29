@@ -73,7 +73,7 @@ namespace eos
         std::function<complex<double> ()> residue_H_para;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            g_fermi(p["G_Fermi"], u),
+            g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             model(Model::make(o.get("model", "SM"), p, o)),
             opt_q(o, "q", { "d", "u" }, "d"),

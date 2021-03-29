@@ -60,7 +60,7 @@ namespace eos
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
             m_pi(p["mass::pi^" + std::string(o.get("q", "d") == "d" ? "+" : "0")], u),
             m_l(p["mass::" + o.get("l", "mu")], u),
-            g_fermi(p["G_Fermi"], u),
+            g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             rng(gsl_rng_alloc(gsl_rng_mt19937)),
             state(gsl_monte_miser_alloc(3u))

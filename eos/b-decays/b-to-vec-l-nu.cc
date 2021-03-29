@@ -286,7 +286,7 @@ namespace eos
             opt_q(o, "q", { "u", "d", "s" }, "d"),
             hbar(p["QM::hbar"], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
-            g_fermi(p["G_Fermi"], u),
+            g_fermi(p["WET::G_Fermi"], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
             m_B(p["mass::B_" + opt_q.value()], u),
