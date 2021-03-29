@@ -72,6 +72,10 @@ class BToKstarGammaTest :
                 p["mass::c"] = 1.27;
                 p["mass::B_d"] = 5.27958;
                 p["mass::K_d^*"] = 0.89594;
+                p["K^*::a_1_para@1GeV"] = 0.1;
+                p["K^*::a_1_perp@1GeV"] = 0.1;
+                p["K^*::a_2_para@1GeV"] = 0.1;
+                p["K^*::a_2_perp@1GeV"] = 0.1;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -110,6 +114,10 @@ class BToKstarGammaTest :
                 p["mass::b(MSbar)"] = 4.2;
                 p["mass::B_d"] = 5.27958;
                 p["mass::K_d^*"] = 0.89594;
+                p["K^*::a_1_para@1GeV"] = 0.1;
+                p["K^*::a_1_perp@1GeV"] = 0.1;
+                p["K^*::a_2_para@1GeV"] = 0.1;
+                p["K^*::a_2_perp@1GeV"] = 0.1;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -147,6 +155,10 @@ class BToKstarGammaBobethCompatibilityTest :
             p["decay-constant::B_d"] = 0.1906;
             p["mass::B_d"] = 5.27958;
             p["mass::K_d^*"] = 0.89594;
+            p["K^*::a_1_para@1GeV"] = 0.1;
+            p["K^*::a_1_perp@1GeV"] = 0.1;
+            p["K^*::a_2_para@1GeV"] = 0.1;
+            p["K^*::a_2_perp@1GeV"] = 0.1;
             Options o;
             o.set("model", "WilsonScan");
             o.set("form-factors", "KMPW2010");

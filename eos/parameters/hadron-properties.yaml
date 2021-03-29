@@ -535,26 +535,6 @@ groups:
           max:     +0.0502
           comments: ' // cf. [BZ2004v3], Eq. (24) and cf. [BHP2007] App. A, pp. 24-25'
       # B->K^*, K^* LCDA parameters
-      'B->K^*::a_1_par' :
-          central: +0.1
-          min:     +0.03
-          max:     +0.17
-          comments: ''
-      'B->K^*::a_2_par' :
-          central: +0.1
-          min:     +0.0
-          max:     +0.2
-          comments: ''
-      'B->K^*::a_1_perp' :
-          central: +0.1
-          min:     +0.03
-          max:     +0.17
-          comments: ''
-      'B->K^*::a_2_perp' :
-          central: +0.1
-          min:     +0.0
-          max:     +0.2
-          comments: ''
       'B->K^*::f_Kstar_par' :
           central: +0.217
           min:     +0.212
