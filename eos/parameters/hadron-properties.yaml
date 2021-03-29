@@ -546,11 +546,6 @@ groups:
           max:     +0.178
           comments: ' // GeV @2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD2010], Table I'
       # B LCDA parameters
-      'lambda_B_p' :
-          central: +0.485
-          min:     +0.370
-          max:     +0.600
-          comments: ' // GeV, cf. [BHvD2010], Table I'
       'B::1/lambda_B_p' :
           central: +2.1739
           min:     +1.60

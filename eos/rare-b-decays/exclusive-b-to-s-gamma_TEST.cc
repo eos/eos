@@ -76,6 +76,7 @@ class BToKstarGammaTest :
                 p["K^*::a_1_perp@1GeV"] = 0.1;
                 p["K^*::a_2_para@1GeV"] = 0.1;
                 p["K^*::a_2_perp@1GeV"] = 0.1;
+                p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -118,6 +119,7 @@ class BToKstarGammaTest :
                 p["K^*::a_1_perp@1GeV"] = 0.1;
                 p["K^*::a_2_para@1GeV"] = 0.1;
                 p["K^*::a_2_perp@1GeV"] = 0.1;
+                p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -159,6 +161,7 @@ class BToKstarGammaBobethCompatibilityTest :
             p["K^*::a_1_perp@1GeV"] = 0.1;
             p["K^*::a_2_para@1GeV"] = 0.1;
             p["K^*::a_2_perp@1GeV"] = 0.1;
+            p["B::1/lambda_B_p"] = 1.0 / 0.485;
             Options o;
             o.set("model", "WilsonScan");
             o.set("form-factors", "KMPW2010");
