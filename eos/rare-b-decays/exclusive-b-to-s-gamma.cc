@@ -63,7 +63,7 @@ namespace eos
 
         UsedParameter f_Kstar_par;
 
-        UsedParameter lambda_B_p;
+        UsedParameter lambda_B_p_inv;
 
         UsedParameter m_B;
 
@@ -97,7 +97,7 @@ namespace eos
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], u),
             f_Kstar_par(p["B->K^*::f_Kstar_par"], u),
-            lambda_B_p(p["lambda_B_p"], u),
+            lambda_B_p_inv(p["B::1/lambda_B_p"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             m_Kstar(p["mass::K_d^*"], u),
             mu(p["b->s::mu_b"], u),
@@ -186,10 +186,6 @@ namespace eos
             QCDFIntegrals::Results qcdf_c = QCDFIntegrals::photon_charm_case(m_c_pole, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
             QCDFIntegrals::Results qcdf_b = QCDFIntegrals::photon_bottom_case(m_b_PS, m_B, m_Kstar, mu, a_1_perp, a_2_perp, a_1_par, a_2_par);
 
-            // inverse of the "negative" moment of the B meson LCDA
-            // cf. [BFS2001], Eq. (54), p. 15
-            double lambda_B_p_inv = 1.0 / lambda_B_p;
-
             /* Effective wilson coefficients */
             // cf. [BFS2001], below Eq. (9), p. 4
             complex<double> c7eff = wc.c7() - 1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
@@ -228,8 +224,8 @@ namespace eos
             /* perpendicular, top sector */
             // T0_top_perp_{p,m} = 0, cf. [BFS2001], Eq. (17), p. 6
             // cf. [BFS2004], Eq. (49)
-            complex<double> T1f_top_perp_p_left  = c7eff * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
-            complex<double> T1f_top_perp_p_right = wc.c7prime() * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
+            complex<double> T1f_top_perp_p_left  = c7eff * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv();
+            complex<double> T1f_top_perp_p_right = wc.c7prime() * (4.0 * m_B / energy) * invm1_perp * lambda_B_p_inv();
             // T1f_top_perp_m = 0, cf. [BFS2001], Eq. (22), p. 7
             // cf. [BFS2001], Eq. (23), p. 7
             // [Christoph] Use c8 instead of c8eff
@@ -237,14 +233,14 @@ namespace eos
                 + m_B / (2.0 * m_b_PS) * (
                         e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde1_perp
                         + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6() - (4.0 * m_b_PS / m_B) * (wc.c3() - wc.c4()/6.0 + 4.0 * wc.c5() - 2.0/3.0 * wc.c6())) * qcdf_b.jtilde1_perp
-                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv;
+                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv();
             const complex<double> T1nf_top_perp_p_right = 0.0;
             // T1nf_top_perp_m = 0, cf. [BFS2001], Eq. (17), p. 6
 
             /* perpendicular, up sector */
             // all T1f_up vanish, cf. [BFS2004], sentence below Eq. (49), p. 25
             // cf. [BFS2004], Eq. (50), p. 25
-            complex<double> T1nf_up_perp_p_left = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv;
+            complex<double> T1nf_up_perp_p_left = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv();
             const complex<double> T1nf_up_perp_p_right = 0.0;
 
 
@@ -257,9 +253,9 @@ namespace eos
             complex<double> Delta_T_ann_top_perp = e_q * M_PI * M_PI * f_B / 3.0 / m_b_PS / m_B * (
                     -4.0 * f_Kstar_perp * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 3.0 * wc.c5() + 4.0 * wc.c6())) * qcdf_0.j0_perp
                     + 2.0 * f_Kstar_par * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 12.0 * wc.c5() + 16.0 * wc.c6())) *
-                        (m_Kstar / lambda_B_p));
+                        (m_Kstar * lambda_B_p_inv() ));
             complex<double> Delta_T_ann_up_perp = -e_q * 2.0 * M_PI * M_PI * f_B * f_Kstar_par / 3.0 / m_b_PS / m_B *
-                (m_Kstar / lambda_B_p) * 3.0 * delta_qu * wc.c2();
+                (m_Kstar * lambda_B_p_inv()) * 3.0 * delta_qu * wc.c2();
             // Compute the numerically leading power-suppressed hard spectator interaction contributions to order alpha_s^1
             // cf. [BFS2004], Eqs. (52), (53)
             complex<double> Delta_T_hsa_top_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
@@ -269,14 +265,14 @@ namespace eos
                         + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j5_perp
                         + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j5_perp
                         - (8.0 / 27.0) * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()) * qcdf_0.j0_perp)
-                    - (4.0 * m_Kstar * f_Kstar_par / lambda_B_p) * (3.0 / 4.0) * (
+                    - (4.0 * m_Kstar * f_Kstar_par * lambda_B_p_inv() ) * (3.0 / 4.0) * (
                         (wc.c2() - wc.c1() / 6.0 + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j6_perp
                         + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j6_perp
                         + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j6_perp
                         - 8.0 / 27.0 * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6())));
             complex<double> Delta_T_hsa_up_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
                     + 8.0 * f_Kstar_perp * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0) * (qcdf_c.j5_perp - qcdf_0.j5_perp)
-                    - (4.0 * m_Kstar * f_Kstar_par / lambda_B_p) * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0)
+                    - (4.0 * m_Kstar * f_Kstar_par * lambda_B_p_inv() ) * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0)
                         * (qcdf_c.j6_perp - qcdf_0.j6_perp));
 
             // Compute the sum of the numerically leading power-suppressed contributions

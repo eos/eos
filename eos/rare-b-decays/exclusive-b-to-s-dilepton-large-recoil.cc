@@ -86,7 +86,7 @@ namespace eos
 
         UsedParameter f_Kstar_perp;
 
-        UsedParameter lambda_B_p;
+        UsedParameter lambda_B_p_inv;
 
         UsedParameter a_1_par;
 
@@ -136,7 +136,7 @@ namespace eos
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             f_Kstar_par(p["B->K^*::f_Kstar_par"], u),
             f_Kstar_perp(p["B->K^*::f_Kstar_perp@2GeV"], u),
-            lambda_B_p(p["lambda_B_p"], u),
+            lambda_B_p_inv(p["B::1/lambda_B_p"], u),
             a_1_par(p["K^*::a_1_para@1GeV"], u),
             a_2_par(p["K^*::a_2_para@1GeV"], u),
             a_1_perp(p["K^*::a_1_perp@1GeV"], u),
@@ -274,7 +274,7 @@ namespace eos
 
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15
-            double omega_0 = lambda_B_p, lambda_B_p_inv = 1.0 / lambda_B_p;
+            double omega_0 = 1.0 / lambda_B_p_inv();
             complex<double> lambda_B_m_inv = complex<double>(-gsl_sf_expint_Ei(s / m_B / omega_0), M_PI) * (std::exp(-s / m_B / omega_0) / omega_0);
 
             /* Y(s) for the up and the top sector */
@@ -364,8 +364,8 @@ namespace eos
             /* perpendicular, top sector */
             // T0_top_perp_{p,m} = 0, cf. [BFS2001], Eq. (17), p. 6
             // cf. [BFS2004], Eq. (49)
-            complex<double> T1f_top_perp_p_left  = (c7eff - wc.c7prime()) * (2.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
-            complex<double> T1f_top_perp_p_right = (c7eff + wc.c7prime()) * (2.0 * m_B / energy) * invm1_perp * lambda_B_p_inv;
+            complex<double> T1f_top_perp_p_left  = (c7eff - wc.c7prime()) * (2.0 * m_B / energy) * invm1_perp * lambda_B_p_inv();
+            complex<double> T1f_top_perp_p_right = (c7eff + wc.c7prime()) * (2.0 * m_B / energy) * invm1_perp * lambda_B_p_inv();
             // T1f_top_perp_m = 0, cf. [BFS2001], Eq. (22), p. 7
             // cf. [BFS2001], Eq. (23), p. 7
             // [Christoph] Use c8 instead of c8eff
@@ -373,26 +373,26 @@ namespace eos
                 + m_B / (2.0 * m_b_PS) * (
                         e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde1_perp
                         + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6() - (4.0 * m_b_PS / m_B) * (wc.c3() - wc.c4()/6.0 + 4.0 * wc.c5() - 2.0/3.0 * wc.c6())) * qcdf_b.jtilde1_perp
-                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv;
+                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv();
             // T1nf_top_perp_m = 0, cf. [BFS2001], Eq. (17), p. 6
 
             /* perpendicular, up sector */
             // all T1f_up vanish, cf. [BFS2004], sentence below Eq. (49), p. 25
             // cf. [BFS2004], Eq. (50), p. 25
-            complex<double> T1nf_up_perp_p = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv;
+            complex<double> T1nf_up_perp_p = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv();
 
             /* parallel, top sector */
             // T0_top_par_p = 0, cf. [BFS2001], Eq. (17), p. 6
             // cf. [BFS2004], Eqs. (46)-(47), p. 25 without the \omega term.
             complex<double> T0_top_par_m = -e_q * 4.0 * m_B / m_b_PS * (wc.c3() + 4.0/3.0 * wc.c4() + 16.0 * wc.c5() + 64.0/3.0 * wc.c6()) * lambda_B_m_inv;
             // cf. [BFS2004], Eq. (49), p. 25
-            complex<double> T1f_top_par_p  = (c7eff - wc.c7prime()) * (4.0 * m_B / energy) * invm1_par * lambda_B_p_inv;
+            complex<double> T1f_top_par_p  = (c7eff - wc.c7prime()) * (4.0 * m_B / energy) * invm1_par * lambda_B_p_inv();
             // T1f_top_par_m = 0, cf. [BFS2001], Eq. (22), p. 7
             // cf. [BFS2001], Eq. (25), p. 7
             complex<double> T1nf_top_par_p = m_B / m_b_PS * (
                     e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde2_parallel
                     + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0 / 3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
-                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0 / 3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
+                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0 / 3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv();
             // cf. [BFS2001], Eq. (26), pp. 7-8
             complex<double> T1nf_top_par_m = e_q * (8.0 * c8eff * qcdf_0.j0_parallel
                     + 6.0 * m_B / m_b_PS * (
@@ -406,7 +406,7 @@ namespace eos
             // cf. [BFS2004], Eqs. (46),(48), p. 25 without the \omega term
             complex<double> T0_up_par_m = +e_q * 4.0 * m_B / m_b_PS * (3.0 * delta_qu * wc.c2()) * lambda_B_m_inv;
             // cf. [BFS2004], Eq. (50), p. 25
-            complex<double> T1nf_up_par_p = +e_u * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde2_parallel - qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
+            complex<double> T1nf_up_par_p = +e_u * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde2_parallel - qcdf_0.jtilde2_parallel) * lambda_B_p_inv();
             // cf. [BFS2004], Eq. (50), p. 25 without the \omega term
             complex<double> T1nf_up_par_m = +e_q * 6.0 * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.j4_parallel - qcdf_0.j4_parallel) * lambda_B_m_inv;
 
@@ -422,9 +422,9 @@ namespace eos
             complex<double> Delta_T_ann_top_perp = e_q * M_PI * M_PI * f_B / 3.0 / m_b_PS / m_B * (
                     -4.0 * f_Kstar_perp * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 3.0 * wc.c5() + 4.0 * wc.c6())) * qcdf_0.j0_perp
                     + 2.0 * f_Kstar_par * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 12.0 * wc.c5() + 16.0 * wc.c6())) *
-                        (m_Kstar / (1.0 - s / (m_B * m_B)) / lambda_B_p));
+                        (m_Kstar / (1.0 - s / (m_B * m_B)) * lambda_B_p_inv() ));
             complex<double> Delta_T_ann_up_perp = -e_q * 2.0 * M_PI * M_PI * f_B * f_Kstar_par / 3.0 / m_b_PS / m_B *
-                (m_Kstar / (1.0 - s / (m_B * m_B)) / lambda_B_p) * 3.0 * delta_qu * wc.c2();
+                (m_Kstar / (1.0 - s / (m_B * m_B)) * lambda_B_p_inv() ) * 3.0 * delta_qu * wc.c2();
             // Compute the numerically leading power-suppressed hard spectator interaction contributions to order alpha_s^1
             // cf. [BFS2004], Eqs. (52), (53)
             complex<double> Delta_T_hsa_top_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
@@ -434,14 +434,14 @@ namespace eos
                         + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j5_perp
                         + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j5_perp
                         - (8.0 / 27.0) * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()) * qcdf_0.j0_perp)
-                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) / lambda_B_p) * (3.0 / 4.0) * (
+                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) * lambda_B_p_inv() ) * (3.0 / 4.0) * (
                         (wc.c2() - wc.c1() / 6.0 + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j6_perp
                         + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j6_perp
                         + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j6_perp
                         - 8.0 / 27.0 * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6())));
             complex<double> Delta_T_hsa_up_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
                     + 8.0 * f_Kstar_perp * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0) * (qcdf_c.j5_perp - qcdf_0.j5_perp)
-                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) / lambda_B_p) * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0)
+                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) * lambda_B_p_inv()) * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0)
                         * (qcdf_c.j6_perp - qcdf_0.j6_perp));
 
             // Compute the sum of the numerically leading power-suppressed contributions
@@ -498,9 +498,9 @@ namespace eos
 
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15
+            // omega_0 is just lambda_B_p
             const double
-                omega_0 = lambda_B_p,
-                lambda_B_p_inv = 1.0 / lambda_B_p;
+                omega_0 = 1.0 / lambda_B_p_inv();
 
             const complex<double>
                 lambda_B_m_inv = complex<double>(-gsl_sf_expint_Ei(s / m_B / omega_0), M_PI) * (std::exp(-s / m_B / omega_0) / omega_0);
@@ -562,13 +562,13 @@ namespace eos
                     + m_B / (2.0 * m_b_PS) * (
                         e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde1_perp
                         + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0/3.0 * wc.c6() - (4.0 * m_b_PS / m_B) * (wc.c3() - wc.c4()/6.0 + 4.0 * wc.c5() - 2.0/3.0 * wc.c6())) * qcdf_b.jtilde1_perp
-                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv,
+                        + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0/3.0 * wc.c6()) * qcdf_0.jtilde1_perp)) * lambda_B_p_inv(),
             // T1nf_top_perp_m = 0, cf. [BFS2001], Eq. (17), p. 6
 
             /* perpendicular, up sector */
             // all T1f_up vanish, cf. [BFS2004], sentence below Eq. (49), p. 25
             // cf. [BFS2004], Eq. (50), p. 25
-                T1nf_up_perp_p = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv,
+                T1nf_up_perp_p = +e_u * m_B / (2.0 * m_b_PS) * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde1_perp - qcdf_0.jtilde1_perp) * lambda_B_p_inv(),
 
             /* parallel, top sector */
             // cf. [BFS2004], Eqs. (46)-(47), p. 25 without the \omega term.
@@ -577,7 +577,7 @@ namespace eos
                 T1nf_top_par_p = m_B / m_b_PS * (
                     e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde2_parallel
                     + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0 / 3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
-                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0 / 3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv,
+                    + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0 / 3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv(),
             // cf. [BFS2001], Eq. (26), pp. 7-8
                 T1nf_top_par_m = e_q * (8.0 * c8eff * qcdf_0.j0_parallel
                     + 6.0 * m_B / m_b_PS * (
@@ -592,7 +592,7 @@ namespace eos
             const complex<double>
                 T0_up_par_m = +e_q * 4.0 * m_B / m_b_PS * (3.0 * delta_qu * wc.c2()) * lambda_B_m_inv,
             // cf. [BFS2004], Eq. (50), p. 25
-                T1nf_up_par_p = +e_u * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde2_parallel - qcdf_0.jtilde2_parallel) * lambda_B_p_inv,
+                T1nf_up_par_p = +e_u * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde2_parallel - qcdf_0.jtilde2_parallel) * lambda_B_p_inv(),
             // cf. [BFS2004], Eq. (50), p. 25 without the \omega term
                 T1nf_up_par_m = +e_q * 6.0 * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.j4_parallel - qcdf_0.j4_parallel) * lambda_B_m_inv;
 
@@ -610,9 +610,9 @@ namespace eos
                 Delta_T_ann_top_perp = e_q * M_PI * M_PI * f_B / 3.0 / m_b_PS / m_B * (
                     -4.0 * f_Kstar_perp * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 3.0 * wc.c5() + 4.0 * wc.c6())) * qcdf_0.j0_perp
                     + 2.0 * f_Kstar_par * (wc.c3() + 4.0 / 3.0 * (wc.c4() + 12.0 * wc.c5() + 16.0 * wc.c6())) *
-                        (m_Kstar / (1.0 - s / (m_B * m_B)) / lambda_B_p)),
+                        (m_Kstar / (1.0 - s / (m_B * m_B)) * lambda_B_p_inv())),
                 Delta_T_ann_up_perp = -e_q * 2.0 * M_PI * M_PI * f_B * f_Kstar_par / 3.0 / m_b_PS / m_B
-                    * (m_Kstar / (1.0 - s / (m_B * m_B)) / lambda_B_p) * 3.0 * delta_qu * wc.c2(),
+                    * (m_Kstar / (1.0 - s / (m_B * m_B)) * lambda_B_p_inv()) * 3.0 * delta_qu * wc.c2(),
             // Compute the numerically leading power-suppressed hard spectator interaction contributions to order alpha_s^1
             // cf. [BFS2004], Eqs. (52), (53)
                 Delta_T_hsa_top_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
@@ -622,14 +622,14 @@ namespace eos
                         + (wc.c3() +  5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j5_perp
                         + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j5_perp
                         - (8.0 / 27.0) * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()) * qcdf_0.j0_perp)
-                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) / lambda_B_p) * (3.0 / 4.0) * (
+                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) * lambda_B_p_inv()) * (3.0 / 4.0) * (
                           (wc.c2() - wc.c1() / 6.0 + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j6_perp
                         + (wc.c3() +  5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j6_perp
                         + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j6_perp
                         - 8.0 / 27.0 * (-15.0 / 2.0 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()))),
                 Delta_T_hsa_up_perp = e_q * a_mu_f * (M_PI * M_PI * f_B / (3.0 * m_b_PS * m_B)) * (
                     + 8.0 * f_Kstar_perp * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0) * (qcdf_c.j5_perp - qcdf_0.j5_perp)
-                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) / lambda_B_p) * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0)
+                    - (4.0 * m_Kstar * f_Kstar_par / (1.0 - s / (m_B * m_B)) * lambda_B_p_inv()) * (3.0 / 4.0) * (wc.c2() - wc.c1() / 6.0)
                         * (qcdf_c.j6_perp - qcdf_0.j6_perp));
 
             // Compute the sum of the numerically leading power-suppressed contributions
