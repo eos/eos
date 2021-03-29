@@ -68,6 +68,10 @@ class BToKstarDileptonLargeRecoilBobethCompatibilityTest :
           p["Im{c10}"] = 2.5;
           p["Re{c10'}"] = 4;
           p["Im{c10'}"] = 3.5;
+          p["K^*::a_1_para@1GeV"] = 0.1;
+          p["K^*::a_1_perp@1GeV"] = 0.1;
+          p["K^*::a_2_para@1GeV"] = 0.1;
+          p["K^*::a_2_perp@1GeV"] = 0.1;
 
           Options oo;
           oo.set("model", "WilsonScan");
@@ -143,6 +147,10 @@ class BToKstarDileptonLargeRecoilBobethCompatibilityTest :
             p["Im{cT}"] = 1.4;
             p["Re{cT5}"] = 1.0;
             p["Im{cT5}"] = 1.5;
+            p["K^*::a_1_para@1GeV"] = 0.1;
+            p["K^*::a_1_perp@1GeV"] = 0.1;
+            p["K^*::a_2_para@1GeV"] = 0.1;
+            p["K^*::a_2_perp@1GeV"] = 0.1;
 
             p["mass::s(2GeV)"] = 0.12;
 
@@ -225,6 +233,10 @@ class BToKDileptonLargeRecoilBobethCompatibilityTest :
             p["Im{cT}"] = 1.4;
             p["Re{cT5}"] = 1.0;
             p["Im{cT5}"] = 1.5;
+            p["K^*::a_1_para@1GeV"] = 0.1;
+            p["K^*::a_1_perp@1GeV"] = 0.1;
+            p["K^*::a_2_para@1GeV"] = 0.1;
+            p["K^*::a_2_perp@1GeV"] = 0.1;
 
             Options oo;
             oo.set("model", "WilsonScan");
