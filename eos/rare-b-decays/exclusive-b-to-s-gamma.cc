@@ -87,7 +87,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             a_1_perp(p["B->K^*::a_1_perp"], u),
             a_2_perp(p["B->K^*::a_2_perp"], u),
             a_1_par(p["B->K^*::a_1_par"], u),

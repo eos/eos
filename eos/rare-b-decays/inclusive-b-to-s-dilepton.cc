@@ -79,7 +79,7 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             gfermi(p["G_Fermi"], u),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             tau_B(p["life_time::B" + (destringify<bool>(o.get("admixture", "true")) ? ("@Y(4S)") : ("_" + o.get("q", "d")))], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),

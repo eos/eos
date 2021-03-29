@@ -281,7 +281,7 @@ namespace eos
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
-            hbar(p["hbar"], u),
+            hbar(p["QM::hbar"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             g_fermi(p["G_Fermi"], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
