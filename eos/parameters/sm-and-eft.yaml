@@ -11,41 +11,48 @@ groups:
           central: +6.58211928e-25
           min:     +6.58211913e-25
           max:     +6.58211943e-25
+          latex:    '$\hbar$'
           comments: 'in GeV s, cf. [PDG2012]:  p. 4'
       # Factorization scale
       'mu' :
           central: +4.2
           min:     +2.4
           max:     +9.6
+          latex:    '$\mu$'
           comments: ''
       # GSW Parameter
       'GSW::sin^2(theta)' :
           central: +0.23116
           min:     +0.23104
           max:     +0.23128
+          latex:    '$\sin(\theta)^2_{\text{GSW}}$'
           comments: 'cf. [PDG2012]:  p. 4'
       # QED inputs
       'QED::alpha_e(m_b)' :
           central: +0.00751879699248120
           min:     +0.00751879699248120
           max:     +0.00781250000000000
+          latex:    '$\alpha_e(m_b)$'
           comments: 'alpha_e(m_b) = 1/133 .. alpha_e(m_W) = 1/128'
       # G_Fermi
       'WET::G_Fermi' :
           central: +1.1663787e-5
           min:     +1.1663781e-5
           max:     +1.1663793e-5
+          latex:    '$G_{F,\text{WET}}$'
           comments: 'cf. [PDG2012], p. 5'
       # b->s matching parameters
       'b->s::mu_0c' :
           central: +80.0
           min:     +80.0
           max:     +80.0
+          latex:    '$\mu^{b \to s}_{0c}$'
           comments: ''
       'b->s::mu_0t' :
           central: +120.0
           min:     +120.0
           max:     +120.0
+          latex:    '$\mu^{b \to s}_{0t}$'
           comments: ''
       # QCD inputs
       'QCD::alpha_s(MZ)' :
@@ -299,6 +306,7 @@ groups:
           central: +4.2
           min:     +2.4
           max:     +9.6
+          latex:    '$\mu^{b \to s}_b$'
           comments: ''
 
       # Wilson coefficients C1 - C6 at mu = 4.2 GeV to NNLL accuary as calculated in the SM by EOS's StandardModel class.
@@ -809,124 +817,154 @@ groups:
           central: 1.0
           min:     1.0
           max:     1.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u \ell^-\bar\nu}_{V_L}$'
       'b->uenue::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{V_L}$'
       'b->uenue::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\ell^-\bar\nu}_{V_R}$'
       'b->uenue::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{V_R}$'
       'b->uenue::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_L}$'
       'b->uenue::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_L}$'
       'b->uenue::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_R}$'
       'b->uenue::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_R}$'
       'b->uenue::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\ell^-\bar\nu}_{T}$'
       'b->uenue::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{T}$'
 
       # b->u Wilson coefficients - muon
       'b->umunumu::Re{cVL}' :
           central: 1.0
           min:     1.0
           max:     1.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{V_L}$'
       'b->umunumu::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{V_L}$'
       'b->umunumu::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{V_R}$'
       'b->umunumu::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{V_R}$'
       'b->umunumu::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{S_L}$'
       'b->umunumu::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{S_L}$'
       'b->umunumu::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{S_R}$'
       'b->umunumu::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{S_R}$'
       'b->umunumu::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{T}$'
       'b->umunumu::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{T}$'
 
       # b->u Wilson coefficients - tau
       'b->utaunutau::Re{cVL}' :
           central: 1.0
           min:     1.0
           max:     1.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{V_L}$'
       'b->utaunutau::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{V_L}$'
       'b->utaunutau::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{V_R}$'
       'b->utaunutau::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{V_R}$'
       'b->utaunutau::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{S_L}$'
       'b->utaunutau::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{S_L}$'
       'b->utaunutau::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{S_R}$'
       'b->utaunutau::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{S_R}$'
       'b->utaunutau::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{T}$'
       'b->utaunutau::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{T}$'
   # }}}
