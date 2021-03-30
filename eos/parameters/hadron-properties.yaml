@@ -365,32 +365,38 @@ groups:
           central: +1.519e-12
           min:     +1.512e-12
           max:     +1.526e-12
+          latex:    '$\tau_{B_d}$'
           comments: 'cf. [PDG2012], p. 84'
       'life_time::B_u' :
           central: +1.641e-12
           min:     +1.633e-12
           max:     +1.649e-12
+          latex:    '$\tau_{B_u}$'
           comments: 'cf. [PDG2012], p. 70'
       'life_time::B_s' :
           central: +1.516e-12
           min:     +1.505e-12
           max:     +1.527e-12
+          latex:    '$\tau_{B_s}$'
           comments: 'cf. [PDG-Live], September 2013'
       'life_time::B@Y(4S)' :
           central: +1.580e-12
           min:     +1.573e-12
           max:     +1.589e-12
+          latex:    '$\tau_{B(\Psi(4S))}$'
           comments: 'based on 50:50 admixture of B^+B^- and B^0Bbar^0 @ Y(4S)'
       # Decay width differences in neutral meson systems
       'life_time::Delta_B_d' :
           central: +0.0
           min:     +0.0
           max:     +0.0
+          latex:    '$\tau_{\Delta B_d}$'
           comments: 'smaller than 1eV, i.e. zero for all intents and purposes, cf. [PDG2012]'
       'life_time::Delta_B_s' :
           central: +0.081e+12
           min:     +0.070e+12
           max:     +0.092e+12
+          latex:    '$\tau_{\Delta B_s$'
           comments: 'cf. [PDG2012] and [PDG-Live], September 2013'
   # }}}
 
@@ -403,6 +409,7 @@ groups:
           central: +1.471e-12
           min:     +1.462e-12
           max:     +1.480e-12
+          latex:    '$\tau_{\Lambda_b}$'
           comments: 'cf. PDG2019 update by [HFLAV]'
   # }}}
 
@@ -446,136 +453,162 @@ groups:
           central: +0.16
           min:     +0.16
           max:     +0.16
+          latex:    '$a^{\pi}_2(1\,\GeV)$'
           comments: ' // cf. [DKMMO2008]'
       'pi::a4@1GeV' :
           central: +0.04
           min:     +0.04
           max:     +0.04
+          latex:    '$a^{\pi}_4(1\,\GeV)$'
           comments: ' // cf. [DKMMO2008]'
       'pi::f3@1GeV' :
           central: +0.0045
           min:     +0.0030
           max:     +0.0060
+          latex:    '$f^{\pi}_3(1\,\GeV)$'
           comments: ' // GeV^2, cf. [DKMMO2008]'
       'pi::omega3@1GeV' :
           central: -1.5
           min:     -2.2
           max:     -0.8
+          latex:    '$\omega^{\pi}_3(1\,\GeV)$'
           comments: ' // cf. [DKMMO2008]'
       'pi::omega4@1GeV' :
           central: +0.2
           min:     +0.2
           max:     +0.2
+          latex:    '$\omega^{\pi}_4(1\,\GeV)$'
           comments: ' // cf. [DKMMO2008]'
       'pi::delta^2@1GeV' :
           central: +0.18
           min:     +0.12
           max:     +0.24
+          latex:    '$(\delta^{\pi})^2(1\,\GeV)$'
           comments: ' // GeV^2, cf. [DKMMO2008]'
       # K^* LCDA parameters
       'K^*::a_1_para@1GeV' :
           central: +0.06
           min:     +0.00
           max:     +0.10
+          latex:    '$a^{K^*}_{1,\parallel}(1\,\GeV)$'
           comments: 'cf. [BSZ2015], table 1'
       'K^*::a_2_para@1GeV' :
           central: +0.16
           min:     +0.07
           max:     +0.23
+          latex:    '$a^{K^*}_{2,\parallel}(1\,\GeV)$'
           comments: 'cf. [BSZ2015], table 1'
       'K^*::f_para' :
           central: +0.204
           min:     +0.197
           max:     +0.211
+          latex:    '$f^{K^*}_{\parallel}(1\,\GeV)$'
           comments: 'cf. [BSZ2015], table 1'
       'K^*::a_1_perp@1GeV' :
           central: +0.04
           min:     +0.01
           max:     +0.07
+          latex:    '$a^{K^*}_{1,\perp}(1\,\GeV)$'
           comments: 'cf. [BSZ2015], table 1'
       'K^*::a_2_perp@1GeV' :
           central: +0.10
           min:     +0.02
           max:     +0.18
+          latex:    '$a^{K^*}_{2,\perp}(1\,\GeV)$'
           comments: 'cf. [BSZ2015], table 1'
       'K^*::f_perp@1GeV' :
           central: +0.159
           min:     +0.153
           max:     +0.165
+          latex:    '$f^{K^*}_{\perp}(1\,\GeV)$'
           comments: 'cf. [BSZ2015], table 1'
       # B->K LCDA Parameter
       'K::a_1@1GeV' :
           central: +0.06
           min:     +0.03
           max:     +0.09
+          latex:    '$a^{K}_{1}(1\,\GeV)$'
           comments: ' // cf. [BBL2006], Table 3'
       'K::a_2@1GeV' :
           central: +0.25
           min:     +0.10
           max:     +0.4
+          latex:    '$a^{K}_{2}(1\,\GeV)$'
           comments: ' // cf. [BBL2006], Table 3'
       'K::a_4@1GeV' :
           central: -0.015
           min:     -0.115
           max:     +0.085
+          latex:    '$a^{K}_{4}(1\,\GeV)$'
           comments: ' // cf. [BZ2004v3], Eq. (24)'
       'K::a_1@2.2GeV' :
           central: +0.048
           min:     +0.024
           max:     +0.071
+          latex:    '$a^{K}_{1}(2.2\,\GeV)$'
           comments: ' // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
       'K::a_2@2.2GeV' :
           central: +0.174
           min:     +0.070
           max:     +0.278
+          latex:    '$a^{K}_{2}(2.2\,\GeV)$'
           comments: ' // cf. [BBL2006], Table 3 and cf. [BHP2007] App. A, pp. 24-25'
       'K::a_4@2.2GeV' :
           central: -0.0089
           min:     -0.0679
           max:     +0.0502
+          latex:    '$a^{K}_{4}(2.2\,\GeV)$'
           comments: ' // cf. [BZ2004v3], Eq. (24) and cf. [BHP2007] App. A, pp. 24-25'
       # B->K^*, K^* LCDA parameters
       'B->K^*::f_Kstar_par' :
           central: +0.217
           min:     +0.212
           max:     +0.222
+          latex:    '$f^{K^*}_{\parallel}$'
           comments: ' // GeV, cf. [BHvD2010], Table I'
       'B->K^*::f_Kstar_perp@2GeV' :
           central: +0.173
           min:     +0.168
           max:     +0.178
+          latex:    '$f^{K^*}_{\perp}(2\,\GeV)$'
           comments: ' // GeV @2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD2010], Table I'
       # B LCDA parameters
       'B::1/lambda_B_p' :
           central: +2.1739
           min:     +1.60
           max:     +2.80
+          latex:    '$1/\lambda_{B,+}$'
           comments: ' // GeV^{-1}, cf. [GKvD2018]'
       'B::lambda_E^2' :
           central: +0.03
           min:     +0.01
           max:     +0.05
+          latex:    '$\lambda_E^2$'
           comments: 'GeV^2, cf. [NT2011]'
       'B::lambda_H^2' :
           central: +0.06
           min:     +0.03
           max:     +0.09
+          latex:    '$\lambda_H^2$'
           comments: 'GeV^2, cf. [NT2011]'
       # B_s LCDA parameters
       'B_s::1/lambda_B_p' :
           central: +2.0
           min:     +1.5
           max:     +2.5
+          latex:    '$1/\lambda_{B_s,+}$'
           comments: ' // GeV^{-1}, cf. [GKvD2018]'
       'B_s::lambda_E^2' :
           central: +0.03
           min:     +0.01
           max:     +0.05
+          latex:    '$\lambda_E^2(B_s)$'
           comments: 'GeV^2, cf. [NT2011]'
       'B_s::lambda_H^2' :
           central: +0.06
           min:     +0.03
           max:     +0.09
+          latex:    '$\lambda_H^2(B_s)$'
           comments: 'GeV^2, cf. [NT2011]'
   # }}}
 
