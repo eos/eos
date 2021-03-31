@@ -25,7 +25,7 @@ groups:
           central: +0.23116
           min:     +0.23104
           max:     +0.23128
-          latex:    '$\sin(\theta)^2_{\text{GSW}}$'
+          latex:    '$\sin^2(\theta_{\mathrm{GSW}})$'
           comments: 'cf. [PDG2012]:  p. 4'
       # QED inputs
       'QED::alpha_e(m_b)' :
@@ -39,7 +39,7 @@ groups:
           central: +1.1663787e-5
           min:     +1.1663781e-5
           max:     +1.1663793e-5
-          latex:    '$G_{F,\text{WET}}$'
+          latex:    '$G_{F}$'
           comments: 'cf. [PDG2012], p. 5'
       # b->s matching parameters
       'b->s::mu_0c' :
@@ -80,7 +80,7 @@ groups:
           central: +0.5
           min:     +0.5
           max:     +0.5
-          latex:    '$\Lambda_\text{QCD}$'
+          latex:    '$\Lambda_\mathrm{QCD}$'
       'QCD::cond_GG' :
           central: +0.012
           min:     +0.000
@@ -103,25 +103,25 @@ groups:
           central: +0.827
           min:     +0.814
           max:     +0.840
-          latex:   '$A_\text{CKM}$'
+          latex:   '$A_\mathrm{CKM}$'
           comment: 'The Wolfenstein CKM parameter @MATH[A]@'
       'CKM::lambda' :
           central: +0.22535
           min:     +0.22470
           max:     +0.22600
-          latex:   '$\lambda_\text{CKM}$'
+          latex:   '$\lambda_\mathrm{CKM}$'
           comment: 'The Wolfenstein CKM parameter @MATH[\lambda]@'
       'CKM::rhobar' :
           central: +0.132
           min:     +0.111
           max:     +0.153
-          latex:   '$\bar{\rho}_\text{CKM}$'
+          latex:   '$\bar{\rho}_\mathrm{CKM}$'
           comment: 'The Wolfenstein CKM parameter @MATH[\bar{\rho}]@'
       'CKM::etabar' :
           central: +0.350
           min:     +0.336
           max:     +0.364
-          latex:   '$\bar{\eta}_\text{CKM}$'
+          latex:   '$\bar{\eta}_\mathrm{CKM}$'
           comment: 'The Wolfenstein CKM parameter @MATH[\bar{\eta}]@'
       # Lepton masses
       'mass::e' :
@@ -148,19 +148,19 @@ groups:
           min:     +0.0025
           max:     +0.0035
           comments: 'cf. [PDG2012], p. 21'
-          latex:    '$\overline{m}_u(2\,\text{GeV})$'
+          latex:    '$\overline{m}_u(2\,\mathrm{GeV})$'
       'mass::d(2GeV)' :
           central: +0.0048
           min:     +0.0045
           max:     +0.0055
           comments: 'cf. [PDG2012], p. 21'
-          latex:    '$\overline{m}_d(2\,\text{GeV})$'
+          latex:    '$\overline{m}_d(2\,\mathrm{GeV})$'
       'mass::s(2GeV)' :
           central: +0.095
           min:     +0.090
           max:     +0.10
           comments: 'cf. [PDG2012], p. 21'
-          latex:    '$\overline{m}_s(2\,\text{GeV})$'
+          latex:    '$\overline{m}_s(2\,\mathrm{GeV})$'
       'mass::c' :
           central: +1.275
           min:     +1.250
@@ -178,7 +178,7 @@ groups:
           min:     +172.5
           max:     +174.5
           comments: 'cf. [PDG2012], p. 22'
-          latex:    '$m_t^{\text{pole}}$'
+          latex:    '$m_t^{\mathrm{pole}}$'
       # Gauge boson masses
       'mass::W' :
           central: +80.385
@@ -635,7 +635,7 @@ groups:
     description: >
         The list of parameters describing the $b\to c\ell^-\bar\nu$ Wilson coefficients in the effective Lagrangian
         \begin{equation}
-          \mathcal{L}^{b\to \ell\bar\nu_\ell}_\text{eff}
+          \mathcal{L}^{b\to \ell\bar\nu_\ell}_\mathrm{eff}
           = \frac{4 G_F}{\sqrt{2}} \sum_i \mathcal{C}^{b\to c\ell\bar\nu}_i \mathcal{O}^{b\to c\ell\bar\nu}_i\,.
         \end{equation}
         The operators read:

@@ -383,7 +383,7 @@ groups:
           central: +1.580e-12
           min:     +1.573e-12
           max:     +1.589e-12
-          latex:    '$\tau_{B(\Psi(4S))}$'
+          latex:    '$\tau_{B(\Upsilon(4S))}$'
           comments: 'based on 50:50 admixture of B^+B^- and B^0Bbar^0 @ Y(4S)'
       # Decay width differences in neutral meson systems
       'life_time::Delta_B_d' :
@@ -396,7 +396,7 @@ groups:
           central: +0.081e+12
           min:     +0.070e+12
           max:     +0.092e+12
-          latex:    '$\tau_{\Delta B_s$'
+          latex:    '$\tau_{\Delta B_s}$'
           comments: 'cf. [PDG2012] and [PDG-Live], September 2013'
   # }}}
 
