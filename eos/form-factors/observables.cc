@@ -1068,28 +1068,28 @@ namespace eos
             R"(Pseudo observables representing the $B \to \pi \pi$ form factors. )"
             R"(The specific parametrization can be chosen via the "form-factors" option.)",
             {
-                make_form_factor_adapter("B->pipi::Im{F_perp}(q2,k2,z)", R"(\text{Im}\,F_\perp^{B\to \pi\pi}(q^2,k^2,z))",
+                make_form_factor_adapter("B->pipi::Im{F_perp}(q2,k2,z)", R"(\mathrm{Im}\,F_\perp^{B\to \pi\pi}(q^2,k^2,z))",
                         &FormFactors<PToPP>::im_f_perp, std::make_tuple("q2", "k2", "z")),
 
-                make_form_factor_adapter("B->pipi::Im{F_para}(q2,k2,z)", R"(\text{Im}\,F_\parallel^{B\to \pi\pi}(q^2,k^2,z))",
+                make_form_factor_adapter("B->pipi::Im{F_para}(q2,k2,z)", R"(\mathrm{Im}\,F_\parallel^{B\to \pi\pi}(q^2,k^2,z))",
                         &FormFactors<PToPP>::im_f_para, std::make_tuple("q2", "k2", "z")),
 
-                make_form_factor_adapter("B->pipi::Im{F_long}(q2,k2,z)", R"(\text{Im}\,F_0^{B\to \pi\pi}(q^2,k^2,z))",
+                make_form_factor_adapter("B->pipi::Im{F_long}(q2,k2,z)", R"(\mathrm{Im}\,F_0^{B\to \pi\pi}(q^2,k^2,z))",
                         &FormFactors<PToPP>::im_f_long, std::make_tuple("q2", "k2", "z")),
 
-                make_form_factor_adapter("B->pipi::Im{F_time}(q2,k2,z)", R"(\text{Im}\,F_t^{B\to \pi\pi}(q^2,k^2,z))",
+                make_form_factor_adapter("B->pipi::Im{F_time}(q2,k2,z)", R"(\mathrm{Im}\,F_t^{B\to \pi\pi}(q^2,k^2,z))",
                         &FormFactors<PToPP>::im_f_time, std::make_tuple("q2", "k2", "z")),
 
-                make_form_factor_adapter("B->pipi::Im{Res{F_perp}}(q2,k2)", R"(\text{Res}\,\text{Im}\,F_\perp^{B\to \pi\pi}(q^2,k^2,z))",
+                make_form_factor_adapter("B->pipi::Im{Res{F_perp}}(q2,k2)", R"(\mathrm{Res}\,\mathrm{Im}\,F_\perp^{B\to \pi\pi}(q^2,k^2,z))",
                         &FormFactors<PToPP>::f_perp_im_res_qhat2, std::make_tuple("q2", "k2")),
 
-                make_form_factor_adapter("B->pipi::Im{Res{F_para}}(q2,k2)", R"(\text{Res}\,\text{Im}\,F_\parallel^{B\to \pi\pi}(q^2,k^2,z))",
+                make_form_factor_adapter("B->pipi::Im{Res{F_para}}(q2,k2)", R"(\mathrm{Res}\,\mathrm{Im}\,F_\parallel^{B\to \pi\pi}(q^2,k^2,z))",
                         &FormFactors<PToPP>::f_para_im_res_qhat2, std::make_tuple("q2", "k2")),
 
-                make_form_factor_adapter("B->pipi::Im{Res{F_long}}(q2,k2)", R"(\text{Res}\,\text{Im}\,F_0^{B\to \pi\pi}(q^2,k^2,z))",
+                make_form_factor_adapter("B->pipi::Im{Res{F_long}}(q2,k2)", R"(\mathrm{Res}\,\mathrm{Im}\,F_0^{B\to \pi\pi}(q^2,k^2,z))",
                         &FormFactors<PToPP>::f_long_im_res_qhat2, std::make_tuple("q2", "k2")),
 
-                make_form_factor_adapter("B->pipi::Im{Res{F_time}}(q2,k2)", R"(\text{Res}\,\text{Im}\,F_t^{B\to \pi\pi}(q^2,k^2,z))",
+                make_form_factor_adapter("B->pipi::Im{Res{F_time}}(q2,k2)", R"(\mathrm{Res}\,\mathrm{Im}\,F_t^{B\to \pi\pi}(q^2,k^2,z))",
                         &FormFactors<PToPP>::f_time_im_res_qhat2, std::make_tuple("q2", "k2")),
             }
         );
