@@ -122,16 +122,19 @@ groups:
           min:     +5.10999e-4
           max:     +5.10999e-4
           comments: 'cf. [PDG2012], p. 13'
+          latex:     '$m_e$'
       'mass::mu' :
           central: +1.05658e-1
           min:     +1.05658e-1
           max:     +1.05658e-1
           comments: 'cf. [PDG2012], p. 13'
+          latex:     '$m_\mu$'
       'mass::tau' :
           central: +1.77682
           min:     +1.77666
           max:     +1.77698
           comments: 'cf. [PDG2012], p. 14'
+          latex:     '$m_\tau$'
       # Quark masses
       'mass::u(2GeV)' :
           central: +0.0032
