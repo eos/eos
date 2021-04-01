@@ -64,6 +64,17 @@ def __format_KinematicVariable(kv):
             value=kv.evaluate()
     ))
 
+def __format_Kinematics(k):
+    result = '<table>\n'
+    for kv in k:
+        result += '<tr><th><tt style="color:grey">{name}</tt></th><td>{value}</td></tr>\n'.format(
+            name=kv.name(),
+            value=kv.evaluate()
+        )
+    result += '</table>\n'
+
+    return result
+
 def __format_ObservableEntry(e):
     result = '<table>\n'
     result += '<tr><th>QualifedName</th><td><tt style="color:grey">{qn}</tt></td></tr>'.format(qn=e.name())
