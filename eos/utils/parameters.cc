@@ -20,6 +20,7 @@
 
 #include <config.h>
 
+#include <eos/utils/cartesian-product.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -34,6 +35,7 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/format.hpp>
 #include <yaml-cpp/yaml.h>
 
 #include <iostream>
@@ -462,6 +464,11 @@ namespace eos
 
                             std::string latex;
 
+                            if (parameters_map.end() != parameters_map.find(name))
+                            {
+                                throw ParameterInputDuplicateError(file, name);
+                            }
+
                             auto central_node = p.second["central"];
                             if (! central_node)
                                 throw ParameterInputFileNodeError(file, name, "has no entry named 'central'");
@@ -492,17 +499,53 @@ namespace eos
                                 latex = latex_node.as<std::string>();
                             }
 
-                            if (parameters_map.end() != parameters_map.find(name))
+                            auto matrix_node = p.second["matrix"];
+                            if (matrix_node)
                             {
-                                throw ParameterInputDuplicateError(file, name);
+                                if (YAML::NodeType::Sequence != matrix_node.Type())
+                                    throw ParameterInputFileNodeError(file, name + ".matrix", "is not a sequence");
+
+                                CartesianProduct<std::vector<std::string>> cp;
+
+                                // Parse the parameter substitutions and add them to the cartesian product
+                                for (auto && substitution : matrix_node)
+                                {
+                                    std::vector<std::string> instances;
+
+                                    for (auto && instance : substitution)
+                                    {
+                                        instances.push_back(instance.as<std::string>());
+                                    }
+
+                                    cp.over(instances);
+                                }
+
+                                for (auto cp_it = cp.begin() ; cp.end() != cp_it ; ++cp_it)
+                                {
+                                    boost::format templated_name(name);
+
+                                    for (auto && i : *cp_it)
+                                    {
+                                        templated_name = templated_name % i;
+                                    }
+
+                                    parameters_data->data.push_back(Parameter::Data(Parameter::Template { templated_name.str(), min, central, max, latex }, idx));
+                                    parameters_map[templated_name.str()] = idx;
+                                    parameters.push_back(Parameter(parameters_data, idx));
+                                    group_parameters.push_back(Parameter(parameters_data, idx));
+
+                                    ++idx;
+                                }
                             }
+                            else
+                            {
+                                parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max, latex }, idx));
+                                parameters_map[name] = idx;
+                                parameters.push_back(Parameter(parameters_data, idx));
+                                group_parameters.push_back(Parameter(parameters_data, idx));
 
-                            parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max, latex }, idx));
-                            parameters_map[name] = idx;
-                            parameters.push_back(Parameter(parameters_data, idx));
-                            group_parameters.push_back(Parameter(parameters_data, idx));
-
-                            ++idx;
+                                ++idx;
+                            }
                         }
 
                         section_groups.push_back(ParameterGroup(new Implementation<ParameterGroup>(group_title, group_desc, std::move(group_parameters))));
