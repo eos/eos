@@ -83,12 +83,12 @@ namespace eos
                         std::make_tuple("q2")),
 
                 make_observable("B->Kll::F_H(q2)@LargeRecoil",
-                        R"(F_\text{H}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
+                        R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
                         &BToKDilepton<LargeRecoil>::differential_flat_term,
                         std::make_tuple("q2")),
 
                 make_observable("B->Kll::A_FB(q2)@LargeRecoil",
-                        R"(A_\text{FB}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
+                        R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
                         &BToKDilepton<LargeRecoil>::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
 
@@ -112,7 +112,7 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::A_CP@LargeRecoil",
-                        R"(A_\text{CP}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        R"(A_\mathrm{CP}(\bar{B}\to \bar{K}\ell^+\ell^-))",
                         &BToKDilepton<LargeRecoil>::integrated_cp_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -121,7 +121,7 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::F_H@LargeRecoil",
-                        R"(F_\text{H}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-))",
                         &BToKDilepton<LargeRecoil>::integrated_flat_term,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -130,7 +130,7 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::A_FB@LargeRecoil",
-                        R"(A_\text{FB}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-))",
                         &BToKDilepton<LargeRecoil>::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -1298,15 +1298,15 @@ namespace eos
                         Options{ { "l", "e" } }
                         ),
 
-                make_observable("Lambda_b->Lambdall::A_FB^l@LargeRecoil", R"(A_\text{FB}^\ell(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                make_observable("Lambda_b->Lambdall::A_FB^l@LargeRecoil", R"(A_\mathrm{FB}^\ell(\Lambda_b\to\Lambda\ell^+\ell^-))",
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::A_FB^h@LargeRecoil", R"(A_\text{FB}^h(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                make_observable("Lambda_b->Lambdall::A_FB^h@LargeRecoil", R"(A_\mathrm{FB}^h(\Lambda_b\to\Lambda\ell^+\ell^-))",
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_hadronic,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::A_FB^c@LargeRecoil", R"(A_\text{FB}^{h,\ell}(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                make_observable("Lambda_b->Lambdall::A_FB^c@LargeRecoil", R"(A_\mathrm{FB}^{h,\ell}(\Lambda_b\to\Lambda\ell^+\ell^-))",
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_combined,
                         std::make_tuple("q2_min", "q2_max")),
 
@@ -1339,15 +1339,15 @@ namespace eos
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::A_FB^l@LowRecoil", R"(A_\text{FB}^\ell(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                make_observable("Lambda_b->Lambdall::A_FB^l@LowRecoil", R"(A_\mathrm{FB}^\ell(\Lambda_b\to\Lambda\ell^+\ell^-))",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::A_FB^h@LowRecoil", R"(A_\text{FB}^h(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                make_observable("Lambda_b->Lambdall::A_FB^h@LowRecoil", R"(A_\mathrm{FB}^h(\Lambda_b\to\Lambda\ell^+\ell^-))",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_hadronic,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambdall::A_FB^c@LowRecoil", R"(A_\text{FB}^{h,\ell}(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                make_observable("Lambda_b->Lambdall::A_FB^c@LowRecoil", R"(A_\mathrm{FB}^{h,\ell}(\Lambda_b\to\Lambda\ell^+\ell^-))",
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_combined,
                         std::make_tuple("q2_min", "q2_max")),
 
