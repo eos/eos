@@ -277,6 +277,7 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // Options
+    impl::std_pair_to_python_converter<const std::string, std::string> converter_options_iter;
     class_<Options>("Options", R"(
             Represents the set of options provided to an observable.
 
@@ -291,6 +292,7 @@ BOOST_PYTHON_MODULE(_eos)
                                                               # valid python identifiers
         )", no_init)
         .def("__init__", raw_function(&impl::Options_ctor))
+        .def("__iter__", range(&Options::begin, &Options::end))
         .def(init<>())
         .def("set", &Options::set)
         .def("__str__", &Options::as_string)
