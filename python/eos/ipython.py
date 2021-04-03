@@ -75,6 +75,17 @@ def __format_Kinematics(k):
 
     return result
 
+def __format_Options(o):
+    result = '<table>\n'
+    for k, v in o:
+        result += '<tr><th><tt style="color:grey">{key}</tt></th><td>{value}</td></tr>\n'.format(
+            key=k,
+            value=v
+        )
+    result += '</table>\n'
+
+    return result
+
 def __format_ObservableEntry(e):
     result = '<table>\n'
     result += '<tr><th>QualifedName</th><td><tt style="color:grey">{qn}</tt></td></tr>'.format(qn=e.name())
@@ -92,14 +103,25 @@ def __format_Observable(obs):
     kinematics = [(kv.name(), kv.evaluate()) for kv in obs.kinematics()]
     first_kinematics = "<td colspan=2>none</td>"
     further_kinematics = ""
-    span = 1
+    span_kinematics = 1
     if len(kinematics) > 0:
         first_kinematics = "<th>{kvn}</th><td>{kvv}</td>".format(kvn=kinematics[0][0], kvv=kinematics[0][1])
         further_kinematics = "\n".join([
-            "<th>{kvn}</th><td>{kvv}</td>".format(kvn=kvn, kvv=kvv)
+            "<tr><th>{kvn}</th><td>{kvv}</td></tr>".format(kvn=kvn, kvv=kvv)
             for kvn, kvv in kinematics[1:]
         ])
-        span = len(kinematics)
+        span_kinematics = len(kinematics)
+    options = [(ok, ov) for ok, ov in obs.options()]
+    first_options = "<td colspan=2>none</td>"
+    further_options = ""
+    span_options = 1
+    if len(options) > 0:
+        first_options = "<th>{ok}</th><td>{ov}</td>".format(ok=options[0][0], ov=options[0][1])
+        further_options = "\n".join([
+            "<tr><th>{ok}</th><td>{ov}</td></tr>".format(ok=ok, ov=ov)
+            for ok, ov in options[1:]
+        ])
+        span_options = len(options)
 
     return("""
         <table>
@@ -108,10 +130,15 @@ def __format_Observable(obs):
                 <td colspan="2">(eos.Observable)</td>
             </tr>
             <tr>
-                <th rowspan="{span}">kinematics</th>
+                <th rowspan="{span_kinematics}">kinematics</th>
                 {first_kinematics}
             </tr>
             {further_kinematics}
+            <tr>
+                <th rowspan="{span_options}">options</th>
+                {first_options}
+            </tr>
+            {further_options}
             <tr>
                 <th>current value</th>
                 <td colspan="2"><tt>{value:1.4g}</tt></td>
@@ -120,8 +147,11 @@ def __format_Observable(obs):
             name=name,
             value=obs.evaluate(),
             first_kinematics=first_kinematics,
-            span=span,
-            further_kinematics=further_kinematics
+            span_kinematics=span_kinematics,
+            further_kinematics=further_kinematics,
+            first_options=first_options,
+            span_options=span_options,
+            further_options=further_options
     ))
 
 def __format_GoodnessOfFit(gof):
