@@ -133,3 +133,28 @@ B^0->D^+l^-nu::KinematicalDistribution[w]@Belle-2015A:
       0.02293292241393046]
     dof: 9
 # }}}
+
+#########
+# HFLAV #
+#########
+#
+# 2019
+#
+# {{{
+B->D^(*)lnu::R_D^(*)@HFLAV-2019:
+    type: MultivariateGaussian(Covariance)
+    dim: 2
+    observables:
+        [ B->Dlnu::R_D, B->D^*lnu::R_D^*]
+    options:
+        [ { l: mu, q: d }, { l: tau, q: d }]
+    kinematics:
+    - {q2_tau_max: 11.62, q2_tau_min: 3.15, q2_mu_min: 0.01, q2_mu_max: 11.62}
+    - {q2_tau_max: 11.62, q2_tau_min: 3.15, q2_mu_min: 0.01, q2_mu_max: 11.62}
+    means:
+        [ 0.340, 0.295]
+    covariance:
+        - [0.0016, -0.0002888]
+        - [-0.0002888 , 0.000361]
+    dof: 2
+# }}}
