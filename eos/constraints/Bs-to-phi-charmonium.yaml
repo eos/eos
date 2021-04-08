@@ -1,0 +1,26 @@
+#############
+# PDG's fit #
+#############
+#
+# PDG:2020
+#
+# {{{
+B_s->phiJpsi::BR@PDG2020:
+    type: Gaussian
+    observable: B_s->phicharmonium::branching_ratio
+    kinematics: {}
+    options: {psi: "J/psi"}
+    mean: 1.08e-3
+    sigma-stat: {hi: 0., lo: 0.}
+    sigma-sys: {hi: 8.e-5, lo: 8.e-5}
+    dof: 1
+B_s->phipsi2S::BR@PDG2020:
+    type: Gaussian
+    observable: B_s->phicharmonium::branching_ratio
+    kinematics: {}
+    options: {psi: "psi(2S)"}
+    mean: 5.4e-4
+    sigma-stat: {hi: 0., lo: 0.}
+    sigma-sys: {hi: 6.e-5, lo: 6.e-5}
+    dof: 1
+# }}}

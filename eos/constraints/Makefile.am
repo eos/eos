@@ -3,7 +3,9 @@ MAINTAINERCLEANFILES = Makefile.in
 
 CONSTRAINTS_FILES = \
 	Bq-to-ll.yaml \
+	B-to-K-charmonium.yaml \
 	B-to-K-ll.yaml \
+	B-to-Kstar-charmonium.yaml \
 	B-to-Kstar-gamma.yaml \
 	B-to-Kstar-ll.yaml \
 	B-to-D-l-nu.yaml \
@@ -15,6 +17,7 @@ CONSTRAINTS_FILES = \
 	B-to-P-P-form-factors.yaml \
 	B-to-V-form-factors.yaml \
 	Bs-to-Ds-gamma-l-nu.yaml \
+	Bs-to-phi-charmonium.yaml \
 	hqet.yaml \
 	Lb-to-L-ll.yaml \
 	Lb-to-Lq-form-factors.yaml \
