@@ -51,18 +51,6 @@ namespace eos
 
     namespace nff_p_to_v
     {
-        // struct BToKstar
-        // {
-        //     constexpr static const char * label = "B->K^*";
-        // };
-        // constexpr const char * BToKstar::label;
-
-        // struct BsToPhi
-        // {
-        //     constexpr static const char * label = "B_s->phi";
-        // };
-        // constexpr const char * BsToPhi::label;
-
         class Naive :
             public NonlocalFormFactor<nff::PToV>
         {
@@ -980,6 +968,8 @@ namespace eos
             // parametrizations
             std::make_pair("B->K^*::GvDV2020",      &nff_p_to_v::GvDV2020<nff::BToKstar>::make),
             std::make_pair("B->K^*::GRvDV2021",     &nff_p_to_v::GRvDV2021<nff::BToKstar>::make),
+            std::make_pair("B_s->phi::GvDV2020",    &nff_p_to_v::GvDV2020<nff::BsToPhi>::make),
+            std::make_pair("B_s->phi::GRvDV2021",   &nff_p_to_v::GRvDV2021<nff::BsToPhi>::make),
         };
 
         auto i = entries.find(name);
