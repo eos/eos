@@ -301,19 +301,6 @@ def cmd_find_mode(args):
     min_chi2 = sys.float_info.max
     gof = None
     bfp = None
-<<<<<<< HEAD
-    info('Starting minimization in {} points'.format(args.points))
-    starting_points = []
-    if args.init_file != '':
-        info('Initializing starting point from MCMC data file')
-        chain = eos.data.MarkovChain(args.init_file)
-        idx_mode = _np.argmax(chain.weights)
-        for p, v in zip(analysis.varied_parameters, chain.samples[idx_mode]):
-            p.set(v)
-    else:
-        info('Using random starting point')
-=======
->>>>>>> [eos-analysis] Add option to initialise 'find-point' from a given parameter point via '--from-point 'POINT AS STRING' option
 
     if args.point != '':
         starting_point = args.point
