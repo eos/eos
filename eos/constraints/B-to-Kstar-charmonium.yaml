@@ -7,7 +7,7 @@
 # {{{
 B^0->K^*0Jpsi::BR@PDG2020:
     type: Gaussian
-    observable: B->K^*charmonium::branching_ratio
+    observable: B->K^*psi::BR
     kinematics: {}
     options: {q: d, psi: "J/psi"}
     mean: 1.27e-3
@@ -16,7 +16,7 @@ B^0->K^*0Jpsi::BR@PDG2020:
     dof: 1
 B^0->K^*0psi2S::BR@PDG2020:
     type: Gaussian
-    observable: B->K^*charmonium::branching_ratio
+    observable: B->K^*psi::BR
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: 5.9e-4
@@ -25,7 +25,7 @@ B^0->K^*0psi2S::BR@PDG2020:
     dof: 1
 B->K^*Jpsi::BR@PDG2020:
     type: Gaussian
-    observable: B->K^*charmonium::branching_ratio
+    observable: B->K^*psi::BR
     kinematics: {}
     options: {q: u, psi: "J/psi"}
     mean: 1.43e-3
@@ -34,7 +34,7 @@ B->K^*Jpsi::BR@PDG2020:
     dof: 1
 B->K^*psi2S::BR@PDG2020:
     type: Gaussian
-    observable: B->K^*charmonium::branching_ratio
+    observable: B->K^*psi::BR
     kinematics: {}
     options: {q: u, psi: "psi(2S)"}
     mean: 6.7e-4
@@ -53,7 +53,7 @@ B->K^*psi2S::BR@PDG2020:
 # {{{
 B^0->K^*0Jpsi::S_1s_LHCb@LHCb-2013:
     type: Gaussian
-    observable: B->K^*charmonium::S_1s_LHCb
+    observable: B->K^*psi::S_1s_LHCb
     kinematics: {}
     options: {q: d, psi: "J/psi"}
     mean: 0.321
@@ -62,7 +62,7 @@ B^0->K^*0Jpsi::S_1s_LHCb@LHCb-2013:
     dof: 1
 B^0->K^*0Jpsi::S_3_LHCb@LHCb-2013:
     type: Gaussian
-    observable: B->K^*charmonium::S_3_LHCb
+    observable: B->K^*psi::S_3_LHCb
     kinematics: {}
     options: {q: d, psi: "J/psi"}
     mean: -0.013
@@ -71,7 +71,7 @@ B^0->K^*0Jpsi::S_3_LHCb@LHCb-2013:
     dof: 1
 B^0->K^*0Jpsi::S_4_LHCb@LHCb-2013:
     type: Gaussian
-    observable: B->K^*charmonium::S_4_LHCb
+    observable: B->K^*psi::S_4_LHCb
     kinematics: {}
     options: {q: d, psi: "J/psi"}
     mean: -0.248
@@ -80,7 +80,7 @@ B^0->K^*0Jpsi::S_4_LHCb@LHCb-2013:
     dof: 1
 B^0->K^*0Jpsi::S_8_LHCb@LHCb-2013:
     type: Gaussian
-    observable: B->K^*charmonium::S_8_LHCb
+    observable: B->K^*psi::S_8_LHCb
     kinematics: {}
     options: {q: d, psi: "J/psi"}
     mean: -0.048
@@ -89,7 +89,7 @@ B^0->K^*0Jpsi::S_8_LHCb@LHCb-2013:
     dof: 1
 B^0->K^*0Jpsi::S_9_LHCb@LHCb-2013:
     type: Gaussian
-    observable: B->K^*charmonium::S_9_LHCb
+    observable: B->K^*psi::S_9_LHCb
     kinematics: {}
     options: {q: d, psi: "J/psi"}
     mean: -0.083
@@ -108,7 +108,7 @@ B^0->K^*0Jpsi::S_9_LHCb@LHCb-2013:
 # {{{
 B^0->K^*0psi2S::S_1s_LHCb@BaBar-2007:
     type: Gaussian
-    observable: B->K^*charmonium::S_1s_LHCb
+    observable: B->K^*psi::S_1s_LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: 0.39
@@ -117,7 +117,7 @@ B^0->K^*0psi2S::S_1s_LHCb@BaBar-2007:
     dof: 1
 B^0->K^*0psi2S::S_3_LHCb@BaBar-2007:
     type: Gaussian
-    observable: B->K^*charmonium::S_3_LHCb
+    observable: B->K^*psi::S_3_LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: 0.04
@@ -126,7 +126,7 @@ B^0->K^*0psi2S::S_3_LHCb@BaBar-2007:
     dof: 1
 B^0->K^*0psi2S::S_4_LHCb@BaBar-2007:
     type: Gaussian
-    observable: B->K^*charmonium::S_4_LHCb
+    observable: B->K^*psi::S_4_LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: -0.20
@@ -135,7 +135,7 @@ B^0->K^*0psi2S::S_4_LHCb@BaBar-2007:
     dof: 1
 B^0->K^*0psi2S::S_8_LHCb@BaBar-2007:
     type: Gaussian
-    observable: B->K^*charmonium::S_8_LHCb
+    observable: B->K^*psi::S_8_LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: -0.09
@@ -144,7 +144,7 @@ B^0->K^*0psi2S::S_8_LHCb@BaBar-2007:
     dof: 1
 B^0->K^*0psi2S::S_9_LHCb@BaBar-2007:
     type: Gaussian
-    observable: B->K^*charmonium::S_9_LHCb
+    observable: B->K^*psi::S_9_LHCb
     kinematics: {}
     options: {q: d, psi: "psi(2S)"}
     mean: -0.15

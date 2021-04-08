@@ -219,7 +219,62 @@ B^+->K^+mu^+mu^-::BR[16.00,22.86]@CDF-2012:
     sigma-stat: {hi: 1e-08, lo: -1e-08}
     sigma-sys: {hi: 2e-09, lo: -2e-09}
     dof: 1
+B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {q2_min: 1, q2_max: 6}
+    options: {l: mu, q: d}
+    mean: 9.8e-08
+    sigma-stat: {hi: 6.139999999999999e-08, lo: -6.139999999999999e-08}
+    sigma-sys: {hi: 7.4e-09, lo: -7.4e-09}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LargeRecoil
+    kinematics: {q2_min: 1, q2_max: 6}
+    options: {l: mu, q: d}
+    mean: 1.11e-07
+    sigma-stat: {hi: 5.2e-08, lo: -5.2e-08}
+    sigma-sys: {hi: 1.4e-08, lo: -1.4e-08}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {q2_min: 14.18, q2_max: 16}
+    options: {l: mu, q: d}
+    mean: 7.26e-08
+    sigma-stat: {hi: 2.57e-08, lo: -2.57e-08}
+    sigma-sys: {hi: 5.4e-09, lo: -5.4e-09}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {q2_min: 14.18, q2_max: 16}
+    options: {l: mu, q: d}
+    mean: 4.3e-08
+    sigma-stat: {hi: 1.8e-08, lo: -1.8e-08}
+    sigma-sys: {hi: 4e-09, lo: -4e-09}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF-2011:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {q2_min: 16, q2_max: 22.86}
+    options: {l: mu, q: d}
+    mean: 2.14e-08
+    sigma-stat: {hi: 1.82e-08, lo: -1.82e-08}
+    sigma-sys: {hi: 1.6e-09, lo: -1.6e-09}
+    dof: 1
+B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF-2012:
+    type: Gaussian
+    observable: B->Kll::BRavg@LowRecoil
+    kinematics: {q2_min: 16, q2_max: 22.86}
+    options: {l: mu, q: d}
+    mean: 2.6e-08
+    sigma-stat: {hi: 1.5e-08, lo: -1.5e-08}
+    sigma-sys: {hi: 3e-09, lo: -3e-09}
+    dof: 1
 # }}}
+
 
 ########
 # LHCb #
@@ -450,58 +505,17 @@ B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb-2014:
     sigma-sys: {hi: 0.02, lo: -0.02}
     dof: 1
 # }}}
-
-B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2011:
+#
+# 2021
+#
+# {{{
+B^+->K^+l^+l^-::R_K[1.00,6.00]@LHCb-2021:
     type: Gaussian
-    observable: B->Kll::BRavg@LargeRecoil
+    observable: B->Kll::R_K
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
-    mean: 9.8e-08
-    sigma-stat: {hi: 6.139999999999999e-08, lo: -6.139999999999999e-08}
-    sigma-sys: {hi: 7.4e-09, lo: -7.4e-09}
+    options: {}
+    mean: 0.846
+    sigma-stat: {hi: 0.042, lo: -0.039}
+    sigma-sys: {hi: 0.013, lo: -0.012}
     dof: 1
-B^0->K^0mu^+mu^-::BR[1.00,6.00]@CDF-2012:
-    type: Gaussian
-    observable: B->Kll::BRavg@LargeRecoil
-    kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
-    mean: 1.11e-07
-    sigma-stat: {hi: 5.2e-08, lo: -5.2e-08}
-    sigma-sys: {hi: 1.4e-08, lo: -1.4e-08}
-    dof: 1
-B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2011:
-    type: Gaussian
-    observable: B->Kll::BRavg@LowRecoil
-    kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
-    mean: 7.26e-08
-    sigma-stat: {hi: 2.57e-08, lo: -2.57e-08}
-    sigma-sys: {hi: 5.4e-09, lo: -5.4e-09}
-    dof: 1
-B^0->K^0mu^+mu^-::BR[14.18,16.00]@CDF-2012:
-    type: Gaussian
-    observable: B->Kll::BRavg@LowRecoil
-    kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
-    mean: 4.3e-08
-    sigma-stat: {hi: 1.8e-08, lo: -1.8e-08}
-    sigma-sys: {hi: 4e-09, lo: -4e-09}
-    dof: 1
-B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF-2011:
-    type: Gaussian
-    observable: B->Kll::BRavg@LowRecoil
-    kinematics: {q2_min: 16, q2_max: 22.86}
-    options: {l: mu, q: d}
-    mean: 2.14e-08
-    sigma-stat: {hi: 1.82e-08, lo: -1.82e-08}
-    sigma-sys: {hi: 1.6e-09, lo: -1.6e-09}
-    dof: 1
-B^0->K^0mu^+mu^-::BR[16.00,22.86]@CDF-2012:
-    type: Gaussian
-    observable: B->Kll::BRavg@LowRecoil
-    kinematics: {q2_min: 16, q2_max: 22.86}
-    options: {l: mu, q: d}
-    mean: 2.6e-08
-    sigma-stat: {hi: 1.5e-08, lo: -1.5e-08}
-    sigma-sys: {hi: 3e-09, lo: -3e-09}
-    dof: 1
+# }}}
