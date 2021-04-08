@@ -164,6 +164,10 @@ def main():
         help = 'name of the MCMC data file from which the minimization is started',
         dest = 'init_file', action = 'store', type = str, default = ''
     )
+    parser_find_mode.add_argument('--from-point',
+        help = 'Point from which the minization is started',
+        dest = 'point', action = 'store', type = str, default = ''
+    )
     parser_find_mode.set_defaults(cmd = cmd_find_mode)
 
     # find-clusters
@@ -297,6 +301,7 @@ def cmd_find_mode(args):
     min_chi2 = sys.float_info.max
     gof = None
     bfp = None
+<<<<<<< HEAD
     info('Starting minimization in {} points'.format(args.points))
     starting_points = []
     if args.init_file != '':
@@ -307,9 +312,17 @@ def cmd_find_mode(args):
             p.set(v)
     else:
         info('Using random starting point')
+=======
+>>>>>>> [eos-analysis] Add option to initialise 'find-point' from a given parameter point via '--from-point 'POINT AS STRING' option
 
-    for i in range(args.points):
-        starting_point = [float(p) for p in analysis.varied_parameters]
+    if args.point != '':
+        starting_point = args.point
+        starting_point.strip()
+        starting_point = starting_point.split()
+        starting_point = [float(x) for x in starting_point]
+
+        info('Starting minimization from point: {}'.format(starting_point))
+
         _bfp = analysis.optimize(starting_point)
         _gof = eos.GoodnessOfFit(analysis.log_posterior)
         _chi2 = _gof.total_chi_square()
@@ -317,6 +330,27 @@ def cmd_find_mode(args):
             gof = _gof
             bfp = _bfp
             min_chi2 = _chi2
+    else:
+        info('Starting minimization in {} points'.format(args.points))
+        starting_points = []
+        if args.init_file is not '':
+            info('Initializing starting point from MCMC data file')
+            chain = eos.data.MarkovChain(args.init_file)
+            idx_mode = _np.argmax(chain.weights)
+            for p, v in zip(analysis.varied_parameters, chain.samples[idx_mode]):
+                p.set(v)
+        else:
+            info('Using random starting point')
+
+        for i in range(args.points):
+            starting_point = [float(p) for p in analysis.varied_parameters]
+            _bfp = analysis.optimize(starting_point)
+            _gof = eos.GoodnessOfFit(analysis.log_posterior)
+            _chi2 = _gof.total_chi_square()
+            if _chi2 < min_chi2:
+                gof = _gof
+                bfp = _bfp
+                min_chi2 = _chi2
 
     print('best-fit point:')
     for p, v in zip(analysis.varied_parameters, _bfp.point):
