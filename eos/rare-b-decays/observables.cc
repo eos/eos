@@ -18,6 +18,9 @@
  */
 
 #include <eos/observable-impl.hh>
+#include <eos/rare-b-decays/b-to-kstar-charmonium.hh>
+#include <eos/rare-b-decays/b-to-k-charmonium.hh>
+#include <eos/rare-b-decays/bs-to-phi-charmonium.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-large-recoil.hh>
 #include <eos/rare-b-decays/exclusive-b-to-s-dilepton-low-recoil.hh>
@@ -25,8 +28,6 @@
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
-#include <eos/rare-b-decays/b-to-kstar-charmonium.hh>
-#include <eos/rare-b-decays/b-to-k-charmonium.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
 #include <eos/utils/concrete_observable.hh>
 
@@ -295,7 +296,7 @@ namespace eos
             R"(The option "q" selects the spectator quark flavour.)",
             {
                 /// Branching ratio of B -> K psi
-                make_observable("B->Kcharmonium::branching_ratio",
+                make_observable("B->Kpsi::BR",
                         &BToKCharmonium::branching_ratio)
             }
 
@@ -315,22 +316,26 @@ namespace eos
             R"(The option "q" selects the spectator quark flavour.)",
             {
                 /// Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
-                make_observable("B->K^*charmonium::S_1s_LHCb",
+                make_observable("B->K^*psi::S_1s_LHCb",
                         &BToKstarCharmonium::S_1s_LHCb),
-                make_observable("B->K^*charmonium::S_1c_LHCb",
+                make_observable("B->K^*psi::S_1c_LHCb",
                         &BToKstarCharmonium::S_1c_LHCb),
-                make_observable("B->K^*charmonium::S_3_LHCb",
+                make_observable("B->K^*psi::S_3_LHCb",
                         &BToKstarCharmonium::S_3_LHCb),
-                make_observable("B->K^*charmonium::S_4_LHCb",
+                make_observable("B->K^*psi::S_4_LHCb",
                         &BToKstarCharmonium::S_4_LHCb),
-                make_observable("B->K^*charmonium::S_8_LHCb",
+                make_observable("B->K^*psi::S_8_LHCb",
                         &BToKstarCharmonium::S_8_LHCb),
-                make_observable("B->K^*charmonium::S_9_LHCb",
+                make_observable("B->K^*psi::S_9_LHCb",
                         &BToKstarCharmonium::S_9_LHCb),
 
                 /// Branching ratio of B -> K^* psi
-                make_observable("B->K^*charmonium::branching_ratio",
-                        &BToKstarCharmonium::branching_ratio)
+                make_observable("B->K^*psi::BR",
+                        &BToKstarCharmonium::branching_ratio),
+
+                // Branching ratio of B -> phi psi
+                make_observable("B_s->phipsi::BR",
+                        &BsToPhiCharmonium::branching_ratio)
 
             }
 

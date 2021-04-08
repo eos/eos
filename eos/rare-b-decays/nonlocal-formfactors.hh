@@ -317,6 +317,7 @@ namespace eos
             ///@}
     };
     extern template class NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>;
+    extern template class NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>;
 
     namespace nff_utils
     {
