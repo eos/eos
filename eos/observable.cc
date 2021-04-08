@@ -25,6 +25,7 @@
 #include <eos/rare-b-decays/observables.hh>
 #include <eos/form-factors/observables.hh>
 //#include <eos/utils/concrete_observable.hh>
+#include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/observable_stub.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
@@ -60,10 +61,37 @@ namespace eos
         return observable_entries;
     }
 
+    class ObservableEntries :
+        public InstantiationPolicy<ObservableEntries, Singleton>
+    {
+        private:
+            std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> _entries;
+
+            ObservableEntries() :
+                _entries(make_observable_entries())
+            {
+            }
+
+            ~ObservableEntries() = default;
+
+        public:
+            friend class InstantiationPolicy<ObservableEntries, Singleton>;
+
+            const std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> & entries() const
+            {
+                return _entries;
+            }
+
+            void insert(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value)
+            {
+                _entries[key] = value;
+            }
+    };
+
     ObservablePtr
     Observable::make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & _options)
     {
-        static const std::map<QualifiedName, ObservableEntryPtr> observable_entries = std::move(make_observable_entries());
+        const std::map<QualifiedName, std::shared_ptr<const ObservableEntry>> & observable_entries = ObservableEntries::instance()->entries();
 
         // check if 'name' matches a simple observable
         {
@@ -259,5 +287,11 @@ namespace eos
     Observables::end_sections() const
     {
         return SectionIterator(_imp->observable_sections.end());
+    }
+
+    void
+    Observables::insert(const QualifiedName & name, const ObservableEntry * entry) const
+    {
+        ObservableEntries::instance()->insert(name, std::shared_ptr<const ObservableEntry>(entry));
     }
 }

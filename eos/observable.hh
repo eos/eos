@@ -215,6 +215,13 @@ namespace eos
             SectionIterator begin_sections() const;
             SectionIterator end_sections() const;
             ///@}
+
+            /*!
+            * Insert a new ObservableEntry.
+            * @param name  The name of the new ObservableEntry.
+            * @param entry The new ObservableEntry.
+            */
+            void insert(const QualifiedName & name, const ObservableEntry * entry) const;
     };
 
     extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
