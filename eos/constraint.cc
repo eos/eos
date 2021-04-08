@@ -1834,7 +1834,7 @@ namespace eos
                 return _entries;
             }
 
-            void insert(const QualifiedName & key, std::shared_ptr<const ConstraintEntry> & value)
+            void insert(const QualifiedName & key, const std::shared_ptr<const ConstraintEntry> & value)
             {
                 _entries[key] = value;
             }
