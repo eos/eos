@@ -2927,7 +2927,7 @@ groups:
           central: 1.7
           min:     1.7
           max:     1.7
-          latex:    '$s_{0_{A_2,}} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
+          latex:    '$s_{0_{A_2,0} }^{B_s \to \phi, \mathrm{(B-LCSR)}}$'
           comments: 'GeV^2'
       'B_s->phi::s_0^A2,1@B-LCSR' :
           central: 0.0
@@ -3784,7 +3784,7 @@ groups:
           central: 0.013054
           min:     0.000537
           max:     0.023296
-          latex:    '$\zeta(q^2_{\mathrm{max}}$'
+          latex:    '$\zeta(q^2_{\mathrm{max}})$'
           comments: "Normalisation of the LO IW function at zero recoil, [-1.0, 1.0]"
       "Lambda_b->Lambda_c^*::rho@HQET" :
           central: 0.05
@@ -3843,122 +3843,122 @@ groups:
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\perp,0}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{\perp,0}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Im{alpha_0^perp}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\perp,0}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{\perp,0}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Re{alpha_1^perp}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\perp,1}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{\perp,1}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Im{alpha_1^perp}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\perp,1}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{\perp,1}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Re{alpha_2^perp}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\perp,2}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{\perp,2}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Im{alpha_2^perp}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\perp,2}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{\perp,2}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Re{alpha_0^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\parallel,0}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{\parallel,0}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Im{alpha_0^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\parallel,0}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{\parallel,0}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Re{alpha_1^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\parallel,1}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{\parallel,1}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Im{alpha_1^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\parallel,1}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{\parallel,1}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Re{alpha_2^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\parallel,2}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{\parallel,2}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Im{alpha_2^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\parallel,2}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{\parallel,2}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Re{alpha_0^long}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{0,0}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{0,0}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Im{alpha_0^long}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{0,0}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{0,0}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Re{alpha_1^long}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{0,1}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{0,1}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Im{alpha_1^long}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{0,1}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{0,1}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Re{alpha_2^long}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{0,2}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{0,2}^{\mathrm{GvDV2020}}$'
       'B->K^*ccbar::Im{alpha_2^long}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{0,2}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{0,2}^{\mathrm{GvDV2020}}$'
       'B->Kccbar::Re{alpha_0^plus}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{+,0}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{+,0}^{\mathrm{GvDV2020}}$'
       'B->Kccbar::Im{alpha_0^plus}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{+,0}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{+,0}^{\mathrm{GvDV2020}}$'
       'B->Kccbar::Re{alpha_1^plus}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{+,1}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{+,1}^{\mathrm{GvDV2020}}$'
       'B->Kccbar::Im{alpha_1^plus}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{+,1}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{+,1}^{\mathrm{GvDV2020}}$'
       'B->Kccbar::Re{alpha_2^plus}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{+,2}^{GvDV2020}$'
+          latex:    '$\operatorname*{Re} \alpha_{+,2}^{\mathrm{GvDV2020}}$'
       'B->Kccbar::Im{alpha_2^plus}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{+,2}^{GvDV2020}$'
+          latex:    '$\operatorname*{Im} \alpha_{+,2}^{\mathrm{GvDV2020}}$'
       'b->sccbar::chiOPE@GRvDV2021' :
           central: +0.000181
           min:     +0.000179
@@ -3969,122 +3969,122 @@ groups:
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\perp,0}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{\perp,0}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Im{alpha_0^perp}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\perp,0}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{\perp,0}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Re{alpha_1^perp}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\perp,1}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{\perp,1}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Im{alpha_1^perp}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\perp,1}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{\perp,1}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Re{alpha_2^perp}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\perp,2}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{\perp,2}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Im{alpha_2^perp}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\perp,2}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{\perp,2}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Re{alpha_0^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\parallel,0}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{\parallel,0}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Im{alpha_0^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\parallel,0}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{\parallel,0}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Re{alpha_1^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\parallel,1}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{\parallel,1}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Im{alpha_1^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\parallel,1}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{\parallel,1}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Re{alpha_2^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{\parallel,2}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{\parallel,2}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Im{alpha_2^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{\parallel,2}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{\parallel,2}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Re{alpha_0^long}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{0,0}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{0,0}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Im{alpha_0^long}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{0,0}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{0,0}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Re{alpha_1^long}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{0,1}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{0,1}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Im{alpha_1^long}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{0,1}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{0,1}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Re{alpha_2^long}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{0,2}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{0,2}^{\mathrm{GRvDV2021}}$'
       'B->K^*ccbar::Im{alpha_2^long}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{0,2}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{0,2}^{\mathrm{GRvDV2021}}$'
       'B->Kccbar::Re{alpha_0^plus}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{+,0}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{+,0}^{\mathrm{GRvDV2021}}$'
       'B->Kccbar::Im{alpha_0^plus}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{+,0}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{+,0}^{\mathrm{GRvDV2021}}$'
       'B->Kccbar::Re{alpha_1^plus}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{+,1}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{+,1}^{\mathrm{GRvDV2021}}$'
       'B->Kccbar::Im{alpha_1^plus}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{+,1}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{+,1}^{\mathrm{GRvDV2021}}$'
       'B->Kccbar::Re{alpha_2^plus}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Re} \alpha_{+,2}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Re} \alpha_{+,2}^{\mathrm{GRvDV2021}}$'
       'B->Kccbar::Im{alpha_2^plus}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\operatorname*{Im} \alpha_{+,2}^{GRvDV2021}$'
+          latex:    '$\operatorname*{Im} \alpha_{+,2}^{\mathrm{GRvDV2021}}$'
   # }}}
 
   # Miscellaneous Form Factor Parameters
