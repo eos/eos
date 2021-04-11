@@ -308,6 +308,89 @@ groups:
           latex:    '$\mu^{\bar{s}b\bar{s}b}_0$'
           comments: ''
           unit:     'GeV'
+
+      # Wilson coefficients at the low scale mu = 4.2 GeV to NLL accuracy as calculated in the SM by EOS' StandardModel class.
+      # For the calculations, cf. [BBL:1995A].
+      'sbsb::Re{c1}' :
+          central: +0.001313228
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Re}\,C_{1}^{\bar{s}b\bar{s}b}$'
+      'sbsb::Im{c1}' :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Im}\,C_{1}^{\bar{s}b\bar{s}b}$'
+      "sbsb::Re{c1'}" :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Re}\,C_{1^\prime}^{\bar{s}b\bar{s}b}$'
+      "sbsb::Im{c1'}" :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Im}\,C_{1^\prime}^{\bar{s}b\bar{s}b}$'
+      'sbsb::Re{c2}' :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Re}\,C_{2}^{\bar{s}b\bar{s}b}$'
+      'sbsb::Im{c2}' :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Im}\,C_{2}^{\bar{s}b\bar{s}b}$'
+      "sbsb::Re{c2'}" :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Re}\,C_{2^\prime}^{\bar{s}b\bar{s}b}$'
+      "sbsb::Im{c2'}" :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Im}\,C_{2^\prime}^{\bar{s}b\bar{s}b}$'
+      'sbsb::Re{c3}' :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Re}\,C_{3}^{\bar{s}b\bar{s}b}$'
+      'sbsb::Im{c3}' :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Im}\,C_{3}^{\bar{s}b\bar{s}b}$'
+      "sbsb::Re{c3'}" :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Re}\,C_{3^\prime}^{\bar{s}b\bar{s}b}$'
+      "sbsb::Im{c3'}" :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Im}\,C_{3^\prime}^{\bar{s}b\bar{s}b}$'
+      'sbsb::Re{c4}' :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Re}\,C_{4}^{\bar{s}b\bar{s}b}$'
+      'sbsb::Im{c4}' :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Im}\,C_{4}^{\bar{s}b\bar{s}b}$'
+      'sbsb::Re{c5}' :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Re}\,C_{5}^{\bar{s}b\bar{s}b}$'
+      'sbsb::Im{c5}' :
+          central: +0.0
+          max:     +0.0
+          min:     +0.0
+          latex:    '$\textrm{Im}\,C_{5}^{\bar{s}b\bar{s}b}$'
   # }}}
 
   # b -> s {qqbar, gamma, l^+l^-} WET Parameters
