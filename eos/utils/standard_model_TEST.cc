@@ -441,3 +441,43 @@ class WilsonCoefficientsBToSTest :
             }
         }
 } wilson_coefficients_b_to_s_test;
+
+class WilsonCoefficientsSBSBTest :
+    public TestCase
+{
+    public:
+        WilsonCoefficientsSBSBTest() :
+            TestCase("wilson_coefficients_sbsb_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Test for 5 active flavors, evolving from mu_0 = 120 GeV to mu = 4.2 GeV */
+            {
+                static const double eps = 1e-8;
+                static const double mu = 4.2;
+
+                Parameters parameters = reference_parameters();
+                StandardModel model(parameters);
+
+                WilsonCoefficients<wc::SBSB> wc = model.wilson_coefficients_sbsb(mu);
+                TEST_CHECK_NEARLY_EQUAL(+0.001313228, real(wc.c1()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.c1()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.c2()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.c2()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.c3()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.c3()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.c4()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.c4()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.c5()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.c5()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.c1p()), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.c1p()), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.c2p()), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.c2p()), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.c3p()), eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.c3p()), eps);
+            }
+        }
+} wilson_coefficients_sbsb_test;

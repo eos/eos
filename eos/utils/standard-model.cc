@@ -30,6 +30,7 @@
 #include <cmath>
 
 #include <gsl/gsl_sf_clausen.h>
+#include <gsl/gsl_sf_dilog.h>
 
 namespace eos
 {
@@ -695,6 +696,133 @@ namespace implementation
         return wc;
     }
 
+    SMComponent<components::DeltaB2>::SMComponent(const Parameters & p, ParameterUser & u) :
+        _G_Fermi__deltabs2(p["WET::G_Fermi"], u),
+        _alpha_s_Z__deltabs2(p["QCD::alpha_s(MZ)"], u),
+        _mu_t__deltabs2(p["QCD::mu_t"], u),
+        _mu_b__deltabs2(p["QCD::mu_b"], u),
+        _mu_c__deltabs2(p["QCD::mu_c"], u),
+        _sw2__deltabs2(p["GSW::sin^2(theta)"], u),
+        _m_t_pole__deltabs2(p["mass::t(pole)"], u),
+        _m_W__deltabs2(p["mass::W"], u),
+        _m_Z__deltabs2(p["mass::Z"], u),
+        _mu_0__deltabs2(p["sbsb::mu_0"], u)
+    {
+    }
+
+    WilsonCoefficients<wc::SBSB>
+    SMComponent<components::DeltaB2>::wilson_coefficients_sbsb(const double & mu) const
+    {
+        if (mu >= _mu_t__deltabs2)
+            throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_sbsb: Evolution to mu >= mu_t is illdefined!");
+
+        if (mu <= _mu_c__deltabs2)
+            throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_sbsb: Evolution to mu <= mu_c is not implemented!");
+
+        // only evolve the wilson coefficients for 5 active flavors
+        static const double nf    = 5.0;
+        static const auto & beta4 = QCD::beta_function_nf_4;
+        static const auto & beta5 = QCD::beta_function_nf_5;
+        static const auto & beta6 = QCD::beta_function_nf_6;
+
+        // calculate all alpha_s values
+        const double alpha_s_mu_0 = QCD::alpha_s(_mu_0__deltabs2, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
+
+        double alpha_s = 0.0;
+        if (mu < _mu_b__deltabs2)
+        {
+            alpha_s = QCD::alpha_s(_mu_b__deltabs2, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
+            alpha_s = QCD::alpha_s(mu, alpha_s, _mu_b__deltabs2, beta4);
+        }
+        else
+        {
+            alpha_s = QCD::alpha_s(mu, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
+        }
+
+        double alpha_s_m_t_pole = 0.0;
+        if (_mu_t__deltabs2 <= _m_t_pole__deltabs2)
+        {
+            alpha_s_m_t_pole = QCD::alpha_s(_mu_t__deltabs2, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
+            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__deltabs2, alpha_s_m_t_pole, _mu_t__deltabs2, beta6);
+        }
+        else
+        {
+            Log::instance()->message("sm_component<deltabs2>.wc", ll_error)
+                << "mu_t > m_t_pole!";
+
+            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__deltabs2, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
+        }
+
+        // calculate m_t at the matching scale in the MSbar scheme
+        const double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__deltabs2, alpha_s_m_t_pole, nf);
+        const double m_t_mu_0 = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0, beta5, QCD::gamma_m_nf_5);
+
+        // calculate dependent inputs
+        const double log_t = std::log(_mu_0__deltabs2 / _m_W__deltabs2);
+        const double xt = power_of<2>(m_t_mu_0 / _m_W__deltabs2);
+        const double xt2 = xt  * xt,
+                     xt3 = xt2 * xt,
+                     xt4 = xt2 * xt2;
+        const double lnxt = std::log(xt), ln2xt = lnxt * lnxt;
+        // GSL and [BBL:1995A] convention for the dilogarithm agree:
+        //   gsl_sf_dilog(1.0 - x) = L_2(1.0 - x)
+        const double L2 = gsl_sf_dilog(1.0 - xt);
+
+        /*
+        * Initial scale Wilson coefficients from the top sector, cf. [BBL:1995A], Eqs. (XIII.1) to (XIII.5), pp. 118.
+        */
+
+        // anomalous mass dimension, eq. (XII.7), in the five-flavour scheme
+        const double Nc      = 3.0;
+        const double gamma_0 = 6.0 * (Nc - 1.0) / Nc;
+        const double gamma_1 = (-21.0 + 57.0 / Nc - 19.0 / 3.0 * Nc + 4.0 / 3.0 * nf) * (Nc - 1.0) /(2.0 * Nc);
+        const double d5      = gamma_0  / (2.0 * beta5[0]);
+        const double J5      = d5 * beta5[1] / beta5[0] - gamma_1 / (2.0 * beta5[0]);
+
+        // one-loop (Inami-Lim) function S_0 = S_0(x_t, x_t), cf. [BBL:1995A], Eq. (XII.4), p. 101
+        const double S_0 = (4.0 * xt - 11.0 * xt2 + xt3) / (4.0 * power_of<2>(1.0 - xt))
+                         - 3.0 * xt3 * std::log(xt) / (2.0 * power_of<3>(1.0 - xt));
+        // derivative of S_0 w.r.t. to xt
+        const double S_0_d1 = (4.0 - 18.0 * xt - 3.0 * xt2 - xt3) / (4.0 * power_of<3>(1.0 - xt))
+                            - 9.0 * xt2 * std::log(xt) / (2.0 * power_of<4>(1.0 - xt));
+
+        // two-loop function, eqs. (XII.11)-(XII.14)
+        const double B_t   = 5.0 * (Nc - 1.0) / (2.0 * Nc) + 3.0 * (Nc * Nc - 1.0) / (2.0 * Nc);
+        // two-loop function S_1 (color singlet part)
+        const double S_1_1 = -xt * (4.0 - 39.0 * xt + 168.0 * xt2 + 11.0 * xt3) / (4.0 * power_of<3>(1.0 - xt))
+                           - 3.0 * xt * (4.0 - 24.0 * xt + 36.0 * xt2 + 7.0 * xt3 + xt4) / (2.0 * power_of<4>(1.0 - xt)) * lnxt
+                           + 3.0 * xt3 * (13.0 + 4.0 * xt + xt2) / (2.0 * power_of<4>(1.0 - xt)) * ln2xt
+                           - 3.0 * xt3 * (5.0 + xt) / power_of<3>(1.0 - xt) * L2;
+        // two-loop function S_1 (color octet part)
+        const double S_1_8 = -(64.0 - 68.0 * xt - 17.0 * xt2 + 11.0 * xt3) / (4.0 * power_of<2>(1.0 - xt))
+                           + (32.0 - 68.0 * xt + 32.0 * xt2 - 28.0 * xt3 + 3.0 * xt4) / (2.0 * power_of<3>(1.0 - xt)) * lnxt
+                           + xt2 * (4.0 - 7.0 * xt + 7.0 * xt2 - 2.0 * xt3) / (2.0 * power_of<4>(1.0 - xt)) * ln2xt
+                           + 2.0 * xt * (4.0 - 7.0 * xt - 7.0 * xt2 + xt3) / power_of<3>(1.0 - xt) * L2
+                           + 16.0 / xt * (M_PI * M_PI / 6.0 - L2);
+        // two-loop function S_1 (full result)
+        const double S_1   = (Nc - 1.0) / (2.0 * Nc) * S_1_8 + (Nc * Nc - 1.0) / (2.0 * Nc) * S_1_1;
+
+        // auxilliary quantities
+        const double eta   = std::pow(alpha_s_mu_0 / alpha_s, 6.0 / 23.0);
+        // eta2B from (XIII.3), except for
+        //  - a factor alpha_s(mu)^(-6/23), which has been absorbed into eta
+        const double eta2B = 1.0 + alpha_s_mu_0 / (4.0 * M_PI) * (
+            S_1 / S_0 + B_t - J5 + gamma_0 * log_t + 8.0 * xt * S_0_d1 / (S_0) * 2.0 * log_t
+        );
+        // U5(mu, mu_0) corresponds to the square brackets in (XIII.1) and (XIII.5)
+        const double U5    = 1.0 + alpha_s / (4.0 * M_PI) * J5;
+
+        // We use an effective Hamiltonian
+        //   H^eff = 4 GF / sqrt(2) lambda_q^2 * C_1 * O_1,
+        // where 4 * O_1 coincides with the operator Q in eq. (XIII.2).
+        // We can obtain C_i from eq. (XIII.1)
+        WilsonCoefficients<wc::SBSB> wc;
+        wc._coefficients[0] = _G_Fermi__deltabs2 * power_of<2>(_m_W__deltabs2()) * std::sqrt(2.0) / (16.0 * M_PI * M_PI)
+                  * S_0 * eta2B * eta * U5;
+
+        return wc;
+    }
+
     SMComponent<components::DeltaBU1>::SMComponent(const Parameters & /* p */, ParameterUser & /* u */)
     {
     }
@@ -736,6 +864,7 @@ namespace implementation
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
+        SMComponent<components::DeltaB2>(p, *this),
         SMComponent<components::DeltaBS1>(p, *this),
         SMComponent<components::DeltaBU1>(p, *this),
         SMComponent<components::DeltaBC1>(p, *this)
