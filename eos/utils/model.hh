@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010-2015, 2021 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -41,6 +41,7 @@ namespace eos
         ///@{
         struct CKM;
         struct QCD;
+        struct DeltaB2;
         struct DeltaBS1;
         struct DeltaBU1;
         struct DeltaBC1;
@@ -101,6 +102,16 @@ namespace eos
         public:
             /* b->s Wilson coefficients */
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const std::string & lepton_flavour, const bool & cp_conjugate = false) const = 0;
+    };
+
+    /*!
+     * Base class for the Delta B = 2 = -Delta S FCNC component of models.
+     */
+    template <> class ModelComponent<components::DeltaB2>
+    {
+        public:
+            /* sbar b sbar b Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBSB> wilson_coefficients_sbsb(const double & mu) const = 0;
     };
 
     /*!
