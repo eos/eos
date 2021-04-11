@@ -141,6 +141,7 @@ namespace eos
         public ParameterUser,
         public virtual ModelComponent<components::CKM>,
         public virtual ModelComponent<components::QCD>,
+        public virtual ModelComponent<components::DeltaB2>,
         public virtual ModelComponent<components::DeltaBS1>,
         public virtual ModelComponent<components::DeltaBU1>,
         public virtual ModelComponent<components::DeltaBC1>
