@@ -43,6 +43,46 @@ namespace eos
         complex<double> zero() { return complex<double>(0.0, 0.0); }
     }
 
+    /* sbar b sbar b Wilson coefficients */
+    WilsonScanComponent<components::DeltaB2>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+        _re_sbsb_c1__deltab2(p["sbsb::Re{c1}"], u),
+        _im_sbsb_c1__deltab2(p["sbsb::Im{c1}"], u),
+        _re_sbsb_c2__deltab2(p["sbsb::Re{c2}"], u),
+        _im_sbsb_c2__deltab2(p["sbsb::Im{c2}"], u),
+        _re_sbsb_c3__deltab2(p["sbsb::Re{c3}"], u),
+        _im_sbsb_c3__deltab2(p["sbsb::Im{c3}"], u),
+        _re_sbsb_c4__deltab2(p["sbsb::Re{c4}"], u),
+        _im_sbsb_c4__deltab2(p["sbsb::Im{c4}"], u),
+        _re_sbsb_c5__deltab2(p["sbsb::Re{c5}"], u),
+        _im_sbsb_c5__deltab2(p["sbsb::Im{c5}"], u),
+        _re_sbsb_c1p__deltab2(p["sbsb::Re{c1'}"], u),
+        _im_sbsb_c1p__deltab2(p["sbsb::Im{c1'}"], u),
+        _re_sbsb_c2p__deltab2(p["sbsb::Re{c2'}"], u),
+        _im_sbsb_c2p__deltab2(p["sbsb::Im{c2'}"], u),
+        _re_sbsb_c3p__deltab2(p["sbsb::Re{c3'}"], u),
+        _im_sbsb_c3p__deltab2(p["sbsb::Im{c3'}"], u)
+    {
+    }
+
+    WilsonCoefficients<wc::SBSB>
+    WilsonScanComponent<components::DeltaB2>::wilson_coefficients_sbsb(const double & mu) const
+    {
+        WilsonCoefficients<wc::SBSB> result;
+
+        result._coefficients = std::array<complex<double>, 8>{{
+            complex<double>(_re_sbsb_c1__deltab2(),  _im_sbsb_c1__deltab2()),
+            complex<double>(_re_sbsb_c2__deltab2(),  _im_sbsb_c2__deltab2()),
+            complex<double>(_re_sbsb_c3__deltab2(),  _im_sbsb_c3__deltab2()),
+            complex<double>(_re_sbsb_c4__deltab2(),  _im_sbsb_c4__deltab2()),
+            complex<double>(_re_sbsb_c5__deltab2(),  _im_sbsb_c5__deltab2()),
+            complex<double>(_re_sbsb_c1p__deltab2(), _im_sbsb_c1p__deltab2()),
+            complex<double>(_re_sbsb_c2p__deltab2(), _im_sbsb_c2p__deltab2()),
+            complex<double>(_re_sbsb_c3p__deltab2(), _im_sbsb_c3p__deltab2())
+        }};
+
+        return result;
+    }
+
     /* b->s Wilson coefficients */
     WilsonScanComponent<components::DeltaBS1>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
         _alpha_s_Z__deltabs1(p["QCD::alpha_s(MZ)"], u),
@@ -458,6 +498,7 @@ namespace eos
     WilsonScanModel::WilsonScanModel(const Parameters & parameters, const Options & options) :
         SMComponent<components::CKM>(parameters, *this),
         SMComponent<components::QCD>(parameters, *this),
+        WilsonScanComponent<components::DeltaB2>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBS1>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBU1>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBC1>(parameters, options, *this)
@@ -477,6 +518,7 @@ namespace eos
     ConstrainedWilsonScanModel::ConstrainedWilsonScanModel(const Parameters & parameters, const Options & options) :
         SMComponent<components::CKM>(parameters, *this),
         SMComponent<components::QCD>(parameters, *this),
+        WilsonScanComponent<components::DeltaB2>(parameters, options, *this),
         ConstrainedWilsonScanComponent(parameters, options, *this),
         WilsonScanComponent<components::DeltaBU1>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBC1>(parameters, options, *this)

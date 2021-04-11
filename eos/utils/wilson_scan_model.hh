@@ -115,6 +115,36 @@ namespace eos
     };
 
     template <>
+    class WilsonScanComponent<components::DeltaB2> :
+        public virtual ModelComponent<components::DeltaB2>
+    {
+        protected:
+            /* b->s Wilson coefficients */
+            UsedParameter _re_sbsb_c1__deltab2;
+            UsedParameter _im_sbsb_c1__deltab2;
+            UsedParameter _re_sbsb_c2__deltab2;
+            UsedParameter _im_sbsb_c2__deltab2;
+            UsedParameter _re_sbsb_c3__deltab2;
+            UsedParameter _im_sbsb_c3__deltab2;
+            UsedParameter _re_sbsb_c4__deltab2;
+            UsedParameter _im_sbsb_c4__deltab2;
+            UsedParameter _re_sbsb_c5__deltab2;
+            UsedParameter _im_sbsb_c5__deltab2;
+            UsedParameter _re_sbsb_c1p__deltab2;
+            UsedParameter _im_sbsb_c1p__deltab2;
+            UsedParameter _re_sbsb_c2p__deltab2;
+            UsedParameter _im_sbsb_c2p__deltab2;
+            UsedParameter _re_sbsb_c3p__deltab2;
+            UsedParameter _im_sbsb_c3p__deltab2;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /*! sbar b sbar b Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBSB> wilson_coefficients_sbsb(const double & mu) const;
+    };
+
+    template <>
     class WilsonScanComponent<components::DeltaBU1> :
         public virtual ModelComponent<components::DeltaBU1>
     {
@@ -226,6 +256,7 @@ namespace eos
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
+        public WilsonScanComponent<components::DeltaB2>,
         public WilsonScanComponent<components::DeltaBS1>,
         public WilsonScanComponent<components::DeltaBU1>,
         public WilsonScanComponent<components::DeltaBC1>
@@ -255,6 +286,7 @@ namespace eos
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
+        public WilsonScanComponent<components::DeltaB2>,
         public ConstrainedWilsonScanComponent,
         public WilsonScanComponent<components::DeltaBU1>,
         public WilsonScanComponent<components::DeltaBC1>

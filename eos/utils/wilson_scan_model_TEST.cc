@@ -207,6 +207,65 @@ class WilsonCoefficientsBToSTest :
         }
 } wilson_coefficients_b_to_s_test;
 
+class WilsonCoefficientsSBSBTest :
+    public TestCase
+{
+    public:
+        WilsonCoefficientsSBSBTest() :
+            TestCase("wilson_coefficients_sbsb_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Test passing of WC via cartesian parametrisations */
+            {
+                static const double eps = 1e-6;
+                static const double mu = 4.2; // approximate m_b(m_b) MSbar mass
+
+                Parameters p = Parameters::Defaults();
+                p["sbsb::Re{c1}" ] =  0.123456;
+                p["sbsb::Im{c1}" ] = -0.234567;
+                p["sbsb::Re{c1'}"] = -0.345678;
+                p["sbsb::Im{c1'}"] =  0.456789;
+                p["sbsb::Re{c2}" ] =  0.567890;
+                p["sbsb::Im{c2}" ] = -0.678901;
+                p["sbsb::Re{c2'}"] = -0.789012;
+                p["sbsb::Im{c2'}"] =  0.890123;
+                p["sbsb::Re{c3}" ] =  0.901234;
+                p["sbsb::Im{c3}" ] = -0.012345;
+                p["sbsb::Re{c3'}"] = -0.123456;
+                p["sbsb::Im{c3'}"] =  0.234567;
+                p["sbsb::Re{c4}" ] =  0.345678;
+                p["sbsb::Im{c4}" ] = -0.456789;
+                p["sbsb::Re{c5}" ] = -0.567890;
+                p["sbsb::Im{c5}" ] =  0.678901;
+
+                Options o{};
+
+                WilsonScanModel model(p, o);
+
+                const auto wc = model.wilson_coefficients_sbsb(mu);
+                TEST_CHECK_NEARLY_EQUAL( 0.123456, real(wc.c1()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.234567, imag(wc.c1()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.345678, real(wc.c1p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.456789, imag(wc.c1p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.567890, real(wc.c2()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.678901, imag(wc.c2()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.789012, real(wc.c2p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.890123, imag(wc.c2p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.901234, real(wc.c3()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.012345, imag(wc.c3()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.123456, real(wc.c3p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.234567, imag(wc.c3p()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.345678, real(wc.c4()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.456789, imag(wc.c4()),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.567890, real(wc.c5()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.678901, imag(wc.c5()),  eps);
+            }
+        }
+} wilson_coefficients_sbsbs_test;
+
 class ConstrainedWilsonScanModelTest:
     public TestCase
 {
