@@ -292,6 +292,24 @@ groups:
           latex:   '$\arg{V_{tb}}$'
   # }}}
 
+  # sbsb WET Parameters
+  # {{{
+  - title: '$\bar{s}b\bar{s}b$ WET Parameters'
+    description: >
+        The list of parameters describing the $\bar{s}b\bar{s}b$ Wilson coefficients.
+        See the EOS manual for their physical definitions.
+    wcxf-relevant: true
+    parameters:
+      # SM matching scale
+      'sbsb::mu_0' :
+          central: +120.0
+          max:     +160.0
+          min:      +80.0
+          latex:    '$\mu^{\bar{s}b\bar{s}b}_0$'
+          comments: ''
+          unit:     'GeV'
+  # }}}
+
   # b -> s {qqbar, gamma, l^+l^-} WET Parameters
   # {{{
   - title: '$b\to s\left\lbrace \bar{q}q,\, \gamma,\, \ell^+\ell^-\right\rbrace$ WET Parameters'

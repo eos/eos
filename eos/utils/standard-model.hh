@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2010-2015, 2021 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -123,6 +123,37 @@ namespace eos
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const std::string & lepton_flavour, const bool & cp_conjugate) const;
     };
 
+    template <> class SMComponent<components::DeltaB2> :
+        public virtual ModelComponent<components::DeltaB2>
+    {
+        private:
+            /* Weak decay parameters */
+            UsedParameter _G_Fermi__deltabs2;
+
+            /* QCD parameters */
+            UsedParameter _alpha_s_Z__deltabs2;
+            UsedParameter _mu_t__deltabs2;
+            UsedParameter _mu_b__deltabs2;
+            UsedParameter _mu_c__deltabs2;
+
+            /* GSW parameters */
+            UsedParameter _sw2__deltabs2;
+
+            /* Masses */
+            UsedParameter _m_t_pole__deltabs2;
+            UsedParameter _m_W__deltabs2;
+            UsedParameter _m_Z__deltabs2;
+
+            /* Matching scales */
+            UsedParameter _mu_0__deltabs2;
+
+        public:
+            SMComponent(const Parameters &, ParameterUser &);
+
+            /* sbar b sbar b Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBSB> wilson_coefficients_sbsb(const double & mu) const;
+    };
+
     template <> class SMComponent<components::DeltaBU1> :
         public virtual ModelComponent<components::DeltaBU1>
     {
@@ -147,6 +178,7 @@ namespace eos
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
+        public SMComponent<components::DeltaB2>,
         public SMComponent<components::DeltaBS1>,
         public SMComponent<components::DeltaBU1>,
         public SMComponent<components::DeltaBC1>
