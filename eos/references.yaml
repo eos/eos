@@ -613,6 +613,14 @@ DBG:2013A:
     id: oai:arXiv.org:1307.6653
   inspire-id: Dutta:2013qaa
   title: 'Effective theory approach to new physics in $b \to u$ and $b \to c$ leptonic and semileptonic decays'
+DDHLMSW:2019A:
+  authors: Dowdall, R.J. and Davies, C.T.H. and Horgan, R.R. and Lepage, G.P. and Monahan, C.J. and Shigemitsu, J. and Wingate, M.
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1907.01025
+  inspire-id: Dowdall:2019bea
+  title: Neutral B-meson mixing from full lattice QCD at the physical point
 DDS:2014A:
   authors: Datta, A. and Duraisamy, M. and Sharma, P
   eprint:
