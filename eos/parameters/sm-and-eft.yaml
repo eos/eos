@@ -351,13 +351,13 @@ groups:
           central: -0.33726473
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_7$
+          latex:   $\mathrm{Re}\, \mathcal{C}_7$
           comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::Im{c7}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_7$
+          latex:   $\mathrm{Im}\, \mathcal{C}_7$
           comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::c8" :
           central: -0.18288898
@@ -369,49 +369,49 @@ groups:
           central: +4.27342842
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Re} \mathcal{C}_9^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_9^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Im{c9}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Im} \mathcal{C}_9^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_9^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Re{c10}" :
           central: -4.16611761
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{10}^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{10}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Im{c10}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{10}^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{10}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c9}" :
           central: +4.27342842
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Re} \mathcal{C}_9^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_9^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c9}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Im} \mathcal{C}_9^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_9^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c10}" :
           central: -4.16611761
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{10}^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{10}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c10}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{10}^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{10}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
 
       # Primed Wilson coefficients are negligible in the SM
@@ -419,13 +419,13 @@ groups:
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{7'}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{7'}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->s::Im{c7'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{7'}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{7'}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->s::c8'" :
           central: +0.0
@@ -437,49 +437,49 @@ groups:
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{9'}^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{9'}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Im{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{9'}^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{9'}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Re{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{10'}^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{10'}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Im{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{10'}^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{10'}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{9'}^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{9'}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{9'}^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{9'}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{10'}^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{10'}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{10'}^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{10'}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
 
       # scalar, pseudoscalar, and tensor b -> s ll coefficients
@@ -487,145 +487,145 @@ groups:
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{S}^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{S}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Im{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{S}^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{S}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Re{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{S'}^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{S'}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Im{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{S'}^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{S'}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Re{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{P}^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{P}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Im{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{P}^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{P}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Re{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{P'}^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{P'}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Im{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{P'}^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{P'}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Re{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{T}^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{T}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->see::Im{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{T}^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{T}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->see::Re{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{T5}^{(e)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{T5}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->see::Im{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{T5}^{(e)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{T5}^{(e)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->smumu::Re{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{S}^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{S}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{S}^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{S}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{S'}^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{S'}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{S'}^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{S'}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{P}^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{P}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{P}^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{P}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{P'}^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{P'}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{P'}^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{P'}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{T}^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{T}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->smumu::Im{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{T}^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{T}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->smumu::Re{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Re} \mathcal{C}_{T5}^{(\mu)}$
+          latex:   $\mathrm{Re}\, \mathcal{C}_{T5}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->smumu::Im{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\operatorname*{Im} \mathcal{C}_{T5}^{(\mu)}$
+          latex:   $\mathrm{Im}\, \mathcal{C}_{T5}^{(\mu)}$
           comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
   # }}}
 
@@ -652,156 +652,156 @@ groups:
           central: 1.0
           min:     1.0
           max:     1.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c e\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c e\bar\nu}_{V_L}$'
       'b->cenue::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c e\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c e\bar\nu}_{V_L}$'
       'b->cenue::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c e\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c e\bar\nu}_{V_R}$'
       'b->cenue::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c e\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c e\bar\nu}_{V_R}$'
       'b->cenue::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c e\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c e\bar\nu}_{S_L}$'
       'b->cenue::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c e\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c e\bar\nu}_{S_L}$'
       'b->cenue::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c e\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c e\bar\nu}_{S_R}$'
       'b->cenue::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c e\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c e\bar\nu}_{S_R}$'
       'b->cenue::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c e\bar\nu}_{T}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c e\bar\nu}_{T}$'
       'b->cenue::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c e\bar\nu}_{T}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c e\bar\nu}_{T}$'
 
       # b->c Wilson coefficients - muon
       'b->cmunumu::Re{cVL}' :
           central: 1.0
           min:     1.0
           max:     1.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \mu\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \mu\bar\nu}_{V_L}$'
       'b->cmunumu::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \mu\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \mu\bar\nu}_{V_L}$'
       'b->cmunumu::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \mu\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \mu\bar\nu}_{V_R}$'
       'b->cmunumu::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \mu\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \mu\bar\nu}_{V_R}$'
       'b->cmunumu::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \mu\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \mu\bar\nu}_{S_L}$'
       'b->cmunumu::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \mu\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \mu\bar\nu}_{S_L}$'
       'b->cmunumu::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \mu\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \mu\bar\nu}_{S_R}$'
       'b->cmunumu::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \mu\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \mu\bar\nu}_{S_R}$'
       'b->cmunumu::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \mu\bar\nu}_{T}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \mu\bar\nu}_{T}$'
       'b->cmunumu::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \mu\bar\nu}_{T}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \mu\bar\nu}_{T}$'
 
       # b->c Wilson coefficients - tau
       'b->ctaunutau::Re{cVL}' :
           central: 1.0
           min:     1.0
           max:     1.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \tau\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \tau\bar\nu}_{V_L}$'
       'b->ctaunutau::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \tau\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \tau\bar\nu}_{V_L}$'
       'b->ctaunutau::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \tau\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \tau\bar\nu}_{V_R}$'
       'b->ctaunutau::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \tau\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \tau\bar\nu}_{V_R}$'
       'b->ctaunutau::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \tau\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \tau\bar\nu}_{S_L}$'
       'b->ctaunutau::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \tau\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \tau\bar\nu}_{S_L}$'
       'b->ctaunutau::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \tau\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \tau\bar\nu}_{S_R}$'
       'b->ctaunutau::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \tau\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \tau\bar\nu}_{S_R}$'
       'b->ctaunutau::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to c \tau\bar\nu}_{T}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to c \tau\bar\nu}_{T}$'
       'b->ctaunutau::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to c \tau\bar\nu}_{T}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \tau\bar\nu}_{T}$'
   # }}}
 
   # b -> u l^- nubar WET Parameters
@@ -817,154 +817,154 @@ groups:
           central: 1.0
           min:     1.0
           max:     1.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u \ell^-\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u \ell^-\bar\nu}_{V_L}$'
       'b->uenue::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{V_L}$'
       'b->uenue::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\ell^-\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{V_R}$'
       'b->uenue::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{V_R}$'
       'b->uenue::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_L}$'
       'b->uenue::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_L}$'
       'b->uenue::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_R}$'
       'b->uenue::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{S_R}$'
       'b->uenue::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\ell^-\bar\nu}_{T}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{T}$'
       'b->uenue::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\ell^-\bar\nu}_{T}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{T}$'
 
       # b->u Wilson coefficients - muon
       'b->umunumu::Re{cVL}' :
           central: 1.0
           min:     1.0
           max:     1.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\mu\bar\nu}_{V_L}$'
       'b->umunumu::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\mu\bar\nu}_{V_L}$'
       'b->umunumu::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\mu\bar\nu}_{V_R}$'
       'b->umunumu::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\mu\bar\nu}_{V_R}$'
       'b->umunumu::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\mu\bar\nu}_{S_L}$'
       'b->umunumu::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\mu\bar\nu}_{S_L}$'
       'b->umunumu::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\mu\bar\nu}_{S_R}$'
       'b->umunumu::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\mu\bar\nu}_{S_R}$'
       'b->umunumu::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\mu\bar\nu}_{T}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\mu\bar\nu}_{T}$'
       'b->umunumu::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\mu\bar\nu}_{T}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\mu\bar\nu}_{T}$'
 
       # b->u Wilson coefficients - tau
       'b->utaunutau::Re{cVL}' :
           central: 1.0
           min:     1.0
           max:     1.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\tau\bar\nu}_{V_L}$'
       'b->utaunutau::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{V_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\tau\bar\nu}_{V_L}$'
       'b->utaunutau::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\tau\bar\nu}_{V_R}$'
       'b->utaunutau::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{V_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\tau\bar\nu}_{V_R}$'
       'b->utaunutau::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\tau\bar\nu}_{S_L}$'
       'b->utaunutau::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{S_L}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\tau\bar\nu}_{S_L}$'
       'b->utaunutau::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\tau\bar\nu}_{S_R}$'
       'b->utaunutau::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{S_R}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\tau\bar\nu}_{S_R}$'
       'b->utaunutau::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Re} \mathcal{C}^{b\to u\tau\bar\nu}_{T}$'
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{b\to u\tau\bar\nu}_{T}$'
       'b->utaunutau::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
-          latex:   '$\operatorname*{Im} \mathcal{C}^{b\to u\tau\bar\nu}_{T}$'
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\tau\bar\nu}_{T}$'
   # }}}
