@@ -24,6 +24,7 @@
 #include <eos/b-decays/observables.hh>
 #include <eos/rare-b-decays/observables.hh>
 #include <eos/form-factors/observables.hh>
+#include <eos/meson-mixing/observables.hh>
 //#include <eos/utils/concrete_observable.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -42,7 +43,8 @@ namespace eos
         return std::vector<ObservableSection>({
             make_b_decays_section(),
             make_rare_b_decays_section(),
-            make_form_factors_section()
+            make_form_factors_section(),
+            make_meson_mixing_section(),
         });
     }
 

@@ -468,14 +468,15 @@ AC_OUTPUT(
 	debian/control-xenial
 	debian/Makefile
 	eos/Makefile
+	eos/b-decays/Makefile
 	eos/constraints/Makefile
 	eos/form-factors/Makefile
-	eos/rare-b-decays/Makefile
-	eos/b-decays/Makefile
-	eos/parameters/Makefile
-	eos/utils/Makefile
+	eos/meson-mixing/Makefile
 	eos/optimize/Makefile
+	eos/parameters/Makefile
+	eos/rare-b-decays/Makefile
 	eos/statistics/Makefile
+	eos/utils/Makefile
 	manual/Makefile
 	manual/appendices/Makefile
 	manual/figures/Makefile
