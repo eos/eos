@@ -35,6 +35,7 @@ LDADD = \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
 	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
+	$(top_builddir)/eos/meson-mixing/libeosmesonmixing.la \
 	$(top_builddir)/eos/libeos.la \
 	libcli.a \
 	-lboost_filesystem -lboost_system \

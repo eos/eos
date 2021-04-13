@@ -3,7 +3,17 @@ CLEANFILES = \
 	references_TEST
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = constraints parameters utils optimize statistics form-factors rare-b-decays b-decays .
+SUBDIRS = \
+	constraints \
+	parameters \
+	utils \
+	optimize \
+	statistics \
+	form-factors \
+	rare-b-decays \
+	b-decays \
+	meson-mixing \
+	.
 
 AM_CXXFLAGS = @AM_CXXFLAGS@
 
@@ -24,7 +34,8 @@ libeos_la_LIBADD = \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \
-	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la
+	$(top_builddir)/eos/rare-b-decays/libeosrarebdecays.la \
+	$(top_builddir)/eos/meson-mixing/libeosmesonmixing.la
 
 include_eosdir = $(includedir)/eos
 include_eos_HEADERS = \

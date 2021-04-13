@@ -2,6 +2,41 @@
 title: 'Hadronic Matrix Element Parameters'
 description: ''
 groups:
+# Parameters in B_q <-> Bbar_q Meson Mixing
+  # {{{
+  - title: 'Parameters in $B_q \leftrightarrow \bar{B}_q$ Meson Mixing'
+    description: ''
+    parameters:
+      # R^n taken from table V of [DDHLMSW:2019A], p. 5, and divided by 4
+      # to match the L x L structure rather than a (V-A)x(V-A) structure;
+      # for the definition, see eq. (B1), idem.
+      'B_s<->Bbar_s::R^1' :
+          central: +0.542
+          min:     +0.51875
+          max:     +0.56525
+          latex:    'R_1^{B_s\leftrightarrow \bar{B}_s}'
+      'B_s<->Bbar_s::R^2' :
+          central: -0.545
+          min:     -0.57
+          max:     -0.52
+          latex:    'R_2^{B_s\leftrightarrow \bar{B}_s}'
+      'B_s<->Bbar_s::R^3' :
+          central: +0.109
+          min:     +0.10175
+          max:     +0.11625
+          latex:    'R_3^{B_s\leftrightarrow \bar{B}_s}'
+      'B_s<->Bbar_s::R^4' :
+          central: +0.9125
+          min:     +0.875
+          max:     +0.95
+          latex:    'R_4^{B_s\leftrightarrow \bar{B}_s}'
+      'B_s<->Bbar_s::R^5' :
+          central: +0.48625
+          min:     +0.46725
+          max:     +0.50525
+          latex:    'R_5^{B_s\leftrightarrow \bar{B}_s}'
+  # }}}
+
   # Parameters in B -> P Form Factor Parametrizations
   # {{{
   - title: 'Parameters in $B\to P$ Form Factor Parametrizations'
