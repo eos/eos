@@ -154,6 +154,7 @@ jobs:
                 cfg:
                     - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
                     - { os: bionic,   cxx: clang++-6.0,  cxxflags: '-O2 -g -march=x86-64' }
+                    - { os: focal,    cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-18.04
         container:
