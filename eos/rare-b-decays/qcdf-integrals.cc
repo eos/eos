@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2013, 2014, 2015 Danny van Dyk
+ * Copyright (c) 2011, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,40 +17,15 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_DECAYS_HH
-#define EOS_GUARD_EOS_DECAYS_HH 1
+#include <eos/rare-b-decays/qcdf-integrals.hh>
 
 namespace eos
 {
-    /*
-     * Phase space tags
-     */
-    struct LargeRecoil { };
-    struct LowRecoil { };
-
-    /*
-     * B_s Decays
-     */
-    class BsToKstarLeptonNeutrino;
-
-    /*
-     * Rare B Decays
-     */
-    template <typename T_> class BToKstarDilepton;
-
-    template <typename T_> class BToKDilepton;
-
-    template <typename T_> class BToXsDilepton;
-
-    template <typename T_> class BToXsGamma;
-
-    template <typename T_> class LambdaBToLambdaDilepton;
-
-    enum Helicity
+    namespace tag
     {
-        left_handed = -1,
-        right_handed = +1
-    };
+        const std::string Analytical::name = "analytical";
+        const std::string Mixed::name      = "mixed";
+        const std::string Numerical::name  = "numerical";
+    }
 }
 
-#endif

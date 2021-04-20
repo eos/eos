@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_EOS_B_DECAYS_BS_TO_KSTAR_L_NU_HH
 #define EOS_GUARD_EOS_B_DECAYS_BS_TO_KSTAR_L_NU_HH 1
 
-#include <eos/decays.hh>
+#include <eos/rare-b-decays/decays.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>

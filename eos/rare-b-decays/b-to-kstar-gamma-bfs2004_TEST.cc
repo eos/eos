@@ -19,7 +19,7 @@
 
 #include <test/test.hh>
 #include <eos/observable.hh>
-#include <eos/rare-b-decays/exclusive-b-to-s-gamma.hh>
+#include <eos/rare-b-decays/b-to-kstar-gamma.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
@@ -79,6 +79,7 @@ class BToKstarGammaTest :
                 p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
                 Options oo;
+                oo.set("tag", "BFS2004");
                 oo.set("model", "WilsonScan");
                 oo.set("form-factors", "KMPW2010");
 
@@ -122,6 +123,7 @@ class BToKstarGammaTest :
                 p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
                 Options oo;
+                oo.set("tag", "BFS2004");
                 oo.set("model", "WilsonScan");
                 oo.set("form-factors", "KMPW2010");
 
@@ -163,6 +165,7 @@ class BToKstarGammaBobethCompatibilityTest :
             p["K^*::a_2_perp@1GeV"] = 0.1;
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
             Options o;
+            o.set("tag", "BFS2004");
             o.set("model", "WilsonScan");
             o.set("form-factors", "KMPW2010");
 

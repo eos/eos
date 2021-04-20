@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011, 2016 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,19 +18,23 @@
  */
 
 #include <test/test.hh>
-#include <eos/rare-b-decays/qcdf_integrals.hh>
+#include <eos/rare-b-decays/qcdf-integrals.hh>
 
 #include <iostream>
+#include <string>
 
 using namespace test;
 using namespace eos;
 
-class QCDFIntegralsSToZeroTest :
+template <typename Tag_>
+class QCDFIntegralsPhotonTest :
     public TestCase
 {
     public:
-        QCDFIntegralsSToZeroTest() :
-            TestCase("qcdf_integrals_s_to_zero_test")
+        using Calculator = QCDFIntegralCalculator<BToKstarDilepton, Tag_>;
+
+        QCDFIntegralsPhotonTest() :
+            TestCase("qcdf_integrals_photon_test" + Tag_::name + ">")
         {
         }
 
@@ -42,7 +46,7 @@ class QCDFIntegralsSToZeroTest :
 
             // Asymptotic LCDA, shat = 0, bottom
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::photon_bottom_case(m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_bottom_case(m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.0,                    real(results.j0_perp),     eps);
@@ -84,7 +88,7 @@ class QCDFIntegralsSToZeroTest :
 
             // Asymptotic LCDA, shat = 0, charm
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::photon_charm_case(m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_charm_case(m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.0,                    real(results.j0_perp),     eps);
@@ -126,7 +130,7 @@ class QCDFIntegralsSToZeroTest :
 
             // Asymptotic LCDA, shat = 0, massless
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::photon_massless_case(m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_massless_case(m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.0,                    real(results.j0_perp),     eps);
@@ -169,7 +173,7 @@ class QCDFIntegralsSToZeroTest :
 
             // Full LCDA, shat = 0, bottom
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::photon_bottom_case(m_b, m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_bottom_case(m_b, m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+12.0,                   real(results.j0_perp),     eps);
@@ -211,7 +215,7 @@ class QCDFIntegralsSToZeroTest :
 
             // Full LCDA, shat = 0, charm
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::photon_charm_case(m_c, m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_charm_case(m_c, m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+12.0,                   real(results.j0_perp),     eps);
@@ -253,7 +257,7 @@ class QCDFIntegralsSToZeroTest :
 
             // Full LCDA, shat = 0, massless
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::photon_massless_case(m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::photon_massless_case(m_B, m_Kstar, mu, +1.0, +2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+12.0,                   real(results.j0_perp),     eps);
@@ -293,25 +297,30 @@ class QCDFIntegralsSToZeroTest :
                 TEST_CHECK_RELATIVE_ERROR(+35.571542061706523982,  results.j7_perp,           eps);
             }
         }
-} qcdf_integrals_s_to_zero_test;
+};
+QCDFIntegralsPhotonTest<tag::Analytical> qcdf_integrals_photon_test_analytical;
+QCDFIntegralsPhotonTest<tag::Mixed> qcdf_integrals_photon_test_mixed;
 
+template <typename Tag_>
 class QCDFIntegralsDileptonBottomTest :
     public TestCase
 {
     public:
+        using Calculator = QCDFIntegralCalculator<BToKstarDilepton, Tag_>;
+
         QCDFIntegralsDileptonBottomTest() :
-            TestCase("qcdf_dilepton_bottom_test")
+            TestCase("qcdf_dilepton_bottom_test<" + Tag_::name + ">")
         {
         }
 
         virtual void run() const
         {
             static const double m_b = 4.8, m_B = 5.279, m_Kstar = 0.892, mu = 4.2;
-            static const double eps = 1e-10;
+            static const double eps = 1e-3;
 
             // Asymptotic LCDA, s = 1 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_bottom_case(1.0, m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_bottom_case(1.0, m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+2.5438661014683875729,   real(results.j0_perp),     eps);
@@ -353,7 +362,7 @@ class QCDFIntegralsDileptonBottomTest :
 
             // Full LCDA, s = 1 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_bottom_case(1.0, m_b, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_bottom_case(1.0, m_b, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+7.5060595661946593437,  real(results.j0_perp),      eps);
@@ -395,7 +404,7 @@ class QCDFIntegralsDileptonBottomTest :
 
             // Asymptotic LCDA, s = 6 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_bottom_case(6.0, m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_bottom_case(6.0, m_b, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+1.8152337379049806314,  real(results.j0_perp),     eps);
@@ -437,7 +446,7 @@ class QCDFIntegralsDileptonBottomTest :
 
             // Full LCDA, s = 6 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_bottom_case(6.0, m_b, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_bottom_case(6.0, m_b, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.2577075222152920859,  real(results.j0_perp),     eps);
@@ -474,28 +483,34 @@ class QCDFIntegralsDileptonBottomTest :
                 TEST_CHECK_NEARLY_EQUAL(   0.0,                    imag(results.j6_perp),     eps);
 
                 // J7
-                TEST_CHECK_RELATIVE_ERROR(+6.5286206952110030,    results.j7_perp,           eps);
+                TEST_CHECK_RELATIVE_ERROR(+6.5286206952110030,     results.j7_perp,           eps);
             }
         }
-} qcdf_integrals_dilepton_bottom_test;
+};
+QCDFIntegralsDileptonBottomTest<tag::Analytical> qcdf_integrals_dilepton_bottom_test_analytical;
+QCDFIntegralsDileptonBottomTest<tag::Mixed> qcdf_integrals_dilepton_bottom_test_mixed;
+QCDFIntegralsDileptonBottomTest<tag::Numerical> qcdf_integrals_dilepton_bottom_test_numerical;
 
+template <typename Tag_>
 class QCDFIntegralsDileptonCharmTest :
     public TestCase
 {
     public:
+        using Calculator = QCDFIntegralCalculator<BToKstarDilepton, Tag_>;
+
         QCDFIntegralsDileptonCharmTest() :
-            TestCase("qcdf_dilepton_charm_test")
+            TestCase("qcdf_dilepton_charm_test<" + Tag_::name + ">")
         {
         }
 
         virtual void run() const
         {
             static const double m_c = 1.6, m_B = 5.279, m_Kstar = 0.892, mu = 4.2;
-            static const double eps = 1e-10;
+            static const double eps = 5.5e-3;
 
             // Asymptotic LCDA, s = 1 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_charm_case(1.0, m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_charm_case(1.0, m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+2.5438661014683875729,  real(results.j0_perp),     eps);
@@ -505,9 +520,23 @@ class QCDFIntegralsDileptonCharmTest :
 
                 // J1
                 TEST_CHECK_RELATIVE_ERROR(-1.2084795500217594518,  real(results.j1_perp),     eps);
-                TEST_CHECK_RELATIVE_ERROR(-2.5731752833018131227,  imag(results.j1_perp),     eps);
+                if (("numerical" == Tag_::name) || ("mixed" == Tag_::name))
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-1.6953885768872480000,  imag(results.j1_perp),     eps); // correct
+                }
+                else
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-2.5731752833018131227,  imag(results.j1_perp),     eps); // wrong!
+                }
                 TEST_CHECK_RELATIVE_ERROR(-1.2084795500217594518,  real(results.j1_parallel), eps);
-                TEST_CHECK_RELATIVE_ERROR(-2.5731752833018131227,  imag(results.j1_parallel), eps);
+                if (("numerical" == Tag_::name) || ("mixed" == Tag_::name))
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-1.6953885768872480000,  imag(results.j1_parallel), eps); // correct
+                }
+                else
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-2.5731752833018131227,  imag(results.j1_parallel), eps); // wrong!
+                }
 
                 // J2
                 TEST_CHECK_RELATIVE_ERROR(+7.5499378384070829504,  real(results.j2_perp),     eps);
@@ -537,7 +566,7 @@ class QCDFIntegralsDileptonCharmTest :
 
             // Full LCDA, s = 1 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_charm_case(1.0, m_c, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_charm_case(1.0, m_c, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+7.5060595661946593437,  real(results.j0_perp),     eps);
@@ -547,9 +576,23 @@ class QCDFIntegralsDileptonCharmTest :
 
                 // J1
                 TEST_CHECK_RELATIVE_ERROR(-2.0259892377536594235,  real(results.j1_perp),     eps);
-                TEST_CHECK_RELATIVE_ERROR(+2.0901758815693526036,  imag(results.j1_perp),     eps);
+                if (("numerical" == Tag_::name) || ("mixed" == Tag_::name))
+                {
+                    TEST_CHECK_RELATIVE_ERROR(+1.3250338631629440000,  imag(results.j1_perp),     eps); // correct
+                }
+                else
+                {
+                    TEST_CHECK_RELATIVE_ERROR(+2.0901758815693526036,  imag(results.j1_perp),     eps); // wrong!
+                }
                 TEST_CHECK_RELATIVE_ERROR(-3.3603065663597425813,  real(results.j1_parallel), eps);
-                TEST_CHECK_RELATIVE_ERROR(-5.9062192258577044449,  imag(results.j1_parallel), eps);
+                if (("numerical" == Tag_::name) || ("mixed" == Tag_::name))
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-3.0735616834264360000,  imag(results.j1_parallel), eps); // correct
+                }
+                else
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-5.9062192258577044449,  imag(results.j1_parallel), eps); // wrong!
+                }
 
                 // J2
                 TEST_CHECK_RELATIVE_ERROR(+25.633224198327682961,  real(results.j2_perp),     eps);
@@ -579,7 +622,7 @@ class QCDFIntegralsDileptonCharmTest :
 
             // Asymptotic LCDA, s = 6 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_charm_case(6.0, m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_charm_case(6.0, m_c, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+1.8152337379049806314,  real(results.j0_perp),     eps);
@@ -589,9 +632,23 @@ class QCDFIntegralsDileptonCharmTest :
 
                 // J1
                 TEST_CHECK_RELATIVE_ERROR(-2.5668375066590532237,  real(results.j1_perp),     eps);
-                TEST_CHECK_RELATIVE_ERROR(-6.2820634450983950390,  imag(results.j1_perp),     eps);
+                if (("numerical" == Tag_::name) || ("mixed" == Tag_::name))
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-3.9575320372001630000,  imag(results.j1_perp),     eps); // correct
+                }
+                else
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-6.2820634450983950390,  imag(results.j1_perp),     eps); // wrong!
+                }
                 TEST_CHECK_RELATIVE_ERROR(-2.5668375066590532237,  real(results.j1_parallel), eps);
-                TEST_CHECK_RELATIVE_ERROR(-6.2820634450983950390,  imag(results.j1_parallel), eps);
+                if (("numerical" == Tag_::name) || ("mixed" == Tag_::name))
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-3.9575320372001630000,  imag(results.j1_parallel), eps); // correct
+                }
+                else
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-6.2820634450983950390,  imag(results.j1_parallel), eps); // wrong!
+                }
 
                 // J2
                 TEST_CHECK_RELATIVE_ERROR(+8.3202230206970707438,  real(results.j2_perp),     eps);
@@ -621,7 +678,7 @@ class QCDFIntegralsDileptonCharmTest :
 
             // Full LCDA, s = 6 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_charm_case(6.0, m_c, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_charm_case(6.0, m_c, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.2577075222152920859,  real(results.j0_perp),     eps);
@@ -631,9 +688,23 @@ class QCDFIntegralsDileptonCharmTest :
 
                 // J1
                 TEST_CHECK_RELATIVE_ERROR(-16.318405730056516574,  real(results.j1_perp),     eps);
-                TEST_CHECK_RELATIVE_ERROR(-5.4853614861278124770,  imag(results.j1_perp),     eps);
+                if (("numerical" == Tag_::name) || ("mixed" == Tag_::name))
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-0.9626512455812828000,  imag(results.j1_perp),     eps); // correct
+                }
+                else
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-5.4853614861278124770,  imag(results.j1_perp),     eps); // wrong!
+                }
                 TEST_CHECK_RELATIVE_ERROR(+0.3732425912900265450,  real(results.j1_parallel), eps);
-                TEST_CHECK_RELATIVE_ERROR(-13.668520917564193531,  imag(results.j1_parallel), eps);
+                if (("numerical" == Tag_::name) || ("mixed" == Tag_::name))
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-8.7757310767704430000,  imag(results.j1_parallel), eps); // correct
+                }
+                else
+                {
+                    TEST_CHECK_RELATIVE_ERROR(-13.668520917564193531,  imag(results.j1_parallel), eps); // wrong!
+                }
 
                 // J2
                 TEST_CHECK_RELATIVE_ERROR(+47.588404767679882834,  real(results.j2_perp),     eps);
@@ -645,7 +716,7 @@ class QCDFIntegralsDileptonCharmTest :
 
                 // J4
                 TEST_CHECK_RELATIVE_ERROR(+1.0761522299504679615,  real(results.j4_perp),     eps);
-                TEST_CHECK_RELATIVE_ERROR(-0.0275263680199818626,  imag(results.j4_perp),     eps);
+                TEST_CHECK_RELATIVE_ERROR(-0.0275263680199818626,  imag(results.j4_perp), 10 *eps);
                 TEST_CHECK_RELATIVE_ERROR(+1.3896136112058304143,  real(results.j4_parallel), eps);
                 TEST_CHECK_RELATIVE_ERROR(+1.1061607651804707851,  imag(results.j4_parallel), eps);
 
@@ -661,25 +732,31 @@ class QCDFIntegralsDileptonCharmTest :
                 TEST_CHECK_RELATIVE_ERROR(+6.5286206952110030,    results.j7_perp,           eps);
             }
         }
-} qcdf_integrals_dilepton_charm_test;
+};
+QCDFIntegralsDileptonCharmTest<tag::Analytical> qcdf_integrals_dilepton_charm_test_analytical;
+QCDFIntegralsDileptonCharmTest<tag::Mixed> qcdf_integrals_dilepton_charm_test_mixed;
+QCDFIntegralsDileptonCharmTest<tag::Numerical> qcdf_integrals_dilepton_charm_test_numerical;
 
+template <typename Tag_>
 class QCDFIntegralsDileptonMasslessTest :
     public TestCase
 {
     public:
+        using Calculator = QCDFIntegralCalculator<BToKstarDilepton, Tag_>;
+
         QCDFIntegralsDileptonMasslessTest() :
-            TestCase("qcdf_dilepton_massless_test")
+            TestCase("qcdf_dilepton_massless_test<" + Tag_::name + ">")
         {
         }
 
         virtual void run() const
         {
             static const double m_B = 5.279, m_Kstar = 0.892, mu = 4.2;
-            static const double eps = 1e-13;
+            static const double eps = 5e-3;
 
             // Asymptotic LCDA, s = 1 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_massless_case(1.0, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_massless_case(1.0, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+2.5438661014683875729, real(results.j0_perp),     eps);
@@ -721,7 +798,7 @@ class QCDFIntegralsDileptonMasslessTest :
 
             // Full LCDA, s = 1 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_massless_case(1.0, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_massless_case(1.0, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+7.5060595661946593437, real(results.j0_perp),     eps);
@@ -763,7 +840,7 @@ class QCDFIntegralsDileptonMasslessTest :
 
             // Asymptotic LCDA, s = 6 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_massless_case(6.0, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_massless_case(6.0, m_B, m_Kstar, mu, 0.0, 0.0, 0.0, 0.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+1.8152337379049806314, real(results.j0_perp),     eps);
@@ -805,7 +882,7 @@ class QCDFIntegralsDileptonMasslessTest :
 
             // Full LCDA, s = 6 GeV
             {
-                QCDFIntegrals::Results results = QCDFIntegrals::dilepton_massless_case(6.0, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
+                QCDFIntegrals<BToKstarDilepton> results = Calculator::dilepton_massless_case(6.0, m_B, m_Kstar, mu, 1.0, 2.0, 1.0, -2.0);
 
                 // J0
                 TEST_CHECK_RELATIVE_ERROR(+3.2577075222152920859, real(results.j0_perp),     eps);
@@ -845,4 +922,7 @@ class QCDFIntegralsDileptonMasslessTest :
                 TEST_CHECK_RELATIVE_ERROR(+6.5286206952110030,    results.j7_perp,           eps);
             }
         }
-} qcdf_integrals_dilepton_massless_test;
+};
+QCDFIntegralsDileptonMasslessTest<tag::Analytical> qcdf_integrals_dilepton_massless_test_analytical;
+QCDFIntegralsDileptonMasslessTest<tag::Mixed> qcdf_integrals_dilepton_massless_test_mixed;
+QCDFIntegralsDileptonMasslessTest<tag::Numerical>  qcdf_integrals_dilepton_massless_test_numerical;

@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_GAMMA_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_S_GAMMA_HH 1
 
-#include <eos/decays.hh>
+#include <eos/rare-b-decays/decays.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
@@ -39,6 +39,13 @@ namespace eos
             BToKstarGamma(const Parameters & parameters, const Options & options);
             ~BToKstarGamma();
 
+            struct Amplitudes;
+            class AmplitudeGenerator;
+
+            /*!
+             * @name Simple observables
+             */
+            /// @{
             /// Branching Ratio
             double branching_ratio() const;
 
@@ -56,6 +63,16 @@ namespace eos
 
             /// Isospin asymmetry
             double isospin_asymmetry() const;
+            /// @}
+    };
+
+    /*!
+     * Amplitudes for the decay B -> K^* gamma.
+     */
+    struct BToKstarGamma::Amplitudes
+    {
+        complex<double> a_perp;
+        complex<double> a_para;
     };
 }
 
