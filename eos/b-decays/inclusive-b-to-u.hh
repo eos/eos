@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_EOS_B_DECAYS_INCLUSIVE_B_TO_U_HH
 #define EOS_GUARD_EOS_B_DECAYS_INCLUSIVE_B_TO_U_HH 1
 
-#include <eos/decays.hh>
+#include <eos/rare-b-decays/decays.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>

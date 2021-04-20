@@ -21,7 +21,7 @@
 #ifndef EOS_GUARD_EOS_B_DECAYS_BARYONIC_B_TO_C_LEPTON_NEUTRINO_HH
 #define EOS_GUARD_EOS_B_DECAYS_BARYONIC_B_TO_C_LEPTON_NEUTRINO_HH 1
 
-#include <eos/decays.hh>
+#include <eos/rare-b-decays/decays.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>

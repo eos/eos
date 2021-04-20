@@ -10,7 +10,6 @@ AM_CXXFLAGS = @AM_CXXFLAGS@
 lib_LTLIBRARIES = libeos.la
 libeos_la_SOURCES = \
 	constraint.cc constraint.hh \
-	decays.hh \
 	init.cc \
 	observable.cc observable.hh observable-fwd.hh observable-impl.hh \
 	reference.cc reference.hh \
@@ -30,7 +29,6 @@ libeos_la_LIBADD = \
 include_eosdir = $(includedir)/eos
 include_eos_HEADERS = \
 	constraint.hh \
-	decays.hh \
 	observable.hh \
 	reference.hh \
 	signal-pdf.hh

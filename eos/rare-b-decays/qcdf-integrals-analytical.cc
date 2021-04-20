@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2012 Danny van Dyk
+ * Copyright (c) 2011, 2012, 2016, 2017 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,7 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/rare-b-decays/qcdf_integrals.hh>
+#include <eos/rare-b-decays/qcdf-integrals.hh>
+#include <eos/rare-b-decays/qcdf-integrals-impl.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/polylog.hh>
@@ -26,22 +27,10 @@
 #include <cmath>
 #include <limits>
 
-#include <iostream>
-
 namespace eos
 {
     namespace impl
     {
-        inline double moment_inverse_ubar(const double & a_1, const double & a_2)
-        {
-            return 3.0 * (1.0 + a_1 + a_2);
-        }
-
-        inline double moment_inverse_ubar2(const double & a1, const double & a2, const double & x)
-        {
-            return -6.0 * ((1.0 + 3.0 * a1 + 6.0 * a2) * (x + std::log(1.0 - x)) + x * x * (3.0 * a1 + 4.0 * a2 * x));
-        }
-
         /* s = 0, cases for B->V gamma */
 
         // J1
@@ -287,21 +276,6 @@ namespace eos
 
             return -6.0 * (1.0 - x + lnx) - 6.0 * a1 * (-3.0 * (1.0 - x) * (x - 2.0) + 3.0 * lnx)
                 - 6.0 * a2 * (2.0 * (1.0 - x) * (8.0 - 10.0 * x + 5.0 * x * x) + 6.0 * lnx);
-        }
-
-        /* s > 0, cases for B->V(P)l^+l^- */
-
-        // cf. [vD2011], Eq. (26), p. 3
-        inline double j0(const double & sh, const double & a1, const double & a2)
-        {
-            double lnsh = std::log(sh), sh2 = sh * sh, sh3 = sh2 * sh, sh4 = sh2 * sh2;
-
-            // asymptotic part
-            double asymp = 3.0 * (1.0 + 2.0 * sh * lnsh - sh2) / power_of<3>(1.0 - sh);
-            double gb1 = 3.0 * (1.0 + 9.0 * sh - 9.0 * sh2 - sh3 + 6.0 * sh * (1.0 + sh) * lnsh) / power_of<4>(1.0 - sh);
-            double gb2 = 3.0 * (1.0 + 28.0 * sh - 28.0 * sh3 - sh4 + 12.0 * sh * (1.0 + 3.0 * sh + sh2) * lnsh) / power_of<5>(1.0 - sh);
-
-            return asymp + a1 * gb1 + a2 * gb2;
         }
 
         // Massive case: bottom quarks
@@ -1890,12 +1864,13 @@ namespace eos
     /* s = 0, case for B->V gamma */
 
     // bottom case
-    QCDFIntegrals::Results
-    QCDFIntegrals::photon_bottom_case(const double & m_b, const double & m_B, const double & m_V, const double & mu,
+    template <>
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_bottom_case(const double & m_b, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals::Results results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double mh = m_b / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B)) / 2.0;
 
@@ -1930,12 +1905,13 @@ namespace eos
     }
 
     // charm case
-    QCDFIntegrals::Results
-    QCDFIntegrals::photon_charm_case(const double & m_c, const double & m_B, const double & m_V, const double & mu,
+    template <>
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_charm_case(const double & m_c, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals::Results results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double mh = m_c / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B)) / 2.0;
 
@@ -1970,12 +1946,13 @@ namespace eos
     }
 
     // massless case
-    QCDFIntegrals::Results
-    QCDFIntegrals::photon_massless_case(const double & m_B, const double & m_V, const double & mu,
+    template <>
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_massless_case(const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals::Results results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double eh = (1.0 + power_of<2>(m_V / m_B)) / 2.0;
 
         /*
@@ -2011,12 +1988,13 @@ namespace eos
     /* s > 0, case for B->V l^+ l^- */
 
     // bottom case
-    QCDFIntegrals::Results
-    QCDFIntegrals::dilepton_bottom_case(const double & s, const double & m_b, const double & m_B, const double & m_V, const double & mu,
+    template <>
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_bottom_case(const double & s, const double & m_b, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals::Results results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double sh = s / m_B / m_B, mh = m_b / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B) - sh) / 2.0;
 
@@ -2024,7 +2002,7 @@ namespace eos
 
         // perpendicular amplitude
         results.j0_perp = impl::j0(sh, a_1_perp, a_2_perp);
-        results.j0bar_perp = impl::j0(sh, -a_1_perp, a_2_perp);
+        results.j0bar_perp = impl::j0bar(sh, a_1_perp, a_2_perp);
         results.j1_perp = integrals.j1(a_1_perp, a_2_perp);
         results.j2_perp = integrals.j2(a_1_perp, a_2_perp);
         results.j4_perp = integrals.j4(a_1_perp, a_2_perp);
@@ -2047,23 +2025,24 @@ namespace eos
     }
 
     // charm case
-    QCDFIntegrals::Results
-    QCDFIntegrals::dilepton_charm_case(const double & s, const double & m_c, const double & m_B, const double & m_V, const double & mu,
+    template <>
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_charm_case(const double & s, const double & m_c, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals::Results results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double sh = s / m_B / m_B, rho = 4.0 * m_c * m_c / s, mh = m_c / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B) - sh) / 2.0;
 
-        if (rho < 1.0)
-            throw InternalError("QCDFIntegrals::dilepton_charm_case: charm mass too small, rho = " + stringify(rho) + ", m_c = " + stringify(m_c) + ", s = " + stringify(s));
+        if ((rho > 0) && (rho < 1.0))
+            throw InternalError("QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_charm_case: charm mass too small, rho = " + stringify(rho) + ", m_c = " + stringify(m_c) + ", s = " + stringify(s));
 
         impl::DileptonIntegralsCharm integrals(sh, mh, m_B, mu);
 
         // perpendicular amplitude
         results.j0_perp = impl::j0(sh, a_1_perp, a_2_perp);
-        results.j0bar_perp = impl::j0(sh, -a_1_perp, a_2_perp);
+        results.j0bar_perp = impl::j0bar(sh, a_1_perp, a_2_perp);
         results.j1_perp = integrals.j1(a_1_perp, a_2_perp);
         results.j2_perp = integrals.j2(a_1_perp, a_2_perp);
         results.j4_perp = integrals.j4(a_1_perp, a_2_perp);
@@ -2086,18 +2065,19 @@ namespace eos
     }
 
     // massless case
-    QCDFIntegrals::Results
-    QCDFIntegrals::dilepton_massless_case(const double & s, const double & m_B, const double & m_V, const double & mu,
+    template <>
+    QCDFIntegrals<BToKstarDilepton>
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_massless_case(const double & s, const double & m_B, const double & m_V, const double & mu,
                     const double & a_1_perp, const double & a_2_perp,
                     const double & a_1_parallel, const double & a_2_parallel)
     {
-        QCDFIntegrals::Results results;
+        QCDFIntegrals<BToKstarDilepton> results;
         double sh = s / m_B / m_B;
         double eh = (1.0 + power_of<2>(m_V / m_B) - sh) / 2.0;
 
         // perpendicular amplitude
         results.j0_perp = impl::j0(sh, a_1_perp, a_2_perp);
-        results.j0bar_perp = impl::j0(sh, -a_1_perp, a_2_perp);
+        results.j0bar_perp = impl::j0bar(sh, a_1_perp, a_2_perp);
         results.j1_perp = impl::moment_inverse_ubar(a_1_perp, a_2_perp);
         results.j2_perp = impl::j2_massless(sh, a_1_perp, a_2_perp);
         results.j4_perp = impl::j4_massless(sh, m_B, mu, a_1_perp, a_2_perp);
