@@ -21,6 +21,7 @@
 #include <eos/rare-b-decays/b-to-k-ll-base.hh>
 #include <eos/rare-b-decays/b-to-k-ll-bfs2004.hh>
 #include <eos/rare-b-decays/b-to-k-ll-gp2004.hh>
+#include <eos/rare-b-decays/b-to-k-ll-gvdv2020.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/integrate-impl.hh>
 #include <eos/utils/power_of.hh>
@@ -85,6 +86,10 @@ namespace eos
             else if ("GP2004" == tag)
             {
                 amplitude_generator.reset(new BToKDileptonAmplitudes<tag::GP2004>(p, o));
+            }
+            else if ("GvDV2020" == tag)
+            {
+                amplitude_generator.reset(new BToKDileptonAmplitudes<tag::GvDV2020>(p, o));
             }
             else
             {

@@ -9,6 +9,7 @@ libeosrarebdecays_la_SOURCES = \
 	b-to-k-ll-base.cc b-to-k-ll-base.hh \
 	b-to-k-ll-bfs2004.cc b-to-k-ll-bfs2004.hh \
 	b-to-k-ll-gp2004.cc b-to-k-ll-gp2004.hh \
+	b-to-k-ll-gvdv2020.cc b-to-k-ll-gvdv2020.hh \
 	b-to-k-charmonium.cc b-to-k-charmonium.hh \
 	b-to-kstar-charmonium.cc b-to-kstar-charmonium.hh \
 	b-to-kstar-gamma.cc b-to-kstar-gamma.hh \
@@ -71,6 +72,7 @@ TESTS = \
 	b-to-k-charmonium_TEST \
 	b-to-k-ll-bfs2004_TEST \
 	b-to-k-ll-gp2004_TEST \
+	b-to-k-ll-gvdv2020_TEST \
 	b-to-kstar-charmonium_TEST \
 	b-to-kstar-gamma-bfs2004_TEST \
 	b-to-kstar-ll-bfs2004_TEST \
@@ -103,6 +105,8 @@ b_to_k_charmonium_TEST_SOURCES = b-to-k-charmonium_TEST.cc
 b_to_k_ll_bfs2004_TEST_SOURCES = b-to-k-ll-bfs2004_TEST.cc
 
 b_to_k_ll_gp2004_TEST_SOURCES = b-to-k-ll-gp2004_TEST.cc
+
+b_to_k_ll_gvdv2020_TEST_SOURCES = b-to-k-ll-gvdv2020_TEST.cc
 
 b_to_kstar_charmonium_TEST_SOURCES = b-to-kstar-charmonium_TEST.cc
 
