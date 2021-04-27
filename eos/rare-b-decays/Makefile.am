@@ -18,6 +18,7 @@ libeosrarebdecays_la_SOURCES = \
 	b-to-kstar-ll-base.cc b-to-kstar-ll-base.hh \
 	b-to-kstar-ll-bfs2004.cc b-to-kstar-ll-bfs2004.hh \
 	b-to-kstar-ll-gp2004.cc b-to-kstar-ll-gp2004.hh \
+	b-to-kstar-ll-gvdv2020.cc b-to-kstar-ll-gvdv2020.hh \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	bs-to-phi-charmonium.cc bs-to-phi-charmonium.hh \
 	charm-loops.cc charm-loops.hh \
@@ -74,6 +75,7 @@ TESTS = \
 	b-to-kstar-gamma-bfs2004_TEST \
 	b-to-kstar-ll-bfs2004_TEST \
 	b-to-kstar-ll-gp2004_TEST \
+	b-to-kstar-ll-gvdv2020_TEST \
 	bs-to-phi-charmonium_TEST \
 	charm-loops_TEST \
 	em-contributions_TEST \
@@ -109,6 +111,8 @@ b_to_kstar_gamma_bfs2004_TEST_SOURCES = b-to-kstar-gamma-bfs2004_TEST.cc
 b_to_kstar_ll_bfs2004_TEST_SOURCES = b-to-kstar-ll-bfs2004_TEST.cc
 
 b_to_kstar_ll_gp2004_TEST_SOURCES = b-to-kstar-ll-gp2004_TEST.cc
+
+b_to_kstar_ll_gvdv2020_TEST_SOURCES = b-to-kstar-ll-gvdv2020_TEST.cc
 
 bs_to_phi_charmonium_TEST_SOURCES = bs-to-phi-charmonium_TEST.cc
 

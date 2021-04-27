@@ -762,6 +762,9 @@ GN:1997A:
   title: Searching for new physics in rare $B \to \tau$ decays
 GP:2004A:
   authors: Grinstein, Benjamin and Pirjol, Dan
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0404250
   inspire-id: Grinstein:2004vb
   title: 'Exclusive rare $B \to K^*\ell^+\ell^-$ decays at low recoil: Controlling
     the long-distance effects'
@@ -846,6 +849,13 @@ IKMvD:2014A:
     id: oai:arXiv.org:1409.7816
   inspire-id: Imsong:2014oqa
   title: 'Extrapolation and unitarity bounds for the $B \to \pi$ form factor'
+KM:2005A:
+  authors: Kruger, F. and Matias, J.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0502060
+  inspire-id: Kruger:2005ep
+  title: Probing new physics via the transverse amplitudes of $B^0\to K^{*0} (\to K^- \pi^+) \ell^+\ell^-$ at large recoil
 KMPW:2010A:
   authors: Khodjamirian, A. and Mannel, Th. and Pivovarov, A.A. and Wang, Y.-M.
   eprint:

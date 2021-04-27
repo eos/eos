@@ -72,6 +72,7 @@ namespace eos
          * Approaches that work at small q^2, or large recoil.
          */
         struct BFS2004;
+        struct GvDV2020;
 
         /*
          * Approaches that work at large q^2, or low recoil.
