@@ -26,6 +26,7 @@
 #include <eos/rare-b-decays/b-to-kstar-gamma.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
 #include <eos/rare-b-decays/bs-to-phi-charmonium.hh>
+#include <eos/rare-b-decays/bs-to-phi-ll.hh>
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
@@ -370,6 +371,74 @@ namespace eos
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_ratio_long(q2)",
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_ratio_long,
+                        std::make_tuple("q2")),
+
+
+                make_observable("B_s->phi::re_H_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_H_perp,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::im_H_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_H_perp,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::abs_H_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_H_perp,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::abs_Hhat_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_Hhat_perp,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phi::re_H_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_H_para,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::im_H_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_H_para,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::abs_H_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_H_para,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::abs_Hhat_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_Hhat_para,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phi::re_H_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_H_long,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::im_H_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_H_long,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::abs_H_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_H_long,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::abs_Hhat_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_Hhat_long,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phi::re_ratio_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_ratio_perp,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::im_ratio_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_ratio_perp,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::abs_ratio_perp(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_ratio_perp,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::re_ratio_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_ratio_para,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::im_ratio_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_ratio_para,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::abs_ratio_para(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_ratio_para,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::re_ratio_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_ratio_long,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::im_ratio_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_ratio_long,
+                        std::make_tuple("q2")),
+                make_observable("B_s->phi::abs_ratio_long(q2)",
+                        &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_ratio_long,
                         std::make_tuple("q2")),
             }
 
@@ -780,6 +849,145 @@ namespace eos
                         std::make_tuple("q2_e_min", "q2_e_max"),
                         Options{ { "l", "e" } }
                         ),
+
+
+                // B_s^0 -> \phi \ell^+ \ell^-
+                make_observable("B_s->phill::d^4Gamma",
+                        &BsToPhiDilepton::decay_width,
+                        std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
+
+                make_observable("B_s->phill::dBR/ds",
+                        &BsToPhiDilepton::differential_branching_ratio,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::A_FB(q2)",
+                        &BsToPhiDilepton::differential_forward_backward_asymmetry,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::F_L(q2)",
+                        &BsToPhiDilepton::differential_longitudinal_polarisation,
+                        std::make_tuple("q2")),
+
+                make_observable_ratio("B_s->phill::R_phi(q2)",
+                        R"(R_{\phi}(q^2))",
+                        &BsToPhiDilepton::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "l", "mu" } },
+                        &BsToPhiDilepton::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "l", "e" } }
+                        ),
+
+                make_observable("B_s->phill::A_FB",
+                        &BsToPhiDilepton::integrated_forward_backward_asymmetry,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::BR",
+                        &BsToPhiDilepton::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::F_L",
+                        &BsToPhiDilepton::integrated_longitudinal_polarisation,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::Gamma",
+                        &BsToPhiDilepton::integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::S_3",
+                        &BsToPhiDilepton::integrated_s_3,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::S_4",
+                        &BsToPhiDilepton::integrated_s_4,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::S_5",
+                        &BsToPhiDilepton::integrated_s_5,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::S_7",
+                        &BsToPhiDilepton::integrated_s_7,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::S_8",
+                        &BsToPhiDilepton::integrated_s_8,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::S_9",
+                        &BsToPhiDilepton::integrated_s_9,
+                        std::make_tuple("q2_min", "q2_max")),
+
+
+                // here we put observables S_X in the LHCb angular conveniton:
+                make_observable("B_s->phill::S_1s_LHCb",
+                        &BsToPhiDilepton::integrated_s_1s_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_1c_LHCb",
+                        &BsToPhiDilepton::integrated_s_1c_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_2s_LHCb",
+                        &BsToPhiDilepton::integrated_s_2s_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_2c_LHCb",
+                        &BsToPhiDilepton::integrated_s_2c_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_3_LHCb",
+                        &BsToPhiDilepton::integrated_s_3_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_4_LHCb",
+                        &BsToPhiDilepton::integrated_s_4_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_5_LHCb",
+                        &BsToPhiDilepton::integrated_s_5_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_6s_LHCb",
+                        &BsToPhiDilepton::integrated_s_6s_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_6c_LHCb",
+                        &BsToPhiDilepton::integrated_s_6c_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_7_LHCb",
+                        &BsToPhiDilepton::integrated_s_7_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_8_LHCb",
+                        &BsToPhiDilepton::integrated_s_8_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::S_9_LHCb",
+                        &BsToPhiDilepton::integrated_s_9_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::A_FB_LHCb",
+                        &BsToPhiDilepton::integrated_forward_backward_asymmetry_LHCb,
+                        std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::A_9",
+                        &BsToPhiDilepton::integrated_a_9,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable_ratio("B_s->phill::R_phi",
+                        R"(R_\phi)",
+                        &BsToPhiDilepton::integrated_branching_ratio,
+                        std::make_tuple("q2_mu_min", "q2_mu_max"),
+                        Options{ { "l", "mu" } },
+                        &BsToPhiDilepton::integrated_branching_ratio,
+                        std::make_tuple("q2_e_min", "q2_e_max"),
+                        Options{ { "l", "e" } }
+                        ),
+
+
+
             }
         );
 

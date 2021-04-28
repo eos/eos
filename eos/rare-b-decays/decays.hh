@@ -38,6 +38,8 @@ namespace eos
      */
     class BToKstarDilepton;
 
+    class BsToPhiDilepton;
+
     class BToKDilepton;
 
     template <typename T_> class BToXsDilepton;

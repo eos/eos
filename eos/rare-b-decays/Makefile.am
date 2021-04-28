@@ -5,12 +5,12 @@ AM_CXXFLAGS = @AM_CXXFLAGS@
 
 lib_LTLIBRARIES = libeosrarebdecays.la
 libeosrarebdecays_la_SOURCES = \
+	b-to-k-charmonium.cc b-to-k-charmonium.hh \
 	b-to-k-ll.cc b-to-k-ll.hh \
 	b-to-k-ll-base.cc b-to-k-ll-base.hh \
 	b-to-k-ll-bfs2004.cc b-to-k-ll-bfs2004.hh \
 	b-to-k-ll-gp2004.cc b-to-k-ll-gp2004.hh \
 	b-to-k-ll-gvdv2020.cc b-to-k-ll-gvdv2020.hh \
-	b-to-k-charmonium.cc b-to-k-charmonium.hh \
 	b-to-kstar-charmonium.cc b-to-kstar-charmonium.hh \
 	b-to-kstar-gamma.cc b-to-kstar-gamma.hh \
 	b-to-kstar-gamma-base.cc b-to-kstar-gamma-base.hh \
@@ -22,6 +22,9 @@ libeosrarebdecays_la_SOURCES = \
 	b-to-kstar-ll-gvdv2020.cc b-to-kstar-ll-gvdv2020.hh \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	bs-to-phi-charmonium.cc bs-to-phi-charmonium.hh \
+	bs-to-phi-ll.cc bs-to-phi-ll.hh \
+	bs-to-phi-ll-base.cc bs-to-phi-ll-base.hh \
+	bs-to-phi-ll-gvdv2020.cc bs-to-phi-ll-gvdv2020.hh \
 	charm-loops.cc charm-loops.hh \
 	decays.hh \
 	em-contributions.hh em-contributions.cc \
@@ -79,6 +82,7 @@ TESTS = \
 	b-to-kstar-ll-gp2004_TEST \
 	b-to-kstar-ll-gvdv2020_TEST \
 	bs-to-phi-charmonium_TEST \
+	bs-to-phi-ll-gvdv2020_TEST \
 	charm-loops_TEST \
 	em-contributions_TEST \
 	exclusive-b-to-dilepton_TEST \
@@ -119,6 +123,8 @@ b_to_kstar_ll_gp2004_TEST_SOURCES = b-to-kstar-ll-gp2004_TEST.cc
 b_to_kstar_ll_gvdv2020_TEST_SOURCES = b-to-kstar-ll-gvdv2020_TEST.cc
 
 bs_to_phi_charmonium_TEST_SOURCES = bs-to-phi-charmonium_TEST.cc
+
+bs_to_phi_ll_gvdv2020_TEST_SOURCES = bs-to-phi-ll-gvdv2020_TEST.cc
 
 charm_loops_TEST_SOURCES = charm-loops_TEST.cc
 
