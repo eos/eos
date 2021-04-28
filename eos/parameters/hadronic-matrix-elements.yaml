@@ -3963,32 +3963,32 @@ groups:
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\para,0}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Re}\, \alpha_{\parallel,0}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Im{alpha_0^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\para,0}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Im}\, \alpha_{\parallel,0}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Re{alpha_1^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\para,1}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Re}\, \alpha_{\parallel,1}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Im{alpha_1^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\para,1}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Im}\, \alpha_{\parallel,1}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Re{alpha_2^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\para,2}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Re}\, \alpha_{\parallel,2}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Im{alpha_2^para}@GvDV2020' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\para,2}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Im}\, \alpha_{\parallel,2}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Re{alpha_0^long}@GvDV2020' :
           central: +0.0
           min:     +0.0
@@ -4179,32 +4179,32 @@ groups:
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\para,0}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Re}\, \alpha_{\parallel,0}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Im{alpha_0^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\para,0}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Im}\, \alpha_{\parallel,0}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Re{alpha_1^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\para,1}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Re}\, \alpha_{\parallel,1}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Im{alpha_1^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\para,1}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Im}\, \alpha_{\parallel,1}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Re{alpha_2^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\para,2}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Re}\, \alpha_{\parallel,2}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Im{alpha_2^para}@GRvDV2021' :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\para,2}^{B_s\to \phi c\bar{c}}$'
+          latex:    '$\mathrm{Im}\, \alpha_{\parallel,2}^{B_s\to \phi c\bar{c}}$'
       'B_s->phiccbar::Re{alpha_0^long}@GRvDV2021' :
           central: +0.0
           min:     +0.0
