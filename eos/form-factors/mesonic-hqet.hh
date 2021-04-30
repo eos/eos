@@ -881,6 +881,11 @@ namespace eos
                 return (1.0 + r) / (2.0 * sqrt(r)) * _h_T(q2);
             }
 
+            virtual double f_plus_T(const double & q2) const
+            {
+                return f_t(q2) * q2 / _m_B / (_m_B + _m_P);
+            }
+
             Diagnostics diagnostics() const
             {
                 Diagnostics results;
@@ -1362,6 +1367,41 @@ namespace eos
                 const double lambda = eos::lambda(m_B2, m_V2, q2);
 
                 return ((m_B2 - m_V2) * (m_B2 + 3.0 * m_V2 - q2) * t_2(q2) - lambda * t_3(q2)) / (8.0 * m_B * m_V2 * (m_B - m_V));
+            }
+
+            virtual double f_perp(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_para(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_perp_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_para_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long_T_Normalized(const double &) const
+            {
+                return 0.;
             }
 
             Diagnostics diagnostics() const

@@ -63,6 +63,15 @@ namespace eos
             virtual double t_3(const double & q2) const;
             virtual double t_23(const double & q2) const;
 
+            virtual double f_perp(const double & q2) const;
+            virtual double f_para(const double & q2) const;
+            virtual double f_long(const double & q2) const;
+
+            virtual double f_perp_T(const double & q2) const;
+            virtual double f_para_T(const double & q2) const;
+            virtual double f_long_T(const double & q2) const;
+            virtual double f_long_T_Normalized(const double & q2) const;
+
             /* First moments of the sum rules */
             double normalized_moment_1_a_1(const double & q2) const;
             double normalized_moment_1_a_2(const double & q2) const;

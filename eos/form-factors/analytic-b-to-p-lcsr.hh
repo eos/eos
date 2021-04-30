@@ -56,6 +56,10 @@ namespace eos
             virtual double f_t(const double & q2) const;
             virtual double f_m(const double & q2) const;
 
+            // Conventions of GvDV:2020 eq. (A.5)
+            virtual double f_plus_T(const double & q2) const;
+
+
             /* First moments of the sum rules */
             double normalized_moment_1_f_p(const double & q2) const;
             double normalized_moment_1_f_pm(const double & q2) const;

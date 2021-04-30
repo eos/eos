@@ -69,6 +69,16 @@ namespace eos
             virtual double t_2(const double & s) const = 0;
             virtual double t_3(const double & s) const = 0;
             virtual double t_23(const double & s) const = 0;
+
+            virtual double f_perp(const double & s) const = 0;
+            virtual double f_para(const double & s) const = 0;
+            virtual double f_long(const double & s) const = 0;
+
+            virtual double f_perp_T(const double & s) const = 0;
+            virtual double f_para_T(const double & s) const = 0;
+            virtual double f_long_T(const double & s) const = 0;
+            virtual double f_long_T_Normalized(const double & s) const = 0;
+
     };
 
     template <>
@@ -89,6 +99,9 @@ namespace eos
             virtual double f_0(const double & s) const = 0;
             virtual double f_t(const double & s) const = 0;
             virtual double f_m(const double & s) const;
+
+            // Conventions of GvDV:2020 eq. (A.5)
+            virtual double f_plus_T(const double & s) const = 0;
 
             virtual double f_p_d1(const double & s) const;
             virtual double f_p_d2(const double & s) const;
