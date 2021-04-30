@@ -9533,6 +9533,14 @@ namespace eos
 
     template <typename Process_>
     double
+    AnalyticFormFactorBToPLCSR<Process_>::f_plus_T(const double & q2) const
+    {
+        // Conventions of GvDV:2020 eq. (A.5)
+        return this->_imp->f_t(q2) * q2 / this->_imp->m_B() / (this->_imp->m_B() + this->_imp->m_P());
+    }
+
+    template <typename Process_>
+    double
     AnalyticFormFactorBToPLCSR<Process_>::normalized_moment_1_f_p(const double & q2) const
     {
         return this->_imp->normalized_moment_1_f_p(q2);

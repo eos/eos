@@ -197,6 +197,22 @@ namespace eos
                 make_observable("B->K::f_T[s^1/s^0](q2)",
                         &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K::F_plus(q2)", R"(F_+^{B\to K}(q^2))",
+                        &FormFactors<PToP>::f_p, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K::F_plus_T(q2)", R"(F_T^{B\to K}(q^2))",
+                        &FormFactors<PToP>::f_plus_T, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K::F_T(q2)/F_plus(q2)",
+                        "B->K", &FormFactors<PToP>::f_t,
+                        "B->K", &FormFactors<PToP>::f_p,
+                        std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K::F_plus_T(q2)/F_plus(q2)",
+                        "B->K", &FormFactors<PToP>::f_plus_T,
+                        "B->K", &FormFactors<PToP>::f_p,
+                        std::make_tuple("q2"))
             }
         );
 
@@ -530,6 +546,24 @@ namespace eos
                 make_form_factor_adapter("B->K^*::T_23(q2)",
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
+                make_form_factor_adapter("B->K^*::F_perp(q2)",
+                        &FormFactors<PToV>::f_perp, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K^*::F_para(q2)",
+                        &FormFactors<PToV>::f_para, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K^*::F_long(q2)",
+                        &FormFactors<PToV>::f_long, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K^*::F_perp_T(q2)",
+                        &FormFactors<PToV>::f_perp_T, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K^*::F_para_T(q2)",
+                        &FormFactors<PToV>::f_para_T, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K^*::F_long_T(q2)",
+                        &FormFactors<PToV>::f_long_T, std::make_tuple("q2")),
+
                 make_form_factor_adapter("B->K^*::V(q2)/A_1(q2)",
                         "B->K^*", &FormFactors<PToV>::v,
                         "B->K^*", &FormFactors<PToV>::a_1,
@@ -577,6 +611,27 @@ namespace eos
                 make_observable("B->K^*::T_23B[s^1/s^0](q2)",
                                 &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_23B,
                                 std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K^*::F_perp_T(q2)/F_perp(q2)",
+                        "B->K^*", &FormFactors<PToV>::f_perp_T,
+                        "B->K^*", &FormFactors<PToV>::f_perp,
+                        std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K^*::F_para_T(q2)/F_para(q2)",
+                        "B->K^*", &FormFactors<PToV>::f_para_T,
+                        "B->K^*", &FormFactors<PToV>::f_para,
+                        std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K^*::F_long_T(q2)/F_long(q2)",
+                        "B->K^*", &FormFactors<PToV>::f_long_T,
+                        "B->K^*", &FormFactors<PToV>::f_long,
+                        std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->K^*::F_long_T(q2)/F_long(q2)_Normalized",
+                        "B->K^*", &FormFactors<PToV>::f_long_T_Normalized,
+                        "B->K^*", &FormFactors<PToV>::f_long,
+                        std::make_tuple("q2")),
+
             }
         );
 
@@ -908,6 +963,24 @@ namespace eos
                 make_form_factor_adapter("B_s->phi::T_23(q2)", R"(T_{23}^{B_s\to \phi}(q^2))",
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
+                make_form_factor_adapter("B_s->phi::F_perp(q2)",
+                        &FormFactors<PToV>::f_perp, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->phi::F_para(q2)",
+                        &FormFactors<PToV>::f_para, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->phi::F_long(q2)",
+                        &FormFactors<PToV>::f_long, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->phi::F_perp_T(q2)",
+                        &FormFactors<PToV>::f_perp_T, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->phi::F_para_T(q2)",
+                        &FormFactors<PToV>::f_para_T, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->phi::F_long_T(q2)",
+                        &FormFactors<PToV>::f_long_T, std::make_tuple("q2")),
+
                 make_form_factor_adapter("B_s->phi::V(q2)/A_1(q2)",
                         "B_s->phi", &FormFactors<PToV>::v,
                         "B_s->phi", &FormFactors<PToV>::a_1,
@@ -954,6 +1027,26 @@ namespace eos
 
                 make_observable("B_s->phi::T_23B[s^1/s^0](q2)",
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_23B,
+                        std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->phi::F_perp_T(q2)/F_perp(q2)",
+                        "B_s->phi", &FormFactors<PToV>::f_perp_T,
+                        "B_s->phi", &FormFactors<PToV>::f_perp,
+                        std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->phi::F_para_T(q2)/F_para(q2)",
+                        "B_s->phi", &FormFactors<PToV>::f_para_T,
+                        "B_s->phi", &FormFactors<PToV>::f_para,
+                        std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->phi::F_long_T(q2)/F_long(q2)",
+                        "B_s->phi", &FormFactors<PToV>::f_long_T,
+                        "B_s->phi", &FormFactors<PToV>::f_long,
+                        std::make_tuple("q2")),
+
+                make_form_factor_adapter("B_s->phi::F_long_T(q2)/F_long(q2)_Normalized",
+                        "B_s->phi", &FormFactors<PToV>::f_long_T_Normalized,
+                        "B_s->phi", &FormFactors<PToV>::f_long,
                         std::make_tuple("q2")),
             }
         );

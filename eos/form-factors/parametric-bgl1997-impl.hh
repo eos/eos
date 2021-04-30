@@ -220,6 +220,48 @@ namespace eos
         return 0.0;  //  TODO
     }
 
+    double
+    BGL1997FormFactors<BToDstar>::f_perp(const double & /*s*/) const
+    {
+        return 0.0;  //  TODO
+    }
+
+    double
+    BGL1997FormFactors<BToDstar>::f_para(const double & /*s*/) const
+    {
+        return 0.0;  //  TODO
+    }
+
+    double
+    BGL1997FormFactors<BToDstar>::f_long(const double & /*s*/) const
+    {
+        return 0.0;  //  TODO
+    }
+
+    double
+    BGL1997FormFactors<BToDstar>::f_perp_T(const double & /*s*/) const
+    {
+        return 0.0;  //  TODO
+    }
+
+    double
+    BGL1997FormFactors<BToDstar>::f_para_T(const double & /*s*/) const
+    {
+        return 0.0;  //  TODO
+    }
+
+    double
+    BGL1997FormFactors<BToDstar>::f_long_T(const double & /*s*/) const
+    {
+        return 0.0;  //  TODO
+    }
+
+    double
+    BGL1997FormFactors<BToDstar>::f_long_T_Normalized(const double & /*s*/) const
+    {
+        return 0.0;  //  TODO
+    }
+
 
 
     std::string
@@ -285,6 +327,12 @@ namespace eos
 
     double
     BGL1997FormFactors<BToD>::f_t(const double & /*s*/) const
+    {
+        return 0.0; //  TODO
+    }
+
+    double
+    BGL1997FormFactors<BToD>::f_plus_T(const double & /*s*/) const
     {
         return 0.0; //  TODO
     }

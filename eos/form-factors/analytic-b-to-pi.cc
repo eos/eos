@@ -2106,6 +2106,13 @@ namespace eos
     }
 
     double
+    AnalyticFormFactorBToPiDKMMO2008::f_plus_T(const double &) const
+    {
+        return 0.0;
+        //throw InternalError("AnalyticFormFactorBToPiDKMMO2008::f_t: Evaluation of tensor form factor not yet implemented");
+    }
+
+    double
     AnalyticFormFactorBToPiDKMMO2008::MBp_lcsr(const double & q2) const
     {
         return _imp->MBp_lcsr(q2);

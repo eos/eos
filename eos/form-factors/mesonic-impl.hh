@@ -176,6 +176,41 @@ namespace eos
                 return ((mB2 - mV2) * (mB2 + 3.0 * mV2 - s) * this->t_2(s)
                         - lambda * this->t_3(s)) / (8.0 * mB * mV2 * (mB - mV));
             }
+
+            virtual double f_perp(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_para(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_perp_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_para_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long_T_Normalized(const double &) const
+            {
+                return 0.;
+            }
     };
 
     template <> class KMPW2010FormFactors<PToV> :
@@ -275,6 +310,41 @@ namespace eos
 
                 return ((mB2 - mV2) * (mB2 + 3.0 * mV2 - s) * this->t_2(s)
                         - lambda * this->t_3(s)) / (8.0 * mB * mV2 * (mB - mV));
+            }
+
+            virtual double f_perp(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_para(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_perp_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_para_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long_T_Normalized(const double &) const
+            {
+                return 0.;
             }
     };
 
@@ -381,6 +451,41 @@ namespace eos
             virtual double t_23(const double &) const
             {
                 throw InternalError("BFW2010FormFactors<>::t_23: Tensor form factors not yet implemented");
+            }
+
+            virtual double f_perp(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_para(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_perp_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_para_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long_T(const double &) const
+            {
+                return 0.;
+            }
+
+            virtual double f_long_T_Normalized(const double &) const
+            {
+                return 0.;
             }
     };
 
@@ -535,6 +640,26 @@ namespace eos
             {
                 throw InternalError("FMvD2015FormFactors<>::t_23: Tensor form factors not yet implemented");
             }
+
+            virtual double f_perp_T(const double &) const
+            {
+                throw InternalError("FMvD2015FormFactors<>::f_perp_T: Tensor form factors not yet implemented");
+            }
+
+            virtual double f_para_T(const double &) const
+            {
+                throw InternalError("FMvD2015FormFactors<>::f_para_T: Tensor form factors not yet implemented");
+            }
+
+            virtual double f_long_T(const double &) const
+            {
+                throw InternalError("FMvD2015FormFactors<>::f_long_T: Tensor form factors not yet implemented");
+            }
+
+            virtual double f_long_T_Normalized(const double &) const
+            {
+                throw InternalError("FMvD2015FormFactors<>::f_long_T: Tensor form factors not yet implemented");
+            }
     };
 
     template <typename Process_> class BSZ2015FormFactors<Process_, PToV> :
@@ -681,6 +806,54 @@ namespace eos
             {
                 return _calc_ff(s, Process_::mR2_1p, _a_T23);
             }
+
+            virtual double f_perp(const double & s) const
+            {
+                const double lambda = eos::lambda(_mB2, _mV2, s);
+
+                return pow(2*lambda, 0.5) / _mB / (_mB + _mV) * v(s);
+            }
+
+            virtual double f_para(const double & s) const
+            {
+                return pow(2, 0.5) * (_mB + _mV) / _mB * a_1(s);
+            }
+
+            virtual double f_long(const double & s) const
+            {
+                const double lambda = eos::lambda(_mB2, _mV2, s);
+
+                return ((_mB2 - _mV2 - s) * pow(_mB + _mV, 2) * a_1(s) - lambda * a_2(s))
+                        / (2 * _mV * _mB2 * (_mB + _mV));
+            }
+
+            virtual double f_perp_T(const double & s) const
+            {
+                const double lambda = eos::lambda(_mB2, _mV2, s);
+
+                return pow(2*lambda, 0.5) / _mB2 * t_1(s);
+            }
+
+            virtual double f_para_T(const double & s) const
+            {
+                return pow(2, 0.5) * (_mB2 - _mV2) / _mB2 * t_2(s);
+            }
+
+            virtual double f_long_T(const double & s) const
+            {
+                const double lambda = eos::lambda(_mB2, _mV2, s);
+
+                return s * (_mB2 + 3*_mV2 - s) / (2 * pow(_mB, 3) * _mV) * t_2(s)
+                        - s * lambda / (2 * pow(_mB, 3) * _mV * (_mB2 - _mV2)) * t_3(s);
+            }
+
+            virtual double f_long_T_Normalized(const double & s) const
+            {
+                const double lambda = eos::lambda(_mB2, _mV2, s);
+
+                return _mB2 * (_mB2 + 3*_mV2 - s) / (2 * pow(_mB, 3) * _mV) * t_2(s)
+                        - _mB2 * lambda / (2 * pow(_mB, 3) * _mV * (_mB2 - _mV2)) * t_3(s);
+            }
     };
 
     /*
@@ -746,6 +919,13 @@ namespace eos
             }
 
             virtual double f_t(const double &) const
+            {
+                throw InternalError("This form factor parametrization has no inputs for tensor form factors.");
+
+                return 0.0;
+            }
+
+            virtual double f_plus_T(const double &) const
             {
                 throw InternalError("This form factor parametrization has no inputs for tensor form factors.");
 
@@ -817,6 +997,13 @@ namespace eos
 
                 return 0.0;
             }
+
+            virtual double f_plus_T(const double &) const
+            {
+                throw InternalError("This form factor parametrization has no inputs for tensor form factors.");
+
+                return 0.0;
+            }
     };
 
     template <typename Process_> class BCL2008FormFactorBase<Process_, 5u, false> :
@@ -881,6 +1068,13 @@ namespace eos
             }
 
             virtual double f_t(const double &) const
+            {
+                throw InternalError("This form factor parametrization has no inputs for tensor form factors.");
+
+                return 0.0;
+            }
+
+            virtual double f_plus_T(const double &) const
             {
                 throw InternalError("This form factor parametrization has no inputs for tensor form factors.");
 
@@ -1097,6 +1291,11 @@ namespace eos
 
                 return _calc_ff(s, Process_::m2_Br0p, values);
             }
+
+            virtual double f_plus_T(const double & s) const
+            {
+                return _calc_ff(s, Process_::m2_Br1m, _a_ft) * s / _mB / (_mB + _mP);
+            }
     };
 
     /* Form Factors according to [BZ2004v2] */
@@ -1139,6 +1338,11 @@ namespace eos
             {
                 // [BZ2004v2] eq. (11)
                 return _f_t_factor * (_r1_t / (1 - s / _m12) + _r2_t / power_of<2>(1 - s / _m12));
+            }
+
+            virtual double f_plus_T(const double &) const
+            {
+                return 0.0;
             }
     };
 
@@ -1238,6 +1442,11 @@ namespace eos
                                       _a_2 * poly3(s, _f_t_a_2, _f_t_b_2, _f_t_c_2, _f_t_d_2) +
                                       _a_4 * poly3(s, _f_t_a_4, _f_t_b_4, _f_t_c_4, _f_t_d_4));
             }
+
+            virtual double f_plus_T(const double &) const
+            {
+                return 0.0;
+            }
     };
 
     template <> class KMPW2010FormFactors<PToP> :
@@ -1293,6 +1502,11 @@ namespace eos
 
                 return _f0_t() / (1 - s / _m_Bs2) * (1 + _b1_t() * (zs - z0 + 0.5 * (zs * zs - z0 * z0)));
             }
+
+            virtual double f_plus_T(const double &) const
+            {
+                return 0.0;
+            }
     };
 
     template <> class BFW2010FormFactors<BToK, PToP> :
@@ -1345,6 +1559,12 @@ namespace eos
               {
                   // cf. [BFW2010], Eq. (43), p. 13, replacements Eq. (45), p. 16 and Eq. (9), p. 4
                   static const double prefactor = (_m_B + _m_K) / _m_B;
+                  return prefactor / (1.0 - s / _m_Bs2) * (_alpha_T0_0 + _alpha_T0_1 * _calc_z(s));
+              }
+
+              virtual double f_plus_T(const double & s) const
+              {
+                  static const double prefactor = s / _m_B / _m_B;
                   return prefactor / (1.0 - s / _m_Bs2) * (_alpha_T0_0 + _alpha_T0_1 * _calc_z(s));
               }
     };

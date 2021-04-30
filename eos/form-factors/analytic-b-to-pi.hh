@@ -62,6 +62,8 @@ namespace eos
             virtual double f_0(const double & q2) const;
             virtual double f_t(const double & q2) const;
 
+            virtual double f_plus_T(const double & q2) const;
+
             /* B mass from the LCSR and the SVZ sum rule, respectively */
             double MBp_lcsr(const double & q2) const;
             double MB0_lcsr(const double & q2) const;
