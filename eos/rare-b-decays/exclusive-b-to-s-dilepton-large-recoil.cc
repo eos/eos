@@ -2207,7 +2207,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
 
         UsedParameter f_K;
 
-        UsedParameter lambda_B_p;
+        UsedParameter lambda_B_p_inv;
 
         UsedParameter a_1;
 
@@ -2248,7 +2248,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
             g_fermi(p["WET::G_Fermi"], u),
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             f_K(p["decay-constant::K_" + o.get("q", "d")], u),
-            lambda_B_p(p["lambda_B_p"], u),
+            lambda_B_p_inv(p["B::1/lambda_B_p"], u),
             a_1(p["K::a_1@1GeV"], u),
             a_2(p["K::a_2@1GeV"], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
@@ -2321,7 +2321,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
 
             // inverse of the "negative" moment of the B meson LCDA
             // cf. [BFS2001], Eq. (54), p. 15
-            double omega_0 = lambda_B_p, lambda_B_p_inv = 1.0 / lambda_B_p;
+            double lambda_B_p_inv = this->lambda_B_p_inv, omega_0 = 1 / this->lambda_B_p_inv;
             complex<double> lambda_B_m_inv = complex<double>(-gsl_sf_expint_Ei(s / m_B / omega_0), M_PI) * (std::exp(-s / m_B / omega_0) / omega_0);
 
             /* Y(s) for the up and the top sector */
