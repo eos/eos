@@ -2712,7 +2712,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         std::function<double (const double &)> f = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        return integrate<GSL::QNG>(f, s_min, s_max);
+        return integrate<GSL::QAGS>(f, s_min, s_max);
     }
 
     double
@@ -2721,7 +2721,7 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         std::function<double (const double &)> f = std::bind(std::mem_fn(&BToKDilepton<LargeRecoil>::differential_branching_ratio),
                 this, std::placeholders::_1);
 
-        return integrate<GSL::QNG>(f, s_min, s_max);
+        return integrate<GSL::QAGS>(f, s_min, s_max);
     }
 
     double
@@ -2731,9 +2731,9 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         std::function<double (const double &)> f = std::bind(&BToKDilepton<LargeRecoil>::differential_branching_ratio,
                 this, std::placeholders::_1);
 
-        double br = integrate<GSL::QNG>(f, s_min, s_max);
+        double br = integrate<GSL::QAGS>(f, s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate<GSL::QNG>(f, s_min, s_max);
+        double br_bar = integrate<GSL::QAGS>(f, s_min, s_max);
 
         return (br + br_bar) / 2.0;
     }
@@ -2745,9 +2745,9 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         std::function<double (const double &)> f = std::bind(&BToKDilepton<LargeRecoil>::differential_branching_ratio,
                 this, std::placeholders::_1);
 
-        double br = integrate<GSL::QNG>(f, s_min, s_max);
+        double br = integrate<GSL::QAGS>(f, s_min, s_max);
         _imp->cp_conjugate = true;
-        double br_bar = integrate<GSL::QNG>(f, s_min, s_max);
+        double br_bar = integrate<GSL::QAGS>(f, s_min, s_max);
 
         return (br - br_bar) / (br + br_bar);
     }
@@ -2760,8 +2760,8 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate<GSL::QNG>(num, s_min, s_max);
-        double denom_integrated = integrate<GSL::QNG>(denom, s_min, s_max);
+        double num_integrated = integrate<GSL::QAGS>(num, s_min, s_max);
+        double denom_integrated = integrate<GSL::QAGS>(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2775,13 +2775,13 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate<GSL::QNG>(num, s_min, s_max);
-        double denom_integrated = integrate<GSL::QNG>(denom, s_min, s_max);
+        double num_integrated = integrate<GSL::QAGS>(num, s_min, s_max);
+        double denom_integrated = integrate<GSL::QAGS>(denom, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate<GSL::QNG>(num, s_min, s_max);
-        denom_integrated += integrate<GSL::QNG>(denom, s_min, s_max);
+        num_integrated += integrate<GSL::QAGS>(num, s_min, s_max);
+        denom_integrated += integrate<GSL::QAGS>(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2795,8 +2795,8 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate<GSL::QNG>(num, s_min, s_max);
-        double denom_integrated = integrate<GSL::QNG>(denom, s_min, s_max);
+        double num_integrated = integrate<GSL::QAGS>(num, s_min, s_max);
+        double denom_integrated = integrate<GSL::QAGS>(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
     }
@@ -2810,40 +2810,15 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane using the LHC
         std::function<double (const double &)> denom = std::bind(std::mem_fn(&Implementation<BToKDilepton<LargeRecoil>>::unnormalized_decay_width),
                 _imp, std::placeholders::_1);
 
-        double num_integrated = integrate<GSL::QNG>(num, s_min, s_max);
-        double denom_integrated = integrate<GSL::QNG>(denom, s_min, s_max);
+        double num_integrated = integrate<GSL::QAGS>(num, s_min, s_max);
+        double denom_integrated = integrate<GSL::QAGS>(denom, s_min, s_max);
 
         _imp->cp_conjugate = true;
 
-        num_integrated += integrate<GSL::QNG>(num, s_min, s_max);
-        denom_integrated += integrate<GSL::QNG>(denom, s_min, s_max);
+        num_integrated += integrate<GSL::QAGS>(num, s_min, s_max);
+        denom_integrated += integrate<GSL::QAGS>(denom, s_min, s_max);
 
         return num_integrated / denom_integrated;
-    }
-
-    double
-    BToKDilepton<LargeRecoil>::integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const
-    {
-        std::function<double (const double &)> integrand = std::bind(std::mem_fn(&BToKDilepton<LargeRecoil>::differential_branching_ratio),
-                this, std::placeholders::_1);
-
-        double br_electrons;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
-            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "e");
-            // br_electrons = integrate<GSL::QNG>(integrand, s_min, s_max);
-            br_electrons = integrate<GSL::QNG>(integrand, s_min, s_max);
-        }
-
-        double br_muons;
-        {
-            Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-            Save<std::string> save_lepton_flavour(_imp->lepton_flavour, "mu");
-            br_muons = integrate<GSL::QNG>(integrand, s_min, s_max);
-        }
-
-        // cf. [BHP2007], Eq. (4.10), p. 6
-        return br_muons / br_electrons;
     }
 
     const std::string

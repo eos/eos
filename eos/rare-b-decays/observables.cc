@@ -148,10 +148,6 @@ namespace eos
                         Options{ { "l", "e" } }
                         ),
 
-                make_observable("B->Kll::R_K@LargeRecoil",
-                        &BToKDilepton<LargeRecoil>::integrated_ratio_muons_electrons,
-                        std::make_tuple("q2_min", "q2_max")),
-
                 make_observable("B->Kll::a_l@LargeRecoil",
                         &BToKDilepton<LargeRecoil>::a_l,
                         std::make_tuple("q2")),
