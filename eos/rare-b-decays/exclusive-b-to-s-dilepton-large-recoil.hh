@@ -217,7 +217,6 @@ namespace eos
             double integrated_flat_term_cp_averaged(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry(const double & s_min, const double & s_max) const;
             double integrated_forward_backward_asymmetry_cp_averaged(const double & s_min, const double & s_max) const;
-            double integrated_ratio_muons_electrons(const double & s_min, const double & s_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.

@@ -274,7 +274,6 @@ class BToKDileptonLargeRecoilBobethCompatibilityTest :
                                       2.8855929e-19 * tau_over_hbar, eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_forward_backward_asymmetry(1, 6), 0.1097985735, eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_flat_term(1, 6), 0.2788261376, eps);
-            TEST_CHECK_RELATIVE_ERROR(d.integrated_ratio_muons_electrons(1, 6), 1.073039657, eps);
             TEST_CHECK_RELATIVE_ERROR(d.integrated_cp_asymmetry(1, 6), 0.00455162022, 5 * eps);
         }
 } b_to_k_dilepton_large_recoil_bobeth_compatibility_test;
