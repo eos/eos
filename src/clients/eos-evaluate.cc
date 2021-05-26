@@ -215,14 +215,14 @@ void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluat
               << ": " << evaluation_input->observable->options().as_string() << std::endl;
 
     std::cout << "# ";
-    for (std::size_t i = 0 ; i < evaluation_input->kinematic_names.size() ; ++i)
+    for (const auto & kinematic_name : evaluation_input->kinematic_names)
     {
-        std::cout << evaluation_input->kinematic_names[i] << '\t';
+        std::cout << kinematic_name << '\t';
     }
     std::cout << "central";
-    for (auto b = CommandLine::instance()->budgets.begin() ; b != CommandLine::instance()->budgets.end(); ++b)
+    for (auto & budget : CommandLine::instance()->budgets)
     {
-        std::cout << '\t' << std::get<0>(*b) << "_min\t" << std::get<0>(*b) << "_max";
+        std::cout << '\t' << std::get<0>(budget) << "_min\t" << std::get<0>(budget) << "_max";
     }
     std::cout << "\tdelta_min\tdelta_max" << std::endl;
 
@@ -263,19 +263,19 @@ void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluat
 
         // do the variations
         double delta_max = 0.0, delta_min = 0.0;
-        for (auto b = CommandLine::instance()->budgets.begin() ; b != CommandLine::instance()->budgets.end() ; ++b)
+        for (auto & budget : CommandLine::instance()->budgets)
         {
             double budget_min = 0.0;
             double budget_max = 0.0;
 
-            std::vector<Parameter> variations = std::get<1>(*b);
+            std::vector<Parameter> variations = std::get<1>(budget);
 
-            for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
+            for (auto & variation : variations)
             {
-                double old_v = *v;
+                double old_v = variation;
 
                 // raise value
-                *v = v->max();
+                variation = variation.max();
 
                 double value = evaluation_input->observable->evaluate();
 
@@ -289,7 +289,7 @@ void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluat
                 }
 
                 // lower value
-                *v = v->min();
+                variation = variation.min();
 
                 value = evaluation_input->observable->evaluate();
 
@@ -302,7 +302,7 @@ void evaluate_with_sum_of_squares(const std::shared_ptr<EvaluationInput> evaluat
                     budget_min += power_of<2>(value - central);
                 }
 
-                *v = old_v;
+                variation = old_v;
             }
 
             delta_min += budget_min;
@@ -329,9 +329,9 @@ main(int argc, char * argv[])
         if (CommandLine::instance()->evaluation_inputs.empty())
             throw DoUsage("No input specified");
 
-        for (auto i = CommandLine::instance()->evaluation_inputs.cbegin(), i_end = CommandLine::instance()->evaluation_inputs.cend() ; i != i_end ; ++i)
+        for (const auto & evaluation_input : CommandLine::instance()->evaluation_inputs)
         {
-            evaluate_with_sum_of_squares(*i);
+            evaluate_with_sum_of_squares(evaluation_input);
         }
     }
     catch(DoUsage & e)

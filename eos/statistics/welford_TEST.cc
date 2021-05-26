@@ -43,9 +43,9 @@ class WelfordTest :
                 std::vector<double> samples { 1.23, 413.132, 213.12 };
 
                 Welford w;
-                for (auto s = samples.cbegin() ; s != samples.cend() ; ++s)
+                for (double sample : samples)
                 {
-                    w.add(*s);
+                    w.add(sample);
                 }
 
                 TEST_CHECK_EQUAL(w.number_of_elements(), 3u);

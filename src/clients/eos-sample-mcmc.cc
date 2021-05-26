@@ -504,27 +504,27 @@ int main(int argc, char * argv[])
         if ( ! inst->inputs.empty())
         {
             std::cout << "# Manual inputs (" << inst->inputs.size() << "):" << std::endl;
-            for (auto i = inst->inputs.cbegin(), i_end = inst->inputs.cend() ; i != i_end ; ++i)
+            for (const auto & input : inst->inputs)
             {
-                std::cout << "#   " << i->observable->name() << '['
-                    << i->kinematics.as_string() << "] = (" << i->min << ", "
-                    << i->central << ", " << i->max << ')' << std::endl;
+                std::cout << "#   " << input.observable->name() << '['
+                    << input.kinematics.as_string() << "] = (" << input.min << ", "
+                    << input.central << ", " << input.max << ')' << std::endl;
             }
         }
 
         if ( ! inst->constraints.empty())
         {
             std::cout << "# Constraints (" << inst->constraints.size() << "):" << std::endl;
-            for (auto c = inst->constraints.cbegin(), c_end = inst->constraints.cend() ; c != c_end ; ++c)
+            for (const auto & constraint : inst->constraints)
             {
-                std::cout << "#  " << c->name() << ": ";
-                for (auto o = c->begin_observables(), o_end = c->end_observables(); o != o_end ; ++o)
+                std::cout << "#  " << constraint.name() << ": ";
+                for (auto o = constraint.begin_observables(), o_end = constraint.end_observables(); o != o_end ; ++o)
                 {
                     std::cout << (**o).name() << '['
                         << (**o).kinematics().as_string() << ']'
                         << " with options: " << (**o).options().as_string();
                 }
-                for (auto b = c->begin_blocks(), b_end = c->end_blocks(); b != b_end ; ++b)
+                for (auto b = constraint.begin_blocks(), b_end = constraint.end_blocks(); b != b_end ; ++b)
                 {
                     std::cout << ", " << (**b).as_string();
                 }

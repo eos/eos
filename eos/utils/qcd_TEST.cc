@@ -50,9 +50,9 @@ class QCDMassesTest :
                 std::array<double, 5>{{   4.7, 4.0,    0.22,    3.8627867 }},
             };
 
-            for (auto t = tests.cbegin(), t_end = tests.cend() ; t != t_end ; ++t)
+            for (const auto & test : tests)
             {
-                double m_q_pole_input = (*t)[0], nf = (*t)[1], alpha_s = (*t)[2], m_q_msbar_ref = (*t)[3];
+                double m_q_pole_input = test[0], nf = test[1], alpha_s = test[2], m_q_msbar_ref = test[3];
                 double m_q_msbar = QCD::m_q_msbar(m_q_pole_input, alpha_s, nf);
 
                 TEST_CHECK_RELATIVE_ERROR(m_q_msbar, m_q_msbar_ref, eps);

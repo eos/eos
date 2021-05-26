@@ -349,14 +349,14 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                     { "form-factors", "BZ2004"     }
                 };
 
-                for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
+                for (const auto & name : names)
                 {
-                    ObservablePtr observable = Observable::make(*n, parameters, kinematics, options);
+                    ObservablePtr observable = Observable::make(name, parameters, kinematics, options);
                     WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
 
-                    for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
+                    for (const auto & input : inputs)
                     {
-                        run_one(observable, polynomial, *i);
+                        run_one(observable, polynomial, input);
                     }
                 }
             }
@@ -488,9 +488,9 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
 
             std::vector<Parameter> variations;
 
-            for (auto n = variation_names.cbegin(), n_end = variation_names.cend() ; n != n_end ; ++n)
+            for (const auto & variation_name : variation_names)
             {
-                variations.push_back(p[*n]);
+                variations.push_back(p[variation_name]);
             }
 
             Kinematics k
@@ -550,19 +550,19 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
 
                     std::stringstream ss(line);
 
-                    for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
+                    for (auto & variation : variations)
                     {
                         double value;
                         ss >> value;
-                        *v = value;
+                        variation = value;
                     }
 
-                    for (auto o = observables.cbegin(), o_end = observables.cend() ; o != o_end ; ++o)
+                    for (const auto & observable : observables)
                     {
                         double reference;
                         ss >> reference;
 
-                        TEST_CHECK_RELATIVE_ERROR(reference, (*o)->evaluate(), 1e-3);
+                        TEST_CHECK_RELATIVE_ERROR(reference, observable->evaluate(), 1e-3);
                     }
                 }
             }

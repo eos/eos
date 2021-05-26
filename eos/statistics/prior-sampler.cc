@@ -79,16 +79,16 @@ namespace eos
                 }
 
                 // clone priors
-                for (auto i = priors.begin(), i_end = priors.end() ; i != i_end ; ++i)
+                for (const auto & prior : priors)
                 {
-                    this->priors.push_back((*i)->clone(p));
+                    this->priors.push_back(prior->clone(p));
                 }
 
                 // clone descriptions
-                for (auto i = parameter_descriptions.begin(), i_end = parameter_descriptions.end() ; i != i_end ; ++i)
+                for (const auto & parameter_description : parameter_descriptions)
                 {
                     this->parameter_descriptions.push_back(
-                        ParameterDescription{ p[i->parameter->name()].clone(), i->min, i->max, i->nuisance });
+                        ParameterDescription{ p[parameter_description.parameter->name()].clone(), parameter_description.min, parameter_description.max, parameter_description.nuisance });
                 }
             }
 
@@ -96,9 +96,9 @@ namespace eos
             {
                 // write observables
                 auto observable_data_set = file->create_or_open_data_set("/data/observables", observable_type);
-                for (auto o = observable_samples.cbegin(), o_end = observable_samples.cend() ; o != o_end ; ++o)
+                for (const auto & observable_sample : observable_samples)
                 {
-                    observable_data_set << *o;
+                    observable_data_set << observable_sample;
                 }
 
                 // write parameters
@@ -106,9 +106,9 @@ namespace eos
                     return;
 
                 auto parameter_data_set = file->create_or_open_data_set("/data/parameters", parameter_type);
-                for (auto p = parameter_samples.cbegin(), p_end = parameter_samples.cend() ; p != p_end ; ++p)
+                for (const auto & parameter_sample : parameter_samples)
                 {
-                    parameter_data_set << *p;
+                    parameter_data_set << parameter_sample;
                 }
             }
 
@@ -271,9 +271,9 @@ namespace eos
 
             {
                 std::vector<LogPriorPtr> priors;
-                for (auto d = defs.cbegin(), d_end = defs.cend() ; d != d_end ; ++d)
+                for (const auto & def : defs)
                 {
-                    priors.push_back(LogPrior::Flat(Parameters::Defaults(), d->parameter->name(), ParameterRange{ d->min, d->max }));
+                    priors.push_back(LogPrior::Flat(Parameters::Defaults(), def.parameter->name(), ParameterRange{ def.min, def.max }));
                 }
 
                 this->priors.insert(this->priors.begin(), priors.begin(), priors.end());
@@ -333,15 +333,15 @@ namespace eos
             }
 
             // wait for job completion
-            for (auto t = tickets.begin(), t_end = tickets.end() ; t != t_end ; ++t)
+            for (auto & ticket : tickets)
             {
-                t->wait();
+                ticket.wait();
             }
 
             // retrieve data and delete workers
-            for (auto w = workers.begin(), w_end = workers.end() ; w != w_end ; ++w)
+            for (auto & worker : workers)
             {
-                (**w).dump_history(config.output_file, config.store_parameters);
+                (*worker).dump_history(config.output_file, config.store_parameters);
             }
 
             // all tickets finished

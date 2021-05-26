@@ -171,9 +171,9 @@ class BToKstarGammaBobethCompatibilityTest :
 
             std::vector<Parameter> variations;
 
-            for (auto n = variation_names.cbegin(), n_end = variation_names.cend() ; n != n_end ; ++n)
+            for (const auto & variation_name : variation_names)
             {
-                variations.push_back(p[*n]);
+                variations.push_back(p[variation_name]);
             }
 
             Kinematics k;
@@ -222,19 +222,19 @@ class BToKstarGammaBobethCompatibilityTest :
 
                     std::stringstream ss(line);
 
-                    for (auto v = variations.begin(), v_end = variations.end() ; v != v_end ; ++v)
+                    for (auto & variation : variations)
                     {
                         double value;
                         ss >> value;
-                        *v = value;
+                        variation = value;
                     }
 
-                    for (auto o = observables.cbegin(), o_end = observables.cend() ; o != o_end ; ++o)
+                    for (const auto & observable : observables)
                     {
                         double reference;
                         ss >> reference;
 
-                        TEST_CHECK_RELATIVE_ERROR(reference, (*o)->evaluate(), 1e-3);
+                        TEST_CHECK_RELATIVE_ERROR(reference, observable->evaluate(), 1e-3);
                     }
                 }
             }

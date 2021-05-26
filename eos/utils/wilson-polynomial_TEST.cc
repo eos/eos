@@ -139,9 +139,9 @@ class WilsonPolynomialTest :
                 std::array<double, 6>{{0.7607454, 0.5025871, 0.5877762, 0.5516025, 0.2930899, 0.4882813}},
             };
 
-            for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
+            for (const auto & input : inputs)
             {
-                run_one(o, p, *i);
+                run_one(o, p, input);
             }
         }
 } wilson_polynomial_test;

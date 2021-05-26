@@ -43,9 +43,9 @@ namespace eos
 
         Implementation(const std::initializer_list<std::pair<std::string, std::string>> & _options)
         {
-            for (auto o = _options.begin(), o_end = _options.end() ; o != o_end ; ++o)
+            for (const auto & _option : _options)
             {
-                options.insert(*o);
+                options.insert(_option);
             }
         }
     };

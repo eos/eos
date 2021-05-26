@@ -700,16 +700,16 @@ namespace eos
             std::string as_string() const
             {
                 std::string ret_val = "Mixture: \n";
-                for (auto c = components.cbegin() ; c != components.cend() ; ++c)
-                    ret_val += (**c).as_string() + '\n';
+                for (const auto & component : components)
+                    ret_val += (*component).as_string() + '\n';
                 return ret_val;
             }
 
             LogLikelihoodBlockPtr clone(ObservableCache cache) const
             {
                 std::vector<LogLikelihoodBlockPtr> clones;
-                for (auto c = components.cbegin() ; c != components.cend() ; ++c)
-                    clones.push_back((**c).clone(cache));
+                for (const auto & component : components)
+                    clones.push_back((*component).clone(cache));
 
                 return LogLikelihoodBlockPtr(new MixtureBlock(clones, weights));
             }
@@ -740,8 +740,8 @@ namespace eos
             unsigned number_of_observations() const
             {
                 unsigned ret_val = 0;
-                for (auto c = components.cbegin() ; c != components.cend() ; ++c)
-                    ret_val += (**c).number_of_observations();
+                for (const auto & component : components)
+                    ret_val += (*component).number_of_observations();
                 return ret_val;
             }
 
@@ -1188,8 +1188,8 @@ namespace eos
 
         // normalize weights
         double sum = 0; // std::accumulate(weights.cbegin(), weights.cend(), 0);
-        for (auto w = weights.begin() ; w != weights.end() ; ++w)
-            sum += *w;
+        for (double weight : weights)
+            sum += weight;
 
         std::vector<double> norm_weights(weights);
 
@@ -1257,9 +1257,9 @@ namespace eos
             double t_obs = 0;
 
             // set up for sampling
-            for (auto c = constraints.cbegin(), c_end = constraints.cend() ; c != c_end ; ++c)
+            for (const auto & constraint : constraints)
             {
-                for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
+                for (auto b = constraint.begin_blocks(), b_end = constraint.end_blocks() ; b != b_end ; ++b)
                 {
                     if (! (*b)->number_of_observations())
                         continue;
@@ -1288,9 +1288,9 @@ namespace eos
             for (unsigned i = 0 ; i < datasets ; ++i)
             {
                 t = 0.0;
-                for (auto c = constraints.cbegin(), c_end = constraints.cend() ; c != c_end ; ++c)
+                for (const auto & constraint : constraints)
                 {
-                    for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
+                    for (auto b = constraint.begin_blocks(), b_end = constraint.end_blocks() ; b != b_end ; ++b)
                     {
                         t += (*b)->sample(rng);
                     }
@@ -1324,9 +1324,9 @@ namespace eos
             double result = 0.0;
 
             // loop over all likelihood blocks
-            for (auto c = constraints.cbegin(), c_end = constraints.cend() ; c != c_end ; ++c)
+            for (const auto & constraint : constraints)
             {
-                for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
+                for (auto b = constraint.begin_blocks(), b_end = constraint.end_blocks() ; b != b_end ; ++b)
                 {
                     double llh = (*b)->evaluate();
                     if (! std::isfinite(llh))
@@ -1400,9 +1400,9 @@ namespace eos
         LogLikelihood result(_imp->parameters.clone());
         result._imp->cache = _imp->cache.clone(result._imp->parameters);
 
-        for (auto c = _imp->constraints.cbegin(), c_end = _imp->constraints.cend() ; c != c_end ; ++c)
+        for (const auto & constraint : _imp->constraints)
         {
-            result.add(*c);
+            result.add(constraint);
         }
 
         return result;
@@ -1412,9 +1412,9 @@ namespace eos
     LogLikelihood::number_of_observations() const
     {
         unsigned result = 0;
-        for (auto c = _imp->constraints.cbegin(), c_end = _imp->constraints.cend() ; c != c_end ; ++c)
+        for (const auto & constraint : _imp->constraints)
         {
-            for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
+            for (auto b = constraint.begin_blocks(), b_end = constraint.end_blocks() ; b != b_end ; ++b)
             {
                 result += (**b).number_of_observations();
             }

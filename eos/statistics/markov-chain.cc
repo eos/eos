@@ -794,9 +794,9 @@ namespace eos
     {
         lhs << "point = ( ";
 
-        for (auto p = rhs.point.cbegin(), p_end = rhs.point.cend() ; p != p_end ; ++p)
+        for (double p : rhs.point)
         {
-            lhs << *p << " ";
+            lhs << p << " ";
         }
 
         lhs << "), log(density) = " << rhs.log_density;

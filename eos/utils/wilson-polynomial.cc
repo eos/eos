@@ -99,9 +99,9 @@ namespace eos
         Sum result;
 
         std::list<std::tuple<Parameter, double, double>> coefficients; // <p_i, q_i, l_i>
-        for (auto i = _coefficients.cbegin(), i_end = _coefficients.cend() ; i != i_end ; ++i)
+        for (const auto & _coefficient : _coefficients)
         {
-            coefficients.push_back(std::make_tuple(o->parameters()[*i], 0.0, 0.0));
+            coefficients.push_back(std::make_tuple(o->parameters()[_coefficient], 0.0, 0.0));
         }
 
         /*
@@ -113,9 +113,9 @@ namespace eos
          */
 
         // Set all parameters to zero
-        for (auto i = coefficients.begin(), i_end = coefficients.end() ; i != i_end ; ++i)
+        for (auto & coefficient : coefficients)
         {
-            std::get<0>(*i) = 0.0;
+            std::get<0>(coefficient) = 0.0;
         }
 
         // Determine the constant part 'n'
@@ -123,9 +123,9 @@ namespace eos
         result.add(Constant(n));
 
         // Determine the true quadratic terms 'q_i' and linear terms 'l_i'
-        for (auto i = coefficients.begin(), i_end = coefficients.end() ; i != i_end ; ++i)
+        for (auto & coefficient : coefficients)
         {
-            Parameter p_i = std::get<0>(*i);
+            Parameter p_i = std::get<0>(coefficient);
 
 
             // calculate observables
@@ -137,11 +137,11 @@ namespace eos
 
             double q_i = 0.5 * ((o_plus_one + o_minus_one) - 2.0 * n);
             result.add(Product(Constant(q_i), Product(p_i, p_i)));
-            std::get<1>(*i) = q_i;
+            std::get<1>(coefficient) = q_i;
 
             double l_i = 0.5 * (o_plus_one - o_minus_one);
             result.add(Product(Constant(l_i), p_i));
-            std::get<2>(*i) = l_i;
+            std::get<2>(coefficient) = l_i;
 
             // reset parameter to zero
             p_i = 0.0;
@@ -176,9 +176,9 @@ namespace eos
         }
 
         // Reset parameters to defaults
-        for (auto i = coefficients.cbegin(), i_end = coefficients.cend() ; i != i_end ; ++i)
+        for (const auto & coefficient : coefficients)
         {
-            Parameter p_i = std::get<0>(*i);
+            Parameter p_i = std::get<0>(coefficient);
 
             p_i = p_i.central();
         }
@@ -328,9 +328,9 @@ namespace eos
     {
         Sum result;
 
-        for (auto i = s.summands.cbegin(), i_end = s.summands.cend() ; i != i_end ; ++i)
+        for (const auto & summand : s.summands)
         {
-            result.add(i->accept_returning<WilsonPolynomial>(*this));
+            result.add(summand.accept_returning<WilsonPolynomial>(*this));
         }
 
         return WilsonPolynomial(result);
@@ -441,9 +441,9 @@ namespace eos
     {
         double result = 0.0;
 
-        for (auto i = s.summands.cbegin(), i_end = s.summands.cend() ; i != i_end ; ++i)
+        for (const auto & summand : s.summands)
         {
-            result += (*i).accept_returning<double>(*this);
+            result += summand.accept_returning<double>(*this);
         }
 
         return result;

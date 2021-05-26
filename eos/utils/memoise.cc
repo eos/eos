@@ -43,9 +43,9 @@ namespace eos
     {
         Lock l(*_mutex);
 
-        for (auto c = _clear_functions.begin(), c_end = _clear_functions.end() ; c != c_end ; ++c)
+        for (auto & _clear_function : _clear_functions)
         {
-            (*c)();
+            _clear_function();
         }
     }
 }

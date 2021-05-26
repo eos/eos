@@ -355,9 +355,9 @@ namespace eos
 
         if (cp_conjugate)
         {
-            for (auto c = result._coefficients.begin(), c_end = result._coefficients.end() ; c != c_end ; ++c)
+            for (auto & _coefficient : result._coefficients)
             {
-                *c = conj(*c);
+                _coefficient = conj(_coefficient);
             }
         }
 
@@ -460,9 +460,9 @@ namespace eos
 
         if (cp_conjugate)
         {
-            for (auto c = result._coefficients.begin(), c_end = result._coefficients.end() ; c != c_end ; ++c)
+            for (auto & _coefficient : result._coefficients)
             {
-                *c = conj(*c);
+                _coefficient = conj(_coefficient);
             }
         }
 
