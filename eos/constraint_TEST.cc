@@ -41,6 +41,23 @@ class ConstraintDeserializationTest :
 
         virtual void run() const
         {
+            // {{{ Gaussian (correct order, non-ASCI character present)
+            {
+                static const std::string input(
+                    "type: Gaussian\n"
+                    "observable: Lambda_b->Lambdall::BR@LowRecoil\n"
+                    "kinematics: {s_max: 20, s_min: 15}\n"
+                    "options: {form-factors: DM2016, l: mu}\n"
+                    "mean: 6e-07\n"
+                    "sigma-stat: {hi: 1.2e-08, lo: −3.4e-08}\n"
+                    "sigma-sys: {hi: 4.6e-08, lo: −7.8e-08}\n"
+                    "dof: 1"
+                ); // sigma-stat.lo and sigma-sys.lo contain a U+2212 (minus sign, '−'), rather than a '-'.
+
+                TEST_CHECK_THROWS(ConstraintEntryEncodingError, std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::Gaussian", input)));
+            }
+            /// }}}
+
             // {{{ Gaussian (correct order)
             {
                 static const std::string input(

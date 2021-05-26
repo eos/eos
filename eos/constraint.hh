@@ -213,6 +213,22 @@ namespace eos
     };
 
     /*!
+     * ConstraintEntryEncodingError is thrown when the encoding of a constraint entry contains non-ascii characters.
+     */
+    struct ConstraintEntryEncodingError :
+        public Exception
+    {
+        ///@name Basic Functions
+        ///@{
+        /*!
+         * Constructor.
+         *
+         * @param name The name of the incorrectly encoded constraint entry.
+         */
+        ConstraintEntryEncodingError(const QualifiedName & entry);
+    };
+
+    /*!
      * ConstrainInputFileParseError is thrown when an error occurs while parsing the constraint input files.
      */
     struct ConstraintInputFileParseError :
