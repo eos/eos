@@ -129,9 +129,9 @@ main(int argc, char * argv[])
         }
         else
         {
-            for (auto o = CommandLine::instance()->observables.begin(), o_end = CommandLine::instance()->observables.end() ; o != o_end ; ++o)
+            for (auto & observable : CommandLine::instance()->observables)
             {
-                ids.insert((*o)->begin(), (*o)->end());
+                ids.insert(observable->begin(), observable->end());
             }
         }
 

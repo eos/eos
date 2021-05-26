@@ -139,9 +139,9 @@ namespace eos
                 job_arrival->broadcast();
             }
 
-            for (auto t(threads.begin()), t_end(threads.end()) ; t != t_end ; ++t)
+            for (auto & thread : threads)
             {
-                delete *t;
+                delete thread;
             }
         }
     };

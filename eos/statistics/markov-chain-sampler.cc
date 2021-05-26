@@ -146,12 +146,12 @@ namespace eos
             std::vector<std::vector<double>> all_chains_means;
             std::vector<std::vector<double>> all_chains_variances;
 
-            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end; ++c)
+            for (auto & chain : chains)
             {
                 std::vector<double> means, variances;
-                MarkovChain::State::Iterator it_begin = c->history().states.cbegin();
-                it_begin += unsigned(config.skip_initial * c->history().states.size());
-                c->history().mean_and_variance(it_begin, c->history().states.cend(), means, variances);
+                MarkovChain::State::Iterator it_begin = chain.history().states.cbegin();
+                it_begin += unsigned(config.skip_initial * chain.history().states.size());
+                chain.history().mean_and_variance(it_begin, chain.history().states.cend(), means, variances);
                 all_chains_means.push_back(means);
                 all_chains_variances.push_back(variances);
             }
@@ -228,11 +228,11 @@ namespace eos
              // calculate statistics
             std::vector<std::vector<double>> all_chains_means;
             std::vector<std::vector<double>> all_chains_variances;
-            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end; ++c)
+            for (auto & chain : chains)
             {
                 std::vector<double> means, variances;
-                MarkovChain::State::Iterator it_begin = c->history().states.cend() - config.chunk_size;
-                c->history().mean_and_variance(it_begin, c->history().states.cend(), means, variances);
+                MarkovChain::State::Iterator it_begin = chain.history().states.cend() - config.chunk_size;
+                chain.history().mean_and_variance(it_begin, chain.history().states.cend(), means, variances);
                 all_chains_means.push_back(means);
                 all_chains_variances.push_back(variances);
             }
@@ -397,10 +397,10 @@ namespace eos
             pre_run_info.iterations = 0;
 
             // set up chains
-            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
+            for (auto & chain : chains)
             {
                 // save history
-                c->keep_history(true);
+                chain.keep_history(true);
             }
 
             // keep going till maxIter or  break when convergence estimated
@@ -414,22 +414,22 @@ namespace eos
 
                 // loop over chains
                 // run each chain for N iterations
-                for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
+                for (auto & chain : chains)
                 {
                     if (config.parallelize)
                     {
-                        tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&MarkovChain::run, *c, config.prerun_iterations_update)));
+                        tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&MarkovChain::run, chain, config.prerun_iterations_update)));
                     }
                     else
                     {
-                        c->run(config.prerun_iterations_update);
+                        chain.run(config.prerun_iterations_update);
                     }
                 }
 
                 // wait for job completion
-                for (auto t = tickets.begin(), t_end = tickets.end(); t != t_end; ++t)
+                for (auto & ticket : tickets)
                 {
-                    t->wait();
+                    ticket.wait();
                 }
 
                 // all tickets finished
@@ -488,22 +488,22 @@ namespace eos
 
                 // loop over chains
                 // run each chain for N iterations
-                for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
+                for (auto & chain : chains)
                 {
                     if (config.parallelize)
                     {
-                        tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&MarkovChain::run, *c, config.chunk_size)));
+                        tickets.push_back(ThreadPool::instance()->enqueue(std::bind(&MarkovChain::run, chain, config.chunk_size)));
                     }
                     else
                     {
-                        c->run(config.chunk_size);
+                        chain.run(config.chunk_size);
                     }
                 }
 
                 // wait for job completion
-                for (auto t = tickets.begin(), t_end = tickets.end(); t != t_end; ++t)
+                for (auto & ticket : tickets)
                 {
-                    t->wait();
+                    ticket.wait();
                 }
 
                 // all tickets finished
@@ -530,9 +530,9 @@ namespace eos
                             << "invalid/rejected proposals = " << 1.0 * c->statistics().iterations_invalid / c->statistics().iterations_rejected;
                 }
 
-                for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
+                for (auto & chain : chains)
                 {
-                    c->clear();
+                    chain.clear();
                 }
 
             }
@@ -565,12 +565,12 @@ namespace eos
         void setup_main_run()
         {
             //  clear up
-            for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c)
+            for (auto & chain : chains)
             {
-                c->clear();
+                chain.clear();
 
                 // save history?
-                c->keep_history(config.store);
+                chain.keep_history(config.store);
             }
 
             // write parameter descriptions
@@ -612,7 +612,7 @@ namespace eos
 
         // loop over files
         bool found_chain = false;
-        for (auto f = input_files.begin(), f_end = input_files.end() ; f != f_end ; ++f)
+        for (const auto & input_file : input_files)
         {
             std::string group_name;
             // loop over chains
@@ -620,7 +620,7 @@ namespace eos
             while (true)
             {
                 group_name = base + "/chain #" + stringify(c);
-                if (! (*f)->group_exists(group_name))
+                if (! input_file->group_exists(group_name))
                     break;
 
                 found_chain = true;
@@ -631,7 +631,7 @@ namespace eos
                 MarkovChain::Stats stat;
 
                 // fill the objects
-                MarkovChain::read_data(**f, group_name, *history, prop, proposal_type, stat);
+                MarkovChain::read_data(*input_file, group_name, *history, prop, proposal_type, stat);
 
                 // store them
                 result.push_back(history);

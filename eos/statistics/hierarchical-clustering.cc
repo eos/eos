@@ -270,9 +270,9 @@ namespace eos
 
                 if (config.equal_weights)
                 {
-                    for (unsigned i = 0 ; i < input_components.size() ; ++i)
+                    for (auto & input_component : input_components)
                     {
-                        input_components[i].weight() = 1.0 / input_components.size();
+                        input_component.weight() = 1.0 / input_components.size();
                     }
                 }
             }
@@ -361,9 +361,9 @@ namespace eos
         _imp->inverse_mapping.resize(density.size());
 
         double total_weight = 0;
-        for (auto comp = density.cbegin() ; comp != density.cend() ; ++comp)
+        for (const auto & comp : density)
         {
-            total_weight += comp->weight();
+            total_weight += comp.weight();
         }
 
         if (std::abs(total_weight - 1.0) > 1e-8)

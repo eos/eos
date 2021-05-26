@@ -91,9 +91,9 @@ class OneOfVisitorReturningVoidTest :
             }};
 
             TestVisitorReturningVoid visitor;
-            for (auto i = items.cbegin(), i_end = items.cend() ; i != i_end ; ++i)
+            for (const auto & item : items)
             {
-                (*i).accept(visitor);
+                item.accept(visitor);
             }
 
             TEST_CHECK_EQUAL("FooBarBarFooBaz", visitor.result);
@@ -142,9 +142,9 @@ class OneOfVisitorReturningStringTest :
 
             TestVisitorReturningString visitor;
             std::string result;
-            for (auto i = items.cbegin(), i_end = items.cend() ; i != i_end ; ++i)
+            for (const auto & item : items)
             {
-                result += (*i).accept_returning<std::string>(visitor);
+                result += item.accept_returning<std::string>(visitor);
             }
 
             TEST_CHECK_EQUAL("FooBarBarFooBaz", result);

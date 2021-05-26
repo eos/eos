@@ -348,9 +348,9 @@ namespace eos
                     continue;
 
                 // loop over all jump vectors and eliminate changes in pars not mentioned in index_list
-                for (auto jump = _jump_vectors.begin() ; jump != _jump_vectors.end() ; ++jump)
+                for (auto & _jump_vector : _jump_vectors)
                 {
-                    (*jump)[i] = 0.0;
+                    _jump_vector[i] = 0.0;
                 }
             }
         }
@@ -545,9 +545,9 @@ namespace eos
             std::vector<double> mean(_dimension, 0.0);
             for (auto s = begin ; s != end ; ++s)
             {
-                for (auto i = _index_list.begin(), i_end = _index_list.end() ; i != i_end ; ++i)
+                for (unsigned int & i : _index_list)
                 {
-                    mean[*i] += s->point[*i];
+                    mean[i] += s->point[i];
                 }
             }
             for (unsigned i = 0 ; i < _dimension ; ++i)
@@ -561,17 +561,17 @@ namespace eos
             // _covariance calculation
             for (auto s = begin ; s != end ; ++s)
             {
-                for (auto i = _index_list.begin(), i_end = _index_list.end() ; i != i_end ; ++i)
+                for (unsigned int & i : _index_list)
                 {
                     // diagonal elements
-                    _tmp_sample_covariance_current->data[*i + _dimension * *i] += power_of<2>(s->point[*i] - mean[*i]);
+                    _tmp_sample_covariance_current->data[i + _dimension * i] += power_of<2>(s->point[i] - mean[i]);
 
                     // off-diagonal elements
-                    for (unsigned j = *i + 1 ; j < _dimension ; ++j)
+                    for (unsigned j = i + 1 ; j < _dimension ; ++j)
                     {
-                        double summand = (s->point[*i] - mean[*i]) * (s->point[j] -  mean[j]);
-                        _tmp_sample_covariance_current->data[*i + _dimension * j] += summand;
-                        _tmp_sample_covariance_current->data[j + _dimension * *i] += summand;
+                        double summand = (s->point[i] - mean[i]) * (s->point[j] -  mean[j]);
+                        _tmp_sample_covariance_current->data[i + _dimension * j] += summand;
+                        _tmp_sample_covariance_current->data[j + _dimension * i] += summand;
                     }
                 }
             }
@@ -685,17 +685,17 @@ namespace eos
             // calculate mean in here, but skip initial points of each history
             std::vector<double> mean(_dimension, 0.0);
             std::vector<unsigned> lengths;
-            for (auto h = histories.cbegin(), h_end = histories.cend() ; h != h_end ; ++h)
+            for (const auto & historie : histories)
             {
-                const unsigned number_of_skipped_elements =  skip_initial * (**h).states.size();
-                auto s = (**h).states.cbegin() + number_of_skipped_elements;
-                lengths.push_back((**h).states.size() - number_of_skipped_elements);
+                const unsigned number_of_skipped_elements =  skip_initial * (*historie).states.size();
+                auto s = (*historie).states.cbegin() + number_of_skipped_elements;
+                lengths.push_back((*historie).states.size() - number_of_skipped_elements);
 
-                for (auto s_end = (**h).states.cend() ; s != s_end ; ++s)
+                for (auto s_end = (*historie).states.cend() ; s != s_end ; ++s)
                 {
-                    for (auto i = _index_list.begin(), i_end = _index_list.end() ; i != i_end ; ++i)
+                    for (unsigned int & i : _index_list)
                     {
-                        mean[*i] += s->point[*i];
+                        mean[i] += s->point[i];
                     }
                 }
             }
@@ -719,17 +719,17 @@ namespace eos
                 auto s = s_end - (*l);
                 for ( ; s != s_end ; ++s)
                 {
-                    for (auto i = _index_list.begin(), i_end = _index_list.end() ; i != i_end ; ++i)
+                    for (unsigned int & i : _index_list)
                     {
                         // diagonal elements
-                        _tmp_sample_covariance_current->data[*i + _dimension * *i] += power_of<2>(s->point[*i] - mean[*i]);
+                        _tmp_sample_covariance_current->data[i + _dimension * i] += power_of<2>(s->point[i] - mean[i]);
 
                         // off-diagonal elements
-                        for (unsigned j = *i + 1 ; j < _dimension ; ++j)
+                        for (unsigned j = i + 1 ; j < _dimension ; ++j)
                         {
-                            double summand = (s->point[*i] - mean[*i]) * (s->point[j] -  mean[j]);
-                            _tmp_sample_covariance_current->data[*i + _dimension * j] += summand;
-                            _tmp_sample_covariance_current->data[j + _dimension * *i] += summand;
+                            double summand = (s->point[i] - mean[i]) * (s->point[j] -  mean[j]);
+                            _tmp_sample_covariance_current->data[i + _dimension * j] += summand;
+                            _tmp_sample_covariance_current->data[j + _dimension * i] += summand;
                         }
                     }
                 }
@@ -1028,9 +1028,9 @@ namespace eos
                            const double & efficiency, const double & efficiency_min, const double & efficiency_max)
         {
             // adapt only the multivariate components
-            for (auto mv = _mv.cbegin(), mv_end = _mv.cend() ; mv != mv_end ; ++mv)
+            for (const auto & mv : _mv)
             {
-                (**mv).adapt(begin, end, efficiency, efficiency_min, efficiency_max);
+                (*mv).adapt(begin, end, efficiency, efficiency_min, efficiency_max);
             }
         }
 
@@ -1107,15 +1107,15 @@ namespace eos
             BlockDecomposition * bd = new BlockDecomposition();
 
             // add multivariates
-            for (auto mv = _mv.cbegin(), mv_end = _mv.cend() ; mv != mv_end ; ++mv)
+            for (const auto & mv : _mv)
             {
-                bd->add(*mv);
+                bd->add(mv);
             }
 
             // add priors
-            for (auto prior = _priors.cbegin(), prior_end = _priors.cend() ; prior != prior_end ; ++prior)
+            for (const auto & _prior : _priors)
             {
-                bd->add(*prior);
+                bd->add(_prior);
             }
 
             return ProposalFunctionPtr(bd);
@@ -1135,9 +1135,9 @@ namespace eos
                     // one data set for all priors as they are serialized
                     auto record = std::make_tuple("prior");
                     auto prior_data_set = file.create_or_open_data_set(data_set_base_name + "/priors", priors_type());
-                    for (auto prior = _priors.begin(), prior_end = _priors.end() ; prior != prior_end ; ++prior)
+                    for (const auto & _prior : _priors)
                     {
-                        std::string serialization((**prior).as_string());
+                        std::string serialization((*_prior).as_string());
                         std::get<0>(record) = serialization.c_str();
                         prior_data_set << record;
                     }

@@ -362,10 +362,10 @@ int main(int argc, char * argv[])
             throw DoUsage("Either specify \n a) parameters to vary\n b) a PMC input file c) an MCMC input file");
 
         std::cout << "Determining the uncertainty on the following observables:" << std::endl;
-        for (auto o = inst->inputs.begin(), o_end = inst->inputs.end() ; o != o_end ; ++o)
+        for (auto & input : inst->inputs)
         {
-            std::cout << o->observable->name() << "[" << o->kinematics.as_string() << "]"
-                      << " with options: " << o->observable->options().as_string() << std::endl;
+            std::cout << input.observable->name() << "[" << input.kinematics.as_string() << "]"
+                      << " with options: " << input.observable->options().as_string() << std::endl;
         }
 
         std::cout << std::endl;
@@ -377,11 +377,11 @@ int main(int argc, char * argv[])
             std::cout << "Varying the following parameters:" << std::endl;
         }
 
-        for (auto i = inst->priors.begin(), i_end = inst->priors.end() ; i != i_end ; ++i)
+        for (auto & prior : inst->priors)
         {
-            sampler.add(*i);
+            sampler.add(prior);
 
-            std::cout << (**i).as_string() << std::endl;
+            std::cout << (*prior).as_string() << std::endl;
         }
 
         const bool have_mcmc = ! inst->mcmc_sample_file.empty() && inst->mcmc_sample_min < inst->mcmc_sample_max;

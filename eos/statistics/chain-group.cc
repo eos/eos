@@ -85,7 +85,7 @@ namespace eos
             unsigned number_of_points = std::ceil((1.0 - skip_initial) * chain->states.size());
 
             // check overlap in each parameter dimension
-            for (auto i = parameter_indices.cbegin() ; i != parameter_indices.cend() ; ++i)
+            for (unsigned int parameter_indice : parameter_indices)
             {
                 all_chain_means.clear();
                 all_chain_variances.clear();
@@ -94,20 +94,20 @@ namespace eos
                 unsigned chain_index = 0;
                 for (auto c = chains.begin(), c_end = chains.end() ; c != c_end ; ++c, ++chain_index)
                 {
-                    all_chain_means.push_back(parameter_means[chain_index][*i]);
-                    all_chain_variances.push_back(parameter_variances[chain_index][*i]);
+                    all_chain_means.push_back(parameter_means[chain_index][parameter_indice]);
+                    all_chain_variances.push_back(parameter_variances[chain_index][parameter_indice]);
                 }
 
                 // and compare with the new chain
-                all_chain_means.push_back(new_chain_means[*i]);
-                all_chain_variances.push_back(new_chain_variances[*i]);
+                all_chain_means.push_back(new_chain_means[parameter_indice]);
+                all_chain_variances.push_back(new_chain_variances[parameter_indice]);
 
                 double rvalue = rvalue_function(all_chain_means, all_chain_variances, number_of_points);
 
                 if (rvalue > max_rvalue)
                 {
                     Log::instance()->message("Cluster.overlaps", ll_debug)
-                        << "Parameter " << *i << ": r value too large (" << rvalue << " > " << max_rvalue << ")";
+                        << "Parameter " << parameter_indice << ": r value too large (" << rvalue << " > " << max_rvalue << ")";
                     return false;
                 }
             }
@@ -171,12 +171,12 @@ namespace eos
         std::vector<unsigned> indices_sorted(indices.cbegin(), indices.cend());
         std::sort(indices_sorted.begin(), indices_sorted.end());
 
-        for(auto i = indices_sorted.cbegin() ; i != indices_sorted.cend() ; ++i)
+        for(unsigned int i : indices_sorted)
         {
-            if (*i > _imp->number_of_parameters)
-                throw InternalError("Cluster::parameter_indices: index " + stringify(*i)
+            if (i > _imp->number_of_parameters)
+                throw InternalError("Cluster::parameter_indices: index " + stringify(i)
                                     + " out of range");
-            _imp->parameter_indices.push_back(*i);
+            _imp->parameter_indices.push_back(i);
         }
     }
 

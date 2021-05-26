@@ -403,14 +403,14 @@ namespace eos
             posterior_values.clear();
 
             // wait for job completion
-            for (auto t = tickets.begin(), t_end = tickets.end() ; t != t_end ; ++t)
-                t->wait();
+            for (auto & ticket : tickets)
+                ticket.wait();
 
             // copy results and free memory
-            for (auto w = workers.begin(), w_end = workers.end() ; w != w_end ; ++w)
+            for (auto & worker : workers)
             {
-                std::move((**w).density_values.begin(), (**w).density_values.end(), std::back_inserter(posterior_values));
-                (**w).clear();
+                std::move((*worker).density_values.begin(), (*worker).density_values.end(), std::back_inserter(posterior_values));
+                (*worker).clear();
             }
 
             Log::instance()->message("PMC_sampler.status", ll_debug)
@@ -995,14 +995,14 @@ namespace eos
             const double weight = 1.0 / n_components_total;
 
             {
-                for (auto g = chain_groups.cbegin() ; g != chain_groups.cend() ; ++g)
+                for (const auto & chain_group : chain_groups)
                 {
                     // how many components should each each in group contribute
                     std::vector<unsigned> components_per_chain;
-                    pmc::minimal_partition(config.target_ncomponents, std::distance(g->begin(), g->end()), components_per_chain);
+                    pmc::minimal_partition(config.target_ncomponents, std::distance(chain_group.begin(), chain_group.end()), components_per_chain);
 
                     auto n_components = components_per_chain.cbegin();
-                    for (auto c = g->begin(); c != g->end(); ++c, ++n_components)
+                    for (auto c = chain_group.begin(); c != chain_group.end(); ++c, ++n_components)
                     {
                         // throw away component
                         if (! *n_components)
@@ -1050,9 +1050,9 @@ namespace eos
 
             HierarchicalClustering::MixtureDensity local_patches;
 
-            for (auto g = chain_groups.cbegin() ; g != chain_groups.cend() ; ++g)
+            for (const auto & chain_group : chain_groups)
             {
-                for (auto c = g->begin() ; c != g->end() ; ++c)
+                for (auto c = chain_group.begin() ; c != chain_group.end() ; ++c)
                 {
                     //                local_patches_index_lists.push_back(IndexList());
 

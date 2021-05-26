@@ -94,14 +94,14 @@ class WilsonScan
             kinematics.declare("s_min");
             kinematics.declare("s_max");
 
-            for (auto p(param_changes.begin()), p_end(param_changes.end()) ; p != p_end ; ++p)
+            for (const auto & param_change : param_changes)
             {
-                parameters[p->first] = p->second;
+                parameters[param_change.first] = param_change.second;
             }
 
-            for (auto i(inputs.begin()), i_end(inputs.end()) ; i != i_end ; ++i)
+            for (const auto & input : inputs)
             {
-                bins.push_back(std::make_pair(*i, Observable::make(i->o_name, parameters.clone(), kinematics.clone(), Options())));
+                bins.push_back(std::make_pair(input, Observable::make(input.o_name, parameters.clone(), kinematics.clone(), Options())));
             }
         }
 
@@ -125,9 +125,9 @@ class WilsonScan
             // Calculate chi^2
             double central = o->evaluate();
             double delta_min = 0.0, delta_max = 0.0;
-            for (auto v = variation_names.begin(), v_end = variation_names.end() ; v != v_end ; ++v)
+            for (auto & variation_name : variation_names)
             {
-                Parameter p = params[*v];
+                Parameter p = params[variation_name];
                 double old_p = p();
                 double max = 0.0, min = 0.0, value;
 
@@ -195,12 +195,12 @@ class WilsonScan
             }
 
             std::cout << "# Inputs" << std::endl;
-            for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
+            for (const auto & input : inputs)
             {
                 std::cout
-                    << "#   " << i->o_name
-                    << "[" << i->min << ", " << i->max << "]"
-                    << " = (" << i->o_min << ", " << i->o << ", " << i->o_max << ")"
+                    << "#   " << input.o_name
+                    << "[" << input.min << ", " << input.max << "]"
+                    << " = (" << input.o_min << ", " << input.o << ", " << input.o_max << ")"
                     << std::endl;
             }
 
@@ -221,14 +221,14 @@ class WilsonScan
             tickets.wait();
 
             std::cout << std::scientific << std::setprecision(7);
-            for (auto r = results.cbegin(), r_end = results.cend() ; r != r_end ; ++r)
+            for (const auto & result : results)
             {
-                for (auto w = r->first.cbegin(), w_end = r->first.cend() ; w != w_end ; ++w)
+                for (auto w = result.first.cbegin(), w_end = result.first.cend() ; w != w_end ; ++w)
                 {
                     std::cout << *w << '\t';
                 }
 
-                std::cout << r->second << std::endl;
+                std::cout << result.second << std::endl;
             }
         }
 };

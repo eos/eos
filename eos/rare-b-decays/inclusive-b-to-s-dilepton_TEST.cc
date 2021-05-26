@@ -194,16 +194,16 @@ class BToXsDileptonLargeRecoilPolynomialTest :
                 { "q2_max", 6.0 }
             };
 
-            for (auto n = names.cbegin(), n_end = names.cend() ; n != n_end ; ++n)
+            for (const auto & name : names)
             {
-                ObservablePtr observable = Observable::make(*n, parameters, kinematics, Options());
+                ObservablePtr observable = Observable::make(name, parameters, kinematics, Options());
                 TEST_CHECK(ObservablePtr() != observable);
 
                 WilsonPolynomial polynomial = make_polynomial(observable, std::list<std::string>{ "b->s::Re{c7}", "b->s::Im{c7}", "b->smumu::Re{c9}", "b->smumu::Im{c9}", "b->smumu::Re{c10}", "b->smumu::Im{c10}" });
 
-                for (auto i = inputs.cbegin(), i_end = inputs.cend() ; i != i_end ; ++i)
+                for (const auto & input : inputs)
                 {
-                    run_one(observable, polynomial, *i);
+                    run_one(observable, polynomial, input);
                 }
             }
         }

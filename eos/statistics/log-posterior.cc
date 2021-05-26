@@ -94,9 +94,9 @@ namespace eos
        LogPosterior * result = new LogPosterior(llh);
 
        // add parameters via prior clones
-       for (auto i = _priors.cbegin(), i_end = _priors.cend(); i != i_end; ++i)
+       for (const auto & _prior : _priors)
        {
-           result->add((*i)->clone(result->parameters()));
+           result->add(_prior->clone(result->parameters()));
        }
 
        // copy proper range for subspace sampling
@@ -139,15 +139,15 @@ namespace eos
            auto record = LogPosterior::Output::description_record();
            std::string prior;
 
-           for (auto d = _parameter_descriptions.cbegin(), d_end = _parameter_descriptions.cend() ; d != d_end ; ++d)
+           for (const auto & _parameter_description : _parameter_descriptions)
            {
-               std::get<0>(record) = d->parameter->name().c_str();
-               std::get<1>(record) = d->min;
-               std::get<2>(record) = d->max;
-               std::get<3>(record) = int(d->nuisance);
+               std::get<0>(record) = _parameter_description.parameter->name().c_str();
+               std::get<1>(record) = _parameter_description.min;
+               std::get<2>(record) = _parameter_description.max;
+               std::get<3>(record) = int(_parameter_description.nuisance);
 
                // without local string variable, can get random data in char *
-               prior = log_prior(d->parameter->name())->as_string();
+               prior = log_prior(_parameter_description.parameter->name())->as_string();
                std::get<4>(record) = prior.c_str();
 
                data_set << record;
@@ -278,9 +278,9 @@ namespace eos
        // count scan parameters
        unsigned scan_parameters = 0;
 
-       for (auto d = _parameter_descriptions.cbegin() ; d != _parameter_descriptions.cend() ; ++d)
+       for (const auto & _parameter_description : _parameter_descriptions)
        {
-           if (! d->nuisance)
+           if (! _parameter_description.nuisance)
                ++scan_parameters;
        }
 
@@ -463,9 +463,9 @@ namespace eos
 
        // all prior components are assumed independent,
        // thus the logs can be simply added up
-       for (auto p = _priors.cbegin(), p_end = _priors.cend() ; p != p_end; ++p)
+       for (const auto & _prior : _priors)
        {
-           result += (**p)();
+           result += (*_prior)();
        }
 
        return result;
@@ -477,12 +477,12 @@ namespace eos
        LogPriorPtr prior;
 
        // loop over all descriptions of the prior pointers
-       for (auto p = _priors.begin(), p_end = _priors.end() ; p != p_end ; ++p)
+       for (const auto & _prior : _priors)
        {
-           for (auto i = (*p)->begin(), i_end = (*p)->end() ; i != i_end ; ++i)
+           for (auto i = _prior->begin(), i_end = _prior->end() ; i != i_end ; ++i)
            {
                if (i->parameter->name() == name)
-                   prior = *p;
+                   prior = _prior;
            }
        }
 
