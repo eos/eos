@@ -24,9 +24,6 @@ bin_PROGRAMS = \
 	eos-propagate-uncertainty \
 	eos-sample-mcmc \
 	eos-sample-events-mcmc
-noinst_PROGRAMS = \
-	integrated \
-	observables
 
 LDADD = \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
@@ -77,7 +74,3 @@ eos_sample_mcmc_LDADD = $(LDADD) $(GSL_LDFLAGS)
 eos_sample_events_mcmc_SOURCES = eos-sample-events-mcmc.cc
 eos_sample_events_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
 eos_sample_events_mcmc_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS)
-
-integrated_SOURCES = integrated.cc
-
-observables_SOURCES = observables.cc
