@@ -53,6 +53,11 @@ namespace eos
     {
     }
 
+    ConstraintEntryEncodingError::ConstraintEntryEncodingError(const QualifiedName & name) :
+        Exception("Constraint '" + name.str() + "' contains non-ascii characters")
+    {
+    }
+
     ConstraintInputFileParseError::ConstraintInputFileParseError(const std::string & filename, const std::string & msg) :
         Exception("Could not parse constraint input file '" + filename + "': " + msg)
     {
@@ -1606,6 +1611,10 @@ namespace eos
     ConstraintEntry *
     ConstraintEntry::FromYAML(const QualifiedName & name, const std::string & s)
     {
+        // valid ASCII characters are limited to 0 <= c <= 0x7f (127)
+        if (s.cend() != std::find_if(s.cbegin(), s.cend(), [&] (unsigned char c) -> bool { return (c > 0x7f); }))
+            throw ConstraintEntryEncodingError(name);
+
         YAML::Node node = YAML::Load(s);
 
         return ConstraintEntry::FromYAML(name, node);
