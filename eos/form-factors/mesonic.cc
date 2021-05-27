@@ -31,8 +31,9 @@
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
-#include <map>
 #include <cmath>
+#include <limits>
+#include <map>
 
 namespace eos
 {
@@ -174,6 +175,62 @@ namespace eos
         { "B_s->phi::B-LCSR",     &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::make    },
         { "B_s->D_s^*::B-LCSR",   &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::make }
     };
+
+    complex<double>
+    FormFactors<PToV>::v(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor V for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::a_0(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor A_0 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::a_1(const complex<double> &) const
+    {
+        throw InternalError("P->V form factors A_1 complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::a_12(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor A_12 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::a_2(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor A_2 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::t_1(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor T_1 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::t_2(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor T_2 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToV>::t_23(const complex<double> &) const
+    {
+        throw InternalError("P->V form factor T_23 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
 
     std::shared_ptr<FormFactors<PToV>>
     FormFactorFactory<PToV>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
@@ -323,7 +380,7 @@ namespace eos
     template class BCL2008FormFactors<BToPi, 4u>;
     template class BCL2008FormFactors<BToPi, 5u>;
 
-    /* B_{u,d -> D */
+    /* B_{u,d} -> D */
 
     // [BCL2008]
     template class BCL2008FormFactors<BToD, 3u>;
@@ -339,7 +396,7 @@ namespace eos
     {
         using namespace std::placeholders;
 
-        auto f = std::function<double (const double &)>(std::bind(&FormFactors<PToP>::f_p, this, _1));
+        std::function<double (const double &)> f = [&, this](const double & q2) -> double { return this->f_p(q2); };
 
         return derivative<1u, deriv::TwoSided>(f, s);
     }
@@ -348,7 +405,7 @@ namespace eos
     {
         using namespace std::placeholders;
 
-        auto f = std::function<double (const double &)>(std::bind(&FormFactors<PToP>::f_p, this, _1));
+        std::function<double (const double &)> f = [&, this](const double & q2) -> double { return this->f_p(q2); };
 
         return derivative<2u, deriv::TwoSided>(f, s);
     }
@@ -385,6 +442,27 @@ namespace eos
         { "B_s->K::B-LCSR",      &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::make   },
         { "B_s->D_s::B-LCSR",    &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::make  }
     };
+
+    complex<double>
+    FormFactors<PToP>::f_p(const complex<double> &) const
+    {
+        throw InternalError("P->P form factor f_+ for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToP>::f_0(const complex<double> &) const
+    {
+        throw InternalError("P->P form factor f_0 for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
+
+    complex<double>
+    FormFactors<PToP>::f_t(const complex<double> &) const
+    {
+        throw InternalError("P->P form factor f_t for complex q2 is not implemented for this parametrisation");
+        return complex<double>(std::numeric_limits<double>::signaling_NaN());
+    }
 
     std::shared_ptr<FormFactors<PToP>>
     FormFactorFactory<PToP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)

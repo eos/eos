@@ -682,17 +682,27 @@ namespace eos
                 return tau_p * (1.0 - std::sqrt(1.0 - tau_m / tau_p));
             }
 
-            double _calc_z(const double & s) const
+            complex<double> _calc_z(const complex<double> & s) const
             {
+                const complex<double> tau_p(_tau_p, 0.0);
+                const complex<double> tau_0(_tau_0, 0.0);
+
                 return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
             }
 
-            template <typename Parameter_>
-            double _calc_ff(const double & s, const double & m2_R, const std::array<Parameter_, 3> & a) const
+            double _calc_z(const double & s) const
             {
-                const double diff_z = _calc_z(s) - _z_0;
+                return real(_calc_z(complex<double>(s, 0.0)));
+            }
+
+            template <typename Parameter_>
+            complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const std::array<Parameter_, 3> & a) const
+            {
+                const complex<double> a_0(a[0]), a_1(a[1]), a_2(a[2]);
+
+                const complex<double> diff_z = _calc_z(s) - _z_0;
                 return 1.0 / (1.0 - s / m2_R) *
-                       (a[0] + a[1] * diff_z + a[2] * power_of<2>(diff_z));
+                       (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z));
             }
 
             static std::string _par_name(const std::string & ff_name)
@@ -741,30 +751,22 @@ namespace eos
                 return new BSZ2015FormFactors(parameters, options);
             }
 
-            virtual double v(const double & s) const
+            virtual complex<double> v(const complex<double> & s) const
             {
                 return _calc_ff(s, Process_::mR2_1m, _a_V);
             }
 
-            virtual double a_0(const double & s) const
+            virtual complex<double> a_0(const complex<double> & s) const
             {
                 return _calc_ff(s, Process_::mR2_0m, _a_A0);
             }
 
-            virtual double a_1(const double & s) const
+            virtual complex<double> a_1(const complex<double> & s) const
             {
                 return _calc_ff(s, Process_::mR2_1p, _a_A1);
             }
 
-            virtual double a_2(const double & s) const
-            {
-                const double lambda = eos::lambda(_mB2, _mV2, s);
-
-                return (power_of<2>(_mB + _mV) * (_mB2 - _mV2 - s) * a_1(s)
-                        - 16.0 * _mB * _mV2 * (_mB + _mV) * a_12(s)) / lambda;
-            }
-
-            virtual double a_12(const double & s) const
+            virtual complex<double> a_12(const complex<double> & s) const
             {
                 // use constraint (B.6) in [BSZ2015] to remove A_12(0)
                 std::array<double, 3> values
@@ -777,12 +779,20 @@ namespace eos
                 return _calc_ff(s, Process_::mR2_1p, values);
             }
 
-            virtual double t_1(const double & s) const
+            virtual complex<double> a_2(const complex<double> & s) const
+            {
+                const complex<double> lambda = eos::lambda(complex<double>(_mB2, 0.0), complex<double>(_mV2, 0.0), s);
+
+                return (power_of<2>(_mB + _mV) * (_mB2 - _mV2 - s) * a_1(s)
+                        - 16.0 * _mB * _mV2 * (_mB + _mV) * a_12(s)) / lambda;
+            }
+
+            virtual complex<double> t_1(const complex<double> & s) const
             {
                 return _calc_ff(s, Process_::mR2_1m, _a_T1);
             }
 
-            virtual double t_2(const double & s) const
+            virtual complex<double> t_2(const complex<double> & s) const
             {
                 // use constraint T_1(0) = T_2(0) to replace T_2(0)
                 std::array<double, 3> values
@@ -794,17 +804,57 @@ namespace eos
                 return _calc_ff(s, Process_::mR2_1p, values);
             }
 
+            virtual complex<double> t_23(const complex<double> & s) const
+            {
+                return _calc_ff(s, Process_::mR2_1p, _a_T23);
+            }
+
+            virtual double v(const double & s) const
+            {
+                return real(v(complex<double>(s)));
+            }
+
+            virtual double a_0(const double & s) const
+            {
+                return real(a_0(complex<double>(s)));
+            }
+
+            virtual double a_1(const double & s) const
+            {
+                return real(a_1(complex<double>(s)));
+            }
+
+            virtual double a_12(const double & s) const
+            {
+                return real(a_12(complex<double>(s)));
+            }
+
+            virtual double a_2(const double & s) const
+            {
+                return real(a_2(complex<double>(s)));
+            }
+
+            virtual double t_1(const double & s) const
+            {
+                return real(t_1(complex<double>(s)));
+            }
+
+            virtual double t_2(const double & s) const
+            {
+                return real(t_2(complex<double>(s)));
+            }
+
+            virtual double t_23(const double & s) const
+            {
+                return real(t_23(complex<double>(s)));
+            }
+
             virtual double t_3(const double & s) const
             {
                 const double lambda = eos::lambda(_mB2, _mV2, s);
 
                 return ((_mB2 - _mV2) * (_mB2 + 3.0 * _mV2 - s) * t_2(s)
                         - 8.0 * _mB * _mV2 * (_mB - _mV) * t_23(s)) / lambda;
-            }
-
-            virtual double t_23(const double & s) const
-            {
-                return _calc_ff(s, Process_::mR2_1p, _a_T23);
             }
 
             virtual double f_perp(const double & s) const
@@ -1222,17 +1272,27 @@ namespace eos
                 return tau_p * (1.0 - std::sqrt(1.0 - tau_m / tau_p));
             }
 
-            double _calc_z(const double & s) const
+            complex<double> _calc_z(const complex<double> & s) const
             {
+                const complex<double> tau_p(_tau_p, 0.0);
+                const complex<double> tau_0(_tau_0, 0.0);
+
                 return (std::sqrt(_tau_p - s) - std::sqrt(_tau_p - _tau_0)) / (std::sqrt(_tau_p - s) + std::sqrt(_tau_p - _tau_0));
             }
 
-            template <typename Parameter_>
-            double _calc_ff(const double & s, const double & m2_R, const std::array<Parameter_, 3> & a) const
+            double _calc_z(const double & s) const
             {
-                const double diff_z = _calc_z(s) - _z_0;
+                return real(_calc_z(complex<double>(s, 0.0)));
+            }
+
+            template <typename Parameter_>
+            complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const std::array<Parameter_, 3> & a) const
+            {
+                const complex<double> a_0(a[0]), a_1(a[1]), a_2(a[2]);
+
+                const complex<double> diff_z = _calc_z(s) - _z_0;
                 return 1.0 / (1.0 - s / m2_R) *
-                       (a[0] + a[1] * diff_z + a[2] * power_of<2>(diff_z));
+                       (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z));
             }
 
             static std::string _par_name(const std::string & ff_name)
@@ -1269,17 +1329,17 @@ namespace eos
                 return new BSZ2015FormFactors(parameters, options);
             }
 
-            virtual double f_p(const double & s) const
+            virtual complex<double> f_p(const complex<double> & s) const
             {
                 return _calc_ff(s, Process_::m2_Br1m, _a_fp);
             }
 
-            virtual double f_t(const double & s) const
+            virtual complex<double> f_t(const complex<double> & s) const
             {
                 return _calc_ff(s, Process_::m2_Br1m, _a_ft);
             }
 
-            virtual double f_0(const double & s) const
+            virtual complex<double> f_0(const complex<double> & s) const
             {
                 // use equation of motion to replace f_0(0) by f_+(0)
                 std::array<double, 3> values
@@ -1292,9 +1352,29 @@ namespace eos
                 return _calc_ff(s, Process_::m2_Br0p, values);
             }
 
-            virtual double f_plus_T(const double & s) const
+            virtual complex<double> f_plus_T(const complex<double> & s) const
             {
                 return _calc_ff(s, Process_::m2_Br1m, _a_ft) * s / _mB / (_mB + _mP);
+            }
+
+            virtual double f_p(const double & s) const
+            {
+                return real(f_p(complex<double>(s)));
+            }
+
+            virtual double f_t(const double & s) const
+            {
+                return real(f_t(complex<double>(s)));
+            }
+
+            virtual double f_0(const double & s) const
+            {
+                return real(f_0(complex<double>(s)));
+            }
+
+            virtual double f_plus_T(const double & s) const
+            {
+                return real(f_plus_T(complex<double>(s)));
             }
     };
 
