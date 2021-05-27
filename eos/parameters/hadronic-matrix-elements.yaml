@@ -4017,216 +4017,33 @@ groups:
           unit:     'GeV^-2'
           latex:    '$\chi_{\mathrm{OPE}}$'
           comments: 'Dispersive bound in the OPE at t_s = -m_b^2'
-      'B->K^*ccbar::Re{alpha_0^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_0^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_1^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_1^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_2^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_2^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_0^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_0^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_1^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_1^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_2^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_2^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_0^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_0^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_1^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_1^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_2^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_2^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,2}^{B\to K^*c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_0^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_0^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_1^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_1^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_2^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_2^perp}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_0^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_0^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_1^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_1^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_2^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_2^para}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_0^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_0^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_1^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_1^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_2^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_2^long}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,2}^{B_s\to \phi c\bar{c}}$'
-      'B->Kccbar::Re{alpha_0^plus}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{+,0}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Im{alpha_0^plus}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{+,0}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Re{alpha_1^plus}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{+,1}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Im{alpha_1^plus}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{+,1}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Re{alpha_2^plus}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{+,2}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Im{alpha_2^plus}@GvDV2020' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{+,2}^{B\to Kc\bar{c}}$'
+      'B->K^*ccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to K^*c\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3" ]
+              - [ "perp", "para", "long"]
+      'B_s->phiccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B_s\to \phi c\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3" ]
+              - [ "perp", "para", "long"]
+      'B->Kccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to Kc\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3" ]
+              - [ "plus" ]
       'b->sccbar::chiOPE@GRvDV2021' :
           central: +0.000181
           min:     +0.000179
@@ -4234,216 +4051,33 @@ groups:
           unit:     'GeV^-2'
           latex:    '$\chi_{\mathrm{OPE}}$'
           comments: 'Dispersive bound in the OPE at t_s = -m_b^2'
-      'B->K^*ccbar::Re{alpha_0^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_0^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_1^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_1^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_2^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_2^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_0^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_0^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_1^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_1^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_2^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_2^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_0^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_0^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,0}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_1^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_1^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,1}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Re{alpha_2^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,2}^{B\to K^*c\bar{c}}$'
-      'B->K^*ccbar::Im{alpha_2^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,2}^{B\to K^*c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_0^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_0^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_1^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_1^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_2^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\perp,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_2^perp}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\perp,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_0^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_0^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_1^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_1^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_2^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{\parallel,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_2^para}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{\parallel,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_0^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_0^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,0}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_1^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_1^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,1}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Re{alpha_2^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{0,2}^{B_s\to \phi c\bar{c}}$'
-      'B_s->phiccbar::Im{alpha_2^long}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{0,2}^{B_s\to \phi c\bar{c}}$'
-      'B->Kccbar::Re{alpha_0^plus}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{+,0}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Im{alpha_0^plus}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{+,0}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Re{alpha_1^plus}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{+,1}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Im{alpha_1^plus}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{+,1}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Re{alpha_2^plus}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Re}\, \alpha_{+,2}^{B\to Kc\bar{c}}$'
-      'B->Kccbar::Im{alpha_2^plus}@GRvDV2021' :
-          central: +0.0
-          min:     +0.0
-          max:     +0.0
-          latex:    '$\mathrm{Im}\, \alpha_{+,2}^{B\to Kc\bar{c}}$'
+      'B->K^*ccbar::%1%{alpha_%2%^%3%}@GRvDV2021' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to K^*c\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3" ]
+              - [ "perp", "para", "long"]
+      'B_s->phiccbar::%1%{alpha_%2%^%3%}@GRvDV2021' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B_s\to \phi c\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3" ]
+              - [ "perp", "para", "long"]
+      'B->Kccbar::%1%{alpha_%2%^%3%}@GRvDV2021' :
+          central: 0
+          min:     0
+          max:     0
+          latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to Kc\bar{c}}$'
+          matrix:
+              - [ "Re", "Im" ]
+              - [ "0", "1", "2", "3" ]
+              - [ "plus" ]
   # }}}
 
   # Miscellaneous Form Factor Parameters

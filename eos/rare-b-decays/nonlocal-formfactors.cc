@@ -18,16 +18,16 @@
  */
 
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
-using std::sin;
-using std::cos;
-using std::sqrt;
-
-
 namespace eos
 {
+    using std::sin;
+    using std::cos;
+    using std::sqrt;
+
     // B -> P
     NonlocalFormFactor<nff::PToP>::~NonlocalFormFactor()
     {
@@ -107,28 +107,45 @@ namespace eos
         }
 
         //Expansion in z monomials (they form a basis on the unit circle)
-        complex<double> P(complex<double> z, const complex<double> & alpha_0, const complex<double> & alpha_1, const complex<double> & alpha_2)
+        complex<double> P(complex<double> z, const complex<double> alpha[4])
         {
-            return 1.0 / sqrt(2*M_PI) * (alpha_0 + alpha_1*z + alpha_2*z*z);
+            return 1.0 / sqrt(2*M_PI) * (alpha[0] + z * (alpha[1] + z * (alpha[2] + z * alpha[3])));
         }
 
         //Expansion in polynomials orthogonal on the arc of the unit circle (zXY, zXY*)
-        complex<double> PGvDV2020(complex<double> z, const complex<double> zXY,
-            const complex<double> & alpha_0, const complex<double> & alpha_1, const complex<double> & alpha_2)
+        complex<double> PGvDV2020(complex<double> z, const complex<double> zXY, const complex<double> alpha[4])
         {
 
-            const double alphaXY = std::abs(std::arg(zXY));
+            const double alphaXY  = std::abs(std::arg(zXY));
+            const double alphaXY2 = power_of<2>(alphaXY);
+            const double alphaXY3 = power_of<3>(alphaXY);
 
-            const double denom = 2*pow(alphaXY, 2) + cos(2*alphaXY) - 1;
+            double denom = 2 * alphaXY2 + cos(2 * alphaXY) - 1;
 
-            const complex<double> P0z = 1.0/sqrt(2*alphaXY);
-            const complex<double> P1z = (z - sin(alphaXY)/alphaXY)*sqrt(alphaXY/denom);
-            const complex<double> P2z = ( z*z + z*sin(alphaXY)*(sin(2*alphaXY)-2*alphaXY)/denom +
-                                        2*sin(alphaXY)*(sin(alphaXY)-alphaXY*cos(alphaXY))/denom) *
-                                        sqrt( 2*denom/(-9*alphaXY + 8*pow(alphaXY,3) + 8*alphaXY*cos(2*alphaXY) +
-                                        alphaXY*cos(4*alphaXY) + 4*sin(2*alphaXY) - 2*sin(4*alphaXY)) );
+            const complex<double> P0z = 1.0 / sqrt(2 * alphaXY);
+            const complex<double> P1z = (z - sin(alphaXY) / alphaXY) * sqrt(alphaXY / denom);
+            const complex<double> P2z = (z * z + z * sin(alphaXY) * (sin(2 * alphaXY) - 2 * alphaXY) / denom +
+                                        2 * sin(alphaXY) * (sin(alphaXY) - alphaXY * cos(alphaXY)) / denom) *
+                                        sqrt(2 * denom / (-9 * alphaXY + 8 * alphaXY3 + 8 * alphaXY * cos(2 * alphaXY) +
+                                        alphaXY * cos(4 * alphaXY) + 4 * sin(2 * alphaXY) - 2 * sin(4 * alphaXY)));
 
-            return alpha_0*P0z + alpha_1*P1z + alpha_2*P2z;
+            denom = -9 * alphaXY + 8 * alphaXY3 + 8 * alphaXY * cos(2 * alphaXY) + alphaXY * cos(4 * alphaXY) + 4 * sin(2 * alphaXY) - 2 * sin(4 * alphaXY);
+
+            const complex<double> P3z_norm = 12.0 * sqrt(
+                (2 * alphaXY - sin(2 * alphaXY)) * (2 * (-1 + alphaXY2 + cos(2 * alphaXY)) + alphaXY * sin(2 * alphaXY)) /
+                ( 419 + 32 * alphaXY2 * (-65 + 36 * alphaXY2) + 16 * (-53 + 108 * alphaXY2) * cos(2 * alphaXY) +
+                    4 * (151 + 72 * alphaXY2) * cos(4 * alphaXY) + cos(8 * alphaXY) + 16 * ((-11 + 4 * alphaXY2) * cos(6*alphaXY) +
+                    96 * alphaXY * (5 * cos(alphaXY) + cos(3 * alphaXY)) * power_of<3>(sin(alphaXY))))
+            );
+            const complex<double> P3z_0 = - sin(alphaXY) * (15 + 8 * alphaXY2 + 16 * (-1 + alphaXY2) * cos(2 * alphaXY) + cos(4 * alphaXY) -
+                24 * alphaXY * sin(2 * alphaXY)) / (3 * denom);
+            const complex<double> P3z_1 = sin(alphaXY) * (-12 * alphaXY * cos(alphaXY) + 9 * sin(alphaXY) + sin(3 * alphaXY)) /
+                (12 * (-1 + alphaXY2 + cos(2 * alphaXY)) + 6 * alphaXY * sin(2 * alphaXY));
+            const complex<double> P3z_2 = sin(alphaXY) * (9 - 24 * alphaXY2 - 16 * cos(2 * alphaXY) + 7 * cos(4 * alphaXY) +
+                4 * alphaXY * (4 * sin(2 * alphaXY) + sin(4 * alphaXY))) / (3 * denom);
+            const complex<double> P3z = P3z_norm * (z * z * z + P3z_2 * z * z + P3z_1 * z + P3z_0);
+
+            return alpha[0] * P0z + alpha[1] * P1z + alpha[2] * P2z + alpha[3] * P3z;
         }
 
     }

@@ -53,6 +53,8 @@ class NonlocalFormFactorGvDV2020Test :
                 p["B->Kccbar::Im{alpha_1^plus}@GvDV2020"]    = 5.0;
                 p["B->Kccbar::Re{alpha_2^plus}@GvDV2020"]    = 6.0;
                 p["B->Kccbar::Im{alpha_2^plus}@GvDV2020"]    = 7.0;
+                p["B->Kccbar::Re{alpha_3^plus}@GvDV2020"]    = 0.0;
+                p["B->Kccbar::Im{alpha_3^plus}@GvDV2020"]    = 0.0;
 
                 Options o = { { "model", "WET" } };
 
@@ -76,8 +78,8 @@ class NonlocalFormFactorGvDV2020Test :
                     std::make_pair( -16.3399, eps),            // Re{phi_+(q2 = 16.0)}
                     std::make_pair( 2.06922,  eps),            // Im{phi_+(q2 = 16.0)}
 
-                    std::make_pair( 5.73999,  eps),            // Re{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, 2.0, 3.0, 4.0)}
-                    std::make_pair( 0.0,      eps),            // Im{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, 2.0, 3.0, 4.0)}
+                    std::make_pair( -10.19932, eps),           // Re{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}
+                    std::make_pair( 0.0,      eps),            // Im{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}
 
 
                 };
@@ -131,6 +133,8 @@ class NonlocalFormFactorGvDV2021Test :
                 p["B->Kccbar::Im{alpha_1^plus}@GRvDV2021"]    = 5.0;
                 p["B->Kccbar::Re{alpha_2^plus}@GRvDV2021"]    = 6.0;
                 p["B->Kccbar::Im{alpha_2^plus}@GRvDV2021"]    = 7.0;
+                p["B->Kccbar::Re{alpha_3^plus}@GRvDV2021"]    = 0.0;
+                p["B->Kccbar::Im{alpha_3^plus}@GRvDV2021"]    = 0.0;
 
                 Options o = { { "model", "WET" } };
 
@@ -154,7 +158,7 @@ class NonlocalFormFactorGvDV2021Test :
                     std::make_pair( 1.16924,  eps),            // Re{P(q2 = 1.0, 2.0, 3.0, 4.0)}
                     std::make_pair( 0.0,      eps),            // Im{P(q2 = 1.0, 2.0, 3.0, 4.0)}
                     std::make_pair( 1.16924,  eps),            // Re{P(q2 = 1.0, (2.0,5.0), (3.0,6.0), (4.0,7.0))}
-                    std::make_pair( 2.71519,  eps),            // Im{P(q2 = 1.0, (2.0,5.0), (3.0,6.0), (4.0,7.0))}
+                    std::make_pair( 2.75715,  eps),            // Im{P(q2 = 1.0, (2.0,5.0), (3.0,6.0), (4.0,7.0))}
 
                 };
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
