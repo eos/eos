@@ -253,4 +253,137 @@ B_s->phimu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2015C:
         - [ 0.15, 0.00, 0.40,-0.06, 0.19,-0.02, 1.00,-0.02 ]
         - [-0.01, 0.02, 0.14, 0.28,-0.05, 0.18,-0.02, 1.00 ]
     dof: 8
+#
+B_s->phimu^+mu^-::AngularObservablesNoA[0.10,2.00]@LHCb-2015C:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3
+        - B_s->phill::S_4
+        - B_s->phill::S_7
+    kinematics:
+        [ {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00} ]
+    options:
+        [ {l: mu}, {l: mu}, {l: mu}, {l: mu}]
+    means: [ 0.20, -0.05, 0.27, 0.04 ]
+    sigma-stat-hi: [ 0.08, 0.13, 0.28, 0.12 ]
+    sigma-stat-lo: [ 0.09, 0.13, 0.18, 0.12 ]
+    sigma-sys: [ 0.02, 0.01, 0.01, 0.00 ]
+    correlations:
+        - [ 1.00, 0.03,-0.15, 0.10 ]
+        - [ 0.03, 1.00, 0.04, 0.05 ]
+        - [-0.15, 0.04, 1.00,-0.19 ]
+        - [ 0.10, 0.05,-0.19, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[2.00,5.00]@LHCb-2015C:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3
+        - B_s->phill::S_4
+        - B_s->phill::S_7
+    kinematics:
+        [ {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00} ]
+    options:
+        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+    means: [ 0.68, -0.06, -0.47, -0.03 ]
+    sigma-stat-hi: [ 0.16, 0.19, 0.30, 0.18 ]
+    sigma-stat-lo: [ 0.13, 0.23, 0.44, 0.23 ]
+    sigma-sys: [ 0.03, 0.01, 0.01, 0.01 ]
+    correlations:
+        - [ 1.00,-0.05, 0.27, 0.02 ]
+        - [-0.05, 1.00,-0.23, 0.20 ]
+        - [ 0.27,-0.23, 1.00, 0.14 ]
+        - [ 0.02, 0.20, 0.14, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[5.00,8.00]@LHCb-2015C:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3
+        - B_s->phill::S_4
+        - B_s->phill::S_7
+    kinematics:
+        [ {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00} ]
+    options:
+        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+    means: [ 0.54, -0.10, -0.10, 0.04 ]
+    sigma-stat-hi: [ 0.10, 0.20, 0.15, 0.16 ]
+    sigma-stat-lo: [ 0.09, 0.29, 0.18, 0.20 ]
+    sigma-sys: [ 0.02, 0.01, 0.01, 0.01 ]
+    correlations:
+        - [ 1.00,-0.03,-0.01, 0.03 ]
+        - [-0.03, 1.00,-0.03,-0.18 ]
+        - [-0.01,-0.03, 1.00,-0.03 ]
+        - [ 0.03,-0.18,-0.03, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb-2015C:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3
+        - B_s->phill::S_4
+        - B_s->phill::S_7
+    kinematics:
+        [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
+    options:
+        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+    means: [ 0.29, -0.19, -0.47, 0.00]
+    sigma-stat-hi: [ 0.11, 0.20, 0.21, 0.15 ]
+    sigma-stat-lo: [ 0.11, 0.23, 0.29, 0.17 ]
+    sigma-sys: [ 0.04, 0.01, 0.01, 0.01 ]
+    correlations:
+        - [ 1.00, 0.21, 0.11, 0.21 ]
+        - [ 0.21, 1.00, 0.02, 0.08 ]
+        - [ 0.11, 0.02, 1.00, 0.26 ]
+        - [ 0.21, 0.08, 0.26, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[15.00,17.00]@LHCb-2015C:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3
+        - B_s->phill::S_4
+        - B_s->phill::S_7
+    kinematics:
+        [ {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00} ]
+    options:
+        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+    means: [ 0.23, -0.06, -0.03, 0.12 ]
+    sigma-stat-hi: [ 0.09, 0.16, 0.15, 0.16 ]
+    sigma-stat-lo: [ 0.08, 0.19, 0.15, 0.13 ]
+    sigma-sys: [ 0.02, 0.01, 0.01, 0.01 ]
+    correlations:
+        - [ 1.00,-0.01,-0.01, 0.06 ]
+        - [-0.01, 1.00, 0.03,-0.08 ]
+        - [-0.01, 0.03, 1.00, 0.04 ]
+        - [ 0.06,-0.08, 0.04, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[17.00,19.00]@LHCb-2015C:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3
+        - B_s->phill::S_4
+        - B_s->phill::S_7
+    kinematics:
+        [ {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00} ]
+    options:
+        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+    means: [ 0.40, -0.07, -0.39, 0.20 ]
+    sigma-stat-hi: [ 0.13, 0.23, 0.25, 0.29 ]
+    sigma-stat-lo: [ 0.15, 0.27, 0.34, 0.22 ]
+    sigma-sys: [ 0.02, 0.02, 0.02, 0.01 ]
+    correlations:
+        - [ 1.00,-0.12, 0.08,-0.04 ]
+        - [-0.12, 1.00,-0.04, 0.22 ]
+        - [ 0.08,-0.04, 1.00,-0.13 ]
+        - [-0.04, 0.22,-0.13, 1.00 ]
+    dof: 4
 # }}}
