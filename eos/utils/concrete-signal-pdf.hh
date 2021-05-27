@@ -25,6 +25,7 @@
 #include <eos/utils/density-impl.hh>
 #include <eos/utils/tuple-maker.hh>
 
+#include <cmath>
 #include <functional>
 #include <limits>
 #include <string>

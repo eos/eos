@@ -20,6 +20,8 @@
 #ifndef EOS_GUARD_EOS_UTILS_TUPLE_MAKER_HH
 #define EOS_GUARD_EOS_UTILS_TUPLE_MAKER_HH 1
 
+#include <eos/utils/kinematic.hh>
+
 #include <array>
 #include <tuple>
 #include <utility>
