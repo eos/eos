@@ -59,27 +59,38 @@ namespace eos
         public:
             virtual ~FormFactors();
 
-            virtual double v(const double & s) const = 0;
+            virtual double v(const double & q2) const = 0;
 
-            virtual double a_0(const double & s) const = 0;
-            virtual double a_1(const double & s) const = 0;
-            virtual double a_2(const double & s) const = 0;
-            virtual double a_12(const double & s) const = 0;
+            virtual double a_0(const double & q2) const = 0;
+            virtual double a_1(const double & q2) const = 0;
+            virtual double a_2(const double & q2) const = 0;
+            virtual double a_12(const double & q2) const = 0;
 
-            virtual double t_1(const double & s) const = 0;
-            virtual double t_2(const double & s) const = 0;
-            virtual double t_3(const double & s) const = 0;
-            virtual double t_23(const double & s) const = 0;
+            virtual double t_1(const double & q2) const = 0;
+            virtual double t_2(const double & q2) const = 0;
+            virtual double t_3(const double & q2) const = 0;
+            virtual double t_23(const double & q2) const = 0;
 
-            virtual double f_perp(const double & s) const = 0;
-            virtual double f_para(const double & s) const = 0;
-            virtual double f_long(const double & s) const = 0;
+            virtual double f_perp(const double & q2) const = 0;
+            virtual double f_para(const double & q2) const = 0;
+            virtual double f_long(const double & q2) const = 0;
 
-            virtual double f_perp_T(const double & s) const = 0;
-            virtual double f_para_T(const double & s) const = 0;
-            virtual double f_long_T(const double & s) const = 0;
-            virtual double f_long_T_Normalized(const double & s) const = 0;
+            virtual double f_perp_T(const double & q2) const = 0;
+            virtual double f_para_T(const double & q2) const = 0;
+            virtual double f_long_T(const double & q2) const = 0;
+            virtual double f_long_T_Normalized(const double & q2) const = 0;
 
+            // for access in the complex q2 plane
+            virtual complex<double> v(const complex<double> & q2) const;
+
+            virtual complex<double> a_0(const complex<double> & q2) const;
+            virtual complex<double> a_1(const complex<double> & q2) const;
+            virtual complex<double> a_12(const complex<double> & q2) const;
+            virtual complex<double> a_2(const complex<double> & q2) const;
+
+            virtual complex<double> t_1(const complex<double> & q2) const;
+            virtual complex<double> t_2(const complex<double> & q2) const;
+            virtual complex<double> t_23(const complex<double> & q2) const;
     };
 
     template <>
@@ -113,6 +124,12 @@ namespace eos
 
             virtual double f_p_d1(const double & s) const;
             virtual double f_p_d2(const double & s) const;
+
+            // for access in the complex q2 plane
+            virtual complex<double> f_p(const complex<double> & q2) const;
+            virtual complex<double> f_0(const complex<double> & q2) const;
+            virtual complex<double> f_t(const complex<double> & q2) const;
+
     };
 
     template <>

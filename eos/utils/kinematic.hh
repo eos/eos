@@ -229,7 +229,8 @@ namespace eos
 
     };
 
-    inline double lambda(const double & a, const double & b, const double & c)
+    template <typename T>
+    inline T lambda(const T & a, const T & b, const T & c)
     {
         return a * a + b * b + c * c - 2.0 * (a * b + a * c + b * c);
     }
