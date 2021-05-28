@@ -95,9 +95,14 @@ namespace eos
     namespace nff_utils
     {
 
-        complex<double> z(const double & q2, complex<double> s_plus, complex<double> s_0)
+        complex<double> z(const complex<double> & q2, complex<double> s_plus, complex<double> s_0)
         {
             return (pow(s_plus - q2, 0.5) - pow(s_plus - s_0, 0.5)) / (pow(s_plus - q2, 0.5) + pow(s_plus - s_0, 0.5));
+        }
+
+        complex<double> z(const double & q2, complex<double> s_plus, complex<double> s_0)
+        {
+            return z(complex<double>(q2, 0.0), s_plus, s_0);
         }
 
         // Blaschke factor capturing the two poles for J/psi and psi(2S).
