@@ -77,6 +77,7 @@ namespace eos
             ///@{
 
             virtual complex<double> H_plus(const double & q2) const = 0;
+            virtual complex<double> H_plus(const complex<double> & q2) const = 0;
             virtual complex<double> Hhat_plus(const double & q2) const = 0;
 
             ///@}
@@ -92,6 +93,8 @@ namespace eos
             ///@{
 
             virtual complex<double> ratio_plus(const double & q2) const = 0;
+            virtual complex<double> ratio_plus(const complex<double> & q2) const = 0;
+            virtual complex<double> F_ratio_plus(const complex<double> & q2) const = 0;
 
             ///@}
 
@@ -161,6 +164,11 @@ namespace eos
             double im_ratio_plus(const double & q2) const;
             double abs_ratio_plus(const double & q2) const;
 
+            double re_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
+            double im_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
+            double re_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
+            double im_F_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
+
             ///@}
 
             /*!
@@ -210,6 +218,11 @@ namespace eos
             virtual complex<double> H_long(const double & q2) const = 0;
             virtual complex<double> Hhat_long(const double & q2) const = 0;
 
+            virtual complex<double> H_perp(const complex<double> & q2) const = 0;
+            virtual complex<double> H_para(const complex<double> & q2) const = 0;
+            virtual complex<double> H_long(const complex<double> & q2) const = 0;
+
+
             ///@}
 
             ///@name Evaluate the first normalized moment of the formfactor.
@@ -228,6 +241,14 @@ namespace eos
             virtual complex<double> ratio_perp(const double & q2) const = 0;
             virtual complex<double> ratio_para(const double & q2) const = 0;
             virtual complex<double> ratio_long(const double & q2) const = 0;
+
+            virtual complex<double> ratio_perp(const complex<double> & q2) const = 0;
+            virtual complex<double> ratio_para(const complex<double> & q2) const = 0;
+            virtual complex<double> ratio_long(const complex<double> & q2) const = 0;
+
+            virtual complex<double> F_ratio_perp(const complex<double> & q2) const = 0;
+            virtual complex<double> F_ratio_para(const complex<double> & q2) const = 0;
+            virtual complex<double> F_ratio_long(const complex<double> & q2) const = 0;
 
             ///@}
 
@@ -325,6 +346,19 @@ namespace eos
             double re_ratio_long(const double & q2) const;
             double im_ratio_long(const double & q2) const;
             double abs_ratio_long(const double & q2) const;
+
+            double re_ratio_perp_complex(const double & re_q2, const double & im_q2) const;
+            double im_ratio_perp_complex(const double & re_q2, const double & im_q2) const;
+            double re_ratio_para_complex(const double & re_q2, const double & im_q2) const;
+            double im_ratio_para_complex(const double & re_q2, const double & im_q2) const;
+            double re_ratio_long_complex(const double & re_q2, const double & im_q2) const;
+            double im_ratio_long_complex(const double & re_q2, const double & im_q2) const;
+            double re_F_ratio_perp_complex(const double & re_q2, const double & im_q2) const;
+            double im_F_ratio_perp_complex(const double & re_q2, const double & im_q2) const;
+            double re_F_ratio_para_complex(const double & re_q2, const double & im_q2) const;
+            double im_F_ratio_para_complex(const double & re_q2, const double & im_q2) const;
+            double re_F_ratio_long_complex(const double & re_q2, const double & im_q2) const;
+            double im_F_ratio_long_complex(const double & re_q2, const double & im_q2) const;
             ///@}
 
             /*!
@@ -344,6 +378,7 @@ namespace eos
     namespace nff_utils
     {
 
+        complex<double> z(const complex<double> & q2, complex<double> s_plus, complex<double> s_0);
         complex<double> z(const double & q2, complex<double> s_plus, complex<double> s_0);
         complex<double> blaschke_cc(const complex<double> z, const complex<double> z_Jpsi, const complex<double> z_psi2S);
         complex<double> P(complex<double> z, const complex<double> alpha[4]);

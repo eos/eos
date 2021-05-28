@@ -1242,7 +1242,7 @@ groups:
           latex:    '$\alpha_{T_{23},2}^{B \to \rho,\mathrm{BSZ2015}}$'
       # form-factor parameters for B->K*
       # new updated results based on a combined LQCD+LCSR fit from the GKvD2018 calculation
-      # Use (B.6) of [BSZ:2015A] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
+      # Use (D.6) of [BSZ:2015A] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
       'B->K^*::alpha^A0_0@BSZ2015' :
           central: +0.333565209671414
           min:     +0.333565209671414
