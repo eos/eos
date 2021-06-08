@@ -104,16 +104,16 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
             {
                 Parameters p = Parameters::Defaults();
                 // the rest of input is fixed to default EOS values
-                p["b->cmunumu::Re{cVL}"]   =  1.0;
-                p["b->cmunumu::Im{cVL}"]   = -1.0;
-                p["b->cmunumu::Re{cVR}"]   =  2.0;
-                p["b->cmunumu::Im{cVR}"]   = -2.0;
-                p["b->cmunumu::Re{cSL}"]   =  3.0;
-                p["b->cmunumu::Im{cSL}"]   = -3.0;
-                p["b->cmunumu::Re{cSR}"]   =  4.0;
-                p["b->cmunumu::Im{cSR}"]   = -4.0;
-                p["b->cmunumu::Re{cT}"]    =  0.0;
-                p["b->cmunumu::Im{cT}"]    =  0.0;
+                p["cbmunumu::Re{cVL}"]   =  1.0;
+                p["cbmunumu::Im{cVL}"]   = -1.0;
+                p["cbmunumu::Re{cVR}"]   =  2.0;
+                p["cbmunumu::Im{cVR}"]   = -2.0;
+                p["cbmunumu::Re{cSL}"]   =  3.0;
+                p["cbmunumu::Im{cSL}"]   = -3.0;
+                p["cbmunumu::Re{cSR}"]   =  4.0;
+                p["cbmunumu::Im{cSR}"]   = -4.0;
+                p["cbmunumu::Re{cT}"]    =  0.0;
+                p["cbmunumu::Im{cT}"]    =  0.0;
                 // fix the scale
                 p["mu"]                    =  4.18;
                 p["mass::b(MSbar)"]        =  4.18;
@@ -142,16 +142,16 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
             {
                 Parameters p = Parameters::Defaults();
                 // the rest of input is fixed to default EOS values
-                p["b->cmunumu::Re{cVL}"]   =  1.0;
-                p["b->cmunumu::Im{cVL}"]   = -1.0;
-                p["b->cmunumu::Re{cVR}"]   =  2.0;
-                p["b->cmunumu::Im{cVR}"]   = -2.0;
-                p["b->cmunumu::Re{cSL}"]   =  3.0;
-                p["b->cmunumu::Im{cSL}"]   = -3.0;
-                p["b->cmunumu::Re{cSR}"]   =  4.0;
-                p["b->cmunumu::Im{cSR}"]   = -4.0;
-                p["b->cmunumu::Re{cT}"]    =  1.0;
-                p["b->cmunumu::Im{cT}"]    = -2.0;
+                p["cbmunumu::Re{cVL}"]   =  1.0;
+                p["cbmunumu::Im{cVL}"]   = -1.0;
+                p["cbmunumu::Re{cVR}"]   =  2.0;
+                p["cbmunumu::Im{cVR}"]   = -2.0;
+                p["cbmunumu::Re{cSL}"]   =  3.0;
+                p["cbmunumu::Im{cSL}"]   = -3.0;
+                p["cbmunumu::Re{cSR}"]   =  4.0;
+                p["cbmunumu::Im{cSR}"]   = -4.0;
+                p["cbmunumu::Re{cT}"]    =  1.0;
+                p["cbmunumu::Im{cT}"]    = -2.0;
                 // fix the scale
                 p["mu"]                    =  4.18;
                 p["mass::b(MSbar)"]        =  4.18;
