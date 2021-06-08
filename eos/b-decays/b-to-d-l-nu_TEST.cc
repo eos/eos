@@ -168,8 +168,8 @@ class BToDLeptonNeutrinoTest :
                 p["mass::B_d"]             =  5.279;
                 p["mass::D_d"]             =  1.870;
                 // by default, all other couplings are zero in eos
-                p["b->cmunumu::Re{cVL}"]   =  1.0066;  // include Sirlin correction
-                p["b->ctaunutau::Re{cVL}"] =  1.0066;  // include Sirlin correction
+                p["cbmunumu::Re{cVL}"]   =  1.0066;  // include Sirlin correction
+                p["cbtaunutau::Re{cVL}"] =  1.0066;  // include Sirlin correction
 
                 Options oo
                 {
@@ -221,27 +221,27 @@ class BToDLeptonNeutrinoTest :
                 p["mass::b(MSbar)"]        =  4.18;
                 p["mass::c"]               =  1.275;
                 // mu mode
-                p["b->cmunumu::Re{cVL}"]         = +1.0 * etaEW;
-                p["b->cmunumu::Im{cVL}"]         = -2.0 * etaEW;
-                p["b->cmunumu::Re{cVR}"]         = +2.0 * etaEW;
-                p["b->cmunumu::Im{cVR}"]         = -2.0 * etaEW;
-                p["b->cmunumu::Re{cSL}"]         = +3.0 * etaEW;
-                p["b->cmunumu::Im{cSL}"]         = -3.0 * etaEW;
-                p["b->cmunumu::Re{cSR}"]         = +4.0 * etaEW;
-                p["b->cmunumu::Im{cSR}"]         = -4.0 * etaEW;
-                p["b->cmunumu::Re{cT}"]          = +5.0 * etaEW;
-                p["b->cmunumu::Im{cT}"]          = -5.0 * etaEW;
+                p["cbmunumu::Re{cVL}"]         = +1.0 * etaEW;
+                p["cbmunumu::Im{cVL}"]         = -2.0 * etaEW;
+                p["cbmunumu::Re{cVR}"]         = +2.0 * etaEW;
+                p["cbmunumu::Im{cVR}"]         = -2.0 * etaEW;
+                p["cbmunumu::Re{cSL}"]         = +3.0 * etaEW;
+                p["cbmunumu::Im{cSL}"]         = -3.0 * etaEW;
+                p["cbmunumu::Re{cSR}"]         = +4.0 * etaEW;
+                p["cbmunumu::Im{cSR}"]         = -4.0 * etaEW;
+                p["cbmunumu::Re{cT}"]          = +5.0 * etaEW;
+                p["cbmunumu::Im{cT}"]          = -5.0 * etaEW;
                 // tau mode
-                p["b->ctaunutau::Re{cVL}"]       = +1.0 * etaEW;
-                p["b->ctaunutau::Im{cVL}"]       = -5.0 * etaEW;
-                p["b->ctaunutau::Re{cVR}"]       = +2.1 * etaEW;
-                p["b->ctaunutau::Im{cVR}"]       = -6.0 * etaEW;
-                p["b->ctaunutau::Re{cSL}"]       = +3.1 * etaEW;
-                p["b->ctaunutau::Im{cSL}"]       = -7.0 * etaEW;
-                p["b->ctaunutau::Re{cSR}"]       = +4.1 * etaEW;
-                p["b->ctaunutau::Im{cSR}"]       = -8.0 * etaEW;
-                p["b->ctaunutau::Re{cT}"]        = +5.1 * etaEW;
-                p["b->ctaunutau::Im{cT}"]        = -9.0 * etaEW;
+                p["cbtaunutau::Re{cVL}"]       = +1.0 * etaEW;
+                p["cbtaunutau::Im{cVL}"]       = -5.0 * etaEW;
+                p["cbtaunutau::Re{cVR}"]       = +2.1 * etaEW;
+                p["cbtaunutau::Im{cVR}"]       = -6.0 * etaEW;
+                p["cbtaunutau::Re{cSL}"]       = +3.1 * etaEW;
+                p["cbtaunutau::Im{cSL}"]       = -7.0 * etaEW;
+                p["cbtaunutau::Re{cSR}"]       = +4.1 * etaEW;
+                p["cbtaunutau::Im{cSR}"]       = -8.0 * etaEW;
+                p["cbtaunutau::Re{cT}"]        = +5.1 * etaEW;
+                p["cbtaunutau::Im{cT}"]        = -9.0 * etaEW;
 
                 Options oo
                 {

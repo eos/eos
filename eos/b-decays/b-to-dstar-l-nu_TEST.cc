@@ -219,16 +219,16 @@ class BToVectorLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
  
-                p["b->cmunumu::Re{cVL}"].set(+1.2);
-                p["b->cmunumu::Im{cVL}"].set(+0.0);
-                p["b->cmunumu::Re{cVR}"].set(-0.4*1.2);
-                p["b->cmunumu::Im{cVR}"].set(+0.2*1.2);
-                p["b->cmunumu::Re{cSL}"].set(+0.2*1.2);
-                p["b->cmunumu::Im{cSL}"].set(+0.6*1.2);
-                p["b->cmunumu::Re{cSR}"].set(+0.8*1.2);
-                p["b->cmunumu::Im{cSR}"].set(+0.3*1.2);
-                p["b->cmunumu::Re{cT}"].set(-0.1*1.2);
-                p["b->cmunumu::Im{cT}"].set(+0.2*1.2);
+                p["cbmunumu::Re{cVL}"].set(+1.2);
+                p["cbmunumu::Im{cVL}"].set(+0.0);
+                p["cbmunumu::Re{cVR}"].set(-0.4*1.2);
+                p["cbmunumu::Im{cVR}"].set(+0.2*1.2);
+                p["cbmunumu::Re{cSL}"].set(+0.2*1.2);
+                p["cbmunumu::Im{cSL}"].set(+0.6*1.2);
+                p["cbmunumu::Re{cSR}"].set(+0.8*1.2);
+                p["cbmunumu::Im{cSR}"].set(+0.3*1.2);
+                p["cbmunumu::Re{cT}"].set(-0.1*1.2);
+                p["cbmunumu::Im{cT}"].set(+0.2*1.2);
 
                 p["mu"].set(2.295);  // to get m_b,c in amp_P comparable to Martin
 
@@ -291,8 +291,8 @@ class BToVectorLeptonNeutrinoTest :
                 p1["mass::B_d"]                   = +5.279;
                 p1["mass::D_d^*"]                 = +2.0103;
                 // by default, all other couplings are zero in eos
-                p1["b->cmunumu::Re{cVL}"]         = +1.0066;  // include Sirlin correction
-                p1["b->ctaunutau::Re{cVL}"]       = +1.0066;  // include Sirlin correction
+                p1["cbmunumu::Re{cVL}"]         = +1.0066;  // include Sirlin correction
+                p1["cbtaunutau::Re{cVL}"]       = +1.0066;  // include Sirlin correction
 
                 Options oo;
                 oo.set("model", "WilsonScan");
@@ -363,27 +363,27 @@ class BToVectorLeptonNeutrinoTest :
                 // mc(mc)
                 p3["mass::c"]                     = +1.275;
                 // mu mode
-                p3["b->cmunumu::Re{cVL}"]         = +1.0 * etaEW;
-                p3["b->cmunumu::Im{cVL}"]         = -2.0 * etaEW;
-                p3["b->cmunumu::Re{cVR}"]         = +2.0 * etaEW;
-                p3["b->cmunumu::Im{cVR}"]         = -2.0 * etaEW;
-                p3["b->cmunumu::Re{cSL}"]         = +3.0 * etaEW;
-                p3["b->cmunumu::Im{cSL}"]         = -3.0 * etaEW;
-                p3["b->cmunumu::Re{cSR}"]         = +4.0 * etaEW;
-                p3["b->cmunumu::Im{cSR}"]         = -4.0 * etaEW;
-                p3["b->cmunumu::Re{cT}"]          = +5.0 * etaEW;
-                p3["b->cmunumu::Im{cT}"]          = -5.0 * etaEW;
+                p3["cbmunumu::Re{cVL}"]         = +1.0 * etaEW;
+                p3["cbmunumu::Im{cVL}"]         = -2.0 * etaEW;
+                p3["cbmunumu::Re{cVR}"]         = +2.0 * etaEW;
+                p3["cbmunumu::Im{cVR}"]         = -2.0 * etaEW;
+                p3["cbmunumu::Re{cSL}"]         = +3.0 * etaEW;
+                p3["cbmunumu::Im{cSL}"]         = -3.0 * etaEW;
+                p3["cbmunumu::Re{cSR}"]         = +4.0 * etaEW;
+                p3["cbmunumu::Im{cSR}"]         = -4.0 * etaEW;
+                p3["cbmunumu::Re{cT}"]          = +5.0 * etaEW;
+                p3["cbmunumu::Im{cT}"]          = -5.0 * etaEW;
                 // tau mode
-                p3["b->ctaunutau::Re{cVL}"]       = +1.0 * etaEW;
-                p3["b->ctaunutau::Im{cVL}"]       = -5.0 * etaEW;
-                p3["b->ctaunutau::Re{cVR}"]       = +2.1 * etaEW;
-                p3["b->ctaunutau::Im{cVR}"]       = -6.0 * etaEW;
-                p3["b->ctaunutau::Re{cSL}"]       = +3.1 * etaEW;
-                p3["b->ctaunutau::Im{cSL}"]       = -7.0 * etaEW;
-                p3["b->ctaunutau::Re{cSR}"]       = +4.1 * etaEW;
-                p3["b->ctaunutau::Im{cSR}"]       = -8.0 * etaEW;
-                p3["b->ctaunutau::Re{cT}"]        = +5.1 * etaEW;
-                p3["b->ctaunutau::Im{cT}"]        = -9.0 * etaEW;
+                p3["cbtaunutau::Re{cVL}"]       = +1.0 * etaEW;
+                p3["cbtaunutau::Im{cVL}"]       = -5.0 * etaEW;
+                p3["cbtaunutau::Re{cVR}"]       = +2.1 * etaEW;
+                p3["cbtaunutau::Im{cVR}"]       = -6.0 * etaEW;
+                p3["cbtaunutau::Re{cSL}"]       = +3.1 * etaEW;
+                p3["cbtaunutau::Im{cSL}"]       = -7.0 * etaEW;
+                p3["cbtaunutau::Re{cSR}"]       = +4.1 * etaEW;
+                p3["cbtaunutau::Im{cSR}"]       = -8.0 * etaEW;
+                p3["cbtaunutau::Re{cT}"]        = +5.1 * etaEW;
+                p3["cbtaunutau::Im{cT}"]        = -9.0 * etaEW;
 
                 Options oo;
                 oo.set("model", "WilsonScan");
