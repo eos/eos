@@ -873,7 +873,7 @@ namespace eos
         MultivariateGaussian::propose(MarkovChain::State & proposal, const MarkovChain::State & current, gsl_rng * rng) const
         {
             // generate standard normals
-            std::generate(_tmp_left->data, _tmp_left->data + _dimension, std::bind(gsl_ran_ugaussian, rng));
+            std::generate(_tmp_left->data, _tmp_left->data + _dimension, [=] { return gsl_ran_ugaussian(rng); });
 
             // transform
             gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, _covariance_chol, _tmp_left);
@@ -969,7 +969,7 @@ namespace eos
         MultivariateStudentT::propose(MarkovChain::State & proposal, const MarkovChain::State & current, gsl_rng * rng) const
         {
             // generate standard normals
-            std::generate(_tmp_left->data, _tmp_left->data + _dimension, std::bind(gsl_ran_ugaussian, rng));
+            std::generate(_tmp_left->data, _tmp_left->data + _dimension, [=] { return gsl_ran_ugaussian(rng); });
 
             // transform to N(0, Sigma)
             gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, _covariance_chol, _tmp_left);
