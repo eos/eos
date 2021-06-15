@@ -23,6 +23,7 @@
 #include <eos/observable.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/stringify.hh>
+#include <eos/utils/units.hh>
 
 #include <array>
 #include <map>
@@ -68,52 +69,57 @@ namespace eos
     /* Helper functions to create ObservableEntry for a regular observable */
     template <typename Decay_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable(const char * name,
+            const Unit & unit,
             double (Decay_::* function)(const Args_ & ...) const,
             const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, "", function, std::make_tuple(), forced_options));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, "", unit, function, std::make_tuple(), forced_options));
     }
 
     template <typename Decay_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable(const char * name,
             const char * latex,
+            const Unit & unit,
             double (Decay_::* function)(const Args_ & ...) const,
             const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, function, std::make_tuple(), forced_options));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, unit, function, std::make_tuple(), forced_options));
     }
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable(const char * name,
+            const Unit & unit,
             double (Decay_::* function)(const Args_ & ...) const,
             const Tuple_ & kinematics_names,
             const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, "", function, kinematics_names, forced_options));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, "", unit, function, kinematics_names, forced_options));
     }
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable(const char * name,
             const char * latex,
+            const Unit & unit,
             double (Decay_::* function)(const Args_ & ...) const,
             const Tuple_ & kinematics_names,
             const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, function, kinematics_names, forced_options));
+        return std::make_pair(qn, make_concrete_observable_entry(qn, latex, unit, function, kinematics_names, forced_options));
     }
 
     /* Helper functions to create ObservableEntry for a cacheable observable */
     template <typename Decay_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_cacheable_observable(const char * name,
             const char * latex,
+            const Unit & unit,
             const typename Decay_::IntermediateResult * (Decay_::* prepare_fn)(const Args_ & ...) const,
             double (Decay_::* evaluate_fn)(const typename Decay_::IntermediateResult *) const,
             const Tuple_ & kinematics_names,
@@ -121,13 +127,14 @@ namespace eos
     {
         QualifiedName qn(name);
 
-        return std::make_pair(qn, make_concrete_cacheable_observable_entry(qn, latex, prepare_fn, evaluate_fn, kinematics_names, forced_options));
+        return std::make_pair(qn, make_concrete_cacheable_observable_entry(qn, latex, unit, prepare_fn, evaluate_fn, kinematics_names, forced_options));
     }
 
     /* ratios of regular observables */
     template <typename Decay_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable_ratio(const char * name,
             const char * latex,
+            const Unit & unit,
             double (Decay_::* numerator)(const Args_ & ...) const,
             const Options & forced_options_numerator,
             double (Decay_::* denominator)(const Args_ & ...) const,
@@ -140,6 +147,7 @@ namespace eos
                 make_concrete_observable_ratio_entry(
                         qn,
                         latex,
+                        unit,
                         numerator,   std::make_tuple(), forced_options_numerator,
                         denominator, std::make_tuple(), forced_options_denominator
                        )
@@ -149,6 +157,7 @@ namespace eos
     template <typename Decay_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable_ratio(const char * name,
             const char * latex,
+            const Unit & unit,
             double (Decay_::* numerator)(const Args_ & ...) const,
             const Tuple_ & kinematics_names_numerator,
             const Options & forced_options_numerator,
@@ -163,6 +172,7 @@ namespace eos
                 make_concrete_observable_ratio_entry(
                         qn,
                         latex,
+                        unit,
                         numerator,   kinematics_names_numerator,   forced_options_numerator,
                         denominator, kinematics_names_denominator, forced_options_denominator
                         )
@@ -174,6 +184,7 @@ namespace eos
     template <typename Decay_, typename Tuple_, typename ... Args_>
     std::pair<QualifiedName, ObservableEntryPtr> make_observable_sum(const char * name,
             const char * latex,
+            const Unit & unit,
             double (Decay_::* numerator)(const Args_ & ...) const,
             const Tuple_ & kinematics_names_numerator,
             const Options & forced_options_numerator,
@@ -190,6 +201,7 @@ namespace eos
                 make_concrete_observable_sum_entry(
                         qn,
                         latex,
+                        unit,
                         numerator,   kinematics_names_numerator,   forced_options_numerator, weight_numerator,
                         denominator, kinematics_names_denominator, forced_options_denominator, weight_denominator
                         )

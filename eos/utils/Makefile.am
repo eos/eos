@@ -63,7 +63,7 @@ libeosutils_la_SOURCES = \
 	top-loops.hh top-loops.cc \
 	tuple-maker.hh \
 	type-list.hh type-list-fwd.hh \
-	units.css units.hh \
+	units.cc units.hh \
 	verify.cc verify.hh \
 	visitor.hh visitor-fwd.hh \
 	wilson_coefficients.cc wilson_coefficients.hh \

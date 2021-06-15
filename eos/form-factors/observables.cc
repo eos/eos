@@ -44,7 +44,7 @@ namespace eos
         qnp::Prefix pp = qn.prefix_part();
         std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> function(_function);
 
-        return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, latex, pp, function, kinematics_names));
+        return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, latex, Unit::None(), pp, function, kinematics_names));
     }
 
     template <typename Transition_, typename Tuple_, typename ... Args_>
@@ -56,7 +56,7 @@ namespace eos
         qnp::Prefix pp = qn.prefix_part();
         std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> function(_function);
 
-        return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, "", pp, function, kinematics_names));
+        return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, "", Unit::None(), pp, function, kinematics_names));
     }
 
     template <typename TransitionNumerator_, typename TransitionDenominator_, typename Tuple_, typename ... Args_>
@@ -71,7 +71,7 @@ namespace eos
         std::function<double (const FormFactors<TransitionNumerator_> *, const Args_ & ...)> numerator(_numerator);
         std::function<double (const FormFactors<TransitionDenominator_> *, const Args_ & ...)> denominator(_denominator);
 
-        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<TransitionNumerator_, TransitionDenominator_, Args_ ...>>(qn, "", prefix_numerator, numerator, kinematics_names, prefix_denominator, denominator, kinematics_names));
+        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<TransitionNumerator_, TransitionDenominator_, Args_ ...>>(qn, "", Unit::None(), prefix_numerator, numerator, kinematics_names, prefix_denominator, denominator, kinematics_names));
     }
 
     template <typename TransitionNumerator_, typename TransitionDenominator_, typename Tuple_, typename ... Args_>
@@ -87,7 +87,7 @@ namespace eos
         std::function<double (const FormFactors<TransitionNumerator_> *, const Args_ & ...)> numerator(_numerator);
         std::function<double (const FormFactors<TransitionDenominator_> *, const Args_ & ...)> denominator(_denominator);
 
-        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<TransitionNumerator_, TransitionDenominator_, Args_ ...>>(qn, "", prefix_numerator, numerator, kinematics_names_numerator, prefix_denominator, denominator, kinematics_names_denominator));
+        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<TransitionNumerator_, TransitionDenominator_, Args_ ...>>(qn, "", Unit::None(), prefix_numerator, numerator, kinematics_names_numerator, prefix_denominator, denominator, kinematics_names_denominator));
     }
 
     // B -> P(seudoscalar)
@@ -128,34 +128,42 @@ namespace eos
 
                 // auxiliary variables, e.g. for determining the B-LCSR threshold parameters
                 make_observable("B->pi::f_+[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B->pi::f_0[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B->pi::f_T[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
                 // auxiliary variables, e.g. for determining the pi-LCSR/SVZ threshold parameters
                 make_observable("B->pi::M_B(f_+,LCSR)@DKMMO2008",
+                        Unit::GeV(),
                         &AnalyticFormFactorBToPiDKMMO2008::MBp_lcsr,
                         std::make_tuple("q2")),
 
                 make_observable("B->pi::M_B(f_0,LCSR)@DKMMO2008",
+                        Unit::GeV(),
                         &AnalyticFormFactorBToPiDKMMO2008::MB0_lcsr,
                         std::make_tuple("q2")),
 
                 make_observable("B->pi::M_B(f_T,LCSR)@DKMMO2008",
+                        Unit::GeV(),
                         &AnalyticFormFactorBToPiDKMMO2008::MBT_lcsr,
                         std::make_tuple("q2")),
 
                 make_observable("B->pi::M_B(SVZ)@DKMMO2008",
+                        Unit::GeV(),
                         &AnalyticFormFactorBToPiDKMMO2008::MB_svz),
 
                 make_observable("B->pi::f_B@DKMMO2008",
+                        Unit::GeV(),
                         &AnalyticFormFactorBToPiDKMMO2008::decay_constant),
             }
         );
@@ -187,14 +195,17 @@ namespace eos
                         &FormFactors<PToP>::f_m, std::make_tuple("q2")),
 
                 make_observable("B->K::f_+[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B->K::f_0[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B->K::f_T[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BToK>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
@@ -244,27 +255,34 @@ namespace eos
                         &FormFactors<PToP>::f_m, std::make_tuple("q2")),
 
                 make_observable("B->D::f_+[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B->D::f_0[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B->D::f_T[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BToD>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
                 make_observable("B->D::a_0[S_1]@HQE", R"(a_0^{S_1})",
+                        Unit::None(),
                         &BGLCoefficients::S1_a0),
 
                 make_observable("B->D::a_1[S_1]@HQE", R"(a_1^{S_1})",
+                        Unit::None(),
                         &BGLCoefficients::S1_a1),
 
                 make_observable("B->D::a_2[S_1]@HQE", R"(a_2^{S_1})",
+                        Unit::None(),
                         &BGLCoefficients::S1_a2),
 
                 make_observable_ratio("B->D^*::a_1/a_0[S_1]@HQE", R"(a_1^{S_1}/a_0^{S_1})",
+                        Unit::None(),
                         &BGLCoefficients::S1_a1,
                         std::make_tuple(),
                         Options(),
@@ -273,6 +291,7 @@ namespace eos
                         Options()),
 
                 make_observable_ratio("B->D^*::a_2/a_0[S_1]@HQE", R"(a_2^{S_1}/a_0^{S_1})",
+                        Unit::None(),
                         &BGLCoefficients::S1_a2,
                         std::make_tuple(),
                         Options(),
@@ -281,15 +300,19 @@ namespace eos
                         Options()),
 
                 make_observable("B->D::a_0[V_1]@HQE", R"(a_0^{V_1})",
+                        Unit::None(),
                         &BGLCoefficients::V1_a0),
 
                 make_observable("B->D::a_1[V_1]@HQE", R"(a_1^{V_1})",
+                        Unit::None(),
                         &BGLCoefficients::V1_a1),
 
                 make_observable("B->D::a_2[V_1]@HQE", R"(a_2^{V_1})",
+                        Unit::None(),
                         &BGLCoefficients::V1_a2),
 
                 make_observable_ratio("B->D^*::a_1/a_0[V_1]@HQE", R"(a_1^{V_1}/a_0^{V_1})",
+                        Unit::None(),
                         &BGLCoefficients::V1_a1,
                         std::make_tuple(),
                         Options(),
@@ -298,6 +321,7 @@ namespace eos
                         Options()),
 
                 make_observable_ratio("B->D^*::a_2/a_0[V_1]@HQE", R"(a_2^{V_1}/a_0^{V_1})",
+                        Unit::None(),
                         &BGLCoefficients::V1_a2,
                         std::make_tuple(),
                         Options(),
@@ -344,14 +368,17 @@ namespace eos
                         &FormFactors<PToP>::f_m, std::make_tuple("q2")),
 
                 make_observable("B_s->K::f_+[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K::f_0[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K::f_T[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
             }
@@ -385,14 +412,17 @@ namespace eos
                         &FormFactors<PToP>::f_m, std::make_tuple("q2")),
 
                 make_observable("B_s->D_s::f_+[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_p,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s::f_0[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_pm,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s::f_T[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
@@ -476,30 +506,37 @@ namespace eos
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::A_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::A_2[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::A_30[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::V[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::T_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::T_23A[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B->rho::T_23B[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
             }
@@ -585,32 +622,39 @@ namespace eos
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::A_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::A_2[s^1/s^0](q2)",
-                            &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_a_2,
-                                std::make_tuple("q2")),
+                        Unit::GeV2(),
+                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_a_2,
+                        std::make_tuple("q2")),
 
                 make_observable("B->K^*::A_30[s^1/s^0](q2)",
-                         &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_a_30,
-                                std::make_tuple("q2")),
+                        Unit::GeV2(),
+                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_a_30,
+                        std::make_tuple("q2")),
 
                 make_observable("B->K^*::V[s^1/s^0](q2)",
-                                &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_v,
-                                std::make_tuple("q2")),
+                        Unit::GeV2(),
+                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_v,
+                        std::make_tuple("q2")),
 
                 make_observable("B->K^*::T_1[s^1/s^0](q2)",
-                                &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_1,
-                                std::make_tuple("q2")),
+                        Unit::GeV2(),
+                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_1,
+                        std::make_tuple("q2")),
 
                 make_observable("B->K^*::T_23A[s^1/s^0](q2)",
-                                &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_23A,
-                                std::make_tuple("q2")),
+                        Unit::GeV2(),
+                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_23A,
+                        std::make_tuple("q2")),
 
                 make_observable("B->K^*::T_23B[s^1/s^0](q2)",
-                                &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_23B,
-                                std::make_tuple("q2")),
+                        Unit::GeV2(),
+                        &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_23B,
+                        std::make_tuple("q2")),
 
                 make_form_factor_adapter("B->K^*::F_perp_T(q2)/F_perp(q2)",
                         "B->K^*", &FormFactors<PToV>::f_perp_T,
@@ -697,43 +741,54 @@ namespace eos
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::A_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::A_2[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::A_30[s^1/s^0](q2)",
+                        Unit::GeV2(),
                          &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::V[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::T_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::T_23A[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::T_23B[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
 
                 make_observable("B->D^*::a_0[A_1]@HQE", R"(a_0^{A_1})",
+                        Unit::None(),
                         &BGLCoefficients::A1_a0),
 
                 make_observable("B->D^*::a_1[A_1]@HQE", R"(a_1^{A_1})",
+                        Unit::None(),
                         &BGLCoefficients::A1_a1),
 
                 make_observable("B->D^*::a_2[A_1]@HQE", R"(a_2^{A_1})",
+                        Unit::None(),
                         &BGLCoefficients::A1_a2),
 
                 make_observable_ratio("B->D^*::a_1/a_0[A_1]@HQE", R"(a_1^{A_1}/a_0^{A_1})",
+                        Unit::None(),
                         &BGLCoefficients::A1_a1,
                         std::make_tuple(),
                         Options(),
@@ -742,6 +797,7 @@ namespace eos
                         Options()),
 
                 make_observable_ratio("B->D^*::a_2/a_0[A_1]@HQE", R"(a_2^{A_1}/a_0^{A_1})",
+                        Unit::None(),
                         &BGLCoefficients::A1_a2,
                         std::make_tuple(),
                         Options(),
@@ -750,15 +806,19 @@ namespace eos
                         Options()),
 
                 make_observable("B->D^*::a_0[A_5]@HQE", R"(a_0^{A_5})",
+                        Unit::None(),
                         &BGLCoefficients::A5_a0),
 
                 make_observable("B->D^*::a_1[A_5]@HQE", R"(a_1^{A_5})",
+                        Unit::None(),
                         &BGLCoefficients::A5_a1),
 
                 make_observable("B->D^*::a_2[A_5]@HQE", R"(a_2^{A_5})",
+                        Unit::None(),
                         &BGLCoefficients::A5_a2),
 
                 make_observable_ratio("B->D^*::a_1/a_0[A_5]@HQE", R"(a_1^{A_5}/a_0^{A_5})",
+                        Unit::None(),
                         &BGLCoefficients::A5_a1,
                         std::make_tuple(),
                         Options(),
@@ -767,6 +827,7 @@ namespace eos
                         Options()),
 
                 make_observable_ratio("B->D^*::a_2/a_0[A_5]@HQE", R"(a_2^{A_5}/a_0^{A_5})",
+                        Unit::None(),
                         &BGLCoefficients::A5_a2,
                         std::make_tuple(),
                         Options(),
@@ -775,15 +836,19 @@ namespace eos
                         Options()),
 
                 make_observable("B->D^*::a_0[P_1]@HQE", R"(a_0^{P_1})",
+                        Unit::None(),
                         &BGLCoefficients::P1_a0),
 
                 make_observable("B->D^*::a_1[P_1]@HQE", R"(a_1^{P_1})",
+                        Unit::None(),
                         &BGLCoefficients::P1_a1),
 
                 make_observable("B->D^*::a_2[P_1]@HQE", R"(a_2^{P_1})",
+                        Unit::None(),
                         &BGLCoefficients::P1_a2),
 
                 make_observable_ratio("B->D^*::a_1/a_0[P_1]@HQE", R"(a_1^{P_1}/a_0^{P_1})",
+                        Unit::None(),
                         &BGLCoefficients::P1_a1,
                         std::make_tuple(),
                         Options(),
@@ -792,6 +857,7 @@ namespace eos
                         Options()),
 
                 make_observable_ratio("B->D^*::a_2/a_0[P_1]@HQE", R"(a_2^{P_1}/a_0^{P_1})",
+                        Unit::None(),
                         &BGLCoefficients::P1_a2,
                         std::make_tuple(),
                         Options(),
@@ -800,15 +866,19 @@ namespace eos
                         Options()),
 
                 make_observable("B->D^*::a_0[V_4]@HQE", R"(a_0^{V_4})",
+                        Unit::None(),
                         &BGLCoefficients::V4_a0),
 
                 make_observable("B->D^*::a_1[V_4]@HQE", R"(a_1^{V_4})",
+                        Unit::None(),
                         &BGLCoefficients::V4_a1),
 
                 make_observable("B->D^*::a_2[V_4]@HQE", R"(a_2^{V_4})",
+                        Unit::None(),
                         &BGLCoefficients::V4_a2),
 
                 make_observable_ratio("B->D^*::a_1/a_0[V_4]@HQE", R"(a_1^{V_4}/a_0^{V_4})",
+                        Unit::None(),
                         &BGLCoefficients::V4_a1,
                         std::make_tuple(),
                         Options(),
@@ -817,6 +887,7 @@ namespace eos
                         Options()),
 
                 make_observable_ratio("B->D^*::a_2/a_0[V_4]@HQE", R"(a_2^{V_4}/a_0^{V_4})",
+                        Unit::None(),
                         &BGLCoefficients::V4_a2,
                         std::make_tuple(),
                         Options(),
@@ -893,30 +964,37 @@ namespace eos
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::A_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::A_2[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::A_30[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::V[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::T_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::T_23A[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->K^*::T_23B[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
             }
@@ -1002,30 +1080,37 @@ namespace eos
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::A_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::A_2[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::A_30[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::V[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::T_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::T_23A[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::T_23B[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
 
@@ -1113,30 +1198,37 @@ namespace eos
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::A_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_a_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::A_2[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_a_2,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::A_30[s^1/s^0](q2)",
+                        Unit::GeV2(),
                          &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_a_30,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::V[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_v,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::T_1[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_t_1,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::T_23A[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_t_23A,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->D_s^*::T_23B[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
             }
@@ -1284,15 +1376,19 @@ namespace eos
 
                 // Zero-Recoil Sum Rule for the Lambda_b -> Lambda_c Form Factors
                 make_observable("Lambda_b->Lambda_c::F(1)",
+                        Unit::None(),
                         &ZeroRecoilSumRule<LambdaBToC>::vector_current),
 
                 make_observable("Lambda_b->Lambda_c::G(1)",
+                        Unit::None(),
                         &ZeroRecoilSumRule<LambdaBToC>::axialvector_current),
 
                 make_observable("Lambda_b->Lambda_c::F_inel(1)",
+                        Unit::None(),
                         &ZeroRecoilSumRule<LambdaBToC>::vector_current_inel),
 
                 make_observable("Lambda_b->Lambda_c::G_inel(1)",
+                        Unit::None(),
                         &ZeroRecoilSumRule<LambdaBToC>::axialvector_current_inel),
             }
         );
@@ -1314,63 +1410,83 @@ namespace eos
             R"(Pseudo observables arising in the various unitarity bounds for $b\to c$ semileptonic form factors.)",
             {
                 make_observable("b->c::Bound[0^+]@CLN", R"(B^{b\to c}_{0^+})",
+                        Unit::None(),
                         &HQETUnitarityBounds::bound_0p),
 
                 make_observable("b->c::Bound[0^-]@CLN", R"(B^{b\to c}_{0^-})",
+                        Unit::None(),
                         &HQETUnitarityBounds::bound_0m),
 
                 make_observable("b->c::Bound[1^+]@CLN", R"(B^{b\to c}_{1^+})",
+                        Unit::None(),
                         &HQETUnitarityBounds::bound_1p),
 
                 make_observable("b->c::Bound[1^-]@CLN", R"(B^{b\to c}_{1^-})",
+                        Unit::None(),
                         &HQETUnitarityBounds::bound_1m),
 
                 make_observable("b->c::Prior[0^+]@CLN", R"(B^{b\to c}_{0^+})",
+                        Unit::None(),
                         &HQETUnitarityBounds::bound_0p_prior),
 
                 make_observable("b->c::Prior[0^-]@CLN", R"(B^{b\to c}_{0^-})",
+                        Unit::None(),
                         &HQETUnitarityBounds::bound_0m_prior),
 
                 make_observable("b->c::Prior[1^+]@CLN", R"(B^{b\to c}_{1^+})",
+                        Unit::None(),
                         &HQETUnitarityBounds::bound_1p_prior),
 
                 make_observable("b->c::Prior[1^-]@CLN", R"(B^{b\to c}_{1^-})",
+                        Unit::None(),
                         &HQETUnitarityBounds::bound_1m_prior),
 
                 make_observable("b->c::Bound[0^+]@OPE", R"(B^{b\to c}_{0^+})",
+                        Unit::None(),
                         &OPEUnitarityBounds::bound_0p),
 
                 make_observable("b->c::Bound[0^-]@OPE", R"(B^{b\to c}_{0^-})",
+                        Unit::None(),
                         &OPEUnitarityBounds::bound_0m),
 
                 make_observable("b->c::Bound[1^+]@OPE", R"(B^{b\to c}_{1^+})",
+                        Unit::None(),
                         &OPEUnitarityBounds::bound_1p),
 
                 make_observable("b->c::Bound[1^-]@OPE", R"(B^{b\to c}_{1^-})",
+                        Unit::None(),
                         &OPEUnitarityBounds::bound_1m),
 
                 make_observable("b->c::Bound[0^+]@BGL", R"(B^{b\to c}_{0^+})",
+                        Unit::None(),
                         &BGLUnitarityBounds::bound_0p),
 
                 make_observable("b->c::Bound[0^-]@BGL", R"(B^{b\to c}_{0^-})",
+                        Unit::None(),
                         &BGLUnitarityBounds::bound_0m),
 
                 make_observable("b->c::Bound[1^+]@BGL", R"(B^{b\to c}_{1^+})",
+                        Unit::None(),
                         &BGLUnitarityBounds::bound_1p),
 
                 make_observable("b->c::Bound[1^-]@BGL", R"(B^{b\to c}_{1^-})",
+                        Unit::None(),
                         &BGLUnitarityBounds::bound_1m),
 
                 make_observable("b->c::Prior[0^+]@BGL", R"(B^{b\to c}_{0^+})",
+                        Unit::None(),
                         &BGLUnitarityBounds::bound_0p_prior),
 
                 make_observable("b->c::Prior[0^-]@BGL", R"(B^{b\to c}_{0^-})",
+                        Unit::None(),
                         &BGLUnitarityBounds::bound_0m_prior),
 
                 make_observable("b->c::Prior[1^+]@BGL", R"(B^{b\to c}_{1^+})",
+                        Unit::None(),
                         &BGLUnitarityBounds::bound_1p_prior),
 
                 make_observable("b->c::Prior[1^-]@BGL", R"(B^{b\to c}_{1^-})",
+                        Unit::None(),
                         &BGLUnitarityBounds::bound_1m_prior),
             }
         );
@@ -1389,6 +1505,7 @@ namespace eos
             R"(Pseudo observables for the parameters of the heavy-quark expansion in exclusive $b\to c$ semileptonic form factors)",
             {
                 make_observable_ratio("B_q(*)->D_q(*)::R(xi')@HQET", R"(\xi^\prime_{s}(1)/\xi^\prime(1))",
+                        Unit::None(),
                         &HQETIsgurWiseFunctionParameters::xipone,
                         std::make_tuple(),
                         Options{ { "q", "s" } },

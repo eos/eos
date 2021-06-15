@@ -251,6 +251,8 @@ namespace eos
 
             std::string _latex;
 
+            const Unit & _unit;
+
             std::function<const typename Decay_::IntermediateResult * (const Decay_ *, const Args_ & ...)> _prepare_fn;
 
             std::function<double (const Decay_ *, const typename Decay_::IntermediateResult *)> _evaluate_fn;
@@ -291,6 +293,11 @@ namespace eos
                 return _latex;
             }
 
+            virtual const Unit & unit() const
+            {
+                return _unit;
+            }
+
             virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
             {
                 return _kinematics_names_array.begin();
@@ -321,6 +328,7 @@ namespace eos
 
     template <typename Decay_, typename Tuple_, typename ... Args_>
     ObservableEntryPtr make_concrete_cacheable_observable_entry(const QualifiedName & name, const std::string & latex,
+            const Unit & unit,
             const typename Decay_::IntermediateResult * (Decay_::* prepare_fn)(const Args_ & ...) const,
             double (Decay_::* evaluate_fn)(const typename Decay_::IntermediateResult *) const,
             const Tuple_ & kinematics_names,
@@ -329,6 +337,7 @@ namespace eos
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
 
         return std::make_shared<ConcreteCacheableObservableEntry<Decay_, Args_ ...>>(name, latex,
+                unit,
                 std::function<const typename Decay_::IntermediateResult * (const Decay_ *, const Args_ & ...)>(std::mem_fn(prepare_fn)),
                 std::function<double (const Decay_ *, const typename Decay_::IntermediateResult *)>(std::mem_fn(evaluate_fn)),
                 kinematics_names, forced_options);

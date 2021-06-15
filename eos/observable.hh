@@ -27,6 +27,7 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
+#include <eos/utils/units.hh>
 
 #include <string>
 
@@ -158,6 +159,8 @@ namespace eos
             virtual const QualifiedName & name() const = 0;
 
             virtual const std::string & latex() const = 0;
+
+            virtual const Unit & unit() const = 0;
 
             ///@name Iteration over kinematic variables
             ///@{

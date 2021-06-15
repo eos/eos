@@ -46,18 +46,23 @@ namespace eos
             R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour.)",
             {
                 make_observable("B_q->ll::BR", R"(\mathcal{B}(B_q \to \ell^+\ell^-))",
+                        Unit::None(),
                         &BToDilepton::branching_ratio_time_zero),
 
                 make_observable("B_q->ll::BR@Untagged", R"(\left\langle\mathcal{B}(B_q \to \ell^+\ell^-)\right\rangle)",
+                        Unit::None(),
                         &BToDilepton::branching_ratio_untagged_integrated),
 
                 make_observable("B_q->ll::A_DeltaGamma", R"(\mathcal{A}_{\Delta\Gamma}(B_q \to \ell^+\ell^-))",
+                        Unit::None(),
                         &BToDilepton::cp_asymmetry_del_gamma),
 
                 make_observable("B_q->ll::S", R"(\mathcal{S}(B_q \to \ell^+\ell^-))",
+                        Unit::None(),
                         &BToDilepton::cp_asymmetry_mixing_S),
 
                 make_observable("B_q->ll::eff_lifetime", R"(\langle\tau\rangle(B_q \to \ell^+\ell^-))",
+                        Unit::None(),
                         &BToDilepton::effective_lifetime),
             }
         );
@@ -77,28 +82,28 @@ namespace eos
             R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour.)",
             {
                 // B -> K ll, Large Recoil
-                make_observable("B->Kll::d^2Gamma",
-                        R"(d^2\mathcal{\Gamma(\bar{B}\to \bar{K}\ell^+\ell^-)}/(dq^2\, d\cos\theta_\ell))",
+                make_observable("B->Kll::d^2Gamma", R"(d^2\mathcal{\Gamma(\bar{B}\to \bar{K}\ell^+\ell^-)}/(dq^2\, d\cos\theta_\ell))",
+                        Unit::InverseGeV2(),
                         &BToKDilepton::two_differential_decay_width,
                         std::make_tuple("s", "cos(theta_l)")),
 
-                make_observable("B->Kll::dBR/ds",
-                        R"(d\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/dq^2)",
+                make_observable("B->Kll::dBR/ds", R"(d\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/dq^2)",
+                        Unit::InverseGeV2(),
                         &BToKDilepton::differential_branching_ratio,
                         std::make_tuple("q2")),
 
-                make_observable("B->Kll::F_H(q2)",
-                        R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
+                make_observable("B->Kll::F_H(q2)", R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
+                        Unit::None(),
                         &BToKDilepton::differential_flat_term,
                         std::make_tuple("q2")),
 
-                make_observable("B->Kll::A_FB(q2)",
-                        R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
+                make_observable("B->Kll::A_FB(q2)", R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-)(q^2))",
+                        Unit::None(),
                         &BToKDilepton::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
 
-                make_observable_ratio("B->Kll::R_K(q2)",
-                        R"(R_K(q^2))",
+                make_observable_ratio("B->Kll::R_K(q2)", R"(R_K(q^2))",
+                        Unit::None(),
                         &BToKDilepton::differential_branching_ratio,
                         std::make_tuple("q2"),
                         Options{ { "l", "mu" } },
@@ -107,44 +112,48 @@ namespace eos
                         Options{ { "l", "e" } }
                         ),
 
-                make_observable("B->Kll::BR",
-                        R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                make_observable("B->Kll::BR", R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
                         &BToKDilepton::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::BRavg",
+                        Unit::None(),
                         &BToKDilepton::integrated_branching_ratio_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->Kll::A_CP",
-                        R"(A_\mathrm{CP}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                make_observable("B->Kll::A_CP", R"(A_\mathrm{CP}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
                         &BToKDilepton::integrated_cp_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::Gamma",
+                        Unit::GeV(),
                         &BToKDilepton::integrated_decay_width,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->Kll::F_H",
-                        R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                make_observable("B->Kll::F_H", R"(F_\mathrm{H}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
                         &BToKDilepton::integrated_flat_term,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::F_Havg",
+                        Unit::None(),
                         &BToKDilepton::integrated_flat_term_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B->Kll::A_FB",
-                        R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                make_observable("B->Kll::A_FB", R"(A_\mathrm{FB}(\bar{B}\to \bar{K}\ell^+\ell^-))",
+                        Unit::None(),
                         &BToKDilepton::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->Kll::A_FBavg",
+                        Unit::None(),
                         &BToKDilepton::integrated_forward_backward_asymmetry_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("B->Kll::R_K",
-                        R"(R_K)",
+                make_observable_ratio("B->Kll::R_K", R"(R_K)",
+                        Unit::None(),
                         &BToKDilepton::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "l", "mu" } },
@@ -170,21 +179,27 @@ namespace eos
             {
                 // B -> K^* gamma
                 make_observable("B->K^*gamma::BR",
+                        Unit::None(),
                         &BToKstarGamma::branching_ratio),
 
                 make_observable("B->K^*gamma::BRavg",
+                        Unit::None(),
                         &BToKstarGamma::branching_ratio_cp_averaged),
 
                 make_observable("B->K^*gamma::A_CP",
+                        Unit::None(),
                         &BToKstarGamma::cp_asymmetry),
 
                 make_observable("B->K^*gamma::S_K^*gamma",
+                        Unit::None(),
                         &BToKstarGamma::s_kstar_gamma),
 
                 make_observable("B->K^*gamma::C_K^*gamma",
+                        Unit::None(),
                         &BToKstarGamma::c_kstar_gamma),
 
                 make_observable("B->K^*gamma::A_I",
+                        Unit::None(),
                         &BToKstarGamma::isospin_asymmetry),
             }
         );
@@ -204,6 +219,7 @@ namespace eos
             {
                 /// Branching ratio of B -> K psi
                 make_observable("B->Kpsi::BR",
+                        Unit::None(),
                         &BToKCharmonium::branching_ratio)
             }
 
@@ -224,24 +240,32 @@ namespace eos
             {
                 /// Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
                 make_observable("B->K^*psi::S_1s_LHCb",
+                        Unit::None(),
                         &BToKstarCharmonium::S_1s_LHCb),
                 make_observable("B->K^*psi::S_1c_LHCb",
+                        Unit::None(),
                         &BToKstarCharmonium::S_1c_LHCb),
                 make_observable("B->K^*psi::S_3_LHCb",
+                        Unit::None(),
                         &BToKstarCharmonium::S_3_LHCb),
                 make_observable("B->K^*psi::S_4_LHCb",
+                        Unit::None(),
                         &BToKstarCharmonium::S_4_LHCb),
                 make_observable("B->K^*psi::S_8_LHCb",
+                        Unit::None(),
                         &BToKstarCharmonium::S_8_LHCb),
                 make_observable("B->K^*psi::S_9_LHCb",
+                        Unit::None(),
                         &BToKstarCharmonium::S_9_LHCb),
 
                 /// Branching ratio of B -> K^* psi
                 make_observable("B->K^*psi::BR",
+                        Unit::None(),
                         &BToKstarCharmonium::branching_ratio),
 
                 // Branching ratio of B -> phi psi
                 make_observable("B_s->phipsi::BR",
+                        Unit::None(),
                         &BsToPhiCharmonium::branching_ratio)
 
             }
@@ -262,31 +286,40 @@ namespace eos
             R"(The option "q" selects the spectator quark flavour.)",
             {
                 make_observable("B->K::re_H_plus(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::re_H_plus,
                         std::make_tuple("q2")),
                 make_observable("B->K::im_H_plus(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::im_H_plus,
                         std::make_tuple("q2")),
                 make_observable("B->K::abs_H_plus(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::abs_H_plus,
                         std::make_tuple("q2")),
                 make_observable("B->K::re_Hhat_plus(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::re_Hhat_plus,
                         std::make_tuple("q2")),
                 make_observable("B->K::im_Hhat_plus(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::im_Hhat_plus,
                         std::make_tuple("q2")),
                 make_observable("B->K::abs_Hhat_plus(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::abs_Hhat_plus,
                         std::make_tuple("q2")),
 
                 make_observable("B->K::abs_ratio_plus(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::abs_ratio_plus,
                         std::make_tuple("q2")),
                 make_observable("B->K::re_ratio_plus(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::re_ratio_plus,
                         std::make_tuple("q2")),
                 make_observable("B->K::im_ratio_plus(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::im_ratio_plus,
                         std::make_tuple("q2"))
             }
@@ -307,137 +340,179 @@ namespace eos
             R"(The option "q" selects the spectator quark flavour.)",
             {
                 make_observable("B->K^*::re_H_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_H_perp,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::im_H_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_H_perp,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_H_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_H_perp,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_Hhat_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_Hhat_perp,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::re_H_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_H_para,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::im_H_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_H_para,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_H_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_H_para,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_Hhat_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_Hhat_para,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::re_H_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_H_long,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::im_H_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_H_long,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_H_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_H_long,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_Hhat_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_Hhat_long,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*::re_ratio_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_ratio_perp,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::im_ratio_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_ratio_perp,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_ratio_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_ratio_perp,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::re_ratio_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_ratio_para,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::im_ratio_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_ratio_para,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_ratio_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_ratio_para,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::re_ratio_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_ratio_long,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::im_ratio_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::im_ratio_long,
                         std::make_tuple("q2")),
                 make_observable("B->K^*::abs_ratio_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::abs_ratio_long,
                         std::make_tuple("q2")),
 
 
                 make_observable("B_s->phi::re_H_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_H_perp,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::im_H_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_H_perp,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::abs_H_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_H_perp,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::abs_Hhat_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_Hhat_perp,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::re_H_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_H_para,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::im_H_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_H_para,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::abs_H_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_H_para,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::abs_Hhat_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_Hhat_para,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::re_H_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_H_long,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::im_H_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_H_long,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::abs_H_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_H_long,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::abs_Hhat_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_Hhat_long,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phi::re_ratio_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_ratio_perp,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::im_ratio_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_ratio_perp,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::abs_ratio_perp(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_ratio_perp,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::re_ratio_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_ratio_para,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::im_ratio_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_ratio_para,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::abs_ratio_para(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_ratio_para,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::re_ratio_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::re_ratio_long,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::im_ratio_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::im_ratio_long,
                         std::make_tuple("q2")),
                 make_observable("B_s->phi::abs_ratio_long(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>::abs_ratio_long,
                         std::make_tuple("q2")),
             }
@@ -459,111 +534,137 @@ namespace eos
             R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour.)",
             {
                 make_observable("B->K^*ll::d^4Gamma",
+                        Unit::GeV(),
                         &BToKstarDilepton::decay_width,
                         std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
 
                 make_observable("B->K^*ll::dBR/ds",
+                        Unit::InverseGeV2(),
                         &BToKstarDilepton::differential_branching_ratio,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::A_FB(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::A_T^2(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_transverse_asymmetry_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::A_T^3(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_transverse_asymmetry_3,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::A_T^4(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_transverse_asymmetry_4,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::A_T^5(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_transverse_asymmetry_5,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::A_T^re(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_transverse_asymmetry_re,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::A_T^im(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_transverse_asymmetry_im,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::P'_4(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_p_prime_4,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::P'_5(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_p_prime_5,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::P'_6(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_p_prime_6,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::F_L(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_longitudinal_polarisation,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::F_T(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_transversal_polarisation,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_1s(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_1s,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_1c(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_1c,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_2s(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_2s,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_2c(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_2c,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_3(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_3,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_4(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_4,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_5(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_5,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_6s(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_6s,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_6c(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_6c,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_7(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_7,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_8(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_8,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::J_9(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_j_9,
                         std::make_tuple("q2")),
 
-                make_observable_ratio("B->K^*ll::R_K^*(q2)",
-                        R"(R_{K^*}(q^2))",
+                make_observable_ratio("B->K^*ll::R_K^*(q2)", R"(R_{K^*}(q^2))",
+                        Unit::None(),
                         &BToKstarDilepton::differential_branching_ratio,
                         std::make_tuple("q2"),
                         Options{ { "l", "mu" } },
@@ -573,275 +674,342 @@ namespace eos
                         ),
 
                 make_observable("B->K^*ll::A_FB",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::Abar_FB",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_unnormalized_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::BR",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::BRavg",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_branching_ratio_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::A_CP",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_cp_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::F_L",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_longitudinal_polarisation,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::F_Lavg",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_longitudinal_polarisation_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::F_T",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_transversal_polarisation,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::F_Tavg",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_transversal_polarisation_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::A_T^2",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_transverse_asymmetry_2,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::A_T^2avg",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_transverse_asymmetry_2_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::A_T^3",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_transverse_asymmetry_3,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::A_T^4",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_transverse_asymmetry_4,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::A_T^5",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_transverse_asymmetry_5,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::A_T^re",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_transverse_asymmetry_re,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::A_T^im",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_transverse_asymmetry_im,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::P'_4",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_p_prime_4,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::P'_5",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_p_prime_5,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::P'_6",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_p_prime_6,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::H_T^1(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_h_1,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::H_T^2(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_h_2,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::H_T^3(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_h_3,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::H_T^4(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_h_4,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::H_T^5(q2)",
+                        Unit::None(),
                         &BToKstarDilepton::differential_h_5,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*ll::H_T^1",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_h_1,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::H_T^2",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_h_2,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::H_T^3",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_h_3,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::H_T^4",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_h_4,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::H_T^5",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_h_5,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::s_0^A_FB",
+                        Unit::GeV2(),
                         &BToKstarDilepton::a_fb_zero_crossing),
 
                 make_observable("B->K^*ll::Gamma",
+                        Unit::GeV(),
                         &BToKstarDilepton::integrated_decay_width,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_1s",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_1s,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_1c",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_1c,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_2s",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_2s,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_2c",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_2c,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_3",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_3,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_3norm",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_3_normalized,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_3normavg",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_3_normalized_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_4",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_4,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_5",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_5,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_6s",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_6s,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_6c",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_6c,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_7",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_7,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_8",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_8,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_9",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_9,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_9norm",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_9_normalized,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::J_9normavg",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_j_9_normalized_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::S_3",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_3,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::S_4",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_4,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::S_5",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_5,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::S_7",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_7,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::S_8",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_8,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B->K^*ll::S_9",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_9,
                         std::make_tuple("q2_min", "q2_max")),
 
                 // here we put observables S_X in the LHCb angular conveniton:
                 make_observable("B->K^*ll::S_1s_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_1s_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_1c_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_1c_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_2s_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_2s_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_2c_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_2c_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_3_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_3_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_4_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_4_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_5_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_5_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_6s_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_6s_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_6c_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_6c_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_7_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_7_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_8_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_8_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::S_9_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_s_9_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::A_FB_LHCb",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_forward_backward_asymmetry_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B->K^*ll::A_9",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_a_9,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("B->K^*ll::R_K^*",
-                        R"(R_{K^*})",
+                make_observable_ratio("B->K^*ll::R_K^*", R"(R_{K^*})",
+                        Unit::None(),
                         &BToKstarDilepton::integrated_branching_ratio,
                         std::make_tuple("q2_mu_min", "q2_mu_max"),
                         Options{ { "l", "mu" } },
@@ -853,23 +1021,27 @@ namespace eos
 
                 // B_s^0 -> \phi \ell^+ \ell^-
                 make_observable("B_s->phill::d^4Gamma",
+                        Unit::InverseGeV2(),
                         &BsToPhiDilepton::decay_width,
                         std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
 
                 make_observable("B_s->phill::dBR/ds",
+                        Unit::InverseGeV2(),
                         &BsToPhiDilepton::differential_branching_ratio,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phill::A_FB(q2)",
+                        Unit::None(),
                         &BsToPhiDilepton::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
 
                 make_observable("B_s->phill::F_L(q2)",
+                        Unit::None(),
                         &BsToPhiDilepton::differential_longitudinal_polarisation,
                         std::make_tuple("q2")),
 
-                make_observable_ratio("B_s->phill::R_phi(q2)",
-                        R"(R_{\phi}(q^2))",
+                make_observable_ratio("B_s->phill::R_phi(q2)", R"(R_{\phi}(q^2))",
+                        Unit::None(),
                         &BsToPhiDilepton::differential_branching_ratio,
                         std::make_tuple("q2"),
                         Options{ { "l", "mu" } },
@@ -879,105 +1051,129 @@ namespace eos
                         ),
 
                 make_observable("B_s->phill::A_FB",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::BR",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::F_L",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_longitudinal_polarisation,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::Gamma",
+                        Unit::GeV(),
                         &BsToPhiDilepton::integrated_decay_width,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::S_3",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_3,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::S_4",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_4,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::S_5",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_5,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::S_7",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_7,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::S_8",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_8,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::S_9",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_9,
                         std::make_tuple("q2_min", "q2_max")),
 
 
                 // here we put observables S_X in the LHCb angular conveniton:
                 make_observable("B_s->phill::S_1s_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_1s_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_1c_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_1c_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_2s_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_2s_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_2c_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_2c_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_3_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_3_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_4_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_4_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_5_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_5_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_6s_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_6s_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_6c_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_6c_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_7_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_7_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_8_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_8_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::S_9_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_s_9_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::A_FB_LHCb",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_forward_backward_asymmetry_LHCb,
                         std::make_tuple("s_min", "s_max")),
 
                 make_observable("B_s->phill::A_9",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_a_9,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("B_s->phill::R_phi",
-                        R"(R_\phi)",
+                make_observable_ratio("B_s->phill::R_phi", R"(R_\phi)",
+                        Unit::None(),
                         &BsToPhiDilepton::integrated_branching_ratio,
                         std::make_tuple("q2_mu_min", "q2_mu_max"),
                         Options{ { "l", "mu" } },
@@ -1006,30 +1202,37 @@ namespace eos
             {
                 // Lambda_b -> Lambda l^+ l^-, Large Recoil
                 make_observable("Lambda_b->Lambdall::dBR/dq2@LargeRecoil", R"(d\mathcal{B}(\Lambda_b\to\Lambda\ell^+\ell^-)/dq^2)",
+                        Unit::InverseGeV2(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::differential_branching_ratio,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^l(q2)@LargeRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_leptonic,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^h(q2)@LargeRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_hadronic,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^c(q2)@LargeRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::differential_a_fb_combined,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::F_0(q2)@LargeRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::differential_fzero,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::BR@LargeRecoil", R"(\mathcal{B}(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable_ratio("Lambda_b->Lambdall::R_Lambda@LargeRecoil", R"(R_{\Lambda}(q^2))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio,
                         std::make_tuple("q2_mu_min", "q2_mu_max"),
                         Options{ { "l", "mu" } },
@@ -1039,235 +1242,293 @@ namespace eos
                         ),
 
                 make_observable("Lambda_b->Lambdall::A_FB^l@LargeRecoil", R"(A_\mathrm{FB}^\ell(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^h@LargeRecoil", R"(A_\mathrm{FB}^h(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_hadronic,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^c@LargeRecoil", R"(A_\mathrm{FB}^{h,\ell}(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_a_fb_combined,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::F_0@LargeRecoil", R"(F_0(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_fzero,
                         std::make_tuple("q2_min", "q2_max")),
 
                 // Lambda_b -> Lambda l^+ l^-, Low Recoil
                 make_observable("Lambda_b->Lambdall::dBR/dq2@LowRecoil", R"(d\mathcal{B}(\Lambda_b\to\Lambda\ell^+\ell^-)/dq^2)",
+                        Unit::InverseGeV2(),
                         &LambdaBToLambdaDilepton<LowRecoil>::differential_branching_ratio,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^l(q2)@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_leptonic,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^h(q2)@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_hadronic,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^c(q2)@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::differential_a_fb_combined,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::F_0(q2)@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::differential_fzero,
                         std::make_tuple("q2")),
 
                 make_observable("Lambda_b->Lambdall::BR@LowRecoil", R"(\mathcal{B}(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^l@LowRecoil", R"(A_\mathrm{FB}^\ell(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_leptonic,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^h@LowRecoil", R"(A_\mathrm{FB}^h(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_hadronic,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::A_FB^c@LowRecoil", R"(A_\mathrm{FB}^{h,\ell}(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_a_fb_combined,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::F_0@LowRecoil", R"(F_0(\Lambda_b\to\Lambda\ell^+\ell^-))",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_fzero,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_1ss@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k1ss,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_1cc@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k1cc,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_1c@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k1c,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_2ss@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k2ss,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_2cc@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k2cc,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_2c@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k2c,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_3sc@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k3sc,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_3s@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k3s,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_4sc@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k4sc,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::K_4s@LowRecoil",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_k4s,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_1@LowRecoil", R"(M_1)",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m1,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_2@LowRecoil", R"(M_2)",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m2,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_3@LowRecoil", R"(M_3)",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m3,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_4@LowRecoil", R"(M_4)",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m4,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_5@LowRecoil", R"(M_5)",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m5,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_6@LowRecoil", R"(M_6)",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m6,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_7@LowRecoil", R"(M_7)",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m7,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_8@LowRecoil", R"(M_8)",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m8,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_9@LowRecoil", R"(M_9)",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m9,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_10@LowRecoil", R"(M_{10})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m10,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_11@LowRecoil", R"(M_{11})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m11,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_12@LowRecoil", R"(M_{12})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m12,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_13@LowRecoil", R"(M_{13})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m13,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_14@LowRecoil", R"(M_{14})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m14,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_15@LowRecoil", R"(M_{15})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m15,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_16@LowRecoil", R"(M_{16})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m16,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_17@LowRecoil", R"(M_{17})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m17,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_18@LowRecoil", R"(M_{18})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m18,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_19@LowRecoil", R"(M_{19})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m19,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_20@LowRecoil", R"(M_{20})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m20,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_21@LowRecoil", R"(M_{21})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m21,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_22@LowRecoil", R"(M_{22})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m22,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_23@LowRecoil", R"(M_{23})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m23,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_24@LowRecoil", R"(M_{24})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m24,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_25@LowRecoil", R"(M_{25})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m25,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_26@LowRecoil", R"(M_{26})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m26,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_27@LowRecoil", R"(M_{27})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m27,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_28@LowRecoil", R"(M_{28})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m28,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_29@LowRecoil", R"(M_{29})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m29,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_30@LowRecoil", R"(M_{30})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m30,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_31@LowRecoil", R"(M_{31})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m31,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_32@LowRecoil", R"(M_{32})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m32,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_33@LowRecoil", R"(M_{33})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m33,
                         std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("Lambda_b->Lambdall::M_34@LowRecoil", R"(M_{34})",
+                        Unit::None(),
                         &LambdaBToLambdaDilepton<LowRecoil>::integrated_m34,
                         std::make_tuple("q2_min", "q2_max")),
             }
@@ -1288,27 +1549,33 @@ namespace eos
             {
                 // B->X_s gamma
                 make_observable("B->X_sgamma::BR@Minimal",
+                        Unit::None(),
                         &BToXsGamma<Minimal>::integrated_branching_ratio),
 
                 // B->X_s gamma, NLO implementation
                 make_observable("B->X_sgamma::BR(E_min)@NLO",
+                        Unit::None(),
                         &BToXsGamma<NLO>::integrated_branching_ratio,
                         std::make_tuple("E_min")),
 
                 make_observable("B->X_sgamma::E_1(E_min)@NLO",
+                        Unit::GeV(),
                         &BToXsGamma<NLO>::photon_energy_moment_1,
                         std::make_tuple("E_min")),
 
                 make_observable("B->X_sgamma::E_2(E_min)@NLO",
+                        Unit::GeV2(),
                         &BToXsGamma<NLO>::photon_energy_moment_2,
                         std::make_tuple("E_min")),
 
                 // B->X_s ll, HLMW2005
                 make_observable("B->X_sll::dBR/dq2@HLMW2005",
+                        Unit::InverseGeV2(),
                         &BToXsDilepton<HLMW2005>::differential_branching_ratio,
                         std::make_tuple("q2")),
 
                 make_observable("B->X_sll::BR@HLMW2005",
+                        Unit::None(),
                         &BToXsDilepton<HLMW2005>::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
             }
@@ -1329,37 +1596,45 @@ namespace eos
             {
                 // B->K
                 make_observable("B->Kgamma^*::Re{H_+}(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::re_H_plus,
                         std::make_tuple("q2")),
 
                 // auxiliary variables, e.g. for determining the B-LCSR threshold parameters
                 make_observable("B->Kgamma^*::Re{H_+}[s^1/s^0](q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToK, nff::PToP>::re_normalized_moment_A,
                         std::make_tuple("q2")),
 
                 // B->K^*
                 make_observable("B->K^*gamma^*::Re{H_perp}(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_H_perp,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*gamma^*::Re{H_para}(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_H_para,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*gamma^*::Re{H_long}(q2)",
+                        Unit::None(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_H_long,
                         std::make_tuple("q2")),
 
                 // auxiliary variables, e.g. for determining the B-LCSR threshold parameters
                 make_observable("B->K^*gamma^*::Re{H_1}[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_normalized_moment_V1,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*gamma^*::Re{H_2}[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_normalized_moment_V2,
                         std::make_tuple("q2")),
 
                 make_observable("B->K^*gamma^*::Re{H_23}[s^1/s^0](q2)",
+                        Unit::GeV2(),
                         &NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>::re_normalized_moment_V23,
                         std::make_tuple("q2")),
             }

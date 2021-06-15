@@ -34,6 +34,7 @@ namespace eos
             R"()",
             {
                 make_observable("B_s<->Bbar_s::DeltaM", R"(\Delta M_s(B_s\leftrightarrow \bar{B}_s))",
+                        Unit::InversePicoSecond(),
                         &BMixing::delta_m,
                         std::make_tuple(),
                         Options{ { "q", "s" } }),
