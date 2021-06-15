@@ -111,7 +111,7 @@ namespace eos
     BMixing::delta_m() const
     {
         // cf. [BBL:1995A], eq. (XVIII.16), p. 153
-        return 2.0 * std::abs(_imp->M_12()) / _imp->hbar();
+        return 2.0 * std::abs(_imp->M_12()) / _imp->hbar() * 1.0e-12; // return value in ps^-1
     }
 
     const std::set<ReferenceName>

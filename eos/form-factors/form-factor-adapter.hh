@@ -126,6 +126,8 @@ namespace eos
 
             std::string _latex;
 
+            const Unit & _unit;
+
             qnp::Prefix _process;
 
             std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> _form_factor_function;
@@ -137,11 +139,13 @@ namespace eos
         public:
             FormFactorAdapterEntry(const QualifiedName & name,
                     const std::string & latex,
+                    const Unit & unit,
                     const qnp::Prefix & process,
                     const std::function<double (const FormFactors<Transition_> *, const Args_ & ...)> & form_factor_function,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names) :
                 _name(name),
                 _latex(latex),
+                _unit(unit),
                 _process(process),
                 _form_factor_function(form_factor_function),
                 _kinematics_names(kinematics_names),
@@ -161,6 +165,11 @@ namespace eos
             virtual const std::string & latex() const
             {
                 return _latex;
+            }
+
+            virtual const Unit & unit() const
+            {
+                return _unit;
             }
 
             virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
@@ -316,6 +325,8 @@ namespace eos
 
             std::string _latex;
 
+            const Unit & _unit;
+
             std::string _prefix_numerator;
 
             std::string _prefix_denominator;
@@ -333,6 +344,7 @@ namespace eos
         public:
             FormFactorRatioAdapterEntry(const QualifiedName & name,
                     const std::string & latex,
+                    const Unit & unit,
                     const std::string & prefix_numerator,
                     const std::function<double (const FormFactors<TransitionNumerator_> *, const double &)> & form_factor_numerator,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_numerator,
@@ -341,6 +353,7 @@ namespace eos
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names_denominator) :
                 _name(name),
                 _latex(latex),
+                _unit(unit),
                 _prefix_numerator(prefix_numerator),
                 _prefix_denominator(prefix_denominator),
                 _form_factor_numerator(form_factor_numerator),
@@ -363,6 +376,11 @@ namespace eos
             virtual const std::string & latex() const
             {
                 return _latex;
+            }
+
+            virtual const Unit & unit() const
+            {
+                return _unit;
             }
 
             virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const
