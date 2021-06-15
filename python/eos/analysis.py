@@ -155,9 +155,21 @@ class Analysis:
         for n in varied_parameter_names - used_parameter_names:
             eos.warn('likelihood does not depend on parameter \'{}\'; remove from prior or check options!'.format(n))
 
+
+    def _x_to_par(self, x):
+        """Internal function that rescales back from [-1, 1] to the parameter space"""
+        return np.array([(b[1] - b[0]) * v / 2 + (b[0] + b[1]) / 2 for v, b in zip(x, self.bounds)])
+
+
+    def _par_to_x(self, par):
+        """Internal function that rescales the parameters par to [-1, 1]"""
+        return np.array([(2 * v - b[0] - b[1]) / (b[1] - b[0]) for v, b in zip(par, self.bounds)])
+
+
     def clone(self):
         """Returns an independent instance of eos.Analysis."""
         return eos.Analysis(**self.init_args)
+
 
     def goodness_of_fit(self):
         """Returns a goodness-of-fit summary for the current parameter point."""
@@ -180,9 +192,9 @@ class Analysis:
 
         res = scipy.optimize.minimize(
             self.negative_log_pdf,
-            start_point,
+            self._par_to_x(start_point),
             args=None,
-            bounds=self.bounds,
+            bounds=[(-1.0, 1.0) for b in self.bounds],
             **kwargs)
 
         if not res.success:
@@ -191,22 +203,24 @@ class Analysis:
         else:
             eos.info('Optimization goal achieved after {nfev} function evaluations'.format(nfev=res.nfev))
 
-        for p, v in zip(self.varied_parameters, res.x):
+        bfp = self._x_to_par(res.x)
+
+        for p, v in zip(self.varied_parameters, bfp):
             p.set(v)
 
-        return eos.BestFitPoint(self, res.x)
+        return eos.BestFitPoint(self, bfp)
 
 
     def log_pdf(self, x, *args):
         """
         Adapter for use with external optimization software (e.g. pypmc) to aid when optimizing the log(posterior).
 
-        :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters.
+        :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters, rescaled so that every element is in the interval [-1, +1].
         :type x: iterable
         :param args: Dummy parameter (ignored)
         :type args: optional
         """
-        for p, v in zip(self.varied_parameters, x):
+        for p, v in zip(self.varied_parameters, self._x_to_par(x)):
             p.set(v)
 
         try:
@@ -222,21 +236,12 @@ class Analysis:
         """
         Adapter for use with external optimization software (e.g. scipy.optimize.minimize) to aid when optimizing the log(posterior).
 
-        :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters.
+        :param x: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters, rescaled so that every element is in the interval [-1, +1].
         :type x: iterable
         :param args: Dummy parameter (ignored)
         :type args: optional
         """
-        for p, v in zip(self.varied_parameters, x):
-            p.set(v)
-
-        try:
-            return(-self.log_posterior.evaluate())
-        except RuntimeError as e:
-            error('encountered run time error ({e}) when evaluating negative log(posterior) in parameter point:'.format(e=e))
-            for p in self.varied_parameters:
-                error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
-            return(+np.inf)
+        return -self.log_pdf(x, *args)
 
 
     def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None, rng=np.random.mtrand):
@@ -269,21 +274,21 @@ class Analysis:
         except ImportError:
             progressbar = lambda x, **kw: x
 
-        ind_lower = np.array([bound[0] for bound in self.bounds])
-        ind_upper = np.array([bound[1] for bound in self.bounds])
+        ind_lower = np.array([-1.0 for bound in self.bounds])
+        ind_upper = np.array([+1.0 for bound in self.bounds])
         ind = pypmc.tools.indicator.hyperrectangle(ind_lower, ind_upper)
 
         log_target = pypmc.tools.indicator.merge_function_with_indicator(self.log_pdf, ind, -np.inf)
 
-        # create initial covariance
-        sigma = np.diag([np.square(bound[1] - bound[0]) / 12 * cov_scale for bound in self.bounds])
+        # create initial covariance, assuming that each (rescaled) parameter is uniformly distributed on [-1, +1].
+        sigma = np.diag([1.0 / 3.0 * cov_scale for bound in self.bounds])   # 1 / 3 is the covariance on the interval [-1, +1]
         log_proposal = pypmc.density.gauss.LocalGauss(sigma)
 
-        # create start point, if not provided
+        # create start point, if not provided or rescale a provided start point to [-1, 1]
         if start_point is None:
-            u = np.array([rng.uniform(0.0, 1.0) for j in range(0, len(ind_lower))])
-            ubar = 1.0 - u
-            start_point = ubar * ind_upper + u * ind_lower
+            start_point = np.array([rng.uniform(-1.0, 1.0) for bound in self.bounds])
+        else:
+            start_point = self._par_to_x(start_point)
 
         # create MC sampler
         sampler = pypmc.sampler.markov_chain.AdaptiveMarkovChain(log_target, log_proposal, start_point, save_target_values=True, rng=rng)
@@ -308,7 +313,8 @@ class Analysis:
         accept_rate  = accept_count / (N * stride) * 100
         eos.info('Main run: acceptance rate is {:3.0f}%'.format(accept_rate))
 
-        parameter_samples = sampler.samples[:][::stride]
+        # Rescale the parameters back to their original bounds
+        parameter_samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:][::stride])
         weights = sampler.target_values[:][::stride, 0]
 
         if not observables:
@@ -349,11 +355,20 @@ class Analysis:
         except ImportError:
             progressbar = lambda x, **kw: x
 
-        ind_lower = np.array([bound[0] for bound in self.bounds])
-        ind_upper = np.array([bound[1] for bound in self.bounds])
+        # create log_target
+        ind_lower = np.array([-1.0 for bound in self.bounds])
+        ind_upper = np.array([+1.0 for bound in self.bounds])
         ind = pypmc.tools.indicator.hyperrectangle(ind_lower, ind_upper)
 
         log_target = pypmc.tools.indicator.merge_function_with_indicator(self.log_pdf, ind, -np.inf)
+
+        # rescale log_proposal arguments to [-1, 1]
+        for component in log_proposal.components:
+            rescaled_mu = self._par_to_x(component.mu)
+            rescaled_sigma = np.array([[
+                4 * component.sigma[i, j] / (bj[1] - bj[0]) / (bi[1] - bi[0]) for j, bj in enumerate(self.bounds)
+                ] for i, bi in enumerate(self.bounds)])
+            component.update(rescaled_mu, rescaled_sigma)
 
         # create PMC sampler
         sampler = pypmc.sampler.importance_sampling.ImportanceSampler(log_target, log_proposal, save_target_values=True, rng=rng)
@@ -389,7 +404,7 @@ class Analysis:
         # draw final samples
         origins = sampler.run(final_N, trace_sort=True)
         generating_components.append(origins)
-        samples = sampler.samples[:]
+        samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:])  # Rescale the parameters back to their original bounds
         weights = sampler.weights[:][:, 0]
         adjusted_weights = np.copy(weights)
         for i, w in enumerate(adjusted_weights):
