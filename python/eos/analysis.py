@@ -135,7 +135,7 @@ class Analysis:
         # add manual constraints to the likelihood
         for constraint_name, constraint_data in manual_constraints.items():
             import yaml
-            yaml_string = yaml.dump(constraint_data)
+            yaml_string = yaml.dump(self._sanitize_manual_input(constraint_data))
             constraint_entry = eos.ConstraintEntry.deserialize(constraint_name, yaml_string)
             constraint = constraint_entry.make(constraint_name, self.global_options)
             self.log_likelihood.add(constraint)
@@ -164,6 +164,24 @@ class Analysis:
     def _par_to_x(self, par):
         """Internal function that rescales the parameters par to [-1, 1]"""
         return np.array([(2 * v - b[0] - b[1]) / (b[1] - b[0]) for v, b in zip(par, self.bounds)])
+
+
+    def _sanitize_manual_input(self, data):
+        """Helper function that converts all entries of a manual_constraint from numpy types to basic python types"""
+        if np.issubdtype(type(data), int):
+            return int(data)
+        if np.issubdtype(type(data), float):
+            return float(data)
+        if np.issubdtype(type(data), str):
+            return str(data)
+
+        if type(data) is dict:
+            return { k: self._sanitize_manual_input(v) for k, v in data.items() }
+        if np.issubdtype(type(data), list):  # data of type dict also matches but they are covered before
+            return list(map(self._sanitize_manual_input, data))
+
+        # all valid cases are covered above
+        raise ValueError("Unexpected entry type {} in manual_constraint".format(type(data)))
 
 
     def clone(self):
