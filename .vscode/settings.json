@@ -1,0 +1,15 @@
+{
+	"files.exclude": {
+		"**/.deps": true,
+		"**/*_TEST": true,
+		"**/*_TEST.log": true,
+		"**/*_TEST.o": true,
+		"**/*_TEST.trs": true,
+		"**/*.hdf5": true,
+		"**/*.la": true,
+		"**/*.libs": true,
+		"**/*.lo": true,
+		"**/*.log": true,
+		"**/Makefile.in": true
+	}
+}
