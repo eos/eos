@@ -52,6 +52,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["Lambda_c::alpha"]       = -0.78;
                 p["mass::Lambda_b"]        = 5.6194;
                 p["mass::Lambda_c"]        = 2.2865;
+                p["CKM::abs(V_cb)"]        =  0.041996951916414726;
 
                 // the parameters are fixed as EOS default values
 
@@ -79,6 +80,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["Lambda_c::alpha"]       = -0.78;
                 p["mass::Lambda_b"]        = 5.6194;
                 p["mass::Lambda_c"]        = 2.2865;
+                p["CKM::abs(V_cb)"]        =  0.041996951916414726;
 
                 // the parameters are fixed as EOS default values
 
@@ -104,6 +106,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
             {
                 Parameters p = Parameters::Defaults();
                 // the rest of input is fixed to default EOS values
+                p["CKM::abs(V_cb)"]      =  0.041996951916414726;
                 p["cbmunumu::Re{cVL}"]   =  1.0;
                 p["cbmunumu::Im{cVL}"]   = -1.0;
                 p["cbmunumu::Re{cVR}"]   =  2.0;
@@ -142,6 +145,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
             {
                 Parameters p = Parameters::Defaults();
                 // the rest of input is fixed to default EOS values
+                p["CKM::abs(V_cb)"]      =  0.041996951916414726;
                 p["cbmunumu::Re{cVL}"]   =  1.0;
                 p["cbmunumu::Im{cVL}"]   = -1.0;
                 p["cbmunumu::Re{cVR}"]   =  2.0;

@@ -45,6 +45,10 @@ class BsToKstarLeptonNeutrinoTest :
                 p["CKM::lambda"] = 0.22535;
                 p["CKM::rhobar"] = 0.132;
                 p["CKM::etabar"] = 0.340;
+                // CKM matrix elements corresponding to the above Wolfenstein parameters
+                p["CKM::abs(V_ub)"] =  0.003540609803917236;
+                p["CKM::arg(V_ub)"] = -1.2010727175261147;
+
                 // Kaon mass
                 p["mass::K_u^*"] = 0.89166;
                 // B mass
