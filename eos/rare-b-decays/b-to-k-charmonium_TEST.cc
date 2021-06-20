@@ -18,6 +18,10 @@ class BToKCharmoniumGvDV2020Test :
         {
 
             Parameters p = Parameters::Defaults();
+            p["CKM::abs(V_cb)"]                          =  0.041996951916414726;
+            p["CKM::arg(V_cb)"]                          =  0.0;
+            p["CKM::abs(V_cs)"]                          =  0.9734061815416853;
+            p["CKM::arg(V_cs)"]                          = -3.304199362533668e-05;
             p["mass::B_d"]                               = 5.27942;
             p["mass::K_d"]                               = 0.49761;
             p["mass::J/psi"]                             = 3.0969;
@@ -61,6 +65,10 @@ class BToKCharmoniumGRvDV2021Test :
         {
 
             Parameters p = Parameters::Defaults();
+            p["CKM::abs(V_cb)"]                           =  0.041996951916414726;
+            p["CKM::arg(V_cb)"]                           =  0.0;
+            p["CKM::abs(V_cs)"]                           =  0.9734061815416853;
+            p["CKM::arg(V_cs)"]                           = -3.304199362533668e-05;
             p["mass::B_d"]                                = 5.27942;
             p["mass::K_d"]                                = 0.49761;
             p["mass::J/psi"]                              = 3.0969;

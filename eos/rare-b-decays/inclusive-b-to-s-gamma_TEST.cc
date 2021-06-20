@@ -53,11 +53,23 @@ class BToXsGammaNLOTest :
                 p["b->s::Re{c7}"] = -0.32372;
                 p["b->s::c8"] = -0.159167;
                 p["b->s::mu_b"] = 5.0;
-                // PDG 2010 CKM parameters
-                p["CKM::A"] = 0.812;
-                p["CKM::lambda"] = 0.2243;
-                p["CKM::rhobar"] = 0.144;
-                p["CKM::etabar"] = 0.342;
+                // PDG 2010 CKM parameters w/ typo in CKM::lambda (should be 0.22543)
+                p["CKM::A"]             = 0.812;
+                p["CKM::lambda"]        = 0.2243;
+                p["CKM::rhobar"]        = 0.144;
+                p["CKM::etabar"]        = 0.342;
+                p["CKM::abs(V_ub)"]     =  0.0034870776047445035;
+                p["CKM::arg(V_ub)"]     = -1.1728447805386266;
+                p["CKM::abs(V_cb)"]     =  0.040851869505042326;
+                p["CKM::arg(V_cb)"]     =  0.0;
+                p["CKM::abs(V_tb)"]     =  0.99915912422571;
+                p["CKM::arg(V_tb)"]     =  0.0;
+                p["CKM::abs(V_us)"]     =  0.22429863628849864;
+                p["CKM::arg(V_us)"]     =  0.0;
+                p["CKM::abs(V_cs)"]     =  0.9736942292982523;
+                p["CKM::arg(V_cs)"]     = -3.0251458252370057e-05;
+                p["CKM::abs(V_ts)"]     =  0.04012054599802285;
+                p["CKM::arg(V_ts)"]     = -3.123635053579304;
                 // QED coupling as used in [CMM1996], Sec 5.(iii), p. 11
                 p["QED::alpha_e(m_b)"] = 1/130.3;
                 // b quark mass

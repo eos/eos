@@ -63,10 +63,22 @@ class BToKstarDileptonLowRecoilTest :
                 p["b->smumu::Re{c9}"] = +4.27;
                 p["b->smumu::Re{c10}"] = -4.173;
                 // PDG 2008 CKM parameters
-                p["CKM::A"] = 0.814;
-                p["CKM::lambda"] = 0.2257;
-                p["CKM::rhobar"] = 0.135;
-                p["CKM::etabar"] = 0.349;
+                p["CKM::A"]         =  0.814;
+                p["CKM::lambda"]    =  0.2257;
+                p["CKM::rhobar"]    =  0.135;
+                p["CKM::etabar"]    =  0.349;
+                p["CKM::abs(V_ub)"] =  0.00359255775926898;
+                p["CKM::arg(V_ub)"] = -1.2023040533144056;
+                p["CKM::abs(V_cb)"] =  0.04146529127297828;
+                p["CKM::arg(V_cb)"] =  0.0;
+                p["CKM::abs(V_tb)"] =  0.9991334809397352;
+                p["CKM::arg(V_tb)"] =  0.0;
+                p["CKM::abs(V_us)"] =  0.22569854350471902;
+                p["CKM::arg(V_us)"] =  0.0;
+                p["CKM::abs(V_cs)"] =  0.973346862850555;
+                p["CKM::arg(V_cs)"] = -3.222382085887583e-05;
+                p["CKM::abs(V_ts)"] =  0.040694467854567457;
+                p["CKM::arg(V_ts)"] = -3.1230200317017145;
                 // Kaon mass
                 p["mass::K_d^*"] = 0.896;
                 // B mass
@@ -168,10 +180,22 @@ class BToKstarDileptonLowRecoilTest :
                 p["b->smumu::Re{c10}"] = 0.0;
                 p["b->smumu::Im{c10}"] = -4.2;
                 // PDG 2008 CKM parameters
-                p["CKM::A"] = 0.814;
-                p["CKM::lambda"] = 0.2257;
-                p["CKM::rhobar"] = 0.135;
-                p["CKM::etabar"] = 0.349;
+                p["CKM::A"]         = 0.814;
+                p["CKM::lambda"]    = 0.2257;
+                p["CKM::rhobar"]    = 0.135;
+                p["CKM::etabar"]    = 0.349;
+                p["CKM::abs(V_ub)"] =  0.00359255775926898;
+                p["CKM::arg(V_ub)"] = -1.2023040533144056;
+                p["CKM::abs(V_cb)"] =  0.04146529127297828;
+                p["CKM::arg(V_cb)"] =  0.0;
+                p["CKM::abs(V_tb)"] =  0.9991334809397352;
+                p["CKM::arg(V_tb)"] =  0.0;
+                p["CKM::abs(V_us)"] =  0.22569854350471902;
+                p["CKM::arg(V_us)"] =  0.0;
+                p["CKM::abs(V_cs)"] =  0.973346862850555;
+                p["CKM::arg(V_cs)"] = -3.222382085887583e-05;
+                p["CKM::abs(V_ts)"] =  0.040694467854567457;
+                p["CKM::arg(V_ts)"] = -3.1230200317017145;
                 // Kaon mass
                 p["mass::K_d^*"] = 0.896;
                 // B mass
@@ -239,10 +263,22 @@ class BToKstarDileptonLowRecoilTest :
                 p["b->smumu::Re{c9}"] = 0.0;
                 p["b->smumu::Re{c10}"] = 0.0;
                 // PDG 2008 CKM parameters
-                p["CKM::A"] = 0.814;
-                p["CKM::lambda"] = 0.2257;
-                p["CKM::rhobar"] = 0.135;
-                p["CKM::etabar"] = 0.349;
+                p["CKM::A"]         = 0.814;
+                p["CKM::lambda"]    = 0.2257;
+                p["CKM::rhobar"]    = 0.135;
+                p["CKM::etabar"]    = 0.349;
+                p["CKM::abs(V_ub)"] =  0.00359255775926898;
+                p["CKM::arg(V_ub)"] = -1.2023040533144056;
+                p["CKM::abs(V_cb)"] =  0.04146529127297828;
+                p["CKM::arg(V_cb)"] =  0.0;
+                p["CKM::abs(V_tb)"] =  0.9991334809397352;
+                p["CKM::arg(V_tb)"] =  0.0;
+                p["CKM::abs(V_us)"] =  0.22569854350471902;
+                p["CKM::arg(V_us)"] =  0.0;
+                p["CKM::abs(V_cs)"] =  0.973346862850555;
+                p["CKM::arg(V_cs)"] = -3.222382085887583e-05;
+                p["CKM::abs(V_ts)"] =  0.040694467854567457;
+                p["CKM::arg(V_ts)"] = -3.1230200317017145;
                 // Kaon mass
                 p["mass::K_d^*"] = 0.896;
                 // B mass
@@ -336,6 +372,18 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 };
 
                 Parameters parameters = Parameters::Defaults();
+                parameters["CKM::abs(V_ub)"] =  0.003631275231633653;
+                parameters["CKM::arg(V_ub)"] = -1.210765774253535;
+                parameters["CKM::abs(V_cb)"] =  0.041996951916414726;
+                parameters["CKM::arg(V_cb)"] =  0.0;
+                parameters["CKM::abs(V_tb)"] =  0.9991111344469873;
+                parameters["CKM::arg(V_tb)"] =  0.0;
+                parameters["CKM::abs(V_us)"] =  0.22534851424944366;
+                parameters["CKM::arg(V_us)"] =  0.0;
+                parameters["CKM::abs(V_cs)"] =  0.9734061815416853;
+                parameters["CKM::arg(V_cs)"] = -3.304199362533668e-05;
+                parameters["CKM::abs(V_ts)"] =  0.04121212396309175;
+                parameters["CKM::arg(V_ts)"] = -3.1230250224697222;
                 Kinematics kinematics
                 {
                     { "q2_min", 14.18 },
@@ -478,6 +526,18 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             p["mass::mu"] = 1e-5;
             p["mass::B_d"] = 5.27958;
             p["mass::K_d^*"] = 0.89594;
+            p["CKM::abs(V_ub)"] =  0.003631275231633653;
+            p["CKM::arg(V_ub)"] = -1.210765774253535;
+            p["CKM::abs(V_cb)"] =  0.041996951916414726;
+            p["CKM::arg(V_cb)"] =  0.0;
+            p["CKM::abs(V_tb)"] =  0.9991111344469873;
+            p["CKM::arg(V_tb)"] =  0.0;
+            p["CKM::abs(V_us)"] =  0.22534851424944366;
+            p["CKM::arg(V_us)"] =  0.0;
+            p["CKM::abs(V_cs)"] =  0.9734061815416853;
+            p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
+            p["CKM::abs(V_ts)"] =  0.04121212396309175;
+            p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
             Options o;
             o.set("model", "WilsonScan");
@@ -584,6 +644,18 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             // Christoph uses \Delta C instead of C for C9, C10
             // important to agree to alpha_s, can change values by 1%
             Parameters p = Parameters::Defaults();
+            p["CKM::abs(V_ub)"] =  0.003631275231633653;
+            p["CKM::arg(V_ub)"] = -1.210765774253535;
+            p["CKM::abs(V_cb)"] =  0.041996951916414726;
+            p["CKM::arg(V_cb)"] =  0.0;
+            p["CKM::abs(V_tb)"] =  0.9991111344469873;
+            p["CKM::arg(V_tb)"] =  0.0;
+            p["CKM::abs(V_us)"] =  0.22534851424944366;
+            p["CKM::arg(V_us)"] =  0.0;
+            p["CKM::abs(V_cs)"] =  0.9734061815416853;
+            p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
+            p["CKM::abs(V_ts)"] =  0.04121212396309175;
+            p["CKM::arg(V_ts)"] = -3.1230250224697222;
             p["b->s::c1"] = -0.3231323312;
             p["b->s::c2"] = 1.009301831;
             p["b->s::c3"] = -0.005233499106;

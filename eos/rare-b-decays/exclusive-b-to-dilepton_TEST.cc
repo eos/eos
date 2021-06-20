@@ -52,10 +52,25 @@ class BToDileptonTest :
                 p["b->smumu::Re{c10}"] = -4.150;
                 p["b->smumu::Re{c10'}"] = 0.000;
                 // PDG 2010 CKM parameters
-                p["CKM::A"] = 0.812;
-                p["CKM::lambda"] = 0.22543;
-                p["CKM::rhobar"] = 0.144;
-                p["CKM::etabar"] = 0.342;
+                p["CKM::A"]             =  0.812;
+                p["CKM::lambda"]        =  0.22543;
+                p["CKM::rhobar"]        =  0.144;
+                p["CKM::etabar"]        =  0.342;
+                p["CKM::abs(V_ub)"]     =  0.003540950873054711;
+                p["CKM::arg(V_ub)"]     = -1.1728563751359748;
+                p["CKM::abs(V_cb)"]     =  0.04126451344307112;
+                p["CKM::arg(V_cb)"]     =  0.0;
+                p["CKM::abs(V_tb)"]     =  0.9991419776905534;
+                p["CKM::arg(V_tb)"]     =  0.0;
+                p["CKM::abs(V_td)"]     =  0.008576901910577167;
+                p["CKM::arg(V_td)"]     = -0.37951557931964897;
+                p["CKM::abs(V_us)"]     =  0.22542858674178629;
+                p["CKM::arg(V_us)"]     =  0.0;
+                p["CKM::abs(V_cs)"]     =  0.9734167680132911;
+                p["CKM::arg(V_cs)"]     = -3.119448393424795e-05;
+                p["CKM::abs(V_ts)"]     =  0.04051834255894421;
+                p["CKM::arg(V_ts)"]     = -3.123445879630718;
+
                 p["decay-constant::B_s"] = 0.2276;
                 p["decay-constant::B_d"] = 0.256;
                 p["mass::B_d"] = 5.2795;
@@ -141,10 +156,23 @@ class BToDileptonTest :
                 p["b->smumu::Im{cP'}"] = 1.3;
 
                 // 2013 default values
-                p["CKM::A"] = +0.827;
-                p["CKM::lambda"] = 0.22535;
-                p["CKM::rhobar"] = 0.132;
-                p["CKM::etabar"] = 0.350;
+                p["CKM::A"]          = +0.827;
+                p["CKM::lambda"]     =  0.22535;
+                p["CKM::rhobar"]     =  0.132;
+                p["CKM::etabar"]     =  0.350;
+                p["CKM::abs(V_ub)"]  =  0.003631275231633653;
+                p["CKM::arg(V_ub)"]  = -1.210765774253535;
+                p["CKM::abs(V_cb)"]  =  0.041996951916414726;
+                p["CKM::arg(V_cb)"]  =  0.0;
+                p["CKM::abs(V_tb)"]  =  0.9991111344469873;
+                p["CKM::arg(V_tb)"]  =  0.0;
+                p["CKM::abs(V_us)"]  =  0.22534851424944366;
+                p["CKM::arg(V_us)"]  =  0.0;
+                p["CKM::abs(V_cs)"]  =  0.9734061815416853;
+                p["CKM::arg(V_cs)"]  = -3.304199362533668e-05;
+                p["CKM::abs(V_ts)"]  =  0.04121212396309175;
+                p["CKM::arg(V_ts)"]  = -3.1230250224697222;
+
                 p["mass::B_d"] = 5.27958;
                 p["mass::B_s"] = 5.36677;
                 p["life_time::B_d"] = 1.519e-12;

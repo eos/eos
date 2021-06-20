@@ -45,7 +45,18 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
     {
         {
             Parameters p = Parameters::Defaults();
-
+            p["CKM::abs(V_ub)"] =  0.003631275231633653;
+            p["CKM::arg(V_ub)"] = -1.210765774253535;
+            p["CKM::abs(V_cb)"] =  0.041996951916414726;
+            p["CKM::arg(V_cb)"] =  0.0;
+            p["CKM::abs(V_tb)"] =  0.9991111344469873;
+            p["CKM::arg(V_tb)"] =  0.0;
+            p["CKM::abs(V_us)"] =  0.22534851424944366;
+            p["CKM::arg(V_us)"] =  0.0;
+            p["CKM::abs(V_cs)"] =  0.9734061815416853;
+            p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
+            p["CKM::abs(V_ts)"] =  0.04121212396309175;
+            p["CKM::arg(V_ts)"] = -3.1230250224697222;
             p["b->s::c1"]      = -0.3231323312;
             p["b->s::c2"]      = 1.009301831;
             p["b->s::c3"]      = -0.005233499106;
@@ -98,6 +109,18 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
        {
             // important to agree on alpha_s, can change values by 1%
             Parameters p = Parameters::Defaults();
+            p["CKM::abs(V_ub)"] =  0.003631275231633653;
+            p["CKM::arg(V_ub)"] = -1.210765774253535;
+            p["CKM::abs(V_cb)"] =  0.041996951916414726;
+            p["CKM::arg(V_cb)"] =  0.0;
+            p["CKM::abs(V_tb)"] =  0.9991111344469873;
+            p["CKM::arg(V_tb)"] =  0.0;
+            p["CKM::abs(V_us)"] =  0.22534851424944366;
+            p["CKM::arg(V_us)"] =  0.0;
+            p["CKM::abs(V_cs)"] =  0.9734061815416853;
+            p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
+            p["CKM::abs(V_ts)"] =  0.04121212396309175;
+            p["CKM::arg(V_ts)"] = -3.1230250224697222;
             p["b->s::c1"]      = -0.3231323312;
             p["b->s::c2"]      = 1.009301831;
             p["b->s::c3"]      = -0.005233499106;
