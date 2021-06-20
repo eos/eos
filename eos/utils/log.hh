@@ -28,6 +28,8 @@
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/stringify.hh>
 
+#include <functional>
+
 namespace eos
 {
     /*!
@@ -101,6 +103,11 @@ namespace eos
              * Set the program's name.
              */
             void set_program_name(const std::string &);
+
+            /*!
+             * Register a callback hook with the Log class.
+             */
+            void register_callback(const std::function<void (const std::string &, const LogLevel &, const std::string &)> &);
 
             /*!
              * Return a stream-like object to which message parts can be

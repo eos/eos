@@ -29,6 +29,8 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <iostream>
+#include <vector>
+
 #include <time.h>
 
 namespace eos
@@ -126,6 +128,8 @@ namespace eos
 
         std::string program_name;
 
+        std::vector<std::function<void (const std::string &, const LogLevel &, const std::string &)>> callbacks;
+
         Implementation() :
             log_level(ll_error),
             stream(&std::cerr)
@@ -169,6 +173,12 @@ namespace eos
                 throw InternalError("Implementation<Log>::message: Bad value for log_level");
             }
             while (false);
+
+            // forward message to all callbacks
+            for (auto & c : callbacks)
+            {
+                c(id, l, m);
+            }
 
             *stream << m << std::endl;
         }
@@ -215,6 +225,14 @@ namespace eos
         Lock l(_imp->mutex);
 
         _imp->program_name = program_name;
+    }
+
+    void
+    Log::register_callback(const std::function<void (const std::string &, const LogLevel &, const std::string&)> & callback)
+    {
+        Lock l(_imp->mutex);
+
+        _imp->callbacks.push_back(callback);
     }
 
     void
