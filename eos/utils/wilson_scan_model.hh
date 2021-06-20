@@ -23,6 +23,7 @@
 #ifndef EOS_GUARD_SRC_UTILS_WILSON_SCAN_MODEL_HH
 #define EOS_GUARD_SRC_UTILS_WILSON_SCAN_MODEL_HH 1
 
+#include <eos/utils/ckm_scan_model.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/standard-model.hh>
 
@@ -254,7 +255,7 @@ namespace eos
      */
     class WilsonScanModel :
         public Model,
-        public SMComponent<components::CKM>,
+        public CKMScanComponent,
         public SMComponent<components::QCD>,
         public WilsonScanComponent<components::DeltaB2>,
         public WilsonScanComponent<components::DeltaBS1>,
@@ -284,7 +285,7 @@ namespace eos
      */
     class ConstrainedWilsonScanModel :
         public Model,
-        public SMComponent<components::CKM>,
+        public CKMScanComponent,
         public SMComponent<components::QCD>,
         public WilsonScanComponent<components::DeltaB2>,
         public ConstrainedWilsonScanComponent,

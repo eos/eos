@@ -496,7 +496,7 @@ namespace eos
     }
 
     WilsonScanModel::WilsonScanModel(const Parameters & parameters, const Options & options) :
-        SMComponent<components::CKM>(parameters, *this),
+        CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
         WilsonScanComponent<components::DeltaB2>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBS1>(parameters, options, *this),
@@ -516,7 +516,7 @@ namespace eos
     }
 
     ConstrainedWilsonScanModel::ConstrainedWilsonScanModel(const Parameters & parameters, const Options & options) :
-        SMComponent<components::CKM>(parameters, *this),
+        CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
         WilsonScanComponent<components::DeltaB2>(parameters, options, *this),
         ConstrainedWilsonScanComponent(parameters, options, *this),
