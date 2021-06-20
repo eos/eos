@@ -63,7 +63,8 @@ _eos_la_LDFLAGS = -module -avoid-version -export-symbols-regex PyInit__eos @BOOS
 _eos_la_LIBADD = $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosutils.la -lboost_python$(BOOST_PYTHON_SUFFIX)
 
 TESTS = \
-	eos_TEST.py
+	eos_TEST.py \
+	eos/analysis_TEST.py
 
 EXTRA_DIST += $(TESTS)
 
