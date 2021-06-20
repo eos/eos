@@ -50,9 +50,20 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "unpolarised");
 
                     Parameters p = Parameters::Defaults();
-                    p["mass::Lambda_b"] = 5.6194;
+                    p["mass::Lambda_b"] =  5.6194;
+                    p["CKM::abs(V_ub)"] =  0.003631275231633653;
+                    p["CKM::arg(V_ub)"] = -1.210765774253535;
+                    p["CKM::abs(V_cb)"] =  0.041996951916414726;
+                    p["CKM::arg(V_cb)"] =  0.0;
+                    p["CKM::abs(V_tb)"] =  0.9991111344469873;
+                    p["CKM::arg(V_tb)"] =  0.0;
+                    p["CKM::abs(V_us)"] =  0.22534851424944366;
+                    p["CKM::arg(V_us)"] =  0.0;
+                    p["CKM::abs(V_cs)"] =  0.9734061815416853;
+                    p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
+                    p["CKM::abs(V_ts)"] =  0.04121212396309175;
+                    p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
-		    
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
                     TEST_CHECK_RELATIVE_ERROR(8.250965481e-08, d.differential_branching_ratio(16.0), eps);
@@ -103,7 +114,19 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "LHCb");
 
                     Parameters p = Parameters::Defaults();
-                    p["mass::Lambda_b"] = 5.6194;
+                    p["mass::Lambda_b"] =  5.6194;
+                    p["CKM::abs(V_ub)"] =  0.003631275231633653;
+                    p["CKM::arg(V_ub)"] = -1.210765774253535;
+                    p["CKM::abs(V_cb)"] =  0.041996951916414726;
+                    p["CKM::arg(V_cb)"] =  0.0;
+                    p["CKM::abs(V_tb)"] =  0.9991111344469873;
+                    p["CKM::arg(V_tb)"] =  0.0;
+                    p["CKM::abs(V_us)"] =  0.22534851424944366;
+                    p["CKM::arg(V_us)"] =  0.0;
+                    p["CKM::abs(V_cs)"] =  0.9734061815416853;
+                    p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
+                    p["CKM::abs(V_ts)"] =  0.04121212396309175;
+                    p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
@@ -156,7 +179,19 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     Parameters p = Parameters::Defaults();
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
-                    p["mass::Lambda_b"] = 5.6194;
+                    p["mass::Lambda_b"]    =  5.6194;
+                    p["CKM::abs(V_ub)"]    =  0.003631275231633653;
+                    p["CKM::arg(V_ub)"]    = -1.210765774253535;
+                    p["CKM::abs(V_cb)"]    =  0.041996951916414726;
+                    p["CKM::arg(V_cb)"]    =  0.0;
+                    p["CKM::abs(V_tb)"]    =  0.9991111344469873;
+                    p["CKM::arg(V_tb)"]    =  0.0;
+                    p["CKM::abs(V_us)"]    =  0.22534851424944366;
+                    p["CKM::arg(V_us)"]    =  0.0;
+                    p["CKM::abs(V_cs)"]    =  0.9734061815416853;
+                    p["CKM::arg(V_cs)"]    = -3.304199362533668e-05;
+                    p["CKM::abs(V_ts)"]    =  0.04121212396309175;
+                    p["CKM::arg(V_ts)"]    = -3.1230250224697222;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 
@@ -209,9 +244,21 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "LHCb");
 
                     Parameters p = Parameters::Defaults();
-                    p["mass::Lambda_b"] = 5.6194;
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
+                    p["mass::Lambda_b"]    =  5.6194;
+                    p["CKM::abs(V_ub)"]    =  0.003631275231633653;
+                    p["CKM::arg(V_ub)"]    = -1.210765774253535;
+                    p["CKM::abs(V_cb)"]    =  0.041996951916414726;
+                    p["CKM::arg(V_cb)"]    =  0.0;
+                    p["CKM::abs(V_tb)"]    =  0.9991111344469873;
+                    p["CKM::arg(V_tb)"]    =  0.0;
+                    p["CKM::abs(V_us)"]    =  0.22534851424944366;
+                    p["CKM::arg(V_us)"]    =  0.0;
+                    p["CKM::abs(V_cs)"]    =  0.9734061815416853;
+                    p["CKM::arg(V_cs)"]    = -3.304199362533668e-05;
+                    p["CKM::abs(V_ts)"]    =  0.04121212396309175;
+                    p["CKM::arg(V_ts)"]    = -3.1230250224697222;
 
                     LambdaBToLambdaDilepton<LowRecoil> d(p, oo);
 

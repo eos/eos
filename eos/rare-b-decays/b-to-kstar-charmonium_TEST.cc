@@ -64,6 +64,19 @@ class BToKstarCharmoniumGvDV2020Test :
             p["B->K^*ccbar::Re{alpha_2^long}@GvDV2020"]  = 18.0;
             p["B->K^*ccbar::Im{alpha_2^long}@GvDV2020"]  = 19.0;
 
+            p["CKM::abs(V_ub)"] =  0.003631275231633653;
+            p["CKM::arg(V_ub)"] = -1.210765774253535;
+            p["CKM::abs(V_cb)"] =  0.041996951916414726;
+            p["CKM::arg(V_cb)"] =  0.0;
+            p["CKM::abs(V_tb)"] =  0.9991111344469873;
+            p["CKM::arg(V_tb)"] =  0.0;
+            p["CKM::abs(V_us)"] =  0.22534851424944366;
+            p["CKM::arg(V_us)"] =  0.0;
+            p["CKM::abs(V_cs)"] =  0.9734061815416853;
+            p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
+            p["CKM::abs(V_ts)"] =  0.04121212396309175;
+            p["CKM::arg(V_ts)"] = -3.1230250224697222;
+
             Options oo;
             oo.set("model",               "WilsonScan");
             oo.set("q",                   "d");
@@ -126,6 +139,19 @@ class BToKstarCharmoniumGRvDV2021Test :
             p["B->K^*ccbar::Im{alpha_1^long}@GRvDV2021"]  = 17.0;
             p["B->K^*ccbar::Re{alpha_2^long}@GRvDV2021"]  = 18.0;
             p["B->K^*ccbar::Im{alpha_2^long}@GRvDV2021"]  = 19.0;
+
+            p["CKM::abs(V_ub)"] =  0.003631275231633653;
+            p["CKM::arg(V_ub)"] = -1.210765774253535;
+            p["CKM::abs(V_cb)"] =  0.041996951916414726;
+            p["CKM::arg(V_cb)"] =  0.0;
+            p["CKM::abs(V_tb)"] =  0.9991111344469873;
+            p["CKM::arg(V_tb)"] =  0.0;
+            p["CKM::abs(V_us)"] =  0.22534851424944366;
+            p["CKM::arg(V_us)"] =  0.0;
+            p["CKM::abs(V_cs)"] =  0.9734061815416853;
+            p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
+            p["CKM::abs(V_ts)"] =  0.04121212396309175;
+            p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
             Options oo;
             oo.set("model",               "WilsonScan");
