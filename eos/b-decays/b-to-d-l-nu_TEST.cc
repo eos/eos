@@ -168,6 +168,7 @@ class BToDLeptonNeutrinoTest :
                 p["mass::B_d"]             =  5.279;
                 p["mass::D_d"]             =  1.870;
                 // by default, all other couplings are zero in eos
+                p["CKM::abs(V_cb)"]      =  0.041996951916414726;
                 p["cbmunumu::Re{cVL}"]   =  1.0066;  // include Sirlin correction
                 p["cbtaunutau::Re{cVL}"] =  1.0066;  // include Sirlin correction
 
@@ -220,6 +221,8 @@ class BToDLeptonNeutrinoTest :
                 p["mu"]                    =  4.18;
                 p["mass::b(MSbar)"]        =  4.18;
                 p["mass::c"]               =  1.275;
+                // CKM
+                p["CKM::abs(V_cb)"]        =  0.041996951916414726;
                 // mu mode
                 p["cbmunumu::Re{cVL}"]         = +1.0 * etaEW;
                 p["cbmunumu::Im{cVL}"]         = -2.0 * etaEW;

@@ -211,7 +211,7 @@ class BToVectorLeptonNeutrinoTest :
                 p["B(*)->D(*)::l_6(1)@HQET"].set(1.95851);
                 p["B(*)->D(*)::l_6'(1)@HQET"].set(1.22043);
 
-                p["CKM::abs(V_cb)"].set(1.0);
+                p["CKM::abs(V_cb)"]            =  0.041996951916414726;
                 p["mass::e"].set(0.00000000000001);
                 p["B(*)->D(*)::a@HQET"].set(1.000);
                 p["mass::B_d"].set(5.27942);
@@ -291,6 +291,7 @@ class BToVectorLeptonNeutrinoTest :
                 p1["mass::B_d"]                   = +5.279;
                 p1["mass::D_d^*"]                 = +2.0103;
                 // by default, all other couplings are zero in eos
+                p1["CKM::abs(V_cb)"]            =  0.041996951916414726;
                 p1["cbmunumu::Re{cVL}"]         = +1.0066;  // include Sirlin correction
                 p1["cbtaunutau::Re{cVL}"]       = +1.0066;  // include Sirlin correction
 
@@ -362,6 +363,8 @@ class BToVectorLeptonNeutrinoTest :
                 p3["mass::b(MSbar)"]              = +4.18;
                 // mc(mc)
                 p3["mass::c"]                     = +1.275;
+                // CKM
+                p3["CKM::abs(V_cb)"]              =  0.041996951916414726;
                 // mu mode
                 p3["cbmunumu::Re{cVL}"]         = +1.0 * etaEW;
                 p3["cbmunumu::Im{cVL}"]         = -2.0 * etaEW;
