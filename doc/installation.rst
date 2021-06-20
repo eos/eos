@@ -2,21 +2,32 @@
 Installation
 ############
 
-If you intend to use EOS without any modifications, then you should follow the steps outlined in `Installing with a Package Manager`_
-or `Installing with the Python Package Index (PyPI)`_.
-If you intend to modify EOS for your personal purpose, then you must follow the steps outlined in `Installing from Source`_.
+We distribute EOS as packaged software for end-users and also as source code for developers.
 
 
-*********************************
-Installing with a Package Manager
-*********************************
+*****
+Linux
+*****
+
+Installation with `pip3`
+========================
+
+This is the recommended installation method using the 'package installer for Python' `pip3`:
+
+::
+
+  pip3 install --user eoshep
+
+You can now use the EOS Python module via ``import eos``. In addition, some command line scripts have become available.
+To update EOS, run ``pip3 install --user --upgrade eoshep``.
 
 
-Ubuntu Linux
-============
+Installation with `apt` (Ubuntu, Debian and Siblings)
+=====================================================
 
-Pre-built binary packages of the most recent release of EOS for Ubuntu Linux LTS release 18.04, are available through the Packagecloud web service.
-They can be installed through the following steps:
+EOS is available through the Packagecloud web service.
+The installation requires several steps:
+
 
 1. Create the file ``/etc/apt/sources.list.d/eos.list`` by running the following command in a shell
 
@@ -32,81 +43,65 @@ They can be installed through the following steps:
 
   curl -L "https://packagecloud.io/eos/eos/gpgkey" 2> /dev/null | apt-key add - &>/dev/null
 
-You might need to install the ``curl`` program first, if not already installed. This can be done by running the following command
+You might need to install the ``curl`` program first, if not already installed. This can be done by running the following command:
 
 ::
 
   apt-get install curl
 
-3. Install the pre-built binary packages and its dependencies by running the following commands
+3. Install the pre-built binary package and its dependencies by running the following commands:
 
 ::
 
   apt-get update
   apt-get install eos
 
-4. On older version of Ubuntu, you might need to update your installation of the Matplotlib Python package.
-   We recommend to install the most up-to-date Python package with from the Python Package Index, using
+4. On older versions of Ubuntu, you might need to update your installation of the Matplotlib Python package.
+   We recommend installing the most up-to-date Python package from the Python Package Index, using
 
 ::
 
-  pip3 install --user h5py matplotlib numpy pypmc pyyaml scipy
+  pip3 install --user --upgrade h5py matplotlib numpy pypmc pyyaml scipy
 
 
+
+*****
 macOS
-=====
+*****
 
-The most recent development version of EOS (and all of its dependencies) can be installed automatically using `Homebrew <https://brew.sh/>`_:
+Installation with `brew`
+========================
+
+EOS (and all of its dependencies) can be installed automatically using `Homebrew <https://brew.sh/>`_:
 
 ::
 
   brew tap eos/eos
   brew install --HEAD eos
 
-We recommend to install the most up-to-date Python package with from the Python Package Index, using
+We recommend installing the most up-to-date Python package from the Python Package Index, using
 
 ::
 
-  pip3 install --user h5py matplotlib numpy pypmc pyyaml scipy
-
-***********************************************
-Installing with the Python Package Index (PyPI)
-***********************************************
-
-Linux
-=====
-
-Pre-built binary packages of the most recent release of EOS are available through the `Python Package Index <https://pypi.org/>`_.
-We are presently building these binary packages, also known as wheels, for the ``manylinux2014`` platform.
-We assume that you have access to the ``pip3`` command.
-If not, you need to install ``pip3`` through via your package manager, or ask your system administrator to install it.
-
-EOS can be installed by running the following command:
-
-::
-
-  pip3 install --user eoshep
+  pip3 install --user --upgrade h5py matplotlib numpy pypmc pyyaml scipy
 
 
-MacOS X
-=======
 
-We are presently not building Python wheels for the MacOS platform.
-
-**********************
-Installing from Source
-**********************
+*****************************
+Build and Install from Source
+*****************************
 
 The following instructions explain how to install EOS from source on a Linux-based operating system,
-such as Debian or Ubuntu, or MacOS X.
-Other flavors of Linux or UNIX-like operating systems will likely work as well.
+such as Debian or Ubuntu, and macOS.
+Other flavours of Linux or UNIX-like operating systems will likely work as well.
 However, note that we will exclusively use Debian/Ubuntu-specific package names when listing
-the neccessary softwares that EOS depends upon.
+software dependencies.
 
 Installing the dependencies on Linux
 ====================================
 
 The dependencies can be roughly categorized as either system software, Python-related software, or scientific software.
+
 EOS requires the following system software:
 
 g++
@@ -167,8 +162,8 @@ FFTW3
 If you have administrator access to the computers on which you use EOS,
 we recommend you install the above packages via your system's software management system.
 
-On a Debian/Ubuntu based operating system you can install the prerequisite software with the ``APT`` package management system,
-by running the following commands
+On a Debian/Ubuntu-based operating system you can install the prerequisite software with the ``apt`` package management system,
+by running the following commands:
 
 ::
 
@@ -212,7 +207,7 @@ To install the packages, run the following commands in a shell:
 You can now use the ``pip3`` command to install the remaining packages from the \package{PyPi} package index.
 
 .. note::
-    Due to problems with the Python 3 installation provided by Mac OS X, we strongly recommend to use instead the ``pip3`` programm
+    Due to problems with the Python 3 installation provided by macOS, we strongly recommend using instead the ``pip3`` program
     provided by Homebrew, which should be available as ``/usr/local/bin/pip3``.
 
 To install the remaining packages, run the following command in a shell
@@ -241,8 +236,8 @@ To install from the source code repository, you must first create all the necess
 
 You must now decide where EOS will be installed.
 To proceed we require you to set the environment variable ``PREFIX``.
-We recommend to install to your home directory.
-To do this, run the following command
+We recommend installing to your home directory.
+To do this, run the following command:
 
 ::
 
@@ -250,9 +245,9 @@ To do this, run the following command
 
 Next, you must configure the EOS build using the ``configure`` script.
 To use the EOS Python interface you must pass ``--enable-python`` to the call ``configure``.
-The default is \cli{--disable-python}.
+The default is ``--disable-python``.
 
-The recommended configuration is achieved by running the following command
+The recommended configuration is achieved by running the following command:
 
 ::
 
@@ -263,14 +258,20 @@ The recommended configuration is achieved by running the following command
 
 If the ``configure`` script finds any problems with your system, it will complain loudly.
 
+The flag ``with-boost-python-suffix`` might be necessary, depending on the installation of Python and BOOST.
+For example, when `boost-python3` is installed on macOS via `brew`, you can find the suffix by inspecting the installed libraries:
+``ls /usr/local/lib/libboost_python*``
+might yield
+``/usr/local/lib/libboost_python39.a``.
+Here, the flag ``--with-boost-python-suffix=39`` is required.
 
-After successful configuration, build EOS by running the following command
+After successful configuration, build EOS by running the following command:
 
 ::
 
   make -j all
 
-The ``-j`` option instructs the ``make`` programm to use all available processors to parallelize the build process.
+The ``-j`` option instructs the ``make`` program to use all available processors to parallelize the build process.
 #We strongly recommend testing the build by running the command
 
 ::
@@ -286,7 +287,7 @@ If all tests pass, install EOS by running the command
   make install # Use 'sudo make install' if you install e.g. to 'PREFIX=/usr/local'
                # or a similarly privileged directory
 
-If you installd EOS to a non-standard location (i.e. not `/usr/local``),
+If you installed EOS to a non-standard location (i.e. not ``/usr/local``),
 to use it from the command line you must set up some environment variable.
 For ``BASH``, which is the default Debian/Ubuntu shell, add the following lines to ``\$HOME/.bash_profile``:
 
@@ -295,8 +296,8 @@ For ``BASH``, which is the default Debian/Ubuntu shell, add the following lines 
   export PATH+=":$PREFIX/bin"
   export PYTHONPATH+=":$PREFIX/lib/python3.6/site-packages"
 
-Note that in the above ``python3.6`` piece must be replaced by the appropriate Python version with which EOS was built.
-You can determine the correct value by running the following command
+Note that in the above the ``python3.6`` piece must be replaced by the appropriate Python version with which EOS was built.
+You can determine the correct value by running the following command:
 
 ::
 
