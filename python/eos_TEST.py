@@ -1,5 +1,6 @@
 # vim: set sts=4 tw=120 :
 
+import unittest
 import inspect
 import os
 
@@ -162,7 +163,47 @@ class PythonTests:
         except:
             raise TestFailedError('cannot determine running b quark mass')
 
-# Run all test cases.
+
+class LoggingTests(unittest.TestCase):
+
+    def test_log_levels(self):
+        "Check if the set log level is respected"
+
+        import eos, logging, _eos
+        from eos import _NativeLogLevel as ll
+        levels = [ll.DEBUG, ll.INFO, ll.WARNING, ll.ERROR]
+
+        for set_level in levels:
+            _eos._set_native_log_level(set_level)
+
+            for check_level in levels:
+
+                if check_level <= set_level:
+                    with self.assertLogs('EOS', level='DEBUG') as cm:
+                        _eos._emit_native_log("myId", check_level, "msg")
+                else:
+                    # workaround for old unittest version, w/o assertNoLogs
+                    with self.assertRaisesRegex(AssertionError,
+                        "no logs of level DEBUG or higher triggered on EOS"):
+                        with self.assertLogs('EOS', level='DEBUG') as cm:
+                            _eos._emit_native_log("id", check_level, "msg")
+
+    def test_log_000(self):
+        "Computation of specific observable should log error"
+        import eos
+
+        with self.assertLogs('EOS', level='ERROR') as cm:
+            eos.Observable.make(
+                    "B->pilnu::BR",
+                    eos.Parameters.Defaults(),
+                    eos.Kinematics(q2_min=1, q2_max=6),
+                    eos.Options(**{'U': 'c'})) # will  be overwritten by the
+                                               # implementation of the observable
+            self.assertEqual(cm.output,
+                    [r"""ERROR:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'U' to value 'u', overriding user-provided value 'c'"""])
+
+
+# Run legacy test cases
 tests = PythonTests()
 for (name, testcase) in inspect.getmembers(tests, predicate=inspect.ismethod):
     print("%s: " % name)
@@ -172,3 +213,6 @@ for (name, testcase) in inspect.getmembers(tests, predicate=inspect.ismethod):
         print("    failed with error: %s" % e.msg)
         exit(1)
     print("    passed")
+
+# Run new tests
+unittest.main()
