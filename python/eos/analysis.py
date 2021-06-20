@@ -166,7 +166,8 @@ class Analysis:
         return np.array([(2 * v - b[0] - b[1]) / (b[1] - b[0]) for v, b in zip(par, self.bounds)])
 
 
-    def _sanitize_manual_input(self, data):
+    @staticmethod
+    def _sanitize_manual_input(data):
         """Helper function that converts all entries of a manual_constraint from numpy types to basic python types"""
         if np.issubdtype(type(data), int):
             return int(data)
@@ -176,9 +177,9 @@ class Analysis:
             return str(data)
 
         if type(data) is dict:
-            return { k: self._sanitize_manual_input(v) for k, v in data.items() }
+            return { k: Analysis._sanitize_manual_input(v) for k, v in data.items() }
         if np.issubdtype(type(data), list):  # data of type dict also matches but they are covered before
-            return list(map(self._sanitize_manual_input, data))
+            return list(map(Analysis._sanitize_manual_input, data))
 
         # all valid cases are covered above
         raise ValueError("Unexpected entry type {} in manual_constraint".format(type(data)))
