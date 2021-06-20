@@ -25,6 +25,7 @@
 #include "eos/reference.hh"
 #include "eos/signal-pdf.hh"
 #include "eos/utils/kinematic.hh"
+#include "eos/utils/log.hh"
 #include "eos/utils/model.hh"
 #include "eos/utils/parameters.hh"
 #include "eos/utils/options.hh"
@@ -126,6 +127,27 @@ namespace impl
     {
         PyErr_SetString(PyExc_RuntimeError, e.what());
     }
+
+    void logging_callback(PyObject * c, const std::string & id, const LogLevel & l, const std::string & m)
+    {
+        call<void>(c, id, l, m);
+    }
+
+    void register_log_callback(PyObject * c)
+    {
+        Log::instance()->register_callback(std::bind(&logging_callback, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    }
+
+    void set_native_log_level(const LogLevel & log_level)
+    {
+        Log::instance()->set_log_level(log_level);
+    }
+
+    // for testing
+    void emit_native_log(const std::string & id, const LogLevel & log_level, const std::string & m)
+    {
+        Log::instance()->message(id, log_level) << m;
+    }
 }
 
 BOOST_PYTHON_MODULE(_eos)
@@ -139,6 +161,18 @@ BOOST_PYTHON_MODULE(_eos)
 
     // eos::Exception
     register_exception_translator<Exception>(&impl::translate_exception);
+
+    // native eos logging: provide functions and enum type
+    def("_register_log_callback", &impl::register_log_callback);
+    def("_emit_native_log", &impl::emit_native_log);
+    def("_set_native_log_level", &impl::set_native_log_level);
+    enum_<LogLevel>("_NativeLogLevel")
+        .value("SILENT",  ll_silent)
+        .value("ERROR",   ll_error)
+        .value("WARNING", ll_warning)
+        .value("INFO",    ll_informational)
+        .value("DEBUG",   ll_debug)
+        ;
 
     // {{{ eos/utils
     // qnp::Prefix

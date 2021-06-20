@@ -51,6 +51,8 @@ from .tasks import *
 import logging
 logger = logging.getLogger('EOS')
 logger.setLevel(logging.INFO)
+from _eos import _register_log_callback, _set_native_log_level, _NativeLogLevel
+_set_native_log_level(_NativeLogLevel.INFO) # default native log level
 
 def debug(msg, *args, **kwargs):
     logger.debug(msg, *args, **kwargs)
@@ -62,7 +64,25 @@ def info(msg, *args, **kwargs):
     logger.info(msg, *args, **kwargs)
 
 def warn(msg, *args, **kwargs):
-    logger.warn(msg, *args, **kwargs)
+    logger.warning(msg, *args, **kwargs)
+
+def _log_callback(id, level, msg):
+    full_msg = '{id} {msg}'.format(id=id, msg=msg)
+
+    if   level == _NativeLogLevel.INFO:
+        logger.info(full_msg)
+    elif level == _NativeLogLevel.DEBUG:
+        logger.debug(full_msg)
+    elif level == _NativeLogLevel.WARNING:
+        logger.warning(full_msg)
+    elif level == _NativeLogLevel.ERROR:
+        logger.error(full_msg)
+    elif level == _NativeLogLevel.SILENT:
+        pass
+    else:
+        raise RuntimeError('Cannot handle log level: {ll}. Log message: {msg}'.format(ll=level, msg=full_msg))
+
+_register_log_callback(_log_callback)
 
 import time as _time
 import os as _os
