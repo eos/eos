@@ -22,6 +22,7 @@
 #define EOS_GUARD_SRC_UTILS_CARTESIAN_PRODUCT_HH 1
 
 #include <vector>
+#include <cstddef>
 
 namespace eos
 {
