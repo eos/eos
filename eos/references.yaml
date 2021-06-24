@@ -746,6 +746,14 @@ FNALMILC:2015A:
     id: oai:arXiv.org:1503.07839
   inspire-id: Lattice:2015tia
   title: $|V_{ub}|$ from $B\to\pi\ell\nu$ decays and (2+1)-flavor lattice QCD
+FNALMILC:2015B:
+  authors: Bailey, Jon A. et al.
+  collaboration: MILC
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1503.07237
+  inspire-id: Lattice:2015rga
+  title: $B\to D\ell\nu form factors at nonzero recoil and $|V_{cb}|$ from 2+1-flavor lattice QCD
 FNALMILC:2017A:
   authors: Bazavov, A. et al.
   eprint:
