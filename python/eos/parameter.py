@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2020 Danny van Dyk
+# Copyright (c) 2017-2021 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -99,7 +99,23 @@ class Parameters(_Parameters):
 
 
     @staticmethod
-    def FromWCxf(wc):
+    def FromWCxf(w):
+        """
+        Imports Wilson coefficients into an eos.Parameters object from a wilson.Wilson object.
+
+        :param w: WET Wilson coefficients in the EOS basis.
+        :type w: wilson.Wilson
+        """
+
+        # extract wc data
+        wc = w.wc
+
+        if wc.basis != 'EOS':
+            raise ValueError('Wilson coefficients must be passed to this function in the EOS basis')
+
+        # Needs to be revisited, once EOS support WET-4 or WET-3 bases
+        if wc.scale != 4.2:
+            raise ValueError('Wilson coefficients must be passed to this function at the reference scale 4.2 GeV')
 
         # the following coefficients are treated as real-valued in EOS
         real_coeffs = [
@@ -107,16 +123,16 @@ class Parameters(_Parameters):
         ]
 
         parameters = _Parameters.Defaults()
-        for name in wc.dict:
-            qn     = eos.QualifiedName(name)
+        for name, value in wc.dict.items():
+            qn     = QualifiedName(name)
             prefix = qn.prefix_part()
             coeff  = qn.name_part()
-            value  = wc.dict[name]
-            if (not value.imag == 0) and (coeff in real_coeffs):
-                raise ValueError('WC {0} does not support non-zero imaginary part'.format(name))
 
             # Add values provided by WCxf to EOS central (SM) values
-            if str(coeff) in real_coeffs:
+            if (prefix == 'b->s') and (coeff in real_coeffs):
+                if (abs(value.imag) > 1.0e-10):
+                    raise ValueError('imaginary part of WC {} larger than 10^-10 threshold, which is not supported at present'.format(name))
+
                 p = parameters[str(prefix) + '::' + str(coeff)]
                 p.set(p.central() + value.real)
             else:
