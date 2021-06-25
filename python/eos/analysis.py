@@ -184,6 +184,24 @@ class Analysis:
         raise ValueError("Unexpected entry type {} in manual_constraint".format(type(data)))
 
 
+    @staticmethod
+    def _perplexity(weights):
+        """Helper function that computes the perplexity of an array of weights"""
+        # sum positive finite weights only
+        weights_sum = np.sum(weights,
+            where = np.logical_or(weights > 0, np.isfinite(weights)))
+        if weights_sum <= 0:
+            return 0.
+        else:
+            normalized_weights = weights / weights_sum
+            # mask negative and nan weights
+            normalized_weights = np.ma.MaskedArray(normalized_weights, copy=False,
+                mask=(np.logical_or(normalized_weights <= 0, np.isnan(normalized_weights))))
+            entropy = - np.sum(normalized_weights * np.log(normalized_weights.filled(1.0)))
+            perplexity = np.exp(entropy) / len(normalized_weights)
+            return perplexity
+
+
     def clone(self):
         """Returns an independent instance of eos.Analysis."""
         return eos.Analysis(**self.init_args)
@@ -399,23 +417,15 @@ class Analysis:
             origins = sampler.run(step_N, trace_sort=True)
             generating_components.append(origins)
             samples = sampler.samples[:]
-            last_weights = np.copy(sampler.weights[-1][:, 0])
-            for i, w in enumerate(last_weights):
-                if w <= 0 or np.isnan(w):
-                    last_weights[i] = eps
-            normalized_last_weights = last_weights / np.sum(last_weights)
-            last_entropy = -1.0 * np.dot(np.log(normalized_last_weights), normalized_last_weights)
-            last_perplexity = np.exp(last_entropy) / len(normalized_last_weights)
+            last_perplexity = self._perplexity(np.copy(sampler.weights[-1][:, 0]))
             eos.info('Perplexity of the last samples after sampling in step {}: {}'.format(step, last_perplexity))
             weights = sampler.weights[:][:, 0]
             adjusted_weights = np.copy(weights)
-            for i, w in enumerate(adjusted_weights):
-                if w <= 0 or np.isnan(w):
-                    adjusted_weights[i] = eps
-            normalized_weights = adjusted_weights / np.sum(adjusted_weights)
-            entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
-            perplexity = np.exp(entropy) / len(normalized_weights)
-            eos.info('Perplexity of all previous samples after sampling in step {}: {}'.format(step, perplexity))
+            # replace negative and nan weights by eps
+            adjusted_weights = np.where(
+                    np.logical_or(adjusted_weights <= 0, np.isnan(adjusted_weights)),
+                    eps, adjusted_weights)
+            eos.info('Perplexity of all previous samples after sampling in step {}: {}'.format(step, self._perplexity(adjusted_weights)))
             pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True, copy=False)
             sampler.proposal.normalize()
 
@@ -424,13 +434,7 @@ class Analysis:
         generating_components.append(origins)
         samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:])  # Rescale the parameters back to their original bounds
         weights = sampler.weights[:][:, 0]
-        adjusted_weights = np.copy(weights)
-        for i, w in enumerate(adjusted_weights):
-            if w <= 0 or np.isnan(w):
-                adjusted_weights[i] = eps
-        normalized_weights = adjusted_weights / np.sum(adjusted_weights)
-        entropy = -1.0 * np.dot(np.log(normalized_weights), normalized_weights)
-        perplexity = np.exp(entropy) / len(normalized_weights)
+        perplexity = self._perplexity(np.copy(weights))
         eos.info('Perplexity after final samples: {}'.format(perplexity))
 
         return samples, weights, sampler.proposal
