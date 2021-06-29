@@ -51,53 +51,29 @@ B->K^*psi2S::BR@PDG:2020A:
 # 2013
 #
 # {{{
-B^0->K^*0Jpsi::S_1s_LHCb@LHCb:2013E:
-    type: Gaussian
-    observable: B->K^*psi::S_1s_LHCb
-    kinematics: {}
-    options: {q: d, psi: "J/psi"}
-    mean: 0.321
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.006, lo: 0.006}
-    dof: 1
-B^0->K^*0Jpsi::S_3_LHCb@LHCb:2013E:
-    type: Gaussian
-    observable: B->K^*psi::S_3_LHCb
-    kinematics: {}
-    options: {q: d, psi: "J/psi"}
-    mean: -0.013
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.009, lo: 0.009}
-    dof: 1
-B^0->K^*0Jpsi::S_4_LHCb@LHCb:2013E:
-    type: Gaussian
-    observable: B->K^*psi::S_4_LHCb
-    kinematics: {}
-    options: {q: d, psi: "J/psi"}
-    mean: -0.248
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.005, lo: 0.005}
-    dof: 1
-B^0->K^*0Jpsi::S_8_LHCb@LHCb:2013E:
-    type: Gaussian
-    observable: B->K^*psi::S_8_LHCb
-    kinematics: {}
-    options: {q: d, psi: "J/psi"}
-    mean: -0.048
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.009, lo: 0.009}
-    dof: 1
-B^0->K^*0Jpsi::S_9_LHCb@LHCb:2013E:
-    type: Gaussian
-    observable: B->K^*psi::S_9_LHCb
-    kinematics: {}
-    options: {q: d, psi: "J/psi"}
-    mean: -0.083
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.006, lo: 0.006}
-    dof: 1
+B^0->K^*0Jpsi::PolarizationAmplitude@LHCb:2013E:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B->K^*psi::para_polarization
+        - B->K^*psi::perp_polarization
+        - B->K^*psi::delta_para_long
+        - B->K^*psi::delta_perp_long
+    kinematics:
+        [ {}, {}, {}, {} ]
+    options:
+        [ {q: d, psi: "J/psi"}, {q: d, psi: "J/psi"}, {q: d, psi: "J/psi"}, {q: d, psi: "J/psi"} ]
+    means: [ 0.227, 0.201, -2.94, 2.94 ]
+    sigma-stat-hi: [ 0.004, 0.004, 0.02, 0.02 ]
+    sigma-stat-lo: [ 0.004, 0.004, 0.02, 0.02 ]
+    sigma-sys: [ 0.011, 0.008, 0.03, 0.02 ]
+    correlations:
+        - [ 1.00,-0.70, 0.12, 0.04 ]
+        - [-0.70, 1.00,-0.14,-0.01 ]
+        - [ 0.12,-0.14, 1.00, 0.64 ]
+        - [ 0.04,-0.01, 0.64, 1.00 ]
+    dof: 4
 # }}}
-
 
 #########
 # BaBar #

@@ -1148,6 +1148,14 @@ LHCb:2014C:
   inspire-id: Aaij:2014ora
   title: Test of lepton universality using $B^{+}\rightarrow K^{+}\ell^{+}\ell^{-}$
     decays
+LHCb:2014D:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1411.3104
+  inspire-id: LHCb:2014iah
+  title: Precision measurement of $CP$ violation in $B_s^0 \to J/\psi K^+K^-$ decays
 LHCb:2015A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
@@ -1175,6 +1183,14 @@ LHCb:2017A:
   inspire-id: Aaij:2017vad
   title: Measurement of the $B^0_s\to\mu^+\mu^-$ branching fraction and effective
     lifetime and search for $B^0\to\mu^+\mu^-$ decays
+LHCb:2017B:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1705.05802
+  inspire-id: LHCb:2017avl
+  title: Test of lepton universality with $B^{0} \rightarrow K^{*0}\ell^{+}\ell^{-}$ decays
 LHCb:2018A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
@@ -1184,6 +1200,14 @@ LHCb:2018A:
   inspire-id: Aaij:2018gwm
   title: Angular moments of the decay $\Lambda_b^0 \rightarrow \Lambda \mu^{+} \mu^{-}$
     at low hadronic recoil
+LHCb:2019A:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1906.08356
+  inspire-id: LHCb:2019nin
+  title: Updated measurement of time-dependent CP-violating observables in $B^{0}_{s}\to J/\psi K^+ K^-$ decays
 LHCb:2020A:
   authors: Aaij, Roel et al.
   collaboration: LHCb
@@ -1192,6 +1216,14 @@ LHCb:2020A:
     id: oai:arXiv.org:2003.08453
   inspire-id: Aaij:2018xjy
   title: Measurement of the shape of the B_s^0 -> D_s^{*-}\mu^{+}\nu_{\mu} differential decay rate
+LHCb:2021A:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2105.14007
+  inspire-id: LHCb:2021zwz
+  title: Branching fraction measurements of the rare $B^0_s\rightarrow\phi\mu^+\mu^-$ and $B^0_s\rightarrow f_2^\prime(1525)\mu^+\mu^-$ decays
 LHCb:2021B:
   authors: Aaij, Roel et al.
   collaboration: LHCb
@@ -1200,6 +1232,22 @@ LHCb:2021B:
     id: oai:arXiv.org:2108.09284
   inspire-id: LHCb:2021vsc
   title: Analysis of neutral $B$-meson decays into two muons
+LHCb:2021C:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2105.14738
+  inspire-id: Aaij:2021wte
+  title: First measurement of the $CP$-violating phase in $B^0_s\to J/\psi(\to e^+e^-)\phi$ decays
+LHCb:2021D:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2107.13428
+  inspire-id: LHCb:2021xxq
+  title: Angular analysis of the rare decay $B_s^0\to\phi\mu^+\mu^-$
 LMvD:2021A:
   authors: Leljak, Domagoj and Melic, Blazenka and van Dyk, Danny
   eprint:
