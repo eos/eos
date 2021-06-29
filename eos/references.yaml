@@ -1192,6 +1192,14 @@ LHCb:2020A:
     id: oai:arXiv.org:2003.08453
   inspire-id: Aaij:2018xjy
   title: Measurement of the shape of the B_s^0 -> D_s^{*-}\mu^{+}\nu_{\mu} differential decay rate
+LHCb:2021B:
+  authors: Aaij, Roel et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2108.09284
+  inspire-id: LHCb:2021vsc
+  title: Analysis of neutral $B$-meson decays into two muons
 LMvD:2021A:
   authors: Leljak, Domagoj and Melic, Blazenka and van Dyk, Danny
   eprint:
@@ -1261,6 +1269,13 @@ PDG:2018A:
   collaboration: Particle Data Group
   inspire-id: Tanabashi:2018oca
   journal: Phys. Rev. D 98 030001 (2018)
+  title: Review of Particle Physics
+  url: http://pdg.lbl.gov
+PDG:2020A:
+  authors: Zyla, P. A. and others
+  collaboration: Particle Data Group
+  inspire-id: ParticleDataGroup:2020ssz
+  journal: PTEP 2020 083C01 (2020)
   title: Review of Particle Physics
   url: http://pdg.lbl.gov
 PS:1997A:
