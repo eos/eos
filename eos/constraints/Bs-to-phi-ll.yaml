@@ -66,11 +66,11 @@ B_s->phimu^+mu^-::AngularObservables[0.10,2.00]@LHCb:2015C:
     dim: 8
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7
+        - B_s->phill::S_7_LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -98,11 +98,11 @@ B_s->phimu^+mu^-::AngularObservables[2.00,5.00]@LHCb:2015C:
     dim: 8
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7
+        - B_s->phill::S_7_LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -130,11 +130,11 @@ B_s->phimu^+mu^-::AngularObservables[5.00,8.00]@LHCb:2015C:
     dim: 8
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7
+        - B_s->phill::S_7_LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -162,11 +162,11 @@ B_s->phimu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2015C:
     dim: 8
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7
+        - B_s->phill::S_7_LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -194,11 +194,11 @@ B_s->phimu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2015C:
     dim: 8
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7
+        - B_s->phill::S_7_LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
@@ -226,16 +226,16 @@ B_s->phimu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2015C:
     dim: 8
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
         - B_s->phill::A_5
         - B_s->phill::A_6s # This is probably not correct
-        - B_s->phill::S_7
+        - B_s->phill::S_7_LHCb
         - B_s->phill::A_8
         - B_s->phill::A_9
     kinematics:
-        [ {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00},
-          {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00} ]
+        [ {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89},
+          {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89} ]
     options:
         [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020},
           {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
@@ -259,9 +259,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[0.10,2.00]@LHCb-2015C:
     dim: 4
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
-        - B_s->phill::S_7
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
     kinematics:
         [ {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00} ]
     options:
@@ -281,9 +281,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[2.00,5.00]@LHCb-2015C:
     dim: 4
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
-        - B_s->phill::S_7
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
     kinematics:
         [ {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00} ]
     options:
@@ -303,9 +303,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[5.00,8.00]@LHCb-2015C:
     dim: 4
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
-        - B_s->phill::S_7
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
     kinematics:
         [ {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00} ]
     options:
@@ -325,9 +325,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb-2015C:
     dim: 4
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
-        - B_s->phill::S_7
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
     kinematics:
         [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
     options:
@@ -347,9 +347,9 @@ B_s->phimu^+mu^-::AngularObservablesNoA[15.00,17.00]@LHCb-2015C:
     dim: 4
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
-        - B_s->phill::S_7
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
     kinematics:
         [ {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00} ]
     options:
@@ -369,11 +369,11 @@ B_s->phimu^+mu^-::AngularObservablesNoA[17.00,19.00]@LHCb-2015C:
     dim: 4
     observables:
         - B_s->phill::F_L
-        - B_s->phill::S_3
-        - B_s->phill::S_4
-        - B_s->phill::S_7
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
     kinematics:
-        [ {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00} ]
+        [ {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89} ]
     options:
         [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
     means: [ 0.40, -0.07, -0.39, 0.20 ]
