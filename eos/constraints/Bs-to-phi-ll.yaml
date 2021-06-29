@@ -10,55 +10,55 @@ B_s->phimu^+mu^-::NormalizedBR[0.10,2.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 0.1, q2_max: 2}
-    options: {l: mu, psi: "J/psi", tag: GvDV2020}
-    mean: 5.44e-5
-    sigma-stat: {hi: 0.68e-5, lo: 0.64e-5}
-    sigma-sys: {hi: 0.13e-5, lo: 0.13e-5}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 1.03e-4
+    sigma-stat: {hi: 0.13e-4, lo: 0.12e-4}
+    sigma-sys: {hi: 0.02e-4, lo: 0.02e-4}
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[2.00,5.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 2, q2_max: 5}
-    options: {l: mu, psi: "J/psi", tag: GvDV2020}
-    mean: 2.38e-5
-    sigma-stat: {hi: 0.39e-5, lo: 0.37e-5}
-    sigma-sys: {hi: 0.06e-5, lo: 0.06e-5}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 7.14e-5
+    sigma-stat: {hi: 1.17e-5, lo: 1.11e-5}
+    sigma-sys: {hi: 0.18e-5, lo: 0.18e-5}
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[5.00,8.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 5, q2_max: 8}
-    options: {l: mu, psi: "J/psi", tag: GvDV2020}
-    mean: 2.98e-5
-    sigma-stat: {hi: 0.41e-5, lo: 0.39e-5}
-    sigma-sys: {hi: 0.07e-5, lo: 0.07e-5}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 8.94e-5
+    sigma-stat: {hi: 1.23e-5, lo: 1.17e-5}
+    sigma-sys: {hi: 0.21e-5, lo: 0.21e-5}
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 11, q2_max: 12.5}
-    options: {l: mu, psi: "J/psi", tag: GvDV2020}
-    mean: 4.37e-5
-    sigma-stat: {hi: 0.64e-5, lo: 0.61e-5}
-    sigma-sys: {hi: 0.14e-5, lo: 0.14e-5}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 6.55e-5
+    sigma-stat: {hi: 0.96e-5, lo: 0.91e-5}
+    sigma-sys: {hi: 0.21e-5, lo: 0.21e-5}
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 15, q2_max: 17}
-    options: {l: mu, psi: "J/psi", tag: GvDV2020}
-    mean: 4.20e-5
-    sigma-stat: {hi: 0.53e-5, lo: 0.650e-5}
-    sigma-sys: {hi: 0.11e-5, lo: 0.11e-5}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 8.40e-5
+    sigma-stat: {hi: 1.06e-5, lo: 1.30e-5}
+    sigma-sys: {hi: 0.22e-5, lo: 0.22e-5}
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[17.00,19.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 17, q2_max: 19}
-    options: {l: mu, psi: "J/psi", tag: GvDV2020}
-    mean: 3.68e-5
-    sigma-stat: {hi: 0.53e-5, lo: 0.50e-5}
-    sigma-sys: {hi: 0.13e-5, lo: 0.13e-5}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 7.36e-5
+    sigma-stat: {hi: 1.06e-5, lo: 1.00e-5}
+    sigma-sys: {hi: 0.26e-5, lo: 0.26e-5}
     dof: 1
 #
 B_s->phimu^+mu^-::AngularObservables[0.10,2.00]@LHCb:2015C:
@@ -254,7 +254,7 @@ B_s->phimu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2015C:
         - [-0.01, 0.02, 0.14, 0.28,-0.05, 0.18,-0.02, 1.00 ]
     dof: 8
 #
-B_s->phimu^+mu^-::AngularObservablesNoA[0.10,2.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservablesNoA[0.10,2.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 4
     observables:
@@ -265,7 +265,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[0.10,2.00]@LHCb-2015C:
     kinematics:
         [ {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00}, {q2_min: 0.10, q2_max: 2.00} ]
     options:
-        [ {l: mu}, {l: mu}, {l: mu}, {l: mu}]
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
     means: [ 0.20, -0.05, 0.27, 0.04 ]
     sigma-stat-hi: [ 0.08, 0.13, 0.28, 0.12 ]
     sigma-stat-lo: [ 0.09, 0.13, 0.18, 0.12 ]
@@ -276,7 +276,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[0.10,2.00]@LHCb-2015C:
         - [-0.15, 0.04, 1.00,-0.19 ]
         - [ 0.10, 0.05,-0.19, 1.00 ]
     dof: 4
-B_s->phimu^+mu^-::AngularObservablesNoA[2.00,5.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservablesNoA[2.00,5.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 4
     observables:
@@ -287,7 +287,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[2.00,5.00]@LHCb-2015C:
     kinematics:
         [ {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00}, {q2_min: 2.00, q2_max: 5.00} ]
     options:
-        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
     means: [ 0.68, -0.06, -0.47, -0.03 ]
     sigma-stat-hi: [ 0.16, 0.19, 0.30, 0.18 ]
     sigma-stat-lo: [ 0.13, 0.23, 0.44, 0.23 ]
@@ -298,7 +298,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[2.00,5.00]@LHCb-2015C:
         - [ 0.27,-0.23, 1.00, 0.14 ]
         - [ 0.02, 0.20, 0.14, 1.00 ]
     dof: 4
-B_s->phimu^+mu^-::AngularObservablesNoA[5.00,8.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservablesNoA[5.00,8.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 4
     observables:
@@ -309,7 +309,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[5.00,8.00]@LHCb-2015C:
     kinematics:
         [ {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00}, {q2_min: 5.00, q2_max: 8.00} ]
     options:
-        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
     means: [ 0.54, -0.10, -0.10, 0.04 ]
     sigma-stat-hi: [ 0.10, 0.20, 0.15, 0.16 ]
     sigma-stat-lo: [ 0.09, 0.29, 0.18, 0.20 ]
@@ -320,7 +320,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[5.00,8.00]@LHCb-2015C:
         - [-0.01,-0.03, 1.00,-0.03 ]
         - [ 0.03,-0.18,-0.03, 1.00 ]
     dof: 4
-B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 4
     observables:
@@ -331,7 +331,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb-2015C:
     kinematics:
         [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
     options:
-        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
     means: [ 0.29, -0.19, -0.47, 0.00]
     sigma-stat-hi: [ 0.11, 0.20, 0.21, 0.15 ]
     sigma-stat-lo: [ 0.11, 0.23, 0.29, 0.17 ]
@@ -342,7 +342,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb-2015C:
         - [ 0.11, 0.02, 1.00, 0.26 ]
         - [ 0.21, 0.08, 0.26, 1.00 ]
     dof: 4
-B_s->phimu^+mu^-::AngularObservablesNoA[15.00,17.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservablesNoA[15.00,17.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 4
     observables:
@@ -353,7 +353,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[15.00,17.00]@LHCb-2015C:
     kinematics:
         [ {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00} ]
     options:
-        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
     means: [ 0.23, -0.06, -0.03, 0.12 ]
     sigma-stat-hi: [ 0.09, 0.16, 0.15, 0.16 ]
     sigma-stat-lo: [ 0.08, 0.19, 0.15, 0.13 ]
@@ -364,7 +364,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[15.00,17.00]@LHCb-2015C:
         - [-0.01, 0.03, 1.00, 0.04 ]
         - [ 0.06,-0.08, 0.04, 1.00 ]
     dof: 4
-B_s->phimu^+mu^-::AngularObservablesNoA[17.00,19.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservablesNoA[17.00,19.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 4
     observables:
@@ -375,7 +375,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[17.00,19.00]@LHCb-2015C:
     kinematics:
         [ {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89}, {q2_min: 17.00, q2_max: 18.89} ]
     options:
-        [ {l: mu}, {l: mu}, {l: mu}, {l: mu} ]
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
     means: [ 0.40, -0.07, -0.39, 0.20 ]
     sigma-stat-hi: [ 0.13, 0.23, 0.25, 0.29 ]
     sigma-stat-lo: [ 0.15, 0.27, 0.34, 0.22 ]
@@ -385,5 +385,226 @@ B_s->phimu^+mu^-::AngularObservablesNoA[17.00,19.00]@LHCb-2015C:
         - [-0.12, 1.00,-0.04, 0.22 ]
         - [ 0.08,-0.04, 1.00,-0.13 ]
         - [-0.04, 0.22,-0.13, 1.00 ]
+    dof: 4
+# }}}
+#
+# 2021A
+#
+# {{{
+# Branching ratios are normalized to BR(Bs->phi Jpsi)
+B_s->phimu^+mu^-::NormalizedBR[0.10,0.98]@LHCb:2021A:
+    type: Gaussian
+    observable: B_s->phill::NormalizedBR
+    kinematics: {q2_min: 0.1, q2_max: 0.98}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 6.6968e-5
+    sigma-stat: {hi: 0.4576e-5, lo: 0.4576e-5}
+    sigma-sys: {hi: 0.1056e-5, lo: 0.1056e-5}
+    dof: 1
+B_s->phimu^+mu^-::NormalizedBR[1.10,2.50]@LHCb:2021A:
+    type: Gaussian
+    observable: B_s->phill::NormalizedBR
+    kinematics: {q2_min: 1.1, q2_max: 2.5}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 4.326e-5
+    sigma-stat: {hi: 0.406e-5, lo: 0.406e-5}
+    sigma-sys: {hi: 0.098e-5, lo: 0.098e-5}
+    dof: 1
+B_s->phimu^+mu^-::NormalizedBR[2.50,4.00]@LHCb:2021A:
+    type: Gaussian
+    observable: B_s->phill::NormalizedBR
+    kinematics: {q2_min: 2.5, q2_max: 4}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 3.45e-5
+    sigma-stat: {hi: 0.375e-5, lo: 0.375e-5}
+    sigma-sys: {hi: 0.075e-5, lo: 0.075e-5}
+    dof: 1
+B_s->phimu^+mu^-::NormalizedBR[4.00,6.00]@LHCb:2021A:
+    type: Gaussian
+    observable: B_s->phill::NormalizedBR
+    kinematics: {q2_min: 4, q2_max: 6}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 6.1e-5
+    sigma-stat: {hi: 0.48e-5, lo: 0.48e-5}
+    sigma-sys: {hi: 0.12e-5, lo: 0.12e-5}
+    dof: 1
+B_s->phimu^+mu^-::NormalizedBR[6.00,8.00]@LHCb:2021A:
+    type: Gaussian
+    observable: B_s->phill::NormalizedBR
+    kinematics: {q2_min: 6, q2_max: 8}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 6.20e-5
+    sigma-stat: {hi: 0.46e-5, lo: 0.46e-5}
+    sigma-sys: {hi: 0.12e-5, lo: 0.12e-5}
+    dof: 1
+B_s->phimu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2021A:
+    type: Gaussian
+    observable: B_s->phill::NormalizedBR
+    kinematics: {q2_min: 11, q2_max: 12.5}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 7.035e-5
+    sigma-stat: {hi: 0.45e-5, lo: 0.45e-5}
+    sigma-sys: {hi: 0.105e-5, lo: 0.105e-5}
+    dof: 1
+B_s->phimu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2021A:
+    type: Gaussian
+    observable: B_s->phill::NormalizedBR
+    kinematics: {q2_min: 15, q2_max: 17}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 10.3e-5
+    sigma-stat: {hi: 0.56e-5, lo: 0.56e-5}
+    sigma-sys: {hi: 0.20e-5, lo: 0.20e-5}
+    dof: 1
+B_s->phimu^+mu^-::NormalizedBR[17.00,19.00]@LHCb:2021A:
+    type: Gaussian
+    observable: B_s->phill::NormalizedBR
+    kinematics: {q2_min: 17, q2_max: 18.89}
+    options: {l: mu, psi: J/psi, tag: GvDV2020}
+    mean: 8.24e-5
+    sigma-stat: {hi: 0.58e-5, lo: 0.58e-5}
+    sigma-sys: {hi: 0.24e-5, lo: 0.24e-5}
+    dof: 1
+# }}}
+#
+# 2021D
+#
+# {{{
+B_s->phimu^+mu^-::AngularObservablesNoA[0.10,0.98]@LHCb:2021D:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
+    kinematics:
+        [ {q2_min: 0.10, q2_max: 0.98}, {q2_min: 0.10, q2_max: 0.98},
+          {q2_min: 0.10, q2_max: 0.98}, {q2_min: 0.10, q2_max: 0.98} ]
+    options:
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
+    means: [ 0.254, -0.004, 0.213, -0.178 ]
+    sigma-stat-hi: [ 0.045, 0.068, 0.082, 0.072 ]
+    sigma-stat-lo: [ 0.045, 0.068, 0.082, 0.072 ]
+    sigma-sys: [ 0.017, 0.014, 0.005, 0.001 ]
+    correlations:
+        - [ 1.00,-0.03, 0.06,-0.20 ]
+        - [-0.03, 1.00, 0.11, 0.07 ]
+        - [ 0.06, 0.11, 1.00, 0.08 ]
+        - [-0.20, 0.07, 0.08, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[1.10,4.00]@LHCb:2021D:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
+    kinematics:
+        [ {q2_min: 1.10, q2_max: 4.00}, {q2_min: 1.10, q2_max: 4.00},
+          {q2_min: 1.10, q2_max: 4.00}, {q2_min: 1.10, q2_max: 4.00} ]
+    options:
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
+    means: [ 0.723, -0.03, -0.110, -0.101 ]
+    sigma-stat-hi: [ 0.053, 0.057, 0.079, 0.075 ]
+    sigma-stat-lo: [ 0.053, 0.057, 0.079, 0.075 ]
+    sigma-sys: [ 0.015, 0.004, 0.002, 0.001 ]
+    correlations:
+        - [ 1.00,-0.12, 0.03,-0.12 ]
+        - [-0.12, 1.00,-0.07, 0.04 ]
+        - [ 0.03,-0.07, 1.00, 0.01 ]
+        - [-0.12, 0.04, 0.01, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[4.00,6.00]@LHCb:2021D:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
+    kinematics:
+        [ {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00},
+          {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00} ]
+    options:
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
+    means: [ 0.701, -0.162, -0.222, 0.175 ]
+    sigma-stat-hi: [ 0.05, 0.067, 0.092, 0.089 ]
+    sigma-stat-lo: [ 0.05, 0.067, 0.092, 0.089 ]
+    sigma-sys: [ 0.016, 0.012, 0.01, 0.003 ]
+    correlations:
+        - [ 1.00, 0.15, 0.06,-0.01 ]
+        - [ 0.15, 1.00,-0.04,-0.06 ]
+        - [ 0.06,-0.04, 1.00, 0.05 ]
+        - [-0.01,-0.06, 0.05, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[6.00,8.00]@LHCb:2021D:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
+    kinematics:
+        [ {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00},
+          {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00} ]
+    options:
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
+    means: [ 0.624, 0.013, -0.176, 0.033 ]
+    sigma-stat-hi: [ 0.051, 0.080, 0.078, 0.081 ]
+    sigma-stat-lo: [ 0.051, 0.080, 0.078, 0.081 ]
+    sigma-sys: [ 0.012, 0.009, 0.006, 0.002 ]
+    correlations:
+        - [ 1.00, 0.03, 0.07, 0.01 ]
+        - [ 0.03, 1.00,-0.08,-0.01 ]
+        - [ 0.07,-0.08, 1.00,-0.05 ]
+        - [ 0.01,-0.01,-0.05, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[11.00,12.50]@LHCb:2021D:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
+    kinematics:
+        [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50},
+          {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
+    options:
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
+    means: [ 0.353, -0.138, -0.319, -0.17 ]
+    sigma-stat-hi: [ 0.044, 0.071, 0.061, 0.069 ]
+    sigma-stat-lo: [ 0.044, 0.071, 0.061, 0.069 ]
+    sigma-sys: [ 0.012, 0.013, 0.008, 0.001 ]
+    correlations:
+        - [ 1.00, 0.09, 0.02,-0.03 ]
+        - [ 0.09, 1.00,-0.14, 0.11 ]
+        - [ 0.02,-0.14, 1.00,-0.01 ]
+        - [-0.03, 0.11,-0.01, 1.00 ]
+    dof: 4
+B_s->phimu^+mu^-::AngularObservablesNoA[15.00,19.00]@LHCb:2021D:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phill::F_L
+        - B_s->phill::S_3_LHCb
+        - B_s->phill::S_4_LHCb
+        - B_s->phill::S_7_LHCb
+    kinematics:
+        [ {q2_min: 15.00, q2_max: 18.89}, {q2_min: 15.00, q2_max: 18.89},
+          {q2_min: 15.00, q2_max: 18.89}, {q2_min: 15.00, q2_max: 18.89} ]
+    options:
+        [ {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020}, {l: mu, tag: GvDV2020} ]
+    means: [ 0.359, -0.247, -0.208, 0.003 ]
+    sigma-stat-hi: [ 0.031, 0.042, 0.047, 0.046 ]
+    sigma-stat-lo: [ 0.031, 0.042, 0.047, 0.046 ]
+    sigma-sys: [ 0.019, 0.014, 0.006, 0.002 ]
+    correlations:
+        - [ 1.00, 0.20,-0.04, 0.00 ]
+        - [ 0.20, 1.00,-0.06,-0.08 ]
+        - [-0.04,-0.06, 1.00,-0.04 ]
+        - [ 0.00,-0.08,-0.04, 1.00 ]
     dof: 4
 # }}}

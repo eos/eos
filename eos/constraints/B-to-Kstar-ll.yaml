@@ -1410,6 +1410,29 @@ B^0->K^*0mu^+mu^-::NormalizedBR[17.00,19.00]@LHCb:2016A:
     dof: 1
 # }}}
 #
+# 2017B
+#
+# {{{
+B^0->K^*0mu^+mu^-::R_K^*[0.045,1.10]@LHCb:2017B:
+    type: Gaussian
+    observable: B->K^*ll::R_K^*
+    kinematics: {q2_mu_min: 0.045, q2_mu_max: 1.1, q2_e_min: 0.045, q2_e_max: 1.1}
+    options: {q: d, tag: BFS2004}
+    mean: 0.66
+    sigma-stat: {hi: 0.11, lo: 0.07}
+    sigma-sys: {hi: 0.03, lo: 0.03}
+    dof: 1
+B^0->K^*0mu^+mu^-::R_K^*[1.10,6.00]@LHCb:2017B:
+    type: Gaussian
+    observable: B->K^*ll::R_K^*
+    kinematics: {q2_mu_min: 1.1, q2_mu_max: 6.0, q2_e_min: 1.1, q2_e_max: 6.0}
+    options: {q: d, tag: BFS2004}
+    mean: 0.69
+    sigma-stat: {hi: 0.11, lo: 0.07}
+    sigma-sys: {hi: 0.05, lo: 0.05}
+    dof: 1
+# }}}
+#
 # 2020
 #
 # {{{

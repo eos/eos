@@ -509,10 +509,10 @@ B^+->K^+mu^+mu^-::F_H[15.00,22.00]@LHCb:2014B:
 # 2021
 #
 # {{{
-B^+->K^+l^+l^-::R_K[1.00,6.00]@LHCb:2021A:
+B^+->K^+l^+l^-::R_K[1.10,6.00]@LHCb:2021A:
     type: Gaussian
     observable: B->Kll::R_K
-    kinematics: {q2_mu_min: 1, q2_mu_max: 6, q2_e_min: 1, q2_e_max: 6}
+    kinematics: {q2_mu_min: 1.1, q2_mu_max: 6, q2_e_min: 1.1, q2_e_max: 6}
     options: {tag: BFS2004}
     mean: 0.846
     sigma-stat: {hi: 0.042, lo: -0.039}

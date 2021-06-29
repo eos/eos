@@ -9,7 +9,7 @@ B_s->phiJpsi::BR@PDG:2020A:
     type: Gaussian
     observable: B_s->phipsi::BR
     kinematics: {}
-    options: {psi: "J/psi"}
+    options: {psi: "J/psi", q: "s"}
     mean: 1.08e-3
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 8.e-5, lo: 8.e-5}
@@ -18,9 +18,94 @@ B_s->phipsi2S::BR@PDG:2020A:
     type: Gaussian
     observable: B_s->phipsi::BR
     kinematics: {}
-    options: {psi: "psi(2S)"}
+    options: {psi: "psi(2S)", q: "s"}
     mean: 5.4e-4
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 6.e-5, lo: 6.e-5}
     dof: 1
+# }}}
+
+########
+# LHCb #
+########
+#
+# 2014
+#
+# {{{
+B_s->phiJpsi::PolarizationAmplitude@LHCb:2014D:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phipsi::perp_polarization
+        - B_s->phipsi::long_polarization
+        - B_s->phipsi::delta_para_long
+        - B_s->phipsi::delta_perp_long
+    kinematics:
+        [ {}, {}, {}, {} ]
+    options:
+        [ {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"} ]
+    means: [ 0.2504, 0.5241, 3.26, 3.08 ]
+    sigma-stat-hi: [ 0.0049, 0.0034, 0.1, 0.14 ]
+    sigma-stat-lo: [ 0.0049, 0.0034, 0.17, 0.15 ]
+    sigma-sys: [ 0.0036, 0.0067, 0.06, 0.06 ]
+    correlations:
+        - [ 1.00,-0.70, 0.03, 0.08 ]
+        - [-0.70, 1.00,-0.38,-0.28 ]
+        - [ 0.03,-0.38, 1.00, 0.47 ]
+        - [ 0.08,-0.28, 0.47, 1.00 ]
+    dof: 4
+# }}}
+#
+# 2019
+#
+# {{{
+B_s->phiJpsi::PolarizationAmplitude@LHCb:2019A:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phipsi::perp_polarization
+        - B_s->phipsi::long_polarization
+        - B_s->phipsi::delta_perp_long
+        - B_s->phipsi::delta_para_long
+    kinematics:
+        [ {}, {}, {}, {} ]
+    options:
+        [ {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"} ]
+    means: [ 0.2456, 0.5186, 2.64, 3.06 ]
+    sigma-stat-hi: [ 0.0040, 0.0029, 0.13, 0.08 ]
+    sigma-stat-lo: [ 0.0040, 0.0029, 0.13, 0.07 ]
+    sigma-sys: [ 0.0019, 0.0023, 0.10, 0.04 ]
+    correlations:
+        - [ 1.00,-0.64, 0.01, 0.07 ]
+        - [-0.64, 1.00, 0.01,-0.02 ]
+        - [ 0.01, 0.01, 1.00, 0.25 ]
+        - [ 0.07,-0.02, 0.25, 1.00 ]
+    dof: 4
+# }}}
+#
+# 2021
+#
+# {{{
+B_s->phiJpsi::PolarizationAmplitude@LHCb:2021C:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phipsi::perp_polarization
+        - B_s->phipsi::long_polarization
+        - B_s->phipsi::delta_para_long
+        - B_s->phipsi::delta_perp_long
+    kinematics:
+        [ {}, {}, {}, {} ]
+    options:
+        [ {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"} ]
+    means: [ 0.234, 0.530, 3.11, 2.41 ]
+    sigma-stat-hi: [ 0.034, 0.029, 0.080, 0.430 ]
+    sigma-stat-lo: [ 0.034, 0.029, 0.070, 0.420 ]
+    sigma-sys: [ 0.008, 0.013, 0.060, 0.100 ]
+    correlations:
+        - [ 1.00,-0.66,-0.06, 0.10 ]
+        - [-0.66, 1.00, 0.08,-0.17 ]
+        - [-0.06, 0.08, 1.00,-0.03 ]
+        - [ 0.10,-0.17,-0.03, 1.00 ]
+    dof: 4
 # }}}
