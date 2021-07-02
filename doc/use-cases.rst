@@ -643,7 +643,7 @@ The result looks like this:
 
 
 **********************
-Peudo Event Simulation
+Pseudo Event Simulation
 **********************
 
 EOS can simulate pseudo events from any of its built-in PDFs using Markov chain Monte Carlo techniques.
