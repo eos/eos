@@ -24,6 +24,7 @@ Installation instructions can be found `here <installation.html>`_.
    :caption: Contents:
 
    installation
+   basics
    use-cases
    faq
    api/python
