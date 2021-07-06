@@ -48,7 +48,7 @@ class Plotter:
         self.plot_types = {
             'band':                  Plotter.Band,
             'constraint':            Plotter.Constraint,
-            'constraint2D':         Plotter.Constraint2D,
+            'constraint2D':          Plotter.Constraint2D,
             'constraint-overview':   Plotter.ConstraintOverview,
             'contours2D':            Plotter.Contours2D,
             'expression':            Plotter.Expression,
@@ -267,9 +267,12 @@ class Plotter:
             self.plotter.ax.add_patch(rect)
 
         def handles_labels(self):
-            handle = plt.Rectangle((0,0),1,1, color=self.color)
-            label  = self.label
-            return ([handle], [label])
+            if self.label:
+                handle = plt.Rectangle((0,0),1,1, color=self.color)
+                label  = self.label
+                return ([handle], [label])
+            else:
+                return ([], [])
 
 
     """ Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter. """
@@ -850,9 +853,12 @@ class Plotter:
 
 
         def handles_labels(self):
-            handle = plt.Rectangle((0,0),1,1, color=self.color, alpha=self.alpha)
-            label  = self.label
-            return ([handle], [label])
+            if self.label:
+                handle = plt.Rectangle((0,0),1,1, color=self.color, alpha=self.alpha)
+                label  = self.label
+                return ([handle], [label])
+            else:
+                return ([], [])
 
 
     """ Plots overview of several constraints from the EOS library of experimental and theoretical likelihoods. """
@@ -1175,13 +1181,16 @@ class Plotter:
                 plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
 
         def handles_labels(self):
-            handle = None
-            if 'areas' in self.contours:
-                handle = plt.Rectangle((0,0),1,1, color=self.color)
-            else:
-                handle = plt.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.style[0])
+            if self.label:
+                handle = None
+                if 'areas' in self.contours:
+                    handle = plt.Rectangle((0,0),1,1, color=self.color)
+                else:
+                    handle = plt.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.style[0])
 
-            return ([handle], [self.label])
+                return ([handle], [self.label])
+            else:
+                return ([], [])
 
 
     """ Plots a 1D histogram of pre-existing random samples. """
