@@ -434,6 +434,14 @@ class Analysis:
         generating_components.append(origins)
         samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:])  # Rescale the parameters back to their original bounds
         weights = sampler.weights[:][:, 0]
+        # rescale proposal components back to their physical bounds
+        for component in sampler.proposal.components:
+            rescaled_mu = self._x_to_par(component.mu)
+            rescaled_sigma = np.array([[
+                component.sigma[i, j] * (bj[1] - bj[0]) * (bi[1] - bi[0]) / 4 for j, bj in enumerate(self.bounds)
+                ] for i, bi in enumerate(self.bounds)])
+            component.update(rescaled_mu, rescaled_sigma)
+
         perplexity = self._perplexity(np.copy(weights))
         eos.info('Perplexity after final samples: {}'.format(perplexity))
 
