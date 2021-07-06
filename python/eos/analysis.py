@@ -366,7 +366,7 @@ class Analysis:
             return(parameter_samples, weights, np.array(observable_samples))
 
 
-    def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand):
+    def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand, return_final_only=True):
         """
         Return samples of the parameters and log(weights)
 
@@ -377,6 +377,7 @@ class Analysis:
         :param steps: Number of adaptation steps.
         :param final_N: Number of samples that shall be drawn after all adaptation steps.
         :param rng: Optional random number generator (must be compatible with the requirements of pypmc.sampler.importance_sampler.ImportancSampler)
+        :param return_final_only: If set to True, only returns the samples and weights of the final sampling step, after all adaptations have finished.
 
         :return: A tuple of the parameters as array of length N = pre_N * steps + final_N, the (linear) weights as array of length N, and the
             final proposal function as pypmc.density.mixture.MixtureDensity.
@@ -432,8 +433,7 @@ class Analysis:
         # draw final samples
         origins = sampler.run(final_N, trace_sort=True)
         generating_components.append(origins)
-        samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:])  # Rescale the parameters back to their original bounds
-        weights = sampler.weights[:][:, 0]
+
         # rescale proposal components back to their physical bounds
         for component in sampler.proposal.components:
             rescaled_mu = self._x_to_par(component.mu)
@@ -442,6 +442,15 @@ class Analysis:
                 ] for i, bi in enumerate(self.bounds)])
             component.update(rescaled_mu, rescaled_sigma)
 
+        # rescale the samples back to their physical bounds
+        if return_final_only:
+            # only returns the final_N final samples
+            samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:][-final_N:])
+            weights = sampler.weights[:][-final_N:, 0]
+        else:
+            # returns all samples
+            samples = np.apply_along_axis(self._x_to_par, 1, sampler.samples[:])
+            weights = sampler.weights[:][:, 0]
         perplexity = self._perplexity(np.copy(weights))
         eos.info('Perplexity after final samples: {}'.format(perplexity))
 
