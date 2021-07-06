@@ -16,6 +16,7 @@ jobs:
                     - { pypath: cp36-cp36m, pysuffix: cp36, pyboostsuffix: 36 }
                     - { pypath: cp37-cp37m, pysuffix: cp37, pyboostsuffix: 37 }
                     - { pypath: cp38-cp38,  pysuffix: cp38, pyboostsuffix: 38 }
+                    - { pypath: cp39-cp39,  pysuffix: cp39, pyboostsuffix: 39 }
         container:
             image: eoshep/build-essentials:manylinux2014-${{ matrix.cfg.pysuffix }}
         steps:
@@ -80,6 +81,7 @@ jobs:
                     - { pypath: cp36-cp36m, pysuffix: cp36, pyboostsuffix: 36 }
                     - { pypath: cp37-cp37m, pysuffix: cp37, pyboostsuffix: 37 }
                     - { pypath: cp38-cp38,  pysuffix: cp38, pyboostsuffix: 38 }
+                    - { pypath: cp39-cp39,  pysuffix: cp39, pyboostsuffix: 39 }
         container:
             image: eoshep/build-essentials:manylinux2014-${{ matrix.cfg.pysuffix }}
         steps:
@@ -118,6 +120,7 @@ jobs:
                     - { pypath: cp36-cp36m, pysuffix: cp36, pyboostsuffix: 36 }
                     - { pypath: cp37-cp37m, pysuffix: cp37, pyboostsuffix: 37 }
                     - { pypath: cp38-cp38,  pysuffix: cp38, pyboostsuffix: 38 }
+                    - { pypath: cp39-cp39,  pysuffix: cp39, pyboostsuffix: 39 }
         container:
             image: eoshep/build-essentials:manylinux2014-${{ matrix.cfg.pysuffix }}
         steps:
