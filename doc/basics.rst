@@ -41,7 +41,7 @@ looked at.
 
 The variable ``parameters`` now contains all of your parameters. You can
 use ``display(parameters)`` to see the full list, which is rather
-lengthy. Let’s have a look at something more manageable: the parameters
+lengthy. Let’s have a look at something more manageable: the parameter
 for the muon mass:
 
 .. code:: ipython3
