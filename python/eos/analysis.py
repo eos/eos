@@ -366,7 +366,7 @@ class Analysis:
             return(parameter_samples, weights, np.array(observable_samples))
 
 
-    def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand, return_final_only=True):
+    def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand, return_final_only=True, final_perplexity_threshold=1.0):
         """
         Return samples of the parameters and log(weights)
 
@@ -378,6 +378,7 @@ class Analysis:
         :param final_N: Number of samples that shall be drawn after all adaptation steps.
         :param rng: Optional random number generator (must be compatible with the requirements of pypmc.sampler.importance_sampler.ImportancSampler)
         :param return_final_only: If set to True, only returns the samples and weights of the final sampling step, after all adaptations have finished.
+        :param final_perplexity_threshold: Adaptations are stopped if the perpexlity of the last adaptation step is above this threshold value.
 
         :return: A tuple of the parameters as array of length N = pre_N * steps + final_N, the (linear) weights as array of length N, and the
             final proposal function as pypmc.density.mixture.MixtureDensity.
@@ -420,6 +421,8 @@ class Analysis:
             samples = sampler.samples[:]
             last_perplexity = self._perplexity(np.copy(sampler.weights[-1][:, 0]))
             eos.info('Perplexity of the last samples after sampling in step {}: {}'.format(step, last_perplexity))
+            if last_perplexity < 0.05:
+                eos.warn("Last step's perplexity is very low. This could possibly be improved by running the markov chains that are used to form the initial PDF for a bit longer")
             weights = sampler.weights[:][:, 0]
             adjusted_weights = np.copy(weights)
             # replace negative and nan weights by eps
@@ -429,6 +432,10 @@ class Analysis:
             eos.info('Perplexity of all previous samples after sampling in step {}: {}'.format(step, self._perplexity(adjusted_weights)))
             pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True, copy=False)
             sampler.proposal.normalize()
+            # stop adaptation if the perplexity of the last step is larger than the threshold
+            if last_perplexity > final_perplexity_threshold:
+                eos.info('Perplexity threshold reached after {} step(s)'.format(step))
+                break
 
         # draw final samples
         origins = sampler.run(final_N, trace_sort=True)
