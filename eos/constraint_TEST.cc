@@ -1134,6 +1134,139 @@ class ConstraintDeserializationTest :
                 ObservablePtr o = Observable::make("B->pi::f_+(q2);form-factors=BSZ2015", p, Kinematics{ { "q2", 1.0 } }, Options{ });
                 TEST_CHECK_NEARLY_EQUAL(llh(), o->evaluate(), 1e-17);
             }
+            // }}}
+
+            // {{{ Mixture (correct order)
+            {
+                static const std::string input(
+                    "type: Mixture\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - mass::b(MSbar)\n"
+                    "  - mass::c\n"
+                    "kinematics:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "options:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "components:\n"
+                    "  - means: [4.3, 1.1]\n"
+                    "    covariance:\n"
+                    "      - [0.01, 0.003]\n"
+                    "      - [0.003, 0.0025]\n"
+                    "  - means: [4.2, 1.1]\n"
+                    "    covariance:\n"
+                    "      - [0.04, 0.006]\n"
+                    "      - [0.006, 0.0025]\n"
+                    "weights: [0.6, 0.4]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::Mixture", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                YAML::Emitter out;
+                entry->serialize(out);
+
+                std::string output(out.c_str());
+
+                std::cerr << output << std::endl;
+                TEST_CHECK(input == output);
+            }
+            // }}}
+
+            // {{{ Mixture (value; trivial cross check against MultivariateGaussian(Covariance))
+            {
+                static const std::string input(
+                    "type: Mixture\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - mass::b(MSbar)\n"
+                    "  - mass::c\n"
+                    "kinematics:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "options:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "components:\n"
+                    "  - means: [4.3, 1.1]\n"
+                    "    covariance:\n"
+                    "      - [0.0100, 0.0030]\n"
+                    "      - [0.0030, 0.0025]\n"
+                    "weights: [1.0]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::Mixture", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                Constraint c = entry->make("Test::Mixture", Options{ });
+                std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
+                TEST_CHECK_EQUAL(1, blocks.size());
+
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                llh.add(c);
+
+                // evaluation off mode
+                p["mass::b(MSbar)"] = 4.6;
+                p["mass::c"] = 1.3;
+                TEST_CHECK_NEARLY_EQUAL(llh(), -4.597666149, 1e-8);
+            }
+            // }}}
+
+            // {{{ Mixture (value; non-trivial cross check using two components)
+            {
+                static const std::string input(
+                    "type: Mixture\n"
+                    "dim: 2\n"
+                    "observables:\n"
+                    "  - mass::b(MSbar)\n"
+                    "  - mass::c\n"
+                    "kinematics:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "options:\n"
+                    "  - {}\n"
+                    "  - {}\n"
+                    "components:\n"
+                    "  - means: [4.3, 1.1]\n"
+                    "    covariance:\n"
+                    "      - [0.01, 0.003]\n"
+                    "      - [0.003, 0.0025]\n"
+                    "  - means: [4.2, 1.1]\n"
+                    "    covariance:\n"
+                    "      - [0.04, 0.006]\n"
+                    "      - [0.006, 0.0025]\n"
+                    "weights: [0.6, 0.4]\n"
+                    "dof: 2"
+                );
+
+                YAML::Node node = YAML::Load(input);
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::Mixture", node));
+                TEST_CHECK(nullptr != entry.get());
+
+                Constraint c = entry->make("Test::Mixture", Options{ });
+                std::vector<LogLikelihoodBlockPtr> blocks(c.begin_blocks(), c.end_blocks());
+                TEST_CHECK_EQUAL(1, blocks.size());
+
+                Parameters p = Parameters::Defaults();
+                LogLikelihood llh(p);
+                llh.add(c);
+
+                // evaluation off mode
+                p["mass::b(MSbar)"] = 4.6;
+                p["mass::c"] = 1.3;
+                TEST_CHECK_NEARLY_EQUAL(llh(), -4.779399451, 1e-8);
+            }
+            // }}}
         }
 } constraint_deserialization_test;
 
