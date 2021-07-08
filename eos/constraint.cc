@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
- * Copyright (c) 2011-2018 Danny van Dyk
+ * Copyright (c) 2011-2021 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +22,7 @@
 #include <eos/constraint.hh>
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/utils/exception.hh>
+#include <eos/utils/gsl-interface.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/power_of.hh>
@@ -1076,11 +1077,11 @@ namespace eos
 
         std::vector<Options> options;
 
-        gsl_vector * const means;
+        const GSLVectorPtr means;
 
-        gsl_matrix * const covariance;
+        const GSLMatrixPtr covariance;
 
-        gsl_matrix * response;
+        const GSLMatrixPtr response;
 
         unsigned number_of_observations;
 
@@ -1122,14 +1123,6 @@ namespace eos
 
         virtual ~MultivariateGaussianCovarianceConstraintEntry()
         {
-            gsl_vector_free(means);
-
-            gsl_matrix_free(covariance);
-
-            if (response)
-            {
-                gsl_matrix_free(response);
-            }
         }
 
         virtual const std::string & type() const
@@ -1166,19 +1159,19 @@ namespace eos
 
             // create GSL vector for the mean
             gsl_vector * means = gsl_vector_alloc(subdim_meas);
-            gsl_vector_view means_subset = gsl_vector_subvector(this->means, begin, subdim_meas);
+            gsl_vector_view means_subset = gsl_vector_subvector(this->means.get(), begin, subdim_meas);
             gsl_vector_memcpy(means, &(means_subset.vector));
 
             // create GSL matrix for the covariance
             gsl_matrix * covariance = gsl_matrix_alloc(subdim_meas, subdim_meas);
-            gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->covariance, begin, begin, subdim_meas, subdim_meas);
+            gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->covariance.get(), begin, begin, subdim_meas, subdim_meas);
             gsl_matrix_memcpy(covariance, &(covariance_subset.matrix));
 
             // create GSL matrix for the response
             gsl_matrix * response = gsl_matrix_calloc(subdim_meas, dim_pred);
             if (this->response)
             {
-                gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->response, begin, 0, subdim_meas, dim_pred);
+                gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->response.get(), begin, 0, subdim_meas, dim_pred);
                 gsl_matrix_memcpy(response, &(covariance_subset.matrix));
             }
             else
@@ -1236,7 +1229,7 @@ namespace eos
             out << YAML::Key << "means" << YAML::Value << YAML::Flow << YAML::BeginSeq;
             for (auto i = 0u ; i < dim_meas ; ++i)
             {
-                out << gsl_vector_get(this->means, i);
+                out << gsl_vector_get(means.get(), i);
             }
             out << YAML::EndSeq;
             out << YAML::Key << "covariance" << YAML::Value << YAML::BeginSeq;
@@ -1245,7 +1238,7 @@ namespace eos
                 out << YAML::Flow << YAML::BeginSeq;
                 for (auto j = 0u ; j < dim_meas ; ++j)
                 {
-                    out << gsl_matrix_get(covariance, i, j);
+                    out << gsl_matrix_get(covariance.get(), i, j);
                 }
                 out << YAML::EndSeq;
             }
@@ -1258,7 +1251,7 @@ namespace eos
                     out << YAML::Flow << YAML::BeginSeq;
                     for (auto j = 0u ; j < dim_pred ; ++j)
                     {
-                        out << gsl_matrix_get(response, i, j);
+                        out << gsl_matrix_get(response.get(), i, j);
                     }
                     out << YAML::EndSeq;
                 }
@@ -1606,6 +1599,365 @@ namespace eos
     };
     /// }}}
 
+    /// {{{ MixtureConstraintEntry
+    struct MixtureConstraintEntry :
+        public ConstraintEntryBase
+    {
+        std::vector<QualifiedName> observables;
+
+        std::vector<Kinematics> kinematics;
+
+        std::vector<Options> options;
+
+        std::vector<GSLVectorPtr> means;
+
+        std::vector<GSLMatrixPtr> covariances;
+
+        std::vector<double> weights;
+
+        unsigned number_of_observations;
+
+        unsigned dim_meas, dim_pred;
+
+        explicit
+        MixtureConstraintEntry(const QualifiedName & name,
+                const std::vector<QualifiedName> & observables,
+                const std::vector<Kinematics> & kinematics,
+                const std::vector<Options> & options,
+                std::vector<GSLVectorPtr> && _means,
+                std::vector<GSLMatrixPtr> && _covariances,
+                const std::vector<double> & weights,
+                const unsigned number_of_observations) :
+            ConstraintEntryBase(name, observables),
+            observables(observables),
+            kinematics(kinematics),
+            options(options),
+            means(std::move(_means)),
+            covariances(std::move(_covariances)),
+            weights(weights),
+            number_of_observations(number_of_observations),
+            dim_pred(observables.size())
+        {
+            if (means.size() != covariances.size()) { throw InternalError("MixtureConstraintEntry: number of components does not agree between means and covariances"); }
+            if (means.size() != weights.size()) { throw InternalError("MixtureConstraintEntry: number of components does not agree between means and weights"); }
+
+            if (means.empty()) { throw InternalError("MixtureConstraintEntry: need at least one component"); }
+
+            dim_meas = means.front()->size;
+            for (unsigned int i = 0 ; i < means.size() ; ++i)
+            {
+                if (dim_meas != means[i]->size) { throw InternalError("MixtureConstraintEntry: mean vectors are not all equal in size"); }
+            }
+
+            if (dim_meas != dim_pred) { throw InternalError("MixtureConstraintEntry: number of measurements does not equal number of predictions"); }
+
+            for (unsigned int i = 0 ; i < means.size() ; ++i)
+            {
+                if (dim_meas != covariances[i]->size1) { throw InternalError("MixtureConstraintEntry: number of rows in at least one covariance does not equal number of measurements"); }
+                if (dim_meas != covariances[i]->size2) { throw InternalError("MixtureConstraintEntry: number of columns in at least one covariance does not equal number of measurements"); }
+            }
+
+            if (dim_pred != kinematics.size()) { throw InternalError("MixtureConstraintEntry: number of kinematics entries does not equal number of predictions"); }
+
+            if (dim_pred != options.size()) { throw InternalError("MixtureConstraintEntry: number of options entries does not equal number of predictions"); }
+
+            if (dim_meas < number_of_observations) { throw InternalError("MixtureConstraintEntry: number of observations larger than number of measurements"); }
+        }
+
+        MixtureConstraintEntry(const MixtureConstraintEntry &) = delete;
+        MixtureConstraintEntry & operator= (const MixtureConstraintEntry &) = delete;
+
+        virtual ~MixtureConstraintEntry()
+        {
+        }
+
+        virtual const std::string & type() const
+        {
+            static const std::string type("MultivariateGaussian<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + "> (using covariance matrix)");
+
+            return type;
+        }
+
+        virtual Constraint make(const QualifiedName & name, const Options & options) const
+        {
+            Parameters parameters(Parameters::Defaults());
+            ObservableCache cache(parameters);
+
+            std::vector<ObservablePtr> observables(dim_pred, nullptr);
+            for (auto i = 0u ; i < dim_pred ; ++i)
+            {
+                observables[i] = Observable::make(this->observables[i], parameters, this->kinematics[i], this->options[i] + options);
+                if (! observables[i].get())
+                    throw InternalError("make_multivariate_gaussian_covariance_constraint<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
+            }
+
+            std::vector<LogLikelihoodBlockPtr> components;
+
+            for (unsigned i = 0 ; i < this->means.size() ; ++i)
+            {
+                // create GSL vector for the mean of each component
+                gsl_vector * mean = gsl_vector_alloc(dim_meas);
+                gsl_vector_memcpy(mean, this->means[i].get());
+
+                // create GSL matrix for the covariance of each component
+                gsl_matrix * covariance = gsl_matrix_alloc(dim_meas, dim_meas);
+                gsl_matrix_memcpy(covariance, this->covariances[i].get());
+
+                gsl_matrix * response = gsl_matrix_alloc(dim_meas, dim_pred);
+                gsl_matrix_set_identity(response);
+
+                components.push_back(LogLikelihoodBlock::MultivariateGaussian(cache, observables, mean, covariance, response, dim_meas));
+            }
+
+            auto block = LogLikelihoodBlock::Mixture(components, weights);
+
+            return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
+        }
+
+        virtual std::ostream & insert(std::ostream & os) const
+        {
+            os << _name.full() << ":" << std::endl;
+            os << "    type: Mixture<components=" << means.size() << ",measurements=" << dim_meas << ",predictions=" << dim_pred << ">" << std::endl;
+
+            return os;
+        }
+
+        virtual void serialize(YAML::Emitter & out) const
+        {
+            out << YAML::DoublePrecision(9);
+            out << YAML::BeginMap;
+            out << YAML::Key << "type" << YAML::Value << "Mixture";
+            out << YAML::Key << "dim" << YAML::Value << dim_meas;
+            out << YAML::Key << "observables" << YAML::Value << YAML::BeginSeq;
+            for (const auto & o : observables)
+            {
+                out << o.full();
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "kinematics" << YAML::Value << YAML::BeginSeq;
+            for (const auto & k : kinematics)
+            {
+                out << YAML::Flow << YAML::BeginMap;
+                for (const auto & kk : k)
+                {
+                    out << YAML::Key << kk.name() << YAML::Value << kk.evaluate();
+                }
+                out << YAML::EndMap;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "options" << YAML::Value << YAML::BeginSeq;
+            for (const auto & o : options)
+            {
+                out << YAML::Flow << YAML::BeginMap;
+                for (const auto & oo : o)
+                {
+                    out << YAML::Key << oo.first << YAML::Value << oo.second;
+                }
+                out << YAML::EndMap;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "components" << YAML::Value << YAML::BeginSeq;
+            for (unsigned n = 0 ; n < means.size() ; ++n)
+            {
+                out << YAML::BeginMap;
+                out << YAML::Key << "means" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+                for (auto i = 0u ; i < dim_meas ; ++i)
+                {
+                    out << gsl_vector_get(means[n].get(), i);
+                }
+                out << YAML::EndSeq;
+                out << YAML::Key << "covariance" << YAML::Value << YAML::BeginSeq;
+                for (auto i = 0u ; i < dim_meas ; ++i)
+                {
+                    out << YAML::Flow << YAML::BeginSeq;
+                    for (auto j = 0u ; j < dim_meas ; ++j)
+                    {
+                        out << gsl_matrix_get(covariances[n].get(), i, j);
+                    }
+                    out << YAML::EndSeq;
+                }
+                out << YAML::EndSeq;
+                out << YAML::EndMap;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "weights" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+            for (const auto & w : weights)
+            {
+                out << w;
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "dof" << YAML::Value << number_of_observations;
+            out << YAML::EndMap;
+        }
+
+        static ConstraintEntry * deserialize(const QualifiedName & name, const YAML::Node & n)
+        {
+            static const std::string required_keys[] =
+            {
+                "dim", "observables", "kinematics", "options", "components", "weights", "dof"
+            };
+
+            for (auto && k : required_keys)
+            {
+                if (! n[k].IsDefined())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not specified");
+                }
+            }
+
+            static const std::string scalar_keys[] =
+            {
+                "dim", "dof"
+            };
+
+            for (auto && k : scalar_keys)
+            {
+                if (YAML::NodeType::Scalar != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a scalar value");
+                }
+            }
+
+            static const std::string seq_keys[] =
+            {
+                "observables", "kinematics", "options", "components", "weights"
+            };
+
+            for (auto && k : seq_keys)
+            {
+                if (YAML::NodeType::Sequence != n[k].Type())
+                {
+                    throw ConstraintDeserializationError(name, "required key '" + k + "' not mapped to a sequence");
+                }
+            }
+
+            try
+            {
+                unsigned dof = n["dof"].as<unsigned>();
+
+                std::vector<QualifiedName> observables;
+                for (auto && o : n["observables"])
+                {
+                    observables.push_back(QualifiedName(o.as<std::string>()));
+                }
+
+                std::vector<Kinematics> kinematics;
+                for (auto && entry : n["kinematics"])
+                {
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in kinematics sequence");
+                    }
+
+                    kinematics.push_back(Kinematics{ });
+                    std::list<std::pair<YAML::Node, YAML::Node>> kinematics_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    kinematics_nodes.sort(&impl::less);
+                    std::set<std::string> kinematics_keys;
+                    for (auto && k : kinematics_nodes)
+                    {
+                        std::string key = k.first.as<std::string>();
+                        if (! kinematics_keys.insert(key).second)
+                            throw ConstraintDeserializationError(name, "kinematics key '" + key + "' encountered more than once");
+
+                        kinematics.back().declare(key, k.second.as<double>());
+                    }
+                }
+
+                std::vector<Options> options;
+                for (auto && entry : n["options"])
+                {
+                    if (! n.IsMap())
+                    {
+                        throw ConstraintDeserializationError(name, "non-map entry encountered in options sequence");
+                    }
+
+                    options.push_back(Options{ });
+                    std::list<std::pair<YAML::Node, YAML::Node>> options_nodes(entry.begin(), entry.end());
+                    // yaml-cpp does not guarantee loading of a map in the order it is written. Circumvent this problem
+                    // by sorting the entries lexicographically.
+                    options_nodes.sort(&impl::less);
+                    std::set<std::string> options_keys;
+                    for (auto && o : options_nodes)
+                    {
+                        std::string key = o.first.as<std::string>();
+                        if (! options_keys.insert(key).second)
+                            throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
+
+                        options.back().set(key, o.second.as<std::string>());
+                    }
+                }
+
+                std::vector<GSLVectorPtr> means;
+                std::vector<GSLMatrixPtr> covariances;
+                for (auto && c : n["components"])
+                {
+                    if (YAML::NodeType::Sequence != c["means"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "required key 'means' not mapped to a sequence");
+                    }
+
+                    std::vector<double> _mean;
+                    for (auto && v : c["means"])
+                    {
+                        _mean.push_back(v.as<double>());
+                    }
+                    GSLVectorPtr mean = make_gsl_vector(_mean.size());
+                    for (auto i = 0u ; i < _mean.size() ; ++i)
+                    {
+                        gsl_vector_set(mean.get(), i, _mean[i]);
+                    }
+                    means.emplace_back(std::move(mean));
+
+                    if (YAML::NodeType::Sequence != c["covariance"].Type())
+                    {
+                        throw ConstraintDeserializationError(name, "required key 'covariance' not mapped to a sequence");
+                    }
+
+                    std::vector<std::vector<double>> _covariance;
+                    for (auto && row : c["covariance"])
+                    {
+                        _covariance.push_back(std::vector<double>());
+
+                        for (auto && v : row)
+                        {
+                            _covariance.back().push_back(v.as<double>());
+                        }
+                    }
+                    GSLMatrixPtr covariance = make_gsl_matrix(_covariance.size(), _covariance.size());
+                    for (auto i = 0u ; i < _covariance.size() ; ++i)
+                    {
+                        const auto & _row = _covariance[i];
+
+                        if (_row.size() != _covariance.size())
+                        {
+                            throw ConstraintDeserializationError(name, "covariance matrix is not square; row " + stringify(i) + " has " + stringify(_row.size()) + " columns; expected " + stringify(_covariance.size()));
+                        }
+
+                        for (auto j = 0u ; j < _row.size() ; ++j)
+                        {
+                            gsl_matrix_set(covariance.get(), i, j, _row[j]);
+                        }
+                    }
+                    covariances.emplace_back(std::move(covariance));
+                }
+
+                std::vector<double> weights;
+                for (auto && v : n["weights"])
+                {
+                    weights.push_back(v.as<double>());
+                }
+
+                return new MixtureConstraintEntry(name.str(), observables, kinematics, options, std::move(means), std::move(covariances), weights, dof);
+            }
+            catch (QualifiedNameSyntaxError & e)
+            {
+                throw ConstraintDeserializationError(name, "'" + n["observable"].as<std::string>() + "' is not a valid observable name (" + e.what() + ")");
+            }
+        }
+    };
+    /// }}}
     ConstraintEntry::~ConstraintEntry() = default;
 
     ConstraintEntry *
@@ -1642,6 +1994,7 @@ namespace eos
             { "MultivariateGaussian",             &MultivariateGaussianConstraintEntry::deserialize           },
             { "MultivariateGaussian(Covariance)", &MultivariateGaussianCovarianceConstraintEntry::deserialize },
             { "UniformBound",                     &UniformBoundConstraintEntry::deserialize                   },
+            { "Mixture",                          &MixtureConstraintEntry::deserialize,                       },
         };
 
         std::string type = n["type"].as<std::string>();
