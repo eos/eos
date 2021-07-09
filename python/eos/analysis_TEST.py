@@ -5,6 +5,46 @@ import yaml
 
 class ClassMethodTests(unittest.TestCase):
 
+    def test_parameter_scaling(self):
+
+        analysis_args = {
+            'global_options': { 'form-factors': 'BSZ2015', 'model': 'CKMScan' },
+            'priors': [
+                { 'parameter': 'CKM::abs(V_cb)',           'min':  38e-3, 'max':  45e-3 , 'type': 'uniform'},
+                { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0,   'max':  1.0   , 'type': 'uniform'},
+                { 'parameter': 'B->D::alpha^f+_1@BSZ2015', 'min': -4.0,   'max': -1.0   , 'type': 'uniform'},
+                { 'parameter': 'B->D::alpha^f+_2@BSZ2015', 'min': +4.0,   'max': +6.0   , 'type': 'uniform'},
+                { 'parameter': 'B->D::alpha^f0_1@BSZ2015', 'min': -1.0,   'max': +2.0   , 'type': 'uniform'},
+                { 'parameter': 'B->D::alpha^f0_2@BSZ2015', 'min': -2.0,   'max':  0.0   , 'type': 'uniform'}
+            ],
+            'likelihood': [
+                'B->D::f_++f_0@HPQCD2015A',
+                'B->D::f_++f_0@FNALMILC2015B',
+                'B^0->D^+e^-nu::BRs@Belle-2015A',
+                'B^0->D^+mu^-nu::BRs@Belle-2015A'
+            ]
+        }
+
+        # Test analysis definition
+        analysis = eos.Analysis(**analysis_args)
+
+        # Test analysis optimization
+        bfp = analysis.optimize()
+
+        # Test parameter scaling
+        point = bfp.point
+
+        self.assertTrue(
+            np.max(analysis._par_to_x(point)) < 1.0
+            )
+        self.assertTrue(
+            np.min(analysis._par_to_x(point)) > -1.0
+            )
+        self.assertTrue(
+            np.max(analysis._x_to_par(analysis._par_to_x(point)) - point) < 1e-10
+            )
+
+
     def test_sanitize_manual_input(self):
 
         types  = np.array(["Gaussian", "Gaussian"])
