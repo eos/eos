@@ -40,10 +40,11 @@ namespace eos
             virtual const char * what() const throw ();
     };
 
-    struct InternalError :
+    class InternalError :
         public Exception
     {
-        InternalError(const std::string & message) throw ();
+        public:
+            InternalError(const std::string & message) throw ();
     };
 }
 
