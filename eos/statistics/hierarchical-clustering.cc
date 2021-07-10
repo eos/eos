@@ -442,7 +442,7 @@ namespace eos
 
             // calculate cholesky decomposition, needed for sampling and one step for inversion
             gsl_error_handler_t * default_gsl_error_handler = gsl_set_error_handler_off();
-            if (GSL_EDOM == gsl_linalg_cholesky_decomp(covariance_chol))
+            if (GSL_EDOM == gsl_linalg_cholesky_decomp1(covariance_chol))
             {
                 Log::instance()->message("HierarchicalClustering::Component", ll_warning)
                     << "Covariance matrix is not positive definite!"
@@ -461,7 +461,7 @@ namespace eos
                     }
                 }
 
-                if (GSL_EDOM == gsl_linalg_cholesky_decomp(covariance_chol))
+                if (GSL_EDOM == gsl_linalg_cholesky_decomp1(covariance_chol))
                 {
                     throw InternalError(
                          "HierarchicalClustering::Component: GSL couldn't find Cholesky decomposition of " + stringify(this->covariance->data, dimension, 4)

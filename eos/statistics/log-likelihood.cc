@@ -889,7 +889,10 @@ namespace eos
             {
                 // copy covariance matrix
                 gsl_matrix_memcpy(_chol, _covariance);
-                gsl_linalg_cholesky_decomp(_chol);
+                if (GSL_SUCCESS != gsl_linalg_cholesky_decomp1(_chol))
+                {
+                    throw InternalError("MultivariateGaussianBlock: Cholesky decomposition failed");
+                }
             }
 
             // invert covariance matrix based on previously obtained Cholesky decomposition
@@ -899,7 +902,10 @@ namespace eos
                 gsl_matrix_memcpy(_covariance_inv, _chol);
 
                 // compute inverse matrix from cholesky
-                gsl_linalg_cholesky_invert(_covariance_inv);
+                if (GSL_SUCCESS != gsl_linalg_cholesky_invert(_covariance_inv))
+                {
+                    throw InternalError("MultivariateGaussianBlock: Cholesky inversion failed");
+                }
             }
 
 
