@@ -17,18 +17,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/*
- * Under Debian/Ubuntu, libgsl.so has no DT_NEEDED flag pointing to
- * libgslcblas.so. Force a need on the latter within libeosutils.so.
- *
- * Contents of eos::gsl_cblas_hack::gsl_cblas_hack() is an example from the
- * GSL CBLAS Manual.
- */
-
 #include <gsl/gsl_cblas.h>
 
 namespace eos
 {
+    /*
+     * Under Debian/Ubuntu, libgsl.so has no DT_NEEDED flag pointing to
+     * libgslcblas.so. Force a need on the latter within libeosutils.so.
+     *
+     * Contents of eos::gsl_cblas_hack::gsl_cblas_hack() is an example from the
+     * GSL CBLAS Manual.
+     */
+
     namespace gsl_cblas_hack
     {
         void gsl_cblas_hack()
