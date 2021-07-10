@@ -40,4 +40,9 @@ namespace eos
         Exception("Internal Error: " + message)
     {
     }
+
+    GSLError::GSLError(const std::string & message) throw () :
+        Exception("GSL Error: " + message)
+    {
+    }
 }
