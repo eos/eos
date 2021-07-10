@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020 Danny van Dyk
+ * Copyright (c) 2021 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -17,20 +17,31 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <gsl/gsl_errno.h>
+#include <test/test.hh>
+#include <eos/utils/exception.hh>
 
-namespace eos
+#include <gsl/gsl_sf.h>
+
+using namespace test;
+using namespace eos;
+
+class GSLErrorHandlerTest :
+    public TestCase
 {
-    namespace init
-    {
-        /*
-         * Turn off the default GSLerror handler.
-         */
-        void disable_gsl_error_handler() __attribute__((constructor(101)));
-
-        void disable_gsl_error_handler()
+    public:
+        GSLErrorHandlerTest() :
+            TestCase("gsl_error_handler_test")
         {
-            gsl_set_error_handler_off();
         }
-    }
-}
+
+        virtual void run() const
+        {
+	    gsl_sf_result result;
+	    int status;
+
+	    TEST_CHECK_THROWS(GSLError,
+	    {
+            status = gsl_sf_expint_3_e(-1.0, &result);
+	    });
+        }
+} gsl_error_handler_test;
