@@ -155,6 +155,7 @@ TESTS = \
 	cartesian-product_TEST \
 	ckm_scan_model_TEST \
 	derivative_TEST \
+	gsl-hacks_TEST \
 	gsl-interface_TEST \
 	hdf5_TEST \
 	indirect-iterator_TEST \
@@ -201,6 +202,10 @@ cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 ckm_scan_model_TEST_SOURCES = ckm_scan_model_TEST.cc
 
 derivative_TEST_SOURCES = derivative_TEST.cc
+
+gsl_hacks_TEST_SOURCES = gsl-hacks_TEST.cc
+gsl_hacks_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+gsl_hacks_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 gsl_interface_TEST_SOURCES = gsl-interface_TEST.cc
 

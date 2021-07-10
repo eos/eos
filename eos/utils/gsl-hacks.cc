@@ -17,7 +17,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/exception.hh>
+#include <eos/utils/stringify.hh>
+
 #include <gsl/gsl_cblas.h>
+#include <gsl/gsl_errno.h>
 
 namespace eos
 {
@@ -46,6 +50,25 @@ namespace eos
             float C[4] = { 0.00, 0.00, 0.00, 0.00 };
 
             cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 3, 1.0, A, lda, B, ldb, 0.0, C, ldc);
+        }
+    }
+
+    /*
+     * Disable GSL default error handler and register our own handler, which
+     * throws an eos::Exception of type eos::GSLError.
+     */
+    namespace gsl_error_handler
+    {
+        void gsl_error_handler(const char * reason, const char * /*file*/, int /*line*/, int gsl_errno)
+        {
+            throw GSLError(stringify(reason) + " (error code: " + stringify(gsl_errno) + ")");
+        }
+
+        void gsl_error_handler_hack() __attribute__((constructor));
+
+        void gsl_error_handler_hack()
+        {
+            gsl_error_handler_t * previous_gsl_error_handler = gsl_set_error_handler(&gsl_error_handler);
         }
     }
 }
