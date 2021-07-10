@@ -23,7 +23,7 @@ libeosutils_la_SOURCES = \
 	destringify.cc destringify.hh \
 	diagnostics.cc diagnostics.hh \
 	exception.cc exception.hh \
-	gsl-cblas-hack.cc \
+	gsl-hacks.cc \
 	gsl-interface.hh \
 	hdf5.cc hdf5.hh hdf5-fwd.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
