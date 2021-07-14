@@ -258,6 +258,18 @@ AC_CHECK_LIB(gsl, gsl_sf_zeta,
 	[AC_MSG_ERROR([you do seem to be lacking the GNU Scientific Library (http://www.gnu.org/software/gsl/).])],
 	[-lgslcblas -lm])
 
+AC_CHECK_LIB(gsl, gsl_linalg_cholesky_decomp1,
+	[
+		EOS_USE_GSL_LINALG_CHOLESKY_DECOMP="0"
+	],
+	[
+		EOS_USE_GSL_LINALG_CHOLESKY_DECOMP="1"
+		AC_MSG_NOTICE([falling back to legace GSL cholesky decomposition])
+	],
+	[])
+
+AC_DEFINE_UNQUOTED([EOS_USE_GSL_LINALG_CHOLESKY_DECOMP], $EOS_USE_GSL_LINALG_CHOLESKY_DECOMP, [Whether to use legacy gsl_linalg_cholesky_decomp])
+
 CXXFLAGS=$_CXXFLAGS
 LDFLAGS=$_LDFLAGS
 LIBS="$LIBS $_LIBS"
