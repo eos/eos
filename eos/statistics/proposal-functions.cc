@@ -39,6 +39,18 @@
 #include <map>
 #include <numeric>
 
+#include <config.h>
+
+#ifdef EOS_USE_GSL_LINALG_CHOLESKY_DECOMP
+#  if (EOS_USE_GSL_LINALG_CHOLESKY_DECOMP == 1)
+#    define GSL_LINALG_CHOLESKY_DECOMP gsl_linalg_cholesky_decomp
+#  else
+#    define GSL_LINALG_CHOLESKY_DECOMP gsl_linalg_cholesky_decomp1
+#  endif
+#else
+#  error EOS_USE_GSL_LINALG_CHOLESKY_DECOMP not defined.
+#endif
+
 namespace eos
 {
     namespace proposal_functions
@@ -381,7 +393,7 @@ namespace eos
 
             // calculate cholesky decomposition, needed for sampling and one step for inversion
             gsl_error_handler_t * default_gsl_error_handler = gsl_set_error_handler_off();
-            if (GSL_EDOM == gsl_linalg_cholesky_decomp(_covariance_chol))
+            if (GSL_EDOM == GSL_LINALG_CHOLESKY_DECOMP(_covariance_chol))
             {
                 Log::instance()->message("prop::Multivariate.cholesky", ll_warning)
                     << "Covariance matrix is not positive definite!"
@@ -400,7 +412,7 @@ namespace eos
                     }
                 }
 
-                if (GSL_EDOM == gsl_linalg_cholesky_decomp(_covariance_chol))
+                if (GSL_EDOM == GSL_LINALG_CHOLESKY_DECOMP(_covariance_chol))
                 {
                     throw InternalError(
                          "prop::Multivariate: GSL couldn't find Cholesky decomposition of " + print_matrix(_covariance)
@@ -410,13 +422,7 @@ namespace eos
             }
             gsl_set_error_handler(default_gsl_error_handler);
 
-            // copy cholesky decomposition to _covariance_inverse
-            gsl_matrix_memcpy(_covariance_inverse, _covariance_chol);
-
-            // calculate the inverse of _covariance
-            gsl_linalg_cholesky_invert(_covariance_inverse);
-
-            // remove the upper triangular part of _covariance_chol
+            // remove the upper triangular part (remnant of the original covariance matrix) from _covariance_chol
             for (unsigned i = 0 ; i < _dimension ; ++i)
             {
                 for (unsigned j = i + 1 ; j < _dimension ; ++j)
@@ -424,6 +430,12 @@ namespace eos
                     gsl_matrix_set(_covariance_chol, i, j, 0.0);
                 }
             }
+
+            // copy cholesky decomposition (L + diagonal) and remnant of original matrix (U) to _covariance_inverse
+            gsl_matrix_memcpy(_covariance_inverse, _covariance_chol);
+
+            // calculate the inverse of _covariance
+            gsl_linalg_cholesky_invert(_covariance_inverse);
 
             // compute the normalization constant on log scale
             // log_det = 0.5 * ln(det(V))

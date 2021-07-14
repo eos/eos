@@ -32,6 +32,18 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 
+#include <config.h>
+
+#ifdef EOS_USE_GSL_LINALG_CHOLESKY_DECOMP
+#  if (EOS_USE_GSL_LINALG_CHOLESKY_DECOMP == 1)
+#    define GSL_LINALG_CHOLESKY_DECOMP gsl_linalg_cholesky_decomp
+#  else
+#    define GSL_LINALG_CHOLESKY_DECOMP gsl_linalg_cholesky_decomp1
+#  endif
+#else
+#  error EOS_USE_GSL_LINALG_CHOLESKY_DECOMP not defined.
+#endif
+
 namespace eos
 {
     template <> struct Implementation<HierarchicalClustering>
@@ -442,7 +454,7 @@ namespace eos
 
             // calculate cholesky decomposition, needed for sampling and one step for inversion
             gsl_error_handler_t * default_gsl_error_handler = gsl_set_error_handler_off();
-            if (GSL_EDOM == gsl_linalg_cholesky_decomp(covariance_chol))
+            if (GSL_EDOM == GSL_LINALG_CHOLESKY_DECOMP(covariance_chol))
             {
                 Log::instance()->message("HierarchicalClustering::Component", ll_warning)
                     << "Covariance matrix is not positive definite!"
@@ -461,7 +473,7 @@ namespace eos
                     }
                 }
 
-                if (GSL_EDOM == gsl_linalg_cholesky_decomp(covariance_chol))
+                if (GSL_EDOM == GSL_LINALG_CHOLESKY_DECOMP(covariance_chol))
                 {
                     throw InternalError(
                          "HierarchicalClustering::Component: GSL couldn't find Cholesky decomposition of " + stringify(this->covariance->data, dimension, 4)

@@ -42,6 +42,18 @@
 #include <gsl/gsl_sf_result.h>
 #include <gsl/gsl_vector.h>
 
+#include <config.h>
+
+#ifdef EOS_USE_GSL_LINALG_CHOLESKY_DECOMP
+#  if (EOS_USE_GSL_LINALG_CHOLESKY_DECOMP == 1)
+#    define GSL_LINALG_CHOLESKY_DECOMP gsl_linalg_cholesky_decomp
+#  else
+#    define GSL_LINALG_CHOLESKY_DECOMP gsl_linalg_cholesky_decomp1
+#  endif
+#else
+#  error EOS_USE_GSL_LINALG_CHOLESKY_DECOMP not defined.
+#endif
+
 namespace eos
 {
     namespace implementation
@@ -889,7 +901,10 @@ namespace eos
             {
                 // copy covariance matrix
                 gsl_matrix_memcpy(_chol, _covariance);
-                gsl_linalg_cholesky_decomp(_chol);
+                if (GSL_SUCCESS != GSL_LINALG_CHOLESKY_DECOMP(_chol))
+                {
+                    throw InternalError("MultivariateGaussianBlock: Cholesky decomposition failed");
+                }
             }
 
             // invert covariance matrix based on previously obtained Cholesky decomposition
@@ -899,7 +914,10 @@ namespace eos
                 gsl_matrix_memcpy(_covariance_inv, _chol);
 
                 // compute inverse matrix from cholesky
-                gsl_linalg_cholesky_invert(_covariance_inv);
+                if (GSL_SUCCESS != gsl_linalg_cholesky_invert(_covariance_inv))
+                {
+                    throw InternalError("MultivariateGaussianBlock: Cholesky inversion failed");
+                }
             }
 
 
