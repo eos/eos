@@ -66,7 +66,8 @@ TESTS = \
 	eos_TEST.py \
 	eos/analysis_TEST.py \
 	eos/observable_TEST.py \
-	eos/parameter_TEST.py
+	eos/parameter_TEST.py \
+	eos/plot/plotter_TEST.py
 
 EXTRA_DIST += $(TESTS)
 

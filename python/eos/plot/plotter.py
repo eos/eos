@@ -283,7 +283,14 @@ class Plotter:
         def plot(self):
             item = self.item
             oname = item['observable']
+            eos.Observables.assert_valid_name(oname)
             eos.info('   plotting EOS observable "{}"'.format(oname))
+
+            # create kinematics
+            kinematics = eos.Kinematics()
+            if 'kinematics' in item:
+                for k, v in item['kinematics'].items():
+                    kinematics.declare(k, v)
 
             # create parameters
             parameters = eos.Parameters.Defaults()
@@ -298,25 +305,22 @@ class Plotter:
                 for key, value in item['parameters'].items():
                     parameters.set(key, value)
 
-            # create kinematics
-            kinematics = eos.Kinematics()
-            if not ('kinematic' in item or 'variable' in item) and not 'parameter' in item:
-                raise KeyError('neither kinematic variable nor parameter found; do not know how to map x to a variable')
-            if ('kinematic' in item or 'variable' in item) and 'parameter' in item:
-                raise KeyError('both kinematic variable and parameter found; do not know how to map x to a variable')
-            if 'kinematic' in item:
-                var = kinematics.declare(item['kinematic'], np.nan)
-            elif 'variable' in item:
-                var = kinematics.declare(item['variable'], np.nan)
-            else:
-                var = parameters.declare(item['parameter'], np.nan)
-
-            if 'kinematics' in item:
-                for k, v in item['kinematics'].items():
-                    kinematics.declare(k, v)
-
             # create (empty) options
             options = eos.Options()
+
+            # handle plot variable, create kinematic or parameter
+            if not 'variable' in item:
+                raise ValueError("Missing key for plot of observable '" + oname + "': 'variable'")
+            try:
+                eos.Parameters.assert_valid_name(item['variable'])
+                var = parameters.declare(item['variable'], np.nan)
+            except ValueError:
+                try:
+                    eos.Observables.assert_valid_name_and_kinematic(oname, item['variable'])
+                    var = kinematics.declare(item['variable'], np.nan)
+                except ValueError:
+                    raise ValueError("Value of 'variable' for observable '" + oname +
+                        "' is neither a valid kinematic variable nor parameter: '" + item['variable'] + "'")
 
             # create observable
             observable = eos.Observable.make(oname, parameters, kinematics, options)
