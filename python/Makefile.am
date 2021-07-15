@@ -64,7 +64,8 @@ _eos_la_LIBADD = $(top_builddir)/eos/libeos.la $(top_builddir)/eos/utils/libeosu
 
 TESTS = \
 	eos_TEST.py \
-	eos/analysis_TEST.py
+	eos/analysis_TEST.py \
+	eos/observable_TEST.py
 
 EXTRA_DIST += $(TESTS)
 

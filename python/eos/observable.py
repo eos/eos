@@ -78,3 +78,22 @@ class Observables(_Observables):
         result += r'</table>'
 
         return(result)
+
+    @staticmethod
+    def assert_valid_name(name):
+        obs_names = [ob[0] for ob in Observables()]
+        if name in obs_names:
+            pass
+        else:
+            raise ValueError("Observable with name '" + name + "' is not known")
+
+    @staticmethod
+    def assert_valid_name_and_kinematic(name, kinematic):
+        Observables.assert_valid_name(name)
+
+        obs = Observables()
+        valid_kin_vars = [kv for kv in obs[name].kinematic_variables()]
+        if kinematic in valid_kin_vars:
+            pass
+        else:
+            raise ValueError("Kinematic variable '" + kinematic + "' does not match known ones: " + valid_kin_vars.__repr__())
