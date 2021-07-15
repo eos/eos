@@ -128,3 +128,11 @@ class Parameters(_Parameters):
         return parameters
 
 
+    @staticmethod
+    def _assert_valid_name(name):
+        "Raise error if 'name' is not a valid EOS paramter name"
+
+        valid_names = [p.name() for p in Parameters()]
+        if name not in valid_names:
+            raise ValueError("Parameter name '" + name + "' is not known")
+

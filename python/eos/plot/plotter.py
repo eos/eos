@@ -283,7 +283,19 @@ class Plotter:
         def plot(self):
             item = self.item
             oname = item['observable']
+
+            obs_entry = eos.Observables._get_obs_entry(oname)
+            valid_kin_vars = [kv for kv in obs_entry.kinematic_variables()]
             eos.info('   plotting EOS observable "{}"'.format(oname))
+
+            # create kinematics
+            kinematics = eos.Kinematics()
+            if 'kinematics' in item:
+                for k, v in item['kinematics'].items():
+                    if k not in valid_kin_vars:
+                        raise ValueError("Kinematic quantity '" + k + "' does not " +
+                        "match known ones for observable '" + oname + "': " + valid_kin_vars.__repr__())
+                    kinematics.declare(k, v)
 
             # create parameters
             parameters = eos.Parameters.Defaults()
@@ -298,25 +310,40 @@ class Plotter:
                 for key, value in item['parameters'].items():
                     parameters.set(key, value)
 
-            # create kinematics
-            kinematics = eos.Kinematics()
-            if not ('kinematic' in item or 'variable' in item) and not 'parameter' in item:
-                raise KeyError('neither kinematic variable nor parameter found; do not know how to map x to a variable')
-            if ('kinematic' in item or 'variable' in item) and 'parameter' in item:
-                raise KeyError('both kinematic variable and parameter found; do not know how to map x to a variable')
-            if 'kinematic' in item:
-                var = kinematics.declare(item['kinematic'], np.nan)
-            elif 'variable' in item:
-                var = kinematics.declare(item['variable'], np.nan)
-            else:
-                var = parameters.declare(item['parameter'], np.nan)
-
-            if 'kinematics' in item:
-                for k, v in item['kinematics'].items():
-                    kinematics.declare(k, v)
-
             # create (empty) options
             options = eos.Options()
+
+
+            #
+            # handle plot variable, create kinematic or parameter
+            #
+
+            if not 'variable' in item:
+                raise ValueError("Missing key for plot of observable '" + oname + "': 'variable'")
+
+            # variable is passed *again* as kinematic or parameter?
+            if 'parameters' in item and item['variable'] in item['parameters']:
+                val = item['parameters'].get(item['variable'])
+                raise ValueError("Variable '" + item['variable'] + "' of observable '" + oname + "' is " +
+                        "also specified as a fix parameter with value " + str(val))
+            if 'kinematics' in item and item['variable'] in item['kinematics']:
+                val = item['kinematics'].get(item['variable'])
+                raise ValueError("Variable '" + item['variable'] + "' of observable '" + oname + "' is " +
+                        "also specified as a fix kinematic with value " + str(val))
+
+            # Declare variable that is either parameter or kinematic
+            try:
+                eos.Parameters._assert_valid_name(item['variable'])
+                var = parameters.declare(item['variable'], np.nan)
+            except ValueError:
+                if item['variable'] not in valid_kin_vars:
+                    # variable is neither a valid parameter nor valid kinematic
+                    raise ValueError("Value of 'variable' for observable '" + oname +
+                        "' is neither a valid kinematic variable nor parameter: '" + item['variable'] + "'")
+
+                # variable must be valid kinematic
+                var = kinematics.declare(item['variable'], np.nan)
+
 
             # create observable
             observable = eos.Observable.make(oname, parameters, kinematics, options)
