@@ -21,7 +21,7 @@ contents:
       type: 'observable'
       color: 'C1'
       observable: 'B->pilnu::dBR/dq2;l=mu,model=CKMScan'
-      kinematic: 'q2'
+      variable: 'q2'
       range: [0.01, 26.0]
       samples: 200
       parameters:
