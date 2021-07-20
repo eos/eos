@@ -37,7 +37,7 @@ jobs:
                 brew outdated boost-python3 || brew upgrade boost-python3 || true
                 brew install autoconf automake boost-python3 gsl libtool pkg-config yaml-cpp
                 brew link --overwrite --force python@3.9
-                $PYTHON -m pip install -U cython h5py matplotlib numpy PyYAML scipy "pypmc>=1.2"
+                $PYTHON -m pip install -U cython h5py matplotlib numpy PyYAML scipy wilson "pypmc>=1.2"
 
             - name: Create build directory
               shell: bash
