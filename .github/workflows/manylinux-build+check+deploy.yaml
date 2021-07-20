@@ -144,6 +144,9 @@ jobs:
                 CXXFLAGS:          "-O2 -g -march=x86-64"
                 BOOST_PYTHON_SKIP: yes
               run: |
+                pushd _build
+                export VERSION=$(make -s print-VERSION)
+                popd
                 pushd _src
                 # check if this is a tagged commit, and export a flag variable.
                 if git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then
@@ -161,8 +164,11 @@ jobs:
                 if [[ ${EOS_IS_TAGGED} == 1 ]] ; then
                     cp ../_build/python/setup.py ./
                 else
-                    sed -e "s/\(^.*version=.*\)',/\1.post${GITHUB_RUN_NUMBER}',/" \
-                        -e "s/\(^.*name=.*\)',/\1-latest',/" \
+                    export VERSION=$(sed -ne "s/^.*version='\([^']*\)',/\1/p" < ../_build/python/setup.py)
+                    echo "VERSION=$VERSION"
+                    export DEV_VERSION=$(python3 -c "v = [int(n) for n in '${VERSION}'.split('.')] ; v += [0] * (3 - len(v)) ; v[-1] += 1 ; v = [str(n) for n in v] ; print('.'.join(v))")
+                    echo "DEV_VERSION=$DEV_VERSION"
+                    sed -e "s/\(^.*version='\).*',/\1${DEV_VERSION}.dev${GITHUB_RUN_NUMBER}',/" \
                         < ../_build/python/setup.py \
                         > ./setup.py
                 fi
@@ -218,9 +224,5 @@ jobs:
                 fi
                 pushd _pypi
                 export PATH="$PYTHON_PATH:$PATH"
-                if [[ ${EOS_IS_TAGGED} == 1 ]] ; then
-                    twine upload dist/*.whl
-                else
-                    twine upload --repository testpypi dist/*.whl
-                fi
+                twine upload dist/*.whl
                 popd
