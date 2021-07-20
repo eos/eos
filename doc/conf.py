@@ -4,10 +4,6 @@
 # list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
 
-def setup(app):
-    print('check setup')
-    app.add_stylesheet('css/custom.css')
-
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -24,7 +20,7 @@ def setup(app):
 import eos
 
 project = 'EOS'
-copyright = '2019, Danny van Dyk and others'
+copyright = '2019-2021, Danny van Dyk and others'
 author = 'Danny van Dyk and others'
 master_doc = 'index'
 
@@ -65,6 +61,9 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+html_css_files = [
+    'css/custom.css',
+]
 html_baseurl = 'https://eos.github.io/doc/'
 
 html_show_sourcelink = False
