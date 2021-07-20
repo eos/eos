@@ -206,6 +206,7 @@ jobs:
                 path: _pypi/dist
 
             - name: Upload wheel to pypi.org
+              if: ${{ github.ref == 'refs/heads/master' }}
               shell: bash
               env:
                 PYTHON_PATH:    /opt/python/${{ matrix.cfg.pypath }}/bin
