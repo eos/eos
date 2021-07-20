@@ -16,6 +16,7 @@ CLEANFILES = \
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = @AM_CXXFLAGS@
+AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeosstatistics.la
 libeosstatistics_la_SOURCES = \
@@ -38,7 +39,7 @@ libeosstatistics_la_SOURCES = \
 	welford.cc welford.hh
 libeosstatistics_la_LIBADD = -lpthread -lgsl -lgslcblas -lm -lyaml-cpp
 libeosstatistics_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS) $(YAMLCPP_CXXFLAGS)
-libeosstatistics_la_LDFLAGS = $(AM_CXXFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
+libeosstatistics_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
 if EOS_ENABLE_PMC
 libeosstatistics_la_SOURCES += \

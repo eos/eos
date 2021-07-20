@@ -468,10 +468,20 @@ AC_DEFINE_UNQUOTED([EOS_BUILDDIR], "$ac_pwd", [Absolute path to the build direct
 AC_DEFINE_UNQUOTED([EOS_SRCDIR], "$ac_abs_confdir", [Absolute path to the top-level source directory])
 dnl }}}
 
+dnl {{{ define default CXXFLAGS and LDFLAGS
+AM_CXXFLAGS="-I$ac_abs_confdir -std=c++14 -Wall -Wextra -pedantic"
+AM_LDFLAGS=""
+if test "x`uname -s`" != "xDarwin" ; then
+    AM_CXXFLAGS="$AM_CXXFLAGS -flto"
+    AM_LDFLAGS="$AM_LDFLAGS -flto"
+fi
+dnl }}}
+
 dnl {{{ output
 AM_CONFIG_HEADER(config.h)
 AM_EXTRA_RECURSIVE_TARGETS([manual])
-AC_SUBST([AM_CXXFLAGS], '-I$(top_srcdir) -std=c++14 -Wall -Wextra -pedantic')
+AC_SUBST([AM_CXXFLAGS])
+AC_SUBST([AM_LDFLAGS])
 AC_OUTPUT(
 	Makefile
 	debian/control-bionic

@@ -16,6 +16,7 @@ SUBDIRS = \
 	.
 
 AM_CXXFLAGS = @AM_CXXFLAGS@
+AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeos.la
 libeos_la_SOURCES = \
@@ -27,7 +28,7 @@ libeos_la_CXXFLAGS = $(AM_CXXFLAGS) \
 	-DEOS_DATADIR='"$(datadir)"' \
 	$(GSL_CXXFLAGS) \
 	$(YAMLCPP_CXXFLAGS)
-libeos_la_LDFLAGS = $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
+libeos_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 libeos_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
