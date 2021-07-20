@@ -2,6 +2,7 @@ CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = @AM_CXXFLAGS@
+AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeosformfactors.la
 libeosformfactors_la_SOURCES = \
@@ -28,7 +29,7 @@ libeosformfactors_la_SOURCES = \
 	unitarity-bounds.cc unitarity-bounds.hh \
 	zero-recoil-sum-rule.cc zero-recoil-sum-rule.hh
 libeosformfactors_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
-libeosformfactors_la_LDFLAGS = $(GSL_LDFLAGS)
+libeosformfactors_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 libeosformfactors_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	-lgslcblas \

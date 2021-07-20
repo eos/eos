@@ -2,6 +2,7 @@ CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = @AM_CXXFLAGS@
+AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeosrarebdecays.la
 libeosrarebdecays_la_SOURCES = \
@@ -43,7 +44,7 @@ libeosrarebdecays_la_SOURCES = \
 	qcdf-integrals-mixed.cc \
 	qcdf-integrals-numerical.cc
 libeosrarebdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
-libeosrarebdecays_la_LDFLAGS = $(GSL_LDFLAGS)
+libeosrarebdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 libeosrarebdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
