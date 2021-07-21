@@ -26,15 +26,11 @@
 #include <eos/statistics/log-posterior-fwd.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/utils/density.hh>
-#include <eos/utils/hdf5-fwd.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/verify.hh>
 
 #include <set>
 #include <vector>
-
-#include <gsl/gsl_multimin.h>
-#include <gsl/gsl_vector.h>
 
 namespace eos
 {
@@ -102,63 +98,6 @@ namespace eos
              */
             bool add(const LogPriorPtr & prior, bool nuisance = false);
 
-            /*!
-             * Write parameter descriptions, constraints, observables
-             * into the hdf5 file under the given group name.
-             */
-            virtual void dump_descriptions(hdf5::File & file, const std::string & data_set_base) const;
-
-            /*!
-             * Read in parameter descriptions from a previous dump.
-             *
-             * @param sample_file The HDF5 file with the information.
-             * @param base The base directory where to look for the data set.
-             * @return The descriptions, one per parameter
-             */
-            static std::vector<ParameterDescription> read_descriptions(const hdf5::File & file, std::string data_set_base = "/descriptions");
-
-            /*!
-             * Read the description part of chain's prerun from hdf5 file.
-             *
-             * @param file
-             * @param data_base_name The directory in the file under which the data is parsed.
-             * @param descriptions All parameter ranges etc. Beware, the association to the underlying Parameters object is independent.
-             * @param priors The string representation of a prior distribution.
-             * @param constraints The string representation of an individual constraint.
-             * @param hash The EOS version used to create the file.
-             */
-            static void read_descriptions(hdf5::File & file, const std::string & data_base_name,
-                                          std::vector<ParameterDescription>& descriptions,
-                                          std::vector<std::string> & priors,
-                                          std::vector<std::string> & constraints,
-                                          std::string & hash);
-
-            /*!
-             * Calculate two p values based on the @f$\chi^2 @f$
-             * test statistic for fixed parameter_values.
-             *
-             * The first is based on pulls, or significances,
-             * defined in units of Gaussian standard deviations. Their squared sum
-             * is a @f$\chi^2 @f$. The second uses the log-likelihood as a test statistic,
-             * and empirically generates data from the likelihood blocks to simulate the statistic's
-             * distribution and a p value. With N observations, this p value is transformed into a @f$\chi^2 @f$
-             * using the inverse cumulative of the @f$\chi^2 @f$ distribution with N degrees of freedom.
-             *
-             * Both @f$\chi^2 @f$ values are transformed into a p value through
-             * cumulative of the @f$\chi^2 @f$-distribution with (N-k) degrees-of-freedom,
-             * where N is the number of observations and k is the number of fitted parameters.
-             *
-             * @param parameter_values
-             * @param simulated_datasets The number of data sets used to estimate the distribution of log-likelihood test statistic.
-             * @param output_file If given, store pulls and @f$\chi^2 @f$ in an HDF5 file.
-             * @return < @f$\chi^2 @f$, p>
-             *
-             * @note Nuisance parameters are assumed to have an informative prior counted as one @e observation.
-             *       They therefore cancel in computing the degrees of freedom.
-             */
-            std::pair<double, double>
-            goodness_of_fit(const std::vector<double> & parameter_values, const unsigned & simulated_datasets, std::string output_file = "");
-
             /// Retrieve the overall Log(likelihood).
             LogLikelihood log_likelihood() const;
 
@@ -187,15 +126,6 @@ namespace eos
             unsigned informative_priors() const;
             ///@}
 
-            /*!
-             * Optimize the posterior using the Nelder-Mead simplex algorithm.
-             * @param initial_guess Starting point for simplex construction
-             * @param options If no tuning desired, use LogPosterior::OptimizationOptions::Defaults()
-             * @return <parameter values at mode, posterior value at mode>
-             */
-            std::pair<std::vector<double>, double>
-            optimize(const std::vector<double> & initial_guess, const OptimizationOptions & options);
-
         private:
             /*!
              * Find index of definition of parameter
@@ -203,16 +133,6 @@ namespace eos
              * @return index if found, _parameter_descriptions.size() if not found
              */
             unsigned index(const std::string & name) const;
-
-            /*!
-             * routine needed for optimization. It returns the negative
-             * log(posterior) at parameters
-             * @param parameters the values of the parameters
-             * @param data pointer to an LogPosterior object
-             * @return
-             */
-            static double
-            negative_log_posterior(const gsl_vector * pars, void * data);
 
             LogPosterior *
             private_clone() const;
