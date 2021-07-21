@@ -308,33 +308,8 @@ AC_SUBST([MINUIT2_LIBADD])
 AC_SUBST([MINUIT2_LDFLAGS])
 AC_SUBST([MINUIT2_CXXFLAGS])
 dnl }}}
-dnl {{{ use PMC path if supplied via --with-pmc=
-AC_ARG_WITH([pmc],
-	[AS_HELP_STRING([--with-pmc], [used to perform population Monte Carlo sampling])]
-	[],
-	[])
-if test "x$with_pmc" != x ; then
-	if ! test -d "$with_pmc" ; then
-	AC_MSG_FAILURE(["$with_pmc is not a directory. Please check the manual for how to compile with pmclib"])
-	else
-		CXXFLAGS="-I$with_pmc/include $CXXFLAGS"
-		LDFLAGS="-Wl,-rpath,$with_pmc/lib -L$with_pmc/lib $LDFLAGS"
-	fi
-fi
-dnl }}}
 
-dnl {{{ check if we should enable PMC
-AC_ARG_ENABLE([pmc],
-	[AS_HELP_STRING([--enable-pmc], [enables usage of pmclib by EOS])],
-	[],
-	[])
-if test "x$enable_pmc" == "xyes" ; then
-	AC_DEFINE([EOS_ENABLE_PMC], [1], [Define if PMC is enabled.])
-fi
-AM_CONDITIONAL([EOS_ENABLE_PMC], [test "x$enable_pmc" == "xyes"])
-dnl }}}
-
-dnl {{{ use custom pythondir if supplied via --with-pmc=
+dnl {{{ use custom pythondir if supplied via --with-custom-pythondir=
 AC_ARG_WITH([custom-pythondir],
 	[AS_HELP_STRING([--with-custom-pythondir], [used to override Debian/Ubuntu default choice for \${pythondir} and \${pyexecdir}])],
 	[],
