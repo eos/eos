@@ -163,10 +163,6 @@ EOS requires the following scientific software:
 
 GSL
   the GNU Scientific Library \cite{GSL}, in version 1.16 or higher;
-HDF5
-  the \gls{HDF5} \cite{HDF5}, in version 1.8.11 or higher;
-FFTW3
-  the C subroutine library for computing the discrete Fourier transform;
 
 
 If you have administrator access to the computers on which you use EOS,
@@ -182,7 +178,7 @@ by running the following commands:
   # for the 'Python Software'
   sudo apt-get install python3-dev libboost-python-dev python3-h5py python3-matplotlib python3-scipy python3-yaml
   # for the 'Scientific Software'
-  sudo apt-get install libgsl0-dev libhdf5-serial-dev libfftw3-dev
+  sudo apt-get install libgsl0-dev
 
 We recommend that you upgrade ``matplotlib`` to the latest available version by running the following command:
 
@@ -212,7 +208,7 @@ To install the packages, run the following commands in a shell:
   # for the 'Python Software'
   brew install python3 boost-python3
   # for the 'Scientific Software'
-  brew install gsl hdf5
+  brew install gsl
 
 You can now use the ``pip3`` command to install the remaining packages from the \package{PyPi} package index.
 
@@ -263,8 +259,7 @@ The recommended configuration is achieved by running the following command:
 
   ./configure \
       --prefix=$PREFIX \
-      --enable-python \
-      --enable-pmc
+      --enable-python
 
 If the ``configure`` script finds any problems with your system, it will complain loudly.
 
