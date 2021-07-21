@@ -155,65 +155,6 @@ LIBS=$_LIBS
 dnl }}}
 dnl }}}
 
-dnl {{{ use HDF5 path if supplied via --with-hdf5=, otherwise use pkg-config; check for HDF5
-AC_ARG_WITH([hdf5],
-	[AS_HELP_STRING([--with-hdf5], [used for I/O to scan data])]
-	[],
-	[])
-if test "x$with_hdf5" == xno ; then
-	AC_MSG_FAILURE(["Cannot build EOS without HDF5"])
-fi
-if test "x$with_hdf5" != x -a "x$with_hdf5" != xyes ; then
-	if ! test -d "$with_hdf5" ; then
-		AC_MSG_FAILURE(["$with_hdf5 is not a directory. Please check the manual for how to compile with HDF5"])
-	fi
-	HDF5_CXXFLAGS="-I$with_hdf5/include"
-	HDF5_LDFLAGS="-L$with_hdf5/lib"
-else # use pkg-config
-	PKG_CHECK_MODULES([HDF5],
-		[hdf5-serial],
-		[
-			HDF5_CXXFLAGS="$HDF5_CFLAGS"
-			HDF5_LDFLAGS="$HDF5_LIBS"
-			AC_MSG_NOTICE([using pkg-config for HDF5 location])
-		],
-		[PKG_CHECK_MODULES([HDF5],
-						   [hdf5],
-						   [
-								HDF5_CXXFLAGS="$HDF5_CFLAGS"
-								HDF5_LDFLAGS="$HDF5_LIBS"
-								AC_MSG_NOTICE([using pkg-config for HDF5 location])
-							],
-						    [
-								HDF5_CXXFLAGS=""
-								HDF5_LDFLAGS="-lhdf5"
-								AC_MSG_NOTICE([falling back to default for HDF5 location])
-							])
-		])
-fi
-
-AC_SUBST([HDF5_LDFLAGS])
-AC_SUBST([HDF5_CXXFLAGS])
-
-_CXXFLAGS=$CXXFLAGS
-_LDFLAGS=$LDFLAGS
-_LIBS=$LIBS
-
-CXXFLAGS="$HDF5_CXXFLAGS $CXXFLAGS"
-LDFLAGS="$HDF5_LDFLAGS $LDFLAGS"
-LIBS=""
-
-AC_CHECK_LIB(hdf5, H5open,
-	[],
-	[AC_MSG_ERROR([you do seem to be lacking libhdf5 (http://hdf.ncsa.uiuc.edu/HDF5/).])],
-	[]
-	)
-
-CXXFLAGS=$_CXXFLAGS
-LDFLAGS=$_LDFLAGS
-LIBS="$_LIBS"
-dnl }}}
-
 dnl {{{ use GSL path if supplied via --with-gsl=, otherwise use pkg-config; check for GSL
 AC_ARG_WITH([gsl],
 	[AS_HELP_STRING([--with-gsl], [used for e.g. RNG, special functions, linear algebra])]
