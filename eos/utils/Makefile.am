@@ -77,9 +77,8 @@ libeosutils_la_LIBADD = \
 libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) \
 	-DEOS_DATADIR='"$(datadir)"' \
 	$(GSL_CXXFLAGS) \
-	$(HDF5_CXXFLAGS) \
 	$(YAMLCPP_CXXFLAGS)
-libeosutils_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) $(YAMLCPP_LDFLAGS)
+libeosutils_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
 EXTRA_DIST = \
 	polylog_TEST_dilog.bin \
