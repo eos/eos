@@ -49,7 +49,7 @@ jobs:
                 popd
                 pushd _build
                 export PATH="$PYTHON_PATH:$PATH"
-                ../_src/configure --disable-cli --disable-pmc --enable-python --with-boost-python-suffix=${{ matrix.cfg.pyboostsuffix }}
+                ../_src/configure --disable-cli --enable-python --with-boost-python-suffix=${{ matrix.cfg.pyboostsuffix }}
                 popd
 
             - name: Build
@@ -157,7 +157,7 @@ jobs:
                 pushd _pypi
                 export PATH="$PYTHON_PATH:$PATH"
                 cp ../_build/python/.libs/_eos.so ./
-                LIBRARIES='libaec|libboost|libeos|libgfortran|libgsl|libhdf5|libquadmath|libsatlas|libsz|libyaml|libz'
+                LIBRARIES='libboost|libeos|libgfortran|libgsl|libquadmath|libyaml|libz'
                 for f in $(ldd _eos.so | grep '=>' | grep -E "$LIBRARIES" | awk '{print $3}') ; do
                     cp $f ./
                 done
