@@ -10,6 +10,14 @@
 		"**/*.libs": true,
 		"**/*.lo": true,
 		"**/*.log": true,
-		"**/Makefile.in": true
+		"**/Makefile.in": true,
+		"aclocal.m4": true,
+		"config.h": true,
+		"configure": true,
+		"config.status": true,
+		"libtool": true,
+		"stamp-h1": true,
+		"autom4te.cache": true,
+		"config/"
 	}
 }
