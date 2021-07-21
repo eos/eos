@@ -20,10 +20,7 @@ bin_PROGRAMS = \
 	eos-list-observables \
 	eos-list-parameters \
 	eos-list-signal-pdfs \
-	eos-print-polynomial \
-	eos-propagate-uncertainty \
-	eos-sample-mcmc \
-	eos-sample-events-mcmc
+	eos-print-polynomial
 
 LDADD = \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
@@ -38,18 +35,6 @@ LDADD = \
 	-lboost_filesystem -lboost_system \
 	$(YAMLCPP_LDFLAGS)
 
-if EOS_ENABLE_PMC
-bin_PROGRAMS += \
-	eos-sample-pmc
-
-LDADD += \
-	-lpmc -ldl
-
-eos_sample_pmc_SOURCES = eos-sample-pmc.cc
-eos_sample_pmc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
-eos_sample_pmc_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS) -lpmc -ldl
-endif
-
 eos_evaluate_SOURCES = eos-evaluate.cc
 
 eos_list_constraints_SOURCES = eos-list-constraints.cc
@@ -62,15 +47,3 @@ eos_list_parameters_SOURCES = eos-list-parameters.cc
 eos_list_signal_pdfs_SOURCES = eos-list-signal-pdfs.cc
 
 eos_print_polynomial_SOURCES = eos-print-polynomial.cc
-
-eos_propagate_uncertainty_SOURCES = eos-propagate-uncertainty.cc
-eos_propagate_uncertainty_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
-eos_propagate_uncertainty_LDADD = $(LDADD) $(GSL_LDFLAGS) -lhdf5 $(HDF5_LDFLAGS)
-
-eos_sample_mcmc_SOURCES = eos-sample-mcmc.cc
-eos_sample_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
-eos_sample_mcmc_LDADD = $(LDADD) $(GSL_LDFLAGS)
-
-eos_sample_events_mcmc_SOURCES = eos-sample-events-mcmc.cc
-eos_sample_events_mcmc_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS) $(HDF5_CXXFLAGS)
-eos_sample_events_mcmc_LDADD = $(LDADD) $(GSL_LDFLAGS) $(HDF5_LDFLAGS)
