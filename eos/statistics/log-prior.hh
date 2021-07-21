@@ -91,12 +91,6 @@ namespace eos
             virtual double operator() () const = 0;
 
             /*!
-             * @param rng the random number engine
-             * @return a sample according to this prior distribution
-             */
-            virtual double sample(gsl_rng * rng) const = 0;
-
-            /*!
              * Evaluate the inverse cumulative density function of the prior.
              *
              * @param p The cumulative probability for which we seek the parameter value.

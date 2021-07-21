@@ -410,7 +410,6 @@ AC_OUTPUT(
 	eos/constraints/Makefile
 	eos/form-factors/Makefile
 	eos/meson-mixing/Makefile
-	eos/optimize/Makefile
 	eos/parameters/Makefile
 	eos/rare-b-decays/Makefile
 	eos/statistics/Makefile
