@@ -177,20 +177,7 @@ namespace eos
     void
     ObservableCache::update()
     {
-#ifdef EOS_ENABLE_PMC
-        // evaluate all observables serially
-        auto p = _imp->predictions.begin();
-
-        for (auto o = _imp->observables.begin(), o_end = _imp->observables.end() ; o != o_end ; ++o, ++p)
-        {
-            *p = (*o)->evaluate();
-        }
-#else
         // parallelize the evaluation of the observables
-        // since the EOS builtin PMC sampler is parallelized,
-        // parallelizing the ObservableCache can and will lead
-        // to a deadlock.
-
         std::vector<Ticket> cacheable_tickets;
         cacheable_tickets.reserve(_imp->cacheable_observables.size());
 
@@ -283,7 +270,6 @@ namespace eos
         {
             ticket.wait();
         }
-#endif
     }
 
     Parameters
