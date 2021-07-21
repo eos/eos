@@ -1,8 +1,5 @@
 CLEANFILES = \
-	*~ \
-	hdf5_TEST-attribute.hdf5 \
-	hdf5_TEST-file.hdf5 \
-	hdf5_TEST-copy.hdf5
+	*~
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = @AM_CXXFLAGS@
@@ -26,7 +23,6 @@ libeosutils_la_SOURCES = \
 	exception.cc exception.hh \
 	gsl-hacks.cc \
 	gsl-interface.hh \
-	hdf5.cc hdf5.hh hdf5-fwd.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
 	integrate-cubature.hh integrate-cubature.cc \
@@ -76,7 +72,6 @@ libeosutils_la_SOURCES = \
 libeosutils_la_LIBADD = \
 	-lboost_filesystem -lboost_system \
 	-lgsl -lgslcblas -lm \
-	-lhdf5 -lhdf5_hl \
 	-lpthread \
 	-lyaml-cpp
 libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) \
@@ -106,7 +101,6 @@ include_eos_utils_HEADERS = \
 	destringify.hh \
 	exception.hh \
 	gsl-interface.hh \
-	hdf5.hh hdf5-fwd.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh \
 	integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
@@ -158,7 +152,6 @@ TESTS = \
 	derivative_TEST \
 	gsl-hacks_TEST \
 	gsl-interface_TEST \
-	hdf5_TEST \
 	indirect-iterator_TEST \
 	integrate_TEST \
 	join_TEST \
@@ -209,11 +202,6 @@ gsl_hacks_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 gsl_hacks_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 gsl_interface_TEST_SOURCES = gsl-interface_TEST.cc
-
-hdf5_TEST_SOURCES = hdf5_TEST.cc
-hdf5_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(HDF5_CXXFLAGS)
-hdf5_TEST_LDFLAGS = $(AM_CXXFLAGS) $(HDF5_LDFLAGS)
-hdf5_TEST_LDADD = $(LDADD) -lhdf5
 
 indirect_iterator_TEST_SOURCES = indirect-iterator_TEST.cc
 
