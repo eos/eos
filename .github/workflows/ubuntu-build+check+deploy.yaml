@@ -47,7 +47,7 @@ jobs:
                 popd
                 pushd _build
                 which ${CXX} || ( echo c++ compiler not found ; exit 1 )
-                ../_src/configure --disable-pmc --enable-python --prefix=/usr --with-custom-pythondir=dist-packages || ( cat config.log ; exit 2 )
+                ../_src/configure --enable-python --prefix=/usr --with-custom-pythondir=dist-packages || ( cat config.log ; exit 2 )
                 popd
 
             - name: Build
@@ -144,7 +144,7 @@ jobs:
               shell: bash
               run: |
                 pushd _build
-                make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="--disable-pmc --enable-python --prefix=/usr" VERBOSE=1
+                make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="--enable-python --prefix=/usr" VERBOSE=1
                 popd
 
     ubuntu-examples:
