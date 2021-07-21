@@ -24,7 +24,6 @@ bin_PROGRAMS = \
 
 LDADD = \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
-	$(top_builddir)/eos/optimize/libeosoptimize.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/b-decays/libeosbdecays.la \

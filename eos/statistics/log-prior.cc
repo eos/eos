@@ -112,13 +112,6 @@ namespace eos
                     return LogPriorPtr(new priors::Flat(parameters, _name, _range));
                 }
 
-                virtual double sample(gsl_rng * rng) const
-                {
-                    const double p = gsl_rng_uniform(rng);
-
-                    return inverse_cdf(p);
-                }
-
                 virtual double inverse_cdf(const double & p) const
                 {
                     return p * (_range.max - _range.min) + _range.min;
@@ -242,14 +235,6 @@ namespace eos
                     return LogPriorPtr(new priors::Gauss(parameters, _name, _range, _lower, _central, _upper));
                 }
 
-                virtual double sample(gsl_rng * rng) const
-                {
-                    // get a sample from lower or upper part using inverse transform method
-                    const double p = gsl_rng_uniform(rng);
-
-                    return inverse_cdf(p);
-                }
-
                 virtual double inverse_cdf(const double & p) const
                 {
                     // CDF = c \Phi(x - x_{central} / \sigma) + b
@@ -335,14 +320,6 @@ namespace eos
                 virtual LogPriorPtr clone(const Parameters & parameters) const
                 {
                     return LogPriorPtr(new priors::Scale(parameters, _name, _range, _mu_0, _lambda));
-                }
-
-                virtual double sample(gsl_rng * rng) const
-                {
-                    // get a sample from using inverse transform method
-                    const double p = gsl_rng_uniform(rng);
-
-                    return inverse_cdf(p);
                 }
 
                 virtual double inverse_cdf(const double & p) const

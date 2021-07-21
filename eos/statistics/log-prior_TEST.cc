@@ -18,7 +18,6 @@
  */
 
 #include <test/test.hh>
-#include <eos/statistics/histogram.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/utils/power_of.hh>
 
@@ -136,122 +135,6 @@ class LogPriorTest :
 
                 parameters["mass::b(MSbar)"] = 0.44;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 1.4694735825406655, eps);
-            }
-
-            //test sampling
-            {
-                ParameterRange range { 4.15, 4.57 };
-                LogPriorPtr gauss_prior = LogPrior::Gauss(parameters, "mass::b(MSbar)", range, 4.2, 4.3, 4.5);
-
-                gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
-                gsl_rng_set(rng, 1243);
-
-                /* symmetric Gaussian with huge range */
-                range  = ParameterRange{ 3, 6 };
-                gauss_prior = LogPrior::Gauss(parameters, "mass::b(MSbar)", range, 4.2, 4.3, 4.4);
-
-                // median and mean coincide
-                TEST_CHECK_NEARLY_EQUAL(gauss_prior->inverse_cdf(0.5),         4.3,       1.0e-10);
-                // at lower bound of the 1 sigma interval
-                TEST_CHECK_NEARLY_EQUAL(gauss_prior->inverse_cdf(0.158655254), 4.3 - 0.1, 1.0e-10);
-                // at upper bound of the 1 sigma interval
-                TEST_CHECK_NEARLY_EQUAL(gauss_prior->inverse_cdf(0.841344746), 4.3 + 0.1, 1.0e-10);
-
-                gsl_rng_set(rng, 1243);
-
-                unsigned n_bins = 80;
-                Histogram<1> hist = Histogram<1>::WithEqualBinning(3.8, 4.8, n_bins);
-
-                double chi_sq = 0.0;
-                unsigned N = 1e5;
-                for (unsigned i = 0 ; i < N ; ++i)
-                {
-                    double x = gauss_prior->sample(rng);
-                    hist.insert(x);
-                    chi_sq += power_of<2>(x - 4.3) / 0.01;
-                }
-
-                std::vector<double> pdf_vec;
-
-                for (auto b = hist.begin(), b_end = hist.end() ; b != b_end ; ++b)
-                {
-                    pdf_vec.push_back(b->value);
-                }
-
-                auto cumulative_hist = estimate_cumulative_distribution(hist);
-
-                std::vector<double> cumulative_vec;
-                for (auto b = cumulative_hist.begin(), b_end = cumulative_hist.end() ; b != b_end ; ++b)
-                {
-                    cumulative_vec.push_back(b->value);
-                }
-
-                TEST_CHECK_RELATIVE_ERROR(chi_sq / N, 1.0, 1.1e-2);
-
-                TEST_CHECK_RELATIVE_ERROR(pdf_vec[unsigned(0.5 * n_bins) - 1], pdf_vec[unsigned(0.5 * n_bins)], 1.4e-2);
-
-                // median in the middle
-                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.5 * n_bins) - 1], 0.5,  1e-2);
-
-                // one sigma interval should be [4.2, 4.4]
-                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.6 * n_bins) - 1] - cumulative_vec[unsigned(0.4 * n_bins) - 1], 0.68, 1e-2);
-
-                // two sigma interval should be [4.1, 4.5]
-                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.7 * n_bins) - 1] - cumulative_vec[unsigned(0.3 * n_bins) - 1], 0.95, 1e-2);
-
-                gsl_rng_free(rng);
-            }
-
-            /* symmetric Gaussian with small range */
-            {
-                ParameterRange range  = ParameterRange{ 4.1, 4.5 };
-                LogPriorPtr gauss_prior = LogPrior::Gauss(parameters, "mass::b(MSbar)", range, 4.2, 4.3, 4.4);
-
-                gsl_rng* rng = gsl_rng_alloc(gsl_rng_mt19937);
-                gsl_rng_set(rng, 1243);
-
-                unsigned n_bins = 80;
-                Histogram<1> hist = Histogram<1>::WithEqualBinning(3.8, 4.8, n_bins);
-
-                double chi_sq = 0.0;
-                unsigned N = 1e5;
-                for (unsigned i = 0 ; i < N ; ++i)
-                {
-                    double x = gauss_prior->sample(rng);
-                    hist.insert(x);
-                    chi_sq += power_of<2>(x - 4.3) / 0.01;
-                }
-
-                std::vector<double> pdf_vec;
-
-                for (auto b = hist.begin(), b_end = hist.end() ; b != b_end ; ++b)
-                {
-                    pdf_vec.push_back(b->value);
-                }
-
-                auto cumulative_hist = estimate_cumulative_distribution(hist);
-
-                std::vector<double> cumulative_vec;
-                for (auto b = cumulative_hist.begin(), b_end = cumulative_hist.end() ; b != b_end ; ++b)
-                {
-                    cumulative_vec.push_back(b->value);
-                }
-
-                // account for finite range: only a fraction of usual Gaussian is contained
-                static const double scale_factor = 1/ 0.9545;
-
-                TEST_CHECK_RELATIVE_ERROR(pdf_vec[unsigned(0.5 * n_bins) - 1], pdf_vec[unsigned(0.5 * n_bins)], 1.4e-2);
-
-                // median in the middle
-                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.5 * n_bins) - 1], 0.5,  1e-2);
-
-                // one sigma interval should be [4.2, 4.4]
-                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.6 * n_bins) - 1] - cumulative_vec[unsigned(0.4 * n_bins) - 1], 0.68 * scale_factor,  5e-2);
-
-                // two sigma interval should be [4.1, 4.5]
-                TEST_CHECK_RELATIVE_ERROR(cumulative_vec[unsigned(0.7 * n_bins) - 1] - cumulative_vec[unsigned(0.3 * n_bins) - 1], 0.95 * scale_factor,  1.4e-2);
-
-                gsl_rng_free(rng);
             }
 
             // Scale prior
