@@ -37,6 +37,15 @@ namespace eos
         UnknownKinematicVariableError(const std::string & variable) throw ();
     };
 
+    /*!
+     * DuplicateKinematicAliasError is thrown when an alias is defined twice.
+     */
+    struct DuplicateKinematicAliasError :
+        public Exception
+    {
+        DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) throw ();
+    };
+
     // Forward declaration.
     class KinematicVariable;
 
@@ -85,6 +94,20 @@ namespace eos
 
             ///@name Variable access
             ///@{
+
+            /*!
+             * Create an alias of an existing kinematic variable, under a new name.
+             *
+             * @param alias Alternative name for the existing variable; must not exist!
+             * @param name  Name of the existing variable; must exist!
+             */
+            void alias(const std::string & alias, const std::string & name);
+
+            /*!
+             * Reset all defined aliases.
+             */
+            void clear_aliases();
+
             /*!
              * Declare a new kinematic variable.
              *
@@ -142,11 +165,13 @@ namespace eos
             std::shared_ptr<Implementation<Kinematics>> _imp;
 
             unsigned _index;
+
+            bool _is_alias;
             ///@}
 
             ///@name Basic Functions
             ///@{
-            KinematicVariable(const std::shared_ptr<Implementation<Kinematics>> & imp, unsigned index);
+            KinematicVariable(const std::shared_ptr<Implementation<Kinematics>> & imp, unsigned index, bool is_alias);
             ///@}
 
         public:
