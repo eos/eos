@@ -50,12 +50,6 @@ namespace eos
     class Kinematics :
         public PrivateImplementationPattern<Kinematics>
     {
-        private:
-            ///@name Internal Data
-            ///@{
-            struct Data;
-            ///@}
-
         public:
             ///@name Basic Functions
             ///@{
