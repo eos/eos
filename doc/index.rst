@@ -26,6 +26,7 @@ Installation instructions can be found `here <installation.html>`_.
    installation
    basics
    use-cases
+   advanced
    faq
    api/python
    constraints
