@@ -38,6 +38,8 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.todo',
     'sphinx.ext.autosectionlabel',
+    'sphinxarg.ext',
+    'sphinxcontrib.contentui'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
