@@ -95,6 +95,7 @@ jobs:
             - name: Build documentation
               shell: bash
               run: |
+                pip3 install --upgrade sphinx-argparse sphinxcontrib-contentui
                 pushd _src
                 # determine the release id
                 export EOS_RELEASE=$(git describe --abbrev=0 --tags --exact-match HEAD)
