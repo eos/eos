@@ -34,7 +34,7 @@ def get_from_env(envvar, default):
     return os.environ[envvar]
 
 
-def main():
+def _parser():
     parser = argparse.ArgumentParser(description='Carry out a Bayesian analysis using EOS')
     subparsers = parser.add_subparsers(title = 'commands')
 
@@ -241,7 +241,11 @@ def main():
             dest = 'analysis_file', action = 'store', default = '.analysis.yaml'
         )
 
-    args = parser.parse_args()
+    return parser
+
+def main():
+    parser = _parser()
+    args = parser().parse_args()
 
     if args.verbose > 3:
         args.verbose = 3
