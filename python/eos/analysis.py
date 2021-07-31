@@ -431,7 +431,8 @@ class Analysis:
                     np.logical_or(adjusted_weights <= 0, np.isnan(adjusted_weights)),
                     eps, adjusted_weights)
             eos.info('Perplexity of all previous samples after sampling in step {}: {}'.format(step, self._perplexity(adjusted_weights)))
-            pypmc.mix_adapt.pmc.gaussian_pmc(samples, sampler.proposal, adjusted_weights, mincount=0, rb=True, copy=False)
+            pmc = pypmc.mix_adapt.pmc.PMC(samples, sampler.proposal, weights=adjusted_weights, mincount=0, rb=True)
+            pmc.run(iterations=10, prune=0.0, rel_tol=1e-10, abs_tol=1e-05, verbose=False)
             sampler.proposal.normalize()
             # stop adaptation if the perplexity of the last step is larger than the threshold
             if last_perplexity > final_perplexity_threshold:
