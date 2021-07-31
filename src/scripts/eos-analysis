@@ -42,187 +42,242 @@ def _parser():
 
     # list-priors
     parser_list_priors = subparsers.add_parser('list-priors',
-        description = 'Lists the prior PDFs defined within the scope of this analysis.',
-        help = 'list the known priors'
+        description =
+'''
+Lists the named prior PDFs defined within the scope of this analysis file.
+''',
+        help = 'Lists the named priors defined in the analysis file.'
     )
     parser_list_priors.set_defaults(cmd = cmd_list_priors)
 
     # list-likelihoods
     parser_list_likelihoods = subparsers.add_parser('list-likelihoods',
-        description = 'Lists the likelihoods defined within the scope of this analysis.',
-        help = 'list the known likelihoods'
+        description =
+'''
+Lists the named likelihoods defined within the scope of this analysis file.
+''',
+        help = 'Lists the named likelihoods defined in the analysis file.'
     )
     parser_list_likelihoods.add_argument('-d', '--display-details',
-        help = 'display details for each likelihood',
+        help = 'Whether to display further details for each likelihood.',
         dest = 'display', action = 'store_true', default = False
     )
     parser_list_likelihoods.set_defaults(cmd = cmd_list_likelihoods)
 
     # list-posteriors
     parser_list_posteriors = subparsers.add_parser('list-posteriors',
-        description = 'Lists the posteriors defined within the scope of this analysis.',
-        help = 'list the known posteriors'
+        description =
+'''
+Lists the named posterior PDFs defined within the scope of this analysis file.
+''',
+        help = 'Lists the named posteriors defined in the analysis file.'
     )
     parser_list_posteriors.set_defaults(cmd = cmd_list_posteriors)
 
     # list-predictions
     parser_list_predictions = subparsers.add_parser('list-predictions',
-        description = 'Lists the predictions defined within the scope of this analysis.',
-        help = 'list the known predictions'
+        description =
+'''
+Lists the named prediction sets defined within the scope of this analysis file.
+''',
+        help = 'Lists the named predictions define in the analysis file.'
     )
     parser_list_predictions.set_defaults(cmd = cmd_list_predictions)
 
     # sample-mcmc
     parser_sample_mcmc = subparsers.add_parser('sample-mcmc',
-        description = 'Samples from a posterior using Markov Chain Monte Carlo (MCMC) methods.',
-        help = 'sample from a posterior using Markov chains'
+        description =
+'''
+Samples from a named posterior PDF using Markov Chain Monte Carlo (MCMC) methods.
+
+The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-IDX.
+''',
+        help = 'Samples from a posterior using Marko Chain Monte Carlo methods.'
     )
     parser_sample_mcmc.add_argument('posterior', metavar = 'POSTERIOR',
-        help = 'posterior PDF from which to draw samples'
+        help = 'The name of the posterior PDF from which to draw the samples.'
     )
     parser_sample_mcmc.add_argument('chain', metavar = 'CHAIN-IDX',
-        help = 'index of the Markov chain (used to seed the RNG)'
+        help = 'The index assigned to the Markov chain. This value is used to seed the RNG for a reproducable analysis.'
     )
     parser_sample_mcmc.add_argument('-N', '--number-of-samples',
-        help = 'number of samples to be drawn',
+        help = 'The number of samples to be stored in the output file.',
         dest = 'N', action = 'store', type = int, default = 1000
     )
     parser_sample_mcmc.add_argument('-S', '--stride',
-        help = 'stride (i.e. number of samples to skip) to obtain final samples',
+        help = 'The ratio of samples drawn over samples stored. For every S samples, S - 1 will be discarded.',
         dest = 'stride', action = 'store', type = int, default = 5
     )
     parser_sample_mcmc.add_argument('-p', '--number-of-preruns',
-        help = 'number of times a prerun adapts to the posterior',
+        help = 'The number of prerun steps, which ared used to adapt the MCMC proposal to the posterior.',
         dest = 'preruns', action = 'store', type = int, default = 3
     )
     parser_sample_mcmc.add_argument('-n', '--number-of-prerun-samples',
-        help = 'number of samples to be drawn in each prerun (to be discarded)',
+        help = 'The number of samples to be used for an adaptation in each prerun steps. These samples will be discarded.',
         dest = 'pre_N', action = 'store', type = int, default = 150
     )
     parser_sample_mcmc.add_argument('-b', '--base-directory',
-        help = 'base directory where to store samples',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_sample_mcmc.set_defaults(cmd = cmd_sample_mcmc)
 
     # sample-pmc
     parser_sample_pmc = subparsers.add_parser('sample-pmc',
-        description = 'Samples from a posterior using Population Monte Carlo (PMC) methods.',
-        help = 'sample from a posterior using adaptive importance sampling'
+        description =
+'''
+Samples from a named posterior using the Population Monte Carlo (PMC) methods.
+
+The results of the find-cluster command are expected in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
+The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
+''',
+        help = 'Samples from a posterior using the Population Monte Carlo method.'
     )
     parser_sample_pmc.add_argument('posterior', metavar = 'POSTERIOR',
-        help = 'posterior PDF from which to draw samples'
-    )
-    parser_sample_pmc.add_argument('path', metavar = 'PATH',
-        help = 'path to the output of \'find-cluster\''
+        help = 'The name of the posterior PDF from which to draw the samples.'
     )
     parser_sample_pmc.add_argument('-n', '--number-of-adaptation-samples',
-        help = 'number of samples to be drawn',
+        help = 'The number of samples to be used in each adaptation step. These samples will be discarded.',
         dest = 'step_N', action = 'store', type = int, default = 500
     )
     parser_sample_pmc.add_argument('-s', '--number-of-adaptation-steps',
-        help = 'number of samples to be drawn',
+        help = 'The number of adaptation steps, which ared used to adapt the PMC proposal to the posterior.',
         dest = 'steps', action = 'store', type = int, default = 10
     )
     parser_sample_pmc.add_argument('-N', '--number-of-final-samples',
-        help = 'number of samples to be drawn',
+        help = 'The number of samples to be stored in the output file.',
         dest = 'final_N', action = 'store', type = int, default = 5000
     )
     parser_sample_pmc.add_argument('-b', '--base-directory',
-        help = 'base directory where to store samples',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_sample_pmc.set_defaults(cmd = cmd_sample_pmc)
 
     # plot-samples
     parser_plot_samples = subparsers.add_parser('plot-samples',
-        description = 'Plots samples from a posterior.',
-        help = 'plot samples'
+        description =
+'''
+Plots all samples obtained for a named posterior.
+
+The results of either the sample-mcmc or the sample-pmc command are expected in
+EOS_BASE_DIRECTORY/POSTERIOR/mcmc-* or EOS_BASE_DIRECTORY/POSTERIOR/pmc, respectively.
+The plots will be stored as PDF files within the respective sample inputs.
+''',
+        help = 'Plots samples for a named posterior.'
     )
-    parser_plot_samples.add_argument('path', metavar = 'PATH',
-        help = 'path to the sampling data'
+    parser_plot_samples.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF from which to draw the samples.'
     )
-    parser_plot_samples.add_argument('-b', '--bins',
-        help = 'number of bins in the histogram',
+    parser_plot_samples.add_argument('-B', '--bins',
+        help = 'The number of bins per histogram.',
         dest = 'bins', action = 'store', type = int, default = 50
+    )
+    parser_plot_samples.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_plot_samples.set_defaults(cmd = cmd_plot_samples)
 
     # find-mode
     parser_find_mode = subparsers.add_parser('find-mode',
-        description = 'Finds the mode of a posterior.',
-        help = 'find mode of posterior'
+        description =
+'''
+Finds the mode of the named posterior.
+
+The optimization process can be initialized either with a provided
+parameter point, or by extracting the point with the largest posterior
+from among previously obtained MCMC samples. The output will be stored
+in EOS_BASE_DIRECTORY/posterior/mode.
+''',
+        help = 'Finds the mode of a named posterior.'
     )
     parser_find_mode.add_argument('posterior', metavar = 'POSTERIOR',
-        help = 'posterior PDF from which to draw samples'
+        help = 'The name of the posterior PDF that will be maximized.',
     )
     parser_find_mode.add_argument('-p', '--starting-points',
-        help = 'number of points from which minization is started',
+        help = 'The number of parameter points from which maximization is started.',
         dest = 'points', action = 'store', type = int, default = 10
     )
     parser_find_mode.add_argument('-i', '--init-from-file',
-        help = 'name of the MCMC data file from which the minimization is started',
+        help = 'The name of an MCMC data file from which the maximization is started.',
         dest = 'init_file', action = 'store', type = str, default = ''
     )
     parser_find_mode.add_argument('--from-point',
-        help = 'Point from which the minization is started',
+        help = 'The point from which the minization is started.',
         dest = 'point', action = 'store', type = str, default = ''
+    )
+    parser_find_mode.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_find_mode.set_defaults(cmd = cmd_find_mode)
 
     # find-clusters
     parser_find_clusters = subparsers.add_parser('find-clusters',
-        description = 'Find clusters among the posterior samples by Gelman-Rubin R value.',
-        help = 'find clusters'
+        description =
+'''
+Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
+
+Finding clusters and creating a Gaussian mixture density is a neccessary intermediate step before using the sample-pmc subcommand.
+The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-*. All MCMC input files present will be used in the clustering.
+The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
+''',
+        help = 'Finds clusters within MCMC samples of a named posterior.'
     )
-    parser_find_clusters.add_argument('output_path', metavar = 'OUTPUT_PATH',
-        help = 'path to the storage location for the clusters',
+    parser_find_clusters.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF from which MCMC samples have previously been drawn.',
         action = 'store', type = str
     )
-    parser_find_clusters.add_argument('input_paths', metavar = 'INPUT_PATH',
-        help = 'path to the sampling data',
-        action = 'store', type = str, nargs='+',
-    )
     parser_find_clusters.add_argument('-t', '--threshold',
-        help = 'R value threshold',
+        help = 'The R value threshold. If two sample subsets have an R value larger than this threshold, they will be treated as two distinct clusters. (default: 2.0)',
         dest = 'threshold', action = 'store', type = float, default = 2.0
     )
     parser_find_clusters.add_argument('-c', '--clusters-per-group',
-        help = 'number by which the final number of cluster shall be mulitplied',
+        help = 'The number of mixture components per cluster. (default: 1)',
         dest = 'K_g', action = 'store', type = int, default = 1
+    )
+    parser_find_clusters.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_find_clusters.set_defaults(cmd = cmd_find_clusters)
 
     # predict-observables
     parser_predict_observables = subparsers.add_parser('predict-observables',
-        description = 'Predict a set of observables based on previously obtained PMC samples.',
-        help = 'predict observables'
+        description =
+'''
+Predicts a set of observables based on previously obtained PMC samples.
+
+The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
+The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
+''',
+        help = 'Predicts observables based on PMC samples.'
+    )
+    parser_predict_observables.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF from which to draw the samples.'
     )
     parser_predict_observables.add_argument('prediction', metavar = 'PREDICTION',
-        help = 'name set of observables to predict',
-        action = 'store', type = str
-    )
-    parser_predict_observables.add_argument('path', metavar = 'INPUT_PATH',
-        help = 'path to the sampling data',
+        help = 'The name of the set of observables to predict.',
         action = 'store', type = str
     )
     parser_predict_observables.add_argument('-B', '--begin-index',
-        help = 'index of the first sample to use for the predictions',
+        help = 'The index of the first sample to use for the predictions.',
         dest = 'begin', action = 'store', type = int, default = 0
     )
     parser_predict_observables.add_argument('-E', '--end-index',
-        help = 'index beyond the last sample to use for the predictions',
+        help = 'The index beyond the last sample to use for the predictions.',
         dest = 'end', action = 'store', type = int, default = -1
     )
     parser_predict_observables.add_argument('-b', '--base-directory',
-        help = 'base directory where to store samples',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_predict_observables.set_defaults(cmd = cmd_predict_observables)
 
     ## end of commands
 
-    # add verbosity arg to all commands
+    # add verbosity arg and analysis-file arg to all commands
     parsers = [
         parser,
         parser_find_clusters, parser_find_mode,
@@ -233,11 +288,11 @@ def _parser():
     ]
     for p in parsers:
         p.add_argument('-v', '--verbose',
-            help = 'increase verbosity',
+            help = 'Increases the verbosity of the script' if p == parser else argparse.SUPPRESS,
             dest = 'verbose', action = 'count', default = 0
         )
         p.add_argument('-f', '--analysis-file',
-            help = 'analysis file to be used',
+            help = 'The analysis file. Defaults to \'.analysis.yaml\'.' if p == parser else argparse.SUPPRESS,
             dest = 'analysis_file', action = 'store', default = '.analysis.yaml'
         )
 
@@ -245,7 +300,7 @@ def _parser():
 
 def main():
     parser = _parser()
-    args = parser().parse_args()
+    args = parser.parse_args()
 
     if args.verbose > 3:
         args.verbose = 3
@@ -306,6 +361,9 @@ def cmd_find_mode(args):
     gof = None
     bfp = None
 
+    if args.point and args.init_file:
+        raise ValueError('The -p and -i options are mutually exclusive.')
+
     if args.point != '':
         starting_point = args.point
         starting_point.strip()
@@ -326,7 +384,7 @@ def cmd_find_mode(args):
         starting_points = []
         if args.init_file != '':
             info('Initializing starting point from MCMC data file')
-            chain = eos.data.MarkovChain(args.init_file)
+            chain = eos.data.MarkovChain(os.path.join(args.base_directory, args.posterior, args.init_file))
             idx_mode = _np.argmax(chain.weights)
             for p, v in zip(analysis.varied_parameters, chain.samples[idx_mode]):
                 p.set(v)
@@ -358,51 +416,61 @@ def cmd_find_mode(args):
 
 # Plot samples
 def cmd_plot_samples(args):
-    basename = os.path.basename(os.path.normpath(args.path))
-    if basename.startswith('mcmc-'):
-        data = eos.data.MarkovChain(args.path)
-    elif basename.startswith('pmc'):
-        data = eos.data.PMCSampler(args.path)
-    else:
-        raise RuntimeError('unsupported data set: {}'.format(args.path))
-
-    parameters = eos.Parameters()
-    for idx, p in enumerate(data.varied_parameters):
-        print('plotting histogram for {}'.format(p['name']))
-        if data.type in ['Prediction']:
-            label = eos.Observables()[p['name']]
-        elif data.type in ['MarkovChain', 'PMCSampler']:
-            pp = parameters[p['name']]
-            label = pp.latex()
+    import pathlib
+    input_path = pathlib.Path(os.path.join(args.base_directory, args.posterior))
+    inputs  = [str(d) for d in input_path.glob('mcmc-*')]
+    inputs += [str(d) for d in input_path.glob('pmc')]
+    for input in inputs:
+        info('plotting samples in \'{}\''.format(input))
+        basename = os.path.basename(os.path.normpath(input))
+        if basename.startswith('mcmc-'):
+            data = eos.data.MarkovChain(input)
+        elif basename.startswith('pmc'):
+            data = eos.data.PMCSampler(input)
         else:
-            label = r'\verb+{}+'.format(p['name'])
+            raise RuntimeError('unsupported data set: {}'.format(input))
 
-        description = {
-            'plot': {
-                'x': { 'label': label, 'format':  '${x:.5f}$', 'range': [p['min'], p['max']] },
-                'y': { 'label': 'prob. density' }
-            },
-            'contents': [
-                {
-                    'type': 'histogram', 'bins': args.bins,
-                    'data': {
-                        'samples': data.samples[:, idx],
+        parameters = eos.Parameters()
+        for idx, p in enumerate(data.varied_parameters):
+            info('plotting histogram for {}'.format(p['name']))
+            if data.type in ['Prediction']:
+                label = eos.Observables()[p['name']]
+            elif data.type in ['MarkovChain', 'PMCSampler']:
+                pp = parameters[p['name']]
+                label = pp.latex()
+            else:
+                label = r'\verb+{}+'.format(p['name'])
+
+            description = {
+                'plot': {
+                    'x': { 'label': label, 'range': [p['min'], p['max']] },
+                    'y': { 'label': 'prob. density' }
+                },
+                'contents': [
+                    {
+                        'type': 'histogram', 'bins': args.bins,
+                        'data': {
+                            'samples': data.samples[:, idx],
+                        }
                     }
-                }
-            ]
-        }
-        plotter = eos.plot.Plotter(description, os.path.join(args.path, '{}.pdf'.format(idx)))
-        plotter.plot()
+                ]
+            }
+            plotter = eos.plot.Plotter(description, os.path.join(input, '{}.pdf'.format(idx)))
+            plotter.plot()
+
 
 # Find clusters
 def cmd_find_clusters(args):
-    chains    = [eos.data.MarkovChain(path).samples for path in args.input_paths]
+    import pathlib
+    output_path = os.path.join(args.base_directory, args.posterior, 'clusters')
+    input_paths = [str(p) for p in pathlib.Path(os.path.join(args.base_directory, args.posterior)).glob('mcmc-*')]
+    chains    = [eos.data.MarkovChain(path).samples for path in input_paths]
     means     = [_np.mean(chain, axis=0) for chain in chains]
     variances = [_np.var(chain,  axis=0) for chain in chains]
     groups    = pypmc.mix_adapt.r_value.r_group(means, variances, len(chains[0]), critical_r=args.threshold)
     info('Found {} groups using an R value threshold of {}'.format(len(groups), args.threshold))
     density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=args.K_g, critical_r=args.threshold)
-    eos.data.MixtureDensity.create(args.output_path, density)
+    eos.data.MixtureDensity.create(output_path, density)
 
 
 # Sample MCMC
@@ -426,7 +494,7 @@ def cmd_sample_pmc(args):
     analysis_file = make_analysis_file(args)
     analysis = analysis_file.analysis(args.posterior)
     rng = _np.random.mtrand.RandomState(1701)
-    initial_proposal = eos.data.MixtureDensity(args.path).density()
+    initial_proposal = eos.data.MixtureDensity(os.path.join(args.base_directory, args.posterior, 'clusters')).density()
     samples, weights, proposal = analysis.sample_pmc(initial_proposal, step_N=args.step_N, steps=args.steps, final_N=args.final_N, rng=rng)
     output_path = os.path.join(args.base_directory, args.posterior, 'pmc')
     eos.data.PMCSampler.create(output_path, analysis.varied_parameters, samples, weights, proposal)
@@ -438,13 +506,7 @@ def cmd_predict_observables(args):
     analysis_file = make_analysis_file(args)
     observables = analysis_file.observables(args.prediction, _parameters)
 
-    basename = os.path.basename(os.path.normpath(args.path))
-    if basename.startswith('mcmc-'):
-        data = eos.data.MarkovChain(args.path)
-    elif basename.startswith('pmc'):
-        data = eos.data.PMCSampler(args.path)
-    else:
-        raise RuntimeError('unsupported data set: {}'.format(args.path))
+    data = eos.data.PMCSampler(os.path.join(args.base_directory, args.posterior, 'pmc'))
 
     try:
         from tqdm import tqdm
@@ -464,7 +526,7 @@ def cmd_predict_observables(args):
             observable_samples.append([_np.nan for o in observables])
     observable_samples = _np.array(observable_samples)
 
-    output_path = os.path.join(args.base_directory, args.prediction, 'pred')
+    output_path = os.path.join(args.base_directory, args.posterior, 'pred-{}'.format(args.prediction))
     eos.data.Prediction.create(output_path, observables, observable_samples, data.weights[args.begin:args.end])
 
 

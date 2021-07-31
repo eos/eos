@@ -25,45 +25,31 @@ echo ... success >&2
 ## Clustering ##
 ################
 echo running clustering tests ... >&2
-$PYTHON ${SOURCE_DIR}/eos-analysis \
-    find-clusters \
-    $EOS_BASE_DIRECTORY/CKM+FF/cluster \
-    $EOS_BASE_DIRECTORY/CKM+FF/mcmc-000*
+    $PYTHON ${SOURCE_DIR}/eos-analysis \
+        find-clusters \
+        CKM+FF \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 
 ############################
 ## Population Monte Carlo ##
 ############################
 echo running PMC tests ... >&2
-$PYTHON ${SOURCE_DIR}/eos-analysis \
-    sample-pmc \
-    CKM+FF \
-    $EOS_BASE_DIRECTORY/CKM+FF/cluster \
-    -n 1000 \
-    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+    $PYTHON ${SOURCE_DIR}/eos-analysis \
+        sample-pmc \
+        CKM+FF \
+        -n 1000 \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 
-###########################
-## Plotting MCMC samples ##
-###########################
+###############################
+## Plotting MCMC+PMC samples ##
+###############################
 if [[ "Linux" == $(uname) ]] ; then
 echo running MCMC plotting tests ... >&2
-$PYTHON ${SOURCE_DIR}/eos-analysis \
-    plot-samples \
-    $EOS_BASE_DIRECTORY/CKM+FF/mcmc-0000
-echo ... success >&2
-else
-echo skipping MCMC plotting tests >&2
-fi
-
-##########################
-## Plotting PMC samples ##
-##########################
-if [[ "Linux" == $(uname) ]] ; then
-echo running PMC plotting tests ... >&2
-$PYTHON ${SOURCE_DIR}/eos-analysis \
-    plot-samples \
-    $EOS_BASE_DIRECTORY/CKM+FF/pmc
+    $PYTHON ${SOURCE_DIR}/eos-analysis \
+        plot-samples \
+        CKM+FF
 echo ... success >&2
 else
 echo skipping MCMC plotting tests >&2
@@ -73,30 +59,30 @@ fi
 ## Posterior prediction of observables ##
 #########################################
 echo running prediction tests ... >&2
-$PYTHON ${SOURCE_DIR}/eos-analysis \
-    predict-observables \
-    PDF \
-    $EOS_BASE_DIRECTORY/CKM+FF/pmc \
-    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+    $PYTHON ${SOURCE_DIR}/eos-analysis \
+        predict-observables \
+        CKM+FF \
+        PDF \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 
 ####################
 ## Listing things ##
 ####################
 echo running test for list-priors command ... >&2
-$PYTHON ${SOURCE_DIR}/eos-analysis list-priors \
-    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+    $PYTHON ${SOURCE_DIR}/eos-analysis list-priors \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 echo running test for list-likelihoods command ... >&2
-$PYTHON ${SOURCE_DIR}/eos-analysis list-likelihoods \
-    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+    $PYTHON ${SOURCE_DIR}/eos-analysis list-likelihoods \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 echo running test for list-posteriors command ... >&2
-$PYTHON ${SOURCE_DIR}/eos-analysis list-posteriors \
-    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+    $PYTHON ${SOURCE_DIR}/eos-analysis list-posteriors \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 echo running test for list-predictions command ... >&2
-$PYTHON ${SOURCE_DIR}/eos-analysis list-predictions \
-    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+    $PYTHON ${SOURCE_DIR}/eos-analysis list-predictions \
+        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 
