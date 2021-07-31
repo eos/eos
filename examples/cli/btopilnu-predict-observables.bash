@@ -5,5 +5,5 @@ export EOS_BASE_DIRECTORY=/tmp/btopilnu
 eos-analysis                            \
     predict-observables                 \
     -f btopilnu.analysis                \
-    differential                        \
-    $EOS_BASE_DIRECTORY/th+exp/pmc
+    th+exp                              \
+    differential

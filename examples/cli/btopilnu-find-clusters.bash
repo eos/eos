@@ -4,8 +4,7 @@ export EOS_BASE_DIRECTORY=/tmp/btopilnu
 
 eos-analysis                            \
     find-clusters                       \
+    th+exp                              \
     -f btopilnu.analysis                \
-    $EOS_BASE_DIRECTORY/th+exp/clusters \
-    $EOS_BASE_DIRECTORY/th+exp/mcmc-*   \
     -t 1.5                              \
     -c 2

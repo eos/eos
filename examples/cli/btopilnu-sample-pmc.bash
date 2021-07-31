@@ -11,7 +11,6 @@ eos-analysis                            \
     sample-pmc                          \
     -f btopilnu.analysis                \
     th+exp                              \
-    $EOS_BASE_DIRECTORY/th+exp/clusters \
-    -s 5                                \
+    -s 10                               \
     -n 1000                             \
     -N 5000
