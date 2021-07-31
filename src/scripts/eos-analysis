@@ -320,7 +320,7 @@ def cmd_find_mode(args):
     else:
         info('Starting minimization in {} points'.format(args.points))
         starting_points = []
-        if args.init_file is not '':
+        if args.init_file != '':
             info('Initializing starting point from MCMC data file')
             chain = eos.data.MarkovChain(args.init_file)
             idx_mode = _np.argmax(chain.weights)
