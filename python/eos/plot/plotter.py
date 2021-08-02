@@ -1484,8 +1484,6 @@ class Plotter:
         if self.output:
             plt.savefig(self.output, bbox_inches='tight', dpi=300)
 
-        plt.show()
-
 
 def variable_to_latex(variable):
     p = eos.Parameters.Defaults()
