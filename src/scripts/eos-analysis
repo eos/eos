@@ -326,12 +326,11 @@ def make_analysis_file(args):
     analysis_file = eos.AnalysisFile(args.analysis_file)
     return analysis_file
 
-def set_log_file(path, name='log'):
-    os.makedirs(path, exist_ok=True)
-    formatter = logging.Formatter('%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s')
-    handler = logging.FileHandler(os.path.join(path, name), mode='w')
-    handler.setFormatter(formatter)
-    eos.logger.addHandler(handler)
+def args_to_dict(args):
+    result = vars(args)
+    result.pop('verbose', None)
+    result.pop('cmd', None)
+    return result
 
 class RNG:
     def __init__(self, seed):
@@ -459,75 +458,24 @@ def cmd_plot_samples(args):
             plotter.plot()
 
 
-# Find clusters
-def cmd_find_clusters(args):
-    import pathlib
-    output_path = os.path.join(args.base_directory, args.posterior, 'clusters')
-    input_paths = [str(p) for p in pathlib.Path(os.path.join(args.base_directory, args.posterior)).glob('mcmc-*')]
-    chains    = [eos.data.MarkovChain(path).samples for path in input_paths]
-    means     = [_np.mean(chain, axis=0) for chain in chains]
-    variances = [_np.var(chain,  axis=0) for chain in chains]
-    groups    = pypmc.mix_adapt.r_value.r_group(means, variances, len(chains[0]), critical_r=args.threshold)
-    info('Found {} groups using an R value threshold of {}'.format(len(groups), args.threshold))
-    density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=args.K_g, critical_r=args.threshold)
-    eos.data.MixtureDensity.create(output_path, density)
-
-
 # Sample MCMC
 def cmd_sample_mcmc(args):
-    output_path = os.path.join(args.base_directory, args.posterior, 'mcmc-{:04}'.format(int(args.chain)))
-    set_log_file(output_path, 'log')
-    analysis_file = make_analysis_file(args)
-    analysis = analysis_file.analysis(args.posterior)
-    rng = _np.random.mtrand.RandomState(int(args.chain) + 1701)
-    try:
-        samples, weights = analysis.sample(N=args.N, stride=args.stride, pre_N=args.pre_N, preruns=args.preruns, rng=rng)
-        eos.data.MarkovChain.create(output_path, analysis.varied_parameters, samples, weights)
-    except RuntimeError as e:
-        error('encountered run time error ({e}) in parameter point:'.format(e=e))
-        for p in analysis.varied_parameters:
-            error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
+    return eos.sample_mcmc(**args_to_dict(args))
+
+
+# Find clusters
+def cmd_find_clusters(args):
+    return eos.find_clusters(**args_to_dict(args))
 
 
 # Sample PMC
 def cmd_sample_pmc(args):
-    analysis_file = make_analysis_file(args)
-    analysis = analysis_file.analysis(args.posterior)
-    rng = _np.random.mtrand.RandomState(1701)
-    initial_proposal = eos.data.MixtureDensity(os.path.join(args.base_directory, args.posterior, 'clusters')).density()
-    samples, weights, proposal = analysis.sample_pmc(initial_proposal, step_N=args.step_N, steps=args.steps, final_N=args.final_N, rng=rng)
-    output_path = os.path.join(args.base_directory, args.posterior, 'pmc')
-    eos.data.PMCSampler.create(output_path, analysis.varied_parameters, samples, weights, proposal)
+    return eos.sample_pmc(**args_to_dict(args))
 
 
 # Predict observables
 def cmd_predict_observables(args):
-    _parameters = eos.Parameters()
-    analysis_file = make_analysis_file(args)
-    observables = analysis_file.observables(args.prediction, _parameters)
-
-    data = eos.data.PMCSampler(os.path.join(args.base_directory, args.posterior, 'pmc'))
-
-    try:
-        from tqdm import tqdm
-        progressbar = tqdm
-    except ImportError:
-        progressbar = lambda x: x
-
-    parameters = [_parameters[p['name']] for p in data.varied_parameters]
-    observable_samples = []
-    for i, sample in enumerate(progressbar(data.samples[args.begin:args.end])):
-        for p, v in zip(parameters, sample):
-            p.set(v)
-        try:
-            observable_samples.append([o.evaluate() for o in observables])
-        except RuntimeError as e:
-            error('skipping prediction for sample {i} due to runtime error ({e}): {s}'.format(i=i, e=e, s=sample))
-            observable_samples.append([_np.nan for o in observables])
-    observable_samples = _np.array(observable_samples)
-
-    output_path = os.path.join(args.base_directory, args.posterior, 'pred-{}'.format(args.prediction))
-    eos.data.Prediction.create(output_path, observables, observable_samples, data.weights[args.begin:args.end])
+    return eos.predict_observables(**args_to_dict(args))
 
 
 # List priors
