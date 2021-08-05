@@ -81,6 +81,7 @@ class AnalysisFile:
             manual_constraints.update(self._likelihoods[lh]['manual_constraints'] if 'manual_constraints' in self._likelihoods[lh] else {})
 
         global_options = posterior['global_options'] if 'global_options' in posterior else {}
+        fixed_parameters = posterior['fixed_parameters'] if 'fixed_parameters' in posterior else {}
 
         return eos.Analysis(prior, likelihood, global_options, manual_constraints=manual_constraints)
 
