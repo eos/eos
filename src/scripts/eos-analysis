@@ -275,6 +275,20 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
     )
     parser_predict_observables.set_defaults(cmd = cmd_predict_observables)
 
+    # predict-observables
+    parser_run = subparsers.add_parser('run',
+        description =
+'''
+Runs a list of subcommands.
+''',
+        help = 'Runs a list of subcommands.'
+    )
+    parser_run.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_run.set_defaults(cmd = cmd_run)
+
     ## end of commands
 
     # add verbosity arg and analysis-file arg to all commands
@@ -284,7 +298,8 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
         parser_list_priors, parser_list_likelihoods, parser_list_posteriors, parser_list_predictions,
         parser_plot_samples,
         parser_sample_mcmc, parser_sample_pmc,
-        parser_predict_observables
+        parser_predict_observables,
+        parser_run
     ]
     for p in parsers:
         p.add_argument('-v', '--verbose',
@@ -476,6 +491,11 @@ def cmd_sample_pmc(args):
 # Predict observables
 def cmd_predict_observables(args):
     return eos.predict_observables(**args_to_dict(args))
+
+
+# Run steps
+def cmd_run(args):
+    return eos.run_steps(**args_to_dict(args))
 
 
 # List priors
