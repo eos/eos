@@ -170,6 +170,24 @@ def predict_observables(analysis_file, posterior, prediction, base_directory='./
     eos.data.Prediction.create(output_path, observables, observable_samples, data.weights[begin:end])
 
 
+# Run analysis steps
+def run_steps(analysis_file, base_directory='./'):
+    """
+    Runs a list of predefined steps recorded in the analysis file.
+
+    Each step corresponds to a call to one of the following common tasks:
+     - sample-mcmc
+     - find-cluster
+     - sample-pmc
+     - predict-observables
+
+    :param analysis_file: The name of the analysis file that describes the steps.
+    :type analysis_file: str
+    """
+    _analysis_file = eos.AnalysisFile(analysis_file)
+    _analysis_file.run()
+
+
 def _set_log_file(path, name='log'):
     os.makedirs(path, exist_ok=True)
     formatter = logging.Formatter('%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s')
