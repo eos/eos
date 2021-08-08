@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2019 Ahmet Kokulu
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019,2021 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -289,7 +289,7 @@ namespace eos
             m_Lambda_b(p["mass::Lambda_b"], u),
             m_Lambda_c(p["mass::Lambda_c"], u),
             alpha(p["Lambda_c::alpha"], u),
-            mu(p["mu"], u)
+            mu(p["cb" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u)
         {
             form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::" + o.get("form-factors", "DKMR2017"), p, o);
 

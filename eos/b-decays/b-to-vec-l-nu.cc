@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
- * Copyright (c) 2019, 2020 Danny van Dyk
+ * Copyright (c) 2019-2021 Danny van Dyk
  * Copyright (c) 2021 Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
@@ -69,9 +69,9 @@ namespace eos
 
         UsedParameter m_V;
 
-        UsedParameter mu;
-
         bool cp_conjugate;
+
+        UsedParameter mu;
 
         SwitchOption opt_int_points;
 
@@ -112,8 +112,8 @@ namespace eos
             m_l(p["mass::" + opt_l.value()], u),
             m_B(p["mass::B_" + opt_q.value()], u),
             m_V(p["mass::D_" + opt_q.value() + "^*"], u),
-            mu(p["mu"], u),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+            mu(p["cb" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u),
             opt_int_points(o, "integration-points", {"256", "4096"}, "256"),
             int_points(destringify<int>(opt_int_points.value()))
         {

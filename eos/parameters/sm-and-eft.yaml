@@ -749,6 +749,12 @@ groups:
     wcxf-relevant: true
     parameters:
       # cb Wilson coefficients - electron
+      'cbenue::mu' :
+          central: 4.2
+          min:     4.2
+          max:     4.2
+          latex:   '$\mu^{b\to ce\bar\nu}$'
+          unit:    'GeV'
       'cbenue::Re{cVL}' :
           central: 1.0
           min:     1.0
@@ -801,6 +807,12 @@ groups:
           latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c e\bar\nu}_{T}$'
 
       # cb Wilson coefficients - muon
+      'cbmunumu::mu' :
+          central: 4.2
+          min:     4.2
+          max:     4.2
+          latex:   '$\mu^{b\to c\mu\bar\nu}$'
+          unit:    'GeV'
       'cbmunumu::Re{cVL}' :
           central: 1.0
           min:     1.0
@@ -853,6 +865,12 @@ groups:
           latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to c \mu\bar\nu}_{T}$'
 
       # cb Wilson coefficients - tau
+      'cbtaunutau::mu' :
+          central: 4.2
+          min:     4.2
+          max:     4.2
+          latex:   '$\mu^{b\to c\tau\bar\nu}$'
+          unit:    'GeV'
       'cbtaunutau::Re{cVL}' :
           central: 1.0
           min:     1.0
@@ -914,6 +932,12 @@ groups:
     wcxf-relevant: true
     parameters:
       # ub Wilson coefficients - electron
+      'ubenue::mu' :
+          central: 4.2
+          min:     4.2
+          max:     4.2
+          latex:   '$\mu^{b\to ue\bar\nu}$'
+          unit:    'GeV'
       'ubenue::Re{cVL}' :
           central: 1.0
           min:     1.0
@@ -966,6 +990,12 @@ groups:
           latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\ell^-\bar\nu}_{T}$'
 
       # ub Wilson coefficients - muon
+      'ubmunumu::mu' :
+          central: 4.2
+          min:     4.2
+          max:     4.2
+          latex:   '$\mu^{b\to u\mu\bar\nu}$'
+          unit:    'GeV'
       'ubmunumu::Re{cVL}' :
           central: 1.0
           min:     1.0
@@ -1018,6 +1048,12 @@ groups:
           latex:   '$\mathrm{Im}\, \mathcal{C}^{b\to u\mu\bar\nu}_{T}$'
 
       # ub Wilson coefficients - tau
+      'ubtaunutau::mu' :
+          central: 4.2
+          min:     4.2
+          max:     4.2
+          latex:   '$\mu^{b\to u\tau\bar\nu}$'
+          unit:    'GeV'
       'ubtaunutau::Re{cVL}' :
           central: 1.0
           min:     1.0
