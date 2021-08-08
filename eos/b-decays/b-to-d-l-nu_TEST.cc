@@ -218,7 +218,8 @@ class BToDLeptonNeutrinoTest :
                 p["mass::B_d"]             =  5.279;
                 p["mass::D_d"]             =  1.870;
                 // fix the scale
-                p["mu"]                    =  4.18;
+                p["cbmunumu::mu"]          =  4.18;
+                p["cbtaunutau::mu"]        =  4.18;
                 p["mass::b(MSbar)"]        =  4.18;
                 p["mass::c"]               =  1.275;
                 // CKM

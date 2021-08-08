@@ -232,7 +232,7 @@ class BToVectorLeptonNeutrinoTest :
                 p["cbmunumu::Re{cT}"].set(-0.1*1.2);
                 p["cbmunumu::Im{cT}"].set(+0.2*1.2);
 
-                p["mu"].set(2.295);  // to get m_b,c in amp_P comparable to Martin
+                p["cbmunumu::mu"].set(2.295);  // to get m_b,c in amp_P comparable to Martin
 
                 Options o{
                     { "l",             "mu"      },
@@ -361,7 +361,8 @@ class BToVectorLeptonNeutrinoTest :
                 p3["mass::B_d"]                   = +5.279;
                 p3["mass::D_d^*"]                 = +2.0103;
                 // fix scale
-                p3["mu"]                          = +4.18;
+                p3["cbmunumu::mu"]                = +4.18;
+                p3["cbtaunutau::mu"]              = +4.18;
                 // mb(mb)
                 p3["mass::b(MSbar)"]              = +4.18;
                 // mc(mc)

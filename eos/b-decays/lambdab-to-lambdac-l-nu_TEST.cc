@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2019 Ahmet Kokulu
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019,2021 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -118,7 +118,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["cbmunumu::Re{cT}"]    =  0.0;
                 p["cbmunumu::Im{cT}"]    =  0.0;
                 // fix the scale
-                p["mu"]                    =  4.18;
+                p["cbmunumu::mu"]          =  4.18;
                 p["mass::b(MSbar)"]        =  4.18;
                 p["mass::c"]               =  1.275;
                 p["Lambda_c::alpha"]       = -0.78;
@@ -157,7 +157,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["cbmunumu::Re{cT}"]    =  1.0;
                 p["cbmunumu::Im{cT}"]    = -2.0;
                 // fix the scale
-                p["mu"]                    =  4.18;
+                p["cbmunumu::mu"]          =  4.18;
                 p["mass::b(MSbar)"]        =  4.18;
                 p["mass::c"]               =  1.275;
                 p["Lambda_c::alpha"]       = -0.78;

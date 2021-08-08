@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013, 2014, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2013-2016,2021 Danny van Dyk
  * Copyright (c) 2013 Bastian Müller
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
@@ -78,7 +78,7 @@ namespace eos
             m_b_MSbar(p["mass::b(MSbar)"], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
-            mu(p["mu"], u),
+            mu(p["ub" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u),
             g_fermi(p["WET::G_Fermi"], u),
             tau(p["life_time::B_s"], u)
         {

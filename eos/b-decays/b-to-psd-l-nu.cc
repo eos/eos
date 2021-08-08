@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2015-2017,2021 Danny van Dyk
  * Copyright (c) 2015 Marzia Bordone
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2021 Christoph Bobeth
@@ -63,8 +63,6 @@ namespace eos
 
         UsedParameter m_B;
 
-        UsedParameter mu;
-
         UsedParameter tau_B;
 
         UsedParameter m_P;
@@ -76,6 +74,8 @@ namespace eos
         UsedParameter g_fermi;
 
         UsedParameter hbar;
+
+        UsedParameter mu;
 
         std::function<double (const double &)> m_U_msbar;
         std::function<complex<double> ()> v_Ub;
@@ -171,13 +171,13 @@ namespace eos
             opt_U(o, "U", { "c", "u" }),
             opt_q(o, "q", { "u", "d", "s" }, "d"),
             m_B(p["mass::B_" + opt_q.value()], u),
-            mu(p["mu"], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
             m_P(p[_mass_P()], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
+            mu(p[opt_U.value() + "b" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
