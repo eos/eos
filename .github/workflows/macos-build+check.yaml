@@ -35,12 +35,9 @@ jobs:
                 rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
                 brew outdated boost || brew upgrade boost || true
                 brew outdated boost-python3 || brew upgrade boost-python3 || true
-                brew install autoconf automake boost-python3 gsl hdf5 libtool minuit2 pkg-config yaml-cpp
+                brew install autoconf automake boost-python3 gsl libtool pkg-config yaml-cpp
                 brew link --overwrite --force python@3.9
-                $PYTHON -m pip install -U cython h5py matplotlib numpy PyYAML scipy
-                curl -L -O https://github.com/fredRos/pypmc/archive/v1.1.4.tar.gz
-                tar zxf v1.1.4.tar.gz
-                $PYTHON -m pip install ./pypmc-1.1.4
+                $PYTHON -m pip install -U cython h5py matplotlib numpy PyYAML scipy "pypmc>=1.2"
 
             - name: Create build directory
               shell: bash
@@ -66,7 +63,6 @@ jobs:
                 popd
                 pushd _build
                 ../_src/configure \
-                    --disable-pmc \
                     --enable-python \
                     --with-boost-python-suffix=${SUFFIX} \
                     --prefix=/usr/local \
