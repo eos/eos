@@ -264,13 +264,14 @@ namespace eos
             Options _forced_options;
 
         public:
-            ConcreteCacheableObservableEntry(const QualifiedName & name, const std::string & latex,
+            ConcreteCacheableObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit,
                     const std::function<const typename Decay_::IntermediateResult * (const Decay_ *, const Args_ & ...)> & prepare_fn,
                     const std::function<double (const Decay_ *, const typename Decay_::IntermediateResult *)> & evaluate_fn,
                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type ...> & kinematics_names,
                     const Options & forced_options) :
                 _name(name),
                 _latex(latex),
+                _unit(unit),
                 _prepare_fn(prepare_fn),
                 _evaluate_fn(evaluate_fn),
                 _kinematics_names(kinematics_names),
