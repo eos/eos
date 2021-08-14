@@ -46,7 +46,12 @@ jobs:
                 popd
                 pushd _build
                 which ${CXX} || ( echo c++ compiler not found ; exit 1 )
-                ../_src/configure --enable-python --prefix=/usr --with-custom-pythondir=dist-packages || ( cat config.log ; exit 2 )
+                ../_src/configure \
+                  --enable-python \
+                  --prefix=/usr \
+                  --with-custom-pythondir=dist-packages \
+                  --enable-lto \
+                  || ( cat config.log ; exit 2 )
                 popd
 
             - name: Build
