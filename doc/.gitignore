@@ -4,10 +4,17 @@
 # Sphinx output
 _build
 
+# Doxygen output
+doctrees
+doxyoutput
+html
+log
+
 # VIM files
 .*.swp
 
 # the following files are generated
 constraints.rst
 observables.rst
-parameters.rest
+parameters.rst
+references.rst
