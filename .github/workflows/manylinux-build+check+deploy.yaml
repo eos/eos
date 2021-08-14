@@ -49,7 +49,11 @@ jobs:
                 popd
                 pushd _build
                 export PATH="$PYTHON_PATH:$PATH"
-                ../_src/configure --disable-cli --enable-python --with-boost-python-suffix=${{ matrix.cfg.pyboostsuffix }}
+                ../_src/configure \
+                  --disable-cli \
+                  --enable-python \
+                  --with-boost-python-suffix=${{ matrix.cfg.pyboostsuffix }} \
+                  --enable-lto
                 popd
 
             - name: Build
