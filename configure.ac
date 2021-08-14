@@ -347,10 +347,17 @@ AC_DEFINE_UNQUOTED([EOS_BUILDDIR], "$ac_pwd", [Absolute path to the build direct
 AC_DEFINE_UNQUOTED([EOS_SRCDIR], "$ac_abs_confdir", [Absolute path to the top-level source directory])
 dnl }}}
 
+dnl {{{ use link-time optimization (LTO) to reduce the size of the binaries
+AC_ARG_ENABLE([lto],
+	[AS_HELP_STRING([--enable-lto], [enables link-time optimiztation to reduce the size of the binaries])]
+	[],
+	[])
+dnl }}}
+
 dnl {{{ define default CXXFLAGS and LDFLAGS
 AM_CXXFLAGS="-I$ac_abs_confdir -std=c++14 -Wall -Wextra -pedantic"
 AM_LDFLAGS=""
-if test "x`uname -s`" != "xDarwin" ; then
+if test "x$enable_lto" == xyes ; then
     AM_CXXFLAGS="$AM_CXXFLAGS -flto"
     AM_LDFLAGS="$AM_LDFLAGS -flto"
 fi
