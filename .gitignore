@@ -52,3 +52,6 @@ eos-*.t*
 *.rej
 *.diff
 *.patch
+
+# Jupyter/iPython
+.ipynb_checkpoints
