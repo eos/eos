@@ -40,9 +40,6 @@ namespace eos
         public:
             friend struct Implementation<LogPosterior>;
 
-            struct OptimizationOptions;
-            struct Output;
-
             ///@name Basic Functions
             ///@{
             /*!
@@ -153,69 +150,6 @@ namespace eos
             /// names of all parameters. prevent using a parameter twice
             std::set<std::string> _parameter_names;
     };
-
-     // todo move optimization into separate class
-     struct LogPosterior::OptimizationOptions
-     {
-             /// Keep the value of nuisance parameters with a flat prior fixed at the current value during optimization,
-             /// to avoid flat directions that cause Migrad to fail.
-             bool fix_flat_nuisance;
-
-             /// Fraction of parameter range, in [0,1].
-             /// Useful only for simplex method
-             VerifiedRange<double> initial_step_size;
-
-             /// If algorithm doesn't converge before, quit
-             /// after maximum_iterations.
-             unsigned maximum_iterations;
-
-             /*!
-              * If non-zero, perform MCMC iterations first,
-              * before Minuit2 is invoked from the last point of the chain.
-              *
-              * @note This is only useful when call from MarkovChainSampler,
-              *       further control of the chain is taken from the MarkovChainSampler::Config object.
-              */
-             bool mcmc_pre_run;
-
-             /*!
-              *  Once the algorithm has shrunk the probe
-              *  simplex below this size, convergence is declared.
-              *
-              *  For minuit, it is just their tolerance parameter
-              */
-             VerifiedRange<double> tolerance;
-
-             /*!
-              * When comparing two modes found by minuit to decide whether they correspond
-              * to the same mode, the splitting_tolerance decides how far
-              * in relative units their distance may be.
-              */
-             VerifiedRange<double> splitting_tolerance;
-
-             /// 0 - low, 1 - medium, 2 - high precision
-             VerifiedRange<unsigned> strategy_level;
-
-             static OptimizationOptions Defaults();
-
-         private:
-             OptimizationOptions();
-     };
-
-     /*!
-      * Compute an initial guess of the proposal covariance matrix.
-      *
-      * The variance of each parameter is taken from the prior distribution
-      * and scaled if desired for higher efficiency. Zero correlation is assumed a priori.
-      *
-      * @param log_posterior The log posterior supplying the prior information.
-      * @param scale_reduction Value by which sqrt(variance) of parameters is divided.
-      * @param scale_nuisance Decide whether only scan parameters or all parameters are scaled.
-      * @return The covariance matrix in row major format.
-      */
-     std::vector<double> proposal_covariance(const LogPosterior & log_posterior,
-                                             double scale_reduction=1,
-                                             bool scale_nuisance=true);
 }
 
 #endif
