@@ -42,6 +42,7 @@ class PrefixTest :
             TEST_CHECK_NO_THROW(auto p = qnp::Prefix("B->B"));
 
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::Prefix("B->K^*ll::"));
+            TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::Prefix("B->>B"));
             TEST_CHECK_THROWS(QualifiedNameSyntaxError, auto p = qnp::Prefix(""));
         }
 } prefix_test;

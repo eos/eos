@@ -45,6 +45,14 @@ namespace eos
             {
                 throw QualifiedNameSyntaxError("'" + prefix + "' is not a valid prefix part: Character '" + prefix[pos] + "' may not be used");
             }
+
+            auto pos_opened = prefix.find("<<");
+            auto pos_closed = prefix.find(">>");
+
+            if ((std::string::npos != pos_opened) || (std::string::npos != pos_closed))
+            {
+                throw QualifiedNameSyntaxError("'" + prefix + "' is not a valid prefix part: Neither '<<' nor '>>' may be used");
+            }
         }
 
         Name::Name(const std::string & name) :
