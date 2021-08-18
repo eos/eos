@@ -29,6 +29,7 @@
 #include "eos/utils/options.hh"
 #include "eos/utils/qualified-name.hh"
 #include "eos/utils/reference-name.hh"
+#include "eos/utils/units.hh"
 #include "eos/statistics/goodness-of-fit.hh"
 #include "eos/statistics/log-likelihood.hh"
 #include "eos/statistics/log-posterior.hh"
@@ -296,6 +297,36 @@ BOOST_PYTHON_MODULE(_eos)
         .def(init<>())
         .def("set", &Options::set)
         .def("__str__", &Options::as_string)
+        ;
+
+    // Units
+    class_<Unit, boost::noncopyable>("Unit", R"(
+            Represents the unit of the observables.
+
+            Seven possible entries are currently implemented in EOS:
+            - Undefined
+            - None
+            - GeV
+            - GeV2
+            - InverseGeV2
+            - InverseGeV4
+            - InversePicoSecond
+        )", no_init)
+        .def("Undefined", &Unit::Undefined, return_value_policy<copy_const_reference>())
+        .staticmethod("Undefined")
+        .def("None", &Unit::None, return_value_policy<copy_const_reference>())
+        .staticmethod("None")
+        .def("GeV", &Unit::GeV, return_value_policy<copy_const_reference>())
+        .staticmethod("GeV")
+        .def("GeV2", &Unit::GeV2, return_value_policy<copy_const_reference>())
+        .staticmethod("GeV2")
+        .def("InverseGeV2", &Unit::InverseGeV2, return_value_policy<copy_const_reference>())
+        .staticmethod("InverseGeV2")
+        .def("InverseGeV4", &Unit::InverseGeV4, return_value_policy<copy_const_reference>())
+        .staticmethod("InverseGeV4")
+        .def("InversePicoSecond", &Unit::InversePicoSecond, return_value_policy<copy_const_reference>())
+        .staticmethod("InversePicoSecond")
+        .def("latex", &Unit::latex, return_value_policy<copy_const_reference>())
         ;
 
     // Model
@@ -589,6 +620,18 @@ BOOST_PYTHON_MODULE(_eos)
     class_<Observables>("_Observables")
         .def("__getitem__", &Observables::operator[])
         .def("__iter__", range(&Observables::begin, &Observables::end))
+        .def("insert", &Observables::insert, R"(
+            Insert a new observable to EOS by parsing the input string.
+
+            :param name: The name of the new observable.
+            :type name: eos.QualifiedName
+            :param latex: The latex representation of the new observable.
+            :type latex: std::string
+            :param options: The set of options relevant to this new observable. These options apply to **all** the observables in the expression.
+            :type options: eos.Options
+            :param expression: The expression to be parsed.
+            :type expression: std::string
+        )", args("name", "latex", "options", "expression"))
         .def("sections", range(&Observables::begin_sections, &Observables::end_sections))
         ;
 
