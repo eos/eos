@@ -1356,4 +1356,4 @@ class ConstraintTest :
                 }
             }
         }
-};// constraint_test;
+} constraint_test;

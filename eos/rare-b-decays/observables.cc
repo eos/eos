@@ -683,6 +683,12 @@ namespace eos
                         &BToKstarDilepton::integrated_unnormalized_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
 
+                make_observable("B->K^*ll::A_FBavg",
+                        Unit::None(),
+                        &BToKstarDilepton::integrated_forward_backward_asymmetry_cp_averaged,
+                        std::make_tuple("q2_min", "q2_max")),
+
+
                 make_observable("B->K^*ll::BR",
                         Unit::None(),
                         &BToKstarDilepton::integrated_branching_ratio,
@@ -1166,6 +1172,21 @@ namespace eos
                         Unit::None(),
                         &BsToPhiDilepton::integrated_forward_backward_asymmetry_LHCb,
                         std::make_tuple("s_min", "s_max")),
+
+                make_observable("B_s->phill::A_5",
+                        Unit::None(),
+                        &BsToPhiDilepton::integrated_a_5,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::A_6s",
+                        Unit::None(),
+                        &BsToPhiDilepton::integrated_a_6s,
+                        std::make_tuple("q2_min", "q2_max")),
+
+                make_observable("B_s->phill::A_8",
+                        Unit::None(),
+                        &BsToPhiDilepton::integrated_a_8,
+                        std::make_tuple("q2_min", "q2_max")),
 
                 make_observable("B_s->phill::A_9",
                         Unit::None(),

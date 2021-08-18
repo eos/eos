@@ -25,7 +25,7 @@ namespace eos
 {
     BsToPhiDilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model", "SM"), p, o)),
-        form_factors(FormFactorFactory<PToV>::create("B_s->phi::" + o.get("form-factors", "KMPW2010"), p)),
+        form_factors(FormFactorFactory<PToV>::create("B_s->phi::" + o.get("form-factors", "BSZ2015"), p)),
         mu(p["mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),

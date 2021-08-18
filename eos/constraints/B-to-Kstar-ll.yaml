@@ -9,81 +9,81 @@
 # {{{
 B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@BaBar-2012:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LargeRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: -0.17
     sigma-stat: {hi: 0.14, lo: -0.12}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@BaBar-2012:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.34
     sigma-stat: {hi: 0.15, lo: -0.08}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@BaBar-2012:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.34
     sigma-stat: {hi: 0.21, lo: -0.19}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[1.00,6.00]@BaBar-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 2.05e-07
     sigma-stat: {hi: 5.3e-08, lo: -4.8e-08}
     sigma-sys: {hi: 7e-09, lo: -7e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[14.21,16.00]@BaBar-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.21, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.46e-07
     sigma-stat: {hi: 4.1e-08, lo: -3.6e-08}
     sigma-sys: {hi: 6e-09, lo: -6e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[16.00,19.21]@BaBar-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.02e-07
     sigma-stat: {hi: 4.7e-08, lo: -4.2e-08}
     sigma-sys: {hi: 6e-09, lo: -6e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@BaBar-2012:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LargeRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.25
     sigma-stat: {hi: 0.09, lo: -0.08}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@BaBar-2012:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.43
     sigma-stat: {hi: 0.1, lo: -0.13}
     sigma-sys: {hi: 0.09, lo: -0.09}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@BaBar-2012:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.55
     sigma-stat: {hi: 0.15, lo: -0.17}
     sigma-sys: {hi: 0.03, lo: -0.03}
@@ -99,81 +99,81 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@BaBar-2012:
 # {{{
 B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@Belle-2009:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LargeRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: -0.26
     sigma-stat: {hi: 0.3, lo: -0.27}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@Belle-2009:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.7
     sigma-stat: {hi: 0.22, lo: -0.16}
     sigma-sys: {hi: 0.1, lo: -0.1}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@Belle-2009:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.66
     sigma-stat: {hi: 0.16, lo: -0.11}
     sigma-sys: {hi: 0.04, lo: -0.04}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[1.00,6.00]@Belle-2009:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 1.49e-07
     sigma-stat: {hi: 4.5e-08, lo: -4e-08}
     sigma-sys: {hi: 1.2e-08, lo: -1.2e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[14.18,16.00]@Belle-2009:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.05e-07
     sigma-stat: {hi: 2.9e-08, lo: -2.6e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[16.00,19.21]@Belle-2009:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 2.04e-07
     sigma-stat: {hi: 2.7e-08, lo: -2.4e-08}
     sigma-sys: {hi: 1.6e-08, lo: -1.6e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle-2009:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LargeRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.67
     sigma-stat: {hi: 0.23, lo: -0.23}
     sigma-sys: {hi: 0.05, lo: -0.05}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.15
     sigma-stat: {hi: 0.27, lo: -0.23}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.12
     sigma-stat: {hi: 0.15, lo: -0.13}
     sigma-sys: {hi: 0.02, lo: -0.02}
@@ -189,162 +189,162 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009:
 # {{{
 B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LargeRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: -0.36
     sigma-stat: {hi: 0.28, lo: -0.46}
     sigma-sys: {hi: 0.11, lo: -0.11}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.4
     sigma-stat: {hi: 0.21, lo: -0.18}
-    sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
+    sigma-sys: {hi: 0.07, lo: -0.07}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.66
     sigma-stat: {hi: 0.26, lo: -0.18}
     sigma-sys: {hi: 0.19, lo: -0.19}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::A_T^2avg@LargeRecoil
+    observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 1.6
     sigma-stat: {hi: 1.8, lo: -1.9}
     sigma-sys: {hi: 2.2, lo: -2.2}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::A_T^2avg@LowRecoil
+    observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.4
     sigma-stat: {hi: 0.8, lo: -0.8}
     sigma-sys: {hi: 0.2, lo: -0.2}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^2[16.00,19.21]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::A_T^2avg@LowRecoil
+    observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.9
     sigma-stat: {hi: 0.8, lo: -0.8}
     sigma-sys: {hi: 0.4, lo: -0.4}
     dof: 1
 B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LargeRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: -0.02
     sigma-stat: {hi: 0.4, lo: -0.4}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LowRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.15
     sigma-stat: {hi: 0.25, lo: -0.26}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LowRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.3
     sigma-stat: {hi: 0.36, lo: -0.35}
     sigma-sys: {hi: 0.14, lo: -0.14}
     dof: 1
 B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: u}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 2.57e-07
     sigma-stat: {hi: 1.61e-07, lo: -1.61e-07}
     sigma-sys: {hi: 2.2e-08, lo: -2.2e-08}
     dof: 1
 B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: u}
+    options: {l: mu, q: u, tag: GP2004}
     mean: 5.2e-08
     sigma-stat: {hi: 6.1e-08, lo: -6.1e-08}
     sigma-sys: {hi: 4e-09, lo: -4e-09}
     dof: 1
 B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: u}
+    options: {l: mu, q: u, tag: GP2004}
     mean: 1.57e-07
     sigma-stat: {hi: 9.6e-08, lo: -9.6e-08}
     sigma-sys: {hi: 1.3e-08, lo: -1.3e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 1.42e-07
     sigma-stat: {hi: 4.1e-08, lo: -4.1e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.34e-07
     sigma-stat: {hi: 2.6e-08, lo: -2.6e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 9.7e-08
     sigma-stat: {hi: 2.6e-08, lo: -2.6e-08}
     sigma-sys: {hi: 6e-09, lo: -6e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LargeRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.6
     sigma-stat: {hi: 0.21, lo: -0.23}
     sigma-sys: {hi: 0.09, lo: -0.09}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.32
     sigma-stat: {hi: 0.14, lo: -0.14}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2011:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.16
     sigma-stat: {hi: 0.22, lo: -0.18}
     sigma-sys: {hi: 0.06, lo: -0.06}
@@ -356,162 +356,162 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2011:
 # {{{
 B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LargeRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: -0.29
     sigma-stat: {hi: 0.21, lo: -0.25}
     sigma-sys: {hi: 0.06, lo: -0.06}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.49
     sigma-stat: {hi: 0.09, lo: -0.1}
-    sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
+    sigma-sys: {hi: 0.07, lo: -0.07}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.42
     sigma-stat: {hi: 0.23, lo: -0.22}
     sigma-sys: {hi: 0.09, lo: -0.09}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::A_T^2avg@LargeRecoil
+    observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: -0.45
     sigma-stat: {hi: 2.24, lo: -2.22}
     sigma-sys: {hi: 0.76, lo: -0.76}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::A_T^2avg@LowRecoil
+    observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.15
     sigma-stat: {hi: 0.72, lo: -0.72}
     sigma-sys: {hi: 0.14, lo: -0.14}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^2[16.00,19.21]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::A_T^2avg@LowRecoil
+    observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.62
     sigma-stat: {hi: 0.5600000000000001, lo: -0.53}
     sigma-sys: {hi: 0.13, lo: -0.13}
     dof: 1
 B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LargeRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.51
     sigma-stat: {hi: 0.28, lo: -0.29}
     sigma-sys: {hi: 0.15, lo: -0.15}
     dof: 1
 B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LowRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.16
     sigma-stat: {hi: 0.21, lo: -0.22}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LowRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.02
     sigma-stat: {hi: 0.26, lo: -0.27}
     sigma-sys: {hi: 0.04, lo: -0.04}
     dof: 1
 B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: u}
+    options: {l: mu, q: u, tag: BFS2004}
     mean: 3.56e-07
     sigma-stat: {hi: 1.38e-07, lo: -1.38e-07}
     sigma-sys: {hi: 4.3e-08, lo: -4.3e-08}
     dof: 1
 B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: u}
+    options: {l: mu, q: u, tag: GP2004}
     mean: 1.02e-07
     sigma-stat: {hi: 5.8e-08, lo: -5.8e-08}
     sigma-sys: {hi: 1.3e-08, lo: -1.3e-08}
     dof: 1
 B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: u}
+    options: {l: mu, q: u, tag: GP2004}
     mean: 1.68e-07
     sigma-stat: {hi: 7.4e-08, lo: -7.4e-08}
     sigma-sys: {hi: 1.9e-08, lo: -1.9e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 1.97e-07
     sigma-stat: {hi: 4.9e-08, lo: -4.9e-08}
     sigma-sys: {hi: 1.4e-08, lo: -1.4e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.35e-07
     sigma-stat: {hi: 2.1e-08, lo: -2.1e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 9.8e-08
     sigma-stat: {hi: 2.2e-08, lo: -2.2e-08}
     sigma-sys: {hi: 6e-09, lo: -6e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LargeRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.78
     sigma-stat: {hi: 0.13, lo: -0.15}
     sigma-sys: {hi: 0.08, lo: -0.08}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.45
     sigma-stat: {hi: 0.12, lo: -0.12}
     sigma-sys: {hi: 0.04, lo: -0.04}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2012:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.09
     sigma-stat: {hi: 0.14, lo: -0.12}
     sigma-sys: {hi: 0.08, lo: -0.08}
@@ -527,81 +527,81 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2012:
 # {{{
 B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CMS-2013A:
     type: Gaussian
-    observable: B->K^*ll::A_FB@LargeRecoil
+    observable: B->K^*ll::A_FB
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.07000000000000001
     sigma-stat: {hi: 0.12, lo: -0.12}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CMS-2013A:
     type: Gaussian
-    observable: B->K^*ll::A_FB@LowRecoil
+    observable: B->K^*ll::A_FB
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.29
     sigma-stat: {hi: 0.09, lo: -0.09}
     sigma-sys: {hi: 0.05, lo: -0.05}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@CMS-2013A:
     type: Gaussian
-    observable: B->K^*ll::A_FB@LowRecoil
+    observable: B->K^*ll::A_FB
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.41
     sigma-stat: {hi: 0.05, lo: -0.05}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CMS-2013A:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 2.2e-07
     sigma-stat: {hi: 3e-08, lo: -3e-08}
     sigma-sys: {hi: 3.5e-08, lo: -3.5e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CMS-2013A:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 8.372000000000001e-08
     sigma-stat: {hi: 1.638e-08, lo: -1.456e-08}
     sigma-sys: {hi: 1.456e-08, lo: -1.456e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[16.00,19.00]@CMS-2013A:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.56e-07
     sigma-stat: {hi: 1.8e-08, lo: -1.8e-08}
     sigma-sys: {hi: 2.7e-08, lo: -2.7e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CMS-2013A:
     type: Gaussian
-    observable: B->K^*ll::F_L@LargeRecoil
+    observable: B->K^*ll::F_L
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.68
     sigma-stat: {hi: 0.1, lo: -0.1}
     sigma-sys: {hi: 0.02, lo: -0.02}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CMS-2013A:
     type: Gaussian
-    observable: B->K^*ll::F_L@LowRecoil
+    observable: B->K^*ll::F_L
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.53
     sigma-stat: {hi: 0.12, lo: -0.12}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS-2013A:
     type: Gaussian
-    observable: B->K^*ll::F_L@LowRecoil
+    observable: B->K^*ll::F_L
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.44
     sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.03, lo: -0.03}
@@ -617,81 +617,81 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS-2013A:
 # {{{
 B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2011:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LargeRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.06
     sigma-stat: {hi: 0.14, lo: -0.13}
     sigma-sys: {hi: 0.04, lo: -0.04}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2011:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.47
     sigma-stat: {hi: 0.08, lo: -0.06}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@LHCb-2011:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.16
     sigma-stat: {hi: 0.13, lo: -0.11}
     sigma-sys: {hi: 0.06, lo: -0.06}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 2.1e-07
     sigma-stat: {hi: 3e-08, lo: -3e-08}
     sigma-sys: {hi: 1.5e-08, lo: -1.5e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.1466e-07
     sigma-stat: {hi: 2.002e-08, lo: -2.002e-08}
     sigma-sys: {hi: 9.1e-09, lo: -9.1e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb-2011:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.5e-07
     sigma-stat: {hi: 2.4e-08, lo: -2.4e-08}
     sigma-sys: {hi: 1.5e-08, lo: -1.5e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LargeRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.55
     sigma-stat: {hi: 0.1, lo: -0.1}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.37
     sigma-stat: {hi: 0.09, lo: -0.09}
     sigma-sys: {hi: 0.05, lo: -0.05}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.26
     sigma-stat: {hi: 0.1, lo: -0.08}
     sigma-sys: {hi: 0.03, lo: -0.03}
@@ -703,162 +703,162 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011:
 # {{{
 B^0->K^*0mu^+mu^-::A_CP[1.00,6.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::A_CP@LargeRecoil
+    observable: B->K^*ll::A_CP
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: -0.058
     sigma-stat: {hi: 0.064, lo: -0.064}
     sigma-sys: {hi: 0.008999999999999999, lo: -0.008999999999999999}
     dof: 1
 B^0->K^*0mu^+mu^-::A_CP[14.18,16.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::A_CP@LowRecoil
+    observable: B->K^*ll::A_CP
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.201
     sigma-stat: {hi: 0.104, lo: -0.104}
     sigma-sys: {hi: 0.008999999999999999, lo: -0.008999999999999999}
     dof: 1
 B^0->K^*0mu^+mu^-::A_CP[16.00,20.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::A_CP@LowRecoil
+    observable: B->K^*ll::A_CP
     kinematics: {q2_min: 16, q2_max: 19.81}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.089
     sigma-stat: {hi: 0.1, lo: -0.1}
     sigma-sys: {hi: 0.012, lo: -0.012}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LargeRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.18
     sigma-stat: {hi: 0.06, lo: -0.06}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.49
     sigma-stat: {hi: 0.06, lo: -0.04}
     sigma-sys: {hi: 0.05, lo: -0.02}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::A_FBavg@LowRecoil
+    observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.3
     sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.01, lo: -0.04}
     dof: 1
 B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LargeRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.07000000000000001
     sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LowRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.01
     sigma-stat: {hi: 0.08, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.04, lo: -0.02}
     dof: 1
 B^0->K^*0mu^+mu^-::A_im[16.00,19.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LowRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.06
     sigma-stat: {hi: 0.09, lo: -0.1}
     sigma-sys: {hi: 0.03, lo: -0.05}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 2.1e-07
     sigma-stat: {hi: 2e-08, lo: -2e-08}
     sigma-sys: {hi: 2e-08, lo: -2e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.0738e-07
     sigma-stat: {hi: 1.274e-08, lo: -1.274e-08}
     sigma-sys: {hi: 7.280000000000001e-09, lo: -7.280000000000001e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.32e-07
     sigma-stat: {hi: 1.5e-08, lo: -1.5e-08}
     sigma-sys: {hi: 9e-09, lo: -9e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LargeRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.66
     sigma-stat: {hi: 0.06, lo: -0.06}
     sigma-sys: {hi: 0.04, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.35
     sigma-stat: {hi: 0.07000000000000001, lo: -0.06}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.02}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::F_Lavg@LowRecoil
+    observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.37
     sigma-stat: {hi: 0.06, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.03, lo: -0.04}
     dof: 1
 B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::J_3normavg@LargeRecoil
+    observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.05
     sigma-stat: {hi: 0.075, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.005}
     dof: 1
 B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::J_3normavg@LowRecoil
+    observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.02
     sigma-stat: {hi: 0.075, lo: -0.095}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2012:
     type: Gaussian
-    observable: B->K^*ll::J_3normavg@LowRecoil
+    observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.235
     sigma-stat: {hi: 0.105, lo: -0.05}
     sigma-sys: {hi: 0.015, lo: -0.025}
@@ -870,297 +870,297 @@ B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2012:
 # {{{
 B^0->K^*0mu^+mu^-::A_9[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_9@LargeRecoil
+    observable: B->K^*ll::A_9
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.03
     sigma-stat: {hi: 0.08, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_9[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_9@LowRecoil
+    observable: B->K^*ll::A_9
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.06
     sigma-stat: {hi: 0.11, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_9[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_9@LowRecoil
+    observable: B->K^*ll::A_9
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0
     sigma-stat: {hi: 0.11, lo: -0.1}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_FB@LargeRecoil
+    observable: B->K^*ll::A_FB
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.17
     sigma-stat: {hi: 0.06, lo: -0.06}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_FB@LowRecoil
+    observable: B->K^*ll::A_FB
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.51
     sigma-stat: {hi: 0.05, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.02, lo: -0.02}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_FB@LowRecoil
+    observable: B->K^*ll::A_FB
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.3
     sigma-stat: {hi: 0.08, lo: -0.08}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_T^2@LargeRecoil
+    observable: B->K^*ll::A_T^2
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.15
     sigma-stat: {hi: 0.39, lo: -0.41}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_T^2@LowRecoil
+    observable: B->K^*ll::A_T^2
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.07000000000000001
     sigma-stat: {hi: 0.26, lo: -0.28}
     sigma-sys: {hi: 0.02, lo: -0.02}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_T^2@LowRecoil
+    observable: B->K^*ll::A_T^2
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.71
     sigma-stat: {hi: 0.35, lo: -0.26}
     sigma-sys: {hi: 0.06, lo: -0.04}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_T^re@LargeRecoil
+    observable: B->K^*ll::A_T^re
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.66
     sigma-stat: {hi: 0.22, lo: -0.24}
     sigma-sys: {hi: 0.01, lo: -0.04}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_T^re@LowRecoil
+    observable: B->K^*ll::A_T^re
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -1
     sigma-stat: {hi: 0.05, lo: -0.01}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::A_T^re@LowRecoil
+    observable: B->K^*ll::A_T^re
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.64
     sigma-stat: {hi: 0.15, lo: -0.15}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LargeRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 1.7e-07
     sigma-stat: {hi: 1.8e-08, lo: -2.3e-08}
     sigma-sys: {hi: 2e-08, lo: -2e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.02e-07
     sigma-stat: {hi: 1.3e-08, lo: -1.6e-08}
     sigma-sys: {hi: 7e-09, lo: -7e-09}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::BRavg@LowRecoil
+    observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 1.23e-07
     sigma-stat: {hi: 1.5e-08, lo: -1.7e-08}
     sigma-sys: {hi: 1.2e-08, lo: -1.2e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::F_L@LargeRecoil
+    observable: B->K^*ll::F_L
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.65
     sigma-stat: {hi: 0.08, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::F_L@LowRecoil
+    observable: B->K^*ll::F_L
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.33
     sigma-stat: {hi: 0.08, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.02, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::F_L@LowRecoil
+    observable: B->K^*ll::F_L
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.38
     sigma-stat: {hi: 0.09, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::P'_4[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::P'_4@LargeRecoil
+    observable: B->K^*ll::P'_4
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.58
     sigma-stat: {hi: 0.32, lo: -0.36}
     sigma-sys: {hi: 0.06, lo: -0.06}
     dof: 1
 B^0->K^*0mu^+mu^-::P'_4[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::P'_4@LowRecoil
+    observable: B->K^*ll::P'_4
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.18
     sigma-stat: {hi: 0.54, lo: -0.7}
     sigma-sys: {hi: 0.08, lo: -0.08}
     dof: 1
 B^0->K^*0mu^+mu^-::P'_4[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::P'_4@LowRecoil
+    observable: B->K^*ll::P'_4
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.7
     sigma-stat: {hi: 0.44, lo: -0.52}
     sigma-sys: {hi: 0.06, lo: -0.06}
     dof: 1
 B^0->K^*0mu^+mu^-::P'_5[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::P'_5@LargeRecoil
+    observable: B->K^*ll::P'_5
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.21
     sigma-stat: {hi: 0.2, lo: -0.21}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::P'_5[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::P'_5@LowRecoil
+    observable: B->K^*ll::P'_5
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.79
     sigma-stat: {hi: 0.2, lo: -0.13}
     sigma-sys: {hi: 0.18, lo: -0.18}
     dof: 1
 B^0->K^*0mu^+mu^-::P'_5[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::P'_5@LowRecoil
+    observable: B->K^*ll::P'_5
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.6
     sigma-stat: {hi: 0.19, lo: -0.16}
     sigma-sys: {hi: 0.09, lo: -0.09}
     dof: 1
 B^0->K^*0mu^+mu^-::P'_6[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::P'_6@LargeRecoil
+    observable: B->K^*ll::P'_6
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.18
     sigma-stat: {hi: 0.21, lo: -0.21}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::P'_6[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::P'_6@LowRecoil
+    observable: B->K^*ll::P'_6
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.18
     sigma-stat: {hi: 0.24, lo: -0.25}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::P'_6[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::P'_6@LowRecoil
+    observable: B->K^*ll::P'_6
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.31
     sigma-stat: {hi: 0.37, lo: -0.38}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
 B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::J_3normavg@LargeRecoil
+    observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.03
     sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::J_3normavg@LowRecoil
+    observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.03
     sigma-stat: {hi: 0.09, lo: -0.1}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::J_3normavg@LowRecoil
+    observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: -0.22
     sigma-stat: {hi: 0.1, lo: -0.09}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::S_9[1.00,6.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LargeRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 1, q2_max: 6}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: BFS2004}
     mean: 0.07000000000000001
     sigma-stat: {hi: 0.09, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::S_9[14.18,16.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LowRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0
     sigma-stat: {hi: 0.09, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
 B^0->K^*0mu^+mu^-::S_9[16.00,19.00]@LHCb-2013:
     type: Gaussian
-    observable: B->K^*ll::J_9normavg@LowRecoil
+    observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 16, q2_max: 19}
-    options: {l: mu, q: d}
+    options: {l: mu, q: d, tag: GP2004}
     mean: 0.06
     sigma-stat: {hi: 0.11, lo: -0.1}
     sigma-sys: {hi: 0.01, lo: -0.01}
@@ -1174,11 +1174,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb-2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
-        -   B->K^*ll::F_L@LargeRecoil
-        -   B->K^*ll::S_3@LargeRecoil
-        -   B->K^*ll::S_4@LargeRecoil
-        -   B->K^*ll::S_5@LargeRecoil
-        -   B->K^*ll::A_FB@LargeRecoil
+        -   B->K^*ll::F_L
+        -   B->K^*ll::S_3
+        -   B->K^*ll::S_4
+        -   B->K^*ll::S_5
+        -   B->K^*ll::A_FB
     kinematics:
         -   {q2_min: 1.1, q2_max: 2}
         -   {q2_min: 1.1, q2_max: 2}
@@ -1186,11 +1186,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb-2015A:
         -   {q2_min: 1.1, q2_max: 2}
         -   {q2_min: 1.1, q2_max: 2}
     options:
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
     means: [0.768, 0.065, 0.127, 0.286, -0.333]
     sigma-stat-hi: [0, 0, 0, 0, 0]
     sigma-stat-lo: [0, 0, 0, 0, 0]
@@ -1206,11 +1206,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb-2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
-        -   B->K^*ll::F_L@LargeRecoil
-        -   B->K^*ll::S_3@LargeRecoil
-        -   B->K^*ll::S_4@LargeRecoil
-        -   B->K^*ll::S_5@LargeRecoil
-        -   B->K^*ll::A_FB@LargeRecoil
+        -   B->K^*ll::F_L
+        -   B->K^*ll::S_3
+        -   B->K^*ll::S_4
+        -   B->K^*ll::S_5
+        -   B->K^*ll::A_FB
     kinematics:
         -   {q2_min: 2, q2_max: 3}
         -   {q2_min: 2, q2_max: 3}
@@ -1218,11 +1218,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb-2015A:
         -   {q2_min: 2, q2_max: 3}
         -   {q2_min: 2, q2_max: 3}
     options:
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
     means: [0.6899999999999999, 0.006, -0.339, 0.206, -0.158]
     sigma-stat-hi: [0, 0, 0, 0, 0]
     sigma-stat-lo: [0, 0, 0, 0, 0]
@@ -1238,11 +1238,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb-2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
-        -   B->K^*ll::F_L@LargeRecoil
-        -   B->K^*ll::S_3@LargeRecoil
-        -   B->K^*ll::S_4@LargeRecoil
-        -   B->K^*ll::S_5@LargeRecoil
-        -   B->K^*ll::A_FB@LargeRecoil
+        -   B->K^*ll::F_L
+        -   B->K^*ll::S_3
+        -   B->K^*ll::S_4
+        -   B->K^*ll::S_5
+        -   B->K^*ll::A_FB
     kinematics:
         -   {q2_min: 3, q2_max: 4}
         -   {q2_min: 3, q2_max: 4}
@@ -1250,11 +1250,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb-2015A:
         -   {q2_min: 3, q2_max: 4}
         -   {q2_min: 3, q2_max: 4}
     options:
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
     means: [0.873, 0.078, -0.046, -0.11, -0.041]
     sigma-stat-hi: [0, 0, 0, 0, 0]
     sigma-stat-lo: [0, 0, 0, 0, 0]
@@ -1270,11 +1270,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb-2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
-        -   B->K^*ll::F_L@LargeRecoil
-        -   B->K^*ll::S_3@LargeRecoil
-        -   B->K^*ll::S_4@LargeRecoil
-        -   B->K^*ll::S_5@LargeRecoil
-        -   B->K^*ll::A_FB@LargeRecoil
+        -   B->K^*ll::F_L
+        -   B->K^*ll::S_3
+        -   B->K^*ll::S_4
+        -   B->K^*ll::S_5
+        -   B->K^*ll::A_FB
     kinematics:
         -   {q2_min: 4, q2_max: 5}
         -   {q2_min: 4, q2_max: 5}
@@ -1282,11 +1282,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb-2015A:
         -   {q2_min: 4, q2_max: 5}
         -   {q2_min: 4, q2_max: 5}
     options:
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
     means: [0.899, 0.2, -0.148, -0.306, 0.052]
     sigma-stat-hi: [0, 0, 0, 0, 0]
     sigma-stat-lo: [0, 0, 0, 0, 0]
@@ -1302,11 +1302,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
-        -   B->K^*ll::F_L@LargeRecoil
-        -   B->K^*ll::S_3@LargeRecoil
-        -   B->K^*ll::S_4@LargeRecoil
-        -   B->K^*ll::S_5@LargeRecoil
-        -   B->K^*ll::A_FB@LargeRecoil
+        -   B->K^*ll::F_L
+        -   B->K^*ll::S_3
+        -   B->K^*ll::S_4
+        -   B->K^*ll::S_5
+        -   B->K^*ll::A_FB
     kinematics:
         -   {q2_min: 5, q2_max: 6}
         -   {q2_min: 5, q2_max: 6}
@@ -1314,11 +1314,11 @@ B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A:
         -   {q2_min: 5, q2_max: 6}
         -   {q2_min: 5, q2_max: 6}
     options:
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
-        -   {l: mu, q: d}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
     means: [0.644, -0.122, -0.273, -0.095, 0.057]
     sigma-stat-hi: [0, 0, 0, 0, 0]
     sigma-stat-lo: [0, 0, 0, 0, 0]
@@ -1336,78 +1336,78 @@ B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A:
 #
 # {{{
 # Branching ratios are normalized to BR(B^0->K^* Jpsi)
-B^0->K^*0mu^+mu^-::NormalizedBR[0.10,0.98]@LHCb-2016A:
-    type: Gaussian
-    observable: B->K^*ll::NormalizedBR
-    kinematics: {q2_min: 0.1, q2_max: 0.98}
-    options: {l: mu, q: d}
-    mean: 8.54e-5
-    sigma-stat: {hi: 0.56e-5, lo: 0.61e-5}
-    sigma-sys: {hi: 0.24e-5, lo: 0.24e-5}
-    dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[1.10,2.50]@LHCb-2016A:
-    type: Gaussian
-    observable: B->K^*ll::NormalizedBR
-    kinematics: {q2_min: 1.1, q2_max: 2.5}
-    options: {l: mu, q: d}
-    mean: 2.74e-5
-    sigma-stat: {hi: 0.27e-5, lo: 0.26e-5}
-    sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
-    dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[2.50,4.00]@LHCb-2016A:
-    type: Gaussian
-    observable: B->K^*ll::NormalizedBR
-    kinematics: {q2_min: 2.5, q2_max: 4}
-    options: {l: mu, q: d}
-    mean: 2.81e-5
-    sigma-stat: {hi: 0.26e-5, lo: 0.28e-5}
-    sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
-    dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb-2016A:
-    type: Gaussian
-    observable: B->K^*ll::NormalizedBR
-    kinematics: {q2_min: 4, q2_max: 6}
-    options: {l: mu, q: d}
-    mean: 2.97e-5
-    sigma-stat: {hi: 0.23e-5, lo: 0.22e-5}
-    sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
-    dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb-2016A:
-    type: Gaussian
-    observable: B->K^*ll::NormalizedBR
-    kinematics: {q2_min: 6, q2_max: 8}
-    options: {l: mu, q: d}
-    mean: 3.61e-5
-    sigma-stat: {hi: 0.24e-5, lo: 0.23e-5}
-    sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
-    dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb-2016A:
-    type: Gaussian
-    observable: B->K^*ll::NormalizedBR
-    kinematics: {q2_min: 11, q2_max: 12.5}
-    options: {l: mu, q: d}
-    mean: 4.09e-5
-    sigma-stat: {hi: 0.26e-5, lo: 0.27e-5}
-    sigma-sys: {hi: 0.10e-5, lo: 0.10e-5}
-    dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[15.00,17.00]@LHCb-2016A:
-    type: Gaussian
-    observable: B->K^*ll::NormalizedBR
-    kinematics: {q2_min: 15, q2_max: 17}
-    options: {l: mu, q: d}
-    mean: 4.49e-5
-    sigma-stat: {hi: 0.23e-5, lo: 0.31e-5}
-    sigma-sys: {hi: 0.17e-5, lo: 0.17e-5}
-    dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[17.00,19.00]@LHCb-2016A:
-    type: Gaussian
-    observable: B->K^*ll::NormalizedBR
-    kinematics: {q2_min: 17, q2_max: 19}
-    options: {l: mu, q: d}
-    mean: 2.98e-5
-    sigma-stat: {hi: 0.23e-5, lo: 0.18e-5}
-    sigma-sys: {hi: 0.14e-5, lo: 0.14e-5}
-    dof: 1
+# B^0->K^*0mu^+mu^-::NormalizedBR[0.10,0.98]@LHCb-2016A:
+#     type: Gaussian
+#     observable: B->K^*ll::NormalizedBR
+#     kinematics: {q2_min: 0.1, q2_max: 0.98}
+#     options: {l: mu, q: d, tag: BFS2004}
+#     mean: 8.54e-5
+#     sigma-stat: {hi: 0.56e-5, lo: 0.61e-5}
+#     sigma-sys: {hi: 0.24e-5, lo: 0.24e-5}
+#     dof: 1
+# B^0->K^*0mu^+mu^-::NormalizedBR[1.10,2.50]@LHCb-2016A:
+#     type: Gaussian
+#     observable: B->K^*ll::NormalizedBR
+#     kinematics: {q2_min: 1.1, q2_max: 2.5}
+#     options: {l: mu, q: d, tag: BFS2004}
+#     mean: 2.74e-5
+#     sigma-stat: {hi: 0.27e-5, lo: 0.26e-5}
+#     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
+#     dof: 1
+# B^0->K^*0mu^+mu^-::NormalizedBR[2.50,4.00]@LHCb-2016A:
+#     type: Gaussian
+#     observable: B->K^*ll::NormalizedBR
+#     kinematics: {q2_min: 2.5, q2_max: 4}
+#     options: {l: mu, q: d, tag: BFS2004}
+#     mean: 2.81e-5
+#     sigma-stat: {hi: 0.26e-5, lo: 0.28e-5}
+#     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
+#     dof: 1
+# B^0->K^*0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb-2016A:
+#     type: Gaussian
+#     observable: B->K^*ll::NormalizedBR
+#     kinematics: {q2_min: 4, q2_max: 6}
+#     options: {l: mu, q: d, tag: BFS2004}
+#     mean: 2.97e-5
+#     sigma-stat: {hi: 0.23e-5, lo: 0.22e-5}
+#     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
+#     dof: 1
+# B^0->K^*0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb-2016A:
+#     type: Gaussian
+#     observable: B->K^*ll::NormalizedBR
+#     kinematics: {q2_min: 6, q2_max: 8}
+#     options: {l: mu, q: d, tag: BFS2004}
+#     mean: 3.61e-5
+#     sigma-stat: {hi: 0.24e-5, lo: 0.23e-5}
+#     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
+#     dof: 1
+# B^0->K^*0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb-2016A:
+#     type: Gaussian
+#     observable: B->K^*ll::NormalizedBR
+#     kinematics: {q2_min: 11, q2_max: 12.5}
+#     options: {l: mu, q: d, tag: GP2004}
+#     mean: 4.09e-5
+#     sigma-stat: {hi: 0.26e-5, lo: 0.27e-5}
+#     sigma-sys: {hi: 0.10e-5, lo: 0.10e-5}
+#     dof: 1
+# B^0->K^*0mu^+mu^-::NormalizedBR[15.00,17.00]@LHCb-2016A:
+#     type: Gaussian
+#     observable: B->K^*ll::NormalizedBR
+#     kinematics: {q2_min: 15, q2_max: 17}
+#     options: {l: mu, q: d, tag: GP2004}
+#     mean: 4.49e-5
+#     sigma-stat: {hi: 0.23e-5, lo: 0.31e-5}
+#     sigma-sys: {hi: 0.17e-5, lo: 0.17e-5}
+#     dof: 1
+# B^0->K^*0mu^+mu^-::NormalizedBR[17.00,19.00]@LHCb-2016A:
+#     type: Gaussian
+#     observable: B->K^*ll::NormalizedBR
+#     kinematics: {q2_min: 17, q2_max: 19}
+#     options: {l: mu, q: d, tag: GP2004}
+#     mean: 2.98e-5
+#     sigma-stat: {hi: 0.23e-5, lo: 0.18e-5}
+#     sigma-sys: {hi: 0.14e-5, lo: 0.14e-5}
+#     dof: 1
 # }}}
 #
 # 2020
@@ -1429,8 +1429,8 @@ B^0->K^*0mu^+mu^-::AngularObservables[0.10,0.98]@LHCb-2020A:
         [ {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98},
           {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98} ]
     options:
-        [ {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d},
-          {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d} ]
+        [ {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004},
+          {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004} ]
     means: [ 0.255, 0.034, 0.059, 0.227, -0.004, 0.006, -0.003, -0.055 ]
     sigma-stat-hi: [ 0.032, 0.044, 0.050, 0.041, 0.040, 0.042, 0.051, 0.041 ]
     sigma-stat-lo: [ 0.032, 0.044, 0.050, 0.041, 0.040, 0.042, 0.051, 0.041 ]
@@ -1461,8 +1461,8 @@ B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.50]@LHCb-2020A:
         [ {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 02.50},
           {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 02.50} ]
     options:
-        [ {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d},
-          {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d} ]
+        [ {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004},
+          {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004} ]
     means: [ 0.655, -0.107, -0.038, 0.174, -0.229, -0.107, -0.174, -0.112 ]
     sigma-stat-hi: [ 0.046, 0.052, 0.070, 0.060, 0.046, 0.063, 0.075, 0.054 ]
     sigma-stat-lo: [ 0.046, 0.052, 0.070, 0.060, 0.046, 0.063, 0.075, 0.054 ]
@@ -1493,8 +1493,8 @@ B^0->K^*0mu^+mu^-::AngularObservables[2.50,4.00]@LHCb-2020A:
         [ {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00},
           {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00} ]
     options:
-        [ {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d},
-          {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d} ]
+        [ {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004},
+          {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004} ]
     means: [ 0.756, 0.020, -0.187, -0.064, -0.070, -0.066, 0.016, -0.012 ]
     sigma-stat-hi: [ 0.047, 0.053, 0.074, 0.068, 0.043, 0.065, 0.074, 0.055 ]
     sigma-stat-lo: [ 0.047, 0.053, 0.074, 0.068, 0.043, 0.065, 0.074, 0.055 ]
@@ -1525,8 +1525,8 @@ B^0->K^*0mu^+mu^-::AngularObservables[4.00,6.00]@LHCb-2020A:
         [ {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00},
           {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00} ]
     options:
-        [ {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d},
-          {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d} ]
+        [ {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004},
+          {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004} ]
     means: [ 0.684, 0.014, -0.145, -0.204, 0.050, -0.136, 0.077, 0.029 ]
     sigma-stat-hi: [ 0.035, 0.038, 0.057, 0.051, 0.033, 0.053, 0.062, 0.045 ]
     sigma-stat-lo: [ 0.035, 0.038, 0.057, 0.051, 0.033, 0.053, 0.062, 0.045 ]
@@ -1557,8 +1557,8 @@ B^0->K^*0mu^+mu^-::AngularObservables[6.00,8.00]@LHCb-2020A:
         [ {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00},
           {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00} ]
     options:
-        [ {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d},
-          {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d} ]
+        [ {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004},
+          {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004}, {l: mu, q: d, tag: BFS2004} ]
     means: [ 0.645, -0.013, -0.275, -0.279, 0.110, -0.074, -0.062, 0.024 ]
     sigma-stat-hi: [ 0.030, 0.038, 0.045, 0.043, 0.027, 0.046, 0.047, 0.035 ]
     sigma-stat-lo: [ 0.030, 0.038, 0.045, 0.043, 0.027, 0.046, 0.047, 0.035 ]
@@ -1589,8 +1589,8 @@ B^0->K^*0mu^+mu^-::AngularObservables[11.00,12.50]@LHCb-2020A:
         [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50},
           {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
     options:
-        [ {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d},
-          {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d} ]
+        [ {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004},
+          {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004} ]
     means: [ 0.461, -0.124, -0.245, -0.310, 0.333, -0.096, 0.009, 0.042 ]
     sigma-stat-hi: [ 0.031, 0.037, 0.047, 0.043, 0.030, 0.050, 0.049, 0.040 ]
     sigma-stat-lo: [ 0.031, 0.037, 0.047, 0.043, 0.030, 0.050, 0.049, 0.040 ]
@@ -1621,8 +1621,8 @@ B^0->K^*0mu^+mu^-::AngularObservables[15.00,17.00]@LHCb-2020A:
         [ {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00},
           {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00} ]
     options:
-        [ {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d},
-          {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d} ]
+        [ {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004},
+          {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004} ]
     means: [ 0.352, -0.166, -0.299, -0.341, 0.385, 0.029, 0.003, 0.000]
     sigma-stat-hi: [ 0.026, 0.034, 0.033, 0.034, 0.024, 0.039, 0.042, 0.037]
     sigma-stat-lo: [ 0.026, 0.034, 0.033, 0.034, 0.024, 0.039, 0.042, 0.037]
@@ -1653,8 +1653,8 @@ B^0->K^*0mu^+mu^-::AngularObservables[17.00,19.00]@LHCb-2020A:
         [ {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00},
           {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00} ]
     options:
-        [ {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d},
-          {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d}, {l: mu, q: d} ]
+        [ {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004},
+          {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004}, {l: mu, q: d, tag: GP2004} ]
     means: [ 0.344, -0.250, -0.307, -0.280, 0.323, 0.049, -0.026, -0.056 ]
     sigma-stat-hi: [ 0.032, 0.050, 0.041, 0.040, 0.032, 0.046, 0.042, 0.045 ]
     sigma-stat-lo: [ 0.032, 0.050, 0.041, 0.040, 0.032, 0.046, 0.042, 0.045 ]
@@ -1686,8 +1686,8 @@ B^+->K^*+mu^+mu^-::AngularObservables[0.10,0.98]@LHCb-2020B:
         [ {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98},
           {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98}, {q2_min: 0.1, q2_max: 0.98} ]
     options:
-        [ {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u},
-          {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u} ]
+        [ {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004},
+          {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004} ]
     means: [ 0.34, 0.14, -0.04, 0.24, -0.05, -0.01, 0.21, 0.28 ]
     sigma-stat-hi: [ 0.10, 0.15, 0.17, 0.12, 0.12, 0.19, 0.22, 0.15 ]
     sigma-stat-lo: [ 0.10, 0.14, 0.16, 0.15, 0.12, 0.17, 0.20, 0.12 ]
@@ -1718,8 +1718,8 @@ B^+->K^*+mu^+mu^-::AngularObservables[1.10,2.50]@LHCb-2020B:
         [ {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 02.50},
           {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 2.50}, {q2_min: 1.10, q2_max: 02.50} ]
     options:
-        [ {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u},
-          {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u} ]
+        [ {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004},
+          {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004} ]
     means: [ 0.54, 0.37, 0.29, 0.44, -0.21, 0.15, 0.06, 0.05 ]
     sigma-stat-hi: [ 0.21, 0.97, 0.34, 0.38, 0.19, 0.32, 0.40, 0.37 ]
     sigma-stat-lo: [ 0.18, 0.41, 0.27, 0.32, 0.23, 0.72, 0.37, 0.30 ]
@@ -1750,8 +1750,8 @@ B^+->K^*+mu^+mu^-::AngularObservables[2.50,4.00]@LHCb-2020B:
         [ {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00},
           {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00}, {q2_min: 2.50, q2_max: 4.00} ]
     options:
-        [ {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u},
-          {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u} ]
+        [ {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004},
+          {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004} ]
     means: [ 0.17, -0.12, -0.39, -0.35, 0.03, -0.15, 0.04, 0.31 ]
     sigma-stat-hi: [ 0.23, 0.66, 0.48, 0.41, 0.28, 0.49, 0.75, 0.39 ]
     sigma-stat-lo: [ 0.32, 0.39, 0.45, 0.31, 0.26, 0.59, 0.58, 0.36 ]
@@ -1782,8 +1782,8 @@ B^+->K^*+mu^+mu^-::AngularObservables[4.00,6.00]@LHCb-2020B:
         [ {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00},
           {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00}, {q2_min: 4.00, q2_max: 6.00} ]
     options:
-        [ {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u},
-          {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u} ]
+        [ {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004},
+          {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004} ]
     means: [ 0.67, -0.20, -0.37, -0.12, -0.08, -0.04, -0.07, -0.18 ]
     sigma-stat-hi: [ 0.12, 0.16, 0.20, 0.14, 0.09, 0.18, 0.21, 0.22 ]
     sigma-stat-lo: [ 0.14, 0.19, 0.13, 0.19, 0.10, 0.20, 0.22, 0.33 ]
@@ -1814,8 +1814,8 @@ B^+->K^*+mu^+mu^-::AngularObservables[6.00,8.00]@LHCb-2020B:
         [ {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00},
           {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00}, {q2_min: 6.00, q2_max: 8.00} ]
     options:
-        [ {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u},
-          {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u} ]
+        [ {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004},
+          {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004}, {l: mu, q: u, tag: BFS2004} ]
     means: [ 0.39, -0.24, -0.21, -0.07, -0.05, -0.36, -0.19, -0.11 ]
     sigma-stat-hi: [ 0.20, 0.18, 0.20, 0.16, 0.11, 0.18, 0.18, 0.21 ]
     sigma-stat-lo: [ 0.21, 0.17, 0.18, 0.20, 0.12, 0.15, 0.16, 0.20 ]
@@ -1846,8 +1846,8 @@ B^+->K^*+mu^+mu^-::AngularObservables[11.00,12.50]@LHCb-2020B:
         [ {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50},
           {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50}, {q2_min: 11.00, q2_max: 12.50} ]
     options:
-        [ {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u},
-          {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u} ]
+        [ {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004},
+          {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004} ]
     means: [ 0.39, -0.10, -0.31, -0.43, 0.54, -0.05, 0.06, 0.19 ]
     sigma-stat-hi: [ 0.24, 0.13, 0.14, 0.14, 0.21, 0.14, 0.14, 0.24 ]
     sigma-stat-lo: [ 0.17, 0.13, 0.17, 0.16, 0.18, 0.14, 0.14, 0.19 ]
@@ -1878,8 +1878,8 @@ B^+->K^*+mu^+mu^-::AngularObservables[15.00,17.00]@LHCb-2020B:
         [ {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00},
           {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00}, {q2_min: 15.00, q2_max: 17.00} ]
     options:
-        [ {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u},
-          {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u} ]
+        [ {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004},
+          {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004} ]
     means: [ 0.41, -0.26, -0.16, -0.07, 0.40, -0.24, -0.17, 0.14 ]
     sigma-stat-hi: [ 0.21, 0.12, 0.10, 0.10, 0.04, 0.11, 0.12, 0.12 ]
     sigma-stat-lo: [ 0.14, 0.11, 0.11, 0.10, 0.09, 0.11, 0.11, 0.09 ]
@@ -1910,8 +1910,8 @@ B^+->K^*+mu^+mu^-::AngularObservables[17.00,19.00]@LHCb-2020B:
         [ {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00},
           {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00}, {q2_min: 17.00, q2_max: 19.00} ]
     options:
-        [ {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u},
-          {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u}, {l: mu, q: u} ]
+        [ {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004},
+          {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004}, {l: mu, q: u, tag: GP2004} ]
     means: [ 0.34, -0.13, -0.27, -0.32, 0.14, 0.06, 0.17, -0.08 ]
     sigma-stat-hi: [ 0.12, 0.20, 0.14, 0.16, 0.12, 0.16, 0.18, 0.15 ]
     sigma-stat-lo: [ 0.11, 0.17, 0.15, 0.34, 0.07, 0.16, 0.16, 0.15 ]

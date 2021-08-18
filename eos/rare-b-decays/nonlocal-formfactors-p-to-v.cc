@@ -198,7 +198,7 @@ namespace eos
             public:
                 GvDV2020(const Parameters & p, const Options & o) :
                     form_factors(FormFactorFactory<PToV>::create(stringify(Process_::label) + "::" + o.get("form-factors", "BSZ2015"), p)),
-                    opt_q(o, "q", { "d", "s" }, "d"),
+                    opt_q(o, "q", { "u", "d", "s" }, "d"),
 
                     re_alpha_0_perp(p[stringify(Process_::label) + "ccbar::Re{alpha_0^perp}@GvDV2020"], *this),
                     im_alpha_0_perp(p[stringify(Process_::label) + "ccbar::Im{alpha_0^perp}@GvDV2020"], *this),
