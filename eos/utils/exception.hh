@@ -53,6 +53,13 @@ namespace eos
         public:
             GSLError(const std::string & message) throw ();
     };
+
+    class ParsingError :
+        public Exception
+    {
+        public:
+            ParsingError(const std::string & message) throw ();
+    };
 }
 
 #endif

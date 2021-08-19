@@ -25,10 +25,12 @@
 #include <eos/rare-b-decays/observables.hh>
 #include <eos/form-factors/observables.hh>
 #include <eos/meson-mixing/observables.hh>
-//#include <eos/utils/concrete_observable.hh>
+#include <eos/utils/expression-fwd.hh>
+#include <eos/utils/expression-observable.hh>
+#include <eos/utils/expression-parser-impl.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
-#include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/observable_stub.hh>
+#include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 #include <eos/observable-impl.hh>
 
@@ -84,9 +86,12 @@ namespace eos
                 return _entries;
             }
 
-            void insert(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value)
+            bool insert(const QualifiedName & key, const std::shared_ptr<const ObservableEntry> & value)
             {
-                _entries[key] = value;
+                auto inserted = _entries.insert(std::pair<QualifiedName, std::shared_ptr<const ObservableEntry>>(key, value));
+
+                // true if the insertion was successfull
+                return inserted.second;
             }
     };
 
@@ -260,8 +265,10 @@ namespace eos
     ObservableEntryPtr
     Observables::operator[] (const QualifiedName & qn) const
     {
-        auto i = _imp->observable_entries.find(qn);
-        if (i != _imp->observable_entries.end())
+        const auto & observable_entries = ObservableEntries::instance()->entries();
+
+        auto i = observable_entries.find(qn);
+        if (i != observable_entries.end())
             return i->second;
 
         return ObservableEntryPtr(nullptr);
@@ -270,13 +277,17 @@ namespace eos
     Observables::ObservableIterator
     Observables::begin() const
     {
-        return ObservableIterator(_imp->observable_entries.begin());
+        const auto & observable_entries = ObservableEntries::instance()->entries();
+
+        return ObservableIterator(observable_entries.begin());
     }
 
     Observables::ObservableIterator
     Observables::end() const
     {
-        return ObservableIterator(_imp->observable_entries.end());
+        const auto & observable_entries = ObservableEntries::instance()->entries();
+
+        return ObservableIterator(observable_entries.end());
     }
 
     Observables::SectionIterator
@@ -292,8 +303,39 @@ namespace eos
     }
 
     void
-    Observables::insert(const QualifiedName & name, const ObservableEntry * entry) const
+    Observables::insert(const QualifiedName & name, const std::string & latex, const Options & forced_options, const std::string & input) const
     {
-        ObservableEntries::instance()->insert(name, std::shared_ptr<const ObservableEntry>(entry));
+        eos::exp::Expression expression;
+
+        using It = std::string::const_iterator;
+        ExpressionParser<It> parser;
+
+        It first(input.begin()), last(input.end());
+        bool completed = qi::phrase_parse(first, last, parser, ascii::space, expression) && (first == last);
+
+        if ((! completed) || expression.empty())
+        {
+            throw ParsingError("Could not parse expression '" + input + "'");
+        }
+
+        ExpressionObservableEntry * expression_observable_entry = new
+            ExpressionObservableEntry(name,
+                                      latex,
+                                      Unit::Undefined(),
+                                      expression,
+                                      forced_options
+                                      );
+
+        if (! expression_observable_entry)
+        {
+            throw InternalError("Could not create expression '" + input + "'");
+        }
+
+        bool insertion_success = ObservableEntries::instance()->insert(name, std::shared_ptr<const ObservableEntry>(expression_observable_entry));
+
+        if (! insertion_success)
+        {
+            throw InternalError("Could not insert observable entry '" + name.str() + "'");
+        }
     }
 }

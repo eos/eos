@@ -220,11 +220,13 @@ namespace eos
             ///@}
 
             /*!
-            * Insert a new ObservableEntry.
-            * @param name  The name of the new ObservableEntry.
-            * @param entry The new ObservableEntry.
+            * Insert a new Observable by parsing its expression.
+            * @param name  The name of the new Observable.
+            * @param latex The latex representation of the new observable.
+            * @param options A set of options that applies to all the observables in the expression.
+            * @param expression The expression to be parsed.
             */
-            void insert(const QualifiedName & name, const ObservableEntry * entry) const;
+            void insert(const QualifiedName & name, const std::string & latex, const Options & options, const std::string & expression) const;
     };
 
     extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
