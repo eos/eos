@@ -45,4 +45,9 @@ namespace eos
         Exception("GSL Error: " + message)
     {
     }
+
+    ParsingError::ParsingError(const std::string & message) throw () :
+        Exception("Parsing Error: " + message)
+    {
+    }
 }

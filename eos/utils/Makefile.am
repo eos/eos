@@ -21,6 +21,10 @@ libeosutils_la_SOURCES = \
 	destringify.cc destringify.hh \
 	diagnostics.cc diagnostics.hh \
 	exception.cc exception.hh \
+	expression.cc expression.hh expression-fwd.hh \
+	expression-observable.cc expression-observable.hh \
+	expression-parser.hh expression-parser-impl.hh \
+	expression-visitors.cc \
 	gsl-hacks.cc \
 	gsl-interface.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
@@ -99,6 +103,8 @@ include_eos_utils_HEADERS = \
 	derivative.hh \
 	destringify.hh \
 	exception.hh \
+	expression.hh expression-fwd.hh \
+	expression-parser.hh expression-parser-impl.hh \
 	gsl-interface.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh \
 	integrate.hh \
@@ -149,6 +155,7 @@ TESTS = \
 	cartesian-product_TEST \
 	ckm_scan_model_TEST \
 	derivative_TEST \
+	expression-parser_TEST \
 	gsl-hacks_TEST \
 	gsl-interface_TEST \
 	indirect-iterator_TEST \
@@ -195,6 +202,8 @@ cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 ckm_scan_model_TEST_SOURCES = ckm_scan_model_TEST.cc
 
 derivative_TEST_SOURCES = derivative_TEST.cc
+
+expression_parser_TEST_SOURCES = expression-parser_TEST.cc
 
 gsl_hacks_TEST_SOURCES = gsl-hacks_TEST.cc
 gsl_hacks_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)

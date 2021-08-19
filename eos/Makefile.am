@@ -50,6 +50,7 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
 	constraint_TEST \
+	observable_TEST \
 	reference_TEST
 
 LDADD = \
@@ -63,11 +64,16 @@ LDADD = \
 
 check_PROGRAMS = \
 	constraint_TEST \
+	observable_TEST \
 	reference_TEST
 
 constraint_TEST_SOURCES = constraint_TEST.cc
 constraint_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 constraint_TEST_LDADD = $(LDADD) -lyaml-cpp
+
+observable_TEST_SOURCES = observable_TEST.cc
+observable_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+observable_TEST_LDADD = $(LDADD) -lyaml-cpp
 
 reference_TEST_SOURCES = reference_TEST.cc
 reference_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
