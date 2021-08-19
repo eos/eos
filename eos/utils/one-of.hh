@@ -189,7 +189,11 @@ namespace eos
             OneOf(const OneOf & other) :
                 _value(other._value)
             {
+            }
 
+            bool empty() const
+            {
+                return !_value;
             }
 
             template <typename Type_>
