@@ -1,5 +1,6 @@
 # Copyright (c) 2018 Frederik Beaujean
 # Copyright (c) 2017, 2018, 2021 Danny van Dyk
+# Copyright (c) 2021 Philip Lüghausen
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -332,16 +333,19 @@ class Plotter:
                         "also specified as a fix kinematic with value " + str(val))
 
             # Declare variable that is either parameter or kinematic
-            try:
-                eos.Parameters._assert_valid_name(item['variable'])
-                var = parameters.declare(item['variable'], np.nan)
-            except ValueError:
-                if item['variable'] not in valid_kin_vars:
-                    # variable is neither a valid parameter nor valid kinematic
-                    raise ValueError("Value of 'variable' for observable '" + oname +
-                        "' is neither a valid kinematic variable nor parameter: '" + item['variable'] + "'")
+            var = None
 
-                # variable must be valid kinematic
+            # is a valid parameter?
+            if parameters.has(item['variable']):
+                var = parameters.declare(item['variable'], np.nan)
+
+            # is neither a valid parameter nor valid kinematic?
+            elif item['variable'] not in valid_kin_vars:
+                raise ValueError("Value of 'variable' for observable '" + oname +
+                    "' is neither a valid kinematic variable nor parameter: '" + item['variable'] + "'")
+
+            # variable must be valid kinematic
+            else:
                 var = kinematics.declare(item['variable'], np.nan)
 
 

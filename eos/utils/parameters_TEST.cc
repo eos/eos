@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2021 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -70,6 +71,14 @@ class ParametersTest :
                 m_c_original = 0.0;
                 TEST_CHECK_EQUAL(m_c_original(), 0.0);
                 TEST_CHECK_EQUAL(m_c_clone(), m_c_clone.central());
+            }
+
+            // Parameters::has
+            {
+                Parameters p = Parameters::Defaults();
+
+                TEST_CHECK_EQUAL(p.has("mass::tau"), true);
+                TEST_CHECK_EQUAL(p.has("mass::boing747"), false);
             }
         }
 } parameters_test;

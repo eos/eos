@@ -215,6 +215,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("declare", &Parameters::declare, return_value_policy<return_by_value>())
         .def("sections", range(&Parameters::begin_sections, &Parameters::end_sections))
         .def("set", &Parameters::set)
+        .def("has", &Parameters::has)
         .def("override_from_file", &Parameters::override_from_file)
         ;
 

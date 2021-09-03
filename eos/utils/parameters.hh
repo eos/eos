@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011, 2012, 2013, 2019 Danny van Dyk
+ * Copyright (c) 2021 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -155,6 +156,13 @@ namespace eos
              * @param value The parameter's new numeric value.
              */
             void set(const std::string & name, const double & value);
+
+            /*!
+             * Verify if a parameter with a given name exists.
+             *
+             * @param name  The name to be checked against the known parameters.
+             */
+            bool has(const std::string & name);
 
             /*!
              * Retrieve a parameter's Parameter object by name.

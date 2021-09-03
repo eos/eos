@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2021 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -621,6 +622,16 @@ namespace eos
             throw UnknownParameterError(name);
 
         _imp->parameters_data->data[i->second].value = value;
+    }
+
+    bool
+    Parameters::has(const std::string & name)
+    {
+        auto i(_imp->parameters_map.find(name));
+
+        if (_imp->parameters_map.end() == i)
+            return false;
+        else return true;
     }
 
     Parameters::Iterator
