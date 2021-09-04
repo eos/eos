@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2010-2017, 2021 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  * Copyright (c) 2018, 2019 Ahmet Kokulu
  * Copyright (c) 2018, 2019 Nico Gubernari
@@ -338,4 +338,35 @@ namespace eos
             throw InternalError("Could not insert observable entry '" + name.str() + "'");
         }
     }
+
+    std::pair<QualifiedName, ObservableEntryPtr> make_expression_observable(const char * name,
+            const char * latex,
+            const Unit & unit,
+            const char * _expression
+            )
+    {
+        using namespace exp;
+
+        const QualifiedName qn(name);
+        const std::string input(_expression);
+        Expression expression;
+
+        {
+            bool completed;
+
+            using It = std::string::const_iterator;
+            ExpressionParser<It> parser;
+
+            It first(input.begin()), last(input.end());
+            completed = qi::phrase_parse(first, last, parser, ascii::space, expression) && (first == last);
+
+            if (! completed)
+            {
+                throw InternalError("Error when parsing expression in make_expression_observable");
+            }
+        }
+
+        return std::make_pair(qn, ObservableEntryPtr(new ExpressionObservableEntry(qn, std::string(latex), unit, expression, Options{})));
+    }
+
 }
