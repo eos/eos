@@ -23,7 +23,7 @@ libeosutils_la_SOURCES = \
 	exception.cc exception.hh \
 	expression.cc expression.hh expression-fwd.hh \
 	expression-observable.cc expression-observable.hh \
-	expression-parser.hh expression-parser-impl.hh \
+	expression-parser.cc expression-parser.hh expression-parser-impl.hh \
 	expression-visitors.cc \
 	gsl-hacks.cc \
 	gsl-interface.hh \
