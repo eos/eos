@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019, 2021 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,8 @@
 #define EOS_GUARD_EOS_OBSERVABLE_IMPL_HH 1
 
 #include <eos/observable.hh>
+#include <eos/utils/expression-observable.hh>
+#include <eos/utils/expression-parser.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/units.hh>
@@ -207,6 +209,14 @@ namespace eos
                         )
                 );
     }
+
+    /* expressions involving observables */
+
+    std::pair<QualifiedName, ObservableEntryPtr> make_expression_observable(const char * name,
+            const char * latex,
+            const Unit & unit,
+            const char * _expression
+            );
 
     template <>
     struct WrappedForwardIteratorTraits<ObservableEntry::KinematicVariableIteratorTag>
