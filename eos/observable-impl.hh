@@ -181,35 +181,6 @@ namespace eos
                 );
     }
 
-    /* sums of regular observables */
-
-    template <typename Decay_, typename Tuple_, typename ... Args_>
-    std::pair<QualifiedName, ObservableEntryPtr> make_observable_sum(const char * name,
-            const char * latex,
-            const Unit & unit,
-            double (Decay_::* numerator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names_numerator,
-            const Options & forced_options_numerator,
-            const double & weight_numerator,
-            double (Decay_::* denominator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names_denominator,
-            const Options & forced_options_denominator,
-            const double & weight_denominator
-            )
-    {
-        QualifiedName qn(name);
-
-        return std::make_pair(qn,
-                make_concrete_observable_sum_entry(
-                        qn,
-                        latex,
-                        unit,
-                        numerator,   kinematics_names_numerator,   forced_options_numerator, weight_numerator,
-                        denominator, kinematics_names_denominator, forced_options_denominator, weight_denominator
-                        )
-                );
-    }
-
     /* expressions involving observables */
 
     std::pair<QualifiedName, ObservableEntryPtr> make_expression_observable(const char * name,
