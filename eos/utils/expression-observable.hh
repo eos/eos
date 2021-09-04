@@ -18,11 +18,14 @@
 #ifndef EOS_GUARD_SRC_UTILS_EXPRESSION_OBSERVABLE_HH
 #define EOS_GUARD_SRC_UTILS_EXPRESSION_OBSERVABLE_HH 1
 
-#include <eos/observable-impl.hh>
+#include <eos/observable.hh>
 #include <eos/utils/expression-fwd.hh>
-#include <eos/utils/expression-parser-impl.hh>
+#include <eos/utils/expression-parser.hh>
+#include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
+#include <eos/utils/qualified-name.hh>
+#include <eos/utils/units.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
-
 
 namespace eos
 {
