@@ -54,6 +54,8 @@ namespace eos
         // Destuctor
         ~ExpressionParser();
     };
+
+    extern template class ExpressionParser<std::string::const_iterator>;
 }
 
 #endif
