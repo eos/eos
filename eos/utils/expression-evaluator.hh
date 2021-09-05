@@ -33,9 +33,12 @@ namespace eos::exp
 
             double visit(ConstantExpression & e);
 
+            double visit(ObservableNameExpression &);
+
             double visit(ObservableExpression & e);
 
-            double visit(ObservableNameExpression &);
+            double visit(CachedObservableExpression & e);
+
     };
 }
 

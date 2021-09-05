@@ -113,6 +113,13 @@ namespace eos::exp
         _os << ")";
     }
 
+    void ExpressionPrinter::visit(CachedObservableExpression & e)
+    {
+        _os << "CachedObservableExpression(id=" << e.id;
+        _os << ", name='" << e.cache.observable(e.id)->name().full() << "'";
+        _os << ")";
+    }
+
     /*
      * ExpressionEvaluator
      */
@@ -132,17 +139,23 @@ namespace eos::exp
     }
 
     double
+    ExpressionEvaluator::visit(ObservableNameExpression &)
+    {
+        throw InternalError("Encountered ObserableNameExpression in ExpressionEvaluator::visit");
+
+        return 0.0;
+    }
+
+    double
     ExpressionEvaluator::visit(ObservableExpression & e)
     {
         return e.observable->evaluate();
     }
 
     double
-    ExpressionEvaluator::visit(ObservableNameExpression &)
+    ExpressionEvaluator::visit(CachedObservableExpression & e)
     {
-        throw InternalError("Encountered ObserableNameExpression in ExpressionEvaluator::visit");
-
-        return 0.0;
+        return e.cache[e.id];
     }
 
     /*
@@ -193,6 +206,35 @@ namespace eos::exp
         // Make observable
         auto observable = Observable::make(
             e.observable->name(),
+            this->_parameters,
+            this->_kinematics,
+            this->_options
+            );
+        // Clear alias map
+        _kinematics.clear_aliases();
+
+        return ObservableExpression(observable, e.kinematics_specification);
+    }
+
+    Expression
+    ExpressionCloner::visit(const CachedObservableExpression & e)
+    {
+        const auto & kinematics_values = e.kinematics_specification.values;
+        const auto & kinematics_aliases = e.kinematics_specification.aliases;
+
+        // Set or alias kinematic specifications
+        for (const auto & value : kinematics_values)
+        {
+            _kinematics.declare(value.first, value.second);
+        }
+        for (const auto & alias : kinematics_aliases)
+        {
+            _kinematics.alias(alias.first, alias.second);
+        }
+
+        // Make observable
+        auto observable = Observable::make(
+            e.cache.observable(e.id)->name(),
             this->_parameters,
             this->_kinematics,
             this->_options
@@ -265,7 +307,15 @@ namespace eos::exp
     Expression
     ExpressionMaker::visit(const ObservableExpression & e)
     {
-        throw InternalError("Encountered ObserableExpression in ExpressionMaker::visit");
+        throw InternalError("Encountered ObservableExpression in ExpressionMaker::visit");
+
+        return e;
+    }
+
+    Expression
+    ExpressionMaker::visit(const CachedObservableExpression & e)
+    {
+        throw InternalError("Encountered CachedObservableExpression in ExpressionMaker::visit");
 
         return e;
     }
@@ -315,6 +365,27 @@ namespace eos::exp
 
     std::set<std::string>
     ExpressionKinematicReader::visit(const ObservableExpression & e)
+    {
+        std::set<std::string> kinematic_set;
+
+        const auto & kinematics_values = e.kinematics_specification.values;
+        const auto & kinematics_aliases = e.kinematics_specification.aliases;
+
+        // Set or alias kinematic specifications
+        for (const auto & value : kinematics_values)
+        {
+            kinematic_set.insert(value.first);
+        }
+        for (const auto & alias : kinematics_aliases)
+        {
+            kinematic_set.insert(alias.second);
+        }
+
+        return kinematic_set;
+    }
+
+    std::set<std::string>
+    ExpressionKinematicReader::visit(const CachedObservableExpression & e)
     {
         std::set<std::string> kinematic_set;
 

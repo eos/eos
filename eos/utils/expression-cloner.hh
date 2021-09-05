@@ -43,6 +43,8 @@ namespace eos::exp
             Expression visit(const ObservableNameExpression & e);
 
             Expression visit(const ObservableExpression & e);
+
+            Expression visit(const CachedObservableExpression & e);
     };
 }
 
