@@ -20,6 +20,7 @@
 
 #include <eos/observable-fwd.hh>
 #include <eos/utils/expression-fwd.hh>
+#include <eos/utils/observable_cache.hh>
 #include <eos/utils/qualified-name.hh>
 
 #include <cassert>
@@ -96,6 +97,21 @@ namespace eos::exp
             ObservableExpression(ObservablePtr observable, const KinematicsSpecification & kinematics_specification) :
                  observable(observable),
                  kinematics_specification(kinematics_specification)
+            {
+            }
+    };
+
+    class CachedObservableExpression
+    {
+        public:
+            ObservableCache cache;
+            ObservableCache::Id id;
+            KinematicsSpecification kinematics_specification;
+
+            CachedObservableExpression(const ObservableCache & cache, const ObservableCache::Id & id, const KinematicsSpecification & kinematics_specification) :
+                cache(cache),
+                id(id),
+                kinematics_specification(kinematics_specification)
             {
             }
     };

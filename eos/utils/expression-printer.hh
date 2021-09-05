@@ -40,6 +40,8 @@ namespace eos::exp
             void visit(ObservableNameExpression & e);
 
             void visit(ObservableExpression & e);
+
+            void visit(CachedObservableExpression & e);
     };
 }
 

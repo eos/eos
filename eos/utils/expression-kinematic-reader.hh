@@ -37,6 +37,8 @@ namespace eos::exp
             std::set<std::string> visit(const ObservableNameExpression & e);
 
             std::set<std::string> visit(const ObservableExpression & e);
+
+            std::set<std::string> visit(const CachedObservableExpression & e);
     };
 }
 
