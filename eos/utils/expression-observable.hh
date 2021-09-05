@@ -79,6 +79,11 @@ namespace eos
             {
                 return _options;
             }
+
+            const Expression & expression() const
+            {
+                return _expression;
+            }
     };
 
     class ExpressionObservableEntry :
