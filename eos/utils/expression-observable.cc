@@ -16,10 +16,12 @@
  */
 
 #include <eos/observable-impl.hh>
-#include <eos/utils/expression-fwd.hh>
+#include <eos/utils/expression-cloner.hh>
+#include <eos/utils/expression-evaluator.hh>
+#include <eos/utils/expression-kinematic-reader.hh>
+#include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-observable.hh>
-#include <eos/utils/expression-parser-impl.hh>
-#include <eos/utils/expression-visitors.cc>
+#include <eos/utils/expression-parser.hh>
 
 #include <set>
 

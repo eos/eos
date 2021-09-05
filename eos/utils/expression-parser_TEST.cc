@@ -19,8 +19,12 @@
 
 #include <eos/utils/expression.hh>
 #include <eos/utils/expression-fwd.hh>
+#include <eos/utils/expression-cloner.hh>
+#include <eos/utils/expression-evaluator.hh>
+#include <eos/utils/expression-kinematic-reader.hh>
+#include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-parser-impl.hh>
-#include <eos/utils/expression-visitors.cc>
+#include <eos/utils/expression-printer.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
