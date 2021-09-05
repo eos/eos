@@ -22,8 +22,13 @@ libeosutils_la_SOURCES = \
 	diagnostics.cc diagnostics.hh \
 	exception.cc exception.hh \
 	expression.cc expression.hh expression-fwd.hh \
+	expression-cloner.hh \
+	expression-evaluator.hh \
+	expression-kinematic-reader.hh \
+	expression-maker.hh \
 	expression-observable.cc expression-observable.hh \
 	expression-parser.cc expression-parser.hh expression-parser-impl.hh \
+	expression-printer.hh \
 	expression-visitors.cc \
 	gsl-hacks.cc \
 	gsl-interface.hh \
