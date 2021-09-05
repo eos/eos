@@ -16,6 +16,7 @@
  */
 
 #include <eos/observable-impl.hh>
+#include <eos/utils/expression-cacher.hh>
 #include <eos/utils/expression-cloner.hh>
 #include <eos/utils/expression-evaluator.hh>
 #include <eos/utils/expression-kinematic-reader.hh>
@@ -46,6 +47,26 @@ namespace eos
 
         exp::ExpressionMaker maker(parameters, kinematics, options, this);
         _expression = expression.accept_returning<Expression>(maker);
+    }
+
+    ExpressionObservable::ExpressionObservable(const QualifiedName & name,
+            const ObservableCache & cache,
+            const Kinematics & kinematics,
+            const Options & options,
+            const Expression & expression
+            ) :
+        _name(name),
+        _parameters(cache.parameters()),
+        _kinematics(kinematics),
+        _options(options)
+    {
+        if (expression.empty())
+        {
+            throw InternalError("Empty expression encountered in ExpressionObservable!");
+        }
+
+        exp::ExpressionCacher cacher(cache);
+        _expression = expression.accept_returning<Expression>(cacher);
     }
 
     double

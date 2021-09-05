@@ -18,6 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/expression-cacher.hh>
+#include <eos/utils/expression-observable.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/observable_set.hh>
@@ -56,8 +58,11 @@ namespace eos
         // Contains each cacheable observable and its associated index
         std::multimap<std::type_index, std::tuple<CacheableObservable *, ObservableCache::Id>> cacheable_observables;
 
-        // Contains each cached observables and its associated index
+        // Contains each cached observable and its associated index
         std::vector<std::tuple<ObservablePtr, ObservableCache::Id>> cached_observables;
+
+        // Contains each expression observable and its associated index
+        std::vector<std::tuple<ObservablePtr, ObservableCache::Id>> expression_observables;
 
         // Contains values of all observables
         std::vector<double> predictions;
@@ -94,7 +99,7 @@ namespace eos
             return true;
         }
 
-        ObservableCache::Id add(const ObservablePtr & observable)
+        ObservableCache::Id add(const ObservablePtr & observable, const ObservableCache & cache)
         {
             if (observable->parameters() != parameters)
                 throw InternalError("ObservableSet::add(): Mismatch of Parameters between different observables detected.");
@@ -108,9 +113,26 @@ namespace eos
             }
 
             CacheableObservable * cacheable_observable = dynamic_cast<CacheableObservable *>(observable.get());
+            ExpressionObservable * expression_observable = dynamic_cast<ExpressionObservable *>(observable.get());
 
-            // is the new observable cacheable?
-            if (nullptr != cacheable_observable)
+            if (nullptr != expression_observable) // is the new observable an expression?
+            {
+                ObservablePtr cached_expression_observable(new ExpressionObservable(expression_observable->name(),
+                        cache,
+                        expression_observable->kinematics(),
+                        expression_observable->options(),
+                        expression_observable->expression()));
+
+                // ensure that the new index is correct, since the ExpressionCacher is capable to modify our cache
+                index = observables.size();
+
+                observables.push_back(cached_expression_observable);
+                predictions.push_back(std::numeric_limits<double>::quiet_NaN());
+                expression_observables.push_back(std::make_tuple(cached_expression_observable, index));
+
+                return index;
+            }
+            else if (nullptr != cacheable_observable) // is the new observable cacheable?
             {
                 std::type_index type_index(typeid(*cacheable_observable));
 
@@ -171,7 +193,7 @@ namespace eos
     ObservableCache::Id
     ObservableCache::add(const ObservablePtr & observable)
     {
-        return _imp->add(observable);
+        return _imp->add(observable, *this);
     }
 
     void
@@ -270,6 +292,31 @@ namespace eos
         {
             ticket.wait();
         }
+
+        // evaluate all expression observables in a serial fashion
+        //
+        // This is necessary, since an expression observable can rely on
+        // another expression observable, which would be located earlier in
+        // the sequence.
+        // Serial evaluation ensures that no race conditions arise.
+        // There is not reason to optimize this, since expression observables
+        // are evaluated very quickly.
+        for (auto eo : _imp->expression_observables)
+        {
+            auto & o   = std::get<0>(eo);
+            auto & idx = std::get<1>(eo);
+            try
+            {
+                _imp->predictions[idx] = o->evaluate();
+            }
+            catch (eos::Exception & e)
+            {
+                Log::instance()->message("ObservableCache::update", ll_error)
+                    << "Exception encountered when evaluating expression observable '" << o->name() << "[" << o->kinematics().as_string() << "];" << o->options().as_string() << "': "
+                    << e.what();
+                _imp->predictions[idx] = std::numeric_limits<double>::quiet_NaN();
+            }
+        }
     }
 
     Parameters
@@ -317,7 +364,7 @@ namespace eos
         {
             // cloning cached observables creates independent *cacheable* observables
             // adding them back creates new and independent cached observables
-            result._imp->add((*o)->clone(parameters));
+            result._imp->add((*o)->clone(parameters), *this);
         }
 
         result.update();
