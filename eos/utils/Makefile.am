@@ -22,6 +22,7 @@ libeosutils_la_SOURCES = \
 	diagnostics.cc diagnostics.hh \
 	exception.cc exception.hh \
 	expression.cc expression.hh expression-fwd.hh \
+	expression-cacher.hh \
 	expression-cloner.hh \
 	expression-evaluator.hh \
 	expression-kinematic-reader.hh \

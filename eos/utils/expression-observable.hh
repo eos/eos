@@ -52,6 +52,12 @@ namespace eos
                     const Options & options,
                     const Expression & expression);
 
+            ExpressionObservable(const QualifiedName & name,
+                    const ObservableCache & cache,
+                    const Kinematics & kinematics,
+                    const Options & options,
+                    const Expression & expression);
+
             ~ExpressionObservable()
             {
             }

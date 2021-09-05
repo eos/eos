@@ -18,6 +18,7 @@
 #include <eos/observable.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/expression.hh>
+#include <eos/utils/expression-cacher.hh>
 #include <eos/utils/expression-cloner.hh>
 #include <eos/utils/expression-evaluator.hh>
 #include <eos/utils/expression-kinematic-reader.hh>
@@ -403,5 +404,50 @@ namespace eos::exp
         }
 
         return kinematic_set;
+    }
+
+    /*
+     * ExpressionCacher
+     */
+
+    ExpressionCacher::ExpressionCacher(const ObservableCache & cache) :
+        _cache(cache)
+    {
+    }
+
+    Expression
+    ExpressionCacher::visit(const BinaryExpression & e)
+    {
+        return BinaryExpression(e.op, e.lhs.accept_returning<Expression>(*this), e.rhs.accept_returning<Expression>(*this));
+    }
+
+    Expression
+    ExpressionCacher::visit(const ConstantExpression & e)
+    {
+        return ConstantExpression(e);
+    }
+
+    Expression
+    ExpressionCacher::visit(const ObservableNameExpression & e)
+    {
+        throw InternalError("Encountered ObservableNameExpression in ExpressionCacher::visit()");
+
+        return e;
+    }
+
+    Expression
+    ExpressionCacher::visit(const ObservableExpression & e)
+    {
+        auto id = _cache.add(e.observable);
+
+        return CachedObservableExpression(_cache, id, e.kinematics_specification);
+    }
+
+    Expression
+    ExpressionCacher::visit(const CachedObservableExpression & e)
+    {
+        throw InternalError("Encountered CachedObservableExpression in ExpressionCacher::visit");
+
+        return e;
     }
 }
