@@ -297,7 +297,7 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "U", "c" }, {"q", "s"} }),
 
-                make_expression_observable("B_s->D_slnu::R_D_s(q2)", R"(R_D_s(q^2))",
+                make_expression_observable("B_s->D_slnu::R_D_s(q2)", R"(R_{D_s}(q^2))",
                         Unit::None(),
                         R"(
                         <<B_s->D_slnu::dBR/dq2;U=c,q=s,l=tau>>
@@ -305,7 +305,7 @@ namespace eos
                         <<B_s->D_slnu::dBR/dq2;U=c,q=s,l=mu>>
                         )"),
 
-                make_expression_observable("B_s->D_slnu::R_D_s", R"(R_D_s)",
+                make_expression_observable("B_s->D_slnu::R_D_s", R"(R_{D_s})",
                         Unit::None(),
                         R"(
                         <<B_s->D_slnu::BR;U=c,q=s,l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
