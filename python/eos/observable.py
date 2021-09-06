@@ -1,6 +1,7 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
 # Copyright (c) 2019 Danny van Dyk
+# Copyright (c) 2021 Philip Lüghausen
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -62,11 +63,16 @@ class Observables(_Observables):
                 group_result = '    <tr><th style="text-align:left" colspan=2>{group}</th></tr>\n'.format(group=group.name())
                 for qn, entry in group:
                     latex = entry.latex()
+                    unit_string = entry.unit().latex()
+                    if unit_string == '1':
+                        unit_string = ''
+                    else:
+                        unit_string = r"\, \left[ {unit_string} \right]".format(unit_string=unit_string)
                     if not self.filter_entry(qn):
                         continue
                     if (0 == len(latex)) and not self.showall:
                         continue
-                    group_result += r'      <tr><th><tt style="color:grey">{qn}</tt></th><td style="text-align:left">$${latex}$$</td></tr>'.format(qn=qn,latex=latex)
+                    group_result += r'      <tr><th><tt style="color:grey">{qn}</tt></th><td style="text-align:left">$${latex}{unit_string}$$</td></tr>'.format(qn=qn,latex=latex,unit_string=unit_string)
                     group_entries += 1
 
                 group_result += '    <tr><td style="text-align:left" colspan=2>{desc}</td></tr>\n'.format(desc=group.description())

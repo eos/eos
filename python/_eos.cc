@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2016, 2019, 2020 Danny van Dyk
+ * Copyright (c) 2021 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -596,6 +597,7 @@ BOOST_PYTHON_MODULE(_eos)
     class_<ObservableEntry, boost::noncopyable>("ObservableEntry", no_init)
         .def("name", &ObservableEntry::name, return_value_policy<copy_const_reference>())
         .def("latex", &ObservableEntry::latex, return_value_policy<copy_const_reference>())
+        .def("unit", &ObservableEntry::unit, return_internal_reference<>())
         .def("kinematic_variables", range(&ObservableEntry::begin_kinematic_variables, &ObservableEntry::end_kinematic_variables))
         ;
 
