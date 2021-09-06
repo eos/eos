@@ -44,11 +44,16 @@ for section in observables.sections():
         print('     - Kinematic Variables')
         for qn, entry in group:
             latex = entry.latex()
+            unit_string = entry.unit().latex()
+            if unit_string == '1':
+                unit_string = ''
+            else:
+                unit_string = r'\, \left[ {unit_string} \right]'.format(unit_string=unit_string)
             if 0 == len(latex):
                 continue
 
             entry_name = str(qn)
-            entry_desc = latex_to_rst(latex)
+            entry_desc = latex_to_rst(latex + unit_string)
             entry_kv   = ', '.join([('``' + kv + '``') for kv in entry.kinematic_variables()])
             print('   * - ``{qn}``'.format(qn=entry_name))
             print('     - :math:`{desc}`'.format(desc=entry_desc))
