@@ -132,55 +132,6 @@ namespace eos
         return std::make_pair(qn, make_concrete_cacheable_observable_entry(qn, latex, unit, prepare_fn, evaluate_fn, kinematics_names, forced_options));
     }
 
-    /* ratios of regular observables */
-    template <typename Decay_, typename ... Args_>
-    std::pair<QualifiedName, ObservableEntryPtr> make_observable_ratio(const char * name,
-            const char * latex,
-            const Unit & unit,
-            double (Decay_::* numerator)(const Args_ & ...) const,
-            const Options & forced_options_numerator,
-            double (Decay_::* denominator)(const Args_ & ...) const,
-            const Options & forced_options_denominator
-            )
-    {
-        QualifiedName qn(name);
-
-        return std::make_pair(qn,
-                make_concrete_observable_ratio_entry(
-                        qn,
-                        latex,
-                        unit,
-                        numerator,   std::make_tuple(), forced_options_numerator,
-                        denominator, std::make_tuple(), forced_options_denominator
-                       )
-                );
-    }
-
-    template <typename Decay_, typename Tuple_, typename ... Args_>
-    std::pair<QualifiedName, ObservableEntryPtr> make_observable_ratio(const char * name,
-            const char * latex,
-            const Unit & unit,
-            double (Decay_::* numerator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names_numerator,
-            const Options & forced_options_numerator,
-            double (Decay_::* denominator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names_denominator,
-            const Options & forced_options_denominator
-            )
-    {
-        QualifiedName qn(name);
-
-        return std::make_pair(qn,
-                make_concrete_observable_ratio_entry(
-                        qn,
-                        latex,
-                        unit,
-                        numerator,   kinematics_names_numerator,   forced_options_numerator,
-                        denominator, kinematics_names_denominator, forced_options_denominator
-                        )
-                );
-    }
-
     /* expressions involving observables */
 
     std::pair<QualifiedName, ObservableEntryPtr> make_expression_observable(const char * name,
