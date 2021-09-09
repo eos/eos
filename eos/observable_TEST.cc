@@ -18,6 +18,7 @@
 #include <test/test.hh>
 #include <eos/observable.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/units.hh>
 
 using namespace test;
 using namespace eos;
@@ -39,10 +40,10 @@ class ObservableTest :
 
                 TEST_CHECK_THROWS(
                     ParsingError,
-                    observables.insert("mass::ratio", "m_r",  Options(), "<<mass::mu>> /* <<mass::tau>>")
+                    observables.insert("mass::ratio", "m_r", Options(), "<<mass::mu>> /* <<mass::tau>>")
                 );
 
-                observables.insert("mass::ratio", "m_r",  Options(), "<<mass::mu>> / <<mass::tau>>");
+                observables.insert("mass::ratio", "m_r", Options(), "<<mass::mu>> / <<mass::tau>>");
 
                 Parameters p = Parameters::Defaults();
                 p["mass::mu"]     =  0.105658;
@@ -55,6 +56,59 @@ class ObservableTest :
 
                 auto observable = Observable::make("mass::ratio", p, k, o);
                 TEST_CHECK_NEARLY_EQUAL(observable->evaluate(), 0.059464662, 10e-5);
+            }
+
+            /* Test insertion and evaluation of a cacheable observable */
+            {
+                auto observables = Observables();
+
+                observables.insert("B->D^*lnu::2*S_1c", R"()", Options(),
+                                R"(
+                                2 * <<B->D^*lnu::S_1c;l=mu>>
+                                )");
+
+                Parameters p = Parameters::Defaults();
+                Kinematics k
+                {
+                    { "q2_min",   4.00 }, { "q2_max",  10.68 }
+                };
+                Options o;
+
+                TEST_CHECK(observables["B->D^*lnu::2*S_1c"]->make(p, k, o));
+                TEST_CHECK_NO_THROW(observables["B->D^*lnu::2*S_1c"]->make(p, k, o)->evaluate());
+
+                auto observable = Observable::make("B->D^*lnu::2*S_1c", p, k, o);
+                TEST_CHECK_NO_THROW(observable->evaluate());
+
+                o.set("l", "mu");
+                auto obs_S1c = Observable::make("B->D^*lnu::S_1c", p, k, o);
+                TEST_CHECK_EQUAL(observable->evaluate(), 2 * obs_S1c->evaluate());
+            }
+
+            /* Test insertion of nested cacheable observables */
+            {
+                auto observables = Observables();
+
+                observables.insert("B->D^*lnu::4*S_1c", R"()", Options(),
+                                R"(
+                                2 * <<B->D^*lnu::2*S_1c;l=mu>>
+                                )");
+
+                Parameters p = Parameters::Defaults();
+                Kinematics k
+                {
+                    { "q2_min",   4.00 }, { "q2_max",  10.68 }
+                };
+                Options o;
+
+                TEST_CHECK(observables["B->D^*lnu::4*S_1c"]->make(p, k, o));
+                TEST_CHECK_NO_THROW(observables["B->D^*lnu::4*S_1c"]->make(p, k, o)->evaluate());
+
+                auto observable = Observable::make("B->D^*lnu::4*S_1c", p, k, o);
+                TEST_CHECK_NO_THROW(observable->evaluate());
+
+                auto obs_2S1c = Observable::make("B->D^*lnu::2*S_1c", p, k, o);
+                TEST_CHECK_EQUAL(observable->evaluate(), 2 * obs_2S1c->evaluate());
             }
         }
 

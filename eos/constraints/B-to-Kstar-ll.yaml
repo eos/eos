@@ -1336,78 +1336,78 @@ B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A:
 #
 # {{{
 # Branching ratios are normalized to BR(B^0->K^* Jpsi)
-# B^0->K^*0mu^+mu^-::NormalizedBR[0.10,0.98]@LHCb-2016A:
-#     type: Gaussian
-#     observable: B->K^*ll::NormalizedBR
-#     kinematics: {q2_min: 0.1, q2_max: 0.98}
-#     options: {l: mu, q: d, tag: BFS2004}
-#     mean: 8.54e-5
-#     sigma-stat: {hi: 0.56e-5, lo: 0.61e-5}
-#     sigma-sys: {hi: 0.24e-5, lo: 0.24e-5}
-#     dof: 1
-# B^0->K^*0mu^+mu^-::NormalizedBR[1.10,2.50]@LHCb-2016A:
-#     type: Gaussian
-#     observable: B->K^*ll::NormalizedBR
-#     kinematics: {q2_min: 1.1, q2_max: 2.5}
-#     options: {l: mu, q: d, tag: BFS2004}
-#     mean: 2.74e-5
-#     sigma-stat: {hi: 0.27e-5, lo: 0.26e-5}
-#     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
-#     dof: 1
-# B^0->K^*0mu^+mu^-::NormalizedBR[2.50,4.00]@LHCb-2016A:
-#     type: Gaussian
-#     observable: B->K^*ll::NormalizedBR
-#     kinematics: {q2_min: 2.5, q2_max: 4}
-#     options: {l: mu, q: d, tag: BFS2004}
-#     mean: 2.81e-5
-#     sigma-stat: {hi: 0.26e-5, lo: 0.28e-5}
-#     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
-#     dof: 1
-# B^0->K^*0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb-2016A:
-#     type: Gaussian
-#     observable: B->K^*ll::NormalizedBR
-#     kinematics: {q2_min: 4, q2_max: 6}
-#     options: {l: mu, q: d, tag: BFS2004}
-#     mean: 2.97e-5
-#     sigma-stat: {hi: 0.23e-5, lo: 0.22e-5}
-#     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
-#     dof: 1
-# B^0->K^*0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb-2016A:
-#     type: Gaussian
-#     observable: B->K^*ll::NormalizedBR
-#     kinematics: {q2_min: 6, q2_max: 8}
-#     options: {l: mu, q: d, tag: BFS2004}
-#     mean: 3.61e-5
-#     sigma-stat: {hi: 0.24e-5, lo: 0.23e-5}
-#     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
-#     dof: 1
-# B^0->K^*0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb-2016A:
-#     type: Gaussian
-#     observable: B->K^*ll::NormalizedBR
-#     kinematics: {q2_min: 11, q2_max: 12.5}
-#     options: {l: mu, q: d, tag: GP2004}
-#     mean: 4.09e-5
-#     sigma-stat: {hi: 0.26e-5, lo: 0.27e-5}
-#     sigma-sys: {hi: 0.10e-5, lo: 0.10e-5}
-#     dof: 1
-# B^0->K^*0mu^+mu^-::NormalizedBR[15.00,17.00]@LHCb-2016A:
-#     type: Gaussian
-#     observable: B->K^*ll::NormalizedBR
-#     kinematics: {q2_min: 15, q2_max: 17}
-#     options: {l: mu, q: d, tag: GP2004}
-#     mean: 4.49e-5
-#     sigma-stat: {hi: 0.23e-5, lo: 0.31e-5}
-#     sigma-sys: {hi: 0.17e-5, lo: 0.17e-5}
-#     dof: 1
-# B^0->K^*0mu^+mu^-::NormalizedBR[17.00,19.00]@LHCb-2016A:
-#     type: Gaussian
-#     observable: B->K^*ll::NormalizedBR
-#     kinematics: {q2_min: 17, q2_max: 19}
-#     options: {l: mu, q: d, tag: GP2004}
-#     mean: 2.98e-5
-#     sigma-stat: {hi: 0.23e-5, lo: 0.18e-5}
-#     sigma-sys: {hi: 0.14e-5, lo: 0.14e-5}
-#     dof: 1
+B^0->K^*0mu^+mu^-::NormalizedBR[0.10,0.98]@LHCb-2016A:
+    type: Gaussian
+    observable: B->K^*ll::NormalizedBR
+    kinematics: {q2_min: 0.1, q2_max: 0.98}
+    options: {l: mu, q: d, psi: "J/psi", tag: BFS2004}
+    mean: 8.54e-5
+    sigma-stat: {hi: 0.56e-5, lo: 0.61e-5}
+    sigma-sys: {hi: 0.24e-5, lo: 0.24e-5}
+    dof: 1
+B^0->K^*0mu^+mu^-::NormalizedBR[1.10,2.50]@LHCb-2016A:
+    type: Gaussian
+    observable: B->K^*ll::NormalizedBR
+    kinematics: {q2_min: 1.1, q2_max: 2.5}
+    options: {l: mu, q: d, psi: "J/psi", tag: BFS2004}
+    mean: 2.74e-5
+    sigma-stat: {hi: 0.27e-5, lo: 0.26e-5}
+    sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
+    dof: 1
+B^0->K^*0mu^+mu^-::NormalizedBR[2.50,4.00]@LHCb-2016A:
+    type: Gaussian
+    observable: B->K^*ll::NormalizedBR
+    kinematics: {q2_min: 2.5, q2_max: 4}
+    options: {l: mu, q: d, psi: "J/psi", tag: BFS2004}
+    mean: 2.81e-5
+    sigma-stat: {hi: 0.26e-5, lo: 0.28e-5}
+    sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
+    dof: 1
+B^0->K^*0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb-2016A:
+    type: Gaussian
+    observable: B->K^*ll::NormalizedBR
+    kinematics: {q2_min: 4, q2_max: 6}
+    options: {l: mu, q: d, psi: "J/psi", tag: BFS2004}
+    mean: 2.97e-5
+    sigma-stat: {hi: 0.23e-5, lo: 0.22e-5}
+    sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
+    dof: 1
+B^0->K^*0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb-2016A:
+    type: Gaussian
+    observable: B->K^*ll::NormalizedBR
+    kinematics: {q2_min: 6, q2_max: 8}
+    options: {l: mu, q: d, psi: "J/psi", tag: BFS2004}
+    mean: 3.61e-5
+    sigma-stat: {hi: 0.24e-5, lo: 0.23e-5}
+    sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
+    dof: 1
+B^0->K^*0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb-2016A:
+    type: Gaussian
+    observable: B->K^*ll::NormalizedBR
+    kinematics: {q2_min: 11, q2_max: 12.5}
+    options: {l: mu, q: d, psi: "J/psi", tag: GP2004}
+    mean: 4.09e-5
+    sigma-stat: {hi: 0.26e-5, lo: 0.27e-5}
+    sigma-sys: {hi: 0.10e-5, lo: 0.10e-5}
+    dof: 1
+B^0->K^*0mu^+mu^-::NormalizedBR[15.00,17.00]@LHCb-2016A:
+    type: Gaussian
+    observable: B->K^*ll::NormalizedBR
+    kinematics: {q2_min: 15, q2_max: 17}
+    options: {l: mu, q: d, psi: "J/psi", tag: GP2004}
+    mean: 4.49e-5
+    sigma-stat: {hi: 0.23e-5, lo: 0.31e-5}
+    sigma-sys: {hi: 0.17e-5, lo: 0.17e-5}
+    dof: 1
+B^0->K^*0mu^+mu^-::NormalizedBR[17.00,19.00]@LHCb-2016A:
+    type: Gaussian
+    observable: B->K^*ll::NormalizedBR
+    kinematics: {q2_min: 17, q2_max: 19}
+    options: {l: mu, q: d, psi: "J/psi", tag: GP2004}
+    mean: 2.98e-5
+    sigma-stat: {hi: 0.23e-5, lo: 0.18e-5}
+    sigma-sys: {hi: 0.14e-5, lo: 0.14e-5}
+    dof: 1
 # }}}
 #
 # 2020
