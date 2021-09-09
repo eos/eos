@@ -18,6 +18,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/expression.hh>
 #include <eos/utils/stringify.hh>
+#include <math.h>
 
 namespace eos::exp
 {
@@ -25,6 +26,7 @@ namespace eos::exp
     double BinaryExpression::difference(const double & a, const double & b) { return a - b; }
     double BinaryExpression::product(const double & a, const double & b)    { return a * b; }
     double BinaryExpression::ratio(const double & a, const double & b)      { return a / b; }
+    double BinaryExpression::power(const double & a, const double & b)      { return pow(a, b); }
 
     BinaryExpression::func
     BinaryExpression::Method(char op)
@@ -34,6 +36,7 @@ namespace eos::exp
             case '-': return BinaryExpression::difference;
             case '*': return BinaryExpression::product;
             case '/': return BinaryExpression::ratio;
+            case '^': return BinaryExpression::power;
             default:
                 InternalError("Unknown binary operator '" + stringify(op) + "' encountered");
                 return nullptr;

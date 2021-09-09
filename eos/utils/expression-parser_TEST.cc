@@ -87,6 +87,16 @@ class ExpressionParserTest :
                 TEST_CHECK(test.completed);
                 TEST_CHECK_EQUAL(test.e.accept_returning<double>(evaluator), 7.0);
                 TEST_CHECK_EQUAL("BinaryExpression(ConstantExpression(1) + BinaryExpression(ConstantExpression(2) * ConstantExpression(3)))", out.str());
+
+                // Simple exponentiation
+                ExpressionTest test2("1+2^2*3");
+                TEST_CHECK(test2.completed);
+                TEST_CHECK_EQUAL(test2.e.accept_returning<double>(evaluator), 13.0);
+
+                // Non interger exponentiation
+                ExpressionTest test3("2^(1+3.5)+3");
+                TEST_CHECK(test3.completed);
+                TEST_CHECK_RELATIVE_ERROR(test3.e.accept_returning<double>(evaluator), 25.627416998, 1e-5);
             }
 
             // testing parsing and evaluation of observables
@@ -153,6 +163,13 @@ class ExpressionParserTest :
                     obs_tau->evaluate() / obs_mu->evaluate(),
                     1e-3);
 
+
+                // Observable with exponentiation
+                ExpressionTest test2("<<mass::tau>>^2 - <<mass::mu>>^2");
+                Expression assessable_test2 = test2.e.accept_returning<Expression>(maker);
+
+                TEST_CHECK(test2.completed);
+                TEST_CHECK_RELATIVE_ERROR(assessable_test2.accept_returning<double>(evaluator), 3.14592, 1e-3);
             }
 
             // testing cloning and usage of parameters
