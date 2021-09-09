@@ -189,14 +189,38 @@ class BToDLeptonNeutrinoTest :
                     TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.1988, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.0138762, eps);
 
-                    auto k      = Kinematics{
+                    oo.set("l", "tau");
+                    auto k_tau = Kinematics{
+                        { "q2_min",  3.15702  },
+                        { "q2_max", 11.62     }
+                    };
+                    auto obs_BRtau = Observable::make("B->Dlnu::BR", p, k_tau, oo);
+                    TEST_CHECK(obs_BRtau.get() != nullptr);
+                    TEST_CHECK_RELATIVE_ERROR(0.0069634, obs_BRtau->evaluate(), eps);
+
+                    oo.set("l", "mu");
+                    auto k_mu = Kinematics{
+                        { "q2_min",   0.011164 },
+                        { "q2_max",  11.62     },
+                    };
+                    auto obs_BRmu = Observable::make("B->Dlnu::BR", p, k_mu, oo);
+                    TEST_CHECK(obs_BRmu.get() != nullptr);
+                    TEST_CHECK_RELATIVE_ERROR(0.0232794, obs_BRmu->evaluate(), eps);
+
+                    oo =
+                    {
+                        { "model",        "WilsonScan" },
+                        { "form-factors", "BCL2008"    },
+                        { "U",            "c"          },
+                        { "q",            "d"          }
+                    };
+                    auto k = Kinematics{
                         { "q2_mu_min",   0.011164 },
                         { "q2_mu_max",  11.62     },
                         { "q2_tau_min",  3.15702  },
                         { "q2_tau_max", 11.62     }
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
-
                     TEST_CHECK(obs_RD.get() != nullptr);
                     TEST_CHECK_RELATIVE_ERROR(0.299132, obs_RD->evaluate(), eps);
                 }
@@ -268,6 +292,13 @@ class BToDLeptonNeutrinoTest :
                         { "q2_mu_max",  11.62     },
                         { "q2_tau_min",  3.15702  },
                         { "q2_tau_max", 11.62     }
+                    };
+                    oo =
+                    {
+                        { "model",        "WilsonScan" },
+                        { "form-factors", "BCL2008"    },
+                        { "U",            "c"          },
+                        { "q",            "d"          },
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
 

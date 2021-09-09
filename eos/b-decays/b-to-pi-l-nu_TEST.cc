@@ -80,5 +80,56 @@ class BToPiLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL(8.29930e-5,  d.integrated_branching_ratio( 0.01, 12.00), eps);
                 TEST_CHECK_NEARLY_EQUAL(1.43035e-4,  d.integrated_branching_ratio( 0.01, 25.00), eps);
             }
+
+            // Consistency check for R_pi
+            {
+                Parameters p = Parameters::Defaults();
+                p["CKM::abs(V_ub)"]        =  3.32e-3;
+                p["B->pi::f_+(0)@BCL2008"] =  0.290;
+                p["B->pi::b_+^1@BCL2008"]  = -1.930;
+                p["B->pi::b_+^2@BCL2008"]  = -0.441;
+                p["mass::B_d"]             =  5.2796;
+                p["mass::pi^+"]            =  1.3957e-1;
+
+                Options oo
+                {
+                    { "model",        "CKMScan" },
+                    { "form-factors", "BCL2008" },
+                    { "U",            "u"       },
+                    { "q",            "d"       },
+                    { "l",            "tau"     }
+                };
+                BToPseudoscalarLeptonNeutrino dtau(p, oo);
+
+                oo.set("l", "mu");
+                BToPseudoscalarLeptonNeutrino dmu(p, oo);
+
+                oo =
+                {
+                    { "model",        "CKMScan" },
+                    { "form-factors", "BCL2008" },
+                    { "U",            "u"       },
+                    { "q",            "d"       }
+                };
+                Kinematics k
+                {
+                    { "q2_mu_min",   0.011 }, { "q2_mu_max",  10.00 },
+                    { "q2_tau_min",  3.154 }, { "q2_tau_max", 10.00 },
+                };
+
+                auto obs_Rpi  = Observable::make("B->pilnu::R_pi",   p, k, oo);
+                auto obs_Rpip = Observable::make("B->pilnu::R_pi_p", p, k, oo);
+                auto obs_Rpi0 = Observable::make("B->pilnu::R_pi_0", p, k, oo);
+
+                const double eps = 1e-5;
+                TEST_CHECK_RELATIVE_ERROR(
+                    dtau.integrated_branching_ratio(3.154, 10.00) / dmu.integrated_branching_ratio(0.011, 10.00),
+                    obs_Rpi->evaluate(),
+                    eps
+                );
+                TEST_CHECK_RELATIVE_ERROR(0.352166, obs_Rpi->evaluate(),  eps);
+                TEST_CHECK_RELATIVE_ERROR(0.204647, obs_Rpip->evaluate(), eps);
+                TEST_CHECK_RELATIVE_ERROR(0.147519, obs_Rpi0->evaluate(), eps);
+            }
         }
 } b_to_pi_l_nu_test;
