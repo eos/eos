@@ -102,15 +102,13 @@ namespace eos
                         &BToKDilepton::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
 
-                make_observable_ratio("B->Kll::R_K(q2)", R"(R_K(q^2))",
+                make_expression_observable("B->Kll::R_K(q2)", R"(R_K(q^2))",
                         Unit::None(),
-                        &BToKDilepton::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "mu" } },
-                        &BToKDilepton::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "e" } }
-                        ),
+                        R"(
+                        <<B->Kll::dBR/ds;l=mu>>
+                        /
+                        <<B->Kll::dBR/ds;l=e>>
+                        )"),
 
                 make_observable("B->Kll::BR", R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-))",
                         Unit::None(),
@@ -152,15 +150,13 @@ namespace eos
                         &BToKDilepton::integrated_forward_backward_asymmetry_cp_averaged,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("B->Kll::R_K", R"(R_K)",
+                make_expression_observable("B->Kll::R_K", R"(R_K)",
                         Unit::None(),
-                        &BToKDilepton::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "l", "mu" } },
-                        &BToKDilepton::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "l", "e" } }
-                        )
+                        R"(
+                        <<B->Kll::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        /
+                        <<B->Kll::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                        )"),
             }
         );
 
@@ -663,15 +659,13 @@ namespace eos
                         &BToKstarDilepton::differential_j_9,
                         std::make_tuple("q2")),
 
-                make_observable_ratio("B->K^*ll::R_K^*(q2)", R"(R_{K^*}(q^2))",
+                make_expression_observable("B->K^*ll::R_K^*(q2)", R"(R_{K^*}(q^2))",
                         Unit::None(),
-                        &BToKstarDilepton::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "mu" } },
-                        &BToKstarDilepton::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "e" } }
-                        ),
+                        R"(
+                        <<B->K^*ll::dBR/ds;l=mu>>
+                        /
+                        <<B->K^*ll::dBR/ds;l=e>>
+                        )"),
 
                 make_observable("B->K^*ll::A_FB",
                         Unit::None(),
@@ -1014,15 +1008,13 @@ namespace eos
                         &BToKstarDilepton::integrated_a_9,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("B->K^*ll::R_K^*", R"(R_{K^*})",
+                make_expression_observable("B->K^*ll::R_K^*", R"(R_{K^*})",
                         Unit::None(),
-                        &BToKstarDilepton::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "l", "mu" } },
-                        &BToKstarDilepton::integrated_branching_ratio,
-                        std::make_tuple("q2_e_min", "q2_e_max"),
-                        Options{ { "l", "e" } }
-                        ),
+                        R"(
+                        <<B->K^*ll::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        /
+                        <<B->K^*ll::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                        )"),
 
 
                 // B_s^0 -> \phi \ell^+ \ell^-
@@ -1046,15 +1038,13 @@ namespace eos
                         &BsToPhiDilepton::differential_longitudinal_polarisation,
                         std::make_tuple("q2")),
 
-                make_observable_ratio("B_s->phill::R_phi(q2)", R"(R_{\phi}(q^2))",
+                make_expression_observable("B_s->phill::R_phi(q2)", R"(R_{\phi}(q^2))",
                         Unit::None(),
-                        &BsToPhiDilepton::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "mu" } },
-                        &BsToPhiDilepton::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "e" } }
-                        ),
+                        R"(
+                        <<B_s->phill::dBR/ds;l=mu>>
+                        /
+                        <<B_s->phill::dBR/ds;l=e>>
+                        )"),
 
                 make_observable("B_s->phill::A_FB",
                         Unit::None(),
@@ -1193,18 +1183,13 @@ namespace eos
                         &BsToPhiDilepton::integrated_a_9,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("B_s->phill::R_phi", R"(R_\phi)",
+                make_expression_observable("B_s->phill::R_phi", R"(R_\phi)",
                         Unit::None(),
-                        &BsToPhiDilepton::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "l", "mu" } },
-                        &BsToPhiDilepton::integrated_branching_ratio,
-                        std::make_tuple("q2_e_min", "q2_e_max"),
-                        Options{ { "l", "e" } }
-                        ),
-
-
-
+                        R"(
+                        <<B_s->phill::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        /
+                        <<B_s->phill::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                        )")
             }
         );
 
@@ -1252,15 +1237,13 @@ namespace eos
                         &LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("Lambda_b->Lambdall::R_Lambda@LargeRecoil", R"(R_{\Lambda}(q^2))",
+                make_expression_observable("Lambda_b->Lambdall::R_Lambda@LargeRecoil", R"(R_{\Lambda})",
                         Unit::None(),
-                        &LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "l", "mu" } },
-                        &LambdaBToLambdaDilepton<LargeRecoil>::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "l", "e" } }
-                        ),
+                        R"(
+                        <<Lambda_b->Lambdall::BR@LargeRecoil;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        /
+                        <<Lambda_b->Lambdall::BR@LargeRecoil;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                        )"),
 
                 make_observable("Lambda_b->Lambdall::A_FB^l@LargeRecoil", R"(A_\mathrm{FB}^\ell(\Lambda_b\to\Lambda\ell^+\ell^-))",
                         Unit::None(),
