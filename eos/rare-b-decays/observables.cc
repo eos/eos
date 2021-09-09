@@ -1016,6 +1016,14 @@ namespace eos
                         <<B->K^*ll::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
                         )"),
 
+                make_expression_observable("B->K^*ll::NormalizedBR", R"(\mathcal{B}(B->K^*ll)/\mathcal{B}(B->K^*J/\psi))",
+                        Unit::None(),
+                        R"(
+                        <<B->K^*ll::BR>>
+                        /
+                        <<B->K^*psi::BR>>
+                        )"),
+
 
                 // B_s^0 -> \phi \ell^+ \ell^-
                 make_observable("B_s->phill::d^4Gamma",
@@ -1189,7 +1197,15 @@ namespace eos
                         <<B_s->phill::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
                         /
                         <<B_s->phill::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
-                        )")
+                        )"),
+
+                make_expression_observable("B_s->phill::NormalizedBR", R"(\mathcal{B}(B_s->\phi\ell\ell)/\mathcal{B}(B_s->\phi J/\psi))",
+                        Unit::None(),
+                        R"(
+                        <<B_s->phill::BR>>
+                        /
+                        <<B->K^*psi::BR>>
+                        )"),
             }
         );
 
