@@ -42,6 +42,7 @@ namespace eos::exp
             static double difference(const double &, const double &);
             static double product(const double &, const double &);
             static double ratio(const double &, const double &);
+            static double power(const double &, const double &);
 
             static BinaryExpression::func Method(char op);
 

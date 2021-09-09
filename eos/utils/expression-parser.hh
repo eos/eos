@@ -39,7 +39,8 @@ namespace eos
 
         qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> expression;
         qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> additive_expr;
-        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> non_additive_expr;
+        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> multiplicative_expr;
+        qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> exponential_expr;
 
         qi::rule<Iterator, eos::exp::Expression()               , ascii::space_type> primary_expr;
         qi::rule<Iterator, eos::exp::ConstantExpression()       , ascii::space_type> constant;

@@ -44,17 +44,22 @@ namespace eos
         };
 
         additive_expr =
-            non_additive_expr                            [ _val = _1]
-            >> *(   (char_("+") >> non_additive_expr)    [ _val = phx::bind(make_binary, _1, _val, _2)]
-                  | (char_("-") >> non_additive_expr)    [ _val = phx::bind(make_binary, _1, _val, _2)]
+            multiplicative_expr                            [ _val = _1]
+            >> *(   (char_("+") >> multiplicative_expr)    [ _val = phx::bind(make_binary, _1, _val, _2)]
+                  | (char_("-") >> multiplicative_expr)    [ _val = phx::bind(make_binary, _1, _val, _2)]
                 )
             ;
 
-        non_additive_expr =
-            primary_expr                                 [ _val = _1]
-            >> *(   (char_('*') >> primary_expr)         [ _val = phx::bind(make_binary, _1, _val, _2)]
-                  | (char_('/') >> primary_expr)         [ _val = phx::bind(make_binary, _1, _val, _2)]
+        multiplicative_expr =
+            exponential_expr                               [ _val = _1]
+            >> *(   (char_("*") >> exponential_expr)       [ _val = phx::bind(make_binary, _1, _val, _2)]
+                  | (char_("/") >> exponential_expr)       [ _val = phx::bind(make_binary, _1, _val, _2)]
                 )
+            ;
+
+        exponential_expr =
+            primary_expr                                   [ _val = _1 ]
+            >> -( char_("^") >> primary_expr )             [ _val = phx::bind(make_binary, _1, _val, _2) ]
             ;
 
         auto make_observable = [] (const std::string & name, const KinematicsSpecification & spec)
@@ -63,10 +68,10 @@ namespace eos
         };
 
         primary_expr =
-              ( '(' >> expression >> ')' )               [ _val = _1 ]
-            | constant                                   [ _val = _1 ]
-            | (observable_name >> kinematics)            [ _val = phx::bind(make_observable, _1, _2) ]
-            | observable_name                            [ _val = phx::bind(make_observable, _1, KinematicsSpecification()) ]
+              ('(' >> expression >> ')')                   [ _val = _1 ]
+            | constant                                     [ _val = _1 ]
+            | (observable_name >> kinematics)              [ _val = phx::bind(make_observable, _1, _2) ]
+            | observable_name                              [ _val = phx::bind(make_observable, _1, KinematicsSpecification()) ]
             ;
 
         constant = double_ | int_;
