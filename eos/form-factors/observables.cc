@@ -281,23 +281,21 @@ namespace eos
                         Unit::None(),
                         &BGLCoefficients::S1_a2),
 
-                make_observable_ratio("B->D^*::a_1/a_0[S_1]@HQE", R"(a_1^{S_1}/a_0^{S_1})",
+                make_expression_observable("B->D^*::a_1/a_0[S_1]@HQE", R"(a_1^{S_1}/a_0^{S_1})",
                         Unit::None(),
-                        &BGLCoefficients::S1_a1,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::S1_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_1[S_1]@HQE>>
+                        /
+                        <<B->D::a_0[S_1]@HQE>>
+                        )"),
 
-                make_observable_ratio("B->D^*::a_2/a_0[S_1]@HQE", R"(a_2^{S_1}/a_0^{S_1})",
+                make_expression_observable("B->D^*::a_2/a_0[S_1]@HQE", R"(a_2^{S_1}/a_0^{S_1})",
                         Unit::None(),
-                        &BGLCoefficients::S1_a2,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::S1_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_2[S_1]@HQE>>
+                        /
+                        <<B->D::a_0[S_1]@HQE>>
+                        )"),
 
                 make_observable("B->D::a_0[V_1]@HQE", R"(a_0^{V_1})",
                         Unit::None(),
@@ -311,23 +309,21 @@ namespace eos
                         Unit::None(),
                         &BGLCoefficients::V1_a2),
 
-                make_observable_ratio("B->D^*::a_1/a_0[V_1]@HQE", R"(a_1^{V_1}/a_0^{V_1})",
+                make_expression_observable("B->D^*::a_1/a_0[V_1]@HQE", R"(a_1^{V_1}/a_0^{V_1})",
                         Unit::None(),
-                        &BGLCoefficients::V1_a1,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::V1_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_1[V_1]@HQE>>
+                        /
+                        <<B->D::a_0[V_1]@HQE>>
+                        )"),
 
-                make_observable_ratio("B->D^*::a_2/a_0[V_1]@HQE", R"(a_2^{V_1}/a_0^{V_1})",
+                make_expression_observable("B->D^*::a_2/a_0[V_1]@HQE", R"(a_2^{V_1}/a_0^{V_1})",
                         Unit::None(),
-                        &BGLCoefficients::V1_a2,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::V1_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_2[V_1]@HQE>>
+                        /
+                        <<B->D::a_0[V_1]@HQE>>
+                        )"),
 
                 make_form_factor_adapter("B->D::f_T(q2)/f_+(q2)",
                         "B->D", &FormFactors<PToP>::f_t,
@@ -787,23 +783,21 @@ namespace eos
                         Unit::None(),
                         &BGLCoefficients::A1_a2),
 
-                make_observable_ratio("B->D^*::a_1/a_0[A_1]@HQE", R"(a_1^{A_1}/a_0^{A_1})",
+                make_expression_observable("B->D^*::a_1/a_0[A_1]@HQE", R"(a_1^{A_1}/a_0^{A_1})",
                         Unit::None(),
-                        &BGLCoefficients::A1_a1,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::A1_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_1[A_1]@HQE>>
+                        /
+                        <<B->D::a_0[A_1]@HQE>>
+                        )"),
 
-                make_observable_ratio("B->D^*::a_2/a_0[A_1]@HQE", R"(a_2^{A_1}/a_0^{A_1})",
+                make_expression_observable("B->D^*::a_2/a_0[A_1]@HQE", R"(a_2^{A_1}/a_0^{A_1})",
                         Unit::None(),
-                        &BGLCoefficients::A1_a2,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::A1_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_2[A_1]@HQE>>
+                        /
+                        <<B->D::a_0[A_1]@HQE>>
+                        )"),
 
                 make_observable("B->D^*::a_0[A_5]@HQE", R"(a_0^{A_5})",
                         Unit::None(),
@@ -817,23 +811,21 @@ namespace eos
                         Unit::None(),
                         &BGLCoefficients::A5_a2),
 
-                make_observable_ratio("B->D^*::a_1/a_0[A_5]@HQE", R"(a_1^{A_5}/a_0^{A_5})",
+                make_expression_observable("B->D^*::a_1/a_0[A_5]@HQE", R"(a_1^{A_5}/a_0^{A_5})",
                         Unit::None(),
-                        &BGLCoefficients::A5_a1,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::A5_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_1[A_5]@HQE>>
+                        /
+                        <<B->D::a_0[A_5]@HQE>>
+                        )"),
 
-                make_observable_ratio("B->D^*::a_2/a_0[A_5]@HQE", R"(a_2^{A_5}/a_0^{A_5})",
+                make_expression_observable("B->D^*::a_2/a_0[A_5]@HQE", R"(a_2^{A_5}/a_0^{A_5})",
                         Unit::None(),
-                        &BGLCoefficients::A5_a2,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::A5_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_2[A_5]@HQE>>
+                        /
+                        <<B->D::a_0[A_5]@HQE>>
+                        )"),
 
                 make_observable("B->D^*::a_0[P_1]@HQE", R"(a_0^{P_1})",
                         Unit::None(),
@@ -847,23 +839,21 @@ namespace eos
                         Unit::None(),
                         &BGLCoefficients::P1_a2),
 
-                make_observable_ratio("B->D^*::a_1/a_0[P_1]@HQE", R"(a_1^{P_1}/a_0^{P_1})",
+                make_expression_observable("B->D^*::a_1/a_0[P_1]@HQE", R"(a_1^{P_1}/a_0^{P_1})",
                         Unit::None(),
-                        &BGLCoefficients::P1_a1,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::P1_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_1[P_1]@HQE>>
+                        /
+                        <<B->D::a_0[P_1]@HQE>>
+                        )"),
 
-                make_observable_ratio("B->D^*::a_2/a_0[P_1]@HQE", R"(a_2^{P_1}/a_0^{P_1})",
+                make_expression_observable("B->D^*::a_2/a_0[P_1]@HQE", R"(a_2^{P_1}/a_0^{P_1})",
                         Unit::None(),
-                        &BGLCoefficients::P1_a2,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::P1_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_2[P_1]@HQE>>
+                        /
+                        <<B->D::a_0[P_1]@HQE>>
+                        )"),
 
                 make_observable("B->D^*::a_0[V_4]@HQE", R"(a_0^{V_4})",
                         Unit::None(),
@@ -877,23 +867,21 @@ namespace eos
                         Unit::None(),
                         &BGLCoefficients::V4_a2),
 
-                make_observable_ratio("B->D^*::a_1/a_0[V_4]@HQE", R"(a_1^{V_4}/a_0^{V_4})",
+                make_expression_observable("B->D^*::a_1/a_0[V_4]@HQE", R"(a_1^{V_4}/a_0^{V_4})",
                         Unit::None(),
-                        &BGLCoefficients::V4_a1,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::V4_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_1[V_4]@HQE>>
+                        /
+                        <<B->D::a_0[V_4]@HQE>>
+                        )"),
 
-                make_observable_ratio("B->D^*::a_2/a_0[V_4]@HQE", R"(a_2^{V_4}/a_0^{V_4})",
+                make_expression_observable("B->D^*::a_2/a_0[V_4]@HQE", R"(a_2^{V_4}/a_0^{V_4})",
                         Unit::None(),
-                        &BGLCoefficients::V4_a2,
-                        std::make_tuple(),
-                        Options(),
-                        &BGLCoefficients::V4_a0,
-                        std::make_tuple(),
-                        Options()),
+                        R"(
+                        <<B->D::a_2[V_4]@HQE>>
+                        /
+                        <<B->D::a_0[V_4]@HQE>>
+                        )"),
             }
         );
 
@@ -1504,14 +1492,25 @@ namespace eos
             R"(Heavy Quark Expansion)",
             R"(Pseudo observables for the parameters of the heavy-quark expansion in exclusive $b\to c$ semileptonic form factors)",
             {
-                make_observable_ratio("B_q(*)->D_q(*)::R(xi')@HQET", R"(\xi^\prime_{s}(1)/\xi^\prime(1))",
+                make_observable("B_q(*)->D_q(*)::xi_prime_s(1)", R"(\xi^\prime_{s}(1))",
                         Unit::None(),
                         &HQETIsgurWiseFunctionParameters::xipone,
                         std::make_tuple(),
-                        Options{ { "q", "s" } },
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_q(*)->D_q(*)::xi_prime(1)", R"(\xi^\prime(1))",
+                        Unit::None(),
                         &HQETIsgurWiseFunctionParameters::xipone,
                         std::make_tuple(),
                         Options{ { "q", "d" } }),
+
+                make_expression_observable("B_q(*)->D_q(*)::R(xi')@HQET", R"(\xi^\prime_{s}(1)/\xi^\prime(1))",
+                        Unit::None(),
+                        R"(
+                        <<B_q(*)->D_q(*)::xi_prime_s(1);q=s>>
+                        /
+                        <<B_q(*)->D_q(*)::xi_prime(1);q=d>>
+                        )"),
             }
         };
 
