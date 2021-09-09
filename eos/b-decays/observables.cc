@@ -79,41 +79,55 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "U", "u" } }),
 
-                make_observable_ratio("B->pilnu::R_pi(q2)", R"(R_{\pi}(q^2))",
+                make_observable("B->pilnu::width", R"(\Gamma(B\to\pi\ell^-\bar\nu))",
                         Unit::None(),
-                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "U", "u" }, { "l", "tau" } },
-                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "U", "u" }, { "l", "mu" } }),
+                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" } }),
 
-                make_observable_ratio("B->pilnu::R_pi_p", R"(R_{\pi})",
+                make_observable("B->pilnu::width_p", R"(\Gamma(B\to\pi\ell^-\bar\nu)_p)",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_p,
-                        std::make_tuple("q2_tau_min", "q2_tau_max"),
-                        Options{ { "U", "u" }, { "l", "tau"} },
-                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "U", "u" }, { "l", "mu"} }),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" } }),
 
-                make_observable_ratio("B->pilnu::R_pi_0", R"(R_{\pi})",
+                make_observable("B->pilnu::width_0", R"(\Gamma(B\to\pi\ell^-\bar\nu)_0)",
                         Unit::None(),
                         &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_0,
-                        std::make_tuple("q2_tau_min", "q2_tau_max"),
-                        Options{ { "U", "u" }, { "l", "tau"} },
-                        &BToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "U", "u" }, { "l", "mu"} }),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" } }),
 
-                make_observable_ratio("B->pilnu::R_pi", R"(R_{\pi})",
+                make_expression_observable("B->pilnu::R_pi(q2)", R"(R_{\pi}(q^2))",
                         Unit::None(),
-                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_tau_min", "q2_tau_max"),
-                        Options{ { "U", "u" }, { "l", "tau"} },
-                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "U", "u" }, { "l", "mu"} }),
+                        R"(
+                        <<B->pilnu::dBR/dq2;U=u,l=tau>>
+                        /
+                        <<B->pilnu::dBR/dq2;U=u,l=mu>>
+                        )"),
+
+                make_expression_observable("B->pilnu::R_pi_p", R"(R_{\pi, P})",
+                        Unit::None(),
+                        R"(
+                        <<B->pilnu::width_p;U=u,l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                        /
+                        <<B->pilnu::width;U=u,l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        )"),
+
+                make_expression_observable("B->pilnu::R_pi_0", R"(R_{\pi, 0})",
+                        Unit::None(),
+                        R"(
+                        <<B->pilnu::width_0;U=u,l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                        /
+                        <<B->pilnu::width;U=u,l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        )"),
+
+                make_expression_observable("B->pilnu::R_pi", R"(R_{\pi})",
+                        Unit::None(),
+                        R"(
+                        <<B->pilnu::BR;U=u,l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                        /
+                        <<B->pilnu::BR;U=u,l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                       )"),
 
                 make_observable("B->pilnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B\to \pi\ell^-\bar\nu)(q^2))",
                         Unit::None(),
@@ -197,23 +211,21 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "U", "c" } }),
 
-                make_observable_ratio("B->Dlnu::R_D(q2)", R"(R_D(q^2))",
+                make_expression_observable("B->Dlnu::R_D(q2)", R"(R_D(q^2))",
                         Unit::None(),
-                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "U", "c" }, { "l", "tau" } },
-                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "U", "c" }, { "l", "mu" } }),
+                        R"(
+                        <<B->Dlnu::dBR/dq2;U=c,l=tau>>
+                        /
+                        <<B->Dlnu::dBR/dq2;U=c,l=mu>>
+                        )"),
 
-                make_observable_ratio("B->Dlnu::R_D", R"(R_D)",
+                make_expression_observable("B->Dlnu::R_D", R"(R_D)",
                         Unit::None(),
-                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_tau_min", "q2_tau_max"),
-                        Options{ { "U", "c" }, { "l", "tau"} },
-                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "U", "c" }, { "l", "mu"} }),
+                        R"(
+                        <<B->Dlnu::BR;U=c,l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                        /
+                        <<B->Dlnu::BR;U=c,l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        )"),
 
                 make_observable("B->Dlnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B\to \bar{D}\ell^-\bar\nu)(q^2))",
                         Unit::None(),
@@ -285,23 +297,21 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "U", "c" }, {"q", "s"} }),
 
-                make_observable_ratio("B_s->D_slnu::R_D_s(q2)", R"(R_D_s(q^2))",
+                make_expression_observable("B_s->D_slnu::R_D_s(q2)", R"(R_D_s(q^2))",
                         Unit::None(),
-                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "U", "c" }, {"q", "s"}, { "l", "tau" } },
-                        &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "U", "c" }, {"q", "s"}, { "l", "mu" } }),
+                        R"(
+                        <<B_s->D_slnu::dBR/dq2;U=c,q=s,l=tau>>
+                        /
+                        <<B_s->D_slnu::dBR/dq2;U=c,q=s,l=mu>>
+                        )"),
 
-                make_observable_ratio("B_s->D_slnu::R_D_s", R"(R_D_s)",
+                make_expression_observable("B_s->D_slnu::R_D_s", R"(R_D_s)",
                         Unit::None(),
-                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_tau_min", "q2_tau_max"),
-                        Options{ { "U", "c" }, {"q", "s"}, { "l", "tau"} },
-                        &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "U", "c" }, {"q", "s"}, { "l", "mu"} }),
+                        R"(
+                        <<B_s->D_slnu::BR;U=c,q=s,l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                        /
+                        <<B_s->D_slnu::BR;U=c,q=s,l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        )"),
 
                 make_observable("B_s->D_slnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B_s\to \bar{D}_s\ell^-\bar\nu)(q^2))",
                         Unit::None(),
@@ -368,24 +378,21 @@ namespace eos
                                 &BToVectorLeptonNeutrino::normalized_differential_branching_ratio,
                                 std::make_tuple("q2")),
 
-                // TODO: Rename -> add tau/mu label
-                make_observable_ratio("B->D^*lnu::R_D^*(q2)", R"(R_{D^*}^{\tau/\mu}(q^2))",
-                                Unit::None(),
-                                &BToVectorLeptonNeutrino::differential_branching_ratio,
-                                std::make_tuple("q2"),
-                                Options{ { "l", "tau" } },
-                                &BToVectorLeptonNeutrino::differential_branching_ratio,
-                                std::make_tuple("q2"),
-                                Options{ { "l", "mu" } }),
+                make_expression_observable("B->D^*lnu::R_{D^*}^{tau/mu}(q2)", R"(R_{D^*}^{\tau/\mu}(q^2))",
+                        Unit::None(),
+                        R"(
+                        <<B->D^*lnu::dBR/dq2;l=tau>>
+                        /
+                        <<B->D^*lnu::dBR/dq2;l=mu>>
+                        )"),
 
-                make_observable_ratio("B->D^*lnu::R_{D^*}^{e/mu}(q2)", R"(R_{D^*}^{e/\mu}(q^2))",
-                                Unit::None(),
-                                &BToVectorLeptonNeutrino::differential_branching_ratio,
-                                std::make_tuple("q2"),
-                                Options{ { "l", "e" } },
-                                &BToVectorLeptonNeutrino::differential_branching_ratio,
-                                std::make_tuple("q2"),
-                                Options{ { "l", "mu" } }),
+                make_expression_observable("B->D^*lnu::R_{D^*}^{e/mu}(q2)", R"(R_{D^*}^{e/\mu}(q^2))",
+                        Unit::None(),
+                        R"(
+                        <<B->D^*lnu::dBR/dq2;l=e>>
+                        /
+                        <<B->D^*lnu::dBR/dq2;l=mu>>
+                        )"),
 
                 make_observable("B->D^*lnu::A_FB(q2)", R"(A_{\mathrm{FB}}(B\to \bar{D}^*\ell^-\bar\nu)(q^2))",
                                 Unit::None(),
@@ -459,41 +466,34 @@ namespace eos
                                 &BToVectorLeptonNeutrino::integrated_CPave_branching_ratio,
                                 std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_sum("B->D^*lnu::BRbar", R"()",
+                make_expression_observable("B->D^*lnu::BRbar", R"(\mathcal{B}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_CPave_branching_ratio,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +0.5,
-                                &BToVectorLeptonNeutrino::integrated_CPave_branching_ratio,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                +0.5),
+                                R"(
+                                0.5 * <<B->D^*lnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                +
+                                0.5 * <<B->D^*lnu::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
-                make_observable_sum("B->D^*lnu::DeltaBR", R"()",
+                make_expression_observable("B->D^*lnu::DeltaBR", R"(\Delta\mathcal{B}(B\to \bar{D}^*\ell^-\bar\nu)_{\ell=e,\mu})",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_CPave_branching_ratio,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +1.0,
-                                &BToVectorLeptonNeutrino::integrated_CPave_branching_ratio,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                -1.0),
+                                R"(
+                                <<B->D^*lnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                -
+                                <<B->D^*lnu::BR;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
                 make_observable("B->D^*lnu::normBR",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::normalized_integrated_branching_ratio,
                                 std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("B->D^*lnu::R_D^*", R"(R_{D^*})",
+                make_expression_observable("B->D^*lnu::R_D^*", R"(R_{D^*})",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
-                                std::make_tuple("q2_tau_min", "q2_tau_max"),
-                                Options{ { "l", "tau" } },
-                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } }),
+                                R"(
+                                <<B->D^*lnu::BR;l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                                /
+                                <<B->D^*lnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                )"),
 
                 make_observable("B->D^*lnu::A_L",
                                 Unit::None(),
@@ -600,81 +600,63 @@ namespace eos
                                 &BToVectorLeptonNeutrino::integrated_CPave_a_fb_leptonic,
                                 std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_sum("B->D^*lnu::Abar_FB", R"()",
+                make_expression_observable("B->D^*lnu::Abar_FB", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_CPave_a_fb_leptonic,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +0.5,
-                                &BToVectorLeptonNeutrino::integrated_CPave_a_fb_leptonic,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                +0.5),
+                                R"(
+                                0.5 * <<B->D^*lnu::A_FB;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                +
+                                0.5 * <<B->D^*lnu::A_FB;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
-                make_observable_sum("B->D^*lnu::DeltaA_FB", R"()",
+                make_expression_observable("B->D^*lnu::DeltaA_FB", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_CPave_a_fb_leptonic,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +1.0,
-                                &BToVectorLeptonNeutrino::integrated_CPave_a_fb_leptonic,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                -1.0),
+                                R"(
+                                <<B->D^*lnu::A_FB;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                -
+                                <<B->D^*lnu::A_FB;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
                 make_observable("B->D^*lnu::F_L", R"(F_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::integrated_CPave_f_L,
                                 std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_sum("B->D^*lnu::Fbar_L", R"()",
+                make_expression_observable("B->D^*lnu::Fbar_L", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_CPave_f_L,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +0.5,
-                                &BToVectorLeptonNeutrino::integrated_CPave_f_L,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                +0.5),
+                                R"(
+                                0.5 * <<B->D^*lnu::F_L;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                +
+                                0.5 * <<B->D^*lnu::F_L;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
-                make_observable_sum("B->D^*lnu::DeltaF_L", R"()",
+                make_expression_observable("B->D^*lnu::DeltaF_L", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_CPave_f_L,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +1.0,
-                                &BToVectorLeptonNeutrino::integrated_CPave_f_L,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                -1.0),
+                                R"(
+                                <<B->D^*lnu::F_L;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                -
+                                <<B->D^*lnu::F_L;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
                 make_observable("B->D^*lnu::Ftilde_L", R"(\tilde{F}_{\mathrm{L}}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 Unit::None(),
                                 &BToVectorLeptonNeutrino::integrated_CPave_ftilde_L,
                                 std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_sum("B->D^*lnu::Ftildebar_L", R"()",
+                make_expression_observable("B->D^*lnu::Ftildebar_L", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_CPave_ftilde_L,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +0.5,
-                                &BToVectorLeptonNeutrino::integrated_CPave_ftilde_L,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                +0.5),
+                                R"(
+                                0.5 * <<B->D^*lnu::Ftilde_L;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                +
+                                0.5 * <<B->D^*lnu::Ftilde_L;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
-                make_observable_sum("B->D^*lnu::DeltaFtilde_L", R"()",
+                make_expression_observable("B->D^*lnu::DeltaFtilde_L", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_CPave_ftilde_L,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +1.0,
-                                &BToVectorLeptonNeutrino::integrated_CPave_ftilde_L,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                -1.0),
+                                R"(
+                                <<B->D^*lnu::Ftilde_L;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                -
+                                <<B->D^*lnu::Ftilde_L;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
                 make_cacheable_observable("B->D^*lnu::S_1c", R"(S_{1c}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 Unit::None(),
@@ -707,27 +689,21 @@ namespace eos
                                 &BToVectorLeptonNeutrino::integrated_S3,
                                 std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_sum("B->D^*lnu::Sbar_3", R"()",
+                make_expression_observable("B->D^*lnu::Sbar_3", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_S3,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +0.5,
-                                &BToVectorLeptonNeutrino::integrated_S3,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                +0.5),
+                                R"(
+                                0.5 * <<B->D^*lnu::S_3;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                +
+                                0.5 * <<B->D^*lnu::S_3;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
-                make_observable_sum("B->D^*lnu::DeltaS_3", R"()",
+                make_expression_observable("B->D^*lnu::DeltaS_3", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_S3,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +1.0,
-                                &BToVectorLeptonNeutrino::integrated_S3,
-                                std::make_tuple("q2_e_min", "q2_e_max"),
-                                Options{ { "l", "e" } },
-                                -1.0),
+                                R"(
+                                <<B->D^*lnu::S_3;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                -
+                                <<B->D^*lnu::S_3;l=e>>[q2_max=>q2_e_max,q2_min=>q2_e_min]
+                                )"),
 
                 make_cacheable_observable("B->D^*lnu::S_4", R"(S_{4}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 Unit::None(),
@@ -849,28 +825,21 @@ namespace eos
                                 std::make_tuple("w_min", "w_max"),
                                 Options{ { "U", "c" }, {"q", "d"} }),
 
-                make_observable_sum("B->D^*lnu::Pbar(w_min,w_max)", R"()",
+                make_expression_observable("B->D^*lnu::Pbar(w_min,w_max)", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_pdf_w,
-                                std::make_tuple("w_mu_min", "w_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +0.5,
-                                &BToVectorLeptonNeutrino::integrated_pdf_w,
-                                std::make_tuple("w_e_min", "w_e_max"),
-                                Options{ { "l", "e" } },
-                                +0.5),
+                                R"(
+                                0.5 * <<B->D^*lnu::P(w_min,w_max);l=mu>>[w_mu_max=>w_max,w_mu_min=>w_min]
+                                +
+                                0.5 * <<B->D^*lnu::P(w_min,w_max);l=e>>[w_e_max=>w_max,w_e_min=>w_min]
+                                )"),
 
-                make_observable_sum("B->D^*lnu::DeltaP(w_min,w_max)", R"()",
+                make_expression_observable("B->D^*lnu::DeltaP(w_min,w_max)", R"()",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_pdf_w,
-                                std::make_tuple("w_mu_min", "w_mu_max"),
-                                Options{ { "l", "mu" } },
-                                +1.0,
-                                &BToVectorLeptonNeutrino::integrated_pdf_w,
-                                std::make_tuple("w_e_min", "w_e_max"),
-                                Options{ { "l", "e" } },
-                                -1.0),
-
+                                R"(
+                                <<B->D^*lnu::P(w_min,w_max);l=mu>>[w_mu_max=>w_max,w_mu_min=>w_min]
+                                -
+                                <<B->D^*lnu::P(w_min,w_max);l=e>>[w_e_max=>w_max,w_e_min=>w_min]
+                                )"),
 
                 // B -> D pi l nu
                 make_observable("B->Dpilnu::P(c_D)",
@@ -1042,23 +1011,21 @@ namespace eos
                                 std::make_tuple("q2_min", "q2_max"),
                                 Options{ { "U", "c" }, {"q", "s"} }),
 
-                make_observable_ratio("B_s->D_s^*lnu::R_D_s^*(q2)", R"(R_{D_s^*}(q^2))",
+                make_expression_observable("B_s->D_s^*lnu::R_D_s^*(q2)", R"(R_{D_s^*}(q^2))",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::differential_branching_ratio,
-                                std::make_tuple("q2"),
-                                Options{ { "l", "tau" }, { "U", "c" }, {"q", "s"} },
-                                &BToVectorLeptonNeutrino::differential_branching_ratio,
-                                std::make_tuple("q2"),
-                                Options{ { "l", "mu" }, { "U", "c" }, {"q", "s"} }),
+                                R"(
+                                <<B_s->D_s^*lnu::dBR/dq2;U=c,q=s,l=tau>>
+                                /
+                                <<B_s->D_s^*lnu::dBR/dq2;U=c,q=s,l=mu>>
+                                )"),
 
-                make_observable_ratio("B_s->D_s^*lnu::R_D_s^*", R"(R_{D_s^*})",
+                make_expression_observable("B_s->D_s^*lnu::R_D_s^*", R"(R_{D_s^*})",
                                 Unit::None(),
-                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
-                                std::make_tuple("q2_tau_min", "q2_tau_max"),
-                                Options{ { "l", "tau" }, { "U", "c" }, {"q", "s"} },
-                                &BToVectorLeptonNeutrino::integrated_branching_ratio,
-                                std::make_tuple("q2_mu_min", "q2_mu_max"),
-                                Options{ { "l", "mu" }, { "U", "c" }, {"q", "s"} }),
+                                R"(
+                                <<B_s->D_s^*lnu::BR;U=c,q=s,l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                                /
+                                <<B_s->D_s^*lnu::BR;U=c,q=s,l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                                )"),
 
                 make_observable("B_s->D_s^*lnu::A_FB", R"(A_{\mathrm{FB}}(B_s\to \bar{D}_s^*\ell^-\bar\nu))",
                                 Unit::None(),
@@ -1556,14 +1523,13 @@ namespace eos
                         &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("Lambda_b->Lambda_clnu::R(Lambda_c)", R"(R(\Lambda_c))",
+                make_expression_observable("Lambda_b->Lambda_clnu::R(Lambda_c)", R"(R(\Lambda_c))",
                         Unit::None(),
-                        &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_tau_min", "q2_tau_max"),
-                        Options{ { "l", "tau" } },
-                        &LambdaBToLambdaCLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "l", "mu" } }),
+                        R"(
+                        <<Lambda_b->Lambda_clnu::BR;l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                        /
+                        <<Lambda_b->Lambda_clnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        )"),
 
                 make_observable("Lambda_b->Lambda_clnu::A_FB^l",
                         Unit::None(),
@@ -1575,23 +1541,21 @@ namespace eos
                         &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_hadronic,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("Lambda_b->Lambda_clnu::R(A_FB^h)(q2)", R"(R(A_{\mathrm{FB}}^{\Lambda_c})(q^2))",
+                make_expression_observable("Lambda_b->Lambda_clnu::R(A_FB^h)(q2)", R"(R(A_{\mathrm{FB}}^{\Lambda_c})(q^2))",
                         Unit::None(),
-                        &LambdaBToLambdaCLeptonNeutrino::differential_a_fb_hadronic,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "tau" } },
-                        &LambdaBToLambdaCLeptonNeutrino::differential_a_fb_hadronic,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "mu" } }),
+                        R"(
+                        <<Lambda_b->Lambda_clnu::A_FB^h(q2);l=tau>>
+                        /
+                        <<Lambda_b->Lambda_clnu::A_FB^h(q2);l=mu>>
+                        )"),
 
-                make_observable_ratio("Lambda_b->Lambda_clnu::R(A_FB^h)", R"(R(A_{\mathrm{FB}}^{\Lambda_c}))",
+                make_expression_observable("Lambda_b->Lambda_clnu::R(A_FB^h)", R"(R(A_{\mathrm{FB}}^{\Lambda_c}))",
                         Unit::None(),
-                        &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_hadronic,
-                        std::make_tuple("q2_tau_min", "q2_tau_max"),
-                        Options{ { "l", "tau" } },
-                        &LambdaBToLambdaCLeptonNeutrino::integrated_a_fb_hadronic,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "l", "mu" } }),
+                        R"(
+                        <<Lambda_b->Lambda_clnu::A_FB^h;l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                        /
+                        <<Lambda_b->Lambda_clnu::A_FB^h;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        )"),
 
                 make_observable("Lambda_b->Lambda_clnu::A_FB^c",
                         Unit::None(),
@@ -1679,23 +1643,21 @@ namespace eos
                         &LambdaBToLambdaC2595LeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)(q2)", R"(R_{\Lambda_c(2595}(q^2))",
+                make_expression_observable("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)(q2)", R"(R_{\Lambda_c(2595}(q^2))",
                         Unit::None(),
-                        &LambdaBToLambdaC2595LeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "tau" } },
-                        &LambdaBToLambdaC2595LeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "mu" } }),
+                        R"(
+                        <<Lambda_b->Lambda_c(2595)lnu::dBR/ds;l=tau>>
+                        /
+                        <<Lambda_b->Lambda_c(2595)lnu::dBR/ds;l=mu>>
+                        )"),
 
-                make_observable_ratio("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)", R"(R_{\Lambda_c(2595})",
+                make_expression_observable("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)", R"(R_{\Lambda_c(2595})",
                         Unit::None(),
-                        &LambdaBToLambdaC2595LeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_tau_min", "q2_tau_max"),
-                        Options{ { "l", "tau" } },
-                        &LambdaBToLambdaC2595LeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "l", "mu" } }),
+                        R"(
+                        <<Lambda_b->Lambda_c(2595)lnu::BR;l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                        /
+                        <<Lambda_b->Lambda_c(2595)lnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        )"),
 
                 // Lambda_b -> Lambda_c(2625) l nubar
                 make_observable("Lambda_b->Lambda_c(2625)lnu::dBR/ds",
@@ -1728,23 +1690,21 @@ namespace eos
                         &LambdaBToLambdaC2625LeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable_ratio("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)(q2)", R"(R_{\Lambda_c(2625}(q^2))",
+                make_expression_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)(q2)", R"(R_{\Lambda_c(2625}(q^2))",
                         Unit::None(),
-                        &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "tau" } },
-                        &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "l", "mu" } }),
+                        R"(
+                        <<Lambda_b->Lambda_c(2625)lnu::dBR/ds;l=tau>>
+                        /
+                        <<Lambda_b->Lambda_c(2625)lnu::dBR/ds;l=mu>>
+                        )"),
 
-                make_observable_ratio("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)", R"(R_{\Lambda_c(2625})",
+                make_expression_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)", R"(R_{\Lambda_c(2625})",
                         Unit::None(),
-                        &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_tau_min", "q2_tau_max"),
-                        Options{ { "l", "tau" } },
-                        &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_mu_min", "q2_mu_max"),
-                        Options{ { "l", "mu" } }),
+                        R"(
+                        <<Lambda_b->Lambda_c(2625)lnu::BR;l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
+                        /
+                        <<Lambda_b->Lambda_c(2625)lnu::BR;l=mu>>[q2_max=>q2_mu_max,q2_min=>q2_mu_min]
+                        )")
             }
         );
 

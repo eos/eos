@@ -85,7 +85,8 @@ class BToVectorLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
 
-                Options o{
+                Options o
+                {
                     { "l",             "e"       },
                     { "model",         "CKMScan" },
                     { "q",             "d"       },
@@ -154,7 +155,8 @@ class BToVectorLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
 
-                Options o{
+                Options o
+                {
                     { "l",             "tau"     },
                     { "model",         "CKMScan" },
                     { "q",             "d"       },
@@ -234,7 +236,8 @@ class BToVectorLeptonNeutrinoTest :
 
                 p["cbmunumu::mu"].set(2.295);  // to get m_b,c in amp_P comparable to Martin
 
-                Options o{
+                Options o
+                {
                     { "l",             "mu"      },
                     { "model",         "WilsonScan" },
                     { "q",             "d"       },
@@ -420,5 +423,63 @@ class BToVectorLeptonNeutrinoTest :
                 auto obs_RDst = Observable::make("B->D^*lnu::R_D^*", p3, k, oo);
                 TEST_CHECK_RELATIVE_ERROR(1.20331, obs_RDst->evaluate(), eps);
             }
+
+            // Check of consistency
+            {
+                Parameters p = Parameters::Defaults();
+                p["CKM::abs(V_cb)"].set(1.0);
+                p["B(*)->D(*)::a@HQET"].set(1.000);
+                p["mass::B_d"].set(5.27942);
+                p["mass::D_u^*"].set(2.01000);
+                p["mass::D_d^*"].set(2.01000);
+                p["life_time::B_d"].set(1.520e-12);
+
+                Options o
+                {
+                    { "model",         "CKMScan" },
+                    { "q",             "d"       },
+                    { "z-order-lp",    "3"       },
+                    { "z-order-slp",   "2"       },
+                    { "z-order-sslp",  "1"       },
+                    { "form-factors",  "HQET"    },
+                    { "l",             "e"       },
+                };
+
+                BToVectorLeptonNeutrino de(p, o);
+
+                o.set("l", "mu");
+                BToVectorLeptonNeutrino dmu(p, o);
+
+                o =
+                {
+                    { "model",         "CKMScan" },
+                    { "q",             "d"       },
+                    { "z-order-lp",    "3"       },
+                    { "z-order-slp",   "2"       },
+                    { "z-order-sslp",  "1"       },
+                    { "form-factors",  "HQET"    },
+                };
+                Kinematics k
+                {
+                    { "q2_mu_min", 1.00 }, { "q2_mu_max", 10.68 },
+                    { "q2_e_min",  1.00 }, { "q2_e_max",  10.68 },
+                };
+
+                auto obs_BRavg   = Observable::make("B->D^*lnu::BRbar",   p, k, o);
+                auto obs_deltaBR = Observable::make("B->D^*lnu::DeltaBR", p, k, o);
+
+                const double eps = 1e-5;
+                TEST_CHECK_RELATIVE_ERROR(
+                    0.5 * (de.integrated_CPave_branching_ratio(1.00, 10.68) + dmu.integrated_CPave_branching_ratio(1.00, 10.68)),
+                    obs_BRavg->evaluate(),
+                    eps
+                );
+                TEST_CHECK_RELATIVE_ERROR(
+                    dmu.integrated_CPave_branching_ratio(1.00, 10.68) - de.integrated_CPave_branching_ratio(1.00, 10.68),
+                    obs_deltaBR->evaluate(),
+                    eps
+                );
+            }
+
         }
 } b_to_dstar_l_nu_test;

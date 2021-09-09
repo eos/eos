@@ -102,6 +102,45 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(3.154, 11.1),          0.38041,  eps);
             }
 
+            // Consistency check for R_lambda
+            {
+                Parameters p = Parameters::Defaults();
+                p["Lambda_c::alpha"]       = -0.78;
+                p["mass::Lambda_b"]        = 5.6194;
+                p["mass::Lambda_c"]        = 2.2865;
+                p["CKM::abs(V_cb)"]        =  0.041996951916414726;
+
+                Options oo
+                {
+                    { "model",        "WilsonScan" },
+                    { "form-factors", "DKMR2017"   },
+                    { "l",            "mu"        }
+                };
+                LambdaBToLambdaCLeptonNeutrino dmu(p, oo);
+
+                oo.set("l", "tau");
+                LambdaBToLambdaCLeptonNeutrino dtau(p, oo);
+
+                oo =
+                {
+                    { "model",        "WilsonScan" },
+                    { "form-factors", "DKMR2017"   },
+                };
+                Kinematics k
+                {
+                    { "q2_mu_min",   0.011 }, { "q2_mu_max",  11.1 },
+                    { "q2_tau_min",  3.154 }, { "q2_tau_max", 11.1 },
+                };
+
+                auto obs_Rlambda = Observable::make("Lambda_b->Lambda_clnu::R(Lambda_c)", p, k, oo);
+                TEST_CHECK_RELATIVE_ERROR(
+                    dtau.integrated_branching_ratio(3.154, 11.1) / dmu.integrated_branching_ratio(0.011, 11.1),
+                    obs_Rlambda->evaluate(),
+                    1e-5
+                );
+                
+            }
+
             // tests for NP observables (no tensors)
             {
                 Parameters p = Parameters::Defaults();
