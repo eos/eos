@@ -223,7 +223,7 @@ dnl {{{ check if we should enable Python
 AC_ARG_ENABLE([python],
 	[AS_HELP_STRING([--enable-python], [enables interfacing EOS within python])],
 	[],
-	[])
+	[enable_python=yes])
 AM_CONDITIONAL([EOS_ENABLE_PYTHON], [test "x$enable_python" == "xyes"])
 has_boost_python_suffix=no
 AC_ARG_WITH([boost-python-suffix],
