@@ -161,7 +161,7 @@ jobs:
                 pushd _pypi
                 export PATH="$PYTHON_PATH:$PATH"
                 cp ../_build/python/.libs/_eos.so ./
-                LIBRARIES='libboost|libeos|libgfortran|libgsl|libquadmath|libyaml|libz'
+                LIBRARIES='libboost|libeos|libgfortran|libgsl|libquadmath|libsatlas|libyaml|libz'
                 for f in $(ldd _eos.so | grep '=>' | grep -E "$LIBRARIES" | awk '{print $3}') ; do
                     cp $f ./
                 done
