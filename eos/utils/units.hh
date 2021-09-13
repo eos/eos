@@ -26,25 +26,44 @@
 
 namespace eos
 {
-    class Unit :
-        public InstantiationPolicy<Unit, NonCopyable>
+    class Unit
     {
-        private:
-            const std::string _latex;
+        public:
+            enum class Id;
 
-        protected:
-            Unit(const std::string & latex);
+        private:
+            Id _id;
+
+            Unit(const Id & id) : _id(id) {}
 
         public:
-            const std::string & latex() const { return _latex; }
+            enum class Id :
+                int
+            {
+                undefined = 0,
+                none,
+                gev,
+                gev2,
+                inverse_gev2,
+                inverse_gev4,
+                inverse_ps
+            };
 
-            static const Unit & Undefined();
-            static const Unit & None();
-            static const Unit & GeV();
-            static const Unit & GeV2();
-            static const Unit & InverseGeV2();
-            static const Unit & InverseGeV4();
-            static const Unit & InversePicoSecond();
+            Unit(const Unit &) = default;
+            Unit(Unit &&) = default;
+            ~Unit() = default;
+
+            const std::string & latex() const;
+
+            static Unit Undefined();
+            static Unit None();
+            static Unit GeV();
+            static Unit GeV2();
+            static Unit InverseGeV2();
+            static Unit InverseGeV4();
+            static Unit InversePicoSecond();
+
+            bool operator== (const Unit &) const;
     };
 }
 

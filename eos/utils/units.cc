@@ -22,67 +22,73 @@
 #include <eos/utils/units.hh>
 
 #include <string>
+#include <vector>
 
 namespace eos
 {
-    Unit::Unit(const std::string & latex) :
-        _latex(latex)
+    const std::string &
+    Unit::latex() const
     {
+        static const std::vector<std::string> representations
+        {
+            R"(\textrm{undefined})",
+            "1",
+            R"(\textrm{GeV})",
+            R"(\textrm{GeV}^2)",
+            R"(\textrm{GeV}^{-2})",
+            R"(\textrm{GeV}^{-4})",
+            R"(\textrm{ps}^{-1})",
+            R"(\textrm{undefined})"
+        };
+
+        return representations[static_cast<int>(_id)];
     }
 
-    const Unit &
+    Unit
     Unit::Undefined()
     {
-        static const Unit undefined(R"(\textrm{undefined})");
-
-        return undefined;
+        return Unit(Id::undefined);
     }
 
-    const Unit &
+    Unit
     Unit::None()
     {
-        static const Unit none("1");
-
-        return none;
+        return Unit(Id::none);
     }
 
-    const Unit &
+    Unit
     Unit::GeV()
     {
-        static const Unit gev(R"(\textrm{GeV})");
-
-        return gev;
+        return Unit(Id::gev);
     }
 
-    const Unit &
+    Unit
     Unit::GeV2()
     {
-        static const Unit gev_2(R"(\textrm{GeV}^2)");
-
-        return gev_2;
+        return Unit(Id::gev2);
     }
 
-    const Unit &
+    Unit
     Unit::InverseGeV2()
     {
-        static const Unit inverse_gev_2(R"(\textrm{GeV}^{-2})");
-
-        return inverse_gev_2;
+        return Unit(Id::inverse_gev2);
     }
 
-    const Unit &
+    Unit
     Unit::InverseGeV4()
     {
-        static const Unit inverse_gev_4(R"(\textrm{GeV}^{-4})");
-
-        return inverse_gev_4;
+        return Unit(Id::inverse_gev4);
     }
 
-    const Unit &
+    Unit
     Unit::InversePicoSecond()
     {
-        static const Unit inverse_pico_second(R"(\textrm{ps}^{-1})");
+        return Unit(Id::inverse_ps);
+    }
 
-        return inverse_pico_second;
+    bool
+    Unit::operator== (const Unit & rhs) const
+    {
+        return this->_id == rhs._id;
     }
 }

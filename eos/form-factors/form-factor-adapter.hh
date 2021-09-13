@@ -126,7 +126,7 @@ namespace eos
 
             std::string _latex;
 
-            const Unit & _unit;
+            Unit _unit;
 
             qnp::Prefix _process;
 
@@ -325,7 +325,7 @@ namespace eos
 
             std::string _latex;
 
-            const Unit & _unit;
+            Unit _unit;
 
             std::string _prefix_numerator;
 
