@@ -302,7 +302,7 @@ BOOST_PYTHON_MODULE(_eos)
         ;
 
     // Units
-    class_<Unit, boost::noncopyable>("Unit", R"(
+    class_<Unit>("Unit", R"(
             Represents the unit of the observables.
 
             Seven possible entries are currently implemented in EOS:
@@ -314,19 +314,19 @@ BOOST_PYTHON_MODULE(_eos)
             - InverseGeV4
             - InversePicoSecond
         )", no_init)
-        .def("Undefined", &Unit::Undefined, return_value_policy<copy_const_reference>())
+        .def("Undefined", &Unit::Undefined)
         .staticmethod("Undefined")
-        .def("None", &Unit::None, return_value_policy<copy_const_reference>())
-        .staticmethod("None")
-        .def("GeV", &Unit::GeV, return_value_policy<copy_const_reference>())
+        .def("Unity", &Unit::None)
+        .staticmethod("Unity")
+        .def("GeV", &Unit::GeV)
         .staticmethod("GeV")
-        .def("GeV2", &Unit::GeV2, return_value_policy<copy_const_reference>())
+        .def("GeV2", &Unit::GeV2)
         .staticmethod("GeV2")
-        .def("InverseGeV2", &Unit::InverseGeV2, return_value_policy<copy_const_reference>())
+        .def("InverseGeV2", &Unit::InverseGeV2)
         .staticmethod("InverseGeV2")
-        .def("InverseGeV4", &Unit::InverseGeV4, return_value_policy<copy_const_reference>())
+        .def("InverseGeV4", &Unit::InverseGeV4)
         .staticmethod("InverseGeV4")
-        .def("InversePicoSecond", &Unit::InversePicoSecond, return_value_policy<copy_const_reference>())
+        .def("InversePicoSecond", &Unit::InversePicoSecond)
         .staticmethod("InversePicoSecond")
         .def("latex", &Unit::latex, return_value_policy<copy_const_reference>())
         ;

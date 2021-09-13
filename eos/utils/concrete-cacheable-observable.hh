@@ -251,7 +251,7 @@ namespace eos
 
             std::string _latex;
 
-            const Unit & _unit;
+            Unit _unit;
 
             std::function<const typename Decay_::IntermediateResult * (const Decay_ *, const Args_ & ...)> _prepare_fn;
 

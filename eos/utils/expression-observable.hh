@@ -100,7 +100,7 @@ namespace eos
 
             std::string _latex;
 
-            const Unit & _unit;
+            Unit _unit;
 
             const Expression _expression;
 

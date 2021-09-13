@@ -122,7 +122,7 @@ namespace eos
 
             std::string _latex;
 
-            const Unit & _unit;
+            Unit _unit;
 
             std::function<double (const Decay_ *, const Args_ & ...)> _function;
 
