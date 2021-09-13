@@ -226,7 +226,7 @@ namespace eos
             * @param options A set of options that applies to all the observables in the expression.
             * @param expression The expression to be parsed.
             */
-            void insert(const QualifiedName & name, const std::string & latex, const Options & options, const std::string & expression) const;
+            void insert(const QualifiedName & name, const std::string & latex, const Unit & unit, const Options & options, const std::string & expression) const;
     };
 
     extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;

@@ -630,11 +630,13 @@ BOOST_PYTHON_MODULE(_eos)
             :type name: eos.QualifiedName
             :param latex: The latex representation of the new observable.
             :type latex: std::string
+            :param unit: The unit of the new observable.
+            :type unit: eos.Unit
             :param options: The set of options relevant to this new observable. These options apply to **all** the observables in the expression.
             :type options: eos.Options
             :param expression: The expression to be parsed.
             :type expression: std::string
-        )", args("name", "latex", "options", "expression"))
+        )", args("name", "latex", "unit", "options", "expression"))
         .def("sections", range(&Observables::begin_sections, &Observables::end_sections))
         ;
 

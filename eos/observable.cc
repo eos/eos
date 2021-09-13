@@ -303,7 +303,7 @@ namespace eos
     }
 
     void
-    Observables::insert(const QualifiedName & name, const std::string & latex, const Options & forced_options, const std::string & input) const
+    Observables::insert(const QualifiedName & name, const std::string & latex, const Unit & unit, const Options & forced_options, const std::string & input) const
     {
         eos::exp::Expression expression;
 
@@ -321,7 +321,7 @@ namespace eos
         ExpressionObservableEntry * expression_observable_entry = new
             ExpressionObservableEntry(name,
                                       latex,
-                                      Unit::Undefined(),
+                                      unit,
                                       expression,
                                       forced_options
                                       );
