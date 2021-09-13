@@ -40,10 +40,10 @@ class ObservableTest :
 
                 TEST_CHECK_THROWS(
                     ParsingError,
-                    observables.insert("mass::ratio", "m_r", Options(), "<<mass::mu>> /* <<mass::tau>>")
+                    observables.insert("mass::ratio", "m_r", Unit::None(), Options(), "<<mass::mu>> /* <<mass::tau>>")
                 );
 
-                observables.insert("mass::ratio", "m_r", Options(), "<<mass::mu>> / <<mass::tau>>");
+                observables.insert("mass::ratio", "m_r", Unit::None(), Options(), "<<mass::mu>> / <<mass::tau>>");
 
                 Parameters p = Parameters::Defaults();
                 p["mass::mu"]     =  0.105658;
@@ -62,7 +62,7 @@ class ObservableTest :
             {
                 auto observables = Observables();
 
-                observables.insert("B->D^*lnu::2*S_1c", R"()", Options(),
+                observables.insert("B->D^*lnu::2*S_1c", R"()", Unit::Undefined(), Options(),
                                 R"(
                                 2 * <<B->D^*lnu::S_1c;l=mu>>
                                 )");
@@ -89,7 +89,7 @@ class ObservableTest :
             {
                 auto observables = Observables();
 
-                observables.insert("B->D^*lnu::4*S_1c", R"()", Options(),
+                observables.insert("B->D^*lnu::4*S_1c", R"()", Unit::Undefined(), Options(),
                                 R"(
                                 2 * <<B->D^*lnu::2*S_1c;l=mu>>
                                 )");
