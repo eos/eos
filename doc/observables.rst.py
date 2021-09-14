@@ -44,11 +44,13 @@ for section in observables.sections():
         print('     - Kinematic Variables')
         for qn, entry in group:
             latex = entry.latex()
-            unit_string = entry.unit().latex()
-            if unit_string == '1':
+            unit = entry.unit()
+            if unit == eos.Unit.Unity():
                 unit_string = ''
             else:
-                unit_string = r'\, \left[ {unit_string} \right]'.format(unit_string=unit_string)
+                print(entry.name())
+                unit_string = r'\, \left[ {unit_string} \right]'.format(unit_string=unit.latex())
+
             if 0 == len(latex):
                 continue
 
