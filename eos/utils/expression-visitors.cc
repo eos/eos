@@ -308,9 +308,38 @@ namespace eos::exp
     Expression
     ExpressionMaker::visit(const ObservableExpression & e)
     {
-        throw InternalError("Encountered ObservableExpression in ExpressionMaker::visit");
+        // Rebuild the observable expression with the local set of parameters
 
-        return e;
+        const auto & kinematics_values = e.kinematics_specification.values;
+        const auto & kinematics_aliases = e.kinematics_specification.aliases;
+
+        // Set or alias kinematic specifications
+        for (const auto & value : kinematics_values)
+        {
+            _kinematics.declare(value.first, value.second);
+        }
+        for (const auto & alias : kinematics_aliases)
+        {
+            _kinematics.alias(alias.first, alias.second);
+        }
+
+        // Make observable
+        auto observable = Observable::make(
+            e.observable->name(),
+            this->_parameters,
+            this->_kinematics,
+            this->_options
+            );
+        // Clear alias map
+        _kinematics.clear_aliases();
+
+        // Record the used parameters
+        if (_parameter_user)
+        {
+            _parameter_user->uses(*observable);
+        }
+
+        return ObservableExpression(observable, e.kinematics_specification);
     }
 
     Expression
