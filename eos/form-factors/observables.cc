@@ -59,37 +59,6 @@ namespace eos
         return std::make_pair(qn, std::make_shared<FormFactorAdapterEntry<Transition_, Args_ ...>>(qn, "", Unit::None(), pp, function, kinematics_names));
     }
 
-    template <typename TransitionNumerator_, typename TransitionDenominator_, typename Tuple_, typename ... Args_>
-    std::pair<QualifiedName, ObservableEntryPtr> make_form_factor_adapter(const char * name,
-            const char * prefix_numerator,
-            double (FormFactors<TransitionNumerator_>::* _numerator)(const Args_ & ...) const,
-            const char * prefix_denominator,
-            double (FormFactors<TransitionDenominator_>::* _denominator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names)
-    {
-        QualifiedName qn(name);
-        std::function<double (const FormFactors<TransitionNumerator_> *, const Args_ & ...)> numerator(_numerator);
-        std::function<double (const FormFactors<TransitionDenominator_> *, const Args_ & ...)> denominator(_denominator);
-
-        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<TransitionNumerator_, TransitionDenominator_, Args_ ...>>(qn, "", Unit::None(), prefix_numerator, numerator, kinematics_names, prefix_denominator, denominator, kinematics_names));
-    }
-
-    template <typename TransitionNumerator_, typename TransitionDenominator_, typename Tuple_, typename ... Args_>
-    std::pair<QualifiedName, ObservableEntryPtr> make_form_factor_adapter(const char * name,
-            const char * prefix_numerator,
-            double (FormFactors<TransitionNumerator_>::* _numerator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names_numerator,
-            const char * prefix_denominator,
-            double (FormFactors<TransitionDenominator_>::* _denominator)(const Args_ & ...) const,
-            const Tuple_ & kinematics_names_denominator)
-    {
-        QualifiedName qn(name);
-        std::function<double (const FormFactors<TransitionNumerator_> *, const Args_ & ...)> numerator(_numerator);
-        std::function<double (const FormFactors<TransitionDenominator_> *, const Args_ & ...)> denominator(_denominator);
-
-        return std::make_pair(qn, std::make_shared<FormFactorRatioAdapterEntry<TransitionNumerator_, TransitionDenominator_, Args_ ...>>(qn, "", Unit::None(), prefix_numerator, numerator, kinematics_names_numerator, prefix_denominator, denominator, kinematics_names_denominator));
-    }
-
     // B -> P(seudoscalar)
     // {{{
 
@@ -121,10 +90,9 @@ namespace eos
                 make_form_factor_adapter("B->pi::f_-(q2)", R"(f_-^{B\to\pi}(q^2))",
                         &FormFactors<PToP>::f_m, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B->pi::f_0(q2)/f_+(q2)",
-                        "B->pi", &FormFactors<PToP>::f_0,
-                        "B->pi", &FormFactors<PToP>::f_p,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->pi::f_0(q2)/f_+(q2)", R"(f_0(q^2)/f_+(q^2))",
+                        Unit::None(),
+                        R"( <<B->pi::f_0(q2)>> / <<B->pi::f_+(q2)>> )"),
 
                 // auxiliary variables, e.g. for determining the B-LCSR threshold parameters
                 make_observable("B->pi::f_+[s^1/s^0](q2)",
@@ -215,15 +183,13 @@ namespace eos
                 make_form_factor_adapter("B->K::F_plus_T(q2)", R"(F_T^{B\to K}(q^2))",
                         &FormFactors<PToP>::f_plus_T, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B->K::F_T(q2)/F_plus(q2)",
-                        "B->K", &FormFactors<PToP>::f_t,
-                        "B->K", &FormFactors<PToP>::f_p,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->K::F_T(q2)/F_plus(q2)", R"(F_T(q^2)/F_plus(q^2))",
+                        Unit::None(),
+                        R"( <<B->K::f_T(q2)>> / <<B->K::F_plus(q2)>> )"),
 
-                make_form_factor_adapter("B->K::F_plus_T(q2)/F_plus(q2)",
-                        "B->K", &FormFactors<PToP>::f_plus_T,
-                        "B->K", &FormFactors<PToP>::f_p,
-                        std::make_tuple("q2"))
+                make_expression_observable("B->K::F_plus_T(q2)/F_plus(q2)", R"(F_{+,T}(q^2)/F_+(q^2))",
+                        Unit::None(),
+                        R"( <<B->K::F_plus_T(q2)>> / <<B->K::F_plus(q2)>> )"),
             }
         );
 
@@ -325,10 +291,9 @@ namespace eos
                         <<B->D::a_0[V_1]@HQE>>
                         )"),
 
-                make_form_factor_adapter("B->D::f_T(q2)/f_+(q2)",
-                        "B->D", &FormFactors<PToP>::f_t,
-                        "B->D", &FormFactors<PToP>::f_p,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->D::f_T(q2)/f_+(q2)", R"(f_T(q^2)/f_+(q^2))",
+                        Unit::None(),
+                        R"( <<B->D::f_T(q2)>> / <<B->D::f_+(q2)>> )"),
             }
         );
 
@@ -422,16 +387,17 @@ namespace eos
                         &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::normalized_moment_1_f_t,
                         std::make_tuple("q2")),
 
-                make_form_factor_adapter("B(_s)->D(_s)::f_0(q2_num)/f_0(q2_denom)",
-                        "B_s->D_s", &FormFactors<PToP>::f_0,
-                        std::make_tuple("q2_num"),
-                        "B->D",     &FormFactors<PToP>::f_0,
-                        std::make_tuple("q2_denom")),
+                make_expression_observable("B(_s)->D(_s)::f_0(q2_num)/f_0(q2_denom)", R"(f_0(q^2_\mathrm{num})/f_+(q^2_\mathrm{denom}))",
+                        Unit::None(),
+                        R"(
+                        <<B_s->D_s::f_0(q2)>>[q2=>q2_num]
+                        /
+                        <<B->D::f_0(q2)>>[q2=>q2_denom]
+                        )"),
 
-                make_form_factor_adapter("B_s->D_s::f_T(q2)/f_+(q2)",
-                        "B_s->D_s", &FormFactors<PToP>::f_t,
-                        "B_s->D_s", &FormFactors<PToP>::f_p,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->D_s::f_T(q2)/f_+(q2)", R"(f_T(q^2)/f_+(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->D_s::f_T(q2)>> / <<B_s->D_s::f_+(q2)>> )"),
             }
         );
 
@@ -481,25 +447,21 @@ namespace eos
                 make_form_factor_adapter("B->rho::T_23(q2)", R"(T_{23}^{B\to \rho}(q^2))",
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B->rho::V(q2)/A_1(q2)",
-                        "B->rho", &FormFactors<PToV>::v,
-                        "B->rho", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->rho::V(q2)/A_1(q2)", R"(V(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B->rho::V(q2)>> / <<B->rho::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B->rho::A_2(q2)/A_1(q2)",
-                        "B->rho", &FormFactors<PToV>::a_2,
-                        "B->rho", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->rho::A_2(q2)/A_1(q2)", R"(A_2(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B->rho::A_2(q2)>> / <<B->rho::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B->rho::A_12(q2)/A_1(q2)",
-                        "B->rho", &FormFactors<PToV>::a_12,
-                        "B->rho", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->rho::A_12(q2)/A_1(q2)", R"(A_{12}(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B->rho::A_12(q2)>> / <<B->rho::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B->rho::T_23(q2)/T_2(q2)",
-                        "B->rho", &FormFactors<PToV>::t_23,
-                        "B->rho", &FormFactors<PToV>::t_2,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->rho::T_23(q2)/T_2(q2)", R"(T_{23}(q^2)/T_2(q^2))",
+                        Unit::None(),
+                        R"( <<B->rho::T_23(q2)>> / <<B->rho::T_2(q2)>> )"),
 
                 make_observable("B->rho::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
@@ -597,25 +559,24 @@ namespace eos
                 make_form_factor_adapter("B->K^*::F_long_T(q2)",
                         &FormFactors<PToV>::f_long_T, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B->K^*::V(q2)/A_1(q2)",
-                        "B->K^*", &FormFactors<PToV>::v,
-                        "B->K^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_form_factor_adapter("B->K^*::F_long_T(q2)_Normalized",
+                        &FormFactors<PToV>::f_long_T_Normalized, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B->K^*::A_2(q2)/A_1(q2)",
-                        "B->K^*", &FormFactors<PToV>::a_2,
-                        "B->K^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->K^*::V(q2)/A_1(q2)", R"(V(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*::V(q2)>> / <<B->K^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B->K^*::A_12(q2)/A_1(q2)",
-                        "B->K^*", &FormFactors<PToV>::a_12,
-                        "B->K^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->K^*::A_2(q2)/A_1(q2)", R"(A_2(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*::A_2(q2)>> / <<B->K^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B->K^*::T_23(q2)/T_2(q2)",
-                        "B->K^*", &FormFactors<PToV>::t_23,
-                        "B->K^*", &FormFactors<PToV>::t_2,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->K^*::A_12(q2)/A_1(q2)", R"(A_{12}(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*::A_12(q2)>> / <<B->K^*::A_1(q2)>> )"),
+
+                make_expression_observable("B->K^*::T_23(q2)/T_2(q2)", R"(T_{23}(q^2)/T_2(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*::T_23(q2)>> / <<B->K^*::T_2(q2)>> )"),
 
                 make_observable("B->K^*::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
@@ -652,26 +613,21 @@ namespace eos
                         &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
 
-                make_form_factor_adapter("B->K^*::F_perp_T(q2)/F_perp(q2)",
-                        "B->K^*", &FormFactors<PToV>::f_perp_T,
-                        "B->K^*", &FormFactors<PToV>::f_perp,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->K^*::F_perp_T(q2)/F_perp(q2)", R"(F_{\perp,T}(q^2)/F_\perp(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*::F_perp_T(q2)>> / <<B->K^*::F_perp(q2)>> )"),
 
-                make_form_factor_adapter("B->K^*::F_para_T(q2)/F_para(q2)",
-                        "B->K^*", &FormFactors<PToV>::f_para_T,
-                        "B->K^*", &FormFactors<PToV>::f_para,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->K^*::F_para_T(q2)/F_para(q2)", R"(F_{\parallel,T}(q^2)/F_\parallel(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*::F_para_T(q2)>> / <<B->K^*::F_para(q2)>> )"),
 
-                make_form_factor_adapter("B->K^*::F_long_T(q2)/F_long(q2)",
-                        "B->K^*", &FormFactors<PToV>::f_long_T,
-                        "B->K^*", &FormFactors<PToV>::f_long,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->K^*::F_long_T(q2)/F_long(q2)", R"(F_{0,T}(q^2)/F_0(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*::F_long_T(q2)>> / <<B->K^*::F_long(q2)>> )"),
 
-                make_form_factor_adapter("B->K^*::F_long_T(q2)/F_long(q2)_Normalized",
-                        "B->K^*", &FormFactors<PToV>::f_long_T_Normalized,
-                        "B->K^*", &FormFactors<PToV>::f_long,
-                        std::make_tuple("q2")),
-
+                make_expression_observable("B->K^*::F_long_T(q2)/F_long(q2)_Normalized", R"(\mathcal{N} F_{\long,T}(q^2)/F_\long(q^2))",
+                        Unit::None(),
+                        R"( <<B->K^*::F_long_T(q2)_Normalized>> / <<B->K^*::F_long(q2)>> )"),
             }
         );
 
@@ -716,25 +672,21 @@ namespace eos
                 make_form_factor_adapter("B->D^*::T_23(q2)",
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B->D^*::V(q2)/A_1(q2)",
-                        "B->D^*", &FormFactors<PToV>::v,
-                        "B->D^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->D^*::V(q2)/A_1(q2)", R"(V(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B->D^*::V(q2)>> / <<B->D^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B->D^*::A_2(q2)/A_1(q2)",
-                        "B->D^*", &FormFactors<PToV>::a_2,
-                        "B->D^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->D^*::A_2(q2)/A_1(q2)", R"(A_2(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B->D^*::A_2(q2)>> / <<B->D^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B->D^*::A_12(q2)/A_1(q2)",
-                        "B->D^*", &FormFactors<PToV>::a_12,
-                        "B->D^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->D^*::A_12(q2)/A_1(q2)", R"(A_{12}(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B->D^*::A_12(q2)>> / <<B->D^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B->D^*::T_23(q2)/T_2(q2)",
-                        "B->D^*", &FormFactors<PToV>::t_23,
-                        "B->D^*", &FormFactors<PToV>::t_2,
-                        std::make_tuple("q2")),
+                make_expression_observable("B->D^*::T_23(q2)/T_2(q2)", R"(T_{23}(q^2)/T_2(q^2))",
+                        Unit::None(),
+                        R"( <<B->D^*::T_23(q2)>> / <<B->D^*::T_2(q2)>> )"),
 
                 make_observable("B->D^*::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
@@ -931,25 +883,21 @@ namespace eos
                 make_form_factor_adapter("B_s->K^*::T_23(q2)", R"(T_{23}^{B_s\to \bar{K}^*}(q^2))",
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B_s->K^*::V(q2)/A_1(q2)",
-                        "B_s->K^*", &FormFactors<PToV>::v,
-                        "B_s->K^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->K^*::V(q2)/A_1(q2)", R"(V(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->K^*::V(q2)>> / <<B_s->K^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B_s->K^*::A_2(q2)/A_1(q2)",
-                        "B_s->K^*", &FormFactors<PToV>::a_2,
-                        "B_s->K^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->K^*::A_2(q2)/A_1(q2)", R"(A_2(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->K^*::A_2(q2)>> / <<B_s->K^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B_s->K^*::A_12(q2)/A_1(q2)",
-                        "B_s->K^*", &FormFactors<PToV>::a_12,
-                        "B_s->K^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->K^*::A_12(q2)/A_1(q2)", R"(A_{12}(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->K^*::A_12(q2)>> / <<B_s->K^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B_s->K^*::T_23(q2)/T_2(q2)",
-                        "B_s->K^*", &FormFactors<PToV>::t_23,
-                        "B_s->K^*", &FormFactors<PToV>::t_2,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->K^*::T_23(q2)/T_2(q2)", R"(T_{23}(q^2)/T_2(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->K^*::T_23(q2)>> / <<B_s->K^*::T_2(q2)>> )"),
 
                 make_observable("B_s->K^*::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
@@ -1047,25 +995,24 @@ namespace eos
                 make_form_factor_adapter("B_s->phi::F_long_T(q2)",
                         &FormFactors<PToV>::f_long_T, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B_s->phi::V(q2)/A_1(q2)",
-                        "B_s->phi", &FormFactors<PToV>::v,
-                        "B_s->phi", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_form_factor_adapter("B_s->phi::F_long_T(q2)_Normalized",
+                        &FormFactors<PToV>::f_long_T_Normalized, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B_s->phi::A_2(q2)/A_1(q2)",
-                        "B_s->phi", &FormFactors<PToV>::a_2,
-                        "B_s->phi", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->phi::V(q2)/A_1(q2)", R"(V(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phi::V(q2)>> / <<B_s->phi::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B_s->phi::A_12(q2)/A_1(q2)",
-                        "B_s->phi", &FormFactors<PToV>::a_12,
-                        "B_s->phi", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->phi::A_2(q2)/A_1(q2)", R"(A_2(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phi::A_2(q2)>> / <<B_s->phi::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B_s->phi::T_23(q2)/T_2(q2)",
-                        "B_s->phi", &FormFactors<PToV>::t_23,
-                        "B_s->phi", &FormFactors<PToV>::t_2,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->phi::A_12(q2)/A_1(q2)", R"(A_{12}(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phi::A_12(q2)>> / <<B_s->phi::A_1(q2)>> )"),
+
+                make_expression_observable("B_s->phi::T_23(q2)/T_2(q2)", R"(T_{23}(q^2)/T_2(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phi::T_23(q2)>> / <<B_s->phi::T_2(q2)>> )"),
 
                 make_observable("B_s->phi::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
@@ -1102,25 +1049,21 @@ namespace eos
                         &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::normalized_moment_1_t_23B,
                         std::make_tuple("q2")),
 
-                make_form_factor_adapter("B_s->phi::F_perp_T(q2)/F_perp(q2)",
-                        "B_s->phi", &FormFactors<PToV>::f_perp_T,
-                        "B_s->phi", &FormFactors<PToV>::f_perp,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->phi::F_perp_T(q2)/F_perp(q2)", R"(F_{\perp,T}(q^2)/F_\perp(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phi::F_perp_T(q2)>> / <<B_s->phi::F_perp(q2)>> )"),
 
-                make_form_factor_adapter("B_s->phi::F_para_T(q2)/F_para(q2)",
-                        "B_s->phi", &FormFactors<PToV>::f_para_T,
-                        "B_s->phi", &FormFactors<PToV>::f_para,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->phi::F_para_T(q2)/F_para(q2)", R"(F_{\parallel,T}(q^2)/F_\parallel(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phi::F_para_T(q2)>> / <<B_s->phi::F_para(q2)>> )"),
 
-                make_form_factor_adapter("B_s->phi::F_long_T(q2)/F_long(q2)",
-                        "B_s->phi", &FormFactors<PToV>::f_long_T,
-                        "B_s->phi", &FormFactors<PToV>::f_long,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->phi::F_long_T(q2)/F_long(q2)", R"(F_{0,T}(q^2)/F_0(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phi::F_long_T(q2)>> / <<B_s->phi::F_long(q2)>> )"),
 
-                make_form_factor_adapter("B_s->phi::F_long_T(q2)/F_long(q2)_Normalized",
-                        "B_s->phi", &FormFactors<PToV>::f_long_T_Normalized,
-                        "B_s->phi", &FormFactors<PToV>::f_long,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->phi::F_long_T(q2)/F_long(q2)_Normalized", R"(\mathcal{N} F_{\long,T}(q^2)/F_\long(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->phi::F_long_T(q2)_Normalized>> / <<B_s->phi::F_long(q2)>> )"),
             }
         );
 
@@ -1165,25 +1108,21 @@ namespace eos
                 make_form_factor_adapter("B_s->D_s^*::T_23(q2)",
                         &FormFactors<PToV>::t_23, std::make_tuple("q2")),
 
-                make_form_factor_adapter("B_s->D_s^*::V(q2)/A_1(q2)",
-                        "B_s->D_s^*", &FormFactors<PToV>::v,
-                        "B_s->D_s^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->D_s^*::V(q2)/A_1(q2)", R"(V(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->D_s^*::V(q2)>> / <<B_s->D_s^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B_s->D_s^*::A_2(q2)/A_1(q2)",
-                        "B_s->D_s^*", &FormFactors<PToV>::a_2,
-                        "B_s->D_s^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->D_s^*::A_2(q2)/A_1(q2)", R"(A_2(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->D_s^*::A_2(q2)>> / <<B_s->D_s^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B_s->D_s^*::A_12(q2)/A_1(q2)",
-                        "B_s->D_s^*", &FormFactors<PToV>::a_12,
-                        "B_s->D_s^*", &FormFactors<PToV>::a_1,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->D_s^*::A_12(q2)/A_1(q2)", R"(A_{12}(q^2)/A_1(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->D_s^*::A_12(q2)>> / <<B_s->D_s^*::A_1(q2)>> )"),
 
-                make_form_factor_adapter("B_s->D_s^*::T_23(q2)/T_2(q2)",
-                        "B_s->D_s^*", &FormFactors<PToV>::t_23,
-                        "B_s->D_s^*", &FormFactors<PToV>::t_2,
-                        std::make_tuple("q2")),
+                make_expression_observable("B_s->D_s^*::T_23(q2)/T_2(q2)", R"(T_{23}(q^2)/T_2(q^2))",
+                        Unit::None(),
+                        R"( <<B_s->D_s^*::T_23(q2)>> / <<B_s->D_s^*::T_2(q2)>> )"),
 
                 make_observable("B_s->D_s^*::A_1[s^1/s^0](q2)",
                         Unit::GeV2(),
