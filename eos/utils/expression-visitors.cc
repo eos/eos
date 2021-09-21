@@ -209,7 +209,7 @@ namespace eos::exp
             e.observable->name(),
             this->_parameters,
             this->_kinematics,
-            this->_options
+            this->_options + e.observable->options()
             );
         // Clear alias map
         _kinematics.clear_aliases();
@@ -238,7 +238,7 @@ namespace eos::exp
             e.cache.observable(e.id)->name(),
             this->_parameters,
             this->_kinematics,
-            this->_options
+            this->_options + e.cache.observable(e.id)->options()
             );
         // Clear alias map
         _kinematics.clear_aliases();
@@ -328,7 +328,7 @@ namespace eos::exp
             e.observable->name(),
             this->_parameters,
             this->_kinematics,
-            this->_options
+            this->_options + e.observable->options()
             );
         // Clear alias map
         _kinematics.clear_aliases();
