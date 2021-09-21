@@ -167,10 +167,11 @@ class SignalPDFs(_SignalPDFs):
         return True
 
     def _repr_html_(self):
-        result = '<table>\n'
+        result = '<table>'
         for qn, entry in self:
             if not self.filter_entry(qn):
                 continue
             result += r'      <tr><th><tt style="color:grey">{qn}</tt></th><td style="text-align:left">{desc}</td></tr>'.format(qn=qn,desc=entry.description())
+        result += '</table>'
 
         return result
