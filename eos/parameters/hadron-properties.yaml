@@ -110,6 +110,18 @@ groups:
           max:     +0.77545
           latex:   '$m_{\rho^\pm}$'
           comments: 'cf. [PDG-Live], December 2020'
+      'mass::rho^0' :
+          central: +0.77526
+          min:     +0.77403
+          max:     +0.77549
+          latex:   '$m_{\rho^0}$'
+          comments: 'cf. [PDG-Live], December 2020'
+      'mass::omega' :
+          central: +0.78266
+          min:     +0.78235
+          max:     +0.78279
+          latex:   '$m_{\omega}$'
+          comments: 'cf. [PDG-Live], December 2020'
       'mass::phi' :
           central: +1.019461
           min:     +1.019445
