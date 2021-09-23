@@ -139,7 +139,6 @@ namespace eos
             return { A_perp, A_para, A_long };
         }
 
-        // Returns amplitudes in convention of e.g. [T:2002A], eq. (2.38),
         // Amplitudes are CP invariant according to [BRY:2006A].
         AmplitudesExperimental amplitudes_experimental() const
         {
@@ -150,7 +149,7 @@ namespace eos
             return {
                     -I * amps.A_perp,
                     -I * amps.A_para,
-                    +I * (m_B() + m_Kstar()) / m_B() * amps.A_long
+                    +I * (m_B / m_psi) * amps.A_long
                 };
         }
 
@@ -279,7 +278,7 @@ namespace eos
     double
     BToKstarCharmonium::S_9_LHCb() const
     {
-        return +sqrt(this->para_polarization() * this->perp_polarization() / 2.0) * sin(this->delta_perp_long() - this->delta_para_long());
+        return +sqrt(this->para_polarization() * this->perp_polarization()) * sin(this->delta_perp_long() - this->delta_para_long());
     }
 
     const std::set<ReferenceName>
