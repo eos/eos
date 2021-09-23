@@ -38,6 +38,10 @@ namespace eos
 {
     /* P -> V Processes */
 
+    /* B_{u,d} -> omega */
+    // [BSZ2015]
+    template class BSZ2015FormFactors<BToOmega, PToV>;
+
     /* B_{u,d} -> K^* */
 
     constexpr double BToDstar::mR2_0m;
@@ -152,6 +156,7 @@ namespace eos
         using ValueType = std::function<FormFactors<PToV> * (const Parameters &, const Options &)>;
         static const std::map<KeyType, ValueType> form_factors
         {
+            { KeyType("B->omega::BSZ2015"),    &BSZ2015FormFactors<BToOmega,    PToV>::make        },
             { KeyType("B->rho::BSZ2015"),      &BSZ2015FormFactors<BToRho,    PToV>::make          },
             { KeyType("B->K^*::BZ2004"),       &BZ2004FormFactors<BToKstar, PToV>::make            },
             { KeyType("B->K^*::KMPW2010"),     &KMPW2010FormFactors<PToV>::make                    },

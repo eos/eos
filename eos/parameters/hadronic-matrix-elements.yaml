@@ -995,6 +995,122 @@ groups:
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T_{23},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+      # form-factor parameters for B->omega
+      # note that no lattice results exists for B->omega FFs yet
+      # Use (B.6) of [BSZ2015] to replace A_12(0), and T_1(0) = T_2(0) to replace T_2(0).
+      'B->omega::alpha^A0_0@BSZ2015' :
+          central: +0.327866
+          min:     +0.279787
+          max:     +0.375945
+          latex:    '$\alpha_{A_0,0}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^A0_1@BSZ2015' :
+          central: -0.826659
+          min:     -1.127102
+          max:     -0.526216
+          latex:    '$\alpha_{A_0,1}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^A0_2@BSZ2015' :
+          central: +1.42113
+          min:     +0.17424
+          max:     +2.66802
+          latex:    '$\alpha_{A_0,2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^A1_0@BSZ2015' :
+          central: +0.242567
+          min:     +0.211711
+          max:     +0.273423
+          latex:    '$\alpha_{A_1,0}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^A1_1@BSZ2015' :
+          central: +0.342791
+          min:     +0.103183
+          max:     +0.582399
+          latex:    '$\alpha_{A_1,1}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^A1_2@BSZ2015' :
+          central: +0.0926204
+          min:     -0.4777986
+          max:     +0.6630394
+          latex:    '$\alpha_{A_1,2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^A12_1@BSZ2015' :
+          central: +0.655890
+          min:     +0.397071
+          max:     +0.914709
+          latex:    '$\alpha_{A_{12},1}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^A12_2@BSZ2015' :
+          central: +0.277567
+          min:     -0.705228
+          max:     +1.260362
+          latex:    '$\alpha_{A_{12},2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^V_0@BSZ2015' :
+          central: +0.304239
+          min:     +0.266032
+          max:     +0.342446
+          latex:    '$\alpha_{V,0}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^V_1@BSZ2015' :
+          central: -0.832336
+          min:     -1.122775
+          max:     -0.541897
+          latex:    '$\alpha_{V,1}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^V_2@BSZ2015' :
+          central: +1.71741
+          min:     +0.47443
+          max:     +2.96039
+          latex:    '$\alpha_{V,2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^T1_0@BSZ2015' :
+          central: +0.251370
+          min:     +0.220439
+          max:     +0.282301
+          latex:    '$\alpha_{T_1,0}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^T1_1@BSZ2015' :
+          central: -0.715314
+          min:     -0.939744
+          max:     -0.490884
+          latex:    '$\alpha_{T_1,1}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^T1_2@BSZ2015' :
+          central: +1.41463
+          min:     +0.40802
+          max:     +2.42124
+          latex:    '$\alpha_{T_1,2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^T2_1@BSZ2015' :
+          central: +0.412936
+          min:     +0.184325
+          max:     +0.641547
+          latex:    '$\alpha_{T_2,1}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^T2_2@BSZ2015' :
+          central: +0.460141
+          min:     -0.108437
+          max:     +1.028719
+          latex:    '$\alpha_{T_2,2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^T23_0@BSZ2015' :
+          central: +0.682582
+          min:     +0.592369
+          max:     +0.772795
+          latex:    '$\alpha_{T_{23},0}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^T23_1@BSZ2015' :
+          central: +1.64618
+          min:     +1.02697
+          max:     +2.26539
+          latex:    '$\alpha_{T_{23},1}^{B \to \omega,\mathrm{BSZ2015}}$'
+          comments: ''
+      'B->omega::alpha^T23_2@BSZ2015' :
+          central: +2.46950
+          min:     +0.27794
+          max:     +4.66106
+          latex:    '$\alpha_{T_{23},2}^{B \to \omega,\mathrm{BSZ2015}}$'
       # form-factor parameters for B->rho
       # new updated results based on LCSR-only fit from the GKvD2018 calculation
       # note that no lattice results exists for B->rho FFs yet

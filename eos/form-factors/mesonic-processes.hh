@@ -132,6 +132,16 @@ namespace eos
         static constexpr double mR2_1p = 5.829 * 5.829;
     };
 
+    struct BToOmega {
+        using Transition = PToV;
+        static constexpr const char * label = "B->omega";
+        static constexpr double mB = 5.279;
+        static constexpr double mV = 0.7827;
+        static constexpr double mR2_0m = 5.279 * 5.279;
+        static constexpr double mR2_1m = 5.325 * 5.325;
+        static constexpr double mR2_1p = 5.724 * 5.724;
+    };
+
     struct BToRho {
         using Transition = PToV;
         static constexpr const char * label = "B->rho";
