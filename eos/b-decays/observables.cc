@@ -354,6 +354,34 @@ namespace eos
     // Semileptonic B -> V(seudoscalar) decays
     // {{{
 
+    // B -> omega l nu
+    // {{{
+    ObservableGroup
+    make_b_to_omega_l_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B\to \omega \ell^-\bar\nu$ decays)",
+            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour. )"
+            R"(The option "form-factors" selects the form factor parametrization.)",
+            {
+                make_observable("B->omegalnu::dBR/dq2", R"(d\mathcal{B}(B\to\omega\ell^-\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToVectorLeptonNeutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "U", "u" }, {"I", "0"} }),
+
+                make_observable("B->omegalnu::BR", R"(\mathcal{B}(B\to\omega\ell^-\bar\nu))",
+                        Unit::None(),
+                        &BToVectorLeptonNeutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "U", "u" }, {"I", "0"}  }),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // B -> D^* l nu
     // {{{
     ObservableGroup
@@ -1815,6 +1843,7 @@ namespace eos
                 make_bs_to_ds_l_nu_group(),
 
                 // B_{u,d} -> V l^- nubar
+                make_b_to_omega_l_nu_group(),
                 make_b_to_dstar_l_nu_group(),
 
                 // B_s -> V l^- nubar
