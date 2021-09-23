@@ -424,7 +424,7 @@ class Plotter:
                 _ovalues_central.append(central)
                 _ovalues_higher.append(higher)
 
-            xvalues = np.linspace(np.min(self.xvalues),np.max(self.xvalues),100)
+            xvalues = np.linspace(np.min(self.xvalues),np.max(self.xvalues), self.xsamples)
             if self.xrange:
                 xvalues = np.ma.masked_outside(xvalues, float(self.xrange[0]), float(self.xrange[1]))
 
@@ -656,7 +656,7 @@ class Plotter:
                             if self.rescale_by_width:
                                 width = (_kinematics[self.variable + '_max'] - _kinematics[self.variable + '_min'])
 
-                        yvalues.append(means[i] / width)
+                        yvalues.append(np.float(means[i]) / width)
                         yerrors.append(np.sqrt(np.float(covariance[i, i])) / width)
                 elif constraint['type'] == 'MultivariateGaussian':
                     if not self.observable:
