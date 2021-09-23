@@ -48,7 +48,7 @@ namespace eos
 
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
-        // classic form factors
+        // local form factors
         const double
                 ff_V  = form_factors->v(s),
                 ff_A0 = form_factors->a_0(s),

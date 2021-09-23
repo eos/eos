@@ -308,7 +308,24 @@ namespace eos
             R"(Observables in $B_q \to V \psi$ decays)",
             R"(The option "q" selects the spectator quark flavor.)",
             {
-                /// Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
+                // Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
+                make_observable("B->K^*psi::perp_polarization",
+                        Unit::None(),
+                        &BToKstarCharmonium::perp_polarization),
+                make_observable("B->K^*psi::para_polarization",
+                        Unit::None(),
+                        &BToKstarCharmonium::para_polarization),
+                make_observable("B->K^*psi::long_polarization",
+                        Unit::None(),
+                        &BToKstarCharmonium::long_polarization),
+                make_observable("B->K^*psi::delta_perp_long",
+                        Unit::None(),
+                        &BToKstarCharmonium::delta_perp_long),
+                make_observable("B->K^*psi::delta_para_long",
+                        Unit::None(),
+                        &BToKstarCharmonium::delta_para_long),
+
+                // Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
                 make_observable("B->K^*psi::S_1s_LHCb", R"(S_{1s}(\bar{B} \to \bar{K}^*\psi))",
                         Unit::None(),
                         &BToKstarCharmonium::S_1s_LHCb),
@@ -328,10 +345,32 @@ namespace eos
                         Unit::None(),
                         &BToKstarCharmonium::S_9_LHCb),
 
-                /// Branching ratio of B -> K^* psi
+                // Branching ratio of B -> K^* psi
                 make_observable("B->K^*psi::BR", R"(\mathcal{B}(\bar{B} \to \bar{K}^*\psi))",
                         Unit::None(),
                         &BToKstarCharmonium::branching_ratio),
+
+
+                // Angular observables as detected in the decay B_s -> phi psi (-> l^+ l^-)
+                make_observable("B_s->phipsi::perp_polarization",
+                        Unit::None(),
+                        &BsToPhiCharmonium::perp_polarization),
+
+                make_observable("B_s->phipsi::para_polarization",
+                        Unit::None(),
+                        &BsToPhiCharmonium::para_polarization),
+
+                make_observable("B_s->phipsi::long_polarization",
+                        Unit::None(),
+                        &BsToPhiCharmonium::long_polarization),
+
+                make_observable("B_s->phipsi::delta_perp_long",
+                        Unit::None(),
+                        &BsToPhiCharmonium::delta_perp_long),
+
+                make_observable("B_s->phipsi::delta_para_long",
+                        Unit::None(),
+                        &BsToPhiCharmonium::delta_para_long),
 
                 // Branching ratio of B -> phi psi
                 make_observable("B_s->phipsi::BR", R"(\mathcal{B}(\bar{B}_s \to \phi\psi))",
@@ -1733,9 +1772,7 @@ namespace eos
                 make_expression_observable("B_s->phill::NormalizedBR", R"(\mathcal{B}(\bar{B}_s\to \phi\ell^+\ell^-)/\mathcal{B}(\bar{B}_s\to\phi J/\psi))",
                         Unit::None(),
                         R"(
-                        <<B_s->phill::BR>>
-                        /
-                        <<B->K^*psi::BR>>
+                        <<B_s->phill::BR>> / <<B_s->phipsi::BR>>
                         )"),
             }
         );

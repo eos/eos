@@ -141,20 +141,20 @@ namespace eos
             const auto amps = this->amplitudes_bcvdv2016();
 
             return {
-                    amps.A_perp,
-                    amps.A_para,
-                    m_Bs / m_psi * amps.A_long
+                    -I * amps.A_perp,
+                    -I * amps.A_para,
+                    +I * (m_Bs / m_psi) * amps.A_long
                 };
         }
 
         double branching_ratio() const
         {
-            const auto amps = amplitudes_experimental();
+            const auto amps = amplitudes_bcvdv2016();
             const auto lambda = eos::lambda(power_of<2>(m_Bs), power_of<2>(m_phi), power_of<2>(m_psi));
             const auto prefactor = power_of<2>(g_fermi * abs(model->ckm_cb() * conj(model->ckm_cs())))
                     * tau_Bs() / hbar() * sqrt(lambda) / (2.0 * M_PI * m_Bs);
 
-            return prefactor * (norm(amps.A_perp) + norm(amps.A_para) + norm(amps.A_long));
+            return prefactor * (norm(amps.A_perp) + norm(amps.A_para) + pow(m_Bs/m_psi, 2) * norm(amps.A_long));
         }
 
     };
@@ -227,10 +227,10 @@ namespace eos
 
         const auto result = arg(amps.A_para / amps.A_long);
 
-        // clamp this result between -2 pi and 0
-        if (result > 0)
+        // clamp this result between 0 and 2 pi
+        if (result < 0)
         {
-            return result - 2.0 * M_PI;
+            return result + 2.0 * M_PI;
         }
         else
         {
@@ -271,7 +271,7 @@ namespace eos
     double
     BsToPhiCharmonium::S_9_LHCb() const
     {
-        return +sqrt(this->para_polarization() * this->perp_polarization() / 2.0) * sin(this->delta_perp_long() - this->delta_para_long());
+        return +sqrt(this->para_polarization() * this->perp_polarization()) * sin(this->delta_perp_long() - this->delta_para_long());
     }
 
     const std::set<ReferenceName>
