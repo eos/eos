@@ -410,6 +410,49 @@ namespace eos
     // B -> V(ector)
     // {{{
 
+    // B -> omega
+    // {{{
+    ObservableGroup
+    make_b_to_omega_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $B\to \omega$ transitions)",
+            R"(Pseudo observables representing the full basis of $B\to \omega$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("B->omega::V(q2)", R"(V^{B\to \omega}(q^2))",
+                        &FormFactors<PToV>::v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->omega::A_0(q2)", R"(A_0^{B\to \omega}(q^2))",
+                        &FormFactors<PToV>::a_0, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->omega::A_1(q2)", R"(A_1^{B\to \omega}(q^2))",
+                        &FormFactors<PToV>::a_1, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->omega::A_2(q2)", R"(A_2^{B\to \omega}(q^2))",
+                        &FormFactors<PToV>::a_2, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->omega::A_12(q2)", R"(A_{12}^{B\to \omega}(q^2))",
+                        &FormFactors<PToV>::a_12, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->omega::T_1(q2)", R"(T_1^{B\to \omega}(q^2))",
+                        &FormFactors<PToV>::t_1, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->omega::T_2(q2)", R"(T_2^{B\to \omega}(q^2))",
+                        &FormFactors<PToV>::t_2, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->omega::T_3(q2)", R"(T_3^{B\to \omega}(q^2))",
+                        &FormFactors<PToV>::t_3, std::make_tuple("q2")),
+
+                make_form_factor_adapter("B->omega::T_23(q2)", R"(T_{23}^{B\to \omega}(q^2))",
+                        &FormFactors<PToV>::t_23, std::make_tuple("q2")),
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // B -> rho
     // {{{
     ObservableGroup
@@ -1474,6 +1517,7 @@ namespace eos
                 make_bs_to_ds_form_factors_group(),
 
                 // B -> V
+                make_b_to_omega_form_factors_group(),
                 make_b_to_rho_form_factors_group(),
                 make_b_to_kstar_form_factors_group(),
                 make_b_to_dstar_form_factors_group(),
