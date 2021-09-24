@@ -110,7 +110,7 @@ namespace eos
                 throw QualifiedNameSyntaxError("A qualified name's option key part must not be empty");
             }
 
-            // KEY := ['a'-'z', '-']
+            // KEY := ['a'-'z', 'A'-'Z', '0'-'9', '-']
             static const char * valid_option_key_characters =
                     "abcdefghijklmnopqrstuvwxyz"
                     "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
