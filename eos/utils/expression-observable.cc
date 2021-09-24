@@ -23,6 +23,7 @@
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-observable.hh>
 #include <eos/utils/expression-parser.hh>
+#include <eos/utils/log.hh>
 
 #include <set>
 
@@ -146,6 +147,16 @@ namespace eos
         if (_expression.empty())
         {
             throw InternalError("Empty expression encountered in ExpressionObservableEntry::make!");
+        }
+
+        for (const auto & fo : _forced_options)
+        {
+            const auto & key = std::get<0>(fo);
+            if (options.has(key))
+            {
+                Log::instance()->message("[ExpressionObservableEntry.make]", ll_error)
+                    << "Observable '" << _name << "' forces option key '" << key << "' to value '" << _forced_options[key] << "', overriding user-provided value '" << options[key] << "'";
+            }
         }
 
         return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, options + _forced_options, _expression));
