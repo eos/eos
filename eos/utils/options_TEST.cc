@@ -314,20 +314,5 @@ class SwitchOptionTest :
                 };
                 TEST_CHECK_THROWS(InternalError, test());
             }
-
-            // Creating with empty list
-            {
-                auto test = [] ()
-                {
-                    SwitchOption so
-                    {
-                        Options{ { "key", "value1" }, { "unused", "foo" } },
-                        "key",
-                        { },
-                        "value1"
-                    };
-                };
-                TEST_CHECK_THROWS(InternalError, test());
-            }
         }
 } switch_option_test;
