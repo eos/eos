@@ -23,6 +23,7 @@
 #include <eos/observable-impl.hh>
 #include <eos/utils/apply.hh>
 #include <eos/utils/join.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/tuple-maker.hh>
 #include <eos/utils/units.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
@@ -179,6 +180,15 @@ namespace eos
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
+                for (const auto & fo : _forced_options)
+                {
+                    const auto & key = std::get<0>(fo);
+                    if (options.has(key))
+                    {
+                        Log::instance()->message("[ConcreteObservableEntry.make]", ll_error)
+                            << "Observable '" << _name << "' forces option key '" << key << "' to value '" << _forced_options[key] << "', overriding user-provided value '" << options[key] << "'";
+                    }
+                }
                 return ObservablePtr(new ConcreteObservable<Decay_, Args_ ...>(_name, parameters, kinematics, options + _forced_options, _function, _kinematics_names));
             }
 
