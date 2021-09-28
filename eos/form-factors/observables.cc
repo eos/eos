@@ -183,7 +183,7 @@ namespace eos
                 make_form_factor_adapter("B->K::F_plus_T(q2)", R"(F_T^{B\to K}(q^2))",
                         &FormFactors<PToP>::f_plus_T, std::make_tuple("q2")),
 
-                make_expression_observable("B->K::F_T(q2)/F_plus(q2)", R"(F_T(q^2)/F_plus(q^2))",
+                make_expression_observable("B->K::F_T(q2)/F_plus(q2)", R"(F_T(q^2)/F_+(q^2))",
                         Unit::None(),
                         R"( <<B->K::f_T(q2)>> / <<B->K::F_plus(q2)>> )"),
 
@@ -625,7 +625,7 @@ namespace eos
                         Unit::None(),
                         R"( <<B->K^*::F_long_T(q2)>> / <<B->K^*::F_long(q2)>> )"),
 
-                make_expression_observable("B->K^*::F_long_T(q2)/F_long(q2)_Normalized", R"(\mathcal{N} F_{\long,T}(q^2)/F_\long(q^2))",
+                make_expression_observable("B->K^*::F_long_T(q2)/F_long(q2)_Normalized", R"(\mathcal{N} F_{0,T}(q^2)/F_0(q^2))",
                         Unit::None(),
                         R"( <<B->K^*::F_long_T(q2)_Normalized>> / <<B->K^*::F_long(q2)>> )"),
             }
@@ -1061,7 +1061,7 @@ namespace eos
                         Unit::None(),
                         R"( <<B_s->phi::F_long_T(q2)>> / <<B_s->phi::F_long(q2)>> )"),
 
-                make_expression_observable("B_s->phi::F_long_T(q2)/F_long(q2)_Normalized", R"(\mathcal{N} F_{\long,T}(q^2)/F_\long(q^2))",
+                make_expression_observable("B_s->phi::F_long_T(q2)/F_long(q2)_Normalized", R"(\mathcal{N} F_{0,T}(q^2)/F_0(q^2))",
                         Unit::None(),
                         R"( <<B_s->phi::F_long_T(q2)_Normalized>> / <<B_s->phi::F_long(q2)>> )"),
             }
