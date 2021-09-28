@@ -87,9 +87,11 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
+                    { "U",             "c"       },
+                    { "q",             "d"       },
+                    { "I",             "1/2"     },
                     { "l",             "e"       },
                     { "model",         "CKMScan" },
-                    { "q",             "d"       },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },
@@ -157,9 +159,11 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
+                    { "U",             "c"       },
+                    { "q",             "d"       },
+                    { "I",             "1/2"     },
                     { "l",             "tau"     },
                     { "model",         "CKMScan" },
-                    { "q",             "d"       },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },
@@ -238,9 +242,11 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
+                    { "U",             "c"       },
+                    { "q",             "d"       },
+                    { "I",             "1/2"     },
                     { "l",             "mu"      },
                     { "model",         "WilsonScan" },
-                    { "q",             "d"       },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },
@@ -301,11 +307,15 @@ class BToVectorLeptonNeutrinoTest :
                 p1["cbmunumu::Re{cVL}"]         = +1.0066;  // include Sirlin correction
                 p1["cbtaunutau::Re{cVL}"]       = +1.0066;  // include Sirlin correction
 
-                Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "BSZ2015");
-                oo.set("q", "d");
-                oo.set("integration-points", "4096");
+                Options oo
+                {
+                    { "U",             "c"       },
+                    { "q",             "d"       },
+                    { "I",             "1/2"     },
+                    { "model",         "WilsonScan" },
+                    { "form-factors",  "BSZ2015" },
+                    { "integration-points",    "4096"    }
+                };
 
                 BToVectorLeptonNeutrino d(p1, oo);
 
@@ -395,10 +405,15 @@ class BToVectorLeptonNeutrinoTest :
                 p3["cbtaunutau::Re{cT}"]        = +5.1 * etaEW;
                 p3["cbtaunutau::Im{cT}"]        = -9.0 * etaEW;
 
-                Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "BSZ2015");
-                oo.set("integration-points", "4096");
+                Options oo
+                {
+                    { "U",             "c"       },
+                    { "q",             "d"       },
+                    { "I",             "1/2"     },
+                    { "model",         "WilsonScan" },
+                    { "form-factors",  "BSZ2015" },
+                    { "integration-points",    "4096"    }
+                };
 
                 BToVectorLeptonNeutrino d(p3, oo);
 
@@ -436,8 +451,10 @@ class BToVectorLeptonNeutrinoTest :
 
                 Options o
                 {
-                    { "model",         "CKMScan" },
+                    { "U",             "c"       },
+                    { "I",             "1/2"     },
                     { "q",             "d"       },
+                    { "model",         "CKMScan" },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },
@@ -452,8 +469,10 @@ class BToVectorLeptonNeutrinoTest :
 
                 o =
                 {
-                    { "model",         "CKMScan" },
+                    { "U",             "c"       },
+                    { "I",             "1/2"     },
                     { "q",             "d"       },
+                    { "model",         "CKMScan" },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },

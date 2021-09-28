@@ -53,7 +53,11 @@ namespace eos
 
         Parameters parameters;
 
+        SwitchOption opt_U;
+
         SwitchOption opt_q;
+
+        SwitchOption opt_I;
 
         UsedParameter hbar;
 
@@ -69,6 +73,8 @@ namespace eos
 
         UsedParameter m_V;
 
+        const double isospin_factor;
+
         bool cp_conjugate;
 
         UsedParameter mu;
@@ -81,39 +87,77 @@ namespace eos
 
         IntermediateResult intermediate_result;
 
+        // { U, q, I } -> { process, m_B, m_V, c_I }
+        static const std::map<std::tuple<char, char, std::string>, std::tuple<std::string, std::string, std::string, double>> process_map;
+
         inline std::string _process() const
         {
-            switch (opt_q.value()[0])
-            {
-                case 'd':
-                case 'u':
-                    return std::string("B->D^*");
-                    break;
+            const char U = opt_U.value()[0];
+            const char q = opt_q.value()[0];
+            const std::string I = opt_I.value();
+            const auto p = process_map.find(std::make_tuple(U, q, I));
 
-                case 's':
-                    return std::string("B_s->D_s^*");
-                    break;
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of U=" + stringify(U) + ", q=" + q + ", I=" + I);
 
-                default:
-                    throw InternalError("Should never reach this part, either!");
-            }
+            return std::get<0>(p->second);
+        }
 
-            return "";
+        inline std::string _m_B() const
+        {
+            const char U = opt_U.value()[0];
+            const char q = opt_q.value()[0];
+            const std::string I = opt_I.value();
+            const auto p = process_map.find(std::make_tuple(U, q, I));
+
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of U=" + stringify(U) + ", q=" + q + ", I=" + I);
+
+            return std::get<1>(p->second);
+        }
+
+        inline std::string _m_V() const
+        {
+            const char U = opt_U.value()[0];
+            const char q = opt_q.value()[0];
+            const std::string I = opt_I.value();
+            const auto p = process_map.find(std::make_tuple(U, q, I));
+
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of U=" + stringify(U) + ", q=" + q + ", I=" + I);
+
+            return std::get<2>(p->second);
+        }
+
+        inline double _isospin_factor() const
+        {
+            const char U = opt_U.value()[0];
+            const char q = opt_q.value()[0];
+            const std::string I = opt_I.value();
+            const auto p = process_map.find(std::make_tuple(U, q, I));
+
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of U=" + stringify(U) + ", q=" + q + ", I=" + I);
+
+            return std::get<3>(p->second);
         }
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
+            opt_U(o, "U", { "c", "u" }),
             opt_q(o, "q", { "u", "d", "s" }, "d"),
+            opt_I(o, "I", { "1", "0", "1/2" }),
             hbar(p["QM::hbar"], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
             g_fermi(p["WET::G_Fermi"], u),
-            opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
+            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
-            m_B(p["mass::B_" + opt_q.value()], u),
-            m_V(p["mass::D_" + opt_q.value() + "^*"], u),
+            m_B(p["mass::" + _m_B()], u),
+            m_V(p["mass::" + _m_V()], u),
+            isospin_factor(_isospin_factor()),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
-            mu(p["cb" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u),
+            mu(p[opt_U.value() + "b" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u),
             opt_int_points(o, "integration-points", {"256", "4096"}, "256"),
             int_points(destringify<int>(opt_int_points.value()))
         {
@@ -124,7 +168,6 @@ namespace eos
 
             u.uses(*form_factors);
             u.uses(*model);
-
         }
 
         // normalization cf. [DSD2014] eq. (7), p. 5
@@ -156,31 +199,59 @@ namespace eos
             const double tff1  = form_factors->t_1(q2);
             const double tff2  = form_factors->t_2(q2);
             const double tff3  = form_factors->t_3(q2);
+            // meson & lepton masses
+            const double m_l = this->m_l();
+            const double m_B = this->m_B();
+            const double m_V = this->m_V();
             // running quark masses
             const double mbatmu = model->m_b_msbar(mu);
-            const double mcatmu = model->m_c_msbar(mu);
+            const double mUatmu = this->m_U_msbar(mu);
+            // kinematic variables
             const double lam      = lambda(m_B * m_B, m_V * m_V, q2);
             const double sqrt_lam = (lam > 0.0) ? std::sqrt(lam) : 0.0;
-            const double sqrtq2 = std::sqrt(q2);
+            const double sqrtq2   = std::sqrt(q2);
+            // isospin factor
+            const double isospin = this->isospin_factor;
 
             // transversity amplitudes A's. cf. [DSD2014], p.17
-            result.a_0          = gV_mi * 8.0 * m_B() * m_V() / sqrtq2 * aff12;
-            result.a_0_T        = TL / (2.0 * m_V) * ( (m_B * m_B + 3.0 * m_V * m_V - q2) * tff2 - lam * tff3 / (m_B * m_B - m_V * m_V) );
-            result.a_plus       = (m_B + m_V) * aff1 * gV_mi - sqrt_lam * vff * gV_pl / (m_B + m_V);
-            result.a_minus      = (m_B + m_V) * aff1 * gV_mi + sqrt_lam * vff * gV_pl / (m_B + m_V);
-            result.a_plus_T     = TL / sqrtq2 * ( (m_B * m_B - m_V * m_V) * tff2 + sqrt_lam * tff1 );
-            result.a_minus_T    = TL / sqrtq2 * ( (m_B * m_B - m_V * m_V) * tff2 - sqrt_lam * tff1 );
-            result.a_t          =  sqrt_lam * aff0 * gV_mi / sqrtq2;
-            result.a_P          =  sqrt_lam * aff0 * gP / (mbatmu + mcatmu);
-            result.a_para       =  (result.a_plus + result.a_minus) / std::sqrt(2.0);
-            result.a_para_T     =  (result.a_plus_T + result.a_minus_T) / std::sqrt(2.0);
-            result.a_perp       =  (result.a_plus - result.a_minus) / std::sqrt(2.0);
-            result.a_perp_T     =  (result.a_plus_T - result.a_minus_T) / std::sqrt(2.0);
+            if ((q2 >= power_of<2>(m_l)) && (q2 <= power_of<2>(m_B - m_V))) {
+                result.a_0          = isospin * gV_mi * 8.0 * m_B * m_V / sqrtq2 * aff12;
+                result.a_0_T        = isospin * TL / (2.0 * m_V) * ( (m_B * m_B + 3.0 * m_V * m_V - q2) * tff2 - lam * tff3 / (m_B * m_B - m_V * m_V) );
+                result.a_plus       = isospin * (m_B + m_V) * aff1 * gV_mi - sqrt_lam * vff * gV_pl / (m_B + m_V);
+                result.a_minus      = isospin * (m_B + m_V) * aff1 * gV_mi + sqrt_lam * vff * gV_pl / (m_B + m_V);
+                result.a_plus_T     = isospin * TL / sqrtq2 * ( (m_B * m_B - m_V * m_V) * tff2 + sqrt_lam * tff1 );
+                result.a_minus_T    = isospin * TL / sqrtq2 * ( (m_B * m_B - m_V * m_V) * tff2 - sqrt_lam * tff1 );
+                result.a_t          =  isospin * sqrt_lam * aff0 * gV_mi / sqrtq2;
+                result.a_P          =  isospin * sqrt_lam * aff0 * gP / (mbatmu + mUatmu);
+                result.a_para       =  (result.a_plus + result.a_minus) / std::sqrt(2.0);
+                result.a_para_T     =  (result.a_plus_T + result.a_minus_T) / std::sqrt(2.0);
+                result.a_perp       =  (result.a_plus - result.a_minus) / std::sqrt(2.0);
+                result.a_perp_T     =  (result.a_plus_T - result.a_minus_T) / std::sqrt(2.0);
 
-            result.mlH = (m_l > 0.0) ? std::sqrt(m_l * m_l / q2) : 0.0;
-            result.NF = norm(q2);
+                result.mlH = (m_l > 0.0) ? std::sqrt(m_l * m_l / q2) : 0.0;
+                result.NF = norm(q2);
+            }
+            else
+            {
+                result.a_0          = 0.0;
+                result.a_0_T        = 0.0;
+                result.a_plus       = 0.0;
+                result.a_minus      = 0.0;
+                result.a_plus_T     = 0.0;
+                result.a_minus_T    = 0.0;
+                result.a_t          = 0.0;
+                result.a_P          = 0.0;
+                result.a_para       = 0.0;
+                result.a_para_T     = 0.0;
+                result.a_perp       = 0.0;
+                result.a_perp_T     = 0.0;
+
+                result.mlH = 0.0;
+                result.NF = 0.0;
+            }
 
             return result;
+
         }
 
         std::array<double, 12> _differential_angular_observables(const double & q2) const
@@ -247,6 +318,18 @@ namespace eos
         }
     };
 
+    const std::map<std::tuple<char, char, std::string>, std::tuple<std::string, std::string, std::string, double>>
+    Implementation<BToVectorLeptonNeutrino>::Implementation::process_map
+    {
+        { { 'c', 'u', "1/2" }, { "B->D^*",     "B_u", "D_u^*", 1.0                  } },
+        { { 'c', 'd', "1/2" }, { "B->D^*",     "B_d", "D_d^*", 1.0                  } },
+        { { 'c', 's', "0"   }, { "B_s->D_s^*", "B_s", "D_s^*", 1.0                  } },
+        { { 'u', 'u', "1"   }, { "B->rho",     "B_u", "rho^0", 1.0 / std::sqrt(2.0) } },
+        { { 'u', 'u', "0"   }, { "B->omega",   "B_u", "omega", 1.0 / std::sqrt(2.0) } },
+        { { 'u', 'd', "1"   }, { "B->rho",     "B_d", "rho^+", 1.0                  } },
+        { { 'u', 's', "1/2" }, { "B_s->K^*",   "B_s", "K_u^*", 1.0                  } },
+    };
+
     BToVectorLeptonNeutrino::BToVectorLeptonNeutrino(const Parameters & p, const Options & o) :
         PrivateImplementationPattern<BToVectorLeptonNeutrino>(new Implementation<BToVectorLeptonNeutrino>(p, o, *this))
     {
@@ -268,7 +351,8 @@ namespace eos
     double
     BToVectorLeptonNeutrino::differential_branching_ratio(const double & q2) const
     {
-        return _imp->differential_angular_observables(q2).normalized_decay_width() * std::norm(_imp->model->ckm_cb()) * _imp->tau_B / _imp->hbar;
+        return _imp->differential_angular_observables(q2).normalized_decay_width() * std::norm(_imp->v_Ub()) * _imp
+->tau_B / _imp->hbar;
     }
 
     double
@@ -379,7 +463,7 @@ namespace eos
     double
     BToVectorLeptonNeutrino::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
-        return _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width() * std::norm(_imp->model->ckm_cb()) * _imp->tau_B / _imp->hbar;
+        return _imp->integrated_angular_observables(q2_min, q2_max).normalized_decay_width() * std::norm(_imp->v_Ub()) * _imp->tau_B / _imp->hbar;
     }
 
     double
@@ -391,7 +475,7 @@ namespace eos
         _imp->cp_conjugate = true;
         auto   o_c = _imp->integrated_angular_observables(q2_min, q2_max);
 
-        return (o.normalized_decay_width() + o_c.normalized_decay_width()) / 2.0 * std::norm(_imp->model->ckm_cb()) * _imp->tau_B / _imp->hbar;
+        return (o.normalized_decay_width() + o_c.normalized_decay_width()) / 2.0 * std::norm(_imp->v_Ub()) * _imp->tau_B / _imp->hbar;
     }
 
     double
@@ -416,14 +500,14 @@ namespace eos
     BToVectorLeptonNeutrino::integrated_amplitude_polarization_L(const double & q2_min, const double & q2_max) const
     {
         auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
-        return o.normalized_amplitude_polarization_L() * std::norm(_imp->model->ckm_cb());
+        return o.normalized_amplitude_polarization_L() * std::norm(_imp->v_Ub());
     }
 
     double
     BToVectorLeptonNeutrino::integrated_amplitude_polarization_T(const double & q2_min, const double & q2_max) const
     {
         auto   o = _imp->integrated_angular_observables(q2_min, q2_max);
-        return o.normalized_amplitude_polarization_T() * std::norm(_imp->model->ckm_cb());
+        return o.normalized_amplitude_polarization_T() * std::norm(_imp->v_Ub());
     }
 
     double
