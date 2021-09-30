@@ -102,7 +102,7 @@ namespace eos
             double integrated_S1s(const IntermediateResult *) const;
             double integrated_S2c(const IntermediateResult *) const;
             double integrated_S2s(const IntermediateResult *) const;
-            double integrated_S3 (const double & q2_min, const double & q2_max) const; // Convert once SigmaS3, DeltaS3 are handled
+            double integrated_S3 (const IntermediateResult *) const;
             double integrated_S4 (const IntermediateResult *) const;
             double integrated_S5 (const IntermediateResult *) const;
             double integrated_S6c(const IntermediateResult *) const;
