@@ -111,7 +111,7 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL( 0.255523335, d.integrated_S1s(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.409302220, d.integrated_S2c(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.085174445, d.integrated_S2s(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.134468151, d.integrated_S3 (0.001, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.134468151, d.integrated_S3 (ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.231808464, d.integrated_S4 (ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.165381861, d.integrated_S5 (ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.0,         d.integrated_S6c(ir),  eps);
@@ -181,7 +181,7 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL( 0.2779590234, d.integrated_S1s(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.1287773345, d.integrated_S2c(ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.0471441750, d.integrated_S2s(ir),  eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0819412032, d.integrated_S3 (3.157, 10.689),  eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0819412032, d.integrated_S3 (ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.1057578408, d.integrated_S4 (ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.2056068494, d.integrated_S5 (ir),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.2766922602, d.integrated_S6c(ir),  eps);
@@ -265,7 +265,7 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL( 0.268109,  d.integrated_S1s(ir), eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.228862,  d.integrated_S2c(ir), eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.0375834, d.integrated_S2s(ir), eps);
-                TEST_CHECK_NEARLY_EQUAL(-0.0600368, d.integrated_S3 (q2min, q2max), eps);
+                TEST_CHECK_NEARLY_EQUAL(-0.0600368, d.integrated_S3 (ir), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.0897816, d.integrated_S4 (ir), eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.0837827, d.integrated_S5 (ir), eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.0716409, d.integrated_S6c(ir), eps);

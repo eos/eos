@@ -726,8 +726,9 @@ namespace eos
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "U", "c" }, { "I", "1/2" } }),
 
-                make_observable("B->D^*lnu::S_3", R"(S_{3}(B\to \bar{D}^*\ell^-\bar\nu))",
+                make_cacheable_observable("B->D^*lnu::S_3", R"(S_{3}(B\to \bar{D}^*\ell^-\bar\nu))",
                                 Unit::None(),
+                                &BToVectorLeptonNeutrino::prepare,
                                 &BToVectorLeptonNeutrino::integrated_S3,
                                 std::make_tuple("q2_min", "q2_max"),
                                 { { "U", "c" }, { "I", "1/2" } }),
