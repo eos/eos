@@ -183,7 +183,7 @@ jobs:
                 done
                 cp -r ../_src/python/eos ./
                 mkdir _eos_data
-                for d in ../_src/eos/constraints ../_src/eos/parameters ; do
+                for d in ../_src/eos/references.yaml ../_src/eos/constraints ../_src/eos/parameters ; do
                     cp -r $d _eos_data/
                 done
                 echo 'is_wheel = True' >> eos/config.py
