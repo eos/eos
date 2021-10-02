@@ -1,0 +1,42 @@
+# vim: set fdm=marker :
+
+#############################################
+# BPR:2021A Average of BaBar and Belle data #
+#############################################
+#
+# 2021
+#
+# {{{
+B^+->omegalnu::BR@BPR-2021A:
+    type: MultivariateGaussian
+    dim: 5
+    observables:
+      - B->omegalnu::BR
+      - B->omegalnu::BR
+      - B->omegalnu::BR
+      - B->omegalnu::BR
+      - B->omegalnu::BR
+    kinematics:
+      - {q2_min: 0, q2_max: 4}
+      - {q2_min: 4, q2_max: 8}
+      - {q2_min: 8, q2_max: 10}
+      - {q2_min: 10, q2_max: 12}
+      - {q2_min: 12, q2_max: 21}
+    options:
+      - {q: u, l: e}
+      - {q: u, l: e}
+      - {q: u, l: e}
+      - {q: u, l: e}
+      - {q: u, l: e}
+    means: [1.506e-5, 1.815e-5, 1.471e-5, 1.715e-5, 4.981e-5]
+    sigma-stat-hi: [0, 0, 0, 0, 0]
+    sigma-stat-lo: [0, 0, 0, 0, 0]
+    sigma-sys: [0.459e-5, 0.349e-5, 0.279e-5, 0.294e-5, 0.898e-5]
+    correlations:
+      - [ 1   , -0.15,  0.08,  0.04, 0.06]
+      - [-0.15, 1    ,  0.09,  0.09, 0.15]
+      - [ 0.08,  0.09,  1   , -0.01, 0.12]
+      - [ 0.04,  0.09, -0.01,  1   , 0.15]
+      - [ 0.06,  0.15,  0.12,  0.15, 1   ]
+    dof: 5
+# }}}
