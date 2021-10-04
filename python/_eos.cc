@@ -499,6 +499,7 @@ BOOST_PYTHON_MODULE(_eos)
     class_<LogPosterior>("LogPosterior", init<LogLikelihood>())
         .def("add", &LogPosterior::add)
         .def("log_likelihood", &LogPosterior::log_likelihood)
+        .def("log_priors", range(&LogPosterior::begin_priors, &LogPosterior::end_priors))
         .def("evaluate", &LogPosterior::evaluate)
         ;
 

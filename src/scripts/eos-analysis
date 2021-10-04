@@ -207,6 +207,10 @@ in EOS_BASE_DIRECTORY/posterior/mode.
         help = 'The point from which the minization is started.',
         dest = 'point', action = 'store', type = str, default = ''
     )
+    parser_find_mode.add_argument('--use-random-seed',
+        help = 'The seed used to generate the random starting point of the minimization.',
+        dest = 'seed', action = 'store', type = int, default = 17
+    )
     parser_find_mode.add_argument('-b', '--base-directory',
         help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
@@ -377,6 +381,8 @@ def cmd_find_mode(args):
 
     if args.point and args.init_file:
         raise ValueError('The -p and -i options are mutually exclusive.')
+    if args.point and args.seed:
+        raise ValueError('The -p and --use-random-seed options are mutually exclusive.')
 
     if args.point != '':
         starting_point = args.point
@@ -387,6 +393,17 @@ def cmd_find_mode(args):
         info('Starting minimization from point: {}'.format(starting_point))
 
         _bfp = analysis.optimize(starting_point)
+        _gof = eos.GoodnessOfFit(analysis.log_posterior)
+        _chi2 = _gof.total_chi_square()
+        if _chi2 < min_chi2:
+            gof = _gof
+            bfp = _bfp
+            min_chi2 = _chi2
+    elif args.seed:
+        seed = args.seed
+        info('Starting minimization from point a random point')
+
+        _bfp = analysis.optimize(start_point='random', rng=_np.random.mtrand.RandomState(seed))
         _gof = eos.GoodnessOfFit(analysis.log_posterior)
         _chi2 = _gof.total_chi_square()
         if _chi2 < min_chi2:

@@ -9,6 +9,17 @@ export EOS_BASE_DIRECTORY=$(mktemp -d)
 echo using PYTHON=${PYTHON} >&2
 echo using PYTHONPATH=${PYTHONPATH} >&2
 
+###########################
+## Analysis optimization ##
+###########################
+echo running analysis optimization test ... >&2
+$PYTHON ${SOURCE_DIR}/eos-analysis \
+    find-mode CKM+FF \
+    --use-random-seed 123 \
+    -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
+echo ... success >&2
+
+
 ##############################
 ## Markov Chain Monte Carlo ##
 ##############################
