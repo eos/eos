@@ -1,4 +1,6 @@
 import unittest
+
+from numpy import random
 import eos
 import numpy as np
 import yaml
@@ -30,6 +32,9 @@ class ClassMethodTests(unittest.TestCase):
 
         # Test analysis optimization
         bfp = analysis.optimize()
+
+        # Test analysis optimization from a random point
+        bfp = analysis.optimize(start_point='random', rng=np.random.mtrand.RandomState(123))
 
         # Test parameter scaling
         point = bfp.point

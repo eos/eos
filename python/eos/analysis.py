@@ -213,15 +213,21 @@ class Analysis:
         return eos.GoodnessOfFit(self.log_posterior)
 
 
-    def optimize(self, start_point=None, **kwargs):
+    def optimize(self, start_point=None, rng=np.random.mtrand, **kwargs):
         """
         Optimize the log(posterior) and returns a best-fit-point summary.
 
-        :param start_point: Parameter point from which to start the optimization, with the elements in the same order as in eos.Analysis.varied_parameters. If not specified, optimization starts at the current parameter point.
+        :param start_point: Parameter point from which to start the optimization, with the elements in the same order as in eos.Analysis.varied_parameters.
+                            If set to "random", optimization starts at the random point in the space of the priors.
+                            If not specified, optimization starts at the current parameter point.
         :param start_point: iterable, optional
+        :param rng: Optional random number generator
+
         """
         if start_point == None:
             start_point = [float(p) for p in self.varied_parameters]
+        elif start_point == "random":
+            start_point = [p.inverse_cdf(rng.uniform()) for p in self.log_posterior.log_priors()]
 
         default_kwargs = { 'method': 'SLSQP', 'options': { 'ftol': 1.0e-13 } }
         if kwargs is None:
