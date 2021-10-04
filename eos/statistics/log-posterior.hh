@@ -28,6 +28,7 @@
 #include <eos/utils/density.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/verify.hh>
+#include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <set>
 #include <vector>
@@ -111,6 +112,15 @@ namespace eos
             double log_posterior() const;
 
             /*!
+             * Add forward iterator and corresponding helper functions
+             */
+            struct PriorIteratorTag;
+            using PriorIterator = WrappedForwardIterator<PriorIteratorTag, const LogPriorPtr>;
+
+            PriorIterator begin_priors() const;
+            PriorIterator end_priors() const;
+
+            /*!
              * Check if a given parameter is a nuisance parameter for this LogPosterior.
              *
              * @param name The name of the parameter we are interested in.
@@ -150,6 +160,8 @@ namespace eos
             /// names of all parameters. prevent using a parameter twice
             std::set<std::string> _parameter_names;
     };
+
+    extern template class WrappedForwardIterator<LogPosterior::PriorIteratorTag, const LogPriorPtr>;
 }
 
 #endif
