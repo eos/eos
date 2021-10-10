@@ -25,6 +25,7 @@
 #include <eos/utils/mutable.hh>
 #include <eos/utils/parameters-fwd.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/qualified-name.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <set>
@@ -38,7 +39,7 @@ namespace eos
     struct UnknownParameterError :
         public Exception
     {
-        UnknownParameterError(const std::string & variable) throw ();
+        UnknownParameterError(const QualifiedName & variable) throw ();
     };
 
     /*!
@@ -147,7 +148,7 @@ namespace eos
              * @param name  Name of the new parameter to be declared.
              * @param value (Optional) value for the new parameter.
              */
-            Parameter declare(const std::string & name, double value = 0.0);
+            Parameter declare(const QualifiedName & name, double value = 0.0);
 
             /*!
              * Set a parameter's numeric value.
@@ -155,21 +156,21 @@ namespace eos
              * @param name  The name of the parameter whose numeric value shall be changed.
              * @param value The parameter's new numeric value.
              */
-            void set(const std::string & name, const double & value);
+            void set(const QualifiedName & name, const double & value);
 
             /*!
              * Verify if a parameter with a given name exists.
              *
              * @param name  The name to be checked against the known parameters.
              */
-            bool has(const std::string & name);
+            bool has(const QualifiedName & name);
 
             /*!
              * Retrieve a parameter's Parameter object by name.
              *
              * @param name  The name of the Parameter that shall be retrieved.
              */
-            Parameter operator[] (const std::string & name) const;
+            Parameter operator[] (const QualifiedName & name) const;
 
             /*!
              * Retrieve a parameter's Parameter object by id.

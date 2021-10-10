@@ -176,7 +176,7 @@ namespace eos
 
     struct Parameter::Template
     {
-        std::string name;
+        QualifiedName name;
 
         double min, central, max;
 
@@ -222,7 +222,7 @@ namespace eos
     {
         std::shared_ptr<Parameters::Data> parameters_data;
 
-        std::map<std::string, unsigned> parameters_map;
+        std::map<QualifiedName, unsigned> parameters_map;
 
         std::vector<Parameter> parameters;
 
@@ -352,7 +352,7 @@ namespace eos
                         }
 
                         auto idx = parameters_data->data.size();
-                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max, latex }, idx));
+                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex }, idx));
                         parameters_map[name] = idx;
                         parameters.push_back(Parameter(parameters_data, idx));
                     }
@@ -530,7 +530,9 @@ namespace eos
                                         templated_name = templated_name % i;
                                     }
 
-                                    parameters_data->data.push_back(Parameter::Data(Parameter::Template { templated_name.str(), min, central, max, latex }, idx));
+                                    QualifiedName qn(templated_name.str());
+
+                                    parameters_data->data.push_back(Parameter::Data(Parameter::Template { qn, min, central, max, latex }, idx));
                                     parameters_map[templated_name.str()] = idx;
                                     parameters.push_back(Parameter(parameters_data, idx));
                                     group_parameters.push_back(Parameter(parameters_data, idx));
@@ -540,7 +542,7 @@ namespace eos
                             }
                             else
                             {
-                                parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, min, central, max, latex }, idx));
+                                parameters_data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex }, idx));
                                 parameters_map[name] = idx;
                                 parameters.push_back(Parameter(parameters_data, idx));
                                 group_parameters.push_back(Parameter(parameters_data, idx));
@@ -577,7 +579,7 @@ namespace eos
     }
 
     Parameter
-    Parameters::operator[] (const std::string & name) const
+    Parameters::operator[] (const QualifiedName & name) const
     {
         auto i(_imp->parameters_map.find(name));
 
@@ -597,7 +599,7 @@ namespace eos
     }
 
     Parameter
-    Parameters::declare(const std::string & name, double value)
+    Parameters::declare(const QualifiedName & name, double value)
     {
         // return existing parameter
         auto i(_imp->parameters_map.find(name));
@@ -614,7 +616,7 @@ namespace eos
     }
 
     void
-    Parameters::set(const std::string & name, const double & value)
+    Parameters::set(const QualifiedName & name, const double & value)
     {
         auto i(_imp->parameters_map.find(name));
 
@@ -625,7 +627,7 @@ namespace eos
     }
 
     bool
-    Parameters::has(const std::string & name)
+    Parameters::has(const QualifiedName & name)
     {
         auto i(_imp->parameters_map.find(name));
 
@@ -765,7 +767,7 @@ namespace eos
     const std::string &
     Parameter::name() const
     {
-        return _parameters_data->data[_index].name;
+        return _parameters_data->data[_index].name.str();
     }
 
     const std::string &
@@ -825,8 +827,8 @@ namespace eos
         user.uses(parameter.id());
     }
 
-    UnknownParameterError::UnknownParameterError(const std::string & name) throw () :
-        Exception("Unknown parameter: '" + name + "'")
+    UnknownParameterError::UnknownParameterError(const QualifiedName & name) throw () :
+        Exception("Unknown parameter: '" + name.full() + "'")
     {
     }
 
