@@ -335,19 +335,17 @@ class Plotter:
             # Declare variable that is either parameter or kinematic
             var = None
 
-            # is a valid parameter?
-            if parameters.has(item['variable']):
-                var = parameters.declare(item['variable'], np.nan)
-
-            # is neither a valid parameter nor valid kinematic?
-            elif item['variable'] not in valid_kin_vars:
-                raise ValueError("Value of 'variable' for observable '" + oname +
-                    "' is neither a valid kinematic variable nor parameter: '" + item['variable'] + "'")
-
-            # variable must be valid kinematic
-            else:
+            # does the variable correspond to one of the kinematic variables?
+            if item['variable'] in valid_kin_vars:
                 var = kinematics.declare(item['variable'], np.nan)
-
+            else: # if not,
+                # is the variable name a QualifiedName?
+                try:
+                    qn = eos.QualifiedName(item['variable'])
+                    var = parameters.declare(qn, np.nan)
+                except RuntimeError:
+                    raise ValueError("Value of 'variable' for observable '" + oname +
+                        "' is neither a valid kinematic variable nor parameter: '" + item['variable'] + "'")
 
             # create observable
             observable = eos.Observable.make(oname, parameters, kinematics, options)
