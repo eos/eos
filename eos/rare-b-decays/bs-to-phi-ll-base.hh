@@ -21,6 +21,7 @@
 #define MASTER_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_BASE_HH 1
 
 #include <eos/utils/model.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/form-factors/mesonic.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll.hh>
 
@@ -32,6 +33,7 @@ namespace eos
         public:
             std::shared_ptr<Model> model;
             std::shared_ptr<FormFactors<PToV>> form_factors;
+            SwitchOption opt_l;
 
             UsedParameter mu;
             UsedParameter alpha_e;
