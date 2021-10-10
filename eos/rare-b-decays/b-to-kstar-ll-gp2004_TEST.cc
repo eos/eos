@@ -58,8 +58,10 @@ class BToKstarDileptonLowRecoilTest :
                 p["b->s::c4"] = -0.08794730;
                 p["b->s::c5"] = +0.00037476;
                 p["b->s::c6"] = +0.00105859;
+                p["sb::mu"] = 4.2;
                 p["b->s::Re{c7}"] = -0.331;
                 p["b->s::c8"] = -0.18100000;
+                p["sbmumu::mu"] = 4.2;
                 p["b->smumu::Re{c9}"] = +4.27;
                 p["b->smumu::Re{c10}"] = -4.173;
                 // PDG 2008 CKM parameters
@@ -172,9 +174,11 @@ class BToKstarDileptonLowRecoilTest :
                 p["b->s::c4"] = -0.08794730;
                 p["b->s::c5"] = +0.00037476;
                 p["b->s::c6"] = +0.00105859;
+                p["sb::mu"] = 4.2;
                 p["b->s::Re{c7}"] = 0.0;
                 p["b->s::Im{c7}"] = -0.3;
                 p["b->s::c8"] = -0.181;
+                p["sbmumu::mu"] = 4.2;
                 p["b->smumu::Re{c9}"] = 0.0;
                 p["b->smumu::Im{c9}"] = 4.2;
                 p["b->smumu::Re{c10}"] = 0.0;
@@ -258,8 +262,10 @@ class BToKstarDileptonLowRecoilTest :
                 p["b->s::c4"] = -0.08794730;
                 p["b->s::c5"] = +0.00037476;
                 p["b->s::c6"] = +0.00105859;
+                p["sb::mu"] = 4.2;
                 p["b->s::Re{c7}"] = 0.0;
                 p["b->s::c8"] = -0.181;
+                p["sbmumu::mu"] = 4.2;
                 p["b->smumu::Re{c9}"] = 0.0;
                 p["b->smumu::Re{c10}"] = 0.0;
                 // PDG 2008 CKM parameters
@@ -662,11 +668,13 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             p["b->s::c4"] = -0.08829686414;
             p["b->s::c5"] = 0.0003601965805;
             p["b->s::c6"] = 0.001020749573;
+            p["sb::mu"] = 4.2;
             p["b->s::Re{c7}"] = -0.3370422989 + 0.1;
             p["b->s::Im{c7}"] = 0.2;
             p["b->s::Re{c7'}"] = 0.3;
             p["b->s::Im{c7'}"] = 0.4;
             p["b->s::c8"] = -0.1827530948;
+            p["sbmumu::mu"] = 4.2;
             p["b->smumu::Re{c9}"] = 4.294489364 + 1;
             p["b->smumu::Im{c9}"] = 0.5;
             p["b->smumu::Re{c9'}"] = 2;

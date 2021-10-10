@@ -177,6 +177,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "unpolarised");
 
                     Parameters p = Parameters::Defaults();
+                    p["sbmumu::mu"] = 4.2;
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
                     p["mass::Lambda_b"]    =  5.6194;
@@ -244,6 +245,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                     oo.set("production-polarisation", "LHCb");
 
                     Parameters p = Parameters::Defaults();
+                    p["sbmumu::mu"] = 4.2;
                     p["b->smumu::Re{c9}"]  = +3.2734;
                     p["b->smumu::Re{c9'}"] = +1.0000;
                     p["mass::Lambda_b"]    =  5.6194;

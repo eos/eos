@@ -349,9 +349,9 @@ class WilsonCoefficientsBToSTest :
                 static const double mu = 4.350516515; // Stems from older, lower-order calculations of alpha_s
 
                 Parameters parameters = reference_parameters();
+                parameters["sb::mu"] = mu;
                 StandardModel model(parameters);
 
-                parameters["mu"] = mu;
                 TEST_CHECK_NEARLY_EQUAL(+0.2209967815, model.alpha_s(mu), eps);
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
@@ -385,7 +385,6 @@ class WilsonCoefficientsBToSTest :
                 Parameters parameters = reference_parameters();
                 StandardModel model(parameters);
 
-                parameters["mu"] = mu;
                 TEST_CHECK_NEARLY_EQUAL(+0.2233419372, model.alpha_s(mu), eps);
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);
@@ -418,9 +417,9 @@ class WilsonCoefficientsBToSTest :
                 static const double mu = 4.2; // approximate m_b(m_b) MSbar mass
 
                 Parameters parameters = Parameters::Defaults();
+                parameters["sb::mu"] = mu;
                 StandardModel model(parameters);
 
-                parameters["mu"] = mu;
                 TEST_CHECK_NEARLY_EQUAL(+0.2263282172, model.alpha_s(mu), eps);
 
                 WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, "mu", false);

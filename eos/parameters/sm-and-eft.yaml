@@ -402,12 +402,30 @@ groups:
         See the EOS manual for their physical definitions.
     wcxf-relevant: true
     parameters:
-      # Factorization scale
-      'b->s::mu_b' :
+      # Factorization scales
+      'sb::mu' :
           central: +4.2
           min:     +2.4
           max:     +9.6
-          latex:    '$\mu^{b \to s}_b$'
+          latex:    '$\mu^{b \to s}$'
+          comments: ''
+      'sbee::mu' :
+          central: +4.2
+          min:     +2.4
+          max:     +9.6
+          latex:    '$\mu^{b \to see}$'
+          comments: ''
+      'sbmumu::mu' :
+          central: +4.2
+          min:     +2.4
+          max:     +9.6
+          latex:    '$\mu^{b \to s\mu\mu}$'
+          comments: ''
+      'sbtautau::mu' :
+          central: +4.2
+          min:     +2.4
+          max:     +9.6
+          latex:    '$\mu^{b \to s\tau\tau}$'
           comments: ''
 
       # Wilson coefficients C1 - C6 at mu = 4.2 GeV to NNLL accuary as calculated in the SM by EOS's StandardModel class.

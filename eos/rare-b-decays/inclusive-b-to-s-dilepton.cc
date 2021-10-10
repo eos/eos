@@ -92,7 +92,7 @@ namespace eos
             m_Z(p["mass::Z"], u),
             mu2_g(p["B->B::mu_G^2@1GeV"], u),
             mu2_pi(p["B->B::mu_pi^2@1GeV"], u),
-            mu(p["b->s::mu_b"], u),
+            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u)
         {
             u.uses(*model);

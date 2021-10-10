@@ -28,7 +28,7 @@ namespace eos
         model(Model::make(o.get("model", "SM"), p, o)),
         form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors", "KMPW2010"), p)),
         opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
-        mu(p["mu"], *this),
+        mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
         tau(p["life_time::B_" + o.get("q", "d")], *this),

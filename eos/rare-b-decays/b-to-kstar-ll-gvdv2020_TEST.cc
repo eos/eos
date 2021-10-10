@@ -79,11 +79,13 @@ class BToKstarDileptonGvDV2020Test :
             p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
             p["CKM::abs(V_ts)"] =  0.04121212396309175;
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
+            p["sb::mu"] = 4.2;
             p["b->s::Re{c7}"] = -0.3370422989 + 0.1;
             p["b->s::Im{c7}"] = 0.2;
             p["b->s::Re{c7'}"] = 0.3;
             p["b->s::Im{c7'}"] = 0.4;
             p["b->s::c8"] = -0.1827530948;
+            p["sbmumu::mu"] = 4.2;
             p["b->smumu::Re{c9}"] = 4.294489364 + 1;
             p["b->smumu::Im{c9}"] = 0.5;
             p["b->smumu::Re{c9'}"] = 2;

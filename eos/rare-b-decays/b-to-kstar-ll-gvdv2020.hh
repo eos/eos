@@ -34,7 +34,6 @@ namespace eos
             UsedParameter m_b_MSbar;
             UsedParameter m_s_MSbar;
 
-            UsedParameter mu;
             UsedParameter alpha_e;
             UsedParameter g_fermi;
             UsedParameter tau;
