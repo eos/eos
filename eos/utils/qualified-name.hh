@@ -112,7 +112,7 @@ namespace eos
      *                  but "<<" and ">>" are prohibited (they delimit observables for the expression parser)
      *   NAME        := ['a'-'z', 'A'-'Z', '0'-'9', '(', ')', '[', ']', '{', '}', '|',
      *                   '\'', '.', ',', '/', '^', '_', '*', '+', '-']
-     *   SUFFIX      := ['a'-'z', 'A'-'Z', '0'-'9', ':', '-']
+     *   SUFFIX      := ['a'-'z', 'A'-'Z', '0'-'9', '.', ':', '-', '(', ')']
      *   OPTIONSLIST := OPTION | OPTIONSLIST ',' OPTION
      *   OPTION      := KEY '=' VALUE
      *   KEY         := ['a'-'z', 'A'-'Z', '0'-'9', '-']
