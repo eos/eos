@@ -1301,21 +1301,6 @@ namespace eos
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 // B_s -> K^* l nubar
-                make_observable("B_s->K^*lnu::F_perp(q2)",
-                        Unit::None(),
-                        &BsToKstarLeptonNeutrino::Fperp,
-                        std::make_tuple("q2")),
-
-                make_observable("B_s->K^*lnu::F_para(q2)",
-                        Unit::None(),
-                        &BsToKstarLeptonNeutrino::Fpara,
-                        std::make_tuple("q2")),
-
-                make_observable("B_s->K^*lnu::F_long(q2)",
-                        Unit::None(),
-                        &BsToKstarLeptonNeutrino::Flong,
-                        std::make_tuple("q2")),
-
                 make_observable("B_s->K^*lnu::d^4Gamma",
                         Unit::InverseGeV2(),
                         &BsToKstarLeptonNeutrino::four_differential_decay_width,
