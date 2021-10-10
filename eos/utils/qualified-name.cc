@@ -87,12 +87,12 @@ namespace eos
         Suffix::Suffix(const std::string & suffix) :
             _suffix(suffix)
         {
-            // SUFFIX := ['a'-'z', 'A'-'Z', '0'-'9', ':', '-']
+            // SUFFIX := ['a'-'z', 'A'-'Z', '0'-'9', '.', ':', '-', '(', ')']
             static const char * valid_suffix_characters =
                     "abcdefghijklmnopqrstuvwxyz"
                     "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
                     "0123456789"
-                    ":-";
+                    ".:-()";
 
             auto pos = suffix.find_first_not_of(valid_suffix_characters);
 
