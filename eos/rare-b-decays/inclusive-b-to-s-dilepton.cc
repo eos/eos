@@ -31,6 +31,7 @@
 #include <eos/utils/memoise.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
@@ -51,6 +52,8 @@ namespace eos
     struct Implementation<BToXsDilepton<HLMW2005>>
     {
         std::shared_ptr<Model> model;
+
+        SwitchOption opt_l;
 
         UsedParameter gfermi;
 
@@ -78,13 +81,14 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
+            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
             gfermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             tau_B(p["life_time::B" + (destringify<bool>(o.get("admixture", "true")) ? ("@Y(4S)") : ("_" + o.get("q", "d")))], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
             m_c_MSbar(p["mass::c"], u),
             m_tau(p["mass::tau"], u),
-            m_l(p["mass::" + o.get("l", "mu")], u),
+            m_l(p["mass::" + opt_l.value()], u),
             m_Z(p["mass::Z"], u),
             mu2_g(p["B->B::mu_G^2@1GeV"], u),
             mu2_pi(p["B->B::mu_pi^2@1GeV"], u),

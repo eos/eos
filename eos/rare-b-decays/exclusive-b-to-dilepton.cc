@@ -22,6 +22,7 @@
 #include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/model.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
@@ -33,6 +34,8 @@ namespace eos
     struct Implementation<BToDilepton>
     {
         std::shared_ptr<Model> model;
+
+        SwitchOption opt_l;
 
         UsedParameter f_B;
 
@@ -62,6 +65,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
+            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
             f_B(p["decay-constant::B_" + o.get("q", "d")], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
@@ -70,7 +74,7 @@ namespace eos
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
-            m_l(p["mass::" + o.get("l", "mu")], u),
+            m_l(p["mass::" + opt_l.value()], u),
             m_b(p["mass::b(MSbar)"], u),
             m_q(p["mass::" + o.get("q", "d") + "(2GeV)"], u)
         {

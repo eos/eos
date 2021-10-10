@@ -74,6 +74,8 @@ namespace eos
 
         std::shared_ptr<Model> model;
 
+        SwitchOption opt_l;
+
         UsedParameter hbar;
         UsedParameter m_l;
         UsedParameter tau;
@@ -81,8 +83,9 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "WilsonScan"), p, o)),
+            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
             hbar(p["QM::hbar"], u),
-            m_l(p["mass::" + o.get("l", "mu")], u),
+            m_l(p["mass::" + opt_l.value()], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
             mu(p["mu"], u)
         {

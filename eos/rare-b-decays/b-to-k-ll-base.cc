@@ -28,15 +28,16 @@ namespace eos
     BToKDilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model", "SM"), p, o)),
         form_factors(FormFactorFactory<PToP>::create("B->K::" + o.get("form-factors", "KMPW2010"), p)),
+        opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
         mu(p["mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
         tau(p["life_time::B_" + o.get("q", "d")], *this),
         m_B(p["mass::B_" + o.get("q", "d")], *this),
         m_K(p["mass::K_" + o.get("q", "d")], *this),
-        m_l(p["mass::" + o.get("l", "mu")], *this),
+        m_l(p["mass::" + opt_l.value()], *this),
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
-        lepton_flavour(o.get("l", "mu"))
+        lepton_flavour(opt_l.value())
     {
         if (! form_factors.get())
             throw InternalError("Form factors not found!");
