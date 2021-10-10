@@ -13,13 +13,6 @@ groups:
           max:     +6.58211943e-25
           latex:    '$\hbar$'
           comments: 'in GeV s, cf. [PDG2012]:  p. 4'
-      # Factorization scale
-      'mu' :
-          central: +4.2
-          min:     +2.4
-          max:     +9.6
-          latex:    '$\mu$'
-          comments: ''
       # GSW Parameter
       'GSW::sin^2(theta)' :
           central: +0.23116
