@@ -20,6 +20,7 @@
 
 #include <eos/observable-impl.hh>
 #include <eos/rare-b-decays/decays.hh>
+#include <eos/rare-b-decays/b-to-ll.hh>
 #include <eos/rare-b-decays/b-to-k-charmonium.hh>
 #include <eos/rare-b-decays/b-to-k-ll.hh>
 #include <eos/rare-b-decays/b-to-kstar-charmonium.hh>
@@ -27,7 +28,6 @@
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
 #include <eos/rare-b-decays/bs-to-phi-charmonium.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll.hh>
-#include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
