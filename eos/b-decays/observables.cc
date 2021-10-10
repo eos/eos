@@ -1301,11 +1301,6 @@ namespace eos
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 // B_s -> K^* l nubar
-                make_observable("B_s->K^*lnu::d^4Gamma",
-                        Unit::InverseGeV2(),
-                        &BsToKstarLeptonNeutrino::four_differential_decay_width,
-                        std::make_tuple("q2", "cos(theta_l)", "cos(theta_k)", "phi")),
-
                 make_observable("B_s->K^*lnu::dBR/ds", R"(d\mathcal{B}(B_s\to \bar{K}^*\ell^-\bar\nu)/dq^2)",
                         Unit::InverseGeV2(),
                         &BsToKstarLeptonNeutrino::differential_branching_ratio,
