@@ -99,7 +99,7 @@ class WilsonCoefficientsBToSTest :
                 p["mass::W"] = 80.398;
                 p["mass::Z"] = 91.1876;
                 p["mass::t(pole)"] = 173.3;
-                p["mu"] = mu;
+                p["sb::mu"] = mu;
 
                 Options o;
                 o.set("scan-mode", "cartesian");
@@ -145,7 +145,7 @@ class WilsonCoefficientsBToSTest :
                 p["mass::W"] = 80.398;
                 p["mass::Z"] = 91.1876;
                 p["mass::t(pole)"] = 173.3;
-                p["mu"] = mu;
+                p["sb::mu"] = mu;
                 p["b->s::Re{c7'}"] = 0.008;
                 p["b->s::Im{c7'}"] = M_PI;
                 p["b->s::c8'"] = 0.012;

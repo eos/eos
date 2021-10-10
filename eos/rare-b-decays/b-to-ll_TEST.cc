@@ -49,6 +49,7 @@ class BToDileptonTest :
             // Standard Model
             {
                 Parameters p = Parameters::Defaults();
+                p["sbmumu::mu"] = 4.2;
                 p["b->smumu::Re{c10}"] = -4.150;
                 p["b->smumu::Re{c10'}"] = 0.000;
                 // PDG 2010 CKM parameters
@@ -142,6 +143,7 @@ class BToDileptonTest :
                 Parameters p = Parameters::Defaults();
 
                 // test large NP contributions
+                p["sbmumu::mu"] = 4.2;
                 p["b->smumu::Re{c10}"] = -4.196294696 + 3;
                 p["b->smumu::Im{c10}"] = 2.5;
                 p["b->smumu::Re{c10'}"] = 4;

@@ -87,7 +87,7 @@ namespace eos
             hbar(p["QM::hbar"], u),
             m_l(p["mass::" + opt_l.value()], u),
             tau(p["life_time::B_" + o.get("q", "d")], u),
-            mu(p["mu"], u)
+            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u)
         {
             std::string tag = o.get("tag", "");
 

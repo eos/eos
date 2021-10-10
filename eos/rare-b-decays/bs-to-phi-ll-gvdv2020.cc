@@ -33,7 +33,6 @@ namespace eos
         hbar(p["QM::hbar"], *this),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
-        mu(p["mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
         tau(p["life_time::B_s"], *this),

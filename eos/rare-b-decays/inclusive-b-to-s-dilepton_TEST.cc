@@ -52,8 +52,10 @@ class BToXsDileptonLargeRecoilTest :
                 p["b->s::c4"] = -0.08794730;
                 p["b->s::c5"] = +0.00037476;
                 p["b->s::c6"] = +0.00105859;
+                p["sb::mu"] = 4.2;
                 p["b->s::Re{c7}"] = -0.331;
                 p["b->s::c8"] = -0.181;
+                p["sbmumu::mu"] = 4.2;
                 p["b->smumu::Re{c9}"]  = +4.27;
                 p["b->smumu::Re{c10}"] = -4.173;
                 p["CKM::abs(V_ub)"]    =  0.003631275231633653;
@@ -109,9 +111,11 @@ class BToXsDileptonLargeRecoilTest :
                 p["b->s::c4"] = -0.08794730;
                 p["b->s::c5"] = +0.00037476;
                 p["b->s::c6"] = +0.00105859;
+                p["sb::mu"] = 4.2;
                 p["b->s::Re{c7}"]  = 0.0;
                 p["b->s::Re{c7'}"] = -0.331;
                 p["b->s::c8"] = -0.181;
+                p["sbmumu::mu"] = 4.2;
                 p["b->smumu::Re{c9}"]   = 0.0;
                 p["b->smumu::Re{c9'}"]  = +4.27;
                 p["b->smumu::Re{c10}"]  = 0.0;

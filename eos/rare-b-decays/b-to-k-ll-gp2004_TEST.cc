@@ -51,6 +51,7 @@ class BToKDileptonLowRecoilTest :
             {
                 Parameters p = Parameters::Defaults();
                 p["life_time::B_d"] = 1.530e-12;
+                p["sb::mu"] = 4.2;
                 p["b->s::c1"] = -0.32300000;
                 p["b->s::c2"] = +1.00931000;
                 p["b->s::c3"] = -0.00522869;
@@ -59,6 +60,7 @@ class BToKDileptonLowRecoilTest :
                 p["b->s::c6"] = +0.00105859;
                 p["b->s::Re{c7}"] = -0.331;
                 p["b->s::c8"] = -0.181;
+                p["sbmumu::mu"] = 4.2;
                 p["b->smumu::Re{c9}"] = 4.27;
                 p["b->smumu::Re{c10}"] = -4.17;
                 // PDG 2008 CKM parameters
@@ -146,9 +148,11 @@ class BToKDileptonLowRecoilTest :
                 p["b->s::c4"] = -0.08794730;
                 p["b->s::c5"] = +0.00037476;
                 p["b->s::c6"] = +0.00105859;
+                p["sb::mu"] = 4.2;
                 p["b->s::Re{c7}"] = 0.0;
                 p["b->s::Im{c7}"] = -0.331;
                 p["b->s::c8"] = -0.181;
+                p["sbmumu::mu"] = 4.2;
                 p["b->smumu::Re{c9}"] = 0.0;
                 p["b->smumu::Im{c9}"] = +4.27;
                 p["b->smumu::Re{c10}"] = 0.0;

@@ -63,11 +63,13 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
             p["b->s::c4"]      = -0.08829686414;
             p["b->s::c5"]      = 0.0003601965805;
             p["b->s::c6"]      = 0.001020749573;
+            p["sb::mu"]        = 4.2;
             p["b->s::Re{c7}"]  = -0.3370422989 + 0.1;
             p["b->s::Im{c7}"]  = 0.2;
             p["b->s::Re{c7'}"] = 0.3;
             p["b->s::Im{c7'}"] = 0.4;
             p["b->s::c8"]      = -0.1827530948;
+            p["sbmumu::mu"]         = 4.2;
             p["b->smumu::Re{c9}"]   = 4.294489364 + 1;
             p["b->smumu::Im{c9}"]   = 0.5;
             p["b->smumu::Re{c9'}"]  = 2;
@@ -127,11 +129,13 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
             p["b->s::c4"]      = -0.08829686414;
             p["b->s::c5"]      = 0.0003601965805;
             p["b->s::c6"]      = 0.001020749573;
+            p["sb::mu"]        = 4.2;
             p["b->s::Re{c7}"]  = -0.3370422989 + 0.1;
             p["b->s::Im{c7}"]  = 0.2;
             p["b->s::Re{c7'}"] = 0.3;
             p["b->s::Im{c7'}"] = 0.4;
             p["b->s::c8"]      = -0.1827530948;
+            p["sbmumu::mu"]         = 4.2;
             p["b->smumu::Re{c9}"]   = 4.294489364 + 1;
             p["b->smumu::Im{c9}"]   = 0.5;
             p["b->smumu::Re{c9'}"]  = 2;

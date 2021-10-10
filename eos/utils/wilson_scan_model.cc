@@ -88,7 +88,7 @@ namespace eos
         _alpha_s_Z__deltabs1(p["QCD::alpha_s(MZ)"], u),
         _mu_b__deltabs1(p["QCD::mu_b"], u),
         _m_Z__deltabs1(p["mass::Z"], u),
-        _mu__deltabs1(p["mu"], u),
+        _mu__deltabs1(p["sb::mu"], u),
         /* b->s */
         _c1(p["b->s::c1"], u),
         _c2(p["b->s::c2"], u),

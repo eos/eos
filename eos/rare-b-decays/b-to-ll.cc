@@ -70,7 +70,7 @@ namespace eos
             m_B(p["mass::B_" + o.get("q", "d")], u),
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
             delta_gamma_B(p["life_time::Delta_B_" + o.get("q", "d")], u),
-            mu(p["b->s::mu_b"], u),
+            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
             alpha_e(p["QED::alpha_e(m_b)"], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
