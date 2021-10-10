@@ -21,6 +21,7 @@ libeosrarebdecays_la_SOURCES = \
 	b-to-kstar-ll-bfs2004.cc b-to-kstar-ll-bfs2004.hh \
 	b-to-kstar-ll-gp2004.cc b-to-kstar-ll-gp2004.hh \
 	b-to-kstar-ll-gvdv2020.cc b-to-kstar-ll-gvdv2020.hh \
+	b-to-ll.cc b-to-ll.hh \
 	bremsstrahlung.cc bremsstrahlung.hh \
 	bs-to-phi-charmonium.cc bs-to-phi-charmonium.hh \
 	bs-to-phi-ll.cc bs-to-phi-ll.hh \
@@ -29,7 +30,6 @@ libeosrarebdecays_la_SOURCES = \
 	charm-loops.cc charm-loops.hh \
 	decays.hh \
 	em-contributions.hh em-contributions.cc \
-	exclusive-b-to-dilepton.cc exclusive-b-to-dilepton.hh \
 	inclusive-b-to-s-dilepton.cc inclusive-b-to-s-dilepton.hh \
 	inclusive-b-to-s-gamma.cc inclusive-b-to-s-gamma.hh \
 	hard-scattering.cc hard-scattering.hh \
@@ -57,7 +57,6 @@ include_eos_rarebdecays_HEADERS = \
 	charm-loops.hh \
 	decays.hh \
 	em-contributions.hh \
-	exclusive-b-to-dilepton.hh \
 	hard-scattering.hh \
 	lambda-b-to-lambda-dilepton.hh \
 	long-distance.hh \
@@ -82,11 +81,11 @@ TESTS = \
 	b-to-kstar-ll-bfs2004_TEST \
 	b-to-kstar-ll-gp2004_TEST \
 	b-to-kstar-ll-gvdv2020_TEST \
+	b-to-ll_TEST \
 	bs-to-phi-charmonium_TEST \
 	bs-to-phi-ll-gvdv2020_TEST \
 	charm-loops_TEST \
 	em-contributions_TEST \
-	exclusive-b-to-dilepton_TEST \
 	hard-scattering_TEST \
 	inclusive-b-to-s-dilepton_TEST \
 	inclusive-b-to-s-gamma_TEST \
@@ -123,6 +122,8 @@ b_to_kstar_ll_gp2004_TEST_SOURCES = b-to-kstar-ll-gp2004_TEST.cc
 
 b_to_kstar_ll_gvdv2020_TEST_SOURCES = b-to-kstar-ll-gvdv2020_TEST.cc
 
+b_to_ll_TEST_SOURCES = b-to-ll_TEST.cc
+
 bs_to_phi_charmonium_TEST_SOURCES = bs-to-phi-charmonium_TEST.cc
 
 bs_to_phi_ll_gvdv2020_TEST_SOURCES = bs-to-phi-ll-gvdv2020_TEST.cc
@@ -130,8 +131,6 @@ bs_to_phi_ll_gvdv2020_TEST_SOURCES = bs-to-phi-ll-gvdv2020_TEST.cc
 charm_loops_TEST_SOURCES = charm-loops_TEST.cc
 
 em_contributions_TEST_SOURCES = em-contributions_TEST.cc
-
-exclusive_b_to_dilepton_TEST_SOURCES = exclusive-b-to-dilepton_TEST.cc
 
 hard_scattering_TEST_SOURCES = hard-scattering_TEST.cc
 

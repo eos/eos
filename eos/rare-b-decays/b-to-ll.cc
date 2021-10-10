@@ -19,7 +19,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/rare-b-decays/exclusive-b-to-dilepton.hh>
+#include <eos/rare-b-decays/b-to-ll.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/model.hh>
 #include <eos/utils/options-impl.hh>
