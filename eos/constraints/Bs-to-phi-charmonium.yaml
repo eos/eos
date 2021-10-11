@@ -9,7 +9,7 @@ B_s->phiJpsi::BR@PDG:2020A:
     type: Gaussian
     observable: B_s->phipsi::BR
     kinematics: {}
-    options: {psi: "J/psi", q: "s"}
+    options: {psi: "J/psi"}
     mean: 1.08e-3
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 8.e-5, lo: 8.e-5}
@@ -18,7 +18,7 @@ B_s->phipsi2S::BR@PDG:2020A:
     type: Gaussian
     observable: B_s->phipsi::BR
     kinematics: {}
-    options: {psi: "psi(2S)", q: "s"}
+    options: {psi: "psi(2S)"}
     mean: 5.4e-4
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 6.e-5, lo: 6.e-5}
@@ -43,7 +43,7 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2014D:
     kinematics:
         [ {}, {}, {}, {} ]
     options:
-        [ {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"} ]
+        [ {psi: "J/psi"}, {psi: "J/psi"}, {psi: "J/psi"}, {psi: "J/psi"} ]
     means: [ 0.2504, 0.5241, 3.26, 3.08 ]
     sigma-stat-hi: [ 0.0049, 0.0034, 0.1, 0.14 ]
     sigma-stat-lo: [ 0.0049, 0.0034, 0.17, 0.15 ]
@@ -70,7 +70,7 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2019A:
     kinematics:
         [ {}, {}, {}, {} ]
     options:
-        [ {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"} ]
+        [ {psi: "J/psi"}, {psi: "J/psi"}, {psi: "J/psi"}, {psi: "J/psi"} ]
     means: [ 0.2456, 0.5186, 2.64, 3.06 ]
     sigma-stat-hi: [ 0.0040, 0.0029, 0.13, 0.08 ]
     sigma-stat-lo: [ 0.0040, 0.0029, 0.13, 0.07 ]
@@ -97,7 +97,7 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2021C:
     kinematics:
         [ {}, {}, {}, {} ]
     options:
-        [ {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"} ]
+        [ {psi: "J/psi"}, {psi: "J/psi"}, {psi: "J/psi"}, {psi: "J/psi"} ]
     means: [ 0.234, 0.530, 3.11, 2.41 ]
     sigma-stat-hi: [ 0.034, 0.029, 0.080, 0.430 ]
     sigma-stat-lo: [ 0.034, 0.029, 0.070, 0.420 ]

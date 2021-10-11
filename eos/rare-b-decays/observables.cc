@@ -354,28 +354,40 @@ namespace eos
                 // Angular observables as detected in the decay B_s -> phi psi (-> l^+ l^-)
                 make_observable("B_s->phipsi::perp_polarization",
                         Unit::None(),
-                        &BsToPhiCharmonium::perp_polarization),
+                        &BsToPhiCharmonium::perp_polarization,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phipsi::para_polarization",
                         Unit::None(),
-                        &BsToPhiCharmonium::para_polarization),
+                        &BsToPhiCharmonium::para_polarization,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phipsi::long_polarization",
                         Unit::None(),
-                        &BsToPhiCharmonium::long_polarization),
+                        &BsToPhiCharmonium::long_polarization,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phipsi::delta_perp_long",
                         Unit::None(),
-                        &BsToPhiCharmonium::delta_perp_long),
+                        &BsToPhiCharmonium::delta_perp_long,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phipsi::delta_para_long",
                         Unit::None(),
-                        &BsToPhiCharmonium::delta_para_long),
+                        &BsToPhiCharmonium::delta_para_long,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } }),
 
                 // Branching ratio of B -> phi psi
                 make_observable("B_s->phipsi::BR", R"(\mathcal{B}(\bar{B}_s \to \phi\psi))",
                         Unit::None(),
-                        &BsToPhiCharmonium::branching_ratio)
+                        &BsToPhiCharmonium::branching_ratio,
+                        std::make_tuple(),
+                        Options{ { "q", "s" } })
 
             }
 
@@ -1462,22 +1474,26 @@ namespace eos
                 make_observable("B_s->phill::d^4Gamma",
                         Unit::InverseGeV2(),
                         &BsToPhiDilepton::decay_width,
-                        std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi")),
+                        std::make_tuple("s", "cos(theta_l)", "cos(theta_k)", "phi"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::dBR/ds", R"(d\mathcal{B}/dq^2(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::InverseGeV2(),
                         &BsToPhiDilepton::differential_branching_ratio,
-                        std::make_tuple("q2")),
+                        std::make_tuple("q2"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::A_FB(q2)", R"(A_\mathrm{FB}(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
                         Unit::None(),
                         &BsToPhiDilepton::differential_forward_backward_asymmetry,
-                        std::make_tuple("q2")),
+                        std::make_tuple("q2"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::F_L(q2)", R"(F_L(\bar{B}_s\to \phi\ell^+\ell^-)(q^2))",
                         Unit::None(),
                         &BsToPhiDilepton::differential_longitudinal_polarisation,
-                        std::make_tuple("q2")),
+                        std::make_tuple("q2"),
+                        Options{ { "q", "s" } }),
 
                 make_expression_observable("B_s->phill::R_phi(q2)", R"(R_{\phi}(q^2))",
                         Unit::None(),
@@ -1490,22 +1506,26 @@ namespace eos
                 make_observable("B_s->phill::A_FB", R"(A_\mathrm{FB}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_forward_backward_asymmetry,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::BR", R"(\mathcal{B}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::F_L", R"(F_L(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_longitudinal_polarisation,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::Gamma_CP_specific",
                         Unit::GeV(),
                         &BsToPhiDilepton::integrated_decay_width,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_expression_observable("B_s->phill::Gamma", R"(\Gamma(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
@@ -1516,62 +1536,74 @@ namespace eos
                 make_observable("B_s->phill::J_1s", R"(J_{1s}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_1s,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_1c", R"(J_{1c}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_1c,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_2s", R"(J_{2s}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_2s,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_2c", R"(J_{2c}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_2c,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_3", R"(J_3(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_3,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_4", R"(J_4(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_4,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_5", R"(J_5(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_5,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_6s", R"(J_{6s}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_6s,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_6c", R"(J_{6c}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_6c,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_7", R"(J_7(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_7,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_8", R"(J_8(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_8,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::J_9", R"(J_9(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_j_9,
-                        std::make_tuple("q2_min", "q2_max")),
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
 
                 make_expression_observable("B_s->phill::S_1s", R"(S_{1s}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
@@ -1811,22 +1843,26 @@ namespace eos
                 make_observable("B_s->phill::real_C9_perp(q2)",
                         Unit::None(),
                         &BsToPhiDilepton::real_C9_perp,
-                        std::make_tuple("q2")),
+                        std::make_tuple("q2"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::real_C9_para(q2)",
                         Unit::None(),
                         &BsToPhiDilepton::real_C9_para,
-                        std::make_tuple("q2")),
+                        std::make_tuple("q2"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::imag_C9_perp(q2)",
                         Unit::None(),
                         &BsToPhiDilepton::imag_C9_perp,
-                        std::make_tuple("q2")),
+                        std::make_tuple("q2"),
+                        Options{ { "q", "s" } }),
 
                 make_observable("B_s->phill::imag_C9_para(q2)",
                         Unit::None(),
                         &BsToPhiDilepton::imag_C9_para,
-                        std::make_tuple("q2"))
+                        std::make_tuple("q2"),
+                        Options{ { "q", "s" } })
             }
         );
 
