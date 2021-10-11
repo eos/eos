@@ -492,6 +492,14 @@ Belle:2017B:
   inspire-id: Abdesselam:2018nnh
   title: Measurement of the CKM matrix element $|V_{cb}|$ from $B^0\to D^{*-}\ell^
     {+} \nu_\ell$ at Belle
+Belle:2019A:
+  authors: Prim, Markus T. et. al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1911.03186
+  inspire-id: Belle:2019iji
+  title: 'Search for $B^+\to \mu^+\nu_{\mu}$ and $B^+\to \mu^+N$ with inclusive tagging'
 C:2006A:
   authors: Crandall, R.E.
   title: Note on fast polylogarithm computation
