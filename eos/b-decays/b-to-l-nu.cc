@@ -26,6 +26,8 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/options-impl.hh>
 
+#include <string>
+
 namespace eos
 {
     using std::norm;
@@ -37,6 +39,8 @@ namespace eos
     struct Implementation<BToLeptonNeutrino>
     {
         std::shared_ptr<Model> model;
+
+        SwitchOption opt_q;
 
         UsedParameter hbar;
 
@@ -52,16 +56,41 @@ namespace eos
 
         UsedParameter m_l;
 
+        bool cp_conjugate;
+
+        UsedParameter mu;
+
+        std::function<double (const double &)> m_U_msbar;
+        std::function<complex<double> ()> v_Ub;
+        std::function<WilsonCoefficients<ChargedCurrent> (const std::string &, bool)> wc;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
+            opt_q(o, "q", { "c", "u" }),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            m_B(p["mass::B_u"], u),
-            f_B(p["decay-constant::B_u"], u),
-            tau_B(p["life_time::B_u"], u),
+            m_B(p["mass::B_" + opt_q.value()], u),
+            f_B(p["decay-constant::B_" + opt_q.value()], u),
+            tau_B(p["life_time::B_" + opt_q.value()], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "tau"),
-            m_l(p["mass::" + opt_l.value()], u)
+            m_l(p["mass::" + opt_l.value()], u),
+            cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
+            mu(p[opt_q.value() + "b" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u)
         {
+            using std::placeholders::_1;
+            using std::placeholders::_2;
+            if ('u' == opt_q.value()[0])
+            {
+                m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_u_msbar, model.get(), _1);
+                v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_ub, model.get());
+                wc        = std::bind(&ModelComponent<components::DeltaBU1>::wilson_coefficients_b_to_u, model.get(), _1, _2);
+            }
+            else
+            {
+                m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_c_msbar, model.get(), _1);
+                v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_cb, model.get());
+                wc        = std::bind(&ModelComponent<components::DeltaBC1>::wilson_coefficients_b_to_c, model.get(), _1, _2);
+            }
             u.uses(*model);
         }
 
@@ -72,14 +101,21 @@ namespace eos
 
         double decay_width() const
         {
-            const WilsonCoefficients<ChargedCurrent> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
+            const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value(), cp_conjugate);
 
             // cf. [DBG2013], eq. (5), p. 5
             const complex<double> ga = wc.cvl() - wc.cvr();
+            const complex<double> gp = wc.csl() - wc.csr();
 
-            return power_of<2>(g_fermi * std::abs(model->ckm_ub()) * f_B * m_l * beta_l())
+            // masses
+            const double m_B = this-> m_B(), m_B2 = m_B * m_B;
+            const double m_l = this->m_l();
+            const double mbatmu = model->m_b_msbar(mu);
+            const double mUatmu = this->m_U_msbar(mu);
+
+            return power_of<2>(g_fermi * std::abs(this->v_Ub()) * f_B * m_l * beta_l())
                 * m_B / (8.0 * M_PI)
-                * norm(ga);
+                * norm(ga - gp * m_B2 / (m_l * (mbatmu + mUatmu)));
         }
 
         double branching_ratio() const
