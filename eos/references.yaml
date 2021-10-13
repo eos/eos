@@ -900,6 +900,14 @@ HPQCD:2015A:
   inspire-id: Na:2015kha
   title: $B \rightarrow D l \nu$ form factors at nonzero recoil and extraction of
     $|V_{cb}|$
+HPQCD:2015B:
+  authors: Colquhoun, B. and Davies, C. T. H. and Dowdall, R. J. and Kettle, J. and Koponen, J. and Lepage, G. P. and Lytle A. T.
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1503.05762
+  inspire-id: Colquhoun:2015oha
+  title: '$B$-meson decay constants: a more complete picture from full lattice QCD'
 HPQCDD:2013A:
   authors: Bouchard, Chris and Lepage, G.Peter and Monahan, Christopher and Na, Heechang
     and Shigemitsu, Junko
