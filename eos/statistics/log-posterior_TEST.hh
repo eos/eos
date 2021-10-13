@@ -93,7 +93,7 @@ namespace eos
 
             void set_option(const std::string & key, const std::string & value = "")
             {
-                o.set(key, value);
+                o.declare(key, value);
             }
     };
 

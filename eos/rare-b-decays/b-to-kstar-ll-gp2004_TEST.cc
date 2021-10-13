@@ -93,10 +93,10 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::mu"] = 1e-5;
 
                 Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("tag", "GP2004");
-                oo.set("l", "mu");
-                oo.set("form-factors", "BZ2004");
+                oo.declare("model", "WilsonScan");
+                oo.declare("tag", "GP2004");
+                oo.declare("l", "mu");
+                oo.declare("form-factors", "BZ2004");
 
                 BToKstarDilepton d(p, oo);
 
@@ -212,10 +212,10 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::mu"] = 1e-5;
 
                 Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("tag", "GP2004");
-                oo.set("l", "mu");
-                oo.set("form-factors", "BZ2004");
+                oo.declare("model", "WilsonScan");
+                oo.declare("tag", "GP2004");
+                oo.declare("l", "mu");
+                oo.declare("form-factors", "BZ2004");
 
                 BToKstarDilepton d(p, oo);
 
@@ -295,10 +295,10 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::b(MSbar)"] = 4.2;
 
                 Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("tag", "GP2004");
-                oo.set("l", "mu");
-                oo.set("form-factors", "BZ2004");
+                oo.declare("model", "WilsonScan");
+                oo.declare("tag", "GP2004");
+                oo.declare("l", "mu");
+                oo.declare("form-factors", "BZ2004");
 
                 BToKstarDilepton d(p, oo);
 
@@ -430,8 +430,8 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 Parameter A = parameters["CKM::A"];
 
                 Options options;
-                options.set("model", "WilsonScan");
-                options.set("tag", "GP2004");
+                options.declare("model", "WilsonScan");
+                options.declare("tag", "GP2004");
 
                 ObservablePtr numerator = Observable::make("B->K^*ll::Abar_FB", parameters, kinematics, options);
                 ObservablePtr denominator = Observable::make("B->K^*ll::BR", parameters, kinematics, options);
@@ -546,11 +546,11 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
             Options o;
-            o.set("model", "WilsonScan");
-            o.set("l", "mu");
-            o.set("q", "d");
-            o.set("tag", "GP2004");
-            o.set("form-factors", "BZ2004");
+            o.declare("model", "WilsonScan");
+            o.declare("l", "mu");
+            o.declare("q", "d");
+            o.declare("tag", "GP2004");
+            o.declare("form-factors", "BZ2004");
 
             std::vector<Parameter> variations;
 
@@ -702,12 +702,12 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             p["mass::mu"] = 1.5;
 
             Options oo;
-            oo.set("model", "WilsonScan");
-            oo.set("scan-mode", "cartesian");
-            oo.set("tag", "GP2004");
-            oo.set("form-factors", "KMPW2010");
-            oo.set("l", "mu");
-            oo.set("q", "d");
+            oo.declare("model", "WilsonScan");
+            oo.declare("scan-mode", "cartesian");
+            oo.declare("tag", "GP2004");
+            oo.declare("form-factors", "KMPW2010");
+            oo.declare("l", "mu");
+            oo.declare("q", "d");
 
             static const double q2 = 14.0;
             static const double q2_max = 19.0;
@@ -758,7 +758,7 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             }
 
             {
-                oo.set("cp-conjugate", "true");
+                oo.declare("cp-conjugate", "true");
                 BToKstarDilepton d(p, oo);
 
                 auto amps = d.amplitudes(q2);

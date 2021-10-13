@@ -189,7 +189,7 @@ class BToDLeptonNeutrinoTest :
                     TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.1988, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.0138762, eps);
 
-                    oo.set("l", "tau");
+                    oo.declare("l", "tau");
                     auto k_tau = Kinematics{
                         { "q2_min",  3.15702  },
                         { "q2_max", 11.62     }
@@ -198,7 +198,7 @@ class BToDLeptonNeutrinoTest :
                     TEST_CHECK(obs_BRtau.get() != nullptr);
                     TEST_CHECK_RELATIVE_ERROR(0.0069634, obs_BRtau->evaluate(), eps);
 
-                    oo.set("l", "mu");
+                    oo.declare("l", "mu");
                     auto k_mu = Kinematics{
                         { "q2_min",   0.011164 },
                         { "q2_max",  11.62     },

@@ -323,7 +323,7 @@ namespace eos
                     if (! options_keys.insert(key).second)
                         throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
 
-                    options.set(key, o.second.as<std::string>());
+                    options.declare(key, o.second.as<std::string>());
                 }
 
                 double sigma_hi_stat = n["sigma-stat"]["hi"].as<double>();
@@ -516,7 +516,7 @@ namespace eos
                     if (! options_keys.insert(key).second)
                         throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
 
-                    options.set(key, o.second.as<std::string>());
+                    options.declare(key, o.second.as<std::string>());
                 }
 
                 double sigma_hi = n["sigma"]["hi"].as<double>();
@@ -696,7 +696,7 @@ namespace eos
                     if (! options_keys.insert(key).second)
                         throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
 
-                    options.set(key, o.second.as<std::string>());
+                    options.declare(key, o.second.as<std::string>());
                 }
 
                 double physical_limit = n["physical-limit"].as<double>();
@@ -1017,7 +1017,7 @@ namespace eos
                         if (! options_keys.insert(key).second)
                             throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
 
-                        options.back().set(key, o.second.as<std::string>());
+                        options.back().declare(key, o.second.as<std::string>());
                     }
                 }
 
@@ -1356,7 +1356,7 @@ namespace eos
                         if (! options_keys.insert(key).second)
                             throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
 
-                        options.back().set(key, o.second.as<std::string>());
+                        options.back().declare(key, o.second.as<std::string>());
                     }
                 }
 
@@ -1586,7 +1586,7 @@ namespace eos
                     if (! options_keys.insert(key).second)
                         throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
 
-                    options.set(key, o.second.as<std::string>());
+                    options.declare(key, o.second.as<std::string>());
                 }
 
                 return new UniformBoundConstraintEntry(name.str(), observable, kinematics, options);
@@ -1885,7 +1885,7 @@ namespace eos
                         if (! options_keys.insert(key).second)
                             throw ConstraintDeserializationError(name, "options key '" + key + "' encountered more than once");
 
-                        options.back().set(key, o.second.as<std::string>());
+                        options.back().declare(key, o.second.as<std::string>());
                     }
                 }
 

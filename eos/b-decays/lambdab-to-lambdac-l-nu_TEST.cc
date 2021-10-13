@@ -118,7 +118,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 };
                 LambdaBToLambdaCLeptonNeutrino dmu(p, oo);
 
-                oo.set("l", "tau");
+                oo.declare("l", "tau");
                 LambdaBToLambdaCLeptonNeutrino dtau(p, oo);
 
                 oo =
@@ -165,9 +165,9 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["mass::Lambda_c"]        = 2.2865;
 
                 Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "DKMR2017");
-                oo.set("l", "mu");
+                oo.declare("model", "WilsonScan");
+                oo.declare("form-factors", "DKMR2017");
+                oo.declare("l", "mu");
 
                 LambdaBToLambdaCLeptonNeutrino d(p, oo);
 
@@ -204,9 +204,9 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["mass::Lambda_c"]        = 2.2865;
 
                 Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "DKMR2017");
-                oo.set("l", "mu");
+                oo.declare("model", "WilsonScan");
+                oo.declare("form-factors", "DKMR2017");
+                oo.declare("l", "mu");
 
                 LambdaBToLambdaCLeptonNeutrino d(p, oo);
 

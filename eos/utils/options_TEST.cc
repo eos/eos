@@ -52,7 +52,7 @@ class OptionsTest :
             // Access
             {
                 Options options;
-                options.set("foo", "bar");
+                options.declare("foo", "bar");
 
                 TEST_CHECK(options.has("foo"));
                 TEST_CHECK(! options.has("baz"));
@@ -108,16 +108,16 @@ class OptionsTest :
                 TEST_CHECK(a == b);
 
                 // populate a
-                a.set("foo", "bar");
+                a.declare("foo", "bar");
                 TEST_CHECK(! (a == b));
                 TEST_CHECK(a != b);
 
                 // populate b false
-                b.set("foo", "baz");
+                b.declare("foo", "baz");
                 TEST_CHECK(! (a == b));
 
                 // populate b correctly
-                b.set("foo", "bar");
+                b.declare("foo", "bar");
                 TEST_CHECK(a == b);
 
                 // copy

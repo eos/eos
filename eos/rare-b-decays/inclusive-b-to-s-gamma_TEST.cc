@@ -79,7 +79,7 @@ class BToXsGammaNLOTest :
                 p["B->B::mu_G^2@1GeV"] = 0.36;
 
                 Options oo;
-                oo.set("model", "WilsonScan");
+                oo.declare("model", "WilsonScan");
 
                 const double eps = 1e-9;
                 BToXsGamma<NLO> decay(p, oo);

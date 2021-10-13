@@ -102,7 +102,7 @@ namespace eos
     }
 
     void
-    Options::set(const std::string & key, const std::string & value)
+    Options::declare(const std::string & key, const std::string & value)
     {
         auto i(_imp->options.find(key));
         if (_imp->options.end() != i)

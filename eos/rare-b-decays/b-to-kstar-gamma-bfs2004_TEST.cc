@@ -93,9 +93,9 @@ class BToKstarGammaTest :
                 p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
                 Options oo;
-                oo.set("tag", "BFS2004");
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "KMPW2010");
+                oo.declare("tag", "BFS2004");
+                oo.declare("model", "WilsonScan");
+                oo.declare("form-factors", "KMPW2010");
 
                 BToKstarGamma d(p, oo);
 
@@ -151,9 +151,9 @@ class BToKstarGammaTest :
                 p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
                 Options oo;
-                oo.set("tag", "BFS2004");
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "KMPW2010");
+                oo.declare("tag", "BFS2004");
+                oo.declare("model", "WilsonScan");
+                oo.declare("form-factors", "KMPW2010");
 
                 BToKstarGamma d(p, oo);
 
@@ -207,9 +207,9 @@ class BToKstarGammaBobethCompatibilityTest :
             p["K^*::a_2_perp@1GeV"] = 0.1;
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
             Options o;
-            o.set("tag", "BFS2004");
-            o.set("model", "WilsonScan");
-            o.set("form-factors", "KMPW2010");
+            o.declare("tag", "BFS2004");
+            o.declare("model", "WilsonScan");
+            o.declare("form-factors", "KMPW2010");
 
             std::vector<Parameter> variations;
 

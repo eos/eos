@@ -59,8 +59,8 @@ class BsToKstarLeptonNeutrinoTest :
                 p["mass::mu"] = 0.1056583715;
 
                 Options oo;
-                oo.set("model", "WilsonScan");
-                oo.set("form-factors", "FMvD2015");
+                oo.declare("model", "WilsonScan");
+                oo.declare("form-factors", "FMvD2015");
 
                 BsToKstarLeptonNeutrino d(p, oo);
 

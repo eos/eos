@@ -101,7 +101,7 @@ class BToPiLeptonNeutrinoTest :
                 };
                 BToPseudoscalarLeptonNeutrino dtau(p, oo);
 
-                oo.set("l", "mu");
+                oo.declare("l", "mu");
                 BToPseudoscalarLeptonNeutrino dmu(p, oo);
 
                 oo =

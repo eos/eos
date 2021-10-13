@@ -97,7 +97,7 @@ namespace eos
 
             bool has(const std::string & key) const;
 
-            void set(const std::string & key, const std::string & value = "");
+            void declare(const std::string & key, const std::string & value = "");
 
             std::string get(const std::string & key, const std::string & default_value = "") const;
 

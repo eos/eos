@@ -86,9 +86,9 @@ class BToDileptonTest :
                 // B_d -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.set("model", "WilsonScan");
-                    oo.set("q", "d");
-                    oo.set("l", "mu");
+                    oo.declare("model", "WilsonScan");
+                    oo.declare("q", "d");
+                    oo.declare("l", "mu");
 
                     BToDilepton d(p, oo);
 
@@ -99,9 +99,9 @@ class BToDileptonTest :
                 // B_d -> e^+ e^-
                 {
                     Options oo;
-                    oo.set("model", "WilsonScan");
-                    oo.set("q", "d");
-                    oo.set("l", "e");
+                    oo.declare("model", "WilsonScan");
+                    oo.declare("q", "d");
+                    oo.declare("l", "e");
 
                     BToDilepton d(p, oo);
 
@@ -112,9 +112,9 @@ class BToDileptonTest :
                 // B_s -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.set("model", "WilsonScan");
-                    oo.set("q", "s");
-                    oo.set("l", "mu");
+                    oo.declare("model", "WilsonScan");
+                    oo.declare("q", "s");
+                    oo.declare("l", "mu");
 
                     BToDilepton d(p, oo);
 
@@ -127,9 +127,9 @@ class BToDileptonTest :
                 // B_s -> e^+ e^-
                 {
                     Options oo;
-                    oo.set("model", "WilsonScan");
-                    oo.set("q", "s");
-                    oo.set("l", "e");
+                    oo.declare("model", "WilsonScan");
+                    oo.declare("q", "s");
+                    oo.declare("l", "e");
 
                     BToDilepton d(p, oo);
 
@@ -189,10 +189,10 @@ class BToDileptonTest :
                 // B_s -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.set("model", "WilsonScan");
-                    oo.set("scan-mode", "cartesian");
-                    oo.set("q", "s");
-                    oo.set("l", "mu");
+                    oo.declare("model", "WilsonScan");
+                    oo.declare("scan-mode", "cartesian");
+                    oo.declare("q", "s");
+                    oo.declare("l", "mu");
 
                     BToDilepton d(p, oo);
 

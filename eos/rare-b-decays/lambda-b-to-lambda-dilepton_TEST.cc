@@ -44,10 +44,10 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 // unpolarised SM
                 {
                     Options oo;
-                    oo.set("model",                   "WilsonScan");
-                    oo.set("q",                       "d");
-                    oo.set("l",                       "mu");
-                    oo.set("production-polarisation", "unpolarised");
+                    oo.declare("model",                   "WilsonScan");
+                    oo.declare("q",                       "d");
+                    oo.declare("l",                       "mu");
+                    oo.declare("production-polarisation", "unpolarised");
 
                     Parameters p = Parameters::Defaults();
                     p["mass::Lambda_b"] =  5.6194;
@@ -108,10 +108,10 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 // LHCb-polarised SM
                 {
                     Options oo;
-                    oo.set("model",                   "WilsonScan");
-                    oo.set("q",                       "d");
-                    oo.set("l",                       "mu");
-                    oo.set("production-polarisation", "LHCb");
+                    oo.declare("model",                   "WilsonScan");
+                    oo.declare("q",                       "d");
+                    oo.declare("l",                       "mu");
+                    oo.declare("production-polarisation", "LHCb");
 
                     Parameters p = Parameters::Defaults();
                     p["mass::Lambda_b"] =  5.6194;
@@ -171,10 +171,10 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 // unpolarised BMP
                 {
                     Options oo;
-                    oo.set("model",                   "WilsonScan");
-                    oo.set("q",                       "d");
-                    oo.set("l",                       "mu");
-                    oo.set("production-polarisation", "unpolarised");
+                    oo.declare("model",                   "WilsonScan");
+                    oo.declare("q",                       "d");
+                    oo.declare("l",                       "mu");
+                    oo.declare("production-polarisation", "unpolarised");
 
                     Parameters p = Parameters::Defaults();
                     p["sbmumu::mu"] = 4.2;
@@ -239,10 +239,10 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 // LHCb-polarised BMP
                 {
                     Options oo;
-                    oo.set("model",                   "WilsonScan");
-                    oo.set("q",                       "d");
-                    oo.set("l",                       "mu");
-                    oo.set("production-polarisation", "LHCb");
+                    oo.declare("model",                   "WilsonScan");
+                    oo.declare("q",                       "d");
+                    oo.declare("l",                       "mu");
+                    oo.declare("production-polarisation", "LHCb");
 
                     Parameters p = Parameters::Defaults();
                     p["sbmumu::mu"] = 4.2;
