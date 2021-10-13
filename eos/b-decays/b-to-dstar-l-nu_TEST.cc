@@ -464,7 +464,7 @@ class BToVectorLeptonNeutrinoTest :
 
                 BToVectorLeptonNeutrino de(p, o);
 
-                o.set("l", "mu");
+                o.declare("l", "mu");
                 BToVectorLeptonNeutrino dmu(p, o);
 
                 o =

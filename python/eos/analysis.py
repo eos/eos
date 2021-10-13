@@ -89,7 +89,7 @@ class Analysis:
 
         # collect the global options
         for key, value in global_options.items():
-            self.global_options.set(key, value)
+            self.global_options.declare(key, value)
 
         # Fix specified parameters
         for param, value in fixed_parameters.items():

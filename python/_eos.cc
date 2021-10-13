@@ -81,7 +81,7 @@ namespace impl
         {
             object name = items[i][0];
             object value = items[i][1];
-            self.attr("set")(name, value);
+            self.attr("declare")(name, value);
         }
 
         return object();
@@ -297,7 +297,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("__init__", raw_function(&impl::Options_ctor))
         .def("__iter__", range(&Options::begin, &Options::end))
         .def(init<>())
-        .def("set", &Options::set)
+        .def("declare", &Options::declare)
         .def("__str__", &Options::as_string)
         ;
 

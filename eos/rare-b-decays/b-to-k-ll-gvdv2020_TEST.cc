@@ -87,12 +87,12 @@ class BToKDileptonGvDV2020Test :
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
             Options oo;
-            oo.set("model",                   "WilsonScan");
-            oo.set("tag",                     "GvDV2020");
-            oo.set("nonlocal-formfactors",    "GvDV2020");
-            oo.set("form-factors",            "BSZ2015");
-            oo.set("l",                       "mu");
-            oo.set("q",                       "d");
+            oo.declare("model",                   "WilsonScan");
+            oo.declare("tag",                     "GvDV2020");
+            oo.declare("nonlocal-formfactors",    "GvDV2020");
+            oo.declare("form-factors",            "BSZ2015");
+            oo.declare("l",                       "mu");
+            oo.declare("q",                       "d");
 
             static const double eps = 1e-5;
             static const double q2 = 6.0;

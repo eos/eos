@@ -221,7 +221,7 @@ namespace eos
             qnp::OptionKey key(input.substr(pos_option_start + 1, pos_equal - pos_option_start - 1));
             qnp::OptionValue value(input.substr(pos_equal + 1, pos_next_comma - pos_equal - 1));
 
-            _options.set(key.str(), value.str());
+            _options.declare(key.str(), value.str());
 
             pos_option_start = pos_next_comma;
         }

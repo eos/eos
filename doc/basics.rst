@@ -424,10 +424,10 @@ Adding options to the set can be achieved by the following:
 
 .. code:: ipython3
 
-    options.set('model', 'CKMScan')
-    options.set('form-factors', 'BSZ2015')
-    options.set('l', 'mu')                 # Since we are all so "cautiously excited"!
-    options.set('q', 's')
+    options.declare('model', 'CKMScan')
+    options.declare('form-factors', 'BSZ2015')
+    options.declare('l', 'mu')                 # Since we are all so "cautiously excited"!
+    options.declare('q', 's')
 
 .. code:: ipython3
 

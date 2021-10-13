@@ -100,13 +100,13 @@ class BToKDileptonBFS2004BobethCompatibilityTest :
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
             Options oo;
-            oo.set("model", "WilsonScan");
-            oo.set("scan-mode", "cartesian");
-            oo.set("tag", "BFS2004");
-            oo.set("qcdf-integrals", "mixed");
-            oo.set("form-factors", "KMPW2010");
-            oo.set("l", "mu");
-            oo.set("q", "u");
+            oo.declare("model", "WilsonScan");
+            oo.declare("scan-mode", "cartesian");
+            oo.declare("tag", "BFS2004");
+            oo.declare("qcdf-integrals", "mixed");
+            oo.declare("form-factors", "KMPW2010");
+            oo.declare("l", "mu");
+            oo.declare("q", "u");
 
             double eps = 1e-3;
             static const double s = 6.0;
