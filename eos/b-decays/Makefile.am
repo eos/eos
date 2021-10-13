@@ -51,6 +51,7 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
+	b-to-l-nu_TEST \
 	b-to-d-l-nu_TEST \
 	b-to-dstar-l-nu_TEST \
 	b-to-d-pi-l-nu_TEST \
@@ -70,6 +71,8 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
+b_to_l_nu_TEST_SOURCES = b-to-l-nu_TEST.cc
+
 b_to_d_l_nu_TEST_SOURCES = b-to-d-l-nu_TEST.cc
 
 b_to_dstar_l_nu_TEST_SOURCES = b-to-dstar-l-nu_TEST.cc
