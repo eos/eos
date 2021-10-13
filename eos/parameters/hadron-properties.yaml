@@ -83,6 +83,12 @@ groups:
           max:     +5.36702
           latex:   '$m_{B^0_s}$'
           comments: 'cf. [PDG-Live], December 2020'
+      'mass::B_c' :
+          central: +6.27447
+          min:     +6.27415
+          max:     +6.27479
+          latex:   '$m_{B_c^\pm}$'
+          comments: 'cf. [PDG-Live], October 2021'
       # B^* meson masses
       'mass::B_d^*' :
           central: +5.32470
@@ -262,6 +268,12 @@ groups:
           max:     +0.2330
           latex:    '$f_{\bar{B}_s^0}$'
           comments: 'GeV, cf. [Fermilab-MILC-2017]'
+      'decay-constant::B_c' :
+          central: +0.434
+          min:     +0.419
+          max:     +0.449
+          latex:    '$f_{B_c^\pm}$'
+          comments: 'GeV, cf. [HPQCD2015B], eq. (20)'
       'decay-constant::K_d' :
           central: +0.1561
           min:     +0.155
@@ -391,6 +403,12 @@ groups:
           max:     +1.527e-12
           latex:    '$\tau_{B_s}$'
           comments: 'cf. [PDG-Live], September 2013'
+      'life_time::B_c' :
+          central: +0.510e-12
+          min:     +0.501e-12
+          max:     +0.519e-12
+          latex:    '$\tau_{B_c}$'
+          comments: 'cf. [PDG-Live], October 2021'
       'life_time::B@Y(4S)' :
           central: +1.580e-12
           min:     +1.573e-12
