@@ -26,6 +26,7 @@ libeosrarebdecays_la_SOURCES = \
 	bs-to-phi-charmonium.cc bs-to-phi-charmonium.hh \
 	bs-to-phi-ll.cc bs-to-phi-ll.hh \
 	bs-to-phi-ll-base.cc bs-to-phi-ll-base.hh \
+	bs-to-phi-ll-bfs2004.cc bs-to-phi-ll-bfs2004.hh \
 	bs-to-phi-ll-gvdv2020.cc bs-to-phi-ll-gvdv2020.hh \
 	charm-loops.cc charm-loops.hh \
 	decays.hh \
@@ -85,6 +86,7 @@ TESTS = \
 	b-to-kstar-ll-gvdv2020_TEST \
 	b-to-ll_TEST \
 	bs-to-phi-charmonium_TEST \
+	bs-to-phi-ll-bfs2004_TEST \
 	bs-to-phi-ll-gvdv2020_TEST \
 	charm-loops_TEST \
 	em-contributions_TEST \
@@ -128,6 +130,8 @@ b_to_kstar_ll_gvdv2020_TEST_SOURCES = b-to-kstar-ll-gvdv2020_TEST.cc
 b_to_ll_TEST_SOURCES = b-to-ll_TEST.cc
 
 bs_to_phi_charmonium_TEST_SOURCES = bs-to-phi-charmonium_TEST.cc
+
+bs_to_phi_ll_bfs2004_TEST_SOURCES = bs-to-phi-ll-bfs2004_TEST.cc
 
 bs_to_phi_ll_gvdv2020_TEST_SOURCES = bs-to-phi-ll-gvdv2020_TEST.cc
 
