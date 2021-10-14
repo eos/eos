@@ -64,6 +64,13 @@ namespace eos
             virtual BsToPhiDilepton::Amplitudes amplitudes(const double & q2) const = 0;
     };
 
+    struct BsToPhiDilepton::DipoleFormFactors
+    {
+        complex<double> calT_perp_left;
+        complex<double> calT_perp_right;
+        complex<double> calT_parallel;
+    };
+
     struct BsToPhiDilepton::FormFactorCorrections
     {
         complex<double> t;
@@ -78,7 +85,7 @@ namespace eos
         /*
          * Approaches that work at small q^2, or large recoil.
          */
-        //struct BFS2004;
+        struct BFS2004;
         struct GvDV2020;
 
         /*

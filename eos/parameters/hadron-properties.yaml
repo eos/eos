@@ -633,6 +633,49 @@ groups:
           latex:    '$f^{K^*}_{\perp}(1\,\GeV)$'
           unit:     'GeV'
           comments: 'cf. [BSZ:2015A], table 1'
+      # phi LCDA parameters
+      'phi::a_1_para@1GeV' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          unit:     '1'
+          latex:    '$a^{phi}_{1,\parallel}(1\,\GeV)$'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'phi::a_2_para@1GeV' :
+          central: +0.23
+          min:     +0.15
+          max:     +0.31
+          unit:     '1'
+          latex:    '$a^{phi}_{2,\parallel}(1\,\GeV)$'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'phi::f_para' :
+          central: +0.233
+          min:     +0.229
+          max:     +0.237
+          unit:     'GeV'
+          latex:    '$f^{phi}_{\parallel}(1\,\GeV)$'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'phi::a_1_perp@1GeV' :
+          central: +0.00
+          min:     +0.00
+          max:     +0.00
+          unit:     '1'
+          latex:    '$a^{phi}_{1,\perp}(1\,\GeV)$'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'phi::a_2_perp@1GeV' :
+          central: +0.14
+          min:     +0.07
+          max:     +0.21
+          unit:     '1'
+          latex:    '$a^{phi}_{2,\perp}(1\,\GeV)$'
+          comments: 'cf. [BSZ:2015A], table 1'
+      'phi::f_perp@1GeV' :
+          central: +0.191
+          min:     +0.187
+          max:     +0.195
+          unit:     'GeV'
+          latex:    '$f^{phi}_{\perp}(1\,\GeV)$'
+          comments: 'cf. [BSZ:2015A], table 1'
       # B->K LCDA Parameter
       'K::a_1@1GeV' :
           central: +0.06
@@ -691,6 +734,21 @@ groups:
           latex:    '$f^{K^*}_{\perp}(2\,\GeV)$'
           unit:     'GeV'
           comments: '@2 Gev, 0.185 +/-0.005 GeV, cf. [BHvD:2010A], Table I'
+      # B_s->phi, phi LCDA parameters
+      'B_s->phi::f_phi_par' :
+          central: +0.233
+          min:     +0.229
+          max:     +0.237
+          latex:    '$f^{phi}_{\parallel}$'
+          unit:     'GeV'
+          comments: ''
+      'B_s->phi::f_phi_perp@2GeV' :
+          central: +0.191
+          min:     +0.187
+          max:     +0.195
+          latex:    '$f^{phi}_{\perp}(2\,\GeV)$'
+          unit:     'GeV'
+          comments: ''
       # B LCDA parameters
       'B::1/lambda_B_p' :
           central: +2.1739

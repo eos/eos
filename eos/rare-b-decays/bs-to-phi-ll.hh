@@ -45,6 +45,7 @@ namespace eos
             struct AngularCoefficients;
             struct Amplitudes;
             class AmplitudeGenerator;
+            struct DipoleFormFactors;
             struct FormFactorCorrections;
 
             /*!
