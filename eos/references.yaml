@@ -834,6 +834,13 @@ GR:2004A:
   authors: Goldberger, J. and Roweis, S.
   url: http://eprints.pascal-network.org/archive/00001565/
   title: Hierarchical clustering of a mixture model
+GvDV:2020A:
+  authors: Gubernari, N. and van Dyk, D. and Virto, J.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2011.09813
+  inspire-id: Gubernari:2020eft
+  title: Non-local matrix elements in $B_{(s)}\to \{K^{(*)},\phi\}\ell^+\ell^-$
 HFLAV:2019A:
   authors: Amhis, Yasmine Sara and others
   eprint:
