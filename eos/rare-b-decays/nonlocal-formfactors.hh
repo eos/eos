@@ -26,6 +26,7 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors-fwd.hh>
+#include <eos/utils/reference-name.hh>
 
 #include <memory>
 #include <string>
@@ -162,6 +163,10 @@ namespace eos
 
             ///@}
 
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
     extern template class NonlocalFormFactorObservable<nff::BToK, nff::PToP>;
 
@@ -315,6 +320,11 @@ namespace eos
             double im_ratio_long(const double & q2) const;
             double abs_ratio_long(const double & q2) const;
             ///@}
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
     extern template class NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>;
     extern template class NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>;

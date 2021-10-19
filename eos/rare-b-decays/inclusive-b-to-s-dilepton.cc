@@ -567,4 +567,9 @@ namespace eos
     {
         return _imp->diagnostics();
     }
+
+    const std::set<ReferenceName>
+    BToXsDilepton<HLMW2005>::references
+    {
+    };
 }

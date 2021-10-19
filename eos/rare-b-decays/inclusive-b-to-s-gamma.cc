@@ -112,6 +112,11 @@ namespace eos
         return _imp->branching_ratio();
     }
 
+    const std::set<ReferenceName>
+    BToXsGamma<Minimal>::references
+    {
+    };
+
     /* NLO
      *
      * Implementation according to [BCMU2002],
@@ -698,6 +703,11 @@ namespace eos
     {
         return _imp->diagnostics();
     }
+
+    const std::set<ReferenceName>
+    BToXsGamma<NLO>::references
+    {
+    };
 
     const std::array<double, 225>
     Implementation<BToXsGamma<NLO>>::f22int1coeffs

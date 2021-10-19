@@ -197,4 +197,9 @@ namespace eos
     {
         return _imp->isospin_asymmetry();
     }
+
+    const std::set<ReferenceName>
+    BToKstarGamma::references
+    {
+    };
 }

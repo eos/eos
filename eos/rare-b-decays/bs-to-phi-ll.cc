@@ -1325,4 +1325,9 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
     {
         return _imp->amplitude_generator->amplitudes(q2);
     }
+
+    const std::set<ReferenceName>
+    BsToPhiDilepton::references
+    {
+    };
 }

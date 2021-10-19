@@ -1218,6 +1218,13 @@ namespace eos
         return real(this->_imp->nff->normalized_moment_V23(q2));
     }
 
+    template <typename Process_>
+    const std::set<ReferenceName>
+    NonlocalFormFactorObservable<Process_, nff::PToV>::references
+    {
+        "GvDV:2020A"_rn
+    };
+
     template class NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>;
 
     template class NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>;

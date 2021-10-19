@@ -25,6 +25,7 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/reference-name.hh>
 
 namespace eos
 {
@@ -85,6 +86,11 @@ namespace eos
             double integrated_m32(const double & s_min, const double & s_max) const;
             double integrated_m33(const double & s_min, const double & s_max) const;
             double integrated_m34(const double & s_min, const double & s_max) const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 
     /*
@@ -155,6 +161,11 @@ namespace eos
             double integrated_m32(const double & s_min, const double & s_max) const;
             double integrated_m33(const double & s_min, const double & s_max) const;
             double integrated_m34(const double & s_min, const double & s_max) const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 }
 
