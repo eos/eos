@@ -25,6 +25,7 @@
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/reference-name.hh>
 
 namespace eos
 {
@@ -75,6 +76,11 @@ namespace eos
 
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 }
 

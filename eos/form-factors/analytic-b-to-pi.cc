@@ -2147,4 +2147,11 @@ namespace eos
     {
         return _imp->diagnostics();
     }
+
+    const std::set<ReferenceName>
+    AnalyticFormFactorBToPiDKMMO2008::references
+    {
+        "DKMMO:2008A"_rn,
+        "LMvD:2021A"_rn
+    };
 }
