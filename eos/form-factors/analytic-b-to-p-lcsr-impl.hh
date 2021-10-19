@@ -9566,6 +9566,16 @@ namespace eos
     {
         return this->_imp->diagnostics();
     }
+
+    template <typename Process_>
+    const std::set<ReferenceName>
+    AnalyticFormFactorBToPLCSR<Process_>::references
+    {
+        "KMO:2005A"_rn,
+        "KMO:2006A"_rn,
+        "FKKM:2008A"_rn,
+        "GKvD:2018A"_rn
+    };
 }
 
 #endif
