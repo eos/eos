@@ -242,7 +242,21 @@ namespace eos
         );
 
         // scalar amplitude, cf. KM2005A (3.5)
-        result.a_time = calN / m_B * 2.0 * sqrt_lambda / sqrt_s * (wc.c10() - wc.c10prime()) * calF_time;
+        result.a_time = calN / m_B * sqrt_lambda / sqrt_s * calF_time * (
+            2.0 * (wc.c10() - wc.c10prime()) + s / m_l / (m_b_MSbar + m_s_MSbar) * (wc.cP() - wc.cPprime())
+        );
+
+        // Tensor amplitudes, cf BHvD2012 (B.17)-(B.20) and GVdV2020 (A.11)
+        result.a_scal = -2.0 * calN / m_B * sqrt_lambda * calF_time * (wc.cS() - wc.cSprime()) / (m_b_MSbar + m_s_MSbar);
+
+        result.a_para_perp = 2.0 * calN * m_B2 / s * calF_T_long * wc.cT();
+        result.a_time_long = - 2.0 * calN * m_B2 / s * calF_T_long * wc.cT5();
+
+        result.a_time_perp = sqrt(2) * calN * m_B / sqrt_s * calF_T_perp * wc.cT();
+        result.a_long_perp = - sqrt(2) * calN * m_B / sqrt_s * calF_T_perp * wc.cT5();
+
+        result.a_long_para = sqrt(2) * calN * m_B / sqrt_s * calF_T_para * wc.cT();
+        result.a_time_para = - sqrt(2) * calN * m_B / sqrt_s * calF_T_para* wc.cT5();
 
         return result;
     }
