@@ -690,6 +690,11 @@ namespace eos
             double chi3pone() const { return _chi3pone(); }
             double etaone()   const { return _etaone();   }
             double etapone()  const { return _etapone();  }
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 
     template <typename Process_> class HQETFormFactors<Process_, PToP> :

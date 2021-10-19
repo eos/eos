@@ -236,4 +236,9 @@ namespace eos
     {
         return _imp->f_inel();
     }
+
+    const std::set<ReferenceName>
+    ZeroRecoilSumRule<LambdaBToC>::references
+    {
+    };
 }

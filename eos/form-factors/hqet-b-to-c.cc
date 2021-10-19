@@ -470,4 +470,9 @@ namespace eos
     {
         return _imp->diagnostics();
     }
+
+    const std::set<ReferenceName>
+    HQETBToC::references
+    {
+    };
 }
