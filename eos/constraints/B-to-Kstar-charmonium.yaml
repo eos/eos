@@ -51,7 +51,7 @@ B->K^*psi2S::BR@PDG2020:
 # 2013
 #
 # {{{
-B^0->K^*0Jpsi::S_1s_LHCb@LHCb-2013:
+B^0->K^*0Jpsi::S_1s_LHCb@LHCb:2013E:
     type: Gaussian
     observable: B->K^*psi::S_1s_LHCb
     kinematics: {}
@@ -60,7 +60,7 @@ B^0->K^*0Jpsi::S_1s_LHCb@LHCb-2013:
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.006, lo: 0.006}
     dof: 1
-B^0->K^*0Jpsi::S_3_LHCb@LHCb-2013:
+B^0->K^*0Jpsi::S_3_LHCb@LHCb:2013E:
     type: Gaussian
     observable: B->K^*psi::S_3_LHCb
     kinematics: {}
@@ -69,7 +69,7 @@ B^0->K^*0Jpsi::S_3_LHCb@LHCb-2013:
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.009, lo: 0.009}
     dof: 1
-B^0->K^*0Jpsi::S_4_LHCb@LHCb-2013:
+B^0->K^*0Jpsi::S_4_LHCb@LHCb:2013E:
     type: Gaussian
     observable: B->K^*psi::S_4_LHCb
     kinematics: {}
@@ -78,7 +78,7 @@ B^0->K^*0Jpsi::S_4_LHCb@LHCb-2013:
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.005, lo: 0.005}
     dof: 1
-B^0->K^*0Jpsi::S_8_LHCb@LHCb-2013:
+B^0->K^*0Jpsi::S_8_LHCb@LHCb:2013E:
     type: Gaussian
     observable: B->K^*psi::S_8_LHCb
     kinematics: {}
@@ -87,7 +87,7 @@ B^0->K^*0Jpsi::S_8_LHCb@LHCb-2013:
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.009, lo: 0.009}
     dof: 1
-B^0->K^*0Jpsi::S_9_LHCb@LHCb-2013:
+B^0->K^*0Jpsi::S_9_LHCb@LHCb:2013E:
     type: Gaussian
     observable: B->K^*psi::S_9_LHCb
     kinematics: {}
@@ -106,7 +106,7 @@ B^0->K^*0Jpsi::S_9_LHCb@LHCb-2013:
 # 2007
 #
 # {{{
-B^0->K^*0psi2S::S_1s_LHCb@BaBar-2007:
+B^0->K^*0psi2S::S_1s_LHCb@BaBar:2007A:
     type: Gaussian
     observable: B->K^*psi::S_1s_LHCb
     kinematics: {}
@@ -115,7 +115,7 @@ B^0->K^*0psi2S::S_1s_LHCb@BaBar-2007:
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.04, lo: 0.04}
     dof: 1
-B^0->K^*0psi2S::S_3_LHCb@BaBar-2007:
+B^0->K^*0psi2S::S_3_LHCb@BaBar:2007A:
     type: Gaussian
     observable: B->K^*psi::S_3_LHCb
     kinematics: {}
@@ -124,7 +124,7 @@ B^0->K^*0psi2S::S_3_LHCb@BaBar-2007:
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.06, lo: 0.06}
     dof: 1
-B^0->K^*0psi2S::S_4_LHCb@BaBar-2007:
+B^0->K^*0psi2S::S_4_LHCb@BaBar:2007A:
     type: Gaussian
     observable: B->K^*psi::S_4_LHCb
     kinematics: {}
@@ -133,7 +133,7 @@ B^0->K^*0psi2S::S_4_LHCb@BaBar-2007:
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.04, lo: 0.04}
     dof: 1
-B^0->K^*0psi2S::S_8_LHCb@BaBar-2007:
+B^0->K^*0psi2S::S_8_LHCb@BaBar:2007A:
     type: Gaussian
     observable: B->K^*psi::S_8_LHCb
     kinematics: {}
@@ -142,7 +142,7 @@ B^0->K^*0psi2S::S_8_LHCb@BaBar-2007:
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 0.08, lo: 0.08}
     dof: 1
-B^0->K^*0psi2S::S_9_LHCb@BaBar-2007:
+B^0->K^*0psi2S::S_9_LHCb@BaBar:2007A:
     type: Gaussian
     observable: B->K^*psi::S_9_LHCb
     kinematics: {}
