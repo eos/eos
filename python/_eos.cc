@@ -547,7 +547,7 @@ BOOST_PYTHON_MODULE(_eos)
 
     // ReferenceUser
     class_<ReferenceUser>("ReferenceUser", no_init)
-        .def("used_reference_names", range(&ReferenceUser::begin_references, &ReferenceUser::end_references))
+        .def("references", range(&ReferenceUser::begin_references, &ReferenceUser::end_references))
         ;
 
 
