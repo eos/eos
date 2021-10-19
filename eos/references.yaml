@@ -790,6 +790,13 @@ GKPR:2013A:
     id: oai:arXiv.org:1305.5432
   inspire-id: Gelhausen:2013wia
   title: Decay constants of heavy-light vector mesons from QCD sum rules
+GKvD:2018A:
+  authors: Gubernari, N. and Kokulu, A. van Dyk, D.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1811.00983
+  inspire-id: Gubernari:2018wyi
+  title: $B\to P$ and $B\to V$ Form Factors from $B$-Meson Light-Cone Sum Rules beyond Leading Twist
 GM:2001A:
   authors: Gambino, Paolo and Misiak, Mikolaj
   eprint:
