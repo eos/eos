@@ -390,4 +390,9 @@ The cosine of the lepton's helicity angle theta_l in the l^+l^- rest frame using
     {
         return _imp->angular_coefficients_array(_imp->amplitude_generator->amplitudes(q2), q2);
     }
+
+    const std::set<ReferenceName>
+    BToKDilepton::references
+    {
+    };
 }

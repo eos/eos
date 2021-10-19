@@ -206,4 +206,9 @@ namespace eos
     {
         return _imp->effective_lifetime();
     }
+
+    const std::set<ReferenceName>
+    BToDilepton::references
+    {
+    };
 }

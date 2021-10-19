@@ -25,6 +25,7 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/reference-name.hh>
 
 #include <array>
 
@@ -352,6 +353,11 @@ namespace eos
              * Auxilliary methods for unit tests and diagnostic purposes.
              */
             Amplitudes amplitudes(const double & q2) const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 
     /*!

@@ -816,6 +816,10 @@ namespace eos
         return o.k34() / o.decay_width();
     }
 
+    const std::set<ReferenceName>
+    LambdaBToLambdaDilepton<LargeRecoil>::references
+    {
+    };
 
     template <> struct Implementation<LambdaBToLambdaDilepton<LowRecoil>>
     {
@@ -1330,4 +1334,9 @@ namespace eos
         auto o = _imp->integrated_angular_observables(s_min, s_max);
         return o.k34() / o.decay_width();
     }
+
+    const std::set<ReferenceName>
+    LambdaBToLambdaDilepton<LowRecoil>::references
+    {
+    };
 }

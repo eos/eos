@@ -26,6 +26,7 @@
 #include <eos/utils/complex.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/reference-name.hh>
 
 namespace eos
 {
@@ -63,6 +64,11 @@ namespace eos
             /// Effective lifetime
             double effective_lifetime() const;
             ///@}
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 }
 
