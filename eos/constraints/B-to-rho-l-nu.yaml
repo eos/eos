@@ -7,7 +7,7 @@
 # 2021
 #
 # {{{
-B^+->rho^0lnu::BR@BPR-2021A:
+B^+->rho^0lnu::BR@BPR:2021A:
     type: MultivariateGaussian
     dim: 11
     observables:

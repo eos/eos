@@ -145,7 +145,7 @@ The largest source of theoretical uncertainty in these decays arises from the ha
 from the form factors :math:`f^{B\to \bar{D}}_+(q^2)` and :math:`f^{B\to \bar{D}}_0(q^2)`.
 Both form factors have been obtained independently using lattice QCD simulations by the HPQCD and Fermilab/MILC (FNALMILC) collaborations.
 The joint likelihoods for both form factors at different :math:`q^2` values of each prediction are available in EOS
-as :class:`Constraint <eos.Constraint>` objects under the names ``B->D::f_++f_0@HPQCD2015A`` and ``B->D::f_++f_0@FNALMILC2015B``.
+as :class:`Constraint <eos.Constraint>` objects under the names ``B->D::f_++f_0@HPQCD:2015A`` and ``B->D::f_++f_0@FNALMILC:2015B``.
 We will discuss such constraints in more detail in the section `Parameter Inference`_.
 For this example, we will use both the HPQCD and FNALMILC results and create a combined likelihood as follows:
 
@@ -161,8 +161,8 @@ For this example, we will use both the HPQCD and FNALMILC results and create a c
            { 'parameter': 'B->D::alpha^f0_2@BSZ2015', 'min': -5.0, 'max': +5.0, 'type': 'uniform' }
        ],
        'likelihood': [
-           'B->D::f_++f_0@HPQCD2015A',
-           'B->D::f_++f_0@FNALMILC2015B'
+           'B->D::f_++f_0@HPQCD:2015A',
+           'B->D::f_++f_0@FNALMILC:2015B'
        ]
    }
    analysis = eos.Analysis(**analysis_args)
@@ -357,7 +357,7 @@ The following example only show constraints that contain `'B^0->D^+'` in the pre
 Visualizing the built-in Constraints
 ====================================
 
-For what follows we will use the two experimental constraints ``B^0->D^+e^-nu::BRs@Belle-2015A`` and ``B^0->D^+mu^-nu::BRs@Belle-2015A``,
+For what follows we will use the two experimental constraints ``B^0->D^+e^-nu::BRs@Belle:2015A`` and ``B^0->D^+mu^-nu::BRs@Belle:2015A``,
 to infer the CKM matrix element :math:`|V_{cb}|`. We can readily display these two constraints, along with the default theory prediction,
 using the following code:
 
@@ -382,7 +382,7 @@ using the following code:
                'label': r'Belle 2015 $\ell=e,\, q=d$',
                'type': 'constraint',
                'color': 'C0',
-               'constraints': 'B^0->D^+e^-nu::BRs@Belle-2015A',
+               'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',
                'observable': 'B->Dlnu::BR',
                'variable': 'q2',
                'rescale-by-width': False
@@ -391,7 +391,7 @@ using the following code:
                'label': r'Belle 2015 $\ell=\mu,\,q=d$',
                'type': 'constraint',
                'color': 'C1',
-               'constraints': 'B^0->D^+mu^-nu::BRs@Belle-2015A',
+               'constraints': 'B^0->D^+mu^-nu::BRs@Belle:2015A',
                'observable': 'B->Dlnu::BR',
                'variable': 'q2',
                'rescale-by-width': False
@@ -430,10 +430,10 @@ We then create an :class:`Analysis <eos.Analysis>` object as follows:
            { 'parameter': 'B->D::alpha^f0_2@BSZ2015', 'min': -2.0,   'max':  0.0,   }
        ],
        'likelihood': [
-           'B->D::f_++f_0@HPQCD2015A',
-           'B->D::f_++f_0@FNALMILC2015B',
-           'B^0->D^+e^-nu::BRs@Belle-2015A',
-           'B^0->D^+mu^-nu::BRs@Belle-2015A'
+           'B->D::f_++f_0@HPQCD:2015A',
+           'B->D::f_++f_0@FNALMILC:2015B',
+           'B^0->D^+e^-nu::BRs@Belle:2015A',
+           'B^0->D^+mu^-nu::BRs@Belle:2015A'
        ]
    }
    analysis = eos.Analysis(**analysis_args)
@@ -485,16 +485,16 @@ The goodness-of-fit summary consists of a table listing all constraints,
    * - constraint
      - :math:`\chi^2`
      - d.o.f.
-   * - ``B->D::f_++f_0@FNALMILC2015B``
+   * - ``B->D::f_++f_0@FNALMILC:2015B``
      - 3.4847
      - 7
-   * - ``B->D::f_++f_0@HPQCD2015A``
+   * - ``B->D::f_++f_0@HPQCD:2015A``
      - 3.1016
      - 5
-   * - ``B^0->D^+e^-nu::BRs@Belle-2015A``
+   * - ``B^0->D^+e^-nu::BRs@Belle:2015A``
      - 11.8206
      - 10
-   * - ``B^0->D^+mu^-nu::BRs@Belle-2015A``
+   * - ``B^0->D^+mu^-nu::BRs@Belle:2015A``
      - 5.2242
      - 10
 
@@ -618,7 +618,7 @@ We can visualize the posterior-predictive samples using:
                'label': r'Belle 2015 $\ell=e,\, q=d$',
                'type': 'constraint',
                'color': 'C0',
-               'constraints': 'B^0->D^+e^-nu::BRs@Belle-2015A',
+               'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',
                'observable': 'B->Dlnu::BR',
                'variable': 'q2',
                'rescale-by-width': False
@@ -627,7 +627,7 @@ We can visualize the posterior-predictive samples using:
                'label': r'Belle 2015 $\ell=\mu,\,q=d$',
                'type': 'constraint',
                'color': 'C1',
-               'constraints': 'B^0->D^+mu^-nu::BRs@Belle-2015A',
+               'constraints': 'B^0->D^+mu^-nu::BRs@Belle:2015A',
                'observable': 'B->Dlnu::BR',
                'variable': 'q2',
                'rescale-by-width': False

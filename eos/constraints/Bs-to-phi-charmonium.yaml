@@ -5,7 +5,7 @@
 # PDG:2020
 #
 # {{{
-B_s->phiJpsi::BR@PDG2020:
+B_s->phiJpsi::BR@PDG:2020A:
     type: Gaussian
     observable: B_s->phipsi::BR
     kinematics: {}
@@ -14,7 +14,7 @@ B_s->phiJpsi::BR@PDG2020:
     sigma-stat: {hi: 0., lo: 0.}
     sigma-sys: {hi: 8.e-5, lo: 8.e-5}
     dof: 1
-B_s->phipsi2S::BR@PDG2020:
+B_s->phipsi2S::BR@PDG:2020A:
     type: Gaussian
     observable: B_s->phipsi::BR
     kinematics: {}

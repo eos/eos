@@ -7,7 +7,7 @@
 # 2018
 #
 # {{{
-B^0_s->mu^+mu^-::BR@ATLAS-2018A:
+B^0_s->mu^+mu^-::BR@ATLAS:2018A:
     type: Gaussian
     observable: B_q->ll::BR@Untagged
     kinematics: {}
@@ -25,7 +25,7 @@ B^0_s->mu^+mu^-::BR@ATLAS-2018A:
 # 2013
 #
 # {{{
-B^0_s->mu^+mu^-::BR@CMS-2013B:
+B^0_s->mu^+mu^-::BR@CMS:2013B:
     type: Amoroso
     observable: B_q->ll::BR@Untagged
     kinematics: {}
@@ -39,7 +39,7 @@ B^0_s->mu^+mu^-::BR@CMS-2013B:
 # 2016
 #
 # {{{
-B^0_s->mu^+mu^-::BR@CMS-2016A:
+B^0_s->mu^+mu^-::BR@CMS:2016A:
     type: Gaussian
     observable: B_q->ll::BR@Untagged
     kinematics: {}
@@ -53,7 +53,7 @@ B^0_s->mu^+mu^-::BR@CMS-2016A:
 # 2019
 #
 # {{{
-B^0_s->mu^+mu^-::BR@CMS-2019A:
+B^0_s->mu^+mu^-::BR@CMS:2019A:
     type: Gaussian
     observable: B_q->ll::BR@Untagged
     kinematics: {}
@@ -71,7 +71,7 @@ B^0_s->mu^+mu^-::BR@CMS-2019A:
 # 2014
 #
 # {{{
-B^0_d->mu^+mu^-::BR@CMS-LHCb-2014:
+B^0_d->mu^+mu^-::BR@CMS-LHCb:2014A:
     type: Amoroso
     observable: B_q->ll::BR@Untagged
     kinematics: {}
@@ -80,7 +80,7 @@ B^0_d->mu^+mu^-::BR@CMS-LHCb-2014:
     theta: 3.09469e-10
     alpha: 2.08667
     beta: 1.98708
-B^0_s->mu^+mu^-::BR@CMS-LHCb-2014:
+B^0_s->mu^+mu^-::BR@CMS-LHCb:2014A:
     type: Amoroso
     observable: B_q->ll::BR@Untagged
     kinematics: {}
@@ -98,7 +98,7 @@ B^0_s->mu^+mu^-::BR@CMS-LHCb-2014:
 # 2013
 #
 # {{{
-B^0_s->mu^+mu^-::BR@LHCb-2013D:
+B^0_s->mu^+mu^-::BR@LHCb:2013D:
     type: Amoroso
     observable: B_q->ll::BR@Untagged
     kinematics: {}
@@ -112,7 +112,7 @@ B^0_s->mu^+mu^-::BR@LHCb-2013D:
 # 2017
 #
 # {{{
-B^0_s->mu^+mu^-::BR@LHCb-2017A:
+B^0_s->mu^+mu^-::BR@LHCb:2017A:
     type: Gaussian
     observable: B_q->ll::BR@Untagged
     kinematics: {}
@@ -130,7 +130,7 @@ B^0_s->mu^+mu^-::BR@LHCb-2017A:
 # 2015
 #
 # {{{
-B^+->tau^+nu::BR@Belle-2015A:
+B^+->tau^+nu::BR@Belle:2015A:
     type: Gaussian
     observable: B_u->lnu::BR
     kinematics: {}

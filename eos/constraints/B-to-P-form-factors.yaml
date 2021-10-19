@@ -4,7 +4,7 @@
 # B -> pi form factors #
 ########################
 # {{{
-B->pi::f_++f_0+f_T@FNALMILC2015A:
+B->pi::f_++f_0+f_T@FNALMLC:2015A:
   type: MultivariateGaussian(Covariance)
   dim: 11
   observables: ['B->pi::f_+(q2)', 'B->pi::f_+(q2)', 'B->pi::f_+(q2)', 'B->pi::f_0(q2)',
@@ -74,7 +74,7 @@ B->pi::f_++f_0@RBCUKQCD:2015A:
       0.004281239798400001], [0.0050366144004000005, 0.008631089884800002, 0.012557289576,
       0.0036322087968, 0.004281239798400001, 0.004835483200000001]]
     dof: 6
-B->pi::f_+@IKMvD-2014:
+B->pi::f_+@IKMvD:2014A:
     type: MultivariateGaussian
     dim: 6
     observables:
@@ -110,7 +110,7 @@ B->pi::f_+@IKMvD-2014:
         -   [0.5639999999999999, 0.863, 0.853, 0.8139999999999999, 1, 0.647]
         -   [0.313, 0.246, 0.221, 0.389, 0.647, 1]
     dof: 6
-B->pi::f_+@KMO2006:
+B->pi::f_+@KMO:2006A:
   type: Gaussian
   observable: 'B->pi::f_+(q2)'
   kinematics: {q2: 0}
@@ -119,7 +119,7 @@ B->pi::f_+@KMO2006:
   sigma-stat: {hi: 0.05, lo: 0.05}
   sigma-sys: {hi: 0, lo: 0}
   dof: 1
-B->pi::f_T@KMO2006:
+B->pi::f_T@KMO:2006A:
   type: Gaussian
   observable: 'B->pi::f_T(q2)'
   kinematics: {q2: 0}
@@ -128,7 +128,7 @@ B->pi::f_T@KMO2006:
   sigma-stat: {hi: 0.04, lo: 0.04}
   sigma-sys: {hi: 0, lo: 0}
   dof: 1
-B->pi::FormFactors[f_+,f_0,f_T]@GKvD2018:
+B->pi::FormFactors[f_+,f_0,f_T]@GKvD:2018A:
   type: MultivariateGaussian(Covariance)
   dim: 14
   observables: ['B->pi::f_+(q2)', 'B->pi::f_+(q2)', 'B->pi::f_+(q2)', 'B->pi::f_+(q2)',
@@ -226,7 +226,7 @@ B->pi::FormFactors[f_+,f_0,f_T]@GKvD2018:
     0.005846922552399844, 0.001934553977339478, 0.0024068866958467812, 0.003085296087921994,
     0.004121243324771324, 0.007558683930221799]
   dof: 14
-B->pi::FormFactors[parametric,LCSR]@GKvD2018:
+B->pi::FormFactors[parametric,LCSR]@GKvD:2018A:
   type: MultivariateGaussian(Covariance)
   dim: 8
   observables: ['B->pi::alpha^f+_0@BSZ2015', 'B->pi::alpha^f+_1@BSZ2015', 'B->pi::alpha^f+_2@BSZ2015',
@@ -270,7 +270,7 @@ B->pi::FormFactors[parametric,LCSR]@GKvD2018:
   - [0.019553447409415538, -0.05940946330794693, 0.06250679755940285, -0.002406977551487737,
     0.15324545739159304, -0.047948184973218795, -2.5674962673970105, 44.05834392401531]
   dof: 8
-B->pi::FormFactors[parametric,LCSRLattice]@GKvD2018:
+B->pi::FormFactors[parametric,LCSRLattice]@GKvD:2018A:
   type: MultivariateGaussian(Covariance)
   dim: 8
   observables: ['B->pi::alpha^f+_0@BSZ2015', 'B->pi::alpha^f+_1@BSZ2015', 'B->pi::alpha^f+_2@BSZ2015',
@@ -430,7 +430,7 @@ B->pi::form-factors[f_+,f_0,f_T]@LMvD:2021A:
 # B -> K form factors #
 #######################
 # {{{
-B->K::f_0+f_++f_T@HPQCD-2013A:
+B->K::f_0+f_++f_T@HPQCD:2013A:
     type: MultivariateGaussian
     dim: 9
     observables:
@@ -478,7 +478,7 @@ B->K::f_0+f_++f_T@HPQCD-2013A:
         -   [0.0998671, 0.0933393, 0.046188, 0.212712, 0.262759, 0.140985, 0.785177, 1, 0.853052]
         -   [0.0477771, 0.0749594, 0.0580487, 0.0508819, 0.197032, 0.220042, 0.457065, 0.853052, 1]
     dof: 9
-B->K::f_+@KMO2006:
+B->K::f_+@KMO:2006A:
   type: Gaussian
   observable: 'B->K::f_+(q2)'
   kinematics: {q2: 0}
@@ -487,7 +487,7 @@ B->K::f_+@KMO2006:
   sigma-stat: {hi: 0.04, lo: 0.04}
   sigma-sys: {hi: 0, lo: 0}
   dof: 1
-B->K::f_T@KMO2006:
+B->K::f_T@KMO:2006A:
   type: Gaussian
   observable: 'B->K::f_T(q2)'
   kinematics: {q2: 0}
@@ -496,7 +496,7 @@ B->K::f_T@KMO2006:
   sigma-stat: {hi: 0.04, lo: 0.04}
   sigma-sys: {hi: 0, lo: 0}
   dof: 1
-B->K::FormFactors[f_+,f_0,f_T]@GKvD2018:
+B->K::FormFactors[f_+,f_0,f_T]@GKvD:2018A:
   type: MultivariateGaussian(Covariance)
   dim: 14
   observables: ['B->K::f_+(q2)', 'B->K::f_+(q2)', 'B->K::f_+(q2)', 'B->K::f_+(q2)', 'B->K::f_+(q2)',
@@ -594,7 +594,7 @@ B->K::FormFactors[f_+,f_0,f_T]@GKvD2018:
     0.0085453446046936, 0.002915715991518339, 0.0035921491519817672, 0.004552899601948102,
     0.006006482931304509, 0.009442513979637402]
   dof: 14
-B->K::FormFactors[parametric,LCSR]@GKvD2018:
+B->K::FormFactors[parametric,LCSR]@GKvD:2018A:
   type: MultivariateGaussian(Covariance)
   dim: 8
   observables: ['B->K::alpha^f+_0@BSZ2015', 'B->K::alpha^f+_1@BSZ2015', 'B->K::alpha^f+_2@BSZ2015',
@@ -638,7 +638,7 @@ B->K::FormFactors[parametric,LCSR]@GKvD2018:
   - [0.039491039857246994, -0.13900226128115065, 0.29699060266978206, -0.0008993505288365657,
     0.15335613783747032, -0.0056669635427265, -1.9513469972868065, 31.877547194753852]
   dof: 8
-B->K::FormFactors[parametric,LCSRLattice]@GKvD2018:
+B->K::FormFactors[parametric,LCSRLattice]@GKvD:2018A:
   type: MultivariateGaussian(Covariance)
   dim: 8
   observables: ['B->K::alpha^f+_0@BSZ2015', 'B->K::alpha^f+_1@BSZ2015', 'B->K::alpha^f+_2@BSZ2015',
@@ -688,7 +688,7 @@ B->K::FormFactors[parametric,LCSRLattice]@GKvD2018:
 # B -> D form factors #
 #######################
 # {{{
-B->D::f_+@FKKM2008:
+B->D::f_+@FKKM:2008A:
   type: Gaussian
   observable: 'B->D::f_+(q2)'
   kinematics: {q2: 0}
@@ -697,7 +697,7 @@ B->D::f_+@FKKM2008:
   sigma-stat: {hi: 0.20, lo: 0.20}
   sigma-sys: {hi: 0, lo: 0}
   dof: 1
-B->D::f_++f_0@HPQCD2015A:
+B->D::f_++f_0@HPQCD:2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
@@ -729,7 +729,7 @@ B->D::f_++f_0@HPQCD2015A:
         -   [0.5068182286172014, 0.6170829992176082,  0.7663670044143619, 1., 0.9884737758332469]
         -   [0.5216145561486998, 0.6491777532608343, 0.8449267160522822, 0.988473775833247, 1.]
     dof: 5
-B->D::f_++f_0@FNALMILC2015B:
+B->D::f_++f_0@FNALMILC:2015B:
     type: MultivariateGaussian
     dim: 7
     observables:
@@ -775,7 +775,7 @@ B->D::f_++f_0@FNALMILC2015B:
 # B_s -> D_s form factors #
 ###########################
 # {{{
-B_s->D_s::f_++f_0@HPQCD2019:
+B_s->D_s::f_++f_0@HPQCD:2019A:
   type: MultivariateGaussian(Covariance)
   dim: 5
   observables:
@@ -815,7 +815,7 @@ B_s->D_s::f_++f_0@HPQCD2019:
 # B_s -> K form factors #
 #########################
 # {{{
-B_s->K::f_++f_0@FLAG2019:
+B_s->K::f_++f_0@FLAG:2019A:
   type: MultivariateGaussian(Covariance)
   dim: 5
   observables:
@@ -849,7 +849,7 @@ B_s->K::f_++f_0@FLAG2019:
   - [0.0005524155694906068, 0.0007587710797986562, 0.0012020852954984505, 0.0005506208362083083, 0.0006814340271817386]
   - [0.0006178021016907361, 0.0008732301898815541, 0.0014360698540655434, 0.0006814340271817386, 0.0009094501948742747]
   dof: 5
-B_s->K::FormFactors[f_+,f_0,f_T]@GvDV2019:
+B_s->K::FormFactors[f_+,f_0,f_T]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   dim: 14
   observables:
@@ -1110,7 +1110,7 @@ B_s->K::FormFactors[f_+,f_0,f_T]@GvDV2019:
     - 0.007501837138232052
     - 0.014973159274752052
   dof: 14
-B_s->K::FormFactors[parametric,LCSR]@GvDV2019:
+B_s->K::FormFactors[parametric,LCSR]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   dim: 8
   observables:
@@ -1215,7 +1215,7 @@ B_s->K::FormFactors[parametric,LCSR]@GvDV2019:
     - -8.68985837694645
     - 155.9992071490046
   dof: 8
-B_s->K::FormFactors[parametric,LCSRLattice]@GvDV2019:
+B_s->K::FormFactors[parametric,LCSRLattice]@GvDV:2020A:
   type: MultivariateGaussian(Covariance)
   dim: 8
   observables:

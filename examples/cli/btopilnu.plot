@@ -34,9 +34,9 @@ contents:
       type: 'constraint'
       color: 'C2'
       constraints:
-        - 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar-2010A'
-        - 'B^0->pi^+lnu::BR[4.0,8.0]@BaBar-2010A'
-        - 'B^0->pi^+lnu::BR[8.0,12.0]@BaBar-2010A'
+        - 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar:2010A'
+        - 'B^0->pi^+lnu::BR[4.0,8.0]@BaBar:2010A'
+        - 'B^0->pi^+lnu::BR[8.0,12.0]@BaBar:2010A'
       variable: 'q2'
       rescale-by-width: true
 

@@ -7,7 +7,7 @@
 # 2008
 #
 # {{{
-B^0->K^*0gamma::C_K@BaBar-2008:
+B^0->K^*0gamma::C_K@BaBar:2008A:
     type: Gaussian
     observable: B->K^*gamma::C_K^*gamma
     kinematics: {}
@@ -16,7 +16,7 @@ B^0->K^*0gamma::C_K@BaBar-2008:
     sigma-stat: {hi: 0.16, lo: -0.16}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0gamma::S_K@BaBar-2008:
+B^0->K^*0gamma::S_K@BaBar:2008A:
     type: Gaussian
     observable: B->K^*gamma::S_K^*gamma
     kinematics: {}
@@ -25,7 +25,7 @@ B^0->K^*0gamma::S_K@BaBar-2008:
     sigma-stat: {hi: 0.29, lo: -0.29}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0gamma::S_K+C_K@BaBar-2008:
+B^0->K^*0gamma::S_K+C_K@BaBar:2008A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -51,7 +51,7 @@ B^0->K^*0gamma::S_K+C_K@BaBar-2008:
 # 2009
 #
 # {{{
-B^+->K^*+gamma::BR@BaBar-2009:
+B^+->K^*+gamma::BR@BaBar:2009A:
     type: Gaussian
     observable: B->K^*gamma::BRavg
     kinematics: {}
@@ -60,7 +60,7 @@ B^+->K^*+gamma::BR@BaBar-2009:
     sigma-stat: {hi: 1.4e-06, lo: -1.4e-06}
     sigma-sys: {hi: 1.6e-06, lo: -1.6e-06}
     dof: 1
-B^0->K^*0gamma::BR@BaBar-2009:
+B^0->K^*0gamma::BR@BaBar:2009A:
     type: Gaussian
     observable: B->K^*gamma::BRavg
     kinematics: {}
@@ -78,7 +78,7 @@ B^0->K^*0gamma::BR@BaBar-2009:
 # 2004
 #
 # {{{
-B^+->K^*+gamma::BR@Belle-2004:
+B^+->K^*+gamma::BR@Belle:2004A:
     type: Gaussian
     observable: B->K^*gamma::BRavg
     kinematics: {}
@@ -87,7 +87,7 @@ B^+->K^*+gamma::BR@Belle-2004:
     sigma-stat: {hi: 3.1e-06, lo: 3.1e-06}
     sigma-sys: {hi: 2.4e-06, lo: 2.4e-06}
     dof: 1
-B^0->K^*0gamma::BR@Belle-2004:
+B^0->K^*0gamma::BR@Belle:2004A:
     type: Gaussian
     observable: B->K^*gamma::BRavg
     kinematics: {}
@@ -102,7 +102,7 @@ B^0->K^*0gamma::BR@Belle-2004:
 # 2006
 #
 # {{{
-B^0->K^*0gamma::C_K@Belle-2006:
+B^0->K^*0gamma::C_K@Belle:2006A:
     type: Gaussian
     observable: B->K^*gamma::C_K^*gamma
     kinematics: {}
@@ -111,7 +111,7 @@ B^0->K^*0gamma::C_K@Belle-2006:
     sigma-stat: {hi: 0.24, lo: -0.24}
     sigma-sys: {hi: 0.05, lo: -0.05}
     dof: 1
-B^0->K^*0gamma::S_K@Belle-2006:
+B^0->K^*0gamma::S_K@Belle:2006A:
     type: Gaussian
     observable: B->K^*gamma::S_K^*gamma
     kinematics: {}
@@ -120,7 +120,7 @@ B^0->K^*0gamma::S_K@Belle-2006:
     sigma-stat: {hi: 0.36, lo: -0.33}
     sigma-sys: {hi: 0.05, lo: -0.05}
     dof: 1
-B^0->K^*0gamma::S_K+C_K@Belle-2006:
+B^0->K^*0gamma::S_K+C_K@Belle:2006A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -149,7 +149,7 @@ B^0->K^*0gamma::S_K+C_K@Belle-2006:
 # 2000
 #
 # {{{
-B^+->K^*+gamma::BR@CLEO-2000:
+B^+->K^*+gamma::BR@CLEO:2000A:
     type: Gaussian
     observable: B->K^*gamma::BRavg
     kinematics: {}
@@ -158,7 +158,7 @@ B^+->K^*+gamma::BR@CLEO-2000:
     sigma-stat: {hi: 8.899999999999999e-06, lo: 8.3e-06}
     sigma-sys: {hi: 2.8e-06, lo: 2.8e-06}
     dof: 1
-B^0->K^*0gamma::BR@CLEO-2000:
+B^0->K^*0gamma::BR@CLEO:2000A:
     type: Gaussian
     observable: B->K^*gamma::BRavg
     kinematics: {}
@@ -176,7 +176,7 @@ B^0->K^*0gamma::BR@CLEO-2000:
 # 2011
 #
 # {{{
-B^0->K^*0gamma::S_K+C_K@HFAG-2011:
+B^0->K^*0gamma::S_K+C_K@HFAG:2011A:
     type: MultivariateGaussian
     dim: 2
     observables:
