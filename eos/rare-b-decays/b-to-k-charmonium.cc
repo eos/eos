@@ -121,4 +121,10 @@ namespace eos
         return _imp->branching_ratio();
     }
 
+    const std::set<ReferenceName>
+    BToKCharmonium::references
+    {
+        "KMPW:2010A"_rn,
+        "GvDV:2020A"_rn
+    };
 }
