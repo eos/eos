@@ -1283,47 +1283,41 @@ class ConstraintTest :
         {
             /* Test making constraints */
             {
-                try
+                std::cout << "# Constraints :" << std::endl;
+
+                Options o;
+                auto constraints = Constraints();
+                unsigned n = 0;
+
+                for (auto cf = constraints.begin(); cf != constraints.end(); ++cf, ++n)
                 {
-                    std::cout << "# Constraints :" << std::endl;
+                    std::cout << "#  " << cf->first.full() << ": ";
 
-                    Options o;
-                    auto constraints = Constraints();
-                    unsigned n = 0;
-
-                    for (auto cf = constraints.begin(); cf != constraints.end(); ++cf, ++n)
+                    auto suffix = cf->first.suffix_part();
+                    if (0 < suffix.str().size())
                     {
-                        std::cout << "#  " << cf->first.full() << ": ";
+                        TEST_CHECK_NO_THROW(auto rn = ReferenceName(suffix.str()));
+                    }
 
-                        Constraint c = Constraint::make(cf->first, o);
-                        TEST_CHECK_EQUAL(c.name(), cf->first);
-                        TEST_CHECK(std::distance(c.begin_observables(), c.end_observables()) > 0);
-                        TEST_CHECK(std::distance(c.begin_blocks(), c.end_blocks()) > 0);
+                    Constraint c = Constraint::make(cf->first, o);
+                    TEST_CHECK_EQUAL(c.name(), cf->first);
+                    TEST_CHECK(std::distance(c.begin_observables(), c.end_observables()) > 0);
+                    TEST_CHECK(std::distance(c.begin_blocks(), c.end_blocks()) > 0);
 
-                        for (auto o = c.begin_observables(), o_end = c.end_observables(); o != o_end ; ++o)
-                        {
-                            std::cout << (**o).name() << '['
-                                    << (**o).kinematics().as_string() << ']'
-                                    << " with options: " << (**o).options().as_string();
-                        }
-                        for (auto b = c.begin_blocks(), b_end = c.end_blocks(); b != b_end ; ++b)
-                        {
-                            std::cout << ", " << (**b).as_string();
-                        }
-                        std::cout << std::endl;
+                    for (auto o = c.begin_observables(), o_end = c.end_observables(); o != o_end ; ++o)
+                    {
+                        std::cout << (**o).name() << '['
+                                << (**o).kinematics().as_string() << ']'
+                                << " with options: " << (**o).options().as_string();
+                    }
+                    for (auto b = c.begin_blocks(), b_end = c.end_blocks(); b != b_end ; ++b)
+                    {
+                        std::cout << ", " << (**b).as_string();
                     }
                     std::cout << std::endl;
-                    std::cout << "# Found " << n << " constraints" << std::endl;
                 }
-                catch (std::exception & e)
-                {
-                    std::cerr << "Caught unexpected exception: " << e.what() << std::endl;
-                    throw e;
-                }
-                catch (...)
-                {
-                    std::cerr << "Caught unexpected unknown exception" << std::endl;
-                }
+                std::cout << std::endl;
+                std::cout << "# Found " << n << " constraints" << std::endl;
             }
 
             /* Test retrieving ConstraintEntry by name */
