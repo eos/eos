@@ -321,6 +321,12 @@ BaBar:2004A:
   inspire-id: Aubert:2004it
   title: Measurement of the $B \to X_s \ell^+ \ell^-$ branching fraction with a sum
     over exclusive modes
+BaBar:2007A:
+  authors: Aubert, Bernard et al.
+  collaboration: BaBar
+  inspire-id: BaBar:2007rbr
+  title: Measurement of decay amplitudes of $B \to J/\psi K^{*}, \psi(2S) K^{*}$,
+    and $\chi_{c1} K^{*}$ with an angular analysis
 BaBar:2008A:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
@@ -611,6 +617,13 @@ CMS:2019A:
     id: 2684828
   title: Measurement of properties of $B_s^0 \to \mu^+\mu^-$ decays and search for $B^0
     \to \mu^+\mu^-$ with the CMS experiment
+CMS+LHCb:2014A:
+  authors: Khachatryan, V. and others [CMS and LHCb]
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1411.4413
+  inspire-id: CMS:2014xfa
+  title: Observation of the rare $B^0_s\to\mu^+\mu^-$ decay from the combined analysis of CMS and LHCb data
 D0:2011A:
   authors: Abazov, Victor Mukhamedovich et al.
   collaboration: D0
@@ -1044,6 +1057,14 @@ LHCb:2013D:
   inspire-id: Aaij:2013aka
   title: Measurement of the $B^0_s \to \mu^+ \mu^-$ branching fraction and search
     for $B^0 \to \mu^+ \mu^-$ decays at the LHCb experiment
+LHCb:2013E:
+  authors: Aaij, R. et al.
+  collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1307.2782
+  inspire-id: LHCb:2013vga
+  title: Measurement of the polarization amplitudes  in $B^0 \to J/\psi K^{*}(892)^0$ decays
 LHCb:2014A:
   authors: Aaij, R. et al.
   collaboration: LHCb
