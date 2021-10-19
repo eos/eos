@@ -24,7 +24,7 @@ from scipy.stats import gaussian_kde
 import sys
 
 class Plotter:
-    """ Produces publication-quality plots
+    """Produces publication-quality plots
 
     Plots can contain EOS observables, EOS constraints, and :class:`Analysis <eos.Analysis>` results.
     See `Plot description format`_ for documentation of how to create a plot.
@@ -46,45 +46,24 @@ class Plotter:
         self.colors = [
             'tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan'
         ]
-        self.plot_types = {
-            'band':                  Plotter.Band,
-            'constraint':            Plotter.Constraint,
-            'constraint2D':          Plotter.Constraint2D,
-            'constraint-overview':   Plotter.ConstraintOverview,
-            'contours2D':            Plotter.Contours2D,
-            'expression':            Plotter.Expression,
-            'errorbar':              Plotter.ErrorBar,
-            'histogram':             Plotter.Histogram1D,
-            'histogram2D':           Plotter.Histogram2D,
-            'kde':                   Plotter.KernelDensityEstimate1D,
-            'kde2D':                 Plotter.KernelDensityEstimate2D,
-            'observable':            Plotter.Observable,
-            'point':                 Plotter.Point,
-            'signal-pdf':            Plotter.SignalPDF,
-            'uncertainty':           Plotter.Uncertainty,
-            'uncertainty-binned':    Plotter.UncertaintyBinned,
-            'uncertainty-overview':  Plotter.UncertaintyOverview,
-            'watermark':             Plotter.Watermark,
-        }
 
-
-    """ Returns the next available z-order value, incremented for each plot w/o pre-defined z-order value. """
     @property
     def next_z_order(self):
+        """Returns the next available z-order value, incremented for each plot w/o pre-defined z-order value"""
         result = self.__next_z_order
         self.__next_z_order += 1
         return(result)
 
-    """ Returns the next available color. """
     @property
     def next_color(self):
+        """Returns the next available color"""
         result = self.colors[self.__next_color]
         self.__next_color = (self.__next_color + 1) % len(self.colors)
         return(result)
 
 
-    """ Setting up the plot based on the provided instruction. """
     def setup_plot(self):
+        """Setting up the plot based on the provided instruction"""
         if not 'plot' in self.instructions:
             raise KeyError('no plot metadata specified')
 
@@ -180,8 +159,8 @@ class Plotter:
 
         self.ax.set(xlabel=myxlabel, ylabel=myylabel, title=mytitle)
 
-    """ Base class for any of the plots supported by Plotter. """
     class BasePlot:
+        """Base class for any of the plots supported by Plotter"""
         def __init__(self, plotter, item):
             self.plotter = plotter
             self.item    = item
@@ -202,8 +181,8 @@ class Plotter:
             return ([], [])
 
 
-    """ Plots a single point. """
     class Point(BasePlot):
+        """Plots a single point"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -226,8 +205,8 @@ class Plotter:
                 markersize=self.markersize)
 
 
-    """ Plots a single errors bar. """
     class ErrorBar(BasePlot):
+        """Plots a single errors bar"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -248,8 +227,8 @@ class Plotter:
                 color=self.color, elinewidth=self.elinewidth, fmt='_', linestyle='none', label=self.label)
 
 
-    """ Plots a shaded band. """
     class Band(BasePlot):
+        """Plots a shaded band"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -276,8 +255,8 @@ class Plotter:
                 return ([], [])
 
 
-    """ Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter. """
     class Observable(BasePlot):
+        """Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -358,11 +337,10 @@ class Plotter:
 
             plt.plot(xvalues, ovalues, alpha=self.alpha, color=self.color, label=self.label, ls=self.style)
 
-    """ Plots an uncertainty band as a function of one kinematic variable.
-
-    This routine expects the uncertainty propagation to have produces an HDF5 file.
-    """
     class Uncertainty(BasePlot):
+        """Plots an uncertainty band as a function of one kinematic variable
+
+This routine expects the uncertainty propagation to have produces an HDF5 file"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -444,11 +422,10 @@ class Plotter:
             self.plotter.ax.plot(xvalues, ovalues_higher,                        alpha=self.alpha, color=self.color)
 
 
-    """ Plots one or more uncertainty band integrated over one kinematic variable.
-
-    This routine expects the uncertainty propagation to have produces an HDF5 file.
-    """
     class UncertaintyBinned(BasePlot):
+        """Plots one or more uncertainty band integrated over one kinematic variable
+
+This routine expects the uncertainty propagation to have produces an HDF5 file"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -533,11 +510,10 @@ class Plotter:
                 self.label = None
 
 
-    """ Plots an overview of uncertainty estimates.
-
-    This routine expects the uncertainty propagation to have produced an HDF5 file.
-    """
     class UncertaintyOverview(BasePlot):
+        """Plots an overview of uncertainty estimates
+
+This routine expects the uncertainty propagation to have produced an HDF5 file"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -573,8 +549,8 @@ class Plotter:
                 self.label = None
 
 
-    """ Plots constraints from the EOS library of experimental and theoretical likelihoods. """
     class Constraint(BasePlot):
+        """Plots constraints from the EOS library of experimental and theoretical likelihoods"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -704,8 +680,8 @@ class Plotter:
                 self.label = None
 
 
-    """ Plot 2D contours for two correlated observables from a single constraint. """
     class Constraint2D(BasePlot):
+        """Plot 2D contours for two correlated observables from a single constraint"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -890,8 +866,8 @@ class Plotter:
                 return ([], [])
 
 
-    """ Plots overview of several constraints from the EOS library of experimental and theoretical likelihoods. """
     class ConstraintOverview(BasePlot):
+        """Plots overview of several constraints from the EOS library of experimental and theoretical likelihoods"""
         def __init__(self, plotter, item):
             import yaml
 
@@ -982,8 +958,8 @@ class Plotter:
             plt.subplots_adjust(bottom=0.15)
 
 
-    """ Plots 2D contours of a pair of parameters based on pre-existing random samples. """
     class Contours2D(BasePlot):
+        """Plots 2D contours of a pair of parameters based on pre-existing random samples"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -1043,8 +1019,8 @@ class Plotter:
             plt.clabel(CS, inline=1, fmt=fmt, fontsize=10)
 
 
-    """ Plots a 1D Kernel Density Estimate (KDE) of pre-existing random samples. """
     class KernelDensityEstimate1D(BasePlot):
+        """Plots a 1D Kernel Density Estimate (KDE) of pre-existing random samples"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -1108,8 +1084,8 @@ class Plotter:
             plt.plot(x, pdf, color=self.color, label=self.label)
 
 
-    """ Plots contours of a 2D Kernel Density Estimate (KDE) of pre-existing random samples. """
     class KernelDensityEstimate2D(BasePlot):
+        """Plots contours of a 2D Kernel Density Estimate (KDE) of pre-existing random samples"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -1222,8 +1198,8 @@ class Plotter:
                 return ([], [])
 
 
-    """ Plots a 1D histogram of pre-existing random samples. """
     class Histogram1D(BasePlot):
+        """Plots a 1D histogram of pre-existing random samples"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -1274,8 +1250,8 @@ class Plotter:
                     histtype=self.histtype, label=self.label, lw=self.lw)
 
 
-    """ Plots a 2D histogram of pre-existing random samples. """
     class Histogram2D(BasePlot):
+        """Plots a 2D histogram of pre-existing random samples"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -1334,8 +1310,8 @@ class Plotter:
                        label=self.label)
 
 
-    """ Plots a single EOS signal PDF w/o uncertainties as a function of one kinemtic variable. """
     class SignalPDF(BasePlot):
+        """Plots a single EOS signal PDF w/o uncertainties as a function of one kinemtic variable"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -1386,8 +1362,8 @@ class Plotter:
             plt.plot(xvalues, np.exp(pvalues - norm), alpha=self.alpha, color=self.color, label=self.label, ls=self.style)
 
 
-    """ Plots a given expression. """
     class Expression(BasePlot):
+        """Plots a given expression"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -1412,8 +1388,8 @@ class Plotter:
             plt.plot(x, y, color=color, alpha=alpha, linestyle=style, label=label)
 
 
-    """ Inserts an EOS watermark into the plots. """
     class Watermark(BasePlot):
+        """Inserts an EOS watermark into the plots"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
             self.z_order = sys.maxsize
@@ -1454,8 +1430,33 @@ class Plotter:
                     horizontalalignment=hpos, verticalalignment=vpos, zorder=+5)
 
 
-    """ Plots the contents specified in the instructions provided to Plotter. """
+    # This dict defines the user-facing keys for the plot items
+    # after all classes are defined. Documentation can be generated
+    # based on this class attribute.
+    plot_types = {
+        'band':                  Band,
+        'constraint':            Constraint,
+        'constraint2D':          Constraint2D,
+        'constraint-overview':   ConstraintOverview,
+        'contours2D':            Contours2D,
+        'expression':            Expression,
+        'errorbar':              ErrorBar,
+        'histogram':             Histogram1D,
+        'histogram2D':           Histogram2D,
+        'kde':                   KernelDensityEstimate1D,
+        'kde2D':                 KernelDensityEstimate2D,
+        'observable':            Observable,
+        'point':                 Point,
+        'signal-pdf':            SignalPDF,
+        'uncertainty':           Uncertainty,
+        'uncertainty-binned':    UncertaintyBinned,
+        'uncertainty-overview':  UncertaintyOverview,
+        'watermark':             Watermark,
+    }
+
+
     def plot_contents(self):
+        """Plots the contents specified in the instructions provided to Plotter"""
         if not 'contents' in self.instructions:
             return
 
@@ -1503,8 +1504,8 @@ class Plotter:
                 self.ax.legend(handles, labels, loc=loc, ncol=ncol)
 
 
-    """ Produces the plot. """
     def plot(self):
+        """Produces the plot"""
         self.setup_plot()
         self.plot_contents()
 
@@ -1520,5 +1521,3 @@ def variable_to_latex(variable):
         return p[variable].latex()
     else:
         return r'\verb{' + variable + '}'
-
-
