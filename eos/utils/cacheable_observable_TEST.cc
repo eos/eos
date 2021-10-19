@@ -65,6 +65,10 @@ namespace eos
             static const std::set<ReferenceName> references;
     };
 
+    const std::set<ReferenceName>
+    TestCacheableObservableProvider::references
+    {
+    };
 
     template <>
     struct Implementation<TestCacheableObservableProvider>
@@ -129,14 +133,6 @@ namespace eos
         return _imp->evaluate2(ir);
     }
 
-    const std::set<ReferenceName>
-    TestCacheableObservableProvider::references
-    {
-    };
-
-
-
-
     /*!
     * Construct the same observable as a regular observable
     */
@@ -151,8 +147,17 @@ namespace eos
             // Observables
             double evaluate1(const double & q2) const;
             double evaluate2(const double & q2) const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 
+    const std::set<ReferenceName>
+    TestRegularObservableProvider::references
+    {
+    };
 
     template <>
     struct Implementation<TestRegularObservableProvider>

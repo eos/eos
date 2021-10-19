@@ -74,6 +74,7 @@ namespace eos
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, &_decay))
             {
                 uses(_decay);
+                uses(Decay_::references);
             }
 
             virtual const QualifiedName & name() const

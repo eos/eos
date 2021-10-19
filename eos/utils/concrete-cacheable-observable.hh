@@ -80,6 +80,7 @@ namespace eos
                 _kinematics_names(kinematics_names)
             {
                 uses(*_decay);
+                uses(Decay_::references);
             }
 
             ~ConcreteCachedObservable() = default;
@@ -162,6 +163,7 @@ namespace eos
                 _argument_tuple(impl::TupleMaker<sizeof...(Args_)>::make(_kinematics, _kinematics_names, _decay.get()))
             {
                 uses(*_decay);
+                uses(Decay_::references);
             }
 
             ~ConcreteCacheableObservable() = default;
