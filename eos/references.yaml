@@ -782,6 +782,13 @@ FNALMILC:2017A:
     id: oai:arXiv.org:1712.09262
   inspire-id: Bazavov:2017lyh
   title: $B$- and $D$-meson leptonic decay constants from four-flavor lattice QCD
+FvDV:2018A:
+  authors: Feldmann, Th. and van Dyk, D. and Vos, K.K.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1807.01924
+  inspire-id: Feldmann:2018kqr
+  title: Revisiting $B \to \pi\pi \ell \nu$ at large dipion masses
 FY:2011A:
   authors: Feldmann, Thorsten and Yip, Matthew W.Y.
   eprint:
