@@ -272,4 +272,10 @@ namespace eos
         return +sqrt(this->para_polarization() * this->perp_polarization() / 2.0) * sin(this->delta_perp_long() - this->delta_para_long());
     }
 
+    const std::set<ReferenceName>
+    BToKstarCharmonium::references
+    {
+        "KMPW:2010A"_rn,
+        "GvDV:2020A"_rn
+    };
 }
