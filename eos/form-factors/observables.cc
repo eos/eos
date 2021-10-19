@@ -1465,41 +1465,6 @@ namespace eos
     }
     // }}}
 
-    // heavy-quark expansion
-    // {{{
-    ObservableGroup
-    make_hqe_group()
-    {
-        auto imp = new Implementation<ObservableGroup>{
-            R"(Heavy Quark Expansion)",
-            R"(Pseudo observables for the parameters of the heavy-quark expansion in exclusive $b\to c$ semileptonic form factors)",
-            {
-                make_observable("B_q(*)->D_q(*)::xi_prime_s(1)", R"(\xi^\prime_{s}(1))",
-                        Unit::None(),
-                        &HQETIsgurWiseFunctionParameters::xipone,
-                        std::make_tuple(),
-                        Options{ { "q", "s" } }),
-
-                make_observable("B_q(*)->D_q(*)::xi_prime(1)", R"(\xi^\prime(1))",
-                        Unit::None(),
-                        &HQETIsgurWiseFunctionParameters::xipone,
-                        std::make_tuple(),
-                        Options{ { "q", "d" } }),
-
-                make_expression_observable("B_q(*)->D_q(*)::R(xi')@HQET", R"(\xi^\prime_{s}(1)/\xi^\prime(1))",
-                        Unit::None(),
-                        R"(
-                        <<B_q(*)->D_q(*)::xi_prime_s(1);q=s>>
-                        /
-                        <<B_q(*)->D_q(*)::xi_prime(1);q=d>>
-                        )"),
-            }
-        };
-
-        return ObservableGroup(imp);
-    }
-    // }}}
-
     ObservableSection
     make_form_factors_section()
     {
@@ -1536,9 +1501,6 @@ namespace eos
 
                 // unitarity bounds
                 make_unitarity_bounds_group(),
-
-                // heavy-quark expansion
-                make_hqe_group(),
             }
         );
 
