@@ -124,11 +124,11 @@ class PythonTests:
 
         con = None
         try:
-            con = Constraint.make('B->D::f_++f_0@HPQCD2015A', Options())
+            con = Constraint.make('B->D::f_++f_0@HPQCD:2015A', Options())
         except:
             raise TestFailedError('cannot create Constraint')
 
-        if not con.name() == 'B->D::f_++f_0@HPQCD2015A':
+        if not con.name() == 'B->D::f_++f_0@HPQCD:2015A':
             raise TestFailedError('cannot obtain Constraint name')
 
         for llhb in con.blocks():

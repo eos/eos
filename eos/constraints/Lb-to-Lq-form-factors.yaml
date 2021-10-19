@@ -4,7 +4,7 @@
 # Lambda_b -> Lambda form factors #
 ###################################
 # {{{
-Lambda_b->Lambda::f_long^A@BFvD2014:
+Lambda_b->Lambda::f_long^A@BFvD:2014A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -24,7 +24,7 @@ Lambda_b->Lambda::f_long^A@BFvD2014:
         -   [1, 0]
         -   [0, 1]
     dof: 2
-Lambda_b->Lambda::f_perp+long^V+A@BFvD2014:
+Lambda_b->Lambda::f_perp+long^V+A@BFvD:2014A:
     type: MultivariateGaussian
     dim: 4
     observables:
@@ -52,7 +52,7 @@ Lambda_b->Lambda::f_perp+long^V+A@BFvD2014:
         -   [0.773, 0.773, 1, 0.534]
         -   [0.771, 0.772, 0.534, 1]
     dof: 4
-Lambda_b->Lambda::f_perp^A@BFvD2014:
+Lambda_b->Lambda::f_perp^A@BFvD:2014A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -72,7 +72,7 @@ Lambda_b->Lambda::f_perp^A@BFvD2014:
         -   [1, 0]
         -   [0, 1]
     dof: 2
-Lambda_b->Lambda::f_perp^V@BFvD2014:
+Lambda_b->Lambda::f_perp^V@BFvD:2014A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -92,7 +92,7 @@ Lambda_b->Lambda::f_perp^V@BFvD2014:
         -   [1, 0]
         -   [0, 1]
     dof: 2
-Lambda_b->Lambda::f_perp+long^V+A+T+T5@DM2016:
+Lambda_b->Lambda::f_perp+long^V+A+T+T5@DM:2016A:
     type: MultivariateGaussian(Covariance)
     dim: 22
     observables:
@@ -195,7 +195,7 @@ Lambda_b->Lambda::f_perp+long^V+A+T+T5@DM2016:
 # Lambda_b -> Lambda_c form factors #
 #####################################
 # {{{
-Lambda_b->Lambda::f_long^V@BFvD2014:
+Lambda_b->Lambda::f_long^V@BFvD:2014A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -215,7 +215,7 @@ Lambda_b->Lambda::f_long^V@BFvD2014:
         -   [1, 0]
         -   [0, 1]
     dof: 0
-Lambda_b->Lambda_c::f_perp+long+time^V+A+T+T5@DKMR2017:
+Lambda_b->Lambda_c::f_perp+long+time^V+A+T+T5@DKMR:2017A:
     type: MultivariateGaussian(Covariance)
     dim: 18
     observables:

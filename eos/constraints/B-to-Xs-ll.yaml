@@ -7,7 +7,7 @@
 # 2004
 #
 # {{{
-B->X_sll::BR[1.0,6.0]@BaBar-2004A:
+B->X_sll::BR[1.0,6.0]@BaBar:2004A:
     type: Gaussian
     observable: B->X_sll::BR@HLMW2005
     kinematics: {q2_min: 1, q2_max: 6}
@@ -21,7 +21,7 @@ B->X_sll::BR[1.0,6.0]@BaBar-2004A:
 # 2013
 #
 # {{{
-B->X_sll::BR[1.0,6.0]@BaBar-2013A:
+B->X_sll::BR[1.0,6.0]@BaBar:2013A:
     type: Gaussian
     observable: B->X_sll::BR@HLMW2005
     kinematics: {q2_min: 1, q2_max: 6}
@@ -39,7 +39,7 @@ B->X_sll::BR[1.0,6.0]@BaBar-2013A:
 # 2005
 #
 # {{{
-B->X_sll::BR[1.0,6.0]@Belle-2005A:
+B->X_sll::BR[1.0,6.0]@Belle:2005A:
     type: Gaussian
     observable: B->X_sll::BR@HLMW2005
     kinematics: {q2_min: 1, q2_max: 6}

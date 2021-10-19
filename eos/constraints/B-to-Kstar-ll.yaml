@@ -7,7 +7,7 @@
 # 2012
 #
 # {{{
-B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@BaBar-2012:
+B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@BaBar:2012B:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -16,7 +16,7 @@ B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@BaBar-2012:
     sigma-stat: {hi: 0.14, lo: -0.12}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@BaBar-2012:
+B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@BaBar:2012B:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -25,7 +25,7 @@ B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@BaBar-2012:
     sigma-stat: {hi: 0.15, lo: -0.08}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@BaBar-2012:
+B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@BaBar:2012B:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -34,7 +34,7 @@ B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@BaBar-2012:
     sigma-stat: {hi: 0.21, lo: -0.19}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[1.00,6.00]@BaBar-2012:
+B^0->K^*0mu^+mu^-::BR[1.00,6.00]@BaBar:2012A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -43,7 +43,7 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@BaBar-2012:
     sigma-stat: {hi: 5.3e-08, lo: -4.8e-08}
     sigma-sys: {hi: 7e-09, lo: -7e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[14.21,16.00]@BaBar-2012:
+B^0->K^*0mu^+mu^-::BR[14.21,16.00]@BaBar:2012A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.21, q2_max: 16}
@@ -52,7 +52,7 @@ B^0->K^*0mu^+mu^-::BR[14.21,16.00]@BaBar-2012:
     sigma-stat: {hi: 4.1e-08, lo: -3.6e-08}
     sigma-sys: {hi: 6e-09, lo: -6e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[16.00,19.21]@BaBar-2012:
+B^0->K^*0mu^+mu^-::BR[16.00,19.21]@BaBar:2012A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -61,7 +61,7 @@ B^0->K^*0mu^+mu^-::BR[16.00,19.21]@BaBar-2012:
     sigma-stat: {hi: 4.7e-08, lo: -4.2e-08}
     sigma-sys: {hi: 6e-09, lo: -6e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@BaBar-2012:
+B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@BaBar:2012B:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -70,7 +70,7 @@ B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@BaBar-2012:
     sigma-stat: {hi: 0.09, lo: -0.08}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@BaBar-2012:
+B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@BaBar:2012B:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -79,7 +79,7 @@ B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@BaBar-2012:
     sigma-stat: {hi: 0.1, lo: -0.13}
     sigma-sys: {hi: 0.09, lo: -0.09}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@BaBar-2012:
+B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@BaBar:2012B:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -97,7 +97,7 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@BaBar-2012:
 # 2009
 #
 # {{{
-B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@Belle-2009:
+B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@Belle:2009A:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -106,7 +106,7 @@ B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@Belle-2009:
     sigma-stat: {hi: 0.3, lo: -0.27}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@Belle-2009:
+B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@Belle:2009A:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -115,7 +115,7 @@ B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@Belle-2009:
     sigma-stat: {hi: 0.22, lo: -0.16}
     sigma-sys: {hi: 0.1, lo: -0.1}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@Belle-2009:
+B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@Belle:2009A:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -124,7 +124,7 @@ B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@Belle-2009:
     sigma-stat: {hi: 0.16, lo: -0.11}
     sigma-sys: {hi: 0.04, lo: -0.04}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[1.00,6.00]@Belle-2009:
+B^0->K^*0mu^+mu^-::BR[1.00,6.00]@Belle:2009A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -133,7 +133,7 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@Belle-2009:
     sigma-stat: {hi: 4.5e-08, lo: -4e-08}
     sigma-sys: {hi: 1.2e-08, lo: -1.2e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[14.18,16.00]@Belle-2009:
+B^0->K^*0mu^+mu^-::BR[14.18,16.00]@Belle:2009A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -142,7 +142,7 @@ B^0->K^*0mu^+mu^-::BR[14.18,16.00]@Belle-2009:
     sigma-stat: {hi: 2.9e-08, lo: -2.6e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[16.00,19.21]@Belle-2009:
+B^0->K^*0mu^+mu^-::BR[16.00,19.21]@Belle:2009A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -151,7 +151,7 @@ B^0->K^*0mu^+mu^-::BR[16.00,19.21]@Belle-2009:
     sigma-stat: {hi: 2.7e-08, lo: -2.4e-08}
     sigma-sys: {hi: 1.6e-08, lo: -1.6e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle-2009:
+B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle:2009A:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -160,7 +160,7 @@ B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@Belle-2009:
     sigma-stat: {hi: 0.23, lo: -0.23}
     sigma-sys: {hi: 0.05, lo: -0.05}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009:
+B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle:2009A:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -169,7 +169,7 @@ B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@Belle-2009:
     sigma-stat: {hi: 0.27, lo: -0.23}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009:
+B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle:2009A:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -187,7 +187,7 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle-2009:
 # 2011
 #
 # {{{
-B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -196,7 +196,7 @@ B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2011:
     sigma-stat: {hi: 0.28, lo: -0.46}
     sigma-sys: {hi: 0.11, lo: -0.11}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -205,7 +205,7 @@ B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2011:
     sigma-stat: {hi: 0.21, lo: -0.18}
     sigma-sys: {hi: 0.07, lo: -0.07}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2011:
+B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -214,7 +214,7 @@ B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2011:
     sigma-stat: {hi: 0.26, lo: -0.18}
     sigma-sys: {hi: 0.19, lo: -0.19}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -223,7 +223,7 @@ B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@CDF-2011:
     sigma-stat: {hi: 1.8, lo: -1.9}
     sigma-sys: {hi: 2.2, lo: -2.2}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -232,7 +232,7 @@ B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@CDF-2011:
     sigma-stat: {hi: 0.8, lo: -0.8}
     sigma-sys: {hi: 0.2, lo: -0.2}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^2[16.00,19.21]@CDF-2011:
+B^0->K^*0mu^+mu^-::A_T^2[16.00,19.21]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -241,7 +241,7 @@ B^0->K^*0mu^+mu^-::A_T^2[16.00,19.21]@CDF-2011:
     sigma-stat: {hi: 0.8, lo: -0.8}
     sigma-sys: {hi: 0.4, lo: -0.4}
     dof: 1
-B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -250,7 +250,7 @@ B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF-2011:
     sigma-stat: {hi: 0.4, lo: -0.4}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -259,7 +259,7 @@ B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF-2011:
     sigma-stat: {hi: 0.25, lo: -0.26}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF-2011:
+B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -268,7 +268,7 @@ B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF-2011:
     sigma-stat: {hi: 0.36, lo: -0.35}
     sigma-sys: {hi: 0.14, lo: -0.14}
     dof: 1
-B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF-2011:
+B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -277,7 +277,7 @@ B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF-2011:
     sigma-stat: {hi: 1.61e-07, lo: -1.61e-07}
     sigma-sys: {hi: 2.2e-08, lo: -2.2e-08}
     dof: 1
-B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF-2011:
+B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -286,7 +286,7 @@ B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF-2011:
     sigma-stat: {hi: 6.1e-08, lo: -6.1e-08}
     sigma-sys: {hi: 4e-09, lo: -4e-09}
     dof: 1
-B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF-2011:
+B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -295,7 +295,7 @@ B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF-2011:
     sigma-stat: {hi: 9.6e-08, lo: -9.6e-08}
     sigma-sys: {hi: 1.3e-08, lo: -1.3e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -304,7 +304,7 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2011:
     sigma-stat: {hi: 4.1e-08, lo: -4.1e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -313,7 +313,7 @@ B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2011:
     sigma-stat: {hi: 2.6e-08, lo: -2.6e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2011:
+B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -322,7 +322,7 @@ B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2011:
     sigma-stat: {hi: 2.6e-08, lo: -2.6e-08}
     sigma-sys: {hi: 6e-09, lo: -6e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -331,7 +331,7 @@ B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2011:
     sigma-stat: {hi: 0.21, lo: -0.23}
     sigma-sys: {hi: 0.09, lo: -0.09}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2011:
+B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -340,7 +340,7 @@ B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2011:
     sigma-stat: {hi: 0.14, lo: -0.14}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2011:
+B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF:2011B:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -354,7 +354,7 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2011:
 # 2012
 #
 # {{{
-B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -363,7 +363,7 @@ B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CDF-2012:
     sigma-stat: {hi: 0.21, lo: -0.25}
     sigma-sys: {hi: 0.06, lo: -0.06}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -372,7 +372,7 @@ B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CDF-2012:
     sigma-stat: {hi: 0.09, lo: -0.1}
     sigma-sys: {hi: 0.07, lo: -0.07}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2012:
+B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -381,7 +381,7 @@ B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@CDF-2012:
     sigma-stat: {hi: 0.23, lo: -0.22}
     sigma-sys: {hi: 0.09, lo: -0.09}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -390,7 +390,7 @@ B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@CDF-2012:
     sigma-stat: {hi: 2.24, lo: -2.22}
     sigma-sys: {hi: 0.76, lo: -0.76}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -399,7 +399,7 @@ B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@CDF-2012:
     sigma-stat: {hi: 0.72, lo: -0.72}
     sigma-sys: {hi: 0.14, lo: -0.14}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^2[16.00,19.21]@CDF-2012:
+B^0->K^*0mu^+mu^-::A_T^2[16.00,19.21]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::A_T^2avg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -408,7 +408,7 @@ B^0->K^*0mu^+mu^-::A_T^2[16.00,19.21]@CDF-2012:
     sigma-stat: {hi: 0.5600000000000001, lo: -0.53}
     sigma-sys: {hi: 0.13, lo: -0.13}
     dof: 1
-B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -417,7 +417,7 @@ B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@CDF-2012:
     sigma-stat: {hi: 0.28, lo: -0.29}
     sigma-sys: {hi: 0.15, lo: -0.15}
     dof: 1
-B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -426,7 +426,7 @@ B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@CDF-2012:
     sigma-stat: {hi: 0.21, lo: -0.22}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF-2012:
+B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -435,7 +435,7 @@ B^0->K^*0mu^+mu^-::A_im[16.00,19.21]@CDF-2012:
     sigma-stat: {hi: 0.26, lo: -0.27}
     sigma-sys: {hi: 0.04, lo: -0.04}
     dof: 1
-B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF-2012:
+B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -444,7 +444,7 @@ B^+->K^*+mu^+mu^-::BR[1.00,6.00]@CDF-2012:
     sigma-stat: {hi: 1.38e-07, lo: -1.38e-07}
     sigma-sys: {hi: 4.3e-08, lo: -4.3e-08}
     dof: 1
-B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF-2012:
+B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -453,7 +453,7 @@ B^+->K^*+mu^+mu^-::BR[14.18,16.00]@CDF-2012:
     sigma-stat: {hi: 5.8e-08, lo: -5.8e-08}
     sigma-sys: {hi: 1.3e-08, lo: -1.3e-08}
     dof: 1
-B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF-2012:
+B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -462,7 +462,7 @@ B^+->K^*+mu^+mu^-::BR[16.00,19.21]@CDF-2012:
     sigma-stat: {hi: 7.4e-08, lo: -7.4e-08}
     sigma-sys: {hi: 1.9e-08, lo: -1.9e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -471,7 +471,7 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CDF-2012:
     sigma-stat: {hi: 4.9e-08, lo: -4.9e-08}
     sigma-sys: {hi: 1.4e-08, lo: -1.4e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -480,7 +480,7 @@ B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CDF-2012:
     sigma-stat: {hi: 2.1e-08, lo: -2.1e-08}
     sigma-sys: {hi: 8e-09, lo: -8e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2012:
+B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -489,7 +489,7 @@ B^0->K^*0mu^+mu^-::BR[16.00,19.21]@CDF-2012:
     sigma-stat: {hi: 2.2e-08, lo: -2.2e-08}
     sigma-sys: {hi: 6e-09, lo: -6e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -498,7 +498,7 @@ B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CDF-2012:
     sigma-stat: {hi: 0.13, lo: -0.15}
     sigma-sys: {hi: 0.08, lo: -0.08}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2012:
+B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -507,7 +507,7 @@ B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CDF-2012:
     sigma-stat: {hi: 0.12, lo: -0.12}
     sigma-sys: {hi: 0.04, lo: -0.04}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2012:
+B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF:2012A:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -525,7 +525,7 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@CDF-2012:
 # 2013
 #
 # {{{
-B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CMS-2013A:
+B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::A_FB
     kinematics: {q2_min: 1, q2_max: 6}
@@ -534,7 +534,7 @@ B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CMS-2013A:
     sigma-stat: {hi: 0.12, lo: -0.12}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CMS-2013A:
+B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::A_FB
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -543,7 +543,7 @@ B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CMS-2013A:
     sigma-stat: {hi: 0.09, lo: -0.09}
     sigma-sys: {hi: 0.05, lo: -0.05}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@CMS-2013A:
+B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::A_FB
     kinematics: {q2_min: 16, q2_max: 19}
@@ -552,7 +552,7 @@ B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@CMS-2013A:
     sigma-stat: {hi: 0.05, lo: -0.05}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CMS-2013A:
+B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -561,7 +561,7 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CMS-2013A:
     sigma-stat: {hi: 3e-08, lo: -3e-08}
     sigma-sys: {hi: 3.5e-08, lo: -3.5e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CMS-2013A:
+B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -570,7 +570,7 @@ B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CMS-2013A:
     sigma-stat: {hi: 1.638e-08, lo: -1.456e-08}
     sigma-sys: {hi: 1.456e-08, lo: -1.456e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[16.00,19.00]@CMS-2013A:
+B^0->K^*0mu^+mu^-::BR[16.00,19.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19}
@@ -579,7 +579,7 @@ B^0->K^*0mu^+mu^-::BR[16.00,19.00]@CMS-2013A:
     sigma-stat: {hi: 1.8e-08, lo: -1.8e-08}
     sigma-sys: {hi: 2.7e-08, lo: -2.7e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CMS-2013A:
+B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::F_L
     kinematics: {q2_min: 1, q2_max: 6}
@@ -588,7 +588,7 @@ B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CMS-2013A:
     sigma-stat: {hi: 0.1, lo: -0.1}
     sigma-sys: {hi: 0.02, lo: -0.02}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CMS-2013A:
+B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::F_L
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -597,7 +597,7 @@ B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CMS-2013A:
     sigma-stat: {hi: 0.12, lo: -0.12}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS-2013A:
+B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::F_L
     kinematics: {q2_min: 16, q2_max: 19}
@@ -615,7 +615,7 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS-2013A:
 # 2011
 #
 # {{{
-B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2011:
+B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb:2011B:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -624,7 +624,7 @@ B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2011:
     sigma-stat: {hi: 0.14, lo: -0.13}
     sigma-sys: {hi: 0.04, lo: -0.04}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2011:
+B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb:2011B:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -633,7 +633,7 @@ B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2011:
     sigma-stat: {hi: 0.08, lo: -0.06}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@LHCb-2011:
+B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@LHCb:2011B:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -642,7 +642,7 @@ B^0->K^*0mu^+mu^-::A_FB[16.00,19.21]@LHCb-2011:
     sigma-stat: {hi: 0.13, lo: -0.11}
     sigma-sys: {hi: 0.06, lo: -0.06}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011:
+B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb:2011B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -651,7 +651,7 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2011:
     sigma-stat: {hi: 3e-08, lo: -3e-08}
     sigma-sys: {hi: 1.5e-08, lo: -1.5e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011:
+B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb:2011B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -660,7 +660,7 @@ B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2011:
     sigma-stat: {hi: 2.002e-08, lo: -2.002e-08}
     sigma-sys: {hi: 9.1e-09, lo: -9.1e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb-2011:
+B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb:2011B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -669,7 +669,7 @@ B^0->K^*0mu^+mu^-::BR[16.00,19.21]@LHCb-2011:
     sigma-stat: {hi: 2.4e-08, lo: -2.4e-08}
     sigma-sys: {hi: 1.5e-08, lo: -1.5e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011:
+B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb:2011B:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -678,7 +678,7 @@ B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2011:
     sigma-stat: {hi: 0.1, lo: -0.1}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011:
+B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb:2011B:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -687,7 +687,7 @@ B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2011:
     sigma-stat: {hi: 0.09, lo: -0.09}
     sigma-sys: {hi: 0.05, lo: -0.05}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011:
+B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb:2011B:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19.21}
@@ -701,7 +701,7 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@LHCb-2011:
 # 2012
 #
 # {{{
-B^0->K^*0mu^+mu^-::A_CP[1.00,6.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::A_CP[1.00,6.00]@LHCb:2012E:
     type: Gaussian
     observable: B->K^*ll::A_CP
     kinematics: {q2_min: 1, q2_max: 6}
@@ -710,7 +710,7 @@ B^0->K^*0mu^+mu^-::A_CP[1.00,6.00]@LHCb-2012:
     sigma-stat: {hi: 0.064, lo: -0.064}
     sigma-sys: {hi: 0.008999999999999999, lo: -0.008999999999999999}
     dof: 1
-B^0->K^*0mu^+mu^-::A_CP[14.18,16.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::A_CP[14.18,16.00]@LHCb:2012E:
     type: Gaussian
     observable: B->K^*ll::A_CP
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -719,7 +719,7 @@ B^0->K^*0mu^+mu^-::A_CP[14.18,16.00]@LHCb-2012:
     sigma-stat: {hi: 0.104, lo: -0.104}
     sigma-sys: {hi: 0.008999999999999999, lo: -0.008999999999999999}
     dof: 1
-B^0->K^*0mu^+mu^-::A_CP[16.00,20.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::A_CP[16.00,20.00]@LHCb:2012E:
     type: Gaussian
     observable: B->K^*ll::A_CP
     kinematics: {q2_min: 16, q2_max: 19.81}
@@ -728,7 +728,7 @@ B^0->K^*0mu^+mu^-::A_CP[16.00,20.00]@LHCb-2012:
     sigma-stat: {hi: 0.1, lo: -0.1}
     sigma-sys: {hi: 0.012, lo: -0.012}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb:2012E:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -737,7 +737,7 @@ B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2012:
     sigma-stat: {hi: 0.06, lo: -0.06}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb:2012E:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -746,7 +746,7 @@ B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2012:
     sigma-stat: {hi: 0.06, lo: -0.04}
     sigma-sys: {hi: 0.05, lo: -0.02}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb:2012E:
     type: Gaussian
     observable: B->K^*ll::A_FBavg
     kinematics: {q2_min: 16, q2_max: 19}
@@ -755,7 +755,7 @@ B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb-2012:
     sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.01, lo: -0.04}
     dof: 1
-B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@LHCb:2012E:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -764,7 +764,7 @@ B^0->K^*0mu^+mu^-::A_im[1.00,6.00]@LHCb-2012:
     sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@LHCb:2012E:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -773,7 +773,7 @@ B^0->K^*0mu^+mu^-::A_im[14.18,16.00]@LHCb-2012:
     sigma-stat: {hi: 0.08, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.04, lo: -0.02}
     dof: 1
-B^0->K^*0mu^+mu^-::A_im[16.00,19.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::A_im[16.00,19.00]@LHCb:2012E:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 16, q2_max: 19}
@@ -782,7 +782,7 @@ B^0->K^*0mu^+mu^-::A_im[16.00,19.00]@LHCb-2012:
     sigma-stat: {hi: 0.09, lo: -0.1}
     sigma-sys: {hi: 0.03, lo: -0.05}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb:2012C:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -791,7 +791,7 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2012:
     sigma-stat: {hi: 2e-08, lo: -2e-08}
     sigma-sys: {hi: 2e-08, lo: -2e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb:2012C:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -800,7 +800,7 @@ B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2012:
     sigma-stat: {hi: 1.274e-08, lo: -1.274e-08}
     sigma-sys: {hi: 7.280000000000001e-09, lo: -7.280000000000001e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb:2012C:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19}
@@ -809,7 +809,7 @@ B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb-2012:
     sigma-stat: {hi: 1.5e-08, lo: -1.5e-08}
     sigma-sys: {hi: 9e-09, lo: -9e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb:2012C:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -818,7 +818,7 @@ B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2012:
     sigma-stat: {hi: 0.06, lo: -0.06}
     sigma-sys: {hi: 0.04, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb:2012C:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -827,7 +827,7 @@ B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2012:
     sigma-stat: {hi: 0.07000000000000001, lo: -0.06}
     sigma-sys: {hi: 0.07000000000000001, lo: -0.02}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb:2012C:
     type: Gaussian
     observable: B->K^*ll::F_Lavg
     kinematics: {q2_min: 16, q2_max: 19}
@@ -836,7 +836,7 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2012:
     sigma-stat: {hi: 0.06, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.03, lo: -0.04}
     dof: 1
-B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb:2012C:
     type: Gaussian
     observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -845,7 +845,7 @@ B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2012:
     sigma-stat: {hi: 0.075, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.005}
     dof: 1
-B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb:2012C:
     type: Gaussian
     observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -854,7 +854,7 @@ B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2012:
     sigma-stat: {hi: 0.075, lo: -0.095}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2012:
+B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb:2012C:
     type: Gaussian
     observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 16, q2_max: 19}
@@ -868,7 +868,7 @@ B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2012:
 # 2013
 #
 # {{{
-B^0->K^*0mu^+mu^-::A_9[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_9[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_9
     kinematics: {q2_min: 1, q2_max: 6}
@@ -877,7 +877,7 @@ B^0->K^*0mu^+mu^-::A_9[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.08, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_9[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_9[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_9
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -886,7 +886,7 @@ B^0->K^*0mu^+mu^-::A_9[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.11, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_9[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_9[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_9
     kinematics: {q2_min: 16, q2_max: 19}
@@ -895,7 +895,7 @@ B^0->K^*0mu^+mu^-::A_9[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 0.11, lo: -0.1}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_FB
     kinematics: {q2_min: 1, q2_max: 6}
@@ -904,7 +904,7 @@ B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.06, lo: -0.06}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_FB
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -913,7 +913,7 @@ B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.05, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.02, lo: -0.02}
     dof: 1
-B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_FB
     kinematics: {q2_min: 16, q2_max: 19}
@@ -922,7 +922,7 @@ B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 0.08, lo: -0.08}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_T^2
     kinematics: {q2_min: 1, q2_max: 6}
@@ -931,7 +931,7 @@ B^0->K^*0mu^+mu^-::A_T^2[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.39, lo: -0.41}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_T^2
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -940,7 +940,7 @@ B^0->K^*0mu^+mu^-::A_T^2[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.26, lo: -0.28}
     sigma-sys: {hi: 0.02, lo: -0.02}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_T^2
     kinematics: {q2_min: 16, q2_max: 19}
@@ -949,7 +949,7 @@ B^0->K^*0mu^+mu^-::A_T^2[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 0.35, lo: -0.26}
     sigma-sys: {hi: 0.06, lo: -0.04}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_T^re
     kinematics: {q2_min: 1, q2_max: 6}
@@ -958,7 +958,7 @@ B^0->K^*0mu^+mu^-::A_T^re[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.22, lo: -0.24}
     sigma-sys: {hi: 0.01, lo: -0.04}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_T^re
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -967,7 +967,7 @@ B^0->K^*0mu^+mu^-::A_T^re[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.05, lo: -0.01}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::A_T^re
     kinematics: {q2_min: 16, q2_max: 19}
@@ -976,7 +976,7 @@ B^0->K^*0mu^+mu^-::A_T^re[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 0.15, lo: -0.15}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -985,7 +985,7 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 1.8e-08, lo: -2.3e-08}
     sigma-sys: {hi: 2e-08, lo: -2e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -994,7 +994,7 @@ B^0->K^*0mu^+mu^-::BR[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 1.3e-08, lo: -1.6e-08}
     sigma-sys: {hi: 7e-09, lo: -7e-09}
     dof: 1
-B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::BRavg
     kinematics: {q2_min: 16, q2_max: 19}
@@ -1003,7 +1003,7 @@ B^0->K^*0mu^+mu^-::BR[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 1.5e-08, lo: -1.7e-08}
     sigma-sys: {hi: 1.2e-08, lo: -1.2e-08}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::F_L
     kinematics: {q2_min: 1, q2_max: 6}
@@ -1012,7 +1012,7 @@ B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.08, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::F_L
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -1021,7 +1021,7 @@ B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.08, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.02, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::F_L
     kinematics: {q2_min: 16, q2_max: 19}
@@ -1030,7 +1030,7 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 0.09, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::P'_4[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::P'_4[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::P'_4
     kinematics: {q2_min: 1, q2_max: 6}
@@ -1039,7 +1039,7 @@ B^0->K^*0mu^+mu^-::P'_4[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.32, lo: -0.36}
     sigma-sys: {hi: 0.06, lo: -0.06}
     dof: 1
-B^0->K^*0mu^+mu^-::P'_4[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::P'_4[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::P'_4
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -1048,7 +1048,7 @@ B^0->K^*0mu^+mu^-::P'_4[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.54, lo: -0.7}
     sigma-sys: {hi: 0.08, lo: -0.08}
     dof: 1
-B^0->K^*0mu^+mu^-::P'_4[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::P'_4[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::P'_4
     kinematics: {q2_min: 16, q2_max: 19}
@@ -1057,7 +1057,7 @@ B^0->K^*0mu^+mu^-::P'_4[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 0.44, lo: -0.52}
     sigma-sys: {hi: 0.06, lo: -0.06}
     dof: 1
-B^0->K^*0mu^+mu^-::P'_5[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::P'_5[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::P'_5
     kinematics: {q2_min: 1, q2_max: 6}
@@ -1066,7 +1066,7 @@ B^0->K^*0mu^+mu^-::P'_5[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.2, lo: -0.21}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::P'_5[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::P'_5[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::P'_5
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -1075,7 +1075,7 @@ B^0->K^*0mu^+mu^-::P'_5[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.2, lo: -0.13}
     sigma-sys: {hi: 0.18, lo: -0.18}
     dof: 1
-B^0->K^*0mu^+mu^-::P'_5[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::P'_5[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::P'_5
     kinematics: {q2_min: 16, q2_max: 19}
@@ -1084,7 +1084,7 @@ B^0->K^*0mu^+mu^-::P'_5[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 0.19, lo: -0.16}
     sigma-sys: {hi: 0.09, lo: -0.09}
     dof: 1
-B^0->K^*0mu^+mu^-::P'_6[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::P'_6[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::P'_6
     kinematics: {q2_min: 1, q2_max: 6}
@@ -1093,7 +1093,7 @@ B^0->K^*0mu^+mu^-::P'_6[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.21, lo: -0.21}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::P'_6[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::P'_6[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::P'_6
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -1102,7 +1102,7 @@ B^0->K^*0mu^+mu^-::P'_6[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.24, lo: -0.25}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::P'_6[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::P'_6[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::P'_6
     kinematics: {q2_min: 16, q2_max: 19}
@@ -1111,7 +1111,7 @@ B^0->K^*0mu^+mu^-::P'_6[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 0.37, lo: -0.38}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
-B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -1120,7 +1120,7 @@ B^0->K^*0mu^+mu^-::S_3[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -1129,7 +1129,7 @@ B^0->K^*0mu^+mu^-::S_3[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.09, lo: -0.1}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::J_3normavg
     kinematics: {q2_min: 16, q2_max: 19}
@@ -1138,7 +1138,7 @@ B^0->K^*0mu^+mu^-::S_3[16.00,19.00]@LHCb-2013:
     sigma-stat: {hi: 0.1, lo: -0.09}
     sigma-sys: {hi: 0.02, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::S_9[1.00,6.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::S_9[1.00,6.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 1, q2_max: 6}
@@ -1147,7 +1147,7 @@ B^0->K^*0mu^+mu^-::S_9[1.00,6.00]@LHCb-2013:
     sigma-stat: {hi: 0.09, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::S_9[14.18,16.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::S_9[14.18,16.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 14.18, q2_max: 16}
@@ -1156,7 +1156,7 @@ B^0->K^*0mu^+mu^-::S_9[14.18,16.00]@LHCb-2013:
     sigma-stat: {hi: 0.09, lo: -0.08}
     sigma-sys: {hi: 0.01, lo: -0.01}
     dof: 1
-B^0->K^*0mu^+mu^-::S_9[16.00,19.00]@LHCb-2013:
+B^0->K^*0mu^+mu^-::S_9[16.00,19.00]@LHCb:2013B:
     type: Gaussian
     observable: B->K^*ll::J_9normavg
     kinematics: {q2_min: 16, q2_max: 19}
@@ -1170,7 +1170,7 @@ B^0->K^*0mu^+mu^-::S_9[16.00,19.00]@LHCb-2013:
 # 2015
 #
 # {{{
-B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb-2015A:
+B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb:2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
@@ -1202,7 +1202,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.00]@LHCb-2015A:
         -   [0.12, 0.05, -0, 1, -0.06]
         -   [0.01, 0.05, -0.03, -0.06, 1]
     dof: 5
-B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb-2015A:
+B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb:2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
@@ -1234,7 +1234,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[2.00,3.00]@LHCb-2015A:
         -   [-0.05, 0.07000000000000001, -0.08, 1, -0.1]
         -   [0.12, 0.03, -0, -0.1, 1]
     dof: 5
-B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb-2015A:
+B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb:2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
@@ -1266,7 +1266,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[3.00,4.00]@LHCb-2015A:
         -   [-0.05, -0.05, 0.17, 1, 0.01]
         -   [-0.02, 0.02, 0.05, 0.01, 1]
     dof: 5
-B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb-2015A:
+B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb:2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
@@ -1298,7 +1298,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[4.00,5.00]@LHCb-2015A:
         -   [-0.1, -0.11, 0.15, 1, -0.03]
         -   [-0.03, 0.03, -0.03, -0.03, 1]
     dof: 5
-B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A:
+B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb:2015A:
     type: MultivariateGaussian
     dim: 5
     observables:
@@ -1336,7 +1336,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[5.00,6.00]@LHCb-2015A:
 #
 # {{{
 # Branching ratios are normalized to BR(B^0->K^* Jpsi)
-B^0->K^*0mu^+mu^-::NormalizedBR[0.10,0.98]@LHCb-2016A:
+B^0->K^*0mu^+mu^-::NormalizedBR[0.10,0.98]@LHCb:2016A:
     type: Gaussian
     observable: B->K^*ll::NormalizedBR
     kinematics: {q2_min: 0.1, q2_max: 0.98}
@@ -1345,7 +1345,7 @@ B^0->K^*0mu^+mu^-::NormalizedBR[0.10,0.98]@LHCb-2016A:
     sigma-stat: {hi: 0.56e-5, lo: 0.61e-5}
     sigma-sys: {hi: 0.24e-5, lo: 0.24e-5}
     dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[1.10,2.50]@LHCb-2016A:
+B^0->K^*0mu^+mu^-::NormalizedBR[1.10,2.50]@LHCb:2016A:
     type: Gaussian
     observable: B->K^*ll::NormalizedBR
     kinematics: {q2_min: 1.1, q2_max: 2.5}
@@ -1354,7 +1354,7 @@ B^0->K^*0mu^+mu^-::NormalizedBR[1.10,2.50]@LHCb-2016A:
     sigma-stat: {hi: 0.27e-5, lo: 0.26e-5}
     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
     dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[2.50,4.00]@LHCb-2016A:
+B^0->K^*0mu^+mu^-::NormalizedBR[2.50,4.00]@LHCb:2016A:
     type: Gaussian
     observable: B->K^*ll::NormalizedBR
     kinematics: {q2_min: 2.5, q2_max: 4}
@@ -1363,7 +1363,7 @@ B^0->K^*0mu^+mu^-::NormalizedBR[2.50,4.00]@LHCb-2016A:
     sigma-stat: {hi: 0.26e-5, lo: 0.28e-5}
     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
     dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb-2016A:
+B^0->K^*0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb:2016A:
     type: Gaussian
     observable: B->K^*ll::NormalizedBR
     kinematics: {q2_min: 4, q2_max: 6}
@@ -1372,7 +1372,7 @@ B^0->K^*0mu^+mu^-::NormalizedBR[4.00,6.00]@LHCb-2016A:
     sigma-stat: {hi: 0.23e-5, lo: 0.22e-5}
     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
     dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb-2016A:
+B^0->K^*0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb:2016A:
     type: Gaussian
     observable: B->K^*ll::NormalizedBR
     kinematics: {q2_min: 6, q2_max: 8}
@@ -1381,7 +1381,7 @@ B^0->K^*0mu^+mu^-::NormalizedBR[6.00,8.00]@LHCb-2016A:
     sigma-stat: {hi: 0.24e-5, lo: 0.23e-5}
     sigma-sys: {hi: 0.08e-5, lo: 0.08e-5}
     dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb-2016A:
+B^0->K^*0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2016A:
     type: Gaussian
     observable: B->K^*ll::NormalizedBR
     kinematics: {q2_min: 11, q2_max: 12.5}
@@ -1390,7 +1390,7 @@ B^0->K^*0mu^+mu^-::NormalizedBR[11.00,12.50]@LHCb-2016A:
     sigma-stat: {hi: 0.26e-5, lo: 0.27e-5}
     sigma-sys: {hi: 0.10e-5, lo: 0.10e-5}
     dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[15.00,17.00]@LHCb-2016A:
+B^0->K^*0mu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2016A:
     type: Gaussian
     observable: B->K^*ll::NormalizedBR
     kinematics: {q2_min: 15, q2_max: 17}
@@ -1399,7 +1399,7 @@ B^0->K^*0mu^+mu^-::NormalizedBR[15.00,17.00]@LHCb-2016A:
     sigma-stat: {hi: 0.23e-5, lo: 0.31e-5}
     sigma-sys: {hi: 0.17e-5, lo: 0.17e-5}
     dof: 1
-B^0->K^*0mu^+mu^-::NormalizedBR[17.00,19.00]@LHCb-2016A:
+B^0->K^*0mu^+mu^-::NormalizedBR[17.00,19.00]@LHCb:2016A:
     type: Gaussian
     observable: B->K^*ll::NormalizedBR
     kinematics: {q2_min: 17, q2_max: 19}
@@ -1413,7 +1413,7 @@ B^0->K^*0mu^+mu^-::NormalizedBR[17.00,19.00]@LHCb-2016A:
 # 2020
 #
 # {{{
-B^0->K^*0mu^+mu^-::AngularObservables[0.10,0.98]@LHCb-2020A:
+B^0->K^*0mu^+mu^-::AngularObservables[0.10,0.98]@LHCb:2020A:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1445,7 +1445,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[0.10,0.98]@LHCb-2020A:
         - [ 0.06, 0.01, 0.06,-0.01,-0.01,-0.04, 1.00, 0.02 ]
         - [ 0.03,-0.01, 0.00, 0.00,-0.02, 0.10, 0.02, 1.00 ]
     dof: 8
-B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.50]@LHCb-2020A:
+B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.50]@LHCb:2020A:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1477,7 +1477,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[1.10,2.50]@LHCb-2020A:
         - [-0.06, 0.08,-0.09,-0.02, 0.08,-0.16, 1.00,-0.04 ]
         - [ 0.05, 0.18,-0.07,-0.12,-0.04, 0.14,-0.04, 1.00 ]
     dof: 8
-B^0->K^*0mu^+mu^-::AngularObservables[2.50,4.00]@LHCb-2020A:
+B^0->K^*0mu^+mu^-::AngularObservables[2.50,4.00]@LHCb:2020A:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1509,7 +1509,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[2.50,4.00]@LHCb-2020A:
         - [-0.08,-0.07, 0.03, 0.02,-0.05, 0.01, 1.00,-0.08 ]
         - [ 0.06, 0.02,-0.03, 0.03,-0.08, 0.03,-0.08, 1.00 ]
     dof: 8
-B^0->K^*0mu^+mu^-::AngularObservables[4.00,6.00]@LHCb-2020A:
+B^0->K^*0mu^+mu^-::AngularObservables[4.00,6.00]@LHCb:2020A:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1541,7 +1541,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[4.00,6.00]@LHCb-2020A:
         - [ 0.09, 0.02, 0.02, 0.02,-0.03, 0.03, 1.00,-0.00 ]
         - [ 0.04,-0.08, 0.01,-0.05, 0.01,-0.18,-0.00, 1.00 ]
     dof: 8
-B^0->K^*0mu^+mu^-::AngularObservables[6.00,8.00]@LHCb-2020A:
+B^0->K^*0mu^+mu^-::AngularObservables[6.00,8.00]@LHCb:2020A:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1573,7 +1573,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[6.00,8.00]@LHCb-2020A:
         - [ 0.00, 0.04,-0.04, 0.02, 0.02, 0.08, 1.00,-0.08 ]
         - [-0.06,-0.10,-0.04,-0.06, 0.02,-0.09,-0.08, 1.00 ]
     dof: 8
-B^0->K^*0mu^+mu^-::AngularObservables[11.00,12.50]@LHCb-2020A:
+B^0->K^*0mu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2020A:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1605,7 +1605,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[11.00,12.50]@LHCb-2020A:
         - [ 0.01, 0.06,-0.02,-0.00,-0.10, 0.27, 1.00,-0.01 ]
         - [ 0.01,-0.10,-0.02,-0.17, 0.12,-0.10,-0.01, 1.00 ]
     dof: 8
-B^0->K^*0mu^+mu^-::AngularObservables[15.00,17.00]@LHCb-2020A:
+B^0->K^*0mu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2020A:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1637,7 +1637,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[15.00,17.00]@LHCb-2020A:
         - [-0.04,-0.04, 0.06, 0.03,-0.00, 0.31, 1.00,-0.13 ]
         - [ 0.06, 0.10, 0.03, 0.04, 0.01,-0.23,-0.13, 1.00 ]
     dof: 8
-B^0->K^*0mu^+mu^-::AngularObservables[17.00,19.00]@LHCb-2020A:
+B^0->K^*0mu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2020A:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1670,7 +1670,7 @@ B^0->K^*0mu^+mu^-::AngularObservables[17.00,19.00]@LHCb-2020A:
         - [ 0.08,-0.04, 0.02, 0.05,-0.09,-0.09,-0.13, 1.00 ]
     dof: 8
 #
-B^+->K^*+mu^+mu^-::AngularObservables[0.10,0.98]@LHCb-2020B:
+B^+->K^*+mu^+mu^-::AngularObservables[0.10,0.98]@LHCb:2020B:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1702,7 +1702,7 @@ B^+->K^*+mu^+mu^-::AngularObservables[0.10,0.98]@LHCb-2020B:
         - [-0.00, 0.06, 0.24,-0.18,-0.27,-0.35, 1.00,-0.08 ]
         - [-0.11, 0.02,-0.06, 0.06,-0.06, 0.22,-0.08, 1.00 ]
     dof: 8
-B^+->K^*+mu^+mu^-::AngularObservables[1.10,2.50]@LHCb-2020B:
+B^+->K^*+mu^+mu^-::AngularObservables[1.10,2.50]@LHCb:2020B:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1734,7 +1734,7 @@ B^+->K^*+mu^+mu^-::AngularObservables[1.10,2.50]@LHCb-2020B:
         - [-0.10,-0.01, 0.33,-0.06, 0.11, 0.06, 1.00, 0.22 ]
         - [-0.03,-0.12, 0.09, 0.04, 0.12, 0.16, 0.22, 1.00 ]
     dof: 8
-B^+->K^*+mu^+mu^-::AngularObservables[2.50,4.00]@LHCb-2020B:
+B^+->K^*+mu^+mu^-::AngularObservables[2.50,4.00]@LHCb:2020B:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1766,7 +1766,7 @@ B^+->K^*+mu^+mu^-::AngularObservables[2.50,4.00]@LHCb-2020B:
         - [-0.07, 0.07,-0.05, 0.00, 0.06, 0.26, 1.00,-0.09 ]
         - [ 0.04, 0.02,-0.00,-0.11,-0.16,-0.14,-0.09, 1.00 ]
     dof: 8
-B^+->K^*+mu^+mu^-::AngularObservables[4.00,6.00]@LHCb-2020B:
+B^+->K^*+mu^+mu^-::AngularObservables[4.00,6.00]@LHCb:2020B:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1798,7 +1798,7 @@ B^+->K^*+mu^+mu^-::AngularObservables[4.00,6.00]@LHCb-2020B:
         - [ 0.16, 0.17,-0.04, 0.09,-0.03, 0.09, 1.00,-0.08 ]
         - [-0.03, 0.03, 0.05,-0.02,-0.01, 0.09,-0.08, 1.00 ]
     dof: 8
-B^+->K^*+mu^+mu^-::AngularObservables[6.00,8.00]@LHCb-2020B:
+B^+->K^*+mu^+mu^-::AngularObservables[6.00,8.00]@LHCb:2020B:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1830,7 +1830,7 @@ B^+->K^*+mu^+mu^-::AngularObservables[6.00,8.00]@LHCb-2020B:
         - [ 0.06,-0.04,-0.03,-0.07,-0.19,-0.10, 1.00, 0.04 ]
         - [ 0.05,-0.00,-0.10,-0.17,-0.13,-0.06, 0.04, 1.00 ]
     dof: 8
-B^+->K^*+mu^+mu^-::AngularObservables[11.00,12.50]@LHCb-2020B:
+B^+->K^*+mu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2020B:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1862,7 +1862,7 @@ B^+->K^*+mu^+mu^-::AngularObservables[11.00,12.50]@LHCb-2020B:
         - [-0.13,-0.04,-0.09,-0.04, 0.11, 0.05, 1.00,-0.07 ]
         - [-0.08,-0.19, 0.12,-0.10, 0.15,-0.07,-0.07, 1.00 ]
     dof: 8
-B^+->K^*+mu^+mu^-::AngularObservables[15.00,17.00]@LHCb-2020B:
+B^+->K^*+mu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2020B:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -1894,7 +1894,7 @@ B^+->K^*+mu^+mu^-::AngularObservables[15.00,17.00]@LHCb-2020B:
         - [-0.13,-0.06, 0.06,-0.06,-0.02, 0.23, 1.00, 0.00 ]
         - [-0.07, 0.01, 0.14,-0.13, 0.16, 0.02, 0.00, 1.00 ]
     dof: 8
-B^+->K^*+mu^+mu^-::AngularObservables[17.00,19.00]@LHCb-2020B:
+B^+->K^*+mu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2020B:
     type: MultivariateGaussian
     dim: 8
     observables:

@@ -24,17 +24,17 @@ priors:
 likelihoods:
   - name: theory
     constraints:
-      - B->pi::f_+@IKMvD-2014
+      - B->pi::f_+@IKMvD:2014A
 
   - name: BaBar
     constraints:
-      - B^0->pi^+lnu::BR@BaBar-2010B
-      - B^0->pi^+lnu::BR@BaBar-2012D
+      - B^0->pi^+lnu::BR@BaBar:2010B
+      - B^0->pi^+lnu::BR@BaBar:2012D
 
   - name: Belle
     constraints:
-      - B^0->pi^+lnu::BR@Belle-2010A
-      - B^0->pi^+lnu::BR@Belle-2013A
+      - B^0->pi^+lnu::BR@Belle:2010A
+      - B^0->pi^+lnu::BR@Belle:2013A
 
 posteriors:
   - name: th+exp

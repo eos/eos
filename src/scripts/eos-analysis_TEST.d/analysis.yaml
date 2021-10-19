@@ -4,13 +4,13 @@ likelihoods:
       - B->pi::f_++f_0@RBCUKQCD:2015A
   - name: lcsr
     constraints:
-      - B->pi::f_+@KMO2006
+      - B->pi::f_+@KMO:2006A
   - name: BaBar
     constraints:
-      - B^0->pi^+lnu::BR@BaBar-2010B
+      - B^0->pi^+lnu::BR@BaBar:2010B
   - name: Belle
     constraints:
-      - B^0->pi^+lnu::BR@Belle-2010A
+      - B^0->pi^+lnu::BR@Belle:2010A
 
 priors:
   - name: CKM

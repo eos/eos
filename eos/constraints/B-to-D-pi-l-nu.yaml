@@ -7,7 +7,7 @@
 # 2017
 #
 # {{{
-B^0->(Dpi)^+l^-nu::KinematicalDistribution[w]@Belle-2017A:
+B^0->(Dpi)^+l^-nu::KinematicalDistribution[w]@Belle:2017A:
     type: MultivariateGaussian
     dim: 9
     observables:
@@ -60,7 +60,7 @@ B^0->(Dpi)^+l^-nu::KinematicalDistribution[w]@Belle-2017A:
         - [0.3718988, 0.4290042, 0.5242777, 0.5447906, 0.4958819, 0.4913688, 0.6096553, 0.8254024, 1.0      ]
     dof: 9
 
-B^0->(Dpi)^+l^-nu::KinematicalDistribution[c_D,c_l,chi]@Belle-2017A:
+B^0->(Dpi)^+l^-nu::KinematicalDistribution[c_D,c_l,chi]@Belle:2017A:
     type: MultivariateGaussian
     dim: 30
     observables:
@@ -332,7 +332,7 @@ B^0->(Dpi)^+l^-nu::KinematicalDistribution[c_D,c_l,chi]@Belle-2017A:
            0.539642, 0.519853, 0.261603, 0.324782, 0.429447, 0.497298,
            0.468187, 0.470658, 0.419953, 0.565412, 0.87824,  1.      ]
     dof: 30
-B^0->(Dpi)^+l^-nu::KinematicalDistribution[w,c_D,c_l,chi]@Belle-2017A:
+B^0->(Dpi)^+l^-nu::KinematicalDistribution[w,c_D,c_l,chi]@Belle:2017A:
     type: MultivariateGaussian
     dim: 40
     observables:
@@ -552,7 +552,7 @@ B^0->(Dpi)^+l^-nu::KinematicalDistribution[w,c_D,c_l,chi]@Belle-2017A:
 # 2018
 #
 # {{{
-B^0->(Dpi)^+l^-nu::KinematicalDistribution[w]@Belle-2018A:
+B^0->(Dpi)^+l^-nu::KinematicalDistribution[w]@Belle:2018A:
     type: MultivariateGaussian
     dim: 9
     observables:

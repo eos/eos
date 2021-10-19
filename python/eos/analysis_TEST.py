@@ -20,10 +20,10 @@ class ClassMethodTests(unittest.TestCase):
                 { 'parameter': 'B->D::alpha^f0_2@BSZ2015', 'min': -2.0,   'max':  0.0   , 'type': 'uniform'}
             ],
             'likelihood': [
-                'B->D::f_++f_0@HPQCD2015A',
-                'B->D::f_++f_0@FNALMILC2015B',
-                'B^0->D^+e^-nu::BRs@Belle-2015A',
-                'B^0->D^+mu^-nu::BRs@Belle-2015A'
+                'B->D::f_++f_0@HPQCD:2015A',
+                'B->D::f_++f_0@FNALMILC:2015B',
+                'B^0->D^+e^-nu::BRs@Belle:2015A',
+                'B^0->D^+mu^-nu::BRs@Belle:2015A'
             ]
         }
 

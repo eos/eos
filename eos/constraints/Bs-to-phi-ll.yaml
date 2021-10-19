@@ -6,7 +6,7 @@
 #
 # {{{
 # Branching ratios are normalized to BR(Bs->phi Jpsi)
-B_s->phimu^+mu^-::NormalizedBR[0.10,2.00]@LHCb-2015C:
+B_s->phimu^+mu^-::NormalizedBR[0.10,2.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 0.1, q2_max: 2}
@@ -15,7 +15,7 @@ B_s->phimu^+mu^-::NormalizedBR[0.10,2.00]@LHCb-2015C:
     sigma-stat: {hi: 0.68e-5, lo: 0.64e-5}
     sigma-sys: {hi: 0.13e-5, lo: 0.13e-5}
     dof: 1
-B_s->phimu^+mu^-::NormalizedBR[2.00,5.00]@LHCb-2015C:
+B_s->phimu^+mu^-::NormalizedBR[2.00,5.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 2, q2_max: 5}
@@ -24,7 +24,7 @@ B_s->phimu^+mu^-::NormalizedBR[2.00,5.00]@LHCb-2015C:
     sigma-stat: {hi: 0.39e-5, lo: 0.37e-5}
     sigma-sys: {hi: 0.06e-5, lo: 0.06e-5}
     dof: 1
-B_s->phimu^+mu^-::NormalizedBR[5.00,8.00]@LHCb-2015C:
+B_s->phimu^+mu^-::NormalizedBR[5.00,8.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 5, q2_max: 8}
@@ -33,7 +33,7 @@ B_s->phimu^+mu^-::NormalizedBR[5.00,8.00]@LHCb-2015C:
     sigma-stat: {hi: 0.41e-5, lo: 0.39e-5}
     sigma-sys: {hi: 0.07e-5, lo: 0.07e-5}
     dof: 1
-B_s->phimu^+mu^-::NormalizedBR[11.00,12.50]@LHCb-2015C:
+B_s->phimu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 11, q2_max: 12.5}
@@ -42,7 +42,7 @@ B_s->phimu^+mu^-::NormalizedBR[11.00,12.50]@LHCb-2015C:
     sigma-stat: {hi: 0.64e-5, lo: 0.61e-5}
     sigma-sys: {hi: 0.14e-5, lo: 0.14e-5}
     dof: 1
-B_s->phimu^+mu^-::NormalizedBR[15.00,17.00]@LHCb-2015C:
+B_s->phimu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 15, q2_max: 17}
@@ -51,7 +51,7 @@ B_s->phimu^+mu^-::NormalizedBR[15.00,17.00]@LHCb-2015C:
     sigma-stat: {hi: 0.53e-5, lo: 0.650e-5}
     sigma-sys: {hi: 0.11e-5, lo: 0.11e-5}
     dof: 1
-B_s->phimu^+mu^-::NormalizedBR[17.00,19.00]@LHCb-2015C:
+B_s->phimu^+mu^-::NormalizedBR[17.00,19.00]@LHCb:2015C:
     type: Gaussian
     observable: B_s->phill::NormalizedBR
     kinematics: {q2_min: 17, q2_max: 19}
@@ -61,7 +61,7 @@ B_s->phimu^+mu^-::NormalizedBR[17.00,19.00]@LHCb-2015C:
     sigma-sys: {hi: 0.13e-5, lo: 0.13e-5}
     dof: 1
 #
-B_s->phimu^+mu^-::AngularObservables[0.10,2.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservables[0.10,2.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -93,7 +93,7 @@ B_s->phimu^+mu^-::AngularObservables[0.10,2.00]@LHCb-2015C:
         - [ 0.03,-0.18, 0.06,-0.14,-0.03,-0.30, 1.00, 0.06 ]
         - [ 0.00,-0.05,-0.09, 0.10,-0.16, 0.03, 0.06, 1.00 ]
     dof: 8
-B_s->phimu^+mu^-::AngularObservables[2.00,5.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservables[2.00,5.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -125,7 +125,7 @@ B_s->phimu^+mu^-::AngularObservables[2.00,5.00]@LHCb-2015C:
         - [ 0.02,-0.11,-0.41, 0.06, 0.05,-0.05, 1.00,-0.16 ]
         - [-0.16, 0.40,-0.33, 0.08, 0.11,-0.02,-0.16, 1.00 ]
     dof: 8
-B_s->phimu^+mu^-::AngularObservables[5.00,8.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservables[5.00,8.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -157,7 +157,7 @@ B_s->phimu^+mu^-::AngularObservables[5.00,8.00]@LHCb-2015C:
         - [-0.07, 0.00, 0.20,-0.05, 0.05, 0.04, 1.00,-0.04 ]
         - [ 0.09, 0.05,-0.08,-0.16,-0.25,-0.14,-0.04, 1.00 ]
     dof: 8
-B_s->phimu^+mu^-::AngularObservables[11.00,12.50]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservables[11.00,12.50]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -189,7 +189,7 @@ B_s->phimu^+mu^-::AngularObservables[11.00,12.50]@LHCb-2015C:
         - [-0.05,-0.02,-0.01, 0.22,-0.11,-0.36, 1.00,-0.23 ]
         - [ 0.03, 0.04,-0.09, 0.04, 0.14, 0.08,-0.23, 1.00 ]
     dof: 8
-B_s->phimu^+mu^-::AngularObservables[15.00,17.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservables[15.00,17.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 8
     observables:
@@ -221,7 +221,7 @@ B_s->phimu^+mu^-::AngularObservables[15.00,17.00]@LHCb-2015C:
         - [-0.06,-0.06, 0.22, 0.05, 0.01,-0.03, 1.00,-0.11 ]
         - [-0.06, 0.15, 0.04, 0.01,-0.09, 0.06,-0.11, 1.00 ]
     dof: 8
-B_s->phimu^+mu^-::AngularObservables[17.00,19.00]@LHCb-2015C:
+B_s->phimu^+mu^-::AngularObservables[17.00,19.00]@LHCb:2015C:
     type: MultivariateGaussian
     dim: 8
     observables:

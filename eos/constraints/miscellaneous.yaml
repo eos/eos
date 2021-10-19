@@ -1,4 +1,4 @@
-B^0::M_B^*-M_B@PDG-2012:
+B^0::M_B^*-M_B@PDG:2012A:
     type: Gaussian
     observable: B::M_B^*-M_B
     kinematics: {}

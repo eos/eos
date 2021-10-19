@@ -1334,8 +1334,8 @@ class ConstraintTest :
 
                     static const std::vector<QualifiedName> names
                     {
-                        "B->pi::f_+@IKMvD-2014",
-                        "B->K::f_0+f_++f_T@HPQCD-2013A"
+                        "B->pi::f_+@IKMvD:2014A",
+                        "B->K::f_0+f_++f_T@HPQCD:2013A"
                     };
 
                     for (auto & n : names)
