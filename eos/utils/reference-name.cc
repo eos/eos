@@ -32,23 +32,23 @@ namespace eos
                 throw ReferenceNameSyntaxError("A reference name's name part must not be empty");
             }
 
-            static const std::string valid_characters =
+            static const std::string valid_characters_begin =
                     "abcdefghijklmnopqrstuvwxyz"
                     "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
                     "0123456789";
 
-            static const std::string valid_characters_and_digits =
+            static const std::string valid_characters_all =
                     "abcdefghijklmnopqrstuvwxyz"
                     "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
-                    "0123456789";
+                    "0123456789-+";
 
-            auto pos = valid_characters.find_first_of(name[0]);
+            auto pos = valid_characters_begin.find_first_of(name[0]);
             if (std::string::npos == pos)
             {
                 throw ReferenceNameSyntaxError("'" + name + "' is not a valid name part: first character '" + name[0] + "' may not be used");
             }
 
-            pos = name.find_first_not_of(valid_characters_and_digits);
+            pos = name.find_first_not_of(valid_characters_all);
             if (std::string::npos != pos)
             {
                 throw ReferenceNameSyntaxError("'" + name + "' is not a valid name part: character '" + name[pos] + "' may not be used");
