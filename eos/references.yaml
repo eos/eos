@@ -900,6 +900,13 @@ KM:2005A:
     id: oai:arXiv.org:hep-ph/0502060
   inspire-id: Kruger:2005ep
   title: Probing new physics via the transverse amplitudes of $B^0\to K^{*0} (\to K^- \pi^+) \ell^+\ell^-$ at large recoil
+KMO:2005A:
+  authors: Khodjamirian, A. and Mannel, Th. and Offen, N.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0504091
+  inspire-id: Khodjamirian:2005ea
+  title: B-meson distribution amplitude from the $B \to \pi$ form-factor
 KMPW:2010A:
   authors: Khodjamirian, A. and Mannel, Th. and Pivovarov, A.A. and Wang, Y.-M.
   eprint:
