@@ -92,7 +92,7 @@ namespace eos
                     "abcdefghijklmnopqrstuvwxyz"
                     "ABCDEFGHIJKLMNOPQRTSUVWXYZ"
                     "0123456789"
-                    ".:-()";
+                    ".:-+()";
 
             auto pos = suffix.find_first_not_of(valid_suffix_characters);
 
