@@ -24,6 +24,7 @@
 #include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/reference-name.hh>
 
 namespace eos
 {
@@ -218,6 +219,11 @@ namespace eos
             double A7s_a1() const;
             double A7s_a2() const;
             // }}}
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 
     /* Unitarity bound implemented as discussed in [BJvD2019] */
@@ -246,6 +252,11 @@ namespace eos
             double bound_1p() const;
 
             double bound_1m() const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 
     /* Unitarity bounds as calculated in the OPE up to dim=4 operators and to NLO in alpha_s [BGL:1997A] */
@@ -265,6 +276,11 @@ namespace eos
             double bound_1p() const;
 
             double bound_1m() const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 
     /* Unitarity bound implemented as discussed in [BGL:1997A] */
@@ -293,5 +309,10 @@ namespace eos
             double bound_1p() const;
 
             double bound_1m() const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
     };
 }

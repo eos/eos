@@ -1278,6 +1278,12 @@ namespace eos
 
     BGLCoefficients::~BGLCoefficients() = default;
 
+    const std::set<ReferenceName>
+    BGLCoefficients::references
+    {
+    };
+
+
     // B -> D form factors
     // {{{
     double BGLCoefficients::V1_a0() const { return _imp->V1_a0(); }
@@ -1819,6 +1825,11 @@ namespace eos
         return _imp->bound_1m_prior();
     }
 
+    const std::set<ReferenceName>
+    HQETUnitarityBounds::references
+    {
+    };
+
     template <> struct Implementation<OPEUnitarityBounds>
     {
         const double cond_qq, cond_G2;
@@ -1964,6 +1975,11 @@ namespace eos
     {
         return _imp->chi_1m();
     }
+
+    const std::set<ReferenceName>
+    OPEUnitarityBounds::references
+    {
+    };
 
     template <> struct Implementation<BGLUnitarityBounds>
     {
@@ -2230,4 +2246,9 @@ namespace eos
     {
         return _imp->bound_1m_prior();
     }
+
+    const std::set<ReferenceName>
+    BGLUnitarityBounds::references
+    {
+    };
 }
