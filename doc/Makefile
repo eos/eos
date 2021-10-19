@@ -24,4 +24,4 @@ html: source Makefile
 	python3 $^ > $@
 
 .PHONY: source
-source: constraints.rst observables.rst parameters.rst references.rst
+source: constraints.rst observables.rst parameters.rst references.rst api/python.rst

@@ -179,15 +179,27 @@ An example illustrating plot layouting follows:
 Plot contents
 -------------
 
-Each item in a plot's contents is represented by a dictionary. The only mandatory key is the item's ``type``.
-Every item can feature an optional ``name``, which will be used when notifying the user about pertinent information,
-warnings or errors.
+Each item in a plot's contents is represented by a dictionary.
+Each features the mandatory ``type`` key and more type-specific (mandatory or optional) keys.
 
  * ``type`` (*str*, mandatory) -- The type of the plot item, from one of the following recognized item types:
 
-    - ``observable`` -- See `Plotting observables`_ for the description of this type of plot item.
-    - ``constraints`` -- See `Plotting constraints`_ for the description of this type of plot item.
-    - ``point`` -- See `Plotting points`_ for the description of this type of plot item.
+   .. list-table::
+      :widths: auto
+      :header-rows: 1
+
+      * - value
+        - description
+      {% for key in plot_type_descrs -%}
+      * - ``{{ key }}``
+        - {{ plot_type_descrs[key] }}
+      {% endfor %}
+
+   You can find examples for the following types:
+
+    - ``observable`` -- See `Plotting observables`_
+    - ``constraints`` -- See `Plotting constraints`_
+    - ``point`` -- See `Plotting points`_
 
  * ``name`` (*str*, optional) -- The name of the plot item, for convenience when reporting warnings and errors.
 
