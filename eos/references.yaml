@@ -907,6 +907,13 @@ KMO:2005A:
     id: oai:arXiv.org:hep-ph/0504091
   inspire-id: Khodjamirian:2005ea
   title: B-meson distribution amplitude from the $B \to \pi$ form-factor
+KMO:2006A:
+  authors: Khodjamirian, A. and Mannel, Th. and Offen, N.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0611193
+  inspire-id: Khodjamirian:2006st
+  title: Form-factors from light-cone sum rules with B-meson distribution amplitudes
 KMPW:2010A:
   authors: Khodjamirian, A. and Mannel, Th. and Pivovarov, A.A. and Wang, Y.-M.
   eprint:
