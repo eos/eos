@@ -728,6 +728,13 @@ FFKMvD:2013A:
     id: oai:arXiv.org:1310.6660
   inspire-id: Faller:2013dwa
   title: Disentangling the Decay Observables in $B^- \to \pi^+\pi^-\ell^-\bar\nu_\ell$
+FKKM:2008A:
+  authors: Faller, S. and Khodjamirian, A. and Klein, C. and Mannel, Th.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0809.0222
+  inspire-id: Faller:2008tr
+  title: $B \to D^{(*)}$ Form Factors from QCD Light-Cone Sum Rules
 FLAG:2013A:
   authors: Aoki, Sinya et al.
   eprint:
