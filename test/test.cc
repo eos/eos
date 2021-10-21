@@ -20,6 +20,7 @@
 #include <test/test.hh>
 #include <eos/utils/log.hh>
 
+#include <cxxabi.h>
 #include <cstdlib>
 #include <iostream>
 #include <list>
@@ -120,6 +121,20 @@ int main(int, char ** argv)
         catch (std::exception & e)
         {
             std::cout << "Test case threw exception: " << e.what() << std::endl;
+            result = EXIT_FAILURE;
+
+            continue;
+        }
+        catch (std::string & e)
+        {
+            std::cout << "Test case threw std::string: " << e << std::endl;
+            result = EXIT_FAILURE;
+
+            continue;
+        }
+        catch (...)
+        {
+            std::cout << "Test case threw unrecognized exception: " << abi::__cxa_current_exception_type()->name() << std::endl;
             result = EXIT_FAILURE;
 
             continue;
