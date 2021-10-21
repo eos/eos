@@ -224,7 +224,7 @@ namespace eos
                 ),
 
             make_signal_pdf("B->D^*lnu::d^4Gamma",
-                    Options{ },
+                    Options{ { "U", "c" }, { "I", "1/2" } },
                     &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
                     std::make_tuple(
                         KinematicRange{ "q2",            0.0,  10.68,      BToVectorLeptonNeutrino::kinematics_description_q2        },
