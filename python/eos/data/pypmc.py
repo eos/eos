@@ -18,6 +18,7 @@ import os
 import numpy as _np
 import pypmc
 import yaml
+from scipy.special import erf
 
 class MarkovChain:
     def __init__(self, path):
@@ -56,7 +57,7 @@ class MarkovChain:
             self.weights = None
 
 
-    @staticmethod 
+    @staticmethod
     def create(path, parameters, samples, weights=None):
         """ Write a new MarkovChain object to disk.
 
@@ -125,7 +126,7 @@ class MixtureDensity:
         return pypmc.density.mixture.MixtureDensity(components, self.weights)
 
 
-    @staticmethod 
+    @staticmethod
     def create(path, density):
         """ Write a new MixtureDensity object to disk.
 
@@ -190,8 +191,24 @@ class PMCSampler:
         self.weights = _np.load(f)
 
 
-    @staticmethod 
-    def create(path, parameters, samples, weights, proposal):
+    @staticmethod
+    def _evaluate_mixture_pdf(components, weights, x):
+        """ Internal function that evaluate the PDF of the mixture density at point x."""
+        def evaluate_component(comp, x):
+            chi2 = _np.dot(
+                _np.transpose(x - comp["mu"]),
+                _np.dot(_np.linalg.inv(comp["sigma"]), x - comp["mu"])
+            )
+            return (2*_np.pi)**(-0.5*len(x)) / _np.sqrt(_np.linalg.det(comp['sigma'])) * _np.exp(-0.5*chi2)
+
+        return _np.sum(
+            _np.array(weights)
+            * _np.array([evaluate_component(comp, _np.array(x)) for comp in components])
+        )
+
+
+    @staticmethod
+    def create(path, parameters, samples, weights, proposal, compute_test_stat=False, sigma_test=_np.arange(0.5,5.5,.5)):
         """ Write a new PMCSampler object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
@@ -202,6 +219,10 @@ class PMCSampler:
         :type samples: 2D numpy array
         :param weights: Weights on a linear scale as a 2D array of shape (N, 1).
         :type weights: 1D numpy array, optional
+        :param compute_test_stat: (optional) If true, the weighted samples will be used to numerically estimate the inverse CDF of -2 * log(PDF) of the mixture.
+        :type compute_test_stat: bool
+        :param sigma_test: (optional) If compute_test_stat is true, the inverse CDF of -2*log(PDF) will be evaluated for the significance values contained in sigma_test.
+        :type sigma_test: list or iterable
         """
         description = {}
         description['version'] = eos.version()
@@ -211,18 +232,37 @@ class PMCSampler:
             'min': p.min(),
             'max': p.max()
         } for p in parameters]
-        description['proposal'] = {
-            'components': [
-                { 'mu': c.mu.tolist(), 'sigma': c.sigma.tolist() } for c in proposal.components
-            ],
-            'weights': proposal.weights.tolist()
-        }
+
+        # Don't write components that have a 0 weight
+        purged_components = []
+        purged_weights = []
+        for comp, w in zip(proposal.components, proposal.weights.tolist()):
+            if w != 0:
+                purged_components.append({ 'mu': comp.mu.tolist(), 'sigma': comp.sigma.tolist() })
+                purged_weights.append(w)
+        description['proposal'] = { 'components': purged_components, 'weights': purged_weights }
 
         if not samples.shape[1] == len(parameters):
             raise RuntimeError('Shape of samples {} incompatible with number of parameters {}'.format(samples.shape, len(parameters)))
 
         if not weights is None and not samples.shape[0] == weights.shape[0]:
             raise RuntimeError('Shape of weights {} incompatible with shape of samples {}'.format(weights.shape, samples.shape))
+
+        # The test statistics defaults to two empty lists
+        description['test statistics'] = { "sigma": [], "densities": [] }
+        if compute_test_stat:
+            samplesPDF = [x for x in map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(purged_components, purged_weights, x)), samples)]
+            ind = _np.argsort(samplesPDF)
+            sorted_samplesPDF = _np.array(samplesPDF)[ind]
+            sorted_weights = weights[ind]
+            cumulant = 1.*sorted_weights.cumsum()/sorted_weights.sum()
+            percents = erf(sigma_test/_np.sqrt(2))
+            weighted_percentile = _np.interp(percents, cumulant, sorted_samplesPDF)
+
+            description['test statistics'] = {
+                "sigma": sigma_test.tolist(),
+                "densities": weighted_percentile.tolist()
+            }
 
         os.makedirs(path, exist_ok=True)
         with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
@@ -265,7 +305,7 @@ class Prediction:
         self.weights = _np.load(f)
 
 
-    @staticmethod 
+    @staticmethod
     def create(path, observables, samples, weights):
         """ Write a new Prediction object to disk.
 
