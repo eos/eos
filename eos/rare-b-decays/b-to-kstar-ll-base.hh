@@ -67,6 +67,13 @@ namespace eos
         complex<double> calT_parallel;
     };
 
+    struct BToKstarDilepton::FormFactorCorrections
+    {
+        complex<double> t;
+        complex<double> t_T;
+        complex<double> t_wa;
+    };
+
     template <typename Tag_> class BToKstarDileptonAmplitudes;
 
     namespace tag

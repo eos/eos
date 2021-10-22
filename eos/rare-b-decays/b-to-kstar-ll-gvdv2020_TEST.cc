@@ -109,26 +109,26 @@ class BToKstarDileptonGvDV2020Test :
             BToKstarDilepton d(p, oo);
             auto amps = d.amplitudes(q2);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -8.09775e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.42046e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.20243e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -6.20413e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right), -4.46981e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -9.48108e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  2.46737e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -3.41528e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   1.90312e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   5.54593e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   3.50547e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   1.04877e-10, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  7.2903e-10,  eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  6.58267e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  1.37096e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  1.24514e-10, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   8.60191e-13, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -2.31604e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.16562e-12, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -4.37922e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  2.49618e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  3.00743e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  4.82839e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  5.70421e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -7.68624e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -1.47917e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -1.45589e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -2.80178e-11, eps);
        }
     }
 } b_to_kstar_dilepton_GvDV2020_test;

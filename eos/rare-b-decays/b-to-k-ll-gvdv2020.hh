@@ -36,34 +36,16 @@ namespace eos
     {
         public:
             UsedParameter m_b_MSbar;
-            UsedParameter m_c;
             UsedParameter m_s_MSbar;
 
             UsedParameter f_B;
             UsedParameter f_K;
             UsedParameter lambda_B_p_inv;
-            UsedParameter a_1;
-            UsedParameter a_2;
 
-            UsedParameter lambda_psd;
-            UsedParameter sl_phase_psd;
+            SwitchOption q;
 
             SwitchOption opt_nonlocal_formfactor;
             NonlocalFormFactorPtr<nff::PToP> nonlocal_formfactor;
-
-            double e_q;
-
-            char q;
-
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &)> qcdf_dilepton_massless_case;
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &, const double &)> qcdf_dilepton_charm_case;
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &, const double &)> qcdf_dilepton_bottom_case;
 
             BToKDileptonAmplitudes(const Parameters & p, const Options & o);
             ~BToKDileptonAmplitudes();
