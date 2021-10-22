@@ -55,6 +55,11 @@ namespace eos
             double energy(const double & q2) const;
             double lambda(const double & q2) const;
 
+            virtual double real_C9_perp(const double & s) const = 0;
+            virtual double real_C9_para(const double & s) const = 0;
+            virtual double imag_C9_perp(const double & s) const = 0;
+            virtual double imag_C9_para(const double & s) const = 0;
+
             virtual ~AmplitudeGenerator();
             virtual BsToPhiDilepton::Amplitudes amplitudes(const double & q2) const = 0;
     };

@@ -831,6 +831,43 @@ namespace eos
             * ag.form_factors->t_2(q2) / ag.form_factors->v(q2);
     }
 
+    double
+    BToKstarDilepton::real_C9_perp(const double & s) const
+    {
+        return _imp->amplitude_generator->real_C9_perp(s);
+    }
+    double
+    BToKstarDilepton::real_C9_para(const double & s) const
+    {
+        return _imp->amplitude_generator->real_C9_para(s);
+    }
+    double
+    BToKstarDilepton::imag_C9_perp(const double & s) const
+    {
+        return _imp->amplitude_generator->imag_C9_perp(s);
+    }
+    double
+    BToKstarDilepton::imag_C9_para(const double & s) const
+    {
+        return _imp->amplitude_generator->imag_C9_para(s);
+    }
+
+    double
+    BToKstarDilepton::H_perp_corrections(const double & s) const
+    {
+        return _imp->amplitude_generator->H_perp_corrections(s);
+    }
+    double
+    BToKstarDilepton::H_para_corrections(const double & s) const
+    {
+        return _imp->amplitude_generator->H_para_corrections(s);
+    }
+    double
+    BToKstarDilepton::H_long_corrections(const double & s) const
+    {
+        return _imp->amplitude_generator->H_long_corrections(s);
+    }
+
 
     const std::string
     BToKstarDilepton::description = "\

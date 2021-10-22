@@ -476,4 +476,50 @@ namespace eos
 
         return result;
     }
+
+    // C9 and its corrections [BFS2001] eqs. (40-41)
+    double
+    BToKstarDileptonAmplitudes<tag::BFS2004>::real_C9_perp(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
+
+        const double
+            shat = s_hat(s),
+            mbhat = m_b_PS() / m_B;
+
+        auto dff = dipole_form_factors(s, wc);
+
+        return real(wc.c9() + uncertainty_perp() * (2.0 * mbhat / shat) * dff.calT_perp_right / xi_perp(s));
+    }
+    double
+    BToKstarDileptonAmplitudes<tag::BFS2004>::imag_C9_perp(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
+
+        const double
+            shat = s_hat(s),
+            mbhat = m_b_PS() / m_B;
+
+        auto dff = dipole_form_factors(s, wc);
+
+        return imag(wc.c9() + uncertainty_perp() * (2.0 * mbhat / shat) * dff.calT_perp_right / xi_perp(s));
+    }
+    double
+    BToKstarDileptonAmplitudes<tag::BFS2004>::real_C9_para(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
+
+        auto dff = dipole_form_factors(s, wc);
+
+        return real(wc.c9() - uncertainty_para() * 2.0 * m_b_PS() / m_B() * dff.calT_parallel / xi_par(s));
+    }
+    double
+    BToKstarDileptonAmplitudes<tag::BFS2004>::imag_C9_para(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
+
+        auto dff = dipole_form_factors(s, wc);
+
+        return imag(wc.c9() - uncertainty_para() * 2.0 * m_b_PS() / m_B() * dff.calT_parallel / xi_par(s));
+    }
 }

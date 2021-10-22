@@ -49,6 +49,14 @@ namespace eos
             double m_b_PS() const;
             double mu_f() const;
 
+            virtual double real_C9_perp(const double & s) const;
+            virtual double real_C9_para(const double & s) const;
+            virtual double imag_C9_perp(const double & s) const;
+            virtual double imag_C9_para(const double & s) const;
+            virtual double H_perp_corrections(const double & s) const;
+            virtual double H_para_corrections(const double & s) const;
+            virtual double H_long_corrections(const double & s) const;
+
             virtual BToKstarDilepton::Amplitudes amplitudes(const double & q2) const;
     };
 }

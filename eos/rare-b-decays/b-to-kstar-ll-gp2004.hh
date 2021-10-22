@@ -61,6 +61,35 @@ namespace eos
             inline double m_b_PS() const;
             inline double kappa() const;
             inline double norm(const double & q2) const;
+
+            virtual double real_C9_perp(const double &) const
+            {
+                return 0.0;
+            }
+            virtual double real_C9_para(const double &) const
+            {
+                return 0.0;
+            }
+            virtual double imag_C9_perp(const double &) const
+            {
+                return 0.0;
+            }
+            virtual double imag_C9_para(const double &) const
+            {
+                return 0.0;
+            }
+            virtual double H_perp_corrections(const double &) const
+            {
+                return 0.0;
+            };
+            virtual double H_para_corrections(const double &) const
+            {
+                return 0.0;
+            };
+            virtual double H_long_corrections(const double &) const
+            {
+                return 0.0;
+            };
     };
 }
 

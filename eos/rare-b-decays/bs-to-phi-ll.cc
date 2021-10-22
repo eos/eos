@@ -825,6 +825,27 @@ namespace eos
             * ag.form_factors->t_2(q2) / ag.form_factors->v(q2);
     }
 
+    double
+    BsToPhiDilepton::real_C9_perp(const double & s) const
+    {
+        return _imp->amplitude_generator->real_C9_perp(s);
+    }
+    double
+    BsToPhiDilepton::real_C9_para(const double & s) const
+    {
+        return _imp->amplitude_generator->real_C9_para(s);
+    }
+    double
+    BsToPhiDilepton::imag_C9_perp(const double & s) const
+    {
+        return _imp->amplitude_generator->imag_C9_perp(s);
+    }
+    double
+    BsToPhiDilepton::imag_C9_para(const double & s) const
+    {
+        return _imp->amplitude_generator->imag_C9_para(s);
+    }
+
     const std::string
     BsToPhiDilepton::description = "\
 The decay Bsbar->phi(-> Kbar K) l^+ l^-, with l=e,mu,tau \
