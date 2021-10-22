@@ -27,7 +27,10 @@
 
 #include <cmath>
 #include <complex>
+#include <cstring>
+#include <vector>
 
+#include <gsl/gsl_spline.h>
 #include <gsl/gsl_sf_dilog.h>
 
 namespace eos
@@ -43,17 +46,28 @@ namespace eos
                 const WilsonCoefficients<BToS> & wc)
     {
         // cf. [BFS2001] Eq. (29), p. 8, and Eqs. (82)-(84), p. 30
-        complex<double> lo = -1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
-        complex<double> nlo = -1.0 * (
+        complex<double> result = wc.c7();
+        // LO contribution
+        result += -1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
+        if (use_nlo)
+        {
+            complex<double> nlo = -1.0 * (
                   wc.c1() * CharmLoops::F17_massless(mu, s, m_b_PS)
                 + wc.c2() * CharmLoops::F27_massless(mu, s, m_b_PS)
                 + wc.c8() * CharmLoops::F87_massless(mu, s, m_b_PS));
-
-        complex<double> result = wc.c7() + lo;
-        if (use_nlo)
             result += (alpha_s / (4.0 * M_PI)) * nlo;
+        }
 
         return result;
+    }
+
+    complex<double>
+    ShortDistanceLowRecoil::c8eff(const WilsonCoefficients<BToS> & wc)
+    {
+        // cf. [BFS2001], below Eq. (26), p. 8
+        complex<double> lo = wc.c3() - 1.0/6.0 * wc.c4() + 20.0 * wc.c5() - 10.0/3.0 * wc.c6();
+
+        return wc.c8() + lo;
     }
 
     complex<double>
@@ -1179,7 +1193,7 @@ namespace eos
             throw InternalError("CharmLoops::C0: s < 0 is unphysical");
 
         if (s_hat > 2.0)
-            throw InternalError("CharmLoops::C0: support for s > 2.0 * m_q^2 is not implemented");
+            throw InternalError("CharmLoops::C0: support for s > 2.0 * m_q^2 is not implemented, here s / m_q^2 = " + stringify(s_hat));
 
         if (s_hat < 0.01)
         {
@@ -1225,5 +1239,130 @@ namespace eos
         complex<double> Li_4(res_re.val, res_im.val);
 
         return 1.0 / (1.0 - s_hat) * (2.0 * at1 * (at1 - at2) + log1 * log1 - Li_1 - Li_2 + Li_3 + Li_4);
+    }
+
+    complex<double>
+    CharmLoops::F17_massive_Qsb(const double & s)
+    {
+        if (s < 0.0 or s > 15.0)
+        {
+            throw InternalError("CharmLoop::F17_massive_Qsb used outside its domain of validity, s = " + stringify(s));
+        }
+
+        CharmLoopsInput F17_massive_Qsb_Input = CharmLoopsInput{31,
+                {0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.7, 2.4, 3.1,
+                 3.8, 4.5, 5.2, 5.9, 6.6, 7.3, 8., 8.7, 9.4, 10.1, 10.8, 11.5, 12.2,
+                 12.9, 13.6, 14.3, 15.},
+                {-0.0717552, -0.071871, -0.0719185, -0.0719426, -0.0719525,
+                -0.0719526, -0.0719453, -0.0719321, -0.0719141, -0.0718923,
+                -0.071867, -0.0716271, -0.0713227, -0.0709846, -0.0706271,
+                -0.0702578, -0.0698812, -0.0695003, -0.0691169, -0.0687322,
+                -0.0683473, -0.0679627, -0.0675788, -0.067196, -0.0668144,
+                -0.0664342, -0.0660555, -0.0656784, -0.0653028, -0.0649287,
+                -0.0645562},
+                {-0.00421001, -0.00468545, -0.00504867, -0.00536975, -0.00566363,
+                -0.00593744, -0.00619537, -0.0064402, -0.00667389, -0.00689793,
+                -0.00711346, -0.00844384, -0.00955976, -0.0105336, -0.0114032,
+                -0.0121916, -0.0129146, -0.013583, -0.0142054, -0.0147879,
+                -0.0153357, -0.0158529, -0.0163428, -0.0168083, -0.0172516,
+                -0.0176749, -0.0180799, -0.018468, -0.0188407, -0.019199, -0.0195441}};
+
+        return CharmSpline(F17_massive_Qsb_Input, s);
+    }
+    complex<double>
+    CharmLoops::F19_massive_Qsb(const double & s)
+    {
+        if (s < 0.0 or s > 15.0)
+        {
+            throw InternalError("CharmLoop::F19_massive_Qsb used outside its domain of validity, s = " + stringify(s));
+        }
+
+        CharmLoopsInput F19_massive_Qsb_Input = CharmLoopsInput{31,
+                {0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.7, 2.4, 3.1,
+                 3.8, 4.5, 5.2, 5.9, 6.6, 7.3, 8., 8.7, 9.4, 10.1, 10.8, 11.5, 12.2,
+                 12.9, 13.6, 14.3, 15.},
+                {1.51695, 0.420975, 0.367386, 0.33627, 0.314336, 0.297424, 0.283681,
+                0.272122, 0.262159, 0.253412, 0.245623, 0.206987, 0.182514, 0.164744,
+                0.15088, 0.139568, 0.130052, 0.121864, 0.114698, 0.108341, 0.102639,
+                0.0974782, 0.0927718, 0.0884517, 0.0844637, 0.0807641, 0.0773173,
+                0.0740936, 0.0710682, 0.0682201, 0.0655313},
+                {0.742634, 0.37831, 0.351979, 0.336317, 0.325048, 0.316199, 0.308888,
+                0.302645, 0.297185, 0.292328, 0.287947, 0.265299, 0.249968, 0.238219,
+                0.228621, 0.220467, 0.213353, 0.207026, 0.201318, 0.19611, 0.191314,
+                0.186865, 0.182712, 0.178816, 0.175143, 0.171667, 0.168367, 0.165223,
+                0.162222, 0.159348, 0.156591}};
+
+
+        return CharmSpline(F19_massive_Qsb_Input, s);
+    }
+    complex<double>
+    CharmLoops::F27_massive_Qsb(const double & s)
+    {
+        if (s < 0.0 or s > 15.0)
+        {
+            throw InternalError("CharmLoop::F27_massive_Qsb used outside its domain of validity, s = " + stringify(s));
+        }
+
+        CharmLoopsInput F27_massive_Qsb_Input = CharmLoopsInput{31,
+                {0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.7, 2.4, 3.1,
+                 3.8, 4.5, 5.2, 5.9, 6.6, 7.3, 8., 8.7, 9.4, 10.1, 10.8, 11.5, 12.2,
+                 12.9, 13.6, 14.3, 15.},
+                {0.430531, 0.431226, 0.431511, 0.431655, 0.431715, 0.431716,
+                0.431672, 0.431592, 0.431485, 0.431354, 0.431202, 0.429763, 0.427936,
+                0.425908, 0.423762, 0.421547, 0.419287, 0.417002, 0.414701, 0.412393,
+                0.410084, 0.407776, 0.405473, 0.403176, 0.400886, 0.398605, 0.396333,
+                0.39407, 0.391817, 0.389572, 0.387337},
+                {0.0252601, 0.0281127, 0.030292, 0.0322185, 0.0339818, 0.0356246,
+                0.0371722, 0.0386412, 0.0400433, 0.0413876, 0.0426807, 0.050663,
+                0.0573586, 0.0632015, 0.068419, 0.0731498, 0.0774874, 0.0814983,
+                0.0852322, 0.0887275, 0.0920144, 0.0951175, 0.098057, 0.10085,
+                0.10351, 0.106049, 0.108479, 0.110808, 0.113044, 0.115194, 0.117265}};
+
+
+        return CharmSpline(F27_massive_Qsb_Input, s);
+    }
+    complex<double>
+    CharmLoops::F29_massive_Qsb(const double & s)
+    {
+        if (s < 0.0 or s > 15.0)
+        {
+            throw InternalError("CharmLoop::F29_massive_Qsb used outside its domain of validity, s = " + stringify(s));
+        }
+
+        CharmLoopsInput F29_massive_Qsb_Input = CharmLoopsInput{31,
+                {0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1., 1.7, 2.4, 3.1,
+                 3.8, 4.5, 5.2, 5.9, 6.6, 7.3, 8., 8.7, 9.4, 10.1, 10.8, 11.5, 12.2,
+                 12.9, 13.6, 14.3, 15.},
+                {-9.10167, -2.52585, -2.20432, -2.01762, -1.88602, -1.78454,
+                -1.70209, -1.63273, -1.57295, -1.52047, -1.47374, -1.24192, -1.09508,
+                -0.988462, -0.905279, -0.837411, -0.780312, -0.731185, -0.688188,
+                -0.650044, -0.615832, -0.584869, -0.556631, -0.53071, -0.506782,
+                -0.484585, -0.463904, -0.444562, -0.426409, -0.40932, -0.393188},
+                {-4.4558, -2.26986, -2.11188, -2.0179, -1.95029, -1.89719, -1.85333,
+                -1.81587, -1.78311, -1.75397, -1.72768, -1.59179, -1.49981, -1.42931,
+                -1.37173, -1.3228, -1.28012, -1.24216, -1.20791, -1.17666, -1.14788,
+                -1.12119, -1.09627, -1.07289, -1.05086, -1.03, -1.0102, -0.99134,
+                -0.973329, -0.956087, -0.939546}};
+
+        return CharmSpline(F29_massive_Qsb_Input, s);
+    }
+
+    complex<double>
+    CharmLoops::CharmSpline(const CharmLoopsInput & input_data, const double & s)
+    {
+        size_t npoints             = input_data.npoints;
+        std::vector<double> x      = input_data.x;
+        std::vector<double> y_real = input_data.y_real;
+        std::vector<double> y_imag = input_data.y_imag;
+
+        gsl_interp_accel *acc = gsl_interp_accel_alloc();
+        gsl_spline *real_spline = gsl_spline_alloc(gsl_interp_cspline, npoints);
+        gsl_spline *imag_spline = gsl_spline_alloc(gsl_interp_cspline, npoints);
+
+        // Interpolate with spline
+        gsl_spline_init(real_spline, &x[0], &y_real[0], npoints);
+        gsl_spline_init(imag_spline, &x[0], &y_imag[0], npoints);
+
+        return complex<double>(gsl_spline_eval(real_spline, s, acc), gsl_spline_eval(imag_spline, s, acc));
     }
 }
