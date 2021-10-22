@@ -30,7 +30,6 @@ namespace eos
 
     BToKstarDileptonAmplitudes<tag::GvDV2020>::BToKstarDileptonAmplitudes(const Parameters & p, const Options & o) :
         AmplitudeGenerator(p, o),
-        hbar(p["QM::hbar"], *this),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_s_MSbar(p["mass::s(2GeV)"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
