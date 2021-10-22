@@ -224,6 +224,14 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
+
+	    /*!
+             * Test functions, [BFS2001] eqs. (40-41)
+             */
+            double real_C9_perp(const double & s) const;
+            double real_C9_para(const double & s) const;
+            double imag_C9_perp(const double & s) const;
+            double imag_C9_para(const double & s) const;
     };
 
     /*!

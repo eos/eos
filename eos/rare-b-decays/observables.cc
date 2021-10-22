@@ -1424,6 +1424,39 @@ namespace eos
                         <<B->K^*ll::BR>> / <<B->K^*psi::BR>>
                         )"),
 
+                make_observable("B->K^*ll::real_C9_perp(q2)",
+                        Unit::None(),
+                        &BToKstarDilepton::real_C9_perp,
+                        std::make_tuple("q2")),
+
+                make_observable("B->K^*ll::real_C9_para(q2)",
+                        Unit::None(),
+                        &BToKstarDilepton::real_C9_para,
+                        std::make_tuple("q2")),
+
+                make_observable("B->K^*ll::imag_C9_perp(q2)",
+                        Unit::None(),
+                        &BToKstarDilepton::imag_C9_perp,
+                        std::make_tuple("q2")),
+
+                make_observable("B->K^*ll::imag_C9_para(q2)",
+                        Unit::None(),
+                        &BToKstarDilepton::imag_C9_para,
+                        std::make_tuple("q2")),
+
+                make_observable("B->K^*ll::H_perp_corrections(q2)",
+                        Unit::None(),
+                        &BToKstarDilepton::H_perp_corrections,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*ll::H_para_corrections(q2)",
+                        Unit::None(),
+                        &BToKstarDilepton::H_para_corrections,
+                        std::make_tuple("q2")),
+                make_observable("B->K^*ll::H_long_corrections(q2)",
+                        Unit::None(),
+                        &BToKstarDilepton::H_long_corrections,
+                        std::make_tuple("q2")),
+
 
                 // B_s^0 -> \phi \ell^+ \ell^-
                 make_observable("B_s->phill::d^4Gamma",
@@ -1774,6 +1807,26 @@ namespace eos
                         R"(
                         <<B_s->phill::BR>> / <<B_s->phipsi::BR>>
                         )"),
+
+                make_observable("B_s->phill::real_C9_perp(q2)",
+                        Unit::None(),
+                        &BsToPhiDilepton::real_C9_perp,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::real_C9_para(q2)",
+                        Unit::None(),
+                        &BsToPhiDilepton::real_C9_para,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::imag_C9_perp(q2)",
+                        Unit::None(),
+                        &BsToPhiDilepton::imag_C9_perp,
+                        std::make_tuple("q2")),
+
+                make_observable("B_s->phill::imag_C9_para(q2)",
+                        Unit::None(),
+                        &BsToPhiDilepton::imag_C9_para,
+                        std::make_tuple("q2"))
             }
         );
 

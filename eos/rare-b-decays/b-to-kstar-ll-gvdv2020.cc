@@ -155,11 +155,11 @@ namespace eos
         return model->m_b_ps(mu_f());
     }
 
-    // For testing purposes, compute the ratio betwenn Qc and non-Qc non-local contributions
+    // For testing purposes, compute the ratio between Qc and non-Qc non-local contributions
     double
     BToKstarDileptonAmplitudes<tag::GvDV2020>::H_perp_corrections(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
         // Contributions not probortional to Qc
         auto sb_c = sb_contributions(s, wc);
 
@@ -186,7 +186,7 @@ namespace eos
     double
     BToKstarDileptonAmplitudes<tag::GvDV2020>::H_para_corrections(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
         // Contributions not probortional to Qc
         auto sb_c = sb_contributions(s, wc);
 
@@ -211,7 +211,7 @@ namespace eos
     double
     BToKstarDileptonAmplitudes<tag::GvDV2020>::H_long_corrections(const double & s) const
     {
-        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
         // Contributions not probortional to Qc
         auto sb_c = sb_contributions(s, wc);
 
@@ -338,5 +338,85 @@ namespace eos
         result.a_time = calN / m_B * 2.0 * sqrt_lambda / sqrt_s * (wc.c10() - wc.c10prime()) * calF_time;
 
         return result;
+    }
+
+    // C9 and its corrections [BFS2001] eqs. (40-41)
+    double
+    BToKstarDileptonAmplitudes<tag::GvDV2020>::real_C9_perp(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
+
+        const complex<double>
+            c7eff = ShortDistanceLowRecoil::c7eff(s, 0.0, 0.0, 0.0, false, wc); // LO C7eff
+
+        const double
+            m_B = this->m_B(), m_B2 = power_of<2>(m_B),
+            m_V         = this->m_Kstar(), m_V2 = power_of<2>(m_V),
+            lambda      = eos::lambda(m_B2, m_V2, s),
+            sqrt_lambda = std::sqrt(lambda);
+
+        const double
+            m_b_msbar = model->m_b_msbar(mu()),
+            m_s_msbar = model->m_s_msbar(mu());
+
+        const double
+            ff_V  = form_factors->v(s),
+            ff_T1 = form_factors->t_1(s),
+            calF_perp = sqrt(2.0) * sqrt_lambda / (m_B * (m_B + m_V)) * ff_V,
+            calF_T_perp = sqrt(2.0) * sqrt_lambda / m_B2 * ff_T1;
+
+        auto sb_c = sb_contributions(s, wc);
+
+        const complex<double>
+            calH_perp = nonlocal_formfactor->H_perp(s) - 1.0 / 16.0 / power_of<2>(M_PI) * (calF_perp * sb_c.t + calF_T_perp * sb_c.t_T);
+
+        return real(wc.c9() + 2.0 * m_B / s * (
+            (m_b_msbar + m_s_msbar) * c7eff * calF_T_perp/calF_perp
+            - 16.0 * power_of<2>(M_PI) * m_B * calH_perp/calF_perp
+            ));
+    }
+    double
+    BToKstarDileptonAmplitudes<tag::GvDV2020>::imag_C9_perp(const double & s) const
+    {
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
+
+        const complex<double>
+            c7eff = ShortDistanceLowRecoil::c7eff(s, 0.0, 0.0, 0.0, false, wc); // LO C7eff
+
+        const double
+            m_B = this->m_B(), m_B2 = power_of<2>(m_B),
+            m_V         = this->m_Kstar(), m_V2 = power_of<2>(m_V),
+            lambda      = eos::lambda(m_B2, m_V2, s),
+            sqrt_lambda = std::sqrt(lambda);
+
+        const double
+            m_b_msbar = model->m_b_msbar(mu()),
+            m_s_msbar = model->m_s_msbar(mu());
+
+        const double
+            ff_V  = form_factors->v(s),
+            ff_T1 = form_factors->t_1(s),
+            calF_perp = sqrt(2.0) * sqrt_lambda / (m_B * (m_B + m_V)) * ff_V,
+            calF_T_perp = sqrt(2.0) * sqrt_lambda / m_B2 * ff_T1;
+
+        auto sb_c = sb_contributions(s, wc);
+
+        const complex<double>
+            calH_perp = nonlocal_formfactor->H_perp(s) - 1.0 / 16.0 / power_of<2>(M_PI) * (calF_perp * sb_c.t + calF_T_perp * sb_c.t_T);
+
+        return imag(wc.c9() + 2.0 * m_B / s * (
+            (m_b_msbar + m_s_msbar) * c7eff * calF_T_perp/calF_perp
+            - 16.0 * power_of<2>(M_PI) * m_B * calH_perp/calF_perp
+            ));
+    }
+    double
+    BToKstarDileptonAmplitudes<tag::GvDV2020>::real_C9_para(const double & ) const
+    {
+        return 0.0;
+    }
+    double
+    BToKstarDileptonAmplitudes<tag::GvDV2020>::imag_C9_para(const double & ) const
+    {
+        return 0.0;
     }
 }
