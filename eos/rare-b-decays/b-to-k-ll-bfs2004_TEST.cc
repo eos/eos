@@ -99,14 +99,16 @@ class BToKDileptonBFS2004BobethCompatibilityTest :
             p["K::a_2@1GeV"] = 0.1;
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
-            Options oo;
-            oo.declare("model", "WET");
-            oo.declare("scan-mode", "cartesian");
-            oo.declare("tag", "BFS2004");
-            oo.declare("qcdf-integrals", "mixed");
-            oo.declare("form-factors", "KMPW2010");
-            oo.declare("l", "mu");
-            oo.declare("q", "u");
+            Options oo
+            {
+                {"model", "WET"},
+                {"scan-mode", "cartesian"},
+                {"tag", "BFS2004"},
+                {"qcdf-integrals", "mixed"},
+                {"form-factors", "KMPW2010"},
+                {"l", "mu"},
+                {"q", "u"}
+            };
 
             double eps = 1e-3;
             static const double s = 6.0;

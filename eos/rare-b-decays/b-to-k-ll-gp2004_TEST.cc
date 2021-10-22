@@ -92,10 +92,12 @@ class BToKDileptonLowRecoilTest :
                 p["mass::B_d"] = 5.27953;
                 p["mass::b(MSbar)"] = 4.2;
 
-                Options oo;
-                oo.declare("model", "WET");
-                oo.declare("tag", "GP2004");
-                oo.declare("form-factors", "BZ2004v2");
+                Options oo
+                {
+                    {"model", "WET"},
+                    {"tag", "GP2004"},
+                    {"form-factors", "BZ2004v2"}
+                };
 
                 BToKDilepton d(p, oo);
 
@@ -167,11 +169,13 @@ class BToKDileptonLowRecoilTest :
                 p["b->smumu::Re{c10}"] = 0.0;
                 p["b->smumu::Im{c10}"] = -4.17;
 
-                Options oo;
-                oo.declare("model", "WET");
-                oo.declare("tag", "GP2004");
-                oo.declare("l", "mu");
-                oo.declare("form-factors", "BZ2004v2");
+                Options oo
+                {
+                    {"model", "WET"},
+                    {"tag", "GP2004"},
+                    {"l", "mu"},
+                    {"form-factors", "BZ2004v2"}
+                };
 
                 BToKDilepton d(p, oo);
 
@@ -225,12 +229,15 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
             p["CKM::arg(V_cs)"] = -3.304199362533668e-05;
             p["CKM::abs(V_ts)"] =  0.04121212396309175;
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
-            Options o;
-            o.declare("model", "WET");
-            o.declare("tag", "GP2004");
-            o.declare("l", "mu");
-            o.declare("q", "u");
-            o.declare("form-factors", "KMPW2010");
+
+            Options o
+            {
+                {"model", "WET"},
+                {"tag", "GP2004"},
+                {"l", "mu"},
+                {"q", "u"},
+                {"form-factors", "KMPW2010"}
+            };
 
             std::vector<Parameter> variations;
 

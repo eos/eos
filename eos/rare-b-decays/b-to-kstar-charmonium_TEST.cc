@@ -77,11 +77,13 @@ class BToKstarCharmoniumGvDV2020Test :
             p["CKM::abs(V_ts)"] =  0.04121212396309175;
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
-            Options oo;
-            oo.declare("model",               "WET");
-            oo.declare("q",                   "d");
-            oo.declare("nonlocal-formfactor", "GvDV2020");
-            oo.declare("psi",                 "J/psi");
+            Options oo
+            {
+                {"model",               "WET"},
+                {"q",                   "d"},
+                {"nonlocal-formfactor", "GvDV2020"},
+                {"psi",                 "J/psi"}
+            };
 
             BToKstarCharmonium c(p, oo);
 
@@ -153,11 +155,13 @@ class BToKstarCharmoniumGRvDV2021Test :
             p["CKM::abs(V_ts)"] =  0.04121212396309175;
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
-            Options oo;
-            oo.declare("model",               "WET");
-            oo.declare("q",                   "d");
-            oo.declare("nonlocal-formfactor", "GRvDV2021");
-            oo.declare("psi",                 "J/psi");
+            Options oo
+            {
+                {"model",               "WET"},
+                {"q",                   "d"},
+                {"nonlocal-formfactor", "GRvDV2021"},
+                {"psi",                 "J/psi"}
+            };
 
             BToKstarCharmonium c(p, oo);
 

@@ -107,11 +107,13 @@ class LambdaBToLambdaDileptonLowRecoilTest :
 
                 // LHCb-polarised SM
                 {
-                    Options oo;
-                    oo.declare("model",                   "WET");
-                    oo.declare("q",                       "d");
-                    oo.declare("l",                       "mu");
-                    oo.declare("production-polarisation", "LHCb");
+                    Options oo
+                    {
+                        {"model",                   "WET"},
+                        {"q",                       "d"},
+                        {"l",                       "mu"},
+                        {"production-polarisation", "LHCb"}
+                    };
 
                     Parameters p = Parameters::Defaults();
                     p["mass::Lambda_b"] =  5.6194;
@@ -170,11 +172,13 @@ class LambdaBToLambdaDileptonLowRecoilTest :
 
                 // unpolarised BMP
                 {
-                    Options oo;
-                    oo.declare("model",                   "WET");
-                    oo.declare("q",                       "d");
-                    oo.declare("l",                       "mu");
-                    oo.declare("production-polarisation", "unpolarised");
+                    Options oo
+                    {
+                        {"model",                   "WET"},
+                        {"q",                       "d"},
+                        {"l",                       "mu"},
+                        {"production-polarisation", "unpolarised"}
+                    };
 
                     Parameters p = Parameters::Defaults();
                     p["sbmumu::mu"] = 4.2;
@@ -238,11 +242,13 @@ class LambdaBToLambdaDileptonLowRecoilTest :
 
                 // LHCb-polarised BMP
                 {
-                    Options oo;
-                    oo.declare("model",                   "WET");
-                    oo.declare("q",                       "d");
-                    oo.declare("l",                       "mu");
-                    oo.declare("production-polarisation", "LHCb");
+                    Options oo
+                    {
+                        {"model",                   "WET"},
+                        {"q",                       "d"},
+                        {"l",                       "mu"},
+                        {"production-polarisation", "LHCb"}
+                    };
 
                     Parameters p = Parameters::Defaults();
                     p["sbmumu::mu"] = 4.2;

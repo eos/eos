@@ -84,14 +84,16 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
             p["K^*::a_2_perp@1GeV"] = 0.1;
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
-            Options oo;
-            oo.declare("model", "WET");
-            oo.declare("scan-mode", "cartesian");
-            oo.declare("tag", "BFS2004");
-            oo.declare("qcdf-integrals", "mixed");
-            oo.declare("form-factors", "KMPW2010");
-            oo.declare("l", "mu");
-            oo.declare("q", "d");
+            Options oo
+            {
+                {"model", "WET"},
+                {"scan-mode", "cartesian"},
+                {"tag", "BFS2004"},
+                {"qcdf-integrals", "mixed"},
+                {"form-factors", "KMPW2010"},
+                {"l", "mu"},
+                {"q", "d"}
+            };
 
             static const double eps = 0.72e-2;
             static const double q2 = 6.0;
@@ -159,13 +161,15 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
 
             p["mass::s(2GeV)"] = 0.12;
 
-            Options oo;
-            oo.declare("model", "WET");
-            oo.declare("scan-mode", "cartesian");
-            oo.declare("tag", "BFS2004");
-            oo.declare("form-factors", "KMPW2010");
-            oo.declare("l", "mu");
-            oo.declare("q", "u");
+            Options oo
+            {
+                {"model", "WET"},
+                {"scan-mode", "cartesian"},
+                {"tag", "BFS2004"},
+                {"form-factors", "KMPW2010"},
+                {"l", "mu"},
+                {"q", "u"}
+            };
 
             BToKstarDilepton d(p, oo);
 

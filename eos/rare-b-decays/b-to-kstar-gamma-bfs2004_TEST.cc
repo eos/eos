@@ -95,10 +95,12 @@ class BToKstarGammaTest :
                 p["K^*::a_2_perp@1GeV"] = 0.1;
                 p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
-                Options oo;
-                oo.declare("tag", "BFS2004");
-                oo.declare("model", "WET");
-                oo.declare("form-factors", "KMPW2010");
+                Options oo
+                {
+                    {"model", "WET"},
+                    {"tag", "BFS2004"},
+                    {"form-factors", "KMPW2010"}
+                };
 
                 BToKstarGamma d(p, oo);
 
@@ -154,10 +156,12 @@ class BToKstarGammaTest :
                 p["K^*::a_2_perp@1GeV"] = 0.1;
                 p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
-                Options oo;
-                oo.declare("tag", "BFS2004");
-                oo.declare("model", "WET");
-                oo.declare("form-factors", "KMPW2010");
+                Options oo
+                {
+                    {"model", "WET"},
+                    {"tag", "BFS2004"},
+                    {"form-factors", "KMPW2010"}
+                };
 
                 BToKstarGamma d(p, oo);
 
@@ -211,10 +215,13 @@ class BToKstarGammaBobethCompatibilityTest :
             p["K^*::a_2_para@1GeV"] = 0.1;
             p["K^*::a_2_perp@1GeV"] = 0.1;
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
-            Options o;
-            o.declare("tag", "BFS2004");
-            o.declare("model", "WET");
-            o.declare("form-factors", "KMPW2010");
+
+            Options o
+            {
+                {"model", "WET"},
+                {"tag", "BFS2004"},
+                {"form-factors", "KMPW2010"}
+            };
 
             std::vector<Parameter> variations;
 
