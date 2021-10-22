@@ -458,3 +458,45 @@ class LowRecoilTest :
             }
         }
 } low_recoil_test;
+
+
+class CharmlessTest :
+    public TestCase
+{
+    public:
+        CharmlessTest() :
+            TestCase("charmless_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            using std::imag;
+            using std::real;
+
+            /* Test cubic spline interpolation by comparison with Javier Virto's notebook */
+            {
+
+                static const double eps = 1e-3;
+
+                TEST_CHECK_NEARLY_EQUAL(real(CharmLoops::F17_massive_Qsb(2.0)), -0.0715022,    eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(CharmLoops::F17_massive_Qsb(2.0)), -0.00894292,   eps);
+                TEST_CHECK_NEARLY_EQUAL(real(CharmLoops::F19_massive_Qsb(2.0)),  0.195383,     eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(CharmLoops::F19_massive_Qsb(2.0)),  0.25814,      eps);
+                TEST_CHECK_NEARLY_EQUAL(real(CharmLoops::F27_massive_Qsb(2.0)),  0.429013,     eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(CharmLoops::F27_massive_Qsb(2.0)),  0.0536575,    eps);
+                TEST_CHECK_NEARLY_EQUAL(real(CharmLoops::F29_massive_Qsb(2.0)), -1.1723,       eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(CharmLoops::F29_massive_Qsb(2.0)), -1.54884,      eps);
+
+                TEST_CHECK_NEARLY_EQUAL(real(CharmLoops::F17_massive_Qsb(8.0)), -0.0683473,    eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(CharmLoops::F17_massive_Qsb(8.0)), -0.0153357,    eps);
+                TEST_CHECK_NEARLY_EQUAL(real(CharmLoops::F19_massive_Qsb(8.0)),  0.102639,     eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(CharmLoops::F19_massive_Qsb(8.0)),  0.191314,     eps);
+                TEST_CHECK_NEARLY_EQUAL(real(CharmLoops::F27_massive_Qsb(8.0)),  0.410084,     eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(CharmLoops::F27_massive_Qsb(8.0)),  0.0920144,    eps);
+                TEST_CHECK_NEARLY_EQUAL(real(CharmLoops::F29_massive_Qsb(8.0)), -0.615832,     eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(CharmLoops::F29_massive_Qsb(8.0)), -1.14788,      eps);
+
+            }
+        }
+} charmless_test;

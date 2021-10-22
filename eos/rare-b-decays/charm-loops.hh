@@ -23,8 +23,18 @@
 #include <eos/maths/complex.hh>
 #include <eos/models/model.hh>
 
+#include <vector>
+
 namespace eos
 {
+    struct CharmLoopsInput
+    {
+        size_t npoints;
+        std::vector<double> x;
+        std::vector<double> y_real;
+        std::vector<double> y_imag;
+    };
+
     struct CharmLoops
     {
         /* One-loop functions */
@@ -61,6 +71,17 @@ namespace eos
         // helper functions for F8j, cf. [BFS2001], Eqs. (29) and (84), pp. 8 and 30
         static complex<double> B0(const double & s, const double & m_q);
         static complex<double> C0(const double & s, const double & m_q);
+
+        // Contributions proportional to Q_s = Q_b arising from intermediate ccbar pairs at NLO in alpha_s.
+        // These contributions are interpolated from reference values from [AGV:2019]
+        // In particular mu = m_b = 4.18 and alpha_s(M_Z) = 0.1185
+        static complex<double> F17_massive_Qsb(const double & s);
+        static complex<double> F19_massive_Qsb(const double & s);
+        static complex<double> F27_massive_Qsb(const double & s);
+        static complex<double> F29_massive_Qsb(const double & s);
+
+        // Helper function for the evaluation of charmless contributions
+        static complex<double> CharmSpline(const CharmLoopsInput & input_data, const double & s);
     };
 
     struct ShortDistanceLowRecoil
@@ -79,6 +100,15 @@ namespace eos
          */
         static complex<double> c7eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, bool use_nlo,
                 const WilsonCoefficients<BToS> & wc);
+
+        /*!
+         * Effective Wilson coefficient c8 at leading order.
+         *
+         * @param wc            the Wilson coefficients
+         *
+         * For the calculation, cf. [BFS2001], below eq. (26)
+         */
+        static complex<double> c8eff(const WilsonCoefficients<BToS> & wc);
 
         /*!
          * Effective Wilson coefficient c9 in the region of low hadronic recoil.
