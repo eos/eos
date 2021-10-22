@@ -31,8 +31,6 @@ namespace eos
         public BsToPhiDilepton::AmplitudeGenerator
     {
         public:
-            UsedParameter hbar;
-
             UsedParameter m_b_MSbar;
             UsedParameter m_s_MSbar;
 

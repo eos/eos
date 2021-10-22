@@ -39,6 +39,7 @@ namespace eos
             UsedParameter mu;
             UsedParameter alpha_e;
             UsedParameter g_fermi;
+            UsedParameter hbar;
             UsedParameter tau;
 
             UsedParameter m_B;

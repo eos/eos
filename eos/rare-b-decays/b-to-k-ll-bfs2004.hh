@@ -33,8 +33,6 @@ namespace eos
         public BToKDilepton::AmplitudeGenerator
     {
         public:
-            UsedParameter hbar;
-
             UsedParameter m_b_MSbar;
             UsedParameter m_c;
             UsedParameter m_s_MSbar;

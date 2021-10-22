@@ -31,6 +31,7 @@ namespace eos
         mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], *this),
         alpha_e(p["QED::alpha_e(m_b)"], *this),
         g_fermi(p["WET::G_Fermi"], *this),
+        hbar(p["QM::hbar"], *this),
         tau(p["life_time::B_" + o.get("q", "d")], *this),
         m_B(p["mass::B_" + o.get("q", "d")], *this),
         m_Kstar(p["mass::K_d^*"], *this),
