@@ -95,11 +95,13 @@ class BToKstarDileptonLowRecoilTest :
                 // muon mass near zero to avoid artificial divergence
                 p["mass::mu"] = 1e-5;
 
-                Options oo;
-                oo.declare("model", "WET");
-                oo.declare("tag", "GP2004");
-                oo.declare("l", "mu");
-                oo.declare("form-factors", "BZ2004");
+                Options oo
+                {
+                    {"model", "WET"},
+                    {"tag", "GP2004"},
+                    {"l", "mu"},
+                    {"form-factors", "BZ2004"}
+                };
 
                 BToKstarDilepton d(p, oo);
 
@@ -214,11 +216,13 @@ class BToKstarDileptonLowRecoilTest :
                 // mu mass
                 p["mass::mu"] = 1e-5;
 
-                Options oo;
-                oo.declare("model", "WET");
-                oo.declare("tag", "GP2004");
-                oo.declare("l", "mu");
-                oo.declare("form-factors", "BZ2004");
+                Options oo
+                {
+                    {"model", "WET"},
+                    {"tag", "GP2004"},
+                    {"l", "mu"},
+                    {"form-factors", "BZ2004"}
+                };
 
                 BToKstarDilepton d(p, oo);
 
@@ -304,11 +308,13 @@ class BToKstarDileptonLowRecoilTest :
                 // b quark mass
                 p["mass::b(MSbar)"] = 4.2;
 
-                Options oo;
-                oo.declare("model", "WET");
-                oo.declare("tag", "GP2004");
-                oo.declare("l", "mu");
-                oo.declare("form-factors", "BZ2004");
+                Options oo
+                {
+                    {"model", "WET"},
+                    {"tag", "GP2004"},
+                    {"l", "mu"},
+                    {"form-factors", "BZ2004"}
+                };
 
                 BToKstarDilepton d(p, oo);
 

@@ -86,13 +86,15 @@ class BToKDileptonGvDV2020Test :
             p["K::a_2@1GeV"] = 0.1;
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
-            Options oo;
-            oo.declare("model",                   "WET");
-            oo.declare("tag",                     "GvDV2020");
-            oo.declare("nonlocal-formfactors",    "GvDV2020");
-            oo.declare("form-factors",            "BSZ2015");
-            oo.declare("l",                       "mu");
-            oo.declare("q",                       "d");
+            Options oo
+            {
+                {"model",                   "WET"},
+                {"tag",                     "GvDV2020"},
+                {"nonlocal-formfactors",    "GvDV2020"},
+                {"form-factors",            "BSZ2015"},
+                {"l",                       "mu"},
+                {"q",                       "d"}
+            };
 
             static const double eps = 1e-5;
             static const double q2 = 6.0;

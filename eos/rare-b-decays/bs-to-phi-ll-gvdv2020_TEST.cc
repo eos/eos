@@ -95,12 +95,15 @@ class BsToPhiDileptonGvDV2020Test :
             p["b->smumu::Re{c10'}"] = 4;
             p["b->smumu::Im{c10'}"] = 3.5;
 
-            Options oo;
-            oo.declare("model",                   "WET");
-            oo.declare("tag",                     "GvDV2020");
-            oo.declare("nonlocal-formfactors",    "GvDV2020");
-            oo.declare("form-factors",            "BZ2004");
-            oo.declare("l",                       "mu");
+            Options oo
+            {
+                {"model",                   "WET"},
+                {"tag",                     "GvDV2020"},
+                {"nonlocal-formfactors",    "GvDV2020"},
+                {"form-factors",            "BZ2004"},
+                {"l",                       "mu"},
+                {"q",                       "s"}
+            };
 
             static const double eps = 1e-5;
             static const double q2 = 6.0;
