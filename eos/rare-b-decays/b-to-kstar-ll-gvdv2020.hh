@@ -20,6 +20,7 @@
 
 #include <eos/rare-b-decays/b-to-kstar-ll-base.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
+#include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/options-impl.hh>
 
 namespace eos
@@ -32,9 +33,9 @@ namespace eos
             UsedParameter m_b_MSbar;
             UsedParameter m_s_MSbar;
 
-            UsedParameter alpha_e;
-            UsedParameter g_fermi;
-            UsedParameter tau;
+            UsedParameter f_B;
+            UsedParameter f_Kstar_par;
+            UsedParameter lambda_B_p_inv;
 
             SwitchOption q;
 
@@ -43,6 +44,10 @@ namespace eos
 
             BToKstarDileptonAmplitudes(const Parameters & p, const Options & o);
             ~BToKstarDileptonAmplitudes() = default;
+
+            BToKstarDilepton::FormFactorCorrections sb_contributions(const double & q2, const WilsonCoefficients<BToS> & wc) const;
+            double m_b_PS() const;
+            double mu_f() const;
 
             virtual BToKstarDilepton::Amplitudes amplitudes(const double & q2) const;
     };

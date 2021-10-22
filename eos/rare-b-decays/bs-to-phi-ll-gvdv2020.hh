@@ -34,15 +34,19 @@ namespace eos
             UsedParameter m_b_MSbar;
             UsedParameter m_s_MSbar;
 
-            UsedParameter alpha_e;
-            UsedParameter g_fermi;
-            UsedParameter tau;
+            UsedParameter f_B;
+            UsedParameter f_phi_par;
+            UsedParameter lambda_B_p_inv;
 
             SwitchOption opt_nonlocal_formfactor;
             NonlocalFormFactorPtr<nff::PToV> nonlocal_formfactor;
 
             BsToPhiDileptonAmplitudes(const Parameters & p, const Options & o);
             ~BsToPhiDileptonAmplitudes() = default;
+
+            BsToPhiDilepton::FormFactorCorrections sb_contributions(const double & q2, const WilsonCoefficients<BToS> & wc) const;
+            double m_b_PS() const;
+            double mu_f() const;
 
             virtual BsToPhiDilepton::Amplitudes amplitudes(const double & q2) const;
     };

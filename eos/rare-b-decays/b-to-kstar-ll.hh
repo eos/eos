@@ -49,6 +49,7 @@ namespace eos
             struct Amplitudes;
             class AmplitudeGenerator;
             struct DipoleFormFactors;
+            struct FormFactorCorrections;
 
             /*!
              * @name Signal PDFs

@@ -59,11 +59,11 @@ namespace eos
             virtual BsToPhiDilepton::Amplitudes amplitudes(const double & q2) const = 0;
     };
 
-    struct BsToPhiDilepton::DipoleFormFactors
+    struct BsToPhiDilepton::FormFactorCorrections
     {
-        complex<double> calT_perp_left;
-        complex<double> calT_perp_right;
-        complex<double> calT_parallel;
+        complex<double> t;
+        complex<double> t_T;
+        complex<double> t_wa;
     };
 
     template <typename Tag_> class BsToPhiDileptonAmplitudes;
