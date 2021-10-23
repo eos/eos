@@ -24,6 +24,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/gsl-interface.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -192,6 +193,16 @@ namespace eos
         {
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
+
+            for (const auto & po : this->options)
+            {
+                const auto & key = std::get<0>(po);
+                if (options.has(key))
+                {
+                    Log::instance()->message("[GaussianConstraintEntry.make]", ll_warning)
+                        << "Constraint '" << name << "' provides option key '" << key << "' with value '" << this->options[key] << "'; user is overriding this preset with '" << options[key] << "'";
+                }
+            }
 
             ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
             if (! observable.get())
@@ -392,6 +403,16 @@ namespace eos
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
+            for (const auto & po : this->options)
+            {
+                const auto & key = std::get<0>(po);
+                if (options.has(key))
+                {
+                    Log::instance()->message("[LogGammaConstraintEntry.make]", ll_warning)
+                        << "Constraint '" << name << "' provides option key '" << key << "' with value '" << this->options[key] << "'; user is overriding this preset with '" << options[key] << "'";
+                }
+            }
+
             ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
             if (! observable.get())
                 throw InternalError("make_LogGamma_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
@@ -580,6 +601,16 @@ namespace eos
         {
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
+
+            for (const auto & po : this->options)
+            {
+                const auto & key = std::get<0>(po);
+                if (options.has(key))
+                {
+                    Log::instance()->message("[AmorosoConstraintEntry.make]", ll_warning)
+                        << "Constraint '" << name << "' provides option key '" << key << "' with value '" << this->options[key] << "'; user is overriding this preset with '" << options[key] << "'";
+                }
+            }
 
             ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
             if (! observable.get())
@@ -798,6 +829,16 @@ namespace eos
             std::vector<ObservablePtr> observables(dim, nullptr);
             for (auto i = 0u ; i < dim ; ++i)
             {
+                for (const auto & po : this->options[i])
+                {
+                    const auto & key = std::get<0>(po);
+                    if (options.has(key))
+                    {
+                        Log::instance()->message("[MultivariateGaussianConstraintEntry.make]", ll_warning)
+                            << "Constraint '" << name << "' in observable '" << this->observable_names[i] << "' provides option key '" << key << "' with value '" << this->options[i][key] << "'; user is overriding this preset with '" << options[key] << "'";
+                    }
+                }
+
                 observables[i] = Observable::make(this->observable_names[i], parameters, this->kinematics[i], this->options[i] + options);
                 if (! observables[i].get())
                     throw InternalError("make_multivariate_gaussian_constraint<" + stringify(dim) + ">: " + name.str() + ": '" + this->observable_names[i].str() + "' is not a valid observable name");
@@ -1140,6 +1181,16 @@ namespace eos
             std::vector<ObservablePtr> observables(dim_pred, nullptr);
             for (auto i = 0u ; i < dim_pred ; ++i)
             {
+                for (const auto & po : this->options[i])
+                {
+                    const auto & key = std::get<0>(po);
+                    if (options.has(key))
+                    {
+                        Log::instance()->message("[MultivariateGaussianCovarianceConstraintEntry.make]", ll_warning)
+                            << "Constraint '" << name << "' in observable '" << this->observables[i] << "' provides option key '" << key << "' with value '" << this->options[i][key] << "'; user is overriding this preset with '" << options[key] << "'";
+                    }
+                }
+
                 observables[i] = Observable::make(this->observables[i], parameters, this->kinematics[i], this->options[i] + options);
                 if (! observables[i].get())
                     throw InternalError("make_multivariate_gaussian_covariance_constraint<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
@@ -1475,6 +1526,16 @@ namespace eos
             Parameters parameters(Parameters::Defaults());
             ObservableCache cache(parameters);
 
+            for (const auto & po : this->options)
+            {
+                const auto & key = std::get<0>(po);
+                if (options.has(key))
+                {
+                    Log::instance()->message("[UniformBoundConstraintEntry.make]", ll_warning)
+                        << "Constraint '" << name << "' provides option key '" << key << "' with value '" << this->options[key] << "'; user is overriding this preset with '" << options[key] << "'";
+                }
+            }
+
             ObservablePtr observable = Observable::make(this->observable, parameters, this->kinematics, this->options + options);
             if (! observable.get())
                 throw InternalError("make_uniform_bound_constraint: " + name.str() + ": '" + this->observable.str() + "' is not a valid observable name");
@@ -1686,6 +1747,16 @@ namespace eos
             std::vector<ObservablePtr> observables(dim_pred, nullptr);
             for (auto i = 0u ; i < dim_pred ; ++i)
             {
+                for (const auto & po : this->options[i])
+                {
+                    const auto & key = std::get<0>(po);
+                    if (options.has(key))
+                    {
+                        Log::instance()->message("[MixtureConstraintEntry.make]", ll_warning)
+                            << "Constraint '" << name << "' in observable '" << this->observables[i] << "' provides option key '" << key << "' with value '" << this->options[i][key] << "'; user is overriding this preset with '" << options[key] << "'";
+                    }
+                }
+
                 observables[i] = Observable::make(this->observables[i], parameters, this->kinematics[i], this->options[i] + options);
                 if (! observables[i].get())
                     throw InternalError("make_multivariate_gaussian_covariance_constraint<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + ">: " + name.str() + ": '" + this->observables[i].str() + "' is not a valid observable name");
