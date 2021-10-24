@@ -141,6 +141,18 @@ namespace eos
         return _kinematics_names.data() + _kinematics_names.size();
     }
 
+    ObservableEntry::OptionIterator
+    ExpressionObservableEntry::begin_options() const
+    {
+        return _option_specifications.cbegin();
+    }
+
+    ObservableEntry::OptionIterator
+    ExpressionObservableEntry::end_options() const
+    {
+        return _option_specifications.cend();
+    }
+
     ObservablePtr
     ExpressionObservableEntry::make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
     {

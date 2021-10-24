@@ -115,6 +115,38 @@ namespace impl
         }
     };
 
+    // converter for std::vector
+    // converts a std::vector instance to a Python list
+    template <typename T>
+    struct std_vector_to_list
+    {
+        static PyObject* convert(const std::vector<T> & v)
+        {
+            boost::python::list ret;
+            for (const T & e : v)
+            {
+                ret.append(e);
+            }
+
+		    return incref(ret.ptr());
+        }
+        static PyTypeObject const * get_pytype () { return &PyList_Type; }
+    };
+
+    // Helper for convenience.
+    template <typename T>
+    struct std_vector_to_python_converter
+    {
+        std_vector_to_python_converter()
+        {
+          boost::python::to_python_converter<
+              std::vector<T>,
+              std_vector_to_list<T>,
+              true //std_vector_to_list has get_pytype
+              >();
+        }
+    };
+
     const char *
     version(void)
     {
@@ -333,6 +365,14 @@ BOOST_PYTHON_MODULE(_eos)
         .def(init<>())
         .def("declare", &Options::declare)
         .def("__str__", &Options::as_string)
+        ;
+
+    // OptionSpecification
+    impl::std_vector_to_python_converter<std::string> converter_option_specifications;
+    class_<OptionSpecification>("OptionSpecification")
+        .def_readonly("key", &OptionSpecification::key)
+        .add_property("allowed_values", make_getter(&OptionSpecification::allowed_values, return_value_policy<return_by_value>()))
+        .def_readonly("default_value", &OptionSpecification::default_value)
         ;
 
     // Units
@@ -636,6 +676,7 @@ BOOST_PYTHON_MODULE(_eos)
         .def("latex", &ObservableEntry::latex, return_value_policy<copy_const_reference>())
         .def("unit", &ObservableEntry::unit, return_internal_reference<>())
         .def("kinematic_variables", range(&ObservableEntry::begin_kinematic_variables, &ObservableEntry::end_kinematic_variables))
+        .def("options", range(&ObservableEntry::begin_options, &ObservableEntry::end_options))
         ;
 
     // ObservableGroup

@@ -23,4 +23,5 @@
 namespace eos
 {
     template class WrappedForwardIterator<ObservableEntry::KinematicVariableIteratorTag, const std::string &>;
+    template class WrappedForwardIterator<ObservableEntry::OptionIteratorTag, const OptionSpecification &>;
 }
