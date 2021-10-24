@@ -508,7 +508,7 @@ namespace eos
                 uses(_b_to_c);
             }
 
-            static FormFactors<OneHalfPlusToOneHalfMinus> * make(const Parameters & parameters, unsigned)
+            static FormFactors<OneHalfPlusToOneHalfMinus> * make(const Parameters & parameters, const Options &)
             {
                 return new HQETFormFactors(parameters);
             }
@@ -815,7 +815,7 @@ namespace eos
                 uses(_b_to_c);
             }
 
-            static FormFactors<OneHalfPlusToThreeHalfMinus> * make(const Parameters & parameters, unsigned)
+            static FormFactors<OneHalfPlusToThreeHalfMinus> * make(const Parameters & parameters, const Options &)
             {
                 return new HQETFormFactors(parameters);
             }

@@ -224,6 +224,12 @@ namespace eos
              * References used in the computation of our observables.
              */
             static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
     /* Unitarity bound implemented as discussed in [BJvD2019] */
@@ -257,6 +263,12 @@ namespace eos
              * References used in the computation of our observables.
              */
             static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
     /* Unitarity bounds as calculated in the OPE up to dim=4 operators and to NLO in alpha_s [BGL:1997A] */
@@ -281,6 +293,12 @@ namespace eos
              * References used in the computation of our observables.
              */
             static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
     /* Unitarity bound implemented as discussed in [BGL:1997A] */
@@ -314,5 +332,11 @@ namespace eos
              * References used in the computation of our observables.
              */
             static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 }

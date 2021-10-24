@@ -65,6 +65,12 @@ namespace eos
 
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
     class AnalyticFormFactorBToPiPiFvDV2018 :
@@ -92,6 +98,12 @@ namespace eos
 
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 }
 

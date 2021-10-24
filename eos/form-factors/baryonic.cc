@@ -136,27 +136,39 @@ namespace eos
     {
     }
 
+    const std::map<FormFactorFactory<OneHalfPlusToOneHalfPlus>::KeyType, FormFactorFactory<OneHalfPlusToOneHalfPlus>::ValueType>
+    FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors
+    {
+        { "Lambda_b->Lambda::BFvD2014",   &BFvD2014FormFactors::make                      },
+        { "Lambda_b->Lambda::DM2016",     &DM2016FormFactors<LambdaBToLambda>::make       },
+        { "Lambda_b->Lambda_c::DKMR2017", &DKMR2017FormFactors<LambdaBToLambdaC>::make    }
+    };
+
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>
     FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> result;
 
-        using KeyType = QualifiedName;
-        using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfPlus> * (const Parameters &, const Options &)>;
-        static const std::map<KeyType, ValueType> form_factors
-        {
-            { KeyType("Lambda_b->Lambda::BFvD2014"),   &BFvD2014FormFactors::make                      },
-            { KeyType("Lambda_b->Lambda::DM2016"),     &DM2016FormFactors<LambdaBToLambda>::make       },
-            { KeyType("Lambda_b->Lambda_c::DKMR2017"), &DKMR2017FormFactors<LambdaBToLambdaC>::make    }
-        };
-
-        auto i = form_factors.find(name);
-        if (form_factors.end() != i)
+        auto i = FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors.find(name);
+        if (FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
         }
 
         return result;
+    }
+
+    std::vector<OptionSpecification>
+    FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specifications(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return { result };
     }
 
     /* J=1/2^+ -> J=1/2^- Processes */
@@ -180,50 +192,37 @@ namespace eos
         return { };
     }
 
+    const std::map<FormFactorFactory<OneHalfPlusToOneHalfMinus>::KeyType, FormFactorFactory<OneHalfPlusToOneHalfMinus>::ValueType>
+    FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors
+    {
+        { "Lambda_b->Lambda_c(2595)::HQET",        &HQETFormFactors<OneHalfPlusToOneHalfMinus, LambdaBToLambdaC2595>::make },
+    };
+
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>>
-    FormFactorFactory<OneHalfPlusToOneHalfMinus>::create(const std::string & label, const Parameters & parameters, const Options &)
+    FormFactorFactory<OneHalfPlusToOneHalfMinus>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> result;
 
-        using KeyType = std::tuple<std::string, std::string>;
-        using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfMinus> * (const Parameters &, unsigned)>;
-
-        static const std::map<KeyType, ValueType> form_factors
+        auto i = FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors.find(name);
+        if (FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors.end() != i)
         {
-            { KeyType("Lambda_b->Lambda_c(2595)", "HQET"),             &HQETFormFactors<OneHalfPlusToOneHalfMinus, LambdaBToLambdaC2595>::make },
-        };
-
-        /*
-         * Labels have the form
-         *
-         *   PROCESS@NAME[:SET]
-         *
-         * The brackets indicate the latter part to be optional.
-         */
-
-        std::string process, name, input(label);
-        unsigned set(0);
-
-        std::string::size_type sep_at(input.find('@')), sep_colon(input.find(':'));
-        if (std::string::npos == sep_at)
-            return result;
-
-        if (std::string::npos != sep_colon)
-        {
-            set = destringify<unsigned>(input.substr(sep_colon + 1));
-            input.erase(sep_colon + 1);
+            result.reset(i->second(parameters, name.options() + options));
         }
 
-        name = input.substr(sep_at + 1);
-        process = input.substr(0, sep_at);
-
-        auto i = form_factors.find(KeyType(process, name));
-        if (form_factors.cend() == i)
-            return result;
-
-        result = std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>>(i->second(parameters, set));
-
         return result;
+    }
+
+    std::vector<OptionSpecification>
+    FormFactorFactory<OneHalfPlusToOneHalfMinus>::option_specifications(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return { result };
     }
 
     /* J=1/2^+ -> J=3/2^- Processes */
@@ -247,49 +246,36 @@ namespace eos
         return { };
     }
 
+    const std::map<FormFactorFactory<OneHalfPlusToThreeHalfMinus>::KeyType, FormFactorFactory<OneHalfPlusToThreeHalfMinus>::ValueType>
+    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors
+    {
+        { "Lambda_b->Lambda_c(2625)::HQET",          &HQETFormFactors<OneHalfPlusToThreeHalfMinus, LambdaBToLambdaC2625>::make },
+    };
+
     std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>>
-    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create(const std::string & label, const Parameters & parameters, const Options &)
+    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> result;
 
-        using KeyType = std::tuple<std::string, std::string>;
-        using ValueType = std::function<FormFactors<OneHalfPlusToThreeHalfMinus> * (const Parameters &, unsigned)>;
-
-        static const std::map<KeyType, ValueType> form_factors
+        auto i = FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors.find(name);
+        if (FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors.end() != i)
         {
-            { KeyType("Lambda_b->Lambda_c(2625)", "HQET"),             &HQETFormFactors<OneHalfPlusToThreeHalfMinus, LambdaBToLambdaC2625>::make },
-        };
-
-        /*
-         * Labels have the form
-         *
-         *   PROCESS@NAME[:SET]
-         *
-         * The brackets indicate the latter part to be optional.
-         */
-
-        std::string process, name, input(label);
-        unsigned set(0);
-
-        std::string::size_type sep_at(input.find('@')), sep_colon(input.find(':'));
-        if (std::string::npos == sep_at)
-            return result;
-
-        if (std::string::npos != sep_colon)
-        {
-            set = destringify<unsigned>(input.substr(sep_colon + 1));
-            input.erase(sep_colon + 1);
+            result.reset(i->second(parameters, name.options() + options));
         }
 
-        name = input.substr(sep_at + 1);
-        process = input.substr(0, sep_at);
-
-        auto i = form_factors.find(KeyType(process, name));
-        if (form_factors.cend() == i)
-            return result;
-
-        result = std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>>(i->second(parameters, set));
-
         return result;
+    }
+
+    std::vector<OptionSpecification>
+    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specifications(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return { result };
     }
 }

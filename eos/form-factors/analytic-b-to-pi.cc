@@ -73,6 +73,8 @@ namespace eos
 
         GSL::QAGS::Config config;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
             MB(p["mass::B_d"], u),
@@ -1986,6 +1988,12 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<AnalyticFormFactorBToPiDKMMO2008>::options
+    {
+        { "rescale-borel", { "1", "0" }, "1" }
+    };
+
     AnalyticFormFactorBToPiDKMMO2008::AnalyticFormFactorBToPiDKMMO2008(const Parameters & p, const Options & o) :
         PrivateImplementationPattern<AnalyticFormFactorBToPiDKMMO2008>(new Implementation<AnalyticFormFactorBToPiDKMMO2008>(p, o, *this))
     {
@@ -2154,4 +2162,16 @@ namespace eos
         "DKMMO:2008A"_rn,
         "LMvD:2021A"_rn
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    AnalyticFormFactorBToPiDKMMO2008::begin_options()
+    {
+        return Implementation<AnalyticFormFactorBToPiDKMMO2008>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    AnalyticFormFactorBToPiDKMMO2008::end_options()
+    {
+        return Implementation<AnalyticFormFactorBToPiDKMMO2008>::options.cend();
+    }
 }
