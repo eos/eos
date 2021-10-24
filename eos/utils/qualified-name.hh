@@ -42,6 +42,7 @@ namespace eos
                 const std::string & str() const { return _prefix; };
 
                 inline bool operator<  (const Prefix & rhs) const { return this->_prefix <  rhs._prefix; };
+                inline bool operator== (const Prefix & rhs) const { return this->_prefix == rhs._prefix; };
         };
 
         class Name
