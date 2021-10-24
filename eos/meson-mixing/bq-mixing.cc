@@ -51,6 +51,8 @@ namespace eos
         UsedParameter R_4;
         UsedParameter R_5;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["QM::hbar"], u),
@@ -98,6 +100,11 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BMixing>::options
+    {
+    };
+
     BMixing::BMixing(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BMixing>(new Implementation<BMixing>(parameters, options, *this))
     {
@@ -118,4 +125,16 @@ namespace eos
     BMixing::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BMixing::begin_options()
+    {
+        return Implementation<BMixing>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BMixing::end_options()
+    {
+        return Implementation<BMixing>::options.cend();
+    }
 }
