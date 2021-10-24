@@ -278,6 +278,8 @@ namespace eos
 
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
@@ -394,6 +396,12 @@ namespace eos
         {
             return lambdab_to_lambdac_l_nu::AngularObservables{ _integrated_angular_observables(q2_min, q2_max) };
         }
+    };
+
+    const std::vector<OptionSpecification>
+    Implementation<LambdaBToLambdaCLeptonNeutrino>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" }
     };
 
     LambdaBToLambdaCLeptonNeutrino::LambdaBToLambdaCLeptonNeutrino(const Parameters & p, const Options & o) :
@@ -577,4 +585,16 @@ namespace eos
     LambdaBToLambdaCLeptonNeutrino::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    LambdaBToLambdaCLeptonNeutrino::begin_options()
+    {
+        return Implementation<LambdaBToLambdaCLeptonNeutrino>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    LambdaBToLambdaCLeptonNeutrino::end_options()
+    {
+        return Implementation<LambdaBToLambdaCLeptonNeutrino>::options.cend();
+    }
 }

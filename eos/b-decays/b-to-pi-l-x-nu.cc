@@ -47,6 +47,8 @@ namespace eos
 
         UsedParameter hbar;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             m_B(p["mass::B_" + o.get("q", "d")], u),
             tau_B(p["life_time::B_" + o.get("q", "d")], u),
@@ -141,7 +143,11 @@ namespace eos
 
             return (a + b * z + c * z2 + (d + e * z) * sqrt(1.0 - z2) * cos(phi));
         }
+    };
 
+    const std::vector<OptionSpecification>
+    Implementation<BToPiLeptonInclusiveNeutrinos>::options
+    {
     };
 
     BToPiLeptonInclusiveNeutrinos::BToPiLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options) :
@@ -218,4 +224,16 @@ The azimuthal angle between the B-D plane and the tau-nubar_tau plane.";
     BToPiLeptonInclusiveNeutrinos::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToPiLeptonInclusiveNeutrinos::begin_options()
+    {
+        return Implementation<BToPiLeptonInclusiveNeutrinos>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToPiLeptonInclusiveNeutrinos::end_options()
+    {
+        return Implementation<BToPiLeptonInclusiveNeutrinos>::options.cend();
+    }
 }

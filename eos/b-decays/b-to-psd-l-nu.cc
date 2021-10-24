@@ -83,6 +83,8 @@ namespace eos
 
         UsedParameter mu;
 
+    	static const std::vector<OptionSpecification> options;
+
         std::function<double (const double &)> m_U_msbar;
         std::function<complex<double> ()> v_Ub;
         std::function<WilsonCoefficients<ChargedCurrent> (const std::string &, bool)> wc;
@@ -152,6 +154,7 @@ namespace eos
 
             return std::get<3>(p->second);
         }
+
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
@@ -423,6 +426,15 @@ namespace eos
         { { 'u', 's', "1/2" }, { "B_s->K",   "B_s", "K_u",  1.0                  } },
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BToPseudoscalarLeptonNeutrino>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" },
+        { "U", { "c", "u" }, "c" },
+        { "q", { "u", "d", "s" }, "d" },
+    	{ "I", { "1", "0", "1/2" }, "1" },
+    };
+
     BToPseudoscalarLeptonNeutrino::BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToPseudoscalarLeptonNeutrino>(new Implementation<BToPseudoscalarLeptonNeutrino>(parameters, options, *this))
     {
@@ -624,4 +636,16 @@ namespace eos
         "DDS:2014A"_rn,
         "STTW:2013A"_rn
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToPseudoscalarLeptonNeutrino::begin_options()
+    {
+        return Implementation<BToPseudoscalarLeptonNeutrino>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToPseudoscalarLeptonNeutrino::end_options()
+    {
+        return Implementation<BToPseudoscalarLeptonNeutrino>::options.cend();
+    }
 }

@@ -33,7 +33,9 @@ namespace eos
         std::shared_ptr<Model> model;
 
         SwitchOption opt_l;
-        
+
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu")
@@ -56,6 +58,12 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BToXuLeptonNeutrino<Naive>>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" }
+    };
+
     BToXuLeptonNeutrino<Naive>::BToXuLeptonNeutrino(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToXuLeptonNeutrino<Naive>>(new Implementation<BToXuLeptonNeutrino<Naive>>(parameters, options, *this))
     {
@@ -75,4 +83,16 @@ namespace eos
     BToXuLeptonNeutrino<Naive>::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToXuLeptonNeutrino<Naive>::begin_options()
+    {
+        return Implementation<BToXuLeptonNeutrino<Naive>>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToXuLeptonNeutrino<Naive>::end_options()
+    {
+        return Implementation<BToXuLeptonNeutrino<Naive>>::options.cend();
+    }
 }

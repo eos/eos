@@ -56,6 +56,8 @@ namespace eos
 
         std::shared_ptr<Model> model;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_q(o, "q", { "u", "d" }, "d"),
             m_B(p["mass::B_" + opt_q.value()], u),
@@ -150,6 +152,11 @@ namespace eos
 
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BToDLeptonInclusiveNeutrinos>::options
+    {
+    };
+
     BToDLeptonInclusiveNeutrinos::BToDLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToDLeptonInclusiveNeutrinos>(new Implementation<BToDLeptonInclusiveNeutrinos>(parameters, options, *this))
     {
@@ -224,4 +231,16 @@ The azimuthal angle between the B-D plane and the tau-nubar_tau plane.";
     BToDLeptonInclusiveNeutrinos::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToDLeptonInclusiveNeutrinos::begin_options()
+    {
+        return Implementation<BToDLeptonInclusiveNeutrinos>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToDLeptonInclusiveNeutrinos::end_options()
+    {
+        return Implementation<BToDLeptonInclusiveNeutrinos>::options.cend();
+    }
 }
