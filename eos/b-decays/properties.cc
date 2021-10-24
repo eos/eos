@@ -36,6 +36,8 @@ namespace eos
         // HQE non-perturbative matrix elements
         UsedParameter mu2_g;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             mu2_g(p["B->B::mu_G^2@1GeV"], u)
@@ -70,6 +72,11 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BMesonProperties>::options
+    {
+    };
+
     BMesonProperties::BMesonProperties(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BMesonProperties>(new Implementation<BMesonProperties>(parameters, options, *this))
     {
@@ -89,4 +96,16 @@ namespace eos
     BMesonProperties::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BMesonProperties::begin_options()
+    {
+        return Implementation<BMesonProperties>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BMesonProperties::end_options()
+    {
+        return Implementation<BMesonProperties>::options.cend();
+    }
 }

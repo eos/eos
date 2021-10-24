@@ -33,6 +33,8 @@ namespace eos
         // form factors
         std::shared_ptr<FormFactors<PToV>> ff;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_model(o, "model", { "SM", "CKMScan" }, "SM"),
             m_B(p["mass::B_d"], u),
@@ -439,6 +441,12 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BToDPiLeptonNeutrino>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" }
+    };
+
     BToDPiLeptonNeutrino::BToDPiLeptonNeutrino(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToDPiLeptonNeutrino>(new Implementation<BToDPiLeptonNeutrino>(parameters, options, *this))
     {
@@ -532,4 +540,16 @@ The squared mass of the dilepton pair.";
     BToDPiLeptonNeutrino::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToDPiLeptonNeutrino::begin_options()
+    {
+        return Implementation<BToDPiLeptonNeutrino>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToDPiLeptonNeutrino::end_options()
+    {
+        return Implementation<BToDPiLeptonNeutrino>::options.cend();
+    }
 }

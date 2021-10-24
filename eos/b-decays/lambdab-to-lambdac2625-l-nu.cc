@@ -52,6 +52,8 @@ namespace eos
 
         UsedParameter hbar;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             parameters(p),
@@ -62,7 +64,7 @@ namespace eos
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u)
         {
-            form_factors = FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)@" + o.get("form-factors", "HQET"), p);
+            form_factors = FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)::" + o.get("form-factors", "HQET"), p);
 
             if (! form_factors.get())
                 throw InternalError("Form factors not found!");
@@ -204,6 +206,12 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<LambdaBToLambdaC2625LeptonNeutrino>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" }
+    };
+
     LambdaBToLambdaC2625LeptonNeutrino::LambdaBToLambdaC2625LeptonNeutrino(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<LambdaBToLambdaC2625LeptonNeutrino>(new Implementation<LambdaBToLambdaC2625LeptonNeutrino>(parameters, options, *this))
     {
@@ -286,4 +294,16 @@ The cosine of the helicity angle between the direction of flight of the muon and
     LambdaBToLambdaC2625LeptonNeutrino::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    LambdaBToLambdaC2625LeptonNeutrino::begin_options()
+    {
+        return Implementation<LambdaBToLambdaC2625LeptonNeutrino>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    LambdaBToLambdaC2625LeptonNeutrino::end_options()
+    {
+        return Implementation<LambdaBToLambdaC2625LeptonNeutrino>::options.cend();
+    }
 }

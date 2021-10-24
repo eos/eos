@@ -54,6 +54,8 @@ namespace eos
         gsl_monte_function normalized_decay_width_integrand;
         gsl_monte_miser_state * state;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             m_B(p["mass::B_" + o.get("q", "d")], u),
@@ -186,6 +188,12 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BToPiPiLeptonNeutrino>::options
+    {
+        { "l", { "e", "mu" }, "mu" }
+    };
+
     BToPiPiLeptonNeutrino::BToPiPiLeptonNeutrino(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToPiPiLeptonNeutrino>(new Implementation<BToPiPiLeptonNeutrino>(parameters, options, *this))
     {
@@ -272,4 +280,16 @@ The cosine of the pion helicity angle in the pi-pi rest frame.";
     BToPiPiLeptonNeutrino::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToPiPiLeptonNeutrino::begin_options()
+    {
+        return Implementation<BToPiPiLeptonNeutrino>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToPiPiLeptonNeutrino::end_options()
+    {
+        return Implementation<BToPiPiLeptonNeutrino>::options.cend();
+    }
 }

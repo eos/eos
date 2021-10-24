@@ -110,6 +110,12 @@ namespace eos
              * References used in the computation of our observables.
              */
             static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
     class BsToKstarLeptonNeutrinoRatios :
@@ -128,6 +134,12 @@ namespace eos
              * References used in the computation of our observables.
              */
             static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
 }
 

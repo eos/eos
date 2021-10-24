@@ -64,6 +64,8 @@ namespace eos
         std::function<complex<double> ()> v_Ub;
         std::function<WilsonCoefficients<ChargedCurrent> (const std::string &, bool)> wc;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             opt_q(o, "q", { "c", "u" }),
@@ -124,6 +126,13 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BToLeptonNeutrino>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" },
+	    { "q", { "c", "u" }, "c"}
+    };
+
     BToLeptonNeutrino::BToLeptonNeutrino(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToLeptonNeutrino>(new Implementation<BToLeptonNeutrino>(parameters, options, *this))
     {
@@ -150,4 +159,16 @@ namespace eos
     {
         "DBG:2013A"_rn
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToLeptonNeutrino::begin_options()
+    {
+        return Implementation<BToLeptonNeutrino>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToLeptonNeutrino::end_options()
+    {
+        return Implementation<BToLeptonNeutrino>::options.cend();
+    }
 }

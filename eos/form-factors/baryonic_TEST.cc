@@ -310,7 +310,7 @@ class HQETOneHalfFormFactorsTest :
             p["Lambda_b->Lambda_c^*::rho@HQET"]           =  0.25;
             p["Lambda_b->Lambda_c^*::rho_3b@HQET"]        =  0.25;
 
-            auto ff = FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)@HQET", p);
+            auto ff = FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)::HQET", p);
 
             //Diagnostics diag = ff->diagnostics();
             //for (auto d : diag)
@@ -356,7 +356,7 @@ class HQETThreeHalfFormFactorsTest :
             p["Lambda_b->Lambda_c^*::rho@HQET"]           =  0.25;
             p["Lambda_b->Lambda_c^*::rho_3b@HQET"]        =  0.25;
 
-            auto ff = FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)@HQET", p);
+            auto ff = FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda_c(2625)::HQET", p);
 
             //Diagnostics diag = ff->diagnostics();
             //for (auto d : diag)

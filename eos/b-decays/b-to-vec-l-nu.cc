@@ -91,6 +91,8 @@ namespace eos
 
         IntermediateResult intermediate_result;
 
+        static const std::vector<OptionSpecification> options;
+
         // { U, q, I } -> { process, m_B, m_V, c_I }
         static const std::map<std::tuple<char, char, std::string>, std::tuple<std::string, std::string, std::string, double>> process_map;
 
@@ -335,6 +337,12 @@ namespace eos
 
             return integrated_pdf_q2(q2_min, q2_max) * (q2_max - q2_min) / (w_max - w_min);
         }
+    };
+
+    const std::vector<OptionSpecification>
+    Implementation<BToVectorLeptonNeutrino>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" }
     };
 
     const std::map<std::tuple<char, char, std::string>, std::tuple<std::string, std::string, std::string, double>>
@@ -991,4 +999,16 @@ namespace eos
     BToVectorLeptonNeutrino::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToVectorLeptonNeutrino::begin_options()
+    {
+        return Implementation<BToVectorLeptonNeutrino>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToVectorLeptonNeutrino::end_options()
+    {
+        return Implementation<BToVectorLeptonNeutrino>::options.cend();
+    }
 }

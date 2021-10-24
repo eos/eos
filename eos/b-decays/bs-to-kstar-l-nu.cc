@@ -59,7 +59,7 @@ namespace eos
         UsedParameter m_b_MSbar;
 
         SwitchOption opt_l;
-        
+
         UsedParameter m_l;
 
         UsedParameter mu;
@@ -69,6 +69,8 @@ namespace eos
         UsedParameter tau;
 
         std::shared_ptr<FormFactors<PToV>> form_factors;
+
+        static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
@@ -171,6 +173,12 @@ namespace eos
         {
             return sqrt(2.0) * (m_Bs + m_Kstar) * form_factors->a_1(s);
         }
+    };
+
+    const std::vector<OptionSpecification>
+    Implementation<BsToKstarLeptonNeutrino>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" }
     };
 
     BsToKstarLeptonNeutrino::BsToKstarLeptonNeutrino(const Parameters & parameters, const Options & options) :
@@ -555,6 +563,18 @@ namespace eos
         return result;
     }
 
+    std::vector<OptionSpecification>::const_iterator
+    BsToKstarLeptonNeutrino::begin_options()
+    {
+        return Implementation<BsToKstarLeptonNeutrino>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BsToKstarLeptonNeutrino::end_options()
+    {
+        return Implementation<BsToKstarLeptonNeutrino>::options.cend();
+    }
+
     template <>
     struct Implementation<BsToKstarLeptonNeutrinoRatios>
     {
@@ -568,6 +588,8 @@ namespace eos
 
         BToPseudoscalarLeptonNeutrino btopilnu;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             hbar(p["QM::hbar"], u),
             tau(p["life_time::B_d"], u),
@@ -579,6 +601,11 @@ namespace eos
             u.uses(btolnu);
             u.uses(btopilnu);
         }
+    };
+
+    const std::vector<OptionSpecification>
+    Implementation<BsToKstarLeptonNeutrinoRatios>::options
+    {
     };
 
     BsToKstarLeptonNeutrinoRatios::BsToKstarLeptonNeutrinoRatios(const Parameters & parameters, const Options & options) :
@@ -643,4 +670,16 @@ The azimuthal angle between the l-nubar plane and the K-pi plane.";
     BsToKstarLeptonNeutrinoRatios::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BsToKstarLeptonNeutrinoRatios::begin_options()
+    {
+        return Implementation<BsToKstarLeptonNeutrinoRatios>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BsToKstarLeptonNeutrinoRatios::end_options()
+    {
+        return Implementation<BsToKstarLeptonNeutrinoRatios>::options.cend();
+    }
 }
