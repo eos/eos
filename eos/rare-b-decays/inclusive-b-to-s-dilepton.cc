@@ -79,6 +79,8 @@ namespace eos
 
         UsedParameter alpha_e;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
@@ -548,6 +550,13 @@ namespace eos
     {
     }
 
+    const std::vector<OptionSpecification>
+    Implementation<BToXsDilepton<HLMW2005>>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" },
+        { "q", { "d", "u" }, "d" }
+    };
+
     double
     BToXsDilepton<HLMW2005>::differential_branching_ratio(const double & s) const
     {
@@ -572,4 +581,16 @@ namespace eos
     BToXsDilepton<HLMW2005>::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToXsDilepton<HLMW2005>::begin_options()
+    {
+        return Implementation<BToXsDilepton<HLMW2005>>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToXsDilepton<HLMW2005>::end_options()
+    {
+        return Implementation<BToXsDilepton<HLMW2005>>::options.cend();
+    }
 }

@@ -81,6 +81,8 @@ namespace eos
         UsedParameter tau;
         UsedParameter mu;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "WilsonScan"), p, o)),
             opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
@@ -298,6 +300,13 @@ namespace eos
     BToKstarDilepton::~BToKstarDilepton()
     {
     }
+
+    const std::vector<OptionSpecification>
+    Implementation<BToKstarDilepton>::options
+    {
+        {"l", { "e", "mu", "tau" }, "mu"},
+        {"q", { "d", "u" }, "d"}
+    };
 
     double
     BToKstarDilepton::a_fb_zero_crossing() const
@@ -1334,4 +1343,16 @@ The azimuthal angle between the Kbar-pi plane and the l^+l^- plane.";
     BToKstarDilepton::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToKstarDilepton::begin_options()
+    {
+        return Implementation<BToKstarDilepton>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToKstarDilepton::end_options()
+    {
+        return Implementation<BToKstarDilepton>::options.cend();
+    }
 }

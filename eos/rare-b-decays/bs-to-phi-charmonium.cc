@@ -67,6 +67,8 @@ namespace eos
         std::function<complex<double> ()> residue_H_perp;
         std::function<complex<double> ()> residue_H_para;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
@@ -162,6 +164,12 @@ namespace eos
     }
 
     BsToPhiCharmonium::~BsToPhiCharmonium() = default;
+
+    const std::vector<OptionSpecification>
+    Implementation<BsToPhiCharmonium>::options
+    {
+        {"psi", { "J/psi", "psi(2S)" }, "J/psi"}
+    };
 
     double
     BsToPhiCharmonium::branching_ratio() const
@@ -271,4 +279,16 @@ namespace eos
         "KMPW:2010A"_rn,
         "GvDV:2020A"_rn
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BsToPhiCharmonium::begin_options()
+    {
+        return Implementation<BsToPhiCharmonium>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BsToPhiCharmonium::end_options()
+    {
+        return Implementation<BsToPhiCharmonium>::options.cend();
+    }
 }

@@ -325,6 +325,8 @@ namespace eos
 
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["QM::hbar"], u),
@@ -513,6 +515,12 @@ namespace eos
     LambdaBToLambdaDilepton<LargeRecoil>::~LambdaBToLambdaDilepton()
     {
     }
+
+    const std::vector<OptionSpecification>
+    Implementation<LambdaBToLambdaDilepton<LargeRecoil>>::options
+    {
+        { "l", {"e", "mu", "tau"}, "mu" }
+    };
 
     /* q^2-differential observables */
     double
@@ -821,6 +829,21 @@ namespace eos
     {
     };
 
+    std::vector<OptionSpecification>::const_iterator
+    LambdaBToLambdaDilepton<LargeRecoil>::begin_options()
+    {
+        return Implementation<LambdaBToLambdaDilepton<LargeRecoil>>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    LambdaBToLambdaDilepton<LargeRecoil>::end_options()
+    {
+        return Implementation<LambdaBToLambdaDilepton<LargeRecoil>>::options.cend();
+    }
+
+
+    /* Low Recoil */
+
     template <> struct Implementation<LambdaBToLambdaDilepton<LowRecoil>>
     {
         std::shared_ptr<Model> model;
@@ -844,6 +867,8 @@ namespace eos
         UsedParameter r_para_0, r_para_1;
 
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
+
+        static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
@@ -963,6 +988,12 @@ namespace eos
     LambdaBToLambdaDilepton<LowRecoil>::~LambdaBToLambdaDilepton()
     {
     }
+
+    const std::vector<OptionSpecification>
+    Implementation<LambdaBToLambdaDilepton<LowRecoil>>::options
+    {
+        { "l", {"e", "mu", "tau"}, "mu" }
+    };
 
     /* q^2-differential observables */
     double
@@ -1339,4 +1370,16 @@ namespace eos
     LambdaBToLambdaDilepton<LowRecoil>::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    LambdaBToLambdaDilepton<LowRecoil>::begin_options()
+    {
+        return Implementation<LambdaBToLambdaDilepton<LowRecoil>>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    LambdaBToLambdaDilepton<LowRecoil>::end_options()
+    {
+        return Implementation<LambdaBToLambdaDilepton<LowRecoil>>::options.cend();
+    }
 }

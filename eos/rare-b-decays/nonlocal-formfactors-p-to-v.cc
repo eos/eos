@@ -986,6 +986,7 @@ namespace eos
     {
         NameOption opt_formfactor;
         NonlocalFormFactorPtr<nff::PToV> nff;
+        static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_formfactor(o, "formfactor", qnp::Name("GvDV2020")),
@@ -1005,6 +1006,12 @@ namespace eos
 
     template <typename Process_>
     NonlocalFormFactorObservable<Process_, nff::PToV>::~NonlocalFormFactorObservable() = default;
+
+    template <typename Process_>
+    const std::vector<OptionSpecification>
+    Implementation<NonlocalFormFactorObservable<Process_, nff::PToV>>::options
+    {
+    };
 
     template <typename Process_>
     double
@@ -1224,6 +1231,20 @@ namespace eos
     {
         "GvDV:2020A"_rn
     };
+
+    template <typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    NonlocalFormFactorObservable<Process_, nff::PToV>::begin_options()
+    {
+        return Implementation<NonlocalFormFactorObservable<Process_, nff::PToV>>::options.cbegin();
+    }
+
+    template <typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    NonlocalFormFactorObservable<Process_, nff::PToV>::end_options()
+    {
+        return Implementation<NonlocalFormFactorObservable<Process_, nff::PToV>>::options.cend();
+    }
 
     template class NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>;
 
