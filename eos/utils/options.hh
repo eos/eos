@@ -120,6 +120,16 @@ namespace eos
 
     /// Merge operator.
     Options operator+ (const Options & lhs, const Options & rhs);
+
+    /*!
+     * Metadata of an Option, providing key, allowed values, and default value.
+     */
+    struct OptionSpecification
+    {
+        std::string key;
+        std::vector<std::string> allowed_values;
+        std::string default_value;
+    };
 }
 
 #endif
