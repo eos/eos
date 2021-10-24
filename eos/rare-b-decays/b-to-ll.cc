@@ -59,6 +59,8 @@ namespace eos
 
         UsedParameter m_q;
 
+        static const std::vector<OptionSpecification> options;
+
         std::function<complex<double> (const Model *)> lambda;
 
         using xi_t = std::array<complex<double>, 4>;
@@ -177,6 +179,13 @@ namespace eos
     {
     }
 
+    const std::vector<OptionSpecification>
+    Implementation<BToDilepton>::options
+    {
+        {"l", { "e", "mu", "tau" }, "mu"},
+        {"q", { "d", "s" }, "d"}
+    };
+
     double
     BToDilepton::branching_ratio_time_zero() const
     {
@@ -211,4 +220,16 @@ namespace eos
     BToDilepton::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToDilepton::begin_options()
+    {
+        return Implementation<BToDilepton>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToDilepton::end_options()
+    {
+        return Implementation<BToDilepton>::options.cend();
+    }
 }

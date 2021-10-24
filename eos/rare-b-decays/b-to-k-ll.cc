@@ -70,6 +70,8 @@ namespace eos
         UsedParameter tau;
         UsedParameter mu;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "WilsonScan"), p, o)),
             opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
@@ -193,6 +195,13 @@ namespace eos
     BToKDilepton::~BToKDilepton()
     {
     }
+
+    const std::vector<OptionSpecification>
+    Implementation<BToKDilepton>::options
+    {
+        {"l", { "e", "mu", "tau" }, "mu"},
+        {"q", { "d", "u" }, "d"}
+    };
 
     double
     BToKDilepton::differential_branching_ratio(const double & s) const
@@ -395,4 +404,16 @@ The cosine of the lepton's helicity angle theta_l in the l^+l^- rest frame using
     BToKDilepton::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToKDilepton::begin_options()
+    {
+        return Implementation<BToKDilepton>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToKDilepton::end_options()
+    {
+        return Implementation<BToKDilepton>::options.cend();
+    }
 }

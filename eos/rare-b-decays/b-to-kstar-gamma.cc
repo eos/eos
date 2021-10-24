@@ -52,6 +52,8 @@ namespace eos
 
         std::shared_ptr<BToKstarGamma::AmplitudeGenerator> amplitude_generator;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             hbar(p["QM::hbar"], u),
@@ -145,6 +147,12 @@ namespace eos
 
     BToKstarGamma::~BToKstarGamma() = default;
 
+    const std::vector<OptionSpecification>
+    Implementation<BToKstarGamma>::options
+    {
+        {"q", { "d", "u" }, "d"}
+    };
+
     double
     BToKstarGamma::branching_ratio() const
     {
@@ -202,4 +210,16 @@ namespace eos
     BToKstarGamma::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToKstarGamma::begin_options()
+    {
+        return Implementation<BToKstarGamma>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToKstarGamma::end_options()
+    {
+        return Implementation<BToKstarGamma>::options.cend();
+    }
 }

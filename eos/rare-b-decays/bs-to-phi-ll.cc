@@ -76,6 +76,8 @@ namespace eos
         UsedParameter tau;
         UsedParameter mu;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "WilsonScan"), p, o)),
             opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
@@ -294,6 +296,12 @@ namespace eos
     BsToPhiDilepton::~BsToPhiDilepton()
     {
     }
+
+    const std::vector<OptionSpecification>
+    Implementation<BsToPhiDilepton>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" }
+    };
 
     double
     BsToPhiDilepton::a_fb_zero_crossing() const
@@ -1330,4 +1338,16 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
     BsToPhiDilepton::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BsToPhiDilepton::begin_options()
+    {
+        return Implementation<BsToPhiDilepton>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BsToPhiDilepton::end_options()
+    {
+        return Implementation<BsToPhiDilepton>::options.cend();
+    }
 }

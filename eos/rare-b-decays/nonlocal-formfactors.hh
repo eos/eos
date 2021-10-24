@@ -167,6 +167,12 @@ namespace eos
              * References used in the computation of our observables.
              */
             static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
     extern template class NonlocalFormFactorObservable<nff::BToK, nff::PToP>;
 
@@ -325,6 +331,12 @@ namespace eos
              * References used in the computation of our observables.
              */
             static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
     };
     extern template class NonlocalFormFactorObservable<nff::BToKstar, nff::PToV>;
     extern template class NonlocalFormFactorObservable<nff::BsToPhi, nff::PToV>;

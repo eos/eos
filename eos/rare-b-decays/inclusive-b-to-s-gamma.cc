@@ -49,6 +49,8 @@ namespace eos
 
         UsedParameter mu;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             m_b_MSbar(p["mass::b(MSbar)"], u),
@@ -106,6 +108,11 @@ namespace eos
     {
     }
 
+    const std::vector<OptionSpecification>
+    Implementation<BToXsGamma<Minimal>>::options
+    {
+    };
+
     double
     BToXsGamma<Minimal>::integrated_branching_ratio() const
     {
@@ -116,6 +123,18 @@ namespace eos
     BToXsGamma<Minimal>::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToXsGamma<Minimal>::begin_options()
+    {
+        return Implementation<BToXsGamma<Minimal>>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToXsGamma<Minimal>::end_options()
+    {
+        return Implementation<BToXsGamma<Minimal>>::options.cend();
+    }
 
     /* NLO
      *
@@ -145,6 +164,8 @@ namespace eos
         UsedParameter gfermi;
 
         UsedParameter tau;
+
+        static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
@@ -680,6 +701,11 @@ namespace eos
     {
     }
 
+    const std::vector<OptionSpecification>
+    Implementation<BToXsGamma<NLO>>::options
+    {
+    };
+
     double
     BToXsGamma<NLO>::integrated_branching_ratio(const double & emin) const
     {
@@ -708,6 +734,18 @@ namespace eos
     BToXsGamma<NLO>::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BToXsGamma<NLO>::begin_options()
+    {
+        return Implementation<BToXsGamma<NLO>>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BToXsGamma<NLO>::end_options()
+    {
+        return Implementation<BToXsGamma<NLO>>::options.cend();
+    }
 
     const std::array<double, 225>
     Implementation<BToXsGamma<NLO>>::f22int1coeffs
