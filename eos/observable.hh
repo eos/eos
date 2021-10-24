@@ -171,6 +171,15 @@ namespace eos
             virtual KinematicVariableIterator end_kinematic_variables() const = 0;
             ///@}
 
+            ///@name Iteration over options
+            ///@{
+            struct OptionIteratorTag;
+            using OptionIterator = WrappedForwardIterator<OptionIteratorTag, const OptionSpecification &>;
+
+            virtual OptionIterator begin_options() const = 0;
+            virtual OptionIterator end_options() const = 0;
+            ///@}
+
         protected:
             virtual std::ostream & insert(std::ostream & os) const = 0;
     };

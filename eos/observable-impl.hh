@@ -145,6 +145,12 @@ namespace eos
     {
         using UnderlyingIterator = std::array<const std::string, 1u>::iterator;
     };
+
+    template <>
+    struct WrappedForwardIteratorTraits<ObservableEntry::OptionIteratorTag>
+    {
+        using UnderlyingIterator = std::vector<OptionSpecification>::const_iterator;
+    };
 }
 
 #endif

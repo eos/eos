@@ -108,6 +108,8 @@ namespace eos
 
             Options _forced_options;
 
+            std::vector<OptionSpecification> _option_specifications;
+
         public:
             ExpressionObservableEntry(const QualifiedName & name, const std::string & latex,
                     const Unit & unit,
@@ -120,6 +122,10 @@ namespace eos
 
             virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const;
             virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const;
+
+            virtual ObservableEntry::OptionIterator begin_options() const;
+            virtual ObservableEntry::OptionIterator end_options() const;
+
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const;
             virtual std::ostream & insert(std::ostream & os) const;
 

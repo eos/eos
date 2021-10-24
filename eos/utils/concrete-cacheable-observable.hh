@@ -312,6 +312,16 @@ namespace eos
                 return _kinematics_names_array.end();
             }
 
+            virtual ObservableEntry::OptionIterator begin_options() const
+            {
+                return Decay_::begin_options();
+            }
+
+            virtual ObservableEntry::OptionIterator end_options() const
+            {
+                return Decay_::end_options();
+            }
+
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
             {
                 for (const auto & fo : _forced_options)
