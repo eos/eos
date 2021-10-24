@@ -89,6 +89,8 @@ namespace eos
         UsedParameter l5sone, l5spone, l5sppone;
         UsedParameter l6sone, l6spone, l6sppone;
 
+        static const std::vector<OptionSpecification> options;
+
         std::string _sslp_prefix()
         {
             if ("1" == opt_sslp_limit.value())
@@ -1271,6 +1273,12 @@ namespace eos
         // }}}
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BGLCoefficients>::options
+    {
+        { "SU3F-limit-sslp", { "0", "1" }, "0" }
+    };
+
     BGLCoefficients::BGLCoefficients(const Parameters & p, const Options & o) :
         PrivateImplementationPattern<BGLCoefficients>(new Implementation<BGLCoefficients>(p, o, *this))
     {
@@ -1436,6 +1444,18 @@ namespace eos
     double BGLCoefficients::A7s_a2() const { return _imp->A7s_a2(); }
     // }}}
 
+    std::vector<OptionSpecification>::const_iterator
+    BGLCoefficients::begin_options()
+    {
+        return Implementation<BGLCoefficients>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BGLCoefficients::end_options()
+    {
+        return Implementation<BGLCoefficients>::options.cend();
+    }
+
     template <> struct Implementation<HQETUnitarityBounds>
     {
         // option to determine if we use z^3 terms in the leading-power IW function
@@ -1447,6 +1467,8 @@ namespace eos
         UsedParameter ns;
 
         std::shared_ptr<BGLCoefficients> bgl;
+
+        static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             opt_zorder_bound(o, "z-order-bound", { "1", "2" }, "2"),
@@ -1770,6 +1792,13 @@ namespace eos
         // }}}
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<HQETUnitarityBounds>::options
+    {
+        { "SU3F-limit-sslp", { "0", "1" }, "0" },
+        { "z-order-bound",   { "1", "2" }, "2" }
+    };
+
     HQETUnitarityBounds::HQETUnitarityBounds(const Parameters & p, const Options & o) :
         PrivateImplementationPattern<HQETUnitarityBounds>(new Implementation<HQETUnitarityBounds>(p, o, *this))
     {
@@ -1830,12 +1859,26 @@ namespace eos
     {
     };
 
+    std::vector<OptionSpecification>::const_iterator
+    HQETUnitarityBounds::begin_options()
+    {
+        return Implementation<HQETUnitarityBounds>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    HQETUnitarityBounds::end_options()
+    {
+        return Implementation<HQETUnitarityBounds>::options.cend();
+    }
+
     template <> struct Implementation<OPEUnitarityBounds>
     {
         const double cond_qq, cond_G2;
         const double mu;   // TODO maybe declare the scale of alpha_s(mu) as a UsedParameter
 
         std::shared_ptr<Model> model;
+
+        static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             cond_qq(-0.02/12), // (p["B->D^*::<qq>@BGL1997"], u),         // [BGL1997] quark condensate
@@ -1945,6 +1988,11 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<OPEUnitarityBounds>::options
+    {
+    };
+
     OPEUnitarityBounds::OPEUnitarityBounds(const Parameters & p, const Options & o) :
         PrivateImplementationPattern<OPEUnitarityBounds>(new Implementation<OPEUnitarityBounds>(p, o, *this))
     {
@@ -1981,6 +2029,18 @@ namespace eos
     {
     };
 
+    std::vector<OptionSpecification>::const_iterator
+    OPEUnitarityBounds::begin_options()
+    {
+        return Implementation<OPEUnitarityBounds>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    OPEUnitarityBounds::end_options()
+    {
+        return Implementation<OPEUnitarityBounds>::options.cend();
+    }
+
     template <> struct Implementation<BGLUnitarityBounds>
     {
         // B->D^* parameters
@@ -1995,6 +2055,8 @@ namespace eos
         // number of light flavor multiplets
         UsedParameter nf;
         UsedParameter ns;
+
+        static const std::vector<OptionSpecification> options;
 
         std::string _par_name_dstar(const std::string & ff_name)
         {
@@ -2192,6 +2254,12 @@ namespace eos
         // }}}
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<BGLUnitarityBounds>::options
+    {
+        { "z-order-bound", { "1", "2" }, "2" }
+    };
+
     BGLUnitarityBounds::BGLUnitarityBounds(const Parameters & p, const Options & o) :
         PrivateImplementationPattern<BGLUnitarityBounds>(new Implementation<BGLUnitarityBounds>(p, o, *this))
     {
@@ -2251,4 +2319,16 @@ namespace eos
     BGLUnitarityBounds::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    BGLUnitarityBounds::begin_options()
+    {
+        return Implementation<BGLUnitarityBounds>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BGLUnitarityBounds::end_options()
+    {
+        return Implementation<BGLUnitarityBounds>::options.cend();
+    }
 }

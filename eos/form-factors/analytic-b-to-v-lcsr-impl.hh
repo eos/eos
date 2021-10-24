@@ -95,6 +95,8 @@ namespace eos
         std::function<double (const Implementation *, const double &, const double &)> integrand_t23B_2pt;
         bool switch_borel;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
             m_B(p[Process_::m_B], u),
@@ -23118,6 +23120,15 @@ namespace eos
     };
 
     template <typename Process_>
+    const std::vector<OptionSpecification>
+    Implementation<AnalyticFormFactorBToVLCSR<Process_>>::options
+    {
+        { "2pt",    { "tw2+3", "all", "off" }, "all"   },
+        { "3pt",    { "tw3+4", "all", "off" }, "all"   },
+        { "method", { "borel", "dispersive" }, "borel" }
+    };
+
+    template <typename Process_>
     AnalyticFormFactorBToVLCSR<Process_>::AnalyticFormFactorBToVLCSR(const Parameters & p, const Options & o) :
         PrivateImplementationPattern<AnalyticFormFactorBToVLCSR<Process_>>(new Implementation<AnalyticFormFactorBToVLCSR<Process_>>(p, o, *this))
     {
@@ -23336,6 +23347,20 @@ namespace eos
         "FKKM:2008A"_rn,
         "GKvD:2018A"_rn
     };
+
+    template <typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    AnalyticFormFactorBToVLCSR<Process_>::begin_options()
+    {
+        return Implementation<AnalyticFormFactorBToVLCSR<Process_>>::options.cbegin();
+    }
+
+    template <typename Process_>
+    std::vector<OptionSpecification>::const_iterator
+    AnalyticFormFactorBToVLCSR<Process_>::end_options()
+    {
+        return Implementation<AnalyticFormFactorBToVLCSR<Process_>>::options.cend();
+    }
 }
 
 #endif

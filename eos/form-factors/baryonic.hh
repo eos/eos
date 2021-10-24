@@ -26,6 +26,7 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 
+#include <map>
 #include <memory>
 #include <string>
 
@@ -74,7 +75,13 @@ namespace eos
     class FormFactorFactory<OneHalfPlusToOneHalfPlus>
     {
         public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfPlus> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
             static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
+            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
     };
 
     template <>
@@ -99,7 +106,13 @@ namespace eos
     class FormFactorFactory<OneHalfPlusToOneHalfMinus>
     {
         public:
-            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfMinus> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
+            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
+            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
     };
 
     template <>
@@ -126,7 +139,13 @@ namespace eos
     class FormFactorFactory<OneHalfPlusToThreeHalfMinus>
     {
         public:
-            static std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> create(const std::string & label, const Parameters & parameters, const Options & options = Options{ });
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<OneHalfPlusToThreeHalfMinus> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
+            static std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
+            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
     };
 }
 

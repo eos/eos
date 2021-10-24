@@ -147,39 +147,38 @@ namespace eos
     {
     }
 
+    const std::map<FormFactorFactory<PToV>::KeyType, FormFactorFactory<PToV>::ValueType>
+    FormFactorFactory<PToV>::form_factors
+    {
+        { "B->omega::BSZ2015",    &BSZ2015FormFactors<BToOmega,   PToV>::make         },
+        { "B->rho::BSZ2015",      &BSZ2015FormFactors<BToRho,     PToV>::make         },
+        { "B->K^*::BZ2004",       &BZ2004FormFactors<BToKstar,    PToV>::make         },
+        { "B->K^*::KMPW2010",     &KMPW2010FormFactors<PToV>::make                    },
+        { "B->K^*::BFW2010",      &BFW2010FormFactors<BToKstar,   PToV>::make         },
+        { "B->K^*::BSZ2015",      &BSZ2015FormFactors<BToKstar,   PToV>::make         },
+        { "B->D^*::BSZ2015",      &BSZ2015FormFactors<BToDstar,   PToV>::make         },
+        { "B->D^*::HQET",         &HQETFormFactors<BToDstar,      PToV>::make         },
+        { "B->D^*::BGL1997",      &BGL1997FormFactors<BToDstar>::make                 },
+        { "B_s->K^*::BFW2010",    &BFW2010FormFactors<BsToKstar,  PToV>::make         },
+        { "B_s->K^*::FMvD2015",   &FMvD2015FormFactors<BsToKstar>::make               },
+        { "B_s->phi::BZ2004",     &BZ2004FormFactors<BsToPhi,     PToV>::make         },
+        { "B_s->K^*::BSZ2015",    &BSZ2015FormFactors<BsToKstar,  PToV>::make         },
+        { "B_s->D_s^*::BSZ2015",  &BSZ2015FormFactors<BsToDsstar, PToV>::make         },
+        { "B_s->D_s^*::HQET",     &HQETFormFactors<BsToDsstar,    PToV>::make         },
+        { "B_s->phi::BSZ2015",    &BSZ2015FormFactors<BsToPhi,    PToV>::make         },
+        // analytic computations
+        { "B->K^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make   },
+        { "B->D^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::make   },
+        { "B->rho::B-LCSR",       &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::make     },
+        { "B_s->K^*::B-LCSR",     &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::make  },
+        { "B_s->phi::B-LCSR",     &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::make    },
+        { "B_s->D_s^*::B-LCSR",   &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::make }
+    };
+
     std::shared_ptr<FormFactors<PToV>>
     FormFactorFactory<PToV>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<PToV>> result;
-
-        using KeyType = QualifiedName;
-        using ValueType = std::function<FormFactors<PToV> * (const Parameters &, const Options &)>;
-        static const std::map<KeyType, ValueType> form_factors
-        {
-            { KeyType("B->omega::BSZ2015"),    &BSZ2015FormFactors<BToOmega,    PToV>::make        },
-            { KeyType("B->rho::BSZ2015"),      &BSZ2015FormFactors<BToRho,    PToV>::make          },
-            { KeyType("B->K^*::BZ2004"),       &BZ2004FormFactors<BToKstar, PToV>::make            },
-            { KeyType("B->K^*::KMPW2010"),     &KMPW2010FormFactors<PToV>::make                    },
-            { KeyType("B->K^*::BFW2010"),      &BFW2010FormFactors<BToKstar,  PToV>::make          },
-            { KeyType("B->K^*::BSZ2015"),      &BSZ2015FormFactors<BToKstar,  PToV>::make          },
-            { KeyType("B->D^*::BSZ2015"),      &BSZ2015FormFactors<BToDstar,  PToV>::make          },
-            { KeyType("B->D^*::HQET"),         &HQETFormFactors<BToDstar,  PToV>::make             },
-            { KeyType("B->D^*::BGL1997"),      &BGL1997FormFactors<BToDstar>::make                 },
-            { KeyType("B_s->K^*::BFW2010"),    &BFW2010FormFactors<BsToKstar, PToV>::make          },
-            { KeyType("B_s->K^*::FMvD2015"),   &FMvD2015FormFactors<BsToKstar>::make               },
-            { KeyType("B_s->phi::BZ2004"),     &BZ2004FormFactors<BsToPhi, PToV>::make             },
-            { KeyType("B_s->K^*::BSZ2015"),    &BSZ2015FormFactors<BsToKstar,    PToV>::make       },
-            { KeyType("B_s->D_s^*::BSZ2015"),  &BSZ2015FormFactors<BsToDsstar,    PToV>::make      },
-            { KeyType("B_s->D_s^*::HQET"),     &HQETFormFactors<BsToDsstar, PToV>::make            },
-            { KeyType("B_s->phi::BSZ2015"),    &BSZ2015FormFactors<BsToPhi,    PToV>::make         },
-            // analytic computations
-            { KeyType("B->K^*::B-LCSR"),       &AnalyticFormFactorBToVLCSR<lcsr::BToKstar>::make   },
-            { KeyType("B->D^*::B-LCSR"),       &AnalyticFormFactorBToVLCSR<lcsr::BToDstar>::make   },
-            { KeyType("B->rho::B-LCSR"),       &AnalyticFormFactorBToVLCSR<lcsr::BToRho>::make     },
-            { KeyType("B_s->K^*::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BsToKstar>::make  },
-            { KeyType("B_s->phi::B-LCSR"),     &AnalyticFormFactorBToVLCSR<lcsr::BsToPhi>::make    },
-            { KeyType("B_s->D_s^*::B-LCSR"),   &AnalyticFormFactorBToVLCSR<lcsr::BsToDsstar>::make }
-        };
 
         auto i = form_factors.find(name);
         if (form_factors.end() != i)
@@ -188,6 +187,19 @@ namespace eos
         }
 
         return result;
+    }
+
+    std::vector<OptionSpecification>
+    FormFactorFactory<PToV>::option_specifications(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<PToV>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return { result };
     }
 
     /* P -> P Processes */
@@ -328,53 +340,64 @@ namespace eos
         return derivative<2u, deriv::TwoSided>(f, s);
     }
 
+    const std::map<FormFactorFactory<PToP>::KeyType, FormFactorFactory<PToP>::ValueType>
+    FormFactorFactory<PToP>::form_factors
+    {
+        // parametrizations
+        // b -> s
+        { "B->K::BCL2008",       &BCL2008FormFactors<BToK, 3u>::make              },
+        { "B->K::BZ2004v2",      &BZ2004FormFactors<BToK,    PToP>::make          },
+        { "B->K::BZ2004v2Split", &BZ2004FormFactorsSplit<BToK>::make              },
+        { "B->K::KMPW2010",      &KMPW2010FormFactors<PToP>::make                 },
+        { "B->K::BFW2010",       &BFW2010FormFactors<BToK,   PToP>::make          },
+        { "B->K::BSZ2015",       &BSZ2015FormFactors<BToK,   PToP>::make          },
+        // b -> u
+        { "B->pi::BCL2008",      &BCL2008FormFactors<BToPi, 3u>::make             },
+        { "B->pi::BCL2008-4",    &BCL2008FormFactors<BToPi, 4u>::make             },
+        { "B->pi::BCL2008-5",    &BCL2008FormFactors<BToPi, 5u>::make             },
+        { "B->pi::BSZ2015",      &BSZ2015FormFactors<BToPi,  PToP>::make          },
+        { "B_s->K::BSZ2015",     &BSZ2015FormFactors<BsToK,  PToP>::make          },
+        // b -> c
+        { "B->D::BCL2008",       &BCL2008FormFactors<BToD, 3u>::make              },
+        { "B->D::BSZ2015",       &BSZ2015FormFactors<BToD,   PToP>::make          },
+        { "B->D::HQET",          &HQETFormFactors<BToD,      PToP>::make          },
+        { "B->D::BGL1997",       &BGL1997FormFactors<BToD>::make                  },
+        { "B_s->D_s::BSZ2015",   &BSZ2015FormFactors<BsToDs, PToP>::make          },
+        { "B_s->D_s::HQET",      &HQETFormFactors<BsToDs,    PToP>::make          },
+        // analytic computations
+        { "B->pi::DKMMO2008",    &AnalyticFormFactorBToPiDKMMO2008::make          },
+        { "B->pi::B-LCSR",       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make   },
+        { "B->K::B-LCSR",        &AnalyticFormFactorBToPLCSR<lcsr::BToK>::make    },
+        { "B->D::B-LCSR",        &AnalyticFormFactorBToPLCSR<lcsr::BToD>::make    },
+        { "B_s->K::B-LCSR",      &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::make   },
+        { "B_s->D_s::B-LCSR",    &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::make  }
+    };
 
     std::shared_ptr<FormFactors<PToP>>
     FormFactorFactory<PToP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<PToP>> result;
 
-        using KeyType = QualifiedName;
-        using ValueType = std::function<FormFactors<PToP> * (const Parameters &, const Options &)>;
-        static const std::map<KeyType, ValueType> form_factors
-        {
-            // parametrizations
-            // b -> s
-            { KeyType("B->K::BCL2008"),       &BCL2008FormFactors<BToK, 3u>::make              },
-            { KeyType("B->K::BZ2004v2"),      &BZ2004FormFactors<BToK, PToP>::make             },
-            { KeyType("B->K::BZ2004v2Split"), &BZ2004FormFactorsSplit<BToK>::make              },
-            { KeyType("B->K::KMPW2010"),      &KMPW2010FormFactors<PToP>::make                 },
-            { KeyType("B->K::BFW2010"),       &BFW2010FormFactors<BToK, PToP>::make            },
-            { KeyType("B->K::BSZ2015"),       &BSZ2015FormFactors<BToK, PToP>::make            },
-            // b -> u
-            { KeyType("B->pi::BCL2008"),      &BCL2008FormFactors<BToPi, 3u>::make             },
-            { KeyType("B->pi::BCL2008-4"),    &BCL2008FormFactors<BToPi, 4u>::make             },
-            { KeyType("B->pi::BCL2008-5"),    &BCL2008FormFactors<BToPi, 5u>::make             },
-            { KeyType("B->pi::BSZ2015"),      &BSZ2015FormFactors<BToPi, PToP>::make           },
-            { KeyType("B_s->K::BSZ2015"),     &BSZ2015FormFactors<BsToK, PToP>::make           },
-            // b -> c
-            { KeyType("B->D::BCL2008"),       &BCL2008FormFactors<BToD, 3u>::make              },
-            { KeyType("B->D::BSZ2015"),       &BSZ2015FormFactors<BToD, PToP>::make            },
-            { KeyType("B->D::HQET"),          &HQETFormFactors<BToD, PToP>::make               },
-            { KeyType("B->D::BGL1997"),       &BGL1997FormFactors<BToD>::make                  },
-            { KeyType("B_s->D_s::BSZ2015"),   &BSZ2015FormFactors<BsToDs, PToP>::make          },
-            { KeyType("B_s->D_s::HQET"),      &HQETFormFactors<BsToDs, PToP>::make             },
-            // analytic computations
-            { KeyType("B->pi::DKMMO2008"),    &AnalyticFormFactorBToPiDKMMO2008::make          },
-            { KeyType("B->pi::B-LCSR"),       &AnalyticFormFactorBToPLCSR<lcsr::BToPi>::make   },
-            { KeyType("B->K::B-LCSR"),        &AnalyticFormFactorBToPLCSR<lcsr::BToK>::make    },
-            { KeyType("B->D::B-LCSR"),        &AnalyticFormFactorBToPLCSR<lcsr::BToD>::make    },
-            { KeyType("B_s->K::B-LCSR"),      &AnalyticFormFactorBToPLCSR<lcsr::BsToK>::make   },
-            { KeyType("B_s->D_s::B-LCSR"),    &AnalyticFormFactorBToPLCSR<lcsr::BsToDs>::make  }
-        };
-
-        auto i = form_factors.find(name);
-        if (form_factors.end() != i)
+        auto i = FormFactorFactory<PToP>::form_factors.find(name);
+        if (FormFactorFactory<PToP>::form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
         }
 
         return result;
+    }
+
+    std::vector<OptionSpecification>
+    FormFactorFactory<PToP>::option_specifications(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<PToP>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return { result };
     }
 
     /* P -> PP Processes */
@@ -398,28 +421,40 @@ namespace eos
     {
     }
 
+    const std::map<FormFactorFactory<PToPP>::KeyType, FormFactorFactory<PToPP>::ValueType>
+    FormFactorFactory<PToPP>::form_factors
+    {
+        // analytic computations
+        { "B->pipi::BFvD2016",            &AnalyticFormFactorBToPiPiBFvD2016::make   },
+        { "B->pipi::FvDV2018-Dispersive", &AnalyticFormFactorBToPiPiFvDV2018::make   },
+        { "B->pipi::FvDV2018",            &FvDV2018FormFactors<BToPiPi>::make        },
+    };
+
     std::shared_ptr<FormFactors<PToPP>>
     FormFactorFactory<PToPP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<PToPP>> result;
 
-        using KeyType = QualifiedName;
-        using ValueType = std::function<FormFactors<PToPP> * (const Parameters &, const Options &)>;
-        static const std::map<KeyType, ValueType> form_factors
-        {
-            // analytic computations
-            { KeyType("B->pipi::BFvD2016"),            &AnalyticFormFactorBToPiPiBFvD2016::make   },
-            { KeyType("B->pipi::FvDV2018-Dispersive"), &AnalyticFormFactorBToPiPiFvDV2018::make   },
-            { KeyType("B->pipi::FvDV2018"),            &FvDV2018FormFactors<BToPiPi>::make        },
-        };
-
-        auto i = form_factors.find(name);
-        if (form_factors.end() != i)
+        auto i = FormFactorFactory<PToPP>::form_factors.find(name);
+        if (FormFactorFactory<PToPP>::form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
         }
 
         return result;
+    }
+
+    std::vector<OptionSpecification>
+    FormFactorFactory<PToPP>::option_specifications(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<PToPP>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return { result };
     }
 
     /* V -> P Processes */
@@ -428,27 +463,39 @@ namespace eos
     {
     }
 
+    const std::map<FormFactorFactory<VToP>::KeyType, FormFactorFactory<VToP>::ValueType>
+    FormFactorFactory<VToP>::form_factors
+    {
+        // parametrizations
+        // b -> c
+        { "B^*->D::HQET",        &HQETFormFactors<BstarToD, VToP>::make          },
+    };
+
     std::shared_ptr<FormFactors<VToP>>
     FormFactorFactory<VToP>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<VToP>> result;
 
-        using KeyType = QualifiedName;
-        using ValueType = std::function<FormFactors<VToP> * (const Parameters &, const Options &)>;
-        static const std::map<KeyType, ValueType> form_factors
-        {
-            // parametrizations
-            // b -> c
-            { KeyType("B^*->D::HQET"),        &HQETFormFactors<BstarToD, VToP>::make          },
-        };
-
-        auto i = form_factors.find(name);
-        if (form_factors.end() != i)
+        auto i = FormFactorFactory<VToP>::form_factors.find(name);
+        if (FormFactorFactory<VToP>::form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
         }
 
         return result;
+    }
+
+    std::vector<OptionSpecification>
+    FormFactorFactory<VToP>::option_specifications(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<VToP>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return { result };
     }
 
     /* V -> V Processes */
@@ -457,27 +504,39 @@ namespace eos
     {
     }
 
+    const std::map<FormFactorFactory<VToV>::KeyType, FormFactorFactory<VToV>::ValueType>
+    FormFactorFactory<VToV>::form_factors
+    {
+        // parametrizations
+        // b -> c
+        // not yet supported
+        { "B^*->D^*::HQET",      &HQETFormFactors<BstarToDstar, VToV>::make      },
+    };
+
     std::shared_ptr<FormFactors<VToV>>
     FormFactorFactory<VToV>::create(const QualifiedName & name, const Parameters & parameters, const Options & options)
     {
         std::shared_ptr<FormFactors<VToV>> result;
 
-        using KeyType = QualifiedName;
-        using ValueType = std::function<FormFactors<VToV> * (const Parameters &, const Options &)>;
-        static const std::map<KeyType, ValueType> form_factors
-        {
-            // parametrizations
-            // b -> c
-            // not yet supported
-            { KeyType("B^*->D^*::HQET"),      &HQETFormFactors<BstarToDstar, VToV>::make      },
-        };
-
-        auto i = form_factors.find(name);
-        if (form_factors.end() != i)
+        auto i = FormFactorFactory<VToV>::form_factors.find(name);
+        if (FormFactorFactory<VToV>::form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
         }
 
         return result;
+    }
+
+    std::vector<OptionSpecification>
+    FormFactorFactory<VToV>::option_specifications(const qnp::Prefix & process)
+    {
+        OptionSpecification result { "form-factors", {}, "" };
+        for (const auto & ff : FormFactorFactory<VToV>::form_factors)
+        {
+            if (process == std::get<0>(ff).prefix_part())
+                result.allowed_values.push_back(std::get<0>(ff).name_part().str());
+        }
+
+        return { result };
     }
 }

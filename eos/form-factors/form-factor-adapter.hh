@@ -136,6 +136,8 @@ namespace eos
 
             std::array<const std::string, sizeof...(Args_)> _kinematics_names_array;
 
+            const std::vector<OptionSpecification> _options;
+
         public:
             FormFactorAdapterEntry(const QualifiedName & name,
                     const std::string & latex,
@@ -149,7 +151,8 @@ namespace eos
                 _process(process),
                 _form_factor_function(form_factor_function),
                 _kinematics_names(kinematics_names),
-                _kinematics_names_array(impl::make_array<const std::string>(kinematics_names))
+                _kinematics_names_array(impl::make_array<const std::string>(kinematics_names)),
+                _options(std::move(FormFactorFactory<Transition_>::option_specifications(process)))
             {
             }
 
@@ -180,6 +183,16 @@ namespace eos
             virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const
             {
                 return _kinematics_names_array.end();
+            }
+
+            virtual ObservableEntry::OptionIterator begin_options() const
+            {
+                return _options.begin();
+            }
+
+            virtual ObservableEntry::OptionIterator end_options() const
+            {
+                return _options.end();
             }
 
             virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const

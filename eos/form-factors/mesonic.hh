@@ -28,6 +28,7 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/qualified-name.hh>
 
+#include <map>
 #include <memory>
 #include <string>
 
@@ -85,7 +86,13 @@ namespace eos
     class FormFactorFactory<PToV>
     {
         public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<PToV> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
             static std::shared_ptr<FormFactors<PToV>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
+            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
     };
 
     template <>
@@ -111,7 +118,13 @@ namespace eos
     class FormFactorFactory<PToP>
     {
         public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<PToP> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
             static std::shared_ptr<FormFactors<PToP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
+            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
     };
 
     template <>
@@ -143,7 +156,13 @@ namespace eos
     class FormFactorFactory<PToPP>
     {
         public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<PToPP> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
             static std::shared_ptr<FormFactors<PToPP>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
+            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
     };
 
     template <>
@@ -164,7 +183,13 @@ namespace eos
     class FormFactorFactory<VToP>
     {
         public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<VToP> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
             static std::shared_ptr<FormFactors<VToP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
+            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
     };
 
     template <>
@@ -193,7 +218,13 @@ namespace eos
     class FormFactorFactory<VToV>
     {
         public:
+            using KeyType = QualifiedName;
+            using ValueType = std::function<FormFactors<VToV> * (const Parameters &, const Options &)>;
+
+            static const std::map<KeyType, ValueType> form_factors;
+
             static std::shared_ptr<FormFactors<VToV>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
+            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
     };
 
 }

@@ -59,6 +59,8 @@ namespace eos
         UsedParameter m_Lambda_c_2595;
         UsedParameter m_Lambda_c_2625;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
             mu(p["Lambda_b->Lambda_c::mu@ZRSR"], u),
@@ -204,6 +206,11 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<ZeroRecoilSumRule<LambdaBToC>>::options
+    {
+    };
+
     ZeroRecoilSumRule<LambdaBToC>::ZeroRecoilSumRule(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<ZeroRecoilSumRule<LambdaBToC>>(new Implementation<ZeroRecoilSumRule<LambdaBToC>>(parameters, options, *this))
     {
@@ -241,4 +248,16 @@ namespace eos
     ZeroRecoilSumRule<LambdaBToC>::references
     {
     };
+
+    std::vector<OptionSpecification>::const_iterator
+    ZeroRecoilSumRule<LambdaBToC>::begin_options()
+    {
+        return Implementation<ZeroRecoilSumRule<LambdaBToC>>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    ZeroRecoilSumRule<LambdaBToC>::end_options()
+    {
+        return Implementation<ZeroRecoilSumRule<LambdaBToC>>::options.cend();
+    }
 }

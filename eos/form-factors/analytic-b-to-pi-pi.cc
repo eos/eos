@@ -59,6 +59,8 @@ namespace eos
         // routine to determine renormlization scale
         std::function<double (const double &)> mu;
 
+        static const std::vector<OptionSpecification> options;
+
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
             b_to_pi_ff(FormFactorFactory<PToP>::create("B->pi::" + o.get("soft-form-factor", "BCL2008"), p, o)),
@@ -458,6 +460,11 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<AnalyticFormFactorBToPiPiBFvD2016>::options
+    {
+    };
+
     AnalyticFormFactorBToPiPiBFvD2016::AnalyticFormFactorBToPiPiBFvD2016(const Parameters & p, const Options & o) :
         PrivateImplementationPattern<AnalyticFormFactorBToPiPiBFvD2016>(new Implementation<AnalyticFormFactorBToPiPiBFvD2016>(p, o, *this))
     {
@@ -591,6 +598,18 @@ namespace eos
         return _imp->diagnostics();
     }
 
+    std::vector<OptionSpecification>::const_iterator
+    AnalyticFormFactorBToPiPiBFvD2016::begin_options()
+    {
+        return Implementation<AnalyticFormFactorBToPiPiBFvD2016>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    AnalyticFormFactorBToPiPiBFvD2016::end_options()
+    {
+        return Implementation<AnalyticFormFactorBToPiPiBFvD2016>::options.cend();
+    }
+
     template <>
     struct Implementation<AnalyticFormFactorBToPiPiFvDV2018>
     {
@@ -602,6 +621,8 @@ namespace eos
         UsedParameter m_B;
         UsedParameter m_Bst;
         UsedParameter g_BstBpi;
+
+        static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make("SM", p, o)),
@@ -675,6 +696,12 @@ namespace eos
         }
     };
 
+    const std::vector<OptionSpecification>
+    Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options
+    {
+        { "l", { "e", "mu", "tau" }, "mu" }
+    };
+
     AnalyticFormFactorBToPiPiFvDV2018::AnalyticFormFactorBToPiPiFvDV2018(const Parameters & p, const Options & o) :
         PrivateImplementationPattern<AnalyticFormFactorBToPiPiFvDV2018>(new Implementation<AnalyticFormFactorBToPiPiFvDV2018>(p, o, *this))
     {
@@ -742,5 +769,17 @@ namespace eos
     AnalyticFormFactorBToPiPiFvDV2018::diagnostics() const
     {
         return _imp->diagnostics();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    AnalyticFormFactorBToPiPiFvDV2018::begin_options()
+    {
+        return Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    AnalyticFormFactorBToPiPiFvDV2018::end_options()
+    {
+        return Implementation<AnalyticFormFactorBToPiPiFvDV2018>::options.cend();
     }
 }
