@@ -21,7 +21,7 @@ html: source Makefile
 	@test xhtml = x$@ && touch $(BUILDDIR)/html/.nojekyll
 
 %.rst: %.rst.py
-	python3 $^ > $@
+	PYTHONPATH="./:$$PYTHONPATH" python3 $< > $@
 
 .PHONY: source
 source: constraints.rst observables.rst parameters.rst references.rst api/python.rst
