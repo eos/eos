@@ -1,8 +1,5 @@
 import eos
-import jinja2, os
-path = os.path.dirname(os.path.abspath(__file__))
-env      = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath=path))
-template = env.get_template('python.rst.jinja')
+from jinja_util import print_template
 
 plot_types_attribute = eos.plot.Plotter.plot_types
 
@@ -13,9 +10,7 @@ for key in plot_types_attribute:
     descr = PlotterClass.__doc__.split('\n')[0]
     plot_type_descrs.update({key: descr})
 
-rendered_str = template.render(
+print_template(__file__,
     plot_type_descrs = plot_type_descrs
 )
-
-print(rendered_str)
 
