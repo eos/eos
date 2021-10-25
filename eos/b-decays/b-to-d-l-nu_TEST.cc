@@ -89,6 +89,7 @@ class BToDLeptonNeutrinoTest :
                     { "model",         "CKMScan" },
                     { "U",             "c"       },
                     { "q",             "d"       },
+                    { "I",             "1/2"     },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },
@@ -142,6 +143,7 @@ class BToDLeptonNeutrinoTest :
                     { "model",         "CKMScan" },
                     { "U",             "c"       },
                     { "q",             "d"       },
+                    { "I",             "1/2"     },
                     { "z-order-lp",    "3"       },
                     { "z-order-slp",   "2"       },
                     { "z-order-sslp",  "1"       },
@@ -178,6 +180,7 @@ class BToDLeptonNeutrinoTest :
                     { "form-factors", "BCL2008"    },
                     { "U",            "c"          },
                     { "q",            "d"          },
+                    { "I",            "1/2"        },
                     { "l",            "mu"         }
                 };
 
@@ -212,7 +215,8 @@ class BToDLeptonNeutrinoTest :
                         { "model",        "WilsonScan" },
                         { "form-factors", "BCL2008"    },
                         { "U",            "c"          },
-                        { "q",            "d"          }
+                        { "q",            "d"          },
+                        { "I",            "1/2"        }
                     };
                     auto k = Kinematics{
                         { "q2_mu_min",   0.011164 },
@@ -277,6 +281,7 @@ class BToDLeptonNeutrinoTest :
                     { "form-factors", "BCL2008"    },
                     { "U",            "c"          },
                     { "q",            "d"          },
+                    { "I",            "1/2"        },
                     { "l",            "mu"         }
                 };
 
@@ -299,6 +304,7 @@ class BToDLeptonNeutrinoTest :
                         { "form-factors", "BCL2008"    },
                         { "U",            "c"          },
                         { "q",            "d"          },
+                        { "I",            "1/2"        }
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
 

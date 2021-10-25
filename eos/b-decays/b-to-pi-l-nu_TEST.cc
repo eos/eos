@@ -63,7 +63,8 @@ class BToPiLeptonNeutrinoTest :
                     { "form-factors", "BCL2008" },
                     { "U",            "u"       },
                     { "q",            "d"       },
-                    { "l",            "e"       }
+                    { "l",            "e"       },
+                    { "I",            "1"       }
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, oo);
@@ -97,7 +98,8 @@ class BToPiLeptonNeutrinoTest :
                     { "form-factors", "BCL2008" },
                     { "U",            "u"       },
                     { "q",            "d"       },
-                    { "l",            "tau"     }
+                    { "l",            "tau"     },
+                    { "I",            "1"     }
                 };
                 BToPseudoscalarLeptonNeutrino dtau(p, oo);
 
@@ -109,7 +111,8 @@ class BToPiLeptonNeutrinoTest :
                     { "model",        "CKMScan" },
                     { "form-factors", "BCL2008" },
                     { "U",            "u"       },
-                    { "q",            "d"       }
+                    { "q",            "d"       },
+                    { "I",            "1"       }
                 };
                 Kinematics k
                 {
@@ -130,6 +133,41 @@ class BToPiLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(0.352166, obs_Rpi->evaluate(),  eps);
                 TEST_CHECK_RELATIVE_ERROR(0.204647, obs_Rpip->evaluate(), eps);
                 TEST_CHECK_RELATIVE_ERROR(0.147519, obs_Rpi0->evaluate(), eps);
+            }
+
+            // Consistency check for isospin
+            {
+                Parameters p = Parameters::Defaults();
+                p["CKM::abs(V_ub)"]        =  3.32e-3;
+                p["B->pi::f_+(0)@BCL2008"] =  0.290;
+                p["B->pi::b_+^1@BCL2008"]  = -1.930;
+                p["B->pi::b_+^2@BCL2008"]  = -0.441;
+                p["mass::B_u"]             =  5.2793;
+                p["mass::pi^0"]            =  1.3498e-1;
+                p["life_time::B_u"]        =  1.519e-12;
+
+                Options oo
+                {
+                    { "model",        "CKMScan" },
+                    { "form-factors", "BCL2008" },
+                    { "U",            "u"       },
+                    { "q",            "u"       },
+                    { "l",            "e"       },
+                    { "I",            "1"       }
+                };
+
+                BToPseudoscalarLeptonNeutrino d(p, oo);
+
+                const double eps = 1e-9;
+
+                TEST_CHECK_NEARLY_EQUAL(1.44047e-05 / 2., d.integrated_branching_ratio( 0.01,  2.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.43046e-05 / 2., d.integrated_branching_ratio( 2.00,  4.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.40803e-05 / 2., d.integrated_branching_ratio( 4.00,  6.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.37941e-05 / 2., d.integrated_branching_ratio( 6.00,  8.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.34323e-05 / 2., d.integrated_branching_ratio( 8.00, 10.00), eps);
+                TEST_CHECK_NEARLY_EQUAL(1.29770e-05 / 2., d.integrated_branching_ratio(10.00, 12.00), eps);
+
+                TEST_CHECK_NEARLY_EQUAL(8.29930e-5 / 2.,  d.integrated_branching_ratio( 0.01, 12.00), eps);
             }
         }
 } b_to_pi_l_nu_test;
