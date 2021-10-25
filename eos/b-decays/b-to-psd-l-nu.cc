@@ -31,6 +31,9 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/save.hh>
 
+#include <map>
+#include <string>
+
 namespace eos
 {
     namespace b_to_psd_l_nu
@@ -60,6 +63,7 @@ namespace eos
 
         SwitchOption opt_U;
         SwitchOption opt_q;
+        SwitchOption opt_I;
 
         UsedParameter m_B;
 
@@ -75,6 +79,8 @@ namespace eos
 
         UsedParameter hbar;
 
+        const double isospin_factor;
+
         UsedParameter mu;
 
         std::function<double (const double &)> m_U_msbar;
@@ -85,84 +91,66 @@ namespace eos
 
         bool cp_conjugate;
 
-        inline std::string _mass_P() const
-        {
-            switch (opt_U.value()[0])
-            {
-                case 'c':
-                    return std::string("mass::D_") + opt_q.value();
-                    break;
-
-                case 'u':
-                    switch (opt_q.value()[0])
-                    {
-                        case 'd':
-                            return std::string("mass::pi^+");
-                            break;
-
-                        case 's':
-                            return std::string("mass::K_u");
-                            break;
-
-                        case 'u':
-                            return std::string("mass::pi^0");
-                            break;
-
-                        default:
-                            throw InternalError("Should never reach this part, either!");
-                    }
-                    break;
-
-                default:
-                    throw InternalError("Should never reach this part!");
-            };
-
-            return "";
-        }
+        // { U, q, I } -> { process, m_B, m_V, c_I }
+        // U: u, c; the quark flavour in the weak transition
+        // q: u, d, s: the spectar quark flavour
+        // I: 1, 0, 1/2: the total isospin of the daughter meson
+        // process: string that can be used to obtain the form factor
+        // B: name of the B meson
+        // P: name of the daughter meson
+        // c_I: isospin factor by which the amplitudes are multiplied
+        static const std::map<std::tuple<char, char, std::string>, std::tuple<std::string, std::string, std::string, double>> process_map;
 
         inline std::string _process() const
         {
-            switch (opt_U.value()[0])
-            {
-                case 'c':
-                    switch (opt_q.value()[0])
-                    {
-                        case 'd':
-                        case 'u':
-                            return std::string("B->D");
-                            break;
+            const char U = opt_U.value()[0];
+            const char q = opt_q.value()[0];
+            const std::string I = opt_I.value();
+            const auto p = process_map.find(std::make_tuple(U, q, I));
 
-                        case 's':
-                            return std::string("B_s->D_s");
-                            break;
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of U=" + stringify(U) + ", q=" + q + ", I=" + I);
 
-                        default:
-                            throw InternalError("Should never reach this part, either!");
-                    }
-                    break;
+            return std::get<0>(p->second);
+        }
 
-                case 'u':
-                    switch (opt_q.value()[0])
-                    {
-                        case 'd':
-                        case 'u':
-                            return std::string("B->pi");
-                            break;
+        inline std::string _B() const
+        {
+            const char U = opt_U.value()[0];
+            const char q = opt_q.value()[0];
+            const std::string I = opt_I.value();
+            const auto p = process_map.find(std::make_tuple(U, q, I));
 
-                        case 's':
-                            return std::string("B_s->K");
-                            break;
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of U=" + stringify(U) + ", q=" + q + ", I=" + I);
 
-                        default:
-                            throw InternalError("Should never reach this part, either!");
-                    }
-                    break;
+            return std::get<1>(p->second);
+        }
 
-                default:
-                    throw InternalError("Should never reach this part!");
-            };
+        inline std::string _P() const
+        {
+            const char U = opt_U.value()[0];
+            const char q = opt_q.value()[0];
+            const std::string I = opt_I.value();
+            const auto p = process_map.find(std::make_tuple(U, q, I));
 
-            return "";
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of U=" + stringify(U) + ", q=" + q + ", I=" + I);
+
+            return std::get<2>(p->second);
+        }
+
+        inline double _isospin_factor() const
+        {
+            const char U = opt_U.value()[0];
+            const char q = opt_q.value()[0];
+            const std::string I = opt_I.value();
+            const auto p = process_map.find(std::make_tuple(U, q, I));
+
+            if (p == process_map.end())
+                throw InternalError("Unsupported combination of U=" + stringify(U) + ", q=" + q + ", I=" + I);
+
+            return std::get<3>(p->second);
         }
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -170,13 +158,15 @@ namespace eos
             parameters(p),
             opt_U(o, "U", { "c", "u" }),
             opt_q(o, "q", { "u", "d", "s" }, "d"),
-            m_B(p["mass::B_" + opt_q.value()], u),
+            opt_I(o, "I", { "1", "0", "1/2" }),
+            m_B(p["mass::" + _B()], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
-            m_P(p[_mass_P()], u),
+            m_P(p["mass::" + _P()], u),
             opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
             m_l(p["mass::" + opt_l.value()], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
+            isospin_factor(_isospin_factor()),
             mu(p[opt_U.value() + "b" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
@@ -233,15 +223,19 @@ namespace eos
             const double ml_hat = std::sqrt(1.0 - v);
             const double NF = v * v * s * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI) * m_B2);
 
+            // isospin factor
+            const double isospin = this->isospin_factor;
+
             // helicity amplitudes, cf. [DDS:2014A] eqs. 13-14
             b_to_psd_l_nu::Amplitudes result;
 
             if (s >= power_of<2>(m_l) && s <= power_of<2>(m_B - m_P))
             {
-                result.h_0  = 2.0 * m_B * p * fp * (1.0 + gV) / std::sqrt(s);
-                result.h_t  = (1.0 + gV) * (m_B2 - m_P2) * f0 / std::sqrt(s);
-                result.h_S  = - gS * (m_B2 - m_P2) * f0 / (mbatmu - mUatmu);
-                result.h_T  = - 2.0 * m_B * p * fT * gT / (m_B + m_P);
+                result.h_0  =   isospin * 2.0 * m_B * p * fp * (1.0 + gV) / std::sqrt(s);
+                result.h_t  =   isospin * (1.0 + gV) * (m_B2 - m_P2) * f0 / std::sqrt(s);
+                result.h_S  = - isospin * gS * (m_B2 - m_P2) * f0 / (mbatmu - mUatmu);
+                result.h_T  = - isospin * 2.0 * m_B * p * fT * gT / (m_B + m_P);
+
                 result.h_tS = result.h_t - result.h_S / ml_hat;
 
                 result.v  = v;
@@ -254,6 +248,7 @@ namespace eos
                 result.h_t  = 0.0;
                 result.h_S  = 0.0;
                 result.h_T  = 0.0;
+
                 result.h_tS = 0.0;
 
                 result.v  = 0.99; // avoid NaN in std::sqrt(1.0 - v);
@@ -415,6 +410,17 @@ namespace eos
 
             return integrated_pdf_q2(q2_min, q2_max) * (q2_max - q2_min) / (w_max - w_min);
         }
+    };
+
+    const std::map<std::tuple<char, char, std::string>, std::tuple<std::string, std::string, std::string, double>>
+    Implementation<BToPseudoscalarLeptonNeutrino>::Implementation::process_map
+    {
+        { { 'c', 'u', "1/2" }, { "B->D",     "B_u", "D_u",  1.0                  } },
+        { { 'c', 'd', "1/2" }, { "B->D",     "B_d", "D_d",  1.0                  } },
+        { { 'c', 's', "0"   }, { "B_s->D_s", "B_s", "D_s",  1.0                  } },
+        { { 'u', 'u', "1"   }, { "B->pi",    "B_u", "pi^0", 1.0 / std::sqrt(2.0) } },
+        { { 'u', 'd', "1"   }, { "B->pi",    "B_d", "pi^+", 1.0                  } },
+        { { 'u', 's', "1/2" }, { "B_s->K",   "B_s", "K_u",  1.0                  } },
     };
 
     BToPseudoscalarLeptonNeutrino::BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :
