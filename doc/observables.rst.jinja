@@ -1,0 +1,42 @@
+###################
+List of Observables
+###################
+
+
+The following is a list of observables that is available in EOS v{{ eos_version }}.
+
+{% for section in sections %}
+
+{{ "*" * len(section.title) }}
+{{ section.title }}
+{{ "*" * len(section.title) }}
+
+{% for group in section.groups %}
+{{ group.title }}
+{{ "=" * len(group.title) }}
+
+{% for obs in group.obss %}
+.. _{{ obs.link_key }}:
+{% endfor %}
+.. list-table::
+   :widths: 50, 25, 25
+   :header-rows: 1
+
+   * - Qualified Name
+     - Description
+     - Kinematic Variables
+   {% for obs in group.obss %}
+   * - ``{{ obs.qn }}``
+     {% if obs.description != '' %}
+     - :math:`{{ obs.description }}`
+     {% endif %}
+     {% if obs.description == '' %}
+     - n/a
+     {% endif %}
+     - {{ obs.kinematics }}
+   {% endfor %}
+
+{{ group.description }}
+
+{% endfor %}
+{% endfor %}
