@@ -1308,65 +1308,60 @@ namespace eos
                         &BsToKstarLeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2")),
 
-                make_observable("B_s->K^*lnu::A_FB(q2)",
+                make_observable("B_s->K^*lnu::A_FB(q2)", R"(A_\mathrm{FB}(B_s\to \bar{K}^*\ell^-\bar\nu)(q^2))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
 
-                make_observable("B_s->K^*lnu::BR",
+                make_observable("B_s->K^*lnu::BR", R"(\mathcal{B}(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("s_min", "s_max")),
 
-                make_observable("B_s->K^*lnu::A_FB",
+                make_observable("B_s->K^*lnu::A_FB", R"(A_\mathrm{FB}(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_forward_backward_asymmetry,
                         std::make_tuple("s_min", "s_max")),
 
-                make_observable("B_s->K^*lnu::Shat_1s",
+                make_observable("B_s->K^*lnu::Shat_1s", R"(\hat{S}_{1s}(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_s_1s,
                         std::make_tuple("s_min", "s_max")),
 
-                make_observable("B_s->K^*lnu::Shat_1c",
+                make_observable("B_s->K^*lnu::Shat_1c", R"(\hat{S}_{1c}(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_s_1c,
                         std::make_tuple("s_min", "s_max")),
 
-                make_observable("B_s->K^*lnu::Shat_2s",
+                make_observable("B_s->K^*lnu::Shat_2s", R"(\hat{S}_{2s}(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_s_2s,
                         std::make_tuple("s_min", "s_max")),
 
-                make_observable("B_s->K^*lnu::Shat_2c",
+                make_observable("B_s->K^*lnu::Shat_2c", R"(\hat{S}_{2c}(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_s_2c,
                         std::make_tuple("s_min", "s_max")),
 
-                make_observable("B_s->K^*lnu::Shat_3",
+                make_observable("B_s->K^*lnu::Shat_3", R"(\hat{S}_3(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_s_3,
                         std::make_tuple("s_min", "s_max")),
 
-                make_observable("B_s->K^*lnu::Shat_4",
+                make_observable("B_s->K^*lnu::Shat_4", R"(\hat{S}_4(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_s_4,
                         std::make_tuple("s_min", "s_max")),
 
-                make_observable("B_s->K^*lnu::Shat_5",
+                make_observable("B_s->K^*lnu::Shat_5", R"(\hat{S}_5(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_s_5,
                         std::make_tuple("s_min", "s_max")),
 
-                make_observable("B_s->K^*lnu::Shat_6s",
+                make_observable("B_s->K^*lnu::Shat_6s", R"(\hat{S}_{6s}(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_s_6s,
                         std::make_tuple("s_min", "s_max")),
-
-                make_observable("B_s->K^*lnu::A_FB(q2)",
-                        Unit::None(),
-                        &BsToKstarLeptonNeutrino::differential_forward_backward_asymmetry,
-                        std::make_tuple("q2")),
 
                 make_observable("B_s->K^*lnu::A_T^2(q2)",
                         Unit::None(),
@@ -1398,12 +1393,12 @@ namespace eos
                         &BsToKstarLeptonNeutrino::differential_transverse_asymmetry_im,
                         std::make_tuple("q2")),
 
-                make_observable("B_s->K^*lnu::F_L(q2)",
+                make_observable("B_s->K^*lnu::F_L(q2)", R"(F_L(B_s\to \bar{K}^*\ell^-\bar\nu)(q^2))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::differential_longitudinal_polarisation,
                         std::make_tuple("q2")),
 
-                make_observable("B_s->K^*lnu::F_T(q2)",
+                make_observable("B_s->K^*lnu::F_T(q2)", R"(F_T(B_s\to \bar{K}^*\ell^-\bar\nu)(q^2))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::differential_transversal_polarisation,
                         std::make_tuple("q2")),
@@ -1433,22 +1428,12 @@ namespace eos
                         &BsToKstarLeptonNeutrino::differential_h_5,
                         std::make_tuple("q2")),
 
-                make_observable("B_s->K^*lnu::A_FB",
-                        Unit::None(),
-                        &BsToKstarLeptonNeutrino::integrated_forward_backward_asymmetry,
-                        std::make_tuple("q2_min", "q2_max")),
-
-                make_observable("B_s->K^*lnu::BR",
-                        Unit::None(),
-                        &BsToKstarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max")),
-
-                make_observable("B_s->K^*lnu::F_L",
+                make_observable("B_s->K^*lnu::F_L", R"(F_L(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_longitudinal_polarisation,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("B_s->K^*lnu::F_T",
+                make_observable("B_s->K^*lnu::F_T", R"(F_T(B_s\to \bar{K}^*\ell^-\bar\nu))",
                         Unit::None(),
                         &BsToKstarLeptonNeutrino::integrated_transversal_polarisation,
                         std::make_tuple("q2_min", "q2_max")),
@@ -1719,7 +1704,7 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max")),
 
                 // Lambda_b -> Lambda_c(2595) l nubar
-                make_observable("Lambda_b->Lambda_c(2595)lnu::dBR/ds",
+                make_observable("Lambda_b->Lambda_c(2595)lnu::dBR/ds", R"(d\mathcal{B}/dq^2(\Lambda_b\to\Lambda_c(2595) \ell^-\bar\nu))",
                         Unit::InverseGeV2(),
                         &LambdaBToLambdaC2595LeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2")),
@@ -1734,7 +1719,7 @@ namespace eos
                         &LambdaBToLambdaC2595LeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambda_c(2595)lnu::A_FB",
+                make_observable("Lambda_b->Lambda_c(2595)lnu::A_FB", R"(A_\mathrm{FB}(\Lambda_b\to\Lambda_c(2595) \ell^-\bar\nu))",
                         Unit::None(),
                         &LambdaBToLambdaC2595LeptonNeutrino::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
@@ -1744,7 +1729,7 @@ namespace eos
                         &LambdaBToLambdaC2595LeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_expression_observable("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)(q2)", R"(R_{\Lambda_c(2595}(q^2))",
+                make_expression_observable("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)(q2)", R"(R_{\Lambda_c(2595)}(q^2))",
                         Unit::None(),
                         R"(
                         <<Lambda_b->Lambda_c(2595)lnu::dBR/ds;l=tau>>
@@ -1752,7 +1737,7 @@ namespace eos
                         <<Lambda_b->Lambda_c(2595)lnu::dBR/ds;l=mu>>
                         )"),
 
-                make_expression_observable("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)", R"(R_{\Lambda_c(2595})",
+                make_expression_observable("Lambda_b->Lambda_c(2595)lnu::R_Lambda_c(2595)", R"(R_{\Lambda_c(2595)})",
                         Unit::None(),
                         R"(
                         <<Lambda_b->Lambda_c(2595)lnu::BR;l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
@@ -1761,12 +1746,12 @@ namespace eos
                         )"),
 
                 // Lambda_b -> Lambda_c(2625) l nubar
-                make_observable("Lambda_b->Lambda_c(2625)lnu::dBR/ds",
+                make_observable("Lambda_b->Lambda_c(2625)lnu::dBR/ds", R"(d\mathcal{B}/dq^2(\Lambda_b\to\Lambda_c(2625) \ell^-\bar\nu))",
                         Unit::InverseGeV2(),
                         &LambdaBToLambdaC2625LeptonNeutrino::differential_branching_ratio,
                         std::make_tuple("q2")),
 
-                make_observable("Lambda_b->Lambda_c(2625)lnu::A_FB(q2)",
+                make_observable("Lambda_b->Lambda_c(2625)lnu::A_FB(q2)", R"(A_\mathrm{FB}(\Lambda_b\to\Lambda_c(2625) \ell^-\bar\nu)(q^2))",
                         Unit::None(),
                         &LambdaBToLambdaC2625LeptonNeutrino::differential_forward_backward_asymmetry,
                         std::make_tuple("q2")),
@@ -1781,7 +1766,7 @@ namespace eos
                         &LambdaBToLambdaC2625LeptonNeutrino::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_observable("Lambda_b->Lambda_c(2625)lnu::A_FB",
+                make_observable("Lambda_b->Lambda_c(2625)lnu::A_FB", R"(A_\mathrm{FB}(\Lambda_b\to\Lambda_c(2625) \ell^-\bar\nu))",
                         Unit::None(),
                         &LambdaBToLambdaC2625LeptonNeutrino::integrated_forward_backward_asymmetry,
                         std::make_tuple("q2_min", "q2_max")),
@@ -1791,7 +1776,7 @@ namespace eos
                         &LambdaBToLambdaC2625LeptonNeutrino::normalized_integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max")),
 
-                make_expression_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)(q2)", R"(R_{\Lambda_c(2625}(q^2))",
+                make_expression_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)(q2)", R"(R_{\Lambda_c(2625)}(q^2))",
                         Unit::None(),
                         R"(
                         <<Lambda_b->Lambda_c(2625)lnu::dBR/ds;l=tau>>
@@ -1799,7 +1784,7 @@ namespace eos
                         <<Lambda_b->Lambda_c(2625)lnu::dBR/ds;l=mu>>
                         )"),
 
-                make_expression_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)", R"(R_{\Lambda_c(2625})",
+                make_expression_observable("Lambda_b->Lambda_c(2625)lnu::R_Lambda_c(2625)", R"(R_{\Lambda_c(2625)})",
                         Unit::None(),
                         R"(
                         <<Lambda_b->Lambda_c(2625)lnu::BR;l=tau>>[q2_max=>q2_tau_max,q2_min=>q2_tau_min]
@@ -1821,11 +1806,11 @@ namespace eos
     make_b_to_xu_semileptonic_group()
     {
         auto imp = new Implementation<ObservableGroup>(
-            R"(Miscellaneous matrix elements)",
+            R"(Miscellaneous)",
             R"()",
             {
                 /* B Meson Properties */
-                make_observable("B::M_B^*-M_B",
+                make_observable("B::M_B^*-M_B", R"(M_{B^*} - M_B)",
                         Unit::GeV(),
                         &BMesonProperties::mass_splitting_j1_j0),
             }
