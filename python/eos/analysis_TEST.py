@@ -21,7 +21,7 @@ class ClassMethodTests(unittest.TestCase):
             ],
             'likelihood': [
                 'B->D::f_++f_0@HPQCD:2015A',
-                'B->D::f_++f_0@FNALMILC:2015B',
+                'B->D::f_++f_0@FNAL+MILC:2015B',
                 'B^0->D^+e^-nu::BRs@Belle:2015A',
                 'B^0->D^+mu^-nu::BRs@Belle:2015A'
             ]
