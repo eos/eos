@@ -4,7 +4,7 @@
 # B -> D^(*) form factors #
 ###########################
 # {{{
-B->D^*::A_1[s_max]@FNALMILC:2014A:
+B->D^*::A_1[s_max]@FNAL+MILC:2014A:
     type: Gaussian
     observable: B->D^*::A_1(q2)
     kinematics: {q2: 10.68}
@@ -5959,7 +5959,7 @@ B->K^*::T_1@KMO:2006A:
   sigma-stat: {hi: 0.11, lo: 0.11}
   sigma-sys: {hi: 0, lo: 0}
   dof: 1
-B->K^*::A_12@FNALMILC:2013A:
+B->K^*::A_12@FNAL+MILC:2013A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -5979,7 +5979,7 @@ B->K^*::A_12@FNALMILC:2013A:
         -   [1, 0.204495]
         -   [0.204495, 1]
     dof: 2
-B->K^*::A_1@FNALMILC:2013A:
+B->K^*::A_1@FNAL+MILC:2013A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -5999,7 +5999,7 @@ B->K^*::A_1@FNALMILC:2013A:
         -   [1, 0.52072]
         -   [0.52072, 1]
     dof: 2
-B->K^*::V@FNALMILC:2013A:
+B->K^*::V@FNAL+MILC:2013A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -7244,7 +7244,7 @@ B_s->K^*::T_23@BSZ:2015A:
   sigma-stat: {hi: 0.076, lo: 0.076}
   sigma-sys: {hi: 0, lo: 0}
   dof: 1
-B_s->K^*::A_12@FNALMILC:2013A:
+B_s->K^*::A_12@FNAL+MILC:2013A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -7264,7 +7264,7 @@ B_s->K^*::A_12@FNALMILC:2013A:
         -   [1, 0.334]
         -   [0.334, 1]
     dof: 0
-B_s->K^*::A_1@FNALMILC:2013A:
+B_s->K^*::A_1@FNAL+MILC:2013A:
     type: MultivariateGaussian
     dim: 2
     observables:
@@ -7284,7 +7284,7 @@ B_s->K^*::A_1@FNALMILC:2013A:
         -   [1, 0.305]
         -   [0.305, 1]
     dof: 0
-B_s->K^*::V@FNALMILC:2013A:
+B_s->K^*::V@FNAL+MILC:2013A:
     type: MultivariateGaussian
     dim: 2
     observables:

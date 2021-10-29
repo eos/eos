@@ -143,11 +143,11 @@ The latter interprets the theory parameters as random variables and assigns *a p
 We carry on using the integrated branching ratios of :math:`\bar{B}^-\to D^0\left\lbrace\mu^-, \tau^-\right\rbrace\bar\nu` decays as examples.
 The largest source of theoretical uncertainty in these decays arises from the hadronic matrix elements, i.e.,
 from the form factors :math:`f^{B\to \bar{D}}_+(q^2)` and :math:`f^{B\to \bar{D}}_0(q^2)`.
-Both form factors have been obtained independently using lattice QCD simulations by the HPQCD and Fermilab/MILC (FNALMILC) collaborations.
+Both form factors have been obtained independently using lattice QCD simulations by the HPQCD and Fermilab/MILC (FNAL+MILC) collaborations.
 The joint likelihoods for both form factors at different :math:`q^2` values of each prediction are available in EOS
-as :class:`Constraint <eos.Constraint>` objects under the names ``B->D::f_++f_0@HPQCD:2015A`` and ``B->D::f_++f_0@FNALMILC:2015B``.
+as :class:`Constraint <eos.Constraint>` objects under the names ``B->D::f_++f_0@HPQCD:2015A`` and ``B->D::f_++f_0@FNAL+MILC:2015B``.
 We will discuss such constraints in more detail in the section `Parameter Inference`_.
-For this example, we will use both the HPQCD and FNALMILC results and create a combined likelihood as follows:
+For this example, we will use both the HPQCD and FNAL+MILC results and create a combined likelihood as follows:
 
 .. code-block::
 
@@ -162,7 +162,7 @@ For this example, we will use both the HPQCD and FNALMILC results and create a c
        ],
        'likelihood': [
            'B->D::f_++f_0@HPQCD:2015A',
-           'B->D::f_++f_0@FNALMILC:2015B'
+           'B->D::f_++f_0@FNAL+MILC:2015B'
        ]
    }
    analysis = eos.Analysis(**analysis_args)
@@ -431,7 +431,7 @@ We then create an :class:`Analysis <eos.Analysis>` object as follows:
        ],
        'likelihood': [
            'B->D::f_++f_0@HPQCD:2015A',
-           'B->D::f_++f_0@FNALMILC:2015B',
+           'B->D::f_++f_0@FNAL+MILC:2015B',
            'B^0->D^+e^-nu::BRs@Belle:2015A',
            'B^0->D^+mu^-nu::BRs@Belle:2015A'
        ]
@@ -485,7 +485,7 @@ The goodness-of-fit summary consists of a table listing all constraints,
    * - constraint
      - :math:`\chi^2`
      - d.o.f.
-   * - ``B->D::f_++f_0@FNALMILC:2015B``
+   * - ``B->D::f_++f_0@FNAL+MILC:2015B``
      - 3.4847
      - 7
    * - ``B->D::f_++f_0@HPQCD:2015A``

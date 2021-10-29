@@ -771,33 +771,42 @@ FM:2002A:
   inspire-id: Feldmann:2002iw
   title: Forward backward and isospin asymmetry for $B \to K^* \ell^+ \ell^-$ decay in the
     standard model and in supersymmetry
-FNALMILC:2014A:
+FNAL+MILC:2014A:
   authors: Bailey, Jon A. et al.
-  collaboration: MILC
+  collaboration: Fermilab Lattice, MILC
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1403.0635
   inspire-id: Bailey:2014tva
   title: Update of $|V_{cb}|$ from the $\bar{B}\to D^*\ell\bar{\nu}$ form factor at
     zero recoil with three-flavor lattice QCD
-FNALMILC:2015A:
+FNAL+MILC:2015A:
   authors: Bailey, Jon A. et al.
-  collaboration: MILC
+  collaboration: Fermilab Lattice, MILC
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1503.07839
   inspire-id: Lattice:2015tia
   title: $|V_{ub}|$ from $B\to\pi\ell\nu$ decays and (2+1)-flavor lattice QCD
-FNALMILC:2015B:
+FNAL+MILC:2015B:
   authors: Bailey, Jon A. et al.
-  collaboration: MILC
+  collaboration: Fermilab Lattice, MILC
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1503.07237
   inspire-id: Lattice:2015rga
   title: $B\to D\ell\nu form factors at nonzero recoil and $|V_{cb}|$ from 2+1-flavor lattice QCD
-FNALMILC:2017A:
+FNAL+MILC:2015C:
+  authors: Bailey, Jon A. et al.
+  collaboration: Fermilab Lattice, MILC
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1507.01618
+  inspire-id: FermilabLattice:2015cdh
+  title: $B\to\pi\ell\ell$ form factors for new-physics searches from lattice QCD
+FNAL+MILC:2017A:
   authors: Bazavov, A. et al.
+  collaboration: Fermilab Lattice, MILC
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1712.09262
@@ -1225,6 +1234,14 @@ PDG:2018A:
 PS:1997A:
   authors: Peskin, M. and Schroeder, D.
   title: An Introduction to Quantum Field Theory
+RBC+UKQCD:2015A:
+  authors: Flynn, J. M. and Izubuchi, T. and Kawanai, T. and Lehner, C. and Soni, A. and Van de Water, R. S. and Witzel, O.
+  title: $B \to \pi \ell \nu$ and $B_s \to K \ell \nu$ form factors and $|V_{ub}|$ from 2+1-flavor lattice QCD with domain-wall light quarks and relativistic heavy quarks
+  collaboration: RBC/UKQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1501.05373
+  journal: Phys. Rev. D 91 074510 (2015)
 S:1982A:
   authors: Sirlin, A.
   journal: Nucl.Phys. B196 (1982) 83-92

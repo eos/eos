@@ -4,7 +4,10 @@
 # B -> pi form factors #
 ########################
 # {{{
-B->pi::f_++f_0+f_T@FNALMLC:2015A:
+# The following constraint contains information both from [FNAL+MILC:2015C] (info on f_T) and
+# from [FNAL+MILC:2015A] (info on f_+ and f_0). Since the covariance matrices were singular, we
+# applied the modification suggested in 1901.02561 in a procedure explained in Section 4 of [LMvD:2021A]
+B->pi::f_++f_0+f_T@FNAL+MILC:2015C:
   type: MultivariateGaussian(Covariance)
   dim: 11
   observables: ['B->pi::f_+(q2)', 'B->pi::f_+(q2)', 'B->pi::f_+(q2)', 'B->pi::f_0(q2)',
@@ -50,7 +53,7 @@ B->pi::f_++f_0+f_T@FNALMLC:2015A:
       0.0008785758290927615, 0.0010399594241164913, 0.002718147076705542, 0.00523728091313789,
       0.011344369057493859, 0.028260244982580427]]
   dof: 11
-B->pi::f_++f_0@RBCUKQCD:2015A:
+B->pi::f_++f_0@RBC+UKQCD:2015A:
     type: MultivariateGaussian(Covariance)
     dim: 6
     observables:
@@ -729,7 +732,7 @@ B->D::f_++f_0@HPQCD:2015A:
         -   [0.5068182286172014, 0.6170829992176082,  0.7663670044143619, 1., 0.9884737758332469]
         -   [0.5216145561486998, 0.6491777532608343, 0.8449267160522822, 0.988473775833247, 1.]
     dof: 5
-B->D::f_++f_0@FNALMILC:2015B:
+B->D::f_++f_0@FNAL+MILC:2015B:
     type: MultivariateGaussian
     dim: 7
     observables:
