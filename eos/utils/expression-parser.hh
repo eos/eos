@@ -56,7 +56,7 @@ namespace eos
         ~ExpressionParser();
     };
 
-    extern template class ExpressionParser<std::string::const_iterator>;
+    extern template struct ExpressionParser<std::string::const_iterator>;
 }
 
 #endif
