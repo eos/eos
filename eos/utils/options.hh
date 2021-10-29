@@ -25,6 +25,7 @@
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <string>
+#include <vector>
 
 namespace eos
 {

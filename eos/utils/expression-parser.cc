@@ -21,5 +21,5 @@
 
  namespace eos
  {
-     template class ExpressionParser<std::string::const_iterator>;
+     template struct ExpressionParser<std::string::const_iterator>;
  }
