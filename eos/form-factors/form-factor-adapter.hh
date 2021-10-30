@@ -152,7 +152,7 @@ namespace eos
                 _form_factor_function(form_factor_function),
                 _kinematics_names(kinematics_names),
                 _kinematics_names_array(impl::make_array<const std::string>(kinematics_names)),
-                _options(std::move(FormFactorFactory<Transition_>::option_specifications(process)))
+                _options{ FormFactorFactory<Transition_>::option_specification(process) }
             {
             }
 

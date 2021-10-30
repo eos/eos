@@ -158,8 +158,8 @@ namespace eos
         return result;
     }
 
-    std::vector<OptionSpecification>
-    FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specifications(const qnp::Prefix & process)
+    OptionSpecification
+    FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification(const qnp::Prefix & process)
     {
         OptionSpecification result { "form-factors", {}, "" };
         for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors)
@@ -168,7 +168,7 @@ namespace eos
                 result.allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return { result };
+        return result;
     }
 
     /* J=1/2^+ -> J=1/2^- Processes */
@@ -212,8 +212,8 @@ namespace eos
         return result;
     }
 
-    std::vector<OptionSpecification>
-    FormFactorFactory<OneHalfPlusToOneHalfMinus>::option_specifications(const qnp::Prefix & process)
+    OptionSpecification
+    FormFactorFactory<OneHalfPlusToOneHalfMinus>::option_specification(const qnp::Prefix & process)
     {
         OptionSpecification result { "form-factors", {}, "" };
         for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors)
@@ -222,7 +222,7 @@ namespace eos
                 result.allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return { result };
+        return result;
     }
 
     /* J=1/2^+ -> J=3/2^- Processes */
@@ -266,8 +266,8 @@ namespace eos
         return result;
     }
 
-    std::vector<OptionSpecification>
-    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specifications(const qnp::Prefix & process)
+    OptionSpecification
+    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(const qnp::Prefix & process)
     {
         OptionSpecification result { "form-factors", {}, "" };
         for (const auto & ff : FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors)
@@ -276,6 +276,6 @@ namespace eos
                 result.allowed_values.push_back(std::get<0>(ff).name_part().str());
         }
 
-        return { result };
+        return result;
     }
 }

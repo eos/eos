@@ -92,7 +92,8 @@ namespace eos
             static const std::map<KeyType, ValueType> form_factors;
 
             static std::shared_ptr<FormFactors<PToV>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
-            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
+            static OptionSpecification option_specification(const qnp::Prefix & process);
+            static OptionSpecification option_specification();
     };
 
     template <>
@@ -124,7 +125,8 @@ namespace eos
             static const std::map<KeyType, ValueType> form_factors;
 
             static std::shared_ptr<FormFactors<PToP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
-            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
+            static OptionSpecification option_specification(const qnp::Prefix & process);
+            static OptionSpecification option_specification();
     };
 
     template <>
@@ -162,7 +164,7 @@ namespace eos
             static const std::map<KeyType, ValueType> form_factors;
 
             static std::shared_ptr<FormFactors<PToPP>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
-            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
+            static OptionSpecification option_specification(const qnp::Prefix & process);
     };
 
     template <>
@@ -189,7 +191,7 @@ namespace eos
             static const std::map<KeyType, ValueType> form_factors;
 
             static std::shared_ptr<FormFactors<VToP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
-            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
+            static OptionSpecification option_specification(const qnp::Prefix & process);
     };
 
     template <>
@@ -224,7 +226,7 @@ namespace eos
             static const std::map<KeyType, ValueType> form_factors;
 
             static std::shared_ptr<FormFactors<VToV>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
-            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
+            static OptionSpecification option_specification(const qnp::Prefix & process);
     };
 
 }
