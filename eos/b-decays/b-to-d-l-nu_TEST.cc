@@ -86,7 +86,7 @@ class BToDLeptonNeutrinoTest :
 
                 Options o{
                     { "l",             "e"       },
-                    { "model",         "CKMScan" },
+                    { "model",         "CKM" },
                     { "U",             "c"       },
                     { "q",             "d"       },
                     { "I",             "1/2"     },
@@ -140,7 +140,7 @@ class BToDLeptonNeutrinoTest :
 
                 Options o{
                     { "l",             "tau"     },
-                    { "model",         "CKMScan" },
+                    { "model",         "CKM" },
                     { "U",             "c"       },
                     { "q",             "d"       },
                     { "I",             "1/2"     },
@@ -176,7 +176,7 @@ class BToDLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WilsonScan" },
+                    { "model",        "WET" },
                     { "form-factors", "BCL2008"    },
                     { "U",            "c"          },
                     { "q",            "d"          },
@@ -212,7 +212,7 @@ class BToDLeptonNeutrinoTest :
 
                     oo =
                     {
-                        { "model",        "WilsonScan" },
+                        { "model",        "WET" },
                         { "form-factors", "BCL2008"    },
                         { "U",            "c"          },
                         { "q",            "d"          },
@@ -277,7 +277,7 @@ class BToDLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WilsonScan" },
+                    { "model",        "WET" },
                     { "form-factors", "BCL2008"    },
                     { "U",            "c"          },
                     { "q",            "d"          },
@@ -300,7 +300,7 @@ class BToDLeptonNeutrinoTest :
                     };
                     oo =
                     {
-                        { "model",        "WilsonScan" },
+                        { "model",        "WET" },
                         { "form-factors", "BCL2008"    },
                         { "U",            "c"          },
                         { "q",            "d"          },

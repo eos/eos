@@ -77,7 +77,7 @@ class BsToPhiCharmoniumGvDV2020Test :
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
             Options oo;
-            oo.declare("model",               "WilsonScan");
+            oo.declare("model",               "WET");
             oo.declare("nonlocal-formfactor", "GvDV2020");
             oo.declare("psi",                 "J/psi");
 
@@ -144,7 +144,7 @@ class BsToPhiCharmoniumGRvDV2021Test :
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
             Options oo;
-            oo.declare("model",               "WilsonScan");
+            oo.declare("model",               "WET");
             oo.declare("nonlocal-formfactor", "GRvDV2021");
             oo.declare("psi",                 "J/psi");
 

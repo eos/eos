@@ -73,7 +73,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model", "WilsonScan"), p, o)),
+            model(Model::make(o.get("model", "WET"), p, o)),
             opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
             hbar(p["QM::hbar"], u),
             m_B(p["mass::B_" + o.get("q", "d")], u),

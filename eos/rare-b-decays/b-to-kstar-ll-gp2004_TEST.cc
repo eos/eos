@@ -93,7 +93,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::mu"] = 1e-5;
 
                 Options oo;
-                oo.declare("model", "WilsonScan");
+                oo.declare("model", "WET");
                 oo.declare("tag", "GP2004");
                 oo.declare("l", "mu");
                 oo.declare("form-factors", "BZ2004");
@@ -212,7 +212,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::mu"] = 1e-5;
 
                 Options oo;
-                oo.declare("model", "WilsonScan");
+                oo.declare("model", "WET");
                 oo.declare("tag", "GP2004");
                 oo.declare("l", "mu");
                 oo.declare("form-factors", "BZ2004");
@@ -295,7 +295,7 @@ class BToKstarDileptonLowRecoilTest :
                 p["mass::b(MSbar)"] = 4.2;
 
                 Options oo;
-                oo.declare("model", "WilsonScan");
+                oo.declare("model", "WET");
                 oo.declare("tag", "GP2004");
                 oo.declare("l", "mu");
                 oo.declare("form-factors", "BZ2004");
@@ -397,7 +397,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 };
                 Options options
                 {
-                    { "model",        "WilsonScan" },
+                    { "model",        "WET" },
                     { "l",            "mu"         },
                     { "tag",          "GP2004"     },
                     { "form-factors", "BZ2004"     }
@@ -430,7 +430,7 @@ class BToKstarDileptonLowRecoilPolynomialTest :
                 Parameter A = parameters["CKM::A"];
 
                 Options options;
-                options.declare("model", "WilsonScan");
+                options.declare("model", "WET");
                 options.declare("tag", "GP2004");
 
                 ObservablePtr numerator = Observable::make("B->K^*ll::Abar_FB", parameters, kinematics, options);
@@ -546,7 +546,7 @@ class BToKstarDileptonLowRecoilBobethCompatibilityTest :
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
 
             Options o;
-            o.declare("model", "WilsonScan");
+            o.declare("model", "WET");
             o.declare("l", "mu");
             o.declare("q", "d");
             o.declare("tag", "GP2004");
@@ -702,7 +702,7 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             p["mass::mu"] = 1.5;
 
             Options oo;
-            oo.declare("model", "WilsonScan");
+            oo.declare("model", "WET");
             oo.declare("scan-mode", "cartesian");
             oo.declare("tag", "GP2004");
             oo.declare("form-factors", "KMPW2010");

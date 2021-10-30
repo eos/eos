@@ -28,6 +28,7 @@
 #include <eos/utils/wilson_coefficients.hh>
 
 #include <complex>
+#include <map>
 
 namespace eos
 {
@@ -149,7 +150,12 @@ namespace eos
         public:
             virtual ~Model() = 0;
 
+            using KeyType   = std::string;
+            using ValueType = std::function<std::shared_ptr<Model> (const Parameters &, const Options &)>;
+            static const std::map<KeyType, ValueType> models;
+
             static std::shared_ptr<Model> make(const std::string & name, const Parameters & parameters, const Options & options);
+            static OptionSpecification option_specification();
     };
 
     struct NoSuchModelError :

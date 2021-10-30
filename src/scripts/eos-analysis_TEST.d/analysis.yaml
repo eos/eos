@@ -47,7 +47,7 @@ priors:
 posteriors:
   - name: FF
     global_options:
-        model: CKMScan
+        model: CKM
         form-factors: BCL2008
     likelihood:
       - lattice
@@ -58,7 +58,7 @@ posteriors:
 
   - name: CKM+FF
     global_options:
-        model: CKMScan
+        model: CKM
         form-factors: BCL2008
     likelihood:
       - lattice
@@ -73,7 +73,7 @@ posteriors:
 predictions:
   - name: PDF
     global_options:
-        model: CKMScan
+        model: CKM
         form-factors: BCL2008
     observables:
       - name: B->pilnu::P(q2_min,q2_max)

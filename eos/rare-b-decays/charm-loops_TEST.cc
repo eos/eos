@@ -437,7 +437,7 @@ class LowRecoilTest :
             /* Comparison with Stefan Meinel from September 2019 */
 
             Parameters p  = Parameters::Defaults();
-            auto       m  = Model::make("WilsonScan", p, Options());
+            auto       m  = Model::make("WET", p, Options());
 
             {
                 static const double mu = 4.2, s = 15.0, eps = 1e-2;

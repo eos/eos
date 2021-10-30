@@ -30,24 +30,37 @@ namespace eos
     {
     }
 
+    const std::map<Model::KeyType, Model::ValueType>
+    Model::models
+    {
+        std::make_pair("CKM",       &CKMScanModel::make),
+        std::make_pair("SM",        &StandardModel::make),
+        std::make_pair("WET",       &WilsonScanModel::make),
+        std::make_pair("WET-SMEFT", &ConstrainedWilsonScanModel::make),
+    };
+
     std::shared_ptr<Model>
     Model::make(const std::string & name, const Parameters & parameters, const Options & options)
     {
-        using ModelMaker = std::function<std::shared_ptr<Model> (const Parameters &, const Options &)>;
-        static const std::map<std::string, ModelMaker> model_makers
-        {
-            std::make_pair("CKMScan", &CKMScanModel::make),
-            std::make_pair("SM", &StandardModel::make),
-            std::make_pair("WilsonScan", &WilsonScanModel::make),
-            std::make_pair("ConstrainedWilsonScan", &ConstrainedWilsonScanModel::make),
-        };
+        auto i = Model::models.find(name);
 
-        auto i = model_makers.find(name);
-
-        if (model_makers.cend() == i)
+        if (Model::models.cend() == i)
             throw NoSuchModelError(name);
 
         return i->second(parameters, options);
+    }
+
+    OptionSpecification
+    Model::option_specification()
+    {
+        OptionSpecification result { "model", { }, "SM" };
+
+        for (const auto & m : Model::models)
+        {
+            result.allowed_values.push_back(std::get<0>(m));
+        }
+
+        return result;
     }
 
     NoSuchModelError::NoSuchModelError(const std::string & name) :

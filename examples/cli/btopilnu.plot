@@ -20,7 +20,7 @@ contents:
     - name: 'B->pi mu nu (V_ub inclusive)'
       type: 'observable'
       color: 'C1'
-      observable: 'B->pilnu::dBR/dq2;l=mu,model=CKMScan'
+      observable: 'B->pilnu::dBR/dq2;l=mu,model=CKM'
       variable: 'q2'
       range: [0.01, 26.0]
       samples: 200

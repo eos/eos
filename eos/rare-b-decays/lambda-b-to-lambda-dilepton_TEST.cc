@@ -44,7 +44,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 // unpolarised SM
                 {
                     Options oo;
-                    oo.declare("model",                   "WilsonScan");
+                    oo.declare("model",                   "WET");
                     oo.declare("q",                       "d");
                     oo.declare("l",                       "mu");
                     oo.declare("production-polarisation", "unpolarised");
@@ -108,7 +108,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 // LHCb-polarised SM
                 {
                     Options oo;
-                    oo.declare("model",                   "WilsonScan");
+                    oo.declare("model",                   "WET");
                     oo.declare("q",                       "d");
                     oo.declare("l",                       "mu");
                     oo.declare("production-polarisation", "LHCb");
@@ -171,7 +171,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 // unpolarised BMP
                 {
                     Options oo;
-                    oo.declare("model",                   "WilsonScan");
+                    oo.declare("model",                   "WET");
                     oo.declare("q",                       "d");
                     oo.declare("l",                       "mu");
                     oo.declare("production-polarisation", "unpolarised");
@@ -239,7 +239,7 @@ class LambdaBToLambdaDileptonLowRecoilTest :
                 // LHCb-polarised BMP
                 {
                     Options oo;
-                    oo.declare("model",                   "WilsonScan");
+                    oo.declare("model",                   "WET");
                     oo.declare("q",                       "d");
                     oo.declare("l",                       "mu");
                     oo.declare("production-polarisation", "LHCb");

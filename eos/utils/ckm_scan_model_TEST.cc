@@ -65,16 +65,16 @@ class CKMScanModelMakeTest :
         {
             try
             {
-                std::shared_ptr<Model> m = Model::make("CKMScan", reference_parameters(), Options());
+                std::shared_ptr<Model> m = Model::make("CKM", reference_parameters(), Options());
             }
             catch (NoSuchModelError &)
             {
-                TEST_CHECK_FAILED("Model::make does not know the model 'CKMScan'");
+                TEST_CHECK_FAILED("Model::make does not know the model 'CKM'");
             }
             catch (...)
             {
                 throw;
-                TEST_CHECK_FAILED("Unknown Exception while making 'CKMScan'");
+                TEST_CHECK_FAILED("Unknown Exception while making 'CKM'");
             }
         }
 } ckm_scan_model_make_test;

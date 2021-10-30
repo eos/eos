@@ -39,7 +39,7 @@ likelihoods:
 posteriors:
   - name: th+exp
     global_options:
-      model: CKMScan
+      model: CKM
       form-factors: BCL2008
     prior:
       - CKM
@@ -52,7 +52,7 @@ posteriors:
 predictions:
   - name: differential
     global_options:
-      model: CKMScan
+      model: CKM
       form-factors: BCL2008
       l: e
     observables:

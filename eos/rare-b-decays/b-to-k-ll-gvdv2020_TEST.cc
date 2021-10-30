@@ -87,7 +87,7 @@ class BToKDileptonGvDV2020Test :
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
             Options oo;
-            oo.declare("model",                   "WilsonScan");
+            oo.declare("model",                   "WET");
             oo.declare("tag",                     "GvDV2020");
             oo.declare("nonlocal-formfactors",    "GvDV2020");
             oo.declare("form-factors",            "BSZ2015");

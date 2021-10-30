@@ -59,7 +59,7 @@ class BToPiLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKMScan" },
+                    { "model",        "CKM" },
                     { "form-factors", "BCL2008" },
                     { "U",            "u"       },
                     { "q",            "d"       },
@@ -94,7 +94,7 @@ class BToPiLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKMScan" },
+                    { "model",        "CKM" },
                     { "form-factors", "BCL2008" },
                     { "U",            "u"       },
                     { "q",            "d"       },
@@ -108,7 +108,7 @@ class BToPiLeptonNeutrinoTest :
 
                 oo =
                 {
-                    { "model",        "CKMScan" },
+                    { "model",        "CKM" },
                     { "form-factors", "BCL2008" },
                     { "U",            "u"       },
                     { "q",            "d"       },
@@ -148,7 +148,7 @@ class BToPiLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "CKMScan" },
+                    { "model",        "CKM" },
                     { "form-factors", "BCL2008" },
                     { "U",            "u"       },
                     { "q",            "u"       },

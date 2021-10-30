@@ -54,7 +54,7 @@ class NonlocalFormFactorGvDV2020Test :
                 p["B->Kccbar::Re{alpha_2^plus}@GvDV2020"]    = 6.0;
                 p["B->Kccbar::Im{alpha_2^plus}@GvDV2020"]    = 7.0;
 
-                Options o = { { "model", "WilsonScan" } };
+                Options o = { { "model", "WET" } };
 
                 auto nff = NonlocalFormFactor<nff::PToP>::make("B->K::GvDV2020", p, o);
 
@@ -132,7 +132,7 @@ class NonlocalFormFactorGvDV2021Test :
                 p["B->Kccbar::Re{alpha_2^plus}@GRvDV2021"]    = 6.0;
                 p["B->Kccbar::Im{alpha_2^plus}@GRvDV2021"]    = 7.0;
 
-                Options o = { { "model", "WilsonScan" } };
+                Options o = { { "model", "WET" } };
 
                 auto nff = NonlocalFormFactor<nff::PToP>::make("B->K::GRvDV2021", p, o);
 

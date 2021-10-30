@@ -159,12 +159,12 @@ class QualifiedNameTest :
                     );
 
             TEST_CHECK_EQUAL_STR(
-                    "B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010,model=WilsonScan",
-                    QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010,model=WilsonScan").full()
+                    "B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010,model=WET",
+                    QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010,model=WET").full()
                     );
             TEST_CHECK_EQUAL_STR(
                     "B->K^*ll::A_FB(s)@LargeRecoil",
-                    QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010,model=WilsonScan").str()
+                    QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010,model=WET").str()
                     );
 
             TEST_CHECK_EQUAL_STR(

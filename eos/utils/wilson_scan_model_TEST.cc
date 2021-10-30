@@ -55,7 +55,7 @@ class MakeTest :
 
         virtual void run() const
         {
-            std::list<std::string> models = {"WilsonScan", "ConstrainedWilsonScan"};
+            std::list<std::string> models = {"WET", "WET-SMEFT"};
             for (const auto & name : models)
             {
                 try
