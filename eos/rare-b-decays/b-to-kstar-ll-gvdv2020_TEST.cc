@@ -96,7 +96,7 @@ class BToKstarDileptonGvDV2020Test :
             p["b->smumu::Im{c10'}"] = 3.5;
 
             Options oo;
-            oo.declare("model",                   "WilsonScan");
+            oo.declare("model",                   "WET");
             oo.declare("tag",                     "GvDV2020");
             oo.declare("nonlocal-formfactors",    "GvDV2020");
             oo.declare("form-factors",            "BSZ2015");

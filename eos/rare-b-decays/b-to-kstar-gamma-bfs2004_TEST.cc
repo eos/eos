@@ -94,7 +94,7 @@ class BToKstarGammaTest :
 
                 Options oo;
                 oo.declare("tag", "BFS2004");
-                oo.declare("model", "WilsonScan");
+                oo.declare("model", "WET");
                 oo.declare("form-factors", "KMPW2010");
 
                 BToKstarGamma d(p, oo);
@@ -152,7 +152,7 @@ class BToKstarGammaTest :
 
                 Options oo;
                 oo.declare("tag", "BFS2004");
-                oo.declare("model", "WilsonScan");
+                oo.declare("model", "WET");
                 oo.declare("form-factors", "KMPW2010");
 
                 BToKstarGamma d(p, oo);
@@ -208,7 +208,7 @@ class BToKstarGammaBobethCompatibilityTest :
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
             Options o;
             o.declare("tag", "BFS2004");
-            o.declare("model", "WilsonScan");
+            o.declare("model", "WET");
             o.declare("form-factors", "KMPW2010");
 
             std::vector<Parameter> variations;

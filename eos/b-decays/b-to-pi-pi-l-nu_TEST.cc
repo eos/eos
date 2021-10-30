@@ -55,7 +55,7 @@ class BToPiPiLeptonNeutrinoTest :
                 p["pi::a4@1GeV"]           = +0.04;
                 p["B->pipi::mu@BFvD2016"]  = +1.5;
                 Options oo;
-                oo.declare("model", "CKMScan");
+                oo.declare("model", "CKM");
                 oo.declare("form-factors", "BFvD2016");
 
                 BToPiPiLeptonNeutrino d(p, oo);

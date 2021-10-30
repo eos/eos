@@ -86,7 +86,7 @@ class BToDileptonTest :
                 // B_d -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.declare("model", "WilsonScan");
+                    oo.declare("model", "WET");
                     oo.declare("q", "d");
                     oo.declare("l", "mu");
 
@@ -99,7 +99,7 @@ class BToDileptonTest :
                 // B_d -> e^+ e^-
                 {
                     Options oo;
-                    oo.declare("model", "WilsonScan");
+                    oo.declare("model", "WET");
                     oo.declare("q", "d");
                     oo.declare("l", "e");
 
@@ -112,7 +112,7 @@ class BToDileptonTest :
                 // B_s -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.declare("model", "WilsonScan");
+                    oo.declare("model", "WET");
                     oo.declare("q", "s");
                     oo.declare("l", "mu");
 
@@ -127,7 +127,7 @@ class BToDileptonTest :
                 // B_s -> e^+ e^-
                 {
                     Options oo;
-                    oo.declare("model", "WilsonScan");
+                    oo.declare("model", "WET");
                     oo.declare("q", "s");
                     oo.declare("l", "e");
 
@@ -189,7 +189,7 @@ class BToDileptonTest :
                 // B_s -> mu^+ mu^-
                 {
                     Options oo;
-                    oo.declare("model", "WilsonScan");
+                    oo.declare("model", "WET");
                     oo.declare("scan-mode", "cartesian");
                     oo.declare("q", "s");
                     oo.declare("l", "mu");

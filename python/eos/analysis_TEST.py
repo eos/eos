@@ -10,7 +10,7 @@ class ClassMethodTests(unittest.TestCase):
     def test_parameter_scaling(self):
 
         analysis_args = {
-            'global_options': { 'form-factors': 'BSZ2015', 'model': 'CKMScan' },
+            'global_options': { 'form-factors': 'BSZ2015', 'model': 'CKM' },
             'priors': [
                 { 'parameter': 'CKM::abs(V_cb)',           'min':  38e-3, 'max':  45e-3 , 'type': 'uniform'},
                 { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0,   'max':  1.0   , 'type': 'uniform'},

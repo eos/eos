@@ -356,7 +356,7 @@ BOOST_PYTHON_MODULE(_eos)
 
             .. code-block::
 
-               o = eos.Options(model='WilsonScan')            # default keyword arguments
+               o = eos.Options(model='WET')                   # default keyword arguments
                o = eos.Options(**{'form-factors': 'BSZ2015'}) # use a dictionary if option keys are not
                                                               # valid python identifiers
         )", no_init)

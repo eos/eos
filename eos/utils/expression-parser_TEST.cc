@@ -143,7 +143,7 @@ class ExpressionParserTest :
 
                 Options o
                 {
-                    { "model",        "WilsonScan" },
+                    { "model",        "WET" },
                     { "form-factors", "BCL2008"    },
                     { "U",            "c"          },
                     { "q",            "d"          }

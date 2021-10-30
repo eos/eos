@@ -85,7 +85,7 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
 
             Options oo;
-            oo.declare("model", "WilsonScan");
+            oo.declare("model", "WET");
             oo.declare("scan-mode", "cartesian");
             oo.declare("tag", "BFS2004");
             oo.declare("qcdf-integrals", "mixed");
@@ -160,7 +160,7 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
             p["mass::s(2GeV)"] = 0.12;
 
             Options oo;
-            oo.declare("model", "WilsonScan");
+            oo.declare("model", "WET");
             oo.declare("scan-mode", "cartesian");
             oo.declare("tag", "BFS2004");
             oo.declare("form-factors", "KMPW2010");

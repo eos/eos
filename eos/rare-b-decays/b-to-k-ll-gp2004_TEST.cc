@@ -87,7 +87,7 @@ class BToKDileptonLowRecoilTest :
                 p["mass::b(MSbar)"] = 4.2;
 
                 Options oo;
-                oo.declare("model", "WilsonScan");
+                oo.declare("model", "WET");
                 oo.declare("tag", "GP2004");
                 oo.declare("form-factors", "BZ2004v2");
 
@@ -159,7 +159,7 @@ class BToKDileptonLowRecoilTest :
                 p["b->smumu::Im{c10}"] = -4.17;
 
                 Options oo;
-                oo.declare("model", "WilsonScan");
+                oo.declare("model", "WET");
                 oo.declare("tag", "GP2004");
                 oo.declare("l", "mu");
                 oo.declare("form-factors", "BZ2004v2");
@@ -214,7 +214,7 @@ class BToKDileptonLowRecoilBobethCompatibilityTest :
             p["CKM::abs(V_ts)"] =  0.04121212396309175;
             p["CKM::arg(V_ts)"] = -3.1230250224697222;
             Options o;
-            o.declare("model", "WilsonScan");
+            o.declare("model", "WET");
             o.declare("tag", "GP2004");
             o.declare("l", "mu");
             o.declare("q", "u");

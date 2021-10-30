@@ -132,7 +132,7 @@ class OptionsTest :
                 {
                     { "l",     "tau"     },
                     { "q",     "u"       },
-                    { "model", "CKMScan" },
+                    { "model", "CKM" },
                 };
 
                 auto i = o.begin();
@@ -141,7 +141,7 @@ class OptionsTest :
 
                 ++i;
                 TEST_CHECK("model" == i->first);
-                TEST_CHECK("CKMScan" == i->second);
+                TEST_CHECK("CKM" == i->second);
 
                 ++i;
                 TEST_CHECK("q" == i->first);

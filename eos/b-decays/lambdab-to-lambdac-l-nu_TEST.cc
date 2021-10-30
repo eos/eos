@@ -58,7 +58,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WilsonScan" },
+                    { "model",        "WET" },
                     { "form-factors", "DKMR2017"   },
                     { "l",            "mu"         }
                 };
@@ -86,7 +86,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WilsonScan" },
+                    { "model",        "WET" },
                     { "form-factors", "DKMR2017"   },
                     { "l",            "tau"        }
                 };
@@ -112,7 +112,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model",        "WilsonScan" },
+                    { "model",        "WET" },
                     { "form-factors", "DKMR2017"   },
                     { "l",            "mu"        }
                 };
@@ -123,7 +123,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
                 oo =
                 {
-                    { "model",        "WilsonScan" },
+                    { "model",        "WET" },
                     { "form-factors", "DKMR2017"   },
                 };
                 Kinematics k
@@ -165,7 +165,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["mass::Lambda_c"]        = 2.2865;
 
                 Options oo;
-                oo.declare("model", "WilsonScan");
+                oo.declare("model", "WET");
                 oo.declare("form-factors", "DKMR2017");
                 oo.declare("l", "mu");
 
@@ -204,7 +204,7 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 p["mass::Lambda_c"]        = 2.2865;
 
                 Options oo;
-                oo.declare("model", "WilsonScan");
+                oo.declare("model", "WET");
                 oo.declare("form-factors", "DKMR2017");
                 oo.declare("l", "mu");
 

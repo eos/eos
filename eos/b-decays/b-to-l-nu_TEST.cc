@@ -63,7 +63,7 @@ class BToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model", "CKMScan" },
+                    { "model", "CKM" },
                     { "l",     "e"       },
                     { "q",     "u"       }
                 };
@@ -95,7 +95,7 @@ class BToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model", "CKMScan" },
+                    { "model", "CKM" },
                     { "l",     "e"       },
                     { "q",     "c"       }
                 };
@@ -128,7 +128,7 @@ class BToLeptonNeutrinoTest :
 
                 Options oo
                 {
-                    { "model", "WilsonScan" },
+                    { "model", "WET" },
                     { "l",     "e"          },
                     { "q",     "u"          }
                 };
