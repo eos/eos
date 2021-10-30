@@ -342,7 +342,9 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToVectorLeptonNeutrino>::options
     {
-        { "l", { "e", "mu", "tau" }, "mu" }
+        Model::option_specification(),
+        FormFactorFactory<PToV>::option_specification(),
+        { "l", { "e", "mu", "tau" }, "mu" },
     };
 
     const std::map<std::tuple<char, char, std::string>, std::tuple<std::string, std::string, std::string, double>>
@@ -378,8 +380,7 @@ namespace eos
     double
     BToVectorLeptonNeutrino::differential_branching_ratio(const double & q2) const
     {
-        return _imp->differential_angular_observables(q2).normalized_decay_width() * std::norm(_imp->v_Ub()) * _imp
-->tau_B / _imp->hbar;
+        return _imp->differential_angular_observables(q2).normalized_decay_width() * std::norm(_imp->v_Ub()) * _imp->tau_B / _imp->hbar;
     }
 
     double

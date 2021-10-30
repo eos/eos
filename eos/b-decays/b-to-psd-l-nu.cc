@@ -429,6 +429,8 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BToPseudoscalarLeptonNeutrino>::options
     {
+        Model::option_specification(),
+        FormFactorFactory<PToP>::option_specification(),
         { "l", { "e", "mu", "tau" }, "mu" },
         { "U", { "c", "u" }, "c" },
         { "q", { "u", "d", "s" }, "d" },
