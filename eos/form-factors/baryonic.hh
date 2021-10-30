@@ -81,7 +81,7 @@ namespace eos
             static const std::map<KeyType, ValueType> form_factors;
 
             static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
-            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
+            static OptionSpecification option_specification(const qnp::Prefix & process);
     };
 
     template <>
@@ -112,7 +112,7 @@ namespace eos
             static const std::map<KeyType, ValueType> form_factors;
 
             static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
-            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
+            static OptionSpecification option_specification(const qnp::Prefix & process);
     };
 
     template <>
@@ -145,7 +145,7 @@ namespace eos
             static const std::map<KeyType, ValueType> form_factors;
 
             static std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
-            static std::vector<OptionSpecification> option_specifications(const qnp::Prefix & process);
+            static OptionSpecification option_specification(const qnp::Prefix & process);
     };
 }
 
