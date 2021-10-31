@@ -556,6 +556,9 @@ CKMfitter:2004A:
   authors: Charles, J. and Hocker, Andreas and Lacker, H. and Laplace, S. and Le Diberder,
     F.R. and Malcles, J. and Ocariz, J. and Pivk, M. and Roos, L.
   collaboration: CKMfitter Group
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0406184
   inspire-id: Charles:2004jd
   title: 'CP violation and the CKM matrix: Assessing the impact of the asymmetric
     $B$ factories'
