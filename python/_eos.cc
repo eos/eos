@@ -56,7 +56,25 @@ namespace impl
 
         self.attr("__init__")();
 
-        list items = kwargs.items();
+        if (1 < len(args))
+        {
+            PyErr_SetString(PyExc_TypeError, "eos.Kinematics expects exactly one argument, or keyword arguments, but not both");
+            return object();
+        }
+
+        dict kinematics;
+
+        if (1 == len(args))
+        {
+            kinematics = dict(args[0]);
+            args = tuple(args.slice(1,_));
+        }
+        else
+        {
+            kinematics = kwargs;
+        }
+
+        list items = kinematics.items();
         for (unsigned i = 0 ; i < len(items) ; ++i)
         {
             object name = items[i][0];
@@ -77,7 +95,25 @@ namespace impl
 
         self.attr("__init__")();
 
-        list items = kwargs.items();
+        if (1 < len(args))
+        {
+            PyErr_SetString(PyExc_TypeError, "eos.Options expects exactly one argument, or keyword arguments, but not both");
+            return object();
+        }
+
+        dict options;
+
+        if (1 == len(args))
+        {
+            options = dict(args[0]);
+            args = tuple(args.slice(1,_));
+        }
+        else
+        {
+            options = kwargs;
+        }
+
+        list items = options.items();
         for (unsigned i = 0 ; i < len(items) ; ++i)
         {
             object name = items[i][0];
@@ -318,7 +354,7 @@ BOOST_PYTHON_MODULE(_eos)
             .. code-block::
 
                k = eos.Kinematics(q2=0.4, k2=0.0)                      # default keyword arguments
-               k = eos.Kinematics(**{'q2': 0.4, 'cos(theta_l)': -1.0}) # use a dictionary if variable names are not
+               k = eos.Kinematics({'q2': 0.4, 'cos(theta_l)': -1.0})   # use a dictionary if variable names are not
                                                                        # valid python identifiers
         )", no_init)
         .def("__init__", raw_function(&impl::Kinematics_ctor))
@@ -357,7 +393,7 @@ BOOST_PYTHON_MODULE(_eos)
             .. code-block::
 
                o = eos.Options(model='WET')                   # default keyword arguments
-               o = eos.Options(**{'form-factors': 'BSZ2015'}) # use a dictionary if option keys are not
+               o = eos.Options({'form-factors': 'BSZ2015'})   # use a dictionary if option keys are not
                                                               # valid python identifiers
         )", no_init)
         .def("__init__", raw_function(&impl::Options_ctor))
