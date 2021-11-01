@@ -157,7 +157,7 @@ namespace eos
                 ),
 
             make_signal_pdf("B->pilnu::dGamma/dq2",
-                    Options{ { "U", "u" } },
+                    Options{ { "U", "u" }, { "I", "1" } },
                     &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }
@@ -170,7 +170,7 @@ namespace eos
                 ),
 
             make_signal_pdf("B->pilnu::d^2Gamma/dq2/dcos(theta_l)",
-                    Options{ {"U", "u"} },
+                    Options{ { "U", "u"}, { "I", "1" } },
                     &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 26.41, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
@@ -184,7 +184,7 @@ namespace eos
                 ),
 
             make_signal_pdf("B->Dlnu::dGamma/dq2",
-                    Options{ { "U", "c" } },
+                    Options{ { "U", "c" }, { "I", "1/2" } },
                     &BToPseudoscalarLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 }
@@ -197,7 +197,7 @@ namespace eos
                 ),
 
             make_signal_pdf("B->Dlnu::d^2Gamma/dq2/dcos(theta_l)",
-                    Options{ {"U", "c"} },
+                    Options{ { "U", "c" }, { "I", "1/2" } },
                     &BToPseudoscalarLeptonNeutrino::normalized_two_differential_decay_width,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 11.62, BToPseudoscalarLeptonNeutrino::kinematics_description_q2 },
@@ -211,7 +211,7 @@ namespace eos
                 ),
 
             make_signal_pdf("B->D^*lnu::dBR",
-                    Options{ },
+                    Options{ { "U", "c" }, { "I", "1/2" } },
                     &BToVectorLeptonNeutrino::differential_branching_ratio,
                     std::make_tuple(
                         KinematicRange{ "q2", 0.0, 10.68, BToVectorLeptonNeutrino::kinematics_description_q2 }
