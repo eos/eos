@@ -185,8 +185,15 @@ jobs:
                 make install
                 popd
                 pushd _src
+                make -C examples/    examples
                 make -C examples/cli examples
                 popd
+
+            - name: Upload processed example notebooks as artifact
+              uses: actions/upload-artifact@v2
+              with:
+                name: eos-examples-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: _src/examples/*.ipynb
 
     ubuntu-deploy:
         needs: [ ubuntu-build, ubuntu-build-doc, ubuntu-check, ubuntu-examples ]
