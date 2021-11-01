@@ -29,9 +29,9 @@ endif
 examples: $(EXAMPLES)
 	for x in $(EXAMPLES) ; do \
 	    echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" ; \
-	    echo "# Running example '$$x'" ; bash $$x || exit 1 ; \
+	    echo "# Running CLI example '$$x'" ; bash $$x || exit 1 ; \
 	    echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" ; \
 	done
 	echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" ; \
-	echo "# All examples ran successfully " ; \
+	echo "# All CLI examples ran successfully " ; \
 	echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" ; \
