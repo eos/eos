@@ -180,6 +180,7 @@ jobs:
             - name: Run examples
               shell: bash
               run: |
+                pip3 install jupyter nbconvert
                 pushd _build
                 make install
                 popd
