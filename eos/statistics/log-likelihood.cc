@@ -751,10 +751,7 @@ namespace eos
 
             unsigned number_of_observations() const
             {
-                unsigned ret_val = 0;
-                for (const auto & component : components)
-                    ret_val += (*component).number_of_observations();
-                return ret_val;
+                return components.front()->number_of_observations();
             }
 
             double sample(gsl_rng * /*rng*/) const
