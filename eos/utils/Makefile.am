@@ -61,6 +61,7 @@ libeosutils_la_SOURCES = \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh \
 	qualified-name.cc qualified-name.hh \
+	quantum-numbers.cc quantum-numbers.hh \
 	reference-name.cc reference-name.hh \
 	save.hh \
 	standard-model.cc standard-model.hh \
@@ -136,6 +137,7 @@ include_eos_utils_HEADERS = \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.hh \
 	qualified-name.hh \
+	quantum-numbers.hh \
 	reference-name.hh \
 	save.hh \
 	standard-model.hh \
@@ -183,6 +185,7 @@ TESTS = \
 	power_of_TEST \
 	qcd_TEST \
 	qualified-name_TEST \
+	quantum-numbers_TEST \
 	reference-name_TEST \
 	save_TEST \
 	standard_model_TEST \
@@ -256,6 +259,8 @@ power_of_TEST_SOURCES = power_of_TEST.cc
 qcd_TEST_SOURCES = qcd_TEST.cc
 
 qualified_name_TEST_SOURCES = qualified-name_TEST.cc
+
+quantum_numbers_TEST_SOURCES = quantum-numbers_TEST.cc
 
 reference_name_TEST_SOURCES = reference-name_TEST.cc
 
