@@ -267,7 +267,7 @@ namespace eos
 
         UsedParameter g_fermi;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
         UsedParameter m_l;
 
         UsedParameter m_Lambda_b;
@@ -286,12 +286,12 @@ namespace eos
             hbar(p["QM::hbar"], u),
             tau_Lambda_b(p["life_time::Lambda_b"], u),
             g_fermi(p["WET::G_Fermi"], u),
-            opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
-            m_l(p["mass::" + opt_l.value()], u),
+            opt_l(o, options, "l"),
+            m_l(p["mass::" + opt_l.str()], u),
             m_Lambda_b(p["mass::Lambda_b"], u),
             m_Lambda_c(p["mass::Lambda_c"], u),
             alpha(p["Lambda_c::alpha"], u),
-            mu(p["cb" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u)
+            mu(p["cb" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u)
         {
             form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::" + o.get("form-factors", "DKMR2017"), p, o);
 
@@ -322,7 +322,7 @@ namespace eos
             lambdab_to_lambdac_l_nu::Amplitudes result;
 
             // uses the b->c WCs in EOS basis
-            const auto wc = model->wilson_coefficients_b_to_c(opt_l.value(), false);
+            const auto wc = model->wet_cblnu(opt_l.value(), false);
             const complex<double> cvl = wc.cvl();
             const complex<double> cvr = wc.cvr();
             const complex<double> csl = wc.csl();

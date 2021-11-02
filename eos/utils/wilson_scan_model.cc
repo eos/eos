@@ -260,7 +260,7 @@ namespace eos
     }
 
     /* b->u Wilson coefficients */
-    WilsonScanComponent<components::DeltaBU1>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+    WilsonScanComponent<components::WET::UBLNu>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
         _e_re_csl(p["ubenue::Re{cSL}"], u),
         _e_im_csl(p["ubenue::Im{cSL}"], u),
         _e_re_csr(p["ubenue::Re{cSR}"], u),
@@ -315,7 +315,7 @@ namespace eos
     }
 
     WilsonCoefficients<ChargedCurrent>
-    WilsonScanComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & cp_conjugate) const
+    WilsonScanComponent<components::WET::UBLNu>::wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const
     {
         std::function<complex<double> ()> cvl;
         std::function<complex<double> ()> cvr;
@@ -323,19 +323,19 @@ namespace eos
         std::function<complex<double> ()> csr;
         std::function<complex<double> ()> ct;
 
-        if ("e" == lepton_flavour)
+        if (LeptonFlavor::electron == lepton_flavor)
         {
             cvl = _e_cvl;   cvr = _e_cvr;
             csl = _e_csl;   csr = _e_csr;
             ct = _e_ct;
         }
-        else if ("mu" == lepton_flavour)
+        else if (LeptonFlavor::muon == lepton_flavor)
         {
             cvl = _mu_cvl;   cvr = _mu_cvr;
             csl = _mu_csl;   csr = _mu_csr;
             ct = _mu_ct;
         }
-        else if ("tau" == lepton_flavour)
+        else if (LeptonFlavor::tauon == lepton_flavor)
         {
             cvl = _tau_cvl;   cvr = _tau_cvr;
             csl = _tau_csl;   csr = _tau_csr;
@@ -365,7 +365,7 @@ namespace eos
     }
 
     /* b->c Wilson coefficients */
-    WilsonScanComponent<components::DeltaBC1>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+    WilsonScanComponent<components::WET::CBLNu>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
     _e_re_csl(p["cbenue::Re{cSL}"], u),
     _e_im_csl(p["cbenue::Im{cSL}"], u),
     _e_re_csr(p["cbenue::Re{cSR}"], u),
@@ -420,7 +420,7 @@ namespace eos
     }
 
     WilsonCoefficients<ChargedCurrent>
-    WilsonScanComponent<components::DeltaBC1>::wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & cp_conjugate) const
+    WilsonScanComponent<components::WET::CBLNu>::wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const
     {
         std::function<complex<double> ()> cvl;
         std::function<complex<double> ()> cvr;
@@ -428,19 +428,19 @@ namespace eos
         std::function<complex<double> ()> csr;
         std::function<complex<double> ()> ct;
 
-        if ("e" == lepton_flavour)
+        if (LeptonFlavor::electron == lepton_flavor)
         {
             cvl = _e_cvl;   cvr = _e_cvr;
             csl = _e_csl;   csr = _e_csr;
             ct = _e_ct;
         }
-        else if ("mu" == lepton_flavour)
+        else if (LeptonFlavor::muon == lepton_flavor)
         {
             cvl = _mu_cvl;   cvr = _mu_cvr;
             csl = _mu_csl;   csr = _mu_csr;
             ct = _mu_ct;
         }
-        else if ("tau" == lepton_flavour)
+        else if (LeptonFlavor::tauon == lepton_flavor)
         {
             cvl = _tau_cvl;   cvr = _tau_cvr;
             csl = _tau_csl;   csr = _tau_csr;
@@ -500,8 +500,8 @@ namespace eos
         SMComponent<components::QCD>(parameters, *this),
         WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBS1>(parameters, options, *this),
-        WilsonScanComponent<components::DeltaBU1>(parameters, options, *this),
-        WilsonScanComponent<components::DeltaBC1>(parameters, options, *this)
+        WilsonScanComponent<components::WET::UBLNu>(parameters, options, *this),
+        WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this)
     {
     }
 
@@ -520,8 +520,8 @@ namespace eos
         SMComponent<components::QCD>(parameters, *this),
         WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
         ConstrainedWilsonScanComponent(parameters, options, *this),
-        WilsonScanComponent<components::DeltaBU1>(parameters, options, *this),
-        WilsonScanComponent<components::DeltaBC1>(parameters, options, *this)
+        WilsonScanComponent<components::WET::UBLNu>(parameters, options, *this),
+        WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this)
     {
     }
 

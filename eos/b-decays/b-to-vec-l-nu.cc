@@ -65,7 +65,7 @@ namespace eos
 
         UsedParameter g_fermi;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
 
         UsedParameter m_l;
 
@@ -81,7 +81,7 @@ namespace eos
 
         std::function<double (const double &)> m_U_msbar;
         std::function<complex<double> ()> v_Ub;
-        std::function<WilsonCoefficients<ChargedCurrent> (const std::string &, bool)> wc;
+        std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
 
         SwitchOption opt_int_points;
 
@@ -157,13 +157,13 @@ namespace eos
             hbar(p["QM::hbar"], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
             g_fermi(p["WET::G_Fermi"], u),
-            opt_l(o, "l", { "e", "mu", "tau" }, "mu"),
-            m_l(p["mass::" + opt_l.value()], u),
+            opt_l(o, options, "l"),
+            m_l(p["mass::" + opt_l.str()], u),
             m_B(p["mass::" + _m_B()], u),
             m_V(p["mass::" + _m_V()], u),
             isospin_factor(_isospin_factor()),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
-            mu(p[opt_U.value() + "b" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u),
+            mu(p[opt_U.value() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             opt_int_points(o, "integration-points", {"256", "4096"}, "256"),
             int_points(destringify<int>(opt_int_points.value()))
         {
@@ -178,13 +178,13 @@ namespace eos
             {
                 m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_u_msbar, model.get(), _1);
                 v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_ub, model.get());
-                wc        = std::bind(&ModelComponent<components::DeltaBU1>::wilson_coefficients_b_to_u, model.get(), _1, _2);
+                wc        = std::bind(&ModelComponent<components::WET::UBLNu>::wet_ublnu, model.get(), _1, _2);
             }
             else
             {
                 m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_c_msbar, model.get(), _1);
                 v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_cb, model.get());
-                wc        = std::bind(&ModelComponent<components::DeltaBC1>::wilson_coefficients_b_to_c, model.get(), _1, _2);
+                wc        = std::bind(&ModelComponent<components::WET::CBLNu>::wet_cblnu, model.get(), _1, _2);
             }
 
             u.uses(*form_factors);

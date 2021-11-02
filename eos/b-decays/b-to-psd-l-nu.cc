@@ -71,7 +71,7 @@ namespace eos
 
         UsedParameter m_P;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
 
         UsedParameter m_l;
 
@@ -87,7 +87,7 @@ namespace eos
 
         std::function<double (const double &)> m_U_msbar;
         std::function<complex<double> ()> v_Ub;
-        std::function<WilsonCoefficients<ChargedCurrent> (const std::string &, bool)> wc;
+        std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
 
         GSL::QAGS::Config int_config;
 
@@ -165,12 +165,12 @@ namespace eos
             m_B(p["mass::" + _B()], u),
             tau_B(p["life_time::B_" + opt_q.value()], u),
             m_P(p["mass::" + _P()], u),
-            opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
-            m_l(p["mass::" + opt_l.value()], u),
+            opt_l(o, options, "l"),
+            m_l(p["mass::" + opt_l.str()], u),
             g_fermi(p["WET::G_Fermi"], u),
             hbar(p["QM::hbar"], u),
             isospin_factor(_isospin_factor()),
-            mu(p[opt_U.value() + "b" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u),
+            mu(p[opt_U.value() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
             cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false")))
         {
@@ -185,13 +185,13 @@ namespace eos
             {
                 m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_u_msbar, model.get(), _1);
                 v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_ub, model.get());
-                wc        = std::bind(&ModelComponent<components::DeltaBU1>::wilson_coefficients_b_to_u, model.get(), _1, _2);
+                wc        = std::bind(&ModelComponent<components::WET::UBLNu>::wet_ublnu, model.get(), _1, _2);
             }
             else
             {
                 m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_c_msbar, model.get(), _1);
                 v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_cb, model.get());
-                wc        = std::bind(&ModelComponent<components::DeltaBC1>::wilson_coefficients_b_to_c, model.get(), _1, _2);
+                wc        = std::bind(&ModelComponent<components::WET::CBLNu>::wet_cblnu, model.get(), _1, _2);
             }
 
             u.uses(*form_factors);
