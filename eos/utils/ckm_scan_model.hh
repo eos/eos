@@ -76,7 +76,7 @@ namespace eos
         public Model,
         public CKMScanComponent,
         public SMComponent<components::QCD>,
-        public SMComponent<components::DeltaB2>,
+        public SMComponent<components::WET::SBSB>,
         public SMComponent<components::DeltaBS1>,
         public SMComponent<components::DeltaBU1>,
         public SMComponent<components::DeltaBC1>

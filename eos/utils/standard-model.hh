@@ -123,8 +123,8 @@ namespace eos
             virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const std::string & lepton_flavour, const bool & cp_conjugate) const;
     };
 
-    template <> class SMComponent<components::DeltaB2> :
-        public virtual ModelComponent<components::DeltaB2>
+    template <> class SMComponent<components::WET::SBSB> :
+        public virtual ModelComponent<components::WET::SBSB>
     {
         private:
             /* Weak decay parameters */
@@ -144,14 +144,17 @@ namespace eos
             UsedParameter _m_W__deltabs2;
             UsedParameter _m_Z__deltabs2;
 
-            /* Matching scales */
+            /* Matching scale */
             UsedParameter _mu_0__deltabs2;
+
+            /* Low scale */
+            UsedParameter _mu__deltabs2;
 
         public:
             SMComponent(const Parameters &, ParameterUser &);
 
             /* sbar b sbar b Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBSB> wilson_coefficients_sbsb(const double & mu) const;
+            virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const;
     };
 
     template <> class SMComponent<components::DeltaBU1> :
@@ -178,7 +181,7 @@ namespace eos
         public Model,
         public SMComponent<components::CKM>,
         public SMComponent<components::QCD>,
-        public SMComponent<components::DeltaB2>,
+        public SMComponent<components::WET::SBSB>,
         public SMComponent<components::DeltaBS1>,
         public SMComponent<components::DeltaBU1>,
         public SMComponent<components::DeltaBC1>

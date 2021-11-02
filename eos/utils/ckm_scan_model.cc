@@ -111,7 +111,7 @@ namespace eos
     CKMScanModel::CKMScanModel(const Parameters & parameters, const Options & options) :
         CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
-        SMComponent<components::DeltaB2>(parameters, *this),
+        SMComponent<components::WET::SBSB>(parameters, *this),
         SMComponent<components::DeltaBS1>(parameters, *this),
         SMComponent<components::DeltaBU1>(parameters, *this),
         SMComponent<components::DeltaBC1>(parameters, *this)

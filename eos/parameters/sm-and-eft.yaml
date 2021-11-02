@@ -293,6 +293,15 @@ groups:
         See the EOS manual for their physical definitions.
     wcxf-relevant: true
     parameters:
+      # Factorization scale
+      'sbsb::mu' :
+          central: +4.2
+          max:     +2.1
+          min:     +8.4
+          latex:    '$\mu^{\bar{s}b\bar{s}b}$'
+          comments: ''
+          unit:     'GeV'
+
       # SM matching scale
       'sbsb::mu_0' :
           central: +120.0
