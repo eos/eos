@@ -44,7 +44,7 @@ namespace eos
     }
 
     /* sbar b sbar b Wilson coefficients */
-    WilsonScanComponent<components::DeltaB2>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+    WilsonScanComponent<components::WET::SBSB>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
         _re_sbsb_c1__deltab2(p["sbsb::Re{c1}"], u),
         _im_sbsb_c1__deltab2(p["sbsb::Im{c1}"], u),
         _re_sbsb_c2__deltab2(p["sbsb::Re{c2}"], u),
@@ -65,7 +65,7 @@ namespace eos
     }
 
     WilsonCoefficients<wc::SBSB>
-    WilsonScanComponent<components::DeltaB2>::wilson_coefficients_sbsb(const double & mu) const
+    WilsonScanComponent<components::WET::SBSB>::wet_sbsb() const
     {
         WilsonCoefficients<wc::SBSB> result;
 
@@ -498,7 +498,7 @@ namespace eos
     WilsonScanModel::WilsonScanModel(const Parameters & parameters, const Options & options) :
         CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
-        WilsonScanComponent<components::DeltaB2>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBS1>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBU1>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBC1>(parameters, options, *this)
@@ -518,7 +518,7 @@ namespace eos
     ConstrainedWilsonScanModel::ConstrainedWilsonScanModel(const Parameters & parameters, const Options & options) :
         CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
-        WilsonScanComponent<components::DeltaB2>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
         ConstrainedWilsonScanComponent(parameters, options, *this),
         WilsonScanComponent<components::DeltaBU1>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBC1>(parameters, options, *this)

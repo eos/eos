@@ -33,6 +33,8 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
+        UsedParameter mu;
+
         UsedParameter hbar;
 
         UsedParameter g_fermi;
@@ -55,6 +57,7 @@ namespace eos
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
+            mu(p["sbsb::mu"], u),
             hbar(p["QM::hbar"], u),
             g_fermi(p["WET::G_Fermi"], u),
             opt_q(o, "q", {"s"}),
@@ -72,10 +75,10 @@ namespace eos
 
         complex<double> M_12() const
         {
-            const double mu = 4.2;
-            const auto wc = model->wilson_coefficients_sbsb(mu);
+            const auto wc = model->wet_sbsb();
 
             // cf. [DDHLMSW:2019A]
+            // TODO: still needs to be evolved to scale mu from reference scale 4.2 GeV.
             const std::array<complex<double>, 8> contributions{{
                 wc.c1()  * R_1(),
                 wc.c2()  * R_2(),

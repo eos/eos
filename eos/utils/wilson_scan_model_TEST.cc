@@ -221,7 +221,6 @@ class WilsonCoefficientsSBSBTest :
             /* Test passing of WC via cartesian parametrisations */
             {
                 static const double eps = 1e-6;
-                static const double mu = 4.2; // approximate m_b(m_b) MSbar mass
 
                 Parameters p = Parameters::Defaults();
                 p["sbsb::Re{c1}" ] =  0.123456;
@@ -240,12 +239,13 @@ class WilsonCoefficientsSBSBTest :
                 p["sbsb::Im{c4}" ] = -0.456789;
                 p["sbsb::Re{c5}" ] = -0.567890;
                 p["sbsb::Im{c5}" ] =  0.678901;
+                p["sbsb::mu"]      = 4.2;
 
                 Options o{};
 
                 WilsonScanModel model(p, o);
 
-                const auto wc = model.wilson_coefficients_sbsb(mu);
+                const auto wc = model.wet_sbsb();
                 TEST_CHECK_NEARLY_EQUAL( 0.123456, real(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.234567, imag(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL(-0.345678, real(wc.c1p()),  eps);

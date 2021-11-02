@@ -696,7 +696,7 @@ namespace implementation
         return wc;
     }
 
-    SMComponent<components::DeltaB2>::SMComponent(const Parameters & p, ParameterUser & u) :
+    SMComponent<components::WET::SBSB>::SMComponent(const Parameters & p, ParameterUser & u) :
         _G_Fermi__deltabs2(p["WET::G_Fermi"], u),
         _alpha_s_Z__deltabs2(p["QCD::alpha_s(MZ)"], u),
         _mu_t__deltabs2(p["QCD::mu_t"], u),
@@ -706,17 +706,18 @@ namespace implementation
         _m_t_pole__deltabs2(p["mass::t(pole)"], u),
         _m_W__deltabs2(p["mass::W"], u),
         _m_Z__deltabs2(p["mass::Z"], u),
-        _mu_0__deltabs2(p["sbsb::mu_0"], u)
+        _mu_0__deltabs2(p["sbsb::mu_0"], u),
+        _mu__deltabs2(p["sbsb::mu"], u)
     {
     }
 
     WilsonCoefficients<wc::SBSB>
-    SMComponent<components::DeltaB2>::wilson_coefficients_sbsb(const double & mu) const
+    SMComponent<components::WET::SBSB>::wet_sbsb() const
     {
-        if (mu >= _mu_t__deltabs2)
+        if (_mu__deltabs2 >= _mu_t__deltabs2)
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_sbsb: Evolution to mu >= mu_t is illdefined!");
 
-        if (mu <= _mu_c__deltabs2)
+        if (_mu__deltabs2 <= _mu_c__deltabs2)
             throw InternalError("SMComponent<components::DeltaB1>::wilson_coefficients_sbsb: Evolution to mu <= mu_c is not implemented!");
 
         // only evolve the wilson coefficients for 5 active flavors
@@ -729,14 +730,14 @@ namespace implementation
         const double alpha_s_mu_0 = QCD::alpha_s(_mu_0__deltabs2, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
 
         double alpha_s = 0.0;
-        if (mu < _mu_b__deltabs2)
+        if (_mu__deltabs2 < _mu_b__deltabs2)
         {
             alpha_s = QCD::alpha_s(_mu_b__deltabs2, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
-            alpha_s = QCD::alpha_s(mu, alpha_s, _mu_b__deltabs2, beta4);
+            alpha_s = QCD::alpha_s(_mu__deltabs2, alpha_s, _mu_b__deltabs2, beta4);
         }
         else
         {
-            alpha_s = QCD::alpha_s(mu, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
+            alpha_s = QCD::alpha_s(_mu__deltabs2, _alpha_s_Z__deltabs2, _m_Z__deltabs2, beta5);
         }
 
         double alpha_s_m_t_pole = 0.0;
@@ -864,7 +865,7 @@ namespace implementation
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
-        SMComponent<components::DeltaB2>(p, *this),
+        SMComponent<components::WET::SBSB>(p, *this),
         SMComponent<components::DeltaBS1>(p, *this),
         SMComponent<components::DeltaBU1>(p, *this),
         SMComponent<components::DeltaBC1>(p, *this)

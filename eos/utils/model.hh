@@ -42,7 +42,10 @@ namespace eos
         ///@{
         struct CKM;
         struct QCD;
-        struct DeltaB2;
+        namespace WET
+        {
+            struct SBSB;
+        }
         struct DeltaBS1;
         struct DeltaBU1;
         struct DeltaBC1;
@@ -108,11 +111,11 @@ namespace eos
     /*!
      * Base class for the Delta B = 2 = -Delta S FCNC component of models.
      */
-    template <> class ModelComponent<components::DeltaB2>
+    template <> class ModelComponent<components::WET::SBSB>
     {
         public:
             /* sbar b sbar b Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBSB> wilson_coefficients_sbsb(const double & mu) const = 0;
+            virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const = 0;
     };
 
     /*!
@@ -142,7 +145,7 @@ namespace eos
         public ParameterUser,
         public virtual ModelComponent<components::CKM>,
         public virtual ModelComponent<components::QCD>,
-        public virtual ModelComponent<components::DeltaB2>,
+        public virtual ModelComponent<components::WET::SBSB>,
         public virtual ModelComponent<components::DeltaBS1>,
         public virtual ModelComponent<components::DeltaBU1>,
         public virtual ModelComponent<components::DeltaBC1>

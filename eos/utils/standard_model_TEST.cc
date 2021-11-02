@@ -47,6 +47,8 @@ reference_parameters()
     result["CKM::lambda"] = 0.22543;
     result["CKM::rhobar"] = 0.144;
     result["CKM::etabar"] = 0.342;
+    // WET sectors
+    result["sbsb::mu"] = 4.2;
 
     return result;
 }
@@ -455,12 +457,11 @@ class WilsonCoefficientsSBSBTest :
             /* Test for 5 active flavors, evolving from mu_0 = 120 GeV to mu = 4.2 GeV */
             {
                 static const double eps = 1e-8;
-                static const double mu = 4.2;
 
-                Parameters parameters = reference_parameters();
+                Parameters parameters = reference_parameters(); // set scale sbsb::mu
                 StandardModel model(parameters);
 
-                WilsonCoefficients<wc::SBSB> wc = model.wilson_coefficients_sbsb(mu);
+                WilsonCoefficients<wc::SBSB> wc = model.wet_sbsb();
                 TEST_CHECK_NEARLY_EQUAL(+0.001313228, real(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.c1()),  eps);
                 TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.c2()),  eps);

@@ -116,8 +116,8 @@ namespace eos
     };
 
     template <>
-    class WilsonScanComponent<components::DeltaB2> :
-        public virtual ModelComponent<components::DeltaB2>
+    class WilsonScanComponent<components::WET::SBSB> :
+        public virtual ModelComponent<components::WET::SBSB>
     {
         protected:
             /* b->s Wilson coefficients */
@@ -142,7 +142,7 @@ namespace eos
             WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
 
             /*! sbar b sbar b Wilson coefficients */
-            virtual WilsonCoefficients<wc::SBSB> wilson_coefficients_sbsb(const double & mu) const;
+            virtual WilsonCoefficients<wc::SBSB> wet_sbsb() const;
     };
 
     template <>
@@ -257,7 +257,7 @@ namespace eos
         public Model,
         public CKMScanComponent,
         public SMComponent<components::QCD>,
-        public WilsonScanComponent<components::DeltaB2>,
+        public WilsonScanComponent<components::WET::SBSB>,
         public WilsonScanComponent<components::DeltaBS1>,
         public WilsonScanComponent<components::DeltaBU1>,
         public WilsonScanComponent<components::DeltaBC1>
@@ -287,7 +287,7 @@ namespace eos
         public Model,
         public CKMScanComponent,
         public SMComponent<components::QCD>,
-        public WilsonScanComponent<components::DeltaB2>,
+        public WilsonScanComponent<components::WET::SBSB>,
         public ConstrainedWilsonScanComponent,
         public WilsonScanComponent<components::DeltaBU1>,
         public WilsonScanComponent<components::DeltaBC1>
