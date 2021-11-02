@@ -824,12 +824,12 @@ namespace implementation
         return wc;
     }
 
-    SMComponent<components::DeltaBU1>::SMComponent(const Parameters & /* p */, ParameterUser & /* u */)
+    SMComponent<components::WET::UBLNu>::SMComponent(const Parameters & /* p */, ParameterUser & /* u */)
     {
     }
 
     WilsonCoefficients<ChargedCurrent>
-    SMComponent<components::DeltaBU1>::wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & /* cp_conjugate */) const
+    SMComponent<components::WET::UBLNu>::wet_ublnu(LeptonFlavor lepton_flavor, const bool & /* cp_conjugate */) const
     {
         // universal electroweak correction, cf. [S1982]
         // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
@@ -843,12 +843,12 @@ namespace implementation
         return wc;
     }
 
-    SMComponent<components::DeltaBC1>::SMComponent(const Parameters & /* p */, ParameterUser & /* c */)
+    SMComponent<components::WET::CBLNu>::SMComponent(const Parameters & /* p */, ParameterUser & /* c */)
     {
     }
 
     WilsonCoefficients<ChargedCurrent>
-    SMComponent<components::DeltaBC1>::wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & /* cp_conjugate */) const
+    SMComponent<components::WET::CBLNu>::wet_cblnu(LeptonFlavor lepton_flavor, const bool & /* cp_conjugate */) const
     {
         // universal electroweak correction, cf. [S1982]
         // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
@@ -867,8 +867,8 @@ namespace implementation
         SMComponent<components::QCD>(p, *this),
         SMComponent<components::WET::SBSB>(p, *this),
         SMComponent<components::DeltaBS1>(p, *this),
-        SMComponent<components::DeltaBU1>(p, *this),
-        SMComponent<components::DeltaBC1>(p, *this)
+        SMComponent<components::WET::CBLNu>(p, *this),
+        SMComponent<components::WET::UBLNu>(p, *this)
     {
     }
 

@@ -32,13 +32,13 @@ namespace eos
     {
         std::shared_ptr<Model> model;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
 
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model", "SM"), p, o)),
-            opt_l(o, "l", {"e", "mu", "tau"}, "mu")
+            opt_l(o, options, "l")
         {
             u.uses(*model);
         }
@@ -52,7 +52,7 @@ namespace eos
             // inclusive |V_ub|^2 = |V_ub^eff|^2 (|C_V,LL|^2 + |C_V,RL|^2)
 
             double v_ub_eff_squared = std::norm(model->ckm_ub());
-            auto wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
+            auto wc = model->wet_ublnu(opt_l.value(), false);
 
             return std::sqrt(v_ub_eff_squared * (std::norm(wc.cvl()) + std::norm(wc.cvr())));
         }

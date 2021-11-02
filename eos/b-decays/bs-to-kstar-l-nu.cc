@@ -58,7 +58,7 @@ namespace eos
 
         UsedParameter m_b_MSbar;
 
-        SwitchOption opt_l;
+        LeptonFlavorOption opt_l;
 
         UsedParameter m_l;
 
@@ -78,9 +78,9 @@ namespace eos
             m_Bs(p["mass::B_s"], u),
             m_Kstar(p["mass::K_u^*"], u),
             m_b_MSbar(p["mass::b(MSbar)"], u),
-            opt_l(o, "l", {"e", "mu", "tau"}, "mu"),
-            m_l(p["mass::" + opt_l.value()], u),
-            mu(p["ub" + opt_l.value() + "nu" + opt_l.value() + "::mu"], u),
+            opt_l(o, options, "l"),
+            m_l(p["mass::" + opt_l.str()], u),
+            mu(p["ub" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
             g_fermi(p["WET::G_Fermi"], u),
             tau(p["life_time::B_s"], u)
         {
@@ -109,7 +109,7 @@ namespace eos
         {
             static const double sqrt2 = sqrt(2.0);
 
-            WilsonCoefficients<ChargedCurrent> wc = model->wilson_coefficients_b_to_u(opt_l.value(), false);
+            WilsonCoefficients<ChargedCurrent> wc = model->wet_ublnu(opt_l.value(), false);
             double m_Bs2 = m_Bs * m_Bs;
             double sqrts = sqrt(s), lam = lambda(m_Bs * m_Bs, m_Kstar * m_Kstar, s), sqrtlam = sqrt(lam);
             double N = this->norm(s);

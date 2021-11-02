@@ -22,9 +22,10 @@
 #ifndef EOS_GUARD_SRC_UTILS_MODEL_HH
 #define EOS_GUARD_SRC_UTILS_MODEL_HH 1
 
-#include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/parameters.hh>
+#include <eos/utils/quantum-numbers.hh>
 #include <eos/utils/wilson_coefficients.hh>
 
 #include <complex>
@@ -45,10 +46,10 @@ namespace eos
         namespace WET
         {
             struct SBSB;
+            struct CBLNu;
+            struct UBLNu;
         }
         struct DeltaBS1;
-        struct DeltaBU1;
-        struct DeltaBC1;
         ///@}
     }
 
@@ -121,21 +122,21 @@ namespace eos
     /*!
      * Base class for the Delta B = 1 = Delta U CC component of models.
      */
-    template <> class ModelComponent<components::DeltaBU1>
+    template <> class ModelComponent<components::WET::UBLNu>
     {
         public:
             /* b->u Wilson coefficients */
-            virtual WilsonCoefficients<ChargedCurrent> wilson_coefficients_b_to_u(const std::string & lepton_flavour, const bool & cp_conjugate = false) const = 0;
+            virtual WilsonCoefficients<ChargedCurrent> wet_ublnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
     };
 
     /*!
      * Base class for the Delta B = 1 = Delta C CC component of models.
      */
-    template <> class ModelComponent<components::DeltaBC1>
+    template <> class ModelComponent<components::WET::CBLNu>
     {
-    public:
-        /* b->c Wilson coefficients */
-        virtual WilsonCoefficients<ChargedCurrent> wilson_coefficients_b_to_c(const std::string & lepton_flavour, const bool & cp_conjugate = false) const = 0;
+        public:
+            /* b->c Wilson coefficients */
+            virtual WilsonCoefficients<ChargedCurrent> wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate = false) const = 0;
     };
 
     /*!
@@ -147,8 +148,8 @@ namespace eos
         public virtual ModelComponent<components::QCD>,
         public virtual ModelComponent<components::WET::SBSB>,
         public virtual ModelComponent<components::DeltaBS1>,
-        public virtual ModelComponent<components::DeltaBU1>,
-        public virtual ModelComponent<components::DeltaBC1>
+        public virtual ModelComponent<components::WET::UBLNu>,
+        public virtual ModelComponent<components::WET::CBLNu>
     {
         public:
             virtual ~Model() = 0;
