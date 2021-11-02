@@ -695,12 +695,15 @@ namespace eos
         {
             std::vector<LogLikelihoodBlockPtr> components;
             std::vector<double> weights;
+            std::vector<std::array<double, 2>> test_stat;
             mutable std::vector<double> temp;
 
             MixtureBlock(const std::vector<LogLikelihoodBlockPtr> & components,
-                         const std::vector<double> & weights) :
+                         const std::vector<double> & weights,
+                         const std::vector<std::array<double, 2>> & test_stat) :
                 components(components),
                 weights(weights),
+                test_stat(test_stat),
                 temp(weights.size(), 0.0)
             {
             }
@@ -723,7 +726,7 @@ namespace eos
                 for (const auto & component : components)
                     clones.push_back((*component).clone(cache));
 
-                return LogLikelihoodBlockPtr(new MixtureBlock(clones, weights));
+                return LogLikelihoodBlockPtr(new MixtureBlock(clones, weights, test_stat));
             }
 
             double evaluate() const
@@ -761,12 +764,20 @@ namespace eos
 
             double significance() const
             {
-                throw InternalError("LogLikelihoodBlock::MixtureBlock::significance() not implemented yet");
+                double value = -2.0 * evaluate();
+                for (const auto & pair : test_stat)
+                {
+                    if (value <= pair[1]) return pair[0];
+                }
+
+                return std::numeric_limits<double>::quiet_NaN();
             }
 
             virtual TestStatistic primary_test_statistic() const
             {
-                return test_statistics::Empty();
+                return test_statistics::ChiSquare(
+                    gsl_cdf_chisq_Pinv(gsl_cdf_chisq_P(power_of<2>(significance()), 1), number_of_observations()),
+                    number_of_observations());
             }
         };
 
@@ -1196,7 +1207,8 @@ namespace eos
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::Mixture(const std::vector<LogLikelihoodBlockPtr> & components,
-                                const std::vector<double> & weights)
+                                const std::vector<double> & weights,
+                                const std::vector<std::array<double, 2>> & test_stat)
     {
         if (components.size() != weights.size())
             throw InternalError("LogLikelihoodBlock::Mixture(): components and weights don't match");
@@ -1213,7 +1225,7 @@ namespace eos
         Log::instance()->message("MixtureBlock()", ll_debug)
             << "sum = " << sum <<  ", norm. weights " << stringify_container(norm_weights);
 
-        return LogLikelihoodBlockPtr(new implementation::MixtureBlock(components, norm_weights));
+        return LogLikelihoodBlockPtr(new implementation::MixtureBlock(components, norm_weights, test_stat));
     }
 
     LogLikelihoodBlockPtr

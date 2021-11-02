@@ -1160,6 +1160,9 @@ class ConstraintDeserializationTest :
                     "      - [0.04, 0.006]\n"
                     "      - [0.006, 0.0025]\n"
                     "weights: [0.6, 0.4]\n"
+                    "test statistics:\n"
+                    "  sigma: []\n"
+                    "  densities: []\n"
                     "dof: 2"
                 );
 
@@ -1197,6 +1200,9 @@ class ConstraintDeserializationTest :
                     "    covariance:\n"
                     "      - [0.0100, 0.0030]\n"
                     "      - [0.0030, 0.0025]\n"
+                    "test statistics:\n"
+                    "  sigma: []\n"
+                    "  densities: []\n"
                     "weights: [1.0]\n"
                     "dof: 2"
                 );
@@ -1221,7 +1227,7 @@ class ConstraintDeserializationTest :
             }
             // }}}
 
-            // {{{ Mixture (value; non-trivial cross check using two components)
+            // {{{ Mixture (value; non-trivial cross check using two components and naive test statistics values)
             {
                 static const std::string input(
                     "type: Mixture\n"
@@ -1244,6 +1250,9 @@ class ConstraintDeserializationTest :
                     "    covariance:\n"
                     "      - [0.04, 0.006]\n"
                     "      - [0.006, 0.0025]\n"
+                    "test statistics:\n"
+                    "  sigma: [0.5, 1., 1.5]\n"
+                    "  densities: [-13., -8., -1.]\n"
                     "weights: [0.6, 0.4]\n"
                     "dof: 2"
                 );
