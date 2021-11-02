@@ -17,6 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/join.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
@@ -202,5 +203,70 @@ namespace eos
         }
 
         return result;
+    }
+
+    SpecifiedOption::SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key)
+    {
+        const auto s = std::find_if(specifications.cbegin(), specifications.cend(), [&] (const auto & e) -> bool {
+            return e.key == key;
+        });
+
+        if (specifications.cend() == s)
+            throw InternalError("Options key '" + key + "' is not specified in the options specifications");
+
+        if (! options.has(key))
+        {
+            if ("" == s->default_value)
+                throw UnspecifiedOptionError(key, join(s->allowed_values.cbegin(), s->allowed_values.cend()));
+
+            _value = s->default_value;
+        }
+        else
+        {
+            _value = options[key];
+
+            if (std::find(s->allowed_values.cbegin(), s->allowed_values.cend(), _value) == s->allowed_values.cend())
+            {
+                throw InvalidOptionValueError(key, _value, join(s->allowed_values.cbegin(), s->allowed_values.cend()));
+            }
+        }
+    }
+
+    SpecifiedOption::~SpecifiedOption() = default;
+
+    const std::string &
+    SpecifiedOption::value() const
+    {
+        return _value;
+    }
+
+    LeptonFlavorOption::LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+        SpecifiedOption(options, specifications, key)
+    {
+    }
+
+    LeptonFlavorOption::~LeptonFlavorOption() = default;
+
+    LeptonFlavor
+    LeptonFlavorOption::value() const
+    {
+        static const std::map<std::string, LeptonFlavor> map
+        {
+            { "e",   LeptonFlavor::electron },
+            { "mu",  LeptonFlavor::muon     },
+            { "tau", LeptonFlavor::tauon    }
+        };
+
+        const auto i = map.find(_value);
+        if (map.cend() == i)
+            throw InternalError("Invalid lepton flavor '" + _value + "' encountered in LeptonFlavorOption::value()");
+
+        return i->second;
+    }
+
+    const std::string &
+    LeptonFlavorOption::str() const
+    {
+        return _value;
     }
 }
