@@ -22,6 +22,7 @@
 
 #include <eos/utils/exception.hh>
 #include <eos/utils/private_implementation_pattern.hh>
+#include <eos/utils/quantum-numbers.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <string>
@@ -130,6 +131,29 @@ namespace eos
         std::string key;
         std::vector<std::string> allowed_values;
         std::string default_value;
+    };
+
+    class SpecifiedOption
+    {
+        protected:
+            std::string _value;
+
+        public:
+            SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key);
+            ~SpecifiedOption();
+
+            const std::string & value() const;
+    };
+
+    class LeptonFlavorOption :
+        public SpecifiedOption
+    {
+        public:
+            LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "l");
+            ~LeptonFlavorOption();
+
+            LeptonFlavor value() const;
+            const std::string & str() const;
     };
 }
 
