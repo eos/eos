@@ -634,8 +634,9 @@ namespace eos
                         LogLikelihoodBlock::Gaussian(cache, ObservablePtr(new ObservableStub(p, "mass::c")),  3,  4,  5)
                     };
                     std::vector<double> weights { 0.9, 0.1 };
+                    std::vector<std::array<double, 2>> test_stat {};
 
-                    auto m = LogLikelihoodBlock::Mixture(components, weights);
+                    auto m = LogLikelihoodBlock::Mixture(components, weights, test_stat);
 
                     p["mass::c"] = 4;
                     cache.update();

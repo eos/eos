@@ -1676,6 +1676,8 @@ namespace eos
 
         std::vector<double> weights;
 
+        std::vector<std::array<double, 2>> test_stat;
+
         unsigned number_of_observations;
 
         unsigned dim_meas, dim_pred;
@@ -1688,6 +1690,7 @@ namespace eos
                 std::vector<GSLVectorPtr> && _means,
                 std::vector<GSLMatrixPtr> && _covariances,
                 const std::vector<double> & weights,
+                const std::vector<std::array<double, 2>> & test_stat,
                 const unsigned number_of_observations) :
             ConstraintEntryBase(name, observables),
             observables(observables),
@@ -1696,6 +1699,7 @@ namespace eos
             means(std::move(_means)),
             covariances(std::move(_covariances)),
             weights(weights),
+            test_stat(test_stat),
             number_of_observations(number_of_observations),
             dim_pred(observables.size())
         {
@@ -1780,7 +1784,7 @@ namespace eos
                 components.push_back(LogLikelihoodBlock::MultivariateGaussian(cache, observables, mean, covariance, response, dim_meas));
             }
 
-            auto block = LogLikelihoodBlock::Mixture(components, weights);
+            auto block = LogLikelihoodBlock::Mixture(components, weights, test_stat);
 
             return Constraint(name, std::vector<ObservablePtr>(observables.begin(), observables.end()), { block });
         }
@@ -1857,6 +1861,26 @@ namespace eos
                 out << w;
             }
             out << YAML::EndSeq;
+            out << YAML::Key << "test statistics" << YAML::Value << YAML::BeginMap;
+            out << YAML::Key << "sigma" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+            if (test_stat.size() != 0)
+            {
+                for (auto i = 0u ; i < test_stat[0].size() ; ++i)
+                {
+                    out << test_stat[0][i];
+                }
+            }
+            out << YAML::EndSeq;
+            out << YAML::Key << "densities" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+            if (test_stat.size() != 0)
+            {
+                for (auto i = 0u ; i < test_stat[0].size() ; ++i)
+                {
+                    out << test_stat[1][i];
+                }
+            }
+            out << YAML::EndSeq;
+            out << YAML::EndMap;
             out << YAML::Key << "dof" << YAML::Value << number_of_observations;
             out << YAML::EndMap;
         }
@@ -1865,7 +1889,7 @@ namespace eos
         {
             static const std::string required_keys[] =
             {
-                "dim", "observables", "kinematics", "options", "components", "weights", "dof"
+                "dim", "observables", "kinematics", "options", "components", "weights", "test statistics", "dof"
             };
 
             for (auto && k : required_keys)
@@ -2020,7 +2044,31 @@ namespace eos
                     weights.push_back(v.as<double>());
                 }
 
-                return new MixtureConstraintEntry(name.str(), observables, kinematics, options, std::move(means), std::move(covariances), weights, dof);
+                std::vector<double> sigma;
+                for (auto && v : n["test statistics"]["sigma"])
+                {
+                    sigma.push_back(v.as<double>());
+                }
+
+                std::vector<double> densities;
+                for (auto && v : n["test statistics"]["densities"])
+                {
+                    densities.push_back(v.as<double>());
+                }
+
+                if (sigma.size() != densities.size())
+                {
+                    throw ConstraintDeserializationError(name, "'sigma' and 'densities' have different size in 'test statistics'");
+                }
+
+                std::vector<std::array<double, 2>> test_stat;
+                auto sigma_it = sigma.begin();
+                for (auto value = densities.cbegin(); value != densities.cend() ; ++value, ++sigma_it)
+                {
+                    test_stat.push_back(std::array<double, 2>{*sigma_it, *value});
+                }
+
+                return new MixtureConstraintEntry(name.str(), observables, kinematics, options, std::move(means), std::move(covariances), std::move(weights), std::move(test_stat), dof);
             }
             catch (QualifiedNameSyntaxError & e)
             {
