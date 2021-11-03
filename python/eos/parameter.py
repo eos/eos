@@ -98,6 +98,53 @@ class Parameters(_Parameters):
         return(result)
 
 
+    def to_yaml(self, names=None):
+        """
+        Converts an eos.Parameters object to a YAML representation.
+
+        :param names: Names of the parameters that shall be converted.
+        :type name: iterable of str (optional)
+        """
+
+        import yaml
+
+        parameters = []
+        if names is None:
+            parameters = [p for p in self]
+        else:
+            for p in self:
+                if p.name() not in names:
+                    continue
+
+                parameters.append(p)
+
+        contents = {}
+        for p in parameters:
+            contents.update({
+                p.name(): {
+                    'central': p.evaluate(),
+                    'min':     p.min(),
+                    'max':     p.max(),
+                    'latex':   p.latex()
+                }
+            })
+
+        return yaml.dump(contents)
+
+
+    def dump(self, file, **kwargs):
+        """
+        Dumps an eos.Parameters object to a YAML file.
+
+        :param file: Name of the file to which the parameters shall be written.
+        :type file: str
+        :param names: Names of the parameters that shall be converted.
+        :type names: iterable of str (optional)
+        """
+        with open(file, 'w') as f:
+            f.write(self.to_yaml(**kwargs))
+
+
     @staticmethod
     def FromWCxf(w):
         """
