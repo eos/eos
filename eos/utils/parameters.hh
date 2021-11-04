@@ -26,6 +26,7 @@
 #include <eos/utils/parameters-fwd.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/qualified-name.hh>
+#include <eos/utils/units.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <set>
@@ -284,6 +285,9 @@ namespace eos
 
             /// Retrieve the Parameter's name as a LaTeX representation
             const std::string & latex() const;
+
+            /// Retrieve the Parameter's unit
+            Unit unit() const;
             ///@}
     };
 

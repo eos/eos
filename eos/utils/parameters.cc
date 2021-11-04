@@ -181,6 +181,8 @@ namespace eos
         double min, central, max;
 
         std::string latex;
+
+        Unit unit;
     };
 
     struct Parameter::Data :
@@ -276,7 +278,9 @@ namespace eos
 
                     std::string latex;
 
-                    bool has_min = false, has_max = false, has_latex = false;
+                    Unit unit = Unit::Undefined();
+
+                    bool has_min = false, has_max = false, has_latex = false, has_unit = false;
 
                     if (! p.second["central"])
                     {
@@ -317,6 +321,15 @@ namespace eos
                         has_latex = true;
                     }
 
+                    auto unit_node = p.second["unit"];
+                    if (unit_node)
+                    {
+                        if (YAML::NodeType::Scalar != unit_node.Type())
+                            throw ParameterInputFileNodeError(file, name + ".unit", "is not a scalar");
+
+                        unit = Unit(unit_node.as<std::string>());
+                    }
+
                     auto i = parameters_map.find(name);
                     if (parameters_map.end() != i)
                     {
@@ -336,6 +349,10 @@ namespace eos
                         {
                             parameters_data->data[i->second].latex = latex;
                         }
+                        if (has_unit)
+                        {
+                            parameters_data->data[i->second].unit = unit;
+                        }
                     }
                     else
                     {
@@ -352,7 +369,7 @@ namespace eos
                         }
 
                         auto idx = parameters_data->data.size();
-                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex }, idx));
+                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex, unit }, idx));
                         parameters_map[name] = idx;
                         parameters.push_back(Parameter(parameters_data, idx));
                     }
@@ -495,6 +512,16 @@ namespace eos
                                 latex = latex_node.as<std::string>();
                             }
 
+                            Unit unit = Unit::Undefined();
+                            auto unit_node = p.second["unit"];
+                            if (unit_node)
+                            {
+                                if (YAML::NodeType::Scalar != unit_node.Type())
+                                    throw ParameterInputFileNodeError(file, name + ".unit", "is not a scalar");
+
+                                unit = Unit(unit_node.as<std::string>());
+                            }
+
                             if (name.find("%") == std::string::npos) // The parameter is not templated
                             {
                                 if (parameters_map.end() != parameters_map.find(name))
@@ -502,7 +529,7 @@ namespace eos
                                     throw ParameterInputDuplicateError(file, name);
                                 }
 
-                                parameters_data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex }, idx));
+                                parameters_data->data.push_back(Parameter::Data(Parameter::Template { QualifiedName(name), min, central, max, latex, unit }, idx));
                                 parameters_map[name] = idx;
                                 parameters.push_back(Parameter(parameters_data, idx));
                                 group_parameters.push_back(Parameter(parameters_data, idx));
@@ -554,7 +581,7 @@ namespace eos
                                             throw ParameterInputDuplicateError(file, qn.str());
                                         }
 
-                                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { qn, min, central, max, templated_latex.str() }, idx));
+                                        parameters_data->data.push_back(Parameter::Data(Parameter::Template { qn, min, central, max, templated_latex.str(), unit }, idx));
                                         parameters_map[templated_name.str()] = idx;
                                         parameters.push_back(Parameter(parameters_data, idx));
                                         group_parameters.push_back(Parameter(parameters_data, idx));
@@ -622,7 +649,7 @@ namespace eos
 
         // create new parameter
         unsigned idx = _imp->parameters.size();
-        _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, value, value, value, "LaTeX display not supported for run-time declared parameters" }, idx));
+        _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template { name, value, value, value, "LaTeX display not supported for run-time declared parameters", Unit::Undefined() }, idx));
         _imp->parameters_map[name] = idx;
         _imp->parameters.push_back(Parameter(_imp->parameters_data, idx));
 
@@ -788,6 +815,12 @@ namespace eos
     Parameter::latex() const
     {
         return _parameters_data->data[_index].latex;
+    }
+
+    Unit
+    Parameter::unit() const
+    {
+        return _parameters_data->data[_index].unit;
     }
 
     Parameter::Id
