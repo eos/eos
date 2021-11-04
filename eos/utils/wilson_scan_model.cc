@@ -469,6 +469,36 @@ namespace eos
         return result;
     }
 
+    /* sbnunu Wilson coefficients */
+    WilsonScanComponent<components::WET::SBNuNu>::WilsonScanComponent(const Parameters & p, const Options &, ParameterUser & u) :
+    _re_cl(p["sbnunu::Re{cL}"], u),
+    _im_cl(p["sbnunu::Im{cL}"], u),
+    _re_cr(p["sbnunu::Re{cR}"], u),
+    _im_cr(p["sbnunu::Im{cR}"], u)
+    {
+    }
+
+    WilsonCoefficients<wc::SBNuNu>
+    WilsonScanComponent<components::WET::SBNuNu>::wet_sbnunu(const bool & cp_conjugate) const
+    {
+        WilsonCoefficients<wc::SBNuNu> result;
+
+        result._coefficients = std::array<complex<double>, 2>{{
+            complex<double>(_re_cl,  _im_cl),
+            complex<double>(_re_cr,  _im_cr)
+        }};
+
+        if (cp_conjugate)
+        {
+            for (auto & _coefficient : result._coefficients)
+            {
+                _coefficient = conj(_coefficient);
+            }
+        }
+
+        return result;
+    }
+
     ConstrainedWilsonScanComponent::ConstrainedWilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
         WilsonScanComponent<components::DeltaBS1>(p, o, u)
     {
@@ -501,7 +531,8 @@ namespace eos
         WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
         WilsonScanComponent<components::DeltaBS1>(parameters, options, *this),
         WilsonScanComponent<components::WET::UBLNu>(parameters, options, *this),
-        WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this)
+        WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this)
     {
     }
 
@@ -521,7 +552,8 @@ namespace eos
         WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
         ConstrainedWilsonScanComponent(parameters, options, *this),
         WilsonScanComponent<components::WET::UBLNu>(parameters, options, *this),
-        WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this)
+        WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this),
+        WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this)
     {
     }
 

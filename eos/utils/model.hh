@@ -48,6 +48,7 @@ namespace eos
             struct SBSB;
             struct CBLNu;
             struct UBLNu;
+            struct SBNuNu;
         }
         struct DeltaBS1;
         ///@}
@@ -140,6 +141,16 @@ namespace eos
     };
 
     /*!
+     * Base class for the sbnunu component of models.
+     */
+    template <> class ModelComponent<components::WET::SBNuNu>
+    {
+        public:
+            /* sbnunu Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjguate = false) const = 0;
+    };
+
+    /*!
      * Base class for all models.
      */
     class Model :
@@ -149,7 +160,8 @@ namespace eos
         public virtual ModelComponent<components::WET::SBSB>,
         public virtual ModelComponent<components::DeltaBS1>,
         public virtual ModelComponent<components::WET::UBLNu>,
-        public virtual ModelComponent<components::WET::CBLNu>
+        public virtual ModelComponent<components::WET::CBLNu>,
+        public virtual ModelComponent<components::WET::SBNuNu>
     {
         public:
             virtual ~Model() = 0;

@@ -126,6 +126,7 @@ namespace eos
     namespace wc
     {
         struct SBSB {};
+        struct SBNuNu {};
     }
 
     /* Wilson coefficients for |Delta B| = |Delta S| = 2 operators */
@@ -158,6 +159,31 @@ namespace eos
         inline complex<double> c1p()  const { return _coefficients[5]; }
         inline complex<double> c2p()  const { return _coefficients[6]; }
         inline complex<double> c3p()  const { return _coefficients[7]; }
+    };
+
+    template <> struct WilsonCoefficients<wc::SBNuNu>
+    {
+        /*
+         * Assuming only left-handed neutrinos, only two operators exist beyond the SM.
+         * These two operators are defined via
+         *
+         * H^eff = 4 G_F / sqrt(2) V_tb V_ts^* (
+         *             C_L alpha_e / (2 pi) * [sbar gamma^mu P_L b] [nubar gamma_mu P_L nu]
+         *             C_R alpha_e / (2 pi) * [sbar gamma^mu P_R b] [nubar gamma_mu P_L nu]
+         *         )
+         *       = 4 G_F / sqrt(2) V_tb V_ts^* ( C_L O_L + C_R O_R )
+         *
+         * C++ idx -> operator
+         * 0       -> O_L
+         * 1       -> O_R
+         */
+        std::array<complex<double>, 2> _coefficients;
+
+        /*! Default ctor */
+        WilsonCoefficients();
+
+        inline complex<double> cL()   const { return _coefficients[0]; }
+        inline complex<double> cR()   const { return _coefficients[1]; }
     };
 }
 

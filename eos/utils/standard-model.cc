@@ -850,7 +850,7 @@ namespace implementation
     WilsonCoefficients<ChargedCurrent>
     SMComponent<components::WET::CBLNu>::wet_cblnu(LeptonFlavor lepton_flavor, const bool & /* cp_conjugate */) const
     {
-        // universal electroweak correction, cf. [S1982]
+        // universal electroweak correction, cf. [S:1982A]
         // etaEW = 1 + alpha_e/pi log(m_Z/mu_b)
         // TODO: provide this to b->ulv and b->clv
         const double etaEW = 1.0066;
@@ -862,13 +862,80 @@ namespace implementation
         return wc;
     }
 
+    SMComponent<components::WET::SBNuNu>::SMComponent(const Parameters &  p , ParameterUser &  u) :
+        _alpha_s_Z__sbnunu(p["QCD::alpha_s(MZ)"], u),
+        _mu_t__sbnunu(p["QCD::mu_t"], u),
+        _sw2__sbnunu(p["GSW::sin^2(theta)"], u),
+        _m_t_pole__sbnunu(p["mass::t(pole)"], u),
+        _m_W__sbnunu(p["mass::W"], u),
+        _m_Z__sbnunu(p["mass::Z"], u),
+        _mu_0__sbnunu(p["sbnunu::mu_0"], u)
+    {
+    }
+
+    WilsonCoefficients<wc::SBNuNu>
+    SMComponent<components::WET::SBNuNu>::wet_sbnunu(const bool & /* cp_conjugate */) const
+    {
+        // SM Wilson coefficients are real so cp conjugation has no effect
+
+        // calculate alpha_s
+        static const double nf    = 5.0;
+        static const auto & beta5 = QCD::beta_function_nf_5;
+        static const auto & beta6 = QCD::beta_function_nf_6;
+
+        const double alpha_s_mu_0 = QCD::alpha_s(_mu_0__sbnunu, _alpha_s_Z__sbnunu, _m_Z__sbnunu, beta5);
+
+        double alpha_s_m_t_pole = 0.0;
+        if (_mu_t__sbnunu <= _m_t_pole__sbnunu)
+        {
+            alpha_s_m_t_pole = QCD::alpha_s(_mu_t__sbnunu, _alpha_s_Z__sbnunu, _m_Z__sbnunu, beta5);
+            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__sbnunu, alpha_s_m_t_pole, _mu_t__sbnunu, beta6);
+        }
+        else
+        {
+            Log::instance()->message("sm_component<sbnunu>.wc", ll_error)
+                << "mu_t > m_t_pole!";
+
+            alpha_s_m_t_pole = QCD::alpha_s(_m_t_pole__sbnunu, _alpha_s_Z__sbnunu, _m_Z__sbnunu, beta5);
+        }
+
+        // calculate m_t at the matching scale in the MSbar scheme
+        const double m_t_msbar_m_t_pole = QCD::m_q_msbar(_m_t_pole__sbnunu, alpha_s_m_t_pole, nf);
+        const double m_t_mu_0 = QCD::m_q_msbar(m_t_msbar_m_t_pole, alpha_s_m_t_pole, alpha_s_mu_0, beta5, QCD::gamma_m_nf_5);
+        const double x_t = power_of<2>(m_t_mu_0 / _m_W__sbnunu);
+        const double x_t2 = power_of<2>(x_t), x_t3 = power_of<3>(x_t), x_t4 = power_of<4>(x_t);
+
+        // [BGS:2010A] TODO: implement EW corrections
+        const double X_t0 = x_t / 8.0 * (
+            (x_t + 2.0) / (x_t - 1.0) + (3.0 * x_t - 6.0) / power_of<2>(x_t - 1.0) * std::log(x_t)
+        );
+        const double X_t1 =
+            - (29.0 * x_t - x_t2 - 4.0 * x_t3) / 3.0 / power_of<2>(1.0 - x_t)
+            - (x_t + 9.0 * x_t2 - x_t3 - x_t4) / power_of<3>(1.0 - x_t) * std::log(x_t)
+            + (8.0 * x_t + 4.0 * x_t2 + x_t3 - x_t4) / 2.0 / power_of<3>(1.0 - x_t) * power_of<2>(std::log(x_t))
+            - (4.0 * x_t - x_t3) / power_of<2>(1.0 - x_t) * gsl_sf_dilog(1.0 - x_t)
+            + 16.0 * x_t * std::log(_mu_t__sbnunu / _m_W__sbnunu) * (
+                (8.0 - 9.0 * x_t + x_t3 + 6.0 * std::log(x_t)) / (8.0 * power_of<3>(x_t - 1.0)) // dX_t0 / dx_t
+            );
+
+        const double X_t = X_t0 + alpha_s_mu_0 / 4.0 / M_PI * X_t1;
+
+        // [BGNS:2014A] eq. 3
+        WilsonCoefficients<wc::SBNuNu> wc;
+        wc._coefficients.fill(complex<double>(0.0));
+        wc._coefficients[0] = X_t / _sw2__sbnunu;
+
+        return wc;
+    }
+
     StandardModel::StandardModel(const Parameters & p) :
         SMComponent<components::CKM>(p, *this),
         SMComponent<components::QCD>(p, *this),
         SMComponent<components::WET::SBSB>(p, *this),
         SMComponent<components::DeltaBS1>(p, *this),
         SMComponent<components::WET::CBLNu>(p, *this),
-        SMComponent<components::WET::UBLNu>(p, *this)
+        SMComponent<components::WET::UBLNu>(p, *this),
+        SMComponent<components::WET::SBNuNu>(p, *this)
     {
     }
 
