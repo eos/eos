@@ -1134,3 +1134,52 @@ groups:
           max:     0.0
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{T}$'
   # }}}
+
+  # sbnunu WET Parameters
+  # {{{
+  - title: '$\bar{s}b\bar{\nu}\nu$ WET Parameters'
+    description: >
+        The list of parameters describing the $\bar{s}b\bar{s}b$ Wilson coefficients in the effective Hamiltonian
+        \begin{equation}
+          \mathcal{H}^{\bar{s}b\bar{\nu}\nu}_\mathrm{eff}
+          = \frac{4 G_F}{\sqrt{2}} V_{tb}^* V_{ts} \sum_i \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_i \mathcal{O}^{\bar{s}b\bar{\nu}\nu}_i\,.
+        \end{equation}
+        The operators read:
+        \begin{align}
+          \mathcal{O}_{L(R)} & = [\bar{s} \gamma^\mu P_{L(R)} b]\, [\bar{\ell} \gamma_\mu P_L \nu_\ell]
+        \end{align}
+
+    wcxf-relevant: true
+    parameters:
+      'sbnunu::mu' :
+          central: 4.2
+          min:     4.2
+          max:     4.2
+          latex:   '$\mu^{\bar{s}b\bar{\nu}\nu}$'
+          unit:    'GeV'
+      'sbnunu::mu_0' :
+          central: 120.0
+          min:     120.0
+          max:     120.0
+          latex:   '$\mu_0^{\bar{s}b\bar{\nu}\nu}$'
+          unit:    'GeV'
+      'sbnunu::Re{cL}' :
+          central: 1.0
+          min:     1.0
+          max:     1.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_L}$'
+      'sbnunu::Im{cL}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_L}$'
+      'sbnunu::Re{cR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_R}$'
+      'sbnunu::Im{cR}' :
+          central: 0.0
+          min:     0.0
+          max:     0.0
+          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{s}b\bar{\nu}\nu}_{V_R}$'

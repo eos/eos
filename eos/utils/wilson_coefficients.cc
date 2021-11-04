@@ -252,4 +252,9 @@ namespace eos
     {
         _coefficients.fill(0.0);
     }
+
+    WilsonCoefficients<wc::SBNuNu>::WilsonCoefficients()
+    {
+        _coefficients.fill(0.0);
+    }
 }

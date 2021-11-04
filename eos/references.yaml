@@ -202,6 +202,13 @@ BGL:1997A:
     id: oai:arXiv.org:hep-ph/9705252
   inspire-id: Boyd:1997kz
   title: Precision corrections to dispersive bounds on form-factors
+BGS:2010A:
+  authors: Brod, Joachim and Gorbahn, Martin and Stamou, Emmanuel
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1009.0947
+  inspire-id: Bigi:2017jbd
+  title: Two-Loop Electroweak Corrections for the $K \to \pi \nu \bar{\nu}$ Decays
 BGS:2017A:
   authors: Bigi, Dante and Gambino, Paolo and Schacht, Stefan
   eprint:
@@ -500,6 +507,13 @@ Belle:2019A:
     id: oai:arXiv.org:1911.03186
   inspire-id: Belle:2019iji
   title: 'Search for $B^+\to \mu^+\nu_{\mu}$ and $B^+\to \mu^+N$ with inclusive tagging'
+BGNS:2014A:
+  authors: Buras, Andrzej J. and Girrbach-Noe, Jennifer and Niehoff, Christoph and Straub, David M.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1409.4557
+  inspire-id: Buras:2014fpa
+  title: '$B\to {K}^{\left(\ast \right)}\nu \overline{\nu} $ decays in the Standard Model and beyond'
 C:2006A:
   authors: Crandall, R.E.
   title: Note on fast polylogarithm computation

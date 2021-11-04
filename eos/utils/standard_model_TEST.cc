@@ -481,3 +481,30 @@ class WilsonCoefficientsSBSBTest :
             }
         }
 } wilson_coefficients_sbsb_test;
+
+class WilsonCoefficientsSBNuNuTest :
+    public TestCase
+{
+    public:
+        WilsonCoefficientsSBNuNuTest() :
+            TestCase("wilson_coefficients_sbnunu_test")
+        {
+        }
+
+        virtual void run() const
+        {
+            /* Test for 5 active flavors, evolving from mu_0 = 120 GeV to mu = 4.2 GeV */
+            {
+                static const double eps = 1e-8;
+
+                Parameters parameters = reference_parameters(); // set scale sbnunu::mu
+                StandardModel model(parameters);
+
+                WilsonCoefficients<wc::SBNuNu> wc = model.wet_sbnunu(false);
+                TEST_CHECK_NEARLY_EQUAL( 6.605426281, real(wc.cL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.cL()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, real(wc.cR()),  eps);
+                TEST_CHECK_NEARLY_EQUAL( 0.000000000, imag(wc.cR()),  eps);
+            }
+        }
+} wilson_coefficients_sbnunu_test;

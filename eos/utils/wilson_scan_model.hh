@@ -249,6 +249,22 @@ namespace eos
             virtual WilsonCoefficients<ChargedCurrent> wet_cblnu(LeptonFlavor lepton_flavor, const bool & cp_conjugate) const;
     };
 
+    template <>
+    class WilsonScanComponent<components::WET::SBNuNu> :
+    public virtual ModelComponent<components::WET::SBNuNu>
+    {
+        private:
+            /* sbnunu Wilson coefficients */
+            UsedParameter _re_cl, _im_cl;
+            UsedParameter _re_cr, _im_cr;
+
+        public:
+            WilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
+
+            /* sbnunu Wilson coefficients */
+            virtual WilsonCoefficients<wc::SBNuNu> wet_sbnunu(const bool & cp_conjugate) const;
+    };
+
     /*!
      * A model with all possible operators; their Wilson coefficients
      * are allowed to have arbitrary values.
@@ -260,7 +276,8 @@ namespace eos
         public WilsonScanComponent<components::WET::SBSB>,
         public WilsonScanComponent<components::DeltaBS1>,
         public WilsonScanComponent<components::WET::UBLNu>,
-        public WilsonScanComponent<components::WET::CBLNu>
+        public WilsonScanComponent<components::WET::CBLNu>,
+        public WilsonScanComponent<components::WET::SBNuNu>
     {
         public:
             WilsonScanModel(const Parameters &, const Options &);
@@ -290,7 +307,8 @@ namespace eos
         public WilsonScanComponent<components::WET::SBSB>,
         public ConstrainedWilsonScanComponent,
         public WilsonScanComponent<components::WET::UBLNu>,
-        public WilsonScanComponent<components::WET::CBLNu>
+        public WilsonScanComponent<components::WET::CBLNu>,
+        public WilsonScanComponent<components::WET::SBNuNu>
     {
         public:
             ConstrainedWilsonScanModel(const Parameters &, const Options &);
