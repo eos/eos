@@ -13,14 +13,24 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from _eos import _Parameters, QualifiedName
+from _eos import _Parameters, QualifiedName, Unit
 import re
 
 class Parameters(_Parameters):
     """
     Represents the set of parameters known to EOS.
 
-    An independent instance of the default parameters can be obtained from the :meth:`Defaults <eos.Parameters.Defaults>` method.
+    Objects of this class are visualized as tables in Jupyter notebooks for easy
+    overview. Filters can be applied through keyword arguments to the initialization.
+    An independent instance of the default parameters is obtained by each call to the constructor.
+
+    :param prefix: Only show parameters whose qualified names contain the provided ``prefix`` in their prefix part.
+    :type prefix: str
+    :param name: Only show parameters whose qualified names contain the provided ``name`` in their name part.
+    :type name: str
+    :param suffix: Only show parameters whose qualified names contain the provided ``suffix`` in their suffix part.
+    :type suffix: str
+
     See also `the complete list of parameters <../parameters.html>`_.
     """
     def __new__(cls, *args, **kwargs):
@@ -28,15 +38,24 @@ class Parameters(_Parameters):
         instance.__class__ = Parameters
         return(instance)
 
-    def __init__(self, name=None):
-        self.name = name
+    def __init__(self, prefix=None, name=None, suffix=None):
+        self.prefix=prefix
+        self.name=name
+        self.suffix=suffix
         self._replacements = [
             (re.compile(r'(\\GeV)'),      r'\\text{GeV}'),
             (re.compile(r'\$([^\$]*)\$'), r'$$\1$$'),        # ensure display mode MathJax presentation
         ]
 
-    def filter_entry(self, name):
-        if self.name and not self.name in name:
+    def filter_entry(self, qn):
+        qn = QualifiedName(str(qn))
+        if self.prefix and not self.prefix in str(qn.prefix_part()):
+            return False
+
+        if self.name and not self.name in str(qn.name_part()):
+            return False
+
+        if self.suffix and not self.suffix in str(qn.suffix_part()):
             return False
 
         return True
@@ -62,38 +81,68 @@ class Parameters(_Parameters):
         return(result)
 
     def _repr_html_(self):
-        result = '<table>\n'
+        result = r'''
+        <table>
+            <colgroup>
+                <col width="25%" id="qn"      style="min-width: 200px">
+                <col width="20%" id="symbol"  style="min-width: 200px">
+                <col width="5%"  id="unit"    style="min-width:  50px">
+                <col width="10%" id="value"   style="min-width: 100px">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>qualified name</th>
+                    <th>symbol</th>
+                    <th>unit</th>
+                    <th>value</th>
+                </tr>
+            </thead>
+        '''
         for section in self.sections():
             section_entries = 0
-            section_result = '  <tr><th style="text-align:left" colspan=3><big>{section}</big></th></tr>\n'.format(section=section.name())
+            section_result = fr'''
+              <tr><th style="text-align:left" colspan=4><big>{section.name()}</big></th></tr>'''
             for group in section:
                 group_entries = 0
-                group_result = '    <tr><th style="text-align:left" colspan=3>{group}</th></tr>\n'.format(group=group.name())
-
+                group_result = fr'''
+                    <tr><th style="text-align:left" colspan=4>{group.name()}</th></tr>
+                    <tr><td style="text-align:left" colspan=4>{group.description()}</td></tr>'''
                 group_parameters = [p for p in group]
-                #group_parameters.sort(key = lambda p: p.name())
                 group_parameters.sort(key = Parameters._key)
                 for parameter in group_parameters:
-                    name  = parameter.name()
-                    if not self.filter_entry(name):
+                    qn = parameter.name()
+                    if not self.filter_entry(qn):
                         continue
 
                     latex = self._latex_refine(parameter.latex())
                     if 0 == len(latex):
                         latex = '---'
 
+                    unit = '&mdash;'
+                    if Unit.Undefined() == parameter.unit():
+                        unit = fr'$${parameter.unit().latex()}$$'
+
                     value = parameter.evaluate()
 
-                    group_result += r'      <tr><th><tt style="color:grey">{name}</tt></th><td style="text-align:left">{latex}</td><td style="text-align:right">{value}</td></tr>'.format(name=name,latex=latex,value=value)
+                    group_result += fr'''
+                        <tbody>
+                            <tr>
+                                <th><tt style="color:grey">{qn}</tt></th>
+                                <td style="text-align:left">{latex}</td>
+                                <td style="text-align:left">{unit}</td>
+                                <td style="text-align:right">{value}</td>
+                            </tr>
+                        </tbody>'''
                     group_entries += 1
 
-                group_result += '    <tr><td style="text-align:left" colspan=3>{desc}</td></tr>\n'.format(desc=group.description())
                 section_entries += group_entries
                 if group_entries > 0:
                     section_result += group_result
             if section_entries > 0:
                 result += section_result
-        result += r'</table>'
+        result += r'''
+            </table>
+        '''
 
         return(result)
 
