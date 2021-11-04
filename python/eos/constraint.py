@@ -15,7 +15,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from _eos import _Constraints
+from _eos import _Constraints, _References
 
 class Constraints(_Constraints):
     def __init__(self, prefix=None, name=None, suffix=None):
@@ -37,12 +37,71 @@ class Constraints(_Constraints):
         return True
 
     def _repr_html_(self):
-        result = '<table>\n'
-        result += '<tr><th style="text-align:left">Name</th><th style="text-align:left">Type</th></tr>'
+        result = r'''
+        <script>
+            function toggle_obs(obs_anchor, id) {
+                var query_dots   = 'span.dots[id="' + id + '"]'
+                var query_values = 'span.values[id="' + id + '"]'
+                var dots   = obs_anchor.querySelector(query_dots)
+                var values = obs_anchor.querySelector(query_values)
+                if (dots.style.display == "none") {
+                    dots.style.display   = "inline"
+                    values.style.display = "none"
+                } else {
+                    dots.style.display   = "none"
+                    values.style.display = "inline"
+                }
+            }
+        </script>
+        <table>
+            <colgroup>
+                <col width="50%" id="qn"     style="min-width: 200px">
+                <col width="25%" id="type"   style="min-width: 200px">
+                <col width="15%" id="type"   style="min-width: 100px">
+                <col width="10%" id="ref"    style="min-width: 100px">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>qualified name</th>
+                    <th>observables</th>
+                    <th>type</th>
+                    <th>reference</th>
+                </tr>
+            </thead>'''
+
+        constraint_id = 0
+        references = _References()
         for qn, entry in self:
             if not self.filter_entry(qn):
                 continue
-            result += '<tr><td><tt style="color:grey">{qn}</tt></td><td style="text-align:left">{t}</td></tr>'.format(qn=qn,t=entry.type())
-        result += '</table>'
+
+            id           = fr'con{constraint_id}-obs'
+            observables  = fr'''<a onclick="toggle_obs(this, '{id}')">
+                <span class="dots"   id="{id}" style="display: inline; text-align: left">...</span>
+                <span class="values" id="{id}" style="display: none;   text-align: left">
+            '''
+            observables += '   ' + r'<br/>'.join({fr'''<tt>{o}</tt>''' for o in entry.observables()})
+            observables += r'''
+                </span>
+            </a>'''
+            refname     = str(qn.suffix_part())
+            reflink     = ''
+            try:
+                ref         = references[refname]
+                if 'arXiv' == ref.eprint_archive():
+                    reflink = fr' href="https://arxiv.org/abs/{ref.eprint_id().split(":")[-1]}"'
+            except:
+                pass
+
+            result += fr'''
+                <tr>
+                    <td><tt>{qn}</tt></td>
+                    <td>{observables}</td>
+                    <td>{entry.type()}</td>
+                    <td><a "{reflink}">{refname}</a></td>
+                </tr>'''
+        result += '''
+            </table>
+        '''
 
         return(result)
