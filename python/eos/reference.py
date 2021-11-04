@@ -33,26 +33,39 @@ class References(_References):
         return True
 
     def _repr_html_(self):
-        result  = r'<table>'
-        result += r'<tr><th style="text-align:left">name</th><th>details</th></tr>'
+        result = r'''<table>
+            <colgroup>
+                <col width="10%" id="rn"      style="min-width: 50px">
+                <col width="40%" id="title"   style="min-width: 200px">
+                <col width="15%" id="authors" style="min-width: 100px">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>name</th>
+                    <th>title</th>
+                    <th>authors</th>
+                </tr>
+            </thead>'''
         for rn, entry in self:
             if not self.filter_entry(rn):
                 continue
 
-            authors        = entry.authors()
             title          = entry.title()
+            authors        = '<br/>'.join([fr'{a.strip()}' for a in entry.authors().split(' and ')])
             eprint_archive = entry.eprint_archive()
             eprint_id      = entry.eprint_id()
 
-            details  = r'<table>'
-            details += r'<tr><th>authors</th><td>{}</td></tr>'.format(authors)
-            details += r'<tr><th>title</th><td>{}</td></tr>'.format(title)
-            if eprint_archive == 'arXiv' and eprint_id:
-                pos = eprint_id[::-1].find(':')
-                details += '<tr><th>eprint</th><td><a href="https://arxiv.org/abs/{0}">{1}</a></td></tr>'.format(eprint_id[pos:], eprint_id)
-            details += r'</table>'
+            link = ''
+            if 'arXiv' == eprint_archive:
+                link = fr' href="https://arxiv.org/abs/{eprint_id.split(":")[-1]}"'
 
-            result += r'<tr><td>[{}]</td><td>{}</td></tr>'.format(rn, details)
+            result += fr'''
+                <tr>
+                    <td><a {link}><tt>{rn}</tt></a></td>
+                    <td>{title}</td>
+                    <td>{authors}</td>
+                </tr>
+            '''
 
         result += r'</table>'
 
