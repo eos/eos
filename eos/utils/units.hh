@@ -50,6 +50,7 @@ namespace eos
                 gev_s
             };
 
+            Unit(const std::string &);
             Unit(const Unit &) = default;
             Unit(Unit &&) = default;
             ~Unit() = default;
@@ -66,6 +67,7 @@ namespace eos
             static Unit GeVSecond();
 
             bool operator== (const Unit &) const;
+            Unit & operator= (const Unit &) = default;
     };
 }
 
