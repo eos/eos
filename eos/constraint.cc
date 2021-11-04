@@ -592,7 +592,7 @@ namespace eos
 
         virtual const std::string & type() const
         {
-            static const std::string type("Amoroso (physical limit, theta, alpha, beta)");
+            static const std::string type("Amoroso");
 
             return type;
         }
@@ -816,7 +816,7 @@ namespace eos
 
         virtual const std::string & type() const
         {
-            static const std::string type("MultivariateGaussian<" + stringify(dim) + "> (using correlation matrix)");
+            static const std::string type("MultivariateGaussian");
 
             return type;
         }
@@ -1168,7 +1168,7 @@ namespace eos
 
         virtual const std::string & type() const
         {
-            static const std::string type("MultivariateGaussian<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + "> (using covariance matrix)");
+            static const std::string type("MultivariateGaussian(Covariance)");
 
             return type;
         }
@@ -1738,7 +1738,7 @@ namespace eos
 
         virtual const std::string & type() const
         {
-            static const std::string type("MultivariateGaussian<measurements=" + stringify(dim_meas) + ",predictions=" + stringify(dim_pred) + "> (using covariance matrix)");
+            static const std::string type("Mixture");
 
             return type;
         }
