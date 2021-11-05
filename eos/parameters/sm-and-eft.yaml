@@ -11,13 +11,15 @@ groups:
           central: +6.58211928e-25
           min:     +6.58211913e-25
           max:     +6.58211943e-25
+          unit:     'GeV s'
           latex:    '$\hbar$'
-          comments: 'in GeV s, cf. [PDG2012]:  p. 4'
+          comments: 'cf. [PDG2012]:  p. 4'
       # GSW Parameter
       'GSW::sin^2(theta)' :
           central: +0.23116
           min:     +0.23104
           max:     +0.23128
+          unit:     '1'
           latex:    '$\sin^2(\theta_{\mathrm{GSW}})$'
           comments: 'cf. [PDG2012]:  p. 4'
       # QED inputs
@@ -25,6 +27,7 @@ groups:
           central: +0.00751879699248120
           min:     +0.00751879699248120
           max:     +0.00781250000000000
+          unit:     '1'
           latex:    '$\alpha_e(m_b)$'
           comments: 'alpha_e(m_b) = 1/133 .. alpha_e(m_W) = 1/128'
       # G_Fermi
@@ -32,6 +35,7 @@ groups:
           central: +1.1663787e-5
           min:     +1.1663781e-5
           max:     +1.1663793e-5
+          unit:     'GeV^-2'
           latex:    '$G_{F}$'
           comments: 'cf. [PDG2012], p. 5'
       # b->s matching parameters
@@ -39,12 +43,14 @@ groups:
           central: +80.0
           min:     +80.0
           max:     +80.0
+          unit:     'GeV'
           latex:    '$\mu^{b \to s}_{0c}$'
           comments: ''
       'b->s::mu_0t' :
           central: +120.0
           min:     +120.0
           max:     +120.0
+          unit:     'GeV'
           latex:    '$\mu^{b \to s}_{0t}$'
           comments: ''
       # QCD inputs
@@ -58,21 +64,25 @@ groups:
           central: +170.0
           min:     +170.0
           max:     +170.0
+          unit:     'GeV'
           latex:    '$\mu_t$'
       'QCD::mu_b' :
           central: +4.2
           min:     +4.2
           max:     +4.2
+          unit:     'GeV'
           latex:    '$\mu_b$'
       'QCD::mu_c' :
           central: +1.0
           min:     +1.0
           max:     +1.0
+          unit:     'GeV'
           latex:    '$\mu_c$'
       'QCD::Lambda' :
           central: +0.5
           min:     +0.5
           max:     +0.5
+          unit:     'GeV'
           latex:    '$\Lambda_\mathrm{QCD}$'
       'QCD::cond_GG' :
           central: +0.012
@@ -83,6 +93,7 @@ groups:
           central: +0.89443
           min:     +0.7746
           max:     +1.0
+          unit:     'GeV^2'
           comments: 'in GeV, cf. [DKMMO2008]'
           latex:    '$\left\langle \bar{q} g_s G q\right\rangle / \left\langle \bar{q} q\right\rangle$'
       'QCD::r_vac' :
@@ -121,70 +132,81 @@ groups:
           central: +5.10999e-4
           min:     +5.10999e-4
           max:     +5.10999e-4
+          unit:     'GeV'
+          latex:    '$m_e$'
           comments: 'cf. [PDG2012], p. 13'
-          latex:     '$m_e$'
       'mass::mu' :
           central: +1.05658e-1
           min:     +1.05658e-1
           max:     +1.05658e-1
+          unit:     'GeV'
+          latex:    '$m_\mu$'
           comments: 'cf. [PDG2012], p. 13'
-          latex:     '$m_\mu$'
       'mass::tau' :
           central: +1.77682
           min:     +1.77666
           max:     +1.77698
+          unit:     'GeV'
+          latex:    '$m_\tau$'
           comments: 'cf. [PDG2012], p. 14'
-          latex:     '$m_\tau$'
       # Quark masses
       'mass::u(2GeV)' :
           central: +0.0032
           min:     +0.0025
           max:     +0.0035
-          comments: 'cf. [PDG2012], p. 21'
+          unit:     'GeV'
           latex:    '$\overline{m}_u(2\,\mathrm{GeV})$'
+          comments: 'cf. [PDG2012], p. 21'
       'mass::d(2GeV)' :
           central: +0.0048
           min:     +0.0045
           max:     +0.0055
-          comments: 'cf. [PDG2012], p. 21'
+          unit:     'GeV'
           latex:    '$\overline{m}_d(2\,\mathrm{GeV})$'
+          comments: 'cf. [PDG2012], p. 21'
       'mass::s(2GeV)' :
           central: +0.095
           min:     +0.090
           max:     +0.10
-          comments: 'cf. [PDG2012], p. 21'
+          unit:     'GeV'
           latex:    '$\overline{m}_s(2\,\mathrm{GeV})$'
+          comments: 'cf. [PDG2012], p. 21'
       'mass::c' :
           central: +1.275
           min:     +1.250
           max:     +1.300
-          comments: 'cf. [PDG2012], p. 21'
+          unit:     'GeV'
           latex:    '$\overline{m}_c(\overline{m}_c)$'
+          comments: 'cf. [PDG2012], p. 21'
       'mass::b(MSbar)' :
           central: +4.18
           min:     +4.15
           max:     +4.21
-          comments: 'cf. [PDG2012], p. 21'
+          unit:     'GeV'
           latex:    '$\overline{m}_b(\overline{m}_b)$'
+          comments: 'cf. [PDG2012], p. 21'
       'mass::t(pole)' :
           central: +173.5
           min:     +172.5
           max:     +174.5
-          comments: 'cf. [PDG2012], p. 22'
+          unit:     'GeV'
           latex:    '$m_t^{\mathrm{pole}}$'
+          comments: 'cf. [PDG2012], p. 22'
       # Gauge boson masses
       'mass::W' :
           central: +80.385
           min:     +80.370
           max:     +80.400
-          comments: 'cf. [PDG2012], p. 8'
+          unit:     'GeV'
           latex:    '$M_W$'
+          comments: 'cf. [PDG2012], p. 8'
       'mass::Z' :
           central: +91.1876
           min:     +91.1855
           max:     +91.1897
-          comments: 'cf. [PDG2012], p. 9'
+          unit:     'GeV'
           latex:    '$M_Z$'
+          comments: 'cf. [PDG2012], p. 9'
   # }}}
 
   # CKM Parameters
@@ -197,91 +219,109 @@ groups:
           central: +1.00
           min:     +1.00
           max:     +1.00
+          unit:     '1'
           latex:   '$|V_{ud}|$'
       'CKM::arg(V_ud)' :
           central: +1.00
           min:     +1.00
           max:     +1.00
+          unit:     '1'
           latex:   '$\arg{V_{ud}}$'
       'CKM::abs(V_us)' :
           central: +0.22
           min:     +0.22
           max:     +0.22
+          unit:     '1'
           latex:   '$|V_{us}|$'
       'CKM::arg(V_us)' :
           central: +0.22
           min:     +0.22
           max:     +0.22
+          unit:     '1'
           latex:   '$\arg{V_{us}}$'
       'CKM::abs(V_ub)' :
           central: +0.00
           min:     +0.00
           max:     +0.00
+          unit:     '1'
           latex:   '$|V_{ub}|$'
       'CKM::arg(V_ub)' :
           central: +0.00
           min:     +0.00
           max:     +0.00
+          unit:     '1'
           latex:   '$\arg{V_{ub}}$'
       'CKM::abs(V_cd)' :
           central: +1.00
           min:     +1.00
           max:     +1.00
+          unit:     '1'
           latex:   '$|V_{cd}|$'
       'CKM::arg(V_cd)' :
           central: +1.00
           min:     +1.00
           max:     +1.00
+          unit:     '1'
           latex:   '$\arg{V_{cd}}$'
       'CKM::abs(V_cs)' :
           central: +0.22
           min:     +0.22
           max:     +0.22
+          unit:     '1'
           latex:   '$|V_{cs}|$'
       'CKM::arg(V_cs)' :
           central: +0.22
           min:     +0.22
           max:     +0.22
+          unit:     '1'
           latex:   '$\arg{V_{cs}}$'
       'CKM::abs(V_cb)' :
           central: +0.00
           min:     +0.00
           max:     +0.00
+          unit:     '1'
           latex:   '$|V_{cb}|$'
       'CKM::arg(V_cb)' :
           central: +0.00
           min:     +0.00
           max:     +0.00
+          unit:     '1'
           latex:   '$\arg{V_{cb}}$'
       'CKM::abs(V_td)' :
           central: +0.00
           min:     +0.00
           max:     +0.00
+          unit:     '1'
           latex:   '$|V_{td}|$'
       'CKM::arg(V_td)' :
           central: +0.00
           min:     +0.00
           max:     +0.00
+          unit:     '1'
           latex:   '$\arg{V_{td}}$'
       'CKM::abs(V_ts)' :
           central: +0.04
           min:     +0.04
           max:     +0.04
+          unit:     '1'
           latex:   '$|V_{ts}|$'
       'CKM::arg(V_ts)' :
           central: +0.04
           min:     +0.04
           max:     +0.04
+          unit:     '1'
           latex:   '$\arg{V_{ts}}$'
       'CKM::abs(V_tb)' :
           central: +1.00
           min:     +1.00
           max:     +1.00
+          unit:     '1'
           latex:   '$|V_{tb}|$'
       'CKM::arg(V_tb)' :
           central: +1.00
           min:     +1.00
           max:     +1.00
+          unit:     '1'
           latex:   '$\arg{V_{tb}}$'
   # }}}
 
@@ -298,18 +338,18 @@ groups:
           central: +4.2
           max:     +2.1
           min:     +8.4
+          unit:     'GeV'
           latex:    '$\mu^{\bar{s}b\bar{s}b}$'
           comments: ''
-          unit:     'GeV'
 
       # SM matching scale
       'sbsb::mu_0' :
           central: +120.0
           max:     +160.0
           min:      +80.0
+          unit:     'GeV'
           latex:    '$\mu^{\bar{s}b\bar{s}b}_0$'
           comments: ''
-          unit:     'GeV'
 
       # Wilson coefficients at the low scale mu = 4.2 GeV to NLL accuracy as calculated in the SM by EOS' StandardModel class.
       # For the calculations, cf. [BBL:1995A].
@@ -317,81 +357,97 @@ groups:
           central: +0.001313228
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Re}\,C_{1}^{\bar{s}b\bar{s}b}$'
       'sbsb::Im{c1}' :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Im}\,C_{1}^{\bar{s}b\bar{s}b}$'
       "sbsb::Re{c1'}" :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Re}\,C_{1^\prime}^{\bar{s}b\bar{s}b}$'
       "sbsb::Im{c1'}" :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Im}\,C_{1^\prime}^{\bar{s}b\bar{s}b}$'
       'sbsb::Re{c2}' :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Re}\,C_{2}^{\bar{s}b\bar{s}b}$'
       'sbsb::Im{c2}' :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Im}\,C_{2}^{\bar{s}b\bar{s}b}$'
       "sbsb::Re{c2'}" :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Re}\,C_{2^\prime}^{\bar{s}b\bar{s}b}$'
       "sbsb::Im{c2'}" :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Im}\,C_{2^\prime}^{\bar{s}b\bar{s}b}$'
       'sbsb::Re{c3}' :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Re}\,C_{3}^{\bar{s}b\bar{s}b}$'
       'sbsb::Im{c3}' :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Im}\,C_{3}^{\bar{s}b\bar{s}b}$'
       "sbsb::Re{c3'}" :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Re}\,C_{3^\prime}^{\bar{s}b\bar{s}b}$'
       "sbsb::Im{c3'}" :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Im}\,C_{3^\prime}^{\bar{s}b\bar{s}b}$'
       'sbsb::Re{c4}' :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Re}\,C_{4}^{\bar{s}b\bar{s}b}$'
       'sbsb::Im{c4}' :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Im}\,C_{4}^{\bar{s}b\bar{s}b}$'
       'sbsb::Re{c5}' :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Re}\,C_{5}^{\bar{s}b\bar{s}b}$'
       'sbsb::Im{c5}' :
           central: +0.0
           max:     +0.0
           min:     +0.0
+          unit:     '1'
           latex:    '$\textrm{Im}\,C_{5}^{\bar{s}b\bar{s}b}$'
   # }}}
 
@@ -409,24 +465,28 @@ groups:
           central: +4.2
           min:     +2.4
           max:     +9.6
+          unit:     'GeV'
           latex:    '$\mu^{b \to s}$'
           comments: ''
       'sbee::mu' :
           central: +4.2
           min:     +2.4
           max:     +9.6
+          unit:     'GeV'
           latex:    '$\mu^{b \to see}$'
           comments: ''
       'sbmumu::mu' :
           central: +4.2
           min:     +2.4
           max:     +9.6
+          unit:     'GeV'
           latex:    '$\mu^{b \to s\mu\mu}$'
           comments: ''
       'sbtautau::mu' :
           central: +4.2
           min:     +2.4
           max:     +9.6
+          unit:     'GeV'
           latex:    '$\mu^{b \to s\tau\tau}$'
           comments: ''
 
@@ -436,318 +496,370 @@ groups:
           central: -0.29063621
           min:     -0.29063621
           max:     -0.29063621
-          latex:   $\mathcal{C}_1$
-          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          unit:     '1'
+          latex:    $\mathcal{C}_1$
+          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::c2" :
           central: +1.01029623
           min:     +1.01029623
           max:     +1.01029623
-          latex:   $\mathcal{C}_2$
-          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          unit:     '1'
+          latex:    $\mathcal{C}_2$
+          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::c3" :
           central: -0.00616220
           min:     -0.00616220
           max:     -0.00616220
-          latex:   $\mathcal{C}_3$
-          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          unit:     '1'
+          latex:    $\mathcal{C}_3$
+          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::c4" :
           central: -0.08730376
           min:     -0.08730376
           max:     -0.08730376
-          latex:   $\mathcal{C}_4$
-          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          unit:     '1'
+          latex:    $\mathcal{C}_4$
+          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::c5" :
           central: +0.00042854
           min:     +0.00042854
           max:     +0.00042854
-          latex:   $\mathcal{C}_5$
-          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          unit:     '1'
+          latex:    $\mathcal{C}_5$
+          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::c6" :
           central: +0.00115807
           min:     +0.00115807
           max:     +0.00115807
-          latex:   $\mathcal{C}_6$
-          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          unit:     '1'
+          latex:    $\mathcal{C}_6$
+          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::Re{c7}" :
           central: -0.33726473
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_7$
-          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_7$
+          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::Im{c7}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_7$
-          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_7$
+          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->s::c8" :
           central: -0.18288898
           min:     -0.18288898
           max:     -0.18288898
-          latex:   $\mathcal{C}_8$
-          comment: 'cf. @REF[BMU1999]@, eqs. (1) and (2)'
+          unit:     '1'
+          latex:    $\mathcal{C}_8$
+          comment:  'cf. @REF[BMU1999]@, eqs. (1) and (2)'
       "b->see::Re{c9}" :
           central: +4.27342842
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_9^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_9^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Im{c9}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_9^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_9^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Re{c10}" :
           central: -4.16611761
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{10}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{10}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Im{c10}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{10}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{10}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c9}" :
           central: +4.27342842
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_9^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_9^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c9}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_9^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_9^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c10}" :
           central: -4.16611761
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{10}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{10}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c10}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{10}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{10}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
 
       # Primed Wilson coefficients are negligible in the SM
       "b->s::Re{c7'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{7'}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{7'}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->s::Im{c7'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{7'}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{7'}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->s::c8'" :
           central: +0.0
           min:     +0.0
           max:     +0.0
-          latex:   $\mathcal{C}_{8'}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3), with the replacement @MATH[e F_{\mu\nu} \to g_s G_{\mu\nu}]@'
+          unit:     '1'
+          latex:    $\mathcal{C}_{8'}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3), with the replacement @MATH[e F_{\mu\nu} \to g_s G_{\mu\nu}]@'
       "b->see::Re{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{9'}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{9'}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Im{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{9'}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{9'}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Re{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{10'}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{10'}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->see::Im{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{10'}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{10'}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{9'}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{9'}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c9'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{9'}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{9'}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Re{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{10'}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{10'}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
       "b->smumu::Im{c10'}" :
           central: +0.0
           min:     -15.0
           max:     +15.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{10'}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{10'}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (3)'
 
       # scalar, pseudoscalar, and tensor b -> s ll coefficients
       "b->see::Re{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{S}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{S}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Im{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{S}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{S}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Re{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{S'}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{S'}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Im{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{S'}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{S'}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Re{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{P}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{P}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Im{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{P}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{P}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Re{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{P'}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{P'}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Im{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{P'}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{P'}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->see::Re{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{T}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{T}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->see::Im{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{T}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{T}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->see::Re{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{T5}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{T5}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->see::Im{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{T5}^{(e)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{T5}^{(e)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->smumu::Re{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{S}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{S}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cS}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{S}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{S}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{S'}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{S'}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cS'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{S'}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{S'}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{P}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{P}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cP}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{P}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{P}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{P'}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{P'}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Im{cP'}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{P'}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{P'}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (4)'
       "b->smumu::Re{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{T}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{T}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->smumu::Im{cT}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{T}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{T}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->smumu::Re{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Re}\, \mathcal{C}_{T5}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          unit:     '1'
+          latex:    $\mathrm{Re}\, \mathcal{C}_{T5}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
       "b->smumu::Im{cT5}" :
           central: +0.0
           min:     -1.0
           max:     +1.0
-          latex:   $\mathrm{Im}\, \mathcal{C}_{T5}^{(\mu)}$
-          comment: 'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
+          unit:     '1'
+          latex:    $\mathrm{Im}\, \mathcal{C}_{T5}^{(\mu)}$
+          comment:  'cf. @REF[BHvD2012]@, eqs. (2) and (5)'
   # }}}
 
   # cblnu WET Parameters
@@ -770,60 +882,70 @@ groups:
     parameters:
       # cb Wilson coefficients - electron
       'cbenue::mu' :
-          central: 4.2
-          min:     4.2
-          max:     4.2
-          latex:   '$\mu^{\bar{c}b\bar{e}\nu_e}$'
-          unit:    'GeV'
+          central: +4.2
+          min:     +4.2
+          max:     +4.2
+          unit:     'GeV'
+          latex:    '$\mu^{\bar{c}b\bar{e}\nu_e}$'
       'cbenue::Re{cVL}' :
-          central: 1.0
-          min:     1.0
-          max:     1.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{V_L}$'
+          central: +1.0
+          min:     +1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{V_L}$'
       'cbenue::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{V_L}$'
       'cbenue::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{V_R}$'
       'cbenue::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{V_R}$'
       'cbenue::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{S_L}$'
       'cbenue::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{S_L}$'
       'cbenue::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{S_R}$'
       'cbenue::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{S_R}$'
       'cbenue::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{T}$'
       'cbenue::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{e}\nu_e}_{T}$'
 
       # cb Wilson coefficients - muon
@@ -837,110 +959,131 @@ groups:
           central: 1.0
           min:     1.0
           max:     1.0
+          unit:     '1'
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{V_L}$'
       'cbmunumu::Im{cVL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{V_L}$'
       'cbmunumu::Re{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{V_R}$'
       'cbmunumu::Im{cVR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{V_R}$'
       'cbmunumu::Re{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{S_L}$'
       'cbmunumu::Im{cSL}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{S_L}$'
       'cbmunumu::Re{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{S_R}$'
       'cbmunumu::Im{cSR}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{S_R}$'
       'cbmunumu::Re{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{T}$'
       'cbmunumu::Im{cT}' :
           central: 0.0
           min:     0.0
           max:     0.0
+          unit:     '1'
           latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\mu}\nu_\mu}_{T}$'
 
       # cb Wilson coefficients - tau
       'cbtaunutau::mu' :
-          central: 4.2
-          min:     4.2
-          max:     4.2
-          latex:   '$\mu^{\bar{c}b\bar{\tau}\nu_\tau}$'
-          unit:    'GeV'
+          central: +4.2
+          min:     +4.2
+          max:     +4.2
+          unit:     '1'
+          latex:    '$\mu^{\bar{c}b\bar{\tau}\nu_\tau}$'
+          unit:     'GeV'
       'cbtaunutau::Re{cVL}' :
-          central: 1.0
-          min:     1.0
-          max:     1.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{V_L}$'
+          central: +1.0
+          min:     +1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{V_L}$'
       'cbtaunutau::Im{cVL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{V_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{V_L}$'
       'cbtaunutau::Re{cVR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{V_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{V_R}$'
       'cbtaunutau::Im{cVR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{V_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{V_R}$'
       'cbtaunutau::Re{cSL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{S_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{S_L}$'
       'cbtaunutau::Im{cSL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{S_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{S_L}$'
       'cbtaunutau::Re{cSR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{S_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{S_R}$'
       'cbtaunutau::Im{cSR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{S_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{S_R}$'
       'cbtaunutau::Re{cT}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{T}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{T}$'
       'cbtaunutau::Im{cT}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{T}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{c}b\bar{\tau}\nu_\tau}_{T}$'
   # }}}
 
   # ublnu WET Parameters
@@ -962,177 +1105,207 @@ groups:
     parameters:
       # ub Wilson coefficients - electron
       'ubenue::mu' :
-          central: 4.2
-          min:     4.2
-          max:     4.2
-          latex:   '$\mu^{\bar{u}b\bar{e}\nu_e}$'
-          unit:    'GeV'
+          central: +4.2
+          min:     +4.2
+          max:     +4.2
+          unit:     'GeV'
+          latex:    '$\mu^{\bar{u}b\bar{e}\nu_e}$'
       'ubenue::Re{cVL}' :
-          central: 1.0
-          min:     1.0
-          max:     1.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{V_L}$'
+          central: +1.0
+          min:     +1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{V_L}$'
       'ubenue::Im{cVL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{V_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{V_L}$'
       'ubenue::Re{cVR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{V_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{V_R}$'
       'ubenue::Im{cVR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{V_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{V_R}$'
       'ubenue::Re{cSL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{S_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{S_L}$'
       'ubenue::Im{cSL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{S_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{S_L}$'
       'ubenue::Re{cSR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{S_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{S_R}$'
       'ubenue::Im{cSR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{S_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{S_R}$'
       'ubenue::Re{cT}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{T}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{T}$'
       'ubenue::Im{cT}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{T}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{e}\nu_e}_{T}$'
 
       # ub Wilson coefficients - muon
       'ubmunumu::mu' :
-          central: 4.2
-          min:     4.2
-          max:     4.2
-          latex:   '$\mu^{\bar{u}b\bar{\mu}\nu_\mu}$'
-          unit:    'GeV'
+          central: +4.2
+          min:     +4.2
+          max:     +4.2
+          latex:    '$\mu^{\bar{u}b\bar{\mu}\nu_\mu}$'
+          unit:     'GeV'
       'ubmunumu::Re{cVL}' :
-          central: 1.0
-          min:     1.0
-          max:     1.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{V_L}$'
+          central: +1.0
+          min:     +1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{V_L}$'
       'ubmunumu::Im{cVL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{V_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{V_L}$'
       'ubmunumu::Re{cVR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{V_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{V_R}$'
       'ubmunumu::Im{cVR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{V_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{V_R}$'
       'ubmunumu::Re{cSL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{S_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{S_L}$'
       'ubmunumu::Im{cSL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{S_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{S_L}$'
       'ubmunumu::Re{cSR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{S_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{S_R}$'
       'ubmunumu::Im{cSR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{S_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{S_R}$'
       'ubmunumu::Re{cT}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{T}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{T}$'
       'ubmunumu::Im{cT}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{T}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\mu}\nu_\mu}_{T}$'
 
       # ub Wilson coefficients - tau
       'ubtaunutau::mu' :
-          central: 4.2
-          min:     4.2
-          max:     4.2
-          latex:   '$\mu^{\bar{u}b\bar{\tau}\nu_\tau}$'
-          unit:    'GeV'
+          central: +4.2
+          min:     +4.2
+          max:     +4.2
+          latex:    '$\mu^{\bar{u}b\bar{\tau}\nu_\tau}$'
+          unit:     'GeV'
       'ubtaunutau::Re{cVL}' :
-          central: 1.0
-          min:     1.0
-          max:     1.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{V_L}$'
+          central: +1.0
+          min:     +1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{V_L}$'
       'ubtaunutau::Im{cVL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{V_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{V_L}$'
       'ubtaunutau::Re{cVR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{V_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{V_R}$'
       'ubtaunutau::Im{cVR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{V_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{V_R}$'
       'ubtaunutau::Re{cSL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{S_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{S_L}$'
       'ubtaunutau::Im{cSL}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{S_L}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{S_L}$'
       'ubtaunutau::Re{cSR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{S_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{S_R}$'
       'ubtaunutau::Im{cSR}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{S_R}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{S_R}$'
       'ubtaunutau::Re{cT}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{T}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{T}$'
       'ubtaunutau::Im{cT}' :
-          central: 0.0
-          min:     0.0
-          max:     0.0
-          latex:   '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{T}$'
+          central: +0.0
+          min:     +0.0
+          max:     +0.0
+          unit:     '1'
+          latex:    '$\mathrm{Im}\, \mathcal{C}^{\bar{u}b\bar{\tau}\nu_\tau}_{T}$'
   # }}}
 
   # sbnunu WET Parameters
