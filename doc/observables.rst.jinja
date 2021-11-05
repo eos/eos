@@ -27,7 +27,7 @@ The following is a list of observables that is available in EOS v{{ version }}.
 
    {% for obs in group.observables %}
        .. _{{ obs.link_key }}:
-   * - ``{{ obs.qn }}``
+   * - ``{{ obs.qualified_name }}``
      {% if obs.description != '' %}
      - :math:`{{ obs.description }}`
      {% endif %}
