@@ -29,6 +29,8 @@ def get_template(abs_path):
     fname = os.path.basename(abs_path)
     env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(searchpath=dir_path),
+        undefined=jinja2.StrictUndefined, # error for undefined variables in
+                                          # template
         trim_blocks=True,
         lstrip_blocks=True)
     template_fname = fname.replace('.py', '.jinja')
