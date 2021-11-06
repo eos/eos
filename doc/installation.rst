@@ -74,6 +74,15 @@ You might need to install the ``curl`` program first, if not already installed. 
   pip3 install --user --upgrade h5py matplotlib numpy pypmc pyyaml scipy
 
 
+*******
+Windows
+*******
+
+EOS can be installed and built under Windows using the 'Windows Subsystem for Linux v2 (WSL2)'.
+Follow the `instructions <https://docs.microsoft.com/en-us/windows/wsl/install>`_ to setup the latter.
+In the process, you might be prompted what Linux distribution should be used. We recommend using 'Ubuntu'.
+After WSL2 has been setup, you can follow the instructions for installing EOS under Linux without modifcations.
+
 
 *****
 macOS
