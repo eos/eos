@@ -153,8 +153,14 @@ matplotlib
 scipy
   the Python scientific library;
 
+pypmc
+  the Python library for adaptive importance sampling with Markov Chain and Population Monte Carlo methods;
+
 PyYAML
-  the Python YAML parser and emitter library.
+  the Python YAML parser and emitter library;
+
+wilson
+  the Python library for matching, translating, and running Wilson coefficients in the Weak Effective Theory and the Standard Model Effective Theory.
 
 We recommend you install the above packages via your system's software management system.
 
@@ -180,13 +186,14 @@ by running the following commands:
   # for the 'Scientific Software'
   sudo apt-get install libgsl0-dev
 
-We recommend that you upgrade ``matplotlib`` to the latest available version by running the following command:
+We recommend that you install ``pypmc`` and ``wilson``, and upgrade ``matplotlib`` to the latest available version, by running the following command:
 
 ::
 
   # for the 'pip3' command
   apt-get install python3-pip
-  pip3 install matplotlib --user --upgrade
+  pip3 install --user pypmc wilson
+  pip3 install --user --upgrade matplotlib
 
 
 Installing the dependencies on macOS with Homebrew and PyPi
