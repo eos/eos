@@ -1,0 +1,28 @@
+# we use a pre-built base image; see github.com/eos/docker.io
+image: eoshep/build-essentials:gitpod
+
+tasks:
+  - name: main terminal
+    init: |
+      ./autogen.bash
+      ./configure --enable-python --prefix=$(pyenv prefix)
+      make -j7 all
+      make -j7 check TESTS=
+      make install
+
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+    addCheck: true
+
+vscode:
+  extensions:
+    - shardulm94.trailing-spaces  # highlight trailing spaces
+    - ms-python.python            # python support in VS code
+    - ms-toolsai.jupyter          # jupyter notebooks in VS code
+
+gitConfig:
+  format.pretty: 'format:%Cred%h%Creset -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset %Cgreen(%cr)'
+  alias.ff: 'merge --ff-only'
