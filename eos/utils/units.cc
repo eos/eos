@@ -38,6 +38,7 @@ namespace eos
             R"(\textrm{GeV}^{-2})",
             R"(\textrm{GeV}^{-4})",
             R"(\textrm{ps}^{-1})",
+            R"(\textrm{GeV}\,\textrm{s})",
             R"(\textrm{undefined})"
         };
 
@@ -84,6 +85,12 @@ namespace eos
     Unit::InversePicoSecond()
     {
         return Unit(Id::inverse_ps);
+    }
+
+    Unit
+    Unit::GeVSecond()
+    {
+        return Unit(Id::gev_s);
     }
 
     bool
