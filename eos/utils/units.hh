@@ -46,7 +46,8 @@ namespace eos
                 gev2,
                 inverse_gev2,
                 inverse_gev4,
-                inverse_ps
+                inverse_ps,
+                gev_s
             };
 
             Unit(const Unit &) = default;
@@ -62,6 +63,7 @@ namespace eos
             static Unit InverseGeV2();
             static Unit InverseGeV4();
             static Unit InversePicoSecond();
+            static Unit GeVSecond();
 
             bool operator== (const Unit &) const;
     };
