@@ -42,3 +42,29 @@ of your local computer's secure shell programm.
 Presently we do not support using EOS on Windows. We recommend that you install EOS on a
 remote Linux machine (e.g., one of your department's workstations) and connect remotely
 as discussed :ref:`above <... use EOS remotely?>`.
+
+.. _faq-check-installation:
+
+... check the installation?
+===========================
+
+You can test with a single command that EOS is available as a python module:
+
+.. code-block:: bash
+
+    python3 -c "import eos; print(eos.__doc__)"
+
+Please verify that the command prints a description of the EOS module:
+
+.. code-block:: none
+
+    EOS is a software package that addresses several use cases in the field of high-energy flavor physics (HEP). [...]
+
+If you built and installed from the source code
+and the import fails, i.e. you see ``ModuleNotFoundError: No module named 'eos'``,
+the module was either not installed with ``make install`` or the ``PYTHONPATH`` is not configured correctly.
+
+If you installed via `pip`
+and the output description is incorrect or ``None``,
+you have another module installed that is also named `eos`.
+Mind that the package name for the ``pip3 install`` command is ``eoshep``.

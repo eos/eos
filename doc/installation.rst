@@ -18,18 +18,12 @@ This is the recommended installation method using the 'package installer for Pyt
 
   pip3 install --user eoshep
 
-This way, you will install the latest regular release of EOS.
-You can now use the EOS Python module via ``import eos``. In addition, some command line scripts have become available.
-To update EOS, run ``pip3 install --user --upgrade eoshep``.
+You can now use the EOS Python module via ``import eos``. In addition, some command-line scripts have become available.
 
-This installs the most recent development version of EOS:
-
-::
-
-  pip3 install --user --pre eoshep
-
-The development version corresponds to the most recent commit in the Github EOS repository.
-To update, run ``pip3 install --user --pre --upgrade eoshep``.
+| To **update** EOS, add the flag ``--upgrade`` to the above command.
+| To install the **development version**, add the flag ``--pre``.
+  This version is automatically up-to-date with the master branch in the Github EOS repository.
+| You can **test** and debug the installation of the python module as described :ref:`here <faq-check-installation>`.
 
 
 Installation with `apt` (Ubuntu, Debian and Siblings)
@@ -323,3 +317,5 @@ You can determine the correct value by running the following command:
 ::
 
   python3 -c "import sys; print('python{0}.{1}'.format(sys.version_info[0], sys.version_info[1]))"
+
+You can test and debug the installation of the python module as described :ref:`here <faq-check-installation>`.
