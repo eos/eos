@@ -14,7 +14,8 @@ and estimate the theoretical uncertainties associated with it.
 
 .. note::
 
-   The following examples are also available as an interactive `Jupyter <https://jupyter.org/>`_ notebook `from here <https://github.com/eos/eos/blob/master/examples/predictions.ipynb>`_.
+   The following examples are intended to be run in an interactive `Jupyter <https://jupyter.org/>`_ notebook.
+   The entire notebook can be obtained `from here <https://github.com/eos/eos/blob/master/examples/predictions.ipynb>`_.
 
 
 Listing the built-in Observables
@@ -325,14 +326,15 @@ We can plot the so-obtained posterior-predictive samples with EOS' plotting fram
 Parameter Inference
 *******************
 
-EOS can infer parameters based on a database of experimental or theoetical constraints and its built-in observables.
+EOS can infer parameters based on a database of experimental or theoretical constraints and its built-in observables.
 The examples following in this section illustrate how to find a specific constraint from the list of all built-in constraints,
 construct an :class:`Analysis <eos.Analysis>` object that represents the statistical analysis,
 and infer mean value and standard deviation of a list of parameters through optimization or Monte Carlo methods.
 
 .. note::
 
-   The following examples are also available as an interactive `Jupyter <https://jupyter.org/>`_ notebook `from here <https://github.com/eos/eos/blob/master/examples/inference.ipynb>`_.
+   The following examples are intended to be run in an interactive `Jupyter <https://jupyter.org/>`_ notebook.
+   The entire notebook can be obtained `from here <https://github.com/eos/eos/blob/master/examples/inference.ipynb>`_.
 
 
 Listing the built-in Constraints
@@ -419,31 +421,31 @@ We then create an :class:`Analysis <eos.Analysis>` object as follows:
 
 .. code-block::
 
-   analysis_args = {
-       'global_options': { 'form-factors': 'BSZ2015', 'model': 'CKMScan' },
-       'priors': [
-           { 'parameter': 'CKM::abs(V_cb)',           'min':  38e-3, 'max':  45e-3, },
-           { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0,   'max':  1.0,   },
-           { 'parameter': 'B->D::alpha^f+_1@BSZ2015', 'min': -4.0,   'max': -1.0,   },
-           { 'parameter': 'B->D::alpha^f+_2@BSZ2015', 'min': +4.0,   'max': +6.0,   },
-           { 'parameter': 'B->D::alpha^f0_1@BSZ2015', 'min': -1.0,   'max': +2.0,   },
-           { 'parameter': 'B->D::alpha^f0_2@BSZ2015', 'min': -2.0,   'max':  0.0,   }
-       ],
-       'likelihood': [
-           'B->D::f_++f_0@HPQCD:2015A',
-           'B->D::f_++f_0@FNAL+MILC:2015B',
-           'B^0->D^+e^-nu::BRs@Belle:2015A',
-           'B^0->D^+mu^-nu::BRs@Belle:2015A'
-       ]
-   }
-   analysis = eos.Analysis(**analysis_args)
-   analysis.parameters['CKM::abs(V_cb)'].set(42.0e-3)
+    analysis_args = {
+        'global_options': { 'form-factors': 'BSZ2015', 'model': 'CKM' },
+        'priors': [
+            { 'parameter': 'CKM::abs(V_cb)',           'min':  38e-3, 'max':  45e-3, 'type': 'uniform'},
+            { 'parameter': 'B->D::alpha^f+_0@BSZ2015', 'min':  0.0,   'max':  1.0,   'type': 'uniform'},
+            { 'parameter': 'B->D::alpha^f+_1@BSZ2015', 'min': -4.0,   'max': -1.0,   'type': 'uniform'},
+            { 'parameter': 'B->D::alpha^f+_2@BSZ2015', 'min': +4.0,   'max': +6.0,   'type': 'uniform'},
+            { 'parameter': 'B->D::alpha^f0_1@BSZ2015', 'min': -1.0,   'max': +2.0,   'type': 'uniform'},
+            { 'parameter': 'B->D::alpha^f0_2@BSZ2015', 'min': -2.0,   'max':  0.0,   'type': 'uniform'}
+        ],
+        'likelihood': [
+            'B->D::f_++f_0@HPQCD:2015A',
+            'B->D::f_++f_0@FNAL+MILC:2015B',
+            'B^0->D^+e^-nu::BRs@Belle:2015A',
+            'B^0->D^+mu^-nu::BRs@Belle:2015A'
+        ]
+    }
+    analysis = eos.Analysis(**analysis_args)
+    analysis.parameters['CKM::abs(V_cb)'].set(42.0e-3)
 
 In the above, the global options ensure that our choice of form factor parametrization is used throughout,
-and that for CKM matrix elements the `CKMScan` model is used. The latter provides access to :math:`V_{cb}` matrix element through two :class:`parameters <eos.Parameter>`:
+and that for CKM matrix elements the `CKM` model is used. The latter provides access to :math:`V_{cb}` matrix element through two :class:`parameters <eos.Parameter>`:
 the absolute value ``CKM::abs(V_cb)`` and the complex phase ``CKM::arg(V_cb)``.
 We provide the parameters in our analysis through the specifications of the Bayesian priors.
-In the above, each prior is by default a uniform prior that covers the range from ``min`` to ``max``.
+In the above, each prior is a uniform prior that covers the range from ``min`` to ``max``.
 The likelihood is defined through a list constraints, which in the above includes both the experimental measurements by the Belle collaboration as well as the theoretical lattice QCD results.
 Finally, we set the starting value of ``CKM::abs(V_cb)`` to a sensible value of :math:`42\cdot 10^{-3}`.
 
@@ -526,6 +528,15 @@ equally across the full phase space. Instead, we equally distribute half of
 the points in the interval :math:`[0.02\,\text{GeV}^2, 1.00\,\text{GeV}^2]` and the other
 half in the remainder of the phase space.
 
+We run one Markov chain to produce :code:`N = 20000` samples with a thinning factor (or :code:`stride`) of 5.
+This means that :code:`stride * N = 100000` samples are produced, but only every 5th sample is returned.
+This improves the quality of the samples by reducing the autocorrelation.
+Before the samples are produced, the Markov Chain self-adapts in a series of preruns,
+the number of which is governed by the :code:`preprun` argument. In each prerun, :code:`pre_N`
+samples are drawn before the adaptation step. The samples obtained as part of the
+preruns are discarded. To ensure efficient sampling, the chain is started in the
+best-fit point obtained earlier through optimization.
+
 .. code-block::
 
    e_q2values  = np.unique(np.concatenate((np.linspace(0.02,  1.00, 20), np.linspace(1.00, 11.60, 20))))
@@ -535,13 +546,6 @@ half in the remainder of the phase space.
                  for q2 in e_q2values]
    parameter_samples, log_weights, e_samples  = analysis.sample(N=20000, stride=5, pre_N=1000, preruns=5, start_point=bfp.point, observables=e_obs)
 
-In the above we start sampling at the best-fit point as obtained earlier through optimization,
-which is optional. We carry out :code:`preruns = 5` burn-in runs/preruns of :code:`pre_N = 1000` samples each.
-The samples obtained in each of these preruns are used to adapt the Markov chain. The prerun samples are
-discarded.
-The main run then produces a total of :code:`N * stride = 100000` random Markov Chain samples.
-The latter are thinned down by a factor of :code:`stride = 5` to obtain :code:`N = 20000` samples, which
-are stored in :code:`parameter_samples`. The thinning reduces the autocorrelation of the samples.
 The values of the log(posterior) are stored in :code:`log_posterior`.
 The posterior-preditive samples for the observables are stored in :code:`e_samples`,
 and are only returned if the :code:`observables` keyword argument is provided.
@@ -653,7 +657,8 @@ and plot 1D and 2D histograms of the pseudo events.
 
 .. note::
 
-   The following examples are also available as an interactive `Jupyter <https://jupyter.org/>`_ notebook `from here <https://github.com/eos/eos/blob/master/examples/simulation.ipynb>`_.
+   The following examples are intended to be run in an interactive `Jupyter <https://jupyter.org/>`_ notebook.
+   The entire notebook can be obtained `from here <https://github.com/eos/eos/blob/master/examples/simulation.ipynb>`_.
 
 
 Listing the built-in Probability Density Functions
