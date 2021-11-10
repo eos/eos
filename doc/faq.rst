@@ -34,14 +34,19 @@ Copy one of these links, making sure to include the lengthy token, and navigate 
 web browser on your local computer. You will be able to use EOS within an interactive Python environment.
 
 You can make this more persistent by configuring your SSH connection to ```REMOTE_HOST```. Please see the documentation
-of your local computer's secure shell programm.
+of your local computer's secure shell program.
 
-... use EOS on Windows?
-=======================
+... use and develop EOS on Windows?
+===================================
 
-Presently we do not support using EOS on Windows. We recommend that you install EOS on a
-remote Linux machine (e.g., one of your department's workstations) and connect remotely
-as discussed :ref:`above <... use EOS remotely?>`.
+EOS can be used on Windows through the Windows Subsystem for Linux (WSL),
+which is offered and developed by Microsoft themselves.
+The installation of WSL is described in detail `here <https://docs.microsoft.com/en-us/windows/wsl/install>`__.
+The installation provides you with a Linux container in a virtual machine.
+From here on, you can follow the instructions for the installation method of your choosing described for EOS under Linux.
+If you would like to make adaptions to the code for a project using EOS and/or contribute to its development,
+we recommend using the Visual Studio Code editor as your development environment.
+It supports connecting natively to the WSL container if you follow these `steps <https://code.visualstudio.com/docs/remote/wsl>`__.
 
 .. _faq-check-installation:
 
