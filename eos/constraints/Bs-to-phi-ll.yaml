@@ -8,7 +8,7 @@
 # Branching ratios are normalized to BR(Bs->phi Jpsi)
 B_s->phimu^+mu^-::NormalizedBR[0.10,2.00]@LHCb:2015C:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 0.1, q2_max: 2}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 1.03e-4
@@ -17,7 +17,7 @@ B_s->phimu^+mu^-::NormalizedBR[0.10,2.00]@LHCb:2015C:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[2.00,5.00]@LHCb:2015C:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 2, q2_max: 5}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 7.14e-5
@@ -26,7 +26,7 @@ B_s->phimu^+mu^-::NormalizedBR[2.00,5.00]@LHCb:2015C:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[5.00,8.00]@LHCb:2015C:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 5, q2_max: 8}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 8.94e-5
@@ -35,7 +35,7 @@ B_s->phimu^+mu^-::NormalizedBR[5.00,8.00]@LHCb:2015C:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2015C:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 11, q2_max: 12.5}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 6.55e-5
@@ -44,7 +44,7 @@ B_s->phimu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2015C:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2015C:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 15, q2_max: 17}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 8.40e-5
@@ -53,7 +53,7 @@ B_s->phimu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2015C:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[17.00,19.00]@LHCb:2015C:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 17, q2_max: 19}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 7.36e-5
@@ -394,7 +394,7 @@ B_s->phimu^+mu^-::AngularObservablesNoA[17.00,19.00]@LHCb:2015C:
 # Branching ratios are normalized to BR(Bs->phi Jpsi)
 B_s->phimu^+mu^-::NormalizedBR[0.10,0.98]@LHCb:2021A:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 0.1, q2_max: 0.98}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 6.6968e-5
@@ -403,7 +403,7 @@ B_s->phimu^+mu^-::NormalizedBR[0.10,0.98]@LHCb:2021A:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[1.10,2.50]@LHCb:2021A:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 1.1, q2_max: 2.5}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 4.326e-5
@@ -412,7 +412,7 @@ B_s->phimu^+mu^-::NormalizedBR[1.10,2.50]@LHCb:2021A:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[2.50,4.00]@LHCb:2021A:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 2.5, q2_max: 4}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 3.45e-5
@@ -421,7 +421,7 @@ B_s->phimu^+mu^-::NormalizedBR[2.50,4.00]@LHCb:2021A:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[4.00,6.00]@LHCb:2021A:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 4, q2_max: 6}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 6.1e-5
@@ -430,7 +430,7 @@ B_s->phimu^+mu^-::NormalizedBR[4.00,6.00]@LHCb:2021A:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[6.00,8.00]@LHCb:2021A:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 6, q2_max: 8}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 6.20e-5
@@ -439,7 +439,7 @@ B_s->phimu^+mu^-::NormalizedBR[6.00,8.00]@LHCb:2021A:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2021A:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 11, q2_max: 12.5}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 7.035e-5
@@ -448,7 +448,7 @@ B_s->phimu^+mu^-::NormalizedBR[11.00,12.50]@LHCb:2021A:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2021A:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 15, q2_max: 17}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 10.3e-5
@@ -457,7 +457,7 @@ B_s->phimu^+mu^-::NormalizedBR[15.00,17.00]@LHCb:2021A:
     dof: 1
 B_s->phimu^+mu^-::NormalizedBR[17.00,19.00]@LHCb:2021A:
     type: Gaussian
-    observable: B_s->phill::NormalizedBR
+    observable: B_s->phill::NormalizedexpBR
     kinematics: {q2_min: 17, q2_max: 18.89}
     options: {l: mu, psi: J/psi, tag: GvDV2020}
     mean: 8.24e-5

@@ -490,6 +490,18 @@ groups:
           latex:    '$\Delta \Gamma_{B_s}$'
           unit:     's^-1'
           comments: 'cf. [PDG2012] and [PDG-Live], September 2013'
+      'B_s::ys' :
+          central: 0.0675
+          min:     0.0635
+          max:     0.0715
+          latex:    '$y_{B_s}$'
+          comments: 'Temporary result 1909.12524 eq. 74'
+      'B_s::q_over_p_phase' :
+          central: -0.050
+          min:     -0.069
+          max:     -0.031
+          latex:    '$\phi_{B_s}$'
+          comments: 'Temporary result https://hflav-eos.web.cern.ch/hflav-eos/osc/PDG_2021/#BETAS'
   # }}}
 
   # Mean Baryon Lifetimes
