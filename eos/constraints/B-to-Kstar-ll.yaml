@@ -43,6 +43,33 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@BaBar:2012A:
     sigma-stat: {hi: 5.3e-08, lo: -4.8e-08}
     sigma-sys: {hi: 7e-09, lo: -7e-09}
     dof: 1
+B^0->K^*0mu^+mu^-::BR[2.00,4.30]@BaBar:2012A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 2, q2_max: 4.3}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.95e-07
+    sigma-stat: {hi: 3.5e-08, lo: -3.0e-08}
+    sigma-sys: {hi: 4e-09, lo: -4e-09}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[4.30,8.12]@BaBar:2012A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 4.3, q2_max: 8.12}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 1.82e-07
+    sigma-stat: {hi: 5.6e-08, lo: -5.2e-08}
+    sigma-sys: {hi: 9e-09, lo: -9e-09}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[10.11,12.89]@BaBar:2012A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 10.11, q2_max: 12.89}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 1.86e-07
+    sigma-stat: {hi: 5.2e-08, lo: -4.8e-08}
+    sigma-sys: {hi: 10e-09, lo: -10e-09}
+    dof: 1
 B^0->K^*0mu^+mu^-::BR[14.21,16.00]@BaBar:2012A:
     type: Gaussian
     observable: B->K^*ll::BR
@@ -177,6 +204,107 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.21]@Belle:2009A:
     mean: 0.12
     sigma-stat: {hi: 0.15, lo: -0.13}
     sigma-sys: {hi: 0.02, lo: -0.02}
+    dof: 1
+# }}}
+#
+# 2016
+#
+# {{{
+# This two measurements are admixtures of B0 and B+ modes
+B^0->K^*0mu^+mu^-::P'_4[1.00,6.00]@Belle:2016A:
+    type: Gaussian
+    observable: B->K^*ll::P'_4
+    kinematics: {q2_min: 1, q2_max: 6}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: -0.22
+    sigma-stat: {hi: 0.35, lo: -0.34}
+    sigma-sys: {hi: 0.15, lo: -0.15}
+    dof: 1
+B^0->K^*0mu^+mu^-::P'_4[10.09,12.90]@Belle:2016A:
+    type: Gaussian
+    observable: B->K^*ll::P'_4
+    kinematics: {q2_min: 10.09, q2_max: 12.90}
+    options: {l: mu, q: d, tag: GP2004}
+    mean: -0.40
+    sigma-stat: {hi: 0.33, lo: -0.29}
+    sigma-sys: {hi: 0.09, lo: -0.09}
+    dof: 1
+B^0->K^*0mu^+mu^-::P'_5[1.00,6.00]@Belle:2016A:
+    type: Gaussian
+    observable: B->K^*ll::P'_5
+    kinematics: {q2_min: 1, q2_max: 6}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.43
+    sigma-stat: {hi: 0.26, lo: -0.28}
+    sigma-sys: {hi: 0.10, lo: -0.10}
+    dof: 1
+B^0->K^*0mu^+mu^-::P'_5[10.09,6.00]@Belle:2016A:
+    type: Gaussian
+    observable: B->K^*ll::P'_5
+    kinematics: {q2_min: 10.09, q2_max: 12.90}
+    options: {l: mu, q: d, tag: GP2004}
+    mean: 0.09
+    sigma-stat: {hi: 0.29, lo: -0.29}
+    sigma-sys: {hi: 0.02, lo: -0.02}
+    dof: 1
+# }}}
+#
+# 2019
+#
+# {{{
+B^0->K^*0mu^+mu^-::BR[1.10,6.00]@Belle:2019B:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 1.1, q2_max: 6}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 1.9e-07
+    sigma-stat: {hi: 6.0e-08, lo: -6.0e-08}
+    sigma-sys: {hi: 2.0e-08, lo: -2.0e-08}
+    dof: 1
+B^+->K^*+mu^+mu^-::BR[1.10,6.00]@Belle:2019B:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 1.1, q2_max: 6}
+    options: {l: mu, q: u, tag: BFS2004}
+    mean: 1.2e-07
+    sigma-stat: {hi: 9.0e-08, lo: -7.0e-08}
+    sigma-sys: {hi: 2.0e-08, lo: -2.0e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::R_K^*[0.045,1.10]@Belle:2019B:
+    type: Gaussian
+    observable: B->K^*ll::R_K^*
+    kinematics: {q2_mu_min: 0.045, q2_mu_max: 1.1, q2_e_min: 0.045, q2_e_max: 1.1}
+    options: {q: d, tag: BFS2004}
+    mean: 0.46
+    sigma-stat: {hi: 0.55, lo: 0.27}
+    sigma-sys: {hi: 0.13, lo: 0.13}
+    dof: 1
+B^0->K^*0mu^+mu^-::R_K^*[1.10,6.00]@Belle:2019B:
+    type: Gaussian
+    observable: B->K^*ll::R_K^*
+    kinematics: {q2_mu_min: 1.1, q2_mu_max: 6.0, q2_e_min: 1.1, q2_e_max: 6.0}
+    options: {q: d, tag: BFS2004}
+    mean: 1.06
+    sigma-stat: {hi: 0.63, lo: 0.38}
+    sigma-sys: {hi: 0.14, lo: 0.14}
+    dof: 1
+B^+->K^*+mu^+mu^-::R_K^*[0.045,1.10]@Belle:2019B:
+    type: Gaussian
+    observable: B->K^*ll::R_K^*
+    kinematics: {q2_mu_min: 0.045, q2_mu_max: 1.1, q2_e_min: 0.045, q2_e_max: 1.1}
+    options: {q: u, tag: BFS2004}
+    mean: 0.62
+    sigma-stat: {hi: 0.60, lo: 0.36}
+    sigma-sys: {hi: 0.09, lo: 0.09}
+    dof: 1
+B^+->K^*+mu^+mu^-::R_K^*[1.10,6.00]@Belle:2019B:
+    type: Gaussian
+    observable: B->K^*ll::R_K^*
+    kinematics: {q2_mu_min: 1.1, q2_mu_max: 6.0, q2_e_min: 1.1, q2_e_max: 6.0}
+    options: {q: u, tag: BFS2004}
+    mean: 0.72
+    sigma-stat: {hi: 0.99, lo: 0.44}
+    sigma-sys: {hi: 0.15, lo: 0.15}
     dof: 1
 # }}}
 
@@ -530,9 +658,45 @@ B^0->K^*0mu^+mu^-::A_FB[1.00,6.00]@CMS:2013A:
     observable: B->K^*ll::A_FB
     kinematics: {q2_min: 1, q2_max: 6}
     options: {l: mu, q: d, tag: BFS2004}
-    mean: 0.07000000000000001
+    mean: 0.07
     sigma-stat: {hi: 0.12, lo: -0.12}
     sigma-sys: {hi: 0.01, lo: -0.01}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[1.00,2.00]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 1, q2_max: 2}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: -0.29
+    sigma-stat: {hi: 0.37, lo: 0.00}
+    sigma-sys: {hi: 0.18, lo: 0.18}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[2.00,4.30]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 2, q2_max: 4.3}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: -0.07
+    sigma-stat: {hi: 0.20, lo: 0.20}
+    sigma-sys: {hi: 0.02, lo: 0.02}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[4.30,8.68]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 4.3, q2_max: 8.68}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: -0.01
+    sigma-stat: {hi: 0.11, lo: 0.11}
+    sigma-sys: {hi: 0.03, lo: 0.03}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[10.09,12.86]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 10.09, q2_max: 12.86}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.40
+    sigma-stat: {hi: 0.08, lo: 0.08}
+    sigma-sys: {hi: 0.05, lo: 0.05}
     dof: 1
 B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CMS:2013A:
     type: Gaussian
@@ -559,16 +723,52 @@ B^0->K^*0mu^+mu^-::BR[1.00,6.00]@CMS:2013A:
     options: {l: mu, q: d, tag: BFS2004}
     mean: 2.2e-07
     sigma-stat: {hi: 3e-08, lo: -3e-08}
-    sigma-sys: {hi: 3.5e-08, lo: -3.5e-08}
+    sigma-sys: {hi: 2.0e-08, lo: -2.0e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[1.00,2.00]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 1, q2_max: 2}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 4.8e-08
+    sigma-stat: {hi: 1.4e-08, lo: -1.2e-08}
+    sigma-sys: {hi: 0.4e-08, lo: -0.4e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[2.00,4.30]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 2, q2_max: 4.3}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 8.74e-08
+    sigma-stat: {hi: 1.61e-08, lo: -1.61e-08}
+    sigma-sys: {hi: 0.92e-08, lo: -0.92e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[4.30,8.68]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 4.3, q2_max: 8.68}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 1.62e-07
+    sigma-stat: {hi: 3.1e-08, lo: -3.1e-08}
+    sigma-sys: {hi: 1.8e-08, lo: -1.8e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[10.09,12.86]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 10.09, q2_max: 12.86}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 1.50e-07
+    sigma-stat: {hi: 2.5e-08, lo: -2.5e-08}
+    sigma-sys: {hi: 2.5e-08, lo: -2.5e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CMS:2013A:
     type: Gaussian
     observable: B->K^*ll::BR
     kinematics: {q2_min: 14.18, q2_max: 16}
     options: {l: mu, q: d, tag: GP2004}
-    mean: 8.372000000000001e-08
+    mean: 8.372e-08
     sigma-stat: {hi: 1.638e-08, lo: -1.456e-08}
-    sigma-sys: {hi: 1.456e-08, lo: -1.456e-08}
+    sigma-sys: {hi: 0.91e-08, lo: -0.91e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::BR[16.00,19.00]@CMS:2013A:
     type: Gaussian
@@ -577,7 +777,7 @@ B^0->K^*0mu^+mu^-::BR[16.00,19.00]@CMS:2013A:
     options: {l: mu, q: d, tag: GP2004}
     mean: 1.56e-07
     sigma-stat: {hi: 1.8e-08, lo: -1.8e-08}
-    sigma-sys: {hi: 2.7e-08, lo: -2.7e-08}
+    sigma-sys: {hi: 1.5e-08, lo: -1.5e-08}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CMS:2013A:
     type: Gaussian
@@ -587,6 +787,42 @@ B^0->K^*0mu^+mu^-::F_L[1.00,6.00]@CMS:2013A:
     mean: 0.68
     sigma-stat: {hi: 0.1, lo: -0.1}
     sigma-sys: {hi: 0.02, lo: -0.02}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[1.00,2.00]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 1, q2_max: 2}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.60
+    sigma-stat: {hi: 0.00, lo: 0.28}
+    sigma-sys: {hi: 0.19, lo: 0.19}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[2.00,4.30]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 2, q2_max: 4.3}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.65
+    sigma-stat: {hi: 0.17, lo: 0.17}
+    sigma-sys: {hi: 0.03, lo: 0.03}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[4.30,8.68]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 4.3, q2_max: 8.68}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.81
+    sigma-stat: {hi: 0.13, lo: 0.12}
+    sigma-sys: {hi: 0.05, lo: 0.05}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[10.09,12.86]@CMS:2013A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 10.09, q2_max: 12.86}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.45
+    sigma-stat: {hi: 0.10, lo: 0.11}
+    sigma-sys: {hi: 0.04, lo: 0.04}
     dof: 1
 B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CMS:2013A:
     type: Gaussian
@@ -603,9 +839,327 @@ B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS:2013A:
     kinematics: {q2_min: 16, q2_max: 19}
     options: {l: mu, q: d, tag: GP2004}
     mean: 0.44
-    sigma-stat: {hi: 0.07000000000000001, lo: -0.07000000000000001}
+    sigma-stat: {hi: 0.07, lo: -0.07}
     sigma-sys: {hi: 0.03, lo: -0.03}
     dof: 1
+# }}}
+#
+# 2015
+#
+# {{{
+B^0->K^*0mu^+mu^-::BR[1.00,2.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 1, q2_max: 2}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 4.6e-08
+    sigma-stat: {hi: 0.7e-08, lo: -0.7e-08}
+    sigma-sys: {hi: 0.3e-08, lo: -0.3e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[2.00,4.30]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 2, q2_max: 4.3}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 7.59e-08
+    sigma-stat: {hi: 1.15e-08, lo: -1.15e-08}
+    sigma-sys: {hi: 0.46e-08, lo: -0.46e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[4.30,6.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 4.3, q2_max: 6}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 5.78e-08
+    sigma-stat: {hi: 0.85e-08, lo: -0.85e-08}
+    sigma-sys: {hi: 0.51e-08, lo: -0.51e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[6.00,8.68]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 6, q2_max: 8.68}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 12.596e-08
+    sigma-stat: {hi: 1.072e-08, lo: -1.072e-08}
+    sigma-sys: {hi: 0.804e-08, lo: -0.804e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[10.09,12.86]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 10.09, q2_max: 12.86}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 17.174e-08
+    sigma-stat: {hi: 1.108e-08, lo: -1.108e-08}
+    sigma-sys: {hi: 1.385e-08, lo: -1.385e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[14.18,16.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 14.18, q2_max: 16}
+    options: {l: mu, q: d, tag: GP2004}
+    mean: 12.194e-08
+    sigma-stat: {hi: 1.092e-08, lo: -1.092e-08}
+    sigma-sys: {hi: 0.91e-08, lo: -0.91e-08}
+    dof: 1
+B^0->K^*0mu^+mu^-::BR[16.00,19.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::BR
+    kinematics: {q2_min: 16, q2_max: 19}
+    options: {l: mu, q: d, tag: GP2004}
+    mean: 1.26e-07
+    sigma-stat: {hi: 0.9e-08, lo: -0.9e-08}
+    sigma-sys: {hi: 0.9e-08, lo: -0.9e-08}
+    dof: 1
+#
+B^0->K^*0mu^+mu^-::A_FB[1.00,2.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 1, q2_max: 2}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: -0.27
+    sigma-stat: {hi: 0.17, lo: 0.40}
+    sigma-sys: {hi: 0.07, lo: 0.07}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[2.00,4.30]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 2, q2_max: 4.3}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: -0.12
+    sigma-stat: {hi: 0.15, lo: 0.17}
+    sigma-sys: {hi: 0.05, lo: 0.05}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[4.30,6.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 4.3, q2_max: 6}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.01
+    sigma-stat: {hi: 0.15, lo: 0.15}
+    sigma-sys: {hi: 0.03, lo: 0.03}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[6.00,8.68]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 6, q2_max: 8.68}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.03
+    sigma-stat: {hi: 0.10, lo: 0.10}
+    sigma-sys: {hi: 0.02, lo: 0.02}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[10.09,12.86]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 10.09, q2_max: 12.86}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.16
+    sigma-stat: {hi: 0.06, lo: 0.06}
+    sigma-sys: {hi: 0.01, lo: 0.01}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[14.18,16.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 14.18, q2_max: 16}
+    options: {l: mu, q: d, tag: GP2004}
+    mean: 0.39
+    sigma-stat: {hi: 0.04, lo: 0.06}
+    sigma-sys: {hi: 0.01, lo: 0.01}
+    dof: 1
+B^0->K^*0mu^+mu^-::A_FB[16.00,19.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 16, q2_max: 19}
+    options: {l: mu, q: d, tag: GP2004}
+    mean: 0.35
+    sigma-stat: {hi: 0.07, lo: 0.07}
+    sigma-sys: {hi: 0.01, lo: 0.01}
+    dof: 1
+#
+B^0->K^*0mu^+mu^-::F_L[1.00,2.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 1, q2_max: 2}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.64
+    sigma-stat: {hi: 0.10, lo: 0.09}
+    sigma-sys: {hi: 0.07, lo: 0.07}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[2.00,4.30]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 2, q2_max: 4.3}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.80
+    sigma-stat: {hi: 0.08, lo: 0.08}
+    sigma-sys: {hi: 0.06, lo: 0.06}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[4.30,6.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 4.3, q2_max: 6}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.62
+    sigma-stat: {hi: 0.10, lo: 0.09}
+    sigma-sys: {hi: 0.07, lo: 0.07}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[6.00,8.68]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 6, q2_max: 8.68}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.50
+    sigma-stat: {hi: 0.06, lo: 0.06}
+    sigma-sys: {hi: 0.06, lo: 0.06}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[10.09,12.86]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 10.09, q2_max: 12.86}
+    options: {l: mu, q: d, tag: BFS2004}
+    mean: 0.39
+    sigma-stat: {hi: 0.05, lo: 0.05}
+    sigma-sys: {hi: 0.04, lo: 0.04}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[14.18,16.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 14.18, q2_max: 16}
+    options: {l: mu, q: d, tag: GP2004}
+    mean: 0.48
+    sigma-stat: {hi: 0.05, lo: 0.06}
+    sigma-sys: {hi: 0.04, lo: 0.04}
+    dof: 1
+B^0->K^*0mu^+mu^-::F_L[16.00,19.00]@CMS:2015A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 16, q2_max: 19}
+    options: {l: mu, q: d, tag: GP2004}
+    mean: 0.38
+    sigma-stat: {hi: 0.05, lo: 0.06}
+    sigma-sys: {hi: 0.04, lo: 0.04}
+    dof: 1
+# }}}
+#
+# 2020
+#
+# {{{
+B^+->K^*+mu^+mu^-::F_L[1.00,8.68]@CMS:2020A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 1, q2_max: 8.68}
+    options: {l: mu, q: u, tag: BFS2004}
+    mean: 0.60
+    sigma-stat: {hi: 0.31, lo: -0.25}
+    sigma-sys: {hi: 0.13, lo: -0.13}
+    dof: 1
+B^+->K^*+mu^+mu^-::F_L[10.09,12.86]@CMS:2020A:
+    type: Gaussian
+    observable: B->K^*ll::F_L
+    kinematics: {q2_min: 10.09, q2_max: 12.86}
+    options: {l: mu, q: u, tag: BFS2004}
+    mean: 0.88
+    sigma-stat: {hi: 0.10, lo: -0.13}
+    sigma-sys: {hi: 0.05, lo: -0.05}
+    dof: 1
+B^+->K^*+mu^+mu^-::A_FB[1.00,8.68]@CMS:2020A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 1, q2_max: 8.68}
+    options: {l: mu, q: u, tag: BFS2004}
+    mean: -0.14
+    sigma-stat: {hi: 0.32, lo: -0.35}
+    sigma-sys: {hi: 0.17, lo: -0.17}
+    dof: 1
+B^+->K^*+mu^+mu^-::A_FB[10.09,12.86]@CMS:2020A:
+    type: Gaussian
+    observable: B->K^*ll::A_FB
+    kinematics: {q2_min: 10.09, q2_max: 12.86}
+    options: {l: mu, q: u, tag: BFS2004}
+    mean: 0.09
+    sigma-stat: {hi: 0.16, lo: -0.11}
+    sigma-sys: {hi: 0.04, lo: -0.04}
+    dof: 1
+# }}}
+
+#########
+# Atlas #
+#########
+#
+# 2018
+#
+# {{{
+B^0->K^*0mu^+mu^-::AngularObservables[2.00,4.00]@ATLAS:2018B:
+    type: MultivariateGaussian
+    dim: 6
+    observables:
+        -   B->K^*ll::F_L
+        -   B->K^*ll::S_3
+        -   B->K^*ll::S_4
+        -   B->K^*ll::S_5
+        -   B->K^*ll::S_7
+        -   B->K^*ll::S_8
+    kinematics:
+        -   {q2_min: 2, q2_max: 4}
+        -   {q2_min: 2, q2_max: 4}
+        -   {q2_min: 2, q2_max: 4}
+        -   {q2_min: 2, q2_max: 4}
+        -   {q2_min: 2, q2_max: 4}
+        -   {q2_min: 2, q2_max: 4}
+    options:
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+    means: [0.64, -0.15, -0.37, -0.16, 0.15, 0.52]
+    sigma-stat-hi: [0.11, 0.10, 0.15, 0.15, 0.14, 0.20]
+    sigma-stat-lo: [0.11, 0.10, 0.15, 0.15, 0.14, 0.20]
+    sigma-sys: [0.05, 0.07, 0.10, 0.06, 0.09, 0.19]
+    correlations:
+        -   [1, 0.27, 0.35, -0.04, -0.15, -0.37]
+        -   [0.27, 1, -0.08, -0.44, -0.09, -0.20]
+        -   [0.35, -0.08, 1, 0.60, -0.02, -0.12]
+        -   [-0.04, -0.44, 0.60, 1, -0.11, -0.20]
+        -   [-0.15, -0.09, -0.02, -0.11, 1, 0.63]
+        -   [-0.37, -0.20, -0.12, -0.20, 0.63, 1]
+    dof: 6
+B^0->K^*0mu^+mu^-::AngularObservables[4.00,6.00]@ATLAS:2018B:
+    type: MultivariateGaussian
+    dim: 6
+    observables:
+        -   B->K^*ll::F_L
+        -   B->K^*ll::S_3
+        -   B->K^*ll::S_4
+        -   B->K^*ll::S_5
+        -   B->K^*ll::S_7
+        -   B->K^*ll::S_8
+    kinematics:
+        -   {q2_min: 4, q2_max: 6}
+        -   {q2_min: 4, q2_max: 6}
+        -   {q2_min: 4, q2_max: 6}
+        -   {q2_min: 4, q2_max: 6}
+        -   {q2_min: 4, q2_max: 6}
+        -   {q2_min: 4, q2_max: 6}
+    options:
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+        -   {l: mu, q: d, tag: BFS2004}
+    means: [0.42, 0., 0.32, 0.13, 0.03, -0.12]
+    sigma-stat-hi: [0.13, 0.12, 0.16, 0.18, 0.13, 0.21]
+    sigma-stat-lo: [0.13, 0.12, 0.16, 0.18, 0.13, 0.21]
+    sigma-sys: [0.12, 0.07, 0.09, 0.09, 0.07, 0.05]
+    correlations:
+        -   [1, 0.33, -0.18, 0.04, 0.22, 0.28]
+        -   [0.33, 1, 0.15, 0.23, 0.60, 0.05]
+        -   [-0.18, 0.15, 1, 0.52, 0.03, 0.01]
+        -   [0.04, 0.23, 0.52, 1, 0.28, 0.27]
+        -   [0.22, 0.60, 0.03, 0.28, 1, 0.60]
+        -   [0.28, 0.05, 0.01, 0.27, 0.60, 1]
+    dof: 6
 # }}}
 
 ########

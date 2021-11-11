@@ -70,6 +70,23 @@ ATLAS:2018A:
   inspire-id: Aaboud:2018mst
   title: Study of the rare decays of $B^0_s$ and $B^0$ mesons into muon pairs using
     data collected during 2015 and 2016 with the ATLAS detector
+ATLAS:2018B:
+  authors: Aaboud, Morad et al.
+  collaboration: ATLAS
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1805.04000
+  inspire-id: ATLAS:2018gqc
+  title: Angular analysis of $B^0_d \rightarrow K^{*}\mu^+\mu^-$ decays in $pp$ collisions
+    at $\sqrt{s}= 8$ TeV with the ATLAS detector
+ATLAS+CMS+LHCb:2020A:
+  authors: ATLAS, CMS and LHCb
+  collaboration: ATLAS, CMS and LHCb
+  eprint:
+    archive: CDS
+    id: 2727207
+  inspire-id: LHCb:2020zud
+  title: Combination of the ATLAS, CMS and LHCb results on the $B^0_{(s)} \to \mu^+ \mu^-$ decays
 B:1998A:
   authors: Beneke, M.
   eprint:
@@ -488,6 +505,14 @@ Belle:2015A:
   inspire-id: Glattauer:2015teq
   title: Measurement of the decay $B\to D\ell\nu_\ell$ in fully reconstructed events
     and determination of the Cabibbo-Kobayashi-Maskawa matrix element $|V_{cb}|$
+Belle:2016A:
+  authors: Wehle, S. et al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1612.05014
+  inspire-id: Belle:2016fev
+  title: Lepton-Flavor-Dependent Angular Analysis of $B\to K^\ast \ell^+\ell^-$
 Belle:2017A:
   authors: Abdesselam, A. et al.
   collaboration: Belle
@@ -514,7 +539,15 @@ Belle:2019A:
     archive: arXiv
     id: oai:arXiv.org:1911.03186
   inspire-id: Belle:2019iji
-  title: 'Search for $B^+\to \mu^+\nu_{\mu}$ and $B^+\to \mu^+N$ with inclusive tagging'
+  title: Search for $B^+\to \mu^+\nu_{\mu}$ and $B^+\to \mu^+N$ with inclusive tagging
+Belle:2019B:
+  authors: Abdesselam, A. et. al.
+  collaboration: Belle
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1904.02440
+  inspire-id: Belle:2019oag
+  title: Test of Lepton-Flavor Universality in ${B\to K^\ast\ell^+\ell^-}$ Decays at Belle
 BGNS:2014A:
   authors: Buras, Andrzej J. and Girrbach-Noe, Jennifer and Niehoff, Christoph and Straub, David M.
   eprint:
@@ -632,6 +665,14 @@ CMS:2013B:
   inspire-id: Chatrchyan:2013bka
   title: Measurement of the $B^0_s \to \mu^+ \mu^-$ Branching Fraction and Search
     for $B^0 \to \mu^+ \mu^-$ with the CMS Experiment
+CMS:2015A:
+  authors: Khachatryan, V. et al.
+  collaboration: CMS
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1507.08126
+  inspire-id: CMS:2015bcy
+  title: Angular analysis of the decay $B^0 \to K^{*0} \mu^+ \mu^-$ from pp collisions at $\sqrt s = 8$ TeV
 CMS:2016A:
   authors: Leonard, N. T. et al.
   collaboration: CMS
@@ -650,6 +691,14 @@ CMS:2019A:
     id: 2684828
   title: Measurement of properties of $B_s^0 \to \mu^+\mu^-$ decays and search for $B^0
     \to \mu^+\mu^-$ with the CMS experiment
+CMS:2020A:
+  authors: The CMS Collaboration
+  collaboration: CMS
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2010.13968
+  title: Angular analysis of the decay B$^+$ $\to$ K$^*$(892)$^+\mu^+\mu^-$ in
+    proton-proton collisions at $\sqrt{s} = 8$ TeV
 CMS+LHCb:2014A:
   authors: Khachatryan, V. and others [CMS and LHCb]
   eprint:

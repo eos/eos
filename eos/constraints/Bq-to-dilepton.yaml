@@ -91,6 +91,33 @@ B^0_s->mu^+mu^-::BR@CMS+LHCb:2014A:
     beta: 1.0048
 # }}}
 
+######################
+# ATLAS + CMS + LHCb #
+######################
+#
+# 2020
+#
+# {{{
+B^0_s->mu^+mu^-::BR@ATLAS+CMS+LHCb:2020A:
+    type: Gaussian
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: s}
+    mean: 2.69e-9
+    sigma-stat: { hi: 0., lo: 0. }
+    sigma-sys: { hi: 0.37e-9, lo: 0.35e-9 }
+    dof: 1
+B^0_d->mu^+mu^-::BR@ATLAS+CMS+LHCb:2020A:
+    type: Gaussian
+    observable: B_q->ll::BR@Untagged
+    kinematics: {}
+    options: {l: mu, q: d}
+    mean: 0.6e-9
+    sigma-stat: { hi: 0.e-9, lo: 0.e-9 }
+    sigma-sys: { hi: 0.7e-9, lo: 0.7e-9 }
+    dof: 1
+# }}}
+
 ########
 # LHCb #
 ########
