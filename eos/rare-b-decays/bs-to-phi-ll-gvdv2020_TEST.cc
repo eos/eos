@@ -123,41 +123,20 @@ class BsToPhiDileptonGvDV2020Test :
             BsToPhiDilepton d(p, oo);
             auto amps = d.amplitudes(q2);
 
-            std::cout << real(amps.a_long_left)   << std::endl;
-            std::cout << imag(amps.a_long_left)   << std::endl;
-            std::cout << real(amps.a_long_right)  << std::endl;
-            std::cout << imag(amps.a_long_right)  << std::endl;
-            std::cout << real(amps.a_para_left)   << std::endl;
-            std::cout << imag(amps.a_para_left)   << std::endl;
-            std::cout << real(amps.a_para_right)  << std::endl;
-            std::cout << imag(amps.a_para_right)  << std::endl;
-            std::cout << real(amps.a_perp_left)   << std::endl;
-            std::cout << imag(amps.a_perp_left)   << std::endl;
-            std::cout << real(amps.a_perp_right)  << std::endl;
-            std::cout << imag(amps.a_perp_right)  << std::endl;
-
-
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.04871e-09, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.41479e-10, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  5.26771e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -2.95225e-11, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   1.79215e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   5.94937e-10, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  8.0494e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  7.15354e-10, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   3.17172e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -2.52525e-10, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  3.30606e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  3.87104e-10, eps);
-
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -1.10463e-09, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -2.12580e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.97997e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -4.79135e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  7.22196e-12, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -8.42014e-12, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   3.68093e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   1.15588e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  1.53399e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  1.38025e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   4.50153e-12, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -4.9812e-11,  eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  6.01929e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  6.93689e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -2.05823e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -3.96097e-11, eps);
        }
     }
 } bs_to_phi_dilepton_GvDV2020_test;
