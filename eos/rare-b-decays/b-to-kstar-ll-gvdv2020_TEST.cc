@@ -19,6 +19,7 @@
 #include <eos/observable.hh>
 #include <eos/maths/complex.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
+#include <eos/rare-b-decays/nonlocal-formfactors.hh>
 
 #include <iostream>
 
@@ -40,7 +41,7 @@ class BToKstarDileptonGvDV2020Test :
             Parameters p = Parameters::Defaults();
 
             p["mass::B_d"]                               = 5.27942;
-            p["mass::K_d"]                               = 0.49761;
+            p["mass::K_d^*"]                             = 0.89555;
             p["mass::J/psi"]                             = 3.0969;
             p["mass::psi(2S)"]                           = 3.6860;
             p["mass::D^0"]                               = 1.86723;
@@ -95,13 +96,15 @@ class BToKstarDileptonGvDV2020Test :
             p["b->smumu::Re{c10'}"] = 4;
             p["b->smumu::Im{c10'}"] = 3.5;
 
-            Options oo;
-            oo.declare("model",                   "WET");
-            oo.declare("tag",                     "GvDV2020");
-            oo.declare("nonlocal-formfactors",    "GvDV2020");
-            oo.declare("form-factors",            "BSZ2015");
-            oo.declare("l",                       "mu");
-            oo.declare("q",                       "d");
+            Options oo
+            {
+                {"model",                   "WET"},
+                {"tag",                     "GvDV2020"},
+                {"nonlocal-formfactors",    "GvDV2020"},
+                {"form-factors",            "BSZ2015"},
+                {"l",                       "mu"},
+                {"q",                       "d"}
+            };
 
             static const double eps = 1e-5;
             static const double q2 = 6.0;
@@ -109,11 +112,11 @@ class BToKstarDileptonGvDV2020Test :
             BToKstarDilepton d(p, oo);
             auto amps = d.amplitudes(q2);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.20243e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -6.20413e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.53768e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -4.68474e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  2.46737e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -3.41528e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right), -8.85107e-12, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -1.89589e-11, eps);
 
             TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   3.50547e-11, eps);
             TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   1.04877e-10, eps);
@@ -132,3 +135,122 @@ class BToKstarDileptonGvDV2020Test :
        }
     }
 } b_to_kstar_dilepton_GvDV2020_test;
+
+class BToKstarDileptonJavierTest :
+    public TestCase
+{
+    public:
+    BToKstarDileptonJavierTest() :
+            TestCase("b_to_kstar_dilepton_Javier_test")
+        {
+        }
+
+        virtual void run() const
+        {
+
+            Parameters p = Parameters::Defaults();
+            p["mass::B_d"]      = 5;
+            p["mass::K_d^*"]    = 0.9;
+            p["mass::mu"]       = 1e-15;
+            p["mass::b(MSbar)"] = 4;
+            p["mass::s(2GeV)"]  = 0.;
+
+            p["B->K^*ccbar::Re{alpha_0^perp}@GvDV2020"]  = 0.01;
+            p["B->K^*ccbar::Im{alpha_0^perp}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Re{alpha_1^perp}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Im{alpha_1^perp}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Re{alpha_2^perp}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Im{alpha_2^perp}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Re{alpha_0^para}@GvDV2020"]  = 0.01;
+            p["B->K^*ccbar::Im{alpha_0^para}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Re{alpha_1^para}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Im{alpha_1^para}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Re{alpha_2^para}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Im{alpha_2^para}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Re{alpha_0^long}@GvDV2020"]  = 0.01;
+            p["B->K^*ccbar::Im{alpha_0^long}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Re{alpha_1^long}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Im{alpha_1^long}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Re{alpha_2^long}@GvDV2020"]  = 0.;
+            p["B->K^*ccbar::Im{alpha_2^long}@GvDV2020"]  = 0.;
+
+            p["B->K^*::alpha^A0_0@BSZ2015"]  = 1.0;
+            p["B->K^*::alpha^A0_1@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^A0_2@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^A1_0@BSZ2015"]  = 1.0;
+            p["B->K^*::alpha^A1_1@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^A1_2@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^A12_1@BSZ2015"] = 0.0;
+            p["B->K^*::alpha^A12_2@BSZ2015"] = 0.0;
+            p["B->K^*::alpha^V_0@BSZ2015"]  = 1.0;
+            p["B->K^*::alpha^V_1@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^V_2@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^T1_0@BSZ2015"]  = 1.0;
+            p["B->K^*::alpha^T1_1@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^T1_2@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^T2_1@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^T2_2@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^T23_0@BSZ2015"]  = 1.0;
+            p["B->K^*::alpha^T23_1@BSZ2015"]  = 0.0;
+            p["B->K^*::alpha^T23_2@BSZ2015"]  = 0.0;
+
+            p["b->s::Re{c7}"] = 1.;
+            p["b->s::Im{c7}"] = 0.;
+            p["b->s::c8"] = 0;
+            p["b->smumu::Re{c9}"] = 4;
+            p["b->smumu::Im{c9}"] = 0.;
+            p["b->smumu::Re{c10}"] = -4;
+            p["b->smumu::Im{c10}"] = 0.;
+            p["b->s::c1"] = 0.;
+            p["b->s::c2"] = 0.;
+            p["b->s::c3"] = 0.;
+            p["b->s::c4"] = 0.;
+            p["b->s::c5"] = 0.;
+            p["b->s::c6"] = 0.;
+            p["b->smumu::Re{cS}"] = 0.;
+            p["b->smumu::Im{cS}"] = 0.;
+            p["b->smumu::Re{cS'}"] = 0.;
+            p["b->smumu::Im{cS'}"] = 0.;
+            p["b->smumu::Re{cT}"] = 0.;
+            p["b->smumu::Im{cT}"] = 0.;
+            p["b->smumu::Re{cT5}"] = 0.;
+            p["b->smumu::Im{cT5}"] = 0.;
+
+            Options oo
+            {
+                {"model",                   "WET"},
+                {"tag",                     "GvDV2020"},
+                {"nonlocal-formfactors",    "GvDV2020"},
+                {"form-factors",            "BSZ2015"},
+                {"l",                       "mu"},
+                {"q",                       "d"}
+            };
+
+            static const double eps = 1e-5;
+            static const double q2 = 1.0;
+
+            auto nff = NonlocalFormFactor<nff::PToV>::make("B->K^*::GvDV2020", p, oo);
+            TEST_CHECK_NEARLY_EQUAL(real(nff->H_perp(q2)),  0.0071505518,  eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(nff->H_perp(q2)),  0.,            eps);
+            TEST_CHECK_NEARLY_EQUAL(real(nff->H_para(q2)),  0.0071505518,  eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(nff->H_para(q2)),  0.,            eps);
+            TEST_CHECK_NEARLY_EQUAL(real(nff->H_long(q2)), -0.0001952966,  eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(nff->H_long(q2)),  0.,            eps);
+
+            BToKstarDilepton c(p, oo);
+
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1s(q2),  7.42282e-21,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1c(q2),  1.3321e-19,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2s(q2),  2.47427e-21,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2c(q2), -1.3321e-19,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_3(q2),  -2.78491e-21,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_4(q2),   2.17481e-20,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_5(q2),  -2.35138e-20,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_6s(q2), -7.20512e-21,  eps);
+            TEST_CHECK_NEARLY_EQUAL(c.differential_j_6c(q2),  0.0,  1e-20);
+            TEST_CHECK_NEARLY_EQUAL(c.differential_j_7(q2),   0.0,  1e-20);
+            TEST_CHECK_NEARLY_EQUAL(c.differential_j_8(q2),   0.0,  1e-20);
+            TEST_CHECK_NEARLY_EQUAL(c.differential_j_9(q2),   0.0,  1e-20);
+
+        }
+} b_to_kstar_dilepton_Javier_test;
