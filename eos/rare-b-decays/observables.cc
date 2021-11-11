@@ -125,6 +125,12 @@ namespace eos
                                )
                         )"),
 
+                make_expression_observable("B->Kll::NormalizedBR", R"(\mathcal{B}(\bar{B}\to \bar{K}\ell^+\ell^-)/\mathcal{B}(\bar{B}\to \bar{K}J/\psi))",
+                        Unit::None(),
+                        R"(
+                        <<B->Kll::BR>> / <<B->Kpsi::BR>>
+                        )"),
+
                 make_expression_observable("B->Kll::A_CP", R"(A_\mathrm{CP}(\bar{B}\to \bar{K}\ell^+\ell^-))",
                         Unit::None(),
                         R"(
