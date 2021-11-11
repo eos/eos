@@ -86,7 +86,7 @@ class BsToPhiCharmoniumGvDV2020Test :
 
             BsToPhiCharmonium c(p, oo);
 
-            TEST_CHECK_NEARLY_EQUAL(c.branching_ratio(),  13598663., 1.);
+            TEST_CHECK_RELATIVE_ERROR(c.branching_ratio(),  15085746.08759, 1e-5);
 
         }
 } bs_to_phi_charmonium_GvDV2020_test;
@@ -156,7 +156,7 @@ class BsToPhiCharmoniumGRvDV2021Test :
 
             BsToPhiCharmonium c(p, oo);
 
-            TEST_CHECK_NEARLY_EQUAL(c.branching_ratio(),  973155.8, .1);
+            TEST_CHECK_RELATIVE_ERROR(c.branching_ratio(),  845912.6463114392, 1e-5);
 
         }
 } bs_to_phi_charmonium_GRvDV2021_test;
