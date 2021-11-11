@@ -104,7 +104,7 @@ class BToKDileptonGvDV2020Test :
 
 
             TEST_CHECK_RELATIVE_ERROR_C(amps.F_A,  complex<double>(2.803705304, 6.000000000),  eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.F_V,  complex<double>(41.17361852, 43.90063686),  eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.F_V,  complex<double>(163.7558788, 192.3164582),  eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.F_S,  complex<double>(3.127953411, 5.971547422),  eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.F_P,  complex<double>(3.752289384, 6.010934604),  eps);
             TEST_CHECK_RELATIVE_ERROR_C(amps.F_T,  complex<double>(6.054659849, 9.418359766),  eps);
@@ -112,3 +112,69 @@ class BToKDileptonGvDV2020Test :
 
         }
 } b_to_k_dilepton_GvDV2020_test;
+
+class BToKDileptonJavierTest :
+    public TestCase
+{
+    public:
+    BToKDileptonJavierTest() :
+            TestCase("b_to_k_dilepton_Javier_test")
+        {
+        }
+
+        virtual void run() const
+        {
+
+            Parameters p = Parameters::Defaults();
+            p["mass::B_d"]      = 5;
+            p["mass::K_d"]      = 0.5;
+            p["mass::mu"]       = 1e-15;
+
+            p["B->Kccbar::Re{alpha_0^plus}@GvDV2020"]  =  0.01;
+            p["B->Kccbar::Im{alpha_0^plus}@GvDV2020"]  =  0.;
+            p["B->Kccbar::Re{alpha_1^plus}@GvDV2020"]  =  0.;
+            p["B->Kccbar::Im{alpha_1^plus}@GvDV2020"]  =  0.;
+            p["B->Kccbar::Re{alpha_2^plus}@GvDV2020"]  =  0.;
+            p["B->Kccbar::Im{alpha_2^plus}@GvDV2020"]  =  0.;
+
+            p["B->K::alpha^f+_0@BSZ2015"] = 1.0;
+            p["B->K::alpha^f+_1@BSZ2015"] = 0.0;
+            p["B->K::alpha^f+_2@BSZ2015"] = 0.0;
+            p["B->K::alpha^fT_0@BSZ2015"] = 1.0;
+            p["B->K::alpha^fT_1@BSZ2015"] = 0.0;
+            p["B->K::alpha^fT_2@BSZ2015"] = 0.0;
+
+            p["b->s::Re{c7}"] = 1.;
+            p["b->s::Im{c7}"] = 0.;
+            p["b->s::c8"] = 0;
+            p["b->smumu::Re{c9}"] = 4;
+            p["b->smumu::Im{c9}"] = 0.;
+            p["b->smumu::Re{c10}"] = -4;
+            p["b->smumu::Im{c10}"] = 0.;
+            p["b->s::c3"] = 0.;
+            p["b->s::c4"] = 0.;
+            p["b->s::c5"] = 0.;
+            p["b->s::c6"] = 0.;
+
+            Options oo
+            {
+                {"model",                   "WET"},
+                {"tag",                     "GvDV2020"},
+                {"nonlocal-formfactors",    "GvDV2020"},
+                {"form-factors",            "BSZ2015"},
+                {"l",                       "mu"},
+                {"q",                       "d"}
+            };
+
+            static const double eps = 1e-5;
+            static const double q2 = 1.0;
+
+            auto nff = NonlocalFormFactor<nff::PToP>::make("B->K::GvDV2020", p, oo);
+            TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(q2)), -0.00019239,  eps);
+            TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(q2)),  0.,        eps);
+
+            BToKDilepton c(p, oo);
+            TEST_CHECK_RELATIVE_ERROR(c.two_differential_decay_width(q2, 0),  1.46233e-19,  eps);
+            TEST_CHECK_EQUAL(         c.two_differential_decay_width(q2, 1),  0.               );
+        }
+} b_to_k_dilepton_Javier_test;
