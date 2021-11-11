@@ -211,9 +211,11 @@ namespace eos
             // @}
 
             /*!
-             * Auxilliary methods for unit tests and diagnostic purposes.
+             * Auxiliary methods for unit tests and diagnostic purposes.
              */
             Amplitudes amplitudes(const double & q2) const;
+            double m_l() const;
+            double phiBs() const;
 
             /*!
              * References used in the computation of our observables.
@@ -248,6 +250,43 @@ namespace eos
         complex<double> a_time_perp, a_long_perp;
         complex<double> a_time_para, a_long_para;
     };
+
+
+    class BsToPhiDileptonAndConjugate:
+        public ParameterUser
+    {
+        public:
+            BsToPhiDileptonAndConjugate(const Parameters & parameters, const Options & options);
+            ~BsToPhiDileptonAndConjugate();
+
+            BsToPhiDilepton bstophidilepton;
+            BsToPhiDilepton bstophidilepton_conjugate;
+
+            struct AngularhCoefficients;
+
+            inline std::array<double, 12> angular_h_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const BsToPhiDilepton::Amplitudes & Atilda, const double & s) const;
+            inline std::array<double, 12> differential_angular_h_coefficients_array(const double & s) const;
+            BsToPhiDileptonAndConjugate::AngularhCoefficients integrated_angular_h_coefficients(const double & s_min, const double & s_max) const;
+
+            double integrated_H_1s(const double & q2_min, const double & q2_max) const;
+            double integrated_H_1c(const double & q2_min, const double & q2_max) const;
+            double integrated_H_2s(const double & q2_min, const double & q2_max) const;
+            double integrated_H_2c(const double & q2_min, const double & q2_max) const;
+
+            /*!
+             * References used in the computation of our observables.
+             */
+            static const std::set<ReferenceName> references;
+
+            /*!
+             * Options used in the computation of our observables.
+             */
+            static const std::vector<OptionSpecification> options;
+            static std::vector<OptionSpecification>::const_iterator begin_options();
+            static std::vector<OptionSpecification>::const_iterator end_options();
+    };
+
+
 }
 
 #endif

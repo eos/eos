@@ -108,9 +108,20 @@ class BsToPhiDileptonGvDV2020Test :
             static const double eps = 1e-5;
             static const double q2 = 6.0;
 
+            Kinematics k_mu  = Kinematics({{"q2_min", 2.0}, {"q2_max", 5.0}});
+            auto obs_BR    = Observable::make("B_s->phill::BR", p, k_mu, oo);
+            auto obs_H1s   = Observable::make("B_s->phill::H_1s",  p, k_mu, oo);
+            auto obs_J1s   = Observable::make("B_s->phill::J_1s",  p, k_mu, oo);
+            auto obs_expBR = Observable::make("B_s->phill::expBR", p, k_mu, oo);
+
+            TEST_CHECK_RELATIVE_ERROR(obs_BR->evaluate(),     7.601485685351265e-07,  eps);
+            TEST_CHECK_RELATIVE_ERROR(obs_H1s->evaluate(),    1.777109626554232e-19,  eps);
+            TEST_CHECK_RELATIVE_ERROR(obs_J1s->evaluate(),    1.113621679253438e-19,  eps);
+            TEST_CHECK_RELATIVE_ERROR(obs_expBR->evaluate(),  7.228090133701119e-07,  eps);
+
+
             BsToPhiDilepton d(p, oo);
             auto amps = d.amplitudes(q2);
-
 
             std::cout << real(amps.a_long_left)   << std::endl;
             std::cout << imag(amps.a_long_left)   << std::endl;

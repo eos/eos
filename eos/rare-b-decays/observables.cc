@@ -1509,11 +1509,21 @@ namespace eos
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "q", "s" } }),
 
-                make_observable("B_s->phill::BR", R"(\mathcal{B}(\bar{B}_s\to \phi\ell^+\ell^-))",
+                make_observable("B_s->phill::BR_CP_specific", R"(\mathcal{B}(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
                         &BsToPhiDilepton::integrated_branching_ratio,
                         std::make_tuple("q2_min", "q2_max"),
                         Options{ { "q", "s" } }),
+
+                make_expression_observable("B_s->phill::BR", R"(\bar{\mathcal{B}}(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                        Unit::None(),
+                        R"(
+                        0.5 * (
+                               <<B_s->phill::BR_CP_specific;cp-conjugate=false>>
+                               +
+                               <<B_s->phill::BR_CP_specific;cp-conjugate=true>>
+                               )
+                        )"),
 
                 make_observable("B_s->phill::F_L", R"(F_L(\bar{B}_s\to \phi\ell^+\ell^-))",
                         Unit::None(),
@@ -1838,6 +1848,48 @@ namespace eos
                         Unit::None(),
                         R"(
                         <<B_s->phill::BR>> / <<B_s->phipsi::BR>>
+                        )"),
+
+                // Time-integrated branching ratio [DV:2015A] eq. (47)
+                make_observable("B_s->phill::H_1s", R"(H_{1s}(\bar{B}_s\to \phi\ell^+\ell^-))",
+                        Unit::None(),
+                        &BsToPhiDileptonAndConjugate::integrated_H_1s,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_s->phill::H_1c", R"(H_{1c}(\bar{B}_s\to \phi\ell^+\ell^-))",
+                        Unit::None(),
+                        &BsToPhiDileptonAndConjugate::integrated_H_1c,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_s->phill::H_2s", R"(H_{2s}(\bar{B}_s\to \phi\ell^+\ell^-))",
+                        Unit::None(),
+                        &BsToPhiDileptonAndConjugate::integrated_H_2s,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
+
+                make_observable("B_s->phill::H_2c", R"(H_{2c}(\bar{B}_s\to \phi\ell^+\ell^-))",
+                        Unit::None(),
+                        &BsToPhiDileptonAndConjugate::integrated_H_2c,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "q", "s" } }),
+
+                make_expression_observable("B_s->phill::expBR", R"(\langle\mathcal{B}\rangle(\bar{B}\to \bar{K}^*\ell^+\ell^-))",
+                        Unit::None(),
+                        R"(
+                         <<life_time::B_s>> / <<QM::hbar>>* 0.5 / (1.0 - <<B_s::ys>>^2.0) * (
+                                        2.0 * (<<B_s->phill::J_1s;cp-conjugate=false>> + <<B_s->phill::J_1s;cp-conjugate=true>> - <<B_s::ys>> * <<B_s->phill::H_1s>>)
+                                            + (<<B_s->phill::J_1c;cp-conjugate=false>> + <<B_s->phill::J_1c;cp-conjugate=true>> - <<B_s::ys>> * <<B_s->phill::H_1c>>)
+                         - 1.0 / 3.0 * (2.0 * (<<B_s->phill::J_2s;cp-conjugate=false>> + <<B_s->phill::J_2s;cp-conjugate=true>> - <<B_s::ys>> * <<B_s->phill::H_2s>>)
+                                            + (<<B_s->phill::J_2c;cp-conjugate=false>> + <<B_s->phill::J_2c;cp-conjugate=true>> - <<B_s::ys>> * <<B_s->phill::H_2c>>))
+                        )
+                        )"),
+
+                make_expression_observable("B_s->phill::NormalizedexpBR", R"(\langle\mathcal{B}\rangle(B_s->\phi\ell\ell)/\mathcal{B}(B_s->\phi J/\psi))",
+                        Unit::None(),
+                        R"(
+                        <<B_s->phill::expBR>> / <<B_s->phipsi::BR>>
                         )"),
 
                 make_observable("B_s->phill::real_C9_perp(q2)",

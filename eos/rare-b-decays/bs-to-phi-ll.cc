@@ -75,6 +75,7 @@ namespace eos
         UsedParameter m_l;
         UsedParameter tau;
         UsedParameter mu;
+        UsedParameter phiBs;
 
         static const std::vector<OptionSpecification> options;
 
@@ -84,7 +85,8 @@ namespace eos
             hbar(p["QM::hbar"], u),
             m_l(p["mass::" + opt_l.value()], u),
             tau(p["life_time::B_s"], u),
-            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u)
+            mu(p["sb" + opt_l.value() + opt_l.value() + "::mu"], u),
+            phiBs(p["B_s::q_over_p_phase"], u)
         {
             std::string tag = o.get("tag", "");
 
@@ -584,6 +586,7 @@ namespace eos
         return integrated_decay_width(s_min, s_max) * _imp->tau() / _imp->hbar();
     }
 
+
     double
     BsToPhiDilepton::integrated_unnormalized_forward_backward_asymmetry(const double & s_min, const double & s_max) const
     {
@@ -869,13 +872,22 @@ The cosine of the Kbar's helicity angle theta_k in the Kbar-K rest frame.";
     BsToPhiDilepton::kinematics_description_phi = "\
 The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
 
-    /*
-     * For diagnostic purposes only!
-     */
     BsToPhiDilepton::Amplitudes
     BsToPhiDilepton::amplitudes(const double & q2) const
     {
         return _imp->amplitude_generator->amplitudes(q2);
+    }
+
+    double
+    BsToPhiDilepton::m_l() const
+    {
+        return _imp->m_l;
+    }
+
+    double
+    BsToPhiDilepton::phiBs() const
+    {
+        return _imp->phiBs;
     }
 
     const std::set<ReferenceName>
@@ -894,4 +906,241 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
     {
         return Implementation<BsToPhiDilepton>::options.cend();
     }
+
+
+    BsToPhiDileptonAndConjugate::BsToPhiDileptonAndConjugate(const Parameters & parameters, const Options & options):
+        bstophidilepton(parameters, options + Options{{"cp-conjugate", "true"}}),
+        bstophidilepton_conjugate(parameters, options + Options{{"cp-conjugate", "false"}})
+    {
+    }
+
+    BsToPhiDileptonAndConjugate::~BsToPhiDileptonAndConjugate() = default;
+
+    struct BsToPhiDileptonAndConjugate::AngularhCoefficients
+    {
+        double h1s, h1c;
+        double h2s, h2c;
+        double h3;
+        double h4;
+        double h5;
+        double h6s, h6c;
+        double h7;
+        double h8;
+        double h9;
+
+        AngularhCoefficients()
+        {
+        }
+
+        AngularhCoefficients(const std::array<double, 12> & a) :
+            h1s(a[0]),
+            h1c(a[1]),
+            h2s(a[2]),
+            h2c(a[3]),
+            h3(a[4]),
+            h4(a[5]),
+            h5(a[6]),
+            h6s(a[7]),
+            h6c(a[8]),
+            h7(a[9]),
+            h8(a[10]),
+            h9(a[11])
+        {
+        }
+    };
+
+
+    inline std::array<double, 12>
+    BsToPhiDileptonAndConjugate::angular_h_coefficients_array(const BsToPhiDilepton::Amplitudes & A,
+                                                              const BsToPhiDilepton::Amplitudes & Atilda,
+                                                              const double & s) const
+    {
+        // cf. [DV2015], eqs. (117)-(128)
+        std::array<double, 12> result;
+
+        double m_l = bstophidilepton.m_l();
+        double phiBs = bstophidilepton.phiBs();
+
+        double z = 4.0 * power_of<2>(m_l) / s;
+        double y = m_l / std::sqrt(s);
+        double beta2 = 1.0 - z;
+        double beta = std::sqrt(beta2);
+
+        const complex<double> expiphi(cos(phiBs), sin(phiBs));
+
+        // h1s
+        result[0] = 3.0 / 4.0 * (
+            (2.0 + beta2) / 2.0 * real( expiphi * (
+                Atilda.a_perp_left * conj(A.a_perp_left) + Atilda.a_perp_right * conj(A.a_perp_right)
+                + Atilda.a_para_left * conj(A.a_para_left) + Atilda.a_para_right * conj(A.a_para_right)
+            ))
+            + z * real( expiphi * (Atilda.a_perp_left * conj(A.a_perp_right) + Atilda.a_para_left * conj(A.a_para_right))
+                - conj(expiphi) * (A.a_perp_left * conj(Atilda.a_perp_right) + A.a_para_left * conj(Atilda.a_para_right))
+                )
+        );
+        // h1c
+        result[1] = 3.0 / 2.0 * ( real(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_long_left) + Atilda.a_long_right * conj(A.a_long_right)
+            ))
+            + z * (
+                real( expiphi * (Atilda.a_time * conj(A.a_time)))
+                + real( expiphi * (Atilda.a_long_left * conj(A.a_long_right)) + conj(expiphi) * (A.a_long_left * conj(Atilda.a_long_right)) )
+            + beta2 * real( expiphi * Atilda.a_scal * conj(A.a_scal)))
+        );
+        // h2s
+        result[2] = 3.0 * beta2 / 8.0 * real( expiphi * (
+            Atilda.a_perp_left * conj(A.a_perp_left) + Atilda.a_perp_right * conj(A.a_perp_right)
+            + Atilda.a_para_left * conj(A.a_para_left) + Atilda.a_para_right * conj(A.a_para_right)
+        ));
+        // h2c
+        result[3] = -3.0 * beta2 / 2.0 * real( expiphi * (
+            Atilda.a_long_left * conj(A.a_long_left) + Atilda.a_long_right * conj(A.a_long_right)
+        ));
+        // h3
+        result[4] = 3.0 / 4.0 * beta2 * real( expiphi * (
+            Atilda.a_perp_left * conj(A.a_perp_left) + Atilda.a_perp_right * conj(A.a_perp_right)
+            - Atilda.a_para_left * conj(A.a_para_left) - Atilda.a_para_right * conj(A.a_para_right)
+        ));
+        // h4
+        result[5] = 3.0 / (4.0 * std::sqrt(2.0)) * beta2 * real(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_para_left) + Atilda.a_long_right * conj(A.a_para_right)
+            ) + conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_para_left) + A.a_long_right * conj(Atilda.a_para_right)
+            ));
+        // h5
+        result[6] = 3.0 * std::sqrt(2.0) / 4.0 * beta * (real(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_perp_left) - Atilda.a_long_right * conj(A.a_perp_right)
+            ) + conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_perp_left) - A.a_long_right * conj(Atilda.a_perp_right)
+            ))
+            - y * real(
+            expiphi * (
+                Atilda.a_para_left * conj(A.a_scal) + Atilda.a_para_right * conj(A.a_scal)
+            ) + conj(expiphi) * (
+                A.a_para_left * conj(Atilda.a_scal) + A.a_para_right * conj(Atilda.a_scal)
+            )));
+        // h6s
+        result[7] = 3.0 / 2.0 * beta * real(
+            expiphi * (
+                Atilda.a_para_left * conj(A.a_perp_left) - Atilda.a_para_right * conj(A.a_perp_right)
+            ) + conj(expiphi) * (
+                A.a_para_left * conj(Atilda.a_perp_left) - A.a_para_right * conj(Atilda.a_perp_right)
+            ));
+        // h6c
+        result[8] = 3.0 * beta * y * real(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_scal) + Atilda.a_long_right * conj(A.a_scal)
+            ) + conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_scal) + A.a_long_right * conj(Atilda.a_scal)
+            ));
+        // h7
+        result[9] = 3.0 * std::sqrt(2.0) / 4.0 * beta * (imag(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_para_left) - Atilda.a_long_right * conj(A.a_para_right)
+            ) + conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_para_left) - A.a_long_right * conj(Atilda.a_para_right)
+            ))
+            + y * imag(
+            expiphi * (
+                Atilda.a_perp_left * conj(A.a_scal) + Atilda.a_perp_right * conj(A.a_scal)
+            ) + conj(expiphi) * (
+                A.a_perp_left * conj(Atilda.a_scal) + A.a_perp_right * conj(Atilda.a_scal)
+            )));
+        // h8
+        result[10] = 3.0 / 4.0 / std::sqrt(2.0) * beta2 * imag(
+            expiphi * (
+                Atilda.a_long_left * conj(A.a_perp_left) + Atilda.a_long_right * conj(A.a_perp_right)
+            ) + conj(expiphi) * (
+                A.a_long_left * conj(Atilda.a_perp_left) + A.a_long_right * conj(Atilda.a_perp_right)
+            ));
+        // h9
+        result[11] = - 3.0 / 4.0 * beta2 * imag(
+            expiphi * (
+                Atilda.a_para_left * conj(A.a_perp_left) + Atilda.a_para_right * conj(A.a_perp_right)
+            ) + conj(expiphi) * (
+                A.a_para_left * conj(Atilda.a_perp_left) + A.a_para_right * conj(Atilda.a_perp_right)
+            ));
+
+        return result;
+    }
+
+    inline std::array<double, 12>
+    BsToPhiDileptonAndConjugate::differential_angular_h_coefficients_array(const double & s) const
+    {
+        BsToPhiDilepton::Amplitudes A = bstophidilepton.amplitudes(s);
+        BsToPhiDilepton::Amplitudes Atilda = bstophidilepton_conjugate.amplitudes(s);
+
+        Atilda.a_perp_left *= -1;
+        Atilda.a_perp_right *= -1;
+        Atilda.a_scal *= -1;
+        Atilda.a_time_perp *= -1; // TODO Check
+        Atilda.a_long_perp *= -1; // TODO Check
+
+        return angular_h_coefficients_array(A, Atilda, s);
+    }
+
+    BsToPhiDileptonAndConjugate::AngularhCoefficients
+    BsToPhiDileptonAndConjugate::integrated_angular_h_coefficients(const double & s_min, const double & s_max) const
+    {
+        std::function<std::array<double, 12> (const double &)> integrand =
+                std::bind(&BsToPhiDileptonAndConjugate::differential_angular_h_coefficients_array, this, std::placeholders::_1);
+        std::array<double, 12> integrated_angular_h_coefficients_array = integrate1D(integrand, 64, s_min, s_max);
+
+        return BsToPhiDileptonAndConjugate::AngularhCoefficients(integrated_angular_h_coefficients_array);
+    }
+
+    double
+    BsToPhiDileptonAndConjugate::integrated_H_1c(const double & s_min, const double & s_max) const
+    {
+        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
+        return a_h_c.h1c;
+    }
+
+    double
+    BsToPhiDileptonAndConjugate::integrated_H_1s(const double & s_min, const double & s_max) const
+    {
+        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
+        return a_h_c.h1s;
+    }
+
+    double
+    BsToPhiDileptonAndConjugate::integrated_H_2c(const double & s_min, const double & s_max) const
+    {
+        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
+        return a_h_c.h2c;
+    }
+
+    double
+    BsToPhiDileptonAndConjugate::integrated_H_2s(const double & s_min, const double & s_max) const
+    {
+        AngularhCoefficients a_h_c = integrated_angular_h_coefficients(s_min, s_max);
+        return a_h_c.h2s;
+    }
+
+    const std::set<ReferenceName>
+    BsToPhiDileptonAndConjugate::references
+    {
+    };
+
+    const std::vector<OptionSpecification>
+    BsToPhiDileptonAndConjugate::options
+    {
+    };
+
+
+    std::vector<OptionSpecification>::const_iterator
+    BsToPhiDileptonAndConjugate::begin_options()
+    {
+        return options.cbegin();
+    }
+
+    std::vector<OptionSpecification>::const_iterator
+    BsToPhiDileptonAndConjugate::end_options()
+    {
+        return options.cend();
+    }
+
 }
