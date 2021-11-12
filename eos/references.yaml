@@ -79,6 +79,14 @@ ATLAS:2018B:
   inspire-id: ATLAS:2018gqc
   title: Angular analysis of $B^0_d \rightarrow K^{*}\mu^+\mu^-$ decays in $pp$ collisions
     at $\sqrt{s}= 8$ TeV with the ATLAS detector
+ATLAS:2020A:
+  authors: Aad, G. et al.
+  collaboration: ATLAS
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2001.07115
+  inspire-id: ATLAS:2020lbz
+  title: Measurement of the $CP$-violating phase $\phi_s$ in $B^0_s \to J/\psi\phi$ decays in ATLAS at 13 TeV
 ATLAS+CMS+LHCb:2020A:
   authors: ATLAS, CMS and LHCb
   collaboration: ATLAS, CMS and LHCb
@@ -699,6 +707,16 @@ CMS:2020A:
     id: oai:arXiv.org:2010.13968
   title: Angular analysis of the decay B$^+$ $\to$ K$^*$(892)$^+\mu^+\mu^-$ in
     proton-proton collisions at $\sqrt{s} = 8$ TeV
+CMS:2020B:
+  authors: Sirunyan, Albert M. et al.
+  collaboration: CMS
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2007.02434
+  inspire-id: CMS:2020efq
+  title: Measurement of the $CP$-violating phase $\phi_\mathrm{s}$ in the
+    B$^0_\mathrm{s}\to$ J$/\psi\, \phi$(1020) $\to \mu^+\mu^-$K$^+$K$^-$ channel
+    in proton-proton collisions at $\sqrt{s} =$ 13 TeV
 CMS+LHCb:2014A:
   authors: Khachatryan, V. and others [CMS and LHCb]
   eprint:

@@ -109,3 +109,66 @@ B_s->phiJpsi::PolarizationAmplitude@LHCb:2021C:
         - [ 0.10,-0.17,-0.03, 1.00 ]
     dof: 4
 # }}}
+
+#######
+# CMS #
+#######
+#
+# 2020
+#
+# {{{
+B_s->phiJpsi::PolarizationAmplitude@CMS:2020B:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phipsi::perp_polarization
+        - B_s->phipsi::long_polarization
+        - B_s->phipsi::delta_para_long
+        - B_s->phipsi::delta_perp_long
+    kinematics:
+        [ {}, {}, {}, {} ]
+    options:
+        [ {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"} ]
+    means: [ 0.2393, 0.5289, 3.19, 2.78 ]
+    sigma-stat-hi: [ 0.005, 0.0038, 0.12, 0.15 ]
+    sigma-stat-lo: [ 0.005, 0.0038, 0.12, 0.15 ]
+    sigma-sys: [ 0.0037, 0.0041, 0.04, 0.046 ]
+    correlations:
+        - [ 1.00,-0.56,-0.03, 0.01 ]
+        - [-0.56, 1.00,-0.03, 0.01 ]
+        - [-0.03,-0.03, 1.00, 0.26 ]
+        - [ 0.01, 0.01, 0.26, 1.00 ]
+    dof: 4
+# }}}
+
+#########
+# ATLAS #
+#########
+#
+# 2020
+#
+# {{{
+# Two solutions where found for the phases, solution (a) is implemented below
+B_s->phiJpsi::PolarizationAmplitude@ATLAS:2020A:
+    type: MultivariateGaussian
+    dim: 4
+    observables:
+        - B_s->phipsi::para_polarization
+        - B_s->phipsi::long_polarization
+        - B_s->phipsi::delta_perp_long
+        - B_s->phipsi::delta_para_long
+    kinematics:
+        [ {}, {}, {}, {} ]
+    options:
+        [ {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"}, {psi: "J/psi", q: "s"} ]
+    means: [ 0.2213, 0.5131, 3.12, 3.35 ]
+    sigma-stat-hi: [ 0.0019, 0.0013, 0.11, 0.05 ]
+    sigma-stat-lo: [ 0.0019, 0.0013, 0.11, 0.05 ]
+    sigma-sys: [ 0.0023, 0.0038, 0.06, 0.09 ]
+    correlations:
+        - [ 1.00, -0.341,  0.13, 0.522 ]
+        - [-0.341, 1.00, -0.034,-0.103 ]
+        - [ 0.13, -0.034,  1.00, 0.254 ]
+        - [ 0.522,-0.103, 0.254, 1.00  ]
+    dof: 4
+# }}}
