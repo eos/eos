@@ -17,7 +17,7 @@ jobs:
         name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-18.04
         container:
-            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+            image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v2
@@ -48,8 +48,7 @@ jobs:
                 which ${CXX} || ( echo c++ compiler not found ; exit 1 )
                 ../_src/configure \
                   --enable-python \
-                  --prefix=/usr \
-                  --with-custom-pythondir=dist-packages \
+                  --prefix=/opt/venv/ \
                   --enable-lto \
                   || ( cat config.log ; exit 2 )
                 popd
@@ -82,7 +81,7 @@ jobs:
         name: Documentation on ${{ matrix.cfg.os }}
         runs-on: ubuntu-18.04
         container:
-            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+            image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v1
@@ -99,7 +98,6 @@ jobs:
             - name: Build documentation
               shell: bash
               run: |
-                pip3 install --upgrade sphinx-argparse sphinxcontrib-contentui jinja2
                 pushd _src
                 # determine the release id
                 export EOS_RELEASE=$(git describe --abbrev=0 --tags --exact-match HEAD)
@@ -131,7 +129,7 @@ jobs:
         name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-18.04
         container:
-            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+            image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v1
@@ -163,7 +161,7 @@ jobs:
         name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-18.04
         container:
-            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+            image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v1
@@ -180,7 +178,6 @@ jobs:
             - name: Run examples
               shell: bash
               run: |
-                pip3 install jupyter nbconvert
                 pushd _build
                 make install
                 popd
@@ -206,19 +203,52 @@ jobs:
         name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
         runs-on: ubuntu-18.04
         container:
-            image: eoshep/build-essentials:${{ matrix.cfg.os }}
+            image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
-            - name: Download configured source as artifact
-              uses: actions/download-artifact@v1
+            - name: Checkout git repository
+              uses: actions/checkout@v2
               with:
-                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _src
+                path: _src/
 
-            - name: Download build as artifact
-              uses: actions/download-artifact@v1
-              with:
-                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _build
+            - name: Fetch tags
+              shell: bash
+              run: |
+                pushd _src
+                git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+                popd
+
+            - name: Create build directory
+              shell: bash
+              run: mkdir -p _build
+
+            # We cannot resuse the configure & build artifacts for deployment,
+            # since we need to target '/usr' rather than the virtual environment
+            # in '/opt/venv', and we need to modify the pythondir.
+            - name: Configure
+              shell: bash
+              env:
+                CXX: "${{ matrix.cfg.cxx }}"
+                CXXFLAGS: "${{ matrix.cfg.cxxflags }}"
+              run: |
+                pushd _src
+                ./autogen.bash
+                popd
+                pushd _build
+                which ${CXX} || ( echo c++ compiler not found ; exit 1 )
+                ../_src/configure \
+                  --enable-python \
+                  --prefix=/usr \
+                  --with-custom-pythondir=dist-packages \
+                  --enable-lto \
+                  || ( cat config.log ; exit 2 )
+                popd
+
+            - name: Build
+              shell: bash
+              run: |
+                pushd _build
+                make -j2 all
+                popd
 
             - name: Build .deb file and deploy to Packagecloud.io
               shell: bash
@@ -253,6 +283,8 @@ jobs:
                     - { os: bionic,   cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
         name: Deploy documentation
         runs-on: ubuntu-18.04
+        container:
+            image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v1
