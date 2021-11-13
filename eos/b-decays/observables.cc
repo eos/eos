@@ -22,6 +22,7 @@
 #include <eos/b-decays/b-to-l-nu.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
+#include <eos/b-decays/b-to-psd-nu-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu-impl.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
@@ -1514,6 +1515,37 @@ namespace eos
 
     // }}}
 
+    // B -> P(seudoscalar) nu nudecays
+    // {{{
+
+    // B -> K nu nu
+    // {{{
+    ObservableGroup
+    make_b_to_k_nu_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B\to K \nu\bar\nu$ decays)",
+            R"()",
+            {
+                make_observable("B->Knunu::dBR/dq2", R"(d\mathcal{B}(\bar{B}\to \bar{K}\nu\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarDineutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "D", "s" }, { "I", "1/2" } }),
+                make_observable("B->Knunu::BR", R"(\mathcal{B}(\bar{B}\to \bar{K}\nu\bar\nu))",
+                        Unit::InverseGeV2(),
+                        &BToPseudoscalarDineutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "D", "s" }, { "I", "1/2" } })
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // }}}
+
     // Semileptonic B -> P(seudoscalar) P(seudoscalar) decays
     // {{{
 
@@ -1845,6 +1877,9 @@ namespace eos
                 // B_s -> V l^- nubar
                 make_bs_to_kstar_l_nu_group(),
                 make_bs_to_dsstar_l_nu_group(),
+
+                // B_{u,d} -> P nu nubar
+                make_b_to_k_nu_nu_group(),
 
                 // Lambda_b
                 make_lambdab_to_lambdac_l_nu_group(),
