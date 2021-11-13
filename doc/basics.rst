@@ -1,6 +1,6 @@
-#########
+######
 Basics
-#########
+######
 
 
 .. note::
@@ -250,7 +250,7 @@ create an empty set of kinematic variables as follows:
 
     kinematics = eos.Kinematics()
 
-We can populate this object with a choice of kinematic variables: 
+We can populate this object with a choice of kinematic variables:
 
 - We generally use ``q2`` or ``p2`` to denote the square of four momentum ``q`` or ``p``. - We generally use ``E_pi`` or ``E_gamma`` for the energy of a final state in the rest frame of the respective initial state.
 - We usually parametrize helicity angles via their cosines, e.g., ``cos(theta_l)`` or ``cos(theta_pi)``. As for parameters, we use powers of GeV as units.
@@ -403,18 +403,18 @@ pairs of strings. Within each pair, we refer to the first element as the
 include:
 - ``model``, to select a BSM model;
 - ``form-factors``, to select the parametrization of the hadronic form factors in semileptonic decays;
-- ``l``, to select a lepton flavour;
-- ``q``, to select a quark flavour (typically for a spectator quark).
+- ``l``, to select a lepton flavor;
+- ``q``, to select a quark flavor (typically for a spectator quark).
 
-Option values are specific to both the process and the option key: -
-``model`` can typically take values such as ``SM`` (for the Standard
-Model), ``CKMScan`` (to parametrize each CKM matrix element and fit for
-absolute value or complex phase), and ``WilsonScan`` (to parametrize the
-Wilson coefficients of the Weak Effective Theory); - ``form-factors``
-can typically take values that identify a single paper (e.g. ``BSZ2015``
-for a parametrization used in Bharucha, Straub, Zwicky 2015); - ``l`` can
-typically take values ``e``, ``mu`` and ``tau``; - ``q`` can typically
-take values ``u``, ``d``, ``s``, and ``c``.
+Option values are specific to both the process and the option key:
+- ``model`` can typically take values such as ``SM`` (for the Standard
+  Model), ``CKM`` (to parametrize each CKM matrix element and fit for
+  absolute value or complex phase), and ``WET`` (to parametrize the
+  Wilson coefficients of the Weak Effective Theory);
+- ``form-factors`` can typically take values that identify a single parametrization
+  (e.g. ``BSZ2015`` for a parametrization used in Bharucha, Straub, Zwicky 2015);
+- ``l`` can typically take values ``e``, ``mu`` and ``tau``;
+- ``q`` can typically take values ``u``, ``d``, ``s``, and ``c``.
 
 Option keys are specific to a process. Presently, there is no way to list
 all option keys that a process understands, or to see their possible
@@ -424,7 +424,7 @@ Adding options to the set can be achieved by the following:
 
 .. code:: ipython3
 
-    options.declare('model', 'CKMScan')
+    options.declare('model', 'CKM')
     options.declare('form-factors', 'BSZ2015')
     options.declare('l', 'mu')                 # Since we are all so "cautiously excited"!
     options.declare('q', 's')
@@ -443,7 +443,7 @@ Adding options to the set can be achieved by the following:
    * - l
      - mu
    * - model
-     - CKMScan
+     - CKM
    * - q
      - s
 
@@ -456,7 +456,7 @@ option keys are also valid Python identifiers. (In the above example
 
 .. code:: ipython3
 
-    options = eos.Options(l='mu', q='s', model='CKMScan')
+    options = eos.Options(l='mu', q='s', model='CKM')
     display(options)
 
 
@@ -467,7 +467,7 @@ option keys are also valid Python identifiers. (In the above example
    * - l
      - mu
    * - model
-     - CKMScan
+     - CKM
    * - q
      - s
 
@@ -480,7 +480,7 @@ identifiers. It uses Python “keyword arguments”:
 
     options = eos.Options(**{
         'form-factors': 'BSZ2015',
-        'model': 'WilsonScan',
+        'model': 'WET',
         'l': 'tau',
         'q': 's'
     })
@@ -496,7 +496,7 @@ identifiers. It uses Python “keyword arguments”:
    * - l
      - mu
    * - model
-     - WilsonScan
+     - WET
    * - q
      - s
 
@@ -527,7 +527,7 @@ To create an observable, we require:
     observable1 = eos.Observable.make('B_q->ll::BR@Untagged',
             eos.Parameters(),
             eos.Kinematics(),
-            eos.Options(model='WilsonScan', q='s', l='mu')
+            eos.Options(model='WET', q='s', l='mu')
     )
     display(observable1)
     print('----')
@@ -553,7 +553,7 @@ To create an observable, we require:
      - mu
    * - options
      - model
-     - WilsonScan
+     - WET
    * -
      - q
      - s
@@ -647,7 +647,7 @@ Finally, you can access the set of options with which an
    * - l
      - mu
    * - model
-     - WilsonScan
+     - WET
    * - q
      - s
 
@@ -655,8 +655,8 @@ Finally, you can access the set of options with which an
 
 An observable can be handled just like any other Python object. For
 example, we can readily create a list of observables that differ only by
-one of their kinematic variables, e.g. to plot an observables as a
-function of the kinematic variable.
+one of their kinematic variables, e.g. to plot an observable as a
+function of one of its kinematic variable.
 
 .. code:: ipython3
 

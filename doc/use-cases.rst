@@ -79,7 +79,7 @@ and then display it:
    obs = eos.Observable.make('B->Dlnu::BR', params, kinematics, eos.Options())
    display(obs)
 
-The default options select :math:`\ell=\mu` as the lepton flavour. The value of the observable
+The default options select :math:`\ell=\mu` as the lepton flavor. The value of the observable
 is shown to be about :math:`2.4\%`, which is compatible with the current world average for the :math:`\bar{B}^-\to D^0\mu^-\bar\nu` branching ratio.
 
 By setting the ``l`` option to the value ``'tau'``, we have create a different observable representing the :math:`\bar{B}^-\to D^0\tau^-\bar\nu` branching ratio.
@@ -224,7 +224,7 @@ Here :code:`N=5000` samples are produced. To illustrate these samples we use EOS
 .. image:: /images/use-cases_prediction_hist-b-to-d-l-nu.png
    :width: 600
 
-We can convince ourselves of the usefullness of the correlated samples by computing the lepton-flavour universality
+We can convince ourselves of the usefullness of the correlated samples by computing the lepton-flavor universality
 ratio :math:`R_D` twice: once using EOS' built-in observable :code:`B->Dlnu::R_D` as sampled above,
 and once by calculating the ratio manually for each sample:
 

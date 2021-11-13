@@ -106,7 +106,7 @@ Build and Install from Source
 
 The following instructions explain how to install EOS from source on a Linux-based operating system,
 such as Debian or Ubuntu, and macOS.
-Other flavours of Linux or UNIX-like operating systems will likely work as well.
+Other flavors of Linux or UNIX-like operating systems will likely work as well.
 However, note that we will exclusively use Debian/Ubuntu-specific package names when listing
 software dependencies.
 

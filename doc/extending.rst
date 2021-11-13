@@ -38,7 +38,7 @@ Each parameter group's entry is a key/value map with the following mandatory key
   a section title.
 * **parameters** (*map*) -- The group's parameters. The keys into this map are strings representing a valid
   :class:`QualifiedName <eos.QualifiedName>`. The values are parameter entries.
-  
+
 Each parameter' entry is a key/value map with the following mandatory keys:
 
 * **central** (*float*) -- The default central value of the parameter.
