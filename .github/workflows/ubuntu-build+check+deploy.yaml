@@ -190,6 +190,7 @@ jobs:
                 popd
 
             - name: Upload processed example notebooks as artifact
+              if: always()
               uses: actions/upload-artifact@v2
               with:
                 name: eos-examples-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
