@@ -35,7 +35,7 @@ def main():
 
     instructions = None
     with open(args.input) as input_file:
-        instructions = yaml.load(input_file)
+        instructions = yaml.load(input_file, Loader=yaml.SafeLoader)
 
     # plot data
     plotter = eos.plot.Plotter(instructions, args.output)
