@@ -269,4 +269,37 @@ namespace eos
     {
         return _value;
     }
+
+    QuarkFlavorOption::QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key) :
+        SpecifiedOption(options, specifications, key)
+    {
+    }
+
+    QuarkFlavorOption::~QuarkFlavorOption() = default;
+
+    QuarkFlavor
+    QuarkFlavorOption::value() const
+    {
+        static const std::map<std::string, QuarkFlavor> map
+        {
+            { "u", QuarkFlavor::up      },
+            { "d", QuarkFlavor::down    },
+            { "s", QuarkFlavor::strange },
+            { "c", QuarkFlavor::charm   },
+            { "b", QuarkFlavor::bottom  },
+            { "t", QuarkFlavor::top     }
+        };
+
+        const auto i = map.find(_value);
+        if (map.cend() == i)
+            throw InternalError("Invalid quark flavor '" + _value + "' encountered in QuarkFlavorOption::value()");
+
+        return i->second;
+    }
+
+    const std::string &
+    QuarkFlavorOption::str() const
+    {
+        return _value;
+    }
 }
