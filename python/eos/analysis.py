@@ -469,3 +469,63 @@ class Analysis:
         eos.info('Perplexity after final samples: {}'.format(perplexity))
 
         return samples, weights, sampler.proposal
+
+    def _repr_html_(self):
+        result = r'''
+        <table>
+            <colgroup>
+                <col width="50%" id="qn"    style="min-width: 200px">
+                <col width="20%" id="min"   style="min-width: 100px">
+                <col width="20%" id="max"   style="min-width: 100px">
+                <col width="30%" id="type"  style="min-width: 100px">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th colspan="4">priors</th>
+                </tr>
+                <tr>
+                    <th>qualified name</th>
+                    <th>min</th>
+                    <th>max</th>
+                    <th>type</th>
+                </tr>
+            </thead>
+            <tbody>'''
+
+        for p in self.init_args['priors']:
+            result += fr'''
+                <tr>
+                    <td><tt>{p['parameter']}</tt></td>
+                    <td>{p['min']}</td>
+                    <td>{p['max']}</td>
+                    <td>{p['type']}</td>
+                </tr>
+            '''
+        result += r'''
+            </tbody>
+            </table>
+            <table>
+            <thead>
+                <tr>
+                    <th colspan="2">likelihood</th>
+                </tr>
+                <tr>
+                    <th>qualified name</th>
+                    <th>&num; obs.</th>
+                </tr>
+            </thead>
+            <tbody>
+        '''
+        for c in self.log_likelihood:
+            result += fr'''
+                <tr>
+                    <td><tt>{c.name()}</tt></td>
+                    <td>{len(list(c.observables()))}</td>
+                </tr>
+            '''
+        result += r'''
+            </tbody>
+            </table>
+        '''
+
+        return(result)
