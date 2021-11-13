@@ -4,21 +4,22 @@
 
 ![EOS logo](https://eos.github.io/images/github-eos-logo.png)
 
-EOS - A HEP Program for Flavour Observables
-===========================================
+EOS - A software for Flavor Physics Phenomenology
+=================================================
 
 EOS is a software package that addresses several use cases in the field of
-high-energy flavor physics (HEP):
+high-energy flavor physics:
 
- 1. [theory predictions of and uncertainty estimation for flavour observables](https://eos.github.io/doc/use-cases.html#theory-predictions-and-their-uncertainties)
+ 1. [theory predictions of and uncertainty estimation for flavor observables](https://eos.github.io/doc/use-cases.html#theory-predictions-and-their-uncertainties)
    within the Standard Model or within the Weak Effective Theory;
  2. [Bayesian parameter inference](https://eos.github.io/doc/use-cases.html#parameter-inference)
     from both experimental and theoretical constraints; and
- 3. [Monte Carlo simulation of pseudo events](https://eos.github.io/doc/use-cases.html#pseudo-event-simulation) for flavour processes.
+ 3. [Monte Carlo simulation of pseudo events](https://eos.github.io/doc/use-cases.html#pseudo-event-simulation) for flavor processes.
 
-An up-to-date list of High Energy Physics publications can be found [here](https://eos.github.io/publications/).
+An up-to-date list of publications that use EOS can be found [here](https://eos.github.io/publications/).
 
-EOS is written in C++14, with a recommended interface to Python 3.
+EOS is written in C++17 and designed to be used through its Python 3 interface,
+ideally within a Jupyter notebook environment.
 It depends on as a small set of external software:
 
  - the GNU Scientific Library (libgsl),
@@ -68,17 +69,20 @@ with further code contributions by:
  * Eduardo Romero,
  * Rafael Silva Coutinho,
  * Ismo Tojiala,
- * Keri Vos,
+ * K. Keri Vos,
  * Christian Wacker.
 
 We would like to extend our thanks to the following people whose input and
 support were most helpful in either the development or the maintenance of EOS:
 
  * Gudrun Hiller
+ * Gino Isidori
  * David Leverton
+ * Thomas Mannel
  * Ciaran McCreesh
  * Hideki Miyake
  * Konstantinos Petridis
+ * Nicola Serra
  * Alexander Shires
 
 Contact
