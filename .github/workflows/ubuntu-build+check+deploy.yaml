@@ -52,6 +52,7 @@ jobs:
                   --enable-lto \
                   || ( cat config.log ; exit 2 )
                 popd
+                tar caf _src.tar _src
 
             - name: Build
               shell: bash
@@ -59,18 +60,19 @@ jobs:
                 pushd _build
                 make -j2 all
                 popd
+                tar caf _build.tar _build
 
             - name: Upload configured source as artifact
               uses: actions/upload-artifact@v2
               with:
                 name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _src
+                path: _src.tar
 
             - name: Upload build as artifact
               uses: actions/upload-artifact@v2
               with:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _build
+                path: _build.tar
 
     ubuntu-build-doc:
         needs: ubuntu-build
@@ -87,21 +89,21 @@ jobs:
               uses: actions/download-artifact@v2
               with:
                 name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _src
 
             - name: Download build as artifact
               uses: actions/download-artifact@v2
               with:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _build
 
             - name: Build documentation
               shell: bash
               run: |
+                tar fx _src.tar
                 pushd _src
                 # determine the release id
                 export EOS_RELEASE=$(git describe --abbrev=0 --tags --exact-match HEAD)
                 popd
+                tar fx _build.tar
                 pushd _build
                 make install
                 make -C ../_src/doc/ html BUILDDIR=$(pwd)/doc O=-a
@@ -111,12 +113,13 @@ jobs:
                     mv $(pwd)/doc/${EOS_RELEASE} $(pwd)/doc/html/
                 fi
                 popd
+                tar caf doc.tar _build/doc/html
 
             - name: Upload documentation as artifact
               uses: actions/upload-artifact@v2
               with:
                 name: eos-doc-${{ github.sha }}
-                path: _build/doc/html
+                path: doc.tar
 
     ubuntu-check:
         needs: ubuntu-build
@@ -135,17 +138,17 @@ jobs:
               uses: actions/download-artifact@v2
               with:
                 name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _src
 
             - name: Download build as artifact
               uses: actions/download-artifact@v2
               with:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _build
 
             - name: Check
               shell: bash
               run: |
+                tar fx _src.tar
+                tar fx _build.tar
                 pushd _build
                 make -j2 distcheck DISTCHECK_CONFIGURE_FLAGS="--enable-python --prefix=/usr" VERBOSE=1
                 popd
@@ -167,17 +170,17 @@ jobs:
               uses: actions/download-artifact@v2
               with:
                 name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _src
 
             - name: Download build as artifact
               uses: actions/download-artifact@v2
               with:
                 name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _build
 
             - name: Run examples
               shell: bash
               run: |
+                tar fx _src.tar
+                tar fx _build.tar
                 pushd _build
                 make install
                 popd
@@ -286,12 +289,6 @@ jobs:
         container:
             image: eoshep/build-essentials:ubuntu-${{ matrix.cfg.os }}
         steps:
-            - name: Download configured source as artifact
-              uses: actions/download-artifact@v2
-              with:
-                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _src
-
             - name: Create repository
               shell: bash
               env:
@@ -304,7 +301,6 @@ jobs:
               uses: actions/download-artifact@v2
               with:
                 name: eos-doc-${{ github.sha }}
-                path: _build/doc/html
 
             - name: Deploy documentation
               shell: bash
@@ -312,6 +308,7 @@ jobs:
                 GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
               run: |
                 [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
+                tar xf doc.tar
                 pushd _build/doc/html
                 git config user.email "eos-developers@googlegroups.com"
                 git config user.name  "EOS"
