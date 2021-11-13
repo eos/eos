@@ -98,8 +98,8 @@ class Analysis:
         # create the priors
         for prior in priors:
             parameter = prior['parameter']
-            minv = prior['min']
-            maxv = prior['max']
+            minv = float(prior['min'])
+            maxv = float(prior['max'])
             prior_type = prior['type'] if 'type' in prior else 'uniform'
             if 'uniform' == prior_type or 'flat' == prior_type:
                 self.log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, eos.ParameterRange(minv, maxv)), False)
