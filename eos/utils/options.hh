@@ -155,6 +155,17 @@ namespace eos
             LeptonFlavor value() const;
             const std::string & str() const;
     };
+
+    class QuarkFlavorOption :
+        public SpecifiedOption
+    {
+        public:
+            QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const std::string & key = "l");
+            ~QuarkFlavorOption();
+
+            QuarkFlavor value() const;
+            const std::string & str() const;
+    };
 }
 
 #endif
