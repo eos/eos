@@ -16,7 +16,7 @@ We assume that remote computer has the hostname ```REMOTE_HOST```. We further as
 can connect to that computer through a secure shell, via ```ssh REMOTE_HOST``` or some similar
 command. Last but not least, we assume that you have installed EOS on the remote computer, e.g.
 via the Python Package Index (PyPI): ```pip3 install eoshep```.
-To use EOS on the remote computer through your local computers browser, you need to slightly
+To use EOS on the remote computer through your local computer's browser, you need to slightly
 change your connection details.
 Use ```ssh -L 8888:localhost:8888 REMOTE_HOST``` to connect. Now you can run ```jupyter-notebook --no-browser```,
 which will provide you with some output that looks as follows
