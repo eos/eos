@@ -392,7 +392,7 @@ namespace eos
     {
         BToKstarDilepton::Amplitudes result;
 
-        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
         const double
             shat = s_hat(s),

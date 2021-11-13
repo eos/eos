@@ -256,7 +256,7 @@ namespace eos
 
             // Use calT_perp / xi_perp = C_7 as start point.
             // Use hard coded values for mu=4.2 GeV and M_B = 5.2795 GeV here.
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), amplitude_generator->lepton_flavour, amplitude_generator->cp_conjugate);
+            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), amplitude_generator->lepton_flavor, amplitude_generator->cp_conjugate);
             const double start = -2.0 * model->m_b_msbar(4.2) * 5.2795 * real(wc.c7() / wc.c9());
 
             double result = start;

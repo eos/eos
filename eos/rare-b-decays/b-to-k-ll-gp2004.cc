@@ -88,7 +88,7 @@ namespace eos
     // double
     // BToKDileptonAmplitudes<tag::GP2004>::rho_1(const double & s) const
     // {
-    //     WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
+    //     WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
     //     double alpha_s = model->alpha_s(mu());
 
@@ -103,7 +103,7 @@ namespace eos
     {
         BToKDilepton::Amplitudes result;
 
-        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
         // cf. [BF2001] Eq. (22 + TODO: 31)
         // cf. [BF2001] Eq. (22 + TODO: 30)

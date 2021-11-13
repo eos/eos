@@ -105,7 +105,7 @@ namespace eos
         // TODO: possibly optimize the calculation
         BToKstarDilepton::Amplitudes result;
 
-        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavour, cp_conjugate);
+        WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
         const double m_B2 = m_B * m_B, m_Kstar2 = m_Kstar * m_Kstar, m2_diff = m_B2 - m_Kstar2;
         const double m_Kstarhat = m_Kstar / m_B;

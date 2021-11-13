@@ -43,7 +43,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_q \to \ell^+\ell^-$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour.)",
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor.)",
             {
                 make_observable("B_q->ll::BR", R"(\mathcal{B}(B_q \to \ell^+\ell^-))",
                         Unit::None(),
@@ -79,7 +79,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_q \to P \ell^+\ell^-$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour.)",
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor.)",
             {
                 // B -> K ll, Large Recoil
                 make_observable("B->Kll::d^2Gamma", R"(d^2\mathcal{\Gamma(\bar{B}\to \bar{K}\ell^+\ell^-)}/(dq^2\, d\cos\theta_\ell))",
@@ -171,7 +171,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_q \to V \gamma$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour.)",
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor.)",
             {
                 // B -> K^* gamma
                 make_observable("B->K^*gamma::BR", R"(\mathcal{B}(\bar{B}\to \bar{K}^*\gamma))",
@@ -211,7 +211,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_q \to P \psi$ decays)",
-            R"(The option "q" selects the spectator quark flavour.)",
+            R"(The option "q" selects the spectator quark flavor.)",
             {
                 /// Branching ratio of B -> K psi
                 make_observable("B->Kpsi::BR", R"(\mathcal{B}(\bar{B} \to \bar{K}\psi))",
@@ -232,7 +232,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_q \to V \psi$ decays)",
-            R"(The option "q" selects the spectator quark flavour.)",
+            R"(The option "q" selects the spectator quark flavor.)",
             {
                 /// Angular observables as detected in the decay B -> K^* psi (-> l^+ l^-)
                 make_observable("B->K^*psi::S_1s_LHCb", R"(S_{1s}(\bar{B} \to \bar{K}^*\psi))",
@@ -279,7 +279,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_q \to P$ decays)",
-            R"(The option "q" selects the spectator quark flavour.)",
+            R"(The option "q" selects the spectator quark flavor.)",
             {
                 make_observable("B->K::re_H_plus(q2)", R"(\mathrm{Re}\mathcal{H}_0^{B \to K}(q^2))",
                         Unit::None(),
@@ -333,7 +333,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_q \to V$ decays)",
-            R"(The option "q" selects the spectator quark flavour.)",
+            R"(The option "q" selects the spectator quark flavor.)",
             {
                 make_observable("B->K^*::re_H_perp(q2)",  R"(\mathrm{Re}\mathcal{H}_\perp^{B \to K^*}(q^2))",
                         Unit::None(),
@@ -527,7 +527,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_q \to V \ell^+\ell^-$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour.)",
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor.)",
             {
                 make_observable("B->K^*ll::d^4Gamma",
                         Unit::GeV(),
@@ -1220,7 +1220,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $\Lambda_b \to \Lambda\ell^+\ell^-$ decays)",
-            R"(The option "l" selects the charged lepton flavour.)",
+            R"(The option "l" selects the charged lepton flavor.)",
             {
                 // Lambda_b -> Lambda l^+ l^-, Large Recoil
                 make_observable("Lambda_b->Lambdall::dBR/dq2@LargeRecoil", R"(d\mathcal{B}(\Lambda_b\to\Lambda\ell^+\ell^-)/dq^2)",
@@ -1565,7 +1565,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B \to X_s \lbrace \gamma, \ell^+\ell^-\rbrace$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour.)",
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor.)",
             {
                 // B->X_s gamma
                 make_observable("B->X_sgamma::BR@Minimal",

@@ -1513,7 +1513,7 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2) * nf; // to account for flavour symmetry
+                    result += pow(ff[i], 2) * nf; // to account for flavor symmetry
                 }
             }
 
@@ -1579,7 +1579,7 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2) * nf; // to account for flavour symmetry
+                    result += pow(ff[i], 2) * nf; // to account for flavor symmetry
                 }
             }
 
@@ -1653,7 +1653,7 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2) * nf; // to account for flavour symmetry
+                    result += pow(ff[i], 2) * nf; // to account for flavor symmetry
                 }
             }
 
@@ -1735,7 +1735,7 @@ namespace eos
             {
                 for (unsigned i = 0 ; i <= zorder_bound ; ++i)
                 {
-                    result += pow(ff[i], 2) * nf; // to account for flavour symmetry
+                    result += pow(ff[i], 2) * nf; // to account for flavor symmetry
                 }
             }
 
@@ -2128,7 +2128,7 @@ namespace eos
 
             for (unsigned i = 0 ; i <= zorder_bound ; ++i)
             {
-                result += pow(_a_f_0[i], 2) * nf; // to account for flavour symmetry
+                result += pow(_a_f_0[i], 2) * nf; // to account for flavor symmetry
             }
 
             return result;
@@ -2160,7 +2160,7 @@ namespace eos
 
             for (unsigned i = 0 ; i <= zorder_bound ; ++i)
             {
-                result += pow(_a_F2[i], 2) * nf; // to account for flavour symmetry
+                result += pow(_a_F2[i], 2) * nf; // to account for flavor symmetry
             }
 
             return result;
@@ -2192,8 +2192,8 @@ namespace eos
 
             for (unsigned i = 0 ; i <= zorder_bound ; ++i)
             {
-                result += pow(_a_f[i],  2) * nf; // to account for flavour symmetry
-                result += pow(_a_F1[i], 2) * nf; // to account for flavour symmetry
+                result += pow(_a_f[i],  2) * nf; // to account for flavor symmetry
+                result += pow(_a_F1[i], 2) * nf; // to account for flavor symmetry
             }
 
             return result;
@@ -2225,8 +2225,8 @@ namespace eos
 
             for (unsigned i = 0 ; i <= zorder_bound ; ++i)
             {
-                result += pow(_a_f_p[i], 2) * nf; // to account for flavour symmetry
-                result += pow(_a_g[i],   2) * nf; // to account for flavour symmetry
+                result += pow(_a_f_p[i], 2) * nf; // to account for flavor symmetry
+                result += pow(_a_g[i],   2) * nf; // to account for flavor symmetry
             }
 
             return result;

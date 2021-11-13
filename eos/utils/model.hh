@@ -107,7 +107,7 @@ namespace eos
     {
         public:
             /* b->s Wilson coefficients */
-            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const std::string & lepton_flavour, const bool & cp_conjugate = false) const = 0;
+            virtual WilsonCoefficients<BToS> wilson_coefficients_b_to_s(const double & mu, const std::string & lepton_flavor, const bool & cp_conjugate = false) const = 0;
     };
 
     /*!

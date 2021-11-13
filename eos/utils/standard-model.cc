@@ -623,13 +623,13 @@ namespace implementation
 }
 
     WilsonCoefficients<BToS>
-    SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const std::string & /*lepton_flavour*/, const bool & /*cp_conjugate*/) const
+    SMComponent<components::DeltaBS1>::wilson_coefficients_b_to_s(const double & mu, const std::string & /*lepton_flavor*/, const bool & /*cp_conjugate*/) const
     {
         /*
          * In the SM all Wilson coefficients are real-valued -> all weak phases are zero.
          * Therefore, CP conjugation leaves the Wilson coefficients invariant.
          *
-         * In the SM there is lepton flavour universality.
+         * In the SM there is lepton flavor universality.
          */
 
         // Calculation according to [BMU1999], Eq. (25), p. 7
@@ -773,7 +773,7 @@ namespace implementation
         * Initial scale Wilson coefficients from the top sector, cf. [BBL:1995A], Eqs. (XIII.1) to (XIII.5), pp. 118.
         */
 
-        // anomalous mass dimension, eq. (XII.7), in the five-flavour scheme
+        // anomalous mass dimension, eq. (XII.7), in the five-flavor scheme
         const double Nc      = 3.0;
         const double gamma_0 = 6.0 * (Nc - 1.0) / Nc;
         const double gamma_1 = (-21.0 + 57.0 / Nc - 19.0 / 3.0 * Nc + 4.0 / 3.0 * nf) * (Nc - 1.0) /(2.0 * Nc);
