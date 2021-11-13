@@ -40,7 +40,7 @@ namespace eos
         UsedParameter a_2_perp_0;
         UsedParameter f_perp_0;
 
-        // matching scales for the individual n-flavour effective QCDs
+        // matching scales for the individual n-flavor effective QCDs
         UsedParameter _mu_c;
         UsedParameter _mu_b;
         UsedParameter _mu_t;
@@ -66,7 +66,7 @@ namespace eos
              *
              *     (alpha_s/alpha_s_0)^(1/beta_0),
              *
-             * with matching between the individual n-flavour QCDs.
+             * with matching between the individual n-flavor QCDs.
              */
 
             double mu = _mu, alpha_s_mu = model->alpha_s(mu);

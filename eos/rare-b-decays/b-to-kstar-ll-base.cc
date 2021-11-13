@@ -36,7 +36,7 @@ namespace eos
         m_Kstar(p["mass::K_d^*"], *this),
         m_l(p["mass::" + opt_l.value()], *this),
         cp_conjugate(destringify<bool>(o.get("cp-conjugate", "false"))),
-        lepton_flavour(opt_l.value())
+        lepton_flavor(opt_l.value())
     {
         if (! form_factors.get())
             throw InternalError("Form factors not found!");

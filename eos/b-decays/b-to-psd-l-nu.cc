@@ -94,8 +94,8 @@ namespace eos
         bool cp_conjugate;
 
         // { U, q, I } -> { process, m_B, m_V, c_I }
-        // U: u, c; the quark flavour in the weak transition
-        // q: u, d, s: the spectar quark flavour
+        // U: u, c; the quark flavor in the weak transition
+        // q: u, d, s: the spectar quark flavor
         // I: 1, 0, 1/2: the total isospin of the daughter meson
         // process: string that can be used to obtain the form factor
         // B: name of the B meson

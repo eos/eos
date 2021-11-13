@@ -231,14 +231,14 @@ namespace eos
     //     double br_electrons;
     //     {
     //         Save<Parameter, double> save_m_l(_imp->m_l, _imp->p["mass::e"]());
-    //         Save<std::string> save_lepton_flavour(_imp->amplitude_generator->lepton_flavour, "e");
+    //         Save<std::string> save_lepton_flavor(_imp->amplitude_generator->lepton_flavor, "e");
     //         br_electrons = BToKDilepton::differential_branching_ratio(s);
     //     }
 
     //     double br_muons;
     //     {
     //         Save<Parameter, double> save_m_l(_imp->m_l, _imp->p["mass::mu"]());
-    //         Save<std::string> save_lepton_flavour(_imp->amplitude_generator->lepton_flavour, "mu");
+    //         Save<std::string> save_lepton_flavor(_imp->amplitude_generator->lepton_flavor, "mu");
     //         br_muons = BToKDilepton::differential_branching_ratio(s);
     //     }
 
@@ -356,7 +356,7 @@ namespace eos
     //     double br_electrons;
     //     {
     //         Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::e"]());
-    //         Save<std::string> save_lepton_flavour(_imp->amplitude_generator->lepton_flavour, "e");
+    //         Save<std::string> save_lepton_flavor(_imp->amplitude_generator->lepton_flavor, "e");
     //         // br_electrons = integrate<GSL::QNG>(integrand, s_min, s_max);
     //         br_electrons = integrate<GSL::QNG>(integrand, s_min, s_max);
     //     }
@@ -364,7 +364,7 @@ namespace eos
     //     double br_muons;
     //     {
     //         Save<Parameter, double> save_m_l(_imp->m_l, _imp->parameters["mass::mu"]());
-    //         Save<std::string> save_lepton_flavour(_imp->amplitude_generator->lepton_flavour, "mu");
+    //         Save<std::string> save_lepton_flavor(_imp->amplitude_generator->lepton_flavor, "mu");
     //         br_muons = integrate<GSL::QNG>(integrand, s_min, s_max);
     //     }
 

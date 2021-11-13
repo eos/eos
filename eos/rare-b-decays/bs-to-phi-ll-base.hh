@@ -45,7 +45,7 @@ namespace eos
             UsedParameter m_l;
 
             bool cp_conjugate;
-            std::string lepton_flavour;
+            std::string lepton_flavor;
 
             AmplitudeGenerator(const Parameters &, const Options &);
 

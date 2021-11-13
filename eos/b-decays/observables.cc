@@ -44,7 +44,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B^-\to \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour.)",
+            R"(The option "l" selects the charged lepton flavor.)",
             {
                 make_observable("B_u->lnu::BR", R"(\mathcal{B}(B^- \to \ell^-\bar\nu))",
                         Unit::None(),
@@ -68,7 +68,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B\to \pi \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour. )"
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 make_observable("B->pilnu::dBR/dq2", R"(d\mathcal{B}(B\to\pi\ell^-\bar\nu)/dq^2)",
@@ -188,7 +188,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B\to \bar{D} \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour. )"
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 make_observable("B->Dlnu::dBR/dq2", R"(d\mathcal{B}(B\to \bar{D}\ell^-\bar\nu)/dq^2)",
@@ -274,7 +274,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_s\to \bar{D_s} \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour.)"
+            R"(The option "l" selects the charged lepton flavor.)"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 make_observable("B_s->D_slnu::dBR/dq2", R"(d\mathcal{B}(B_s\to \bar{D}_s\ell^-\bar\nu)/dq^2)",
@@ -365,7 +365,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B\to \omega \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour. )"
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 make_observable("B->omegalnu::dBR/dq2", R"(d\mathcal{B}(B\to\omega\ell^-\bar\nu)/dq^2)",
@@ -393,7 +393,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B\to \rho \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour. )"
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 make_observable("B->rholnu::dBR/dq2", R"(d\mathcal{B}(B\to\rho\ell^-\bar\nu)/dq^2)",
@@ -421,7 +421,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B\to \bar{D}^* \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour. The option "q" selects the spectator quark flavour. )"
+            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 // B -> D^* l nu
@@ -1028,7 +1028,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $\bar{B}_s\to D_s^* \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour.)"
+            R"(The option "l" selects the charged lepton flavor.)"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 // B_s -> D_s^* l nu
@@ -1301,7 +1301,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B_s\to \bar{K}^* \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour. )"
+            R"(The option "l" selects the charged lepton flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 // B_s -> K^* l nubar
@@ -1588,7 +1588,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $B\to \pi\pi \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour. )"
+            R"(The option "l" selects the charged lepton flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 make_observable("B->pipilnu::BR(q2,k2)", R"(d^2\mathcal{B}(B\to \pi\pi \ell^-\bar\nu)/(dq^2\,dk^2))",
@@ -1639,7 +1639,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Observables in $\Lambda_b\to \Lambda_c \ell^-\bar\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavour. )"
+            R"(The option "l" selects the charged lepton flavor. )"
             R"(The option "form-factors" selects the form factor parametrization.)",
             {
                 // Lambda_b -> Lambda_c l nu

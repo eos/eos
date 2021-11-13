@@ -127,7 +127,7 @@ namespace eos
                     break;
 
                 default:
-                    throw InternalError("Unknown quark flavour: '" + stringify(Process_::q_v) + "'");
+                    throw InternalError("Unknown quark flavor: '" + stringify(Process_::q_v) + "'");
             }
 
             // selectively enable/disable two-particle contributions
