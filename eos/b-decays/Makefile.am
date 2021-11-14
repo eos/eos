@@ -15,6 +15,7 @@ libeosbdecays_la_SOURCES = \
 	b-to-psd-nu-nu.cc b-to-psd-nu-nu.hh \
 	b-to-v-l-nu.hh \
 	b-to-vec-l-nu.cc b-to-vec-l-nu.hh b-to-vec-l-nu-impl.hh \
+	b-to-vec-nu-nu.cc b-to-vec-nu-nu.hh \
 	bs-to-kstar-l-nu.cc bs-to-kstar-l-nu.hh \
 	lambdab-to-lambdac-l-nu.cc lambdab-to-lambdac-l-nu.hh \
 	lambdab-to-lambdac2595-l-nu.cc lambdab-to-lambdac2595-l-nu.hh \
@@ -58,6 +59,7 @@ TESTS = \
 	b-to-dstar-l-nu_TEST \
 	b-to-d-pi-l-nu_TEST \
 	b-to-k-nu-nu_TEST \
+	b-to-kstar-nu-nu_TEST \
 	b-to-pi-l-nu_TEST \
 	b-to-pi-pi-l-nu_TEST \
 	bs-to-kstar-l-nu_TEST \
@@ -83,6 +85,8 @@ b_to_dstar_l_nu_TEST_SOURCES = b-to-dstar-l-nu_TEST.cc
 b_to_d_pi_l_nu_TEST_SOURCES = b-to-d-pi-l-nu_TEST.cc
 
 b_to_k_nu_nu_TEST_SOURCES = b-to-k-nu-nu_TEST.cc
+
+b_to_kstar_nu_nu_TEST_SOURCES = b-to-kstar-nu-nu_TEST.cc
 
 b_to_pi_l_nu_TEST_SOURCES = b-to-pi-l-nu_TEST.cc
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2021 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,6 +25,7 @@
 #include <eos/b-decays/b-to-psd-nu-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
 #include <eos/b-decays/b-to-vec-l-nu-impl.hh>
+#include <eos/b-decays/b-to-vec-nu-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/b-decays/lambdab-to-lambdac2595-l-nu.hh>
@@ -1546,6 +1547,37 @@ namespace eos
 
     // }}}
 
+    // B -> V(ector) nu nu decays
+    // {{{
+
+    // B -> K^* nu nu
+    // {{{
+    ObservableGroup
+    make_b_to_kstar_nu_nu_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Observables in $B\to K^* \nu\bar\nu$ decays)",
+            R"()",
+            {
+                make_observable("B->K^*nunu::dBR/dq2", R"(d\mathcal{B}(\bar{B}\to \bar{K}^*\nu\bar\nu)/dq^2)",
+                        Unit::InverseGeV2(),
+                        &BToVectorDineutrino::differential_branching_ratio,
+                        std::make_tuple("q2"),
+                        Options{ { "D", "s" }, { "I", "1/2" } }),
+                make_observable("B->K^*nunu::BR", R"(\mathcal{B}(\bar{B}\to \bar{K}^*\nu\bar\nu))",
+                        Unit::InverseGeV2(),
+                        &BToVectorDineutrino::integrated_branching_ratio,
+                        std::make_tuple("q2_min", "q2_max"),
+                        Options{ { "D", "s" }, { "I", "1/2" } })
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
+    // }}}
+
     // Semileptonic B -> P(seudoscalar) P(seudoscalar) decays
     // {{{
 
@@ -1880,6 +1912,9 @@ namespace eos
 
                 // B_{u,d} -> P nu nubar
                 make_b_to_k_nu_nu_group(),
+
+                // B_{u,d} -> V nu nubar
+                make_b_to_kstar_nu_nu_group(),
 
                 // Lambda_b
                 make_lambdab_to_lambdac_l_nu_group(),
