@@ -375,20 +375,45 @@ class Analysis:
 
     def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand, return_final_only=True, final_perplexity_threshold=1.0):
         """
-        Return samples of the parameters and log(weights)
+        Return samples of the parameters and log(weights), and a mixture density adapted to the posterior.
 
         Obtains random samples of the log(posterior) using adaptive importance sampling following
         the Popoulation Monte Carlo approach with PyPMC.
 
+        :param log_proposal: Initial gaussian mixture density that shall be adapted to the posterior density.
+        :type log_proposal: pypmc.density.mixture.MixtureDensity
         :param step_N: Number of samples that shall be drawn in each adaptation step.
+        :type step_N: int
         :param steps: Number of adaptation steps.
+        :type steps: int
         :param final_N: Number of samples that shall be drawn after all adaptation steps.
+        :type final_N: int
         :param rng: Optional random number generator (must be compatible with the requirements of pypmc.sampler.importance_sampler.ImportancSampler)
         :param return_final_only: If set to True, only returns the samples and weights of the final sampling step, after all adaptations have finished.
         :param final_perplexity_threshold: Adaptations are stopped if the perpexlity of the last adaptation step is above this threshold value.
 
         :return: A tuple of the parameters as array of length N = pre_N * steps + final_N, the (linear) weights as array of length N, and the
             final proposal function as pypmc.density.mixture.MixtureDensity.
+
+        This method should be called after obtaining approximate samples of the
+        log(posterior) by other means, e.g., by using :meth:`eos.Analysis.sample`.
+        A possible (incomplete) example could look as follows:
+
+        .. code-block:: python3
+
+           from pypmc.mix_adapt.r_value import make_r_gaussmix
+           chains = []
+           for i in range(10):
+               # run Markov Chains for your problem
+               chain, _ = analysis.sample(...)
+               chains.append(chain)
+
+           # please consult the pypmc documentation for details on the call below
+           proposal_density = make_r_gaussmix(chains, K_g=3, critical_r=1.1)
+
+           # adapt the proposal to the posterior and obtain high-quality samples
+           analysis.sample_pmc(proposal_density, ...)
+
 
         .. note::
            This method requires the PyPMC python module, which can be installed from PyPI.
