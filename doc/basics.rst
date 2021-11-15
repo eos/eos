@@ -19,7 +19,7 @@ interpreter. You achieve this with the ``import`` keyword.
     import eos
 
 The import statement should go through without any error messages. If
-there are errors, they might be related to the following issues: 
+there are errors, they might be related to the following issues:
 
 - missing Python packages (try to run ``!pip3 install -U matplotlib numpy scipy``);
 - you might have forgotten to tell the Python interpreter where you installed EOS to ( this should only happen if you have **not** installed EOS using ``pip``)
@@ -252,7 +252,8 @@ create an empty set of kinematic variables as follows:
 
 We can populate this object with a choice of kinematic variables:
 
-- We generally use ``q2`` or ``p2`` to denote the square of four momentum ``q`` or ``p``. - We generally use ``E_pi`` or ``E_gamma`` for the energy of a final state in the rest frame of the respective initial state.
+- We generally use ``q2`` or ``p2`` to denote the square of four momentum ``q`` or ``p``.
+- We generally use ``E_pi`` or ``E_gamma`` for the energy of a final state in the rest frame of the respective initial state.
 - We usually parametrize helicity angles via their cosines, e.g., ``cos(theta_l)`` or ``cos(theta_pi)``. As for parameters, we use powers of GeV as units.
 
 .. code:: ipython3
@@ -401,24 +402,26 @@ We can now populate this object with individual options. Options are
 pairs of strings. Within each pair, we refer to the first element as the
 **key** and to the second element as the **value**. Typical keys
 include:
+
 - ``model``, to select a BSM model;
 - ``form-factors``, to select the parametrization of the hadronic form factors in semileptonic decays;
 - ``l``, to select a lepton flavor;
 - ``q``, to select a quark flavor (typically for a spectator quark).
 
 Option values are specific to both the process and the option key:
-- ``model`` can typically take values such as ``SM`` (for the Standard
-  Model), ``CKM`` (to parametrize each CKM matrix element and fit for
-  absolute value or complex phase), and ``WET`` (to parametrize the
-  Wilson coefficients of the Weak Effective Theory);
+
+- ``model`` can typically take values such as ``SM`` (for the Standard Model),
+  ``CKM`` (to parametrize each CKM matrix element and fit for absolute value or complex phase), and
+  ``WET`` (to parametrize the Wilson coefficients of the Weak Effective Theory);
 - ``form-factors`` can typically take values that identify a single parametrization
   (e.g. ``BSZ2015`` for a parametrization used in Bharucha, Straub, Zwicky 2015);
 - ``l`` can typically take values ``e``, ``mu`` and ``tau``;
 - ``q`` can typically take values ``u``, ``d``, ``s``, and ``c``.
 
-Option keys are specific to a process. Presently, there is no way to list
-all option keys that a process understands, or to see their possible
-values. We are working on that!
+Option keys are specific to a process. Within a Jupyter notebook, EOS displays
+the known option keys in the rich display of ``eos.Observables()``. For each
+option, we also display the permitted option values.
+
 
 Adding options to the set can be achieved by the following:
 
@@ -515,11 +518,11 @@ via:
 
      eos.Observables()
 
-To create an observable, we require: 
+To create an observable, we require:
 
-- its name, 
-- a set of parameters that it will be bound to, 
-- a set of kinematic variables that it will be bound to, 
+- its name,
+- a set of parameters that it will be bound to,
+- a set of kinematic variables that it will be bound to,
 - a set of options.
 
 .. code:: ipython3
