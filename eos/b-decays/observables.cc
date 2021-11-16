@@ -1910,6 +1910,9 @@ namespace eos
                 make_bs_to_kstar_l_nu_group(),
                 make_bs_to_dsstar_l_nu_group(),
 
+                // B_{u,d} -> P P l^- nubar
+                make_b_to_pi_pi_l_nu_group(),
+
                 // B_{u,d} -> P nu nubar
                 make_b_to_k_nu_nu_group(),
 
