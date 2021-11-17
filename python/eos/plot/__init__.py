@@ -17,8 +17,12 @@
 ## minimal versions checks
 # matplotlib
 import matplotlib._version
-if matplotlib._version.get_versions()['version'] < '2.0':
-    raise ImportError('eos.plot requires matplotlib in version 2.0 or higher')
+try:
+    if matplotlib._version.get_versions()['version'] < '2.0':
+        raise ImportError('eos.plot requires matplotlib in version 2.0 or higher')
+except AttributeError:
+    # matplotlib._version.get_versions() was removed in version 3.5 or higher
+    pass
 
 from . import config
 
