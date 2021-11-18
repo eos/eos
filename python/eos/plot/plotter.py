@@ -419,6 +419,55 @@ class Plotter:
         """Plots an uncertainty band as a function of one kinematic variable
 
         This routine expects the uncertainty propagation to have produced an HDF5 file"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting Uncertainty Bands
+        --------------------------
+
+        Contents items of type ``uncertainty`` are used to display uncertainty bands at 68% probability
+        for one of the built-in `observables <../observables.html>`_. This item type requires that either
+        a predictive distribution of the observables has been previously produced.
+
+        Exactly one of the following keys is mandatory:
+
+         * ``data`` (*dict*, see below) -- The data on predictive distribution of the observable whose uncertainty band will be plotted.
+
+         * ``data-file`` (*str*, path to an existing data file of type *eos.data.Prediction*) -- The path to
+           a data file that was generated with the ``eos-analysis`` command-line client.
+
+        For ``data`` object, the following keys are mandatory:
+
+         * ``xvalues`` (*tuple* of *float*) -- The values on the x axis at which the observable has been evaluated.
+         * ``samples`` (*list* of tuples of *float*) -- The list of samples of the predictive distribution. Each tuple of samples
+           corresponds to an evaluation of the observables at the kinematic configuration corresponding to the ``xvalues``
+           entry with the same index.
+
+        Example:
+
+        .. code-block::
+
+           analysis = ... # eos.Analysis object as discussed in the example notebook `predictions.ipynb`
+           mu_q2values = numpy.unique(numpy.concatenate((numpy.linspace(0.02,1.00,20), numpy.linspace(1.00,11.60,20))))
+           mu_obs      = [eos.Observable.make('B->Dlnu::dBR/dq2', prior.parameters,
+                                              eos.Kinematics(q2=q2), eos.Options({'form-factors':'BSZ2015','l':'mu'}))
+                          for q2 in mu_q2values]
+           _, _, mu_samples = analysis.sample(N=5000, pre_N=1000, observables=mu_obs)
+           plot_args = {
+               'plot': {
+                   'x': { 'label': r'$q^2$' },
+                   'y': { 'label': r'$d\mathcal{B}/dq^2$' }
+               },
+               'contents': [
+                   {
+                       'label': r'$\ell=\mu$',
+                       'type': 'uncertainty',
+                       'data': { 'samples': mu_samples, 'xvalues': mu_q2values },
+                       'range': [0.02, 11.60],
+                   },
+               ]
+           }
+        """)
+
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
