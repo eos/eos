@@ -16,6 +16,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
+import inspect
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -161,6 +162,7 @@ class Plotter:
 
     class BasePlot:
         """Base class for any of the plots supported by Plotter"""
+
         def __init__(self, plotter, item):
             self.plotter = plotter
             self.item    = item
@@ -183,6 +185,43 @@ class Plotter:
 
     class Point(BasePlot):
         """Plots a single point"""
+        
+        _api_doc = inspect.cleandoc("""\
+        Plotting Points
+        ---------------
+
+        Content items of type ``point`` are used to display a single data point manually.
+        The following keys are mandatory:
+
+         * ``x`` (*number*) -- The point's x coordinate.
+         * ``y`` (*number*) -- The point's y coordinate.
+
+        Beside the common set of optional keys, this item type recognizes the following optional
+        keys:
+
+         * ``marker`` (*str*, a valid Matplotlib marker style) -- The point's marker style.
+         * ``markersize`` (*number*, a valid Matplotlib marker size) -- The point's marker size in pts.
+
+        Example:
+
+        .. code-block::
+
+           plot_args = {
+               'plot': { ... },
+               'contents': [
+                   {
+                       'label': r'LCSR (Bharucha 2012)',
+                       'type': 'point',
+                       'color': 'C0',
+                       'x': 0,
+                       'y': 0.261,
+                       'marker': 'o',
+                       'markersize': 12
+                   }
+               ]
+           }
+        """)
+
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -257,6 +296,45 @@ class Plotter:
 
     class Observable(BasePlot):
         """Plots a single EOS observable w/o uncertainties as a function of one kinemtic variable or one parameter"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting Observables
+        --------------------
+
+        Contents items of type ``observable`` are used to display one of the built-in `observables <../observables.html>`_.
+        The following keys are mandatory:
+
+         * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable that will be plotted.
+           Must identify one of the observables known to EOS; see `the complete list of observables <../observables.html>`_.
+         * ``range`` (*list* or *tuple* of two *float*) --The tuple of [minimal, maximal] values of the specified kinematic variable
+           for which the observable will be evaluated.
+
+        Exactly one of the following keys is mandatory, to specify either a kinematic variable or a parameter to which the x coordinate
+        will be mapped:
+
+         * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
+         * ``kinematic`` (*str*) -- Alias for ``variable``.
+         * ``parameter`` (*str*) -- The name of the parameter to which the x axis will be mapped;
+           see `the complete list of parameters <../parameters.html>`_.
+
+        Example:
+
+        .. code-block::
+
+           plot_args = {
+               'plot': { ... },
+               'contents': [
+                   {
+                       'label': r'$\ell=\mu$',
+                       'type': 'observable',
+                       'observable': 'B->Dlnu::dBR/dq2;l=mu',
+                       'variable': 'q2',
+                       'range': [0.02, 11.60],
+                   },
+               ]
+           }
+        """)
+
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -340,7 +418,7 @@ class Plotter:
     class Uncertainty(BasePlot):
         """Plots an uncertainty band as a function of one kinematic variable
 
-This routine expects the uncertainty propagation to have produces an HDF5 file"""
+        This routine expects the uncertainty propagation to have produced an HDF5 file"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -425,7 +503,7 @@ This routine expects the uncertainty propagation to have produces an HDF5 file""
     class UncertaintyBinned(BasePlot):
         """Plots one or more uncertainty band integrated over one kinematic variable
 
-This routine expects the uncertainty propagation to have produces an HDF5 file"""
+        This routine expects the uncertainty propagation to have produces an HDF5 file"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -513,7 +591,7 @@ This routine expects the uncertainty propagation to have produces an HDF5 file""
     class UncertaintyOverview(BasePlot):
         """Plots an overview of uncertainty estimates
 
-This routine expects the uncertainty propagation to have produced an HDF5 file"""
+        This routine expects the uncertainty propagation to have produced an HDF5 file"""
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
@@ -551,6 +629,45 @@ This routine expects the uncertainty propagation to have produced an HDF5 file""
 
     class Constraint(BasePlot):
         """Plots constraints from the EOS library of experimental and theoretical likelihoods"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting Constraints
+        --------------------
+
+        Contents items of type ``constraints`` are used to display one of the built-in `experimental or theoretical constraints <../constraints.html>`_.
+        The following keys are mandatory:
+
+         * ``constraints`` (:class:`QualifiedName <eos.QualifiedName>` or iterable thereof) -- The name or the list of names of the constraints
+           that will be plotted. Must identify at least one of the constraints known to EOS; see `the complete list of constraints <../constraints.html>`_.
+         * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
+
+        When plotting multivariate constraints, the following key is also mandatory:
+
+         * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable whose constraints will be plotted.
+           Must identify one of the observables known to EOS; see `the complete list of observables <../observables.html>`_.
+           This is only mandatory in multivariate constraints, since these can constrain more than one observable simultaneously.
+
+        Example:
+
+        .. code-block::
+
+           plot_args = {
+               'plot': { ... },
+               'contents': [
+                   {
+                       'label': r'Belle 2015 $\ell=e,\, q=d$',
+                       'type': 'constraint',
+                       'color': 'C0',
+                       'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',
+                       'observable': 'B->Dlnu::BR',
+                       'variable': 'q2',
+                       'rescale-by-width': False
+                   }
+               ]
+           }
+
+        """)
+
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 

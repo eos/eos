@@ -131,7 +131,7 @@ expressed in terms of independent plot items.
 In the above, ``FILENAME`` is an optional argument naming the file into which the plot shall be placed.
 The format is automatically determined based on the file name extension.
 
-Plot layouting
+Plot Layouting
 --------------
 
 By default plots lack any axis labels and units, and any legend.
@@ -176,7 +176,7 @@ An example illustrating plot layouting follows:
        ]
    }
 
-Plot contents
+Plot Contents
 -------------
 
 Each item in a plot's contents is represented by a dictionary.
@@ -190,130 +190,33 @@ Each features the mandatory ``type`` key and more type-specific (mandatory or op
 
       * - value
         - description
-      {% for key, value in plot_type_descs.items() %}
+      {% for key, value in plot_types.items() %}
       * - ``{{ key }}``
-        - {{ value }}
+        - {{ value.oneline }}
       {% endfor %}
 
-   You can find examples for the following types:
-
-    - ``observable`` -- See `Plotting observables`_
-    - ``constraints`` -- See `Plotting constraints`_
-    - ``point`` -- See `Plotting points`_
-
- * ``name`` (*str*, optional) -- The name of the plot item, for convenience when reporting warnings and errors.
 
 All item types recognize the following optional keys:
+
+ * ``name`` (*str*, optional) -- The name of the plot item, for convenience when reporting warnings and errors.
 
  * ``alpha`` (*float*, between 0.0 and 1.0) -- The opacity of the plot item expressed as an alpha value. 0.0 means completely transparent,
    1.0 means completely opaque.
 
  * ``color`` (*str*, containing any valid Matplotlib color specification) -- The color of the plot item.
    Defaults to one of the colors in the Matplotlib default color cycler.
+
  * ``label`` (*str*, may contain LaTeX commands) -- The label that appears in the plot's legend for this plot item.
 
-Plotting observables
---------------------
-
-Contents items of type ``observable`` are used to display one of the built-in `observables <../observables.html>`_.
-The following keys are mandatory:
-
- * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable that will be plotted.
-   Must identify one of the observables known to EOS; see `the complete list of observables <../observables.html>`_.
- * ``range`` (*list* or *tuple* of two *float*) --The tuple of [minimal, maximal] values of the specified kinematic variable
-   for which the observable will be evaluated.
-
-Exactly one of the following keys is mandatory, to specify either a kinematic variable or a parameter to which the x coordinate
-will be mapped:
-
- * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
- * ``kinematic`` (*str*) -- Alias for ``variable``.
- * ``parameter`` (*str*) -- The name of the parameter to which the x axis will be mapped;
-   see `the complete list of parameters <../parameters.html>`_.
-
-Example:
-
-.. code-block::
-
-   plot_args = {
-       'plot': { ... },
-       'contents': [
-           {
-               'label': r'$\ell=\mu$',
-               'type': 'observable',
-               'observable': 'B->Dlnu::dBR/dq2;l=mu',
-               'variable': 'q2',
-               'range': [0.02, 11.60],
-           },
-       ]
-   }
-
-Plotting constraints
---------------------
-
-Contents items of type ``constraints`` are used to display one of the built-in `experimental or theoretical constraints <../constraints.html>`_.
-The following keys are mandatory:
-
- * ``constraints`` (:class:`QualifiedName <eos.QualifiedName>` or iterable thereof) -- The name or the list of names of the constraints
-   that will be plotted. Must identify at least one of the constraints known to EOS; see `the complete list of constraints <../constraints.html>`_.
- * ``variable`` (*str*) -- The name of the kinematic variable to which the x axis will be mapped.
-
-When plotting multivariate constraints, the following key is also mandatory:
-
- * ``observable`` (:class:`QualifiedName <eos.QualifiedName>`) -- The name of the observable whose constraints will be plotted.
-   Must identify one of the observables known to EOS; see `the complete list of observables <../observables.html>`_.
-   This is only mandatory in multivariate constraints, since these can constrain more than one observable simultaneously.
-
-Example:
-
-.. code-block::
-
-   plot_args = {
-       'plot': { ... },
-       'contents': [
-           {
-               'label': r'Belle 2015 $\ell=e,\, q=d$',
-               'type': 'constraint',
-               'color': 'C0',
-               'constraints': 'B^0->D^+e^-nu::BRs@Belle-2015A',
-               'observable': 'B->Dlnu::BR',
-               'variable': 'q2',
-               'rescale-by-width': False
-           }
-       ]
-   }
+ * ``style`` (*str*, containing any valid Matplotlib styale specification) -- The style of the plot item.
 
 
-Plotting points
----------------
+{% for key, value in plot_types.items() %}
+{% if value.content | length %}
+.. _{{ key }}:
 
-Content items of type ``point`` are used to display a single data point manually.
-The following keys are mandatory:
+{{ value.content }}
 
- * ``x`` (*number*) -- The point's x coordinate.
- * ``y`` (*number*) -- The point's y coordinate.
+{% endif %}
+{% endfor %}
 
-Beside the common set of optional keys, this item type recognizes the following optional
-keys:
-
- * ``marker`` (*str*, a valid Matplotlib marker style) -- The point's marker style.
- * ``markersize`` (*number*, a valid Matplotlib marker size) -- The point's marker size in pts.
-
-Example:
-
-.. code-block::
-
-   plot_args = {
-       'plot': { ... },
-       'contents': [
-           {
-               'label': r'LCSR (Bharucha 2012)',
-               'type': 'point',
-               'color': 'C0',
-               'x': 0,
-               'y': 0.261,
-               'marker': 'o',
-               'markersize': 12
-           }
-       ]
-   }
