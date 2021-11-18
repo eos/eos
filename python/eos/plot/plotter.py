@@ -1411,6 +1411,43 @@ class Plotter:
 
     class Histogram1D(BasePlot):
         """Plots a 1D histogram of pre-existing random samples"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting Histograms
+        -------------------
+
+        Contents items of type ``histogram`` are used to display samples of a probability density, be it a prior, a posterior, or a signal PDF.
+        The following key is mandatory:
+
+         * ``data`` (*dict*, see below) -- The data on probability density that will be histogramed.
+
+        Within the data object, the following keys are understood.
+
+         * ``samples`` (*list* of *float*) -- The samples that will be histogramed. Mandatory.
+         * ``weights`` or ``log_weights`` (*list* of *float*, optional) -- The weights of the samples, on a linear or logarithmic scale.
+           Defaults to uniform weights.
+
+        Example:
+
+        .. code-block::
+
+           analysis = ... # eos.Analysis object as discussed in the example notebook `inference.ipynb`
+           parameter_samples, _, = analysis.sample(N=5000, pre_N=1000)
+           plot_args = {
+               'plot': {
+                   'x': { 'label': r'$|V_{cb}|$' },
+                   'y': { 'label': r'$d\mathcal{B}/dq^2$' }
+               },
+               'contents': [
+                   {
+                       'type': 'histogram',
+                       'data': { 'samples': parameter_samples[:, 0] },
+                   },
+               ]
+           }
+
+        """)
+
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
