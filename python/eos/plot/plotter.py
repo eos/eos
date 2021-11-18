@@ -1187,6 +1187,51 @@ class Plotter:
 
     class KernelDensityEstimate1D(BasePlot):
         """Plots a 1D Kernel Density Estimate (KDE) of pre-existing random samples"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting Kernel Density Estimates
+        ---------------------------------
+
+        Contents items of type ``kde`` are used to display a kernel density estimate (a smooth histogram) of samples of a probability density,
+        be it a prior, a posterior, or a signal PDF.
+
+        The following key is mandatory:
+
+         * ``data`` (*dict*, see below) -- The data on the probability density that will be histogramed.
+
+           Within the data object, the following keys are understood.
+
+            * ``samples`` (*list* of *float*) -- The samples that will be histogramed. Mandatory.
+            * ``weights`` or ``log_weights`` (*list* of *float*, optional) -- The weights of the samples, on a linear or logarithmic scale.
+              Defaults to uniform weights.
+
+
+        The following keys are optional:
+
+         * ``bandwidth`` (*float*) -- The factor by which the automatically determined kernel bandwidth is scaled. See the SciPy documentation
+           for ``gaussian_kde``, ``bw_method='silverman'``. Defaults to 1.
+         * ``range`` (*tuple* of two *float*) -- The minimum and maximum value of the x coordinate for which the smooth histogram is plotted.
+
+        Example:
+
+        .. code-block::
+
+           analysis = ... # eos.Analysis object as discussed in the example notebook `inference.ipynb`
+           parameter_samples, _, = analysis.sample(N=5000, pre_N=1000)
+           plot_args = {
+               'plot': {
+                   'x': { 'label': r'$|V_{cb}|$', 'range':[38e-3, 45e-3] }
+               },
+               'contents': [
+                   {
+                       'type': 'kde', 'color': C0, 'label': 'posterior', 'bandwidth': 1,
+                       'range': [40e-3, 45e-3],
+                       'data': { 'samples': parameter_samples[:, 0] }
+                   }
+               ]
+           }
+
+        """)
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
