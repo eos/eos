@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2021 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,6 +18,7 @@
  */
 
 #include <eos/utils/condition_variable.hh>
+#include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/lock.hh>
 #include <eos/utils/mutex.hh>
@@ -109,8 +110,24 @@ namespace eos
             while (true);
         }
 
+        static unsigned _number_of_threads()
+        {
+            // by default, use as many threads as configured processors available to the system
+            unsigned result = sysconf(_SC_NPROCESSORS_CONF);
+
+            // limit number of threads to user configured value
+            const char * env_max_threads = std::getenv("EOS_MAX_THREADS");
+            if (env_max_threads)
+            {
+                unsigned max_threads = destringify<unsigned>(env_max_threads);
+                result = std::min(result, max_threads);
+            }
+
+            return result;
+        }
+
         Implementation() :
-            number_of_threads(sysconf(_SC_NPROCESSORS_CONF)),
+            number_of_threads(_number_of_threads()),
             nominal_capacity(number_of_threads * 10),
             stop_capacity(nominal_capacity * 2),
             terminate_mutex(new Mutex),
