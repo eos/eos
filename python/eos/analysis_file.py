@@ -82,6 +82,14 @@ class AnalysisFile:
         likelihood = []
         manual_constraints = {}
         for lh in posterior['likelihood']:
+            LH_ALLOWED_KEYS = { 'name', 'constraints', 'manual_constraints' }
+            for key in self._likelihoods[lh]:
+                if key not in LH_ALLOWED_KEYS:
+                    raise KeyError(f"Unsupported key in 'likelihoods['{lh}']': {key}")
+
+            if 'constraints' not in self._likelihoods[lh] and 'manual_constraints' not in self._likelihoods[lh]:
+                raise KeyError(f'Missing entry in \'likelihoods[\'{lh}\']\': neither \'constraints\' nor \'manual_constraints\' is provided')
+
             likelihood.extend(self._likelihoods[lh]['constraints'] if 'constraints' in self._likelihoods[lh] else [])
             manual_constraints.update(self._likelihoods[lh]['manual_constraints'] if 'manual_constraints' in self._likelihoods[lh] else {})
 
