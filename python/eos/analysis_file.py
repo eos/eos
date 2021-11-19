@@ -88,7 +88,9 @@ class AnalysisFile:
         global_options = posterior['global_options'] if 'global_options' in posterior else {}
         fixed_parameters = posterior['fixed_parameters'] if 'fixed_parameters' in posterior else {}
 
-        return eos.Analysis(prior, likelihood, global_options, manual_constraints=manual_constraints)
+        return eos.Analysis(prior, likelihood, global_options,
+                            manual_constraints=manual_constraints,
+                            fixed_parameters=fixed_parameters)
 
 
     def observables(self, _prediction, parameters):
