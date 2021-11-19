@@ -439,13 +439,16 @@ namespace eos
             A += 4.0 * a_s * std::real(wc.c2() * std::conj(wc.c7()) * fij.f27);
             A += 4.0 * a_s * std::real(wc.c2() * std::conj(wc.c8()) * fij.f28);
             A += 4.0 * a_s * std::norm(wc.c7()) * std::real(fij.f77);
-            A += 4.0 * a_s * std::norm(wc.c7prime()) * std::real(fij.f77);
             A += 4.0 * a_s * std::real(wc.c7() * std::conj(wc.c8()) * fij.f78);
             A += 4.0 * a_s * std::norm(wc.c8()) * std::real(fij.f88);
+            A += 4.0 * a_s * std::norm(wc.c7prime()) * std::real(fij.f77);
+            A += 4.0 * a_s * std::norm(wc.c8prime()) * std::real(fij.f88);
+            A += 4.0 * a_s * std::real(wc.c7prime() * std::conj(wc.c8prime()) * fij.f78);
 
             return A;
         }
 
+        // ToDo: this function is only used in Diagnostics
         double ratio_quark(const double & z, const double & delta, const double & ckm, const double & alpha_s, const double & mu) const
         {
             // Constants
@@ -453,7 +456,7 @@ namespace eos
             static const complex<double> iu(0.0, 1.0);
 
             // masses
-            double m_b_pole = 4.8;
+            double m_b_pole = 4.8;                  // ToDo: check whether hardcoded numerical value could be removed
             double lnmu = std::log(m_b_pole / mu);
 
             WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu, "mu" /* fake lepton flavor */);
