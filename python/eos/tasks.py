@@ -123,7 +123,7 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     """
 
     output_path = os.path.join(base_directory, posterior, 'pmc')
-    _set_log_file(output_path, 'log')
+    _set_log_file(output_path, 'log', mode='a' if continue_sampling else 'w')
     _analysis_file = eos.AnalysisFile(analysis_file)
     analysis = _analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(1701)
