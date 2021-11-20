@@ -193,6 +193,11 @@ class PMCSampler:
         self.weights = _np.load(f)
 
 
+    def density(self):
+        """ Return a pypmc.density.MixtureDensity. """
+        return pypmc.density.mixture.MixtureDensity(self.components, self.component_weights)
+
+
     @staticmethod
     def _evaluate_mixture_pdf(components, weights, x):
         """ Internal function that evaluate the PDF of the mixture density at point x."""
