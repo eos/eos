@@ -42,6 +42,7 @@ class MarkovChain:
 
         self.type = 'MarkovChain'
         self.varied_parameters = description['parameters']
+        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
 
         f = os.path.join(path, 'samples.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
@@ -177,6 +178,7 @@ class PMCSampler:
 
         self.type = 'PMCSampler'
         self.varied_parameters = description['parameters']
+        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
         self.components = _np.array([pypmc.density.gauss.Gauss(_np.array(c['mu']), _np.array(c['sigma'])) for c in description['proposal']['components']])
         self.weights    = _np.array(description['proposal']['weights'])
 
