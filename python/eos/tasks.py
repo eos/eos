@@ -210,9 +210,9 @@ def run_steps(analysis_file, base_directory='./'):
     _analysis_file.run()
 
 
-def _set_log_file(path, name='log'):
+def _set_log_file(path, name='log', mode='w'):
     os.makedirs(path, exist_ok=True)
     formatter = logging.Formatter('%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s')
-    handler = logging.FileHandler(os.path.join(path, name), mode='w')
+    handler = logging.FileHandler(os.path.join(path, name), mode=mode)
     handler.setFormatter(formatter)
     eos.logger.addHandler(handler)
