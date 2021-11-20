@@ -97,7 +97,7 @@ def find_clusters(analysis_file, posterior, base_directory='./', threshold=2.0, 
 
 
 # Sample PMC
-def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000, perplexity_threshold=1.0):
+def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000, perplexity_threshold=1.0, continue_sampling=False):
     """
     Samples from a named posterior using the Population Monte Carlo (PMC) methods.
 
@@ -118,6 +118,8 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     :type final_N: int > 0, optional
     :param perplexity_threshold: The threshold for the perplexity in the last step after which further adaptation steps are to be skipped. Defaults to 1.0.
     :type perplexity_threshold: 0.0 < float <= 1.0, optional
+    :param continue_sampling: Whether to continue sampling from the previous `sample-pmc` results, or start fresh from the proposal obtained using `find-clusters`.
+    :type continue_sampling: bool, optional
     """
 
     output_path = os.path.join(base_directory, posterior, 'pmc')
@@ -125,9 +127,19 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     _analysis_file = eos.AnalysisFile(analysis_file)
     analysis = _analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(1701)
-    initial_proposal = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
+    if continue_sampling:
+        previous_sampler = eos.data.PMCSampler(os.path.join(base_directory, posterior, 'pmc'))
+        initial_proposal = previous_sampler.density()
+    else:
+        initial_proposal = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
+
     samples, weights, proposal = analysis.sample_pmc(initial_proposal, step_N=step_N, steps=steps, final_N=final_N,
                                                      rng=rng, final_perplexity_threshold=perplexity_threshold)
+
+    if continue_sampling:
+        samples = _np.concatenate((previous_sampler.samples, samples), axis=0)
+        weights = _np.concatenate((previous_sampler.weights, weights), axis=0)
+
     eos.data.PMCSampler.create(output_path, analysis.varied_parameters, samples, weights, proposal)
 
 
