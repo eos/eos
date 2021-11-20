@@ -80,13 +80,19 @@ def find_clusters(analysis_file, posterior, base_directory='./', threshold=2.0, 
 
     import pathlib
     output_path = os.path.join(base_directory, posterior, 'clusters')
+    _set_log_file(output_path, 'log')
     input_paths = [str(p) for p in pathlib.Path(os.path.join(base_directory, posterior)).glob('mcmc-*')]
     chains    = [eos.data.MarkovChain(path).samples for path in input_paths]
-    means     = _np.mean(chains, axis=1)
-    variances = _np.var(chains,  axis=1)
-    groups    = pypmc.mix_adapt.r_value.r_group(means, variances, len(chains[0]), critical_r=threshold)
+    n = len(chains[0])
+    for chain in chains:
+        assert len(chain) == n, 'Every chains must contain the same number of samples'
+
+    groups = pypmc.mix_adapt.r_value.r_group([_np.mean(chain.T, axis=1) for chain in chains],
+                           [_np.var (chain.T, axis=1, ddof=1) for chain in chains],
+                           n, threshold)
     eos.info('Found {} groups using an R value threshold of {}'.format(len(groups), threshold))
     density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=K_g, critical_r=threshold)
+    eos.info(f'Created mixture density with {len(density.components)} components')
     eos.data.MixtureDensity.create(output_path, density)
 
 
