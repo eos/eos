@@ -118,12 +118,13 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     :type final_N: int > 0, optional
     """
 
+    output_path = os.path.join(base_directory, posterior, 'pmc')
+    _set_log_file(output_path, 'log')
     _analysis_file = eos.AnalysisFile(analysis_file)
     analysis = _analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(1701)
     initial_proposal = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
     samples, weights, proposal = analysis.sample_pmc(initial_proposal, step_N=step_N, steps=steps, final_N=final_N, rng=rng)
-    output_path = os.path.join(base_directory, posterior, 'pmc')
     eos.data.PMCSampler.create(output_path, analysis.varied_parameters, samples, weights, proposal)
 
 
