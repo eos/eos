@@ -97,7 +97,7 @@ def find_clusters(analysis_file, posterior, base_directory='./', threshold=2.0, 
 
 
 # Sample PMC
-def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000):
+def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=10, final_N=5000, perplexity_threshold=1.0):
     """
     Samples from a named posterior using the Population Monte Carlo (PMC) methods.
 
@@ -116,6 +116,8 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     :type steps: int > 0, optional
     :param final_N: The number of samples to be stored in the output file. Defaults to 5000,
     :type final_N: int > 0, optional
+    :param perplexity_threshold: The threshold for the perplexity in the last step after which further adaptation steps are to be skipped. Defaults to 1.0.
+    :type perplexity_threshold: 0.0 < float <= 1.0, optional
     """
 
     output_path = os.path.join(base_directory, posterior, 'pmc')
@@ -124,7 +126,8 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     analysis = _analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(1701)
     initial_proposal = eos.data.MixtureDensity(os.path.join(base_directory, posterior, 'clusters')).density()
-    samples, weights, proposal = analysis.sample_pmc(initial_proposal, step_N=step_N, steps=steps, final_N=final_N, rng=rng)
+    samples, weights, proposal = analysis.sample_pmc(initial_proposal, step_N=step_N, steps=steps, final_N=final_N,
+                                                     rng=rng, final_perplexity_threshold=perplexity_threshold)
     eos.data.PMCSampler.create(output_path, analysis.varied_parameters, samples, weights, proposal)
 
 
