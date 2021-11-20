@@ -144,6 +144,10 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
         help = 'The number of adaptation steps, which ared used to adapt the PMC proposal to the posterior.',
         dest = 'steps', action = 'store', type = int, default = 10
     )
+    parser_sample_pmc.add_argument('-t', '--perplexity-threshold',
+        help = 'The threshold for the perplexity in the last step after which further adaptation steps are to be skipped.',
+        dest = 'perplexity_threshold', action = 'store', type = float, default = 1.0
+    )
     parser_sample_pmc.add_argument('-N', '--number-of-final-samples',
         help = 'The number of samples to be stored in the output file.',
         dest = 'final_N', action = 'store', type = int, default = 5000
