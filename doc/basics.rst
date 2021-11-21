@@ -56,7 +56,7 @@ for the muon mass:
    * - current value
      - 0.105658
    * - default value
-     - 0.1050658
+     - 0.105658
 
 
 
