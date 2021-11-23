@@ -1291,7 +1291,9 @@ class Plotter:
             if self.level:
                 plevelf = lambda x, pdf, P: pdf[pdf > x * pdf_norm].sum() - P * pdf_norm
                 plevel = scipy.optimize.brentq(plevelf, 0., 1., args=(pdf, self.level / 100.0 ))
-                self.plotter.ax.fill_between(x[pdf >= plevel * pdf_norm], pdf[pdf >= plevel * pdf_norm], facecolor=self.color, alpha=self.alpha)
+                self.plotter.ax.fill_between(np.ma.masked_array(x, mask=pdf < plevel * pdf_norm),
+                                             np.ma.masked_array(pdf, mask=pdf < plevel * pdf_norm, fill_value=np.nan),
+                                             facecolor=self.color, alpha=self.alpha)
 
             plt.plot(x, pdf, color=self.color, label=self.label)
 
