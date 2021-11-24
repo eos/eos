@@ -84,6 +84,11 @@ namespace eos
                     return 0.0;
                 }
 
+                virtual complex<double> P_ratio_plus(const double &) const
+                {
+                    return 0.0;
+                }
+
                 virtual complex<double> normalized_moment_A(const double &) const
                 {
                     return 0.0;
@@ -337,6 +342,27 @@ namespace eos
                 virtual complex<double> F_ratio_plus(const complex<double> & q2) const
                 {
                     return form_factors->f_t(q2) * q2 / m_B() / (m_B + m_P) / form_factors->f_p(q2);
+                }
+
+                virtual complex<double> P_ratio_plus(const double & q2) const
+                {
+                    const complex<double> alpha[4] {
+                        complex<double>(re_alpha_0_plus, im_alpha_0_plus),
+                        complex<double>(re_alpha_1_plus, im_alpha_1_plus),
+                        complex<double>(re_alpha_2_plus, im_alpha_2_plus),
+                        complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                    };
+
+                    const complex<double> F_plus = form_factors->f_p(q2);
+
+                    const double s_0   = this->t_0();
+                    const double s_p   = 4.0 * pow(m_D0, 2);
+                    const auto z       = eos::nff_utils::z(q2,              s_p, s_0);
+                    const auto zBP     = eos::nff_utils::z(pow(m_B+m_P, 2), s_p, s_0);
+
+                    const unsigned phiParam[4] = {3, 3, 2, 2};
+
+                    return eos::nff_utils::PGvDV2020(z, zBP, alpha) / phi(q2, phiParam) / F_plus;
                 }
 
                 static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
@@ -606,6 +632,26 @@ namespace eos
                     return form_factors->f_t(q2) * q2 / m_B() / (m_B + m_P) / form_factors->f_p(q2);
                 }
 
+                virtual complex<double> P_ratio_plus(const double & q2) const
+                {
+                    const complex<double> alpha[4] {
+                        complex<double>(re_alpha_0_plus, im_alpha_0_plus),
+                        complex<double>(re_alpha_1_plus, im_alpha_1_plus),
+                        complex<double>(re_alpha_2_plus, im_alpha_2_plus),
+                        complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                    };
+
+                    const complex<double> F_plus = form_factors->f_p(q2);
+
+                    const double s_0   = this->t_0();
+                    const double s_p   = 4.0 * pow(m_D0, 2);
+                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
+
+                    const unsigned phiParam[5] = {5, 3, 2, 2, 2};
+
+                    return eos::nff_utils::P(z, alpha) / phi(q2, phiParam) / F_plus;
+                }
+
                 static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
                 {
                     return NonlocalFormFactorPtr<nff::PToP>(new GRvDV2021<Process_>(p, o));
@@ -760,6 +806,13 @@ namespace eos
     NonlocalFormFactorObservable<Process_, nff::PToP>::abs_ratio_plus(const double & q2) const
     {
         return abs(this->_imp->nff->ratio_plus(q2));
+    }
+
+    template <typename Process_>
+    double
+    NonlocalFormFactorObservable<Process_, nff::PToP>::abs_P_ratio_plus(const double & q2) const
+    {
+        return abs(this->_imp->nff->P_ratio_plus(q2));
     }
 
     template <typename Process_>
