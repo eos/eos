@@ -95,6 +95,7 @@ namespace eos
             virtual complex<double> ratio_plus(const double & q2) const = 0;
             virtual complex<double> ratio_plus(const complex<double> & q2) const = 0;
             virtual complex<double> F_ratio_plus(const complex<double> & q2) const = 0;
+            virtual complex<double> P_ratio_plus(const double & q2) const = 0;
 
             ///@}
 
@@ -163,6 +164,7 @@ namespace eos
             double re_ratio_plus(const double & q2) const;
             double im_ratio_plus(const double & q2) const;
             double abs_ratio_plus(const double & q2) const;
+            double abs_P_ratio_plus(const double & q2) const;
 
             double re_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
             double im_ratio_plus_complex(const double & re_q2, const double & im_q2) const;
