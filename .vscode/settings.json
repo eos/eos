@@ -18,6 +18,7 @@
 		"libtool": true,
 		"stamp-h1": true,
 		"autom4te.cache": true,
-		"config/"
-	}
+		"config/": true,
+	},
+	"C_Cpp.intelliSenseCacheSize": 0
 }
