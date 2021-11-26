@@ -40,7 +40,7 @@ setup(
     },
     package_data={
         '_eos_libs': ['lib*.so*'],
-        '_eos_data': ['constraints/*.yaml', 'parameters/*.yaml'],
+        '_eos_data': ['*.yaml', 'constraints/*.yaml', 'parameters/*.yaml'],
     },
     scripts=[
         'bin/eos-analysis',
