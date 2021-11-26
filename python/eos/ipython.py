@@ -170,3 +170,17 @@ def __format_GoodnessOfFit(gof):
     result += '<tr><th>p-value</th><td>{p:6.4f}%</td></tr>\n'.format(p=pvalue * 100)
     result += '</table>\n'
     return(result)
+
+
+def __format_Reference(ref):
+    url = None
+    if ref.eprint_archive() == 'arXiv':
+        arxiv_id = ref.eprint_id().split(':')[-1]
+        url = f'http://arxiv.org/abs/{arxiv_id}'
+
+    result = '<table>\n'
+    if url:
+        result += f'<tr><th>name</th><td><a href="{url}"><tt>{ref.name()}</tt></a></td></tr>\n'
+    result += f'<tr><th>title</th><td>{ref.title()}</td></tr>'
+    result += '</table>\n'
+    return(result)
