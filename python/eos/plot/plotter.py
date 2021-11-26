@@ -1575,6 +1575,55 @@ class Plotter:
 
     class Histogram2D(BasePlot):
         """Plots a 2D histogram of pre-existing random samples"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting 2D Histograms
+        ----------------------
+
+        Contents items of type ``histogram2D`` are used to display samples of a two-dimension probability density,
+        be it a prior, a posterior, or a signal PDF.
+        The following key is mandatory:
+
+         * ``data`` (*dict*, see below) -- The data on probability density that will be histogramed.
+
+        Within the data object, the following keys are understood.
+
+         * ``samples`` (*list* of *float* with shape (N, 2)) -- The samples that will be histogramed. Mandatory.
+         * ``weights`` or ``log_weights`` (*list* of *float* with length N, optional) -- The weights of the samples,
+           on a linear or logarithmic scale, respectively. Defaults to uniform weights.
+
+        Additional optional keys are:
+
+         * ``bins`` (*int*, optional) -- The number of bins in each dimension. Defaults to 100.
+
+        Example:
+
+        .. code-block::
+
+           analysis = ... # eos.Analysis object as discussed in the example notebook `inference.ipynb`
+           dstarlnu_kinematics = ... # create kineamtics and SignalPDF as discussed in the example notebook `simulation.ipynb`
+           dstarlnu_pdf        = ...
+           dstarlnu_samples, _ = dstarlnu_pdf.sample_mcmc(N=50000, stride=5, pre_N=1000, preruns=3, rng=rng)
+           plot_args = {
+               'plot': {
+                   'x': { 'label': r'$q^2$', 'unit': r'$\textnormal{GeV}^2$', 'range': [ 0.0, 10.50] },
+                   'y': { 'label': r'$cos(\theta_\ell)$',                     'range': [-1.0,  +1.0] },
+               },
+               'contents': [
+                   {
+                       'label': r'samples ($\ell=\mu$)',
+                       'type': 'histogram2D',
+                       'data': {
+                           'samples': dstarlnu_samples[:, (0, 1)]
+                       },
+                       'bins': 40
+                   },
+               ]
+           }
+           eos.plot.Plotter(plot_args).plot()
+
+        """)
+
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
