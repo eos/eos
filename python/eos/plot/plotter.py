@@ -1275,7 +1275,7 @@ class Plotter:
 
             self.bw       = item['bandwidth'] if 'bandwidth' in item else None
             self.level    = item['level']     if 'level'     in item else 68.29
-            self.xrange   = plotter.xrange    if plotter.xrange      else (np.amin(self.samples), np.amax(self.samples))
+            self.xrange   = item['range']     if 'range'     in item else plotter.xrange
 
         def plot(self):
             kde = gaussian_kde(self.samples, weights=self.weights)
