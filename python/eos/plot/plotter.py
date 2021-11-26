@@ -1300,6 +1300,59 @@ class Plotter:
 
     class KernelDensityEstimate2D(BasePlot):
         """Plots contours of a 2D Kernel Density Estimate (KDE) of pre-existing random samples"""
+
+        _api_doc = inspect.cleandoc("""\
+        Plotting 2D Kernel Density Estimates
+        ------------------------------------
+
+        Contents items of type ``kde2D`` are used to display contours of a two-dimensional
+        kernel density estimate (a 2D smooth histogram) of samples of a probability density,
+        be it a prior, a posterior, or a signal PDF.
+
+        The following key is mandatory:
+
+         * ``data`` (*dict*, see below) -- The data on the probability density that will be histogramed.
+
+           Within the data object, the following keys are understood.
+
+            * ``samples`` (*list* of *float* with shape (N, 2)) -- The samples that will be histogramed. Mandatory.
+            * ``weights`` or ``log_weights`` (*list* of *float*, optional) -- The weights of the samples, on a linear or logarithmic scale.
+              Defaults to uniform weights.
+
+
+        The following keys are optional:
+
+         * ``bandwidth`` (*float*) -- The factor by which the automatically determined kernel bandwidth is scaled. See the SciPy documentation
+           for ``gaussian_kde``, ``bw_method='silverman'``. Defaults to 1.
+         * ``contours`` (a *list* containing ``'lines'``, ``'areas'``, or both) -- The setting for the illustration of the contours.
+           If ``'lines'`` is provided, the contour lines are drawn.
+           If ``'areas'`` is provided, the contour areas are filled.
+           Defaults to ``['lines']``.
+         * ``levels`` (*list* of *float*) -- The probability levels of the contours. Defaults to ``[0.68, 0.95, 0.99]``.
+
+        Example:
+
+        .. code-block::
+
+           analysis = ... # eos.Analysis object as discussed in the example notebook `inference.ipynb`
+           parameter_samples, _, = analysis.sample(N=5000, pre_N=1000)
+           plot_args = {
+               'plot': {
+                   'x': { 'label': r'$|V_{cb}|$', 'range': [38e-3, 47e-3] },
+                   'y': { 'label': r'$f_+(0)$',   'range': [0.6, 0.75] },
+               },
+               'contents': [
+                   {
+                       'type': 'kde2D', 'color': 'C1', 'label': 'posterior',
+                       'levels': [68, 95], 'contours': ['lines','areas'], 'bandwidth':3,
+                       'data': { 'samples': parameter_samples[:, (0,1)] }
+                   }
+               ]
+           }
+           eos.plot.Plotter(plot_args).plot()
+
+        """)
+
         def __init__(self, plotter, item):
             super().__init__(plotter, item)
 
