@@ -1409,7 +1409,7 @@ class Plotter:
                 self.levels = [0] + self.levels
             self.contours = item['contours']  if 'contours'  in item else ['lines']
             self.xrange   = plotter.xrange    if plotter.xrange      else (np.amin(self.samples[:, 0]), np.amax(self.samples[:, 0]))
-            self.yrange   = plotter.xrange    if plotter.yrange      else (np.amin(self.samples[:, 1]), np.amax(self.samples[:, 1]))
+            self.yrange   = plotter.yrange    if plotter.yrange      else (np.amin(self.samples[:, 1]), np.amax(self.samples[:, 1]))
             if type(self.style) is not list:
                 self.style= [self.style]
 
@@ -1419,7 +1419,7 @@ class Plotter:
             if self.bw:
                 kde.set_bandwidth(bw_method=kde.factor * self.bw)
 
-            xx, yy = np.mgrid[self.plotter.xrange[0]:self.plotter.xrange[1]:100j, self.plotter.yrange[0]:self.plotter.yrange[1]:100j]
+            xx, yy = np.mgrid[self.xrange[0]:self.xrange[1]:100j, self.yrange[0]:self.yrange[1]:100j]
             positions = np.vstack([xx.ravel(), yy.ravel()])
             pdf = np.reshape(kde(positions).T, xx.shape)
             pdf /= pdf.sum()
@@ -1436,12 +1436,12 @@ class Plotter:
                 colors = [matplotlib.colors.to_rgba(self.color, alpha) for alpha in np.linspace(0.50, 1.00, len(self.levels))]
                 plt.contourf(pdf.transpose(),
                              colors=colors,
-                             extent=[self.plotter.xrange[0], self.plotter.xrange[1], self.plotter.yrange[0], self.plotter.yrange[1]],
+                             extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                              levels=plevels[::-1])
 
             CS = plt.contour(pdf.transpose(),
                              colors=self.color,
-                             extent=[self.plotter.xrange[0], self.plotter.xrange[1], self.plotter.yrange[0], self.plotter.yrange[1]],
+                             extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                              levels=plevels[::-1],
                              linestyles=self.style[::-1])
 
