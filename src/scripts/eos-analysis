@@ -401,7 +401,7 @@ def cmd_find_mode(args):
         info('Starting minimization from point: {}'.format(starting_point))
 
         _bfp = analysis.optimize(starting_point)
-        _gof = eos.GoodnessOfFit(analysis.log_posterior)
+        _gof = eos.GoodnessOfFit(analysis._log_posterior)
         _chi2 = _gof.total_chi_square()
         if _chi2 < min_chi2:
             gof = _gof
@@ -412,7 +412,7 @@ def cmd_find_mode(args):
         info('Starting minimization from point a random point')
 
         _bfp = analysis.optimize(start_point='random', rng=_np.random.mtrand.RandomState(seed))
-        _gof = eos.GoodnessOfFit(analysis.log_posterior)
+        _gof = eos.GoodnessOfFit(analysis._log_posterior)
         _chi2 = _gof.total_chi_square()
         if _chi2 < min_chi2:
             gof = _gof
@@ -433,7 +433,7 @@ def cmd_find_mode(args):
         for i in range(args.points):
             starting_point = [float(p) for p in analysis.varied_parameters]
             _bfp = analysis.optimize(starting_point)
-            _gof = eos.GoodnessOfFit(analysis.log_posterior)
+            _gof = eos.GoodnessOfFit(analysis._log_posterior)
             _chi2 = _gof.total_chi_square()
             if _chi2 < min_chi2:
                 gof = _gof
@@ -449,7 +449,7 @@ def cmd_find_mode(args):
     for n, e in gof:
         print('  - {}: chi^2 / dof = {:f} / {}'.format(n, e.chi2, e.dof))
     print('individual observable values:')
-    for o in _bfp.analysis.log_likelihood.observable_cache():
+    for o in _bfp.analysis._log_likelihood.observable_cache():
         print('  - {n}[{k}];{o} -> {v:f}'.format(n=o.name(), k=o.kinematics(), o=o.options(), v=o.evaluate()))
 
 
