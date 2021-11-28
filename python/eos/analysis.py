@@ -67,8 +67,8 @@ class Analysis:
         self.init_args = { 'priors': priors, 'likelihood': likelihood, 'global_options': global_options, 'manual_constraints': manual_constraints, 'fixed_parameters':fixed_parameters }
         self.parameters = eos.Parameters.Defaults()
         self.global_options = eos.Options()
-        self.log_likelihood = eos.LogLikelihood(self.parameters)
-        self.log_posterior = eos.LogPosterior(self.log_likelihood)
+        self._log_likelihood = eos.LogLikelihood(self.parameters)
+        self._log_posterior = eos.LogPosterior(self._log_likelihood)
         self.varied_parameters = []
         self.bounds = []
 
@@ -102,7 +102,7 @@ class Analysis:
             maxv = float(prior['max'])
             prior_type = prior['type'] if 'type' in prior else 'uniform'
             if 'uniform' == prior_type or 'flat' == prior_type:
-                self.log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, eos.ParameterRange(minv, maxv)), False)
+                self._log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, eos.ParameterRange(minv, maxv)), False)
             elif 'gauss' == prior_type or 'gaussian' == prior_type:
                 central = prior['central']
                 sigma = prior['sigma']
@@ -112,7 +112,7 @@ class Analysis:
                 else:
                     sigma_lo = sigma
                     sigma_hi = sigma
-                self.log_posterior.add(
+                self._log_posterior.add(
                     eos.LogPrior.Gauss(
                         self.parameters, parameter, eos.ParameterRange(minv, maxv),
                         central - sigma_lo, central, central + sigma_hi
@@ -130,7 +130,7 @@ class Analysis:
         # create the likelihood
         for constraint_name in likelihood:
             constraint = eos.Constraint.make(constraint_name, self.global_options)
-            self.log_likelihood.add(constraint)
+            self._log_likelihood.add(constraint)
 
         # add manual constraints to the likelihood
         for constraint_name, constraint_data in manual_constraints.items():
@@ -138,12 +138,12 @@ class Analysis:
             yaml_string = yaml.dump(self._sanitize_manual_input(constraint_data))
             constraint_entry = eos.ConstraintEntry.deserialize(constraint_name, yaml_string)
             constraint = constraint_entry.make(constraint_name, self.global_options)
-            self.log_likelihood.add(constraint)
+            self._log_likelihood.add(constraint)
 
         # perform some sanity checks
         varied_parameter_names = set([p.name() for p in self.varied_parameters])
         used_parameter_names = set()
-        for observable in self.log_likelihood.observable_cache():
+        for observable in self._log_likelihood.observable_cache():
             for i in observable.used_parameter_ids():
                 used_parameter_names.add(self.parameters.by_id(i).name())
 
@@ -210,7 +210,7 @@ class Analysis:
 
     def goodness_of_fit(self):
         """Returns a goodness-of-fit summary for the current parameter point."""
-        return eos.GoodnessOfFit(self.log_posterior)
+        return eos.GoodnessOfFit(self._log_posterior)
 
 
     def optimize(self, start_point=None, rng=np.random.mtrand, **kwargs):
@@ -227,7 +227,7 @@ class Analysis:
         if start_point == None:
             start_point = [float(p) for p in self.varied_parameters]
         elif start_point == "random":
-            start_point = [p.inverse_cdf(rng.uniform()) for p in self.log_posterior.log_priors()]
+            start_point = [p.inverse_cdf(rng.uniform()) for p in self._log_posterior.log_priors()]
 
         default_kwargs = { 'method': 'SLSQP', 'options': { 'ftol': 1.0e-13 } }
         if kwargs is None:
@@ -267,7 +267,7 @@ class Analysis:
             p.set(v)
 
         try:
-            return(self.log_posterior.evaluate())
+            return(self._log_posterior.evaluate())
         except RuntimeError as e:
             error('encountered run time error ({e}) when evaluating log(posterior) in parameter point:'.format(e=e))
             for p in self.varied_parameters:
@@ -541,7 +541,7 @@ class Analysis:
             </thead>
             <tbody>
         '''
-        for c in self.log_likelihood:
+        for c in self._log_likelihood:
             result += fr'''
                 <tr>
                     <td><tt>{c.name()}</tt></td>
