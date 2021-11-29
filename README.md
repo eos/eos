@@ -46,6 +46,12 @@ pip3 install --pre eoshep
 For instructions on how to build and install EOS on your computer please have a
 look at the [online documentation](https://eos.github.io/doc/installation.html).
 
+Contact
+-------
+
+If you want to report an error or file a request, please file an issue [here](https://github.com/eos/eos/issues).
+For additional information, please contact any of the main authors, e.g. via our [Discord server](https://discord.com/hyPu7f7K6W).
+
 Authors and Contributors
 ------------------------
 
@@ -86,9 +92,3 @@ support were most helpful in either the development or the maintenance of EOS:
  * Konstantinos Petridis
  * Nicola Serra
  * Alexander Shires
-
-Contact
--------
-
-For additional information, please contact any of the main authors. If you want to report an
-error or file a request, please file an issue [here](https://github.com/eos/eos/issues).
