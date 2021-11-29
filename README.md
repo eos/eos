@@ -1,6 +1,8 @@
 [![PyPI version](https://badge.fury.io/py/eoshep.svg)](https://badge.fury.io/py/eoshep)
 [![Build Status](https://github.com/eos/eos/actions/workflows/manylinux-build+check+deploy.yaml/badge.svg)](https://github.com/eos/eos/actions/workflows/manylinux-build+check+deploy.yaml)
 [![Build Status](https://github.com/eos/eos/actions/workflows/ubuntu-build+check+deploy.yaml/badge.svg)](https://github.com/eos/eos/actions/workflows/ubuntu-build+check+deploy.yaml)
+[![Discord](https://img.shields.io/discord/808999754989961236.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.com/hyPu7f7K6W)
+
 
 ![EOS logo](https://eos.github.io/images/github-eos-logo.png)
 
