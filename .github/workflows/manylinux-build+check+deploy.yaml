@@ -213,7 +213,7 @@ jobs:
                 path: _pypi/dist
 
             - name: Upload wheel to pypi.org
-              if: ${{ github.ref == 'refs/heads/master' }}
+              if: ${{ github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')}}
               shell: bash
               env:
                 PYTHON_PATH:    /opt/python/${{ matrix.cfg.pypath }}/bin
@@ -221,12 +221,6 @@ jobs:
                 TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
                 TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
               run: |
-                pushd _src
-                # check if this is a tagged commit, and export a flag variable.
-                if git describe --abbrev=0 --tags --exact-match HEAD &> /dev/null ; then
-                    export EOS_IS_TAGGED=1
-                fi
-                popd
                 if [[ ${TWINE_USERNAME} == "" ]] ; then
                     exit 0
                 fi
