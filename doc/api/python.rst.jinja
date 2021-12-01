@@ -141,7 +141,8 @@ An axis' description is provided through the following key/value pairs, which ca
  * ``label`` (*str*, may contain LaTeX commands) -- The axis' label.
  * ``unit``  (*str*, may contain LaTeX commands) -- The axis' unit, which will be appended to the axis' label in square brackets.
  * ``range`` (*list* or *tuple* of two *float*) -- The tuple of [minimal, maximal] values, which will be displayed along the axis.
- * ``scale`` (*number*) -- The axis' scale by which all tick coordinates will be divided. The scale will *not* be appended to
+ * ``scale`` (*str*) -- Can be either ``linear`` or ``log``.
+ * ``scaling_factor`` (*number*) -- The axis' scale by which all tick coordinates will be divided. The scale will *not* be appended to
    the axis' label automatically. Using this argument is not recommended as it prevents automatic axis tick formatting and providing
    the argument below is required.
  * ``format`` (*str*, Python 3 format string) -- The axis' tick label format can be provided and is only in use when ``scale`` is used, to
