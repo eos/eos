@@ -36,12 +36,24 @@ def get_from_env(envvar, default):
 
 def _parser():
     parser = argparse.ArgumentParser(description='Carry out a Bayesian analysis using EOS')
+    # 'parent' parser for common arguments
+    common_subparser = argparse.ArgumentParser(add_help=False)
+    # add verbosity arg and analysis-file arg to all commands
+    common_subparser.add_argument('-v', '--verbose',
+        help = 'Increases the verbosity of the script',
+        dest = 'verbose', action = 'count', default = 0
+    )
+    common_subparser.add_argument('-f', '--analysis-file',
+        help = 'The analysis file. Defaults to \'.analysis.yaml\'.',
+        dest = 'analysis_file', action = 'store', default = '.analysis.yaml'
+    )
     subparsers = parser.add_subparsers(title = 'commands')
 
     ## begin of commands
 
     # list-priors
     parser_list_priors = subparsers.add_parser('list-priors',
+        parents = [common_subparser],
         description =
 '''
 Lists the named prior PDFs defined within the scope of this analysis file.
@@ -52,6 +64,7 @@ Lists the named prior PDFs defined within the scope of this analysis file.
 
     # list-likelihoods
     parser_list_likelihoods = subparsers.add_parser('list-likelihoods',
+        parents = [common_subparser],
         description =
 '''
 Lists the named likelihoods defined within the scope of this analysis file.
@@ -66,6 +79,7 @@ Lists the named likelihoods defined within the scope of this analysis file.
 
     # list-posteriors
     parser_list_posteriors = subparsers.add_parser('list-posteriors',
+        parents = [common_subparser],
         description =
 '''
 Lists the named posterior PDFs defined within the scope of this analysis file.
@@ -76,6 +90,7 @@ Lists the named posterior PDFs defined within the scope of this analysis file.
 
     # list-predictions
     parser_list_predictions = subparsers.add_parser('list-predictions',
+        parents = [common_subparser],
         description =
 '''
 Lists the named prediction sets defined within the scope of this analysis file.
@@ -86,6 +101,7 @@ Lists the named prediction sets defined within the scope of this analysis file.
 
     # sample-mcmc
     parser_sample_mcmc = subparsers.add_parser('sample-mcmc',
+        parents = [common_subparser],
         description =
 '''
 Samples from a named posterior PDF using Markov Chain Monte Carlo (MCMC) methods.
@@ -132,6 +148,7 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-IDX.
 
     # sample-pmc
     parser_sample_pmc = subparsers.add_parser('sample-pmc',
+        parents = [common_subparser],
         description =
 '''
 Samples from a named posterior using the Population Monte Carlo (PMC) methods.
@@ -172,6 +189,7 @@ The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
 
     # plot-samples
     parser_plot_samples = subparsers.add_parser('plot-samples',
+        parents = [common_subparser],
         description =
 '''
 Plots all samples obtained for a named posterior.
@@ -197,6 +215,7 @@ The plots will be stored as PDF files within the respective sample inputs.
 
     # find-mode
     parser_find_mode = subparsers.add_parser('find-mode',
+        parents = [common_subparser],
         description =
 '''
 Finds the mode of the named posterior.
@@ -235,6 +254,7 @@ in EOS_BASE_DIRECTORY/posterior/mode.
 
     # find-clusters
     parser_find_clusters = subparsers.add_parser('find-clusters',
+        parents = [common_subparser],
         description =
 '''
 Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
@@ -265,6 +285,7 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
 
     # predict-observables
     parser_predict_observables = subparsers.add_parser('predict-observables',
+        parents = [common_subparser],
         description =
 '''
 Predicts a set of observables based on previously obtained PMC samples.
@@ -297,6 +318,7 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
 
     # predict-observables
     parser_run = subparsers.add_parser('run',
+        parents = [common_subparser],
         description =
 '''
 Runs a list of subcommands.
@@ -310,26 +332,6 @@ Runs a list of subcommands.
     parser_run.set_defaults(cmd = cmd_run)
 
     ## end of commands
-
-    # add verbosity arg and analysis-file arg to all commands
-    parsers = [
-        parser,
-        parser_find_clusters, parser_find_mode,
-        parser_list_priors, parser_list_likelihoods, parser_list_posteriors, parser_list_predictions,
-        parser_plot_samples,
-        parser_sample_mcmc, parser_sample_pmc,
-        parser_predict_observables,
-        parser_run
-    ]
-    for p in parsers:
-        p.add_argument('-v', '--verbose',
-            help = 'Increases the verbosity of the script' if p == parser else argparse.SUPPRESS,
-            dest = 'verbose', action = 'count', default = 0
-        )
-        p.add_argument('-f', '--analysis-file',
-            help = 'The analysis file. Defaults to \'.analysis.yaml\'.' if p == parser else argparse.SUPPRESS,
-            dest = 'analysis_file', action = 'store', default = '.analysis.yaml'
-        )
 
     return parser
 
