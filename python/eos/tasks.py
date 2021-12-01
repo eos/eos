@@ -21,7 +21,7 @@ import numpy as _np
 import os
 import pypmc
 
-def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150, preruns=3, N=1000, stride=5):
+def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150, preruns=3, N=1000, stride=5, cov_scale=0.1, start_point=None):
     """
     Samples from a named posterior PDF using Markov Chain Monte Carlo (MCMC) methods.
 
@@ -43,6 +43,10 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
     :type N: int, optional
     :param stride: The ratio of samples drawn over samples stored. For every S samples, S - 1 will be discarded. Defaults to 5.
     :type stride: int, optional
+    :param cov_scale: Scale factor for the initial guess of the covariance matrix.
+    :type cov_scale: float, optional
+    :param start_point: Optional starting point for the chain
+    :type start_point: list-like, optional
     """
 
     output_path = os.path.join(base_directory, posterior, 'mcmc-{:04}'.format(int(chain)))
@@ -51,7 +55,7 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
     analysis = _analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
     try:
-        samples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng)
+        samples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng, cov_scale=cov_scale, start_point=start_point)
         eos.data.MarkovChain.create(output_path, analysis.varied_parameters, samples, weights)
     except RuntimeError as e:
         eos.error('encountered run time error ({e}) in parameter point:'.format(e=e))
