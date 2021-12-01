@@ -76,6 +76,8 @@ class Plotter:
         mytitle = ''
         myylabel = ''
         myxlabel = ''
+        myyscale = 'linear'
+        myxscale = 'linear'
         if 'title' in myplot:
             mytitle = myplot['title']
 
@@ -108,6 +110,9 @@ class Plotter:
             self.ax.xaxis.set_ticks_position('both')
 
             if 'scale' in myx:
+                myxscale = myx['scale']
+
+            if 'scaling_factor' in myx:
 
                 if 'format' in myx:
                     self.xformat = myx['format']
@@ -115,8 +120,8 @@ class Plotter:
                     self.xformat = '${x}$'
                     eos.warn("Argument plot:x:format might be required when using plot:x:scale to avoid side effects")
 
-                self.xscale = float(myx['scale'])
-                self.xticks = matplotlib.ticker.FuncFormatter(lambda x, pos, xscale=self.xscale: self.xformat.format(x=x / xscale))
+                self.x_scaling_factor = float(myx['scaling_factor'])
+                self.xticks = matplotlib.ticker.FuncFormatter(lambda x, pos, xscale=self.x_scaling_factor: self.xformat.format(x=x / xscale))
                 self.ax.xaxis.set_major_formatter(self.xticks)
 
             else:
@@ -141,6 +146,9 @@ class Plotter:
             self.ax.yaxis.set_ticks_position('both')
 
             if 'scale' in myy:
+                myyscale = myy['scale']
+
+            if 'scaling_factor' in myy:
 
                 if 'format' in myy:
                     self.yformat = myy['format']
@@ -148,8 +156,8 @@ class Plotter:
                     self.yformat = '${x}$'
                     eos.warn("Argument plot:y:format might be required when using plot:y:scale to avoid side effects")
 
-                self.yscale = float(myy['scale'])
-                self.yticks = matplotlib.ticker.FuncFormatter(lambda y, pos, yscale=self.yscale: self.yformat.format(x=y / yscale))
+                self.y_scaling_factor = float(myy['scaling_factor'])
+                self.yticks = matplotlib.ticker.FuncFormatter(lambda y, pos, yscale=self.y_scaling_factor: self.yformat.format(x=y / yscale))
                 self.ax.yaxis.set_major_formatter(self.yticks)
 
             else:
@@ -159,7 +167,7 @@ class Plotter:
         if 'grid' in myplot:
             self.ax.grid(b=True, which=myplot['grid'])
 
-        self.ax.set(xlabel=myxlabel, ylabel=myylabel, title=mytitle)
+        self.ax.set(xlabel=myxlabel, ylabel=myylabel, xscale=myxscale, yscale=myyscale, title=mytitle)
 
     class BasePlot:
         """Base class for any of the plots supported by Plotter"""
@@ -186,7 +194,7 @@ class Plotter:
 
     class Point(BasePlot):
         """Plots a single point"""
-        
+
         _api_doc = inspect.cleandoc("""\
         Plotting Points
         ---------------
