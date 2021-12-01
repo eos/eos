@@ -220,7 +220,7 @@ class Analysis:
         :param start_point: Parameter point from which to start the optimization, with the elements in the same order as in eos.Analysis.varied_parameters.
                             If set to "random", optimization starts at the random point in the space of the priors.
                             If not specified, optimization starts at the current parameter point.
-        :param start_point: iterable, optional
+        :type start_point: iterable, optional
         :param rng: Optional random number generator
 
         """
