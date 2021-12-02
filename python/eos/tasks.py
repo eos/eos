@@ -62,7 +62,7 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
         for p in analysis.varied_parameters:
             eos.error(' - {n}: {v}'.format(n=p.name(), v=p.evaluate()))
 
-def find_clusters(analysis_file, posterior, base_directory='./', threshold=2.0, K_g=1):
+def find_clusters(posterior, base_directory='./', threshold=2.0, K_g=1, analysis_file=None):
     """
     Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
 
@@ -70,8 +70,6 @@ def find_clusters(analysis_file, posterior, base_directory='./', threshold=2.0, 
     The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-*. All MCMC input files present will be used in the clustering.
     The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
 
-    :param analysis_file: The name of the analysis file that describes the named posterior.
-    :type analysis_file: str
     :param posterior: The name of the posterior.
     :type posterior: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
