@@ -9,6 +9,10 @@ on:
 
 name: Build/Check/Deploy on Ubuntu
 
+concurrency:
+  group: Ubuntu, ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
     ubuntu-build:
         strategy:

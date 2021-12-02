@@ -6,6 +6,10 @@ on:
 
 name: Build/Check on MacOS
 
+concurrency:
+  group: MacOS, ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
     macos-build-check:
         name: Build on MacOS
