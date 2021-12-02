@@ -27,8 +27,8 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
 
     The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-CHAIN.
 
-    :param analysis_file: The name of the analysis file that describes the named posterior.
-    :type analysis_file: str
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
     :param posterior: The name of the posterior PDF from which to draw the samples.
     :type posterior: str
     :param chain: The index assigned to the Markov chain. This value is used to seed the RNG for a reproducable analysis.
@@ -51,7 +51,10 @@ def sample_mcmc(analysis_file, posterior, chain, base_directory='./', pre_N=150,
 
     output_path = os.path.join(base_directory, posterior, 'mcmc-{:04}'.format(int(chain)))
     _set_log_file(output_path, 'log')
-    _analysis_file = eos.AnalysisFile(analysis_file)
+    if type(analysis_file) is not eos.AnalysisFile:
+        _analysis_file = eos.AnalysisFile(analysis_file)
+    else:
+        _analysis_file = analysis_file
     analysis = _analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
     try:
@@ -106,8 +109,8 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
     The results of the find-cluster command are expected in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
     The output file will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
 
-    :param analysis_file: The name of the analysis file that describes the named posterior.
-    :type analysis_file: str
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
     :param posterior: The name of the posterior.
     :type posterior: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
@@ -126,7 +129,10 @@ def sample_pmc(analysis_file, posterior, base_directory='./', step_N=500, steps=
 
     output_path = os.path.join(base_directory, posterior, 'pmc')
     _set_log_file(output_path, 'log', mode='a' if continue_sampling else 'w')
-    _analysis_file = eos.AnalysisFile(analysis_file)
+    if type(analysis_file) is not eos.AnalysisFile:
+        _analysis_file = eos.AnalysisFile(analysis_file)
+    else:
+        _analysis_file = analysis_file
     analysis = _analysis_file.analysis(posterior)
     rng = _np.random.mtrand.RandomState(1701)
     if continue_sampling:
@@ -153,8 +159,8 @@ def predict_observables(analysis_file, posterior, prediction, base_directory='./
     The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/pmc.
     The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
 
-    :param analysis_file: The name of the analysis file that describes the named posterior.
-    :type analysis_file: str
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
     :param posterior: The name of the posterior.
     :type posterior: str
     :param prediction: The name of the set of observables to predict.
@@ -167,7 +173,10 @@ def predict_observables(analysis_file, posterior, prediction, base_directory='./
     :type begin: int
     '''
     _parameters = eos.Parameters()
-    _analysis_file = eos.AnalysisFile(analysis_file)
+    if type(analysis_file) is not eos.AnalysisFile:
+        _analysis_file = eos.AnalysisFile(analysis_file)
+    else:
+        _analysis_file = analysis_file
     observables = _analysis_file.observables(prediction, _parameters)
 
     data = eos.data.PMCSampler(os.path.join(base_directory, posterior, 'pmc'))
@@ -205,10 +214,13 @@ def run_steps(analysis_file, base_directory='./'):
      - sample-pmc
      - predict-observables
 
-    :param analysis_file: The name of the analysis file that describes the steps.
-    :type analysis_file: str
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
     """
-    _analysis_file = eos.AnalysisFile(analysis_file)
+    if type(analysis_file) is not eos.AnalysisFile:
+        _analysis_file = eos.AnalysisFile(analysis_file)
+    else:
+        _analysis_file = analysis_file
     _analysis_file.run()
 
 
