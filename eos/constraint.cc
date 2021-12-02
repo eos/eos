@@ -198,7 +198,7 @@ namespace eos
             {
                 if (options.has(key) && (value != options[key]))
                 {
-                    Log::instance()->message("[GaussianConstraintEntry.make]", ll_warning)
+                    Log::instance()->message("[GaussianConstraintEntry.make]", ll_debug)
                         << "Constraint '" << name << "' provides option key '" << key << "' with value '" << value << "'; user is overriding this preset with '" << options[key] << "'";
                 }
             }
@@ -406,7 +406,7 @@ namespace eos
             {
                 if (options.has(key) && (value != options[key]))
                 {
-                    Log::instance()->message("[LogGammaConstraintEntry.make]", ll_warning)
+                    Log::instance()->message("[LogGammaConstraintEntry.make]", ll_debug)
                         << "Constraint '" << name << "' provides option key '" << key << "' with value '" << value << "'; user is overriding this preset with '" << options[key] << "'";
                 }
             }
@@ -604,7 +604,7 @@ namespace eos
             {
                 if (options.has(key) && (value != options[key]))
                 {
-                    Log::instance()->message("[AmorosoConstraintEntry.make]", ll_warning)
+                    Log::instance()->message("[AmorosoConstraintEntry.make]", ll_debug)
                         << "Constraint '" << name << "' provides option key '" << key << "' with value '" << value << "'; user is overriding this preset with '" << options[key] << "'";
                 }
             }
@@ -830,7 +830,7 @@ namespace eos
                 {
                     if (options.has(key) && (value != options[key]))
                     {
-                        Log::instance()->message("[MultivariateGaussianConstraintEntry.make]", ll_warning)
+                        Log::instance()->message("[MultivariateGaussianConstraintEntry.make]", ll_debug)
                             << "Constraint '" << name << "' in observable '" << this->observable_names[i] << "' provides option key '" << key << "' with value '" << value << "'; user is overriding this preset with '" << options[key] << "'";
                     }
                 }
@@ -1181,7 +1181,7 @@ namespace eos
                 {
                     if (options.has(key) && (value != options[key]))
                     {
-                        Log::instance()->message("[MultivariateGaussianCovarianceConstraintEntry.make]", ll_warning)
+                        Log::instance()->message("[MultivariateGaussianCovarianceConstraintEntry.make]", ll_debug)
                             << "Constraint '" << name << "' in observable '" << this->observables[i] << "' provides option key '" << key << "' with value '" << value << "'; user is overriding this preset with '" << options[key] << "'";
                     }
                 }
@@ -1525,7 +1525,7 @@ namespace eos
             {
                 if (options.has(key) && (value != options[key]))
                 {
-                    Log::instance()->message("[UniformBoundConstraintEntry.make]", ll_warning)
+                    Log::instance()->message("[UniformBoundConstraintEntry.make]", ll_debug)
                         << "Constraint '" << name << "' provides option key '" << key << "' with value '" << value << "'; user is overriding this preset with '" << options[key] << "'";
                 }
             }
@@ -1749,7 +1749,7 @@ namespace eos
                 {
                     if (options.has(key) && (value != options[key]))
                     {
-                        Log::instance()->message("[MixtureConstraintEntry.make]", ll_warning)
+                        Log::instance()->message("[MixtureConstraintEntry.make]", ll_debug)
                             << "Constraint '" << name << "' in observable '" << this->observables[i] << "' provides option key '" << key << "' with value '" << value << "'; user is overriding this preset with '" << options[key] << "'";
                     }
                 }
