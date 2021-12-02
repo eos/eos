@@ -9,6 +9,10 @@ on:
 
 name: Build/Check/Deploy for PyPI
 
+concurrency:
+  group: manylinux, ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
     pypi-build:
         name: Build on manylinux2014
