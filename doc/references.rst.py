@@ -32,7 +32,7 @@ print('#' * len(page_title))
 print('\n')
 print('''
 The following is the full list of references that were used to implement theory codes and provide likelihood constraints
-or parameter values within EOS v{}.\n\n'''.format(eos.version()))
+or parameter values within EOS v{}.\n\n'''.format(eos.__version__))
 for handle, reference in eos.References():
     title = latex_to_rst(reference.title())
     eprint, url = id_to_eprint_url(reference.eprint_id())

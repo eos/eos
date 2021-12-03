@@ -59,7 +59,7 @@ def make_doc_observables(group):
 if __name__ == '__main__':
 
     print_template(__file__,
-        version = eos.version(),
+        version = eos.__version__,
         sections = make_doc_sections(),
         len = len,
     )

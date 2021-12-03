@@ -1800,7 +1800,7 @@ class Plotter:
 
             ax = plt.gca()
             color = 'OrangeRed'
-            version = 'v{version}'.format(version=eos.version())
+            version = 'v{version}'.format(version=eos.__version__)
             if 'preliminary' in item and item['preliminary']:
                 color = 'red'
                 version = 'Preliminary'

@@ -183,13 +183,7 @@ namespace impl
         }
     };
 
-    const char *
-    version(void)
-    {
-        static const char version[] = PACKAGE_VERSION;
-
-        return version;
-    }
+    static const char version[] = PACKAGE_VERSION;
 
     void translate_exception(const Exception & e)
     {
@@ -809,5 +803,5 @@ BOOST_PYTHON_MODULE(_eos)
     // }}}
 
     // EOS version
-    def("version", impl::version);
+    scope().attr("__version__") = PACKAGE_VERSION;
 }
