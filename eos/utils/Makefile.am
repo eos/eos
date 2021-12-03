@@ -66,6 +66,7 @@ libeosutils_la_SOURCES = \
 	save.hh \
 	standard-model.cc standard-model.hh \
 	stringify.hh \
+	szego-polynomial.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh \
@@ -142,6 +143,7 @@ include_eos_utils_HEADERS = \
 	save.hh \
 	standard-model.hh \
 	stringify.hh \
+	szego-polynomial.hh \
 	thread.hh \
 	thread_pool.hh \
 	ticket.hh \
@@ -191,6 +193,7 @@ TESTS = \
 	standard_model_TEST \
 	top-loops_TEST \
 	stringify_TEST \
+	szego-polynomial_TEST \
 	verify_TEST \
 	wilson_coefficients_TEST \
 	wilson-polynomial_TEST \
@@ -269,6 +272,8 @@ save_TEST_SOURCES = save_TEST.cc
 stringify_TEST_SOURCES = stringify_TEST.cc
 
 standard_model_TEST_SOURCES = standard_model_TEST.cc
+
+szego_polynomial_TEST_SOURCES = szego-polynomial_TEST.cc
 
 top_loops_TEST_SOURCES = top-loops_TEST.cc
 
