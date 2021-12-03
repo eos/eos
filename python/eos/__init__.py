@@ -37,6 +37,7 @@ except NameError:
     pass
 
 from _eos import *
+from _eos import __version__
 from .data import *
 from .plot import *
 from .analysis import Analysis, BestFitPoint

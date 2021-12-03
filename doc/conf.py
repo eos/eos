@@ -25,7 +25,7 @@ author = 'Danny van Dyk and others'
 master_doc = 'index'
 
 # The full version, including alpha/beta/rc tags
-release = eos.version()
+release = eos.__version__
 
 
 # -- General configuration ---------------------------------------------------

@@ -72,7 +72,7 @@ class MarkovChain:
         :type weights: 2D numpy array, optional
         """
         description = {}
-        description['version'] = eos.version()
+        description['version'] = eos.__version__
         description['type'] = 'MarkovChain'
         description['parameters'] = [{
             'name': p.name(),
@@ -137,7 +137,7 @@ class MixtureDensity:
         :type density: pypmc.density.MixtureDensity
         """
         description = {}
-        description['version'] = eos.version()
+        description['version'] = eos.__version__
         description['type'] = 'MixtureDensity'
         description['components'] = []
         for c in density.components:
@@ -232,7 +232,7 @@ class PMCSampler:
         :type sigma_test: list or iterable
         """
         description = {}
-        description['version'] = eos.version()
+        description['version'] = eos.__version__
         description['type'] = 'PMCSampler'
         description['parameters'] = [{
             'name': p.name(),
@@ -326,7 +326,7 @@ class Prediction:
         :type weights: 1D numpy array
         """
         description = {}
-        description['version'] = eos.version()
+        description['version'] = eos.__version__
         description['type'] = 'Prediction'
         description['observables'] = [{
             'name': str(o.name()),
