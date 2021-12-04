@@ -220,3 +220,31 @@ class AnalysisFile:
         """Returns a list of all predictions recorded in the analysis file."""
 
         return self._predictions
+
+
+    def _repr_html_(self):
+        result = r'''
+        <table>
+            <colgroup>
+                <col width="100%" id="posterior"    style="min-width: 200px">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>posteriors</th>
+                </tr>
+            </thead>
+            <tbody>
+        '''
+        for p in self._posteriors:
+            result += fr'''
+                <tr>
+                    <td>{p}</td>
+                </tr>
+            '''
+
+        result += r'''
+            </tbody>
+        </table>
+        '''
+
+        return result
