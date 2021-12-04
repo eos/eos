@@ -1278,6 +1278,12 @@ S:2004A:
     id: oai:arXiv.org:hep-ph/0403185
   inspire-id: Seidel:2004jh
   title: Analytic two loop virtual corrections to $b \to d \ell^+ \ell^-$
+S:2004B:
+  authors: Simon, Barry
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:math/0405111
+  title: 'Orthogonal polynomials on the unit circle: New results'
 S:2010A:
   authors: Simone, J. and others
   collaboration:
