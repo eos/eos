@@ -22,7 +22,7 @@
 #include <test/test.hh>
 #include <eos/form-factors/b-lcdas.hh>
 
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 
 #include <cmath>
 #include <limits>

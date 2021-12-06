@@ -25,10 +25,10 @@
 #include <eos/b-decays/b-to-v-l-nu.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
 #include <eos/form-factors/form-factors.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/power_of.hh>

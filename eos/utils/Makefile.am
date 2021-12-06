@@ -10,7 +10,6 @@ libeosutils_la_SOURCES = \
 	accumulator.cc accumulator.hh \
 	apply.hh \
 	cartesian-product.hh \
-	ckm_scan_model.cc ckm_scan_model.hh \
 	complex.hh \
 	concrete_observable.cc concrete_observable.hh \
 	concrete-cacheable-observable.hh \
@@ -46,7 +45,6 @@ libeosutils_la_SOURCES = \
 	log.cc log.hh \
 	matrix.hh \
 	memoise.cc memoise.hh \
-	model.cc model.hh \
 	mutable.cc mutable.hh mutable-fwd.hh \
 	mutex.cc mutex.hh \
 	named-value.hh named-value-fwd.hh \
@@ -64,21 +62,17 @@ libeosutils_la_SOURCES = \
 	quantum-numbers.cc quantum-numbers.hh \
 	reference-name.cc reference-name.hh \
 	save.hh \
-	standard-model.cc standard-model.hh \
 	stringify.hh \
 	szego-polynomial.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh \
-	top-loops.hh top-loops.cc \
 	tuple-maker.hh \
 	type-list.hh type-list-fwd.hh \
 	units.cc units.hh \
 	verify.cc verify.hh \
 	visitor.hh visitor-fwd.hh \
-	wilson_coefficients.cc wilson_coefficients.hh \
 	wilson-polynomial.cc wilson-polynomial.hh \
-	wilson_scan_model.cc wilson_scan_model.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 
 libeosutils_la_LIBADD = \
@@ -102,7 +96,6 @@ include_eos_utils_HEADERS = \
 	accumulator.hh \
 	apply.hh \
 	cartesian-product.hh \
-	ckm_scan_model.hh \
 	complex.hh \
 	concrete_observable.hh \
 	concrete-signal-pdf.hh \
@@ -126,7 +119,6 @@ include_eos_utils_HEADERS = \
 	log.hh \
 	matrix.hh \
 	memoise.hh \
-	model.hh \
 	mutex.hh \
 	mutable.hh mutable-fwd.hh \
 	observable_cache.hh \
@@ -141,19 +133,15 @@ include_eos_utils_HEADERS = \
 	quantum-numbers.hh \
 	reference-name.hh \
 	save.hh \
-	standard-model.hh \
 	stringify.hh \
 	szego-polynomial.hh \
 	thread.hh \
 	thread_pool.hh \
 	ticket.hh \
-	top-loops.hh \
 	tuple-maker.hh \
 	units.hh \
 	verify.hh \
-	wilson_coefficients.hh \
 	wilson-polynomial.hh \
-	wilson_scan_model.hh \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 
 AM_TESTS_ENVIRONMENT = \
@@ -163,7 +151,6 @@ TESTS = \
 	apply_TEST \
 	cacheable-observable_TEST \
 	cartesian-product_TEST \
-	ckm_scan_model_TEST \
 	derivative_TEST \
 	expression-parser_TEST \
 	gsl-hacks_TEST \
@@ -190,17 +177,14 @@ TESTS = \
 	quantum-numbers_TEST \
 	reference-name_TEST \
 	save_TEST \
-	standard_model_TEST \
-	top-loops_TEST \
 	stringify_TEST \
 	szego-polynomial_TEST \
 	verify_TEST \
-	wilson_coefficients_TEST \
-	wilson-polynomial_TEST \
-	wilson_scan_model_TEST
+	wilson-polynomial_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	libeosutils.la \
+	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = $(TESTS)
@@ -210,8 +194,6 @@ apply_TEST_SOURCES = apply_TEST.cc
 cacheable_observable_TEST_SOURCES = cacheable_observable_TEST.cc
 
 cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
-
-ckm_scan_model_TEST_SOURCES = ckm_scan_model_TEST.cc
 
 derivative_TEST_SOURCES = derivative_TEST.cc
 
@@ -271,18 +253,8 @@ save_TEST_SOURCES = save_TEST.cc
 
 stringify_TEST_SOURCES = stringify_TEST.cc
 
-standard_model_TEST_SOURCES = standard_model_TEST.cc
-
 szego_polynomial_TEST_SOURCES = szego-polynomial_TEST.cc
-
-top_loops_TEST_SOURCES = top-loops_TEST.cc
 
 verify_TEST_SOURCES = verify_TEST.cc
 
-wilson_coefficients_TEST_SOURCES = wilson_coefficients_TEST.cc
-wilson_coefficients_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
-wilson_coefficients_TEST_LDFLAGS = $(GSL_LDFLAGS)
-
 wilson_polynomial_TEST_SOURCES = wilson-polynomial_TEST.cc
-
-wilson_scan_model_TEST_SOURCES = wilson_scan_model_TEST.cc

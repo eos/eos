@@ -17,7 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/utils/ckm_scan_model.hh>
+#include <eos/models/ckm.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/matrix.hh>

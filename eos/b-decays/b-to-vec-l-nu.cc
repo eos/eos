@@ -21,6 +21,7 @@
 
 #include <eos/form-factors/form-factors.hh>
 #include <eos/b-decays/b-to-vec-l-nu-impl.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/integrate-impl.hh>
@@ -28,7 +29,6 @@
 #include <eos/utils/log.hh>
 #include <eos/utils/memoise.hh>
 #include <eos/utils/options-impl.hh>
-#include <eos/utils/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>

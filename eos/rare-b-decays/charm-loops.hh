@@ -20,8 +20,8 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_CHARM_LOOPS_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_CHARM_LOOPS_HH 1
 
+#include <eos/models/model.hh>
 #include <eos/utils/complex.hh>
-#include <eos/utils/model.hh>
 
 namespace eos
 {

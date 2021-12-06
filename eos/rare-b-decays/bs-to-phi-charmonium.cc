@@ -16,10 +16,10 @@
  */
 
 #include <eos/form-factors/mesonic.hh>
+#include <eos/models/model.hh>
 #include <eos/rare-b-decays/bs-to-phi-charmonium.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/model.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 

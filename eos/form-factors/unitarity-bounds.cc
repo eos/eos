@@ -20,7 +20,7 @@
 
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/power_of.hh>

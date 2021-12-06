@@ -18,7 +18,7 @@
  */
 
 #include <eos/b-decays/properties.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>

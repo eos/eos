@@ -21,7 +21,7 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/reference-name.hh>

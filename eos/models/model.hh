@@ -19,14 +19,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_MODEL_HH
-#define EOS_GUARD_SRC_UTILS_MODEL_HH 1
+#ifndef EOS_GUARD_EOS_MODELS_MODEL_HH
+#define EOS_GUARD_EOS_MODELS_MODEL_HH 1
 
+#include <eos/models/wilson-coefficients.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/quantum-numbers.hh>
-#include <eos/utils/wilson_coefficients.hh>
 
 #include <complex>
 #include <map>
