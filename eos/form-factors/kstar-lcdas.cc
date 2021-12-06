@@ -18,7 +18,7 @@
  */
 
 #include <eos/form-factors/kstar-lcdas.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 #include <eos/utils/stringify.hh>

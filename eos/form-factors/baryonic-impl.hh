@@ -27,7 +27,7 @@
 #include <eos/form-factors/hqet-b-to-c.hh>
 #include <eos/utils/complex.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/stringify.hh>

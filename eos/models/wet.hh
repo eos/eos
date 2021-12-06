@@ -20,12 +20,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_WILSON_SCAN_MODEL_HH
-#define EOS_GUARD_SRC_UTILS_WILSON_SCAN_MODEL_HH 1
+#ifndef EOS_GUARD_EOS_MODELS_WET_HH
+#define EOS_GUARD_EOS_MODELS_WET_HH 1
 
-#include <eos/utils/ckm_scan_model.hh>
-#include <eos/utils/model.hh>
-#include <eos/utils/standard-model.hh>
+#include <eos/models/ckm.hh>
+#include <eos/models/model.hh>
+#include <eos/models/standard-model.hh>
 
 namespace eos
 {

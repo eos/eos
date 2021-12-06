@@ -20,10 +20,10 @@
 #ifndef MASTER_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_BASE_HH
 #define MASTER_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_BASE_HH 1
 
-#include <eos/utils/model.hh>
-#include <eos/utils/options-impl.hh>
 #include <eos/form-factors/mesonic.hh>
+#include <eos/models/model.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll.hh>
+#include <eos/utils/options-impl.hh>
 
 namespace eos
 {

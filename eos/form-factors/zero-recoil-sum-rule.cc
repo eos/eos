@@ -19,7 +19,7 @@
 
 #include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/power_of.hh>
 

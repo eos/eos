@@ -25,7 +25,7 @@
 #include <eos/form-factors/form-factors-fwd.hh>
 #include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 
 namespace eos
 {

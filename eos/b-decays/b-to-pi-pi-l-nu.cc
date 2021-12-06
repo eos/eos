@@ -19,9 +19,9 @@
 
 #include <eos/form-factors/form-factors.hh>
 #include <eos/b-decays/b-to-pi-pi-l-nu.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/model.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 

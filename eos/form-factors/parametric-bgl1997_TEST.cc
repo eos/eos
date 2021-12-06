@@ -21,7 +21,7 @@
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bgl1997-impl.hh>
 
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/power_of.hh>
 
 #include <cmath>

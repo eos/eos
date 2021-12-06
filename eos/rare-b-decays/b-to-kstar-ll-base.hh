@@ -21,7 +21,7 @@
 #ifndef MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_KSTAR_LL_BASE_HH
 #define MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_KSTAR_LL_BASE_HH 1
 
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/form-factors/mesonic.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>

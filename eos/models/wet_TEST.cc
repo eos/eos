@@ -19,8 +19,8 @@
 
 #include <test/test.hh>
 #include <eos/utils/complex.hh>
-#include <eos/utils/model.hh>
-#include <eos/utils/wilson_scan_model.hh>
+#include <eos/models/model.hh>
+#include <eos/models/wet.hh>
 
 #include <algorithm>
 #include <cmath>

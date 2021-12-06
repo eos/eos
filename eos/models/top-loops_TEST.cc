@@ -19,7 +19,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/top-loops.hh>
+#include <eos/models/top-loops.hh>
 
 #include <cmath>
 

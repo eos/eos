@@ -5,7 +5,7 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/options-impl.hh>
 
 namespace eos

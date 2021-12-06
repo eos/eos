@@ -17,10 +17,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/utils/ckm_scan_model.hh>
-#include <eos/utils/model.hh>
-#include <eos/utils/standard-model.hh>
-#include <eos/utils/wilson_scan_model.hh>
+#include <eos/models/ckm.hh>
+#include <eos/models/model.hh>
+#include <eos/models/standard-model.hh>
+#include <eos/models/wet.hh>
 
 #include <map>
 

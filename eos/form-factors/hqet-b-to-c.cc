@@ -19,7 +19,7 @@
  */
 
 #include <eos/form-factors/hqet-b-to-c.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/polylog.hh>
 #include <eos/utils/stringify.hh>

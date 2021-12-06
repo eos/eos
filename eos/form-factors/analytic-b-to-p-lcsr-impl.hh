@@ -27,7 +27,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>

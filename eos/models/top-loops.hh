@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_TOP_LOOPS_HH
-#define EOS_GUARD_SRC_UTILS_TOP_LOOPS_HH 1
+#ifndef EOS_GUARD_EOS_MODELS_TOP_LOOPS_HH
+#define EOS_GUARD_EOS_MODELS_TOP_LOOPS_HH 1
 
 namespace eos
 {

@@ -19,10 +19,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_STANDARD_MODEL_HH
-#define EOS_GUARD_SRC_UTILS_STANDARD_MODEL_HH 1
+#ifndef EOS_GUARD_EOS_MODELS_STANDARD_MODEL_HH
+#define EOS_GUARD_EOS_MODELS_STANDARD_MODEL_HH 1
 
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 
 namespace eos

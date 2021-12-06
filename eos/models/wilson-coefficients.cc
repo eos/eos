@@ -18,11 +18,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/models/model.hh>
+#include <eos/models/wilson-coefficients.hh>
 #include <eos/utils/matrix.hh>
-#include <eos/utils/model.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/qcd.hh>
-#include <eos/utils/wilson_coefficients.hh>
 
 #include <array>
 #include <cmath>

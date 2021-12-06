@@ -19,13 +19,13 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/models/top-loops.hh>
+#include <eos/models/standard-model.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/matrix.hh>
 #include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
-#include <eos/utils/top-loops.hh>
-#include <eos/utils/standard-model.hh>
 
 #include <cmath>
 

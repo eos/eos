@@ -7,6 +7,7 @@ SUBDIRS = \
 	constraints \
 	parameters \
 	utils \
+	models \
 	statistics \
 	form-factors \
 	rare-b-decays \

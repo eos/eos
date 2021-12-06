@@ -18,8 +18,8 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/model.hh>
-#include <eos/utils/ckm_scan_model.hh>
+#include <eos/models/model.hh>
+#include <eos/models/ckm.hh>
 
 #include <cmath>
 

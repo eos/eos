@@ -20,8 +20,8 @@
 #include <test/test.hh>
 #include <eos/utils/matrix.hh>
 #include <eos/utils/power_of.hh>
-#include <eos/utils/top-loops.hh>
-#include <eos/utils/wilson_coefficients.hh>
+#include <eos/models/top-loops.hh>
+#include <eos/models/wilson-coefficients.hh>
 
 #include <cmath>
 #include <iostream>

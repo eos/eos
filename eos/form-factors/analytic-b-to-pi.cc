@@ -24,7 +24,7 @@
 #include <eos/utils/exception.hh>
 #include <eos/utils/integrate.hh>
 #include <eos/utils/log.hh>
-#include <eos/utils/model.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/polylog.hh>
 #include <eos/utils/power_of.hh>
