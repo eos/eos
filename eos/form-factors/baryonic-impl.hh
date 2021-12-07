@@ -24,6 +24,7 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_BARYONIC_IMPL_HH 1
 
 #include <eos/form-factors/baryonic.hh>
+#include <eos/form-factors/baryonic-processes.hh>
 #include <eos/form-factors/hqet-b-to-c.hh>
 #include <eos/maths/complex.hh>
 #include <eos/utils/kinematic.hh>
@@ -36,47 +37,6 @@ namespace eos
 {
     /* Form Factors according to [MvD2016] for J=1/2^+ -> 1/2^+ transitions */
     template <typename Process_> class MvD2016FormFactors;
-
-    /*
-     * J=1/2^+ -> J=1/2^+ transitions
-     */
-    struct LambdaBToLambda {
-        static constexpr const char * label = "Lambda_b->Lambda";
-        // initial state mass
-        static constexpr double m1 = 5.61951;
-        // final state mass
-        static constexpr double m2 = 1.115683;
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m1 - m2) * (m1 - m2);
-        // pair production threshold: B + K
-        static constexpr double tp = (5.279 + 0.494) * (5.279 + 0.494);
-        // first resonances sorted by spin/parity
-        static constexpr double mR2_0m = 5.367 * 5.367;
-        static constexpr double mR2_0p = 5.711 * 5.711;
-        static constexpr double mR2_1m = 5.416 * 5.416;
-        static constexpr double mR2_1p = 5.750 * 5.750;
-    };
-
-    struct LambdaBToLambdaC {
-        static constexpr const char * label = "Lambda_b->Lambda_c";
-        // initial state mass
-        static constexpr double m1 = 5.61951;
-        // final state mass
-        static constexpr double m2 = 2.2865;
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m1 - m2) * (m1 - m2);
-        // first resonances sorted by spin/parity (from DLM2015 table VII)
-        static constexpr double mBc = 6.276;
-        static constexpr double mR2_0m = mBc * mBc;
-        static constexpr double mR2_0p = (mBc + 0.449) * (mBc + 0.449);
-        static constexpr double mR2_1m = (mBc + 0.056) * (mBc + 0.056);
-        static constexpr double mR2_1p = (mBc + 0.492) * (mBc + 0.492);
-        // see cf. DKMR2017 for the def. of t_+'s; FF specific
-        static constexpr double tp_0m  = mR2_0m;
-        static constexpr double tp_0p  = mR2_0p;
-        static constexpr double tp_1m  = mR2_1m;
-        static constexpr double tp_1p  = mR2_1p;
-    };
 
     template <typename Process_> class DKMR2017FormFactors :
         public FormFactors<OneHalfPlusToOneHalfPlus>
