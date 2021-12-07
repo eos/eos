@@ -22,14 +22,14 @@ class BToKCharmoniumGvDV2020Test :
             p["CKM::arg(V_cb)"]                          =  0.0;
             p["CKM::abs(V_cs)"]                          =  0.9734061815416853;
             p["CKM::arg(V_cs)"]                          = -3.304199362533668e-05;
-            p["mass::B_d"]                               = 5.27942;
-            p["mass::K_d"]                               = 0.49761;
-            p["mass::J/psi"]                             = 3.0969;
-            p["mass::psi(2S)"]                           = 3.6860;
-            p["mass::D^0"]                               = 1.86723;
-            p["b->sccbar::t_0"]                          = 9.0;
-            p["b->sccbar::t_s"]                          = -17.4724;
-            p["b->sccbar::chiOPE@GvDV2020"]              = 1.81e-4;
+            p["mass::B_d"]                               =  5.279;
+            p["mass::K_d"]                               =  0.492;
+            p["mass::J/psi"]                             =  3.0969;
+            p["mass::psi(2S)"]                           =  3.6860;
+            p["mass::D^0"]                               =  1.86723;
+            p["b->sccbar::t_0"]                          =  4.0;
+            p["b->sccbar::t_s"]                          =  -17.4724;
+            p["b->sccbar::chiOPE@GvDV2020"]              =  1.81e-4;
 
             p["B->Kccbar::Re{alpha_0^plus}@GvDV2020"]  = 2.0;
             p["B->Kccbar::Im{alpha_0^plus}@GvDV2020"]  = 3.0;
@@ -48,7 +48,7 @@ class BToKCharmoniumGvDV2020Test :
 
             BToKCharmonium c(p, oo);
 
-            TEST_CHECK_NEARLY_EQUAL(c.branching_ratio(),  303297., 1.);
+            TEST_CHECK_RELATIVE_ERROR(c.branching_ratio(),  109982.6197301, 1e-5);
 
         }
 } b_to_k_charmonium_GvDV2020_test;
@@ -71,12 +71,12 @@ class BToKCharmoniumGRvDV2021Test :
             p["CKM::arg(V_cb)"]                           =  0.0;
             p["CKM::abs(V_cs)"]                           =  0.9734061815416853;
             p["CKM::arg(V_cs)"]                           = -3.304199362533668e-05;
-            p["mass::B_d"]                                = 5.27942;
-            p["mass::K_d"]                                = 0.49761;
+            p["mass::B_d"]                                = 5.279;
+            p["mass::K_d"]                                = 0.492;
             p["mass::J/psi"]                              = 3.0969;
             p["mass::psi(2S)"]                            = 3.6860;
             p["mass::D^0"]                                = 1.86723;
-            p["b->sccbar::t_0"]                           = 9.0;
+            p["b->sccbar::t_0"]                           = 4.0;
             p["b->sccbar::t_s"]                           = -17.4724;
             p["b->sccbar::chiOPE@GRvDV2021"]              = 1.81e-4;
 
@@ -97,7 +97,7 @@ class BToKCharmoniumGRvDV2021Test :
 
             BToKCharmonium c(p, oo);
 
-            TEST_CHECK_NEARLY_EQUAL(c.branching_ratio(),  11420.6, .1);
+            TEST_CHECK_RELATIVE_ERROR(c.branching_ratio(),  756.3214, 1e-5);
 
         }
 } b_to_k_charmonium_GRvDV2021_test;

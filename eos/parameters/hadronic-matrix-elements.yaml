@@ -3999,9 +3999,9 @@ groups:
           unit:     'GeV'
           comments: 'Renormalization scale for the charm quark mass.'
       'b->sccbar::t_0' :
-          central: +10.0
-          min:     +10.0
-          max:     +10.0
+          central: +4.0
+          min:     +4.0
+          max:     +4.0
           unit:     'GeV^2'
           latex:    '$t_0$'
       'b->sccbar::t_s' :
@@ -4024,7 +4024,7 @@ groups:
           latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to K^*c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
-              - [ "0", "1", "2", "3" ]
+              - [ "0", "1", "2", "3", "4", "5" ]
               - [ "perp", "para", "long"]
       'B_s->phiccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
           central: 0
@@ -4033,7 +4033,7 @@ groups:
           latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B_s\to \phi c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
-              - [ "0", "1", "2", "3" ]
+              - [ "0", "1", "2", "3", "4", "5" ]
               - [ "perp", "para", "long"]
       'B->Kccbar::%1%{alpha_%2%^%3%}@GvDV2020' :
           central: 0
@@ -4042,7 +4042,7 @@ groups:
           latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to Kc\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
-              - [ "0", "1", "2", "3" ]
+              - [ "0", "1", "2", "3", "4", "5", "6" ]
               - [ "plus" ]
       'b->sccbar::chiOPE@GRvDV2021' :
           central: +0.000181
@@ -4058,7 +4058,7 @@ groups:
           latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to K^*c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
-              - [ "0", "1", "2", "3" ]
+              - [ "0", "1", "2", "3", "4", "5" ]
               - [ "perp", "para", "long"]
       'B_s->phiccbar::%1%{alpha_%2%^%3%}@GRvDV2021' :
           central: 0
@@ -4067,7 +4067,7 @@ groups:
           latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B_s\to \phi c\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
-              - [ "0", "1", "2", "3" ]
+              - [ "0", "1", "2", "3", "4", "5" ]
               - [ "perp", "para", "long"]
       'B->Kccbar::%1%{alpha_%2%^%3%}@GRvDV2021' :
           central: 0
@@ -4076,7 +4076,7 @@ groups:
           latex:   '$\mathrm{%1%}\, \alpha_{\%3%,%2%}^{B\to Kc\bar{c}}$'
           matrix:
               - [ "Re", "Im" ]
-              - [ "0", "1", "2", "3" ]
+              - [ "0", "1", "2", "3", "4", "5", "6" ]
               - [ "plus" ]
   # }}}
 
@@ -4090,11 +4090,13 @@ groups:
           central: +1.0
           min:     +0.89
           max:     +1.11
+          unit:     '1'
           latex:    '$\Delta\xi_{\perp}$'
       'formfactors::xi_par_uncertainty' :
           central: +1.0
           min:     +0.86
           max:     +1.14
+          unit:     '1'
           latex:    '$\Delta\xi_{\parallel}$'
       # form factor parameters for QCDF calculation according to [BFvD2016]
       'B->pipi::mu@BFvD2016' :
