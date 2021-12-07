@@ -1,24 +1,28 @@
 {
-	"files.exclude": {
-		"**/.deps": true,
-		"**/*_TEST": true,
-		"**/*_TEST.log": true,
-		"**/*_TEST.o": true,
-		"**/*_TEST.trs": true,
-		"**/*.hdf5": true,
-		"**/*.la": true,
-		"**/*.libs": true,
-		"**/*.lo": true,
-		"**/*.log": true,
-		"**/Makefile.in": true,
-		"aclocal.m4": true,
-		"config.h": true,
-		"configure": true,
-		"config.status": true,
-		"libtool": true,
-		"stamp-h1": true,
-		"autom4te.cache": true,
-		"config/": true,
-	},
-	"C_Cpp.intelliSenseCacheSize": 0
+    "files.exclude": {
+        "**/.deps": true,
+        "**/*_TEST": true,
+        "**/*_TEST.log": true,
+        "**/*_TEST.o": true,
+        "**/*_TEST.trs": true,
+        "**/*.hdf5": true,
+        "**/*.la": true,
+        "**/*.libs": true,
+        "**/*.lo": true,
+        "**/*.log": true,
+        "**/Makefile.in": true,
+        "aclocal.m4": true,
+        "config.h": true,
+        "configure": true,
+        "config.status": true,
+        "libtool": true,
+        "stamp-h1": true,
+        "autom4te.cache": true,
+        "config/": true,
+    },
+    "C_Cpp.intelliSenseCacheSize": 0,
+
+    // Insert spaces when pressing Tab. This setting is overriden
+    // based on the file contents when `editor.detectIndentation` is true.
+    "editor.insertSpaces": true
 }
