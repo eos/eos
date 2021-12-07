@@ -40,12 +40,12 @@ class BToKstarDileptonGvDV2020Test :
         {
             Parameters p = Parameters::Defaults();
 
-            p["mass::B_d"]                               = 5.27942;
-            p["mass::K_d^*"]                             = 0.89555;
+            p["mass::B_d"]                               = 5.279;
+            p["mass::K_d^*"]                             = 0.896;
             p["mass::J/psi"]                             = 3.0969;
             p["mass::psi(2S)"]                           = 3.6860;
             p["mass::D^0"]                               = 1.86723;
-            p["b->sccbar::t_0"]                          = 9.0;
+            p["b->sccbar::t_0"]                          = 4.0;
             p["b->sccbar::t_s"]                          = -17.4724;
             p["b->sccbar::chiOPE@GvDV2020"]              = 1.81e-4;
 
@@ -112,26 +112,26 @@ class BToKstarDileptonGvDV2020Test :
             BToKstarDilepton d(p, oo);
             auto amps = d.amplitudes(q2);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.53768e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -4.68474e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_left),  -1.37402e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_left),  -2.96243e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right), -8.85107e-12, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -1.89589e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_long_right),  7.46919e-12, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_long_right), -1.74463e-12, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   3.50547e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   1.04877e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_left),   5.67827e-12, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_left),   7.31160e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  1.37096e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  1.24514e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_para_right),  1.07717e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_para_right),  9.27529e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.16562e-12, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -4.37922e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_left),   1.62003e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_left),  -2.63585e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  4.82839e-11, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  5.70421e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_perp_right),  6.33040e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_perp_right),  7.44445e-11, eps);
 
-            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -1.45589e-10, eps);
-            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -2.80178e-11, eps);
+            TEST_CHECK_RELATIVE_ERROR(real(amps.a_time),       -1.45544e-10, eps);
+            TEST_CHECK_RELATIVE_ERROR(imag(amps.a_time),       -2.80092e-11, eps);
        }
     }
 } b_to_kstar_dilepton_GvDV2020_test;
@@ -230,23 +230,23 @@ class BToKstarDileptonJavierTest :
             static const double q2 = 1.0;
 
             auto nff = NonlocalFormFactor<nff::PToV>::make("B->K^*::GvDV2020", p, oo);
-            TEST_CHECK_NEARLY_EQUAL(real(nff->H_perp(q2)),  0.0071505518,  eps);
+            TEST_CHECK_NEARLY_EQUAL(real(nff->H_perp(q2)),  0.0063082395,  eps);
             TEST_CHECK_NEARLY_EQUAL(imag(nff->H_perp(q2)),  0.,            eps);
-            TEST_CHECK_NEARLY_EQUAL(real(nff->H_para(q2)),  0.0071505518,  eps);
+            TEST_CHECK_NEARLY_EQUAL(real(nff->H_para(q2)),  0.0063082395,  eps);
             TEST_CHECK_NEARLY_EQUAL(imag(nff->H_para(q2)),  0.,            eps);
-            TEST_CHECK_NEARLY_EQUAL(real(nff->H_long(q2)), -0.0001952966,  eps);
+            TEST_CHECK_NEARLY_EQUAL(real(nff->H_long(q2)), -0.0001722913,  eps);
             TEST_CHECK_NEARLY_EQUAL(imag(nff->H_long(q2)),  0.,            eps);
 
             BToKstarDilepton c(p, oo);
 
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1s(q2),  7.42282e-21,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1c(q2),  1.3321e-19,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2s(q2),  2.47427e-21,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2c(q2), -1.3321e-19,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_3(q2),  -2.78491e-21,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_4(q2),   2.17481e-20,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_5(q2),  -2.35138e-20,  eps);
-            TEST_CHECK_RELATIVE_ERROR(c.differential_j_6s(q2), -7.20512e-21,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1s(q2),  2.17500e-20,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_1c(q2),  1.35530e-19,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2s(q2),  7.25000e-21,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_2c(q2), -1.35530e-19,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_3(q2),  -5.82559e-21,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_4(q2),   3.70203e-20,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_5(q2),  -4.24896e-20,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.differential_j_6s(q2), -2.23092e-20,  eps);
             TEST_CHECK_NEARLY_EQUAL(c.differential_j_6c(q2),  0.0,  1e-20);
             TEST_CHECK_NEARLY_EQUAL(c.differential_j_7(q2),   0.0,  1e-20);
             TEST_CHECK_NEARLY_EQUAL(c.differential_j_8(q2),   0.0,  1e-20);

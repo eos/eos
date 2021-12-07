@@ -35,12 +35,12 @@ class BToKDileptonGvDV2020Test :
         {
 
             Parameters p = Parameters::Defaults();
-            p["mass::B_d"]                               = 5.27942;
-            p["mass::K_d"]                               = 0.49761;
+            p["mass::B_d"]                               = 5.279;
+            p["mass::K_d"]                               = 0.492;
             p["mass::J/psi"]                             = 3.0969;
             p["mass::psi(2S)"]                           = 3.6860;
             p["mass::D^0"]                               = 1.86723;
-            p["b->sccbar::t_0"]                          = 9.0;
+            p["b->sccbar::t_0"]                          = 4.0;
             p["b->sccbar::t_s"]                          = -17.4724;
             p["b->sccbar::chiOPE@GvDV2020"]              = 1.81e-4;
 
@@ -104,11 +104,11 @@ class BToKDileptonGvDV2020Test :
 
 
             TEST_CHECK_RELATIVE_ERROR_C(amps.F_A,  complex<double>(2.803705304, 6.000000000),  eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.F_V,  complex<double>(163.7558788, 192.3164582),  eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.F_S,  complex<double>(3.127953411, 5.971547422),  eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.F_P,  complex<double>(3.752289384, 6.010934604),  eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.F_T,  complex<double>(6.054659849, 9.418359766),  eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.F_T5, complex<double>(6.727399832, 10.09109974),  eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.F_V,  complex<double>(116.0731147, 135.4259671),  eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.F_S,  complex<double>(3.128079910, 5.971788919),  eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.F_P,  complex<double>(3.752453111, 6.011203332),  eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.F_T,  complex<double>(6.062177880, 9.430054481),  eps);
+            TEST_CHECK_RELATIVE_ERROR_C(amps.F_T5, complex<double>(6.735753201, 10.10362980),  eps);
 
         }
 } b_to_k_dilepton_GvDV2020_test;
@@ -170,11 +170,11 @@ class BToKDileptonJavierTest :
             static const double q2 = 1.0;
 
             auto nff = NonlocalFormFactor<nff::PToP>::make("B->K::GvDV2020", p, oo);
-            TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(q2)), -0.00019239,  eps);
+            TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(q2)), -0.0001715707,  eps);
             TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(q2)),  0.,        eps);
 
             BToKDilepton c(p, oo);
-            TEST_CHECK_RELATIVE_ERROR(c.two_differential_decay_width(q2, 0),  1.46233e-19,  eps);
+            TEST_CHECK_RELATIVE_ERROR(c.two_differential_decay_width(q2, 0),  1.498155e-19,  eps);
             TEST_CHECK_EQUAL(         c.two_differential_decay_width(q2, 1),  0.               );
         }
 } b_to_k_dilepton_Javier_test;

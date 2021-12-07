@@ -28,6 +28,7 @@
 #include <eos/utils/stringify.hh>
 
 #include <map>
+#include <numeric>
 
 namespace eos
 {
@@ -124,8 +125,14 @@ namespace eos
                 UsedParameter im_alpha_2_plus;
                 UsedParameter re_alpha_3_plus;
                 UsedParameter im_alpha_3_plus;
+                UsedParameter re_alpha_4_plus;
+                UsedParameter im_alpha_4_plus;
+                UsedParameter re_alpha_5_plus;
+                UsedParameter im_alpha_5_plus;
+                UsedParameter re_alpha_6_plus;
+                UsedParameter im_alpha_6_plus;
 
-                //Charmonium masses
+                // Charmonium masses
                 UsedParameter m_Jpsi;
                 UsedParameter m_psi2S;
 
@@ -143,6 +150,9 @@ namespace eos
                 // ...and value of the dispersion bound at that point in the OPE
                 UsedParameter chiOPE;
 
+                // Orthogonal polynomials on an arc of the unit circle
+                const SzegoPolynomial<6u> polynomials;
+
                 GvDV2020(const Parameters & p, const Options & o) :
                     form_factors(FormFactorFactory<PToP>::create(stringify(Process_::label) + "::" + o.get("form-factors", "BSZ2015"), p)),
 
@@ -154,6 +164,12 @@ namespace eos
                     im_alpha_2_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_2^plus}@GvDV2020"], *this),
                     re_alpha_3_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_3^plus}@GvDV2020"], *this),
                     im_alpha_3_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_3^plus}@GvDV2020"], *this),
+                    re_alpha_4_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_4^plus}@GvDV2020"], *this),
+                    im_alpha_4_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_4^plus}@GvDV2020"], *this),
+                    re_alpha_5_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_5^plus}@GvDV2020"], *this),
+                    im_alpha_5_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_5^plus}@GvDV2020"], *this),
+                    re_alpha_6_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_6^plus}@GvDV2020"], *this),
+                    im_alpha_6_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_6^plus}@GvDV2020"], *this),
 
                     m_Jpsi(p["mass::J/psi"], *this),
                     m_psi2S(p["mass::psi(2S)"], *this),
@@ -166,7 +182,12 @@ namespace eos
                     t_0(p["b->sccbar::t_0"], *this),
 
                     t_s(p["b->sccbar::t_s"], *this),
-                    chiOPE(p["b->sccbar::chiOPE@GvDV2020"], *this)
+                    chiOPE(p["b->sccbar::chiOPE@GvDV2020"], *this),
+
+                    // The parameters of the polynomial expension are computed using t0 = 4.0 and
+                    // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
+                    polynomials(2.487638017,
+                                {0.7613788603, -0.7974181049, 0.8063703241, -0.8093292634, 0.8106139436, -0.8112876795})
                 {
                     this->uses(*form_factors);
                 }
@@ -194,11 +215,11 @@ namespace eos
                     const double Nlambda = 4 * M_PI * pow(m_B2, 0.5 * (a - b + c + d) - 1.) * pow(2 * (4 * m_D02 - s_0) / 3 / chi, 0.5); //(C6)
                     const complex<double> phi1 = -pow(2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 - Q2 - s_0, 0.5) /
                                                 (2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 + Q2 * (z - 1.) - s_0 * (z + 1.)); //(C7)
-                    const complex<double> phi2 = pow(m_B4 * pow(z - 1., 4) - 2 * m_B2 * pow(z - 1., 2) * (-16 * m_D02 * z + m_P2 * pow(z - 1., 2) + s_0 * pow(z + 1., 2)) +
-                                                pow(16 * m_D02 * z + m_P2 * pow(z - 1., 2) - s_0 * pow(z + 1., 2), 2), 0.5);//(C8)
+                    const complex<double> phi2 = pow(m_B4 * power_of<4>(z - 1.) - 2 * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) + s_0 * pow(z + 1., 2)) +
+                                                power_of<2>(16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) - s_0 * power_of<2>(z + 1.)), 0.5);//(C8)
                     const complex<double> phi3 = pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) /
                                                 (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0*(z+1.)); //(C9)
-                    const complex<double> phi4 = pow(s_0 * pow(z + 1., 2.) - 16. * z * m_D02, -0.5); //(C10)
+                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5); //(C10)
 
                     return Nlambda * pow(1.+z, 0.5) * pow(1.-z, a-b+c+d-1.5) * pow(phi1, a) * pow(phi2, 0.5*b) * pow(phi3, c) * pow(phi4, d); //(C5)
                 }
@@ -209,55 +230,60 @@ namespace eos
                 }
 
                 // Residue of H at s = m_Jpsi2 computed as the residue wrt z -z_Jpsi divided by dz/ds evaluated at s = m_Jpsi2
-                inline complex<double> H_residue_jpsi(const std::array<unsigned, 4> & phi_parameters, const complex<double> alpha[4]) const
+                inline complex<double> H_residue_jpsi(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, 7> & alpha) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
 
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto zBP     = eos::nff_utils::z(power_of<2>(m_B + m_P), s_p, s_0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,           s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2,          s_p, s_0);
+                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
+                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
+
+                    const auto & polynomials_at_z = polynomials(z_Jpsi);
+                    const complex<double> p_at_z = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_Jpsi2, -0.5) * pow(pow(s_p - m_Jpsi2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
-                    return eos::nff_utils::PGvDV2020(z_Jpsi, zBP, alpha) / phi(m_Jpsi2, phi_parameters) *
-                            (1 - norm(z_Jpsi)) * (1. - z_Jpsi * std::conj(z_psi2S)) / (z_Jpsi - z_psi2S) / dzds;
+
+                    return p_at_z / phi(m_Jpsi2, phi_parameters) * (1 - norm(z_Jpsi)) * (1. - z_Jpsi * std::conj(z_psi2S)) / (z_Jpsi - z_psi2S) / dzds;
                 }
 
                 // Residue of H at s = m_psi2S2 computed as the residue wrt z -z_psi2S divided by dz/ds evaluated at s = m_psi2S2
-                inline complex<double> H_residue_psi2s(const std::array<unsigned, 4> & phi_parameters, const complex<double> alpha[4]) const
+                inline complex<double> H_residue_psi2s(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, 7> & alpha) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
 
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto zBP     = eos::nff_utils::z(power_of<2>(m_B + m_P), s_p, s_0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,           s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2,          s_p, s_0);
+                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
+                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
+
+                    const auto & polynomials_at_z = polynomials(z_psi2S);
+                    const complex<double> p_at_z = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_psi2S2, -0.5) * pow(pow(s_p - m_psi2S2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
-                    return eos::nff_utils::PGvDV2020(z_psi2S, zBP, alpha) / phi(m_psi2S2, phi_parameters) *
-                            (1 - norm(z_psi2S)) * (1. - z_psi2S * std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
+                    return p_at_z / phi(m_psi2S2, phi_parameters) * (1 - norm(z_psi2S)) * (1. - z_psi2S * std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
                 }
 
 
                 virtual complex<double> H_plus(const complex<double> & q2) const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2,              s_p, s_0);
-                    const auto zBP     = eos::nff_utils::z(power_of<2>(m_B+m_P), s_p, s_0);
+                    const auto z       = eos::nff_utils::z(q2,                   s_p, s_0);
                     const auto z_Jpsi  = eos::nff_utils::z(power_of<2>(m_Jpsi),  s_p, s_0);
                     const auto z_psi2S = eos::nff_utils::z(power_of<2>(m_psi2S), s_p, s_0);
 
@@ -265,7 +291,10 @@ namespace eos
 
                     const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
 
-                    return eos::nff_utils::PGvDV2020(z, zBP, alpha) / phi(q2, phi_parameters) / blaschke_factor;
+                    const auto & polynomials_at_z = polynomials(z);
+                    const complex<double> p_at_z = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
+
+                    return p_at_z / phi(q2, phi_parameters) / blaschke_factor;
                 }
 
                 virtual complex<double> H_plus(const double & q2) const
@@ -275,32 +304,37 @@ namespace eos
 
                 virtual complex<double> Hhat_plus(const double & q2) const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
-
 
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * power_of<2>(m_D0);
                     const auto z       = eos::nff_utils::z(q2, s_p, s_0);
-                    const auto zBP     = eos::nff_utils::z(power_of<2>(m_B + m_P), s_p, s_0);
 
-                    return eos::nff_utils::PGvDV2020(z, zBP, alpha);
+                    const auto & polynomials_at_z = polynomials(z);
+
+                    return std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
                 }
 
 
                 virtual complex<double> H_plus_residue_jpsi() const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
-
 
                     const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
 
@@ -309,13 +343,15 @@ namespace eos
 
                 virtual complex<double> H_plus_residue_psi2s() const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
-
 
                     const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
 
@@ -346,23 +382,28 @@ namespace eos
 
                 virtual complex<double> P_ratio_plus(const double & q2) const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
                     const complex<double> F_plus = form_factors->f_p(q2);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
-                    const auto z       = eos::nff_utils::z(q2,              s_p, s_0);
-                    const auto zBP     = eos::nff_utils::z(pow(m_B+m_P, 2), s_p, s_0);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
+                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
 
-                    const unsigned phiParam[4] = {3, 3, 2, 2};
+                    const auto & polynomials_at_z = polynomials(z);
+                    const complex<double> p_at_z = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
 
-                    return eos::nff_utils::PGvDV2020(z, zBP, alpha) / phi(q2, phiParam) / F_plus;
+                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+
+                    return p_at_z / phi(q2, phi_parameters) / F_plus;
                 }
 
                 static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
@@ -383,21 +424,27 @@ namespace eos
 
                     const double s_0   = this->t_0();
                     const auto z1 = eos::nff_utils::z(1.0, 4.0 * power_of<2>(m_D0), s_0);
-                    const complex<double> alpha[4] = {2.0, 3.0, 4.0, 5.0};
+                    const std::array<complex<double>, 6> alpha = {2.0, 3.0, 4.0, 5.0, 0.0};
 
-                    results.add({ real(eos::nff_utils::PGvDV2020(z1, complex<double>(0.6,0.8), alpha)),
-                                "Re{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}" });
-                    results.add({ imag(eos::nff_utils::PGvDV2020(z1, complex<double>(0.6,0.8), alpha)),
-                                "Im{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}" });
+                    SzegoPolynomial<5u> p{
+                        1.854590436,
+                        {0.8627241729, -0.8863992518, 0.8911183885, -0.8926229103, 0.8932870967}
+                    };
+
+                    const auto & polynomials_at_z = p(z1);
+
+                    const complex<double> p_at_z = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
+
+                    results.add({ std::real(p_at_z), "Re{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}" });
+                    results.add({ std::imag(p_at_z), "Im{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}" });
 
                     return results;
                 }
         };
 
 
-
         /*
-         * Parametrize the entire formfactor, i.e., both leading and all sub-leading powers as described in [GRvDV:2021].
+         * Parametrize the entire formfactor, i.e., both leading and all sub-leading powers as described in [GvDV:2020].
          */
         template <typename Process_>
         class GRvDV2021 :
@@ -415,14 +462,19 @@ namespace eos
                 UsedParameter im_alpha_2_plus;
                 UsedParameter re_alpha_3_plus;
                 UsedParameter im_alpha_3_plus;
+                UsedParameter re_alpha_4_plus;
+                UsedParameter im_alpha_4_plus;
+                UsedParameter re_alpha_5_plus;
+                UsedParameter im_alpha_5_plus;
+                UsedParameter re_alpha_6_plus;
+                UsedParameter im_alpha_6_plus;
 
-                //Charmonium masses
+                // Charmonium masses
                 UsedParameter m_Jpsi;
                 UsedParameter m_psi2S;
 
                 // B-meson parameters
                 UsedParameter m_B;
-                UsedParameter m_Bsst;
 
                 // final state meson parameters
                 UsedParameter m_P;
@@ -446,12 +498,17 @@ namespace eos
                     im_alpha_2_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_2^plus}@GRvDV2021"], *this),
                     re_alpha_3_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_3^plus}@GRvDV2021"], *this),
                     im_alpha_3_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_3^plus}@GRvDV2021"], *this),
+                    re_alpha_4_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_4^plus}@GRvDV2021"], *this),
+                    im_alpha_4_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_4^plus}@GRvDV2021"], *this),
+                    re_alpha_5_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_5^plus}@GRvDV2021"], *this),
+                    im_alpha_5_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_5^plus}@GRvDV2021"], *this),
+                    re_alpha_6_plus(p[stringify(Process_::label) + "ccbar::Re{alpha_6^plus}@GRvDV2021"], *this),
+                    im_alpha_6_plus(p[stringify(Process_::label) + "ccbar::Im{alpha_6^plus}@GRvDV2021"], *this),
 
                     m_Jpsi(p["mass::J/psi"], *this),
                     m_psi2S(p["mass::psi(2S)"], *this),
 
                     m_B(p["mass::B_d"], *this),
-                    m_Bsst(p["mass::B_s^*"], *this),
 
                     m_P(p["mass::K_d"], *this),
 
@@ -466,45 +523,43 @@ namespace eos
 
                 ~GRvDV2021() = default;
 
-                inline complex<double> phi(const complex<double> & q2, const std::array<unsigned, 5> & phi_parameters) const
+                inline complex<double> phi(const complex<double> & q2, const std::array<unsigned, 4> & phi_parameters) const
                 {
                     // Values of a, b, c and d depends on the form factor:
-                    // FF                        a    b    c    d    e
-                    // 0(P->P) aka plus          5    3    2    2    2
-                    // perp(P->V) = par(P->V)    5    1    3    0    2
-                    // 0(P->V) aka long          5    1    2    2    2
+                    // FF                        a    b    c    d
+                    // 0(P->P) aka plus          3    3    2    2
+                    // perp(P->V) = par(P->V)    3    1    3    0
+                    // 0(P->V) aka long          3    1    2    2
 
                     const double m_P2  = power_of<2>(m_P);
-                    const double m_Bsst2 = power_of<2>(m_Bsst);
                     const double m_B2  = power_of<2>(m_B),  m_B4 =  power_of<4>(m_B);
                     const double m_D02 = power_of<2>(m_D0), m_D04 = power_of<4>(m_D0);
                     const double s_0   = this->t_0();
                     const auto   z     = eos::nff_utils::z(q2, 4.0 * power_of<2>(m_D0), s_0);
-                    const double Q2   = this->t_s();
-                    const double chi = this->chiOPE();
+                    const double Q2    = this->t_s();
+                    const double chi   = this->chiOPE();
 
-                    const double a = phi_parameters[0], b = phi_parameters[1], c = phi_parameters[2], d = phi_parameters[3], e = phi_parameters[4];
+                    const double a = phi_parameters[0], b = phi_parameters[1], c = phi_parameters[2], d = phi_parameters[3];
 
-                    const complex<double> Nlambda = 4. * M_PI * pow(m_B2, 0.5 * (a - b + c + d - e) - 1.) * pow(2. * (4. * m_D02 - s_0) / 3. / chi, 0.5);
-                    const complex<double> phi1 = -pow(2. * pow((4. * m_D02 - Q2) * (4. * m_D02 - s_0), 0.5) + 8. * m_D02 - Q2 - s_0, 0.5) /
-                                                (2. * pow((4. * m_D02 - Q2) * (4. * m_D02 - s_0), 0.5) + 8. * m_D02 + Q2 * (z - 1.) - s_0*(z + 1.));
-                    const complex<double> phi2 = pow(m_B4 * power_of<4>(z - 1.) - 2. * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) +
-                                                s_0 * pow(z + 1., 2)) + pow(16 * m_D02 * z + m_P2 * pow(z - 1., 2) - s_0 * pow(z + 1., 2), 2), 0.5);
+                    const double Nlambda = 4 * M_PI * pow(m_B2, 0.5 * (a - b + c + d) - 1.) * pow(2 * (4 * m_D02 - s_0) / 3 / chi, 0.5); //(C6)
+                    const complex<double> phi1 = -pow(2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 - Q2 - s_0, 0.5) /
+                                                (2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 + Q2 * (z - 1.) - s_0 * (z + 1.)); //(C7)
+                    const complex<double> phi2 = pow(m_B4 * power_of<4>(z - 1.) - 2 * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) + s_0 * power_of<2>(z + 1.)) +
+                                                power_of<2>(16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) - s_0 * power_of<2>(z + 1.)), 0.5);//(C8)
                     const complex<double> phi3 = pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) /
-                                                (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0 * (z + 1.));
-                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5);
-                    const complex<double> phi5 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02 - m_Bsst2 * power_of<2>(-z + 1.), 0.5);
+                                                (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0*(z + 1.)); //(C9)
+                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5); //(C10)
 
-                    return Nlambda * pow(1. + z, 0.5) * pow(1. - z, a - b + c + d - e - 1.5) * pow(phi1, a) * pow(phi2, 0.5*b) * pow(phi3, c) * pow(phi4, d) * pow(phi5, e);
+                    return Nlambda * pow(1.+z, 0.5) * pow(1.-z, a-b+c+d-1.5) * pow(phi1, a) * pow(phi2, 0.5*b) * pow(phi3, c) * pow(phi4, d); //(C5)
                 }
 
-                inline complex<double> phi(const double & q2, const std::array<unsigned, 5> & phi_parameters) const
+                inline complex<double> phi(const double & q2, const std::array<unsigned, 4> & phi_parameters) const
                 {
                     return phi(complex<double>(q2, 0.0), phi_parameters);
                 }
 
                 // Residue of H at s = m_Jpsi2 computed as the residue wrt z -z_Jpsi divided by dz/ds evaluated at s = m_Jpsi2
-                inline complex<double> H_residue_jpsi(const std::array<unsigned, 5> & phi_parameters, const complex<double> alpha[4]) const
+                inline complex<double> H_residue_jpsi(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, 7> alpha) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
@@ -516,12 +571,12 @@ namespace eos
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_Jpsi2, -0.5) * pow(pow(s_p - m_Jpsi2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
-                    return eos::nff_utils::P(z_Jpsi, alpha) / phi(m_Jpsi2, phi_parameters) *
+                    return eos::nff_utils::P<6u>(z_Jpsi, alpha) / phi(m_Jpsi2, phi_parameters) *
                             (1 - norm(z_Jpsi)) * (1. - z_Jpsi * std::conj(z_psi2S)) / (z_Jpsi - z_psi2S) / dzds;
                 }
 
                 // Residue of H at s = m_psi2S2 computed as the residue wrt z -z_psi2S divided by dz/ds evaluated at s = m_psi2S2
-                inline complex<double> H_residue_psi2s(const std::array<unsigned, 5> & phi_parameters, const complex<double> alpha[4]) const
+                inline complex<double> H_residue_psi2s(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, 7> alpha) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
@@ -533,18 +588,21 @@ namespace eos
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_psi2S2, -0.5) * pow(pow(s_p - m_psi2S2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
-                    return eos::nff_utils::P(z_psi2S, alpha) / phi(m_psi2S2, phi_parameters) *
+                    return eos::nff_utils::P<6u>(z_psi2S, alpha) / phi(m_psi2S2, phi_parameters) *
                             (1 - norm(z_psi2S)) * (1. - z_psi2S * std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
                 }
 
 
                 virtual complex<double> H_plus(const complex<double> & q2) const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
                     const double s_0   = this->t_0();
@@ -555,9 +613,9 @@ namespace eos
 
                     const complex<double> blaschke_factor = eos::nff_utils::blaschke_cc(z, z_Jpsi, z_psi2S);
 
-                    const std::array<unsigned, 5> phi_parameters = {5, 3, 2, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
 
-                    return eos::nff_utils::P(z, alpha) / phi(q2, phi_parameters) / blaschke_factor;
+                    return eos::nff_utils::P<6u>(z, alpha) / phi(q2, phi_parameters) / blaschke_factor;
                 }
 
                 virtual complex<double> H_plus(const double & q2) const
@@ -567,45 +625,54 @@ namespace eos
 
                 virtual complex<double> Hhat_plus(const double & q2) const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
                     const double s_0   = this->t_0();
                     const double s_p   = 4.0 * power_of<2>(m_D0);
                     const auto z       = eos::nff_utils::z(q2, s_p, s_0);
 
-                    return eos::nff_utils::P(z, alpha);
+                    return eos::nff_utils::P<6u>(z, alpha);
                 }
 
 
                 virtual complex<double> H_plus_residue_jpsi() const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
-                    const std::array<unsigned, 5> phi_parameters = {5, 3, 2, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
 
                     return H_residue_jpsi(phi_parameters, alpha);
                 }
 
                 virtual complex<double> H_plus_residue_psi2s() const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
-                    const std::array<unsigned, 5> phi_parameters = {5, 3, 2, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
 
                     return H_residue_psi2s(phi_parameters, alpha);
                 };
@@ -634,22 +701,25 @@ namespace eos
 
                 virtual complex<double> P_ratio_plus(const double & q2) const
                 {
-                    const complex<double> alpha[4] {
+                    const std::array<complex<double>, 7> alpha{
                         complex<double>(re_alpha_0_plus, im_alpha_0_plus),
                         complex<double>(re_alpha_1_plus, im_alpha_1_plus),
                         complex<double>(re_alpha_2_plus, im_alpha_2_plus),
                         complex<double>(re_alpha_3_plus, im_alpha_3_plus),
+                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
+                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
                     const complex<double> F_plus = form_factors->f_p(q2);
 
                     const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * pow(m_D0, 2);
+                    const double s_p   = 4.0 * power_of<2>(m_D0);
                     const auto z       = eos::nff_utils::z(q2, s_p, s_0);
 
-                    const unsigned phiParam[5] = {5, 3, 2, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
 
-                    return eos::nff_utils::P(z, alpha) / phi(q2, phiParam) / F_plus;
+                    return eos::nff_utils::P<6u>(z, alpha) / phi(q2, phi_parameters) / F_plus;
                 }
 
                 static NonlocalFormFactorPtr<nff::PToP> make(const Parameters & p, const Options & o)
@@ -661,28 +731,27 @@ namespace eos
                 {
                     Diagnostics results;
 
-                    const std::array<unsigned, 5> phi_parameters = {5, 3, 2, 2, 2}; //plus polarization
-
-                    results.add({ real(this->phi(16.0, phi_parameters)), "Re{phi_+(q2 = 16.0)}" });
-                    results.add({ imag(this->phi(16.0, phi_parameters)), "Im{phi_+(q2 = 16.0)}" });
-
                     const double s_0   = this->t_0();
                     const auto z1 = eos::nff_utils::z(1.0, 4.0 * power_of<2>(m_D0), s_0);
-                    const complex<double> alpha[4] = {2.0, 3.0, 4.0, 0.0};
+                    const std::array<complex<double>, 7> alpha{2.0, 3.0, 4.0, 0.0, 0.0, 0.0, 0.0};
 
-                    results.add({ real(eos::nff_utils::P(z1, alpha)), "Re{P(q2 = 1.0, {2.0, 3.0, 4.0, 0.0})}" });
-                    results.add({ imag(eos::nff_utils::P(z1, alpha)), "Im{P(q2 = 1.0, {2.0, 3.0, 4.0, 0.0})}" });
+                    results.add({ real(eos::nff_utils::P<6u>(z1, alpha)), "Re{P(q2 = 1.0, {2.0, 3.0, 4.0})}" });
+                    results.add({ imag(eos::nff_utils::P<6u>(z1, alpha)), "Im{P(q2 = 1.0, {2.0, 3.0, 4.0})}" });
 
-                    const complex<double> alpha2[4] = {
+                    const std::array<complex<double>, 7> alpha2{
                         complex<double>(2.0,5.0),
                         complex<double>(3.0,6.0),
                         complex<double>(4.0,7.0),
-                        complex<double>(0.0,8.0)};
+                        complex<double>(0.0,8.0),
+                        0., 0., 0.
+                        };
 
-                    results.add({ real(eos::nff_utils::P(z1, alpha2)),
+                    results.add({ real(eos::nff_utils::P<6u>(z1, alpha2)),
                                 "Re{P(q2 = 1.0, {(2.0,5.0), (3.0,6.0), (4.0,7.0), (0.0,8.0))}}" });
-                    results.add({ imag(eos::nff_utils::P(z1, alpha2)),
+                    results.add({ imag(eos::nff_utils::P<6u>(z1, alpha2)),
                                 "Im{P(q2 = 1.0, {(2.0,5.0), (3.0,6.0), (4.0,7.0), (0.0,8.0))}}" });
+
+                    return results;
 
                     return results;
                 }
@@ -721,7 +790,7 @@ namespace eos
         static const std::vector<OptionSpecification> options;
 
         Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_formfactor(o, "formfactor", qnp::Name("GvDV2020")),
+            opt_formfactor(o, "nonlocal-formfactor", qnp::Name("GvDV2020")),
             nff(NonlocalFormFactor<nff::PToP>::make(QualifiedName(qnp::Prefix(Process_::label), opt_formfactor.value()), p, o))
         {
             u.uses(*nff);

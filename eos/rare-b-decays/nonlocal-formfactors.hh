@@ -22,6 +22,7 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/maths/complex.hh>
+#include <eos/maths/szego-polynomial.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors-fwd.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/options.hh>
@@ -382,11 +383,30 @@ namespace eos
 
         complex<double> z(const complex<double> & q2, complex<double> s_plus, complex<double> s_0);
         complex<double> z(const double & q2, complex<double> s_plus, complex<double> s_0);
-        complex<double> blaschke_cc(const complex<double> z, const complex<double> z_Jpsi, const complex<double> z_psi2S);
-        complex<double> P(complex<double> z, const complex<double> alpha[4]);
-        complex<double> PGvDV2020(complex<double> z, const complex<double> zXY, const complex<double> alpha[4]);
+        complex<double> blaschke_cc(const complex<double> & z, const complex<double> & z_Jpsi, const complex<double> & z_psi2S);
 
+        // Expansion in normalized z monomials (they form a basis on the unit circle)
+        template <unsigned order_>
+        complex<double> P(const complex<double> & z, const std::array<complex<double>, order_ + 1u> alpha);
+
+        template <unsigned order_>
+        complex<double> P(const complex<double> & z, const std::array<complex<double>, order_ + 1u> alpha)
+        {
+            complex<double> result = alpha[order_];
+
+            for (int i = order_ - 1; i >= 0; i--)
+            {
+                result = alpha[i] + z * result;
+            }
+
+            return 1.0 / sqrt(2*M_PI) * result;
+        }
     }
 
+    class PolynomialsFactory
+    {
+        public:
+            static std::shared_ptr<SzegoPolynomial<5u>> create(const std::string & opt_q);
+    };
 }
 #endif
