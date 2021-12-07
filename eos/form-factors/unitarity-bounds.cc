@@ -23,7 +23,7 @@
 #include <eos/models/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <gsl/gsl_sf_dilog.h>

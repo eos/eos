@@ -23,6 +23,7 @@
 
 #include <eos/observable.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
+#include <eos/maths/complex.hh>
 
 #include <array>
 

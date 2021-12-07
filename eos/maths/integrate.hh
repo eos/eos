@@ -18,10 +18,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_SRC_UTILS_INTEGRATE_HH
-#define EOS_GUARD_SRC_UTILS_INTEGRATE_HH 1
+#ifndef EOS_GUARD_EOS_MATHS_INTEGRATE_HH
+#define EOS_GUARD_EOS_MATHS_INTEGRATE_HH 1
 
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/exception.hh>
 
 // TODO Didn't manage to forward declare C struct

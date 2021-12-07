@@ -19,12 +19,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EOS_GUARD_EOS_UTILS_INTEGRATE_IMPL_HH
-#define EOS_GUARD_EOS_UTILS_INTEGRATE_IMPL_HH 1
+#ifndef EOS_GUARD_EOS_MATHS_INTEGRATE_IMPL_HH
+#define EOS_GUARD_EOS_MATHS_INTEGRATE_IMPL_HH 1
 
-#include <eos/utils/integrate.hh>
-#include <eos/utils/integrate-cubature.hh>
-#include <eos/utils/matrix.hh>
+#include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-cubature.hh>
+#include <eos/maths/matrix.hh>
 
 #include <cassert>
 #include <vector>

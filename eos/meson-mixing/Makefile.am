@@ -11,6 +11,7 @@ libeosmesonmixing_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosmesonmixing_la_LDFLAGS = $(GSL_LDFLAGS)
 libeosmesonmixing_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	-lgslcblas \
 	-lgsl

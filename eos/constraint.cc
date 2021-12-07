@@ -20,17 +20,17 @@
 #include <config.h>
 
 #include <eos/constraint.hh>
+#include <eos/maths/gsl-interface.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/statistics/log-likelihood.hh>
+#include <eos/utils/destringify.hh>
 #include <eos/utils/exception.hh>
-#include <eos/utils/gsl-interface.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_set.hh>
-#include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qualified-name.hh>
 #include <eos/utils/stringify.hh>
-#include <eos/utils/destringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <boost/filesystem/operations.hpp>

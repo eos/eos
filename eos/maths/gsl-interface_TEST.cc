@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/gsl-interface.hh>
+#include <eos/maths/gsl-interface.hh>
 
 using namespace test;
 using namespace eos;

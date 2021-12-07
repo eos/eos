@@ -21,7 +21,7 @@
 #include <test/test.hh>
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/log-posterior_TEST.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 #include <algorithm>
 
 using namespace test;

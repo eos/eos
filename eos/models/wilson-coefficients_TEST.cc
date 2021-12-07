@@ -18,8 +18,8 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/matrix.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/matrix.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/top-loops.hh>
 #include <eos/models/wilson-coefficients.hh>
 

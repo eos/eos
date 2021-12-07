@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/integrate-impl.hh>
+#include <eos/maths/integrate-impl.hh>
 
 #include <cmath>
 #include <limits>

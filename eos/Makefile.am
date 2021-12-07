@@ -7,6 +7,7 @@ SUBDIRS = \
 	constraints \
 	parameters \
 	utils \
+	maths \
 	models \
 	statistics \
 	form-factors \

@@ -23,7 +23,7 @@
 #define EOS_GUARD_SRC_FORM_FACTORS_MESONIC_HH 1
 
 #include <eos/form-factors/form-factors-fwd.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/qualified-name.hh>

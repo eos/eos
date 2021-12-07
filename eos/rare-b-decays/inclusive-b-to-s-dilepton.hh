@@ -22,7 +22,7 @@
 
 #include <eos/rare-b-decays/decays.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>

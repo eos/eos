@@ -25,11 +25,11 @@
 
 #include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/hqet-b-to-c.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/options.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/stringify.hh>
 
 namespace eos

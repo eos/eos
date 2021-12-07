@@ -20,10 +20,10 @@
  */
 
 #include <eos/b-decays/inclusive-b-to-u.hh>
+#include <eos/maths/complex.hh>
 #include <eos/models/model.hh>
-#include <eos/utils/complex.hh>
-#include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/private_implementation_pattern-impl.hh>
 
 namespace eos
 {

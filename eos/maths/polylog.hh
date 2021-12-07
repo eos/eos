@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#ifndef EOS_GUARD_EOS_UTILS_POLYLOG_HH
-#define EOS_GUARD_EOS_UTILS_POLYLOG_HH 1
+#ifndef EOS_GUARD_EOS_MATHS_POLYLOG_HH
+#define EOS_GUARD_EOS_MATHS_POLYLOG_HH 1
 
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 
 namespace eos
 {

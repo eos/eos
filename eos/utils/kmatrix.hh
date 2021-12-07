@@ -21,7 +21,7 @@
 #define EOS_GUARD_EOS_UTILS_KMATRIX_HH 1
 
 
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/parameters.hh>
 

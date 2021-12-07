@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_EM_CONTRIBUTIONS_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_EM_CONTRIBUTIONS_HH 1
 
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 
 namespace eos
 {

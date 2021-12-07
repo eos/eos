@@ -25,7 +25,7 @@
 #include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/models/model.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 #include <gsl/gsl_sf_dilog.h>
 

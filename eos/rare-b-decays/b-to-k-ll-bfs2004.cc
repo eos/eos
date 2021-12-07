@@ -24,7 +24,7 @@
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/memoise.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 #include <gsl/gsl_sf.h>
 

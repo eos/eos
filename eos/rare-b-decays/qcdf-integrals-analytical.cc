@@ -20,8 +20,8 @@
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/rare-b-decays/qcdf-integrals-impl.hh>
 #include <eos/utils/exception.hh>
-#include <eos/utils/power_of.hh>
-#include <eos/utils/polylog.hh>
+#include <eos/maths/power-of.hh>
+#include <eos/maths/polylog.hh>
 #include <eos/utils/stringify.hh>
 
 #include <cmath>

@@ -20,7 +20,7 @@
 #include <eos/statistics/log-prior.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/log.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 

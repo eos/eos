@@ -10,13 +10,11 @@ libeosutils_la_SOURCES = \
 	accumulator.cc accumulator.hh \
 	apply.hh \
 	cartesian-product.hh \
-	complex.hh \
 	concrete_observable.cc concrete_observable.hh \
 	concrete-cacheable-observable.hh \
 	concrete-signal-pdf.hh \
 	condition_variable.cc condition_variable.hh \
 	density.cc density.hh density-fwd.hh density-impl.hh \
-	derivative.cc derivative.hh \
 	destringify.cc destringify.hh \
 	diagnostics.cc diagnostics.hh \
 	exception.cc exception.hh \
@@ -31,10 +29,7 @@ libeosutils_la_SOURCES = \
 	expression-printer.hh \
 	expression-visitors.cc \
 	gsl-hacks.cc \
-	gsl-interface.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
-	integrate.cc integrate.hh integrate-impl.hh \
-	integrate-cubature.hh integrate-cubature.cc \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	iterator-range.hh \
 	join.hh \
@@ -43,7 +38,6 @@ libeosutils_la_SOURCES = \
 	lcda.cc lcda.hh \
 	lock.cc lock.hh \
 	log.cc log.hh \
-	matrix.hh \
 	memoise.cc memoise.hh \
 	mutable.cc mutable.hh mutable-fwd.hh \
 	mutex.cc mutex.hh \
@@ -54,8 +48,6 @@ libeosutils_la_SOURCES = \
 	one-of.hh \
 	options.cc options.hh options-impl.hh \
 	parameters.cc parameters.hh parameters-fwd.hh \
-	polylog.cc polylog.hh \
-	power_of.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.cc qcd.hh \
 	qualified-name.cc qualified-name.hh \
@@ -63,7 +55,6 @@ libeosutils_la_SOURCES = \
 	reference-name.cc reference-name.hh \
 	save.hh \
 	stringify.hh \
-	szego-polynomial.hh \
 	thread.cc thread.hh \
 	thread_pool.cc thread_pool.hh \
 	ticket.cc ticket.hh \
@@ -86,29 +77,20 @@ libeosutils_la_CXXFLAGS = $(AM_CXXFLAGS) \
 	$(YAMLCPP_CXXFLAGS)
 libeosutils_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
-EXTRA_DIST = \
-	polylog_TEST_dilog.bin \
-	polylog_TEST_trilog.bin \
-	polylog_TEST_z.bin
-
 include_eos_utilsdir = $(includedir)/eos/utils
 include_eos_utils_HEADERS = \
 	accumulator.hh \
 	apply.hh \
 	cartesian-product.hh \
-	complex.hh \
 	concrete_observable.hh \
 	concrete-signal-pdf.hh \
 	condition_variable.hh \
 	density.hh density-fwd.hh \
-	derivative.hh \
 	destringify.hh \
 	exception.hh \
 	expression.hh expression-fwd.hh \
 	expression-parser.hh expression-parser-impl.hh \
-	gsl-interface.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh \
-	integrate.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
 	iterator-range.hh \
 	join.hh \
@@ -117,7 +99,6 @@ include_eos_utils_HEADERS = \
 	lcda.hh \
 	lock.hh \
 	log.hh \
-	matrix.hh \
 	memoise.hh \
 	mutex.hh \
 	mutable.hh mutable-fwd.hh \
@@ -126,7 +107,6 @@ include_eos_utils_HEADERS = \
 	one-of.hh \
 	options.hh \
 	parameters.hh parameters-fwd.hh \
-	power_of.hh \
 	private_implementation_pattern.hh private_implementation_pattern-impl.hh \
 	qcd.hh \
 	qualified-name.hh \
@@ -134,7 +114,6 @@ include_eos_utils_HEADERS = \
 	reference-name.hh \
 	save.hh \
 	stringify.hh \
-	szego-polynomial.hh \
 	thread.hh \
 	thread_pool.hh \
 	ticket.hh \
@@ -151,18 +130,14 @@ TESTS = \
 	apply_TEST \
 	cacheable-observable_TEST \
 	cartesian-product_TEST \
-	derivative_TEST \
 	expression-parser_TEST \
 	gsl-hacks_TEST \
-	gsl-interface_TEST \
 	indirect-iterator_TEST \
-	integrate_TEST \
 	join_TEST \
 	kinematic_TEST \
 	kmatrix_TEST \
 	lcda_TEST \
 	log_TEST \
-	matrix_TEST \
 	memoise_TEST \
 	mutable_TEST \
 	observable_set_TEST \
@@ -170,20 +145,18 @@ TESTS = \
 	options_TEST \
 	one-of_TEST \
 	parameters_TEST \
-	polylog_TEST \
-	power_of_TEST \
 	qcd_TEST \
 	qualified-name_TEST \
 	quantum-numbers_TEST \
 	reference-name_TEST \
 	save_TEST \
 	stringify_TEST \
-	szego-polynomial_TEST \
 	verify_TEST \
 	wilson-polynomial_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.a \
 	libeosutils.la \
+	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/libeos.la
 
@@ -195,21 +168,13 @@ cacheable_observable_TEST_SOURCES = cacheable_observable_TEST.cc
 
 cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 
-derivative_TEST_SOURCES = derivative_TEST.cc
-
 expression_parser_TEST_SOURCES = expression-parser_TEST.cc
 
 gsl_hacks_TEST_SOURCES = gsl-hacks_TEST.cc
 gsl_hacks_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 gsl_hacks_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
-gsl_interface_TEST_SOURCES = gsl-interface_TEST.cc
-
 indirect_iterator_TEST_SOURCES = indirect-iterator_TEST.cc
-
-integrate_TEST_SOURCES = integrate_TEST.cc
-integrate_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
-integrate_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 join_TEST_SOURCES = join_TEST.cc
 
@@ -220,8 +185,6 @@ kmatrix_TEST_SOURCES = kmatrix_TEST.cc
 lcda_TEST_SOURCES = lcda_TEST.cc
 
 log_TEST_SOURCES = log_TEST.cc
-
-matrix_TEST_SOURCES = matrix_TEST.cc
 
 memoise_TEST_SOURCES = memoise_TEST.cc
 
@@ -237,10 +200,6 @@ options_TEST_SOURCES = options_TEST.cc
 
 parameters_TEST_SOURCES = parameters_TEST.cc
 
-polylog_TEST_SOURCES = polylog_TEST.cc
-
-power_of_TEST_SOURCES = power_of_TEST.cc
-
 qcd_TEST_SOURCES = qcd_TEST.cc
 
 qualified_name_TEST_SOURCES = qualified-name_TEST.cc
@@ -252,8 +211,6 @@ reference_name_TEST_SOURCES = reference-name_TEST.cc
 save_TEST_SOURCES = save_TEST.cc
 
 stringify_TEST_SOURCES = stringify_TEST.cc
-
-szego_polynomial_TEST_SOURCES = szego-polynomial_TEST.cc
 
 verify_TEST_SOURCES = verify_TEST.cc
 

@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/szego-polynomial.hh>
+#include <eos/maths/szego-polynomial.hh>
 
 #include <cmath>
 #include <iostream>

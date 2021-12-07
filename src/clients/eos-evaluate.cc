@@ -18,11 +18,11 @@
  */
 
 #include <eos/observable.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/cartesian-product.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
-#include <eos/utils/power_of.hh>
 
 #include <cmath>
 #include <cstdlib>

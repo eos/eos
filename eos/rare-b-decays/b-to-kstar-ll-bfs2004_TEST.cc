@@ -20,7 +20,7 @@
 #include <test/test.hh>
 #include <eos/observable.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 
 #include <array>
 #include <cmath>

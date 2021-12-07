@@ -25,10 +25,10 @@
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/destringify.hh>
-#include <eos/utils/integrate.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/utils/memoise.hh>
 #include <eos/utils/options.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 #include <eos/utils/save.hh>

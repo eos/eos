@@ -19,7 +19,7 @@
  */
 
 #include <eos/models/top-loops.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 #include <cmath>
 

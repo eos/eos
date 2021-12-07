@@ -47,6 +47,7 @@ libeosrarebdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosrarebdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 libeosrarebdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	-lboost_filesystem -lboost_system \

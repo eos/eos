@@ -21,7 +21,7 @@
 #define EOS_GUARD_EOS_RARE_B_DECAYS_NONLOCAL_FORMFACTORS_HH 1
 
 #include <eos/form-factors/mesonic.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>

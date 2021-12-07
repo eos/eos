@@ -18,8 +18,8 @@
  */
 
 #include <eos/rare-b-decays/bremsstrahlung.hh>
-#include <eos/utils/integrate.hh>
-#include <eos/utils/polylog.hh>
+#include <eos/maths/integrate.hh>
+#include <eos/maths/polylog.hh>
 
 #include <cmath>
 #include <limits>

@@ -20,7 +20,7 @@
 #include <test/test.hh>
 #include <eos/observable.hh>
 #include <eos/b-decays/bs-to-kstar-l-nu.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 
 using namespace test;
 using namespace eos;

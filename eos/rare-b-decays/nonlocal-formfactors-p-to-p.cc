@@ -19,10 +19,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/complex.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
 #include <eos/utils/options-impl.hh>
-#include <eos/utils/complex.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/stringify.hh>
 

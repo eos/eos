@@ -18,10 +18,10 @@
  */
 
 #include <eos/models/ckm.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/log.hh>
-#include <eos/utils/matrix.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/matrix.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 

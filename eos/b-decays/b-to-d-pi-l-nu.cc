@@ -3,10 +3,10 @@
 #include <eos/b-decays/b-to-d-pi-l-nu.hh>
 #include <eos/b-decays/b-to-v-l-nu.hh>
 #include <eos/form-factors/mesonic.hh>
-#include <eos/utils/integrate-impl.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options-impl.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 namespace eos

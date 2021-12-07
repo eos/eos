@@ -22,7 +22,7 @@
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/long-distance.hh>
 #include <eos/utils/exception.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/stringify.hh>
 
 #include <cmath>

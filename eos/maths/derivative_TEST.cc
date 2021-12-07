@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/derivative.hh>
+#include <eos/maths/derivative.hh>
 
 #include <cmath>
 #include <limits>

@@ -21,13 +21,13 @@
 #define MASTER_GUARD_EOS_FORM_FACTORS_MESONIC_HQET_HH 1
 
 #include <eos/form-factors/mesonic.hh>
-#include <eos/utils/derivative.hh>
+#include <eos/maths/derivative.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
-#include <eos/utils/polylog.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 
 #include <cmath>
 #include <limits>

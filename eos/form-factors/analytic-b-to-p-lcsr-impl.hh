@@ -25,7 +25,7 @@
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/b-lcdas.hh>
 #include <eos/utils/exception.hh>
-#include <eos/utils/integrate.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/options-impl.hh>

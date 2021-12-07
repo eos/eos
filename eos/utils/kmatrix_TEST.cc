@@ -16,9 +16,9 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/parameters.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/kmatrix-impl.hh>
-#include <eos/utils/complex.hh>
+#include <eos/utils/parameters.hh>
 
 #include <cmath>
 #include <memory>
