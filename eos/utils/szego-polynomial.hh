@@ -15,90 +15,122 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef EOS_GUARD_SRC_UTILS_SZEGO_POLYNOMIALS_HH
+#define EOS_GUARD_SRC_UTILS_SZEGO_POLYNOMIALS_HH 1
+
+#include <eos/utils/complex.hh>
 #include <eos/utils/power_of.hh>
 
 #include <array>
 
 namespace eos
 {
-	/*
-	 * Reprensentation of a Szego polynomial in the form of its
-	 * Verblunsky coefficients. We assume real-valued Vernblunsky
-	 * coefficients.
-	 */
-	template <unsigned order_>
+    /*
+     * Reprensentation of a Szego polynomial in the form of its
+     * Verblunsky coefficients. We assume real-valued Vernblunsky
+     * coefficients.
+     */
+    template <unsigned order_>
     class SzegoPolynomial
     {
-		private:
-			const double _norm_measure;
+        private:
+            const double _norm_measure;
 
-			const std::array<double, order_> _verblunsky_coefficients;
+            const std::array<double, order_> _verblunsky_coefficients;
 
-			const std::array<double, order_ + 1> _norms;
+            const std::array<double, order_ + 1> _norms;
 
-			std::array<double, order_ + 1> _calculate_norms() const
-			{
-				std::array<double, order_ + 1> result;
+            std::array<double, order_ + 1> _calculate_norms() const
+            {
+                std::array<double, order_ + 1> result;
 
-				result[0] = _norm_measure;
+                result[0] = _norm_measure;
 
-				for (unsigned i = 1 ; i <= order_ ; ++i)
-				{
-					result[i] = result[i - 1] * (1.0 - power_of<2>(_verblunsky_coefficients[i - 1]));
-				}
+                for (unsigned i = 1 ; i <= order_ ; ++i)
+                {
+                    result[i] = result[i - 1] * (1.0 - power_of<2>(_verblunsky_coefficients[i - 1]));
+                }
 
-				for (unsigned i = 0 ; i <= order_ ; ++i)
-				{
-					result[i] = std::sqrt(result[i]);
-				}
+                for (unsigned i = 0 ; i <= order_ ; ++i)
+                {
+                    result[i] = std::sqrt(result[i]);
+                }
 
-				return result;
-			}
+                return result;
+            }
 
-		public:
-			SzegoPolynomial(const double & norm_measure, std::array<double, order_> && verblunsky_coefficients) :
-				_norm_measure(norm_measure),
-				_verblunsky_coefficients(verblunsky_coefficients),
-				_norms(_calculate_norms())
-			{
-			}
+        public:
+            SzegoPolynomial(const double & norm_measure, std::array<double, order_> && verblunsky_coefficients) :
+                _norm_measure(norm_measure),
+                _verblunsky_coefficients(verblunsky_coefficients),
+                _norms(_calculate_norms())
+            {
+            }
 
-			SzegoPolynomial(const SzegoPolynomial &) = default;
-			SzegoPolynomial(SzegoPolynomial &&) = default;
-			~SzegoPolynomial() = default;
-			SzegoPolynomial & operator= (SzegoPolynomial &&) = default;
-			SzegoPolynomial & operator= (const SzegoPolynomial &) = default;
+            SzegoPolynomial(const SzegoPolynomial &) = default;
+            SzegoPolynomial(SzegoPolynomial &&) = default;
+            ~SzegoPolynomial() = default;
+            SzegoPolynomial & operator= (SzegoPolynomial &&) = default;
+            SzegoPolynomial & operator= (const SzegoPolynomial &) = default;
 
-			// Evaluate the normalized polynomials at on the real z axis, in the interval [-1, +1].
-			// Note that, contrary to the literature [S:2004B], we use an integral measure dmu, which
-			// yields \int dmu = `_norm_measure`, rather than the usual \int dmu = 1.
-			std::array<double, order_ + 1> operator() (const double & z) const
-			{
-				using std::sqrt;
+            // Evaluate the normalized polynomials at on the real z axis, in the interval [-1, +1].
+            // Note that, contrary to the literature [S:2004B], we use an integral measure dmu, which
+            // yields \int dmu = `_norm_measure`, rather than the usual \int dmu = 1.
+            std::array<double, order_ + 1> operator() (const double & z) const
+            {
+                std::array<double, order_ + 1> phi;
+                std::array<double, order_ + 1> phi_star;
 
-				std::array<double, order_ + 1> phi;
-				std::array<double, order_ + 1> phi_star;
+                phi[0]      = 1.0;
+                phi_star[0] = 1.0;
 
-				phi[0]      = 1.0;
-				phi_star[0] = 1.0;
+                // we use real-valued Verblunsky coefficients only.
+                for (unsigned n = 1 ; n <= order_ ; ++n)
+                {
+                    // cf. [S:2004B], eq. (1.4), p.2
+                    phi[n]      = z * phi[n - 1]  - _verblunsky_coefficients[n - 1] * phi_star[n - 1];
 
-				// we use real-valued Verblunsky coefficients only.
-				for (unsigned n = 1 ; n <= order_ ; ++n)
-				{
-					// cf. [S:2004B], eq. (1.4), p.2
-					phi[n]      = z * phi[n - 1]  - _verblunsky_coefficients[n - 1] * phi_star[n - 1];
+                    // cf. [S:2004B], eqs. (1.4) and (1.5) in combination;
+                    phi_star[n] = phi_star[n - 1] - _verblunsky_coefficients[n - 1] * z * phi[n - 1];
+                }
 
-					// cf. [S:2004B], eqs. (1.4) and (1.5) in combination;
-					phi_star[n] = phi_star[n - 1] - _verblunsky_coefficients[n - 1] * z * phi[n - 1];
-				}
+                std::array<double, order_ + 1> result;
+                for (unsigned n = 0 ; n <= order_ ; ++n)
+                {
+                    result[n] = phi[n] / _norms[n];
+                };
 
-				std::array<double, order_ + 1> result;
-				for (unsigned n = 0 ; n <= order_ ; ++n)
-				{
-					result[n] = phi[n] / _norms[n];
-				};
+                return result;
+            }
 
-				return result;
-			}
+            // Trivial generalization to real Verblunsky coefficients and complex z
+            std::array<complex<double>, order_ + 1> operator() (const complex<double> & z) const
+            {
+                std::array<complex<double>, order_ + 1> phi;
+                std::array<complex<double>, order_ + 1> phi_star;
+
+                phi[0]      = 1.0;
+                phi_star[0] = 1.0;
+
+                // we use real-valued Verblunsky coefficients only.
+                for (unsigned n = 1 ; n <= order_ ; ++n)
+                {
+                    // cf. [S:2004B], eq. (1.4), p.2
+                    phi[n]      = z * phi[n - 1]  - _verblunsky_coefficients[n - 1] * phi_star[n - 1];
+
+                    // cf. [S:2004B], eqs. (1.4) and (1.5) in combination;
+                    phi_star[n] = phi_star[n - 1] - _verblunsky_coefficients[n - 1] * z * phi[n - 1];
+                }
+
+                std::array<complex<double>, order_ + 1> result;
+                for (unsigned n = 0 ; n <= order_ ; ++n)
+                {
+                    result[n] = phi[n] / _norms[n];
+                };
+
+                return result;
+            }
     };
 }
+
+#endif
