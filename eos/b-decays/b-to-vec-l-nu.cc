@@ -19,20 +19,20 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/form-factors.hh>
 #include <eos/b-decays/b-to-vec-l-nu-impl.hh>
+#include <eos/form-factors/form-factors.hh>
 #include <eos/models/model.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
+#include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/destringify.hh>
-#include <eos/utils/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/memoise.hh>
-#include <eos/utils/options-impl.hh>
 #include <eos/utils/options.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/utils/options-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
-#include <eos/utils/integrate.hh>
 #include <eos/utils/save.hh>
 
 #include <cmath>

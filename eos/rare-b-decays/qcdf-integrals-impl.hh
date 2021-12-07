@@ -21,7 +21,7 @@
 #define EOS_GUARD_EOS_RARE_B_DECAYS_QCDF_INTEGRALS_IMPL_HH 1
 
 #include <eos/rare-b-decays/qcdf-integrals.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 namespace eos
 {

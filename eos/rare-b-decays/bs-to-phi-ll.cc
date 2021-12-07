@@ -19,8 +19,8 @@
 
 #include <eos/rare-b-decays/bs-to-phi-ll-base.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll-gvdv2020.hh>
-#include <eos/utils/integrate.hh>
-#include <eos/utils/integrate-impl.hh>
+#include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/save.hh>
 

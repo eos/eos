@@ -20,14 +20,14 @@
 
 #include <eos/form-factors/analytic-b-to-pi.hh>
 #include <eos/form-factors/pi-lcdas.hh>
-#include <eos/utils/derivative.hh>
+#include <eos/maths/derivative.hh>
 #include <eos/utils/exception.hh>
-#include <eos/utils/integrate.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/utils/log.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/options-impl.hh>
-#include <eos/utils/polylog.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 

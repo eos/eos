@@ -22,7 +22,7 @@
 #ifndef EOS_GUARD_EOS_MODELS_WILSON_COEFFICIENTS_HH
 #define EOS_GUARD_EOS_MODELS_WILSON_COEFFICIENTS_HH 1
 
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qcd.hh>
 

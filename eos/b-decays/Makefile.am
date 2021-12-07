@@ -27,6 +27,7 @@ libeosbdecays_la_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 libeosbdecays_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
 libeosbdecays_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	-lgslcblas \
@@ -74,6 +75,7 @@ LDADD = \
 	libeosbdecays.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/models/libeosmodels.la \
 	$(top_builddir)/eos/libeos.la
 

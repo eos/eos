@@ -19,7 +19,7 @@
 
 #include <test/test.hh>
 #include <eos/statistics/log-prior.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 using namespace test;
 using namespace eos;

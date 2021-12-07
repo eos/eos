@@ -20,8 +20,8 @@
 
 #include <eos/models/model.hh>
 #include <eos/models/wilson-coefficients.hh>
-#include <eos/utils/matrix.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/matrix.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/qcd.hh>
 
 #include <array>

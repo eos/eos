@@ -24,7 +24,7 @@
 #include <eos/rare-b-decays/b-to-k-ll-gp2004.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/utils/destringify.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 #include <gsl/gsl_sf.h>
 

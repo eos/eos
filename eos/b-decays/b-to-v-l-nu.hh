@@ -21,8 +21,8 @@
 #ifndef EOS_GUARD_EOS_B_DECAYS_B_TO_V_L_NU_HH
 #define EOS_GUARD_EOS_B_DECAYS_B_TO_V_L_NU_HH 1
 
-#include <eos/utils/complex.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/complex.hh>
+#include <eos/maths/power-of.hh>
 
 #include <array>
 

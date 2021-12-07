@@ -30,12 +30,12 @@
 #include <eos/form-factors/analytic-b-to-pi.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
-#include <eos/utils/derivative.hh>
+#include <eos/maths/derivative.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/options.hh>
-#include <eos/utils/polylog.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 
 #include <array>
 #include <limits>

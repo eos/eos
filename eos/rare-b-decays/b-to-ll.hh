@@ -23,7 +23,7 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_DILEPTON_HH 1
 
 #include <eos/observable.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/reference-name.hh>

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
-#include <eos/utils/complex.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/complex.hh>
+#include <eos/maths/power-of.hh>
 
 #include <array>
 #include <cmath>

@@ -19,7 +19,7 @@
 
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 #include <gsl/gsl_sf_dilog.h>
 

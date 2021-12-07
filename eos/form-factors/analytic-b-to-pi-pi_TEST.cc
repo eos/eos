@@ -21,7 +21,7 @@
 #include <test/test.hh>
 #include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/mesonic.hh>
-#include <eos/utils/integrate.hh>
+#include <eos/maths/integrate.hh>
 
 #include <cmath>
 #include <limits>

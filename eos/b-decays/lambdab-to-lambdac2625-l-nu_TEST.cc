@@ -21,7 +21,7 @@
 #include <test/test.hh>
 #include <eos/observable.hh>
 #include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 
 #include <iostream>
 

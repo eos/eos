@@ -21,7 +21,7 @@
 #define EOS_GUARD_EOS_RARE_B_DECAYS_QCDF_INTEGRALS_HH 1
 
 #include <eos/rare-b-decays/decays.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 
 #include <string>
 

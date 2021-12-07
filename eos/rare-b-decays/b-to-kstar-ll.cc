@@ -24,8 +24,8 @@
 #include <eos/rare-b-decays/b-to-kstar-ll-bfs2004.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-gp2004.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll-gvdv2020.hh>
-#include <eos/utils/integrate.hh>
-#include <eos/utils/integrate-impl.hh>
+#include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/save.hh>
 

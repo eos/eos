@@ -21,7 +21,7 @@
 #include <eos/observable.hh>
 #include <eos/b-decays/b-to-d-pi-l-nu.hh>
 
-#include <eos/utils/integrate.hh>
+#include <eos/maths/integrate.hh>
 
 using namespace test;
 using namespace eos;

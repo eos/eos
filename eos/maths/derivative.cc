@@ -17,7 +17,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/utils/derivative.hh>
+#include <eos/maths/derivative.hh>
 
 #include <limits>
 #include <cmath>

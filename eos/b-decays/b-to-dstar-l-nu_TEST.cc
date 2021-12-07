@@ -22,7 +22,7 @@
 #include <test/test.hh>
 #include <eos/observable.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
 #include <array>

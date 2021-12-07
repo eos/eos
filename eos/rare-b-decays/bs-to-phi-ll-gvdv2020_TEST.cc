@@ -18,7 +18,7 @@
 #include <test/test.hh>
 #include <eos/observable.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 
 #include <iostream>
 

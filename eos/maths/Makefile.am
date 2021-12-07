@@ -1,0 +1,78 @@
+CLEANFILES = \
+	*~
+MAINTAINERCLEANFILES = Makefile.in
+
+AM_CXXFLAGS = @AM_CXXFLAGS@
+AM_LDFLAGS = @AM_LDFLAGS@
+
+lib_LTLIBRARIES = libeosmaths.la
+libeosmaths_la_SOURCES = \
+	complex.hh \
+	derivative.cc derivative.hh \
+	gsl-interface.hh \
+	integrate.cc integrate.hh integrate-impl.hh \
+	integrate-cubature.cc integrate-cubature.hh \
+	matrix.hh \
+	polylog.cc polylog.hh \
+	power-of.hh \
+	szego-polynomial.hh
+
+libeosmaths_la_LIBADD = \
+	-lgsl -lgslcblas -lm
+libeosmaths_la_CXXFLAGS = $(AM_CXXFLAGS) \
+	-DEOS_DATADIR='"$(datadir)"' \
+	$(GSL_CXXFLAGS)
+libeosmaths_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS)
+
+EXTRA_DIST = \
+	polylog_TEST_dilog.bin \
+	polylog_TEST_trilog.bin \
+	polylog_TEST_z.bin
+
+include_eos_utilsdir = $(includedir)/eos/utils
+include_eos_utils_HEADERS = \
+	complex.hh \
+	derivative.hh \
+	gsl-interface.hh \
+	integrate.hh \
+	integrate-cubature.hh \
+	matrix.hh \
+	polylog.hh \
+	power-of.hh \
+	szego-polynomial.hh
+
+AM_TESTS_ENVIRONMENT = \
+	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
+
+TESTS = \
+	derivative_TEST \
+	gsl-interface_TEST \
+	integrate_TEST \
+	matrix_TEST \
+	polylog_TEST \
+	power_of_TEST \
+	szego-polynomial_TEST
+LDADD = \
+	$(top_builddir)/test/libeostest.a \
+	libeosmaths.la \
+	$(top_builddir)/eos/maths/libeosmaths.la \
+	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/libeos.la
+
+check_PROGRAMS = $(TESTS)
+
+derivative_TEST_SOURCES = derivative_TEST.cc
+
+gsl_interface_TEST_SOURCES = gsl-interface_TEST.cc
+
+integrate_TEST_SOURCES = integrate_TEST.cc
+integrate_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+integrate_TEST_LDFLAGS = $(GSL_LDFLAGS)
+
+matrix_TEST_SOURCES = matrix_TEST.cc
+
+polylog_TEST_SOURCES = polylog_TEST.cc
+
+power_of_TEST_SOURCES = power-of_TEST.cc
+
+szego_polynomial_TEST_SOURCES = szego-polynomial_TEST.cc

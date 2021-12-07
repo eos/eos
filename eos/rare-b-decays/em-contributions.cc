@@ -18,7 +18,7 @@
  */
 
 #include <eos/rare-b-decays/em-contributions.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 #include <cmath>
 

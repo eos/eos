@@ -18,7 +18,7 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 
 #include <cmath>
 

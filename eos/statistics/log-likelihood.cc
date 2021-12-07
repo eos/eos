@@ -22,7 +22,7 @@
 #include <eos/statistics/test-statistic-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_cache.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/verify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>

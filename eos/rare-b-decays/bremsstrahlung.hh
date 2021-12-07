@@ -20,7 +20,7 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_BREMSSTRAHLUNG_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_BREMSSTRAHLUNG_HH 1
 
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
 
 namespace eos
 {

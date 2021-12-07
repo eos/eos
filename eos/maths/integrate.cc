@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/utils/integrate.hh>
-#include <eos/utils/matrix.hh>
+#include <eos/maths/integrate.hh>
+#include <eos/maths/matrix.hh>
 
 #include <gsl/gsl_errno.h>
 

@@ -18,13 +18,13 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
 #include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/baryonic.hh>
-#include <eos/b-decays/lambdab-to-lambdac2625-l-nu.hh>
+#include <eos/maths/integrate.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
-#include <eos/utils/integrate.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/power_of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/save.hh>
 #include <math.h>

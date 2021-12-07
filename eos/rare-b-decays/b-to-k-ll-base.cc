@@ -21,7 +21,7 @@
 #include <eos/rare-b-decays/b-to-k-ll-base.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 namespace eos
 {

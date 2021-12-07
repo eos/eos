@@ -20,9 +20,9 @@
 #ifndef EOS_GUARD_EOS_UTILS_KMATRIX_IMPL_HH
 #define EOS_GUARD_EOS_UTILS_KMATRIX_IMPL_HH 1
 
-#include <eos/utils/complex.hh>
+#include <eos/maths/complex.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/kmatrix.hh>
-#include <eos/utils/power_of.hh>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_complex.h>

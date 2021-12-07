@@ -21,7 +21,7 @@
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
-#include <eos/utils/power_of.hh>
+#include <eos/maths/power-of.hh>
 
 #include <iostream>
 

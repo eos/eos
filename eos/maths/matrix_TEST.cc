@@ -18,8 +18,8 @@
  */
 
 #include <test/test.hh>
-#include <eos/utils/complex.hh>
-#include <eos/utils/matrix.hh>
+#include <eos/maths/complex.hh>
+#include <eos/maths/matrix.hh>
 
 #include <cmath>
 #include <array>
