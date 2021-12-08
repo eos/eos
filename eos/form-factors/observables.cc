@@ -27,6 +27,7 @@
 #include <eos/form-factors/mesonic-impl.hh>
 #include <eos/form-factors/mesonic-hqet.hh>
 #include <eos/form-factors/observables.hh>
+#include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/utils/concrete_observable.hh>
@@ -1297,6 +1298,42 @@ namespace eos
 
                 make_form_factor_adapter("Lambda_b->Lambda::f_perp^T5(q2)", R"(f_\perp^{T5,\Lambda_b\to\Lambda}(q^2))",
                         &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t5, std::make_tuple("q2")),
+
+                make_observable("Lambda_b->Lambda::Bound[0^+]@BMRvD2022", R"(\textrm{Bound[$0^+$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_0p),
+
+                make_observable("Lambda_b->Lambda::Bound[1^-]@BMRvD2022", R"(\textrm{Bound[$1^-$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_1m),
+
+                make_observable("Lambda_b->Lambda::Bound[0^-]@BMRvD2022", R"(\textrm{Bound[$0^-$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_0m),
+
+                make_observable("Lambda_b->Lambda::Bound[1^+]@BMRvD2022", R"(\textrm{Bound[$1^+$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_1p),
+
+                make_observable("Lambda_b->Lambda::Bound[T]@BMRvD2022", R"(\textrm{Bound[$T$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_T),
+
+                make_observable("Lambda_b->Lambda::Bound[T5]@BMRvD2022", R"(\textrm{Bound[$T5$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_T5),
+
+                make_observable("Lambda_b->Lambda::Prior[0^+]@BMRvD2022", R"(\textrm{Prior[$0^+$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_0p_prior),
+
+                make_observable("Lambda_b->Lambda::Prior[1^-]@BMRvD2022", R"(\textrm{Prior[$1^-$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_1m_prior),
+
+                make_observable("Lambda_b->Lambda::Prior[0^-]@BMRvD2022", R"(\textrm{Prior[$0^-$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_0m_prior),
+
+                make_observable("Lambda_b->Lambda::Prior[1^+]@BMRvD2022", R"(\textrm{Prior[$1^+$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_1p_prior),
+
+                make_observable("Lambda_b->Lambda::Prior[T]@BMRvD2022", R"(\textrm{Prior[$T$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_T_prior),
+
+                make_observable("Lambda_b->Lambda::Prior[T5]@BMRvD2022", R"(\textrm{Prior[$T5$]})", Unit::None(),
+                        &BMRvD2022FormFactors<LambdaBToLambda>::bound_T5_prior),
             }
         );
 

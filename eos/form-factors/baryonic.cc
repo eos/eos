@@ -19,6 +19,8 @@
  */
 
 #include <eos/form-factors/baryonic-impl.hh>
+#include <eos/form-factors/baryonic-processes.hh>
+#include <eos/form-factors/parametric-bmrvd2022.hh>
 #include <eos/utils/destringify.hh>
 
 #include <map>
@@ -36,6 +38,10 @@ namespace eos
     const constexpr double LambdaBToLambda::mR2_0p;
     const constexpr double LambdaBToLambda::mR2_1m;
     const constexpr double LambdaBToLambda::mR2_1p;
+    const SzegoPolynomial<5> LambdaBToLambda::orthonormal_polynomials
+    {
+        3.221984414, { +0.6202340707, -0.6657045152, +0.6807193104, -0.6863087689, +0.6887736474 }
+    };
 
     /* Lambda_b -> Lambda_c */
 
@@ -141,6 +147,7 @@ namespace eos
     {
         { "Lambda_b->Lambda::BFvD2014",   &BFvD2014FormFactors::make                      },
         { "Lambda_b->Lambda::DM2016",     &DM2016FormFactors<LambdaBToLambda>::make       },
+        { "Lambda_b->Lambda::BMRvD2022",  &BMRvD2022FormFactors<LambdaBToLambda>::make    },
         { "Lambda_b->Lambda_c::DKMR2017", &DKMR2017FormFactors<LambdaBToLambdaC>::make    }
     };
 
