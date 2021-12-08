@@ -7,7 +7,6 @@ AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeosutils.la
 libeosutils_la_SOURCES = \
-	accumulator.cc accumulator.hh \
 	apply.hh \
 	cartesian-product.hh \
 	concrete_observable.cc concrete_observable.hh \
@@ -79,7 +78,6 @@ libeosutils_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 
 include_eos_utilsdir = $(includedir)/eos/utils
 include_eos_utils_HEADERS = \
-	accumulator.hh \
 	apply.hh \
 	cartesian-product.hh \
 	concrete_observable.hh \
