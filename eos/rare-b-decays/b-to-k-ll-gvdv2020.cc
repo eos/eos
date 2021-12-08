@@ -20,11 +20,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/b-to-k-ll-gvdv2020.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/memoise.hh>
-#include <eos/maths/power-of.hh>
 
 #include <gsl/gsl_sf.h>
 

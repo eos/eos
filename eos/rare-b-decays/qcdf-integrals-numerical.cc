@@ -17,12 +17,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/integrate.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/rare-b-decays/qcdf-integrals-impl.hh>
 #include <eos/utils/exception.hh>
-#include <eos/maths/integrate.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/stringify.hh>
 
 #include <cmath>

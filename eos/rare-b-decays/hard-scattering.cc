@@ -17,9 +17,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/hard-scattering.hh>
-#include <eos/maths/power-of.hh>
 
 #include <gsl/gsl_sf_dilog.h>
 

@@ -20,8 +20,8 @@
 
 #include <test/test.hh>
 #include <eos/observable.hh>
-#include <eos/rare-b-decays/b-to-kstar-ll.hh>
 #include <eos/maths/complex.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
 #include <array>

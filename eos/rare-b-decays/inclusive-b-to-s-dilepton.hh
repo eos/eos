@@ -20,9 +20,9 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_INCLUSIVE_B_TO_S_DILEPTON_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_INCLUSIVE_B_TO_S_DILEPTON_HH 1
 
+#include <eos/maths/complex.hh>
 #include <eos/rare-b-decays/decays.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/maths/complex.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>

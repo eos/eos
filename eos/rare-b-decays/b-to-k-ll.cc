@@ -18,13 +18,13 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/integrate.hh>
+#include <eos/maths/integrate-impl.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/b-to-k-ll-base.hh>
 #include <eos/rare-b-decays/b-to-k-ll-bfs2004.hh>
 #include <eos/rare-b-decays/b-to-k-ll-gp2004.hh>
 #include <eos/rare-b-decays/b-to-k-ll-gvdv2020.hh>
-#include <eos/maths/integrate.hh>
-#include <eos/maths/integrate-impl.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 

@@ -18,6 +18,8 @@
  */
 
 #include <eos/form-factors/form-factors.hh>
+#include <eos/maths/integrate.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma-bfs2004.hh>
@@ -25,10 +27,8 @@
 #include <eos/rare-b-decays/hard-scattering.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/destringify.hh>
-#include <eos/maths/integrate.hh>
 #include <eos/utils/memoise.hh>
 #include <eos/utils/options.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 

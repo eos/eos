@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/rare-b-decays/em-contributions.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/rare-b-decays/em-contributions.hh>
 
 #include <cmath>
 

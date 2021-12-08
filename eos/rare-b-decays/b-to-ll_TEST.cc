@@ -21,8 +21,8 @@
 
 #include <test/test.hh>
 #include <eos/observable.hh>
-#include <eos/rare-b-decays/b-to-ll.hh>
 #include <eos/maths/complex.hh>
+#include <eos/rare-b-decays/b-to-ll.hh>
 
 #include <array>
 #include <cmath>

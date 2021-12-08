@@ -24,9 +24,9 @@
 #define EOS_GUARD_SRC_RARE_B_DECAYS_B_TO_KSTAR_LL_HH 1
 
 #include <eos/maths/complex.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/reference-name.hh>
 

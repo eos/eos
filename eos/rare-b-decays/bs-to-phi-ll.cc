@@ -17,10 +17,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/rare-b-decays/bs-to-phi-ll-base.hh>
-#include <eos/rare-b-decays/bs-to-phi-ll-gvdv2020.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
+#include <eos/rare-b-decays/bs-to-phi-ll-base.hh>
+#include <eos/rare-b-decays/bs-to-phi-ll-gvdv2020.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 namespace eos

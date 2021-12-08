@@ -19,18 +19,18 @@
  */
 
 #include <eos/form-factors/baryonic.hh>
+#include <eos/maths/complex.hh>
+#include <eos/maths/integrate-impl.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
-#include <eos/maths/complex.hh>
 #include <eos/utils/destringify.hh>
-#include <eos/maths/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/memoise.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <cmath>
