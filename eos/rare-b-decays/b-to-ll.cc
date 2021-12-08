@@ -19,11 +19,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-ll.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/options-impl.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <string>

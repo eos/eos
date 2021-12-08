@@ -22,6 +22,7 @@
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
+#include <eos/maths/complex.hh>
 #include <eos/rare-b-decays/nonlocal-formfactors.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/memoise.hh>

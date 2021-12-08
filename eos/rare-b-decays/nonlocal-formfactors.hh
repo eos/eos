@@ -22,10 +22,10 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/maths/complex.hh>
+#include <eos/rare-b-decays/nonlocal-formfactors-fwd.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
-#include <eos/rare-b-decays/nonlocal-formfactors-fwd.hh>
 #include <eos/utils/reference-name.hh>
 
 #include <memory>

@@ -18,10 +18,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/b-to-k-ll-base.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/maths/power-of.hh>
 
 namespace eos
 {

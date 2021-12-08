@@ -20,19 +20,19 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/integrate.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/bremsstrahlung.hh>
 #include <eos/rare-b-decays/charm-loops.hh>
 #include <eos/rare-b-decays/em-contributions.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-dilepton.hh>
 #include <eos/utils/destringify.hh>
-#include <eos/maths/integrate.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/memoise.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/qcd.hh>
 

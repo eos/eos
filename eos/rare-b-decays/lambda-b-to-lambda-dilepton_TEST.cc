@@ -20,8 +20,8 @@
 
 #include <test/test.hh>
 #include <eos/observable.hh>
-#include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
 #include <eos/maths/complex.hh>
+#include <eos/rare-b-decays/lambda-b-to-lambda-dilepton.hh>
 
 using namespace test;
 using namespace eos;
