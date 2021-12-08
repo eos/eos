@@ -3431,6 +3431,324 @@ groups:
           max:     +0.000
           unit:     '1'
           latex:    '$a_{\perp,2}^{T5,\Lambda_b \to \Lambda ,\mathrm{DM2016}}$'
+          comments: ''
+      # form factor parameters for Lambda_b -> Lambda decays according to
+      # [BMRvD:2022A]
+      'Lambda_b->Lambda::a^(t,V)_1@BMRvD2022' :
+          central:  0.4896605330254244
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{t,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(t,V)_2@BMRvD2022' :
+          central:  0.5911436400432727
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{t,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(t,V)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{t,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(t,V)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{t,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,V)_0@BMRvD2022' :
+          central: -0.0970706117909448
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_0^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,V)_1@BMRvD2022' :
+          central:  0.20575657000390518
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,V)_2@BMRvD2022' :
+          central:  0.25919997450741056
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,V)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,V)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{0,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,V)_0@BMRvD2022' :
+          central: -0.17003698967164574
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_0^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,V)_1@BMRvD2022' :
+          central:  0.28214533680157095
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,V)_2@BMRvD2022' :
+          central:  0.41966553547525054
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,V)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,V)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{\perp,V,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(t,A)_1@BMRvD2022' :
+          central:  0.6331868983113765
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{t,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(t,A)_2@BMRvD2022' :
+          central:  0.7383188104767887
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{t,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(t,A)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{t,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(t,A)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{t,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,A)_0@BMRvD2022' :
+          central: -0.09945446605295541
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_0^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,A)_1@BMRvD2022' :
+          central:  0.2671743834190154
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,A)_2@BMRvD2022' :
+          central:  0.29833216513104743
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,A)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,A)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{0,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,A)_1@BMRvD2022' :
+          central:  0.5570315792575746
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,A)_2@BMRvD2022' :
+          central:  0.6774966813204484
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,A)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,A)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{\perp,A,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,T)_0@BMRvD2022' :
+          central: -0.06801094642008053
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_0^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,T)_1@BMRvD2022' :
+          central: -0.08249464693203802
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,T)_2@BMRvD2022' :
+          central:  0.06002298912894147
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,T)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,T)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{0,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,T)_1@BMRvD2022' :
+          central:  0.32440585925329807
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,T)_2@BMRvD2022' :
+          central:  0.383016678864083
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,T)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,T)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{\perp,T,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,T5)_1@BMRvD2022' :
+          central:  0.5425990441545133
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{0,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,T5)_2@BMRvD2022' :
+          central:  0.5805380689598787
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{0,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,T5)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{0,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(0,T5)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{0,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,T5)_0@BMRvD2022' :
+          central: -0.1352023399864286
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_0^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,T5)_1@BMRvD2022' :
+          central:  0.3800478173547997
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_1^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,T5)_2@BMRvD2022' :
+          central:  0.4226660980547705
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_2^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,T5)_3@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_3^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
+      'Lambda_b->Lambda::a^(perp,T5)_4@BMRvD2022' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$a_4^{\perp,T5,\Lambda_b \to \Lambda ,\mathrm{BMRvD2022}}$'
+          comments: ''
       # Form factor parameters for Lambda_b -> Lambda_c decay according to
       # [DKMR2017], use table 2 and supplemental material. For nominal fit all a_2 parameters are set to zero.
       # params for tensor FFs are included.
